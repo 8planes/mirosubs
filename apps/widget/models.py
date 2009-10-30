@@ -3,7 +3,10 @@ from uuid import uuid4
 
 class Video(models.Model):
     video_id = models.CharField(max_length=255)
-    video_url = models.CharField(max_length=2048)
+    video_url = models.CharField(max_length=2048, unique=True)
+    
+    def __unicode__(self):
+        return self.video_url
 
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
