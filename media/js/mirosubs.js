@@ -1,10 +1,10 @@
 goog.provide('mirosubs');
 
-mirosubs.login = function(login_url) {
-    var base_url = [login_url, 
-                    "?" + (new Date()).getTime(),
-                    "&to_redirect=", 
-                    encodeURIComponent(window.location)].join('');
+/**
+ *
+ * @param
+ */
+mirosubs.login = function(login_url, twitter_login_url, finishFn) {
     var html = ['<div><iframe marginwidth="0" marginheight="0" hspace="0" ',
                 'vspace="0" frameborder="0" allowtransparency="true" src="', 
                 base_url,
