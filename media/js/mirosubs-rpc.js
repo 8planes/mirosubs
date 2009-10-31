@@ -8,7 +8,8 @@ mirosubs.Rpc.call = function(methodName, args, opt_callback) {
     var serializedArgs = {};
     for (var param in args)
         serializedArgs[param] = s(args[param]);
-    if (!goog.Uri.haveSameDomain(mirosubs.Rpc.BASE_URL, window.location.href))
+    if (mirosubs.Rpc.BASE_URL.substr(0, 1) != '/' && 
+        !goog.Uri.haveSameDomain(mirosubs.Rpc.BASE_URL, window.location.href)) {
         goog.net.CrossDomainRpc.send([mirosubs.Rpc.BASE_URL, "xd/", methodName].join(''),
                                      function(event) {
                                          if (opt_callback)
@@ -16,7 +17,7 @@ mirosubs.Rpc.call = function(methodName, args, opt_callback) {
                                                             ["responseText"]))
                                      }, "POST",
                                      serializedArgs);
-    else {
+    } else {
         var postContent = "";
         var isFirst = true;
         for (var param in serializedArgs) {
