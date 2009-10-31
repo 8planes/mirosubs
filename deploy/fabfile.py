@@ -10,7 +10,7 @@ def _command(cmd):
 
 def staging():
     """
-    Run the subsequent commands on the staging server, e.g., li22-44.members.linode.com or 75.127.96.44
+    Run the subsequent commands on the staging server, e.g., li77-157.members.linode.com or 74.207.235.157
     """
     env.hosts = ['74.207.235.157']
     env.user = 'mirosubs'
@@ -29,8 +29,8 @@ def set_permissions(home='/home/mirosubs'):
     Make sure the web server has permission to write files into the
     upload directories.
     """
-    # Note that 'fab highsite2 set_permissions' won't work, because you need
-    # to log in as a user with permission to use sudo. the evolve user does
+    # Note that 'fab staging set_permissions' won't work, because you need
+    # to log in as a user with permission to use sudo. the mirosubs user does
     # not have that permission
     with cd(home):
         sudo('chgrp www-data -R mirosubs/media/')
@@ -48,6 +48,6 @@ def update():
     with cd('/home/mirosubs/mirosubs'):
         run('git pull origin master')
         run("find -name '*.pyc' -print0 | xargs -0 rm")
-        run('touch deploy/evolve.wsgi')
+        run('touch deploy/mirosubs.wsgi')
         run('/home/mirosubs/env/bin/python closure/compile.py')
 
