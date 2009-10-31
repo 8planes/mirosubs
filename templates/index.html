@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% block main_content %}
 To enable collaborative subtitles, enter the URL to any Ogg video:
-<input type="text"/>
-<a href="#">Get started</a>
+<form action="{% url videos:create %}" method="POST">
+  {# TODO: this should be an instance of VideoForm, which should go in context processor #}
+  <input type="text" name="video_url" />
+  <input type="submit" value="Get started" />
+</form>
 <h2>Recent Activity</h2>
 {% endblock %}
