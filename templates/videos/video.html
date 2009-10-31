@@ -1,6 +1,32 @@
 {% extends "base.html" %}
+{% load escapejs %}
 
+{% block scripts %}
+{% if not js_use_compiled %}
+  <script type="text/javascript" src="http://{{site.domain}}/site_media/js/closure-library/closure/goog/base.js"></script>
+  <script type="text/javascript" src="http://{{site.domain}}/site_media/js/closure-dependencies.js"></script>
+{% endif %}
+{% for dep in js_dependencies %}
+  <script type="text/javascript" src="{{dep|safe}}"></script>
+{% endfor %}
+<script type="text/javascript">
+function main(){
+    mirosubs.CaptionWidget.wrap({
+        uuid: '{{ uuid }}',
+        video_id: '{{ video.video_id }}',
+        has_subtitles: {{ has_subtitles_var }},
+        username: '{{request.user.username|escapejs}}',
+        base_rpc_url: 'http://{{site.domain}}/widget/rpc/',
+        base_rpc_url: 'http://{{site.domain}}/widget/',
+    });
+}
+</script>
+{% endblock %}
+
+{% block body_attrs %}onload="main()"{% endblock %}
 {% block main_content %}
-<p>The widget will go here, but for now, here is the url of the video:</p>
-<p>{{ video }}</p>
+<p>{{ video.video_url }}</p>
+{% with video.video_url as video_url %}
+  {% include "widget/widget.html" %}
+{% endwith %}
 {% endblock %}

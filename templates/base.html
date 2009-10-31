@@ -8,7 +8,7 @@
 {% block scripts %}{% endblock %}
 <title>Miro Subs Alpha</title>
 </head>
-<body>
+<body {% block body_attrs %}{% endblock %}>
   {% block extra_body %}{% endblock %}
   <div class="base_header">
     <div class="base_accountstatus">
