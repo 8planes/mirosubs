@@ -4,6 +4,7 @@ from uuid import uuid4
 class Video(models.Model):
     video_id = models.CharField(max_length=255)
     video_url = models.CharField(max_length=2048, unique=True)
+    view_count = models.PositiveIntegerField(default=0)
     
     def __unicode__(self):
         return self.video_url

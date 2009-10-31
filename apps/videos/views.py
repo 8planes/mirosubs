@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.views.generic.list_detail import object_list
 from uuid import uuid4
 from videos.forms import VideoForm
 from widget.models import Video
@@ -26,8 +27,22 @@ def create(request):
 @login_required
 def video(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
+    video.view_count += 1
+    video.save()
     has_subtitles = video.videocaption_set.count() > 0
     has_subtitles_var = 'true' if has_subtitles else 'false'
     uuid = str(uuid4()).replace('-', '')
     return render_to_response('videos/video.html', add_params(locals()),
                               context_instance=RequestContext(request))
+                              
+@login_required
+def video_list(request):
+    try:
+        page = int(request.GET['page'])
+    except (ValueError, TypeError, KeyError):
+        page = 1
+    qs = Video.objects.all()
+    return object_list(request, queryset=qs, allow_empty=True,
+                       paginate_by=50, page=page,
+                       template_name='videos/video_list.html',
+                       template_object_name='video')

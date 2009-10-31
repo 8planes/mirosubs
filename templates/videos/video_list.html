@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block main_content %}
+{% if video_list %}
+  <table>
+    <tr>
+      <th>URL</th>
+      <th>Views</th>
+      <th>Subtitles Fetched</th>
+      <th>Translations</th>
+      <th>Transcriptions</th>
+    </tr>
+    {% for video in video_list %}
+      <tr>
+        <td>{{ video.video_url }}</td>
+        <td>{{ video.view_count }}</td>
+        <td>{{ video.videocaption_set.count }}</td>
+        <td>translation count</td>
+        <td>transcription count</td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% if is_paginated %}{% load paginator %}{% paginator 3 %}{% endif %} 
+{% else %}
+  <p> There are no videos.</p>
+{% endif %}
+{% endblock %}

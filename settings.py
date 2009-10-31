@@ -105,7 +105,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'registration',
-    'widget'
+    'videos',
+    'widget',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
