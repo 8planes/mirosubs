@@ -1,8 +1,13 @@
 from settings import *
 import logging
 
-SITE_ID = 3
-SITE_NAME = 'mirosubs-rz'
+from socket import gethostname
+if gethostname() == 'lrz2':
+    SITE_ID = 3
+    SITE_NAME = 'mirosubs-rz'
+if gethostname() == 'rz-laptopII-ub':
+    SITE_ID = 5
+    SITE_NAME = 'mirosubs-rz-local'
 
 INSTALLED_APPS +=(
     'django_extensions',

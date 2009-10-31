@@ -22,6 +22,12 @@
     domain: mirosubs.example.com:8000
     name: mirosubs-dev
 
+- model: sites.site
+  pk: 5
+  fields:
+      domain: 192.168.225.128:8002
+      name: mirosubs-rz-local
+
 - model: widget.video
   pk: 1
   fields:
