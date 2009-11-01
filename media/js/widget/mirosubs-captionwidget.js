@@ -2,9 +2,9 @@ goog.provide('mirosubs.CaptionWidget');
 
 // TODO: have this inherit from goog.ui.Component
 
-mirosubs.CaptionWidget = function(uuid, videoID, hasSubtitles, username, baseRpcUrl, baseLoginUrl) {
+mirosubs.CaptionWidget = function(uuid, videoID, showTab, username, baseRpcUrl, baseLoginUrl) {
     var that = this;
-    this.videoID = videoID;
+    this.videoID_ = videoID;
 
     mirosubs.currentUsername = username == '' ? null : username;
     mirosubs.Rpc.BASE_URL = baseRpcUrl;
@@ -29,20 +29,21 @@ mirosubs.CaptionWidget = function(uuid, videoID, hasSubtitles, username, baseRpc
         goog.events.listen(goog.dom.$(id), 'click', listener, false, that);
     };
 
-    if (hasSubtitles)
-        onClick(uuid + "_selectLanguage", this.languageSelectedListener_);
-    else
-        onClick(uuid + "_subtitleMe", this.subtitleMeListener_);
+    if (showTab == 0 || showTab == 1)
+        onClick(uuid + (showTab == 0 ? "_tabSubtitleMe" : "_tabContinue"), 
+                this.subtitleMeListener_);
+    else if (showTab == 3)
+        onClick(uuid + "_tabSelectLanguage", this.languageSelectedListener_);
 };
 
 mirosubs.CaptionWidget.wrap = function(identifier) {
     var uuid = identifier["uuid"];
     var videoID = identifier["video_id"];
-    var hasSubtitles = identifier["has_subtitles"];
+    var showTab = identifier["show_tab"];
     var username = identifier["username"];
     var baseRpcUrl = identifier["base_rpc_url"];
     var baseLoginUrl = identifier["base_login_url"];
-    new mirosubs.CaptionWidget(uuid, videoID, hasSubtitles, 
+    new mirosubs.CaptionWidget(uuid, videoID, showTab, 
                                username, baseRpcUrl, baseLoginUrl);
 };
 
@@ -64,11 +65,30 @@ mirosubs.CaptionWidget.prototype.languageSelectedListener_ = function(event) {
 };
 
 mirosubs.CaptionWidget.prototype.subtitleMeListener_ = function(event) {
+    // TODO: show a loading animation.
+    var that = this;
+    mirosubs.Rpc.call("start_editing", {"video_id": this.videoID_},
+                      function(result) {
+                          if (!result["can_edit"]) {
+                              if (result["owned_by"])
+                                  alert("Sorry, this video is owned by " + 
+                                        result["owned_by"]);
+                              else
+                                  alert("Sorry, this video is locked by " +
+                                        result["locked_by"]);
+                          }
+                          else {
+                              that.startEditing_(result["version"], result["existing"]);
+                          }
+                      });
+    event.preventDefault();
+};
+
+mirosubs.CaptionWidget.prototype.startEditing_ = function(version, existingCaptions) {
     goog.dom.removeChildren(this.captionDiv_);
     var containerWidget = new mirosubs.trans.ContainerWidget(
-        this.playheadFn_, this.captionManager_);
+        this.playheadFn_, this.captionManager_, version, existingCaptions);
     containerWidget.decorate(this.captionDiv_);
-    event.preventDefault();
 };
 
 /**

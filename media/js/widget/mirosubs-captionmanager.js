@@ -99,7 +99,7 @@ mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
     this.dispatchEvent(event);
 };
 
-mirosubs.CaptionManager.prototype.disposeInternal = function() {
+mirosubs.CaptionManager.prototype.dispose = function() {
     mirosubs.CaptionManager.superClass_.disposeInternal.call(this);
     goog.events.removeAll(this);
     /**
