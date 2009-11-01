@@ -17,7 +17,7 @@ function main(){
         has_subtitles: {{ has_subtitles_var }},
         username: '{{request.user.username|escapejs}}',
         base_rpc_url: 'http://{{site.domain}}/widget/rpc/',
-        base_rpc_url: 'http://{{site.domain}}/widget/',
+        base_login_url: 'http://{{site.domain}}/widget/',
     });
 }
 </script>

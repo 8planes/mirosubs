@@ -11,7 +11,7 @@
     </tr>
     {% for video in video_list %}
       <tr>
-        <td>{{ video.video_url }}</td>
+        <td><a href="{% url videos:video video_id=video.video_id %}">{{ video.video_url|slice:":25" }}</a></td>
         <td>{{ video.view_count }}</td>
         <td>{{ video.videocaption_set.count }}</td>
         <td>translation count</td>
