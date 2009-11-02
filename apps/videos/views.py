@@ -21,7 +21,8 @@ def create(request):
                 # TODO: log to activity feed
                 pass
             if video.owner == request.user or video.allow_community_edits:
-                return HttpResponseRedirect(reverse('videos:video', kwargs={'video_id':video.video_id}))
+                return HttpResponseRedirect(reverse(
+                        'videos:video', kwargs={'video_id':video.video_id}))
             else:
                 # TODO: better error page?
                 return HttpResponse('You are not allowed to add transcriptions to this video.')
