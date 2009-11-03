@@ -15,7 +15,7 @@
         <td>{{ video.view_count }}</td>
         <td>{{ video.videocaption_set.count }}</td>
         <td>translation count</td>
-        <td>transcription count</td>
+        <td>{{ video.videocaptionversion_set.count }}</td>
       </tr>
     {% endfor %}
   </table>
