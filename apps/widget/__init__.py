@@ -1,7 +1,7 @@
 from uuid import uuid4
 from videos import models
 from django.conf import settings
-from django.contrib.sites import Site
+from django.contrib.sites.models import Site
 
 def js_context(request, video):
     params = {'uuid': uuid4().replace('-', ''),
