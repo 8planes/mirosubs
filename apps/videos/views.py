@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from uuid import uuid4
 from videos.forms import VideoForm
-from widget.models import Video
+from videos.models import Video
 from widget.views import add_params
 
 @login_required

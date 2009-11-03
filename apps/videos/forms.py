@@ -1,5 +1,5 @@
 from django import forms
-from widget.models import Video
+from videos.models import Video
 
 class VideoForm(forms.ModelForm):
     class Meta:

@@ -1,4 +1,4 @@
 from django.contrib import admin
-from widget.models import Video
+from videos.models import Video
 
 admin.site.register(Video)

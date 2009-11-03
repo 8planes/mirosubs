@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.cache import never_cache
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from widget import models
+from videos import models
 from datetime import datetime
 import simplejson as json
 import views
