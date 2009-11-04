@@ -7,7 +7,7 @@ from django.views.generic.list_detail import object_list
 from uuid import uuid4
 from videos.forms import VideoForm
 from videos.models import Video
-from widget.views import add_params
+import widget
 
 @login_required
 def create(request):
@@ -36,10 +36,9 @@ def video(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     video.view_count += 1
     video.save()
-    has_subtitles = video.videocaptionversion_set.count() > 0
-    has_subtitles_var = 'true' if has_subtitles else 'false'
-    uuid = str(uuid4()).replace('-', '')
-    return render_to_response('videos/video.html', add_params(locals()),
+    context = widget.js_context(request, video)
+    context['video'] = video
+    return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
 @login_required
