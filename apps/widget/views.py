@@ -11,6 +11,7 @@ from videos import models
 from datetime import datetime
 import simplejson as json
 import views
+import widget
 
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
@@ -38,23 +39,9 @@ def embed(request):
             video = models.Video(video_url=video_url, \
                                  allow_community_edits=False)
             video.save()
-    params = {}
-    if video.caption_state == models.NO_CAPTIONS:
-        params['show_tab'] = 0
-    elif video.caption_state == models.CAPTIONS_IN_PROGRESS:
-        if request.user.is_authenticated and request.user == video.owner:
-            params['show_tab'] = 1
-        else:
-            params['show_tab'] = 2
-            params['owned_by'] = video.owner.username
-    else:
-        params['show_tab'] = 3        
-    params.update({'request': request, \
-                   'video_id': video.video_id, \
-                   'video_url': video.video_url, \
-                   'uuid': str(uuid4()).replace('-', '')})
-    return render_to_response('widget/embed.js', add_params(params), \
-                              mimetype="text/javascript")
+    return render_to_response('widget/embed.js', widget.js_context(request, video),
+                              mimetype="text/javascript",
+                              context_instance = RequestContext(request))
 
 def rpc(request, method_name):
     args = { 'request': request }
