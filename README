@@ -1,0 +1,12 @@
+To run the development version:
+
+1. Install virtualenv http://pypi.python.org/pypi/virtualenv
+2. (optional) download and download the virtualenv wrapper bash
+  functions http://www.doughellmann.com/projects/virtualenvwrapper/
+3. create a virtual environment and activate it
+4. run:
+   $ easy_install -U setuptools
+   $ easy_install pip
+   $ pip install -r deploy/dev-requirements.txt
+
+The last command will install django and some basic project niceties.

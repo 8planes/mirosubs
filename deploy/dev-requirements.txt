@@ -1,0 +1,6 @@
+Django==1.1.1
+werkzeug
+ipython
+django_extensions
+django-debug-toolbar
+
