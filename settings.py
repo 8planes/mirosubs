@@ -75,6 +75,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'socialauth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
