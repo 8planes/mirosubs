@@ -5,8 +5,11 @@ from django.conf import settings
 # from django.contrib import admin
 # admin.autodiscover()
 
+
+
 urlpatterns = patterns('',
-    (r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'})
+    (r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
+    (r'^widget/', include('widget.urls', namespace='widget'))
 )
 
 if settings.DEBUG:
