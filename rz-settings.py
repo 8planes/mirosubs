@@ -2,6 +2,7 @@ from settings import *
 import logging
 
 SITE_ID = 2
+SITE_NAME = 'mirosubs-rz'
 
 INSTALLED_APPS +=(
     'django_extensions',
@@ -28,6 +29,9 @@ OPENID_AX = [{"type_uri": "email", "count": 1, "required": False, "alias": "emai
  
 TWITTER_CONSUMER_KEY = 'GRcOIZyWRM0XxluS6flA'
 TWITTER_CONSUMER_SECRET = '4BSIzc524xOV9edjyXgJiae1krY7TEmG38K7tKohc'
+
+FACEBOOK_API_KEY = ''
+FACEBOOK_API_SECRET = ''
  
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            'socialauth.auth_backends.OpenIdBackend',
@@ -35,4 +39,4 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            'socialauth.auth_backends.FacebookBackend',
                            )
  
-LOGIN_REDIRECT_URL = '/login/done/'
+LOGIN_REDIRECT_URL = '/'
