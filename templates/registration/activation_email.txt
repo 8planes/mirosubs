@@ -1,0 +1,9 @@
+Welcome to {{ site.name }}!
+
+To activate your account please click the link below.
+
+http://{{ site.domain }}{% url registration_activate activation_key=activation_key %}
+
+Thanks!
+
+-- The {{ site.name }} team

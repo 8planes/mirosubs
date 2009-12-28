@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+{% if account %}
+  <p>Thank you for registering! Your account is now active. You may <a href="{% url login %}">login</a>.</p>
+{% else %}
+  <p>The activation key {{ activation_key }} is invalid.</p>
+{% endif %}
+{% endblock %}

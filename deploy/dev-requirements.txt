@@ -15,3 +15,5 @@ python-openid
 python-yadis
 oauth
 -e git://github.com/uswaretech/Django-Socialauth.git#egg=socialauth
+
+django-registration

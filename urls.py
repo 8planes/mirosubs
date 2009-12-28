@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     (r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
     url(r'^login/', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/'}),
+    (r'^accounts/', include('registration.urls')),
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
 )
