@@ -1,6 +1,17 @@
+# pip requirements file for mirosubs development
+# to install the requirements run
+# $ pip install -r dev-requirements.txt
+
 Django==1.1.1
 werkzeug
 ipython
 django_extensions
 django-debug-toolbar
+PyYAML
+simplejson
 
+# dependencies of socialauth
+python-openid
+python-yadis
+oauth
+-e git://github.com/uswaretech/Django-Socialauth.git#egg=socialauth

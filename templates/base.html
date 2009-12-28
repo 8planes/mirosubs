@@ -9,9 +9,14 @@
 <title>Miro Subs Alpha</title>
 </head>
 <body>
+  {% block extra_body %}{% endblock %}
   <div class="base_header">
     <div class="base_accountstatus">
-      Login / Create account
+      {% if request.user.is_authenticated %}
+        <p>Logged in as {{ request.user }}. <a href="{% url logout %}">Logout</a></p>
+      {% else %}
+        <p><a href="{% url login %}">Login</a> / Create account</p>
+      {% endif %}
     </div>
     <h1>Miro Subs Alpha</h1>
     <div class="base_search">
@@ -21,6 +26,6 @@
       <a href="#">Submit Video</a> / <a href="#">All Videos</a> / <a href="#">About</a> / <a href="#">Firefox Extension</a>
     </div>
   </div>
-  {% block content %}{% endblock %}
+  {% block main_content %}{% endblock %}
 </body>
 </html>

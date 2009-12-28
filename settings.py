@@ -64,7 +64,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
-ROOT_URLCONF = 'MiroSubs.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -73,9 +73,18 @@ TEMPLATE_DIRS = (
    os.path.join(os.path.dirname(__file__),'templates'),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.request',
+    'django.core.context_processors.media',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'socialauth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.admin',
 )
