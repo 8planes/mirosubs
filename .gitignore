@@ -1,2 +1,5 @@
 *~
 *.pyc
+pip-log.txt
+deploy/src/*
+*.sqlite3

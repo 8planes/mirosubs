@@ -13,7 +13,9 @@ urlpatterns = patterns('',
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/'}),
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^embed_widget.js$', 'views.embed_widget')
+    (r'^embed_widget.js$', 'widget.views.embed'),
+    (r'^mirosubs_widget.js$', 'widget.views.mirosubsjs'),
+    (r'^widget/login', 'django.contrib.auth.views.login', { 'template_name' : 'widget/login.html', 'redirect_field_name' : 'to_redirect' })
 )
 
 if settings.DEBUG:
