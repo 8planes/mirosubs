@@ -4,4 +4,5 @@
 {% else %}
   <a href="#" onclick="MiroSubs.login(); return false;">Login</a>
 {% endif %}
+  <a href="#" onclick="MiroSubs.IFrameRPC.post('http://localhost:8000/widget/save_captions/', { param : 3 }, function(result) { alert(result); }); return false;">RPC</a>
 </div>

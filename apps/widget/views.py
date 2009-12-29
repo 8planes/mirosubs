@@ -13,3 +13,9 @@ def embed(request):
 
 def mirosubsjs(request):
     return render_to_response('widget/mirosubs_widget.js', mimetype="text/javascript")
+
+def save_captions(request):
+    iframe_id = request.POST['iframe_id']
+    return render_to_response('widget/iframe_rpc_response.html',
+                              { 'id' : iframe_id,
+                                'result' : '\'hello, world\'' })

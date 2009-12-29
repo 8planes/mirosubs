@@ -38,10 +38,10 @@ var MiroSubs = function() {
                     });
     };
     var login_impl = function() {
-        var base_url = "http://localhost:8000/widget/login";
-        var to_redirect = encodeURIComponent(window.location);
-        base_url += ("?" + (new Date()).getTime() +
-                     "&to_redirect=" + to_redirect);
+        var base_url = ["http://localhost:8000/widget/login?", 
+                        '' + (new Date()).getTime(),
+                        "&to_redirect=", 
+                        encodeURIComponent(window.location)].join('');
         var html = ['<div><iframe ', 
                     'marginwidth="0" marginheight="0" hspace="0" ',
                     'vspace="0" frameborder="0" allowtransparency="true" ',
@@ -71,3 +71,4 @@ var MiroSubs = function() {
 MiroSubs.init();
 for (var i = 0; i < window.MiroSubsToEmbed.length; i++)
     MiroSubs.embed_player(window.MiroSubsToEmbed[i]);
+{% include "widget/mirosubs_iframerpc.js" %}
