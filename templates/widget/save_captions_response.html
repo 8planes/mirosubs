@@ -1,0 +1,22 @@
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<body>
+{% if not js_use_compiled %}
+    <script type="text/javascript" src="http://localhost:8000/site_media/js/closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript" src="http://localhost:8000/site_media/js/closure-dependencies.js"></script>
+{% endif %}
+{% for dep in js_dependencies %}
+<script type="text/javascript" src="{{dep|safe}}"></script>
+{% endfor %}
+<script type="text/javascript">
+  var currentDirectory = location.href.substring(0, location.href.lastIndexOf('/'));
+  var echo = [];
+  echo[xdRequestID] = '{{request_id|escapejs}}';
+  echo[xdDummyURI] = '{{dummy_uri|escapejs}}';
+  xdSendResponse(
+    '{"result":"{{response_json|escapejs}}"}',
+    true, // is JSON
+    echo,
+    200,
+    '{}');
+</script>
+</body>

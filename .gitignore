@@ -3,3 +3,5 @@
 pip-log.txt
 deploy/src/*
 *.sqlite3
+*calcdeps.js
+*compiled.js

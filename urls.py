@@ -14,8 +14,8 @@ urlpatterns = patterns('',
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^embed_widget.js$', 'widget.views.embed'),
-    (r'^mirosubs_widget.js$', 'widget.views.mirosubsjs'),
-    (r'^widget/login/', 'django.contrib.auth.views.login', { 'template_name' : 'widget/login.html', 'redirect_field_name' : 'to_redirect' }),
+    (r'^widget/login/', 'django.contrib.auth.views.login', 
+     { 'template_name' : 'widget/login.html', 'redirect_field_name' : 'to_redirect' }),
     (r'^widget/save_captions/$', 'widget.views.save_captions')
 )
 
