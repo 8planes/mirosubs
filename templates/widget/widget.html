@@ -2,7 +2,7 @@
 {% if username %}
   <div>Welcome, {{username}}!</div>
 {% else %}
-  <a href="#" onclick="mirosubs.login(); return false;">Login</a>
+  <a href="#" onclick="mirosubs.login('http://{{site.domain}}/widget/login/'); return false;">Login</a>
 {% endif %}
   <div id="{{uuid}}_captions">
     <a href="#" id="{{uuid}}_addCaption">Add caption</a>

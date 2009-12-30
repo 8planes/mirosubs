@@ -7,9 +7,13 @@
       '{{dep|safe}}'{% if not forloop.last %},{% endif %}
     {% endfor %}];
 
-    var identifier = { uuid: '{{uuid}}', 
-                       video_id: '{{video_id}}', 
-                       username: '{{username|escapejs}}' };
+    var identifier = 
+        { 
+            uuid: '{{uuid}}', 
+            video_id: '{{video_id}}', 
+            username: '{{username|escapejs}}',
+            save_captions_url: 'http://{{site.domain}}/widget/save_captions/'
+        };
 
     if (typeof(mirosubs) != 'undefined' && typeof(mirosubs.CaptionWidget) != 'undefined')
         mirosubs.CaptionWidget.wrap(identifier);

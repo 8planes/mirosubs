@@ -19,11 +19,8 @@ DATABASE_PORT = ''                    # Set to empty string for default. Not use
 
 JS_USE_COMPILED = False
 
-if JS_USE_COMPILED:
-    JS_DEPENDENCIES = ['http://localhost:8000/site_media/js/mirosubs-compiled.js']
-else:
-    JS_DEPENDENCIES = ['http://localhost:8000/site_media/js/mirosubs.js',
-                       'http://localhost:8000/site_media/js/mirosubs-captionwidget.js']
+# paths provided relative to media/js
+JS_RAW = ['mirosubs.js', 'mirosubs-captionwidget.js']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -86,7 +83,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
-    'mirosubs.context_processors.current_site',
+    'context_processors.current_site',
 )
 
 INSTALLED_APPS = (

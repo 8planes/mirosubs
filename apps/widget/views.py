@@ -2,12 +2,20 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
 from uuid import uuid4
+from django.contrib.sites.models import Site
+
+def full_path(js_file):
+    return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
 
 def add_params(params=None):
     if params is None:
         params = {}
     params["js_use_compiled"] = settings.JS_USE_COMPILED
-    params["js_dependencies"] = settings.JS_DEPENDENCIES
+    if settings.JS_USE_COMPILED:
+        params["js_dependencies"] = [full_path("mirosubs-compiled.js")]
+    else:
+        params["js_dependencies"] = [full_path(js_file) for js_file in settings.JS_RAW]
+    params["site"] = Site.objects.get_current()
     return params
 
 def embed(request):

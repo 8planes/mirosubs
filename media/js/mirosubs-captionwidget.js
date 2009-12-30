@@ -1,9 +1,10 @@
 goog.provide('mirosubs.CaptionWidget');
 
 
-mirosubs.CaptionWidget = function(uuid, video_id, username) {
+mirosubs.CaptionWidget = function(uuid, video_id, username, save_captions_url) {
     this.caption_div = goog.dom.$(uuid + "_captions");
     this.addCaptionLink = goog.dom.$(uuid + "_addCaption");
+    this.save_captions_url = save_captions_url;
     goog.events.listen(this.addCaptionLink, 
                        goog.events.EventType.CLICK, 
                        this.addCaptionLinkClicked, 
@@ -14,7 +15,8 @@ mirosubs.CaptionWidget.wrap = function(identifier) {
     var uuid = identifier["uuid"];
     var video_id = identifier["video_id"];
     var username = identifier["username"];
-    new mirosubs.CaptionWidget(uuid, video_id, username);
+    var save_captions_url = identifier["save_captions_url"];
+    new mirosubs.CaptionWidget(uuid, video_id, username, save_captions_url);
 };
 
 mirosubs.CaptionWidget.prototype.addCaptionLinkClicked = function(e) {

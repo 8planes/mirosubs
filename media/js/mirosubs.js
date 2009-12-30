@@ -1,8 +1,8 @@
 goog.provide('mirosubs');
 
-mirosubs.login = function() {
-    var base_url = ["http://localhost:8000/widget/login?", 
-                    '' + (new Date()).getTime(),
+mirosubs.login = function(login_url) {
+    var base_url = [login_url, 
+                    "?" + (new Date()).getTime(),
                     "&to_redirect=", 
                     encodeURIComponent(window.location)].join('');
     var html = ['<div><iframe marginwidth="0" marginheight="0" hspace="0" ',
@@ -15,12 +15,15 @@ mirosubs.login = function() {
     dialog.setVisible(true);
 };
 
-mirosubs.saveCaptionWork_ = function(video_id, updatedCaptions, 
-                                    insertedCaptions, deletedCaptions, 
-                                    onComplete) {
+mirosubs.saveCaptionWork_ = function(save_captions_url, 
+                                     video_id, 
+                                     updatedCaptions, 
+                                     insertedCaptions, 
+                                     deletedCaptions, 
+                                     onComplete) {
     var p = goog.json.parse;
     var s = goog.json.serialize;
-    goog.net.CrossDomainRpc.send("http://localhost:8000/widget/save_captions/",
+    goog.net.CrossDomainRpc.send(save_captions_url,
                                  function(event) { 
                                      // avoiding obfuscation by compiler.
                                      onComplete(p(p(event["target"]["responseText"])

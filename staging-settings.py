@@ -1,5 +1,7 @@
 from settings import *
 
+JS_USE_COMPILED = True
+
 DEBUG = False
 ADMINS = (
   ('Rodrigo Guzman', 'rz@pybrew.com'),
