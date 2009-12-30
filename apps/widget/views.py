@@ -1,8 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
-from uuid import uuid1
-
+from uuid import uuid4
 
 def add_params(params=None):
     if params is None:
@@ -16,7 +15,7 @@ def embed(request):
     params['video_id'] = request.GET['video_id']
     if request.user.is_authenticated():
         params['username'] = request.user.username
-    params['uuid'] = str(uuid1()).replace('-', '')
+    params['uuid'] = str(uuid4()).replace('-', '')
     return render_to_response('widget/embed.js', add_params(params), 
                               mimetype="text/javascript")
 
@@ -24,6 +23,6 @@ def save_captions(request):
     params = {}
     params['request_id'] = request.POST["xdpe:request-id"]
     params['dummy_uri'] = request.POST["xdpe:dummy-uri"]
-    params['response_json'] = "{'response': 'ok'}"
+    params['response_json'] = '{\\"response\\": \\"ok\\"}'
     return render_to_response('widget/save_captions_response.html',
                               add_params(params))

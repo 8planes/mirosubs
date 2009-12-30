@@ -1,4 +1,4 @@
-var mirosubs = mirosubs || {};
+goog.provide('mirosubs');
 
 mirosubs.login = function() {
     var base_url = ["http://localhost:8000/widget/login?", 
@@ -15,32 +15,27 @@ mirosubs.login = function() {
     dialog.setVisible(true);
 };
 
-mirosubs.saveCaptionWork = function(video_id, updatedCaptions, 
-                                    insertedCaptions, deletedCaptions) {
-    var s = new goog.json.Serializer();
+mirosubs.saveCaptionWork_ = function(video_id, updatedCaptions, 
+                                    insertedCaptions, deletedCaptions, 
+                                    onComplete) {
+    var p = goog.json.parse;
+    var s = goog.json.serialize;
     goog.net.CrossDomainRpc.send("http://localhost:8000/widget/save_captions/",
-                              function(event) { alert(event.target.responseText) },
-                              "POST",
-                              { video_id : video_id + '',
-                                updated : s.serialize(updatedCaptions),
-                                inserted : s.serialize(insertedCaptions),
-                                deleted : s.serialize(deletedCaptions) });
+                                 function(event) { 
+                                     // avoiding obfuscation by compiler.
+                                     onComplete(p(p(event["target"]["responseText"])
+                                                  ["result"]));
+                                 },
+                                 "POST",
+                                 { video_id : video_id + '',
+                                  updated : s(updatedCaptions),
+                                  inserted : s(insertedCaptions),
+                                  deleted : s(deletedCaptions) });
 }
-
-mirosubs.embedPlayer = function(identifier) {
-    // not clear what we need to do here yet
-    
-};
-
-if (typeof(MiroSubsToEmbed) != 'undefined')
-    for (var i = 0; i < MiroSubsToEmbed.length; i++)
-        mirosubs.embedPlayer(MiroSubsToEmbed[i]);
 
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
 window["mirosubs"] = mirosubs;
 mirosubs["login"] = mirosubs.login;
-mirosubs["saveCaptionWork"] = mirosubs.saveCaptionWork;
-mirosubs["embedPlayer"] = mirosubs.embedPlayer;
-window["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
-window["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
-window["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;
+mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
+mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
+mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;

@@ -11,8 +11,8 @@
                        video_id: '{{video_id}}', 
                        username: '{{username|escapejs}}' };
 
-    if (typeof(mirosubs) != 'undefined')
-        mirosubs.embedPlayer(identifier);
+    if (typeof(mirosubs) != 'undefined' && typeof(mirosubs.CaptionWidget) != 'undefined')
+        mirosubs.CaptionWidget.wrap(identifier);
     else {
         if (!window.MiroSubsLoading) {
             window.MiroSubsLoading = true;

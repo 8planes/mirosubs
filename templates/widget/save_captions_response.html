@@ -10,9 +10,9 @@
 <script type="text/javascript">
   var currentDirectory = location.href.substring(0, location.href.lastIndexOf('/'));
   var echo = [];
-  echo[xdRequestID] = '{{request_id|escapejs}}';
-  echo[xdDummyURI] = '{{dummy_uri|escapejs}}';
-  xdSendResponse(
+  echo[mirosubs.xdRequestID] = '{{request_id|escapejs}}';
+  echo[mirosubs.xdDummyURI] = '{{dummy_uri|escapejs}}';
+  mirosubs.xdSendResponse(
     '{"result":"{{response_json|escapejs}}"}',
     true, // is JSON
     echo,

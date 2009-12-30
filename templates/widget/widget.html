@@ -4,5 +4,7 @@
 {% else %}
   <a href="#" onclick="mirosubs.login(); return false;">Login</a>
 {% endif %}
-  <a href="#" onclick="mirosubs.saveCaptionWork(['u0', 'u1'], ['i0'], []); return false;">RPC</a>
+  <div id="{{uuid}}_captions">
+    <a href="#" id="{{uuid}}_addCaption">Add caption</a>
+  </div>
 </div>

@@ -17,12 +17,13 @@ DATABASE_PASSWORD = ''                # Not used with sqlite3.
 DATABASE_HOST = ''                    # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''                    # Set to empty string for default. Not used with sqlite3.
 
-JS_USE_COMPILED = True
+JS_USE_COMPILED = False
 
 if JS_USE_COMPILED:
     JS_DEPENDENCIES = ['http://localhost:8000/site_media/js/mirosubs-compiled.js']
 else:
-    JS_DEPENDENCIES = ['http://localhost:8000/site_media/js/mirosubs.js']
+    JS_DEPENDENCIES = ['http://localhost:8000/site_media/js/mirosubs.js',
+                       'http://localhost:8000/site_media/js/mirosubs-captionwidget.js']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
