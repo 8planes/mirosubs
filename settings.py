@@ -17,6 +17,13 @@ DATABASE_PASSWORD = ''                # Not used with sqlite3.
 DATABASE_HOST = ''                    # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''                    # Set to empty string for default. Not used with sqlite3.
 
+JS_USE_COMPILED = True
+
+if JS_USE_COMPILED:
+    JS_DEPENDENCIES = ['http://localhost:8000/site_media/js/mirosubs-compiled.js']
+else:
+    JS_DEPENDENCIES = ['http://localhost:8000/site_media/js/mirosubs.js']
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -88,6 +95,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'registration',
+    'widget'
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

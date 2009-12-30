@@ -5,6 +5,8 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
+
+
 urlpatterns = patterns('',
     (r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
     url(r'^login/', 'django.contrib.auth.views.login', name='login'),
@@ -12,6 +14,10 @@ urlpatterns = patterns('',
     (r'^accounts/', include('registration.urls')),
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
+    (r'^embed_widget.js$', 'widget.views.embed'),
+    (r'^widget/login/', 'django.contrib.auth.views.login', 
+     { 'template_name' : 'widget/login.html', 'redirect_field_name' : 'to_redirect' }),
+    (r'^widget/save_captions/$', 'widget.views.save_captions')
 )
 
 if settings.DEBUG:

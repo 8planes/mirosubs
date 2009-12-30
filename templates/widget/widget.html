@@ -1,0 +1,8 @@
+<div>
+{% if username %}
+  <div>Welcome, {{username}}!</div>
+{% else %}
+  <a href="#" onclick="mirosubs.login(); return false;">Login</a>
+{% endif %}
+  <a href="#" onclick="mirosubs.saveCaptionWork(['u0', 'u1'], ['i0'], []); return false;">RPC</a>
+</div>
