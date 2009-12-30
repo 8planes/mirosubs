@@ -15,7 +15,9 @@
       {% if request.user.is_authenticated %}
         <p>Logged in as {{ request.user }}. <a href="{% url logout %}">Logout</a></p>
       {% else %}
-        <p><a href="{% url login %}">Login</a> / Create account</p>
+        <p><a href="{% url login %}">Login</a> /
+           <a href="{% url registration_register %}">Create account</a>
+        </p>
       {% endif %}
     </div>
     <h1>Miro Subs Alpha</h1>

@@ -86,6 +86,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
+    'mirosubs.context_processors.current_site',
 )
 
 INSTALLED_APPS = (
@@ -95,5 +96,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'registration',
     'widget'
 )
+
+ACCOUNT_ACTIVATION_DAYS = 7
