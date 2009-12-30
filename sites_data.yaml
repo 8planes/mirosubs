@@ -1,4 +1,3 @@
-# sites for all everyone
 - model: sites.site
   pk: 1
   fields:
@@ -8,5 +7,18 @@
 - model: sites.site
   pk: 2
   fields:
+    domain: mirosubs.pybrew.com
+    name: mirosubs-staging
+
+- model: sites.site
+  pk: 3
+  fields:
     domain: dev0.pybrew.com:8002
     name: mirosubs-rz
+
+- model: sites.site
+  pk: 4
+  fields:
+    domain: localhost:8000
+    name: mirosubs-adam
+
