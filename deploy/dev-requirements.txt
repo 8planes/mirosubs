@@ -17,3 +17,4 @@ oauth
 -e git://github.com/uswaretech/Django-Socialauth.git#egg=socialauth
 
 django-registration
+fabric>=0.9.0
