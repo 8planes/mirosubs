@@ -1,5 +1,9 @@
 {% load escapejs %}
 (function() {
+    document.write('<style type="text/css" media="screen">');
+    document.write('{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}');
+    document.write('</style>');
+
     document.write('{% escapejs %}{% include "widget/widget.html" %}{% endescapejs %}');
 
     var scripts = [
@@ -15,6 +19,8 @@
             save_captions_url: 'http://{{site.domain}}/widget/save_captions/'
         };
 
+    var head = document.getElementsByTagName('head')[0];
+
     if (typeof(mirosubs) != 'undefined' && typeof(mirosubs.CaptionWidget) != 'undefined')
         mirosubs.CaptionWidget.wrap(identifier);
     else {
@@ -25,11 +31,21 @@
                 script.type = 'text/javascript';
                 script.src = scripts[i];
                 script.charset = 'UTF-8';
-                document.getElementsByTagName('head')[0].appendChild(script);
+                head.appendChild(script);
             }
         }
         if (typeof(MiroSubsToEmbed) == 'undefined')
             window.MiroSubsToEmbed = [];
         window.MiroSubsToEmbed.push(identifier);
+    }
+
+    if (!window.MiroCSSLoading) {
+        window.MiroCSSLoading = true;
+        var css = document.createElement("link");
+        css.type = "text/css";
+        css.rel = 'stylesheet';
+        css.href = 'http://{{site.domain}}/site_media/css/mirosubs.css';
+        css.media = 'screen';
+        head.appendChild(css);
     }
 })();

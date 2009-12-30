@@ -10,31 +10,11 @@ mirosubs.login = function(login_url) {
                 base_url,
                 '"</iframe></div>'].join('');
     var dialog = new goog.ui.Dialog("mirosubs-modal-dialog", true);
+    dialog.setButtonSet(null);
     dialog.setContent(html);
     dialog.setTitle("Login or Sign Up");
     dialog.setVisible(true);
 };
-
-mirosubs.saveCaptionWork_ = function(save_captions_url, 
-                                     video_id, 
-                                     updatedCaptions, 
-                                     insertedCaptions, 
-                                     deletedCaptions, 
-                                     onComplete) {
-    var p = goog.json.parse;
-    var s = goog.json.serialize;
-    goog.net.CrossDomainRpc.send(save_captions_url,
-                                 function(event) { 
-                                     // avoiding obfuscation by compiler.
-                                     onComplete(p(p(event["target"]["responseText"])
-                                                  ["result"]));
-                                 },
-                                 "POST",
-                                 { video_id : video_id + '',
-                                  updated : s(updatedCaptions),
-                                  inserted : s(insertedCaptions),
-                                  deleted : s(deletedCaptions) });
-}
 
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
 window["mirosubs"] = mirosubs;

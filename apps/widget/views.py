@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.conf import settings
 from uuid import uuid4
 from django.contrib.sites.models import Site
+import simplejson as json
 
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
@@ -28,6 +29,14 @@ def embed(request):
                               mimetype="text/javascript")
 
 def save_captions(request):
+    video_id = request.POST["xdp:video_id"];
+    deleted_captions = json.loads(request.POST["xdp:deleted"]);
+    inserted_captions = json.loads(request.POST["xdp:inserted"]);
+    updated_captions = json.loads(request.POST["xdp:updated"]);
+
+    # TODO: save caption work to database
+    # for definition of json format, see mirosubs-captionwidget.js
+
     params = {}
     params['request_id'] = request.POST["xdpe:request-id"]
     params['dummy_uri'] = request.POST["xdpe:dummy-uri"]
