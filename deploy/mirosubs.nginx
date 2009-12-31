@@ -17,7 +17,7 @@ server {
     }
     
     location /site_media {
-        root /home/yourxiv/arxivsocial/media;
+        root /home/mirosubs/mirosubs/media;
         autoindex off;
         expires 1d;
     }
