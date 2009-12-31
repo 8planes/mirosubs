@@ -8,7 +8,7 @@
     ErrorLog /home/mirosubs/log/apache.error.log
     CustomLog /home/mirosubs/log/apache.custom.log combined
 
-    WSGIDaemonProcess mirosubs user=www-data group=www-data threads=2
+    WSGIDaemonProcess mirosubs user=mirosubs group=www-data threads=2
     WSGIProcessGroup mirosubs
 
     WSGIScriptAlias / /home/mirosubs/mirosubs/deploy/mirosubs.wsgi
