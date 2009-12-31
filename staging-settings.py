@@ -8,6 +8,9 @@ ADMINS = (
 #  ('Adam Duston', 'adam@pybrew.com'),
 )
 
+DATABASE_NAME = '/home/mirosubs/mirosubs/mirosubs.sqlite3'
+ROOT_URLCONF = 'mirosubs.urls'
+
 SITE_ID = 2
 SITE_NAME = 'mirosubs-staging'
 
