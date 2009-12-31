@@ -23,7 +23,7 @@ server {
     }
     
     location /media {
-        root /home/mirosubs/env/lib/python2.5/site-packages/django/contrib/admin/media    
+        root /home/mirosubs/env/lib/python2.5/site-packages/django/contrib/admin/media;
         autoindex off;
         expires 1d;
     }
