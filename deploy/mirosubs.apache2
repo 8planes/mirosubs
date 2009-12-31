@@ -1,5 +1,5 @@
 <VirtualHost *:9998>
-    ServerAdmin pybrew@googlegroups.com
+    ServerAdmin webmaster@pybrew.com
 
     ServerName mirosubs.pybrew.com
     ServerAlias mirosubs.pybrew.com
