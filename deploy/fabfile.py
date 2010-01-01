@@ -48,3 +48,6 @@ def update():
     with cd('/home/mirosubs/mirosubs'):
         run('git pull origin master')
         run('touch deploy/evolve.wsgi')
+
+def compile_js():
+    run('/home/mirosubs/compile.py')
