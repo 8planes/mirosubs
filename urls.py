@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 #    (r'^admin/', include(admin.site.urls)),
     (r'^embed_widget.js$', 'widget.views.embed'),
     (r'^widget/login/', 'widget.views.login'),
+    (r'^widget/logout/', 'django.contrib.auth.views.logout'),
     (r'^widget/save_captions/$', 'widget.views.save_captions')
 )
 

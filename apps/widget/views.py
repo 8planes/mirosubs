@@ -30,6 +30,7 @@ def embed(request):
     if request.user.is_authenticated():
         params['username'] = request.user.username
     params['uuid'] = str(uuid4()).replace('-', '')
+    params['referer'] = request.META.get('HTTP_REFERER', '')
     return render_to_response('widget/embed.js', add_params(params), 
                               mimetype="text/javascript")
 

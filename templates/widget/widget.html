@@ -1,6 +1,8 @@
 <div>
 {% if username %}
-  <div>Welcome, {{username}}!</div>
+  <div>
+    Welcome, {{username}}!&nbsp;<a href="http://{{site.domain}}/widget/logout/?next={{referer|urlencode}}">Logout</a>
+  </div>
 {% else %}
   <a href="#" onclick="mirosubs.login('http://{{site.domain}}/widget/login/'); return false;">Login</a>
 {% endif %}
