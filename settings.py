@@ -69,6 +69,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'openid_consumer.middleware.OpenIDMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -91,6 +92,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 INSTALLED_APPS = (
     'django.contrib.auth',
     'socialauth',
+    'openid_consumer',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
