@@ -4,22 +4,6 @@ import logging
 SITE_ID = 4
 SITE_NAME = 'mirosubs-adam'
 
-INSTALLED_APPS +=(
-    'django_extensions',
-    'debug_toolbar',
-)
-
-MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
-}
-
-logging.basicConfig(
-    level = logging.DEBUG,
-    format = '%(levelname)s %(asctime)s %(filename)s:%(lineno)s %(funcName)s\n%(message)s\n',
-)
 
 # socialauth-related
 OPENID_REDIRECT_NEXT = '/accounts/openid/done/'
@@ -38,5 +22,3 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            'socialauth.auth_backends.TwitterBackend',
                            'socialauth.auth_backends.FacebookBackend',
                            )
- 
-LOGIN_REDIRECT_URL = '/'
