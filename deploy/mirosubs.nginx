@@ -8,30 +8,33 @@ server {
     listen 80;
     server_name mirosubs.pybrew.com;
     access_log /home/mirosubs/log/nginx.access.log;
-    error_log /home/mirosubs/log/nginx.error.log;
+    error_log /home/mirosubs/log/nginx.error.log notice;
+
+    location / {
+        # from:
+        # http://www.meppum.com/2009/jan/17/installing-django-ubuntu-intrepid/#Config_Nginx   
+        proxy_pass http://mirosubs-backend;
+        include /etc/nginx/proxy.conf;
+    }
 
     location = /favicon.ico {
         root /home/mirosubs/mirosubs/media;
         autoindex off;
         expires 1d;
     }
-    
+
     location /site_media {
+        rewrite ^/site_media/(.*)$ /$1 break;
         root /home/mirosubs/mirosubs/media;
-        autoindex off;
+        autoindex on;
         expires 1d;
     }
-    
+
     location /media {
+        rewrite ^/media/(.*)$ /$1 break;
         root /home/mirosubs/env/lib/python2.5/site-packages/django/contrib/admin/media;
-        autoindex off;
+        autoindex on;
         expires 1d;
-    }
-    
-    location / {
-        # from:
-        # http://www.meppum.com/2009/jan/17/installing-django-ubuntu-intrepid/#Config_Nginx
-        proxy_pass http://mirosubs-backend;
-        include /etc/nginx/proxy.conf;
     }
 }
+
