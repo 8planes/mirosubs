@@ -50,4 +50,4 @@ def update():
         run('touch deploy/evolve.wsgi')
 
 def compile_js():
-    run('/home/mirosubs/compile.py')
+    run('/home/mirosubs/closure/compile.py')
