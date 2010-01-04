@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.contrib.sites.models import Site
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -20,8 +21,10 @@ urlpatterns = patterns('',
 #    (r'^admin/', include(admin.site.urls)),
     (r'^embed_widget.js$', 'widget.views.embed'),
     (r'^widget/login/', 'widget.views.login'),
+    url(r'^widget/twitter_login/', 'socialauth.views.twitter_login', kwargs={'base_url_and_callback': ('http://%s/socialauth' % Site.objects.get_current().domain, '/widget/close_window/')}),
     (r'^widget/logout/', 'django.contrib.auth.views.logout'),
-    (r'^widget/save_captions/$', 'widget.views.save_captions')
+    (r'^widget/save_captions/$', 'widget.views.save_captions'),
+    (r'^widget/close_window/$', 'django.views.generic.simple.direct_to_template', {'template' : 'widget/close_window.html'})
 )
 
 if settings.DEBUG:

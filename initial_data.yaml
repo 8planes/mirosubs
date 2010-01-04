@@ -19,6 +19,6 @@
 - model: sites.site
   pk: 4
   fields:
-    domain: localhost:8000
+    domain: dev0.pybrew.com:8000
     name: mirosubs-adam
 

@@ -16,9 +16,22 @@ mirosubs.login = function(login_url) {
     dialog.setVisible(true);
 };
 
+mirosubs.twitter_login = function(twitter_login_url) {
+    var popupParams = 'location=0,status=0,width=800,height=400';
+    var twitterWin = window.open(twitter_login_url, 'twitterWindow', popupParams);
+    var timer = {};
+    timer.interval = window.setInterval(function() {
+            if (twitterWin.closed) {
+                window.clearInterval(timer.interval);
+                window.location.reload();
+            }
+        }, 1000);
+};
+
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
 window["mirosubs"] = mirosubs;
 mirosubs["login"] = mirosubs.login;
+mirosubs["twitter_login"] = mirosubs.twitter_login;
 mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
 mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
 mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;

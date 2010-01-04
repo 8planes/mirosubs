@@ -26,9 +26,8 @@ def add_params(params=None):
 
 def embed(request):
     params = {}
+    params['request'] = request
     params['video_id'] = request.GET['video_id']
-    if request.user.is_authenticated():
-        params['username'] = request.user.username
     params['uuid'] = str(uuid4()).replace('-', '')
     params['referer'] = request.META.get('HTTP_REFERER', '')
     return render_to_response('widget/embed.js', add_params(params), 

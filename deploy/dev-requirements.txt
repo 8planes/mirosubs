@@ -14,7 +14,7 @@ simplejson
 python-openid
 python-yadis
 oauth
--e git://github.com/uswaretech/Django-Socialauth.git#egg=socialauth
+-e git://github.com/aduston/Django-Socialauth.git#egg=socialauth
 
 django-registration
 fabric>=0.9.0

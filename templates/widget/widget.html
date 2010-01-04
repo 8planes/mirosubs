@@ -1,10 +1,11 @@
 <div>
-{% if username %}
+{% if request.user.is_authenticated %}
   <div>
-    Welcome, {{username}}!&nbsp;<a href="http://{{site.domain}}/widget/logout/?next={{referer|urlencode}}">Logout</a>
+    Welcome, {{request.user}}!&nbsp;<a href="http://{{site.domain}}/widget/logout/?next={{referer|urlencode}}">Logout</a>
   </div>
 {% else %}
-  <a href="#" onclick="mirosubs.login('http://{{site.domain}}/widget/login/'); return false;">Login</a>
+  <a href="#" onclick="mirosubs.login('http://{{site.domain}}/widget/login/'); return false;">Login</a><br/>
+  <a href="#" onclick="mirosubs.twitter_login('http://{{site.domain}}/widget/twitter_login/'); return false;">Login through Twitter</a>
 {% endif %}
   <div id="{{uuid}}_captions">
     <a href="#" id="{{uuid}}_addCaption">Add caption</a>
