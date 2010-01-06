@@ -12,7 +12,7 @@ def staging():
     """
     Run the subsequent commands on the staging server, e.g., li22-44.members.linode.com or 75.127.96.44
     """
-    env.hosts = ['75.127.96.44:2222']
+    env.hosts = ['74.207.235.157']
     env.user = 'mirosubs'
 
 def setup_virtualenv(home='/home/mirosubs'):
