@@ -28,6 +28,7 @@ def embed(request):
     params = {}
     params['request'] = request
     params['video_id'] = request.GET['video_id']
+    params['video_url'] = request.GET['video_url']
     params['uuid'] = str(uuid4()).replace('-', '')
     params['referer'] = request.META.get('HTTP_REFERER', '')
     return render_to_response('widget/embed.js', add_params(params), 
