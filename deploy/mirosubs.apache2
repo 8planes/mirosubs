@@ -20,7 +20,7 @@
         Allow from all
     </Location>
 
-    Alias /media /home/mirosubs/env/lib/python2.5/site-packages/django/contrib/admin/media/
+    Alias /media /home/mirosubs/env/lib/python2.6/site-packages/django/contrib/admin/media/
     <Location "/media">
         SetHandler None
         Order allow,deny
