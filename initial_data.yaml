@@ -19,6 +19,10 @@
 - model: sites.site
   pk: 4
   fields:
-    domain: dev0.pybrew.com:8000
-    name: mirosubs-adam
+    domain: mirosubs.example.com:8000
+    name: mirosubs-dev
 
+- model: widget.video
+  pk: 1
+  fields:
+    video_url: http://videos.mozilla.org/firefox3/switch/switch.ogg

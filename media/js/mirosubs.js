@@ -42,8 +42,6 @@ mirosubs.transcribe = function(transcribe_url) {
 
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
 window["mirosubs"] = mirosubs;
-mirosubs["login"] = mirosubs.login;
-mirosubs["twitter_login"] = mirosubs.twitter_login;
 mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
 mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
 mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;
