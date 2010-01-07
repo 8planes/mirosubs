@@ -2,7 +2,7 @@ from settings import *
 import logging
 
 SITE_ID = 4
-SITE_NAME = 'mirosubs-adam'
+SITE_NAME = 'mirosubs-dev'
 
 
 # socialauth-related

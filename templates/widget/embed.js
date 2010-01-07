@@ -15,6 +15,7 @@
         { 
             uuid: '{{uuid}}', 
             video_id: '{{video_id}}', 
+            has_subtitles: {{has_subtitles_var}},
             username: '{{username|escapejs}}',
             save_captions_url: 'http://{{site.domain}}/widget/save_captions/'
         };

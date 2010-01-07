@@ -5,7 +5,7 @@ JS_USE_COMPILED = True
 DEBUG = False
 ADMINS = (
   ('Rodrigo Guzman', 'rz@pybrew.com'),
-#  ('Adam Duston', 'adam@pybrew.com'),
+  ('Adam Duston', 'adam@pybrew.com'),
 )
 
 DATABASE_NAME = '/home/mirosubs/mirosubs/mirosubs.sqlite3'
