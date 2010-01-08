@@ -42,3 +42,6 @@ mirosubs.trans.EditableCaption.prototype.setEndTime = function(endTime) {
 mirosubs.trans.EditableCaption.prototype.getEndTime = function() {
     return this.jsonCaption['end_time'];
 };
+mirosubs.trans.EditableCaption.prototype.getCaptionID = function() {
+    return this.jsonCaption['caption_id'];
+};
