@@ -51,16 +51,13 @@ mirosubs.trans.SyncWidget.prototype.decorateInternal = function(element) {
 };
 mirosubs.trans.SyncWidget.prototype.handleKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE) {
-        console.log("space clicked!");
         var playheadTime = this.playheadFn_();
         var lastCaption = null;
-        console.log("this.currentCaptionWidget_ is " + this.currentCaptionWidget_);
         if (this.currentCaptionWidget_ != null) {
             lastCaption = this.currentCaptionWidget_.caption;
             if (lastCaption.getStartTime() != -1)
                 lastCaption.setEndTime(playheadTime);
         }
-        console.log("lastCaption is " + lastCaption);
         // TODO: get rid of this linear search in the future by getting 
         // another map in instance state.
         var nextIndex = lastCaption == null ? 
@@ -77,14 +74,11 @@ mirosubs.trans.SyncWidget.prototype.handleKey_ = function(event) {
 };
 mirosubs.trans.SyncWidget.prototype.captionReached_ = function(jsonCaptionEvent) {
     var jsonCaption = jsonCaptionEvent.caption;
-    console.log("captionReached. jsonCaption is " + jsonCaption);
     if (this.currentCaptionWidget_ != null)
         this.currentCaptionWidget_.setCurrent(false);
     if (jsonCaption != null) {
         var captionID = jsonCaption['caption_id'];
-        console.log("captionID is " + captionID);
         this.currentCaptionWidget_ = this.captionWidgetMap_[captionID + ''];
-        console.log("currentCaptionWidget_ is " + this.currentCaptionWidget_);
         this.currentCaptionWidget_.setCurrent(true);
     }
     else {
@@ -126,7 +120,6 @@ mirosubs.trans.SyncWidget.Caption_.prototype.keyUp_ = function(event) {
 };
 mirosubs.trans.SyncWidget.Caption_.prototype.setCurrent = function(current) {
     var className = "mirosubs-activecaption-input-label";
-    console.log("setCurrent called: " + current);
     if (current)
         goog.dom.classes.add(this.getElement(), className);
     else
