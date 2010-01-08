@@ -7,7 +7,6 @@ goog.provide('mirosubs.CaptionManager');
  *     playhead time of the video, in seconds.
  */
 mirosubs.CaptionManager = function(playheadFn) {
-    console.log(playheadFn);
     goog.events.EventTarget.call(this);
     this.captions_ = [];
     this.captionCompare_ = function(a, b) {
@@ -19,6 +18,7 @@ mirosubs.CaptionManager = function(playheadFn) {
     this.timerInterval_ = window.setInterval(function() { that.timerTick_(); }, 100);
     this.currentCaption_ = null;
     this.nextCaption_ = null;
+    this.lastCaptionDispatched_ = null;
 };
 goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 
@@ -72,6 +72,9 @@ mirosubs.CaptionManager.prototype.timerTick_ = function() {
 };
 
 mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
+    if (caption == this.lastCaptionDispatched_)
+        return;
+    this.lastCaptionDispatched_ = caption;
     var event = new goog.events.Event(mirosubs.CaptionManager.CAPTION_EVENT, this);
     event.caption = caption;
     this.dispatchEvent(event);
