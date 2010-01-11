@@ -42,6 +42,11 @@ mirosubs.trans.ContainerWidget.prototype.decorateInternal = function(element) {
                            buttonContainer.addChild(that.createTab_(text, index), true);
                        });
     this.addChild(this.nextStepButton_ = new goog.ui.Button("Next Step >>"), true);
+    goog.events.listen(this.nextStepButton_, goog.ui.Component.EventType.ACTION,
+                       function(e) {
+                           if (that.state_ < 2)
+                               that.setState_(that.state_ + 1);
+                       });
     this.setState_(0);
 };
 

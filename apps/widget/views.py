@@ -39,46 +39,30 @@ def embed(request):
     return render_to_response('widget/embed.js', add_params(params), 
                               mimetype="text/javascript")
 
-def save_captions(request):
-    video_id = request.POST["xdp:video_id"];
-    deleted_captions = json.loads(request.POST["xdp:deleted"]);
-    inserted_captions = json.loads(request.POST["xdp:inserted"]);
-    updated_captions = json.loads(request.POST["xdp:updated"]);
+def rpc(request, method_name):
+    func = getattr(self, method_name)
+    args = {}
+    for k, v in request.POST:
+        args[k] = json.loads(v)
+    result = fun(**args)
+    return HttpResponse(json.dumps(result), "application/json")
 
-    # TODO: save caption work to database
-    # for definition of json format, see mirosubs-captionwidget.js
-
-    params = {}
-    params['request_id'] = request.POST["xdpe:request-id"]
-    params['dummy_uri'] = request.POST["xdpe:dummy-uri"]
-    params['response_json'] = '{\\"response\\": \\"ok\\"}'
-    return render_to_response('widget/save_captions_response.html',
+def xd_rpc(request, method_name):
+    args = {}
+    for k, v in request.POST:
+        if k[0:4] == 'xdp:':
+            args[k] = json.loads(k[4:])
+    func = getattr(self, method_name)
+    result = fun(**args)
+    # TODO: you might have to replace " in json with \\"
+    params = {
+        'request_id' : request.POST['xdpe:request-id'],
+        'dummy_uri' : request.POST['xdpe:dummy-uri'],
+        'response_json' : json.dumps(result) }
+    return render_to_response('widget/xd_rpc_response.html',
                               add_params(params))
+    
 
-def login(request):
-    "Similar to django.contrib.auth.views.login, except handles off-site redirects"
-    redirect_field_name = 'to_redirect'
-    redirect_to = request.REQUEST.get(redirect_field_name, '')
-    if request.method == "POST":        
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            from django.contrib.auth import login
-            login(request, form.get_user())
-            if request.session.test_cookie_worked():
-                request.session.delete_test_cookie()
-            return render_to_response('widget/set_parent_url.html',
-                                      {'url': redirect_to})
-    else:
-        form = AuthenticationForm(request)
-        request.session.set_test_cookie()
-        if Site._meta.installed:
-            current_site = Site.objects.get_current()
-        else:
-            current_site = RequestSite(request)
-        return render_to_response('widget/login.html', {
-                'form': form,
-                redirect_field_name : redirect_to,
-                'site': current_site,
-                'site_name': current_site.name,
-                }, context_instance=RequestContext(request))
-login = never_cache(login)
+def save_captions(video_id, deleted, inserted, updated):
+    # TODO: save caption work to database
+    return {"response" : "ok"}
