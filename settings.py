@@ -21,6 +21,7 @@ JS_USE_COMPILED = False
 
 # paths provided relative to media/js
 JS_RAW = ['mirosubs.js', 
+          'mirosubs-rpc.js',
           'mirosubs-videoplayer.js',
           'mirosubs-unitofwork.js', 
           'widget/mirosubs-editablecaption.js',
