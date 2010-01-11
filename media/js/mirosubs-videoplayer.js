@@ -1,7 +1,7 @@
 goog.provide('mirosubs.VideoPlayer');
 
-mirosubs.VideoPlayer = function(video_elem) {
-    this.video_elem = video_elem;
+mirosubs.VideoPlayer = function(videoElem) {
+    this.videoElem_ = videoElem;
 };
 
 mirosubs.VideoPlayer.wrap = function(video_elem_id) {
@@ -10,7 +10,7 @@ mirosubs.VideoPlayer.wrap = function(video_elem_id) {
 };
 
 mirosubs.VideoPlayer.prototype.getPlayheadTime = function() {
-    return this.video_elem.currentTime;
+    return this.videoElem_.currentTime;
 };
 
 /**
