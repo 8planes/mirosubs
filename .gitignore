@@ -6,3 +6,4 @@ deploy/src/*
 *calcdeps.js
 *compiled.js
 closure-library
+jsunit

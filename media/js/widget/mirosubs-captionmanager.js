@@ -41,9 +41,11 @@ mirosubs.CaptionManager.prototype.addCaptions = function(captions) {
 };
 
 mirosubs.CaptionManager.prototype.timerTick_ = function() {
-    if (this.playheadFn_ == null)
-        return;
-    var playheadTime = (this.playheadFn_)();
+    if (this.playheadFn_ != null)
+        this.sendEventsForPlayheadTime_(this.playheadFn());    
+};
+
+mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ = function(playheadTime) {
     if (this.currentCaption_ != null && 
         playheadTime >= this.currentCaption_['start_time'] && 
         playheadTime <= this.currentCaption_['end_time'])
