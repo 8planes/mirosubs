@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="/site_media/js/closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript" src="/site_media/js/closure-dependencies.js"></script>
+    <script>
+      goog.require('goog.testing.jsunit');
+    </script>
+    <script>
+      <!-- Symlinked to JSUnit installation -->
+      goog.testing.jsunit.BASE_PATH = '/site_media/js/jsunit/app/';
+    </script>
+{% for dep in js_dependencies %}
+    <script type="text/javascript" src="{{dep|safe}}"></script>
+{% endfor %}
+  </head>
+  <body>
+    <script>
+      {% block testscript %}{% endblock %}
+    </script>
+  </body>
+</html>
