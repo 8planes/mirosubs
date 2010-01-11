@@ -16,8 +16,7 @@ mirosubs.CaptionManager = function(playheadFn) {
     this.playheadFn_ = playheadFn;
     var that = this;
     this.timerInterval_ = window.setInterval(function() { that.timerTick_(); }, 100);
-    this.currentCaption_ = null;
-    this.nextCaption_ = null;
+    this.currentCaptionIndex_ = -1;
     this.lastCaptionDispatched_ = null;
 };
 goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
@@ -37,37 +36,57 @@ mirosubs.CaptionManager.prototype.addCaptions = function(captions) {
     for (i = 0; i < captions.length; i++)
         this.captions_.push(captions[i]);
     goog.array.sort(this.captions_, this.captionCompare_);
+    this.currentCaptionIndex_ = -1;
     this.timerTick_();
 };
 
 mirosubs.CaptionManager.prototype.timerTick_ = function() {
-    if (this.playheadFn_ == null)
+    if (this.playheadFn_ != null)
+        this.sendEventsForPlayheadTime_(this.playheadFn_());
+};
+
+mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ = function(playheadTime) {
+    if (this.captions_.length == 0)
         return;
-    var playheadTime = (this.playheadFn_)();
-    if (this.currentCaption_ != null && 
-        playheadTime >= this.currentCaption_['start_time'] && 
-        playheadTime <= this.currentCaption_['end_time'])
+    if (this.currentCaptionIndex_ == -1 && 
+        playheadTime < this.captions_[0]['start_time'])
         return;
-    // TODO: perhaps keep track of more state in future (e.g. next caption)
-    // to eliminate some binary searches. For now, keeping it simple at the 
-    // expense of performance.
-    if (this.captions_.length > 0) {
-        var lastCaptionIndex = 
-            goog.array.binarySearch(this.captions_, 
-                                    { 'start_time' : playheadTime },
-                                    this.captionCompare_);
-        if (lastCaptionIndex < 0)
-            lastCaptionIndex = -lastCaptionIndex - 2;
-        if (lastCaptionIndex >= 0 && 
-            playheadTime >= this.captions_[lastCaptionIndex]['start_time'] &&
-            playheadTime <= this.captions_[lastCaptionIndex]['end_time']) {
-            this.currentCaption_ = this.captions_[lastCaptionIndex];
-            this.dispatchCaptionEvent_(this.currentCaption_);
-        }
-        else {
-            this.currentCaption_ = null;
-            this.dispatchCaptionEvent_(this.currentCaption_);
-        }
+    var curCaption = this.currentCaptionIndex_ > -1 ? 
+        this.captions_[this.currentCaptionIndex_] : null;
+    if (this.currentCaptionIndex_ > -1 && 
+        playheadTime >= curCaption['start_time'] && 
+        playheadTime < curCaption['end_time'])
+        return;
+    var nextCaption = this.currentCaptionIndex_ < this.captions_.length - 1 ? 
+        this.captions_[this.currentCaptionIndex_ + 1] : null;
+    if (nextCaption != null && 
+        playheadTime >= nextCaption['start_time'] &&
+        playheadTime < nextCaption['end_time']) {
+        this.currentCaptionIndex_++;
+        this.dispatchCaptionEvent_(nextCaption);
+        return;
+    }
+    if ((nextCaption == null || playheadTime < nextCaption['start_time']) &&
+        playheadTime >= curCaption['start_time']) {
+        this.dispatchCaptionEvent_(null);
+        return;
+    }
+    this.sendEventForRandomPlayheadTime_(playheadTime);
+};
+
+mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ = function(playheadTime) {
+    var lastCaptionIndex = goog.array.binarySearch(this.captions_, 
+        { 'start_time' : playheadTime }, this.captionCompare_);
+    if (lastCaptionIndex < 0)
+        lastCaptionIndex = -lastCaptionIndex - 2;
+    this.currentCaptionIndex_ = lastCaptionIndex;
+    if (lastCaptionIndex >= 0 && 
+        playheadTime >= this.captions_[lastCaptionIndex]['start_time'] &&
+        playheadTime <= this.captions_[lastCaptionIndex]['end_time']) {
+        this.dispatchCaptionEvent_(this.captions_[lastCaptionIndex]);
+    }
+    else {        
+        this.dispatchCaptionEvent_(null);
     }
 };
 

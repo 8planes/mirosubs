@@ -24,7 +24,8 @@ urlpatterns = patterns('',
     url(r'^widget/twitter_login/', 'socialauth.views.twitter_login', kwargs={'base_url_and_callback': ('http://%s/socialauth' % Site.objects.get_current().domain, '/widget/close_window/')}),
     (r'^widget/logout/', 'django.contrib.auth.views.logout'),
     (r'^widget/save_captions/$', 'widget.views.save_captions'),
-    (r'^widget/close_window/$', 'django.views.generic.simple.direct_to_template', {'template' : 'widget/close_window.html'})
+    (r'^widget/close_window/$', 'django.views.generic.simple.direct_to_template', {'template' : 'widget/close_window.html'}),
+    (r'^jstest/(\w+)', 'jstesting.views.jstest')
 )
 
 if settings.DEBUG:

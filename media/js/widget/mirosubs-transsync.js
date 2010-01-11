@@ -50,7 +50,9 @@ mirosubs.trans.SyncWidget.prototype.decorateInternal = function(element) {
                               this.handleKey_);
 };
 mirosubs.trans.SyncWidget.prototype.handleKey_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.SPACE) {
+    // I'm using the N key here instead of space because space pauses the 
+    // video.
+    if (event.keyCode == goog.events.KeyCodes.N) {
         var playheadTime = this.playheadFn_();
         var lastCaption = null;
         if (this.currentCaptionWidget_ != null) {
