@@ -47,5 +47,7 @@ def update():
     """
     with cd('/home/mirosubs/mirosubs'):
         run('git pull origin master')
+        run("find -name '*.pyc' -print0 | xargs -0 rm")
         run('touch deploy/evolve.wsgi')
         run('/home/mirosubs/env/bin/python closure/compile.py')
+
