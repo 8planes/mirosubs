@@ -122,7 +122,16 @@ function testInsertCaptionUnderCurrentPlayheadTime() {
 }
 
 function testAlterCurrentCaptionTime() {
-    fail("implement me");
+    var addedCaption = captionJSON(0.5, 2, 1);
+		addCaptions([addedCaption]);
+    sendEvents(0.3);
+    sendEvents(1.3);
+		addedCaption["end_time"]=3;
+    sendEvents(2.2);
+		addedCaption["start_time"]=2.5;
+    sendEvents(2.3);
+    assertEquals(2, MS_dispatchedCaptions.length);
+    assertNull(MS_dispatchedCaptions[1]);
 }
 
 function testProgressToEnd() {
