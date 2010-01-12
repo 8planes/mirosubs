@@ -1,7 +1,19 @@
 from django.db import models
+from uuid import uuid4
 
 class Video(models.Model):
-    video_url = models.CharField(max_length=2048)
+    video_id = models.CharField(max_length=255)
+    video_url = models.CharField(max_length=2048, unique=True)
+    
+    def __unicode__(self):
+        return self.video_url
+
+def create_video_id(sender, instance, **kwargs):
+    if not instance or instance.video_id:
+        return
+    instance.video_id = str(uuid4())
+models.signals.pre_save.connect(create_video_id, sender=Video)
+    
 
 class VideoCaption(models.Model):
     video = models.ForeignKey(Video)

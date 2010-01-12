@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<p>To enable collaborative subtitles, enter the URL to any Ogg video:</p>
+<div id="video_form">
+  <form action="" method="POST">
+    {{ video_form.as_p }}
+    <p><input type="submit" value="Get started" /></p>
+  </form>
+</div>
+{% endblock %}
