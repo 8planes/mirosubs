@@ -135,11 +135,26 @@ function testAlterCurrentCaptionTime() {
 }
 
 function testProgressToEnd() {
-    fail("implement me");
+		addCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    sendEvents(0.3);
+    sendEvents(1.3);
+    sendEvents(2.3);
+    sendEvents(3.3);
+    sendEvents(4.3);
+    assertEquals(4, MS_dispatchedCaptions.length);
+    assertNull(MS_dispatchedCaptions[3]);
 }
 
 function testProgressToEndTwice() {
-    fail("implement me");
+		addCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    sendEvents(0.3);
+    sendEvents(1.3);
+    sendEvents(2.3);
+    sendEvents(3.3);
+    sendEvents(4.3);
+    sendEvents(4.5);
+    assertEquals(4, MS_dispatchedCaptions.length);
+    assertNull(MS_dispatchedCaptions[3]);
 }
 
 {% endblock %}
