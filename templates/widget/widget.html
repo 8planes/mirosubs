@@ -4,9 +4,21 @@
       <source src="{{video_url}}" />
     </video>
   </div>
+  <!-- The following block is possiby temporary, just to make login/logout more 
+       explicit for the time being -->
+  <div>
+    <div id="{{uuid}}_authenticated" {% if not request.user.is_authenticated %}style="display:none"{% endif %}>
+      You are logged in as <span id="{{uuid}}_username">{{ request.user.username }}</span>. 
+      <a href="#" id="{{uuid}}_logout">Logout</a>
+    </div>
+    <div id="{{uuid}}_notauthenticated" {% if request.user.is_authenticated %}style="display:none"{% endif %}>
+      You are currently logged out. 
+      <a href="#" id="{{uuid}}_login">Login</a>
+    </div>
+  </div>
   <div class="MiroSubs-captioningArea" id="{{uuid}}_captions">
     {% if has_subtitles %}
-      <a href="#{{uuid}}_selectLanguage">subtitle language...</a>
+      <a href="#" id="{{uuid}}_selectLanguage">subtitle language...</a>
     {% else %}
       <a href="#" id="{{uuid}}_subtitleMe">subtitle me!</a>
     {% endif %}

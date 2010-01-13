@@ -36,12 +36,11 @@ def embed(request):
     params['has_subtitles'] = False
     params['has_subtitles_var'] = 'false'
     params['uuid'] = str(uuid4()).replace('-', '')
-    params['referer'] = request.META.get('HTTP_REFERER', '')
     return render_to_response('widget/embed.js', add_params(params), 
                               mimetype="text/javascript")
 
 def rpc(request, method_name):
-    args = {}
+    args = { 'request': request }
     for k, v in request.POST.items():
         args[k.encode('ascii')] = json.loads(v)
     func = getattr(views, method_name)
@@ -49,7 +48,7 @@ def rpc(request, method_name):
     return HttpResponse(json.dumps(result), "application/json")
 
 def xd_rpc(request, method_name):
-    args = {}
+    args = { 'request' : request }
     for k, v in request.POST.items():
         if k[0:4] == 'xdp:':
             args[k[4:].encode('ascii')] = json.loads(v)
@@ -62,6 +61,18 @@ def xd_rpc(request, method_name):
     return render_to_response('widget/xd_rpc_response.html',
                               add_params(params))
 
-def save_captions(video_id, deleted, inserted, updated):
+def getMyUserInfo(request):
+    if request.user.is_authenticated:
+        return { "logged_in" : True,
+                 "username" : request.user.username }
+    else:
+        return { "logged_in" : False }
+
+def save_captions(request, video_id, deleted, inserted, updated):
     # TODO: save caption work to database
     return {"response" : "ok"}
+
+def logout(request):
+    from django.contrib.auth import logout
+    logout(request)
+    return {"respones" : "ok"}

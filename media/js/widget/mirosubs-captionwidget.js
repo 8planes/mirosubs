@@ -6,14 +6,16 @@ mirosubs.CaptionWidget = function(uuid, videoID, hasSubtitles, username, baseRpc
     var that = this;
     this.videoID = videoID;
 
-    mirosubs.currentUsername = username;
+    mirosubs.currentUsername = username == '' ? null : username;
     mirosubs.Rpc.BASE_URL = baseRpcUrl;
     mirosubs.BASE_LOGIN_URL = baseLoginUrl;
+    mirosubs.CaptionWidget.widgets = mirosubs.CaptionWidget.widgets || [];
+    mirosubs.CaptionWidget.widgets.push(this);
+
+    this.userPanel_ = new mirosubs.CaptionWidget.UserPanel_(uuid);
 
     this.unitOfWork = new mirosubs.UnitOfWork(function() { that.workPerformed(); });
-    this.saving = false;
-
-    this.caption_div = goog.dom.$(uuid + "_captions");    
+    this.captionDiv_ = goog.dom.$(uuid + "_captions");    
     this.videoPlayer = mirosubs.VideoPlayer.wrap(uuid + "_video");
     this.playheadFn_ = function() {
             return that.videoPlayer.getPlayheadTime();
@@ -44,6 +46,13 @@ mirosubs.CaptionWidget.wrap = function(identifier) {
                                username, baseRpcUrl, baseLoginUrl);
 };
 
+mirosubs.CaptionWidget.prototype.updateLoginState = function() {
+    if (mirosubs.currentUsername == null)
+        this.userPanel_.setLoggedOut();
+    else
+        this.userPanel_.setLoggedIn(mirosubs.currentUsername);
+};
+
 mirosubs.CaptionWidget.prototype.captionReached_ = function(jsonCaptionEvent) {
     var c = jsonCaptionEvent.caption;
     this.videoPlayer.showCaptionText(c ? c['caption_text'] : '');
@@ -55,10 +64,44 @@ mirosubs.CaptionWidget.prototype.languageSelectedListener_ = function(event) {
 };
 
 mirosubs.CaptionWidget.prototype.subtitleMeListener_ = function(event) {
-    goog.dom.removeChildren(this.caption_div);
+    goog.dom.removeChildren(this.captionDiv_);
     var containerWidget = new mirosubs.trans.ContainerWidget(
         this.playheadFn_, this.captionManager_);
-    containerWidget.decorate(this.caption_div);
+    containerWidget.decorate(this.captionDiv_);
+    event.preventDefault();
+};
+
+/**
+ * A private class to manage the user div in the widget.
+ */
+mirosubs.CaptionWidget.UserPanel_ = function(uuid) {
+    var $ = goog.dom.$;
+    this.authenticatedPanel_ = $(uuid + "_authenticated");
+    this.usernameSpan_ = $(uuid + "_username");
+    this.notAuthenticatedPanel_ = $(uuid + "_notauthenticated");
+
+    goog.events.listen($(uuid + '_login'), 'click', this.loginClicked_, false, this);
+    goog.events.listen($(uuid + '_logout'), 'click', this.logoutClicked_, false, this);
+};
+
+mirosubs.CaptionWidget.UserPanel_.prototype.setLoggedIn = function(username) {
+    this.authenticatedPanel_.style.display = '';
+    this.notAuthenticatedPanel_.style.display = 'none';
+    goog.dom.setTextContent(this.usernameSpan_, username);
+};
+
+mirosubs.CaptionWidget.UserPanel_.prototype.setLoggedOut = function() {
+    this.authenticatedPanel_.style.display = 'none';
+    this.notAuthenticatedPanel_.style.display = '';
+};
+
+mirosubs.CaptionWidget.UserPanel_.prototype.loginClicked_ = function(event) {
+    mirosubs.login();
+    event.preventDefault();
+};
+
+mirosubs.CaptionWidget.UserPanel_.prototype.logoutClicked_ = function(event) {
+    mirosubs.logout();
     event.preventDefault();
 };
 
@@ -66,6 +109,9 @@ mirosubs.CaptionWidget.prototype.subtitleMeListener_ = function(event) {
 mirosubs["CaptionWidget"] = mirosubs.CaptionWidget;
 mirosubs.CaptionWidget["wrap"] = mirosubs.CaptionWidget.wrap;
 
-if (typeof(MiroSubsToEmbed) != 'undefined')
-    for (var i = 0; i < MiroSubsToEmbed.length; i++)
-        mirosubs.CaptionWidget.wrap(MiroSubsToEmbed[i]);
+(function() {
+    var m = window["MiroSubsToEmbed"];
+    if (typeof(m) != 'undefined')
+        for (var i = 0; i < m.length; i++)
+            mirosubs.CaptionWidget.wrap(m[i]);
+})();

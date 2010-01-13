@@ -16,7 +16,7 @@
             uuid: '{{uuid}}', 
             video_id: '{{video_id}}', 
             has_subtitles: {{has_subtitles_var}},
-            username: '{{username|escapejs}}',
+            username: '{{request.user.name|escapejs}}',
             base_rpc_url: 'http://{{site.domain}}/widget/rpc/',
             base_login_url: 'http://{{site.domain}}/widget/'
         };
