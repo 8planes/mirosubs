@@ -13,7 +13,7 @@
   echo[mirosubs.xdRequestID] = '{{request_id|escapejs}}';
   echo[mirosubs.xdDummyURI] = '{{dummy_uri|escapejs}}';
   mirosubs.xdSendResponse(
-    '{"result":"{{response_json|escapejs}}"}',
+    '{{response_json|escapejs}}',
     true, // is JSON
     echo,
     200,

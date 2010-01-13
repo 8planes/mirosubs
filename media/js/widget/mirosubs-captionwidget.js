@@ -2,10 +2,14 @@ goog.provide('mirosubs.CaptionWidget');
 
 // TODO: have this inherit from goog.ui.Component
 
-mirosubs.CaptionWidget = function(uuid, video_id, has_subtitles, username, save_captions_url) {
+mirosubs.CaptionWidget = function(uuid, videoID, hasSubtitles, username, baseRpcUrl, baseLoginUrl) {
     var that = this;
-    this.video_id = video_id;
-    this.save_captions_url = save_captions_url;
+    this.videoID = videoID;
+
+    mirosubs.currentUsername = username;
+    mirosubs.Rpc.BASE_URL = baseRpcUrl;
+    mirosubs.BASE_LOGIN_URL = baseLoginUrl;
+
     this.unitOfWork = new mirosubs.UnitOfWork(function() { that.workPerformed(); });
     this.saving = false;
 
@@ -23,7 +27,7 @@ mirosubs.CaptionWidget = function(uuid, video_id, has_subtitles, username, save_
         goog.events.listen(goog.dom.$(id), 'click', listener, false, that);
     };
 
-    if (has_subtitles)
+    if (hasSubtitles)
         onClick(uuid + "_selectLanguage", this.languageSelectedListener_);
     else
         onClick(uuid + "_subtitleMe", this.subtitleMeListener_);
@@ -31,12 +35,13 @@ mirosubs.CaptionWidget = function(uuid, video_id, has_subtitles, username, save_
 
 mirosubs.CaptionWidget.wrap = function(identifier) {
     var uuid = identifier["uuid"];
-    var video_id = identifier["video_id"];
-    var has_subtitles = identifier["has_subtitles"];
+    var videoID = identifier["video_id"];
+    var hasSubtitles = identifier["has_subtitles"];
     var username = identifier["username"];
-    var save_captions_url = identifier["save_captions_url"];
-    new mirosubs.CaptionWidget(uuid, video_id, has_subtitles, 
-                               username, save_captions_url);
+    var baseRpcUrl = identifier["base_rpc_url"];
+    var baseLoginUrl = identifier["base_login_url"];
+    new mirosubs.CaptionWidget(uuid, videoID, hasSubtitles, 
+                               username, baseRpcUrl, baseLoginUrl);
 };
 
 mirosubs.CaptionWidget.prototype.captionReached_ = function(jsonCaptionEvent) {

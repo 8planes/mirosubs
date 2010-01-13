@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from widget import models
 import simplejson as json
+import views
 
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
@@ -40,28 +41,26 @@ def embed(request):
                               mimetype="text/javascript")
 
 def rpc(request, method_name):
-    func = getattr(self, method_name)
     args = {}
-    for k, v in request.POST:
-        args[k] = json.loads(v)
-    result = fun(**args)
+    for k, v in request.POST.items():
+        args[k.encode('ascii')] = json.loads(v)
+    func = getattr(views, method_name)
+    result = func(**args)
     return HttpResponse(json.dumps(result), "application/json")
 
 def xd_rpc(request, method_name):
     args = {}
-    for k, v in request.POST:
+    for k, v in request.POST.items():
         if k[0:4] == 'xdp:':
-            args[k] = json.loads(k[4:])
-    func = getattr(self, method_name)
-    result = fun(**args)
-    # TODO: you might have to replace " in json with \\"
+            args[k[4:].encode('ascii')] = json.loads(v)
+    func = getattr(views, method_name)
+    result = func(**args)
     params = {
         'request_id' : request.POST['xdpe:request-id'],
         'dummy_uri' : request.POST['xdpe:dummy-uri'],
         'response_json' : json.dumps(result) }
     return render_to_response('widget/xd_rpc_response.html',
                               add_params(params))
-    
 
 def save_captions(video_id, deleted, inserted, updated):
     # TODO: save caption work to database

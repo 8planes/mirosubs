@@ -17,7 +17,8 @@
             video_id: '{{video_id}}', 
             has_subtitles: {{has_subtitles_var}},
             username: '{{username|escapejs}}',
-            save_captions_url: 'http://{{site.domain}}/widget/save_captions/'
+            base_rpc_url: 'http://{{site.domain}}/widget/rpc/',
+            base_login_url: 'http://{{site.domain}}/widget/'
         };
 
     var head = document.getElementsByTagName('head')[0];

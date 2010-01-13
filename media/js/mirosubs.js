@@ -1,10 +1,13 @@
 goog.provide('mirosubs');
 
+mirosubs.BASE_LOGIN_URL = "";
+
 /**
  *
- * @param
+ * @param finishFn {Function} either called with username (if 
+ *     logged in successfully), or null otherwise.
  */
-mirosubs.login = function(login_url, twitter_login_url, finishFn) {
+mirosubs.login = function(finishFn) {
     var html = ['<div><iframe marginwidth="0" marginheight="0" hspace="0" ',
                 'vspace="0" frameborder="0" allowtransparency="true" src="', 
                 base_url,
@@ -26,18 +29,6 @@ mirosubs.twitter_login = function(twitter_login_url) {
                 window.location.reload();
             }
         }, 1000);
-};
-
-mirosubs.transcribe = function(transcribe_url) {
-    var html = ['<div><iframe marginwidth="0" marginheight="0" hspace="0" ',
-                'vspace="0" frameborder="0" allowtransparency="true" src="', 
-                transcribe_url,
-                '"</iframe></div>'].join('');
-    var dialog = new goog.ui.Dialog("mirosubs-modal-dialog", true);
-    dialog.setButtonSet(null);
-    dialog.setContent(html);
-    dialog.setTitle("Transcribe Video");
-    dialog.setVisible(true);
 };
 
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
