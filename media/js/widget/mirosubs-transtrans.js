@@ -52,7 +52,15 @@ mirosubs.trans.TransWidget.prototype.addLine_ = function() {
         this.captions_.push(newEditableCaption);
         this.lastNewLine_.caption = newEditableCaption;
     }
-    this.lastNewLine_ = new mirosubs.trans.TransWidget.Line_();
+//TODO: People might want to insert lines in the middle, not just in the end of the transcript 
+		var current_line = this.lastNewLine_;
+
+		var new_line = new mirosubs.trans.TransWidget.Line_();
+		new_line.previous_line = current_line;
+		new_line.next_line = null;
+
+		if (current_line) current_line.next_line = new_line;
+    this.lastNewLine_ = new_line;
     this.addChild(this.lastNewLine_, true);
 };
 mirosubs.trans.TransWidget.prototype.disposeInternal = function() {
@@ -84,9 +92,21 @@ mirosubs.trans.TransWidget.Line_.prototype.decorateInternal = function(element) 
                        goog.events.EventType.KEYUP,
                        this.keyUp_,
                        false, this);
+    goog.events.listen(this.labelInput.getElement(),
+                       goog.events.EventType.KEYDOWN,
+                       this.keyDown_,
+                       false, this);
     goog.Timer.callOnce(this.labelInput.focusAndSelect, 10, this.labelInput);
 };
+
 mirosubs.trans.TransWidget.Line_.prototype.keyUp_ = function(event) {
     if (this.caption != null)
         this.caption.setText(this.labelInput.getValue());
+};
+
+mirosubs.trans.TransWidget.Line_.prototype.keyDown_ = function(event) {
+    if (event.keyCode == goog.events.KeyCodes.UP && this.previous_line != null)
+        this.previous_line.labelInput.getElement().focus();
+    if (event.keyCode == goog.events.KeyCodes.DOWN && this.next_line != null)
+        this.next_line.labelInput.getElement().focus();
 };
