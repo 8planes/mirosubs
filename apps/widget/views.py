@@ -28,11 +28,10 @@ def add_params(params=None):
 
 def embed(request):
     # just temporary
-    video = models.Video.objects.get(id=1)
     params = {}
     params['request'] = request
     params['video_id'] = request.GET['video_id']
-    params['video_url'] = video.video_url;
+    params['video_url'] = "http://videos.mozilla.org/firefox3/switch/switch.ogg"
     params['has_subtitles'] = False
     params['has_subtitles_var'] = 'false'
     params['uuid'] = str(uuid4()).replace('-', '')

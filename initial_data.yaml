@@ -27,8 +27,3 @@
   fields:
       domain: 192.168.225.128:8002
       name: mirosubs-rz-local
-
-- model: widget.video
-  pk: 1
-  fields:
-    video_url: http://videos.mozilla.org/firefox3/switch/switch.ogg
