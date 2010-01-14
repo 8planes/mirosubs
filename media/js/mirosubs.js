@@ -13,7 +13,7 @@ mirosubs.login = function(finishFn) {
         return;
     }
 
-    var dialog = new goog.ui.Dialog("mirosubs-modal-dialog", true);
+    mirosubs.loginDialog_ = new goog.ui.Dialog("mirosubs-modal-dialog", true);
     var buttonContainer = new goog.ui.Component();
     buttonContainer.addChild(mirosubs.loginButton_ = 
                              new goog.ui.Button("Login"), true);
@@ -31,19 +31,24 @@ mirosubs.login = function(finishFn) {
                                                    mirosubs.loginClicked_(event, dialog, finishFn);
                                                });
                         });
-    dialog.addChild(buttonContainer, true);
-    dialog.setButtonSet(null);
-    dialog.setTitle("Login or Sign Up");
-    dialog.setVisible(true);
+    mirosubs.loginDialog_.addChild(buttonContainer, true);
+    mirosubs.loginDialog_.setButtonSet(null);
+    mirosubs.loginDialog_.setTitle("Login or Sign Up");
+    mirosubs.loginDialog_.setVisible(true);
+};
+
+mirosubs.isLoginDialogShowing = function() {
+    return (mirosubs.loginDialog_ != null && mirosubs.loginDialog_.isVisible());
 };
 
 mirosubs.logout = function() {
-    mirosubs.Rpc.call('logout', {});
-    mirosubs.currentUsername = null;
-    mirosubs.updateLoginState_();
+    mirosubs.Rpc.call('logout', {}, function(result) {
+            mirosubs.currentUsername = null;
+            mirosubs.updateLoginState_();
+        });
 };
 
-mirosubs.loginClicked_ = function(event, dialog, finishFn) {
+mirosubs.loginClicked_ = function(event, finishFn) {
     var popupParams = 'location=0,status=0,width=800,height=400';
     var urlSuffix;
     if (event.target == this.loginButton_)
@@ -59,7 +64,7 @@ mirosubs.loginClicked_ = function(event, dialog, finishFn) {
     timer.interval = window.setInterval(function() {
             if (loginWin.closed) {
                 window.clearInterval(timer.interval);
-                mirosubs.postPossiblyLoggedIn_(dialog, finishFn);
+                mirosubs.postPossiblyLoggedIn_(finishFn);
             }
         }, 1000);
 };
@@ -69,10 +74,11 @@ mirosubs.updateLoginState_ = function() {
                        function(w) { w.updateLoginState(); });
 };
 
-mirosubs.postPossiblyLoggedIn_ = function(dialog, finishFn) {
+mirosubs.postPossiblyLoggedIn_ = function(finishFn) {
     mirosubs.Rpc.call("getMyUserInfo", {}, function(result) {
-            dialog.setVisible(false);
-            dialog.dispose();
+            mirosubs.loginDialog_.setVisible(false);
+            mirosubs.loginDialog_.dispose();
+            mirosubs.loginDialog_ = null;
             if (result["logged_in"]) {
                 mirosubs.currentUsername = result["username"];
                 mirosubs.updateLoginState_();

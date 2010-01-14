@@ -1,9 +1,11 @@
 goog.provide('mirosubs.UnitOfWork');
 
-mirosubs.UnitOfWork = function(workListener) {
+mirosubs.UnitOfWork = function() {
+    goog.events.EventTarget.call(this);
     this.instantiateLists_();
-    this.workListener = workListener;
 };
+goog.inherits(mirosubs.UnitOfWork, goog.events.EventTarget);
+mirosubs.UnitOfWork.WORK_EVENT = 'work';
 
 mirosubs.UnitOfWork.prototype.instantiateLists_ = function() {
     this.updated = [];
@@ -52,8 +54,8 @@ mirosubs.UnitOfWork.prototype.clear = function() {
 };
 
 mirosubs.UnitOfWork.prototype.issueWorkEvent_ = function() {
-    if (this.workListener != null)
-        this.workListener();
+    this.dispatchEvent(new goog.events.Event(
+        mirosubs.UnitOfWork.WORK_EVENT, this));
 };
 
 mirosubs.UnitOfWork.prototype.getWork = function() {
@@ -62,4 +64,9 @@ mirosubs.UnitOfWork.prototype.getWork = function() {
         neu: goog.array.clone(that.neu),
         updated: goog.array.clone(that.updated),
         deleted: goog.array.clone(that.deleted) };
+};
+
+mirosubs.UnitOfWork.prototype.dispose = function() {
+    mirosubs.UnitOfWork.superClass_.disposeInternal.call(this);
+    goog.events.removeAll(this);
 };
