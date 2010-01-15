@@ -48,7 +48,8 @@ def update():
     """
     with cd('/home/mirosubs/mirosubs'):
         run('git pull origin master')
-        run("find -name '*.pyc' -print0 | xargs -0 rm")
-        run('touch deploy/mirosubs.wsgi')
+        env.warn_only = True
+        run("find . -name '*.pyc' -print0 | xargs -0 rm")
+        env.warn_only = False
         run('/home/mirosubs/env/bin/python closure/compile.py')
-
+        run('touch deploy/mirosubs.wsgi')
