@@ -124,10 +124,19 @@ def update_lock(request, video_id):
         video.save()
         return { "response" : "ok" }
     else:
-        return { "repsonse" : "failed" }        
+        return { "response" : "failed" }        
+
+def release_lock(request, video_id):
+    video = models.Video.objects.get(video_id=video_id)
+    user = request.user if request.user.is_authenticated else None
+    if video.can_writelock(user):
+        video.writelock_time = None
+        video.writelock_owner = None
+        video.save()
+    return { "response": "ok" }
 
 def getMyUserInfo(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         return { "logged_in" : True,
                  "username" : request.user.username }
     else:

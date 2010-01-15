@@ -10,7 +10,7 @@ mirosubs.VideoPlayer.wrap = function(video_elem_id) {
 };
 
 mirosubs.VideoPlayer.prototype.getPlayheadTime = function() {
-    return this.videoElem_.currentTime;
+    return this.videoElem_["currentTime"];
 };
 
 /**
