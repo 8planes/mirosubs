@@ -25,7 +25,7 @@ mirosubs.CaptionManager.CAPTION_EVENT = 'caption';
 
 /**
  * Adds captions to be displayed.
- * @param {Array} captions Array of captions. Each caption must be an 
+ * @param {Array.<jsonCaptions>} captions Array of captions. Each caption must be an 
  *     object with a 'start_time' property set to the start time for 
  *     that caption and an 'end_time' property set to the end time.
  */

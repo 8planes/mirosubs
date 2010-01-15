@@ -14,19 +14,10 @@ mirosubs.trans.SaveManager = function(unitOfWork, saveMethod, saveArgStrategy) {
                                 this.workPerformed_, false, this);
     this.workIndicator_ = null;
 
-    var makeLabel = function(label) {
-        var comp = new goog.ui.Component();
-        comp.setElementInternal(goog.dom.createDom('span', null, label));
-        return comp;
-    };
-
-    this.savingChild_ = makeLabel("Saving...");
-    this.savedChild_ = makeLabel("Saved");
-    this.saveNowChild_ = new goog.ui.Component();
-    this.saveNowChild_.setElementInternal(
-        goog.dom.createDom('a', {'href': '#'}, "Save now"));
-    goog.events.listen(this.saveNowChild_, 'click', 
-                       this.saveNowClicked_, false, this);
+    var $SPAN = goog.bind(goog.dom.createDom, goog.dom, 'span', null);
+    this.savingChild_ = $SPAN("Saving...");
+    this.savedChild_ = $SPAN("Saved");
+    this.saveNowChild_ = goog.dom.createDom('a', {'href': '#'}, "Save now");
     this.currentChild_ = null;
     this.saving_ = false;
     var that = this;
@@ -75,20 +66,26 @@ mirosubs.trans.SaveManager.prototype.saveImpl_ = function(opt_finishFn) {
 
 mirosubs.trans.SaveManager.prototype.workPerformed_ = function(event) {
     if (!this.saving_)
-        this.setChild_(this._saveNowChild);
+        this.setChild_(this.saveNowChild_);
 };
 
 mirosubs.trans.SaveManager.prototype.setWorkIndicator = function(workIndicator) {
     this.workIndicator_ = workIndicator;
     if (this.currentChild_ != null)
-        this.workIndicator_.addChild(this.currentChild_);
+        this.workIndicator_.appendChild(this.currentChild_);
 };
 
 mirosubs.trans.SaveManager.prototype.setChild_ = function(child) {
     if (this.workIndicator_ != null &&
         this.currentChild_ != child) {
-        this.workIndicator_.removeChildren();
-        this.workIndicator_.addChild(child);
+        goog.events.removeAll(this.saveNowChild_);
+        if (this.currentChild_ != null)
+            this.workIndicator_.removeChild(this.currentChild_);
+        this.workIndicator_.appendChild(child);
+        if (child == this.saveNowChild_)
+            goog.events.listen(this.saveNowChild_, 'click', 
+                               this.saveNowClicked_, false, this);
+
     }
     this.currentChild_ = child;
 };

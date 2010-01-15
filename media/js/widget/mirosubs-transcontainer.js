@@ -30,7 +30,7 @@ mirosubs.trans.ContainerWidget = function(video_id, editVersion, playheadFn, cap
     this.captionManager_ = captionManager;
     this.editVersion_ = editVersion;
     var toJsonCaptions = function(arr) {
-        goog.array.map(arr, function(editableCaption) {
+        return goog.array.map(arr, function(editableCaption) {
                 return editableCaption.jsonCaption;
             });
     };
@@ -54,16 +54,15 @@ mirosubs.trans.ContainerWidget.prototype.createDom = function() {
 mirosubs.trans.ContainerWidget.prototype.decorateInternal = function(element) {
     mirosubs.trans.ContainerWidget.superClass_.decorateInternal.call(this, element);
     goog.dom.classes.add(this.getElement(), 'MiroSubs-trans-container');
-    var versionLabel = new goog.ui.Component();
-    versionLabel.setElementInternal(
-        goog.dom.createDom('span', null, 
-                           "Editing version " + this.editVersion_));
-    var workIndicator = new goog.ui.Component();
-    workIndicator.setElementInternal(goog.dom.createDom('span'));
-    var div = new goog.ui.Component();
-    div.addChild(versionLabel, true);
-    div.addChild(workIndicator, true)
-    this.addChild(div, true);
+    var status = new goog.ui.Component();
+    status.setElementInternal(goog.dom.createDom('div'));
+    status.getElement().appendChild(goog.dom.createDom(
+        'span', null, "Editing version " + this.editVersion_));
+    status.getElement().innerHTML += "&nbsp;&nbsp;";
+    var workIndicator = goog.dom.createDom('span');
+    status.getElement().appendChild(workIndicator);
+    this.addChild(status, true);
+
     this.saveManager_.setWorkIndicator(workIndicator);
     this.addChild(this.transcribeMain_ = new goog.ui.Component(), true);
     goog.dom.classes.add(this.transcribeMain_.getElement(), 'main');
@@ -95,7 +94,6 @@ mirosubs.trans.ContainerWidget.prototype.createTab_ = function(text, index) {
 };
 
 mirosubs.trans.ContainerWidget.prototype.setState_ = function(state) {
-    var that = this;
     this.state_ = state;
     for (var i = 0; i < this.tabs_.length; i++)
         this.tabs_[i].getElement().setAttribute(
@@ -110,10 +108,8 @@ mirosubs.trans.ContainerWidget.prototype.setState_ = function(state) {
         this.currentWidget = new mirosubs.trans.SyncWidget(
             this.captions_, this.playheadFn_, this.captionManager_);
     else if (state == 2)
-        this.saveCaptioningWork_(function() {
-                that.currentWidget = new mirosubs.trans.TranslationWidget(
-                    that.captions_, that.captionManager_);
-            });
+        this.currentWidget = new mirosubs.trans.SyncWidget(
+            this.captions_, this.playheadFn_, this.captionManager_);
     this.transcribeMain_.addChild(this.currentWidget, true);
 };
 

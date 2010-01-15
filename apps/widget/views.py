@@ -104,10 +104,10 @@ def start_editing(request, video_id):
         new_version_no = 0
         existing_captions = []
     else:
-        max_version = max(version_list, key=version_no)
+        max_version = max(version_list, key=lambda v: v.version_no)
         new_version_no = max_version.version_no + 1
         existing_captions = models.VideoCaption.objects.filter(\
-            version__id__exact == max_version.id)
+            version__id__exact = max_version.id)
     return { "can_edit" : True, \
              "version" : new_version_no, \
              "existing" : [caption_to_dict(caption) for 
@@ -116,7 +116,7 @@ def start_editing(request, video_id):
 def update_lock(request, video_id):
     ok_response = { "response" : "ok" }
     failed_response = { "response" : "failed" }
-    video = models.Video.objects.get(id=video_id)
+    video = models.Video.objects.get(video_id=video_id)
     user = request.user if request.user.is_authenticated else None
     if video.can_writelock(user):
         video.writelock_time = datetime.now()
@@ -134,9 +134,41 @@ def getMyUserInfo(request):
         return { "logged_in" : False }
 
 def save_captions(request, video_id, version_no, deleted, inserted, updated):
-    # TODO: set me as the owner of the video if video.owner is currently None
-    # TODO: create VideoCaptionVersion, if necessary. Be sure to copy captions from last.
-    # TODO: save caption work to database
+    video = models.Video.objects.get(video_id=video_id)
+    if video.owner is None:
+        video.owner = request.user
+        video.save()
+    version_list = list(video.videocaptionversion_set.all())
+    if len(version_list) == 0:
+        last_version = None
+    else:
+        last_version = max(version_list, key=lambda v: v.version_no)
+    if last_version != None and last_version.version_no == version_no:
+        current_version = last_version
+    else:
+        current_version = models.VideoCaptionVersion(video=video, 
+                                                     version_no=version_no,
+                                                     datetime_started=datetime.now(),
+                                                     user=request.user)
+        current_version.save()
+        if last_version != None:
+            for caption in list(last_version.videocaption_set.all()):
+                current_version.videocaption_set.add(
+                    caption.duplicate_for(current_version))
+    captions = current_version.videocaption_set
+    for d in deleted:
+        captions.remove(captions.get(caption_id=d['caption_id']))
+    for u in updated:
+        caption = captions.get(caption_id=u['caption_id'])
+        caption.update_from(u)
+        caption.save()
+    for i in inserted:
+        captions.add(models.VideoCaption(version=current_version,
+                                         caption_id=i['caption_id'],
+                                         caption_text=i['caption_text'],
+                                         start_time=i['start_time'],
+                                         end_time=i['end_time']))
+    current_version.save()
     return {"response" : "ok"}
 
 def logout(request):

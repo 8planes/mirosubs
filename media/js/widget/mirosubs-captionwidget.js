@@ -90,6 +90,11 @@ mirosubs.CaptionWidget.prototype.subtitleMeListener_ = function(event) {
 
 mirosubs.CaptionWidget.prototype.startEditing_ = 
     function(version, existingCaptions) {
+    this.captionManager_.addCaptions(
+        goog.array.filter(existingCaptions,
+                          function(caption) {
+                              return caption['start_time'] != -1;
+                          }));
     goog.dom.removeChildren(this.captionDiv_);
     var containerWidget = new mirosubs.trans.ContainerWidget(
         this.videoID_, version, this.playheadFn_, this.captionManager_, 

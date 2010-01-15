@@ -68,3 +68,15 @@ class VideoCaption(models.Model):
     caption_text = models.CharField(max_length=1024)
     start_time = models.FloatField()
     end_time = models.FloatField()
+
+    def duplicate_for(self, new_version):
+        return VideoCaption(version=new_version,
+                            caption_id=self.caption_id,
+                            caption_text=self.caption_text,
+                            start_time=self.start_time,
+                            end_time=self.end_time)
+
+    def update_from(self, caption_dict):
+        self.caption_text = caption_dict['caption_text']
+        self.start_time = caption_dict['start_time']
+        self.end_time = caption_dict['end_time']
