@@ -4,6 +4,7 @@ goog.provide('mirosubs.CaptionWidget');
 
 mirosubs.CaptionWidget = function(uuid, videoID, showTab, username, baseRpcUrl, baseLoginUrl) {
     var that = this;
+    this.uuid_ = uuid;
     this.videoID_ = videoID;
 
     mirosubs.currentUsername = username == '' ? null : username;
@@ -65,10 +66,12 @@ mirosubs.CaptionWidget.prototype.languageSelectedListener_ = function(event) {
 };
 
 mirosubs.CaptionWidget.prototype.subtitleMeListener_ = function(event) {
-    // TODO: show a loading animation.
     var that = this;
+    var loadingImage = goog.dom.$(this.uuid_ + "_loading");
+    loadingImage.style.display = '';
     mirosubs.Rpc.call("start_editing", {"video_id": this.videoID_},
                       function(result) {
+                          loadingImage.style.display = 'none';
                           if (!result["can_edit"]) {
                               if (result["owned_by"])
                                   alert("Sorry, this video is owned by " + 
@@ -78,16 +81,19 @@ mirosubs.CaptionWidget.prototype.subtitleMeListener_ = function(event) {
                                         result["locked_by"]);
                           }
                           else {
-                              that.startEditing_(result["version"], result["existing"]);
+                              that.startEditing_(result["version"], 
+                                                 result["existing"]);
                           }
                       });
     event.preventDefault();
 };
 
-mirosubs.CaptionWidget.prototype.startEditing_ = function(version, existingCaptions) {
+mirosubs.CaptionWidget.prototype.startEditing_ = 
+    function(version, existingCaptions) {
     goog.dom.removeChildren(this.captionDiv_);
     var containerWidget = new mirosubs.trans.ContainerWidget(
-        this.playheadFn_, this.captionManager_, version, existingCaptions);
+        this.videoID_, version, this.playheadFn_, this.captionManager_, 
+        existingCaptions);
     containerWidget.decorate(this.captionDiv_);
 };
 

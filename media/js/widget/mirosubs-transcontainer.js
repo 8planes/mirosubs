@@ -56,9 +56,15 @@ mirosubs.trans.ContainerWidget.prototype.decorateInternal = function(element) {
     goog.dom.classes.add(this.getElement(), 'MiroSubs-trans-container');
     var versionLabel = new goog.ui.Component();
     versionLabel.setElementInternal(
-        goog.dom.createDom('div', null, 
+        goog.dom.createDom('span', null, 
                            "Editing version " + this.editVersion_));
-    this.addChild(versionLabel, true);
+    var workIndicator = new goog.ui.Component();
+    workIndicator.setElementInternal(goog.dom.createDom('span'));
+    var div = new goog.ui.Component();
+    div.addChild(versionLabel, true);
+    div.addChild(workIndicator, true)
+    this.addChild(div, true);
+    this.saveManager_.setWorkIndicator(workIndicator);
     this.addChild(this.transcribeMain_ = new goog.ui.Component(), true);
     goog.dom.classes.add(this.transcribeMain_.getElement(), 'main');
     var buttonContainer = new goog.ui.Component();

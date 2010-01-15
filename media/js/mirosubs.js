@@ -28,7 +28,7 @@ mirosubs.login = function(finishFn) {
                             goog.events.listen(button,
                                                goog.ui.Component.EventType.ACTION,
                                                function(event) {
-                                                   mirosubs.loginClicked_(event, dialog, finishFn);
+                                                   mirosubs.loginClicked_(event, finishFn);
                                                });
                         });
     mirosubs.loginDialog_.addChild(buttonContainer, true);

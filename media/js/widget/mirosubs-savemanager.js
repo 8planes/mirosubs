@@ -9,9 +9,9 @@ goog.provide('mirosubs.trans.SaveManager');
 mirosubs.trans.SaveManager = function(unitOfWork, saveMethod, saveArgStrategy) {
     this.unitOfWork_ = unitOfWork;
     this.saveMethod_ = saveMethod;
-    this.saveArgStrategy = saveArgStrategy;
-    goog.events.listen(unitOfWork, mirosubs.UnitOfWork.WORK_EVENT,
-                       this.workPerformed_, false, this);
+    this.saveArgStrategy_ = saveArgStrategy;
+    unitOfWork.addEventListener(mirosubs.UnitOfWork.WORK_EVENT,
+                                this.workPerformed_, false, this);
     this.workIndicator_ = null;
 
     var makeLabel = function(label) {
@@ -29,6 +29,9 @@ mirosubs.trans.SaveManager = function(unitOfWork, saveMethod, saveArgStrategy) {
                        this.saveNowClicked_, false, this);
     this.currentChild_ = null;
     this.saving_ = false;
+    var that = this;
+    this.timerInterval_ = window.setInterval(
+        function() { that.saveNow(); }, 30 * 1000);
 };
 
 mirosubs.trans.SaveManager.prototype.saveNowClicked_ = function(event) {
@@ -37,7 +40,7 @@ mirosubs.trans.SaveManager.prototype.saveNowClicked_ = function(event) {
 };
 
 mirosubs.trans.SaveManager.prototype.saveNow = function(opt_finishFn) {
-    if (!this.unitOfWork_.containsWork())
+    if (this.saving_ || !this.unitOfWork_.containsWork())
         return;
     if (mirosubs.currentUsername == null) {
         if (mirosubs.isLoginDialogShowing())
@@ -91,5 +94,8 @@ mirosubs.trans.SaveManager.prototype.setChild_ = function(child) {
 };
 
 mirosubs.trans.SaveManager.prototype.dispose = function() {
-    // TODO: remove event listeners from constructor. Stop timer.
+    this.unitOfWork_.removeEventListener(mirosubs.UnitOfWork.WORK_EVENT,
+                                         this.workPerformed_, false, this);
+    goog.events.removeAll(this.saveNowChild_);
+    window.clearInterval(this.timerInterval_);    
 };

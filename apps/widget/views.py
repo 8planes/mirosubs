@@ -84,7 +84,7 @@ def start_editing(request, video_id):
     # three cases: either the video is locked, or it is owned by someone else 
     # already and doesn't allow community edits, or i can freely edit it.
     video = models.Video.objects.get(video_id=video_id)
-    if video.owner != null and video.owner != request.user:
+    if video.owner != None and video.owner != request.user:
         return { "can_edit": False, "owned_by" : video.owner.name }
     if video.is_writelocked:
         if video.writelock_owner == None:
@@ -92,7 +92,7 @@ def start_editing(request, video_id):
         else:
             lock_owner_name = video.writelock_owner.username
         return { "can_edit": False, "locked_by" : lock_owner_name }
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         video.owner = request.user
         video.writelock_owner = request.user
     else:
@@ -105,11 +105,13 @@ def start_editing(request, video_id):
         existing_captions = []
     else:
         max_version = max(version_list, key=version_no)
+        new_version_no = max_version.version_no + 1
         existing_captions = models.VideoCaption.objects.filter(\
             version__id__exact == max_version.id)
     return { "can_edit" : True, \
-             "version" : max_version.version_no + 1, \
-             "existing" : [caption_to_dict(caption) for caption in existing_captions] }
+             "version" : new_version_no, \
+             "existing" : [caption_to_dict(caption) for 
+                           caption in existing_captions] }
 
 def update_lock(request, video_id):
     ok_response = { "response" : "ok" }
