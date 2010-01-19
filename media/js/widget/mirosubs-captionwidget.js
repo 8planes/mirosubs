@@ -2,20 +2,19 @@ goog.provide('mirosubs.CaptionWidget');
 
 // TODO: have this inherit from goog.ui.Component
 
-mirosubs.CaptionWidget = function(uuid, videoID, showTab, username, baseRpcUrl, baseLoginUrl) {
+mirosubs.CaptionWidget = function(uuid, videoID, showTab, username) {
     var that = this;
     this.uuid_ = uuid;
     this.videoID_ = videoID;
 
     mirosubs.currentUsername = username == '' ? null : username;
-    mirosubs.Rpc.BASE_URL = baseRpcUrl;
-    mirosubs.BASE_LOGIN_URL = baseLoginUrl;
+    
     mirosubs.CaptionWidget.widgets = mirosubs.CaptionWidget.widgets || [];
     mirosubs.CaptionWidget.widgets.push(this);
 
     this.userPanel_ = new mirosubs.CaptionWidget.UserPanel_(uuid);
 
-    this.unitOfWork = new mirosubs.UnitOfWork(function() { that.workPerformed(); });
+    this.unitOfWork = new mirosubs.UnitOfWork();
     this.captionDiv_ = goog.dom.$(uuid + "_captions");    
     this.videoPlayer = mirosubs.VideoPlayer.wrap(uuid + "_video");
     this.playheadFn_ = function() {
@@ -42,10 +41,10 @@ mirosubs.CaptionWidget.wrap = function(identifier) {
     var videoID = identifier["video_id"];
     var showTab = identifier["show_tab"];
     var username = identifier["username"];
-    var baseRpcUrl = identifier["base_rpc_url"];
-    var baseLoginUrl = identifier["base_login_url"];
-    new mirosubs.CaptionWidget(uuid, videoID, showTab, 
-                               username, baseRpcUrl, baseLoginUrl);
+    mirosubs.Rpc.BASE_URL = identifier["base_rpc_url"];
+    mirosubs.BASE_LOGIN_URL = identifier["base_login_url"];
+    mirosubs.trans.LockManager.EXPIRATION = identifier["writelock_expiration"];
+    new mirosubs.CaptionWidget(uuid, videoID, showTab, username);
 };
 
 mirosubs.CaptionWidget.prototype.updateLoginState = function() {
@@ -96,7 +95,7 @@ mirosubs.CaptionWidget.prototype.startEditing_ =
                               return caption['start_time'] != -1;
                           }));
     goog.dom.removeChildren(this.captionDiv_);
-    var containerWidget = new mirosubs.trans.ContainerWidget(
+    var containerWidget = new mirosubs.trans.ContainerWidget(this.uuid_,
         this.videoID_, version, this.playheadFn_, this.captionManager_, 
         existingCaptions);
     containerWidget.decorate(this.captionDiv_);

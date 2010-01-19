@@ -9,7 +9,8 @@ def full_path(js_file):
 def js_context(request, video):
     params = {'uuid': str(uuid4()).replace('-', ''),
               'video_id': video.video_id,
-              'video_url': video.video_url,}
+              'video_url': video.video_url,
+              'writelock_expiration': video_models.WRITELOCK_EXPIRATION }
     if video.caption_state == video_models.NO_CAPTIONS:
         params['show_tab'] = 0
     elif video.caption_state == video_models.CAPTIONS_IN_PROGRESS:
@@ -20,12 +21,14 @@ def js_context(request, video):
             params['owned_by'] = video.owner.username
     else:
         params['show_tab'] = 3
-    params["js_use_compiled"] = settings.JS_USE_COMPILED
+    return add_js_files(params)
+
+def add_js_files(context):
+    context["js_use_compiled"] = settings.JS_USE_COMPILED
     if settings.JS_USE_COMPILED:
         # might change in future when using cdn to serve static js
-        params["js_dependencies"] = [full_path("mirosubs-compiled.js")]
+        context["js_dependencies"] = [full_path("mirosubs-compiled.js")]
     else:
-        params["js_dependencies"] = [full_path(js_file) for js_file in settings.JS_RAW]
-    params["site"] = Site.objects.get_current()
-    return params
-    
+        context["js_dependencies"] = [full_path(js_file) for js_file in settings.JS_RAW]
+    context["site"] = Site.objects.get_current()
+    return context;

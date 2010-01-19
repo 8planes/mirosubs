@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
-WRITELOCK_EXPIRATION = 120 # 2 minutes
+WRITELOCK_EXPIRATION = 30 # 30 seconds
 
 class Video(models.Model):
     video_id = models.CharField(max_length=255, unique=True)
@@ -15,10 +15,19 @@ class Video(models.Model):
     # always set to False for the time being.
     allow_community_edits = models.BooleanField()
     writelock_time = models.DateTimeField(null=True)
-    writelock_owner = models.ForeignKey(User, null=True, related_name='writelock_owners')
+    writelock_session_key = models.CharField(max_length=255)
+    writelock_owner = models.ForeignKey(User, null=True, 
+                                        related_name="writelock_owners")
 
     def __unicode__(self):
         return self.video_url
+
+    @property
+    def writelock_owner_name(self):
+        if self.writelock_owner == None:
+            return "anonymous"
+        else:
+            return self.writelock_owner.username
 
     @property
     def caption_state(self):
@@ -38,15 +47,22 @@ class Video(models.Model):
         seconds = delta.days * 24 * 60 * 60 + delta.seconds
         return seconds < WRITELOCK_EXPIRATION
 
-    def can_writelock(self, user):
-        if user != None and \
-           (self.writelock_owner == None or \
-            self.writelock_owner == user or \
-            not self.is_writelocked):
-            return True
-        if user == None and (self.writelock_owner == None or not self.is_writelocked):
-            return True
-        return False
+    def can_writelock(self, session_key):
+        return self.writelock_session_key == session_key or \
+            not self.is_writelocked
+
+    def writelock(self, request):
+        if request.user.is_authenticated():
+            self.writelock_owner = request.user
+        else:
+            self.writelock_owner = None
+        self.writelock_session_key = request.session.session_key
+        self.writelock_time = datetime.now()
+
+    def release_writelock(self):
+        video.writelock_owner = None
+        video.writelock_session_key = ''
+        video.writelock_time = None
 
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:

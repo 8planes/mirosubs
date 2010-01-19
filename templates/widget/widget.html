@@ -16,22 +16,41 @@
       <a href="#" id="{{uuid}}_login">Login</a>
     </div>
   </div>
-  <div class="MiroSubs-captioningArea" id="{{uuid}}_captions">
-    {% ifequal show_tab 0 %}
+  <div style="position: relative">
+    <div class="MiroSubs-captioningArea" id="{{uuid}}_captions">
+      {% ifequal show_tab 0 %}
       <a href="#" id="{{uuid}}_tabSubtitleMe">subtitle me!</a> 
       <img src="http://{{site.domain}}/site_media/images/loading.gif" id="{{uuid}}_loading" 
            alt="loading" style="display: none"/>
-    {% endifequal %}
-    {% ifequal show_tab 1 %}
+      {% endifequal %}
+      {% ifequal show_tab 1 %}
       <a href="#" id="{{uuid}}_tabContinue">continue subtitling</a>
       <img src="http://{{site.domain}}/site_media/images/loading.gif" id="{{uuid}}_loading" 
            alt="loading" style="display: none"/>
-    {% endifequal %}
-    {% ifequal show_tab 2 %}
+      {% endifequal %}
+      {% ifequal show_tab 2 %}
       <span>subtitling in progress/{{owned_by}}</span>
-    {% endifequal %}
-    {% ifequal show_tab 3 %}
+      {% endifequal %}
+      {% ifequal show_tab 3 %}
       <a href="#" id="{{uuid}}_tabSelectLanguage">subtitle language...</a>
-    {% endifequal %}
+      {% endifequal %}
+    </div>
+    <div style="position: absolute; top: 0; left: 0">
+      <div id="{{uuid}}_interPanel0" style="display:none; background-color: white">
+        <p>Good job</p>
+        <p>Now you can sync the captions!</p>
+        <p><a href="#" id="{{uuid}}_interPanelLink0">Go ahead</a></p>
+      </div>
+      <div id="{{uuid}}_interPanel1" style="display:none; background-color: white">
+        <p>Good job</p>
+        <p>Now you can review the captions!</p>
+        <p><a href="#" id="{{uuid}}_interPanelLink1">Go ahead</a></p>
+      </div>
+      <div id="{{uuid}}_interPanel2" style="display:none; background-color: white">
+        <p>Good job</p>
+        <p>Now you are done!</p>
+        <p><a href="#" id="{{uuid}}_interPanelLink2">Finish</a></p>
+      </div>
+    </div>
   </div>
 </div>

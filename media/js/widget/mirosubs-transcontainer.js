@@ -13,8 +13,11 @@ goog.provide('mirosubs.trans.ContainerWidget');
  *     exist and have startTime set.
  * @param {array.<jsonCaptions>} existing captions in json object format.
  */
-mirosubs.trans.ContainerWidget = function(video_id, editVersion, playheadFn, captionManager, existingCaptions, opt_domHelper) {
+mirosubs.trans.ContainerWidget = function(uuid, video_id, editVersion, playheadFn, 
+                                          captionManager, existingCaptions, 
+                                          opt_domHelper) {
     goog.ui.Component.call(this, opt_domHelper);
+    this.uuid_ = uuid;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
     /**
      * Array of captions.
@@ -44,6 +47,8 @@ mirosubs.trans.ContainerWidget = function(video_id, editVersion, playheadFn, cap
                 "updated" : toJsonCaptions(work.updated)
             };
         });
+    this.lockManager_ = new mirosubs.trans.LockManager(
+        'update_video_lock', { 'video_id' : video_id });
 };
 goog.inherits(mirosubs.trans.ContainerWidget, goog.ui.Component);
 
@@ -76,8 +81,7 @@ mirosubs.trans.ContainerWidget.prototype.decorateInternal = function(element) {
     this.addChild(this.nextStepButton_ = new goog.ui.Button("Next Step >>"), true);
     goog.events.listen(this.nextStepButton_, goog.ui.Component.EventType.ACTION,
                        function(e) {
-                           if (that.state_ < 2)
-                               that.setState_(that.state_ + 1);
+                           that.setState_(that.state_ + 1);
                        });
     this.setState_(0);
 };
@@ -92,28 +96,56 @@ mirosubs.trans.ContainerWidget.prototype.createTab_ = function(text, index) {
                        });
     return tab;
 };
-
 mirosubs.trans.ContainerWidget.prototype.setState_ = function(state) {
-    this.state_ = state;
-    for (var i = 0; i < this.tabs_.length; i++)
-        this.tabs_[i].getElement().setAttribute(
-            'class', i == state ? 'tab tab-selected' : 'tab');
-    this.transcribeMain_.removeChildren();
-    if (this.currentWidget != null)
-        this.currentWidget.dispose();
+    var nextWidget;
     if (state == 0)
-        this.currentWidget = new mirosubs.trans.TransWidget(
+        nextWidget = new mirosubs.trans.TransWidget(
             this.captions_, this.unitOfWork_);
     else if (state == 1)
-        this.currentWidget = new mirosubs.trans.SyncWidget(
+        nextWidget = new mirosubs.trans.SyncWidget(
             this.captions_, this.playheadFn_, this.captionManager_);
     else if (state == 2)
-        this.currentWidget = new mirosubs.trans.SyncWidget(
+        nextWidget = new mirosubs.trans.SyncWidget(
             this.captions_, this.playheadFn_, this.captionManager_);
-    this.transcribeMain_.addChild(this.currentWidget, true);
+    this.showInterPanel_(state, nextWidget);
+};
+
+mirosubs.trans.ContainerWidget.prototype.showInterPanel_ = function(state, nextWidget) {
+    var that = this;
+    var finishFn = function() {
+        if (state < 3) {
+            for (var i = 0; i < that.tabs_.length; i++)
+                that.tabs_[i].getElement().setAttribute(
+                    'class', i == state ? 'tab tab-selected' : 'tab');
+            that.transcribeMain_.removeChildren();
+            if (that.currentWidget != null)
+                that.currentWidget.dispose();
+            that.currentWidget = nextWidget;
+            that.transcribeMain_.addChild(that.currentWidget, true);
+            that.state_ = state;
+        }
+        else
+            that.finishEditing_();
+    };
+    if (state != 0 && this.state_ == state - 1) {
+        var panelElem = goog.dom.$(this.uuid_ + "_interPanel" + this.state_);
+        var panelLink = goog.dom.$(this.uuid_ + "_interPanelLink" + this.state_);
+        panelElem.style.display = '';
+        goog.events.listenOnce(panelLink, 'click', function(event) {
+                panelElem.style.display = 'none';
+                finishFn();
+                event.preventDefault();
+            });
+    } else
+        finishFn();
+};
+
+mirosubs.trans.ContainerWidget.prototype.finishEditing_ = function() {
+    
 };
 
 mirosubs.trans.ContainerWidget.prototype.disposeInternal = function() {
     this.saveManager_.dispose();
+    this.lockManager_.dispose();
     mirosubs.trans.ContainerWidget.superClass_.disposeInternal.call(this);
 };

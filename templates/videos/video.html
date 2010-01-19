@@ -11,14 +11,7 @@
 {% endfor %}
 <script type="text/javascript">
 function main(){
-    mirosubs.CaptionWidget.wrap({
-        uuid: '{{ uuid }}',
-        video_id: '{{ video.video_id }}',
-        has_subtitles: {{ has_subtitles_var }},
-        username: '{{request.user.username|escapejs}}',
-        base_rpc_url: 'http://{{site.domain}}/widget/rpc/',
-        base_login_url: 'http://{{site.domain}}/widget/',
-    });
+    mirosubs.CaptionWidget.wrap({% include "widget/embed_params.js" %});
 }
 </script>
 {% endblock %}

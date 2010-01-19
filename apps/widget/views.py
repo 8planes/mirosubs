@@ -16,18 +16,6 @@ import widget
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
 
-def add_params(params=None):
-    if params is None:
-        params = {}
-    params["js_use_compiled"] = settings.JS_USE_COMPILED
-    if settings.JS_USE_COMPILED:
-        # might change in future when using cdn to serve static js
-        params["js_dependencies"] = [full_path("mirosubs-compiled.js")]
-    else:
-        params["js_dependencies"] = [full_path(js_file) for js_file in settings.JS_RAW]
-    params["site"] = Site.objects.get_current()
-    return params
-
 def embed(request):
     if 'video_id' in request.GET:
         video = models.Video.objects.get(video_id=request.GET['video_id'])
@@ -63,28 +51,25 @@ def xd_rpc(request, method_name):
         'dummy_uri' : request.POST['xdpe:dummy-uri'],
         'response_json' : json.dumps(result) }
     return render_to_response('widget/xd_rpc_response.html',
-                              add_params(params))
-
+                              widget.add_js_files(params))
 
 # start of rpc methods
 def start_editing(request, video_id):
     # three cases: either the video is locked, or it is owned by someone else 
     # already and doesn't allow community edits, or i can freely edit it.
+
+    # django won't set a session cookie unless something is in session state.
+    request.session["dummy"] = "a"
+
     video = models.Video.objects.get(video_id=video_id)
     if video.owner != None and video.owner != request.user:
         return { "can_edit": False, "owned_by" : video.owner.name }
-    if video.is_writelocked:
-        if video.writelock_owner == None:
-            lock_owner_name = "anonymous"
-        else:
-            lock_owner_name = video.writelock_owner.username
-        return { "can_edit": False, "locked_by" : lock_owner_name }
-    if request.user.is_authenticated():
+    if not video.can_writelock(request.session.session_key):
+        return { "can_edit": False, "locked_by" : video.writelock_owner_name }
+
+    if video.owner == None and request.user.is_authenticated():
         video.owner = request.user
-        video.writelock_owner = request.user
-    else:
-        video.writelock_owner = None
-    video.writelock_time = datetime.now()
+    video.writelock(request)
     video.save()
     version_list = list(video.videocaptionversion_set.all())
     if len(version_list) == 0:
@@ -100,25 +85,19 @@ def start_editing(request, video_id):
              "existing" : [caption_to_dict(caption) for 
                            caption in existing_captions] }
 
-def update_lock(request, video_id):
-    ok_response = { "response" : "ok" }
-    failed_response = { "response" : "failed" }
+def update_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
-    user = request.user if request.user.is_authenticated else None
-    if video.can_writelock(user):
-        video.writelock_time = datetime.now()
-        video.writelock_owner = user
+    if video.can_writelock(request.session.session_key):
+        video.writelock(request)
         video.save()
         return { "response" : "ok" }
     else:
         return { "response" : "failed" }        
 
-def release_lock(request, video_id):
+def release_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
-    user = request.user if request.user.is_authenticated else None
-    if video.can_writelock(user):
-        video.writelock_time = None
-        video.writelock_owner = None
+    if video.can_writelock(request):
+        video.release_writelock()
         video.save()
     return { "response": "ok" }
 
@@ -131,6 +110,8 @@ def getMyUserInfo(request):
 
 def save_captions(request, video_id, version_no, deleted, inserted, updated):
     video = models.Video.objects.get(video_id=video_id)
+    if not video.can_writelock(request.session.session_key):
+        return { "response" : "unlockable" }
     if video.owner is None:
         video.owner = request.user
         video.save()
