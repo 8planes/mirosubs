@@ -8,5 +8,5 @@ class VideoForm(forms.ModelForm):
                    # TODO: this is being set to false in the save method it 
                    # should just be in the form when the models are finished.
                    'allow_community_edits',
-                   'writelock_time', 'writelock_owner',)
+                   'writelock_time', 'writelock_owner', 'writelock_session_key',)
                    
