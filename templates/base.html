@@ -11,6 +11,13 @@
 <body {% block body_attrs %}{% endblock %}>
   {% block extra_body %}{% endblock %}
   <div class="base_header">
+    {% if messages %}
+      <div id="messages">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
     <div class="base_accountstatus">
       {% if request.user.is_authenticated %}
         <p>Logged in as {{ request.user }}. <a href="{% url logout %}">Logout</a></p>
@@ -25,7 +32,13 @@
       <a href="#">search</a>
     </div>
     <div class="base_links">
-      <a href="{% url videos:create %}">Submit Video</a> / <a href="{% url videos:list %}">All Videos</a> / <a href="#">About</a> / <a href="#">Firefox Extension</a>
+      <a href="{% url videos:create %}">Submit Video</a> /
+      <a href="{% url videos:list %}">All Videos</a> /
+      <a href="#">About</a> /
+      <a href="#">Firefox Extension</a> /
+      {% if request.user.is_authenticated %}
+        <a href="{% url profiles:my_profile %}">My options</a>
+      {% endif %}
     </div>
   </div>
   {% block main_content %}{% endblock %}
