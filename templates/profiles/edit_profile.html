@@ -1,0 +1,8 @@
+{% extends "profiles/base.html" %}
+
+{% block edit_profile_form %}
+<form action="{% url profiles:profile user_id=request.user.username %}" method="post" enctype="multipart/form-data">
+  {{ edit_profile_form.as_p }}
+  <p><input type="submit" value="Save" class="button "/>
+</form>    
+{% endblock %}

@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     (r'^widget/close_window/$', 'django.views.generic.simple.direct_to_template', {'template' : 'widget/close_window.html'}),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^videos/', include('videos.urls', namespace='videos', app_name='videos')),
+    (r'^profiles/', include('profiles.urls', namespace='profiles', app_name='profiles')),
 )
 
 if settings.DEBUG:

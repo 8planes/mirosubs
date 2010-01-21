@@ -1,0 +1,7 @@
+{% extends "profiles/base.html" %}
+
+{% block userinfo %}
+{{ block.super }}
+<p>Preferred language: {{ profile.preferred_language }}</p>
+<p>Homepage: <a href="{{ profile.homepage }}">{{ profile.homepage }}</a></p>
+{% endblock %}

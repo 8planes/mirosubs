@@ -107,9 +107,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'profiles',
     'registration',
+    'sorl.thumbnail',
     'videos',
     'widget',
 )
 
+AUTH_PROFILE_MODULE = 'profiles.Profile'
 ACCOUNT_ACTIVATION_DAYS = 7

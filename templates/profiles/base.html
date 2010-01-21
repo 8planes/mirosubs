@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block main_content %}
+
+{% block userinfo %}
+ <img src="{% thumbnail profile.picture 128x128 %}">
+ <h2>{{ profile.user.username }}</h2>
+{% endblock %} 
+{% block edit_profile_form %}{% endblock %}
+{% block activity %}
+<h2>{{ profile.user.username }}'s activity</h2>
+{% endblock %}
+{% endblock %}

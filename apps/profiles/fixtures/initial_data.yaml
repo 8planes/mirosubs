@@ -1,0 +1,35 @@
+- model: auth.User
+  pk: 1
+  fields:
+      username: rguzman
+      password: sha1$893cb$89b5e35eb492a7cba123798c647832fbcb675220 # pass
+      email: rz@pybrew.com
+        
+- model: auth.User
+  pk: 2
+  fields:
+      username: adam
+      password: sha1$893cb$89b5e35eb492a7cba123798c647832fbcb675220 # pass
+      email: adam@pybrew.com
+
+
+# languages below
+- model: profiles.Language
+  pk: 1
+  fields:
+      name: English
+
+- model: profiles.Language
+  pk: 2
+  fields:
+      name: Spanish
+
+- model: profiles.Language
+  pk: 3
+  fields:
+      name: Portuguese
+      
+- model: profiles.Language
+  pk: 4
+  fields:
+      name: German
