@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from uuid import uuid4
 from videos.forms import VideoForm
 from videos.models import Video
 import widget
