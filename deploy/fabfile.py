@@ -38,8 +38,7 @@ def set_permissions(home='/home/mirosubs'):
 def reset_db():
     env.warn_only = True
     with cd('/home/mirosubs/mirosubs/'):
-        run('/home/mirosubs/env/bin/python manage.py reset videos --noinput --settings=staging-settings')
-        run('/home/mirosubs/env/bin/python manage.py reset widget --noinput --settings=staging-settings')
+        run('/home/mirosubs/env/bin/python manage.py reset_db --noinput --settings=staging-settings')
         run('/home/mirosubs/env/bin/python manage.py syncdb --noinput --settings=staging-settings')
 
 def update():

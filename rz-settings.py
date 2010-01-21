@@ -10,7 +10,6 @@ if gethostname() == 'rz-laptopII-ub':
     SITE_NAME = 'mirosubs-rz-local'
 
 INSTALLED_APPS +=(
-    'django_extensions',
     'debug_toolbar',
 )
 
