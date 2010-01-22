@@ -24,3 +24,4 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            )
 
 
+JS_USE_COMPILED = True

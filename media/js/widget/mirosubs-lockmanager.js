@@ -1,8 +1,5 @@
 goog.provide('mirosubs.trans.LockManager');
 
-// updated by values from server when widgets load.
-mirosubs.trans.LockManager.EXPIRATION = 0;
-
 mirosubs.trans.LockManager = function(lockMethod, lockArgs) {
     this.lockMethod_ = lockMethod;
     this.lockArgs_ = lockArgs;
@@ -11,6 +8,9 @@ mirosubs.trans.LockManager = function(lockMethod, lockArgs) {
         function() { that.updateLock_(); }, 
         (mirosubs.trans.LockManager.EXPIRATION - 10) * 1000);
 };
+
+// updated by values from server when widgets load.
+mirosubs.trans.LockManager.EXPIRATION = 0;
 
 mirosubs.trans.LockManager.prototype.updateLock_ = function() {
     mirosubs.Rpc.call(this.lockMethod_, this.lockArgs_);

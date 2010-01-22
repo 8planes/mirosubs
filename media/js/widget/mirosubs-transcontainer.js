@@ -113,13 +113,13 @@ mirosubs.trans.ContainerWidget.prototype.setState_ = function(state) {
 mirosubs.trans.ContainerWidget.prototype.showInterPanel_ = function(state, nextWidget) {
     var that = this;
     var finishFn = function() {
+        that.transcribeMain_.removeChildren();
+        if (that.currentWidget != null)
+            that.currentWidget.dispose();
         if (state < 3) {
             for (var i = 0; i < that.tabs_.length; i++)
                 that.tabs_[i].getElement().setAttribute(
                     'class', i == state ? 'tab tab-selected' : 'tab');
-            that.transcribeMain_.removeChildren();
-            if (that.currentWidget != null)
-                that.currentWidget.dispose();
             that.currentWidget = nextWidget;
             that.transcribeMain_.addChild(that.currentWidget, true);
             that.state_ = state;
@@ -141,6 +141,10 @@ mirosubs.trans.ContainerWidget.prototype.showInterPanel_ = function(state, nextW
 };
 
 mirosubs.trans.ContainerWidget.prototype.finishEditing_ = function() {
+    // TODO: save subtitles as "complete"
+    // TODO: release lock
+    // TODO: ask widget to remove me, add thing to be able to watch.
+    // TODO: parent widget should call dispose
     
 };
 
