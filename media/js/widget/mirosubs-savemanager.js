@@ -31,8 +31,11 @@ mirosubs.trans.SaveManager.prototype.saveNowClicked_ = function(event) {
 };
 
 mirosubs.trans.SaveManager.prototype.saveNow = function(opt_finishFn) {
-    if (this.saving_ || !this.unitOfWork_.containsWork())
+    if (this.saving_ || !this.unitOfWork_.containsWork()) {
+        if (opt_finishFn != null)
+            opt_finishFn();
         return;
+    }
     if (mirosubs.currentUsername == null) {
         if (mirosubs.isLoginDialogShowing())
             return;

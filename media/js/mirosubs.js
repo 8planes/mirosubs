@@ -22,15 +22,15 @@ mirosubs.login = function(finishFn) {
     buttonContainer.addChild(mirosubs.openidLoginButton_ = 
                              new goog.ui.Button("OpenID Login"), true);
     goog.array.forEach([mirosubs.loginButton_, 
-                         mirosubs.twitterLoginButton_, 
-                         mirosubs.openidLoginButton_],
-                        function(button) {
-                            goog.events.listen(button,
-                                               goog.ui.Component.EventType.ACTION,
-                                               function(event) {
-                                                   mirosubs.loginClicked_(event, finishFn);
-                                               });
-                        });
+                        mirosubs.twitterLoginButton_, 
+                        mirosubs.openidLoginButton_],
+                       function(button) {
+                           goog.events.listen(button,
+                                              goog.ui.Component.EventType.ACTION,
+                                              function(event) {
+                                                  mirosubs.loginClicked_(event, finishFn);
+                                              });
+                       });
     mirosubs.loginDialog_.addChild(buttonContainer, true);
     mirosubs.loginDialog_.setButtonSet(null);
     mirosubs.loginDialog_.setTitle("Login or Sign Up");

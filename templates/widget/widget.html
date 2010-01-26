@@ -1,5 +1,5 @@
 <div class="MiroSubs-widget">
-  <div class="MiroSubs-videodiv">
+  <div class="MiroSubs-videodiv" style="position: relative">
     <video id="{{uuid}}_video" width="400" autobuffer controls>
       <source src="{{video_url}}" />
     </video>
@@ -31,25 +31,29 @@
       {% ifequal show_tab 2 %}
       <span>subtitling in progress/{{owned_by}}</span>
       {% endifequal %}
-      {% ifequal show_tab 3 %}
-      <a href="#" id="{{uuid}}_tabSelectLanguage">subtitle language...</a>
-      {% endifequal %}
+      <a href="#" {% ifnotequal show_tab 3 %}style="display: none"{% endifnotequal %} 
+         id="{{uuid}}_tabSelectLanguage">subtitle language...</a>
     </div>
     <div style="position: absolute; top: 0; left: 0">
-      <div id="{{uuid}}_interPanel0" style="display:none; background-color: white">
+      <div id="{{uuid}}_interPanel0" style="display:none; background-color: #F0E68C">
         <p>Good job</p>
         <p>Now you can sync the captions!</p>
         <p><a href="#" id="{{uuid}}_interPanelLink0">Go ahead</a></p>
       </div>
-      <div id="{{uuid}}_interPanel1" style="display:none; background-color: white">
+      <div id="{{uuid}}_interPanel1" style="display:none; background-color: #F0E68C">
         <p>Good job</p>
         <p>Now you can review the captions!</p>
         <p><a href="#" id="{{uuid}}_interPanelLink1">Go ahead</a></p>
       </div>
-      <div id="{{uuid}}_interPanel2" style="display:none; background-color: white">
+      <div id="{{uuid}}_interPanel2" style="display:none; background-color: #F0E68C">
         <p>Good job</p>
         <p>Now you are done!</p>
-        <p><a href="#" id="{{uuid}}_interPanelLink2">Finish</a></p>
+        <p>
+          <a href="#" id="{{uuid}}_interPanelLink2">Finish</a>
+          <img src="http://{{site.domain}}/site_media/images/loading.gif" 
+               id="{{uuid}}_finishedLoading" 
+               alt="loading" style="display: none"/>
+        </p>
       </div>
     </div>
   </div>

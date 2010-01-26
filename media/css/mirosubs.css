@@ -67,3 +67,18 @@
 .mirosubs-activecaption-input-label {
     background-color: #fbb;
 }
+
+.mirosubs-captionDiv {
+    position: absolute;
+    top: 240px;
+    left: 10px;
+    width: 380px;
+    background-color: black;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    opacity: 0.5;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding: 8px 0;
+}
