@@ -60,9 +60,17 @@ class Video(models.Model):
         self.writelock_time = datetime.now()
 
     def release_writelock(self):
-        video.writelock_owner = None
-        video.writelock_session_key = ''
-        video.writelock_time = None
+        self.writelock_owner = None
+        self.writelock_session_key = ''
+        self.writelock_time = None
+
+    def last_video_caption_version(self):
+        version_list = list(self.videocaptionversion_set.all())
+        if len(version_list) == 0:
+            return None
+        else:
+            return max(version_list, key=lambda v: v.version_no)
+
 
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
@@ -73,7 +81,7 @@ models.signals.pre_save.connect(create_video_id, sender=Video)
 class VideoCaptionVersion(models.Model):
     video = models.ForeignKey(Video)
     version_no = models.PositiveIntegerField(default=0)
-    # true iff all captions have beg & end time values assigned.
+    # true iff user has gotten to "complete" part of captioning process.
     is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User)

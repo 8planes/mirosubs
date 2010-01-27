@@ -13,11 +13,13 @@ goog.provide('mirosubs.trans.ContainerWidget');
  *     exist and have startTime set.
  * @param {array.<jsonCaptions>} existing captions in json object format.
  */
-mirosubs.trans.ContainerWidget = function(uuid, video_id, editVersion, playheadFn, 
-                                          captionManager, existingCaptions, 
+mirosubs.trans.ContainerWidget = function(videoPlayer, uuid, video_id, editVersion, 
+                                          playheadFn, captionManager, existingCaptions, 
                                           opt_domHelper) {
     goog.ui.Component.call(this, opt_domHelper);
+    this.videoPlayer_ = videoPlayer;
     this.uuid_ = uuid;
+    this.videoID_ = video_id;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
     /**
      * Array of captions.
@@ -117,6 +119,7 @@ mirosubs.trans.ContainerWidget.prototype.showInterPanel_ = function(state, nextW
         if (that.currentWidget != null)
             that.currentWidget.dispose();
         if (state < 3) {
+            that.videoPlayer_.setPlayheadTime(0);
             for (var i = 0; i < that.tabs_.length; i++)
                 that.tabs_[i].getElement().setAttribute(
                     'class', i == state ? 'tab tab-selected' : 'tab');
@@ -141,15 +144,27 @@ mirosubs.trans.ContainerWidget.prototype.showInterPanel_ = function(state, nextW
 };
 
 mirosubs.trans.ContainerWidget.prototype.finishEditing_ = function() {
-    // TODO: save subtitles as "complete"
-    // TODO: release lock
-    // TODO: ask widget to remove me, add thing to be able to watch.
-    // TODO: parent widget should call dispose
-    
+    var that = this;
+    var loadingImg = goog.dom.$(this.uuid_ + "_finishedLoading");
+    loadingImg.style.display = '';
+    this.saveManager_.saveNow(function() {
+            mirosubs.Rpc.call("finished_captions", {
+                    "video_id" : that.videoID_
+                }, function() {
+                    loadingImg.style.display = 'none';
+                    that.dispatchEvent(mirosubs.trans.ContainerWidget
+                                       .EventType.FINISHED_EDITING);
+                    that.dispose();
+                });
+        });
 };
 
 mirosubs.trans.ContainerWidget.prototype.disposeInternal = function() {
     this.saveManager_.dispose();
     this.lockManager_.dispose();
     mirosubs.trans.ContainerWidget.superClass_.disposeInternal.call(this);
+};
+
+mirosubs.trans.ContainerWidget.EventType = {
+    FINISHED_EDITING: 'finishedediting'
 };

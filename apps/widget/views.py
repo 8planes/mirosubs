@@ -54,6 +54,7 @@ def xd_rpc(request, method_name):
                               widget.add_js_files(params))
 
 # start of rpc methods
+
 def start_editing(request, video_id):
     # three cases: either the video is locked, or it is owned by someone else 
     # already and doesn't allow community edits, or i can freely edit it.
@@ -115,11 +116,7 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
     if video.owner is None:
         video.owner = request.user
         video.save()
-    version_list = list(video.videocaptionversion_set.all())
-    if len(version_list) == 0:
-        last_version = None
-    else:
-        last_version = max(version_list, key=lambda v: v.version_no)
+    last_version = video.last_video_caption_version()
     if last_version != None and last_version.version_no == version_no:
         current_version = last_version
     else:
@@ -127,11 +124,14 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
                                                      version_no=version_no,
                                                      datetime_started=datetime.now(),
                                                      user=request.user)
-        current_version.save()
         if last_version != None:
+            current_version.is_complete = last_version.is_complete
+            current_version.save()
             for caption in list(last_version.videocaption_set.all()):
                 current_version.videocaption_set.add(
                     caption.duplicate_for(current_version))
+        else:
+            current_version.save()
     captions = current_version.videocaption_set
     for d in deleted:
         captions.remove(captions.get(caption_id=d['caption_id']))
@@ -147,6 +147,17 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
                                          end_time=i['end_time']))
     current_version.save()
     return {"response" : "ok"}
+
+def finished_captions(request, video_id):
+    video = models.Video.objects.get(video_id=video_id)
+    if not video.can_writelock(request.session.session_key):
+        return { "response" : "unlockable" }
+    last_version = video.last_video_caption_version()
+    last_version.is_complete = True
+    last_version.save()
+    video.release_writelock()
+    video.save()
+    return { "response" : "ok" }
 
 def logout(request):
     from django.contrib.auth import logout

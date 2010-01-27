@@ -32,8 +32,9 @@ mirosubs.CaptionWidget = function(uuid, videoID, showTab, username) {
     if (showTab == 0 || showTab == 1)
         onClick(uuid + (showTab == 0 ? "_tabSubtitleMe" : "_tabContinue"), 
                 this.subtitleMeListener_);
-    else if (showTab == 3)
-        onClick(uuid + "_tabSelectLanguage", this.languageSelectedListener_);
+    var tabSelectLanguageID = uuid + "_tabSelectLanguage";
+    this.tabSelectLanguageElem_ = goog.dom.$(tabSelectLanguageID);
+    onClick(tabSelectLanguageID, this.languageSelectedListener_);
 };
 
 mirosubs.CaptionWidget.wrap = function(identifier) {
@@ -95,10 +96,20 @@ mirosubs.CaptionWidget.prototype.startEditing_ =
                               return caption['start_time'] != -1;
                           }));
     goog.dom.removeChildren(this.captionDiv_);
-    var containerWidget = new mirosubs.trans.ContainerWidget(this.uuid_,
+    var containerWidget = new mirosubs.trans.ContainerWidget(
+        this.videoPlayer, this.uuid_,
         this.videoID_, version, this.playheadFn_, this.captionManager_, 
         existingCaptions);
     containerWidget.decorate(this.captionDiv_);
+    containerWidget.addEventListener(
+        mirosubs.trans.ContainerWidget.EventType.FINISHED_EDITING,
+        this.finishedEditing_, false, this);
+};
+
+mirosubs.CaptionWidget.prototype.finishedEditing_ = function(event) {
+    goog.dom.removeChildren(this.captionDiv_);
+    this.captionDiv_.appendChild(this.tabSelectLanguageElem_);
+    this.tabSelectLanguageElem_.style.display = '';
 };
 
 /**
@@ -110,8 +121,10 @@ mirosubs.CaptionWidget.UserPanel_ = function(uuid) {
     this.usernameSpan_ = $(uuid + "_username");
     this.notAuthenticatedPanel_ = $(uuid + "_notauthenticated");
 
-    goog.events.listen($(uuid + '_login'), 'click', this.loginClicked_, false, this);
-    goog.events.listen($(uuid + '_logout'), 'click', this.logoutClicked_, false, this);
+    goog.events.listen($(uuid + '_login'), 'click', 
+                       this.loginClicked_, false, this);
+    goog.events.listen($(uuid + '_logout'), 'click', 
+                       this.logoutClicked_, false, this);
 };
 
 mirosubs.CaptionWidget.UserPanel_.prototype.setLoggedIn = function(username) {

@@ -22,6 +22,3 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            'socialauth.auth_backends.TwitterBackend',
                            'socialauth.auth_backends.FacebookBackend',
                            )
-
-
-JS_USE_COMPILED = True
