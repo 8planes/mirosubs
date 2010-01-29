@@ -34,6 +34,8 @@ mirosubs.VideoPlayer.prototype.showCaptionText = function(text) {
         if (this.captionElem_ == null) {
             this.captionElem_ = document.createElement("div");
             this.captionElem_.setAttribute("class", "mirosubs-captionDiv");
+            var videoSize = goog.style.getSize(this.videoElem_);
+            this.captionElem_.style.top = (videoSize.height - 60) + "px";
             this.videoDiv_.appendChild(this.captionElem_);
         }
         goog.dom.setTextContent(this.captionElem_, text);
