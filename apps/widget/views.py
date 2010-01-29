@@ -164,6 +164,12 @@ def logout(request):
     logout(request)
     return {"respones" : "ok"}
 
+def fetch_captions(request, video_id):
+    video = models.Video.objects.get(video_id=video_id)
+    last_version = video.last_video_caption_version()
+    captions = list(last_version.videocaption_set.all())
+    return [caption_to_dict(caption) for caption in captions]
+
 # helpers
 def caption_to_dict(caption):
     # TODO: this is essentially duplication.
