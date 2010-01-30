@@ -20,11 +20,7 @@ mirosubs.CaptionWidget = function(uuid, videoID, showTab, username) {
     this.playheadFn_ = function() {
             return that.videoPlayer.getPlayheadTime();
         };
-    this.captionManager_ = new mirosubs.CaptionManager(this.playheadFn_);
     // TODO: dispose of this during disposal after inheriting from goog.ui.Component.
-    this.captionManager_.addEventListener(mirosubs.CaptionManager.CAPTION_EVENT,
-                                          this.captionReached_, false, this);
-
     var onClick = function(id, listener) {
         goog.events.listen(goog.dom.$(id), 'click', listener, false, that);
     };
@@ -61,7 +57,11 @@ mirosubs.CaptionWidget.prototype.captionReached_ = function(jsonCaptionEvent) {
 };
 
 mirosubs.CaptionWidget.prototype.languageSelectedListener_ = function(event) {
-    // TODO: write me.
+    goog.dom.removeChildren(this.captionDiv_);
+    var that = this;
+    var languageSelectionWidget = new mirosubs.CaptionDisplayWidget(
+        this.videoPlayer, this.videoID_, this.playheadFn_);
+    languageSelectionWidget.decorate(this.captionDiv_);
     event.preventDefault();
 };
 
@@ -90,6 +90,11 @@ mirosubs.CaptionWidget.prototype.subtitleMeListener_ = function(event) {
 
 mirosubs.CaptionWidget.prototype.startEditing_ = 
     function(version, existingCaptions) {
+    // TODO: It makes more sense to instantiate the captionManager 
+    // from within the containerWidget.
+    this.captionManager_ = new mirosubs.CaptionManager(this.playheadFn_);
+    this.captionManager_.addEventListener(mirosubs.CaptionManager.CAPTION_EVENT,
+                                          this.captionReached_, false, this);
     this.captionManager_.addCaptions(
         goog.array.filter(existingCaptions,
                           function(caption) {
@@ -110,6 +115,10 @@ mirosubs.CaptionWidget.prototype.finishedEditing_ = function(event) {
     goog.dom.removeChildren(this.captionDiv_);
     this.captionDiv_.appendChild(this.tabSelectLanguageElem_);
     this.tabSelectLanguageElem_.style.display = '';
+    // TODO: It makes more sense to instantiate the captionManager 
+    // from within the containerWidget.
+    this.captionManager_.dispose();
+    this.captionManager_ = null;
 };
 
 /**
