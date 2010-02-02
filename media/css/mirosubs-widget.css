@@ -222,13 +222,19 @@ ul.mirosubs-titlesList li:hover {
     background: #fff !important;
 }
 
+ul.mirosubs-titlesList li.active {
+    background: #caf3ff;
+}
+
 .mirosubs-timestamp {
     margin: 0 !important;
     float: left;
     line-height: 23px;
     font-weight: bold;
+    min-width: 67px;
+    min-height: 21px;
     padding: 0 9px !important;
-    background: url(t"../images/imestamp.png") no-repeat;
+    background: url("../images/timestamp.png") no-repeat;
 }
 
 .mirosubs-timestamp.none {

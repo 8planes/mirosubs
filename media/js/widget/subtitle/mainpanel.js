@@ -66,8 +66,8 @@ mirosubs.subtitle.MainPanel.prototype.getContentElement = function() {
     return this.contentElem_;
 };
 
-mirosubs.subtitle.MainPanel.prototype.enterDocument = function() {
-    mirosubs.subtitle.MainPanel.superClass_.enterDocument.call(this);
+mirosubs.subtitle.MainPanel.prototype.createDom = function() {
+    mirosubs.subtitle.MainPanel.superClass_.createDom.call(this);
 
     var that = this;
     var el = this.getElement();
@@ -88,6 +88,14 @@ mirosubs.subtitle.MainPanel.prototype.enterDocument = function() {
     this.addChild(this.subtitleMain_ = new goog.ui.Component(), true);
     this.setState_(0);
 };
+
+mirosubs.subtitle.MainPanel.prototype.setNextStepText = 
+    function(messageText, buttonText) {
+    var $c = goog.dom.setTextContent;
+    $c(this.nextMessageSpan_, messageText);
+    $c(this.nextStepLink_, buttonText);
+};
+
 mirosubs.subtitle.MainPanel.prototype.createTabElems_ = function() {
     var that = this;
     var h = this.getHandler();
@@ -145,6 +153,7 @@ mirosubs.subtitle.MainPanel.prototype.showInterPanel_ = function(state, nextWidg
             that.currentWidget_ = nextWidget;
             that.subtitleMain_.addChild(that.currentWidget_, true);
             that.state_ = state;
+            that.setNextStepText("When you're done, click here", "Next Step");
         }
         else
             that.finishEditing_();
