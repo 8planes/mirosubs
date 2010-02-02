@@ -26,6 +26,9 @@
 	          <p>{{ message }}</p>
 	        {% endfor %}
 	      </div>
+	      
+	      
+	      
 	    {% endif %}
 	    <div class="accountstatus">
 	      {% if request.user.is_authenticated %}
@@ -35,8 +38,12 @@
 	           <a href="{% url registration_register %}">Create account</a>
 	        </p>
 	      {% endif %}
-	      </div>
 	    </div>
+	      
+	      
+	  </div>
+	  
+	  
 	    <h1>Miro Subs Alpha</h1>
 
 			<ul class="nav">
@@ -49,8 +56,11 @@
 	      <li><a href="{% url profiles:my_profile %}">My options</a></li>
 	      {% endif %}
 	    </ul>
-	    </div>
+	    
+	    
 	  </div>
+
+	  
 	  
 	  <div class="content">
 	  {% block main_content %}
