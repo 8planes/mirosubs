@@ -14,7 +14,7 @@ goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
 
 mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper()
-                            .createDom('ul', {'className':'MiroSubs-titlesList'}));
+                            .createDom('ul', {'className':'mirosubs-titlesList'}));
     if (this.helpElem_)
         this.getElement().appendChild(this.helpElem_);
     goog.array.forEach(this.captions_, this.addSubtitle, this);
