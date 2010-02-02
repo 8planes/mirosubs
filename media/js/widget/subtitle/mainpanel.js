@@ -66,39 +66,43 @@ mirosubs.subtitle.MainPanel.prototype.getContentElement = function() {
     return this.contentElem_;
 };
 
-mirosubs.subtitle.MainPanel.prototype.createDom = function() {
-    mirosubs.subtitle.MainPanel.superClass_.createDom.call(this);
-    
+mirosubs.subtitle.MainPanel.prototype.enterDocument = function() {
+    mirosubs.subtitle.MainPanel.superClass_.enterDocument.call(this);
+
     var that = this;
-    this.getElement().appendChild(this.contentElem_ = $dom('div'));
-    this.getElement()
-        .appendChild($dom('div', { 'class': 'MiroSubs-nextStep' },
-                          this.nextMessageSpan_ = $dom('span'),
-                          this.nextStepLink_ = $dom('a', { 'href': '#'})));
+    var el = this.getElement();
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+
+    el.appendChild(this.contentElem_ = $d('div'));
+    el.appendChild($d('div', { 'class': 'MiroSubs-nextStep' },
+                      this.nextMessageSpan_ = $d('span'),
+                      this.nextStepLink_ = $d('a', { 'href': '#'})));
     this.getHandler().listen(this.nextStepLink_, 'click', 
-                             function() {
+                             function(event) {
                                  that.setState_(that.state_ + 1);
+                                 event.preventDefault();
                              });
-    this.tabs_ = this.createTabsElems_();
-    this.getElement()
-        .appendChild($dom('ul', { 'class' : 'MiroSubs-nav' }, this.tabs_));
+    this.tabs_ = this.createTabElems_()
+    el.appendChild($d('ul', { 'class' : 'MiroSubs-nav' }, this.tabs_));
 
     this.addChild(this.subtitleMain_ = new goog.ui.Component(), true);
     this.setState_(0);
 };
 mirosubs.subtitle.MainPanel.prototype.createTabElems_ = function() {
-    var h = this.getHandler();
     var that = this;
+    var h = this.getHandler();
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     return goog.array.map(["Transcribe", "Sync", "Review"],
                           function(label, index) {
-                              var a = $dom('a', { 'href': '#' }, label);
+                              var a = $d('a', { 'href': '#' }, label);
                               h.listen(a, 'click', 
-                                       function() {
+                                       function(event) {
                                            that.setState_(index);
+                                           event.preventDefault();
                                        });
-                              return $dom('li', 
-                                          {'class': 'MiroSubs-nav' + label}, 
-                                          a);
+                              return $d('li', 
+                                        {'class': 'MiroSubs-nav' + label}, 
+                                        a);
                           });
 };
 mirosubs.subtitle.MainPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
@@ -134,9 +138,9 @@ mirosubs.subtitle.MainPanel.prototype.showInterPanel_ = function(state, nextWidg
             var c = goog.dom.classes;
             for (var i = 0; i < that.tabs_.length; i++) {
                 if (i == state)
-                    c.add('active');
+                    c.add(that.tabs_[i], 'active');
                 else
-                    c.remove('active');
+                    c.remove(that.tabs_[i], 'active');
             }
             that.currentWidget_ = nextWidget;
             that.subtitleMain_.addChild(that.currentWidget_, true);

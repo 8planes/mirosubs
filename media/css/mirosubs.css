@@ -100,7 +100,7 @@
 .mirosubs-widget .mirosubs-loginBox {
     height: 26px;
     font-size: 10px;
-    background: #efefef url(gradient.gif) 0 -9px repeat-x;
+    background: #efefef url("../images/gradient.gif") 0 -9px repeat-x;
     border-bottom: 1px solid #ddd;
 }
 
@@ -180,11 +180,11 @@
     float: right;
     border-left: 1px solid #ddd;
     padding: 5px 10px 5px 22px !important;
-    background: url(arrow.gif) 7px center no-repeat;
+    background: url("../images/arrow.gif") 7px center no-repeat;
 }
 
 .mirosubs-subtitleMe a.mirosubs-subtitleMeLink:hover {
-    background: #fff url(arrow.gif) 7px center no-repeat;
+    background: #fff url("../images/arrow.gif") 7px center no-repeat;
 }
 
 .mirosubs-captioningArea {
@@ -228,7 +228,7 @@ ul.mirosubs-titlesList li:hover {
     line-height: 23px;
     font-weight: bold;
     padding: 0 9px !important;
-    background: url(timestamp.png) no-repeat;
+    background: url(t"../images/imestamp.png") no-repeat;
 }
 
 .mirosubs-timestamp.none {
@@ -247,7 +247,7 @@ ul.mirosubs-titlesList li:hover {
     text-align: right;
     float: left;
     width: 100%;
-    background: #fcfcfc url(gradient.png) 0 14px repeat-x;
+    background: #fcfcfc url("../images/gradient.png") 0 14px repeat-x;
 }
 
 .mirosubs-nextStep span {
@@ -258,7 +258,7 @@ ul.mirosubs-titlesList li:hover {
 .mirosubs-nextStep a {
     float: right;
     padding: 5px 10px;
-    background: url(next.gif) 0 -5px repeat-x;
+    background: url("../images/next.gif") 0 -5px repeat-x;
     text-decoration: none;
     color: #fff;
     border: 1px solid #999;
@@ -288,7 +288,7 @@ ul.mirosubs-titlesList li:hover {
 
 .mirosubs-nav li.active a {
     border-top: 1px solid #ededed;
-    background: #efefef url(gradient.png) 0 -39px repeat-x;
+    background: #efefef url("../images/gradient.png") 0 -39px repeat-x;
 }
 
 .mirosubs-nav a {
@@ -303,7 +303,7 @@ ul.mirosubs-titlesList li:hover {
     float: left;
     border-top: 1px solid #ddd;
     line-height: 2.5em;
-    background: #efefef url(gradient.png) 0 -9px repeat-x;
+    background: #efefef url("../images/gradient.png") 0 -9px repeat-x;
 }
 
 
@@ -328,7 +328,7 @@ ul.mirosubs-titlesList li:hover {
 
 .mirosubs-nav a:hover {
     border-top: 1px solid #ededed;
-    background: #efefef url(gradient.png) 0 -39px repeat-x;
+    background: #efefef url("../images/gradient.png") 0 -39px repeat-x;
 }
 
 .mirosubs-transcribeControls {

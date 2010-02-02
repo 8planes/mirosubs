@@ -4,7 +4,7 @@ goog.provide('mirosubs.ControlTabPanel.EventType');
 mirosubs.ControlTabPanel = function(uuid, showTab) {
     goog.events.EventTarget.call(this);
     var $ = goog.dom.$;
-    this.controlTabDiv_ = $(uuid + "_tabDiv");
+    this.controlTabDiv_ = $(uuid + "_menu");
     this.controlTabLoadingImage_ = $(uuid + "_loading");
     if (showTab == 0 || showTab == 1) {
         this.subtitleMeLink_ = 
