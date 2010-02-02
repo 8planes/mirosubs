@@ -3,7 +3,8 @@ goog.provide('mirosubs.CaptionManager');
 /**
  * Constructor.
  *
- * @param {Function} playheadFn Optional function that returns the current 
+ * @param {?function(): number} playheadFn Optional function that 
+ *     returns the current 
  *     playhead time of the video, in seconds.
  */
 mirosubs.CaptionManager = function(playheadFn) {
@@ -21,11 +22,14 @@ mirosubs.CaptionManager = function(playheadFn) {
 };
 goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 
-mirosubs.CaptionManager.CAPTION_EVENT = 'caption';
+mirosubs.CaptionManager.EventType = {
+    CAPTION: 'caption'
+};
+
 
 /**
  * Adds captions to be displayed.
- * @param {Array.<jsonCaptions>} captions Array of captions. Each caption must be an 
+ * @param {Array.<Object.<string, *>>} captions Array of captions. Each caption must be an 
  *     object with a 'start_time' property set to the start time for 
  *     that caption and an 'end_time' property set to the end time.
  */
@@ -94,16 +98,12 @@ mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
     if (caption == this.lastCaptionDispatched_)
         return;
     this.lastCaptionDispatched_ = caption;
-    var event = new goog.events.Event(mirosubs.CaptionManager.CAPTION_EVENT, this);
+    var event = new goog.events.Event(mirosubs.CaptionManager.EventType.CAPTION, this);
     event.caption = caption;
     this.dispatchEvent(event);
 };
 
-mirosubs.CaptionManager.prototype.dispose = function() {
+mirosubs.CaptionManager.prototype.disposeInternal = function() {
     mirosubs.CaptionManager.superClass_.disposeInternal.call(this);
-    goog.events.removeAll(this);
-    /**
-     * Stop the timer.
-     */
     window.clearInterval(this.timerInterval_);
 };

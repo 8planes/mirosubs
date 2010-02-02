@@ -4,28 +4,36 @@
       <source src="{{video_url}}" />
     </video>
   </div>
-  <!-- The following block is possiby temporary, just to make login/logout more 
-       explicit for the time being -->
   <div>
-    <div id="{{uuid}}_authenticated" {% if not request.user.is_authenticated %}style="display:none"{% endif %}>
-      You are logged in as <span id="{{uuid}}_username">{{ request.user.username }}</span>. 
+    <div id="{{uuid}}_authenticated" 
+         {% if not request.user.is_authenticated %}
+         style="display:none"
+         {% endif %}>
+      You are logged in as <span id="{{uuid}}_username">
+        {{ request.user.username }}
+      </span>. 
       <a href="#" id="{{uuid}}_logout">Logout</a>
     </div>
-    <div id="{{uuid}}_notauthenticated" {% if request.user.is_authenticated %}style="display:none"{% endif %}>
+    <div id="{{uuid}}_notauthenticated" 
+         {% if request.user.is_authenticated %}
+         style="display:none"
+         {% endif %}>
       You are currently logged out. 
       <a href="#" id="{{uuid}}_login">Login</a>
     </div>
   </div>
-  <div style="position: relative">
-    <div class="MiroSubs-captioningArea" id="{{uuid}}_captions">
+  <div>
+    <div id="{{uuid}}_tabDiv">
       {% ifequal show_tab 0 %}
       <a href="#" id="{{uuid}}_tabSubtitleMe">subtitle me!</a> 
-      <img src="http://{{site.domain}}/site_media/images/loading.gif" id="{{uuid}}_loading" 
+      <img src="http://{{site.domain}}/site_media/images/loading.gif" 
+           id="{{uuid}}_loading" 
            alt="loading" style="display: none"/>
       {% endifequal %}
       {% ifequal show_tab 1 %}
       <a href="#" id="{{uuid}}_tabContinue">continue subtitling</a>
-      <img src="http://{{site.domain}}/site_media/images/loading.gif" id="{{uuid}}_loading" 
+      <img src="http://{{site.domain}}/site_media/images/loading.gif" 
+           id="{{uuid}}_loading" 
            alt="loading" style="display: none"/>
       {% endifequal %}
       {% ifequal show_tab 2 %}
@@ -34,27 +42,6 @@
       <a href="#" {% ifnotequal show_tab 3 %}style="display: none"{% endifnotequal %} 
          id="{{uuid}}_tabSelectLanguage">subtitle language...</a>
     </div>
-    <div style="position: absolute; top: 0; left: 0">
-      <div id="{{uuid}}_interPanel0" style="display:none; background-color: #F0E68C">
-        <p>Good job</p>
-        <p>Now you can sync the captions!</p>
-        <p><a href="#" id="{{uuid}}_interPanelLink0">Go ahead</a></p>
-      </div>
-      <div id="{{uuid}}_interPanel1" style="display:none; background-color: #F0E68C">
-        <p>Good job</p>
-        <p>Now you can review the captions!</p>
-        <p><a href="#" id="{{uuid}}_interPanelLink1">Go ahead</a></p>
-      </div>
-      <div id="{{uuid}}_interPanel2" style="display:none; background-color: #F0E68C">
-        <p>Good job</p>
-        <p>Now you are done!</p>
-        <p>
-          <a href="#" id="{{uuid}}_interPanelLink2">Finish</a>
-          <img src="http://{{site.domain}}/site_media/images/loading.gif" 
-               id="{{uuid}}_finishedLoading" 
-               alt="loading" style="display: none"/>
-        </p>
-      </div>
-    </div>
+    <div class="MiroSubs-captioningArea" id="{{uuid}}_captions"></div>
   </div>
 </div>

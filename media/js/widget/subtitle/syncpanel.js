@@ -1,25 +1,26 @@
-goog.provide('mirosubs.trans.SyncWidget');
+goog.provide('mirosubs.subtitle.SyncPanel');
 
 /**
  *
- * @param {Array.<mirosubs.trans.EditableCaption>} captions The captions for the video, so far.
+ * @param {Array.<mirosubs.subtitle.EditableCaption>} captions The captions 
+ *     for the video, so far.
  * @param {Function} playheadFn Function that returns current playhead time for video.
  * @param {mirosubs.CaptionManager} Caption manager, already containing captions with 
  *     start_time set.
  */
-mirosubs.trans.SyncWidget = function(captions, playheadFn, captionManager, opt_domHelper) {
-    goog.ui.Component.call(this, opt_domHelper);
+mirosubs.subtitle.SyncPanel = function(captions, playheadFn, captionManager) {
+    goog.ui.Component.call(this);
     /**
      * Always in correct order by time.
-     * @type {Array.<mirosubs.trans.EditableCaption>}
+     * @type {Array.<mirosubs.subtitle.EditableCaption>}
      */ 
     this.captions_ = captions;
     /**
-     * A map of caption_id to mirosubs.trans.SyncWidget.Caption_
+     * A map of caption_id to mirosubs.subtitle.SyncPanel.Caption_
      */
     this.captionWidgetMap_ = {};
     /**
-     * The current mirosubs.trans.SyncWidget.Caption_ displayed, 
+     * The current mirosubs.subtitle.SyncPanel.Caption_ displayed, 
      * or null if no captions have been displayed yet, or if we are
      * in between captions.
      */
@@ -27,29 +28,26 @@ mirosubs.trans.SyncWidget = function(captions, playheadFn, captionManager, opt_d
 
     this.playheadFn_ = playheadFn;
     this.captionManager_ = captionManager;
-    this.captionManager_.addEventListener(mirosubs.CaptionManager.CAPTION_EVENT,
-                                          this.captionReached_,
-                                          false, this);
-    this.eventHandler_ = new goog.events.EventHandler(this);
+    this.getHandler().listen(captionManager,
+                             mirosubs.CaptionManager.EventType.CAPTION,
+                             this.captionReached_,
+                             false, this);
     this.keyHandler_ = null;
 };
-goog.inherits(mirosubs.trans.SyncWidget, goog.ui.Component);
-mirosubs.trans.SyncWidget.prototype.createDom = function() {
-    this.decorateInternal(this.getDomHelper().createElement('div'));
-};
-mirosubs.trans.SyncWidget.prototype.decorateInternal = function(element) {
-    mirosubs.trans.SyncWidget.superClass_.decorateInternal.call(this, element);
+goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
+mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
+    mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);
     for (var i = 0; i < this.captions_.length; i++) {
-        var captionWidget = new mirosubs.trans.SyncWidget.Caption_(this.captions_[i]);
+        var captionWidget = new mirosubs.subtitle.SyncPanel.Caption_(this.captions_[i]);
         this.addChild(captionWidget, true);
         this.captionWidgetMap_[this.captions_[i].getCaptionID() + ''] = captionWidget;
     }
     this.keyHandler_ = new goog.events.KeyHandler(document);
-    this.eventHandler_.listen(this.keyHandler_,
-                              goog.events.KeyHandler.EventType.KEY,
-                              this.handleKey_);
+    this.getHandler().listen(this.keyHandler_,
+                             goog.events.KeyHandler.EventType.KEY,
+                             this.handleKey_);
 };
-mirosubs.trans.SyncWidget.prototype.handleKey_ = function(event) {
+mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
     // I'm using the N key here instead of space because space pauses the 
     // video.
     if (event.keyCode == goog.events.KeyCodes.N) {
@@ -69,12 +67,13 @@ mirosubs.trans.SyncWidget.prototype.handleKey_ = function(event) {
             var isInManager = currentCaption.getStartTime() != -1;
             currentCaption.setStartTime(playheadTime);
             currentCaption.setEndTime(99999);
+            console.log("adding to caption mgr!");
             if (!isInManager)
                 this.captionManager_.addCaptions([currentCaption.jsonCaption]);
         }
     }
 };
-mirosubs.trans.SyncWidget.prototype.captionReached_ = function(jsonCaptionEvent) {
+mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
     var jsonCaption = jsonCaptionEvent.caption;
     if (this.currentCaptionWidget_ != null)
         this.currentCaptionWidget_.setCurrent(false);
@@ -87,29 +86,25 @@ mirosubs.trans.SyncWidget.prototype.captionReached_ = function(jsonCaptionEvent)
         this.currentCaptionWidget_ = null;
     }
 };
-mirosubs.trans.SyncWidget.prototype.disposeInternal = function() {
-    mirosubs.trans.SyncWidget.superClass_.disposeInternal.call(this);
-    this.eventHandler_.dispose();
+mirosubs.subtitle.SyncPanel.prototype.disposeInternal = function() {
+    mirosubs.subtitle.SyncPanel.superClass_.disposeInternal.call(this);
     if (this.keyHandler_)
         this.keyHandler_.dispose();
-    this.captionManager_.removeEventListener(mirosubs.CaptionManager.CAPTION_EVENT,
-                                             this.captionReached_,
-                                             false, this);
 };
 
 /**
  * @param {JSONCaption} caption The caption for this Caption widget.
  */
-mirosubs.trans.SyncWidget.Caption_ = function(caption, opt_domHelper) {
+mirosubs.subtitle.SyncPanel.Caption_ = function(caption, opt_domHelper) {
     this.caption = caption;
     goog.ui.Component.call(this, opt_domHelper);
 };
-goog.inherits(mirosubs.trans.SyncWidget.Caption_, goog.ui.Component);
-mirosubs.trans.SyncWidget.Caption_.prototype.createDom = function() {
+goog.inherits(mirosubs.subtitle.SyncPanel.Caption_, goog.ui.Component);
+mirosubs.subtitle.SyncPanel.Caption_.prototype.createDom = function() {
     this.decorateInternal(this.getDomHelper().createElement("div"));
 };
-mirosubs.trans.SyncWidget.Caption_.prototype.decorateInternal = function(element) {
-    mirosubs.trans.SyncWidget.Caption_.superClass_.decorateInternal.call(this, element);
+mirosubs.subtitle.SyncPanel.Caption_.prototype.decorateInternal = function(element) {
+    mirosubs.subtitle.SyncPanel.Caption_.superClass_.decorateInternal.call(this, element);
     this.addChild(this.labelInput = new goog.ui.LabelInput("(silence)"), true);
     goog.events.listen(this.labelInput.getElement(),
                        goog.events.EventType.KEYUP,
@@ -117,10 +112,10 @@ mirosubs.trans.SyncWidget.Caption_.prototype.decorateInternal = function(element
                        false, this);
     this.labelInput.setValue(this.caption.getText());
 };
-mirosubs.trans.SyncWidget.Caption_.prototype.keyUp_ = function(event) {
+mirosubs.subtitle.SyncPanel.Caption_.prototype.keyUp_ = function(event) {
     this.caption.setText(this.labelInput.getValue());
 };
-mirosubs.trans.SyncWidget.Caption_.prototype.setCurrent = function(current) {
+mirosubs.subtitle.SyncPanel.Caption_.prototype.setCurrent = function(current) {
     var className = "mirosubs-activecaption-input-label";
     if (current)
         goog.dom.classes.add(this.getElement(), className);
