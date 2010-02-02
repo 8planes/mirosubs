@@ -36,28 +36,28 @@
 }
 
 .mirosubs-modal-dialog-title-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  width: 15px;
-  height: 16px;
-  background: url("../images/dialog_close_box.gif") no-repeat center;
-  cursor: default;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 15px;
+    height: 16px;
+    background: url("../images/dialog_close_box.gif") no-repeat center;
+    cursor: default;
 }
 
 .mirosubs-modal-dialog-content {
-  padding: 15px;
-  font-size: 90%;
-  background-color: #fff;
+    padding: 15px;
+    font-size: 90%;
+    background-color: #fff;
 }
 
 .mirosubs-modal-dialog-buttons {
-  padding: 0 15px 15px;
-  background-color: #fff;
+    padding: 0 15px 15px;
+    background-color: #fff;
 }
 
 .goog-buttonset-default {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .mirosubs-label-input-label {
@@ -66,4 +66,327 @@
 
 .mirosubs-activecaption-input-label {
     background-color: #fbb;
+}
+
+.mirosubs-captionDiv {
+    position: absolute;
+    top: 240px;
+    left: 10px;
+    width: 380px;
+    background-color: black;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    opacity: 0.5;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding: 8px 0;
+}
+
+.mirosubs-widget {
+    width: 512px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px !important;
+    color: #000 !important;
+    line-height: 16px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #000;
+
+}
+
+.mirosubs-widget .mirosubs-loginBox {
+    height: 26px;
+    font-size: 10px;
+    background: #efefef url(gradient.gif) 0 -9px repeat-x;
+    border-bottom: 1px solid #ddd;
+}
+
+.mirosubs-loginStatus {
+    margin: 0 !important;
+    padding: 5px 8px !important;
+    list-style: none !important;
+    width: 70%;
+    float: left;
+}
+
+.mirosubs-loginStatus.notLogged {
+    display: none;
+}
+
+.mirosubs-dropdown {
+    width: 150px;
+    position: absolute;
+    top: 27px;
+    right: 0;
+    border: 1px solid #aaa;
+    border-top: none;
+    background: #fefefe;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-radius-right-bottom: 5px;
+    -webkit-border-radius-left-bottom: 5px;
+}
+
+.mirosubs-dropdown ul.mirosubs-languageList {
+    padding: 0;
+    margin: 0;
+}
+
+.mirosubs-dropdown ul.mirosubs-languageList li {
+    list-style: none;
+}
+
+.mirosubs-dropdown ul.mirosubs-languageList a {
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+    display: block;
+    border-top: 1px solid #ddd;
+    text-decoration: none;
+    padding: 2px 7px;
+}
+
+.mirosubs-dropdown ul.mirosubs-languageList a:hover {
+    text-decoration: underline;
+}
+
+.mirosubs-dropdown p {
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+    display: block;
+    padding: 2px 7px;
+}
+
+.mirosubs-subtitleMe {
+    float: right;
+    width: 117px;
+    position: relative;
+}
+
+.mirosubs-subtitleMe a {
+    color: #333;
+}
+
+.mirosubs-subtitleMe img {
+    float: left;
+    margin: 5px;
+}
+
+.mirosubs-subtitleMe a.mirosubs-subtitleMeLink {
+    float: right;
+    border-left: 1px solid #ddd;
+    padding: 5px 10px 5px 22px !important;
+    background: url(arrow.gif) 7px center no-repeat;
+}
+
+.mirosubs-subtitleMe a.mirosubs-subtitleMeLink:hover {
+    background: #fff url(arrow.gif) 7px center no-repeat;
+}
+
+.mirosubs-captioningArea {
+
+}
+
+ul.mirosubs-titlesList {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 300px;
+    border-bottom: 1px solid #ccc;
+    overflow: auto;
+}
+
+/*--- "Finished Page" version ---*/
+
+ul.mirosubs-titlesList.finished {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 56px;
+    border-bottom: 1px solid #ccc;
+    overflow: auto;
+}
+
+ul.mirosubs-titlesList li {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #eee;
+    margin: 0 !important;
+    background: #fcfcfc;
+    padding: 15px !important;
+    list-style: none !important;
+}
+
+ul.mirosubs-titlesList li:hover {
+    background: #fff !important;
+}
+
+.mirosubs-timestamp {
+    margin: 0 !important;
+    float: left;
+    line-height: 23px;
+    font-weight: bold;
+    padding: 0 9px !important;
+    background: url(timestamp.png) no-repeat;
+}
+
+.mirosubs-timestamp.none {
+    color: #aaa;
+}
+
+.mirosubs-title {
+    line-height: 1.7em;
+    padding-left: 100px;
+    display: block;
+    padding-top: 2px;
+}
+
+.mirosubs-nextStep {
+    padding: 10px 0;
+    text-align: right;
+    float: left;
+    width: 100%;
+    background: #fcfcfc url(gradient.png) 0 14px repeat-x;
+}
+
+.mirosubs-nextStep span {
+    line-height: 2.3em;
+    padding-right: 15px;
+}
+
+.mirosubs-nextStep a {
+    float: right;
+    padding: 5px 10px;
+    background: url(next.gif) 0 -5px repeat-x;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #999;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    margin-right: 10px;
+}
+
+.mirosubs-nextStep a:hover {
+    border: 1px solid #333;
+}
+
+.mirosubs-nav {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    height: 2.5em;
+}
+
+.mirosubs-nav li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-width: 33%;
+    float: left;
+}
+
+.mirosubs-nav li.active a {
+    border-top: 1px solid #ededed;
+    background: #efefef url(gradient.png) 0 -39px repeat-x;
+}
+
+.mirosubs-nav a {
+    margin: 0;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    font-weight: bold;
+    color: #333;
+    padding: 0;
+    float: left;
+    border-top: 1px solid #ddd;
+    line-height: 2.5em;
+    background: #efefef url(gradient.png) 0 -9px repeat-x;
+}
+
+
+.mirosubs-navTranscribe a {
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+}
+
+.mirosubs-navSync a {
+    border-left: 1px solid #ccc;
+}
+
+.mirosubs-navReview {
+    width: 34%;
+}
+
+.mirosubs-navReview a {
+    -moz-border-radius-bottomright: 5px;
+    border-left: 1px solid #ccc;
+    -webkit-border-bottom-right-radius: 5px;
+}
+
+.mirosubs-nav a:hover {
+    border-top: 1px solid #ededed;
+    background: #efefef url(gradient.png) 0 -39px repeat-x;
+}
+
+.mirosubs-transcribeControls {
+    background: #ddd;
+    border-bottom: 1px solid #999;
+    border-top: 1px solid #eee;
+}
+
+.mirosubs-transcribeControls input.trans {
+    width: 476px;
+    margin: 10px;
+    padding: 5px;
+    font-size: 13px;
+}
+
+.mirosubs-tips, .mirosubs-help, .mirosubs-help:hover {
+    background: #feffe7 !important;
+    margin: 0;
+    padding: 10px 10px 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+.mirosubs-help ol {
+    margin: 0;
+    background: none;
+    padding: 0;
+}
+
+li.mirosubs-help ol li {
+    background: none !important;
+    margin: 0;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 1.4em;
+    border: none !important;
+    padding: 3px !important;
+}
+
+.mirosubs-tips p {
+    padding: 0 0 4px;
+    font-size: 11px;
+    margin: 0;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .mirosubs-navSync {
+        border-left: 1px solid #ccc;
+    }
+
+    .mirosubs-navSync a{
+        border-left: none;
+    }
+
+    .mirosubs-navReview a{
+        border-left: none;
+    }
+
+    .mirosubs-navReview {
+        border-left: 1px solid #ccc;
+    }
 }
