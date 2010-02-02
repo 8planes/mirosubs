@@ -70,7 +70,7 @@ list-style: none;
 }
 
 
-.header .nav li.search_link{
+.header .nav li.search{
 margin: 0;
 float: right;
 padding: 0;
@@ -126,6 +126,16 @@ width: 100%;
 font-size: 12px;
 padding: 10px 0 0;
 color: #eee;
+}
+
+table{
+width: 900px;
+}
+
+th, td{
+text-align: left;
+border-bottom: 1px solid #ddd;
+padding: 5px;
 }
 
 
