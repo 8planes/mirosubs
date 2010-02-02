@@ -11,6 +11,13 @@ mirosubs.VideoPlayer.wrap = function(video_elem_id) {
     return new mirosubs.VideoPlayer(goog.dom.$(video_elem_id));
 };
 
+mirosubs.VideoPlayer.prototype.getPlayheadFn = function() {
+    var that = this;
+    return function() {
+        return that.getPlayheadTime();
+    };
+};
+
 mirosubs.VideoPlayer.prototype.getPlayheadTime = function() {
     return this.videoElem_["currentTime"];
 };

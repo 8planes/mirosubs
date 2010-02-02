@@ -21,20 +21,20 @@ JS_USE_COMPILED = False
 
 # paths provided relative to media/js
 JS_RAW = ['mirosubs.js', 
-          'mirosubs-rpc.js',
-          'mirosubs-videoplayer.js',
-          'mirosubs-unitofwork.js', 
-          'widget/mirosubs-captiondisplaywidget.js',
-          'widget/mirosubs-captionmenu.js',
-          'widget/mirosubs-lockmanager.js',
-          'widget/mirosubs-savemanager.js',
-          'widget/mirosubs-editablecaption.js',
-          'widget/mirosubs-captionmanager.js',
-          'widget/mirosubs-captionwidget.js',
-          'widget/mirosubs-transcontainer.js',
-          'widget/mirosubs-transtrans.js',
-          'widget/mirosubs-transsync.js',
-          'widget/mirosubs-translationwidget.js']
+          'rpc.js',
+          'videoplayer.js',
+          'unitofwork.js', 
+          'widget/captionmanager.js',
+          'widget/captionpanel.js',
+          'widget/controltabpanel.js',
+          'widget/userpanel.js',
+          'widget/subtitle/lockmanager.js',
+          'widget/subtitle/savemanager.js',
+          'widget/subtitle/editablecaption.js',
+          'widget/subtitle/transcribepanel.js',
+          'widget/subtitle/syncpanel.js',
+          'widget/subtitle/mainpanel.js',
+          'widget/embeddablewidget.js']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
