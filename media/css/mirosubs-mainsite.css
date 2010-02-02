@@ -114,6 +114,9 @@ padding-right: 10px;
 min-height: 300px;
 border: 1px solid #ddd;
 border-top: 0;
+padding: 20px;
+clear: both;
+font-size: 12px;
 }
 
 .footer{
