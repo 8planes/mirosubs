@@ -64,12 +64,10 @@ def start_editing(request, video_id):
 
     video = models.Video.objects.get(video_id=video_id)
     if video.owner != None and video.owner != request.user:
-        return { "can_edit": False, "owned_by" : video.owner.name }
+        return { "can_edit": False, "owned_by" : video.owner.username }
     if not video.can_writelock(request.session.session_key):
         return { "can_edit": False, "locked_by" : video.writelock_owner_name }
 
-    if video.owner == None and request.user.is_authenticated():
-        video.owner = request.user
     video.writelock(request)
     video.save()
     version_list = list(video.videocaptionversion_set.all())
