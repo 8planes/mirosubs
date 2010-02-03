@@ -1,5 +1,4 @@
 goog.provide('mirosubs.CaptionPanel');
-goog.provide('mirosubs.CaptionPanel.EventType');
 
 mirosubs.CaptionPanel = function(videoID, videoPlayer) {
     goog.ui.Component.call(this);
@@ -7,10 +6,6 @@ mirosubs.CaptionPanel = function(videoID, videoPlayer) {
     this.videoPlayer_ = videoPlayer;
 };
 goog.inherits(mirosubs.CaptionPanel, goog.ui.Component);
-
-mirosubs.CaptionPanel.EventType = {
-    FINISHED_SUBTITLING: 'finishedsubtitling'
-};
 
 /**
  *
@@ -42,10 +37,11 @@ mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ =
                                                   version, 
                                                   existingCaptions),
                   true);
-    // TODO: dispose the MainPanel when done!
 };
 
-mirosubs.CaptionPanel.prototype.languageSelected = function() {
+mirosubs.CaptionPanel.prototype.languageSelected = function(languageID, captions) {
     this.removeChildren();
-    this.addChild(new mirosubs.play.MainPanel());
+    if (this.playManager_)
+        this.playManager_.dispose();
+    this.playManager_ = new mirosubs.play.Manager(this.videoPlayer_, captions);
 };

@@ -1,0 +1,141 @@
+body{
+padding: 30px;
+
+margin: 0 auto;
+background: #eee;
+position: relative;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+.wrapper{
+background: #fff;
+padding: 0 20px 10px;
+border: 1px solid #ddd;
+width: 960px;
+margin: 0 auto;
+}
+
+
+.header{
+
+}
+
+.header .top_bar{
+border-bottom: 1px solid #ddd;
+border-right: 1px solid #ddd;
+border-left: 1px solid #ddd;
+background: #eee;
+font-size: 12px;
+float: left;
+width: 100%;
+line-height: 3em;
+}
+
+.header h1{
+clear: both;
+
+margin: 0;
+padding: 20px 0;
+}
+
+.header .top_bar #mesages{
+float: left;
+
+}
+
+.header .top_bar #messages p{
+margin: 0;
+padding-left: 10px;
+float: left;
+}
+
+
+.header .nav{
+margin: 0;
+padding: 0;
+background: #eee;
+float: left;
+border-top: 1px solid #ddd;
+
+width: 100%;
+border-bottom: 1px solid #999;
+}
+
+
+.header .nav li{
+margin: 0;
+float: left;
+padding: 0;
+list-style: none;
+}
+
+
+.header .nav li.search{
+margin: 0;
+float: right;
+padding: 0;
+list-style: none;
+}
+
+
+.header .nav li a{
+font-size: 12px;
+margin: 0;
+float: left;
+color: #333;
+text-decoration: none;
+padding: 10px 30px;
+border-right: 1px solid #ddd;
+border-left: 1px solid #ddd;
+font-weight: bold;
+}
+
+.header .nav li a:hover{
+background: #fff;
+border-right: 1px solid #fff;
+border-left: 1px solid #fff;
+}
+
+
+.accountstatus{
+width: 40%;
+text-align: right;
+float: right;
+}
+
+
+.accountstatus p{
+margin: 0;
+padding-right: 10px;
+}
+
+
+.content{
+min-height: 300px;
+border: 1px solid #ddd;
+border-top: 0;
+padding: 20px;
+clear: both;
+font-size: 12px;
+}
+
+.footer{
+clear: both;
+min-height: 20px;
+width: 100%;
+font-size: 12px;
+padding: 10px 0 0;
+color: #eee;
+}
+
+table{
+width: 900px;
+}
+
+th, td{
+text-align: left;
+border-bottom: 1px solid #ddd;
+padding: 5px;
+}
+
+

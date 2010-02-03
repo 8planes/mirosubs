@@ -70,7 +70,7 @@ mirosubs.loginClicked_ = function(event, finishFn) {
 };
 
 mirosubs.updateLoginState_ = function() {
-    goog.array.forEach(mirosubs.CaptionWidget.widgets,
+    goog.array.forEach(mirosubs.EmbeddableWidget.widgets,
                        function(w) { w.updateLoginState(); });
 };
 

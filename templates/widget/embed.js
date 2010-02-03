@@ -38,7 +38,7 @@
         var css = document.createElement("link");
         css.type = "text/css";
         css.rel = 'stylesheet';
-        css.href = 'http://{{site.domain}}/site_media/css/mirosubs.css';
+        css.href = 'http://{{site.domain}}/site_media/css/mirosubs-widget.css';
         css.media = 'screen';
         head.appendChild(css);
     }

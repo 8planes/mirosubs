@@ -57,6 +57,6 @@ mirosubs.subtitle.SaveManager.prototype.saveImpl_ = function(opt_finishFn) {
 
 
 mirosubs.subtitle.SaveManager.prototype.disposeInternal = function() {
-    mirosubs.subtitle.SaveManager.prototype.superClass_.disposeInternal.call(this);
-    window.clearInterval(this.timerInterval_);    
+    mirosubs.subtitle.SaveManager.superClass_.disposeInternal.call(this);
+    window.clearInterval(this.timerInterval_);
 };
