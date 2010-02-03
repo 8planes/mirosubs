@@ -48,7 +48,6 @@ mirosubs.subtitle.SubtitleWidget.prototype.doubleClicked_ = function(event) {
     var that = this;
     this.docClickListener_.listen(document, goog.events.EventType.CLICK,
                                   function(event) {
-                                      console.log(event.target);
                                       if (event.target != that.textareaElem_)
                                           that.switchToView_();
                                   });

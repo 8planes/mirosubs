@@ -38,6 +38,7 @@ JS_RAW = ['mirosubs.js',
           'widget/subtitle/transcribepanel.js',
           'widget/subtitle/syncpanel.js',
           'widget/subtitle/mainpanel.js',
+          'widget/play/manager.js',
           'widget/embeddablewidget.js']
 
 # Local time zone for this installation. Choices can be found here:

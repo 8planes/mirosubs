@@ -409,3 +409,28 @@ li.mirosubs-help ol li {
         border-left: 1px solid #ccc;
     }
 }
+
+.mirosubs-langmenu {
+    background-color:#FFFFFF;
+    border-color:#CCCCCC #666666 #666666 #CCCCCC;
+    border-style:solid;
+    border-width:1px;
+    cursor:default;
+    margin:0;
+    outline-color:-moz-use-text-color;
+    outline-style:none;
+    outline-width:medium;
+    padding:4px 0;
+    position:absolute;
+}
+
+.mirosubs-langmenuitem {
+    border-top:1px solid #DDDDDD;
+    font-size:11px;
+    margin:0;
+    padding:2px 7px;
+}
+
+.mirosubs-langmenuitem-highlight {
+    background-color: #d6e9f8
+}

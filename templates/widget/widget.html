@@ -27,16 +27,10 @@
       {% ifequal show_tab 0 %}
       <a href="#" class="mirosubs-subtitleMeLink" 
          id="{{uuid}}_tabSubtitleMe">subtitle me!</a> 
-      <img src="http://{{site.domain}}/site_media/images/spinner.gif" 
-           id="{{uuid}}_loading" 
-           alt="loading" style="display: none"/>
       {% endifequal %}
       {% ifequal show_tab 1 %}
       <a href="#" class="mirosubs-subtitleMeLink" 
          id="{{uuid}}_tabContinue">continue subtitling</a>
-      <img src="http://{{site.domain}}/site_media/images/spinner.gif" 
-           id="{{uuid}}_loading" 
-           alt="loading" style="display: none"/>
       {% endifequal %}
       {% ifequal show_tab 2 %}
       <span>subtitling in progress/{{owned_by}}</span>
@@ -44,7 +38,10 @@
       <a href="#" 
          class="mirosubs-subtitleMeLink"
          {% ifnotequal show_tab 3 %}style="display: none"{% endifnotequal %} 
-         id="{{uuid}}_tabSelectLanguage">subtitle language...</a>      
+         id="{{uuid}}_tabSelectLanguage">Language</a>
+      <img src="http://{{site.domain}}/site_media/images/spinner.gif" 
+           id="{{uuid}}_loading" 
+           alt="loading" style="display: none"/>
     </span>
   </div>
   <div class="mirosubs-captioningArea" id="{{uuid}}_captions"></div>
