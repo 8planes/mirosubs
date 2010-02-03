@@ -74,7 +74,7 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
     el.appendChild(this.contentElem_ = $d('div'));
-    el.appendChild($d('div', { 'class': 'MiroSubs-nextStep' },
+    el.appendChild($d('div', { 'className': 'mirosubs-nextStep' },
                       this.nextMessageSpan_ = $d('span'),
                       this.nextStepLink_ = $d('a', { 'href': '#'})));
     this.getHandler().listen(this.nextStepLink_, 'click', 
@@ -83,7 +83,7 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                                  event.preventDefault();
                              });
     this.tabs_ = this.createTabElems_()
-    el.appendChild($d('ul', { 'class' : 'MiroSubs-nav' }, this.tabs_));
+    el.appendChild($d('ul', { 'className' : 'mirosubs-nav' }, this.tabs_));
 
     this.addChild(this.subtitleMain_ = new goog.ui.Component(), true);
     this.setState_(0);
@@ -109,7 +109,7 @@ mirosubs.subtitle.MainPanel.prototype.createTabElems_ = function() {
                                            event.preventDefault();
                                        });
                               return $d('li', 
-                                        {'class': 'MiroSubs-nav' + label}, 
+                                        {'className': 'mirosubs-nav' + label}, 
                                         a);
                           });
 };

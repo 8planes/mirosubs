@@ -100,7 +100,7 @@
 .mirosubs-widget .mirosubs-loginBox {
     height: 26px;
     font-size: 10px;
-    background: #efefef url("../images/gradient.gif") 0 -9px repeat-x;
+    background: #efefef url("../images/gradient.png") 0 -9px repeat-x;
     border-bottom: 1px solid #ddd;
 }
 
@@ -214,6 +214,7 @@ ul.mirosubs-titlesList li {
     border-bottom: 1px solid #eee;
     margin: 0 !important;
     background: #fcfcfc;
+    min-height: 23px;
     padding: 15px !important;
     list-style: none !important;
 }
