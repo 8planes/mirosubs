@@ -36,7 +36,8 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
     mirosubs.currentUsername = username == '' ? null : username;
     mirosubs.Rpc.BASE_URL = identifier["base_rpc_url"];
     mirosubs.BASE_LOGIN_URL = identifier["base_login_url"];
-    mirosubs.subtitle.LockManager.EXPIRATION = identifier["writelock_expiration"];
+    mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
+        identifier["writelock_expiration"];
 };
 
 mirosubs.EmbeddableWidget.prototype.updateLoginState = function() {
