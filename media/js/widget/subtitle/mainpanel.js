@@ -40,8 +40,13 @@ mirosubs.subtitle.MainPanel = function(videoPlayer,
     this.lockManager_ = new mirosubs.subtitle.LockManager(
         'update_video_lock', { 'video_id' : videoID });
     this.tabs_ = [];
+    this.showingInterPanel_ = false;
 };
 goog.inherits(mirosubs.subtitle.MainPanel, goog.ui.Component);
+
+mirosubs.subtitle.MainPanel.EventType = {
+    FINISHED: "finishedediting"
+};
 
 mirosubs.subtitle.MainPanel.prototype.createSaveManager_ = 
     function(videoID, editVersion, unitOfWork) {
@@ -78,14 +83,9 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                       this.nextMessageSpan_ = $d('span'),
                       this.nextStepLink_ = $d('a', { 'href': '#'})));
     this.getHandler().listen(this.nextStepLink_, 'click', 
-                             function(event) {
-                                 that.setState_(that.state_ + 1);
-                                 event.preventDefault();
-                             });
+                             this.nextStepClicked_, false, this);
     this.tabs_ = this.createTabElems_()
     el.appendChild($d('ul', { 'className' : 'mirosubs-nav' }, this.tabs_));
-
-    this.addChild(this.subtitleMain_ = new goog.ui.Component(), true);
     this.setState_(0);
 };
 
@@ -117,61 +117,86 @@ mirosubs.subtitle.MainPanel.prototype.captionReached_ = function(jsonCaptionEven
     var c = jsonCaptionEvent.caption;
     this.videoPlayer_.showCaptionText(c ? c['caption_text'] : '');
 };
+mirosubs.subtitle.MainPanel.prototype.nextStepClicked_ = function(event) {
+    this.setState_(this.state_ + 1);
+    event.preventDefault();
+};
 mirosubs.subtitle.MainPanel.prototype.setState_ = function(state) {
-    var nextWidget;
+    if (this.showingInterPanel_ || state == 0) {
+        this.showingInterPanel_ = false;
+        this.disposeCurrentWidget_();
+        if (state < 3) {
+            this.removeChildren(true);
+            this.state_ = state;
+            this.videoPlayer_.setPlayheadTime(0);
+            this.selectTab_(state);
+            this.addChild(this.makeNextWidget_(state), true);
+            this.setNextStepText("When you're done, click here", "Next Step");
+        }
+        else
+            this.finishEditing_();
+    }
+    else {
+        this.removeChildren(true);
+        this.showingInterPanel_ = true;
+        this.addChild(this.makeInterPanel_(state), true);
+        if (state == 3)
+            this.setNextStepText("Click close to finish", "Close");
+    }
+};
+mirosubs.subtitle.MainPanel.prototype.selectTab_ = function(state) {
+    var c = goog.dom.classes;
+    for (var i = 0; i < this.tabs_.length; i++) {
+        if (i == state)
+            c.add(this.tabs_[i], 'active');
+        else
+            c.remove(this.tabs_[i], 'active');
+    }
+};
+
+mirosubs.subtitle.MainPanel.prototype.disposeCurrentWidget_ = function() {
+    if (this.currentWidget_) {
+        this.currentWidget_.dispose();
+        this.currentWidget_ = null;
+    }
+};
+
+mirosubs.subtitle.MainPanel.prototype.makeNextWidget_ = function(state) {
     if (state == 0)
-        nextWidget = new mirosubs.subtitle.TranscribePanel(
+        this.currentWidget_ = new mirosubs.subtitle.TranscribePanel(
             this.captions_, this.unitOfWork_);
     else if (state == 1)
-        nextWidget = new mirosubs.subtitle.SyncPanel(
+        this.currentWidget_ = new mirosubs.subtitle.SyncPanel(
             this.captions_, 
             this.videoPlayer_.getPlayheadFn(), 
             this.captionManager_);
     else if (state == 2)
-        nextWidget = new mirosubs.subtitle.SyncPanel(
+        this.currentWidget_ = new mirosubs.subtitle.SyncPanel(
             this.captions_, 
             this.videoPlayer_.getPlayheadFn(), 
-            this.captionManager_);
-    this.showInterPanel_(state, nextWidget);
+            this.captionManager_);    
+    return this.currentWidget_;
 };
 
-mirosubs.subtitle.MainPanel.prototype.showInterPanel_ = function(state, nextWidget) {
-    var that = this;
-    var finishFn = function() {
-        that.subtitleMain_.removeChildren();
-        if (that.currentWidget_ != null)
-            that.currentWidget_.dispose();
-        if (state < 3) {
-            that.videoPlayer_.setPlayheadTime(0);
-            var c = goog.dom.classes;
-            for (var i = 0; i < that.tabs_.length; i++) {
-                if (i == state)
-                    c.add(that.tabs_[i], 'active');
-                else
-                    c.remove(that.tabs_[i], 'active');
-            }
-            that.currentWidget_ = nextWidget;
-            that.subtitleMain_.addChild(that.currentWidget_, true);
-            that.state_ = state;
-            that.setNextStepText("When you're done, click here", "Next Step");
-        }
-        else
-            that.finishEditing_();
-    };
-    finishFn();
+mirosubs.subtitle.MainPanel.prototype.makeInterPanel_ = function(state) {
+    if (state < 3)
+        return new mirosubs.subtitle.InterPanel("Great job, carry on!");
+    else
+        return new mirosubs.subtitle
+            .InterPanel("Thank you, click close to end the session",
+                        "finished");
 };
 
 mirosubs.subtitle.MainPanel.prototype.finishEditing_ = function() {
     var that = this;
-    var loadingImg = goog.dom.$(this.uuid_ + "_finishedLoading");
-    loadingImg.style.display = '';
+    // TODO: show loading
     this.saveManager_.saveNow(function() {
             mirosubs.Rpc.call("finished_captions", {
                     "video_id" : that.videoID_
                 }, function() {
-                    loadingImg.style.display = 'none';
+                    // TODO: hide loading.
                     that.dispatchEvent(mirosubs.subtitle.MainPanel
-                                       .EventType.FINISHED_EDITING);
+                                       .EventType.FINISHED);
                     that.dispose();
                 });
         });
@@ -179,6 +204,7 @@ mirosubs.subtitle.MainPanel.prototype.finishEditing_ = function() {
 
 mirosubs.subtitle.MainPanel.prototype.disposeInternal = function() {
     mirosubs.subtitle.MainPanel.superClass_.disposeInternal.call(this);
+    this.disposeCurrentWidget_();
     this.saveManager_.dispose();
     this.lockManager_.dispose();
     this.captionManager_.dispose();

@@ -12,6 +12,7 @@ from datetime import datetime
 import simplejson as json
 import views
 import widget
+import logging
 
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
@@ -109,7 +110,6 @@ def getMyUserInfo(request):
 
 def save_captions(request, video_id, version_no, deleted, inserted, updated):
     if not request.user.is_authenticated():
-        # TODO: log this. it is a problem.
         return { "response" : "not_logged_in" }
     video = models.Video.objects.get(video_id=video_id)
     if not video.can_writelock(request.session.session_key):

@@ -35,13 +35,12 @@ mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
     el.appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
        this.captions_, 
-       $d('li', {'class':'mirosubs-help'}, 
-           $d('ol', null, 
-              $d('li', null, 'Press play.'),
-              $d('li', null, ['When people start speaking, type everything ',
-                              'they say in the box below.'].join('')),
-              $d('li', null, ['Don\'t let subtitles get too long! Hit enter ',
-                              'at the end of each line.'].join(''))))), true);
+       mirosubs.subtitle.Util
+       .createHelpLi(this.getDomHelper(),
+                     [['When people start speaking, type everything ',
+                       'they say in the box below.'].join(''),
+                      ['Don\'t let subtitles get too long! Hit enter ',
+                       'at the end of each line.'].join('')])), true);
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(), 
                   true);
 };
@@ -64,9 +63,6 @@ mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKey_ = function(event
         this.lineEntry_.clearAndFocus();
         event.preventDefault();
     }
-};
-mirosubs.subtitle.TranscribePanel.prototype.disposeInternal = function() {
-    mirosubs.subtitle.TranscribePanel.superClass_.disposeInternal.call(this);
 };
 
 mirosubs.subtitle.TranscribeEntry = function() {

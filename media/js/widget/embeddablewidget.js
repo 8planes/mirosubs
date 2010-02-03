@@ -54,9 +54,8 @@ mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
             if (success) {
                 that.controlTabPanel_.setVisible(false);
                 goog.events.listenOnce(that.captionPanel_, 
-                                       mirosubs.CaptionPanel.EventType.FINISHED_SUBTITLING,
-                                       that.finishedSubtitling_
-                                       );
+                                       mirosubs.subtitle.MainPanel.EventType.FINISHED,
+                                       that.finishedSubtitling_, false, that);
             }
         });
 };
