@@ -1,5 +1,4 @@
 goog.provide('mirosubs.CaptionPanel');
-goog.provide('mirosubs.CaptionPanel.EventType');
 
 mirosubs.CaptionPanel = function(videoID, videoPlayer) {
     goog.ui.Component.call(this);

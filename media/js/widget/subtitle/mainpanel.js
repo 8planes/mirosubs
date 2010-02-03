@@ -1,4 +1,5 @@
 goog.provide('mirosubs.subtitle.MainPanel');
+goog.provide('mirosubs.subtitle.MainPanel.EventType');
 
 /**
  * @fileoverview In this class, the three states {0, 1, 2} correspond to 

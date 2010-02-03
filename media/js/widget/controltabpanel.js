@@ -36,7 +36,7 @@ mirosubs.ControlTabPanel = function(uuid, showTab, videoID) {
 goog.inherits(mirosubs.ControlTabPanel, goog.events.EventTarget);
 
 mirosubs.ControlTabPanel.EventType = {
-    SUBTITLEME_CLICKED : 'subtitlemeclicked',
+    SUBTITLEME_CLICKED: 'subtitlemeclicked',
     LANGUAGE_SELECTED: 'langselected'
 };
 
