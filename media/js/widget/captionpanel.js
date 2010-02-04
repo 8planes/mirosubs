@@ -32,10 +32,11 @@ mirosubs.CaptionPanel.prototype.startSubtitling = function(callback) {
 
 mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ = 
     function(version, existingCaptions) {
-    this.addChild(new mirosubs.subtitle.MainPanel(this.videoPlayer_,
-                                                  this.videoID_, 
-                                                  version, 
-                                                  existingCaptions),
+    this.addChild(new mirosubs.subtitle
+                  .MainPanel(this.videoPlayer_,
+                             new mirosubs.subtitle.MSServerModel(this.videoID_,
+                                                                 version),
+                             existingCaptions),
                   true);
 };
 

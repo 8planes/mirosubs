@@ -62,9 +62,9 @@ mirosubs.UnitOfWork.prototype.issueWorkEvent_ = function() {
 };
 
 mirosubs.UnitOfWork.prototype.getWork = function() {
-    var that = this;
     return {
-        neu: goog.array.clone(that.neu),
-        updated: goog.array.clone(that.updated),
-        deleted: goog.array.clone(that.deleted) };
+        neu: goog.array.clone(this.neu),
+        updated: goog.array.clone(this.updated),
+        deleted: goog.array.clone(this.deleted) 
+    };
 };

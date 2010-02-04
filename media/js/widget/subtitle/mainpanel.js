@@ -8,20 +8,16 @@ goog.provide('mirosubs.subtitle.MainPanel.EventType');
 
 /**
  * 
- * 
- * @param {int} editVersion The caption version we're editing.
+ * @param {mirosubs.subtitle.ServerModel} serverModel
  * @param {Array.<Object.<string, *>>} existingCaptions existing captions in 
  *     json object format.
  */
 mirosubs.subtitle.MainPanel = function(videoPlayer, 
-                                       videoID, 
-                                       editVersion, 
+                                       serverModel, 
                                        existingCaptions) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
-    this.videoID_ = videoID;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
-    this.editVersion_ = editVersion;
     /**
      * Array of captions.
      * @type {Array.<mirosubs.subtitle.EditableCaption>}
@@ -37,9 +33,8 @@ mirosubs.subtitle.MainPanel = function(videoPlayer,
     this.getHandler().listen(this.captionManager_,
                              mirosubs.CaptionManager.EventType.CAPTION,
                              this.captionReached_, false, this);
-    this.saveManager_ = this.createSaveManager_(videoID, editVersion, uw);
-    this.lockManager_ = new mirosubs.subtitle.LockManager(
-        'update_video_lock', { 'video_id' : videoID });
+    this.serverModel_ = serverModel;
+    this.serverModel_.init(uw);
     this.tabs_ = [];
     this.showingInterPanel_ = false;
 };
@@ -47,25 +42,6 @@ goog.inherits(mirosubs.subtitle.MainPanel, goog.ui.Component);
 
 mirosubs.subtitle.MainPanel.EventType = {
     FINISHED: "finishedediting"
-};
-
-mirosubs.subtitle.MainPanel.prototype.createSaveManager_ = 
-    function(videoID, editVersion, unitOfWork) {
-    var toJsonCaptions = function(arr) {
-        return goog.array.map(arr, function(editableCaption) {
-                return editableCaption.jsonCaption;
-            });
-    };
-    return new mirosubs.subtitle.SaveManager(
-        unitOfWork, "save_captions", function(work) {
-            return {
-                "video_id" : videoID,
-                "version_no" : editVersion,
-                "deleted" : toJsonCaptions(work.deleted),
-                "inserted" : toJsonCaptions(work.neu),
-                "updated" : toJsonCaptions(work.updated)
-            };
-        });
 };
 
 mirosubs.subtitle.MainPanel.prototype.getContentElement = function() {
@@ -191,22 +167,17 @@ mirosubs.subtitle.MainPanel.prototype.makeInterPanel_ = function(state) {
 mirosubs.subtitle.MainPanel.prototype.finishEditing_ = function() {
     var that = this;
     // TODO: show loading
-    this.saveManager_.saveNow(function() {
-            mirosubs.Rpc.call("finished_captions", {
-                    "video_id" : that.videoID_
-                }, function() {
-                    // TODO: hide loading.
-                    that.dispatchEvent(mirosubs.subtitle.MainPanel
-                                       .EventType.FINISHED);
-                    that.dispose();
-                });
+    this.serverModel_.finish(function() {
+            // TODO: hide loading.
+            that.dispatchEvent(mirosubs.subtitle.MainPanel
+                               .EventType.FINISHED);
+            that.dispose();
         });
 };
 
 mirosubs.subtitle.MainPanel.prototype.disposeInternal = function() {
     mirosubs.subtitle.MainPanel.superClass_.disposeInternal.call(this);
     this.disposeCurrentWidget_();
-    this.saveManager_.dispose();
-    this.lockManager_.dispose();
+    this.serverModel_.dispose();
     this.captionManager_.dispose();
 };

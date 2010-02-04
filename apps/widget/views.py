@@ -114,9 +114,45 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
     video = models.Video.objects.get(video_id=video_id)
     if not video.can_writelock(request.session.session_key):
         return { "response" : "unlockable" }
+    video.writelock(request)
+    save_captions_impl(request, video, version_no, deleted, inserted, updated)
+    return {"response" : "ok"}
+
+def finished_captions(request, video_id, version_no, deleted, inserted, updated):
+    video = models.Video.objects.get(video_id=video_id)
+    if not video.can_writelock(request.session.session_key):
+        return { "response" : "unlockable" }
+    last_version = save_captions_impl(request, video, version_no, 
+                                      deleted, inserted, updated)
+    last_version.is_complete = True
+    last_version.save()
+    video.release_writelock()
+    video.save()
+    return { "response" : "ok" }
+
+def logout(request):
+    from django.contrib.auth import logout
+    logout(request)
+    return {"respones" : "ok"}
+
+def fetch_captions(request, video_id):
+    video = models.Video.objects.get(video_id=video_id)
+    last_version = video.last_video_caption_version()
+    captions = list(last_version.videocaption_set.all())
+    return [caption_to_dict(caption) for caption in captions]
+
+# helpers
+def caption_to_dict(caption):
+    # TODO: this is essentially duplication.
+    return { 'caption_id' : caption.caption_id, \
+             'caption_text' : caption.caption_text, \
+             'start_time' : caption.start_time, \
+             'end_time' : caption.end_time }
+
+def save_captions_impl(request, video, version_no, deleted, inserted, updated):
     if video.owner is None:
         video.owner = request.user
-        video.save()
+    video.save()
     last_version = video.last_video_caption_version()
     if last_version != None and last_version.version_no == version_no:
         current_version = last_version
@@ -147,34 +183,4 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
                                          start_time=i['start_time'],
                                          end_time=i['end_time']))
     current_version.save()
-    return {"response" : "ok"}
-
-def finished_captions(request, video_id):
-    video = models.Video.objects.get(video_id=video_id)
-    if not video.can_writelock(request.session.session_key):
-        return { "response" : "unlockable" }
-    last_version = video.last_video_caption_version()
-    last_version.is_complete = True
-    last_version.save()
-    video.release_writelock()
-    video.save()
-    return { "response" : "ok" }
-
-def logout(request):
-    from django.contrib.auth import logout
-    logout(request)
-    return {"respones" : "ok"}
-
-def fetch_captions(request, video_id):
-    video = models.Video.objects.get(video_id=video_id)
-    last_version = video.last_video_caption_version()
-    captions = list(last_version.videocaption_set.all())
-    return [caption_to_dict(caption) for caption in captions]
-
-# helpers
-def caption_to_dict(caption):
-    # TODO: this is essentially duplication.
-    return { 'caption_id' : caption.caption_id, \
-             'caption_text' : caption.caption_text, \
-             'start_time' : caption.start_time, \
-             'end_time' : caption.end_time }
+    return current_version
