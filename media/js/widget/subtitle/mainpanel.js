@@ -52,17 +52,13 @@ mirosubs.subtitle.MainPanel.prototype.handleKey_ = function(event) {
 //TODO: listen to control key
     if (event.keyCode == goog.events.KeyCodes.CTRL ||
 				event.keyCode == goog.events.KeyCodes.B) {
-			var now = this.videoPlayer_.getPlayheadTime();
-			this.videoPlayer_.setPlayheadTime(now>3 ? now-3 : 0);
-		}
+		var now = this.videoPlayer_.getPlayheadTime();
+		this.videoPlayer_.setPlayheadTime(now>3 ? now-3 : 0);
+	}
 
     if (event.keyCode == goog.events.KeyCodes.BACKSLASH) {
-			if (this.videoPlayer_.videoElem_.paused || this.videoPlayer_.videoElem_.ended){
-				this.videoPlayer_.videoElem_.play();
-			} else {
-				this.videoPlayer_.videoElem_.pause();
-			}
-		}
+        this.videoPlayer_.togglePause();
+	}
 };
 
 mirosubs.subtitle.MainPanel.prototype.createDom = function() {

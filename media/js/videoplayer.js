@@ -18,6 +18,30 @@ mirosubs.VideoPlayer.prototype.getPlayheadFn = function() {
     };
 };
 
+mirosubs.VideoPlayer.prototype.isPaused = function() {
+    return this.videoElem_.paused;
+};
+
+mirosubs.VideoPlayer.prototype.videoEnded = function() {
+    return this.videoElem_.ended;
+};
+
+mirosubs.VideoPlayer.prototype.Play = function() {
+    this.videoElem_.play();
+};
+
+mirosubs.VideoPlayer.prototype.Pause = function() {
+    this.videoElem_.pause();
+};
+
+mirosubs.VideoPlayer.prototype.togglePause = function() {
+    if (this.isPaused() || this.videoEnded()){
+	    this.Play();
+    } else {
+	    this.Pause();
+    }
+};
+
 mirosubs.VideoPlayer.prototype.getPlayheadTime = function() {
     return this.videoElem_["currentTime"];
 };
@@ -48,3 +72,4 @@ mirosubs.VideoPlayer.prototype.showCaptionText = function(text) {
         goog.dom.setTextContent(this.captionElem_, text);
     }
 };
+
