@@ -201,5 +201,6 @@ mirosubs.subtitle.MainPanel.prototype.disposeInternal = function() {
     this.disposeCurrentWidget_();
     this.serverModel_.dispose();
     this.captionManager_.dispose();
+    this.videoPlayer_.showCaptionText('');
 };
 
