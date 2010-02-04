@@ -23,7 +23,6 @@ mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
         goog.array.contains(this.neu, obj))
         throw new "registerNew failed";
     this.neu.push(obj);
-    console.log(this.neu);
     this.issueWorkEvent_();
 };
 
