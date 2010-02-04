@@ -48,6 +48,23 @@ mirosubs.subtitle.MainPanel.prototype.getContentElement = function() {
     return this.contentElem_;
 };
 
+mirosubs.subtitle.MainPanel.prototype.handleKey_ = function(event) {
+//TODO: listen to control key
+    if (event.keyCode == goog.events.KeyCodes.CTRL ||
+				event.keyCode == goog.events.KeyCodes.B) {
+			var now = this.videoPlayer_.getPlayheadTime();
+			this.videoPlayer_.setPlayheadTime(now>3 ? now-3 : 0);
+		}
+
+    if (event.keyCode == goog.events.KeyCodes.BACKSLASH) {
+			if (this.videoPlayer_.videoElem_.paused || this.videoPlayer_.videoElem_.ended){
+				this.videoPlayer_.videoElem_.play();
+			} else {
+				this.videoPlayer_.videoElem_.pause();
+			}
+		}
+};
+
 mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     mirosubs.subtitle.MainPanel.superClass_.createDom.call(this);
 
@@ -64,6 +81,10 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     this.tabs_ = this.createTabElems_()
     el.appendChild($d('ul', { 'className' : 'mirosubs-nav' }, this.tabs_));
     this.setState_(0);
+    this.keyHandler_ = new goog.events.KeyHandler(document);
+    this.getHandler().listen(this.keyHandler_,
+                             goog.events.KeyHandler.EventType.KEY,
+                             this.handleKey_);
 };
 
 mirosubs.subtitle.MainPanel.prototype.setNextStepText = 
@@ -181,3 +202,4 @@ mirosubs.subtitle.MainPanel.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
     this.captionManager_.dispose();
 };
+
