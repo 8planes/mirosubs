@@ -36,15 +36,12 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     el.appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = 
                   new mirosubs.subtitle.SubtitleList(this.subtitles_), true);
-    this.keyHandler_ = new goog.events.KeyHandler(document);
-    this.getHandler().listen(this.keyHandler_,
-                             goog.events.KeyHandler.EventType.KEY,
-                             this.handleKey_);
+    this.getHandler().listen(document,
+                             goog.events.EventType.KEYDOWN,
+                             this.handleKey_, false, this);
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
-    // I'm using the N key here instead of space because space pauses the 
-    // video.
-    if (event.keyCode == goog.events.KeyCodes.N) {
+    if (event.keyCode == goog.events.KeyCodes.SPACE) {
         var playheadTime = this.playheadFn_();
         var lastSubtitle = null;
         var activeSubtitleWidget = this.subtitleList_.getActiveWidget();
