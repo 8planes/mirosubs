@@ -50,19 +50,13 @@ mirosubs.subtitle.MainPanel.prototype.getContentElement = function() {
 
 mirosubs.subtitle.MainPanel.prototype.handleKey_ = function(event) {
     console.log(event);
-    if (event.keyCode == goog.events.KeyCodes.CTRL ||
-        event.keyCode == goog.events.KeyCodes.B) {
+    if (event.keyCode == goog.events.KeyCodes.CTRL) {
         var now = this.videoPlayer_.getPlayheadTime();
         this.videoPlayer_.setPlayheadTime(now>3 ? now-3 : 0);
     }
 
-    if (event.keyCode == goog.events.KeyCodes.BACKSLASH) {
-        if (this.videoPlayer_.videoElem_.paused || this.videoPlayer_.videoElem_.ended){
-            this.videoPlayer_.videoElem_.play();
-        } else {
-            this.videoPlayer_.videoElem_.pause();
-        }
-    }
+    if (event.keyCode == goog.events.KeyCodes.TAB)
+        this.videoPlayer_.togglePause();
 };
 
 mirosubs.subtitle.MainPanel.prototype.createDom = function() {
@@ -81,8 +75,8 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     this.tabs_ = this.createTabElems_()
     el.appendChild($d('ul', { 'className' : 'mirosubs-nav' }, this.tabs_));
     this.setState_(0);
-    this.getHandler().listen(this.keyHandler_,
-                             goog.events.KeyHandler.EventType.KEY,
+    this.getHandler().listen(document,
+                             goog.events.EventType.KEYDOWN,
                              this.handleKey_, false, this);
 };
 
