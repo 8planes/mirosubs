@@ -19,11 +19,11 @@ mirosubs.VideoPlayer.prototype.getPlayheadFn = function() {
 };
 
 mirosubs.VideoPlayer.prototype.isPaused = function() {
-    return this.videoElem_.paused;
+    return this.videoElem_['paused'];
 };
 
 mirosubs.VideoPlayer.prototype.videoEnded = function() {
-    return this.videoElem_.ended;
+    return this.videoElem_['ended'];
 };
 
 mirosubs.VideoPlayer.prototype.Play = function() {
