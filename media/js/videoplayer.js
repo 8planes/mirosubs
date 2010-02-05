@@ -26,19 +26,19 @@ mirosubs.VideoPlayer.prototype.videoEnded = function() {
     return this.videoElem_['ended'];
 };
 
-mirosubs.VideoPlayer.prototype.Play = function() {
-    this.videoElem_.play();
+mirosubs.VideoPlayer.prototype.play = function() {
+    this.videoElem_['play']();
 };
 
-mirosubs.VideoPlayer.prototype.Pause = function() {
-    this.videoElem_.pause();
+mirosubs.VideoPlayer.prototype.pause = function() {
+    this.videoElem_['pause']();
 };
 
 mirosubs.VideoPlayer.prototype.togglePause = function() {
     if (this.isPaused() || this.videoEnded()){
-	    this.Play();
+	    this.play();
     } else {
-	    this.Pause();
+	    this.pause();
     }
 };
 
