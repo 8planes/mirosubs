@@ -1,6 +1,6 @@
 goog.provide('mirosubs.EmbeddableWidget');
 
-mirosubs.EmbeddableWidget = function(uuid, videoID, showTab) {
+mirosubs.EmbeddableWidget = function(uuid, videoID, showTab, nullWidget) {
     goog.Disposable.call(this);
 
     var $ = goog.dom.$;
@@ -8,7 +8,9 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, showTab) {
     this.videoPlayer_ = mirosubs.VideoPlayer.wrap(uuid + "_video");
     this.userPanel_ = new mirosubs.UserPanel(uuid);
     this.controlTabPanel_ = new mirosubs.ControlTabPanel(uuid, showTab, videoID);
-    this.captionPanel_ = new mirosubs.CaptionPanel(videoID, this.videoPlayer_);
+    this.captionPanel_ = new mirosubs.CaptionPanel(videoID, 
+                                                   this.videoPlayer_, 
+                                                   nullWidget);
     this.captionPanel_.decorate($(uuid + "_captions"));
 
     goog.events.listen(this.controlTabPanel_, 
@@ -28,7 +30,8 @@ mirosubs.EmbeddableWidget.wrap = function(identifier) {
     mirosubs.EmbeddableWidget.widgets.push(
         new mirosubs.EmbeddableWidget(identifier["uuid"], 
                                       identifier["video_id"], 
-                                      identifier["show_tab"]));
+                                      identifier["show_tab"],
+                                      identifier["null_widget"]));
 };
 
 mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {

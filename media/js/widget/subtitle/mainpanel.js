@@ -49,7 +49,6 @@ mirosubs.subtitle.MainPanel.prototype.getContentElement = function() {
 };
 
 mirosubs.subtitle.MainPanel.prototype.handleKey_ = function(event) {
-    console.log(event);
     if (event.keyCode == goog.events.KeyCodes.CTRL) {
         var now = this.videoPlayer_.getPlayheadTime();
         this.videoPlayer_.setPlayheadTime(now>3 ? now-3 : 0);

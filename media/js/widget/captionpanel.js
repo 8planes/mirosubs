@@ -1,9 +1,10 @@
 goog.provide('mirosubs.CaptionPanel');
 
-mirosubs.CaptionPanel = function(videoID, videoPlayer) {
+mirosubs.CaptionPanel = function(videoID, videoPlayer, nullWidget) {
     goog.ui.Component.call(this);
     this.videoID_ = videoID;
     this.videoPlayer_ = videoPlayer;
+    this.nullWidget_ = nullWidget;
 };
 goog.inherits(mirosubs.CaptionPanel, goog.ui.Component);
 
@@ -13,21 +14,34 @@ goog.inherits(mirosubs.CaptionPanel, goog.ui.Component);
  */
 mirosubs.CaptionPanel.prototype.startSubtitling = function(callback) {
     var that = this;
-    mirosubs.Rpc.call("start_editing", {"video_id": this.videoID_},
-                      function(result) {
-                          callback(result["can_edit"]);
-                          if (result["can_edit"])
-                              that.startSubtitlingImpl_(result["version"], 
-                                                        result["existing"]);
-                          else {
-                              if (result["owned_by"])
-                                  alert("Sorry, this video is owned by " + 
-                                        result["owned_by"]);
-                              else
-                                  alert("Sorry, this video is locked by " +
-                                        result["locked_by"]);
-                          }
-                      });
+
+    if (this.nullWidget_) {
+        callback(true);
+        this.startSubtitlingNull_();
+    }
+    else    
+        mirosubs.Rpc.call("start_editing", {"video_id": this.videoID_},
+                          function(result) {
+                              callback(result["can_edit"]);
+                              if (result["can_edit"])
+                                  that.startSubtitlingImpl_(result["version"], 
+                                                            result["existing"]);
+                              else {
+                                  if (result["owned_by"])
+                                      alert("Sorry, this video is owned by " + 
+                                            result["owned_by"]);
+                                  else
+                                      alert("Sorry, this video is locked by " +
+                                            result["locked_by"]);
+                              }
+                          });
+};
+
+mirosubs.CaptionPanel.prototype.startSubtitlingNull_ = function() {
+    this.addChild(new mirosubs.subtitle
+                  .MainPanel(this.videoPlayer_,
+                             new mirosubs.subtitle.NullServerModel(),
+                             []), true);
 };
 
 mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ = 

@@ -6,12 +6,13 @@ from django.contrib.sites.models import Site
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
 
-def js_context(request, video):
+def js_context(request, video, null_widget):
     params = {'uuid': str(uuid4()).replace('-', ''),
               'video_id': video.video_id,
               'video_url': video.video_url,
+              'null_widget': 'true' if null_widget else 'false',
               'writelock_expiration': video_models.WRITELOCK_EXPIRATION }
-    if video.caption_state == video_models.NO_CAPTIONS:
+    if video.caption_state == video_models.NO_CAPTIONS or null_widget:
         params['show_tab'] = 0
     elif video.caption_state == video_models.CAPTIONS_IN_PROGRESS:
         if request.user.is_authenticated and request.user == video.owner:

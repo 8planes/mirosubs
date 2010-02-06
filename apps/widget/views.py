@@ -28,7 +28,9 @@ def embed(request):
             video = models.Video(video_url=video_url, \
                                  allow_community_edits=False)
             video.save()
-    return render_to_response('widget/embed.js', widget.js_context(request, video),
+    null_widget = 'null' in request.GET
+    return render_to_response('widget/embed.js', 
+                              widget.js_context(request, video, null_widget),
                               mimetype="text/javascript",
                               context_instance = RequestContext(request))
 
