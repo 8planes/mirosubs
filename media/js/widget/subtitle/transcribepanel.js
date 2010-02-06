@@ -59,7 +59,7 @@ mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKey_ = function(event
            new mirosubs.subtitle.EditableCaption(this.unitOfWork_);
         this.captions_.push(newEditableCaption);
         newEditableCaption.setText(this.lineEntry_.getValue());
-        this.subtitleList_.addSubtitle(newEditableCaption);
+        this.subtitleList_.addSubtitle(newEditableCaption, true);
         this.lineEntry_.clearAndFocus();
         event.preventDefault();
     }

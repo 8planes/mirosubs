@@ -53,7 +53,6 @@ mirosubs.subtitle.MainPanel.prototype.handleKey_ = function(event) {
         var now = this.videoPlayer_.getPlayheadTime();
         this.videoPlayer_.setPlayheadTime(now>3 ? now-3 : 0);
     }
-
     if (event.keyCode == goog.events.KeyCodes.TAB)
         this.videoPlayer_.togglePause();
 };

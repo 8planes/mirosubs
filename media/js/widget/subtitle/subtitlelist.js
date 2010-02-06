@@ -28,10 +28,13 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
 /**
  *
  */
-mirosubs.subtitle.SubtitleList.prototype.addSubtitle = function(subtitle) {
+mirosubs.subtitle.SubtitleList.prototype.addSubtitle = function(subtitle, scrollDown) {
     var subtitleWidget = new mirosubs.subtitle.SubtitleWidget(subtitle);
     this.addChild(subtitleWidget, true);
     this.subtitleMap_[subtitle.getCaptionID() + ''] = subtitleWidget;
+    if (scrollDown)
+        goog.style.scrollIntoContainerView(subtitleWidget.getElement(),
+                                           this.getElement(), false);
 };
 mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
     if (this.currentActiveSubtitle_ != null) {
