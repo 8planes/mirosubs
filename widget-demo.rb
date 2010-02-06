@@ -12,6 +12,10 @@ begin
     @js_query_string = "youtube_id=#{@params['youtube_id']}"
   end
 
+  if (@params["null"] != nil)
+    @js_query_string = "#{@js_query_string}&null"
+  end
+
   @logger.info "called for #{@js_query_string}"
 
   cgi = CGI.new('html4')
