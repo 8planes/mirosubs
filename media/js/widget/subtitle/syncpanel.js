@@ -35,7 +35,7 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
                       $d('p', null, 'TAB = Play/Pause  CTRL = Skip Back')));
     el.appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = 
-                  new mirosubs.subtitle.SubtitleList(this.subtitles_), true);
+                  new mirosubs.subtitle.SubtitleList(this.subtitles_, true), true);
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
                              this.handleKey_, false, this);

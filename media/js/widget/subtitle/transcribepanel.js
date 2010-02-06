@@ -35,6 +35,7 @@ mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
     el.appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
        this.captions_, 
+       false,
        mirosubs.subtitle.Util
        .createHelpLi(this.getDomHelper(),
                      [['When people start speaking, type everything ',

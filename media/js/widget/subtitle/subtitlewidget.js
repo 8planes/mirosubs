@@ -1,9 +1,10 @@
 goog.provide('mirosubs.subtitle.SubtitleWidget');
 
-mirosubs.subtitle.SubtitleWidget = function(subtitle) {
+mirosubs.subtitle.SubtitleWidget = function(subtitle, displayTimes) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
     this.keyHandler_ = null;
+    this.displayTimes_ = displayTimes;
 };
 goog.inherits(mirosubs.subtitle.SubtitleWidget, goog.ui.Component);
 mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
@@ -15,6 +16,10 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
                                $d('span', {'className':'mirosubs-title'},
                                   this.titleElemInner_ = 
                                   $d('span'))));
+    if (!this.displayTimes_) {
+        goog.dom.classes.add(this.titleElem_, 'mirosubs-title-notime');
+        this.timestampElem_.style.display = 'none';
+    }
     this.textareaElem_ = null;
     this.keyHandler_ = null;
     this.docClickListener_ = null;
@@ -83,11 +88,13 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToView_ = function() {
 };
 mirosubs.subtitle.SubtitleWidget.prototype.updateValues = function() {
     var $t = goog.dom.setTextContent;
-    var time = this.subtitle_.getStartTime();
-    if (time == -1)
-        $t(this.timestampElem_, " ");
-    else
-        $t(this.timestampElem_, this.formatTime_(time));
+    if (this.displayTimes_) {
+        var time = this.subtitle_.getStartTime();
+        this.timestampElem_.style.visibility = 
+            time == -1 ? 'hidden' : 'visible';
+        if (time != -1)
+            $t(this.timestampElem_, this.formatTime_(time));
+    }
     $t(this.titleElemInner_, this.subtitle_.getText());    
 };
 mirosubs.subtitle.SubtitleWidget.prototype.formatTime_ = function(time) {

@@ -261,6 +261,10 @@ ul.mirosubs-titlesList li textarea {
     padding-top: 2px;
 }
 
+.mirosubs-title-notime {
+    padding-left: 0;
+}
+
 .mirosubs-nextStep {
     padding: 10px 0;
     text-align: right;

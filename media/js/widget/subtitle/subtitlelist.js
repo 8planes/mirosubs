@@ -5,10 +5,11 @@ goog.provide('mirosubs.subtitle.SubtitleList');
  * @param {?Element} opt_helpElem first element to insert into ul element
  *     that comprises this component.
  */
-mirosubs.subtitle.SubtitleList = function(captions, opt_helpElem) {
+mirosubs.subtitle.SubtitleList = function(captions, displayTimes, opt_helpElem) {
     goog.ui.Component.call(this);
     this.captions_ = captions;
     this.helpElem_ = opt_helpElem;
+    this.displayTimes_ = displayTimes;
     this.currentActiveSubtitle_ = null;
     /**
      * A map of captionID to mirosubs.subtitle.SubtitleWidget
@@ -29,7 +30,8 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
  *
  */
 mirosubs.subtitle.SubtitleList.prototype.addSubtitle = function(subtitle, scrollDown) {
-    var subtitleWidget = new mirosubs.subtitle.SubtitleWidget(subtitle);
+    var subtitleWidget = new mirosubs.subtitle
+    .SubtitleWidget(subtitle, this.displayTimes_);
     this.addChild(subtitleWidget, true);
     this.subtitleMap_[subtitle.getCaptionID() + ''] = subtitleWidget;
     if (scrollDown)
