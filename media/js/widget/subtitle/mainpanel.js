@@ -111,7 +111,7 @@ mirosubs.subtitle.MainPanel.prototype.nextStepClicked_ = function(event) {
     event.preventDefault();
 };
 mirosubs.subtitle.MainPanel.prototype.setState_ = function(state) {
-    if (this.showingInterPanel_ || state == 0) {
+    if (this.showingInterPanel_ || state == 0 || state == 1 || state == 2) {
         this.showingInterPanel_ = false;
         this.disposeCurrentWidget_();
         if (state < 3) {
