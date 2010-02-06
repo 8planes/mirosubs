@@ -58,16 +58,47 @@ mirosubs.subtitle.TranscribePanel.prototype.getCurrentCaption = function() {
     return this.lineEntry_.getValue();
 };
 
-mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKey_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.ENTER) {
+mirosubs.subtitle.TranscribePanel.prototype.addNewTitle = function() {
         var newEditableCaption = 
            new mirosubs.subtitle.EditableCaption(this.unitOfWork_);
         this.captions_.push(newEditableCaption);
         newEditableCaption.setText(this.lineEntry_.getValue());
         this.subtitleList_.addSubtitle(newEditableCaption, true);
         this.lineEntry_.clearAndFocus();
+};
+
+mirosubs.subtitle.TranscribePanel.prototype.tooLongLineWarning = function(input) {
+    var hex = function(i){
+      if (i>15) return 'F';
+      if (i<0) return '0';
+      return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'][Math.floor(i)];
+    }
+
+    var warning_color = function(len, first_chars, max_chars){
+      if (len<first_chars) return "#ddd"
+
+      len-=first_chars;
+      r=15;
+      g = 16 - 16*len/(max_chars-first_chars);
+      b = 12 - 12*len/(max_chars-first_chars);
+      return "#" + hex(r) + hex(g) + hex(b);
+    }
+
+    var MAX_CHARS = 100;
+    var len = input.getValue().length;
+    if (len > MAX_CHARS)
+        this.addNewTitle();
+    else
+        input.getElement().style.background = warning_color(len, 25, MAX_CHARS);
+};
+
+mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKey_ = function(event) {
+    if (event.keyCode == goog.events.KeyCodes.ENTER) {
+        this.addNewTitle();
         event.preventDefault();
     }
+
+    this.tooLongLineWarning(this.lineEntry_);
 };
 
 mirosubs.subtitle.TranscribeEntry = function() {
