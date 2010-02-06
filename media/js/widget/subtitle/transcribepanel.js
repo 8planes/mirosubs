@@ -54,6 +54,10 @@ mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
                              this.handleLineEntryKey_, false, this);
 };
 
+mirosubs.subtitle.TranscribePanel.prototype.getCurrentCaption = function() {
+    return this.lineEntry_.getValue();
+};
+
 mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.ENTER) {
         var newEditableCaption = 

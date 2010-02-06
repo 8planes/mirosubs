@@ -48,13 +48,18 @@ mirosubs.subtitle.MainPanel.prototype.getContentElement = function() {
     return this.contentElem_;
 };
 
-mirosubs.subtitle.MainPanel.prototype.handleKey_ = function(event) {
+mirosubs.subtitle.MainPanel.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL) {
         var now = this.videoPlayer_.getPlayheadTime();
         this.videoPlayer_.setPlayheadTime(now>3 ? now-3 : 0);
     }
     if (event.keyCode == goog.events.KeyCodes.TAB)
         this.videoPlayer_.togglePause();
+};
+
+mirosubs.subtitle.MainPanel.prototype.handleKeyUp_ = function(event) {
+    if (this.currentWidget_.getCurrentCaption)
+        this.videoPlayer_.showCaptionText(this.currentWidget_.getCurrentCaption());
 };
 
 mirosubs.subtitle.MainPanel.prototype.createDom = function() {
@@ -75,7 +80,10 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     this.setState_(0);
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
-                             this.handleKey_, false, this);
+                             this.handleKeyDown_, false, this);
+    this.getHandler().listen(document,
+                             goog.events.EventType.KEYUP,
+                             this.handleKeyUp_, false, this);
 };
 
 mirosubs.subtitle.MainPanel.prototype.setNextStepText = 
