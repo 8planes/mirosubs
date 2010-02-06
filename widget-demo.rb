@@ -23,7 +23,6 @@ begin
   cgi.out() do
     cgi.html() do
       cgi.body() do
-       cgi.h1 { 'A video for you!' } +
        cgi.div {  
           "<script src=\"http://mirosubs.pybrew.com/embed_widget.js?#{@js_query_string}\"></script>"
        }
