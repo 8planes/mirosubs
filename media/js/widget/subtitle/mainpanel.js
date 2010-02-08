@@ -57,11 +57,6 @@ mirosubs.subtitle.MainPanel.prototype.handleKeyDown_ = function(event) {
         this.videoPlayer_.togglePause();
 };
 
-mirosubs.subtitle.MainPanel.prototype.handleKeyUp_ = function(event) {
-    if (this.currentWidget_.getCurrentCaption)
-        this.videoPlayer_.showCaptionText(this.currentWidget_.getCurrentCaption());
-};
-
 mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     mirosubs.subtitle.MainPanel.superClass_.createDom.call(this);
 
@@ -81,9 +76,6 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
                              this.handleKeyDown_, false, this);
-    this.getHandler().listen(document,
-                             goog.events.EventType.KEYUP,
-                             this.handleKeyUp_, false, this);
 };
 
 mirosubs.subtitle.MainPanel.prototype.setNextStepText = 
@@ -161,7 +153,7 @@ mirosubs.subtitle.MainPanel.prototype.disposeCurrentWidget_ = function() {
 mirosubs.subtitle.MainPanel.prototype.makeNextWidget_ = function(state) {
     if (state == 0)
         this.currentWidget_ = new mirosubs.subtitle.TranscribePanel(
-            this.captions_, this.unitOfWork_);
+            this.captions_, this.unitOfWork_, this.videoPlayer_);
     else if (state == 1)
         this.currentWidget_ = new mirosubs.subtitle.SyncPanel(
             this.captions_, 

@@ -4,12 +4,14 @@ goog.provide('mirosubs.subtitle.TranscribePanel');
  * @param {Array.<mirosubs.subtitle.EditableCaption>} captions
  * @param {mirosubs.UnitOfWork} unitOfWork Used to track any new captions added 
  *     while this widget is active.
+ * @param {mirosubs.VideoPlayer} videoPlayer Used to update subtitle preview on top of the video
  */
-mirosubs.subtitle.TranscribePanel = function(captions, unitOfWork) {
+mirosubs.subtitle.TranscribePanel = function(captions, unitOfWork, videoPlayer) {
     goog.ui.Component.call(this);
 
     this.captions_ = captions;
     this.unitOfWork_ = unitOfWork;
+    this.videoPlayer_ = videoPlayer;
 
 
     /**
@@ -51,11 +53,10 @@ mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
     this.keyHandler_ = new goog.events.KeyHandler(this.lineEntry_.getElement());
     this.getHandler().listen(this.keyHandler_,
                              goog.events.KeyHandler.EventType.KEY,
-                             this.handleLineEntryKey_, false, this);
-};
-
-mirosubs.subtitle.TranscribePanel.prototype.getCurrentCaption = function() {
-    return this.lineEntry_.getValue();
+                             this.handleLineEntryKeyDown_, false, this);
+    this.getHandler().listen(document,
+                             goog.events.EventType.KEYUP,
+                             this.handleKeyUp_, false, this);
 };
 
 mirosubs.subtitle.TranscribePanel.prototype.addNewTitle = function() {
@@ -92,12 +93,18 @@ mirosubs.subtitle.TranscribePanel.prototype.tooLongLineWarning = function(input)
         input.getElement().style.background = warning_color(len, 25, MAX_CHARS);
 };
 
-mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKey_ = function(event) {
+mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.ENTER) {
         this.addNewTitle();
         event.preventDefault();
     }
+};
 
+mirosubs.subtitle.TranscribePanel.prototype.handleKeyUp_ = function(event) {
+    /*live update subtitle display on video*/
+    this.videoPlayer_.showCaptionText(this.lineEntry_.getValue());
+
+    /*warn user when the inserted subtitle line it getting too long*/
     this.tooLongLineWarning(this.lineEntry_);
 };
 
