@@ -104,13 +104,28 @@ mirosubs.subtitle.SubtitleWidget.prototype.formatTime_ = function(time) {
 
     var intTime = parseInt(time);
 
+    var timeString = '';
     var hours = (intTime / 3600) | 0;
+    if (hours > 0)
+        timeString += (hours + ':');
     var minutes = ((intTime / 60) | 0) % 60;
+    if (minutes > 0 || hours > 0) {
+        if (hours > 0)
+            timeString += (pad(minutes) + ':');
+        else
+            timeString += (minutes + ':');
+    }
     var seconds = intTime % 60;
+    if (seconds > 0 || minutes > 0 || hours > 0) {
+        if (minutes > 0 || hours > 0)
+            timeString += pad(seconds);
+        else
+            timeString += seconds;
+    }
     var frac = parseInt((time - intTime) * 100);
+    timeString += ('.' + pad(frac));
 
-    return [[pad(hours), pad(minutes), pad(seconds)].join(':'),
-            pad(frac)].join('.');        
+    return timeString;        
 };
 mirosubs.subtitle.SubtitleWidget.prototype.disposeEventHandlers_ = function() {
     if (this.keyHandler_) {
