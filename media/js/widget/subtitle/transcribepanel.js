@@ -68,7 +68,7 @@ mirosubs.subtitle.TranscribePanel.prototype.addNewTitle = function() {
         this.lineEntry_.clearAndFocus();
 };
 
-mirosubs.subtitle.TranscribePanel.prototype.tooLongLineWarning = function(input) {
+mirosubs.subtitle.TranscribePanel.prototype.tooLongLineWarning = function(input, breakable) {
     var hex = function(i){
       if (i>15) return 'F';
       if (i<0) return '0';
@@ -87,7 +87,7 @@ mirosubs.subtitle.TranscribePanel.prototype.tooLongLineWarning = function(input)
 
     var MAX_CHARS = 100;
     var len = input.getValue().length;
-    if (len > MAX_CHARS)
+    if (breakable && len > MAX_CHARS)
         this.addNewTitle();
     else
         input.getElement().style.background = warning_color(len, 25, MAX_CHARS);
@@ -101,11 +101,28 @@ mirosubs.subtitle.TranscribePanel.prototype.handleLineEntryKeyDown_ = function(e
 };
 
 mirosubs.subtitle.TranscribePanel.prototype.handleKeyUp_ = function(event) {
+//TODO: check the resulting char instead of what key was pressed
+    var insertsBreakableChar = function(key){
+        return key==goog.events.KeyCodes.SPACE ||
+               key==goog.events.KeyCodes.COMMA ||
+               key==goog.events.KeyCodes.APOSTROPHE ||
+               key==goog.events.KeyCodes.QUESTION_MARK ||
+               key==goog.events.KeyCodes.SEMICOLON ||
+               key==goog.events.KeyCodes.DASH ||
+               key==goog.events.KeyCodes.NUM_MINUS ||
+               key==goog.events.KeyCodes.NUM_PERIOD ||
+               key==goog.events.KeyCodes.PERIOD ||
+               key==goog.events.KeyCodes.SINGLE_QUOTE ||
+               key==goog.events.KeyCodes.SLASH ||
+               key==goog.events.KeyCodes.BACKSLASH ||
+               key==goog.events.KeyCodes.CLOSE_SQUARE_BRACKET;
+    };
+
     /*live update subtitle display on video*/
     this.videoPlayer_.showCaptionText(this.lineEntry_.getValue());
 
     /*warn user when the inserted subtitle line it getting too long*/
-    this.tooLongLineWarning(this.lineEntry_);
+    this.tooLongLineWarning(this.lineEntry_, insertsBreakableChar(event.keyCode));
 };
 
 mirosubs.subtitle.TranscribeEntry = function() {
