@@ -63,6 +63,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
             if (!isInManager)
                 this.captionManager_.addCaptions([currentSubtitle.jsonCaption]);
         }
+        event.preventDefault();
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
