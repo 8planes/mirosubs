@@ -70,9 +70,7 @@ mirosubs.subtitle.TranscribePanel.prototype.addNewTitle = function() {
 
 mirosubs.subtitle.TranscribePanel.prototype.tooLongLineWarning = function(input, breakable) {
     var hex = function(i){
-      if (i>15) return 'F';
-      if (i<0) return '0';
-      return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'][Math.floor(i)];
+        return Math.max(0, Math.min(15, Math.floor(i))).toString(16);
     }
 
     var warning_color = function(len, first_chars, max_chars){
