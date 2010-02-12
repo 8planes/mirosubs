@@ -6,13 +6,13 @@ require 'logger'
 begin
   @params = CGI::parse(ENV["QUERY_STRING"])
 
-  if (@params["video_url"] != nil)
-    @js_query_string = "video_url=#{@params['video_url']}"
+  if (@params["video_url"].length > 0)
+    @js_query_string = "video_url=#{@params['video_url'][0]}"
   else
-    @js_query_string = "youtube_id=#{@params['youtube_id']}"
+    @js_query_string = "youtube_id=#{@params['youtube_id'][0]}"
   end
 
-  if (@params["null"] != nil)
+  if (@params["null"].length > 0)
     @js_query_string = "#{@js_query_string}&null"
   end
 
