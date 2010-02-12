@@ -23,6 +23,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, captionManager) {
                              this.captionReached_,
                              false, this);
     this.keyHandler_ = null;
+    this.lastActiveSubtitleWidget_ = null;
 };
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
@@ -40,33 +41,43 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
                              goog.events.EventType.KEYDOWN,
                              this.handleKey_, false, this);
 };
+mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime) {
+    var i;
+    // TODO: write unit test then get rid of linear search in future.
+    for (i = 0; i < this.subtitles_.length; i++)
+        if (this.subtitles_[i].getStartTime() != -1 &&
+            this.subtitles_[i].getStartTime() <= playheadTime &&
+            (i == this.subtitles_.length - 1 ||
+             this.subtitles_[i + 1].getStartTime() == -1 ||
+             this.subtitles_[i + 1].getStartTime() > playheadTime))
+            return i;
+    return -1;
+};
 mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE) {
         var playheadTime = this.playheadFn_();
-        var lastSubtitle = null;
-        var activeSubtitleWidget = this.subtitleList_.getActiveWidget();
-        if (activeSubtitleWidget != null) {
-            lastSubtitle = activeSubtitleWidget.getSubtitle();
-            if (lastSubtitle.getStartTime() != -1)
-                lastSubtitle.setEndTime(playheadTime);
+        var currentSubIndex = this.findSubtitleIndex_(playheadTime);
+        if (currentSubIndex > -1) {
+            var currentSubtitle = this.subtitles_[currentSubIndex];
+            if (currentSubtitle.getStartTime() != -1)
+                currentSubtitle.setEndTime(playheadTime);
         }
-        // TODO: get rid of this linear search in the future by getting 
-        // another map in instance state.
-        var nextIndex = lastSubtitle == null ? 
-            0 : goog.array.indexOf(this.subtitles_, lastSubtitle) + 1;
-        if (nextIndex < this.subtitles_.length) {
-            var currentSubtitle = this.subtitles_[nextIndex];
-            var isInManager = currentSubtitle.getStartTime() != -1;
-            currentSubtitle.setStartTime(playheadTime);
-            currentSubtitle.setEndTime(99999);
-            this.subtitleList_.updateWidget(currentSubtitle.getCaptionID());
+        var nextSubIndex = currentSubIndex + 1;
+        if (nextSubIndex < this.subtitles_.length) {
+            var nextSubtitle = this.subtitles_[nextSubIndex];
+            var isInManager = nextSubtitle.getStartTime() != -1;
+            nextSubtitle.setStartTime(playheadTime);
+            if (nextSubtitle.getEndTime() == -1)
+                nextSubtitle.setEndTime(99999);
+            this.subtitleList_.updateWidget(nextSubtitle.getCaptionID());
             if (!isInManager)
-                this.captionManager_.addCaptions([currentSubtitle.jsonCaption]);
+                this.captionManager_.addCaptions([nextSubtitle.jsonCaption]);
         }
         event.preventDefault();
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
+    console.log("captionReached");
     var jsonCaption = jsonCaptionEvent.caption;
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)
