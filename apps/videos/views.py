@@ -35,7 +35,7 @@ def video(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     video.view_count += 1
     video.save()
-    context = widget.js_context(request, video, false)
+    context = widget.js_context(request, video, False)
     context['video'] = video
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
