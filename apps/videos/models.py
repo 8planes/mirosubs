@@ -1,14 +1,23 @@
 from django.db import models
 from uuid import uuid4
+from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
 from datetime import datetime
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
+VIDEO_TYPE = (
+    ('H', 'HTML5'),
+    ('Y', 'Youtube')
+)
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 
 class Video(models.Model):
     video_id = models.CharField(max_length=255, unique=True)
-    video_url = models.URLField(max_length=2048, unique=True)
+    video_type = models.CharField(max_length=1, choices=VIDEO_TYPE)
+    # only nonzero length for HTML5 videos
+    video_url = models.URLField(max_length=2048)
+    # only nonzero length for Youtube videos
+    youtube_videoid = models.CharField(max_length=32)
     view_count = models.PositiveIntegerField(default=0)
     # the person who was first to start captioning this video.
     owner = models.ForeignKey(User, null=True)
@@ -46,6 +55,11 @@ class Video(models.Model):
         delta = datetime.now() - self.writelock_time
         seconds = delta.days * 24 * 60 * 60 + delta.seconds
         return seconds < WRITELOCK_EXPIRATION
+
+    @property
+    def translation_language_codes(self):
+        return set([trans_version.language for trans_version 
+                    in list(self.translationversion_set.all())])
 
     def can_writelock(self, session_key):
         return self.writelock_session_key == session_key or \
@@ -85,6 +99,28 @@ class VideoCaptionVersion(models.Model):
     is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User)
+
+
+# TODO: make TranslationLock unique on (video, language)
+class TranslationLock(models.Model):
+    video = models.ForeignKey(Video)
+    language = models.CharField(max_length=16, choices=LANGUAGES)
+    writelock_time = models.DateTimeField(null=True)
+    writelock_session_key = models.CharField(max_length=255)
+    writelock_owner = models.ForeignKey(User, null=True)
+
+# TODO: make TranslationVersion unique on (video, version_no, language)
+class TranslationVersion(models.Model):
+    video = models.ForeignKey(Video)
+    version_no = models.PositiveIntegerField(default=0)
+    language = models.CharField(max_length=16, choices=LANGUAGES)
+    user = models.ForeignKey(User)
+
+# TODO: make Translation unique on (version, caption_id)
+class Translation(models.Model):
+    version = models.ForeignKey(TranslationVersion)
+    caption_id = models.IntegerField()
+    translation_text = models.CharField(max_length=1024)
 
 class VideoCaption(models.Model):
     version = models.ForeignKey(VideoCaptionVersion)

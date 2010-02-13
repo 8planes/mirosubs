@@ -1,7 +1,7 @@
 goog.provide('mirosubs.ControlTabPanel');
 goog.provide('mirosubs.ControlTabPanel.EventType');
 
-mirosubs.ControlTabPanel = function(uuid, showTab, videoID) {
+mirosubs.ControlTabPanel = function(uuid, showTab, videoID, translationLanguages) {
     goog.events.EventTarget.call(this);
     this.videoID_ = videoID;
     var $ = goog.dom.$;
@@ -14,13 +14,18 @@ mirosubs.ControlTabPanel = function(uuid, showTab, videoID) {
                            this.subtitleMeListener_, false, this);
     }
     this.tabSelectLanguageLink_ = $(uuid + "_tabSelectLanguage");
+    this.translationLanguages_ = translationLanguages;
 
-    // TODO: in future, load languages from server.
     goog.ui.MenuRenderer.CSS_CLASS = 'mirosubs-langmenu';
     goog.ui.MenuItemRenderer.CSS_CLASS = goog.getCssName('mirosubs-langmenuitem');
     var pm = new goog.ui.PopupMenu();
-    pm.addItem(new goog.ui.MenuItem('Original', 0));
-    pm.addItem(new goog.ui.MenuItem('Add new', 1));
+    pm.addItem(new goog.ui.MenuItem('Original', 
+                                    mirosubs.ControlTabPanel.LANGUAGE_ORIGINAL));
+    goog.array.forEach(translationLanguages, 
+                       function(lang) {
+                           pm.addItem(new goog.ui.MenuItem(lang['name'], lang['code']))
+                       });
+    pm.addItem(new goog.ui.MenuItem('Add new', mirosubs.ControlTabPanel.LANGUAGE_NEW));
     pm.render(document.body);
     pm.setToggleMode(true);
     pm.attach(this.tabSelectLanguageLink_,
@@ -35,9 +40,14 @@ mirosubs.ControlTabPanel = function(uuid, showTab, videoID) {
 };
 goog.inherits(mirosubs.ControlTabPanel, goog.events.EventTarget);
 
+mirosubs.ControlTabPanel.LANGUAGE_ORIGINAL = 'originallang';
+mirosubs.ControlTabPanel.LANGUAGE_NEW = 'newlang';
+
+
 mirosubs.ControlTabPanel.EventType = {
     SUBTITLEME_CLICKED: 'subtitlemeclicked',
-    LANGUAGE_SELECTED: 'langselected'
+    LANGUAGE_SELECTED: 'langselected',
+    ADD_NEW_LANGUAGE: 'newlanguage'
 };
 
 mirosubs.ControlTabPanel.prototype.subtitleMeListener_ = function(event) {
@@ -56,18 +66,39 @@ mirosubs.ControlTabPanel.prototype.showSelectLanguage = function() {
 };
 
 mirosubs.ControlTabPanel.prototype.languageSelected_ = function(event) {
-    if (event.target.getModel() == 0) {
+    if (event.target.getModel() == mirosubs.ControlTabPanel.LANGUAGE_ORIGINAL) {
         var that = this;
         this.showLoading(true);
         mirosubs.Rpc.call('fetch_captions', { 'video_id' : this.videoID_ },
                           function(captions) {
-                              // TODO: in future, look up the language.
                               goog.dom.setTextContent(that.tabSelectLanguageLink_, 
                                                       'Original');
                               that.showLoading(false);
                               that.dispatchEvent(new mirosubs.ControlTabPanel
-                                                 .LanguageSelectedEvent(0, captions)); 
+                                                 .LanguageSelectedEvent('', captions)); 
                           });
+    }
+    else if (event.target.getModel() == mirosubs.ControlTabPanel.LANGUAGE_NEW) {
+        that.dispatchEvent(mirosubs.ControlTabPanel.EventType.ADD_NEW_LANGUAGE);
+    }
+    else {
+        var languageCode = event.target.getModel();
+        var language = 
+        goog.array.find(this.translationLanguages_,
+                        function(tl) {
+                            return tl['code'] == languageCode;
+                        });
+        var that = this;
+        this.showLoading(true);
+        mirosubs.Rpc.call('fetch_translations', { 'video_id' : this.videoID_,
+                    'language_code': languageCode }, 
+            function(captions) {
+                goog.dom.setTextContent(that.tabSelectLanguageLink_, 
+                                        language['name']);
+                that.showLoading(false);
+                that.dispatchEvent(new mirosubs.ControlTabPanel
+                                   .LanguageSelectedEvent(languageCode, captions));
+            });        
     }
 };
 
@@ -82,9 +113,9 @@ mirosubs.ControlTabPanel.prototype.disposeInternal = function() {
                              this.subtitleMeListener_, false, this);
 };
 
-mirosubs.ControlTabPanel.LanguageSelectedEvent = function(languageID, captions) {
+mirosubs.ControlTabPanel.LanguageSelectedEvent = function(languageCode, captions) {
     this.type = mirosubs.ControlTabPanel.EventType.LANGUAGE_SELECTED;
-    this.languageID = languageID;
+    this.languageCode = languageCode;
     this.captions = captions;
 };
 goog.inherits(mirosubs.ControlTabPanel.LanguageSelectedEvent, goog.events.Event);

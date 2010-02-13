@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
+from django.conf.global_settings import LANGUAGES
 from uuid import uuid4
 from django.contrib.sites.models import Site
 from django.contrib.auth.forms import AuthenticationForm
@@ -14,18 +15,30 @@ import views
 import widget
 import logging
 
+LANGUAGES_MAP = dict(LANGUAGES)
+
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
 
 def embed(request):
     if 'video_id' in request.GET:
         video = models.Video.objects.get(video_id=request.GET['video_id'])
+    elif 'youtube_videoid' in request.GET:
+        youtube_videoid = request.GET['youtube_videoid']
+        try:
+            video = models.Video.objects.get(youtube_videoid=youtube_videoid)
+        except models.Video.DoesNotExist:
+            video = models.Video(video_type='Y',
+                                 youtube_videoid=youtube_videoid,
+                                 allow_community_edits=False)
+            video.save()
     else:
         video_url = request.GET['video_url']
         try:
             video = models.Video.objects.get(video_url=video_url)
         except models.Video.DoesNotExist:
-            video = models.Video(video_url=video_url, \
+            video = models.Video(video_type='H',
+                                 video_url=video_url,
                                  allow_community_edits=False)
             video.save()
     null_widget = 'null' in request.GET

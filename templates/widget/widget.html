@@ -1,8 +1,13 @@
 <div class="mirosubs-widget">
   <div class="mirosubs-videoDiv">
+    {% ifnotequal video_url '' %}
     <video id="{{uuid}}_video" width="400" autobuffer controls>
       <source src="{{video_url}}" />
     </video>
+    {% endifnotequal %}
+    {% ifnotequal youtube_videoid '' %}
+    <div id="{{uuid}}_ytvideo" style="height: 360px"></div>
+    {% endifnotequal %}
   </div>
   <div class="mirosubs-loginBox">
     <div id="{{uuid}}_authenticated" 

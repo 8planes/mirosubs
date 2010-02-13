@@ -54,7 +54,7 @@ mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ =
                   true);
 };
 
-mirosubs.CaptionPanel.prototype.languageSelected = function(languageID, captions) {
+mirosubs.CaptionPanel.prototype.languageSelected = function(languageCode, captions) {
     this.removeChildren();
     if (this.playManager_)
         this.playManager_.dispose();

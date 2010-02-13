@@ -77,7 +77,6 @@ mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
-    console.log("captionReached");
     var jsonCaption = jsonCaptionEvent.caption;
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)

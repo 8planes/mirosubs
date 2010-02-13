@@ -1,13 +1,19 @@
 goog.provide('mirosubs.EmbeddableWidget');
 
-mirosubs.EmbeddableWidget = function(uuid, videoID, showTab, nullWidget) {
+mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, translationLanguages, 
+                                     showTab, nullWidget) {
     goog.Disposable.call(this);
 
     var $ = goog.dom.$;
 
-    this.videoPlayer_ = mirosubs.VideoPlayer.wrap(uuid + "_video");
+    if (youtubeVideoID == '')
+        this.videoPlayer_ = mirosubs.Html5VideoPlayer.wrap(uuid + "_video");
+    else
+        this.videoPlayer_ = new mirosubs
+            .YoutubeVideoPlayer(uuid, uuid + "_ytvideo", youtubeVideoID);
     this.userPanel_ = new mirosubs.UserPanel(uuid);
-    this.controlTabPanel_ = new mirosubs.ControlTabPanel(uuid, showTab, videoID);
+    this.controlTabPanel_ = new mirosubs.ControlTabPanel(uuid, showTab, videoID, 
+                                                         translationLanguages);
     this.captionPanel_ = new mirosubs.CaptionPanel(videoID, 
                                                    this.videoPlayer_, 
                                                    nullWidget);
@@ -29,7 +35,9 @@ mirosubs.EmbeddableWidget.wrap = function(identifier) {
     mirosubs.EmbeddableWidget.widgets = mirosubs.EmbeddableWidget.widgets || [];
     mirosubs.EmbeddableWidget.widgets.push(
         new mirosubs.EmbeddableWidget(identifier["uuid"], 
-                                      identifier["video_id"], 
+                                      identifier["video_id"],
+                                      identifier["youtube_videoid"],
+                                      identifier["translation_languages"],
                                       identifier["show_tab"],
                                       identifier["null_widget"]));
 };
@@ -65,7 +73,7 @@ mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
 };
 
 mirosubs.EmbeddableWidget.prototype.languageSelected_ = function(event) {
-    this.captionPanel_.languageSelected(event.languageID, event.captions);
+    this.captionPanel_.languageSelected(event.languageCode, event.captions);
 };
 
 mirosubs.EmbeddableWidget.prototype.finishedSubtitling_ = function(event) {

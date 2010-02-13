@@ -17,12 +17,15 @@ DATABASE_PASSWORD = ''                # Not used with sqlite3.
 DATABASE_HOST = ''                    # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''                    # Set to empty string for default. Not used with sqlite3.
 
-JS_USE_COMPILED = False
+JS_USE_COMPILED = True
 
 # paths provided relative to media/js
-JS_RAW = ['mirosubs.js', 
+JS_RAW = ['swfobject.js',
+          'mirosubs.js', 
           'rpc.js',
-          'videoplayer.js',
+          'abstractvideoplayer.js',
+          'html5videoplayer.js',
+          'youtubevideoplayer.js',
           'unitofwork.js', 
           'widget/captionmanager.js',
           'widget/captionpanel.js',
