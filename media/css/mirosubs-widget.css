@@ -83,6 +83,11 @@
     padding: 8px 0;
 }
 
+iframe.mirosubs-captionDivBg {
+    position: absolute;
+    border: none;
+}
+
 .mirosubs-widget {
     width: 512px;
     font-family: Arial, Helvetica, sans-serif;

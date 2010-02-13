@@ -37,26 +37,10 @@ mirosubs.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     this.videoElem_["currentTime"] = playheadTime;
 };
 
-/**
- *
- * @param {String} text Caption text to display in video. null for blank.
- */
-mirosubs.Html5VideoPlayer.prototype.showCaptionText = function(text) {
-    if (text == null || text == "") {
-        if (this.captionElem_ != null) {
-            this.videoDiv_.removeChild(this.captionElem_);
-            this.captionElem_ = null;
-        }
-    }
-    else {
-        if (this.captionElem_ == null) {
-            this.captionElem_ = document.createElement("div");
-            this.captionElem_.setAttribute("class", "mirosubs-captionDiv");
-            var videoSize = goog.style.getSize(this.videoElem_);
-            this.captionElem_.style.top = (videoSize.height - 60) + "px";
-            this.videoDiv_.appendChild(this.captionElem_);
-        }
-        goog.dom.setTextContent(this.captionElem_, text);
-    }
+mirosubs.Html5VideoPlayer.prototype.getVideoSize = function() {
+    return goog.style.getSize(this.videoElem_)
 };
 
+mirosubs.Html5VideoPlayer.prototype.getVideoContainerElem = function() {
+    return this.videoDiv_;
+};

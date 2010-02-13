@@ -5,6 +5,7 @@ mirosubs.YoutubeVideoPlayer = function(uuid, divID, youtubeVideoID) {
     var ytid = uuid + "_ytplayer";
     var params = { 'allowScriptAccess': 'always' };
     var atts = { 'id': ytid };
+    this.videoDiv_ = goog.dom.$(divID).parentNode;
     swfobject.embedSWF(['http://www.youtube.com/v/', 
                         youtubeVideoID,'?enablejsapi=1'].join(''),
                        divID, "480", "360", "8", null, null, params, atts);
@@ -30,9 +31,15 @@ mirosubs.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
 mirosubs.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     return this.player_['seekTo'](playheadTime, true);
 };
-mirosubs.YoutubeVideoPlayer.prototype.showCaptionText = function(text) {
-    // TODO: implement me
-};
 mirosubs.YoutubeVideoPlayer.prototype.getPlayerState_ = function() {
     return this.player_['getPlayerState']();
+};
+mirosubs.YoutubeVideoPlayer.prototype.needsIFrame = function() {
+    return goog.userAgent.LINUX;
+};
+mirosubs.YoutubeVideoPlayer.prototype.getVideoSize = function() {
+    return new goog.math.Size(480, 360);
+};
+mirosubs.YoutubeVideoPlayer.prototype.getVideoContainerElem = function() {
+    return this.videoDiv_;
 };
