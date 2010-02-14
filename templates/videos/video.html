@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load escapejs %}
-
+{% block css %}
+  {{ block.super }}
+  <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
 {% block scripts %}
 {% if not js_use_compiled %}
   <script type="text/javascript" src="http://{{site.domain}}/site_media/js/closure-library/closure/goog/base.js"></script>

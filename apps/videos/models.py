@@ -5,9 +5,11 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
+VIDEO_TYPE_HTML5 = 'H'
+VIDEO_TYPE_YOUTUBE = 'Y'
 VIDEO_TYPE = (
-    ('H', 'HTML5'),
-    ('Y', 'Youtube')
+    (VIDEO_TYPE_HTML5, 'HTML5'),
+    (VIDEO_TYPE_YOUTUBE, 'Youtube')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 
@@ -29,7 +31,12 @@ class Video(models.Model):
                                         related_name="writelock_owners")
 
     def __unicode__(self):
-        return self.video_url
+        if self.video_type == VIDEO_TYPE_HTML5:
+            return 'html5: %s' % self.video_url
+        elif self.video_type == VIDEO_TYPE_YOUTUBE:
+            return 'youtube: %s' % self.youtube_videoid
+        else:
+            return 'unknown video %s' % video_url
 
     @property
     def writelock_owner_name(self):
