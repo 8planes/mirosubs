@@ -5,21 +5,32 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.forms import VideoForm
-from videos.models import Video
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5
 import widget
+from urlparse import urlparse, parse_qs
 
-@login_required
+
 def create(request):
     if request.method == 'POST':
         video_form = VideoForm(request.POST)
         if video_form.is_valid():
-            video, created = Video.objects.get_or_create(
-                                video_url=video_form.cleaned_data.get('video_url'),
-                                defaults={'owner': request.user})
+            owner = request.user if request.user.is_authenticated() else None
+            parsed_url = urlparse(video_form.cleaned_data['video_url'])
+            if 'youtube.com' in parsed_url.netloc:
+                yt_video_id = parse_qs(parsed_url.query)['v'][0]
+                video, created = Video.objects.get_or_create(
+                                    youtube_videoid=yt_video_id,
+                                    defaults={'owner': owner,
+                                              'video_type': VIDEO_TYPE_YOUTUBE})
+            else:
+                video, created = Video.objects.get_or_create(
+                                    video_url=video_form.cleaned_data['video_url'],
+                                    defaults={'owner': owner,
+                                              'video_type': VIDEO_TYPE_HTML5})
             if created:
                 # TODO: log to activity feed
                 pass
-            if video.owner == request.user or video.allow_community_edits:
+            if not video.owner or video.owner == request.user or video.allow_community_edits:
                 return HttpResponseRedirect(reverse(
                         'videos:video', kwargs={'video_id':video.video_id}))
             else:
@@ -30,7 +41,6 @@ def create(request):
     return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
 
-@login_required
 def video(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     video.view_count += 1
@@ -40,7 +50,6 @@ def video(request, video_id):
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
-@login_required
 def video_list(request):
     try:
         page = int(request.GET['page'])
