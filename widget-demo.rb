@@ -16,6 +16,10 @@ begin
     @js_query_string = "#{@js_query_string}&null"
   end
 
+  if (@params['js_debug'].length > 0)
+    @js_query_string = "#{@js_query_string}&debug_js"
+  end
+
   @logger.info "called for #{@js_query_string}"
 
   cgi = CGI.new('html4')

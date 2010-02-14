@@ -7,6 +7,7 @@
     base_rpc_url: 'http://{{site.domain}}/widget/rpc/',
     base_login_url: 'http://{{site.domain}}/widget/',
     null_widget: {{null_widget}},
+    debug_js: {{debug_js}},
     writelock_expiration: {{writelock_expiration}},
     translation_languages: {{translation_languages}}
 }
