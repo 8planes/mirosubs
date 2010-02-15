@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import registration.signals
+from django.contrib.auth import login, authenticate
 
 
 class Language(models.Model):
@@ -35,7 +36,10 @@ def register_user(sender, user, request, **kwargs):
         return
     user.is_active = True
     user.save()
-    # TODO: login the user
+    u = authenticate(username=request.POST.get('username'),
+                     password=request.POST.get('password1'))
+    if u is not None:
+        login(request, u)
 registration.signals.user_registered.connect(register_user)
 
 def activate_user(sender, user, request, **kwargs):
