@@ -1,13 +1,15 @@
 from settings import *
 import logging
 
+DEBUG = True
+
 from socket import gethostname
 if gethostname() == 'lrz2':
     SITE_ID = 3
     SITE_NAME = 'mirosubs-rz'
-if gethostname() == 'rz-laptopII-ub':
-    SITE_ID = 5
-    SITE_NAME = 'mirosubs-rz-local'
+#if gethostname() == 'rz-laptopII-ub' or gethostname == 'rz-laptop-ub':
+SITE_ID = 5
+SITE_NAME = 'mirosubs-rz-local'
 
 INSTALLED_APPS +=(
     'debug_toolbar',
@@ -44,3 +46,6 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            )
  
 LOGIN_REDIRECT_URL = '/'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '1025'

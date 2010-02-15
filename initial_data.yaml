@@ -25,5 +25,5 @@
 - model: sites.site
   pk: 5
   fields:
-      domain: 192.168.225.128:8002
+      domain: 192.168.225.131:8002
       name: mirosubs-rz-local
