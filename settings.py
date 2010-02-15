@@ -127,3 +127,5 @@ INSTALLED_APPS = (
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 ACCOUNT_ACTIVATION_DAYS = 9999 # we are using registration only to verify emails
+SESSION_COOKIE_AGE = 2419200 # 4 weeks
+
