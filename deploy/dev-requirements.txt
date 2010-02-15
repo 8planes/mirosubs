@@ -17,5 +17,5 @@ python-yadis
 oauth
 -e git://github.com/aduston/Django-Socialauth.git#egg=socialauth
 
-django-registration
+-e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
 fabric>=0.9.0

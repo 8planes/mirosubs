@@ -1,1 +1,1 @@
-{{ site.name }} -- account activation
+{{ site.name }} -- email verification

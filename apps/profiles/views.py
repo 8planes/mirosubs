@@ -34,6 +34,4 @@ def profile(request, user_id):
     else:
         return render_to_response('profiles/view_profile.html', locals(),
                                   context_instance=RequestContext(request))
-
-            
             

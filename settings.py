@@ -126,4 +126,4 @@ INSTALLED_APPS = (
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
-ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_ACTIVATION_DAYS = 9999 # we are using registration only to verify emails
