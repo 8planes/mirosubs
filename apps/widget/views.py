@@ -42,8 +42,9 @@ def embed(request):
                                  allow_community_edits=False)
             video.save()
     null_widget = 'null' in request.GET
+    debug_js = 'debug_js' in request.GET
     return render_to_response('widget/embed.js', 
-                              widget.js_context(request, video, null_widget),
+                              widget.js_context(request, video, null_widget, debug_js),
                               mimetype="text/javascript",
                               context_instance = RequestContext(request))
 

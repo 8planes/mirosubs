@@ -10,12 +10,13 @@ LANGUAGES_MAP = dict(LANGUAGES)
 def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
 
-def js_context(request, video, null_widget):
+def js_context(request, video, null_widget, debug_js=False):
     params = {'uuid': str(uuid4()).replace('-', ''),
               'video_id': video.video_id,
               'video_url': video.video_url,
               'youtube_videoid': video.youtube_videoid,
               'null_widget': 'true' if null_widget else 'false',
+              'debug_js': 'true' if debug_js else 'false',
               'writelock_expiration': video_models.WRITELOCK_EXPIRATION,
               'translation_languages' : json.dumps(
                   [{'code':code, 'name':LANGUAGE_MAP[code]} for 

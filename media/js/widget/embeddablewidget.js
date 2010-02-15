@@ -30,7 +30,17 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, translationL
 };
 goog.inherits(mirosubs.EmbeddableWidget, goog.Disposable);
 
+mirosubs.EmbeddableWidget.logger_ =
+    goog.debug.Logger.getLogger('mirosubs.EmbeddableWidget');
+
 mirosubs.EmbeddableWidget.wrap = function(identifier) {
+    var nullWidget = identifier["null_widget"];
+    var debug = identifier["debug_js"];
+    if (debug) {
+        var debugWindow = new goog.debug.FancyWindow('main');
+        debugWindow.setEnabled(true);
+        debugWindow.init(); 
+    }
     mirosubs.EmbeddableWidget.setConstants_(identifier);
     mirosubs.EmbeddableWidget.widgets = mirosubs.EmbeddableWidget.widgets || [];
     mirosubs.EmbeddableWidget.widgets.push(
@@ -39,11 +49,12 @@ mirosubs.EmbeddableWidget.wrap = function(identifier) {
                                       identifier["youtube_videoid"],
                                       identifier["translation_languages"],
                                       identifier["show_tab"],
-                                      identifier["null_widget"]));
+                                      nullWidget));
 };
 
 mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
     var username = identifier["username"];
+    mirosubs.EmbeddableWidget.logger_.info('username is ' + username);
     mirosubs.currentUsername = username == '' ? null : username;
     mirosubs.Rpc.BASE_URL = identifier["base_rpc_url"];
     mirosubs.BASE_LOGIN_URL = identifier["base_login_url"];
