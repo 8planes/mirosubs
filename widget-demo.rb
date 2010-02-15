@@ -16,7 +16,7 @@ begin
     @js_query_string = "#{@js_query_string}&null"
   end
 
-  if (@params['js_debug'].length > 0)
+  if (@params['debug_js'].length > 0)
     @js_query_string = "#{@js_query_string}&debug_js"
   end
 

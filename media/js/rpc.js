@@ -27,8 +27,9 @@ mirosubs.Rpc.call = function(methodName, args, opt_callback) {
             postContent += (param + "=" + encodeURIComponent(serializedArgs[param]));
         }
         goog.net.XhrIo.send([mirosubs.Rpc.BASE_URL, "xhr/", methodName].join(''),
-                            function(data) {
-                                console.log("XhrIo send completed: " + data);
+                            function(event) {
+                                if (opt_callback)
+                                    opt_callback(event.target.getResponseJson());
                             }, "POST",
                             postContent);
     }

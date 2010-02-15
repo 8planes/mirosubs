@@ -15,8 +15,8 @@
 
     var head = document.getElementsByTagName('head')[0];
 
-    if (typeof(mirosubs) != 'undefined' && typeof(mirosubs.CaptionWidget) != 'undefined')
-        mirosubs.CaptionWidget.wrap(identifier);
+    if (typeof(mirosubs) != 'undefined' && typeof(mirosubs.EmbeddableWidget) != 'undefined')
+        mirosubs.EmbeddableWidget.wrap(identifier);
     else {
         if (!window.MiroSubsLoading) {
             window.MiroSubsLoading = true;
