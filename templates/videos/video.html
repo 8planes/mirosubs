@@ -3,6 +3,14 @@
 {% block css %}
   {{ block.super }}
   <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+  <style>
+div.mirosubs-widget {
+    position: relative;    
+}
+.mirosubs-videoDiv {
+    text-align: center;
+}
+  </style>
 {% endblock %}
 {% block scripts %}
 {% if not js_use_compiled %}
@@ -22,6 +30,7 @@ function main(){
 {% block body_attrs %}onload="main()"{% endblock %}
 {% block main_content %}
 <p>{{ video.video_url }}</p>
+
 {% with video.video_url as video_url %}
   {% include "widget/widget.html" %}
 {% endwith %}
