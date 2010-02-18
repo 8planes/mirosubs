@@ -5,10 +5,11 @@ goog.provide('mirosubs.subtitle.SyncPanel');
  * @param {Array.<mirosubs.subtitle.EditableCaption>} subtitles The subtitles 
  *     for the video, so far.
  * @param {Function} playheadFn Function that returns current playhead time for video.
+ * @param {Function} isPausedFn Function that returns true if video is paused.
  * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles with 
  *     start_time set.
  */
-mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, captionManager) {
+mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, isPausedFn, captionManager) {
     goog.ui.Component.call(this);
     /**
      * Always in correct order by time.
@@ -17,6 +18,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, captionManager) {
     this.subtitles_ = subtitles;
 
     this.playheadFn_ = playheadFn;
+    this.isPausedFn_ = isPausedFn;
     this.captionManager_ = captionManager;
     this.getHandler().listen(captionManager,
                              mirosubs.CaptionManager.EventType.CAPTION,
@@ -55,23 +57,25 @@ mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE) {
-        var playheadTime = this.playheadFn_();
-        var currentSubIndex = this.findSubtitleIndex_(playheadTime);
-        if (currentSubIndex > -1) {
-            var currentSubtitle = this.subtitles_[currentSubIndex];
-            if (currentSubtitle.getStartTime() != -1)
-                currentSubtitle.setEndTime(playheadTime);
-        }
-        var nextSubIndex = currentSubIndex + 1;
-        if (nextSubIndex < this.subtitles_.length) {
-            var nextSubtitle = this.subtitles_[nextSubIndex];
-            var isInManager = nextSubtitle.getStartTime() != -1;
-            nextSubtitle.setStartTime(playheadTime);
-            if (nextSubtitle.getEndTime() == -1)
-                nextSubtitle.setEndTime(99999);
-            this.subtitleList_.updateWidget(nextSubtitle.getCaptionID());
-            if (!isInManager)
-                this.captionManager_.addCaptions([nextSubtitle.jsonCaption]);
+        if (!this.isPausedFn_()) {
+            var playheadTime = this.playheadFn_();
+            var currentSubIndex = this.findSubtitleIndex_(playheadTime);
+            if (currentSubIndex > -1) {
+                var currentSubtitle = this.subtitles_[currentSubIndex];
+                if (currentSubtitle.getStartTime() != -1)
+                    currentSubtitle.setEndTime(playheadTime);
+            }
+            var nextSubIndex = currentSubIndex + 1;
+            if (nextSubIndex < this.subtitles_.length) {
+                var nextSubtitle = this.subtitles_[nextSubIndex];
+                var isInManager = nextSubtitle.getStartTime() != -1;
+                nextSubtitle.setStartTime(playheadTime);
+                if (nextSubtitle.getEndTime() == -1)
+                    nextSubtitle.setEndTime(99999);
+                this.subtitleList_.updateWidget(nextSubtitle.getCaptionID());
+                if (!isInManager)
+                    this.captionManager_.addCaptions([nextSubtitle.jsonCaption]);
+            }
         }
         event.preventDefault();
     }

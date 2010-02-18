@@ -13,6 +13,9 @@ mirosubs.AbstractVideoPlayer = function() {};
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
 };
+mirosubs.AbstractVideoPlayer.prototype.getIsPausedFn = function() {
+    return goog.bind(this.isPaused, this);
+};
 mirosubs.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.videoEnded = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.play = goog.abstractMethod;
@@ -60,6 +63,7 @@ mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
             if (this.captionBgElem_ == null) {
                 this.captionBgElem_ = document.createElement('iframe');
                 this.captionBgElem_.setAttribute("class", "mirosubs-captionDivBg");
+                //this.captionBgElem_.setAttribute("allowtransparency", "true");
                 this.captionBgElem_.style.visibility = 'hidden';
                 this.captionBgElem_.style.top = this.captionElem_.style.top;
                 // FIXME: get rid of hardcoded value
@@ -80,7 +84,7 @@ mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
  * @protected
  */
 mirosubs.AbstractVideoPlayer.prototype.needsIFrame = function() {
-    return false;
+    return true;//false;
 };
 /**
  *
