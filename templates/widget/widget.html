@@ -9,7 +9,7 @@
     <div id="{{uuid}}_ytvideo" style="height: 360px"></div>
     {% endifnotequal %}
   </div>
-  <div class="mirosubs-loginBox">
+  <div class="mirosubs-loginBox" id="{{uuid}}_topPanel">
     <div id="{{uuid}}_authenticated" 
          class="mirosubs-loginStatus"
          {% if not request.user.is_authenticated %}
