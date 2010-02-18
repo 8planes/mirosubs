@@ -31,7 +31,7 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());    
     this.getElement().appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-        this.subtitles_, true, this.createHelpDom_($d)), true);
+        this.subtitles_, true, this.createHelpDom($d)), true);
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
                              this.handleKey_, false, this);

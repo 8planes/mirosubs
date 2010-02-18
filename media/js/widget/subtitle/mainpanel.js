@@ -70,8 +70,10 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
 
     el.appendChild(this.contentElem_ = $d('div'));
     el.appendChild($d('div', { 'className': 'mirosubs-nextStep' },
-                      this.nextMessageSpan_ = $d('span'),
-                      this.nextStepLink_ = $d('a', { 'href': '#'})));
+                      $d('a', { 'href': '#'}, 
+                         "Done? ",
+                         this.nextStepLink_ = 
+                         $d('strong', null, 'Next Step'))));
     this.getHandler().listen(this.nextStepLink_, 'click', 
                              this.nextStepClicked_, false, this);
     this.tabs_ = this.createTabElems_()
@@ -82,11 +84,8 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                              this.handleKeyDown_, false, this);
 };
 
-mirosubs.subtitle.MainPanel.prototype.setNextStepText = 
-    function(messageText, buttonText) {
-    var $c = goog.dom.setTextContent;
-    $c(this.nextMessageSpan_, messageText);
-    $c(this.nextStepLink_, buttonText);
+mirosubs.subtitle.MainPanel.prototype.setNextStepText = function(buttonText) {
+    goog.dom.setTextContent(this.nextStepLink_, buttonText);
 };
 
 mirosubs.subtitle.MainPanel.prototype.createTabElems_ = function() {
@@ -124,7 +123,7 @@ mirosubs.subtitle.MainPanel.prototype.setState_ = function(state) {
             this.videoPlayer_.setPlayheadTime(0);
             this.selectTab_(state);
             this.addChild(this.makeNextWidget_(state), true);
-            this.setNextStepText("When you're done, click here", "Next Step");
+            this.setNextStepText("Next Step");
         }
         else
             this.finishEditing_();
@@ -134,7 +133,7 @@ mirosubs.subtitle.MainPanel.prototype.setState_ = function(state) {
         this.showingInterPanel_ = true;
         this.addChild(this.makeInterPanel_(state), true);
         if (state == 3)
-            this.setNextStepText("Click close to finish", "Close");
+            this.setNextStepText("Submit Work");
     }
 };
 mirosubs.subtitle.MainPanel.prototype.selectTab_ = function(state) {
