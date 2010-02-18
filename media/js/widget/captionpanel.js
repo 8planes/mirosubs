@@ -60,3 +60,8 @@ mirosubs.CaptionPanel.prototype.languageSelected = function(languageCode, captio
         this.playManager_.dispose();
     this.playManager_ = new mirosubs.play.Manager(this.videoPlayer_, captions);
 };
+
+mirosubs.CaptionPanel.prototype.addNewLanguage = function(originalCaptions) {
+    this.addChild(new mirosubs.translate.MainPanel(
+        this.videoPlayer_, originalCaptions), true);
+};

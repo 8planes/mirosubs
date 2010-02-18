@@ -7,6 +7,7 @@ goog.provide('mirosubs.UserPanel');
 mirosubs.UserPanel = function(uuid) {
     goog.Disposable.call(this);
     var $ = goog.dom.$;
+    this.mainPanel_ = $(uuid + "_topPanel");
     this.authenticatedPanel_ = $(uuid + "_authenticated");
     this.usernameSpan_ = $(uuid + "_username");
     this.notAuthenticatedPanel_ = $(uuid + "_notauthenticated");
@@ -19,6 +20,10 @@ mirosubs.UserPanel = function(uuid) {
                        this.logoutClicked_, false, this);
 };
 goog.inherits(mirosubs.UserPanel, goog.Disposable);
+
+mirosubs.UserPanel.prototype.setVisible = function(visible) {
+    this.mainPanel_.style.display = visible ? '' : 'none';
+};
 
 mirosubs.UserPanel.prototype.setLoggedIn = function(username) {
     this.authenticatedPanel_.style.display = '';

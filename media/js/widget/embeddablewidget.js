@@ -18,15 +18,17 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, translationL
                                                    this.videoPlayer_, 
                                                    nullWidget);
     this.captionPanel_.decorate($(uuid + "_captions"));
+    this.handler_ = new goog.events.EventHandler(this);
 
-    goog.events.listen(this.controlTabPanel_, 
-                       mirosubs.ControlTabPanel.EventType.SUBTITLEME_CLICKED,
-                       this.startSubtitling_,
-                       false, this);
-    goog.events.listen(this.controlTabPanel_, 
-                       mirosubs.ControlTabPanel.EventType.LANGUAGE_SELECTED,
-                       this.languageSelected_,
-                       false, this);
+    this.handler_.listen(this.controlTabPanel_, 
+                         mirosubs.ControlTabPanel.EventType.SUBTITLEME_CLICKED,
+                         this.startSubtitling_);
+    this.handler_.listen(this.controlTabPanel_, 
+                         mirosubs.ControlTabPanel.EventType.LANGUAGE_SELECTED,
+                         this.languageSelected_);
+    this.handler_.listen(this.controlTabPanel_,
+                         mirosubs.ControlTabPanel.EventType.ADD_NEW_LANGUAGE,
+                         this.addNewLanguage_);
 };
 goog.inherits(mirosubs.EmbeddableWidget, goog.Disposable);
 
@@ -75,7 +77,7 @@ mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
     this.captionPanel_.startSubtitling(function(success) {
             that.controlTabPanel_.showLoading(false);
             if (success) {
-                that.controlTabPanel_.setVisible(false);
+                that.userPanel_.setVisible(false);
                 goog.events.listenOnce(that.captionPanel_, 
                                        mirosubs.subtitle.MainPanel.EventType.FINISHED,
                                        that.finishedSubtitling_, false, that);
@@ -87,14 +89,18 @@ mirosubs.EmbeddableWidget.prototype.languageSelected_ = function(event) {
     this.captionPanel_.languageSelected(event.languageCode, event.captions);
 };
 
+mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
+    this.captionPanel_.addNewLanguage(event.captions);
+};
+
 mirosubs.EmbeddableWidget.prototype.finishedSubtitling_ = function(event) {
     this.controlTabPanel_.showSelectLanguage();
-    this.controlTabPanel_.setVisible(true);
+    this.userPanel_.setVisible(true);
 };
 
 mirosubs.EmbeddableWidget.prototype.disposeInternal = function() {
     mirosubs.EmbeddableWidget.superClass_.disposeInternal.call(this);
-    goog.events.removeAll(this.controlTabPanel_);
+    this.handler_.dispose();
 };
 
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed

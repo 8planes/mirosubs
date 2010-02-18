@@ -28,18 +28,23 @@ mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, captionManager) {
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);
-    var el = this.getElement();
-    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    el.appendChild($d('div', {'class':'mirosubs-tips'},
-                      $d('p', null, ['Tap spacebar to begin, and tap again ',
-                                     'to align each subtitle.'].join('')),
-                      $d('p', null, 'TAB = Play/Pause  CTRL = Skip Back')));
-    el.appendChild(this.contentElem_ = $d('div'));
-    this.addChild(this.subtitleList_ = 
-                  new mirosubs.subtitle.SubtitleList(this.subtitles_, true), true);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());    
+    this.getElement().appendChild(this.contentElem_ = $d('div'));
+    this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
+        this.subtitles_, true, this.createHelpDom_($d)), true);
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
                              this.handleKey_, false, this);
+};
+/**
+ *
+ * @protected
+ */
+mirosubs.subtitle.SyncPanel.prototype.createHelpDom = function($d) {
+    var helpLines = [['To sync your subtitles to the video, tap SPACEBAR ',
+                      'at the exact moment each subtitle should display.'].join(''), 
+                     '(then tap it again to trigger the first subtitle, and so on).'];
+    return mirosubs.subtitle.Util.createHelpLi($d, helpLines, true, 'BEGIN');
 };
 mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime) {
     var i;

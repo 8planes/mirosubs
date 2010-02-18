@@ -4,7 +4,8 @@ goog.provide('mirosubs.subtitle.TranscribePanel');
  * @param {Array.<mirosubs.subtitle.EditableCaption>} captions
  * @param {mirosubs.UnitOfWork} unitOfWork Used to track any new captions added 
  *     while this widget is active.
- * @param {mirosubs.VideoPlayer} videoPlayer Used to update subtitle preview on top of the video
+ * @param {mirosubs.VideoPlayer} videoPlayer Used to update subtitle 
+ * preview on top of the video
  */
 mirosubs.subtitle.TranscribePanel = function(captions, unitOfWork, videoPlayer) {
     goog.ui.Component.call(this);
@@ -28,22 +29,16 @@ mirosubs.subtitle.TranscribePanel.prototype.getContentElement = function() {
 
 mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
     mirosubs.subtitle.TranscribePanel.superClass_.createDom.call(this);
-    var el = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    el.appendChild($d('div', {'class':'mirosubs-tips'},
-                      $d('p', null, ['Tap spacebar to begin, and tap again ',
-                                     'to align each subtitle.'].join('')),
-                      $d('p', null, 'TAB = Play/Pause  CTRL = Skip Back')));
-    el.appendChild(this.contentElem_ = $d('div'));
+    this.getElement().appendChild(this.contentElem_ = $d('div'));
+    var helpLines = [['When you start the video, type everything people ',
+                      'say in the box below.  Don\'t let subtitles get ',
+                      'too long! Hit enter for a new line.'].join(''), 
+                     'Use these keys to pause and jump back, so you can keep up:'];
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-       this.captions_, 
-       false,
-       mirosubs.subtitle.Util
-       .createHelpLi(this.getDomHelper(),
-                     [['When people start speaking, type everything ',
-                       'they say in the box below.'].join(''),
-                      ['Don\'t let subtitles get too long! Hit enter ',
-                       'at the end of each line.'].join('')])), true);
+       this.captions_, false, 
+       mirosubs.subtitle.Util.createHelpLi($d, helpLines, false, 
+                                           'PRESS TAB TO BEGIN')), true);
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(), 
                   true);
 };

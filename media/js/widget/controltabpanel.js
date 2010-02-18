@@ -79,7 +79,14 @@ mirosubs.ControlTabPanel.prototype.languageSelected_ = function(event) {
                           });
     }
     else if (event.target.getModel() == mirosubs.ControlTabPanel.LANGUAGE_NEW) {
-        that.dispatchEvent(mirosubs.ControlTabPanel.EventType.ADD_NEW_LANGUAGE);
+        var that = this;
+        this.showLoading(true);
+        mirosubs.Rpc.call('fetch_captions', {'video_id': this.videoID_},
+                          function(captions) {
+                              that.showLoading(false);
+                              that.dispatchEvent(new mirosubs.ControlTabPanel.
+                                                 AddNewLanguageEvent(captions));
+                          });
     }
     else {
         var languageCode = event.target.getModel();
@@ -119,3 +126,9 @@ mirosubs.ControlTabPanel.LanguageSelectedEvent = function(languageCode, captions
     this.captions = captions;
 };
 goog.inherits(mirosubs.ControlTabPanel.LanguageSelectedEvent, goog.events.Event);
+
+mirosubs.ControlTabPanel.AddNewLanguageEvent = function(captions) {
+    this.type = mirosubs.ControlTabPanel.EventType.ADD_NEW_LANGUAGE;
+    this.captions = captions;
+};
+goog.inherits(mirosubs.ControlTabPanel.AddNewLanguageEvent, goog.events.Event);
