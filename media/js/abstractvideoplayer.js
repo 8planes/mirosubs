@@ -63,7 +63,6 @@ mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
             if (this.captionBgElem_ == null) {
                 this.captionBgElem_ = document.createElement('iframe');
                 this.captionBgElem_.setAttribute("class", "mirosubs-captionDivBg");
-                //this.captionBgElem_.setAttribute("allowtransparency", "true");
                 this.captionBgElem_.style.visibility = 'hidden';
                 this.captionBgElem_.style.top = this.captionElem_.style.top;
                 // FIXME: get rid of hardcoded value
@@ -84,7 +83,7 @@ mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
  * @protected
  */
 mirosubs.AbstractVideoPlayer.prototype.needsIFrame = function() {
-    return true;//false;
+    return false;
 };
 /**
  *
