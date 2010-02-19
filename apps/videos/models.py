@@ -1,5 +1,6 @@
 from django.db import models
-from uuid import uuid4
+import string
+import random
 from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
 from datetime import datetime
@@ -96,7 +97,9 @@ class Video(models.Model):
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
         return
-    instance.video_id = str(uuid4())
+    alphanum = string.letters+string.digits
+    instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
+                                                           for i in xrange(12)])
 models.signals.pre_save.connect(create_video_id, sender=Video)
 
 class VideoCaptionVersion(models.Model):
