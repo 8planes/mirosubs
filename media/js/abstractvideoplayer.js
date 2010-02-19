@@ -13,10 +13,11 @@ mirosubs.AbstractVideoPlayer = function() {};
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
 };
-mirosubs.AbstractVideoPlayer.prototype.getIsPausedFn = function() {
-    return goog.bind(this.isPaused, this);
+mirosubs.AbstractVideoPlayer.prototype.getIsPlayingFn = function() {
+    return goog.bind(this.isPlaying, this);
 };
 mirosubs.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
+mirosubs.AbstractVideoPlayer.prototype.isPlaying = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.videoEnded = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.play = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.pause = goog.abstractMethod;

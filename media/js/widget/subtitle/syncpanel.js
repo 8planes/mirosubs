@@ -5,11 +5,11 @@ goog.provide('mirosubs.subtitle.SyncPanel');
  * @param {Array.<mirosubs.subtitle.EditableCaption>} subtitles The subtitles 
  *     for the video, so far.
  * @param {Function} playheadFn Function that returns current playhead time for video.
- * @param {Function} isPausedFn Function that returns true if video is paused.
+ * @param {Function} isPlayingFn Function that returns true if video is playing.
  * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles with 
  *     start_time set.
  */
-mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, isPausedFn, captionManager) {
+mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, isPlayingFn, captionManager) {
     goog.ui.Component.call(this);
     /**
      * Always in correct order by time.
@@ -18,7 +18,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, isPausedFn, captio
     this.subtitles_ = subtitles;
 
     this.playheadFn_ = playheadFn;
-    this.isPausedFn_ = isPausedFn;
+    this.isPlayingFn_ = isPlayingFn;
     this.captionManager_ = captionManager;
     this.getHandler().listen(captionManager,
                              mirosubs.CaptionManager.EventType.CAPTION,
@@ -62,7 +62,7 @@ mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE) {
-        if (!this.isPausedFn_()) {
+        if (this.isPlayingFn_()) {
             var playheadTime = this.playheadFn_();
             var currentSubIndex = this.findSubtitleIndex_(playheadTime);
             if (currentSubIndex > -1) {

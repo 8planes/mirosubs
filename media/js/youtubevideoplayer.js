@@ -49,6 +49,9 @@ mirosubs.YoutubeVideoPlayer.prototype.isPaused = function() {
 mirosubs.YoutubeVideoPlayer.prototype.videoEnded = function() {
     return this.getPlayerState_() == 0;
 };
+mirosubs.YoutubeVideoPlayer.prototype.isPlaying = function() {
+    return !this.isPaused() && !this.videoEnded();
+};
 mirosubs.YoutubeVideoPlayer.prototype.play = function () {
     if (this.player_)
         this.player_['playVideo']();

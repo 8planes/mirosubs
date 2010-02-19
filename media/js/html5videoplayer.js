@@ -21,6 +21,12 @@ mirosubs.Html5VideoPlayer.prototype.videoEnded = function() {
     return this.videoElem_['ended'];
 };
 
+mirosubs.Html5VideoPlayer.prototype.isPlaying = function() {
+    return (this.videoElem_['readyState']==3 /*HAVE_FUTURE_DATA*/ ||
+            this.videoElem_['readyState']==4 /*HAVE_ENOUGH_DATA*/) &&
+           !this.isPaused() && !this.videoEnded();
+};
+
 mirosubs.Html5VideoPlayer.prototype.play = function() {
     this.videoElem_['play']();
 };

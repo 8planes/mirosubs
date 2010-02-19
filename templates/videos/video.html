@@ -10,6 +10,11 @@ div.mirosubs-widget {
 .mirosubs-videoDiv {
     text-align: center;
 }
+#embed{
+  white-space: pre;
+  background: #eee;
+  boder: #666;
+}
   </style>
 {% endblock %}
 {% block scripts %}
@@ -33,5 +38,13 @@ function main(){
 
 {% with video.video_url as video_url %}
   {% include "widget/widget.html" %}
+  <p>Enable collaborative subtitling on your site by copying and pasting this code:</p>
+  <div id="embed">
+    <code>
+      &lt;script type="text/javascript"
+          src="http://{{ site.domain }}{% url widget.views.embed %}?video_id={{ video.video_id }}"&gt;
+      &lt;/script&gt;
+    </code>
+  </div>
 {% endwith %}
 {% endblock %}
