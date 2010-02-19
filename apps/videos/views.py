@@ -8,7 +8,7 @@ from videos.forms import VideoForm
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5
 import widget
 from urlparse import urlparse, parse_qs
-
+from django.contrib.sites.models import Site
 
 def create(request):
     if request.method == 'POST':
@@ -47,6 +47,7 @@ def video(request, video_id):
     video.save()
     context = widget.js_context(request, video, False)
     context['video'] = video
+    context['site'] = Site.objects.get_current()
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
