@@ -58,8 +58,10 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
     var username = identifier["username"];
     mirosubs.EmbeddableWidget.logger_.info('username is ' + username);
     mirosubs.currentUsername = username == '' ? null : username;
-    mirosubs.Rpc.BASE_URL = identifier["base_rpc_url"];
-    mirosubs.BASE_LOGIN_URL = identifier["base_login_url"];
+    var baseURL = identifier["base_url"];
+    mirosubs.Rpc.BASE_URL = baseURL + '/widget/rpc/';
+    mirosubs.BASE_LOGIN_URL = baseURL + '/widget/';
+    mirosubs.subtitle.MSServerModel.EMBED_JS_URL = baseURL + '/embed_widget.js';
     mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
         identifier["writelock_expiration"];
 };

@@ -2,8 +2,8 @@ goog.provide('mirosubs.subtitle.MainPanel');
 goog.provide('mirosubs.subtitle.MainPanel.EventType');
 
 /**
- * @fileoverview In this class, the three states {0, 1, 2} correspond to 
- *     { transcribe, sync, review }.
+ * @fileoverview In this class, the three states {0, 1, 2, 3} correspond to 
+ *     { transcribe, sync, review, finished }.
  */
 
 /**
@@ -36,7 +36,7 @@ mirosubs.subtitle.MainPanel = function(videoPlayer,
     this.serverModel_ = serverModel;
     this.serverModel_.init(uw);
     this.tabs_ = [];
-    this.showingInterPanel_ = false;
+    this.state_ = -1; // dom not created yet.
 };
 goog.inherits(mirosubs.subtitle.MainPanel, goog.ui.Component);
 
@@ -69,13 +69,14 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
     el.appendChild(this.contentElem_ = $d('div'));
+    var nextStepAnchorElem;
     el.appendChild($d('div', { 'className': 'mirosubs-nextStep' },
-                      $d('a', { 'href': '#'}, 
+                      nextStepAnchorElem = $d('a', { 'href': '#'}, 
                          "Done? ",
                          this.nextStepLink_ = 
                          $d('strong', null, 'Next Step'))));
-    this.getHandler().listen(this.nextStepLink_, 'click', 
-                             this.nextStepClicked_, false, this);
+    this.getHandler().listen(nextStepAnchorElem, 'click', 
+                             this.nextStepClicked_);
     this.tabs_ = this.createTabElems_()
     el.appendChild($d('ul', { 'className' : 'mirosubs-nav' }, this.tabs_));
     this.setState_(0);
@@ -84,7 +85,7 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                              this.handleKeyDown_, false, this);
 };
 
-mirosubs.subtitle.MainPanel.prototype.setNextStepText = function(buttonText) {
+mirosubs.subtitle.MainPanel.prototype.setNextStepText_ = function(buttonText) {
     goog.dom.setTextContent(this.nextStepLink_, buttonText);
 };
 
@@ -114,27 +115,34 @@ mirosubs.subtitle.MainPanel.prototype.nextStepClicked_ = function(event) {
     event.preventDefault();
 };
 mirosubs.subtitle.MainPanel.prototype.setState_ = function(state) {
-    if (this.showingInterPanel_ || state == 0 || state == 1 || state == 2) {
-        this.showingInterPanel_ = false;
+    if (state == this.state_)
+        return;
+    if (state == 3) {
+        this.submitWorkThenProgressToFinishedState_();
+        return;
+    }
+    else
+        this.progressToState_(state);
+};
+mirosubs.subtitle.MainPanel.prototype.progressToState_ = function(state) {
+    this.state_ = state;
+    if (state < 4) {
         this.disposeCurrentWidget_();
-        if (state < 3) {
-            this.removeChildren(true);
-            this.state_ = state;
-            this.videoPlayer_.setPlayheadTime(0);
-            this.selectTab_(state);
-            this.addChild(this.makeNextWidget_(state), true);
-            this.setNextStepText("Next Step");
-        }
-        else
-            this.finishEditing_();
-    }
-    else {
         this.removeChildren(true);
-        this.showingInterPanel_ = true;
-        this.addChild(this.makeInterPanel_(state), true);
-        if (state == 3)
-            this.setNextStepText("Submit Work");
+        this.videoPlayer_.setPlayheadTime(0);
+        this.selectTab_(state);
+        this.addChild(this.makeNextWidget_(state), true);
+        var nextStepText;
+        if (state < 2)
+            nextStepText = "Next Step";
+        else if (state == 2)
+            nextStepText = "Submit Work";
+        else
+            nextStepText = "Finish";
+        this.setNextStepText_(nextStepText);
     }
+    else
+        this.finishEditing_();
 };
 mirosubs.subtitle.MainPanel.prototype.selectTab_ = function(state) {
     var c = goog.dom.classes;
@@ -163,31 +171,30 @@ mirosubs.subtitle.MainPanel.prototype.makeNextWidget_ = function(state) {
             this.videoPlayer_.getPlayheadFn(), 
             this.captionManager_);
     else if (state == 2)
-        this.currentWidget_ = new mirosubs.subtitle.SyncPanel(
+        this.currentWidget_ = new mirosubs.subtitle.ReviewPanel(
             this.captions_, 
             this.videoPlayer_.getPlayheadFn(), 
-            this.captionManager_);    
+            this.captionManager_);
+    else
+        this.currentWidget_ = 
+            new mirosubs.subtitle.FinishedPanel(this.serverModel_);
     return this.currentWidget_;
 };
 
-mirosubs.subtitle.MainPanel.prototype.makeInterPanel_ = function(state) {
-    if (state < 3)
-        return new mirosubs.subtitle.InterPanel("Great job, carry on!");
-    else
-        return new mirosubs.subtitle
-            .InterPanel("Thank you, click close to end the session",
-                        "finished");
-};
-
-mirosubs.subtitle.MainPanel.prototype.finishEditing_ = function() {
+mirosubs.subtitle.MainPanel.prototype.submitWorkThenProgressToFinishedState_ =
+    function() {
     var that = this;
     // TODO: show loading
     this.serverModel_.finish(function() {
-            // TODO: hide loading.
-            that.dispatchEvent(mirosubs.subtitle.MainPanel
-                               .EventType.FINISHED);
-            that.dispose();
+            // TODO: hide loading
+            that.progressToState_(3);
         });
+};
+
+mirosubs.subtitle.MainPanel.prototype.finishEditing_ = function() {
+    this.dispatchEvent(mirosubs.subtitle.MainPanel
+                       .EventType.FINISHED);
+    this.dispose();
 };
 
 mirosubs.subtitle.MainPanel.prototype.disposeInternal = function() {

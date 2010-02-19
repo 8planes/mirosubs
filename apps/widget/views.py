@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -15,6 +16,7 @@ import views
 import widget
 import logging
 
+VIDEO_SESSION_KEY = 'video_session'
 LANGUAGES_MAP = dict(LANGUAGES)
 
 def full_path(js_file):
@@ -77,12 +79,13 @@ def start_editing(request, video_id):
     # already and doesn't allow community edits, or i can freely edit it.
 
     # django won't set a session cookie unless something is in session state.
-    request.session["dummy"] = "a"
+    if VIDEO_SESSION_KEY not in request.session:
+        request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
 
     video = models.Video.objects.get(video_id=video_id)
     if video.owner != None and video.owner != request.user:
         return { "can_edit": False, "owned_by" : video.owner.username }
-    if not video.can_writelock(request.session.session_key):
+    if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
         return { "can_edit": False, "locked_by" : video.writelock_owner_name }
 
     video.writelock(request)
@@ -103,7 +106,7 @@ def start_editing(request, video_id):
 
 def update_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
-    if video.can_writelock(request.session.session_key):
+    if video.can_writelock(request.session[VIDEO_SESSION_KEY]):
         video.writelock(request)
         video.save()
         return { "response" : "ok" }
@@ -128,7 +131,7 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
     if not request.user.is_authenticated():
         return { "response" : "not_logged_in" }
     video = models.Video.objects.get(video_id=video_id)
-    if not video.can_writelock(request.session.session_key):
+    if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
         return { "response" : "unlockable" }
     video.writelock(request)
     save_captions_impl(request, video, version_no, deleted, inserted, updated)
@@ -136,7 +139,7 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
 
 def finished_captions(request, video_id, version_no, deleted, inserted, updated):
     video = models.Video.objects.get(video_id=video_id)
-    if not video.can_writelock(request.session.session_key):
+    if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
         return { "response" : "unlockable" }
     last_version = save_captions_impl(request, video, version_no, 
                                       deleted, inserted, updated)

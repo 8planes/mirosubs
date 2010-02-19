@@ -23,6 +23,13 @@ mirosubs.subtitle.MSServerModel = function(videoID, editVersion) {
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
+/*
+ * URL for the widget's embed javascript.
+ * Set by mirosubs.EmbeddableWidget when widget first loads.
+ * @type {string} 
+ */
+mirosubs.subtitle.MSServerModel.EMBED_JS_URL = null;
+
 mirosubs.subtitle.MSServerModel.logger_ = 
     goog.debug.Logger.getLogger('mirosubs.subtitle.MSServerModel');
 
@@ -61,25 +68,32 @@ mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
             mirosubs.Rpc.call('finished_captions', 
                               saveArgs,
                               function(result) {
+                                  if (result['response'] != 'ok')
+                                      // this should never happen.
+                                      alert('Problem saving subtitles. Response: ' +
+                                            result["response"]);
                                   mirosubs.subtitle.MSServerModel.logger_.info(
                                       "finish return: " + $e(result));
                                   callback();
                               });
-        });
+        }, true);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
     this.loginThenAction_(goog.bind(this.saveImpl_, this));
 };
 
-mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ = function(action) {
+mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ = 
+    function(action, opt_forceLogin) {
+    
     mirosubs.subtitle.MSServerModel.logger_.info(
         "loginThenAction_ for " + mirosubs.currentUsername);
     if (mirosubs.currentUsername == null) {
         // first update lock anyway.
         mirosubs.Rpc.call("update_video_lock", { 'video_id': this.videoID_ });
         var currentTime = new Date().getTime();
-        if (currentTime >= this.lastLoginPesterTime_ + 60 * 1000) {
+        if (opt_forceLogin || 
+            currentTime >= this.lastLoginPesterTime_ + 60 * 1000) {
             if (mirosubs.isLoginDialogShowing())
                 return;
             // temporary
@@ -101,6 +115,10 @@ mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
         'saveImpl_: ' + $e(saveArgs));
     mirosubs.Rpc.call('save_captions', saveArgs, 
                       function(result) {
+                          if (result['response'] != 'ok')
+                              // this should never happen.
+                              alert('Problem saving subtitles. Response: ' + 
+                                    result['response']);
                           mirosubs.subtitle.MSServerModel.logger_.info(
                               'saveImpl_ return: ' + $e(result));
                       });
@@ -121,6 +139,11 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
             'inserted': toJsonCaptions(work.neu),
             'updated': toJsonCaptions(work.updated)
             };
+};
+
+mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {
+    return mirosubs.subtitle.MSServerModel.EMBED_JS_URL + 
+        "?video_id=" + this.videoID_;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.stopTimer_ = function() {

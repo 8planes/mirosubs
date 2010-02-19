@@ -32,3 +32,5 @@ mirosubs.subtitle.ServerModel.prototype.finish = function(callback) {};
  * Instances implementing this interface must extend goog.Disposable
  */
 mirosubs.subtitle.ServerModel.prototype.dispose = function() {};
+
+mirosubs.subtitle.ServerModel.prototype.getEmbedCode = function() {};
