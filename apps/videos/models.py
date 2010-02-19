@@ -12,6 +12,7 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_YOUTUBE, 'Youtube')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
+VIDEO_SESSION_KEY = 'video_session'
 
 class Video(models.Model):
     video_id = models.CharField(max_length=255, unique=True)
@@ -77,7 +78,7 @@ class Video(models.Model):
             self.writelock_owner = request.user
         else:
             self.writelock_owner = None
-        self.writelock_session_key = request.session.session_key
+        self.writelock_session_key = request.session[VIDEO_SESSION_KEY]
         self.writelock_time = datetime.now()
 
     def release_writelock(self):

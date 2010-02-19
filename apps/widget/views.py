@@ -10,13 +10,13 @@ from django.views.decorators.cache import never_cache
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from videos import models
+from videos.models import VIDEO_SESSION_KEY
 from datetime import datetime
 import simplejson as json
 import views
 import widget
 import logging
 
-VIDEO_SESSION_KEY = 'video_session'
 LANGUAGES_MAP = dict(LANGUAGES)
 
 def full_path(js_file):
