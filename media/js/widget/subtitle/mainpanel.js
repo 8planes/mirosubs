@@ -40,6 +40,11 @@ mirosubs.subtitle.MainPanel = function(videoPlayer,
 };
 goog.inherits(mirosubs.subtitle.MainPanel, goog.ui.Component);
 
+/**
+ * Must be set by some external component.
+ */
+mirosubs.subtitle.MainPanel.SPINNER_GIF_URL = null;
+
 mirosubs.subtitle.MainPanel.EventType = {
     FINISHED: "finishedediting"
 };
@@ -71,6 +76,12 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     el.appendChild(this.contentElem_ = $d('div'));
     var nextStepAnchorElem;
     el.appendChild($d('div', { 'className': 'mirosubs-nextStep' },
+                      this.logInOutLink_ = $d('a', {'className':'mirosubs-logoutLink', 
+                                                    'href':'#'}),
+                      this.loadingGif_ = $d('img', {'style':'display: none',
+                                                    'alt':'loading',
+                                                    'src':mirosubs.subtitle.MainPanel
+                                                         .SPINNER_GIF_URL}),
                       nextStepAnchorElem = $d('a', { 'href': '#'}, 
                          "Done? ",
                          this.nextStepLink_ = 
@@ -83,6 +94,28 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
                              this.handleKeyDown_, false, this);
+    if (this.serverModel_.currentUsername() != null)
+        this.showLoggedIn(this.serverModel_.currentUsername());
+    else
+        this.showLoggedOut();
+    this.getHandler().listen(this.logInOutLink_, 'click',
+                             function(e) {
+                                 if (that.loggedIn_)
+                                     that.serverModel_.logOut();
+                                 else
+                                     that.serverModel_.logIn();
+                                 e.preventDefault();
+                             });
+};
+
+mirosubs.subtitle.MainPanel.prototype.showLoggedIn = function(username) {
+    this.loggedIn_ = true;
+    goog.dom.setTextContent(this.logInOutLink_, "Logout " + username);
+};
+
+mirosubs.subtitle.MainPanel.prototype.showLoggedOut = function() {
+    this.loggedIn_ = false;
+    goog.dom.setTextContent(this.logInOutLink_, "Login");
 };
 
 mirosubs.subtitle.MainPanel.prototype.setNextStepText_ = function(buttonText) {
@@ -123,6 +156,9 @@ mirosubs.subtitle.MainPanel.prototype.setState_ = function(state) {
     }
     else
         this.progressToState_(state);
+};
+mirosubs.subtitle.MainPanel.prototype.showLoading_ = function(show) {
+    this.loadingGif_.style.display = show ? '' : 'none';
 };
 mirosubs.subtitle.MainPanel.prototype.progressToState_ = function(state) {
     this.state_ = state;
@@ -186,9 +222,9 @@ mirosubs.subtitle.MainPanel.prototype.makeNextWidget_ = function(state) {
 mirosubs.subtitle.MainPanel.prototype.submitWorkThenProgressToFinishedState_ =
     function() {
     var that = this;
-    // TODO: show loading
+    this.showLoading_(true);
     this.serverModel_.finish(function() {
-            // TODO: hide loading
+            that.showLoading_(false);
             that.progressToState_(3);
         });
 };

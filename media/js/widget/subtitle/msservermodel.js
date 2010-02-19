@@ -156,3 +156,15 @@ mirosubs.subtitle.MSServerModel.prototype.stopTimer_ = function() {
 mirosubs.subtitle.MSServerModel.prototype.disposeInternal = function() {
     this.stopTimer_();
 };
+
+mirosubs.subtitle.MSServerModel.prototype.currentUsername = function() {
+    return mirosubs.currentUsername;
+};
+
+mirosubs.subtitle.MSServerModel.prototype.logIn = function() {
+    mirosubs.login();
+};
+
+mirosubs.subtitle.MSServerModel.prototype.logOut = function() {
+    mirosubs.logout();
+};

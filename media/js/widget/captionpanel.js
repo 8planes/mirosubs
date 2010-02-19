@@ -5,6 +5,7 @@ mirosubs.CaptionPanel = function(videoID, videoPlayer, nullWidget) {
     this.videoID_ = videoID;
     this.videoPlayer_ = videoPlayer;
     this.nullWidget_ = nullWidget;
+    this.mainPanel_ = null;
 };
 goog.inherits(mirosubs.CaptionPanel, goog.ui.Component);
 
@@ -38,15 +39,24 @@ mirosubs.CaptionPanel.prototype.startSubtitling = function(callback) {
 };
 
 mirosubs.CaptionPanel.prototype.startSubtitlingNull_ = function() {
-    this.addChild(new mirosubs.subtitle
+    this.addChild(this.mainPanel_ = new mirosubs.subtitle
                   .MainPanel(this.videoPlayer_,
                              new mirosubs.subtitle.NullServerModel(),
                              []), true);
 };
 
+mirosubs.CaptionPanel.prototype.updateLoginState = function() {
+    if (this.mainPanel_ != null) {
+        if (mirosubs.currentUsername != null)
+            this.mainPanel_.showLoggedIn(mirosubs.currentUsername);
+        else
+            this.mainPanel_.showLoggedOut();
+    }
+};
+
 mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ = 
     function(version, existingCaptions) {
-    this.addChild(new mirosubs.subtitle
+    this.addChild(this.mainPanel_ = new mirosubs.subtitle
                   .MainPanel(this.videoPlayer_,
                              new mirosubs.subtitle.MSServerModel(this.videoID_,
                                                                  version),

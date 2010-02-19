@@ -59,6 +59,8 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
     mirosubs.EmbeddableWidget.logger_.info('username is ' + username);
     mirosubs.currentUsername = username == '' ? null : username;
     var baseURL = identifier["base_url"];
+    mirosubs.subtitle.MainPanel.SPINNER_GIF_URL = 
+        baseURL + '/site_media/images/spinner.gif';
     mirosubs.Rpc.BASE_URL = baseURL + '/widget/rpc/';
     mirosubs.BASE_LOGIN_URL = baseURL + '/widget/';
     mirosubs.subtitle.MSServerModel.EMBED_JS_URL = baseURL + '/embed_widget.js';
@@ -71,6 +73,7 @@ mirosubs.EmbeddableWidget.prototype.updateLoginState = function() {
         this.userPanel_.setLoggedOut();
     else
         this.userPanel_.setLoggedIn(mirosubs.currentUsername);
+    this.captionPanel_.updateLoginState();
 };
 
 mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {

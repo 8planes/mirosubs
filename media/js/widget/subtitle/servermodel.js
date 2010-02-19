@@ -34,3 +34,9 @@ mirosubs.subtitle.ServerModel.prototype.finish = function(callback) {};
 mirosubs.subtitle.ServerModel.prototype.dispose = function() {};
 
 mirosubs.subtitle.ServerModel.prototype.getEmbedCode = function() {};
+
+mirosubs.subtitle.ServerModel.prototype.currentUsername = function() {};
+
+mirosubs.subtitle.ServerModel.prototype.logIn = function() {};
+
+mirosubs.subtitle.ServerModel.prototype.logOut = function() {};
