@@ -1,7 +1,9 @@
 goog.provide('mirosubs.subtitle.ReviewPanel');
 
-mirosubs.subtitle.ReviewPanel = function(subtitles, playheadFn, captionManager) {
-    mirosubs.subtitle.SyncPanel.call(this, subtitles, playheadFn, captionManager);
+mirosubs.subtitle.ReviewPanel = function(subtitles, playheadFn, isPausedFn, 
+                                         captionManager) {
+    mirosubs.subtitle.SyncPanel.call(this, subtitles, playheadFn, isPausedFn, 
+                                     captionManager);
 };
 goog.inherits(mirosubs.subtitle.ReviewPanel, mirosubs.subtitle.SyncPanel);
 /**

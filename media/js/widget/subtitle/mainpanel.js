@@ -169,12 +169,14 @@ mirosubs.subtitle.MainPanel.prototype.makeNextWidget_ = function(state) {
         this.currentWidget_ = new mirosubs.subtitle.SyncPanel(
             this.captions_, 
             this.videoPlayer_.getPlayheadFn(), 
+            this.videoPlayer_.getIsPausedFn(),
             this.captionManager_);
     else if (state == 2)
         this.currentWidget_ = new mirosubs.subtitle.ReviewPanel(
             this.captions_, 
             this.videoPlayer_.getPlayheadFn(), 
-            this.captionManager_);
+            this.videoPlayer_.getIsPausedFn(),
+            this.captionManager_);    
     else
         this.currentWidget_ = 
             new mirosubs.subtitle.FinishedPanel(this.serverModel_);
