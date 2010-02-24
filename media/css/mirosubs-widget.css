@@ -2,7 +2,145 @@
 .mirosubs-widget a:focus,
 .mirosubs-widget a:hover {
   outline: none;
+
 }
+
+
+.mirosubs-timeline{
+
+margin: 0;
+overflow: auto;
+height: 10r0px;
+padding: 0;
+background: #fefefe url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 0px repeat-x;
+position: relative;
+}
+
+
+.mirosubs-timeline .marker{
+background: url("marker.png") 0 0px no-repeat;
+position: absolute;
+top: 17px;
+left: 50%;
+height: 73px;
+width: 13px;
+
+}
+
+
+.mirosubs-timeline ul{
+margin: 0;
+padding: 0;
+width: 2500px;
+float: left;
+}
+
+
+.mirosubs-timeline ul.mirosubs-timeline-time {
+
+border-bottom: 1px solid #ddd;
+}
+
+
+.mirosubs-timeline ul.mirosubs-timeline-time li{
+margin: 0;
+list-style: none;
+font-size: 10px;
+float: left;
+width: 50px;
+padding: 3px 0px 3px 10px;
+background: url("ticks.gif") 5px bottom no-repeat !important;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles{
+background: #333;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li{
+margin: 0;
+list-style: none;
+margin: 7px 0px 7px 6px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+float: left;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
+background: #fefefe url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 21px repeat-x;
+
+}
+
+
+.mirosubs-widget li.selected{
+background: #0090cb;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
+color: #fff;
+}
+
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li.not_synced{
+background: #aaa;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
+color: #fff;
+}
+
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a{
+display: block;
+padding: 20px 20px 17px 20px;
+position: relative;
+text-decoration: none;
+color: #333;
+cursor: default;
+
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a span{
+position: absolute;
+height: 30px;
+width: 13px;
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,01);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
+border: 1px solid #fff;
+background: #fefefe url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 9px repeat-x;
+top: 12px;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+display: none ;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a span strong{
+position: absolute;
+height: 17px;
+width: 13px;
+background:  url("arrows.gif") 2px 0px no-repeat;
+top: 12px;
+display: block ;
+}
+
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a span:hover{
+background: #fefefe url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 -35px repeat-x;
+}
+
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a span.mirosubs-leftGrabber{
+left: 0;
+margin-left: -3px;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a span.mirosubs-rightGrabber{
+right: 0;
+margin-right: -3px;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a:hover span{
+display: block;
+}
+
 
 .mirosubs-modal-dialog-bg {
   position: absolute;
@@ -47,9 +185,11 @@
     right: 15px;
     width: 15px;
     height: 16px;
-    background: url("../images/dialog_close_box.gif") no-repeat center;
+    background: url("http://mirosubs.pybrew.com/site_media/images/dialog_close_box.gif") no-repeat center;
     cursor: default;
 }
+
+
 
 .mirosubs-modal-dialog-content {
     padding: 15px;
@@ -89,11 +229,6 @@
     padding: 8px 0;
 }
 
-iframe.mirosubs-captionDivBg {
-    position: absolute;
-    border: none;
-}
-
 .mirosubs-widget {
     width: 400px;
     font-family: Arial, Helvetica, sans-serif;
@@ -111,7 +246,7 @@ iframe.mirosubs-captionDivBg {
 .mirosubs-widget .mirosubs-loginBox {
     height: 26px;
     font-size: 10px;
-    background: #efefef url("../images/gradient.png") 0 -9px repeat-x;
+    background: #efefef url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 -9px repeat-x;
     border-bottom: 1px solid #ddd;
 }
 
@@ -119,7 +254,7 @@ iframe.mirosubs-captionDivBg {
     margin: 0 !important;
     padding: 5px 8px !important;
     list-style: none !important;
-    width: 65%;
+    width: 70%;
     float: left;
 }
 
@@ -191,11 +326,11 @@ iframe.mirosubs-captionDivBg {
     float: right;
     border-left: 1px solid #ddd;
     padding: 5px 10px 5px 22px !important;
-    background: url("../images/arrow.gif") 7px center no-repeat;
+    background: url("http://mirosubs.pybrew.com/site_media/images/arrow.gif") 7px center no-repeat;
 }
 
 .mirosubs-subtitleMe a.mirosubs-subtitleMeLink:hover {
-    background: #fff url("../images/arrow.gif") 7px center no-repeat;
+    background: #fff url("http://mirosubs.pybrew.com/site_media/images/arrow.gif") 7px center no-repeat;
 }
 
 .mirosubs-captioningArea {
@@ -230,18 +365,18 @@ ul.mirosubs-titlesList.finished {
 
 ul.mirosubs-titlesList li {
     border-top: 1px solid #fff;
-	font-weight: bold;
+font-weight: bold;
     border-bottom: 1px solid #eee;
     margin: 0 !important;
     background: #fcfcfc;
-	position: relative;
+    position: relative;
     min-height: 23px;
     padding: 15px 15px 17px 20px !important;
     list-style: none !important;
 }
 
 ul.mirosubs-titlesList li:hover {
-    background: #fff;
+    background: #fff ;
 }
 
 ul.mirosubs-titlesList li.active {
@@ -260,8 +395,9 @@ ul.mirosubs-titlesList li textarea {
     border-left: 1px solid #ddd;
 }
 
+
 ul.mirosubs-titlesList li input.mirosubs-translateInput {
-	width: 95%;
+width: 95%;
     padding: 5px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -270,21 +406,21 @@ ul.mirosubs-titlesList li input.mirosubs-translateInput {
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #eee;
     border-left: 1px solid #ddd;
-	margin: 7px 0 0 0;
+margin: 7px 0 0 0;
 }
 
 .mirosubs-timestamp {
     margin: 0 !important;
-	right: 0;
-	font-size: 10px;
-	position: absolute;
+right: 0;
+font-size: 10px;
+position: absolute;
     line-height: 18px;
-	top: -2px;
+top: -2px;
     font-weight: normal;
     min-width: 47px;
-	color: #aaa;
+color: #aaa;
     min-height: 21px;
-	border-top: 1px solid #ccc;
+border-top: 1px solid #ccc;
     padding: 0 5px !important;
     background: url("http://mirosubs.pybrew.com/site_media/images/timestamp.png") 0px -3px no-repeat;
 }
@@ -297,7 +433,7 @@ ul.mirosubs-titlesList li input.mirosubs-translateInput {
     line-height: 1.7em;
     display: block;
     padding-top: 2px;
-	margin-right: 65px;
+margin-right: 65px;
 }
 
 .mirosubs-title-notime {
@@ -309,12 +445,13 @@ ul.mirosubs-titlesList li input.mirosubs-translateInput {
     text-align: right;
     float: left;
     width: 100%;
-    background: #fcfcfc url("../images/gradient.png") 0 14px repeat-x;
+    background: #fcfcfc url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 14px repeat-x;
 }
 
+
 .mirosubs-nextStep strong{
-	padding-right: 17px;
-    background: url("../images/right_arrow.png") right 3px no-repeat;
+padding-right: 17px;
+    background: url("right_arrow.png") right 3px no-repeat;
 }
 
 .mirosubs-nextStep span {
@@ -325,7 +462,7 @@ ul.mirosubs-titlesList li input.mirosubs-translateInput {
     float: right;
 padding: 1px 10px 0;
 line-height: 2em !important;
-    background: url("../images/next.gif") 0 -4px repeat-x;
+    background: url("http://mirosubs.pybrew.com/site_media/images/next.gif") 0 -4px repeat-x;
     text-decoration: none;
     color: #fff;
     border: 1px solid #666;
@@ -339,7 +476,7 @@ line-height: 2em !important;
 }
 
 .mirosubs-nextStep a.mirosubs-logoutLink {
-    background: #fff url("../images/gradient.png") 0 1px repeat-x;
+    background: #fff url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 1px repeat-x;
     color: #aaa;
     border: 1px solid #ddd;
     float: left;
@@ -355,7 +492,7 @@ line-height: 2em !important;
 
 
 .mirosubs-nextStep a.mirosubs-logoutLink:active {
-    background: #fff url("../images/gradient.png") 0 -55px repeat-x;
+    background: #fff url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 -55px repeat-x;
     color: #666;
     border: 1px solid #ddd;
 }
@@ -377,7 +514,7 @@ line-height: 2em !important;
 
 .mirosubs-nav li.active a {
     border-top: 1px solid #ededed;
-    background: #efefef url("../images/gradient.png") 0 -39px repeat-x;
+    background: #efefef url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 -39px repeat-x;
 }
 
 .mirosubs-nav a {
@@ -392,8 +529,9 @@ line-height: 2em !important;
     float: left;
     border-top: 1px solid #ddd;
     line-height: 2.5em;
-    background: #efefef url("../images/gradient.png") 0 -9px repeat-x;
+    background: #efefef url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 -9px repeat-x;
 }
+
 
 .mirosubs-navTranscribe a {
     -moz-border-radius-bottomleft: 5px;
@@ -413,14 +551,15 @@ line-height: 2em !important;
     -webkit-border-bottom-right-radius: 5px;
 }
 
+
 .mirosubs-navSync a {
    border-right: 1px solid #ccc;
-	width: 99%;
+width: 99%;
 }
 
 .mirosubs-nav a:hover {
     border-top: 1px solid #ededed;
-    background: #efefef url("../images/gradient.png") 0 -39px repeat-x;
+    background: #efefef url("http://mirosubs.pybrew.com/site_media/images/gradient.png") 0 -39px repeat-x;
 }
 
 .mirosubs-transcribeControls {
@@ -430,7 +569,7 @@ line-height: 2em !important;
 }
 
 .mirosubs-transcribeControls input.trans {
-    width: 91%;
+width: 91%;
     margin: 10px;
     padding: 5px;
     font-size: 13px;
@@ -439,20 +578,20 @@ line-height: 2em !important;
 .mirosubs-widget li.mirosubs-transcribeHelp{
     margin:0px !important;
     padding: 0px !important; 
-	background: #eee;
-	border-bottom: 1px solid #ddd;
+background: #eee;
+border-bottom: 1px solid #ddd;
 }
 
 .mirosubs-widget li.mirosubs-transcribeHelp:hover{
-	background: #eee !important;
+background: #eee !important;
 }
 
 .mirosubs-widget li.mirosubs-transcribeHelp .mirosubs-helpInner{
     margin: 10px !important;
     padding: 0px !important; 
     border: 1px solid #333;
-	-moz-border-radius: 5px;
-    background: url("../images/blue_grad.gif") 0 0 repeat-x;
+  -moz-border-radius: 5px;
+    background: url("blue_grad.gif") 0 0 repeat-x;
     border-right: 1px solid #1d8bb0;
     border-left: 1px solid #1d8bb0;
     border-bottom: 1px solid #fff;
@@ -462,65 +601,74 @@ line-height: 2em !important;
 
 
 li.mirosubs-transcribeHelp p{
-	color: #fff;
-	font-weight: bold;
-	padding: 0 25px 5px 15px;
-	margin: 0px 0px 0 0;
-	font-size: 11px;
-	text-shadow: #6374AB 1px 1px 1px;
+color: #fff;
+font-weight: bold;
+padding: 0 25px 5px 15px;
+margin: 0px 0px 0 0;
+font-size: 11px;
+text-shadow: #6374AB 1px 1px 1px;
 }
 
+
+
+
 li.mirosubs-transcribeHelp p.mirosubs-topP{
-	padding-top: 10px;
+padding-top: 10px;
 }
 
 
 .mirosubs-transcribeHelp,
 .mirosubs-transcribeHelp li:hover {
 
+
 }
 
+
 .mirosubs-transcribeHelp .mirosubs-keys{
-	width: 100%;
-	height: 27px;
-	margin-top: 5px;
-	padding: 10px 0;
-	background: url("../images/keys.png") 0 0 repeat-x;
-  	-moz-border-radius-bottomright: 5px;
-    background: url("../images/blue_grad.gif") 0 0 repeat-x;
+width: 100%;
+height: 27px;
+margin-top: 5px;
+padding: 10px 0;
+background: url("keys.png") 0 0 repeat-x;
+  -moz-border-radius-bottomright: 5px;
+    background: url("blue_grad.gif") 0 0 repeat-x;
+
     -webkit-border-radius: 5px;
 }
 
 .mirosubs-transcribeHelp .mirosubs-keys span{
-	float: left;
-	font-weight: bold;
-	font-size: 10px;
-	text-shadow: #6374AB 1px 1px 1px;
-	color: #fff;
-	padding: 5px 5px 5px 15px;
+float: left;
+font-weight: bold;
+font-size: 10px;
+text-shadow: #6374AB 1px 1px 1px;
+color: #fff;
+padding: 5px 5px 5px 15px;
 }
 
 .mirosubs-transcribeHelp .mirosubs-keys span.mirosubs-tab{
-	float: left;
-	font-weight: bold;
-	font-size: 10px;
-	padding: 5px 5px 5px 50px;
-    background: url("../images/keys_buttons.png") 10px -48px no-repeat;
+float: left;
+font-weight: bold;
+font-size: 10px;
+padding: 5px 5px 5px 50px;
+    background: url("keys_buttons.png") 10px -48px no-repeat;
 }
 
+
 .mirosubs-transcribeHelp .mirosubs-keys span.mirosubs-back{
-	float: left;
-	font-weight: bold;
-	font-size: 10px;
-	padding: 5px 5px 5px 50px;
-    background: url("../images/keys_buttons.png") 10px -97px no-repeat;
+float: left;
+font-weight: bold;
+font-size: 10px;
+padding: 5px 5px 5px 50px;
+    background: url("keys_buttons.png") 10px -97px no-repeat;
 }
 
 
 li.mirosubs-transcribeHelp span.mirosubs-space_bar{
-    background: url("../images/keys_buttons.png") 8px 1px no-repeat;
-	padding: 6px 0 5px 100px;
+    background: url("keys_buttons.png") 8px 1px no-repeat;
+padding: 6px 0 5px 100px;
+
 }
+
 
 .mirosubs-transcribeHelp ol {
     margin: 0;
@@ -547,12 +695,13 @@ li.mirosubs-transcribeHelp ol li {
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     .mirosubs-navSync {
         border-left: 1px solid #ccc;
-		border-right: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+
     }
 
-    .mirosubs-navSync a {
+    .mirosubs-navSync a{
         border-left: none;
-		width: 100%;
+        width: 100%;
     }
 
     .mirosubs-navReview a{
