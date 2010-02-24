@@ -42,6 +42,9 @@ JS_RAW = ['swfobject.js',
           'widget/subtitle/reviewpanel.js',
           'widget/subtitle/finishedpanel.js',
           'widget/subtitle/mainpanel.js',
+          'widget/translate/mainpanel.js',
+          'widget/translate/translationlist.js',
+          'widget/translate/translationwidget.js',
           'widget/play/manager.js',
           'widget/embeddablewidget.js']
 

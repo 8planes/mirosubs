@@ -41,13 +41,6 @@ class Video(models.Model):
             return 'unknown video %s' % video_url
 
     @property
-    def writelock_owner_name(self):
-        if self.writelock_owner == None:
-            return "anonymous"
-        else:
-            return self.writelock_owner.username
-
-    @property
     def caption_state(self):
         video_captions = self.videocaptionversion_set.all()
         if len(video_captions) == 0:
@@ -57,6 +50,23 @@ class Video(models.Model):
         else:
             return CAPTIONS_IN_PROGRESS
 
+    def translation(self, language_code):
+        translations = list(self.translationlanguage_set.all().filter(
+            language__exact=language_code))
+        return None if len(translations) == 0 else translations[0]
+
+    @property
+    def translation_language_codes(self):
+        return set([trans.language for trans 
+                    in list(self.translationlanguage_set.all())])
+
+    @property
+    def writelock_owner_name(self):
+        if self.writelock_owner == None:
+            return "anonymous"
+        else:
+            return self.writelock_owner.username
+
     @property
     def is_writelocked(self):
         if self.writelock_time == None:
@@ -64,11 +74,6 @@ class Video(models.Model):
         delta = datetime.now() - self.writelock_time
         seconds = delta.days * 24 * 60 * 60 + delta.seconds
         return seconds < WRITELOCK_EXPIRATION
-
-    @property
-    def translation_language_codes(self):
-        return set([trans_version.language for trans_version 
-                    in list(self.translationversion_set.all())])
 
     def can_writelock(self, session_key):
         return self.writelock_session_key == session_key or \
@@ -112,19 +117,53 @@ class VideoCaptionVersion(models.Model):
     user = models.ForeignKey(User)
 
 
-# TODO: make TranslationLock unique on (video, language)
-class TranslationLock(models.Model):
+# TODO: make TranslationLanguage unique on (video, language)
+class TranslationLanguage(models.Model):
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=LANGUAGES)
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True)
 
+    # TODO: These methods are duplicated from Video, 
+    # since they're both lockable. Fix the duplication.
+    @property
+    def writelock_owner_name(self):
+        if self.writelock_owner == None:
+            return "anonymous"
+        else:
+            return self.writelock_owner.username
+
+    @property
+    def is_writelocked(self):
+        if self.writelock_time == None:
+            return False
+        delta = datetime.now() - self.writelock_time
+        seconds = delta.days * 24 * 60 * 60 + delta.seconds
+        return seconds < WRITELOCK_EXPIRATION
+
+    def can_writelock(self, session_key):
+        return self.writelock_session_key == session_key or \
+            not self.is_writelocked
+
+    def writelock(self, request):
+        if request.user.is_authenticated():
+            self.writelock_owner = request.user
+        else:
+            self.writelock_owner = None
+        self.writelock_session_key = request.session[VIDEO_SESSION_KEY]
+        self.writelock_time = datetime.now()
+
+    def release_writelock(self):
+        self.writelock_owner = None
+        self.writelock_session_key = ''
+        self.writelock_time = None
+
+
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(models.Model):
-    video = models.ForeignKey(Video)
+    language = models.ForeignKey(TranslationLanguage)
     version_no = models.PositiveIntegerField(default=0)
-    language = models.CharField(max_length=16, choices=LANGUAGES)
     user = models.ForeignKey(User)
 
 # TODO: make Translation unique on (version, caption_id)

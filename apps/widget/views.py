@@ -78,9 +78,7 @@ def start_editing(request, video_id):
     # three cases: either the video is locked, or it is owned by someone else 
     # already and doesn't allow community edits, or i can freely edit it.
 
-    # django won't set a session cookie unless something is in session state.
-    if VIDEO_SESSION_KEY not in request.session:
-        request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
+    maybe_add_video_session(request)
 
     video = models.Video.objects.get(video_id=video_id)
     if video.owner != None and video.owner != request.user:
@@ -103,6 +101,38 @@ def start_editing(request, video_id):
              "version" : new_version_no, \
              "existing" : [caption_to_dict(caption) for 
                            caption in existing_captions] }
+
+def start_translating(request, video_id, language_code):
+    maybe_add_video_session(request)
+
+    video = models.Video.objects.get(video_id=video_id)
+    translation_language = video.translation(language_code)
+    if translation_language == None:
+        translation_language = models.TranslationLanguage(
+            video=video,
+            language=language_code,
+            writelock_session_key='')
+        translation_language.save()
+    # TODO: note duplication with start_editing. Figure out a way to fix this.
+    if not translation_language.can_writelock(
+        request.session[VIDEO_SESSION_KEY]):
+        return { "can_edit": False, 
+                 "locked_by" : video.writelock_owner_name }
+    translation_language.writelock(request)
+    translation_language.save()
+    version_list = list(translation_language.translationversion_set.all())
+    if len(version_list) == 0:
+        new_version_no = 0
+        existing_translations = []
+    else:
+        max_version = max(version_list, key=lambda v: v.version_no)
+        new_version_no = max_version.version_no + 1
+        existing_translations = models.Translation.objects.filter(
+            version__id__exact = max_version.id)
+    return { 'can_edit' : True,
+             'version' : new_version_no, 
+             'existing' : [translation_to_dict(trans) for 
+                           trans in existing_translations] }
 
 def update_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
@@ -160,6 +190,11 @@ def fetch_captions(request, video_id):
     captions = list(last_version.videocaption_set.all())
     return [caption_to_dict(caption) for caption in captions]
 
+def fetch_captions_and_open_languages(request, video_id):
+    return { 'captions': fetch_captions(request, video_id),
+             'languages': [widget.language_to_map(lang[0], lang[1]) 
+                           for lang in LANGUAGES]}
+
 # helpers
 def caption_to_dict(caption):
     # TODO: this is essentially duplication.
@@ -167,6 +202,10 @@ def caption_to_dict(caption):
              'caption_text' : caption.caption_text, \
              'start_time' : caption.start_time, \
              'end_time' : caption.end_time }
+
+def translation_to_dict(translation):
+    return { 'caption_id' : translation.caption_id,
+             'text' : translation.translation_text }
 
 def save_captions_impl(request, video, version_no, deleted, inserted, updated):
     if video.owner is None:
@@ -203,3 +242,7 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
                                          end_time=i['end_time']))
     current_version.save()
     return current_version
+
+def maybe_add_video_session(request):
+    if VIDEO_SESSION_KEY not in request.session:
+        request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')

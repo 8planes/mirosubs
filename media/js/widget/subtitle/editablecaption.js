@@ -22,22 +22,22 @@ mirosubs.subtitle.EditableCaption = function(unitOfWork, opt_jsonCaption) {
 // TODO: get rid of repetition here, if possible.
 
 mirosubs.subtitle.EditableCaption.prototype.setText = function(text) {
-    this.unitOfWork_.registerUpdated(this);
     this.jsonCaption['caption_text'] = text;
+    this.unitOfWork_.registerUpdated(this);
 };
 mirosubs.subtitle.EditableCaption.prototype.getText = function() {
     return this.jsonCaption['caption_text'];
 };
 mirosubs.subtitle.EditableCaption.prototype.setStartTime = function(startTime) {
-    this.unitOfWork_.registerUpdated(this);
     this.jsonCaption['start_time'] = startTime;
+    this.unitOfWork_.registerUpdated(this);
 };
 mirosubs.subtitle.EditableCaption.prototype.getStartTime = function() {
     return this.jsonCaption['start_time'];
 };
 mirosubs.subtitle.EditableCaption.prototype.setEndTime = function(endTime) {
-    this.unitOfWork_.registerUpdated(this);
     this.jsonCaption['end_time'] = endTime;
+    this.unitOfWork_.registerUpdated(this);
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
     return this.jsonCaption['end_time'];

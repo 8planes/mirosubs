@@ -19,7 +19,7 @@ def js_context(request, video, null_widget, debug_js=False):
               'debug_js': 'true' if debug_js else 'false',
               'writelock_expiration': video_models.WRITELOCK_EXPIRATION,
               'translation_languages' : json.dumps(
-                  [{'code':code, 'name':LANGUAGE_MAP[code]} for 
+                  [language_to_map(code, LANGUAGES_MAP[code]) for 
                    code in video.translation_language_codes])
               }
     if video.caption_state == video_models.NO_CAPTIONS or null_widget:
@@ -43,3 +43,6 @@ def add_js_files(context):
         context["js_dependencies"] = [full_path(js_file) for js_file in settings.JS_RAW]
     context["site"] = Site.objects.get_current()
     return context;
+
+def language_to_map(code, name):
+    return { 'code': code, 'name': name };

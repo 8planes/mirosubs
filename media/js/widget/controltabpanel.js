@@ -81,11 +81,13 @@ mirosubs.ControlTabPanel.prototype.languageSelected_ = function(event) {
     else if (event.target.getModel() == mirosubs.ControlTabPanel.LANGUAGE_NEW) {
         var that = this;
         this.showLoading(true);
-        mirosubs.Rpc.call('fetch_captions', {'video_id': this.videoID_},
-                          function(captions) {
+        mirosubs.Rpc.call('fetch_captions_and_open_languages', 
+                          { 'video_id': this.videoID_ },
+                          function(result) {
                               that.showLoading(false);
                               that.dispatchEvent(new mirosubs.ControlTabPanel.
-                                                 AddNewLanguageEvent(captions));
+                                                 AddNewLanguageEvent(result['captions'],
+                                                                     result['languages']));
                           });
     }
     else {
@@ -127,8 +129,9 @@ mirosubs.ControlTabPanel.LanguageSelectedEvent = function(languageCode, captions
 };
 goog.inherits(mirosubs.ControlTabPanel.LanguageSelectedEvent, goog.events.Event);
 
-mirosubs.ControlTabPanel.AddNewLanguageEvent = function(captions) {
+mirosubs.ControlTabPanel.AddNewLanguageEvent = function(captions, languages) {
     this.type = mirosubs.ControlTabPanel.EventType.ADD_NEW_LANGUAGE;
     this.captions = captions;
+    this.languages = languages;
 };
 goog.inherits(mirosubs.ControlTabPanel.AddNewLanguageEvent, goog.events.Event);

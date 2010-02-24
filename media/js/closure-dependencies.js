@@ -10,3 +10,4 @@ goog.require('goog.positioning.Corner');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.PopupMenu');
 goog.require('goog.debug.FancyWindow');
+goog.require('goog.math');

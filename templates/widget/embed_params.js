@@ -8,5 +8,5 @@
     null_widget: {{null_widget}},
     debug_js: {{debug_js}},
     writelock_expiration: {{writelock_expiration}},
-    translation_languages: {{translation_languages}}
+    translation_languages: {{translation_languages|safe}}
 }

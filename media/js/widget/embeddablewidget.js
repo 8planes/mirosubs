@@ -95,7 +95,7 @@ mirosubs.EmbeddableWidget.prototype.languageSelected_ = function(event) {
 };
 
 mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
-    this.captionPanel_.addNewLanguage(event.captions);
+    this.captionPanel_.addNewLanguage(event.captions, event.languages);
 };
 
 mirosubs.EmbeddableWidget.prototype.finishedSubtitling_ = function(event) {
