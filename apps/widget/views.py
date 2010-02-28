@@ -184,6 +184,12 @@ def logout(request):
     logout(request)
     return {"respones" : "ok"}
 
+def fetch_SRT(request, video_id, langcode):
+    #TODO: handle langcode to generate the SRT of a translation
+    captions = fetch_captions(request, video_id)
+    srt = [dict_to_srt(index, caption) for index,caption in enumerate(captions)]
+    return '\n'.join(srt)
+
 def fetch_captions(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
     last_version = video.last_video_caption_version()
@@ -195,7 +201,23 @@ def fetch_captions_and_open_languages(request, video_id):
              'languages': [widget.language_to_map(lang[0], lang[1]) 
                            for lang in LANGUAGES]}
 
-# helpers
+# SRT encoding helpers:
+def dict_to_srt(index, caption_dict):
+    return str(index+1) + "\n" + encode_srt_time(int(caption_dict["start_time"])) + " --> " + encode_srt_time(int(caption_dict["end_time"])) + "\n" + caption_dict["caption_text"] + "\n"
+
+def encode_srt_helper_toString(val, n):
+    result = str(val)
+    result = '0'*(n-len(result))+result
+    return result
+
+def encode_srt_time(t):
+    ms = t%1000
+    s = (t/1000)%60
+    m = (t/(60*1000))%60
+    h = (t/(60*60*1000))%60
+    return encode_srt_helper_toString(h,2)+":"+encode_srt_helper_toString(m,2)+":"+encode_srt_helper_toString(s,2)+","+encode_srt_helper_toString(ms,3)
+
+#helpers
 def caption_to_dict(caption):
     # TODO: this is essentially duplication.
     return { 'caption_id' : caption.caption_id, \
