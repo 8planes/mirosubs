@@ -58,6 +58,12 @@ mirosubs.translate.ServerModel.prototype.timerTick_ = function() {
     this.loginThenAction_(goog.bind(this.saveImpl_, this));
 };
 
+/**
+ *
+ *
+ * @param {function(Object.<string, string>)} callback Function that takes 
+ *     new available languages for video, in json format.
+ */
 mirosubs.translate.ServerModel.prototype.finish = function(callback) {
     goog.asserts.assert(this.translating_);
     goog.asserts.assert(!this.finished_);
@@ -72,7 +78,7 @@ mirosubs.translate.ServerModel.prototype.finish = function(callback) {
                                       // should never happen
                                       alert('problem saving translations. response: ' +
                                             result['response']);
-                                  callback();
+                                  callback(result['available_languages']);
                               });
         }, true);
 };

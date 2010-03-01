@@ -99,7 +99,7 @@ def start_editing(request, video_id):
             version__id__exact = max_version.id)
     return { "can_edit" : True, \
              "version" : new_version_no, \
-             "existing" : [caption_to_dict(caption) for 
+             "existing" : [caption.to_json_dict() for 
                            caption in existing_captions] }
 
 def start_translating(request, video_id, language_code):
@@ -212,7 +212,11 @@ def finished_translations(request, video_id, language_code, version_no, inserted
     last_version.save()
     translation_language.release_writelock()
     translation_language.save()
-    return { 'response' : 'ok' }
+    video = models.Video.objects.get(video_id=video_id)
+    return { 'response' : 'ok',
+             'available_languages': 
+             [widget.language_to_map(code, LANGUAGES_MAP[code]) for
+              code in video.translation_language_codes] }
 
 def logout(request):
     from django.contrib.auth import logout
@@ -229,7 +233,21 @@ def fetch_captions(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
     last_version = video.last_video_caption_version()
     captions = list(last_version.videocaption_set.all())
-    return [caption_to_dict(caption) for caption in captions]
+    return [caption.to_json_dict() for caption in captions]
+
+def fetch_translations(request, video_id, language_code):
+    video = models.Video.objects.get(video_id=video_id)
+    trans_lang = video.translation(language_code)
+    subtitles = list(
+        video.last_video_caption_version().videocaption_set.all())
+    translations = list(
+        trans_lang.last_translation_version().translation_set.all())
+    translations_dict = dict([(trans.caption_id, trans) for trans 
+                              in translations])
+    return [subtitle.to_json_dict(
+            None if subtitle.caption_id not in translations_dict
+            else translations_dict[subtitle.caption_id].translation_text) 
+            for subtitle in subtitles]
 
 def fetch_captions_and_open_languages(request, video_id):
     return { 'captions': fetch_captions(request, video_id),
@@ -253,12 +271,6 @@ def encode_srt_time(t):
     return encode_srt_helper_toString(h,2)+":"+encode_srt_helper_toString(m,2)+":"+encode_srt_helper_toString(s,2)+","+encode_srt_helper_toString(ms,3)
 
 #helpers
-def caption_to_dict(caption):
-    # TODO: this is essentially duplication.
-    return { 'caption_id' : caption.caption_id, 
-             'caption_text' : caption.caption_text, 
-             'start_time' : caption.start_time, 
-             'end_time' : caption.end_time }
 
 def translation_to_dict(translation):
     return { 'caption_id' : translation.caption_id,

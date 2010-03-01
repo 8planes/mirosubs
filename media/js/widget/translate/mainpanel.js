@@ -88,8 +88,11 @@ mirosubs.translate.MainPanel.prototype.startEditing_ =
 };
 
 mirosubs.translate.MainPanel.prototype.finishClicked_ = function(event) {
-    this.serverModel_.finish(function() {
-            alert('translations finished');
+    var that = this;
+    this.serverModel_.finish(function(availableLanguages) {
+            that.dispatchEvent(new mirosubs.translate.MainPanel
+                               .FinishedEvent(availableLanguages));
+            that.dispose();
         });
     event.preventDefault();
 };
@@ -110,4 +113,18 @@ mirosubs.translate.MainPanel.prototype.showLoggedIn = function(username) {
 mirosubs.translate.MainPanel.prototype.showLoggedOut = function() {
     this.loggedIn_ = false;
     goog.dom.setTextContent(this.logInOutLink_, "Login");
+};
+
+mirosubs.translate.MainPanel.prototype.disposeInternal = function() {
+    mirosubs.translate.MainPanel.superClass_.disposeInternal.call(this);
+    this.serverModel_.dispose();
+};
+
+mirosubs.translate.MainPanel.EventType = {
+    FINISHED : 'translateFinished'
+};
+
+mirosubs.translate.MainPanel.FinishedEvent = function(availableLanguages) {
+    this.type = mirosubs.translate.MainPanel.EventType.FINISHED;
+    this.availableLanguages = availableLanguages;
 };

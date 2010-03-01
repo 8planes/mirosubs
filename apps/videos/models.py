@@ -207,3 +207,10 @@ class VideoCaption(models.Model):
         self.caption_text = caption_dict['caption_text']
         self.start_time = caption_dict['start_time']
         self.end_time = caption_dict['end_time']
+
+    def to_json_dict(self, text_to_use=None):
+        text = self.caption_text if text_to_use is None else text_to_use
+        return { 'caption_id' : self.caption_id, 
+                 'caption_text' : text, 
+                 'start_time' : self.start_time, 
+                 'end_time' : self.end_time }

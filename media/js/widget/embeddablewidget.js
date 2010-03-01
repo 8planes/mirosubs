@@ -96,11 +96,20 @@ mirosubs.EmbeddableWidget.prototype.languageSelected_ = function(event) {
 
 mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
     this.captionPanel_.addNewLanguage(event.captions, event.languages);
+    this.userPanel_.setVisible(false);
+    goog.events.listenOnce(this.captionPanel_,
+                           mirosubs.translate.MainPanel.EventType.FINISHED,
+                           this.finishedTranslating_, false, this);
 };
 
 mirosubs.EmbeddableWidget.prototype.finishedSubtitling_ = function(event) {
     this.controlTabPanel_.showSelectLanguage();
     this.userPanel_.setVisible(true);
+};
+
+mirosubs.EmbeddableWidget.prototype.finishedTranslating_ = function(event) {
+    this.userPanel_.setVisible(true);
+    this.controlTabPanel_.setAvailableLanguages(event.availableLanguages);
 };
 
 mirosubs.EmbeddableWidget.prototype.disposeInternal = function() {
