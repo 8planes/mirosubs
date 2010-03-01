@@ -59,7 +59,7 @@ mirosubs.subtitle.MainPanel.prototype.handleKeyDown_ = function(event) {
         this.videoPlayer_.setPlayheadTime(Math.max(now - 3, 0));
         this.videoPlayer_.play();
     }
-    if (event.keyCode == goog.events.KeyCodes.TAB){
+    if (event.keyCode == goog.events.KeyCodes.TAB) {
         //TODO: this violates accessibility guidelines. Use another key instead of TAB!
         this.videoPlayer_.togglePause();
         event.preventDefault();

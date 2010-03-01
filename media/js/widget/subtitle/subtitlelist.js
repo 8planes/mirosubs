@@ -15,6 +15,7 @@ mirosubs.subtitle.SubtitleList = function(captions, displayTimes, opt_helpElem) 
      * A map of captionID to mirosubs.subtitle.SubtitleWidget
      */
     this.subtitleMap_ = {};
+    this.currentlyEditing_ = false;
 };
 goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
 
@@ -32,7 +33,7 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
 mirosubs.subtitle.SubtitleList.prototype.addSubtitle = 
     function(subtitle, opt_scrollDown) {
     var subtitleWidget = new mirosubs.subtitle
-    .SubtitleWidget(subtitle, this.displayTimes_);
+    .SubtitleWidget(subtitle, this.displayTimes_, this);
     this.addChild(subtitleWidget, true);
     this.subtitleMap_[subtitle.getCaptionID() + ''] = subtitleWidget;
     if (typeof(opt_scrollDown) == 'boolean' && opt_scrollDown)
@@ -62,4 +63,11 @@ mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
 mirosubs.subtitle.SubtitleList.prototype.updateWidget = function(captionID) {
     this.subtitleMap_[captionID + ''].updateValues();
     this.scrollToCaption(captionID);
+};
+mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing = 
+    function(subtitleWidget, editing) {
+    this.currentlyEditing_ = editing;
+};
+mirosubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {
+    return this.currentlyEditing_;
 };

@@ -61,7 +61,8 @@ mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime
     return -1;
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.SPACE) {
+    if (event.keyCode == goog.events.KeyCodes.SPACE && 
+        !this.currentlyEditingSubtitle_()) {
         if (this.isPlayingFn_()) {
             var playheadTime = this.playheadFn_();
             var currentSubIndex = this.findSubtitleIndex_(playheadTime);
@@ -84,6 +85,9 @@ mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
         }
         event.preventDefault();
     }
+};
+mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
+    return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
     var jsonCaption = jsonCaptionEvent.caption;

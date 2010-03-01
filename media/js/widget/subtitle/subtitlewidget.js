@@ -1,10 +1,11 @@
 goog.provide('mirosubs.subtitle.SubtitleWidget');
 
-mirosubs.subtitle.SubtitleWidget = function(subtitle, displayTimes) {
+mirosubs.subtitle.SubtitleWidget = function(subtitle, displayTimes, subtitleList) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
     this.keyHandler_ = null;
     this.displayTimes_ = displayTimes;
+    this.subtitleList_ = subtitleList;
 };
 goog.inherits(mirosubs.subtitle.SubtitleWidget, goog.ui.Component);
 mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
@@ -49,6 +50,8 @@ mirosubs.subtitle.SubtitleWidget.prototype.doubleClicked_ = function(event) {
     if (this.showingTextarea_)
         return;
     this.showingTextarea_ = true;
+    if (this.subtitleList_)
+        this.subtitleList_.setCurrentlyEditing(this, true);
     this.docClickListener_ = new goog.events.EventHandler();
     var that = this;
     this.docClickListener_.listen(document, goog.events.EventType.CLICK,
@@ -84,7 +87,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToView_ = function() {
     goog.dom.removeNode(this.textareaElem_);
     this.titleElem_.appendChild(this.titleElemInner_);
     this.updateValues();
-    this.showingTextarea_ = false;    
+    this.showingTextarea_ = false;
+    if (this.subtitleList_)
+        this.subtitleList_.setCurrentlyEditing(this, false);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.updateValues = function() {
     var $t = goog.dom.setTextContent;
