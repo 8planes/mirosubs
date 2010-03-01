@@ -20,8 +20,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, captionManager) {
     this.captionManager_ = captionManager;
     this.getHandler().listen(captionManager,
                              mirosubs.CaptionManager.EventType.CAPTION,
-                             this.captionReached_,
-                             false, this);
+                             this.captionReached_);
     this.keyHandler_ = null;
     this.lastActiveSubtitleWidget_ = null;
     this.videoStarted_ = false;
@@ -33,9 +32,9 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     this.getElement().appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.subtitles_, true, this.createHelpDom($d)), true);
-    this.getHandler().listen(document,
+    this.getHandler().listen(window,
                              goog.events.EventType.KEYDOWN,
-                             this.handleKey_, false, this);
+                             this.handleKey_);
 };
 /**
  *
@@ -88,6 +87,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
             this.videoPlayer_.play();
             this.videoStarted_ = true;
         }
+        event.stopPropagation();
         event.preventDefault();
     }
 };
