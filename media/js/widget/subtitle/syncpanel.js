@@ -4,12 +4,11 @@ goog.provide('mirosubs.subtitle.SyncPanel');
  *
  * @param {Array.<mirosubs.subtitle.EditableCaption>} subtitles The subtitles 
  *     for the video, so far.
- * @param {Function} playheadFn Function that returns current playhead time for video.
- * @param {Function} isPlayingFn Function that returns true if video is playing.
+ * @param {mirosubs.AbstractVideoPlayer} videoPlayer
  * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles with 
  *     start_time set.
  */
-mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, isPlayingFn, captionManager) {
+mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, captionManager) {
     goog.ui.Component.call(this);
     /**
      * Always in correct order by time.
@@ -17,8 +16,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, isPlayingFn, capti
      */ 
     this.subtitles_ = subtitles;
 
-    this.playheadFn_ = playheadFn;
-    this.isPlayingFn_ = isPlayingFn;
+    this.videoPlayer_ = videoPlayer;
     this.captionManager_ = captionManager;
     this.getHandler().listen(captionManager,
                              mirosubs.CaptionManager.EventType.CAPTION,
@@ -26,6 +24,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, playheadFn, isPlayingFn, capti
                              false, this);
     this.keyHandler_ = null;
     this.lastActiveSubtitleWidget_ = null;
+    this.videoStarted_ = false;
 };
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
@@ -63,8 +62,9 @@ mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime
 mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE && 
         !this.currentlyEditingSubtitle_()) {
-        if (this.isPlayingFn_()) {
-            var playheadTime = this.playheadFn_();
+        if (this.videoPlayer_.isPlaying()) {
+            this.videoStarted_ = true;
+            var playheadTime = this.videoPlayer_.getPlayheadTime();
             var currentSubIndex = this.findSubtitleIndex_(playheadTime);
             if (currentSubIndex > -1) {
                 var currentSubtitle = this.subtitles_[currentSubIndex];
@@ -82,6 +82,10 @@ mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
                 if (!isInManager)
                     this.captionManager_.addCaptions([nextSubtitle.jsonCaption]);
             }
+        }
+        else if (this.videoPlayer_.isPaused() && !this.videoStarted_) {
+            this.videoPlayer_.play();
+            this.videoStarted_ = true;
         }
         event.preventDefault();
     }

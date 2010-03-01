@@ -166,6 +166,7 @@ mirosubs.subtitle.MainPanel.prototype.progressToState_ = function(state) {
         this.disposeCurrentWidget_();
         this.removeChildren(true);
         this.videoPlayer_.setPlayheadTime(0);
+        this.videoPlayer_.pause();
         this.selectTab_(state);
         this.addChild(this.makeNextWidget_(state), true);
         var nextStepText;
@@ -204,14 +205,12 @@ mirosubs.subtitle.MainPanel.prototype.makeNextWidget_ = function(state) {
     else if (state == 1)
         this.currentWidget_ = new mirosubs.subtitle.SyncPanel(
             this.captions_, 
-            this.videoPlayer_.getPlayheadFn(), 
-            this.videoPlayer_.getIsPlayingFn(),
+            this.videoPlayer_,
             this.captionManager_);
     else if (state == 2)
         this.currentWidget_ = new mirosubs.subtitle.ReviewPanel(
             this.captions_, 
-            this.videoPlayer_.getPlayheadFn(), 
-            this.videoPlayer_.getIsPlayingFn(),
+            this.videoPlayer_,
             this.captionManager_);    
     else
         this.currentWidget_ = 
