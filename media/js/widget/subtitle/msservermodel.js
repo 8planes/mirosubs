@@ -14,12 +14,13 @@ goog.provide('mirosubs.subtitle.MSServerModel');
  * @param {string} videoID MiroSubs videoid
  * @param {number} editVersion MiroSubs version number we are editing
  */
-mirosubs.subtitle.MSServerModel = function(videoID, editVersion) {
+mirosubs.subtitle.MSServerModel = function(videoID, editVersion, isNull) {
     goog.Disposable.call(this);
     this.videoID_ = videoID;
     this.editVersion_ = editVersion;
     this.initialized_ = false;
     this.finished_ = false;
+    this.isNull_ = isNull;
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
@@ -61,7 +62,7 @@ mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
     this.loginThenAction_(function() {
             var $e = goog.json.serialize;
             var saveArgs = that.makeSaveArgs_();
-            mirosubs.Rpc.call('finished_captions', 
+            mirosubs.Rpc.call('finished_captions' + (that.isNull_ ? '_null' : ''), 
                               saveArgs,
                               function(result) {
                                   if (result['response'] != 'ok')
@@ -84,15 +85,17 @@ mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ =
         "loginThenAction_ for " + mirosubs.currentUsername);
     if (mirosubs.currentUsername == null) {
         // first update lock anyway.
-        mirosubs.Rpc.call("update_video_lock", { 'video_id': this.videoID_ });
+        if (!this.isNull_)
+            mirosubs.Rpc.call("update_video_lock", 
+                              { 'video_id': this.videoID_ });
         var currentTime = new Date().getTime();
         if (opt_forceLogin || 
             currentTime >= this.lastLoginPesterTime_ + 60 * 1000) {
             if (mirosubs.isLoginDialogShowing())
                 return;
             // temporary
-            alert("We would like to save your captions, but before they get saved, " +
-                  "you need to log in.");
+            alert("We would like to save your captions, but before " +
+                  "they get saved, you need to log in.");
             this.lastLoginPesterTime_ = currentTime;
             mirosubs.login(action);
         }
@@ -105,7 +108,8 @@ mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
     // TODO: at some point in future, account for possibly failed save.
     var $e = goog.json.serialize;
     var saveArgs = this.makeSaveArgs_();
-    mirosubs.Rpc.call('save_captions', saveArgs, 
+    mirosubs.Rpc.call('save_captions' + (this.isNull_ ? '_null' : ''), 
+                      saveArgs, 
                       function(result) {
                           if (result['response'] != 'ok')
                               // this should never happen.

@@ -1,6 +1,7 @@
 goog.provide('mirosubs.EmbeddableWidget');
 
-mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, translationLanguages, 
+mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, 
+                                     translationLanguages, 
                                      showTab, nullWidget) {
     goog.Disposable.call(this);
 
@@ -13,7 +14,8 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, translationL
             .YoutubeVideoPlayer(uuid, uuid + "_ytvideo", youtubeVideoID);
     this.userPanel_ = new mirosubs.UserPanel(uuid);
     this.controlTabPanel_ = new mirosubs.ControlTabPanel(uuid, showTab, videoID, 
-                                                         translationLanguages);
+                                                         translationLanguages,
+                                                         nullWidget);
     this.captionPanel_ = new mirosubs.CaptionPanel(videoID, 
                                                    this.videoPlayer_, 
                                                    nullWidget);

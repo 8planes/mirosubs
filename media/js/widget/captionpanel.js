@@ -15,34 +15,22 @@ goog.inherits(mirosubs.CaptionPanel, goog.ui.Component);
  */
 mirosubs.CaptionPanel.prototype.startSubtitling = function(callback) {
     var that = this;
-
-    if (this.nullWidget_) {
-        callback(true);
-        this.startSubtitlingNull_();
-    }
-    else    
-        mirosubs.Rpc.call("start_editing", {"video_id": this.videoID_},
-                          function(result) {
-                              callback(result["can_edit"]);
-                              if (result["can_edit"])
-                                  that.startSubtitlingImpl_(result["version"], 
-                                                            result["existing"]);
-                              else {
-                                  if (result["owned_by"])
-                                      alert("Sorry, this video is owned by " + 
-                                            result["owned_by"]);
-                                  else
-                                      alert("Sorry, this video is locked by " +
-                                            result["locked_by"]);
-                              }
-                          });
-};
-
-mirosubs.CaptionPanel.prototype.startSubtitlingNull_ = function() {
-    this.addChild(this.mainPanel_ = new mirosubs.subtitle
-                  .MainPanel(this.videoPlayer_,
-                             new mirosubs.subtitle.NullServerModel(),
-                             []), true);
+    mirosubs.Rpc.call("start_editing" + (this.nullWidget_ ? '_null' : ''), 
+                      {"video_id": this.videoID_},
+                      function(result) {
+                          callback(result["can_edit"]);
+                          if (result["can_edit"])
+                              that.startSubtitlingImpl_(result["version"], 
+                                                        result["existing"]);
+                          else {
+                              if (result["owned_by"])
+                                  alert("Sorry, this video is owned by " + 
+                                        result["owned_by"]);
+                              else
+                                  alert("Sorry, this video is locked by " +
+                                        result["locked_by"]);
+                          }
+                      });
 };
 
 mirosubs.CaptionPanel.prototype.updateLoginState = function() {
@@ -59,7 +47,8 @@ mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ =
     this.addChild(this.mainPanel_ = new mirosubs.subtitle
                   .MainPanel(this.videoPlayer_,
                              new mirosubs.subtitle.MSServerModel(this.videoID_,
-                                                                 version),
+                                                                 version,
+                                                                 this.nullWidget_),
                              existingCaptions),
                   true);
 };
@@ -73,5 +62,6 @@ mirosubs.CaptionPanel.prototype.languageSelected = function(languageCode, captio
 
 mirosubs.CaptionPanel.prototype.addNewLanguage = function(captions, languages) {
     this.addChild(new mirosubs.translate.MainPanel(
-        this.videoPlayer_, this.videoID_, captions, languages), true);
+        this.videoPlayer_, this.videoID_, captions, languages, this.nullWidget_), 
+                  true);
 };

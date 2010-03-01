@@ -30,7 +30,7 @@ def embed(request):
         try:
             video = models.Video.objects.get(youtube_videoid=youtube_videoid)
         except models.Video.DoesNotExist:
-            video = models.Video(video_type='Y',
+            video = models.Video(video_type=models.VIDEO_TYPE_YOUTUBE,
                                  youtube_videoid=youtube_videoid,
                                  allow_community_edits=False)
             video.save()
@@ -39,7 +39,7 @@ def embed(request):
         try:
             video = models.Video.objects.get(video_url=video_url)
         except models.Video.DoesNotExist:
-            video = models.Video(video_type='H',
+            video = models.Video(video_type=models.VIDEO_TYPE_HTML5,
                                  video_url=video_url,
                                  allow_community_edits=False)
             video.save()
@@ -102,6 +102,22 @@ def start_editing(request, video_id):
              "existing" : [caption.to_json_dict() for 
                            caption in existing_captions] }
 
+def start_editing_null(request, video_id):
+    if not request.user.is_authenticated():
+        captions = []
+    else:
+        video = models.Video.objects.get(video_id=video_id)
+        null_captions = video.null_captions(request.user)
+        if null_captions is None:
+            captions = []
+        else:
+            captions = models.VideoCaption.objects.filter(
+                null_captions__id__exact = null_captions.id)
+    return { 'can_edit': True,
+             'version': 0,
+             'existing': [caption.to_json_dict() for
+                          caption in captions] }
+
 def start_translating(request, video_id, language_code):
     maybe_add_video_session(request)
 
@@ -131,8 +147,25 @@ def start_translating(request, video_id, language_code):
             version__id__exact = max_version.id)
     return { 'can_edit' : True,
              'version' : new_version_no, 
-             'existing' : [translation_to_dict(trans) for 
+             'existing' : [trans.to_json_dict() for 
                            trans in existing_translations] }
+
+def start_translating_null(request, video_id, language_code):
+    if not request.user.is_authenticated():
+        translations = []
+    else:
+        video = models.Video.objects.get(video_id=video_id)
+        null_translations = video.null_translations(request.user, language_code)
+        if null_translations is None:
+            translations = []
+        else:
+            translations = models.Translation.objects.filter(
+                null_translations__id__exact = null_translations.id)
+    return { 'can_edit': True,
+             'version': 0,
+             'existing': [trans.to_json_dict() for
+                          trans in translations] }
+
 
 def update_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
@@ -177,6 +210,13 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
     save_captions_impl(request, video, version_no, deleted, inserted, updated)
     return {"response" : "ok"}
 
+def save_captions_null(request, video_id, version_no, deleted, inserted, updated):
+    if not request.user.is_authenticated():
+        return { "response" : "not_logged_in" }
+    video = models.Video.objects.get(video_id=video_id)
+    save_captions_null_impl(request, video, version_no, deleted, inserted, updated)
+    return {'response':'ok'}
+
 def save_translations(request, video_id, language_code, version_no, inserted, updated):
     if not request.user.is_authenticated():
         return { "response" : "not_logged_in" }
@@ -187,6 +227,13 @@ def save_translations(request, video_id, language_code, version_no, inserted, up
     translation_language.writelock(request)
     save_translations_impl(request, translation_language, 
                            version_no, inserted, updated)
+    return {'response':'ok'}
+
+def save_translations_null(request, video_id, language_code, version_no, inserted, updated):
+    if not request.user.is_authenticated():
+        return { "response" : "not_logged_in" }
+    video = models.Video.objects.get(video_id=video_id)
+    save_translations_null_impl(request, video, language_code, inserted, updated)
     return {'response':'ok'}
 
 def finished_captions(request, video_id, version_no, deleted, inserted, updated):
@@ -201,7 +248,18 @@ def finished_captions(request, video_id, version_no, deleted, inserted, updated)
     video.save()
     return { "response" : "ok" }
 
-def finished_translations(request, video_id, language_code, version_no, inserted, updated):
+def finished_captions_null(request, video_id, version_no, deleted, inserted, updated):
+    if not request.user.is_authenticated():
+        return { "response" : "not_logged_in" }
+    video = models.Video.objects.get(video_id=video_id)
+    null_captions = save_captions_null_impl(request, video, version_no, 
+                                            deleted, inserted, updated)
+    null_captions.is_complete = True
+    null_captions.save()
+    return {'response':'ok'}
+
+def finished_translations(request, video_id, language_code, version_no, 
+                          inserted, updated):
     translation_language = models.Video.objects.get(
         video_id=video_id).translation(language_code)
     if not translation_language.can_writelock(request.session[VIDEO_SESSION_KEY]):
@@ -217,6 +275,21 @@ def finished_translations(request, video_id, language_code, version_no, inserted
              'available_languages': 
              [widget.language_to_map(code, LANGUAGES_MAP[code]) for
               code in video.translation_language_codes] }
+
+def finished_translations_null(request, video_id, language_code, version_no, 
+                               inserted, updated):
+    if not request.user.is_authenticated():
+        return { "response" : "not_logged_in" }
+    video = models.Video.objects.get(video_id=video_id)
+    null_translations = save_translations_null_impl(request, video, language_code, 
+                                                    inserted, updated)
+    null_translations.is_complete = True
+    null_translations.save()
+    video = models.Video.objects.get(video_id=video_id)
+    return { 'response' : 'ok',
+             'available_languages': 
+             [widget.language_to_map(code, LANGUAGES_MAP[code]) for
+              code in video.null_translation_language_codes(request.user)] }
 
 def logout(request):
     from django.contrib.auth import logout
@@ -235,6 +308,12 @@ def fetch_captions(request, video_id):
     captions = list(last_version.videocaption_set.all())
     return [caption.to_json_dict() for caption in captions]
 
+def fetch_captions_null(request, video_id):
+    video = models.Video.objects.get(video_id=video_id)
+    null_captions = video.null_captions(request.user)
+    captions = list(null_captions.videocaption_set.all())
+    return [caption.to_json_dict() for caption in captions]
+
 def fetch_translations(request, video_id, language_code):
     video = models.Video.objects.get(video_id=video_id)
     trans_lang = video.translation(language_code)
@@ -249,8 +328,26 @@ def fetch_translations(request, video_id, language_code):
             else translations_dict[subtitle.caption_id].translation_text) 
             for subtitle in subtitles]
 
+def fetch_translations_null(request, video_id, language_code):
+    video = models.Video.objects.get(video_id=video_id)
+    subtitles = list(video.null_captions(request.user).videocaption_set.all())
+    translations = list(video.null_translations(
+        request.user, language_code).translation_set.all())
+    translations_dict = dict([(trans.caption_id, trans) for 
+                              trans in translations])
+    return [subtitle.to_json_dict(
+            None if subtitle.caption_id not in translations_dict
+            else translations_dict[subtitle.caption_id].translation_text) 
+            for subtitle in subtitles]    
+    
+
 def fetch_captions_and_open_languages(request, video_id):
     return { 'captions': fetch_captions(request, video_id),
+             'languages': [widget.language_to_map(lang[0], lang[1]) 
+                           for lang in LANGUAGES]}
+
+def fetch_captions_and_open_languages_null(request, video_id):
+    return { 'captions': fetch_captions_null(request, video_id),
              'languages': [widget.language_to_map(lang[0], lang[1]) 
                            for lang in LANGUAGES]}
 
@@ -271,10 +368,6 @@ def encode_srt_time(t):
     return encode_srt_helper_toString(h,2)+":"+encode_srt_helper_toString(m,2)+":"+encode_srt_helper_toString(s,2)+","+encode_srt_helper_toString(ms,3)
 
 #helpers
-
-def translation_to_dict(translation):
-    return { 'caption_id' : translation.caption_id,
-             'text' : translation.translation_text }
 
 def save_captions_impl(request, video, version_no, deleted, inserted, updated):
     if video.owner is None:
@@ -297,21 +390,40 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
                     caption.duplicate_for(current_version))
         else:
             current_version.save()
-    captions = current_version.videocaption_set
+    apply_caption_changes(current_version.videocaption_set, deleted, inserted, 
+                          updated, current_version)
+    current_version.save()
+    return current_version
+
+def save_captions_null_impl(request, video, version_no, deleted, inserted, updated):
+    null_captions = video.null_captions(request.user)
+    if null_captions is None:
+        null_captions = models.NullVideoCaptions(video=video,
+                                                 user=request.user)
+        null_captions.save()
+    apply_caption_changes(null_captions.videocaption_set, deleted, inserted, 
+                          updated, None, null_captions)
+    null_captions.save()
+    return null_captions
+
+def apply_caption_changes(caption_set, deleted, inserted, updated, 
+                          version=None, null_captions=None):
     for d in deleted:
-        captions.remove(captions.get(caption_id=d['caption_id']))
+        caption_set.remove(caption_set.get(caption_id=d['caption_id']))
     for u in updated:
-        caption = captions.get(caption_id=u['caption_id'])
+        caption = caption_set.get(caption_id=u['caption_id'])
         caption.update_from(u)
         caption.save()
     for i in inserted:
-        captions.add(models.VideoCaption(version=current_version,
-                                         caption_id=i['caption_id'],
-                                         caption_text=i['caption_text'],
-                                         start_time=i['start_time'],
-                                         end_time=i['end_time']))
-    current_version.save()
-    return current_version
+        vc = models.VideoCaption(caption_id=i['caption_id'],
+                                 caption_text=i['caption_text'],
+                                 start_time=i['start_time'],
+                                 end_time=i['end_time'])
+        if version is not None:
+            vc.version = version
+        else:
+            vc.null_captions = null_captions
+        caption_set.add(vc)
 
 def save_translations_impl(request, translation_language,
                            version_no, inserted, updated):
@@ -331,18 +443,37 @@ def save_translations_impl(request, translation_language,
                     translation.duplicate_for(current_version))
         else:
             current_version.save()
-    translations = current_version.translation_set
+    apply_translation_changes(current_version.translation_set, inserted, 
+                              updated, current_version)
+    current_version.save()
+    return current_version
+
+def save_translations_null_impl(request, video, language_code, inserted, updated):
+    null_translations = video.null_translations(request.user, language_code)
+    if null_translations is None:
+        null_translations = models.NullTranslations(video=video,
+                                                    user=request.user,
+                                                    language=language_code)
+        null_translations.save()
+    apply_translation_changes(null_translations.translation_set, inserted, 
+                              updated, None, null_translations)
+    null_translations.save()
+    return null_translations
+
+def apply_translation_changes(translations_set, inserted, updated, 
+                              version=None, null_translations=None):
     for u in updated:
-        translation = translations.get(caption_id=u['caption_id'])
+        translation = translations_set.get(caption_id=u['caption_id'])
         translation.update_from(u)
         translation.save()
     for i in inserted:
-        translations.add(models.Translation(version=current_version,
-                                            caption_id=i['caption_id'],
-                                            translation_text=i['text']))
-    current_version.save()
-    return current_version
-    
+        t = models.Translation(caption_id=i['caption_id'],
+                               translation_text=i['text'])
+        if version is not None:
+            t.version = version
+        else:
+            t.null_translations = null_translations
+        translations_set.add(t)
 
 def maybe_add_video_session(request):
     if VIDEO_SESSION_KEY not in request.session:

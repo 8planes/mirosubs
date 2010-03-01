@@ -1,13 +1,14 @@
 goog.provide('mirosubs.translate.MainPanel');
 
-mirosubs.translate.MainPanel = function(videoPlayer, videoID, subtitles, languages) {
+mirosubs.translate.MainPanel = function(videoPlayer, videoID, subtitles, 
+                                        languages, nullWidget) {
     goog.ui.Component.call(this);
     this.videoID_ = videoID;
     this.subtitles_ = subtitles;
     this.languages_ = languages;
     this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.serverModel_ = new mirosubs.translate.ServerModel(
-        videoID, this.unitOfWork_);
+        videoID, this.unitOfWork_, nullWidget);
 };
 goog.inherits(mirosubs.translate.MainPanel, goog.ui.Component);
 

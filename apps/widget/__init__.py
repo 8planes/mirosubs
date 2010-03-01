@@ -17,21 +17,37 @@ def js_context(request, video, null_widget, debug_js=False):
               'youtube_videoid': video.youtube_videoid,
               'null_widget': 'true' if null_widget else 'false',
               'debug_js': 'true' if debug_js else 'false',
-              'writelock_expiration': video_models.WRITELOCK_EXPIRATION,
-              'translation_languages' : json.dumps(
-                  [language_to_map(code, LANGUAGES_MAP[code]) for 
-                   code in video.translation_language_codes])
+              'writelock_expiration': video_models.WRITELOCK_EXPIRATION
               }
-    if video.caption_state == video_models.NO_CAPTIONS or null_widget:
-        params['show_tab'] = 0
-    elif video.caption_state == video_models.CAPTIONS_IN_PROGRESS:
-        if request.user.is_authenticated and request.user == video.owner:
+    if null_widget:
+        null_captions = None
+        if request.user.is_authenticated:
+            null_captions = video.null_captions(request.user)
+            translation_language_codes = \
+                video.null_translation_language_codes(request.user)
+        else:
+            translation_language_codes = []
+        if null_captions is None:
+            params['show_tab'] = 0
+        elif not null_captions.is_complete:
             params['show_tab'] = 1
         else:
-            params['show_tab'] = 2
-            params['owned_by'] = video.owner.username
+            params['show_tab'] = 3
     else:
-        params['show_tab'] = 3
+        translation_language_codes = video.translation_language_codes
+        if video.caption_state == video_models.NO_CAPTIONS:
+            params['show_tab'] = 0
+        elif video.caption_state == video_models.CAPTIONS_IN_PROGRESS:
+            if request.user.is_authenticated and request.user == video.owner:
+                params['show_tab'] = 1
+            else:
+                params['show_tab'] = 2
+                params['owned_by'] = video.owner.username
+        else:
+            params['show_tab'] = 3
+    params['translation_languages'] = json.dumps(
+        [language_to_map(code, LANGUAGES_MAP[code]) for 
+         code in translation_language_codes])
     return add_js_files(params)
 
 def add_js_files(context):

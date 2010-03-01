@@ -60,6 +60,16 @@ class Video(models.Model):
         return set([trans.language for trans 
                     in list(self.translationlanguage_set.all())])
 
+    def null_translation_language_codes(self, user):
+        null_translations = list(
+            self.nulltranslations_set.all().filter(
+                user__id__exact=user.id))
+        if len(null_translations) == 0:
+            return set([])
+        else:
+            return set([trans.language for trans
+                        in null_translations])
+
     @property
     def writelock_owner_name(self):
         if self.writelock_owner == None:
@@ -99,6 +109,17 @@ class Video(models.Model):
         else:
             return max(version_list, key=lambda v: v.version_no)
 
+    def null_captions(self, user):
+        captions = list(self.nullvideocaptions_set.all().filter(
+                user__id__exact=user.id))
+        return None if len(captions) == 0 else captions[0]
+
+    def null_translations(self, user, language_code):
+        translations = list(self.nulltranslations_set.all().filter(
+                user__id__exact=user.id).filter(
+                language__exact=language_code))
+        return None if len(translations) == 0 else translations[0]
+
 
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
@@ -111,11 +132,22 @@ models.signals.pre_save.connect(create_video_id, sender=Video)
 class VideoCaptionVersion(models.Model):
     video = models.ForeignKey(Video)
     version_no = models.PositiveIntegerField(default=0)
-    # true iff user has gotten to "complete" part of captioning process.
+    # true iff user clicked "finish" at end of captioning process.
     is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User)
 
+class NullVideoCaptions(models.Model):
+    video = models.ForeignKey(Video)
+    user = models.ForeignKey(User)
+    # true iff user clicked "finish" at end of captioning process.
+    is_complete = models.BooleanField()
+
+class NullTranslations(models.Model):
+    video = models.ForeignKey(Video)
+    user = models.ForeignKey(User)
+    language = models.CharField(max_length=16, choices=LANGUAGES)
+    is_complete = models.BooleanField()
 
 # TODO: make TranslationLanguage unique on (video, language)
 class TranslationLanguage(models.Model):
@@ -177,7 +209,8 @@ class TranslationVersion(models.Model):
 
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
-    version = models.ForeignKey(TranslationVersion)
+    version = models.ForeignKey(TranslationVersion, null=True)
+    null_translations = models.ForeignKey(NullTranslations, null=True)
     caption_id = models.IntegerField()
     translation_text = models.CharField(max_length=1024)
 
@@ -189,8 +222,13 @@ class Translation(models.Model):
     def update_from(self, translation_dict):
         self.translation_text = translation_dict['text']
 
+    def to_json_dict(self):
+        return { 'caption_id': self.caption_id,
+                 'text': self.translation_text }
+
 class VideoCaption(models.Model):
-    version = models.ForeignKey(VideoCaptionVersion)
+    version = models.ForeignKey(VideoCaptionVersion, null=True)
+    null_captions = models.ForeignKey(NullVideoCaptions, null=True)
     caption_id = models.IntegerField()
     caption_text = models.CharField(max_length=1024)
     start_time = models.FloatField()
