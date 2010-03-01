@@ -143,6 +143,16 @@ def update_video_lock(request, video_id):
     else:
         return { "response" : "failed" }        
 
+def update_video_translation_lock(request, video_id, language_code):
+    translation_language = models.Video.objects.get(
+        video_id=video_id).translation(language_code)
+    if translation_language.can_writelock(request.session[VIDEO_SESSION_KEY]):
+        translation_language.writelock(request)
+        translation_language.save()
+        return { 'response' : 'ok' }
+    else:
+        return { 'response' : 'failed' }
+
 def release_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
     if video.can_writelock(request):
@@ -167,6 +177,18 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
     save_captions_impl(request, video, version_no, deleted, inserted, updated)
     return {"response" : "ok"}
 
+def save_translations(request, video_id, language_code, version_no, inserted, updated):
+    if not request.user.is_authenticated():
+        return { "response" : "not_logged_in" }
+    translation_language = models.Video.objects.get(
+        video_id=video_id).translation(language_code)
+    if not translation_language.can_writelock(request.session[VIDEO_SESSION_KEY]):
+        return { 'response' : 'unlockable' }
+    translation_language.writelock(request)
+    save_translations_impl(request, translation_language, 
+                           version_no, inserted, updated)
+    return {'response':'ok'}
+
 def finished_captions(request, video_id, version_no, deleted, inserted, updated):
     video = models.Video.objects.get(video_id=video_id)
     if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
@@ -178,6 +200,19 @@ def finished_captions(request, video_id, version_no, deleted, inserted, updated)
     video.release_writelock()
     video.save()
     return { "response" : "ok" }
+
+def finished_translations(request, video_id, language_code, version_no, inserted, updated):
+    translation_language = models.Video.objects.get(
+        video_id=video_id).translation(language_code)
+    if not translation_language.can_writelock(request.session[VIDEO_SESSION_KEY]):
+        return { 'response' : 'unlockable' }
+    last_version = save_translations_impl(request, translation_language,
+                                          version_no, inserted, updated)
+    last_version.is_complete = True
+    last_version.save()
+    translation_language.release_writelock()
+    translation_language.save()
+    return { 'response' : 'ok' }
 
 def logout(request):
     from django.contrib.auth import logout
@@ -220,9 +255,9 @@ def encode_srt_time(t):
 #helpers
 def caption_to_dict(caption):
     # TODO: this is essentially duplication.
-    return { 'caption_id' : caption.caption_id, \
-             'caption_text' : caption.caption_text, \
-             'start_time' : caption.start_time, \
+    return { 'caption_id' : caption.caption_id, 
+             'caption_text' : caption.caption_text, 
+             'start_time' : caption.start_time, 
              'end_time' : caption.end_time }
 
 def translation_to_dict(translation):
@@ -240,7 +275,8 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
         current_version = models.VideoCaptionVersion(video=video, 
                                                      version_no=version_no,
                                                      datetime_started=datetime.now(),
-                                                     user=request.user)
+                                                     user=request.user,
+                                                     is_complete=False)
         if last_version != None:
             current_version.is_complete = last_version.is_complete
             current_version.save()
@@ -264,6 +300,37 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
                                          end_time=i['end_time']))
     current_version.save()
     return current_version
+
+def save_translations_impl(request, translation_language,
+                           version_no, inserted, updated):
+    last_version = translation_language.last_translation_version()
+    if last_version != None and last_version.version_no == version_no:
+        current_version = last_version
+    else:
+        current_version = models.TranslationVersion(language=translation_language, 
+                                                    version_no=version_no,
+                                                    user=request.user,
+                                                    is_complete=False)
+        if last_version != None:
+            current_version.is_complete = last_version.is_complete
+            current_version.save()
+            for translation in list(last_version.translation_set.all()):
+                current_version.translation_set.add(
+                    translation.duplicate_for(current_version))
+        else:
+            current_version.save()
+    translations = current_version.translation_set
+    for u in updated:
+        translation = translations.get(caption_id=u['caption_id'])
+        translation.update_from(u)
+        translation.save()
+    for i in inserted:
+        translations.add(models.Translation(version=current_version,
+                                            caption_id=i['caption_id'],
+                                            translation_text=i['text']))
+    current_version.save()
+    return current_version
+    
 
 def maybe_add_video_session(request):
     if VIDEO_SESSION_KEY not in request.session:

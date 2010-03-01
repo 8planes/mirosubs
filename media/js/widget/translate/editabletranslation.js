@@ -13,15 +13,15 @@ mirosubs.translate.EditableTranslation = function(unitOfWork, captionID,
         this.unitOfWork_.registerNew(this);
 };
 
-mirosubs.subtitle.EditableTranslation.prototype.setText = function(text) {
+mirosubs.translate.EditableTranslation.prototype.setText = function(text) {
     this.jsonTranslation['text'] = text;
     this.unitOfWork_.registerUpdated(this);
 };
 
-mirosubs.subtitle.EditableTranslation.prototype.getText = function() {
+mirosubs.translate.EditableTranslation.prototype.getText = function() {
     return this.jsonTranslation['text'];
 };
 
-mirosubs.subtitle.EditableTranslation.prototype.getCaptionID = function() {
+mirosubs.translate.EditableTranslation.prototype.getCaptionID = function() {
     return this.jsonTranslation['caption_id'];
 };

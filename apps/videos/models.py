@@ -159,18 +159,35 @@ class TranslationLanguage(models.Model):
         self.writelock_session_key = ''
         self.writelock_time = None
 
+    def last_translation_version(self):
+        version_list = list(self.translationversion_set.all())
+        if len(version_list) == 0:
+            return None
+        else:
+            return max(version_list, key=lambda v: v.version_no)
+
 
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(models.Model):
     language = models.ForeignKey(TranslationLanguage)
     version_no = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User)
+    # true iff user has clicked "finish" in translating process.
+    is_complete = models.BooleanField()
 
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
     version = models.ForeignKey(TranslationVersion)
     caption_id = models.IntegerField()
     translation_text = models.CharField(max_length=1024)
+
+    def duplicate_for(self, new_version):
+        return Translation(version=new_version,
+                           caption_id=self.caption_id,
+                           translation_text=self.translation_text)
+
+    def update_from(self, translation_dict):
+        self.translation_text = translation_dict['text']
 
 class VideoCaption(models.Model):
     version = models.ForeignKey(VideoCaptionVersion)

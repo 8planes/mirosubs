@@ -55,16 +55,12 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
 mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
-    mirosubs.subtitle.MSServerModel.logger_.info('finish');
-
     this.finished_ = true;
     this.stopTimer_();
     var that = this;
     this.loginThenAction_(function() {
             var $e = goog.json.serialize;
             var saveArgs = that.makeSaveArgs_();
-            mirosubs.subtitle.MSServerModel.logger_.info(
-                "finish: " + $e(saveArgs));
             mirosubs.Rpc.call('finished_captions', 
                               saveArgs,
                               function(result) {
@@ -72,8 +68,6 @@ mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
                                       // this should never happen.
                                       alert('Problem saving subtitles. Response: ' +
                                             result["response"]);
-                                  mirosubs.subtitle.MSServerModel.logger_.info(
-                                      "finish return: " + $e(result));
                                   callback();
                               });
         }, true);
@@ -111,16 +105,12 @@ mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
     // TODO: at some point in future, account for possibly failed save.
     var $e = goog.json.serialize;
     var saveArgs = this.makeSaveArgs_();
-    mirosubs.subtitle.MSServerModel.logger_.info(
-        'saveImpl_: ' + $e(saveArgs));
     mirosubs.Rpc.call('save_captions', saveArgs, 
                       function(result) {
                           if (result['response'] != 'ok')
                               // this should never happen.
                               alert('Problem saving subtitles. Response: ' + 
                                     result['response']);
-                          mirosubs.subtitle.MSServerModel.logger_.info(
-                              'saveImpl_ return: ' + $e(result));
                       });
 };
 
