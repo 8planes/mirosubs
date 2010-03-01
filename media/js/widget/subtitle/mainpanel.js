@@ -78,6 +78,10 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     el.appendChild($d('div', { 'className': 'mirosubs-nextStep' },
                       this.logInOutLink_ = $d('a', {'className':'mirosubs-logoutLink', 
                                                     'href':'#'}),
+                      this.startOverLink_ = $d('a', {'className':'mirosubs-logoutLink',
+                                                     'href':'#',
+                                                     'style':'display:none'}, 
+                                                    'Start Over'),
                       this.loadingGif_ = $d('img', {'style':'display: none',
                                                     'alt':'loading',
                                                     'src':mirosubs.subtitle.MainPanel
@@ -86,6 +90,8 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                          "Done? ",
                          this.nextStepLink_ = 
                          $d('strong', null, 'Next Step'))));
+    this.getHandler().listen(this.startOverLink_, 'click',
+                             this.startOverClicked_);
     this.getHandler().listen(nextStepAnchorElem, 'click', 
                              this.nextStepClicked_);
     this.tabs_ = this.createTabElems_()
@@ -143,6 +149,14 @@ mirosubs.subtitle.MainPanel.prototype.captionReached_ = function(jsonCaptionEven
     var c = jsonCaptionEvent.caption;
     this.videoPlayer_.showCaptionText(c ? c['caption_text'] : '');
 };
+mirosubs.subtitle.MainPanel.prototype.startOverClicked_ = function(event) {
+    event.preventDefault();
+    goog.asserts.assert(this.state_ == 1);
+    var answer = confirm("Are you sure you want to start over? All timestamps " +
+                         "will be deleted.");
+    if (answer)
+        this.currentWidget_.startOver();
+};
 mirosubs.subtitle.MainPanel.prototype.nextStepClicked_ = function(event) {
     this.setState_(this.state_ + 1);
     event.preventDefault();
@@ -168,6 +182,7 @@ mirosubs.subtitle.MainPanel.prototype.progressToState_ = function(state) {
         this.videoPlayer_.setPlayheadTime(0);
         this.videoPlayer_.pause();
         this.selectTab_(state);
+        this.startOverLink_.style.display = (state == 1 ? '' : 'none');
         this.addChild(this.makeNextWidget_(state), true);
         var nextStepText;
         if (state < 2)

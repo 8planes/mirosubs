@@ -62,7 +62,6 @@ mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
 };
 mirosubs.subtitle.SubtitleList.prototype.updateWidget = function(captionID) {
     this.subtitleMap_[captionID + ''].updateValues();
-    this.scrollToCaption(captionID);
 };
 mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing = 
     function(subtitleWidget, editing) {

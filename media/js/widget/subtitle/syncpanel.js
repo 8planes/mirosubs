@@ -79,6 +79,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
                 if (nextSubtitle.getEndTime() == -1)
                     nextSubtitle.setEndTime(99999);
                 this.subtitleList_.updateWidget(nextSubtitle.getCaptionID());
+                this.subtitleList_.scrollToCaption(nextSubtitle.getCaptionID());
                 if (!isInManager)
                     this.captionManager_.addCaptions([nextSubtitle.jsonCaption]);
             }
@@ -88,6 +89,14 @@ mirosubs.subtitle.SyncPanel.prototype.handleKey_ = function(event) {
             this.videoStarted_ = true;
         }
         event.preventDefault();
+    }
+};
+mirosubs.subtitle.SyncPanel.prototype.startOver = function() {
+    var i;
+    for (i = 0; i < this.subtitles_.length; i++) {
+        this.subtitles_[i].setStartTime(-1);
+        this.subtitles_[i].setEndTime(-1);
+        this.subtitleList_.updateWidget(this.subtitles_[i].getCaptionID());
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
