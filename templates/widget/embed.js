@@ -1,10 +1,14 @@
 {% load escapejs %}
 (function() {
+    var innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';
+    var innerWidgetHTML = '{% escapejs %}{% include "widget/widget.html" %}{% endescapejs %}';
+
+
     document.write('<style type="text/css" media="screen">');
-    document.write('{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}');
+    document.write(innerStyle);
     document.write('</style>');
 
-    document.write('{% escapejs %}{% include "widget/widget.html" %}{% endescapejs %}');
+    document.write(innerWidgetHTML);
 
     var scripts = [
     {% for dep in js_dependencies %}
