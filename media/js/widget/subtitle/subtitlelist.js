@@ -70,3 +70,25 @@ mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing =
 mirosubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {
     return this.currentlyEditing_;
 };
+mirosubs.subtitle.SubtitleList.createHelpLi = function($d, helpLines, keysTitle,
+                                                       showSpaceBar, firstKeyText) {
+    var keysDiv = $d('div', {'className':'mirosubs-keys'},
+                     $d('h3', null, keysTitle),
+                     $d('span', 
+                        showSpaceBar ? {'className':'mirosubs-space_bar'} : null, 
+                        firstKeyText),
+                     $d('span', {'className':'mirosubs-tab'}, 'Play/Pause'),
+                     $d('span', {'className':'mirosubs-back'}, 'Skip Back'),
+                     $d('a', {'href':'#'}, 'help'));
+    var helpParas = goog.array.map(helpLines, 
+                                   function(line, index) {
+                                       return $d('p', 
+                                                 index == 0 ? 
+                                           {'className':'mirosubs-topP'} : null, 
+                                                 line);
+                                   });
+    return $d('li', {'className': 'mirosubs-transcribeHelp'},
+              $d('div', {'className':'mirosubs-helpInner'}, 
+                 goog.array.concat(keysDiv, helpParas)));
+
+}

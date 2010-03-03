@@ -14,5 +14,7 @@ mirosubs.subtitle.ReviewPanel.prototype.createHelpDom = function($d) {
                      ['To change subtitle timing, tap spacebar to skip to the next ',
                       'subtitle immediately.  To delay, press and hold spacebar to ',
                       'keep the next subtitle from displaying until you let go.'].join('')];
-    return mirosubs.subtitle.Util.createHelpLi($d, helpLines, true, 'BEGIN');
+    return mirosubs.subtitle.SubtitleList.createHelpLi($d, helpLines, 
+                                                       'Syncing Controls', 
+                                                       true, 'BEGIN');
 };

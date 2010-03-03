@@ -42,9 +42,13 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
  */
 mirosubs.subtitle.SyncPanel.prototype.createHelpDom = function($d) {
     var helpLines = [['To sync your subtitles to the video, tap SPACEBAR ',
-                      'at the exact moment each subtitle should display.'].join(''), 
-                     '(then tap it again to trigger the first subtitle, and so on).'];
-    return mirosubs.subtitle.Util.createHelpLi($d, helpLines, true, 'BEGIN');
+                      'at the exact moment each subtitle should display. ', 
+                      'It’s easy!'].join(''), 
+                     ['To begin, tap SPACEBAR to play the video and tap it ',
+                      'again when each subtitle should appear.'].join('')];
+    return mirosubs.subtitle.SubtitleList.createHelpLi($d, helpLines, 
+                                                       'Syncing Controls', 
+                                                       true, 'BEGIN');
 };
 mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime) {
     var i;

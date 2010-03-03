@@ -14,7 +14,6 @@ mirosubs.subtitle.TranscribePanel = function(captions, unitOfWork, videoPlayer) 
     this.unitOfWork_ = unitOfWork;
     this.videoPlayer_ = videoPlayer;
 
-
     /**
      * @type {?goog.events.KeyHandler}
      * @private
@@ -31,14 +30,19 @@ mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
     mirosubs.subtitle.TranscribePanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getElement().appendChild(this.contentElem_ = $d('div'));
-    var helpLines = [['When you start the video, type everything people ',
-                      'say in the box below.  Don\'t let subtitles get ',
-                      'too long! Hit enter for a new line.'].join(''), 
-                     'Use these keys to pause and jump back, so you can keep up:'];
+    var helpLines = [['While you watch the video, type everything people ',
+                      'say in the box below. Don\'t let subtitles get too ',
+                      'long-- hit enter for a new line.'].join(''), 
+                     ['Make sure to use the key controls (on the left side) ',
+                      'to pause and jump back, so you can keep up.'].join(''),
+                     'To begin, press TAB to play and start typing.'];
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
        this.captions_, false, 
-       mirosubs.subtitle.Util.createHelpLi($d, helpLines, false, 
-                                           'PRESS TAB TO BEGIN')), true);
+       mirosubs.subtitle.SubtitleList.createHelpLi($d, helpLines, 
+                                                   'Transcribing Controls', 
+                                                   false, 
+                                                   'PRESS TAB TO BEGIN')), 
+                  true);
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(), 
                   true);
 };

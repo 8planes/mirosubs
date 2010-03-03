@@ -462,24 +462,25 @@ margin: 7px 0 0 0;
 }
 
 .mirosubs-nextStep a.mirosubs-logoutLink {
-    background: #fff url("../images/gradient.png") 0 1px repeat-x;
+    background: none;
     color: #aaa;
-    border: 1px solid #ddd;
+    text-decoration: underline;
+    border: 0;
     float: left;
     margin: 0 0 0 10px;
 }
 
 
 .mirosubs-nextStep a.mirosubs-logoutLink:hover {
-    background: #fff;
+    background: none;
     color: #666;
-    border: 1px solid #aaa;
+    border: 0;
 }
 
 .mirosubs-nextStep a.mirosubs-logoutLink:active {
-    background: #fff url("../images/gradient.png") 0 -55px repeat-x;
+    background: none;
     color: #666;
-    border: 1px solid #ddd;
+    border: 0;
 }
 
 .mirosubs-nav {
@@ -601,21 +602,44 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
 
 .mirosubs-transcribeHelp .mirosubs-keys {
     width: 100%;
-    height: 27px;
-    margin-top: 5px;
-    padding: 10px 0;
+    height: 127px; 
+    border: 1px solid #333; 
+    border-bottom: 0; 
+    margin-left: -223px; 
+    position: fixed; 
+    width: 200px; 
+    margin-top: -10px; 
+    padding: 15px 5px; 
     background: url("../images/keys.png") 0 0 repeat-x;
-    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-topleft: 5px;
     background: url("../images/blue_grad.gif") 0 0 repeat-x;
-    -webkit-border-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px; 
+    -webkit-border-top-left-radius: 5px; 
 }
 
-.mirosubs-transcribeHelp .mirosubs-keys span{
+.mirosubs-transcribeHelp .mirosubs-keys h3{ 
+    margin: 0 0 10px; 
+    padding: 0 0 0 10px; 
+    color: #fff; 
+} 
+
+.mirosubs-transcribeHelp .mirosubs-keys a { 
+    margin: 0; 
+    padding: 0 0 0 10px; 
+    color: #fff; 
+    position: absolute; 
+    bottom:10px; 
+    right: 10px; 
+} 
+
+.mirosubs-transcribeHelp .mirosubs-keys span {
     float: left;
     font-weight: bold;
     font-size: 10px;
     text-shadow: #6374AB 1px 1px 1px;
     color: #fff;
+    margin-bottom: 5px;
     padding: 5px 5px 5px 15px;
 }
 
@@ -636,7 +660,7 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
 }
 
 li.mirosubs-transcribeHelp span.mirosubs-space_bar{
-    background: url("../images/keys_buttons.png") 8px 1px no-repeat;
+    background: url("../images/keys_buttons.png") 10px 1px no-repeat;
     padding: 6px 0 5px 100px;
 }
 
