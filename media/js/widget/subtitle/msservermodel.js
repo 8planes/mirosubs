@@ -21,6 +21,7 @@ mirosubs.subtitle.MSServerModel = function(videoID, editVersion, isNull) {
     this.initialized_ = false;
     this.finished_ = false;
     this.isNull_ = isNull;
+    this.loginPesterFreq_ = 1000 * 60 * (isNull ? 10 : 1);
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
@@ -91,7 +92,7 @@ mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ =
                               { 'video_id': this.videoID_ });
         var currentTime = new Date().getTime();
         if (opt_forceLogin || 
-            currentTime >= this.lastLoginPesterTime_ + 60 * 1000) {
+            currentTime >= this.lastLoginPesterTime_ + this.loginPesterFreq_) {
             if (mirosubs.isLoginDialogShowing())
                 return;
             this.lastLoginPesterTime_ = currentTime;

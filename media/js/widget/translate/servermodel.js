@@ -10,6 +10,7 @@ mirosubs.translate.ServerModel = function(videoID, unitOfWork, isNull, loginNagF
     this.translating_ = false;
     this.isNull_ = isNull;
     this.loginNagFn_ = loginNagFn;
+    this.loginPesterFreq_ = 1000 * 60 * (isNull ? 10 : 1);
 };
 goog.inherits(mirosubs.translate.ServerModel, goog.Disposable);
 
@@ -96,7 +97,7 @@ mirosubs.translate.ServerModel.prototype.loginThenAction_ =
                                 'language_code' : this.curLanguageCode_ });
         var currentTime = new Date().getTime();
         if (opt_forceLogin || 
-            currentTime >= this.lastLoginPesterTime_ + 60 * 1000) {
+            currentTime >= this.lastLoginPesterTime_ + this.loginPesterFreq_) {
             if (mirosubs.isLoginDialogShowing())
                 return;            
             this.lastLoginPesterTime_ = currentTime;
