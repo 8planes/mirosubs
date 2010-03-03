@@ -32,9 +32,9 @@ mirosubs.subtitle.MainPanel = function(videoPlayer,
     this.captionManager_.addCaptions(existingCaptions);
     this.getHandler().listen(this.captionManager_,
                              mirosubs.CaptionManager.EventType.CAPTION,
-                             this.captionReached_, false, this);
+                             this.captionReached_);
     this.serverModel_ = serverModel;
-    this.serverModel_.init(uw);
+    this.serverModel_.init(uw, goog.bind(this.showLoginNag_, this));
     this.tabs_ = [];
     this.state_ = -1; // dom not created yet.
 };
@@ -99,7 +99,7 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
     this.setState_(0);
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
-                             this.handleKeyDown_, false, this);
+                             this.handleKeyDown_);
     if (this.serverModel_.currentUsername() != null)
         this.showLoggedIn(this.serverModel_.currentUsername());
     else
@@ -112,6 +112,19 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                                      that.serverModel_.logIn();
                                  e.preventDefault();
                              });
+};
+
+mirosubs.subtitle.MainPanel.prototype.showLoginNag_ = function() {
+    if (!this.loginNagBubble_) {
+        this.loginNagBubble_ = new goog.ui.Bubble('Login to save changes!');
+        this.loginNagBubble_.setAutoHide(false);
+        this.loginNagBubble_.setPosition(new goog.positioning
+                           .AnchoredPosition(this.logInOutLink_, null));
+        this.loginNagBubble_.setTimeout(20000);
+        this.loginNagBubble_.render();
+        this.loginNagBubble_.attach(this.logInOutLink_);
+    }
+    this.loginNagBubble_.setVisible(true);
 };
 
 mirosubs.subtitle.MainPanel.prototype.showLoggedIn = function(username) {
@@ -255,5 +268,7 @@ mirosubs.subtitle.MainPanel.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
     this.captionManager_.dispose();
     this.videoPlayer_.showCaptionText('');
+    if (this.loginNagBubble_)
+        this.loginNagBubble_.dispose();
 };
 

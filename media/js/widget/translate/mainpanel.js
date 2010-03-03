@@ -8,7 +8,8 @@ mirosubs.translate.MainPanel = function(videoPlayer, videoID, subtitles,
     this.languages_ = languages;
     this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.serverModel_ = new mirosubs.translate.ServerModel(
-        videoID, this.unitOfWork_, nullWidget);
+        videoID, this.unitOfWork_, nullWidget,
+        goog.bind(this.showLoginNag_, this));
 };
 goog.inherits(mirosubs.translate.MainPanel, goog.ui.Component);
 
@@ -106,6 +107,19 @@ mirosubs.translate.MainPanel.prototype.logInOutClicked_ = function(event) {
     event.preventDefault();
 };
 
+mirosubs.translate.MainPanel.prototype.showLoginNag_ = function() {
+    if (!this.loginNagBubble_) {
+        this.loginNagBubble_ = new goog.ui.Bubble('Login to save changes!');
+        this.loginNagBubble_.setAutoHide(false);
+        this.loginNagBubble_.setPosition(new goog.positioning
+                           .AnchoredPosition(this.logInOutLink_, null));
+        this.loginNagBubble_.setTimeout(20000);
+        this.loginNagBubble_.render();
+        this.loginNagBubble_.attach(this.logInOutLink_);
+    }
+    this.loginNagBubble_.setVisible(true);
+};
+
 mirosubs.translate.MainPanel.prototype.showLoggedIn = function(username) {
     this.loggedIn_ = true;
     goog.dom.setTextContent(this.logInOutLink_, "Logout " + username);
@@ -119,6 +133,8 @@ mirosubs.translate.MainPanel.prototype.showLoggedOut = function() {
 mirosubs.translate.MainPanel.prototype.disposeInternal = function() {
     mirosubs.translate.MainPanel.superClass_.disposeInternal.call(this);
     this.serverModel_.dispose();
+    if (this.loginNagBubble_)
+        this.loginNagBubble_.dispose();
 };
 
 mirosubs.translate.MainPanel.EventType = {

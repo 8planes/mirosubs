@@ -3,12 +3,13 @@ goog.provide('mirosubs.translate.ServerModel');
 // Currently this class has a lot in common with mirosubs.subtitle.MSServerModel.
 // TODO: fix the duplication, probably by turning the two classes into one.
 
-mirosubs.translate.ServerModel = function(videoID, unitOfWork, isNull) {
+mirosubs.translate.ServerModel = function(videoID, unitOfWork, isNull, loginNagFn) {
     goog.Disposable.call(this);
     this.videoID_ = videoID;
     this.unitOfWork_ = unitOfWork;
     this.translating_ = false;
     this.isNull_ = isNull;
+    this.loginNagFn_ = loginNagFn;
 };
 goog.inherits(mirosubs.translate.ServerModel, goog.Disposable);
 
@@ -97,12 +98,15 @@ mirosubs.translate.ServerModel.prototype.loginThenAction_ =
         if (opt_forceLogin || 
             currentTime >= this.lastLoginPesterTime_ + 60 * 1000) {
             if (mirosubs.isLoginDialogShowing())
-                return;
-            // temporary
-            alert("We would like to save your captions, but before they get saved, " +
-                  "you need to log in.");
+                return;            
             this.lastLoginPesterTime_ = currentTime;
-            mirosubs.login(action);
+            if (opt_forceLogin) {
+                alert("In order to finish and save your work, " +
+                      "you need to log in.");
+                mirosubs.login(action);
+            }
+            else
+                this.loginNagFn_();
         }
     }
     else

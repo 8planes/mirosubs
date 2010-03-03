@@ -17,8 +17,9 @@ mirosubs.subtitle.ServerModel = function() {};
  * proceeds to save periodically (or not) using the work recorded by the 
  * UnitOfWork. This method can only be called once.
  * @param {mirosubs.UnitOfWork} unitOfWork
+ * @param {function()} loginNagFn Function which, when called, displays login nag.
  */
-mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork) {};
+mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork, loginNagFn) {};
 
 /**
  * Announces to the server that subtitling is finished. Also frees timers, 
