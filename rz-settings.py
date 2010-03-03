@@ -30,8 +30,9 @@ logging.basicConfig(
 # socialauth-related
 OPENID_REDIRECT_NEXT = '/socialauth/openid/done/'
  
-OPENID_SREG = {"requred": "nickname, email", "optional":"postcode, country", "policy_url": ""}
-OPENID_AX = [{"type_uri": "email", "count": 1, "required": False, "alias": "email"}, {"type_uri": "fullname", "count":1 , "required": False, "alias": "fullname"}]
+OPENID_SREG = {"required": "nickname, email", "optional":"postcode, country", "policy_url": ""}
+OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "required": True, "alias": "email"},
+             {"type_uri": "fullname", "count":1 , "required": False, "alias": "fullname"}]
 
 TWITTER_CONSUMER_KEY = 'GRcOIZyWRM0XxluS6flA'
 TWITTER_CONSUMER_SECRET = '4BSIzc524xOV9edjyXgJiae1krY7TEmG38K7tKohc'
