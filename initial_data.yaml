@@ -25,5 +25,18 @@
 - model: sites.site
   pk: 5
   fields:
-      domain: 192.168.225.131:8002
-      name: mirosubs-rz-local
+    domain: 192.168.225.131:8002
+    name: mirosubs-rz-local
+
+- model: sites.site
+  pk: 6
+  fields:
+    domain: mirosubsdev.8planes.com
+    name: mirosubs-dev-8planes
+
+- model: sites.site
+  pk: 7
+  fields:
+    domain: mirosubsstaging.8planes.com
+    name: mirosubs-staging-8planes
+
