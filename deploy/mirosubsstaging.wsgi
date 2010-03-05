@@ -7,7 +7,7 @@ sys.path.append('/home/mirosubsstaging/mirosubs')
 sys.path.append('/home/mirosubsstaging/mirosubs/apps')
 
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.staging-settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.staging-8planes-settings'
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
