@@ -1,5 +1,5 @@
 import site
-site.addsitedir('/home/mirosubs/env/lib/python2.6/site-packages')
+site.addsitedir('/home/mirosubsstaging/env/lib/python2.6/site-packages')
 
 import sys
 sys.path.append('/home/mirosubsstaging')

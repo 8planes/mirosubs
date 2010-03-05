@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-    ServerAdmin webmaster@8planes.com
+    ServerAdmin adam@8planes.com
 
     ServerName mirosubsstaging.8planes.com
     ServerAlias mirosubsstaging.8planes.com
