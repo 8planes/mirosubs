@@ -1,7 +1,15 @@
+#!/usr/bin/ruby
+
 require 'cgi'
 require 'logger'
 
 @logger = Logger.new('widget-demo.log', 5, 512000)
+@widget_subdomain = ENV["HTTP_HOST"].split('.')[0]
+
+if (@widget_subdomain == "mswidgetdev")
+  @site_subdomain = "mirosubsdev"
+else
+  @site_subdomain = "mirosubsstaging"
 
 begin
   @params = CGI::parse(ENV["QUERY_STRING"])
@@ -28,7 +36,7 @@ begin
     cgi.html() do
       cgi.body() do
        cgi.div {  
-          "<script src=\"http://mirosubs.pybrew.com/embed_widget.js?#{@js_query_string}\"></script>"
+          "<script src=\"http://#{@site_subdomain}.8planes.com/embed_widget.js?#{@js_query_string}\"></script>"
        }
       end
     end
