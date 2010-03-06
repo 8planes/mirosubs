@@ -721,10 +721,16 @@ li.mirosubs-transcribeHelp ol li {
 }
 
 .mirosubs-langmenuitem {
-    border-top:1px solid #DDDDDD;
     font-size:11px;
     margin:0;
     padding:2px 7px;
+}
+
+.mirosubs-langmenusep {
+    border-top: 1px solid #cccccc;
+    margin: 4px 0;
+    padding: 0;
+    position: relative;
 }
 
 .mirosubs-langmenuitem-highlight {

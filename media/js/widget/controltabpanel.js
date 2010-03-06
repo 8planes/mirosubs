@@ -20,11 +20,12 @@ mirosubs.ControlTabPanel = function(uuid, showTab, videoID,
 
     goog.ui.MenuRenderer.CSS_CLASS = 'mirosubs-langmenu';
     goog.ui.MenuItemRenderer.CSS_CLASS = goog.getCssName('mirosubs-langmenuitem');
+    goog.ui.MenuSeparatorRenderer.CSS_CLASS = goog.getCssName('mirosubs-langmenusep');
     this.popupMenu_ = new goog.ui.PopupMenu();
     this.popupMenu_.addChild(new goog.ui.MenuItem('Original', 
-                             mirosubs.ControlTabPanel.LANGUAGE_ORIGINAL));
+        mirosubs.ControlTabPanel.LANGUAGE_ORIGINAL), true);
     this.popupMenu_.addChild(new goog.ui.MenuItem(
-        'Add new', mirosubs.ControlTabPanel.LANGUAGE_NEW));
+        'Add new', mirosubs.ControlTabPanel.LANGUAGE_NEW), true);
     this.setAvailableLanguages(translationLanguages);
     this.popupMenu_.render(document.body);
     this.popupMenu_.setToggleMode(true);
@@ -67,7 +68,7 @@ mirosubs.ControlTabPanel.prototype.setAvailableLanguages = function(langs) {
         this.popupMenu_.removeChildAt(1);
     for (i = 0; i < langs.length; i++)
         this.popupMenu_.addChildAt(new goog.ui.MenuItem(
-            langs[i]['name'], langs[i]['code']), i + 1);
+            langs[i]['name'], langs[i]['code']), i + 1, true);
 };
 
 mirosubs.ControlTabPanel.prototype.showSelectLanguage = function() {

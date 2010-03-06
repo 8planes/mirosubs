@@ -12,8 +12,12 @@ def staging():
     """
     Run the subsequent commands on the staging server, e.g., li77-157.members.linode.com or 74.207.235.157
     """
-    env.hosts = ['74.207.235.157']
-    env.user = 'mirosubs'
+    env.hosts = ['8planes.com']
+    env.user = 'mirosubsstaging'
+
+def dev():
+    env.hosts = ['8planes.com']
+    env.user = 'mirosubsdev'    
 
 def setup_virtualenv(home='/home/mirosubs'):
     run('virtualenv --no-site-packages %s/env' % home)
@@ -37,18 +41,20 @@ def set_permissions(home='/home/mirosubs'):
 
 def reset_db():
     env.warn_only = True
-    with cd('/home/mirosubs/mirosubs/'):
-        run('/home/mirosubs/env/bin/python manage.py reset_db --noinput --settings=staging-settings')
-        run('/home/mirosubs/env/bin/python manage.py syncdb --noinput --settings=staging-settings')
+    with cd('/home/{0}/mirosubs/'.format(env.user)):
+        run(('/home/{0}/env/bin/python manage.py reset_db --noinput '
+             '--settings={0}-settings').format(env.user))
+        run(('/home/{0}/env/bin/python manage.py syncdb --noinput '
+              '--settings={0}-settings').format(env.user))
 
 def update():
     """
     Put the latest version of the code on the server and reload the app.
     """
-    with cd('/home/mirosubs/mirosubs'):
+    with cd('/home/{0}/mirosubs'.format(env.user)):
         run('git pull origin master')
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
-        run('/home/mirosubs/env/bin/python closure/compile.py')
-        run('touch deploy/mirosubs.wsgi')
+        run('/home/{0}/env/bin/python closure/compile.py'.format(env.user))
+        run('touch deploy/{0}.wsgi'.format(env.user))
