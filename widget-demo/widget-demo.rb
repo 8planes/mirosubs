@@ -10,6 +10,7 @@ if (@widget_subdomain == "mswidgetdev")
   @site_subdomain = "mirosubsdev"
 else
   @site_subdomain = "mirosubsstaging"
+end
 
 begin
   @params = CGI::parse(ENV["QUERY_STRING"])
