@@ -8,13 +8,13 @@ goog.provide('mirosubs.AbstractVideoPlayer');
  * class.
  * @constructor
  */
-mirosubs.AbstractVideoPlayer = function() {};
+mirosubs.AbstractVideoPlayer = function() {
+    goog.events.EventTarget.call(this);
+};
+goog.inherits(mirosubs.AbstractVideoPlayer, goog.events.EventTarget);
 
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
-};
-mirosubs.AbstractVideoPlayer.prototype.getIsPlayingFn = function() {
-    return goog.bind(this.isPlaying, this);
 };
 mirosubs.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.isPlaying = goog.abstractMethod;
@@ -92,4 +92,22 @@ mirosubs.AbstractVideoPlayer.prototype.needsIFrame = function() {
  * @return {goog.math.Size} size of the video
  */
 mirosubs.AbstractVideoPlayer.prototype.getVideoSize = goog.abstractMethod;
+
+/**
+ * Returns the html element that contains the video. We use this to add the 
+ * subtitle html element.
+ * @protected
+ * @return {HTMLElement}
+ */
 mirosubs.AbstractVideoPlayer.prototype.getVideoContainerElem = goog.abstractMethod;
+
+/**
+ * Video player events
+ * @enum {string}
+ */
+mirosubs.AbstractVideoPlayer.EventType = {
+    /** dispatched when playback starts or resumes. */
+    PLAY : 'videoplay',
+    /** dispatched when playback is paused. */
+    PAUSE : 'videopause'
+};

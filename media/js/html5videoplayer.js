@@ -5,12 +5,23 @@ mirosubs.Html5VideoPlayer = function(videoElem) {
     this.videoElem_ = videoElem;
     this.videoDiv_ = videoElem.parentNode;
     this.captionElem_ = null;
+    this.videoEventHandler_ = new goog.events.EventHandler(this);
+    this.videoEventHandler_.listen(this.videoElem_, 'play', this.videoPlaying_);
+    this.videoEventHandler_.listen(this.videoElem_, 'pause', this.videoPaused_);
 };
 goog.inherits(mirosubs.Html5VideoPlayer, mirosubs.AbstractVideoPlayer);
 
 mirosubs.Html5VideoPlayer.wrap = function(video_elem_id) {
     // in the future can be used to abstract flash player, etc.
     return new mirosubs.Html5VideoPlayer(goog.dom.$(video_elem_id));
+};
+
+mirosubs.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
+    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PLAY);
+};
+
+mirosubs.Html5VideoPlayer.prototype.videoPaused_ = function(event) {
+    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PAUSE);    
 };
 
 mirosubs.Html5VideoPlayer.prototype.isPaused = function() {
@@ -22,8 +33,10 @@ mirosubs.Html5VideoPlayer.prototype.videoEnded = function() {
 };
 
 mirosubs.Html5VideoPlayer.prototype.isPlaying = function() {
-    return (this.videoElem_['readyState']==3 /*HAVE_FUTURE_DATA*/ ||
-            this.videoElem_['readyState']==4 /*HAVE_ENOUGH_DATA*/) &&
+    var readyState = this.getReadyState_();
+    var RS = mirosubs.Html5VideoPlayer.ReadyState_;
+    return (readyState == RS.HAVE_FUTURE_DATA ||
+            readyState == RS.HAVE_ENOUGH_DATA) &&
            !this.isPaused() && !this.videoEnded();
 };
 
@@ -49,4 +62,25 @@ mirosubs.Html5VideoPlayer.prototype.getVideoSize = function() {
 
 mirosubs.Html5VideoPlayer.prototype.getVideoContainerElem = function() {
     return this.videoDiv_;
+};
+
+mirosubs.Html5VideoPlayer.prototype.getReadyState_ = function() {
+    return this.videoElem_["readyState"];
+};
+
+mirosubs.Html5VideoPlayer.prototype.disposeInternal = function() {
+    mirosubs.Html5VideoPlayer.superClass_.disposeInternal();
+    this.videoEventHandler_.dispose();
+};
+
+/**
+ * See http://www.w3.org/TR/html5/video.html#dom-media-have_nothing
+ * @enum
+ */
+mirosubs.Html5VideoPlayer.ReadyState_ = {
+    HAVE_NOTHING  : 0,
+    HAVE_METADATA : 1,
+    HAVE_CURRENT_DATA : 2,
+    HAVE_FUTURE_DATA : 3,
+    HAVE_ENOUGH_DATA : 4
 };

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="/site_media/js/closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript" src="/site_media/js/closure-dependencies.js"></script>
+    <script>
+      goog.require('goog.debug.DivConsole');
+    </script>
+{% for dep in js_dependencies %}
+    <script type="text/javascript" src="{{dep|safe}}"></script>
+{% endfor %}
+  </head>
+  <body>
+    {% block body %}{% endblock %}
+  </body>
+</html>
