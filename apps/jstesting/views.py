@@ -5,7 +5,8 @@ def relative_path(js_file):
     return "/site_media/js/%s" % js_file
 
 def js_dependencies():
-    return [relative_path(js_file) for js_file in settings.JS_RAW]
+    js_files = settings.JS_RAW.append('widget/testing/stubvideoplayer.js')
+    return [relative_path(js_file) for js_file in js_files]
 
 def jstest(request, file_name):
     return render_to_response('jstesting/%s.js' % file_name,

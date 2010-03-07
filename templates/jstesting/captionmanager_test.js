@@ -27,7 +27,7 @@ function sendEvents(playheadTime) {
 function setUp() {
     MS_dispatchedCaptions = [];
     MS_captionManager = new mirosubs.CaptionManager(null);
-    MS_captionManager.addEventListener(mirosubs.CaptionManager.CAPTION_EVENT,
+    MS_captionManager.addEventListener(mirosubs.CaptionManager.EventType.CAPTION,
                                        MS_captionListener);
     // clear window timer so we can imitate stub timer in tests
     window.clearInterval(MS_captionManager.timerInterval_);

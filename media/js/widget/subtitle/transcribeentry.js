@@ -43,9 +43,9 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKeyUp_ = function(event) {
 };
 mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     var value = this.labelInput_.getValue();
-    this.labelInput_.setValue('');
     // FIXME: accessing private member of goog.ui.LabelInput
     this.labelInput_.label_ = '';
+    this.labelInput_.setValue('');
     this.labelInput_.focusAndSelect();
     this.dispatchEvent(new mirosubs.subtitle.TranscribeEntry.NewTitleEvent(value));
 };
