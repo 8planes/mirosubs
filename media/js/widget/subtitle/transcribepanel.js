@@ -56,15 +56,22 @@ mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
     this.getHandler().listen(document,
                              goog.events.EventType.KEYUP,
                              this.handleKeyUp_, false, this);
+    this.getHandler().listen(this.videoPlayer_,
+                             mirosubs.AbstractVideoPlayer.EventType.PLAY,
+                             this.videoPlaying_);
+};
+
+mirosubs.subtitle.TranscribePanel.prototype.videoPlaying_ = function(event) {
+    this.lineEntry_.focus();
 };
 
 mirosubs.subtitle.TranscribePanel.prototype.addNewTitle = function() {
-        var newEditableCaption = 
-           new mirosubs.subtitle.EditableCaption(this.unitOfWork_);
-        this.captions_.push(newEditableCaption);
-        newEditableCaption.setText(this.lineEntry_.getValue());
-        this.subtitleList_.addSubtitle(newEditableCaption, true);
-        this.lineEntry_.clearAndFocus();
+    var newEditableCaption = 
+        new mirosubs.subtitle.EditableCaption(this.unitOfWork_);
+    this.captions_.push(newEditableCaption);
+    newEditableCaption.setText(this.lineEntry_.getValue());
+    this.subtitleList_.addSubtitle(newEditableCaption, true);
+    this.lineEntry_.clearAndFocus();
 };
 
 mirosubs.subtitle.TranscribePanel.prototype.tooLongLineWarning = function(input, breakable) {
@@ -139,4 +146,17 @@ mirosubs.subtitle.TranscribeEntry.prototype.getValue = function() {
 mirosubs.subtitle.TranscribeEntry.prototype.clearAndFocus = function() {
     this.labelInput_.setValue('');
     this.labelInput_.focusAndSelect();
+};
+mirosubs.subtitle.TranscribeEntry.prototype.focus = function() {
+    this.labelInput_.getElement().focus();
+
+    return;
+
+    console.log('focus called');
+    var that = this;
+    goog.Timer.callOnce(function() {
+            console.log('focus');
+            that.labelInput_.getElement().focus();
+        });
+    console.log('finished call');
 };

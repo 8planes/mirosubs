@@ -18,12 +18,14 @@
         <option value="html5Player">HTML 5</option>
       </select>
     </div>
-    <a
+    <div>
+      <a href="#" id="playButton">play</a> <a href="#" id="pauseButton">pause</a>
+    </div>
   </div>
  <!-- Event log. -->
  <fieldset class="goog-debug-panel">
    <legend>Event Log</legend>
-   <div id="log"></div>
+   <div id="log" style="height: 300px; overflow-y: auto"></div>
  </fieldset>
  <div id="perf"></div>  
 </div>
@@ -65,6 +67,14 @@
   }
   goog.events.listen(goog.dom.$('videoselector'), 'change', videoSelected);
 
-  
+  goog.events.listen(goog.dom.$('playButton'), 'click', function(event) {
+    curPlayer.play();
+    event.preventDefault();
+  });
+
+  goog.events.listen(goog.dom.$('pauseButton'), 'click', function(event) {
+    curPlayer.pause();
+    event.preventDefault();
+  });
 </script>
 {% endblock %}
