@@ -21,6 +21,11 @@
     <div>
       <a href="#" id="playButton">play</a> <a href="#" id="pauseButton">pause</a>
     </div>
+    <div>
+      Periodic focus stealing: 
+      <a href="#" id="focusStealingTimerToggle">off</a> 
+      <input type="text" id="focusable"/>
+    </div>
   </div>
  <!-- Event log. -->
  <fieldset class="goog-debug-panel">
@@ -37,6 +42,7 @@
   goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
   var ytlogger = goog.debug.Logger.getLogger('youtube');
   var html5logger = goog.debug.Logger.getLogger('html5');
+  var focusLogger = goog.debug.Logger.getLogger('focus');
   var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
   logconsole.setCapturing(true);
 
@@ -75,6 +81,22 @@
   goog.events.listen(goog.dom.$('pauseButton'), 'click', function(event) {
     curPlayer.pause();
     event.preventDefault();
+  });
+
+  var stealingFocus = false;
+  goog.events.listen(goog.dom.$('focusStealingTimerToggle'), 'click', 
+    function(event) {
+      stealingFocus = !stealingFocus;
+      goog.dom.$('focusStealingTimerToggle').innerHTML = stealingFocus ? 'on' : 'off';
+      event.preventDefault();
+    });
+  var focusTimer = new goog.Timer(2000);
+  focusTimer.start();
+  goog.events.listen(focusTimer, goog.Timer.TICK, function() {
+    if (stealingFocus) {
+      focusLogger.info('attempting to steal focus');
+      goog.dom.$('focusable').focus();
+    }
   });
 </script>
 {% endblock %}
