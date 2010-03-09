@@ -8,7 +8,8 @@ goog.provide('mirosubs.subtitle.SyncPanel');
  * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles with 
  *     start_time set.
  */
-mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, captionManager) {
+mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, 
+                                       captionManager, focusableElem) {
     goog.ui.Component.call(this);
     /**
      * Always in correct order by time.
@@ -21,6 +22,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, captionManager) {
     this.keyHandler_ = null;
     this.lastActiveSubtitleWidget_ = null;
     this.videoStarted_ = false;
+    this.focusableElem_ = focusableElem;
 };
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
@@ -32,10 +34,11 @@ mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     handler.listen(window,
                    goog.events.EventType.KEYDOWN,
                    this.handleKey_);
+    var that = this;
     handler.listen(this.videoPlayer_,
                    mirosubs.AbstractVideoPlayer.EventType.PLAY,
-                   function() {
-                       document.body.focus();
+                   function(event) {
+                       that.focusableElem_.focus();
                    });
 };
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {

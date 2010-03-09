@@ -86,13 +86,13 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                                                     'alt':'loading',
                                                     'src':mirosubs.subtitle.MainPanel
                                                          .SPINNER_GIF_URL}),
-                      nextStepAnchorElem = $d('a', { 'href': '#'}, 
+                      this.nextStepAnchorElem_ = $d('a', { 'href': '#'}, 
                          "Done? ",
                          this.nextStepLink_ = 
                          $d('strong', null, 'Next Step'))));
     this.getHandler().listen(this.startOverLink_, 'click',
                              this.startOverClicked_);
-    this.getHandler().listen(nextStepAnchorElem, 'click', 
+    this.getHandler().listen(this.nextStepAnchorElem_, 'click', 
                              this.nextStepClicked_);
     this.tabs_ = this.createTabElems_()
     el.appendChild($d('ul', { 'className' : 'mirosubs-nav' }, this.tabs_));
@@ -234,12 +234,14 @@ mirosubs.subtitle.MainPanel.prototype.makeNextWidget_ = function(state) {
         this.currentWidget_ = new mirosubs.subtitle.SyncPanel(
             this.captions_, 
             this.videoPlayer_,
-            this.captionManager_);
+            this.captionManager_,
+            this.nextStepAnchorElem_);
     else if (state == 2)
         this.currentWidget_ = new mirosubs.subtitle.ReviewPanel(
             this.captions_, 
             this.videoPlayer_,
-            this.captionManager_);    
+            this.captionManager_, 
+            this.nextStepAnchorElem_);    
     else
         this.currentWidget_ = 
             new mirosubs.subtitle.FinishedPanel(this.serverModel_);
