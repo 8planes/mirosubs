@@ -26,7 +26,7 @@ goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.SyncPanel.superClass_.enterDocument.call(this);
     var handler = this.getHandler();
-    handler.listen(captionManager,
+    handler.listen(this.captionManager_,
                    mirosubs.CaptionManager.EventType.CAPTION,
                    this.captionReached_);    
     handler.listen(window,
