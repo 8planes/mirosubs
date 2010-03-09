@@ -18,23 +18,32 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, captionManager) {
 
     this.videoPlayer_ = videoPlayer;
     this.captionManager_ = captionManager;
-    this.getHandler().listen(captionManager,
-                             mirosubs.CaptionManager.EventType.CAPTION,
-                             this.captionReached_);
     this.keyHandler_ = null;
     this.lastActiveSubtitleWidget_ = null;
     this.videoStarted_ = false;
 };
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
+mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
+    mirosubs.subtitle.SyncPanel.superClass_.enterDocument.call(this);
+    var handler = this.getHandler();
+    handler.listen(captionManager,
+                   mirosubs.CaptionManager.EventType.CAPTION,
+                   this.captionReached_);    
+    handler.listen(window,
+                   goog.events.EventType.KEYDOWN,
+                   this.handleKey_);
+    handler.listen(this.videoPlayer_,
+                   mirosubs.AbstractVideoPlayer.EventType.PLAY,
+                   function() {
+                       document.body.focus();
+                   });
+};
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());    
     this.getElement().appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.subtitles_, true, this.createHelpDom($d)), true);
-    this.getHandler().listen(window,
-                             goog.events.EventType.KEYDOWN,
-                             this.handleKey_);
 };
 /**
  *

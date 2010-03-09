@@ -30,14 +30,12 @@ mirosubs.subtitle.TranscribeEntry.prototype.focus = function() {
         this.labelInput_.getElement().focus();
 };
 mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
-    console.log('handleKey_');
     if (event.keyCode == goog.events.KeyCodes.ENTER) {
         this.addNewTitle_();
         event.preventDefault();
     }
 };
 mirosubs.subtitle.TranscribeEntry.prototype.handleKeyUp_ = function(event) {
-    console.log('keyUp');
     this.videoPlayer_.showCaptionText(this.labelInput_.getValue());
     this.issueLengthWarning_(this.insertsBreakableChar_(event.keyCode));
 };
