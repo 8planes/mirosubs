@@ -45,3 +45,6 @@ mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
 mirosubs.subtitle.EditableCaption.prototype.getCaptionID = function() {
     return this.jsonCaption['caption_id'];
 };
+mirosubs.subtitle.EditableCaption.prototype.isShownAt = function(time) {
+    return this.getStartTime() < time && time < this.getEndTime();
+};

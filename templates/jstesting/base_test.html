@@ -5,6 +5,7 @@
     <script type="text/javascript" src="/site_media/js/closure-dependencies.js"></script>
     <script>
       goog.require('goog.testing.jsunit');
+      goog.require('goog.testing.events');
     </script>
     <script>
       <!-- Symlinked to JSUnit installation -->
@@ -15,6 +16,9 @@
 {% endfor %}
   </head>
   <body>
+    <div>
+      {% block testcontrols %}{% endblock %}
+    </div>
     <script>
       {% block testscript %}{% endblock %}
     </script>
