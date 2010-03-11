@@ -26,16 +26,17 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
     this.spaceDown_ = false;
 };
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
+
 mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.SyncPanel.superClass_.enterDocument.call(this);
     var handler = this.getHandler();
     handler.listen(this.captionManager_,
                    mirosubs.CaptionManager.EventType.CAPTION,
                    this.captionReached_);    
-    handler.listen(document,
+    handler.listen(window,
                    goog.events.EventType.KEYDOWN,
                    this.handleKeyDown_);
-    handler.listen(document,
+    handler.listen(window,
                    goog.events.EventType.KEYUP,
                    this.handleKeyUp_);
     var that = this;
@@ -87,6 +88,7 @@ mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE && 
         !this.currentlyEditingSubtitle_()) {
+        event.preventDefault();
         if (this.videoPlayer_.isPlaying()) {
             if (this.spaceDown_)
                 return;
@@ -101,14 +103,13 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
             this.videoPlayer_.play();
             this.videoStarted_ = true;
         }
-        event.preventDefault();
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE && 
         this.spaceDown_) {
-        console.log('space up');
         this.spaceDown_ = false;
+        event.preventDefault();
         var playheadTime = this.videoPlayer_.getPlayheadTime();
         if (this.spaceDownSubIndex > -1 &&
             this.subtitles_[this.spaceDownSubIndex_].isShownAt(playheadTime))
@@ -120,10 +121,8 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
             else
                 this.moveSubTimesBack(playheadTime, currentSubIndex);
         }
-        console.log('spaceDownPlayheadTime_ back to -1');
         this.spaceDownPlayheadTime_ = -1;
         this.spaceDownSubIndex_ = -1;
-        event.preventDefault();
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.moveSubTimeForward = function() {
@@ -164,8 +163,10 @@ mirosubs.subtitle.SyncPanel.prototype.moveSubTimesBack =
                 this.captionManager_.addCaptions([subtitle.jsonCaption]);
         }
     }
-    if (subtitle != null)
+    if (subtitle != null) {
         this.subtitleList_.scrollToCaption(subtitle.getCaptionID());
+        this.subtitleList_.setActiveWidget(subtitle.getCaptionID());
+    }
 };
 mirosubs.subtitle.SyncPanel.prototype.startOver = function() {
     var i;
@@ -179,10 +180,8 @@ mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
-    console.log('caption attempted to be reached');
     if (this.spaceDown_)
         return; // don't progress displayed subtitle so long as the spacebar is pressed.
-    console.log('captionReached');
     var jsonCaption = jsonCaptionEvent.caption;
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)
