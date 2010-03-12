@@ -37,8 +37,11 @@ mirosubs.subtitle.MainPanel = function(videoPlayer,
     this.serverModel_.init(uw, goog.bind(this.showLoginNag_, this));
     this.tabs_ = [];
     this.state_ = -1; // dom not created yet.
+    this.transAutoRepeat_ = false;
 };
 goog.inherits(mirosubs.subtitle.MainPanel, goog.ui.Component);
+mirosubs.subtitle.MainPanel.AUTO_REPEAT_ON = 'Auto-repeat ON';
+mirosubs.subtitle.MainPanel.AUTO_REPEAT_OFF = 'Auto-repeat OFF';
 
 /**
  * Must be set by some external component.
@@ -75,25 +78,34 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
 
     el.appendChild(this.contentElem_ = $d('div'));
     var nextStepAnchorElem;
-    el.appendChild($d('div', { 'className': 'mirosubs-nextStep' },
-                      this.logInOutLink_ = $d('a', {'className':'mirosubs-logoutLink', 
-                                                    'href':'#'}),
-                      this.startOverLink_ = $d('a', {'className':'mirosubs-logoutLink',
-                                                     'href':'#',
-                                                     'style':'display:none'}, 
-                                                    'Start Over'),
-                      this.loadingGif_ = $d('img', {'style':'display: none',
-                                                    'alt':'loading',
-                                                    'src':mirosubs.subtitle.MainPanel
-                                                         .SPINNER_GIF_URL}),
-                      this.nextStepAnchorElem_ = $d('a', { 'href': '#'}, 
-                         "Done? ",
-                         this.nextStepLink_ = 
-                         $d('strong', null, 'Next Step'))));
+    el.appendChild(
+        $d('div', { 'className': 'mirosubs-nextStep' },
+           this.logInOutLink_ = $d('a', {'className':'mirosubs-logoutLink', 
+                                         'href':'#'}),
+           this.startOverLink_ = $d('a', {'className':'mirosubs-logoutLink',
+                                          'href':'#',
+                                          'style':'display:none'}, 
+                                    'Start Over'),
+           this.autoRepeatModeLink_ = $d('a', {'className':'mirosubs-logoutLink',
+                                              'href':'#',
+                                              'style':'display:none'},
+                                         this.transAutoRepeat_ ?
+                                         mirosubs.subtitle.MainPanel.AUTO_REPEAT_ON : 
+                                         mirosubs.subtitle.MainPanel.AUTO_REPEAT_OFF),
+           this.loadingGif_ = $d('img', {'style':'display: none',
+                                         'alt':'loading',
+                                         'src':mirosubs.subtitle.MainPanel
+                                         .SPINNER_GIF_URL}),
+           this.nextStepAnchorElem_ = $d('a', { 'href': '#'}, 
+                                         "Done? ",
+                                         this.nextStepLink_ = 
+                                         $d('strong', null, 'Next Step'))));
     this.getHandler().listen(this.startOverLink_, 'click',
                              this.startOverClicked_);
     this.getHandler().listen(this.nextStepAnchorElem_, 'click', 
                              this.nextStepClicked_);
+    this.getHandler().listen(this.autoRepeatModeLink_, 'click',
+                             this.autoRepeatModeLinkClicked_);
     this.tabs_ = this.createTabElems_()
     el.appendChild($d('ul', { 'className' : 'mirosubs-nav' }, this.tabs_));
     this.setState_(0);
@@ -112,6 +124,17 @@ mirosubs.subtitle.MainPanel.prototype.createDom = function() {
                                      that.serverModel_.logIn();
                                  e.preventDefault();
                              });
+};
+
+mirosubs.subtitle.MainPanel.prototype.autoRepeatModeLinkClicked_ = function(event) {
+    goog.asserts.assert(this.state_ == 0);
+    event.preventDefault();
+    this.transAutoRepeat_ = !this.transAutoRepeat_;
+    goog.dom.setTextContent(this.autoRepeatModeLink_,
+                            this.transAutoRepeat_ ?
+                            mirosubs.subtitle.MainPanel.AUTO_REPEAT_ON : 
+                            mirosubs.subtitle.MainPanel.AUTO_REPEAT_OFF);
+    this.currentWidget_.setRepeatVideoMode(this.transAutoRepeat_);
 };
 
 mirosubs.subtitle.MainPanel.prototype.showLoginNag_ = function() {
@@ -196,6 +219,7 @@ mirosubs.subtitle.MainPanel.prototype.progressToState_ = function(state) {
         this.videoPlayer_.pause();
         this.selectTab_(state);
         this.startOverLink_.style.display = (state == 1 ? '' : 'none');
+        this.autoRepeatModeLink_.style.display = (state == 0 ? '' : 'none');
         this.addChild(this.makeNextWidget_(state), true);
         var nextStepText;
         if (state < 2)

@@ -37,14 +37,14 @@ mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
                       'to pause and jump back, so you can keep up.'].join(''),
                      'To begin, press TAB to play and start typing.'];
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-       this.captions_, false, 
-       mirosubs.subtitle.SubtitleList.createHelpLi($d, helpLines, 
-                                                   'Transcribing Controls', 
-                                                   false, 
-                                                   'PRESS TAB TO BEGIN')), 
+        this.captions_, false, 
+        mirosubs.subtitle.SubtitleList.createHelpLi($d, helpLines,
+                                                    'Transcribing Controls', 
+                                                    false, 
+                                                    'PRESS TAB TO BEGIN')), 
                   true);
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(
-                  this.videoPlayer_), true);
+        this.videoPlayer_), true);
 };
 
 mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
@@ -67,4 +67,8 @@ mirosubs.subtitle.TranscribePanel.prototype.newTitle_ = function(event) {
     this.captions_.push(newEditableCaption);
     newEditableCaption.setText(event.title);
     this.subtitleList_.addSubtitle(newEditableCaption, true);
+};
+
+mirosubs.subtitle.TranscribePanel.prototype.setRepeatVideoMode = function(mode) {
+    this.lineEntry_.setRepeatVideoMode(mode);
 };
