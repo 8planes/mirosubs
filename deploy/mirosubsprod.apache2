@@ -1,5 +1,5 @@
 <VirtualHost *:8080>
-    ServerAdmin admin@pculture.org
+    ServerAdmin aduston@gmail.com
 
     ServerName www.universalsubtitles.org
     ServerAlias universalsubtitles.org
@@ -15,6 +15,11 @@
     WSGIProcessGroup miroprod
 
     WSGIScriptAlias / /var/www/universalsubtitles/mirosubs/deploy/mirosubsprod.wsgi
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
 
     Alias /site_media /var/www/universalsubtitles/mirosubs/media/
     <Location "/site_media">
