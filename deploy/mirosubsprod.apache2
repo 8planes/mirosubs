@@ -1,0 +1,32 @@
+<VirtualHost *:80>
+    ServerAdmin admin@pculture.org
+
+    ServerName www.universalsubtitles.org
+    ServerAlias universalsubtitles.org
+    ServerAlias www.universalsubtitles.com
+    ServerAlias universalsubtitles.com
+
+    LogLevel warn
+
+    CustomLog "|/usr/bin/cronolog /var/log/apache2/universalsubtitles/access.log" combined
+    ErrorLog "|/usr/bin/cronolog /var/log/apache2/universalsubtitles/error.log"
+
+    WSGIDaemonProcess miroprod user=adam group=www-data threads=2
+    WSGIProcessGroup miroprod
+
+    WSGIScriptAlias / /var/www/universalsubtitles/mirosubs/deploy/mirosubsprod.wsgi
+
+    Alias /site_media /var/www/universalsubtitles/mirosubs/media/
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /media /var/www/universalsubtitles/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    <Location "/media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+</VirtualHost>

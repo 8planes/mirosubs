@@ -14,10 +14,17 @@ def staging():
     """
     env.hosts = ['8planes.com']
     env.user = 'mirosubsstaging'
+    env.production = False
 
 def dev():
     env.hosts = ['8planes.com']
-    env.user = 'mirosubsdev'    
+    env.user = 'mirosubsdev'
+    env.production = False
+
+def prod():
+    env.hosts = ['pcf10.pculture.org']
+    env.user = 'adam'
+    env.production = True
 
 def setup_virtualenv(home='/home/mirosubs'):
     run('virtualenv --no-site-packages %s/env' % home)
@@ -48,13 +55,14 @@ def reset_db():
               '--settings={0}-settings').format(env.user))
 
 def update():
+    base_dir = '/var/www/universalsubtitles' if env.production else '/home/{0}'.format(env.user)
     """
     Put the latest version of the code on the server and reload the app.
     """
-    with cd('/home/{0}/mirosubs'.format(env.user)):
+    with cd('{0}/mirosubs'.format(base_dir)):
         run('git pull origin master')
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
-        run('/home/{0}/env/bin/python closure/compile.py'.format(env.user))
+        run('{0}/env/bin/python closure/compile.py'.format(base_dir))
         run('touch deploy/{0}.wsgi'.format(env.user))

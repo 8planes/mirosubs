@@ -40,3 +40,8 @@
     domain: mirosubsstaging.8planes.com
     name: mirosubs-staging-8planes
 
+- model: sites.site
+  pk: 8
+  fields:
+    domain: universalsubtitles.org
+    name: mirosubs-prod
