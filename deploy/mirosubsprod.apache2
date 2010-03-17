@@ -11,7 +11,7 @@
     CustomLog "|/usr/bin/cronolog /var/log/apache2/universalsubtitles/access.log" combined
     ErrorLog "|/usr/bin/cronolog /var/log/apache2/universalsubtitles/error.log"
 
-    WSGIDaemonProcess miroprod user=pcf-web group=www-data threads=2
+    WSGIDaemonProcess miroprod user=www-data group=pcf-web threads=2
     WSGIProcessGroup miroprod
 
     WSGIScriptAlias / /var/www/universalsubtitles/mirosubs/deploy/mirosubsprod.wsgi
