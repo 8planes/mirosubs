@@ -1,13 +1,13 @@
 body{
 
-background: #d3e9ed url(/site_media/images/main_bg.gif) repeat-x;
+background: #d3e9ed url(../images/main_bg.gif) repeat-x;
 margin: 0 auto;
 position: relative;
 font-family: Arial, Helvetica, sans-serif;
 }
 
 .cloud{
-background: url(/site_media/images/cloud.png) center top no-repeat;
+background: url(../images/cloud.png) center top no-repeat;
 }
 
 
@@ -53,7 +53,7 @@ margin: 0;
 
 
 .header h1 a{
-background: url(/site_media/images/logo.png) 0 10px no-repeat;
+background: url(../images/logo.png) 0 10px no-repeat;
 margin: 0;
 overflow: hidden;
 padding: 64px 0 0;
@@ -64,7 +64,7 @@ display: block;
 
 
 .header h1 a:hover{
-background: url(/site_media/images/logo.png) 0 -59px no-repeat;
+background: url(../images/logo.png) 0 -59px no-repeat;
 }
 
 .header .nav{
@@ -89,13 +89,13 @@ float: right;
 
 .header .nav li.search a {
 border: none;
-background: url(/site_media/images/nav.png) right top no-repeat;
+background: url(../images/nav.png) right top no-repeat;
 }
 
 
 .header .nav li.search a:hover {
 border: none;
-background: url(/site_media/images/nav.png) right -45px no-repeat;
+background: url(../images/nav.png) right -45px no-repeat;
 }
 
 .header .nav li.search a span{
@@ -112,13 +112,13 @@ text-decoration: none;
 padding: 0px 0px;
 font-weight: bold;
 padding: 1px 0 3px;
-background: url(/site_media/images/nav.png) center top no-repeat;
+background: url(../images/nav.png) center top no-repeat;
 }
 
 
 
 .header .nav li a:hover{
-background: url(/site_media/images/nav.png) center -45px no-repeat;
+background: url(../images/nav.png) center -45px no-repeat;
 }
 
 
@@ -133,12 +133,12 @@ padding: 0 22px;
 
 
 .header .nav li.first a{
-background: url(/site_media/images/nav.png) left top no-repeat;
+background: url(../images/nav.png) left top no-repeat;
 }
 
 
 .header .nav li.first a:hover{
-background: url(/site_media/images/nav.png) left -45px no-repeat;
+background: url(../images/nav.png) left -45px no-repeat;
 }
 
 
@@ -197,7 +197,7 @@ line-height: 1.8em;
 }
 
 .begin{
-background: url(/site_media/images/begin.png) left top no-repeat;
+background: url(../images/begin.png) left top no-repeat;
 width: 133px;
 height: 42px;
 display: block;
@@ -214,13 +214,13 @@ color: #fff;
 }
 
 .begin:hover{
-background: url(/site_media/images/begin.png) left -45px no-repeat;
+background: url(../images/begin.png) left -45px no-repeat;
 cursor: pointer;
 }
 
 
 .begin:active{
-background: url(/site_media/images/begin.png) left -90px no-repeat;
+background: url(../images/begin.png) left -90px no-repeat;
 }
 
 
@@ -230,7 +230,7 @@ border: none;
 padding: 9px;
 font-size: 20px;
 width: 466px;
-background: url(/site_media/images/form.png) left top no-repeat;
+background: url(../images/form.png) left top no-repeat;
 }
 
 .right_column{
@@ -247,7 +247,7 @@ float: left;
 padding: 0;
 margin: 0;
 height: 100px;
-background: url(/site_media/images/numbers.png) left top no-repeat;
+background: url(../images/numbers.png) left top no-repeat;
 font-size: 20px;
 }
 
