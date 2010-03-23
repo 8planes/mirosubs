@@ -22,7 +22,7 @@ def dev():
     env.production = False
 
 def prod():
-    env.hosts = ['pcf10.pculture.org']
+    env.hosts = ['pcf10.pculture.org:2191']
     env.user = 'adam'
     env.production = True
 
