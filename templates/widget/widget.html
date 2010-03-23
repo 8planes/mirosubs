@@ -29,21 +29,22 @@
       <a href="#" id="{{uuid}}_login">Login</a>
     </div>
     <span class="mirosubs-subtitleMe" id="{{uuid}}_menu">
-      {% ifequal show_tab 0 %}
-      <a href="#" class="mirosubs-subtitleMeLink" 
-         id="{{uuid}}_tabSubtitleMe">subtitle me!</a> 
-      {% endifequal %}
-      {% ifequal show_tab 1 %}
-      <a href="#" class="mirosubs-subtitleMeLink" 
-         id="{{uuid}}_tabContinue">continue subtitling</a>
-      {% endifequal %}
       {% ifequal show_tab 2 %}
-      <span>subtitling in progress/{{owned_by}}</span>
+        <span>subtitling in progress/{{owned_by}}</span>
+      {% else %}
+        <a href="#" class="mirosubs-subtitleMeLink"
+           id="{{uuid}}_tabMainMenu">
+          {% ifequal show_tab 0 %}
+            Subtitle Me!
+          {% endifequal %}
+          {% ifequal show_tab 1 %}
+            Continue Subtitling
+          {% endifequal %}
+          {% ifequal show_tab 3 %}
+            Choose Language...
+          {% endifequal %}
+        </a>
       {% endifequal %}
-      <a href="#" 
-         class="mirosubs-subtitleMeLink"
-         {% ifnotequal show_tab 3 %}style="display: none"{% endifnotequal %} 
-         id="{{uuid}}_tabSelectLanguage">Language</a>
       <img src="http://{{site.domain}}/site_media/images/spinner.gif" 
            id="{{uuid}}_loading" 
            alt="loading" style="display: none"/>

@@ -77,8 +77,10 @@ mirosubs.subtitle.TranscribeEntry.prototype.startRepeatVideoTimer_ = function() 
  */
 mirosubs.subtitle.TranscribeEntry.prototype.setRepeatVideoMode = function(mode) {
     this.repeatVideoMode_ = mode;
-    if (!mode)
+    if (!mode) {
+        this.firstKeyStrokeTime_ = -1;
         this.stopAndDisposeRepeatTimer_();
+    }
     else if (this.firstKeyStrokeTime_ != -1)
         this.startRepeatVideoTimer_();
 };
