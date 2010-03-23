@@ -1,10 +1,42 @@
 {% extends "base.html" %}
 {% block main_content %}
-To enable collaborative subtitles, enter the URL to any Ogg video:
-<form action="{% url videos:create %}" method="POST">
+
+
+
+
+<form action="{% url videos:create %}" method="POST" class="main_video_form">
+
+	<h2 class="main_heading">Subtitle a Video</h2>
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
-  <input type="text" name="video_url" />
-  <input type="submit" value="Get started" />
+  <input type="text" name="video_url" class="main_video_form_field" />
+  <button type="submit" value="Begin" class="begin">Begin</button>
 </form>
+
+
+
+<div class="right_column">
 <h2>Recent Activity</h2>
+
+</div>
+
+
+
+<div class="left_column">
+<h2>Watch How it Works</h2>
+
+<img src="/site_media/images/vid.png" />
+
+
+<h2>Easy Subtitling in 3 Easy Steps</h2>
+
+<ol>
+	<li class="one">Watch <span>and type all<br />that you hear</span></li>
+	<li class="two">Sync <span>your titles to the<br />right moment</span></li>	
+	<li class="three">Review <span>and Save your<br />transcription</span></li>
+</ol>
+
+
+
+</div>
+
 {% endblock %}
