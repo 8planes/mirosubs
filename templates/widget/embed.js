@@ -3,12 +3,16 @@
     var innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';
     var innerWidgetHTML = '{% escapejs %}{% include "widget/widget.html" %}{% endescapejs %}';
 
-
+{% if element_id %}
+    var containingElement = document.getElementById('{{ element_id }}');
+    containingElement.innerHTML =
+        ['<style>', innerStyle, '</style>', innerWidgetHTML].join('');
+{% else %}
     document.write('<style type="text/css" media="screen">');
     document.write(innerStyle);
     document.write('</style>');
-
     document.write(innerWidgetHTML);
+{% endif %}
 
     var scripts = [
     {% for dep in js_dependencies %}

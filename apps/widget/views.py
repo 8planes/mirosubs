@@ -45,8 +45,14 @@ def embed(request):
             video.save()
     null_widget = 'null' in request.GET
     debug_js = 'debug_js' in request.GET
+    if 'element_id' in request.GET:
+        element_id = request.GET['element_id']
+    else:
+        element_id = None
     return render_to_response('widget/embed.js', 
-                              widget.js_context(request, video, null_widget, debug_js),
+                              widget.js_context(request, video, 
+                                                null_widget, element_id, 
+                                                debug_js),
                               mimetype="text/javascript",
                               context_instance = RequestContext(request))
 
