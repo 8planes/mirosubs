@@ -1,5 +1,4 @@
 goog.provide('mirosubs.ControlTabPanel');
-goog.provide('mirosubs.ControlTabPanel.EventType');
 
 mirosubs.ControlTabPanel = function(uuid, showTab, videoID, 
                                     translationLanguages, nullWidget) {
