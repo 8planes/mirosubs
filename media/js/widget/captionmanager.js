@@ -37,6 +37,7 @@ mirosubs.CaptionManager = function(playheadFn) {
     this.timerInterval_ = window.setInterval(function() { that.timerTick_(); }, 100);
     this.currentCaptionIndex_ = -1;
     this.lastCaptionDispatched_ = null;
+    this.eventsDisabled_ = false;
 };
 goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 
@@ -115,8 +116,11 @@ mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ = function(pla
 mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
     if (caption == this.lastCaptionDispatched_)
         return;
+    if (this.eventsDisabled_)
+        return;
     this.lastCaptionDispatched_ = caption;
-    var event = new goog.events.Event(mirosubs.CaptionManager.EventType.CAPTION, this);
+    var event = new goog.events.Event(
+        mirosubs.CaptionManager.EventType.CAPTION, this);
     event.caption = caption;
     this.dispatchEvent(event);
 };
@@ -124,4 +128,8 @@ mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
 mirosubs.CaptionManager.prototype.disposeInternal = function() {
     mirosubs.CaptionManager.superClass_.disposeInternal.call(this);
     window.clearInterval(this.timerInterval_);
+};
+
+mirosubs.CaptionManager.prototype.disableCaptionEvents = function(disabled) {
+    this.eventsDisabled_ = disabled;
 };

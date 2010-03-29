@@ -110,6 +110,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
         if (this.videoPlayer_.isPlaying()) {
             if (this.spaceDown_)
                 return;
+            this.captionManager_.disableCaptionEvents(true);
             this.spaceDown_ = true;
             this.videoStarted_ = true;
             this.spaceDownPlayheadTime_ = 
@@ -126,6 +127,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
 mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE && 
         this.spaceDown_) {
+            this.captionManager_.disableCaptionEvents(false);        
         this.spaceDown_ = false;
         event.preventDefault();
         var playheadTime = this.videoPlayer_.getPlayheadTime();
@@ -198,8 +200,6 @@ mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
-    if (this.spaceDown_)
-        return; // don't progress displayed subtitle so long as the spacebar is pressed.
     var jsonCaption = jsonCaptionEvent.caption;
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)
