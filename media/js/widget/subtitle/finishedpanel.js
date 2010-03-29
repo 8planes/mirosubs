@@ -52,8 +52,12 @@ mirosubs.subtitle.FinishedPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.FinishedPanel.superClass_.enterDocument.call(this);
     var that = this;
     this.getHandler().listen(this.embedCodeInput,
-                             goog.events.EventType.FOCUS,
-                             function(event) {
-                                 that.embedCodeInput.select()
-                             });
+                             ['focus', 'click'],
+                             this.focusEmbed);
+};
+mirosubs.subtitle.FinishedPanel.prototype.focusEmbed = function() {
+    var that = this;
+    goog.Timer.callOnce(function() {
+        that.embedCodeInput.select();
+    });
 };
