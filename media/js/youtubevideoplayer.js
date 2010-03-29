@@ -21,7 +21,7 @@ goog.provide('mirosubs.YoutubeVideoPlayer');
 mirosubs.YoutubeVideoPlayer = function(uuid, divID, youtubeVideoID) {
     mirosubs.AbstractVideoPlayer.call(this);
     this.playerElemID = uuid + "_ytplayer";
-    this.playerAPIID = [uuid, '_', '' + new Date().getTime()].join('');
+    this.playerAPIID = [uuid, '' + new Date().getTime()].join('');
     this.eventFunction_ = ['event', uuid].join('');
 
     var readyFunc = goog.bind(this.onYouTubePlayerReady_, this);
