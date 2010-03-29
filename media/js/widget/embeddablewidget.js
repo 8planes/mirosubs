@@ -83,6 +83,8 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
         baseURL + '/site_media/images/spinner.gif';
     mirosubs.Rpc.BASE_URL = baseURL + '/widget/rpc/';
     mirosubs.BASE_LOGIN_URL = baseURL + '/widget/';
+    mirosubs.Clippy.SWF_URL = 
+        [baseURL, '/site_media/swf/clippy.swf'].join('');
     mirosubs.subtitle.MSServerModel.EMBED_JS_URL = baseURL + '/embed_widget.js';
     mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
         identifier["writelock_expiration"];

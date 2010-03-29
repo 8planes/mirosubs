@@ -29,7 +29,12 @@ mirosubs.subtitle.FinishedPanel = function(serverModel) {
 goog.inherits(mirosubs.subtitle.FinishedPanel, goog.ui.Component);
 mirosubs.subtitle.FinishedPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var embedCodeInput = $d('input', {'type':'text'});
+    this.embedCodeInput = $d('input', {'type':'text'});
+    var embedCode = ['<sc', 'ript type="text/javascript" src="',
+                     this.serverModel_.getEmbedCode(),
+                     '"></script>'].join('');
+    this.embedCodeInput['value'] = embedCode;
+    var flashSpan;
     var helpLi = $d('li', null, 
                     $d('p', null, 
                        ['Thanks for submitting. Now anyone else who views ',
@@ -37,8 +42,18 @@ mirosubs.subtitle.FinishedPanel.prototype.createDom = function() {
                     $d('p', null, 
                        ['To share it with others, or post on your site, ',
                         'use this embed code'].join('')),
-                    embedCodeInput);
-    embedCodeInput['value'] = this.serverModel_.getEmbedCode();
+                    this.embedCodeInput,
+                    flashSpan = $d('span'));
+    flashSpan.innerHTML = mirosubs.Clippy.getHTML(embedCode);
     this.setElementInternal($d('ul', {'className':'mirosubs-titlesList'},
                                helpLi));
+};
+mirosubs.subtitle.FinishedPanel.prototype.enterDocument = function() {
+    mirosubs.subtitle.FinishedPanel.superClass_.enterDocument.call(this);
+    var that = this;
+    this.getHandler().listen(this.embedCodeInput,
+                             goog.events.EventType.FOCUS,
+                             function(event) {
+                                 that.embedCodeInput.select()
+                             });
 };

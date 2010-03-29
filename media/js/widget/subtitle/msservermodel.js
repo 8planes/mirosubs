@@ -158,8 +158,8 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {
-    return mirosubs.subtitle.MSServerModel.EMBED_JS_URL + 
-        "?video_id=" + this.videoID_;
+    return [mirosubs.subtitle.MSServerModel.EMBED_JS_URL, 
+            "?video_id=", this.videoID_].join('');
 };
 
 mirosubs.subtitle.MSServerModel.prototype.stopTimer_ = function() {
