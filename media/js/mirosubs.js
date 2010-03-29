@@ -70,11 +70,11 @@ mirosubs.loginClicked_ = function(event, finishFn) {
     var popupParams = 'location=0,status=0,width=800,height=400';
     var urlSuffix;
     if (event.target == this.loginButton_)
-        urlSuffix = "login/?next=/widget/close_window/";
+        urlSuffix = "/widget/login/?next=/widget/close_window/";
     else if (event.target == this.twitterLoginButton_)
-        urlSuffix = "twitter_login/";
+        urlSuffix = "/widget/twitter_login/";
     else
-        urlSuffix = "openid_login/";
+        urlSuffix = "/socialauth/openid/?next=/widget/close_window/";
     var loginWin = window.open(mirosubs.BASE_LOGIN_URL + urlSuffix,
                                "loginWindow",
                                popupParams);
