@@ -68,10 +68,14 @@ def embed(request):
         element_id = request.GET['element_id']
     else:
         element_id = None
+    if 'autoplay' in request.GET:
+        autoplay = request.GET['autoplay']
+    else:
+        autoplay = None
     return render_to_response('widget/embed.js', 
                               widget.js_context(request, video, 
                                                 null_widget, element_id, 
-                                                debug_js),
+                                                debug_js, autoplay),
                               mimetype="text/javascript",
                               context_instance = RequestContext(request))
 
@@ -82,7 +86,7 @@ def srt(request):
         response_text = captions_and_translations_to_srt(
             video.captions_and_translations(lang_code))
     else:
-        resonse_text = captions_to_srt(
+        response_text = captions_to_srt(
             list(video.captions().videocaption_set.all()))
     response = HttpResponse(response_text, mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=subs.srt'
@@ -347,14 +351,12 @@ def logout(request):
 
 def fetch_captions(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
-    last_version = video.captions()
-    captions = list(last_version.videocaption_set.all())
+    captions = list(video.captions().videocaption_set.all())
     return [caption.to_json_dict() for caption in captions]
 
 def fetch_captions_null(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
-    null_captions = video.null_captions(request.user)
-    captions = list(null_captions.videocaption_set.all())
+    captions = list(video.null_captions(request.user).videocaption_set.all())
     return [caption.to_json_dict() for caption in captions]
 
 def fetch_translations(request, video_id, language_code):

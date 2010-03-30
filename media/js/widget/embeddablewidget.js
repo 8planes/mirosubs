@@ -20,7 +20,8 @@ goog.provide('mirosubs.EmbeddableWidget');
 
 mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, 
                                      translationLanguages, 
-                                     showTab, nullWidget) {
+                                     showTab, nullWidget, 
+                                     autoplay_params) {
     goog.Disposable.call(this);
 
     this.videoID_ = videoID;
@@ -49,6 +50,9 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID,
     this.handler_.listen(this.controlTabPanel_,
                          mirosubs.MainMenu.EventType.ADD_NEW_LANGUAGE,
                          this.addNewLanguage_);
+    if (autoplay_params != null)
+        this.subsLoaded_(autoplay_params['language_code'],
+                         autoplay_params['subtitles']);
 };
 goog.inherits(mirosubs.EmbeddableWidget, goog.Disposable);
 
@@ -71,7 +75,8 @@ mirosubs.EmbeddableWidget.wrap = function(identifier) {
                                       identifier["youtube_videoid"],
                                       identifier["translation_languages"],
                                       identifier["show_tab"],
-                                      nullWidget));
+                                      nullWidget,
+                                      identifier["autoplay_params"]));
 };
 
 mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
@@ -127,14 +132,7 @@ mirosubs.EmbeddableWidget.prototype.translationSelected_ = function(languageCode
     mirosubs.Rpc.call('fetch_translations' + (this.nullWidget_ ? '_null' : ''),
                       { 'video_id' : this.videoID_,
                         'language_code' : languageCode },
-                      function(captions) {
-                          that.controlTabPanel_.showLoading(false);
-                          that.captionPanel_.languageSelected(
-                              languageCode, captions);
-                          var mainMenu = that.controlTabPanel_.getMainMenu();
-                          mainMenu.setCurrentLangCode(languageCode);
-                          mainMenu.showDownloadSRT(true);
-                      });
+                      goog.bind(this.subsLoaded_, this, languageCode));
 };
 
 mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
@@ -142,14 +140,15 @@ mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
     var that = this;
     mirosubs.Rpc.call('fetch_captions' + (this.nullWidget_ ? '_null' : ''),
                       { 'video_id' : this.videoID_ },
-                      function(captions) {
-                          that.controlTabPanel_.showLoading(false);
-                          that.captionPanel_.languageSelected(
-                              null, captions);
-                          var mainMenu = that.controlTabPanel_.getMainMenu();
-                          mainMenu.setCurrentLangCode(null);
-                          mainMenu.showDownloadSRT(true);
-                      });
+                      goog.bind(this.subsLoaded_, this, null));
+};
+
+mirosubs.EmbeddableWidget.prototype.subsLoaded_ = function(languageCode, subtitles) {
+    this.controlTabPanel_.showLoading(false);
+    this.captionPanel_.languageSelected(languageCode, subtitles);
+    var mainMenu = this.controlTabPanel_.getMainMenu();
+    mainMenu.setCurrentLangCode(languageCode);
+    mainMenu.showDownloadSRT(true);    
 };
 
 mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {

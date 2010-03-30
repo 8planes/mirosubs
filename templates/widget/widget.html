@@ -41,7 +41,11 @@
             Continue Subtitling
           {% endifequal %}
           {% ifequal show_tab 3 %}
-            Choose Language...
+            {% if autoplay_menutext %}
+              {{ autoplay_menutext }}
+            {% else %}
+              Choose Language...
+            {% endif %}
           {% endifequal %}
         </a>
       {% endifequal %}
