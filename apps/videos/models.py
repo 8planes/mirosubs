@@ -68,12 +68,69 @@ class Video(models.Model):
         else:
             return CAPTIONS_IN_PROGRESS
 
-    def translation(self, language_code):
+    def captions(self):
+        """Returns latest VideoCaptionVersion, or None if no captions"""
+        version_list = list(self.videocaptionversion_set.all())
+        if len(version_list) == 0:
+            return None
+        else:
+            return max(version_list, key=lambda v: v.version_no)
+
+    def null_captions(self, user):
+        captions = list(self.nullvideocaptions_set.all().filter(
+                user__id__exact=user.id))
+        return None if len(captions) == 0 else captions[0]
+
+    def translation_language(self, language_code):
+        """Returns a TranslationLanguage, or None if none found"""
         translations = list(self.translationlanguage_set.all().filter(
             language__exact=language_code))
         return None if len(translations) == 0 else translations[0]
 
-    @property
+    def captions_and_translations(self, language_code):
+        """
+        Returns (VideoCaption, Translation) tuple list, where the 
+        Translation in each tuple might be None if there's no trans 
+        for the caption
+        """
+        return self.make_captions_and_translations(
+            self.captions(), self.translations(language_code))
+
+    def null_captions_and_translations(self, user, language_code):
+        """
+        Returns (VideoCaption, Translation) tuple list, where the 
+        Translation in each tuple might be None if there's no trans 
+        for the caption
+        """
+        return self.make_captions_and_translations(
+            self.null_captions(user), 
+            self.null_translations(user, language_code))
+
+    def make_captions_and_translations(self, subtitle_set, translation_set):
+        # FIXME: this should be private and static 
+        # (no need for ref to self)
+        subtitles = list(subtitle_set.videocaption_set.all())
+        translations = list(translation_set.translation_set.all())
+        translations_dict = dict([(trans.caption_id, trans) for
+                                  trans in translations])
+        return [(subtitle,
+                 None if subtitle.caption_id not in translations_dict
+                 else translations_dict[subtitle.caption_id])
+                for subtitle in subtitles]
+
+    def translations(self, language_code):
+        """Returns latest TranslationVersion, or None if none found"""
+        trans_lang = self.translation_language(language_code)
+        if trans_lang is None:
+            return None
+        return trans_lang.translations()
+
+    def null_translations(self, user, language_code):
+        translations = list(self.nulltranslations_set.all().filter(
+                user__id__exact=user.id).filter(
+                language__exact=language_code))
+        return None if len(translations) == 0 else translations[0]
+
     def translation_language_codes(self):
         return set([trans.language for trans 
                     in list(self.translationlanguage_set.all())])
@@ -82,11 +139,8 @@ class Video(models.Model):
         null_translations = list(
             self.nulltranslations_set.all().filter(
                 user__id__exact=user.id))
-        if len(null_translations) == 0:
-            return set([])
-        else:
-            return set([trans.language for trans
-                        in null_translations])
+        return set([trans.language for trans
+                    in null_translations])
 
     @property
     def writelock_owner_name(self):
@@ -119,24 +173,6 @@ class Video(models.Model):
         self.writelock_owner = None
         self.writelock_session_key = ''
         self.writelock_time = None
-
-    def last_video_caption_version(self):
-        version_list = list(self.videocaptionversion_set.all())
-        if len(version_list) == 0:
-            return None
-        else:
-            return max(version_list, key=lambda v: v.version_no)
-
-    def null_captions(self, user):
-        captions = list(self.nullvideocaptions_set.all().filter(
-                user__id__exact=user.id))
-        return None if len(captions) == 0 else captions[0]
-
-    def null_translations(self, user, language_code):
-        translations = list(self.nulltranslations_set.all().filter(
-                user__id__exact=user.id).filter(
-                language__exact=language_code))
-        return None if len(translations) == 0 else translations[0]
 
 
 def create_video_id(sender, instance, **kwargs):
@@ -209,7 +245,8 @@ class TranslationLanguage(models.Model):
         self.writelock_session_key = ''
         self.writelock_time = None
 
-    def last_translation_version(self):
+    def translations(self):
+        """Returns latest TranslationVersion, or None if none found"""
         version_list = list(self.translationversion_set.all())
         if len(version_list) == 0:
             return None
@@ -249,7 +286,9 @@ class VideoCaption(models.Model):
     null_captions = models.ForeignKey(NullVideoCaptions, null=True)
     caption_id = models.IntegerField()
     caption_text = models.CharField(max_length=1024)
+    # in seconds
     start_time = models.FloatField()
+    # in seconds
     end_time = models.FloatField()
 
     def duplicate_for(self, new_version):

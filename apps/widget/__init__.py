@@ -54,7 +54,7 @@ def js_context(request, video, null_widget, element_id=None, debug_js=False):
         else:
             params['show_tab'] = 3
     else:
-        translation_language_codes = video.translation_language_codes
+        translation_language_codes = video.translation_language_codes()
         if video.caption_state == video_models.NO_CAPTIONS:
             params['show_tab'] = 0
         elif video.caption_state == video_models.CAPTIONS_IN_PROGRESS:
