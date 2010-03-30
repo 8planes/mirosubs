@@ -29,6 +29,10 @@ begin
     @js_query_string = "#{@js_query_string}&debug_js"
   end
 
+  if (@params['autoplay'].length > 0)
+    @js_query_string = "#{@js_query_string}&autoplay=#{@params['autoplay'][0]}"
+  end
+
   @logger.info "called for #{@js_query_string}"
 
   cgi = CGI.new('html4')
