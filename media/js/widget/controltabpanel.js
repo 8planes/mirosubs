@@ -31,7 +31,7 @@ mirosubs.ControlTabPanel = function(uuid, showTab, videoID,
     if (showTab == 0 || showTab == 1 || showTab == 3) {
         this.mainMenuLink_ = $(uuid + "_tabMainMenu");
         this.popupMenu_ = new mirosubs.MainMenu(
-            showTab == 3, translationLanguages);
+            videoID, nullWidget, showTab == 3, translationLanguages);
         this.popupMenu_.render(document.body);
         this.popupMenu_.attach(this.mainMenuLink_,
                                goog.positioning.Corner.BOTTOM_LEFT,
@@ -82,6 +82,13 @@ mirosubs.ControlTabPanel.prototype.menuEvent_ = function(event) {
 
 mirosubs.ControlTabPanel.prototype.setMainMenuLinkText_ = function(text) {
     goog.dom.setTextContent(this.mainMenuLink_, text);
+};
+
+/**
+ * @return {mirosubs.MainMenu}
+ */
+mirosubs.ControlTabPanel.prototype.getMainMenu = function() {
+    return this.popupMenu_;
 };
 
 mirosubs.ControlTabPanel.prototype.setVisible = function(visible) {

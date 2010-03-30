@@ -25,14 +25,19 @@ goog.provide('mirosubs.MainMenu');
  *     json translation languages, where each language
  *     has a code and name.
  */
-mirosubs.MainMenu = function(isSubtitled, opt_translationLanguages) {
+mirosubs.MainMenu = function(videoID, nullWidget, 
+                             isSubtitled, opt_translationLanguages) {
     goog.ui.PopupMenu.call(this);
     // FIXME: is there a better way to do this rather than setting globals?
     goog.ui.MenuRenderer.CSS_CLASS = 'mirosubs-langmenu';
     goog.ui.MenuItemRenderer.CSS_CLASS = goog.getCssName('mirosubs-langmenuitem');
     goog.ui.MenuSeparatorRenderer.CSS_CLASS = goog.getCssName('mirosubs-langmenusep');
+    this.videoID_ = videoID;
+    this.nullWidget_ = nullWidget;
     this.isSubtitled_ = isSubtitled;
     this.translationLanguages_ = opt_translationLanguages || [];
+    this.currentLangCode_ = null;
+    this.showDownloadSRT_ = false;
     this.setToggleMode(true);
 };
 goog.inherits(mirosubs.MainMenu, goog.ui.PopupMenu);
@@ -49,6 +54,17 @@ mirosubs.MainMenu.EventType = {
     ADD_SUBTITLES: 'addsubs',
     LANGUAGE_SELECTED: 'langselected',
     ADD_NEW_LANGUAGE: 'newlanguage'
+};
+/**
+ * Sets current language code -- used to add SRT download link to menu.
+ * @param {?langCode} The current language code selected, or null to indicate
+ *     original language.
+ */
+mirosubs.MainMenu.prototype.setCurrentLangCode = function(langCode) {
+    this.currentLangCode_ = langCode;
+};
+mirosubs.MainMenu.prototype.showDownloadSRT = function(show) {
+    this.showDownloadSRT_ = show;
 };
 mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
     var selectedValue = event.target.getModel();
@@ -121,8 +137,27 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
     this.addChild(new goog.ui.MenuSeparator(), true);
     this.addChild(new goog.ui.MenuItem('Share this',
                                        mv.SHARETHIS), true);
+    if (this.showDownloadSRT_) {
+        this.addChild(new goog.ui.MenuSeparator(), true);
+        this.addChild(this.createDownloadSRTLink_(), true);
+    }
 };
-
+mirosubs.MainMenu.prototype.createDownloadSRTLink_ = function() {
+    var url = [mirosubs.BASE_URL,
+               "/widget/download_", 
+               (this.nullWidget_ ? "null_" : ""),
+               "srt/?video_id=",
+               '' + this.videoID_].join('');
+    if (this.currentLangCode_)
+        url += ['&lang_code=', this.currentLangCode_].join('')
+    var $d = goog.bind(this.getDomHelper().createDom, 
+                       this.getDomHelper());
+    var menuItem = new goog.ui.MenuItem(
+        $d('a', {'href':url}, 'Download SRT'));
+    menuItem.setSelectable(false);
+    menuItem.setEnabled(false);
+    return menuItem;
+};
 mirosubs.MainMenu.LanguageSelectedEvent = function(opt_languageCode) {
     this.type = mirosubs.MainMenu.EventType.LANGUAGE_SELECTED;
     /**

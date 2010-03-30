@@ -18,7 +18,11 @@
 
 goog.provide('mirosubs');
 
-mirosubs.BASE_LOGIN_URL = "";
+/**
+ * This ends up getting set when widget first loads. It contains the url 
+ * for ms server, without trailing slash.
+ */
+mirosubs.BASE_URL = "";
 
 /**
  *
@@ -75,7 +79,7 @@ mirosubs.loginClicked_ = function(event, finishFn) {
         urlSuffix = "/widget/twitter_login/";
     else
         urlSuffix = "/socialauth/openid/?next=/widget/close_window/";
-    var loginWin = window.open(mirosubs.BASE_LOGIN_URL + urlSuffix,
+    var loginWin = window.open(mirosubs.BASE_URL + urlSuffix,
                                "loginWindow",
                                popupParams);
     var timer = {};

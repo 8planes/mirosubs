@@ -20,11 +20,13 @@
 Functionality for generating srt files.
 """
 
+import StringIO
+
 def captions_and_translations_to_srt(captions_and_translations):
     # TODO: note this loads the entire string into memory, which will not 
     # scale beautifully. In future, possibly stream directly to response.
     output = StringIO.StringIO()
-    for i in len(captions_and_translations):
+    for i in range(len(captions_and_translations)):
         translation_to_srt(captions_and_translations[i][1],
                            captions_and_translations[i][0],
                            i, output)
@@ -36,7 +38,7 @@ def captions_to_srt(subtitles):
     # TODO: note this loads the entire string into memory, which will not 
     # scale beautifully. In future, possibly stream directly to response.
     output = StringIO.StringIO()
-    for i in len(subtitles):
+    for i in range(len(subtitles)):
         subtitle_to_srt(subtitles[i], i, output)
     srt = output.getvalue()
     output.close()

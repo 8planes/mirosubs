@@ -82,7 +82,7 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
     mirosubs.subtitle.MainPanel.SPINNER_GIF_URL = 
         baseURL + '/site_media/images/spinner.gif';
     mirosubs.Rpc.BASE_URL = baseURL + '/widget/rpc/';
-    mirosubs.BASE_LOGIN_URL = baseURL;
+    mirosubs.BASE_URL = baseURL;
     mirosubs.Clippy.SWF_URL = 
         [baseURL, '/site_media/swf/clippy.swf'].join('');
     mirosubs.subtitle.MSServerModel.EMBED_JS_URL = baseURL + '/embed_widget.js';
@@ -131,6 +131,9 @@ mirosubs.EmbeddableWidget.prototype.translationSelected_ = function(languageCode
                           that.controlTabPanel_.showLoading(false);
                           that.captionPanel_.languageSelected(
                               languageCode, captions);
+                          var mainMenu = that.controlTabPanel_.getMainMenu();
+                          mainMenu.setCurrentLangCode(languageCode);
+                          mainMenu.showDownloadSRT(true);
                       });
 };
 
@@ -142,7 +145,10 @@ mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
                       function(captions) {
                           that.controlTabPanel_.showLoading(false);
                           that.captionPanel_.languageSelected(
-                              null, captions);                                
+                              null, captions);
+                          var mainMenu = that.controlTabPanel_.getMainMenu();
+                          mainMenu.setCurrentLangCode(null);
+                          mainMenu.showDownloadSRT(true);
                       });
 };
 

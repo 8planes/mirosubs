@@ -30,6 +30,7 @@ from django.http import HttpResponseRedirect
 from videos import models
 from videos.models import VIDEO_SESSION_KEY
 from datetime import datetime
+from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt
 import simplejson as json
 import views
 import widget
@@ -75,7 +76,7 @@ def embed(request):
                               context_instance = RequestContext(request))
 
 def srt(request):
-    video_id = int(request.GET['video_id'])
+    video = models.Video.objects.get(video_id=request.GET['video_id'])
     if 'lang_code' in request.GET:
         lang_code = request.GET['lang_code']
         response_text = captions_and_translations_to_srt(
@@ -89,14 +90,14 @@ def srt(request):
 
 def null_srt(request):
     # FIXME: possibly note duplication with srt, and fix that.
-    video_id = int(request.GET['video_id'])
+    video = models.Video.objects.get(video_id=request.GET['video_id'])
     if 'lang_code' in request.GET:
         lang_code = request.GET['lang_code']
         response_text = captions_and_translations_to_srt(
             video.null_captions_and_translations(request.user, lang_code))
     else:
         response_text = captions_to_srt(
-            list(video.null_captions(request.user)))
+            list(video.null_captions(request.user).videocaption_set.all()))
     response = HttpResponse(response_text, mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=subs.srt'
     return response
