@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
-    print 'redirect_to: ' + redirect_to
     return render_to_response("auth/login.html", {
         'creation_form': UserCreationForm(),
         'login_form': AuthenticationForm(),
@@ -16,7 +15,6 @@ def login(request):
 
 def create_user(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
-    print 'redirect_to: ' + redirect_to
     form = UserCreationForm(request.POST)
     if form.is_valid():
         # Light security check -- make sure redirect_to isn't garbage.
@@ -37,7 +35,6 @@ def create_user(request):
 
 def login_post(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
-    print 'redirect_to: ' + redirect_to
     form = AuthenticationForm(data=request.POST)
     if form.is_valid():
         # Light security check -- make sure redirect_to isn't garbage.
