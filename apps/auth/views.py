@@ -29,13 +29,6 @@ def login(request):
     return render_login(request, UserCreationForm(), 
                         AuthenticationForm(), redirect_to)
 
-def make_redirect_to(request):
-    redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
-    if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
-        return '/'
-    else:
-        return redirect_to
-
 def create_user(request):
     redirect_to = make_redirect_to(request)
     form = UserCreationForm(request.POST)
@@ -69,3 +62,9 @@ def render_login(request, user_creation_form, login_form, redirect_to):
             REDIRECT_FIELD_NAME: redirect_to,
             }, context_instance=RequestContext(request))
         
+def make_redirect_to(request):
+    redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
+    if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
+        return '/'
+    else:
+        return redirect_to
