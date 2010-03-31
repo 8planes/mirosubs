@@ -111,7 +111,7 @@ mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ =
         var currentTime = new Date().getTime();
         if (opt_forceLogin || 
             currentTime >= this.lastLoginPesterTime_ + this.loginPesterFreq_) {
-            if (mirosubs.isLoginDialogShowing())
+            if (mirosubs.isLoginAttemptInProgress())
                 return;
             this.lastLoginPesterTime_ = currentTime;
             if (opt_forceLogin) {

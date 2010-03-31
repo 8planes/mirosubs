@@ -81,7 +81,7 @@ mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
     else if (selectedValue == mv.LOGIN)
         mirosubs.login();
     else if (selectedValue == mv.CREATE_ACCOUNT)
-        alert('not yet implemented');
+        mirosubs.createAccount();
     else if (selectedValue == mv.LOGOUT)
         mirosubs.logout();
     else if (selectedValue == mv.SHARETHIS)

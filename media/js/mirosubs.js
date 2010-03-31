@@ -24,6 +24,13 @@ goog.provide('mirosubs');
  */
 mirosubs.BASE_URL = "";
 
+mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
+
+/**
+ * @type {boolean}
+ */
+mirosubs.loginAttemptInProgress_ = false;
+
 /**
  *
  * @param finishFn {Function} Called if logged in successfully.
@@ -43,24 +50,32 @@ mirosubs.login = function(finishFn) {
                              new goog.ui.Button("Twitter Login"), true);
     buttonContainer.addChild(mirosubs.openidLoginButton_ = 
                              new goog.ui.Button("OpenID Login"), true);
-    goog.array.forEach([mirosubs.loginButton_, 
-                        mirosubs.twitterLoginButton_, 
-                        mirosubs.openidLoginButton_],
-                       function(button) {
-                           goog.events.listen(button,
-                                              goog.ui.Component.EventType.ACTION,
-                                              function(event) {
-                                                  mirosubs.loginClicked_(event, finishFn);
-                                              });
-                       });
+    goog.array.forEach(
+        [mirosubs.loginButton_, 
+         mirosubs.twitterLoginButton_, 
+         mirosubs.openidLoginButton_],
+        function(button) {
+            goog.events.listen(
+                button, goog.ui.Component.EventType.ACTION,
+                function(event) {
+                    mirosubs.loginClicked_(event, finishFn);
+                });
+        });
     mirosubs.loginDialog_.addChild(buttonContainer, true);
     mirosubs.loginDialog_.setButtonSet(null);
     mirosubs.loginDialog_.setTitle("Login or Sign Up");
     mirosubs.loginDialog_.setVisible(true);
 };
 
-mirosubs.isLoginDialogShowing = function() {
-    return (mirosubs.loginDialog_ != null && mirosubs.loginDialog_.isVisible());
+mirosubs.isLoginAttemptInProgress = function() {
+    return mirosubs.loginAttemptInProgress_ ||
+        (mirosubs.loginDialog_ != null && 
+         mirosubs.loginDialog_.isVisible());
+};
+
+mirosubs.createAccount = function() {
+    mirosubs.loginAttemptInProgress_ = true;
+    mirosubs.openLoginPopup_(mirosubs.NATIVE_LOGIN_URL_SUFFIX);
 };
 
 mirosubs.logout = function() {
@@ -71,24 +86,28 @@ mirosubs.logout = function() {
 };
 
 mirosubs.loginClicked_ = function(event, finishFn) {
-    var popupParams = 'location=0,status=0,width=800,height=400';
     var urlSuffix;
     if (event.target == this.loginButton_)
-        urlSuffix = "/auth/login/?next=/widget/close_window/";
+        urlSuffix = mirosubs.NATIVE_LOGIN_URL_SUFFIX;
     else if (event.target == this.twitterLoginButton_)
         urlSuffix = "/widget/twitter_login/";
     else
-        urlSuffix = "/socialauth/openid/?next=/widget/close_window/";
+        urlSuffix = "/socialauth/openid/?next=/widget/close_window/";    
+    mirosubs.openLoginPopup_(urlSuffix, finishFn);
+};
+
+mirosubs.openLoginPopup_ = function(urlSuffix, opt_finishFn) {
+    var popupParams = 'location=0,status=0,width=800,height=400';
     var loginWin = window.open(mirosubs.BASE_URL + urlSuffix,
                                "loginWindow",
                                popupParams);
     var timer = {};
     timer.interval = window.setInterval(function() {
-            if (loginWin.closed) {
-                window.clearInterval(timer.interval);
-                mirosubs.postPossiblyLoggedIn_(finishFn);
-            }
-        }, 1000);
+        if (loginWin.closed) {
+            window.clearInterval(timer.interval);
+            mirosubs.postPossiblyLoggedIn_(opt_finishFn);
+        }
+    }, 1000);
 };
 
 mirosubs.updateLoginState_ = function() {
@@ -96,17 +115,20 @@ mirosubs.updateLoginState_ = function() {
                        function(w) { w.updateLoginState(); });
 };
 
-mirosubs.postPossiblyLoggedIn_ = function(finishFn) {
+mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
     mirosubs.Rpc.call("getMyUserInfo", {}, function(result) {
+        if (mirosubs.loginDialog_ != null) {
             mirosubs.loginDialog_.setVisible(false);
             mirosubs.loginDialog_.dispose();
-            mirosubs.loginDialog_ = null;
-            if (result["logged_in"]) {
-                mirosubs.currentUsername = result["username"];
-                mirosubs.updateLoginState_();
-                if (finishFn != null)
-                    finishFn();
-            }
+        }
+        mirosubs.loginAttemptInProgress_ = false;
+        mirosubs.loginDialog_ = null;
+        if (result["logged_in"]) {
+            mirosubs.currentUsername = result["username"];
+            mirosubs.updateLoginState_();
+            if (opt_finishFn != null)
+                opt_finishFn();
+        }
         });
 };
 
