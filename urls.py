@@ -26,13 +26,12 @@ admin.autodiscover()
 
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     (r'^$', 'django.views.generic.simple.direct_to_template', 
      {'template': 'index.html'}),
-    url(r'^login/', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout', 
         kwargs={'next_page': '/'}),
-    (r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/password_reset/$', 
         'django.contrib.auth.views.password_reset', 
         name='password_reset'),
@@ -60,6 +59,8 @@ urlpatterns = patterns('',
                           app_name='videos')),
     (r'^profiles/', include('profiles.urls', namespace='profiles', 
                             app_name='profiles')),
+    (r'auth/', include('auth.urls', namespace='auth',
+                       app_name='auth'))
 )
 
 if settings.DEBUG:

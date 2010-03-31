@@ -35,8 +35,8 @@
 	      {% if request.user.is_authenticated %}
 	        <p>Logged in as {{ request.user }}. <a href="{% url logout %}">Logout</a></p>
 	      {% else %}
-	        <p><a href="{% url login %}">Login</a>
-	           <a href="{% url registration_register %}">Create account</a>
+	        <p><a href="{% url auth:login %}">Login</a>
+	           <a href="{% url auth:login %}">Create account</a>
 	        </p>
 	      {% endif %}
 	    </div>

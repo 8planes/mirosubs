@@ -38,7 +38,7 @@ mirosubs.login = function(finishFn) {
     mirosubs.loginDialog_ = new goog.ui.Dialog("mirosubs-modal-dialog", true);
     var buttonContainer = new goog.ui.Component();
     buttonContainer.addChild(mirosubs.loginButton_ = 
-                             new goog.ui.Button("Login"), true);
+                             new goog.ui.Button("Login/Create Account"), true);
     buttonContainer.addChild(mirosubs.twitterLoginButton_ = 
                              new goog.ui.Button("Twitter Login"), true);
     buttonContainer.addChild(mirosubs.openidLoginButton_ = 
@@ -74,7 +74,7 @@ mirosubs.loginClicked_ = function(event, finishFn) {
     var popupParams = 'location=0,status=0,width=800,height=400';
     var urlSuffix;
     if (event.target == this.loginButton_)
-        urlSuffix = "/widget/login/?next=/widget/close_window/";
+        urlSuffix = "/auth/login/?next=/widget/close_window/";
     else if (event.target == this.twitterLoginButton_)
         urlSuffix = "/widget/twitter_login/";
     else

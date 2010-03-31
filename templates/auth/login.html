@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block main_content %}
+<div style="width: 300px; float: left">
+  <form action="{% url auth:login_post %}" method="post">
+    {{ login_form.as_p }}
+    <input type="submit" value="login" class="button" />
+    <a href="{% url password_reset %}">Forgot password?</a>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+  <p>You can also login using
+    <a href="{% url socialauth_twitter_login %}"> twitter</a> or 
+    <a href="{% url socialauth_openid_login %}?next=/">openid</a>.
+  </p>
+</div>
+<div style="margin-left: 310px">
+  <form action="{% url auth:create_user %}" method="post">
+    {{ creation_form.as_p }}
+    <input type="submit" value="create account" class="button"/>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+</div>
+{% endblock %}

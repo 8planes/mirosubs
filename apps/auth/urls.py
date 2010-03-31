@@ -18,7 +18,9 @@
 
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('profiles.views',
-    url(r'^mine/$', 'my_profile', name='my_profile'),
-    url(r'^(?P<user_id>.+)/$', 'profile', name='profile'),
+urlpatterns = patterns(
+    'auth.views',
+    url(r'^login/$', 'login', name='login'),
+    url(r'^create_user/$', 'create_user', name='create_user'),
+    url(r'^login_post/$', 'login_post', name='login_post')
 )

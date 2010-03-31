@@ -145,10 +145,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django_extensions',
     'profiles',
-    'registration',
     'sorl.thumbnail',
     'videos',
     'widget',
+    'auth'
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
