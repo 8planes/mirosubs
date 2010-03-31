@@ -41,15 +41,15 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID,
     this.captionPanel_.decorate(goog.dom.$(uuid + "_captions"));
     this.handler_ = new goog.events.EventHandler(this);
 
-    this.handler_.listen(this.controlTabPanel_, 
-                         mirosubs.MainMenu.EventType.ADD_SUBTITLES,
-                         this.startSubtitling_);
-    this.handler_.listen(this.controlTabPanel_, 
-                         mirosubs.MainMenu.EventType.LANGUAGE_SELECTED,
-                         this.languageSelected_);
-    this.handler_.listen(this.controlTabPanel_,
-                         mirosubs.MainMenu.EventType.ADD_NEW_LANGUAGE,
-                         this.addNewLanguage_);
+    var et = mirosubs.MainMenu.EventType;
+    this.handler_.listen(
+        this.controlTabPanel_, et.ADD_SUBTITLES, this.startSubtitling_);
+    this.handler_.listen(
+        this.controlTabPanel_, et.LANGUAGE_SELECTED, this.languageSelected_);
+    this.handler_.listen(
+        this.controlTabPanel_, et.ADD_NEW_LANGUAGE, this.addNewLanguage_);
+    this.handler_.listen(
+        this.controlTabPanel_, et.TURN_OFF_SUBS, this.turnOffSubs_);
     if (autoplay_params != null)
         this.subsLoaded_(autoplay_params['language_code'],
                          autoplay_params['subtitles']);
@@ -143,12 +143,17 @@ mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
                       goog.bind(this.subsLoaded_, this, null));
 };
 
+mirosubs.EmbeddableWidget.prototype.turnOffSubs_ = function(event) {
+    this.controlTabPanel_.getMainMenu().setShowingSubs(false);
+    this.captionPanel_.turnOffSubs();
+};
+
 mirosubs.EmbeddableWidget.prototype.subsLoaded_ = function(languageCode, subtitles) {
     this.controlTabPanel_.showLoading(false);
     this.captionPanel_.languageSelected(languageCode, subtitles);
     var mainMenu = this.controlTabPanel_.getMainMenu();
     mainMenu.setCurrentLangCode(languageCode);
-    mainMenu.showDownloadSRT(true);    
+    mainMenu.setShowingSubs(true);
 };
 
 mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {

@@ -73,13 +73,25 @@ mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ =
 
 mirosubs.CaptionPanel.prototype.languageSelected = function(languageCode, captions) {
     this.removeChildren();
-    if (this.playManager_)
-        this.playManager_.dispose();
+    this.disposePlayManager_();
     this.playManager_ = new mirosubs.play.Manager(this.videoPlayer_, captions);
 };
 
+mirosubs.CaptionPanel.prototype.turnOffSubs = function() {
+    this.disposePlayManager_();
+};
+
 mirosubs.CaptionPanel.prototype.addNewLanguage = function(captions, languages) {
+    this.disposePlayManager_();
     this.addChild(new mirosubs.translate.MainPanel(
         this.videoPlayer_, this.videoID_, captions, languages, this.nullWidget_), 
                   true);
+};
+
+mirosubs.CaptionPanel.prototype.disposePlayManager_ = function() {
+    if (this.playManager_) {
+        this.playManager_.dispose();
+        this.playManager_ = null;
+    }
+    this.videoPlayer_.showCaptionText(null);
 };

@@ -37,7 +37,7 @@ mirosubs.MainMenu = function(videoID, nullWidget,
     this.isSubtitled_ = isSubtitled;
     this.translationLanguages_ = opt_translationLanguages || [];
     this.currentLangCode_ = null;
-    this.showDownloadSRT_ = false;
+    this.showingSubs_ = false;
     this.setToggleMode(true);
 };
 goog.inherits(mirosubs.MainMenu, goog.ui.PopupMenu);
@@ -48,12 +48,14 @@ mirosubs.MainMenu.MenuValues_ = {
     LOGIN: 'login',
     CREATE_ACCOUNT: 'createaccount',
     LOGOUT: 'logout',
-    SHARETHIS: 'sharethis'
+    SHARETHIS: 'sharethis',
+    TURNOFFSUBS: 'turnoffsubs'
 };
 mirosubs.MainMenu.EventType = {
     ADD_SUBTITLES: 'addsubs',
     LANGUAGE_SELECTED: 'langselected',
-    ADD_NEW_LANGUAGE: 'newlanguage'
+    ADD_NEW_LANGUAGE: 'newlanguage',
+    TURN_OFF_SUBS: 'turnoffsubs'
 };
 /**
  * Sets current language code -- used to add SRT download link to menu.
@@ -63,8 +65,8 @@ mirosubs.MainMenu.EventType = {
 mirosubs.MainMenu.prototype.setCurrentLangCode = function(langCode) {
     this.currentLangCode_ = langCode;
 };
-mirosubs.MainMenu.prototype.showDownloadSRT = function(show) {
-    this.showDownloadSRT_ = show;
+mirosubs.MainMenu.prototype.setShowingSubs = function(show) {
+    this.showingSubs_ = show;
 };
 mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
     var selectedValue = event.target.getModel();
@@ -86,6 +88,8 @@ mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
         mirosubs.logout();
     else if (selectedValue == mv.SHARETHIS)
         alert('not yet implemented');
+    else if (selectedValue == mv.TURNOFFSUBS)
+        this.dispatchEvent(et.TURN_OFF_SUBS);
     else
         this.dispatchEvent(
             new mirosubs.MainMenu
@@ -110,6 +114,11 @@ mirosubs.MainMenu.prototype.showMenu = function(target, x, y) {
 mirosubs.MainMenu.prototype.setMenuItems_ = function() {
     this.removeChildren(true);
     var mv = mirosubs.MainMenu.MenuValues_;
+    if (this.showingSubs_) {
+        this.addChild(new goog.ui.MenuItem(
+            'Turn off subs', mv.TURNOFFSUBS), true);
+        this.addChild(new goog.ui.MenuSeparator(), true);
+    }
     if (this.isSubtitled_) {
         this.addChild(new goog.ui.MenuItem('Original',
             mv.ORIGINAL_LANG), true);
@@ -137,7 +146,7 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
     this.addChild(new goog.ui.MenuSeparator(), true);
     this.addChild(new goog.ui.MenuItem('Share this',
                                        mv.SHARETHIS), true);
-    if (this.showDownloadSRT_) {
+    if (this.showingSubs_) {
         this.addChild(new goog.ui.MenuSeparator(), true);
         this.addChild(this.createDownloadSRTLink_(), true);
     }

@@ -38,7 +38,6 @@ mirosubs.ControlTabPanel = function(uuid, showTab, videoID,
                                goog.positioning.Corner.TOP_LEFT);
         goog.events.listen(this.mainMenuLink_, 'click',
                            function(event) {
-                               console.log('clicked');
                                event.preventDefault();
                            });        
         goog.events.listen(this.popupMenu_, 
@@ -64,7 +63,8 @@ mirosubs.ControlTabPanel.prototype.showSelectLanguage = function() {
 };
 
 mirosubs.ControlTabPanel.prototype.menuEvent_ = function(event) {
-    if (event.type == mirosubs.MainMenu.EventType.LANGUAGE_SELECTED) {
+    var et = mirosubs.MainMenu.EventType;
+    if (event.type == et.LANGUAGE_SELECTED) {
         var linkText = "Original";
         if (event.languageCode) {
             var language =
@@ -76,6 +76,8 @@ mirosubs.ControlTabPanel.prototype.menuEvent_ = function(event) {
         }
         this.setMainMenuLinkText_(linkText);
     }
+    else if (event.type == et.TURN_OFF_SUBS)
+        this.setMainMenuLinkText_("Choose Language...");
     // have to propagate event manually
     this.dispatchEvent(event);
 };
