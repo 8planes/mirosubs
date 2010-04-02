@@ -31,24 +31,16 @@ goog.inherits(mirosubs.CaptionPanel, goog.ui.Component);
  *
  * @param {function(boolean)} callback 
  */
-mirosubs.CaptionPanel.prototype.startSubtitling = function(callback) {
-    var that = this;
-    mirosubs.Rpc.call("start_editing" + (this.nullWidget_ ? '_null' : ''), 
-                      {"video_id": this.videoID_},
-                      function(result) {
-                          callback(result["can_edit"]);
-                          if (result["can_edit"])
-                              that.startSubtitlingImpl_(result["version"], 
-                                                        result["existing"]);
-                          else {
-                              if (result["owned_by"])
-                                  alert("Sorry, this video is owned by " + 
-                                        result["owned_by"]);
-                              else
-                                  alert("Sorry, this video is locked by " +
-                                        result["locked_by"]);
-                          }
-                      });
+mirosubs.CaptionPanel.prototype.startSubtitling = function(
+    version, existingCaptions) {
+    this.addChild(
+        this.mainPanel_ = new mirosubs.subtitle.MainPanel(
+            this.videoPlayer_,
+            new mirosubs.subtitle.MSServerModel(this.videoID_,
+                                                version,
+                                                this.nullWidget_),
+            existingCaptions),
+        true);
 };
 
 mirosubs.CaptionPanel.prototype.updateLoginState = function() {
@@ -60,18 +52,8 @@ mirosubs.CaptionPanel.prototype.updateLoginState = function() {
     }
 };
 
-mirosubs.CaptionPanel.prototype.startSubtitlingImpl_ = 
-    function(version, existingCaptions) {
-    this.addChild(this.mainPanel_ = new mirosubs.subtitle
-                  .MainPanel(this.videoPlayer_,
-                             new mirosubs.subtitle.MSServerModel(this.videoID_,
-                                                                 version,
-                                                                 this.nullWidget_),
-                             existingCaptions),
-                  true);
-};
-
-mirosubs.CaptionPanel.prototype.languageSelected = function(languageCode, captions) {
+mirosubs.CaptionPanel.prototype.languageSelected = 
+    function(languageCode, captions) {
     this.removeChildren();
     this.disposePlayManager_();
     this.playManager_ = new mirosubs.play.Manager(this.videoPlayer_, captions);
@@ -81,11 +63,12 @@ mirosubs.CaptionPanel.prototype.turnOffSubs = function() {
     this.disposePlayManager_();
 };
 
-mirosubs.CaptionPanel.prototype.addNewLanguage = function(captions, languages) {
+mirosubs.CaptionPanel.prototype.addNewLanguage = 
+    function(captions, languages) {
     this.disposePlayManager_();
     this.addChild(new mirosubs.translate.MainPanel(
-        this.videoPlayer_, this.videoID_, captions, languages, this.nullWidget_), 
-                  true);
+        this.videoPlayer_, this.videoID_, captions, 
+        languages, this.nullWidget_), true);
 };
 
 mirosubs.CaptionPanel.prototype.disposePlayManager_ = function() {
