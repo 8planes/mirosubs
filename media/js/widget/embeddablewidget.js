@@ -31,7 +31,6 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID,
     else
         this.videoPlayer_ = new mirosubs
             .YoutubeVideoPlayer(uuid, uuid + "_ytvideo", youtubeVideoID);
-    this.userPanel_ = new mirosubs.UserPanel(uuid);
     this.controlTabPanel_ = new mirosubs.ControlTabPanel(uuid, showTab, videoID, 
                                                          translationLanguages,
                                                          nullWidget);
@@ -95,14 +94,6 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
         identifier["writelock_expiration"];
 };
 
-mirosubs.EmbeddableWidget.prototype.updateLoginState = function() {
-    if (mirosubs.currentUsername == null)
-        this.userPanel_.setLoggedOut();
-    else
-        this.userPanel_.setLoggedIn(mirosubs.currentUsername);
-    this.captionPanel_.updateLoginState();
-};
-
 mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
     this.controlTabPanel_.showLoading(true);
     var that = this;
@@ -112,7 +103,6 @@ mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
         function(result) {
             that.controlTabPanel_.showLoading(false);
             if (result["can_edit"]) {
-                that.userPanel_.setVisible(false);
                 goog.events.listenOnce(that.captionPanel_, 
                                        mirosubs.subtitle.MainPanel.EventType.FINISHED,
                                        that.finishedSubtitling_, false, that);
@@ -183,7 +173,6 @@ mirosubs.EmbeddableWidget.prototype.addNewLanguageResponseReceived_ =
     this.controlTabPanel_.showLoading(false);
     this.captionPanel_.addNewLanguage(result['captions'], 
                                       result['languages']);
-    this.userPanel_.setVisible(false);
     goog.events.listenOnce(this.captionPanel_,
                            mirosubs.translate.MainPanel.EventType.FINISHED,
                            this.finishedTranslating_, false, this);
@@ -191,11 +180,9 @@ mirosubs.EmbeddableWidget.prototype.addNewLanguageResponseReceived_ =
 
 mirosubs.EmbeddableWidget.prototype.finishedSubtitling_ = function(event) {
     this.controlTabPanel_.showSelectLanguage();
-    this.userPanel_.setVisible(true);
 };
 
 mirosubs.EmbeddableWidget.prototype.finishedTranslating_ = function(event) {
-    this.userPanel_.setVisible(true);
     this.controlTabPanel_.setAvailableLanguages(event.availableLanguages);
 };
 

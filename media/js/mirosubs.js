@@ -26,6 +26,13 @@ mirosubs.BASE_URL = "";
 
 mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
 
+mirosubs.EventType = {
+    LOGIN : 'login',
+    LOGOUT : 'logout'
+};
+
+mirosubs.userEventTarget = new goog.events.EventTarget();
+
 /**
  * @type {boolean}
  */
@@ -80,9 +87,9 @@ mirosubs.createAccount = function() {
 
 mirosubs.logout = function() {
     mirosubs.Rpc.call('logout', {}, function(result) {
-            mirosubs.currentUsername = null;
-            mirosubs.updateLoginState_();
-        });
+        mirosubs.currentUsername = null;
+        mirosubs.userEventTarget.dispatchEvent(mirosubs.EventType.LOGOUT);
+    });
 };
 
 mirosubs.loginClicked_ = function(event, finishFn) {
@@ -110,11 +117,6 @@ mirosubs.openLoginPopup_ = function(urlSuffix, opt_finishFn) {
     }, 1000);
 };
 
-mirosubs.updateLoginState_ = function() {
-    goog.array.forEach(mirosubs.EmbeddableWidget.widgets,
-                       function(w) { w.updateLoginState(); });
-};
-
 mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
     mirosubs.Rpc.call("getMyUserInfo", {}, function(result) {
         if (mirosubs.loginDialog_ != null) {
@@ -125,11 +127,17 @@ mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
         mirosubs.loginDialog_ = null;
         if (result["logged_in"]) {
             mirosubs.currentUsername = result["username"];
-            mirosubs.updateLoginState_();
+            mirosubs.userEventTarget.dispatchEvent(
+                new mirosubs.LoginEvent(mirosubs.currentUsername));
             if (opt_finishFn != null)
                 opt_finishFn();
         }
-        });
+    });
+};
+
+mirosubs.LoginEvent = function(username) {
+    this.type = mirosubs.EventType.LOGIN;
+    this.username = username;
 };
 
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
