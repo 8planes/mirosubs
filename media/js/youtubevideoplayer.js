@@ -18,10 +18,13 @@
 
 goog.provide('mirosubs.YoutubeVideoPlayer');
 
-mirosubs.YoutubeVideoPlayer = function(uuid, divID, youtubeVideoID) {
+mirosubs.YoutubeVideoPlayer = function(uuid, youtubeVideoID) {
     mirosubs.AbstractVideoPlayer.call(this);
-    this.playerElemID = uuid + "_ytplayer";
-    this.playerAPIID = [uuid, '' + new Date().getTime()].join('');
+    this.uuid_ = uuid;
+    this.playerAPIID_ = [uuid, '' + new Date().getTime()].join('');
+    this.playerElemID_ = uuid + "_ytplayer";
+    
+    this.youtubeVideoID_ = youtubeVideoID;
     this.eventFunction_ = ['event', uuid].join('');
 
     var readyFunc = goog.bind(this.onYouTubePlayerReady_, this);
@@ -41,20 +44,24 @@ mirosubs.YoutubeVideoPlayer = function(uuid, divID, youtubeVideoID) {
      * Array of functions to execute once player is ready.
      */
     this.commands_ = [];
-    var params = { 'allowScriptAccess': 'always' };
-    var atts = { 'id': this.playerElemID };
-    this.videoDiv_ = goog.dom.$(divID).parentNode;
-    swfobject.embedSWF(['http://www.youtube.com/v/', 
-                        youtubeVideoID, 
-                        '?enablejsapi=1&playerapiid=',
-                        this.playerAPIID].join(''),
-                       divID, "480", "360", "8", null, null, params, atts);
 };
 goog.inherits(mirosubs.YoutubeVideoPlayer, mirosubs.AbstractVideoPlayer);
 
+mirosubs.YoutubeVideoPlayer.prototype.enterDocument = function() {
+    mirosubs.YoutubeVideoPlayer.superClass_.enterDocument.call(this);
+    var divId = this.getElement().id;
+    if (!divId)
+        divId = this.getElement().id = this.uuid_ + 'div';
+    var params = { 'allowScriptAccess': 'always' };
+    var atts = { 'id': this.playerElemID_ };
+    swfobject.embedSWF(
+        ['http://www.youtube.com/v/', this.youtubeVideoID_, 
+         '?enablejsapi=1&playerapiid=', this.playerAPIID_].join(''),
+        divId, "480", "360", "8", null, null, params, atts);
+};
 mirosubs.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = function(playerAPIID) {
-    if (playerAPIID == this.playerAPIID) {
-        this.player_ = goog.dom.$(this.playerElemID);
+    if (playerAPIID == this.playerAPIID_) {
+        this.player_ = goog.dom.$(this.playerElemID_);
         goog.array.forEach(this.commands_, 
                            function(cmd) {
                                cmd();
@@ -110,9 +117,6 @@ mirosubs.YoutubeVideoPlayer.prototype.needsIFrame = function() {
 };
 mirosubs.YoutubeVideoPlayer.prototype.getVideoSize = function() {
     return new goog.math.Size(480, 360);
-};
-mirosubs.YoutubeVideoPlayer.prototype.getVideoContainerElem = function() {
-    return this.videoDiv_;
 };
 /**
  * http://code.google.com/apis/youtube/js_api_reference.html#getPlayerState

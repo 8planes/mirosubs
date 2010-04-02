@@ -18,22 +18,29 @@
 
 goog.provide('mirosubs.Html5VideoPlayer');
 
-mirosubs.Html5VideoPlayer = function(videoElem) {
+mirosubs.Html5VideoPlayer = function(videoURL) {
     mirosubs.AbstractVideoPlayer.call(this);
-    this.videoElem_ = videoElem;
-    this.videoDiv_ = videoElem.parentNode;
-    this.captionElem_ = null;
-    this.videoEventHandler_ = new goog.events.EventHandler(this);
-    this.videoEventHandler_.listen(this.videoElem_, 'play', this.videoPlaying_);
-    this.videoEventHandler_.listen(this.videoElem_, 'pause', this.videoPaused_);
+    this.videoURL_ = videoURL;
+    this.videoElem_ = null;
 };
 goog.inherits(mirosubs.Html5VideoPlayer, mirosubs.AbstractVideoPlayer);
 
-mirosubs.Html5VideoPlayer.wrap = function(video_elem_id) {
-    // in the future can be used to abstract flash player, etc.
-    return new mirosubs.Html5VideoPlayer(goog.dom.$(video_elem_id));
+mirosubs.Html5VideoPlayer.prototype.createDom = function() {
+    mirosubs.Html5VideoPlayer.superClass_.createDom.call(this);
+    this.decorateInternal(this.getElement());
 };
-
+mirosubs.Html5VideoPlayer.prototype.decorateInternal = function(el) {
+    mirosubs.Html5VideoPlayer.superClass_.decorateInternal.call(this);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    el.appendChild(
+        this.videoElem_ = 
+            $d('video', {'width': 400, 'autobuffer': '', 'controls': '' },
+               $d('source', {'src': this.videoURL_})));                             
+};
+mirosubs.Html5VideoPlayer.prototype.enterDocument = function() {
+    this.getHandler().listen(this.videoElem_, 'play', this.videoPlaying_);
+    this.getHandler().listen(this.videoElem_, 'pause', this.videoPaused_);
+};
 mirosubs.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
     this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PLAY);
 };
@@ -78,17 +85,8 @@ mirosubs.Html5VideoPlayer.prototype.getVideoSize = function() {
     return goog.style.getSize(this.videoElem_)
 };
 
-mirosubs.Html5VideoPlayer.prototype.getVideoContainerElem = function() {
-    return this.videoDiv_;
-};
-
 mirosubs.Html5VideoPlayer.prototype.getReadyState_ = function() {
     return this.videoElem_["readyState"];
-};
-
-mirosubs.Html5VideoPlayer.prototype.disposeInternal = function() {
-    mirosubs.Html5VideoPlayer.superClass_.disposeInternal();
-    this.videoEventHandler_.dispose();
 };
 
 /**

@@ -1,6 +1,7 @@
 { 
     uuid: '{{uuid}}', 
     video_id: '{{video_id}}', 
+    video_url: '{{video_url}}',
     youtube_videoid: '{{youtube_videoid}}',
     show_tab: {{show_tab}},
     username: '{{request.user.username|escapejs}}',

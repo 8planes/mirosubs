@@ -1,33 +1,6 @@
 <div class="mirosubs-widget">
-  <div class="mirosubs-videoDiv">
-    {% ifnotequal video_url '' %}
-    <video id="{{uuid}}_video" width="400" autobuffer controls>
-      <source src="{{video_url}}" />
-    </video>
-    {% endifnotequal %}
-    {% ifnotequal youtube_videoid '' %}
-    <div id="{{uuid}}_ytvideo" style="height: 360px"></div>
-    {% endifnotequal %}
-  </div>
+  <div id="{{uuid}}_video" class="mirosubs-videoDiv"></div>
   <div class="mirosubs-loginBox" id="{{uuid}}_topPanel">
-    <div id="{{uuid}}_authenticated" 
-         class="mirosubs-loginStatus"
-         {% if not request.user.is_authenticated %}
-         style="display:none"
-         {% endif %}>
-      You are logged in as <span id="{{uuid}}_username">
-        {{ request.user.username }}
-      </span>. 
-      <a href="#" id="{{uuid}}_logout">Logout</a>
-    </div>
-    <div id="{{uuid}}_notauthenticated" 
-         class="mirosubs-loginStatus"
-         {% if request.user.is_authenticated %}
-         style="display:none"
-         {% endif %}>
-      You are currently logged out. 
-      <a href="#" id="{{uuid}}_login">Login</a>
-    </div>
     <span class="mirosubs-subtitleMe" id="{{uuid}}_menu">
       {% ifequal show_tab 2 %}
         <span>subtitling in progress/{{owned_by}}</span>

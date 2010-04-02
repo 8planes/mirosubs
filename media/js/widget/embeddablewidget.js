@@ -18,8 +18,8 @@
 
 goog.provide('mirosubs.EmbeddableWidget');
 
-mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID, 
-                                     translationLanguages, 
+mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL, 
+                                     youtubeVideoID, translationLanguages, 
                                      showTab, nullWidget, 
                                      autoplay_params) {
     goog.Disposable.call(this);
@@ -27,13 +27,13 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, youtubeVideoID,
     this.videoID_ = videoID;
     this.nullWidget_ = nullWidget;
     if (youtubeVideoID == '')
-        this.videoPlayer_ = mirosubs.Html5VideoPlayer.wrap(uuid + "_video");
+        this.videoPlayer_ = new mirosubs.Html5VideoPlayer(videoURL);
     else
-        this.videoPlayer_ = new mirosubs
-            .YoutubeVideoPlayer(uuid, uuid + "_ytvideo", youtubeVideoID);
-    this.controlTabPanel_ = new mirosubs.ControlTabPanel(uuid, showTab, videoID, 
-                                                         translationLanguages,
-                                                         nullWidget);
+        this.videoPlayer_ = 
+            new mirosubs.YoutubeVideoPlayer(uuid, youtubeVideoID);
+    this.videoPlayer_.decorate(goog.dom.$(uuid + "_video"));
+    this.controlTabPanel_ = new mirosubs.ControlTabPanel(
+        uuid, showTab, videoID, translationLanguages, nullWidget);
     this.captionPanel_ = new mirosubs.CaptionPanel(videoID, 
                                                    this.videoPlayer_, 
                                                    nullWidget);
@@ -71,6 +71,7 @@ mirosubs.EmbeddableWidget.wrap = function(identifier) {
     mirosubs.EmbeddableWidget.widgets.push(
         new mirosubs.EmbeddableWidget(identifier["uuid"], 
                                       identifier["video_id"],
+                                      identifier["video_url"],
                                       identifier["youtube_videoid"],
                                       identifier["translation_languages"],
                                       identifier["show_tab"],

@@ -27,9 +27,9 @@ goog.provide('mirosubs.AbstractVideoPlayer');
  * @constructor
  */
 mirosubs.AbstractVideoPlayer = function() {
-    goog.events.EventTarget.call(this);
+    goog.ui.Component.call(this);
 };
-goog.inherits(mirosubs.AbstractVideoPlayer, goog.events.EventTarget);
+goog.inherits(mirosubs.AbstractVideoPlayer, goog.ui.Component);
 
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
@@ -56,10 +56,10 @@ mirosubs.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime) 
 mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
     if (text == null || text == "") {
         if (this.captionElem_ != null) {
-            this.videoDiv_.removeChild(this.captionElem_);
+            this.getElement().removeChild(this.captionElem_);
             this.captionElem_ = null;
             if (this.captionBgElem_ != null) {
-                this.videoDiv_.removeChild(this.captionBgElem_);
+                this.getElement().removeChild(this.captionBgElem_);
                 this.captionBgElem_ = null;
             }
         }
@@ -73,7 +73,7 @@ mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
             this.captionElem_.style.top = (videoSize.height - 60) + "px";
             if (needsIFrame)
                 this.captionElem_.style.visibility = 'hidden';
-            this.getVideoContainerElem().appendChild(this.captionElem_);
+            this.getElement().appendChild(this.captionElem_);
         }
         goog.dom.setTextContent(this.captionElem_, text);
         if (needsIFrame) {
@@ -110,14 +110,6 @@ mirosubs.AbstractVideoPlayer.prototype.needsIFrame = function() {
  * @return {goog.math.Size} size of the video
  */
 mirosubs.AbstractVideoPlayer.prototype.getVideoSize = goog.abstractMethod;
-
-/**
- * Returns the html element that contains the video. We use this to add the 
- * subtitle html element.
- * @protected
- * @return {HTMLElement}
- */
-mirosubs.AbstractVideoPlayer.prototype.getVideoContainerElem = goog.abstractMethod;
 
 /**
  * Video player events
