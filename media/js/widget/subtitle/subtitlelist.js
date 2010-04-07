@@ -26,6 +26,7 @@ mirosubs.subtitle.SubtitleList = function(captions, displayTimes) {
     this.captions_ = captions;
     this.displayTimes_ = displayTimes;
     this.currentActiveSubtitle_ = null;
+    this.subtitleWidgets_ = [];
     /**
      * A map of captionID to mirosubs.subtitle.SubtitleWidget
      */
@@ -33,10 +34,11 @@ mirosubs.subtitle.SubtitleList = function(captions, displayTimes) {
     this.currentlyEditing_ = false;
 };
 goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
-
+mirosubs.subtitle.SubtitleList.MIN_SUB_LENGTH = 1;
 mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
-    this.setElementInternal(this.getDomHelper()
-                            .createDom('ul', {'className':'mirosubs-titlesList'}));
+    this.setElementInternal(
+        this.getDomHelper().createDom(
+            'ul', {'className':'mirosubs-titlesList'}));
     goog.array.forEach(this.captions_, this.addSubtitle, this);
 };
 
@@ -44,10 +46,19 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
  *
  */
 mirosubs.subtitle.SubtitleList.prototype.addSubtitle = 
-    function(subtitle, opt_scrollDown) {
-    var subtitleWidget = new mirosubs.subtitle
-    .SubtitleWidget(subtitle, this.displayTimes_, this);
+    function(subtitle, opt_scrollDown) 
+{
+    var subtitleWidget = 
+        new mirosubs.subtitle.SubtitleWidget(
+            subtitle, this.displayTimes_, this);
     this.addChild(subtitleWidget, true);
+//    this.getHandler().listen(
+//        subtitleWidget, mirosubs.Spinner.VALUE_CHANGED,
+//        goog.bind(this.timeValueChanged_, this, 
+//                  this.subtitleWidgets_.length));
+    this.subtitleWidgets_.push(subtitleWidget);
+    if (this.subtitleWidgets_.length > 1)
+        this.setSubtitleMinMax_(this.subtitleWidgets_.length - 1);
     this.subtitleMap_[subtitle.getCaptionID() + ''] = subtitleWidget;
     if (typeof(opt_scrollDown) == 'boolean' && opt_scrollDown)
         this.scrollToCaption(subtitle.getCaptionID());
@@ -57,6 +68,11 @@ mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
         this.currentActiveSubtitle_.setActive(false);
         this.currentActiveSubtitle_ = null;
     }
+};
+mirosubs.subtitle.SubtitleList.prototype.timeValueChanged_ = 
+    function(subtitleIndex, event)
+{
+    
 };
 mirosubs.subtitle.SubtitleList.prototype.setActiveWidget = function(captionID) {
     this.scrollToCaption(captionID);
@@ -75,6 +91,21 @@ mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
 };
 mirosubs.subtitle.SubtitleList.prototype.updateWidget = function(captionID) {
     this.subtitleMap_[captionID + ''].updateValues();
+    // TODO: update min/max here also.
+};
+mirosubs.subtitle.SubtitleList.prototype.setSubtitleMinMax_ = function(index) {
+    if (index > 0) {
+        var lastSubWidget = this.subtitleWidgets_[index - 1];
+        var subWidget = this.subtitleWidgets_[index];
+        if (lastSubWidget.getSubtitle().getStartTime() != -1)
+            subWidget.setMinSubTime(
+                lastSubWidget.getSubtitle().getStartTime() +
+                    mirosubs.subtitle.SubtitleList.MIN_SUB_LENGTH);
+        if (subWidget.getSubtitle().getEndTime != -1)
+            lastSubWidget.setMaxSubTime(
+                subWidget.getSubtitle().getEndTime() -
+                    mirosubs.subtitle.SubtitleList.MIN_SUB_LENGTH);
+    }
 };
 mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing = 
     function(subtitleWidget, editing) {
