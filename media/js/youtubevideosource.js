@@ -18,12 +18,12 @@
 
 goog.provide('mirosubs.YoutubeVideoSource');
 
-mirosubs.YoutubeVideoSource.counter_ = 0;
-
 mirosubs.YoutubeVideoSource = function(uuid, youtubeVideoID) {
     this.uuid_ = uuid;
     this.youtubeVideoID_ = youtubeVideoID;
 };
+
+mirosubs.YoutubeVideoSource.counter_ = 0;
 
 mirosubs.YoutubeVideoSource.prototype.createPlayer = function() {
     return new mirosubs.YoutubeVideoPlayer(
