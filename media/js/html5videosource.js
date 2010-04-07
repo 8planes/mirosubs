@@ -16,18 +16,17 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.require("goog.ui.Dialog");
-goog.require("goog.json.Serializer");
-goog.require("goog.net.CrossDomainRpc");
-goog.require("goog.dom.DomHelper");
-goog.require("goog.events.BrowserEvent");
-goog.require("goog.ui.Button");
-goog.require("goog.ui.LabelInput");
-goog.require("goog.net.XhrIo");
-goog.require('goog.positioning.Corner');
-goog.require('goog.ui.MenuItem');
-goog.require('goog.ui.PopupMenu');
-goog.require('goog.ui.Bubble');
-goog.require('goog.debug.FancyWindow');
-goog.require('goog.math');
-goog.require('goog.net.ImageLoader');
+goog.provide('mirosubs.Html5VideoSource');
+
+mirosubs.Html5VideoSource = function(videoURL) {
+    this.videoURL_ = videoURL;
+};
+
+mirosubs.Html5VideoSource.prototype.createPlayer = function() {
+    return new mirosubs.Html5VideoPlayer(
+        new mirosubs.Html5VideoSource(this.videoURL_));
+};
+
+mirosubs.Html5VideoSource.prototype.getVideoURL = function() {
+    return this.videoURL_;
+};

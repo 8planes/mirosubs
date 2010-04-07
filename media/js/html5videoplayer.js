@@ -18,24 +18,36 @@
 
 goog.provide('mirosubs.Html5VideoPlayer');
 
-mirosubs.Html5VideoPlayer = function(videoURL) {
-    mirosubs.AbstractVideoPlayer.call(this);
-    this.videoURL_ = videoURL;
+/**
+ *
+ * @param {mirosubs.Html5VideoSource} videoSource
+ */
+mirosubs.Html5VideoPlayer = function(videoSource) {
+    mirosubs.AbstractVideoPlayer.call(this, videoSource);
+    this.videoSource_ = videoSource;
     this.videoElem_ = null;
 };
 goog.inherits(mirosubs.Html5VideoPlayer, mirosubs.AbstractVideoPlayer);
 
+mirosubs.Html5VideoPlayer.WIDTH = 400;
+mirosubs.Html5VideoPlayer.HEIGHT = 300;
+
 mirosubs.Html5VideoPlayer.prototype.createDom = function() {
     mirosubs.Html5VideoPlayer.superClass_.createDom.call(this);
-    this.decorateInternal(this.getElement());
+    this.getElement().style.height = mirosubs.Html5VideoPlayer.HEIGHT + 'px';
+    this.addVideoElement_(this.getElement());
 };
 mirosubs.Html5VideoPlayer.prototype.decorateInternal = function(el) {
     mirosubs.Html5VideoPlayer.superClass_.decorateInternal.call(this);
+    this.addVideoElement_(el);
+};
+mirosubs.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     el.appendChild(
         this.videoElem_ = 
-            $d('video', {'width': 400, 'autobuffer': '', 'controls': '' },
-               $d('source', {'src': this.videoURL_})));                             
+            $d('video', {'width': mirosubs.Html5VideoPlayer.WIDTH, 
+                         'autobuffer': 'a', 'controls': 'a' },
+               $d('source', {'src': this.videoSource_.getVideoURL()})));    
 };
 mirosubs.Html5VideoPlayer.prototype.enterDocument = function() {
     this.getHandler().listen(this.videoElem_, 'play', this.videoPlaying_);

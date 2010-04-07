@@ -20,13 +20,10 @@ goog.provide('mirosubs.subtitle.SubtitleList');
 
 /**
  * @param {Array.<mirosubs.subtitle.EditableCaption>} captions
- * @param {?Element} opt_helpElem first element to insert into ul element
- *     that comprises this component.
  */
-mirosubs.subtitle.SubtitleList = function(captions, displayTimes, opt_helpElem) {
+mirosubs.subtitle.SubtitleList = function(captions, displayTimes) {
     goog.ui.Component.call(this);
     this.captions_ = captions;
-    this.helpElem_ = opt_helpElem;
     this.displayTimes_ = displayTimes;
     this.currentActiveSubtitle_ = null;
     /**
@@ -40,8 +37,6 @@ goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
 mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper()
                             .createDom('ul', {'className':'mirosubs-titlesList'}));
-    if (this.helpElem_)
-        this.getElement().appendChild(this.helpElem_);
     goog.array.forEach(this.captions_, this.addSubtitle, this);
 };
 
@@ -88,25 +83,3 @@ mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing =
 mirosubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {
     return this.currentlyEditing_;
 };
-mirosubs.subtitle.SubtitleList.createHelpLi = function($d, helpLines, keysTitle,
-                                                       showSpaceBar, firstKeyText) {
-    var keysDiv = $d('div', {'className':'mirosubs-keys'},
-                     $d('h3', null, keysTitle),
-                     $d('span', 
-                        showSpaceBar ? {'className':'mirosubs-space_bar'} : null, 
-                        firstKeyText),
-                     $d('span', {'className':'mirosubs-tab'}, 'Play/Pause'),
-                     $d('span', {'className':'mirosubs-back'}, 'Skip Back'),
-                     $d('a', {'href':'#'}, 'help'));
-    var helpParas = goog.array.map(helpLines, 
-                                   function(line, index) {
-                                       return $d('p', 
-                                                 index == 0 ? 
-                                           {'className':'mirosubs-topP'} : null, 
-                                                 line);
-                                   });
-    return $d('li', {'className': 'mirosubs-transcribeHelp'},
-              $d('div', {'className':'mirosubs-helpInner'}, 
-                 goog.array.concat(keysDiv, helpParas)));
-
-}

@@ -26,13 +26,18 @@ goog.provide('mirosubs.AbstractVideoPlayer');
  * class.
  * @constructor
  */
-mirosubs.AbstractVideoPlayer = function() {
+mirosubs.AbstractVideoPlayer = function(videoSource) {
     goog.ui.Component.call(this);
+    this.videoSource_ = videoSource;
 };
 goog.inherits(mirosubs.AbstractVideoPlayer, goog.ui.Component);
 
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
+};
+mirosubs.AbstractVideoPlayer.prototype.createDom = function() {
+    mirosubs.AbstractVideoPlayer.superClass_.createDom.call(this);
+    this.getElement().className = 'mirosubs-videoDiv';
 };
 mirosubs.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.isPlaying = goog.abstractMethod;
@@ -46,6 +51,9 @@ mirosubs.AbstractVideoPlayer.prototype.togglePause = function() {
         this.pause();
 };
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
+mirosubs.AbstractVideoPlayer.prototype.getVideoSource = function() {
+    return this.videoSource_;
+};
 mirosubs.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     goog.abstractMethod();
 };

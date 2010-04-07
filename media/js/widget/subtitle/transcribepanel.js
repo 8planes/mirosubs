@@ -48,23 +48,41 @@ mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
     mirosubs.subtitle.TranscribePanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getElement().appendChild(this.contentElem_ = $d('div'));
-    var helpLines = [['While you watch the video, type everything people ',
-                      'say in the box below. Don\'t let subtitles get too ',
-                      'long-- hit enter for a new line.'].join(''), 
-                     ['Make sure to use the key controls (on the left side) ',
-                      'to pause and jump back, so you can keep up.'].join(''),
-                     'To begin, press TAB to play and start typing.'];
-    this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-        this.captions_, false, 
-        mirosubs.subtitle.SubtitleList.createHelpLi($d, helpLines,
-                                                    'Transcribing Controls', 
-                                                    false, 
-                                                    'PRESS TAB TO BEGIN')), 
-                  true);
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(
         this.videoPlayer_), true);
+    this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
+        this.captions_, false), true);
 };
-
+mirosubs.subtitle.TranscribePanel.prototype.registerRightPanel = 
+    function(rightPanel) 
+{
+    
+};
+mirosubs.subtitle.TranscribePanel.prototype.createRightPanel = 
+    function(serverModel) 
+{
+    var helpContents = new mirosubs.RightPanel.HelpContents(
+        "STEP 1: Typing the subtitles",
+        [["Thanks for making subtitles!! It's easy to learn ", 
+          "and actually fun to do."].join(''),
+         ["While you watch the video, type everything people say. Don't let ", 
+          "the subtitles get too long -- hit enter for a new line."].join(''),
+         ["Make sure to use the key controls below to pause and jump back, ", 
+          "which will help you keep up."]],
+        "Watch a quick how-to video",
+        "http://youtube.com");
+    var KC = goog.events.KeyCodes;
+    var keySpecs = [
+        new mirosubs.RightPanel.KeySpec(
+            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB),
+        new mirosubs.RightPanel.KeySpec(
+            'mirosubs-skip', 'mirosubs-control', 'control', 
+            'Skip Back 8 Seconds', KC.CTRL)
+    ];
+    return new mirosubs.RightPanel(
+        serverModel, helpContents, keySpecs, true, "Done?", 
+        "Next Step: Syncing");
+};
 mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
     mirosubs.subtitle.TranscribePanel.superClass_.enterDocument.call(this);
     this.getHandler().listen(this.lineEntry_,

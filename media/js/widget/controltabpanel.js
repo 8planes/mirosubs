@@ -21,7 +21,7 @@ goog.provide('mirosubs.ControlTabPanel');
 mirosubs.ControlTabPanel = function(uuid, showTab, videoID, 
                                     translationLanguages, nullWidget) {
     goog.events.EventTarget.call(this);
-    
+ 
     this.videoID_ = videoID;
     this.nullWidget_ = nullWidget;
     this.translationLanguages_ = translationLanguages;

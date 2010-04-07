@@ -18,14 +18,17 @@
 
 goog.provide('mirosubs.YoutubeVideoPlayer');
 
-mirosubs.YoutubeVideoPlayer = function(uuid, youtubeVideoID) {
-    mirosubs.AbstractVideoPlayer.call(this);
-    this.uuid_ = uuid;
-    this.playerAPIID_ = [uuid, '' + new Date().getTime()].join('');
-    this.playerElemID_ = uuid + "_ytplayer";
-    
-    this.youtubeVideoID_ = youtubeVideoID;
-    this.eventFunction_ = ['event', uuid].join('');
+/**
+ *
+ * @param {mirosubs.YoutubeVideoSource} videoSource
+ */
+mirosubs.YoutubeVideoPlayer = function(videoSource) {
+    mirosubs.AbstractVideoPlayer.call(this, videoSource);
+    this.videoSource_ = videoSource;
+    this.playerAPIID_ = [videoSource.getUUID(), 
+                         '' + new Date().getTime()].join('');
+    this.playerElemID_ = videoSource.getUUID() + "_ytplayer";
+    this.eventFunction_ = 'event' + videoSource.getUUID();
 
     var readyFunc = goog.bind(this.onYouTubePlayerReady_, this);
     var ytReady = "onYouTubePlayerReady";
@@ -51,11 +54,11 @@ mirosubs.YoutubeVideoPlayer.prototype.enterDocument = function() {
     mirosubs.YoutubeVideoPlayer.superClass_.enterDocument.call(this);
     var divId = this.getElement().id;
     if (!divId)
-        divId = this.getElement().id = this.uuid_ + 'div';
+        divId = this.getElement().id = this.videoSource_.getUUID() + 'div';
     var params = { 'allowScriptAccess': 'always' };
     var atts = { 'id': this.playerElemID_ };
     swfobject.embedSWF(
-        ['http://www.youtube.com/v/', this.youtubeVideoID_, 
+        ['http://www.youtube.com/v/', this.videoSource_.getYoutubeVideoID(), 
          '?enablejsapi=1&playerapiid=', this.playerAPIID_].join(''),
         divId, "480", "360", "8", null, null, params, atts);
 };

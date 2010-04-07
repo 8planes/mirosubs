@@ -19,8 +19,8 @@ div.mirosubs-widget {
 {% endblock %}
 {% block scripts %}
 {% if not js_use_compiled %}
-  <script type="text/javascript" src="http://{{site.domain}}/site_media/js/closure-library/closure/goog/base.js"></script>
-  <script type="text/javascript" src="http://{{site.domain}}/site_media/js/closure-dependencies.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
 {% endif %}
 {% for dep in js_dependencies %}
   <script type="text/javascript" src="{{dep|safe}}"></script>
