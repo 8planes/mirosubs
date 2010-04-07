@@ -62,6 +62,7 @@ mirosubs.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime) 
  * @param {String} text Caption text to display in video. null for blank.
  */
 mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
+    console.log(this);
     if (text == null || text == "") {
         if (this.captionElem_ != null) {
             this.getElement().removeChild(this.captionElem_);

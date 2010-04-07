@@ -56,6 +56,15 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL,
         this.popupMenu_, et.ADD_NEW_LANGUAGE, this.addNewLanguage_);
     this.handler_.listen(
         this.popupMenu_, et.TURN_OFF_SUBS, this.turnOffSubs_);
+    /**
+     * The Manager used for displaying subtitles on the video on the page.
+     * @type {?mirosubs.play.Manager} 
+     */
+    this.playManager_ = null;
+    /**
+     * Master list of translation languages for this video.
+     */
+    this.translationLanguages_ = translationLanguages;
     if (autoplayParams != null)
         this.subsLoaded_(autoplayParams['language_code'],
                          autoplayParams['subtitles']);
@@ -134,6 +143,7 @@ mirosubs.EmbeddableWidget.prototype.startSubtitlingImpl_ =
         subtitleDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
         function(event) {
             if (subtitleDialog.isSaved()) {
+                // FIXME: petit duplication. appears in server-side code also.
                 that.videoTab_.setText('Choose language...');
                 that.popupMenu_.setSubtitled();
             }
@@ -165,18 +175,31 @@ mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
 
 mirosubs.EmbeddableWidget.prototype.turnOffSubs_ = function(event) {
     this.popupMenu_.setShowingSubs(false);
-    this.captionPanel_.turnOffSubs();
+    // FIXME: petit duplication. appears in server-side code also.
+    this.videoTab_.setText("Choose Language...");
+    this.disposePlayManager_();
 };
 
 mirosubs.EmbeddableWidget.prototype.subsLoaded_ = 
-    function(languageCode, subtitles) {
+    function(languageCode, subtitles) 
+{
     this.videoTab_.showLoading(false);
-    this.captionPanel_.languageSelected(languageCode, subtitles);
-    var mainMenu = this.videoTab_.getMainMenu();
-    mainMenu.setCurrentLangCode(languageCode);
-    mainMenu.setShowingSubs(true);
+    this.disposePlayManager_();
+    this.playManager_ = new mirosubs.play.Manager(
+        this.videoPlayer_, subtitles);
+    // FIXME: petit duplication. appears in server-side code also.
+    this.videoTab_.setText(
+        languageCode == null ? "Original language" : 
+            this.findLanguage_(languageCode)['name']);
+    this.popupMenu_.setCurrentLangCode(languageCode);
+    this.popupMenu_.setShowingSubs(true);
 };
-
+mirosubs.EmbeddableWidget.prototype.findLanguage_ = function(code) {
+    return goog.array.find(
+        this.translationLanguages_, function(tl) {
+            return tl['code'] == code;
+        });
+};
 mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
     this.mainMenu_.showLoading(true);
     var that = this;
@@ -204,10 +227,17 @@ mirosubs.EmbeddableWidget.prototype.finishedSubtitling_ = function(event) {
 mirosubs.EmbeddableWidget.prototype.finishedTranslating_ = function(event) {
     this.controlTabPanel_.setAvailableLanguages(event.availableLanguages);
 };
-
+mirosubs.EmbeddableWidget.prototype.disposePlayManager_ = function() {
+    if (this.playManager_) {
+        this.playManager_.dispose();
+        this.playManager_ = null;
+    }
+    this.videoPlayer_.showCaptionText(null);
+};
 mirosubs.EmbeddableWidget.prototype.disposeInternal = function() {
     mirosubs.EmbeddableWidget.superClass_.disposeInternal.call(this);
     this.handler_.dispose();
+    this.disposePlayManager_();
 };
 
 // see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed

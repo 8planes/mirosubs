@@ -38,7 +38,7 @@ mirosubs.Html5VideoPlayer.prototype.createDom = function() {
     this.addVideoElement_(this.getElement());
 };
 mirosubs.Html5VideoPlayer.prototype.decorateInternal = function(el) {
-    mirosubs.Html5VideoPlayer.superClass_.decorateInternal.call(this);
+    mirosubs.Html5VideoPlayer.superClass_.decorateInternal.call(this, el);
     this.addVideoElement_(el);
 };
 mirosubs.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
