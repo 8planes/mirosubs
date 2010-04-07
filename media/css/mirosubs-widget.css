@@ -329,7 +329,6 @@ margin: 20px 0 0 0px;
 }
 
 .mirosubs-widget .mirosubs-videoTab {
-    height: 26px;
     font-size: 10px;
     float: right;
     margin: 0;
@@ -397,7 +396,6 @@ margin: 20px 0 0 0px;
 }
 
 .mirosubs-videoTab a.mirosubs-subtitleMeLink {
-
     -moz-border-radius-bottomleft: 5px;
     -moz-border-radius-bottomright: 5px;
     background: #fff url("../images/gradient.png") right 2px repeat-x;
@@ -411,11 +409,14 @@ margin: 20px 0 0 0px;
     text-decoration: none;
     border: 3px solid #90b60f;
     border-top: none;
-    margin-top: -5px;
 }
 
 .mirosubs-videoTab a.mirosubs-subtitleMeLink img {
     float: left;
+    border: none;
+    height: 17px;
+    width: 17px;
+    margin: 5px;
 }
 
 .mirosubs-videoTab a.mirosubs-subtitleMeLink span {
