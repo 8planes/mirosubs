@@ -330,8 +330,8 @@ margin: 20px 0 0 0px;
 
 .mirosubs-widget .mirosubs-videoTab {
     font-size: 10px;
-    float: right;
-    margin: 0;
+    float: left;
+    margin: -5px 0 0 0;
 }
 
 .mirosubs-loginStatus {
@@ -416,7 +416,7 @@ margin: 20px 0 0 0px;
     border: none;
     height: 17px;
     width: 17px;
-    margin: 5px;
+    margin: 7px 0 0 7px;
 }
 
 .mirosubs-videoTab a.mirosubs-subtitleMeLink span {
