@@ -30,13 +30,16 @@ goog.inherits(mirosubs.translate.TranslationWidget, goog.ui.Component);
 
 mirosubs.translate.TranslationWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.setElementInternal($d('li', null,
-                               $d('div', null, this.subtitle_['caption_text']),
-                               this.translateInput_ = 
-                               $d('input', {'type':'text'})));
-    this.getHandler().listen(this.translateInput_, 
-                             goog.events.EventType.BLUR,
-                             this.inputLostFocus_);
+    this.setElementInternal(
+        $d('li', null,
+           $d('div', null, 
+              $d('span', 'mirosubs-title mirosubs-title-notime', 
+                 this.subtitle_['caption_text'])),
+           this.translateInput_ = 
+           $d('textarea', 'mirosubs-translateField')));
+    this.getHandler().listen(
+        this.translateInput_, goog.events.EventType.BLUR, 
+        this.inputLostFocus_);
 };
 
 mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(event) {

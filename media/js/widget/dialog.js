@@ -20,6 +20,7 @@ goog.provide('mirosubs.Dialog');
 
 mirosubs.Dialog = function(videoSource) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-widget', true);
+    console.log(videoSource);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.videoSource_ = videoSource;

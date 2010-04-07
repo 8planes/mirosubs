@@ -63,6 +63,7 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL,
     this.playManager_ = null;
     /**
      * Master list of translation languages for this video.
+     * TODO: Only use list stored in MainMenu.
      */
     this.translationLanguages_ = translationLanguages;
     if (autoplayParams != null)
@@ -201,7 +202,7 @@ mirosubs.EmbeddableWidget.prototype.findLanguage_ = function(code) {
         });
 };
 mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
-    this.mainMenu_.showLoading(true);
+    this.videoTab_.showLoading(true);
     var that = this;
     mirosubs.Rpc.call(
         'fetch_captions_and_open_languages' + 
@@ -211,21 +212,25 @@ mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
 };
 
 mirosubs.EmbeddableWidget.prototype.addNewLanguageResponseReceived_ = 
-    function(result) {
+    function(result) 
+{
     this.videoTab_.showLoading(false);
-    this.captionPanel_.addNewLanguage(result['captions'], 
-                                      result['languages']);
-    goog.events.listenOnce(this.captionPanel_,
-                           mirosubs.translate.MainPanel.EventType.FINISHED,
-                           this.finishedTranslating_, false, this);
-};
-
-mirosubs.EmbeddableWidget.prototype.finishedSubtitling_ = function(event) {
-    this.controlTabPanel_.showSelectLanguage();
-};
-
-mirosubs.EmbeddableWidget.prototype.finishedTranslating_ = function(event) {
-    this.controlTabPanel_.setAvailableLanguages(event.availableLanguages);
+    var translationDialog = new mirosubs.translate.Dialog(
+        this.videoSource_, this.videoID_, result['captions'], 
+        result['languages'], this.nullWidget_);
+    translationDialog.setVisible(true);
+    var that = this;
+    goog.events.listenOnce(
+        translationDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
+        function(event) {
+            var availableLanguages = 
+                translationDialog.getAvailableLanguages();
+            if (availableLanguages) {
+                that.translationLanguages_ = availableLanguages;
+                that.popupMenu_.setTranslationLanguages(
+                    availableLanguages);
+            }
+        });
 };
 mirosubs.EmbeddableWidget.prototype.disposePlayManager_ = function() {
     if (this.playManager_) {
