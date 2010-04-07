@@ -24,7 +24,6 @@ mirosubs.translate.Dialog = function(videoSource,
                                      allLanguages,
                                      nullWidget) {
     mirosubs.Dialog.call(this, videoSource);
-    console.log(videoSource);
     this.videoID_ = videoID;
     this.subtitles_ = subtitles;
     this.languages_ = allLanguages;
