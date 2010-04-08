@@ -58,7 +58,7 @@ def subtitle_to_srt_impl(text, video_caption, index, output):
     output.write("\n")
     write_srt_time_line(video_caption, output)
     output.write(text)
-    output.write("\n")
+    output.write("\n\n")
 
 def write_srt_time_line(video_caption, output):
     write_srt_time(video_caption.start_time, output)
@@ -73,7 +73,7 @@ def write_srt_time(seconds, output):
     write_padded_num((seconds_int / 60) % 60, 2, output)
     output.write(":")
     write_padded_num(seconds_int % 60, 2, output)
-    output.write(".")
+    output.write(",")
     write_padded_num(int(seconds * 1000) % 1000, 3, output)
 
 def write_padded_num(num, numchars, output):
