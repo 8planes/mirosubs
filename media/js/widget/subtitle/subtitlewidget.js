@@ -19,7 +19,7 @@
 goog.provide('mirosubs.subtitle.SubtitleWidget');
 
 mirosubs.subtitle.SubtitleWidget = function(subtitle, displayTimes, 
-                                            subtitleList) {
+                                            subtitleList, index) {
     goog.ui.Component.call(this);
     this.minSubTime_ = 0;
     this.maxSubTime_ = 99999999999;
@@ -28,6 +28,7 @@ mirosubs.subtitle.SubtitleWidget = function(subtitle, displayTimes,
     this.displayTimes_ = displayTimes;
     this.subtitleList_ = subtitleList;
     this.timeSpinner_ = null;
+    this.index_ = index;
 };
 goog.inherits(mirosubs.subtitle.SubtitleWidget, goog.ui.Component);
 mirosubs.subtitle.SubtitleWidget.prototype.setMinSubTime = function(min) {
@@ -39,6 +40,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.setMaxSubTime = function(max) {
     this.maxSubTime_ = max;
     if (this.timeSpinner_)
         this.timeSpinner_.setMax(max);
+};
+mirosubs.subtitle.SubtitleWidget.prototype.getIndex = function() {
+    return this.index_;
 };
 mirosubs.subtitle.SubtitleWidget.prototype.getContentElement = function() {
     return this.contentElement_;

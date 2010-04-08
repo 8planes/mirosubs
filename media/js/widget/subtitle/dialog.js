@@ -103,6 +103,8 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
         rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
     this.rightPanelListener_.listen(
         rightPanel, et.DONE, this.handleDoneKeyPress_);
+    this.rightPanelListener_.listen(
+        rightPanel, et.RESTART, this.handleRestart_);
 
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
@@ -121,6 +123,14 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
 
     this.currentRightPanel_.dispose();
     this.currentRightPanel_ = rightPanel;
+};
+mirosubs.subtitle.Dialog.prototype.handleRestart_ = function(event) {
+    goog.asserts.assert(this.state_ == mirosubs.subtitle.Dialog.State_.SYNC);
+    var answer = 
+        confirm("Are you sure you want to start over? All timestamps " +
+                "will be deleted.");
+    if (answer)
+        this.currentSubtitlePanel_.startOver();
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL)

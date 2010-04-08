@@ -33,16 +33,21 @@ mirosubs.Spinner = function(value, min, max, valueExpression) {
     this.value_ = value;
     this.min_ = min;
     this.max_ = max;
-    this.maxStep_ = 1.00;
-    this.minStep_ = 0.10;
+    this.maxStep_ = 0.20;
+    this.minStep_ = 0.05;
     this.step_ = this.minStep_;
     this.enabled_ = true;
     this.increment_ = true;
     this.valueExpression_ = valueExpression;
+    /**
+     * True iff the user has mouse down on an arrow.
+     */
+    this.activated_ = false;
 };
 goog.inherits(mirosubs.Spinner, goog.ui.Component);
+mirosubs.Spinner.logger_ =
+    goog.debug.Logger.getLogger('mirosubs.Spinner');
 mirosubs.Spinner.VALUE_CHANGED = "valueChanged";
-
 mirosubs.Spinner.INITIAL_SPEED = 7;
 mirosubs.Spinner.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
@@ -81,6 +86,7 @@ mirosubs.Spinner.prototype.updateText_ = function() {
                             this.valueExpression_(this.value_));
 };
 mirosubs.Spinner.prototype.cancelTimer_ = function() {
+    this.activated_ = false;
     this.timer_.stop();
     this.speed_ = mirosubs.Spinner.INITIAL_SPEED;
     this.counter_ = 0;
@@ -102,6 +108,7 @@ mirosubs.Spinner.prototype.timerTick_ = function(event) {
 };
 mirosubs.Spinner.prototype.mouseDown_ = function(event) {
     if (this.enabled_) {
+        this.activated_ = true;
         if (event.target == this.upAnchor_) {
             this.increment_ = true;
             this.increase_();
@@ -114,17 +121,19 @@ mirosubs.Spinner.prototype.mouseDown_ = function(event) {
     };
 };
 mirosubs.Spinner.prototype.mouseUp_ = function(event) {
-    if (this.enabled_)
+    if (this.activated_)
         this.cancelTimer_();
 };
 mirosubs.Spinner.prototype.mouseOut_ = function(event) {
-    if (this.enabled_)
+    if (this.activated_)
         this.cancelTimer_();    
 };
 mirosubs.Spinner.prototype.setMin = function(min) {
+    mirosubs.Spinner.logger_.info('Setting min to ' + min);
     this.min_ = min;
 };
 mirosubs.Spinner.prototype.setMax = function(max) {
+    mirosubs.Spinner.logger_.info('Setting max to ' + max);
     this.max_ = max;
 };
 mirosubs.Spinner.prototype.setValue = function(value) {
