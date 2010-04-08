@@ -36,9 +36,8 @@ mirosubs.subtitle.SubtitleList = function(captions, displayTimes) {
 goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
 mirosubs.subtitle.SubtitleList.MIN_SUB_LENGTH = 1;
 mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
-    this.setElementInternal(
-        this.getDomHelper().createDom(
-            'ul', {'className':'mirosubs-titlesList'}));
+    this.setElementInternal(this.getDomHelper().createDom(
+        'ul', 'mirosubs-titlesList'));
     goog.array.forEach(this.captions_, this.addSubtitle, this);
 };
 
@@ -59,7 +58,8 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
                   this.subtitleWidgets_.length));
     this.subtitleWidgets_.push(subtitleWidget);
     if (this.subtitleWidgets_.length > 1)
-        this.setSubtitleMinMax_(this.subtitleWidgets_.length - 1);
+        this.setSubtitleMinMax_(this.subtitleWidgets_.length - 2);
+    this.setSubtitleMinMax_(this.subtitleWidgets_.length - 1);
     this.subtitleMap_[subtitle.getCaptionID() + ''] = subtitleWidget;
     if (typeof(opt_scrollDown) == 'boolean' && opt_scrollDown)
         this.scrollToCaption(subtitle.getCaptionID());
@@ -97,7 +97,7 @@ mirosubs.subtitle.SubtitleList.prototype.getActiveWidget = function() {
 mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
     var subtitleWidget = this.subtitleMap_[captionID + ''];
     goog.style.scrollIntoContainerView(subtitleWidget.getElement(),
-                                       this.getElement(), false);
+                                       this.getElement(), true);
 };
 mirosubs.subtitle.SubtitleList.prototype.updateWidget = function(captionID) {
     var subtitleWidget = this.subtitleMap_[captionID + ''];

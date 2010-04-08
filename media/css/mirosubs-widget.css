@@ -1,8 +1,8 @@
 .mirosubs-widgetContainer {
-width: 100%;
-height: 100% !important;
-position: relative;
-background: url("../images/black_trans1x1.png");
+    width: 100%;
+    height: 100% !important;
+    position: relative;
+    background: url("../images/black_trans1x1.png");
 }
 
 .mirosubs-widget {
@@ -436,27 +436,23 @@ margin: 20px 0 0 0px;
 
 
 .mirosubs-subtitleMe a.mirosubs-subtitleMeLink:hover span{
-border-bottom: 1px solid #fff;
+    border-bottom: 1px solid #fff;
 }
 
-
 .mirosubs-captioningArea {
-
     background: #fff url("../images/big_grad.png") 0 bottom no-repeat !important;
 }
 
 ul.mirosubs-titlesList {
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 0 0 150px 0 !important;
     border-bottom: 1px solid #ccc;
     overflow: auto;
-height: 280px;
+    height: 130px;
 }
 
-
 ul.mirosubs-titlesList.taller {
-
-height: 320px;
+    height: 170px;
 }
 
 ul.mirosubs-titlesList.sync {
