@@ -89,7 +89,8 @@ def srt(request):
         response_text = captions_to_srt(
             list(video.captions().videocaption_set.all()))
     response = HttpResponse(response_text, mimetype="text/plain")
-    response['Content-Disposition'] = 'attachment; filename=subs.srt'
+    response['Content-Disposition'] = \
+        'attachment; filename={0}'.format(video.srt_filename)
     return response
 
 def null_srt(request):
@@ -103,7 +104,8 @@ def null_srt(request):
         response_text = captions_to_srt(
             list(video.null_captions(request.user).videocaption_set.all()))
     response = HttpResponse(response_text, mimetype="text/plain")
-    response['Content-Disposition'] = 'attachment; filename=subs.srt'
+    response['Content-Disposition'] = \
+        'attachment; filename={0}'.format(video.srt_filename)
     return response
 
 def rpc(request, method_name):

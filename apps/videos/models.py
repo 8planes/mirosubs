@@ -59,6 +59,13 @@ class Video(models.Model):
             return 'unknown video %s' % video_url
 
     @property
+    def srt_filename(self):
+        if self.video_type == VIDEO_TYPE_HTML5:
+            return '{0}.srt'.format(self.video_url.split('/')[-1])
+        else:
+            return 'youtube_{0}.srt'.format(self.youtube_videoid)
+
+    @property
     def caption_state(self):
         video_captions = self.videocaptionversion_set.all()
         if len(video_captions) == 0:
