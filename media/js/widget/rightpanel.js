@@ -121,7 +121,7 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     el.appendChild($d('div', 'mirosubs-steps',
                       this.loginDiv_, this.doneAnchor_));
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
-    this.updateLoginState();                  
+    this.updateLoginState();
 };
 mirosubs.RightPanel.prototype.legendKeyClicked_ = function(keyCode, event) {
     this.dispatchEvent(
@@ -151,7 +151,26 @@ mirosubs.RightPanel.prototype.getDoneAnchor = function() {
     return this.doneAnchor_;
 };
 mirosubs.RightPanel.prototype.updateLoginState = function() {
-    // TODO: implement me!
+    goog.dom.removeChildren(this.loginDiv_);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    if (this.serverModel_.currentUsername() != null)
+        this.loginDiv_.innerHTML = 
+        ["You are logged in as ", 
+         this.serverModel_.currentUsername()].join('');
+    else {
+        var loginLink = $d('a', {'href':'#'}, "LOGIN");
+        this.loginDiv_.appendChild(
+            $d('div', 'mirosubs-needLogin',
+               goog.dom.createTextNode(
+                   'To save your subtitling work, you need to '),
+               loginLink));
+        this.getHandler().listen(loginLink, 'click', this.loginClicked_);
+    }
+};
+
+mirosubs.RightPanel.prototype.loginClicked_ = function(event) {
+    this.serverModel_.logIn();
+    event.preventDefault();
 };
 
 /**

@@ -27,6 +27,7 @@ mirosubs.Dialog = function(videoSource) {
     this.timelinePanel_ = null;
     this.captioningArea_ = null;
     this.rightPanelContainer_ = null;
+    this.rightPanel_ = null;
 };
 goog.inherits(mirosubs.Dialog, goog.ui.Dialog);
 mirosubs.Dialog.prototype.createDom = function() {
@@ -53,8 +54,13 @@ mirosubs.Dialog.prototype.getTimelinePanelInternal = function() {
 mirosubs.Dialog.prototype.getCaptioningAreaInternal = function() {
     return this.captioningArea_;
 };
-mirosubs.Dialog.prototype.getRightPanelContainerInternal = function() {
-    return this.rightPanelContainer_;
+mirosubs.Dialog.prototype.setRightPanelInternal = function(rightPanel) {
+    this.rightPanel_ = rightPanel;
+    this.rightPanelContainer_.removeChildren(true);
+    this.rightPanelContainer_.addChild(rightPanel, true);
+};
+mirosubs.Dialog.prototype.updateLoginState = function() {
+    this.rightPanel_.updateLoginState();
 };
 mirosubs.Dialog.prototype.disposeInternal = function() {
     mirosubs.Dialog.superClass_.disposeInternal.call(this);

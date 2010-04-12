@@ -88,10 +88,8 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     captionPanel.removeChildren(true);
     captionPanel.addChild(nextSubPanel, true);
 
-    var rightPanel = nextSubPanel.createRightPanel();
-    var rightPanelContainer = this.getRightPanelContainerInternal();
-    rightPanelContainer.removeChildren(true);
-    rightPanelContainer.addChild(rightPanel, true);
+    var rightPanel = nextSubPanel.createRightPanel(this.serverModel_);
+    this.setRightPanelInternal(rightPanel);
 
     this.disposeCurrentPanels_();
     this.currentSubtitlePanel_ = nextSubPanel;
@@ -116,10 +114,7 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     this.saved_ = true;
     var rightPanel = new mirosubs.subtitle.FinishedRightPanel(
         this.serverModel_);
-    // FIXME: three duplicated lines
-    var rightPanelContainer = this.getRightPanelContainerInternal();
-    rightPanelContainer.removeChildren(true);
-    rightPanelContainer.addChild(rightPanel, true);
+    this.setRightPanelInternal(rightPanel);
 
     this.currentRightPanel_.dispose();
     this.currentRightPanel_ = rightPanel;

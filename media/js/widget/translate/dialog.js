@@ -45,7 +45,7 @@ mirosubs.translate.Dialog.prototype.createDom = function() {
         this.unitOfWork_, this.serverModel_)
     this.getCaptioningAreaInternal().addChild(translationPanel, true);
     var rightPanel = this.createRightPanel_();
-    this.getRightPanelContainerInternal().addChild(rightPanel, true);
+    this.setRightPanelInternal(rightPanel);
     this.getHandler().listen(
         rightPanel, mirosubs.RightPanel.EventType.DONE,
         this.handleDoneKeyPress_);

@@ -66,6 +66,9 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL,
      * TODO: Only use list stored in MainMenu.
      */
     this.translationLanguages_ = translationLanguages;
+    this.handler_.listen(mirosubs.userEventTarget,
+                         goog.object.getValues(mirosubs.EventType),
+                         this.loginStatusChanged_);
     if (autoplayParams != null)
         this.subsLoaded_(autoplayParams['language_code'],
                          autoplayParams['subtitles']);
@@ -109,6 +112,11 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
         identifier["writelock_expiration"];
 };
 
+mirosubs.EmbeddableWidget.prototype.loginStatusChanged_ = function() {
+    if (this.dialog_)
+        this.dialog_.updateLoginState();
+};
+
 mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
     this.videoTab_.showLoading(true);
     var that = this;
@@ -139,10 +147,12 @@ mirosubs.EmbeddableWidget.prototype.startSubtitlingImpl_ =
             this.videoID_, version, this.nullWidget_),
         existingCaptions);
     subtitleDialog.setVisible(true);
+    this.dialog_ = subtitleDialog;
     var that = this;
     goog.events.listenOnce(
         subtitleDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
         function(event) {
+            that.dialog_ = null;
             if (subtitleDialog.isSaved()) {
                 // FIXME: petit duplication. appears in server-side code also.
                 that.videoTab_.setText('Choose language...');
@@ -219,10 +229,12 @@ mirosubs.EmbeddableWidget.prototype.addNewLanguageResponseReceived_ =
         this.videoSource_, this.videoID_, result['captions'], 
         result['languages'], this.nullWidget_);
     translationDialog.setVisible(true);
+    this.dialog_ = translationDialog;
     var that = this;
     goog.events.listenOnce(
         translationDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
         function(event) {
+            that.dialog_ = null;
             var availableLanguages = 
                 translationDialog.getAvailableLanguages();
             if (availableLanguages) {
