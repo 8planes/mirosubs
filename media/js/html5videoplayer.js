@@ -35,18 +35,20 @@ mirosubs.Html5VideoPlayer.HEIGHT = 300;
 mirosubs.Html5VideoPlayer.prototype.createDom = function() {
     mirosubs.Html5VideoPlayer.superClass_.createDom.call(this);
     this.getElement().style.height = mirosubs.Html5VideoPlayer.HEIGHT + 'px';
-    this.addVideoElement_(this.getElement());
+    this.addVideoElement_(this.getElement(), true);
 };
 mirosubs.Html5VideoPlayer.prototype.decorateInternal = function(el) {
     mirosubs.Html5VideoPlayer.superClass_.decorateInternal.call(this, el);
-    this.addVideoElement_(el);
+    this.addVideoElement_(el, false);
 };
-mirosubs.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
+mirosubs.Html5VideoPlayer.prototype.addVideoElement_ = function(el, hardCodeWidth) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    var params = {'autobuffer': 'a', 'controls': 'a' };
+    if (hardCodeWidth)
+        params['width'] = mirosubs.Html5VideoPlayer.WIDTH;
     el.appendChild(
         this.videoElem_ = 
-            $d('video', {'width': mirosubs.Html5VideoPlayer.WIDTH, 
-                         'autobuffer': 'a', 'controls': 'a' },
+            $d('video', params,
                $d('source', {'src': this.videoSource_.getVideoURL()})));    
 };
 mirosubs.Html5VideoPlayer.prototype.enterDocument = function() {
