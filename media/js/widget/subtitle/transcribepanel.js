@@ -56,7 +56,9 @@ mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
 mirosubs.subtitle.TranscribePanel.prototype.registerRightPanel = 
     function(rightPanel) 
 {
-    // do nothing
+    this.getHandler().listen(rightPanel,
+                             mirosubs.RightPanel.EventType.RESTART,
+                             this.startOverClicked_);
 };
 mirosubs.subtitle.TranscribePanel.prototype.createRightPanel = 
     function(serverModel) 
@@ -107,4 +109,21 @@ mirosubs.subtitle.TranscribePanel.prototype.newTitle_ = function(event) {
 
 mirosubs.subtitle.TranscribePanel.prototype.setRepeatVideoMode = function(mode) {
     this.lineEntry_.setRepeatVideoMode(mode);
+};
+
+mirosubs.subtitle.TranscribePanel.prototype.startOverClicked_ = function() {
+    var answer = confirm("Are you sure you want to start over? " +
+                         "All subtitles will be deleted.");
+    if (answer) {
+        while (this.captions_.length > 0) {
+            var caption = this.captions_.pop();
+            this.unitOfWork_.registerDeleted(caption);
+            // TODO: at this point, these subtitles are not in the CaptionManager.
+            // But, if they are in the future (like, there is a back button in 
+            // the process), then they need to be removed from the CaptionManager
+            // also.
+        }
+        this.subtitleList_.clearAll();
+        this.videoPlayer_.setPlayheadTime(0);
+    }
 };

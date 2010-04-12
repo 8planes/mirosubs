@@ -56,6 +56,6 @@ mirosubs.subtitle.ReviewPanel.prototype.createRightPanel =
             'Skip Back 8 Seconds', KC.CTRL)
     ];
     return new mirosubs.RightPanel(
-        serverModel, helpContents, keySpecs, true, "Done?", 
+        serverModel, helpContents, keySpecs, false, "Done?", 
         "Submit your work");
 };

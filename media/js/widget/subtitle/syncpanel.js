@@ -78,6 +78,9 @@ mirosubs.subtitle.SyncPanel.prototype.registerRightPanel =
     this.getHandler().listen(rightPanel, 
                              mirosubs.RightPanel.EventType.LEGENDKEY,
                              this.handleLegendKeyPress_);
+    this.getHandler().listen(rightPanel,
+                             mirosubs.RightPanel.EventType.RESTART,
+                             this.startOverClicked_);
 }
 mirosubs.subtitle.SyncPanel.prototype.createRightPanel = function(serverModel) {
     var helpContents = new mirosubs.RightPanel.HelpContents(
@@ -228,12 +231,18 @@ mirosubs.subtitle.SyncPanel.prototype.moveSubTimesBack =
         this.subtitleList_.setActiveWidget(subtitle.getCaptionID());
     }
 };
-mirosubs.subtitle.SyncPanel.prototype.startOver = function() {
-    var i;
-    for (i = 0; i < this.subtitles_.length; i++) {
-        this.subtitles_[i].setStartTime(-1);
-        this.subtitles_[i].setEndTime(-1);
-        this.subtitleList_.updateWidget(this.subtitles_[i].getCaptionID());
+mirosubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
+    var answer = 
+        confirm("Are you sure you want to start over? All timestamps " +
+                "will be deleted.");
+    if (answer) {
+        var i;
+        for (i = 0; i < this.subtitles_.length; i++) {
+            this.subtitles_[i].setStartTime(-1);
+            this.subtitles_[i].setEndTime(-1);
+            this.subtitleList_.updateWidget(this.subtitles_[i].getCaptionID());
+        }
+        this.videoPlayer_.setPlayheadTime(0);
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {

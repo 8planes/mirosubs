@@ -36,6 +36,12 @@ mirosubs.subtitle.SubtitleList = function(videoPlayer, captions, displayTimes) {
 };
 goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
 mirosubs.subtitle.SubtitleList.MIN_SUB_LENGTH = 1;
+mirosubs.subtitle.SubtitleList.prototype.clearAll = function() {
+    this.captions_ = [];
+    this.subtitleWidgets_ = [];
+    this.subtitleMap_ = {};
+    this.removeChildren(true);
+};
 mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper().createDom(
         'ul', 'mirosubs-titlesList'));
@@ -112,6 +118,7 @@ mirosubs.subtitle.SubtitleList.prototype.updateWidget = function(captionID) {
     var subtitleWidget = this.subtitleMap_[captionID + ''];
     subtitleWidget.updateValues();
     this.setSubtitleMinMax_(subtitleWidget.getIndex() + 1);
+    this.setSubtitleMinMax_(subtitleWidget.getIndex());
     this.setSubtitleMinMax_(subtitleWidget.getIndex() - 1);
 };
 mirosubs.subtitle.SubtitleList.prototype.setSubtitleMinMax_ = function(index) {
