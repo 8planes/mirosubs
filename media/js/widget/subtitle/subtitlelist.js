@@ -21,8 +21,9 @@ goog.provide('mirosubs.subtitle.SubtitleList');
 /**
  * @param {Array.<mirosubs.subtitle.EditableCaption>} captions
  */
-mirosubs.subtitle.SubtitleList = function(captions, displayTimes) {
+mirosubs.subtitle.SubtitleList = function(videoPlayer, captions, displayTimes) {
     goog.ui.Component.call(this);
+    this.videoPlayer_ = videoPlayer;
     this.captions_ = captions;
     this.displayTimes_ = displayTimes;
     this.currentActiveSubtitle_ = null;
@@ -53,7 +54,10 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
             this.subtitleWidgets_.length);
     this.addChild(subtitleWidget, true);
     this.getHandler().listen(
-        subtitleWidget, mirosubs.Spinner.VALUE_CHANGED,
+        subtitleWidget, mirosubs.Spinner.EventType.ARROW_PRESSED,
+        this.timeSpinnerPressed_);
+    this.getHandler().listen(
+        subtitleWidget, mirosubs.Spinner.EventType.VALUE_CHANGED,
         goog.bind(this.timeValueChanged_, this, 
                   this.subtitleWidgets_.length));
     this.subtitleWidgets_.push(subtitleWidget);
@@ -70,12 +74,17 @@ mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
         this.currentActiveSubtitle_ = null;
     }
 };
+mirosubs.subtitle.SubtitleList.prototype.timeSpinnerPressed_ = function(event) {
+    this.videoPlayer_.pause();
+};
 mirosubs.subtitle.SubtitleList.prototype.timeValueChanged_ = 
     function(subtitleIndex, event)
 {
     var newTimeValue = event.value;
     var subtitle = this.subtitleWidgets_[subtitleIndex].getSubtitle();
     subtitle.setStartTime(newTimeValue);
+    this.videoPlayer_.setPlayheadTime(newTimeValue);
+    this.videoPlayer_.play();
     if (subtitleIndex > 0) {
         var lastSubtitle = this.subtitleWidgets_[
             subtitleIndex - 1].getSubtitle();

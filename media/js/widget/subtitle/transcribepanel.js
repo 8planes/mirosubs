@@ -51,12 +51,12 @@ mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(
         this.videoPlayer_), true);
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-        this.captions_, false), true);
+        this.videoPlayer_, this.captions_, false), true);
 };
 mirosubs.subtitle.TranscribePanel.prototype.registerRightPanel = 
     function(rightPanel) 
 {
-    
+    // do nothing
 };
 mirosubs.subtitle.TranscribePanel.prototype.createRightPanel = 
     function(serverModel) 

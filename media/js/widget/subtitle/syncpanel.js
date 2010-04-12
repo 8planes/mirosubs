@@ -69,7 +69,7 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());    
     this.getElement().appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-        this.subtitles_, true), true);
+        this.videoPlayer_, this.subtitles_, true), true);
 };
 mirosubs.subtitle.SyncPanel.prototype.registerRightPanel = 
     function(rightPanel) 

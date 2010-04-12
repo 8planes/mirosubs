@@ -47,7 +47,11 @@ mirosubs.Spinner = function(value, min, max, valueExpression) {
 goog.inherits(mirosubs.Spinner, goog.ui.Component);
 mirosubs.Spinner.logger_ =
     goog.debug.Logger.getLogger('mirosubs.Spinner');
-mirosubs.Spinner.VALUE_CHANGED = "valueChanged";
+
+mirosubs.Spinner.EventType = {
+    ARROW_PRESSED: "arrowPressed",
+    VALUE_CHANGED: "valueChanged"
+};
 mirosubs.Spinner.INITIAL_SPEED = 7;
 mirosubs.Spinner.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
@@ -108,6 +112,7 @@ mirosubs.Spinner.prototype.timerTick_ = function(event) {
 };
 mirosubs.Spinner.prototype.mouseDown_ = function(event) {
     if (this.enabled_) {
+        this.dispatchEvent(mirosubs.Spinner.EventType.ARROW_PRESSED);
         this.activated_ = true;
         if (event.target == this.upAnchor_) {
             this.increment_ = true;
@@ -162,6 +167,6 @@ mirosubs.Spinner.prototype.disposeInternal = function() {
     this.valueExpression_ = null;
 };
 mirosubs.Spinner.ValueChangedEvent = function(value) {
-    this.type = mirosubs.Spinner.VALUE_CHANGED;
+    this.type = mirosubs.Spinner.EventType.VALUE_CHANGED;
     this.value = value;
 };
