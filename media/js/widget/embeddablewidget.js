@@ -21,7 +21,7 @@ goog.provide('mirosubs.EmbeddableWidget');
 mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL, 
                                      youtubeVideoID, translationLanguages, 
                                      showTab, nullWidget, 
-                                     autoplayParams) {
+                                     autoplayParams, subtitleImmediately) {
     goog.Disposable.call(this);
 
     this.videoID_ = videoID;
@@ -72,6 +72,8 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL,
     if (autoplayParams != null)
         this.subsLoaded_(autoplayParams['language_code'],
                          autoplayParams['subtitles']);
+    if (subtitleImmediately)
+        goog.Timer.callOnce(goog.bind(this.startSubtitling_, this));
 };
 goog.inherits(mirosubs.EmbeddableWidget, goog.Disposable);
 
@@ -95,7 +97,8 @@ mirosubs.EmbeddableWidget.wrap = function(identifier) {
                                       identifier["translation_languages"],
                                       identifier["show_tab"],
                                       identifier["null_widget"],
-                                      identifier["autoplay_params"]));
+                                      identifier["autoplay_params"],
+                                      identifier["subtitle_immediately"]));
 };
 
 mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {

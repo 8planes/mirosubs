@@ -25,19 +25,16 @@ div.mirosubs-widget {
 {% for dep in js_dependencies %}
   <script type="text/javascript" src="{{dep|safe}}"></script>
 {% endfor %}
-<script type="text/javascript">
-function main(){
-    mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
-}
-</script>
 {% endblock %}
-
-{% block body_attrs %}onload="main()"{% endblock %}
 {% block main_content %}
 <p>{{ video.video_url }}</p>
 
 {% with video.video_url as video_url %}
   {% include "widget/widget.html" %}
+<script type="text/javascript">
+mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
+</script>
+
   <p>Enable collaborative subtitling on your site by copying and pasting this code:</p>
   <div id="embed">
     <code>

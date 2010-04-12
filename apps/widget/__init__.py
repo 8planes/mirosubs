@@ -29,14 +29,15 @@ def full_path(js_file):
     return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
 
 def js_context(request, video, null_widget, element_id=None, 
-               debug_js=False, autoplay_lang_code=None):
+               debug_js=False, autoplay_lang_code=None, subtitle_immediately=False):
     params = {'uuid': str(uuid4()).replace('-', ''),
               'video_id': video.video_id,
               'video_url': video.video_url,
               'youtube_videoid': video.youtube_videoid,
               'null_widget': 'true' if null_widget else 'false',
               'debug_js': 'true' if debug_js else 'false',
-              'writelock_expiration': video_models.WRITELOCK_EXPIRATION
+              'writelock_expiration': video_models.WRITELOCK_EXPIRATION,
+              'subtitle_immediately': 'true' if subtitle_immediately else 'false'
               }
     if autoplay_lang_code is not None:
         params['autoplay_params'] = create_autoplay_params(
