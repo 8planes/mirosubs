@@ -43,13 +43,23 @@ mirosubs.Html5VideoPlayer.prototype.decorateInternal = function(el) {
 };
 mirosubs.Html5VideoPlayer.prototype.addVideoElement_ = function(el, hardCodeWidth) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var params = {'autobuffer': 'a', 'controls': 'a' };
-    if (hardCodeWidth)
-        params['width'] = mirosubs.Html5VideoPlayer.WIDTH;
-    el.appendChild(
-        this.videoElem_ = 
-            $d('video', params,
-               $d('source', {'src': this.videoSource_.getVideoURL()})));    
+    var testVideo = $d('video');
+    if (typeof(testVideo['canPlayType']) != 'undefined') {
+        var params = {'autobuffer': 'a', 'controls': 'a' };
+        if (hardCodeWidth)
+            params['width'] = mirosubs.Html5VideoPlayer.WIDTH;
+        el.appendChild(
+            this.videoElem_ = 
+                $d('video', params,
+                   $d('source', {'src': this.videoSource_.getVideoURL()})));
+    }
+    else {
+        el.style.width = '400px';
+        el.style.height = '300px';
+        el.style.lineHeight = '300px';
+        el.innerHTML = "Sorry, your browser can't play HTML5/Ogg video. " +
+            "<a href='http://getfirefox.com'>Get Firefox</a>.";
+    }
 };
 mirosubs.Html5VideoPlayer.prototype.enterDocument = function() {
     this.getHandler().listen(this.videoElem_, 'play', this.videoPlaying_);
