@@ -8,5 +8,12 @@ To run the development version:
    $ easy_install -U setuptools
    $ easy_install pip
    $ pip install -r deploy/dev-requirements.txt
-
-The last command will install django and some basic project niceties.
+       note: you'll need mercurial installed to make this last command work.
+5. Check out google closure into directory of your choice: svn checkout 
+   http://closure-library.googlecode.com/svn/trunk/ <directory>. Then 
+   symlink media/js/closure-library to the checkout location.
+6. Add mirosubs.example.com to your hosts file, pointing at 127.0.0.1. 
+   This is necessary for Twitter oauth to work correctly.
+7. After running syncdb, use manage.py runserver --settings=dev-settings 
+   to run the development server with development settings. You can access 
+   the site at http://mirosubs.example.com:8000.

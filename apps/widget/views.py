@@ -133,8 +133,10 @@ def xd_rpc(request, method_name):
 # start of rpc methods
 
 def start_editing(request, video_id):
-    # three cases: either the video is locked, or it is owned by someone else 
-    # already and doesn't allow community edits, or i can freely edit it.
+    """Called by subtitling widget when subtitling is to commence or recommence on a video.
+
+    Three cases: either the video is locked, or it is owned by someone else 
+    already and doesn't allow community edits, or i can freely edit it."""
 
     maybe_add_video_session(request)
 
@@ -176,6 +178,8 @@ def start_editing_null(request, video_id):
                           caption in captions] }
 
 def start_translating(request, video_id, language_code):
+    """Called by widget whenever translating is about to commence or recommence or a video."""
+
     maybe_add_video_session(request)
 
     video = models.Video.objects.get(video_id=video_id)

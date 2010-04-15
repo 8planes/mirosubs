@@ -34,6 +34,7 @@ WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
 
 class Video(models.Model):
+    """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
     video_type = models.CharField(max_length=1, choices=VIDEO_TYPE)
     # only nonzero length for HTML5 videos
@@ -60,6 +61,7 @@ class Video(models.Model):
 
     @property
     def srt_filename(self):
+        """The best SRT filename for this video."""
         if self.video_type == VIDEO_TYPE_HTML5:
             return '{0}.srt'.format(self.video_url.split('/')[-1])
         else:
@@ -67,6 +69,12 @@ class Video(models.Model):
 
     @property
     def caption_state(self):
+        """Subtitling state for this video 
+
+        Either subtitling hasn't started yet, or someone has marked one 
+        VideoCaptionVersion as finished, or VideoCaptionVersions exist 
+        but none have been marked as finished yet.
+        """
         video_captions = self.videocaptionversion_set.all()
         if len(video_captions) == 0:
             return NO_CAPTIONS
@@ -84,6 +92,7 @@ class Video(models.Model):
             return max(version_list, key=lambda v: v.version_no)
 
     def null_captions(self, user):
+        """Returns NullVideoCaptions for user, or None if none exist."""
         captions = list(self.nullvideocaptions_set.all().filter(
                 user__id__exact=user.id))
         return None if len(captions) == 0 else captions[0]
@@ -95,7 +104,8 @@ class Video(models.Model):
         return None if len(translations) == 0 else translations[0]
 
     def captions_and_translations(self, language_code):
-        """
+        """(VideoCaption, Translation) pair list
+
         Returns (VideoCaption, Translation) tuple list, where the 
         Translation in each tuple might be None if there's no trans 
         for the caption
@@ -104,7 +114,8 @@ class Video(models.Model):
             self.captions(), self.translations(language_code))
 
     def null_captions_and_translations(self, user, language_code):
-        """
+        """(VideoCaption, Translation) pair list
+
         Returns (VideoCaption, Translation) tuple list, where the 
         Translation in each tuple might be None if there's no trans 
         for the caption
@@ -126,7 +137,7 @@ class Video(models.Model):
                 for subtitle in subtitles]
 
     def translations(self, language_code):
-        """Returns latest TranslationVersion, or None if none found"""
+        """Returns latest TranslationVersion for language_code, or None if none found"""
         trans_lang = self.translation_language(language_code)
         if trans_lang is None:
             return None
@@ -139,6 +150,7 @@ class Video(models.Model):
         return None if len(translations) == 0 else translations[0]
 
     def translation_language_codes(self):
+        """All iso language codes with translations."""
         return set([trans.language for trans 
                     in list(self.translationlanguage_set.all())])
 
@@ -151,6 +163,7 @@ class Video(models.Model):
 
     @property
     def writelock_owner_name(self):
+        """The user who currently has a subtitling writelock on this video."""
         if self.writelock_owner == None:
             return "anonymous"
         else:
@@ -158,6 +171,7 @@ class Video(models.Model):
 
     @property
     def is_writelocked(self):
+        """Is this video writelocked for subtitling?"""
         if self.writelock_time == None:
             return False
         delta = datetime.now() - self.writelock_time
@@ -165,10 +179,12 @@ class Video(models.Model):
         return seconds < WRITELOCK_EXPIRATION
 
     def can_writelock(self, session_key):
+        """Can I place a writelock on this video for subtitling?"""
         return self.writelock_session_key == session_key or \
             not self.is_writelocked
 
     def writelock(self, request):
+        """Writelock this video for subtitling."""
         if request.user.is_authenticated():
             self.writelock_owner = request.user
         else:
@@ -177,6 +193,7 @@ class Video(models.Model):
         self.writelock_time = datetime.now()
 
     def release_writelock(self):
+        """Writelock this video for subtitling."""
         self.writelock_owner = None
         self.writelock_session_key = ''
         self.writelock_time = None
@@ -191,6 +208,11 @@ def create_video_id(sender, instance, **kwargs):
 models.signals.pre_save.connect(create_video_id, sender=Video)
 
 class VideoCaptionVersion(models.Model):
+    """A video subtitles snapshot at the end of a particular subtitling session.
+
+    A new VideoCaptionVersion is added during each subtitling session, each time 
+    copying the subtitles from the previous session and adding any additional 
+    changes for this session."""
     video = models.ForeignKey(Video)
     version_no = models.PositiveIntegerField(default=0)
     # true iff user clicked "finish" at end of captioning process.
@@ -212,6 +234,10 @@ class NullTranslations(models.Model):
 
 # TODO: make TranslationLanguage unique on (video, language)
 class TranslationLanguage(models.Model):
+    """A given language for a video.
+
+    This object is writelocked whenever someone is editing translations 
+    for a particular language for a particular video"""
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=LANGUAGES)
     writelock_time = models.DateTimeField(null=True)
@@ -263,6 +289,12 @@ class TranslationLanguage(models.Model):
 
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(models.Model):
+    """Snapshot of translations for a (video, language) pair at the end of a translating session.
+
+    Every time a new translating session is started, the previous session's 
+    translations are copied into a new TranslationVersion, and then the new 
+    session works with the Translations attached to the new TranslationVersion.
+    """
     language = models.ForeignKey(TranslationLanguage)
     version_no = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User)
@@ -271,6 +303,11 @@ class TranslationVersion(models.Model):
 
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
+    """A translation of one subtitle.
+
+    The subtitle to which this translation applies is identified by 
+    caption_id. Using a foreign key would not work well on account 
+    of the versioning system."""
     version = models.ForeignKey(TranslationVersion, null=True)
     null_translations = models.ForeignKey(NullTranslations, null=True)
     caption_id = models.IntegerField()
@@ -289,6 +326,12 @@ class Translation(models.Model):
                  'text': self.translation_text }
 
 class VideoCaption(models.Model):
+    """A single subtitle for a video.
+
+    Note that caption_id is an identifier that is assigned by the client 
+    while subtitling. caption_id should be unique for each VideoCaption 
+    for a given video. caption_id remains the same across VideoCaptionVersions, 
+    unlike database primary keys."""
     version = models.ForeignKey(VideoCaptionVersion, null=True)
     null_captions = models.ForeignKey(NullVideoCaptions, null=True)
     caption_id = models.IntegerField()
