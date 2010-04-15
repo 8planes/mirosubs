@@ -35,7 +35,7 @@ mirosubs.subtitle.TranscribeEntry.logger_ =
     goog.debug.Logger.getLogger('mirosubs.subtitle.TranscribeEntry');
 
 mirosubs.subtitle.TranscribeEntry.P = 4;
-mirosubs.subtitle.TranscribeEntry.R = 6;
+mirosubs.subtitle.TranscribeEntry.R = 3;
 mirosubs.subtitle.TranscribeEntry.S = 1;
 
 mirosubs.subtitle.TranscribeEntry.prototype.createDom = function() {
