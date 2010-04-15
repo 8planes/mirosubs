@@ -59,6 +59,9 @@ class Video(models.Model):
         else:
             return 'unknown video %s' % video_url
     
+    def translation_count(self):
+        return self.translationlanguage_set.count()
+    
     def get_video_url(self):
         if self.video_type == VIDEO_TYPE_HTML5:
             return self.video_url
