@@ -152,7 +152,8 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'videos',
     'widget',
-    'auth'
+    'auth',
+    'south'
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
