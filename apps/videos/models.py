@@ -57,16 +57,15 @@ class Video(models.Model):
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
             return 'youtube: %s' % self.youtube_videoid
         else:
-            return 'unknown video %s' % video_url
-    
-    def translation_count(self):
-        return self.translationlanguage_set.count()
+            return 'unknown video %s' % self.video_url
     
     def get_video_url(self):
         if self.video_type == VIDEO_TYPE_HTML5:
             return self.video_url
-        else:
+        elif self.video_type == VIDEO_TYPE_YOUTUBE:
             return 'http://www.youtube.com/v/%s' % self.youtube_videoid
+        else:
+            return self.video_url
         
     @property
     def srt_filename(self):

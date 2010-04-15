@@ -4,19 +4,31 @@
   <table>
     <tr>
       <th>URL</th>
-      <th>Views</th>
+      <th>
+      	 {% ifequal ordering 'view_count' %}
+      	     <a href="?o=view_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Views</a>
+	     {% else %}
+		     <a href="?o=view_count&ot=asc&page={{ page }}">Views</a>
+		 {% endifequal %}
+	  </th>
       <th>Subtitles Fetched</th>
-      <th>Translations</th>
+      <th>
+         {% ifequal ordering 'translation_count' %}
+             <a href="?o=translation_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Translations</a>
+         {% else %}
+             <a href="?o=translation_count&ot=asc&page={{ page }}">Translations</a>
+         {% endifequal %}      	
+	   </th>
     </tr>
     {% for video in video_list %}
       <tr>
         <td>
             <a href="{% url videos:video video_id=video.video_id %}">
-                {{ video.get_video_url|slice:":25" }}
+                {{ video.get_video_url|slice:":36" }}
             </a>
         </td>
         <td>{{ video.view_count }}</td>
-        <td>{{ video.videocaption_set.count }}</td>
+        <td>{{ video.videocaptionversion_set.count }}</td>
         <td>{{ video.translation_count }}</td>
       </tr>
     {% endfor %}

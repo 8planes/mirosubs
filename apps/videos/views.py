@@ -71,12 +71,21 @@ def video(request, video_id):
                               context_instance=RequestContext(request))
                               
 def video_list(request):
+    from django.db.models import Count
     try:
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.all()
+    qs = Video.objects.annotate(translation_count=Count('translationlanguage'))
+    ordering = request.GET.get('o')
+    order_type = request.GET.get('ot')
+    extra_context = {}
+    if ordering in ['view_count', 'translation_count'] and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
+        extra_context['ordering'] = ordering
+        extra_context['order_type'] = order_type
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=50, page=page,
                        template_name='videos/video_list.html',
-                       template_object_name='video')
+                       template_object_name='video',
+                       extra_context=extra_context)
