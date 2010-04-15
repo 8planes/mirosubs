@@ -91,9 +91,6 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
             var now = new Date();
             var playheadTime = this.videoPlayer_.getPlayheadTime()
             mirosubs.subtitle.TranscribeEntry.logger_.info(
-                "Setting firstKeyStrokeTime_ to " + 
-                    now.getTime());
-            mirosubs.subtitle.TranscribeEntry.logger_.info(
                 "Setting firstKeyStrokePlayheadTime_ to " + 
                     playheadTime);
             this.firstKeyStrokeTime_ = now;
