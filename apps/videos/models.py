@@ -58,7 +58,13 @@ class Video(models.Model):
             return 'youtube: %s' % self.youtube_videoid
         else:
             return 'unknown video %s' % video_url
-
+    
+    def get_video_url(self):
+        if self.video_type == VIDEO_TYPE_HTML5:
+            return self.video_url
+        else:
+            return 'http://www.youtube.com/v/%s' % self.youtube_videoid
+        
     @property
     def srt_filename(self):
         """The best SRT filename for this video."""
