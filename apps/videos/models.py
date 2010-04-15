@@ -300,7 +300,8 @@ class TranslationVersion(models.Model):
     user = models.ForeignKey(User)
     # true iff user has clicked "finish" in translating process.
     is_complete = models.BooleanField()
-
+    datetime_started = models.DateTimeField()
+    
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
     """A translation of one subtitle.
