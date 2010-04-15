@@ -139,10 +139,6 @@ mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     this.labelInput_.label_ = '';
     this.labelInput_.setValue('');
     this.labelInput_.focusAndSelect();
-    // TODO: extract the next three lines into method called resetTypingStateMachine
-    this.continuouslyTyping_ = false;
-    this.typingPauseTimer_.stop();
-    this.continuousTypingTimer_.stop();
     this.dispatchEvent(new mirosubs.subtitle.TranscribeEntry
                        .NewTitleEvent(value));
 };
