@@ -455,7 +455,8 @@ def save_translations_impl(request, translation_language,
         current_version = models.TranslationVersion(language=translation_language, 
                                                     version_no=version_no,
                                                     user=request.user,
-                                                    is_complete=False)
+                                                    is_complete=False,
+                                                    datetime_started=datetime.now())
         if last_version != None:
             current_version.is_complete = last_version.is_complete
             current_version.save()

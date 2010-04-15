@@ -1,0 +1,18 @@
+{% for item in events %}
+    <p>
+    	{% if item.user %}
+		  <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+		{% else %}
+		  Anonymous
+		{% endif %}
+		
+        {% if item.language %}
+            edited {{ item.language }} translations for 
+		{% else %}
+		    edited subtitles for
+		{% endif %}
+		
+        <a href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
+		at {{ item.time }}.		
+	</p>
+{% endfor %}
