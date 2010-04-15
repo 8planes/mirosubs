@@ -7,7 +7,6 @@
       <th>Views</th>
       <th>Subtitles Fetched</th>
       <th>Translations</th>
-      <th>Transcriptions</th>
     </tr>
     {% for video in video_list %}
       <tr>
@@ -19,7 +18,6 @@
         <td>{{ video.view_count }}</td>
         <td>{{ video.videocaption_set.count }}</td>
         <td>{{ video.translation_count }}</td>
-        <td>{{ video.videocaptionversion_set.count }}</td>
       </tr>
     {% endfor %}
   </table>
