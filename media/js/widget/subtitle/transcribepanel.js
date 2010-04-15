@@ -46,6 +46,13 @@ mirosubs.subtitle.TranscribePanel.prototype.getContentElement = function() {
 
 mirosubs.subtitle.TranscribePanel.prototype.createDom = function() {
     mirosubs.subtitle.TranscribePanel.superClass_.createDom.call(this);
+    this.addElems_(this.getElement());
+};
+mirosubs.subtitle.TranscribePanel.prototype.decorateInternal = function(el) {
+    mirosubs.subtitle.TranscribePanel.superClass_.decorateInternal.call(this, el);
+    this.addElems_(el);
+};
+mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getElement().appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(
@@ -58,7 +65,7 @@ mirosubs.subtitle.TranscribePanel.prototype.registerRightPanel =
 {
     this.getHandler().listen(rightPanel,
                              mirosubs.RightPanel.EventType.RESTART,
-                             this.startOverClicked_);
+                             this.startOverClicked);
 };
 mirosubs.subtitle.TranscribePanel.prototype.createRightPanel = 
     function(serverModel) 
@@ -106,12 +113,15 @@ mirosubs.subtitle.TranscribePanel.prototype.newTitle_ = function(event) {
     newEditableCaption.setText(event.title);
     this.subtitleList_.addSubtitle(newEditableCaption, true);
 };
-
+/**
+ *
+ * @param {boolean} mode True to turn repeat on, false to turn it off.
+ */
 mirosubs.subtitle.TranscribePanel.prototype.setRepeatVideoMode = function(mode) {
     this.lineEntry_.setRepeatVideoMode(mode);
 };
 
-mirosubs.subtitle.TranscribePanel.prototype.startOverClicked_ = function() {
+mirosubs.subtitle.TranscribePanel.prototype.startOverClicked = function() {
     var answer = confirm("Are you sure you want to start over? " +
                          "All subtitles will be deleted.");
     if (answer) {

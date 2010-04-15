@@ -21,15 +21,32 @@ goog.provide('mirosubs.subtitle.TranscribeEntry');
 mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
-    this.firstKeyStrokeTime_ = -1;
+    /**
+     * The time at which continuous typing last started. Set to null at the 
+     * beginning of a new subtitle and also after a pause of S seconds.
+     * @type {?number}
+     */
+    this.firstKeyStrokeTime_ = null;
+    this.firstKeyStrokePlayheadTime_ = null;
     this.repeatVideoMode_ = false;
-    this.repeatVideoTimer_ = null;
+    this.typingPauseTimer_ = new goog.Timer(
+        mirosubs.subtitle.TranscribeEntry.S * 1000);
 };
 goog.inherits(mirosubs.subtitle.TranscribeEntry, goog.ui.Component);
 mirosubs.subtitle.TranscribeEntry.logger_ = 
     goog.debug.Logger.getLogger('mirosubs.subtitle.TranscribeEntry');
-mirosubs.subtitle.TranscribeEntry.REPEAT_SECS = 10;
-mirosubs.subtitle.TranscribeEntry.RETURN_SECS = 6;
+
+/**
+ * Number of seconds of continuous typing before restarting to 
+ * firstKeyStrokePlayheadTime_ - R
+ */
+mirosubs.subtitle.TranscribeEntry.P = 4;
+mirosubs.subtitle.TranscribeEntry.R = 6;
+/**
+ * Minimum number of seconds to pause before restarting typingPauseTimer_
+ */
+mirosubs.subtitle.TranscribeEntry.S = 1;
+
 mirosubs.subtitle.TranscribeEntry.prototype.createDom = function() {
     mirosubs.subtitle.TranscribeEntry.superClass_.createDom.call(this);
     this.getElement().setAttribute('class', 'mirosubs-transcribeControls');
@@ -47,6 +64,15 @@ mirosubs.subtitle.TranscribeEntry.prototype.enterDocument = function() {
     this.getHandler().listen(this.labelInput_.getElement(),
                              goog.events.EventType.KEYUP,
                              this.handleKeyUp_);
+    this.getHandler().listen(this.typingPauseTimer_,
+                             goog.Timer.TICK,
+                             this.typingPauseTimerTick_);
+    mirosubs.subtitle.TranscribeEntry.logger_.info(
+        "P is set to " + mirosubs.subtitle.TranscribeEntry.P);
+    mirosubs.subtitle.TranscribeEntry.logger_.info(
+        "R is set to " + mirosubs.subtitle.TranscribeEntry.R);
+    mirosubs.subtitle.TranscribeEntry.logger_.info(
+        "S is set to " + mirosubs.subtitle.TranscribeEntry.S);
 };
 mirosubs.subtitle.TranscribeEntry.prototype.focus = function() {
     if (this.labelInput_.getValue() == '')
@@ -59,34 +85,43 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
         event.preventDefault();
         this.addNewTitle_();
     }
-    else if (this.firstKeyStrokeTime_ == -1 && 
-             event.keyCode != goog.events.KeyCodes.TAB) {
-        this.firstKeyStrokeTime_ = this.videoPlayer_.getPlayheadTime();
-        if (this.repeatVideoMode_)
-            this.startRepeatVideoTimer_();
+    else if (event.keyCode != goog.events.KeyCodes.TAB && 
+             this.repeatVideoMode_) {
+        if (this.firstKeyStrokeTime_ == null) {
+            var now = new Date();
+            var playheadTime = this.videoPlayer_.getPlayheadTime()
+            mirosubs.subtitle.TranscribeEntry.logger_.info(
+                "Setting firstKeyStrokePlayheadTime_ to " + 
+                    playheadTime);
+            this.firstKeyStrokeTime_ = now;
+            this.firstKeyStrokePlayheadTime_ = playheadTime;
+            this.typingPauseTimer_.start();
+        }
+        else {
+            // restart timer.
+            this.typingPauseTimer_.stop();
+            this.typingPauseTimer_.start();
+        }
     }
 };
-mirosubs.subtitle.TranscribeEntry.prototype.repeatTimerTick_ = function() {
-    var newPlayheadTime = this.firstKeyStrokeTime_ - 
-        mirosubs.subtitle.TranscribeEntry.RETURN_SECS;
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        'Setting playhead time to ' + newPlayheadTime);
-    this.videoPlayer_.setPlayheadTime(newPlayheadTime);
-    this.repeatVideoTimer_.setInterval(
-        mirosubs.subtitle.TranscribeEntry.REPEAT_SECS * 1000);
-};
-mirosubs.subtitle.TranscribeEntry.prototype.startRepeatVideoTimer_ = function() {
-    this.stopAndDisposeRepeatTimer_();
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        "Starting repeat video timer with for playhead time " +
-            this.firstKeyStrokeTime_);
-    this.repeatVideoTimer_ = new goog.Timer(
-        (mirosubs.subtitle.TranscribeEntry.REPEAT_SECS - 
-         mirosubs.subtitle.TranscribeEntry.RETURN_SECS) * 1000);
-    this.repeatVideoTimer_.start();
-    this.getHandler().listen(this.repeatVideoTimer_, 
-                             goog.Timer.TICK, 
-                             this.repeatTimerTick_);
+mirosubs.subtitle.TranscribeEntry.prototype.typingPauseTimerTick_ = function() {
+    // S seconds since last keystroke!
+    var now = new Date();
+    var typingTime = (now.getTime() - this.firstKeyStrokeTime_.getTime()) / 1000;
+    this.firstKeyStrokeTime_ = null;
+    this.typingPauseTimer_.stop();
+    if (typingTime >= mirosubs.subtitle.TranscribeEntry.P) {
+        mirosubs.subtitle.TranscribeEntry.logger_.info(
+            ["Over P seconds of continuous typing followed by a pause of S. ",
+             "Restarting video to firstKeyStrokePlayheadTime_ - R"].join(''));
+        this.videoPlayer_.setPlayheadTime(
+            this.firstKeyStrokePlayheadTime_ - 
+                mirosubs.subtitle.TranscribeEntry.R);
+    }
+    else
+        mirosubs.subtitle.TranscribeEntry.logger_.info(
+            ["Typing followed by a pause of S, but typing was not ", 
+             "continuous for over P seconds"].join(''));
 };
 /**
  * Turns Repeat Video Mode on or off. When this mode is turned on, the video 
@@ -95,12 +130,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.startRepeatVideoTimer_ = function() 
  */
 mirosubs.subtitle.TranscribeEntry.prototype.setRepeatVideoMode = function(mode) {
     this.repeatVideoMode_ = mode;
-    if (!mode) {
-        this.firstKeyStrokeTime_ = -1;
-        this.stopAndDisposeRepeatTimer_();
-    }
-    else if (this.firstKeyStrokeTime_ != -1)
-        this.startRepeatVideoTimer_();
+    this.firstKeyStrokeTime_ = null;
+    this.typingPauseTimer_.stop();
 };
 mirosubs.subtitle.TranscribeEntry.prototype.handleKeyUp_ = function(event) {
     this.videoPlayer_.showCaptionText(this.labelInput_.getValue());
@@ -112,8 +143,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     this.labelInput_.label_ = '';
     this.labelInput_.setValue('');
     this.labelInput_.focusAndSelect();
-    this.firstKeyStrokeTime_ = -1;
-    this.stopAndDisposeRepeatTimer_();
+    this.firstKeyStrokeTime_ = null;
+    this.typingPauseTimer_.stop();
     this.dispatchEvent(new mirosubs.subtitle.TranscribeEntry
                        .NewTitleEvent(value));
 };
@@ -123,7 +154,7 @@ mirosubs.subtitle.TranscribeEntry.prototype.issueLengthWarning_ = function(break
     if (breakable && length > MAX_CHARS)
         this.addNewTitle_();
     else
-        this.getElement().style.background = this.warningColor_(length, 25, MAX_CHARS);
+        this.getElement().style.background = this.warningColor_(length, 50, MAX_CHARS);
 };
 mirosubs.subtitle.TranscribeEntry.prototype.warningColor_ = 
     function(length, firstChars, maxChars) {
@@ -157,17 +188,14 @@ mirosubs.subtitle.TranscribeEntry.prototype.insertsBreakableChar_ = function(key
     key==goog.events.KeyCodes.BACKSLASH ||
     key==goog.events.KeyCodes.CLOSE_SQUARE_BRACKET;
 };
-mirosubs.subtitle.TranscribeEntry.prototype.stopAndDisposeRepeatTimer_ = function() {
-    if (this.repeatVideoTimer_) {
-        this.repeatVideoTimer_.dispose();
-        this.repeatVideoTimer_ = null;
-    }
-};
 mirosubs.subtitle.TranscribeEntry.prototype.disposeInternal = function() {
     mirosubs.subtitle.TranscribeEntry.superClass_.disposeInternal.call(this);
     if (this.keyHandler_)
         this.keyHandler_.dispose();
-    this.stopAndDisposeRepeatTimer_();
+    if (this.typingPauseTimer_) {
+        this.typingPauseTimer_.dispose();
+        this.typingPauseTimer_ = null;
+    }
 };
 
 mirosubs.subtitle.TranscribeEntry.NEWTITLE = 'newtitle';
