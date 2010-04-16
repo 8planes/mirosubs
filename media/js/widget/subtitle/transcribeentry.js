@@ -21,14 +21,12 @@ goog.provide('mirosubs.subtitle.TranscribeEntry');
 mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
-    /**
-     * The time at which continuous typing last started. Set to null at the 
-     * beginning of a new subtitle and also after a pause of S seconds.
-     * @type {?number}
-     */
-    this.firstKeyStrokeTime_ = null;
-    this.firstKeyStrokePlayheadTime_ = null;
+    this.endOfPPlayheadTime_ = null;
     this.repeatVideoMode_ = false;
+
+    this.continuouslyTyping_ = false;
+    this.continuousTypingTimer_ = new goog.Timer(
+        mirosubs.subtitle.TranscribeEntry.P * 1000);
     this.typingPauseTimer_ = new goog.Timer(
         mirosubs.subtitle.TranscribeEntry.S * 1000);
 };
@@ -36,15 +34,8 @@ goog.inherits(mirosubs.subtitle.TranscribeEntry, goog.ui.Component);
 mirosubs.subtitle.TranscribeEntry.logger_ = 
     goog.debug.Logger.getLogger('mirosubs.subtitle.TranscribeEntry');
 
-/**
- * Number of seconds of continuous typing before restarting to 
- * firstKeyStrokePlayheadTime_ - R
- */
 mirosubs.subtitle.TranscribeEntry.P = 4;
-mirosubs.subtitle.TranscribeEntry.R = 6;
-/**
- * Minimum number of seconds to pause before restarting typingPauseTimer_
- */
+mirosubs.subtitle.TranscribeEntry.R = 3;
 mirosubs.subtitle.TranscribeEntry.S = 1;
 
 mirosubs.subtitle.TranscribeEntry.prototype.createDom = function() {
@@ -67,6 +58,9 @@ mirosubs.subtitle.TranscribeEntry.prototype.enterDocument = function() {
     this.getHandler().listen(this.typingPauseTimer_,
                              goog.Timer.TICK,
                              this.typingPauseTimerTick_);
+    this.getHandler().listen(this.continuousTypingTimer_,
+                             goog.Timer.TICK,
+                             this.continuousTypingTimerTick_);
     mirosubs.subtitle.TranscribeEntry.logger_.info(
         "P is set to " + mirosubs.subtitle.TranscribeEntry.P);
     mirosubs.subtitle.TranscribeEntry.logger_.info(
@@ -87,41 +81,42 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
     }
     else if (event.keyCode != goog.events.KeyCodes.TAB && 
              this.repeatVideoMode_) {
-        if (this.firstKeyStrokeTime_ == null) {
-            var now = new Date();
-            var playheadTime = this.videoPlayer_.getPlayheadTime()
+        this.typingPauseTimer_.stop();
+        this.typingPauseTimer_.start();
+        if (!this.continuouslyTyping_) {
             mirosubs.subtitle.TranscribeEntry.logger_.info(
-                "Setting firstKeyStrokePlayheadTime_ to " + 
-                    playheadTime);
-            this.firstKeyStrokeTime_ = now;
-            this.firstKeyStrokePlayheadTime_ = playheadTime;
-            this.typingPauseTimer_.start();
-        }
-        else {
-            // restart timer.
-            this.typingPauseTimer_.stop();
-            this.typingPauseTimer_.start();
+                "Continuous typing started.");
+            this.continuousTypingTimer_.start();
+            this.continuouslyTyping_ = true;
         }
     }
 };
+mirosubs.subtitle.TranscribeEntry.prototype.continuousTypingTimerTick_ = function() {
+    // P seconds since continuous typing was started.
+    this.continuousTypingTimer_.stop();
+    this.videoPlayer_.pause();
+    mirosubs.subtitle.TranscribeEntry.logger_.info(
+        ["Continuous typing has now progressed for P ",
+         "seconds. Pausing video at playhead time ", 
+         this.videoPlayer_.getPlayheadTime() + ''].join(''));
+};
 mirosubs.subtitle.TranscribeEntry.prototype.typingPauseTimerTick_ = function() {
     // S seconds since last keystroke!
-    var now = new Date();
-    var typingTime = (now.getTime() - this.firstKeyStrokeTime_.getTime()) / 1000;
-    this.firstKeyStrokeTime_ = null;
+    var pSecondsElapsed = !this.continuousTypingTimer_.enabled;
+    var newPlayheadTime = this.videoPlayer_.getPlayheadTime() - 
+        mirosubs.subtitle.TranscribeEntry.R;
+    mirosubs.subtitle.TranscribeEntry.logger_.info(
+        ["Continuous typing ended.",
+         pSecondsElapsed ? 
+         (" Restarting video at playhead time " + newPlayheadTime) : 
+         ""].join(''));
+    this.continuouslyTyping_ = false;
     this.typingPauseTimer_.stop();
-    if (typingTime >= mirosubs.subtitle.TranscribeEntry.P) {
-        mirosubs.subtitle.TranscribeEntry.logger_.info(
-            ["Over P seconds of continuous typing followed by a pause of S. ",
-             "Restarting video to firstKeyStrokePlayheadTime_ - R"].join(''));
-        this.videoPlayer_.setPlayheadTime(
-            this.firstKeyStrokePlayheadTime_ - 
-                mirosubs.subtitle.TranscribeEntry.R);
+    this.continuousTypingTimer_.stop();
+    if (pSecondsElapsed) {
+        this.videoPlayer_.setPlayheadTime(newPlayheadTime);
+        this.videoPlayer_.play();
     }
-    else
-        mirosubs.subtitle.TranscribeEntry.logger_.info(
-            ["Typing followed by a pause of S, but typing was not ", 
-             "continuous for over P seconds"].join(''));
 };
 /**
  * Turns Repeat Video Mode on or off. When this mode is turned on, the video 
@@ -130,7 +125,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.typingPauseTimerTick_ = function() {
  */
 mirosubs.subtitle.TranscribeEntry.prototype.setRepeatVideoMode = function(mode) {
     this.repeatVideoMode_ = mode;
-    this.firstKeyStrokeTime_ = null;
+    this.continuouslyTyping_ = false;
+    this.continuousTypingTimer_.stop();
     this.typingPauseTimer_.stop();
 };
 mirosubs.subtitle.TranscribeEntry.prototype.handleKeyUp_ = function(event) {
@@ -143,8 +139,6 @@ mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     this.labelInput_.label_ = '';
     this.labelInput_.setValue('');
     this.labelInput_.focusAndSelect();
-    this.firstKeyStrokeTime_ = null;
-    this.typingPauseTimer_.stop();
     this.dispatchEvent(new mirosubs.subtitle.TranscribeEntry
                        .NewTitleEvent(value));
 };
@@ -192,10 +186,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.disposeInternal = function() {
     mirosubs.subtitle.TranscribeEntry.superClass_.disposeInternal.call(this);
     if (this.keyHandler_)
         this.keyHandler_.dispose();
-    if (this.typingPauseTimer_) {
-        this.typingPauseTimer_.dispose();
-        this.typingPauseTimer_ = null;
-    }
+    this.typingPauseTimer_.dispose();
+    this.continuousTypingTimer_.dispose();
 };
 
 mirosubs.subtitle.TranscribeEntry.NEWTITLE = 'newtitle';
