@@ -53,7 +53,7 @@ goog.inherits(mirosubs.YoutubeVideoPlayer, mirosubs.AbstractVideoPlayer);
 mirosubs.YoutubeVideoPlayer.prototype.enterDocument = function() {
     mirosubs.YoutubeVideoPlayer.superClass_.enterDocument.call(this);
     var videoDiv = this.getDomHelper().createDom('div');
-    videoDiv.id = this.makeId('video');
+    videoDiv.id = 'a' + this.makeId('video');
     this.getElement().appendChild(videoDiv);
     var params = { 'allowScriptAccess': 'always' };
     var atts = { 'id': this.playerElemID_ };
