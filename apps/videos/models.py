@@ -51,6 +51,7 @@ class Video(models.Model):
     writelock_owner = models.ForeignKey(User, null=True, 
                                         related_name="writelock_owners")
     subtitles_fetched_count = models.IntegerField(default=0)
+    widget_views_count = models.IntegerField(default=0)
     
     def __unicode__(self):
         if self.video_type == VIDEO_TYPE_HTML5:

@@ -62,6 +62,9 @@ def embed(request):
                                  video_url=video_url,
                                  allow_community_edits=False)
             video.save()
+    video.widget_views_count += 1
+    video.save()
+    
     null_widget = 'null' in request.GET
     debug_js = 'debug_js' in request.GET
     if 'element_id' in request.GET:
@@ -358,6 +361,8 @@ def logout(request):
 
 def fetch_captions(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
+    video.subtitles_fetched_count += 1
+    video.save()
     captions = list(video.captions().videocaption_set.all())
     return [caption.to_json_dict() for caption in captions]
 
@@ -368,6 +373,8 @@ def fetch_captions_null(request, video_id):
 
 def fetch_translations(request, video_id, language_code):
     video = models.Video.objects.get(video_id=video_id)
+    video.subtitles_fetched_count += 1
+    video.save()    
     return captions_and_translations_dict(
         video.captions_and_translations(language_code))
 

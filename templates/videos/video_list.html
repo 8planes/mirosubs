@@ -5,13 +5,19 @@
     <tr>
       <th>URL</th>
       <th>
-      	 {% ifequal ordering 'view_count' %}
-      	     <a href="?o=view_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Views</a>
+      	 {% ifequal ordering 'widget_views_count' %}
+      	     <a href="?o=widget_views_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Views</a>
 	     {% else %}
-		     <a href="?o=view_count&ot=asc&page={{ page }}">Views</a>
+		     <a href="?o=widget_views_count&ot=asc&page={{ page }}">Views</a>
 		 {% endifequal %}
 	  </th>
-      <th>Subtitles Fetched</th>
+      <th>
+         {% ifequal ordering 'subtitles_fetched_count' %}
+             <a href="?o=subtitles_fetched_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Subtitles Fetched</a>
+         {% else %}
+             <a href="?o=subtitles_fetched_count&ot=asc&page={{ page }}">Subtitles Fetched</a>
+         {% endifequal %}        
+      </th>
       <th>
          {% ifequal ordering 'translation_count' %}
              <a href="?o=translation_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Translations</a>
@@ -27,8 +33,8 @@
                 {{ video.get_video_url|slice:":36" }}
             </a>
         </td>
-        <td>{{ video.view_count }}</td>
-        <td>{{ video.videocaptionversion_set.count }}</td>
+        <td>{{ video.widget_views_count }}</td>
+        <td>{{ video.subtitles_fetched_count }}</td>
         <td>{{ video.translation_count }}</td>
       </tr>
     {% endfor %}
