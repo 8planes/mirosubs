@@ -161,3 +161,6 @@ ACCOUNT_ACTIVATION_DAYS = 9999 # we are using registration only to verify emails
 SESSION_COOKIE_AGE = 2419200 # 4 weeks
 
 RECENT_ACTIVITIES_ONPAGE = 10
+
+FEEDBACK_EMAIL = 'feedback@universalsubtitles.org'
+FEEDBACK_SUBJECT = 'Feedback'
