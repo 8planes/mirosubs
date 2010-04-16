@@ -50,7 +50,8 @@ class Video(models.Model):
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True, 
                                         related_name="writelock_owners")
-
+    subtitles_fetched_count = models.IntegerField(default=0)
+    
     def __unicode__(self):
         if self.video_type == VIDEO_TYPE_HTML5:
             return 'html5: %s' % self.video_url
