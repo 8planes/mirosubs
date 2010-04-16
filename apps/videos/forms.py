@@ -18,9 +18,23 @@
 
 from django import forms
 from videos.models import Video
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
         fields = ('video_url',)
-                   
+
+class FeedbackForm(forms.Form):
+    email = forms.EmailField(required=False)
+    message = forms.CharField(widget=forms.Textarea())
+    
+    def send(self):
+        email = self.cleaned_data['email']
+        message = self.cleaned_data['message']
+        
+        headers = {'Reply-To': email} if email else None
+        
+        EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
+                     [settings.FEEDBACK_EMAIL], headers=headers).send()
