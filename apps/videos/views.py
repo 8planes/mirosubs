@@ -50,8 +50,8 @@ def create(request):
                 # TODO: log to activity feed
                 pass
             if not video.owner or video.owner == request.user or video.allow_community_edits:
-                return HttpResponseRedirect(reverse(
-                        'videos:video', kwargs={'video_id':video.video_id}))
+                return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
+                        'videos:video', kwargs={'video_id':video.video_id})))
             else:
                 # TODO: better error page?
                 return HttpResponse('You are not allowed to add transcriptions to this video.')
@@ -65,7 +65,8 @@ def video(request, video_id):
     video.view_count += 1
     video.save()
     # TODO: make this more pythonic, prob using kwargs
-    context = widget.js_context(request, video, False, None, False, None, True)
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
     context['video'] = video
     context['site'] = Site.objects.get_current()
     return render_to_response('videos/video.html', context,
