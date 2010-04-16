@@ -59,6 +59,8 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
         this.videoPlayer_), true);
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.videoPlayer_, this.captions_, false), true);
+    // FIXME: hacky
+    this.setRepeatVideoMode(true);
 };
 mirosubs.subtitle.TranscribePanel.prototype.registerRightPanel = 
     function(rightPanel) 
@@ -66,6 +68,13 @@ mirosubs.subtitle.TranscribePanel.prototype.registerRightPanel =
     this.getHandler().listen(rightPanel,
                              mirosubs.RightPanel.EventType.RESTART,
                              this.startOverClicked);
+    var that = this;
+    this.getHandler().listen(
+        rightPanel,
+        mirosubs.subtitle.TranscribeRightPanel.AUTOPAUSE_CHANGED,
+        function(event) {
+            that.setRepeatVideoMode(event.on);
+        });
 };
 mirosubs.subtitle.TranscribePanel.prototype.createRightPanel = 
     function(serverModel) 
@@ -88,7 +97,7 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel =
             'mirosubs-skip', 'mirosubs-control', 'control', 
             'Skip Back 8 Seconds', KC.CTRL)
     ];
-    return new mirosubs.RightPanel(
+    return new mirosubs.subtitle.TranscribeRightPanel(
         serverModel, helpContents, keySpecs, true, "Done?", 
         "Next Step: Syncing");
 };

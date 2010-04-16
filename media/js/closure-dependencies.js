@@ -31,3 +31,4 @@ goog.require('goog.ui.Bubble');
 goog.require('goog.debug.FancyWindow');
 goog.require('goog.math');
 goog.require('goog.net.ImageLoader');
+goog.require('goog.ui.Checkbox');
