@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% load recent_activity %}
+
 {% block main_content %}
 
 
@@ -16,7 +19,7 @@
 
 <div class="right_column">
 <h2>Recent Activity</h2>
-
+    {% recent_activity %}
 </div>
 
 

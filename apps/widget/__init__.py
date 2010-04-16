@@ -30,7 +30,7 @@ def full_path(js_file):
 
 def js_context(request, video, null_widget, element_id=None, 
                debug_js=False, autoplay_lang_code=None, subtitle_immediately=False):
-    params = {'uuid': str(uuid4()).replace('-', ''),
+    params = {'uuid': 'a' + str(uuid4()).replace('-', ''),
               'video_id': video.video_id,
               'video_url': video.video_url,
               'youtube_videoid': video.youtube_videoid,

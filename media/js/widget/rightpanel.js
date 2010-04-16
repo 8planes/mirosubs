@@ -85,8 +85,12 @@ mirosubs.RightPanel.prototype.appendHelpContents_ = function($d, el) {
 };
 mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     var legendDiv = $d('div', 'mirosubs-legend');
-    var et = goog.events.EventType;
     el.appendChild(legendDiv);
+    this.appendLegendContentsInternal($d, legendDiv);
+    this.appendLegendClearInternal($d, legendDiv);
+};
+mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legendDiv) {
+    var et = goog.events.EventType;
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
         var spec = this.legendKeySpecs_[i];
         var key = $d('span', spec.spanClass, spec.keyText);
@@ -108,8 +112,10 @@ mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
         this.getHandler().listen(
             restartAnchor, 'click', this.restartClicked_);
         legendDiv.appendChild($d('div', 'mirosubs-restart', restartAnchor));
-        legendDiv.appendChild($d('div', 'mirosubs-clear'));
     }
+};
+mirosubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv) {
+    legendDiv.appendChild($d('div', 'mirosubs-clear'));    
 };
 mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.loginDiv_ = $d('div');

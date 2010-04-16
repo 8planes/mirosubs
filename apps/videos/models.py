@@ -50,15 +50,25 @@ class Video(models.Model):
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True, 
                                         related_name="writelock_owners")
-
+    subtitles_fetched_count = models.IntegerField(default=0)
+    widget_views_count = models.IntegerField(default=0)
+    
     def __unicode__(self):
         if self.video_type == VIDEO_TYPE_HTML5:
             return 'html5: %s' % self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
             return 'youtube: %s' % self.youtube_videoid
         else:
-            return 'unknown video %s' % video_url
-
+            return 'unknown video %s' % self.video_url
+    
+    def get_video_url(self):
+        if self.video_type == VIDEO_TYPE_HTML5:
+            return self.video_url
+        elif self.video_type == VIDEO_TYPE_YOUTUBE:
+            return 'http://www.youtube.com/v/%s' % self.youtube_videoid
+        else:
+            return self.video_url
+        
     @property
     def srt_filename(self):
         """The best SRT filename for this video."""
@@ -300,7 +310,8 @@ class TranslationVersion(models.Model):
     user = models.ForeignKey(User)
     # true iff user has clicked "finish" in translating process.
     is_complete = models.BooleanField()
-
+    datetime_started = models.DateTimeField()
+    
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
     """A translation of one subtitle.

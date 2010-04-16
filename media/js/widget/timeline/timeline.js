@@ -16,19 +16,22 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.require("goog.ui.Dialog");
-goog.require("goog.json.Serializer");
-goog.require("goog.net.CrossDomainRpc");
-goog.require("goog.dom.DomHelper");
-goog.require("goog.events.BrowserEvent");
-goog.require("goog.ui.Button");
-goog.require("goog.ui.LabelInput");
-goog.require("goog.net.XhrIo");
-goog.require('goog.positioning.Corner');
-goog.require('goog.ui.MenuItem');
-goog.require('goog.ui.PopupMenu');
-goog.require('goog.ui.Bubble');
-goog.require('goog.debug.FancyWindow');
-goog.require('goog.math');
-goog.require('goog.net.ImageLoader');
-goog.require('goog.ui.Checkbox');
+goog.provide('mirosubs.timeline.Timeline');
+
+/**
+ *
+ * @param {number} spacing The space, in seconds, between two 
+ *     major ticks.
+ */
+mirosubs.timeline.Timeline = function(spacing) {
+    goog.ui.Component.call(this);
+    this.spacing_ = spacing;
+    this.timesRow0_ = 
+};
+mirosubs.timeline.Timeline.prototype.createDom = function() {
+    mirosubs.timeline.Timeline.superClass_.createDom.call(this);
+    
+};
+mirosubs.timeline.Timeline.prototype.setTime(time) {
+    
+};

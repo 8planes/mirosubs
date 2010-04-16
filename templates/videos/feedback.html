@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+{% if success %}
+    <div>
+        Feedback sent success, thank you.
+    </div>
+{% endif %}
+    <div id="feedback_form">
+      <form action="{% url videos:feedback %}" method="POST">
+        <p>
+            {{ form.email.errors }}
+            <label for="id_email">Email</label>
+            {{ form.email }}
+        </p>
+        <p>
+            {{ form.message.errors }}
+            {{ form.message }}
+        </p>    
+        <p><input type="submit" value="Send feedback" /></p>
+      </form>
+    </div>
+{% endblock %}

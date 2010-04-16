@@ -62,6 +62,7 @@ JS_RAW = ['swfobject.js',
           'widget/subtitle/subtitlelist.js',
           'widget/subtitle/transcribeentry.js',
           'widget/subtitle/transcribepanel.js',
+          'widget/subtitle/transcriberightpanel.js',
           'widget/subtitle/syncpanel.js',
           'widget/subtitle/reviewpanel.js',
           'widget/subtitle/finishedrightpanel.js',
@@ -152,10 +153,15 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'videos',
     'widget',
-    'auth'
+    'auth',
+    'south'
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 ACCOUNT_ACTIVATION_DAYS = 9999 # we are using registration only to verify emails
 SESSION_COOKIE_AGE = 2419200 # 4 weeks
 
+RECENT_ACTIVITIES_ONPAGE = 10
+
+FEEDBACK_EMAIL = 'feedback@universalsubtitles.org'
+FEEDBACK_SUBJECT = 'Feedback'

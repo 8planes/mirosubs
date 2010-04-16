@@ -22,11 +22,12 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.forms import VideoForm
+from videos.forms import VideoForm, FeedbackForm
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5
 import widget
 from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
+from django.shortcuts import redirect
 
 def create(request):
     if request.method == 'POST':
@@ -49,8 +50,8 @@ def create(request):
                 # TODO: log to activity feed
                 pass
             if not video.owner or video.owner == request.user or video.allow_community_edits:
-                return HttpResponseRedirect(reverse(
-                        'videos:video', kwargs={'video_id':video.video_id}))
+                return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
+                        'videos:video', kwargs={'video_id':video.video_id})))
             else:
                 # TODO: better error page?
                 return HttpResponse('You are not allowed to add transcriptions to this video.')
@@ -64,19 +65,42 @@ def video(request, video_id):
     video.view_count += 1
     video.save()
     # TODO: make this more pythonic, prob using kwargs
-    context = widget.js_context(request, video, False, None, False, None, True)
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
     context['video'] = video
     context['site'] = Site.objects.get_current()
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
 def video_list(request):
+    from django.db.models import Count
     try:
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.all()
+    qs = Video.objects.annotate(translation_count=Count('translationlanguage'))
+    ordering = request.GET.get('o')
+    order_type = request.GET.get('ot')
+    extra_context = {}
+    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count']
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
+        extra_context['ordering'] = ordering
+        extra_context['order_type'] = order_type
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=50, page=page,
                        template_name='videos/video_list.html',
-                       template_object_name='video')
+                       template_object_name='video',
+                       extra_context=extra_context)
+
+def feedback(request, success=False):
+    if not success and request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.send()
+            return redirect('videos:feedback_success')
+    else:
+        form = FeedbackForm()
+    context = dict(form=form, success=success)
+    return render_to_response('videos/feedback.html', context,
+                              context_instance=RequestContext(request))
