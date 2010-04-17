@@ -35,8 +35,7 @@ begin
 
   @logger.info "called for #{@js_query_string}"
 
-#  cgi = CGI.new('html4')
-  cgi = CGI.new
+  cgi = CGI.new('html4')
 
   cgi.out() do
     cgi.html() do
