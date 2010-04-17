@@ -5,14 +5,19 @@
 
 {% if element_id %}
     var containingElement = document.getElementById('{{ element_id }}');
+{% else %}
+    var containingElement;
+    var scripts = document.getElementsByTagName('script');
+    for (var i = 0; i < scripts.length; i++) {
+        if (scripts[i].src.match(/embed_widget.js/)) {
+            containingElement = document.createElement('div');
+            scripts[i].parentNode.insertBefore(containingElement, scripts[i]);
+            break;
+        }
+    }
+{% endif %}
     containingElement.innerHTML =
         ['<style>', innerStyle, '</style>', innerWidgetHTML].join('');
-{% else %}
-    document.write('<style type="text/css" media="screen">');
-    document.write(innerStyle);
-    document.write('</style>');
-    document.write(innerWidgetHTML);
-{% endif %}
 
     var scripts = [
     {% for dep in js_dependencies %}

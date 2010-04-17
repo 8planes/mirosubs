@@ -10,7 +10,7 @@
     debug_js: {{debug_js}},
     writelock_expiration: {{writelock_expiration}},
     translation_languages: {{translation_languages|safe}},
-    subtitle_immediately: {{subtitle_immediately}},
+    subtitle_immediately: {{subtitle_immediately}}
 {% if autoplay_params %}
     , autoplay_params: {{autoplay_params|safe}}
 {% endif %}

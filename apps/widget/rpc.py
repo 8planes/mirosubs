@@ -19,6 +19,8 @@
 from django.conf.global_settings import LANGUAGES
 from videos import models
 from datetime import datetime
+from uuid import uuid4
+
 import widget
 from videos.models import VIDEO_SESSION_KEY
 
