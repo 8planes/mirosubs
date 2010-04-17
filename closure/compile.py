@@ -43,6 +43,15 @@ output,_ = call_command(("java -jar %s --js %s %s " +
                          "--compilation_level ADVANCED_OPTIMIZATIONS") % 
                         (compiler_jar, calcdeps_js, deps, compiled_js))
 
+with open(compiled_js, 'r') as compiled_js_file:
+    compiled_js_text = compiled_js_file.read()
+
+with open(compiled_js, 'w') as compiled_js_file:
+    with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
+        compiled_js_file.write(swfobject_file.read())
+    compiled_js_file.write(compiled_js_text)
+
+
 if len(output) > 0:
     logging.info("compiler.jar output: %s" % output)
 

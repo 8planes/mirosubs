@@ -38,8 +38,7 @@ DATABASE_PORT = ''                    # Set to empty string for default. Not use
 JS_USE_COMPILED = False
 
 # paths provided relative to media/js
-JS_RAW = ['swfobject.js',
-          'mirosubs.js', 
+JS_RAW = ['mirosubs.js', 
           'rpc.js',
           'abstractvideoplayer.js',
           'html5videoplayer.js',

@@ -60,10 +60,10 @@ mirosubs.YoutubeVideoPlayer.prototype.enterDocument = function() {
         this.getElement().appendChild(videoDiv);
         var params = { 'allowScriptAccess': 'always' };
         var atts = { 'id': this.playerElemID_ };
-        swfobject.embedSWF(
+        window["swfobject"]["embedSWF"](
             ['http://www.youtube.com/v/', this.videoSource_.getYoutubeVideoID(), 
              '?enablejsapi=1&playerapiid=', this.playerAPIID_].join(''),
-            videoDiv.id, "480", "360", "8", null, null, params, atts);    
+            videoDiv.id, "480", "360", "8", null, null, params, atts);
     }
 };
 mirosubs.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = function(playerAPIID) {
