@@ -5,7 +5,7 @@
     background: url("../images/black_trans1x1.png");
 }
 
-.mirosubs-modal-widget, .mirosubs-modal-widget:active, .mirosubs-modal-widget:hover{
+.mirosubs-modal-widget, .mirosubs-modal-widget:active, .mirosubs-modal-widget:hover, a, a:hover, a:active{
 
 outline: none;
 
@@ -48,6 +48,40 @@ color: #fff;
 text-align: center;
 padding: 25px;
 }
+
+.mirosubs-moreHelp{
+width: 400px;
+margin: 80px auto 0;
+}
+
+
+.mirosubs-showTimeline{
+position: absolute;
+right: 5px;
+background: #fff;
+top: -10px;
+border: 1px solid #333;
+padding: 4px 6px;
+line-height: 1em;
+text-decoration: none;
+font-weight: bold;
+z-index: 5667666666666;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+
+.mirosubs-moreHelp p a{
+color: #fff;
+text-align: center;
+}
+
+.mirosubs-moreHelp p{
+color: #fff;
+text-align: center;
+}
+
+
 
 
 
@@ -115,6 +149,12 @@ font-size: 15px;
 	float: left;
 	}
 
+.mirosubs-modal-widget-content.finished {
+height: 670px;
+	}
+
+
+
 
 .mirosubs-modal-widget-content.finished .mirosubs-right{
 	width: 360px !important;
@@ -128,6 +168,11 @@ font-size: 15px;
 margin-left: 30px;
 }
 
+
+
+::-moz-selection{background: transparent; !important} 
+
+::selection {background: transparent; !important} 
 
 
 .mirosubs-help{
@@ -152,6 +197,8 @@ line-height: 1.5em;
 position:absolute;
 bottom: 30px;
 width: 383px;
+border: 1px solid #000;
+background: #000;
 }
 
 
@@ -160,8 +207,7 @@ width: 383px;
     margin: 10px 0 0 0px;
     font-size: 11px;
     float: right;
-        text-decoration: none;
-
+    text-decoration: none;
     line-height: 2em;
     background: url("../images/sprite.png") 0 -153px no-repeat;
     color: #777;
@@ -197,6 +243,7 @@ border: 1px solid #fff;
 padding: 10px 3px 10px 8px;
 clear: both;
 margin: 15px 30px 20px;
+position: relative;
 text-align: center;
 text-decoration: none;
     text-shadow: #fff 1px 1px 1px;
@@ -204,9 +251,23 @@ display: block;
 background: #fff url("../images/gradient.png") right -2px repeat-x;
 }
 
+.mirosubs-done img{
+border: 0;
+position: absolute;
+left: 30px;
+
+}
+
+
 .mirosubs-done span{
 padding-right: 19px;
 background: url("../images/sprite.png") right -236px no-repeat;
+}
+
+
+.mirosubs-done.left span{
+padding-left: 19px;
+background: url("../images/sprite.png") left -214px no-repeat;
 }
 
 .mirosubs-done:hover{
@@ -498,6 +559,7 @@ margin: 20px 0 0 0px;
 }
 
 .mirosubs-captioningArea {
+position: relative;
     background: #fff url("../images/big_grad.png") 0 bottom repeat-x !important;
 }
 
@@ -506,8 +568,21 @@ ul.mirosubs-titlesList {
     padding: 0 0 150px 0 !important;
     border-bottom: 1px solid #ccc;
     overflow: auto;
+    position: relative;
     height: 130px;
 }
+
+
+ul.mirosubs-titlesList li {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin: 0 !important;
+    position: relative;
+    min-height: 23px;
+    padding: 10px !important;
+    list-style: none !important;
+}
+
 
 ul.mirosubs-titlesList.taller {
     height: 210px !important;
@@ -799,16 +874,6 @@ ul.mirosubs-titlesList.finished {
     overflow: auto;
 }
 
-ul.mirosubs-titlesList li {
-
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
-    margin: 0 !important;
-    position: relative;
-    min-height: 23px;
-    padding: 10px !important;
-    list-style: none !important;
-}
 
 
 ul.mirosubs-titlesList.mirosubs-beginTab {
@@ -871,11 +936,12 @@ margin: 7px 0 0 0;
     font-size: 10px;
     position: absolute;
     line-height: 18px;
-    top: 0px;
+    top: 0;
+    .top: -3px;
     font-weight: normal;
-    min-width: 47px;
+    width: 60px;
     color: #aaa;
-    min-height: 21px;
+    height: 29px;
     padding: 0 0px 0 5px !important;
 }
 
@@ -885,8 +951,12 @@ margin: 7px 0 0 0;
 
 .mirosubs-changeTime {
 width: 13px;
-float: right;
-margin: 0 0 0 5px;
+margin: 0;
+position: absolute;
+right: 0;
+height: 27px;
+top: 0;
+
 }
 
 .mirosubs-timestamp:hover .mirosubs-changeTime a{
@@ -896,10 +966,10 @@ display: block;
 .mirosubs-changeTime a{
 width: 13px;
 float: right;
-height: 0;
-padding-top: 9px;
-overflow: hidden;
 display: none;
+height: 0;
+padding-top: 13px;
+overflow: hidden;
 }
 
 
@@ -908,7 +978,6 @@ display: none;
 width: 13px;
 float: right;
 height: 0;
-padding-top: 9px;
 overflow: hidden;
 background: url("../images/time_arrows.png") 0 -1px no-repeat;
 }
@@ -919,22 +988,22 @@ background: url("../images/time_arrows.png") 0 -1px no-repeat;
 width: 13px;
 float: right;
 height: 0;
-padding-top: 9px;
+
 overflow: hidden;
-background: url("../images/time_arrows.png") 0 -10px no-repeat;
+background: url("../images/time_arrows.png") 0 -14px no-repeat;
 }
 
 
 .mirosubs-changeTime a.mirosubs-down:hover{
 cursor: default;
-background: url("../images/time_arrows.png") -15px -10px no-repeat;
+background: url("../images/time_arrows.png") -15px -14px no-repeat;
 }
 
 
 
 .mirosubs-changeTime a.mirosubs-down:active{
 cursor: default;
-background: url("../images/time_arrows.png") -30px -10px no-repeat;
+background: url("../images/time_arrows.png") -30px -14px no-repeat;
 }
 
 
@@ -954,6 +1023,8 @@ background: url("../images/time_arrows.png") -30px -1px no-repeat;
     line-height: 1.7em;
     display: block;
     padding-top: 2px;
+    .padding-top: 0px;
+
     margin-right: 65px;
 }
 
@@ -1287,7 +1358,7 @@ position: relative;
 embed#clippy{
 position: absolute;
 top: 5px;
-right: 0px;
+left: 230px;
 }
 
 
@@ -1449,3 +1520,22 @@ margin: 0 0 35px;
   cursor: default !important;
   background-position: -7px;
 }
+
+
+.mirosubs-videoHelp video{
+width: 600px;
+height: 300px;
+margin: 30px 0 0 125px !important;
+}
+
+
+.mirosubs-langmenu{
+width: 110px;
+}
+
+.mirosubs-langmenuitem-content, .mirosubs-langmenuitem-content a{
+font-family: Arial, Helvetica, sans-serif;
+color: #333;
+text-decoration: none;
+}
+

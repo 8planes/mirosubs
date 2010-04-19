@@ -1,0 +1,47 @@
+{% extends "jsdemo/base_demo.html" %}
+{% block body %}
+	
+<div>
+  <script src="http://mirosubsstaging.8planes.com/embed_widget.js?video_url=http://videos.mozilla.org/firefox3/switch/switch.ogg&amp;null"></script>
+  <style type="text/css" media="screen">
+/* Should only contain css for the actual widget */
+div.mirosubs-widget {
+    position: relative;    
+}
+.mirosubs-videoDiv {
+    text-align: center;
+}
+
+
+
+.mirosubs-widget {
+    margin: 0 auto;
+}
+</style>
+  <div class="mirosubs-widget">
+    <div id="7cb3cbab6d32451da7f2816cf824e215_video" class="mirosubs-videoDiv">
+      <video tabindex="0" controls="controls" autobuffer="">
+        <source src="http://videos.mozilla.org/firefox3/switch/switch.ogg">
+      </video>
+    </div>
+    <div class="mirosubs-videoTab" id="7cb3cbab6d32451da7f2816cf824e215_videoTab"> <a href="#" class="mirosubs-subtitleMeLink"> <img src="http://mirosubsstaging.8planes.com/site_media/images/small_logo.png" alt="small logo"> <span class="mirosubs-tabText"> Choose Language... </span> </a> </div>
+  </div>
+</div>
+<div tabindex="-1" aria-haspopup="true" role="menu" style="-moz-user-select: none; visibility: visible; left: 629px; top: 521px; display: none;" class="mirosubs-langmenu mirosubs-langmenu-vertical">
+  <div id=":0" style="-moz-user-select: none;" role="menuitem" class="mirosubs-langmenuitem">
+    <div class="mirosubs-langmenuitem-content">Original</div>
+  </div>
+  <div id=":1" style="-moz-user-select: none;" role="menuitem" class="mirosubs-langmenuitem">
+    <div class="mirosubs-langmenuitem-content">Add new</div>
+  </div>
+  <div id=":2" role="separator" style="-moz-user-select: none;" class="mirosubs-langmenusep"></div>
+  <div id=":3" style="-moz-user-select: none;" role="menuitem" class="mirosubs-langmenuitem">
+    <div class="mirosubs-langmenuitem-content">Logout</div>
+  </div>
+  <div id=":4" role="separator" style="-moz-user-select: none;" class="mirosubs-langmenusep"></div>
+  <div id=":5" style="-moz-user-select: none;" role="menuitem" class="mirosubs-langmenuitem">
+    <div class="mirosubs-langmenuitem-content">Share this</div>
+  </div>
+</div>
+
+{% endblock %}
