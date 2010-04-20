@@ -66,7 +66,7 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(
         this.videoPlayer_), true);
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-        this.videoPlayer_, this.captions_, false), true);
+        this.videoPlayer_, this.captions_, false, true), true);
     // FIXME: hacky
     this.setRepeatVideoMode(true);
 };

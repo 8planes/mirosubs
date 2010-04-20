@@ -21,7 +21,8 @@ goog.provide('mirosubs.subtitle.SubtitleList');
 /**
  * @param {Array.<mirosubs.subtitle.EditableCaption>} captions
  */
-mirosubs.subtitle.SubtitleList = function(videoPlayer, captions, displayTimes) {
+mirosubs.subtitle.SubtitleList = function(videoPlayer, captions, 
+                                          displayTimes, opt_showBeginMessage) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
     this.captions_ = captions;
@@ -33,6 +34,8 @@ mirosubs.subtitle.SubtitleList = function(videoPlayer, captions, displayTimes) {
      */
     this.subtitleMap_ = {};
     this.currentlyEditing_ = false;
+    this.showBeginMessage_ = opt_showBeginMessage ? true : false;
+    this.showingBeginMessage_ = false;
 };
 goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
 mirosubs.subtitle.SubtitleList.MIN_SUB_LENGTH = 1;
@@ -43,9 +46,21 @@ mirosubs.subtitle.SubtitleList.prototype.clearAll = function() {
     this.removeChildren(true);
 };
 mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
-    this.setElementInternal(this.getDomHelper().createDom(
-        'ul', 'mirosubs-titlesList'));
-    goog.array.forEach(this.captions_, this.addSubtitle, this);
+    var dh = this.getDomHelper();
+    var $d = goog.bind(dh.createDom, dh);
+    var $t = goog.bind(dh.createTextNode, dh);
+    this.setElementInternal($d('ul', 'mirosubs-titlesList'));
+    if (this.captions_.length == 0 && this.showBeginMessage_) {
+        this.showingBeginMessage_ = true;
+        goog.dom.classes.add(this.getElement(), 'mirosubs-beginTab');
+        this.getElement().appendChild(
+            $d('li', 'mirosubs-beginTabLi',
+               $t('To begin, press TAB to play'),
+               $d('br'),
+               $t('and start typing!')));
+    }
+    else
+        goog.array.forEach(this.captions_, this.addSubtitle, this);
 };
 
 /**
@@ -54,6 +69,11 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
 mirosubs.subtitle.SubtitleList.prototype.addSubtitle = 
     function(subtitle, opt_scrollDown) 
 {
+    if (this.showingBeginMessage_) {
+        goog.dom.removeChildren(this.getElement());
+        goog.dom.classes.remove(this.getElement(), 'mirosubs-beginTab');
+        this.showingBeginMessage_ = false;
+    }
     var subtitleWidget = 
         new mirosubs.subtitle.SubtitleWidget(
             subtitle, this.displayTimes_, this,
