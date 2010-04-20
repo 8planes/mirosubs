@@ -59,6 +59,9 @@ mirosubs.Dialog.prototype.setRightPanelInternal = function(rightPanel) {
     this.rightPanelContainer_.removeChildren(true);
     this.rightPanelContainer_.addChild(rightPanel, true);
 };
+mirosubs.Dialog.prototype.getRightPanelInternal = function() {
+    return this.rightPanel_;
+};
 mirosubs.Dialog.prototype.updateLoginState = function() {
     this.rightPanel_.updateLoginState();
 };

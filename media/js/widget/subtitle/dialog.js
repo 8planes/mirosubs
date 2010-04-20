@@ -51,8 +51,8 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.saved_ = false;
     this.state_ = null;
     this.currentSubtitlePanel_ = null;
-    this.currentRightPanel_ = null;
     this.rightPanelListener_ = new goog.events.EventHandler(this);
+    this.doneButtonEnabled_ = true;
 };
 goog.inherits(mirosubs.subtitle.Dialog, mirosubs.Dialog);
 
@@ -88,19 +88,24 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     captionPanel.removeChildren(true);
     captionPanel.addChild(nextSubPanel, true);
 
-    var rightPanel = nextSubPanel.createRightPanel(this.serverModel_);
+    var rightPanel = nextSubPanel.getRightPanel();
     this.setRightPanelInternal(rightPanel);
 
     this.disposeCurrentPanels_();
     this.currentSubtitlePanel_ = nextSubPanel;
-    this.currentRightPanel_ = rightPanel;
-    nextSubPanel.registerRightPanel(rightPanel);
 
     var et = mirosubs.RightPanel.EventType;
     this.rightPanelListener_.listen(
         rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
     this.rightPanelListener_.listen(
         rightPanel, et.DONE, this.handleDoneKeyPress_);
+    var s = mirosubs.subtitle.Dialog.State_;
+    if (state == s.SYNC || state == s.REVIEW) {
+        rightPanel.showBackLink(
+            state == s.SYNC ? "Back to Transcribe" : "Back to Sync");
+        this.rightPanelListener_.listen(
+            rightPanel, et.BACK, this.handleBackKeyPress_);
+    }
 
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
@@ -113,9 +118,6 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     var rightPanel = new mirosubs.subtitle.FinishedRightPanel(
         this.serverModel_);
     this.setRightPanelInternal(rightPanel);
-
-    this.currentRightPanel_.dispose();
-    this.currentRightPanel_ = rightPanel;
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL)
@@ -126,6 +128,13 @@ mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
         event.preventDefault();
     }
 };
+mirosubs.subtitle.Dialog.prototype.handleBackKeyPress_ = function(event) {
+    var s = mirosubs.subtitle.Dialog.State_;
+    if (this.state_ == s.SYNC)
+        this.setState_(s.TRANSCRIBE);
+    else if (this.state_ == s.REVIEW)
+        this.setState_(s.SYNC);    
+};
 mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL && 
         event.keyEventType == goog.events.EventType.CLICK)
@@ -135,11 +144,15 @@ mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
         this.togglePause_();
 };
 mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
+    if (!this.doneButtonEnabled_)
+        return;
     if (this.state_ == mirosubs.subtitle.Dialog.State_.REVIEW) {
-        // TODO: show loading
+        this.doneButtonEnabled_ = false;
+        this.getRightPanelInternal().showLoading(true);
         var that = this;
         this.serverModel_.finish(function() {
-            // TODO: hide loading
+            that.doneButtonEnabled_ = true;
+            that.getRightPanelInternal().showLoading(false);
             that.setFinishedState_();
         });
     }
@@ -159,16 +172,21 @@ mirosubs.subtitle.Dialog.prototype.makeCurrentStateSubtitlePanel_ = function() {
     var s = mirosubs.subtitle.Dialog.State_;
     if (this.state_ == s.TRANSCRIBE)
         return new mirosubs.subtitle.TranscribePanel(
-            this.captions_, this.unitOfWork_, this.getVideoPlayerInternal());
+            this.captions_, this.unitOfWork_, 
+            this.getVideoPlayerInternal(),
+            this.serverModel_, 
+            this.captionManager_);
     else if (this.state_ == s.SYNC)
         return new mirosubs.subtitle.SyncPanel(
             this.captions_, 
             this.getVideoPlayerInternal(),
+            this.serverModel_,
             this.captionManager_);
     else if (this.state_ == s.REVIEW)
         return new mirosubs.subtitle.ReviewPanel(
             this.captions_, 
             this.getVideoPlayerInternal(),
+            this.serverModel_,
             this.captionManager_);
 };
 mirosubs.subtitle.Dialog.prototype.nextState_ = function() {
@@ -185,7 +203,7 @@ mirosubs.subtitle.Dialog.prototype.getPlayheadTime_ = function() {
     return vp ? vp.getPlayheadTime() : 0;
 };
 mirosubs.subtitle.Dialog.prototype.showLoginNag_ = function() {
-    
+    // not doing anything here right now.
 };
 /**
  * Did we ever pass into finished state?
@@ -197,10 +215,6 @@ mirosubs.subtitle.Dialog.prototype.disposeCurrentPanels_ = function() {
     if (this.currentSubtitlePanel_) {
         this.currentSubtitlePanel_.dispose();
         this.currentSubtitlePanel_ = null;
-    }
-    if (this.currentRightPanel_) {        
-        this.currentRightPanel_.dispose();
-        this.currentRightPanel_ = null;
     }
     this.rightPanelListener_.removeAll();
 };

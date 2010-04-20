@@ -63,7 +63,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     else {
         this.timeSpinner_ = new mirosubs.Spinner(
             this.subtitle_.getStartTime(), this.minSubTime_,
-            this.maxSubTime_, mirosubs.subtitle.SubtitleWidget.formatTime_);
+            this.maxSubTime_, mirosubs.formatTime);
         this.addChild(this.timeSpinner_, true);
     }
     this.textareaElem_ = null;
@@ -146,36 +146,6 @@ mirosubs.subtitle.SubtitleWidget.prototype.updateValues = function() {
             this.timeSpinner_.setValue(time);
     }
     goog.dom.setTextContent(this.titleElemInner_, this.subtitle_.getText());
-};
-mirosubs.subtitle.SubtitleWidget.formatTime_ = function(time) {
-    var pad = function(number) {
-        return (number < 10 ? "0" : "") + number;
-    };
-
-    var intTime = parseInt(time);
-
-    var timeString = '';
-    var hours = (intTime / 3600) | 0;
-    if (hours > 0)
-        timeString += (hours + ':');
-    var minutes = ((intTime / 60) | 0) % 60;
-    if (minutes > 0 || hours > 0) {
-        if (hours > 0)
-            timeString += (pad(minutes) + ':');
-        else
-            timeString += (minutes + ':');
-    }
-    var seconds = intTime % 60;
-    if (seconds > 0 || minutes > 0 || hours > 0) {
-        if (minutes > 0 || hours > 0)
-            timeString += pad(seconds);
-        else
-            timeString += seconds;
-    }
-    var frac = parseInt((time - intTime) * 100);
-    timeString += ('.' + pad(frac));
-
-    return timeString;        
 };
 mirosubs.subtitle.SubtitleWidget.prototype.disposeEventHandlers_ = function() {
     if (this.keyHandler_) {

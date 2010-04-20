@@ -16,24 +16,19 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.timeline.Timeline');
+goog.provide('mirosubs.timeline.TimeRow');
 
-/**
- *
- * @param {number} spacing The space, in seconds, between two 
- *     major ticks.
- */
-mirosubs.timeline.Timeline = function(spacing) {
+mirosubs.timeline.TimeRow = function(spacing) {
     goog.ui.Component.call(this);
     this.spacing_ = spacing;
 };
-goog.inherits(mirosubs.timeline.Timeline, goog.ui.Component);
-mirosubs.timeline.Timeline.prototype.createDom = function() {
-    mirosubs.timeline.Timeline.superClass_.createDom.call(this);
-    this.timeRow_ = new mirosubs.timeline.TimeRow(this.spacing_);
-    this.addChild(this.timeRow_);
+goog.inherits(mirosubs.timeline.TimeRow, goog.ui.Component);
+mirosubs.timeline.TimeRow.prototype.createDom = function() {
+    mirosubs.timeline.TimeRow.superClass_.createDom.call(this);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.timeRowUL0_ = new mirosubs.timeline.TimeRowUL($d, this.spacing_);
+    this.timeRowUL1_ = new mirosubs.timeline.TimeRowUL($d, this.spacing_);
 };
-mirosubs.timeline.Timeline.prototype.setTime(time) {
-    this.timeRow_.setTime(time);
+mirosubs.timeline.TimeRow.prototype.setTime = function(time) {
     
 };

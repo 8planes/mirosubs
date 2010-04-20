@@ -137,6 +137,34 @@ mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
     });
 };
 
+mirosubs.formatTime = function(time, opt_excludeMs) {
+    var intTime = parseInt(time);
+
+    var timeString = '';
+    var hours = (intTime / 3600) | 0;
+    if (hours > 0)
+        timeString += (hours + ':');
+    var minutes = ((intTime / 60) | 0) % 60;
+    if (minutes > 0 || hours > 0) {
+        if (hours > 0)
+            timeString += (goog.string.padNumber(minutes, 2) + ':');
+        else
+            timeString += (minutes + ':');
+    }
+    var seconds = intTime % 60;
+    if (seconds > 0 || minutes > 0 || hours > 0) {
+        if (minutes > 0 || hours > 0)
+            timeString += goog.string.padNumber(seconds, 2);
+        else
+            timeString += seconds;
+    }
+    if (!opt_excludeMs) {
+        var frac = parseInt(time * 100) % 100;
+        timeString += ('.' + goog.string.padNumber(frac, 2));
+    }
+    return timeString;        
+};
+
 mirosubs.LoginEvent = function(username) {
     this.type = mirosubs.EventType.LOGIN;
     this.username = username;

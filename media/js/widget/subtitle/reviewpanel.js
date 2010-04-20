@@ -19,15 +19,15 @@
 goog.provide('mirosubs.subtitle.ReviewPanel');
 
 mirosubs.subtitle.ReviewPanel = function(subtitles, videoPlayer, 
-                                         captionManager) {
+                                         serverModel, captionManager) {
     mirosubs.subtitle.SyncPanel.call(this, subtitles, videoPlayer, 
-                                     captionManager);
+                                     serverModel, captionManager);
 };
 goog.inherits(mirosubs.subtitle.ReviewPanel, mirosubs.subtitle.SyncPanel);
 /**
  * @override
  */
-mirosubs.subtitle.ReviewPanel.prototype.createRightPanel = 
+mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal = 
     function(serverModel) 
 {
     var helpContents = new mirosubs.RightPanel.HelpContents(
@@ -42,20 +42,8 @@ mirosubs.subtitle.ReviewPanel.prototype.createRightPanel =
           "timestamp, and click the up/down buttons that appear."].join('')],
         "Watch a video about how to edit",
         "http://youtube.com");
-    var KC = goog.events.KeyCodes;
-    // FIXME: Tiny bit of duplication. Can be fixed thru inheritance from 
-    // common abstract superclass
-    var keySpecs = [
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-begin', 'mirosubs-spacebar', 'spacebar', 
-            'Advance/Delay Subtitle', KC.SPACE),
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB),
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-skip', 'mirosubs-control', 'control', 
-            'Skip Back 8 Seconds', KC.CTRL)
-    ];
     return new mirosubs.RightPanel(
-        serverModel, helpContents, keySpecs, false, "Done?", 
+        this.serverModel, helpContents, 
+        this.makeKeySpecsInternal(), false, "Done?", 
         "Submit your work");
 };
