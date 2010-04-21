@@ -23,7 +23,7 @@ from django.template import RequestContext
 from videos import models
 from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt
 import simplejson as json
-from widget import rpc_views
+from widget import rpc as rpc_views
 import widget
 
 def full_path(js_file):
