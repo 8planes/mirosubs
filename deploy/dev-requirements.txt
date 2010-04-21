@@ -10,6 +10,7 @@ django-debug-toolbar
 PyYAML
 simplejson
 pil
+south
 -e hg+http://sorl-thumbnail.googlecode.com/hg/#egg=sorl-thumbnail
 
 

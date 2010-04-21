@@ -27,7 +27,7 @@ goog.provide('mirosubs.subtitle.SyncPanel');
  *     start_time set.
  */
 mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, 
-                                       captionManager) {
+                                       serverModel, captionManager) {
     goog.ui.Component.call(this);
     /**
      * Always in correct order by time.
@@ -36,6 +36,10 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
     this.subtitles_ = subtitles;
 
     this.videoPlayer_ = videoPlayer;
+    /**
+     * @protected
+     */
+    this.serverModel = serverModel;
     this.captionManager_ = captionManager;
     this.videoStarted_ = false;
     this.spaceDownPlayheadTime_ = -1;
@@ -70,19 +74,22 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     this.getElement().appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.videoPlayer_, this.subtitles_, true), true);
+    this.subtitleList_.setTaller(true);
 };
-mirosubs.subtitle.SyncPanel.prototype.registerRightPanel = 
-    function(rightPanel) 
-{
-    this.focusableElem_ = rightPanel.getDoneAnchor();
-    this.getHandler().listen(rightPanel, 
-                             mirosubs.RightPanel.EventType.LEGENDKEY,
-                             this.handleLegendKeyPress_);
-    this.getHandler().listen(rightPanel,
-                             mirosubs.RightPanel.EventType.RESTART,
-                             this.startOverClicked_);
-}
-mirosubs.subtitle.SyncPanel.prototype.createRightPanel = function(serverModel) {
+mirosubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
+    if (!this.rightPanel_) {
+        this.rightPanel_ = this.createRightPanelInternal();
+        this.focusableElem_ = this.rightPanel_.getDoneAnchor();
+        this.getHandler().listen(this.rightPanel_, 
+                                 mirosubs.RightPanel.EventType.LEGENDKEY,
+                                 this.handleLegendKeyPress_);
+        this.getHandler().listen(this.rightPanel_,
+                                 mirosubs.RightPanel.EventType.RESTART,
+                                 this.startOverClicked_);    
+    }
+    return this.rightPanel_;
+};
+mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
         "STEP 2: Syncing Subtitles",
         ["Congratulations, you finished the hard part (all that typing)!",
@@ -94,10 +101,14 @@ mirosubs.subtitle.SyncPanel.prototype.createRightPanel = function(serverModel) {
           "below."].join('')],
         "Watch a how-to video on syncing",
         "http://youtube.com");
+    return new mirosubs.RightPanel(
+        this.serverModel, helpContents, 
+        this.makeKeySpecsInternal(), true, "Done?", 
+        "Next Step: Reviewing");
+};
+mirosubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
     var KC = goog.events.KeyCodes;
-    // FIXME: Tiny bit of duplication. Can be fixed thru inheritance from 
-    // common abstract superclass
-    var keySpecs = [
+    return [
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-begin', 'mirosubs-spacebar', 'spacebar', 
             'Sync Next Subtitle', KC.SPACE),
@@ -107,9 +118,7 @@ mirosubs.subtitle.SyncPanel.prototype.createRightPanel = function(serverModel) {
             'mirosubs-skip', 'mirosubs-control', 'control', 
             'Skip Back 8 Seconds', KC.CTRL)
     ];
-    return new mirosubs.RightPanel(
-        serverModel, helpContents, keySpecs, true, "Done?", 
-        "Next Step: Reviewing");
+    
 };
 /**
  * Find the last subtitle with a start time at or before playheadTime.
@@ -253,4 +262,8 @@ mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEven
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)
         this.subtitleList_.setActiveWidget(jsonCaption['caption_id']);
+};
+mirosubs.subtitle.SyncPanel.prototype.disposeInternal = function() {
+    mirosubs.subtitle.SyncPanel.superClass_.disposeInternal.call(this);
+    this.rightPanel_.dispose();
 };

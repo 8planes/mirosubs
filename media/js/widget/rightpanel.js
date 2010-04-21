@@ -53,7 +53,8 @@ goog.inherits(mirosubs.RightPanel, goog.ui.Component);
 mirosubs.RightPanel.EventType = {
     LEGENDKEY : 'legend',
     RESTART : 'restart',
-    DONE : 'done'
+    DONE : 'done',
+    BACK : 'back'
 };
 mirosubs.RightPanel.prototype.createDom = function() {
     mirosubs.RightPanel.superClass_.createDom.call(this);
@@ -70,6 +71,13 @@ mirosubs.RightPanel.prototype.createDom = function() {
 
     this.appendStepsContents_($d, el);
 };
+mirosubs.RightPanel.prototype.showLoading = function(show) {
+    this.loadingGif_.style.display = (show ? '' : 'none');
+};
+mirosubs.RightPanel.prototype.showBackLink = function(linkText) {
+    this.backAnchor_.style.display = '';
+    goog.dom.setTextContent(this.backAnchor_, linkText);
+};
 mirosubs.RightPanel.prototype.appendHelpContents_ = function($d, el) {
     var helpDiv = $d('div', 'mirosubs-help');
     el.appendChild(helpDiv);
@@ -85,8 +93,12 @@ mirosubs.RightPanel.prototype.appendHelpContents_ = function($d, el) {
 };
 mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     var legendDiv = $d('div', 'mirosubs-legend');
-    var et = goog.events.EventType;
     el.appendChild(legendDiv);
+    this.appendLegendContentsInternal($d, legendDiv);
+    this.appendLegendClearInternal($d, legendDiv);
+};
+mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legendDiv) {
+    var et = goog.events.EventType;
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
         var spec = this.legendKeySpecs_[i];
         var key = $d('span', spec.spanClass, spec.keyText);
@@ -103,23 +115,40 @@ mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
         this.getHandler().listen(key, et.MOUSEUP, mouseupFn);
         this.getHandler().listen(key, et.MOUSEOUT, mouseupFn);
     }
-    if (this.showRestart_) {
-        var restartAnchor = $d('a', {'href':'#'}, 'Restart this Step');
-        this.getHandler().listen(
-            restartAnchor, 'click', this.restartClicked_);
-        legendDiv.appendChild($d('div', 'mirosubs-restart', restartAnchor));
-        legendDiv.appendChild($d('div', 'mirosubs-clear'));
-    }
+};
+mirosubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv) {
+    legendDiv.appendChild($d('div', 'mirosubs-clear'));    
 };
 mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.loginDiv_ = $d('div');
+    this.loadingGif_ = $d('img', 
+                          {'src': [mirosubs.BASE_URL, mirosubs.IMAGE_DIR, 
+                                   'spinner.gif'].join('')});
+    this.showLoading(false);
     this.doneAnchor_ = $d('a', {'className':'mirosubs-done', 'href':'#'},
-                          $d('span', null,                           
+                          $d('span', null,
+                             this.loadingGif_,
                              $d('strong', null, this.doneStrongText_),
                              goog.dom.createTextNode(" "),
                              goog.dom.createTextNode(this.doneText_)));
-    el.appendChild($d('div', 'mirosubs-steps',
-                      this.loginDiv_, this.doneAnchor_));
+    var stepsDiv = $d('div', 'mirosubs-steps',
+                      this.loginDiv_, this.doneAnchor_);
+    this.backAnchor_ = 
+        $d('a', {'className':'mirosubs-backTo', 'href':'#'}, 
+           'Back to Transcribe');
+    this.getHandler().listen(this.backAnchor_, 'click', this.backClicked_);
+    this.backAnchor_.style.display = 'none';
+    stepsDiv.appendChild(this.backAnchor_);
+    if (this.showRestart_) {
+        var restartAnchor = 
+            $d('a', {'className': 'mirosubs-restart','href':'#'}, 
+               'Restart this Step');
+        this.getHandler().listen(
+            restartAnchor, 'click', this.restartClicked_);
+        stepsDiv.appendChild(restartAnchor);
+    }
+    
+    el.appendChild(stepsDiv);
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
     this.updateLoginState();
 };
@@ -139,6 +168,10 @@ mirosubs.RightPanel.prototype.legendKeyMouseup_ = function(keyCode, event) {
             new mirosubs.RightPanel.LegendKeyEvent(keyCode, 'mouseup'));
     }
 };
+mirosubs.RightPanel.prototype.backClicked_ = function(event) {
+    this.dispatchEvent(mirosubs.RightPanel.EventType.BACK);
+    event.preventDefault();
+};
 mirosubs.RightPanel.prototype.restartClicked_ = function(event) {
     this.dispatchEvent(mirosubs.RightPanel.EventType.RESTART);
     event.preventDefault();
@@ -154,9 +187,11 @@ mirosubs.RightPanel.prototype.updateLoginState = function() {
     goog.dom.removeChildren(this.loginDiv_);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     if (this.serverModel_.currentUsername() != null)
-        this.loginDiv_.innerHTML = 
-        ["You are logged in as ", 
-         this.serverModel_.currentUsername()].join('');
+        this.loginDiv_.appendChild(
+            $d('div', 'mirosubs-loggedIn',
+               goog.dom.createTextNode(
+                   ["You are logged in as ", 
+                    this.serverModel_.currentUsername()].join(''))));
     else {
         var loginLink = $d('a', {'href':'#'}, "LOGIN");
         this.loginDiv_.appendChild(

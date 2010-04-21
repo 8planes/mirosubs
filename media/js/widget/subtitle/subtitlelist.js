@@ -80,6 +80,15 @@ mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
         this.currentActiveSubtitle_ = null;
     }
 };
+/**
+ * @param {boolean} taller
+ */
+mirosubs.subtitle.SubtitleList.prototype.setTaller = function(taller) {
+    if (taller)
+        goog.dom.classes.add(this.getElement(), 'taller');
+    else
+        goog.dom.classes.remove(this.getElement(), 'taller');
+};
 mirosubs.subtitle.SubtitleList.prototype.timeSpinnerPressed_ = function(event) {
     this.videoPlayer_.pause();
 };

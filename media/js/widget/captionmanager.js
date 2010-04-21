@@ -45,7 +45,6 @@ mirosubs.CaptionManager.EventType = {
     CAPTION: 'caption'
 };
 
-
 /**
  * Adds captions to be displayed.
  * @param {Array.<Object.<string, *>>} captions Array of captions. Each caption must be an 
@@ -61,6 +60,11 @@ mirosubs.CaptionManager.prototype.addCaptions = function(captions) {
     goog.array.sort(this.captions_, this.captionCompare_);
     this.currentCaptionIndex_ = -1;
     this.timerTick_();
+};
+
+mirosubs.CaptionManager.prototype.removeAll = function() {
+    this.captions_ = [];
+    this.dispatchCaptionEvent_(null);    
 };
 
 mirosubs.CaptionManager.prototype.timerTick_ = function() {

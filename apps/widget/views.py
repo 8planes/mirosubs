@@ -26,9 +26,6 @@ import simplejson as json
 from widget import rpc as rpc_views
 import widget
 
-def full_path(js_file):
-    return "http://%s/site_media/js/%s" % (Site.objects.get_current().domain, js_file)
-
 def embed(request):
     if 'video_id' in request.GET:
         video = models.Video.objects.get(video_id=request.GET['video_id'])

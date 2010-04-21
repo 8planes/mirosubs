@@ -28,21 +28,22 @@ def _command(cmd):
 
 def staging():
     """
-    Run the subsequent commands on the staging server, e.g., li77-157.members.linode.com or 74.207.235.157
+    Run the subsequent commands on the staging server, e.g., li77-157.members.linode.com 
+    or 74.207.235.157
     """
     env.hosts = ['8planes.com']
     env.user = 'mirosubsstaging'
-    env.production = False
+    env.base_dir = '/home/{0}'.format(env.user)
 
 def dev():
     env.hosts = ['8planes.com']
     env.user = 'mirosubsdev'
-    env.production = False
+    env.base_dir = '/home/{0}'.format(env.user)
 
 def prod():
     env.hosts = ['pcf10.pculture.org:2191']
     env.user = 'adam'
-    env.production = True
+    env.base_dir = '/var/www/universalsubtitles'
 
 def setup_virtualenv(home='/home/mirosubs'):
     run('virtualenv --no-site-packages %s/env' % home)
@@ -72,15 +73,18 @@ def reset_db():
         run(('/home/{0}/env/bin/python manage.py syncdb --noinput '
               '--settings={0}-settings').format(env.user))
 
+def migrate(app_name):
+    with cd('{0}/mirosubs'.format(env.base_dir)):
+        run('python manage.py migrate {0}'.format(app_name))
+
 def update():
-    base_dir = '/var/www/universalsubtitles' if env.production else '/home/{0}'.format(env.user)
     """
     Put the latest version of the code on the server and reload the app.
     """
-    with cd('{0}/mirosubs'.format(base_dir)):
+    with cd('{0}/mirosubs'.format(env.base_dir)):
         run('git pull origin master')
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
-        run('{0}/env/bin/python closure/compile.py'.format(base_dir))
+        run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
         run('touch deploy/{0}.wsgi'.format(env.user))

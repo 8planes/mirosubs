@@ -23,14 +23,22 @@ goog.provide('mirosubs.subtitle.TranscribePanel');
  * @param {mirosubs.UnitOfWork} unitOfWork Used to track any new captions added 
  *     while this widget is active.
  * @param {mirosubs.VideoPlayer} videoPlayer Used to update subtitle 
- * preview on top of the video
+ *     preview on top of the video
+ * @param {mirosubs.ServerModel} serverModel Used to create RightPanel, which 
+ *     needs access to server to login.
+ * @param {mirosubs.CaptionManager} captionManager Used to remove all 
+ *    subtitles, in case the user decides to do that.
  */
-mirosubs.subtitle.TranscribePanel = function(captions, unitOfWork, videoPlayer) {
+mirosubs.subtitle.TranscribePanel = function(captions, unitOfWork, 
+                                             videoPlayer, serverModel, 
+                                             captionManager) {
     goog.ui.Component.call(this);
 
     this.captions_ = captions;
     this.unitOfWork_ = unitOfWork;
     this.videoPlayer_ = videoPlayer;
+    this.serverModel_ = serverModel;
+    this.captionManager_ = captionManager;
 
     /**
      * @type {?goog.events.KeyHandler}
@@ -59,17 +67,28 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
         this.videoPlayer_), true);
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.videoPlayer_, this.captions_, false), true);
+    // FIXME: hacky
+    this.setRepeatVideoMode(true);
 };
-mirosubs.subtitle.TranscribePanel.prototype.registerRightPanel = 
-    function(rightPanel) 
-{
-    this.getHandler().listen(rightPanel,
-                             mirosubs.RightPanel.EventType.RESTART,
-                             this.startOverClicked);
-};
-mirosubs.subtitle.TranscribePanel.prototype.createRightPanel = 
+mirosubs.subtitle.TranscribePanel.prototype.getRightPanel = 
     function(serverModel) 
 {
+    if (!this.rightPanel_) {
+        this.rightPanel_ = this.createRightPanel_();
+        this.getHandler().listen(this.rightPanel_,
+                                 mirosubs.RightPanel.EventType.RESTART,
+                                 this.startOverClicked);
+        var that = this;
+        this.getHandler().listen(
+            this.rightPanel_,
+            mirosubs.subtitle.TranscribeRightPanel.AUTOPAUSE_CHANGED,
+            function(event) {
+                that.setRepeatVideoMode(event.on);
+            });
+    }
+    return this.rightPanel_;
+};
+mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
         "STEP 1: Typing the subtitles",
         [["Thanks for making subtitles!! It's easy to learn ", 
@@ -88,9 +107,9 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel =
             'mirosubs-skip', 'mirosubs-control', 'control', 
             'Skip Back 8 Seconds', KC.CTRL)
     ];
-    return new mirosubs.RightPanel(
-        serverModel, helpContents, keySpecs, true, "Done?", 
-        "Next Step: Syncing");
+    return new mirosubs.subtitle.TranscribeRightPanel(
+        this.serverModel_, helpContents, keySpecs, 
+        true, "Done?", "Next Step: Syncing");
 };
 mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
     mirosubs.subtitle.TranscribePanel.superClass_.enterDocument.call(this);
@@ -128,12 +147,15 @@ mirosubs.subtitle.TranscribePanel.prototype.startOverClicked = function() {
         while (this.captions_.length > 0) {
             var caption = this.captions_.pop();
             this.unitOfWork_.registerDeleted(caption);
-            // TODO: at this point, these subtitles are not in the CaptionManager.
-            // But, if they are in the future (like, there is a back button in 
-            // the process), then they need to be removed from the CaptionManager
-            // also.
         }
+        this.captionManager_.removeAll();
         this.subtitleList_.clearAll();
         this.videoPlayer_.setPlayheadTime(0);
     }
+};
+
+mirosubs.subtitle.TranscribePanel.prototype.disposeInternal = function() {
+    mirosubs.subtitle.TranscribePanel.superClass_.disposeInternal.call(this);
+    if (this.rightPanel_)
+        this.rightPanel_.dispose();
 };

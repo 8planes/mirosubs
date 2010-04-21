@@ -16,19 +16,19 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.require("goog.ui.Dialog");
-goog.require("goog.json.Serializer");
-goog.require("goog.net.CrossDomainRpc");
-goog.require("goog.dom.DomHelper");
-goog.require("goog.events.BrowserEvent");
-goog.require("goog.ui.Button");
-goog.require("goog.ui.LabelInput");
-goog.require("goog.net.XhrIo");
-goog.require('goog.positioning.Corner');
-goog.require('goog.ui.MenuItem');
-goog.require('goog.ui.PopupMenu');
-goog.require('goog.ui.Bubble');
-goog.require('goog.debug.FancyWindow');
-goog.require('goog.math');
-goog.require('goog.net.ImageLoader');
-goog.require('goog.ui.Checkbox');
+goog.provide('mirosubs.timeline.TimeRow');
+
+mirosubs.timeline.TimeRow = function(spacing) {
+    goog.ui.Component.call(this);
+    this.spacing_ = spacing;
+};
+goog.inherits(mirosubs.timeline.TimeRow, goog.ui.Component);
+mirosubs.timeline.TimeRow.prototype.createDom = function() {
+    mirosubs.timeline.TimeRow.superClass_.createDom.call(this);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.timeRowUL0_ = new mirosubs.timeline.TimeRowUL($d, this.spacing_);
+    this.timeRowUL1_ = new mirosubs.timeline.TimeRowUL($d, this.spacing_);
+};
+mirosubs.timeline.TimeRow.prototype.setTime = function(time) {
+    
+};
