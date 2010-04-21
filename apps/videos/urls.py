@@ -21,7 +21,6 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('videos.views',
     url(r'^$', 'video_list', name='list'),
     url(r'^feedback/$', 'feedback', name='feedback'),
-    url(r'^feedback/success/$', 'feedback', {'success': True}, name='feedback_success'),    
     url(r'^create/$', 'create', name='create'),    
     url(r'(?P<video_id>(\w|-)+)/$', 'video', name='video'),
 )

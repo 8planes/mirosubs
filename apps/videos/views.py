@@ -28,6 +28,7 @@ import widget
 from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
 from django.shortcuts import redirect
+import simplejson as json
 
 def create(request):
     if request.method == 'POST':
@@ -92,14 +93,12 @@ def video_list(request):
                        template_object_name='video',
                        extra_context=extra_context)
 
-def feedback(request, success=False):
-    if not success and request.method == 'POST':
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            form.send()
-            return redirect('videos:feedback_success')
+def feedback(request):
+    output = dict(success=False)
+    form = FeedbackForm(request.POST)
+    if form.is_valid():
+        form.send()
+        output['success'] = True
     else:
-        form = FeedbackForm()
-    context = dict(form=form, success=success)
-    return render_to_response('videos/feedback.html', context,
-                              context_instance=RequestContext(request))
+        output['errors'] = form.get_errors()
+    return HttpResponse(json.dumps(output), "text/javascript")
