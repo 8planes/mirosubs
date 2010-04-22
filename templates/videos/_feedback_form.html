@@ -1,0 +1,67 @@
+<style>
+    #id_email {
+        width: 300px;
+        margin: 2px;
+    }
+    #id_message {
+        width: 368px;
+        height: 150px;
+    }
+    #feedback_form div {
+        margin: 2px;
+    }
+    #feedback_form p.error_list {
+        color: #ff0000;
+        margin: -1px;
+    }
+    #feedback_success {
+        font-size: 1.2em;
+    }
+</style>
+<div style="clear: both">
+    <div>
+        <form method="post" action="{% url videos:feedback %}" id="feedback_form">
+            <div>
+                <label for="id_email">Your email: </label>{{ form.email }}
+            </div>
+            <div>
+                {{ form.message }}
+            </div>
+            <div>
+                <input type="submit" value="Send feedback"/>
+            </div>      
+        </form>
+    </div>
+    <div style="display: none" id="feedback_success">
+        Thak you, for your feedback.<br/>
+        <a href="#" id="send_more_feedback">Send more feedback.</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#send_more_feedback').click(function(){
+       $(this).parent('div').hide().prev().show(); 
+       return false;
+    });
+    
+    $('#feedback_form').ajaxForm({
+        dataType: 'json',
+        success: function(data, status, xhr, $form){
+            if (data.success){
+                $form.resetForm();
+                $form.parent().hide().next().show();
+            }else{
+                for (key in data.errors){
+                    $form.prepend('<p class="error_list">'+data.errors[key]+'</p>');
+                };
+            }
+        },
+        beforeSubmit: function(formData, $Form, options){
+            $('p.error_list', $Form).remove();
+            var form = $Form[0];
+            if ( ! form.message.value){
+                $(form.message).before('<p class="error_list">Enter feedback please.</p>');
+                return false;
+            }
+        }
+    });
+</script>
