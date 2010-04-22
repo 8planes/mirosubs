@@ -185,3 +185,7 @@ mirosubs.subtitle.MSServerModel.prototype.logIn = function() {
 mirosubs.subtitle.MSServerModel.prototype.logOut = function() {
     mirosubs.logout();
 };
+
+mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
+    return [mirosubs.BASE_URL, "/videos/", this.videoID_, "/"].join('');
+};

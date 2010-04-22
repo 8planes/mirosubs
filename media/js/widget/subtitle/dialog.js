@@ -115,9 +115,15 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
 };
 mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     this.saved_ = true;
-    var rightPanel = new mirosubs.subtitle.FinishedRightPanel(
+    var sharePanel = new mirosubs.subtitle.SharePanel(
         this.serverModel_);
-    this.setRightPanelInternal(rightPanel);
+    this.setRightPanelInternal(sharePanel);
+    this.getCaptioningAreaInternal().removeChildren(true);
+    var bottomContainer = this.getBottomPanelContainerInternal();
+    console.log(bottomContainer);
+    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel();
+    console.log(bottomFinishedPanel);
+    bottomContainer.addChild(bottomFinishedPanel, true);
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL)

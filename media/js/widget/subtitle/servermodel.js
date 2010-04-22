@@ -59,3 +59,5 @@ mirosubs.subtitle.ServerModel.prototype.currentUsername = function() {};
 mirosubs.subtitle.ServerModel.prototype.logIn = function() {};
 
 mirosubs.subtitle.ServerModel.prototype.logOut = function() {};
+
+mirosubs.subtitle.ServerModel.prototype.getPermalink = function() {};

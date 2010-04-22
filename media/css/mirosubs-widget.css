@@ -861,6 +861,7 @@ font-size: 14px;
 iframe.mirosubs-captionDivBg { 
     position: absolute; 
     border: none; 
+    top: 220px !important;
 } 
 
 
@@ -1362,13 +1363,12 @@ left: 230px;
 }
 
 
-.mirosubs-embed textarea{
+.mirosubs-embed input {
 width: 205px;
 overflow: hidden;
 padding: 5px;
 height: 11px;
 font-size: 11px;
-
 }
 
 

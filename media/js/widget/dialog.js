@@ -28,6 +28,7 @@ mirosubs.Dialog = function(videoSource) {
     this.captioningArea_ = null;
     this.rightPanelContainer_ = null;
     this.rightPanel_ = null;
+    this.bottomPanelContainer_ = null;
 };
 goog.inherits(mirosubs.Dialog, goog.ui.Dialog);
 mirosubs.Dialog.prototype.createDom = function() {
@@ -44,6 +45,7 @@ mirosubs.Dialog.prototype.createDom = function() {
     this.rightPanelContainer_.getElement().className = 'mirosubs-right';
     this.getContentElement().appendChild(this.getDomHelper().createDom(
         'div', 'mirosubs-clear'));
+    this.addChild(this.bottomPanelContainer_ = new goog.ui.Component(), true);
 };
 mirosubs.Dialog.prototype.getVideoPlayerInternal = function() {
     return this.videoPlayer_;
@@ -61,6 +63,9 @@ mirosubs.Dialog.prototype.setRightPanelInternal = function(rightPanel) {
 };
 mirosubs.Dialog.prototype.getRightPanelInternal = function() {
     return this.rightPanel_;
+};
+mirosubs.Dialog.prototype.getBottomPanelContainerInternal = function() {
+    return this.bottomPanelContainer_;
 };
 mirosubs.Dialog.prototype.updateLoginState = function() {
     this.rightPanel_.updateLoginState();
