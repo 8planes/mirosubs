@@ -1,9 +1,9 @@
 <style>
-    #id_email {
+    #feedback_email {
         width: 300px;
         margin: 2px;
     }
-    #id_message {
+    #feedback_message {
         width: 368px;
         height: 150px;
     }
@@ -22,7 +22,7 @@
     <div>
         <form method="post" action="{% url videos:feedback %}" id="feedback_form">
             <div>
-                <label for="id_email">Your email: </label>{{ form.email }}
+                <label for="feedback_email">Your email: </label>{{ form.email }}
             </div>
             <div>
                 {{ form.message }}
