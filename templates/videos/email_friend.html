@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<form method="post" action="." id="email_friend_from">
+    <table>
+        {{ form }}
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <input type="submit" value="Send"/>
+            </td>
+        </tr>
+    </table>
+</form>
+<br/>
+{% endblock %}
