@@ -42,7 +42,7 @@ begin
       cgi.body() do
         cgi.div {  
           "<script src=\"http://#{@site_subdomain}.8planes.com/embed_widget.js?#{@js_query_string}\"></script>"
-        },
+        } + 
         cgi.div {
           "<img src='/media/test.png' alt='some stupid image'/>"
         }
