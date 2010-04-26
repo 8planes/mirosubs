@@ -9,4 +9,11 @@
    CustomLog /home/mirosubsdev/log/apache.widget.custom.log combined
 
    ScriptAlias / /home/mirosubsdev/mirosubs/widget-demo/
+
+   Alias /media /var/www/
+   <Location "/media">
+      SetHandler None
+      Order allow, deny
+      Allow from all
+   </Location>
 </VirtualHost>
