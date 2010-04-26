@@ -18,8 +18,9 @@
 
 from django import forms
 from videos.models import Video
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
+import re
 
 class VideoForm(forms.ModelForm):
     class Meta:
@@ -45,3 +46,32 @@ class FeedbackForm(forms.Form):
         for key, value in self.errors.items():
             output[key] = '/n'.join([force_unicode(i) for i in value])
         return output
+
+email_list_re = re.compile(
+    r"""^(([-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*")@(?:[A-Z0-9]+(?:-*[A-Z0-9]+)*\.)+[A-Z]{2,6},)+$""", re.IGNORECASE)
+
+class EmailListField(forms.RegexField):
+    default_error_messages = {
+        'invalid': u'Enter valid e-mail addresses separated by commas.',
+    }
+    
+    def __init__(self, max_length=None, min_length=None, *args, **kwargs):
+        super(EmailListField, self).__init__(email_list_re, max_length, min_length, *args, **kwargs)
+    
+    def clean(self, value):
+        if value:
+            value = value and value.endswith(',') and value or value+','
+        return super(EmailListField, self).clean(value)
+    
+class EmailFriendForm(forms.Form):
+    from_email = forms.EmailField(label='From')
+    to_emails = EmailListField(label='To')
+    subject = forms.CharField()
+    message = forms.CharField(widget=forms.Textarea())
+    
+    def send(self):
+        subject = self.cleaned_data['subject']
+        message = self.cleaned_data['message']
+        from_email = self.cleaned_data['from_email']
+        to_emails = self.cleaned_data['to_emails'].strip(',').split(',')
+        send_mail(subject, message, from_email, to_emails)

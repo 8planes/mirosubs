@@ -269,7 +269,10 @@ font-size: 13px;
 padding-top: 5px;
 }
 
-
+input#email_friend_id_from_email, input#email_friend_id_to_emails,
+input#email_friend_id_subject {
+    width: 339px;
+}
 
 
 
