@@ -8,12 +8,13 @@
    ErrorLog /home/mirosubsdev/log/apache.widget.error.log
    CustomLog /home/mirosubsdev/log/apache.widget.custom.log combined
 
-   ScriptAlias / /home/mirosubsdev/mirosubs/widget-demo/
-
    Alias /media /var/www/
    <Location "/media">
       SetHandler None
-      Order allow, deny
+      Order allow,deny
       Allow from all
    </Location>
+
+   ScriptAlias / /home/mirosubsdev/mirosubs/widget-demo/
+
 </VirtualHost>
