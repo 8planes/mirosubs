@@ -607,10 +607,8 @@ ul.mirosubs-titlesList.sync {
 .mirosubs-timeline{
     margin: 0;
     overflow: hidden;
-
     padding: 0;
     background: #fefefe url("../images/gradient.png") 0 0px repeat-x;
-    position: relative;
 }
 
 .mirosubs-timeline:hover .mirosubs-hideTimeline{
@@ -644,18 +642,16 @@ background: #fff url("../images/sprite.png") 3px -212px no-repeat;
     width: 13px;
 }
 
-.mirosubs-timeline ul{
+.mirosubs-timeline ul {
     margin: 0;
     padding: 0;
-    width: 2500px;
-    float: left;
 }
 
 .mirosubs-timeline ul.mirosubs-timeline-time {
     border-bottom: 1px solid #ddd;
 }
 
-.mirosubs-timeline ul.mirosubs-timeline-time li{
+.mirosubs-timeline ul.mirosubs-timeline-time li {
     margin: 0;
     list-style: none;
     font-size: 10px;

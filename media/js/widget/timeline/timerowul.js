@@ -24,27 +24,41 @@ goog.provide('mirosubs.timeline.TimeRowUL');
  */
 mirosubs.timeline.TimeRowUL = function($d, spacing) {
     this.element_ = $d('ul', 'mirosubs-timeline-time');
+    this.element_.style.width =
+        (mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
+         mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
     this.spacing_ = spacing;
     this.majorTicks_ = [];
+    this.firstTime_ = null;
     var i;
-    for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS_; i++) {
+    for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS; i++) {
         var tick = $d('li');
         this.element_.appendChild(tick);
         this.majorTicks_.push(tick);
     }
 };
-mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS_ = 7;
+mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS = 15;
+mirosubs.timeline.TimeRowUL.PX_PER_TICK = 60;
 mirosubs.timeline.TimeRowUL.prototype.getElement = function() {
     return this.element_;
 };
 mirosubs.timeline.TimeRowUL.prototype.setFirstTime = function(time) {
+    time = Math.max(0, time);
+    time = Math.floor(time / this.spacing_) * this.spacing_;
     this.firstTime_ = time;
-    var i;
-    for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS_; i++)
+    this.lastTime_ = time + this.spacing_ * 
+        mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS;
+    var i, seconds;
+    for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS; i++) {
+        seconds = this.firstTime_ + i * this.spacing_;
         goog.dom.setTextContent(
             this.majorTicks_[i], 
-            mirosubs.formatTime(this.firstTime_ + i * this.spacing_));
+            mirosubs.formatTime(seconds >= 0 ? ('' + seconds) : ''));
+    }
 };
 mirosubs.timeline.TimeRowUL.prototype.getFirstTime = function() {
     return this.firstTime_;
+};
+mirosubs.timeline.TimeRowUL.prototype.getLastTime = function() {
+    return this.lastTime_;
 };
