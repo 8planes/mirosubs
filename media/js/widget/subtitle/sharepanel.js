@@ -58,9 +58,10 @@ mirosubs.subtitle.SharePanel.prototype.createShareList_ = function($d, $t) {
 };
 mirosubs.subtitle.SharePanel.prototype.createEmbedSection_ = function($d, $t) {
     this.embedCodeInput_ = $d('input', {'type':'text'});
-    var embedCode = ['<sc', 'ript type="text/javascript" src="',
-                     this.serverModel_.getEmbedCode(),
-                     '"></script>'].join('');
+//    var embedCode = ['<sc', 'ript type="text/javascript" src="',
+//                     this.serverModel_.getEmbedCode(),
+//                     '"></script>'].join('');
+    var embedCode = "(Embed code currently unavailable)";
     this.embedCodeInput_['value'] = embedCode;
 
     var flashSpan = $d('span');

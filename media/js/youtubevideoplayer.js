@@ -62,7 +62,7 @@ mirosubs.YoutubeVideoPlayer.prototype.enterDocument = function() {
         var atts = { 'id': this.playerElemID_ };
         window["swfobject"]["embedSWF"](
             ['http://www.youtube.com/v/', this.videoSource_.getYoutubeVideoID(), 
-             '?enablejsapi=1&playerapiid=', this.playerAPIID_].join(''),
+             '?enablejsapi=1&disablekb=1&playerapiid=', this.playerAPIID_].join(''),
             videoDiv.id, "480", "360", "8", null, null, params, atts);
     }
 };
