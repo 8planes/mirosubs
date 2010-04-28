@@ -121,3 +121,8 @@ def email_friend(request):
     }
     return render_to_response('videos/email_friend.html', context,
                               context_instance=RequestContext(request))
+
+def demo(request):
+    context = {}
+    return render_to_response('videos/demo.html', context,
+                              context_instance=RequestContext(request))
