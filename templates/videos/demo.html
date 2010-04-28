@@ -1,37 +1,40 @@
 {% extends "base.html" %}
-
 {% block scripts %}
-    <script type="text/javascript">
-        $(function(){
-            //get from: http://diveintohtml5.org/detect.html#video-formats
-            function supports_video() {
-              return !!document.createElement('video').canPlayType;
-            }
-            
-            function supports_h264_baseline_video() {
-              if (!supports_video()) { return false; }
-              var v = document.createElement("video");
-              return v.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
-            }
-            
-            function supports_ogg_theora_video() {
-              if (!supports_video()) { return false; }
-              var v = document.createElement("video");
-              return v.canPlayType('video/ogg; codecs="theora, vorbis"');
-            }
-            var result;
-            if (supports_ogg_theora_video()){
-                result = 'HTML5 Ogg capable browsers (Chrome, Firefox post 3.5)';
-            }else if(supports_h264_baseline_video()){
-                result = 'HTML5 h.264 capable browsers that can’t play Ogg (Safari, iPhone, iPad)';
-            }else{
-                result = 'Browsers with Flash (IE)';
-            }
-            $('.suport-video-result').html(result);
-        });
-    </script>
+{% if not js_use_compiled %}
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
+{% endif %}
 {% endblock %}
-
 {% block main_content %}
-    <div class="suport-video-result"></div>
+    <div id="videoDiv"></div>
+    <script type="text/javascript">
+      // get from: http://diveintohtml5.org/detect.html#video-formats
+      function supports_video() {
+          return !!document.createElement('video').canPlayType;
+      }
+      function supports_h264_baseline_video() {
+          if (!supports_video()) 
+              return false;
+          var v = document.createElement("video");
+          return v.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+      }
+      function supports_ogg_theora_video() {
+          if (!supports_video()) 
+              return false;
+          var v = document.createElement("video");
+          return v.canPlayType('video/ogg; codecs="theora, vorbis"');
+      }
+      var scriptQueryString;
+      if (supports_ogg_theora_video())
+          scriptQueryString = 
+              "video_url=http://videos.mozilla.org/firefox3/switch/switch.ogg";
+      else if (supports_h264_baseline_video())
+          scriptQueryString = 
+              "video_url=http://www.visitmix.com/content/files/HTML5.mp4";
+      else
+          scriptQueryString = "youtube_videoid=32d-ofwa_yA";
+      document.write(['<scr', 'ipt src="/embed_widget.js?', scriptQueryString, 
+                      '&element_id=videoDiv"></scr', 'ipt>'].join(''));
+    </script>
 {% endblock %}
