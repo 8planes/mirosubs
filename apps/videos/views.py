@@ -105,12 +105,17 @@ def feedback(request):
     return HttpResponse(json.dumps(output), "text/javascript")
 
 def email_friend(request):
+    text = request.GET.get('text', '')
+    link = request.GET.get('link', '')
+    if link:
+        text = link if not text else '%s\n%s' % (text, link) 
+    initial = dict(message=text)
     if request.method == 'POST':
         form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s")
         if form.is_valid():
             form.send()
     else:
-        form = EmailFriendForm(auto_id="email_friend_id_%s")
+        form = EmailFriendForm(auto_id="email_friend_id_%s", initial=initial)
     context = {
         'form': form
     }
