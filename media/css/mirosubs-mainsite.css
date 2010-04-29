@@ -24,7 +24,7 @@ a:active {}
 
 .wrapper{
 padding: 0 0px 10px;
-width: 960px;
+width: 940px;
 margin: 0 auto;
 }
 
@@ -48,7 +48,7 @@ line-height: 3em;
 
 .header h1 {
 float: left;
-margin: 0;
+margin: 0 0 0 -10px;
 }
 
 
@@ -243,6 +243,18 @@ width: 480px;
 float: left;
 }
 
+
+
+
+/*/////////////////////////////////////////////
+
+~ Home Page
+
+/////////////////////////////////////////////*/
+
+
+
+
 .left_column ol{
 padding: 0;
 margin: 0;
@@ -270,6 +282,77 @@ padding-top: 5px;
 }
 
 
+/*/////////////////////////////////////////////
+
+~ Recent Activity
+
+/////////////////////////////////////////////*/
+
+
+
+.recent_activity{
+border: 1px solid;
+padding: 0;
+margin: 0;
+}
+
+.recent_activity li{
+border: 1px solid;
+padding: 0 0 0 30px;
+margin: 0;
+list-style: none;
+}
+
+
+
+/*/////////////////////////////////////////////
+
+~ Standard Form
+
+/////////////////////////////////////////////*/
+
+
+.content form{
+clear: both;
+}
+
+
+
+form p{
+clear: both;
+}
+
+form p label{
+float: left;
+margin: 0;
+line-height: 2.4em;
+width: 160px;
+font-size: 13px;
+}
+
+form p input{
+font-size: 13px;
+padding: 3px;
+}
+
+
+/*/////////////////////////////////////////////
+
+~ Feedback Form
+
+/////////////////////////////////////////////*/
+
+
+#feedback_form{
+border-top: 1px solid #bed3d7;
+border-bottom: 1px solid #ebfcff;
+border-left: 1px solid #c6dee2;
+border-right: 1px solid #c6dee2;
+padding: 30px;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+background: url(../images/1x1.png);
+}
 
 
 

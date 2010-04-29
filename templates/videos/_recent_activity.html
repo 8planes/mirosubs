@@ -1,9 +1,9 @@
 {% for item in events %}
-    <p>
+    <li>
     	{% if item.user %}
-		  <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+		  <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
 		{% else %}
-		  Anonymous
+		  <span class="username anon">Anonymous</span>
 		{% endif %}
 		
         {% if item.language %}
@@ -12,7 +12,7 @@
 		    edited subtitles for
 		{% endif %}
 		
-        <a href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
-		at {{ item.time }}.		
-	</p>
+        <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
+		<span>at {{ item.time }}		
+	</li>
 {% endfor %}
