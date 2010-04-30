@@ -55,10 +55,10 @@ mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     handler.listen(this.captionManager_,
                    mirosubs.CaptionManager.EventType.CAPTION,
                    this.captionReached_);    
-    handler.listen(window,
+    handler.listen(document,
                    goog.events.EventType.KEYDOWN,
                    this.handleKeyDown_);
-    handler.listen(window,
+    handler.listen(document,
                    goog.events.EventType.KEYUP,
                    this.handleKeyUp_);
     var that = this;

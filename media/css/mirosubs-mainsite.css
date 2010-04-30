@@ -157,10 +157,13 @@ padding-right: 10px;
 
 .content{
 min-height: 700px;
-
 clear: both;
+padding-top: 70px;
 font-size: 12px;
 }
+
+
+
 
 .footer{
 clear: both;
@@ -352,6 +355,13 @@ padding: 30px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
 background: url(../images/1x1.png);
+}
+
+
+input#email_friend_id_from_email, input#email_friend_id_to_emails,
+input#email_friend_id_subject {
+    width: 339px;
+
 }
 
 

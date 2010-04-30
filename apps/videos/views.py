@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.forms import VideoForm, FeedbackForm
+from videos.forms import VideoForm, FeedbackForm, EmailFriendForm
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5
 import widget
 from urlparse import urlparse, parse_qs
@@ -103,3 +103,26 @@ def feedback(request):
     else:
         output['errors'] = form.get_errors()
     return HttpResponse(json.dumps(output), "text/javascript")
+
+def email_friend(request):
+    text = request.GET.get('text', '')
+    link = request.GET.get('link', '')
+    if link:
+        text = link if not text else '%s\n%s' % (text, link) 
+    initial = dict(message=text)
+    if request.method == 'POST':
+        form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s")
+        if form.is_valid():
+            form.send()
+    else:
+        form = EmailFriendForm(auto_id="email_friend_id_%s", initial=initial)
+    context = {
+        'form': form
+    }
+    return render_to_response('videos/email_friend.html', context,
+                              context_instance=RequestContext(request))
+
+def demo(request):
+    context = {}
+    return render_to_response('videos/demo.html', context,
+                              context_instance=RequestContext(request))

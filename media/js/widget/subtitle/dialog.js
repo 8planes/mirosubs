@@ -120,9 +120,7 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     this.setRightPanelInternal(sharePanel);
     this.getCaptioningAreaInternal().removeChildren(true);
     var bottomContainer = this.getBottomPanelContainerInternal();
-    console.log(bottomContainer);
     var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel();
-    console.log(bottomFinishedPanel);
     bottomContainer.addChild(bottomFinishedPanel, true);
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {

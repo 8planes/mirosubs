@@ -27,14 +27,15 @@ goog.provide('mirosubs.Spinner');
  */
 mirosubs.Spinner = function(value, min, max, valueExpression) {
     goog.ui.Component.call(this);
-    this.timer_ = new goog.Timer(30);
+    this.timer_ = new goog.Timer(100);
     this.speed_ = mirosubs.Spinner.INITIAL_SPEED;
     this.counter_ = 0;
     this.value_ = value;
     this.min_ = min;
     this.max_ = max;
-    this.maxStep_ = 0.20;
+    this.maxStep_ = 0.10;
     this.minStep_ = 0.05;
+    this.stepIncrease_ = 0.05;
     this.step_ = this.minStep_;
     this.enabled_ = true;
     this.increment_ = true;
@@ -52,7 +53,7 @@ mirosubs.Spinner.EventType = {
     ARROW_PRESSED: "arrowPressed",
     VALUE_CHANGED: "valueChanged"
 };
-mirosubs.Spinner.INITIAL_SPEED = 7;
+mirosubs.Spinner.INITIAL_SPEED = 4;
 mirosubs.Spinner.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.valueSpan_ = $d('span');
@@ -100,15 +101,17 @@ mirosubs.Spinner.prototype.cancelTimer_ = function() {
 mirosubs.Spinner.prototype.timerTick_ = function(event) {
     this.counter_++;
     if (this.speed_ <= 0 || this.counter_ % this.speed_ == 0) {
-        this.speed_--;
-        this.counter_ = 0;
+        if (this.counter_ > 10) {
+            this.speed_--;
+            this.counter_ = 0;
+        }
         if (this.increment_)
             this.increase_();
         else
             this.decrease_();
     }
     if (this.speed_ < 0 && this.step_ < this.maxStep_)
-        this.step_++;
+        this.step_ += this.stepIncrease_;
 };
 mirosubs.Spinner.prototype.mouseDown_ = function(event) {
     if (this.enabled_) {

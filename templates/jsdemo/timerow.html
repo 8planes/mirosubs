@@ -1,0 +1,25 @@
+{% extends "jsdemo/base_demo.html" %}
+{% block body %}
+<div id="timerow" class="mirosubs-timeline" 
+     style="height: 20px; width: 360px"></div>
+<fieldset class="goog-debug-panel">
+  <legend>Event Log</legend>
+  <div id="log" style="height: 340px; overflow-y: auto"></div>
+</fieldset>
+<script type="text/javascript">
+    // Set up a logger.
+    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    logconsole.setCapturing(true);
+
+    var timerow = new mirosubs.timeline.TimeRow(2);
+    timerow.decorate(goog.dom.$('timerow'));
+
+    timerow.setTime(0);
+
+    var curTime = 0;
+
+    window.setInterval(
+      function() { timerow.setTime(curTime += 0.05);  }, 50);
+</script>
+{% endblock %}
