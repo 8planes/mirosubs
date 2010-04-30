@@ -6,5 +6,5 @@ register = template.Library()
 @register.inclusion_tag('videos/_feedback_form.html')
 def feedback_form():
     return {
-        'form': FeedbackForm(auto_id="feedback_%s")
+        'form': FeedbackForm(auto_id="feedback_%s", label_suffix="")
     }

@@ -1,24 +1,25 @@
 {% extends "base.html" %}
 {% block main_content %}
 {% if video_list %}
+<h2>All Submitted Videos</h2>
   <table>
     <tr>
-      <th>URL</th>
-      <th>
+      <th width="600">URL</th>
+      <th class="center">
       	 {% ifequal ordering 'widget_views_count' %}
       	     <a href="?o=widget_views_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Views</a>
 	     {% else %}
 		     <a href="?o=widget_views_count&ot=asc&page={{ page }}">Views</a>
 		 {% endifequal %}
 	  </th>
-      <th>
+      <th class="center">
          {% ifequal ordering 'subtitles_fetched_count' %}
              <a href="?o=subtitles_fetched_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Subtitles Fetched</a>
          {% else %}
              <a href="?o=subtitles_fetched_count&ot=asc&page={{ page }}">Subtitles Fetched</a>
          {% endifequal %}        
       </th>
-      <th>
+      <th class="center">
          {% ifequal ordering 'translation_count' %}
              <a href="?o=translation_count&ot={% ifequal order_type 'asc' %}desc{% else %}asc{% endifequal %}&page={{ page }}">Translations</a>
          {% else %}
@@ -33,9 +34,9 @@
                 {{ video.get_video_url|slice:":36" }}
             </a>
         </td>
-        <td>{{ video.widget_views_count }}</td>
-        <td>{{ video.subtitles_fetched_count }}</td>
-        <td>{{ video.translation_count }}</td>
+        <td class="center">{{ video.widget_views_count }}</td>
+        <td class="center">{{ video.subtitles_fetched_count }}</td>
+        <td class="center">{{ video.translation_count }}</td>
       </tr>
     {% endfor %}
   </table>

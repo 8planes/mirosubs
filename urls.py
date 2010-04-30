@@ -60,7 +60,11 @@ urlpatterns = patterns(
     (r'^profiles/', include('profiles.urls', namespace='profiles', 
                             app_name='profiles')),
     (r'auth/', include('auth.urls', namespace='auth',
-                       app_name='auth'))
+                       app_name='auth')),
+    (r'^about$',  'django.views.generic.simple.direct_to_template', 
+     {'template': 'about.html'}),
+		(r'^faq$',  'django.views.generic.simple.direct_to_template', 
+     {'template': 'faq.html'})
 )
 
 if settings.DEBUG:

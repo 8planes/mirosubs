@@ -18,25 +18,32 @@
         font-size: 1.2em;
     }
 </style>
-<div style="clear: both">
+
+
+   
     <div>
         <form method="post" action="{% url videos:feedback %}" id="feedback_form">
-            <div>
+        <h2>What would make this page work better?</h2>
+<p>Please let us know if you have any comments, questions, or suggestions!</p>
+            <p>
                 <label for="feedback_email">Your email: </label>{{ form.email }}
-            </div>
-            <div>
+            </p>
+            <p>
+            <label>Your Feedback</label>
                 {{ form.message }}
-            </div>
-            <div>
-                <input type="submit" value="Send feedback"/>
-            </div>      
+            </p>
+
+                <button type="submit" value="Send feedback"><span>Send Feedback</span></button>
+
         </form>
     </div>
+   
     <div style="display: none" id="feedback_success">
         Thak you, for your feedback.<br/>
         <a href="#" id="send_more_feedback">Send more feedback.</a>
     </div>
-</div>
+    
+    
 <script type="text/javascript">
     $('#send_more_feedback').click(function(){
        $(this).parent('div').hide().prev().show(); 

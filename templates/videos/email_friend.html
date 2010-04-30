@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 
 {% block main_content %}
+<h2>Email this to a friend</h2>
 <form method="post" action="." id="email_friend_from">
-    <table>
-        {{ form }}
-        <tr>
-            <td>&nbsp;</td>
-            <td>
-                <input type="submit" value="Send"/>
-            </td>
-        </tr>
-    </table>
+        {{ form.as_p }}
+      
+      
+                <button type="submit" value="Send"/><span>Send to Friend!</span></button>
+     
+     
 </form>
 <br/>
 {% endblock %}
