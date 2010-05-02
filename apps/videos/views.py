@@ -32,7 +32,7 @@ import simplejson as json
 
 def create(request):
     if request.method == 'POST':
-        video_form = VideoForm(request.POST)
+        video_form = VideoForm(request.POST, label_suffix="")
         if video_form.is_valid():
             owner = request.user if request.user.is_authenticated() else None
             parsed_url = urlparse(video_form.cleaned_data['video_url'])
@@ -57,7 +57,7 @@ def create(request):
                 # TODO: better error page?
                 return HttpResponse('You are not allowed to add transcriptions to this video.')
     else:
-        video_form = VideoForm()
+        video_form = VideoForm(label_suffix="")
     return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
 
@@ -111,11 +111,11 @@ def email_friend(request):
         text = link if not text else '%s\n%s' % (text, link) 
     initial = dict(message=text)
     if request.method == 'POST':
-        form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s")
+        form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s", label_suffix="")
         if form.is_valid():
             form.send()
     else:
-        form = EmailFriendForm(auto_id="email_friend_id_%s", initial=initial)
+        form = EmailFriendForm(auto_id="email_friend_id_%s", initial=initial, label_suffix="")
     context = {
         'form': form
     }

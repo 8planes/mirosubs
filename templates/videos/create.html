@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-<p>To enable collaborative subtitles, enter the URL to any Ogg or youtube video:</p>
-<div id="video_form">
-  <form action="" method="POST">
-    {{ video_form.as_p }}
-    <p><input type="submit" value="Get started" /></p>
-  </form>
-</div>
+<form action="{% url videos:create %}" method="POST" class="main_video_form">
+
+	<h2 class="main_heading">Subtitle a Video</h2>
+  {# TODO: this should be an instance of VideoForm, which should go in context processor #}
+  <input type="text" name="video_url" class="main_video_form_field" />
+  <button type="submit" value="Begin" class="begin">Begin</button>
+  <p>To enable collaborative subtitles, enter the URL to any Ogg or youtube video</p>
+
+</form>
+
+
 {% endblock %}

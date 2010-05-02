@@ -26,12 +26,12 @@ from django.contrib.auth import login as auth_login
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
-    return render_login(request, UserCreationForm(), 
-                        AuthenticationForm(), redirect_to)
+    return render_login(request, UserCreationForm(label_suffix=""), 
+                        AuthenticationForm(label_suffix=""), redirect_to)
 
 def create_user(request):
     redirect_to = make_redirect_to(request)
-    form = UserCreationForm(request.POST)
+    form = UserCreationForm(request.POST, label_suffix="")
     if form.is_valid():
         new_user = form.save()
         user = authenticate(username=new_user.username,
@@ -39,18 +39,18 @@ def create_user(request):
         auth_login(request, user)
         return HttpResponseRedirect(redirect_to)
     else:
-        return render_login(request, form, AuthenticationForm(), redirect_to)
+        return render_login(request, form, AuthenticationForm(label_suffix=""), redirect_to)
 
 def login_post(request):
     redirect_to = make_redirect_to(request)
-    form = AuthenticationForm(data=request.POST)
+    form = AuthenticationForm(data=request.POST, label_suffix="")
     if form.is_valid():
         auth_login(request, form.get_user())
         if request.session.test_cookie_worked():
             request.session.delete_test_cookie()
         return HttpResponseRedirect(redirect_to)
     else:
-        return render_login(request, UserCreationForm(), form, redirect_to)
+        return render_login(request, UserCreationForm(label_suffix=""), form, redirect_to)
 
 # Helpers
 

@@ -3,11 +3,23 @@
 {% block main_content %}
 
 {% block userinfo %}
+
+
+<div class="left_column">
+
  <img src="{% thumbnail profile.picture 128x128 %}">
- <h2>{{ profile.user.username }}</h2>
+ <h2>User Profile for {{ profile.user.username }}</h2>
+
 {% endblock %} 
 {% block edit_profile_form %}{% endblock %}
+</div>
+
+
 {% block activity %}
+
+<div class="right_column">
 <h2>{{ profile.user.username }}'s activity</h2>
+
+</div>
 {% endblock %}
 {% endblock %}

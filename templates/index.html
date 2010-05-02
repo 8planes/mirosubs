@@ -13,13 +13,17 @@
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
   <input type="text" name="video_url" class="main_video_form_field" />
   <button type="submit" value="Begin" class="begin">Begin</button>
+  <p>To enable collaborative subtitles, enter the URL to any Ogg or youtube video</p>
+
 </form>
 
 
 
 <div class="right_column">
 <h2>Recent Activity</h2>
+	<ul class="recent_activity">
     {% recent_activity %}
+	</ul>
 </div>
 
 

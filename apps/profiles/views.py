@@ -41,12 +41,12 @@ def profile(request, user_id):
         if request.method == 'POST':
             edit_profile_form = EditProfileForm(request.POST,
                                                 instance=profile,
-                                                files=request.FILES)
+                                                files=request.FILES, label_suffix="")
             if edit_profile_form.is_valid():
                 edit_profile_form.save()
                 request.user.message_set.create(message='Your profile has been updated.')
         else:
-            edit_profile_form = EditProfileForm(instance=profile)
+            edit_profile_form = EditProfileForm(instance=profile, label_suffix="")
         return render_to_response('profiles/edit_profile.html', locals(),
                                   context_instance=RequestContext(request))
     else:
