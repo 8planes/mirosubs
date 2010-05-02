@@ -19,26 +19,18 @@
 goog.provide('mirosubs.subtitle.TranscribePanel');
 
 /**
- * @param {Array.<mirosubs.subtitle.EditableCaption>} captions
- * @param {mirosubs.UnitOfWork} unitOfWork Used to track any new captions added 
- *     while this widget is active.
+ * @param {mirosubs.subtitle.EditableCaptionSet} captions
  * @param {mirosubs.VideoPlayer} videoPlayer Used to update subtitle 
  *     preview on top of the video
  * @param {mirosubs.ServerModel} serverModel Used to create RightPanel, which 
  *     needs access to server to login.
- * @param {mirosubs.CaptionManager} captionManager Used to remove all 
- *    subtitles, in case the user decides to do that.
  */
-mirosubs.subtitle.TranscribePanel = function(captions, unitOfWork, 
-                                             videoPlayer, serverModel, 
-                                             captionManager) {
+mirosubs.subtitle.TranscribePanel = function(captionSet, videoPlayer, serverModel) {
     goog.ui.Component.call(this);
 
-    this.captions_ = captions;
-    this.unitOfWork_ = unitOfWork;
+    this.captionSet_ = captionSet;
     this.videoPlayer_ = videoPlayer;
     this.serverModel_ = serverModel;
-    this.captionManager_ = captionManager;
 
     /**
      * @type {?goog.events.KeyHandler}
@@ -66,7 +58,7 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
     this.addChild(this.lineEntry_ = new mirosubs.subtitle.TranscribeEntry(
         this.videoPlayer_), true);
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
-        this.videoPlayer_, this.captions_, false, true), true);
+        this.videoPlayer_, this.captionSet_, false, true), true);
     // FIXME: hacky
     this.setRepeatVideoMode(true);
 };
@@ -75,6 +67,12 @@ mirosubs.subtitle.TranscribePanel.prototype.getRightPanel =
 {
     if (!this.rightPanel_) {
         this.rightPanel_ = this.createRightPanel_();
+        this.listenToRightPanel_();
+    }
+    return this.rightPanel_;
+};
+mirosubs.subtitle.TranscribePanel.prototype.listenToRightPanel_ = function() {
+    if (this.rightPanel_ && this.isInDocument()) {
         this.getHandler().listen(this.rightPanel_,
                                  mirosubs.RightPanel.EventType.RESTART,
                                  this.startOverClicked);
@@ -84,9 +82,8 @@ mirosubs.subtitle.TranscribePanel.prototype.getRightPanel =
             mirosubs.subtitle.TranscribeRightPanel.AUTOPAUSE_CHANGED,
             function(event) {
                 that.setRepeatVideoMode(event.on);
-            });
+            });        
     }
-    return this.rightPanel_;
 };
 mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
@@ -119,16 +116,13 @@ mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
     this.getHandler().listen(this.videoPlayer_,
                              mirosubs.AbstractVideoPlayer.EventType.PLAY,
                              this.videoPlaying_);    
+    this.listenToRightPanel_();
 };
-
 mirosubs.subtitle.TranscribePanel.prototype.videoPlaying_ = function(event) {
     this.lineEntry_.focus();
 };
-
 mirosubs.subtitle.TranscribePanel.prototype.newTitle_ = function(event) {
-    var newEditableCaption = 
-        new mirosubs.subtitle.EditableCaption(this.unitOfWork_);
-    this.captions_.push(newEditableCaption);
+    var newEditableCaption = this.captionSet_.addNewCaption();
     newEditableCaption.setText(event.title);
     this.subtitleList_.addSubtitle(newEditableCaption, true);
 };
@@ -141,15 +135,10 @@ mirosubs.subtitle.TranscribePanel.prototype.setRepeatVideoMode = function(mode) 
 };
 
 mirosubs.subtitle.TranscribePanel.prototype.startOverClicked = function() {
-    var answer = confirm("Are you sure you want to start over? " +
-                         "All subtitles will be deleted.");
+    var answer = confirm(
+        "Are you sure you want to start over? All subtitles will be deleted.");
     if (answer) {
-        while (this.captions_.length > 0) {
-            var caption = this.captions_.pop();
-            this.unitOfWork_.registerDeleted(caption);
-        }
-        this.captionManager_.removeAll();
-        this.subtitleList_.clearAll();
+        this.captionSet_.clear();
         this.videoPlayer_.setPlayheadTime(0);
     }
 };

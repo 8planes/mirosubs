@@ -33,16 +33,17 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
      * Array of captions.
      * @type {Array.<mirosubs.subtitle.EditableCaption>}
      */
-    this.captions_ = goog.array.map(
-        existingCaptions, function(caption) { 
-            return new mirosubs.subtitle.EditableCaption(uw, caption);
-        });
+    this.captionSet_ = 
+        new mirosubs.subtitle.EditableCaptionSet(uw, existingCaptions);
     this.captionManager_ = 
         new mirosubs.CaptionManager(goog.bind(this.getPlayheadTime_, this));
-    this.captionManager_.addCaptions(existingCaptions);
-    this.getHandler().listen(this.captionManager_,
-                             mirosubs.CaptionManager.EventType.CAPTION,
-                             this.captionReached_);
+    var captionsWithTimes = goog.array.filter(
+        existingCaptions, function(c) { return c['start_time'] != -1; });
+    this.captionManager_.addCaptions(captionsWithTimes);
+    goog.events.listen(
+        this.captionSet_,
+        mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_ALL,
+        this.captionManager_.removeAll, false, this.captionManager_);
     this.serverModel_ = serverModel;
     this.serverModel_.init(uw, goog.bind(this.showLoginNag_, this));
     /**
@@ -79,6 +80,9 @@ mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
     this.getHandler().listen(document,
                              goog.events.EventType.KEYDOWN,
                              this.handleKeyDown_);
+    this.getHandler().listen(this.captionManager_,
+                             mirosubs.CaptionManager.EventType.CAPTION,
+                             this.captionReached_);
 };
 mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.state_ = state;
@@ -176,19 +180,18 @@ mirosubs.subtitle.Dialog.prototype.makeCurrentStateSubtitlePanel_ = function() {
     var s = mirosubs.subtitle.Dialog.State_;
     if (this.state_ == s.TRANSCRIBE)
         return new mirosubs.subtitle.TranscribePanel(
-            this.captions_, this.unitOfWork_, 
+            this.captionSet_, 
             this.getVideoPlayerInternal(),
-            this.serverModel_, 
-            this.captionManager_);
+            this.serverModel_);
     else if (this.state_ == s.SYNC)
         return new mirosubs.subtitle.SyncPanel(
-            this.captions_, 
+            this.captionSet_, 
             this.getVideoPlayerInternal(),
             this.serverModel_,
             this.captionManager_);
     else if (this.state_ == s.REVIEW)
         return new mirosubs.subtitle.ReviewPanel(
-            this.captions_, 
+            this.captionSet_, 
             this.getVideoPlayerInternal(),
             this.serverModel_,
             this.captionManager_);
@@ -228,4 +231,5 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
     this.captionManager_.dispose();
     this.serverModel_.dispose();
     this.rightPanelListener_.dispose();
+    this.captionSet_.dispose();
 };

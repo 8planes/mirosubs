@@ -21,18 +21,20 @@ goog.provide('mirosubs.Spinner');
 /**
  * 
  * @param {number} value
- * @param {number} min
- * @param {number} max
+ * @param {function():number} minFn A function that returns the 
+ *     min value for this spinner.
+ * @param {function():number} maxFn A function that returns the 
+ *     max value for this spinner.
  * @param {function(number):string} valueExpression
  */
-mirosubs.Spinner = function(value, min, max, valueExpression) {
+mirosubs.Spinner = function(value, minFn, maxFn, valueExpression) {
     goog.ui.Component.call(this);
     this.timer_ = new goog.Timer(100);
     this.speed_ = mirosubs.Spinner.INITIAL_SPEED;
     this.counter_ = 0;
     this.value_ = value;
-    this.min_ = min;
-    this.max_ = max;
+    this.minFn_ = minFn;
+    this.maxFn_ = maxFn;
     this.maxStep_ = 0.10;
     this.minStep_ = 0.05;
     this.stepIncrease_ = 0.05;
@@ -46,11 +48,16 @@ mirosubs.Spinner = function(value, min, max, valueExpression) {
     this.activated_ = false;
 };
 goog.inherits(mirosubs.Spinner, goog.ui.Component);
-mirosubs.Spinner.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.Spinner');
 
 mirosubs.Spinner.EventType = {
+    /**
+     * Dispatched when arrow button is first pressed.
+     */
     ARROW_PRESSED: "arrowPressed",
+    /**
+     * Dispatched when arrow button is let go of, either by 
+     * mouseup or mouseout
+     */
     VALUE_CHANGED: "valueChanged"
 };
 mirosubs.Spinner.INITIAL_SPEED = 4;
@@ -136,30 +143,22 @@ mirosubs.Spinner.prototype.mouseOut_ = function(event) {
     if (this.activated_)
         this.cancelTimer_();    
 };
-mirosubs.Spinner.prototype.setMin = function(min) {
-    mirosubs.Spinner.logger_.info('Setting min to ' + min);
-    this.min_ = min;
-};
-mirosubs.Spinner.prototype.setMax = function(max) {
-    mirosubs.Spinner.logger_.info('Setting max to ' + max);
-    this.max_ = max;
-};
 mirosubs.Spinner.prototype.setValue = function(value) {
     this.value_ = value;
     this.updateText_();
 };
 mirosubs.Spinner.prototype.decrease_ = function() {
     this.value_ -= this.step_;
-    if (this.value_ < this.min_) {
-        this.value_ = this.min_;
+    if (this.value_ < this.minFn_()) {
+        this.value_ = this.minFn_();
         this.cancelTimer_();
     }
     this.updateText_();
 };
 mirosubs.Spinner.prototype.increase_ = function() {
     this.value_ += this.step_;
-    if (this.value_ > this.max_) {
-        this.value_ = this.max_;
+    if (this.value_ > this.maxFn_()) {
+        this.value_ = this.maxFn_();
         this.cancelTimer_();
     }
     this.updateText_();

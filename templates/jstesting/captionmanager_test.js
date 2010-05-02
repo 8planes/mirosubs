@@ -123,7 +123,7 @@ function testInsertCaptionUnderCurrentPlayheadTime() {
 
 function testAlterCurrentCaptionTime() {
     var addedCaption = captionJSON(0.5, 2, 1);
-		addCaptions([addedCaption]);
+    addCaptions([addedCaption]);
     sendEvents(0.3);
     sendEvents(1.3);
 		addedCaption["end_time"]=3;
@@ -135,7 +135,7 @@ function testAlterCurrentCaptionTime() {
 }
 
 function testProgressToEnd() {
-		addCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    addCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.3);
@@ -146,7 +146,7 @@ function testProgressToEnd() {
 }
 
 function testProgressToEndTwice() {
-		addCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    addCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.3);

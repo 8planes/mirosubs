@@ -20,18 +20,17 @@ goog.provide('mirosubs.subtitle.SyncPanel');
 
 /**
  *
- * @param {Array.<mirosubs.subtitle.EditableCaption>} subtitles The subtitles 
+ * @param {mirosubs.subtitle.EditableCaptionSet} subtitles The subtitles 
  *     for the video, so far.
  * @param {mirosubs.AbstractVideoPlayer} videoPlayer
- * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles with 
- *     start_time set.
+ * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles 
+ *     with start_time set.
  */
 mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer, 
                                        serverModel, captionManager) {
     goog.ui.Component.call(this);
     /**
-     * Always in correct order by time.
-     * @type {Array.<mirosubs.subtitle.EditableCaption>}
+     * @type {mirosubs.subtitle.EditableCaptionSet}
      */ 
     this.subtitles_ = subtitles;
 
@@ -42,8 +41,8 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
     this.serverModel = serverModel;
     this.captionManager_ = captionManager;
     this.videoStarted_ = false;
+    this.spaceDownSub_ = null;
     this.spaceDownPlayheadTime_ = -1;
-    this.spaceDownSubIndex_ = -1;
     this.spaceDown_ = false;
     this.focusableElem_ = null;
 };
@@ -120,24 +119,6 @@ mirosubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
     ];
     
 };
-/**
- * Find the last subtitle with a start time at or before playheadTime.
- * @param {number} playheadTime
- * @return {number} -1 if before first sub start time, or index of last 
- *     subtitle with start time at or before playheadTime.
- */
-mirosubs.subtitle.SyncPanel.prototype.findSubtitleIndex_ = function(playheadTime) {
-    var i;
-    // TODO: write unit test then get rid of linear search in future.
-    for (i = 0; i < this.subtitles_.length; i++)
-        if (this.subtitles_[i].getStartTime() != -1 &&
-            this.subtitles_[i].getStartTime() <= playheadTime &&
-            (i == this.subtitles_.length - 1 ||
-             this.subtitles_[i + 1].getStartTime() == -1 ||
-             this.subtitles_[i + 1].getStartTime() > playheadTime))
-            return i;
-    return -1;
-};
 mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ = 
     function(event) 
 {
@@ -151,6 +132,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
+    console.log('key down');
     if (event.keyCode == goog.events.KeyCodes.SPACE && 
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
@@ -166,8 +148,8 @@ mirosubs.subtitle.SyncPanel.prototype.spacePressed_ = function() {
         this.videoStarted_ = true;
         this.spaceDownPlayheadTime_ = 
             this.videoPlayer_.getPlayheadTime();
-        this.spaceDownSubIndex_ =
-            this.findSubtitleIndex_(this.spaceDownPlayheadTime_);
+        this.spaceDownSub_ =
+            this.subtitles_.findLastForTime(this.spaceDownPlayheadTime_);
     }
     else if (this.videoPlayer_.isPaused() && !this.videoStarted_) {
         this.videoPlayer_.play();
@@ -184,73 +166,33 @@ mirosubs.subtitle.SyncPanel.prototype.spaceReleased_ = function() {
     this.captionManager_.disableCaptionEvents(false);        
     this.spaceDown_ = false;
     var playheadTime = this.videoPlayer_.getPlayheadTime();
-    if (this.spaceDownSubIndex > -1 &&
-        this.subtitles_[this.spaceDownSubIndex_].isShownAt(playheadTime))
-        this.moveSubTimeForward();
-    else {
-        var currentSubIndex = this.findSubtitleIndex_(playheadTime);
-        if (this.spaceDownSubIndex_ == currentSubIndex)
-            this.moveSubTimeForward();
-        else
-            this.moveSubTimesBack(playheadTime, currentSubIndex);
+
+    if (this.spaceDownSub_ == null || 
+        !this.spaceDownSub_.isShownAt(this.spaceDownPlayheadTime_)) {
+        // pressed down before first sub or in between subs.
+        var nextSub = null;
+        if (this.spaceDownSub_ == null && this.subtitles_.count() > 0)
+            nextSub = this.subtitles_.caption(0);
+        if (this.spaceDownSub_)
+            nextSub = this.spaceDownSub_.getNextCaption();
+        if (nextSub != null)
+            nextSub.setStartTime(playheadTime);
     }
+    else if (this.spaceDownSub_.isShownAt(playheadTime) && 
+             this.spaceDownSub_.getNextCaption()) 
+        this.spaceDownSub_.getNextCaption().setStartTime(playheadTime);
+    else
+        this.spaceDownSub_.setEndTime(playheadTime);
+
+    this.spaceDownSub_ = null;
     this.spaceDownPlayheadTime_ = -1;
-    this.spaceDownSubIndex_ = -1;
-};
-mirosubs.subtitle.SyncPanel.prototype.moveSubTimeForward = function() {
-    if (this.spaceDownSubIndex_ > -1) {
-        var currentSubtitle = this.subtitles_[this.spaceDownSubIndex_];
-        if (currentSubtitle.getStartTime() != -1)
-            currentSubtitle.setEndTime(this.spaceDownPlayheadTime_);
-    }
-    var nextSubIndex = this.spaceDownSubIndex_ + 1;
-    if (nextSubIndex < this.subtitles_.length) {
-        var nextSubtitle = this.subtitles_[nextSubIndex];
-        var isInManager = nextSubtitle.getStartTime() != -1;
-        nextSubtitle.setStartTime(this.spaceDownPlayheadTime_);
-        if (nextSubtitle.getEndTime() == -1)
-            nextSubtitle.setEndTime(99999);
-        this.subtitleList_.updateWidget(nextSubtitle.getCaptionID());
-        this.subtitleList_.scrollToCaption(nextSubtitle.getCaptionID());
-        if (!isInManager)
-            this.captionManager_.addCaptions([nextSubtitle.jsonCaption]);
-    }
-};
-mirosubs.subtitle.SyncPanel.prototype.moveSubTimesBack = 
-    function(playheadTime, currentSubIndex) {
-    var i;
-    var subtitle = null;
-    for (i = this.spaceDownSubIndex_; i <= currentSubIndex; i++) {
-        if (i > -1) {
-            subtitle = this.subtitles_[i];
-            var isInManager = subtitle.getStartTime() != -1;
-            if (subtitle.getStartTime() > this.spaceDownPlayheadTime_ &&
-                subtitle.getStartTime() < playheadTime)
-                subtitle.setStartTime(playheadTime);
-            if (subtitle.getEndTime() > this.spaceDownPlayheadTime_ &&
-                subtitle.getStartTime() < playheadTime)
-                subtitle.setEndTime(playheadTime);
-            this.subtitleList_.updateWidget(subtitle.getCaptionID());
-            if (!isInManager)
-                this.captionManager_.addCaptions([subtitle.jsonCaption]);
-        }
-    }
-    if (subtitle != null) {
-        this.subtitleList_.scrollToCaption(subtitle.getCaptionID());
-        this.subtitleList_.setActiveWidget(subtitle.getCaptionID());
-    }
 };
 mirosubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
     var answer = 
         confirm("Are you sure you want to start over? All timestamps " +
                 "will be deleted.");
     if (answer) {
-        var i;
-        for (i = 0; i < this.subtitles_.length; i++) {
-            this.subtitles_[i].setStartTime(-1);
-            this.subtitles_[i].setEndTime(-1);
-            this.subtitleList_.updateWidget(this.subtitles_[i].getCaptionID());
-        }
+        this.subtitles_.clearTimes();
         this.videoPlayer_.setPlayheadTime(0);
     }
 };
@@ -265,5 +207,6 @@ mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEven
 };
 mirosubs.subtitle.SyncPanel.prototype.disposeInternal = function() {
     mirosubs.subtitle.SyncPanel.superClass_.disposeInternal.call(this);
-    this.rightPanel_.dispose();
+    if (this.rightPanel_)
+        this.rightPanel_.dispose();
 };
