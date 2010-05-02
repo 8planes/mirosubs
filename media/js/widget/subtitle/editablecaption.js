@@ -76,8 +76,9 @@ mirosubs.subtitle.EditableCaption.prototype.getText = function() {
 mirosubs.subtitle.EditableCaption.prototype.setStartTime = 
     function(startTime) 
 {
+    var previousStartTime = this.getStartTime();
     this.setStartTime_(startTime);
-    this.updateFn_();
+    this.updateFn_(previousStartTime == -1);
 };
 mirosubs.subtitle.EditableCaption.prototype.setStartTime_ = 
     function(startTime) 

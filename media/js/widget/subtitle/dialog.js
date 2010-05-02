@@ -44,6 +44,10 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
         this.captionSet_,
         mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_ALL,
         this.captionManager_.removeAll, false, this.captionManager_);
+    goog.events.listen(
+        this.captionSet_,
+        mirosubs.subtitle.EditableCaptionSet.EventType.UPDATED,
+        this.captionManager_.captionUpdated, false, this.captionManager_);
     this.serverModel_ = serverModel;
     this.serverModel_.init(uw, goog.bind(this.showLoginNag_, this));
     /**

@@ -123,8 +123,8 @@ mirosubs.subtitle.TranscribePanel.prototype.videoPlaying_ = function(event) {
 };
 mirosubs.subtitle.TranscribePanel.prototype.newTitle_ = function(event) {
     var newEditableCaption = this.captionSet_.addNewCaption();
-    newEditableCaption.setText(event.title);
     this.subtitleList_.addSubtitle(newEditableCaption, true);
+    newEditableCaption.setText(event.title);
 };
 /**
  *

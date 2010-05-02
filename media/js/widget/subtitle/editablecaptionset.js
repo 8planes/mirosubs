@@ -95,12 +95,18 @@ mirosubs.subtitle.EditableCaptionSet.prototype.findLastForTime =
             return this.captions_[i];
     return null;
 };
-mirosubs.subtitle.EditableCaptionSet.prototype.captionUpdated_ = function(caption) {
+mirosubs.subtitle.EditableCaptionSet.prototype.captionUpdated_ = 
+    function(caption, timesFirstAssigned) 
+{
     this.unitOfWork_.registerUpdated(caption);
     this.dispatchEvent(
-        new mirosubs.subtitle.EditableCaptionSet.UpdateEvent(caption));
+        new mirosubs.subtitle.EditableCaptionSet.UpdateEvent(
+            caption, timesFirstAssigned));
 };
-mirosubs.subtitle.EditableCaptionSet.UpdateEvent = function(caption) {
+mirosubs.subtitle.EditableCaptionSet.UpdateEvent = 
+    function(caption, timesFirstAssigned) 
+{
     this.type = mirosubs.subtitle.EditableCaptionSet.EventType.UPDATED;
     this.caption = caption;
+    this.timesFirstAssigned = timesFirstAssigned;
 };

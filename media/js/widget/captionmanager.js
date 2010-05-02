@@ -32,6 +32,7 @@ mirosubs.CaptionManager = function(playheadFn) {
         return a['start_time'] > b['start_time'] ? 
             1 : a['start_time'] < b['start_time'] ? -1 : 0;
     };
+    this.captionMap_ = {};
     this.playheadFn_ = playheadFn;
     var that = this;
     this.timerInterval_ = window.setInterval(function() { that.timerTick_(); }, 100);
@@ -65,6 +66,15 @@ mirosubs.CaptionManager.prototype.addCaptions = function(captions) {
 mirosubs.CaptionManager.prototype.removeAll = function() {
     this.captions_ = [];
     this.dispatchCaptionEvent_(null);    
+};
+
+/**
+ * 
+ * @param {mirosubs.subtitle.EditableCaption.UpdateEvent} event
+ */
+mirosubs.CaptionManager.prototype.captionUpdated = function(event) {
+    if (event.timesFirstAssigned)
+        this.addCaptions([event.caption]);
 };
 
 mirosubs.CaptionManager.prototype.timerTick_ = function() {
