@@ -1,25 +1,91 @@
 {% extends "jsdemo/base_demo.html" %}
 {% block body %}
-<div id="timerow" class="mirosubs-timeline" 
-     style="height: 20px; width: 360px"></div>
+<div id="timeline"></div>
+<div><a id="playPause" href="#">play</a>&nbsp;&nbsp;<a id="resetTime" href="#">reset time</a></div>
 <fieldset class="goog-debug-panel">
   <legend>Event Log</legend>
   <div id="log" style="height: 340px; overflow-y: auto"></div>
 </fieldset>
 <script type="text/javascript">
+    function captionJSON(start_time, end_time, caption_id, text) {
+        return {'start_time' : start_time, 'end_time': end_time, 
+                'caption_id': caption_id, 'caption_text' : text};
+    }
+
+    var FakeVideoPlayer = function() {
+        this.timer_ = new goog.Timer(50);
+        this.playheadTime_ = 0;
+        var that = this;
+        goog.events.listen(this.timer_, goog.Timer.TICK,
+                    function(event) {
+                        that.playheadTime_ += 0.05;
+                        window.timeline.setTime(that.playheadTime_);
+                    });
+    };
+    FakeVideoPlayer.prototype.play = function() {
+        this.timer_.start();
+    };
+    FakeVideoPlayer.prototype.pause = function() {
+        this.timer_.stop();
+    };
+    FakeVideoPlayer.prototype.isPlaying = function() {
+        return this.timer_.enabled;
+    };
+
+    var fakeVideoPlayer = new FakeVideoPlayer();
+
+    var pl = goog.dom.$('playPause');
+    goog.events.listen(pl, 'click', function(e) {
+        if (fakeVideoPlayer.isPlaying()) {
+            fakeVideoPlayer.pause();
+            pl.innerHTML = 'play';
+        }
+        else {
+            fakeVideoPlayer.play();
+            pl.innerHTML = 'pause';
+        }
+        e.preventDefault();
+    });
+
+    goog.events.listen(goog.dom.$('resetTime'), 'click', 
+    function(e) {
+        fakeVideoPlayer.playheadTime_ = 0;
+        window.timeline.setTime(0);
+        e.preventDefault();
+    });
+
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
     logconsole.setCapturing(true);
 
-    var timerow = new mirosubs.timeline.TimeRow(2);
-    timerow.decorate(goog.dom.$('timerow'));
+    var unitOfWork = new mirosubs.UnitOfWork();
+    var existingCaptions = [];
+    for (var i = 0; i < 3; i++)
+        existingCaptions.push(captionJSON(i * 4, i * 4 + 2.2, 
+                        i + 1, 'subtitle ' + (i + 1)));
+    var captionSet = new mirosubs.subtitle.EditableCaptionSet(
+        unitOfWork, existingCaptions);
 
-    timerow.setTime(0);
+    var subLogger = goog.debug.Logger.getLogger('subtitles');
+    var EVENTS = goog.object.getValues(
+                        mirosubs.subtitle.EditableCaptionSet.EventType);
+    subLogger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
+    
+    function logSubEvent(e) {
+        subLogger.info([e.type, ' ', e.caption.getCaptionID(), 
+                        '. Start: ', e.caption.getStartTime(),
+                        ' End: ', e.caption.getEndTime()].join(''));
+    }
 
-    var curTime = 0;
+    goog.events.listen(captionSet, EVENTS, logSubEvent);
 
-    window.setInterval(
-        function() { timerow.setTime(curTime += 0.05); }, 50);
+    var timeline = new mirosubs.timeline.Timeline(1, captionSet);
+    var container = new goog.ui.Component();
+    container.decorate(goog.dom.$('timeline'));
+    container.addChild(timeline, true);
+
+    timeline.setTime(0);
+
 </script>
 {% endblock %}

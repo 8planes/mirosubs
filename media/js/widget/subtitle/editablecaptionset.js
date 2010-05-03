@@ -45,6 +45,12 @@ mirosubs.subtitle.EditableCaptionSet.EventType = {
     CLEAR_ALL : 'clearall',
     UPDATED : 'updated'
 };
+mirosubs.subtitle.EditableCaptionSet.prototype.captionsWithTimes =
+    function() 
+{
+    return goog.array.filter(
+        this.captions_, function(c) { return c.getStartTime() != -1; });
+};
 mirosubs.subtitle.EditableCaptionSet.prototype.clear = function() {
     var caption;
     while (this.captions_.length > 0) {

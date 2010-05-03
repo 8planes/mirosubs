@@ -603,144 +603,8 @@ ul.mirosubs-titlesList.sync {
     outline: none;
 }
 
-
-.mirosubs-timeline{
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
-    background: #fefefe url("../images/gradient.png") 0 0px repeat-x;
-}
-
-.mirosubs-timeline:hover .mirosubs-hideTimeline{
-display: block;
-}
-
-
-
-.mirosubs-hideTimeline{
-left: 0;
-position: absolute;
-padding-top: 17px;
-overflow: hidden;
-height: 0;
-width: 17px;
-border: 1px solid #999;
-display: none;
-margin: 2px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-background: #fff url("../images/sprite.png") 3px -212px no-repeat;
-}
-
-
-.mirosubs-timeline .marker{
-    background: url("../images/marker.png") 0 0px no-repeat;
-    position: absolute;
-    top: 17px;
-    left: 50%;
-    height: 73px;
-    width: 13px;
-}
-
-.mirosubs-timeline ul {
-    margin: 0;
-    padding: 0;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-time {
-    border-bottom: 1px solid #ddd;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-time li {
-    margin: 0;
-    list-style: none;
-    font-size: 10px;
-    float: left;
-    width: 50px;
-    padding: 3px 0px 3px 10px;
-    background: url("../images/ticks.gif") 5px bottom no-repeat !important;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles{
-    background: #333;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li{
-    margin: 0;
-    list-style: none;
-    margin: 7px 0px 7px 6px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    float: left;
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
-    background: #fefefe url("../images/gradient.png") 0 21px repeat-x;
-}
-
 .mirosubs-widget li.selected{
     background: #0090cb;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
-    color: #fff;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li.not_synced{
-    background: #aaa;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
-    color: #fff;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li a{
-    display: block;
-    padding: 15px 20px 10px 20px;
-    position: relative;
-    text-decoration: none;
-    color: #333;
-    cursor: default;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li a span{
-    position: absolute;
-    height: 30px;
-    width: 13px;
-    -moz-box-shadow: 0 1px 2px rgba(0,0,0,01);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
-    border: 1px solid #fff;
-    background: #fefefe url("../images/gradient.png") 0 9px repeat-x;
-    top: 12px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    display: none ;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li a span strong{
-    position: absolute;
-    height: 17px;
-    width: 13px;
-    background:  url("../images/arrows.gif") 2px 0px no-repeat;
-    top: 12px;
-    display: block ;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li a span:hover{
-    background: #fefefe url("../images/gradient.png") 0 -35px repeat-x;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li a span.mirosubs-leftGrabber{
-    left: 0;
-    margin: -7px 0 0 -3px;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li a span.mirosubs-rightGrabber{
-    right: 0;
-    margin: -7px -3px 0 0;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li a:hover span{
-    display: block;
 }
 
 .mirosubs-modal-dialog-bg {
@@ -1468,21 +1332,14 @@ line-height: 1.3em;
 
 }
 
-
-
-
-
-
 .mirosubs-translating .mirosubs-buttons{
 float: right;
 width: 240px;
 }
 
-
 .mirosubs-translating .mirosubs-done{
 margin: 0 0 35px;
 }
-
 
 .mirosubs-autopause {
     font-size: 16px;
@@ -1672,10 +1529,7 @@ float: left;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px; 
 width: 230px;
-
-
 }
-
 
 .mirosubs-progress .mirosubs-played{
 width: 10px;
@@ -1690,12 +1544,149 @@ border: 1px solid #a6dd13;
 border-top: 1px solid #c5ff27;
 border-bottom: 1px solid #7ba115;
 background: #a6dd13 url("../images/gradient.png") 0 0px repeat-x ;
-
-
 }
 
+/* ////////////////////
 
+~ Timeline
 
+////////////////////// */
 
+.mirosubs-timeline {
+    margin: 0;
+    padding: 0;
+    width: 360px;
+    height: 80px;
+    overflow: hidden;
+    position: relative;
+    background: #333;
+}
 
-						
+.mirosubs-timeline .top {
+    height: 22px;
+    background: #fefefe url("../images/gradient.png") 0 0px repeat-x;
+}
+
+.mirosubs-timeline-inner, .mirosubs-timeline-timerow, 
+.mirosubs-timeline-time, .mirosubs-timeline-subs, 
+.mirosubs-timeline-sub {
+    position: absolute;
+}
+
+.mirosubs-timeline-inner {
+    top: 0px;
+}
+
+.mirosubs-timeline-subs {
+    top: 22px;
+    height: 30px;
+}
+
+.mirosubs-timeline-sub {
+    background-color: #FFDDDD;
+}
+
+.mirosubs-timeline .mirosubs-subpanel div {
+    position: absolute;
+    top: 3px;
+    height: 24px;
+    background-color: #FFDDDD;
+}
+
+.mirosubs-timeline .marker {
+    background: url("../images/marker.png") 0 0px no-repeat;
+    position: absolute;
+    top: 17px;
+    left: 50%;
+    height: 73px;
+    width: 13px;
+}
+
+.mirosubs-timeline ul {
+    margin: 0;
+    padding: 0;
+    line-height: 16px;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-time {
+    border-bottom: 1px solid #ddd;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-time li {
+    margin: 0;
+    list-style: none;
+    font-size: 10px;
+    float: left;
+    width: 50px;
+    padding: 3px 0px 3px 10px;
+    background: url("../images/ticks.gif") 5px bottom no-repeat !important;
+}
+
+.mirosubs-timeline-sub {
+    top: 7px;
+    height: 46px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
+    background: #fefefe url("../images/gradient.png") 0 21px repeat-x;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
+    color: #fff;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li.not_synced{
+    background: #aaa;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
+    color: #fff;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-titles li a{
+    display: block;
+    padding: 15px 20px 10px 20px;
+    position: relative;
+    text-decoration: none;
+    color: #333;
+    cursor: default;
+}
+
+.mirosubs-timeline-sub .mirosubs-grabber {
+    position: absolute;
+    height: 30px;
+    width: 13px;
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,01);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
+    border: 1px solid #fff;
+    background: #fefefe url("../images/gradient.png") 0 9px repeat-x;
+    top: 12px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    display: none;
+}
+
+.mirosubs-timeline-sub .mirosubs-grabber strong {
+    position: absolute;
+    height: 17px;
+    width: 13px;
+    background:  url("../images/arrows.gif") 2px 0px no-repeat;
+    top: 12px;
+    display: block;
+}
+
+.mirosubs-timeline-sub .mirosubs-grabber-over {
+    background: #fefefe url("../images/gradient.png") 0 -35px repeat-x;
+    display: block;
+}
+
+.mirosubs-timeline-sub span.mirosubs-leftGrabber {
+    left: 0;
+    margin: -7px 0 0 -3px;
+}
+
+.mirosubs-timeline-sub span.mirosubs-rightGrabber {
+    right: 0;
+    margin: -7px -3px 0 0;
+}

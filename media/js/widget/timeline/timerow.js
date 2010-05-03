@@ -21,57 +21,26 @@ goog.provide('mirosubs.timeline.TimeRow');
 mirosubs.timeline.TimeRow = function(spacing) {
     goog.ui.Component.call(this);
     this.spacing_ = spacing;
-    /**
-     * Set to non-null value iff not entered document yet and time is set.
-     * @type {?number}
-     */
-    this.startTime_ = null;
+    this.secondsPerUL_ = spacing * mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS;
+    this.pixelsPerUL_ = mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
+        mirosubs.timeline.TimeRowUL.PX_PER_TICK;
+    this.uls_ = [];
 };
 goog.inherits(mirosubs.timeline.TimeRow, goog.ui.Component);
-mirosubs.timeline.TimeRow.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.timeline.TimeRow');
-mirosubs.timeline.TimeRow.prototype.enterDocument = function() {
-    mirosubs.timeline.TimeRow.superClass_.enterDocument.call(this);
-    var size = goog.style.getSize(this.getElement());
-    this.width_ = size.width;
-    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.row_ = new mirosubs.timeline.TimeRowUL($d, this.spacing_);
-    this.getElement().appendChild(this.row_.getElement());
-    this.sideBufferSeconds_ = this.width_ * this.spacing_ / 
-        (2 * mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 1;
-
-    mirosubs.timeline.TimeRow.logger_.info(
-        "Side buffer seconds set at " + this.sideBufferSeconds_);
-
-    if (this.startTime_ != null)
-        this.setTime(this.startTime_);
-    this.startTime_ = null;
+mirosubs.timeline.TimeRow.prototype.createDom = function() {
+    mirosubs.timeline.TimeRow.superClass_.createDom.call(this);
+    this.getElement().className = 'mirosubs-timerow';
+    this.ensureVisible(0);
 };
-/**
- * @param {number} time in seconds
- */
-mirosubs.timeline.TimeRow.prototype.setTime = function(time) {
-    if (!this.isInDocument()) {
-        this.startTime_ = time;
-        return;
-    }
-    if (this.row_.getFirstTime() == null || 
-        (this.row_.getFirstTime() > this.sideBufferSeconds_ &&
-         time < this.row_.getFirstTime() + this.sideBufferSeconds_) || 
-        time >= this.row_.getLastTime() - this.sideBufferSeconds_ )
-    {
-        mirosubs.timeline.TimeRow.logger_.info(
-            "Reset occurring at " + time);
-        this.row_.setFirstTime(time - 
-                               mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
-                               this.spacing_ / 4);
-        this.setTime(time);
-    }
-    else {       
-        // just need to shift pixel position.
-        this.row_.getElement().style.marginLeft = 
-            (this.width_ / 2 - 
-             mirosubs.timeline.TimeRowUL.PX_PER_TICK * 
-             (time - this.row_.getFirstTime()) / this.spacing_) + 'px';
+mirosubs.timeline.TimeRow.prototype.ensureVisible = function(time) {
+    // always reaching 20 seconds into the future.
+    var $d = 
+        goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    while (this.uls_.length * this.secondsPerUL_ < time + 20) {
+        var row = new mirosubs.timeline.TimeRowUL(
+            $d, this.spacing_, 
+            this.uls_.length * this.secondsPerUL_);
+        this.getElement().appendChild(row.getElement());
+        this.uls_.push(row);
     }
 };

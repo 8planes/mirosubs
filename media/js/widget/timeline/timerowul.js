@@ -22,20 +22,22 @@ goog.provide('mirosubs.timeline.TimeRowUL');
  *
  * @param {number} spacing Spacing between major ticks, in seconds.
  */
-mirosubs.timeline.TimeRowUL = function($d, spacing) {
+mirosubs.timeline.TimeRowUL = function($d, spacing, firstTime) {
     this.element_ = $d('ul', 'mirosubs-timeline-time');
     this.element_.style.width =
         (mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
          mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
+    this.element_.style.left =
+        (firstTime / spacing * mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
     this.spacing_ = spacing;
     this.majorTicks_ = [];
-    this.firstTime_ = null;
     var i;
     for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS; i++) {
         var tick = $d('li');
         this.element_.appendChild(tick);
         this.majorTicks_.push(tick);
     }
+    this.setFirstTime(firstTime);
 };
 mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS = 15;
 mirosubs.timeline.TimeRowUL.PX_PER_TICK = 60;
