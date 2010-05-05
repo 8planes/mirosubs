@@ -40,6 +40,7 @@ JS_USE_COMPILED = False
 # paths provided relative to media/js
 JS_RAW = ['mirosubs.js', 
           'rpc.js',
+          'timerange.js',
           'abstractvideoplayer.js',
           'html5videoplayer.js',
           'youtubevideoplayer.js',

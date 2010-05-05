@@ -200,6 +200,7 @@ mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
+    console.log('caption reached');
     var jsonCaption = jsonCaptionEvent.caption;
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)

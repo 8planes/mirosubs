@@ -73,7 +73,7 @@ mirosubs.CaptionManager.prototype.removeAll = function() {
  */
 mirosubs.CaptionManager.prototype.captionUpdated = function(event) {
     if (event.timesFirstAssigned)
-        this.addCaptions([event.caption]);
+        this.addCaptions([event.caption.jsonCaption]);
 };
 
 mirosubs.CaptionManager.prototype.timerTick_ = function() {
