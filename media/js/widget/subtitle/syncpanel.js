@@ -132,7 +132,6 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
-    console.log('key down');
     if (event.keyCode == goog.events.KeyCodes.SPACE && 
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
@@ -200,7 +199,6 @@ mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
-    console.log('caption reached');
     var jsonCaption = jsonCaptionEvent.caption;
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)
