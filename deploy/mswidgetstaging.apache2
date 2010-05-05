@@ -8,5 +8,12 @@
    ErrorLog /home/mirosubsstaging/log/apache.widget.error.log
    CustomLog /home/mirosubsstaging/log/apache.widget.custom.log combined
 
+   Alias /media /var/www/
+   <Location "/media">
+      SetHandler None
+      Order allow,deny
+      Allow from all
+   </Location>
+
    ScriptAlias / /home/mirosubsstaging/mirosubs/widget-demo/
 </VirtualHost>
