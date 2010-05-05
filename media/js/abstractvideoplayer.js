@@ -56,9 +56,18 @@ mirosubs.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
  */
 mirosubs.AbstractVideoPlayer.prototype.getDuration = goog.abstractMethod;
 /**
- * @returns {array.<mirosubs.TimeRange>}
+ * @returns {int} Number of buffered ranges.
  */
-mirosubs.AbstractVideoPlayer.prototype.getBuffered = goog.abstractMethod;
+mirosubs.AbstractVideoPlayer.prototype.getBufferedLength = goog.abstractMethod;
+/**
+ * @returns {number} Start of buffered range with index
+ */
+mirosubs.AbstractVideoPlayer.prototype.getBufferedStart = function(index) {
+    goog.abstractMethod();
+};
+mirosubs.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
+    goog.abstractMethod();
+};
 mirosubs.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };

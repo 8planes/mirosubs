@@ -73,9 +73,9 @@ mirosubs.YoutubeVideoPlayer.prototype.enterDocument = function() {
         this.progressTimer_, goog.Timer.TICK, this.progressTick_);
     this.getHandler().listen(
         this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
-// FIXME: only commented out temporarily
-//    this.progressTimer_.start();
-//    this.timeUpdateTimer_.start();
+    this.progressTimer_.start();
+    if (!this.isPaused())
+        this.timeUpdateTimer_.start();
 };
 mirosubs.YoutubeVideoPlayer.prototype.exitDocument = function() {
     mirosubs.YoutubeVideoPlayer.superClass_.exitDocument.call(this);
@@ -101,18 +101,31 @@ mirosubs.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = function(playerAPI
     }
 };
 mirosubs.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
-    if (newState == mirosubs.YoutubeVideoPlayer.State_.PLAYING)
+    if (newState == mirosubs.YoutubeVideoPlayer.State_.PLAYING) {
         this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PLAY);
-    else if (newState == mirosubs.YoutubeVideoPlayer.State_.PAUSED) 
+        this.timeUpdateTimer_.start();
+    }
+    else if (newState == mirosubs.YoutubeVideoPlayer.State_.PAUSED) {
         this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PAUSE);
+        this.timeUpdateTimer_.stop();
+    }
 };
-mirosubs.YoutubeVideoPlayer.prototype.getBuffered = function() {
-    var bytesTotal = this.player_['getVideoBytesTotal']();
-    var startBytes = this.player_['getVideoStartBytes']();
-    var bytesLoaded = this.player_['getVideoBytesLoaded']();
-    return new mirosubs.TimeRange(
-        duration * startBytes / bytesTotal,
-        duration * (startBytes + bytesLoaded) / bytesTotal);
+mirosubs.YoutubeVideoPlayer.prototype.getBufferedLength = function() {
+    return this.getDuration() > 0  ? 1 : 0;
+o};
+mirosubs.YoutubeVideoPlayer.prototype.getBufferedStart = function(index) {
+    return this.getDuration() * this.getStartBytes_() / this.getBytesTotal_();
+};
+mirosubs.YoutubeVideoPlayer.prototype.getBufferedEnd = function(index) {
+    return this.getDuration() * 
+        (this.getStartBytes_() + this.player_['getVideoBytesLoaded']()) /
+        this.getBytesTotal_();
+};
+mirosubs.YoutubeVideoPlayer.prototype.getStartBytes_ = function() {
+    return this.player_ ? this.player_['getVideoStartBytes']() : 0;
+};
+mirosubs.YoutubeVideoPlayer.prototype.getBytesTotal_ = function() {
+    return this.player_ ? this.player_['getVideoBytesTotal']() : 0;
 };
 mirosubs.YoutubeVideoPlayer.prototype.getDuration = function() {
     return this.player_ ? this.player_['getDuration']() : 0;
