@@ -16,8 +16,6 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-
-
 goog.provide('mirosubs.AbstractVideoPlayer');
 
 /**
@@ -31,6 +29,8 @@ mirosubs.AbstractVideoPlayer = function(videoSource) {
     this.videoSource_ = videoSource;
 };
 goog.inherits(mirosubs.AbstractVideoPlayer, goog.ui.Component);
+mirosubs.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
+mirosubs.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
@@ -51,6 +51,23 @@ mirosubs.AbstractVideoPlayer.prototype.togglePause = function() {
         this.pause();
 };
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
+/**
+ * @returns {number} video duration in seconds.
+ */
+mirosubs.AbstractVideoPlayer.prototype.getDuration = goog.abstractMethod;
+/**
+ * @returns {int} Number of buffered ranges.
+ */
+mirosubs.AbstractVideoPlayer.prototype.getBufferedLength = goog.abstractMethod;
+/**
+ * @returns {number} Start of buffered range with index
+ */
+mirosubs.AbstractVideoPlayer.prototype.getBufferedStart = function(index) {
+    goog.abstractMethod();
+};
+mirosubs.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
+    goog.abstractMethod();
+};
 mirosubs.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };
@@ -127,5 +144,12 @@ mirosubs.AbstractVideoPlayer.EventType = {
     /** dispatched when playback starts or resumes. */
     PLAY : 'videoplay',
     /** dispatched when playback is paused. */
-    PAUSE : 'videopause'
+    PAUSE : 'videopause',
+    /** dispatched when media data is fetched */
+    PROGRESS : 'videoprogress',
+    /** 
+     * dispatched when playhead time changes, either as a result 
+     *  of normal playback or otherwise. 
+     */
+    TIMEUPDATE : 'videotimeupdate'
 };

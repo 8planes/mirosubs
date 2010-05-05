@@ -84,8 +84,10 @@ mirosubs.subtitle.SubtitleWidget.prototype.timeSpinnerListener_ =
     var et = mirosubs.Spinner.EventType;
     if (event.type == et.ARROW_PRESSED)
         this.setEditing_(true);
-    else if (event.type == et.VALUE_CHANGED)
+    else if (event.type == et.VALUE_CHANGED) {
+        this.subtitle_.setStartTime(event.value);
         this.setEditing_(false);
+    }
 };
 mirosubs.subtitle.SubtitleWidget.prototype.setEditing_ = function(editing) {
     this.editingFn_(editing, this);

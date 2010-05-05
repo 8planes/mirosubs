@@ -32,7 +32,6 @@ mirosubs.CaptionManager = function(playheadFn) {
         return a['start_time'] > b['start_time'] ? 
             1 : a['start_time'] < b['start_time'] ? -1 : 0;
     };
-    this.captionMap_ = {};
     this.playheadFn_ = playheadFn;
     var that = this;
     this.timerInterval_ = window.setInterval(function() { that.timerTick_(); }, 100);
@@ -74,7 +73,7 @@ mirosubs.CaptionManager.prototype.removeAll = function() {
  */
 mirosubs.CaptionManager.prototype.captionUpdated = function(event) {
     if (event.timesFirstAssigned)
-        this.addCaptions([event.caption]);
+        this.addCaptions([event.caption.jsonCaption]);
 };
 
 mirosubs.CaptionManager.prototype.timerTick_ = function() {

@@ -23,17 +23,31 @@ goog.provide('mirosubs.timeline.Timeline');
  * @param {number} spacing The space, in seconds, between two 
  *     major ticks.
  */
-mirosubs.timeline.Timeline = function(spacing) {
+mirosubs.timeline.Timeline = function(spacing, captionSet) {
     goog.ui.Component.call(this);
     this.spacing_ = spacing;
+    this.captionSet_ = captionSet;
+    this.pixelsPerSecond_ = mirosubs.timeline.TimeRowUL.PX_PER_TICK / spacing;    
 };
 goog.inherits(mirosubs.timeline.Timeline, goog.ui.Component);
 mirosubs.timeline.Timeline.prototype.createDom = function() {
     mirosubs.timeline.Timeline.superClass_.createDom.call(this);
-    this.timeRow_ = new mirosubs.timeline.TimeRow(this.spacing_);
-    this.addChild(this.timeRow_);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    var el = this.getElement();
+    el.className = 'mirosubs-timeline';
+    el.appendChild($d('div', 'top', ' '));
+    this.timelineInner_ = new mirosubs.timeline.TimelineInner(
+        this.spacing_, this.captionSet_);
+    this.addChild(this.timelineInner_, true);
+    el.appendChild($d('div', 'marker'));
 };
-mirosubs.timeline.Timeline.prototype.setTime(time) {
-    this.timeRow_.setTime(time);
-    
+mirosubs.timeline.Timeline.prototype.enterDocument = function() {
+    mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
+    var size = goog.style.getSize(this.getElement());
+    this.width_ = size.width;
+};
+mirosubs.timeline.Timeline.prototype.setTime = function(time) {
+    this.timelineInner_.getElement().style.left = 
+        (-time * this.pixelsPerSecond_ + this.width_ / 2) + 'px';
+    this.timelineInner_.ensureVisible(time);
 };

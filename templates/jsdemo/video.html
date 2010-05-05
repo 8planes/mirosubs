@@ -57,8 +57,13 @@
   }
 
   // Set up the video players.
-  var ytPlayer = new mirosubs.YoutubeVideoPlayer('adam', 'ytvideo', 'w7vuupjsaVI');
-  var html5Player = mirosubs.Html5VideoPlayer.wrap('html5video');
+  var ytPlayer = new mirosubs.YoutubeVideoPlayer(
+      new mirosubs.YoutubeVideoSource('adam', 'w7vuupjsaVI'));
+  ytPlayer.decorate(goog.dom.$('ytvideo'));
+  var html5Player = new mirosubs.Html5VideoPlayer(
+      new mirosubs.Html5VideoSource(
+          'http://videos.mozilla.org/firefox3/switch/switch.ogg'));
+  html5Player.decorate(goog.dom.$('html5video'));
 
   var curPlayer = ytPlayer;
 

@@ -132,7 +132,6 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
-    console.log('key down');
     if (event.keyCode == goog.events.KeyCodes.SPACE && 
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
