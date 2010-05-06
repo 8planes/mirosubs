@@ -50,11 +50,10 @@ mirosubs.Html5VideoPlayer.prototype.decorateInternal = function(el) {
     this.addVideoElement_(el, false);
 };
 mirosubs.Html5VideoPlayer.prototype.addVideoElement_ = function(el, hardCodeWidth) {
-    console.log('addVideoElement_ called');
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var testVideo = $d('video');
     if (typeof(testVideo['canPlayType']) != 'undefined') {
-        var params = {'autobuffer': 'a', 'controls': 'a' };
+        var params = {'autobuffer': 'true', 'controls': 'true' };
         if (hardCodeWidth)
             params['width'] = mirosubs.Html5VideoPlayer.WIDTH;
         el.appendChild(
