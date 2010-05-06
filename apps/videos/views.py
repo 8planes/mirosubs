@@ -98,7 +98,7 @@ def feedback(request):
     output = dict(success=False)
     form = FeedbackForm(request.POST)
     if form.is_valid():
-        form.send()
+        form.send(request)
         output['success'] = True
     else:
         output['errors'] = form.get_errors()
