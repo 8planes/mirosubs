@@ -27,6 +27,7 @@ from django import template
 from videos.models import VideoCaptionVersion, TranslationVersion
 from django.conf import settings
 from datetime import date
+from django.utils.dateformat import format as date_format
 
 register = template.Library()
 
@@ -40,10 +41,10 @@ def events_info_generator(events):
             obj['video'] = item.video
         obj['user'] = obj['video'].owner
         if item.datetime_started.date() == date.today():
-            format = '%I:%M %p'
+            format = 'g:i A'
         else:
-            format = '%I:%M %p, %d %b %Y'
-        obj['time'] = item.datetime_started.strftime(format)    
+            format = 'g:i A, j M Y'
+        obj['time'] = date_format(item.datetime_started, format)    
         yield obj
 
 @register.inclusion_tag('videos/_recent_activity.html')
