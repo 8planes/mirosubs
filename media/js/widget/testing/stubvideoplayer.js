@@ -44,3 +44,6 @@ mirosubs.testing.StubVideoPlayer.prototype.play = function() {
 mirosubs.testing.StubVideoPlayer.prototype.isPlaying = function() {
     return this.playing;
 };
+mirosubs.testing.StubVideoPlayer.prototype.dispatchTimeUpdate = function() {
+    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.TIMEUPDATE);
+};
