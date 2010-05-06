@@ -40,6 +40,11 @@ def events_info_generator(events):
         else:
             obj['video'] = item.video
         obj['user'] = obj['video'].owner
+        if obj['user']:
+            try:
+                obj['profile'] = obj['user'].profile_set.all()[0]
+            except IndexError:
+                pass
         if item.datetime_started.date() == date.today():
             format = 'g:i A'
         else:
