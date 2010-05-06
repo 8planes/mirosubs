@@ -25,9 +25,17 @@
 
 goog.provide('mirosubs.subtitle.EditableCaptionSet');
 
-mirosubs.subtitle.EditableCaptionSet = function(unitOfWork, existingJsonCaptions) {
+/**
+ * @constructor
+ * @param {array.<object.<string, *>>} existingJsonCaptions
+ * @param {mirosubs.UnitOfWork=} opt_unitOfWork Unit of work, only provided 
+ *     if this EditableCaptionSet is not read-only
+ */
+mirosubs.subtitle.EditableCaptionSet = function(
+    existingJsonCaptions, opt_unitOfWork) 
+{
     goog.events.EventTarget.call(this);
-    this.unitOfWork_ = unitOfWork;
+    this.unitOfWork_ = opt_unitOfWork;
     this.updateFn_ = goog.bind(this.captionUpdated_, this);
     var updateFn = this.updateFn_;
     this.captions_ = goog.array.map(

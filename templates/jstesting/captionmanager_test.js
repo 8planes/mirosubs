@@ -37,9 +37,9 @@ function addNewCaption(startTime, endTime) {
 /* the tests */
 
 function setUpForInitialCaptions(captions) {
-    var unitOfWork = new mirosubs.UnitOfWork();
+    var uw = new mirosubs.UnitOfWork();
     MS_editableCaptionSet = 
-	new mirosubs.subtitle.EditableCaptionSet(unitOfWork, captions);
+	new mirosubs.subtitle.EditableCaptionSet(captions, uw);
     MS_dispatchedCaptions = [];
     MS_videoPlayer = new mirosubs.testing.StubVideoPlayer();
     MS_captionManager = new mirosubs.CaptionManager(
