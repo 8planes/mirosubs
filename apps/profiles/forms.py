@@ -20,6 +20,7 @@ from django import forms
 from profiles.models import Profile
 
 class EditProfileForm(forms.ModelForm):
+    email = forms.EmailField(required=False)
     current_password = forms.CharField(widget=forms.PasswordInput, required=False)
     new_password = forms.CharField(widget=forms.PasswordInput, required=False)
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
@@ -28,7 +29,7 @@ class EditProfileForm(forms.ModelForm):
     
     class Meta:
         model = Profile
-        exclude = ('user',)
+        exclude = ('user', 'valid_email')
 
     def clean(self):
         current, new, verify = map(self.cleaned_data.get,
@@ -38,10 +39,26 @@ class EditProfileForm(forms.ModelForm):
         if new and new != verify:
             raise forms.ValidationError('The two passwords did not match.')
         return self.cleaned_data
-
+    
+    def clean_email(self):
+        value = self.cleaned_data['email']
+        if value:
+            user_class = self.instance.user.__class__
+            try:
+                user_class.objects.get(email=value)
+                raise forms.ValidationError('This email is used already.')
+            except user_class.DoesNotExist:
+                pass
+        return value
+    
     def save(self, commit=True):
         password = self.cleaned_data.get('new_password')
+        email = self.cleaned_data.get('email')
+        print email
         if password:
             self.instance.user.set_password(password)
+        if email:
+            self.instance.user.email = email
+            self.instance.user.save()
         return super(EditProfileForm, self).save(commit)
         
