@@ -1,5 +1,6 @@
 {% load thumbnail %}
 
+<ul class="recent_activity">
 {% for item in events %}
     <li>
     	{% if item.user %}
@@ -21,3 +22,4 @@
 		<span>at {{ item.time }}		
 	</li>
 {% endfor %}
+</ul>

@@ -2,6 +2,6 @@
 
 {% block userinfo %}
 {{ block.super }}
-<p>Preferred language: {{ profile.preferred_language }}</p>
+<p>Preferred language: {% if profile.preferred_language %}{{ profile.preferred_language }}{% endif %}</p>
 <p>Homepage: <a href="{{ profile.homepage }}">{{ profile.homepage }}</a></p>
 {% endblock %}

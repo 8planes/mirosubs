@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load thumbnail %}
+{% load thumbnail recent_activity %}
 {% block main_content %}
 
 {% block userinfo %}
@@ -16,10 +16,10 @@
 
 
 {% block activity %}
-
-<div class="right_column">
-<h2>{{ profile.user.username }}'s activity</h2>
-
-</div>
+    <div class="right_column">
+        <h2>{{ profile.user.username }}'s activity</h2>
+        {% recent_activity profile.user %}
+    </div>
 {% endblock %}
+
 {% endblock %}
