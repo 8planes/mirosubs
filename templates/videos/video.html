@@ -35,8 +35,6 @@ width: 460px;
 
 {% block main_content %}
 <div class="left_column">
-	<p>{{ video.video_url }}</p>
-	
 	{% with video.video_url as video_url %}
 	  {% include "widget/widget.html" %}
 	<script type="text/javascript">
