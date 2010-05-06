@@ -70,7 +70,9 @@ width: 460px;
 		            
 		            
 		      <h3>Permalink</h3>
-		      <a href="#" class="mirosubs-permalink">http://www.universalsubtitles.org/asdfasdfas/asdfasdf</a>
+		      <a href="http://{{ site.domain }}{% url videos:video video_id=video.video_id %}" class="mirosubs-permalink">
+		          http://{{ site.domain }}{% url videos:video video_id=video.video_id %}
+              </a>
    </div>
 
 
