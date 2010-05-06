@@ -1468,14 +1468,50 @@ cursor: pointer;
 }
 
 .mirosubs-volume div{
-height: 100px !important;
+height: 99px !important;
 width: 31px;
-postion: absolute;
-top: 0;
-margin-top: -100px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-topleft: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+position: absolute;
+top: -100px;
 z-index: 999999999999;
 background: #ededed url("../images/gradient.png") left 30px repeat-x;
 }
+
+
+.mirosubs-volume div span{
+height: 75px !important;
+width: 10px !important; 
+margin: 10px 9px 0 0;
+border: 1px solid;
+position: relative;
+z-index: 999999999999;
+background: #333;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 0px;
+}
+
+
+.mirosubs-volume div span span{
+height: 0px !important;
+width: 0px !important;
+border: 1px solid red;
+top: 0;
+margin: -3px -3px 0 0 !important;
+z-index: 999999999999;
+border: 1px solid;
+padding: 7px;
+border-top: 1px solid #666;
+border-right: 1px solid #333;
+border-bottom: 1px solid #333;
+border-left: 1px solid #333;
+background: #fff url("../images/gradient.png") 0 1px repeat-x;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
 
 .mirosubs-scrobbler{
 border: 1px solid;
@@ -1489,7 +1525,7 @@ border-left: 1px solid #333;
 background: #fff url("../images/gradient.png") 0 1px repeat-x;
 margin: -3px 0 0 101px;
     -moz-border-radius: 10px;
-    -webkit-border-radius: 0px;
+    -webkit-border-radius: 10px;
 }
 
 
