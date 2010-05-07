@@ -4,8 +4,8 @@
 {% for item in events %}
     <li>
     	{% if item.user %}
-            {% if item.profile.picture %}
-                <img src="{% thumbnail item.profile.picture 32x32 %}" />
+            {% if item.uprofile.picture %}
+                <img src="{% thumbnail item.uprofile.picture 32x32 %}" />
             {% endif %}
 		    <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
 		{% else %}
@@ -13,7 +13,7 @@
 		{% endif %}
 		
         {% if item.language %}
-            edited {{ item.language }} translations for 
+            edited {{ item.get_language_display }} translations for 
 		{% else %}
 		    edited subtitles for
 		{% endif %}

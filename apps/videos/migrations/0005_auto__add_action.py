@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
         
         # Adding model 'Action'
         db.create_table('videos_action', (
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
             ('video', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.Video'])),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('language', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True)),
@@ -20,14 +20,12 @@ class Migration(SchemaMigration):
         
         for item in orm.VideoCaptionVersion.objects.all():
             obj = orm.Action(user=item.user, video=item.video)
-            obj.save()
             obj.created = item.datetime_started
             obj.save()
             
         for item in orm.TranslationVersion.objects.all():
             obj = orm.Action(user=item.user, video=item.language.video)
             obj.language = item.language.language
-            obj.save()
             obj.created = item.datetime_started
             obj.save()
             
@@ -76,7 +74,7 @@ class Migration(SchemaMigration):
         },
         'videos.action': {
             'Meta': {'object_name': 'Action'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
