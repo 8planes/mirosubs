@@ -1,0 +1,25 @@
+{% load thumbnail %}
+
+<ul class="recent_activity">
+{% for item in events %}
+    <li>
+        {% if item.user %}
+            {% if item.uprofile.picture %}
+                <img src="{% thumbnail item.uprofile.picture 32x32 %}" />
+            {% endif %}
+            <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+        {% else %}
+            <span class="username anon">Anonymous</span>
+        {% endif %}
+        
+        {% if item.language %}
+            edited {{ item.get_language_display }} translations for 
+        {% else %}
+            edited subtitles for
+        {% endif %}
+        
+        <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
+        <span>at {{ item.time }}        
+    </li>
+{% endfor %}
+</ul>

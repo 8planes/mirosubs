@@ -1,0 +1,27 @@
+<div class="pagination">
+   {% if has_previous %}
+      <span class="page">
+      <a href="?page={{ previous }}{{ extra_link }}">&laquo; prev</a>
+      </span>
+   {% endif %}
+
+   {% if show_first %}
+      <span class="page"><a href="?page=1{{ extra_link }}">1</a></span>
+      <span class="ellipsis">...</span>
+   {% endif %}
+   {% for linkpage in page_numbers %}
+      {% ifequal linkpage page %}
+         <span class="current_page">{{ page }}</span>
+      {% else %}
+         <span class="page"><a href="?page={{ linkpage }}{{ extra_link }}"
+               >{{ linkpage }}</a></span>
+      {% endifequal %}
+   {% endfor %}
+   {% if show_last %}
+      <span class="ellipsis">...</span>
+      <span class="page"><a href="?page=last{{ extra_link }}">{{ pages }}</a></span>
+   {% endif %}
+   {% if has_next %}
+      <span class="page"><a href="?page={{ next }}{{ extra_link }}">next &raquo;</a></span>
+   {% endif %}
+</div>
