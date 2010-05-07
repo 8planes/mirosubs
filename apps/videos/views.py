@@ -23,11 +23,12 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action
 import widget
 from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
 from django.shortcuts import redirect
+from django.conf import settings
 import simplejson as json
 
 def create(request):
@@ -93,6 +94,28 @@ def video_list(request):
                        template_name='videos/video_list.html',
                        template_object_name='video',
                        extra_context=extra_context)
+
+def actions_list(request):
+    try:
+        page = int(request.GET['page'])
+    except (ValueError, TypeError, KeyError):
+        page = 1    
+    qs = Action.objects.all()
+    
+    extra_context = {}
+    ordering = request.GET.get('o')
+    order_type = request.GET.get('ot')    
+    order_fields = ['user__username', 'created', 'video__video_id']
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
+        extra_context['ordering'] = ordering
+        extra_context['order_type'] = order_type
+            
+    return object_list(request, queryset=qs, allow_empty=True,
+                       paginate_by=settings.ACTIVITIES_ONPAGE, page=page,
+                       template_name='videos/actions_list.html',
+                       template_object_name='action',
+                       extra_context=extra_context)    
 
 def feedback(request):
     output = dict(success=False)
