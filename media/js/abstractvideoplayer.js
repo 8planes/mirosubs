@@ -42,8 +42,16 @@ mirosubs.AbstractVideoPlayer.prototype.createDom = function() {
 mirosubs.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.isPlaying = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.videoEnded = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.play = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.pause = goog.abstractMethod;
+mirosubs.AbstractVideoPlayer.prototype.play = function() {
+    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PLAY_CALLED);
+    this.playInternal();
+};
+mirosubs.AbstractVideoPlayer.prototype.playInternal = goog.abstractMethod;
+mirosubs.AbstractVideoPlayer.prototype.pause = function() {
+    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PAUSE_CALLED);
+    this.pauseInternal();
+};
+mirosubs.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.togglePause = function() {
     if (this.isPaused() || this.videoEnded())
         this.play();
@@ -143,8 +151,10 @@ mirosubs.AbstractVideoPlayer.prototype.getVideoSize = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.EventType = {
     /** dispatched when playback starts or resumes. */
     PLAY : 'videoplay',
+    PLAY_CALLED : 'videoplaycalled',
     /** dispatched when playback is paused. */
     PAUSE : 'videopause',
+    PAUSE_CALLED : 'videopausecalled',
     /** dispatched when media data is fetched */
     PROGRESS : 'videoprogress',
     /** 

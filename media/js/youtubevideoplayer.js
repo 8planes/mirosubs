@@ -139,17 +139,17 @@ mirosubs.YoutubeVideoPlayer.prototype.videoEnded = function() {
 mirosubs.YoutubeVideoPlayer.prototype.isPlaying = function() {
     return this.getPlayerState_() == mirosubs.YoutubeVideoPlayer.State_.PLAYING;
 };
-mirosubs.YoutubeVideoPlayer.prototype.play = function () {
+mirosubs.YoutubeVideoPlayer.prototype.playInternal = function () {
     if (this.player_)
         this.player_['playVideo']();
     else
-        this.commands_.push(goog.bind(this.play, this));
+        this.commands_.push(goog.bind(this.playInternal, this));
 };
-mirosubs.YoutubeVideoPlayer.prototype.pause = function() {
+mirosubs.YoutubeVideoPlayer.prototype.pauseInternal = function() {
     if (this.player_)
         this.player_['pauseVideo']();
     else
-        this.commands_.push(goog.bind(this.pause, this));
+        this.commands_.push(goog.bind(this.pauseInternal, this));
 };
 mirosubs.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;

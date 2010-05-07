@@ -124,11 +124,11 @@ mirosubs.Html5VideoPlayer.prototype.isPlaying = function() {
            !this.isPaused() && !this.videoEnded();
 };
 
-mirosubs.Html5VideoPlayer.prototype.play = function() {
+mirosubs.Html5VideoPlayer.prototype.playInternal = function() {
     this.videoElem_['play']();
 };
 
-mirosubs.Html5VideoPlayer.prototype.pause = function() {
+mirosubs.Html5VideoPlayer.prototype.pauseInternal = function() {
     this.videoElem_['pause']();
 };
 
