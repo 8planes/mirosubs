@@ -370,3 +370,16 @@ class VideoCaption(models.Model):
                  'caption_text' : text, 
                  'start_time' : self.start_time, 
                  'end_time' : self.end_time }
+
+class Action(models.Model):
+    TYPE_CHOICES = (
+        (1, 'subtitles'),
+        (2, 'translations')
+    )
+    user = models.ForeignKey(User)
+    video = models.ForeignKey(Video)
+    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created']
