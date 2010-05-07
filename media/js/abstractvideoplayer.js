@@ -60,7 +60,8 @@ mirosubs.AbstractVideoPlayer.prototype.togglePause = function() {
 };
 mirosubs.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
 /**
- * @returns {number} video duration in seconds.
+ * @returns {number} video duration in seconds. Returns 0 if duration isn't
+ *     available yet.
  */
 mirosubs.AbstractVideoPlayer.prototype.getDuration = goog.abstractMethod;
 /**

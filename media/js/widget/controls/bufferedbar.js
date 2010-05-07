@@ -28,7 +28,7 @@ goog.inherits(mirosubs.controls.BufferedBar, goog.ui.Component);
 
 mirosubs.controls.BufferedBar.prototype.createDom = function() {
     this.setElementInternal(
-	this.getDomHelper().createDom('div', 'mirosubs-buffered'));
+	this.getDomHelper().createDom('div', 'mirosubs-buffered-container'));
 };
 
 mirosubs.controls.BufferedBar.prototype.enterDocument = function() {
@@ -36,14 +36,15 @@ mirosubs.controls.BufferedBar.prototype.enterDocument = function() {
     this.getHandler().listen(this.videoPlayer_,
 			     mirosubs.AbstractVideoPlayer.EventType.PROGRESS,
 			     this.onVideoProgress_);
-    var size = goog.dom.getSize(this.getElement());
+    var size = goog.style.getSize(this.getElement());
     this.width_ = size.width;
 };
 
 mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
     if (this.videoDuration_ == 0) {
 	this.videoDuration_ = this.videoPlayer_.getDuration();
-	if (this.videoDuration_ == 0) return;
+	if (this.videoDuration_ == 0) 
+            return;
     }
     if (this.bufferedRangeDivs_.length != 
 	this.videoPlayer_.getBufferedLength())
@@ -51,8 +52,9 @@ mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
 	while (this.bufferedRangeDivs_.length < 
 	       this.videoPlayer_.getBufferedLength()) 
 	{
+            console.log('creating buffered div');
 	    var bufferedDiv = this.getDomHelper().createDom(
-		'div', 'mirosubs-played');
+		'div', 'mirosubs-buffered');
 	    this.getElement().appendChild(bufferedDiv);
 	    this.bufferedRangeDivs_.push(bufferedDiv);
 	}

@@ -53,7 +53,7 @@ mirosubs.Html5VideoPlayer.prototype.addVideoElement_ = function(el, hardCodeWidt
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var testVideo = $d('video');
     if (typeof(testVideo['canPlayType']) != 'undefined') {
-        var params = {'autobuffer': 'true', 'controls': 'true' };
+        var params = { 'autobuffer': 'true', 'controls': 'true' };
         if (hardCodeWidth)
             params['width'] = mirosubs.Html5VideoPlayer.WIDTH;
         el.appendChild(
@@ -106,7 +106,8 @@ mirosubs.Html5VideoPlayer.prototype.getBufferedEnd = function(index) {
     return this.videoElem_['buffered']['end'](index);
 };
 mirosubs.Html5VideoPlayer.prototype.getDuration = function() {
-    return this.videoElem_['duration'];
+    var duration = this.videoElem_['duration'];
+    return isNaN(duration) ? 0 : duration;
 };
 mirosubs.Html5VideoPlayer.prototype.isPaused = function() {
     return this.videoElem_['paused'];

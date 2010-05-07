@@ -1,0 +1,18 @@
+{% extends "jsdemo/base_demo.html" %}
+{% block body %}
+<div>
+  <div id="video"></div>
+</div>
+<div>
+</div>
+<script type="text/javascript">
+  var container = new goog.ui.Component();
+  container.decorate(goog.dom.$('video'));
+  var player = new mirosubs.Html5VideoPlayer(
+      new mirosubs.Html5VideoSource(
+          'http://videos.mozilla.org/firefox3/switch/switch.ogg'));
+  container.addChild(player, true);
+  var controls = new mirosubs.controls.VideoControls(player);
+  container.addChild(controls, true);
+</script>
+{% endblock %}

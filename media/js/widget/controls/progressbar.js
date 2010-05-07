@@ -26,10 +26,11 @@ mirosubs.controls.ProgressBar = function(videoPlayer) {
 goog.inherits(mirosubs.controls.ProgressBar, goog.ui.Component);
 
 mirosubs.controls.ProgressBar.prototype.createDom = function() {
-    mirosubs.controls.ProgressBar.superClass_.createDom.call(this);
+    this.setElementInternal(
+        this.getDomHelper().createDom('span', 'mirosubs-progress'));
     this.bufferedBar_ = new mirosubs.controls.BufferedBar(
         this.videoPlayer_);
-    this.addChild(this.bufferedBar_);
+    this.addChild(this.bufferedBar_, this);
     this.progressSlider_ = new mirosubs.controls.ProgressSlider();
     this.addChild(this.progressSlider_, true);
 };

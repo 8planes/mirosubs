@@ -24,13 +24,14 @@ mirosubs.controls.VolumeSlider = function(opt_domHelper) {
     this.setMoveToPointEnabled = true;
     this.setOrientation(goog.ui.SliderBase.Orientation.VERTICAL);
 };
-goog.inherits(goog.ui.Slider, goog.ui.SliderBase);
+goog.inherits(mirosubs.controls.VolumeSlider, goog.ui.SliderBase);
 
 mirosubs.controls.VolumeSlider.CSS_CLASS_PREFIX = 
     goog.getCssName('mirosubs');
 
 mirosubs.controls.VolumeSlider.THUMB_CSS_CLASS = 
-    goog.getCssName(goog.ui.Slider.CSS_CLASS_PREFIX, 'vscrobbler');
+    goog.getCssName(mirosubs.controls.VolumeSlider.CSS_CLASS_PREFIX, 
+                    'volume-scrobbler');
 
 mirosubs.controls.VolumeSlider.prototype.getCssClass = function(orient) {
     return goog.getCssName(mirosubs.controls.VolumeSlider.CSS_CLASS_PREFIX,

@@ -23,13 +23,14 @@ mirosubs.controls.ProgressSlider = function(opt_domHelper) {
     this.rangeModel.setExtent(0);
     this.setMoveToPointEnabled = true;
 };
-goog.inherits(goog.ui.Slider, goog.ui.SliderBase);
+goog.inherits(mirosubs.controls.ProgressSlider, goog.ui.SliderBase);
 
 mirosubs.controls.ProgressSlider.CSS_CLASS_PREFIX = 
     goog.getCssName('mirosubs');
 
 mirosubs.controls.ProgressSlider.THUMB_CSS_CLASS = 
-    goog.getCssName(goog.ui.Slider.CSS_CLASS_PREFIX, 'scrobbler');
+    goog.getCssName(mirosubs.controls.ProgressSlider.CSS_CLASS_PREFIX, 
+                    'scrobbler');
 
 mirosubs.controls.ProgressSlider.prototype.getCssClass = function(orient) {
     return goog.getCssName(mirosubs.controls.ProgressSlider.CSS_CLASS_PREFIX,

@@ -59,7 +59,9 @@ mirosubs.controls.PlayPause.prototype.setPaused_ = function() {
     this.state_ = mirosubs.controls.PlayPause.State_.PAUSED;
 };
 mirosubs.controls.PlayPause.prototype.clicked_ = function() {
-    if (this.state_ == mirosubs.controls.PlayPause.State_.PLAYING)
+    if (this.state_ == null)
+        return;
+    else if (this.state_ == mirosubs.controls.PlayPause.State_.PLAYING)
         this.videoPlayer_.pause();
     else
         this.videoPlayer_.play();
