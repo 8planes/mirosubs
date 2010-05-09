@@ -62,12 +62,15 @@ mirosubs.YoutubeVideoPlayer.prototype.enterDocument = function() {
         var videoDiv = this.getDomHelper().createDom('div');
         videoDiv.id = 'a' + this.makeId('video');
         this.getElement().appendChild(videoDiv);
-        var params = { 'allowScriptAccess': 'always' };
+        var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
         var atts = { 'id': this.playerElemID_ };
         window["swfobject"]["embedSWF"](
-            ['http://www.youtube.com/v/', this.videoSource_.getYoutubeVideoID(), 
-             '?enablejsapi=1&disablekb=1&playerapiid=', this.playerAPIID_].join(''),
-            videoDiv.id, "480", "360", "8", null, null, params, atts);
+            ['http://www.youtube.com/v/', 
+             this.videoSource_.getYoutubeVideoID(), 
+             '?enablejsapi=1&disablekb=1&playerapiid=', 
+             this.playerAPIID_].join(''),
+            videoDiv.id, "480", "360", "8", 
+            null, null, params, atts);
     }
     this.getHandler().listen(
         this.progressTimer_, goog.Timer.TICK, this.progressTick_);

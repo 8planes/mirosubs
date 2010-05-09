@@ -19,12 +19,10 @@
 goog.provide('mirosubs.controls.VolumeSlider');
 
 mirosubs.controls.VolumeSlider = function(opt_domHelper) {
-    goog.ui.SliderBase.call(this, opt_domHelper);
-    this.rangeModel.setExtent(0);
-    this.setMoveToPointEnabled = true;
-    this.setOrientation(goog.ui.SliderBase.Orientation.VERTICAL);
+    mirosubs.SliderBase.call(this, opt_domHelper);
+    this.setOrientation(mirosubs.SliderBase.Orientation.VERTICAL);
 };
-goog.inherits(mirosubs.controls.VolumeSlider, goog.ui.SliderBase);
+goog.inherits(mirosubs.controls.VolumeSlider, mirosubs.SliderBase);
 
 mirosubs.controls.VolumeSlider.CSS_CLASS_PREFIX = 
     goog.getCssName('mirosubs');
@@ -39,11 +37,11 @@ mirosubs.controls.VolumeSlider.prototype.getCssClass = function(orient) {
 };
 
 /** @inherhitDoc */
-mirosubs.controls.VolumeSlider.prototype.createThumbs = function() {
+mirosubs.controls.VolumeSlider.prototype.createThumb = function() {
     var element = this.getElement();
     var thumb = this.getDomHelper().createDom(
 	'div', mirosubs.controls.VolumeSlider.THUMB_CSS_CLASS);
     goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
     element.appendChild(thumb);
-    this.valueThumb = this.extentThumb = thumb;
+    this.thumb = thumb;
 };

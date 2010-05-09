@@ -22,14 +22,16 @@ mirosubs.controls.TimeSpan = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
     this.currentlyDisplayedSecond_ = -1;
-    this.durationString_ = null;
+    this.durationSet_ = false;
 };
 goog.inherits(mirosubs.controls.TimeSpan, goog.ui.Component);
 mirosubs.controls.TimeSpan.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.timeElapsedLabel_ = $d('div', 'mirosubs-timeElapsed');
+    this.timeElapsedLabel_ = $d('div', 'mirosubs-timeElapsed')
+    this.totalTimeLabel_ = $d('span');
     this.setElementInternal(
-        $d('span', 'mirosubs-timespan', this.timeElapsedLabel_));
+        $d('span', 'mirosubs-timespan', 
+           this.timeElapsedLabel_, this.totalTimeLabel_));
 };
 mirosubs.controls.TimeSpan.prototype.enterDocument = function() {
     mirosubs.controls.TimeSpan.superClass_.enterDocument.call(this);
@@ -42,18 +44,18 @@ mirosubs.controls.TimeSpan.prototype.enterDocument = function() {
 };
 mirosubs.controls.TimeSpan.prototype.videoTimeUpdate_ = function() {
     if (~~this.videoPlayer_.getPlayheadTime() != this.currentlyDisplayedSecond_) {
-        if (!this.durationString_) {
+        if (!this.durationSet_) {
             var duration = this.videoPlayer_.getDuration();
             if (duration == 0)
                 return;
-            this.durationString_ = mirosubs.formatTime(duration, true);
+            goog.dom.setTextContent(this.totalTimeLabel_,
+                                    '/' + mirosubs.formatTime(duration, true));
+            this.durationSet_ = true;
         }
         var playheadSecs = ~~this.videoPlayer_.getPlayheadTime();
         this.currentlyDisplayedSecond_ = playheadSecs;
         goog.dom.setTextContent(
             this.timeElapsedLabel_, 
-            [mirosubs.formatTime(playheadSecs, true), 
-             '/',
-             this.durationString_].join(''));
+            mirosubs.formatTime(playheadSecs, true));
     }
 };

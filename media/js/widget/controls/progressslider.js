@@ -19,11 +19,9 @@
 goog.provide('mirosubs.controls.ProgressSlider');
 
 mirosubs.controls.ProgressSlider = function(opt_domHelper) {
-    goog.ui.SliderBase.call(this, opt_domHelper);
-    this.rangeModel.setExtent(0);
-    this.setMoveToPointEnabled = true;
+    mirosubs.SliderBase.call(this, opt_domHelper);
 };
-goog.inherits(mirosubs.controls.ProgressSlider, goog.ui.SliderBase);
+goog.inherits(mirosubs.controls.ProgressSlider, mirosubs.SliderBase);
 
 mirosubs.controls.ProgressSlider.CSS_CLASS_PREFIX = 
     goog.getCssName('mirosubs');
@@ -38,11 +36,11 @@ mirosubs.controls.ProgressSlider.prototype.getCssClass = function(orient) {
 };
 
 /** @inherhitDoc */
-mirosubs.controls.ProgressSlider.prototype.createThumbs = function() {
+mirosubs.controls.ProgressSlider.prototype.createThumb = function() {
     var element = this.getElement();
     var thumb = this.getDomHelper().createDom(
 	'div', mirosubs.controls.ProgressSlider.THUMB_CSS_CLASS);
     goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
     element.appendChild(thumb);
-    this.valueThumb = this.extentThumb = thumb;
+    this.thumb = thumb;
 };

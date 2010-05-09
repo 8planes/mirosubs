@@ -42,13 +42,17 @@ mirosubs.AbstractVideoPlayer.prototype.createDom = function() {
 mirosubs.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.isPlaying = goog.abstractMethod;
 mirosubs.AbstractVideoPlayer.prototype.videoEnded = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.play = function() {
-    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PLAY_CALLED);
+mirosubs.AbstractVideoPlayer.prototype.play = function(opt_suppressEvent) {
+    if (!opt_suppressEvent)
+        this.dispatchEvent(
+            mirosubs.AbstractVideoPlayer.EventType.PLAY_CALLED);
     this.playInternal();
 };
 mirosubs.AbstractVideoPlayer.prototype.playInternal = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.pause = function() {
-    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PAUSE_CALLED);
+mirosubs.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent) {
+    if (!opt_suppressEvent)
+        this.dispatchEvent(
+            mirosubs.AbstractVideoPlayer.EventType.PAUSE_CALLED);
     this.pauseInternal();
 };
 mirosubs.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;

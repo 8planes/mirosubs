@@ -1438,12 +1438,19 @@ cursor: pointer;
 }
 
 
-.mirosubs-playPause.play span{
-width: 10px;
-padding-top: 13px;
-overflow: hidden;
-float: left;
-background: url("../images/play_pause.png") 0 0px no-repeat;
+.mirosubs-playPause span{
+   width: 10px;
+   padding-top: 13px;
+   overflow: hidden;
+   float: left;
+}
+
+.mirosubs-playPause.play span {
+   background: url("../images/play_pause.png") 0 0px no-repeat;
+}
+
+.mirosubs-playPause.pause span {
+   background: url("../images/play_pause.png") 0 -32px no-repeat;
 }
 
 .mirosubs-volume {
@@ -1523,7 +1530,8 @@ border-right: 1px solid #333;
 border-bottom: 1px solid #333;
 border-left: 1px solid #333;
 background: #fff url("../images/gradient.png") 0 1px repeat-x;
-margin: -3px 0 0 0;
+top: -3px;
+margin: 0 0 0 0;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 }

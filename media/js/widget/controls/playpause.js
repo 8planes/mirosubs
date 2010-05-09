@@ -32,7 +32,7 @@ mirosubs.controls.PlayPause.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.setElementInternal($d('span', 'mirosubs-playPause', $d('span')));
     goog.dom.a11y.setRole(this.getElement(), goog.dom.a11y.Role.BUTTON);
-    this.setPlaying_();;
+    this.setPaused_();;
 };
 mirosubs.controls.PlayPause.prototype.enterDocument = function() {
     mirosubs.controls.PlayPause.superClass_.enterDocument.call(this);

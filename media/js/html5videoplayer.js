@@ -97,13 +97,16 @@ mirosubs.Html5VideoPlayer.prototype.videoTimeUpdate_ = function() {
     this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };
 mirosubs.Html5VideoPlayer.prototype.getBufferedLength = function() {
-    return this.videoElem_['buffered']['length'];
+//    return this.videoElem_['buffered']['length'];
+    return 0;
 };
 mirosubs.Html5VideoPlayer.prototype.getBufferedStart = function(index) {
-    return this.videoElem_['buffered']['start'](index);
+//    return this.videoElem_['buffered']['start'](index);
+    return 0;
 };
 mirosubs.Html5VideoPlayer.prototype.getBufferedEnd = function(index) {
-    return this.videoElem_['buffered']['end'](index);
+//    return this.videoElem_['buffered']['end'](index);
+    return 0;
 };
 mirosubs.Html5VideoPlayer.prototype.getDuration = function() {
     var duration = this.videoElem_['duration'];

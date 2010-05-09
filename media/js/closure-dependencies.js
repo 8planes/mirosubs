@@ -33,4 +33,7 @@ goog.require('goog.math');
 goog.require('goog.net.ImageLoader');
 goog.require('goog.ui.Checkbox');
 goog.require('goog.Throttle');
-goog.require('goog.ui.SliderBase');
+goog.require('goog.fx.Animation.EventType');
+goog.require('goog.fx.Dragger');
+goog.require('goog.fx.Dragger.EventType');
+goog.require('goog.fx.dom.SlideFrom');

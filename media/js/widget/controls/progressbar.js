@@ -30,7 +30,7 @@ mirosubs.controls.ProgressBar.prototype.createDom = function() {
         this.getDomHelper().createDom('span', 'mirosubs-progress'));
     this.bufferedBar_ = new mirosubs.controls.BufferedBar(
         this.videoPlayer_);
-    this.addChild(this.bufferedBar_, this);
+    this.addChild(this.bufferedBar_, true);
     this.progressSlider_ = new mirosubs.controls.ProgressSlider();
     this.addChild(this.progressSlider_, true);
 };
@@ -40,6 +40,37 @@ mirosubs.controls.ProgressBar.prototype.enterDocument = function() {
     var et = mirosubs.AbstractVideoPlayer.EventType;
     this.getHandler().listen(
         this.videoPlayer_, et.TIMEUPDATE, this.videoTimeUpdate_);
+    this.getHandler().listen(
+        this.progressSlider_, 
+        goog.ui.Component.EventType.CHANGE,
+        this.progressSliderUpdate_);
+    this.getHandler().listen(
+        this.progressSlider_,
+        goog.object.getValues(mirosubs.SliderBase.EventType),
+        this.progressSliderInteracting_);
+};
+
+mirosubs.controls.ProgressBar.prototype.progressSliderInteracting_ = 
+    function(event) 
+{
+    if (event.type == mirosubs.SliderBase.EventType.START) {
+        this.pausedAtStart_ = this.videoPlayer_.isPaused();
+        this.videoPlayer_.pause(true);
+    }
+    else if (!this.pausedAtStart_)
+        this.videoPlayer_.play(true);
+};
+
+mirosubs.controls.ProgressBar.prototype.progressSliderUpdate_ = 
+    function(event) 
+{
+    if (this.videoDuration_ == 0) {
+        this.videoDuration_ = this.videoPlayer_.getDuration();
+        if (this.videoDuration_ == 0)
+            return;
+    }
+    this.videoPlayer_.setPlayheadTime(
+        this.videoDuration_ * this.progressSlider_.getValue() / 100);
 };
 
 mirosubs.controls.ProgressBar.prototype.videoTimeUpdate_ = function(event) {
@@ -48,8 +79,8 @@ mirosubs.controls.ProgressBar.prototype.videoTimeUpdate_ = function(event) {
         if (this.videoDuration_ == 0)
             return;
     }
-    // TODO: you're probably going to have to make sure user isn't currently
-    // manipulating slider value.
-    this.progressSlider_.setValue(
-        100 * this.videoPlayer_.getPlayheadTime() / this.videoDuration_);
+    if (!this.progressSlider_.isCurrentlyInteracting())
+        this.progressSlider_.setValue(
+            100 * this.videoPlayer_.getPlayheadTime() / this.videoDuration_, 
+            true);
 };

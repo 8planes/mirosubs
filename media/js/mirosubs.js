@@ -152,12 +152,10 @@ mirosubs.formatTime = function(time, opt_excludeMs) {
             timeString += (minutes + ':');
     }
     var seconds = intTime % 60;
-    if (seconds > 0 || minutes > 0 || hours > 0) {
-        if (minutes > 0 || hours > 0)
-            timeString += goog.string.padNumber(seconds, 2);
-        else
-            timeString += seconds;
-    }
+    if (minutes > 0 || hours > 0)
+        timeString += goog.string.padNumber(seconds, 2);
+    else
+        timeString += seconds;
     if (!opt_excludeMs) {
         var frac = parseInt(time * 100) % 100;
         timeString += ('.' + goog.string.padNumber(frac, 2));
