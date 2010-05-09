@@ -96,6 +96,12 @@ mirosubs.Html5VideoPlayer.prototype.videoProgress_ = function() {
 mirosubs.Html5VideoPlayer.prototype.videoTimeUpdate_ = function() {
     this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };
+mirosubs.Html5VideoPlayer.prototype.getVolume = function() {
+    return this.videoElem_['volume'];
+};
+mirosubs.Html5VideoPlayer.prototype.setVolume = function(volume) {
+    this.videoElem_['volume'] = volume;
+};
 mirosubs.Html5VideoPlayer.prototype.getBufferedLength = function() {
 //    return this.videoElem_['buffered']['length'];
     return 0;

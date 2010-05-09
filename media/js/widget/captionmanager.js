@@ -60,7 +60,6 @@ mirosubs.CaptionManager.CAPTION = 'caption';
 
 mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
     var et = mirosubs.subtitle.EditableCaptionSet.EventType;
-    console.log(event);
     if (event.type == et.CLEAR_ALL) {
 	this.captions_ = [];
 	this.dispatchCaptionEvent_(null);	

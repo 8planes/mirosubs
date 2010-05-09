@@ -81,6 +81,17 @@ mirosubs.AbstractVideoPlayer.prototype.getBufferedStart = function(index) {
 mirosubs.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
     goog.abstractMethod();
 };
+/**
+ * @returns {number} 0.0 to 1.0
+ */
+mirosubs.AbstractVideoPlayer.prototype.getVolume = goog.abstractMethod;
+/**
+ * 
+ * @param {number} volume A number between 0.0 and 1.0
+ */
+mirosubs.AbstractVideoPlayer.prototype.setVolume = function(volume) {
+    goog.abstractMethod();
+};
 mirosubs.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };

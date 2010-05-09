@@ -52,7 +52,6 @@ mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
 	while (this.bufferedRangeDivs_.length < 
 	       this.videoPlayer_.getBufferedLength()) 
 	{
-            console.log('creating buffered div');
 	    var bufferedDiv = this.getDomHelper().createDom(
 		'div', 'mirosubs-buffered');
 	    this.getElement().appendChild(bufferedDiv);

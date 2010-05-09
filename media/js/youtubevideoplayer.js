@@ -133,6 +133,15 @@ mirosubs.YoutubeVideoPlayer.prototype.getBytesTotal_ = function() {
 mirosubs.YoutubeVideoPlayer.prototype.getDuration = function() {
     return this.player_ ? this.player_['getDuration']() : 0;
 };
+mirosubs.YoutubeVideoPlayer.prototype.getVolume = function() {
+    return this.player_ ? (this.player_['getVolume']() / 100) : 0;
+};
+mirosubs.YoutubeVideoPlayer.prototype.setVolume = function(vol) {
+    if (this.player_)
+        this.player_['setVolume'](vol);
+    else
+        this.commands_.push(goog.bind(this.setVolume_, this, vol));
+};
 mirosubs.YoutubeVideoPlayer.prototype.isPaused = function() {
     return this.getPlayerState_() == mirosubs.YoutubeVideoPlayer.State_.PAUSED;
 };
