@@ -33,3 +33,7 @@ mirosubs.video.VideoSource = function() {};
  * @return {mirosubs.video.AbstractVideoPlayer} 
  */
 mirosubs.prototype.createPlayer = function() {};
+/**
+ * @return {mirosubs.video.ControlledVideoPlayer}
+ */
+mirosubs.prototype.createControlledPlayer = function() {};

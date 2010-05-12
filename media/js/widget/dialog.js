@@ -23,7 +23,8 @@ mirosubs.Dialog = function(videoSource) {
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.videoSource_ = videoSource;
-    this.videoPlayer_ = null;
+    this.controlledVideoPlayer_ = videoSource.createControlledPlayer();
+    this.videoPlayer_ = this.controlledVideoPlayer_.getPlayer();
     this.timelinePanel_ = null;
     this.captioningArea_ = null;
     this.rightPanelContainer_ = null;
@@ -34,8 +35,7 @@ goog.inherits(mirosubs.Dialog, goog.ui.Dialog);
 mirosubs.Dialog.prototype.createDom = function() {
     mirosubs.Dialog.superClass_.createDom.call(this);
     var leftColumn = new goog.ui.Component();
-    leftColumn.addChild(
-        this.videoPlayer_ = this.videoSource_.createPlayer(), true);
+    leftColumn.addChild(this.controlledVideoPlayer_, true);
     leftColumn.getElement().className = 'mirosubs-left';
     leftColumn.addChild(this.timelinePanel_ = new goog.ui.Component(), true);
     leftColumn.addChild(this.captioningArea_ = new goog.ui.Component(), true);

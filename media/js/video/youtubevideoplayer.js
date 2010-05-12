@@ -21,14 +21,16 @@ goog.provide('mirosubs.video.YoutubeVideoPlayer');
 /**
  *
  * @param {mirosubs.video.YoutubeVideoSource} videoSource
+ * @param {boolean=} opt_chromeless
  */
-mirosubs.video.YoutubeVideoPlayer = function(videoSource) {
+mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_chromeless) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
     this.playerAPIID_ = [videoSource.getUUID(), 
                          '' + new Date().getTime()].join('');
     this.playerElemID_ = videoSource.getUUID() + "_ytplayer";
     this.eventFunction_ = 'event' + videoSource.getUUID();
+    this.chromeless_ = !!opt_chromeless;
 
     var readyFunc = goog.bind(this.onYouTubePlayerReady_, this);
     var ytReady = "onYouTubePlayerReady";
@@ -49,9 +51,9 @@ mirosubs.video.YoutubeVideoPlayer = function(videoSource) {
     this.commands_ = [];
     this.swfEmbedded_ = false;
     this.progressTimer_ = new goog.Timer(
-        mirosubs.AbstractVideoPlayer.PROGRESS_INTERVAL);
+        mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
-        mirosubs.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+        mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
 };
 goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
@@ -64,11 +66,17 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         this.getElement().appendChild(videoDiv);
         var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
         var atts = { 'id': this.playerElemID_ };
+        var baseURL;
+        if (this.chromeless_)
+            baseURL = 'http://www.youtube.com/apiplayer';
+        else
+            baseURL = ['http://www.youtube.com/v/', 
+                       this.videoSource_.getYoutubeVideoID()].join('');
+        var queryString = 
+            ['?enablejsapi=1&version=3&disablekb=1&playerapiid=', 
+             this.playerAPIID_].join('');
         window["swfobject"]["embedSWF"](
-            ['http://www.youtube.com/v/', 
-             this.videoSource_.getYoutubeVideoID(), 
-             '?enablejsapi=1&disablekb=1&playerapiid=', 
-             this.playerAPIID_].join(''),
+            [baseURL, queryString].join(''),
             videoDiv.id, "480", "360", "8", 
             null, null, params, atts);
     }
@@ -88,16 +96,20 @@ mirosubs.video.YoutubeVideoPlayer.prototype.exitDocument = function() {
 mirosubs.video.YoutubeVideoPlayer.prototype.progressTick_ = function(e) {
     if (this.getDuration() > 0)
         this.dispatchEvent(
-            mirosubs.AbstractVideoPlayer.EventType.PROGRESS);
+            mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
         this.dispatchEvent(
-            mirosubs.AbstractVideoPlayer.EventType.TIMEUPDATE);
+            mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = function(playerAPIID) {
+mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = 
+    function(playerAPIID) 
+{
     if (playerAPIID == this.playerAPIID_) {
         this.player_ = goog.dom.$(this.playerElemID_);
+        if (this.chromeless_)
+            this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());
         goog.array.forEach(this.commands_, function(cmd) { cmd(); });
         window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
         this.player_.addEventListener('onStateChange', this.eventFunction_);
@@ -105,11 +117,11 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = function(pla
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
     if (newState == mirosubs.video.YoutubeVideoPlayer.State_.PLAYING) {
-        this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PLAY);
+        this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
         this.timeUpdateTimer_.start();
     }
     else if (newState == mirosubs.video.YoutubeVideoPlayer.State_.PAUSED) {
-        this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.PAUSE);
+        this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PAUSE);
         this.timeUpdateTimer_.stop();
     }
 };
@@ -117,12 +129,14 @@ mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedLength = function() {
     return this.getDuration() > 0  ? 1 : 0;
 o};
 mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedStart = function(index) {
-    return this.getDuration() * this.getStartBytes_() / this.getBytesTotal_();
+    var startBytes = this.getStartBytes_();
+    return this.getDuration() * startBytes / (startBytes + this.getBytesTotal_());
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedEnd = function(index) {
+    var startBytes = this.getStartBytes_();
     return this.getDuration() * 
-        (this.getStartBytes_() + this.player_['getVideoBytesLoaded']()) /
-        this.getBytesTotal_();
+        (startBytes + this.player_['getVideoBytesLoaded']()) /
+        (startBytes + this.getBytesTotal_());
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getStartBytes_ = function() {
     return this.player_ ? this.player_['getVideoStartBytes']() : 0;
@@ -138,7 +152,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.getVolume = function() {
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.setVolume = function(vol) {
     if (this.player_)
-        this.player_['setVolume'](vol);
+        this.player_['setVolume'](vol * 100);
     else
         this.commands_.push(goog.bind(this.setVolume_, this, vol));
 };

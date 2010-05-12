@@ -56,15 +56,20 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     this.textareaElem_ = null;
     this.keyHandler_ = null;
     this.docClickListener_ = null;
-    this.updateValues();
+    this.updateValues_();
     this.showingTextarea_ = false
     this.editing_ = false;
 };
 mirosubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
     mirosubs.subtitle.SubtitleWidget.superClass_.enterDocument.call(this);
-    this.getHandler().listen(this.titleElem_,
-                             goog.events.EventType.DBLCLICK,
-                             this.doubleClicked_);
+    this.getHandler().listen(
+        this.subtitle_,
+        mirosubs.subtitle.EditableCaption.CHANGE,
+        this.updateValues_);
+    this.getHandler().listen(
+        this.titleElem_,
+        goog.events.EventType.DBLCLICK,
+        this.doubleClicked_);
     if (this.timeSpinner_)
         this.getHandler().listen(
             this.timeSpinner_, 
@@ -93,7 +98,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.setEditing_ = function(editing) {
     this.editingFn_(editing, this);
     this.editing_ = editing;
     if (!editing)
-        this.updateValues();
+        this.updateValues_();
 };
 /**
  *
@@ -145,12 +150,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToView_ = function() {
     this.showingTextarea_ = false;
     this.setEditing_(false);
 };
-/**
- * To be called by SubtitleList whenever it receives notice of a 
- * subtitle being updated.
- *
- */
-mirosubs.subtitle.SubtitleWidget.prototype.updateValues = function() {
+mirosubs.subtitle.SubtitleWidget.prototype.updateValues_ = function() {
     if (this.editing_)
         return;
     if (this.displayTimes_) {

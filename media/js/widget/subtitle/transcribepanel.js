@@ -114,8 +114,8 @@ mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
                              mirosubs.subtitle.TranscribeEntry.NEWTITLE,
                              this.newTitle_);
     this.getHandler().listen(this.videoPlayer_,
-                             mirosubs.AbstractVideoPlayer.EventType.PLAY,
-                             this.videoPlaying_);    
+                             mirosubs.video.AbstractVideoPlayer.EventType.PLAY,
+                             this.videoPlaying_);
     this.listenToRightPanel_();
 };
 mirosubs.subtitle.TranscribePanel.prototype.videoPlaying_ = function(event) {

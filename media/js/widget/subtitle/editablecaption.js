@@ -22,13 +22,14 @@ goog.provide('mirosubs.subtitle.EditableCaption');
  * Don't call this constructor directly. Instead call the factory method in 
  * mirosubs.subtitle.EditableCaptionSet.
  *
- * @param {function(mirosubs.subtitle.EditableCaption)} updateFn Function 
- *     to call when this caption is updated.
- * @param {JSONCaption} opt_jsonCaption optional JSON caption on which 
+ * @param {mirosubs.UnitOfWork=} opt_unitOfWork
+ * @param {JSONCaption=} opt_jsonCaption optional JSON caption on which 
  *     we're operating. Provide this parameter iff the caption exists 
  *     already in the MiroSubs system.
  */
-mirosubs.subtitle.EditableCaption = function(updateFn, opt_jsonCaption) {
+mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_jsonCaption) {
+    goog.events.EventTarget.call(this);
+    this.unitOfWork_ = opt_unitOfWork;
     this.jsonCaption = opt_jsonCaption || 
         { 
             'caption_id' : new Date().getTime(),
@@ -36,10 +37,12 @@ mirosubs.subtitle.EditableCaption = function(updateFn, opt_jsonCaption) {
             'start_time' : -1,
             'end_time' : -1
         };
-    this.updateFn_ = goog.partial(updateFn, this);
     this.previousCaption_ = null;
     this.nextCaption_ = null;
 };
+goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
+
+mirosubs.subtitle.EditableCaption.CHANGE = 'captionchanged';
 
 /**
  * Minimum subtitle length, in seconds.
@@ -69,7 +72,7 @@ mirosubs.subtitle.EditableCaption.prototype.getNextCaption = function() {
 };
 mirosubs.subtitle.EditableCaption.prototype.setText = function(text) {
     this.jsonCaption['caption_text'] = text;
-    this.updateFn_();
+    this.changed_(false);
 };
 mirosubs.subtitle.EditableCaption.prototype.getText = function() {
     return this.jsonCaption['caption_text'];
@@ -79,7 +82,7 @@ mirosubs.subtitle.EditableCaption.prototype.setStartTime =
 {
     var previousStartTime = this.getStartTime();
     this.setStartTime_(startTime);
-    this.updateFn_(previousStartTime == -1);
+    this.changed_(previousStartTime == -1);
 };
 mirosubs.subtitle.EditableCaption.prototype.setStartTime_ = 
     function(startTime) 
@@ -103,7 +106,7 @@ mirosubs.subtitle.EditableCaption.prototype.setEndTime =
     function(endTime) 
 {
     this.setEndTime_(endTime);
-    this.updateFn_();
+    this.changed_(false);
 };
 mirosubs.subtitle.EditableCaption.prototype.setEndTime_ = 
     function(endTime) 
@@ -122,7 +125,7 @@ mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
     if (this.getStartTime() != -1 || this.getEndTime() != -1) {
         this.jsonCaption['start_time'] = -1;
         this.jsonCaption['end_time'] = -1;
-        this.updateFn_();
+        this.changed_(false);
     }
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
@@ -154,4 +157,18 @@ mirosubs.subtitle.EditableCaption.prototype.getCaptionID = function() {
 mirosubs.subtitle.EditableCaption.prototype.isShownAt = function(time) {
     return this.getStartTime() < time && 
         (this.getEndTime() == -1 || time < this.getEndTime());
+};
+
+mirosubs.subtitle.EditableCaption.prototype.changed_ = 
+    function(timesFirstAssigned) 
+{
+    if (this.unitOfWork_)
+        this.unitOfWork_.registerUpdated(this);
+    this.dispatchEvent(
+        new mirosubs.subtitle.EditableCaption.ChangeEvent(
+            timesFirstAssigned));
+};
+mirosubs.subtitle.EditableCaption.ChangeEvent = function(timesFirstAssigned) {
+    this.type = mirosubs.subtitle.EditableCaption.CHANGE;
+    this.timesFirstAssigned = timesFirstAssigned;
 };

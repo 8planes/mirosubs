@@ -57,7 +57,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent)
 };
 mirosubs.video.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;
 mirosubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
-    if (this.isPaused() || this.videoEnded())
+    if (!this.isPlaying())
         this.play();
     else
         this.pause();

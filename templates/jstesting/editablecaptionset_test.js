@@ -7,7 +7,7 @@ var MS_cleared = false;
 var MS_unitOfWork = null;
 
 function MS_updateListener(event) {
-    MS_updatedCaptions.push(event.caption);
+    MS_updatedCaptions.push(event.target);
 }
 function MS_clearListener(event) {
     MS_cleared = true;
@@ -16,15 +16,29 @@ function MS_clearListener(event) {
 function captionJSON(start_time, end_time, caption_id) {
     return {'start_time' : start_time, 'end_time': end_time, 'caption_id': caption_id};
 }
+
+function listenToCaption(editableCaption) {
+    MS_eventHandler.listen(
+        editableCaption,
+        mirosubs.subtitle.EditableCaption.CHANGE,
+        MS_updateListener);
+}
+
+function addNewCaption(set) {
+    var c = set.addNewCaption();
+    listenToCaption(c);
+    return c;
+}
+
 function createSet(existingCaptions) {    
     MS_unitOfWork = new mirosubs.UnitOfWork();
     var captionSet = new mirosubs.subtitle.EditableCaptionSet(
         existingCaptions, MS_unitOfWork);
+    for (var i = 0; i < captionSet.count(); i++)
+        listenToCaption(captionSet.caption(i));
     MS_eventHandler.listen(
-        captionSet, mirosubs.subtitle.EditableCaptionSet.EventType.UPDATED,
-        MS_updateListener);
-    MS_eventHandler.listen(
-        captionSet, mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_ALL,
+        captionSet, 
+        mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
         MS_clearListener);
     return captionSet;
 };
@@ -38,16 +52,16 @@ function tearDown() {
 
 function testBasicAdd() {
     var set = createSet([]);
-    set.addNewCaption();
-    set.addNewCaption();
-    set.addNewCaption();
+    addNewCaption(set);
+    addNewCaption(set);
+    addNewCaption(set);
     assertEquals(3, set.count());
 }
 
 function testBasicSetTime() {
     var set = createSet([]);
-    var caption0 = set.addNewCaption();
-    var caption1 = set.addNewCaption();
+    var caption0 = addNewCaption(set);
+    var caption1 = addNewCaption(set);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     assertEquals(0, MS_updatedCaptions.length);
     caption0.setStartTime(0.3);
@@ -60,8 +74,8 @@ function testBasicSetTime() {
 
 function testSetTimeTooClose() {
     var set = createSet([]);
-    var caption0 = set.addNewCaption();
-    var caption1 = set.addNewCaption();
+    var caption0 = addNewCaption(set);
+    var caption1 = addNewCaption(set);
     var FIRSTTIME = 0.3;
     caption0.setStartTime(FIRSTTIME);
     // imitates hitting spacebar too early in sync view.
@@ -91,9 +105,9 @@ function assertMinMaxTimes(caption, minStart, maxStart, minEnd, maxEnd) {
 function testMinMaxTimes() {
     // set times, make sure min/max times make sense.
     var set = createSet([]);
-    var caption0 = set.addNewCaption();
-    var caption1 = set.addNewCaption();
-    var caption2 = set.addNewCaption();
+    var caption0 = addNewCaption(set);
+    var caption1 = addNewCaption(set);
+    var caption2 = addNewCaption(set);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     
     var T0 = 1.8, T1 = 5.6, T2 = 9.2;

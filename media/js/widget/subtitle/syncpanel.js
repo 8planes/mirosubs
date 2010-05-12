@@ -191,9 +191,9 @@ mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(event) {
-    var editableCaption = jsonCaptionEvent.caption;
+    var editableCaption = event.caption;
     this.subtitleList_.clearActiveWidget();
-    if (jsonCaption != null)
+    if (editableCaption != null)
         this.subtitleList_.setActiveWidget(editableCaption.getCaptionID());
 };
 mirosubs.subtitle.SyncPanel.prototype.disposeInternal = function() {

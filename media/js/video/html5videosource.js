@@ -23,8 +23,22 @@ mirosubs.video.Html5VideoSource = function(videoURL) {
 };
 
 mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
+    return this.createPlayer_(false);
+};
+
+mirosubs.video.Html5VideoSource.prototype.createControlledPlayer = 
+    function() 
+{
+    return new mirosubs.video.ControlledVideoPlayer(
+        this.createPlayer_(true));
+};
+
+mirosubs.video.Html5VideoSource.prototype.createPlayer_ = 
+    function(excludeControls) 
+{
     return new mirosubs.video.Html5VideoPlayer(
-        new mirosubs.video.Html5VideoSource(this.videoURL_));
+        new mirosubs.video.Html5VideoSource(this.videoURL_), 
+        excludeControls);
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {

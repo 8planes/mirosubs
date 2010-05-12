@@ -165,7 +165,6 @@ mirosubs.SliderBase.prototype.handleBeforeDrag_ = function(e) {
             this.minimum_;
     }
     value = goog.math.clamp(value, this.minimum_, this.maximum_);
-    console.log(value);
     this.setCurrentlyInteracting_(true);
     this.setValue(value);
 };

@@ -26,10 +26,20 @@ mirosubs.video.YoutubeVideoSource = function(uuid, youtubeVideoID) {
 mirosubs.video.YoutubeVideoSource.counter_ = 0;
 
 mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
+    return this.createPlayer_(false);
+};
+
+mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer = 
+    function() 
+{
+    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+};
+
+mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(chromeless) {
     return new mirosubs.video.YoutubeVideoPlayer(
         new mirosubs.video.YoutubeVideoSource(
             this.uuid_ + (mirosubs.video.YoutubeVideoSource.counter_++), 
-            this.youtubeVideoID_));
+            this.youtubeVideoID_), chromeless);
 };
 
 mirosubs.video.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
