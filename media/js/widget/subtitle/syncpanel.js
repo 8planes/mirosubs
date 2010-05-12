@@ -22,7 +22,7 @@ goog.provide('mirosubs.subtitle.SyncPanel');
  *
  * @param {mirosubs.subtitle.EditableCaptionSet} subtitles The subtitles 
  *     for the video, so far.
- * @param {mirosubs.AbstractVideoPlayer} videoPlayer
+ * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
  * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles 
  *     with start_time set.
  */
@@ -44,7 +44,6 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
     this.spaceDownSub_ = null;
     this.spaceDownPlayheadTime_ = -1;
     this.spaceDown_ = false;
-    this.focusableElem_ = null;
 };
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 
@@ -52,7 +51,7 @@ mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.SyncPanel.superClass_.enterDocument.call(this);
     var handler = this.getHandler();
     handler.listen(this.captionManager_,
-                   mirosubs.CaptionManager.EventType.CAPTION,
+                   mirosubs.CaptionManager.CAPTION,
                    this.captionReached_);    
     handler.listen(document,
                    goog.events.EventType.KEYDOWN,
@@ -60,12 +59,6 @@ mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     handler.listen(document,
                    goog.events.EventType.KEYUP,
                    this.handleKeyUp_);
-    var that = this;
-    handler.listen(this.videoPlayer_,
-                   mirosubs.AbstractVideoPlayer.EventType.PLAY,
-                   function(event) {
-                       that.focusableElem_.focus();
-                   });
 };
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);
@@ -78,7 +71,6 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
 mirosubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
     if (!this.rightPanel_) {
         this.rightPanel_ = this.createRightPanelInternal();
-        this.focusableElem_ = this.rightPanel_.getDoneAnchor();
         this.getHandler().listen(this.rightPanel_, 
                                  mirosubs.RightPanel.EventType.LEGENDKEY,
                                  this.handleLegendKeyPress_);
@@ -198,11 +190,11 @@ mirosubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
 mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
-mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(jsonCaptionEvent) {
-    var jsonCaption = jsonCaptionEvent.caption;
+mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(event) {
+    var editableCaption = jsonCaptionEvent.caption;
     this.subtitleList_.clearActiveWidget();
     if (jsonCaption != null)
-        this.subtitleList_.setActiveWidget(jsonCaption['caption_id']);
+        this.subtitleList_.setActiveWidget(editableCaption.getCaptionID());
 };
 mirosubs.subtitle.SyncPanel.prototype.disposeInternal = function() {
     mirosubs.subtitle.SyncPanel.superClass_.disposeInternal.call(this);

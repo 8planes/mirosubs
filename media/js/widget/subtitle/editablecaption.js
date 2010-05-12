@@ -40,6 +40,7 @@ mirosubs.subtitle.EditableCaption = function(updateFn, opt_jsonCaption) {
     this.previousCaption_ = null;
     this.nextCaption_ = null;
 };
+
 /**
  * Minimum subtitle length, in seconds.
  */
@@ -85,14 +86,14 @@ mirosubs.subtitle.EditableCaption.prototype.setStartTime_ =
 {
     startTime = Math.max(startTime, this.getMinStartTime());
     this.jsonCaption['start_time'] = startTime;
-    if (this.getEndTime() == -1)
-        this.setEndTime_(99999);
-    if (this.getEndTime() < startTime + 
+    if (this.getEndTime() != -1 && 
+        this.getEndTime() < startTime + 
         mirosubs.subtitle.EditableCaption.MIN_LENGTH)
         this.setEndTime_(
             startTime + mirosubs.subtitle.EditableCaption.MIN_LENGTH);
     if (this.previousCaption_ &&
-        this.previousCaption_.getEndTime() > startTime)
+        (this.previousCaption_.getEndTime() == -1 ||
+         this.previousCaption_.getEndTime() > startTime))
         this.previousCaption_.setEndTime(startTime);
 };
 mirosubs.subtitle.EditableCaption.prototype.getStartTime = function() {
@@ -133,7 +134,11 @@ mirosubs.subtitle.EditableCaption.prototype.getMinStartTime = function() {
          mirosubs.subtitle.EditableCaption.MIN_LENGTH) : 0;
 };
 mirosubs.subtitle.EditableCaption.prototype.getMaxStartTime = function() {
-    return this.getEndTime() - mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    if (this.getEndTime() == -1)
+        return 99999;
+    else
+        return this.getEndTime() - 
+            mirosubs.subtitle.EditableCaption.MIN_LENGTH;
 };
 mirosubs.subtitle.EditableCaption.prototype.getMinEndTime = function() {
     return this.getStartTime() + mirosubs.subtitle.EditableCaption.MIN_LENGTH;
@@ -147,5 +152,6 @@ mirosubs.subtitle.EditableCaption.prototype.getCaptionID = function() {
     return this.jsonCaption['caption_id'];
 };
 mirosubs.subtitle.EditableCaption.prototype.isShownAt = function(time) {
-    return this.getStartTime() < time && time < this.getEndTime();
+    return this.getStartTime() < time && 
+        (this.getEndTime() == -1 || time < this.getEndTime());
 };

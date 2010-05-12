@@ -19,7 +19,7 @@ function captionJSON(start_time, end_time, caption_id) {
 function createSet(existingCaptions) {    
     MS_unitOfWork = new mirosubs.UnitOfWork();
     var captionSet = new mirosubs.subtitle.EditableCaptionSet(
-        MS_unitOfWork, existingCaptions);
+        existingCaptions, MS_unitOfWork);
     MS_eventHandler.listen(
         captionSet, mirosubs.subtitle.EditableCaptionSet.EventType.UPDATED,
         MS_updateListener);
@@ -53,7 +53,7 @@ function testBasicSetTime() {
     caption0.setStartTime(0.3);
     assertEquals(1, MS_updatedCaptions.length);
     assertEquals(0.3, caption0.getStartTime());
-    assertTrue(caption0.getEndTime() >= 9999);
+    assertTrue(caption0.getEndTime() == -1);
     assertEquals(-1, caption1.getStartTime());
     assertEquals(caption0, MS_updatedCaptions[0]);
 }
@@ -71,7 +71,7 @@ function testSetTimeTooClose() {
     assertEquals(FIRSTTIME + mirosubs.subtitle.EditableCaption.MIN_LENGTH,
                  caption0.getEndTime());
     assertEquals(caption0.getEndTime(), caption1.getStartTime());
-    assertTrue(caption1.getEndTime() >= 9999);
+    assertTrue(caption1.getEndTime() == -1);
     assertEquals(3, MS_updatedCaptions.length);
 }
 
@@ -122,7 +122,7 @@ function testExistingCaptions() {
     var set = createSet([
         captionJSON(T0, T1, 1),
         captionJSON(T1, T2, 2), 
-        captionJSON(T2, 99999, 3)]);
+        captionJSON(T2, -1, 3)]);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     assertMinMaxTimes(set.caption(0), 0, T1 - minLength, 
                       T0 + minLength, T2 - minLength);

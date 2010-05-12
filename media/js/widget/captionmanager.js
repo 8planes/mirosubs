@@ -21,7 +21,7 @@ goog.provide('mirosubs.CaptionManager');
 /**
  * Constructor.
  *
- * @param {mirosubs.AbstractVideoPlayer} videoPlayer
+ * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
  * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
  */
 mirosubs.CaptionManager = function(videoPlayer, captionSet) {
@@ -42,7 +42,7 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     this.eventHandler_ = new goog.events.EventHandler(this);
     this.eventHandler_.listen(
 	videoPlayer,
-	mirosubs.AbstractVideoPlayer.EventType.TIMEUPDATE,
+	mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
 	this.timeUpdate_);
     this.eventHandler_.listen(
 	captionSet,

@@ -25,7 +25,7 @@ goog.provide('mirosubs.testing.StubVideoPlayer');
  */
 
 mirosubs.testing.StubVideoPlayer = function() {
-    mirosubs.AbstractVideoPlayer.call(this);
+    mirosubs.video.AbstractVideoPlayer.call(this);
     /**
      * Can be set to artificial values for the purpose of unit 
      * testing components.
@@ -33,7 +33,8 @@ mirosubs.testing.StubVideoPlayer = function() {
     this.playheadTime = 0;
     this.playing = false;
 };
-goog.inherits(mirosubs.testing.StubVideoPlayer, mirosubs.AbstractVideoPlayer);
+goog.inherits(mirosubs.testing.StubVideoPlayer, 
+              mirosubs.video.AbstractVideoPlayer);
 
 mirosubs.testing.StubVideoPlayer.prototype.getPlayheadTime = function() {
     return this.playheadTime;
@@ -45,5 +46,5 @@ mirosubs.testing.StubVideoPlayer.prototype.isPlaying = function() {
     return this.playing;
 };
 mirosubs.testing.StubVideoPlayer.prototype.dispatchTimeUpdate = function() {
-    this.dispatchEvent(mirosubs.AbstractVideoPlayer.EventType.TIMEUPDATE);
+    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };

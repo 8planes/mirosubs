@@ -79,21 +79,15 @@ mirosubs.controls.ProgressBar.prototype.progressSliderUpdate_ =
 mirosubs.controls.ProgressBar.prototype.setVideoPlayheadTime_ = 
     function(progValue) 
 {
-    if (this.videoDuration_ == 0) {
-        this.videoDuration_ = this.videoPlayer_.getDuration();
-        if (this.videoDuration_ == 0)
-            return;
-    }
+    if (!this.hasDuration_())
+        return;
     this.videoPlayer_.setPlayheadTime(
         this.videoDuration_ * progValue / 100);    
 };
 
 mirosubs.controls.ProgressBar.prototype.videoTimeUpdate_ = function(event) {
-    if (this.videoDuration_ == 0) {
-        this.videoDuration_ = this.videoPlayer_.getDuration();
-        if (this.videoDuration_ == 0)
-            return;
-    }
+    if (!this.hasDuration_())
+        return;
     if (!this.progressSlider_.isCurrentlyInteracting()) {
         this.progressSlider_.setValue(
             100 * this.videoPlayer_.getPlayheadTime() / this.videoDuration_, 
@@ -102,7 +96,14 @@ mirosubs.controls.ProgressBar.prototype.videoTimeUpdate_ = function(event) {
             this.videoPlayer_.getPlayheadTime() / this.videoDuration_);
     }
 };
-
+mirosubs.controls.ProgressBar.prototype.hasDuration_ = function() {
+    if (this.videoDuration_ == 0) {
+        this.videoDuration_ = this.videoPlayer_.getDuration();
+        if (this.videoDuration_ == 0)
+            return false;
+    }
+    return true;
+};
 mirosubs.controls.ProgressBar.prototype.updatePlayedBar_ = function(ratio) {
     if (this.barWidth_) {
         this.played_.getElement().style.width = 
