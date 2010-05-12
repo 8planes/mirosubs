@@ -16,7 +16,7 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.AbstractVideoPlayer');
+goog.provide('mirosubs.video.AbstractVideoPlayer');
 
 /**
  * Abstract base class for video player implementations. Any video player 
@@ -24,85 +24,85 @@ goog.provide('mirosubs.AbstractVideoPlayer');
  * class.
  * @constructor
  */
-mirosubs.AbstractVideoPlayer = function(videoSource) {
+mirosubs.video.AbstractVideoPlayer = function(videoSource) {
     goog.ui.Component.call(this);
     this.videoSource_ = videoSource;
 };
-goog.inherits(mirosubs.AbstractVideoPlayer, goog.ui.Component);
-mirosubs.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
-mirosubs.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
+goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
+mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
+mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
-mirosubs.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
+mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
 };
-mirosubs.AbstractVideoPlayer.prototype.createDom = function() {
-    mirosubs.AbstractVideoPlayer.superClass_.createDom.call(this);
+mirosubs.video.AbstractVideoPlayer.prototype.createDom = function() {
+    mirosubs.video.AbstractVideoPlayer.superClass_.createDom.call(this);
     this.getElement().className = 'mirosubs-videoDiv';
 };
-mirosubs.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.isPlaying = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.videoEnded = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.play = function(opt_suppressEvent) {
+mirosubs.video.AbstractVideoPlayer.prototype.isPaused = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.isPlaying = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.videoEnded = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.play = function(opt_suppressEvent) {
     if (!opt_suppressEvent)
         this.dispatchEvent(
-            mirosubs.AbstractVideoPlayer.EventType.PLAY_CALLED);
+            mirosubs.video.AbstractVideoPlayer.EventType.PLAY_CALLED);
     this.playInternal();
 };
-mirosubs.AbstractVideoPlayer.prototype.playInternal = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent) {
+mirosubs.video.AbstractVideoPlayer.prototype.playInternal = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent) {
     if (!opt_suppressEvent)
         this.dispatchEvent(
-            mirosubs.AbstractVideoPlayer.EventType.PAUSE_CALLED);
+            mirosubs.video.AbstractVideoPlayer.EventType.PAUSE_CALLED);
     this.pauseInternal();
 };
-mirosubs.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;
-mirosubs.AbstractVideoPlayer.prototype.togglePause = function() {
+mirosubs.video.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
     if (this.isPaused() || this.videoEnded())
         this.play();
     else
         this.pause();
 };
-mirosubs.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
 /**
  * @returns {number} video duration in seconds. Returns 0 if duration isn't
  *     available yet.
  */
-mirosubs.AbstractVideoPlayer.prototype.getDuration = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.getDuration = goog.abstractMethod;
 /**
  * @returns {int} Number of buffered ranges.
  */
-mirosubs.AbstractVideoPlayer.prototype.getBufferedLength = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.getBufferedLength = goog.abstractMethod;
 /**
  * @returns {number} Start of buffered range with index
  */
-mirosubs.AbstractVideoPlayer.prototype.getBufferedStart = function(index) {
+mirosubs.video.AbstractVideoPlayer.prototype.getBufferedStart = function(index) {
     goog.abstractMethod();
 };
-mirosubs.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
+mirosubs.video.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
     goog.abstractMethod();
 };
 /**
  * @returns {number} 0.0 to 1.0
  */
-mirosubs.AbstractVideoPlayer.prototype.getVolume = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.getVolume = goog.abstractMethod;
 /**
  * 
  * @param {number} volume A number between 0.0 and 1.0
  */
-mirosubs.AbstractVideoPlayer.prototype.setVolume = function(volume) {
+mirosubs.video.AbstractVideoPlayer.prototype.setVolume = function(volume) {
     goog.abstractMethod();
 };
-mirosubs.AbstractVideoPlayer.prototype.getVideoSource = function() {
+mirosubs.video.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };
-mirosubs.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
+mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     goog.abstractMethod();
 };
 /**
  *
  * @param {String} text Caption text to display in video. null for blank.
  */
-mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
+mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
     if (text == null || text == "") {
         if (this.captionElem_ != null) {
             this.getElement().removeChild(this.captionElem_);
@@ -150,7 +150,7 @@ mirosubs.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
  * certain browsers (e.g. flash on linux/ff)
  * @protected
  */
-mirosubs.AbstractVideoPlayer.prototype.needsIFrame = function() {
+mirosubs.video.AbstractVideoPlayer.prototype.needsIFrame = function() {
     return false;
 };
 /**
@@ -158,13 +158,13 @@ mirosubs.AbstractVideoPlayer.prototype.needsIFrame = function() {
  * @protected
  * @return {goog.math.Size} size of the video
  */
-mirosubs.AbstractVideoPlayer.prototype.getVideoSize = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.getVideoSize = goog.abstractMethod;
 
 /**
  * Video player events
  * @enum {string}
  */
-mirosubs.AbstractVideoPlayer.EventType = {
+mirosubs.video.AbstractVideoPlayer.EventType = {
     /** dispatched when playback starts or resumes. */
     PLAY : 'videoplay',
     PLAY_CALLED : 'videoplaycalled',

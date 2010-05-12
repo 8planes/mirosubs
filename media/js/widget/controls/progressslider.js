@@ -20,6 +20,7 @@ goog.provide('mirosubs.controls.ProgressSlider');
 
 mirosubs.controls.ProgressSlider = function(opt_domHelper) {
     mirosubs.SliderBase.call(this, opt_domHelper);
+    this.setClickToMove(false);
 };
 goog.inherits(mirosubs.controls.ProgressSlider, mirosubs.SliderBase);
 

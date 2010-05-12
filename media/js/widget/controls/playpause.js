@@ -38,11 +38,11 @@ mirosubs.controls.PlayPause.prototype.enterDocument = function() {
     mirosubs.controls.PlayPause.superClass_.enterDocument.call(this);
     this.getHandler().listen(
         this.videoPlayer_,
-        mirosubs.AbstractVideoPlayer.EventType.PLAY_CALLED,
+        mirosubs.video.AbstractVideoPlayer.EventType.PLAY_CALLED,
         this.setPlaying_);
     this.getHandler().listen(
         this.videoPlayer_,
-        mirosubs.AbstractVideoPlayer.EventType.PAUSE_CALLED,
+        mirosubs.video.AbstractVideoPlayer.EventType.PAUSE_CALLED,
         this.setPaused_);
     this.getHandler().listen(
         this.getElement(), 'click',

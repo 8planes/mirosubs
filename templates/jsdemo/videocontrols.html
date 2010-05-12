@@ -8,8 +8,8 @@
 <script type="text/javascript">
   var container = new goog.ui.Component();
   container.decorate(goog.dom.$('video'));
-  var player = new mirosubs.Html5VideoPlayer(
-      new mirosubs.Html5VideoSource(
+  var player = new mirosubs.video.Html5VideoPlayer(
+      new mirosubs.video.Html5VideoSource(
           'http://videos.mozilla.org/firefox3/switch/switch.ogg'));
   container.addChild(player, true);
   var controls = new mirosubs.controls.VideoControls(player);

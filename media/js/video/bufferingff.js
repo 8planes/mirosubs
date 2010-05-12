@@ -16,26 +16,9 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.YoutubeVideoSource');
+goog.provide('mirosubs.video.BufferingFF');
 
-mirosubs.YoutubeVideoSource = function(uuid, youtubeVideoID) {
-    this.uuid_ = uuid;
-    this.youtubeVideoID_ = youtubeVideoID;
-};
-
-mirosubs.YoutubeVideoSource.counter_ = 0;
-
-mirosubs.YoutubeVideoSource.prototype.createPlayer = function() {
-    return new mirosubs.YoutubeVideoPlayer(
-        new mirosubs.YoutubeVideoSource(
-            this.uuid_ + (mirosubs.YoutubeVideoSource.counter_++), 
-            this.youtubeVideoID_));
-};
-
-mirosubs.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
-    return this.youtubeVideoID_;
-};
-
-mirosubs.YoutubeVideoSource.prototype.getUUID = function() {
-    return this.uuid_;
+mirosubs.video.BufferingFF = function(videoElem) {
+    this.videoElem_ = videoElem;
+    this.videoElem_
 };

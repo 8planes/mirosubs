@@ -16,17 +16,20 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.Html5VideoSource');
+/**
+ * @fileoverview An interface for a video source
+ *
+ */
 
-mirosubs.Html5VideoSource = function(videoURL) {
-    this.videoURL_ = videoURL;
-};
+goog.provide('mirosubs.video.VideoSource');
 
-mirosubs.Html5VideoSource.prototype.createPlayer = function() {
-    return new mirosubs.Html5VideoPlayer(
-        new mirosubs.Html5VideoSource(this.videoURL_));
-};
+/**
+ *
+ * @interface
+ */
+mirosubs.video.VideoSource = function() {};
 
-mirosubs.Html5VideoSource.prototype.getVideoURL = function() {
-    return this.videoURL_;
-};
+/**
+ * @return {mirosubs.video.AbstractVideoPlayer} 
+ */
+mirosubs.prototype.createPlayer = function() {};

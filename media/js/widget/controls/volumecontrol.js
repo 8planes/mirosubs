@@ -31,8 +31,6 @@ mirosubs.controls.VolumeControl.prototype.createDom = function() {
     var el = $d('span', 'mirosubs-volume');
     this.setElementInternal(el);
     this.volumeButton_ = $d('span');
-    goog.dom.a11y.setRole(
-        this.volumeButton_, goog.dom.a11y.Role.BUTTON);
     this.getElement().appendChild(this.volumeButton_);
     this.volumeSliderContainer_ = new goog.ui.Component();
     this.volumeSlider_ = new mirosubs.controls.VolumeSlider();
@@ -51,9 +49,6 @@ mirosubs.controls.VolumeControl.prototype.enterDocument = function() {
         listen(
             this.volumeSlider_, mirosubs.SliderBase.EventType.STOP,
             this.sliderStopInteracting_).
-        listen(
-            this.volumeButton_, 'click', 
-            this.volumeClicked_).
         listen(this.getElement(), 'mouseout', this.onMouseOut_).
         listen(this.getElement(), 'mouseover', this.onMouseOver_);
 };
@@ -77,19 +72,22 @@ mirosubs.controls.VolumeControl.prototype.sliderStopInteracting_ =
 
 mirosubs.controls.VolumeControl.prototype.onMouseOver_ = function(event) {
     this.isMouseOver_ = true;
+    this.extendVolumeSlider_();
 };
 
 mirosubs.controls.VolumeControl.prototype.volumeSliderUpdate_ = function(e) {
     this.videoPlayer_.setVolume(this.volumeSlider_.getValue() / 100);
 };
 
-mirosubs.controls.VolumeControl.prototype.volumeClicked_ = function(e) {
+mirosubs.controls.VolumeControl.prototype.extendVolumeSlider_ = function(e) {
+    if (this.volumeControlExtended_)
+        return;
+    this.volumeControlExtended_ = true;
     this.volumeSlider_.setValue(this.videoPlayer_.getVolume() * 100);
     var animation = new goog.fx.dom.ResizeHeight(
         this.volumeSliderContainer_.getElement(),
         0, 100, 100);
     animation.play(false);
-    this.volumeControlExtended_ = true;
 };
 
 mirosubs.controls.VolumeControl.prototype.retractVolumeSlider_ = function() {

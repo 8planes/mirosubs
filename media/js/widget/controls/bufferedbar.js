@@ -34,7 +34,7 @@ mirosubs.controls.BufferedBar.prototype.createDom = function() {
 mirosubs.controls.BufferedBar.prototype.enterDocument = function() {
     mirosubs.controls.BufferedBar.superClass_.enterDocument.call(this);
     this.getHandler().listen(this.videoPlayer_,
-			     mirosubs.AbstractVideoPlayer.EventType.PROGRESS,
+			     mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS,
 			     this.onVideoProgress_);
     var size = goog.style.getSize(this.getElement());
     this.width_ = size.width;

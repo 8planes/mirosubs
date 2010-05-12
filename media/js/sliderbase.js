@@ -36,7 +36,9 @@ goog.inherits(mirosubs.SliderBase, goog.ui.Component);
 
 mirosubs.SliderBase.EventType = {
     START : 'startinteraction',
-    STOP : 'stopinteraction'
+    STOP : 'stopinteraction',
+    /** Means the progress bar track was clicked. */
+    TRACK_CLICKED : 'trackclicked'
 };
 
 mirosubs.SliderBase.Orientation = {
@@ -71,6 +73,8 @@ mirosubs.SliderBase.prototype.minimum_ = 0;
 mirosubs.SliderBase.prototype.maximum_ = 100;
 
 mirosubs.SliderBase.prototype.currentlyInteracting_ = false;
+
+mirosubs.SliderBase.prototype.clickToMove_ = true;
 
 /**
  * The Dragger for dragging the thumb.
@@ -149,18 +153,19 @@ mirosubs.SliderBase.prototype.enterDocument = function() {
 mirosubs.SliderBase.prototype.handleBeforeDrag_ = function(e) {
     var value;
     if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
-        var availHeight = this.getElement().clientHeight - 
-            this.thumb.offsetHeight;
-        value = (availHeight - e.top) / availHeight *
+        var availHeight = this.getElement().clientHeight;
+        value = (availHeight - (e.top + this.thumb.offsetHeight / 2)) / 
+            availHeight *
             (this.maximum_ - this.minimum_) + this.minimum_;
     } 
     else {
-        var availWidth = this.getElement().clientWidth - 
-            this.thumb.offsetWidth;
-        value = (e.left / availWidth) * (this.maximum_ - this.minimum_) +
+        var availWidth = this.getElement().clientWidth;
+        value = ((e.left + this.thumb.offsetWidth / 2) / availWidth) * 
+            (this.maximum_ - this.minimum_) +
             this.minimum_;
     }
     value = goog.math.clamp(value, this.minimum_, this.maximum_);
+    console.log(value);
     this.setCurrentlyInteracting_(true);
     this.setValue(value);
 };
@@ -192,8 +197,14 @@ mirosubs.SliderBase.prototype.handleMouseDown_ = function(e) {
     // Known Element.
     var target = /** @type {Element} */ (e.target);
 
-    if (!goog.dom.contains(this.thumb, target))
-        this.animatedSetValue_(this.getValueFromMousePosition_(e));
+    if (!goog.dom.contains(this.thumb, target)) {
+        if (this.clickToMove_)
+            this.animatedSetValue_(this.getValueFromMousePosition_(e));
+        else
+            this.dispatchEvent(
+                new mirosubs.SliderBase.TrackClickEvent(
+                    this.getValueFromMousePosition_(e)));
+    }
 };
 
 /**
@@ -228,15 +239,13 @@ mirosubs.SliderBase.prototype.storeMousePos_ = function(e) {
  */
 mirosubs.SliderBase.prototype.getValueFromMousePosition_ = function(e) {
     if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
-        var thumbH = this.thumb.offsetHeight;
-        var availH = this.getElement().clientHeight - thumbH;
-        var y = this.getRelativeMousePos_(e) - thumbH / 2;
+        var availH = this.getElement().clientHeight;
+        var y = this.getRelativeMousePos_(e);
         return (this.maximum_ - this.minimum_) * 
             (availH - y) / availH + this.minimum_;
     } else {
-        var thumbW = this.thumb.offsetWidth;
-        var availW = this.getElement().clientWidth - thumbW;
-        var x = this.getRelativeMousePos_(e) - thumbW / 2;
+        var availW = this.getElement().clientWidth;
+        var x = this.getRelativeMousePos_(e);
         return (this.maximum_ - this.minimum_) * 
             x / availW + this.minimum_;
     }
@@ -292,13 +301,13 @@ mirosubs.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
         
         if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
             var thumbHeight = this.thumb.offsetHeight;
-            var h = this.getElement().clientHeight - thumbHeight;
+            var h = this.getElement().clientHeight;
             var bottom = Math.round(ratio * h);
-            coord.y = h - bottom;
+            coord.y = h - bottom - thumbHeight / 2;
         } else {
-            var w = this.getElement().clientWidth - this.thumb.offsetWidth;
+            var w = this.getElement().clientWidth;
             var left = Math.round(ratio * w);
-            coord.x = left;
+            coord.x = left - this.thumb.offsetWidth / 2;
         }
     }
     return coord;
@@ -390,6 +399,10 @@ mirosubs.SliderBase.prototype.setAriaRoles = function() {
     this.updateAriaStates();
 };
 
+mirosubs.SliderBase.prototype.setClickToMove = function(clickToMove) {
+    this.clickToMove_ = clickToMove;
+};
+
 /**
  * Set a11y roles and state when values change.
  * @protected
@@ -407,4 +420,9 @@ mirosubs.SliderBase.prototype.updateAriaStates = function() {
                                goog.dom.a11y.State.VALUENOW,
                                this.value_);
     }
+};
+
+mirosubs.SliderBase.TrackClickEvent = function(value) {
+    this.type = mirosubs.SliderBase.EventType.TRACK_CLICKED;
+    this.value = value;
 };

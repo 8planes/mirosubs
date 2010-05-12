@@ -16,20 +16,26 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-/**
- * @fileoverview An interface for a video source
- *
- */
+goog.provide('mirosubs.video.YoutubeVideoSource');
 
-goog.provide('mirosubs.VideoSource');
+mirosubs.video.YoutubeVideoSource = function(uuid, youtubeVideoID) {
+    this.uuid_ = uuid;
+    this.youtubeVideoID_ = youtubeVideoID;
+};
 
-/**
- *
- * @interface
- */
-mirosubs.VideoSource = function() {};
+mirosubs.video.YoutubeVideoSource.counter_ = 0;
 
-/**
- * @return {mirosubs.AbstractVideoPlayer} 
- */
-mirosubs.prototype.createPlayer = function() {};
+mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
+    return new mirosubs.video.YoutubeVideoPlayer(
+        new mirosubs.video.YoutubeVideoSource(
+            this.uuid_ + (mirosubs.video.YoutubeVideoSource.counter_++), 
+            this.youtubeVideoID_));
+};
+
+mirosubs.video.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
+    return this.youtubeVideoID_;
+};
+
+mirosubs.video.YoutubeVideoSource.prototype.getUUID = function() {
+    return this.uuid_;
+};

@@ -1524,7 +1524,7 @@ cursor: pointer;
    border: 1px solid;
   padding: 7px;
   position: absolute;
-  left: 0;
+  left: -7px;
   border-top: 1px solid #666;
   border-right: 1px solid #333;
   border-bottom: 1px solid #333;
@@ -1581,19 +1581,17 @@ margin: 9px;
     position: absolute;
 }
 
-.mirosubs-progress .mirosubs-played{
-width: 10px;
-height: 8px;
-
-float: left;
-    -moz-border-radius: 5px;
-
-    -webkit-border-radius: 5px; 
-width: 110px;
-border: 1px solid #a6dd13;
-border-top: 1px solid #c5ff27;
-border-bottom: 1px solid #7ba115;
-background: #a6dd13 url("../images/gradient.png") 0 0px repeat-x ;
+.mirosubs-progress .mirosubs-played {
+   width: 10px;
+   height: 8px;
+   position: absolute;
+   -moz-border-radius: 5px;
+   -webkit-border-radius: 5px; 
+   width: 0;
+   border: 1px solid #a6dd13;
+   border-top: 1px solid #c5ff27;
+   border-bottom: 1px solid #7ba115;
+   background: #a6dd13 url("../images/gradient.png") 0 0px repeat-x ;
 }
 
 /* ////////////////////

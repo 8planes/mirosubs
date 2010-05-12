@@ -38,9 +38,10 @@ mirosubs.controls.TimeSpan.prototype.enterDocument = function() {
     // TODO: alternative here is to set a 1-second interval timer and 
     // query playheadTime on each tick. Decide if that has better 
     // performance.
-    this.getHandler().listen(this.videoPlayer_,
-                             mirosubs.AbstractVideoPlayer.EventType.TIMEUPDATE,
-                             this.videoTimeUpdate_);
+    this.getHandler().listen(
+        this.videoPlayer_,
+        mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+        this.videoTimeUpdate_);
 };
 mirosubs.controls.TimeSpan.prototype.videoTimeUpdate_ = function() {
     if (~~this.videoPlayer_.getPlayheadTime() != this.currentlyDisplayedSecond_) {
