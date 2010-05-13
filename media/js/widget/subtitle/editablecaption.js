@@ -155,7 +155,7 @@ mirosubs.subtitle.EditableCaption.prototype.getCaptionID = function() {
     return this.jsonCaption['caption_id'];
 };
 mirosubs.subtitle.EditableCaption.prototype.isShownAt = function(time) {
-    return this.getStartTime() < time && 
+    return this.getStartTime() <= time && 
         (this.getEndTime() == -1 || time < this.getEndTime());
 };
 

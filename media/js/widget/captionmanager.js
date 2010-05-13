@@ -35,6 +35,7 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     this.captionCompare_ = function(a, b) {
         return a.getStartTime() - b.getStartTime();
     };
+    goog.array.sort(this.captions_, this.captionCompare_);
     this.binaryCompare_ = function(time, caption) {
 	return time - caption.getStartTime();
     };
@@ -128,7 +129,6 @@ mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
     if (this.eventsDisabled_)
         return;
     this.lastCaptionDispatched_ = caption;
-    console.log('dispatching caption event');
     this.dispatchEvent(new mirosubs.CaptionManager.CaptionEvent(caption));
 };
 

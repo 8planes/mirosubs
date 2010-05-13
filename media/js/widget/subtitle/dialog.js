@@ -62,7 +62,6 @@ mirosubs.subtitle.Dialog.State_ = {
     FINISHED: 3
 };
 mirosubs.subtitle.Dialog.prototype.captionReached_ = function(event) {
-    console.log('caption reached');
     var c = event.caption;
     this.getVideoPlayerInternal().showCaptionText(c ? c.getText() : '');
 };
