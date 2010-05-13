@@ -23,6 +23,7 @@ mirosubs.controls.BufferedBar = function(videoPlayer) {
     this.bufferedRangeDivs_ = [];
     this.videoPlayer_ = videoPlayer;
     this.videoDuration_ = 0;
+    this.width_ = 0;
 };
 goog.inherits(mirosubs.controls.BufferedBar, goog.ui.Component);
 
@@ -36,16 +37,30 @@ mirosubs.controls.BufferedBar.prototype.enterDocument = function() {
     this.getHandler().listen(this.videoPlayer_,
 			     mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS,
 			     this.onVideoProgress_);
-    var size = goog.style.getSize(this.getElement());
-    this.width_ = size.width;
 };
 
-mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
+mirosubs.controls.BufferedBar.prototype.hasWidth_ = function() {
+    if (this.width_ == 0) {
+        var size = goog.style.getSize(this.getElement());
+        this.width_ = size.width;
+        if (this.width_ == 0)
+            return false;
+    }
+    return true;
+};
+
+mirosubs.controls.BufferedBar.prototype.hasDuration_ = function() {
     if (this.videoDuration_ == 0) {
 	this.videoDuration_ = this.videoPlayer_.getDuration();
 	if (this.videoDuration_ == 0) 
-            return;
+            return false;
     }
+    return true;
+};
+
+mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
+    if (!this.hasWidth_() || !this.hasDuration_())
+        return;
     if (this.bufferedRangeDivs_.length != 
 	this.videoPlayer_.getBufferedLength())
     {

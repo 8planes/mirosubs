@@ -41,8 +41,6 @@ mirosubs.controls.ProgressBar.prototype.createDom = function() {
 mirosubs.controls.ProgressBar.prototype.enterDocument = function() {
     mirosubs.controls.ProgressBar.superClass_.enterDocument.call(this);
     var et = mirosubs.video.AbstractVideoPlayer.EventType;
-    var barSize = goog.style.getSize(this.bufferedBar_.getElement());
-    this.barWidth_ = barSize.width;
     this.getHandler().listen(
         this.videoPlayer_, et.TIMEUPDATE, this.videoTimeUpdate_).
     listen(
@@ -105,6 +103,10 @@ mirosubs.controls.ProgressBar.prototype.hasDuration_ = function() {
     return true;
 };
 mirosubs.controls.ProgressBar.prototype.updatePlayedBar_ = function(ratio) {
+    if (!this.barWidth_ && this.bufferedBar_) {
+        var barSize = goog.style.getSize(this.bufferedBar_.getElement());
+        this.barWidth_ = barSize.width;
+    }
     if (this.barWidth_) {
         this.played_.getElement().style.width = 
             (this.barWidth_ * ratio) + 'px';
