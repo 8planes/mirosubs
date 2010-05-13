@@ -34,20 +34,10 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
      * @type {Array.<mirosubs.subtitle.EditableCaption>}
      */
     this.captionSet_ = 
-        new mirosubs.subtitle.EditableCaptionSet(uw, existingCaptions);
+        new mirosubs.subtitle.EditableCaptionSet(existingCaptions, uw);
     this.captionManager_ = 
-        new mirosubs.CaptionManager(goog.bind(this.getPlayheadTime_, this));
-    var captionsWithTimes = goog.array.filter(
-        existingCaptions, function(c) { return c['start_time'] != -1; });
-    this.captionManager_.addCaptions(captionsWithTimes);
-    goog.events.listen(
-        this.captionSet_,
-        mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_ALL,
-        this.captionManager_.removeAll, false, this.captionManager_);
-    goog.events.listen(
-        this.captionSet_,
-        mirosubs.subtitle.EditableCaptionSet.EventType.UPDATED,
-        this.captionManager_.captionUpdated, false, this.captionManager_);
+        new mirosubs.CaptionManager(
+            this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
     this.serverModel_.init(uw, goog.bind(this.showLoginNag_, this));
     /**
@@ -71,22 +61,24 @@ mirosubs.subtitle.Dialog.State_ = {
     REVIEW: 2,
     FINISHED: 3
 };
-mirosubs.subtitle.Dialog.prototype.captionReached_ = function(jsonCaptionEvent) {
-    var c = jsonCaptionEvent.caption;
-    this.getVideoPlayerInternal().showCaptionText(c ? c['caption_text'] : '');
+mirosubs.subtitle.Dialog.prototype.captionReached_ = function(event) {
+    var c = event.caption;
+    this.getVideoPlayerInternal().showCaptionText(c ? c.getText() : '');
 };
 mirosubs.subtitle.Dialog.prototype.createDom = function() {
-   mirosubs.subtitle.Dialog.superClass_.createDom.call(this);
+    mirosubs.subtitle.Dialog.superClass_.createDom.call(this);
     this.setState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
 };
 mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
     mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
-    this.getHandler().listen(document,
-                             goog.events.EventType.KEYDOWN,
-                             this.handleKeyDown_);
-    this.getHandler().listen(this.captionManager_,
-                             mirosubs.CaptionManager.EventType.CAPTION,
-                             this.captionReached_);
+    this.getHandler().listen(
+        document,
+        goog.events.EventType.KEYDOWN,
+        this.handleKeyDown_);
+    this.getHandler().listen(
+        this.captionManager_,
+        mirosubs.CaptionManager.CAPTION,
+        this.captionReached_);
 };
 mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.state_ = state;
@@ -208,10 +200,6 @@ mirosubs.subtitle.Dialog.prototype.nextState_ = function() {
         return s.REVIEW;
     else if (this.state_ == s.REVIEW)
         return s.FINISHED;
-};
-mirosubs.subtitle.Dialog.prototype.getPlayheadTime_ = function() {
-    var vp = this.getVideoPlayerInternal();
-    return vp ? vp.getPlayheadTime() : 0;
 };
 mirosubs.subtitle.Dialog.prototype.showLoginNag_ = function() {
     // not doing anything here right now.

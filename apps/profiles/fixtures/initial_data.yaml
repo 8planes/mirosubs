@@ -14,22 +14,156 @@
 
 
 # languages below
-- model: profiles.Language
+- fields: {name: Arabic}
+  model: profiles.language
   pk: 1
-  fields:
-      name: English
-
-- model: profiles.Language
+- fields: {name: Bengali}
+  model: profiles.language
   pk: 2
-  fields:
-      name: Spanish
-
-- model: profiles.Language
+- fields: {name: Bulgarian}
+  model: profiles.language
   pk: 3
-  fields:
-      name: Portuguese
-      
-- model: profiles.Language
+- fields: {name: Catalan}
+  model: profiles.language
   pk: 4
-  fields:
-      name: German
+- fields: {name: Czech}
+  model: profiles.language
+  pk: 5
+- fields: {name: Welsh}
+  model: profiles.language
+  pk: 6
+- fields: {name: Danish}
+  model: profiles.language
+  pk: 7
+- fields: {name: German}
+  model: profiles.language
+  pk: 8
+- fields: {name: Greek}
+  model: profiles.language
+  pk: 9
+- fields: {name: English}
+  model: profiles.language
+  pk: 10
+- fields: {name: Spanish}
+  model: profiles.language
+  pk: 11
+- fields: {name: Estonian}
+  model: profiles.language
+  pk: 12
+- fields: {name: Argentinean Spanish}
+  model: profiles.language
+  pk: 13
+- fields: {name: Basque}
+  model: profiles.language
+  pk: 14
+- fields: {name: Persian}
+  model: profiles.language
+  pk: 15
+- fields: {name: Finnish}
+  model: profiles.language
+  pk: 16
+- fields: {name: French}
+  model: profiles.language
+  pk: 17
+- fields: {name: Irish}
+  model: profiles.language
+  pk: 18
+- fields: {name: Galician}
+  model: profiles.language
+  pk: 19
+- fields: {name: Hungarian}
+  model: profiles.language
+  pk: 20
+- fields: {name: Hebrew}
+  model: profiles.language
+  pk: 21
+- fields: {name: Hindi}
+  model: profiles.language
+  pk: 22
+- fields: {name: Croatian}
+  model: profiles.language
+  pk: 23
+- fields: {name: Icelandic}
+  model: profiles.language
+  pk: 24
+- fields: {name: Italian}
+  model: profiles.language
+  pk: 25
+- fields: {name: Japanese}
+  model: profiles.language
+  pk: 26
+- fields: {name: Georgian}
+  model: profiles.language
+  pk: 27
+- fields: {name: Korean}
+  model: profiles.language
+  pk: 28
+- fields: {name: Khmer}
+  model: profiles.language
+  pk: 29
+- fields: {name: Kannada}
+  model: profiles.language
+  pk: 30
+- fields: {name: Latvian}
+  model: profiles.language
+  pk: 31
+- fields: {name: Lithuanian}
+  model: profiles.language
+  pk: 32
+- fields: {name: Macedonian}
+  model: profiles.language
+  pk: 33
+- fields: {name: Dutch}
+  model: profiles.language
+  pk: 34
+- fields: {name: Norwegian}
+  model: profiles.language
+  pk: 35
+- fields: {name: Polish}
+  model: profiles.language
+  pk: 36
+- fields: {name: Portuguese}
+  model: profiles.language
+  pk: 37
+- fields: {name: Brazilian Portuguese}
+  model: profiles.language
+  pk: 38
+- fields: {name: Romanian}
+  model: profiles.language
+  pk: 39
+- fields: {name: Russian}
+  model: profiles.language
+  pk: 40
+- fields: {name: Slovak}
+  model: profiles.language
+  pk: 41
+- fields: {name: Slovenian}
+  model: profiles.language
+  pk: 42
+- fields: {name: Serbian}
+  model: profiles.language
+  pk: 43
+- fields: {name: Swedish}
+  model: profiles.language
+  pk: 44
+- fields: {name: Tamil}
+  model: profiles.language
+  pk: 45
+- fields: {name: Telugu}
+  model: profiles.language
+  pk: 46
+- fields: {name: Thai}
+  model: profiles.language
+  pk: 47
+- fields: {name: Turkish}
+  model: profiles.language
+  pk: 48
+- fields: {name: Ukrainian}
+  model: profiles.language
+  pk: 49
+- fields: {name: Simplified Chinese}
+  model: profiles.language
+  pk: 50
+- fields: {name: Traditional Chinese}
+  model: profiles.language
+  pk: 51

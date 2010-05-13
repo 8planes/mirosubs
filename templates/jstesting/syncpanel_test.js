@@ -34,7 +34,7 @@ function spaceUp() {
 function assertTimes(subIndex, start, end) {
     assertEquals(start, MS_captionSet.caption(subIndex).getStartTime());
     if (end == null)
-        assertTrue(MS_captionSet.caption(subIndex).getEndTime() > 9999);
+        assertTrue(MS_captionSet.caption(subIndex).getEndTime() == -1);
     else
         assertEquals(end, MS_captionSet.caption(subIndex).getEndTime());
 }
@@ -47,8 +47,9 @@ function setUpSubs(opt_subs) {
                         captionJSON(-1, -1, 3)];
     MS_captionSet = 
         new mirosubs.subtitle.EditableCaptionSet(
-            MS_unitOfWork, subs);
-    MS_captionManager = new mirosubs.CaptionManager(MS_videoPlayer.getPlayheadFn());
+            subs, MS_unitOfWork);
+    MS_captionManager = new mirosubs.CaptionManager(
+        MS_videoPlayer, MS_captionSet);
     MS_syncPanel = new mirosubs.subtitle.SyncPanel(MS_captionSet, 
                                                    MS_videoPlayer,
                                                    null,

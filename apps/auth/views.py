@@ -17,21 +17,22 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+from auth.forms import CustomUserCreationForm
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
-    return render_login(request, UserCreationForm(label_suffix=""), 
+    return render_login(request, CustomUserCreationForm(label_suffix=""), 
                         AuthenticationForm(label_suffix=""), redirect_to)
 
 def create_user(request):
     redirect_to = make_redirect_to(request)
-    form = UserCreationForm(request.POST, label_suffix="")
+    form = CustomUserCreationForm(request.POST, label_suffix="")
     if form.is_valid():
         new_user = form.save()
         user = authenticate(username=new_user.username,
@@ -50,7 +51,7 @@ def login_post(request):
             request.session.delete_test_cookie()
         return HttpResponseRedirect(redirect_to)
     else:
-        return render_login(request, UserCreationForm(label_suffix=""), form, redirect_to)
+        return render_login(request, CustomUserCreationForm(label_suffix=""), form, redirect_to)
 
 # Helpers
 

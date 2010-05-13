@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load paginator %}
+
+{% block main_content %}
+    {% if action_list %}
+        
+        <h2>All activities</h2>
+        
+        <p>
+            Order by:
+            {% ordered_column "user__username" "User" %}
+            {% ordered_column "created" "Date" %}
+            {% ordered_column "video__video_id" "Video" %}
+        </p>
+        
+        {% with action_list as events %}
+            {% include 'videos/_activities.html' %}
+        {% endwith %}
+            
+        {% if is_paginated %}{% ordered_paginator 3 %}{% endif %}
+         
+    {% else %}
+        <p> There are no activities.</p>
+    {% endif %}
+{% endblock %}

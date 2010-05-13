@@ -16,26 +16,36 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.YoutubeVideoSource');
+goog.provide('mirosubs.video.YoutubeVideoSource');
 
-mirosubs.YoutubeVideoSource = function(uuid, youtubeVideoID) {
+mirosubs.video.YoutubeVideoSource = function(uuid, youtubeVideoID) {
     this.uuid_ = uuid;
     this.youtubeVideoID_ = youtubeVideoID;
 };
 
-mirosubs.YoutubeVideoSource.counter_ = 0;
+mirosubs.video.YoutubeVideoSource.counter_ = 0;
 
-mirosubs.YoutubeVideoSource.prototype.createPlayer = function() {
-    return new mirosubs.YoutubeVideoPlayer(
-        new mirosubs.YoutubeVideoSource(
-            this.uuid_ + (mirosubs.YoutubeVideoSource.counter_++), 
-            this.youtubeVideoID_));
+mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
+    return this.createPlayer_(false);
 };
 
-mirosubs.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
+mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer = 
+    function() 
+{
+    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+};
+
+mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(chromeless) {
+    return new mirosubs.video.YoutubeVideoPlayer(
+        new mirosubs.video.YoutubeVideoSource(
+            this.uuid_ + (mirosubs.video.YoutubeVideoSource.counter_++), 
+            this.youtubeVideoID_), chromeless);
+};
+
+mirosubs.video.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
     return this.youtubeVideoID_;
 };
 
-mirosubs.YoutubeVideoSource.prototype.getUUID = function() {
+mirosubs.video.YoutubeVideoSource.prototype.getUUID = function() {
     return this.uuid_;
 };

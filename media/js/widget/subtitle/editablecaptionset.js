@@ -25,14 +25,25 @@
 
 goog.provide('mirosubs.subtitle.EditableCaptionSet');
 
-mirosubs.subtitle.EditableCaptionSet = function(unitOfWork, existingJsonCaptions) {
+/**
+ * @constructor
+ * @param {array.<object.<string, *>>} existingJsonCaptions
+ * @param {mirosubs.UnitOfWork=} opt_unitOfWork Unit of work, only provided 
+ *     if this EditableCaptionSet is not read-only
+ */
+mirosubs.subtitle.EditableCaptionSet = function(
+    existingJsonCaptions, opt_unitOfWork) 
+{
     goog.events.EventTarget.call(this);
-    this.unitOfWork_ = unitOfWork;
-    this.updateFn_ = goog.bind(this.captionUpdated_, this);
-    var updateFn = this.updateFn_;
+    this.unitOfWork_ = opt_unitOfWork;
+    var that = this;
+    var c;
     this.captions_ = goog.array.map(
         existingJsonCaptions, function(caption) { 
-            return new mirosubs.subtitle.EditableCaption(updateFn, caption);
+            c = new mirosubs.subtitle.EditableCaption(
+                opt_unitOfWork, caption);
+            c.setParentEventTarget(that);
+            return c;
         });
     var i;
     for (i = 1; i < this.captions_.length; i++) {
@@ -41,10 +52,8 @@ mirosubs.subtitle.EditableCaptionSet = function(unitOfWork, existingJsonCaptions
     }
 };
 goog.inherits(mirosubs.subtitle.EditableCaptionSet, goog.events.EventTarget);
-mirosubs.subtitle.EditableCaptionSet.EventType = {
-    CLEAR_ALL : 'clearall',
-    UPDATED : 'updated'
-};
+mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL = 'clearall';
+
 mirosubs.subtitle.EditableCaptionSet.prototype.captionsWithTimes =
     function() 
 {
@@ -58,7 +67,7 @@ mirosubs.subtitle.EditableCaptionSet.prototype.clear = function() {
         this.unitOfWork_.registerDeleted(caption);
     }
     this.dispatchEvent(
-        mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_ALL);
+        mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL);
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.clearTimes = function() {
     goog.array.forEach(this.captions_, function(c) { c.clearTimes(); });
@@ -70,7 +79,8 @@ mirosubs.subtitle.EditableCaptionSet.prototype.caption = function(index) {
     return this.captions_[index];
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function() {
-    var c = new mirosubs.subtitle.EditableCaption(this.updateFn_);
+    var c = new mirosubs.subtitle.EditableCaption(this.unitOfWork_);
+    c.setParentEventTarget(this);
     this.captions_.push(c);
     if (this.captions_.length > 1) {
         var previousCaption = this.captions_[this.captions_.length - 2];
@@ -100,19 +110,4 @@ mirosubs.subtitle.EditableCaptionSet.prototype.findLastForTime =
              this.captions_[i + 1].getStartTime() > time))
             return this.captions_[i];
     return null;
-};
-mirosubs.subtitle.EditableCaptionSet.prototype.captionUpdated_ = 
-    function(caption, timesFirstAssigned) 
-{
-    this.unitOfWork_.registerUpdated(caption);
-    this.dispatchEvent(
-        new mirosubs.subtitle.EditableCaptionSet.UpdateEvent(
-            caption, timesFirstAssigned));
-};
-mirosubs.subtitle.EditableCaptionSet.UpdateEvent = 
-    function(caption, timesFirstAssigned) 
-{
-    this.type = mirosubs.subtitle.EditableCaptionSet.EventType.UPDATED;
-    this.caption = caption;
-    this.timesFirstAssigned = timesFirstAssigned;
 };

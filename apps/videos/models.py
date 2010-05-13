@@ -22,6 +22,9 @@ import random
 from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.db.models.signals import post_save
+from datetime import date
+from django.utils.dateformat import format as date_format
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
 VIDEO_TYPE_HTML5 = 'H'
@@ -370,3 +373,47 @@ class VideoCaption(models.Model):
                  'caption_text' : text, 
                  'start_time' : self.start_time, 
                  'end_time' : self.end_time }
+
+class Action(models.Model):
+    TYPE_CHOICES = (
+        (1, 'subtitles'),
+        (2, 'translations')
+    )
+    user = models.ForeignKey(User)
+    video = models.ForeignKey(Video)
+    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    created = models.DateTimeField()
+    
+    class Meta:
+        ordering = ['-created']
+    
+    def time(self):
+        if self.created.date() == date.today():
+            format = 'g:i A'
+        else:
+            format = 'g:i A, j M Y'
+        return date_format(self.created, format)           
+    
+    def uprofile(self):
+        try:
+            return self.user.profile_set.all()[0]
+        except IndexError:
+            pass        
+    
+    @classmethod
+    def create_translation_handler(cls, sender, instance, created, **kwargs):
+        if created:
+            obj = cls(user=instance.user, video=instance.language.video)
+            obj.language = instance.language.language
+            obj.created = instance.datetime_started
+            obj.save()
+    
+    @classmethod
+    def create_caption_handler(cls, sender, instance, created, **kwargs):
+        if created:
+            obj = cls(user=instance.user, video=instance.video)
+            obj.created = instance.datetime_started
+            obj.save()            
+        
+post_save.connect(Action.create_translation_handler, TranslationVersion)
+post_save.connect(Action.create_caption_handler, VideoCaptionVersion)

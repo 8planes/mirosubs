@@ -16,30 +16,22 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-#  Based on: http://www.djangosnippets.org/snippets/73/
-#
-#  Modified by Sean Reifschneider to be smarter about surrounding page
-#  link context.  For usage documentation see:
-#
-#     http://www.tummy.com/Community/Articles/django-pagination/
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django import forms
 
-from django import template
-from videos.models import Action
-from django.conf import settings
-from datetime import date
-from django.utils.dateformat import format as date_format
-
-register = template.Library()
-
-@register.inclusion_tag('videos/_recent_activity.html')
-def recent_activity(user=None):
-    LIMIT = settings.RECENT_ACTIVITIES_ONPAGE
+class CustomUserCreationForm(UserCreationForm):
     
-    qs = Action.objects.all()
-    
-    if user:
-        qs = qs.filter(user=user)
-    
-    return {
-        'events': qs[:LIMIT]
-    }
+    class Meta:
+        model = User
+        fields = ("username", "email")
+        
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['email'].required = True
+        
+    def _get_unique_checks(self):
+        #add email field validate like unique
+        unique_checks, date_checks = super(CustomUserCreationForm, self)._get_unique_checks()
+        unique_checks.append(('email',))
+        return unique_checks, date_checks

@@ -16,24 +16,19 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.require("goog.ui.Dialog");
-goog.require("goog.json.Serializer");
-goog.require("goog.net.CrossDomainRpc");
-goog.require("goog.dom.DomHelper");
-goog.require("goog.events.BrowserEvent");
-goog.require("goog.ui.Button");
-goog.require("goog.ui.LabelInput");
-goog.require("goog.net.XhrIo");
-goog.require('goog.positioning.Corner');
-goog.require('goog.ui.MenuItem');
-goog.require('goog.ui.PopupMenu');
-goog.require('goog.ui.Bubble');
-goog.require('goog.debug.FancyWindow');
-goog.require('goog.math');
-goog.require('goog.net.ImageLoader');
-goog.require('goog.ui.Checkbox');
-goog.require('goog.Throttle');
-goog.require('goog.fx.Animation.EventType');
-goog.require('goog.fx.Dragger');
-goog.require('goog.fx.Dragger.EventType');
-goog.require('goog.fx.dom.SlideFrom');
+goog.provide('mirosubs.controls.VideoControls');
+
+mirosubs.controls.VideoControls = function(videoPlayer) {
+    goog.ui.Component.call(this);
+    this.videoPlayer_ = videoPlayer;
+};
+goog.inherits(mirosubs.controls.VideoControls, goog.ui.Component);
+
+mirosubs.controls.VideoControls.prototype.createDom = function() {
+    mirosubs.controls.VideoControls.superClass_.createDom.call(this);
+    this.getElement().className = 'mirosubs-videoControls';
+    this.addChild(new mirosubs.controls.PlayPause(this.videoPlayer_), true);
+    this.addChild(new mirosubs.controls.ProgressBar(this.videoPlayer_), true);
+    this.addChild(new mirosubs.controls.TimeSpan(this.videoPlayer_), true);
+    this.addChild(new mirosubs.controls.VolumeControl(this.videoPlayer_), true);
+};

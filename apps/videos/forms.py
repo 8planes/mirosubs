@@ -31,10 +31,11 @@ class FeedbackForm(forms.Form):
     email = forms.EmailField(required=False)
     message = forms.CharField(widget=forms.Textarea())
     
-    def send(self):
+    def send(self, request):
         email = self.cleaned_data['email']
         message = self.cleaned_data['message']
-        
+        user_agent_data = 'User agent: %s' % request.META.get('HTTP_USER_AGENT')
+        message = '%s\n\n%s' % (message, user_agent_data)
         headers = {'Reply-To': email} if email else None
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \

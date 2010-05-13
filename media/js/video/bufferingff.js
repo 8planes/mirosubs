@@ -16,20 +16,9 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-/**
- * @fileoverview An interface for a video source
- *
- */
+goog.provide('mirosubs.video.BufferingFF');
 
-goog.provide('mirosubs.VideoSource');
-
-/**
- *
- * @interface
- */
-mirosubs.VideoSource = function() {};
-
-/**
- * @return {mirosubs.AbstractVideoPlayer} 
- */
-mirosubs.prototype.createPlayer = function() {};
+mirosubs.video.BufferingFF = function(videoElem) {
+    this.videoElem_ = videoElem;
+    this.videoElem_
+};

@@ -40,15 +40,17 @@ JS_USE_COMPILED = False
 # paths provided relative to media/js
 JS_RAW = ['mirosubs.js', 
           'rpc.js',
-          'abstractvideoplayer.js',
-          'html5videoplayer.js',
-          'youtubevideoplayer.js',
-          'html5videosource.js',
-          'youtubevideosource.js',
           'unitofwork.js', 
           'clippy.js',
           'flash.js',
           'spinner.js',
+          'sliderbase.js',
+          'video/abstractvideoplayer.js',
+          'video/html5videoplayer.js',
+          'video/youtubevideoplayer.js',
+          'video/html5videosource.js',
+          'video/youtubevideosource.js',
+          'video/controlledvideoplayer.js',
           'widget/videotab.js',
           'widget/dialog.js',
           'widget/captionmanager.js',
@@ -73,6 +75,14 @@ JS_RAW = ['mirosubs.js',
           'widget/timeline/timelinesubs.js',
           'widget/timeline/timelineinner.js',
           'widget/timeline/timeline.js',
+          'widget/controls/bufferedbar.js',
+          'widget/controls/playpause.js',
+          'widget/controls/progressbar.js',
+          'widget/controls/progressslider.js',
+          'widget/controls/timespan.js',
+          'widget/controls/videocontrols.js',
+          'widget/controls/volumecontrol.js',
+          'widget/controls/volumeslider.js',
           'widget/translate/dialog.js',
           'widget/translate/translationpanel.js',
           'widget/translate/translationlist.js',
@@ -169,6 +179,7 @@ ACCOUNT_ACTIVATION_DAYS = 9999 # we are using registration only to verify emails
 SESSION_COOKIE_AGE = 2419200 # 4 weeks
 
 RECENT_ACTIVITIES_ONPAGE = 10
+ACTIVITIES_ONPAGE = 20
 
 FEEDBACK_EMAIL = 'feedback@universalsubtitles.org'
 FEEDBACK_SUBJECT = 'Feedback'

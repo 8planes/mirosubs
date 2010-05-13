@@ -27,10 +27,11 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL,
     this.videoID_ = videoID;
     this.nullWidget_ = nullWidget;
     if (youtubeVideoID == '')
-        this.videoSource_ = new mirosubs.Html5VideoSource(videoURL);
+        this.videoSource_ = 
+            new mirosubs.video.Html5VideoSource(videoURL);
     else
         this.videoSource_ = 
-            new mirosubs.YoutubeVideoSource(uuid, youtubeVideoID);
+            new mirosubs.video.YoutubeVideoSource(uuid, youtubeVideoID);
     this.videoPlayer_ = this.videoSource_.createPlayer();
     this.videoPlayer_.decorate(goog.dom.$(uuid + "_video"));
     this.videoTab_ = new mirosubs.VideoTab();

@@ -35,8 +35,6 @@ width: 460px;
 
 {% block main_content %}
 <div class="left_column">
-	<p>{{ video.video_url }}</p>
-	
 	{% with video.video_url as video_url %}
 	  {% include "widget/widget.html" %}
 	<script type="text/javascript">
@@ -47,7 +45,7 @@ width: 460px;
 <div class="right_column">
 
   <div class="mirosubs-share">
-						<img src="../site_media/images/blue_triangle.png" class="mirosubs-blueTriangle" />
+						<img src="{{ MEDIA_URL }}images/blue_triangle.png" class="mirosubs-blueTriangle" />
 						<h2>Share your subtitles</h2>
 						
 						<p>Now everyone can watch the video with subtitles-- try it!<br />
@@ -70,7 +68,9 @@ width: 460px;
 		            
 		            
 		      <h3>Permalink</h3>
-		      <a href="#" class="mirosubs-permalink">http://www.universalsubtitles.org/asdfasdfas/asdfasdf</a>
+		      <a href="http://{{ site.domain }}{% url videos:video video_id=video.video_id %}" class="mirosubs-permalink">
+		          http://{{ site.domain }}{% url videos:video video_id=video.video_id %}
+              </a>
    </div>
 
 

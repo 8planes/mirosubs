@@ -22,8 +22,7 @@ JS_USE_COMPILED = True
 
 DEBUG = False
 ADMINS = (
-  ('Rodrigo Guzman', 'rz@pybrew.com'),
-  ('Adam Duston', 'adam@pybrew.com'),
+  ('Adam Duston', 'adam@8planes.com')
 )
 
 DATABASE_NAME = '/var/www/universalsubtitles/mirosubs/mirosubs.sqlite3'

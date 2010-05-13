@@ -13,11 +13,11 @@ outline: none;
 
 
 .mirosubs-widget {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px !important;
-    color: #000 !important;
-    line-height: 16px;
-    width: 400px;
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 12px !important;
+   color: #000 !important;
+   line-height: 16px;
+   width: 400px;
 }
 
 
@@ -1436,12 +1436,19 @@ cursor: pointer;
 }
 
 
-.mirosubs-playPause.play span{
-width: 10px;
-padding-top: 13px;
-overflow: hidden;
-float: left;
-background: url("../images/play_pause.png") 0 0px no-repeat;
+.mirosubs-playPause span{
+   width: 10px;
+   padding-top: 13px;
+   overflow: hidden;
+   float: left;
+}
+
+.mirosubs-playPause.play span {
+   background: url("../images/play_pause.png") 0 0px no-repeat;
+}
+
+.mirosubs-playPause.pause span {
+   background: url("../images/play_pause.png") 0 -32px no-repeat;
 }
 
 .mirosubs-volume {
@@ -1465,68 +1472,67 @@ background: url("../images/gradient.png") 0 1px repeat-x;
 cursor: pointer;
 }
 
-.mirosubs-volume div{
-height: 99px !important;
-width: 31px;
-    -moz-border-radius-topright: 3px;
-    -moz-border-radius-topleft: 3px;
-    -webkit-border-top-right-radius: 3px;
-    -webkit-border-top-left-radius: 3px;
-position: absolute;
-top: -100px;
-z-index: 999999999999;
-background: #ededed url("../images/gradient.png") left 30px repeat-x;
+.mirosubs-volume .mirosubs-volume-container {
+   overflow: hidden;
+   height: 0;
+   bottom: 29px;
+   width: 31px;
+   -moz-border-radius-topright: 3px;
+   -moz-border-radius-topleft: 3px;
+   -webkit-border-top-right-radius: 3px;
+   -webkit-border-top-left-radius: 3px;
+   position: absolute;
+   background: #ededed url("../images/gradient.png") left 30px repeat-x;
 }
 
 
-.mirosubs-volume div span{
-height: 75px !important;
-width: 10px !important; 
-margin: 10px 9px 0 0;
-border: 1px solid;
-position: relative;
-z-index: 999999999999;
-background: #333;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 0px;
+.mirosubs-volume-slider {
+   height: 75px !important;
+   width: 10px !important; 
+   border: 1px solid;
+   top: 10px;
+   left: 10px;
+   position: absolute;
+   background: #333;
+   -moz-border-radius: 10px;
+   -webkit-border-radius: 0px;
 }
 
 
-.mirosubs-volume div span span{
-height: 0px !important;
-width: 0px !important;
-border: 1px solid red;
-top: 0;
-margin: -3px -3px 0 0 !important;
-z-index: 999999999999;
-border: 1px solid;
-padding: 7px;
-border-top: 1px solid #666;
-border-right: 1px solid #333;
-border-bottom: 1px solid #333;
-border-left: 1px solid #333;
-background: #fff url("../images/gradient.png") 0 1px repeat-x;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
+.mirosubs-volume-scrobbler {
+   height: 0px !important;
+   width: 0px !important;
+   border: 1px solid red;
+   top: 0;
+   border: 1px solid;
+   left: -3px;
+   position: absolute;
+   padding: 7px;
+   border-top: 1px solid #666;
+   border-right: 1px solid #333;
+   border-bottom: 1px solid #333;
+   border-left: 1px solid #333;
+   background: #fff url("../images/gradient.png") 0 1px repeat-x;
+   -moz-border-radius: 10px;
+   -webkit-border-radius: 10px;
 }
 
 
-.mirosubs-scrobbler{
-border: 1px solid;
-padding: 7px;
-position: absolute;
-left: 0;
-border-top: 1px solid #666;
-border-right: 1px solid #333;
-border-bottom: 1px solid #333;
-border-left: 1px solid #333;
-background: #fff url("../images/gradient.png") 0 1px repeat-x;
-margin: -3px 0 0 101px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
+.mirosubs-scrobbler {
+   border: 1px solid;
+  padding: 7px;
+  position: absolute;
+  left: -8px;
+  border-top: 1px solid #666;
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+  border-left: 1px solid #333;
+  background: #fff url("../images/gradient.png") 0 1px repeat-x;
+  top: -3px;
+  margin: 0 0 0 0;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
 }
-
-
 
 .mirosubs-scrobbler:hover{
 background: #fff url("../images/gradient.png") 0 31px repeat-x;
@@ -1536,12 +1542,15 @@ border-bottom: 1px solid #000;
 border-left: 1px solid #333;
 }
 
-
+.mirosubs-progress-slider {
+    position: absolute;
+    height: 10px;
+    width: 250px;
+}
 
 
 .mirosubs-progress{
-border: 1px solid;
-width: 10px;
+    border: 1px solid;
 height: 10px;
 position: relative;
 background: #fff url("../images/gradient.png") 0 -109px repeat-x;
@@ -1555,29 +1564,32 @@ width: 250px;
 margin: 9px;
 }
 
-.mirosubs-progress .mirosubs-buffered{
-width: 10px;
-height: 10px;
-background: #222 url("../images/gradient.png") 0 40px ;
-float: left;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px; 
-width: 230px;
+.mirosubs-progress .mirosubs-buffered-container {
+    position: relative;
+    width: 250px;
+    height: 10px;
+    float: left;
 }
 
-.mirosubs-progress .mirosubs-played{
-width: 10px;
-height: 8px;
-
-float: left;
+.mirosubs-progress .mirosubs-buffered {
+    height: 10px;      
+    background: #222 url("../images/gradient.png") 0 40px ;
     -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    position: absolute;
+}
 
-    -webkit-border-radius: 5px; 
-width: 110px;
-border: 1px solid #a6dd13;
-border-top: 1px solid #c5ff27;
-border-bottom: 1px solid #7ba115;
-background: #a6dd13 url("../images/gradient.png") 0 0px repeat-x ;
+.mirosubs-progress .mirosubs-played {
+   width: 10px;
+   height: 8px;
+   position: absolute;
+   -moz-border-radius: 5px;
+   -webkit-border-radius: 5px; 
+   width: 0;
+   border: 1px solid #a6dd13;
+   border-top: 1px solid #c5ff27;
+   border-bottom: 1px solid #7ba115;
+   background: #a6dd13 url("../images/gradient.png") 0 0px repeat-x ;
 }
 
 /* ////////////////////

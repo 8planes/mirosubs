@@ -21,104 +21,101 @@ goog.provide('mirosubs.CaptionManager');
 /**
  * Constructor.
  *
- * @param {?function(): number} playheadFn Optional function that 
- *     returns the current 
- *     playhead time of the video, in seconds.
+ * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
  */
-mirosubs.CaptionManager = function(playheadFn) {
+mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     goog.events.EventTarget.call(this);
-    this.captions_ = [];
+    this.captions_ = captionSet.captionsWithTimes();
+    /**
+     * Compares two subs for ordering by start time.
+     * @type {function(mirosubs.subtitle.EditableCaption, 
+     *     mirosubs.subtitle.EditableCaption)}
+     */
     this.captionCompare_ = function(a, b) {
-        return a['start_time'] > b['start_time'] ? 
-            1 : a['start_time'] < b['start_time'] ? -1 : 0;
+        return a.getStartTime() - b.getStartTime();
     };
-    this.playheadFn_ = playheadFn;
-    var that = this;
-    this.timerInterval_ = window.setInterval(function() { that.timerTick_(); }, 100);
+    goog.array.sort(this.captions_, this.captionCompare_);
+    this.binaryCompare_ = function(time, caption) {
+	return time - caption.getStartTime();
+    };
+    this.videoPlayer_ = videoPlayer;
+    this.eventHandler_ = new goog.events.EventHandler(this);
+    this.eventHandler_.listen(
+	videoPlayer,
+	mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+	this.timeUpdate_);
+    this.eventHandler_.listen(
+	captionSet,
+	[mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
+         mirosubs.subtitle.EditableCaption.CHANGE],
+	this.captionSetUpdate_);
+
     this.currentCaptionIndex_ = -1;
     this.lastCaptionDispatched_ = null;
     this.eventsDisabled_ = false;
 };
 goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 
-mirosubs.CaptionManager.EventType = {
-    CAPTION: 'caption'
+mirosubs.CaptionManager.CAPTION = 'caption';
+
+mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
+    if (event.type == mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL) {
+	this.captions_ = [];
+	this.dispatchCaptionEvent_(null);	
+    }
+    else if (event.type == mirosubs.subtitle.EditableCaption.CHANGE) {
+	if (event.timesFirstAssigned) {
+	    this.captions_.push(event.target);
+	    this.timeUpdate_();
+	}
+    }
 };
 
-/**
- * Adds captions to be displayed.
- * @param {Array.<Object.<string, *>>} captions Array of captions. Each caption must be an 
- *     object with a 'start_time' property set to the start time for 
- *     that caption and an 'end_time' property set to the end time.
- */
-mirosubs.CaptionManager.prototype.addCaptions = function(captions) {
-    // TODO: perhaps use a more efficient implementation in the future, if 
-    // that is appealing. For example, sort-merge.
-    var i;
-    for (i = 0; i < captions.length; i++)
-        this.captions_.push(captions[i]);
-    goog.array.sort(this.captions_, this.captionCompare_);
-    this.currentCaptionIndex_ = -1;
-    this.timerTick_();
+mirosubs.CaptionManager.prototype.timeUpdate_ = function() {
+    this.sendEventsForPlayheadTime_(
+	this.videoPlayer_.getPlayheadTime());
 };
 
-mirosubs.CaptionManager.prototype.removeAll = function() {
-    this.captions_ = [];
-    this.dispatchCaptionEvent_(null);    
-};
-
-/**
- * 
- * @param {mirosubs.subtitle.EditableCaption.UpdateEvent} event
- */
-mirosubs.CaptionManager.prototype.captionUpdated = function(event) {
-    if (event.timesFirstAssigned)
-        this.addCaptions([event.caption.jsonCaption]);
-};
-
-mirosubs.CaptionManager.prototype.timerTick_ = function() {
-    if (this.playheadFn_ != null)
-        this.sendEventsForPlayheadTime_(this.playheadFn_());
-};
-
-mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ = function(playheadTime) {
+mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ = 
+    function(playheadTime) 
+{
     if (this.captions_.length == 0)
         return;
     if (this.currentCaptionIndex_ == -1 && 
-        playheadTime < this.captions_[0]['start_time'])
+        playheadTime < this.captions_[0].getStartTime())
         return;
     var curCaption = this.currentCaptionIndex_ > -1 ? 
         this.captions_[this.currentCaptionIndex_] : null;
     if (this.currentCaptionIndex_ > -1 && 
-        playheadTime >= curCaption['start_time'] && 
-        playheadTime < curCaption['end_time'])
+	curCaption.isShownAt(playheadTime))
         return;
     var nextCaption = this.currentCaptionIndex_ < this.captions_.length - 1 ? 
         this.captions_[this.currentCaptionIndex_ + 1] : null;
     if (nextCaption != null && 
-        playheadTime >= nextCaption['start_time'] &&
-        playheadTime < nextCaption['end_time']) {
+	nextCaption.isShownAt(playheadTime)) {
         this.currentCaptionIndex_++;
         this.dispatchCaptionEvent_(nextCaption);
         return;
     }
-    if ((nextCaption == null || playheadTime < nextCaption['start_time']) &&
-        playheadTime >= curCaption['start_time']) {
+    if ((nextCaption == null || playheadTime < nextCaption.getStartTime()) &&
+        playheadTime >= curCaption.getStartTime()) {
         this.dispatchCaptionEvent_(null);
         return;
     }
     this.sendEventForRandomPlayheadTime_(playheadTime);
 };
 
-mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ = function(playheadTime) {
+mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ = 
+    function(playheadTime) 
+{
     var lastCaptionIndex = goog.array.binarySearch(this.captions_, 
-        { 'start_time' : playheadTime }, this.captionCompare_);
+        playheadTime, this.binaryCompare_);
     if (lastCaptionIndex < 0)
         lastCaptionIndex = -lastCaptionIndex - 2;
     this.currentCaptionIndex_ = lastCaptionIndex;
     if (lastCaptionIndex >= 0 && 
-        playheadTime >= this.captions_[lastCaptionIndex]['start_time'] &&
-        playheadTime <= this.captions_[lastCaptionIndex]['end_time']) {
+	this.captions_[lastCaptionIndex].isShownAt(playheadTime)) {
         this.dispatchCaptionEvent_(this.captions_[lastCaptionIndex]);
     }
     else {        
@@ -132,17 +129,19 @@ mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
     if (this.eventsDisabled_)
         return;
     this.lastCaptionDispatched_ = caption;
-    var event = new goog.events.Event(
-        mirosubs.CaptionManager.EventType.CAPTION, this);
-    event.caption = caption;
-    this.dispatchEvent(event);
+    this.dispatchEvent(new mirosubs.CaptionManager.CaptionEvent(caption));
 };
 
 mirosubs.CaptionManager.prototype.disposeInternal = function() {
     mirosubs.CaptionManager.superClass_.disposeInternal.call(this);
-    window.clearInterval(this.timerInterval_);
+    this.eventHandler_.dispose();
 };
 
 mirosubs.CaptionManager.prototype.disableCaptionEvents = function(disabled) {
     this.eventsDisabled_ = disabled;
+};
+
+mirosubs.CaptionManager.CaptionEvent = function(editableCaption) {
+    this.type = mirosubs.CaptionManager.CAPTION;
+    this.caption = editableCaption;
 };
