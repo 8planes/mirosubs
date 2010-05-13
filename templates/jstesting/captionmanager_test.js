@@ -58,6 +58,7 @@ function testOneCaption() {
     setUpForInitialCaptions([captionJSON(0.5, 2, 1)]);
     sendEvents(0.4);
     assertEquals(0, MS_dispatchedCaptions.length);
+    sendEvents(0.5);
     sendEvents(0.6);
     assertEquals(1, MS_dispatchedCaptions.length);
     assertEquals(1, MS_dispatchedCaptions[0].getCaptionID());
