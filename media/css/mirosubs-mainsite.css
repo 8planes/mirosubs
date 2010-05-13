@@ -148,6 +148,9 @@ background: url(../images/nav.png) left -45px no-repeat;
 }
 
 
+
+
+
 .accountstatus{
 width: 40%;
 text-align: right;
@@ -174,6 +177,7 @@ clear: both;
 padding-top: 30px;
 line-height: 15px;
 font-size: 12px;
+background: url(../images/watercolor.png) left 30px no-repeat;
 }
 
 
@@ -331,24 +335,19 @@ margin: 0;
 }
 
 .recent_activity li{
-padding: 10px 0 10px 35px;
+padding: 10px 0 10px 60px;
 margin: 0 0 15px;
-border-top: 1px solid #bed3d7;
-border-bottom: 1px solid #ebfcff;
-border-left: 1px solid #c6dee2;
-border-right: 1px solid #c6dee2;
--moz-border-radius: 5px;  
--webkit-border-radius: 5px;
+
 list-style: none;
 color: #666;
-background: #e7f2f5 url(../images/bubble.png) 12px 12px no-repeat;
-;
 }
 
 
 
 .recent_activity li a{
 font-weight: bold;
+color: #333;
+text-decoration: none;
 }
 
 
@@ -465,10 +464,8 @@ border-right: 1px solid #c6dee2;
 padding: 30px;
 margin-top: 120px;
 clear: both;
-width: 880px;
-float: left;
--moz-border-radius: 5px;  
--webkit-border-radius: 5px;
+text-align: center;
+
 background: url(../images/1x1.png);
 }
 
@@ -486,6 +483,13 @@ font-size: 15px;
 
 #feedback_form textarea{
 width: 600px;
+margin: 0 auto;
+}
+
+input#feedback_email{
+margin: 0 auto;
+width: 300px;
+float: none;
 }
 
 
@@ -566,3 +570,182 @@ padding-top: 33px;
 height: 0;
 overflow: hidden;
 }
+
+
+
+/*/////////////////////////////////////////////
+
+~ Index Page
+
+/////////////////////////////////////////////*/
+
+
+.centered{
+font-size: 30px;
+text-align: center;
+margin: 35px 0 0;
+padding-bottom: 25px;
+}
+
+.problem, .mission{
+font-size: 30px;
+width: 340px;
+line-height: 22px;
+display: block;
+text-align: center;
+padding: 0px 0;
+float: left;
+margin-top: 0px;
+}
+
+.mission{
+width: 400px;
+}
+
+.problem{
+margin: 0px 108px 0 60px;
+}
+
+
+.problem strong{
+font-size: 26px;
+margin-bottom: 15px;
+display: block;
+color: #c84f4f;
+text-shadow: #fff 1px 1px 1px;
+
+}
+
+.mission strong{
+font-size: 26px;
+margin-bottom: 15px;
+display: block;
+color: #57a927;
+text-shadow: #fff 1px 1px 1px;
+
+}
+
+
+.problem span, .mission span{
+font-size: 18px;
+text-shadow: #fff 1px 1px 1px;
+
+}
+
+
+p.pitch{
+border-top: 1px solid #fff;
+border-bottom: 1px solid #fff;
+float: left;
+width: 100%;
+margin: 0 0 50px;
+padding: 30px 0;
+}
+
+
+/*/////////////////////////////////////////////
+
+~ 3 columns
+
+/////////////////////////////////////////////*/
+
+
+.three_column{
+margin: 0px 0 20px;
+float: left;
+}
+
+
+.col1, .col2, .col3{
+float: left;
+width: 220px;
+padding-left: 80px;
+background: url(../images/big_icons.png) -10px 13px no-repeat;
+}
+
+.col1 h3, .col2 h3, .col3 h3{
+font-size: 16px;
+}
+
+
+.col1 p, .col2 p, .col3 p{
+font-size: 14px;
+line-height: 20px;
+}
+
+
+.col1, .col2{
+margin-right: 20px;
+}
+
+
+.col2{
+background-position: -10px -198px;
+}
+
+
+.col3{
+background-position: -10px -417px;
+}
+
+
+
+.get_updates{
+clear: both;
+font-size: 18px;
+padding: 20px 30px 20px 30px;
+border-top: 1px solid #bed3d7;
+border-bottom: 1px solid #ebfcff;
+border-left: 1px solid #c6dee2;
+border-right: 1px solid #c6dee2;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+margin:35px 0 50px;
+float: left;
+width: 880px;
+}
+
+
+
+
+
+.get_updates .update_text{
+float: left !important;
+line-height: 2em;
+margin: 0;
+padding: 8px 20px 0 0;
+}
+
+
+
+.get_updates form  {
+float: left !important;
+clear: none !important;
+
+}
+
+
+.get_updates form p {
+float: left !important;
+clear: none !important;
+width: 320px;
+margin: 0 20px 0 0;
+padding-top: 8px;
+}
+
+
+
+.get_updates form p input{
+float: left !important;
+clear: none;
+width: 305px;
+
+}
+
+
+.get_updates button{
+margin-right: 0;
+
+}
+
+

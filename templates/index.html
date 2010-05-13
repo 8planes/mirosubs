@@ -5,21 +5,39 @@
 {% block main_content %}
 
 
+<h2 class="centered">Subtitles and Captions for Every Video on the Web</h2>
+
+<p class="pitch">
+<span class="problem"><strong>The Problem</strong> <span>Web video is beginning to rival <br />television, but there isn't a good<br /> open resource for subtitling.</span></span> 
+
+<span class="mission"><strong>Our Mission</strong> <span>We're trying to make captioning, subtitling, <br />and translating video publicly accessible in <br />a way that's free and open, just like the Web.</span></span>
+</p>											
+
+<div class="three_column">
+	<div class="col1">
+		<h3>Subtitle Widget</h3>
+		<p>A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos).</p>
+	</div>
+	<div class="col2">
+		<h3>Subtitle Lookup Protocol</h3>
+		<p>An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video.</p>
+	</div>
+	<div class="col3">
+		<h3>Community Site</h3>
+		<p>An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles).</p>
+	</div>
+</div>
 
 
-<form action="{% url videos:create %}" method="POST" class="main_video_form">
+<div class="get_updates">
+	<p class="update_text">Get updates and find out first when we launch</p>
+	<form>
+		<p><input type="text" /></p>
+		<button><span>Get Updates!</span></button>
+	</form>
+</div>
 
-	<h2 class="main_heading">Subtitle a Video</h2>
-  {# TODO: this should be an instance of VideoForm, which should go in context processor #}
-  <input type="text" name="video_url" class="main_video_form_field" />
-  <button type="submit" value="Begin" class="begin">Begin</button>
-  <p>To enable collaborative subtitles, enter the URL to any Ogg or youtube video</p>
-
-</form>
-
-
-
-<div class="right_column">
+<div class="right_column">	
 <h2>Recent Activity</h2>
     {% recent_activity %}
 </div>
