@@ -2,8 +2,8 @@
     width: 100%;
     height: 100% !important;
     position: relative;
-    background: url("../images/black_trans1x1.png");
 }
+
 
 .mirosubs-modal-widget, .mirosubs-modal-widget:active, .mirosubs-modal-widget:hover, a, a:hover, a:active{
 
@@ -616,7 +616,7 @@ ul.mirosubs-titlesList.sync {
 
 .mirosubs-modal-widget-bg {
   position: absolute;
-  background-color: #000;
+    background: #000 url("../images/trans.gif");
   top: 0;
   left: 0;
 }
@@ -740,9 +740,9 @@ ul.mirosubs-titlesList.finished {
 ul.mirosubs-titlesList.mirosubs-beginTab {
 overflow: hidden;
 margin-bottom: 0px !important;
-background: url("../images/begin_tab.jpg") 0 0px no-repeat;
+background: url("../images/begin_tab.jpg") 0 -74px no-repeat;
     text-shadow: #333 1px 1px 1px;
-
+border-bottom: none;
 }
 
 
@@ -1413,14 +1413,16 @@ background: #fff url("../images/gradient.png") 0 1px repeat-x;
 
 .mirosubs-timespan {
 float: left;
-font-size: 10px;
-padding: 7px;
+font-size: 11px;
+padding: 7px 0 0;
+font-weight: bold;
 }
 
 
 .mirosubs-timespan .mirosubs-timeElapsed{
 float: left; 
-font-size: 10px;
+padding-right: 1px;
+font-size: 11px;
 }
 
 
@@ -1428,6 +1430,7 @@ font-size: 10px;
 float: left;
 border-right: 1px solid;
 padding: 9px 10px 8px 11px;
+margin-right: 8px;
 }
 
 .mirosubs-playPause:hover {
@@ -1490,7 +1493,9 @@ cursor: pointer;
    height: 75px !important;
    width: 10px !important; 
    border: 1px solid;
-   top: 10px;
+outline: none !important;
+-moz-outline: none !important;
+   top: 12px;
    left: 10px;
    position: absolute;
    background: #333;
@@ -1504,6 +1509,8 @@ cursor: pointer;
    width: 0px !important;
    border: 1px solid red;
    top: 0;
+outline: none !important;
+-moz-outline: none !important;
    border: 1px solid;
    left: -3px;
    position: absolute;
@@ -1524,6 +1531,8 @@ cursor: pointer;
   position: absolute;
   left: -8px;
   border-top: 1px solid #666;
+outline: none !important;
+-moz-outline: none !important;
   border-right: 1px solid #333;
   border-bottom: 1px solid #333;
   border-left: 1px solid #333;
@@ -1545,6 +1554,8 @@ border-left: 1px solid #333;
 .mirosubs-progress-slider {
     position: absolute;
     height: 10px;
+outline: none !important;
+-moz-outline: none !important;
     width: 250px;
 }
 
@@ -1557,6 +1568,8 @@ background: #fff url("../images/gradient.png") 0 -109px repeat-x;
 float: left;
 border: 1px solid #888;
 border-top: 1px solid #111;
+outline: none !important;
+-moz-outline: none !important;
 border-bottom: 1px solid #666;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px; 
@@ -1569,6 +1582,8 @@ margin: 9px;
     width: 250px;
     height: 10px;
     float: left;
+outline: none !important;
+-moz-outline: none !important;
 }
 
 .mirosubs-progress .mirosubs-buffered {
@@ -1577,6 +1592,8 @@ margin: 9px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     position: absolute;
+outline: none !important;
+-moz-outline: none !important;
 }
 
 .mirosubs-progress .mirosubs-played {
@@ -1584,6 +1601,8 @@ margin: 9px;
    height: 8px;
    position: absolute;
    -moz-border-radius: 5px;
+outline: none !important;
+-moz-outline: none !important;
    -webkit-border-radius: 5px; 
    width: 0;
    border: 1px solid #a6dd13;

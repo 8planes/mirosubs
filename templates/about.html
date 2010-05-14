@@ -7,34 +7,52 @@
 {% endif %}
 {% endblock %}
 {% block main_content %}
-    <div id="videoDiv"></div>
-    <script type="text/javascript">
-      // get from: http://diveintohtml5.org/detect.html#video-formats
-      function supports_video() {
-          return !!document.createElement('video').canPlayType;
-      }
-      function supports_h264_baseline_video() {
-          if (!supports_video()) 
-              return false;
-          var v = document.createElement("video");
-          return v.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
-      }
-      function supports_ogg_theora_video() {
-          if (!supports_video()) 
-              return false;
-          var v = document.createElement("video");
-          return v.canPlayType('video/ogg; codecs="theora, vorbis"');
-      }
-      var scriptQueryString;
-      if (supports_ogg_theora_video())
-          scriptQueryString = 
-              "video_url=http://videos.mozilla.org/firefox3/switch/switch.ogg";
-      else if (supports_h264_baseline_video())
-          scriptQueryString = 
-              "video_url=http://www.visitmix.com/content/files/HTML5.mp4";
-      else
-          scriptQueryString = "youtube_videoid=32d-ofwa_yA";
-      document.write(['<scr', 'ipt src="/embed_widget.js?', scriptQueryString, 
-                      '&element_id=videoDiv"></scr', 'ipt>'].join(''));
-    </script>
+
+
+<h2>About Universal Subtitles</h2>
+
+<div class="left_column">
+
+<h3>Our Mission</h3>
+
+<h4>Videos for Everyone</h4>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+<h4>Community is Key</h4>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+
+</div>
+
+
+<div class="right_column">
+
+<h3>The Uninauts</h3>
+
+<ul class="peeps">
+
+  <li>
+    <h4>Participatory Culture Foundation</h4>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+  </li>
+
+  <li>
+    <h4>8Planes</h4>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+  </li>
+</ul>
+
+
+</div>
+
+
+
 {% endblock %}
