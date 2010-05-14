@@ -83,6 +83,7 @@ function assertTimes(sub, start, end) {
 
 function setUp() {
     MS_videoPlayer = new mirosubs.testing.StubVideoPlayer();
+    MS_videoPlayer.playheadTime = 0;
     MS_unitOfWork = new mirosubs.UnitOfWork();
     MS_eventHandler = new goog.events.EventHandler();
     MS_subtitleUpdateCounts = {};
@@ -173,6 +174,33 @@ function testAssignTime() {
     assertTimes(newSub,
                 T3 + UNASSIGNED_SPACING,
                 T3 + UNASSIGNED_SPACING + MIN_LENGTH);
+}
+
+function testStartOut() {
+    var set = createSet([
+        captionJSON(-1, -1, 1),
+        captionJSON(-1, -1, 2),
+        captionJSON(-1, -1, 3),
+        captionJSON(-1, -1, 4)
+    ]);
+    var subs = set.getSubsToDisplay();
+    assertEquals(1, subs.length);
+    assertTimes(subs[0], UNASSIGNED_SPACING, 
+               UNASSIGNED_SPACING + MIN_LENGTH);
+    var T0 = 3;
+    sendVideoTimeUpdate(T0);
+    assertEquals(1, MS_subtitleUpdateCount);
+    assertTimes(subs[0], T0 + UNASSIGNED_SPACING,
+                T0 + UNASSIGNED_SPACING + MIN_LENGTH);
+    subs[0].getEditableCaption().setStartTime(T0);
+    assertEquals(2, MS_subtitleUpdateCounts['1']);
+    assertEquals(1, MS_addedSubtitles.length);
+    var T1= 5;
+    sendVideoTimeUpdate(T1);
+    assertTimes(subs[0], T0, T1);
+    assertTimes(MS_addedSubtitles[0], 
+                T1 + UNASSIGNED_SPACING,
+                T1 + UNASSIGNED_SPACING + MIN_LENGTH);
 }
 
 {% endblock %}

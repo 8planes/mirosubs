@@ -23,16 +23,18 @@ mirosubs.timeline.SubtitleSet = function(editableCaptionSet, videoPlayer) {
     this.eventHandler_ = new goog.events.EventHandler(this);
     this.editableCaptionSet_ = editableCaptionSet;
     this.videoPlayer_ = videoPlayer;
+    var first = true;
     this.subsToDisplay_ = goog.array.map(
         editableCaptionSet.timelineCaptions(),
         function(c) { 
-            return new mirosubs.timeline.Subtitle(c, videoPlayer) 
+            var s = new mirosubs.timeline.Subtitle(c, videoPlayer, first);
+            first = false;
+            return s;
         });
     var i;
-    for (i = 0; i < this.subsToDisplay_.length - 1; i++) {
+    for (i = 0; i < this.subsToDisplay_.length - 1; i++)
         this.subsToDisplay_[i].setNextSubtitle(
             this.subsToDisplay_[i + 1]);
-    }
     this.eventHandler_.listen(
         this.editableCaptionSet_,
         mirosubs.subtitle.EditableCaption.CHANGE,
@@ -51,9 +53,12 @@ mirosubs.timeline.SubtitleSet.prototype.captionChange_ = function(e) {
     if (e.timesFirstAssigned && e.target.getNextCaption() != null) {
         var newSub = new mirosubs.timeline.Subtitle(
             e.target.getNextCaption(), this.videoPlayer_);
-        var lastSub = this.subsToDisplay_[this.subsToDisplay_.length - 1];
+        var lastSub = null;
+        if (this.subsToDisplay_.length > 0)
+            lastSub = this.subsToDisplay_[this.subsToDisplay_.length - 1];
         this.subsToDisplay_.push(newSub);
-        lastSub.setNextSubtitle(newSub);
+        if (lastSub != null)
+            lastSub.setNextSubtitle(newSub);
         this.dispatchEvent(
             new mirosubs.timeline.SubtitleSet.DisplayNewEvent(newSub));
     }
@@ -62,7 +67,7 @@ mirosubs.timeline.SubtitleSet.prototype.captionChange_ = function(e) {
 mirosubs.timeline.SubtitleSet.prototype.disposeInternal = function() {
     mirosubs.timeline.SubtitleSet.superClass_.disposeInternal.call(this);
     this.eventHandler_.dispose();
-    goog.array.forEach(this.subtitles_, function(s) { s.dispose(); });
+    goog.array.forEach(this.subsToDisplay_, function(s) { s.dispose(); });
 };
 
 mirosubs.timeline.SubtitleSet.DisplayNewEvent = function(subtitle) {

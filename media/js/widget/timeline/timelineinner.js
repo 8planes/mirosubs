@@ -23,12 +23,12 @@ goog.provide('mirosubs.timeline.TimelineInner');
  *
  * @param {number} spacing The space, in seconds, between two 
  *     major ticks.
- * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
+ * @param {mirosubs.timeline.SubtitleSet} subtitleSet
  */
-mirosubs.timeline.TimelineInner = function(spacing, captionSet) {
+mirosubs.timeline.TimelineInner = function(spacing, subtitleSet) {
     goog.ui.Component.call(this);
     this.spacing_ = spacing;
-    this.captionSet_ = captionSet;
+    this.subtitleSet_ = subtitleSet;
 };
 goog.inherits(mirosubs.timeline.TimelineInner, goog.ui.Component);
 mirosubs.timeline.TimelineInner.prototype.createDom = function() {
@@ -37,7 +37,7 @@ mirosubs.timeline.TimelineInner.prototype.createDom = function() {
     this.timerow_ = new mirosubs.timeline.TimeRow(this.spacing_);
     this.addChild(this.timerow_, true);
     this.timelineSubs_ = new mirosubs.timeline.TimelineSubs(
-        this.captionSet_,
+        this.subtitleSet_,
         mirosubs.timeline.TimeRowUL.PX_PER_TICK / this.spacing_);
     this.addChild(this.timelineSubs_, true);
 };

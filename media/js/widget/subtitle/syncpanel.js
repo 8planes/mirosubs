@@ -52,13 +52,9 @@ mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     var handler = this.getHandler();
     handler.listen(this.captionManager_,
                    mirosubs.CaptionManager.CAPTION,
-                   this.captionReached_);    
-    handler.listen(document,
-                   goog.events.EventType.KEYDOWN,
-                   this.handleKeyDown_);
-    handler.listen(document,
-                   goog.events.EventType.KEYUP,
-                   this.handleKeyUp_);
+                   this.captionReached_).
+    listen(document, goog.events.EventType.KEYDOWN, this.handleKeyDown_).
+    listen(document, goog.events.EventType.KEYUP, this.handleKeyUp_);
 };
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);

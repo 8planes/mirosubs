@@ -18,11 +18,12 @@
 
 goog.provide('mirosubs.timeline.Subtitle');
 
-mirosubs.timeline.Subtitle = function(editableCaption, videoPlayer) {
+mirosubs.timeline.Subtitle = function(editableCaption, videoPlayer, isFirst) {
     goog.events.EventTarget.call(this);
-    this.nextSubtitle_ = null;
     this.editableCaption_ = editableCaption;
     this.videoPlayer_ = videoPlayer;
+    this.isFirst_ = isFirst;
+    this.nextSubtitle_ = null;
     this.eventHandler_ = new goog.events.EventHandler(this);
     this.eventHandler_.listen(
         editableCaption,
@@ -43,8 +44,16 @@ mirosubs.timeline.Subtitle.prototype.captionChanged_ = function(e) {
 };
 
 mirosubs.timeline.Subtitle.prototype.updateTimes_ = function() {
-    this.startTime_ = this.editableCaption_.getStartTime();
-    if (this.editableCaption_.hasStartTimeOnly()) {
+    if (this.isFirstUnsynced_()) {
+        this.startTime_ = 
+            this.videoPlayer_.getPlayheadTime() +
+            mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
+    }
+    else {
+        this.startTime_ = this.editableCaption_.getStartTime();
+    }
+    if (this.isFirstUnsynced_() ||
+        this.editableCaption_.hasStartTimeOnly()) {
         if (this.videoEventHandler_ == null) {
             this.videoEventHandler_ = new goog.events.EventHandler(this);
             this.videoEventHandler_.listen(
@@ -52,11 +61,18 @@ mirosubs.timeline.Subtitle.prototype.updateTimes_ = function() {
                 mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
                 this.videoTimeUpdate_);
         }
-        this.endTime_ = Math.max(
-            this.startTime_ + mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH, 
-            this.videoPlayer_.getPlayheadTime());
-        if (this.nextSubtitle_)
-            this.nextSubtitle_.bumpNextSubTime(this.endTime_);
+        if (this.editableCaption_.hasStartTimeOnly()) {
+            this.endTime_ = Math.max(
+                this.startTime_ + 
+                    mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH, 
+                this.videoPlayer_.getPlayheadTime());
+            if (this.nextSubtitle_)
+                this.nextSubtitle_.bumpUnsyncedTimes(this.endTime_);
+        }
+        else {
+            this.endTime_ = this.startTime_ +
+                mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;
+        }
     }
     else {
         this.endTime_ = this.editableCaption_.getEndTime();
@@ -67,31 +83,45 @@ mirosubs.timeline.Subtitle.prototype.updateTimes_ = function() {
     }    
 };
 
-mirosubs.timeline.Subtitle.prototype.bumpNextSubTime = function(lastEndTime) {
-    // called because this instance is the next sub to be synced.
-    this.startTime_ = lastEndTime + 
-        mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
-    this.endTime_ = this.startTime_ +
-        mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;
-    this.dispatchEvent(mirosubs.timeline.Subtitle.CHANGE);
+mirosubs.timeline.Subtitle.prototype.isFirstUnsynced_ = function() {
+    return this.isFirst_ &&
+        this.editableCaption_.getStartTime() == -1;
 };
 
-mirosubs.timeline.Subtitle.prototype.videoTimeUpdate_ = function(e) {
-    var prevEndTime = this.endTime_;
-    this.endTime_ = Math.max(
-        this.startTime_ + mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH,
-        this.videoPlayer_.getPlayheadTime());
-    if (prevEndTime != this.endTime_) {
-        this.dispatchEvent(mirosubs.timeline.Subtitle.CHANGE);
-        if (this.nextSubtitle_)
-            this.nextSubtitle_.bumpNextSubTime(this.endTime_);
-    }
+mirosubs.timeline.Subtitle.prototype.isNextToBeSynced = function() {
+    return this.editableCaption_.getStartTime() == -1;
 };
 
 mirosubs.timeline.Subtitle.prototype.setNextSubtitle = function(sub) {
     this.nextSubtitle_ = sub;
     if (this.editableCaption_.hasStartTimeOnly())
-        this.nextSubtitle_.bumpNextSubTime(this.endTime_);
+        this.nextSubtitle_.bumpUnsyncedTimes(this.endTime_);
+};
+
+mirosubs.timeline.Subtitle.prototype.videoTimeUpdate_ = function(e) {
+    if (this.editableCaption_.hasStartTimeOnly()) {
+        var prevEndTime = this.endTime_;
+        this.endTime_ = Math.max(
+            this.startTime_ + mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH,
+            this.videoPlayer_.getPlayheadTime());
+        if (prevEndTime != this.endTime_) {
+            this.dispatchEvent(mirosubs.timeline.Subtitle.CHANGE);
+            if (this.nextSubtitle_)
+                this.nextSubtitle_.bumpUnsyncedTimes(this.endTime_);
+        }
+    }
+    else
+        this.bumpUnsyncedTimes(this.videoPlayer_.getPlayheadTime());
+};
+
+mirosubs.timeline.Subtitle.prototype.bumpUnsyncedTimes = function(time) {
+    var prevStartTime = this.startTime_;
+    this.startTime_ = time + 
+        mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
+    this.endTime_ = this.startTime_ +
+        mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;
+    if (this.startTime_ != prevStartTime)
+        this.dispatchEvent(mirosubs.timeline.Subtitle.CHANGE);
 };
 
 mirosubs.timeline.Subtitle.prototype.getStartTime = function() {

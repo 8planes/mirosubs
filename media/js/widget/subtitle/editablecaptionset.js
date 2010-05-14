@@ -75,7 +75,9 @@ mirosubs.subtitle.EditableCaptionSet.prototype.timelineCaptions =
         function(c) {
             return c.getStartTime() != -1 || 
                 (c.getPreviousCaption() != null &&
-                 c.getPreviousCaption().getStartTime() != -1);
+                 c.getPreviousCaption().getStartTime() != -1) ||
+                (c.getPreviousCaption() == null &&
+                 c.getStartTime() == -1);
         });
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.clear = function() {

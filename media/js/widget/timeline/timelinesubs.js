@@ -18,9 +18,9 @@
 
 goog.provide('mirosubs.timeline.TimelineSubs');
 
-mirosubs.timeline.TimelineSubs = function(captionSet, pixelsPerSecond) {
+mirosubs.timeline.TimelineSubs = function(subtitleSet, pixelsPerSecond) {
     goog.ui.Component.call(this);
-    this.captionSet_ = captionSet;
+    this.subtitleSet_ = subtitleSet;
     this.pixelsPerSecond_ = pixelsPerSecond;
     /**
      * Map of caption id to TimelineSub
@@ -31,34 +31,27 @@ goog.inherits(mirosubs.timeline.TimelineSubs, goog.ui.Component);
 mirosubs.timeline.TimelineSubs.prototype.createDom = function() {
     mirosubs.timeline.TimelineSubs.superClass_.createDom.call(this);
     this.getElement().className = 'mirosubs-timeline-subs';
-    var subsWithTimes = this.captionSet_.captionsWithTimes();
+    var subsToDisplay = this.subtitleSet_.getSubsToDisplay();
     var i;
-    for (i = 0; i < subsWithTimes.length; i++)
-        this.addSub_(subsWithTimes[i]);
+    for (i = 0; i < subsToDisplay.length; i++)
+        this.addSub_(subsToDisplay[i]);
 };
 mirosubs.timeline.TimelineSubs.prototype.enterDocument = function() {
     mirosubs.timeline.TimelineSubs.superClass_.enterDocument.call(this);
     this.getHandler().listen(
-        this.captionSet_, 
-        goog.object.getValues(mirosubs.subtitle.EditableCaptionSet.EventType),
-        this.captionSetListener_);
+        this.subtitleSet_, 
+        mirosubs.timeline.SubtitleSet.DISPLAY_NEW,
+        this.displayNewListener_);
+    // TODO: listen to CLEAR_ALL also (after you write it and unit test :))
 };
-mirosubs.timeline.TimelineSubs.prototype.captionSetListener_ = function(event) {
-    var et = mirosubs.subtitle.EditableCaptionSet.EventType;
-    if (event.type == et.CLEAR_ALL) {
-        
-    }
-    else if (event.type == et.UPDATED) {
-        var updatedSub = event.caption;
-        if (event.timesFirstAssigned)
-            this.addSub_(updatedSub);
-        else
-            this.subs_[updatedSub.getCaptionID() + ''].updateValues();
-    }
+mirosubs.timeline.TimelineSubs.prototype.displayNewListener_ = 
+    function(event) 
+{
+    this.addSub_(event.subtitle);
 };
 mirosubs.timeline.TimelineSubs.prototype.addSub_ = function(sub) {
     var timelineSub = new mirosubs.timeline.TimelineSub(
         sub, this.pixelsPerSecond_, 0);
     this.addChild(timelineSub, true);
-    this.subs_[sub.getCaptionID() + ''] = timelineSub;
+    this.subs_[sub.getEditableCaption().getCaptionID() + ''] = timelineSub;
 };

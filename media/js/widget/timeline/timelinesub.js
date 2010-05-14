@@ -39,22 +39,25 @@ mirosubs.timeline.TimelineSub.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var el = this.getElement();
     el.appendChild(this.textElem_ = $d('span'));
-    el.appendChild(this.leftGrabber_ = 
-                   $d('span', 'mirosubs-grabber mirosubs-leftGrabber', $d('strong')));
-    el.appendChild(this.rightGrabber_ = 
-                   $d('span', 'mirosubs-grabber mirosubs-rightGrabber', $d('strong')));
-    this.updateValues();
+    el.appendChild(
+        this.leftGrabber_ = 
+            $d('span', 'mirosubs-grabber mirosubs-leftGrabber', 
+               $d('strong')));
+    el.appendChild(
+        this.rightGrabber_ = 
+            $d('span', 'mirosubs-grabber mirosubs-rightGrabber', 
+               $d('strong')));
+    this.updateValues_();
 };
 mirosubs.timeline.TimelineSub.prototype.enterDocument = function() {
     mirosubs.timeline.TimelineSub.superClass_.enterDocument.call(this);
     this.getHandler().listen(
-        this.getElement(), 'mouseover', this.onMouseOver_);
-    this.getHandler().listen(
-        this.getElement(), 'mouseout', this.onMouseOut_);
-    this.getHandler().listen(
-        this.leftGrabber_, 'mousedown', this.onGrabberMousedown_);
-    this.getHandler().listen(
-        this.rightGrabber_, 'mousedown', this.onGrabberMousedown_);
+        this.getElement(), 'mouseover', this.onMouseOver_).
+        listen(this.getElement(), 'mouseout', this.onMouseOut_).
+        listen(this.leftGrabber_, 'mousedown', this.onGrabberMousedown_).
+        listen(this.rightGrabber_, 'mousedown', this.onGrabberMousedown_).
+        listen(this.subtitle_, mirosubs.timeline.Subtitle.CHANGE, 
+               this.updateValues_);
 };
 mirosubs.timeline.TimelineSub.prototype.onMouseOver_ = function(event) {
     this.setGrabberVisibility_(true);
@@ -66,14 +69,14 @@ mirosubs.timeline.TimelineSub.prototype.onMouseOut_ = function(event) {
 };
 mirosubs.timeline.TimelineSub.prototype.onDocMouseMoveLeft_ = function(event) {
     // moving left grabber
-    this.subtitle_.setStartTime(
+    this.subtitle_.getEditableCaption().setStartTime(
         this.grabberMousedownTime_ + 
             (event.clientX - this.grabberMousedownClientX_) / 
             this.pixelsPerSecond_);
 };
 mirosubs.timeline.TimelineSub.prototype.onDocMouseMoveRight_ = function(event) {
     // moving right grabber
-    this.subtitle_.setEndTime(
+    this.subtitle_.getEditableCaption().setEndTime(
         this.grabberMousedownTime_ +
             (event.clientX - this.grabberMousedownClientX_) /
             this.pixelsPerSecond_);
@@ -110,15 +113,41 @@ mirosubs.timeline.TimelineSub.prototype.setGrabberVisibility_ =
         c.remove(this.rightGrabber_, overClass);
     }
 };
-mirosubs.timeline.TimelineSub.prototype.updateValues = function() {
-    goog.dom.setTextContent(this.textElem_, this.subtitle_.getText());
-    this.getElement().style.left = 
-        (this.subtitle_.getStartTime() * 
-         this.pixelsPerSecond_ - 
-         this.pixelOffset_) + 'px';
-    this.getElement().style.width =
-        ((this.subtitle_.getEndTime() - this.subtitle_.getStartTime()) *
-         this.pixelsPerSecond_) + 'px';
+mirosubs.timeline.TimelineSub.prototype.updateValues_ = function() {
+    if (this.subtitle_.getEditableCaption().getText() != 
+        this.existingSubText_) 
+    {
+        goog.dom.setTextContent(
+            this.textElem_, this.subtitle_.getEditableCaption().getText());
+        this.existingSubText_ = this.subtitle_.getEditableCaption().getText();
+    }
+    if (this.subtitle_.getEndTime() != this.existingSubEnd_ ||
+        this.subtitle_.getStartTime() != this.existingSubStart_) {
+        this.getElement().style.width =
+            ((this.subtitle_.getEndTime() - this.subtitle_.getStartTime()) *
+             this.pixelsPerSecond_) + 'px';
+        this.existingSubEnd_ = this.subtitle_.getEndTime();
+    }
+    if (this.subtitle_.getStartTime() != this.existingSubStart_) {
+        this.getElement().style.left = 
+            (this.subtitle_.getStartTime() * 
+             this.pixelsPerSecond_ - 
+             this.pixelOffset_) + 'px';
+        this.existingSubStart_ = this.subtitle_.getStartTime();
+    }
+    if (this.subtitle_.isNextToBeSynced() != this.existingSubNextToSync_) {
+        var c = goog.dom.classes;
+        var unsyncedclass = 'mirosubs-timeline-sub-unsynced';
+        if (this.subtitle_.isNextToBeSynced()) {
+            c.add(this.getElement(), unsyncedclass);
+            this.rightGrabber_.style.display = 'none';
+        }
+        else {
+            c.remove(this.getElement(), unsyncedclass);
+            this.rightGrabber_.style.display = '';
+        }
+        this.existingSubNextToSync_ = this.subtitle_.isNextToBeSynced();
+    }
 };
 mirosubs.timeline.TimelineSub.prototype.disposeInternal = function() {
     mirosubs.timeline.TimelineSub.superClass_.disposeInternal.call(this);

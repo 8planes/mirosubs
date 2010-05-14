@@ -22,12 +22,14 @@ goog.provide('mirosubs.timeline.Timeline');
  *
  * @param {number} spacing The space, in seconds, between two 
  *     major ticks.
+ * @param {mirosubs.timeline.SubtitleSet} subtitleSet
  */
-mirosubs.timeline.Timeline = function(spacing, captionSet) {
+mirosubs.timeline.Timeline = function(spacing, subtitleSet, videoPlayer) {
     goog.ui.Component.call(this);
     this.spacing_ = spacing;
-    this.captionSet_ = captionSet;
-    this.pixelsPerSecond_ = mirosubs.timeline.TimeRowUL.PX_PER_TICK / spacing;    
+    this.subtitleSet_ = subtitleSet;
+    this.pixelsPerSecond_ = mirosubs.timeline.TimeRowUL.PX_PER_TICK / spacing;
+    this.videoPlayer_ = videoPlayer;
 };
 goog.inherits(mirosubs.timeline.Timeline, goog.ui.Component);
 mirosubs.timeline.Timeline.prototype.createDom = function() {
@@ -37,16 +39,26 @@ mirosubs.timeline.Timeline.prototype.createDom = function() {
     el.className = 'mirosubs-timeline';
     el.appendChild($d('div', 'top', ' '));
     this.timelineInner_ = new mirosubs.timeline.TimelineInner(
-        this.spacing_, this.captionSet_);
+        this.spacing_, this.subtitleSet_);
     this.addChild(this.timelineInner_, true);
     el.appendChild($d('div', 'marker'));
 };
 mirosubs.timeline.Timeline.prototype.enterDocument = function() {
     mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
-    var size = goog.style.getSize(this.getElement());
-    this.width_ = size.width;
+    this.getHandler().listen(
+        this.videoPlayer_,
+        mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+        this.videoTimeUpdate_);
+    this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
-mirosubs.timeline.Timeline.prototype.setTime = function(time) {
+mirosubs.timeline.Timeline.prototype.videoTimeUpdate_ = function(e) {
+    this.setTime_(this.videoPlayer_.getPlayheadTime());
+};
+mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {
+    if (!this.width_) {
+        var size = goog.style.getSize(this.getElement());
+        this.width_ = size.width;
+    }
     this.timelineInner_.getElement().style.left = 
         (-time * this.pixelsPerSecond_ + this.width_ / 2) + 'px';
     this.timelineInner_.ensureVisible(time);
