@@ -7,15 +7,16 @@
  */
 var MS_subtitleUpdateCounts;
 var MS_subtitleUpdateCount;
+var MS_addedSubtitles;
 var MS_eventHandler;
 var MS_videoPlayer;
 var MS_unitOfWork;
 
-var MIN_LENGTH = mirosubs.timeline.subtitle.MIN_UNASSIGNED_LENGTH;
-var UNASSIGNED_SPACING = mirosubs.timeline.subtitle.UNASSIGNED_SPACING;
+var MIN_LENGTH = mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;
+var UNASSIGNED_SPACING = mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
 
 function MS_subUpdateListener(event) {
-    var captionID = event.target.getCaptionID() + '';
+    var captionID = event.target.getEditableCaption().getCaptionID() + '';
     if (!MS_subtitleUpdateCounts[captionID])
         MS_subtitleUpdateCounts[captionID] = 1;
     else
@@ -24,10 +25,15 @@ function MS_subUpdateListener(event) {
 }
 
 function MS_displaySubListener(event) {
-    var captionID = event.subtitle.getCaptionID + '';
+    var captionID = event.subtitle.getEditableCaption().getCaptionID() + '';
+    MS_addedSubtitles.push(event.subtitle);
     MS_subtitleUpdateCounts[captionID] = 1;
     MS_subtitleUpdateCount++;
     listenToSubtitle(event.subtitle);
+}
+
+function MS_clearListener(event) {
+    
 }
 
 /* helper functions */
@@ -81,6 +87,7 @@ function setUp() {
     MS_eventHandler = new goog.events.EventHandler();
     MS_subtitleUpdateCounts = {};
     MS_subtitleUpdateCount = 0;
+    MS_addedSubtitles = [];
 }
 
 function testSubsToDisplayLength() {
@@ -139,12 +146,33 @@ function testVideoPlayheadMove() {
                 T1 + MIN_LENGTH * 2 + UNASSIGNED_SPACING);
 }
 
-function testAssignTimeBeforeMin() {
-    fail('implement me');
-}
-
-function testAssignTimeAfterMin() {
-    fail('implement me');
+function testAssignTime() {
+    var T0 = 0.3, T1 = 2.5, T2 = 4.6, T3 = 7;
+    var set = createSet([
+        captionJSON(T0, T1, 1),
+        captionJSON(T1, -1, 2),
+        captionJSON(-1, -1, 3),
+        captionJSON(-1, -1, 4)
+    ]);
+    var subs = set.getSubsToDisplay();
+    sendVideoTimeUpdate(T2);
+    subs[2].getEditableCaption().setStartTime(T2);
+    assertEquals(1, MS_subtitleUpdateCounts['4']);
+    assertEquals(5, MS_subtitleUpdateCount);
+    assertEquals(1, MS_addedSubtitles.length);
+    var newSub = MS_addedSubtitles[0];
+    assertTimes(subs[1], T1, T2);
+    assertTimes(subs[2], T2, T2 + MIN_LENGTH);
+    assertTimes(newSub, 
+                T2 + MIN_LENGTH + UNASSIGNED_SPACING,
+                T2 + MIN_LENGTH * 2 + UNASSIGNED_SPACING);
+    sendVideoTimeUpdate(T3);
+    assertEquals(2, MS_subtitleUpdateCounts['4']);
+    assertEquals(7, MS_subtitleUpdateCount);
+    assertTimes(subs[2], T2, T3);
+    assertTimes(newSub,
+                T3 + UNASSIGNED_SPACING,
+                T3 + UNASSIGNED_SPACING + MIN_LENGTH);
 }
 
 {% endblock %}

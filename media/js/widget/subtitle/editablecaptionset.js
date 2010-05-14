@@ -27,7 +27,8 @@ goog.provide('mirosubs.subtitle.EditableCaptionSet');
 
 /**
  * @constructor
- * @param {array.<object.<string, *>>} existingJsonCaptions
+ * @param {array.<object.<string, *>>} existingJsonCaptions Must be sorted 
+ *     in ascending order
  * @param {mirosubs.UnitOfWork=} opt_unitOfWork Unit of work, only provided 
  *     if this EditableCaptionSet is not read-only
  */
@@ -54,11 +55,28 @@ mirosubs.subtitle.EditableCaptionSet = function(
 goog.inherits(mirosubs.subtitle.EditableCaptionSet, goog.events.EventTarget);
 mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL = 'clearall';
 
+/**
+ * Always in ascending order by start time.
+ */
 mirosubs.subtitle.EditableCaptionSet.prototype.captionsWithTimes =
     function() 
 {
     return goog.array.filter(
         this.captions_, function(c) { return c.getStartTime() != -1; });
+};
+/**
+ * Always in ascending order by start time.
+ */
+mirosubs.subtitle.EditableCaptionSet.prototype.timelineCaptions = 
+    function() 
+{
+    return goog.array.filter(
+        this.captions_,
+        function(c) {
+            return c.getStartTime() != -1 || 
+                (c.getPreviousCaption() != null &&
+                 c.getPreviousCaption().getStartTime() != -1);
+        });
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.clear = function() {
     var caption;
