@@ -42,6 +42,10 @@ mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_jsonCaption) {
 };
 goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
 
+mirosubs.subtitle.EditableCaption.startTimeCompare = function(a, b) {
+    return a.getStartTime() - b.getStartTime();
+};
+
 mirosubs.subtitle.EditableCaption.CHANGE = 'captionchanged';
 
 /**
@@ -57,6 +61,9 @@ mirosubs.subtitle.EditableCaption.prototype.setPreviousCaption =
     function(caption) 
 {
     this.previousCaption_ = caption;
+};
+mirosubs.subtitle.EditableCaption.prototype.getPreviousCaption = function() {
+    return this.previousCaption_;
 };
 /**
  * @param {mirosubs.subtitle.EditableCaption} caption Next caption in list.
@@ -158,7 +165,10 @@ mirosubs.subtitle.EditableCaption.prototype.isShownAt = function(time) {
     return this.getStartTime() <= time && 
         (this.getEndTime() == -1 || time < this.getEndTime());
 };
-
+mirosubs.subtitle.EditableCaption.prototype.hasStartTimeOnly = function() {
+    return this.getStartTime() != -1 &&
+        this.getEndTime() == -1;
+};
 mirosubs.subtitle.EditableCaption.prototype.changed_ = 
     function(timesFirstAssigned) 
 {

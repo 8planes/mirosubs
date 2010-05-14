@@ -42,6 +42,9 @@ mirosubs.testing.StubVideoPlayer.prototype.getPlayheadTime = function() {
 mirosubs.testing.StubVideoPlayer.prototype.play = function() {
     this.playing = true;
 };
+mirosubs.testing.StubVideoPlayer.prototype.pause = function() {
+    this.playing = false;
+};
 mirosubs.testing.StubVideoPlayer.prototype.isPlaying = function() {
     return this.playing;
 };

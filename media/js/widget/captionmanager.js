@@ -27,15 +27,9 @@ goog.provide('mirosubs.CaptionManager');
 mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     goog.events.EventTarget.call(this);
     this.captions_ = captionSet.captionsWithTimes();
-    /**
-     * Compares two subs for ordering by start time.
-     * @type {function(mirosubs.subtitle.EditableCaption, 
-     *     mirosubs.subtitle.EditableCaption)}
-     */
-    this.captionCompare_ = function(a, b) {
-        return a.getStartTime() - b.getStartTime();
-    };
-    goog.array.sort(this.captions_, this.captionCompare_);
+    goog.array.sort(
+        this.captions_,
+        mirosubs.subtitle.EditableCaption.startTimeCompare);
     this.binaryCompare_ = function(time, caption) {
 	return time - caption.getStartTime();
     };

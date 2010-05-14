@@ -1620,7 +1620,7 @@ outline: none !important;
 .mirosubs-timeline {
     margin: 0;
     padding: 0;
-    width: 360px;
+    width: 400px;
     height: 80px;
     overflow: hidden;
     position: relative;
@@ -1697,11 +1697,7 @@ outline: none !important;
     background: #fefefe url("../images/gradient.png") 0 21px repeat-x;
 }
 
-.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
-    color: #fff;
-}
-
-.mirosubs-timeline ul.mirosubs-timeline-titles li.not_synced{
+.mirosubs-timeline-sub-unsynced {
     background: #aaa;
 }
 
