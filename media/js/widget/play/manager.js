@@ -21,8 +21,10 @@ goog.provide('mirosubs.play.Manager');
 mirosubs.play.Manager = function(videoPlayer, captions) {
     goog.Disposable.call(this);
     this.videoPlayer_ = videoPlayer;
-    this.captionManager_ = new mirosubs.CaptionManager(videoPlayer.getPlayheadFn());
-    this.captionManager_.addCaptions(captions);
+    var captionSet = 
+        new mirosubs.subtitle.EditableCaptionSet(captions);
+    this.captionManager_ = 
+        new mirosubs.CaptionManager(videoPlayer, captionSet);
     goog.events.listen(this.captionManager_,
                        mirosubs.CaptionManager.CAPTION,
                        this.captionReached_);
@@ -30,7 +32,7 @@ mirosubs.play.Manager = function(videoPlayer, captions) {
 goog.inherits(mirosubs.play.Manager, goog.Disposable);
 mirosubs.play.Manager.prototype.captionReached_ = function(event) {
     var c = event.caption;
-    this.videoPlayer_.showCaptionText(c ? c.getCaptionText() : '');
+    this.videoPlayer_.showCaptionText(c ? c.getText() : '');
 };
 mirosubs.play.Manager.prototype.disposeInternal = function() {
     mirosubs.play.Manager.superClass_.disposeInternal.call(this);
