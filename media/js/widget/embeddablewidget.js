@@ -145,6 +145,8 @@ mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
 mirosubs.EmbeddableWidget.prototype.startSubtitlingImpl_ = 
     function(version, existingCaptions) 
 {
+    this.videoPlayer_.pause();
+    this.turnOffSubs_();
     var subtitleDialog = new mirosubs.subtitle.Dialog(
         this.videoSource_, 
         new mirosubs.subtitle.MSServerModel(
@@ -189,10 +191,12 @@ mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
 };
 
 mirosubs.EmbeddableWidget.prototype.turnOffSubs_ = function(event) {
-    this.popupMenu_.setShowingSubs(false);
-    // FIXME: petit duplication. appears in server-side code also.
-    this.videoTab_.setText("Choose Language...");
-    this.disposePlayManager_();
+    if (this.playManager_) {
+        this.popupMenu_.setShowingSubs(false);
+        // FIXME: petit duplication. appears in server-side code also.
+        this.videoTab_.setText("Choose Language...");
+        this.disposePlayManager_();
+    }
 };
 
 mirosubs.EmbeddableWidget.prototype.subsLoaded_ = 
@@ -229,6 +233,8 @@ mirosubs.EmbeddableWidget.prototype.addNewLanguageResponseReceived_ =
     function(result) 
 {
     this.videoTab_.showLoading(false);
+    this.videoPlayer_.pause();
+    this.turnOffSubs_();
     var translationDialog = new mirosubs.translate.Dialog(
         this.videoSource_, this.videoID_, result['captions'], 
         result['languages'], this.nullWidget_);
