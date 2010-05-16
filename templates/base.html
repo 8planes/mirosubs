@@ -16,6 +16,7 @@
 </head>
 <body {% block body_attrs %}{% endblock %}>
     <div class="cloud">
+    <div class="watercolor">
 
     <div class="wrapper">
 
@@ -54,8 +55,8 @@
 
           <li class="first"><a href="{% url videos:create %}"><span>Submit Video</span></a></li>
           <li><a href="{% url videos:list %}"><span>All Videos</span></a></li>
-          <li><a href="#"><span>About</span></a></li>
-          <li><a href="#"><span>FAQ</span></a></li>
+          <li><a href="/about"><span>About</span></a></li>
+          <li><a href="/faq"><span>FAQ</span></a></li>
           <li><a href="#"><span>Firefox Extension</span></a></li>
            
         </ul>
@@ -76,6 +77,8 @@
       
         </div>
       {% feedback_form %}
+
+  </div>
 
   </div>
 </body>
