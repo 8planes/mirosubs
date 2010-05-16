@@ -60,7 +60,7 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
             this.subtitles_, this.unitOfWork_);
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className = 
-        "mirosubs-titlesList taller";
+        "mirosubs-titlesList";
     this.translationList_.setEnabled(false);
 };
 mirosubs.translate.TranslationPanel.prototype.languageSelected_ = 
