@@ -438,7 +438,7 @@ margin: 20px 0 0 0px;
 }
 
 .mirosubs-left object, .mirosubs-left embed{
-    width: 400px;
+    width: 400px !important;
     height: 350px;
 }
 
