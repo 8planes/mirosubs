@@ -126,17 +126,11 @@ mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
 {
     this.currentlyEditing_ = editing;
     if (editing) {
-        this.videoPlayerPlayingBeforeEditing_ = 
-            this.videoPlayer_.isPlaying();
         this.videoPlayer_.pause();
     }
     else {
-        if (this.videoPlayerPlayingBeforeEditing_) {
-            var subStartTime = subtitleWidget.getSubtitle().getStartTime();
-            if (subStartTime != -1)
-                this.videoPlayer_.setPlayheadTime(subStartTime);
-            this.videoPlayer_.play();
-        }
+        var subStartTime = subtitleWidget.getSubtitle().getStartTime();
+        this.videoPlayer_.playWithNoUpdateEvents(subStartTime, 2);
     }
 };
 mirosubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {

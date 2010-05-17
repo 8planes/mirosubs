@@ -38,7 +38,7 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls) {
         mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL,
         this);
     this.timeUpdateThrottle_ = new goog.Throttle(
-        this.videoTimeUpdate_, 
+        this.sendTimeUpdateInternal, 
         mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL,
         this);
 };
@@ -114,9 +114,6 @@ mirosubs.video.Html5VideoPlayer.prototype.videoProgress_ = function() {
     this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoTimeUpdate_ = function() {
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
-};
 mirosubs.video.Html5VideoPlayer.prototype.getVolume = function() {
     return this.videoElem_['volume'];
 };

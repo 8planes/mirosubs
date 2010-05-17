@@ -100,8 +100,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.progressTick_ = function(e) {
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
-        this.dispatchEvent(
-            mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+        this.sendTimeUpdateInternal();
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = 
     function(playerAPIID) 
@@ -181,8 +180,10 @@ mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
-    if (this.player_)
+    if (this.player_) {
         this.player_['seekTo'](playheadTime, true);
+        this.sendTimeUpdateInternal();
+    }
     else
         this.commands_.push(goog.bind(this.setPlayheadTime, 
                                       this, playheadTime));
