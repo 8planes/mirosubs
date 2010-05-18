@@ -23,13 +23,10 @@ mirosubs.timeline.SubtitleSet = function(editableCaptionSet, videoPlayer) {
     this.eventHandler_ = new goog.events.EventHandler(this);
     this.editableCaptionSet_ = editableCaptionSet;
     this.videoPlayer_ = videoPlayer;
-    var first = true;
     this.subsToDisplay_ = goog.array.map(
         editableCaptionSet.timelineCaptions(),
         function(c) { 
-            var s = new mirosubs.timeline.Subtitle(c, videoPlayer, first);
-            first = false;
-            return s;
+            return new mirosubs.timeline.Subtitle(c, videoPlayer);
         });
     var i;
     for (i = 0; i < this.subsToDisplay_.length - 1; i++)

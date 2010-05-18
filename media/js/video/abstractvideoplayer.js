@@ -71,9 +71,9 @@ mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMeth
 mirosubs.video.AbstractVideoPlayer.prototype.playWithNoUpdateEvents = 
     function(timeToStart, secondsToPlay) 
 {
+    this.noUpdateEvents_ = true;
     this.setPlayheadTime(timeToStart);
     this.play();
-    this.noUpdateEvents_ = true;
     this.noUpdateStartTime_ = timeToStart;
     this.noUpdateEndTime_ = timeToStart + secondsToPlay;
 };
@@ -85,7 +85,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.sendTimeUpdateInternal =
             mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
     else {
         if (this.getPlayheadTime() >= this.noUpdateEndTime_) {
-            this.setPlayheadTime(this.noUpdateStartTime_);
+            this.setPlayheadTime(this.noUpdateStartTime_, true);
             this.pause();
             this.noUpdateEvents_ = false;
         }

@@ -203,4 +203,24 @@ function testStartOut() {
                 T1 + UNASSIGNED_SPACING + MIN_LENGTH);
 }
 
+function testStartWithLoneUnsynced() {
+    var T0 = 8, T1 = 10;
+    var set = createSet([
+        captionJSON(0.5, 4, 1),
+        captionJSON(4.5, T0, 2),
+        captionJSON(-1, -1, 3),
+        captionJSON(-1, -1, 4)
+    ]);
+    var subs = set.getSubsToDisplay();
+    assertEquals(3, subs.length);
+    assertTimes(subs[2],
+                T0 + UNASSIGNED_SPACING,
+                T0 + UNASSIGNED_SPACING + MIN_LENGTH);
+    sendVideoTimeUpdate(T1);
+    assertEquals(1, MS_subtitleUpdateCount);
+    assertTimes(subs[2],
+                T1 + UNASSIGNED_SPACING,
+                T1 + UNASSIGNED_SPACING + MIN_LENGTH);
+}
+
 {% endblock %}

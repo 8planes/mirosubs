@@ -94,12 +94,15 @@ mirosubs.timeline.TimelineSub.prototype.onDocMouseMoveRight_ = function(event) {
 };
 mirosubs.timeline.TimelineSub.prototype.onDocMouseUp_ = function(event) {
     this.editing_ = false;
-    this.dispatchEvent(
-        mirosubs.timeline.TimelineSub.EventType.FINISH_EDITING);
     mirosubs.timeline.TimelineSub.currentlyEditing_ = false;
     this.documentEventHandler_.removeAll();
     if (!this.mouseOver_)
         this.setGrabberVisibility_(false);
+    this.dispatchEvent(
+        mirosubs.timeline.TimelineSub.EventType.FINISH_EDITING);
+};
+mirosubs.timeline.TimelineSub.prototype.getSubtitle = function() {
+    return this.subtitle_;
 };
 mirosubs.timeline.TimelineSub.prototype.onGrabberMousedown_ = 
     function(event) 
@@ -148,6 +151,8 @@ mirosubs.timeline.TimelineSub.prototype.updateValues_ = function() {
         this.existingSubEnd_ = this.subtitle_.getEndTime();
     }
     if (this.subtitle_.getStartTime() != this.existingSubStart_) {
+        console.log('start time: ' + this.subtitle_.getStartTime() + 
+                    ' ' + this.subtitle_.getEditableCaption().getText());
         this.getElement().style.left = 
             (this.subtitle_.getStartTime() * 
              this.pixelsPerSecond_ - 
