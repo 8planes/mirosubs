@@ -72,6 +72,8 @@ mirosubs.video.AbstractVideoPlayer.prototype.playWithNoUpdateEvents =
     function(timeToStart, secondsToPlay) 
 {
     this.noUpdateEvents_ = true;
+    if (this.noUpdatePreTime_ == null)
+        this.noUpdatePreTime_ = this.videoPlayer_.getPlayheadTime();
     this.setPlayheadTime(timeToStart);
     this.play();
     this.noUpdateStartTime_ = timeToStart;
@@ -88,7 +90,8 @@ mirosubs.video.AbstractVideoPlayer.prototype.sendTimeUpdateInternal =
             return;
         if (this.getPlayheadTime() >= this.noUpdateEndTime_) {
             this.ignoreTimeUpdate_ = true;
-            this.setPlayheadTime(this.noUpdateStartTime_);
+            this.setPlayheadTime(this.noUpdatePreTime_);
+            this.noUpdatePreTime_ = null;
             this.pause();
             this.ignoreTimeUpdate_ = false;
             this.noUpdateEvents_ = false;
