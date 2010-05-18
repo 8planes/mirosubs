@@ -87,7 +87,7 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
             goog.bind(this.setCurrentlyEditing_, this), 
             this.displayTimes_);
     this.addChild(subtitleWidget, true);
-    this.subtitleMap_[subtitle.getCaptionID() + ''] = subtitleWidget;
+    this.subtitleMap_[subtitle.getCaptionIDString()] = subtitleWidget;
     if (opt_scrollDown && typeof(opt_scrollDown) == 'boolean')
         this.scrollToCaption(subtitle.getCaptionID());
 };
