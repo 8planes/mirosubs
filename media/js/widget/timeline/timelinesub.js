@@ -151,8 +151,6 @@ mirosubs.timeline.TimelineSub.prototype.updateValues_ = function() {
         this.existingSubEnd_ = this.subtitle_.getEndTime();
     }
     if (this.subtitle_.getStartTime() != this.existingSubStart_) {
-        console.log('start time: ' + this.subtitle_.getStartTime() + 
-                    ' ' + this.subtitle_.getEditableCaption().getText());
         this.getElement().style.left = 
             (this.subtitle_.getStartTime() * 
              this.pixelsPerSecond_ - 
