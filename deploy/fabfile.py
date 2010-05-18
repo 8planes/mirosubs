@@ -82,7 +82,7 @@ def update():
     Put the latest version of the code on the server and reload the app.
     """
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('git pull origin master')
+        run('git pull')
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False

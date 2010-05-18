@@ -62,7 +62,6 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     this.getElement().appendChild(this.contentElem_ = $d('div'));
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.videoPlayer_, this.subtitles_, true), true);
-    this.subtitleList_.setTaller(true);
 };
 mirosubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
     if (!this.rightPanel_) {

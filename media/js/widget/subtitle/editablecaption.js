@@ -39,6 +39,7 @@ mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_jsonCaption) {
         };
     this.previousCaption_ = null;
     this.nextCaption_ = null;
+    this.captionIDString_ = this.getCaptionID() + '';
 };
 goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
 
@@ -160,6 +161,9 @@ mirosubs.subtitle.EditableCaption.prototype.getMaxEndTime = function() {
 };
 mirosubs.subtitle.EditableCaption.prototype.getCaptionID = function() {
     return this.jsonCaption['caption_id'];
+};
+mirosubs.subtitle.EditableCaption.prototype.getCaptionIDString = function() {
+    return this.captionIDString_;
 };
 mirosubs.subtitle.EditableCaption.prototype.isShownAt = function(time) {
     return this.getStartTime() <= time && 

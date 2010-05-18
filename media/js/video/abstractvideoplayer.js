@@ -27,6 +27,7 @@ goog.provide('mirosubs.video.AbstractVideoPlayer');
 mirosubs.video.AbstractVideoPlayer = function(videoSource) {
     goog.ui.Component.call(this);
     this.videoSource_ = videoSource;
+    this.noUpdateEvents_ = false;
 };
 goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
@@ -63,6 +64,33 @@ mirosubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
         this.pause();
 };
 mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
+/**
+ * 
+ *
+ */
+mirosubs.video.AbstractVideoPlayer.prototype.playWithNoUpdateEvents = 
+    function(timeToStart, secondsToPlay) 
+{
+    this.setPlayheadTime(timeToStart);
+    this.play();
+    this.noUpdateEvents_ = true;
+    this.noUpdateStartTime_ = timeToStart;
+    this.noUpdateEndTime_ = timeToStart + secondsToPlay;
+};
+mirosubs.video.AbstractVideoPlayer.prototype.sendTimeUpdateInternal = 
+    function() 
+{
+    if (!this.noUpdateEvents_)
+        this.dispatchEvent(
+            mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+    else {
+        if (this.getPlayheadTime() >= this.noUpdateEndTime_) {
+            this.setPlayheadTime(this.noUpdateStartTime_);
+            this.pause();
+            this.noUpdateEvents_ = false;
+        }
+    }
+}
 /**
  * @returns {number} video duration in seconds. Returns 0 if duration isn't
  *     available yet.

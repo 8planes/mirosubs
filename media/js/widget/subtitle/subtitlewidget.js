@@ -68,8 +68,8 @@ mirosubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
         this.updateValues_);
     this.getHandler().listen(
         this.titleElem_,
-        goog.events.EventType.DBLCLICK,
-        this.doubleClicked_);
+        goog.events.EventType.CLICK,
+        this.clicked_);
     if (this.timeSpinner_)
         this.getHandler().listen(
             this.timeSpinner_, 
@@ -107,9 +107,14 @@ mirosubs.subtitle.SubtitleWidget.prototype.setEditing_ = function(editing) {
 mirosubs.subtitle.SubtitleWidget.prototype.getSubtitle = function() {
     return this.subtitle_;
 };
-mirosubs.subtitle.SubtitleWidget.prototype.doubleClicked_ = function(event) {
+mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
     if (this.showingTextarea_)
         return;
+    if (mirosubs.subtitle.SubtitleWidget.editing_) {
+        mirosubs.subtitle.SubtitleWidget.editing_.switchToView_();
+        return;
+    }
+    mirosubs.subtitle.SubtitleWidget.editing_ = this;
     this.setEditing_(true);
     this.showingTextarea_ = true;
     this.docClickListener_ = new goog.events.EventHandler();
@@ -117,8 +122,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.doubleClicked_ = function(event) {
     this.docClickListener_.listen(
         document, goog.events.EventType.CLICK,
         function(event) {
-            if (event.target != that.textareaElem_)
+            if (event.target != that.textareaElem_) {
                 that.switchToView_();
+            }
         });
     goog.dom.removeNode(this.titleElemInner_);
     this.textareaElem_ = this.getDomHelper().createElement('textarea');
@@ -142,6 +148,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.handleKey_ = function(event) {
 mirosubs.subtitle.SubtitleWidget.prototype.switchToView_ = function() {
     if (!this.showingTextarea_)
         return;
+    mirosubs.subtitle.SubtitleWidget.editing_ = null;
     this.getHandler().unlisten(this.keyHandler_);
     this.disposeEventHandlers_();
     this.subtitle_.setText(this.textareaElem_.value);

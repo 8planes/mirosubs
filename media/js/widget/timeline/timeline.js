@@ -48,8 +48,20 @@ mirosubs.timeline.Timeline.prototype.enterDocument = function() {
     this.getHandler().listen(
         this.videoPlayer_,
         mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
-        this.videoTimeUpdate_);
+        this.videoTimeUpdate_).
+        listen(this.timelineInner_,
+               goog.object.getValues(
+                   mirosubs.timeline.TimelineSub.EventType),
+               this.timelineSubEdit_);
     this.setTime_(this.videoPlayer_.getPlayheadTime());
+};
+mirosubs.timeline.Timeline.prototype.timelineSubEdit_ = function(e) {
+    var et = mirosubs.timeline.TimelineSub.EventType;
+    if (e.type == et.START_EDITING)
+        this.videoPlayer_.pause();
+    else {
+
+    }
 };
 mirosubs.timeline.Timeline.prototype.videoTimeUpdate_ = function(e) {
     this.setTime_(this.videoPlayer_.getPlayheadTime());

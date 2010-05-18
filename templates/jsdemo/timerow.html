@@ -82,19 +82,10 @@
                         mirosubs.subtitle.EditableCaption.CHANGE, 
                         logSubEvent);
 
-    var timeline = new mirosubs.timeline.Timeline(1, subtitleSet);
+    var timeline = new mirosubs.timeline.Timeline(1, subtitleSet, stubVideoPlayer);
     var container = new goog.ui.Component();
     container.decorate(goog.dom.$('timeline'));
     container.addChild(timeline, true);
-
-    goog.events.listen(
-        stubVideoPlayer, 
-        mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
-        function() {
-            timeline.setTime(stubVideoPlayer.getPlayheadTime());
-        });
-
-    timeline.setTime(0);
 
 </script>
 {% endblock %}
