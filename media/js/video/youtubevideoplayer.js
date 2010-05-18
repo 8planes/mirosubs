@@ -75,9 +75,10 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         var queryString = 
             ['?enablejsapi=1&version=3&disablekb=1&playerapiid=', 
              this.playerAPIID_].join('');
+        var width = this.chromeless_ ? "400" : "480";
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
-            videoDiv.id, "480", "360", "8", 
+            videoDiv.id, width, "360", "8", 
             null, null, params, atts);
     }
     this.getHandler().listen(
