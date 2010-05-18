@@ -179,14 +179,10 @@ mirosubs.video.YoutubeVideoPlayer.prototype.pauseInternal = function() {
 mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = 
-    function(playheadTime, opt_suppressTimeUpdate) 
+mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime) 
 {
-    if (this.player_) {
+    if (this.player_)
         this.player_['seekTo'](playheadTime, true);
-        if (!opt_suppressTimeUpdate)
-            this.sendTimeUpdateInternal();
-    }
     else
         this.commands_.push(goog.bind(this.setPlayheadTime, 
                                       this, playheadTime));

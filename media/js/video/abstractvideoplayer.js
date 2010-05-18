@@ -84,9 +84,13 @@ mirosubs.video.AbstractVideoPlayer.prototype.sendTimeUpdateInternal =
         this.dispatchEvent(
             mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
     else {
+        if (this.ignoreTimeUpdate_)
+            return;
         if (this.getPlayheadTime() >= this.noUpdateEndTime_) {
-            this.setPlayheadTime(this.noUpdateStartTime_, true);
+            this.ignoreTimeUpdate_ = true;
+            this.setPlayheadTime(this.noUpdateStartTime_);
             this.pause();
+            this.ignoreTimeUpdate_ = false;
             this.noUpdateEvents_ = false;
         }
     }
