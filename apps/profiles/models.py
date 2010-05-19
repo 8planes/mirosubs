@@ -20,18 +20,12 @@ from django.db import models
 from django.contrib.auth.models import User
 import registration.signals
 from django.contrib.auth import login, authenticate
-
-
-class Language(models.Model):
-    name = models.CharField(max_length=255)
-    
-    def __unicode__(self):
-        return self.name
+from django.conf.global_settings import LANGUAGES
 
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
     homepage = models.URLField(verify_exists=False, blank=True)
-    preferred_language = models.ForeignKey(Language, blank=True, null=True)
+    preferred_language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
     picture = models.ImageField(blank=True,
                                       upload_to='profile_images/%y/%m/')
     valid_email = models.BooleanField(default=False)
