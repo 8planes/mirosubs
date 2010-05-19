@@ -29,6 +29,12 @@ mirosubs.timeline.TimelineSub = function(
     this.documentEventHandler_ = new goog.events.EventHandler(this);
 };
 goog.inherits(mirosubs.timeline.TimelineSub, goog.ui.Component);
+/**
+ * Whether one of the timeline subs is currently being edited.
+ */
+mirosubs.timeline.TimelineSub.currentlyEditing_ = false;
+mirosubs.timeline.TimelineSub.logger_ =
+    goog.debug.Logger.getLogger('mirosubs.subtitle.TimelineSub');
 mirosubs.timeline.TimelineSub.EventType = {
     START_EDITING : 'startediting',
     FINISH_EDITING : 'finishediting'
@@ -60,12 +66,17 @@ mirosubs.timeline.TimelineSub.prototype.enterDocument = function() {
                this.updateValues_);
 };
 mirosubs.timeline.TimelineSub.prototype.onMouseOver_ = function(event) {
-    this.setGrabberVisibility_(true);
+    if (!mirosubs.timeline.TimelineSub.currentlyEditing_)
+        this.setGrabberVisibility_(true);
+    this.mouseOver_ = true;
 };
 mirosubs.timeline.TimelineSub.prototype.onMouseOut_ = function(event) {
-    if (!this.editing_ && event.relatedTarget && 
-        !goog.dom.contains(this.getElement(), event.relatedTarget))
-        this.setGrabberVisibility_(false);
+    if (event.relatedTarget && 
+        !goog.dom.contains(this.getElement(), event.relatedTarget)) {
+        if (!this.editing_)
+            this.setGrabberVisibility_(false);
+        this.mouseOver_ = false
+    }
 };
 mirosubs.timeline.TimelineSub.prototype.onDocMouseMoveLeft_ = function(event) {
     // moving left grabber
@@ -83,13 +94,24 @@ mirosubs.timeline.TimelineSub.prototype.onDocMouseMoveRight_ = function(event) {
 };
 mirosubs.timeline.TimelineSub.prototype.onDocMouseUp_ = function(event) {
     this.editing_ = false;
+    mirosubs.timeline.TimelineSub.currentlyEditing_ = false;
     this.documentEventHandler_.removeAll();
+    if (!this.mouseOver_)
+        this.setGrabberVisibility_(false);
+    this.dispatchEvent(
+        mirosubs.timeline.TimelineSub.EventType.FINISH_EDITING);
+};
+mirosubs.timeline.TimelineSub.prototype.getSubtitle = function() {
+    return this.subtitle_;
 };
 mirosubs.timeline.TimelineSub.prototype.onGrabberMousedown_ = 
     function(event) 
 {
     var left = goog.dom.contains(this.leftGrabber_, event.target);
     this.editing_ = true;
+    this.dispatchEvent(
+        mirosubs.timeline.TimelineSub.EventType.START_EDITING);
+    mirosubs.timeline.TimelineSub.currentlyEditing_ = true;
     this.grabberMousedownClientX_ = event.clientX;
     this.grabberMousedownTime_ = left ? 
         this.subtitle_.getStartTime() : this.subtitle_.getEndTime();

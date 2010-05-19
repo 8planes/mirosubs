@@ -75,9 +75,10 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         var queryString = 
             ['?enablejsapi=1&version=3&disablekb=1&playerapiid=', 
              this.playerAPIID_].join('');
+        var width = this.chromeless_ ? "400" : "480";
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
-            videoDiv.id, "480", "360", "8", 
+            videoDiv.id, width, "360", "8", 
             null, null, params, atts);
     }
     this.getHandler().listen(
@@ -100,8 +101,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.progressTick_ = function(e) {
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
-        this.dispatchEvent(
-            mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+        this.sendTimeUpdateInternal();
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = 
     function(playerAPIID) 
@@ -180,7 +180,8 @@ mirosubs.video.YoutubeVideoPlayer.prototype.pauseInternal = function() {
 mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
+mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime) 
+{
     if (this.player_)
         this.player_['seekTo'](playheadTime, true);
     else

@@ -176,15 +176,17 @@ padding: 0px 10px 0 0;
 
 
 .content{
-min-height: 700px;
+min-height: 300px;
 clear: both;
 padding-top: 30px;
 line-height: 15px;
-background: url(../images/watercolor2.png) center 50px no-repeat;
 font-size: 12px;
 }
 
+.watercolor2{
+background: url(../images/watercolor2.png) center 0px no-repeat;
 
+}
 
 
 .footer{
@@ -533,7 +535,7 @@ width: 20px;
 margin: 0;
 clear: both;
 padding: 0 0 8px;
-width: 283px;
+width: 300px;
 background: url(../images/red_arrow.png) 255px bottom no-repeat;
 }
 
@@ -554,7 +556,7 @@ padding: 10px;
 }
 
 
-.openid{
+.open-id{
 background: url(../images/social_login.png) 0 0px no-repeat;
 display: block;
 width: 113px;
@@ -598,12 +600,12 @@ margin-top: 0px;
 }
 
 .mission{
-color: #333;
+color: #555;
 
 }
 
 .problem{
-color: #333;
+color: #555;
 
 }
 
@@ -761,6 +763,30 @@ margin: 0;
 }
 
 
+ul.question-linked{
+padding: 10px 0 30px 0px;
+margin: 0;
+border-bottom: 1px solid #ddd;
+
+
+}
+
+ul.question-linked li{
+margin: 0;
+list-style: none;
+}
+
+
+ul.question-linked a{
+padding: 5px 0 5px 25px;
+margin: 0;
+display: block;
+font-size: 14px;
+background: url(../images/question.png) left center no-repeat;
+
+}
+
+
 /*/////////////////////////////////////////////
 
 ~ About
@@ -778,6 +804,137 @@ padding: 0;
 margin: 0;
 list-style: none;
 }
+
+
+/*/////////////////////////////////////////////
+
+~ Note
+
+/////////////////////////////////////////////*/
+
+
+.note{
+text-align: center;
+line-height: 3em;
+color: #fff;
+background: #9a9a9a;
+border-bottom: 1px solid #fff;
+text-shadow: 1px 1px 1px #333;
+font-size: 13px;
+}
+
+.note a{
+color: #fff;
+font-weight: bold;
+}
+
+
+/*/////////////////////////////////////////////
+
+~ Revision History
+
+/////////////////////////////////////////////*/
+
+
+
+.pag{
+width: 480px;
+margin: 0 auto;
+text-align: center;
+padding: 0;
+}
+
+.pag li{
+list-style: none;
+}
+
+.pag li.previous{
+float: left;
+}
+
+.pag li.next{
+float: right;
+}
+
+
+
+.revision_list{
+padding: 0;
+}
+
+
+.revision_list li{
+list-style: none;
+padding: 15px;
+}
+
+
+.revision_list li.even{
+background: #edfcfd;
+}
+
+
+a.roll_back{
+width: 300px;
+display: block;
+margin: 20px auto ;
+padding: 15px 10px;
+background: #e45129;
+text-align: center;
+text-decoration: none;
+font-weight: bold;
+color: #fff;
+border: 3px solid #9e381d;
+font-size: 14px;
+}
+
+
+a.new_edit{
+width: 300px;
+display: block;
+margin: 0px auto 0;
+padding: 15px 10px;
+background: #3fa92d;
+text-align: center;
+text-decoration: none;
+font-weight: bold;
+color: #fff;
+border: 3px solid #2a6a20;
+font-size: 14px;
+}
+
+
+.viewing_old{
+display: block;
+margin: 20px auto ;
+padding: 15px 10px;
+background: #e45129;
+text-align: center;
+text-decoration: none;
+font-weight: bold;
+color: #fff;
+border: 3px solid #9e381d;
+font-size: 14px;
+}
+
+
+.time_change{
+color: #e45129;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
