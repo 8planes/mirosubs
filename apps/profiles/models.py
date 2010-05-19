@@ -32,7 +32,11 @@ class Profile(models.Model):
         
     def __unicode__(self):
         return '%s %s' % (self.user.first_name, self.user.last_name)
-
+    
+    @property
+    def language(self):
+        return self.get_preferred_language_display()
+    
 def create_profile(sender, instance, **kwargs):
     if not instance:
         return
