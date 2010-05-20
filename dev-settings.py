@@ -27,7 +27,8 @@ SITE_NAME = 'mirosubs-dev'
 OPENID_REDIRECT_NEXT = '/socialauth/openid/done/'
 
 OPENID_SREG = {"requred": "nickname, email", "optional":"postcode, country", "policy_url": ""}
-OPENID_AX = [{"type_uri": "email", "count": 1, "required": False, "alias": "email"}, {"type_uri": "fullname", "count":1 , "required": False, "alias": "fullname"}]
+OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "required": True, "alias": "email"},
+             {"type_uri": "fullname", "count": 1 , "required": False, "alias": "fullname"}]
 
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
@@ -36,7 +37,8 @@ FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
 
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
-                           'socialauth.auth_backends.OpenIdBackend',
+                           #'socialauth.auth_backends.OpenIdBackend',
+                           'auth.backends.OpenIdBackend',
                            'socialauth.auth_backends.TwitterBackend',
                            'socialauth.auth_backends.FacebookBackend',
                            )

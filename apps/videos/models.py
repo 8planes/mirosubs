@@ -44,6 +44,7 @@ class Video(models.Model):
     video_url = models.URLField(max_length=2048)
     # only nonzero length for Youtube videos
     youtube_videoid = models.CharField(max_length=32)
+    youtube_name = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
     # the person who was first to start captioning this video.
     owner = models.ForeignKey(User, null=True)
@@ -60,9 +61,11 @@ class Video(models.Model):
         if self.video_type == VIDEO_TYPE_HTML5:
             return 'html5: %s' % self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
+            if self.youtube_name:
+                return self.youtube_name
             return 'youtube: %s' % self.youtube_videoid
         else:
-            return 'unknown video %s' % self.video_url
+            return 'unknown video %s' % self.video_url 
     
     def get_video_url(self):
         if self.video_type == VIDEO_TYPE_HTML5:
@@ -232,6 +235,9 @@ class VideoCaptionVersion(models.Model):
     is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User)
+    note = models.CharField(max_length=512, blank=True)
+    time_change = models.FloatField(null=True, blank=True)
+    text_change = models.FloatField(null=True, blank=True)
 
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
@@ -314,6 +320,9 @@ class TranslationVersion(models.Model):
     # true iff user has clicked "finish" in translating process.
     is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
+    note = models.CharField(max_length=512, blank=True)
+    time_change = models.FloatField(null=True, blank=True)
+    text_change = models.FloatField(null=True, blank=True)
     
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
