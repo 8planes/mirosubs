@@ -122,7 +122,10 @@ mirosubs.translate.ServerModel.prototype.loginThenAction_ =
             if (opt_forceLogin) {
                 alert("In order to finish and save your work, " +
                       "you need to log in.");
-                mirosubs.login(action);
+                mirosubs.login(function(loggedIn) {
+                    if (loggedIn)
+                        action();
+                });
             }
             else
                 this.loginNagFn_();
