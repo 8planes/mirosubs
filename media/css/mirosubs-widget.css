@@ -1406,7 +1406,7 @@ width: 100%;
 border-bottom: 1px solid;
 width: 400px;
 height: 30px;
-background: #fff url("../images/gradient.png") 0 1px repeat-x;
+background: #000 url("../images/gradient.png") 0 1px repeat-x;
 }
 
 
@@ -1428,13 +1428,12 @@ font-size: 11px;
 
 .mirosubs-playPause {
 float: left;
-border-right: 1px solid;
 padding: 9px 10px 8px 11px;
 margin-right: 8px;
 }
 
 .mirosubs-playPause:hover {
-background: url("../images/gradient.png") 0 1px repeat-x;
+background: url("../images/gradient.png") 0 10px repeat-x;
 cursor: pointer;
 }
 
@@ -1458,7 +1457,6 @@ cursor: pointer;
 height: 30px;
 float: right;
 width: 31px;
-border-left: 1px solid #777;
 position: relative;
 }
 
@@ -1859,4 +1857,11 @@ padding-top: 34px;
 overflow: hidden;
 width: 99px;
 }
+
+.big_spinner{
+margin: 20px auto 0;
+width: 113px;
+display: block;
+}
+
 
