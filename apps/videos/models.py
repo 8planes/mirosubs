@@ -235,6 +235,9 @@ class VideoCaptionVersion(models.Model):
     is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User)
+    note = models.CharField(max_length=512, blank=True)
+    time_change = models.FloatField(null=True, blank=True)
+    text_change = models.FloatField(null=True, blank=True)
 
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
@@ -317,6 +320,9 @@ class TranslationVersion(models.Model):
     # true iff user has clicked "finish" in translating process.
     is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
+    note = models.CharField(max_length=512, blank=True)
+    time_change = models.FloatField(null=True, blank=True)
+    text_change = models.FloatField(null=True, blank=True)
     
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
