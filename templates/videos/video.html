@@ -35,6 +35,9 @@ width: 460px;
 
 {% block main_content %}
 <div class="left_column">
+    {% if video.youtube_name %}
+    <h2>{{ video.youtube_name }}</h2>
+    {% endif %}
 	{% with video.video_url as video_url %}
 	  {% include "widget/widget.html" %}
 	<script type="text/javascript">

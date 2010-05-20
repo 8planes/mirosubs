@@ -30,6 +30,8 @@ from django.contrib.sites.models import Site
 from django.shortcuts import redirect
 from django.conf import settings
 import simplejson as json
+from django.utils.encoding import DjangoUnicodeDecodeError
+import feedparser
 
 def create(request):
     if request.method == 'POST':
@@ -43,6 +45,14 @@ def create(request):
                                     youtube_videoid=yt_video_id,
                                     defaults={'owner': owner,
                                               'video_type': VIDEO_TYPE_YOUTUBE})
+                if created:
+                    url = 'http://gdata.youtube.com/feeds/api/videos/%s' % video.youtube_videoid
+                    data = feedparser.parse(url)
+                    try:
+                        video.youtube_name = data['entries'][0]['title']
+                        video.save()
+                    except DjangoUnicodeDecodeError:
+                        pass
             else:
                 video, created = Video.objects.get_or_create(
                                     video_url=video_form.cleaned_data['video_url'],
