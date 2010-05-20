@@ -1836,18 +1836,18 @@ a.mirosubs-openid span{
 }
 
 .mirosubs-twitter{
-background: url("../images/social_login.png") -120px 0px no-repeat !important;
-margin-top: 4px;
-height: 0;
-padding-top: 34px;
-overflow: hidden;
-width: 99px;
+   background: url("../images/social_login.png") -120px 0px no-repeat !important;
+   margin-top: 4px;
+   height: 0;
+   padding-top: 34px;
+   overflow: hidden;
+   width: 99px;
 }
 
 .big_spinner{
-margin: 20px auto 0;
-width: 113px;
-display: block;
+   margin: 20px auto 0;
+   width: 113px;
+   display: block;
 }
 
 
