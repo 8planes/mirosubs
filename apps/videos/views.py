@@ -23,7 +23,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage
 import widget
 from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
@@ -158,4 +158,14 @@ def email_friend(request):
 def demo(request):
     context = {}
     return render_to_response('videos/demo.html', context,
+                              context_instance=RequestContext(request))
+    
+def history(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+    context['video'] = video
+    context['site'] = Site.objects.get_current()
+    context['translation'] = TranslationLanguage.objects.filter(video=video)
+    return render_to_response('videos/history.html', context,
                               context_instance=RequestContext(request))

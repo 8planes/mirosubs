@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load escapejs %}
+
+{% block css %}
+  {{ block.super }}
+  <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+  <style>
+    div.mirosubs-widget {
+        position: relative;    
+    }
+    .mirosubs-videoDiv {
+        text-align: center;
+    }
+    .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
+    width: 460px;
+    }
+    
+    #embed{
+      white-space: pre;
+      background: #eee;
+      boder: #666;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+    {% if not js_use_compiled %}
+      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
+      <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
+    {% endif %}
+    {% for dep in js_dependencies %}
+      <script type="text/javascript" src="{{dep|safe}}"></script>
+    {% endfor %}
+{% endblock %}
+
+{% block main_content %}
+<div class="left_column">
+    {% if video.youtube_name %}
+    <h2>{{ video.youtube_name }}</h2>
+    {% endif %}
+    {% with video.video_url as video_url %}
+        {% include "widget/widget.html" %}
+        <script type="text/javascript">
+            mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
+        </script>
+    {% endwith %}
+</div>
+
+<div class="right_column">
+    {% if translation %}
+        <h2>Other languages:</h2>
+        {% for item in translation %}
+            {{ item.get_language_display }}
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
