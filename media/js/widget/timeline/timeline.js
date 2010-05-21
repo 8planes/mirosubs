@@ -43,17 +43,28 @@ mirosubs.timeline.Timeline.prototype.createDom = function() {
     this.addChild(this.timelineInner_, true);
     el.appendChild($d('div', 'marker'));
 };
+console.log('here');
 mirosubs.timeline.Timeline.prototype.enterDocument = function() {
     mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.videoPlayer_,
-        mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
-        this.videoTimeUpdate_).
-        listen(this.timelineInner_,
-               goog.object.getValues(
-                   mirosubs.timeline.TimelineSub.EventType),
-               this.timelineSubEdit_);
+    this.getHandler().
+        listen(
+            this.videoPlayer_,
+            mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+            this.videoTimeUpdate_).
+        listen(
+            this.timelineInner_,
+            goog.object.getValues(
+                mirosubs.timeline.TimelineSub.EventType),
+            this.timelineSubEdit_).
+        listen(
+            this.timelineInner_,
+            mirosubs.timeline.TimeRowUL.DOUBLECLICK,
+            this.timeRowDoubleClick_);
     this.setTime_(this.videoPlayer_.getPlayheadTime());
+};
+mirosubs.timeline.Timeline.prototype.timeRowDoubleClick_ = function(e) {
+    this.videoPlayer_.setPlayheadTime(e.time);
+    this.videoPlayer_.play();
 };
 mirosubs.timeline.Timeline.prototype.timelineSubEdit_ = function(e) {
     var et = mirosubs.timeline.TimelineSub.EventType;

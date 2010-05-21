@@ -17,8 +17,11 @@ class Migration(SchemaMigration):
                 url = 'http://gdata.youtube.com/feeds/api/videos/%s' % item.youtube_videoid
                 data = feedparser.parse(url)
                 try:
-                    item.youtube_name = data['entries'][0]['title']             
-                    item.save()
+                    if len(data['entries']) > 0:
+                        item.youtube_name = data['entries'][0]['title']
+                        item.save()
+                    else:
+                        item.youtube_name = ''
                 except DjangoUnicodeDecodeError:
                     pass
         

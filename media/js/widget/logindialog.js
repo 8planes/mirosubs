@@ -60,6 +60,17 @@ mirosubs.LoginDialog.prototype.createDom = function() {
            'For security, the login prompt will open in a separate window.'));
 };
 
+mirosubs.LoginDialog.prototype.showLoading_ = function() {
+    goog.dom.removeChildren(this.getElement());
+    this.getElement().appendChild(
+        this.getDomHelper().createDom(
+            'img', 
+            {'className': 'big_spinner', 
+             'src': [mirosubs.BASE_URL, 
+                     mirosubs.IMAGE_DIR, 
+                     'big_spinner.gif'].join('')}));
+};
+
 mirosubs.LoginDialog.prototype.enterDocument = function() {
     mirosubs.LoginDialog.superClass_.enterDocument.call(this);
     var that = this;
@@ -72,6 +83,7 @@ mirosubs.LoginDialog.prototype.enterDocument = function() {
 };
 
 mirosubs.LoginDialog.prototype.siteLoginClicked_ = function(e) {
+    this.showLoading_();
     mirosubs.openLoginPopup(
         mirosubs.NATIVE_LOGIN_URL_SUFFIX,
         goog.bind(this.processCompleted_, this));
@@ -79,6 +91,7 @@ mirosubs.LoginDialog.prototype.siteLoginClicked_ = function(e) {
 };
 
 mirosubs.LoginDialog.prototype.clicked_ = function(e) {
+    this.showLoading_();
     var urlSuffix;
     if (e.target == this.loginLink_)
         urlSuffix = mirosubs.NATIVE_LOGIN_URL_SUFFIX;
