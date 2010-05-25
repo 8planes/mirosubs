@@ -434,7 +434,8 @@ class Translation(models.Model):
     
     def display_time(self):
         try:
-            t = int(VideoCaption.objects.get(caption_id=self.caption_id).start_time)
+            t = int(VideoCaption.objects.filter(caption_id=self.caption_id) \
+                    .order_by('-version__datetime_started')[:1].get().start_time)
             s = t % 60
             s = s > 9 and s or '0%s' % s 
             return '%s:%s' % (t / 60, s)            
