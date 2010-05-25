@@ -57,10 +57,11 @@ mirosubs.subtitle.EditDialog.prototype.captionReached_ = function(event) {
 };
 mirosubs.subtitle.EditDialog.prototype.createDom = function() {
     mirosubs.subtitle.EditDialog.superClass_.createDom.call(this);
-    this.setState_(mirosubs.subtitle.EditDialog.State_.EDIT);
+    this.state_ = mirosubs.subtitle.EditDialog.State_.EDIT;
 };
 mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
     mirosubs.subtitle.EditDialog.superClass_.enterDocument.call(this);
+    this.setState_(this.state_);
     this.getHandler().
         listen(
             document,
@@ -72,6 +73,7 @@ mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
             this.captionReached_);
 };
 mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
+    console.log('setting state');
     this.state_ = state;
 
     var nextSubPanel = this.makeCurrentStateSubtitlePanel_();

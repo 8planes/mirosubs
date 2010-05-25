@@ -74,6 +74,7 @@ mirosubs.timeline.Timeline.prototype.timelineSubEdit_ = function(e) {
             e.target.getSubtitle().getStartTime(), 2);
 };
 mirosubs.timeline.Timeline.prototype.videoTimeUpdate_ = function(e) {
+    console.log('video time update');
     this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
 mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {
