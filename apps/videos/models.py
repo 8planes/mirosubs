@@ -433,3 +433,4 @@ class UserTestResult(models.Model):
     task1 = models.TextField()
     task2 = models.TextField(blank=True)
     task3 = models.TextField(blank=True)
+    get_updates = models.BooleanField(default=False)

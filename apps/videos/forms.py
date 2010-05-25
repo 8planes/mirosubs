@@ -23,7 +23,6 @@ from django.conf import settings
 import re
 
 class UserTestResultForm(forms.ModelForm):
-    get_updates = forms.BooleanField(required=False)
     
     class Meta:
         model = UserTestResult

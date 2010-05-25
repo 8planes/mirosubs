@@ -166,9 +166,9 @@ def test_form_page(request):
         if form.is_valid():
             form.save()
     else:
-        form = UserTestResultForm
+        form = UserTestResultForm()
     context = {
         'form': form           
     }
-    return render_to_response('videos/demo.html', context,
+    return render_to_response('videos/test_form_page.html', context,
                               context_instance=RequestContext(request))
