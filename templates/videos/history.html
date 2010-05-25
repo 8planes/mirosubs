@@ -1,30 +1,9 @@
 {% extends "base.html" %}
 
-{% load escapejs %}
-
-{% block css %}
-  {{ block.super }}
-  <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
-  <style>
-    div.mirosubs-widget {
-        position: relative;    
-    }
-    .mirosubs-videoDiv {
-        text-align: center;
-    }
-    .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
-    width: 460px;
-    }
-    
-    #embed{
-      white-space: pre;
-      background: #eee;
-      boder: #666;
-    }
-  </style>
-{% endblock %}
+{% load escapejs paginator %}
 
 {% block scripts %}
+    {{ block.super }}
     {% if not js_use_compiled %}
       <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
       <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
@@ -36,24 +15,66 @@
 {% endblock %}
 
 {% block main_content %}
-<div class="left_column">
     {% if video.youtube_name %}
-    <h2>{{ video.youtube_name }}</h2>
+        <h2>{{ video.youtube_name }}</h2>
     {% endif %}
-    {% with video.video_url as video_url %}
-        {% include "widget/widget.html" %}
-        <script type="text/javascript">
-            mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
-        </script>
-    {% endwith %}
-</div>
-
-<div class="right_column">
-    {% if translation %}
-        <h2>Other languages:</h2>
-        {% for item in translation %}
-            {{ item.get_language_display }}
-        {% endfor %}
-    {% endif %}
-</div>
+    <p class="what_lang">
+        {% block lang_display %}
+            in <a href="{% url videos:video video_id=video.video_id %}">Original Language</a>
+        {% endblock %}
+    </p>
+    
+    <div class="left_column">
+        {% with video.video_url as video_url %}
+            {% include "widget/widget.html" %}
+            <script type="text/javascript">
+                mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
+            </script>
+        {% endwith %}
+    </div>
+    
+    <div class="right_column">
+        {% block translation_list %}
+            {% if translations %}
+                <p class="other_lang">
+                    Other Languages:
+                        {% for item in translations %}
+                            <a href="{% url videos:translation_history video.video_id item.language %}">{{ item.get_language_display }}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                 </p>             
+            {% endif %}
+        {% endblock %}
+    </div>
+    
+    <div class="clear">&nbsp;</div>
+    
+    <h2>Recent Revisions <a class="whats_this" href="#">(What's This?)</a></h2>
+    
+    <button><span>Compare Revisions</span></button>
+    
+    <ul class="table_head">
+      <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
+      <li class="table_user">{% ordered_column "user" "User" %}</li>
+      <li class="table_note">{% ordered_column "note" "Note" %}</li>
+      <li class="table_time">{% ordered_column "time" "Time" %}</li>
+      <li class="table_text">{% ordered_column "text" "Text" %}</li>
+    </ul>
+    
+   
+   <ul class="table_body"> 
+    {% for item in revisions %}
+          <li>
+            <ul>
+              <li class="table_most_recent"><input type="checkbox" /> {{ item.revision_time }}</li>
+              <li class="table_user">
+                  <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+              </li>
+              <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
+              <li class="table_time">{{ item.time_change }}</li>
+              <li class="table_text">{{ item.text_change }}</li>
+            </ul>
+          </li>    
+    {% endfor %}
+   </ul> 
+    
 {% endblock %}

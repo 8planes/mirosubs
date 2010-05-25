@@ -21,9 +21,8 @@ import string
 import random
 from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
-from datetime import date
 from django.utils.dateformat import format as date_format
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
@@ -238,6 +237,16 @@ class VideoCaptionVersion(models.Model):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
+    
+    def revision_time(self):
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+        d = self.datetime_started.date()
+        if d == today:
+            return 'Today'
+        elif d == yesterday:
+            return 'Yestarday'
+        return d
 
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
@@ -323,6 +332,16 @@ class TranslationVersion(models.Model):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
+
+    def revision_time(self):
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+        d = self.datetime_started.date()
+        if d == today:
+            return 'Today'
+        elif d == yesterday:
+            return 'Yestarday'
+        return d
     
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):

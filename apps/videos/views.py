@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm
 import widget
 from urlparse import urlparse, parse_qs
@@ -164,11 +164,54 @@ def history(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     context = widget.js_context(request, video, False, None, False, None, 
                                 'autosub' in request.GET)
+
+    qs = VideoCaptionVersion.objects.filter(video=video)
+    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
+    order_fields = {
+        'date': 'datetime_started', 
+        'user': 'user__username', 
+        'note': 'note', 
+        'time': 'time_change', 
+        'text': 'text_change'
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+        context['ordering'], context['order_type'] = ordering, order_type
+
     context['video'] = video
     context['site'] = Site.objects.get_current()
-    context['translation'] = TranslationLanguage.objects.filter(video=video)
+    context['translations'] = TranslationLanguage.objects.filter(video=video)
+    context['revisions'] = qs   
     return render_to_response('videos/history.html', context,
                               context_instance=RequestContext(request))
+
+def translation_history(request, video_id, lang):
+    video = get_object_or_404(Video, video_id=video_id)
+    language = get_object_or_404(TranslationLanguage, video=video, language=lang)
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+   
+    qs = TranslationVersion.objects.filter(language=language)
+    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
+    order_fields = {
+        'date': 'datetime_started', 
+        'user': 'user__username', 
+        'note': 'note', 
+        'time': 'time_change', 
+        'text': 'text_change'
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+        context['ordering'], context['order_type'] = ordering, order_type 
+    
+    context['revisions'] = qs
+    context['video'] = video
+    context['language'] = language
+    context['site'] = Site.objects.get_current()        
+    context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
+     
+    return render_to_response('videos/translation_history.html', context,
+                              context_instance=RequestContext(request))    
     
 def test_form_page(request):
     if request.method == 'POST':
