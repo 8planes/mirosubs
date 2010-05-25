@@ -17,10 +17,16 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from videos.models import Video
+from videos.models import Video, UserTestResult
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 import re
+
+class UserTestResultForm(forms.ModelForm):
+    get_updates = forms.BooleanField(required=False)
+    
+    class Meta:
+        model = UserTestResult
 
 class VideoForm(forms.ModelForm):
     class Meta:
