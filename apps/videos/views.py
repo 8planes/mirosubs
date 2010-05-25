@@ -212,6 +212,19 @@ def translation_history(request, video_id, lang):
      
     return render_to_response('videos/translation_history.html', context,
                               context_instance=RequestContext(request))    
+
+def revision(request, pk):
+    version = get_object_or_404(VideoCaptionVersion, pk=pk)
+    video = version.video
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+    context['video'] = video
+    context['version'] = version
+    context['next_version'] = version.next_version()
+    context['prev_version'] = version.prev_version()
+    
+    return render_to_response('videos/revision.html', context,
+                              context_instance=RequestContext(request))     
     
 def test_form_page(request):
     if request.method == 'POST':

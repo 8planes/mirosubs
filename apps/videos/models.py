@@ -238,6 +238,9 @@ class VideoCaptionVersion(models.Model):
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
     
+    class Meta:
+        ordering = ['-datetime_started']
+    
     def revision_time(self):
         today = date.today()
         yesterday = today - timedelta(days=1)
@@ -247,7 +250,22 @@ class VideoCaptionVersion(models.Model):
         elif d == yesterday:
             return 'Yestarday'
         return d
-
+    
+    def prev_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__lt=self.datetime_started)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
+    def next_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__gt=self.datetime_started) \
+                      .order_by('datetime_started')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+                    
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
@@ -401,7 +419,13 @@ class VideoCaption(models.Model):
                  'caption_text' : text, 
                  'start_time' : self.start_time, 
                  'end_time' : self.end_time }
-
+    
+    def display_time(self):
+        t = int(self.start_time)
+        s = t % 60
+        s = s > 9 and s or '0%s' % s 
+        return '%s:%s' % (t / 60, s)
+    
 class Action(models.Model):
     TYPE_CHOICES = (
         (1, 'subtitles'),

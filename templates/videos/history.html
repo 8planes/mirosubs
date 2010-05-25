@@ -2,6 +2,28 @@
 
 {% load escapejs paginator %}
 
+{% block css %}
+  {{ block.super }}
+  <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+  <style>
+    div.mirosubs-widget {
+        position: relative;    
+    }
+    .mirosubs-videoDiv {
+        text-align: center;
+    }
+    .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
+    width: 460px;
+    }
+    
+    #embed{
+      white-space: pre;
+      background: #eee;
+      boder: #666;
+    }
+  </style>
+{% endblock %}
+
 {% block scripts %}
     {{ block.super }}
     {% if not js_use_compiled %}
@@ -72,6 +94,7 @@
               <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
               <li class="table_time">{{ item.time_change }}</li>
               <li class="table_text">{{ item.text_change }}</li>
+              <li><a href="{% url videos:revision pk=item.pk %}">view</a></li>
             </ul>
           </li>    
     {% endfor %}
