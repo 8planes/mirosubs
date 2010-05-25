@@ -19,9 +19,11 @@
 goog.provide('mirosubs.translate.TranslationWidget');
 
 /**
- * Subtitle in json format
+ * @param {Object<string, *>} subtitle Subtitle in json format
+ * @param {mirosubs.UnitOfWork} unitOfWork
  */
-mirosubs.translate.TranslationWidget = function(subtitle, unitOfWork) {
+mirosubs.translate.TranslationWidget = function(subtitle, 
+                                                unitOfWork) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
     this.unitOfWork_ = unitOfWork;

@@ -73,7 +73,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.playWithNoUpdateEvents =
 {
     this.noUpdateEvents_ = true;
     if (this.noUpdatePreTime_ == null)
-        this.noUpdatePreTime_ = this.videoPlayer_.getPlayheadTime();
+        this.noUpdatePreTime_ = this.getPlayheadTime();
     this.setPlayheadTime(timeToStart);
     this.play();
     this.noUpdateStartTime_ = timeToStart;

@@ -49,14 +49,12 @@ mirosubs.EmbeddableWidget = function(uuid, videoID, videoURL,
                              event.preventDefault();
                          });
     var et = mirosubs.MainMenu.EventType;
-    this.handler_.listen(
-        this.popupMenu_, et.ADD_SUBTITLES, this.startSubtitling_);
-    this.handler_.listen(
-        this.popupMenu_, et.LANGUAGE_SELECTED, this.languageSelected_);
-    this.handler_.listen(
-        this.popupMenu_, et.ADD_NEW_LANGUAGE, this.addNewLanguage_);
-    this.handler_.listen(
-        this.popupMenu_, et.TURN_OFF_SUBS, this.turnOffSubs_);
+    this.handler_.
+        listen(this.popupMenu_, et.ADD_SUBTITLES, this.startSubtitling_).
+        listen(this.popupMenu_, et.EDIT_SUBTITLES, this.editSubtitles_).
+        listen(this.popupMenu_, et.LANGUAGE_SELECTED, this.languageSelected_).
+        listen(this.popupMenu_, et.ADD_NEW_LANGUAGE, this.addNewLanguage_).
+        listen(this.popupMenu_, et.TURN_OFF_SUBS, this.turnOffSubs_);
     /**
      * The Manager used for displaying subtitles on the video on the page.
      * @type {?mirosubs.play.Manager} 
@@ -120,8 +118,10 @@ mirosubs.EmbeddableWidget.prototype.loginStatusChanged_ = function() {
     if (this.dialog_)
         this.dialog_.updateLoginState();
 };
-
-mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
+/**
+ * @param {function(int, array.<JsonCaption>)} postFn
+ */
+mirosubs.EmbeddableWidget.prototype.subtitle_ = function(postFn) {
     this.videoTab_.showLoading(true);
     var that = this;
     mirosubs.Rpc.call(
@@ -130,8 +130,7 @@ mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
         function(result) {
             that.videoTab_.showLoading(false);
             if (result["can_edit"])
-                that.startSubtitlingImpl_(result["version"], 
-                                          result["existing"]);
+                postFn(result["version"], result["existing"]);
             else {
                 if (result["owned_by"])
                     alert("Sorry, this video is owned by " + 
@@ -141,6 +140,36 @@ mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
                           result["locked_by"]);
             }
         });
+};
+mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
+    this.subtitle_(goog.bind(this.startSubtitlingImpl_, this));
+};
+mirosubs.EmbeddableWidget.prototype.editSubtitles_ = function() {
+    if (this.languageCodePlaying_ == null) {
+        // original language
+        this.subtitle_(goog.bind(this.editSubtitlesImpl_, this));
+    }
+    else {
+        // foreign language
+        this.videoTab_.showLoading(true);
+        mirosubs.Rpc.call(
+            'edit_translations' + (this.nullWidget_ ? '_null' : ''),
+            { 'video_id' : this.videoID_ },
+            goog.bind(this.editTranslations_, this));
+    }
+};
+mirosubs.EmbeddableWidget.prototype.editTranslations_ = function(result) {
+    this.videoTab_.showLoading(false);
+    this.videoPlayer_.pause();
+    this.turnOffSubs_();
+    var dialog = new mirosubs.translate.EditDialog(
+        this.videoSource_, this.videoID_,
+        result['version'],
+        result['existing_captions'],
+        result['existing_translations'],
+        this.nullWidget_);
+    dialog.setVisible(true);
+    this.dialog_ = dialog;
 };
 mirosubs.EmbeddableWidget.prototype.startSubtitlingImpl_ = 
     function(version, existingCaptions) 
@@ -165,6 +194,19 @@ mirosubs.EmbeddableWidget.prototype.startSubtitlingImpl_ =
                 that.popupMenu_.setSubtitled();
             }
         });
+};
+mirosubs.EmbeddableWidget.prototype.editSubtitlesImpl_ = 
+    function(version, existingCaptions) 
+{
+    this.videoPlayer_.pause();
+    this.turnOffSubs_();
+    var dialog = new mirosubs.subtitle.EditDialog(
+        this.videoSource_,
+        new mirosubs.subtitle.MSServerModel(
+            this.videoID_, version, this.nullWidget_),
+        existingCaptions);
+    dialog.setVisible(true);
+    this.dialog_ = dialog;
 };
 mirosubs.EmbeddableWidget.prototype.languageSelected_ = function(event) {
     if (event.languageCode)
@@ -204,6 +246,7 @@ mirosubs.EmbeddableWidget.prototype.subsLoaded_ =
 {
     this.videoTab_.showLoading(false);
     this.disposePlayManager_();
+    this.languageCodePlaying_ = languageCode;
     this.playManager_ = new mirosubs.play.Manager(
         this.videoPlayer_, subtitles);
     // FIXME: petit duplication. appears in server-side code also.
@@ -221,7 +264,6 @@ mirosubs.EmbeddableWidget.prototype.findLanguage_ = function(code) {
 };
 mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
     this.videoTab_.showLoading(true);
-    var that = this;
     mirosubs.Rpc.call(
         'fetch_captions_and_open_languages' + 
             (this.nullWidget_ ? '_null' : ''),

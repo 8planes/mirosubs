@@ -16,16 +16,17 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.Dialog');
+goog.provide('mirosubs.subtitle.EditDialog');
 
 /**
- * 
- * @param {mirosubs.subtitle.ServerModel} serverModel
- * @param {Array.<Object.<string, *>>} existingCaptions existing captions in 
- *     json object format.
+ * @fileoverview Used to edit existing subtitles. Has some duplication 
+ *     with mirosubs.subtitle.Dialog, which should be fixed in the future.
+ *     TODO: fix duplication with mirosubs.subtitle.Dialog after this 
+ *     solidifies a bit more.
  */
-mirosubs.subtitle.Dialog = function(videoSource, serverModel, 
-                                    existingCaptions) {
+
+mirosubs.subtitle.EditDialog = function(videoSource, serverModel, 
+                                        existingCaptions) {
     mirosubs.Dialog.call(this, videoSource);
     this.serverModel_ = serverModel;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
@@ -35,42 +36,31 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
         new mirosubs.CaptionManager(
             this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
-    this.serverModel_.init(uw, goog.bind(this.showLoginNag_, this));
-    /**
-     * @type {?boolean} True iff we pass into FINISHED state.
-     */
-    this.saved_ = false;
-    /**
-     *
-     * @type {?mirosubs.subtitle.Dialog.State_}
-     */
+    this.serverModel_.init(uw, function() {});
+    
     this.state_ = null;
     this.currentSubtitlePanel_ = null;
     this.rightPanelListener_ = new goog.events.EventHandler(this);
     this.doneButtonEnabled_ = true;
 };
-goog.inherits(mirosubs.subtitle.Dialog, mirosubs.Dialog);
+goog.inherits(mirosubs.subtitle.EditDialog, mirosubs.Dialog);
 
-/**
- *
- * @enum
- */
-mirosubs.subtitle.Dialog.State_ = {
-    TRANSCRIBE: 0,
-    SYNC: 1,
-    REVIEW: 2,
-    FINISHED: 3
+mirosubs.subtitle.EditDialog.State_ = {
+    EDIT: 0,
+    TRANSCRIBE: 1,
+    FINISHED: 2
 };
-mirosubs.subtitle.Dialog.prototype.captionReached_ = function(event) {
+
+mirosubs.subtitle.EditDialog.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.getVideoPlayerInternal().showCaptionText(c ? c.getText() : '');
 };
-mirosubs.subtitle.Dialog.prototype.createDom = function() {
-    mirosubs.subtitle.Dialog.superClass_.createDom.call(this);
-    this.setState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
+mirosubs.subtitle.EditDialog.prototype.createDom = function() {
+    mirosubs.subtitle.EditDialog.superClass_.createDom.call(this);
+    this.setState_(mirosubs.subtitle.EditDialog.State_.EDIT);
 };
-mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
-    mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
+mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
+    mirosubs.subtitle.EditDialog.superClass_.enterDocument.call(this);
     this.getHandler().
         listen(
             document,
@@ -81,7 +71,7 @@ mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
             mirosubs.CaptionManager.CAPTION,
             this.captionReached_);
 };
-mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
+mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
     this.state_ = state;
 
     var nextSubPanel = this.makeCurrentStateSubtitlePanel_();
@@ -101,14 +91,13 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.rightPanelListener_.listen(
         rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
     this.rightPanelListener_.listen(
-        rightPanel, et.DONE, this.handleDoneKeyPress_);
-    var s = mirosubs.subtitle.Dialog.State_;
-    if (state == s.SYNC || state == s.REVIEW) {
-        rightPanel.showBackLink(
-            state == s.SYNC ? "Back to Transcribe" : "Back to Sync");
+        rightPanel, et.DONE, this.handleDoneKeyPRess_);
+    var s = mirosubs.subtitle.EditDialog.State_;
+    if (state == s.EDIT) {
+        rightPanel.showBackLink("Return to Transcribe");
         this.rightPanelListener_.listen(
             rightPanel, et.BACK, this.handleBackKeyPress_);
-        this.timelineSubtitleSet_ = 
+        this.timelineSubtitleSet_ =
             new mirosubs.timeline.SubtitleSet(
                 this.captionSet_, this.getVideoPlayerInternal());
         this.getTimelinePanelInternal().addChild(
@@ -123,8 +112,7 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
         videoPlayer.pause();
     }
 };
-mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
-    this.saved_ = true;
+mirosubs.subtitle.EditDialog.prototype.setFinishedState_ = function() {
     var sharePanel = new mirosubs.subtitle.SharePanel(
         this.serverModel_);
     this.setRightPanelInternal(sharePanel);
@@ -133,23 +121,20 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel();
     bottomContainer.addChild(bottomFinishedPanel, true);
 };
-mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
+mirosubs.subtitle.EditDialog.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL)
         this.ctrlClicked_();
     if (event.keyCode == goog.events.KeyCodes.TAB) {
-        //TODO: this violates accessibility guidelines. Use another key instead of TAB!
+        // TODO: this violates accessibility guidelines. 
+        // Use another key instead of TAB!
         this.togglePause_();
         event.preventDefault();
     }
 };
-mirosubs.subtitle.Dialog.prototype.handleBackKeyPress_ = function(event) {
-    var s = mirosubs.subtitle.Dialog.State_;
-    if (this.state_ == s.SYNC)
-        this.setState_(s.TRANSCRIBE);
-    else if (this.state_ == s.REVIEW)
-        this.setState_(s.SYNC);    
+mirosubs.subtitle.EditDialog.prototype.handleBackKeyPress_ = function(event) {
+    this.setState_(mirosubs.subtitle.EditDialog.State_.TRANSCRIBE);
 };
-mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
+mirosubs.subtitle.EditDialog.prototype.handleLegendKeyPress_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL && 
         event.keyEventType == goog.events.EventType.CLICK)
         this.ctrlClicked_();
@@ -157,10 +142,10 @@ mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
         event.keyEventType == goog.events.EventType.CLICK)
         this.togglePause_();
 };
-mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
+mirosubs.subtitle.EditDialog.prototype.handleDoneKeyPress_ = function(event) {
     if (!this.doneButtonEnabled_)
         return;
-    if (this.state_ == mirosubs.subtitle.Dialog.State_.REVIEW) {
+    if (this.state_ == mirosubs.subtitle.EditDialog.State_.EDIT) {
         this.doneButtonEnabled_ = false;
         this.getRightPanelInternal().showLoading(true);
         var that = this;
@@ -173,54 +158,32 @@ mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     else
         this.setState_(this.nextState_());
 };
-mirosubs.subtitle.Dialog.prototype.ctrlClicked_ = function() {
+mirosubs.subtitle.EditDialog.prototype.ctrlClicked_ = function() {
     var videoPlayer = this.getVideoPlayerInternal();
     var now = videoPlayer.getPlayheadTime();
     videoPlayer.setPlayheadTime(Math.max(now - 8, 0));
     videoPlayer.play();
 };
-mirosubs.subtitle.Dialog.prototype.togglePause_ = function() {
+mirosubs.subtitle.EditDialog.prototype.togglePause_ = function() {
     this.getVideoPlayerInternal().togglePause();
 };
-mirosubs.subtitle.Dialog.prototype.makeCurrentStateSubtitlePanel_ = function() {
-    var s = mirosubs.subtitle.Dialog.State_;
+mirosubs.subtitle.EditDialog.prototype.makeCurrentStateSubtitlePanel_ = 
+    function() 
+{
+    var s = mirosubs.subtitle.EditDialog.State_;
     if (this.state_ == s.TRANSCRIBE)
         return new mirosubs.subtitle.TranscribePanel(
-            this.captionSet_, 
+            this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_);
-    else if (this.state_ == s.SYNC)
-        return new mirosubs.subtitle.SyncPanel(
-            this.captionSet_, 
-            this.getVideoPlayerInternal(),
-            this.serverModel_,
-            this.captionManager_);
-    else if (this.state_ == s.REVIEW)
-        return new mirosubs.subtitle.ReviewPanel(
-            this.captionSet_, 
+    else if (this.state_ == s.EDIT)
+        return new mirosubs.subtitle.EditPanel(
+            this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_,
             this.captionManager_);
 };
-mirosubs.subtitle.Dialog.prototype.nextState_ = function() {
-    var s = mirosubs.subtitle.Dialog.State_;
-    if (this.state_ == s.TRANSCRIBE)
-        return s.SYNC;
-    else if (this.state_ == s.SYNC)
-        return s.REVIEW;
-    else if (this.state_ == s.REVIEW)
-        return s.FINISHED;
-};
-mirosubs.subtitle.Dialog.prototype.showLoginNag_ = function() {
-    // not doing anything here right now.
-};
-/**
- * Did we ever pass into finished state?
- */
-mirosubs.subtitle.Dialog.prototype.isSaved = function() {
-    return this.saved_;
-};
-mirosubs.subtitle.Dialog.prototype.disposeCurrentPanels_ = function() {
+mirosubs.subtitle.EditDialog.prototype.disposeCurrentPanels_ = function() {
     if (this.currentSubtitlePanel_) {
         this.currentSubtitlePanel_.dispose();
         this.currentSubtitlePanel_ = null;
@@ -231,8 +194,8 @@ mirosubs.subtitle.Dialog.prototype.disposeCurrentPanels_ = function() {
         this.timelineSubtitleSet_ = null;
     }
 };
-mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
-    mirosubs.subtitle.Dialog.superClass_.disposeInternal.call(this);
+mirosubs.subtitle.EditDialog.prototype.disposeInternal = function() {
+    mirosubs.subtitle.EditDialog.superClass_.disposeInternal.call(this);
     this.disposeCurrentPanels_();
     this.captionManager_.dispose();
     this.serverModel_.dispose();

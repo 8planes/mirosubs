@@ -48,7 +48,6 @@ class Video(models.Model):
     view_count = models.PositiveIntegerField(default=0)
     # the person who was first to start captioning this video.
     owner = models.ForeignKey(User, null=True)
-    # always set to False for the time being.
     allow_community_edits = models.BooleanField()
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)

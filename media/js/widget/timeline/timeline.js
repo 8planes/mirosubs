@@ -43,7 +43,6 @@ mirosubs.timeline.Timeline.prototype.createDom = function() {
     this.addChild(this.timelineInner_, true);
     el.appendChild($d('div', 'marker'));
 };
-console.log('here');
 mirosubs.timeline.Timeline.prototype.enterDocument = function() {
     mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
     this.getHandler().
