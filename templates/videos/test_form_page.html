@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <form action="." method="post">
+        <p>
+            {{ form.email.errors }}
+            <label for="id_email">Email</label>
+            {{ form.email }}
+        </p>
+        <p>
+            {{ form.browser.errors }}
+            <label for="id_browser">Browser</label>
+            {{ form.browser }}
+        </p>
+        <p>
+            {{ form.task1.errors }}
+            <label for="id_task1">Task 1</label>
+            {{ form.task1 }}
+        </p>
+        <p>
+            {{ form.task2.errors }}
+            <label for="id_task2">Task 2</label>
+            {{ form.task2 }}
+        </p>
+        <p>
+            {{ form.task3.errors }}
+            <label for="id_task3">Task 3</label>
+            {{ form.task3 }}
+        </p>
+        <p>
+            {{ form.get_updates.errors }}
+            optional: get updates about Universal Subtitles
+            {{ form.get_updates }}
+        </p>
+        <p>
+            <button type="submit">
+                <span>Submit</span>
+            </button>
+        </p>
+    </form>
+{% endblock %}

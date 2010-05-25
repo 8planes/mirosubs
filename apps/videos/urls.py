@@ -25,5 +25,6 @@ urlpatterns = patterns('videos.views',
     url(r'^email_friend/$', 'email_friend', name='email_friend'),
     url(r'^demo/$', 'demo', name='demo'),
     url(r'^activities/$', 'actions_list', name='actions_list'),
+    url(r'^test/$', 'test_form_page', name='test_form_page'),
     url(r'(?P<video_id>(\w|-)+)/$', 'video', name='video'),
 )

@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.forms import VideoForm, FeedbackForm, EmailFriendForm
+from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action
 import widget
 from urlparse import urlparse, parse_qs
@@ -158,4 +158,17 @@ def email_friend(request):
 def demo(request):
     context = {}
     return render_to_response('videos/demo.html', context,
+                              context_instance=RequestContext(request))
+    
+def test_form_page(request):
+    if request.method == 'POST':
+        form = UserTestResultForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserTestResultForm()
+    context = {
+        'form': form           
+    }
+    return render_to_response('videos/test_form_page.html', context,
                               context_instance=RequestContext(request))
