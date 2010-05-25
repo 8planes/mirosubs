@@ -19,7 +19,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion
@@ -213,18 +213,27 @@ def translation_history(request, video_id, lang):
     return render_to_response('videos/translation_history.html', context,
                               context_instance=RequestContext(request))    
 
-def revision(request, pk):
-    version = get_object_or_404(VideoCaptionVersion, pk=pk)
-    video = version.video
-    context = widget.js_context(request, video, False, None, False, None, 
+def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
+    version = get_object_or_404(cls, pk=pk)
+    context = widget.js_context(request, version.video, False, None, False, None, 
                                 'autosub' in request.GET)
-    context['video'] = video
+    context['video'] = version.video
     context['version'] = version
     context['next_version'] = version.next_version()
     context['prev_version'] = version.prev_version()
     
-    return render_to_response('videos/revision.html', context,
+    if cls == TranslationVersion:
+        tpl = 'videos/translation_revision.html'
+    return render_to_response(tpl, context,
                               context_instance=RequestContext(request))     
+
+@login_required
+def rollback(request, pk, cls=VideoCaptionVersion):
+    version = get_object_or_404(cls, pk=pk)
+    new_version = version.rollback(request.user)
+    if cls == TranslationVersion:
+        return redirect('videos:translation_revision', pk=new_version.pk)
+    return redirect('videos:revision', pk=new_version.pk)
     
 def test_form_page(request):
     if request.method == 'POST':

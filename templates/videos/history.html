@@ -94,7 +94,11 @@
               <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
               <li class="table_time">{{ item.time_change }}</li>
               <li class="table_text">{{ item.text_change }}</li>
-              <li><a href="{% url videos:revision pk=item.pk %}">view</a></li>
+              <li>
+                  {% block view_link %}
+                    <a href="{% url videos:revision pk=item.pk %}">view</a>
+                  {% endblock %}
+              </li>
             </ul>
           </li>    
     {% endfor %}

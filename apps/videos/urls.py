@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
+from models import TranslationVersion
 
 urlpatterns = patterns('videos.views',
     url(r'^$', 'video_list', name='list'),
@@ -28,6 +29,9 @@ urlpatterns = patterns('videos.views',
     url(r'^history/(?P<video_id>(\w|-)+)/$', 'history', name='history'),
     url(r'^history/(?P<video_id>(\w|-)+)/(?P<lang>\w+)/$', 'translation_history', name='translation_history'),
     url(r'^revision/(?P<pk>\d+)/$', 'revision', name='revision'),
+    url(r'^revision/t(?P<pk>\d+)/$', 'revision', {'cls': TranslationVersion}, 'translation_revision'),
+    url(r'^rollback/(?P<pk>\d+)/$', 'rollback', name='rollback'),
+    url(r'^rollback/t(?P<pk>\d+)/$', 'rollback', {'cls': TranslationVersion}, 'translation_rollback'),
     url(r'^test/$', 'test_form_page', name='test_form_page'),
     url(r'(?P<video_id>(\w|-)+)/$', 'video', name='video'),
 )

@@ -222,7 +222,23 @@ def create_video_id(sender, instance, **kwargs):
                                                            for i in xrange(12)])
 models.signals.pre_save.connect(create_video_id, sender=Video)
 
-class VideoCaptionVersion(models.Model):
+class VersionModel(models.Model):
+    
+    class Meta:
+        abstract = True
+        ordering = ['-datetime_started']
+    
+    def revision_time(self):
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+        d = self.datetime_started.date()
+        if d == today:
+            return 'Today'
+        elif d == yesterday:
+            return 'Yestarday'
+        return d
+
+class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.
 
     A new VideoCaptionVersion is added during each subtitling session, each time 
@@ -238,23 +254,14 @@ class VideoCaptionVersion(models.Model):
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
     
-    class Meta:
-        ordering = ['-datetime_started']
-    
-    def revision_time(self):
-        today = date.today()
-        yesterday = today - timedelta(days=1)
-        d = self.datetime_started.date()
-        if d == today:
-            return 'Today'
-        elif d == yesterday:
-            return 'Yestarday'
-        return d
-    
+    def captions(self):
+        return self.videocaption_set.all()
+
     def prev_version(self):
         cls = self.__class__
         try:
-            return cls.objects.filter(datetime_started__lt=self.datetime_started)[:1].get()
+            return cls.objects.filter(datetime_started__lt=self.datetime_started) \
+                      .filter(video=self.video)[:1].get()
         except models.ObjectDoesNotExist:
             pass
         
@@ -262,9 +269,21 @@ class VideoCaptionVersion(models.Model):
         cls = self.__class__
         try:
             return cls.objects.filter(datetime_started__gt=self.datetime_started) \
-                      .order_by('datetime_started')[:1].get()
+                      .filter(video=self.video).order_by('datetime_started')[:1].get()
         except models.ObjectDoesNotExist:
             pass
+    
+    def rollback(self, user):
+        cls = self.__class__
+        latest_captions = self.video.captions()
+        new_version_no = latest_captions.version_no + 1
+        note = 'rollback to version #%s' % self.version_no
+        new_version = cls(video=self.video, version_no=new_version_no, is_complete=True, \
+            datetime_started=datetime.now(), user=user, note=note)
+        new_version.save()
+        for item in self.captions():
+            item.duplicate_for(new_version).save()
+        return new_version
                     
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
@@ -334,7 +353,7 @@ class TranslationLanguage(models.Model):
 
 
 # TODO: make TranslationVersion unique on (video, version_no, language)
-class TranslationVersion(models.Model):
+class TranslationVersion(VersionModel):
     """Snapshot of translations for a (video, language) pair at the end of a translating session.
 
     Every time a new translating session is started, the previous session's 
@@ -350,17 +369,42 @@ class TranslationVersion(models.Model):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
-
-    def revision_time(self):
-        today = date.today()
-        yesterday = today - timedelta(days=1)
-        d = self.datetime_started.date()
-        if d == today:
-            return 'Today'
-        elif d == yesterday:
-            return 'Yestarday'
-        return d
     
+    @property
+    def video(self):
+        return self.language.video
+    
+    def captions(self):
+        return self.translation_set.all()
+
+    def prev_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__lt=self.datetime_started) \
+                      .filter(language=self.language)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
+    def next_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__gt=self.datetime_started) \
+                      .filter(language=self.language).order_by('datetime_started')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+
+    def rollback(self, user):
+        cls = self.__class__
+        latest_captions = self.language.translations()
+        new_version_no = latest_captions.version_no + 1
+        note = 'rollback to version #%s' % self.version_no
+        new_version = cls(language=self.language, version_no=new_version_no, is_complete=True, \
+            datetime_started=datetime.now(), user=user, note=note)
+        new_version.save()
+        for item in self.captions():
+            item.duplicate_for(new_version).save()
+        return new_version
+            
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
     """A translation of one subtitle.
@@ -384,7 +428,19 @@ class Translation(models.Model):
     def to_json_dict(self):
         return { 'caption_id': self.caption_id,
                  'text': self.translation_text }
-
+    
+    def text(self):
+        return self.translation_text
+    
+    def display_time(self):
+        try:
+            t = int(VideoCaption.objects.get(caption_id=self.caption_id).start_time)
+            s = t % 60
+            s = s > 9 and s or '0%s' % s 
+            return '%s:%s' % (t / 60, s)            
+        except VideoCaption.DoesNotExist:
+            return ''    
+    
 class VideoCaption(models.Model):
     """A single subtitle for a video.
 
@@ -425,6 +481,9 @@ class VideoCaption(models.Model):
         s = t % 60
         s = s > 9 and s or '0%s' % s 
         return '%s:%s' % (t / 60, s)
+    
+    def text(self):
+        return self.caption_text
     
 class Action(models.Model):
     TYPE_CHOICES = (

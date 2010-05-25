@@ -1,0 +1,11 @@
+{% extends 'videos/revision.html' %}
+
+{% block history_link %}
+    {% url  videos:translation_history video.video_id version.language.language %}
+{% endblock %}
+
+{% block next_link %}{% url videos:translation_revision pk=prev_version.pk %}{% endblock %}
+
+{% block prev_link %}{% url videos:translation_revision pk=next_version.pk %}{% endblock %}
+
+{% block roolback_link %}{% url videos:translation_rollback version.pk %}{% endblock %}

@@ -13,3 +13,7 @@
             {% endfor %}
      </p>             
 {% endblock %}
+
+{% block view_link %}
+    <a href="{% url videos:translation_revision pk=item.pk %}">view</a>
+{% endblock %}

@@ -24,6 +24,15 @@
 
 {% block scripts %}
     {{ block.super }}
+    <script>
+        $(function(){
+            $('.roll_back').click(function(){
+                if ( ! confirm('Do roll back to this version?')){
+                    return false;
+                }
+            });
+        });
+    </script>    
     {% if not js_use_compiled %}
       <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
       <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
@@ -48,12 +57,17 @@
     <ul class="pag">
       {% if prev_version %}
           <li class="previous">
-            (<a href="#">diff</a>) &#8592; <a href="{% url videos:revision pk=prev_version.pk %}">Previous Revision</a>
+            (<a href="#">diff</a>) &#8592; 
+            <a href="{% block next_link %}{% url videos:revision pk=prev_version.pk %}{% endblock %}">
+                Previous Revision
+            </a>
           </li>
       {% endif %}
       {% if next_version %}
           <li class="next">
-            <a href="{% url videos:revision pk=next_version.pk %}">Next Revision</a> &#8594; (<a href="#">diff</a>) 
+            <a href="{% block prev_link %}{% url videos:revision pk=next_version.pk %}{% endblock %}">
+                Next Revision
+            </a> &#8594; (<a href="#">diff</a>) 
           </li>
       {% endif %}
       <li class="current">
@@ -69,12 +83,12 @@
     {% endwith %}
        
     <a href="#" class="new_edit">Submit a new edit based on this version</a>
-    <a href="#" class="roll_back">Roll back to this version</a>
-    <a href="{% url  videos:history video_id=video.video_id %}" class="return_history">&lt;&lt; Return to revision history</a>
+    <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">Roll back to this version</a>
+    <a href="{% block history_link %}{% url  videos:history video_id=video.video_id %}{% endblock %}" class="return_history">&lt;&lt; Return to revision history</a>
     
     <ul class="revision_list">
-      {% for item in version.videocaption_set.all %}
-        <li {% cycle 'class="even"' '' %}>{{ item.display_time }} &gt; {{ item.caption_text }}</li>
+      {% for item in version.captions %}
+        <li {% cycle 'class="even"' '' %}>{{ item.display_time }} &gt; {{ item.text }}</li>
       {% endfor %}
     </ul>
 {% endblock %}
