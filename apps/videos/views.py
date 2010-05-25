@@ -230,10 +230,13 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
 @login_required
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)
-    new_version = version.rollback(request.user)
-    if cls == TranslationVersion:
-        return redirect('videos:translation_revision', pk=new_version.pk)
-    return redirect('videos:revision', pk=new_version.pk)
+    if not version.next_version():
+        request.user.message_set.create(message='Can not rollback to the last version')
+    else:
+        request.user.message_set.create(message='Rollback was success')
+        version = version.rollback(request.user)
+    url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
+    return redirect('videos:%s' % url_name, pk=version.pk)
     
 def test_form_page(request):
     if request.method == 'POST':

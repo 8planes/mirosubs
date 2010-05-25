@@ -83,8 +83,18 @@
         </script>
     {% endwith %}
        
-    <a href="#" class="new_edit">Submit a new edit based on this version</a>
-    <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">Roll back to this version</a>
+    {% if user.is_authenticated %}
+        <a href="#" class="new_edit">Submit a new edit based on this version</a>
+        {% if next_version %}
+        <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
+            Roll back to this version
+        </a>
+        {% endif %}
+    {% else %}
+        <div class="viewing_old">
+            Login, please.
+        </div>    
+    {% endif %}
     <a href="{% block history_link %}{% url  videos:history video_id=video.video_id %}{% endblock %}" class="return_history">&lt;&lt; Return to revision history</a>
     
     <ul class="revision_list">
