@@ -38,9 +38,9 @@ mirosubs.timeline.TimeRow.prototype.ensureVisible = function(time) {
         goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     while (this.uls_.length * this.secondsPerUL_ < time + 20) {
         var row = new mirosubs.timeline.TimeRowUL(
-            $d, this.spacing_, 
+            this.spacing_, 
             this.uls_.length * this.secondsPerUL_);
-        this.getElement().appendChild(row.getElement());
+        this.addChild(row, true);
         this.uls_.push(row);
     }
 };

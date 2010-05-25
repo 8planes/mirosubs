@@ -9,6 +9,7 @@ django_extensions
 django-debug-toolbar
 PyYAML
 simplejson
+feedburner
 pil
 south
 -e hg+http://sorl-thumbnail.googlecode.com/hg/#egg=sorl-thumbnail
