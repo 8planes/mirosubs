@@ -22,8 +22,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.forms import VideoForm, FeedbackForm, EmailFriendForm
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage
+from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm
 import widget
 from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
@@ -168,4 +168,17 @@ def history(request, video_id):
     context['site'] = Site.objects.get_current()
     context['translation'] = TranslationLanguage.objects.filter(video=video)
     return render_to_response('videos/history.html', context,
+                              context_instance=RequestContext(request))
+    
+def test_form_page(request):
+    if request.method == 'POST':
+        form = UserTestResultForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserTestResultForm()
+    context = {
+        'form': form           
+    }
+    return render_to_response('videos/test_form_page.html', context,
                               context_instance=RequestContext(request))

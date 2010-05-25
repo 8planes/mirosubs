@@ -21,28 +21,49 @@ goog.provide('mirosubs.timeline.TimeRowUL');
 /**
  *
  * @param {number} spacing Spacing between major ticks, in seconds.
+ * @param {number} first time for this timerow ul, in seconds.
  */
-mirosubs.timeline.TimeRowUL = function($d, spacing, firstTime) {
-    this.element_ = $d('ul', 'mirosubs-timeline-time');
-    this.element_.style.width =
+mirosubs.timeline.TimeRowUL = function(spacing, firstTime) {
+    goog.ui.Component.call(this);
+    this.firstTime_ = firstTime;
+    this.spacing_ = spacing;
+    this.majorTicks_ = [];
+};
+goog.inherits(mirosubs.timeline.TimeRowUL, goog.ui.Component);
+mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS = 15;
+mirosubs.timeline.TimeRowUL.PX_PER_TICK = 60;
+mirosubs.timeline.TimeRowUL.DOUBLECLICK = 'timerowdblclick';
+mirosubs.timeline.TimeRowUL.prototype.createDom = function() {
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.setElementInternal($d('ul', 'mirosubs-timeline-time'));
+    var el = this.getElement();
+    el.style.width =
         (mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
          mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
-    this.element_.style.left =
-        (firstTime / spacing * mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
-    this.spacing_ = spacing;
+    el.style.left =
+        (this.firstTime_ / this.spacing_ * 
+         mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
     this.majorTicks_ = [];
     var i;
     for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS; i++) {
         var tick = $d('li');
-        this.element_.appendChild(tick);
+        el.appendChild(tick);
         this.majorTicks_.push(tick);
     }
-    this.setFirstTime(firstTime);
+    this.setFirstTime(this.firstTime_);
 };
-mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS = 15;
-mirosubs.timeline.TimeRowUL.PX_PER_TICK = 60;
-mirosubs.timeline.TimeRowUL.prototype.getElement = function() {
-    return this.element_;
+mirosubs.timeline.TimeRowUL.prototype.enterDocument = function() {
+    mirosubs.timeline.TimeRowUL.superClass_.enterDocument.call(this);
+    this.getHandler().listen(
+        this.getElement(), 
+        goog.events.EventType.DBLCLICK,
+        this.doubleClicked_);
+};
+mirosubs.timeline.TimeRowUL.prototype.doubleClicked_ = function(e) {
+    this.dispatchEvent(
+        new mirosubs.timeline.TimeRowUL.DoubleClickEvent(
+            this.firstTime_ + e.offsetX * this.spacing_ / 
+                mirosubs.timeline.TimeRowUL.PX_PER_TICK));
 };
 mirosubs.timeline.TimeRowUL.prototype.setFirstTime = function(time) {
     time = Math.max(0, time);
@@ -63,4 +84,8 @@ mirosubs.timeline.TimeRowUL.prototype.getFirstTime = function() {
 };
 mirosubs.timeline.TimeRowUL.prototype.getLastTime = function() {
     return this.lastTime_;
+};
+mirosubs.timeline.TimeRowUL.DoubleClickEvent = function(time) {
+    this.type = mirosubs.timeline.TimeRowUL.DOUBLECLICK;
+    this.time = time;
 };

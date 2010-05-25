@@ -24,7 +24,10 @@ class OpenIdBackend:
                     nickname = request.openid.ax.get('nickname')
  
             if nickname is None :
-                nickname =  ''.join([random.choice('abcdefghijklmnopqrstuvwxyz') for i in xrange(10)])
+                if email:
+                    nickname = email.split('@')[0]
+                else:
+                    nickname =  ''.join([random.choice('abcdefghijklmnopqrstuvwxyz') for i in xrange(10)])
             if email is None :
                 valid_username = False
                 email =  None #'%s@example.openid.com'%(nickname)

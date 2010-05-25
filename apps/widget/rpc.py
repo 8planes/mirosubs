@@ -147,7 +147,7 @@ def release_video_lock(request, video_id):
         video.save()
     return { "response": "ok" }
 
-def getMyUserInfo(request):
+def get_my_user_info(request):
     if request.user.is_authenticated():
         return { "logged_in" : True,
                  "username" : request.user.username }

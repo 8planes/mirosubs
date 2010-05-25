@@ -68,7 +68,9 @@ urlpatterns = patterns(
 		(r'^revision$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'revision.html'}),
 		(r'^revision2$',  'django.views.generic.simple.direct_to_template', 
-     {'template': 'revision2.html'})
+     {'template': 'revision2.html'}),
+		(r'^revision-history$',  'django.views.generic.simple.direct_to_template', 
+     {'template': 'revision-history.html'})
 )
 
 if settings.DEBUG:

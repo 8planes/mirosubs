@@ -1,5 +1,4 @@
 body{
-
 background: #d3e9ed url(../images/main_bg.gif) repeat-x;
 margin: 0 auto;
 position: relative;
@@ -30,7 +29,7 @@ a:active {}
 
 .wrapper{
 padding: 0 0px 10px;
-width: 940px;
+width: 980px;
 margin: 0 auto;
 }
 
@@ -921,6 +920,134 @@ font-size: 14px;
 .time_change{
 color: #e45129;
 }
+
+
+.diff_title{
+font-weight: normal;
+}
+
+
+/*/////////////////////////////////////////////
+
+~ Close Link
+
+/////////////////////////////////////////////*/
+
+
+a.next_edit{
+float: right;
+padding-right: 20px;
+}
+
+
+a.previous_edit{
+float: left;
+padding-left: 20px;
+}
+
+
+a.next_edit ,a.previous_edit{
+font-weight: bold;
+font-size: 16px;
+}
+
+
+
+/*/////////////////////////////////////////////
+
+~ Faux Link
+
+/////////////////////////////////////////////*/
+
+
+.table_head{
+margin: 0;
+padding: 0;
+background: #fff;
+height: 3em;
+}
+
+
+.table_head li{
+margin: 0;
+padding: 0;
+list-style: none;
+float: left;
+line-height: 3em;
+}
+
+.table_head li a{
+display: block;
+line-height: 3em;
+}
+
+
+li.table_most_recent{
+width: 220px;
+padding-left: 20px;
+}
+
+
+li.table_user{
+width: 220px;
+padding-left: 20px !important;
+}
+
+
+li.table_note{
+width: 300px;
+padding-left: 20px !important;
+}
+
+li.table_time{
+width: 60px;
+}
+
+li.table_text{
+width: 60px;
+padding-left: 20px;
+}
+
+
+
+.table_body, .table_body li, .table_body li ul, .table_body li ul li{
+padding: 0;
+margin: 0;
+list-style: none;
+}
+
+
+
+.table_body ul li{
+padding: 0;
+margin: 0;
+float: left;
+}
+
+
+.table_body ul li.table_most_recent{
+padding-right: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
