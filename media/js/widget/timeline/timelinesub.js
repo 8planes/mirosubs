@@ -120,6 +120,7 @@ mirosubs.timeline.TimelineSub.prototype.onGrabberMousedown_ =
         left ? this.onDocMouseMoveLeft_ : this.onDocMouseMoveRight_);
     this.documentEventHandler_.listen(
         document, 'mouseup', this.onDocMouseUp_);
+    event.preventDefault(); // necessary to prevent image dragging in FF3
 };
 mirosubs.timeline.TimelineSub.prototype.setGrabberVisibility_ = 
     function(visible) 
