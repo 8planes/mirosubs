@@ -144,17 +144,13 @@ mirosubs.subtitle.EditDialog.prototype.handleLegendKeyPress_ = function(event) {
         this.togglePause_();
 };
 mirosubs.subtitle.EditDialog.prototype.handleDoneKeyPress_ = function(event) {
-    console.log('done key pressed');
     if (!this.doneButtonEnabled_)
         return;
     if (this.state_ == mirosubs.subtitle.EditDialog.State_.EDIT) {
-        console.log('edit');
         this.doneButtonEnabled_ = false;
         this.getRightPanelInternal().showLoading(true);
         var that = this;
-        console.log('yes');
         this.serverModel_.finish(function() {
-            console.log('finishing');
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);
             that.setFinishedState_();
