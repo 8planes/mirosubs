@@ -45,17 +45,18 @@ mirosubs.translate.ServerModel.prototype.startTranslating =
     this.curLanguageCode_ = null;
     this.curVersion_ = -1;
     this.translating_ = false;
-    mirosubs.Rpc.call('start_translating' + (this.isNull_ ? '_null' : ''),
-                      {'video_id': this.videoID_,
-                       'language_code': languageCode },
-                      function(result) {
-                          if (result['can_edit']) {
-                              that.startEditing_(languageCode, result['version']);
-                              callback(true, result['existing']);
-                          }
-                          else
-                              callback(false, 'locked by ' + result['locked_by']);
-                      });
+    mirosubs.Rpc.call(
+        'start_translating' + (this.isNull_ ? '_null' : ''),
+        {'video_id': this.videoID_,
+         'language_code': languageCode },
+        function(result) {
+            if (result['can_edit']) {
+                that.startEditing_(languageCode, result['version']);
+                callback(true, result['existing']);
+            }
+            else
+                callback(false, 'locked by ' + result['locked_by']);
+        });
 };
 
 mirosubs.translate.ServerModel.prototype.startEditing =

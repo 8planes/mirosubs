@@ -24,7 +24,7 @@ goog.provide('mirosubs.translate.EditDialog');
 mirosubs.translate.EditDialog = function(videoSource,
                                          videoID,
                                          subtitles,
-                                         allLangauges,
+                                         allLanguages,
                                          version,
                                          languageCode,
                                          existingTranslations,
@@ -40,7 +40,7 @@ mirosubs.translate.EditDialog = function(videoSource,
     this.serverModel_ = new mirosubs.translate.ServerModel(
         videoID, this.unitOfWork_, nullWidget,
         function() {});
-    this.serverModel_.startEditing();
+    this.serverModel_.startEditing(languageCode, version);
 };
 goog.inherits(mirosubs.translate.EditDialog, mirosubs.Dialog);
 mirosubs.translate.EditDialog.prototype.createDom = function() {
