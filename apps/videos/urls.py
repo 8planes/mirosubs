@@ -32,6 +32,8 @@ urlpatterns = patterns('videos.views',
     url(r'^revision/t(?P<pk>\d+)/$', 'revision', {'cls': TranslationVersion}, 'translation_revision'),
     url(r'^rollback/(?P<pk>\d+)/$', 'rollback', name='rollback'),
     url(r'^rollback/t(?P<pk>\d+)/$', 'rollback', {'cls': TranslationVersion}, 'translation_rollback'),
+    url(r'^diffing/(?P<first_pk>\d+)/(?P<second_pk>\d+)/$', 'diffing', name='diffing'),
+    url(r'^diffing/t(?P<first_pk>\d+)/t(?P<second_pk>\d+)/$', 'translation_diffing', name='translation_diffing'),
     url(r'^test/$', 'test_form_page', name='test_form_page'),
     url(r'(?P<video_id>(\w|-)+)/$', 'video', name='video'),
 )

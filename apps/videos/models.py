@@ -255,7 +255,7 @@ class VideoCaptionVersion(VersionModel):
     text_change = models.FloatField(null=True, blank=True)
     
     def captions(self):
-        return self.videocaption_set.all()
+        return self.videocaption_set.order_by('start_time')
 
     def prev_version(self):
         cls = self.__class__
@@ -350,7 +350,6 @@ class TranslationLanguage(models.Model):
             return None
         else:
             return max(version_list, key=lambda v: v.version_no)
-
 
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(VersionModel):

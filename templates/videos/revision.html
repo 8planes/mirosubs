@@ -24,7 +24,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    <script>
+    <script type="text/javascript">
         $(function(){
             $('.roll_back').click(function(){
                 if ( ! confirm('Do roll back to this version?')){
@@ -55,27 +55,42 @@
         </div>
     {% endif %}
     
-    <ul class="pag">
-      {% if prev_version %}
-          <li class="previous">
-            (<a href="#">diff</a>) &#8592; 
-            <a href="{% block next_link %}{% url videos:revision pk=prev_version.pk %}{% endblock %}">
-                Previous Revision
-            </a>
+    {% block navigation %}
+        <ul class="pag">
+            
+          {% if prev_version %}
+              <li class="previous">
+                {% ifnotequal latest_version prev_version %}
+                    (<a href="{% url videos:diffing latest_version.pk prev_version.pk %}">diff</a>) 
+                {% endifnotequal %}
+                &#8592; 
+                <a href="{% url videos:revision pk=prev_version.pk %}">
+                    Previous Revision
+                </a>
+              </li>
+          {% endif %}
+          
+          {% if next_version %}
+              <li class="next">
+                <a href="{% url videos:revision pk=next_version.pk %}">
+                    Next Revision
+                </a> &#8594;
+                {% ifnotequal latest_version next_version %}
+                    (<a href="{% url videos:diffing latest_version.pk next_version.pk %}">diff</a>) 
+                {% endifnotequal %}                
+              </li>
+          {% endif %}
+          
+          <li class="current">
+            Current Revision 
+            {% ifnotequal latest_version version %}
+                (<a href="{% url videos:diffing latest_version.pk version.pk %}">diff</a>) 
+            {% endifnotequal %}               
           </li>
-      {% endif %}
-      {% if next_version %}
-          <li class="next">
-            <a href="{% block prev_link %}{% url videos:revision pk=next_version.pk %}{% endblock %}">
-                Next Revision
-            </a> &#8594; (<a href="#">diff</a>) 
-          </li>
-      {% endif %}
-      <li class="current">
-        Current Revision (<a href="#">diff</a>)  
-      </li>
-    </ul>
- 
+          
+        </ul>
+    {% endblock %}
+    
     {% with video.video_url as video_url %}
         {% include "widget/widget.html" %}
         <script type="text/javascript">
@@ -95,7 +110,7 @@
             Login, please.
         </div>    
     {% endif %}
-    <a href="{% block history_link %}{% url  videos:history video_id=video.video_id %}{% endblock %}" class="return_history">&lt;&lt; Return to revision history</a>
+    <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}" class="return_history">&lt;&lt; Return to revision history</a>
     
     <ul class="revision_list">
       {% for item in version.captions %}

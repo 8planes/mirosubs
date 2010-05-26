@@ -27,7 +27,6 @@ from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResul
 import widget
 from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
-from django.shortcuts import redirect
 from django.conf import settings
 import simplejson as json
 from django.utils.encoding import DjangoUnicodeDecodeError
@@ -181,7 +180,7 @@ def history(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
-    context['revisions'] = qs   
+    context['revisions'] = qs  
     return render_to_response('videos/history.html', context,
                               context_instance=RequestContext(request))
 
@@ -209,7 +208,6 @@ def translation_history(request, video_id, lang):
     context['language'] = language
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
-     
     return render_to_response('videos/translation_history.html', context,
                               context_instance=RequestContext(request))    
 
@@ -224,6 +222,9 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     
     if cls == TranslationVersion:
         tpl = 'videos/translation_revision.html'
+        context['latest_version'] = version.language.translations()
+    else:
+        context['latest_version'] = version.video.captions()
     return render_to_response(tpl, context,
                               context_instance=RequestContext(request))     
 
@@ -237,6 +238,68 @@ def rollback(request, pk, cls=VideoCaptionVersion):
         version = version.rollback(request.user)
     url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
     return redirect('videos:%s' % url_name, pk=version.pk)
+
+def diffing(request, first_pk, second_pk):
+    first_version = get_object_or_404(VideoCaptionVersion, pk=first_pk)
+    video = first_version.video
+    second_version = get_object_or_404(VideoCaptionVersion, pk=second_pk, video=video)
+    if second_version.datetime_started > first_version.datetime_started:
+        first_version, second_version = second_version, first_version
+    
+    second_captions = dict([(item.caption_id, item) for item in second_version.captions()])
+    captions = []
+    for caption in first_version.captions():
+        try:
+            scaption = second_captions[caption.caption_id]
+        except KeyError:
+            scaption = None
+            changed = dict(text=True, time=True)
+        else:
+            changed = {
+                'text': (not caption.caption_text == scaption.caption_text), 
+                'time': (not caption.start_time == scaption.start_time)
+            }
+        data = [caption, scaption, changed]
+        captions.append(data)
+        
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+    context['video'] = video
+    context['captions'] = captions
+    context['first_version'] = first_version
+    context['second_version'] = second_version
+    context['history_link'] = reverse('videos:history', args=[video.video_id])     
+    return render_to_response('videos/diffing.html', context,
+                              context_instance=RequestContext(request)) 
+
+def translation_diffing(request, first_pk, second_pk):
+    first_version = get_object_or_404(TranslationVersion, pk=first_pk)
+    language = first_version.language
+    video = first_version.video
+    second_version = get_object_or_404(TranslationVersion, pk=second_pk, language=language)
+    if second_version.datetime_started > first_version.datetime_started:
+        first_version, second_version = second_version, first_version
+    
+    second_captions = dict([(item.caption_id, item) for item in second_version.captions()])
+    captions = []
+    for caption in first_version.captions():
+        try:
+            scaption = second_captions[caption.caption_id]
+        except KeyError:
+            scaption = None
+        changed = scaption and not caption.translation_text == scaption.translation_text 
+        data = [caption, scaption, dict(text=changed, time=False)]
+        captions.append(data)
+        
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+    context['video'] = video
+    context['captions'] = captions
+    context['first_version'] = first_version
+    context['second_version'] = second_version
+    context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language]) 
+    return render_to_response('videos/translation_diffing.html', context,
+                              context_instance=RequestContext(request))
     
 def test_form_page(request):
     if request.method == 'POST':
