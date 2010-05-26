@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.SubtitleList');
@@ -21,7 +21,7 @@ goog.provide('mirosubs.subtitle.SubtitleList');
 /**
  * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
  */
-mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet, 
+mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
                                           displayTimes, opt_showBeginMessage) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
@@ -73,18 +73,18 @@ mirosubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
  * @param {mirosubs.subtitle.EditableCaption} subtitle
  *
  */
-mirosubs.subtitle.SubtitleList.prototype.addSubtitle = 
-    function(subtitle, opt_scrollDown) 
+mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
+    function(subtitle, opt_scrollDown)
 {
     if (this.showingBeginMessage_) {
         goog.dom.removeChildren(this.getElement());
         goog.dom.classes.remove(this.getElement(), 'mirosubs-beginTab');
         this.showingBeginMessage_ = false;
     }
-    var subtitleWidget = 
+    var subtitleWidget =
         new mirosubs.subtitle.SubtitleWidget(
-            subtitle, 
-            goog.bind(this.setCurrentlyEditing_, this), 
+            subtitle,
+            goog.bind(this.setCurrentlyEditing_, this),
             this.displayTimes_);
     this.addChild(subtitleWidget, true);
     this.subtitleMap_[subtitle.getCaptionIDString()] = subtitleWidget;
@@ -121,8 +121,8 @@ mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
     goog.style.scrollIntoContainerView(subtitleWidget.getElement(),
                                        this.getElement(), true);
 };
-mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ = 
-    function(editing, subtitleWidget) 
+mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
+    function(editing, timeChanged, subtitleWidget)
 {
     this.currentlyEditing_ = editing;
     if (editing) {
@@ -130,7 +130,9 @@ mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
     }
     else {
         var subStartTime = subtitleWidget.getSubtitle().getStartTime();
-        this.videoPlayer_.playWithNoUpdateEvents(subStartTime, 2);
+        if (timeChanged) {
+            this.videoPlayer_.playWithNoUpdateEvents(subStartTime, 2);
+        }
     }
 };
 mirosubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {
