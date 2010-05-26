@@ -1,37 +1,37 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
 // 
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.Dialog');
 
 /**
- * 
+ *
  * @param {mirosubs.subtitle.ServerModel} serverModel
- * @param {Array.<Object.<string, *>>} existingCaptions existing captions in 
+ * @param {Array.<Object.<string, *>>} existingCaptions existing captions in
  *     json object format.
  */
-mirosubs.subtitle.Dialog = function(videoSource, serverModel, 
+mirosubs.subtitle.Dialog = function(videoSource, serverModel,
                                     existingCaptions) {
     mirosubs.Dialog.call(this, videoSource);
     this.serverModel_ = serverModel;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
-    this.captionSet_ = 
+    this.captionSet_ =
         new mirosubs.subtitle.EditableCaptionSet(existingCaptions, uw);
-    this.captionManager_ = 
+    this.captionManager_ =
         new mirosubs.CaptionManager(
             this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
@@ -108,7 +108,7 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
             state == s.SYNC ? "Back to Transcribe" : "Back to Sync");
         this.rightPanelListener_.listen(
             rightPanel, et.BACK, this.handleBackKeyPress_);
-        this.timelineSubtitleSet_ = 
+        this.timelineSubtitleSet_ =
             new mirosubs.timeline.SubtitleSet(
                 this.captionSet_, this.getVideoPlayerInternal());
         this.getTimelinePanelInternal().addChild(
@@ -134,10 +134,17 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     bottomContainer.addChild(bottomFinishedPanel, true);
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
+    var s = mirosubs.subtitle.Dialog.State_;
     if (event.keyCode == goog.events.KeyCodes.CTRL)
         this.ctrlClicked_();
-    if (event.keyCode == goog.events.KeyCodes.TAB) {
+    if (event.keyCode == goog.events.KeyCodes.TAB &&
+        this.state_ == s.TRANSCRIBE) {
         //TODO: this violates accessibility guidelines. Use another key instead of TAB!
+        this.togglePause_();
+        event.preventDefault();
+    }
+    if (event.keyCode == goog.events.KeyCodes.SPACE &&
+        (this.state_ == s.SYNC || this.state_ == s.REVIEW)) {
         this.togglePause_();
         event.preventDefault();
     }
@@ -147,10 +154,10 @@ mirosubs.subtitle.Dialog.prototype.handleBackKeyPress_ = function(event) {
     if (this.state_ == s.SYNC)
         this.setState_(s.TRANSCRIBE);
     else if (this.state_ == s.REVIEW)
-        this.setState_(s.SYNC);    
+        this.setState_(s.SYNC);
 };
 mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.CTRL && 
+    if (event.keyCode == goog.events.KeyCodes.CTRL &&
         event.keyEventType == goog.events.EventType.CLICK)
         this.ctrlClicked_();
     if (event.keyCode == goog.events.KeyCodes.TAB &&
@@ -186,18 +193,18 @@ mirosubs.subtitle.Dialog.prototype.makeCurrentStateSubtitlePanel_ = function() {
     var s = mirosubs.subtitle.Dialog.State_;
     if (this.state_ == s.TRANSCRIBE)
         return new mirosubs.subtitle.TranscribePanel(
-            this.captionSet_, 
+            this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_);
     else if (this.state_ == s.SYNC)
         return new mirosubs.subtitle.SyncPanel(
-            this.captionSet_, 
+            this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_,
             this.captionManager_);
     else if (this.state_ == s.REVIEW)
         return new mirosubs.subtitle.ReviewPanel(
-            this.captionSet_, 
+            this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_,
             this.captionManager_);

@@ -9,26 +9,26 @@ var MS_unitOfWork = null;
 var MS_captionSet = [];
 var MS_videoPlayer = null;
 var MS_captionManager = null;
-var MS_space = goog.events.KeyCodes.SPACE;
+var MS_down = goog.events.KeyCodes.DOWN;
 
 // helper methods to avoid typing too much
 
 function captionJSON(start, end, id) {
-    return {'start_time' : start, 
-            'end_time': end, 
+    return {'start_time' : start,
+            'end_time': end,
             'caption_id': id};
 }
 
-function spacePress() {
-    goog.testing.events.fireKeySequence(document, MS_space);
+function downPress() {
+    goog.testing.events.fireKeySequence(document, MS_down);
 }
 
-function spaceDown() {
-    mirosubs.testing.events.fireKeyDown(document, MS_space);
+function downHold() {
+    mirosubs.testing.events.fireKeyDown(document, MS_down);
 }
 
-function spaceUp() {
-    mirosubs.testing.events.fireKeyUp(document, MS_space);
+function downRelease() {
+    mirosubs.testing.events.fireKeyUp(document, MS_down);
 }
 
 function assertTimes(subIndex, start, end) {
@@ -45,12 +45,12 @@ function setUpSubs(opt_subs) {
     subs = opt_subs || [captionJSON(-1, -1, 1),
                         captionJSON(-1, -1, 2),
                         captionJSON(-1, -1, 3)];
-    MS_captionSet = 
+    MS_captionSet =
         new mirosubs.subtitle.EditableCaptionSet(
             subs, MS_unitOfWork);
     MS_captionManager = new mirosubs.CaptionManager(
         MS_videoPlayer, MS_captionSet);
-    MS_syncPanel = new mirosubs.subtitle.SyncPanel(MS_captionSet, 
+    MS_syncPanel = new mirosubs.subtitle.SyncPanel(MS_captionSet,
                                                    MS_videoPlayer,
                                                    null,
                                                    MS_captionManager);
@@ -69,9 +69,9 @@ function tearDown() {
 function testAssignSubtitles() {
     setUpSubs();
     MS_videoPlayer.playheadTime = 0.3;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 5.4;
-    spacePress();
+    downPress();
     assertTimes(0, 0.3, 5.4);
     assertTimes(1, 5.4, null);
 }
@@ -79,11 +79,11 @@ function testAssignSubtitles() {
 function testMoveFirstSubtitle() {
     setUpSubs();
     MS_videoPlayer.playheadTime = 0.8;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 5.2;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 0.3;
-    spacePress();
+    downPress();
     assertTimes(0, 0.3, 5.2);
     assertTimes(1, 5.2, null);
 }
@@ -91,13 +91,13 @@ function testMoveFirstSubtitle() {
 function testAssignAllSubtitles() {
     setUpSubs();
     MS_videoPlayer.playheadTime = 0.3;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 5.2;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 8.0;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 10.0;
-    spacePress();
+    downPress();
     assertTimes(0, 0.3, 5.2);
     assertTimes(1, 5.2, 8.0);
     assertTimes(2, 8.0, 10.0);
@@ -106,11 +106,11 @@ function testAssignAllSubtitles() {
 function testMoveMiddleSubtitle() {
     setUpSubs();
     MS_videoPlayer.playheadTime = 0.8;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 9.0;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 6.0;
-    spacePress();
+    downPress();
     assertTimes(0, 0.8, 6.0);
     assertTimes(1, 6.0, null);
 }
@@ -118,13 +118,13 @@ function testMoveMiddleSubtitle() {
 function testClearOneSubtitle() {
     setUpSubs();
     MS_videoPlayer.playheadTime = 0.3;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 5.2;
-    spacePress();
+    downPress();
     MS_videoPlayer.playheadTime = 0.8;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 6.3;
-    spaceUp();
+    downRelease();
     assertTimes(0, 0.3, 6.3);
     assertTimes(1, 6.3, null);
 }
@@ -134,9 +134,9 @@ function testMoveFirstSubtitleByHolding() {
                captionJSON(10, 15, 2),
                captionJSON(15, 20, 3)]);
     MS_videoPlayer.playheadTime = 2;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 7;
-    spaceUp();
+    downRelease();
     assertTimes(0, 7, 10);
 }
 
@@ -146,9 +146,9 @@ function testMoveFirstTwoSubs() {
                captionJSON(15, 20, 3)]);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     MS_videoPlayer.playheadTime = 2;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 17;
-    spaceUp();
+    downRelease();
     assertTimes(0, 17, 17 + minLength);
     assertTimes(1, 17 + minLength, 17 + minLength * 2);
     assertTimes(2, 17 + minLength * 2, Math.max(17 + minLength * 3, 20));
@@ -159,38 +159,38 @@ function testMoveLastSub() {
                captionJSON(10, 15, 2),
                captionJSON(15, 20, 3)]);
     MS_videoPlayer.playheadTime = 19;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 22;
-    spaceUp();
+    downRelease();
     assertTimes(2, 15, 22);
 }
 
 function testMoveEndOfFirstSubWithSpace() {
     // here we have spaces between subs (from using timeline)
-    // and we press space in the middle of the first sub, releasing 
+    // and we press space in the middle of the first sub, releasing
     // it between the first and second.
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(15, 20, 2),
                captionJSON(25, 30, 3)]);
     MS_videoPlayer.playheadTime = 7;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 12;
-    spaceUp();
+    downRelease();
     assertTimes(0, 5, 12);
     assertTimes(1, 15, 20);
 }
 
 function testMoveStartOfSecondSubWithSpace0() {
     // here we have spaces between subs (from using timeline)
-    // and we press space between the first and second, releasing 
+    // and we press space between the first and second, releasing
     // in the middle of the second.
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(15, 20, 2),
                captionJSON(25, 30, 3)]);
     MS_videoPlayer.playheadTime = 13;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 17;
-    spaceUp();
+    downRelease();
     assertTimes(0, 5, 10);
     assertTimes(1, 17, 20);
     assertTimes(2, 25, 30);
@@ -198,15 +198,15 @@ function testMoveStartOfSecondSubWithSpace0() {
 
 function testMoveStartOfSecondSubWithSpace1() {
     // here we have spaces between subs (from using timeline)
-    // and we press space between the first and second, releasing 
+    // and we press space between the first and second, releasing
     // between the first and second also.
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(15, 20, 2),
                captionJSON(25, 30, 3)]);
     MS_videoPlayer.playheadTime = 13;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 14;
-    spaceUp();
+    downRelease();
     assertTimes(0, 5, 10);
     assertTimes(1, 14, 20);
     assertTimes(2, 25, 30);
@@ -215,16 +215,16 @@ function testMoveStartOfSecondSubWithSpace1() {
 
 function testClearFirstTwoWithSpace() {
     // here we have spaces between subs (from using timeline)
-    // and we press space before the first, releasing 
+    // and we press space before the first, releasing
     // after the second.
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(15, 20, 2),
                captionJSON(30, 35, 3)]);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     MS_videoPlayer.playheadTime = 3;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 22;
-    spaceUp();
+    downRelease();
     assertTimes(0, 22, 22 + minLength);
     assertTimes(1, 22 + minLength, 22 + minLength * 2);
     assertTimes(2, 30, 35);
@@ -232,16 +232,16 @@ function testClearFirstTwoWithSpace() {
 
 function testClearMiddleWithSpace() {
     // here we have spaces between subs (from using timeline)
-    // and we press space before the second, releasing 
+    // and we press space before the second, releasing
     // after the second.
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(15, 20, 2),
                captionJSON(30, 35, 3)]);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     MS_videoPlayer.playheadTime = 13;
-    spaceDown();
+    downHold();
     MS_videoPlayer.playheadTime = 22;
-    spaceUp();
+    downRelease();
     assertTimes(0, 5, 10);
     assertTimes(1, 22, 22 + minLength);
     assertTimes(2, 30, 35);

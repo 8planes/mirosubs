@@ -338,7 +338,8 @@ margin-top: 10px;
 }
 
 .mirosubs-play .mirosubs-tab, 
-.mirosubs-skip .mirosubs-control{
+.mirosubs-skip .mirosubs-control,
+.mirosubs-begin .mirosubs-down{
 font-size: 20px;
 color: #333;
 font-size: 11px;
@@ -354,7 +355,8 @@ margin: 0 10px 0 44px;
 }
 
 
-.mirosubs-begin .mirosubs-spacebar{
+.mirosubs-begin .mirosubs-spacebar,
+.mirosubs-play .mirosubs-spacebar{
 font-size: 20px;
 color: #333;
 font-size: 11px;
@@ -371,24 +373,28 @@ margin: 0 10px 10px 0;
 }
 
 .mirosubs-play .mirosubs-tab:hover,
-.mirosubs-skip .mirosubs-control:hover{
+.mirosubs-skip .mirosubs-control:hover,
+.mirosubs-begin .mirosubs-down:hover{
 background: url("../images/sprite.png") 0 -41px no-repeat;
 cursor: pointer;
 }
 
 .mirosubs-play .mirosubs-tab:active,
-.mirosubs-skip .mirosubs-control:active{
+.mirosubs-skip .mirosubs-control:active,
+.mirosubs-begin .mirosubs-down:active{
 background: url("../images/sprite.png") 0 -83px no-repeat;
 cursor: pointer;
 }
 
 
-.mirosubs-begin .mirosubs-spacebar:hover{
+.mirosubs-begin .mirosubs-spacebar:hover,
+.mirosubs-play .mirosubs-spacebar:hover{
 background: url("../images/spacebar.png") 0 -41px no-repeat;
 cursor: pointer;
 }
 
-.mirosubs-begin .mirosubs-spacebar:active{
+.mirosubs-begin .mirosubs-spacebar:active,
+.mirosubs-play .mirosubs-spacebar:active{
 background: url("../images/spacebar.png") 0 -83px no-repeat;
 cursor: pointer;
 }
