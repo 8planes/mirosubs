@@ -43,7 +43,6 @@ mirosubs.timeline.Timeline.prototype.createDom = function() {
     this.addChild(this.timelineInner_, true);
     el.appendChild($d('div', 'marker'));
 };
-console.log('here');
 mirosubs.timeline.Timeline.prototype.enterDocument = function() {
     mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
     this.getHandler().
@@ -75,6 +74,7 @@ mirosubs.timeline.Timeline.prototype.timelineSubEdit_ = function(e) {
             e.target.getSubtitle().getStartTime(), 2);
 };
 mirosubs.timeline.Timeline.prototype.videoTimeUpdate_ = function(e) {
+    console.log('video time update');
     this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
 mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {

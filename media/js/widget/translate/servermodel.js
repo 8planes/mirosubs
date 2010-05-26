@@ -58,6 +58,13 @@ mirosubs.translate.ServerModel.prototype.startTranslating =
                       });
 };
 
+mirosubs.translate.ServerModel.prototype.startEditing =
+    function(languageCode, version) 
+{
+    this.unitOfWork_.clear();
+    this.startEditing_(languageCode, version);
+}
+
 mirosubs.translate.ServerModel.prototype.startEditing_ = 
     function(languageCode, version) {
     this.translating_ = true;
@@ -91,18 +98,18 @@ mirosubs.translate.ServerModel.prototype.finish = function(callback) {
     this.stopTimer_();
     var that = this;
     this.loginThenAction_(function() {
-            var saveArgs = that.makeSaveArgs_();
-            mirosubs.Rpc.call('finished_translations' + 
-                              (that.isNull_ ? '_null' : ''),
-                              saveArgs,
-                              function(result) {
-                                  if (result['response'] != 'ok')
-                                      // should never happen
-                                      alert('problem saving translations. response: ' +
-                                            result['response']);
-                                  callback(result['available_languages']);
-                              });
-        }, true);
+        var saveArgs = that.makeSaveArgs_();
+        mirosubs.Rpc.call('finished_translations' + 
+                          (that.isNull_ ? '_null' : ''),
+                          saveArgs,
+                          function(result) {
+                              if (result['response'] != 'ok')
+                                  // should never happen
+                                  alert('problem saving translations. response: ' +
+                                        result['response']);
+                              callback(result['available_languages']);
+                          });
+    }, true);
 };
 
 mirosubs.translate.ServerModel.prototype.loginThenAction_ = 

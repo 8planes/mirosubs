@@ -31,7 +31,7 @@ mirosubs.timeline.TimeRowUL = function(spacing, firstTime) {
 };
 goog.inherits(mirosubs.timeline.TimeRowUL, goog.ui.Component);
 mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS = 15;
-mirosubs.timeline.TimeRowUL.PX_PER_TICK = 60;
+mirosubs.timeline.TimeRowUL.PX_PER_TICK = 65;
 mirosubs.timeline.TimeRowUL.DOUBLECLICK = 'timerowdblclick';
 mirosubs.timeline.TimeRowUL.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());

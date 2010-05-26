@@ -36,7 +36,7 @@ def embed(request):
         except models.Video.DoesNotExist:
             video = models.Video(video_type=models.VIDEO_TYPE_YOUTUBE,
                                  youtube_videoid=youtube_videoid,
-                                 allow_community_edits=False)
+                                 allow_community_edits=True)
             video.save()
     else:
         video_url = request.GET['video_url']
@@ -45,7 +45,7 @@ def embed(request):
         except models.Video.DoesNotExist:
             video = models.Video(video_type=models.VIDEO_TYPE_HTML5,
                                  video_url=video_url,
-                                 allow_community_edits=False)
+                                 allow_community_edits=True)
             video.save()
     video.widget_views_count += 1
     video.save()

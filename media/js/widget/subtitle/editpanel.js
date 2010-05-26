@@ -16,34 +16,26 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.ReviewPanel');
+goog.provide('mirosubs.subtitle.EditPanel');
 
-mirosubs.subtitle.ReviewPanel = function(subtitles, videoPlayer, 
+mirosubs.subtitle.EditPanel = function(subtitles, videoPlayer, 
                                          serverModel, captionManager) {
     mirosubs.subtitle.SyncPanel.call(this, subtitles, videoPlayer, 
                                      serverModel, captionManager);
 };
-goog.inherits(mirosubs.subtitle.ReviewPanel, mirosubs.subtitle.SyncPanel);
-/**
- * @override
- */
-mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal = 
-    function() 
+goog.inherits(mirosubs.subtitle.EditPanel, mirosubs.subtitle.SyncPanel);
+mirosubs.subtitle.EditPanel.prototype.createRightPanelInternal =
+    function()
 {
     var helpContents = new mirosubs.RightPanel.HelpContents(
-        "STEP 3: Review and make corrections",
-        [["Now it's time to watch your subtitles, making changes if ", 
-          "neccesary. Double click on any subtitle to edit its text."]
-         .join(''),
-         ["If a subtitle changes too late, skip back and tap spacebar ",
-          "when it should change. If a subtitle changes too soon, hold ", 
-          "down spacebar to delay it until you let go."].join(''),
-         ["You can also edit timing with your mouse. Just rollover any ", 
-          "timestamp, and click the up/down buttons that appear."].join('')],
+        "EDIT: Edit existing subtitles",
+        ["Here are some instructions that are appropriate for editing existing subtitles.",
+         "Yes, very good instructions.",
+         "You are editing existing subtitles!"],
         "Watch a video about how to edit",
         "http://youtube.com");
     return new mirosubs.RightPanel(
-        this.serverModel, helpContents, 
-        this.makeKeySpecsInternal(), false, "Done?", 
+        this.serverModel, helpContents,
+        this.makeKeySpecsInternal(), false, "Done?",
         "Submit your work");
-};
+}

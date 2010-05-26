@@ -76,9 +76,10 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
             ['?enablejsapi=1&version=3&disablekb=1&playerapiid=', 
              this.playerAPIID_].join('');
         var width = this.chromeless_ ? "400" : "480";
+        var height = this.chromeless_ ? "350" : "360";
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
-            videoDiv.id, width, "360", "8", 
+            videoDiv.id, width, height, "8", 
             null, null, params, atts);
     }
     this.getHandler().listen(
@@ -182,8 +183,10 @@ mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime) 
 {
-    if (this.player_)
+    if (this.player_) {
         this.player_['seekTo'](playheadTime, true);
+        this.sendTimeUpdateInternal();
+    }
     else
         this.commands_.push(goog.bind(this.setPlayheadTime, 
                                       this, playheadTime));

@@ -43,6 +43,7 @@ mirosubs.MainMenu = function(videoID, nullWidget,
 goog.inherits(mirosubs.MainMenu, goog.ui.PopupMenu);
 mirosubs.MainMenu.MenuValues_ = {
     ADD_SUBTITLES: 'addsubs',
+    EDIT_SUBTITLES: 'editsubs',
     ORIGINAL_LANG: 'originallang',
     NEW_LANG: 'newlang',
     LOGIN: 'login',
@@ -53,6 +54,7 @@ mirosubs.MainMenu.MenuValues_ = {
 };
 mirosubs.MainMenu.EventType = {
     ADD_SUBTITLES: 'addsubs',
+    EDIT_SUBTITLES: 'editsubs',
     LANGUAGE_SELECTED: 'langselected',
     ADD_NEW_LANGUAGE: 'newlanguage',
     TURN_OFF_SUBS: 'turnoffsubs'
@@ -74,6 +76,8 @@ mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
     var et = mirosubs.MainMenu.EventType;
     if (selectedValue == mv.ADD_SUBTITLES)
         this.dispatchEvent(et.ADD_SUBTITLES);
+    else if (selectedValue == mv.EDIT_SUBTITLES)
+        this.dispatchEvent(et.EDIT_SUBTITLES);
     else if (selectedValue == mv.ORIGINAL_LANG)
         this.dispatchEvent(
             new mirosubs.MainMenu
@@ -115,6 +119,8 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
     this.removeChildren(true);
     var mv = mirosubs.MainMenu.MenuValues_;
     if (this.showingSubs_) {
+        this.addChild(new goog.ui.MenuItem(
+            'Edit subs', mv.EDIT_SUBTITLES), true);
         this.addChild(new goog.ui.MenuItem(
             'Turn off subs', mv.TURNOFFSUBS), true);
         this.addChild(new goog.ui.MenuSeparator(), true);

@@ -50,8 +50,8 @@ def start_editing(request, video_id):
     else:
         new_version_no = latest_captions.version_no + 1
         existing_captions = list(latest_captions.videocaption_set.all())
-    return { "can_edit" : True, \
-             "version" : new_version_no, \
+    return { "can_edit" : True,
+             "version" : new_version_no,
              "existing" : [caption.to_json_dict() for 
                            caption in existing_captions] }
 
