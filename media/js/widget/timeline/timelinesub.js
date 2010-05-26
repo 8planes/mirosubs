@@ -44,7 +44,7 @@ mirosubs.timeline.TimelineSub.prototype.createDom = function() {
     this.getElement().className = 'mirosubs-timeline-sub';
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var el = this.getElement();
-    el.appendChild(this.textElem_ = $d('div', 'content'));
+    el.appendChild(this.textElem_ = $d('div', 'mirosubs-subtext'));
     el.appendChild(
         this.leftGrabber_ = 
             $d('span', 'mirosubs-grabber mirosubs-leftGrabber', 

@@ -73,7 +73,6 @@ mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
             this.captionReached_);
 };
 mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
-    console.log('setting state');
     this.state_ = state;
 
     var nextSubPanel = this.makeCurrentStateSubtitlePanel_();
@@ -93,7 +92,7 @@ mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
     this.rightPanelListener_.listen(
         rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
     this.rightPanelListener_.listen(
-        rightPanel, et.DONE, this.handleDoneKeyPRess_);
+        rightPanel, et.DONE, this.handleDoneKeyPress_);
     var s = mirosubs.subtitle.EditDialog.State_;
     if (state == s.EDIT) {
         rightPanel.showBackLink("Return to Transcribe");
@@ -145,13 +144,17 @@ mirosubs.subtitle.EditDialog.prototype.handleLegendKeyPress_ = function(event) {
         this.togglePause_();
 };
 mirosubs.subtitle.EditDialog.prototype.handleDoneKeyPress_ = function(event) {
+    console.log('done key pressed');
     if (!this.doneButtonEnabled_)
         return;
     if (this.state_ == mirosubs.subtitle.EditDialog.State_.EDIT) {
+        console.log('edit');
         this.doneButtonEnabled_ = false;
         this.getRightPanelInternal().showLoading(true);
         var that = this;
+        console.log('yes');
         this.serverModel_.finish(function() {
+            console.log('finishing');
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);
             that.setFinishedState_();
@@ -159,6 +162,13 @@ mirosubs.subtitle.EditDialog.prototype.handleDoneKeyPress_ = function(event) {
     }
     else
         this.setState_(this.nextState_());
+};
+mirosubs.subtitle.EditDialog.prototype.nextState_ = function() {
+    var s = mirosubs.subtitle.EditDialog.State_;
+    if (this.state_ == s.TRANSCRIBE)
+        return s.EDIT;
+    else if (this.state == s.EDIT)
+        return s.FINISHED;
 };
 mirosubs.subtitle.EditDialog.prototype.ctrlClicked_ = function() {
     var videoPlayer = this.getVideoPlayerInternal();
