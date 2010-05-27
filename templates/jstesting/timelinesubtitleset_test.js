@@ -65,7 +65,7 @@ function createSet(existingCaptions) {
         listenToSubtitle(subsToDisplay[i]);
     MS_eventHandler.listen(
         subtitleSet, 
-        mirosubs.timeline.SubtitleSet.CLEAR_ALL,
+        mirosubs.timeline.SubtitleSet.CLEAR_TIMES,
         MS_clearListener);
     MS_eventHandler.listen(
         subtitleSet,

@@ -92,6 +92,7 @@ mirosubs.subtitle.EditableCaptionSet.prototype.clear = function() {
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.clearTimes = function() {
     goog.array.forEach(this.captions_, function(c) { c.clearTimes(); });
+    
     this.dispatchEvent(
         mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES);
 };
