@@ -54,6 +54,7 @@ mirosubs.subtitle.EditableCaptionSet = function(
 };
 goog.inherits(mirosubs.subtitle.EditableCaptionSet, goog.events.EventTarget);
 mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL = 'clearall';
+mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES = 'cleartimes';
 
 /**
  * Always in ascending order by start time.
@@ -91,6 +92,8 @@ mirosubs.subtitle.EditableCaptionSet.prototype.clear = function() {
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.clearTimes = function() {
     goog.array.forEach(this.captions_, function(c) { c.clearTimes(); });
+    this.dispatchEvent(
+        mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES);
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.count = function() {
     return this.captions_.length;

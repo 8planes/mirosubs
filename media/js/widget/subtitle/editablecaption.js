@@ -129,11 +129,16 @@ mirosubs.subtitle.EditableCaption.prototype.setEndTime_ =
         this.nextCaption_.getStartTime() < endTime)
         this.nextCaption_.setStartTime(endTime);
 };
+/**
+ * Clears times. Does not issue a CHANGE event. Registers update 
+ * with UnitOfWork.
+ */
 mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
     if (this.getStartTime() != -1 || this.getEndTime() != -1) {
         this.jsonCaption['start_time'] = -1;
         this.jsonCaption['end_time'] = -1;
-        this.changed_(false);
+        if (this.unitOfWork_)
+            this.unitOfWork_.registerUpdated(this);
     }
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
