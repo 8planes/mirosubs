@@ -96,32 +96,35 @@ class Video(models.Model):
         but none have been marked as finished yet.
         """
         video_captions = self.videocaptionversion_set.all()
-        if len(video_captions) == 0:
+        if video_captions.count() == 0:
             return NO_CAPTIONS
-        if len(video_captions.filter(is_complete__exact=True)) > 0:
+        if video_captions.filter(is_complete__exact=True).count() > 0:
             return CAPTIONS_FINISHED
         else:
             return CAPTIONS_IN_PROGRESS
 
     def captions(self):
         """Returns latest VideoCaptionVersion, or None if no captions"""
-        version_list = list(self.videocaptionversion_set.all())
-        if len(version_list) == 0:
-            return None
-        else:
-            return max(version_list, key=lambda v: v.version_no)
+        try:
+            return self.videocaptionversion_set.order_by('-version_no')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def null_captions(self, user):
         """Returns NullVideoCaptions for user, or None if none exist."""
-        captions = list(self.nullvideocaptions_set.all().filter(
-                user__id__exact=user.id))
-        return None if len(captions) == 0 else captions[0]
+        try:
+            return self.nullvideocaptions_set.filter(
+                user__id__exact=user.id)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def translation_language(self, language_code):
         """Returns a TranslationLanguage, or None if none found"""
-        translations = list(self.translationlanguage_set.all().filter(
-            language__exact=language_code))
-        return None if len(translations) == 0 else translations[0]
+        try:
+            return self.translationlanguage_set.filter(
+                language__exact=language_code)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def captions_and_translations(self, language_code):
         """(VideoCaption, Translation) pair list
@@ -147,8 +150,8 @@ class Video(models.Model):
     def make_captions_and_translations(self, subtitle_set, translation_set):
         # FIXME: this should be private and static 
         # (no need for ref to self)
-        subtitles = list(subtitle_set.videocaption_set.all())
-        translations = list(translation_set.translation_set.all())
+        subtitles = subtitle_set.videocaption_set.all()
+        translations = translation_set.translation_set.all()
         translations_dict = dict([(trans.caption_id, trans) for
                                   trans in translations])
         return [(subtitle,
@@ -164,22 +167,21 @@ class Video(models.Model):
         return trans_lang.translations()
 
     def null_translations(self, user, language_code):
-        translations = list(self.nulltranslations_set.all().filter(
+        try:
+            return self.nulltranslations_set.all().filter(
                 user__id__exact=user.id).filter(
-                language__exact=language_code))
-        return None if len(translations) == 0 else translations[0]
+                language__exact=language_code)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def translation_language_codes(self):
         """All iso language codes with translations."""
         return set([trans.language for trans 
-                    in list(self.translationlanguage_set.all())])
+                    in self.translationlanguage_set.all()])
 
     def null_translation_language_codes(self, user):
-        null_translations = list(
-            self.nulltranslations_set.all().filter(
-                user__id__exact=user.id))
-        return set([trans.language for trans
-                    in null_translations])
+        null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)
+        return set([trans.language for trans in null_translations])
 
     @property
     def writelock_owner_name(self):
@@ -350,11 +352,10 @@ class TranslationLanguage(models.Model):
 
     def translations(self):
         """Returns latest TranslationVersion, or None if none found"""
-        version_list = list(self.translationversion_set.all())
-        if len(version_list) == 0:
-            return None
-        else:
-            return max(version_list, key=lambda v: v.version_no)
+        try:
+            return self.translationversion_set.order_by('-version_no')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(VersionModel):
