@@ -81,8 +81,8 @@ mirosubs.subtitle.SharePanel.prototype.createPermalinkSection_ = function($d, $t
 mirosubs.subtitle.SharePanel.prototype.enterDocument = function() {
     mirosubs.subtitle.SharePanel.superClass_.enterDocument.call(this);
     var that = this;
-    this.getHandler().listen(this.embedCodeInput_, ['focus', 'click'], 
-                             this.focusEmbed_);
+    this.getHandler().listen(
+        this.embedCodeInput_, ['focus', 'click'], this.focusEmbed_);
 };
 mirosubs.subtitle.SharePanel.prototype.focusEmbed_ = function() {
     var that = this;

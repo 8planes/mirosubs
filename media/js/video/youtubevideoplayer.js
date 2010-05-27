@@ -82,10 +82,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
             videoDiv.id, width, height, "8", 
             null, null, params, atts);
     }
-    this.getHandler().listen(
-        this.progressTimer_, goog.Timer.TICK, this.progressTick_);
-    this.getHandler().listen(
-        this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
+    this.getHandler().
+        listen(this.progressTimer_, goog.Timer.TICK, this.progressTick_).
+        listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
     this.progressTimer_.start();
     if (!this.isPaused())
         this.timeUpdateTimer_.start();

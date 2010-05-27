@@ -48,10 +48,11 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.createDom = function() {
 };
 mirosubs.subtitle.BottomFinishedPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.BottomFinishedPanel.superClass_.enterDocument.call(this);
-    this.getHandler().listen(this.addTranslationLink_, 'click', 
-                             this.addTranslationClicked_);
-    this.getHandler().listen(this.askAFriendLink_, 'click',
-                             this.askAFriendClicked_);
+    this.getHandler().
+        listen(this.addTranslationLink_, 'click', 
+               this.addTranslationClicked_).
+        listen(this.askAFriendLink_, 'click',
+               this.askAFriendClicked_);
 };
 mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ = 
     function(event) 

@@ -48,6 +48,7 @@ mirosubs.RightPanel = function(serverModel,
      * @type {?string}
      */
     this.mouseDownKeyCode_ = null;
+    this.eventHandler_ = new goog.events.EventHandler(this);
 };
 goog.inherits(mirosubs.RightPanel, goog.ui.Component);
 mirosubs.RightPanel.EventType = {
@@ -105,15 +106,15 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
         legendDiv.appendChild(
             $d('div', spec.divClass,
                key, goog.dom.createTextNode(spec.legendText)));
-        this.getHandler().listen(
+        this.eventHandler_.listen(
             key, et.CLICK, goog.bind(this.legendKeyClicked_, 
                                      this, spec.keyCode));
-        this.getHandler().listen(
+        this.eventHandler_.listen(
             key, et.MOUSEDOWN, goog.bind(this.legendKeyMousedown_, 
                                          this, spec.keyCode));
         var mouseupFn = goog.bind(this.legendKeyMouseup_, this, spec.keyCode);
-        this.getHandler().listen(key, et.MOUSEUP, mouseupFn);
-        this.getHandler().listen(key, et.MOUSEOUT, mouseupFn);
+        this.eventHandler_.listen(key, et.MOUSEUP, mouseupFn);
+        this.eventHandler_.listen(key, et.MOUSEOUT, mouseupFn);
     }
 };
 mirosubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv) {
@@ -136,20 +137,20 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.backAnchor_ = 
         $d('a', {'className':'mirosubs-backTo', 'href':'#'}, 
            'Back to Transcribe');
-    this.getHandler().listen(this.backAnchor_, 'click', this.backClicked_);
+    this.eventHandler_.listen(this.backAnchor_, 'click', this.backClicked_);
     this.backAnchor_.style.display = 'none';
     stepsDiv.appendChild(this.backAnchor_);
     if (this.showRestart_) {
         var restartAnchor = 
             $d('a', {'className': 'mirosubs-restart','href':'#'}, 
                'Restart this Step');
-        this.getHandler().listen(
+        this.eventHandler_.listen(
             restartAnchor, 'click', this.restartClicked_);
         stepsDiv.appendChild(restartAnchor);
     }
     
     el.appendChild(stepsDiv);
-    this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
+    this.eventHandler_.listen(this.doneAnchor_, 'click', this.doneClicked_);
     this.updateLoginState();
 };
 mirosubs.RightPanel.prototype.legendKeyClicked_ = function(keyCode, event) {
@@ -199,13 +200,18 @@ mirosubs.RightPanel.prototype.updateLoginState = function() {
                goog.dom.createTextNode(
                    'To save your subtitling work, you need to '),
                loginLink));
-        this.getHandler().listen(loginLink, 'click', this.loginClicked_);
+        this.eventHandler_.listen(loginLink, 'click', this.loginClicked_);
     }
 };
 
 mirosubs.RightPanel.prototype.loginClicked_ = function(event) {
     this.serverModel_.logIn();
     event.preventDefault();
+};
+
+mirosubs.RightPanel.prototype.disposeInternal = function() {
+    mirosubs.RightPanel.superClass_.disposeInternal.call(this);
+    this.eventHandler_.dispose();
 };
 
 /**

@@ -49,18 +49,19 @@ mirosubs.subtitle.TranscribeEntry.prototype.createDom = function() {
 mirosubs.subtitle.TranscribeEntry.prototype.enterDocument = function() {
     mirosubs.subtitle.TranscribeEntry.superClass_.enterDocument.call(this);
     this.keyHandler_ = new goog.events.KeyHandler(this.labelInput_.getElement());
-    this.getHandler().listen(this.keyHandler_,
-                             goog.events.KeyHandler.EventType.KEY,
-                             this.handleKey_);
-    this.getHandler().listen(this.labelInput_.getElement(),
-                             goog.events.EventType.KEYUP,
-                             this.handleKeyUp_);
-    this.getHandler().listen(this.typingPauseTimer_,
-                             goog.Timer.TICK,
-                             this.typingPauseTimerTick_);
-    this.getHandler().listen(this.continuousTypingTimer_,
-                             goog.Timer.TICK,
-                             this.continuousTypingTimerTick_);
+    this.getHandler().
+        listen(this.keyHandler_,
+               goog.events.KeyHandler.EventType.KEY,
+               this.handleKey_).
+        listen(this.labelInput_.getElement(),
+               goog.events.EventType.KEYUP,
+               this.handleKeyUp_).
+        listen(this.typingPauseTimer_,
+               goog.Timer.TICK,
+               this.typingPauseTimerTick_).
+        listen(this.continuousTypingTimer_,
+               goog.Timer.TICK,
+               this.continuousTypingTimerTick_);
     mirosubs.subtitle.TranscribeEntry.logger_.info(
         "P is set to " + mirosubs.subtitle.TranscribeEntry.P);
     mirosubs.subtitle.TranscribeEntry.logger_.info(

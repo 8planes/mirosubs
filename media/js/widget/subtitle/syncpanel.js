@@ -49,12 +49,13 @@ goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 
 mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.SyncPanel.superClass_.enterDocument.call(this);
-    var handler = this.getHandler();
-    handler.listen(this.captionManager_,
+    this.getHandler().
+        listen(this.captionManager_,
                    mirosubs.CaptionManager.CAPTION,
                    this.captionReached_).
-    listen(document, goog.events.EventType.KEYDOWN, this.handleKeyDown_).
-    listen(document, goog.events.EventType.KEYUP, this.handleKeyUp_);
+        listen(document, goog.events.EventType.KEYDOWN, this.handleKeyDown_).
+        listen(document, goog.events.EventType.KEYUP, this.handleKeyUp_);
+    this.listenToRightPanel_();
 };
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);
@@ -66,17 +67,22 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
 mirosubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
     if (!this.rightPanel_) {
         this.rightPanel_ = this.createRightPanelInternal();
-        this.getHandler().
-            listen(
-                this.rightPanel_, 
-                mirosubs.RightPanel.EventType.LEGENDKEY,
-                this.handleLegendKeyPress_).
-            listen(
-                this.rightPanel_,
-                mirosubs.RightPanel.EventType.RESTART,
-                this.startOverClicked_);    
+        this.listenToRightPanel_();
     }
     return this.rightPanel_;
+};
+mirosubs.subtitle.SyncPanel.prototype.listenToRightPanel_ = function() {
+    if (!this.isInDocument() || !this.rightPanel_)
+        return;
+    this.getHandler().
+        listen(
+            this.rightPanel_, 
+            mirosubs.RightPanel.EventType.LEGENDKEY,
+            this.handleLegendKeyPress_).
+        listen(
+            this.rightPanel_,
+            mirosubs.RightPanel.EventType.RESTART,
+            this.startOverClicked_);
 };
 mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(

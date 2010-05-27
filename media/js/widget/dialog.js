@@ -32,20 +32,50 @@ mirosubs.Dialog = function(videoSource) {
     this.bottomPanelContainer_ = null;
 };
 goog.inherits(mirosubs.Dialog, goog.ui.Dialog);
+mirosubs.Dialog.ComponentType = {
+    MAIN : 'main',
+    ALT : 'alt'
+};
 mirosubs.Dialog.prototype.createDom = function() {
     mirosubs.Dialog.superClass_.createDom.call(this);
+
+    this.mainComponent_ = new goog.ui.Component();
+    this.altComponent_ = new goog.ui.Component();
+
     var leftColumn = new goog.ui.Component();
     leftColumn.addChild(this.controlledVideoPlayer_, true);
     leftColumn.getElement().className = 'mirosubs-left';
     leftColumn.addChild(this.timelinePanel_ = new goog.ui.Component(), true);
     leftColumn.addChild(this.captioningArea_ = new goog.ui.Component(), true);
     this.captioningArea_.getElement().className = 'mirosubs-captioningArea';
-    this.addChild(leftColumn, true);
-    this.addChild(this.rightPanelContainer_ = new goog.ui.Component(), true);
+    this.mainComponent_.addChild(leftColumn, true);
+    this.mainComponent_.addChild(
+        this.rightPanelContainer_ = new goog.ui.Component(), true);
     this.rightPanelContainer_.getElement().className = 'mirosubs-right';
     this.getContentElement().appendChild(this.getDomHelper().createDom(
         'div', 'mirosubs-clear'));
-    this.addChild(this.bottomPanelContainer_ = new goog.ui.Component(), true);
+    this.mainComponent_.addChild(
+        this.bottomPanelContainer_ = new goog.ui.Component(), true);
+    this.addChild(this.mainComponent_, true);
+    this.componentType_ = mirosubs.Dialog.ComponentType.MAIN;
+};
+mirosubs.Dialog.prototype.getAltComponentInternal = function() {
+    return this.altComponent_;
+};
+/**
+ * @protected
+ * @param {mirosubs.Dialog.ComponentType} componentType
+ */
+mirosubs.Dialog.prototype.setComponentInternal = function(componentType) {
+    if (componentType == this.componentType_)
+        return;
+    this.removeChildren(true);
+    this.videoPlayer_.pause();
+    var ct = mirosubs.Dialog.ComponentType;
+    if (componentType == ct.MAIN)
+        this.addChild(this.mainComponent_, true);
+    else if (componentType == ct.ALT)
+        this.addChild(this.altComponent_, true);
 };
 mirosubs.Dialog.prototype.getVideoPlayerInternal = function() {
     return this.videoPlayer_;
