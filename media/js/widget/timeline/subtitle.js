@@ -34,7 +34,7 @@ mirosubs.timeline.Subtitle = function(editableCaption, videoPlayer) {
 goog.inherits(mirosubs.timeline.Subtitle, goog.events.EventTarget);
 
 mirosubs.timeline.Subtitle.CHANGE = 'tsubchanged';
-mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH = 1.0;
+mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH = 2.0;
 mirosubs.timeline.Subtitle.UNASSIGNED_SPACING = 0.5;
 
 mirosubs.timeline.Subtitle.prototype.captionChanged_ = function(e) {

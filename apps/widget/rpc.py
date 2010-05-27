@@ -35,8 +35,9 @@ def start_editing(request, video_id):
     maybe_add_video_session(request)
 
     video = models.Video.objects.get(video_id=video_id)
-    if video.owner != None and (request.user.is_anonymous() or 
-                                video.owner.pk != request.user.pk):
+    if (not video.allow_community_edits and 
+        video.owner != None and (request.user.is_anonymous() or 
+                                 video.owner.pk != request.user.pk)):
         return { "can_edit": False, "owned_by" : video.owner.username }
     if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
         return { "can_edit": False, "locked_by" : video.writelock_owner_name }
@@ -71,8 +72,8 @@ def start_editing_null(request, video_id):
              'existing': [caption.to_json_dict() for
                           caption in captions] }
 
-def start_translating(request, video_id, language_code):
-    """Called by widget whenever translating is about to commence or recommence or a video."""
+def start_translating(request, video_id, language_code, editing=False):
+    """Called by widget whenever translating is about to commence or recommence."""
 
     maybe_add_video_session(request)
 
@@ -98,10 +99,15 @@ def start_translating(request, video_id, language_code):
     else:
         new_version_no = latest_translations.version_no + 1
         existing_translations = list(latest_translations.translation_set.all())
-    return { 'can_edit' : True,
-             'version' : new_version_no, 
-             'existing' : [trans.to_json_dict() for 
-                           trans in existing_translations] }
+    return_dict = { 'can_edit' : True,
+                    'version' : new_version_no, 
+                    'existing' : [trans.to_json_dict() for 
+                                  trans in existing_translations] }
+    if editing:
+        return_dict['existing_captions'] = fetch_captions(request, video_id)
+        return_dict['languages'] = [widget.language_to_map(lang[0], lang[1]) 
+                                    for lang in LANGUAGES]
+    return return_dict
 
 def start_translating_null(request, video_id, language_code):
     # FIXME: note duplication with start_translating, fix that.
@@ -171,7 +177,8 @@ def save_captions_null(request, video_id, version_no, deleted, inserted, updated
     save_captions_null_impl(request, video, version_no, deleted, inserted, updated)
     return {'response':'ok'}
 
-def save_translations(request, video_id, language_code, version_no, inserted, updated):
+def save_translations(request, video_id, language_code, version_no, 
+                      inserted, updated):
     if not request.user.is_authenticated():
         return { "response" : "not_logged_in" }
     translation_language = models.Video.objects.get(
@@ -183,7 +190,8 @@ def save_translations(request, video_id, language_code, version_no, inserted, up
                            version_no, inserted, updated)
     return {'response':'ok'}
 
-def save_translations_null(request, video_id, language_code, version_no, inserted, updated):
+def save_translations_null(request, video_id, language_code, 
+                           version_no, inserted, updated):
     if not request.user.is_authenticated():
         return { "response" : "not_logged_in" }
     video = models.Video.objects.get(video_id=video_id)

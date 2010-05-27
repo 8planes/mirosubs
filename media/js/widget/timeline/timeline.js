@@ -69,12 +69,8 @@ mirosubs.timeline.Timeline.prototype.timelineSubEdit_ = function(e) {
     var et = mirosubs.timeline.TimelineSub.EventType;
     if (e.type == et.START_EDITING)
         this.videoPlayer_.pause();
-    else if (e.type == et.FINISH_EDITING)
-        this.videoPlayer_.playWithNoUpdateEvents(
-            e.target.getSubtitle().getStartTime(), 2);
 };
 mirosubs.timeline.Timeline.prototype.videoTimeUpdate_ = function(e) {
-    console.log('video time update');
     this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
 mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {

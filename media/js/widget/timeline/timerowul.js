@@ -76,7 +76,7 @@ mirosubs.timeline.TimeRowUL.prototype.setFirstTime = function(time) {
         seconds = this.firstTime_ + i * this.spacing_;
         goog.dom.setTextContent(
             this.majorTicks_[i], 
-            mirosubs.formatTime(seconds >= 0 ? ('' + seconds) : ''));
+            mirosubs.formatTime(seconds >= 0 ? ('' + seconds) : '', true));
     }
 };
 mirosubs.timeline.TimeRowUL.prototype.getFirstTime = function() {

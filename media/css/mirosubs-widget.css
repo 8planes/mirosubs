@@ -1697,8 +1697,10 @@ color: #fff;
    background: #fefefe url("../images/gradient.png") 0 21px repeat-x;
 }
 
-.mirosubs-timeline-sub .content {
-   margin: 17px 10px 0 10px;   
+.mirosubs-timeline-sub .mirosubs-subtext {
+   margin: 17px 10px 0 10px;
+   white-space: nowrap;
+   overflow: hidden;
 }
 
 .mirosubs-timeline-sub-unsynced {

@@ -153,20 +153,25 @@ mirosubs.EmbeddableWidget.prototype.editSubtitles_ = function() {
         // foreign language
         this.videoTab_.showLoading(true);
         mirosubs.Rpc.call(
-            'edit_translations' + (this.nullWidget_ ? '_null' : ''),
-            { 'video_id' : this.videoID_ },
+            'start_translating' + (this.nullWidget_ ? '_null' : ''),
+            { 'video_id' : this.videoID_,
+              'language_code' : this.languageCodePlaying_,
+              'editing' : true },
             goog.bind(this.editTranslations_, this));
     }
 };
 mirosubs.EmbeddableWidget.prototype.editTranslations_ = function(result) {
+    // TODO: check result['can_edit']
     this.videoTab_.showLoading(false);
     this.videoPlayer_.pause();
     this.turnOffSubs_();
     var dialog = new mirosubs.translate.EditDialog(
         this.videoSource_, this.videoID_,
-        result['version'],
         result['existing_captions'],
-        result['existing_translations'],
+        result['languages'],
+        result['version'],
+        this.languageCodePlaying_,
+        result['existing'],
         this.nullWidget_);
     dialog.setVisible(true);
     this.dialog_ = dialog;
