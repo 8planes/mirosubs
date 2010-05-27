@@ -42,6 +42,7 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     this.eventHandler_.listen(
 	captionSet,
 	[mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
+         mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES,
          mirosubs.subtitle.EditableCaption.CHANGE],
 	this.captionSetUpdate_);
 
@@ -54,8 +55,11 @@ goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 mirosubs.CaptionManager.CAPTION = 'caption';
 
 mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
-    if (event.type == mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL) {
+    if (event.type == mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL ||
+        event.type == mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES) {
 	this.captions_ = [];
+        this.currentCaptionIndex_ = -1;
+        this.lastCaptionDispatched_ = null;
 	this.dispatchCaptionEvent_(null);	
     }
     else if (event.type == mirosubs.subtitle.EditableCaption.CHANGE) {
@@ -82,6 +86,7 @@ mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
     var curCaption = this.currentCaptionIndex_ > -1 ? 
         this.captions_[this.currentCaptionIndex_] : null;
     if (this.currentCaptionIndex_ > -1 && 
+        curCaption != null &&
 	curCaption.isShownAt(playheadTime))
         return;
     var nextCaption = this.currentCaptionIndex_ < this.captions_.length - 1 ? 
@@ -92,8 +97,8 @@ mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
         this.dispatchCaptionEvent_(nextCaption);
         return;
     }
-    if ((nextCaption == null || playheadTime < nextCaption.getStartTime()) &&
-        playheadTime >= curCaption.getStartTime()) {
+    if (nextCaption == null || (playheadTime < nextCaption.getStartTime() &&
+                                playheadTime >= curCaption.getStartTime())) {
         this.dispatchCaptionEvent_(null);
         return;
     }
