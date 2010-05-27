@@ -35,8 +35,9 @@ def start_editing(request, video_id):
     maybe_add_video_session(request)
 
     video = models.Video.objects.get(video_id=video_id)
-    if video.owner != None and (request.user.is_anonymous() or 
-                                video.owner.pk != request.user.pk):
+    if (not video.allow_community_edits and 
+        video.owner != None and (request.user.is_anonymous() or 
+                                 video.owner.pk != request.user.pk)):
         return { "can_edit": False, "owned_by" : video.owner.username }
     if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
         return { "can_edit": False, "locked_by" : video.writelock_owner_name }
