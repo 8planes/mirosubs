@@ -16,7 +16,7 @@ background: url(../images/cloud.png) center top no-repeat;
 }
 
 .watercolor{
-background: url(../images/watercolor-top.png) center -120px repeat-x;
+background: url(../images/watercolor3.png) center 0px repeat-x;
 }
 
 .center{
@@ -28,8 +28,8 @@ a{
 }
 
 
-a:link {color: #333;text-decoration: underline;} 
-a:visited {color: #;}
+a:link {color: #8bb000;text-decoration: underline;} 
+a:visited {color: #506a70;}
 a:hover,a:focus {color: #;text-decoration: none; outline: none !important; -moz-outline: none !important;}
 a:active {}
 
@@ -243,14 +243,6 @@ background: url(../images/watercolor2.png) center 0px no-repeat;
 }
 
 
-.footer{
-clear: both;
-min-height: 20px;
-width: 100%;
-font-size: 12px;
-padding: 10px 0 0;
-color: #999;
-}
 
 table{
 width: 900px;
@@ -917,7 +909,6 @@ text-align: center;
 line-height: 3em;
 color: #fff;
 background: #9a9a9a;
-border-bottom: 1px solid #fff;
 text-shadow: 1px 1px 1px #333;
 font-size: 13px;
 }
@@ -1203,6 +1194,41 @@ padding: 10px;
 
 
 
+/*/////////////////////////////////////////////
+
+~ Footer
+
+/////////////////////////////////////////////*/
+
+
+.footer{
+padding: 20px 30px 16px;
+border: 1px solid #f2fdff;
+border-right: 0;
+border-left: 0;
+margin: 50px 0 80px;
+color: #8eb2b6;
+clear: both;
+width: 920px;
+font-weight: bold;
+font-size: 13px;
+text-shadow: 1px 1px 1px #fff;
+float: left;
+
+background: url(../images/1x1.png);
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+}
+
+
+
+.footer a{
+
+color: #8eb2b6;
+
+text-shadow: 1px 1px 1px #fff;
+
+}
 
 
 
