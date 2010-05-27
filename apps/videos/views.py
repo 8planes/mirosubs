@@ -257,7 +257,8 @@ def diffing(request, first_pk, second_pk):
         else:
             changed = {
                 'text': (not caption.caption_text == scaption.caption_text), 
-                'time': (not caption.start_time == scaption.start_time)
+                'time': (not caption.start_time == scaption.start_time),
+                'end_time': (not caption.end_time == scaption.end_time)
             }
         data = [caption, scaption, changed]
         captions.append(data)
@@ -288,7 +289,7 @@ def translation_diffing(request, first_pk, second_pk):
         except KeyError:
             scaption = None
         changed = scaption and not caption.translation_text == scaption.translation_text 
-        data = [caption, scaption, dict(text=changed, time=False)]
+        data = [caption, scaption, dict(text=changed, time=False, end_time=False)]
         captions.append(data)
         
     context = widget.js_context(request, video, False, None, False, None, 

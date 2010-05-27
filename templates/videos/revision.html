@@ -114,7 +114,7 @@
     
     <ul class="revision_list">
       {% for item in version.captions %}
-        <li {% cycle 'class="even"' '' %}>{{ item.display_time }} &gt; {{ item.text }}</li>
+        <li {% cycle 'class="even"' '' %}>{{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text }}</li>
       {% endfor %}
     </ul>
 {% endblock %}

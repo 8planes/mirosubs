@@ -35,6 +35,12 @@ VIDEO_TYPE = (
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
 
+def format_time(time):
+    t = int(time)
+    s = t % 60
+    s = s > 9 and s or '0%s' % s 
+    return '%s:%s' % (t / 60, s)   
+
 class Video(models.Model):
     """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
@@ -429,16 +435,24 @@ class Translation(models.Model):
     
     def text(self):
         return self.translation_text
+
+    @property
+    def caption(self):
+        #cache caption for self.caption_id
+        if not hasattr(self, '_caption'):
+            try:
+                c = VideoCaption.objects.filter(caption_id=self.caption_id) \
+                        .order_by('-version__datetime_started')[:1].get()        
+            except VideoCaption.DoesNotExist:
+                c = None
+            setattr(self, '_caption', c)
+        return self._caption
     
     def display_time(self):
-        try:
-            t = int(VideoCaption.objects.filter(caption_id=self.caption_id) \
-                    .order_by('-version__datetime_started')[:1].get().start_time)
-            s = t % 60
-            s = s > 9 and s or '0%s' % s 
-            return '%s:%s' % (t / 60, s)            
-        except VideoCaption.DoesNotExist:
-            return ''    
+        return self.caption and format_time(self.caption.start_time) or ''   
+
+    def display_end_time(self):
+        return self.caption and format_time(self.caption.end_time) or ''   
     
 class VideoCaption(models.Model):
     """A single subtitle for a video.
@@ -473,13 +487,13 @@ class VideoCaption(models.Model):
         return { 'caption_id' : self.caption_id, 
                  'caption_text' : text, 
                  'start_time' : self.start_time, 
-                 'end_time' : self.end_time }
+                 'end_time' : self.end_time }       
     
     def display_time(self):
-        t = int(self.start_time)
-        s = t % 60
-        s = s > 9 and s or '0%s' % s 
-        return '%s:%s' % (t / 60, s)
+        return format_time(self.start_time)
+    
+    def display_end_time(self):
+        return format_time(self.end_time)
     
     def text(self):
         return self.caption_text
