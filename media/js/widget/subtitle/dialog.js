@@ -11,7 +11,7 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
@@ -128,6 +128,7 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     var sharePanel = new mirosubs.subtitle.SharePanel(
         this.serverModel_);
     this.setRightPanelInternal(sharePanel);
+    this.getTimelinePanelInternal().removeChildren(true);
     this.getCaptioningAreaInternal().removeChildren(true);
     var bottomContainer = this.getBottomPanelContainerInternal();
     var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel();
