@@ -66,12 +66,15 @@ mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
 mirosubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
     if (!this.rightPanel_) {
         this.rightPanel_ = this.createRightPanelInternal();
-        this.getHandler().listen(this.rightPanel_,
-                                 mirosubs.RightPanel.EventType.LEGENDKEY,
-                                 this.handleLegendKeyPress_);
-        this.getHandler().listen(this.rightPanel_,
-                                 mirosubs.RightPanel.EventType.RESTART,
-                                 this.startOverClicked_);
+        this.getHandler().
+            listen(
+                this.rightPanel_,
+                mirosubs.RightPanel.EventType.LEGENDKEY,
+                this.handleLegendKeyPress_).
+            listen(
+                this.rightPanel_,
+                mirosubs.RightPanel.EventType.RESTART,
+                this.startOverClicked_);
     }
     return this.rightPanel_;
 };

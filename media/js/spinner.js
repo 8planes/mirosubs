@@ -63,7 +63,7 @@ mirosubs.Spinner.EventType = {
 mirosubs.Spinner.INITIAL_SPEED = 4;
 mirosubs.Spinner.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.valueSpan_ = $d('span');
+    this.valueSpan_ = $d('span', 'mirosubs-timestamp-time');
     this.upAnchor_ = 
         $d('a', {'className': 'mirosubs-up', 'href':'#'}, "Up");
     this.downAnchor_ = 
@@ -85,13 +85,11 @@ mirosubs.Spinner.prototype.enterDocument = function() {
 };
 mirosubs.Spinner.prototype.addAnchorEventHandlers_ = function(elem) {
     var et = goog.events.EventType;
-    this.getHandler().listen(
-        elem, et.CLICK, function(event) {
-            event.preventDefault();
-        });
-    this.getHandler().listen(elem, et.MOUSEDOWN, this.mouseDown_);
-    this.getHandler().listen(elem, et.MOUSEUP, this.mouseUp_);
-    this.getHandler().listen(elem, et.MOUSEOUT, this.mouseOut_);
+    this.getHandler().
+        listen(elem, et.CLICK, function(e) { e.preventDefault(); }).
+        listen(elem, et.MOUSEDOWN, this.mouseDown_).
+        listen(elem, et.MOUSEUP, this.mouseUp_).
+        listen(elem, et.MOUSEOUT, this.mouseOut_);
 };
 mirosubs.Spinner.prototype.updateText_ = function() {
     goog.dom.setTextContent(this.valueSpan_, 

@@ -59,14 +59,23 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
 };
 mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
     mirosubs.subtitle.SubtitleList.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.captionSet_,
-        mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
-        this.captionsCleared_);
+    this.getHandler().
+        listen(
+            this.captionSet_,
+            mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
+            this.captionsCleared_).
+        listen(
+            this.captionSet_,
+            mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES,
+            this.captionTimesCleared_);
 };
 mirosubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
     this.subtitleMap_ = {};
     this.removeChildren(true);
+};
+mirosubs.subtitle.SubtitleList.prototype.captionTimesCleared_ = function(e) {
+    var subtitleWidgets = goog.object.getValues(this.subtitleMap_);
+    goog.array.forEach(subtitleWidgets, function(w) { w.clearTimes(); });
 };
 /**
  *

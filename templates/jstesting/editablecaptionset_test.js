@@ -200,17 +200,4 @@ function testClearAll() {
     assertEquals(3, work.deleted.length);
 }
 
-function testClearTimes() {
-    var set = createSet([
-        captionJSON(1, 5, 1),
-        captionJSON(5, 99999, 2), 
-        captionJSON(-1, -1, 3)]);
-    set.clearTimes();
-    assertEquals(2, MS_updatedCaptions.length);
-    assertEquals(-1, set.caption(0).getStartTime());
-    assertEquals(-1, set.caption(0).getEndTime());
-    assertEquals(-1, set.caption(1).getStartTime());
-    assertEquals(-1, set.caption(1).getEndTime());
-}
-
 {% endblock %}

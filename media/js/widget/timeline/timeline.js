@@ -55,6 +55,16 @@ mirosubs.timeline.Timeline.prototype.createDom = function() {
     this.dragger_ = new goog.fx.Dragger(el);
     this.dragger_.defaultAction = function(x,y) {};
 };
+/**
+ * Useful for when times are cleared.
+ */
+mirosubs.timeline.Timeline.prototype.reset_ = function() {
+    this.removeChild(this.timelineInner_, true);
+    this.timelineInner_.dispose();
+    this.timelineInner_ = new mirosubs.timeline.TimelineInner(
+        this.spacing_, this.subtitleSet_);
+    this.addChild(this.timelineInner_, true);
+};
 mirosubs.timeline.Timeline.prototype.enterDocument = function() {
     mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
     this.getHandler().
@@ -71,6 +81,10 @@ mirosubs.timeline.Timeline.prototype.enterDocument = function() {
             this.timelineInner_,
             mirosubs.timeline.TimeRowUL.DOUBLECLICK,
             this.timeRowDoubleClick_).
+        listen(
+            this.subtitleSet_,
+            mirosubs.timeline.SubtitleSet.CLEAR_TIMES,
+            this.reset_).
         listen(
             this.dragger_,
             goog.fx.Dragger.EventType.BEFOREDRAG,

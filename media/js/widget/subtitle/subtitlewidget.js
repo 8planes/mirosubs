@@ -157,6 +157,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToView_ = function() {
     this.showingTextarea_ = false;
     this.setEditing_(false, false);
 };
+mirosubs.subtitle.SubtitleWidget.prototype.clearTimes = function() {
+    this.contentElement_.style.visibility = 'hidden';
+};
 mirosubs.subtitle.SubtitleWidget.prototype.updateValues_ = function() {
     if (this.editing_)
         return;

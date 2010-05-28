@@ -49,7 +49,6 @@ mirosubs.MainMenu.MenuValues_ = {
     LOGIN: 'login',
     CREATE_ACCOUNT: 'createaccount',
     LOGOUT: 'logout',
-    SHARETHIS: 'sharethis',
     TURNOFFSUBS: 'turnoffsubs'
 };
 mirosubs.MainMenu.EventType = {
@@ -90,8 +89,6 @@ mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
         mirosubs.createAccount();
     else if (selectedValue == mv.LOGOUT)
         mirosubs.logout();
-    else if (selectedValue == mv.SHARETHIS)
-        alert('not yet implemented');
     else if (selectedValue == mv.TURNOFFSUBS)
         this.dispatchEvent(et.TURN_OFF_SUBS);
     else
@@ -150,8 +147,6 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
         this.addChild(new goog.ui.MenuItem('Logout',
                                            mv.LOGOUT), true);
     this.addChild(new goog.ui.MenuSeparator(), true);
-    this.addChild(new goog.ui.MenuItem('Share this',
-                                       mv.SHARETHIS), true);
     if (this.showingSubs_) {
         this.addChild(new goog.ui.MenuSeparator(), true);
         this.addChild(this.createDownloadSRTLink_(), true);
