@@ -1,26 +1,28 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.timeline.Timeline');
+goog.require('goog.fx.Dragger');
+goog.require('goog.style.cursor');
 
 /**
  *
- * @param {number} spacing The space, in seconds, between two 
+ * @param {number} spacing The space, in seconds, between two
  *     major ticks.
  * @param {mirosubs.timeline.SubtitleSet} subtitleSet
  */
@@ -28,8 +30,10 @@ mirosubs.timeline.Timeline = function(spacing, subtitleSet, videoPlayer) {
     goog.ui.Component.call(this);
     this.spacing_ = spacing;
     this.subtitleSet_ = subtitleSet;
-    this.pixelsPerSecond_ = mirosubs.timeline.TimeRowUL.PX_PER_TICK / spacing;
     this.videoPlayer_ = videoPlayer;
+
+    this.openHandStyle_ = goog.style.cursor.getDraggableCursorStyle("../../../images/", true);
+    this.closedHandStyle_ = goog.style.cursor.getDraggingCursorStyle("../../../images/", true);
 };
 goog.inherits(mirosubs.timeline.Timeline, goog.ui.Component);
 mirosubs.timeline.Timeline.prototype.createDom = function() {
@@ -42,6 +46,14 @@ mirosubs.timeline.Timeline.prototype.createDom = function() {
         this.spacing_, this.subtitleSet_);
     this.addChild(this.timelineInner_, true);
     el.appendChild($d('div', 'marker'));
+
+    el.style.cursor = this.openHandStyle_;
+
+    // Dragger has a default action that cannot be overridden.  Kind of pointless
+    // to subclass just to override that, so instead the variable is being
+    // overwritten.
+    this.dragger_ = new goog.fx.Dragger(el);
+    this.dragger_.defaultAction = function(x,y) {};
 };
 mirosubs.timeline.Timeline.prototype.enterDocument = function() {
     mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
@@ -58,7 +70,23 @@ mirosubs.timeline.Timeline.prototype.enterDocument = function() {
         listen(
             this.timelineInner_,
             mirosubs.timeline.TimeRowUL.DOUBLECLICK,
-            this.timeRowDoubleClick_);
+            this.timeRowDoubleClick_).
+        listen(
+            this.dragger_,
+            goog.fx.Dragger.EventType.BEFOREDRAG,
+            this.beforeDrag_).
+        listen(
+            this.dragger_,
+            goog.fx.Dragger.EventType.START,
+            this.startDrag_).
+        listen(
+            this.dragger_,
+            goog.fx.Dragger.EventType.DRAG,
+            this.onDrag_).
+        listen(
+            this.dragger_,
+            goog.fx.Dragger.EventType.END,
+            this.endDrag_);
     this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
 mirosubs.timeline.Timeline.prototype.timeRowDoubleClick_ = function(e) {
@@ -73,12 +101,41 @@ mirosubs.timeline.Timeline.prototype.timelineSubEdit_ = function(e) {
 mirosubs.timeline.Timeline.prototype.videoTimeUpdate_ = function(e) {
     this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
-mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {
+mirosubs.timeline.Timeline.prototype.ensureWidth_ = function() {
     if (!this.width_) {
         var size = goog.style.getSize(this.getElement());
         this.width_ = size.width;
     }
-    this.timelineInner_.getElement().style.left = 
-        (-time * this.pixelsPerSecond_ + this.width_ / 2) + 'px';
-    this.timelineInner_.ensureVisible(time);
+};
+mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {
+    this.ensureWidth_();
+    this.timelineInner_.setTime(time, this.width_ / 2, this.videoPlayer_.getDuration());
+};
+mirosubs.timeline.Timeline.prototype.getTime_ = function() {
+    this.ensureWidth_();
+    return this.timelineInner_.getTime();
+};
+mirosubs.timeline.Timeline.prototype.beforeDrag_ = function(e) {
+    // Returns false if a timeline subtitle's start or end time is being
+    // changed, to keep the timeline from jumping around.
+    return !mirosubs.timeline.TimelineSub.isCurrentlyEditing();
+};
+mirosubs.timeline.Timeline.prototype.startDrag_ = function(e) {
+    this.wasPlaying_ = this.videoPlayer_.isPlaying();
+    this.videoPlayer_.pause();
+    this.oldLeft_ = this.timelineInner_.getLeft();
+    this.getElement().style.cursor = this.closedHandStyle_;
+};
+mirosubs.timeline.Timeline.prototype.onDrag_ = function(e) {
+    this.ensureWidth_();
+    this.timelineInner_.setLeft(e.left + this.oldLeft_, this.width_ / 2,
+                                this.videoPlayer_.getDuration());
+    this.videoPlayer_.setPlayheadTime(this.timelineInner_.getTime());
+};
+mirosubs.timeline.Timeline.prototype.endDrag_ = function(e) {
+    this.oldLeft_ = null;
+    if (this.wasPlaying_) {
+        this.videoPlayer_.play();
+    }
+    this.getElement().style.cursor = this.openHandStyle_;
 };
