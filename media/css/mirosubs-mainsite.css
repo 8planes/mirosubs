@@ -1029,7 +1029,9 @@ float: left;
 padding-right: 20px;
 }
 
-
+.how-to-video-image {
+    cursor: pointer;
+}
 
 
 
