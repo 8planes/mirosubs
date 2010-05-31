@@ -302,7 +302,7 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
         video.owner = request.user
     video.save()
     last_version = video.captions()
-    if last_version != None and last_version.version_no == version_no:
+    if last_version != None and last_version.version_no >= version_no:
         current_version = last_version
     else:
         current_version = models.VideoCaptionVersion(
@@ -355,7 +355,7 @@ def apply_caption_changes(caption_set, deleted, inserted, updated,
 def save_translations_impl(request, translation_language,
                            version_no, inserted, updated):
     last_version = translation_language.translations()
-    if last_version != None and last_version.version_no == version_no:
+    if last_version != None and last_version.version_no >= version_no:
         current_version = last_version
     else:
         current_version = models.TranslationVersion(language=translation_language, 
