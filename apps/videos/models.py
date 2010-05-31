@@ -63,13 +63,13 @@ class Video(models.Model):
     
     def __unicode__(self):
         if self.video_type == VIDEO_TYPE_HTML5:
-            return 'html5: %s' % self.video_url
+            return self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
             if self.youtube_name:
                 return self.youtube_name
-            return 'youtube: %s' % self.youtube_videoid
+            return self.youtube_videoid
         else:
-            return 'unknown video %s' % self.video_url 
+            return self.video_url 
     
     def get_video_url(self):
         if self.video_type == VIDEO_TYPE_HTML5:

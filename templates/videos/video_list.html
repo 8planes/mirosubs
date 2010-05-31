@@ -23,7 +23,7 @@
       <tr>
         <td>
             <a href="{% url videos:video video_id=video.video_id %}">
-                {{ video.get_video_url|slice:":36" }}
+                {{ video|slice:":70" }}
             </a>
         </td>
         <td>
