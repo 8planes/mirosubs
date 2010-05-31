@@ -545,7 +545,7 @@ post_save.connect(Action.create_caption_handler, VideoCaptionVersion)
 
 class UserTestResult(models.Model):
     email = models.EmailField()
-    browser = models.CharField(max_length=512)
+    browser = models.CharField(max_length=1024)
     task1 = models.TextField()
     task2 = models.TextField(blank=True)
     task3 = models.TextField(blank=True)
