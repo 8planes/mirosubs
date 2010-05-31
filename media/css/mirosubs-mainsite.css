@@ -1029,14 +1029,15 @@ float: left;
 padding-right: 20px;
 }
 
-.how-to-video-image {
-    cursor: pointer;
+a.how-to-video-image {
+    text-decoration: none;
+    outline: none;
 }
 
-
-
-
-
+a.how-to-video-image img {
+    border: none;
+    outline: none;
+}
 
 
 
