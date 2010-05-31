@@ -16,17 +16,12 @@
               return v.canPlayType && v.canPlayType('video/ogg; codecs="theora, vorbis"');
             }
             if (supports_ogg_theora_video()){
-                $('a.how-to-video-image').attr('href', '#how-to-video-ogg');
-                $('a.how-to-video-image').prettyPhoto({
-                    default_width: 720,
-                    default_height: 540
-                });                
-            }else{
-                $('a.how-to-video-image').prettyPhoto({
-                    default_width: 425,
-                    default_height: 344
-                });                 
-            }
+                $('a.how-to-video-image').attr('href', '#how-to-video-ogg');              
+            };
+            $('a.how-to-video-image').prettyPhoto({
+                default_width: 425,
+                default_height: 344
+            });              
         });
     </script>
 {% endblock %}
@@ -84,7 +79,7 @@
 <div id="how-to-video-ogg" style="display: none" width="720" height="540">
     <video src="http://a52.video2.blip.tv/7390004349617/Miropcf-overviewtypingogg899.ogv" 
            controls="controls"
-           width="720" height="540"
+           width="425" height="344"
            style="display: block">
         your browser does not support the video tag
     </video>
