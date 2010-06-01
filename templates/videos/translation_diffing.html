@@ -1,0 +1,5 @@
+{% extends 'videos/diffing.html' %}
+
+{% block first_roolback_link %}{% url videos:translation_rollback first_version.pk %}{% endblock %}
+
+{% block second_roolback_link %}{% url videos:translation_rollback second_version.pk %}{% endblock %}

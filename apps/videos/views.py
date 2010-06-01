@@ -19,15 +19,14 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action
 import widget
 from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
-from django.shortcuts import redirect
 from django.conf import settings
 import simplejson as json
 from django.utils.encoding import DjangoUnicodeDecodeError
@@ -160,11 +159,157 @@ def demo(request):
     return render_to_response('videos/demo.html', context,
                               context_instance=RequestContext(request))
     
+def history(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+
+    qs = VideoCaptionVersion.objects.filter(video=video)
+    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
+    order_fields = {
+        'date': 'datetime_started', 
+        'user': 'user__username', 
+        'note': 'note', 
+        'time': 'time_change', 
+        'text': 'text_change'
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+        context['ordering'], context['order_type'] = ordering, order_type
+
+    context['video'] = video
+    context['site'] = Site.objects.get_current()
+    context['translations'] = TranslationLanguage.objects.filter(video=video)
+    context['revisions'] = qs  
+    return render_to_response('videos/history.html', context,
+                              context_instance=RequestContext(request))
+
+def translation_history(request, video_id, lang):
+    video = get_object_or_404(Video, video_id=video_id)
+    language = get_object_or_404(TranslationLanguage, video=video, language=lang)
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+   
+    qs = TranslationVersion.objects.filter(language=language)
+    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
+    order_fields = {
+        'date': 'datetime_started', 
+        'user': 'user__username', 
+        'note': 'note', 
+        'time': 'time_change', 
+        'text': 'text_change'
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+        context['ordering'], context['order_type'] = ordering, order_type 
+    
+    context['revisions'] = qs
+    context['video'] = video
+    context['language'] = language
+    context['site'] = Site.objects.get_current()        
+    context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
+    return render_to_response('videos/translation_history.html', context,
+                              context_instance=RequestContext(request))    
+
+def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
+    version = get_object_or_404(cls, pk=pk)
+    context = widget.js_context(request, version.video, False, None, False, None, 
+                                'autosub' in request.GET)
+    context['video'] = version.video
+    context['version'] = version
+    context['next_version'] = version.next_version()
+    context['prev_version'] = version.prev_version()
+    
+    if cls == TranslationVersion:
+        tpl = 'videos/translation_revision.html'
+        context['latest_version'] = version.language.translations()
+    else:
+        context['latest_version'] = version.video.captions()
+    return render_to_response(tpl, context,
+                              context_instance=RequestContext(request))     
+
+@login_required
+def rollback(request, pk, cls=VideoCaptionVersion):
+    version = get_object_or_404(cls, pk=pk)
+    if not version.next_version():
+        request.user.message_set.create(message='Can not rollback to the last version')
+    else:
+        request.user.message_set.create(message='Rollback was success')
+        version = version.rollback(request.user)
+    url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
+    return redirect('videos:%s' % url_name, pk=version.pk)
+
+def diffing(request, first_pk, second_pk):
+    first_version = get_object_or_404(VideoCaptionVersion, pk=first_pk)
+    video = first_version.video
+    second_version = get_object_or_404(VideoCaptionVersion, pk=second_pk, video=video)
+    if second_version.datetime_started > first_version.datetime_started:
+        first_version, second_version = second_version, first_version
+    
+    second_captions = dict([(item.caption_id, item) for item in second_version.captions()])
+    captions = []
+    for caption in first_version.captions():
+        try:
+            scaption = second_captions[caption.caption_id]
+        except KeyError:
+            scaption = None
+            changed = dict(text=True, time=True)
+        else:
+            changed = {
+                'text': (not caption.caption_text == scaption.caption_text), 
+                'time': (not caption.start_time == scaption.start_time),
+                'end_time': (not caption.end_time == scaption.end_time)
+            }
+        data = [caption, scaption, changed]
+        captions.append(data)
+        
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+    context['video'] = video
+    context['captions'] = captions
+    context['first_version'] = first_version
+    context['second_version'] = second_version
+    context['history_link'] = reverse('videos:history', args=[video.video_id])     
+    return render_to_response('videos/diffing.html', context,
+                              context_instance=RequestContext(request)) 
+
+def translation_diffing(request, first_pk, second_pk):
+    first_version = get_object_or_404(TranslationVersion, pk=first_pk)
+    language = first_version.language
+    video = first_version.video
+    second_version = get_object_or_404(TranslationVersion, pk=second_pk, language=language)
+    if second_version.datetime_started > first_version.datetime_started:
+        first_version, second_version = second_version, first_version
+    
+    second_captions = dict([(item.caption_id, item) for item in second_version.captions()])
+    captions = []
+    for caption in first_version.captions():
+        try:
+            scaption = second_captions[caption.caption_id]
+        except KeyError:
+            scaption = None
+        changed = scaption and not caption.translation_text == scaption.translation_text 
+        data = [caption, scaption, dict(text=changed, time=False, end_time=False)]
+        captions.append(data)
+        
+    context = widget.js_context(request, video, False, None, False, None, 
+                                'autosub' in request.GET)
+    context['video'] = video
+    context['captions'] = captions
+    context['first_version'] = first_version
+    context['second_version'] = second_version
+    context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language]) 
+    return render_to_response('videos/translation_diffing.html', context,
+                              context_instance=RequestContext(request))
+
+@login_required    
 def test_form_page(request):
     if request.method == 'POST':
         form = UserTestResultForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save(request)
+            request.user.message_set.create(message='Thanks for your feedback.  It\'s a huge help to us as we improve the site')
+            return redirect('videos:test_form_page')
     else:
         form = UserTestResultForm()
     context = {

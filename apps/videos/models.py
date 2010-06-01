@@ -21,9 +21,8 @@ import string
 import random
 from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
-from datetime import date
 from django.utils.dateformat import format as date_format
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
@@ -35,6 +34,12 @@ VIDEO_TYPE = (
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
+
+def format_time(time):
+    t = int(time)
+    s = t % 60
+    s = s > 9 and s or '0%s' % s 
+    return '%s:%s' % (t / 60, s)   
 
 class Video(models.Model):
     """Central object in the system"""
@@ -58,13 +63,13 @@ class Video(models.Model):
     
     def __unicode__(self):
         if self.video_type == VIDEO_TYPE_HTML5:
-            return 'html5: %s' % self.video_url
+            return self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
             if self.youtube_name:
                 return self.youtube_name
-            return 'youtube: %s' % self.youtube_videoid
+            return self.youtube_videoid
         else:
-            return 'unknown video %s' % self.video_url 
+            return self.video_url 
     
     def get_video_url(self):
         if self.video_type == VIDEO_TYPE_HTML5:
@@ -91,32 +96,35 @@ class Video(models.Model):
         but none have been marked as finished yet.
         """
         video_captions = self.videocaptionversion_set.all()
-        if len(video_captions) == 0:
+        if video_captions.count() == 0:
             return NO_CAPTIONS
-        if len(video_captions.filter(is_complete__exact=True)) > 0:
+        if video_captions.filter(is_complete__exact=True).count() > 0:
             return CAPTIONS_FINISHED
         else:
             return CAPTIONS_IN_PROGRESS
 
     def captions(self):
         """Returns latest VideoCaptionVersion, or None if no captions"""
-        version_list = list(self.videocaptionversion_set.all())
-        if len(version_list) == 0:
-            return None
-        else:
-            return max(version_list, key=lambda v: v.version_no)
+        try:
+            return self.videocaptionversion_set.order_by('-version_no')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def null_captions(self, user):
         """Returns NullVideoCaptions for user, or None if none exist."""
-        captions = list(self.nullvideocaptions_set.all().filter(
-                user__id__exact=user.id))
-        return None if len(captions) == 0 else captions[0]
+        try:
+            return self.nullvideocaptions_set.filter(
+                user__id__exact=user.id)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def translation_language(self, language_code):
         """Returns a TranslationLanguage, or None if none found"""
-        translations = list(self.translationlanguage_set.all().filter(
-            language__exact=language_code))
-        return None if len(translations) == 0 else translations[0]
+        try:
+            return self.translationlanguage_set.filter(
+                language__exact=language_code)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def captions_and_translations(self, language_code):
         """(VideoCaption, Translation) pair list
@@ -142,8 +150,8 @@ class Video(models.Model):
     def make_captions_and_translations(self, subtitle_set, translation_set):
         # FIXME: this should be private and static 
         # (no need for ref to self)
-        subtitles = list(subtitle_set.videocaption_set.all())
-        translations = list(translation_set.translation_set.all())
+        subtitles = subtitle_set.videocaption_set.all()
+        translations = translation_set.translation_set.all()
         translations_dict = dict([(trans.caption_id, trans) for
                                   trans in translations])
         return [(subtitle,
@@ -159,22 +167,21 @@ class Video(models.Model):
         return trans_lang.translations()
 
     def null_translations(self, user, language_code):
-        translations = list(self.nulltranslations_set.all().filter(
+        try:
+            return self.nulltranslations_set.all().filter(
                 user__id__exact=user.id).filter(
-                language__exact=language_code))
-        return None if len(translations) == 0 else translations[0]
+                language__exact=language_code)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def translation_language_codes(self):
         """All iso language codes with translations."""
         return set([trans.language for trans 
-                    in list(self.translationlanguage_set.all())])
+                    in self.translationlanguage_set.all()])
 
     def null_translation_language_codes(self, user):
-        null_translations = list(
-            self.nulltranslations_set.all().filter(
-                user__id__exact=user.id))
-        return set([trans.language for trans
-                    in null_translations])
+        null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)
+        return set([trans.language for trans in null_translations])
 
     @property
     def writelock_owner_name(self):
@@ -222,7 +229,23 @@ def create_video_id(sender, instance, **kwargs):
                                                            for i in xrange(12)])
 models.signals.pre_save.connect(create_video_id, sender=Video)
 
-class VideoCaptionVersion(models.Model):
+class VersionModel(models.Model):
+    
+    class Meta:
+        abstract = True
+        ordering = ['-datetime_started']
+    
+    def revision_time(self):
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+        d = self.datetime_started.date()
+        if d == today:
+            return 'Today'
+        elif d == yesterday:
+            return 'Yestarday'
+        return d
+
+class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.
 
     A new VideoCaptionVersion is added during each subtitling session, each time 
@@ -237,7 +260,38 @@ class VideoCaptionVersion(models.Model):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
+    
+    def captions(self):
+        return self.videocaption_set.order_by('start_time')
 
+    def prev_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__lt=self.datetime_started) \
+                      .filter(video=self.video)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
+    def next_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__gt=self.datetime_started) \
+                      .filter(video=self.video).order_by('datetime_started')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+    
+    def rollback(self, user):
+        cls = self.__class__
+        latest_captions = self.video.captions()
+        new_version_no = latest_captions.version_no + 1
+        note = 'rollback to version #%s' % self.version_no
+        new_version = cls(video=self.video, version_no=new_version_no, is_complete=True, \
+            datetime_started=datetime.now(), user=user, note=note)
+        new_version.save()
+        for item in self.captions():
+            item.duplicate_for(new_version).save()
+        return new_version
+                    
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
@@ -298,15 +352,13 @@ class TranslationLanguage(models.Model):
 
     def translations(self):
         """Returns latest TranslationVersion, or None if none found"""
-        version_list = list(self.translationversion_set.all())
-        if len(version_list) == 0:
-            return None
-        else:
-            return max(version_list, key=lambda v: v.version_no)
-
+        try:
+            return self.translationversion_set.order_by('-version_no')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
 # TODO: make TranslationVersion unique on (video, version_no, language)
-class TranslationVersion(models.Model):
+class TranslationVersion(VersionModel):
     """Snapshot of translations for a (video, language) pair at the end of a translating session.
 
     Every time a new translating session is started, the previous session's 
@@ -323,6 +375,41 @@ class TranslationVersion(models.Model):
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
     
+    @property
+    def video(self):
+        return self.language.video
+    
+    def captions(self):
+        return self.translation_set.all()
+
+    def prev_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__lt=self.datetime_started) \
+                      .filter(language=self.language)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
+    def next_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__gt=self.datetime_started) \
+                      .filter(language=self.language).order_by('datetime_started')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+
+    def rollback(self, user):
+        cls = self.__class__
+        latest_captions = self.language.translations()
+        new_version_no = latest_captions.version_no + 1
+        note = 'rollback to version #%s' % self.version_no
+        new_version = cls(language=self.language, version_no=new_version_no, is_complete=True, \
+            datetime_started=datetime.now(), user=user, note=note)
+        new_version.save()
+        for item in self.captions():
+            item.duplicate_for(new_version).save()
+        return new_version
+            
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
     """A translation of one subtitle.
@@ -346,7 +433,28 @@ class Translation(models.Model):
     def to_json_dict(self):
         return { 'caption_id': self.caption_id,
                  'text': self.translation_text }
+    
+    def text(self):
+        return self.translation_text
 
+    @property
+    def caption(self):
+        #cache caption for self.caption_id
+        if not hasattr(self, '_caption'):
+            try:
+                c = VideoCaption.objects.filter(caption_id=self.caption_id) \
+                        .order_by('-version__datetime_started')[:1].get()        
+            except VideoCaption.DoesNotExist:
+                c = None
+            setattr(self, '_caption', c)
+        return self._caption
+    
+    def display_time(self):
+        return self.caption and format_time(self.caption.start_time) or ''   
+
+    def display_end_time(self):
+        return self.caption and format_time(self.caption.end_time) or ''   
+    
 class VideoCaption(models.Model):
     """A single subtitle for a video.
 
@@ -380,8 +488,19 @@ class VideoCaption(models.Model):
         return { 'caption_id' : self.caption_id, 
                  'caption_text' : text, 
                  'start_time' : self.start_time, 
-                 'end_time' : self.end_time }
-
+                 'end_time' : self.end_time }       
+    
+    def display_time(self):
+        return format_time(self.start_time)
+    
+    def display_end_time(self):
+        if self.end_time == 99999:
+            return 'END'
+        return format_time(self.end_time)
+    
+    def text(self):
+        return self.caption_text
+    
 class Action(models.Model):
     TYPE_CHOICES = (
         (1, 'subtitles'),
@@ -428,7 +547,7 @@ post_save.connect(Action.create_caption_handler, VideoCaptionVersion)
 
 class UserTestResult(models.Model):
     email = models.EmailField()
-    browser = models.CharField(max_length=512)
+    browser = models.CharField(max_length=1024)
     task1 = models.TextField()
     task2 = models.TextField(blank=True)
     task3 = models.TextField(blank=True)

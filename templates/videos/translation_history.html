@@ -1,0 +1,21 @@
+{% extends "videos/history.html" %}
+
+{% block diffing_link %}{% url videos:translation_diffing 11111 22222 %}{% endblock %}
+
+{% block lang_display %}
+    in <a href="{% url videos:video video_id=video.video_id %}">{{ language.get_language_display }} Language</a>
+{% endblock %}
+
+{% block translation_list %}
+    <p class="other_lang">
+        Other Languages:
+            <a href="{% url videos:history video.video_id %}">Original</a>{% if translations %}, {% endif %}
+            {% for item in translations %}
+                <a href="{% url videos:translation_history video.video_id item.language %}">{{ item.get_language_display }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+     </p>             
+{% endblock %}
+
+{% block view_link %}
+    <a href="{% url videos:translation_revision pk=item.pk %}">view</a>
+{% endblock %}

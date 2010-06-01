@@ -180,6 +180,15 @@ INSTALLED_APPS = (
     'south'
 )
 
+AUTHENTICATION_BACKENDS = (
+   'django.contrib.auth.backends.ModelBackend',
+   'auth.backends.OpenIdBackend',
+   'socialauth.auth_backends.TwitterBackend',
+   'socialauth.auth_backends.FacebookBackend',
+)
+
+LOGIN_URL = '/auth/login/'
+
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 ACCOUNT_ACTIVATION_DAYS = 9999 # we are using registration only to verify emails
 SESSION_COOKIE_AGE = 2419200 # 4 weeks
