@@ -17,8 +17,10 @@ begin
 
   if (@params["video_url"].length > 0)
     @js_query_string = "video_url=#{@params['video_url'][0]}"
-  else
+  elsif (@params["youtube_videoid"].length > 0)
     @js_query_string = "youtube_videoid=#{@params['youtube_videoid'][0]}"
+  else
+    @js_query_string = "video_id=${@params['video_id'][0]}"
   end
 
   if (@params["null"].length > 0)
