@@ -180,6 +180,13 @@ INSTALLED_APPS = (
     'south'
 )
 
+AUTHENTICATION_BACKENDS = (
+   'django.contrib.auth.backends.ModelBackend',
+   'auth.backends.OpenIdBackend',
+   'socialauth.auth_backends.TwitterBackend',
+   'socialauth.auth_backends.FacebookBackend',
+)
+
 LOGIN_URL = '/auth/login/'
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
