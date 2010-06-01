@@ -21,8 +21,8 @@
 
 
    
-    <div id="feedback_form">
-        <form method="post" action="{% url videos:feedback %}">
+    <div>
+        <form method="post" action="{% url videos:feedback %}" id="feedback_form">
         <h2>What would make this page work better?</h2>
 <p>Please let us know if you have any comments, questions, or suggestions!</p>
             <p>
@@ -45,30 +45,32 @@
     
     
 <script type="text/javascript">
-    $('#send_more_feedback').click(function(){
-       $(this).parent('div').hide().prev().show(); 
-       return false;
-    });
-    
-    $('#feedback_form').ajaxForm({
-        dataType: 'json',
-        success: function(data, status, xhr, $form){
-            if (data.success){
-                $form.resetForm();
-                $form.parent().hide().next().show();
-            }else{
-                for (key in data.errors){
-                    $form.prepend('<p class="error_list">'+data.errors[key]+'</p>');
-                };
+    jQuery(document).ready(function($){
+        $('#send_more_feedback').click(function(){
+           $(this).parent('div').hide().prev().show(); 
+           return false;
+        });
+        
+        $('#feedback_form').ajaxForm({
+            dataType: 'json',
+            success: function(data, status, xhr, $form){
+                if (data.success){
+                    $form.resetForm();
+                    $form.parent().hide().next().show();
+                }else{
+                    for (key in data.errors){
+                        $form.prepend('<p class="error_list">'+data.errors[key]+'</p>');
+                    };
+                }
+            },
+            beforeSubmit: function(formData, $Form, options){
+                $('p.error_list', $Form).remove();
+                var form = $Form[0];
+                if ( ! form.message.value){
+                    $(form.message).before('<p class="error_list">Enter feedback please.</p>');
+                    return false;
+                }
             }
-        },
-        beforeSubmit: function(formData, $Form, options){
-            $('p.error_list', $Form).remove();
-            var form = $Form[0];
-            if ( ! form.message.value){
-                $(form.message).before('<p class="error_list">Enter feedback please.</p>');
-                return false;
-            }
-        }
+        });
     });
 </script>

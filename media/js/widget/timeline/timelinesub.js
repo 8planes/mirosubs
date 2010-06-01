@@ -1,25 +1,25 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.timeline.TimelineSub');
 
 mirosubs.timeline.TimelineSub = function(
-    subtitle, pixelsPerSecond, opt_pixelOffset) 
+    subtitle, pixelsPerSecond, opt_pixelOffset)
 {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
@@ -33,6 +33,9 @@ goog.inherits(mirosubs.timeline.TimelineSub, goog.ui.Component);
  * Whether one of the timeline subs is currently being edited.
  */
 mirosubs.timeline.TimelineSub.currentlyEditing_ = false;
+mirosubs.timeline.TimelineSub.isCurrentlyEditing = function() {
+    return mirosubs.timeline.TimelineSub.currentlyEditing_;
+};
 mirosubs.timeline.TimelineSub.logger_ =
     goog.debug.Logger.getLogger('mirosubs.subtitle.TimelineSub');
 mirosubs.timeline.TimelineSub.EventType = {
@@ -46,13 +49,14 @@ mirosubs.timeline.TimelineSub.prototype.createDom = function() {
     var el = this.getElement();
     el.appendChild(this.textElem_ = $d('div', 'mirosubs-subtext'));
     el.appendChild(
-        this.leftGrabber_ = 
-            $d('span', 'mirosubs-grabber mirosubs-leftGrabber', 
+        this.leftGrabber_ =
+            $d('span', 'mirosubs-grabber mirosubs-leftGrabber',
                $d('strong')));
     el.appendChild(
-        this.rightGrabber_ = 
-            $d('span', 'mirosubs-grabber mirosubs-rightGrabber', 
+        this.rightGrabber_ =
+            $d('span', 'mirosubs-grabber mirosubs-rightGrabber',
                $d('strong')));
+    el.style.cursor = "pointer";
     this.updateValues_();
 };
 mirosubs.timeline.TimelineSub.prototype.enterDocument = function() {
@@ -62,7 +66,7 @@ mirosubs.timeline.TimelineSub.prototype.enterDocument = function() {
         listen(this.getElement(), 'mouseout', this.onMouseOut_).
         listen(this.leftGrabber_, 'mousedown', this.onGrabberMousedown_).
         listen(this.rightGrabber_, 'mousedown', this.onGrabberMousedown_).
-        listen(this.subtitle_, mirosubs.timeline.Subtitle.CHANGE, 
+        listen(this.subtitle_, mirosubs.timeline.Subtitle.CHANGE,
                this.updateValues_);
 };
 mirosubs.timeline.TimelineSub.prototype.onMouseOver_ = function(event) {
@@ -71,18 +75,18 @@ mirosubs.timeline.TimelineSub.prototype.onMouseOver_ = function(event) {
     this.mouseOver_ = true;
 };
 mirosubs.timeline.TimelineSub.prototype.onMouseOut_ = function(event) {
-    if (event.relatedTarget && 
+    if (event.relatedTarget &&
         !goog.dom.contains(this.getElement(), event.relatedTarget)) {
         if (!this.editing_)
             this.setGrabberVisibility_(false);
-        this.mouseOver_ = false
+        this.mouseOver_ = false;
     }
 };
 mirosubs.timeline.TimelineSub.prototype.onDocMouseMoveLeft_ = function(event) {
     // moving left grabber
     this.subtitle_.getEditableCaption().setStartTime(
-        this.grabberMousedownTime_ + 
-            (event.clientX - this.grabberMousedownClientX_) / 
+        this.grabberMousedownTime_ +
+            (event.clientX - this.grabberMousedownClientX_) /
             this.pixelsPerSecond_);
 };
 mirosubs.timeline.TimelineSub.prototype.onDocMouseMoveRight_ = function(event) {
@@ -104,8 +108,8 @@ mirosubs.timeline.TimelineSub.prototype.onDocMouseUp_ = function(event) {
 mirosubs.timeline.TimelineSub.prototype.getSubtitle = function() {
     return this.subtitle_;
 };
-mirosubs.timeline.TimelineSub.prototype.onGrabberMousedown_ = 
-    function(event) 
+mirosubs.timeline.TimelineSub.prototype.onGrabberMousedown_ =
+    function(event)
 {
     var left = goog.dom.contains(this.leftGrabber_, event.target);
     this.editing_ = true;
@@ -113,17 +117,17 @@ mirosubs.timeline.TimelineSub.prototype.onGrabberMousedown_ =
         mirosubs.timeline.TimelineSub.EventType.START_EDITING);
     mirosubs.timeline.TimelineSub.currentlyEditing_ = true;
     this.grabberMousedownClientX_ = event.clientX;
-    this.grabberMousedownTime_ = left ? 
+    this.grabberMousedownTime_ = left ?
         this.subtitle_.getStartTime() : this.subtitle_.getEndTime();
     this.documentEventHandler_.listen(
-        document, 'mousemove', 
+        document, 'mousemove',
         left ? this.onDocMouseMoveLeft_ : this.onDocMouseMoveRight_);
     this.documentEventHandler_.listen(
         document, 'mouseup', this.onDocMouseUp_);
     event.preventDefault(); // necessary to prevent image dragging in FF3
 };
-mirosubs.timeline.TimelineSub.prototype.setGrabberVisibility_ = 
-    function(visible) 
+mirosubs.timeline.TimelineSub.prototype.setGrabberVisibility_ =
+    function(visible)
 {
     var c = goog.dom.classes;
     var overClass = 'mirosubs-grabber-over';
@@ -137,8 +141,8 @@ mirosubs.timeline.TimelineSub.prototype.setGrabberVisibility_ =
     }
 };
 mirosubs.timeline.TimelineSub.prototype.updateValues_ = function() {
-    if (this.subtitle_.getEditableCaption().getText() != 
-        this.existingSubText_) 
+    if (this.subtitle_.getEditableCaption().getText() !=
+        this.existingSubText_)
     {
         goog.dom.setTextContent(
             this.textElem_, this.subtitle_.getEditableCaption().getText());
@@ -152,9 +156,9 @@ mirosubs.timeline.TimelineSub.prototype.updateValues_ = function() {
         this.existingSubEnd_ = this.subtitle_.getEndTime();
     }
     if (this.subtitle_.getStartTime() != this.existingSubStart_) {
-        this.getElement().style.left = 
-            (this.subtitle_.getStartTime() * 
-             this.pixelsPerSecond_ - 
+        this.getElement().style.left =
+            (this.subtitle_.getStartTime() *
+             this.pixelsPerSecond_ -
              this.pixelOffset_) + 'px';
         this.existingSubStart_ = this.subtitle_.getStartTime();
     }

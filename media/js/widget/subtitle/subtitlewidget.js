@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.SubtitleWidget');
@@ -37,9 +37,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     this.setElementInternal(
         $d('li', null,
            this.contentElement_,
-           this.titleElem_ = 
+           this.titleElem_ =
            $d('span', {'className':'mirosubs-title'},
-              this.titleElemInner_ = 
+              this.titleElemInner_ =
               $d('span'))));
     if (!this.displayTimes_) {
         goog.dom.classes.add(this.titleElem_, 'mirosubs-title-notime');
@@ -47,9 +47,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     }
     else {
         this.timeSpinner_ = new mirosubs.Spinner(
-            this.subtitle_.getStartTime(), 
+            this.subtitle_.getStartTime(),
             goog.bind(this.subtitle_.getMinStartTime, this.subtitle_),
-            goog.bind(this.subtitle_.getMaxStartTime, this.subtitle_), 
+            goog.bind(this.subtitle_.getMaxStartTime, this.subtitle_),
             mirosubs.formatTime);
         this.addChild(this.timeSpinner_, true);
     }
@@ -72,7 +72,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
         this.clicked_);
     if (this.timeSpinner_)
         this.getHandler().listen(
-            this.timeSpinner_, 
+            this.timeSpinner_,
             goog.object.getValues(mirosubs.Spinner.EventType),
             this.timeSpinnerListener_);
 };
@@ -83,19 +83,19 @@ mirosubs.subtitle.SubtitleWidget.prototype.setActive = function(active) {
     else
         c.remove(this.getElement(), 'active');
 };
-mirosubs.subtitle.SubtitleWidget.prototype.timeSpinnerListener_ = 
-    function(event) 
+mirosubs.subtitle.SubtitleWidget.prototype.timeSpinnerListener_ =
+    function(event)
 {
     var et = mirosubs.Spinner.EventType;
     if (event.type == et.ARROW_PRESSED)
-        this.setEditing_(true);
+        this.setEditing_(true, true);
     else if (event.type == et.VALUE_CHANGED) {
         this.subtitle_.setStartTime(event.value);
-        this.setEditing_(false);
+        this.setEditing_(false, true);
     }
 };
-mirosubs.subtitle.SubtitleWidget.prototype.setEditing_ = function(editing) {
-    this.editingFn_(editing, this);
+mirosubs.subtitle.SubtitleWidget.prototype.setEditing_ = function(editing, timeChanged) {
+    this.editingFn_(editing, timeChanged, this);
     this.editing_ = editing;
     if (!editing)
         this.updateValues_();
@@ -115,7 +115,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
         return;
     }
     mirosubs.subtitle.SubtitleWidget.editing_ = this;
-    this.setEditing_(true);
+    this.setEditing_(true, false);
     this.showingTextarea_ = true;
     this.docClickListener_ = new goog.events.EventHandler();
     var that = this;
@@ -155,7 +155,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToView_ = function() {
     goog.dom.removeNode(this.textareaElem_);
     this.titleElem_.appendChild(this.titleElemInner_);
     this.showingTextarea_ = false;
-    this.setEditing_(false);
+    this.setEditing_(false, false);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.clearTimes = function() {
     this.contentElement_.style.visibility = 'hidden';
@@ -165,12 +165,12 @@ mirosubs.subtitle.SubtitleWidget.prototype.updateValues_ = function() {
         return;
     if (this.displayTimes_) {
         var time = this.subtitle_.getStartTime();
-        this.contentElement_.style.visibility = 
+        this.contentElement_.style.visibility =
             time == -1 ? 'hidden' : 'visible';
         if (time != -1)
             this.timeSpinner_.setValue(time);
     }
-    goog.dom.setTextContent(this.titleElemInner_, 
+    goog.dom.setTextContent(this.titleElemInner_,
                             this.subtitle_.getText());
 };
 mirosubs.subtitle.SubtitleWidget.prototype.disposeEventHandlers_ = function() {

@@ -494,6 +494,8 @@ class VideoCaption(models.Model):
         return format_time(self.start_time)
     
     def display_end_time(self):
+        if self.end_time == 99999:
+            return 'END'
         return format_time(self.end_time)
     
     def text(self):

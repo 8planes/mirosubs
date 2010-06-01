@@ -45,18 +45,18 @@
             //set values from arguents
             return DIFFING_URL.replace(/<<first_pk>>/, first_pk).replace(/<<second_pk>>/, second_pk);
         }
-        
-        $(function(){
-            $('.compare_versions_button').click(function(){
-                var $checked = $('.version_checkbox:checked');
-                if ($checked.length !== 2){
-                    alert('Select two revisions for compare, please');
-                }else{
-                    var url = get_compare_link($checked[0].value, $checked[1].value);
-                    window.location.replace(url);
-                }
+
+            jQuery(document).ready(function($){
+                $('.compare_versions_button').click(function(){
+                    var $checked = $('.version_checkbox:checked');
+                    if ($checked.length !== 2){
+                        alert('Select two revisions for compare, please');
+                    }else{
+                        var url = get_compare_link($checked[0].value, $checked[1].value);
+                        window.location.replace(url);
+                    }
+                });
             });
-        });
     </script>
 {% endblock %}
 
