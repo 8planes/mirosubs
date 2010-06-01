@@ -37,3 +37,4 @@ goog.require('goog.fx.Animation.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.fx.Dragger.EventType');
 goog.require('goog.fx.dom.SlideFrom');
+goog.require('goog.style.cursor');

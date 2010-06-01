@@ -22,8 +22,9 @@ JS_USE_COMPILED = True
 
 DEBUG = False
 ADMINS = (
-  ('Rodrigo Guzman', 'rz@pybrew.com'),
   ('Adam Duston', 'adam@8planes.com'),
+  ('Hubert Huang', 'huberth@gmail.com'),
+  ('Dmitriy', 'alerion.um@gmail.com')
 )
 
 DATABASE_NAME = '/home/mirosubsdev/mirosubs/mirosubs.sqlite3'
@@ -44,11 +45,5 @@ TWITTER_CONSUMER_SECRET = 'jVDC7080261pB5eIr717KIEmI7TvNreLJpcPM6Yq8'
 
 FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
-
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
-                           'socialauth.auth_backends.OpenIdBackend',
-                           'socialauth.auth_backends.TwitterBackend',
-                           'socialauth.auth_backends.FacebookBackend',
-                           )
 
 LOGIN_REDIRECT_URL = '/'

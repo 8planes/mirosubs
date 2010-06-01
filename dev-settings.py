@@ -36,11 +36,4 @@ TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
 
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
-                           #'socialauth.auth_backends.OpenIdBackend',
-                           'auth.backends.OpenIdBackend',
-                           'socialauth.auth_backends.TwitterBackend',
-                           'socialauth.auth_backends.FacebookBackend',
-                           )
-
 LOGIN_REDIRECT_URL = '/'
