@@ -127,7 +127,10 @@ class OrderedColumnNode(template.Node):
         self.ordering = template.Variable('ordering')
         
     def render(self, context):
-        page = self.page.resolve(context)
+        if context.has_key(self.page.var):
+            page = self.page.resolve(context)
+        else:
+            page = None
         
         if context.has_key(self.ordering.var):
             ordering = self.ordering.resolve(context)
@@ -140,6 +143,8 @@ class OrderedColumnNode(template.Node):
             order_type = None
             
         ot = (ordering == self.field_name and order_type == 'asc') and 'desc' or 'asc'
-        link = '?o=%s&ot=%s&page=%s' % (self.field_name, ot, page)
-        
+        if page:
+            link = '?o=%s&ot=%s&page=%s' % (self.field_name, ot, page)
+        else:
+            link = '?o=%s&ot=%s' % (self.field_name, ot)
         return '<a href="%s">%s</a>' % (link, self.title)

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block css %}
+  {{ block.super }}
+  <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+  <style>
+    div.mirosubs-widget {
+        position: relative;    
+    }
+    .mirosubs-videoDiv {
+        text-align: center;
+    }
+    .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
+    width: 460px;
+    }
+    
+    #embed{
+      white-space: pre;
+      background: #eee;
+      boder: #666;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(function(){
+            $('.roll_back').click(function(){
+                if ( ! confirm('Do roll back to this version?')){
+                    return false;
+                }
+            });
+        });
+    </script>    
+    {% if not js_use_compiled %}
+      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
+      <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
+    {% endif %}
+    {% for dep in js_dependencies %}
+      <script type="text/javascript" src="{{dep|safe}}"></script>
+    {% endfor %}
+{% endblock %}
+
+{% block main_content %}
+    <h2>Viewing Revision History</h2>
+    
+    {% if next_version %}
+        <div class="viewing_old">
+            This is an old revision of {% if version.language %}{{ version.language.get_language_display }}
+            {% else %}original{% endif %} language subtitles for "{{ video }}", 
+            as edited by {{ version.user.username }} at {{ version.datetime_started|date:"H:i, j F Y" }}. It may
+            differ significantly from the current revision.
+        </div>
+    {% endif %}
+    
+    {% block navigation %}
+        <ul class="pag">
+            
+          {% if prev_version %}
+              <li class="previous">
+                {% ifnotequal latest_version prev_version %}
+                    (<a href="{% url videos:diffing latest_version.pk prev_version.pk %}">diff</a>) 
+                {% endifnotequal %}
+                &#8592; 
+                <a href="{% url videos:revision pk=prev_version.pk %}">
+                    Previous Revision
+                </a>
+              </li>
+          {% endif %}
+          
+          {% if next_version %}
+              <li class="next">
+                <a href="{% url videos:revision pk=next_version.pk %}">
+                    Next Revision
+                </a> &#8594;
+                {% ifnotequal latest_version next_version %}
+                    (<a href="{% url videos:diffing latest_version.pk next_version.pk %}">diff</a>) 
+                {% endifnotequal %}                
+              </li>
+          {% endif %}
+          
+          <li class="current">
+            Current Revision 
+            {% ifnotequal latest_version version %}
+                (<a href="{% url videos:diffing latest_version.pk version.pk %}">diff</a>) 
+            {% endifnotequal %}               
+          </li>
+          
+        </ul>
+    {% endblock %}
+    
+    {% with video.video_url as video_url %}
+        {% include "widget/widget.html" %}
+        <script type="text/javascript">
+            mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
+        </script>
+    {% endwith %}
+       
+    {% if user.is_authenticated %}
+        <a href="#" class="new_edit">Submit a new edit based on this version</a>
+        {% if next_version %}
+        <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
+            Roll back to this version
+        </a>
+        {% endif %}
+    {% else %}
+        <div class="viewing_old">
+            Login, please.
+        </div>    
+    {% endif %}
+    <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}" class="return_history">&lt;&lt; Return to revision history</a>
+    
+    <ul class="revision_list">
+      {% for item in version.captions %}
+        <li {% cycle 'class="even"' '' %}>{{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text }}</li>
+      {% endfor %}
+    </ul>
+{% endblock %}

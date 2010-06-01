@@ -8,6 +8,7 @@
   <table>
     <tr>
       <th width="600">URL</th>
+      <th ></th>
       <th class="center">
           {% ordered_column "widget_views_count" "Views" %}
 	  </th>
@@ -22,8 +23,13 @@
       <tr>
         <td>
             <a href="{% url videos:video video_id=video.video_id %}">
-                {{ video.get_video_url|slice:":36" }}
+                {{ video|slice:":70" }}
             </a>
+        </td>
+        <td>
+            <a href="{% url  videos:history video_id=video.video_id %}">
+                history
+            </a>            
         </td>
         <td class="center">{{ video.widget_views_count }}</td>
         <td class="center">{{ video.subtitles_fetched_count }}</td>

@@ -26,6 +26,13 @@ class UserTestResultForm(forms.ModelForm):
     
     class Meta:
         model = UserTestResult
+        exclude = ('browser',)
+        
+    def save(self, request):
+        obj = super(UserTestResultForm, self).save(False)
+        obj.browser = request.META.get('HTTP_USER_AGENT', 'empty HTTP_USER_AGENT')
+        obj.save()
+        return obj
 
 class VideoForm(forms.ModelForm):
     class Meta:
