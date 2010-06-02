@@ -138,8 +138,7 @@ mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
     var s = mirosubs.subtitle.Dialog.State_;
     if (event.keyCode == goog.events.KeyCodes.CTRL)
         this.ctrlClicked_();
-    if (event.keyCode == goog.events.KeyCodes.TAB &&
-        this.state_ == s.TRANSCRIBE) {
+    if (event.keyCode == goog.events.KeyCodes.TAB) {
         //TODO: this violates accessibility guidelines. Use another key instead of TAB!
         this.togglePause_();
         event.preventDefault();
