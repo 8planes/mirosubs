@@ -1,25 +1,25 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs');
 
 /**
- * This ends up getting set when widget first loads. It contains the url 
+ * This ends up getting set when widget first loads. It contains the url
  * for ms server, without trailing slash.
  */
 mirosubs.BASE_URL = "";
@@ -38,7 +38,7 @@ mirosubs.loginAttemptInProgress_ = false;
 
 /**
  *
- * @param opt_finishFn {function(boolean)=} Called when login process 
+ * @param opt_finishFn {function(boolean)=} Called when login process
  *     completes. Passed true if logged in successfully, false otherwise.
  */
 mirosubs.login = function(opt_finishFn) {
@@ -54,7 +54,7 @@ mirosubs.login = function(opt_finishFn) {
 
 /**
  *
- * @param {function(boolean)=} opt_finishFn Will be called with true if 
+ * @param {function(boolean)=} opt_finishFn Will be called with true if
  *     logged in, false otherwise.
  */
 mirosubs.openLoginPopup = function(urlSuffix, opt_finishFn) {
@@ -75,7 +75,7 @@ mirosubs.openLoginPopup = function(urlSuffix, opt_finishFn) {
 };
 mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
     mirosubs.Rpc.call(
-        'get_my_user_info', {}, 
+        'get_my_user_info', {},
         function(result) {
             mirosubs.loginAttemptInProgress_ = false;
             if (result['logged_in']) {
@@ -128,7 +128,7 @@ mirosubs.formatTime = function(time, opt_excludeMs) {
         var frac = parseInt(time * 100) % 100;
         timeString += ('.' + goog.string.padNumber(frac, 2));
     }
-    return timeString;        
+    return timeString;
 };
 
 mirosubs.LoginEvent = function(username) {

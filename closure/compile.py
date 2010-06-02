@@ -32,13 +32,20 @@ output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/closure-dependencies.
                          "-p %s/ -o script") % 
                         (CLOSURE_LIB, JS_LIB, CLOSURE_LIB))
 
+# This is to reduce the number of warnings in the code.
+# The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
+# JavaScript files, each of which has a @fileoverview tag to describe it.
+# When put all in one file, the compiler complains, so remove them all.
+output_lines = filter(lambda s: s.find("@fileoverview") == -1,
+                      output.split("\n"))
+
 calcdeps_file = open(calcdeps_js, "w")
-calcdeps_file.write(output)
+calcdeps_file.write("\n".join(output_lines))
 calcdeps_file.close()
 
 logging.info("Compiling JavaScript")
 
-output,_ = call_command(("java -jar %s --js %s %s " +
+output,err = call_command(("java -jar %s --js %s %s " +
                          "--js_output_file %s " +
                          "--compilation_level ADVANCED_OPTIMIZATIONS") % 
                         (compiler_jar, calcdeps_js, deps, compiled_js))
@@ -54,5 +61,8 @@ with open(compiled_js, 'w') as compiled_js_file:
 
 if len(output) > 0:
     logging.info("compiler.jar output: %s" % output)
+
+if len(err) > 0:
+    logging.info("stderr: %s" % err)
 
 logging.info("Success")
