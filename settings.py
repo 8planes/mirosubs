@@ -147,7 +147,7 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'mirosubs.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -181,13 +181,6 @@ INSTALLED_APPS = (
     'south'
 )
 
-AUTHENTICATION_BACKENDS = (
-   'django.contrib.auth.backends.ModelBackend',
-   'auth.backends.OpenIdBackend',
-   'socialauth.auth_backends.TwitterBackend',
-   'socialauth.auth_backends.FacebookBackend',
-)
-
 # socialauth-related
 OPENID_REDIRECT_NEXT = '/socialauth/openid/done/'
 
@@ -197,6 +190,13 @@ OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "requ
 
 FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
+
+AUTHENTICATION_BACKENDS = (
+   'django.contrib.auth.backends.ModelBackend',
+   'auth.backends.OpenIdBackend',
+   'socialauth.auth_backends.TwitterBackend',
+   'socialauth.auth_backends.FacebookBackend',
+)
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'

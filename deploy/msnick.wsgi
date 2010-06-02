@@ -7,7 +7,7 @@ sys.path.append('/home/msnick/mirosubs')
 sys.path.append('/home/msnick/mirosubs/apps')
 
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'msnick-settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings.msnick-settings'
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
