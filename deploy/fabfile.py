@@ -45,15 +45,6 @@ def prod():
     env.user = 'adam'
     env.base_dir = '/var/www/universalsubtitles'
 
-def setup_virtualenv(home='/home/mirosubs'):
-    run('virtualenv --no-site-packages %s/env' % home)
-    with cd(home):
-        run('env/bin/easy_install -U setuptools')
-        run('env/bin/easy_install pip')
-        # use shell with pip to get PIP_DOWNLOAD_CACHE environment variable:
-        run('env/bin/pip install -r mirosubs/deploy/dev-requirements.txt')
-        run('ln -s /usr/lib/python2.5/site-packages/PIL env/lib/python2.5/site-packages/')
-
 def set_permissions(home='/home/mirosubs'):
     """
     Make sure the web server has permission to write files into the
@@ -87,4 +78,22 @@ def update():
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
         run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
+        run('touch deploy/{0}.wsgi'.format(env.user))
+
+def user_update(username):
+    env.user = username
+    env.base_dir = '/home/{0}'.format(env.user)
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.join(this_dir, '..')
+    exclude_file = os.path.join(this_dir, 'rsync-exclude.txt')
+    local(("rsync -ave ssh {0} {1}@8planes.com:mirosubs "
+           "--exclude-from '{2}'").format(
+            base_dir, env.user, exclude_file))
+    env.host_string = '8planes.com'
+    with cd('{0}/mirosubs'.format(env.base_dir)):
+        run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
+        run('{0}/env/bin/python manage.py migrate'.format(env.base_dir))
+        env.warn_only = True
+        run("find . -name '*.pyc' -print0 | xargs -0 rm")
+        env.warn_only = False
         run('touch deploy/{0}.wsgi'.format(env.user))
