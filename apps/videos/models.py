@@ -247,6 +247,18 @@ class VersionModel(models.Model):
         elif d == yesterday:
             return 'Yestarday'
         return d
+    
+    def time_change_display(self):
+        if not self.time_change:
+            return '0'
+        else:
+            return '%.2f' % self.time_change
+
+    def text_change_display(self):
+        if not self.text_change:
+            return '0'
+        else:
+            return '%.2f' % self.text_change
 
 class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.

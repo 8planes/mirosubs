@@ -114,8 +114,8 @@
                   <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
               </li>
               <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
-              <li class="table_time">{{ item.time_change }}</li>
-              <li class="table_text">{{ item.text_change }}</li>
+              <li class="table_time">{{ item.time_change_display }}</li>
+              <li class="table_text">{{ item.text_change_display }}</li>
               <li>
                   {% block view_link %}
                     <a href="{% url videos:revision pk=item.pk %}">view</a>
