@@ -29,7 +29,8 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'mirosubs.sqlite3'    # Or path to database file if using sqlite3.
+DATABASE_NAME = os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), 'mirosubs.sqlite3')
 DATABASE_USER = ''                    # Not used with sqlite3.
 DATABASE_PASSWORD = ''                # Not used with sqlite3.
 DATABASE_HOST = ''                    # Set to empty string for localhost. Not used with sqlite3.
@@ -187,7 +188,18 @@ AUTHENTICATION_BACKENDS = (
    'socialauth.auth_backends.FacebookBackend',
 )
 
+# socialauth-related
+OPENID_REDIRECT_NEXT = '/socialauth/openid/done/'
+
+OPENID_SREG = {"required": "nickname, email", "optional":"postcode, country", "policy_url": ""}
+OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "required": True, "alias": "email"},
+             {"type_uri": "fullname", "count": 1 , "required": False, "alias": "fullname"}]
+
+FACEBOOK_API_KEY = ''
+FACEBOOK_API_SECRET = ''
+
 LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/'
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 ACCOUNT_ACTIVATION_DAYS = 9999 # we are using registration only to verify emails

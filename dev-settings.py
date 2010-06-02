@@ -22,18 +22,5 @@ import logging
 SITE_ID = 4
 SITE_NAME = 'mirosubs-dev'
 
-
-# socialauth-related
-OPENID_REDIRECT_NEXT = '/socialauth/openid/done/'
-
-OPENID_SREG = {"requred": "nickname, email", "optional":"postcode, country", "policy_url": ""}
-OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "required": True, "alias": "email"},
-             {"type_uri": "fullname", "count": 1 , "required": False, "alias": "fullname"}]
-
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
-
-FACEBOOK_API_KEY = ''
-FACEBOOK_API_SECRET = ''
-
-LOGIN_REDIRECT_URL = '/'
