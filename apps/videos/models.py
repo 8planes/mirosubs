@@ -205,7 +205,7 @@ class Video(models.Model):
         if VIDEO_SESSION_KEY not in request.session:
             return False
         return self.writelock_session_key == \
-            request.session[VIDEO_SESSSION_KEY] or \
+            request.session[VIDEO_SESSION_KEY] or \
             not self.is_writelocked
 
     def writelock(self, request):
