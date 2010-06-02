@@ -45,3 +45,27 @@
   fields:
     domain: universalsubtitles.org
     name: mirosubs-prod
+
+- model: sites.site
+  pk: 9
+  fields:
+    domain: msholmes.8planes.com
+    name: msholmes
+
+- model: sites.site
+  pk: 10
+  fields:
+    domain: msnick.8planes.com
+    name: msnick
+
+- model: sites.site
+  pk: 11
+  fields:
+    domain: msdean.8planes.com
+    name: msdean
+
+- model: sites.site
+  pk: 12
+  fields:
+    domain: msdennis.8planes.com
+    name: msdennis
