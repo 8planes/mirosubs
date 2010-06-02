@@ -204,7 +204,8 @@ class Video(models.Model):
         """Can I place a writelock on this video for subtitling?"""
         if VIDEO_SESSION_KEY not in request.session:
             return False
-        return self.writelock_session_key == session_key or \
+        return self.writelock_session_key == \
+            request.session[VIDEO_SESSSION_KEY] or \
             not self.is_writelocked
 
     def writelock(self, request):
@@ -338,7 +339,8 @@ class TranslationLanguage(models.Model):
     def can_writelock(self, request):
         if VIDEO_SESSION_KEY not in request.session:
             return False
-        return self.writelock_session_key == session_key or \
+        return self.writelock_session_key == \
+            request.session[VIDEO_SESSION_KEY] or \
             not self.is_writelocked
 
     def writelock(self, request):
