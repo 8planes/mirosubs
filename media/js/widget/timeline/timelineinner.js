@@ -21,12 +21,14 @@ goog.provide('mirosubs.timeline.TimelineInner');
 
 /**
  *
+ * @param {Timeline} timeline The timeline containing this object.
  * @param {number} spacing The space, in seconds, between two
  *     major ticks.
  * @param {mirosubs.timeline.SubtitleSet} subtitleSet
  */
-mirosubs.timeline.TimelineInner = function(spacing, subtitleSet) {
+mirosubs.timeline.TimelineInner = function(timeline, spacing, subtitleSet) {
     goog.ui.Component.call(this);
+    this.timeline_ = timeline;
     this.spacing_ = spacing;
     this.subtitleSet_ = subtitleSet;
     this.pixelsPerSecond_ = mirosubs.timeline.TimeRowUL.PX_PER_TICK / spacing;
@@ -37,7 +39,7 @@ goog.inherits(mirosubs.timeline.TimelineInner, goog.ui.Component);
 mirosubs.timeline.TimelineInner.prototype.createDom = function() {
     mirosubs.timeline.TimelineInner.superClass_.createDom.call(this);
     this.getElement().className = 'mirosubs-timeline-inner';
-    this.timerow_ = new mirosubs.timeline.TimeRow(this.spacing_);
+    this.timerow_ = new mirosubs.timeline.TimeRow(this, this.spacing_);
     this.addChild(this.timerow_, true);
     this.timelineSubs_ = new mirosubs.timeline.TimelineSubs(
         this.subtitleSet_,
@@ -77,4 +79,18 @@ mirosubs.timeline.TimelineInner.prototype.setTime = function(time, offset, maxTi
     this.time_ = time;
     this.getElement().style.left = (newLeft + offset) + 'px';
     this.ensureVisible(time);
+};
+mirosubs.timeline.TimelineInner.prototype.beforeDrag = function(e) {
+    return this.timeline_.beforeDrag(e);
+};
+mirosubs.timeline.TimelineInner.prototype.startDrag = function(e) {
+    this.timerow_.changeCursor(true);
+    this.timeline_.startDrag(e);
+};
+mirosubs.timeline.TimelineInner.prototype.onDrag = function(e) {
+    this.timeline_.onDrag(e);
+};
+mirosubs.timeline.TimelineInner.prototype.endDrag = function(e) {
+    this.timerow_.changeCursor(false);
+    this.timeline_.endDrag(e);
 };
