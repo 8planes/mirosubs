@@ -7,7 +7,7 @@ sys.path.append('/home/msdean/mirosubs')
 sys.path.append('/home/msdean/mirosubs/apps')
 
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings.msdean-settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.msdean-settings'
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
