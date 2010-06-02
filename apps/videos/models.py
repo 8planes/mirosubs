@@ -247,6 +247,18 @@ class VersionModel(models.Model):
         elif d == yesterday:
             return 'Yestarday'
         return d
+    
+    def time_change_display(self):
+        if not self.time_change:
+            return '0'
+        else:
+            return '%.2f' % self.time_change
+
+    def text_change_display(self):
+        if not self.text_change:
+            return '0'
+        else:
+            return '%.2f' % self.text_change
 
 class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.
@@ -263,6 +275,35 @@ class VideoCaptionVersion(VersionModel):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        super(VideoCaptionVersion, self).save(*args, **kwargs)
+        old_version = self.prev_version()
+        new_captions = self.captions()
+        captions_length = len(new_captions)
+
+        if not old_version or not captions_length:
+            #if it's first version set changes to 0
+            self.time_change = 0
+            self.text_change = 0
+        else:
+            old_captions = dict([(item.caption_id, item) for item in old_version.captions()])
+            time_count_changed, text_count_changed = 0, 0
+            #compare captions one by one and count changes in time and text
+            for caption in new_captions:
+                try:
+                    old_caption = old_captions[caption.caption_id]
+                    if not old_caption.caption_text == caption.caption_text:
+                        text_count_changed += 1
+                    if not old_caption.start_time == caption.start_time or \
+                                    not old_caption.end_time == caption.end_time:
+                        time_count_changed += 1
+                except KeyError:
+                    time_count_changed += 1
+                    text_count_changed += 1
+            self.time_change = time_count_changed / 1. / captions_length
+            self.text_change = text_count_changed / 1. / captions_length   
+        super(VideoCaptionVersion, self).save()
     
     def captions(self):
         return self.videocaption_set.order_by('start_time')
@@ -380,6 +421,30 @@ class TranslationVersion(VersionModel):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        super(TranslationVersion, self).save(*args, **kwargs)
+        old_version = self.prev_version()
+        new_captions = self.captions()
+        captions_length = len(new_captions)
+        
+        self.time_change = 0
+        if not old_version or not captions_length:
+            #if it's first version set changes to 0
+            self.text_change = 0
+        else:
+            old_captions = dict([(item.caption_id, item) for item in old_version.captions()])
+            text_count_changed = 0
+            #compare captions one by one and count changes in time and text
+            for caption in new_captions:
+                try:
+                    old_caption = old_captions[caption.caption_id]
+                    if not old_caption.translation_text == caption.translation_text:
+                        text_count_changed += 1
+                except KeyError:
+                    text_count_changed += 1
+            self.text_change = text_count_changed / 1. / captions_length   
+        super(TranslationVersion, self).save()
     
     @property
     def video(self):
@@ -519,6 +584,7 @@ class Action(models.Model):
     
     class Meta:
         ordering = ['-created']
+        get_latest_by = 'created'
     
     def time(self):
         if self.created.date() == date.today():
@@ -536,15 +602,40 @@ class Action(models.Model):
     @classmethod
     def create_translation_handler(cls, sender, instance, created, **kwargs):
         if created:
-            obj = cls(user=instance.user, video=instance.language.video)
-            obj.language = instance.language.language
+            video = instance.language.video
+            user = instance.user
+            language = instance.language.language
+            
+            try:
+                la = cls.objects.latest()
+                if la.user == user and la.video == video and la.language == language:
+                    la.created = instance.datetime_started
+                    la.save()
+                    return
+            except cls.DoesNotExist:
+                pass
+            
+            obj = cls(user=user, video=video)
+            obj.language = language
             obj.created = instance.datetime_started
             obj.save()
     
     @classmethod
     def create_caption_handler(cls, sender, instance, created, **kwargs):
         if created:
-            obj = cls(user=instance.user, video=instance.video)
+            user = instance.user
+            video = instance.video
+
+            try:
+                la = cls.objects.latest()
+                if la.user == user and la.video == video:
+                    la.created = instance.datetime_started
+                    la.save()                    
+                    return
+            except cls.DoesNotExist:
+                pass
+                       
+            obj = cls(user=user, video=video)
             obj.created = instance.datetime_started
             obj.save()            
         
