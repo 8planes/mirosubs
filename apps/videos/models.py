@@ -200,8 +200,10 @@ class Video(models.Model):
         seconds = delta.days * 24 * 60 * 60 + delta.seconds
         return seconds < WRITELOCK_EXPIRATION
 
-    def can_writelock(self, session_key):
+    def can_writelock(self, request):
         """Can I place a writelock on this video for subtitling?"""
+        if VIDEO_SESSION_KEY not in request.session:
+            return False
         return self.writelock_session_key == session_key or \
             not self.is_writelocked
 
@@ -333,7 +335,9 @@ class TranslationLanguage(models.Model):
         seconds = delta.days * 24 * 60 * 60 + delta.seconds
         return seconds < WRITELOCK_EXPIRATION
 
-    def can_writelock(self, session_key):
+    def can_writelock(self, request):
+        if VIDEO_SESSION_KEY not in request.session:
+            return False
         return self.writelock_session_key == session_key or \
             not self.is_writelocked
 

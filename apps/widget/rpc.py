@@ -39,7 +39,7 @@ def start_editing(request, video_id):
         video.owner != None and (request.user.is_anonymous() or 
                                  video.owner.pk != request.user.pk)):
         return { "can_edit": False, "owned_by" : video.owner.username }
-    if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
+    if not video.can_writelock(request):
         return { "can_edit": False, "locked_by" : video.writelock_owner_name }
 
     video.writelock(request)
@@ -86,8 +86,7 @@ def start_translating(request, video_id, language_code, editing=False):
             writelock_session_key='')
         translation_language.save()
     # TODO: note duplication with start_editing. Figure out a way to fix this.
-    if not translation_language.can_writelock(
-        request.session[VIDEO_SESSION_KEY]):
+    if not translation_language.can_writelock(request):
         return { "can_edit": False, 
                  "locked_by" : video.writelock_owner_name }
     translation_language.writelock(request)
@@ -129,7 +128,7 @@ def start_translating_null(request, video_id, language_code):
 
 def update_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)
-    if video.can_writelock(request.session[VIDEO_SESSION_KEY]):
+    if video.can_writelock(request):
         video.writelock(request)
         video.save()
         return { "response" : "ok" }
@@ -139,7 +138,7 @@ def update_video_lock(request, video_id):
 def update_video_translation_lock(request, video_id, language_code):
     translation_language = models.Video.objects.get(
         video_id=video_id).translation_language(language_code)
-    if translation_language.can_writelock(request.session[VIDEO_SESSION_KEY]):
+    if translation_language.can_writelock(request):
         translation_language.writelock(request)
         translation_language.save()
         return { 'response' : 'ok' }
@@ -164,7 +163,7 @@ def save_captions(request, video_id, version_no, deleted, inserted, updated):
     if not request.user.is_authenticated():
         return { "response" : "not_logged_in" }
     video = models.Video.objects.get(video_id=video_id)
-    if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
+    if not video.can_writelock(request):
         return { "response" : "unlockable" }
     video.writelock(request)
     save_captions_impl(request, video, version_no, deleted, inserted, updated)
@@ -183,7 +182,7 @@ def save_translations(request, video_id, language_code, version_no,
         return { "response" : "not_logged_in" }
     translation_language = models.Video.objects.get(
         video_id=video_id).translation_language(language_code)
-    if not translation_language.can_writelock(request.session[VIDEO_SESSION_KEY]):
+    if not translation_language.can_writelock(request):
         return { 'response' : 'unlockable' }
     translation_language.writelock(request)
     save_translations_impl(request, translation_language, 
@@ -200,7 +199,7 @@ def save_translations_null(request, video_id, language_code,
 
 def finished_captions(request, video_id, version_no, deleted, inserted, updated):
     video = models.Video.objects.get(video_id=video_id)
-    if not video.can_writelock(request.session[VIDEO_SESSION_KEY]):
+    if not video.can_writelock(request):
         return { "response" : "unlockable" }
     last_version = save_captions_impl(request, video, version_no, 
                                       deleted, inserted, updated)
@@ -224,7 +223,7 @@ def finished_translations(request, video_id, language_code, version_no,
                           inserted, updated):
     translation_language = models.Video.objects.get(
         video_id=video_id).translation_language(language_code)
-    if not translation_language.can_writelock(request.session[VIDEO_SESSION_KEY]):
+    if not translation_language.can_writelock(request):
         return { 'response' : 'unlockable' }
     last_version = save_translations_impl(request, translation_language,
                                           version_no, inserted, updated)
