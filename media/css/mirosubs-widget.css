@@ -4,11 +4,10 @@
     position: relative;
 }
 
-
 .mirosubs-modal-widget, .mirosubs-modal-widget:active, .mirosubs-modal-widget:hover, a, a:hover, a:active{
 
-outline: none !important;
--moz-outline: none !important;
+outline: none;
+
 }
 
 
@@ -102,7 +101,7 @@ text-shadow:
 -2px -1px 0px red;
 }
 
-.mirosubs-modal-widget-title-close {
+.mirosubs-modal-login-title-close, .mirosubs-modal-widget-title-close {
     background: url("../images/sprite.png") 0 -256px no-repeat;
     position: absolute;
     top: -17px;
@@ -443,8 +442,8 @@ margin: 20px 0 0 0px;
 
 }
 
-.mirosubs-left object, .mirosubs-left embed{
-    width: 400px;
+.mirosubs-left .mirosubs-videoDiv {
+    width: 400px !important;
     height: 350px;
 }
 
@@ -692,7 +691,7 @@ ul.mirosubs-titlesList.sync {
 
 .mirosubs-captionDiv {
     position: absolute;
-    top: 220px !important;
+    top: 235px !important;
     left: 10px;
     width: 360px;
 letter-spacing: .04em;
@@ -708,13 +707,8 @@ text-shadow:
 2px -2px 1px #000,
 -2px -1px 1px #000,
 -1px -3px 1px #000,
--3px -2px 1px #000,
-0px 0px 25px #000,
-0px 0px 35px #000,
-0px 0px 35px #000,
-0px 0px 31px #fff,
-0px 0px 31px #fff,
-0px 0px 31px #fff;
+-3px -2px 1px #000;
+
 font-size: 14px;
     text-align: center;
     color: white;
@@ -809,18 +803,23 @@ margin: 7px 0 0 0;
     width: 60px;
     color: #aaa;
     height: 29px;
-    padding: 0 0px 0 5px !important;
+    padding: 0 10px 0 5px !important;
 }
 
 .mirosubs-timestamp.none {
     color: #aaa;
 }
 
+.mirosubs-timestamp-time {
+float: right;
+}
+
+
 .mirosubs-changeTime {
 width: 31px;
 margin: 0;
 position: absolute;
-right: 0;
+left: 0;
 height: 27px;
 top: 0;
 
@@ -838,8 +837,6 @@ height: 0;
 padding-top: 18px;
 overflow: hidden;
 }
-
-
 
 .mirosubs-changeTime a.mirosubs-up{
 float: right;
@@ -1409,10 +1406,10 @@ text-decoration: none;
 
 .mirosubs-videoControls{
 width: 100%;
-border-bottom: 1px solid;
+border-bottom: 1px solid #000;
 width: 400px;
 height: 30px;
-background: #fff url("../images/gradient.png") 0 1px repeat-x;
+background: #000 url("../images/gradient.png") 0 -20px repeat-x;
 }
 
 
@@ -1420,6 +1417,7 @@ background: #fff url("../images/gradient.png") 0 1px repeat-x;
 .mirosubs-timespan {
 float: left;
 font-size: 11px;
+color: #fff;
 padding: 7px 0 0;
 font-weight: bold;
 }
@@ -1434,13 +1432,12 @@ font-size: 11px;
 
 .mirosubs-playPause {
 float: left;
-border-right: 1px solid;
 padding: 9px 10px 8px 11px;
 margin-right: 8px;
 }
 
 .mirosubs-playPause:hover {
-background: url("../images/gradient.png") 0 1px repeat-x;
+background: url("../images/gradient.png") 0 0px repeat-x;
 cursor: pointer;
 }
 
@@ -1464,7 +1461,6 @@ cursor: pointer;
 height: 30px;
 float: right;
 width: 31px;
-border-left: 1px solid #777;
 position: relative;
 }
 
@@ -1477,7 +1473,7 @@ background: url("../images/play_pause.png") 9px -55px no-repeat;
 }
 
 .mirosubs-volume:hover {
-background: url("../images/gradient.png") 0 1px repeat-x;
+background: url("../images/gradient.png") 0 0px repeat-x;
 cursor: pointer;
 }
 
@@ -1536,7 +1532,7 @@ outline: none !important;
   padding: 7px;
   position: absolute;
   left: -8px;
-  border-top: 1px solid #666;
+  border-top: 1px solid #555;
 outline: none !important;
 -moz-outline: none !important;
   border-right: 1px solid #333;
@@ -1572,11 +1568,11 @@ height: 10px;
 position: relative;
 background: #fff url("../images/gradient.png") 0 -109px repeat-x;
 float: left;
-border: 1px solid #888;
+border: 1px solid #444;
 border-top: 1px solid #111;
 outline: none !important;
 -moz-outline: none !important;
-border-bottom: 1px solid #666;
+border-bottom: 1px solid #ddd;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px; 
 width: 250px;
@@ -1625,17 +1621,19 @@ outline: none !important;
 
 .mirosubs-timeline {
     margin: 0;
-    padding: 0;
+    padding: 0 0 3px;
     width: 400px;
     height: 80px;
     overflow: hidden;
+border-bottom: 1px solid #000;
     position: relative;
-    background: #333;
+    background: #000 url("../images/gradient.png") 0 -47px repeat-x;
+
 }
 
 .mirosubs-timeline .top {
     height: 22px;
-    background: #fefefe url("../images/gradient.png") 0 0px repeat-x;
+    background: #000;
 }
 
 .mirosubs-timeline-inner, .mirosubs-timeline-timerow, 
@@ -1653,23 +1651,19 @@ outline: none !important;
     height: 30px;
 }
 
-.mirosubs-timeline-sub {
-    background-color: #FFDDDD;
-}
-
 .mirosubs-timeline .mirosubs-subpanel div {
     position: absolute;
     top: 3px;
-    height: 24px;
+    height: 2px;
     background-color: #FFDDDD;
 }
 
 .mirosubs-timeline .marker {
     background: url("../images/marker.png") 0 0px no-repeat;
     position: absolute;
-    top: 17px;
+    top: 0px;
     left: 50%;
-    height: 73px;
+    height: 100px;
     width: 13px;
 }
 
@@ -1680,7 +1674,6 @@ outline: none !important;
 }
 
 .mirosubs-timeline ul.mirosubs-timeline-time {
-    border-bottom: 1px solid #ddd;
 }
 
 .mirosubs-timeline ul.mirosubs-timeline-time li {
@@ -1688,24 +1681,64 @@ outline: none !important;
     list-style: none;
     font-size: 10px;
     float: left;
-    width: 50px;
-    padding: 3px 0px 3px 10px;
-    background: url("../images/ticks.gif") 5px bottom no-repeat !important;
+    width: 65px;
+color: #fff;
+    padding: 3px 0px 3px 0px;
+    background: url("../images/ticks.gif") 15px 8px no-repeat !important;
+}
+
+.mirosubs-timeline ul.mirosubs-timeline-time li span{
+   display: block;
+   width: 15px;
+   text-align: center;
 }
 
 .mirosubs-timeline-sub {
-    top: 7px;
-    height: 46px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
-    background: #fefefe url("../images/gradient.png") 0 21px repeat-x;
+   top: 7px;
+   height: 46px;
+   -moz-border-radius: 3px;
+   -webkit-border-radius: 3px;
+   -moz-box-shadow: 0 1px 3px rgba(0,0,0,01);
+   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01);
+   background: #fefefe url("../images/gradient.png") 0 21px repeat-x;
+}
+
+.mirosubs-timeline-sub .mirosubs-subtext {
+   margin: 17px 10px 0 10px;
+   white-space: nowrap;
+   overflow: hidden;
 }
 
 .mirosubs-timeline-sub-unsynced {
-    background: #aaa;
+   background: #777;
+   color: #aaa;
 }
+
+.mirosubs-timeline-sub-selected{
+   background: #46d8ff url("../images/gradient.png") 0 0px repeat-x;
+}
+
+.mirosubs-titlesList-sub-selected{
+   background: #46d8ff url("../images/gradient.png") 0 0px repeat-x;
+   border-bottom: 1px solid #333 !important;
+}
+
+.mirosubs-timeline-sub-rightbump{
+   -moz-border-radius-topright: 0px;
+   -moz-border-radius-bottomright: 0px;
+   -webkit-border-radius-bottom-right: 0px;
+   -webkit-border-radius-top-right: 0px;
+}
+
+.mirosubs-timeline-sub-leftbump{
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    -moz-box-shadow: 1px 1px 3px rgba(0,0,0,01);
+    -webkit-border-radius-bottom-left: 0px;
+    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,01);
+    -webkit-border-radius-top-left: 0px;
+}
+
 
 .mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
     color: #fff;
@@ -1758,139 +1791,104 @@ outline: none !important;
     margin: -7px -3px 0 0;
 }
 
-
-.mirosubs-loginPopup{
-border: 3px solid;
-position: absolute;
-top: 50%;
-left: 50%;
-
-padding: 15px 0;
-margin: -145px 0 0 -250px;
-width: 500px;
-height: 200px;
-background: #fff url("../images/uni-logo.png") center 165px no-repeat;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+.mirosubs-modal-login {
+   border: 3px solid;
+   position: absolute;
+   padding: 15px 0;
+   width: 540px;
+   height: 200px;
+   background: #fff url("../images/uni-logo.png") center 165px no-repeat;
+   -moz-border-radius: 5px;
+   -webkit-border-radius: 5px;
    -moz-box-shadow: 0px 5px 50px rgba(0,0,0,01);
-    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,01);
-z-index: 9999999999;
+   -webkit-box-shadow: 0 3px 5px rgba(0,0,0,01);
 }
 
-.mirosubs-loginPopup h4{
-text-align:center;
-font-size: 16px;
+.mirosubs-modal-login-content h4 {
+   text-align:center;
+   font-size: 16px;
 }
 
-
-
-.mirosubs-loginPopup .mirosubs-small{
-padding-top: 20px;
-clear: both;}
-
-
-.mirosubs-loginPopup p{
-text-align:center;
-font-size: 12px;
-font-style: italic;
-clear: both;
+.mirosubs-modal-login-content .mirosubs-small {
+   padding-top: 20px;
+   clear: both;
 }
 
-.mirosubs-loginPopup a{
-float: left;
-color: #333;
-font-weight:bold;
-text-decoration: none;
-
+.mirosubs-modal-login-content p {
+   text-align:center;
+   font-size: 12px;
+   font-style: italic;
+   clear: both;
 }
 
-
-.mirosubs-loginPopup a.mirosubs-log:hover{
-background: #fff url("../images/gradient.png") right -101px repeat-x;
-    -moz-box-shadow: 0px 0px 0px rgba(0,0,0,01);
-border-top: 1px solid #666;
-border-right: 1px solid #888;
-border-left: 1px solid #888;
-border-bottom: 1px solid #ddd;
+.mirosubs-modal-login-content a {
+   float: left;
+   color: #333;
+   font-weight:bold;
+   text-decoration: none;
 }
 
-.mirosubs-loginPopup a span{
-display: block;
-float:left;
-padding: 10px 17px;
+.mirosubs-modal-login-content a.mirosubs-log:hover {
+   background: #fff url("../images/gradient.png") right -101px repeat-x;
+   -moz-box-shadow: 0px 0px 0px rgba(0,0,0,01);
+   border-top: 1px solid #666;
+   border-right: 1px solid #888;
+   border-left: 1px solid #888;
+   border-bottom: 1px solid #ddd;
 }
 
+.mirosubs-modal-login-content a span {
+   display: block;
+   float:left;
+   padding: 10px 17px;
+}
 
-.mirosubs-loginPopup a.mirosubs-log{
-margin: 0 10px 0 30px;
-border-top: 1px solid #ddd;
-border-right: 1px solid #bbb;
-border-left: 1px solid #bbb;
-border-bottom: 1px solid #888;
-background: #fff url("../images/gradient.png") right 1px repeat-x;
-    -moz-box-shadow: 0px 1px 0px rgba(0,0,0,01);
-    -webkit-box-shadow: 0 3px 3px rgba(0,0,0,01);
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    text-shadow: #fff 1px 1px 1px;
+.mirosubs-modal-login-content a.mirosubs-log {
+   margin: 0 10px 0 30px;
+   border-top: 1px solid #ddd;
+   border-right: 1px solid #bbb;
+   border-left: 1px solid #bbb;
+   border-bottom: 1px solid #888;
+   background: #fff url("../images/gradient.png") right 1px repeat-x;
+   -moz-box-shadow: 0px 1px 0px rgba(0,0,0,01);
+   -webkit-box-shadow: 0 3px 3px rgba(0,0,0,01);
+   -moz-border-radius: 5px;
+   -webkit-border-radius: 5px;
+   text-shadow: #fff 1px 1px 1px;
 }
 
 a.mirosubs-twitter span{
-padding-left: 35px;
-background: url("../images/social_login.png") -120px 0px no-repeat;
-
+   padding-left: 35px;
+   background: url("../images/social_login.png") -120px 0px no-repeat;
 }
-
 
 a.mirosubs-openid span{
-margin-right: 0;
+   margin-right: 0;
 }
 
-.mirosubs-openid{
-height: 0;
-padding-top: 34px;
-overflow: hidden;
-margin-left: 17px;
-width: 115px;
-margin-top: 4px;
-background: url("../images/social_login.png") 0 0px no-repeat !important;
+.mirosubs-openid {
+   height: 0;
+   padding-top: 34px;
+   overflow: hidden;
+   margin-left: 17px;
+   width: 115px;
+   margin-top: 4px;
+   background: url("../images/social_login.png") 0 0px no-repeat !important;
 }
-
 
 .mirosubs-twitter{
-background: url("../images/social_login.png") -120px 0px no-repeat !important;
-margin-top: 4px;
-height: 0;
-padding-top: 34px;
-overflow: hidden;
-width: 99px;
+   background: url("../images/social_login.png") -120px 0px no-repeat !important;
+   margin-top: 4px;
+   height: 0;
+   padding-top: 34px;
+   overflow: hidden;
+   width: 99px;
 }
 
-
-.mirosubs-inline-note{
-margin-left: 180px;
-width: 380px;
-margin-top: -213px;
-position: absolute;
-z-index: 99999999;
-background: #fff;
-padding: 30px;
-font-weight: bold;
-font-size: 23px;
-border: 5px solid red;
-line-height: 1.3em;
+.big_spinner{
+   margin: 20px auto 0;
+   width: 113px;
+   display: block;
 }
-
-
-.mirosubs-inline-note a{
-display: block;
-margin-top: 15px;
-}
-
-
-.mirosubs-langmenuitem-highlight *{
-color: #fff !important;
-}
-
 
 
