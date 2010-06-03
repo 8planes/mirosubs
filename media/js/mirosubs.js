@@ -28,6 +28,8 @@ mirosubs.IMAGE_DIR = "/site_media/images/";
 
 mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
 
+mirosubs.DEBUG = false;
+
 mirosubs.EventType = {
     LOGIN : 'login',
     LOGOUT : 'logout'

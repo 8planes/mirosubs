@@ -117,3 +117,15 @@ def xd_rpc(request, method_name):
         'response_json' : json.dumps(result) }
     return render_to_response('widget/xd_rpc_response.html',
                               widget.add_js_files(params))
+
+def jsonp(request, method_name):
+    callback = request.GET['callback']
+    args = { 'request' : request }
+    for k, v in request.GET.items():
+        if k != 'callback':
+            args[k.encode('ascii')] = json.loads(v)
+    func = getattr(rpc_views, method_name)
+    result = func(**args)
+    return HttpResponse(
+        "{0}({1})".format(callback, json.dumps(result)),
+        "text/javascript")
