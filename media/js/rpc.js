@@ -61,6 +61,9 @@ mirosubs.Rpc.callWithJsonp_ = function(methodName, serializedArgs, opt_callback)
         [mirosubs.Rpc.BASE_URL, "jsonp/", methodName].join(''));
     jsonp.send(serializedArgs,
                function(result) {
+                   if (mirosubs.DEBUG)
+                       mirosubs.Rpc.logger_.info(
+                           [methodName, ' response: ', responseText].join(''));
                    if (opt_callback)
                        opt_callback(result);
                });

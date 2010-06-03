@@ -127,5 +127,5 @@ def jsonp(request, method_name):
     func = getattr(rpc_views, method_name)
     result = func(**args)
     return HttpResponse(
-        "{0}({1})".format(callback, json.dumps(result)),
+        "{0}({1});".format(callback, json.dumps(result)),
         "text/javascript")
