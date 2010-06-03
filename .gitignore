@@ -5,6 +5,7 @@ deploy/src/*
 *.sqlite3
 *calcdeps.js
 *compiled.js
+.DS_Store
 closure-library
 jsunit
 media/profile_images
