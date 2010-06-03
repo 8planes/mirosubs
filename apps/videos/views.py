@@ -231,7 +231,9 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
 @login_required
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)
-    if not version.next_version():
+    if version.video.is_writelocked:
+        request.user.message_set.create(message='Can not rollback now, because someone is editing subtitles.')
+    elif not version.next_version():
         request.user.message_set.create(message='Can not rollback to the last version')
     else:
         request.user.message_set.create(message='Rollback was success')

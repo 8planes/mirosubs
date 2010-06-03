@@ -77,11 +77,17 @@
         {% endwith %}
         
         {% if user.is_authenticated %}
-            <a href="#" class="new_edit">Submit a new edit based on this version</a>
-            {% if first_version.next_version %}
-            <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
-                Roll back to this version
-            </a>
+            {% if video.is_writelocked %}
+                <div class="viewing_old">
+                    Someone is editing subtitles.
+                </div>             
+            {% else%}
+                <a href="#" class="new_edit">Submit a new edit based on this version</a>
+                {% if first_version.next_version %}
+                    <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
+                        Roll back to this version
+                    </a>
+                {% endif %}
             {% endif %}
         {% else %}
             <div class="viewing_old">
@@ -131,12 +137,18 @@
         {% endwith %}
         
         {% if user.is_authenticated %}
-            <a href="#" class="new_edit">Submit a new edit based on this version</a>
-            {% if second_version.next_version %}
-            <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
-                Roll back to this version
-            </a>
-            {% endif %}
+            {% if video.is_writelocked %}
+                <div class="viewing_old">
+                    Someone is editing subtitles.
+                </div>             
+            {% else%}        
+                <a href="#" class="new_edit">Submit a new edit based on this version</a>
+                {% if second_version.next_version %}
+                    <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
+                        Roll back to this version
+                    </a>
+                {% endif %}
+             {% endif %}
         {% else %}
             <div class="viewing_old">
                 Login, please.
