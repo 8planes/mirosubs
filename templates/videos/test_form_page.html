@@ -18,7 +18,7 @@
         <div>
             {{ form.task1.errors }}
             <label for="id_task1">Task 1</label>
-            <span>Try creating subtitles on the following video:</span>
+            <span>Try creating subtitles on the following <a href="#" class="test-video-link">video</a></span>
             <textarea id="task1_id" name="task1" class="task-input" cols="" rows="">how was it? were the instructions clear? what would improve it?</textarea>
         </div>
         <div>
@@ -45,6 +45,12 @@
 </div>
 <script type="text/javascript">
     (function($){
+        var ogg_url = '{% url test-ogg-page %}';
+        var mp4_url = '{% url test-mp4-page %}';
+        function supports_video() {
+            return !!document.createElement('video').canPlayType;
+        }
+        $('.test-video-link').attr('href', supports_video() && ogg_url || mp4_url);
         var init_value = 'how was it? were the instructions clear? what would improve it?';
         $('.task-input').one('click', function(){
             ($(this).val() == init_value) && $(this).val('');
