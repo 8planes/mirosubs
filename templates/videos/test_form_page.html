@@ -1,36 +1,64 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+    <link media="all" rel="stylesheet" href="{{ MEDIA_URL }}css/mirosubs-widget.css" />
+{% endblock %}
+
 {% block main_content %}
-    <form action="." method="post">
-        <p>
+
+<h2>Widget Testing Form</h2>
+
+<div class="left_column">
+    <form action="." method="post" class="div-based-form">
+        <div>
             {{ form.email.errors }}
-            <label for="id_email">Email</label>
+            <label for="id_email">Your Email</label>
             {{ form.email }}
-        </p>
-        <p>
+        </div>
+        <div>
             {{ form.task1.errors }}
             <label for="id_task1">Task 1</label>
-            {{ form.task1 }}
-        </p>
-        <p>
+            <span>Try creating subtitles on the following video:</span>
+            <textarea id="task1_id" name="task1" class="task-input" cols="" rows="">how was it? were the instructions clear? what would improve it?</textarea>
+        </div>
+        <div>
             {{ form.task2.errors }}
             <label for="id_task2">Task 2</label>
-            {{ form.task2 }}
-        </p>
-        <p>
+            <span>Try fixing errors on the video (or just get back in and make an edit)</span>
+            <textarea id="task2_id" name="task2" class="task-input" cols="" rows="">how was it? were the instructions clear? what would improve it?</textarea>
+        </div>
+        <div>
             {{ form.task3.errors }}
             <label for="id_task3">Task 3</label>
-            {{ form.task3 }}
-        </p>
-        <p>
+            <span>Translate the video (fake it if you’re not bilingual!)</span>
+            <textarea id="task3_id" name="task3" class="task-input" cols="" rows="">how was it? were the instructions clear? what would improve it?</textarea>
+        </div>
+        <div class="checkbox">
             {{ form.get_updates.errors }}
-            optional: get updates about Universal Subtitles
             {{ form.get_updates }}
-        </p>
-        <p>
-            <button type="submit">
-                <span>Submit</span>
-            </button>
-        </p>
+            <label>optional: get updates about Universal Subtitles</label>
+        </div>
+        <div>
+            <button><span>Submit!</span></button>
+        </div>
     </form>
+</div>
+<script type="text/javascript">
+    (function($){
+        var init_value = 'how was it? were the instructions clear? what would improve it?';
+        $('.task-input').one('click', function(){
+            ($(this).val() == init_value) && $(this).val('');
+        });
+    })(jQuery);
+</script>
+
+<div class="right_column">
+    <div class="mirosubs-share">
+        <img src="{{ MEDIA_URL }}images/blue_triangle.png" class="mirosubs-blueTriangle" />
+        <h2>Simple Instructions</h2>
+        <p>Clicking the links in the tasks will open a new page. Do your best to accomplish the task at hand. Switch back to this tab at any time during the process to give us feedback.</p>
+        <p>All tasks 2 & 3 are optional (but we recommend trying them all).</p>
+        <p>That’s it!</p>
+    </div>
+</div>
 {% endblock %}
