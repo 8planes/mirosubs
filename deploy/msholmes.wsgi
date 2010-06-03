@@ -7,7 +7,7 @@ sys.path.append('/home/msholmes/mirosubs')
 sys.path.append('/home/msholmes/mirosubs/apps')
 
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'msholmes-settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.msholmes-settings'
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()

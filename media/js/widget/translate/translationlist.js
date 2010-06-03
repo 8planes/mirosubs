@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.translate.TranslationList');
@@ -23,7 +23,7 @@ goog.provide('mirosubs.translate.TranslationList');
  * @param {array<object<string, *>>} subtitles Array of json captions.
  * @param {mirosubs.UnitOfWork} unitOfWork Used to instantiate new EditableTranslations.
  */
-mirosubs.translate.TranslationList = function(subtitles, 
+mirosubs.translate.TranslationList = function(subtitles,
                                               unitOfWork) {
     goog.ui.Component.call(this);
     /**
@@ -44,7 +44,7 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
                             .createDom('ul'));
     var that = this;
     var w;
-    goog.array.forEach(this.subtitles_, 
+    goog.array.forEach(this.subtitles_,
                        function(subtitle) {
                            w = new mirosubs.translate.TranslationWidget(
                                subtitle, that.unitOfWork_);
@@ -62,7 +62,7 @@ mirosubs.translate.TranslationList.prototype.setEnabled = function(enabled) {
 
 /**
  * This class will mutate the array as translations are added.
- * @param {Array.<mirosubs.translate.EditableTranslation>}
+ * @param {Array.<mirosubs.translate.EditableTranslation>} translations
  */
 mirosubs.translate.TranslationList.prototype.setTranslations = function(translations) {
     this.translations_ = translations;

@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.video.YoutubeVideoPlayer');
@@ -26,7 +26,7 @@ goog.provide('mirosubs.video.YoutubeVideoPlayer');
 mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_chromeless) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
-    this.playerAPIID_ = [videoSource.getUUID(), 
+    this.playerAPIID_ = [videoSource.getUUID(),
                          '' + new Date().getTime()].join('');
     this.playerElemID_ = videoSource.getUUID() + "_ytplayer";
     this.eventFunction_ = 'event' + videoSource.getUUID();
@@ -70,16 +70,16 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         if (this.chromeless_)
             baseURL = 'http://www.youtube.com/apiplayer';
         else
-            baseURL = ['http://www.youtube.com/v/', 
+            baseURL = ['http://www.youtube.com/v/',
                        this.videoSource_.getYoutubeVideoID()].join('');
-        var queryString = 
-            ['?enablejsapi=1&version=3&disablekb=1&playerapiid=', 
+        var queryString =
+            ['?enablejsapi=1&version=3&disablekb=1&playerapiid=',
              this.playerAPIID_].join('');
         var width = this.chromeless_ ? "400" : "480";
         var height = this.chromeless_ ? "350" : "360";
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
-            videoDiv.id, width, height, "8", 
+            videoDiv.id, width, height, "8",
             null, null, params, atts);
     }
     this.getHandler().listen(
@@ -104,8 +104,8 @@ mirosubs.video.YoutubeVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
         this.sendTimeUpdateInternal();
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ = 
-    function(playerAPIID) 
+mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
+    function(playerAPIID)
 {
     if (playerAPIID == this.playerAPIID_) {
         this.player_ = goog.dom.$(this.playerElemID_);
@@ -128,14 +128,14 @@ mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newSta
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedLength = function() {
     return this.getDuration() > 0  ? 1 : 0;
-o};
+};
 mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedStart = function(index) {
     var startBytes = this.getStartBytes_();
     return this.getDuration() * startBytes / (startBytes + this.getBytesTotal_());
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedEnd = function(index) {
     var startBytes = this.getStartBytes_();
-    return this.getDuration() * 
+    return this.getDuration() *
         (startBytes + this.player_['getVideoBytesLoaded']()) /
         (startBytes + this.getBytesTotal_());
 };
@@ -181,14 +181,14 @@ mirosubs.video.YoutubeVideoPlayer.prototype.pauseInternal = function() {
 mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime) 
+mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime)
 {
     if (this.player_) {
         this.player_['seekTo'](playheadTime, true);
         this.sendTimeUpdateInternal();
     }
     else
-        this.commands_.push(goog.bind(this.setPlayheadTime, 
+        this.commands_.push(goog.bind(this.setPlayheadTime,
                                       this, playheadTime));
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getPlayerState_ = function() {
