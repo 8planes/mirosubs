@@ -99,7 +99,7 @@
     {% endwith %}
        
     {% if user.is_authenticated %}
-        {% if video.is_writelocked %}
+        {% if is_writelocked %}
             <div class="viewing_old">
                 Someone is editing subtitles.
             </div>             
