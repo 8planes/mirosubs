@@ -223,15 +223,20 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     if cls == TranslationVersion:
         tpl = 'videos/translation_revision.html'
         context['latest_version'] = version.language.translations()
+        context['is_writelocked'] = version.language.is_writelocked
     else:
         context['latest_version'] = version.video.captions()
+        context['is_writelocked'] = version.video.is_writelocked
     return render_to_response(tpl, context,
                               context_instance=RequestContext(request))     
 
 @login_required
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)
-    if not version.next_version():
+    is_writelocked = (cls == VideoCaptionVersion) and version.video.is_writelocked or version.language.is_writelocked
+    if is_writelocked:
+        request.user.message_set.create(message='Can not rollback now, because someone is editing subtitles.')
+    elif not version.next_version():
         request.user.message_set.create(message='Can not rollback to the last version')
     else:
         request.user.message_set.create(message='Rollback was success')
@@ -269,6 +274,7 @@ def diffing(request, first_pk, second_pk):
     context['captions'] = captions
     context['first_version'] = first_version
     context['second_version'] = second_version
+    context['is_writelocked'] = video.is_writelocked
     context['history_link'] = reverse('videos:history', args=[video.video_id])     
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
@@ -298,7 +304,8 @@ def translation_diffing(request, first_pk, second_pk):
     context['captions'] = captions
     context['first_version'] = first_version
     context['second_version'] = second_version
-    context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language]) 
+    context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language])
+    context['is_writelocked'] = language.is_writelocked 
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 

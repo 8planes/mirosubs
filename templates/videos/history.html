@@ -96,6 +96,7 @@
     
     <button class="compare_versions_button"><span>Compare Revisions</span></button>
     
+    {% block table %}
     <ul class="table_head">
       <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
       <li class="table_user">{% ordered_column "user" "User" %}</li>
@@ -117,13 +118,11 @@
               <li class="table_time">{{ item.time_change_display }}</li>
               <li class="table_text">{{ item.text_change_display }}</li>
               <li>
-                  {% block view_link %}
-                    <a href="{% url videos:revision pk=item.pk %}">view</a>
-                  {% endblock %}
+                  <a href="{% url videos:revision pk=item.pk %}">view</a>
               </li>
             </ul>
           </li>    
     {% endfor %}
    </ul> 
-    
+   {% endblock %} 
 {% endblock %}

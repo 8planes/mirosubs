@@ -31,9 +31,6 @@ mirosubs.timeline.Timeline = function(spacing, subtitleSet, videoPlayer) {
     this.spacing_ = spacing;
     this.subtitleSet_ = subtitleSet;
     this.videoPlayer_ = videoPlayer;
-
-    this.openHandStyle_ = goog.style.cursor.getDraggableCursorStyle("../../../images/", true);
-    this.closedHandStyle_ = goog.style.cursor.getDraggingCursorStyle("../../../images/", true);
 };
 goog.inherits(mirosubs.timeline.Timeline, goog.ui.Component);
 mirosubs.timeline.Timeline.prototype.createDom = function() {
@@ -43,17 +40,9 @@ mirosubs.timeline.Timeline.prototype.createDom = function() {
     el.className = 'mirosubs-timeline';
     el.appendChild($d('div', 'top', ' '));
     this.timelineInner_ = new mirosubs.timeline.TimelineInner(
-        this.spacing_, this.subtitleSet_);
+        this, this.spacing_, this.subtitleSet_);
     this.addChild(this.timelineInner_, true);
     el.appendChild($d('div', 'marker'));
-
-    el.style.cursor = this.openHandStyle_;
-
-    // Dragger has a default action that cannot be overridden.  Kind of pointless
-    // to subclass just to override that, so instead the variable is being
-    // overwritten.
-    this.dragger_ = new goog.fx.Dragger(el);
-    this.dragger_.defaultAction = function(x,y) {};
 };
 /**
  * Useful for when times are cleared.
@@ -62,7 +51,7 @@ mirosubs.timeline.Timeline.prototype.reset_ = function() {
     this.removeChild(this.timelineInner_, true);
     this.timelineInner_.dispose();
     this.timelineInner_ = new mirosubs.timeline.TimelineInner(
-        this.spacing_, this.subtitleSet_);
+        this, this.spacing_, this.subtitleSet_);
     this.addChild(this.timelineInner_, true);
 };
 mirosubs.timeline.Timeline.prototype.enterDocument = function() {
@@ -84,23 +73,7 @@ mirosubs.timeline.Timeline.prototype.enterDocument = function() {
         listen(
             this.subtitleSet_,
             mirosubs.timeline.SubtitleSet.CLEAR_TIMES,
-            this.reset_).
-        listen(
-            this.dragger_,
-            goog.fx.Dragger.EventType.BEFOREDRAG,
-            this.beforeDrag_).
-        listen(
-            this.dragger_,
-            goog.fx.Dragger.EventType.START,
-            this.startDrag_).
-        listen(
-            this.dragger_,
-            goog.fx.Dragger.EventType.DRAG,
-            this.onDrag_).
-        listen(
-            this.dragger_,
-            goog.fx.Dragger.EventType.END,
-            this.endDrag_);
+            this.reset_);
     this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
 mirosubs.timeline.Timeline.prototype.timeRowDoubleClick_ = function(e) {
@@ -129,27 +102,25 @@ mirosubs.timeline.Timeline.prototype.getTime_ = function() {
     this.ensureWidth_();
     return this.timelineInner_.getTime();
 };
-mirosubs.timeline.Timeline.prototype.beforeDrag_ = function(e) {
+mirosubs.timeline.Timeline.prototype.beforeDrag = function(e) {
     // Returns false if a timeline subtitle's start or end time is being
     // changed, to keep the timeline from jumping around.
     return !mirosubs.timeline.TimelineSub.isCurrentlyEditing();
 };
-mirosubs.timeline.Timeline.prototype.startDrag_ = function(e) {
+mirosubs.timeline.Timeline.prototype.startDrag = function(e) {
     this.wasPlaying_ = this.videoPlayer_.isPlaying();
     this.videoPlayer_.pause();
     this.oldLeft_ = this.timelineInner_.getLeft();
-    this.getElement().style.cursor = this.closedHandStyle_;
 };
-mirosubs.timeline.Timeline.prototype.onDrag_ = function(e) {
+mirosubs.timeline.Timeline.prototype.onDrag = function(e) {
     this.ensureWidth_();
     this.timelineInner_.setLeft(e.left + this.oldLeft_, this.width_ / 2,
                                 this.videoPlayer_.getDuration());
     this.videoPlayer_.setPlayheadTime(this.timelineInner_.getTime());
 };
-mirosubs.timeline.Timeline.prototype.endDrag_ = function(e) {
+mirosubs.timeline.Timeline.prototype.endDrag = function(e) {
     this.oldLeft_ = null;
     if (this.wasPlaying_) {
         this.videoPlayer_.play();
     }
-    this.getElement().style.cursor = this.openHandStyle_;
 };

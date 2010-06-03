@@ -46,7 +46,8 @@ width: 460px;
 </div>
 
 <div class="right_column">
-
+{% include '_testing_widget.html' %}
+{% comment %}
   <div class="mirosubs-share">
 						<img src="{{ MEDIA_URL }}images/blue_triangle.png" class="mirosubs-blueTriangle" />
 						<h2>Share your subtitles</h2>
@@ -75,7 +76,7 @@ width: 460px;
 		          http://{{ site.domain }}{% url videos:video video_id=video.video_id %}
               </a>
    </div>
-
+{% endcomment %}
 
 </div>
 

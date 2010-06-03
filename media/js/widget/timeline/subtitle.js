@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.timeline.Subtitle');
@@ -46,10 +46,10 @@ mirosubs.timeline.Subtitle.prototype.captionChanged_ = function(e) {
 
 mirosubs.timeline.Subtitle.prototype.updateTimes_ = function() {
     if (this.isLoneUnsynced_()) {
-        var prevSubtitleEndTime = 
+        var prevSubtitleEndTime =
             this.editableCaption_.getPreviousCaption() == null ?
             -1 : this.editableCaption_.getPreviousCaption().getEndTime();
-        this.startTime_ = 
+        this.startTime_ =
             Math.max(prevSubtitleEndTime,
                      this.videoPlayer_.getPlayheadTime()) +
             mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
@@ -68,8 +68,8 @@ mirosubs.timeline.Subtitle.prototype.updateTimes_ = function() {
         }
         if (this.editableCaption_.hasStartTimeOnly()) {
             this.endTime_ = Math.max(
-                this.startTime_ + 
-                    mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH, 
+                this.startTime_ +
+                    mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH,
                 this.videoPlayer_.getPlayheadTime());
             if (this.nextSubtitle_)
                 this.nextSubtitle_.bumpUnsyncedTimes(this.endTime_);
@@ -83,13 +83,13 @@ mirosubs.timeline.Subtitle.prototype.updateTimes_ = function() {
         this.endTime_ = this.editableCaption_.getEndTime();
         if (this.videoEventHandler_ != null) {
             this.videoEventHandler_.dispose();
-            this.videoEventHandler_ == null;
+            this.videoEventHandler_ = null;
         }
-    }    
+    }
 };
 
 mirosubs.timeline.Subtitle.prototype.isLoneUnsynced_ = function() {
-    return this.editableCaption_.getStartTime() == -1 && 
+    return this.editableCaption_.getStartTime() == -1 &&
         (this.editableCaption_.getPreviousCaption() == null ||
          this.editableCaption_.getPreviousCaption().getEndTime() != -1);
 };
@@ -128,7 +128,7 @@ mirosubs.timeline.Subtitle.prototype.videoTimeUpdate_ = function(e) {
 
 mirosubs.timeline.Subtitle.prototype.bumpUnsyncedTimes = function(time) {
     var prevStartTime = this.startTime_;
-    this.startTime_ = time + 
+    this.startTime_ = time +
         mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
     this.endTime_ = this.startTime_ +
         mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;

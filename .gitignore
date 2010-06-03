@@ -8,3 +8,4 @@ deploy/src/*
 closure-library
 jsunit
 media/profile_images
+settings_local.py
