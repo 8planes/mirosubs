@@ -47,6 +47,7 @@ urlpatterns = patterns(
         kwargs={'next': '/widget/close_window/'}),
     (r'^widget/rpc/xd/(\w+)$', 'widget.views.xd_rpc'),
     (r'^widget/rpc/xhr/(\w+)$', 'widget.views.rpc'),
+    (r'^widget/rpc/jsonp/(\w+)$', 'widget.views.jsonp'),
     (r'^widget/login/$', 'django.contrib.auth.views.login'),
     (r'^widget/close_window/$', 
      'django.views.generic.simple.direct_to_template', 
@@ -70,7 +71,11 @@ urlpatterns = patterns(
 		(r'^revision2$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'revision2.html'}),
 		(r'^revision-history$',  'django.views.generic.simple.direct_to_template', 
-     {'template': 'revision-history.html'})
+     {'template': 'revision-history.html'}),
+        (r'^test-ogg$',  'django.views.generic.simple.direct_to_template', 
+     {'template': 'alpha-test01-ogg.htm'}, 'test-ogg-page'),   
+        (r'^test-mp4$',  'django.views.generic.simple.direct_to_template', 
+     {'template': 'alpha-test01-mp4.htm'}, 'test-mp4-page'),        
 )
 
 if settings.DEBUG:

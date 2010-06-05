@@ -1,5 +1,7 @@
 {% extends "videos/history.html" %}
 
+{% load paginator %}
+
 {% block diffing_link %}{% url videos:translation_diffing 11111 22222 %}{% endblock %}
 
 {% block lang_display %}
@@ -16,6 +18,30 @@
      </p>             
 {% endblock %}
 
-{% block view_link %}
-    <a href="{% url videos:translation_revision pk=item.pk %}">view</a>
+{% block table %}
+    <ul class="table_head">
+      <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
+      <li class="table_user">{% ordered_column "user" "User" %}</li>
+      <li class="table_note">{% ordered_column "note" "Note" %}</li>
+      <li class="table_time">{% ordered_column "time" "Time" %}</li>
+    </ul>
+    
+    
+    <ul class="table_body"> 
+    {% for item in revisions %}
+          <li>
+            <ul>
+              <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }}</li>
+              <li class="table_user">
+                  <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+              </li>
+              <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
+              <li class="table_time">{{ item.time_change_display }}</li>
+              <li class="table_text">
+                  <a href="{% url videos:translation_revision pk=item.pk %}">view</a>
+              </li>
+            </ul>
+          </li>    
+    {% endfor %}
+    </ul> 
 {% endblock %}

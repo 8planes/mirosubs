@@ -107,6 +107,7 @@ mirosubs.EmbeddableWidget.setConstants_ = function(identifier) {
     var baseURL = identifier["base_url"];
     mirosubs.Rpc.BASE_URL = baseURL + '/widget/rpc/';
     mirosubs.BASE_URL = baseURL;
+    mirosubs.DEBUG = identifier["debug_js"];
     mirosubs.Clippy.SWF_URL = 
         [baseURL, '/site_media/swf/clippy.swf'].join('');
     mirosubs.subtitle.MSServerModel.EMBED_JS_URL = baseURL + '/embed_widget.js';

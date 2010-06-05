@@ -57,11 +57,10 @@ mirosubs.subtitle.EditDialog.prototype.captionReached_ = function(event) {
 };
 mirosubs.subtitle.EditDialog.prototype.createDom = function() {
     mirosubs.subtitle.EditDialog.superClass_.createDom.call(this);
-    this.state_ = mirosubs.subtitle.EditDialog.State_.EDIT;
+    this.setState_(mirosubs.subtitle.EditDialog.State_.EDIT);
 };
 mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
     mirosubs.subtitle.EditDialog.superClass_.enterDocument.call(this);
-    this.setState_(this.state_);
     this.getHandler().
         listen(
             document,
@@ -106,7 +105,6 @@ mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
                 1, this.timelineSubtitleSet_,
                 this.getVideoPlayerInternal()), true);
     }
-
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
         videoPlayer.setPlayheadTime(0);

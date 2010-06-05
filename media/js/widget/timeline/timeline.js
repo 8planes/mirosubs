@@ -74,7 +74,7 @@ mirosubs.timeline.Timeline.prototype.enterDocument = function() {
             this.subtitleSet_,
             mirosubs.timeline.SubtitleSet.CLEAR_TIMES,
             this.reset_);
-    this.setTime_(this.videoPlayer_.getPlayheadTime());
+    this.initTime_();
 };
 mirosubs.timeline.Timeline.prototype.timeRowDoubleClick_ = function(e) {
     this.videoPlayer_.setPlayheadTime(e.time);
@@ -88,6 +88,13 @@ mirosubs.timeline.Timeline.prototype.timelineSubEdit_ = function(e) {
 mirosubs.timeline.Timeline.prototype.videoTimeUpdate_ = function(e) {
     this.setTime_(this.videoPlayer_.getPlayheadTime());
 };
+mirosubs.timeline.Timeline.prototype.initTime_ = function() {
+    this.ensureWidth_();
+    if (this.width_)
+        this.videoTimeUpdate_();
+    else
+        goog.Timer.callOnce(goog.bind(this.initTime_, this));
+};
 mirosubs.timeline.Timeline.prototype.ensureWidth_ = function() {
     if (!this.width_) {
         var size = goog.style.getSize(this.getElement());
@@ -96,7 +103,9 @@ mirosubs.timeline.Timeline.prototype.ensureWidth_ = function() {
 };
 mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {
     this.ensureWidth_();
-    this.timelineInner_.setTime(time, this.width_ / 2, this.videoPlayer_.getDuration());
+    this.timelineInner_.setTime(
+        time, this.width_ / 2, 
+        this.videoPlayer_.getDuration());
 };
 mirosubs.timeline.Timeline.prototype.getTime_ = function() {
     this.ensureWidth_();
