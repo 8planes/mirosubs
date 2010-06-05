@@ -83,6 +83,19 @@ function testRewind() {
     assertNull(MS_dispatchedCaptions[1]);
 }
 
+function testRewind2() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    sendEvents(0.3);
+    sendEvents(1.3);
+    sendEvents(2.3);
+    assertEquals(2, MS_dispatchedCaptions.length);
+    sendEvents(1.3);
+    assertEquals(3, MS_dispatchedCaptions.length);
+    sendEvents(0.3);
+    assertEquals(4, MS_dispatchedCaptions.length);
+    assertNull(MS_dispatchedCaptions[3]);
+}
+
 function testProgressToNextCaptionAdjacent() {
     setUpForInitialCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2)]);
     sendEvents(0.3);
