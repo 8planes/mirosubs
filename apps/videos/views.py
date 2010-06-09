@@ -164,7 +164,8 @@ def history(request, video_id):
     context = widget.js_context(request, video, False, None, False, None, 
                                 'autosub' in request.GET)
 
-    qs = VideoCaptionVersion.objects.filter(video=video)
+    qs = VideoCaptionVersion.objects.filter(video=video)    \
+        .exclude(time_change=0, text_change=0)
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
         'date': 'datetime_started', 
@@ -190,7 +191,8 @@ def translation_history(request, video_id, lang):
     context = widget.js_context(request, video, False, None, False, None, 
                                 'autosub' in request.GET)
    
-    qs = TranslationVersion.objects.filter(language=language)
+    qs = TranslationVersion.objects.filter(language=language) \
+        .exclude(time_change=0, text_change=0)
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
         'date': 'datetime_started', 
