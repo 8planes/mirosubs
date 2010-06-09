@@ -48,6 +48,7 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.currentSubtitlePanel_ = null;
     this.rightPanelListener_ = new goog.events.EventHandler(this);
     this.doneButtonEnabled_ = true;
+    this.addingTranslations_ = false;
 };
 goog.inherits(mirosubs.subtitle.Dialog, mirosubs.Dialog);
 
@@ -131,7 +132,7 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     this.getTimelinePanelInternal().removeChildren(true);
     this.getCaptioningAreaInternal().removeChildren(true);
     var bottomContainer = this.getBottomPanelContainerInternal();
-    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel();
+    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel(this);
     bottomContainer.addChild(bottomFinishedPanel, true);
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
@@ -245,4 +246,11 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
     this.rightPanelListener_.dispose();
     this.captionSet_.dispose();
+};
+mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
+    this.addingTranslations_ = true;
+    this.setVisible(false);
+};
+mirosubs.subtitle.Dialog.prototype.isAddingTranslations = function() {
+    return this.addingTranslations_;
 };
