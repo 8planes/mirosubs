@@ -31,6 +31,7 @@ from django.conf import settings
 import simplejson as json
 from django.utils.encoding import DjangoUnicodeDecodeError
 import feedparser
+from videos.utils import get_pager
 
 def create(request):
     if request.method == 'POST':
@@ -164,7 +165,7 @@ def history(request, video_id):
     context = widget.js_context(request, video, False, None, False, None, 
                                 'autosub' in request.GET)
 
-    qs = VideoCaptionVersion.objects.filter(video=video)    \
+    qs = VideoCaptionVersion.objects.filter(video=video)   \
         .exclude(time_change=0, text_change=0)
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
@@ -181,9 +182,13 @@ def history(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
-    context['revisions'] = qs  
-    return render_to_response('videos/history.html', context,
-                              context_instance=RequestContext(request))
+
+    return object_list(request, queryset=qs, allow_empty=True,
+                       paginate_by=settings.REVISIONS_ONPAGE, 
+                       page=request.GET.get('page', 1),
+                       template_name='videos/history.html',
+                       template_object_name='revision',
+                       extra_context=context)      
 
 def translation_history(request, video_id, lang):
     video = get_object_or_404(Video, video_id=video_id)
@@ -193,6 +198,7 @@ def translation_history(request, video_id, lang):
    
     qs = TranslationVersion.objects.filter(language=language) \
         .exclude(time_change=0, text_change=0)
+    print qs
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
         'date': 'datetime_started', 
@@ -205,13 +211,17 @@ def translation_history(request, video_id, lang):
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
         context['ordering'], context['order_type'] = ordering, order_type 
     
-    context['revisions'] = qs
     context['video'] = video
     context['language'] = language
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
-    return render_to_response('videos/translation_history.html', context,
-                              context_instance=RequestContext(request))    
+    
+    return object_list(request, queryset=qs, allow_empty=True,
+                       paginate_by=settings.REVISIONS_ONPAGE, 
+                       page=request.GET.get('page', 1),
+                       template_name='videos/translation_history.html',
+                       template_object_name='revision',
+                       extra_context=context) 
 
 def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     version = get_object_or_404(cls, pk=pk)

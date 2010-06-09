@@ -28,7 +28,7 @@
     
     
     <ul class="table_body"> 
-    {% for item in revisions %}
+    {% for item in revision_list %}
           <li>
             <ul>
               <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }}</li>
