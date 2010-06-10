@@ -245,13 +245,15 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
 @login_required
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)
-    is_writelocked = (cls == VideoCaptionVersion) and version.video.is_writelocked or version.language.is_writelocked
+    user = request.user
+    print cls == VideoCaptionVersion
+    is_writelocked = version.video.is_writelocked if (cls == VideoCaptionVersion) else version.language.is_writelocked
     if is_writelocked:
-        request.user.message_set.create(message='Can not rollback now, because someone is editing subtitles.')
+        user.message_set.create(message='Can not rollback now, because someone is editing subtitles.')
     elif not version.next_version():
-        request.user.message_set.create(message='Can not rollback to the last version')
+        user.message_set.create(message='Can not rollback to the last version')
     else:
-        request.user.message_set.create(message='Rollback was success')
+        user.message_set.create(message='Rollback was success')
         version = version.rollback(request.user)
     url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
     return redirect('videos:%s' % url_name, pk=version.pk)

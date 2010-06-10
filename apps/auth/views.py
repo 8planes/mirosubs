@@ -56,6 +56,7 @@ def login_post(request):
 # Helpers
 
 def render_login(request, user_creation_form, login_form, redirect_to):
+    redirect_to = redirect_to or '/'
     return render_to_response(
         'auth/login.html', {
             'creation_form': user_creation_form,

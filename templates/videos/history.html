@@ -112,7 +112,7 @@
                 <ul>
                   <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }}</li>
                   <li class="table_user">
-                      <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+                      <a href="{% url profiles:profile item.user_id %}">{{ item.user.username }}</a>
                   </li>
                   <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
                   <li class="table_time">{{ item.time_change_display }}</li>
