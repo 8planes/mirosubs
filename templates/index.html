@@ -58,10 +58,44 @@
 
 <div class="get_updates">
 	<p class="update_text">Get updates and find out first when we launch</p>
-	<form>
-		<p><input type="text" /></p>
-		<button><span>Get Updates!</span></button>
+	<form method="post" action="http://pcf8.pculture.org/interspire/form.php?form=3" id="frmSS3" onsubmit="return CheckForm3(this);">
+		<p><input type="text" name="email" /></p>
+		<input type="hidden" name="format" value="h" />
+		<button type="submit" /><span>Get Updates!</span></button>
 	</form>
+
+	<script type="text/javascript">
+	// <![CDATA[
+
+				function CheckMultiple1(frm, name) {
+					for (var i=0; i < frm.length; i++)
+					{
+						fldObj = frm.elements[i];
+						fldId = fldObj.id;
+						if (fldId) {
+							var fieldnamecheck=fldObj.id.indexOf(name);
+							if (fieldnamecheck != -1) {
+								if (fldObj.checked) {
+									return true;
+								}
+							}
+						}
+					}
+					return false;
+				}
+			function CheckForm1(f) {
+				var email_re = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+				if (!email_re.test(f.email.value)) {
+					alert("Please enter your email address.");
+					f.email.focus();
+					return false;
+				}
+		
+					return true;
+				}
+		
+	// ]]>
+	</script>
 </div>
 
 <div class="right_column">	
@@ -113,7 +147,20 @@
 
 <div class="clear">&nbsp;</div>
 
-{% include '_testing_widget.html' %}
+  <div class="mirosubs-share">
+						<h2>We&#8217;d like help testing our subtitling widget</h2>
+						
+						<p>Just launch our feedback form and try captioning a video</p>
+
+<button><span>Test the Widget</span></button>
+
+
+<p class="warning">Warning: These videos should not be embeded--there is a good possibility they will break at some point!</p>
+
+<p class="warning">Warning #2: These subtitles are non-permanent and should not be relied on -- someone could change them. 
+
+This alpha site is for purely testing purposes.</p>
+   </div>
 
 </div>
 
