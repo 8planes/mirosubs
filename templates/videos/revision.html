@@ -98,24 +98,13 @@
         </script>
     {% endwith %}
        
-    {% if user.is_authenticated %}
-        {% if is_writelocked %}
-            <div class="viewing_old">
-                Someone is editing subtitles.
-            </div>             
-        {% else%}       
-            <a href="#" class="new_edit">Submit a new edit based on this version</a>
-            {% if next_version %}
-            <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
-                Roll back to this version
-            </a>
-            {% endif %}
-        {% endif %}
-    {% else %}
-        <div class="viewing_old">
-            Login, please.
-        </div>    
+    <a href="#" class="new_edit">Submit a new edit based on this version</a>
+    {% if next_version %}
+    <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
+        Roll back to this version
+    </a>
     {% endif %}
+    
     <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}" class="return_history">&lt;&lt; Return to revision history</a>
     
     <ul class="revision_list">

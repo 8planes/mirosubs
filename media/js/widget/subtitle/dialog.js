@@ -145,7 +145,8 @@ mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
         event.preventDefault();
     }
     if (event.keyCode == goog.events.KeyCodes.SPACE &&
-        (this.state_ == s.SYNC || this.state_ == s.REVIEW)) {
+        (this.state_ == s.SYNC || this.state_ == s.REVIEW) &&
+        !this.currentSubtitlePanel_.currentlyEditingSubtitle()) {
         this.togglePause_();
         event.preventDefault();
     }

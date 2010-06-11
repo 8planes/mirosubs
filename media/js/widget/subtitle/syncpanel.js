@@ -114,7 +114,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
 {
     if (event.keyCode == goog.events.KeyCodes.DOWN) {
         if (event.keyEventType == goog.events.EventType.MOUSEDOWN &&
-            !this.currentlyEditingSubtitle_())
+            !this.currentlyEditingSubtitle())
             this.downPressed_();
         else if (event.keyEventType == goog.events.EventType.MOUSEUP &&
                 this.downHeld_)
@@ -123,7 +123,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.DOWN &&
-        !this.currentlyEditingSubtitle_()) {
+        !this.currentlyEditingSubtitle()) {
         event.preventDefault();
         this.downPressed_();
     }
@@ -185,7 +185,7 @@ mirosubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
         this.videoPlayer_.setPlayheadTime(0);
     }
 };
-mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
+mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(event) {
