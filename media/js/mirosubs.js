@@ -133,6 +133,14 @@ mirosubs.formatTime = function(time, opt_excludeMs) {
     return timeString;
 };
 
+/**
+ * Function which checks whether we are embedded in a non-PCF domain.
+ */
+mirosubs.isEmbeddedInDifferentDomain = function() {
+    return mirosubs.BASE_URL.substr(0, 1) != '/' &&
+        !goog.Uri.haveSameDomain(mirosubs.BASE_URL, window.location.href);
+};
+
 mirosubs.LoginEvent = function(username) {
     this.type = mirosubs.EventType.LOGIN;
     this.username = username;
