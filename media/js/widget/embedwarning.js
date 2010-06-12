@@ -68,9 +68,11 @@ mirosubs.EmbedWarning.prototype.showWarning = function() {
         // if the warning has already been cleared and the cookie exists,
         // just go to the callback directly
         this.callback_();
+        return false;
     }
     else {
         this.setVisible(true);
+        return true;
     }
 };
 mirosubs.EmbedWarning.prototype.isWarningCleared_ = function() {

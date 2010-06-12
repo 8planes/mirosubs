@@ -116,14 +116,19 @@ mirosubs.MainMenu.prototype.showMenu = function(target, x, y) {
 
     if (mirosubs.isEmbeddedInDifferentDomain()) {
         this.warning_ = new mirosubs.EmbedWarning( goog.bind(this.showMenuInternal_, this, target, x, y), x, y );
-        this.warning_.showWarning();
-        var that = this;
-        goog.events.listenOnce(
-            this.warning_,
-            goog.ui.Dialog.EventType.AFTER_HIDE,
-            function(event) {
-                that.warning_ = null;
-            });
+        if (this.warning_.showWarning()) {
+            var that = this;
+            goog.events.listenOnce(
+                this.warning_,
+                goog.ui.Dialog.EventType.AFTER_HIDE,
+                function(event) {
+                    that.warning_ = null;
+                });
+        }
+        else {
+            this.warning_.dispose();
+            this.warning_ = null;
+        }
     }
     else {
         this.showMenuInternal_(target, x, y);
