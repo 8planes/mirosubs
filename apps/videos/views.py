@@ -80,6 +80,7 @@ def video(request, video_id):
     context = widget.add_onsite_js_files({})
     context['video'] = video
     context['site'] = Site.objects.get_current()
+    context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
