@@ -92,7 +92,7 @@
     
     <div class="clear">&nbsp;</div>
     
-    <h2>Recent Revisions <a class="whats_this" href="#">(What's This?)</a></h2>
+    <h2 class="floatleft margin-top">Recent Revisions <a class="whats_this" href="#">(What's This?)</a></h2>
     
     <button class="compare_versions_button"><span>Compare Revisions</span></button>
     
@@ -110,16 +110,14 @@
     {% for item in revisions %}
           <li>
             <ul>
-              <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }}</li>
+              <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }} <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a></li>
               <li class="table_user">
                   <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
               </li>
               <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
               <li class="table_time">{{ item.time_change_display }}</li>
               <li class="table_text">{{ item.text_change_display }}</li>
-              <li>
-                  <a href="{% url videos:revision pk=item.pk %}">view</a>
-              </li>
+
             </ul>
           </li>    
     {% endfor %}
