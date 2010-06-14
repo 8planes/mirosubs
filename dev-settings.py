@@ -18,6 +18,7 @@
 
 from settings import *
 import logging
+from django.contrib.sites.models import Site
 
 SITE_ID = 4
 SITE_NAME = 'mirosubs-dev'
@@ -29,3 +30,8 @@ try:
     from settings_local import *
 except ImportError:
     pass
+
+MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)
+
+# Uncomment following line when you want to work with compiled JS.
+# JS_USE_COMPILED = True

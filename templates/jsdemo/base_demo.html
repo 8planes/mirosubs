@@ -2,15 +2,10 @@
 <html>
   <head>
     <link href="/site_media/css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="/site_media/js/closure-library/closure/goog/base.js"></script>
-    <script type="text/javascript" src="/site_media/js/closure-dependencies.js"></script>
-    <script type="text/javascript" src="/site_media/js/swfobject.js"></script>
+    {% include "widget/_js_onsite_dependencies.html" %}
     <script>
       goog.require('goog.debug.DivConsole');
     </script>
-{% for dep in js_dependencies %}
-    <script type="text/javascript" src="{{dep|safe}}"></script>
-{% endfor %}
   </head>
   <body>
     {% block body %}{% endblock %}

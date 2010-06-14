@@ -45,27 +45,22 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls) {
 goog.inherits(mirosubs.video.Html5VideoPlayer, 
               mirosubs.video.AbstractVideoPlayer);
 
-mirosubs.video.Html5VideoPlayer.WIDTH = 400;
-mirosubs.video.Html5VideoPlayer.HEIGHT = 300;
-
 mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
     mirosubs.video.Html5VideoPlayer.superClass_.createDom.call(this);
     this.getElement().style.height = mirosubs.video.Html5VideoPlayer.HEIGHT + 'px';
-    this.addVideoElement_(this.getElement(), true);
+    this.addVideoElement_(this.getElement());
 };
 mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(el) {
     mirosubs.video.Html5VideoPlayer.superClass_.decorateInternal.call(this, el);
-    this.addVideoElement_(el, false);
+    this.addVideoElement_(el);
 };
-mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el, hardCodeWidth) {
+mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var testVideo = $d('video');
     if (typeof(testVideo['canPlayType']) != 'undefined') {
         var params = { 'autobuffer': 'true' };
         if (this.includeControls_)
             params['controls'] = 'true';
-        if (hardCodeWidth)
-            params['width'] = mirosubs.video.Html5VideoPlayer.WIDTH;
         el.appendChild(
             this.videoElem_ = 
                 $d('video', params,

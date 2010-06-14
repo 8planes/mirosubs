@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 {% block scripts %}
-{% if not js_use_compiled %}
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
-{% endif %}
+{% include "widget/_js_onsite_dependencies.html" %}
 {% endblock %}
 {% block main_content %}
     <div id="videoDiv"></div>

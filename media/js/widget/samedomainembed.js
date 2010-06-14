@@ -16,31 +16,24 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.Html5VideoSource');
+goog.provide('mirosubs.widget.SameDomainEmbed');
 
-mirosubs.video.Html5VideoSource = function(videoURL) {
-    this.videoURL_ = videoURL;
+mirosubs.widget.SameDomainEmbed = {};
+
+mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
+    if (widgetConfig['debug_js']) {
+        var debugWindow = new goog.debug.FancyWindow('main');
+        debugWindow.setEnabled(true);
+        debugWindow.init(); 
+        mirosubs.DEBUG = true;
+    }
+    var widget = new mirosubs.widget.Widget(widgetConfig);
+    widget.decorate(widgetDiv);
 };
 
-mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
-    return this.createPlayer_(false);
-};
-
-mirosubs.video.Html5VideoSource.prototype.createControlledPlayer = 
-    function() 
-{
-    return new mirosubs.video.ControlledVideoPlayer(
-        this.createPlayer_(true));
-};
-
-mirosubs.video.Html5VideoSource.prototype.createPlayer_ = 
-    function(forSubDialog) 
-{
-    return new mirosubs.video.Html5VideoPlayer(
-        new mirosubs.video.Html5VideoSource(this.videoURL_), 
-        forSubDialog);
-};
-
-mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
-    return this.videoURL_;
-};
+// see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
+window["mirosubs"] = mirosubs;
+mirosubs["widget"] = mirosubs.widget;
+mirosubs.widget["SameDomainEmbed"] = mirosubs.widget.SameDomainEmbed;
+mirosubs.widget.SameDomainEmbed["embed"] = 
+    mirosubs.widget.SameDomainEmbed.embed;
