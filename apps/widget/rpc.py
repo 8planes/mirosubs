@@ -55,7 +55,7 @@ def show_widget(request, video_url, null_widget, autoplay, autoplay_language):
     video.save()
 
     return_value = {
-            'video_id' : video.id,
+            'video_id' : video.video_id,
             'writelock_expiration' : models.WRITELOCK_EXPIRATION 
         }
     # video_tab corresponds to mirosubs.widget.VideoTab.InitialState in
