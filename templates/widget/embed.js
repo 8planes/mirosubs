@@ -61,10 +61,10 @@
     var widgetConfig = (new Function('return ' + 
                                script.innerHTML.replace(/\n|\r/g, '')))();
 
-    var $c = document.createElement;
-
+    var $c = function(tag) { return document.createElement(tag); };
     var containingElement = $c('div');
     var styleElement = $c('style');
+    styleElement.innerHTML = innerStyle;
     containingElement.appendChild(styleElement);
 
     var widgetDiv = $c('div');

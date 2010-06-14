@@ -31,7 +31,15 @@ def embed(request):
     widget.add_js_files(context)
     return render_to_response('widget/embed.js',
                               context_instance = context,
-                              mimetype='text/javascript');
+                              mimetype='text/javascript')
+
+def widget_demo(request):
+    context = RequestContext(request)
+    context['embed_js_url'] = \
+        "http://{0}/embed.js".format(Site.objects.get_current().domain)
+    context['video_url'] = request.GET['video_url']
+    return render_to_response('widget/widget_demo.html',
+                              context_instance = context)
 
 def srt(request):
     video = models.Video.objects.get(video_id=request.GET['video_id'])

@@ -39,20 +39,23 @@ mirosubs.widget.VideoTab.InitialState = {
     CHOOSE_LANGUAGE: 3    
 };
 
-/**
- * Decorate an HTML structure already in the document. Expects:
- * <pre>
- * - div
- *   - a
- *     - img
- *     - span
- * </pre>
- */
-mirosubs.widget.VideoTab.prototype.decorateInternal = function(el) {
-    mirosubs.widget.VideoTab.superClass_.decorateInternal.call(this, el);
-    this.anchorElem_ = el.getElementsByTagName('a')[0];
-    this.imageElem_ = this.anchorElem_.getElementsByTagName('img')[0];
-    this.spanElem_ = this.anchorElem_.getElementsByTagName('span')[0];
+mirosubs.widget.VideoTab.Messages = {
+    SUBTITLE_ME: 'Subtitle me',
+    CONTINUE : 'Continue subtitling',
+    IN_PROGRESS : 'Subtitling in progress/',
+    CHOOSE_LANGUAGE : 'Choose language'
+};
+
+mirosubs.widget.VideoTab.prototype.createDom = function() {
+    mirosubs.widget.VideoTab.superClass_.createDom.call(this);
+    this.getElement().className = 'mirosubs-videoTab';
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.imageElem_ = $d('img', {'alt': 'small logo'});
+    this.spanElem_ = $d('span', 'mirosubs-tabText');
+    this.anchorElem_ = 
+        $d('a', {'className': 'mirosubs-subtitleMeLink', 'href':'#'},
+           this.imageElem_, this.spanElem_);
+    this.getElement().appendChild(this.anchorElem_);
 };
 mirosubs.widget.VideoTab.prototype.showLoading = function(loading) {
     this.imageElem_.src = loading ? this.spinnerGifURL_ : this.logoURL_;

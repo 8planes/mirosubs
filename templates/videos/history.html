@@ -25,16 +25,9 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ block.super }}
-    {% if not js_use_compiled %}
-      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
-      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
-      <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
-    {% endif %}
-    {% for dep in js_dependencies %}
-      <script type="text/javascript" src="{{dep|safe}}"></script>
-    {% endfor %}
-    <script type="text/javascript">
+  {{ block.super }}
+  {% include "widget/_js_dependencies.html" %}
+  <script type="text/javascript">
         //create url template
         var DIFFING_URL = function(){
             var url = '{% block diffing_link %}{% url videos:diffing 11111 22222 %}{% endblock %}';

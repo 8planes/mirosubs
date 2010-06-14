@@ -43,6 +43,7 @@ urlpatterns = patterns(
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^embed.js$', 'widget.views.embed'),
+    (r'^widget_demo/$', 'widget.views.widget_demo'),
     url(r'^widget/twitter_login/', 'socialauth.views.twitter_login', 
         kwargs={'next': '/widget/close_window/'}),
     (r'^widget/rpc/xd/(\w+)$', 'widget.views.xd_rpc'),

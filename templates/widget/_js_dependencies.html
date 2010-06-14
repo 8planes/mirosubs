@@ -1,0 +1,6 @@
+{% if not js_use_compiled %}
+   {% include "widget/_js_base_dependencies.html" %}
+{% endif %}
+{% for dep in js_dependencies %}
+  <script type="text/javascript" src="{{dep|safe}}"></script>
+{% endfor %}

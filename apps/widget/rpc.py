@@ -21,7 +21,7 @@ from videos import models
 from datetime import datetime
 from uuid import uuid4
 import re
-
+import simplejson as json
 import widget
 from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
@@ -77,9 +77,9 @@ def show_widget(request, video_url, null_widget, autoplay, autoplay_language):
             video_tab = 3
     else:
         translation_language_codes = video.translation_language_codes()
-        if video.caption_state == video_models.NO_CAPTIONS:
+        if video.caption_state == models.NO_CAPTIONS:
             video_tab = 0
-        elif video.caption_state == video_models.CAPTIONS_IN_PROGRESS:
+        elif video.caption_state == models.CAPTIONS_IN_PROGRESS:
             if request.user.is_authenticated and request.user == video.owner:
                 video_tab = 1
             else:

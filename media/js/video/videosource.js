@@ -33,12 +33,12 @@ mirosubs.video.VideoSource = function() {};
  * Creates a player for the page, not the widget.
  * @return {mirosubs.video.AbstractVideoPlayer} 
  */
-mirosubs.prototype.createPlayer = function() {};
+mirosubs.video.VideoSource.prototype.createPlayer = function() {};
 /**
  * Creates a player for the widget.
  * @return {mirosubs.video.ControlledVideoPlayer}
  */
-mirosubs.prototype.createControlledPlayer = function() {};
+mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
 
 /**
  *

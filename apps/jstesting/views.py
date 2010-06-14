@@ -29,5 +29,7 @@ def js_dependencies():
     return [relative_path(js_file) for js_file in js_files]
 
 def jstest(request, file_name):
-    return render_to_response('jstesting/%s.js' % file_name,
-                              {'js_dependencies' : js_dependencies()})
+    return render_to_response(
+        'jstesting/%s.js' % file_name,
+        { 'js_use_compiled' : False,
+          'js_dependencies' : js_dependencies()})

@@ -21,14 +21,7 @@ http://www.gnu.org/licenses/agpl-3.0.html.
 <html>
 <title>crossdomainrpc response</title>
 <body>
-{% if not js_use_compiled %}
-    <script type="text/javascript" src="http://{{site.domain}}/site_media/js/closure-library/closure/goog/base.js"></script>
-    <script type="text/javascript" src="http://{{site.domain}}/site_media/js/closure-dependencies.js"></script>
-    <script type="text/javascript" src="http://{{site.domain}}/site_media/js/swfobject.js"></script>
-{% endif %}
-{% for dep in js_dependencies %}
-<script type="text/javascript" src="{{dep|safe}}"></script>
-{% endfor %}
+{% include "widget/_js_dependencies.html" %}
 <script type="text/javascript">
   var currentDirectory = location.href.substring(0, location.href.lastIndexOf('/'));
   var echo = [];

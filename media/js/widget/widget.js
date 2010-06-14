@@ -81,10 +81,10 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
     }
     this.videoPlayer_ = this.videoSource_.createPlayer();
     this.addChild(this.videoPlayer_, true);
-    this.videoTab_ = new mirosubs.VideoTab();
+    this.videoTab_ = new mirosubs.widget.VideoTab();
+    this.addChild(this.videoTab_, true);
     this.videoTab_.setText("Loading...");
     this.videoTab_.showLoading(true);
-    this.addChild(this.videoTab_, true);
     mirosubs.Rpc.call(
         'show_widget', {
             'video_url' : this.videoURL_,
@@ -102,10 +102,10 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
         result["writelock_expiration"];
     this.videoID_ = result['video_id'];
 
+    var initialTab = result['initial_tab'];
+    var IS = mirosubs.widget.VideoTab.InitialState;
     this.popupMenu_ = new mirosubs.MainMenu(
-        this.videoID_, this.nullWidget_, 
-        result['initial_tab'] == 
-            mirosubs.widget.VideoTab.InitialState.SUBTITLE_ME,
+        this.videoID_, this.nullWidget_, initialTab == IS.CHOOSE_LANGUAGE, 
         result['translation_languages']);
     this.popupMenu_.render(document.body);
     this.popupMenu_.attach(
@@ -113,15 +113,31 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
         goog.positioning.Corner.BOTTOM_LEFT,
         goog.positioning.Corner.TOP_LEFT);
 
-    // TODO: set text for videotab.
+    this.setInitialVideoTabState_(initialTab, result['locked_by']);
 
     if (this.autoplay_)
         this.subsLoaded_(this.autoplayLanguage_,
                          result['subtitles']);
-    if (subtitleImmediately)
+    if (this.subtitleImmediately_)
         goog.Timer.callOnce(goog.bind(this.startSubtitling_, this));
 
     this.attachEvents_();
+};
+
+mirosubs.widget.Widget.prototype.setInitialVideoTabState_ = 
+    function(initialTab, opt_lockedBy) 
+{
+    this.videoTab_.showLoading(false);
+    var IS = mirosubs.widget.VideoTab.InitialState;
+    var M = mirosubs.widget.VideoTab.Messages;
+    if (initialTab == IS.SUBTITLE_ME)
+        this.videoTab_.setText(M.SUBTITLE_ME);
+    else if (initialTab == IS.CONTINUE)
+        this.videoTab_.setText(M.CONTINUE);
+    else if (initialTab == IS.IN_PROGRESS)
+        this.videoTab_.setText(M.IN_PROGRESS + opt_lockedBy);
+    else if (initialTab == IS.CHOOSE_LANGUAGE)
+        this.videoTab_.setText(M.CHOOSE_LANGUAGE);
 };
 
 mirosubs.widget.Widget.prototype.enterDocument = function() {
@@ -132,6 +148,7 @@ mirosubs.widget.Widget.prototype.enterDocument = function() {
 mirosubs.widget.Widget.prototype.attachEvents_ = function() {
     if (!this.stateInitialized_ || !this.isInDocument())
         return;
+    var et = mirosubs.MainMenu.EventType;
     this.getHandler().
         listen(this.videoTab_.getAnchorElem(), 'click',
                function(e) { e.preventDefault(); }).
@@ -145,14 +162,14 @@ mirosubs.widget.Widget.prototype.attachEvents_ = function() {
                this.loginStatusChanged_);
 };
 
-mirosubs.EmbeddableWidget.prototype.loginStatusChanged_ = function() {
+mirosubs.widget.Widget.prototype.loginStatusChanged_ = function() {
     if (this.dialog_)
         this.dialog_.updateLoginState();
 };
 /**
  * @param {function(int, array.<JsonCaption>)} postFn
  */
-mirosubs.EmbeddableWidget.prototype.subtitle_ = function(postFn) {
+mirosubs.widget.Widget.prototype.subtitle_ = function(postFn) {
     this.videoTab_.showLoading(true);
     var that = this;
     mirosubs.Rpc.call(
@@ -172,10 +189,10 @@ mirosubs.EmbeddableWidget.prototype.subtitle_ = function(postFn) {
             }
         });
 };
-mirosubs.EmbeddableWidget.prototype.startSubtitling_ = function() {
+mirosubs.widget.Widget.prototype.startSubtitling_ = function() {
     this.subtitle_(goog.bind(this.startSubtitlingImpl_, this));
 };
-mirosubs.EmbeddableWidget.prototype.editSubtitles_ = function() {
+mirosubs.widget.Widget.prototype.editSubtitles_ = function() {
     if (this.languageCodePlaying_ == null) {
         // original language
         this.subtitle_(goog.bind(this.editSubtitlesImpl_, this));
@@ -191,7 +208,7 @@ mirosubs.EmbeddableWidget.prototype.editSubtitles_ = function() {
             goog.bind(this.editTranslations_, this));
     }
 };
-mirosubs.EmbeddableWidget.prototype.editTranslations_ = function(result) {
+mirosubs.widget.Widget.prototype.editTranslations_ = function(result) {
     // TODO: check result['can_edit']
     this.videoTab_.showLoading(false);
     this.videoPlayer_.pause();
@@ -207,7 +224,7 @@ mirosubs.EmbeddableWidget.prototype.editTranslations_ = function(result) {
     dialog.setVisible(true);
     this.dialog_ = dialog;
 };
-mirosubs.EmbeddableWidget.prototype.startSubtitlingImpl_ = 
+mirosubs.widget.Widget.prototype.startSubtitlingImpl_ = 
     function(version, existingCaptions) 
 {
     this.videoPlayer_.pause();
@@ -225,13 +242,13 @@ mirosubs.EmbeddableWidget.prototype.startSubtitlingImpl_ =
         function(event) {
             that.dialog_ = null;
             if (subtitleDialog.isSaved()) {
-                // FIXME: petit duplication. appears in server-side code also.
-                that.videoTab_.setText('Choose language...');
+                that.videoTab_.setText(
+                    mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE);
                 that.popupMenu_.setSubtitled();
             }
         });
 };
-mirosubs.EmbeddableWidget.prototype.editSubtitlesImpl_ = 
+mirosubs.widget.Widget.prototype.editSubtitlesImpl_ = 
     function(version, existingCaptions) 
 {
     this.videoPlayer_.pause();
@@ -244,14 +261,14 @@ mirosubs.EmbeddableWidget.prototype.editSubtitlesImpl_ =
     dialog.setVisible(true);
     this.dialog_ = dialog;
 };
-mirosubs.EmbeddableWidget.prototype.languageSelected_ = function(event) {
+mirosubs.widget.Widget.prototype.languageSelected_ = function(event) {
     if (event.languageCode)
         this.translationSelected_(event.languageCode);
     else
         this.originalLanguageSelected_();
 };
 
-mirosubs.EmbeddableWidget.prototype.translationSelected_ = function(languageCode) {
+mirosubs.widget.Widget.prototype.translationSelected_ = function(languageCode) {
     this.videoTab_.showLoading(true);
     var that = this;
     mirosubs.Rpc.call('fetch_translations' + (this.nullWidget_ ? '_null' : ''),
@@ -260,7 +277,7 @@ mirosubs.EmbeddableWidget.prototype.translationSelected_ = function(languageCode
                       goog.bind(this.subsLoaded_, this, languageCode));
 };
 
-mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
+mirosubs.widget.Widget.prototype.originalLanguageSelected_ = function() {
     this.videoTab_.showLoading(true);
     var that = this;
     mirosubs.Rpc.call('fetch_captions' + (this.nullWidget_ ? '_null' : ''),
@@ -268,7 +285,7 @@ mirosubs.EmbeddableWidget.prototype.originalLanguageSelected_ = function() {
                       goog.bind(this.subsLoaded_, this, null));
 };
 
-mirosubs.EmbeddableWidget.prototype.turnOffSubs_ = function(event) {
+mirosubs.widget.Widget.prototype.turnOffSubs_ = function(event) {
     if (this.playManager_) {
         this.popupMenu_.setShowingSubs(false);
         // FIXME: petit duplication. appears in server-side code also.
@@ -277,7 +294,7 @@ mirosubs.EmbeddableWidget.prototype.turnOffSubs_ = function(event) {
     }
 };
 
-mirosubs.EmbeddableWidget.prototype.subsLoaded_ = 
+mirosubs.widget.Widget.prototype.subsLoaded_ = 
     function(languageCode, subtitles) 
 {
     this.videoTab_.showLoading(false);
@@ -292,13 +309,13 @@ mirosubs.EmbeddableWidget.prototype.subsLoaded_ =
     this.popupMenu_.setCurrentLangCode(languageCode);
     this.popupMenu_.setShowingSubs(true);
 };
-mirosubs.EmbeddableWidget.prototype.findLanguage_ = function(code) {
+mirosubs.widget.Widget.prototype.findLanguage_ = function(code) {
     return goog.array.find(
         this.translationLanguages_, function(tl) {
             return tl['code'] == code;
         });
 };
-mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
+mirosubs.widget.Widget.prototype.addNewLanguage_ = function(event) {
     this.videoTab_.showLoading(true);
     mirosubs.Rpc.call(
         'fetch_captions_and_open_languages' + 
@@ -307,7 +324,7 @@ mirosubs.EmbeddableWidget.prototype.addNewLanguage_ = function(event) {
         goog.bind(this.addNewLanguageResponseReceived_, this));
 };
 
-mirosubs.EmbeddableWidget.prototype.addNewLanguageResponseReceived_ = 
+mirosubs.widget.Widget.prototype.addNewLanguageResponseReceived_ = 
     function(result) 
 {
     this.videoTab_.showLoading(false);
@@ -332,15 +349,15 @@ mirosubs.EmbeddableWidget.prototype.addNewLanguageResponseReceived_ =
             }
         });
 };
-mirosubs.EmbeddableWidget.prototype.disposePlayManager_ = function() {
+mirosubs.widget.Widget.prototype.disposePlayManager_ = function() {
     if (this.playManager_) {
         this.playManager_.dispose();
         this.playManager_ = null;
     }
     this.videoPlayer_.showCaptionText(null);
 };
-mirosubs.EmbeddableWidget.prototype.disposeInternal = function() {
-    mirosubs.EmbeddableWidget.superClass_.disposeInternal.call(this);
+mirosubs.widget.Widget.prototype.disposeInternal = function() {
+    mirosubs.widget.Widget.superClass_.disposeInternal.call(this);
     this.handler_.dispose();
     this.disposePlayManager_();
 };

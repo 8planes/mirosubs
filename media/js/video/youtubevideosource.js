@@ -38,7 +38,6 @@ mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer =
 mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(chromeless) {
     return new mirosubs.video.YoutubeVideoPlayer(
         new mirosubs.video.YoutubeVideoSource(
-            this.uuid_ + (mirosubs.video.YoutubeVideoSource.counter_++), 
             this.youtubeVideoID_), chromeless);
 };
 

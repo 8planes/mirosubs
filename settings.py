@@ -49,6 +49,7 @@ JS_RAW = ['mirosubs.js',
           'video/abstractvideoplayer.js',
           'video/html5videoplayer.js',
           'video/youtubevideoplayer.js',
+          'video/videosource.js',
           'video/html5videosource.js',
           'video/youtubevideosource.js',
           'video/controlledvideoplayer.js',
@@ -98,7 +99,8 @@ JS_RAW = ['mirosubs.js',
           'widget/translate/editabletranslation.js',
           'widget/translate/servermodel.js',
           'widget/play/manager.js',
-          'widget/embeddablewidget.js']
+          'widget/widget.js',
+          'widget/crossdomainembed.js'] # FIXME: make two separate js bundles, one with, one without.
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

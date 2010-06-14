@@ -28,5 +28,7 @@ def js_dependencies():
     return [relative_path(js_file) for js_file in js_files]
 
 def jsdemo(request, file_name):
-    return render_to_response('jsdemo/%s.html' % file_name,
-                              {'js_dependencies' : js_dependencies()})
+    return render_to_response(
+        'jsdemo/{0}.html'.format(file_name),
+        {'js_use_compiled': False,
+         'js_dependencies' : js_dependencies()})

@@ -27,20 +27,11 @@
     <script type="text/javascript">
         $(function(){
             $('.roll_back').click(function(){
-                if ( ! confirm('Do roll back to this version?')){
-                    return false;
-                }
+                return confirm('Roll back to this version?');
             });
         });
-    </script>     
-    {% if not js_use_compiled %}
-      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
-      <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
-      <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
-    {% endif %}
-    {% for dep in js_dependencies %}
-      <script type="text/javascript" src="{{dep|safe}}"></script>
-    {% endfor %}
+    </script>
+    {% include "widget/_js_dependencies.html" %}
 {% endblock %}
 
 {% block main_content %}
