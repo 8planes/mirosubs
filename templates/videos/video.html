@@ -11,18 +11,18 @@ div.mirosubs-widget {
     text-align: center;
 }
 .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
-width: 460px;
+    width: 460px;
 }
 
 #embed{
   white-space: pre;
   background: #eee;
-  boder: #666;
+  border: #666;
 }
   </style>
 {% endblock %}
 {% block scripts %}
-{% include "widget/_js_dependencies.html" %}
+{% include "widget/_js_onsite_dependencies.html" %}
 {% endblock %}
 
 {% block main_content %}
@@ -30,11 +30,12 @@ width: 460px;
     {% if video.youtube_name %}
     <h2>{{ video.youtube_name }}</h2>
     {% endif %}
-	{% with video.video_url as video_url %}
-	  {% include "widget/widget.html" %}
-	<script type="text/javascript">
-	mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
-	</script>
+    <div id="widget_div" class="mirosubs-widget"></div>
+    <script type="text/javascript">
+      mirosubs.widget.SameDomainEmbed.embed(
+          document.getElementById('widget_div'), 
+          { video_url: '{{video.video_url}}' });
+    </script>
 </div>
 
 <div class="right_column">

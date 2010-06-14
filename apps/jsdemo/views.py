@@ -17,18 +17,20 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf import settings
+from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 def relative_path(js_file):
     return "/site_media/js/%s" % js_file
 
 def js_dependencies():
-    js_files = list(settings.JS_RAW)
+    js_files = list(settings.JS_ONSITE)
     js_files.append('widget/testing/stubvideoplayer.js');
     return [relative_path(js_file) for js_file in js_files]
 
 def jsdemo(request, file_name):
     return render_to_response(
-        'jsdemo/{0}.html'.format(file_name),
-        {'js_use_compiled': False,
-         'js_dependencies' : js_dependencies()})
+        'jsdemo/{0}.html'.format(file_name), 
+        widget.add_js_files({}, False, js_dependencies()),
+        context_instance=RequestContext(request))
+

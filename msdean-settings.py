@@ -18,6 +18,7 @@
 
 from settings import *
 import logging
+from django.contrib.sites.models import Site
 
 SITE_ID = 11
 SITE_NAME = 'msdean'

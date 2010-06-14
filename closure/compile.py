@@ -15,54 +15,59 @@ logging.basicConfig(level=logging.INFO,
 JS_LIB = os.path.join(BASE, "../media/js")
 CLOSURE_LIB = os.path.join(JS_LIB, "closure-library")
 
-deps = [" --js %s " % os.path.join(JS_LIB, file) for file in settings.JS_RAW]
-calcdeps_js = os.path.join(JS_LIB, 'mirosubs-calcdeps.js')
-compiled_js = os.path.join(JS_LIB, 'mirosubs-compiled.js')
-compiler_jar = os.path.join(BASE, 'compiler.jar')
-
 def call_command(command):
     process = subprocess.Popen(command.split(' '),
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
     return process.communicate()
 
-logging.info("Calculating closure dependencies")
+def compile(output_file_name, js_file_list):
+    logging.info("Starting {0}".format(output_file_name))
 
-output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/closure-dependencies.js " +
-                         "-p %s/ -o script") % 
-                        (CLOSURE_LIB, JS_LIB, CLOSURE_LIB))
+    deps = [" --js %s " % os.path.join(JS_LIB, file) for file in js_file_list]
+    calcdeps_js = os.path.join(JS_LIB, 'mirosubs-calcdeps.js')
+    compiled_js = os.path.join(JS_LIB, output_file_name)
+    compiler_jar = os.path.join(BASE, 'compiler.jar')
 
-# This is to reduce the number of warnings in the code.
-# The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
-# JavaScript files, each of which has a @fileoverview tag to describe it.
-# When put all in one file, the compiler complains, so remove them all.
-output_lines = filter(lambda s: s.find("@fileoverview") == -1,
-                      output.split("\n"))
+    logging.info("Calculating closure dependencies")
 
-calcdeps_file = open(calcdeps_js, "w")
-calcdeps_file.write("\n".join(output_lines))
-calcdeps_file.close()
+    output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/closure-dependencies.js " +
+                             "-p %s/ -o script") % 
+                            (CLOSURE_LIB, JS_LIB, CLOSURE_LIB))
 
-logging.info("Compiling JavaScript")
+    # This is to reduce the number of warnings in the code.
+    # The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
+    # JavaScript files, each of which has a @fileoverview tag to describe it.
+    # When put all in one file, the compiler complains, so remove them all.
+    output_lines = filter(lambda s: s.find("@fileoverview") == -1,
+                          output.split("\n"))
 
-output,err = call_command(("java -jar %s --js %s %s " +
-                         "--js_output_file %s " +
-                         "--compilation_level ADVANCED_OPTIMIZATIONS") % 
-                        (compiler_jar, calcdeps_js, deps, compiled_js))
+    calcdeps_file = open(calcdeps_js, "w")
+    calcdeps_file.write("\n".join(output_lines))
+    calcdeps_file.close()
 
-with open(compiled_js, 'r') as compiled_js_file:
-    compiled_js_text = compiled_js_file.read()
+    logging.info("Compiling {0}".format(output_file_name))
 
-with open(compiled_js, 'w') as compiled_js_file:
-    with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
-        compiled_js_file.write(swfobject_file.read())
-    compiled_js_file.write(compiled_js_text)
+    output,err = call_command(("java -jar %s --js %s %s " +
+                               "--js_output_file %s " +
+                               "--compilation_level ADVANCED_OPTIMIZATIONS") % 
+                              (compiler_jar, calcdeps_js, deps, compiled_js))
+    
+    with open(compiled_js, 'r') as compiled_js_file:
+        compiled_js_text = compiled_js_file.read()
+        
+    with open(compiled_js, 'w') as compiled_js_file:
+        with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
+            compiled_js_file.write(swfobject_file.read())
+            compiled_js_file.write(compiled_js_text)
 
+    if len(output) > 0:
+        logging.info("compiler.jar output: %s" % output)
 
-if len(output) > 0:
-    logging.info("compiler.jar output: %s" % output)
+    if len(err) > 0:
+        logging.info("stderr: %s" % err)
 
-if len(err) > 0:
-    logging.info("stderr: %s" % err)
+    logging.info("Successfully compiled {0}".format(output_file_name))
 
-logging.info("Success")
+compile('mirosubs-offsite-compiled.js', settings.JS_OFFSITE)
+compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)

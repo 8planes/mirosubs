@@ -40,7 +40,7 @@ mirosubs.siteURL = function() {
  */
 mirosubs.mediaURL = function() {
     return mirosubs.siteConfig ? 
-        mirosubs.siteConfig['mediaURL'] : window.MEDIA_URL;
+        mirosubs.siteConfig['mediaURL'] : window['MEDIA_URL'];
 };
 
 mirosubs.imageAssetURL = function(imageFileName) {

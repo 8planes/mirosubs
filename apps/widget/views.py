@@ -28,20 +28,21 @@ from django.conf import settings
 import widget
 
 def embed(request):
-    context = RequestContext(request)
-    widget.add_js_files(context)
-    return render_to_response('widget/embed.js',
-                              context_instance = context,
+    context = widget.add_js_files(
+        {}, settings.JS_USE_COMPILED, settings.JS_OFFSITE)
+    return render_to_response('widget/embed.js', context,
+                              context_instance=RequestContext(request),
                               mimetype='text/javascript')
 
 def widget_demo(request):
-    context = RequestContext(request)
+    context = {}
     context['js_use_compiled'] = settings.JS_USE_COMPILED
     context['embed_js_url'] = \
         "http://{0}/embed.js".format(Site.objects.get_current().domain)
     context['video_url'] = request.GET['video_url']
-    return render_to_response('widget/widget_demo.html',
-                              context_instance = context)
+    return render_to_response('widget/widget_demo.html', 
+                              context,
+                              context_instance=RequestContext(request))
 
 def srt(request):
     video = models.Video.objects.get(video_id=request.GET['video_id'])
@@ -92,7 +93,8 @@ def xd_rpc(request, method_name):
         'dummy_uri' : request.POST['xdpe:dummy-uri'],
         'response_json' : json.dumps(result) }
     return render_to_response('widget/xd_rpc_response.html',
-                              widget.add_js_files(params))
+                              widget.add_offsite_js_files(params), 
+                              context_instance = RequestContext(request))
 
 def jsonp(request, method_name):
     callback = request.GET['callback']

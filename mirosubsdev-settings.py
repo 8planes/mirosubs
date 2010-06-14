@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from settings import *
+from django.contrib.sites.models import Site
 
 JS_USE_COMPILED = True
 

@@ -28,15 +28,27 @@ LANGUAGES_MAP = dict(LANGUAGES)
 def full_path(js_file):
     return "{0}js/{1}".format(settings.MEDIA_URL, js_file)
 
-def add_js_files(context):
-    context["js_use_compiled"] = settings.JS_USE_COMPILED
-    if settings.JS_USE_COMPILED:
+def add_offsite_js_files(context):
+    """ Adds variables necessary for _js_dependencies.html """
+    return add_js_files(context, settings.JS_USE_COMPILED, 
+                        settings.JS_OFFSITE, 
+                        'mirosubs-offsite-compiled.js')
+
+def add_onsite_js_files(context):
+    """ Adds variables necessary for _js_onsite_dependencies.html """
+    return add_js_files(context, settings.JS_USE_COMPILED, 
+                        settings.JS_ONSITE, 
+                        'mirosubs-onsite-compiled.js')
+
+def add_js_files(context, use_compiled, js_files, compiled_file_name=None):
+    context["js_use_compiled"] = use_compiled
+    if use_compiled:
         # might change in future when using cdn to serve static js
-        context["js_dependencies"] = [full_path("mirosubs-compiled.js")]
+        context["js_dependencies"] = [full_path(compiled_file_name)]
     else:
-        context["js_dependencies"] = [full_path(js_file) for js_file in settings.JS_RAW]
+        context["js_dependencies"] = [full_path(js_file) for js_file in js_files]
     context["site"] = Site.objects.get_current()
-    return context;
+    return context;    
 
 def language_to_map(code, name):
     return { 'code': code, 'name': name };
