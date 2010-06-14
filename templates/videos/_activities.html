@@ -6,8 +6,10 @@
         {% if item.user %}
             {% if item.uprofile.picture %}
                 <img src="{% thumbnail item.uprofile.picture 32x32 %}" />
+                {% else %}            
+
             {% endif %}
-            <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+            {{ item.time }} - <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a><br />
         {% else %}
             <span class="username anon">Anonymous</span>
         {% endif %}
@@ -19,7 +21,7 @@
         {% endif %}
         
         <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
-        <span>at {{ item.time }}        
+        
     </li>
 {% endfor %}
 </ul>

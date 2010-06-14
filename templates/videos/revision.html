@@ -84,21 +84,40 @@
         </ul>
     {% endblock %}
     
-    {% with video.video_url as video_url %}
-        {% include "widget/widget.html" %}
-        <script type="text/javascript">
-            mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
-        </script>
-    {% endwith %}
-       
-    <a href="#" class="new_edit">Submit a new edit based on this version</a>
-    {% if next_version %}
-    <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
-        Roll back to this version
-    </a>
-    {% endif %}
-    
-    <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}" class="return_history">&lt;&lt; Return to revision history</a>
+    <div class="left_column">
+      <br />
+      {% with video.video_url as video_url %}
+          {% include "widget/widget.html" %}
+          <script type="text/javascript">
+              mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
+          </script>
+      {% endwith %}
+    </div>    
+
+    <div class="right_column">
+      <br />
+      <br />      <br />      <br />      <br />
+      {% if user.is_authenticated %}
+          {% if is_writelocked %}
+              <div class="viewing_old">
+                  Someone is editing subtitles.
+              </div>             
+          {% else%}       
+              <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
+              {% if next_version %}
+              <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
+                  <span>Roll back to this version</span>
+              </a>
+              {% endif %}
+          {% endif %}
+      {% else %}
+          <div class="viewing_old">
+              Login, please.
+          </div>    
+      {% endif %}
+    </div>    
+<div class="clearboth">&nbsp;</div>
+    <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}" class="return_history floatright">&lt;&lt; Return to revision history</a>
     
     <ul class="revision_list">
       {% for item in version.captions %}

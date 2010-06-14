@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block body_attrs %}id="index"{% endblock %}
 {% load recent_activity %}
 
 {% block css %}
@@ -33,21 +33,29 @@
 <p class="pitch">
 <span class="problem"><strong>The Problem</strong> <span>Web video is beginning to rival television, but there isn't a good open resource for subtitling.</span></span> 
 
-<span class="mission"><strong>Our Mission</strong> <span>We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web.</span></span>
+<span class="mission"><strong>Our Mission</strong> <span>We're trying to make captioning, subtitling, and translating video publicly accessible 
+in a way that's free and open, just like the Web.</span> <a href="#">Learn More</a></span>
+
+<br />
+
+
+
+<span class="right_now"><strong>Right Now</strong> We're in an alpha stage, building and testing <a href="#">(help test)</a></span>
+
 </p>											
 
 <div class="three_column">
 	<div class="col1">
-		<h3>Subtitle Widget</h3>
+		<h3 class="alpha">Subtitle Widget</h3>
 		<p>A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos).</p>
+	</div>
+	<div class="col3">
+		<h3 class="alpha">Community Site</h3> 
+		<p>An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles).</p>
 	</div>
 	<div class="col2">
 		<h3>Subtitle Lookup Protocol</h3>
 		<p>An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video.</p>
-	</div>
-	<div class="col3">
-		<h3>Community Site</h3>
-		<p>An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles).</p>
 	</div>
 </div>
 
@@ -57,6 +65,7 @@
 
 
 <div class="get_updates">
+
 	<p class="update_text">Get updates and find out first when we launch</p>
 	<form method="post" action="http://pcf8.pculture.org/interspire/form.php?form=3" id="frmSS3" onsubmit="return CheckForm3(this);">
 		<p><input type="text" name="email" /></p>
@@ -98,70 +107,58 @@
 	</script>
 </div>
 
+
+
+
 <div class="right_column">	
-<h2>Recent Activity</h2>
-    {% recent_activity %}
-</div>
+
+
+  <div class="box">
+      <h3>Get involved with the project</h3>
+      <p>Test our subtitling widget <a href="#">Start Testing</a></p>
+  </div>
+
+
+  <div class="drumbeat box">
+      <h3>Mozilla will double your donation!</h3>
+      <p>We're a featured Mozilla Drumbeat project!<a href="#">Donate Now</a></p>
+  </div>
+
+
+
+ </div>
 
 <div class="left_column">
-
-<h2>Watch How it Works</h2>
-
-<a href="#how-to-video-flash" class="how-to-video-image">
-    <img src="{{ MEDIA_URL }}images/how-to-video.jpg" width="460" height="345"/>
-</a>
-
-<div id="how-to-video-ogg" style="display: none" width="720" height="540">
-    <video src="http://a52.video2.blip.tv/7390004349617/Miropcf-overviewtypingogg899.ogv" 
-           controls="controls"
-           width="425" height="344"
-           style="display: block">
-        your browser does not support the video tag
-    </video>
-</div>
-
-<div id="how-to-video-flash" style="display: none" width="720" height="540">
-    <object width="425" height="344">
-        <param name="movie" value="http://www.youtube.com/v/2tP_NU9a5pE&hl=en&fs=1"></param>
-        <param name="allowFullScreen" value="true"></param>
-        <param name="allowscriptaccess" value="always"></param>
-        <embed src="http://www.youtube.com/v/2tP_NU9a5pE&hl=en&fs=1"
-               type="application/x-shockwave-flash" allowscriptaccess="always"
-               allowfullscreen="true" width="425" height="344">
-        </embed>
-    </object>
-</div>
-
-<h2>Easy Subtitling in 3 Easy Steps</h2>
-
-<ol>
-	<li class="one">Watch <span>and type all<br />that you hear</span></li>
-	<li class="two">Sync <span>your titles to the<br />right moment</span></li>	
-	<li class="three">Review <span>and Save your<br />transcription</span></li>
-</ol>
-
-
-<h2>Watch How it Works</h2>
-
-<embed src="http://blip.tv/play/hMtugeCwDgI" type="application/x-shockwave-flash" width="480" height="390" allowscriptaccess="always" allowfullscreen="true"></embed>
-
-<div class="clear">&nbsp;</div>
-
-  <div class="mirosubs-share">
-						<h2>We&#8217;d like help testing our subtitling widget</h2>
-						
-						<p>Just launch our feedback form and try captioning a video</p>
-
-<button><span>Test the Widget</span></button>
-
-
-<p class="warning">Warning: These videos should not be embeded--there is a good possibility they will break at some point!</p>
-
-<p class="warning">Warning #2: These subtitles are non-permanent and should not be relied on -- someone could change them. 
-
-This alpha site is for purely testing purposes.</p>
-   </div>
-
+  
+  <a href="#how-to-video-flash" class="how-to-video-image">
+      <img src="{{ MEDIA_URL }}images/play_vid.png" border="0" />
+  </a>
+  
+  <div id="how-to-video-ogg" style="display: none" width="720" height="540">
+      <video src="http://a52.video2.blip.tv/7390004349617/Miropcf-overviewtypingogg899.ogv" 
+             controls="controls"
+             width="425" height="344"
+             style="display: block">
+Terribly sorry, but your browser doesn't support this video.      </video>
+  </div>
+  
+  <div id="how-to-video-flash" style="display: none" width="720" height="540">
+      <object width="425" height="344">
+          <param name="movie" value="http://www.youtube.com/v/2tP_NU9a5pE&hl=en&fs=1"></param>
+          <param name="allowFullScreen" value="true"></param>
+          <param name="allowscriptaccess" value="always"></param>
+          <embed src="http://www.youtube.com/v/2tP_NU9a5pE&hl=en&fs=1"
+                 type="application/x-shockwave-flash" allowscriptaccess="always"
+                 allowfullscreen="true" width="425" height="344">
+          </embed>
+      </object>
+  </div>
+  
+  
+  
+  <div class="clear">&nbsp;</div>
+  
+  
 </div>
 
 {% endblock %}
