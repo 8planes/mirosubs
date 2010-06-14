@@ -113,7 +113,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
         goog.positioning.Corner.BOTTOM_LEFT,
         goog.positioning.Corner.TOP_LEFT);
 
-    this.setInitialVideoTabState_(initialTab, result['locked_by']);
+    this.setInitialVideoTabState_(initialTab, result['owned_by']);
 
     if (this.autoplay_)
         this.subsLoaded_(this.autoplayLanguage_,
