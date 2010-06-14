@@ -288,8 +288,8 @@ mirosubs.widget.Widget.prototype.originalLanguageSelected_ = function() {
 mirosubs.widget.Widget.prototype.turnOffSubs_ = function(event) {
     if (this.playManager_) {
         this.popupMenu_.setShowingSubs(false);
-        // FIXME: petit duplication. appears in server-side code also.
-        this.videoTab_.setText("Choose Language...");
+        this.videoTab_.setText(
+            mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE);
         this.disposePlayManager_();
     }
 };

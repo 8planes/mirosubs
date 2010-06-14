@@ -32,7 +32,7 @@ mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
  * Does not include trailing slash.
  */
 mirosubs.siteURL = function() {
-    return mirosubs.siteConfig ? mirosubs.siteConfig.siteURL : '';
+    return mirosubs.siteConfig ? mirosubs.siteConfig['siteURL'] : '';
 };
 
 /**
@@ -40,7 +40,7 @@ mirosubs.siteURL = function() {
  */
 mirosubs.mediaURL = function() {
     return mirosubs.siteConfig ? 
-        mirosubs.siteConfig.mediaURL : window.MEDIA_URL;
+        mirosubs.siteConfig['mediaURL'] : window.MEDIA_URL;
 };
 
 mirosubs.imageAssetURL = function(imageFileName) {

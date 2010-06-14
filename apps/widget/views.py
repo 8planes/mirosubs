@@ -24,6 +24,7 @@ from videos import models
 from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt
 import simplejson as json
 from widget import rpc as rpc_views
+from django.conf import settings
 import widget
 
 def embed(request):
@@ -35,6 +36,7 @@ def embed(request):
 
 def widget_demo(request):
     context = RequestContext(request)
+    context['js_use_compiled'] = settings.JS_USE_COMPILED
     context['embed_js_url'] = \
         "http://{0}/embed.js".format(Site.objects.get_current().domain)
     context['video_url'] = request.GET['video_url']
