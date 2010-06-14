@@ -162,7 +162,7 @@ def demo(request):
 
 def history(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
-    context = widget.add_offsite_js_files({})
+    context = widget.add_onsite_js_files({})
 
     qs = VideoCaptionVersion.objects.filter(video=video)   \
         .exclude(time_change=0, text_change=0)
@@ -224,7 +224,7 @@ def translation_history(request, video_id, lang):
 
 def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     version = get_object_or_404(cls, pk=pk)
-    context = widget.add_offsite_js_files({})
+    context = widget.add_onsite_js_files({})
     context['video'] = version.video
     context['version'] = version
     context['next_version'] = version.next_version()
