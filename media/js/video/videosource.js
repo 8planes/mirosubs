@@ -30,10 +30,31 @@ goog.provide('mirosubs.video.VideoSource');
 mirosubs.video.VideoSource = function() {};
 
 /**
+ * Creates a player for the page, not the widget.
  * @return {mirosubs.video.AbstractVideoPlayer} 
  */
 mirosubs.prototype.createPlayer = function() {};
 /**
+ * Creates a player for the widget.
  * @return {mirosubs.video.ControlledVideoPlayer}
  */
 mirosubs.prototype.createControlledPlayer = function() {};
+
+/**
+ *
+ *
+ */
+mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
+    if (/^\s*https?:\/\/([^\.]+\.)?youtube/i.test(videoURL)) {
+        var videoIDExtract = /v=([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
+        if (videoIDExtract)
+            return new mirosubs.video.YoutubeVideoSource(
+                videoIDExtract[1]);
+        else
+            throw new Error("Cannot parse youtube url " + videoURL);
+    }
+    else {
+        // TODO: maybe check this in the future.
+        return new mirosubs.video.Html5VideoSource(videoURL);
+    }
+};

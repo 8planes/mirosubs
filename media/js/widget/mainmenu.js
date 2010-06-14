@@ -178,7 +178,7 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
     }
 };
 mirosubs.MainMenu.prototype.createDownloadSRTLink_ = function() {
-    var url = [mirosubs.BASE_URL,
+    var url = [mirosubs.siteURL(),
                "/widget/download_",
                (this.nullWidget_ ? "null_" : ""),
                "srt/?video_id=",

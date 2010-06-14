@@ -21,3 +21,5 @@ import logging
 
 SITE_ID = 10
 SITE_NAME = 'msnick'
+
+MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)

@@ -19,14 +19,33 @@
 goog.provide('mirosubs');
 
 /**
- * This ends up getting set when widget first loads. It contains the url
- * for ms server, without trailing slash.
+ * If a widget is embedded in a different domain, this is set by
+ * mirosubs.widget.CrossDomainEmbed. It has two properties: siteURL
+ * and mediaURL. It is non-null iff the widget is embedded in a 
+ * different domain.
  */
-mirosubs.BASE_URL = "";
-
-mirosubs.IMAGE_DIR = "/site_media/images/";
+mirosubs.siteConfig = null;
 
 mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
+
+/**
+ * Does not include trailing slash.
+ */
+mirosubs.siteURL = function() {
+    return mirosubs.siteConfig ? mirosubs.siteConfig.siteURL : '';
+};
+
+/**
+ * Includes trailing slash.
+ */
+mirosubs.mediaURL = function() {
+    return mirosubs.siteConfig ? 
+        mirosubs.siteConfig.mediaURL : window.MEDIA_URL;
+};
+
+mirosubs.imageAssetURL = function(imageFileName) {
+    return [mirosubs.mediaURL(), 'images/', imageFileName].join('');
+};
 
 mirosubs.DEBUG = false;
 
@@ -61,7 +80,7 @@ mirosubs.login = function(opt_finishFn) {
  */
 mirosubs.openLoginPopup = function(urlSuffix, opt_finishFn) {
     var popupParams = 'location=0,status=0,width=800,height=400';
-    var loginWin = window.open(mirosubs.BASE_URL + urlSuffix,
+    var loginWin = window.open(mirosubs.siteURL() + urlSuffix,
                                "loginWindow",
                                popupParams);
     var timer = new goog.Timer(250);
@@ -133,12 +152,18 @@ mirosubs.formatTime = function(time, opt_excludeMs) {
     return timeString;
 };
 
+mirosubs.randomString = function() {
+    var sb = [], i;
+    for (i = 0; i < 10; i++)
+        sb.push((10 + ~~(Math.random() * 26)).toString(36));
+    return sb.join('') + (new Date().getTime() % 1000000);
+};
+
 /**
  * Function which checks whether we are embedded in a non-PCF domain.
  */
 mirosubs.isEmbeddedInDifferentDomain = function() {
-    return mirosubs.BASE_URL.substr(0, 1) != '/' &&
-        !goog.Uri.haveSameDomain(mirosubs.BASE_URL, window.location.href);
+    return mirosubs.siteConfig != null;
 };
 
 mirosubs.LoginEvent = function(username) {

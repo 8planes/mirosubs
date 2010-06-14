@@ -16,22 +16,28 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.VideoTab');
+goog.provide('mirosubs.widget.VideoTab');
 
-mirosubs.VideoTab = function() {
+mirosubs.widget.VideoTab = function() {
     goog.ui.Component.call(this);
     this.anchorElem_ = null;
     this.imageElem_ = null;
     this.spanElem_ = null;
-    this.spinnerGifURL_ = [mirosubs.BASE_URL, mirosubs.IMAGE_DIR, 
-                           'spinner.gif'].join('');
-    this.logoURL_ = [mirosubs.BASE_URL, mirosubs.IMAGE_DIR, 
-                           'small_logo.png'].join('');
+    this.spinnerGifURL_ = mirosubs.imageAssetURL('spinner.gif');
+    this.logoURL_ = mirosubs.imageAssetURL('small_logo.png');
     this.imageLoader_ = new goog.net.ImageLoader();
     this.imageLoader_.addImage('spinner', this.spinnerGifURL_);
+    this.imageLoader_.addImage('small_logo', this.logoURL_);
     this.imageLoader_.start();
 };
-goog.inherits(mirosubs.VideoTab, goog.ui.Component);
+goog.inherits(mirosubs.widget.VideoTab, goog.ui.Component);
+
+mirosubs.widget.VideoTab.InitialState = {
+    SUBTITLE_ME: 0,
+    CONTINUE: 1,
+    IN_PROGRESS: 2,
+    CHOOSE_LANGUAGE: 3    
+};
 
 /**
  * Decorate an HTML structure already in the document. Expects:
@@ -42,22 +48,22 @@ goog.inherits(mirosubs.VideoTab, goog.ui.Component);
  *     - span
  * </pre>
  */
-mirosubs.VideoTab.prototype.decorateInternal = function(el) {
-    mirosubs.VideoTab.superClass_.decorateInternal.call(this, el);
+mirosubs.widget.VideoTab.prototype.decorateInternal = function(el) {
+    mirosubs.widget.VideoTab.superClass_.decorateInternal.call(this, el);
     this.anchorElem_ = el.getElementsByTagName('a')[0];
     this.imageElem_ = this.anchorElem_.getElementsByTagName('img')[0];
     this.spanElem_ = this.anchorElem_.getElementsByTagName('span')[0];
 };
-mirosubs.VideoTab.prototype.showLoading = function(loading) {
+mirosubs.widget.VideoTab.prototype.showLoading = function(loading) {
     this.imageElem_.src = loading ? this.spinnerGifURL_ : this.logoURL_;
 };
-mirosubs.VideoTab.prototype.setText = function(text) {
+mirosubs.widget.VideoTab.prototype.setText = function(text) {
     goog.dom.setTextContent(this.spanElem_, text);
 };
-mirosubs.VideoTab.prototype.getAnchorElem = function() {
+mirosubs.widget.VideoTab.prototype.getAnchorElem = function() {
     return this.anchorElem_;
 };
-mirosubs.VideoTab.prototype.disposeInternal = function() {
-    mirosubs.VideoTab.superClass_.disposeInternal.call(this);
+mirosubs.widget.VideoTab.prototype.disposeInternal = function() {
+    mirosubs.widget.VideoTab.superClass_.disposeInternal.call(this);
     this.imageLoader_.dispose();
 };

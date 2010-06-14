@@ -42,7 +42,7 @@ urlpatterns = patterns(
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^embed_widget.js$', 'widget.views.embed'),
+    (r'^embed.js$', 'widget.views.embed'),
     url(r'^widget/twitter_login/', 'socialauth.views.twitter_login', 
         kwargs={'next': '/widget/close_window/'}),
     (r'^widget/rpc/xd/(\w+)$', 'widget.views.xd_rpc'),

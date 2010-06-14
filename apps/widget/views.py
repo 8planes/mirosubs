@@ -27,45 +27,11 @@ from widget import rpc as rpc_views
 import widget
 
 def embed(request):
-    if 'video_id' in request.GET:
-        video = models.Video.objects.get(video_id=request.GET['video_id'])
-    elif 'youtube_videoid' in request.GET:
-        youtube_videoid = request.GET['youtube_videoid']
-        try:
-            video = models.Video.objects.get(youtube_videoid=youtube_videoid)
-        except models.Video.DoesNotExist:
-            video = models.Video(video_type=models.VIDEO_TYPE_YOUTUBE,
-                                 youtube_videoid=youtube_videoid,
-                                 allow_community_edits=True)
-            video.save()
-    else:
-        video_url = request.GET['video_url']
-        try:
-            video = models.Video.objects.get(video_url=video_url)
-        except models.Video.DoesNotExist:
-            video = models.Video(video_type=models.VIDEO_TYPE_HTML5,
-                                 video_url=video_url,
-                                 allow_community_edits=True)
-            video.save()
-    video.widget_views_count += 1
-    video.save()
-    
-    null_widget = 'null' in request.GET
-    debug_js = 'debug_js' in request.GET
-    if 'element_id' in request.GET:
-        element_id = request.GET['element_id']
-    else:
-        element_id = None
-    if 'autoplay' in request.GET:
-        autoplay = request.GET['autoplay']
-    else:
-        autoplay = None
-    return render_to_response('widget/embed.js', 
-                              widget.js_context(request, video, 
-                                                null_widget, element_id, 
-                                                debug_js, autoplay),
-                              mimetype="text/javascript",
-                              context_instance = RequestContext(request))
+    context = RequestContext(request)
+    widget.add_js_files(context)
+    return render_to_response('widget/embed.js',
+                              context_instance = context,
+                              mimetype='text/javascript');
 
 def srt(request):
     video = models.Video.objects.get(video_id=request.GET['video_id'])

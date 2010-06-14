@@ -21,3 +21,5 @@ import logging
 
 SITE_ID = 11
 SITE_NAME = 'msdean'
+
+MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)

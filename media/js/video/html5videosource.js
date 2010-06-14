@@ -34,11 +34,11 @@ mirosubs.video.Html5VideoSource.prototype.createControlledPlayer =
 };
 
 mirosubs.video.Html5VideoSource.prototype.createPlayer_ = 
-    function(excludeControls) 
+    function(forSubDialog) 
 {
     return new mirosubs.video.Html5VideoPlayer(
         new mirosubs.video.Html5VideoSource(this.videoURL_), 
-        excludeControls);
+        forSubDialog);
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {

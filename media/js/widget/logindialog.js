@@ -29,6 +29,10 @@ mirosubs.LoginDialog = function(opt_finishFn) {
     this.loggedIn_ = mirosubs.currentUsername != null;
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
+    this.imageLoader_ = new goog.net.ImageLoader();
+    this.bigSpinnerGifURL_ = mirosubs.imageAssetURL('big_spinner.gif');
+    this.imageLoader_.addImage('bigSpinner', this.bigSpinnerGifURL_);
+    this.imageLoader_.start();
 };
 goog.inherits(mirosubs.LoginDialog, goog.ui.Dialog);
 /**
@@ -64,11 +68,10 @@ mirosubs.LoginDialog.prototype.showLoading_ = function() {
     goog.dom.removeChildren(this.getElement());
     this.getElement().appendChild(
         this.getDomHelper().createDom(
-            'img', 
-            {'className': 'big_spinner', 
-             'src': [mirosubs.BASE_URL, 
-                     mirosubs.IMAGE_DIR, 
-                     'big_spinner.gif'].join('')}));
+            'img', {
+                'className': 'big_spinner', 
+                'src': this.bigSpinnerGifURL_
+            }));
 };
 
 mirosubs.LoginDialog.prototype.enterDocument = function() {
@@ -114,6 +117,11 @@ mirosubs.LoginDialog.prototype.setVisible = function(visible) {
     mirosubs.LoginDialog.currentDialog_ = visible ? this : null;
     if (!visible && this.finishFn_)
         this.finishFn_(this.loggedIn_);
+};
+
+mirosubs.LoginDialog.prototype.disposeInternal = function() {
+    mirosubs.LoginDialog.superClass_.disposeInternal.call(this);
+    this.imageLoader_.dispose();
 };
 
 mirosubs.LoginDialog.isCurrentlyShown = function() {

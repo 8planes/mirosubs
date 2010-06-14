@@ -18,14 +18,14 @@
 
 goog.provide('mirosubs.video.YoutubeVideoSource');
 
-mirosubs.video.YoutubeVideoSource = function(uuid, youtubeVideoID) {
-    this.uuid_ = uuid;
+mirosubs.video.YoutubeVideoSource = function(youtubeVideoID) {
     this.youtubeVideoID_ = youtubeVideoID;
+    this.uuid_ = mirosubs.randomString();
 };
 
 mirosubs.video.YoutubeVideoSource.counter_ = 0;
 
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
+mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function(forSubtitlingWidget) {
     return this.createPlayer_(false);
 };
 
