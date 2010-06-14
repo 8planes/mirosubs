@@ -56,6 +56,7 @@ JS_RAW = ['mirosubs.js',
           'widget/videotab.js',
           'widget/dialog.js',
           'widget/captionmanager.js',
+          'widget/embedwarning.js',
           'widget/mainmenu.js',
           'widget/rightpanel.js',
           'widget/subtitle/dialog.js',
@@ -207,6 +208,7 @@ SESSION_COOKIE_AGE = 2419200 # 4 weeks
 
 RECENT_ACTIVITIES_ONPAGE = 10
 ACTIVITIES_ONPAGE = 20
+REVISIONS_ONPAGE = 20
 
 FEEDBACK_EMAIL = 'feedback@universalsubtitles.org'
 FEEDBACK_SUBJECT = 'Feedback'

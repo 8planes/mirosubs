@@ -1,47 +1,48 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.EditDialog');
 
 /**
- * @fileoverview Used to edit existing subtitles. Has some duplication 
+ * @fileoverview Used to edit existing subtitles. Has some duplication
  *     with mirosubs.subtitle.Dialog, which should be fixed in the future.
- *     TODO: fix duplication with mirosubs.subtitle.Dialog after this 
+ *     TODO: fix duplication with mirosubs.subtitle.Dialog after this
  *     solidifies a bit more.
  */
 
-mirosubs.subtitle.EditDialog = function(videoSource, serverModel, 
+mirosubs.subtitle.EditDialog = function(videoSource, serverModel,
                                         existingCaptions) {
     mirosubs.Dialog.call(this, videoSource);
     this.serverModel_ = serverModel;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
-    this.captionSet_ = 
+    this.captionSet_ =
         new mirosubs.subtitle.EditableCaptionSet(existingCaptions, uw);
-    this.captionManager_ = 
+    this.captionManager_ =
         new mirosubs.CaptionManager(
             this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
     this.serverModel_.init(uw, function() {});
-    
+
     this.state_ = null;
     this.currentSubtitlePanel_ = null;
     this.rightPanelListener_ = new goog.events.EventHandler(this);
     this.doneButtonEnabled_ = true;
+    this.addingTranslations_ = false;
 };
 goog.inherits(mirosubs.subtitle.EditDialog, mirosubs.Dialog);
 
@@ -57,11 +58,10 @@ mirosubs.subtitle.EditDialog.prototype.captionReached_ = function(event) {
 };
 mirosubs.subtitle.EditDialog.prototype.createDom = function() {
     mirosubs.subtitle.EditDialog.superClass_.createDom.call(this);
-    this.state_ = mirosubs.subtitle.EditDialog.State_.EDIT;
+    this.setState_(mirosubs.subtitle.EditDialog.State_.EDIT);
 };
 mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
     mirosubs.subtitle.EditDialog.superClass_.enterDocument.call(this);
-    this.setState_(this.state_);
     this.getHandler().
         listen(
             document,
@@ -106,7 +106,6 @@ mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
                 1, this.timelineSubtitleSet_,
                 this.getVideoPlayerInternal()), true);
     }
-
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
         videoPlayer.setPlayheadTime(0);
@@ -119,14 +118,14 @@ mirosubs.subtitle.EditDialog.prototype.setFinishedState_ = function() {
     this.setRightPanelInternal(sharePanel);
     this.getCaptioningAreaInternal().removeChildren(true);
     var bottomContainer = this.getBottomPanelContainerInternal();
-    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel();
+    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel(this);
     bottomContainer.addChild(bottomFinishedPanel, true);
 };
 mirosubs.subtitle.EditDialog.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL)
         this.ctrlClicked_();
     if (event.keyCode == goog.events.KeyCodes.TAB) {
-        // TODO: this violates accessibility guidelines. 
+        // TODO: this violates accessibility guidelines.
         // Use another key instead of TAB!
         this.togglePause_();
         event.preventDefault();
@@ -136,7 +135,7 @@ mirosubs.subtitle.EditDialog.prototype.handleBackKeyPress_ = function(event) {
     this.setState_(mirosubs.subtitle.EditDialog.State_.TRANSCRIBE);
 };
 mirosubs.subtitle.EditDialog.prototype.handleLegendKeyPress_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.CTRL && 
+    if (event.keyCode == goog.events.KeyCodes.CTRL &&
         event.keyEventType == goog.events.EventType.CLICK)
         this.ctrlClicked_();
     if (event.keyCode == goog.events.KeyCodes.TAB &&
@@ -175,8 +174,8 @@ mirosubs.subtitle.EditDialog.prototype.ctrlClicked_ = function() {
 mirosubs.subtitle.EditDialog.prototype.togglePause_ = function() {
     this.getVideoPlayerInternal().togglePause();
 };
-mirosubs.subtitle.EditDialog.prototype.makeCurrentStateSubtitlePanel_ = 
-    function() 
+mirosubs.subtitle.EditDialog.prototype.makeCurrentStateSubtitlePanel_ =
+    function()
 {
     var s = mirosubs.subtitle.EditDialog.State_;
     if (this.state_ == s.TRANSCRIBE)
@@ -209,4 +208,11 @@ mirosubs.subtitle.EditDialog.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
     this.rightPanelListener_.dispose();
     this.captionSet_.dispose();
+};
+mirosubs.subtitle.EditDialog.prototype.addTranslationsAndClose = function() {
+    this.addingTranslations_ = true;
+    this.setVisible(false);
+};
+mirosubs.subtitle.EditDialog.prototype.isAddingTranslations = function() {
+    return this.addingTranslations_;
 };

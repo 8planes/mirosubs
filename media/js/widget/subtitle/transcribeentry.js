@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.TranscribeEntry');
@@ -24,6 +24,7 @@ mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
     this.endOfPPlayheadTime_ = null;
     this.repeatVideoMode_ = false;
 
+    this.wasPlaying_ = false;
     this.continuouslyTyping_ = false;
     this.continuousTypingTimer_ = new goog.Timer(
         mirosubs.subtitle.TranscribeEntry.P * 1000);
@@ -31,7 +32,7 @@ mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
         mirosubs.subtitle.TranscribeEntry.S * 1000);
 };
 goog.inherits(mirosubs.subtitle.TranscribeEntry, goog.ui.Component);
-mirosubs.subtitle.TranscribeEntry.logger_ = 
+mirosubs.subtitle.TranscribeEntry.logger_ =
     goog.debug.Logger.getLogger('mirosubs.subtitle.TranscribeEntry');
 
 mirosubs.subtitle.TranscribeEntry.P = 4;
@@ -79,7 +80,7 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
         event.preventDefault();
         this.addNewTitle_();
     }
-    else if (event.keyCode != goog.events.KeyCodes.TAB && 
+    else if (event.keyCode != goog.events.KeyCodes.TAB &&
              this.repeatVideoMode_) {
         this.typingPauseTimer_.stop();
         this.typingPauseTimer_.start();
@@ -94,32 +95,33 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
 mirosubs.subtitle.TranscribeEntry.prototype.continuousTypingTimerTick_ = function() {
     // P seconds since continuous typing was started.
     this.continuousTypingTimer_.stop();
+    this.wasPlaying_ = this.videoPlayer_.isPlaying();
     this.videoPlayer_.pause();
     mirosubs.subtitle.TranscribeEntry.logger_.info(
         ["Continuous typing has now progressed for P ",
-         "seconds. Pausing video at playhead time ", 
+         "seconds. Pausing video at playhead time ",
          this.videoPlayer_.getPlayheadTime() + ''].join(''));
 };
 mirosubs.subtitle.TranscribeEntry.prototype.typingPauseTimerTick_ = function() {
     // S seconds since last keystroke!
     var pSecondsElapsed = !this.continuousTypingTimer_.enabled;
-    var newPlayheadTime = this.videoPlayer_.getPlayheadTime() - 
+    var newPlayheadTime = this.videoPlayer_.getPlayheadTime() -
         mirosubs.subtitle.TranscribeEntry.R;
     mirosubs.subtitle.TranscribeEntry.logger_.info(
         ["Continuous typing ended.",
-         pSecondsElapsed ? 
-         (" Restarting video at playhead time " + newPlayheadTime) : 
+         pSecondsElapsed ?
+         (" Restarting video at playhead time " + newPlayheadTime) :
          ""].join(''));
     this.continuouslyTyping_ = false;
     this.typingPauseTimer_.stop();
     this.continuousTypingTimer_.stop();
-    if (pSecondsElapsed) {
+    if (pSecondsElapsed && this.wasPlaying_) {
         this.videoPlayer_.setPlayheadTime(newPlayheadTime);
         this.videoPlayer_.play();
     }
 };
 /**
- * Turns Repeat Video Mode on or off. When this mode is turned on, the video 
+ * Turns Repeat Video Mode on or off. When this mode is turned on, the video
  * repeats during typing. The mode is off by default.
  * @param {boolean} mode True to turn Repeat Video Mode on, false to turn it off.
  */
@@ -150,17 +152,17 @@ mirosubs.subtitle.TranscribeEntry.prototype.issueLengthWarning_ = function(break
     else
         this.getElement().style.background = this.warningColor_(length, 50, MAX_CHARS);
 };
-mirosubs.subtitle.TranscribeEntry.prototype.warningColor_ = 
+mirosubs.subtitle.TranscribeEntry.prototype.warningColor_ =
     function(length, firstChars, maxChars) {
 
-    if (length < firstChars) 
+    if (length < firstChars)
         return "#ddd";
 
     length -= firstChars;
     var r = 15;
     var g = 16 - 16 * length / (maxChars - firstChars);
     var b = 12 - 12 * length / (maxChars - firstChars);
-    return ["#", this.hex_(r), this.hex_(g), this.hex_(b)].join('');    
+    return ["#", this.hex_(r), this.hex_(g), this.hex_(b)].join('');
 };
 mirosubs.subtitle.TranscribeEntry.prototype.hex_ = function(num) {
     return goog.math.clamp(Math.floor(num), 0, 15).toString(16);

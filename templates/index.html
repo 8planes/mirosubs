@@ -65,11 +65,46 @@ in a way that's free and open, just like the Web.</span> <a href="#">Learn More<
 
 
 <div class="get_updates">
-	<p class="update_text">Get updates and find out when we launch!</p>
-	<form>
-		<p><input type="text" /></p>
-		<button><span>Get Updates!</span></button>
+
+	<p class="update_text">Get updates and find out first when we launch</p>
+	<form method="post" action="http://pcf8.pculture.org/interspire/form.php?form=3" id="frmSS3" onsubmit="return CheckForm3(this);">
+		<p><input type="text" name="email" /></p>
+		<input type="hidden" name="format" value="h" />
+		<button type="submit" /><span>Get Updates!</span></button>
 	</form>
+
+	<script type="text/javascript">
+	// <![CDATA[
+
+				function CheckMultiple1(frm, name) {
+					for (var i=0; i < frm.length; i++)
+					{
+						fldObj = frm.elements[i];
+						fldId = fldObj.id;
+						if (fldId) {
+							var fieldnamecheck=fldObj.id.indexOf(name);
+							if (fieldnamecheck != -1) {
+								if (fldObj.checked) {
+									return true;
+								}
+							}
+						}
+					}
+					return false;
+				}
+			function CheckForm1(f) {
+				var email_re = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+				if (!email_re.test(f.email.value)) {
+					alert("Please enter your email address.");
+					f.email.focus();
+					return false;
+				}
+		
+					return true;
+				}
+		
+	// ]]>
+	</script>
 </div>
 
 
@@ -90,7 +125,8 @@ in a way that's free and open, just like the Web.</span> <a href="#">Learn More<
   </div>
 
 
-</div>
+
+ </div>
 
 <div class="left_column">
   

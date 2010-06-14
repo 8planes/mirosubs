@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.CaptionManager');
@@ -59,8 +59,7 @@ mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
         event.type == mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES) {
 	this.captions_ = [];
         this.currentCaptionIndex_ = -1;
-        this.lastCaptionDispatched_ = null;
-	this.dispatchCaptionEvent_(null);	
+	this.dispatchCaptionEvent_(null);
     }
     else if (event.type == mirosubs.subtitle.EditableCaption.CHANGE) {
 	if (event.timesFirstAssigned) {
@@ -75,49 +74,69 @@ mirosubs.CaptionManager.prototype.timeUpdate_ = function() {
 	this.videoPlayer_.getPlayheadTime());
 };
 
-mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ = 
-    function(playheadTime) 
+mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
+    function(playheadTime)
 {
     if (this.captions_.length == 0)
         return;
-    if (this.currentCaptionIndex_ == -1 && 
+    if (this.currentCaptionIndex_ == -1 &&
         playheadTime < this.captions_[0].getStartTime())
         return;
-    var curCaption = this.currentCaptionIndex_ > -1 ? 
+
+    // we may need to update the current caption index if we have shown at least
+    // one caption before AND the slider has been dragged backwards
+    if (this.currentCaptionIndex_ > -1) {
+        var backedUp = false;
+        while (this.currentCaptionIndex_ > -1 &&
+               playheadTime < this.captions_[this.currentCaptionIndex_].getStartTime()) {
+            backedUp = true;
+            this.currentCaptionIndex_--;
+        }
+
+        // If we backed up and changed the current caption, display that one instead.
+        if (backedUp && this.currentCaptionIndex_ > -1) {
+            this.dispatchCaptionEvent_(this.captions_[this.currentCaptionIndex_]);
+            return;
+        }
+    }
+
+    var curCaption = this.currentCaptionIndex_ > -1 ?
         this.captions_[this.currentCaptionIndex_] : null;
-    if (this.currentCaptionIndex_ > -1 && 
+    if (this.currentCaptionIndex_ > -1 &&
         curCaption != null &&
 	curCaption.isShownAt(playheadTime))
         return;
-    var nextCaption = this.currentCaptionIndex_ < this.captions_.length - 1 ? 
+
+    var nextCaption = this.currentCaptionIndex_ < this.captions_.length - 1 ?
         this.captions_[this.currentCaptionIndex_ + 1] : null;
-    if (nextCaption != null && 
+    if (nextCaption != null &&
 	nextCaption.isShownAt(playheadTime)) {
         this.currentCaptionIndex_++;
         this.dispatchCaptionEvent_(nextCaption);
         return;
     }
-    if (nextCaption == null || (playheadTime < nextCaption.getStartTime() &&
-                                playheadTime >= curCaption.getStartTime())) {
+    if (nextCaption == null ||
+        (playheadTime < nextCaption.getStartTime() &&
+         (curCaption == null || playheadTime >= curCaption.getStartTime()))) {
         this.dispatchCaptionEvent_(null);
         return;
     }
     this.sendEventForRandomPlayheadTime_(playheadTime);
 };
 
-mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ = 
-    function(playheadTime) 
+mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ =
+    function(playheadTime)
 {
-    var lastCaptionIndex = goog.array.binarySearch(this.captions_, 
+    var lastCaptionIndex = goog.array.binarySearch(this.captions_,
         playheadTime, this.binaryCompare_);
     if (lastCaptionIndex < 0)
         lastCaptionIndex = -lastCaptionIndex - 2;
     this.currentCaptionIndex_ = lastCaptionIndex;
-    if (lastCaptionIndex >= 0 && 
+    if (lastCaptionIndex >= 0 &&
 	this.captions_[lastCaptionIndex].isShownAt(playheadTime)) {
         this.dispatchCaptionEvent_(this.captions_[lastCaptionIndex]);
     }
-    else {        
+    else {
         this.dispatchCaptionEvent_(null);
     }
 };

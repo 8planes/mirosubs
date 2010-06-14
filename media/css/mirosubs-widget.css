@@ -1891,4 +1891,21 @@ a.mirosubs-openid span{
    display: block !important;
 }
 
+.mirosubs-warning {
+    position: absolute;
+    border: 5px solid red;
+    padding: 15px;
+    background-color: white;
+    max-width: 350px;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 150%;
+}
 
+.mirosubs-warning .mirosubs-label {
+    margin-bottom: 15px;
+}
+
+.mirosubs-warning .mirosubs-link {
+    margin-right: 10px;
+}

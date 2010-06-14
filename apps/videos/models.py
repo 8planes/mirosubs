@@ -252,13 +252,13 @@ class VersionModel(models.Model):
         if not self.time_change:
             return '0'
         else:
-            return '%.2f' % self.time_change
+            return '%.0f%%' % (self.time_change*100)
 
     def text_change_display(self):
         if not self.text_change:
             return '0'
         else:
-            return '%.2f' % self.text_change
+            return '%.0f%%' % (self.text_change*100)
 
 class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.

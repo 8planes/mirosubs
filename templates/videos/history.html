@@ -95,8 +95,13 @@
     <h2 class="floatleft margin-top">Recent Revisions <a class="whats_this" href="#">(What's This?)</a></h2>
     
     <button class="compare_versions_button"><span>Compare Revisions</span></button>
+    {% if revision_list %}
     
     {% block table %}
+
+
+
+
     <ul class="table_head">
       <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
       <li class="table_user">{% ordered_column "user" "User" %}</li>
@@ -122,5 +127,16 @@
           </li>    
     {% endfor %}
    </ul> 
+
+
+
+       <div style="clear: both"/>
+       {% ordered_paginator 3 %}
+
+
+
+
+
    {% endblock %} 
+   {% endif %}
 {% endblock %}
