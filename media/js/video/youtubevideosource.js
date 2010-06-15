@@ -18,14 +18,14 @@
 
 goog.provide('mirosubs.video.YoutubeVideoSource');
 
-mirosubs.video.YoutubeVideoSource = function(uuid, youtubeVideoID) {
-    this.uuid_ = uuid;
+mirosubs.video.YoutubeVideoSource = function(youtubeVideoID) {
     this.youtubeVideoID_ = youtubeVideoID;
+    this.uuid_ = mirosubs.randomString();
 };
 
 mirosubs.video.YoutubeVideoSource.counter_ = 0;
 
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
+mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function(forSubtitlingWidget) {
     return this.createPlayer_(false);
 };
 
@@ -38,7 +38,6 @@ mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer =
 mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(chromeless) {
     return new mirosubs.video.YoutubeVideoPlayer(
         new mirosubs.video.YoutubeVideoSource(
-            this.uuid_ + (mirosubs.video.YoutubeVideoSource.counter_++), 
             this.youtubeVideoID_), chromeless);
 };
 

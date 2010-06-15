@@ -31,8 +31,7 @@ mirosubs.subtitle.SharePanel.prototype.createDom = function() {
     var $t = goog.bind(this.getDomHelper().createTextNode, this.getDomHelper());
 
     this.getElement().appendChild(
-        $d('img', {'src': [mirosubs.BASE_URL, mirosubs.IMAGE_DIR, 
-                           'blue_triangle.png'].join(''), 
+        $d('img', {'src': mirosubs.imageAssetURL('blue_triangle.png'), 
                    'className':'mirosubs-blueTriangle'}));
     this.createShareSection_($d, $t);
     this.createEmbedSection_($d, $t);

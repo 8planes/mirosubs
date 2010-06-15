@@ -23,7 +23,7 @@
    
     <div>
         <form method="post" action="{% url videos:feedback %}" id="feedback_form">
-        <h2>What would make this page work better?</h2>
+        <h2>What did you think about the demo?</h2>
 <p>Please let us know if you have any comments, questions, or suggestions!</p>
             <p>
                 <label for="feedback_email">Your email: </label>{{ form.email }}
@@ -39,7 +39,7 @@
     </div>
    
     <div style="display: none" id="feedback_success">
-        Thak you, for your feedback.<br/>
+        Thank you for your feedback.<br/>
         <a href="#" id="send_more_feedback">Send more feedback.</a>
     </div>
     
@@ -57,7 +57,7 @@
                 if (data.success){
                     $form.resetForm();
                     $form.parent().hide().next().show();
-                }else{
+                } else {
                     for (key in data.errors){
                         $form.prepend('<p class="error_list">'+data.errors[key]+'</p>');
                     };
@@ -66,7 +66,7 @@
             beforeSubmit: function(formData, $Form, options){
                 $('p.error_list', $Form).remove();
                 var form = $Form[0];
-                if ( ! form.message.value){
+                if (!form.message.value){
                     $(form.message).before('<p class="error_list">Enter feedback please.</p>');
                     return false;
                 }

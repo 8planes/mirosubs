@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="/site_media/js/closure-library/closure/goog/base.js"></script>
-    <script type="text/javascript" src="/site_media/js/closure-dependencies.js"></script>
+    {% include "widget/_js_onsite_dependencies.html" %}
     <script>
       goog.require('goog.testing.jsunit');
       goog.require('goog.testing.events');
@@ -11,9 +10,6 @@
       <!-- Symlinked to JSUnit installation -->
       goog.testing.jsunit.BASE_PATH = '/site_media/js/jsunit/app/';
     </script>
-{% for dep in js_dependencies %}
-    <script type="text/javascript" src="{{dep|safe}}"></script>
-{% endfor %}
   </head>
   <body>
     <div>

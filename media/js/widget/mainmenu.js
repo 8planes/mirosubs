@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.MainMenu');
@@ -21,11 +21,11 @@ goog.provide('mirosubs.MainMenu');
 /**
  *
  * @param {boolean} isSubtitled
- * @param {Array.<Object<string, string>>=} Optional array of 
+ * @param {Array.<Object<string, string>>=} Optional array of
  *     json translation languages, where each language
  *     has a code and name.
  */
-mirosubs.MainMenu = function(videoID, nullWidget, 
+mirosubs.MainMenu = function(videoID, nullWidget,
                              isSubtitled, opt_translationLanguages) {
     goog.ui.PopupMenu.call(this);
     // FIXME: is there a better way to do this rather than setting globals?
@@ -110,6 +110,31 @@ mirosubs.MainMenu.prototype.enterDocument = function() {
 mirosubs.MainMenu.prototype.showMenu = function(target, x, y) {
     if (!this.isVisible() && !this.wasRecentlyHidden())
         this.setMenuItems_();
+
+    if (this.warning_)
+        return;
+
+    if (mirosubs.isEmbeddedInDifferentDomain()) {
+        this.warning_ = new mirosubs.EmbedWarning( goog.bind(this.showMenuInternal_, this, target, x, y), x, y );
+        if (this.warning_.showWarning()) {
+            var that = this;
+            goog.events.listenOnce(
+                this.warning_,
+                goog.ui.Dialog.EventType.AFTER_HIDE,
+                function(event) {
+                    that.warning_ = null;
+                });
+        }
+        else {
+            this.warning_.dispose();
+            this.warning_ = null;
+        }
+    }
+    else {
+        this.showMenuInternal_(target, x, y);
+    }
+};
+mirosubs.MainMenu.prototype.showMenuInternal_ = function(target, x, y) {
     mirosubs.MainMenu.superClass_.showMenu.call(this, target, x, y);
 };
 mirosubs.MainMenu.prototype.setMenuItems_ = function() {
@@ -134,13 +159,13 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
             'Add new', mv.NEW_LANG), true);
     }
     else {
-        this.addChild(new goog.ui.MenuItem('Add Subtitles', 
+        this.addChild(new goog.ui.MenuItem('Add Subtitles',
                                            mv.ADD_SUBTITLES), true);
     }
     this.addChild(new goog.ui.MenuSeparator(), true);
     if (mirosubs.currentUsername == null) {
         this.addChild(new goog.ui.MenuItem('Login', mv.LOGIN), true);
-        this.addChild(new goog.ui.MenuItem('Create Account', 
+        this.addChild(new goog.ui.MenuItem('Create Account',
                                            mv.CREATE_ACCOUNT), true);
     }
     else
@@ -153,14 +178,14 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
     }
 };
 mirosubs.MainMenu.prototype.createDownloadSRTLink_ = function() {
-    var url = [mirosubs.BASE_URL,
-               "/widget/download_", 
+    var url = [mirosubs.siteURL(),
+               "/widget/download_",
                (this.nullWidget_ ? "null_" : ""),
                "srt/?video_id=",
                '' + this.videoID_].join('');
     if (this.currentLangCode_)
         url += ['&lang_code=', this.currentLangCode_].join('')
-    var $d = goog.bind(this.getDomHelper().createDom, 
+    var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
     var menuItem = new goog.ui.MenuItem(
         $d('a', {'href':url}, 'Download SRT'));
@@ -171,7 +196,7 @@ mirosubs.MainMenu.prototype.createDownloadSRTLink_ = function() {
 mirosubs.MainMenu.LanguageSelectedEvent = function(opt_languageCode) {
     this.type = mirosubs.MainMenu.EventType.LANGUAGE_SELECTED;
     /**
-     * The language code selected, or null to signify original 
+     * The language code selected, or null to signify original
      * language.
      * @type {?string}
      */

@@ -122,8 +122,7 @@ mirosubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv
 mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.loginDiv_ = $d('div');
     this.loadingGif_ = $d('img', 
-                          {'src': [mirosubs.BASE_URL, mirosubs.IMAGE_DIR, 
-                                   'spinner.gif'].join('')});
+                          {'src': mirosubs.imageAssetURL('spinner.gif') });
     this.showLoading(false);
     this.doneAnchor_ = $d('a', {'className':'mirosubs-done', 'href':'#'},
                           $d('span', null,

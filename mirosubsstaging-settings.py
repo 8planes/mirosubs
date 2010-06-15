@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from settings import *
+from django.contrib.sites.models import Site
 
 JS_USE_COMPILED = True
 
@@ -32,3 +33,5 @@ SITE_NAME = 'mirosubs-staging-8planes'
 
 TWITTER_CONSUMER_KEY = 'GmKbnjiW1fkzW0MraLKkiQ'
 TWITTER_CONSUMER_SECRET = 'xgOc8kj0lH8AZkElPu5YgYAYz9QeLR16skHl5zA1ejg'
+
+MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)

@@ -18,6 +18,9 @@
 
 from settings import *
 import logging
+from django.contrib.sites.models import Site
 
 SITE_ID = 12
 SITE_NAME = 'msdean'
+
+MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)

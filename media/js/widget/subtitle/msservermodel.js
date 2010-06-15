@@ -190,5 +190,5 @@ mirosubs.subtitle.MSServerModel.prototype.logOut = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
-    return [mirosubs.BASE_URL, "/videos/", this.videoID_, "/"].join('');
+    return [mirosubs.siteURL(), "/videos/", this.videoID_, "/"].join('');
 };

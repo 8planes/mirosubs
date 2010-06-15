@@ -20,11 +20,80 @@ from django.conf.global_settings import LANGUAGES
 from videos import models
 from datetime import datetime
 from uuid import uuid4
-
+import re
+import simplejson as json
 import widget
 from videos.models import VIDEO_SESSION_KEY
+from urlparse import urlparse, parse_qs
 
 LANGUAGES_MAP = dict(LANGUAGES)
+
+def show_widget(request, video_url, null_widget, autoplay, autoplay_language):
+    #FIXME: shorten this method.
+    #FIXME: This logic is duplicated in video.views.create. Fix that.
+    parsed_url = urlparse(video_url)
+    if 'youtube.com' in parsed_url.netloc.lower():
+        youtube_videoid = parse_qs(parsed_url.query)['v'][0]
+        #TODO: worry about transaction here, in case two users embed same video
+        # at roughly same time.
+        try:
+            video = models.Video.objects.get(youtube_videoid=youtube_videoid)
+        except models.Video.DoesNotExist:
+            video = models.Video(video_type=models.VIDEO_TYPE_YOUTUBE,
+                                 youtube_videoid=youtube_videoid,
+                                 allow_community_edits=True)
+        video.save()
+    else:
+        try:
+            video = models.Video.objects.get(video_url=video_url)
+        except models.Video.DoesNotExist:
+            video = models.Video(video_type=models.VIDEO_TYPE_HTML5,
+                                 video_url=video_url,
+                                 allow_community_edits=True)
+        video.save()
+    video.widget_views_count += 1
+    video.save()
+
+    return_value = {
+            'video_id' : video.video_id,
+            'writelock_expiration' : models.WRITELOCK_EXPIRATION 
+        }
+    # video_tab corresponds to mirosubs.widget.VideoTab.InitialState in
+    # javascript.
+    video_tab = 0
+    if null_widget:
+        null_captions = None
+        if request.user.is_authenticated:
+            null_captions = video.null_captions(request.user)
+            translation_language_codes = \
+                video.null_translation_language_codes(request.user)
+        else:
+            translation_language_codes = []
+        if null_captions is None:
+            video_tab = 0
+        elif not null_captions.is_complete:
+            video_tab = 1
+        else:
+            video_tab = 3
+    else:
+        translation_language_codes = video.translation_language_codes()
+        if video.caption_state == models.NO_CAPTIONS:
+            video_tab = 0
+        elif video.caption_state == models.CAPTIONS_IN_PROGRESS:
+            if request.user.is_authenticated and request.user == video.owner:
+                video_tab = 1
+            else:
+                video_tab = 2
+                return_value['owned_by'] = video.owner.username
+        else:
+            video_tab = 3
+    return_value['initial_tab'] = video_tab
+    return_value['translation_languages'] = \
+        [language_to_map(code, LANGUAGES_MAP[code]) for 
+         code in translation_language_codes]
+    if autoplay:
+        return_value['subtitles'] = autoplay_subtitles
+    return return_value
 
 def start_editing(request, video_id):
     """Called by subtitling widget when subtitling is to commence or recommence on a video.
@@ -405,3 +474,25 @@ def apply_translation_changes(translations_set, inserted, updated,
 def maybe_add_video_session(request):
     if VIDEO_SESSION_KEY not in request.session:
         request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
+
+def autoplay_subtitles(request, video, null_widget, autoplay_lang_code):
+    params = { }
+    if autoplay_lang_code != '':
+        if null_widget:
+            translations = \
+                video.null_captions_and_translations(
+                request.user, autoplay_lang_code)
+        else:
+            translations = \
+                video.captions_and_translations(autoplay_lang_code)
+        return [t[0].to_json_dict(
+                None if t[1] is None else t[1].translation_text)
+                for t in translations]
+    else:
+        if null_widget:
+            subtitles = list(video.null_captions(
+                    request.user).videocaption_set.all())
+        else:
+            subtitles = list(video.captions().videocaption_set.all())
+        return [subtitle.to_json_dict() 
+                for subtitle in subtitles]

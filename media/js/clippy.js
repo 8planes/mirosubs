@@ -18,13 +18,10 @@
 
 goog.provide('mirosubs.Clippy');
 
-/**
- * Filled in embeddablewidget.js when widget loads.
- */
-mirosubs.Clippy.SWF_URL = null;
-
 mirosubs.Clippy.getHTML = function(text) {
-    return mirosubs.Flash.getHTML('clippy', mirosubs.Clippy.SWF_URL,
-                                  110, 14, 
-                                  new goog.structs.Map({'text' : text}));
+    return mirosubs.Flash.getHTML(
+        'clippy', 
+        mirosubs.mediaURL() + 'swf/clippy.swf',
+        110, 14, 
+        new goog.structs.Map({'text' : text}));
 };
