@@ -36,9 +36,15 @@ def embed(request):
 def widget_demo(request):
     context = {}
     context['js_use_compiled'] = settings.JS_USE_COMPILED
-    context['embed_js_url'] = \
-        "http://{0}/embed.js".format(Site.objects.get_current().domain)
-    context['video_url'] = request.GET['video_url']
+    context['site_url'] = 'http://{0}'.format(
+        request.get_host())
+    if 'video_url' not in request.GET:
+        context['help_mode'] = True
+    else:
+        context['help_mode'] = False
+        context['embed_js_url'] = \
+            "http://{0}/embed.js".format(Site.objects.get_current().domain)
+        context['video_url'] = request.GET['video_url']
     return render_to_response('widget/widget_demo.html', 
                               context,
                               context_instance=RequestContext(request))

@@ -7,10 +7,39 @@
 {% endif %}
 </head>
 <body>
-  <script type="text/javascript" src="{{ embed_js_url }}">
-    ({
-       video_url: '{{video_url}}'
-    })
-  </script>
+  {% if help_mode %}
+    <h2>Things you can add to query string:</h2>
+    <table>
+      <tr>
+        <td>video_url=[video url]</td>
+        <td>(<strong>NOT</strong> optional) The url of the video to embed. Can be a youtube page url or a video file url.</td>
+      </tr>
+      <tr>
+        <td>null_widget=true</td>
+        <td>(optional) When true, makes the widget in null sandbox.</td>
+      </tr>
+      <tr>
+        <td>debug_js=true</td>
+        <td>(optional) When true, opens a Javascreipt debugging panel</td>
+      </tr>
+      <tr>
+        <td>subtitle_immediately=true</td>
+        <td>(optional) When true, opens subtitling dialog as soon as widget loads.</td>
+      </tr>
+      <tr>
+        <td>autoplay_language=[language code]</td>
+        <td>(optional) Blank [language code] opens widget with native language subs already loaded. Or use 2-letter [language code] for other languages.</td>
+      </tr>
+    </table>
+    <h2>Examples</h2>
+    <pre>{{site_url}}/widget_demo/?video_url=http://www.youtube.com/watch?v=MJRF8xGzvj4</pre>
+    <pre>{{site_url}}/widget_demo/?video_url=http://videos.mozilla.org/firefox/3.5/switch/switch.ogv&amp;null_widget=true&amp;debug_js=true</pre>
+  {% else %}
+    <script type="text/javascript" src="{{ embed_js_url }}">
+      ({
+         video_url: '{{video_url}}'
+      })
+    </script>
+  {% endif %}
 </body>
 </html>
