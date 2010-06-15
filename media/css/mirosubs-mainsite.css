@@ -159,9 +159,8 @@ background: url(../images/logo.png) 0 -59px no-repeat;
 }
 
 .header .nav{
-margin: 7px 0 0;
+margin: 12px 0 0;
 padding: 0;
-
 float: right;
 }
 
@@ -175,7 +174,6 @@ list-style: none;
 
 
 .header .nav li.search{
-float: right;
 }
 
 .header .nav li.search a {
@@ -1431,7 +1429,7 @@ border: 1px solid #999;
 display: block;
 }
 
-#index #feedback_form{
+#index #feedback_form, #about #feedback_form{
 display: none;
 }
 
