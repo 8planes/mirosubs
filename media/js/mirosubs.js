@@ -160,7 +160,7 @@ mirosubs.randomString = function() {
 };
 
 /**
- * Function which checks whether we are embedded in a non-PCF domain.
+ * Checks whether we are embedded in a non-PCF domain.
  */
 mirosubs.isEmbeddedInDifferentDomain = function() {
     return mirosubs.siteConfig != null;
@@ -170,9 +170,3 @@ mirosubs.LoginEvent = function(username) {
     this.type = mirosubs.EventType.LOGIN;
     this.username = username;
 };
-
-// see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
-window["mirosubs"] = mirosubs;
-mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
-mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
-mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;
