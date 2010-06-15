@@ -240,6 +240,30 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     return render_to_response(tpl, context,
                               context_instance=RequestContext(request))     
 
+def last_revision(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    
+    context = widget.add_onsite_js_files({})
+    context['video'] = video
+    context['version'] = video.captions()
+    context['translations'] = video.translationlanguage_set.all()
+    
+    return render_to_response('videos/last_revision.html', context,
+                              context_instance=RequestContext(request))
+
+def last_translation_revision(request, video_id, language_code):
+    video = get_object_or_404(Video, video_id=video_id)
+    language = video.translation_language(language_code)
+    
+    context = widget.add_onsite_js_files({})
+    context['video'] = video
+    context['version'] = video.translations(language_code)
+    context['language'] = language
+    context['translations'] = video.translationlanguage_set.exclude(pk=language.pk)
+    
+    return render_to_response('videos/last_revision.html', context,
+                              context_instance=RequestContext(request))
+    
 @login_required
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)

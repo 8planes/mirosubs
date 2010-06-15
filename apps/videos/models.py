@@ -307,7 +307,7 @@ class VideoCaptionVersion(VersionModel):
     
     def captions(self):
         return self.videocaption_set.order_by('start_time')
-
+            
     def prev_version(self):
         cls = self.__class__
         try:
