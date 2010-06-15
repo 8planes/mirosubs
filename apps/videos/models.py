@@ -75,7 +75,7 @@ class Video(models.Model):
         if self.video_type == VIDEO_TYPE_HTML5:
             return self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
-            return 'http://www.youtube.com/v/%s' % self.youtube_videoid
+            return 'http://www.youtube.com/watch?v=%s' % self.youtube_videoid
         else:
             return self.video_url
         
