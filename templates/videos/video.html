@@ -30,13 +30,12 @@ div.mirosubs-widget {
     {% if video.youtube_name %}
     <h2>{{ video.youtube_name }}</h2>
     {% endif %}
-    <div id="widget_div" class="mirosubs-widget"></div>
-    <script type="text/javascript">
-      mirosubs.widget.SameDomainEmbed.embed(
-          document.getElementById('widget_div'), 
-          { video_url: '{{video.get_video_url}}',
-            subtitle_immediately: {{autosub}} });
-    </script>
+        <div id="widget_div" class="mirosubs-widget"></div>
+        <script type="text/javascript">
+          mirosubs.widget.SameDomainEmbed.embed(
+              document.getElementById('widget_div'), 
+              { video_url: '{{video.get_video_url}}' });
+        </script>
 </div>
 
 <div class="right_column">

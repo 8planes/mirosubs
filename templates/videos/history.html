@@ -62,12 +62,12 @@
     </p>
     
     <div class="left_column">
-      <div id="widget_div" class="mirosubs-widget"></div>
-      <script type="text/javascript">
-        mirosubs.widget.SameDomainEmbed.embed(
-            document.getElementById('widget_div'),
-            { video_url: '{{video.get_video_url}}' });
-      </script>
+        <div id="widget_div" class="mirosubs-widget"></div>
+        <script type="text/javascript">
+          mirosubs.widget.SameDomainEmbed.embed(
+              document.getElementById('widget_div'), 
+              { video_url: '{{video.get_video_url}}' });
+        </script>
     </div>
     
     <div class="right_column">
@@ -105,7 +105,7 @@
     
    
    <ul class="table_body"> 
-    {% for item in revisions %}
+    {% for item in revision_list %}
           <li>
             <ul>
               <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }} <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a></li>
@@ -120,15 +120,8 @@
           </li>    
     {% endfor %}
    </ul> 
-
-
-
-       <div style="clear: both"/>
-       {% ordered_paginator 3 %}
-
-
-
-
+   <div style="clear: both"/>
+   {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
 
    {% endblock %} 
    {% endif %}

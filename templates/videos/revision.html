@@ -85,13 +85,13 @@
     {% endblock %}
     
     <div class="left_column">
-      <br />
-      {% with video.video_url as video_url %}
-          {% include "widget/widget.html" %}
-          <script type="text/javascript">
-              mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
-          </script>
-      {% endwith %}
+        <br />
+        <div id="widget_div" class="mirosubs-widget"></div>
+        <script type="text/javascript">
+          mirosubs.widget.SameDomainEmbed.embed(
+              document.getElementById('widget_div'), 
+              { video_url: '{{video.get_video_url}}' });
+        </script>
     </div>    
 
     <div class="right_column">

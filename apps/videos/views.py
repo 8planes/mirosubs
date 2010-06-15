@@ -81,6 +81,7 @@ def video(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
+    
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
@@ -181,7 +182,7 @@ def history(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
-
+    
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
@@ -192,12 +193,11 @@ def history(request, video_id):
 def translation_history(request, video_id, lang):
     video = get_object_or_404(Video, video_id=video_id)
     language = get_object_or_404(TranslationLanguage, video=video, language=lang)
-    context = widget.js_context(request, video, False, None, False, None, 
-                                'autosub' in request.GET)
+    context = widget.add_onsite_js_files({})
    
     qs = TranslationVersion.objects.filter(language=language) \
         .exclude(time_change=0, text_change=0)
-    print qs
+
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
         'date': 'datetime_started', 
@@ -244,7 +244,6 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)
     user = request.user
-    print cls == VideoCaptionVersion
     is_writelocked = version.video.is_writelocked if (cls == VideoCaptionVersion) else version.language.is_writelocked
     if is_writelocked:
         user.message_set.create(message='Can not rollback now, because someone is editing subtitles.')
@@ -286,7 +285,7 @@ def diffing(request, first_pk, second_pk):
     context['first_version'] = first_version
     context['second_version'] = second_version
     context['is_writelocked'] = video.is_writelocked
-    context['history_link'] = reverse('videos:history', args=[video.video_id])     
+    context['history_link'] = reverse('videos:history', args=[video.video_id])
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
 
@@ -309,14 +308,14 @@ def translation_diffing(request, first_pk, second_pk):
         data = [caption, scaption, dict(text=changed, time=False, end_time=False)]
         captions.append(data)
         
-    context = widget.js_context(request, video, False, None, False, None, 
-                                'autosub' in request.GET)
+    context = widget.add_onsite_js_files({})
+    
     context['video'] = video
     context['captions'] = captions
     context['first_version'] = first_version
     context['second_version'] = second_version
     context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language])
-    context['is_writelocked'] = language.is_writelocked 
+    context['is_writelocked'] = language.is_writelocked
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 
