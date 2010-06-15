@@ -99,6 +99,9 @@ mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
 mirosubs.MainMenu.prototype.setTranslationLanguages = function(langs) {
     this.translationLanguages_ = langs;
 };
+mirosubs.MainMenu.prototype.getTranslationLanguages = function() {
+    return this.translationLanguages_;
+};
 mirosubs.MainMenu.prototype.setSubtitled = function() {
     this.isSubtitled_ = true;
 };

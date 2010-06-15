@@ -37,7 +37,7 @@
   {% else %}
     <script type="text/javascript" src="{{ embed_js_url }}">
       ({
-         video_url: '{{video_url}}'
+{{widget_params|safe}}
       })
     </script>
   {% endif %}

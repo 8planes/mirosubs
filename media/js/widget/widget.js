@@ -115,7 +115,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
 
     this.setInitialVideoTabState_(initialTab, result['owned_by']);
 
-    if (this.autoplay_)
+    if (this.autoplayLanguage_ != null)
         this.subsLoaded_(this.autoplayLanguage_,
                          result['subtitles']);
     if (this.subtitleImmediately_)
@@ -302,16 +302,16 @@ mirosubs.widget.Widget.prototype.subsLoaded_ =
     this.languageCodePlaying_ = languageCode;
     this.playManager_ = new mirosubs.play.Manager(
         this.videoPlayer_, subtitles);
-    // FIXME: petit duplication. appears in server-side code also.
     this.videoTab_.setText(
-        languageCode == null ? "Original language" : 
+        languageCode == '' ? "Original language" : 
             this.findLanguage_(languageCode)['name']);
     this.popupMenu_.setCurrentLangCode(languageCode);
     this.popupMenu_.setShowingSubs(true);
 };
 mirosubs.widget.Widget.prototype.findLanguage_ = function(code) {
     return goog.array.find(
-        this.translationLanguages_, function(tl) {
+        this.popupMenu_.getTranslationLanguages(), 
+        function(tl) {
             return tl['code'] == code;
         });
 };
