@@ -40,6 +40,18 @@ div.mirosubs-widget {
 
 <div class="right_column">
 {% include '_testing_widget.html' %}
+
+{% if video.captions %}
+    Last version for <a href="{% url videos:last_revision video.video_id %}" >original language</a>
+    <br/>
+{% endif %}
+{% if translations %}
+    {% for item in translations %}
+        Last version for languages:
+        <a target="_blank" href="{% url videos:last_translation_revision video.video_id item.language %}">{{ item.get_language_display }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+{% endif %}
+
 {% comment %}
   <div class="mirosubs-share">
 						<img src="{{ MEDIA_URL }}images/blue_triangle.png" class="mirosubs-blueTriangle" />

@@ -81,6 +81,7 @@ def video(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
+    context['translations'] = video.translationlanguage_set.all()
     
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
