@@ -8,10 +8,71 @@
 {% endblock %}
 {% block main_content %}
 
-<h2 class="centered">Welcome to our alpha demo!</h1>
+<h2 class="centered">Welcome to our alpha demo!</h2>
 
-<p>This is purely for demonstration purposes &mdash; your subtitles will not be saved (even if you log in). Feel free to drop us a note at the bottom of the page.</p>
+<div style="width:550px;margin:auto;">
+	<p><strong>What's this?</strong> The video below is for demonstration purposes &mdash; try clicking the subtitles tab!</p> 
 
-<div class="centered"><p style="width:420px;height:308px;border:2px solid #999;text-size:18pt;margin:auto;">video widget</p></div>
+	<p>We're just getting started, so expect to see better cross-browser support (Firefox 3.5+ works best right now) and we'll make it compatible with lots of different video formats/hosts. Feel free to drop us a note at the bottom of the page. <em>Note: Your subtitles will not be permanently saved (even if you log in).</em></p>
 
+	<script language="JavaScript" type="text/javascript">
+		<!--
+		
+
+
+		
+		if (navigator.userAgent.indexOf("Opera") !=-1)
+		  {
+		    
+		    var format 
+			format = "theora";
+		  }
+
+		else if (navigator.userAgent.indexOf("Chrome") !=-1)
+		  {
+		    
+		    var format 
+			format = "theora";
+		  }
+
+		else if (navigator.userAgent.indexOf("Safari") !=-1)
+		  {
+		    
+		    var format 
+			format = "yt";
+		  }
+
+		else if (navigator.userAgent.indexOf("Gecko") !=-1)
+		  {
+		    
+		    var format 
+			format = "theora";
+		  }
+
+		else
+		   {
+			var format 
+			format = "yt";
+
+		   }
+		
+		 if (format == "theora")
+		   {
+		      document.write ('theora demo goes here <script type="http://mirosubsdev.8planes.com/embed_widget.js">({video_url:"http://www.youtube.com/watch?v=cNn3k1KfOrs", null_widget: true, })<\/script>');
+		   }
+		
+		else 
+		   {
+		      document.write ('youtube demo goes here <script type="http://mirosubsdev.8planes.com/embed_widget.js">({video_url:"http://www.youtube.com/watch?v=cNn3k1KfOrs", null_widget: true, })<\/script>');
+		   }
+		
+			
+
+		//-->
+	</script>
+
+	<p><strong>Got feedback?</strong> Use the form at the bottom of this page to give us your feedback, bugs, and opinions.</p>
+
+	<p><strong>What's next?</strong> We’re working on an alpha version of our community website that will enable basic collaboration on subtitles and translations. Stay tuned!</p>
+</div>
 {% endblock %}
