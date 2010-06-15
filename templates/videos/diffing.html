@@ -60,12 +60,7 @@
         <a href="#" class="previous_edit">Previous Edit</a>
         <div class="clear">&nbsp;</div>
         
-        {% with video.video_url as video_url %}
-            {% include "widget/widget.html" %}
-            <script type="text/javascript">
-                mirosubs.EmbeddableWidget.wrap({% include "widget/embed_params.js" %});
-            </script>
-        {% endwith %}
+
         
         {% if user.is_authenticated %}
             {% if is_writelocked %}

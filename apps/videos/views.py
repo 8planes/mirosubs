@@ -80,6 +80,7 @@ def video(request, video_id):
     context = widget.add_onsite_js_files({})
     context['video'] = video
     context['site'] = Site.objects.get_current()
+    context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
@@ -161,7 +162,7 @@ def demo(request):
 
 def history(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
-    context = widget.add_offsite_js_files({})
+    context = widget.add_onsite_js_files({})
 
     qs = VideoCaptionVersion.objects.filter(video=video)   \
         .exclude(time_change=0, text_change=0)
@@ -223,7 +224,7 @@ def translation_history(request, video_id, lang):
 
 def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     version = get_object_or_404(cls, pk=pk)
-    context = widget.add_offsite_js_files({})
+    context = widget.add_onsite_js_files({})
     context['video'] = version.video
     context['version'] = version
     context['next_version'] = version.next_version()

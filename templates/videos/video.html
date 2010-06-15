@@ -34,7 +34,8 @@ div.mirosubs-widget {
     <script type="text/javascript">
       mirosubs.widget.SameDomainEmbed.embed(
           document.getElementById('widget_div'), 
-          { video_url: '{{video.video_url}}' });
+          { video_url: '{{video.get_video_url}}',
+            subtitle_immediately: {{autosub}} });
     </script>
 </div>
 
@@ -76,7 +77,5 @@ div.mirosubs-widget {
 
 
 	
-  
-  
-{% endwith %}
+
 {% endblock %}
