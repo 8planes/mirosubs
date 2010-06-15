@@ -209,5 +209,5 @@ RECENT_ACTIVITIES_ONPAGE = 10
 ACTIVITIES_ONPAGE = 20
 REVISIONS_ONPAGE = 20
 
-FEEDBACK_EMAIL = 'feedback@universalsubtitles.org'
+FEEDBACK_EMAIL = 'universalsubtitles@pculture.org'
 FEEDBACK_SUBJECT = 'Feedback'
