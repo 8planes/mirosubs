@@ -24,8 +24,6 @@ from django.contrib.sites.models import Site
 from django.contrib import admin
 admin.autodiscover()
 
-
-
 urlpatterns = patterns(
     '',
     (r'^$', 'django.views.generic.simple.direct_to_template', 
@@ -63,6 +61,7 @@ urlpatterns = patterns(
                             app_name='profiles')),
     (r'auth/', include('auth.urls', namespace='auth',
                        app_name='auth')),
+    url(r'^demo/$', 'videos.views.demo', name="demo"),
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'about.html'}),
 		(r'^faq$',  'django.views.generic.simple.direct_to_template', 

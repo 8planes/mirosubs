@@ -1,78 +1,53 @@
 {% extends "base.html" %}
 {% block scripts %}
-{% if not js_use_compiled %}
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
-{% endif %}
+{% include "widget/_js_onsite_dependencies.html" %}
+{% endblock %}
+{% block css %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+
 {% endblock %}
 {% block main_content %}
-
 <h2 class="centered">Welcome to our alpha demo!</h2>
-
 <div style="width:550px;margin:auto;">
-	<p><strong>What's this?</strong> The video below is for demonstration purposes &mdash; try clicking the subtitles tab!</p> 
-
-	<p>We're just getting started, so expect to see better cross-browser support (Firefox 3.5+ works best right now) and we'll make it compatible with lots of different video formats/hosts. Feel free to drop us a note at the bottom of the page. <em>Note: Your subtitles will not be permanently saved (even if you log in).</em></p>
-
-	<script language="JavaScript" type="text/javascript">
-		<!--
-		
-
-
-		
-		if (navigator.userAgent.indexOf("Opera") !=-1)
-		  {
-		    
-		    var format 
-			format = "theora";
-		  }
-
-		else if (navigator.userAgent.indexOf("Chrome") !=-1)
-		  {
-		    
-		    var format 
-			format = "theora";
-		  }
-
-		else if (navigator.userAgent.indexOf("Safari") !=-1)
-		  {
-		    
-		    var format 
-			format = "yt";
-		  }
-
-		else if (navigator.userAgent.indexOf("Gecko") !=-1)
-		  {
-		    
-		    var format 
-			format = "theora";
-		  }
-
-		else
-		   {
-			var format 
-			format = "yt";
-
-		   }
-		
-		 if (format == "theora")
-		   {
-		      document.write ('theora demo goes here <script type="http://mirosubsdev.8planes.com/embed_widget.js">({video_url:"http://www.youtube.com/watch?v=cNn3k1KfOrs", null_widget: true, })<\/script><br \/> <a style="font-size:8px" href="http://commons.wikimedia.org/wiki/File:Bookshelf_Sue.ogv">CC-BY-SA<\/a>');
-		   }
-		
-		else 
-		   {
-		      document.write ('<script type="http://mirosubsdev.8planes.com/embed_widget.js">({video_url:"http://www.youtube.com/watch?v=6APY0_lEHJo", null_widget: true, })<\/script><br \/> <a style="font-size:8px" href="http://www.youtube.com/watch?v=6APY0_lEHJo">CC-BY-SA<\/a>');
-		   }
-		
-			
-
-		//-->
-	</script>
-
-	<p><strong>Got feedback?</strong> Use the form at the bottom of this page to give us your feedback, bugs, and opinions.</p>
-
-	<p><strong>What's next?</strong> We’re working on an alpha version of our community website that will enable basic collaboration on subtitles and translations. Stay tuned!</p>
+  <p><strong>What's this?</strong> The video below is for 
+    demonstration purposes &mdash; try clicking the subtitles tab!</p> 
+  <p>We're just getting started, so expect to see better cross-browser 
+    support (Firefox 3.5+ works best right now) and we'll make it 
+    compatible with lots of different video formats/hosts. Feel free 
+    to drop us a note at the bottom of the page. 
+    <em>Note: Your subtitles will not be permanently saved 
+      (even if you log in).</em>
+  </p>
+  <div id="widget_div" class="mirosubs-widget"></div>
+  <script language="JavaScript" type="text/javascript">
+      // get from: http://diveintohtml5.org/detect.html#video-formats
+      function supports_video() {
+          return !!document.createElement('video').canPlayType;
+      }
+      function supports_h264_baseline_video() {
+          if (!supports_video()) 
+              return false;
+          var v = document.createElement("video");
+          return v.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+      }
+      function supports_ogg_theora_video() {
+          if (!supports_video()) 
+              return false;
+          var v = document.createElement("video");
+          return v.canPlayType('video/ogg; codecs="theora, vorbis"');
+      }
+      var videoURL = supports_ogg_theora_video() ? 
+          "http://upload.wikimedia.org/wikipedia/commons/2/24/Bookshelf_Sue.ogv" :
+          "http://www.youtube.com/watch?v=6APY0_lEHJo";
+      mirosubs.widget.SameDomainEmbed.embed(
+          document.getElementById('widget_div'),
+          { video_url: videoURL, null_widget: true });
+  </script>
+  <p style="clear: both"><strong>Got feedback?</strong> Use the form at the bottom of 
+    this page to give us your feedback, bugs, and opinions.</p>
+  <p><strong>What's next?</strong> We’re working on an alpha 
+    version of our community website that will enable basic 
+    collaboration on subtitles and translations. Stay tuned!</p>
 </div>
 {% endblock %}

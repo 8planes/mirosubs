@@ -159,7 +159,7 @@ def email_friend(request):
 
 def demo(request):
     context = widget.add_onsite_js_files({})
-    return render_to_response('videos/demo.html', context,
+    return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
 def history(request, video_id):
