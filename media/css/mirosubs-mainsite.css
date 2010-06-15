@@ -68,25 +68,31 @@ margin: 0;
 position: relative;
 clear: both;
 padding: 20px 30px 20px 30px;
-border-top: 1px solid #bed3d7;
-border-bottom: 1px solid #ebfcff;
-border-left: 1px solid #c6dee2;
-border-right: 1px solid #c6dee2;
+
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
-margin:15px 0 10px;
+margin:15px 0 5px;
 float: left;
+background: url(../images/1x1.png);
+
 width: 400px;
 }
 
 .box h3{
 font-size: 18px;
+margin: 0px 0 0;
+padding: 10px 0 0;
 }
 
 .box a{
 position: absolute;
 bottom: 20px;
 right: 20px;
+}
+
+.box img{
+margin-right: 20px;
+margin-top: 4px;
 }
 
 
@@ -768,7 +774,7 @@ overflow: hidden;
 
 
 .centered{
-font-size: 36px;
+font-size: 40px;
 text-align: center;
 margin: 35px 0 0;
 padding-bottom: 35px;
@@ -780,14 +786,23 @@ padding: 0px 0;
 margin-top: 0px;
 }
 
-.mission{
-color: #555;
-
+.problem strong, .mission strong{
+float: left;
+width: 140px;
+line-height: 1.5em;
 }
 
-.problem{
-color: #555;
 
+
+.mission{
+color: #555;
+display: block;
+}
+
+span.problem{
+color: #555;
+margin-bottom: 10px;
+display: block;
 }
 
 
@@ -797,10 +812,25 @@ color: #c84f4f;
 
 .mission strong{
 color: #57a927;
+
 }
 
+.right_now{
+font-size: 28px;
+padding: 25px 30px 20px 30px;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+margin:15px 0 0px;
+float: left;
+width: 920px;
+background: url(../images/1x1.png);
+text-align: center;
+}
+
+
 .right_now strong{
-color: #c3c34c;
+color: #333;
+
 
 }
 
@@ -811,12 +841,11 @@ color: #c3c34c;
 
 p.pitch{
 border-top: 1px solid #fff;
-border-bottom: 1px solid #fff;
 float: left;
 width: 100%;
 margin: 0px 0 55px;
 padding: 20px 0;
-text-align: center;
+
 font-size: 20px;
 line-height: 34px;
 text-shadow: #fff 1px 1px 1px;
@@ -880,10 +909,6 @@ background-position: -10px -417px;
 clear: both;
 font-size: 18px;
 padding: 20px 30px 20px 30px;
-border-top: 1px solid #bed3d7;
-border-bottom: 1px solid #ebfcff;
-border-left: 1px solid #c6dee2;
-border-right: 1px solid #c6dee2;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
 margin:35px 0 50px;
@@ -1358,12 +1383,11 @@ padding-left: 20px;
 
 
 .drumbeat{
-background: url(../images/drum.png) 20px 20px no-repeat;
+background: url(../images/drum.png) 0px 7px no-repeat;
 clear: both;
-float: left;
-
-border-bottom: 1px solid #fff;
-padding-top: 100px;
+width: 440px;
+height: 130px;
+margin-left: -7px;
 }
 
 .drumbeat .button{
@@ -1395,12 +1419,17 @@ padding-left: 40px;
 
 
 .how-to-video-image{
-border: 0;
 margin: 15px 0 30px;
 display: block;
 }
 
 
+.how-to-video-image img{
+border: 1px solid #999;
+-moz-border-radius: 10px;  
+-webkit-border-radius: 10px;
+display: block;
+}
 
 #index #feedback_form{
 display: none;
