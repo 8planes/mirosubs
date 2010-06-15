@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block scripts %}
+{% if not js_use_compiled %}
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
+{% endif %}
+{% endblock %}
+{% block main_content %}
+
+<h2 class="centered">Welcome to our alpha demo!</h1>
+
+<p>This is purely for demonstration purposes &mdash; your subtitles will not be saved (even if you log in). Feel free to drop us a note at the bottom of the page.</p>
+
+<div class="centered"><p style="width:420px;height:308px;border:2px solid #999;text-size:18pt;margin:auto;">video widget</p></div>
+
+{% endblock %}
