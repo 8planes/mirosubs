@@ -28,8 +28,7 @@ from django.conf import settings
 import widget
 
 def embed(request):
-    context = widget.add_js_files(
-        {}, settings.JS_USE_COMPILED, settings.JS_OFFSITE)
+    context = widget.add_offsite_js_files({})
     return render_to_response('widget/embed.js', context,
                               context_instance=RequestContext(request),
                               mimetype='text/javascript')
