@@ -15,7 +15,7 @@ outline: none !important;
    font-size: 12px !important;
    color: #000 !important;
    line-height: 16px !important;
-   width: 400px !important;
+   width: 400px;
    position: relative;
 }
 
