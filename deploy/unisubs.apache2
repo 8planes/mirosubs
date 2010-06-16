@@ -1,10 +1,7 @@
 <VirtualHost *:8080>
     ServerAdmin aduston@gmail.com
 
-    ServerName  universalsubtitles.org
-    ServerAlias universalsubtitles.com
-    ServerAlias www.universalsubtitles.org
-    ServerAlias dev.universalsutitles.org
+    ServerName  dev.universalsubtitles.org
 
     LogLevel warn
 
