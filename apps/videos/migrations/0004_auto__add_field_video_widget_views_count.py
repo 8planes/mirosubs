@@ -10,10 +10,11 @@ class Migration(SchemaMigration):
         
         # Adding field 'Video.widget_views_count'
         db.add_column('videos_video', 'widget_views_count', self.gf('django.db.models.fields.IntegerField')(default=0))
-        for obj in orm.Video.objects.all():
-            obj.widget_views_count = 1
-            obj.save()    
-    
+        if not db.dry_run:
+            for obj in orm.Video.objects.all():
+                obj.widget_views_count = 1
+                obj.save()
+
     def backwards(self, orm):
         
         # Deleting field 'Video.widget_views_count'

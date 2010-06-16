@@ -8,9 +8,10 @@ from videos.models import Video
 class Migration(DataMigration):
     
     def forwards(self, orm):
-        for video in list(Video.objects.all()):
-            video.allow_community_edits = True
-            video.save()
+        if not db.dry_run:
+            for video in list(orm.Video.objects.all()):
+                video.allow_community_edits = True
+                video.save()
 
     def backwards(self, orm):
         pass # not worrying about going backwards

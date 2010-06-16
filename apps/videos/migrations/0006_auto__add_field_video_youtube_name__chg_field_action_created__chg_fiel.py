@@ -12,18 +12,19 @@ class Migration(SchemaMigration):
         
         # Adding field 'Video.youtube_name'
         db.add_column('videos_video', 'youtube_name', self.gf('django.db.models.fields.CharField')(default='', max_length=2048, blank=True), keep_default=False)
-        for item in orm.Video.objects.all():
-            if item.youtube_videoid:
-                url = 'http://gdata.youtube.com/feeds/api/videos/%s' % item.youtube_videoid
-                data = feedparser.parse(url)
-                try:
-                    if len(data['entries']) > 0:
-                        item.youtube_name = data['entries'][0]['title']
-                        item.save()
-                    else:
-                        item.youtube_name = ''
-                except DjangoUnicodeDecodeError:
-                    pass
+        if not db.dry_run:
+            for item in orm.Video.objects.all():
+                if item.youtube_videoid:
+                    url = 'http://gdata.youtube.com/feeds/api/videos/%s' % item.youtube_videoid
+                    data = feedparser.parse(url)
+                    try:
+                        if len(data['entries']) > 0:
+                            item.youtube_name = data['entries'][0]['title']
+                            item.save()
+                        else:
+                            item.youtube_name = ''
+                    except DjangoUnicodeDecodeError:
+                        pass
         
         # Changing field 'Action.created'
         db.alter_column('videos_action', 'created', self.gf('django.db.models.fields.DateTimeField')())
