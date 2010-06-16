@@ -43,7 +43,7 @@
 - model: sites.site
   pk: 8
   fields:
-    domain: www.universalsubtitles.org
+    domain: universalsubtitles.org
     name: unisubs
 
 - model: sites.site

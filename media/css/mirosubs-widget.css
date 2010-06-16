@@ -10,13 +10,13 @@ outline: none !important;
 
 }
 
-
 .mirosubs-widget {
    font-family: Arial, Helvetica, sans-serif !important;
    font-size: 12px !important;
    color: #000 !important;
    line-height: 16px !important;
    width: 400px !important;
+   position: relative;
 }
 
 
@@ -691,7 +691,6 @@ ul.mirosubs-titlesList.sync {
 
 .mirosubs-captionDiv {
     position: absolute !important;
-    top: 235px !important;
     left: 10px !important;
     width: 360px !important;
 letter-spacing: .04em !important;

@@ -74,6 +74,7 @@ mirosubs.subtitle.SharePanel.prototype.createPermalinkSection_ = function($d, $t
     this.getElement().appendChild(
         $d('a', 
            {'className':'mirosubs-permalink',
+            'style': 'visibility: hidden',
             'href':this.serverModel_.getPermalink()},
            this.serverModel_.getPermalink()));
 };
