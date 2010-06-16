@@ -1458,28 +1458,28 @@ cursor: pointer !important;
 }
 
 .mirosubs-volume {
-height: 30px !important;
-float: right !important;
-width: 31px !important;
-position: relative !important;
+   height: 30px;
+   float: right !important;
+   width: 31px !important;
+   position: relative !important;
 }
 
 
 .mirosubs-volume span{
-height: 30px !important;
-float: right !important;
-width: 31px !important;
-background: url("../images/play_pause.png") 9px -55px no-repeat !important;
+   height: 30px !important;
+   float: right !important;
+   width: 31px !important;
+   background: url("../images/play_pause.png") 9px -55px no-repeat !important;
 }
 
 .mirosubs-volume:hover {
-background: url("../images/gradient.png") 0 0px repeat-x !important;
-cursor: pointer !important;
+   background: url("../images/gradient.png") 0 0px repeat-x !important;
+   cursor: pointer !important;
 }
 
 .mirosubs-volume .mirosubs-volume-container {
    overflow: hidden !important;
-   height: 0 !important;
+   height: 0;
    bottom: 29px !important;
    width: 31px !important;
    -moz-border-radius-topright: 3px !important;
@@ -1495,8 +1495,8 @@ cursor: pointer !important;
    height: 75px !important;
    width: 10px !important; 
    border: 1px solid !important;
-outline: none !important;
--moz-outline: none !important;
+   outline: none !important;
+   -moz-outline: none !important;
    top: 12px !important;
    left: 10px !important;
    position: absolute !important;
@@ -1510,7 +1510,7 @@ outline: none !important;
    height: 0px !important;
    width: 0px !important;
    border: 1px solid red !important;
-   top: 0 !important;
+   top: 0;
    outline: none !important;
    -moz-outline: none !important;
    border: 1px solid !important;
@@ -1529,20 +1529,20 @@ outline: none !important;
 
 .mirosubs-scrobbler {
    border: 1px solid !important;
-  padding: 7px !important;
-  position: absolute !important;
-  left: -8px !important;
-  border-top: 1px solid #555 !important;
-outline: none !important;
--moz-outline: none !important;
-  border-right: 1px solid #333 !important;
-  border-bottom: 1px solid #333 !important;
-  border-left: 1px solid #333 !important;
-  background: #fff url("../images/gradient.png") 0 1px repeat-x !important;
-  top: -3px !important;
-  margin: 0 0 0 0 !important;
-  -moz-border-radius: 10px !important;
-  -webkit-border-radius: 10px !important;
+   padding: 7px !important;
+   position: absolute !important;
+   left: -8px;
+   border-top: 1px solid #555 !important;
+   outline: none !important;
+   -moz-outline: none !important;
+   border-right: 1px solid #333 !important;
+   border-bottom: 1px solid #333 !important;
+   border-left: 1px solid #333 !important;
+   background: #fff url("../images/gradient.png") 0 1px repeat-x !important;
+   top: -3px !important;
+   margin: 0 0 0 0 !important;
+   -moz-border-radius: 10px !important;
+   -webkit-border-radius: 10px !important;
 }
 
 .mirosubs-scrobbler:hover{
@@ -1594,19 +1594,18 @@ outline: none !important;
     -moz-border-radius: 5px !important;
     -webkit-border-radius: 5px !important;
     position: absolute !important;
-outline: none !important;
--moz-outline: none !important;
+   outline: none !important;
+   -moz-outline: none !important;
 }
 
 .mirosubs-progress .mirosubs-played {
-   width: 10px !important;
+   width: 0;
    height: 8px !important;
    position: absolute !important;
    -moz-border-radius: 5px !important;
-outline: none !important;
--moz-outline: none !important;
+   outline: none !important;
+   -moz-outline: none !important;
    -webkit-border-radius: 5px !important; 
-   width: 0 !important;
    border: 1px solid #a6dd13 !important;
    border-top: 1px solid #c5ff27 !important;
    border-bottom: 1px solid #7ba115 !important;

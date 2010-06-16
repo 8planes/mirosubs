@@ -97,7 +97,8 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
 
 mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.stateInitialized_ = true;
-    // TODO: probably set this when startEditing or whatever is called.
+    if (result['username'])
+        mirosubs.currentUsername = result['username'];
     mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
         result["writelock_expiration"];
     this.videoID_ = result['video_id'];
@@ -116,8 +117,9 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.setInitialVideoTabState_(initialTab, result['owned_by']);
 
     if (this.autoplayLanguage_ != null)
-        this.subsLoaded_(this.autoplayLanguage_,
-                         result['subtitles']);
+        this.subsLoaded_(
+            this.autoplayLanguage_ == '' ? null : this.autoplayLanguage_,
+            result['subtitles']);
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(goog.bind(this.startSubtitling_, this));
 
@@ -294,6 +296,9 @@ mirosubs.widget.Widget.prototype.turnOffSubs_ = function(event) {
     }
 };
 
+/**
+ * @param {string=} languageCode for language, or null for original language.
+ */
 mirosubs.widget.Widget.prototype.subsLoaded_ = 
     function(languageCode, subtitles) 
 {
@@ -303,7 +308,7 @@ mirosubs.widget.Widget.prototype.subsLoaded_ =
     this.playManager_ = new mirosubs.play.Manager(
         this.videoPlayer_, subtitles);
     this.videoTab_.setText(
-        languageCode == '' ? "Original language" : 
+        languageCode == null ? "Original language" : 
             this.findLanguage_(languageCode)['name']);
     this.popupMenu_.setCurrentLangCode(languageCode);
     this.popupMenu_.setShowingSubs(true);

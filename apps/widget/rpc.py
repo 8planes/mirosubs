@@ -94,6 +94,8 @@ def show_widget(request, video_url, null_widget, autoplay, autoplay_language):
     if autoplay:
         return_value['subtitles'] = autoplay_subtitles(
             request, video, null_widget, autoplay_language)
+    if request.user.is_authenticated:
+        return_value['username'] = request.user.username
     return return_value
 
 def start_editing(request, video_id):

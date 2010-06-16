@@ -26,6 +26,12 @@ goog.provide('mirosubs');
  */
 mirosubs.siteConfig = null;
 
+/**
+ * Set when widget gets initial state from server, if user is logged in.
+ * @type {string}
+ */
+mirosubs.currentUsername = null;
+
 mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
 
 /**
