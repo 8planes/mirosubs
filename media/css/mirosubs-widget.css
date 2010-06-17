@@ -621,7 +621,7 @@ ul.mirosubs-titlesList.sync {
 
 .mirosubs-modal-widget-bg {
   position: absolute !important;
-    background: #000 url("../images/trans.gif") !important;
+    background: #000 !important;
   top: 0 !important;
   left: 0 !important;
 }
@@ -1200,6 +1200,11 @@ li.mirosubs-transcribeHelp ol li {
 .mirosubs-langmenuitem-highlight {
     background-color: #333 !important;
     cursor: pointer !important;
+    color: white !important;
+}
+
+.mirosubs-langmenuitem-highlight .mirosubs-langmenuitem-content {
+
     color: white !important;
 }
 
