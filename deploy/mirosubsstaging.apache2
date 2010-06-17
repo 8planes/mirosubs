@@ -3,6 +3,7 @@
 
     ServerName mirosubsstaging.8planes.com
     ServerAlias mirosubsstaging.8planes.com
+    ServerAlias mswidgetstaging.8planes.com
 
     LogLevel warn
     ErrorLog /home/mirosubsstaging/log/apache.error.log

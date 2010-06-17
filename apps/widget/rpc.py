@@ -89,10 +89,13 @@ def show_widget(request, video_url, null_widget, autoplay, autoplay_language):
             video_tab = 3
     return_value['initial_tab'] = video_tab
     return_value['translation_languages'] = \
-        [language_to_map(code, LANGUAGES_MAP[code]) for 
+        [widget.language_to_map(code, LANGUAGES_MAP[code]) for 
          code in translation_language_codes]
     if autoplay:
-        return_value['subtitles'] = autoplay_subtitles
+        return_value['subtitles'] = autoplay_subtitles(
+            request, video, null_widget, autoplay_language)
+    if request.user.is_authenticated:
+        return_value['username'] = request.user.username
     return return_value
 
 def start_editing(request, video_id):

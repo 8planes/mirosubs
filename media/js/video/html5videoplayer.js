@@ -56,8 +56,7 @@ mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(el) {
 };
 mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var testVideo = $d('video');
-    if (typeof(testVideo['canPlayType']) != 'undefined') {
+    if (mirosubs.video.supportsOgg()) {
         var params = { 'autobuffer': 'true' };
         if (this.includeControls_)
             params['controls'] = 'true';

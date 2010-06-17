@@ -159,9 +159,8 @@ background: url(../images/logo.png) 0 -59px no-repeat;
 }
 
 .header .nav{
-margin: 7px 0 0;
+margin: 12px 0 0;
 padding: 0;
-
 float: right;
 }
 
@@ -175,7 +174,6 @@ list-style: none;
 
 
 .header .nav li.search{
-float: right;
 }
 
 .header .nav li.search a {
@@ -265,7 +263,7 @@ font-size: 12px;
 }
 
 .watercolor2{
-background: url(../images/watercolor2.png) center 0px no-repeat;
+background: url(../images/watercolor2.png) center 20px no-repeat;
 
 }
 
@@ -776,20 +774,29 @@ overflow: hidden;
 .centered{
 font-size: 40px;
 text-align: center;
-margin: 35px 0 0;
+margin: 45px 0 0;
 padding-bottom: 35px;
 text-shadow: #fff 1px 1px 1px;
 }
 
 .problem, .mission{
-padding: 0px 0;
-margin-top: 0px;
+padding: 0px 90px;
+margin-top: 10px;
+float: left;
+
+line-height: 1.3em;
 }
 
 .problem strong, .mission strong{
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+color: #fff;
+font-size: 13px;
+width: 120px;
+margin: -1px 20px 10px 0;
+text-align: center;
 float: left;
-width: 140px;
-line-height: 1.5em;
+text-shadow: #333 1px 1px 1px;
 }
 
 
@@ -797,6 +804,8 @@ line-height: 1.5em;
 .mission{
 color: #555;
 display: block;
+margin-bottom: 10px;
+padding-top: 10px;
 }
 
 span.problem{
@@ -807,11 +816,12 @@ display: block;
 
 
 .problem strong{
-color: #c84f4f;
+background: #c84f4f;
+
 }
 
 .mission strong{
-color: #57a927;
+background: #57a927;
 
 }
 
@@ -820,10 +830,12 @@ font-size: 28px;
 padding: 25px 30px 20px 30px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
-margin:15px 0 0px;
+margin:45px 0 0px;
 float: left;
+border: 1px solid #e3e3a9;
 width: 920px;
-background: url(../images/1x1.png);
+clear: both;
+background: #f0f3d0;
 text-align: center;
 }
 
@@ -843,8 +855,8 @@ p.pitch{
 border-top: 1px solid #fff;
 float: left;
 width: 100%;
-margin: 0px 0 55px;
-padding: 20px 0;
+margin: 10px 0 55px;
+padding: 40px 0 0;
 
 font-size: 20px;
 line-height: 34px;
@@ -880,12 +892,14 @@ margin-left: 20px;
 .col1 h3, .col2 h3, .col3 h3{
 font-size: 16px;
 line-height: 1.4em;
+margin-bottom: 0;
 }
 
 
 .col1 p, .col2 p, .col3 p{
 font-size: 14px;
 line-height: 20px;
+margin-top: 8px;
 }
 
 
@@ -1431,7 +1445,7 @@ border: 1px solid #999;
 display: block;
 }
 
-#index #feedback_form{
+#index #feedback_form, #about #feedback_form{
 display: none;
 }
 

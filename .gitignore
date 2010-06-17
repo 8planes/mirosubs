@@ -10,3 +10,5 @@ closure-library
 jsunit
 media/profile_images
 settings_local.py
+unisubs-settings.py
+unisubsstaging-settings.py

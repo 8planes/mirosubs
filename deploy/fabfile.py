@@ -40,8 +40,8 @@ def dev():
     env.user = 'mirosubsdev'
     env.base_dir = '/home/{0}'.format(env.user)
 
-def prod():
-    env.hosts = ['pcf10.pculture.org:2191']
+def unisubs():
+    env.hosts = ['universalsubtitles.org:2191']
     env.user = 'adam'
     env.base_dir = '/var/www/universalsubtitles'
 

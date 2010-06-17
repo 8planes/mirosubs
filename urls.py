@@ -24,8 +24,6 @@ from django.contrib.sites.models import Site
 from django.contrib import admin
 admin.autodiscover()
 
-
-
 urlpatterns = patterns(
     '',
     (r'^$', 'django.views.generic.simple.direct_to_template', 
@@ -44,6 +42,7 @@ urlpatterns = patterns(
     (r'^admin/', include(admin.site.urls)),
     (r'^embed.js$', 'widget.views.embed'),
     (r'^widget_demo/$', 'widget.views.widget_demo'),
+    (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
     url(r'^widget/twitter_login/', 'socialauth.views.twitter_login', 
         kwargs={'next': '/widget/close_window/'}),
     (r'^widget/rpc/xd/(\w+)$', 'widget.views.xd_rpc'),
@@ -63,6 +62,7 @@ urlpatterns = patterns(
                             app_name='profiles')),
     (r'auth/', include('auth.urls', namespace='auth',
                        app_name='auth')),
+    url(r'^demo/$', 'videos.views.demo', name="demo"),
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'about.html'}),
 		(r'^faq$',  'django.views.generic.simple.direct_to_template', 

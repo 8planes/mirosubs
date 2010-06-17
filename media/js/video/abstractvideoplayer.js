@@ -154,7 +154,8 @@ mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
             this.captionElem_ = document.createElement("div");
             this.captionElem_.setAttribute("class", "mirosubs-captionDiv");
             var videoSize = this.getVideoSize();
-            this.captionElem_.style.top = (videoSize.height - 60) + "px";
+            this.captionElem_.style.top = (videoSize.height - 100) + "px";
+            this.captionElem_.style.width = (videoSize.width - 40) + "px";
             if (needsIFrame)
                 this.captionElem_.style.visibility = 'hidden';
             this.getElement().appendChild(this.captionElem_);

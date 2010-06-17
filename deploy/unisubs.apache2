@@ -1,8 +1,10 @@
 <VirtualHost *:8080>
     ServerAdmin aduston@gmail.com
 
-    ServerName  dev.universalsubtitles.org
-    ServerAlias dev.universalsubtitles.com
+    ServerName  universalsubtitles.org
+    ServerAlias universalsubtitles.com
+    ServerAlias www.universalsubtitles.org
+    ServerAlias www.universalsubtitles.com
 
     LogLevel warn
 
@@ -12,19 +14,7 @@
     WSGIDaemonProcess miroprod user=www-data group=pcf-web threads=2
     WSGIProcessGroup miroprod
 
-    WSGIScriptAlias / /var/www/universalsubtitles/mirosubs/deploy/mirosubsprod.wsgi
-    <Location "/">
-        AuthType Basic
-        AuthName "Universal Subtitles Users"
-        AuthUserFile /var/www/universalsubtitles/mirosubs/deploy/passwords
-        Require valid-user
-    </Location>
-
-    <Location "/site_media">
-        SetHandler None
-        Order allow,deny
-        Allow from all
-    </Location>
+    WSGIScriptAlias / /var/www/universalsubtitles/mirosubs/deploy/unisubs.wsgi
 
     Alias /site_media /var/www/universalsubtitles/mirosubs/media/
     <Location "/site_media">

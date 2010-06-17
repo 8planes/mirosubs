@@ -3,46 +3,19 @@ import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
-import feedparser
-from django.utils.encoding import DjangoUnicodeDecodeError
-    
+
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
         
-        # Adding field 'Video.youtube_name'
-        db.add_column('videos_video', 'youtube_name', self.gf('django.db.models.fields.CharField')(default='', max_length=2048, blank=True), keep_default=False)
-        if not db.dry_run:
-            for item in orm.Video.objects.all():
-                if item.youtube_videoid:
-                    url = 'http://gdata.youtube.com/feeds/api/videos/%s' % item.youtube_videoid
-                    data = feedparser.parse(url)
-                    try:
-                        if len(data['entries']) > 0:
-                            item.youtube_name = data['entries'][0]['title']
-                            item.save()
-                        else:
-                            item.youtube_name = ''
-                    except DjangoUnicodeDecodeError:
-                        pass
-        
-        # Changing field 'Action.created'
-        db.alter_column('videos_action', 'created', self.gf('django.db.models.fields.DateTimeField')())
-
-        # Changing field 'Action.language'
-        db.alter_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True))
-        
+        # Changing field 'Translation.caption_id'
+        db.alter_column('videos_translation', 'caption_id', self.gf('django.db.models.fields.CharField')(max_length=32))
+    
     
     def backwards(self, orm):
         
-        # Deleting field 'Video.youtube_name'
-        db.delete_column('videos_video', 'youtube_name')
-
-        # Changing field 'Action.created'
-        db.alter_column('videos_action', 'created', self.gf('django.db.models.fields.DateTimeField')(blank=True))
-
-        # Changing field 'Action.language'
-        db.alter_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True))
+        # Changing field 'Translation.caption_id'
+        db.alter_column('videos_translation', 'caption_id', self.gf('django.db.models.fields.IntegerField')())
     
     
     models = {
@@ -107,7 +80,7 @@ class Migration(SchemaMigration):
         },
         'videos.translation': {
             'Meta': {'object_name': 'Translation'},
-            'caption_id': ('django.db.models.fields.IntegerField', [], {}),
+            'caption_id': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'null_translations': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.NullTranslations']", 'null': 'True'}),
             'translation_text': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
@@ -128,8 +101,21 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_complete': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.TranslationLanguage']"}),
+            'note': ('django.db.models.fields.CharField', [], {'max_length': '512', 'blank': 'True'}),
+            'text_change': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'time_change': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'version_no': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+        },
+        'videos.usertestresult': {
+            'Meta': {'object_name': 'UserTestResult'},
+            'browser': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'get_updates': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'task1': ('django.db.models.fields.TextField', [], {}),
+            'task2': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'task3': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
         'videos.video': {
             'Meta': {'object_name': 'Video'},
@@ -150,7 +136,7 @@ class Migration(SchemaMigration):
         },
         'videos.videocaption': {
             'Meta': {'object_name': 'VideoCaption'},
-            'caption_id': ('django.db.models.fields.IntegerField', [], {}),
+            'caption_id': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             'caption_text': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
             'end_time': ('django.db.models.fields.FloatField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -163,6 +149,9 @@ class Migration(SchemaMigration):
             'datetime_started': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_complete': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'note': ('django.db.models.fields.CharField', [], {'max_length': '512', 'blank': 'True'}),
+            'text_change': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'time_change': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'version_no': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})

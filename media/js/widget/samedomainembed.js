@@ -37,3 +37,9 @@ mirosubs["widget"] = mirosubs.widget;
 mirosubs.widget["SameDomainEmbed"] = mirosubs.widget.SameDomainEmbed;
 mirosubs.widget.SameDomainEmbed["embed"] = 
     mirosubs.widget.SameDomainEmbed.embed;
+
+mirosubs["video"] = mirosubs.video;
+mirosubs.video["supportsVideo"] = mirosubs.video.supportsVideo;
+mirosubs.video["supportsH264"] = mirosubs.video.supportsH264;
+mirosubs.video["supportsOgg"] = mirosubs.video.supportsOgg;
+mirosubs.video["supportsWebM"] = mirosubs.video.supportsWebM;

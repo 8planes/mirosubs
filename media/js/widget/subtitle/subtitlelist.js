@@ -96,7 +96,7 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
             goog.bind(this.setCurrentlyEditing_, this),
             this.displayTimes_);
     this.addChild(subtitleWidget, true);
-    this.subtitleMap_[subtitle.getCaptionIDString()] = subtitleWidget;
+    this.subtitleMap_[subtitle.getCaptionID()] = subtitleWidget;
     if (opt_scrollDown && typeof(opt_scrollDown) == 'boolean')
         this.scrollToCaption(subtitle.getCaptionID());
 };
@@ -118,7 +118,7 @@ mirosubs.subtitle.SubtitleList.prototype.setTaller = function(taller) {
 mirosubs.subtitle.SubtitleList.prototype.setActiveWidget = function(captionID) {
     this.scrollToCaption(captionID);
     this.clearActiveWidget();
-    var subtitleWidget = this.subtitleMap_[captionID + ''];
+    var subtitleWidget = this.subtitleMap_[captionID];
     subtitleWidget.setActive(true);
     this.currentActiveSubtitle_ = subtitleWidget;
 };
@@ -126,7 +126,7 @@ mirosubs.subtitle.SubtitleList.prototype.getActiveWidget = function() {
     return this.currentActiveSubtitle_;
 };
 mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
-    var subtitleWidget = this.subtitleMap_[captionID + ''];
+    var subtitleWidget = this.subtitleMap_[captionID];
     goog.style.scrollIntoContainerView(subtitleWidget.getElement(),
                                        this.getElement(), true);
 };

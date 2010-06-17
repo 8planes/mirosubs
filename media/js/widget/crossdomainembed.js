@@ -40,6 +40,9 @@ mirosubs["widget"] = mirosubs.widget;
 mirosubs.widget["CrossDomainEmbed"] = mirosubs.widget.CrossDomainEmbed;
 mirosubs.widget.CrossDomainEmbed["embed"] = 
     mirosubs.widget.CrossDomainEmbed.embed;
+mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
+mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
+mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;
 
 (function() {
     var m = window["MiroSubsToEmbed"];

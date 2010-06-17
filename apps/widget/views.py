@@ -28,18 +28,39 @@ from django.conf import settings
 import widget
 
 def embed(request):
-    context = widget.add_js_files(
-        {}, settings.JS_USE_COMPILED, settings.JS_OFFSITE)
+    context = widget.add_offsite_js_files({})
     return render_to_response('widget/embed.js', context,
                               context_instance=RequestContext(request),
                               mimetype='text/javascript')
 
+def widget_public_demo(request):
+    context = widget.add_onsite_js_files({})
+    return render_to_response('widget/widget_public_demo.html', context,
+                              context_instance=RequestContext(request))
+
 def widget_demo(request):
     context = {}
     context['js_use_compiled'] = settings.JS_USE_COMPILED
-    context['embed_js_url'] = \
-        "http://{0}/embed.js".format(Site.objects.get_current().domain)
-    context['video_url'] = request.GET['video_url']
+    context['site_url'] = 'http://{0}'.format(
+        request.get_host())
+    if 'video_url' not in request.GET:
+        context['help_mode'] = True
+    else:
+        context['help_mode'] = False
+        spaces = ' ' * 9
+        params = '{0}video_url: \'{1}\''.format(spaces, request.GET['video_url'])
+        if request.GET.get('null_widget', None) == 'true':
+            params += ',\n{0}null_widget: true'.format(spaces)
+        if request.GET.get('debug_js', None) == 'true':
+            params += ',\n{0}debug_js: true'.format(spaces)
+        if request.GET.get('subtitle_immediately', None) == 'true':
+            params += ',\n{0}subtitle_immediately: true'.format(spaces)
+        if request.GET.get('autoplay_language', None) is not None:
+            params += ',\n{0}autoplay_language: \'{1}\''.format(
+                spaces, request.GET['autoplay_language'])
+        context['embed_js_url'] = \
+            "http://{0}/embed.js".format(Site.objects.get_current().domain)
+        context['widget_params'] = params
     return render_to_response('widget/widget_demo.html', 
                               context,
                               context_instance=RequestContext(request))

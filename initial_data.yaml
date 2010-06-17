@@ -44,7 +44,7 @@
   pk: 8
   fields:
     domain: universalsubtitles.org
-    name: mirosubs-prod
+    name: unisubs
 
 - model: sites.site
   pk: 9

@@ -18,16 +18,17 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('videos', ['Action'])
         
-        for item in orm.VideoCaptionVersion.objects.all():
-            obj = orm.Action(user=item.user, video=item.video)
-            obj.created = item.datetime_started
-            obj.save()
+        if not db.dry_run:
+            for item in orm.VideoCaptionVersion.objects.all():
+                obj = orm.Action(user=item.user, video=item.video)
+                obj.created = item.datetime_started
+                obj.save()
             
-        for item in orm.TranslationVersion.objects.all():
-            obj = orm.Action(user=item.user, video=item.language.video)
-            obj.language = item.language.language
-            obj.created = item.datetime_started
-            obj.save()
+            for item in orm.TranslationVersion.objects.all():
+                obj = orm.Action(user=item.user, video=item.language.video)
+                obj.language = item.language.language
+                obj.created = item.datetime_started
+                obj.save()
             
     def backwards(self, orm):
         
