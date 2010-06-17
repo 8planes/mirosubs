@@ -490,7 +490,7 @@ class Translation(models.Model):
     of the versioning system."""
     version = models.ForeignKey(TranslationVersion, null=True)
     null_translations = models.ForeignKey(NullTranslations, null=True)
-    caption_id = models.IntegerField()
+    caption_id = models.CharField(max_length=32)
     translation_text = models.CharField(max_length=1024)
 
     def duplicate_for(self, new_version):
@@ -535,7 +535,7 @@ class VideoCaption(models.Model):
     unlike database primary keys."""
     version = models.ForeignKey(VideoCaptionVersion, null=True)
     null_captions = models.ForeignKey(NullVideoCaptions, null=True)
-    caption_id = models.IntegerField()
+    caption_id = models.CharField(max_length=32)
     caption_text = models.CharField(max_length=1024)
     # in seconds
     start_time = models.FloatField()

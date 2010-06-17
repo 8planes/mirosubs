@@ -53,5 +53,5 @@ mirosubs.timeline.TimelineSubs.prototype.addSub_ = function(sub) {
     var timelineSub = new mirosubs.timeline.TimelineSub(
         sub, this.pixelsPerSecond_, 0);
     this.addChild(timelineSub, true);
-    this.subs_[sub.getEditableCaption().getCaptionIDString()] = timelineSub;
+    this.subs_[sub.getEditableCaption().getCaptionID()] = timelineSub;
 };
