@@ -59,15 +59,13 @@
         </h3>
         <a href="#" class="previous_edit">Previous Edit</a>
         <div class="clear">&nbsp;</div>
-        
-        {% comment %}
-        <div id="widget_div" class="mirosubs-widget"></div>
+
+        <div id="widget_div_one" class="mirosubs-widget"></div>
         <script type="text/javascript">
           mirosubs.widget.SameDomainEmbed.embed(
-              document.getElementById('widget_div'), 
+              document.getElementById('widget_div_one'), 
               { video_url: '{{video.get_video_url}}' });
         </script>
-        {% endcomment %}
         
         {% if user.is_authenticated %}
             {% if is_writelocked %}
