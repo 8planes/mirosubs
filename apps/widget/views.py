@@ -33,6 +33,11 @@ def embed(request):
                               context_instance=RequestContext(request),
                               mimetype='text/javascript')
 
+def widget_public_demo(request):
+    context = widget.add_onsite_js_files({})
+    return render_to_response('widget/widget_public_demo.html', context,
+                              context_instance=RequestContext(request))
+
 def widget_demo(request):
     context = {}
     context['js_use_compiled'] = settings.JS_USE_COMPILED
