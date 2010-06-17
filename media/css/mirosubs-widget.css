@@ -690,23 +690,21 @@ ul.mirosubs-titlesList.sync {
 }
 
 .mirosubs-captionDiv {
-    position: absolute !important;
-    left: 10px !important;
-    width: 360px !important;
-letter-spacing: .04em !important;
-text-shadow:
-0px 2px 1px #000,
--1px 3px 1px #000,
--2px 2px 1px #000,
--2px 1px 1px #000,
--2px 0px 1px #000,
-2px 2px 1px #000,
-1px 2px 1px #000,
-0px -2px 1px #000,
-2px -2px 1px #000,
--2px -1px 1px #000,
--1px -3px 1px #000,
--3px -2px 1px #000 !important;
+   position: absolute !important;
+   letter-spacing: .04em !important;
+   text-shadow:
+      0px 2px 1px #000,
+      -1px 3px 1px #000,
+      -2px 2px 1px #000,
+      -2px 1px 1px #000,
+      -2px 0px 1px #000,
+      2px 2px 1px #000,
+      1px 2px 1px #000,
+      0px -2px 1px #000,
+      2px -2px 1px #000,
+      -2px -1px 1px #000,
+      -1px -3px 1px #000,
+      -3px -2px 1px #000 !important;
 
 font-size: 14px !important;
     text-align: center !important;
