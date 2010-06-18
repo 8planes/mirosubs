@@ -21,6 +21,7 @@ from videos.models import Video, UserTestResult
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from datetime import datetime
+from django.template.loader import render_to_string
 import re
 
 class UserTestResultForm(forms.ModelForm):
@@ -55,6 +56,14 @@ class FeedbackForm(forms.Form):
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
                      [settings.FEEDBACK_EMAIL], headers=headers).send()
+        
+        if email:
+            headers = {'Reply-To': settings.FEEDBACK_RESPONSE_EMAIL}
+            body = render_to_string(settings.FEEDBACK_RESPONSE_TEMPLATE, {})
+            email = EmailMessage(settings.FEEDBACK_RESPONSE_SUBJECT, body, \
+                         settings.FEEDBACK_RESPONSE_EMAIL, [email], headers=headers)
+            email.content_subtype = 'html'
+            email.send()
                      
     def get_errors(self):
         from django.utils.encoding import force_unicode        
