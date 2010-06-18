@@ -5,27 +5,11 @@
 {% block main_content %}
     <div id="videoDiv"></div>
     <script type="text/javascript">
-      // get from: http://diveintohtml5.org/detect.html#video-formats
-      function supports_video() {
-          return !!document.createElement('video').canPlayType;
-      }
-      function supports_h264_baseline_video() {
-          if (!supports_video()) 
-              return false;
-          var v = document.createElement("video");
-          return v.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
-      }
-      function supports_ogg_theora_video() {
-          if (!supports_video()) 
-              return false;
-          var v = document.createElement("video");
-          return v.canPlayType('video/ogg; codecs="theora, vorbis"');
-      }
       var scriptQueryString;
-      if (supports_ogg_theora_video())
+      if (mirosubs.video.supportsOgg())
           scriptQueryString = 
               "video_url=http://videos.mozilla.org/firefox3/switch/switch.ogg";
-      else if (supports_h264_baseline_video())
+      else if (mirosubs.video.supportsH264())
           scriptQueryString = 
               "video_url=http://www.visitmix.com/content/files/HTML5.mp4";
       else
