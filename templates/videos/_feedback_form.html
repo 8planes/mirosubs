@@ -18,13 +18,17 @@
         font-size: 1.2em;
     }
 </style>
-
-
    
     <div>
         <form method="post" action="{% url videos:feedback %}" id="feedback_form">
-        <h2>What did you think about the demo?</h2>
-<p>Please let us know if you have any comments, questions, or suggestions!</p>
+        {% csrf_token %}
+        <h2>
+            {% block form_title %}
+                What did you think about the demo?
+            {% endblock %}
+        </h2>
+            {% block hidden_fields %}{% endblock %}
+            <p>Please let us know if you have any comments, questions, or suggestions!</p>
             <p>
                 <label for="feedback_email">Your email: </label>{{ form.email }}
             </p>

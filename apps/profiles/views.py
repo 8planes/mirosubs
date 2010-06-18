@@ -22,6 +22,7 @@ from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from profiles.forms import EditProfileForm
+from django.contrib import messages
 
 @login_required
 def my_profile(request):
@@ -44,7 +45,7 @@ def profile(request, user_id):
                                                 files=request.FILES, label_suffix="")
             if edit_profile_form.is_valid():
                 edit_profile_form.save()
-                request.user.message_set.create(message='Your profile has been updated.')
+                messages.success(request, 'Your profile has been updated.')
         else:
             edit_profile_form = EditProfileForm(instance=profile, label_suffix="")
         return render_to_response('profiles/edit_profile.html', locals(),

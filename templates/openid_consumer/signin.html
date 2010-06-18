@@ -12,6 +12,7 @@
 <h1>{% trans "Sign in with your OpenID" %}</h1>
 
 <form action="{{ action }}" method="post">
+    {% csrf_token %}
     <p>
         <input class="openid" type="text" name="openid_url"> 
         <input type="submit" value="{% trans "Sign in" %}" class="open-id">
