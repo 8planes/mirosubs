@@ -19,6 +19,9 @@
 # Django settings for mirosubs project.
 import os
 
+def rel(*x):
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -28,13 +31,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), 'mirosubs.sqlite3')
-DATABASE_USER = ''                    # Not used with sqlite3.
-DATABASE_PASSWORD = ''                # Not used with sqlite3.
-DATABASE_HOST = ''                    # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''                    # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': rel('mirosubs.sqlite3'), # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
 
 JS_USE_COMPILED = False
 
@@ -127,7 +133,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')+'/'
+MEDIA_ROOT = rel('media')
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -147,7 +153,9 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
 )
 
@@ -157,7 +165,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-   os.path.join(os.path.dirname(__file__),'templates'),
+   rel('templates'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -166,6 +174,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'context_processors.current_site',
+    "django.contrib.messages.context_processors.messages",
 )
 
 INSTALLED_APPS = (

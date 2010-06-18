@@ -3,6 +3,7 @@
 <div class="left_column">
 <h2>Login to Your Existing Account</h2>
   <form action="{% url auth:login_post %}" method="post">
+    {% csrf_token %}
     {{ login_form.as_p }}
     <button type="submit" value="login"><span>Login</span></button>
     <a class="forgot" href="{% url password_reset %}">Forgot password?</a>

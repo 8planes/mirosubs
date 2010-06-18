@@ -21,6 +21,7 @@
    
     <div>
         <form method="post" action="{% url videos:feedback %}" id="feedback_form">
+        {% csrf_token %}
         <h2>
             {% block form_title %}
                 What did you think about the demo?

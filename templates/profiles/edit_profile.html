@@ -2,6 +2,7 @@
 
 {% block edit_profile_form %}
 <form action="{% url profiles:profile user_id=request.user.username %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
   {{ edit_profile_form.as_p }}
   <button type="submit" value="Save"><span>Save Edits to Profile</span></button>
 </form>    
