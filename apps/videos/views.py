@@ -345,13 +345,12 @@ def translation_diffing(request, first_pk, second_pk):
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 
-@login_required    
 def test_form_page(request):
     if request.method == 'POST':
         form = UserTestResultForm(request.POST)
         if form.is_valid():
             form.save(request)
-            request.user.message_set.create(message='Thanks for your feedback.  It\'s a huge help to us as we improve the site')
+            #request.user.message_set.create(message='Thanks for your feedback.  It\'s a huge help to us as we improve the site')
             return redirect('videos:test_form_page')
     else:
         form = UserTestResultForm()
