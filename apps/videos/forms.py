@@ -44,14 +44,18 @@ class VideoForm(forms.ModelForm):
 class FeedbackForm(forms.Form):
     email = forms.EmailField(required=False)
     message = forms.CharField(widget=forms.Textarea())
+    error = forms.CharField(required=False)
     
     def send(self, request):
         email = self.cleaned_data['email']
         message = self.cleaned_data['message']
+        error = self.cleaned_data['error']
         user_agent_data = 'User agent: %s' % request.META.get('HTTP_USER_AGENT')
         timestamp = 'Time: %s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         version = 'Version: %s' % settings.PROJECT_VERSION
         message = '%s\n\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version)
+        if error in ['404', '500']:
+            message += '\nIt was sent from '+error+' error page.'
         headers = {'Reply-To': email} if email else None
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
