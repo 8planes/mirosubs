@@ -215,3 +215,5 @@ REVISIONS_ONPAGE = 20
 
 FEEDBACK_EMAIL = 'universalsubtitles@pculture.org'
 FEEDBACK_SUBJECT = 'Universal Subtitles Feedback'
+
+PROJECT_VERSION = '0.5'

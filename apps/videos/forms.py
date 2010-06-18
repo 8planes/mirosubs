@@ -20,6 +20,7 @@ from django import forms
 from videos.models import Video, UserTestResult
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
+from datetime import datetime
 import re
 
 class UserTestResultForm(forms.ModelForm):
@@ -47,7 +48,9 @@ class FeedbackForm(forms.Form):
         email = self.cleaned_data['email']
         message = self.cleaned_data['message']
         user_agent_data = 'User agent: %s' % request.META.get('HTTP_USER_AGENT')
-        message = '%s\n\n%s' % (message, user_agent_data)
+        timestamp = 'Time: %s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        version = 'Version: %s' % settings.PROJECT_VERSION
+        message = '%s\n\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version)
         headers = {'Reply-To': email} if email else None
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
