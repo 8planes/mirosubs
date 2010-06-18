@@ -53,8 +53,34 @@ float: right !important;
 margin-top: 40px;
 }
 
+
+.full_width{
+width: 960px;
+float: left;
+margin-bottom: 30px;  
+}
+
+
+.full_width.center{
+text-align: center;
+}
+
+.full_width #widget_div{
+margin: 20px auto;
+width: 479px;
+}
+
+.padding{
+padding: 30px;
+}
+
+
 .project{
+font-weight: normal;
 padding-left: 53px;
+position: absolute;
+top: 45px;
+font-size: 11px;
 }
 
 .bigger{
@@ -116,11 +142,14 @@ h2{
 margin: 0px 0 15px;
 clear: both !important;
 line-height: 15px;
+font-size: 20px;
 }
 
 
 .header{
-
+border-bottom: 1px solid #fff;
+min-height: 130px;
+width: 100%;
 }
 
 .header .top_bar{
@@ -263,7 +292,7 @@ font-size: 12px;
 }
 
 .watercolor2{
-background: url(../images/watercolor2.png) center 20px no-repeat;
+background: url(../images/watercolor2.png) center 30px no-repeat;
 
 }
 
@@ -774,7 +803,7 @@ overflow: hidden;
 .centered{
 font-size: 40px;
 text-align: center;
-margin: 45px 0 0;
+margin: 15px 0 0;
 padding-bottom: 35px;
 text-shadow: #fff 1px 1px 1px;
 }
@@ -922,12 +951,12 @@ background-position: -10px -417px;
 .get_updates{
 clear: both;
 font-size: 18px;
-padding: 20px 30px 20px 30px;
+padding: 20px 0px 20px 30px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
 margin:35px 0 50px;
 float: left;
-width: 920px;
+width: 950px;
 background: url(../images/1x1.png);
 }
 
@@ -939,7 +968,7 @@ background: url(../images/1x1.png);
 float: left !important;
 line-height: 2em;
 margin: 0;
-padding: 8px 30px 0 0;
+padding: 8px 40px 0 0;
 }
 
 
@@ -955,7 +984,7 @@ clear: none !important;
 float: left !important;
 clear: none !important;
 width: 320px;
-margin: 0 40px 0 0;
+margin: 0 50px 0 0;
 padding-top: 8px;
 }
 
@@ -965,7 +994,6 @@ padding-top: 8px;
 float: left !important;
 clear: none;
 width: 305px;
-
 }
 
 
@@ -1204,15 +1232,14 @@ font-size: 16px;
 .table_head{
 margin: 0px 0 0;
 padding: 0;
-background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
 height: 3em;
 border: 1px solid #aaa;
 clear: both;
 border-bottom: 1px solid #fff;
+float: left;
 -moz-border-radius-topright: 5px;  
--moz-border-radius-topleft: 5px;
 -webkit-border-radius-top-right: 5px;
--webkit-border-radius-top-left: 5px;
+background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
 }
 
 .table_head li{
@@ -1351,6 +1378,151 @@ margin: 20px 0 0 !important;
 }
 
 
+ul.table_body.comments{
+width: 560px;
+clear: left;
+}
+
+
+ul .table_transcript{
+width: 939px;
+clear: left;
+padding: 20px !important;
+}
+
+
+.table_body ul li.table_comment{
+width: 520px;
+padding: 20px !important;
+float: left;
+}
+
+.table_body ul li.table_comment .comment_text{
+width: 360px;
+padding: 0;
+margin: 0;
+float: left;
+line-height: 1.6em;
+}
+
+.table_body ul li.table_comment .comment_text p{
+padding: 0;
+margin: 0 0 10px;
+line-height: 1.6em;
+}
+
+
+.table_user_deets{
+
+margin-bottom: 10px;
+}
+
+
+
+
+.table_user_deets a{font-size: 14px;
+padding-right: 10px;
+}
+
+
+
+.table_body ul li.table_comment .user_thumb{
+margin-right: 25px;
+}
+
+
+.user_thumb{
+height: 100px;
+width: 100px;
+float: left;
+border: 1px solid;
+}
+
+
+/*/////////////////////////////////////////////
+
+~ Thumbs
+
+/////////////////////////////////////////////*/
+
+.user_approval{
+float: right;
+margin-top: 73px;
+border: 1px solid;
+width: 390px;
+padding: 0;
+}
+
+
+.user_approval li{
+margin: 0;
+padding: 10px;
+list-style: none;
+border-bottom: 1px solid #333;
+}
+
+
+
+.user_approval li .thumb{
+float: left;
+width: 13px;
+height: 13px;
+margin-right: 13px;
+}
+
+.user_approval li a{
+color: #fff;}
+
+
+
+.user_approval li.thumb_down{
+background: #ff0000 url(../images/gradient.png) 0 0px repeat-x;
+font-weight: bold;
+color: #fff;
+}
+
+.user_approval li.thumb_up .thumb{
+background:  url(../images/thumb.png) 3px 0px no-repeat !important;
+}
+
+
+.user_approval li.thumb_up{
+background: #1fd211 url(../images/gradient.png) 0 0 repeat-x;
+font-weight: bold;  
+color: #fff;
+}
+
+.user_approval li.thumb_down .thumb{
+background:  url(../images/thumb.png) 3px bottom no-repeat !important;
+}
+
+
+
+
+/*/////////////////////////////////////////////
+
+~ Profile Pages
+
+/////////////////////////////////////////////*/
+
+
+.thumbnail_medium{
+width: 128px;
+height: 128px;
+float: left;
+border: 1px solid #999;
+padding: 4px;
+margin-right: 30px;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+}
+
+
+#profile .full_width h3{
+margin: 0px;
+}
+
+
 
 /*/////////////////////////////////////////////
 
@@ -1448,6 +1620,134 @@ display: block;
 #index #feedback_form, #about #feedback_form{
 display: none;
 }
+
+
+
+
+.video_tabs{
+clear: both;
+float: left;
+margin: 30px 0 0;
+padding: 0;
+}
+
+
+.video_tabs li{
+list-style: none;
+padding: 0;
+margin: 0;
+float: left;
+
+}
+
+
+.video_tabs li a{
+list-style: none;
+padding: 10px 20px 9px;
+margin: 0;
+float: left;
+border: 1px solid #ccc;
+font-size: 14px;
+color: #333;
+border-bottom:none;
+margin-top: 8px;
+-moz-border-radius-topleft: 5px;
+-webkit-border-radius-top-left: 5px;
+text-decoration: none;
+margin-right: 10px;
+-moz-border-radius-topright: 5px;  
+-webkit-border-radius-top-right: 5px;
+background: #fff url(../images/gradient_light.png) 0 0px repeat-x;
+
+}
+
+
+.video_tabs li.active a{
+font-weight: bold;
+background: #fff url(../images/table_head.gif) 0px 4px repeat-x;
+border-bottom:none;
+margin-top: 1px;
+padding: 13px 25px;
+font-size: 16px;
+cursor: default;
+}
+
+
+
+
+.video_tabs li a:hover{
+border-color: #999;
+background: #fff url(../images/gradient_light.png) 0 -90px repeat-x;
+
+}
+
+
+
+.video_tabs li.active a:hover{
+border: 1px solid #999;
+border-bottom:none;
+background: #fff url(../images/table_head.gif) 0px 4px repeat-x;
+}
+
+
+
+
+/*/////////////////////////////////////////////
+
+~ Send Message
+
+/////////////////////////////////////////////*/
+
+form.message h3{
+background: #fff url(../images/gradient.png) 0 0px repeat-x !important;
+padding: 15px;
+font-size: 14px;
+margin: 0 0 0px;
+-moz-border-radius-topright: 5px;  
+-moz-border-radius-topleft: 5px;  
+-webkit-border-radius-top-right: 5px;
+-webkit-border-radius-top-left: 5px;
+}
+
+form.message label{
+width: 100px;
+float: left;
+clear: both;
+}
+
+
+form.message input{
+width: 300px;
+float: left;
+font-size: 12px;
+
+}
+
+
+form.message p{
+background: #fff;
+padding: 20px;
+width: 423px;
+margin: 0 !important;
+border-bottom: 1px solid #999;
+background: #fff url(../images/big_grad.png) 0 0px repeat-x !important;
+
+}
+
+form.message textarea{
+width: 300px;
+font-size: 12px;
+}
+
+
+form.message p span{
+padding: 4px 0 0 100px;
+clear: both;
+float: left;
+}
+
+
+
 
 
 

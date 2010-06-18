@@ -1,7 +1,62 @@
 {% extends "profiles/base.html" %}
 
+{% block css %}
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/prettyPhoto.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="{{ MEDIA_URL }}/js/jquery.prettyPhoto.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            $('button.send_message').attr('href', '#send_message');              
+
+            $('button.send_message').prettyPhoto({
+                default_width: 425,
+                default_height: 344
+            });              
+        });
+    </script>
+{% endblock %}
+
+
+
 {% block userinfo %}
 {{ block.super }}
-<p>Preferred language: {% if profile.preferred_language %}{{ profile.language }}{% endif %}</p>
+<p>Preferred Language: {% if profile.preferred_language %}{{ profile.language }}{% endif %}</p>
 <p>Homepage: <a href="{{ profile.homepage }}">{{ profile.homepage }}</a></p>
+<button class="send_message"><span>Send a Message</span></button>
+
+<div id="send_message" style="display: none;">
+
+
+  <form class="message">  
+
+  <h3>Send USERNAME a Message</h3>
+
+    <p>
+      <label>To</label>
+      <textarea class="to" type="text">morganknutson@gmail.com</textarea>  
+      <span>Comma separated</span>
+    </p>
+    <p>
+      <label>From</label>
+      <input type="text" value="morganknutson@gmail.com" />    
+    </p>
+    <p>
+      <label>Message</label>
+      <textarea class="to" type="text">morganknutson@gmail.com</textarea>  
+      <span>No HTML</span>
+    </p>
+
+  </form>
+
+
+
+</div>
+
+
+
 {% endblock %}

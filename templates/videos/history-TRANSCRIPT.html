@@ -54,14 +54,19 @@
 {% endblock %}
 
 {% block main_content %}
+
+    <div class="full_width center">
+
     <h2>{{ video }}</h2>
     <p class="what_lang">
         {% block lang_display %}
-            in <a href="{% url videos:video video_id=video.video_id %}">Original Language</a>
+            in <a href="{% url videos:video video_id=video.video_id %}">LANGUAGE (Original Language)</a>
         {% endblock %}
+      
+        
+      
     </p>
     
-    <div class="left_column">
         <div id="widget_div" class="mirosubs-widget"></div>
         <script type="text/javascript">
           mirosubs.widget.SameDomainEmbed.embed(
@@ -70,8 +75,8 @@
         </script>
     </div>
     
-    <div class="right_column">
-        {% block translation_list %}
+    <!-- <div class="right_column">
+       {% block translation_list %}
             {% if translations %}
                 <p class="other_lang">
                     Other Languages:
@@ -81,15 +86,15 @@
                  </p>             
             {% endif %}
         {% endblock %}
-    </div>
+    </div> -->
     
     <div class="clear">&nbsp;</div>
     
     
     <ul class="video_tabs">
-      <li><a href="#">English Transcript</a></li>
+      <li class="active"><a href="#">English Transcript</a></li>
       <li><a href="#">Comments (12)</a></li>
-      <li class="active"><a href="#">Revisions (120)</a></li>
+      <li><a href="#">Revisions (120)</a></li>
     </ul>
 
 
@@ -99,31 +104,23 @@
 
 
 
-
-    <ul class="table_head">
-      <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
-      <li class="table_user">{% ordered_column "user" "User" %}</li>
-      <li class="table_note">{% ordered_column "note" "Note" %}</li>
-      <li class="table_time">{% ordered_column "time" "Time" %}</li>
-      <li class="table_text">{% ordered_column "text" "Text" %}</li>
-    </ul>
-    
    
    <ul class="table_body"> 
-    {% for item in revision_list %}
-          <li>
-            <ul>
-              <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }} <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a></li>
-              <li class="table_user">
-                  <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
-              </li>
-              <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
-              <li class="table_time">{{ item.time_change_display }}</li>
-              <li class="table_text">{{ item.text_change_display }}</li>
-
-            </ul>
-          </li>    
-    {% endfor %}
+      <li class="table_transcript">
+          Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+      </li>
+      <li class="table_transcript">
+          Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+      </li> 
+      <li class="table_transcript">
+          Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+      </li>  
+      <li class="table_transcript">
+          Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+      </li>   
+      <li class="table_transcript">
+          Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+      </li>
    </ul> 
    <div style="clear: both"/>
    {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 

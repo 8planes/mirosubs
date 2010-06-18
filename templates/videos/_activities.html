@@ -1,15 +1,17 @@
 {% load thumbnail %}
 
-<ul class="recent_activity">
+
+
+<ul class="table_body">
 {% for item in events %}
-    <li>
+    <li class="table_transcript">
         {% if item.user %}
             {% if item.uprofile.picture %}
                 <img src="{% thumbnail item.uprofile.picture 32x32 %}" />
                 {% else %}            
 
             {% endif %}
-            {{ item.time }} - <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a><br />
+            {{ item.time }} - <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
         {% else %}
             <span class="username anon">Anonymous</span>
         {% endif %}
