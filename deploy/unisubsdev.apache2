@@ -6,8 +6,8 @@
     ServerAlias wdev.universalsubtitles.org
 
     LogLevel warn
-    ErrorLog /var/www/universalsubtitles.dev/apache.error.log
-    CustomLog /var/www/universalsubtitles.dev/apache.custom.log combined
+    ErrorLog /var/www/universalsubtitles.dev/log/apache.error.log
+    CustomLog /var/www/universalsubtitles.dev/log/apache.custom.log combined
 
     WSGIDaemonProcess unisubsdev user=www-data group=pcf-web threads=2
     WSGIProcessGroup unisubsdev

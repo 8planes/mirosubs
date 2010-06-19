@@ -6,8 +6,8 @@
     ServerAlias wstaging.universalsubtitles.org
 
     LogLevel warn
-    ErrorLog /var/www/universalsubtitles.staging/apache.error.log
-    CustomLog /var/www/universalsubtitles.staging/apache.custom.log combined
+    ErrorLog /var/www/universalsubtitles.staging/log/apache.error.log
+    CustomLog /var/www/universalsubtitles.staging/log/apache.custom.log combined
 
     WSGIDaemonProcess unisubsstaging user=www-data group=pcf-web threads=2
     WSGIProcessGroup unisubsstaging
