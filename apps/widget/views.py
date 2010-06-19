@@ -25,6 +25,7 @@ from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt
 import simplejson as json
 from widget import rpc as rpc_views
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 import widget
 
 def embed(request):
@@ -94,6 +95,7 @@ def null_srt(request):
         'attachment; filename={0}'.format(video.srt_filename)
     return response
 
+@csrf_exempt
 def rpc(request, method_name):
     args = { 'request': request }
     for k, v in request.POST.items():
@@ -102,6 +104,7 @@ def rpc(request, method_name):
     result = func(**args)
     return HttpResponse(json.dumps(result), "application/json")
 
+@csrf_exempt
 def xd_rpc(request, method_name):
     args = { 'request' : request }
     for k, v in request.POST.items():
