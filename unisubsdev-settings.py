@@ -34,10 +34,14 @@ SITE_NAME = 'unisubsdev'
 
 TWITTER_CONSUMER_KEY = 'Vbub5lMDc47d8cydMNCTQ'
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = 'universalsubtitles_dev'
-DATABASE_USER = 'univsubs_dev'
-DATABASE_HOST = 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com'
-DATABASE_PORT = '3306'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'universalsubtitles_dev',
+        'USER': 'univsubs_dev',
+        'PASSWORD': DATABASE_PASSWORD,
+        'HOST': 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com',
+        'PORT': '3306'
+}
 
 MEDIA_URL = "http://dev.universalsubtitles.org/site_media/"
