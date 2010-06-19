@@ -2,7 +2,7 @@
 # to install the requirements run
 # $ pip install -r dev-requirements.txt
 
-Django==1.1.1
+Django==1.2.1
 werkzeug
 ipython
 django_extensions

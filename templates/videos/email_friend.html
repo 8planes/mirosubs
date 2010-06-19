@@ -3,12 +3,9 @@
 {% block main_content %}
 <h2>Email this to a friend</h2>
 <form method="post" action="." id="email_friend_from">
-        {{ form.as_p }}
-      
-      
-                <button type="submit" value="Send"/><span>Send to Friend!</span></button>
-     
-     
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" value="Send"/><span>Send to Friend!</span></button>
 </form>
 <br/>
 {% endblock %}

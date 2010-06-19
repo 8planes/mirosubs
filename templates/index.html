@@ -65,6 +65,7 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
 
 	<p class="update_text">Get updates and find out first when we launch</p>
 	<form method="post" action="http://pcf8.pculture.org/interspire/form.php?form=3" id="frmSS3" onsubmit="return CheckForm3(this);">
+	    {% csrf_token %}
 		<p><input type="text" name="email" /></p>
 		<input type="hidden" name="format" value="h" />
 		<button type="submit" /><span>Get Updates!</span></button>

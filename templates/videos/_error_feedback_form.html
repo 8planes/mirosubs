@@ -1,0 +1,9 @@
+{% extends 'videos/_feedback_form.html' %}
+
+{% block form_title %}
+    Please let us know what you were doing when you encountered this error.
+{% endblock %}
+
+{% block hidden_fields %}
+    <input type="hidden" name="error" value="{{ error }}"/>
+{% endblock %}

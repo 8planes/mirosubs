@@ -10,6 +10,7 @@
 
 <div class="left_column">
     <form action="." method="post" class="div-based-form">
+        {% csrf_token %}
         <div>
             {{ form.email.errors }}
             <label for="id_email">Your Email</label>

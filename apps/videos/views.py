@@ -32,6 +32,7 @@ import simplejson as json
 from django.utils.encoding import DjangoUnicodeDecodeError
 import feedparser
 from videos.utils import get_pager
+from django.contrib import messages
 
 def create(request):
     if request.method == 'POST':
@@ -271,11 +272,11 @@ def rollback(request, pk, cls=VideoCaptionVersion):
     user = request.user
     is_writelocked = version.video.is_writelocked if (cls == VideoCaptionVersion) else version.language.is_writelocked
     if is_writelocked:
-        user.message_set.create(message='Can not rollback now, because someone is editing subtitles.')
+        messages.error(request, 'Can not rollback now, because someone is editing subtitles.')
     elif not version.next_version():
-        user.message_set.create(message='Can not rollback to the last version')
+        messages.error(message='Can not rollback to the last version')
     else:
-        user.message_set.create(message='Rollback was success')
+        messages.success(message='Rollback was success')
         version = version.rollback(request.user)
     url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
     return redirect('videos:%s' % url_name, pk=version.pk)
@@ -344,13 +345,12 @@ def translation_diffing(request, first_pk, second_pk):
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 
-@login_required    
 def test_form_page(request):
     if request.method == 'POST':
         form = UserTestResultForm(request.POST)
         if form.is_valid():
             form.save(request)
-            request.user.message_set.create(message='Thanks for your feedback.  It\'s a huge help to us as we improve the site')
+            messages.success(request, 'Thanks for your feedback.  It\'s a huge help to us as we improve the site.')
             return redirect('videos:test_form_page')
     else:
         form = UserTestResultForm()
