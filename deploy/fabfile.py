@@ -36,14 +36,16 @@ def staging():
     env.base_dir = '/home/{0}'.format(env.user)
 
 def dev():
-    env.hosts = ['8planes.com']
-    env.user = 'mirosubsdev'
-    env.base_dir = '/home/{0}'.format(env.user)
+    env.hosts = ['universalsubtitles.org:2191']
+    env.user = 'adam'
+    env.base_dir = '/var/www/universalsubtitles.dev'
+    env.wsgi_file_name = 'deploy/unisubsdev.wsgi'
 
 def unisubs():
     env.hosts = ['universalsubtitles.org:2191']
     env.user = 'adam'
     env.base_dir = '/var/www/universalsubtitles'
+    env.wsgi_file_name = 'deploy/unisubs.wsgi'
 
 def set_permissions(home='/home/mirosubs'):
     """
@@ -78,7 +80,7 @@ def update():
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
         run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
-        run('touch deploy/{0}.wsgi'.format(env.user))
+        run('touch {0}'.format(env.wsgi_file_name))
 
 def user_update(username):
     env.user = username

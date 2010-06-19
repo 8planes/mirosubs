@@ -3,13 +3,14 @@
 
     ServerName  staging.universalsubtitles.org
     ServerAlias staging.universalsubtitles.org
+    ServerAlias wstaging.universalsubtitles.org
 
     LogLevel warn
     ErrorLog /var/www/universalsubtitles.staging/apache.error.log
     CustomLog /var/www/universalsubtitles.staging/apache.custom.log combined
 
-    WSGIDaemonProcess miroprod user=www-data group=pcf-web threads=2
-    WSGIProcessGroup miroprod
+    WSGIDaemonProcess unisubsstaging user=www-data group=pcf-web threads=2
+    WSGIProcessGroup unisubsstaging
 
     WSGIScriptAlias / /var/www/universalsubtitles.staging/mirosubs/deploy/unisubsstaging.wsgi
 

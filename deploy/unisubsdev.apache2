@@ -3,13 +3,14 @@
 
     ServerName  dev.universalsubtitles.org
     ServerAlias dev.universalsubtitles.org
+    ServerAlias wdev.universalsubtitles.org
 
     LogLevel warn
     ErrorLog /var/www/universalsubtitles.dev/apache.error.log
     CustomLog /var/www/universalsubtitles.dev/apache.custom.log combined
 
-    WSGIDaemonProcess miroprod user=www-data group=pcf-web threads=2
-    WSGIProcessGroup miroprod
+    WSGIDaemonProcess unisubsdev user=www-data group=pcf-web threads=2
+    WSGIProcessGroup unisubsdev
 
     WSGIScriptAlias / /var/www/universalsubtitles.dev/mirosubs/deploy/unisubsdev.wsgi
 
