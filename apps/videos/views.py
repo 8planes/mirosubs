@@ -158,10 +158,9 @@ def email_friend(request):
                               context_instance=RequestContext(request))
 
 def demo(request):
-    return HttpResponseRedirect('/widget_public_demo/')
-#    context = widget.add_onsite_js_files({})
-#    return render_to_response('demo.html', context,
-#                              context_instance=RequestContext(request))
+    context = widget.add_onsite_js_files({})
+    return render_to_response('demo.html', context,
+                              context_instance=RequestContext(request))
 
 def history(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)

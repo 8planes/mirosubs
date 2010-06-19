@@ -1,0 +1,29 @@
+<VirtualHost *:8080>
+    ServerAdmin aduston@gmail.com
+
+    ServerName  dev.universalsubtitles.org
+    ServerAlias dev.universalsubtitles.org
+
+    LogLevel warn
+    ErrorLog /var/www/universalsubtitles.dev/apache.error.log
+    CustomLog /var/www/universalsubtitles.dev/apache.custom.log combined
+
+    WSGIDaemonProcess miroprod user=www-data group=pcf-web threads=2
+    WSGIProcessGroup miroprod
+
+    WSGIScriptAlias / /var/www/universalsubtitles.dev/mirosubs/deploy/unisubsdev.wsgi
+
+    Alias /site_media /var/www/universalsubtitles.dev/mirosubs/media/
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /media /var/www/universalsubtitles.dev/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    <Location "/media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+</VirtualHost>

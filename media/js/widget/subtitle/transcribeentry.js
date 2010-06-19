@@ -132,8 +132,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.setRepeatVideoMode = function(mode) 
     this.typingPauseTimer_.stop();
 };
 mirosubs.subtitle.TranscribeEntry.prototype.handleKeyUp_ = function(event) {
-    this.videoPlayer_.showCaptionText(this.labelInput_.getValue());
-    this.issueLengthWarning_(this.insertsBreakableChar_(event.keyCode));
+//    this.videoPlayer_.showCaptionText(this.labelInput_.getValue());
+//    this.issueLengthWarning_(this.insertsBreakableChar_(event.keyCode));
 };
 mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     var value = this.labelInput_.getValue();
@@ -144,7 +144,9 @@ mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     this.dispatchEvent(new mirosubs.subtitle.TranscribeEntry
                        .NewTitleEvent(value));
 };
-mirosubs.subtitle.TranscribeEntry.prototype.issueLengthWarning_ = function(breakable) {
+mirosubs.subtitle.TranscribeEntry.prototype.issueLengthWarning_ = 
+    function(breakable) 
+{
     var MAX_CHARS = 100;
     var length = this.labelInput_.getValue().length;
     if (breakable && length > MAX_CHARS)
@@ -168,21 +170,10 @@ mirosubs.subtitle.TranscribeEntry.prototype.hex_ = function(num) {
     return goog.math.clamp(Math.floor(num), 0, 15).toString(16);
 };
 
-mirosubs.subtitle.TranscribeEntry.prototype.insertsBreakableChar_ = function(key) {
-    // TODO: check the resulting char instead of what key was pressed
-    return key==goog.events.KeyCodes.SPACE ||
-    key==goog.events.KeyCodes.COMMA ||
-    key==goog.events.KeyCodes.APOSTROPHE ||
-    key==goog.events.KeyCodes.QUESTION_MARK ||
-    key==goog.events.KeyCodes.SEMICOLON ||
-    key==goog.events.KeyCodes.DASH ||
-    key==goog.events.KeyCodes.NUM_MINUS ||
-    key==goog.events.KeyCodes.NUM_PERIOD ||
-    key==goog.events.KeyCodes.PERIOD ||
-    key==goog.events.KeyCodes.SINGLE_QUOTE ||
-    key==goog.events.KeyCodes.SLASH ||
-    key==goog.events.KeyCodes.BACKSLASH ||
-    key==goog.events.KeyCodes.CLOSE_SQUARE_BRACKET;
+mirosubs.subtitle.TranscribeEntry.prototype.insertsBreakableChar_ = 
+    function(key) 
+{
+    return key == goog.events.KeyCodes.SPACE;
 };
 mirosubs.subtitle.TranscribeEntry.prototype.disposeInternal = function() {
     mirosubs.subtitle.TranscribeEntry.superClass_.disposeInternal.call(this);

@@ -69,3 +69,15 @@
   fields:
     domain: msdennis.8planes.com
     name: msdennis
+
+- model: sites.site
+  pk: 13
+  fields:
+    domain: dev.universalsubtitles.org
+    name: unisubsdev
+
+- model: sites.site
+  pk: 14
+  fields:
+    domain: staging.universalsubtitles.org
+    name: unisubsstaging
