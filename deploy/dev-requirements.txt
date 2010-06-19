@@ -16,8 +16,7 @@ south
 
 
 # dependencies of socialauth
-python-openid
-python-yadis
+vendor/openid-python-openid-2.2.5.tar.gz
 oauth
 -e git://github.com/aduston/Django-Socialauth.git#egg=socialauth
 
