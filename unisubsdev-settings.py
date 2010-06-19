@@ -42,6 +42,7 @@ DATABASES = {
         'PASSWORD': DATABASE_PASSWORD,
         'HOST': 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com',
         'PORT': '3306'
-}
+        }
+    }
 
 MEDIA_URL = "http://dev.universalsubtitles.org/site_media/"
