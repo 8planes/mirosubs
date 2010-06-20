@@ -26,19 +26,28 @@
     {{ block.super }}
     <script type="text/javascript">
         $(function(){
-            $('.roll_back').click(function(){
-                if ( ! confirm('Do roll back to this version?')){
+            var IS_AUTHENTICATED = '{{ user.is_authenticated }}' == 'True';
+            if (IS_AUTHENTICATED){
+                $('.roll_back').click(function(){
+                    if ( ! confirm('Do roll back to this version?')){
+                        return false;
+                    }                    
+                });                
+            }else{
+                $('.roll_back, .new_edit').click(function(){
+                    alert('You need to log in to do that.');
                     return false;
-                }
-            });
+                });
+            }
         });
     </script>
     {% include "widget/_js_onsite_dependencies.html" %}
 {% endblock %}
 
 {% block main_content %}
-    <h2>Viewing Revision History</h2>
-    
+    <h2>Revision #{{ version.version_no }} - {{ version.revision_time }}</h2>
+    in language <a href="#">{{ version.language_display }} language</a><br/><br/>
+        
     {% if next_version %}
         <div class="viewing_old">
             This is an old revision of {% if version.language %}{{ version.language.get_language_display }}
@@ -49,7 +58,7 @@
     {% endif %}
     
     {% block navigation %}
-        <ul class="pag">
+        <ul class="pag" style="width: 420px">
             
           {% if prev_version %}
               <li class="previous">
@@ -75,7 +84,9 @@
           {% endif %}
           
           <li class="current">
-            Current Revision 
+            <a href="{% url videos:revision pk=latest_version.pk %}">
+                The most recent revision
+            </a>
             {% ifnotequal latest_version version %}
                 (<a href="{% url videos:diffing latest_version.pk version.pk %}">diff</a>) 
             {% endifnotequal %}               
@@ -97,23 +108,17 @@
     <div class="right_column">
       <br />
       <br />      <br />      <br />      <br />
-      {% if user.is_authenticated %}
-          {% if is_writelocked %}
-              <div class="viewing_old">
-                  Someone is editing subtitles.
-              </div>             
-          {% else%}       
-              <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
-              {% if next_version %}
-              <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
-                  <span>Roll back to this version</span>
-              </a>
-              {% endif %}
-          {% endif %}
-      {% else %}
+      {% if is_writelocked %}
           <div class="viewing_old">
-              Login, please.
-          </div>    
+              Someone is editing subtitles.
+          </div>             
+      {% else%}       
+          <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
+          {% if next_version %}
+          <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
+              <span>Roll back to version #{{ version.version_no }}</span>
+          </a>
+          {% endif %}
       {% endif %}
     </div>    
 <div class="clearboth">&nbsp;</div>

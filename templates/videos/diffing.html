@@ -26,9 +26,19 @@
     {{ block.super }}
     <script type="text/javascript">
         $(function(){
-            $('.roll_back').click(function(){
-                return confirm('Roll back to this version?');
-            });
+            var IS_AUTHENTICATED = '{{ user.is_authenticated }}' == 'True';
+            if (IS_AUTHENTICATED){
+                $('.roll_back').click(function(){
+                    if ( ! confirm('Do roll back to this version?')){
+                        return false;
+                    }                    
+                });                
+            }else{
+                $('.roll_back, .new_edit').click(function(){
+                    alert('You need to log in to do that.');
+                    return false;
+                });
+            }
         });
     </script>
     {% include "widget/_js_onsite_dependencies.html" %}
@@ -36,28 +46,27 @@
 
 {% block main_content %}
     <h2>
-        {{ video }} in {% if first_version.language %}
-        {{ first_version.language.get_language_display }}
-        {% else %}original{% endif %} language.
+        Comparing revisions #{{ first_version.version_no }} and #{{ second_version.version_no }}
     </h2>
+    in language <a href="#">{{ first_version.language_display }} language</a><br/><br/>
     
-    {% if first_version.next_version %}
-        <div class="viewing_old">
-            This is an old revision of {% if first_version.language %}
-            {{ first_version.language.get_language_display }}{% else %}original
-            {% endif %} language subtitles for "{{ video }}", as edited by 
-            {{ first_version.user.username }} at 
-            {{ first_version.datetime_started|date:"H:i, j F Y" }}. It may
-            differ significantly from the current revision.
-        </div>
-    {% endif %}
+    <a href="{{ history_link }}" class="return_history">
+        &lt;&lt; Return to revision history
+    </a>
+    <div style="clear: both"></div>
     
     <div class="left_column">
         <h3 class="diff_title">
-            Revision as of {{ first_version.datetime_started|date:"H:i, j F Y" }} 
+            Revision #{{ first_version.version_no }} - as of {{ first_version.datetime_started|date:"H:i, j F Y" }} 
             by {{ first_version.user.username }}
         </h3>
-        <a href="#" class="previous_edit">Previous Edit</a>
+        
+        {% block first_navigation %}
+            {% with first_version as version %}
+                {% include 'videos/_revision_navigation.html' %}
+            {% endwith %}
+        {% endblock %}
+        
         <div class="clear">&nbsp;</div>
         
         <div id="widget_div_0" class="mirosubs-widget"></div>
@@ -67,27 +76,18 @@
               { video_url: '{{video.get_video_url}}' });
         </script>
         
-        {% if user.is_authenticated %}
-            {% if is_writelocked %}
-                <div class="viewing_old">
-                    Someone is editing subtitles.
-                </div>             
-            {% else%}
-                <a href="#" class="new_edit">Submit a new edit based on this version</a>
-                {% if first_version.next_version %}
-                    <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
-                        Roll back to this version
-                    </a>
-                {% endif %}
-            {% endif %}
-        {% else %}
+        {% if is_writelocked %}
             <div class="viewing_old">
-                Login, please.
-            </div>    
+                Someone is editing subtitles.
+            </div>             
+        {% else%}
+            <a href="#" class="new_edit">Submit a new edit based on this version</a>
+            {% if first_version.next_version %}
+                <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
+                    Roll back to version #{{ first_version.version_no }}
+                </a>
+            {% endif %}
         {% endif %}
-        <a href="{{ history_link }}" class="return_history">
-            &lt;&lt; Return to revision history
-        </a>
         
         <ul class="revision_list">
           {% for item in captions %}
@@ -114,10 +114,16 @@
     
     <div class="right_column">
         <h3 class="diff_title">
-            Revision as of {{ second_version.datetime_started|date:"H:i, j F Y" }} 
+            Revision #{{ second_version.version_no }} - as of {{ second_version.datetime_started|date:"H:i, j F Y" }} 
             by {{ second_version.user.username }}
         </h3>
-        <a href="#" class="previous_edit">Previous Edit</a>
+        
+        {% block second_navigation %}
+            {% with second_version as version %}
+                {% include 'videos/_revision_navigation.html' %}
+            {% endwith %}
+        {% endblock %}
+        
         <div class="clear">&nbsp;</div>
         
         <div id="widget_div_1" class="mirosubs-widget"></div>
@@ -127,27 +133,18 @@
               { video_url: '{{video.get_video_url}}' });
         </script>
         
-        {% if user.is_authenticated %}
-            {% if is_writelocked %}
-                <div class="viewing_old">
-                    Someone is editing subtitles.
-                </div>             
-            {% else%}        
-                <a href="#" class="new_edit">Submit a new edit based on this version</a>
-                {% if second_version.next_version %}
-                    <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
-                        Roll back to this version
-                    </a>
-                {% endif %}
-             {% endif %}
-        {% else %}
+        {% if is_writelocked %}
             <div class="viewing_old">
-                Login, please.
-            </div>    
-        {% endif %}
-        <a href="{{ history_link }}" class="return_history">
-            &lt;&lt; Return to revision history
-        </a>
+                Someone is editing subtitles.
+            </div>             
+        {% else%}        
+            <a href="#" class="new_edit">Submit a new edit based on this version</a>
+            {% if second_version.next_version %}
+                <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
+                    Roll back to version #{{ second_version.version_no }}
+                </a>
+            {% endif %}
+         {% endif %}
         
         <ul class="revision_list">
           {% for item in captions %}

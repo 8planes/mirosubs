@@ -246,6 +246,8 @@ class VersionModel(models.Model):
             return 'Today'
         elif d == yesterday:
             return 'Yestarday'
+        else:
+            d = d.strftime('%m/%d/%Y')
         return d
     
     def time_change_display(self):
@@ -275,6 +277,9 @@ class VideoCaptionVersion(VersionModel):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
+
+    def language_display(self):
+        return 'Original'
     
     def save(self, *args, **kwargs):
         super(VideoCaptionVersion, self).save(*args, **kwargs)
@@ -446,6 +451,9 @@ class TranslationVersion(VersionModel):
             self.text_change = text_count_changed / 1. / captions_length   
         super(TranslationVersion, self).save()
     
+    def language_display(self):
+        return self.language.get_language_display()
+    
     @property
     def video(self):
         return self.language.video
@@ -565,7 +573,7 @@ class VideoCaption(models.Model):
         return format_time(self.start_time)
     
     def display_end_time(self):
-        if self.end_time == 99999:
+        if self.end_time == 99999 or self.end_time < 0:
             return 'END'
         return format_time(self.end_time)
     

@@ -312,6 +312,7 @@ def diffing(request, first_pk, second_pk):
     context['second_version'] = second_version
     context['is_writelocked'] = video.is_writelocked
     context['history_link'] = reverse('videos:history', args=[video.video_id])
+    context['latest_version'] = video.captions()
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
 
@@ -342,6 +343,7 @@ def translation_diffing(request, first_pk, second_pk):
     context['second_version'] = second_version
     context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language])
     context['is_writelocked'] = language.is_writelocked
+    context['latest_version'] = language.translations()
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 

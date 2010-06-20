@@ -66,7 +66,7 @@ urlpatterns = patterns(
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'about.html'}),
 		(r'^faq$',  'django.views.generic.simple.direct_to_template', 
-     {'template': 'faq.html'}),
+     {'template': 'faq.html'}, 'faq_page'),
 		(r'^revision$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'revision.html'}),
 		(r'^revision2$',  'django.views.generic.simple.direct_to_template', 
