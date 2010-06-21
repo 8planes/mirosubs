@@ -25,8 +25,7 @@ JS_USE_COMPILED = True
 
 DEBUG = False
 ADMINS = (
-  ('Adam Duston', 'adam@8planes.com'),
-  ('Dean Jansen', 'dean@pculture.org')
+  ('Adam Duston', 'adam@8planes.com')
 )
 
 SITE_ID = 13
