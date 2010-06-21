@@ -7,7 +7,8 @@ To run the development version:
 4. run:
    $ easy_install -U setuptools
    $ easy_install pip
-   $ pip install -r deploy/dev-requirements.txt
+   $ cd deploy
+   $ pip install -r requirements.txt
        note: you'll need mercurial installed to make this last command work.
 5. Check out google closure into directory of your choice: svn checkout 
    http://closure-library.googlecode.com/svn/trunk/ <directory>. Then 
