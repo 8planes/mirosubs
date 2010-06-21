@@ -141,7 +141,7 @@ top: 20px;
 }
 
 
-.header h1 a{
+.header h1 a, .header h1 span.logo {
 background: url(../images/logo.png) 0 10px no-repeat;
 margin: 0;
 overflow: hidden;
