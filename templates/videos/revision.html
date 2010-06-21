@@ -46,7 +46,7 @@
 
 {% block main_content %}
     <h2>Revision #{{ version.version_no }} - {{ version.revision_time }}</h2>
-    in language <a href="#">{{ version.language_display }} language</a><br/><br/>
+    {{ video }} in language {{ version.language_display }} language<br/><br/>
         
     {% if next_version %}
         <div class="viewing_old">
