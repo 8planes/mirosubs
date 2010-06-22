@@ -132,8 +132,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.setRepeatVideoMode = function(mode) 
     this.typingPauseTimer_.stop();
 };
 mirosubs.subtitle.TranscribeEntry.prototype.handleKeyUp_ = function(event) {
-//    this.videoPlayer_.showCaptionText(this.labelInput_.getValue());
-//    this.issueLengthWarning_(this.insertsBreakableChar_(event.keyCode));
+    this.videoPlayer_.showCaptionText(this.labelInput_.getValue());
+    this.issueLengthWarning_(this.insertsBreakableChar_(event.keyCode));
 };
 mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     var value = this.labelInput_.getValue();

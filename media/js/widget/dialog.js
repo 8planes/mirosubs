@@ -70,6 +70,14 @@ mirosubs.Dialog.prototype.getBottomPanelContainerInternal = function() {
 mirosubs.Dialog.prototype.updateLoginState = function() {
     this.rightPanel_.updateLoginState();
 };
+mirosubs.Dialog.prototype.setVisible = function(visible) {
+    mirosubs.Dialog.superClass_.setVisible.call(this, visible);
+    if (!visible && mirosubs.returnURL != null) {
+        goog.Timer.callOnce(function() {
+            window.location.replace(mirosubs.returnURL);
+        });
+    }
+};
 mirosubs.Dialog.prototype.disposeInternal = function() {
     mirosubs.Dialog.superClass_.disposeInternal.call(this);
     this.videoPlayer_.dispose();

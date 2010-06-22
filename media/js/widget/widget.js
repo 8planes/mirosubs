@@ -19,8 +19,7 @@
 goog.provide('mirosubs.widget.Widget');
 
 /**
- * widgetConfig parameter documentation is currenty in embed.js.
- *
+ * @param {Object} widgetConfig parameter documentation is currenty in embed.js.
  */
 mirosubs.widget.Widget = function(widgetConfig) {
     goog.ui.Component.call(this);
