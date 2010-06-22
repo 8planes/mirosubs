@@ -97,12 +97,7 @@
     
     <div class="left_column">
         <br />
-        <div id="widget_div" class="mirosubs-widget"></div>
-        <script type="text/javascript">
-          mirosubs.widget.SameDomainEmbed.embed(
-              document.getElementById('widget_div'), 
-              { video_url: '{{video.get_video_url}}' });
-        </script>
+        {% widget video.get_video_url %}
     </div>    
 
     <div class="right_column">

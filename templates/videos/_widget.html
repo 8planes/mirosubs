@@ -1,0 +1,6 @@
+        <div id="{{ div_id }}" class="mirosubs-widget"></div>
+        <script type="text/javascript">
+          mirosubs.widget.SameDomainEmbed.embed(
+              document.getElementById('{{ div_id }}'), 
+              { video_url: '{{ video_url }}'{% if null_widget %}, null_widget: true {% endif %}});
+        </script>
