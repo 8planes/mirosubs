@@ -32,6 +32,16 @@ mirosubs.siteConfig = null;
  */
 mirosubs.currentUsername = null;
 
+/**
+ * URL to which the page should return after widget dialog closes.
+ * @type {?string}
+ * This is a temporary setting to solve 
+ * http://bugzilla.pculture.org/show_bug.cgi?id=13694 .
+ * Only set for on-site widgets opened for Firefox workaround due
+ * to video frame/background css performance problem.
+ */
+mirosubs.returnURL = null;
+
 mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
 
 /**
@@ -162,7 +172,7 @@ mirosubs.randomString = function() {
     var sb = [], i;
     for (i = 0; i < 10; i++)
         sb.push((10 + ~~(Math.random() * 26)).toString(36));
-    return sb.join('') + (new Date().getTime() % 1000000);
+    return sb.join('') + (new Date().getTime() % 100000000);
 };
 
 /**

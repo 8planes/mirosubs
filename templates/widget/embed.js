@@ -29,6 +29,7 @@
  *     null_widget: true,
  *     debug_js: false,
  *     subtitle_immediately: false,
+ *     translate_immediately: false,
  *     autoplay_language: null // blank string for original, or language code for other
  * })
  * &lt;/script&gt;

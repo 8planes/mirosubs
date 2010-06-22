@@ -160,7 +160,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.getBytesTotal_ = function() {
     return this.player_ ? this.player_['getVideoBytesTotal']() : 0;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getDuration = function() {
-    return this.player_ ? this.player_['getDuration']() : 0;
+    if (!this.duration_)
+        this.duration_ = this.player_ ? this.player_['getDuration']() : 0;
+    return this.duration_;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getVolume = function() {
     return this.player_ ? (this.player_['getVolume']() / 100) : 0;

@@ -25,6 +25,7 @@ from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt
 import simplejson as json
 from widget import rpc as rpc_views
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 import widget
 
 def embed(request):
@@ -38,6 +39,19 @@ def widget_public_demo(request):
     return render_to_response('widget/widget_public_demo.html', context,
                               context_instance=RequestContext(request))
 
+def onsite_widget(request):
+    """Used for onsite subtitling
+
+    Temporary kludge for http://bugzilla.pculture.org/show_bug.cgi?id=13694"""
+    context = widget.add_onsite_js_files({})
+    spaces = ' ' * 9
+    params = base_widget_params(request)
+    params += ',\n{0}returnURL: \'{1}\''.format(spaces, request.GET['return_url'])
+    context['widget_params'] = params
+    return render_to_response('widget/onsite_widget.html',
+                              context,
+                              context_instance=RequestContext(request))
+
 def widget_demo(request):
     context = {}
     context['js_use_compiled'] = settings.JS_USE_COMPILED
@@ -48,13 +62,7 @@ def widget_demo(request):
     else:
         context['help_mode'] = False
         spaces = ' ' * 9
-        params = '{0}video_url: \'{1}\''.format(spaces, request.GET['video_url'])
-        if request.GET.get('null_widget', None) == 'true':
-            params += ',\n{0}null_widget: true'.format(spaces)
-        if request.GET.get('debug_js', None) == 'true':
-            params += ',\n{0}debug_js: true'.format(spaces)
-        if request.GET.get('subtitle_immediately', None) == 'true':
-            params += ',\n{0}subtitle_immediately: true'.format(spaces)
+        params = base_widget_params(request)
         if request.GET.get('autoplay_language', None) is not None:
             params += ',\n{0}autoplay_language: \'{1}\''.format(
                 spaces, request.GET['autoplay_language'])
@@ -64,6 +72,19 @@ def widget_demo(request):
     return render_to_response('widget/widget_demo.html', 
                               context,
                               context_instance=RequestContext(request))
+
+def base_widget_params(request):
+    spaces = ' ' * 9
+    params = '{0}video_url: \'{1}\''.format(spaces, request.GET['video_url'])
+    if request.GET.get('null_widget', None) == 'true':
+        params += ',\n{0}null_widget: true'.format(spaces)
+    if request.GET.get('debug_js', None) == 'true':
+        params += ',\n{0}debug_js: true'.format(spaces)
+    if request.GET.get('subtitle_immediately', None) == 'true':
+        params += ',\n{0}subtitle_immediately: true'.format(spaces)
+    if request.GET.get('translate_immediately', None) == 'true':
+        params += ',\n{0}translate_immediately: true'.format(spaces)
+    return params
 
 def srt(request):
     video = models.Video.objects.get(video_id=request.GET['video_id'])
@@ -94,6 +115,7 @@ def null_srt(request):
         'attachment; filename={0}'.format(video.srt_filename)
     return response
 
+@csrf_exempt
 def rpc(request, method_name):
     args = { 'request': request }
     for k, v in request.POST.items():
@@ -102,6 +124,7 @@ def rpc(request, method_name):
     result = func(**args)
     return HttpResponse(json.dumps(result), "application/json")
 
+@csrf_exempt
 def xd_rpc(request, method_name):
     args = { 'request' : request }
     for k, v in request.POST.items():

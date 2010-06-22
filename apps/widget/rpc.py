@@ -180,8 +180,11 @@ def start_translating(request, video_id, language_code, editing=False):
                                     for lang in LANGUAGES]
     return return_dict
 
-def start_translating_null(request, video_id, language_code):
+def start_translating_null(request, video_id, language_code, editing=False):
     # FIXME: note duplication with start_translating, fix that.
+
+    maybe_add_video_session(request)
+
     if not request.user.is_authenticated():
         translations = []
     else:
@@ -192,11 +195,15 @@ def start_translating_null(request, video_id, language_code):
             translations = []
         else:
             translations = list(null_translations.translation_set.all())
-    return { 'can_edit': True,
-             'version': 0,
-             'existing': [trans.to_json_dict() for
-                          trans in translations] }
-
+    return_dict = { 'can_edit': True,
+                    'version': 0,
+                    'existing': [trans.to_json_dict() for
+                                 trans in translations] }
+    if editing:
+        return_dict['existing_captions'] = fetch_captions_null(request, video_id)
+        return_dict['languages'] = [widget.language_to_map(lang[0], lang[1])
+                                    for lang in LANGUAGES]
+    return return_dict
 
 def update_video_lock(request, video_id):
     video = models.Video.objects.get(video_id=video_id)

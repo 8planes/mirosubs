@@ -23,7 +23,9 @@
     <div id="widget_div" class="mirosubs-widget" style="width: 480px; margin: auto"></div>
   </div>
   <script language="JavaScript" type="text/javascript">
-      var videoURL = "http://www.youtube.com/watch?v=6APY0_lEHJo";
+      var videoURL = mirosubs.video.supportsOgg() ? 
+          "http://videos.mozilla.org/firefox/3.5/switch/switch.ogv" :
+          "http://www.youtube.com/watch?v=6APY0_lEHJo";
       mirosubs.widget.SameDomainEmbed.embed(
           document.getElementById('widget_div'),
           { video_url: videoURL, null_widget: true });

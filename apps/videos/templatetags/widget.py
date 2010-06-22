@@ -16,17 +16,22 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.contrib.sites.models import Site
+#  Based on: http://www.djangosnippets.org/snippets/73/
+#
+#  Modified by Sean Reifschneider to be smarter about surrounding page
+#  link context.  For usage documentation see:
+#
+#     http://www.tummy.com/Community/Articles/django-pagination/
 
-def current_site(request):
-    try:
-        return { 'current_site': Site.objects.get_current() }
-    except Site.DoesNotExist:
-        return { 'current_site': '' }
+from django import template
+from django.template import RequestContext
 
-def null_widget(request):
-    null = request.GET.get('null')
-    if null == 'true':
-        return {'null_widget': True}
-    else:
-        return {'null_widget': False}
+register = template.Library()
+
+@register.inclusion_tag('videos/_widget.html', takes_context=True)
+def widget(context, video_url, div_id='widget_div'):
+    return {
+        'video_url': video_url,
+        'div_id': div_id,
+        'null_widget': context.get('null_widget')
+    }

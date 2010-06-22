@@ -159,10 +159,9 @@ def email_friend(request):
                               context_instance=RequestContext(request))
 
 def demo(request):
-    return HttpResponseRedirect('/widget_public_demo/')
-#    context = widget.add_onsite_js_files({})
-#    return render_to_response('demo.html', context,
-#                              context_instance=RequestContext(request))
+    context = widget.add_onsite_js_files({})
+    return render_to_response('demo.html', context,
+                              context_instance=RequestContext(request))
 
 def history(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
@@ -275,9 +274,9 @@ def rollback(request, pk, cls=VideoCaptionVersion):
     if is_writelocked:
         messages.error(request, 'Can not rollback now, because someone is editing subtitles.')
     elif not version.next_version():
-        messages.error(message='Can not rollback to the last version')
+        messages.error(request, message='Can not rollback to the last version')
     else:
-        messages.success(message='Rollback was success')
+        messages.success(request, message='Rollback was success')
         version = version.rollback(request.user)
     url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
     return redirect('videos:%s' % url_name, pk=version.pk)
@@ -313,6 +312,7 @@ def diffing(request, first_pk, second_pk):
     context['second_version'] = second_version
     context['is_writelocked'] = video.is_writelocked
     context['history_link'] = reverse('videos:history', args=[video.video_id])
+    context['latest_version'] = video.captions()
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
 
@@ -343,6 +343,7 @@ def translation_diffing(request, first_pk, second_pk):
     context['second_version'] = second_version
     context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language])
     context['is_writelocked'] = language.is_writelocked
+    context['latest_version'] = language.translations()
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 

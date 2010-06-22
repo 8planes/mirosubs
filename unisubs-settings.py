@@ -16,17 +16,27 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.contrib.sites.models import Site
+# Note that this file is kept in .gitignore since it contains password information.
 
-def current_site(request):
-    try:
-        return { 'current_site': Site.objects.get_current() }
-    except Site.DoesNotExist:
-        return { 'current_site': '' }
+from settings import *
+from passwords.unisubs import *
 
-def null_widget(request):
-    null = request.GET.get('null')
-    if null == 'true':
-        return {'null_widget': True}
-    else:
-        return {'null_widget': False}
+JS_USE_COMPILED = True
+
+DEBUG = False
+ADMINS = (
+  ('Adam Duston', 'adam@8planes.com')
+)
+
+SITE_ID = 8
+SITE_NAME = 'unisubs'
+
+TWITTER_CONSUMER_KEY = '568zigeMu0p0KNHI3XUn0g'
+
+DATABASE_ENGINE = 'mysql'
+DATABASE_NAME = 'universalsubtitles'
+DATABASE_USER = 'univsubs'
+DATABASE_HOST = 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com'
+DATABASE_PORT = '3306'
+
+MEDIA_URL = "http://universalsubtitles.org/site_media/"
