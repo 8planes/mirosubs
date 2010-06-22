@@ -16,8 +16,8 @@
 </div>
 <div class="right_column">
 <h2>Create an Account</h2>
-
   <form action="{% url auth:create_user %}" method="post">
+    {% csrf_token %}
     {{ creation_form.as_p }}
     <button type="submit" value="create account"><span>Create Account</span></button>
     <input type="hidden" name="next" value="{{ next }}" />
