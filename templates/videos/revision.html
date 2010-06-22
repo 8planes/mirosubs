@@ -31,7 +31,7 @@
             var IS_AUTHENTICATED = '{{ user.is_authenticated }}' == 'True';
             if (IS_AUTHENTICATED){
                 $('.roll_back').click(function(){
-                    if ( ! confirm('Do roll back to this version?')){
+                    if ( ! confirm('Subtitles will be rolled back to a previous version')){
                         return false;
                     }                    
                 });                
