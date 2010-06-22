@@ -162,7 +162,7 @@ mirosubs.randomString = function() {
     var sb = [], i;
     for (i = 0; i < 10; i++)
         sb.push((10 + ~~(Math.random() * 26)).toString(36));
-    return sb.join('') + (new Date().getTime() % 1000000);
+    return sb.join('') + (new Date().getTime() % 100000000);
 };
 
 /**
