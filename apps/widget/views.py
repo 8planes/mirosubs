@@ -56,6 +56,8 @@ def widget_demo(request):
             params += ',\n{0}debug_js: true'.format(spaces)
         if request.GET.get('subtitle_immediately', None) == 'true':
             params += ',\n{0}subtitle_immediately: true'.format(spaces)
+        if request.GET.get('translate_immediately', None) == 'true':
+            params += ',\n{0}translate_immediately: true'.format(spaces)
         if request.GET.get('autoplay_language', None) is not None:
             params += ',\n{0}autoplay_language: \'{1}\''.format(
                 spaces, request.GET['autoplay_language'])

@@ -36,6 +36,8 @@ mirosubs.widget.Widget = function(widgetConfig) {
     this.nullWidget_ = !!widgetConfig['null_widget'];
     this.subtitleImmediately_ = 
         !!widgetConfig['subtitle_immediately'];
+    this.translateImmediately_ =
+        !!widgetConfig['translate_immediately'];
     /**
      * null if no autoplay, blank string for original language, 
      * language code for other
@@ -122,6 +124,8 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
             result['subtitles']);
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(goog.bind(this.subtitle_, this));
+    else if (this.translateImmediately_)
+        goog.Timer.callOnce(goog.bind(this.addNewLanguage_, this));
 
     this.attachEvents_();
 };
@@ -320,7 +324,7 @@ mirosubs.widget.Widget.prototype.findLanguage_ = function(code) {
             return tl['code'] == code;
         });
 };
-mirosubs.widget.Widget.prototype.addNewLanguage_ = function(event) {
+mirosubs.widget.Widget.prototype.addNewLanguage_ = function() {
     this.videoTab_.showLoading(true);
     mirosubs.Rpc.call(
         'fetch_captions_and_open_languages' + 
