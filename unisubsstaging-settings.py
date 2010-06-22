@@ -33,10 +33,15 @@ SITE_NAME = 'unisubsstaging'
 
 TWITTER_CONSUMER_KEY = 'XYDDYlf54CU9bKMfIbvgNg'
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = 'universalsubtitles_staging'
-DATABASE_USER = 'univsubs_staging'
-DATABASE_HOST = 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com'
-DATABASE_PORT = '3306'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'universalsubtitles_staging',
+        'USER': 'univsubs_staging',
+        'PASSWORD': DATABASE_PASSWORD,
+        'HOST': 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com',
+        'PORT': '3306'
+        }
+    }
 
 MEDIA_URL = "http://staging.universalsubtitles.org/site_media/"
