@@ -286,7 +286,7 @@ class VideoCaptionVersion(VersionModel):
         old_version = self.prev_version()
         new_captions = self.captions()
         captions_length = len(new_captions)
-
+        print old_version, captions_length
         if not old_version or not captions_length:
             #if it's first version set changes to 0
             self.time_change = 0

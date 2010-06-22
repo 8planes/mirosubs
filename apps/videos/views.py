@@ -274,9 +274,9 @@ def rollback(request, pk, cls=VideoCaptionVersion):
     if is_writelocked:
         messages.error(request, 'Can not rollback now, because someone is editing subtitles.')
     elif not version.next_version():
-        messages.error(message='Can not rollback to the last version')
+        messages.error(request, message='Can not rollback to the last version')
     else:
-        messages.success(message='Rollback was success')
+        messages.success(request, message='Rollback was success')
         version = version.rollback(request.user)
     url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
     return redirect('videos:%s' % url_name, pk=version.pk)

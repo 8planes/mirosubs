@@ -39,17 +39,28 @@
             return DIFFING_URL.replace(/<<first_pk>>/, first_pk).replace(/<<second_pk>>/, second_pk);
         }
 
-            jQuery(document).ready(function($){
-                $('.compare_versions_button').click(function(){
-                    var $checked = $('.version_checkbox:checked');
-                    if ($checked.length !== 2){
-                        alert('Select two revisions for compare, please');
-                    }else{
-                        var url = get_compare_link($checked[0].value, $checked[1].value);
-                        window.location.replace(url);
-                    }
-                });
+        jQuery(document).ready(function($){
+            $('.version_checkbox:first').attr('checked', 'checked');
+            
+            $('.version_checkbox').change(function(){
+                var $this = $(this);
+                var checked_length = $('.version_checkbox:checked').length;
+                
+                if($this.attr('checked') && (checked_length > 2)){
+                    $this.attr('checked', '');
+                }
             });
+            
+            $('.compare_versions_button').click(function(){
+                var $checked = $('.version_checkbox:checked');
+                if ($checked.length !== 2){
+                    alert('Select two revisions for compare, please');
+                }else{
+                    var url = get_compare_link($checked[0].value, $checked[1].value);
+                    window.location.replace(url);
+                }
+            });
+        });
     </script>
 {% endblock %}
 
