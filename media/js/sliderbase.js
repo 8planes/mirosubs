@@ -131,7 +131,6 @@ mirosubs.SliderBase.prototype.enterDocument = function() {
 
     this.dragger_ = new goog.fx.Dragger(this.thumb);
     this.dragger_.defaultAction = goog.nullFunction;
-    this.keyHandler_ = new goog.events.KeyHandler(this.getElement());
     this.getHandler().
         listen(this.dragger_, goog.fx.Dragger.EventType.BEFOREDRAG,
                this.handleBeforeDrag_).
@@ -142,6 +141,11 @@ mirosubs.SliderBase.prototype.enterDocument = function() {
 
     this.getElement().tabIndex = 0;
     this.updateUi_();
+};
+
+mirosubs.SliderBase.prototype.exitDocument = function() {
+    mirosubs.SliderBase.superClass_.exitDocument.call(this);
+    this.dragger_.dispose();
 };
 
 /**
