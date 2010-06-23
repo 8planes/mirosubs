@@ -41,16 +41,17 @@ mirosubs.controls.ProgressBar.prototype.createDom = function() {
 mirosubs.controls.ProgressBar.prototype.enterDocument = function() {
     mirosubs.controls.ProgressBar.superClass_.enterDocument.call(this);
     var et = mirosubs.video.AbstractVideoPlayer.EventType;
-    this.getHandler().listen(
-        this.videoPlayer_, et.TIMEUPDATE, this.videoTimeUpdate_).
-    listen(
-        this.progressSlider_, 
-        goog.ui.Component.EventType.CHANGE,
-        this.progressSliderUpdate_).
-    listen(
-        this.progressSlider_,
-        goog.object.getValues(mirosubs.SliderBase.EventType),
-        this.progressSliderInteracting_);
+    this.getHandler().
+        listen(
+            this.videoPlayer_, et.TIMEUPDATE, this.videoTimeUpdate_).
+        listen(
+            this.progressSlider_, 
+            goog.ui.Component.EventType.CHANGE,
+            this.progressSliderUpdate_).
+        listen(
+            this.progressSlider_,
+            goog.object.getValues(mirosubs.SliderBase.EventType),
+            this.progressSliderInteracting_);
 };
 
 mirosubs.controls.ProgressBar.prototype.progressSliderInteracting_ = 
