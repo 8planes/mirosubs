@@ -75,7 +75,20 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
 
 	<script type="text/javascript">
 	// <![CDATA[
-
+                var email_source = 'Please enter a valid email address';
+                $('.get_updates input[name=email]')
+                    .val(email_source)
+                    .focus(function(){
+                        if ($(this).val() === email_source){
+                            $(this).val('');
+                        }
+                    })
+                    .blur(function(){
+                        if ($(this).val() === ''){
+                            $(this).val(email_source);
+                        }
+                    });
+                
 				function CheckMultiple1(frm, name) {
 					for (var i=0; i < frm.length; i++)
 					{
