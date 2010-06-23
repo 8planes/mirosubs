@@ -1,0 +1,30 @@
+<VirtualHost *:8080>
+    ServerAdmin aduston@gmail.com
+
+    ServerName  ${server name}
+    ServerAlias ${server alias}
+
+    LogLevel warn
+
+    CustomLog "|/usr/bin/cronolog ${log dir}/access.log" combined
+    ErrorLog "|/usr/bin/cronolog ${log dir}/error.log"
+
+    WSGIDaemonProcess unisubs user=www-data group=pcf-web threads=2
+    WSGIProcessGroup unisubs
+
+    WSGIScriptAlias / ${base site dir}/mirosubs/deploy/unisubs.wsgi
+
+    Alias /site_media ${base site dir}/mirosubs/media/
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /media ${base site dir}/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    <Location "/media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+</VirtualHost>

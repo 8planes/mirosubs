@@ -16,22 +16,32 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+# Note that this file is kept in .gitignore since it contains password information.
+
 from settings import *
-from django.contrib.sites.models import Site
 
 JS_USE_COMPILED = True
 
 DEBUG = False
 ADMINS = (
-  ('Adam Duston', 'adam@8planes.com'),
-  ('Hubert Huang', 'huberth@gmail.com'),
-  ('Dmitriy', 'alerion.um@gmail.com')
+  ('Adam Duston', 'adam@8planes.com')
 )
 
-SITE_ID = 6
-SITE_NAME = 'mirosubs-dev-8planes'
+SITE_ID = ${site id}
+SITE_NAME = ${site name}
 
-TWITTER_CONSUMER_KEY = 'bV1YANLJrSyAMNN78zI2wg'
-TWITTER_CONSUMER_SECRET = 'jVDC7080261pB5eIr717KIEmI7TvNreLJpcPM6Yq8'
+TWITTER_CONSUMER_KEY = ${twitter consumer key}
+TWITTER_PRIVATE_KEY = ${twitter private key}
 
-MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': ${database name},
+        'USER': ${database user},
+        'PASSWORD': ${database password},
+        'HOST': 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com',
+        'PORT': '3306'
+        }
+    }
+
+MEDIA_URL = ${media url}

@@ -2,8 +2,8 @@
 
 {% block main_content %}
 <form action="{% url videos:create %}" method="POST" class="main_video_form">
-
-	<h2 class="main_heading">Subtitle a Video</h2>
+  {% csrf_token %}
+  <h2 class="main_heading">Subtitle a Video</h2>
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
   <input type="text" name="video_url" class="main_video_form_field" />
   <button type="submit" value="Begin" class="begin">Begin</button>
