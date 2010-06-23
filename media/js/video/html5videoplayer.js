@@ -74,15 +74,13 @@ mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     }
 };
 mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
-    this.getHandler().listen(
-        this.videoElem_, 'play', this.videoPlaying_);
-    this.getHandler().listen(
-        this.videoElem_, 'pause', this.videoPaused_);
-    this.getHandler().listen(
-        this.videoElem_, 'progress', this.videoProgressListener_);
-    this.getHandler().listen(
-        this.videoElem_, 'timeupdate',
-        this.timeUpdateThrottle_.fire, false, this.timeUpdateThrottle_);
+    this.getHandler().
+        listen(this.videoElem_, 'play', this.videoPlaying_).
+        listen(this.videoElem_, 'pause', this.videoPaused_).
+        listen(this.videoElem_, 'progress', this.videoProgressListener_).
+        listen(this.videoElem_, 'timeupdate',
+               this.timeUpdateThrottle_.fire, 
+               false, this.timeUpdateThrottle_);
 };
 mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
     this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
