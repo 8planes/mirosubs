@@ -1,27 +1,28 @@
 <VirtualHost *:8080>
     ServerAdmin aduston@gmail.com
 
-    ServerName  ${server name}
-    ServerAlias ${server alias}
+    ServerName  INSERT_SUBDOMAIN.universalsubtitles.org
+    ServerAlias INSERT_SUBDOMAIN.universalsubtitles.com
+
 
     LogLevel warn
 
-    CustomLog "|/usr/bin/cronolog ${log dir}/access.log" combined
-    ErrorLog "|/usr/bin/cronolog ${log dir}/error.log"
+    CustomLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/access.log" combined
+    ErrorLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/error.log"
 
-    WSGIDaemonProcess unisubs user=www-data group=pcf-web threads=2
-    WSGIProcessGroup unisubs
+    WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web threads=2
+    WSGIProcessGroup unisubs-INSERT_SITE_NAME
 
-    WSGIScriptAlias / ${base site dir}/mirosubs/deploy/unisubs.wsgi
+    WSGIScriptAlias / /var/www/INSERT_SITE_DIRECTORY/mirosubs/deploy/unisubs.wsgi
 
-    Alias /site_media ${base site dir}/mirosubs/media/
+    Alias /site_media /var/www/INSERT_SITE_DIRECTORY/mirosubs/media/
     <Location "/site_media">
         SetHandler None
         Order allow,deny
         Allow from all
     </Location>
 
-    Alias /media ${base site dir}/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    Alias /media /var/www/INSERT_SITE_DIRECTORY/env/lib/python2.6/site-packages/django/contrib/admin/media/
     <Location "/media">
         SetHandler None
         Order allow,deny
