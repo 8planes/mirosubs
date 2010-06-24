@@ -27,21 +27,21 @@ ADMINS = (
   ('Adam Duston', 'adam@8planes.com')
 )
 
-SITE_ID = ${site id}
-SITE_NAME = ${site name}
+SITE_ID = INSERT_SITE_ID_AS_NUMBER
+SITE_NAME = 'INSERT SITE NAME'
 
-TWITTER_CONSUMER_KEY = ${twitter consumer key}
-TWITTER_PRIVATE_KEY = ${twitter private key}
+TWITTER_CONSUMER_KEY = 'INSERT TWITTER CONSUMER KEY'
+TWITTER_CONSUMER_PRIVATE = 'INSERT TWITTER PRIVATE KEY'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': ${database name},
-        'USER': ${database user},
-        'PASSWORD': ${database password},
+        'NAME': 'INSERT DATABASE NAME',
+        'USER': 'INSERT DATABASE USER',
+        'PASSWORD': 'INSERT DATABASE PASSWORD',
         'HOST': 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com',
         'PORT': '3306'
         }
     }
 
-MEDIA_URL = ${media url}
+MEDIA_URL = "http://INSERT_SUBDOMAIN.universalsubtitles.org/site_media/"

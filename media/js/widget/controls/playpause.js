@@ -36,17 +36,11 @@ mirosubs.controls.PlayPause.prototype.createDom = function() {
 };
 mirosubs.controls.PlayPause.prototype.enterDocument = function() {
     mirosubs.controls.PlayPause.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.videoPlayer_,
-        mirosubs.video.AbstractVideoPlayer.EventType.PLAY_CALLED,
-        this.setPlaying_);
-    this.getHandler().listen(
-        this.videoPlayer_,
-        mirosubs.video.AbstractVideoPlayer.EventType.PAUSE_CALLED,
-        this.setPaused_);
-    this.getHandler().listen(
-        this.getElement(), 'click',
-        this.clicked_);
+    var et = mirosubs.video.AbstractVideoPlayer.EventType;
+    this.getHandler().
+        listen(this.videoPlayer_, et.PLAY_CALLED, this.setPlaying_).
+        listen(this.videoPlayer_, et.PAUSE_CALLED, this.setPaused_).
+        listen(this.getElement(), 'click', this.clicked_);
 };
 mirosubs.controls.PlayPause.prototype.setPlaying_ = function() {
     goog.dom.classes.remove(this.getElement(), 'play');

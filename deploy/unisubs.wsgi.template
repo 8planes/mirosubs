@@ -1,10 +1,10 @@
 from os.path import join
 
 import site
-site.addsitedir(${virtual env site packages})
+site.addsitedir('/var/www/INSERT_SITE_DIRECTORY/env/lib/python2.6/site-packages')
 
 import sys
-base_site_dir = ${base site dir}
+base_site_dir = '/var/www/INSERT_SITE_DIRECTORY'
 sys.path.append(base_site_dir)
 sys.path.append(join(base_site_dir, 'mirosubs'))
 sys.path.append(join(base_site_dir, 'mirosubs', 'apps'))

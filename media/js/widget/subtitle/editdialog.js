@@ -95,7 +95,7 @@ mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
         rightPanel, et.DONE, this.handleDoneKeyPress_);
     var s = mirosubs.subtitle.EditDialog.State_;
     if (state == s.EDIT) {
-        rightPanel.showBackLink("Return to Transcribe");
+        rightPanel.showBackLink("Return to Typing");
         this.rightPanelListener_.listen(
             rightPanel, et.BACK, this.handleBackKeyPress_);
         this.timelineSubtitleSet_ =

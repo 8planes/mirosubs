@@ -22,7 +22,6 @@ mirosubs.Dialog = function(videoSource) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-widget', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
-    this.videoSource_ = videoSource;
     this.controlledVideoPlayer_ = videoSource.createControlledPlayer();
     this.videoPlayer_ = this.controlledVideoPlayer_.getPlayer();
     this.timelinePanel_ = null;
@@ -41,11 +40,36 @@ mirosubs.Dialog.prototype.createDom = function() {
     leftColumn.addChild(this.captioningArea_ = new goog.ui.Component(), true);
     this.captioningArea_.getElement().className = 'mirosubs-captioningArea';
     this.addChild(leftColumn, true);
-    this.addChild(this.rightPanelContainer_ = new goog.ui.Component(), true);
+    this.addChild(
+        this.rightPanelContainer_ = new goog.ui.Component(), true);
     this.rightPanelContainer_.getElement().className = 'mirosubs-right';
     this.getContentElement().appendChild(this.getDomHelper().createDom(
         'div', 'mirosubs-clear'));
-    this.addChild(this.bottomPanelContainer_ = new goog.ui.Component(), true);
+    this.addChild(
+        this.bottomPanelContainer_ = new goog.ui.Component(), true);
+};
+/**
+ * Used to display a temporary overlay, for example the instructional
+ * video panel in between subtitling steps.
+ * @protected
+ * @param {goog.ui.Component} panel Something with absolute positioning
+ *
+ */
+mirosubs.Dialog.prototype.showTemporaryPanel = function(panel) {
+    this.hideTemporaryPanel();
+    this.temporaryPanel_ = panel;
+    this.addChild(panel, true);
+};
+/**
+ * Hides and disposes the panel displayed in showTemporaryPanel.
+ * @protected
+ */
+mirosubs.Dialog.prototype.hideTemporaryPanel = function() {
+    if (this.temporaryPanel_) {
+        this.removeChild(this.temporaryPanel_, true);
+        this.temporaryPanel_.dispose();
+        this.temporaryPanel_ = null;
+    }
 };
 mirosubs.Dialog.prototype.getVideoPlayerInternal = function() {
     return this.videoPlayer_;
