@@ -31,7 +31,7 @@ SITE_ID = ${site id}
 SITE_NAME = ${site name}
 
 TWITTER_CONSUMER_KEY = ${twitter consumer key}
-TWITTER_PRIVATE_KEY = ${twitter private key}
+TWITTER_CONSUMER_PRIVATE = ${twitter private key}
 
 DATABASES = {
     'default': {
