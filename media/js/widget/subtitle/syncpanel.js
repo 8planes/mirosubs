@@ -87,9 +87,7 @@ mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
          "Tap DOWN to begin, tap it for the first subtitle, and so on.",
          ["Don't worry about small mistakes. We can correct them in the ",
           "next step. If you need to start over, click \"restart\" ",
-          "below."].join('')],
-        "Watch a how-to video on syncing",
-        "http://youtube.com");
+          "below."].join('')]);
     return new mirosubs.RightPanel(
         this.serverModel, helpContents,
         this.makeKeySpecsInternal(), true, "Done?",

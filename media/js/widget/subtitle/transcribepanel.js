@@ -95,9 +95,7 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
           "enter after each sentence or long phrase."].join(''),
          ["Use the key controls below to pause and jump back, ", 
           "which will help you keep up."].join(''),
-         "Don't worry about timing, that's the next step.  Just type!"],
-        "Watch a quick how-to video",
-        "http://youtube.com");
+         "Don't worry about timing, that's the next step.  Just type!"]);
     var KC = goog.events.KeyCodes;
     var keySpecs = [
         new mirosubs.RightPanel.KeySpec(
