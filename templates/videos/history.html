@@ -102,7 +102,7 @@
 
 
     {% if revision_list %}
-    
+ 
     {% block table %}
     <ul class="table_head">
       <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
@@ -123,14 +123,15 @@
               <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
               <li class="table_time">{{ item.time_change_display }}</li>
               <li class="table_text">{{ item.text_change_display }}</li>
-
             </ul>
           </li>    
-    {% endfor %}
-   </ul> 
-   <div style="clear: both"/>
-   {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
-
-   {% endblock %} 
+        {% endfor %}
+       </ul> 
+       <div style="clear: both"/>
+       {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
+       {% endblock %}
+   {% else %}
+        <div class="clear">&nbsp;</div>
+        <div>There are no revisions of this video</div>
    {% endif %}
 {% endblock %}

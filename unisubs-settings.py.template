@@ -19,7 +19,6 @@
 # Note that this file is kept in .gitignore since it contains password information.
 
 from settings import *
-from passwords.unisubsstaging import *
 
 JS_USE_COMPILED = True
 
@@ -28,20 +27,21 @@ ADMINS = (
   ('Adam Duston', 'adam@8planes.com')
 )
 
-SITE_ID = 14
-SITE_NAME = 'unisubsstaging'
+SITE_ID = INSERT_SITE_ID_AS_NUMBER
+SITE_NAME = 'INSERT SITE NAME'
 
-TWITTER_CONSUMER_KEY = 'XYDDYlf54CU9bKMfIbvgNg'
+TWITTER_CONSUMER_KEY = 'INSERT TWITTER CONSUMER KEY'
+TWITTER_CONSUMER_PRIVATE = 'INSERT TWITTER PRIVATE KEY'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'universalsubtitles_staging',
-        'USER': 'univsubs_staging',
-        'PASSWORD': DATABASE_PASSWORD,
+        'NAME': 'INSERT DATABASE NAME',
+        'USER': 'INSERT DATABASE USER',
+        'PASSWORD': 'INSERT DATABASE PASSWORD',
         'HOST': 'universalsubtitles.cxrucp2uira2.us-east-1.rds.amazonaws.com',
         'PORT': '3306'
         }
     }
 
-MEDIA_URL = "http://staging.universalsubtitles.org/site_media/"
+MEDIA_URL = "http://INSERT_SUBDOMAIN.universalsubtitles.org/site_media/"

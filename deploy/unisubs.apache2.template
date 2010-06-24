@@ -1,0 +1,31 @@
+<VirtualHost *:8080>
+    ServerAdmin aduston@gmail.com
+
+    ServerName  INSERT_SUBDOMAIN.universalsubtitles.org
+    ServerAlias INSERT_SUBDOMAIN.universalsubtitles.com
+
+
+    LogLevel warn
+
+    CustomLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/access.log" combined
+    ErrorLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/error.log"
+
+    WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web threads=2
+    WSGIProcessGroup unisubs-INSERT_SITE_NAME
+
+    WSGIScriptAlias / /var/www/INSERT_SITE_DIRECTORY/mirosubs/deploy/unisubs.wsgi
+
+    Alias /site_media /var/www/INSERT_SITE_DIRECTORY/mirosubs/media/
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /media /var/www/INSERT_SITE_DIRECTORY/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    <Location "/media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+</VirtualHost>

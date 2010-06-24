@@ -27,15 +27,8 @@ goog.inherits(mirosubs.subtitle.EditPanel, mirosubs.subtitle.SyncPanel);
 mirosubs.subtitle.EditPanel.prototype.createRightPanelInternal =
     function()
 {
-    var helpContents = new mirosubs.RightPanel.HelpContents(
-        "EDIT: Edit existing subtitles",
-        ["Here are some instructions that are appropriate for editing existing subtitles.",
-         "Yes, very good instructions.",
-         "You are editing existing subtitles!"],
-        "Watch a video about how to edit",
-        "http://youtube.com");
-    return new mirosubs.RightPanel(
-        this.serverModel, helpContents,
+    return new mirosubs.subtitle.EditRightPanel(
+        this.serverModel, null,
         this.makeKeySpecsInternal(), false, "Done?",
         "Submit your work");
 }
