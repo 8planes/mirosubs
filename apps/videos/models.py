@@ -103,10 +103,15 @@ class Video(models.Model):
         else:
             return CAPTIONS_IN_PROGRESS
 
-    def captions(self):
-        """Returns latest VideoCaptionVersion, or None if no captions"""
+    def captions(self, version=None):
+        """Returns VideoCaptionVersion, or None if no captions
+        
+        If version is None, then returns latest VideoCaptionVersion."""
         try:
-            return self.videocaptionversion_set.order_by('-version_no')[:1].get()
+            if version is None:
+                return self.videocaptionversion_set.order_by('-version_no')[:1].get()
+            else:
+                return self.videocaptionversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
             pass
 
@@ -126,7 +131,7 @@ class Video(models.Model):
         except models.ObjectDoesNotExist:
             pass
 
-    def captions_and_translations(self, language_code):
+    def captions_and_translations(self, language_code, version=None):
         """(VideoCaption, Translation) pair list
 
         Returns (VideoCaption, Translation) tuple list, where the 
@@ -134,7 +139,7 @@ class Video(models.Model):
         for the caption
         """
         return self.make_captions_and_translations(
-            self.captions(), self.translations(language_code))
+            self.captions(), self.translations(language_code, version))
 
     def null_captions_and_translations(self, user, language_code):
         """(VideoCaption, Translation) pair list
@@ -159,12 +164,14 @@ class Video(models.Model):
                  else translations_dict[subtitle.caption_id])
                 for subtitle in subtitles]
 
-    def translations(self, language_code):
-        """Returns latest TranslationVersion for language_code, or None if none found"""
+    def translations(self, language_code, version=None):
+        """Returns TranslationVersion for language_code, or None if none found 
+        
+        version is None means that we fetch latest version."""
         trans_lang = self.translation_language(language_code)
         if trans_lang is None:
             return None
-        return trans_lang.translations()
+        return trans_lang.translations(version)
 
     def null_translations(self, user, language_code):
         try:
@@ -402,10 +409,13 @@ class TranslationLanguage(models.Model):
         self.writelock_session_key = ''
         self.writelock_time = None
 
-    def translations(self):
+    def translations(self, version=None):
         """Returns latest TranslationVersion, or None if none found"""
         try:
-            return self.translationversion_set.order_by('-version_no')[:1].get()
+            if version is None:
+                return self.translationversion_set.order_by('-version_no')[:1].get()
+            else:
+                return self.translationversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
             pass
 
