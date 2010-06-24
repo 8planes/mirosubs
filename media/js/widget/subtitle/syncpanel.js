@@ -82,9 +82,9 @@ mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
         "STEP 2: Syncing Subtitles",
         ["Congratulations, you finished the hard part (all that typing)!",
-         ["Now, to line up your subtitles to the video, tap DOWN right ",
+         ["Now, to line up your subtitles to the video, tap the DOWN ARROW right ",
           "when each subtitle should appear."].join(''),
-         "Tap down to begin, tap it for the first subtitle, and so on.",
+         "Tap DOWN to begin, tap it for the first subtitle, and so on.",
          ["Don't worry about small mistakes. We can correct them in the ",
           "next step. If you need to start over, click \"restart\" ",
           "below."].join('')],

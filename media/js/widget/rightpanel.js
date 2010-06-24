@@ -65,7 +65,7 @@ mirosubs.RightPanel.prototype.createDom = function() {
     var el = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
-    this.appendHelpContents_($d, el);
+    this.appendHelpContentsInternal($d, el);
 
     this.appendLegendContents_($d, el);
 
@@ -78,18 +78,13 @@ mirosubs.RightPanel.prototype.showBackLink = function(linkText) {
     this.backAnchor_.style.display = '';
     goog.dom.setTextContent(this.backAnchor_, linkText);
 };
-mirosubs.RightPanel.prototype.appendHelpContents_ = function($d, el) {
+mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
     var helpDiv = $d('div', 'mirosubs-help');
     el.appendChild(helpDiv);
     helpDiv.appendChild($d('h2', null, this.helpContents_.header));
     goog.array.forEach(this.helpContents_.paragraphs, function(p) {
         helpDiv.appendChild($d('p', null, p));
     });
-    if (this.helpContents_.watchLinkText && this.helpContents_.watchLinkURL)
-        helpDiv.appendChild(
-            $d('a', {'className':'mirosubs-watch', 
-                     'href':this.helpContents_.watchLinkURL},
-               $d('span', null, this.helpContents_.watchLinkText)));
 };
 mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     var legendDiv = $d('div', 'mirosubs-legend');
@@ -134,8 +129,8 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
                       this.loginDiv_, this.doneAnchor_);
     this.backAnchor_ = 
         $d('a', {'className':'mirosubs-backTo', 'href':'#'}, 
-           'Back to Transcribe');
-    this.getHandler().listen(this.backAnchor_, 'click', this.backClicked_);
+           'Return to Typing');
+    this.getHandler().listen(this.backAnchor_, 'click', this.backClickedInternal);
     this.backAnchor_.style.display = 'none';
     stepsDiv.appendChild(this.backAnchor_);
     if (this.showRestart_) {
@@ -167,7 +162,7 @@ mirosubs.RightPanel.prototype.legendKeyMouseup_ = function(keyCode, event) {
             new mirosubs.RightPanel.LegendKeyEvent(keyCode, 'mouseup'));
     }
 };
-mirosubs.RightPanel.prototype.backClicked_ = function(event) {
+mirosubs.RightPanel.prototype.backClickedInternal = function(event) {
     this.dispatchEvent(mirosubs.RightPanel.EventType.BACK);
     event.preventDefault();
 };
@@ -211,17 +206,11 @@ mirosubs.RightPanel.prototype.loginClicked_ = function(event) {
  * Sets contents at top part of right panel.
  *
  * @param {string} header
- * @param {Array.<string>} paragraphs
- * @param {string=} opt_watchLinkText
- * @param {string=} opt_watchLinkURL
+ * @param {Array.<string>=} paragraphs
  */
-mirosubs.RightPanel.HelpContents = function(header, paragraphs, 
-                                            opt_watchLinkText,
-                                            opt_watchLinkURL) {
+mirosubs.RightPanel.HelpContents = function(header, paragraphs) {
     this.header = header;
     this.paragraphs = paragraphs;
-    this.watchLinkText = opt_watchLinkText;
-    this.watchLinkURL = opt_watchLinkURL;
 };
                                             
 mirosubs.RightPanel.KeySpec = function(divClass, spanClass, 

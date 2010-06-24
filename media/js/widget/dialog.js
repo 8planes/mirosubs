@@ -66,7 +66,6 @@ mirosubs.Dialog.prototype.showTemporaryPanel = function(panel) {
  */
 mirosubs.Dialog.prototype.hideTemporaryPanel = function() {
     if (this.temporaryPanel_) {
-        console.log('removing panel');
         this.removeChild(this.temporaryPanel_, true);
         this.temporaryPanel_.dispose();
         this.temporaryPanel_ = null;

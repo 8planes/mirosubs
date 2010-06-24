@@ -106,7 +106,7 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     var s = mirosubs.subtitle.Dialog.State_;
     if (state == s.SYNC || state == s.REVIEW) {
         rightPanel.showBackLink(
-            state == s.SYNC ? "Back to Transcribe" : "Back to Sync");
+            state == s.SYNC ? "Back to Typing" : "Back to Sync");
         this.rightPanelListener_.listen(
             rightPanel, et.BACK, this.handleBackKeyPress_);
         this.timelineSubtitleSet_ =

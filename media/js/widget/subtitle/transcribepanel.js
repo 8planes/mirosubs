@@ -87,13 +87,15 @@ mirosubs.subtitle.TranscribePanel.prototype.listenToRightPanel_ = function() {
 };
 mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
-        "STEP 1: Typing the subtitles",
+        "Step 1 of 3: Typing the subtitles",
         [["Thanks for making subtitles!! It's easy to learn ", 
           "and actually fun to do."].join(''),
-         ["While you watch the video, type everything people say. Don't let ", 
-          "the subtitles get too long -- hit enter for a new line."].join(''),
-         ["Make sure to use the key controls below to pause and jump back, ", 
-          "which will help you keep up."]],
+         ["While you watch the video, type everything people ",
+          "say. Don't let the subtitles get too long -- hit ",
+          "enter after each sentence or long phrase."].join(''),
+         ["Use the key controls below to pause and jump back, ", 
+          "which will help you keep up."].join(''),
+         "Don't worry about timing, that's the next step.  Just type!"],
         "Watch a quick how-to video",
         "http://youtube.com");
     var KC = goog.events.KeyCodes;
