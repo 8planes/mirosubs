@@ -90,7 +90,7 @@
     </div>
     
     <div class="clear">&nbsp;</div>
-    
+        <button class="compare_versions_button"><span>Compare Revisions</span></button>
 
     <h2 class="floatleft margin-top">Recent Revisions <a class="whats_this" href="{% url faq_page %}#revisions">(What's This?)</a></h2>
     
@@ -114,7 +114,7 @@
    
    <ul class="table_body"> 
     {% for item in revision_list %}
-          <li>
+          <li {% cycle 'class="even"' '' %}>
             <ul>
               <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }} (#{{ item.version_no}}) <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a></li>
               <li class="table_user">

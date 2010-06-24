@@ -19,10 +19,18 @@ text-align: center;
 
 a{}
 
-a:link {color: #8bb000;text-decoration: underline;} 
+a:link {color: #3196ad;text-decoration: underline;} 
 a:visited {color: #506a70;}
 a:hover,a:focus {color: #;text-decoration: none; outline: none !important; -moz-outline: none !important;}
 a:active {}
+
+
+button::-moz-focus-inner { border: 0; }
+
+p{
+line-height: 1.5em;
+}
+
 
 
 /*/////////////////////////////////////////////
@@ -30,6 +38,7 @@ a:active {}
 ~ Classes
 
 /////////////////////////////////////////////*/
+
 
 .alpha{
 background: url(../images/alpha.png) 130px 0px no-repeat;
@@ -50,6 +59,10 @@ float: right !important;
 }
 
 .margin-top{
+margin-top: 40px;
+}
+
+.clear.tall{
 margin-top: 40px;
 }
 
@@ -517,15 +530,21 @@ padding: 10px 8px;
 }
 
 button{
-background: url(../images/buttons.png) right 1px no-repeat;
+background: url(../images/buttons.png) right 0px no-repeat;
 border: none;
 font-weight: bold;
-padding:0 6px 0 0 !important;
+padding:0 7px 0 0 !important;
 font-size: 15px;
 margin: 0;
 clear: both;
 line-height: 15px;
 font-family: Arial, Helvetica, sans-serif;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+button{
+padding:0 9px 0 0 !important;
+}
 }
 
 button span{
@@ -540,7 +559,7 @@ text-shadow: 0px 1px 1px black;
 }
 
 button:hover{
-background: url(../images/buttons.png) right -44px no-repeat;
+background: url(../images/buttons.png) right -45px no-repeat;
 cursor: pointer
 }
 
@@ -1129,12 +1148,16 @@ clear: both;
 .revision_list li{
 list-style: none;
 padding: 15px;
+width: 430px;
+line-height: 1.6em;
+padding: 15px !important;
 }
 
 
-.revision_list li.even{
-background: #edfcfd;
+li.even, li.even li, li.even span, li.even div{
+background: #edfcfd !important;
 }
+
 
 
 a.roll_back{
@@ -1744,6 +1767,12 @@ form.message p span{
 padding: 4px 0 0 100px;
 clear: both;
 float: left;
+}
+
+
+form.message button{
+float: right;
+margin: 15px 15px 0;
 }
 
 

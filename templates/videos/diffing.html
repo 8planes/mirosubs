@@ -72,7 +72,8 @@
         <div class="clear">&nbsp;</div>
         
         {% widget video.get_video_url 'widget_div_0' %}
-        
+                <div class="clear tall">&nbsp;</div>
+
         {% if is_writelocked %}
             <div class="viewing_old">
                 Someone is editing subtitles.
@@ -86,7 +87,7 @@
             {% endif %}
         {% endif %}
         
-        <ul class="revision_list">
+        <ul class="revision_list table_body">
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
                 {% if item.0 %}
@@ -129,7 +130,9 @@
             <div class="viewing_old">
                 Someone is editing subtitles.
             </div>             
-        {% else%}        
+        {% else%}       
+        <div class="clear tall">&nbsp;</div>
+ 
             <a href="#" class="new_edit">Submit a new edit based on this version</a>
             {% if second_version.next_version %}
                 <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
@@ -138,7 +141,7 @@
             {% endif %}
          {% endif %}
         
-        <ul class="revision_list">
+        <ul class="revision_list table_body">
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
                 {% if item.1 %}

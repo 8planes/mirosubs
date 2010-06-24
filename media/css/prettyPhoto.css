@@ -512,7 +512,6 @@ a.pp_close {
 * html .pp_bottom {
 }
 .pp_bottom .pp_left {
-	height:20px;
 	left:0;
 	position:absolute;
 	width:20px;
@@ -527,7 +526,6 @@ a.pp_close {
 	position: static;
 }
 .pp_bottom .pp_right {
-	height:20px;
 	left:auto;
 	position:absolute;
 	right:0;
