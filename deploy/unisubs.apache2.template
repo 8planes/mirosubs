@@ -10,8 +10,8 @@
     CustomLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/access.log" combined
     ErrorLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/error.log"
 
-    WSGIDaemonProcess unisubs user=www-data group=pcf-web threads=2
-    WSGIProcessGroup unisubs
+    WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web threads=2
+    WSGIProcessGroup unisubs-INSERT_SITE_NAME
 
     WSGIScriptAlias / /var/www/INSERT_SITE_DIRECTORY/mirosubs/deploy/unisubs.wsgi
 
