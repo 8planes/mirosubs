@@ -21,26 +21,29 @@ outline: none !important;
 
 
 .mirosubs-modal-widget {
-    width: 842px !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 12px !important;
-    color: #000 !important;
-    line-height: 16px !important;
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
-    -moz-border-radius: 5px !important;
-    -webkit-border-radius: 5px !important;
-    border: 1px solid #000 !important;
-    padding: 10px !important;
-    background: #fff !important;
-    position: absolute !important;
+   width: 842px !important;
+   font-family: Arial, Helvetica, sans-serif !important;
+   font-size: 12px !important;
+   color: #000 !important;
+   line-height: 16px !important;
+   -moz-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
+   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
+   -moz-border-radius: 5px !important;
+   -webkit-border-radius: 5px !important;
+   border: 1px solid #000 !important;
+   padding: 10px !important;
+   background: #fff !important;
+   position: absolute !important;
 }
-
 
 .mirosubs-modal-widget-content {
-    border: 1px solid #000 !important;
-    background: #000 !important;
+   border: 1px solid #000 !important;
+   background: #000 !important;
+   min-height: 700px;
+   position: relative;
 }
+
+
 
 .mirosubs-modal-widget-content h1{
 color: #fff !important;
@@ -1893,20 +1896,28 @@ a.mirosubs-openid span{
 }
 
 .mirosubs-warning {
-    position: absolute;
-    border: 5px solid red;
-    padding: 15px;
-    background-color: white;
-    max-width: 350px;
-    font-size: 1.2em;
-    font-weight: bold;
-    line-height: 150%;
+   position: absolute;
+   border: 5px solid red;
+   padding: 15px;
+   background-color: white;
+   max-width: 350px;
+   font-size: 1.2em;
+   font-weight: bold;
+   line-height: 150%;
 }
 
 .mirosubs-warning .mirosubs-label {
-    margin-bottom: 15px;
+   margin-bottom: 15px;
 }
 
 .mirosubs-warning .mirosubs-link {
-    margin-right: 10px;
+   margin-right: 10px;
+}
+
+.mirosubs-howtopanel {
+   position: absolute;
+   top: 0;
+   left: 0;
+   color: white;
+   background-color: black;
 }

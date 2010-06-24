@@ -68,7 +68,7 @@ mirosubs.subtitle.Dialog.prototype.captionReached_ = function(event) {
 };
 mirosubs.subtitle.Dialog.prototype.createDom = function() {
     mirosubs.subtitle.Dialog.superClass_.createDom.call(this);
-    this.setState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
+    this.showHowToForState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
 };
 mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
     mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
@@ -179,8 +179,39 @@ mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
             that.setFinishedState_();
         });
     }
-    else
-        this.setState_(this.nextState_());
+    else {
+        if (false) {
+            // placeholder for determining if user has chosen to stop 
+            // seeing help videos
+            this.setState_(this.nextState_());
+        }
+        else
+            this.showHowToForState_(this.nextState_());
+    }
+};
+
+mirosubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
+    this.getVideoPlayerInternal().pause();
+    var s = mirosubs.subtitle.Dialog.State_;
+    var vc = mirosubs.HowToVideoPanel.VideoChoice;
+    var videoChoice;
+    if (state == s.TRANSCRIBE)
+        videoChoice = vc.TRANSCRIBE;
+    else if (state == s.SYNC)
+        videoChoice = vc.SYNC;
+    else if (state == s.REVIEW)
+        videoChoice = vc.REVIEW;
+    var howToPanel = new mirosubs.HowToVideoPanel(videoChoice);
+    this.showTemporaryPanel(howToPanel);
+    this.displayingHowTo_ = true;
+    var that = this;
+    this.getHandler().listenOnce(
+        howToPanel, mirosubs.HowToVideoPanel.CONTINUE,
+        function(e) {
+            that.displayingHowTo_ = false;
+            that.hideTemporaryPanel();
+            that.setState_(state);
+        });
 };
 mirosubs.subtitle.Dialog.prototype.ctrlClicked_ = function() {
     var videoPlayer = this.getVideoPlayerInternal();
