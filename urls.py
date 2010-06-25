@@ -54,8 +54,7 @@ urlpatterns = patterns(
      'django.views.generic.simple.direct_to_template', 
      {'template' : 'widget/close_window.html'}),
     (r'^widget/download_srt/$', 'widget.views.srt'),
-    (r'^widget/download"connect the various stakeholders working on project with open
-subtitling needs or focus"_null_srt/$', 'widget.views.null_srt'),
+    (r'^widget/download_null_srt/$', 'widget.views.null_srt'),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
     (r'^videos/', include('videos.urls', namespace='videos', 
