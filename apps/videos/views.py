@@ -25,12 +25,9 @@ from django.views.generic.list_detail import object_list
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm
 import widget
-from urlparse import urlparse, parse_qs
 from django.contrib.sites.models import Site
 from django.conf import settings
 import simplejson as json
-from django.utils.encoding import DjangoUnicodeDecodeError
-import feedparser
 from videos.utils import get_pager
 from django.contrib import messages
 
@@ -39,26 +36,8 @@ def create(request):
         video_form = VideoForm(request.POST, label_suffix="")
         if video_form.is_valid():
             owner = request.user if request.user.is_authenticated() else None
-            parsed_url = urlparse(video_form.cleaned_data['video_url'])
-            if 'youtube.com' in parsed_url.netloc:
-                yt_video_id = parse_qs(parsed_url.query)['v'][0]
-                video, created = Video.objects.get_or_create(
-                                    youtube_videoid=yt_video_id,
-                                    defaults={'owner': owner,
-                                              'video_type': VIDEO_TYPE_YOUTUBE})
-                if created:
-                    url = 'http://gdata.youtube.com/feeds/api/videos/%s' % video.youtube_videoid
-                    data = feedparser.parse(url)
-                    try:
-                        video.youtube_name = data['entries'][0]['title']
-                        video.save()
-                    except DjangoUnicodeDecodeError:
-                        pass
-            else:
-                video, created = Video.objects.get_or_create(
-                                    video_url=video_form.cleaned_data['video_url'],
-                                    defaults={'owner': owner,
-                                              'video_type': VIDEO_TYPE_HTML5})
+            video_url = video_form.cleaned_data['video_url']
+            video, created = Video.get_or_create_for_url(video_url, owner)
             if created:
                 # TODO: log to activity feed
                 pass
