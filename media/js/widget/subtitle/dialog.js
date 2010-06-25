@@ -187,7 +187,7 @@ mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     }
     else {
         if (false) {
-            // placeholder for determining if user has chosen to stop 
+            // placeholder for determining if user has chosen to stop
             // seeing help videos
             this.setState_(this.nextState_());
         }
@@ -284,6 +284,18 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
     this.rightPanelListener_.dispose();
     this.captionSet_.dispose();
+};
+mirosubs.subtitle.Dialog.prototype.setVisible = function(visible) {
+    if (this.addingTranslations_) {
+        goog.Timer.callOnce(function() {
+            window.location = window.location.href.replace("subtitle_immediately", "translate_immediately");
+            mirosubs.returnURL = null;
+            mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
+        });
+    }
+    else {
+        mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
+    }
 };
 mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
     this.addingTranslations_ = true;
