@@ -25,9 +25,12 @@
 
 {% block userinfo %}
 {{ block.super }}
-<p>Preferred Language: {% if profile.preferred_language %}{{ profile.language }}{% endif %}</p>
-<p>Homepage: <a href="{{ profile.homepage }}">{{ profile.homepage }}</a></p>
+
 <button class="send_message"><span>Send a Message</span></button>
+
+
+
+
 
 <div id="send_message" style="display: none;">
 
