@@ -77,7 +77,7 @@
     <h2>{{ video }}</h2>
     <p class="what_lang">
         {% block lang_display %}
-            in <a href="{% url videos:video video_id=video.video_id %}">Original Language</a>
+            in <a href="{% url videos:video video_id=video.video_id %}">Original Language</a> <a href="other_lang">Other Languages</a>
         {% endblock %}
     </p>
     
@@ -86,24 +86,35 @@
     </div>
     
     <div class="right_column">
-        {% block translation_list %}
-            {% if translations %}
-                <p class="other_lang">
-                    Other Languages:
-                        {% for item in translations %}
-                            <a href="{% url videos:translation_history video.video_id item.language %}">{{ item.get_language_display }}</a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                 </p>             
-            {% endif %}
-        {% endblock %}
-    </div>
     
-    <div class="clear">&nbsp;</div>
+   </div>
+    
+    <div class="clearboth">&nbsp;</div>
+
     <button class="compare_versions_button"><span>Compare Revisions</span></button>
 
-    <h2 class="floatleft margin-top">Recent Revisions <a class="whats_this" href="{% url faq_page %}#revisions">(What's This?)</a></h2>
     
     <ul class="video_tabs">
+
+      <li><a href="#">English Transcript</a></li>
+      <li><a href="#">Comments (12)</a></li>
+      <li class="active revision_link"><a href="#">Revisions (120)</a>        <button class="compare_versions_button"><span>Compare Revisions</span></button>
+</li>
+    </ul>
+
+
+    {% if revision_list %}
+        {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
+
+    {% block table %}
+    <ul class="table_head">
+      <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
+      <li class="table_user">{% ordered_column "user" "User" %}</li>
+      <li class="table_note">{% ordered_column "note" "Note" %}</li>
+      <li class="table_time">{% ordered_column "time" "Time" %}</li>
+      <li class="table_text">{% ordered_column "text" "Text" %}</li>
+    </ul>
+
       <li>
           <a href="#trascript-tab">
           {% if language %}
@@ -202,6 +213,7 @@
        </ul> 
        <div style="clear: both"></div>     
    </div>
+
    
    <div style="display: none" id="trascript-tab" class="tab">
        <ul class="table_body"> 
@@ -212,6 +224,15 @@
               </li>        
         {% endfor %}
        </ul> 
+
+       <div style="clear: both"/>
+       {% endblock %}
+   {% else %}
+        <div class="clear">&nbsp;</div>
+        <div>There are no revisions of this video</div>
+   {% endif %}
+
        <div style="clear: both"></div>   
    </div>
+
 {% endblock %}

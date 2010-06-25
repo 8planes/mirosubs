@@ -30,9 +30,14 @@
  *     debug_js: false,
  *     subtitle_immediately: false,
  *     translate_immediately: false,
- *     autoplay_language: null // blank string for original, or language code for other
+ *     base_state: { // omit this param altogether to not load subs at the beginning.
+ *         language: 'es',  // omit for native language
+ *         revision: 3,     // omit for latest revision
+ *         start_playing: false // if true, will start playing as soon as subs load. omit or set to false otherwise.
+ *     }
  * })
  * &lt;/script&gt;
+ * </pre>
  *
  * If a video_url is provided instead of video_element, then the widget will
  * generate a video element (or youtube embed element or whatever) and insert it

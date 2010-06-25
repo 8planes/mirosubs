@@ -102,7 +102,7 @@ class Video(models.Model):
                     pass
         else:
             video, created = Video.objects.get_or_create(
-                video_url=video_form.cleaned_data['video_url'],
+                video_url=video_url,
                 defaults={'owner': user,
                           'video_type': VIDEO_TYPE_HTML5,
                           'allow_community_edits': True})

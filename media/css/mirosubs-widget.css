@@ -1918,6 +1918,20 @@ a.mirosubs-openid span{
    position: absolute;
    top: 0;
    left: 0;
+border: 5px solid white;
    color: white;
    background-color: black;
+width: 830px;
+height: 690px;
+}
+
+
+.mirosubs-howtopanel,
+.mirosubs-howtopanel h2,
+.mirosubs-howtopanel .mirosubs-videoDiv{
+text-align: center;
+}
+
+.mirosubs-howtopanel .mirosubs-videoDiv{
+margin-bottom: 20px;
 }
