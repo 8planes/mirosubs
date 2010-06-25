@@ -112,7 +112,7 @@ def start_editing(request, video_id, base_version_no=None):
              "existing" : [caption.to_json_dict() for 
                            caption in existing_captions] }
 
-def start_editing_null(request, video_id):
+def start_editing_null(request, video_id, base_version_no=None):
     # FIXME: note duplication with start_editing, fix that.
     if not request.user.is_authenticated():
         captions = []
@@ -165,7 +165,7 @@ def start_translating(request, video_id, language_code, editing=False, base_vers
                                     for lang in LANGUAGES]
     return return_dict
 
-def start_translating_null(request, video_id, language_code, editing=False):
+def start_translating_null(request, video_id, language_code, editing=False, base_version_no=None):
     # FIXME: note duplication with start_translating, fix that.
 
     maybe_add_video_session(request)
