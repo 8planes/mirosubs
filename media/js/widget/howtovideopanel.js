@@ -90,7 +90,16 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
         this.skipVideosCheckbox_.setLabel(
             this.skipVideosCheckbox_.getElement().parentNode);
     }
+    this.getHandler().listen(this.skipVideosCheckbox_,
+                             goog.ui.Component.EventType.CHANGE,
+                             this.skipVideosCheckboxChanged_);
     this.getHandler().listen(this.continueLink_, 'click', this.continue_);
+};
+
+mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
+    mirosubs.UserSettings.setBooleanValue(
+        mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO,
+        this.skipVideosCheckbox_.getChecked());
 };
 
 mirosubs.HowToVideoPanel.prototype.continue_ = function() {

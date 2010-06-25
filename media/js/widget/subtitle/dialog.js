@@ -186,11 +186,9 @@ mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
         });
     }
     else {
-        if (false) {
-            // placeholder for determining if user has chosen to stop
-            // seeing help videos
+        if (mirosubs.UserSettings.getBooleanValue(
+            mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO))
             this.setState_(this.nextState_());
-        }
         else
             this.showHowToForState_(this.nextState_());
     }
