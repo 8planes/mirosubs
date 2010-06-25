@@ -60,6 +60,15 @@
                     window.location.replace(url);
                 }
             });
+            //******** Tabs ********//
+            var $last_active_tab = $('#revision-tab');
+            $('.video_tabs a').click(function(){
+                $last_active_tab.hide('fast');
+                $last_active_tab = $('#'+$(this).attr('tab')).show('fast');
+                $('.video_tabs li').removeClass('active');
+                $(this).parent('li').addClass('active');
+                return false;
+            });
         });
     </script>
 {% endblock %}
@@ -90,48 +99,120 @@
     </div>
     
     <div class="clear">&nbsp;</div>
-        <button class="compare_versions_button"><span>Compare Revisions</span></button>
+    <button class="compare_versions_button"><span>Compare Revisions</span></button>
 
     <h2 class="floatleft margin-top">Recent Revisions <a class="whats_this" href="{% url faq_page %}#revisions">(What's This?)</a></h2>
     
     <ul class="video_tabs">
-      <li><a href="#">English Transcript</a></li>
-      <li><a href="#">Comments (12)</a></li>
-      <li class="active"><a href="#">Revisions (120)</a></li>
+      <li><a href="#" tab="trascript-tab">English Transcript</a></li>
+      <li><a href="#" tab="comments-tab">Comments (12)</a></li>
+      <li class="active"><a href="#" tab="revision-tab">Revisions (120)</a></li>
     </ul>
 
-
-    {% if revision_list %}
- 
-    {% block table %}
-    <ul class="table_head">
-      <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
-      <li class="table_user">{% ordered_column "user" "User" %}</li>
-      <li class="table_note">{% ordered_column "note" "Note" %}</li>
-      <li class="table_time">{% ordered_column "time" "Time" %}</li>
-      <li class="table_text">{% ordered_column "text" "Text" %}</li>
-    </ul>
+    <div id="revision-tab" class="tab">
+        {% if revision_list %}
+     
+        {% block table %}
+        <ul class="table_head">
+          <li class="table_most_recent">{% ordered_column "date" "Most Recent" %}</li>
+          <li class="table_user">{% ordered_column "user" "User" %}</li>
+          <li class="table_note">{% ordered_column "note" "Note" %}</li>
+          <li class="table_time">{% ordered_column "time" "Time" %}</li>
+          <li class="table_text">{% ordered_column "text" "Text" %}</li>
+        </ul>
+       
+       <ul class="table_body"> 
+        {% for item in revision_list %}
+              <li {% cycle 'class="even"' '' %}>
+                <ul>
+                  <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }} (#{{ item.version_no}}) <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a></li>
+                  <li class="table_user">
+                      <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+                  </li>
+                  <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
+                  <li class="table_time">{{ item.time_change_display }}</li>
+                  <li class="table_text">{{ item.text_change_display }}</li>
+                </ul>
+              </li>    
+         {% endfor %}
+        </ul> 
+           <div style="clear: both"/>
+           {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
+           {% endblock %}
+       {% else %}
+            <div class="clear">&nbsp;</div>
+            <div>There are no revisions of this video</div>
+       {% endif %}
+   </div>
    
-   <ul class="table_body"> 
-    {% for item in revision_list %}
-          <li {% cycle 'class="even"' '' %}>
-            <ul>
-              <li class="table_most_recent"><input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/> {{ item.revision_time }} (#{{ item.version_no}}) <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a></li>
-              <li class="table_user">
-                  <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
-              </li>
-              <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
-              <li class="table_time">{{ item.time_change_display }}</li>
-              <li class="table_text">{{ item.text_change_display }}</li>
-            </ul>
-          </li>    
+   <div style="display: none" id="comments-tab" class="tab">
+        <ul class="user_approval">
+          <li class="thumb_up"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs up</li>
+          <li class="thumb_down"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs down</li>
+          <li class="thumb_up"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs up</li>
+          <li class="thumb_down"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs down</li>
+          <li class="thumb_up"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs up</li>
+          <li class="thumb_down"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs down</li>
+          <li class="thumb_up"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs up</li>
+          <li class="thumb_down"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs down</li>
+          <li class="thumb_up"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs up</li>
+          <li class="thumb_down"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs down</li>
+          <li class="thumb_up"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs up</li>
+          <li class="thumb_down"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs down</li>
+          <li class="thumb_up"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs up</li>
+          <li class="thumb_down"><span class="thumb"></span><a href="#">Username</a> gave this translation a thumbs down</li>
+        </ul>    
+   
+        <ul class="table_body comments"> 
+            {% for item in revision_list %}
+              <li>
+                <ul>
+                  <li class="table_comment">
+                      
+                      <span class="user_thumb"></span>               
+                      
+                      <span class="comment_text">
+                                <div class="table_user_deets">
+                    
+                    <a href="#">UserName</a>
+                    <span class="comment_date">45 days ago</span>
+                    </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. </p>
+                        
+                        <p>Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. </p>
+                        
+                        <p>Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.</p>
+                      </span>
+                  </li>
+                  
+                <li class="table_thumbs_up">
+                  <span class="thumbs_up"></span>
+                </li>
+                </ul>
+              </li>    
         {% endfor %}
        </ul> 
-       <div style="clear: both"/>
-       {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
-       {% endblock %}
-   {% else %}
-        <div class="clear">&nbsp;</div>
-        <div>There are no revisions of this video</div>
-   {% endif %}
+       <div style="clear: both"></div>     
+   </div>
+   
+   <div style="display: none" id="trascript-tab" class="tab">
+       <ul class="table_body"> 
+          <li class="table_transcript even">
+              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+          </li>
+          <li class="table_transcript">
+              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+          </li> 
+          <li class="table_transcript even">
+              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+          </li>  
+          <li class="table_transcript">
+              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+          </li>   
+          <li class="table_transcript even">
+              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
+          </li>
+       </ul> 
+       <div style="clear: both"></div>   
+   </div>
 {% endblock %}
