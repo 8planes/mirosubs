@@ -31,17 +31,31 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
         mirosubs.returnURL = widgetConfig['returnURL'];
     var widget = new mirosubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
+    return widget;
 };
 
-// see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
-window["mirosubs"] = mirosubs;
-mirosubs["widget"] = mirosubs.widget;
-mirosubs.widget["SameDomainEmbed"] = mirosubs.widget.SameDomainEmbed;
-mirosubs.widget.SameDomainEmbed["embed"] = 
-    mirosubs.widget.SameDomainEmbed.embed;
+(function() {
+    goog.exportSymbol("mirosubs.widget.SameDomainEmbed.embed", 
+                      mirosubs.widget.SameDomainEmbed.embed);
 
-mirosubs["video"] = mirosubs.video;
-mirosubs.video["supportsVideo"] = mirosubs.video.supportsVideo;
-mirosubs.video["supportsH264"] = mirosubs.video.supportsH264;
-mirosubs.video["supportsOgg"] = mirosubs.video.supportsOgg;
-mirosubs.video["supportsWebM"] = mirosubs.video.supportsWebM;
+    goog.exportSymbol("mirosubs.video", mirosubs.video);
+    var v = mirosubs.video;
+    v["supportsVideo"] = v.supportsVideo;
+    v["supportsH264"] = v.supportsH264;
+    v["supportsOgg"] = v.supportsOgg;
+    v["supportsWebM"] = v.supportsWebM;
+
+    goog.exportSymbol(
+        "mirosubs.widget.Widget.prototype.selectMenuItem",
+        mirosubs.widget.Widget.prototype.selectMenuItem);
+
+    goog.exportSymbol(
+        "mirosubs.MainMenu.Selection",
+        mirosubs.MainMenu.Selection);
+    var s = mirosubs.MainMenu.Selection;
+    s['ADD_SUBTITLES'] = s.ADD_SUBTITLES;
+    s['EDIT_SUBTITLES'] = s.EDIT_SUBTITLES;
+    s['LANGUAGE_SELECTED'] = s.LANGUAGE_SELECTED;
+    s['ADD_NEW_LANGUAGE'] = s.ADD_NEW_LANGUAGE;
+    s['TURN_OFF_SUBS'] = s.TURN_OFF_SUBS;
+})();

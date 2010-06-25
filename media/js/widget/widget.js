@@ -151,18 +151,37 @@ mirosubs.widget.Widget.prototype.enterDocument = function() {
 mirosubs.widget.Widget.prototype.attachEvents_ = function() {
     if (!this.stateInitialized_ || !this.isInDocument())
         return;
-    var et = mirosubs.MainMenu.EventType;
     this.getHandler().
         listen(this.videoTab_.getAnchorElem(), 'click',
                function(e) { e.preventDefault(); }).
-        listen(this.popupMenu_, et.ADD_SUBTITLES, this.subtitleClicked_).
-        listen(this.popupMenu_, et.EDIT_SUBTITLES, this.editSubtitles_).
-        listen(this.popupMenu_, et.LANGUAGE_SELECTED, this.languageSelected_).
-        listen(this.popupMenu_, et.ADD_NEW_LANGUAGE, this.addNewLanguageClicked_).
-        listen(this.popupMenu_, et.TURN_OFF_SUBS, this.turnOffSubs_).
+        listen(this.popupMenu_, 
+               goog.object.getValues(mirosubs.MainMenu.Selection),
+               this.menuItemSelected_).
         listen(mirosubs.userEventTarget,
                goog.object.getValues(mirosubs.EventType),
                this.loginStatusChanged_);
+};
+
+mirosubs.widget.Widget.prototype.menuItemSelected_ = function(event) {
+    this.selectMenuItem(event.type, event.languageCode);
+};
+
+/**
+ * Select a menu item. Either called by selecting 
+ * a menu item or programmatically by js on the page.
+ */
+mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_languageCode) {
+    var s = mirosubs.MainMenu.Selection;
+    if (selection == s.ADD_SUBTITLES)
+        this.subtitleClicked_();
+    else if (selection == s.EDIT_SUBTITLES)
+        this.editSubtitles_();
+    else if (selection == s.LANGUAGE_SELECTED)
+        this.languageSelected_(opt_languageCode);
+    else if (selection == s.ADD_NEW_LANGUAGE)
+        this.addNewLanguageClicked_();
+    else if (selection == s.TURN_OFF_SUBS)
+        this.turnOffSubs_();
 };
 
 mirosubs.widget.Widget.prototype.loginStatusChanged_ = function() {
@@ -339,11 +358,11 @@ mirosubs.widget.Widget.prototype.editSubtitlesImpl_ =
     dialog.setVisible(true);
     this.dialog_ = dialog;
 };
-mirosubs.widget.Widget.prototype.languageSelected_ = function(event) {
+mirosubs.widget.Widget.prototype.languageSelected_ = function(opt_languageCode) {
     // this clears out the base state.
     this.baseState_ = new mirosubs.widget.BaseState(null);
-    if (event.languageCode)
-        this.translationSelected_(event.languageCode);
+    if (opt_languageCode)
+        this.translationSelected_(opt_languageCode);
     else
         this.originalLanguageSelected_();
 };
