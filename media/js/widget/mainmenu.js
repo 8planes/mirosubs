@@ -118,7 +118,8 @@ mirosubs.MainMenu.prototype.showMenu = function(target, x, y) {
         return;
 
     if (mirosubs.isEmbeddedInDifferentDomain()) {
-        this.warning_ = new mirosubs.EmbedWarning( goog.bind(this.showMenuInternal_, this, target, x, y), x, y );
+        this.warning_ = new mirosubs.EmbedWarning(
+            goog.bind(this.showMenuInternal_, this, target, x, y));
         if (this.warning_.showWarning()) {
             var that = this;
             goog.events.listenOnce(

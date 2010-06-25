@@ -73,9 +73,9 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
                       goog.dom.createTextNode(' Skip these videos')));
     this.continueLink_ = 
         $d('a', 
-           {'className': 'mirosubs-howtopanel-continue', 
+           {'className': 'mirosubs-smallButton', 
             'href': '#'}, 
-           'CONTINUE')
+           $d('span', null, 'Continue'))
     el.appendChild(this.continueLink_);
     var vidPlayer = new goog.ui.Component();
     vidPlayer.addChild(this.videoPlayer_, true);

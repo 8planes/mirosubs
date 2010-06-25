@@ -18,15 +18,13 @@
 
 goog.provide('mirosubs.EmbedWarning');
 
-mirosubs.EmbedWarning = function(callback, left, top) {
-    goog.ui.Dialog.call(this);
+mirosubs.EmbedWarning = function(callback) {
+    goog.ui.Dialog.call(this, null, true);
 
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
 
     this.callback_ = callback;
-    this.left_ = left;
-    this.top_ = top;
 };
 goog.inherits(mirosubs.EmbedWarning, goog.ui.Dialog);
 
@@ -60,8 +58,6 @@ mirosubs.EmbedWarning.prototype.enterDocument = function() {
         listen(this.cancelLink_,
                'click',
                this.cancelLinkClicked_);
-
-    goog.style.setPosition(this.getElement(), this.left_, this.top_);
 };
 mirosubs.EmbedWarning.prototype.showWarning = function() {
     if (this.isWarningCleared_()) {
