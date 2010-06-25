@@ -15,8 +15,8 @@ outline: none !important;
    font-size: 12px !important;
    color: #000 !important;
    line-height: 16px !important;
-   width: 400px;
    position: relative;
+text-align: left;
 }
 
 
@@ -1935,3 +1935,42 @@ text-align: center;
 .mirosubs-howtopanel .mirosubs-videoDiv{
 margin-bottom: 20px;
 }
+
+
+a.mirosubs-smallButton{
+padding-right: 18px !important;
+font-size: 12px;
+text-decoration: none;
+font-weight: bold;
+float: left;
+background: url(../images/small_buttons.png) right 0px no-repeat;
+}
+
+a.mirosubs-smallButton span{
+padding: 8px 0 8px 20px;
+float: left;
+color: #485c14;
+text-transform: uppercase;
+text-shadow: 0px 1px 1px #abce1d;
+background: url(../images/small_buttons.png) left 0px no-repeat;
+}
+
+a.mirosubs-smallButton:hover{
+background: url(../images/small_buttons.png) right -34px no-repeat;
+}
+
+a.mirosubs-smallButton:hover span{
+text-shadow: 0px 1px 1px #beec32 ;
+background: url(../images/small_buttons.png) left -34px no-repeat;
+}
+
+a.mirosubs-smallButton:active{
+background: url(../images/small_buttons.png) right -68px no-repeat;
+}
+
+a.mirosubs-smallButton:active span{
+background: url(../images/small_buttons.png) left -68px no-repeat;
+}
+
+
+
