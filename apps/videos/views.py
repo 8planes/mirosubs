@@ -184,6 +184,7 @@ def history(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
+    context['last_version'] = video.captions()
     
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -216,6 +217,7 @@ def translation_history(request, video_id, lang):
     context['language'] = language
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
+    context['last_version'] = video.translations(lang)
     
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 

@@ -63,8 +63,8 @@
             //******** Tabs ********//
             var $last_active_tab = $('#revision-tab');
             $('.video_tabs a').click(function(){
-                $last_active_tab.hide('fast');
-                $last_active_tab = $('#'+$(this).attr('tab')).show('fast');
+                $last_active_tab.hide();
+                $last_active_tab = $($(this).attr('href')).show();
                 $('.video_tabs li').removeClass('active');
                 $(this).parent('li').addClass('active');
                 return false;
@@ -104,9 +104,17 @@
     <h2 class="floatleft margin-top">Recent Revisions <a class="whats_this" href="{% url faq_page %}#revisions">(What's This?)</a></h2>
     
     <ul class="video_tabs">
-      <li><a href="#" tab="trascript-tab">English Transcript</a></li>
-      <li><a href="#" tab="comments-tab">Comments (12)</a></li>
-      <li class="active"><a href="#" tab="revision-tab">Revisions (120)</a></li>
+      <li>
+          <a href="#trascript-tab">
+          {% if language %}
+            {{ language.get_language_display }} Transcript
+          {% else %}
+            Original language
+          {% endif %}
+          </a>
+      </li>
+      <li><a href="#comments-tab">Comments (12)</a></li>
+      <li class="active"><a href="#revision-tab">Revisions ({{ revision_list|length }})</a></li>
     </ul>
 
     <div id="revision-tab" class="tab">
@@ -136,7 +144,7 @@
               </li>    
          {% endfor %}
         </ul> 
-           <div style="clear: both"/>
+           <div style="clear: both"></div>
            {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
            {% endblock %}
        {% else %}
@@ -197,21 +205,12 @@
    
    <div style="display: none" id="trascript-tab" class="tab">
        <ul class="table_body"> 
-          <li class="table_transcript even">
-              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
-          </li>
-          <li class="table_transcript">
-              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
-          </li> 
-          <li class="table_transcript even">
-              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
-          </li>  
-          <li class="table_transcript">
-              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
-          </li>   
-          <li class="table_transcript even">
-              Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipisc
-          </li>
+        {% for item in last_version.captions %}
+              <li class="table_transcript{% cycle ' even' '' %}">
+                  {# {{ item.display_time }} - {{ item.display_end_time }} &gt; #} 
+                  {{ item.text }}
+              </li>        
+        {% endfor %}
        </ul> 
        <div style="clear: both"></div>   
    </div>
