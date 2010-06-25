@@ -29,6 +29,8 @@ class Profile(models.Model):
     picture = models.ImageField(blank=True,
                                       upload_to='profile_images/%y/%m/')
     valid_email = models.BooleanField(default=False)
+    changes_notification = models.BooleanField(default=True)
+    biography = models.TextField(blank=True)
         
     def __unicode__(self):
         return '%s %s' % (self.user.first_name, self.user.last_name)
