@@ -80,15 +80,33 @@
 
 
         <ul class="nav">
+
+
+
           <li class="first try_link"><a href="{% url demo %}"><span>Try the Demo</span></a></li>
           <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Read Our Blog</span></a></li>
           <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
+
+
+
+
           {% if user.is_authenticated %}
               <li class="login_link"><a href="{% url logout %}"><span>Logout</span></a></li>
           {% else %}
               <li class="login_link"><a href="{% url auth:login %}"><span>Login</span></a></li>
           {% endif %}
+
+
           <li class="last about_link last_nav"><a href="/about"><span>About Us</span></a></li>
+
+
+
+
+
+
+
+
+
         </ul>
       </div>
       

@@ -5,7 +5,6 @@
     <link href="{{ MEDIA_URL }}css/prettyPhoto.css" media="all" type="text/css" rel="stylesheet" />
 {% endblock %}
 
-
 {% block scripts %}
     <script src="{{ MEDIA_URL }}/js/jquery.prettyPhoto.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -16,52 +15,69 @@
             $('button.send_message').prettyPhoto({
                 default_width: 425,
                 default_height: 344
-            });              
+            }); 
+            
+            $('#message-form').ajaxForm({
+                dataType: 'json',
+                success: function(data, status, xhr, $form){
+                    if (data.success){
+                        $form.resetForm();
+                    } else {
+                        for (key in data.errors){
+                            var $field = $('input[name="'+key+'"]', $form);
+                            var error = '<div class="error_list">'+data.errors[key]+'</div>';
+                            if ($field.length){
+                                $('input[name="'+key+'"]', $form).before(error);
+                            }else{
+                                $form.prepend(error);
+                            }
+                        };
+                    }
+                },
+                beforeSubmit: function(formData, $Form, options){
+                    $('div2.error_list', $Form).remove();
+                    var form = $Form[0];
+                    var valid = true;
+                    if (!form.message.value){
+                        $(form.message).before('<div class="error_list">Enter message please.</div>');
+                        valid = false;
+                    }
+                    if (!form.email.value){
+                        $(form.email).before('<div class="error_list">Enter email please.</div>');
+                        valid = false;                      
+                    }
+                    return valid;
+                }
+            });
         });
     </script>
 {% endblock %}
 
-
-
 {% block userinfo %}
-{{ block.super }}
 
-<button class="send_message"><span>Send a Message</span></button>
+    {{ block.super }}
+    <p>Preferred Language: {% if profile.preferred_language %}{{ profile.language }}{% endif %}</p>
+    <p>Homepage: <a href="{{ profile.homepage }}">{{ profile.homepage }}</a></p>
+   
+ <button class="send_message"><span>Send a Message</span></button>
 
-
-
-
-
-<div id="send_message" style="display: none;">
-
-
-  <form class="message">  
-
-  <h3>Send USERNAME a Message</h3>
-
-    <p>
-      <label>To</label>
-      <textarea class="to" type="text">morganknutson@gmail.com</textarea>  
-      <span>Comma separated</span>
-    </p>
-    <p>
-      <label>From</label>
-      <input type="text" value="morganknutson@gmail.com" />    
-    </p>
-    <p>
-      <label>Message</label>
-      <textarea class="to" type="text">morganknutson@gmail.com</textarea>  
-      <span>No HTML</span>
-    </p>
     
-      <button><span>Send a Message</span></button>
-  
-  </form>
-
-
-
-</div>
-
-
-
+    <div id="send_message" style="display: none">
+      <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  
+         <h3>Send USERNAME a Message</h3>
+         {% csrf_token %}
+         <input type="hidden" name="user" value="{{ user.id }}"/>
+         <p>
+           <label>From</label>
+           <input type="text" value="{{ request.user.email }}" name="email"/>    
+         </p>
+         <p>
+           <label>Message</label>
+           <textarea class="to" type="text" name="message">morganknutson@gmail.com</textarea>  
+           <span>No HTML</span>
+           <span>Note: when you send a message the recipient can see your email and reply directly</span>
+         </p>
+         <button type="submit"><span>Send a Message</span></button>
+      </form>
+    </div>
 {% endblock %}

@@ -18,11 +18,12 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from profiles.forms import EditProfileForm
+from profiles.forms import EditProfileForm, SendMessageForm
 from django.contrib import messages
+from django.utils import simplejson as json
 
 @login_required
 def my_profile(request):
@@ -54,3 +55,13 @@ def profile(request, user_id):
         return render_to_response('profiles/view_profile.html', locals(),
                                   context_instance=RequestContext(request))
             
+
+def send_message(request):
+    output = dict(success=False)
+    form = SendMessageForm(request.POST)
+    if form.is_valid():
+        form.send()
+        output['success'] = True
+    else:
+        output['errors'] = form.get_errors()
+    return HttpResponse(json.dumps(output), "text/javascript")    

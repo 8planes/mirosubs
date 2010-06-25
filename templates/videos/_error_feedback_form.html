@@ -1,7 +1,11 @@
 {% extends 'videos/_feedback_form.html' %}
 
 {% block form_title %}
-    Please let us know what you were doing when you encountered this error.
+    {% if error == 500 %}
+        Please let us know what you were doing when you encountered this error.
+    {% else %}
+        Sorry, the page you requested was not found.
+    {% endif %}
 {% endblock %}
 
 {% block hidden_fields %}

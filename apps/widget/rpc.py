@@ -28,29 +28,10 @@ from urlparse import urlparse, parse_qs
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
-def show_widget(request, video_url, null_widget, autoplay, autoplay_language):
+def show_widget(request, video_url, null_widget, base_state):
     #FIXME: shorten this method.
-    #FIXME: This logic is duplicated in video.views.create. Fix that.
-    parsed_url = urlparse(video_url)
-    if 'youtube.com' in parsed_url.netloc.lower():
-        youtube_videoid = parse_qs(parsed_url.query)['v'][0]
-        #TODO: worry about transaction here, in case two users embed same video
-        # at roughly same time.
-        try:
-            video = models.Video.objects.get(youtube_videoid=youtube_videoid)
-        except models.Video.DoesNotExist:
-            video = models.Video(video_type=models.VIDEO_TYPE_YOUTUBE,
-                                 youtube_videoid=youtube_videoid,
-                                 allow_community_edits=True)
-        video.save()
-    else:
-        try:
-            video = models.Video.objects.get(video_url=video_url)
-        except models.Video.DoesNotExist:
-            video = models.Video(video_type=models.VIDEO_TYPE_HTML5,
-                                 video_url=video_url,
-                                 allow_community_edits=True)
-        video.save()
+    owner = request.user if request.user.is_authenticated() else None
+    video, created = models.Video.get_or_create_for_url(video_url, owner)
     video.widget_views_count += 1
     video.save()
 
@@ -91,14 +72,16 @@ def show_widget(request, video_url, null_widget, autoplay, autoplay_language):
     return_value['translation_languages'] = \
         [widget.language_to_map(code, LANGUAGES_MAP[code]) for 
          code in translation_language_codes]
-    if autoplay:
+    if base_state is not None:
         return_value['subtitles'] = autoplay_subtitles(
-            request, video, null_widget, autoplay_language)
+            request, video, null_widget, 
+            base_state.get('language', None),
+            base_state.get('revision', None))
     if request.user.is_authenticated:
         return_value['username'] = request.user.username
     return return_value
 
-def start_editing(request, video_id):
+def start_editing(request, video_id, base_version_no=None):
     """Called by subtitling widget when subtitling is to commence or recommence on a video.
 
     Three cases: either the video is locked, or it is owned by someone else 
@@ -122,7 +105,8 @@ def start_editing(request, video_id):
         existing_captions = []
     else:
         new_version_no = latest_captions.version_no + 1
-        existing_captions = list(latest_captions.videocaption_set.all())
+        existing_captions = \
+            list(video.captions(base_version_no).videocaption_set.all())
     return { "can_edit" : True,
              "version" : new_version_no,
              "existing" : [caption.to_json_dict() for 
@@ -144,7 +128,7 @@ def start_editing_null(request, video_id):
              'existing': [caption.to_json_dict() for
                           caption in captions] }
 
-def start_translating(request, video_id, language_code, editing=False):
+def start_translating(request, video_id, language_code, editing=False, base_version_no=None):
     """Called by widget whenever translating is about to commence or recommence."""
 
     maybe_add_video_session(request)
@@ -169,7 +153,8 @@ def start_translating(request, video_id, language_code, editing=False):
         existing_translations = []
     else:
         new_version_no = latest_translations.version_no + 1
-        existing_translations = list(latest_translations.translation_set.all())
+        existing_translations = list(
+            translation_language.translations(base_version_no).translation_set.all())
     return_dict = { 'can_edit' : True,
                     'version' : new_version_no, 
                     'existing' : [trans.to_json_dict() for 
@@ -485,16 +470,16 @@ def maybe_add_video_session(request):
     if VIDEO_SESSION_KEY not in request.session:
         request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
 
-def autoplay_subtitles(request, video, null_widget, autoplay_lang_code):
+def autoplay_subtitles(request, video, null_widget, language, revision):
     params = { }
-    if autoplay_lang_code != '':
+    if language is not None:
         if null_widget:
             translations = \
                 video.null_captions_and_translations(
-                request.user, autoplay_lang_code)
+                request.user, language)
         else:
             translations = \
-                video.captions_and_translations(autoplay_lang_code)
+                video.captions_and_translations(language, revision)
         return [t[0].to_json_dict(
                 None if t[1] is None else t[1].translation_text)
                 for t in translations]
@@ -503,6 +488,6 @@ def autoplay_subtitles(request, video, null_widget, autoplay_lang_code):
             subtitles = list(video.null_captions(
                     request.user).videocaption_set.all())
         else:
-            subtitles = list(video.captions().videocaption_set.all())
+            subtitles = list(video.captions(revision).videocaption_set.all())
         return [subtitle.to_json_dict() 
                 for subtitle in subtitles]

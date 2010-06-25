@@ -18,7 +18,28 @@
 
 from django import forms
 from profiles.models import Profile
+from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 
+class SendMessageForm(forms.Form):
+    email = forms.EmailField()
+    message = forms.CharField()
+    user = forms.ModelChoiceField(User.objects)
+    
+    def send(self):
+        user = self.cleaned_data.get('user')
+        email = self.cleaned_data.get('email')
+        headers = {'Reply-To': email}
+        EmailMessage('', self.cleaned_data.get('message'), email, \
+                     [user.email], headers=headers).send()
+
+    def get_errors(self):
+        from django.utils.encoding import force_unicode        
+        output = {}
+        for key, value in self.errors.items():
+            output[key] = '/n'.join([force_unicode(i) for i in value])
+        return output
+                         
 class EditProfileForm(forms.ModelForm):
     email = forms.EmailField(required=False)
     current_password = forms.CharField(widget=forms.PasswordInput, required=False)

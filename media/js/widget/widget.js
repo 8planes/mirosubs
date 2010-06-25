@@ -18,6 +18,8 @@
 
 goog.provide('mirosubs.widget.Widget');
 
+// FIXME: this class has become too long/complicated. Need to break it up into smaller components.
+
 /**
  * @param {Object} widgetConfig parameter documentation is currenty in embed.js.
  */
@@ -37,14 +39,8 @@ mirosubs.widget.Widget = function(widgetConfig) {
         !!widgetConfig['subtitle_immediately'];
     this.translateImmediately_ =
         !!widgetConfig['translate_immediately'];
-    /**
-     * null if no autoplay, blank string for original language, 
-     * language code for other
-     * @type {?string}
-     */
-    this.autoplayLanguage_ = widgetConfig['autoplay_language'];
-    if (!this.autoplayLanguage_ && this.autoplayLanguage_ != '')
-        this.autoplayLanguage_ = null;
+    this.baseState_ = new mirosubs.widget.BaseState(
+        widgetConfig['base_state']);
     /**
      * Whether or not we've heard back from the initial call 
      * to the server yet.
@@ -90,8 +86,7 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
         'show_widget', {
             'video_url' : this.videoURL_,
             'null_widget': this.nullWidget_,
-            'autoplay': this.autoplayLanguage_ != null,
-            'autoplay_language': this.autoplayLanguage_
+            'base_state': this.baseState_.ORIGINAL_PARAM
         },
         goog.bind(this.initializeState_, this));
 };
@@ -117,14 +112,17 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
 
     this.setInitialVideoTabState_(initialTab, result['owned_by']);
 
-    if (this.autoplayLanguage_ != null)
+    if (this.baseState_.NOT_NULL)
         this.subsLoaded_(
-            this.autoplayLanguage_ == '' ? null : this.autoplayLanguage_,
-            result['subtitles']);
+            this.baseState_.LANGUAGE, result['subtitles']);
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(goog.bind(this.subtitle_, this));
-    else if (this.translateImmediately_)
-        goog.Timer.callOnce(goog.bind(this.addNewLanguage_, this));
+    else if (this.translateImmediately_) {
+        if (this.baseState_.LANGUAGE)
+            goog.Timer.callOnce(goog.bind(this.editTranslationImpl_, this));
+        else
+            goog.Timer.callOnce(goog.bind(this.addNewLanguage_, this));
+    }
 
     this.attachEvents_();
 };
@@ -173,14 +171,31 @@ mirosubs.widget.Widget.prototype.loginStatusChanged_ = function() {
 };
 mirosubs.widget.Widget.prototype.subtitleClicked_ = function() {
     if (!this.possiblyRedirectToOnsiteWidget_(true))
-        this.subtitle_();
+        this.subtitle_();    
 };
 mirosubs.widget.Widget.prototype.subtitle_ = function() {
+    if (this.baseState_.REVISION != null) {
+        var msg = 
+            ["You're about to edit revision ", 
+             this.baseState_.REVISION, ", an old revision. ",
+             "Changes may have been made since this revision, and your edits ",
+             "will override those changes. Are you sure you want to do this?"].
+            join('');
+        if (confirm(msg))
+            this.subtitleImpl_();
+        else if (mirosubs.returnURL)
+            window.location.replace(mirosubs.returnURL);
+    }
+    else
+        this.subtitleImpl_();
+};
+mirosubs.widget.Widget.prototype.subtitleImpl_ = function() {
     this.videoTab_.showLoading(true);
     var that = this;
     mirosubs.Rpc.call(
         "start_editing" + (this.nullWidget_ ? '_null' : ''), 
-        {"video_id": this.videoID_},
+        {"video_id": this.videoID_,
+         "base_version_no": this.baseState_.REVISION},
         function(result) {
             that.videoTab_.showLoading(false);
             if (result["can_edit"]) {
@@ -200,6 +215,7 @@ mirosubs.widget.Widget.prototype.subtitle_ = function() {
                           result["locked_by"]);
             }
         });
+
 };
 mirosubs.widget.Widget.prototype.editSubtitles_ = function() {
     if (this.languageCodePlaying_ == null) {
@@ -209,16 +225,37 @@ mirosubs.widget.Widget.prototype.editSubtitles_ = function() {
     }
     else {
         // foreign language
-        if (this.possiblyRedirectToOnsiteWidget_(false))
-            return;
-        this.videoTab_.showLoading(true);
-        mirosubs.Rpc.call(
-            'start_translating' + (this.nullWidget_ ? '_null' : ''),
-            { 'video_id' : this.videoID_,
-              'language_code' : this.languageCodePlaying_,
-              'editing' : true },
-            goog.bind(this.editTranslations_, this));
+        if (!this.possiblyRedirectToOnsiteWidget_(false))
+            this.editTranslationImpl_();
     }
+};
+mirosubs.widget.Widget.prototype.editTranslationImpl_ = function() {
+    if (this.baseState_.REVISION != null) {
+        var msg =
+            ["You're about to edit revision ", 
+             this.baseState_.REVISION, ", an old revision. ",
+             "Changes may have been made since this revision, and your edits ",
+             "will override those changes. Are you sure you want to do this?"].
+            join('');
+        if (confirm(msg))
+            this.editTranslationConfirmed_();
+        else if (mirosubs.returnURL)
+            window.location.replace(mirosubs.returnURL);
+    }
+    else
+        this.editTranslationConfirmed_();
+};
+mirosubs.widget.Widget.prototype.editTranslationConfirmed_ = function() {
+    this.videoTab_.showLoading(true);
+    var languageCode = this.baseState_.LANGUAGE ? 
+        this.baseState_.LANGUAGE : this.languageCodePlaying_;
+    mirosubs.Rpc.call(
+        'start_translating' + (this.nullWidget_ ? '_null' : ''),
+        { 'video_id' : this.videoID_,
+          'language_code' : languageCode,
+          'editing' : true,
+          'base_version_no': this.baseState_.REVISION },
+        goog.bind(this.editTranslations_, this));
 };
 /**
  * @param {boolean} forSubtitling true for subs, false for translations
@@ -240,6 +277,10 @@ mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
             queryData.set('subtitle_immediately', 'true');
         else
             queryData.set('translate_immediately', 'true');
+        if (this.baseState_.NOT_NULL)
+            queryData.set(
+                'base_state', 
+                goog.json.serialize(this.baseState_.ORIGINAL_PARAM));
         queryData.set('return_url', window.location.href);
         window.location.assign(url + queryData.toString());
         return true;
@@ -299,6 +340,8 @@ mirosubs.widget.Widget.prototype.editSubtitlesImpl_ =
     this.dialog_ = dialog;
 };
 mirosubs.widget.Widget.prototype.languageSelected_ = function(event) {
+    // this clears out the base state.
+    this.baseState_ = new mirosubs.widget.BaseState(null);
     if (event.languageCode)
         this.translationSelected_(event.languageCode);
     else

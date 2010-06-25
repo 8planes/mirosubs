@@ -20,32 +20,19 @@ from __future__ import with_statement
 from fabric.api import run, put, sudo, env, cd, local
 import os
 
-def _command(cmd):
-    """Return a closure that holds the path and required args."""
-    def f(arg):
-        run("%s %s" % (cmd, arg))
-    return f
-
-def staging():
-    """
-    Run the subsequent commands on the staging server, e.g., li77-157.members.linode.com 
-    or 74.207.235.157
-    """
-    env.hosts = ['8planes.com']
-    env.user = 'mirosubsstaging'
-    env.base_dir = '/home/{0}'.format(env.user)
-
-def dev():
+def _create_env(username, installation_dir):
     env.hosts = ['universalsubtitles.org:2191']
-    env.user = 'adam'
-    env.base_dir = '/var/www/universalsubtitles.dev'
-    env.wsgi_file_name = 'deploy/unisubsdev.wsgi'
+    env.user = username
+    env.base_dir = '/var/www/{0}'.format(installation_dir)
 
-def unisubs():
-    env.hosts = ['universalsubtitles.org:2191']
-    env.user = 'adam'
-    env.base_dir = '/var/www/universalsubtitles'
-    env.wsgi_file_name = 'deploy/unisubs.wsgi'
+def staging(username):
+    _create_env(username, 'universalsubtitles.staging')
+
+def dev(username):
+    _create_env(username, 'universalsubtitles.dev')
+
+def unisubs(username):
+    _create_env(username, 'universalsubtitles')
 
 def set_permissions(home='/home/mirosubs'):
     """
@@ -58,17 +45,9 @@ def set_permissions(home='/home/mirosubs'):
     with cd(home):
         sudo('chgrp www-data -R mirosubs/media/')
 
-def reset_db():
-    env.warn_only = True
-    with cd('/home/{0}/mirosubs/'.format(env.user)):
-        run(('/home/{0}/env/bin/python manage.py reset_db --noinput '
-             '--settings={0}-settings').format(env.user))
-        run(('/home/{0}/env/bin/python manage.py syncdb --noinput '
-              '--settings={0}-settings').format(env.user))
-
-def migrate(app_name):
+def migrate():
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('python manage.py migrate {0}'.format(app_name))
+        run('python manage.py migrate')
 
 def update():
     """
@@ -80,7 +59,7 @@ def update():
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
         run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
-        run('touch {0}'.format(env.wsgi_file_name))
+        run('touch deploy/unisubs.wsgi')
 
 def user_update(username):
     env.user = username

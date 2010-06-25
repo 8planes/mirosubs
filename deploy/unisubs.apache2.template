@@ -4,6 +4,10 @@
     ServerName  INSERT_SUBDOMAIN.universalsubtitles.org
     ServerAlias INSERT_SUBDOMAIN.universalsubtitles.com
 
+    # Extra alias for dev only
+    #ServerAlias wdev.universalsubtitles.org
+    # Extra alias for staging only
+    #ServerAlias wstaging.universalsubtitles.org
 
     LogLevel warn
 
