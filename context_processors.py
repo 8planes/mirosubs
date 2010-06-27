@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.sites.models import Site
+from django.conf import settings
 
 def current_site(request):
     try:
@@ -30,3 +31,6 @@ def null_widget(request):
         return {'null_widget': True}
     else:
         return {'null_widget': False}
+    
+def current_commit(request):
+    return {'LAST_COMMIT_GUID': settings.LAST_COMMIT_GUID}

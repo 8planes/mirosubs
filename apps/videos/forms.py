@@ -53,7 +53,8 @@ class FeedbackForm(forms.Form):
         user_agent_data = 'User agent: %s' % request.META.get('HTTP_USER_AGENT')
         timestamp = 'Time: %s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         version = 'Version: %s' % settings.PROJECT_VERSION
-        message = '%s\n\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version)
+        commit = 'Commit: %s' % settings.LAST_COMMIT_GUID
+        message = '%s\n\n%s\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version, commit)
         if error in ['404', '500']:
             message += '\nIt was sent from '+error+' error page.'
         headers = {'Reply-To': email} if email else None

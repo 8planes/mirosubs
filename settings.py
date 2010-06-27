@@ -179,6 +179,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'context_processors.current_site',
     'context_processors.null_widget',
+    'context_processors.current_commit',
     "django.contrib.messages.context_processors.messages",
 )
 
