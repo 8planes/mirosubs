@@ -26,11 +26,13 @@ class SendMessageForm(forms.Form):
     message = forms.CharField()
     user = forms.ModelChoiceField(User.objects)
     
-    def send(self):
+    def send(self, user):
         user = self.cleaned_data.get('user')
         email = self.cleaned_data.get('email')
         headers = {'Reply-To': email}
-        EmailMessage('', self.cleaned_data.get('message'), email, \
+        username = user.username if user.is_authenticated() else 'anonymous'
+        subject = 'Personal message from %s on universalsubtitles.org' % username
+        EmailMessage(subject, self.cleaned_data.get('message'), email, \
                      [user.email], headers=headers).send()
 
     def get_errors(self):

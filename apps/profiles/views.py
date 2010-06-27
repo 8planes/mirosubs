@@ -60,7 +60,7 @@ def send_message(request):
     output = dict(success=False)
     form = SendMessageForm(request.POST)
     if form.is_valid():
-        form.send()
+        form.send(request.user)
         output['success'] = True
     else:
         output['errors'] = form.get_errors()
