@@ -102,7 +102,8 @@ mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
         this.skipVideosCheckbox_.getChecked());
 };
 
-mirosubs.HowToVideoPanel.prototype.continue_ = function() {
+mirosubs.HowToVideoPanel.prototype.continue_ = function(e) {
+    e.preventDefault();
     this.dispatchEvent(mirosubs.HowToVideoPanel.CONTINUE);
 };
 
