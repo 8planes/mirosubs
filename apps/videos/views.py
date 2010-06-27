@@ -41,12 +41,14 @@ def create(request):
             if created:
                 # TODO: log to activity feed
                 pass
-            if not video.owner or video.owner == request.user or video.allow_community_edits:
-                return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
-                        'videos:video', kwargs={'video_id':video.video_id})))
-            else:
-                # TODO: better error page?
-                return HttpResponse('You are not allowed to add transcriptions to this video.')
+            return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
+                    'videos:video', kwargs={'video_id':video.video_id})))            
+            #if not video.owner or video.owner == request.user or video.allow_community_edits:
+            #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
+            #            'videos:video', kwargs={'video_id':video.video_id})))
+            #else:
+            #    # TODO: better error page?
+            #    return HttpResponse('You are not allowed to add transcriptions to this video.')
     else:
         video_form = VideoForm(label_suffix="")
     return render_to_response('videos/create.html', locals(),
