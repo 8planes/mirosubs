@@ -19,6 +19,9 @@
 from django.db import models
 import string
 import random
+from urlparse import urlparse, parse_qs
+import feedparser
+from django.utils.encoding import DjangoUnicodeDecodeError
 from django.conf.global_settings import LANGUAGES
 from django.contrib.auth.models import User
 from datetime import datetime, date, timedelta
@@ -78,7 +81,33 @@ class Video(models.Model):
             return 'http://www.youtube.com/watch?v=%s' % self.youtube_videoid
         else:
             return self.video_url
-        
+
+    @classmethod
+    def get_or_create_for_url(cls, video_url, user):
+        parsed_url = urlparse(video_url)
+        if 'youtube.com' in parsed_url.netloc:
+            yt_video_id = parse_qs(parsed_url.query)['v'][0]
+            video, created = Video.objects.get_or_create(
+                youtube_videoid=yt_video_id,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_YOUTUBE, 
+                          'allow_community_edits': True})
+            if created:
+                url = 'http://gdata.youtube.com/feeds/api/videos/%s' % video.youtube_videoid
+                data = feedparser.parse(url)
+                try:
+                    video.youtube_name = data['entries'][0]['title']
+                    video.save()
+                except DjangoUnicodeDecodeError: # FIXME: under what circumsntances will this happen?
+                    pass
+        else:
+            video, created = Video.objects.get_or_create(
+                video_url=video_url,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_HTML5,
+                          'allow_community_edits': True})
+        return video, created
+
     @property
     def srt_filename(self):
         """The best SRT filename for this video."""

@@ -35,7 +35,7 @@
                     }
                 },
                 beforeSubmit: function(formData, $Form, options){
-                    $('div.error_list', $Form).remove();
+                    $('div2.error_list', $Form).remove();
                     var form = $Form[0];
                     var valid = true;
                     if (!form.message.value){
@@ -54,10 +54,13 @@
 {% endblock %}
 
 {% block userinfo %}
+
     {{ block.super }}
     <p>Preferred Language: {% if profile.preferred_language %}{{ profile.language }}{% endif %}</p>
     <p>Homepage: <a href="{{ profile.homepage }}">{{ profile.homepage }}</a></p>
-    <button class="send_message"><span>Send a Message</span></button>
+   
+ <button class="send_message"><span>Send a Message</span></button>
+
     
     <div id="send_message" style="display: none">
       <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  

@@ -51,7 +51,7 @@ mirosubs.MainMenu.MenuValues_ = {
     LOGOUT: 'logout',
     TURNOFFSUBS: 'turnoffsubs'
 };
-mirosubs.MainMenu.EventType = {
+mirosubs.MainMenu.Selection = {
     ADD_SUBTITLES: 'addsubs',
     EDIT_SUBTITLES: 'editsubs',
     LANGUAGE_SELECTED: 'langselected',
@@ -72,7 +72,7 @@ mirosubs.MainMenu.prototype.setShowingSubs = function(show) {
 mirosubs.MainMenu.prototype.onActionTaken_ = function(event) {
     var selectedValue = event.target.getModel();
     var mv = mirosubs.MainMenu.MenuValues_;
-    var et = mirosubs.MainMenu.EventType;
+    var et = mirosubs.MainMenu.Selection;
     if (selectedValue == mv.ADD_SUBTITLES)
         this.dispatchEvent(et.ADD_SUBTITLES);
     else if (selectedValue == mv.EDIT_SUBTITLES)
@@ -118,7 +118,8 @@ mirosubs.MainMenu.prototype.showMenu = function(target, x, y) {
         return;
 
     if (mirosubs.isEmbeddedInDifferentDomain()) {
-        this.warning_ = new mirosubs.EmbedWarning( goog.bind(this.showMenuInternal_, this, target, x, y), x, y );
+        this.warning_ = new mirosubs.EmbedWarning(
+            goog.bind(this.showMenuInternal_, this, target, x, y));
         if (this.warning_.showWarning()) {
             var that = this;
             goog.events.listenOnce(
@@ -197,7 +198,7 @@ mirosubs.MainMenu.prototype.createDownloadSRTLink_ = function() {
     return menuItem;
 };
 mirosubs.MainMenu.LanguageSelectedEvent = function(opt_languageCode) {
-    this.type = mirosubs.MainMenu.EventType.LANGUAGE_SELECTED;
+    this.type = mirosubs.MainMenu.Selection.LANGUAGE_SELECTED;
     /**
      * The language code selected, or null to signify original
      * language.

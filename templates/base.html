@@ -57,7 +57,9 @@
         <div class="accountstatus">
 <p></p>
           {% if request.user.is_authenticated %}
-            <p>Logged in as <a href="{% url profiles:my_profile %}">{{ request.user }}</a>  <a href="{% url logout %}">Logout</a>              {% else %}
+            <p>Logged in as <a href="{% url profiles:my_profile %}">{{ request.user }}</a>  <a href="{% url logout %}">Logout</a>         
+
+         {% else %}
             <p><a href="{% url auth:login %}">Login</a>
                <a href="{% url auth:login %}">Create account</a>
               
@@ -78,15 +80,33 @@
 
 
         <ul class="nav">
-          <li class="first"><a href="{% url demo %}"><span>Try the Demo</span></a></li>
-          <li><a href="http://blog.universalsubtitles.org"><span>Read Our Blog</span></a></li>
-          <li><a href="http://blog.universalsubtitles.org"><span>FAQ</span></a></li>
+
+
+
+          <li class="first try_link"><a href="{% url demo %}"><span>Try the Demo</span></a></li>
+          <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Read Our Blog</span></a></li>
+          <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
+
+
+
+
           {% if user.is_authenticated %}
-              <li><a href="{% url logout %}"><span>Logout</span></a></li>
+              <li class="login_link"><a href="{% url logout %}"><span>Logout</span></a></li>
           {% else %}
-              <li><a href="{% url auth:login %}"><span>Login</span></a></li>
+              <li class="login_link"><a href="{% url auth:login %}"><span>Login</span></a></li>
           {% endif %}
-          <li class="search last_nav"><a href="/about"><span>About Us</span></a></li>
+
+
+          <li class="last about_link last_nav"><a href="/about"><span>About Us</span></a></li>
+
+
+
+
+
+
+
+
+
         </ul>
       </div>
       

@@ -73,9 +73,9 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
                       goog.dom.createTextNode(' Skip these videos')));
     this.continueLink_ = 
         $d('a', 
-           {'className': 'mirosubs-howtopanel-continue', 
+           {'className': 'mirosubs-smallButton', 
             'href': '#'}, 
-           'CONTINUE')
+           $d('span', null, 'Continue'))
     el.appendChild(this.continueLink_);
     var vidPlayer = new goog.ui.Component();
     vidPlayer.addChild(this.videoPlayer_, true);
@@ -90,7 +90,16 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
         this.skipVideosCheckbox_.setLabel(
             this.skipVideosCheckbox_.getElement().parentNode);
     }
+    this.getHandler().listen(this.skipVideosCheckbox_,
+                             goog.ui.Component.EventType.CHANGE,
+                             this.skipVideosCheckboxChanged_);
     this.getHandler().listen(this.continueLink_, 'click', this.continue_);
+};
+
+mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
+    mirosubs.UserSettings.setBooleanValue(
+        mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO,
+        this.skipVideosCheckbox_.getChecked());
 };
 
 mirosubs.HowToVideoPanel.prototype.continue_ = function() {
