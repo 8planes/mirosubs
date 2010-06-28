@@ -4,26 +4,40 @@
 
 {% block css %}
     {{ block.super }}
-    <link href="{{ MEDIA_URL }}css/prettyPhoto.css" media="all" type="text/css" rel="stylesheet" />
+    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
+    <style>
+        .error_list {
+            color: #fa6343;
+        }
+        
+        .success-message {
+            color: #5ae26b;
+            margin: 5px 0 0;
+        }
+    </style>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ MEDIA_URL }}/js/jquery.prettyPhoto.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}/js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function(){
-
-            $('button.send_message').attr('href', '#send_message');              
-
-            $('button.send_message').prettyPhoto({
-                default_width: 425,
-                default_height: 344
+            $.nyroModalSettings({
+                minWidth: 460,
+                minHeight: 380              
             }); 
+            $('.send_message').nyroModal();
+                        
+            $('button.send_message').attr('href', '#send_message');              
             
             $('#message-form').ajaxForm({
                 dataType: 'json',
                 success: function(data, status, xhr, $form){
                     if (data.success){
                         $form.resetForm();
+                        $('.success-message', $form).show(500);
+                        setTimeout(function(){
+                            $('.success-message', $form).hide(500);
+                        }, 3500);
                     } else {
                         for (key in data.errors){
                             var $field = $('input[name="'+key+'"]', $form);
@@ -37,7 +51,7 @@
                     }
                 },
                 beforeSubmit: function(formData, $Form, options){
-                    $('div2.error_list', $Form).remove();
+                    $('div.error_list', $Form).remove();
                     var form = $Form[0];
                     var valid = true;
                     if (!form.message.value){
@@ -75,9 +89,12 @@
     
     <div id="send_message" style="display: none">
       <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  
-         <h3>Send USERNAME a Message</h3>
+         <h3>Send {{ user_info.username }} a Message</h3>
          {% csrf_token %}
          <input type="hidden" name="user" value="{{ user_info.id }}"/>
+         <div class="success-message" style="display: none">
+            Messages was sent success
+         </div>
          <p>
            <label>From</label>
            <input type="text" value="{{ user.email }}" name="email"/>    
