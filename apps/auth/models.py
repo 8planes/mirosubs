@@ -9,7 +9,7 @@ class CustomUser(BaseUser):
                                       upload_to='profile_images/%y/%m/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
-    biography = models.TextField(blank=True)
+    biography = models.TextField('Tell us about yourself', blank=True)
     
     objects = UserManager()
         
