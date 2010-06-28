@@ -63,9 +63,6 @@ def widget_demo(request):
         context['help_mode'] = False
         spaces = ' ' * 9
         params = base_widget_params(request)
-        if request.GET.get('autoplay_language', None) is not None:
-            params += ',\n{0}autoplay_language: \'{1}\''.format(
-                spaces, request.GET['autoplay_language'])
         context['embed_js_url'] = \
             "http://{0}/embed.js".format(Site.objects.get_current().domain)
         context['widget_params'] = params
