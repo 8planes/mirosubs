@@ -236,3 +236,7 @@ FEEDBACK_RESPONSE_TEMPLATE = 'feedback_response.html'
 
 PROJECT_VERSION = '0.5'
 
+try:
+    from commit import LAST_COMMIT_GUID
+except ImportError:
+    LAST_COMMIT_GUID = ''

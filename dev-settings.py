@@ -27,11 +27,6 @@ TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 
 try:
-    from commit import LAST_COMMIT_GUID
-except ImportError:
-    LAST_COMMIT_GUID = ''
-
-try:
     from settings_local import *
 except ImportError:
     pass
