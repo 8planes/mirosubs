@@ -1,6 +1,7 @@
 from auth.models import CustomUser as User
 from django.contrib.auth.models import User as AuthUser
 from django.conf import settings
+from django.contrib.auth.backends import ModelBackend
 
 from socialauth.lib import oauthtwitter
 from socialauth.models import OpenidProfile as UserAssociation, TwitterUserProfile, FacebookUserProfile, AuthMeta
@@ -14,6 +15,22 @@ TWITTER_CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', '')
 FACEBOOK_API_KEY = getattr(settings, 'FACEBOOK_API_KEY', '')
 FACEBOOK_API_SECRET = getattr(settings, 'FACEBOOK_API_SECRET', '')
 FACEBOOK_REST_SERVER = getattr(settings, 'FACEBOOK_REST_SERVER', 'http://api.facebook.com/restserver.php')
+
+class CustomUserBackend(ModelBackend):
+    
+    def authenticate(self, username=None, password=None):
+        try:
+            user = User.objects.get(username=username)
+            if user.check_password(password):
+                return user
+        except User.DoesNotExist:
+            return None
+        
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
 
 class OpenIdBackend:
     def authenticate(self, openid_key, request, provider):

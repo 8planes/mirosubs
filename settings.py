@@ -211,7 +211,7 @@ FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
 
 AUTHENTICATION_BACKENDS = (
-   'django.contrib.auth.backends.ModelBackend',
+   'auth.backends.CustomUserBackend',
    'auth.backends.OpenIdBackend',
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',

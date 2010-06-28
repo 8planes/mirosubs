@@ -16,43 +16,50 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.contrib.auth.models import User
+from auth.models import CustomUser as User
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from profiles.forms import EditProfileForm, SendMessageForm
+from profiles.forms import EditUserForm, SendMessageForm
 from django.contrib import messages
 from django.utils import simplejson as json
 
 @login_required
 def my_profile(request):
-    return profile(request, request.user.username)
+    return profile(request)
 
-def profile(request, user_id):
-    try:
-        user = User.objects.get(username=user_id)
-    except User.DoesNotExist:
+def profile(request, user_id=None):
+    if user_id:
         try:
-            user = User.objects.get(id=user_id)
+            user = User.objects.get(username=user_id)
         except User.DoesNotExist:
-            raise Http404
-    profile = user.get_profile()
-    # TODO: get user's activity
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                raise Http404
+    else:
+        user = request.user
+    context = {
+        'user_info': user
+    }
+
     if request.user == user:
         if request.method == 'POST':
-            edit_profile_form = EditProfileForm(request.POST,
-                                                instance=profile,
-                                                files=request.FILES, label_suffix="")
-            if edit_profile_form.is_valid():
-                edit_profile_form.save()
+            form = EditUserForm(request.POST,
+                                instance=request.user,
+                                files=request.FILES, label_suffix="")
+            if form.is_valid():
+                form.save()
                 messages.success(request, 'Your profile has been updated.')
+                return redirect('profiles:my_profile')
         else:
-            edit_profile_form = EditProfileForm(instance=profile, label_suffix="")
-        return render_to_response('profiles/edit_profile.html', locals(),
+            form = EditUserForm(instance=request.user, label_suffix="")
+        context['form'] = form
+        return render_to_response('profiles/edit_profile.html', context,
                                   context_instance=RequestContext(request))
     else:
-        return render_to_response('profiles/view_profile.html', locals(),
+        return render_to_response('profiles/view_profile.html', context,
                                   context_instance=RequestContext(request))
             
 

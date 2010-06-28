@@ -1,5 +1,7 @@
 {% extends "profiles/base.html" %}
 
+{% load thumbnail %}
+
 {% block css %}
     {{ block.super }}
     <link href="{{ MEDIA_URL }}css/prettyPhoto.css" media="all" type="text/css" rel="stylesheet" />
@@ -53,27 +55,36 @@
     </script>
 {% endblock %}
 
-{% block userinfo %}
-
+{% block main_content %}
+    <div class="left_column">
+        <h2>User Profile</h2>
+        <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}">
+        <h3>{{ user_info.username }}</h3>
+        <p>Preferred Language: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
+        <p>Homepage: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
+        <button class="send_message"><span>Send a Message</span></button>
+    </div>
+    
+    <div class="right_column">
+        <br />
+        <h3>About {{ user_info.username }}</h3>
+        <p class="user_bio">{{ user_info.biography }}</p>
+    </div>
+    
     {{ block.super }}
-    <p>Preferred Language: {% if profile.preferred_language %}{{ profile.language }}{% endif %}</p>
-    <p>Homepage: <a href="{{ profile.homepage }}">{{ profile.homepage }}</a></p>
-   
- <button class="send_message"><span>Send a Message</span></button>
-
     
     <div id="send_message" style="display: none">
       <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  
          <h3>Send USERNAME a Message</h3>
          {% csrf_token %}
-         <input type="hidden" name="user" value="{{ user.id }}"/>
+         <input type="hidden" name="user" value="{{ user_info.id }}"/>
          <p>
            <label>From</label>
-           <input type="text" value="{{ request.user.email }}" name="email"/>    
+           <input type="text" value="{{ user.email }}" name="email"/>    
          </p>
          <p>
            <label>Message</label>
-           <textarea class="to" type="text" name="message">morganknutson@gmail.com</textarea>  
+           <textarea class="to" type="text" name="message"></textarea>  
            <span>No HTML</span>
            <span>Note: when you send a message the recipient can see your email and reply directly</span>
          </p>

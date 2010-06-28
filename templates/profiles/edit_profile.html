@@ -1,9 +1,162 @@
 {% extends "profiles/base.html" %}
 
-{% block edit_profile_form %}
-<form class="edit_profile" action="{% url profiles:profile user_id=request.user.username %}" method="post" enctype="multipart/form-data">
+{% load thumbnail %}
+
+{% block main_content %}
+<div class="left_column">
+    <h2>User Profile</h2>
+    <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}"><h3>{{ user_info.username }}</h3>
+    <p>
+        Preferred Language: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
+    </p>
+    <p>
+        Homepage: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a>
+    </p>
+</div>
+
+<div class="right_column">
+    <br/>
+    <h3>About {{ user_info.username }}</h3>
+    <p class="user_bio">
+        {{ user_info.biography }}
+    </p>
+</div>
+
+<form class="edit_profile" action="{% url profiles:profile user_id=user.username %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-  {{ edit_profile_form.as_p }}
-  <button type="submit" value="Save"><span>Save Edits to Profile</span></button>
-</form>    
+    <div class="edit_profile_shell">
+        <h2>
+            Edit Your Profile
+            <button type="submit" value="Save" style="margin-left: 200px;">
+                <span>Save Edits to Profile</span>
+            </button>
+        </h2>
+        
+        <div class="left_column">
+            <h3>Personal Info</h3>
+            <p>
+                {{ form.homepage.errors }}
+                {{ form.homepage.label_tag }}
+                {{ form.homepage }}
+            </p>
+            <p>
+                {{ form.picture.errors }}
+                {{ form.picture.label_tag }}
+                {{ form.picture }}
+            </p>
+            <p>
+                {{ form.email.errors }}
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </p>
+            <p>
+                {{ form.current_password.errors }}
+                {{ form.current_password.label_tag }}
+                {{ form.current_password }}
+            </p>
+            <p>
+                {{ form.new_password.errors }}
+                {{ form.new_password.label_tag }}
+                {{ form.new_password }}
+            </p>
+            <p>
+                {{ form.new_password_verify.errors }}
+                {{ form.new_password_verify.label_tag }}
+                {{ form.new_password_verify }}
+            </p>
+            <p>
+                {{ form.changes_notification.errors }}
+                {{ form.changes_notification.label_tag }}
+                {{ form.changes_notification }}
+            </p>
+            <p>
+                {{ form.biography.errors }}
+                {{ form.biography.label_tag }}
+                {{ form.biography }}
+            </p>                          
+        </div>
+        
+        <div class="right_column">
+            <h3>Language Info</h3>
+            <p>
+                {{ form.preferred_language.errors }}
+                {{ form.preferred_language.label_tag }}
+                {{ form.preferred_language }}
+            </p>
+            <h4>Languages I Know</h4>
+            <ul class="language_list">
+                <li>
+                    <a href="#" class="small_close">Remove Language</a>
+                    <select>
+                        <option value="" selected="selected">Select Language</option>
+                    </select>
+                    <select>
+                        <option value="" selected="selected">Select Proficiency</option>
+                    </select>
+                </li>
+                <li>
+                    <a href="#" class="small_close">Remove Language</a>
+                    <select>
+                        <option value="" selected="selected">Select Language</option>
+                    </select>
+                    <select>
+                        <option value="" selected="selected">Select Proficiency</option>
+                    </select>
+                </li>
+                <li>
+                    <a href="#" class="small_close">Remove Language</a>
+                    <select>
+                        <option value="" selected="selected">Select Language</option>
+                    </select>
+                    <select>
+                        <option value="" selected="selected">Select Proficiency</option>
+                    </select>
+                </li>
+                <li>
+                    <a href="#" class="small_close">Remove Language</a>
+                    <select>
+                        <option value="" selected="selected">Select Language</option>
+                    </select>
+                    <select>
+                        <option value="" selected="selected">Select Proficiency</option>
+                    </select>
+                </li>
+                <li>
+                    <a href="#" class="small_close">Remove Language</a>
+                    <select>
+                        <option value="" selected="selected">Select Language</option>
+                    </select>
+                    <select>
+                        <option value="" selected="selected">Select Proficiency</option>
+                    </select>
+                </li>
+                <li>
+                    <a href="#" class="small_close">Remove Language</a>
+                    <select>
+                        <option value="" selected="selected">Select Language</option>
+                    </select>
+                    <select>
+                        <option value="" selected="selected">Select Proficiency</option>
+                    </select>
+                </li>
+                <li>
+                    <a href="#" class="small_close">Remove Language</a>
+                    <select>
+                        <option value="" selected="selected">Select Language</option>
+                    </select>
+                    <select>
+                        <option value="" selected="selected">Select Proficiency</option>
+                    </select>
+                </li>
+            </ul>
+            <button class="small_button">
+                <span><span class="plus"></span>Add Language</span>
+            </button>
+        </div>
+        <div class="clearboth">
+            &nbsp;
+        </div>
+    </div>
+</form>
+{{ block.super }}
 {% endblock %}
