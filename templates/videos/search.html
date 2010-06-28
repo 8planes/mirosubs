@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load escapejs paginator widget %}
+
+{% block main_content %}
+    <h2>Search</h2>
+    <form method="post" action="{% url search %}">
+        {% csrf_token %}
+        <input type="text" name="q" />
+        <input type="submit" value="Search"/>
+    </form>
+    <div class="left_column">
+            <ul class="table_head">
+                <li class="table_most_recent">
+                    {% ordered_column "name" "URL/title" %}
+                </li>
+                <li class="table_user">
+                    Language
+                </li>                
+            </ul>
+            
+            <ul class="table_body">
+                {% for item in result_list %}
+                <li {%  cycle 'class="even"' '' %}>
+                    <ul>
+                        <li class="table_most_recent">
+                            {{ item.video }}
+                        </li>
+                        <li class="table_user">
+                            {{ item.get_language_display }}
+                        </li>                        
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <div style="clear: both"></div>
+            
+            {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
+    </div>
+        
+{% endblock %}

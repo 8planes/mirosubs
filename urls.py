@@ -63,6 +63,7 @@ urlpatterns = patterns(
                             app_name='profiles')),
     (r'auth/', include('auth.urls', namespace='auth',
                        app_name='auth')),
+    url(r'^search/$', 'videos.views.search', name="search"),
     url(r'^demo/$', 'videos.views.demo', name="demo"),
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'about.html'}),
