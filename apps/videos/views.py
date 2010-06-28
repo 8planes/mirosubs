@@ -30,6 +30,7 @@ from django.conf import settings
 import simplejson as json
 from videos.utils import get_pager
 from django.contrib import messages
+from django.db.models import Q
 
 def create(request):
     if request.method == 'POST':
@@ -344,3 +345,31 @@ def test_form_page(request):
     }
     return render_to_response('videos/test_form_page.html', context,
                               context_instance=RequestContext(request))
+
+def search(request):
+    q = request.REQUEST.get('q')
+    
+    try:
+        page = int(request.GET['page'])
+    except (ValueError, TypeError, KeyError):
+        page = 1  
+          
+    if q:
+        qs = TranslationLanguage.objects.filter(Q(video__video_url__icontains=q)|Q(video__youtube_name__icontains=q))
+    else:
+        qs = TranslationLanguage.objects.none()
+        
+    context = {}
+    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
+    order_fields = {
+        'name': 'video__youtube_name'
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+        context['ordering'], context['order_type'] = ordering, order_type
+        
+    return object_list(request, queryset=qs, allow_empty=True,
+                       paginate_by=30, page=page,
+                       template_name='videos/search.html',
+                       template_object_name='result',
+                       extra_context=context)   
