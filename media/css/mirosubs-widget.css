@@ -446,13 +446,13 @@ margin: 20px 0 0 0px !important;
 }
 
 .mirosubs-left .mirosubs-videoDiv {
-    width: 400px !important;
-    height: 350px !important;
+   width: 400px;
+   height: 350px;
 }
 
 .mirosubs-left video{
-    width: 400px !important;
-    height: 300px !important;
+    width: 400px;
+    height: 300px;
 }
 
 .mirosubs-widget .mirosubs-videoTab {
