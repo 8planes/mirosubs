@@ -145,7 +145,20 @@ mirosubs.widget.Widget.prototype.setInitialVideoTabState_ =
 
 mirosubs.widget.Widget.prototype.enterDocument = function() {
     mirosubs.widget.Widget.superClass_.enterDocument.call(this);
+    if (this.videoPlayer_.areDimensionsKnown())
+        this.videoDimensionsKnown_();
+    else
+        this.getHandler().listen(
+            this.videoPlayer_,
+            mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
+            this.videoDimensionsKnown_);
     this.attachEvents_();
+};
+
+mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
+    console.log('dimensions known');
+    this.getElement().style.width = 
+        Math.round(this.videoPlayer_.getVideoSize().width) + 'px';
 };
 
 mirosubs.widget.Widget.prototype.attachEvents_ = function() {

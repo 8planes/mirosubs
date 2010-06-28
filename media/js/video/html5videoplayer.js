@@ -78,10 +78,12 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'play', this.videoPlaying_).
         listen(this.videoElem_, 'pause', this.videoPaused_).
         listen(this.videoElem_, 'progress', this.videoProgressListener_).
+        listen(this.videoElem_, 'loadedmetadata', this.setDimensionsKnownInternal).
         listen(this.videoElem_, 'timeupdate',
                this.timeUpdateThrottle_.fire, 
                false, this.timeUpdateThrottle_);
 };
+
 mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
     this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
 };

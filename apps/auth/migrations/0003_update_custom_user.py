@@ -9,22 +9,23 @@ class Migration(DataMigration):
     needed_by = (
         ("profiles", "0007_auto__del_profile"),
     )
-    
+
     def forwards(self, orm):
-        fields = ['picture', 'preferred_language', 'changes_notification', 'valid_email', 'homepage', 'biography']
-        for user in orm['auth.user'].objects.all():
-            values = {}
-            try:
-                profile = orm['profiles.Profile'].objects.get(user__id=user.id)
-                for f in fields:
-                    values[f] = getattr(profile, f)
-            except models.ObjectDoesNotExist:
-                pass
-            for f in orm['auth.user']._meta.local_fields:
-                values[f.attname] = getattr(user, f.attname)
-            obj = orm['auth.customuser'](**values)
-            obj.save()
-    
+        if not db.dry_run:
+            fields = ['picture', 'preferred_language', 'changes_notification', 'valid_email', 'homepage', 'biography']
+            for user in orm['auth.user'].objects.all():
+                values = {}
+                try:
+                    profile = orm['profiles.Profile'].objects.get(user__id=user.id)
+                    for f in fields:
+                        values[f] = getattr(profile, f)
+                except models.ObjectDoesNotExist:
+                    pass
+                for f in orm['auth.user']._meta.local_fields:
+                    values[f.attname] = getattr(user, f.attname)
+                obj = orm['auth.customuser'](**values)
+                obj.save()
+
     def backwards(self, orm):
         pass
     

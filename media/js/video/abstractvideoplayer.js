@@ -28,6 +28,7 @@ mirosubs.video.AbstractVideoPlayer = function(videoSource) {
     goog.ui.Component.call(this);
     this.videoSource_ = videoSource;
     this.noUpdateEvents_ = false;
+    this.dimensionsKnown_ = false;
 };
 goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
@@ -62,6 +63,18 @@ mirosubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
         this.play();
     else
         this.pause();
+};
+/**
+ * @protected
+ * Must be called by subclasses once they know their dimensions.
+ */
+mirosubs.video.AbstractVideoPlayer.prototype.setDimensionsKnownInternal = function() {
+    this.dimensionsKnown_ = true;
+    this.dispatchEvent(
+        mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN);
+};
+mirosubs.video.AbstractVideoPlayer.prototype.areDimensionsKnown = function() {
+    return this.dimensionsKnown_;
 };
 mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadTime = goog.abstractMethod;
 /**
@@ -213,5 +226,9 @@ mirosubs.video.AbstractVideoPlayer.EventType = {
      * dispatched when playhead time changes, either as a result 
      *  of normal playback or otherwise. 
      */
-    TIMEUPDATE : 'videotimeupdate'
+    TIMEUPDATE : 'videotimeupdate',
+    /**
+     * dispatched when video dimensions are known.
+     */
+    DIMENSIONS_KNOWN: 'dimensionsknown'
 };

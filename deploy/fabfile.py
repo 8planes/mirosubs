@@ -45,9 +45,13 @@ def set_permissions(home='/home/mirosubs'):
     with cd(home):
         sudo('chgrp www-data -R mirosubs/media/')
 
-def migrate():
+def syncdb():
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('python manage.py migrate')
+        run('python manage.py syncdb --settings=unisubs-settings')
+
+def migrate(app_name=''):
+    with cd('{0}/mirosubs'.format(env.base_dir)):
+        run('python manage.py migrate {0} --settings=unisubs-settings'.format(app_name))
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
@@ -57,7 +61,7 @@ def migrate_fake(app_name):
     in a subsequent version, but now we're stuck with this solution.
     """
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('python manage.py migrate {0} 0001 --fake'.format(app_name))
+        run('python manage.py migrate {0} 0001 --fake --settings=unisubs-settings'.format(app_name))
 
 def update_closure():
     pass
