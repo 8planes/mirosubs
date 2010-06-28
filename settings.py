@@ -184,6 +184,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INSTALLED_APPS = (
+    'auth',
     'django.contrib.auth',
     'socialauth',
     'openid_consumer',
@@ -196,7 +197,6 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'videos',
     'widget',
-    'auth',
     'south'
 )
 
@@ -213,8 +213,8 @@ FACEBOOK_API_SECRET = ''
 AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
    'auth.backends.OpenIdBackend',
-   'socialauth.auth_backends.TwitterBackend',
-   'socialauth.auth_backends.FacebookBackend',
+   'auth.backends.TwitterBackend',
+   'auth.backends.FacebookBackend',
 )
 
 LOGIN_URL = '/auth/login/'

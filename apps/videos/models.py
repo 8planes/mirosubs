@@ -23,7 +23,7 @@ from urlparse import urlparse, parse_qs
 import feedparser
 from django.utils.encoding import DjangoUnicodeDecodeError
 from django.conf.global_settings import LANGUAGES
-from django.contrib.auth.models import User
+from auth.models import CustomUser as User
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
