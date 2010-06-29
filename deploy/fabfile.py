@@ -47,11 +47,11 @@ def set_permissions(home='/home/mirosubs'):
 
 def syncdb():
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('python manage.py syncdb --settings=unisubs-settings')
+        run('{0}/env/bin/python manage.py syncdb --settings=unisubs-settings'.format(env.base_dir))
 
 def migrate(app_name=''):
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('python manage.py migrate {0} --settings=unisubs-settings'.format(app_name))
+        run('{0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(env.base_dir, app_name))
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
@@ -61,7 +61,7 @@ def migrate_fake(app_name):
     in a subsequent version, but now we're stuck with this solution.
     """
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('python manage.py migrate {0} 0001 --fake --settings=unisubs-settings'.format(app_name))
+        run('{0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs-settings'.format(env.base_dir, app_name))
 
 def update_closure():
     pass

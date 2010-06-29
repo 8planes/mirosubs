@@ -42,8 +42,6 @@ mirosubs.currentUsername = null;
  */
 mirosubs.returnURL = null;
 
-mirosubs.NATIVE_LOGIN_URL_SUFFIX = "/auth/login/?next=/widget/close_window/";
-
 /**
  * Does not include trailing slash.
  */
@@ -89,16 +87,30 @@ mirosubs.login = function(opt_finishFn) {
     loginDialog.setVisible(true);
 };
 
+mirosubs.LoginPopupType = {
+    TWITTER: [
+        '/widget/twitter_login/',
+        'location=0,status=0,width=800,height=400'
+    ],
+    OPENID: [
+        '/socialauth/openid/?next=/widget/close_window/',
+        'location=0,status=0,resizable=yes'
+    ],
+    NATIVE: [
+        '/auth/login/?next=/widget/close_window/',
+        'location=0,status=0,resizable=yes'
+    ]
+};
+
 /**
- *
+ * @param {mirosubs.LoginPopupType} loginPopupType
  * @param {function(boolean)=} opt_finishFn Will be called with true if
  *     logged in, false otherwise.
  */
-mirosubs.openLoginPopup = function(urlSuffix, opt_finishFn) {
-    var popupParams = 'location=0,status=0,width=800,height=400';
-    var loginWin = window.open(mirosubs.siteURL() + urlSuffix,
-                               "loginWindow",
-                               popupParams);
+mirosubs.openLoginPopup = function(loginPopupType, opt_finishFn) {
+    var loginWin = window.open(mirosubs.siteURL() + loginPopupType[0],
+                               mirosubs.randomString(),
+                               loginPopupType[1]);
     var timer = new goog.Timer(250);
     goog.events.listen(
         timer, goog.Timer.TICK,
@@ -132,7 +144,7 @@ mirosubs.isLoginAttemptInProgress = function() {
 
 mirosubs.createAccount = function() {
     mirosubs.loginAttemptInProgress_ = true;
-    mirosubs.openLoginPopup(mirosubs.NATIVE_LOGIN_URL_SUFFIX);
+    mirosubs.openLoginPopup(mirosubs.LoginPopupType.NATIVE);
 };
 
 mirosubs.logout = function() {
