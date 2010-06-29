@@ -216,6 +216,9 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.FacebookBackend',
 )
 
+SKIP_SOUTH_TESTS = True
+SOUTH_TESTS_MIGRATE = False
+
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
 
