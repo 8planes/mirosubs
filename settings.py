@@ -163,7 +163,7 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
 )
 
-ROOT_URLCONF = 'mirosubs.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -235,6 +235,8 @@ FEEDBACK_RESPONSE_EMAIL = 'universalsubtitles@pculture.org'
 FEEDBACK_RESPONSE_TEMPLATE = 'feedback_response.html'
 
 PROJECT_VERSION = '0.5'
+
+EDIT_END_THRESHOLD = 120
 
 try:
     from commit import LAST_COMMIT_GUID

@@ -288,13 +288,13 @@ class VersionModel(models.Model):
     
     def time_change_display(self):
         if not self.time_change:
-            return '0'
+            return '0%'
         else:
             return '%.0f%%' % (self.time_change*100)
 
     def text_change_display(self):
         if not self.text_change:
-            return '0'
+            return '0%'
         else:
             return '%.0f%%' % (self.text_change*100)
 
@@ -313,12 +313,12 @@ class VideoCaptionVersion(VersionModel):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
-
+    notification_sent = models.BooleanField(default=False)
+    
     def language_display(self):
         return 'Original'
     
-    def save(self, *args, **kwargs):
-        super(VideoCaptionVersion, self).save(*args, **kwargs)
+    def update_changes(self):
         old_version = self.prev_version()
         new_captions = self.captions()
         captions_length = len(new_captions)
@@ -343,8 +343,8 @@ class VideoCaptionVersion(VersionModel):
                     time_count_changed += 1
                     text_count_changed += 1
             self.time_change = time_count_changed / 1. / captions_length
-            self.text_change = text_count_changed / 1. / captions_length   
-        super(VideoCaptionVersion, self).save()
+            self.text_change = text_count_changed / 1. / captions_length
+        self.save()
     
     def captions(self):
         return self.videocaption_set.order_by('start_time')
@@ -465,9 +465,9 @@ class TranslationVersion(VersionModel):
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        super(TranslationVersion, self).save(*args, **kwargs)
+    notification_sent = models.BooleanField(default=False)
+    
+    def update_changes(self):
         old_version = self.prev_version()
         new_captions = self.captions()
         captions_length = len(new_captions)
@@ -487,8 +487,8 @@ class TranslationVersion(VersionModel):
                         text_count_changed += 1
                 except KeyError:
                     text_count_changed += 1
-            self.text_change = text_count_changed / 1. / captions_length   
-        super(TranslationVersion, self).save()
+            self.text_change = text_count_changed / 1. / captions_length
+        self.save()        
     
     def language_display(self):
         return self.language.get_language_display()

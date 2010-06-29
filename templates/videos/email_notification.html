@@ -1,0 +1,35 @@
+{% if translation %}
+    {% url videos:translation_diffing version.pk old_version.pk as diffing_url %}
+{% else %}
+    {% url videos:diffing version.pk old_version.pk as diffing_url %}
+{% endif %}
+<p>
+    Dear {{ user.username }}, A transcription or translation you contributed to 
+    has been edited by {{ version.user.username }}. It would be great if you could  
+    review their changes for quality. Click here to see the latest version side 
+    by side with the <a href="http://{{ domain }}{{ diffing_url }}">
+    previous version</a>.
+</p>
+<p>
+    We've also included a rough summary of the changes below.  Thanks so much!<br/>
+
+    Sincerely,
+    The Universal Subtitles Community<br/><br/>
+    
+    To stop receiving these emails, go to your preferences page and uncheck
+    "receive notifications":
+    <a href="http://{{ domain }}{% url profiles:my_profile %}">profile</a>
+</p>
+<p>
+    ##SUMMARY OF CHANGES##<br/>
+    {{ version.text_change_display }} of the text was changed.<br/>  
+    {{ version.time_change_display }} of the timing was changed. 
+</p>
+<p>
+    Here is a list of text changes:<br/>
+
+</p>
+<p>
+    To view the current and previous versions side by side, follow this 
+    <a href="http://{{ domain }}{{ diffing_url }}">link</a>.
+</p>
