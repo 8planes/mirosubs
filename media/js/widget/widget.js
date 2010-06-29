@@ -156,7 +156,6 @@ mirosubs.widget.Widget.prototype.enterDocument = function() {
 };
 
 mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
-    console.log('dimensions known');
     this.getElement().style.width = 
         Math.round(this.videoPlayer_.getVideoSize().width) + 'px';
 };
@@ -295,7 +294,7 @@ mirosubs.widget.Widget.prototype.editTranslationConfirmed_ = function() {
 mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
     function(forSubtitling) 
 {
-    if (!goog.userAgent.GECKO)
+    if (mirosubs.DEBUG || !goog.userAgent.GECKO)
         return false;
     else {
         var url = mirosubs.siteURL() + '/onsite_widget/?';

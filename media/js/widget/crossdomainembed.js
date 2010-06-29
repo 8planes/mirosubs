@@ -25,12 +25,9 @@ mirosubs.widget.CrossDomainEmbed.embed =
 {
     mirosubs.siteConfig = siteConfig;
     if (widgetConfig['debug_js']) {
-        if (!goog.userAgent.GECKO) {
-            // gecko widget dialog opens on-site, due to kludge
-            var debugWindow = new goog.debug.FancyWindow('main');
-            debugWindow.setEnabled(true);
-            debugWindow.init();
-        }
+        var debugWindow = new goog.debug.FancyWindow('main');
+        debugWindow.setEnabled(true);
+        debugWindow.init();
         mirosubs.DEBUG = true;
     }
     var widget = new mirosubs.widget.Widget(widgetConfig);

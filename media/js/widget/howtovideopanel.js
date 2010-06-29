@@ -72,14 +72,13 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     this.contentElement_ = $d('div');
     var el = this.getElement();
     el.className = 'mirosubs-howtopanel';
-    el.appendChild($d('h2', null, 'How-To Video'));
     el.appendChild(this.contentElement_);
     this.skipVideosSpan_ = $d('span');
     el.appendChild($d('div', null, this.skipVideosSpan_,
                       goog.dom.createTextNode(' Skip these videos')));
     this.continueLink_ = 
         $d('a', 
-           {'className': 'mirosubs-smallButton', 
+           {'className': 'mirosubs-done', 
             'href': '#'}, 
            $d('span', null, 'Continue'))
     el.appendChild(this.continueLink_);

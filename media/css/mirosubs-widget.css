@@ -37,10 +37,11 @@ text-align: left;
 }
 
 .mirosubs-modal-widget-content {
-   border: 1px solid #000 !important;
-   background: #000 !important;
+   border: 1px solid #000;
+   background: #000;
    min-height: 700px;
    position: relative;
+   overflow: hidden;
 }
 
 
@@ -236,49 +237,46 @@ color: #fff !important;
 text-align: center !important;
 }
 
-.mirosubs-done{
-color: #333 !important;
-font-size: 16px !important;
-    -moz-border-radius: 3px !important;
-    -webkit-border-radius: 3px !important;
-border: 1px solid #fff !important;
-padding: 10px 3px 10px 8px !important;
-clear: both !important;
-margin: 15px 30px 20px !important;
-position: relative !important;
-text-align: center !important;
-text-decoration: none !important;
-    text-shadow: #fff 1px 1px 1px !important;
-display: block !important;
-background: #fff url("../images/gradient.png") right -2px repeat-x !important;
+.mirosubs-done {
+   color: #333;
+   font-size: 16px;
+   -moz-border-radius: 3px;
+   -webkit-border-radius: 3px;
+   border: 1px solid #fff;
+   padding: 10px 3px 10px 8px;
+   clear: both;
+   margin: 15px 30px 20px;
+   position: relative;
+   text-align: center;
+   text-decoration: none;
+   text-shadow: #fff 1px 1px 1px;
+   display: block;
+   background: #fff url("../images/gradient.png") right -2px repeat-x;
 }
 
-.mirosubs-done img{
-border: 0 !important;
-position: absolute !important;
-left: 30px !important;
-
+.mirosubs-done img {
+   border: 0;
+   position: absolute;
+   left: 30px;
 }
 
-
-.mirosubs-done span{
-padding-right: 19px !important;
-background: url("../images/sprite.png") right -236px no-repeat !important;
+.mirosubs-done span {
+   padding-right: 19px;
+   background: url("../images/sprite.png") right -236px no-repeat;
 }
 
-
-.mirosubs-done.left span{
-padding-left: 19px !important;
-background: url("../images/sprite.png") left -214px no-repeat !important;
+.mirosubs-done.left span {
+   padding-left: 19px;
+   background: url("../images/sprite.png") left -214px no-repeat;
 }
 
-.mirosubs-done:hover{
-background: #fff url("../images/gradient.png") right 32px repeat-x !important;
+.mirosubs-done:hover {
+   background: #fff url("../images/gradient.png") right 32px repeat-x;
 }
 
-.mirosubs-done:active{
-background: #fff url("../images/gradient.png") right -82px repeat-x !important;
-border-color: #000 !important;
+.mirosubs-done:active {
+   background: #fff url("../images/gradient.png") right -82px repeat-x;
+   border-color: #000;
 }
 
 .mirosubs-translateField{
@@ -1918,11 +1916,10 @@ a.mirosubs-openid span{
    position: absolute;
    top: 0;
    left: 0;
-border: 5px solid white;
    color: white;
    background-color: black;
-width: 830px;
-height: 690px;
+   width: 830px;
+   height: 730px;
 }
 
 
@@ -1933,9 +1930,14 @@ text-align: center;
 }
 
 .mirosubs-howtopanel .mirosubs-videoDiv{
-margin-bottom: 20px;
+   margin-top: 36px;
+   margin-bottom: 20px;
 }
 
+.mirosubs-howtopanel .mirosubs-done {
+   width: 180px;
+   margin: 10px auto;
+}
 
 a.mirosubs-smallButton{
 padding-right: 18px !important;
