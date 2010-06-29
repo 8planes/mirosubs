@@ -163,7 +163,7 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'mirosubs.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
