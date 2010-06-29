@@ -70,9 +70,9 @@ def widget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
-def base_widget_params(request):
+def base_widget_params(request, video_url=None):
     spaces = ' ' * 9
-    params = '{0}video_url: \'{1}\''.format(spaces, request.GET['video_url'])
+    params = '{0}video_url: \'{1}\''.format(spaces, video_url or request.GET.get('video_url'))
     if request.GET.get('null_widget', None) == 'true':
         params += ',\n{0}null_widget: true'.format(spaces)
     if request.GET.get('debug_js', None) == 'true':

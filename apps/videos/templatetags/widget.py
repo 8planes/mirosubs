@@ -25,13 +25,14 @@
 
 from django import template
 from django.template import RequestContext
+from apps.widget.views import base_widget_params
 
 register = template.Library()
 
 @register.inclusion_tag('videos/_widget.html', takes_context=True)
 def widget(context, video_url, div_id='widget_div'):
+    widget_params = base_widget_params(context['request'], video_url)
     return {
-        'video_url': video_url,
         'div_id': div_id,
-        'null_widget': context.get('null_widget')
+        'widget_params': widget_params
     }

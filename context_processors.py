@@ -24,13 +24,6 @@ def current_site(request):
         return { 'current_site': Site.objects.get_current() }
     except Site.DoesNotExist:
         return { 'current_site': '' }
-
-def null_widget(request):
-    null = request.GET.get('null')
-    if null == 'true':
-        return {'null_widget': True}
-    else:
-        return {'null_widget': False}
     
 def current_commit(request):
     return {'LAST_COMMIT_GUID': settings.LAST_COMMIT_GUID}
