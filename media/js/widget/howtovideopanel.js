@@ -113,6 +113,7 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
                              goog.ui.Component.EventType.CHANGE,
                              this.skipVideosCheckboxChanged_);
     this.getHandler().listen(this.continueLink_, 'click', this.continue_);
+    this.videoPlayer_.play();
 };
 
 mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
