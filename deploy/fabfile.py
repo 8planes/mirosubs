@@ -79,4 +79,5 @@ def update():
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
         run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
+        run('{0}/env/bin/python deploy/create_commit_file.py'.format(env.base_dir))
         run('touch deploy/unisubs.wsgi')
