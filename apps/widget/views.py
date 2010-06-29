@@ -71,20 +71,19 @@ def widget_demo(request):
                               context_instance=RequestContext(request))
 
 def base_widget_params(request, video_url=None):
-    spaces = ' ' * 9
-    params = '{0}video_url: \'{1}\''.format(spaces, video_url or request.GET.get('video_url'))
-    if request.GET.get('null_widget', None) == 'true':
-        params += ',\n{0}null_widget: true'.format(spaces)
-    if request.GET.get('debug_js', None) == 'true':
-        params += ',\n{0}debug_js: true'.format(spaces)
-    if request.GET.get('subtitle_immediately', None) == 'true':
-        params += ',\n{0}subtitle_immediately: true'.format(spaces)
-    if request.GET.get('translate_immediately', None) == 'true':
-        params += ',\n{0}translate_immediately: true'.format(spaces)
-    if request.GET.get('base_state', None) is not None:
-        params += ',\n{0}base_state: {1}'.format(
-            spaces, request.GET['base_state'])
-    return params
+    params = {}
+    params['video_url'] = video_url or request.GET.get('video_url')
+    if request.GET.get('null_widget') == 'true':   
+        params['null_widget'] = True
+    if request.GET.get('debug_js') == 'true':
+        params['debug_js'] = True
+    if request.GET.get('subtitle_immediately') == 'true':
+        params['subtitle_immediately'] = True
+    if request.GET.get('translate_immediately') == 'true':
+        params['translate_immediately'] = True    
+    if request.GET.get('base_state') is not None:
+        params['base_state'] = request.GET['base_state']
+    return json.dumps(params)[1:-1]
 
 def srt(request):
     video = models.Video.objects.get(video_id=request.GET['video_id'])
