@@ -30,6 +30,9 @@ mirosubs.HowToVideoPanel = function(videoChoice) {
         this.videoPlayer_ = videoChoice[1].createPlayer();
     else
         this.videoPlayer_ = videoChoice[2].createPlayer();
+    this.usingHtml5Video_ = 
+        mirosubs.video.supportsOgg() ||
+        mirosubs.video.supportsH264();
 };
 goog.inherits(mirosubs.HowToVideoPanel, goog.ui.Component);
 
@@ -56,6 +59,9 @@ mirosubs.HowToVideoPanel.VideoChoice = {
         new mirosubs.video.YoutubeVideoSource('w7jmT6o0Nk0')]
 };
 
+mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_ =
+    new goog.math.Size(720, 540);
+
 mirosubs.HowToVideoPanel.prototype.getContentElement = function() {
     return this.contentElement_;
 };
@@ -79,6 +85,19 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     el.appendChild(this.continueLink_);
     var vidPlayer = new goog.ui.Component();
     vidPlayer.addChild(this.videoPlayer_, true);
+    if (this.usingHtml5Video_) {
+        var viewportSize = goog.dom.getViewportSize();
+        var videoTop = 
+            Math.max(0, goog.style.getClientLeftTop(
+                this.videoPlayer_.getElement()).y);
+        var videoSize = mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
+        if (videoTop + videoSize.height > viewportSize.height - 60) {
+            var newVideoHeight = Math.max(270, viewportSize.height - videoTop - 60);
+            this.videoPlayer_.setVideoSize(
+                videoSize.width * newVideoHeight / videoSize.height,
+                newVideoHeight);
+        }
+    }
     this.addChild(vidPlayer, true);
 };
 

@@ -18,6 +18,9 @@
 
 goog.provide('mirosubs.video.Html5VideoSource');
 
+/**
+ * @constructor
+ */
 mirosubs.video.Html5VideoSource = function(videoURL) {
     this.videoURL_ = videoURL;
 };
