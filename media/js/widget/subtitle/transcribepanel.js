@@ -37,6 +37,7 @@ mirosubs.subtitle.TranscribePanel = function(captionSet, videoPlayer, serverMode
      * @private
      */
     this.keyHandler_ = null;
+    this.keyEventsSuspended_ = false;
 };
 goog.inherits(mirosubs.subtitle.TranscribePanel, goog.ui.Component);
 
@@ -61,6 +62,9 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
         this.videoPlayer_, this.captionSet_, false, true), true);
     // FIXME: hacky
     this.setRepeatVideoMode(true);
+};
+mirosubs.subtitle.TranscribePanel.prototype.suspendKeyEvents = function(suspended) {
+    this.keyEventsSuspended_ = suspended;
 };
 mirosubs.subtitle.TranscribePanel.prototype.getRightPanel = 
     function(serverModel) 
