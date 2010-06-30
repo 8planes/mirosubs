@@ -25,6 +25,7 @@ goog.provide('mirosubs.video.Html5VideoPlayer');
  */
 mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+
     this.videoSource_ = videoSource;
     this.videoElem_ = null;
 
@@ -56,7 +57,8 @@ mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(el) {
 };
 mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    if (mirosubs.video.supportsOgg()) {
+    if (mirosubs.video.supportsOgg() ||
+        mirosubs.video.supportsH264()) {
         var params = { 'autobuffer': 'true' };
         if (this.includeControls_)
             params['controls'] = 'true';
@@ -73,6 +75,7 @@ mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     }
 };
 mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
+    mirosubs.video.Html5VideoPlayer.superClass_.enterDocument.call(this);
     this.getHandler().
         listen(this.videoElem_, 'play', this.videoPlaying_).
         listen(this.videoElem_, 'pause', this.videoPaused_).
