@@ -150,12 +150,6 @@ mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
         this.togglePause_();
         event.preventDefault();
     }
-    if (event.keyCode == goog.events.KeyCodes.SPACE &&
-        (this.state_ == s.SYNC || this.state_ == s.REVIEW) &&
-        !this.currentSubtitlePanel_.currentlyEditingSubtitle()) {
-        this.togglePause_();
-        event.preventDefault();
-    }
 };
 mirosubs.subtitle.Dialog.prototype.handleBackKeyPress_ = function(event) {
     var s = mirosubs.subtitle.Dialog.State_;

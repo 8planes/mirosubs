@@ -125,6 +125,12 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
         event.preventDefault();
         this.downPressed_();
     }
+
+    if (event.keyCode == goog.events.KeyCodes.SPACE &&
+        !this.currentlyEditingSubtitle()) {
+        this.videoPlayer_.togglePause();
+        event.preventDefault();
+    }
 };
 mirosubs.subtitle.SyncPanel.prototype.downPressed_ = function() {
     if (this.videoPlayer_.isPlaying()) {
