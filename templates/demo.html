@@ -10,8 +10,11 @@
 
 {% endblock %}
 {% block main_content %}
+
+
+
 <h2 class="centered">Welcome to our alpha demo!</h2>
-<div style="width:550px;margin:auto;">
+<div style="text-align: center;">
   <p><strong>What's this?</strong> The video below is for 
     demonstration purposes &mdash; try clicking the 'Subtitle Me' button!</p> 
   <p>We're just getting started, so expect to see better cross-browser 
@@ -21,9 +24,7 @@
     <em>Note: Your subtitles will not be permanently saved 
       (even if you log in).</em>
   </p>
-  <div class="centered">
-    <div id="widget_div" class="mirosubs-widget" style="width: 480px; margin: auto"></div>
-  </div>
+    <div id="widget_div" class="mirosubs-widget"></div>
   <script language="JavaScript" type="text/javascript">
       var videoURL = mirosubs.video.supportsOgg() ? 
           "http://videos.mozilla.org/firefox/3.5/switch/switch.ogv" :
