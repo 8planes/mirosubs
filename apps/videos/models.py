@@ -27,6 +27,7 @@ from auth.models import CustomUser as User
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
+from django.utils.encoding import force_unicode
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
 VIDEO_TYPE_HTML5 = 'H'
@@ -96,7 +97,7 @@ class Video(models.Model):
                 url = 'http://gdata.youtube.com/feeds/api/videos/%s' % video.youtube_videoid
                 data = feedparser.parse(url)
                 try:
-                    video.youtube_name = data['entries'][0]['title']
+                    video.youtube_name = force_unicode(data['entries'][0]['title'])
                     video.save()
                 except DjangoUnicodeDecodeError: # FIXME: under what circumsntances will this happen?
                     pass
