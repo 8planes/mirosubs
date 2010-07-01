@@ -17,7 +17,8 @@ class Command(BaseCommand):
         for version in qs:
             version.notification_sent = True
             version.update_changes()  #item is saved in update_changes
-            self.send_letter_caption(version)
+            if version.text_change or version.time_change:
+                self.send_letter_caption(version)
         
         translation_qs = TranslationVersion.objects \
             .filter(notification_sent=False) \
@@ -28,7 +29,8 @@ class Command(BaseCommand):
             if version.version_no == 0:
                 self.send_letter_translation_start(version)
             else:
-                self.send_letter_translation(version)
+                if version.text_change or version.time_change:
+                    self.send_letter_translation(version)
     
     def _get_users(self, version):
         users = []
@@ -69,6 +71,19 @@ class Command(BaseCommand):
             if not translation_version.user == item.user and item.user.changes_notification \
                                                     and not item.user in users:
                 users.append(item.user)
+                
+                second_captions = dict([(c.caption_id, c) for c in item.captions()])
+                captions = []
+                for caption in translation_version.captions():
+                    try:
+                        scaption = second_captions[caption.caption_id]
+                    except KeyError:
+                        scaption = None
+                    changed = scaption and not caption.translation_text == scaption.translation_text 
+                    data = [caption, scaption, changed]
+                    captions.append(data)
+                
+                context['captions'] = captions        
                 context['user'] = item.user
                 context['old_version'] = item
                 send_templated_email(item.user.email, '', 'videos/email_notification.html',
@@ -89,5 +104,20 @@ class Command(BaseCommand):
                 users.append(item.user)
                 context['user'] = item.user
                 context['old_version'] = item
+                
+                second_captions = dict([(c.caption_id, c) for c in item.captions()])
+                captions = []
+                for caption in caption_version.captions():
+                    try:
+                        scaption = second_captions[caption.caption_id]
+                    except KeyError:
+                        scaption = None
+                        changed = True
+                    else:
+                        changed = not caption.caption_text == scaption.caption_text
+                    data = [caption, scaption, changed]
+                    captions.append(data)
+                context['captions'] = captions
+                        
                 send_templated_email(item.user.email, '', 'videos/email_notification.html',
                              context, fail_silently=not settings.DEBUG)

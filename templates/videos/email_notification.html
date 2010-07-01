@@ -25,10 +25,19 @@
     {{ version.text_change_display }} of the text was changed.<br/>  
     {{ version.time_change_display }} of the timing was changed. 
 </p>
-<p>
-    Here is a list of text changes:<br/>
-
-</p>
+{% if version.text_change %}
+    <div>
+        Here is a list of text changes:<br/>
+        {% for item in captions %}
+            {% if item.2 %}
+                <p>
+                    NEW: {{ item.0.text }}<br/>
+                    OLD: {{ item.1.text }}
+                </p>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
 <p>
     To view the current and previous versions side by side, follow this 
     <a href="http://{{ domain }}{{ diffing_url }}">link</a>.
