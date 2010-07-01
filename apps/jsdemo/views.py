@@ -19,6 +19,7 @@
 from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+import widget
 
 def relative_path(js_file):
     return "/site_media/js/%s" % js_file
