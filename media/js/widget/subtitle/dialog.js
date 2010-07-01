@@ -218,9 +218,11 @@ mirosubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
     this.getHandler().listenOnce(
         howToPanel, mirosubs.HowToVideoPanel.CONTINUE,
         function(e) {
-            that.displayingHowTo_ = false;
-            that.hideTemporaryPanel();
-            that.setState_(state);
+            goog.Timer.callOnce(function() {
+                that.displayingHowTo_ = false;
+                that.hideTemporaryPanel();
+                that.setState_(state);
+            });
         });
 };
 mirosubs.subtitle.Dialog.prototype.ctrlClicked_ = function() {

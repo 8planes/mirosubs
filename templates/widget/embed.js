@@ -70,7 +70,13 @@
     var $c = function(tag) { return document.createElement(tag); };
     var containingElement = $c('div');
     var styleElement = $c('style');
-    styleElement.innerHTML = innerStyle;
+    if ('textContent' in styleElement)
+        styleElement.textContent = innerStyle;
+    else {
+        // IE
+        styleElement.setAttribute("type", "text/css")
+        styleElement.styleSheet.cssText = innerStyle;
+    }
     containingElement.appendChild(styleElement);
 
     var widgetDiv = $c('div');

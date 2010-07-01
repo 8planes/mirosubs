@@ -301,6 +301,9 @@ mirosubs.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
         // This check ensures the ratio never take NaN value, which is possible when
         // the slider min & max are same numbers (i.e. 1).
         var ratio = (val == min && min == max) ? 0 : (val - min) / (max - min);
+
+        if (isNaN(ratio))
+            ratio = 0;
         
         if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
             var thumbHeight = this.thumb.offsetHeight;
