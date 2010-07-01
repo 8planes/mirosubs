@@ -63,6 +63,7 @@ urlpatterns = patterns(
                             app_name='profiles')),
     (r'auth/', include('auth.urls', namespace='auth',
                        app_name='auth')),
+    url(r'^search/$', 'videos.views.search', name="search"),
     url(r'^demo/$', 'videos.views.demo', name="demo"),
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'about.html'}),
@@ -88,3 +89,10 @@ if settings.DEBUG:
          {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
         (r'raw_template/(?P<template>.*)', 'django.views.generic.simple.direct_to_template'),
     )
+
+from django import http
+from django.template import RequestContext, loader
+
+def handler500(request, template_name='500.html'):
+    t = loader.get_template(template_name)
+    return http.HttpResponseServerError(t.render(RequestContext(request)))

@@ -24,18 +24,24 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from videos.models import Video
+from apps.auth.models import CustomUser as User
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
-
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
-
+class VideoTest(TestCase):
+    
+    def setUp(self):
+        self.user = User.objects.all()[0]
+        self.youtube_video = 'http://www.youtube.com/watch?v=pQ9qX8lcaBQ'
+        self.html5_video = 'http://mirrorblender.top-ix.org/peach/bigbuckbunny_movies/big_buck_bunny_1080p_stereo.ogg'
+        
+    def test_video_create(self):
+        self._create_video(self.youtube_video)
+        self._create_video(self.html5_video)
+        
+    def _create_video(self, video_url):
+        video, created = Video.get_or_create_for_url(video_url, self.user)
+        self.failUnless(video)
+        self.failUnless(created)
+        more_video, created = Video.get_or_create_for_url(video_url, self.user)
+        self.failIf(created)
+        self.failUnlessEqual(video, more_video)        

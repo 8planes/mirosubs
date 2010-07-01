@@ -30,6 +30,9 @@ mirosubs.HowToVideoPanel = function(videoChoice) {
         this.videoPlayer_ = videoChoice[1].createPlayer();
     else
         this.videoPlayer_ = videoChoice[2].createPlayer();
+    this.usingHtml5Video_ = 
+        mirosubs.video.supportsOgg() ||
+        mirosubs.video.supportsH264();
 };
 goog.inherits(mirosubs.HowToVideoPanel, goog.ui.Component);
 
@@ -56,6 +59,9 @@ mirosubs.HowToVideoPanel.VideoChoice = {
         new mirosubs.video.YoutubeVideoSource('w7jmT6o0Nk0')]
 };
 
+mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_ =
+    new goog.math.Size(720, 540);
+
 mirosubs.HowToVideoPanel.prototype.getContentElement = function() {
     return this.contentElement_;
 };
@@ -66,19 +72,31 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     this.contentElement_ = $d('div');
     var el = this.getElement();
     el.className = 'mirosubs-howtopanel';
-    el.appendChild($d('h2', null, 'How-To Video'));
     el.appendChild(this.contentElement_);
     this.skipVideosSpan_ = $d('span');
     el.appendChild($d('div', null, this.skipVideosSpan_,
                       goog.dom.createTextNode(' Skip these videos')));
     this.continueLink_ = 
         $d('a', 
-           {'className': 'mirosubs-howtopanel-continue', 
+           {'className': 'mirosubs-done', 
             'href': '#'}, 
-           'CONTINUE')
+           $d('span', null, 'Continue'))
     el.appendChild(this.continueLink_);
     var vidPlayer = new goog.ui.Component();
     vidPlayer.addChild(this.videoPlayer_, true);
+    if (this.usingHtml5Video_) {
+        var viewportSize = goog.dom.getViewportSize();
+        var videoTop = 
+            Math.max(0, goog.style.getClientLeftTop(
+                this.videoPlayer_.getElement()).y);
+        var videoSize = mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
+        if (videoTop + videoSize.height > viewportSize.height - 60) {
+            var newVideoHeight = Math.max(270, viewportSize.height - videoTop - 60);
+            this.videoPlayer_.setVideoSize(
+                videoSize.width * newVideoHeight / videoSize.height,
+                newVideoHeight);
+        }
+    }
     this.addChild(vidPlayer, true);
 };
 
@@ -90,10 +108,21 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
         this.skipVideosCheckbox_.setLabel(
             this.skipVideosCheckbox_.getElement().parentNode);
     }
+    this.getHandler().listen(this.skipVideosCheckbox_,
+                             goog.ui.Component.EventType.CHANGE,
+                             this.skipVideosCheckboxChanged_);
     this.getHandler().listen(this.continueLink_, 'click', this.continue_);
+    this.videoPlayer_.play();
 };
 
-mirosubs.HowToVideoPanel.prototype.continue_ = function() {
+mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
+    mirosubs.UserSettings.setBooleanValue(
+        mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO,
+        this.skipVideosCheckbox_.getChecked());
+};
+
+mirosubs.HowToVideoPanel.prototype.continue_ = function(e) {
+    e.preventDefault();
     this.dispatchEvent(mirosubs.HowToVideoPanel.CONTINUE);
 };
 

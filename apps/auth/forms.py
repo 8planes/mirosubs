@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from models import CustomUser as User
 from django import forms
 
 class CustomUserCreationForm(UserCreationForm):

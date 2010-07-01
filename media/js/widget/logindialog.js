@@ -88,22 +88,22 @@ mirosubs.LoginDialog.prototype.enterDocument = function() {
 mirosubs.LoginDialog.prototype.siteLoginClicked_ = function(e) {
     this.showLoading_();
     mirosubs.openLoginPopup(
-        mirosubs.NATIVE_LOGIN_URL_SUFFIX,
+        mirosubs.LoginPopupType.NATIVE,
         goog.bind(this.processCompleted_, this));
     e.preventDefault();
 };
 
 mirosubs.LoginDialog.prototype.clicked_ = function(e) {
     this.showLoading_();
-    var urlSuffix;
+    var type;
     if (e.target == this.loginLink_)
-        urlSuffix = mirosubs.NATIVE_LOGIN_URL_SUFFIX;
+        type = mirosubs.LoginPopupType.NATIVE;
     else if (e.target == this.twitterLink_)
-        urlSuffix = '/widget/twitter_login/';
+        type = mirosubs.LoginPopupType.TWITTER;
     else
-        urlSuffix = '/socialauth/openid/?next=/widget/close_window/';
+        type = mirosubs.LoginPopupType.OPENID;
     mirosubs.openLoginPopup(
-        urlSuffix, goog.bind(this.processCompleted_, this));
+        type, goog.bind(this.processCompleted_, this));
     e.preventDefault();
 };
 
@@ -128,10 +128,6 @@ mirosubs.LoginDialog.isCurrentlyShown = function() {
     return mirosubs.LoginDialog.currentDialog_ != null;
 };
 
-mirosubs.LoginDialog.createAccount = function() {
-    mirosubs.LoginDialog.loginAttemptInProgress_ = true;
-    mirosubs.LoginDialog.openLoginPopup_(mirosubs.NATIVE_LOGIN_URL_SUFFIX);
-};
 mirosubs.LoginDialog.logout = function() {
     mirosubs.Rpc.call('logout', {}, function(result) {
         mirosubs.currentUsername = null;

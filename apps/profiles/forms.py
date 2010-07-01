@@ -17,8 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from profiles.models import Profile
-from django.contrib.auth.models import User
+from auth.models import CustomUser as User
 from django.core.mail import EmailMessage
 
 class SendMessageForm(forms.Form):
@@ -26,11 +25,13 @@ class SendMessageForm(forms.Form):
     message = forms.CharField()
     user = forms.ModelChoiceField(User.objects)
     
-    def send(self):
+    def send(self, user):
         user = self.cleaned_data.get('user')
         email = self.cleaned_data.get('email')
         headers = {'Reply-To': email}
-        EmailMessage('', self.cleaned_data.get('message'), email, \
+        username = user.username if user.is_authenticated() else 'anonymous'
+        subject = 'Personal message from %s on universalsubtitles.org' % username
+        EmailMessage(subject, self.cleaned_data.get('message'), email, \
                      [user.email], headers=headers).send()
 
     def get_errors(self):
@@ -40,46 +41,50 @@ class SendMessageForm(forms.Form):
             output[key] = '/n'.join([force_unicode(i) for i in value])
         return output
                          
-class EditProfileForm(forms.ModelForm):
-    email = forms.EmailField(required=False)
+class EditUserForm(forms.ModelForm):
     current_password = forms.CharField(widget=forms.PasswordInput, required=False)
     new_password = forms.CharField(widget=forms.PasswordInput, required=False)
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
                                           required=False,
                                           label='Confirm new password:')
+
+    def __init__(self, *args, **kwargs):
+        super(EditUserForm, self).__init__(*args, **kwargs)
+        self.fields['email'].required = True
     
     class Meta:
-        model = Profile
-        exclude = ('user', 'valid_email')
-
+        model = User
+        fields = ('email', 'homepage', 'preferred_language', 'picture', 
+                  'changes_notification', 'biography')
+        
     def clean(self):
         current, new, verify = map(self.cleaned_data.get,
                     ('current_password', 'new_password', 'new_password_verify'))
-        if current and not self.instance.user.check_password(current):
+        if current and not self.instance.check_password(current):
             raise forms.ValidationError('Invalid password.')
         if new and new != verify:
             raise forms.ValidationError('The two passwords did not match.')
+        if not self.cleaned_data['picture']:
+            del self.cleaned_data['picture']
         return self.cleaned_data
     
     def clean_email(self):
         value = self.cleaned_data['email']
         if value:
-            user_class = self.instance.user.__class__
             try:
-                user_class.objects.get(email=value)
+                User.objects.exclude(pk=self.instance.pk).get(email=value)
                 raise forms.ValidationError('This email is used already.')
-            except user_class.DoesNotExist:
+            except User.DoesNotExist:
                 pass
         return value
     
     def save(self, commit=True):
         password = self.cleaned_data.get('new_password')
         email = self.cleaned_data.get('email')
-        print email
         if password:
-            self.instance.user.set_password(password)
+            self.instance.set_password(password)
         if email:
-            self.instance.user.email = email
-            self.instance.user.save()
-        return super(EditProfileForm, self).save(commit)
+            self.instance.email = email
+            self.instance.save()
+        return super(EditUserForm, self).save(commit)
         

@@ -15,7 +15,7 @@
         margin: -1px;
     }
     #feedback_success {
-        font-size: 1.2em;
+        padding: 10px 0px;
     }
 </style>
    
@@ -42,8 +42,12 @@
         </form>
     </div>
    
-    <div style="display: none" id="feedback_success">
+    <div style="display: none" class="wrapper" id="feedback_success">
         Thank you for your feedback.<br/>
+        If you would like to perform some additional testing,
+        please go to our <a href="http://litmus.pculture.org/run_tests.cgi">Litmus regression tests</a><br/>
+        For new testers, we have a <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">getting started guide</a>
+        <br/>
         <a href="#" id="send_more_feedback">Send more feedback.</a>
     </div>
     

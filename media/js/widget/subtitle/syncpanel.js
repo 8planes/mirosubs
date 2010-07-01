@@ -19,7 +19,7 @@
 goog.provide('mirosubs.subtitle.SyncPanel');
 
 /**
- *
+ * @constructor
  * @param {mirosubs.subtitle.EditableCaptionSet} subtitles The subtitles
  *     for the video, so far.
  * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
@@ -44,6 +44,7 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
     this.downSub_ = null;
     this.downPlayheadTime_ = -1;
     this.downHeld_ = false;
+    this.keyEventsSuspended_ = false;
 };
 goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
 
@@ -107,12 +108,15 @@ mirosubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
     ];
 
 };
+mirosubs.subtitle.SyncPanel.prototype.suspendKeyEvents = function(suspended) {
+    this.keyEventsSuspended_ = suspended;
+};
 mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
     function(event)
 {
     if (event.keyCode == goog.events.KeyCodes.DOWN) {
         if (event.keyEventType == goog.events.EventType.MOUSEDOWN &&
-            !this.currentlyEditingSubtitle())
+            !this.currentlyEditingSubtitle_())
             this.downPressed_();
         else if (event.keyEventType == goog.events.EventType.MOUSEUP &&
                 this.downHeld_)
@@ -120,10 +124,18 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
+    if (this.keyEventsSuspended_)
+        return;
     if (event.keyCode == goog.events.KeyCodes.DOWN &&
-        !this.currentlyEditingSubtitle()) {
+        !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
         this.downPressed_();
+    }
+
+    if (event.keyCode == goog.events.KeyCodes.SPACE &&
+        !this.currentlyEditingSubtitle_()) {
+        this.videoPlayer_.togglePause();
+        event.preventDefault();
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.downPressed_ = function() {
@@ -183,7 +195,7 @@ mirosubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
         this.videoPlayer_.setPlayheadTime(0);
     }
 };
-mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle = function() {
+mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
 mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(event) {

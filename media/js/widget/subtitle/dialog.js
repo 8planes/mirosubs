@@ -19,7 +19,7 @@
 goog.provide('mirosubs.subtitle.Dialog');
 
 /**
- *
+ * @constructor
  * @param {mirosubs.subtitle.ServerModel} serverModel
  * @param {Array.<Object.<string, *>>} existingCaptions existing captions in
  *     json object format.
@@ -49,6 +49,8 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.rightPanelListener_ = new goog.events.EventHandler(this);
     this.doneButtonEnabled_ = true;
     this.addingTranslations_ = false;
+
+    this.keyEventsSuspended_ = false;
 };
 goog.inherits(mirosubs.subtitle.Dialog, mirosubs.Dialog);
 
@@ -84,6 +86,8 @@ mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
 };
 mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.state_ = state;
+
+    this.suspendKeyEvents_(false);
 
     var nextSubPanel = this.makeCurrentStateSubtitlePanel_();
     var captionPanel = this.getCaptioningAreaInternal();
@@ -124,6 +128,11 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
         videoPlayer.pause();
     }
 };
+mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
+    this.keyEventsSuspended_ = suspended;
+    if (this.currentSubtitlePanel_)
+        this.currentSubtitlePanel_.suspendKeyEvents(suspended);
+};
 mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     this.saved_ = true;
     var sharePanel = new mirosubs.subtitle.SharePanel(
@@ -142,17 +151,13 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     }
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
+    if (this.keyEventsSuspended_)
+        return;
     var s = mirosubs.subtitle.Dialog.State_;
     if (event.keyCode == goog.events.KeyCodes.CTRL)
         this.ctrlClicked_();
     if (event.keyCode == goog.events.KeyCodes.TAB) {
         //TODO: this violates accessibility guidelines. Use another key instead of TAB!
-        this.togglePause_();
-        event.preventDefault();
-    }
-    if (event.keyCode == goog.events.KeyCodes.SPACE &&
-        (this.state_ == s.SYNC || this.state_ == s.REVIEW) &&
-        !this.currentSubtitlePanel_.currentlyEditingSubtitle()) {
         this.togglePause_();
         event.preventDefault();
     }
@@ -186,17 +191,16 @@ mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
         });
     }
     else {
-        if (false) {
-            // placeholder for determining if user has chosen to stop 
-            // seeing help videos
+        if (mirosubs.UserSettings.getBooleanValue(
+            mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO))
             this.setState_(this.nextState_());
-        }
         else
             this.showHowToForState_(this.nextState_());
     }
 };
 
 mirosubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
+    this.suspendKeyEvents_(true);
     this.getVideoPlayerInternal().pause();
     var s = mirosubs.subtitle.Dialog.State_;
     var vc = mirosubs.HowToVideoPanel.VideoChoice;
@@ -284,6 +288,18 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
     this.rightPanelListener_.dispose();
     this.captionSet_.dispose();
+};
+mirosubs.subtitle.Dialog.prototype.setVisible = function(visible) {
+    if (this.addingTranslations_) {
+        goog.Timer.callOnce(function() {
+            window.location = window.location.href.replace("subtitle_immediately", "translate_immediately");
+            mirosubs.returnURL = null;
+            mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
+        });
+    }
+    else {
+        mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
+    }
 };
 mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
     this.addingTranslations_ = true;

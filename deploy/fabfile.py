@@ -45,9 +45,29 @@ def set_permissions(home='/home/mirosubs'):
     with cd(home):
         sudo('chgrp www-data -R mirosubs/media/')
 
-def migrate():
+def syncdb():
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('python manage.py migrate')
+        run('{0}/env/bin/python manage.py syncdb --settings=unisubs-settings'.format(env.base_dir))
+
+def migrate(app_name=''):
+    with cd('{0}/mirosubs'.format(env.base_dir)):
+        run('{0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(env.base_dir, app_name))
+
+def migrate_fake(app_name):
+    """Unfortunately, one must do this when moving an app to South for the first time.
+    
+    See http://south.aeracode.org/docs/convertinganapp.html and
+    http://south.aeracode.org/ticket/430 for more details. Perhaps this will be changed 
+    in a subsequent version, but now we're stuck with this solution.
+    """
+    with cd('{0}/mirosubs'.format(env.base_dir)):
+        run('{0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs-settings'.format(env.base_dir, app_name))
+
+def update_closure():
+    pass
+
+def update_environment():
+    pass
 
 def update():
     """
@@ -59,22 +79,5 @@ def update():
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
         run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
+        run('{0}/env/bin/python deploy/create_commit_file.py'.format(env.base_dir))
         run('touch deploy/unisubs.wsgi')
-
-def user_update(username):
-    env.user = username
-    env.base_dir = '/home/{0}'.format(env.user)
-    this_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = os.path.join(this_dir, '..')
-    exclude_file = os.path.join(this_dir, 'rsync-exclude.txt')
-    local(("rsync -ave ssh {0} {1}@8planes.com:mirosubs "
-           "--exclude-from '{2}'").format(
-            base_dir, env.user, exclude_file))
-    env.host_string = '8planes.com'
-    with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
-        run('{0}/env/bin/python manage.py migrate'.format(env.base_dir))
-        env.warn_only = True
-        run("find . -name '*.pyc' -print0 | xargs -0 rm")
-        env.warn_only = False
-        run('touch deploy/{0}.wsgi'.format(env.user))

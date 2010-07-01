@@ -145,7 +145,19 @@ mirosubs.widget.Widget.prototype.setInitialVideoTabState_ =
 
 mirosubs.widget.Widget.prototype.enterDocument = function() {
     mirosubs.widget.Widget.superClass_.enterDocument.call(this);
+    if (this.videoPlayer_.areDimensionsKnown())
+        this.videoDimensionsKnown_();
+    else
+        this.getHandler().listen(
+            this.videoPlayer_,
+            mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
+            this.videoDimensionsKnown_);
     this.attachEvents_();
+};
+
+mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
+    this.getElement().style.width = 
+        Math.round(this.videoPlayer_.getVideoSize().width) + 'px';
 };
 
 mirosubs.widget.Widget.prototype.attachEvents_ = function() {
@@ -282,7 +294,7 @@ mirosubs.widget.Widget.prototype.editTranslationConfirmed_ = function() {
 mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
     function(forSubtitling) 
 {
-    if (!goog.userAgent.GECKO)
+    if (mirosubs.DEBUG || !goog.userAgent.GECKO)
         return false;
     else {
         var url = mirosubs.siteURL() + '/onsite_widget/?';

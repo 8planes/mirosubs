@@ -45,3 +45,8 @@ DATABASES = {
     }
 
 MEDIA_URL = "http://INSERT_SUBDOMAIN.universalsubtitles.org/site_media/"
+
+try:
+    from commit import LAST_COMMIT_GUID
+except ImportError:
+    LAST_COMMIT_GUID = ''

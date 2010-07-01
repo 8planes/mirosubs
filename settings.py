@@ -60,6 +60,7 @@ JS_CORE = ['mirosubs.js',
            'video/html5videosource.js',
            'video/youtubevideosource.js',
            'video/controlledvideoplayer.js',
+           'widget/usersettings.js',
            'widget/logindialog.js',
            'widget/videotab.js',
            'widget/howtovideopanel.js',
@@ -177,11 +178,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'context_processors.current_site',
-    'context_processors.null_widget',
+    'context_processors.current_commit',
     "django.contrib.messages.context_processors.messages",
 )
 
 INSTALLED_APPS = (
+    'auth',
     'django.contrib.auth',
     'socialauth',
     'openid_consumer',
@@ -194,7 +196,6 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'videos',
     'widget',
-    'auth',
     'south'
 )
 
@@ -209,11 +210,14 @@ FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
 
 AUTHENTICATION_BACKENDS = (
-   'django.contrib.auth.backends.ModelBackend',
+   'auth.backends.CustomUserBackend',
    'auth.backends.OpenIdBackend',
-   'socialauth.auth_backends.TwitterBackend',
-   'socialauth.auth_backends.FacebookBackend',
+   'auth.backends.TwitterBackend',
+   'auth.backends.FacebookBackend',
 )
+
+SKIP_SOUTH_TESTS = True
+SOUTH_TESTS_MIGRATE = False
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
@@ -234,3 +238,9 @@ FEEDBACK_RESPONSE_TEMPLATE = 'feedback_response.html'
 
 PROJECT_VERSION = '0.5'
 
+EDIT_END_THRESHOLD = 120
+
+try:
+    from commit import LAST_COMMIT_GUID
+except ImportError:
+    LAST_COMMIT_GUID = ''

@@ -62,6 +62,6 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ =
 mirosubs.subtitle.BottomFinishedPanel.prototype.askAFriendClicked_ =
     function(event)
 {
-    alert('stub: ask a friend clicked');
+    alert("Sorry.  We're still testing the widget, so we haven't enabled sharing features.  Please just email your friend a link for now.");
     event.preventDefault();
 };

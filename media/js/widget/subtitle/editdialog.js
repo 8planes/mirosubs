@@ -209,6 +209,18 @@ mirosubs.subtitle.EditDialog.prototype.disposeInternal = function() {
     this.rightPanelListener_.dispose();
     this.captionSet_.dispose();
 };
+mirosubs.subtitle.EditDialog.prototype.setVisible = function(visible) {
+    if (this.addingTranslations_) {
+        goog.Timer.callOnce(function() {
+            window.location = window.location.href.replace("subtitle_immediately", "translate_immediately");
+            mirosubs.returnURL = null;
+            mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
+        });
+    }
+    else {
+        mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
+    }
+};
 mirosubs.subtitle.EditDialog.prototype.addTranslationsAndClose = function() {
     this.addingTranslations_ = true;
     this.setVisible(false);

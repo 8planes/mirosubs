@@ -91,6 +91,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
             (this.chromeless_ ? 
              mirosubs.video.YoutubeVideoPlayer.SMALL_HEIGHT : 
              mirosubs.video.YoutubeVideoPlayer.REGULAR_HEIGHT) + '';
+        this.setDimensionsKnownInternal();
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
             videoDiv.id, this.width_, this.height_, "8",

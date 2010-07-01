@@ -25,6 +25,7 @@ goog.provide('mirosubs.video.Html5VideoPlayer');
  */
 mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+
     this.videoSource_ = videoSource;
     this.videoElem_ = null;
 
@@ -56,7 +57,8 @@ mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(el) {
 };
 mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    if (mirosubs.video.supportsOgg()) {
+    if (mirosubs.video.supportsOgg() ||
+        mirosubs.video.supportsH264()) {
         var params = { 'autobuffer': 'true' };
         if (this.includeControls_)
             params['controls'] = 'true';
@@ -66,22 +68,28 @@ mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
                    $d('source', {'src': this.videoSource_.getVideoURL()})));
     }
     else {
-        el.style.width = '400px';
-        el.style.height = '300px';
+        goog.style.setSize(el, 400, 300);
         el.style.lineHeight = '300px';
         el.innerHTML = "Sorry, your browser can't play HTML5/Ogg video. " +
             "<a href='http://getfirefox.com'>Get Firefox</a>.";
     }
 };
 mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
+    mirosubs.video.Html5VideoPlayer.superClass_.enterDocument.call(this);
     this.getHandler().
         listen(this.videoElem_, 'play', this.videoPlaying_).
         listen(this.videoElem_, 'pause', this.videoPaused_).
         listen(this.videoElem_, 'progress', this.videoProgressListener_).
+        listen(this.videoElem_, 'loadedmetadata', this.setDimensionsKnownInternal).
         listen(this.videoElem_, 'timeupdate',
                this.timeUpdateThrottle_.fire, 
                false, this.timeUpdateThrottle_);
 };
+
+mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {
+    goog.style.setSize(this.videoElem_, width, height);
+};
+
 mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
     this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
 };

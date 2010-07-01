@@ -1,0 +1,16 @@
+Dear {{ user.username }},<br/> 
+
+Great news!  {{ version.user.username }} has just started a {{ language.get_language_display }} 
+translation of your video{% if video.youtube_name %} {{ video.youtube_name }}{% endif %}.  
+<br/>
+You can review the translation and thank them for their contribution on this
+<a href="http://{{ domain }}{% url videos:last_translation_revision video.video_id language.language %}">page</a> 
+<br/>
+Thanks for your great work,
+<br/>
+Sincerely,
+The Universal Subtitles Community
+<br/>
+To stop receiving these emails, go to your preferences page and uncheck
+"receive notifications":
+<a href="http://{{ domain }}{{ diffing_url }}">link</a>.
