@@ -30,17 +30,30 @@ class Command(BaseCommand):
             else:
                 self.send_letter_translation(version)
     
+    def _get_users(self, version):
+        users = []
+        owner = version.language.video.owner
+        if not owner == version.user and owner.changes_notification:
+            users.append(owner)
+        qs = TranslationVersion.objects.filter(language=version.language) \
+            .filter(version_no__lt=version.version_no).order_by('-version_no')
+        for item in qs:
+            user = item.user
+            if not user == version.user and not user in users and user.changes_notification:
+                users.append(user)
+        return users
+     
     def send_letter_translation_start(self, translation_version):
         video = translation_version.language.video
-        if video.owner and not video.owner == translation_version.user and video.owner.changes_notification:
+        for user in self._get_users(translation_version):
             context = {
                 'version': translation_version,
                 'domain': self.domain,
-                'user': video.owner,
+                'user': user,
                 'language': translation_version.language,
                 'video': video
             }
-            send_templated_email(video.owner.email, '', 'videos/email_start_notification.html',
+            send_templated_email(user.email, '', 'videos/email_start_notification.html',
                          context, fail_silently=not settings.DEBUG)
             
     def send_letter_translation(self, translation_version):
