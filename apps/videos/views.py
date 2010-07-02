@@ -43,7 +43,7 @@ def create(request):
             if created:
                 # TODO: log to activity feed
                 pass
-            return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
+            return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
                     'videos:video', kwargs={'video_id':video.video_id})))            
             #if not video.owner or video.owner == request.user or video.allow_community_edits:
             #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(

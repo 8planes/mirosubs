@@ -24,7 +24,8 @@ JS_USE_COMPILED = True
 
 DEBUG = False
 ADMINS = (
-  ('Adam Duston', 'adam@8planes.com')
+  ('Adam Duston', 'adam@8planes.com'),
+  ('Dmitriy', 'alerion.um@gmail.com')
 )
 
 SITE_ID = INSERT_SITE_ID_AS_NUMBER
