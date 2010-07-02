@@ -31,7 +31,10 @@ register = template.Library()
 
 @register.inclusion_tag('videos/_widget.html', takes_context=True)
 def widget(context, video_url, div_id='widget_div'):
-    widget_params = base_widget_params(context['request'], video_url)
+    extra_params = {}
+    if context['request'].GET.get('autosub') == 'true':
+        extra_params['subtitle_immediately'] = True
+    widget_params = base_widget_params(context['request'], video_url, extra_params)
     return {
         'div_id': div_id,
         'widget_params': widget_params

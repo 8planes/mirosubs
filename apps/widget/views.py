@@ -70,7 +70,7 @@ def widget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
-def base_widget_params(request, video_url=None):
+def base_widget_params(request, video_url=None, extra_params={}):
     params = {}
     params['video_url'] = video_url or request.GET.get('video_url')
     if request.GET.get('null_widget') == 'true':   
@@ -83,6 +83,7 @@ def base_widget_params(request, video_url=None):
         params['translate_immediately'] = True    
     if request.GET.get('base_state') is not None:
         params['base_state'] = request.GET['base_state']
+    params.update(extra_params)
     return json.dumps(params)[1:-1]
 
 def srt(request):
