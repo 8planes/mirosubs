@@ -93,7 +93,6 @@
     <div class="clearboth">&nbsp;</div>
 
 
-    <h2 class="floatleft margin-top">Recent Revisions <a class="whats_this" href="{% url faq_page %}#revisions">(What's This?)</a></h2>
     
     <ul class="video_tabs">
       <li><a href="#trascript-tab">Languages (4)</a></li>
@@ -108,20 +107,51 @@
 
         {% block table %}
         <ul class="table_head">
-          <li class="table_user">{% ordered_column "user" "User" %}</li>
-          <li class="table_text">{% ordered_column "text" "Text" %}</li>
+          <li class="td_user">{% ordered_column "user" "User" %}</li>
+          <li class="td_time">{% ordered_column "text" "Happened" %}</li>
         </ul>
-       
-       <ul class="table_body"> 
-              <li>
-                <ul>
-                  <li class="table_user">
-                      <a href="#">morganknutson Rolled back Spanish to an earlier version</a>
-                  </li>
-                  <li class="table_text">22 hours ago</li>
-                </ul>
-              </li>    
+        
+        <ul class="table_body"> 
+          <li>
+              <span class="td_user rolled_back"><a href="#">morganknutson</a> Rolled back <a href="#">Language</a> to an earlier version <a href="#" class="view_revision">View</a></span>
+              <span class="td_time">22 hours ago</span>
+          </li>
+    
+          <li class="table_user">
+              <span class="td_user thumb_up"><a href="#">Username</a> gave <a href="#">Language</a> a thumbs up</span>
+              <span class="td_time">1 Day Ago</span>
+          </li>       
+    
+          <li class="table_user">
+              <span class="td_user thumb_down"><a href="#">Username</a> gave <a href="#">Language</a> a thumbs down</span>
+              <span class="td_time">2 Days Ago</span>
+          </li>      
+        
+          <li class="table_user">
+              <span class="td_user commented"><a href="#">Username</a> commented on this Video</span>
+              <span class="td_time">1 Week Ago</span>
+          </li>   
+
+
+          <li class="table_user">
+              <span class="td_user language_rating"><a href="#">Language</a> has a B+ rating</span>
+              <span class="td_time">2 Weeks Ago</span>
+          </li>   
+
+          <li class="table_user">
+              <span class="td_user language_begins"><a href="#">Username</a> started <a href="#">Language</a> subtitles</span>
+              <span class="td_time">1 Month Ago</span>
+          </li>   
+
+          <li class="table_user">
+              <span class="td_user video_begins"><a href="#">Username</a> added this video</span>
+              <span class="td_time">2 Months Ago</span>
+          </li>   
+        
         </ul> 
+        
+
+
            <div style="clear: both"></div>
            {% endblock %}
        {% else %}
@@ -131,40 +161,19 @@ Either no subtitles have been entered, or they were deleted.</div>
    </div>
    
    <div style="display: none" id="comments-tab" class="tab">
-
-        <ul class="user_approval">
-            <li class="thumb_up">
-                <span class="thumb"></span>
-                <a href="#">Username</a>
-                gave this translation a thumbs up
-            </li>
-            <li class="thumb_down">
-                <span class="thumb"></span>
-                <a href="#">Username</a>
-                gave this translation a thumbs down
-            </li>
-            <li class="thumb_up">
-                <span class="thumb"></span>
-                <a href="#">Username</a>
-                gave this translation a thumbs up
-            </li>
-            <li class="thumb_down">
-                <span class="thumb"></span>
-                <a href="#">Username</a>
-                gave this translation a thumbs down
-            </li>
-        </ul>
         <ul class="table_body comments">
             {% for item in revision_list %}
-            <li>
-                <ul>
+ 
                     <li class="table_comment">
-                        <span class="user_thumb"></span>
+                        <div class="table_user_deets">                         
+                          <span class="user_thumb"></span>
+                         
+                          <a href="#">UserName</a>
+                          <span class="comment_date">45 days ago</span>
+                        </div>
                         <span class="comment_text">
-                            <div class="table_user_deets">
-                                <a href="#">UserName</a>
-                                <span class="comment_date">45 days ago</span>
-                            </div>
+                            <a href="#" class="small_button floatright"><span>Reply</span></a>
+
                             <p>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
                             </p>
@@ -175,12 +184,127 @@ Either no subtitles have been entered, or they were deleted.</div>
                                 Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
                             </p>
                         </span>
+                            <ul>
+                              <li class="table_comment">
+                                <div class="table_user_deets">                         
+                                  <span class="user_thumb"></span>
+                                 
+                                  <a href="#">UserName</a>
+                                  <span class="comment_date">45 days ago</span>
+                                </div>
+                                <span class="comment_text">
+                                                              <a href="#" class="small_button floatright"><span>Reply</span></a>
+
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
+                                    </p>
+                                    <p>
+                                        Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
+                                    </p>
+                                    <p>
+                                        Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
+                                    </p>
+                                </span>
+                                <ul>
+                                  <li class="table_comment">
+                                    <div class="table_user_deets">                         
+                                      <span class="user_thumb"></span>
+                                     
+                                      <a href="#">UserName</a>
+                                      <span class="comment_date">45 days ago</span>
+                                    </div>
+                                    <span class="comment_text">
+                                                                  <a href="#" class="small_button floatright"><span>Reply</span></a>
+
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
+                                        </p>
+                                        <p>
+                                            Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
+                                        </p>
+                                        <p>
+                                            Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
+                                        </p>
+                                    </span>
+
+                                      <ul>
+                                        <li class="table_comment">
+                                          <div class="table_user_deets">                         
+                                            <span class="user_thumb"></span>
+                                           
+                                            <a href="#">UserName</a>
+                                            <span class="comment_date">45 days ago</span>
+                                          </div>
+                                          <span class="comment_text">
+                                                                        <a href="#" class="small_button floatright"><span>Reply</span></a>
+
+                                              <p>
+                                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
+                                              </p>
+                                              <p>
+                                                  Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
+                                              </p>
+                                              <p>
+                                                  Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
+                                              </p>
+                                          </span>
+
+
+                                            <ul>
+                                              <li class="table_comment">
+                                                <div class="table_user_deets">                         
+                                                  <span class="user_thumb"></span>
+                                                 
+                                                  <a href="#">UserName</a>
+                                                  <span class="comment_date">45 days ago</span>
+                                                </div>
+                                                <span class="comment_text">
+                                                                              <a href="#" class="small_button floatright"><span>Reply</span></a>
+
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
+                                                    </p>
+                                                    <p>
+                                                        Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
+                                                    </p>
+                                                    <p>
+                                                        Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
+                                                    </p>
+                                                </span>
+                                               </li>
+                                            </ul>
+
+
+                                         </li>
+                                      </ul>
+
+                                   </li>
+                                </ul>
+                              </li>
+                              <li class="table_comment">
+                                <div class="table_user_deets">                         
+                                  <span class="user_thumb"></span>
+                                 
+                                  <a href="#">UserName</a>
+                                  <span class="comment_date">45 days ago</span>
+                                </div>
+                                <span class="comment_text">
+                                  
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
+                                    </p>
+                                    <p>
+                                        Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
+                                    </p>
+                                    <p>
+                                        Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
+                                    </p>
+                                </span>
+                              </li>
+                            </ul>
                     </li>
-                    <li class="table_thumbs_up">
-                        <span class="thumbs_up"></span>
-                    </li>
-                </ul>
-              </li>    
+ 
+ 
         {% endfor %}
        </ul> 
        <div style="clear: both"></div>     
@@ -197,12 +321,39 @@ Either no subtitles have been entered, or they were deleted.</div>
         <ul class="table_body"> 
             <li>
               <ul>
-                <li class="table_language">Japanese</li>
+                <li class="table_language">English</li>
                 <li class="table_rating">A+</li>
-                <li class="table_done"><span class="progress"><span class="completion 50_percent"></span></span></li>
+                <li class="table_done"><span class="progress"><span class="completion ten_percent red"></span></span></li>
               </ul>
             </li>
-              
+            <li>
+              <ul>
+                <li class="table_language">Hebrew</li>
+                <li class="table_rating">A+</li>
+                <li class="table_done"><span class="progress"><span class="completion twenty_percent red"></span></span></li>
+              </ul>
+            </li>
+            <li>
+              <ul>
+                <li class="table_language">Korean</li>
+                <li class="table_rating">A+</li>
+                <li class="table_done"><span class="progress"><span class="completion thirty_percent red"></span></span></li>
+              </ul>
+            </li>
+            <li>
+              <ul>
+                <li class="table_language">Japanese</li>
+                <li class="table_rating">A+</li>
+                <li class="table_done"><span class="progress"><span class="completion fourty_percent yellow"></span></span></li>
+              </ul>
+            </li>
+            <li>
+              <ul>
+                <li class="table_language">Dutch</li>
+                <li class="table_rating">A+</li>
+                <li class="table_done"><span class="progress"><span class="completion fifty_percent green"></span></span></li>
+              </ul>
+            </li>              
 
        </ul> 
 

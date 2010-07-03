@@ -40,6 +40,7 @@ line-height: 1.5em;
 /////////////////////////////////////////////*/
 
 
+
 .alpha{
 background: url(../images/alpha.png) 130px 0px no-repeat;
 }
@@ -1482,11 +1483,44 @@ padding-left: 20px !important;
 border-right: 1px solid #ddd;
 }
 
-li.table_user{
-width: 859px;
+.td_user{
+width: 778px;
 padding-left: 20px !important;
 border-right: 1px solid #ddd;
+float: left;
+}
 
+span.td_user{
+padding: 10px 0 10px 45px !important;
+width: 753px;
+}
+
+.rolled_back{
+background: url(../images/history_icons.png) 20px 12px no-repeat;
+}
+
+.thumb_up{
+background: url(../images/history_icons.png) 20px -23px no-repeat;
+}
+
+.thumb_down{
+background: url(../images/history_icons.png) 20px -59px no-repeat;
+}
+
+.commented{
+background: url(../images/history_icons.png) 20px -96px no-repeat;
+}
+
+.language_rating{
+background: url(../images/history_icons.png) 20px -132px no-repeat;
+}
+
+.language_begins{
+background: url(../images/history_icons.png) 20px -168px no-repeat;
+}
+
+.video_begins{
+background: url(../images/history_icons.png) 20px -204px no-repeat;
 }
 
 li.table_note{
@@ -1496,12 +1530,18 @@ border-right: 1px solid #ddd;
 
 }
 
-li.table_time{
-width: 59px;
-border-right: 1px solid #ddd;
+.td_time{
+width: 159px;
 padding-left: 20px !important;
 font-weight: bold;
+float: left;
 }
+
+
+span.td_time{
+padding: 10px 0 10px 20px !important;
+}
+
 
 li.table_text{
 width: 58px;
@@ -1584,7 +1624,7 @@ margin: 20px 0 0 !important;
 
 
 ul.table_body.comments{
-width: 560px;
+width: 978px;
 clear: left;
 }
 
@@ -1596,42 +1636,79 @@ padding: 20px !important;
 }
 
 
-.table_body ul li.table_comment{
-width: 520px;
+.table_body li.table_comment{
+width: 938px;
 padding: 20px !important;
-float: left;
+float: right;
 }
 
-.table_body ul li.table_comment .comment_text{
-width: 360px;
+.table_body li.table_comment ul{
+margin: 0 !important;
+padding: 0 !important;
+
+}
+
+.table_body li.table_comment li.table_comment{
+width: 838px;
+padding-left: 100px !important;
+border-left: 1px solid #ddd;
+padding-right: 0px !important;
+}
+
+.table_body li.table_comment li.table_comment li.table_comment{
+width: 738px;
+}
+.table_body li.table_comment li.table_comment li.table_comment li.table_comment{
+width: 638px;
+}
+
+.table_body li.table_comment li.table_comment li.table_comment li.table_comment li.table_comment{
+width: 538px;
+}
+
+.table_body li.table_comment li.table_comment li.table_comment li.table_comment li.table_comment li.table_comment{
+width: 438px;
+}
+
+.table_body li.table_comment li.table_comment li.table_comment li.table_comment li.table_comment li.table_comment li.table_comment{
+width: 338px;
+}
+
+
+.table_body li.table_comment .comment_text{
 padding: 0;
 margin: 0;
-float: left;
-line-height: 1.6em;
 }
 
-.table_body ul li.table_comment .comment_text p{
+.table_body li.table_comment .comment_text p{
 padding: 0;
 margin: 0 0 10px;
-line-height: 1.6em;
+line-height: 1.7em !important; 
 }
 
 
 .table_user_deets{
-
+float: right;
 margin-bottom: 10px;
+width: 100px;
+margin-left: 30px;
 }
 
 
 
 
-.table_user_deets a{font-size: 14px;
+.table_user_deets a{
+font-size: 13px;
+margin: 10px 0 5px;
+float: left;
+width: 100px;
 padding-right: 10px;
+display: block;
 }
 
 
 
-.table_body ul li.table_comment .user_thumb{
+.table_body li.table_comment .user_thumb{
 margin-right: 25px;
 }
 
@@ -1640,7 +1717,8 @@ margin-right: 25px;
 height: 100px;
 width: 100px;
 float: left;
-border: 1px solid;
+background: url(../images/default_thumb.png) 0 0px repeat-x;
+
 }
 
 .progress{
@@ -1655,12 +1733,50 @@ display: block;
 
 
 .progress .completion{
-width: 150px;
 height: 13px;
 display: block;
 -moz-border-radius: 15px;  
-background: green url(../images/gradient.png) 0 0px repeat-x;
+background: #d0e9ed url(../images/gradient.png) 0 0px repeat-x;
 -webkit-border-radius: 15px;
+}
+
+
+
+
+.progress .completion.ten_percent{
+width: 30px !important;
+}
+
+
+.progress .completion.twenty_percent{
+width: 60px !important;
+}
+
+.progress .completion.thirty_percent{
+width: 120px !important;
+}
+
+.progress .completion.fourty_percent{
+width: 240px !important;
+}
+
+
+.progress .completion.fifty_percent{
+width: 300px !important;
+}
+
+
+
+.progress .completion.red{
+background: #cc3335 url(../images/gradient.png) 0 0px repeat-x;
+}
+
+.progress .completion.yellow{
+background: #ffff66 url(../images/gradient.png) 0 0px repeat-x;
+}
+
+.progress .completion.green{
+background: #33cc00 url(../images/gradient.png) 0 0px repeat-x;
 }
 
 
@@ -1936,6 +2052,7 @@ clear: both;
 float: left;
 margin: 30px 0 0;
 padding: 0;
+
 }
 
 
@@ -2137,7 +2254,9 @@ padding: 5px 10px;
 }
 
 
-
-
+.view_revision{
+float: right;
+margin-right: 20px;
+}
 
 
