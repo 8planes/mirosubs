@@ -67,7 +67,9 @@ def update_closure():
     pass
 
 def update_environment():
-    pass
+    with cd('{0}/mirosubs/deploy'.format(env.base_dir)):
+        run('export PIP_REQUIRE_VIRTUALENV=true')
+        run('{0}/env/bin/pip install -r requirements.txt'.format(env.base_dir))
 
 def update():
     """

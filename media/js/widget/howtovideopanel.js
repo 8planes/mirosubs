@@ -126,8 +126,11 @@ mirosubs.HowToVideoPanel.prototype.continue_ = function(e) {
     this.dispatchEvent(mirosubs.HowToVideoPanel.CONTINUE);
 };
 
-mirosubs.HowToVideoPanel.prototype.disposeInternal = function() {
-    mirosubs.HowToVideoPanel.superClass_.disposeInternal.call(this);
+mirosubs.HowToVideoPanel.prototype.stopVideo = function() {
     this.videoPlayer_.pause();
     this.videoPlayer_.dispose();
+};
+
+mirosubs.HowToVideoPanel.prototype.disposeInternal = function() {
+    mirosubs.HowToVideoPanel.superClass_.disposeInternal.call(this);
 };

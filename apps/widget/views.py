@@ -45,8 +45,7 @@ def onsite_widget(request):
     Temporary kludge for http://bugzilla.pculture.org/show_bug.cgi?id=13694"""
     context = widget.add_onsite_js_files({})
     spaces = ' ' * 9
-    params = base_widget_params(request)
-    params += ',\n{0}returnURL: \'{1}\''.format(spaces, request.GET['return_url'])
+    params = base_widget_params(request, extra_params={'returnURL': request.GET['return_url']})
     context['widget_params'] = params
     return render_to_response('widget/onsite_widget.html',
                               context,
@@ -70,9 +69,9 @@ def widget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
-def base_widget_params(request, video_url=None):
+def base_widget_params(request, extra_params={}):
     params = {}
-    params['video_url'] = video_url or request.GET.get('video_url')
+    params['video_url'] = request.GET.get('video_url')
     if request.GET.get('null_widget') == 'true':   
         params['null_widget'] = True
     if request.GET.get('debug_js') == 'true':
@@ -83,6 +82,7 @@ def base_widget_params(request, video_url=None):
         params['translate_immediately'] = True    
     if request.GET.get('base_state') is not None:
         params['base_state'] = request.GET['base_state']
+    params.update(extra_params)
     return json.dumps(params)[1:-1]
 
 def srt(request):

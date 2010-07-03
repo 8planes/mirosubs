@@ -30,6 +30,8 @@ def js_dependencies():
     return [relative_path(js_file) for js_file in js_files]
 
 def jsdemo(request, file_name):
+    if file_name == 'raise_exception':
+        raise Exception('gratuitous exception')
     return render_to_response(
         'jsdemo/{0}.html'.format(file_name), 
         widget.add_js_files({}, False, js_dependencies()),

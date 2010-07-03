@@ -29,9 +29,8 @@ from apps.widget.views import base_widget_params
 
 register = template.Library()
 
-@register.inclusion_tag('videos/_widget.html', takes_context=True)
-def widget(context, video_url, div_id='widget_div'):
-    widget_params = base_widget_params(context['request'], video_url)
+@register.inclusion_tag('videos/_widget.html')
+def widget(widget_params, div_id='widget_div'):
     return {
         'div_id': div_id,
         'widget_params': widget_params

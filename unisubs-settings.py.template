@@ -24,14 +24,15 @@ JS_USE_COMPILED = True
 
 DEBUG = False
 ADMINS = (
-  ('Adam Duston', 'adam@8planes.com')
+  ('Adam Duston', 'adam@8planes.com'),
+  ('Dmitriy', 'alerion.um@gmail.com')
 )
 
 SITE_ID = INSERT_SITE_ID_AS_NUMBER
 SITE_NAME = 'INSERT SITE NAME'
 
 TWITTER_CONSUMER_KEY = 'INSERT TWITTER CONSUMER KEY'
-TWITTER_CONSUMER_PRIVATE = 'INSERT TWITTER PRIVATE KEY'
+TWITTER_CONSUMER_SECRET = 'INSERT TWITTER PRIVATE KEY'
 
 DATABASES = {
     'default': {

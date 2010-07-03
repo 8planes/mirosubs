@@ -31,6 +31,7 @@ import simplejson as json
 from videos.utils import get_pager
 from django.contrib import messages
 from django.db.models import Q
+from widget.views import base_widget_params
 
 def create(request):
     if request.method == 'POST':
@@ -42,7 +43,7 @@ def create(request):
             if created:
                 # TODO: log to activity feed
                 pass
-            return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
+            return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
                     'videos:video', kwargs={'video_id':video.video_id})))            
             #if not video.owner or video.owner == request.user or video.allow_community_edits:
             #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
@@ -65,7 +66,9 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set.all()
-    
+    context['widget_params'] = base_widget_params(request, {
+                                'video_url': video.get_video_url()
+                            })
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
@@ -167,7 +170,9 @@ def history(request, video_id):
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
     context['last_version'] = video.captions()
-    
+    context['widget_params'] = base_widget_params(request, {
+                                'video_url': video.get_video_url()
+                            })    
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
@@ -200,7 +205,9 @@ def translation_history(request, video_id, lang):
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
     context['last_version'] = video.translations(lang)
-    
+    context['widget_params'] = base_widget_params(request, {
+                                'video_url': video.get_video_url()
+                            })    
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
@@ -215,7 +222,9 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     context['version'] = version
     context['next_version'] = version.next_version()
     context['prev_version'] = version.prev_version()
-    
+    context['widget_params'] = base_widget_params(request, {
+                                'video_url': video.get_video_url()
+                            })
     if cls == TranslationVersion:
         tpl = 'videos/translation_revision.html'
         context['latest_version'] = version.language.translations()
@@ -233,7 +242,9 @@ def last_revision(request, video_id):
     context['video'] = video
     context['version'] = video.captions()
     context['translations'] = video.translationlanguage_set.all()
-    
+    context['widget_params'] = base_widget_params(request, {
+                                'video_url': video.get_video_url()
+                            })      
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
 
@@ -246,7 +257,9 @@ def last_translation_revision(request, video_id, language_code):
     context['version'] = video.translations(language_code)
     context['language'] = language
     context['translations'] = video.translationlanguage_set.exclude(pk=language.pk)
-    
+    context['widget_params'] = base_widget_params(request, {
+                                'video_url': video.get_video_url()
+                            })      
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
     
@@ -297,6 +310,10 @@ def diffing(request, first_pk, second_pk):
     context['is_writelocked'] = video.is_writelocked
     context['history_link'] = reverse('videos:history', args=[video.video_id])
     context['latest_version'] = video.captions()
+    context['widget1_params'] = base_widget_params(request, {
+                                    'video_url': video.get_video_url()
+                                })
+    context['widget2_params'] = context['widget1_params']
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
 
@@ -328,6 +345,10 @@ def translation_diffing(request, first_pk, second_pk):
     context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language])
     context['is_writelocked'] = language.is_writelocked
     context['latest_version'] = language.translations()
+    context['widget1_params'] = base_widget_params(request, {
+                                    'video_url': video.get_video_url()
+                                })
+    context['widget2_params'] = context['widget1_params']    
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 
