@@ -26,11 +26,10 @@ text-align: left;
    font-size: 12px !important;
    color: #000 !important;
    line-height: 16px !important;
-   -moz-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
+   -moz-box-shadow: 0px 3px 10px rgba(0,0,0,9) !important;
    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
    -moz-border-radius: 5px !important;
    -webkit-border-radius: 5px !important;
-   border: 1px solid #000 !important;
    padding: 10px !important;
    background: #fff !important;
    position: absolute !important;
@@ -38,8 +37,10 @@ text-align: left;
 
 .mirosubs-modal-widget-content {
    border: 1px solid #000;
+border-top: none;
+border-right: none !important;
    background: #000;
-   min-height: 700px;
+   min-height: 500px;
    position: relative;
    overflow: hidden;
 }
@@ -106,7 +107,7 @@ text-shadow:
 }
 
 .mirosubs-modal-login-title-close, .mirosubs-modal-widget-title-close {
-    background: url("../images/sprite.png") 0 -256px no-repeat !important;
+    background: url("/site_media/images/sprite.png") 0 -256px no-repeat !important;
     position: absolute !important;
     top: -17px !important;
     right: -17px !important;
@@ -146,11 +147,103 @@ font-size: 15px !important;
 
 	}
 
+
+.mirosubs-modal-widget-transcribe .mirosubs-right{
+width: 440px !important;
+padding: 0px 0px !important;
+float: left !important;
+height: 667px;
+color: #fff;
+background: url("/site_media/images/widget_right_bg.gif") 0 0 repeat-y !important;
+border: 0;	
+}
+
+
 .mirosubs-right{
-	width: 380px !important;
-	padding: 20px 30px !important;
-	float: left !important;
-	}
+width: 440px !important;
+padding: 0px 0px !important;
+float: left !important;
+height: 776px;
+color: #fff;
+background: url("/site_media/images/widget_right_bg.gif") 0 0 repeat-y !important;
+border: 0;	
+}
+
+
+.mirosubs-help-heading{
+padding-top: 16px;
+background: #fff url("/site_media/images/gradient_light.png") right 0px repeat-x;
+height: 30px;
+margin: 0 -1px 28px 0px;
+padding-left: 20px;
+border-bottom: 1px solid #eee;
+}
+
+
+.mirosubs-right h2{
+	color: #333 !important;
+	margin: 0px 0 0 !important;
+font-size: 15px !important;
+	
+float: left;
+
+}
+
+
+
+.mirosubs-right p{
+font-size: 13px !important;
+line-height: 1.6em !important;
+margin: 0 21px 10px;
+
+text-shadow: #000 1px 1px 0px;
+}
+
+
+
+.mirosubs-help-heading ul{
+padding: 0px;
+margin: -4px 5px 0 0;
+float: right;
+}
+
+.mirosubs-help-heading ul span{
+float: left;
+margin-right: 20px;
+padding-top: 4px;
+color: #999;
+}
+
+
+.mirosubs-help-heading ul li{
+list-style: none;
+float: left;
+margin-right: 10px;
+}
+
+
+.mirosubs-help-heading ul li a{
+text-decoration: none;
+color: #aaa;
+font-size: 11px;
+background: #eee url("/site_media/images/gradient_light.png") 8px -113px repeat-x;
+padding: 3px 8px 2px 8px;
+float: left;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+border: 1px solid #eee;
+}
+
+
+
+
+.mirosubs-help-heading ul li a.mirosubs-activestep{
+text-decoration: none;
+color: #333;
+background: #fff;
+border: 1px solid #ddd;
+}
+
 
 .mirosubs-modal-widget-content.finished {
 height: 670px !important;
@@ -184,51 +277,98 @@ margin-left: 30px !important;
 
 	}
 
-.mirosubs-help h2{
-	color: #fff !important;
-	margin: 0px 0 0 !important;
-font-size: 18px !important;
-	}
 
-.mirosubs-help p{
-font-size: 14px !important;
-line-height: 1.5em !important;
-}
+
+
 
 
 .mirosubs-steps{
 position:absolute !important;
-bottom: 30px !important;
-width: 383px !important;
-border: 1px solid #000 !important;
-background: #000 !important;
+bottom: 15px !important;
+width: 421px !important;
+height: 112px;
 }
 
 
 .mirosubs-restart{
-    padding-left: 23px !important;
-    margin: 10px 0 0 0px !important;
+    padding-left: 33px !important;
+    margin: 10px 0 20px 0px !important;
     font-size: 11px !important;
     float: right !important;
     text-decoration: none !important;
     line-height: 2em !important;
-    background: url("../images/sprite.png") 0 -153px no-repeat !important;
+    background: #333 url("/site_media/images/sprite.png") 8px -149px no-repeat !important;
     color: #777 !important;
-
+padding: 4px 20px 2px;
+border: 1px solid #333;
+border-top: 1px solid #666;
+border-bottom: 1px solid #444;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
 }
 
   
+.mirosubs-extra{
+border: 1px solid #4f4f4f;
+background: #454545;
+margin: 20px;
+padding: 15px 15px 5px;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+position: relative;
+}
+
+
+.mirosubs-extra p{
+margin: 0px 0 5px;
+font-size: 12px !important;
+padding: 0;
+}
+
+.mirosubs-extra .mirosubs-spanarrow{
+display: block;
+bottom: -12px;
+width: 17px;
+height: 12px;
+position: absolute;
+background: url("/site_media/images/pointing.png") 0 0 no-repeat !important;
+}
+
+
 
 .mirosubs-backTo{
-    padding-left: 16px !important;
-    margin: 10px 0 0 0px !important;
+    padding-left: 29px !important;
+    margin: 10px 0 0 20px !important;
     font-size: 11px !important;
     text-decoration: none !important;
     float: left !important;
     line-height: 2em !important;
-background: url("../images/sprite.png") left -211px no-repeat !important;
+background: #333 url("/site_media/images/sprite.png") 10px -206px no-repeat !important;
     color: #777 !important;
+padding: 4px 20px 2px;
+border: 1px solid #333;
+border-top: 1px solid #666;
+border-bottom: 1px solid #444;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+}
 
+.mirosubs-backTo:hover{
+background: #666 url("/site_media/images/sprite.png") 10px -206px no-repeat !important;
+border: 1px solid #777;
+border-top: 1px solid #999;
+color: #fff !important;
+border-bottom: 1px solid #777;
+}
+
+
+
+.mirosubs-restart:hover{
+    background: #666 url("/site_media/images/sprite.png") 8px -149px no-repeat !important;
+border: 1px solid #777;
+border-top: 1px solid #999;
+color: #fff !important;
+border-bottom: 1px solid #777;
 }
 
 
@@ -240,18 +380,21 @@ text-align: center !important;
 .mirosubs-done {
    color: #333;
    font-size: 16px;
-   -moz-border-radius: 3px;
-   -webkit-border-radius: 3px;
-   border: 1px solid #fff;
-   padding: 10px 3px 10px 8px;
+   -moz-border-radius: 5px;
+   -webkit-border-radius: 5px;
+   padding: 15px 3px 13px 8px;
    clear: both;
-   margin: 15px 30px 20px;
+   margin: 15px 20px 20px;
    position: relative;
    text-align: center;
    text-decoration: none;
-   text-shadow: #fff 1px 1px 1px;
+   text-shadow: #ddd 1px 1px 0px;
    display: block;
-   background: #fff url("../images/gradient.png") right -2px repeat-x;
+width: 388px;
+border: 1px solid #ddd;
+border-bottom: 1px solid #999;
+border-top: 1px solid #fff;
+   background: #fff url("/site_media/images/gradient.png") right -2px repeat-x;
 }
 
 .mirosubs-done img {
@@ -262,20 +405,21 @@ text-align: center !important;
 
 .mirosubs-done span {
    padding-right: 19px;
-   background: url("../images/sprite.png") right -236px no-repeat;
+   background: url("/site_media/images/sprite.png") right -236px no-repeat;
 }
 
 .mirosubs-done.left span {
    padding-left: 19px;
-   background: url("../images/sprite.png") left -214px no-repeat;
+   background: url("/site_media/images/sprite.png") left -214px no-repeat;
 }
 
 .mirosubs-done:hover {
-   background: #fff url("../images/gradient.png") right 32px repeat-x;
+   background: #fff url("/site_media/images/gradient.png") right 132px repeat-x;
+   text-shadow: none;
 }
 
 .mirosubs-done:active {
-   background: #fff url("../images/gradient.png") right -82px repeat-x;
+   background: #fff url("/site_media/images/gradient.png") right -82px repeat-x;
    border-color: #000;
 }
 
@@ -297,7 +441,7 @@ margin-left: 40px !important;
 color: #fff !important;
 font-size: 15px !important;
 padding-left: 35px !important;
-background: url("../images/sprite.png") 10px -119px no-repeat !important;
+background: url("/site_media/images/sprite.png") 10px -119px no-repeat !important;
 line-height: 2em !important;
 text-align: center !important;
 }
@@ -310,49 +454,117 @@ color: #fff !important;
 
 
 .mirosubs-legend{
-color: #fff !important;
-background: #444 url("../images/big_grad.png") right bottom repeat-x !important;
-    -moz-border-radius: 4px !important;
-    -webkit-border-radius: 4px !important;
-padding: 20px !important;
-margin: 40px 0 0 !important;
-border-top: 1px solid #444 !important;
-border-right: 1px solid #555 !important;
-border-bottom: 1px solid #555 !important;
-border-left: 1px solid #555 !important;
-clear:both !important;
+
 }
 
 
 
-.mirosubs-play,
-.mirosubs-skip,
+.mirosubs-speedmode{
+margin-left: 20px;
+}
+
+
+.mirosubs-speedmode h4{
+float: left;
+margin: 21px 20px 0 0;
+
+}
+
+.mirosubs-speedmode select{
+float: left;
+margin-top: 20px;
+
+}
+
+.mirosubs-speedmode select option{
+
+}
+
+
+
+.mirosubs-play:hover,
+.mirosubs-skip:hover,
+.mirosubs-begin:hover{
+cursor: pointer;
+}
+
+.mirosubs-play{
+text-shadow: 1px 1px 0px #68b553;
+background: url("/site_media/images/new_buttons.png") 0px -56px no-repeat !important;
+font-size: 11px;
+float: left;
+color: #000;
+padding-left: 60px;
+width: 128px;
+line-height: 1.3em;
+font-weight: bold;
+margin-left: 20px;
+height: 40px;
+padding-top: 20px;
+}
+
 .mirosubs-begin{
-font-size: 18px !important;
-line-height: 2.1em !important;
-clear:both !important;
-text-shadow: 1px 1px 1px #000 !important;
+text-shadow: 1px 1px 0px #b662ad;
+background: url("/site_media/images/new_buttons.png") 0px -0px no-repeat !important;
+font-size: 12px;
+float: left;
+color: #000;
+padding-left: 60px;
+width: 408px;
+line-height: 1.3em;
+font-weight: bold;
+margin-left: 20px;
+height: 34px;
+margin-bottom: 15px;
+padding-top: 18px;
+margin-top: 5px;
 }
+
 
 .mirosubs-skip{
-margin-top: 10px !important;
+text-shadow: 1px 1px 0px #6db8ca;
+background: url("/site_media/images/new_buttons.png") -195px -56px no-repeat !important;
+font-size: 11px;
+float: left;
+color: #000;
+padding-left: 60px;
+width: 128px;
+line-height: 1.3em;
+font-weight: bold;
+margin-left: 24px;
+height: 40px;
+padding-top: 13px;
 }
 
+
+.mirosubs-skip .mirosubs-control{
+font-size: 20px !important;
+color: #333 !important;
+font-size: 10px !important;
+height: 22px !important;
+padding: 9px 0 0 10px !important;
+display: block !important;
+width: 37px !important;
+text-shadow: 1px 1px 1px #fff !important;
+float: right !important;
+line-height: 1em !important;
+margin: 0 0px 0px !important;
+}
+
+
 .mirosubs-play .mirosubs-tab, 
-.mirosubs-skip .mirosubs-control,
 .mirosubs-begin .mirosubs-down{
 font-size: 20px !important;
 color: #333 !important;
-font-size: 11px !important;
+font-size: 10px !important;
 height: 22px !important;
-padding: 18px 0 0 10px !important;
+padding: 2px 0 0 10px !important;
 display: block !important;
-background: url("../images/sprite.png") 0 0px no-repeat !important;
-width: 58px !important;
+width: 37px !important;
 text-shadow: 1px 1px 1px #fff !important;
-float: left !important;
+float: right !important;
 line-height: 1em !important;
-margin: 0 10px 0 44px !important;
+margin: 0 0px 0px !important;
 }
 
 
@@ -364,7 +576,7 @@ font-size: 11px !important;
 height: 22px !important;
 padding: 14px 0 4px 0px !important;
 display: block !important;
-background: url("../images/spacebar.png") 0 0px no-repeat !important;
+background: url("/site_media/images/spacebar.png") 0 0px no-repeat !important;
 width: 110px !important;
 float: left !important;
 text-align: center !important;
@@ -373,32 +585,6 @@ text-shadow: 1px 1px 1px #fff !important;
 margin: 0 10px 10px 0 !important;
 }
 
-.mirosubs-play .mirosubs-tab:hover,
-.mirosubs-skip .mirosubs-control:hover,
-.mirosubs-begin .mirosubs-down:hover{
-background: url("../images/sprite.png") 0 -41px no-repeat !important;
-cursor: pointer !important;
-}
-
-.mirosubs-play .mirosubs-tab:active,
-.mirosubs-skip .mirosubs-control:active,
-.mirosubs-begin .mirosubs-down:active{
-background: url("../images/sprite.png") 0 -83px no-repeat !important;
-cursor: pointer !important;
-}
-
-
-.mirosubs-begin .mirosubs-spacebar:hover,
-.mirosubs-play .mirosubs-spacebar:hover{
-background: url("../images/spacebar.png") 0 -41px no-repeat !important;
-cursor: pointer !important;
-}
-
-.mirosubs-begin .mirosubs-spacebar:active,
-.mirosubs-play .mirosubs-spacebar:active{
-background: url("../images/spacebar.png") 0 -83px no-repeat !important;
-cursor: pointer !important;
-}
 
 .mirosubs-auto{
 float: left !important;
@@ -410,7 +596,7 @@ margin: 0px 30px 0 40px !important;
 padding-left: 40px !important;
 float: left !important;
 line-height: 1.7em !important;
-background: url("../images/sprite.png") 0 -183px no-repeat !important;
+background: url("/site_media/images/sprite.png") 0 -183px no-repeat !important;
 margin: 20px 0 0 0px !important;
 }
 .mirosubs-auto a{
@@ -422,7 +608,7 @@ margin: 20px 0 0 0px !important;
     float: right !important;
     color: #555 !important;
     padding-left: 15px !important;
-    background: url("../images/sprite.png") 0 -214px no-repeat !important;
+    background: url("/site_media/images/sprite.png") 0 -214px no-repeat !important;
     text-decoration: none !important;
 }
 
@@ -436,7 +622,7 @@ margin: 20px 0 0 0px !important;
     margin: 20px 0 !important;
     display: block !important;
     padding-left: 30px !important;
-    background: url("../images/sprite.png") 0px -328px no-repeat !important;
+    background: url("/site_media/images/sprite.png") 0px -328px no-repeat !important;
 }
 
 .mirosubs-watch span {
@@ -523,7 +709,7 @@ margin: 20px 0 0 0px !important;
 .mirosubs-videoTab a.mirosubs-subtitleMeLink {
     -moz-border-radius-bottomleft: 5px !important;
     -moz-border-radius-bottomright: 5px !important;
-    background: #fff url("../images/gradient.png") right 2px repeat-x !important;
+    background: #fff url("/site_media/images/gradient.png") right 2px repeat-x !important;
     -webkit-border-bottom-left-radius: 5px !important; 
     -webkit-border-bottom-rught-radius: 5px !important; 
     display:block !important;
@@ -556,7 +742,7 @@ margin: 20px 0 0 0px !important;
 
 
 .mirosubs-subtitleMe a.mirosubs-subtitleMeLink:hover {
-    background: #fff url("../images/arrow.gif") 7px center no-repeat !important;
+    background: #fff url("/site_media/images/arrow.gif") 7px center no-repeat !important;
 }
 
 
@@ -566,7 +752,7 @@ margin: 20px 0 0 0px !important;
 
 .mirosubs-captioningArea {
 position: relative !important;
-    background: #fff url("../images/big_grad.png") 0 bottom repeat-x !important;
+    background: #fff url("/site_media/images/big_grad.png") 0 bottom repeat-x !important;
 }
 
 ul.mirosubs-titlesList {
@@ -663,7 +849,7 @@ ul.mirosubs-titlesList.sync {
     right: 15px !important;
     width: 15px !important;
     height: 16px !important;
-    background: url("../images/dialog_close_box.gif") no-repeat center !important;
+    background: url("/site_media/images/dialog_close_box.gif") no-repeat center !important;
     cursor: default !important;
 }
 
@@ -706,7 +892,7 @@ ul.mirosubs-titlesList.sync {
       -2px -1px 1px #000,
       -1px -3px 1px #000,
       -3px -2px 1px #000 !important;
-
+width: 360px;
 font-size: 14px !important;
     text-align: center !important;
     color: white !important;
@@ -738,7 +924,7 @@ ul.mirosubs-titlesList.finished {
 ul.mirosubs-titlesList.mirosubs-beginTab {
 overflow: hidden !important;
 margin-bottom: 0px !important;
-background: url("../images/begin_tab.jpg") 0 -74px no-repeat !important;
+background: url("/site_media/images/begin_tab.jpg") 0 -74px no-repeat !important;
     text-shadow: #333 1px 1px 1px !important;
 border-bottom: none !important;
 }
@@ -841,7 +1027,7 @@ float: right !important;
 height: 0 !important;
 overflow: hidden !important;
 border-left: 1px solid #aaa !important;
-background: url("../images/time_arrows.png") right -1px no-repeat !important;
+background: url("/site_media/images/time_arrows.png") right -1px no-repeat !important;
 }
 
 
@@ -850,32 +1036,32 @@ background: url("../images/time_arrows.png") right -1px no-repeat !important;
 height: 0 !important;
 float: left !important;
 overflow: hidden !important;
-background: url("../images/time_arrows.png") left -1px no-repeat !important;
+background: url("/site_media/images/time_arrows.png") left -1px no-repeat !important;
 }
 
 
 .mirosubs-changeTime a.mirosubs-down:hover{
 cursor: default !important;
-background: url("../images/time_arrows.png") left -20px no-repeat !important;
+background: url("/site_media/images/time_arrows.png") left -20px no-repeat !important;
 }
 
 
 
 .mirosubs-changeTime a.mirosubs-down:active{
 cursor: default !important;
-background: url("../images/time_arrows.png") left -39px no-repeat !important;
+background: url("/site_media/images/time_arrows.png") left -39px no-repeat !important;
 }
 
 
 .mirosubs-changeTime a.mirosubs-up:hover{
 cursor: default !important;
-background: url("../images/time_arrows.png") right -20px no-repeat !important;
+background: url("/site_media/images/time_arrows.png") right -20px no-repeat !important;
 }
 
 
 .mirosubs-changeTime a.mirosubs-up:active{
 cursor: default !important;
-background: url("../images/time_arrows.png") right -39px no-repeat !important;
+background: url("/site_media/images/time_arrows.png") right -39px no-repeat !important;
 }
 
 
@@ -897,12 +1083,12 @@ background: url("../images/time_arrows.png") right -39px no-repeat !important;
     text-align: right !important;
     float: left !important;
     width: 100% !important;
-    background: #fcfcfc url("../images/gradient.png") 0 14px repeat-x !important;
+    background: #fcfcfc url("/site_media/images/gradient.png") 0 14px repeat-x !important;
 }
 
 .mirosubs-nextStep strong {
     padding-right: 17px !important;
-    background: url("../images/right_arrow.png") right 3px no-repeat !important;
+    background: url("/site_media/images/right_arrow.png") right 3px no-repeat !important;
 }
 
 .mirosubs-nextStep span {
@@ -965,7 +1151,7 @@ background: url("../images/time_arrows.png") right -39px no-repeat !important;
 
 .mirosubs-nav li.active a {
     border-top: 1px solid #ededed !important;
-    background: #efefef url("../images/gradient.png") 0 -39px repeat-x !important;
+    background: #efefef url("/site_media/images/gradient.png") 0 -39px repeat-x !important;
 }
 
 .mirosubs-nav a {
@@ -980,7 +1166,7 @@ background: url("../images/time_arrows.png") right -39px no-repeat !important;
     float: left !important;
     border-top: 1px solid #ddd !important;
     line-height: 2.5em !important;
-    background: #efefef url("../images/gradient.png") 0 -9px repeat-x !important;
+    background: #efefef url("/site_media/images/gradient.png") 0 -9px repeat-x !important;
 }
 
 .mirosubs-navTranscribe a {
@@ -1008,7 +1194,7 @@ background: url("../images/time_arrows.png") right -39px no-repeat !important;
 
 .mirosubs-nav a:hover {
     border-top: 1px solid #ededed !important;
-    background: #efefef url("../images/gradient.png") 0 -39px repeat-x !important;
+    background: #efefef url("/site_media/images/gradient.png") 0 -39px repeat-x !important;
 }
 
 .mirosubs-transcribeControls {
@@ -1040,7 +1226,7 @@ background: url("../images/time_arrows.png") right -39px no-repeat !important;
     padding: 0px !important; 
     border: 1px solid #333 !important;
     -moz-border-radius: 5px !important;
-    background: url("../images/blue_grad.gif") 0 0 repeat-x !important;
+    background: url("/site_media/images/blue_grad.gif") 0 0 repeat-x !important;
     border-right: 1px solid #1d8bb0 !important;
     border-left: 1px solid #1d8bb0 !important;
     border-bottom: 1px solid #fff !important;
@@ -1075,10 +1261,10 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     width: 200px !important; 
     margin-top: -10px !important; 
     padding: 15px 5px !important; 
-    background: url("../images/keys.png") 0 0 repeat-x !important;
+    background: url("/site_media/images/keys.png") 0 0 repeat-x !important;
     -moz-border-radius-bottomleft: 5px !important;
     -moz-border-radius-topleft: 5px !important;
-    background: url("../images/blue_grad.gif") 0 0 repeat-x !important;
+    background: url("/site_media/images/blue_grad.gif") 0 0 repeat-x !important;
     -webkit-border-bottom-left-radius: 5px !important; 
     -webkit-border-top-left-radius: 5px !important; 
 }
@@ -1113,7 +1299,7 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     font-weight: bold !important;
     font-size: 10px !important;
     padding: 5px 5px 5px 50px !important;
-    background: url("../images/keys_buttons.png") 10px -48px no-repeat !important;
+    background: url("/site_media/images/keys_buttons.png") 10px -48px no-repeat !important;
 }
 
 .mirosubs-transcribeHelp .mirosubs-keys span.mirosubs-back{
@@ -1121,11 +1307,11 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     font-weight: bold !important;
     font-size: 10px !important;
     padding: 5px 5px 5px 50px !important;
-    background: url("../images/keys_buttons.png") 10px -97px no-repeat !important;
+    background: url("/site_media/images/keys_buttons.png") 10px -97px no-repeat !important;
 }
 
 li.mirosubs-transcribeHelp span.mirosubs-space_bar{
-    background: url("../images/keys_buttons.png") 10px 1px no-repeat !important;
+    background: url("/site_media/images/keys_buttons.png") 10px 1px no-repeat !important;
     padding: 6px 0 5px 100px !important;
 }
 
@@ -1294,17 +1480,17 @@ font-weight: bold !important;
 
 
 .mirosubs-twitter{
-    background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+    background: url("/site_media/images/share_icons.png") 0 -37px no-repeat !important;
 }
 
 
 .mirosubs-facebook{
-    background: url("../images/share_icons.png") 0 0px no-repeat !important;
+    background: url("/site_media/images/share_icons.png") 0 0px no-repeat !important;
 }
 
 
 .mirosubs-friends{
-    background: url("../images/share_icons.png") 0 -73px no-repeat !important;
+    background: url("/site_media/images/share_icons.png") 0 -73px no-repeat !important;
 }
 
 
@@ -1312,7 +1498,7 @@ font-weight: bold !important;
 .mirosubs-translating{
 padding: 5px !important;
 color: #fff !important;
-background: #444 url("../images/big_grad.png") right bottom repeat-x !important;
+background: #444 url("/site_media/images/big_grad.png") right bottom repeat-x !important;
 -moz-border-radius: 4px !important;
 -webkit-border-radius: 4px !important;
 padding: 30px !important;
@@ -1364,11 +1550,11 @@ margin: 0 0 35px !important;
 }
 
 .goog-checkbox-checked {
-  background: #fff url('../images/check-sprite.gif') no-repeat 2px center !important;
+  background: #fff url('/site_media/images/check-sprite.gif') no-repeat 2px center !important;
 }
 
 .goog-checkbox-undetermined {
-  background: #bbb url('../images/check-sprite.gif') no-repeat 2px center !important;
+  background: #bbb url('/site_media/images/check-sprite.gif') no-repeat 2px center !important;
 }
 
 .goog-checkbox-unchecked {
@@ -1412,7 +1598,7 @@ width: 100% !important;
 border-bottom: 1px solid #000 !important;
 width: 400px !important;
 height: 30px !important;
-background: #000 url("../images/gradient.png") 0 -20px repeat-x !important;
+background: #000 url("/site_media/images/gradient.png") 0 -20px repeat-x !important;
 }
 
 
@@ -1440,7 +1626,7 @@ margin-right: 8px !important;
 }
 
 .mirosubs-playPause:hover {
-background: url("../images/gradient.png") 0 0px repeat-x !important;
+background: url("/site_media/images/gradient.png") 0 0px repeat-x !important;
 cursor: pointer !important;
 }
 
@@ -1453,11 +1639,11 @@ cursor: pointer !important;
 }
 
 .mirosubs-playPause.play span {
-   background: url("../images/play_pause.png") 0 0px no-repeat !important;
+   background: url("/site_media/images/play_pause.png") 0 0px no-repeat !important;
 }
 
 .mirosubs-playPause.pause span {
-   background: url("../images/play_pause.png") 0 -32px no-repeat !important;
+   background: url("/site_media/images/play_pause.png") 0 -32px no-repeat !important;
 }
 
 .mirosubs-volume {
@@ -1472,11 +1658,11 @@ cursor: pointer !important;
    height: 30px !important;
    float: right !important;
    width: 31px !important;
-   background: url("../images/play_pause.png") 9px -55px no-repeat !important;
+   background: url("/site_media/images/play_pause.png") 9px -55px no-repeat !important;
 }
 
 .mirosubs-volume:hover {
-   background: url("../images/gradient.png") 0 0px repeat-x !important;
+   background: url("/site_media/images/gradient.png") 0 0px repeat-x !important;
    cursor: pointer !important;
 }
 
@@ -1490,7 +1676,7 @@ cursor: pointer !important;
    -webkit-border-top-right-radius: 3px !important;
    -webkit-border-top-left-radius: 3px !important;
    position: absolute !important;
-   background: #ededed url("../images/gradient.png") left 30px repeat-x !important;
+   background: #ededed url("/site_media/images/gradient.png") left 30px repeat-x !important;
 }
 
 
@@ -1524,7 +1710,7 @@ cursor: pointer !important;
    border-right: 1px solid #333 !important;
    border-bottom: 1px solid #333 !important;
    border-left: 1px solid #333 !important;
-   background: #fff url("../images/gradient.png") 0 1px repeat-x !important;
+   background: #fff url("/site_media/images/gradient.png") 0 1px repeat-x !important;
    -moz-border-radius: 10px !important;
    -webkit-border-radius: 10px !important;
 }
@@ -1541,7 +1727,7 @@ cursor: pointer !important;
    border-right: 1px solid #333 !important;
    border-bottom: 1px solid #333 !important;
    border-left: 1px solid #333 !important;
-   background: #fff url("../images/gradient.png") 0 1px repeat-x !important;
+   background: #fff url("/site_media/images/gradient.png") 0 1px repeat-x !important;
    top: -3px !important;
    margin: 0 0 0 0 !important;
    -moz-border-radius: 10px !important;
@@ -1549,7 +1735,7 @@ cursor: pointer !important;
 }
 
 .mirosubs-scrobbler:hover{
-background: #fff url("../images/gradient.png") 0 31px repeat-x !important;
+background: #fff url("/site_media/images/gradient.png") 0 31px repeat-x !important;
 border-top: 1px solid #666 !important;
 border-right: 1px solid #333 !important;
 border-bottom: 1px solid #000 !important;
@@ -1569,7 +1755,7 @@ outline: none !important;
     border: 1px solid !important;
 height: 10px !important;
 position: relative !important;
-background: #fff url("../images/gradient.png") 0 -109px repeat-x !important;
+background: #fff url("/site_media/images/gradient.png") 0 -109px repeat-x !important;
 float: left !important;
 border: 1px solid #444 !important;
 border-top: 1px solid #111 !important;
@@ -1593,7 +1779,7 @@ outline: none !important;
 
 .mirosubs-progress .mirosubs-buffered {
     height: 10px !important;      
-    background: #222 url("../images/gradient.png") 0 40px !important;
+    background: #222 url("/site_media/images/gradient.png") 0 40px !important;
     -moz-border-radius: 5px !important;
     -webkit-border-radius: 5px !important;
     position: absolute !important;
@@ -1612,7 +1798,7 @@ outline: none !important;
    border: 1px solid #a6dd13 !important;
    border-top: 1px solid #c5ff27 !important;
    border-bottom: 1px solid #7ba115 !important;
-   background: #a6dd13 url("../images/gradient.png") 0 0px repeat-x !important;
+   background: #a6dd13 url("/site_media/images/gradient.png") 0 0px repeat-x !important;
 }
 
 /* ////////////////////
@@ -1629,7 +1815,7 @@ outline: none !important;
     overflow: hidden !important;
 border-bottom: 1px solid #000 !important;
     position: relative !important;
-    background: #000 url("../images/gradient.png") 0 -47px repeat-x !important;
+    background: #000 url("/site_media/images/gradient.png") 0 -47px repeat-x !important;
 
 }
 
@@ -1661,7 +1847,7 @@ border-bottom: 1px solid #000 !important;
 }
 
 .mirosubs-timeline .marker {
-    background: url("../images/marker.png") 0 0px no-repeat !important;
+    background: url("/site_media/images/marker.png") 0 0px no-repeat !important;
     position: absolute !important;
     top: 0px !important;
     left: 50% !important;
@@ -1686,7 +1872,7 @@ border-bottom: 1px solid #000 !important;
     width: 65px !important;
 color: #fff !important;
     padding: 3px 0px 3px 0px !important;
-    background: url("../images/ticks.gif") 15px 8px no-repeat !important;
+    background: url("/site_media/images/ticks.gif") 15px 8px no-repeat !important;
 }
 
 .mirosubs-timeline ul.mirosubs-timeline-time li span{
@@ -1702,7 +1888,7 @@ color: #fff !important;
    -webkit-border-radius: 3px !important;
    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
-   background: #fefefe url("../images/gradient.png") 0 21px repeat-x !important;
+   background: #fefefe url("/site_media/images/gradient.png") 0 21px repeat-x !important;
 }
 
 .mirosubs-timeline-sub .mirosubs-subtext {
@@ -1717,11 +1903,11 @@ color: #fff !important;
 }
 
 .mirosubs-timeline-sub-selected{
-   background: #46d8ff url("../images/gradient.png") 0 0px repeat-x !important;
+   background: #46d8ff url("/site_media/images/gradient.png") 0 0px repeat-x !important;
 }
 
 .mirosubs-titlesList-sub-selected{
-   background: #46d8ff url("../images/gradient.png") 0 0px repeat-x !important;
+   background: #46d8ff url("/site_media/images/gradient.png") 0 0px repeat-x !important;
    border-bottom: 1px solid #333 !important;
 }
 
@@ -1762,7 +1948,7 @@ color: #fff !important;
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,01) !important;
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
     border: 1px solid #fff !important;
-    background: #fefefe url("../images/gradient.png") 0 9px repeat-x !important;
+    background: #fefefe url("/site_media/images/gradient.png") 0 9px repeat-x !important;
     top: 12px !important;
     -moz-border-radius: 3px !important;
     -webkit-border-radius: 3px !important;
@@ -1773,13 +1959,13 @@ color: #fff !important;
     position: absolute !important;
     height: 17px !important;
     width: 13px !important;
-    background:  url("../images/arrows.gif") 2px 0px no-repeat !important;
+    background:  url("/site_media/images/arrows.gif") 2px 0px no-repeat !important;
     top: 12px !important;
     display: block !important;
 }
 
 .mirosubs-timeline-sub .mirosubs-grabber-over {
-    background: #fefefe url("../images/gradient.png") 0 -35px repeat-x !important;
+    background: #fefefe url("/site_media/images/gradient.png") 0 -35px repeat-x !important;
     display: block !important;
 }
 
@@ -1799,7 +1985,7 @@ color: #fff !important;
    padding: 15px 0 !important;
    width: 540px !important;
    height: 200px !important;
-   background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
+   background: #fff url("/site_media/images/uni-logo.png") center 165px no-repeat !important;
    -moz-border-radius: 5px !important;
    -webkit-border-radius: 5px !important;
    -moz-box-shadow: 0px 5px 50px rgba(0,0,0,01) !important;
@@ -1831,7 +2017,7 @@ color: #fff !important;
 }
 
 .mirosubs-modal-login-content a.mirosubs-log:hover {
-   background: #fff url("../images/gradient.png") right -101px repeat-x !important;
+   background: #fff url("/site_media/images/gradient.png") right -101px repeat-x !important;
    -moz-box-shadow: 0px 0px 0px rgba(0,0,0,01) !important;
    border-top: 1px solid #666 !important;
    border-right: 1px solid #888 !important;
@@ -1851,7 +2037,7 @@ color: #fff !important;
    border-right: 1px solid #bbb !important;
    border-left: 1px solid #bbb !important;
    border-bottom: 1px solid #888 !important;
-   background: #fff url("../images/gradient.png") right 1px repeat-x !important;
+   background: #fff url("/site_media/images/gradient.png") right 1px repeat-x !important;
    -moz-box-shadow: 0px 1px 0px rgba(0,0,0,01) !important;
    -webkit-box-shadow: 0 3px 3px rgba(0,0,0,01) !important;
    -moz-border-radius: 5px !important;
@@ -1861,7 +2047,7 @@ color: #fff !important;
 
 a.mirosubs-twitter span{
    padding-left: 35px !important;
-   background: url("../images/social_login.png") -120px 0px no-repeat !important;
+   background: url("/site_media/images/social_login.png") -120px 0px no-repeat !important;
 }
 
 a.mirosubs-openid span{
@@ -1875,11 +2061,11 @@ a.mirosubs-openid span{
    margin-left: 17px !important;
    width: 115px !important;
    margin-top: 4px !important;
-   background: url("../images/social_login.png") 0 0px no-repeat !important;
+   background: url("/site_media/images/social_login.png") 0 0px no-repeat !important;
 }
 
 .mirosubs-twitter{
-   background: url("../images/social_login.png") -120px 0px no-repeat !important;
+   background: url("/site_media/images/social_login.png") -120px 0px no-repeat !important;
    margin-top: 4px !important;
    height: 0 !important;
    padding-top: 34px !important;
@@ -1945,7 +2131,7 @@ font-size: 12px;
 text-decoration: none;
 font-weight: bold;
 float: left;
-background: url(../images/small_buttons.png) right 0px no-repeat;
+background: url(/site_media/images/small_buttons.png) right 0px no-repeat;
 }
 
 a.mirosubs-smallButton span{
@@ -1954,25 +2140,35 @@ float: left;
 color: #485c14;
 text-transform: uppercase;
 text-shadow: 0px 1px 1px #abce1d;
-background: url(../images/small_buttons.png) left 0px no-repeat;
+background: url(/site_media/images/small_buttons.png) left 0px no-repeat;
 }
 
 a.mirosubs-smallButton:hover{
-background: url(../images/small_buttons.png) right -34px no-repeat;
+background: url(/site_media/images/small_buttons.png) right -34px no-repeat;
 }
 
 a.mirosubs-smallButton:hover span{
 text-shadow: 0px 1px 1px #beec32 ;
-background: url(../images/small_buttons.png) left -34px no-repeat;
+background: url(/site_media/images/small_buttons.png) left -34px no-repeat;
 }
 
 a.mirosubs-smallButton:active{
-background: url(../images/small_buttons.png) right -68px no-repeat;
+background: url(/site_media/images/small_buttons.png) right -68px no-repeat;
 }
 
 a.mirosubs-smallButton:active span{
-background: url(../images/small_buttons.png) left -68px no-repeat;
+background: url(/site_media/images/small_buttons.png) left -68px no-repeat;
 }
 
 
+
+.mirosubs-googleLogin{
+background: url(../images/social_login.png) -222px 0px no-repeat;
+display: block;
+width: 113px;
+float: left;
+padding-top: 33px;
+height: 0;
+overflow: hidden;
+}
 

@@ -20,7 +20,7 @@
 <div style="opacity: 0.3; width: 1627px; height: 498px;" class="mirosubs-modal-widget-bg"></div>
 <div style="left: 397px; top: 157px;" aria-labelledby=":5" role="dialog" tabindex="0" class="mirosubs-modal-widget">
   <div id=":5" class="mirosubs-modal-widget-title mirosubs-modal-widget-title-draggable"><span class="mirosubs-modal-widget-title-text"></span><span class="mirosubs-modal-widget-title-close"></span></div>
-  <div class="mirosubs-modal-widget-content">
+  <div class="mirosubs-modal-widget-content mirosubs-modal-widget-transcribe">
     <div class="mirosubs-left">
       <div style="height: 300px;" class="mirosubs-videoDiv">
         <video tabindex="0" controls="controls" autobuffer="" width="400">
@@ -64,30 +64,49 @@
       </div>
     </div>
     <div class="mirosubs-right">
-      <div>
-        <div class="mirosubs-help">
-          <h2>STEP 1: Typing the subtitles</h2>
+          <div class="mirosubs-help-heading">
+            <h2>Typing</h2>
+            <ul><span>Steps</span>
+              <li><a class="mirosubs-activestep" href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+            </ul>         
+          </div>
           <p>Thanks for making subtitles!! It's easy to learn and actually fun to do.</p>
           <p>While you watch the video, type everything people say. Don't let the subtitles get too long -- hit enter for a new line.</p>
           <p>Make sure to use the key controls below to pause and jump back, which will help you keep up.</p>
-          <a href="http://youtube.com" class="mirosubs-watch"><span>Watch a quick how-to video</span></a></div>
+
+
+          <div class="mirosubs-extra">
+            <p>Press play, then type everything people say in the text entry below the video. Don't let subtitles get too long.</p>
+
+            <p>Hit Enter for a new line.</p>
+            <span class="mirosubs-spanarrow"></span>
+          </div>  
+
+
         <div class="mirosubs-legend">
           <div class="mirosubs-play"><span class="mirosubs-tab">tab</span>Play/Pause</div>
-          <div class="mirosubs-skip"><span class="mirosubs-control">control</span>Skip Back 8 Seconds</div>
+          <div class="mirosubs-skip"><span class="mirosubs-control">ctrl</span>Skip Back <br />8 Seconds</div>
           <div class="mirosubs-clear"></div>
+          <div class="mirosubs-speedmode">    
+            <h4>Speed Mode</h4>
+            <select>
+              <option>Recommended: Magical Auto-Pause (keep typing!) </option>
+            </select>
+          </div>
         </div>
         <div class="mirosubs-steps">
-          <div class="mirosubs-loggedIn">You are logged in as morganknutson</div>
+
+    <a class="mirosubs-backTo mirosubs-greybutton" href="#">Back to Transcribe</a>
+           <a class="mirosubs-restart" href="#">Restart this Step</a>
+           
+                 
           <a href="#" class="mirosubs-done"><span><img src="../site_media/images/spinner.gif" /><strong>Done?</strong> Next Step: Syncing</span></a>
           
           
-           <a class="mirosubs-backTo" href="#">Back to Transcribe</a>
-           <a class="mirosubs-restart" href="#">Restart this Step</a>
-           
-                    
-         </div>
+       
 
-      </div>
     </div>
     <div class="mirosubs-clear"></div>
   </div>
