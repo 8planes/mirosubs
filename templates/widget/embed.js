@@ -77,6 +77,15 @@
             currentSibling = currentSibling.previousSibling;
     }
 
+    if (/MSIE 6/i.test(navigator.userAgent)) {
+        containingElement.innerHTML = 
+            "Sorry, <a href='http://universalsubtitles.org'>Universal " +
+            "Subtitles</a> doesn't " +
+            "support your browser yet. Upgrade your browser or " +
+            "<a href='http://getfirefox.com'>Try Firefox</a>.";
+        return;
+    }
+
     var $c = function(tag) { return document.createElement(tag); };
     var styleElement = $c('style');
     if ('textContent' in styleElement)
