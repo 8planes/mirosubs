@@ -1,16 +1,20 @@
+import sys, site, os
 from os.path import join
 
-import site
+prev_sys_path = list(sys.path)
+
 site.addsitedir('/var/www/INSERT_SITE_DIRECTORY/env/lib/python2.6/site-packages')
 
-import sys
 base_site_dir = '/var/www/INSERT_SITE_DIRECTORY'
 sys.path.append(base_site_dir)
 sys.path.append(join(base_site_dir, 'mirosubs'))
 sys.path.append(join(base_site_dir, 'mirosubs', 'apps'))
 
-import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs-settings'
+new_sys_path = [p for p in sys.path if p not in prev_sys_path]
+for item in new_sys_path:
+    sys.path.remove(item)
+sys.path[:0] = new_sys_path
 
 import django.core.handlers.wsgi
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs-settings'
 application = django.core.handlers.wsgi.WSGIHandler()
