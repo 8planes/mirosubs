@@ -64,11 +64,20 @@
 
     var scripts = document.getElementsByTagName('script');
     var script = scripts[scripts.length - 1];
-    var widgetConfig = (new Function('return ' + 
-                               script.innerHTML.replace(/\n|\r/g, '')))();
+    var widgetConfig = 
+        (new Function('return ' + script.innerHTML.replace(/\n|\r/g, '')))();
+
+    var containingElement = null;
+    var currentSibling = script.previousSibling;
+    while (containingElement == null) {
+        if (currentSibling.tagName &&
+            currentSibling.tagName.toLowerCase() == 'div')
+            containingElement = currentSibling;
+        else
+            currentSibling = currentSibling.previousSibling;
+    }
 
     var $c = function(tag) { return document.createElement(tag); };
-    var containingElement = $c('div');
     var styleElement = $c('style');
     if ('textContent' in styleElement)
         styleElement.textContent = innerStyle;
@@ -82,7 +91,6 @@
     var widgetDiv = $c('div');
     widgetDiv.className = 'mirosubs-widget';
     containingElement.appendChild(widgetDiv);
-    script.parentNode.insertBefore(containingElement, script);
 
     var head = document.getElementsByTagName('head')[0];
     if (typeof(mirosubs) != 'undefined' &&
