@@ -18,6 +18,9 @@
 
 goog.provide('mirosubs.EmbedWarning');
 
+/**
+ * @constructor
+ */
 mirosubs.EmbedWarning = function(callback) {
     goog.ui.Dialog.call(this, null, true);
 
@@ -35,7 +38,7 @@ mirosubs.EmbedWarning.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var attrs = { 'className': 'mirosubs-link', 'href': '#' };
     var learnMoreAttrs = { 'className': 'mirosubs-link', 'target': '_blank',
-                           'href': 'http://www.universalsubtitles.org' };
+                           'href': 'http://universalsubtitles.org' };
     var text = 'Note: this widget is in early testing stages.  ' +
         'Please only use it experimentally, with audiences that enjoy experiments.';
     this.continueLink_ = $d('a', attrs, 'Continue');
