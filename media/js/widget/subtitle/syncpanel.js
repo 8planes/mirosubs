@@ -122,22 +122,28 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
                 this.downHeld_)
             this.downReleased_();
     }
+    else if (event.keyCode == goog.events.KeyCodes.SPACE &&
+             event.keyEventType == goog.events.EventType.MOUSEDOWN &&
+             !this.currentlyEditingSubtitle_())
+        this.spacePressed_();
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
     if (this.keyEventsSuspended_)
         return;
-    if (event.keyCode == goog.events.KeyCodes.DOWN &&
+    if (event.keyCode == goog.events.KeyCodes.DOWN && 
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
         this.downPressed_();
     }
-
     if (event.keyCode == goog.events.KeyCodes.SPACE &&
         !this.currentlyEditingSubtitle_()) {
-        this.videoPlayer_.togglePause();
         event.preventDefault();
+        this.spacePressed_();
     }
 };
+mirosubs.subtitle.SyncPanel.prototype.spacePressed_ = function() {
+    this.videoPlayer_.togglePause();
+}
 mirosubs.subtitle.SyncPanel.prototype.downPressed_ = function() {
     if (this.videoPlayer_.isPlaying()) {
         if (this.downHeld_)
