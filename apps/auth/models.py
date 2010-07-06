@@ -19,3 +19,16 @@ class CustomUser(BaseUser):
     @property
     def language(self):
         return self.get_preferred_language_display()
+    
+class UserLanguage(models.Model):
+    PROFICIENCY_CHOICES = (
+        (1, 'knowpretty well'),
+        (2, 'understand 99%'),
+        (3, 'can translate into this language'),
+    )
+    user = models.ForeignKey(CustomUser)
+    language = models.CharField(max_length=16, choices=LANGUAGES, verbose_name='languages')
+    proficiency = models.IntegerField(choices=PROFICIENCY_CHOICES)
+    
+    class Meta:
+        unique_together = ['user', 'language']
