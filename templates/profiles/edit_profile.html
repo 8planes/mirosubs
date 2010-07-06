@@ -21,8 +21,7 @@
         {{ user_info.biography }}
     </p>
 </div>
-
-<form class="edit_profile" action="{% url profiles:profile user_id=user.username %}" method="post" enctype="multipart/form-data">
+<form class="edit_profile" action="{% url profiles:my_profile %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="edit_profile_shell">
         <h2>
@@ -84,72 +83,34 @@
                 {{ form.preferred_language }}
             </p>
             <h4>Languages I Know</h4>
+            <div class="empty-form" style="display: none">
+                <li>
+                    <a href="#" class="small_close remove-language">Remove Language</a>
+                    {{ formset.empty_form.id }}
+                    {{ formset.empty_form.language }}
+                    {{ formset.empty_form.proficiency }}
+                    <div style="display: none" class="delete-checkbox">
+                        {{ form.DELETE }}
+                    </div>                
+                </li>
+            </div>
             <ul class="language_list">
-                <li>
-                    <a href="#" class="small_close">Remove Language</a>
-                    <select>
-                        <option value="" selected="selected">Select Language</option>
-                    </select>
-                    <select>
-                        <option value="" selected="selected">Select Proficiency</option>
-                    </select>
-                </li>
-                <li>
-                    <a href="#" class="small_close">Remove Language</a>
-                    <select>
-                        <option value="" selected="selected">Select Language</option>
-                    </select>
-                    <select>
-                        <option value="" selected="selected">Select Proficiency</option>
-                    </select>
-                </li>
-                <li>
-                    <a href="#" class="small_close">Remove Language</a>
-                    <select>
-                        <option value="" selected="selected">Select Language</option>
-                    </select>
-                    <select>
-                        <option value="" selected="selected">Select Proficiency</option>
-                    </select>
-                </li>
-                <li>
-                    <a href="#" class="small_close">Remove Language</a>
-                    <select>
-                        <option value="" selected="selected">Select Language</option>
-                    </select>
-                    <select>
-                        <option value="" selected="selected">Select Proficiency</option>
-                    </select>
-                </li>
-                <li>
-                    <a href="#" class="small_close">Remove Language</a>
-                    <select>
-                        <option value="" selected="selected">Select Language</option>
-                    </select>
-                    <select>
-                        <option value="" selected="selected">Select Proficiency</option>
-                    </select>
-                </li>
-                <li>
-                    <a href="#" class="small_close">Remove Language</a>
-                    <select>
-                        <option value="" selected="selected">Select Language</option>
-                    </select>
-                    <select>
-                        <option value="" selected="selected">Select Proficiency</option>
-                    </select>
-                </li>
-                <li>
-                    <a href="#" class="small_close">Remove Language</a>
-                    <select>
-                        <option value="" selected="selected">Select Language</option>
-                    </select>
-                    <select>
-                        <option value="" selected="selected">Select Proficiency</option>
-                    </select>
-                </li>
-            </ul>
-            <button class="small_button">
+                {{ formset.management_form }}
+                {% for form in formset.forms %}
+                    <li>
+                        {{ form.non_field_errors }}
+                        <a href="#" class="small_close remove-language">Remove Language</a>
+                        {{ form.id }}
+                        {{ form.language.errors }}
+                        {{ form.language }}
+                        {{ form.proficiency.errors }}
+                        {{ form.proficiency }}
+                        <div style="display: none" class="delete-checkbox">
+                            {{ form.DELETE }}
+                        </div>
+                    </li>
+                {% endfor %}
+            <button class="small_button add-language">
                 <span><span class="plus"></span>Add Language</span>
             </button>
         </div>
@@ -158,5 +119,27 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    var form_count = {{ formset.total_form_count }};
+    var empty_form = $('.empty-form').html();
+    var $form_count_field = $('#id_userlanguage_set-TOTAL_FORMS')
+    
+    //fix saving value by browser after refresh
+    $('.delete-checkbox input').attr('checked', false); 
+    $form_count_field.val(form_count);
+    
+    $('.language_list .remove-language').live('click', function(){
+        $(this).parent().hide().find('.delete-checkbox input').attr('checked', true);
+        return false;
+    })
+    
+    $('.add-language').click(function(){
+        form_count++;
+        $form_count_field.val(form_count);
+        var form = empty_form.replace(/__prefix__/g, form_count);
+        $('.language_list li:last').after(form);
+        return false;
+    });
+</script>
 {{ block.super }}
 {% endblock %}

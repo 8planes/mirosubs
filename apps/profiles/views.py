@@ -21,7 +21,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from profiles.forms import EditUserForm, SendMessageForm
+from profiles.forms import EditUserForm, SendMessageForm, UserLanguageFormset
 from django.contrib import messages
 from django.utils import simplejson as json
 
@@ -33,14 +33,22 @@ def my_profile(request):
                             files=request.FILES, label_suffix="")
         if form.is_valid():
             form.save()
+            form_validated = True
+        else:
+            form_validated = False
+            
+        formset = UserLanguageFormset(request.POST, instance=request.user)
+        if formset.is_valid() and form_validated:
+            formset.save()
             messages.success(request, 'Your profile has been updated.')
             return redirect('profiles:my_profile')
     else:
         form = EditUserForm(instance=request.user, label_suffix="")
-
+        formset = UserLanguageFormset(instance=request.user)
     context = {
         'form': form,
-        'user_info': request.user
+        'user_info': request.user,
+        'formset': formset
     }
     return render_to_response('profiles/edit_profile.html', context,
                               context_instance=RequestContext(request))

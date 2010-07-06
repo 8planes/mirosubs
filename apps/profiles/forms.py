@@ -17,8 +17,11 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from auth.models import CustomUser as User
+from auth.models import CustomUser as User, UserLanguage
 from django.core.mail import EmailMessage
+from django.forms.models import inlineformset_factory
+
+UserLanguageFormset = inlineformset_factory(User, UserLanguage, extra=1)
 
 class SendMessageForm(forms.Form):
     email = forms.EmailField()
