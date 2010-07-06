@@ -84,6 +84,7 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     el.appendChild(this.continueLink_);
     var vidPlayer = new goog.ui.Component();
     vidPlayer.addChild(this.videoPlayer_, true);
+    this.addChild(vidPlayer, true);
     if (this.usingHtml5Video_) {
         var viewportSize = goog.dom.getViewportSize();
         var videoTop = 
@@ -91,13 +92,15 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
                 this.videoPlayer_.getElement()).y);
         var videoSize = mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
         if (videoTop + videoSize.height > viewportSize.height - 60) {
-            var newVideoHeight = Math.max(270, viewportSize.height - videoTop - 60);
-            this.videoPlayer_.setVideoSize(
-                videoSize.width * newVideoHeight / videoSize.height,
-                newVideoHeight);
+            var newVideoHeight = 
+                Math.max(270, viewportSize.height - videoTop - 60);
+            var newVideoWidth = 
+                videoSize.width * newVideoHeight / videoSize.height;
+            videoSize = new goog.math.Size(
+                newVideoWidth, newVideoHeight);
         }
+        this.videoPlayer_.setVideoSize(videoSize.width, videoSize.height);
     }
-    this.addChild(vidPlayer, true);
 };
 
 mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
@@ -112,7 +115,6 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
                              goog.ui.Component.EventType.CHANGE,
                              this.skipVideosCheckboxChanged_);
     this.getHandler().listen(this.continueLink_, 'click', this.continue_);
-    this.videoPlayer_.play();
 };
 
 mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
