@@ -75,6 +75,10 @@ class Video(models.Model):
         else:
             return self.video_url 
     
+    @models.permalink
+    def search_page_url(self):
+        return ('videos:last_revision', [self.video_id])
+    
     def get_video_url(self):
         if self.video_type == VIDEO_TYPE_HTML5:
             return self.video_url
@@ -410,6 +414,10 @@ class TranslationLanguage(models.Model):
             return "anonymous"
         else:
             return self.writelock_owner.username
+
+    @models.permalink
+    def search_page_url(self):
+        return ('videos:last_translation_revision', [self.video.video_id, self.language])
 
     @property
     def is_writelocked(self):

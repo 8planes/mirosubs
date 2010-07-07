@@ -4,8 +4,7 @@
 
 {% block main_content %}
     <h2>Search</h2>
-    <form method="post" action="{% url search %}">
-        {% csrf_token %}
+    <form method="get" action="{% url search %}">
         <input type="text" name="q" />
         <input type="submit" value="Search"/>
     </form>
@@ -24,7 +23,9 @@
                 <li {%  cycle 'class="even"' '' %}>
                     <ul>
                         <li class="table_most_recent">
-                            {{ item.title }}
+                            <a href="{{ item.object.search_page_url }}">
+                                {{item.title}}
+                            </a>
                         </li>
                         <li class="table_user">
                             {{ item.language }}
@@ -35,8 +36,7 @@
             </ul>
             
             <div style="clear: both"></div>
-            
-            {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
+            {% if is_paginated %}{% search_ordered_paginator query 3 %}{% endif %}
     </div>
         
 {% endblock %}

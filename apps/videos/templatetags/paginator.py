@@ -63,7 +63,11 @@ def paginator(context, adjacent_pages=2):
 
 register.inclusion_tag('paginator.html', takes_context=True)(paginator)
 
-def ordered_paginator(context, adjacent_pages=2):
+def search_ordered_paginator(context, query, adjacent_pages=2):
+    return ordered_paginator(context, adjacent_pages, q=query)
+register.inclusion_tag('ordered_paginator.html', takes_context=True)(search_ordered_paginator)
+
+def ordered_paginator(context, adjacent_pages=2, **kwargs):
     """
     To be used in conjunction with the object_list generic view.
 
@@ -89,6 +93,9 @@ def ordered_paginator(context, adjacent_pages=2):
          extra_link = '&o=%s' % ordering
          if order_type:
              extra_link += '&ot=%s' % order_type
+    
+    for key, value in kwargs.items():
+        extra_link += '&%s=%s' % (key, value)
                 
     return {
         'page_obj': page_obj,
