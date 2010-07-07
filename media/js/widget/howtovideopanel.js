@@ -40,27 +40,27 @@ mirosubs.HowToVideoPanel.CONTINUE = 'continue';
 mirosubs.HowToVideoPanel.VideoChoice = {
     TRANSCRIBE: [
         new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-overviewtypingogg899.ogv'),
+            'http://blip.tv/file/get/Miropcf-tutorialstep1200.ogv'),
         new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-overviewtypingmp4598.m4v'),
-        new mirosubs.video.YoutubeVideoSource('w7jmT6o0Nk0')
+            'http://blip.tv/file/get/Miropcf-tutorialstep1107.mp4'),
+        new mirosubs.video.YoutubeVideoSource('nIVRa9JieIQ')
     ],
     SYNC: [
         new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-syncingogg217.ogv'),
+            'http://blip.tv/file/get/Miropcf-tutorialstep2510.ogv'),
         new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-syncingmp4898.m4v'),
-        new mirosubs.video.YoutubeVideoSource('w7jmT6o0Nk0')],
+            'http://blip.tv/file/get/Miropcf-tutorialstep2428.mp4'),
+        new mirosubs.video.YoutubeVideoSource('1V_UcxtokmA')],
     REVIEW: [
         new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-reviewogg196.ogv'),
+            'http://blip.tv/file/get/Miropcf-tutorialstep3361.ogv'),
         new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-reviewmp4769.m4v'),
-        new mirosubs.video.YoutubeVideoSource('w7jmT6o0Nk0')]
+            'http://blip.tv/file/get/Miropcf-tutorialstep3905.mp4'),
+        new mirosubs.video.YoutubeVideoSource('n-EAEtfojgw')]
 };
 
 mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_ =
-    new goog.math.Size(720, 540);
+    new goog.math.Size(512, 384);
 
 mirosubs.HowToVideoPanel.prototype.getContentElement = function() {
     return this.contentElement_;
@@ -84,6 +84,7 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     el.appendChild(this.continueLink_);
     var vidPlayer = new goog.ui.Component();
     vidPlayer.addChild(this.videoPlayer_, true);
+    this.addChild(vidPlayer, true);
     if (this.usingHtml5Video_) {
         var viewportSize = goog.dom.getViewportSize();
         var videoTop = 
@@ -91,13 +92,15 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
                 this.videoPlayer_.getElement()).y);
         var videoSize = mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
         if (videoTop + videoSize.height > viewportSize.height - 60) {
-            var newVideoHeight = Math.max(270, viewportSize.height - videoTop - 60);
-            this.videoPlayer_.setVideoSize(
-                videoSize.width * newVideoHeight / videoSize.height,
-                newVideoHeight);
+            var newVideoHeight = 
+                Math.max(270, viewportSize.height - videoTop - 60);
+            var newVideoWidth = 
+                videoSize.width * newVideoHeight / videoSize.height;
+            videoSize = new goog.math.Size(
+                newVideoWidth, newVideoHeight);
         }
+        this.videoPlayer_.setVideoSize(videoSize.width, videoSize.height);
     }
-    this.addChild(vidPlayer, true);
 };
 
 mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
@@ -112,7 +115,6 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
                              goog.ui.Component.EventType.CHANGE,
                              this.skipVideosCheckboxChanged_);
     this.getHandler().listen(this.continueLink_, 'click', this.continue_);
-    this.videoPlayer_.play();
 };
 
 mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
