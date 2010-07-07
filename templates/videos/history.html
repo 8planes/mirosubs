@@ -81,8 +81,17 @@
     <p class="what_lang">
         {% block lang_display %} 
         in <a href="{% url videos:video video_id=video.video_id %}">Original Language</a>
-        <a href="other_lang">Other Languages</a>
         {% endblock %}
+        {% block translation_list %}
+            {% if translations %}
+                <p class="other_lang">
+                    Other Languages:
+                        {% for item in translations %}
+                            <a href="{% url videos:translation_history video.video_id item.language %}">{{ item.get_language_display }}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                 </p>
+            {% endif %}
+        {% endblock %}        
     </p>
     <div class="left_column">
         {% widget widget_params %}
@@ -97,7 +106,7 @@
     <ul class="video_tabs">
       <li><a href="#trascript-tab">Languages (4)</a></li>
       <li><a href="#comments-tab">Comments (12)</a></li>
-      <li class="active"><a href="#revision-tab">Activity Stream</a></li>
+      <li class="active"><a href="#revision-tab">Versions ({{ hits }})</a></li>
 
     </ul>
     
@@ -105,54 +114,50 @@
         {% if revision_list %}
            {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
 
-        {% block table %}
-        <ul class="table_head">
-          <li class="td_user">{% ordered_column "user" "User" %}</li>
-          <li class="td_time">{% ordered_column "text" "Happened" %}</li>
-        </ul>
-        
-        <ul class="table_body"> 
-          <li>
-              <span class="td_user rolled_back"><a href="#">morganknutson</a> Rolled back <a href="#">Language</a> to an earlier version <a href="#" class="view_revision">View</a></span>
-              <span class="td_time">22 hours ago</span>
-          </li>
-    
-          <li class="table_user">
-              <span class="td_user thumb_up"><a href="#">Username</a> gave <a href="#">Language</a> a thumbs up</span>
-              <span class="td_time">1 Day Ago</span>
-          </li>       
-    
-          <li class="table_user">
-              <span class="td_user thumb_down"><a href="#">Username</a> gave <a href="#">Language</a> a thumbs down</span>
-              <span class="td_time">2 Days Ago</span>
-          </li>      
-        
-          <li class="table_user">
-              <span class="td_user commented"><a href="#">Username</a> commented on this Video</span>
-              <span class="td_time">1 Week Ago</span>
-          </li>   
-
-
-          <li class="table_user">
-              <span class="td_user language_rating"><a href="#">Language</a> has a B+ rating</span>
-              <span class="td_time">2 Weeks Ago</span>
-          </li>   
-
-          <li class="table_user">
-              <span class="td_user language_begins"><a href="#">Username</a> started <a href="#">Language</a> subtitles</span>
-              <span class="td_time">1 Month Ago</span>
-          </li>   
-
-          <li class="table_user">
-              <span class="td_user video_begins"><a href="#">Username</a> added this video</span>
-              <span class="td_time">2 Months Ago</span>
-          </li>   
-        
-        </ul> 
-        
-
-
-           <div style="clear: both"></div>
+           {% block table %}
+            <ul class="table_head">
+                <li class="table_most_recent">
+                    {% ordered_column "date" "Most Recent" %}
+                </li>
+                <li class="table_user">
+                    {% ordered_column "user" "User" %}
+                </li>
+                <li class="table_note">
+                    {% ordered_column "note" "Note" %}
+                </li>
+                <li class="table_time">
+                    {% ordered_column "time" "Time" %}
+                </li>
+                <li class="table_text">
+                    {% ordered_column "text" "Text" %}
+                </li>
+            </ul>
+            
+            <ul class="table_body">
+                {% for item in revision_list %}
+                <li {% cycle 'class="even"' '' %}>
+                    <ul>
+                        <li class="table_most_recent">
+                            <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/>{{ item.revision_time }} (#{{ item.version_no}}) <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a>
+                        </li>
+                        <li class="table_user">
+                            <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+                        </li>
+                        <li class="table_note">
+                            {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}
+                        </li>
+                        <li class="table_time">
+                            {{ item.time_change_display }}
+                        </li>
+                        <li class="table_text">
+                            {{ item.text_change_display }}
+                        </li>
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <div style="clear: both"></div>
            {% endblock %}
        {% else %}
             <div class="nothing"><strong>This revision has no subtitles</strong><br />

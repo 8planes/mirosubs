@@ -224,7 +224,7 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     context['next_version'] = version.next_version()
     context['prev_version'] = version.prev_version()
     context['widget_params'] = base_widget_params(request, {
-                                'video_url': video.get_video_url()
+                                'video_url': version.video.get_video_url()
                             })
     if cls == TranslationVersion:
         tpl = 'videos/translation_revision.html'
