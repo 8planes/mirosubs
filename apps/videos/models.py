@@ -20,14 +20,15 @@ from django.db import models
 import string
 import random
 from urlparse import urlparse, parse_qs
-import feedparser
 from django.utils.encoding import DjangoUnicodeDecodeError
 from django.conf.global_settings import LANGUAGES
 from auth.models import CustomUser as User
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
-from django.utils.encoding import force_unicode
+from gdata.youtube.service import YouTubeService
+
+yt_service = YouTubeService()
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
 VIDEO_TYPE_HTML5 = 'H'
@@ -97,14 +98,11 @@ class Video(models.Model):
                 defaults={'owner': user,
                           'video_type': VIDEO_TYPE_YOUTUBE, 
                           'allow_community_edits': True})
+         
             if created:
-                url = 'http://gdata.youtube.com/feeds/api/videos/%s' % video.youtube_videoid
-                data = feedparser.parse(url)
-                try:
-                    video.youtube_name = force_unicode(data['entries'][0]['title'])
-                    video.save()
-                except DjangoUnicodeDecodeError: # FIXME: under what circumsntances will this happen?
-                    pass
+                entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
+                video.youtube_name = entry.media.title.text
+                video.save()
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,

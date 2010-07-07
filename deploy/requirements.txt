@@ -9,7 +9,6 @@ django-debug-toolbar==0.8.3
 django-extensions==0.4.1
 -e hg+http://bitbucket.org/ubernostrum/django-registration/@d36a38202ee3d09d342b000f4ff634296f90df49#egg=django_registration-tip
 -e git://github.com/aduston/Django-Socialauth.git@709d344226471b658250f01c714a0dd9559a88e5#egg=django_socialauth-0.1.5-py2.6-dev
-feedparser==4.1
 ipython==0.10
 oauth==1.0.1
 pyOpenSSL==0.9
@@ -20,3 +19,4 @@ simplejson==2.1.1
 -e hg+http://sorl-thumbnail.googlecode.com/hg/@caf69b5206329d89282b4b8246a72e5aa77cb578#egg=sorl_thumbnail-tip
 django-haystack==1.0
 pysolr
+-e svn+http://gdata-python-client.googlecode.com/svn/trunk/#egg=gdata-2.0.10-py2.6.egg
