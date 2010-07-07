@@ -199,6 +199,7 @@ INSTALLED_APPS = (
     'widget',
     'south',
     'haystack',
+    'comments'
 )
 
 #Haystack configuration
