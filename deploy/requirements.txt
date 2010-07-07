@@ -19,4 +19,4 @@ simplejson==2.1.1
 -e hg+http://sorl-thumbnail.googlecode.com/hg/@caf69b5206329d89282b4b8246a72e5aa77cb578#egg=sorl_thumbnail-tip
 django-haystack==1.0.1-final
 pysolr==2.0.12
--e svn+http://gdata-python-client.googlecode.com/svn/trunk@1007#egg=gdata-2.0.10-py2.6-dev_r1007
+vendor/gdata-2.0.10.tar.gz
