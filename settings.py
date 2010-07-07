@@ -197,8 +197,16 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'videos',
     'widget',
-    'south'
+    'south',
+    'haystack',
 )
+
+#Haystack configuration
+HAYSTACK_SITECONF = 'search_site'
+HAYSTACK_SEARCH_ENGINE = 'solr'
+HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
+SOLR_ROOT = rel('..', 'buildout', 'parts', 'solr', 'example')
 
 # socialauth-related
 OPENID_REDIRECT_NEXT = '/socialauth/openid/done/'

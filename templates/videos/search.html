@@ -12,10 +12,10 @@
     <div class="left_column">
             <ul class="table_head">
                 <li class="table_most_recent">
-                    {% ordered_column "name" "URL/title" %}
+                    {% ordered_column "title" "URL/title" q=query %}
                 </li>
                 <li class="table_user">
-                    Language
+                    {% ordered_column "language" "Language" q=query %}
                 </li>                
             </ul>
             
@@ -24,10 +24,10 @@
                 <li {%  cycle 'class="even"' '' %}>
                     <ul>
                         <li class="table_most_recent">
-                            {{ item.video }}
+                            {{ item.title }}
                         </li>
                         <li class="table_user">
-                            {{ item.get_language_display }}
+                            {{ item.language }}
                         </li>                        
                     </ul>
                 </li>

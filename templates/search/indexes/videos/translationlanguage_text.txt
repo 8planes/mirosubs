@@ -1,0 +1,4 @@
+{{ object.get_language_display }}
+{% for item in object.translations.translation_set.all %}
+    {{ item.translation_text }}
+{% endfor %}

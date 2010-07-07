@@ -112,19 +112,23 @@ register.inclusion_tag('ordered_paginator.html', takes_context=True)(ordered_pag
 @register.tag
 def ordered_column(parser, token):
     try:
-        tag_name, field_name, title = token.split_contents()
+        tokens = token.split_contents()
+        field_name = tokens[1]
+        title = tokens[2]
+        get_params = tokens[3:]
     except ValueError:
         raise template.TemplateSyntaxError, "%r tag requires exactly two arguments" % token.contents.split()[0]
-    return OrderedColumnNode(field_name[1:-1], title[1:-1])
+    return OrderedColumnNode(field_name[1:-1], title[1:-1], get_params)
     
 class OrderedColumnNode(template.Node):
     
-    def __init__(self, field_name, title):
+    def __init__(self, field_name, title, get_params):
         self.field_name = field_name
         self.title = title
         self.page = template.Variable('page')
         self.order_type = template.Variable('order_type')
         self.ordering = template.Variable('ordering')
+        self.get_params = get_params
         
     def render(self, context):
         if context.has_key(self.page.var):
@@ -141,10 +145,18 @@ class OrderedColumnNode(template.Node):
             order_type = self.order_type.resolve(context)
         else:
             order_type = None
+         
+        extra_params = [] 
+        for item in self.get_params:
+            items = item.split('=')
+            variable = template.Variable(items[1])
+            extra_params.append('&%s=%s' % (items[0], variable.resolve(context)))
+        
+        extra_params = ''.join(extra_params)
             
         ot = (ordering == self.field_name and order_type == 'asc') and 'desc' or 'asc'
         if page:
-            link = '?o=%s&ot=%s&page=%s' % (self.field_name, ot, page)
+            link = '?o=%s&ot=%s&page=%s%s' % (self.field_name, ot, page, extra_params)
         else:
-            link = '?o=%s&ot=%s' % (self.field_name, ot)
+            link = '?o=%s&ot=%s%s' % (self.field_name, ot, extra_params)
         return '<a href="%s">%s</a>' % (link, self.title)

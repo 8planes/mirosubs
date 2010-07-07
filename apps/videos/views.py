@@ -32,6 +32,7 @@ from videos.utils import get_pager
 from django.contrib import messages
 from django.db.models import Q
 from widget.views import base_widget_params
+from haystack.query import SearchQuerySet
 
 def create(request):
     if request.method == 'POST':
@@ -369,21 +370,24 @@ def test_form_page(request):
 
 def search(request):
     q = request.REQUEST.get('q')
-    
+    print q
     try:
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1  
           
     if q:
-        qs = TranslationLanguage.objects.filter(Q(video__video_url__icontains=q)|Q(video__youtube_name__icontains=q))
+        qs = SearchQuerySet().auto_query(q).highlight()
     else:
         qs = TranslationLanguage.objects.none()
         
-    context = {}
+    context = {
+        'query': q
+    }
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
-        'name': 'video__youtube_name'
+        'title': 'title',
+        'language': 'language'
     }
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
