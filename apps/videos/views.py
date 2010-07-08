@@ -174,8 +174,7 @@ def history(request, video_id):
     context['widget_params'] = base_widget_params(request, {
                                 'video_url': video.get_video_url()
                             })
-    context['comments_next'] = request.path+'#comments-tab'
-    context['commented_video'] = ProxyVideo.get(video)
+    context['commented_object'] = ProxyVideo.get(video)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
@@ -211,7 +210,7 @@ def translation_history(request, video_id, lang):
     context['widget_params'] = base_widget_params(request, {
                                 'video_url': video.get_video_url()
                             })
-    context['comments_next'] = request.path+'#comments-tab'          
+    context['commented_object'] = language
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),

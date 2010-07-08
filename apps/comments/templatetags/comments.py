@@ -19,6 +19,7 @@
 from django import template
 from apps.comments.forms import CommentForm
 from apps.comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 register = template.Library()
 
@@ -35,7 +36,9 @@ def render_comment_form(context, obj):
 @register.inclusion_tag('comments/list.html', takes_context=True)
 def render_comment_list(context, obj):
     return {
-        'qs': Comment.get_for_object(obj)
+        'qs': Comment.get_for_object(obj),
+        'content_type': ContentType.objects.get_for_model(obj),
+        'obj': obj
     }
     
 @register.simple_tag    

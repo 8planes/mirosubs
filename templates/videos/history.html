@@ -74,7 +74,11 @@
             });
                         
             if (document.location.hash){
-                $('a[href='+document.location.hash.split('?', 1)+']').click();
+                var tab_name = document.location.hash.split('-', 1)
+                if (tab_name){
+                    $('a[href='+tab_name+']').click();
+                    document.location.href = document.location.href;
+                }
             }
         });
     </script>
@@ -105,12 +109,12 @@
     <div class="clearboth">&nbsp;</div>
 
     <ul class="video_tabs">
-      <li class="active"><a href="#trascript-tab">Original Subtitles</a></li>
-      <li><a href="#comments">Comments ({% get_comment_count commented_video %})</a></li>
-      <li><a href="#revision-tab">Versions ({{ hits }})</a></li>
+      <li class="active"><a href="#trascripts">Original Subtitles</a></li>
+      <li><a href="#comments">Comments ({% get_comment_count commented_object %})</a></li>
+      <li><a href="#revisions">Versions ({{ hits }})</a></li>
     </ul>
     
-    <div style="display: none" id="revision-tab" class="tab">
+    <div style="display: none" id="revisions" class="tab">
         {% if revision_list|length > 1 %}
             <button class="compare_versions_button">
                 <span>Compare Revisions</span>
@@ -174,14 +178,12 @@
    </div>
    
    <div style="display: none" id="comments" class="tab">
-       {% block comments %}
-           {% render_comment_form commented_video %}
-           {% render_comment_list commented_video %}
-       {% endblock %}
+       {% render_comment_form commented_object %}
+       {% render_comment_list commented_object %}
        <div style="clear: both"></div>     
    </div>
    
-   <div id="trascript-tab" class="tab">
+   <div id="trascripts" class="tab">
         <ul class="table_body"> 
             {% for item in last_version.captions %}
                 <li class="table_transcript {% cycle 'even' '' %}">

@@ -26,7 +26,12 @@ class CommentForm(forms.ModelForm):
         self.fields['content_type'].widget = forms.HiddenInput()
     
     def clean(self):
-        #add reply_to validation. reply is able only for comments for same object
+        reply_to = self.cleaned_data.get('reply_to')
+        content_type = self.cleaned_data.get('content_type')
+        object_pk = self.cleaned_data.get('object_pk')
+        if reply_to and content_type and object_pk:
+            if not reply_to.content_type == content_type and not reply_to.object_pk == object_pk:
+                raise forms.ValidationError('You car reply only comments for same object')
         return self.cleaned_data
     
     def clean_honeypot(self):
