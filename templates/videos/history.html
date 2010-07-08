@@ -2,6 +2,8 @@
 
 {% load escapejs paginator widget %}
 
+{% load comments %}
+
 {% block css %}
     {{ block.super }}
     <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
@@ -102,12 +104,12 @@
     <div class="clearboth">&nbsp;</div>
 
 
-    
+    {% get_comment_count for video as comment_count %}
+
     <ul class="video_tabs">
       <li><a href="#trascript-tab">Languages (4)</a></li>
-      <li><a href="#comments-tab">Comments (12)</a></li>
+      <li><a href="#comments-tab">Comments ({{ comment_count }})</a></li>
       <li class="active"><a href="#revision-tab">Versions ({{ hits }})</a></li>
-
     </ul>
     
     <div id="revision-tab" class="tab">
@@ -166,152 +168,10 @@ Either no subtitles have been entered, or they were deleted.</div>
    </div>
    
    <div style="display: none" id="comments-tab" class="tab">
-        <ul class="table_body comments">
-            {% for item in revision_list %}
- 
-                    <li class="table_comment">
-                        <div class="table_user_deets">                         
-                          <span class="user_thumb"></span>
-                         
-                          <a href="#">UserName</a>
-                          <span class="comment_date">45 days ago</span>
-                        </div>
-                        <span class="comment_text">
-                            <a href="#" class="small_button floatright"><span>Reply</span></a>
-
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
-                            </p>
-                            <p>
-                                Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
-                            </p>
-                            <p>
-                                Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
-                            </p>
-                        </span>
-                            <ul>
-                              <li class="table_comment">
-                                <div class="table_user_deets">                         
-                                  <span class="user_thumb"></span>
-                                 
-                                  <a href="#">UserName</a>
-                                  <span class="comment_date">45 days ago</span>
-                                </div>
-                                <span class="comment_text">
-                                                              <a href="#" class="small_button floatright"><span>Reply</span></a>
-
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
-                                    </p>
-                                    <p>
-                                        Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
-                                    </p>
-                                    <p>
-                                        Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
-                                    </p>
-                                </span>
-                                <ul>
-                                  <li class="table_comment">
-                                    <div class="table_user_deets">                         
-                                      <span class="user_thumb"></span>
-                                     
-                                      <a href="#">UserName</a>
-                                      <span class="comment_date">45 days ago</span>
-                                    </div>
-                                    <span class="comment_text">
-                                                                  <a href="#" class="small_button floatright"><span>Reply</span></a>
-
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
-                                        </p>
-                                        <p>
-                                            Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
-                                        </p>
-                                        <p>
-                                            Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
-                                        </p>
-                                    </span>
-
-                                      <ul>
-                                        <li class="table_comment">
-                                          <div class="table_user_deets">                         
-                                            <span class="user_thumb"></span>
-                                           
-                                            <a href="#">UserName</a>
-                                            <span class="comment_date">45 days ago</span>
-                                          </div>
-                                          <span class="comment_text">
-                                                                        <a href="#" class="small_button floatright"><span>Reply</span></a>
-
-                                              <p>
-                                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
-                                              </p>
-                                              <p>
-                                                  Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
-                                              </p>
-                                              <p>
-                                                  Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
-                                              </p>
-                                          </span>
-
-
-                                            <ul>
-                                              <li class="table_comment">
-                                                <div class="table_user_deets">                         
-                                                  <span class="user_thumb"></span>
-                                                 
-                                                  <a href="#">UserName</a>
-                                                  <span class="comment_date">45 days ago</span>
-                                                </div>
-                                                <span class="comment_text">
-                                                                              <a href="#" class="small_button floatright"><span>Reply</span></a>
-
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
-                                                    </p>
-                                                    <p>
-                                                        Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
-                                                    </p>
-                                                    <p>
-                                                        Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
-                                                    </p>
-                                                </span>
-                                               </li>
-                                            </ul>
-
-
-                                         </li>
-                                      </ul>
-
-                                   </li>
-                                </ul>
-                              </li>
-                              <li class="table_comment">
-                                <div class="table_user_deets">                         
-                                  <span class="user_thumb"></span>
-                                 
-                                  <a href="#">UserName</a>
-                                  <span class="comment_date">45 days ago</span>
-                                </div>
-                                <span class="comment_text">
-                                  
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed felis nulla, pellentesque a pharetra nec, molestie vel eros. 
-                                    </p>
-                                    <p>
-                                        Donec ut egestas mi. Ut mollis commodo nibh, quis dapibus lacus adipiscing a. Pellentesque tincidunt adipiscing vestibulum. Mauris consequat consequat fringilla. Curabitur lobortis neque non nibh elementum et euismod magna bibendum. Mauris iaculis augue non libero consectetur at vulputate lacus mattis. Proin gravida ipsum vitae sapien aliquet tristique. In hac habitasse platea dictumst. Morbi quis lectus sed libero molestie fermentum vel ac mauris. 
-                                    </p>
-                                    <p>
-                                        Donec scelerisque imperdiet varius. Duis luctus, dolor ac fermentum sodales, risus lorem cursus lectus, vel laoreet tellus diam vitae dolor. Ut vehicula ultricies venenatis. Suspendisse elementum pretium fermentum. Ut ullamcorper viverra rutrum. Fusce luctus rutrum gravida.
-                                    </p>
-                                </span>
-                              </li>
-                            </ul>
-                    </li>
- 
- 
-        {% endfor %}
-       </ul> 
+       {% with request.path as next %}
+           {% render_comment_form for video %}
+       {% endwith %}
+       {% render_comment_list for video %}
        <div style="clear: both"></div>     
    </div>
    

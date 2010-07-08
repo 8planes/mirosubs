@@ -199,7 +199,8 @@ INSTALLED_APPS = (
     'widget',
     'south',
     'haystack',
-    'comments'
+    #'comments',
+    'django.contrib.comments',
 )
 
 #Haystack configuration
