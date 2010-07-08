@@ -29,6 +29,7 @@ from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 
 yt_service = YouTubeService()
+yt_service.ssl = False
 
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
 VIDEO_TYPE_HTML5 = 'H'

@@ -40,9 +40,10 @@ mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal =
          ["You can also edit timing by rolling over any timestamp, ",
           "and clicking the left/right buttons that appear. After ",
           "you click, your change will play back."].join(''),
-         "You can still use the down arrow too, to start the next subtitle."]);
+         "You can still use the down arrow too, to start the next subtitle."],
+        3, 2);
     return new mirosubs.RightPanel(
-        this.serverModel, helpContents,
+        this.serverModel, helpContents, [],
         this.makeKeySpecsInternal(), false, "Done?",
         "Submit your work");
 };

@@ -20,27 +20,30 @@ goog.provide('mirosubs.subtitle.EditRightPanel');
 
 mirosubs.subtitle.EditRightPanel = function(serverModel,
                                             helpContents,
+                                            extraHelp,
                                             legendKeySpecs,
                                             showRestart,
                                             doneStrongText,
                                             doneText) {
-    mirosubs.RightPanel.call(this, serverModel, helpContents, legendKeySpecs, 
-                             showRestart, doneStrongText, doneText);
+    mirosubs.RightPanel.call(this, serverModel, helpContents, 
+                             extraHelp, legendKeySpecs, 
+                             showRestart, doneStrongText, 
+                             doneText);
 };
 goog.inherits(mirosubs.subtitle.EditRightPanel, mirosubs.RightPanel);
 mirosubs.subtitle.EditRightPanel.prototype.appendHelpContentsInternal = function($d, el) {
     var backLink = $d('a', {'href': '#'}, 'click here');
     this.getHandler().listenOnce(
         backLink, 'click', this.backClickedInternal);
-    var helpDiv = $d('div', 'mirosubs-help',
-                     $d('h2', null, "EDIT: Edit existing subtitles"),
-                     $d('p', null, 
-                        goog.dom.createTextNode(
-                            'Double click on any subtitle to edit its text. To add more text, '),
-                        backLink,
-                        goog.dom.createTextNode(' for TYPING mode.')),
-                     $d('p', null, 'Adjust subtitle timing by dragging their edges in the timeline to the left and watching the results.'),
-                     $d('p', null, 'You can also edit timing by rolling over any timestamp, and clicking the left/right buttons that appear.  After you click, your change will play back.'),
-                     $d('p', null, 'Hitting the DOWN ARROW will set the start of the next subtitle.'));
+    var helpDiv = $d('div', 'mirosubs-help-heading',
+                     $d('h2', null, "EDIT: Edit existing subtitles"));
     el.appendChild(helpDiv);
+    el.appendChild($d('p', null, 
+                      goog.dom.createTextNode(
+                          'Double click on any subtitle to edit its text. To add more text, '),
+                      backLink,
+                      goog.dom.createTextNode(' for TYPING mode.')));
+    el.appendChild($d('p', null, 'Adjust subtitle timing by dragging their edges in the timeline to the left and watching the results.'));
+    el.appendChild($d('p', null, 'You can also edit timing by rolling over any timestamp, and clicking the left/right buttons that appear.  After you click, your change will play back.'));
+    el.appendChild($d('p', null, 'Hitting the DOWN ARROW will set the start of the next subtitle.'));
 };

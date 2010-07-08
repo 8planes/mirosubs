@@ -28,7 +28,7 @@ mirosubs.subtitle.EditPanel.prototype.createRightPanelInternal =
     function()
 {
     return new mirosubs.subtitle.EditRightPanel(
-        this.serverModel, null,
+        this.serverModel, null, null,
         this.makeKeySpecsInternal(), false, "Done?",
         "Submit your work");
 }

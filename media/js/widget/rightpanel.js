@@ -22,6 +22,8 @@ goog.provide('mirosubs.RightPanel');
  *
  * @param {mirosubs.ServerModel} serverModel
  * @param {mirosubs.RightPanel.HelpContents} helpContents
+ * @param {Array.<string>} extraHelp paragraphs to display in extra bubble. 
+ *     0-length array will not display bubble.
  * @param {Array.<mirosubs.RightPanel.KeySpec>} legendKeySpecs
  * @param {boolean} showRestart
  * @param {string} doneStrongText
@@ -29,6 +31,7 @@ goog.provide('mirosubs.RightPanel');
  */
 mirosubs.RightPanel = function(serverModel,
                                helpContents,
+                               extraHelp,
                                legendKeySpecs,
                                showRestart,
                                doneStrongText,
@@ -36,6 +39,7 @@ mirosubs.RightPanel = function(serverModel,
     goog.ui.Component.call(this);
     this.serverModel_ = serverModel;
     this.helpContents_ = helpContents;
+    this.extraHelp_ = extraHelp;
     this.legendKeySpecs_ = legendKeySpecs;
     this.showRestart_ = showRestart;
     this.doneStrongText_ = doneStrongText;
@@ -67,6 +71,8 @@ mirosubs.RightPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
     this.appendHelpContentsInternal($d, el);
+
+    this.appendExtraHelp_($d, el);
 
     this.appendLegendContents_($d, el);
 
@@ -105,6 +111,15 @@ mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
     goog.array.forEach(this.helpContents_.paragraphs, function(p) {
         el.appendChild($d('p', null, p));
     });
+};
+mirosubs.RightPanel.prototype.appendExtraHelp_ = function($d, el) {
+    if (this.extraHelp_ && this.extraHelp_.length > 0) {
+        var extraDiv = $d('div', 'mirosubs-extra');
+        for (var i = 0; i < this.extraHelp_.length; i++)
+            extraDiv.appendChild($d('p', null, this.extraHelp_[i]));
+        extraDiv.appendChild($d('span', 'mirosubs-spanarrow'));
+        el.appendChild(extraDiv);
+    }
 };
 mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     var legendDiv = $d('div', 'mirosubs-legend');
@@ -145,14 +160,15 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
                              $d('strong', null, this.doneStrongText_),
                              goog.dom.createTextNode(" "),
                              goog.dom.createTextNode(this.doneText_)));
-    var stepsDiv = $d('div', 'mirosubs-steps',
-                      this.loginDiv_, this.doneAnchor_);
+    var stepsDiv = $d('div', 'mirosubs-steps', this.loginDiv_);
+
     this.backAnchor_ = 
-        $d('a', {'className':'mirosubs-backTo', 'href':'#'}, 
+        $d('a', {'className':'mirosubs-backTo mirosubs-greybutton', 'href':'#'}, 
            'Return to Typing');
     this.getHandler().listen(this.backAnchor_, 'click', this.backClickedInternal);
     this.backAnchor_.style.display = 'none';
     stepsDiv.appendChild(this.backAnchor_);
+
     if (this.showRestart_) {
         var restartAnchor = 
             $d('a', {'className': 'mirosubs-restart','href':'#'}, 
@@ -161,6 +177,8 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
             restartAnchor, 'click', this.restartClicked_);
         stepsDiv.appendChild(restartAnchor);
     }
+
+    stepsDiv.appendChild(this.doneAnchor_);
     
     el.appendChild(stepsDiv);
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);

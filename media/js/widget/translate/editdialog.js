@@ -74,7 +74,7 @@ mirosubs.translate.EditDialog.prototype.createRightPanel_ = function() {
             'shift+tab')
     ];
     return new mirosubs.RightPanel(
-        this.serverModel_, helpContents, keySpecs, false, "Done?", 
+        this.serverModel_, helpContents, [], keySpecs, false, "Done?", 
         "Submit final translation");
 };
 mirosubs.translate.EditDialog.prototype.handleDoneKeyPress_ = function(event) {

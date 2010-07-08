@@ -19,47 +19,64 @@
 goog.provide('mirosubs.subtitle.TranscribeRightPanel');
 
 mirosubs.subtitle.TranscribeRightPanel = function(serverModel,
-                                            helpContents,
-                                            legendKeySpecs,
-                                            showRestart,
-                                            doneStrongText,
-                                            doneText) {
-    mirosubs.RightPanel.call(this, serverModel, helpContents, legendKeySpecs, 
+                                                  helpContents,
+                                                  extraHelp,
+                                                  legendKeySpecs,
+                                                  showRestart,
+                                                  doneStrongText,
+                                                  doneText) {
+    mirosubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
+                             legendKeySpecs, 
                              showRestart, doneStrongText, doneText);
 };
 goog.inherits(mirosubs.subtitle.TranscribeRightPanel, mirosubs.RightPanel);
-mirosubs.subtitle.TranscribeRightPanel.AUTOPAUSE_CHANGED = 'autopausechanged';
+
+mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED = 'modechanged';
+
+mirosubs.subtitle.TranscribeRightPanel.prototype.playModeText_ = function(playMode) {
+    var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
+    if (playMode == pm.NO_AUTOPAUSE)
+        return "Expert: no automatic pausing (use TAB key)";
+    else if (playMode == pm.AUTOPAUSE)
+        return "Recommended: magical autopause (just keep typing!)";
+    else if (playMode == pm.PLAY_STOP)
+        return "Beginner: play 8 seconds, then pause";
+};
+
 mirosubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal = 
     function($d, legendDiv) 
 {
     mirosubs.subtitle.TranscribeRightPanel.superClass_
         .appendLegendContentsInternal.call(this, $d, legendDiv);
-    this.autopauseCheckboxSpan_ = $d('span');
-    legendDiv.appendChild($d('div', 'mirosubs-autopause', 
-                             this.autopauseCheckboxSpan_,
-                             goog.dom.createTextNode(' Enable Autopause')));
+    this.playModeSelect_ = $d('select');
+    var select = this.playModeSelect_;
+    var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
+    var text = goog.bind(this.playModeText_, this);
+    goog.array.forEach(
+        [pm.AUTOPAUSE, pm.PLAY_STOP, pm.NO_AUTOPAUSE],
+        function(opt) {
+            select.appendChild(
+                $d('option', {'value': opt}, text(opt)));                   
+        });
+    legendDiv.appendChild($d('div', 'mirosubs-speedmode',
+                             $d('h4', null, 'Speed Mode'), 
+                             select));
 };
 
 mirosubs.subtitle.TranscribeRightPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.TranscribeRightPanel.superClass_.enterDocument.call(this);
-    if (!this.autopauseCheckBox_) {
-        // FIXME: passing true is hacky
-        this.autopauseCheckBox_ = new goog.ui.Checkbox(true);
-        this.autopauseCheckBox_.decorate(this.autopauseCheckboxSpan_);
-        this.autopauseCheckBox_.setLabel(this.autopauseCheckBox_.getElement().parentNode);
-    }
-    this.getHandler().listen(this.autopauseCheckBox_, 
-                             goog.ui.Component.EventType.CHANGE, 
-                             this.autopauseCheckBoxChanged_);
+    this.getHandler().listen(this.playModeSelect_, 
+                             goog.events.EventType.CHANGE, 
+                             this.playModeChanged_);
 };
 
-mirosubs.subtitle.TranscribeRightPanel.prototype.autopauseCheckBoxChanged_ = function(event) {
+mirosubs.subtitle.TranscribeRightPanel.prototype.playModeChanged_ = function(event) {
     this.dispatchEvent(
-        new mirosubs.subtitle.TranscribeRightPanel.AutoPauseChangeEvent(
-            this.autopauseCheckBox_.getChecked()));
+        new mirosubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent(
+            this.playModeSelect_.value));
 };
 
-mirosubs.subtitle.TranscribeRightPanel.AutoPauseChangeEvent = function(on) {
-    this.type = mirosubs.subtitle.TranscribeRightPanel.AUTOPAUSE_CHANGED;
-    this.on = on;
+mirosubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent = function(mode) {
+    this.type = mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED
+    this.mode = mode;;
 };

@@ -81,16 +81,20 @@ mirosubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
 };
 mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
-        "STEP 2: Syncing Subtitles",
+        "Syncing",
         ["Congratulations, you finished the hard part (all that typing)!",
          ["Now, to line up your subtitles to the video, tap the DOWN ARROW right ",
           "when each subtitle should appear."].join(''),
          "Tap DOWN to begin, tap it for the first subtitle, and so on.",
          ["Don't worry about small mistakes. We can correct them in the ",
           "next step. If you need to start over, click \"restart\" ",
-          "below."].join('')]);
+          "below."].join('')],
+        3, 1);
+    var extraHelp = 
+        ["Press play, then type everything people say in the text entry below the video. Don't let subtitles get too long.", 
+         "Hit enter for a new line."];
     return new mirosubs.RightPanel(
-        this.serverModel, helpContents,
+        this.serverModel, helpContents, extraHelp,
         this.makeKeySpecsInternal(), true, "Done?",
         "Next Step: Reviewing");
 };
@@ -99,11 +103,11 @@ mirosubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
     return [
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-begin', 'mirosubs-down', 'down',
-            'Sync Next Subtitle', KC.DOWN),
+            'Tap when next subtitle should appear', KC.DOWN),
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-spacebar', 'spacebar', 'Play/Pause', KC.SPACE),
+            'mirosubs-play', 'mirosubs-tab', 'space', 'Play/Pause', KC.SPACE),
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-skip', 'mirosubs-control', 'control',
+            'mirosubs-skip', 'mirosubs-control', 'ctrl',
             'Skip Back 8 Seconds', KC.CTRL)
     ];
 

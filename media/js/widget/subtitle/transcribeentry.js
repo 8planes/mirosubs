@@ -22,7 +22,7 @@ mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
     this.endOfPPlayheadTime_ = null;
-    this.repeatVideoMode_ = false;
+    this.playMode_ = mirosubs.subtitle.TranscribePanel.PlayMode.AUTOPAUSE;
 
     this.wasPlaying_ = false;
     this.continuouslyTyping_ = false;
@@ -30,6 +30,7 @@ mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
         mirosubs.subtitle.TranscribeEntry.P * 1000);
     this.typingPauseTimer_ = new goog.Timer(
         mirosubs.subtitle.TranscribeEntry.S * 1000);
+    this.playStopTimer_ = new goog.Timer(8000);
 };
 goog.inherits(mirosubs.subtitle.TranscribeEntry, goog.ui.Component);
 mirosubs.subtitle.TranscribeEntry.logger_ =
@@ -50,24 +51,38 @@ mirosubs.subtitle.TranscribeEntry.prototype.createDom = function() {
 mirosubs.subtitle.TranscribeEntry.prototype.enterDocument = function() {
     mirosubs.subtitle.TranscribeEntry.superClass_.enterDocument.call(this);
     this.keyHandler_ = new goog.events.KeyHandler(this.labelInput_.getElement());
-    this.getHandler().listen(this.keyHandler_,
-                             goog.events.KeyHandler.EventType.KEY,
-                             this.handleKey_);
-    this.getHandler().listen(this.labelInput_.getElement(),
-                             goog.events.EventType.KEYUP,
-                             this.handleKeyUp_);
-    this.getHandler().listen(this.typingPauseTimer_,
-                             goog.Timer.TICK,
-                             this.typingPauseTimerTick_);
-    this.getHandler().listen(this.continuousTypingTimer_,
-                             goog.Timer.TICK,
-                             this.continuousTypingTimerTick_);
+    this.getHandler().
+        listen(this.keyHandler_,
+               goog.events.KeyHandler.EventType.KEY,
+               this.handleKey_).
+        listen(this.labelInput_.getElement(),
+               goog.events.EventType.KEYUP,
+               this.handleKeyUp_).
+        listen(this.typingPauseTimer_,
+               goog.Timer.TICK,
+               this.typingPauseTimerTick_).
+        listen(this.continuousTypingTimer_,
+               goog.Timer.TICK,
+               this.continuousTypingTimerTick_).
+        listen(this.playStopTimer_,
+               goog.Timer.TICK,
+               this.playStopTimerTick_).
+        listen(this.videoPlayer_,
+               mirosubs.video.AbstractVideoPlayer.EventType.PLAY,
+              this.startPlaying_);
     mirosubs.subtitle.TranscribeEntry.logger_.info(
         "P is set to " + mirosubs.subtitle.TranscribeEntry.P);
     mirosubs.subtitle.TranscribeEntry.logger_.info(
         "R is set to " + mirosubs.subtitle.TranscribeEntry.R);
     mirosubs.subtitle.TranscribeEntry.logger_.info(
         "S is set to " + mirosubs.subtitle.TranscribeEntry.S);
+};
+mirosubs.subtitle.TranscribeEntry.prototype.startPlaying_ = function() {
+    if (this.playMode_ == mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP) {
+        mirosubs.subtitle.TranscribeEntry.logger_.info(
+            "Starting play/stop timer in response to play");
+        this.playStopTimer_.start();
+    }
 };
 mirosubs.subtitle.TranscribeEntry.prototype.focus = function() {
     if (this.labelInput_.getValue() == '')
@@ -81,7 +96,7 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
         this.addNewTitle_();
     }
     else if (event.keyCode != goog.events.KeyCodes.TAB &&
-             this.repeatVideoMode_) {
+             this.playMode_ == mirosubs.subtitle.TranscribePanel.PlayMode.AUTOPAUSE) {
         this.typingPauseTimer_.stop();
         this.typingPauseTimer_.start();
         if (!this.continuouslyTyping_) {
@@ -120,16 +135,26 @@ mirosubs.subtitle.TranscribeEntry.prototype.typingPauseTimerTick_ = function() {
         this.videoPlayer_.play();
     }
 };
+mirosubs.subtitle.TranscribeEntry.prototype.playStopTimerTick_ = function() {
+    mirosubs.subtitle.TranscribeEntry.logger_.info(
+        "Pausing the video for play/stop mode");
+    this.playStopTimer_.stop();
+    this.videoPlayer_.pause();
+};
 /**
- * Turns Repeat Video Mode on or off. When this mode is turned on, the video
- * repeats during typing. The mode is off by default.
- * @param {boolean} mode True to turn Repeat Video Mode on, false to turn it off.
+ * 
+ * @param {mirosubs.subtitle.TranscribePanel.PlayMode} mode 
  */
-mirosubs.subtitle.TranscribeEntry.prototype.setRepeatVideoMode = function(mode) {
-    this.repeatVideoMode_ = mode;
+mirosubs.subtitle.TranscribeEntry.prototype.setPlayMode = function(mode) {
+    mirosubs.subtitle.TranscribeEntry.logger_.info("mode set to " + mode);
+    this.playMode_ = mode;
     this.continuouslyTyping_ = false;
     this.continuousTypingTimer_.stop();
     this.typingPauseTimer_.stop();
+    this.playStopTimer_.stop();
+    if (this.playMode_ == mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP &&
+        this.videoPlayer_.isPlaying())
+        this.playStopTimer_.start();
 };
 mirosubs.subtitle.TranscribeEntry.prototype.handleKeyUp_ = function(event) {
     this.videoPlayer_.showCaptionText(this.labelInput_.getValue());

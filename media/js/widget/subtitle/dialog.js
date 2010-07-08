@@ -70,7 +70,7 @@ mirosubs.subtitle.Dialog.prototype.captionReached_ = function(event) {
 };
 mirosubs.subtitle.Dialog.prototype.createDom = function() {
     mirosubs.subtitle.Dialog.superClass_.createDom.call(this);
-    this.showHowToForState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
+    this.enterState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
 };
 mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
     mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
@@ -190,13 +190,16 @@ mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
             that.setFinishedState_();
         });
     }
-    else {
-        if (mirosubs.UserSettings.getBooleanValue(
-            mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO))
-            this.setState_(this.nextState_());
-        else
-            this.showHowToForState_(this.nextState_());
-    }
+    else
+        this.enterState_(this.nextState_());
+};
+
+mirosubs.subtitle.Dialog.prototype.enterState_ = function(state) {
+    if (mirosubs.UserSettings.getBooleanValue(
+        mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO))
+        this.setState_(state);
+    else
+        this.showHowToForState_(state);
 };
 
 mirosubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {

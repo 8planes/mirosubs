@@ -41,6 +41,12 @@ mirosubs.subtitle.TranscribePanel = function(captionSet, videoPlayer, serverMode
 };
 goog.inherits(mirosubs.subtitle.TranscribePanel, goog.ui.Component);
 
+mirosubs.subtitle.TranscribePanel.PlayMode = {
+    NO_AUTOPAUSE : 'no',
+    AUTOPAUSE : 'au',
+    PLAY_STOP : 'pl'
+};
+
 mirosubs.subtitle.TranscribePanel.prototype.getContentElement = function() {
     return this.contentElem_;
 };
@@ -61,7 +67,7 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.videoPlayer_, this.captionSet_, false, true), true);
     // FIXME: hacky
-    this.setRepeatVideoMode(true);
+    this.setPlayMode(mirosubs.subtitle.TranscribePanel.PlayMode.AUTOPAUSE);
 };
 mirosubs.subtitle.TranscribePanel.prototype.suspendKeyEvents = function(suspended) {
     this.keyEventsSuspended_ = suspended;
@@ -83,9 +89,9 @@ mirosubs.subtitle.TranscribePanel.prototype.listenToRightPanel_ = function() {
         var that = this;
         this.getHandler().listen(
             this.rightPanel_,
-            mirosubs.subtitle.TranscribeRightPanel.AUTOPAUSE_CHANGED,
+            mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED,
             function(event) {
-                that.setRepeatVideoMode(event.on);
+                that.setPlayMode(event.mode);
             });        
     }
 };
@@ -98,19 +104,23 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
           "say. Don't let the subtitles get too long -- hit ",
           "enter after each sentence or long phrase."].join(''),
          ["Use the key controls below to pause and jump back, ", 
-          "which will help you keep up."].join(''),
-         "Don't worry about timing, that's the next step.  Just type!"], 
-        3, 0);
+          "which will help you keep up."].join('')],
+         3, 0);
+    var extraHelp = [
+        "Press play, then type everything people say in the text " +
+            "entry below the video. Don't let subtitles get too long.",
+        "Hit Enter for a new line."
+    ];
     var KC = goog.events.KeyCodes;
     var keySpecs = [
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB),
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-skip', 'mirosubs-control', 'control', 
+            'mirosubs-skip', 'mirosubs-control', 'ctrl', 
             'Skip Back 8 Seconds', KC.CTRL)
     ];
     return new mirosubs.subtitle.TranscribeRightPanel(
-        this.serverModel_, helpContents, keySpecs, 
+        this.serverModel_, helpContents, extraHelp, keySpecs, 
         true, "Done?", "Next Step: Syncing");
 };
 mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
@@ -135,8 +145,8 @@ mirosubs.subtitle.TranscribePanel.prototype.newTitle_ = function(event) {
  *
  * @param {boolean} mode True to turn repeat on, false to turn it off.
  */
-mirosubs.subtitle.TranscribePanel.prototype.setRepeatVideoMode = function(mode) {
-    this.lineEntry_.setRepeatVideoMode(mode);
+mirosubs.subtitle.TranscribePanel.prototype.setPlayMode = function(mode) {
+    this.lineEntry_.setPlayMode(mode);
 };
 
 mirosubs.subtitle.TranscribePanel.prototype.startOverClicked = function() {
