@@ -167,3 +167,11 @@ class OrderedColumnNode(template.Node):
         else:
             link = '?o=%s&ot=%s%s' % (self.field_name, ot, extra_params)
         return '<a href="%s">%s</a>' % (link, self.title)
+
+@register.simple_tag   
+def progress_color(value):
+    if value <= 50:
+        return 'red'
+    if value >= 90:
+        return 'green'
+    return 'yellow'

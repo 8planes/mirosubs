@@ -424,7 +424,16 @@ class TranslationLanguage(models.Model):
         delta = datetime.now() - self.writelock_time
         seconds = delta.days * 24 * 60 * 60 + delta.seconds
         return seconds < WRITELOCK_EXPIRATION
-
+    
+    @property
+    def percent_done(self):
+        translation_count = self.translations().captions().count()
+        captions_count = self.video.captions().captions().count()
+        try:
+            return translation_count / 1. / captions_count * 100
+        except ZeroDivisionError:
+            return 0 
+    
     def can_writelock(self, request):
         if VIDEO_SESSION_KEY not in request.session:
             return False

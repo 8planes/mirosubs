@@ -1,6 +1,6 @@
 {% extends "videos/history.html" %}
 
-{% load paginator %}
+{% load paginator comments %}
 
 {% block diffing_link %}{% url videos:translation_diffing 11111 22222 %}{% endblock %}
 
@@ -43,4 +43,11 @@
           </li>    
     {% endfor %}
     </ul> 
+{% endblock %}
+
+{% block comments %}
+   {% with comments_next as next %}
+       {% render_comment_form for language %}
+   {% endwith %}
+   {% render_comment_list for language %}
 {% endblock %}

@@ -66,7 +66,7 @@
                 }
             });
             //******** Tabs ********//
-            var $last_active_tab = $('#revision-tab');
+            var $last_active_tab = $($('.video_tabs li.active a').attr('href'));
             $('.video_tabs a').click(function(){
                 $last_active_tab.hide();
                 $last_active_tab = $($(this).attr('href')).show();
@@ -74,6 +74,10 @@
                 $(this).parent('li').addClass('active');
                 return false;
             });
+                        
+            if (document.location.hash){
+                $('a[href='+document.location.hash.split('?', 1)+']').click();
+            }
         });
     </script>
 {% endblock %}
@@ -98,21 +102,24 @@
     <div class="left_column">
         {% widget widget_params %}
     </div>
-    <div class="right_column">
-            </div>
+    <div class="right_column"></div>
     
     <div class="clearboth">&nbsp;</div>
 
-
     {% get_comment_count for video as comment_count %}
-
     <ul class="video_tabs">
-      <li><a href="#trascript-tab">Languages (4)</a></li>
-      <li><a href="#comments-tab">Comments ({{ comment_count }})</a></li>
-      <li class="active"><a href="#revision-tab">Versions ({{ hits }})</a></li>
+      <li class="active"><a href="#trascript-tab">Original Subtitles</a></li>
+      <li><a href="#comments">Comments ({{ comment_count }})</a></li>
+      <li><a href="#revision-tab">Versions ({{ hits }})</a></li>
     </ul>
     
-    <div id="revision-tab" class="tab">
+    <div style="display: none" id="revision-tab" class="tab">
+        {% if revision_list|length > 1 %}
+            <button class="compare_versions_button">
+                <span>Compare Revisions</span>
+            </button>
+        {% endif %}
+        
         {% if revision_list %}
            {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
 
@@ -162,66 +169,31 @@
             <div style="clear: both"></div>
            {% endblock %}
        {% else %}
-            <div class="nothing"><strong>This revision has no subtitles</strong><br />
-Either no subtitles have been entered, or they were deleted.</div>
+            <div class="nothing">
+                <strong>This revision has no subtitles</strong><br />
+                Either no subtitles have been entered, or they were deleted.
+            </div>
        {% endif %}
    </div>
    
-   <div style="display: none" id="comments-tab" class="tab">
-       {% with request.path as next %}
-           {% render_comment_form for video %}
-       {% endwith %}
-       {% render_comment_list for video %}
+   <div style="display: none" id="comments" class="tab">
+       {% block comments %}
+           {% with comments_next as next %}
+               {% render_comment_form for video %}
+           {% endwith %}
+           {% render_comment_list for video %}
+       {% endblock %}
        <div style="clear: both"></div>     
    </div>
    
-   <div style="display: none" id="trascript-tab" class="tab">
-       
-        <ul class="table_head">
-          <li class="table_language">Language</li>
-          <li class="table_rating">Rating</li>
-          <li class="table_done">% Done</li>
-        </ul>
-
+   <div id="trascript-tab" class="tab">
         <ul class="table_body"> 
-            <li>
-              <ul>
-                <li class="table_language">English</li>
-                <li class="table_rating">A+</li>
-                <li class="table_done"><span class="progress"><span class="completion ten_percent red"></span></span></li>
-              </ul>
-            </li>
-            <li>
-              <ul>
-                <li class="table_language">Hebrew</li>
-                <li class="table_rating">A+</li>
-                <li class="table_done"><span class="progress"><span class="completion twenty_percent red"></span></span></li>
-              </ul>
-            </li>
-            <li>
-              <ul>
-                <li class="table_language">Korean</li>
-                <li class="table_rating">A+</li>
-                <li class="table_done"><span class="progress"><span class="completion thirty_percent red"></span></span></li>
-              </ul>
-            </li>
-            <li>
-              <ul>
-                <li class="table_language">Japanese</li>
-                <li class="table_rating">A+</li>
-                <li class="table_done"><span class="progress"><span class="completion fourty_percent yellow"></span></span></li>
-              </ul>
-            </li>
-            <li>
-              <ul>
-                <li class="table_language">Dutch</li>
-                <li class="table_rating">A+</li>
-                <li class="table_done"><span class="progress"><span class="completion fifty_percent green"></span></span></li>
-              </ul>
-            </li>              
-
-       </ul> 
-
+            {% for item in last_version.captions %}
+                <li class="table_transcript {% cycle 'even' '' %}">
+                    {{ item.text }}
+                </li>
+            {% endfor %}
+        </ul>
        <div style="clear: both"></div>   
    </div>
 {% endblock %}

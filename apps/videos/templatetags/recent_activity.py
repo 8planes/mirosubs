@@ -31,10 +31,10 @@ from django.utils.dateformat import format as date_format
 
 register = template.Library()
 
+LIMIT = settings.RECENT_ACTIVITIES_ONPAGE
+
 @register.inclusion_tag('videos/_recent_activity.html')
 def recent_activity(user=None):
-    LIMIT = settings.RECENT_ACTIVITIES_ONPAGE
-    
     qs = Action.objects.all()
     
     if user:
@@ -43,3 +43,11 @@ def recent_activity(user=None):
     return {
         'events': qs[:LIMIT]
     }
+
+@register.inclusion_tag('videos/_recent_activity.html')    
+def video_activity(video):
+    qs = Action.objects.filter(video=video)
+    
+    return {
+        'events': qs[:LIMIT]
+    }    

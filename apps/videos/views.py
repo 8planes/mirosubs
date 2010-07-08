@@ -173,7 +173,8 @@ def history(request, video_id):
     context['last_version'] = video.captions()
     context['widget_params'] = base_widget_params(request, {
                                 'video_url': video.get_video_url()
-                            })    
+                            })
+    context['comments_next'] = request.path+'#comments-tab'    
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
@@ -208,7 +209,8 @@ def translation_history(request, video_id, lang):
     context['last_version'] = video.translations(lang)
     context['widget_params'] = base_widget_params(request, {
                                 'video_url': video.get_video_url()
-                            })    
+                            })
+    context['comments_next'] = request.path+'#comments-tab'          
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
