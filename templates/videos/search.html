@@ -15,7 +15,10 @@
                 </li>
                 <li class="table_user">
                     {% ordered_column "language" "Language" q=query %}
-                </li>                
+                </li>
+                <li class="table_user">
+                    Does %
+                </li>                 
             </ul>
             
             <ul class="table_body">
@@ -29,8 +32,10 @@
                         </li>
                         <li class="table_user">
                             {{ item.language }}
-                        </li>                        
-                    </ul>
+                        </li>
+                        <li class="table_user">
+                            {{ item.object.percent_done|default:'' }}
+                        </li>                          
                 </li>
                 {% endfor %}
             </ul>

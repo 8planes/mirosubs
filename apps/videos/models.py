@@ -78,7 +78,7 @@ class Video(models.Model):
     
     @models.permalink
     def search_page_url(self):
-        return ('videos:last_revision', [self.video_id])
+        return ('videos:video', [self.video_id])
     
     def get_video_url(self):
         if self.video_type == VIDEO_TYPE_HTML5:
@@ -415,7 +415,7 @@ class TranslationLanguage(models.Model):
 
     @models.permalink
     def search_page_url(self):
-        return ('videos:last_translation_revision', [self.video.video_id, self.language])
+        return ('videos:translation_history', [self.video.video_id, self.language])
 
     @property
     def is_writelocked(self):
@@ -430,7 +430,7 @@ class TranslationLanguage(models.Model):
         translation_count = self.translations().captions().count()
         captions_count = self.video.captions().captions().count()
         try:
-            return translation_count / 1. / captions_count * 100
+            return int(translation_count / 1. / captions_count * 100)
         except ZeroDivisionError:
             return 0 
     
