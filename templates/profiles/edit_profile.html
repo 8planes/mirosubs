@@ -26,7 +26,7 @@
     <div class="edit_profile_shell">
         <h2>
             Edit Your Profile
-            <button type="submit" value="Save" style="margin-left: 200px;">
+            <button class="small_button" type="submit" value="Save">
                 <span>Save Edits to Profile</span>
             </button>
         </h2>
@@ -65,8 +65,8 @@
             </p>
             <p>
                 {{ form.changes_notification.errors }}
-                <label for="id_changes_notification">Email me when something I've edited gets changed</label>
-                {{ form.changes_notification }}
+                               {{ form.changes_notification }}
+ <label for="id_changes_notification">Email me when something I've edited gets changed</label>
             </p>
             <p>
                 {{ form.biography.errors }}

@@ -33,8 +33,9 @@
 <!--[if lte IE 6]>
   <div class="note"><strong>Universal Subtitles does not support your browser. Upgrade your browser or <a href="http://getfirefox.com">Try Firefox</a>.</strong></div>
 <![endif]-->
-  <div class="note"><strong>Note:</strong> this site is in early testing stages.  Please only use it experimentally, with audiences that enjoy experiments.  <a href="#">Learn more</a>. </div>
 {% endcomment %}
+  <div class="note"><strong>Note:</strong> this site is in early testing stages.  Please only use it experimentally, with audiences that enjoy experiments.  <a href="#">Learn more</a>. </div>
+
     <div class="cloud">
     <div class="watercolor">
 
@@ -54,8 +55,6 @@
           
         {% endif %}
 
-<!--temporary spacer-->
-<div style="height:33px;"></div>
 
 {% comment %}
         <div class="accountstatus">
@@ -78,7 +77,7 @@
       
 
         <h1>
-          {% block logo %}<a href="/">Miro Subs Alpha</a>{% endblock %}
+          {% block logo %}<a href="/">Universal Subtitles</a>{% endblock %}
           <span class="project">a project of the participatory culture foundation</span>
         </h1>
 
@@ -86,19 +85,20 @@
         <ul class="nav">
 
 
-
-          <li class="first try_link"><a href="{% url demo %}"><span>Try the Demo</span></a></li>
-          <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Read Our Blog</span></a></li>
-          <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
-
-
-
+          <li class="first create_link"><a href="/videos/create/"><span>Subtitle a Video</span></a></li>
+          <li class="try_link"><a href="{% url demo %}"><span>Try the Demo</span></a></li>
 
           {% if user.is_authenticated %}
               <li class="login_link"><a href="{% url logout %}"><span>Logout</span></a></li>
           {% else %}
               <li class="login_link"><a href="{% url auth:login %}"><span>Login</span></a></li>
           {% endif %}
+      
+    <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Our Blog</span></a></li>
+          <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
+
+
+
 
 
           <li class="last about_link last_nav"><a href="/about"><span>About Us</span></a></li>
