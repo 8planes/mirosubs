@@ -25,8 +25,11 @@ JS_USE_COMPILED = True
 DEBUG = False
 ADMINS = (
   ('Adam Duston', 'adam@8planes.com'),
-  ('Dmitriy', 'alerion.um@gmail.com')
+  ('Dmitriy', 'alerion.um@gmail.com'),
+  ('Rob', 'rchekaluk@pculture.org')
 )
+
+HAYSTACK_SOLR_URL = 'INSERT SOLR URL'
 
 SITE_ID = INSERT_SITE_ID_AS_NUMBER
 SITE_NAME = 'INSERT SITE NAME'
