@@ -54,7 +54,8 @@ mirosubs.RightPanel.EventType = {
     LEGENDKEY : 'legend',
     RESTART : 'restart',
     DONE : 'done',
-    BACK : 'back'
+    BACK : 'back',
+    GOTOSTEP : 'gotostep'
 };
 mirosubs.RightPanel.prototype.createDom = function() {
     mirosubs.RightPanel.superClass_.createDom.call(this);
@@ -79,11 +80,30 @@ mirosubs.RightPanel.prototype.showBackLink = function(linkText) {
     goog.dom.setTextContent(this.backAnchor_, linkText);
 };
 mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
-    var helpDiv = $d('div', 'mirosubs-help');
-    el.appendChild(helpDiv);
-    helpDiv.appendChild($d('h2', null, this.helpContents_.header));
+    var helpHeadingDiv = $d('div', 'mirosubs-help-heading');
+    el.appendChild(helpHeadingDiv);
+    helpHeadingDiv.appendChild($d('h2', null, this.helpContents_.header));
+    if (this.helpContents_.numSteps) {
+        var that = this;
+        var stepsUL = $d('ul', null, $d('span', null, 'Steps'));
+        for (var i = 0; i < this.helpContents_.numSteps; i++) {
+            var linkAttributes = { 'href' : '#' };
+            if (i == this.helpContents_.activeStep)
+                linkAttributes['className'] = 'mirosubs-activestep';
+            var link = $d('a', linkAttributes, i + 1 + '');
+            var curStep = i;
+            this.getHandler().listen(
+                link, 'click', function(e) {
+                    e.preventDefault();
+                    that.dispatchEvent(
+                        new mirosubs.RightPanel.GoToStepEvent(curStep));
+                });
+            stepsUL.appendChild($d('li', null, link));
+        }
+        helpHeadingDiv.appendChild(stepsUL);
+    }
     goog.array.forEach(this.helpContents_.paragraphs, function(p) {
-        helpDiv.appendChild($d('p', null, p));
+        el.appendChild($d('p', null, p));
     });
 };
 mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
@@ -203,16 +223,21 @@ mirosubs.RightPanel.prototype.loginClicked_ = function(event) {
 };
 
 /**
+ * @constructor
  * Sets contents at top part of right panel.
  *
  * @param {string} header
- * @param {Array.<string>=} paragraphs
+ * @param {Array.<string>} paragraphs
+ * @param {number=} opt_numSteps
+ * @param {number} opt_activeStep;
  */
-mirosubs.RightPanel.HelpContents = function(header, paragraphs) {
+mirosubs.RightPanel.HelpContents = function(header, paragraphs, opt_numSteps, opt_activeStep) {
     this.header = header;
     this.paragraphs = paragraphs;
+    this.numSteps = opt_numSteps;
+    this.activeStep = opt_activeStep;
 };
-                                            
+
 mirosubs.RightPanel.KeySpec = function(divClass, spanClass, 
                                        keyText, legendText, 
                                        keyCode) {
@@ -226,4 +251,8 @@ mirosubs.RightPanel.LegendKeyEvent = function(keyCode, eventType) {
     this.type = mirosubs.RightPanel.EventType.LEGENDKEY;
     this.keyCode = keyCode;
     this.keyEventType = eventType;
+};
+mirosubs.RightPanel.GoToStepEvent = function(stepNo) {
+    this.type = mirosubs.RightPanel.EventType.GOTOSTEP;
+    this.stepNo = stepNo;
 };

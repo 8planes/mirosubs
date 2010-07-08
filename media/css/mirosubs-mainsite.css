@@ -32,6 +32,12 @@ line-height: 1.5em;
 }
 
 
+#id_changes_notification{
+width: 1em !important;
+float: left;
+margin: 7px 10px 0 0;
+}
+
 
 /*/////////////////////////////////////////////
 
@@ -300,7 +306,7 @@ background: url(../images/logo.png) 0 -59px no-repeat;
 }
 
 .header .nav{
-margin: 12px 0 0;
+margin: 42px 0 0;
 padding: 0;
 float: right;
 }
@@ -1024,7 +1030,7 @@ background: #57a927;
 }
 
 .right_now{
-font-size: 28px;
+font-size: 23px;
 padding: 25px 30px 20px 30px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
@@ -1241,6 +1247,10 @@ list-style: none;
 
 /////////////////////////////////////////////*/
 
+
+#index .note{
+display: none;
+}
 
 .note{
 text-align: center;
@@ -1887,14 +1897,11 @@ position: relative;
 }
 
 
-.edit_profile_shell .edit_profile button{
+.edit_profile_shell h2 button{
 position: absolute;
 margin: 0 !important;
 right: 10px;
 top: 12px;
-padding-right: 16px !important;
-font-size: 12px;
-background: url(../images/small_buttons.png) right 0px no-repeat;
 }
 
 .edit_profile_shell .edit_profile button span{

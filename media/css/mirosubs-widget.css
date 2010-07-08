@@ -490,7 +490,7 @@ cursor: pointer;
 
 .mirosubs-play{
 text-shadow: 1px 1px 0px #68b553;
-background: url("/site_media/images/new_buttons.png") 0px -56px no-repeat !important;
+background: url("/site_media/images/new_buttons.png") 0px -73px no-repeat !important;
 font-size: 11px;
 float: left;
 color: #000;
@@ -503,6 +503,20 @@ height: 40px;
 padding-top: 20px;
 }
 
+
+.mirosubs-play:hover{
+background: url("/site_media/images/new_buttons.png") 0px -214px no-repeat !important;
+text-shadow: 1px 1px 0px #a7d29c;
+}
+
+
+.mirosubs-play:active{
+background: url("/site_media/images/new_buttons.png") 0px -356px no-repeat !important;
+text-shadow: none;
+}
+
+
+
 .mirosubs-begin{
 text-shadow: 1px 1px 0px #b662ad;
 background: url("/site_media/images/new_buttons.png") 0px -0px no-repeat !important;
@@ -514,16 +528,27 @@ width: 408px;
 line-height: 1.3em;
 font-weight: bold;
 margin-left: 20px;
-height: 34px;
+height: 35px;
 margin-bottom: 15px;
 padding-top: 18px;
 margin-top: 5px;
 }
 
 
+.mirosubs-begin:hover{
+background: url("/site_media/images/new_buttons.png") 0px -141px no-repeat !important;
+text-shadow: 1px 1px 0px #e48fd8;
+}
+
+.mirosubs-begin:active{
+background: url("/site_media/images/new_buttons.png") 0px -283px no-repeat !important;
+text-shadow: none;
+}
+
+
 .mirosubs-skip{
 text-shadow: 1px 1px 0px #6db8ca;
-background: url("/site_media/images/new_buttons.png") -195px -56px no-repeat !important;
+background: url("/site_media/images/new_buttons.png") right -73px no-repeat !important;
 font-size: 11px;
 float: left;
 color: #000;
@@ -532,8 +557,20 @@ width: 128px;
 line-height: 1.3em;
 font-weight: bold;
 margin-left: 24px;
-height: 40px;
+height: 41px;
 padding-top: 13px;
+}
+
+
+.mirosubs-skip:hover{
+background: url("/site_media/images/new_buttons.png") right -214px no-repeat !important;
+text-shadow: 1px 1px 0px #86bfcc;
+}
+
+
+.mirosubs-skip:active{
+background: url("/site_media/images/new_buttons.png") right -356px no-repeat !important;
+text-shadow: none;
 }
 
 
