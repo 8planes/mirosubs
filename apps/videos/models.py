@@ -716,3 +716,10 @@ class UserTestResult(models.Model):
     task2 = models.TextField(blank=True)
     task3 = models.TextField(blank=True)
     get_updates = models.BooleanField(default=False)
+
+#for two threads of comments
+class ProxyVideo(Video):
+    
+    @classmethod
+    def get(cls, video):
+        return cls(pk=video.pk)

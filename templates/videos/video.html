@@ -72,10 +72,9 @@
     </div>
     <div class="clearboth">&nbsp;</div>
     
-    {% get_comment_count for video as comments_count %}
     <ul class="video_tabs">
       <li class="active"><a href="#languages-tab">Languages ({{ translations|length }})</a></li>
-      <li><a href="#comments">Comments ({{ comments_count }})</a></li>
+      <li><a href="#comments">Comments ({% get_comment_count video %})</a></li>
       <li><a href="#activity-tab">Activity stream</a></li>
     </ul>
     
@@ -113,10 +112,8 @@
     </div>
     
     <div style="display: none" id="comments" class="tab">
-       {% with request.path as next %}
-           {% render_comment_form for video %}
-       {% endwith %}
-       {% render_comment_list for video %}
+       {% render_comment_form video %}
+       {% render_comment_list video %}
        <div style="clear: both"></div>        
     </div>
     

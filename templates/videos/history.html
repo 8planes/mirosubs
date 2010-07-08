@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% load escapejs paginator widget %}
-
-{% load comments %}
+{% load escapejs paginator widget comments %}
 
 {% block css %}
     {{ block.super }}
@@ -106,10 +104,9 @@
     
     <div class="clearboth">&nbsp;</div>
 
-    {% get_comment_count for video as comment_count %}
     <ul class="video_tabs">
       <li class="active"><a href="#trascript-tab">Original Subtitles</a></li>
-      <li><a href="#comments">Comments ({{ comment_count }})</a></li>
+      <li><a href="#comments">Comments ({% get_comment_count commented_video %})</a></li>
       <li><a href="#revision-tab">Versions ({{ hits }})</a></li>
     </ul>
     
@@ -178,10 +175,8 @@
    
    <div style="display: none" id="comments" class="tab">
        {% block comments %}
-           {% with comments_next as next %}
-               {% render_comment_form for video %}
-           {% endwith %}
-           {% render_comment_list for video %}
+           {% render_comment_form commented_video %}
+           {% render_comment_list commented_video %}
        {% endblock %}
        <div style="clear: both"></div>     
    </div>

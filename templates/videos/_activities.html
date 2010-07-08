@@ -1,7 +1,5 @@
 {% load thumbnail %}
 
-
-
 <ul class="table_body">
 {% for item in events %}
     <li class="table_transcript">
@@ -11,7 +9,7 @@
                 {% else %}            
 
             {% endif %}
-            {{ item.time }} - <a class="username" href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+            {{ item.time }} - <a class="username" href="{{ item.user.profile_url }}">{{ item.user.username }}</a>
         {% else %}
             <span class="username anon">Anonymous</span>
         {% endif %}

@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion, ProxyVideo
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm
 import widget
 from django.contrib.sites.models import Site
@@ -174,7 +174,8 @@ def history(request, video_id):
     context['widget_params'] = base_widget_params(request, {
                                 'video_url': video.get_video_url()
                             })
-    context['comments_next'] = request.path+'#comments-tab'    
+    context['comments_next'] = request.path+'#comments-tab'
+    context['commented_video'] = ProxyVideo.get(video)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),

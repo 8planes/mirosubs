@@ -1,27 +1,33 @@
 from django import forms
-from models import Comment
+from comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
-from django.utils.encoding import force_unicode
 from django.conf import settings
 
 COMMENT_MAX_LENGTH = getattr(settings,'COMMENT_MAX_LENGTH',3000)
 
 class CommentForm(forms.ModelForm):
-    honeypot = forms.CharField(required=False,
-                                    label=_('If you enter anything in this field '\
-                                            'your comment will be treated as spam'))
-    content = forms.CharField(label=_('Comment'), widget=forms.Textarea,
+    honeypot = forms.CharField(required=False, widget=forms.HiddenInput)
+    content = forms.CharField(label='Comment', widget=forms.Textarea,
                                     max_length=COMMENT_MAX_LENGTH)
     
     class Meta:
         model = Comment
-        fields = ('content', 'reply_to')
+        fields = ('content', 'reply_to', 'object_pk', 'content_type')
         
     def __init__(self, obj, *args, **kwargs):
-        self.target_object = obj
+        if obj:
+            ct = ContentType.objects.get_for_model(obj)
+            kwargs.setdefault('initial', {})
+            kwargs['initial']['object_pk'] = obj.pk
+            kwargs['initial']['content_type'] = ct.pk
         super(CommentForm, self).__init__(*args, **kwargs)
-        ct = ContentType.objects.get_for_model(obj)
-        self.fields['reply_to'].queryset = Comment.objects.filter(content_type=ct, object_pk=obj.pk)
+        self.fields['reply_to'].widget = forms.HiddenInput()
+        self.fields['object_pk'].widget = forms.HiddenInput()
+        self.fields['content_type'].widget = forms.HiddenInput()
+    
+    def clean(self):
+        #add reply_to validation. reply is able only for comments for same object
+        return self.cleaned_data
     
     def clean_honeypot(self):
         """Check that nothing's been entered into the honeypot."""
@@ -31,9 +37,15 @@ class CommentForm(forms.ModelForm):
         return value  
         
     def save(self, user, commit=True):
-        obj = super(CommentForm, self).save()
+        obj = super(CommentForm, self).save(False)
         obj.user = user
-        obj.content_object = self.target_object
         if commit:
             obj.save()
         return obj
+    
+    def get_errors(self):
+        from django.utils.encoding import force_unicode        
+        output = {}
+        for key, value in self.errors.items():
+            output[key] = '/n'.join([force_unicode(i) for i in value])
+        return output    

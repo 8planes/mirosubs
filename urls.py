@@ -28,7 +28,7 @@ urlpatterns = patterns(
     '',
     (r'^$', 'django.views.generic.simple.direct_to_template', 
      {'template': 'index.html'}),
-    (r'^comments/', include('django.contrib.comments.urls')),
+    (r'^comments/', include('comments.urls', namespace='comments')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout', 
         kwargs={'next_page': '/'}),
     url(r'^admin/password_reset/$', 

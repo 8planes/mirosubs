@@ -20,6 +20,10 @@ class CustomUser(BaseUser):
     def language(self):
         return self.get_preferred_language_display()
     
+    @models.permalink
+    def profile_url(self):
+        return ('profiles:profile', [self.pk])
+    
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (
         (1, 'knowpretty well'),

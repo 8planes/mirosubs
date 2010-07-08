@@ -46,8 +46,6 @@
 {% endblock %}
 
 {% block comments %}
-   {% with comments_next as next %}
-       {% render_comment_form for language %}
-   {% endwith %}
-   {% render_comment_list for language %}
+   {% render_comment_form language %}
+   {% render_comment_list language %}
 {% endblock %}

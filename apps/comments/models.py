@@ -17,7 +17,16 @@ class Comment(models.Model):
     submit_date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        ordering = ('submit_date',)
+        ordering = ('-submit_date',)
         
     def __unicode__(self):
-        return "%s: %s..." % (self.user.username, self.comment[:50])    
+        return "%s: %s..." % (self.user.username, self.comment[:50])
+    
+    @classmethod
+    def get_for_object(self, obj):
+        if obj.pk:
+            ct = ContentType.objects.get_for_model(obj)
+            return self.objects.filter(content_type=ct, object_pk=obj.pk)
+        else:
+            return self.objects.none()
+        
