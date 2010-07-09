@@ -25,11 +25,15 @@ goog.provide('mirosubs.HowToVideoPanel');
 mirosubs.HowToVideoPanel = function(videoChoice) {
     goog.ui.Component.call(this);
     if (mirosubs.video.supportsOgg())
-        this.videoPlayer_ = videoChoice[0].createPlayer();
+        this.videoPlayer_ = (new mirosubs.video.Html5VideoSource(
+            videoChoice.videos.ogg)).createPlayer();
     else if (mirosubs.video.supportsH264())
-        this.videoPlayer_ = videoChoice[1].createPlayer();
+        this.videoPlayer_ = (new mirosubs.video.Html5VideoSource(
+            videoChoice.videos.h264)).createPlayer();
     else
-        this.videoPlayer_ = videoChoice[2].createPlayer();
+        this.videoPlayer_ = (new mirosubs.video.YoutubeVideoSource(
+            videoChoice.videos.yt)).createPlayer();
+    this.howToImageURL_ = mirosubs.imageAssetURL(videoChoice.image);
     this.usingHtml5Video_ = 
         mirosubs.video.supportsOgg() ||
         mirosubs.video.supportsH264();
@@ -38,25 +42,30 @@ goog.inherits(mirosubs.HowToVideoPanel, goog.ui.Component);
 
 mirosubs.HowToVideoPanel.CONTINUE = 'continue';
 mirosubs.HowToVideoPanel.VideoChoice = {
-    TRANSCRIBE: [
-        new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-tutorialstep1200.ogv'),
-        new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-tutorialstep1107.mp4'),
-        new mirosubs.video.YoutubeVideoSource('nIVRa9JieIQ')
-    ],
-    SYNC: [
-        new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-tutorialstep2510.ogv'),
-        new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-tutorialstep2428.mp4'),
-        new mirosubs.video.YoutubeVideoSource('1V_UcxtokmA')],
-    REVIEW: [
-        new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-tutorialstep3361.ogv'),
-        new mirosubs.video.Html5VideoSource(
-            'http://blip.tv/file/get/Miropcf-tutorialstep3905.mp4'),
-        new mirosubs.video.YoutubeVideoSource('n-EAEtfojgw')]
+    TRANSCRIBE: {
+        videos: {
+            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep1200.ogv',
+            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep1107.mp4',
+            yt: 'nIVRa9JieIQ'
+        },
+        image: 'howto-step1.png'
+    },
+    SYNC: {
+        videos: {
+            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep2510.ogv',
+            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep2428.mp4',
+            yt: '1V_UcxtokmA'
+        },
+        image: 'howto-step2.png'
+    },
+    REVIEW: {
+        videos: {
+            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep3361.ogv',
+            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep3905.mp4',
+            yt: 'n-EAEtfojgw'
+        },
+        image: 'howto-step3.png'
+    }
 };
 
 mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_ =
@@ -84,7 +93,12 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     el.appendChild(this.continueLink_);
     var vidPlayer = new goog.ui.Component();
     vidPlayer.addChild(this.videoPlayer_, true);
+    this.howToImage_ = $d('img', 
+                          {'src': this.howToImageURL_, 
+                           'className': 'mirosubs-howto-image'});
+    vidPlayer.getElement().appendChild(this.howToImage_);
     this.addChild(vidPlayer, true);
+    vidPlayer.getElement().className = 'mirosubs-howto-videocontainer';
     if (this.usingHtml5Video_) {
         var viewportSize = goog.dom.getViewportSize();
         var videoTop = 
@@ -100,6 +114,8 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
                 newVideoWidth, newVideoHeight);
         }
         this.videoPlayer_.setVideoSize(videoSize.width, videoSize.height);
+        goog.style.setSize(vidPlayer.getElement(), videoSize.width, videoSize.height);
+        goog.style.setSize(this.howToImage_, videoSize.width, videoSize.height);
     }
 };
 
@@ -115,6 +131,13 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
                              goog.ui.Component.EventType.CHANGE,
                              this.skipVideosCheckboxChanged_);
     this.getHandler().listen(this.continueLink_, 'click', this.continue_);
+    this.getHandler().listen(this.howToImage_, 'click', this.startPlaying_);
+};
+
+mirosubs.HowToVideoPanel.prototype.startPlaying_ = function(e) {
+    e.preventDefault();
+    goog.dom.removeNode(this.howToImage_);
+    this.videoPlayer_.play();
 };
 
 mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
