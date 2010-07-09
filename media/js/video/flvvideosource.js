@@ -16,38 +16,27 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.YoutubeVideoSource');
+goog.provide('mirosubs.video.FlvVideoSource');
 
 /**
  * @constructor
  */
-mirosubs.video.YoutubeVideoSource = function(youtubeVideoID) {
-    this.youtubeVideoID_ = youtubeVideoID;
-    this.uuid_ = mirosubs.randomString();
+mirosubs.video.FlvVideoSource = function(flvURL) {
+    this.flvURL_ = flvURL;
 };
 
-mirosubs.video.YoutubeVideoSource.counter_ = 0;
-
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
+mirosubs.video.FlvVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer = 
-    function() 
-{
+mirosubs.video.FlvVideoSource.prototype.createControllerPlayer = function() {
     return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(chromeless) {
-    return new mirosubs.video.YoutubeVideoPlayer(
-        new mirosubs.video.YoutubeVideoSource(
-            this.youtubeVideoID_), chromeless);
+mirosubs.video.FlvVideoSource.prototype.createPlayer_ = function(chromeless) {
+    return new mirosubs.video.FlvVideoPlayer(this, chromeless);
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
-    return this.youtubeVideoID_;
-};
-
-mirosubs.video.YoutubeVideoSource.prototype.getUUID = function() {
-    return this.uuid_;
+mirosubs.video.FlvVideoSource.prototype.getFlvURL = function() {
+    return this.flvURL_;
 };

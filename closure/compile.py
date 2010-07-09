@@ -14,6 +14,7 @@ logging.basicConfig(level=logging.INFO,
 
 JS_LIB = os.path.join(BASE, "../media/js")
 CLOSURE_LIB = os.path.join(JS_LIB, "closure-library")
+FLOWPLAYER_JS = os.path.join(BASE, "../media/flowplayer/flowplayer-3.2.2.min.js")
 
 def call_command(command):
     process = subprocess.Popen(command.split(' '),
@@ -59,7 +60,9 @@ def compile(output_file_name, js_file_list):
     with open(compiled_js, 'w') as compiled_js_file:
         with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
             compiled_js_file.write(swfobject_file.read())
-            compiled_js_file.write(compiled_js_text)
+        with open(FLOWPLAYER_JS, 'r') as flowplayerjs_file:
+            compiled_js_file.write(flowplayerjs_file.read())
+        compiled_js_file.write(compiled_js_text)
 
     if len(output) > 0:
         logging.info("compiler.jar output: %s" % output)

@@ -42,7 +42,7 @@
   var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
   logconsole.setCapturing(true);
 
-  var EVENTS = goog.object.getValues(mirosubs.AbstractVideoPlayer.EventType);
+  var EVENTS = goog.object.getValues(mirosubs.video.AbstractVideoPlayer.EventType);
   ytlogger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
   html5logger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
 
@@ -55,18 +55,18 @@
   }
 
   // Set up the video players.
-  var ytPlayer = new mirosubs.YoutubeVideoPlayer(
-      new mirosubs.YoutubeVideoSource('adam', 'w7vuupjsaVI'));
+  var ytSource = new mirosubs.video.YoutubeVideoSource('w7vuupjsaVI');
+  var ytPlayer = ytSource.createPlayer();
   ytPlayer.decorate(goog.dom.$('ytvideo'));
-  var html5Player = new mirosubs.Html5VideoPlayer(
-      new mirosubs.Html5VideoSource(
-          'http://videos.mozilla.org/firefox3/switch/switch.ogg'));
-  html5Player.decorate(goog.dom.$('html5video'));
+  var html5source = new mirosubs.video.Html5VideoSource(
+      'http://videos.mozilla.org/firefox3/switch/switch.ogg');
+  var html5player = html5source.createPlayer();
+  html5player.decorate(goog.dom.$('html5video'));
 
   var curPlayer = ytPlayer;
 
   goog.events.listen(ytPlayer, EVENTS, logYtEvent);
-  goog.events.listen(html5Player, EVENTS, logHtml5Event);
+  goog.events.listen(html5player, EVENTS, logHtml5Event);
 
   // Set up the controls.
   function videoSelected(e) {
