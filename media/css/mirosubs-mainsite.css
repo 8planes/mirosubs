@@ -1633,6 +1633,31 @@ margin: 20px 0 0 !important;
 }
 
 
+#comment-form{
+background: #fff;
+border: 1px solid #aaa;
+border-bottom: none;
+padding: 20px 20px 215px;
+}
+
+#comment-form textarea{
+width: 685px;
+margin-left: 120px;
+padding: 10px;
+float: left;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 13px;
+letter-spacing: .04em;
+}
+
+
+
+#comment-form button{
+clear: none !important;
+float: right; 
+}
+
+
 ul.table_body.comments{
 width: 978px;
 clear: left;
@@ -1698,10 +1723,9 @@ line-height: 1.7em !important;
 
 
 .table_user_deets{
-float: right;
-margin-bottom: 10px;
+float: left;
 width: 100px;
-margin-left: 30px;
+margin: 0px 30px 0 0;
 }
 
 
