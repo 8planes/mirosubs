@@ -89,6 +89,14 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
 
     this.suspendKeyEvents_(false);
 
+    var s = mirosubs.subtitle.Dialog.State_;
+
+    var transcribeExtraClass = 'mirosubs-modal-widget-transcribe';
+    if (state == s.TRANSCRIBE)
+        goog.dom.classes.add(this.getContentElement(), transcribeExtraClass);
+    else
+        goog.dom.classes.remove(this.getContentElement(), transcribeExtraClass);
+
     var nextSubPanel = this.makeCurrentStateSubtitlePanel_();
     var captionPanel = this.getCaptioningAreaInternal();
     captionPanel.removeChildren(true);
@@ -107,7 +115,6 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
         rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
     this.rightPanelListener_.listen(
         rightPanel, et.DONE, this.handleDoneKeyPress_);
-    var s = mirosubs.subtitle.Dialog.State_;
     if (state == s.SYNC || state == s.REVIEW) {
         rightPanel.showBackLink(
             state == s.SYNC ? "Back to Typing" : "Back to Sync");

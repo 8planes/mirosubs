@@ -2153,14 +2153,22 @@ a.mirosubs-openid span{
 text-align: center;
 }
 
-.mirosubs-howtopanel .mirosubs-videoDiv{
-   margin-top: 36px;
-   margin-bottom: 20px;
-}
-
 .mirosubs-howtopanel .mirosubs-done {
    width: 180px;
    margin: 10px auto;
+}
+
+.mirosubs-howto-videocontainer {
+   position: relative;
+   margin: 36px auto 20px;
+}
+
+.mirosubs-howto-image {
+   position: absolute;
+   top: 0;
+   left: 0;
+   cursor: pointer;
+   cursor: hand;
 }
 
 a.mirosubs-smallButton{
