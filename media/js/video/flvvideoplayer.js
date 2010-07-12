@@ -76,7 +76,7 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
         };
         if (this.chromeless_)
             config['plugins'] = { 'controls': null };
-        this.player_ = window['flowplayer'](
+        this.player_ = $f(
             videoDiv.id, flashEmbedParams, config);
     }
     this.getHandler().
