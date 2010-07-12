@@ -66,7 +66,10 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
         };
         var that = this;
         var config = {
-            'playlist': [this.videoSource_.getFlvURL()],
+            'playlist': [{ 
+                'url': this.videoSource_.getFlvURL(), 
+                'autoPlay': false
+            }],
             'onLoad': function() {
                 that.swfFinishedLoading_();
             }
@@ -79,6 +82,7 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
     this.getHandler().
         listen(this.progressTimer_, goog.Timer.TICK, this.progressTick_).
         listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
+    this.progressTimer_.start();
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
@@ -89,7 +93,7 @@ mirosubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
 
 mirosubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     this.swfLoaded_ = true;
-    goog.arrar.forEach(this.commands_, function(c) { c(); });
+    goog.array.forEach(this.commands_, function(c) { c(); });
     this.commands_ = [];
     var that = this;
     this.getClip_()['onStart'](function() {
@@ -104,7 +108,7 @@ mirosubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.progressTick_ = function(e) {
-    if (this.getDuration > 0) {
+    if (this.getDuration() > 0) {
         this.refreshStatus_();
         if (this.status_['bufferEnd'] >= this.getDuration() - 0.10)
             this.progressUpdateTimer_.stop();
@@ -132,7 +136,7 @@ mirosubs.video.FlvVideoPlayer.prototype.onPause_ = function() {
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.getClip_ = function() {
-    return this.player_['getClip']();
+    return this.player_['getClip'](0);
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.getBufferedLength = function() {
@@ -154,6 +158,7 @@ mirosubs.video.FlvVideoPlayer.prototype.getBufferedEnd = function(index) {
 mirosubs.video.FlvVideoPlayer.prototype.getDuration = function() {
     if (!this.duration_)
         this.duration_ = this.swfLoaded_ ? this.getClip_()['fullDuration'] : 0;
+    return this.duration_;
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.getVolume = function() {
