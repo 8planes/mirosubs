@@ -41,7 +41,8 @@ mirosubs.video.VideoSource.prototype.createPlayer = function() {};
 mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
 
 /**
- *
+ * Returns null if we can't get VideoSource without asking the server
+ * for more info.
  *
  */
 mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
@@ -53,6 +54,8 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
         else
             throw new Error("Cannot parse youtube url " + videoURL);
     }
+    else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL))
+        return null;
     else {
         // TODO: maybe check this in the future.
         return new mirosubs.video.Html5VideoSource(videoURL);

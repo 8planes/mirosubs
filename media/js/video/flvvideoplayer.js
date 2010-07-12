@@ -88,7 +88,7 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
 mirosubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
     mirosubs.video.FlvVideoPlayer.superClass_.exitDocument.call(this);
     this.timeUpdateTimer_.stop();
-    this.progressUpdateTimer_.stop();
+    this.progressTimer_.stop();
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
@@ -111,13 +111,13 @@ mirosubs.video.FlvVideoPlayer.prototype.progressTick_ = function(e) {
     if (this.getDuration() > 0) {
         this.refreshStatus_();
         if (this.status_['bufferEnd'] >= this.getDuration() - 0.10)
-            this.progressUpdateTimer_.stop();
+            this.progressTimer_.stop();
         this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
     }
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.refreshStatus_ = function() {
-    this.status_ = this.player_['getStatus']();    
+    this.status_ = this.player_['getStatus']();
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.timeUpdateTick_ = function(e) {
@@ -146,7 +146,7 @@ mirosubs.video.FlvVideoPlayer.prototype.getBufferedLength = function() {
 mirosubs.video.FlvVideoPlayer.prototype.getBufferedStart = function(index) {
     if (!this.status_)
         this.refreshStatus_();
-    return this.status_['bufferedStart'];
+    return this.status_['bufferStart'];
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.getBufferedEnd = function(index) {
@@ -156,8 +156,11 @@ mirosubs.video.FlvVideoPlayer.prototype.getBufferedEnd = function(index) {
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.getDuration = function() {
-    if (!this.duration_)
+    if (!this.duration_) {
         this.duration_ = this.swfLoaded_ ? this.getClip_()['fullDuration'] : 0;
+        if (isNaN(this.duration_))
+            this.duration_ = 0;
+    }
     return this.duration_;
 };
 

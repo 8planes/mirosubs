@@ -29,7 +29,7 @@ mirosubs.video.FlvVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-mirosubs.video.FlvVideoSource.prototype.createControllerPlayer = function() {
+mirosubs.video.FlvVideoSource.prototype.createControlledPlayer = function() {
     return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
 };
 

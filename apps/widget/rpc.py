@@ -39,6 +39,8 @@ def show_widget(request, video_url, null_widget, base_state):
             'video_id' : video.video_id,
             'writelock_expiration' : models.WRITELOCK_EXPIRATION 
         }
+    if video.video_type == models.VIDEO_TYPE_BLIPTV:
+        return_value['flv_url'] = video.bliptv_flv_url
     # video_tab corresponds to mirosubs.widget.VideoTab.InitialState in
     # javascript.
     video_tab = 0

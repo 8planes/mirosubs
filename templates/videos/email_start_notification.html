@@ -1,7 +1,7 @@
 Dear {{ user.username }},<br/> 
 
 Great news!  {{ version.user.username }} has just started a {{ language.get_language_display }} 
-translation of your video{% if video.youtube_name %} {{ video.youtube_name }}{% endif %}.  
+translation of your video{% if video.title %} {{ video.title }}{% endif %}.
 <br/>
 You can review the translation and thank them for their contribution on this
 <a href="http://{{ domain }}{% url videos:last_translation_revision video.video_id language.language %}">page</a> 
