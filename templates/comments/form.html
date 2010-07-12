@@ -12,7 +12,7 @@
     <button type="submit"><span>Post</span></button>    
 </form>
 <script type="text/javascript">
-$('#comment-form').ajaxForm({
+jQuery('#comment-form').ajaxForm({
     dataType: 'json',
     success: function(data, status, xhr, $form){
         if (data.success){
@@ -42,7 +42,7 @@ $('#comment-form').ajaxForm({
     }
 });
 
-$('.reply').live('click', function(){
+jQuery('.reply').live('click', function(){
     $('#id_comment_form_reply_to').val($(this).attr('comment_id'))
     $('#id_comment_form_content').focus();
     return false;
