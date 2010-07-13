@@ -930,14 +930,12 @@ ul.mirosubs-titlesList.sync {
       -2px -1px 1px #000,
       -1px -3px 1px #000,
       -3px -2px 1px #000 !important;
-width: 360px;
-font-size: 14px !important;
-    text-align: center !important;
-    color: white !important;
-    font-weight: bold !important;
-	z-index: 4534534544433 !important;
-    padding: 8px 20px !important;
-
+   width: 360px;
+   font-size: 14px !important;
+   text-align: center !important;
+   color: white !important;
+   font-weight: bold !important;
+   padding: 8px 20px !important;
 }
 
 iframe.mirosubs-captionDivBg { 
