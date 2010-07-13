@@ -131,10 +131,10 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
     var et = goog.events.EventType;
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
         var spec = this.legendKeySpecs_[i];
-        var key = $d('span', spec.spanClass, spec.keyText);
-        legendDiv.appendChild(
-            $d('div', spec.divClass,
-               key, goog.dom.createTextNode(spec.legendText)));
+        var key = $d('div', spec.divClass,
+                     $d('span', spec.spanClass, spec.keyText),
+                     goog.dom.createTextNode(spec.legendText));
+        legendDiv.appendChild(key);
         this.getHandler().listen(
             key, et.CLICK, goog.bind(this.legendKeyClicked_, 
                                      this, spec.keyCode));
