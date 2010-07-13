@@ -84,6 +84,21 @@ mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
             mirosubs.CaptionManager.CAPTION,
             this.captionReached_);
 };
+mirosubs.subtitle.Dialog.prototype.setExtraClass_ = function() {
+    var extraClasses = 
+        goog.array.map(['transcribe', 'sync', 'review'],
+                       function(suffix) { return 'mirosubs-modal-widget-' + suffix; });
+    var currentClass = "";
+    var s = mirosubs.subtitle.Dialog.State_;
+    if (this.state_ == s.TRANSCRIBE)
+        currentClass = extraClasses[0];
+    else if (this.state_ == s.SYNC)
+        currentClass = extraClasses[1];
+    else if (this.state_ == s.REVIEW)
+        currentClass = extraClasses[2];
+    goog.array.remove(extraClasses, currentClass);
+    goog.dom.classes.addRemove(this.getContentElement(), extraClasses, currentClass);
+};
 mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.state_ = state;
 
@@ -91,11 +106,7 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
 
     var s = mirosubs.subtitle.Dialog.State_;
 
-    var transcribeExtraClass = 'mirosubs-modal-widget-transcribe';
-    if (state == s.TRANSCRIBE)
-        goog.dom.classes.add(this.getContentElement(), transcribeExtraClass);
-    else
-        goog.dom.classes.remove(this.getContentElement(), transcribeExtraClass);
+    this.setExtraClass_();
 
     var nextSubPanel = this.makeCurrentStateSubtitlePanel_();
     var captionPanel = this.getCaptioningAreaInternal();
