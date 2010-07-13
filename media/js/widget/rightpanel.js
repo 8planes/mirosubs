@@ -127,6 +127,13 @@ mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     this.appendLegendContentsInternal($d, legendDiv);
     this.appendLegendClearInternal($d, legendDiv);
 };
+mirosubs.RightPanel.prototype.setKeyDown = function (keyCode, active) {
+    var spec = goog.array.find(this.legendKeySpecs_, 
+                               function(s) { return s.keyCode == keyCode; });
+    if (spec)
+        goog.dom.classes.enable(
+            spec.div, spec.divClass + '-down', active);
+};
 mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legendDiv) {
     var et = goog.events.EventType;
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
@@ -135,6 +142,7 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
                      $d('span', spec.spanClass, spec.keyText),
                      goog.dom.createTextNode(spec.legendText));
         legendDiv.appendChild(key);
+        spec.div = key;
         this.getHandler().listen(
             key, et.CLICK, goog.bind(this.legendKeyClicked_, 
                                      this, spec.keyCode));

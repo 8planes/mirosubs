@@ -54,8 +54,8 @@ mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
     handler.listen(this.captionManager_,
                    mirosubs.CaptionManager.CAPTION,
                    this.captionReached_).
-    listen(document, goog.events.EventType.KEYDOWN, this.handleKeyDown_).
-    listen(document, goog.events.EventType.KEYUP, this.handleKeyUp_);
+        listen(document, goog.events.EventType.KEYDOWN, this.handleKeyDown_).
+        listen(document, goog.events.EventType.KEYUP, this.handleKeyUp_);
 };
 mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
     mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);
@@ -104,7 +104,7 @@ mirosubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
             'mirosubs-begin', 'mirosubs-down', 'down',
             'Tap when next subtitle should appear', KC.DOWN),
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-tab', 'space', 'Play/Pause', KC.SPACE),
+            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB),
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-skip', 'mirosubs-control', 'ctrl',
             'Skip Back 8 Seconds', KC.CTRL)
@@ -125,10 +125,6 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
                 this.downHeld_)
             this.downReleased_();
     }
-    else if (event.keyCode == goog.events.KeyCodes.SPACE &&
-             event.keyEventType == goog.events.EventType.MOUSEDOWN &&
-             !this.currentlyEditingSubtitle_())
-        this.spacePressed_();
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
     if (this.keyEventsSuspended_)
@@ -137,12 +133,24 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
         this.downPressed_();
+        this.rightPanel_.setKeyDown(event.keyCode, true);
     }
-    if (event.keyCode == goog.events.KeyCodes.SPACE &&
+    else if (event.keyCode == goog.events.KeyCodes.SPACE &&
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
         this.spacePressed_();
+        this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, true);
     }
+};
+mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
+    if (event.keyCode == goog.events.KeyCodes.DOWN && this.downHeld_) {
+        event.preventDefault();
+        this.downReleased_();
+        this.rightPanel_.setKeyDown(event.keyCode, false);
+    }
+    else if (event.keyCode == goog.events.KeyCodes.SPACE &&
+             !this.currentlyEditingSubtitle_())
+        this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, false);
 };
 mirosubs.subtitle.SyncPanel.prototype.spacePressed_ = function() {
     this.videoPlayer_.togglePause();
@@ -162,12 +170,6 @@ mirosubs.subtitle.SyncPanel.prototype.downPressed_ = function() {
     else if (this.videoPlayer_.isPaused() && !this.videoStarted_) {
         this.videoPlayer_.play();
         this.videoStarted_ = true;
-    }
-};
-mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.DOWN && this.downHeld_) {
-        event.preventDefault();
-        this.downReleased_();
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.downReleased_ = function() {

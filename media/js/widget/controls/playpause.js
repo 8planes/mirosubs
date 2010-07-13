@@ -43,13 +43,11 @@ mirosubs.controls.PlayPause.prototype.enterDocument = function() {
         listen(this.getElement(), 'click', this.clicked_);
 };
 mirosubs.controls.PlayPause.prototype.setPlaying_ = function() {
-    goog.dom.classes.remove(this.getElement(), 'play');
-    goog.dom.classes.add(this.getElement(), 'pause');
+    goog.dom.classes.addRemove(this.getElement(), 'play', 'pause');
     this.state_ = mirosubs.controls.PlayPause.State_.PLAYING;
 };
 mirosubs.controls.PlayPause.prototype.setPaused_ = function() {
-    goog.dom.classes.remove(this.getElement(), 'pause');
-    goog.dom.classes.add(this.getElement(), 'play');
+    goog.dom.classes.addRemove(this.getElement(), 'pause', 'play');
     this.state_ = mirosubs.controls.PlayPause.State_.PAUSED;
 };
 mirosubs.controls.PlayPause.prototype.clicked_ = function() {

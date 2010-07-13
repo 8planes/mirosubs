@@ -68,6 +68,10 @@ mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
             goog.events.EventType.KEYDOWN,
             this.handleKeyDown_).
         listen(
+            document,
+            goog.events.EventType.KEYUP,
+            this.handleKeyUp_).
+        listen(
             this.captionManager_,
             mirosubs.CaptionManager.CAPTION,
             this.captionReached_);
@@ -122,14 +126,23 @@ mirosubs.subtitle.EditDialog.prototype.setFinishedState_ = function() {
     bottomContainer.addChild(bottomFinishedPanel, true);
 };
 mirosubs.subtitle.EditDialog.prototype.handleKeyDown_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.CTRL)
+    if (event.keyCode == goog.events.KeyCodes.CTRL) {
         this.ctrlClicked_();
+        this.getRightPanelInternal().setKeyDown(event.keyCode, true);
+    }
     if (event.keyCode == goog.events.KeyCodes.TAB) {
         // TODO: this violates accessibility guidelines.
         // Use another key instead of TAB!
         this.togglePause_();
         event.preventDefault();
+        this.getRightPanelInternal().setKeyDown(event.keyCode, true);
     }
+};
+mirosubs.subtitle.EditDialog.prototype.handleKeyUp_ = function(event) {
+    if (event.keyCode == goog.events.KeyCodes.CTRL)
+        this.getRightPanelInternal().setKeyDown(event.keyCode, false);
+    else if (event.keyCode == goog.events.KeyCodes.TAB)
+        this.getRightPanelInternal().setKeyDown(event.keyCode, false);    
 };
 mirosubs.subtitle.EditDialog.prototype.handleBackKeyPress_ = function(event) {
     this.setState_(mirosubs.subtitle.EditDialog.State_.TRANSCRIBE);

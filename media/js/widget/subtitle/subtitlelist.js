@@ -110,10 +110,7 @@ mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
  * @param {boolean} taller
  */
 mirosubs.subtitle.SubtitleList.prototype.setTaller = function(taller) {
-    if (taller)
-        goog.dom.classes.add(this.getElement(), 'taller');
-    else
-        goog.dom.classes.remove(this.getElement(), 'taller');
+    goog.dom.classes.enable(this.getElement(), 'taller', taller);
 };
 mirosubs.subtitle.SubtitleList.prototype.setActiveWidget = function(captionID) {
     this.scrollToCaption(captionID);
