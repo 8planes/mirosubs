@@ -91,8 +91,7 @@ mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
           "below."].join('')],
         3, 1);
     var extraHelp = 
-        ["Press play, then type everything people say in the text entry below the video. Don't let subtitles get too long.", 
-         "Hit enter for a new line."];
+        ["Press play, then tap this button or the down arrow when the next subtitle should appear."];
     return new mirosubs.RightPanel(
         this.serverModel, helpContents, extraHelp,
         this.makeKeySpecsInternal(), true, "Done?",

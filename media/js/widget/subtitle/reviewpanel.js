@@ -31,7 +31,7 @@ mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal =
     function()
 {
     var helpContents = new mirosubs.RightPanel.HelpContents(
-        "FINAL STEP: Review and make corrections",
+        "Review and make corrections",
         [["Now it's time to watch your subtitles, making changes if ",
           "neccesary. Click on any subtitle to edit its text."]
          .join(''),
