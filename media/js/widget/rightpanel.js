@@ -127,22 +127,37 @@ mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     this.appendLegendContentsInternal($d, legendDiv);
     this.appendLegendClearInternal($d, legendDiv);
 };
-mirosubs.RightPanel.prototype.setKeyDown = function (keyCode, active) {
-    var spec = goog.array.find(this.legendKeySpecs_, 
-                               function(s) { return s.keyCode == keyCode; });
+mirosubs.RightPanel.prototype.findSpec_ = function(keyCode) {
+    return goog.array.find(this.legendKeySpecs_, 
+                           function(s) { return s.keyCode == keyCode; });
+};
+mirosubs.RightPanel.prototype.setKeyDown = function(keyCode, active) {
+    var spec = this.findSpec_(keyCode);
     if (spec)
         goog.dom.classes.enable(
             spec.div, spec.divClass + '-down', active);
+};
+/**
+ * @protected
+ * @param {string=} opt_text text for the button, or null to revert to original text.
+ */
+mirosubs.RightPanel.prototype.setButtonTextInternal = function(keyCode, opt_text) {
+    var spec = this.findSpec_(keyCode);
+    if (spec)
+        goog.dom.setTextContent(
+            spec.textSpan, opt_text ? opt_text : spec.legendText);                    
 };
 mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legendDiv) {
     var et = goog.events.EventType;
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
         var spec = this.legendKeySpecs_[i];
+        var textSpan = $d('span', null, spec.legendText);
         var key = $d('div', spec.divClass,
                      $d('span', spec.spanClass, spec.keyText),
-                     goog.dom.createTextNode(spec.legendText));
+                     textSpan);
         legendDiv.appendChild(key);
         spec.div = key;
+        spec.textSpan = textSpan;
         this.getHandler().listen(
             key, et.CLICK, goog.bind(this.legendKeyClicked_, 
                                      this, spec.keyCode));
