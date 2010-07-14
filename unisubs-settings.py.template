@@ -48,7 +48,13 @@ DATABASES = {
         }
     }
 
-MEDIA_URL = "http://INSERT_SUBDOMAIN.universalsubtitles.org/site_media/"
+
+DEV_MEDIA_URL = 'http://dev.universalsubtitles.org/site_media'
+STAGING_MEDIA_URL = 'http://staging-static.universalsubtitles.org/'
+PRODUCTION_MEDIA_URL = 'http://static.universalsubtitles.org/'
+
+# should be one of the three above variables, depending on env.
+MEDIA_URL = INSERT_SITE_MEDIA_URL
 
 try:
     from commit import LAST_COMMIT_GUID
