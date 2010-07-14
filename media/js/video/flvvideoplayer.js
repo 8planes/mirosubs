@@ -175,15 +175,15 @@ mirosubs.video.FlvVideoPlayer.prototype.setVolume = function(vol) {
         this.commands_.push(goog.bind(this.setVolume_, this, vol));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.isPaused = function() {
+mirosubs.video.FlvVideoPlayer.prototype.isPausedInternal = function() {
     return this.swfLoaded_ ? this.player_['isPaused']() : false;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.videoEnded = function() {
+mirosubs.video.FlvVideoPlayer.prototype.videoEndedInternal = function() {
     return this.swfLoaded_ ? (this.player_['getState']() == 5) : false;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.isPlaying = function() {
+mirosubs.video.FlvVideoPlayer.prototype.isPlayingInternal = function() {
     return this.swfLoaded_ ? this.player_['isPlaying']() : false;
 };
 
@@ -201,7 +201,16 @@ mirosubs.video.FlvVideoPlayer.prototype.pauseInternal = function() {
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getPlayheadTime = function() {
+mirosubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
+    this.player_['stopBuffering']();
+    return true;    
+};
+
+mirosubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+    this.player_['startBuffering']();
+};
+
+mirosubs.video.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.swfLoaded_ ? this.player_['getTime']() : 0;
 };
 

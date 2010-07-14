@@ -172,13 +172,13 @@ mirosubs.video.YoutubeVideoPlayer.prototype.setVolume = function(vol) {
     else
         this.commands_.push(goog.bind(this.setVolume_, this, vol));
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.isPaused = function() {
+mirosubs.video.YoutubeVideoPlayer.prototype.isPausedInternal = function() {
     return this.getPlayerState_() == mirosubs.video.YoutubeVideoPlayer.State_.PAUSED;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.videoEnded = function() {
+mirosubs.video.YoutubeVideoPlayer.prototype.videoEndedInternal = function() {
     return this.getPlayerState_() == mirosubs.video.YoutubeVideoPlayer.State_.ENDED;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.isPlaying = function() {
+mirosubs.video.YoutubeVideoPlayer.prototype.isPlayingInternal = function() {
     return this.getPlayerState_() == mirosubs.video.YoutubeVideoPlayer.State_.PLAYING;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.playInternal = function () {
@@ -193,10 +193,26 @@ mirosubs.video.YoutubeVideoPlayer.prototype.pauseInternal = function() {
     else
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
+mirosubs.video.YoutubeVideoPlayer.prototype.stopLoadingInternal = function() {
+    if (this.player_) {
+        this.player_['stopVideo']();
+	return true;	
+    }
+
+    // The video hasn't started loading, so don't bother stopping.
+    return false;
+};
+mirosubs.video.YoutubeVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+    if (this.player_) {
+        this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID(), playheadTime);
+    }
+    else
+        this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));
+};
 mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime)
+mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTimeInternal = function(playheadTime)
 {
     if (this.player_) {
         this.player_['seekTo'](playheadTime, true);
