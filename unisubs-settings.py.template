@@ -49,7 +49,7 @@ DATABASES = {
     }
 
 
-DEV_MEDIA_URL = 'http://dev.universalsubtitles.org/site_media'
+DEV_MEDIA_URL = 'http://dev.universalsubtitles.org/site_media/'
 STAGING_MEDIA_URL = 'http://staging-static.universalsubtitles.org/'
 PRODUCTION_MEDIA_URL = 'http://static.universalsubtitles.org/'
 
