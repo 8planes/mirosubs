@@ -53,7 +53,7 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal =
     var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
     var text = goog.bind(this.playModeText_, this);
     goog.array.forEach(
-        [pm.AUTOPAUSE, pm.PLAY_STOP, pm.NO_AUTOPAUSE],
+        [pm.PLAY_STOP, pm.AUTOPAUSE, pm.NO_AUTOPAUSE],
         function(opt) {
             select.appendChild(
                 $d('option', {'value': opt}, text(opt)));                   
@@ -61,6 +61,7 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal =
     legendDiv.appendChild($d('div', 'mirosubs-speedmode',
                              $d('h4', null, 'Speed Mode'), 
                              select));
+    this.setButtonText_();
 };
 
 mirosubs.subtitle.TranscribeRightPanel.prototype.enterDocument = function() {
@@ -70,7 +71,21 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.enterDocument = function() {
                              this.playModeChanged_);
 };
 
-mirosubs.subtitle.TranscribeRightPanel.prototype.playModeChanged_ = function(event) {
+mirosubs.subtitle.TranscribeRightPanel.prototype.setButtonText_ = function() {
+    var kc = goog.events.KeyCodes;
+    if (this.playModeSelect_.value == 
+        mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP) {
+        this.setButtonTextInternal(kc.CTRL, "Re-play last 8 seconds");
+        this.setButtonTextInternal(kc.TAB, "Play next 8 seconds");
+    }
+    else {
+        this.setButtonTextInternal(kc.CTRL);
+        this.setButtonTextInternal(kc.TAB);
+    }
+};
+
+mirosubs.subtitle.TranscribeRightPanel.prototype.playModeChanged_ = function(event) {    
+    this.setButtonText_();
     this.dispatchEvent(
         new mirosubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent(
             this.playModeSelect_.value));
