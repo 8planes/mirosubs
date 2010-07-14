@@ -65,19 +65,26 @@ mirosubs.widget.Widget.prototype.decorateInternal = function(el) {
     this.addWidget_(el);
 };
 
+mirosubs.widget.Widget.prototype.setVideoSource_ = function(videoSource) {
+    this.videoSource_ = videoSource;
+    this.videoPlayer_ = this.videoSource_.createPlayer();
+    this.addChildAt(this.videoPlayer_, 0, true);
+    this.setVideoDimensions_();
+};
+
 mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
-    this.videoSource_ = null;
+    var videoSource = null;
     try {
-        this.videoSource_ = 
-            mirosubs.video.VideoSource.videoSourceForURL(this.videoURL_);
+        videoSource = mirosubs.video.VideoSource.videoSourceForURL(
+            this.videoURL_);
     }
     catch (err) {
         // TODO: format this more.
         el.innerHTML = err.message;
         return;
     }
-    this.videoPlayer_ = this.videoSource_.createPlayer();
-    this.addChild(this.videoPlayer_, true);
+    if (videoSource != null)
+        this.setVideoSource_(videoSource);
     this.videoTab_ = new mirosubs.widget.VideoTab();
     this.addChild(this.videoTab_, true);
     this.videoTab_.setText("Loading...");
@@ -95,6 +102,9 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.stateInitialized_ = true;
     if (result['username'])
         mirosubs.currentUsername = result['username'];
+    if (result['flv_url'] && !this.videoSource_)
+        this.setVideoSource_(new mirosubs.video.FlvVideoSource(
+            result['flv_url']));
     mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
         result["writelock_expiration"];
     this.videoID_ = result['video_id'];
@@ -145,6 +155,13 @@ mirosubs.widget.Widget.prototype.setInitialVideoTabState_ =
 
 mirosubs.widget.Widget.prototype.enterDocument = function() {
     mirosubs.widget.Widget.superClass_.enterDocument.call(this);
+    this.setVideoDimensions_();
+    this.attachEvents_();
+};
+
+mirosubs.widget.Widget.prototype.setVideoDimensions_ = function() {
+    if (!this.isInDocument() || !this.videoPlayer_)
+        return;
     if (this.videoPlayer_.areDimensionsKnown())
         this.videoDimensionsKnown_();
     else
@@ -152,7 +169,6 @@ mirosubs.widget.Widget.prototype.enterDocument = function() {
             this.videoPlayer_,
             mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
             this.videoDimensionsKnown_);
-    this.attachEvents_();
 };
 
 mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {

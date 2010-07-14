@@ -166,7 +166,7 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
                 lang['name'], lang['code']), true);
         });
         this.addChild(new goog.ui.MenuItem(
-            'Add new', mv.NEW_LANG), true);
+            'Add a translation', mv.NEW_LANG), true);
     }
     else {
         this.addChild(new goog.ui.MenuItem('Add Subtitles',

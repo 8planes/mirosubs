@@ -2,9 +2,13 @@
 {% block body%}
 <div>
   <h1>Youtube Video</h1>
+<!--
   <div id="ytvideo" style="height: 360px"></div>
+-->
   <h1>HTML 5 Video</h1>
   <div id="html5video"></div>
+  <h1>FLV Video</h1>
+  <div id="flvvideo"></div>
 </div>
 <div style="position: fixed; left: 500px; top: 80px;">
   <!-- Control panel -->
@@ -14,6 +18,7 @@
       <select id="videoselector">
         <option value="ytPlayer">YouTube</option>
         <option value="html5Player">HTML 5</option>
+        <option selected="1" value="flvPlayer">FLV</option>
       </select>
     </div>
     <div>
@@ -38,13 +43,17 @@
   goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
   var ytlogger = goog.debug.Logger.getLogger('youtube');
   var html5logger = goog.debug.Logger.getLogger('html5');
+  var flvlogger = goog.debug.Logger.getLogger('flv');
+
   var focusLogger = goog.debug.Logger.getLogger('focus');
   var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+
   logconsole.setCapturing(true);
 
-  var EVENTS = goog.object.getValues(mirosubs.AbstractVideoPlayer.EventType);
+  var EVENTS = goog.object.getValues(mirosubs.video.AbstractVideoPlayer.EventType);
   ytlogger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
   html5logger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
+  flvlogger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
 
   function logYtEvent(e) {
     ytlogger.info(e.type);
@@ -54,19 +63,32 @@
     html5logger.info(e.type);
   }
 
+  function logFlvEvent(e) {
+    flvlogger.info(e.type);
+  }
+
   // Set up the video players.
-  var ytPlayer = new mirosubs.YoutubeVideoPlayer(
-      new mirosubs.YoutubeVideoSource('adam', 'w7vuupjsaVI'));
+
+/*
+  var ytSource = new mirosubs.video.YoutubeVideoSource('w7vuupjsaVI');
+  var ytPlayer = ytSource.createPlayer();
   ytPlayer.decorate(goog.dom.$('ytvideo'));
-  var html5Player = new mirosubs.Html5VideoPlayer(
-      new mirosubs.Html5VideoSource(
-          'http://videos.mozilla.org/firefox3/switch/switch.ogg'));
-  html5Player.decorate(goog.dom.$('html5video'));
 
-  var curPlayer = ytPlayer;
+  var html5source = new mirosubs.video.Html5VideoSource(
+      'http://videos.mozilla.org/firefox3/switch/switch.ogg');
+  var html5player = html5source.createPlayer();
+  html5player.decorate(goog.dom.$('html5video'));
+*/
+  var flvSource = new mirosubs.video.FlvVideoSource(
+      'http://blip.tv/file/get/Thecraigshow-CraigVsKelly354.flv');
+  var flvPlayer = flvSource.createPlayer();
+  flvPlayer.decorate(goog.dom.$('flvvideo'));
 
-  goog.events.listen(ytPlayer, EVENTS, logYtEvent);
-  goog.events.listen(html5Player, EVENTS, logHtml5Event);
+  var curPlayer = flvPlayer;
+
+//  goog.events.listen(ytPlayer, EVENTS, logYtEvent);
+//  goog.events.listen(html5player, EVENTS, logHtml5Event);
+  goog.events.listen(flvPlayer, EVENTS, logFlvEvent);
 
   // Set up the controls.
   function videoSelected(e) {

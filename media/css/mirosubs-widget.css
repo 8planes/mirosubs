@@ -526,7 +526,7 @@ margin-top: 20px;
 .mirosubs-play:hover,
 .mirosubs-skip:hover,
 .mirosubs-begin:hover{
-cursor: pointer;
+   cursor: pointer;
 }
 
 .mirosubs-play{
@@ -546,17 +546,14 @@ padding-top: 20px;
 
 
 .mirosubs-play:hover{
-background: url("/site_media/images/new_buttons.png") 0px -214px no-repeat !important;
-text-shadow: 1px 1px 0px #a7d29c;
+   background: url("/site_media/images/new_buttons.png") 0px -214px no-repeat !important;
+   text-shadow: 1px 1px 0px #a7d29c;
 }
 
-
-.mirosubs-play:active{
-background: url("/site_media/images/new_buttons.png") 0px -356px no-repeat !important;
-text-shadow: none;
+.mirosubs-play:active, .mirosubs-play-down {
+   background: url("/site_media/images/new_buttons.png") 0px -356px no-repeat !important;
+   text-shadow: none;
 }
-
-
 
 .mirosubs-begin{
 text-shadow: 1px 1px 0px #b662ad;
@@ -576,14 +573,14 @@ margin-top: 5px;
 }
 
 
-.mirosubs-begin:hover{
-background: url("/site_media/images/new_buttons.png") 0px -141px no-repeat !important;
-text-shadow: 1px 1px 0px #e48fd8;
+.mirosubs-begin:hover {
+   background: url("/site_media/images/new_buttons.png") 0px -141px no-repeat !important;
+   text-shadow: 1px 1px 0px #e48fd8;
 }
 
-.mirosubs-begin:active{
-background: url("/site_media/images/new_buttons.png") 0px -283px no-repeat !important;
-text-shadow: none;
+.mirosubs-begin:active, .mirosubs-begin-down {
+   background: url("/site_media/images/new_buttons.png") 0px -283px no-repeat !important;
+   text-shadow: none;
 }
 
 
@@ -609,7 +606,7 @@ text-shadow: 1px 1px 0px #86bfcc;
 }
 
 
-.mirosubs-skip:active{
+.mirosubs-skip:active, .mirosubs-skip-down {
 background: url("/site_media/images/new_buttons.png") right -356px no-repeat !important;
 text-shadow: none;
 }
@@ -969,14 +966,12 @@ ul.mirosubs-titlesList.sync {
       -2px -1px 1px #000,
       -1px -3px 1px #000,
       -3px -2px 1px #000 !important;
-width: 360px;
-font-size: 14px !important;
-    text-align: center !important;
-    color: white !important;
-    font-weight: bold !important;
-	z-index: 4534534544433 !important;
-    padding: 8px 20px !important;
-
+   width: 360px;
+   font-size: 14px !important;
+   text-align: center !important;
+   color: white !important;
+   font-weight: bold !important;
+   padding: 8px 20px !important;
 }
 
 iframe.mirosubs-captionDivBg { 
@@ -2190,7 +2185,7 @@ a.mirosubs-openid span{
 .mirosubs-howtopanel,
 .mirosubs-howtopanel h2,
 .mirosubs-howtopanel .mirosubs-videoDiv{
-text-align: center;
+   text-align: center;
 }
 
 .mirosubs-howtopanel .mirosubs-done {
@@ -2230,20 +2225,20 @@ background: url(/site_media/images/small_buttons.png) left 0px no-repeat;
 }
 
 a.mirosubs-smallButton:hover{
-background: url(/site_media/images/small_buttons.png) right -34px no-repeat;
+   background: url(/site_media/images/small_buttons.png) right -34px no-repeat;
 }
 
 a.mirosubs-smallButton:hover span{
-text-shadow: 0px 1px 1px #beec32 ;
-background: url(/site_media/images/small_buttons.png) left -34px no-repeat;
+   text-shadow: 0px 1px 1px #beec32 ;
+   background: url(/site_media/images/small_buttons.png) left -34px no-repeat;
 }
 
 a.mirosubs-smallButton:active{
-background: url(/site_media/images/small_buttons.png) right -68px no-repeat;
+   background: url(/site_media/images/small_buttons.png) right -68px no-repeat;
 }
 
 a.mirosubs-smallButton:active span{
-background: url(/site_media/images/small_buttons.png) left -68px no-repeat;
+   background: url(/site_media/images/small_buttons.png) left -68px no-repeat;
 }
 
 

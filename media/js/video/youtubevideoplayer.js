@@ -70,7 +70,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
     if (!this.swfEmbedded_) {
         this.swfEmbedded_ = true;
         var videoDiv = this.getDomHelper().createDom('div');
-        videoDiv.id = 'a' + this.makeId('video');
+        videoDiv.id = mirosubs.randomString();
         this.getElement().appendChild(videoDiv);
         var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
         var atts = { 'id': this.playerElemID_ };
@@ -101,8 +101,6 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         listen(this.progressTimer_, goog.Timer.TICK, this.progressTick_).
         listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
     this.progressTimer_.start();
-    if (!this.isPaused())
-        this.timeUpdateTimer_.start();
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.exitDocument = function() {
     mirosubs.video.YoutubeVideoPlayer.superClass_.exitDocument.call(this);
@@ -126,6 +124,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
         if (this.chromeless_)
             this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());
         goog.array.forEach(this.commands_, function(cmd) { cmd(); });
+        this.commands_ = [];
         window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
         this.player_.addEventListener('onStateChange', this.eventFunction_);
     }

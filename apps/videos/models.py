@@ -27,6 +27,7 @@ from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
+from vidscraper.sites import blip
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -34,9 +35,11 @@ yt_service.ssl = False
 NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
 VIDEO_TYPE_HTML5 = 'H'
 VIDEO_TYPE_YOUTUBE = 'Y'
+VIDEO_TYPE_BLIPTV = 'B'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
-    (VIDEO_TYPE_YOUTUBE, 'Youtube')
+    (VIDEO_TYPE_YOUTUBE, 'Youtube'),
+    (VIDEO_TYPE_BLIPTV, 'Blip.tv')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
@@ -55,7 +58,10 @@ class Video(models.Model):
     video_url = models.URLField(max_length=2048)
     # only nonzero length for Youtube videos
     youtube_videoid = models.CharField(max_length=32)
-    youtube_name = models.CharField(max_length=2048, blank=True)
+    # only nonzero length for Blip.tv videos
+    bliptv_fileid = models.CharField(max_length=32)
+    bliptv_flv_url = models.CharField(max_length=256)
+    title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
     # the person who was first to start captioning this video.
     owner = models.ForeignKey(User, null=True)
@@ -68,14 +74,14 @@ class Video(models.Model):
     widget_views_count = models.IntegerField(default=0)
     
     def __unicode__(self):
+        if self.title:
+            return self.title
         if self.video_type == VIDEO_TYPE_HTML5:
             return self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
-            if self.youtube_name:
-                return self.youtube_name
             return self.youtube_videoid
-        else:
-            return self.video_url 
+        elif self.video_type == VIDEO_TYPE_BLIPTV:
+            return self.bliptv_fileid
     
     @models.permalink
     def search_page_url(self):
@@ -85,7 +91,9 @@ class Video(models.Model):
         if self.video_type == VIDEO_TYPE_HTML5:
             return self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
-            return 'http://www.youtube.com/watch?v=%s' % self.youtube_videoid
+            return 'http://www.youtube.com/watch?v={0}'.format(self.youtube_videoid)
+        elif self.video_type == VIDEO_TYPE_BLIPTV:
+            return 'http://blip.tv/file/{0}/'.format(self.bliptv_fileid)
         else:
             return self.video_url
 
@@ -102,7 +110,18 @@ class Video(models.Model):
          
             if created:
                 entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
-                video.youtube_name = entry.media.title.text
+                video.title = entry.media.title.text
+                video.save()
+        elif 'blip.tv' in parsed_url.netloc:
+            bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
+            video, created = Video.objects.get_or_create(
+                bliptv_fileid=bliptv_fileid,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_BLIPTV, 
+                          'allow_community_edits': True})
+            if created:
+                video.title = blip.scrape_title(video_url)
+                video.bliptv_flv_url = blip.scrape_file_url(video_url)
                 video.save()
         else:
             video, created = Video.objects.get_or_create(
@@ -117,8 +136,10 @@ class Video(models.Model):
         """The best SRT filename for this video."""
         if self.video_type == VIDEO_TYPE_HTML5:
             return '{0}.srt'.format(self.video_url.split('/')[-1])
-        else:
+        elif self.video_type == VIDEO_TYPE_YOUTUBE:
             return 'youtube_{0}.srt'.format(self.youtube_videoid)
+        else:
+            return 'bliptv_{0}.srt'.format(self.bliptv_fileid)
 
     @property
     def caption_state(self):

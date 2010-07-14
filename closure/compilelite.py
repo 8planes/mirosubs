@@ -14,6 +14,7 @@ logging.basicConfig(level=logging.INFO,
 
 JS_LIB = os.path.join(BASE, "../media/js")
 CLOSURE_LIB = os.path.join(JS_LIB, "closure-library")
+FLOWPLAYER_JS = os.path.join(BASE, "../media/flowplayer/flowplayer-3.2.2.min.js")
 
 calcdeps_js = os.path.join(JS_LIB, 'mirosubs-calcdeps.js')
 
@@ -40,6 +41,8 @@ def compile(output_file_name, js_file_list):
     with open(output_file_path, 'w') as compiled_js_file:
         with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
             compiled_js_file.write(swfobject_file.read())
+        with open(FLOWPLAYER_JS, 'r') as flowplayerjs_file:
+            compiled_js_file.write(flowplayerjs_file.read())
         compiled_js_file.write(output)
         js_file_paths = [os.path.join(JS_LIB, file) for file in js_file_list]
         for dep_file_name in js_file_paths:

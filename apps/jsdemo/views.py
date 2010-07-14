@@ -21,13 +21,10 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 import widget
 
-def relative_path(js_file):
-    return "/site_media/js/%s" % js_file
-
 def js_dependencies():
     js_files = list(settings.JS_ONSITE)
-    js_files.append('widget/testing/stubvideoplayer.js');
-    return [relative_path(js_file) for js_file in js_files]
+    js_files.append('/site_media/js/widget/testing/stubvideoplayer.js');
+    return js_files
 
 def jsdemo(request, file_name):
     if file_name == 'raise_exception':

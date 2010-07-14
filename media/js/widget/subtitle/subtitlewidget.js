@@ -77,11 +77,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
             this.timeSpinnerListener_);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.setActive = function(active) {
-    var c = goog.dom.classes;
-    if (active)
-        c.add(this.getElement(), 'active');
-    else
-        c.remove(this.getElement(), 'active');
+    goog.dom.classes.enable(this.getElement(), 'active', active);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.timeSpinnerListener_ =
     function(event)
