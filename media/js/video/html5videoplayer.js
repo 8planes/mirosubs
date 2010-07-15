@@ -169,16 +169,15 @@ mirosubs.video.Html5VideoPlayer.prototype.pauseInternal = function() {
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.stopLoadingInternal = function() {
-    if (this.videoEnded())
-	return false;
-
-    // set playhead time to the end of the video, which should cut off buffering
-    this.setPlayheadTime(this.getDuration());
+    // TODO: replace this with an actual URL
+    this.videoElem_['src'] = 'http://www.google.com/';
     return true;
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+    this.videoElem_['src'] = this.videoSource_.getVideoURL();
     this.setPlayheadTime(playheadTime);
+    this.pause();
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.getPlayheadTimeInternal = function() {

@@ -202,12 +202,24 @@ mirosubs.video.FlvVideoPlayer.prototype.pauseInternal = function() {
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
-    this.player_['stopBuffering']();
-    return true;    
+    if (this.swfLoaded_) {
+        this.player_['stopBuffering']();
+	this.setLoadingStopped(true);
+	return true;
+    }
+    else {
+        this.commands_.push(goog.bind(this.stopLoadingInternal, this));
+	return false;
+    }
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
-    this.player_['startBuffering']();
+    if (this.swfLoaded_) {
+        this.player_['startBuffering']();
+	this.setLoadingStopped(false);
+    }
+    else
+        this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {

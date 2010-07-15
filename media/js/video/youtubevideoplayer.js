@@ -196,15 +196,18 @@ mirosubs.video.YoutubeVideoPlayer.prototype.pauseInternal = function() {
 mirosubs.video.YoutubeVideoPlayer.prototype.stopLoadingInternal = function() {
     if (this.player_) {
         this.player_['stopVideo']();
+	this.setLoadingStopped(true);
 	return true;	
     }
-
-    // The video hasn't started loading, so don't bother stopping.
-    return false;
+    else {
+	this.commands_.push(goog.bind(this.stopLoadingInternal, this));
+	return false;
+    }
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     if (this.player_) {
         this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID(), playheadTime);
+	this.setLoadingStopped(false);
     }
     else
         this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));

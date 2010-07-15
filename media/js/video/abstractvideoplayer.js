@@ -30,7 +30,14 @@ mirosubs.video.AbstractVideoPlayer = function(videoSource) {
     this.noUpdateEvents_ = false;
     this.dimensionsKnown_ = false;
     this.isLoadingStopped_ = false;
-    this.storedPlayheadTime_ = null;
+    /**
+     * If the video's loading is stopped (i.e., it is no longer buffering),
+     * we may have had to alter the video source or playhead time to force
+     * the buffering to actually cease.  While stopped, this variable will
+     * store the playhead time we were previously at, so it can be restored.
+     * @type{number}
+     */
+    this.storedPlayheadTime_ = 0;
 };
 goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
@@ -88,10 +95,17 @@ mirosubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
     else
         this.pause();
 };
+mirosubs.video.AbstractVideoPlayer.prototype.isLoadingStopped = function() {
+  return this.isLoadingStopped_;  
+};
+mirosubs.video.AbstractVideoPlayer.prototype.setLoadingStopped = function(isLoadingStopped) {
+  this.isLoadingStopped_ = isLoadingStopped;  
+};
 mirosubs.video.AbstractVideoPlayer.prototype.stopLoading = function() {
     if (!this.isLoadingStopped_) {
+	this.pause();
+	this.storedPlayheadTime_ = this.getPlayheadTime();
 	if (this.stopLoadingInternal()) {
-	    this.storedPlayheadTime_ = this.getPlayheadTime();
 	    this.isLoadingStopped_ = true;
 	}
     }
@@ -99,7 +113,6 @@ mirosubs.video.AbstractVideoPlayer.prototype.stopLoading = function() {
 mirosubs.video.AbstractVideoPlayer.prototype.stopLoadingInternal = goog.abstractMethod;
 mirosubs.video.AbstractVideoPlayer.prototype.resumeLoading = function() {
     if (this.isLoadingStopped_) {
-	this.isLoadingStopped_ = false;
 	this.resumeLoadingInternal(this.storedPlayheadTime_);
 	this.storedPlayheadTime_ = null;
     }
