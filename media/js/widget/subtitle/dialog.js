@@ -130,6 +130,8 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
         rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
     this.rightPanelListener_.listen(
         rightPanel, et.DONE, this.handleDoneKeyPress_);
+    this.rightPanelListener_.listen(
+        rightPanel, et.GOTOSTEP, this.handleGoToStep_);
     if (state == s.SYNC || state == s.REVIEW) {
         rightPanel.showBackLink(
             state == s.SYNC ? "Back to Typing" : "Back to Sync");
@@ -171,6 +173,9 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
         videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
     }
+};
+mirosubs.subtitle.Dialog.prototype.handleGoToStep_ = function(event) {
+    this.setState_(event.stepNo);
 };
 mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
     if (this.keyEventsSuspended_)
