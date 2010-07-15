@@ -50,6 +50,10 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
         mirosubs.widget.Widget.prototype.selectMenuItem);
 
     goog.exportSymbol(
+        "mirosubs.widget.Widget.prototype.playAt",
+        mirosubs.widget.Widget.prototype.playAt);
+
+    goog.exportSymbol(
         "mirosubs.MainMenu.Selection",
         mirosubs.MainMenu.Selection);
     var s = mirosubs.MainMenu.Selection;

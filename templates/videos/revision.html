@@ -13,9 +13,11 @@
         text-align: center;
     }
     .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
-    width: 460px;
+    width: 480px;
     }
-    
+    span.data {
+      display: none;
+    }
     #embed{
       white-space: pre;
       background: #eee;
@@ -27,7 +29,7 @@
 {% block scripts %}
     {{ block.super }}
     <script type="text/javascript">
-        $(function(){
+        jQuery(function($){
             var IS_AUTHENTICATED = '{{ user.is_authenticated }}' == 'True';
             if (IS_AUTHENTICATED){
                 $('.roll_back').click(function(){
@@ -41,6 +43,16 @@
                     return false;
                 });
             }
+            $('.new_edit').click(function() {
+                widget_widget_div.selectMenuItem(
+                    mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
+                return false;
+            });
+            $('.time_link').click(function() {
+                widget_widget_div.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });
         });
     </script>
     {% include "widget/_js_onsite_dependencies.html" %}
@@ -123,7 +135,11 @@
     
     <ul class="revision_list">
       {% for item in version.captions %}
-        <li {% cycle 'class="even"' '' %}>{{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text }}</li>
+        <li {% cycle 'class="even"' '' %}>
+          <a href="#" class="time_link">
+            <span class="data">{{item.start_time}}</span>
+            {{ item.display_time }} - {{ item.display_end_time }}
+          </a> &gt; {{ item.text }}</li>
       {% endfor %}
     </ul>
 {% endblock %}
