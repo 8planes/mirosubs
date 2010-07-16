@@ -1,6 +1,6 @@
         <div id="{{ div_id }}" class="mirosubs-widget"></div>
         <script type="text/javascript">
-          mirosubs.widget.SameDomainEmbed.embed(
+          var widget_{{ div_id }} = mirosubs.widget.SameDomainEmbed.embed(
               document.getElementById('{{ div_id }}'), 
               { {{ widget_params|safe }} });
         </script>

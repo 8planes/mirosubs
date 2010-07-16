@@ -81,7 +81,7 @@ def base_widget_params(request, extra_params={}):
     if request.GET.get('translate_immediately') == 'true':
         params['translate_immediately'] = True    
     if request.GET.get('base_state') is not None:
-        params['base_state'] = request.GET['base_state']
+        params['base_state'] = json.loads(request.GET['base_state'])
     params.update(extra_params)
     return json.dumps(params)[1:-1]
 

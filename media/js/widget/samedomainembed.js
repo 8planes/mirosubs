@@ -45,9 +45,15 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
     v["supportsOgg"] = v.supportsOgg;
     v["supportsWebM"] = v.supportsWebM;
 
-    goog.exportSymbol(
-        "mirosubs.widget.Widget.prototype.selectMenuItem",
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "selectMenuItem",
         mirosubs.widget.Widget.prototype.selectMenuItem);
+
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "playAt",
+        mirosubs.widget.Widget.prototype.playAt);
 
     goog.exportSymbol(
         "mirosubs.MainMenu.Selection",

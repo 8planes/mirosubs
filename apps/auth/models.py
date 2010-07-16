@@ -12,6 +12,9 @@ class CustomUser(BaseUser):
     biography = models.TextField('Tell us about yourself', blank=True)
     
     objects = UserManager()
+    
+    class Meta:
+        verbose_name = 'User'
         
     def __unicode__(self):
         return self.username
@@ -23,6 +26,12 @@ class CustomUser(BaseUser):
     @models.permalink
     def profile_url(self):
         return ('profiles:profile', [self.pk])
+
+    def _get_unique_checks(self, exclude=None):
+        #add email field validate like unique
+        unique_checks, date_checks = super(CustomUser, self)._get_unique_checks(exclude)
+        unique_checks.append((CustomUser, ('email',)))
+        return unique_checks, date_checks
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (
