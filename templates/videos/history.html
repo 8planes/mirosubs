@@ -152,7 +152,7 @@
                 <li {% cycle 'class="even"' '' %}>
                     <ul>
                         <li class="table_most_recent">
-                            <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/>{{ item.revision_time }} (#{{ item.version_no}}) <a class="view_history" href="{% url videos:revision pk=item.pk %}">view</a>
+                            <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/><a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
                         </li>
                         <li class="table_user">
                             <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
