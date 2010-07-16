@@ -109,7 +109,11 @@
     <div class="clearboth">&nbsp;</div>
 
     <ul class="video_tabs">
-      <li class="active"><a href="#trascripts">Original Subtitles</a></li>
+      <li class="active">
+          <a href="#trascripts">
+            {% block trascripts_tab %}Original Language Subtitles{% endblock %}
+          </a>
+      </li>
       <li><a href="#comments">Comments ({% get_comment_count commented_object %})</a></li>
       <li><a href="#revisions">Versions ({{ hits }})</a></li>
     </ul>
@@ -187,7 +191,7 @@
         <ul class="table_body"> 
             {% for item in last_version.captions %}
                 <li class="table_transcript {% cycle 'even' '' %}">
-                    {{ item.text }}
+                    {{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text }}
                 </li>
             {% endfor %}
         </ul>

@@ -136,10 +136,8 @@
     <ul class="revision_list">
       {% for item in version.captions %}
         <li {% cycle 'class="even"' '' %}>
-          <a href="#" class="time_link">
-            <span class="data">{{item.start_time}}</span>
-            {{ item.display_time }} - {{ item.display_end_time }}
-          </a> &gt; {{ item.text }}</li>
+          {{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text }}
+        </li>
       {% endfor %}
     </ul>
 {% endblock %}
