@@ -52,25 +52,25 @@ mirosubs.video.AbstractVideoPlayer.prototype.createDom = function() {
 };
 mirosubs.video.AbstractVideoPlayer.prototype.isPaused = function() {
     if (this.isLoadingStopped_)
-	return true;
+	throw new "can't check if paused, loading is stopped";
     return this.isPausedInternal();
 };
 mirosubs.video.AbstractVideoPlayer.prototype.isPausedInternal = goog.abstractMethod;
 mirosubs.video.AbstractVideoPlayer.prototype.isPlaying = function() {
     if (this.isLoadingStopped_)
-	return false;
+	throw new "can't check if playing, loading is stopped";
     return this.isPlayingInternal();
 };
 mirosubs.video.AbstractVideoPlayer.prototype.isPlayingInternal = goog.abstractMethod;
 mirosubs.video.AbstractVideoPlayer.prototype.videoEnded = function() {
     if (this.isLoadingStopped_)
-	return false;
+	throw new "can't check if video ended, loading is stopped";
     return this.videoEndedInternal();
 };
 mirosubs.video.AbstractVideoPlayer.prototype.videoEndedInternal = goog.abstractMethod;
 mirosubs.video.AbstractVideoPlayer.prototype.play = function(opt_suppressEvent) {
     if (this.isLoadingStopped_)
-	return;
+	throw new "can't play, loading is stopped";
     if (!opt_suppressEvent)
         this.dispatchEvent(
             mirosubs.video.AbstractVideoPlayer.EventType.PLAY_CALLED);
@@ -79,7 +79,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.play = function(opt_suppressEvent) 
 mirosubs.video.AbstractVideoPlayer.prototype.playInternal = goog.abstractMethod;
 mirosubs.video.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent) {
     if (this.isLoadingStopped_)
-	return;
+	throw new "can't pause, loading is stopped";
     if (!opt_suppressEvent)
         this.dispatchEvent(
             mirosubs.video.AbstractVideoPlayer.EventType.PAUSE_CALLED);
@@ -88,7 +88,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent)
 mirosubs.video.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;
 mirosubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
     if (this.isLoadingStopped_)
-	return;
+	throw new "can't toggle pause, loading is stopped";
 
     if (!this.isPlaying())
         this.play();
