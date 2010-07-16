@@ -62,7 +62,8 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
         var flashEmbedParams = {
             'src': mirosubs.mediaURL() + 'flowplayer/flowplayer-3.2.2.swf',
             'width': this.width_,
-            'height': this.height_
+            'height': this.height_,
+            'wmode': 'opaque'
         };
         var that = this;
         var config = {

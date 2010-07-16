@@ -42,6 +42,9 @@ DATABASES = {
     }
 }
 
+# 'embed{0}.js'.format(EMBED_JS_VERSION) gives the current embed script file name.
+EMBED_JS_VERSION = '0008'
+
 JS_USE_COMPILED = False
 
 # paths provided relative to media/js

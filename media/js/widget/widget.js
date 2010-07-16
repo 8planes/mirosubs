@@ -35,6 +35,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
      */
     this.videoElement_ = widgetConfig['video_element'];
     this.nullWidget_ = !!widgetConfig['null_widget'];
+    this.hideTab_ = !!widgetConfig['hide_tab'];
     this.subtitleImmediately_ = 
         !!widgetConfig['subtitle_immediately'];
     this.translateImmediately_ =
@@ -87,6 +88,8 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
         this.setVideoSource_(videoSource);
     this.videoTab_ = new mirosubs.widget.VideoTab();
     this.addChild(this.videoTab_, true);
+    if (this.hideTab_)
+        goog.style.showElement(this.videoTab_.getElement(), false);
     this.videoTab_.setText("Loading...");
     this.videoTab_.showLoading(true);
     mirosubs.Rpc.call(
@@ -210,6 +213,11 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
         this.addNewLanguageClicked_();
     else if (selection == s.TURN_OFF_SUBS)
         this.turnOffSubs_();
+};
+
+mirosubs.widget.Widget.prototype.playAt = function(time) {
+    this.videoPlayer_.setPlayheadTime(time);
+    this.videoPlayer_.play();
 };
 
 mirosubs.widget.Widget.prototype.loginStatusChanged_ = function() {

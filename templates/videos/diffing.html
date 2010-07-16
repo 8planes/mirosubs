@@ -13,9 +13,11 @@
         text-align: center;
     }
     .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
-    width: 460px;
+        width: 480px;
     }
-    
+    span.data {
+        display: none;
+    }
     #embed{
       white-space: pre;
       background: #eee;
@@ -27,7 +29,7 @@
 {% block scripts %}
     {{ block.super }}
     <script type="text/javascript">
-        $(function(){
+        jQuery(function($) {
             var IS_AUTHENTICATED = '{{ user.is_authenticated }}' == 'True';
             if (IS_AUTHENTICATED){
                 $('.roll_back').click(function(){
@@ -41,6 +43,26 @@
                     return false;
                 });
             }
+            $('#edit_0').click(function() {
+                widget_widget_div_0.selectMenuItem(
+                    mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
+                return false;
+            });
+            $('#edit_1').click(function() {
+                widget_widget_div_1.selectMenuItem(
+                    mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
+                return false;
+            });
+            $('.time_link_0').click(function() {
+                widget_widget_div_0.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });
+            $('.time_link_1').click(function() {
+                widget_widget_div_1.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });
         });
     </script>
     {% include "widget/_js_onsite_dependencies.html" %}
@@ -71,7 +93,7 @@
         
         <div class="clear">&nbsp;</div>
         
-        {% widget widget1_params 'widget_div_0' %}
+        {% widget widget0_params 'widget_div_0' %}
                 <div class="clear tall">&nbsp;</div>
 
         {% if is_writelocked %}
@@ -79,7 +101,7 @@
                 Someone is editing subtitles.
             </div>             
         {% else%}
-            <a href="#" class="new_edit">Submit a new edit based on this version</a>
+            <a href="#" class="new_edit" id="edit_0">Submit a new edit based on this version</a>
             {% if first_version.next_version %}
                 <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
                     Roll back to version #{{ first_version.version_no }}
@@ -91,16 +113,19 @@
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
                 {% if item.0 %}
+                  <a href="#" class="time_link_0">
+                    <span class="data">{{item.0.start_time}}</span>
                     <span {% if item.2.time %}class="time_change"{% endif %}>
                         {{ item.0.display_time }}
                     </span> -
                     <span {% if item.2.end_time %}class="time_change"{% endif %}>
                         {{ item.0.display_end_time }}
-                    </span>                    
-                     &gt; 
-                    <span {% if item.2.text %}class="time_change"{% endif %}>
-                        {{ item.0.text }}
                     </span>
+                  </a>
+                  &gt; 
+                  <span {% if item.2.text %}class="time_change"{% endif %}>
+                    {{ item.0.text }}
+                  </span>
                 {% else %}
                     &nbsp;
                 {% endif %}
@@ -124,7 +149,7 @@
         
         <div class="clear">&nbsp;</div>
         
-        {% widget widget2_params 'widget_div_1' %}
+        {% widget widget1_params 'widget_div_1' %}
         
         {% if is_writelocked %}
             <div class="viewing_old">
@@ -145,16 +170,19 @@
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
                 {% if item.1 %}
+                  <a href="#" class="time_link_1">
+                  <span class="data">{{item.1.start_time}}</span>
                     <span {% if item.2.time %}class="time_change"{% endif %}>
-                        {{ item.1.display_time }}
+                      {{ item.1.display_time }}
                     </span> -
                     <span {% if item.2.end_time %}class="time_change"{% endif %}>
-                        {{ item.1.display_end_time }}
-                    </span>                      
-                    &gt; 
-                    <span {% if item.2.text %}class="time_change"{% endif %}>
-                        {{ item.1.text }}
+                      {{ item.1.display_end_time }}
                     </span>
+                  </a>
+                  &gt; 
+                  <span {% if item.2.text %}class="time_change"{% endif %}>
+                    {{ item.1.text }}
+                  </span>
                 {% else %}
                     &nbsp;
                 {% endif %}

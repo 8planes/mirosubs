@@ -97,13 +97,12 @@ mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
             if (i == this.helpContents_.activeStep)
                 linkAttributes['className'] = 'mirosubs-activestep';
             var link = $d('a', linkAttributes, i + 1 + '');
-            var curStep = i;
             this.getHandler().listen(
-                link, 'click', function(e) {
+                link, 'click', goog.partial(function(step, e) {
                     e.preventDefault();
                     that.dispatchEvent(
-                        new mirosubs.RightPanel.GoToStepEvent(curStep));
-                });
+                        new mirosubs.RightPanel.GoToStepEvent(step));
+                }, i));
             stepsUL.appendChild($d('li', null, link));
         }
         helpHeadingDiv.appendChild(stepsUL);
