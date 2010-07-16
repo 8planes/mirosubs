@@ -176,15 +176,15 @@ mirosubs.video.FlvVideoPlayer.prototype.setVolume = function(vol) {
         this.commands_.push(goog.bind(this.setVolume_, this, vol));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.isPaused = function() {
+mirosubs.video.FlvVideoPlayer.prototype.isPausedInternal = function() {
     return this.swfLoaded_ ? this.player_['isPaused']() : false;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.videoEnded = function() {
+mirosubs.video.FlvVideoPlayer.prototype.videoEndedInternal = function() {
     return this.swfLoaded_ ? (this.player_['getState']() == 5) : false;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.isPlaying = function() {
+mirosubs.video.FlvVideoPlayer.prototype.isPlayingInternal = function() {
     return this.swfLoaded_ ? this.player_['isPlaying']() : false;
 };
 
@@ -202,7 +202,28 @@ mirosubs.video.FlvVideoPlayer.prototype.pauseInternal = function() {
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getPlayheadTime = function() {
+mirosubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
+    if (this.swfLoaded_) {
+        this.player_['stopBuffering']();
+	this.setLoadingStopped(true);
+	return true;
+    }
+    else {
+        this.commands_.push(goog.bind(this.stopLoadingInternal, this));
+	return false;
+    }
+};
+
+mirosubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+    if (this.swfLoaded_) {
+        this.player_['startBuffering']();
+	this.setLoadingStopped(false);
+    }
+    else
+        this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));
+};
+
+mirosubs.video.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.swfLoaded_ ? this.player_['getTime']() : 0;
 };
 

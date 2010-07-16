@@ -144,15 +144,15 @@ mirosubs.video.Html5VideoPlayer.prototype.getDuration = function() {
     var duration = this.videoElem_['duration'];
     return isNaN(duration) ? 0 : duration;
 };
-mirosubs.video.Html5VideoPlayer.prototype.isPaused = function() {
+mirosubs.video.Html5VideoPlayer.prototype.isPausedInternal = function() {
     return this.videoElem_['paused'];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoEnded = function() {
+mirosubs.video.Html5VideoPlayer.prototype.videoEndedInternal = function() {
     return this.videoElem_['ended'];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.isPlaying = function() {
+mirosubs.video.Html5VideoPlayer.prototype.isPlayingInternal = function() {
     var readyState = this.getReadyState_();
     var RS = mirosubs.video.Html5VideoPlayer.ReadyState_;
     return (readyState == RS.HAVE_FUTURE_DATA ||
@@ -168,7 +168,19 @@ mirosubs.video.Html5VideoPlayer.prototype.pauseInternal = function() {
     this.videoElem_['pause']();
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.getPlayheadTime = function() {
+mirosubs.video.Html5VideoPlayer.prototype.stopLoadingInternal = function() {
+    // TODO: replace this with an actual URL
+    this.videoElem_['src'] = 'http://www.google.com/';
+    return true;
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+    this.videoElem_['src'] = this.videoSource_.getVideoURL();
+    this.setPlayheadTime(playheadTime);
+    this.pause();
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.videoElem_["currentTime"];
 };
 
@@ -177,7 +189,7 @@ mirosubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTim
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.getVideoSize = function() {
-    return goog.style.getSize(this.videoElem_)
+    return goog.style.getSize(this.videoElem_);
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.getReadyState_ = function() {
