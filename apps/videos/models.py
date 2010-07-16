@@ -46,6 +46,8 @@ WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
 
 def format_time(time):
+    if time < 0:
+        return ''
     t = int(time)
     s = t % 60
     s = s > 9 and s or '0%s' % s 

@@ -115,8 +115,7 @@
     </div>    
 
     <div class="right_column">
-      <br />
-      <br />      <br />      <br />      <br />
+      <br /><br /><br /><br /><br />
       {% if is_writelocked %}
           <div class="viewing_old">
               Someone is editing subtitles.
@@ -129,14 +128,16 @@
           </a>
           {% endif %}
       {% endif %}
-    </div>    
-<div class="clearboth">&nbsp;</div>
+    </div>
+    <div class="clearboth">&nbsp;</div>
     <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}" class="return_history floatright">&lt;&lt; Return to revision history</a>
     
     <ul class="revision_list">
       {% for item in version.captions %}
         <li {% cycle 'class="even"' '' %}>
-          {{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text }}
+          {% if item.display_time or item.display_end_time %}
+            {{ item.display_time }} - {{ item.display_end_time }} 
+          {% endif %} &gt; {{ item.text }}
         </li>
       {% endfor %}
     </ul>
