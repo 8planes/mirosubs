@@ -23,9 +23,9 @@
             {% endif %}
         {% else %}
             {% if item.language %}
-                edited {{ item.get_language_display }} translations for 
+                edited <a href="{% url videos:translation_history item.video.video_id item.language %}">{{ item.get_language_display }} translation</a> for 
             {% else %}
-                edited subtitles for
+                edited <a href="{% url videos:history item.video.video_id %}">original language subtitles</a> for
             {% endif %}
             <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
         {% endif %}
