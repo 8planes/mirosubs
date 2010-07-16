@@ -3,7 +3,7 @@
         <div class="table_user_deets">
             <span class="user_thumb"><img src="{% thumbnail item.user.picture 100x100 %}" /></span>
             <a href="{{ item.user.profile_url }}">{{ item.user.username }}</a>
-            <span class="comment_date">{{ item.submit_date|timesince }}</span>
+            <span class="comment_date">{{ item.submit_date|timesince }} ago</span>
         </div>
         <div class="comment_text">
             <a name="comments-{{ item.id }}"></a>

@@ -44,7 +44,7 @@ def recent_activity(user=None):
         'events': qs[:LIMIT]
     }
 
-@register.inclusion_tag('videos/_recent_activity.html')    
+@register.inclusion_tag('videos/_video_activity.html')    
 def video_activity(video):
     qs = Action.objects.filter(video=video)
     

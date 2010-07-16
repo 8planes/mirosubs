@@ -27,6 +27,7 @@ from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
+from comments.models import Comment
 from vidscraper.sites import blip
 
 yt_service = YouTubeService()
@@ -449,7 +450,10 @@ class TranslationLanguage(models.Model):
     
     @property
     def percent_done(self):
-        translation_count = self.translations().captions().count()
+        try:
+            translation_count = self.translations().captions().count()
+        except AttributeError:
+            translation_count = 0
         captions_count = self.video.captions().captions().count()
         try:
             return int(translation_count / 1. / captions_count * 100)
@@ -662,13 +666,10 @@ class VideoCaption(models.Model):
         return self.caption_text
     
 class Action(models.Model):
-    TYPE_CHOICES = (
-        (1, 'subtitles'),
-        (2, 'translations')
-    )
     user = models.ForeignKey(User)
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    comment = models.ForeignKey(Comment, blank=True, null=True)
     created = models.DateTimeField()
     
     class Meta:
@@ -687,6 +688,24 @@ class Action(models.Model):
             return self.user.profile_set.all()[0]
         except IndexError:
             pass        
+    
+    @classmethod
+    def create_comment_handler(cls, sender, instance, created, **kwargs):
+        if created:
+            model_class = instance.content_type.model_class()
+            if issubclass(model_class, Video):
+                obj = cls(user=instance.user)
+                obj.video_id = instance.object_pk
+                obj.comment = instance
+                obj.created = instance.submit_date
+                obj.save()
+            if issubclass(model_class, TranslationLanguage):
+                obj = cls(user=instance.user)
+                language = instance.content_object
+                obj.comment = instance
+                obj.video = language.video
+                obj.created = instance.submit_date
+                obj.save()
     
     @classmethod
     def create_translation_handler(cls, sender, instance, created, **kwargs):
@@ -727,7 +746,8 @@ class Action(models.Model):
             obj = cls(user=user, video=video)
             obj.created = instance.datetime_started
             obj.save()            
-        
+
+post_save.connect(Action.create_comment_handler, Comment)        
 post_save.connect(Action.create_translation_handler, TranslationVersion)
 post_save.connect(Action.create_caption_handler, VideoCaptionVersion)
 

@@ -1,13 +1,16 @@
-{% load thumbnail %}
-
+<ul class="table_head">
+    <li class="table_most_recent">
+        Activity
+    </li>
+    <li class="table_user">
+        Happened
+    </li>            
+</ul>
 <ul class="table_body">
 {% for item in events %}
     <li class="table_transcript">
         {% if item.user %}
-            {% if item.uprofile.picture %}
-                <img src="{% thumbnail item.uprofile.picture 32x32 %}" />
-            {% endif %}
-            {{ item.time }} - <a class="username" href="{{ item.user.profile_url }}">{{ item.user.username }}</a>
+            <a class="username" href="{{ item.user.profile_url }}">{{ item.user.username }}</a>
         {% else %}
             <span class="username anon">Anonymous</span>
         {% endif %}
@@ -26,6 +29,9 @@
             {% endif %}
             <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
         {% endif %}
+    </li>
+    <li>
+        {{ item.created|timesince }} ago
     </li>
 {% endfor %}
 </ul>

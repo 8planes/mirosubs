@@ -5,7 +5,7 @@
 {% block diffing_link %}{% url videos:translation_diffing 11111 22222 %}{% endblock %}
 
 {% block lang_display %}
-    in <a href="{% url videos:video video_id=video.video_id %}">{{ language.get_language_display }} Language</a>
+    in {{ language.get_language_display }} Language
 {% endblock %}
 
 {% block translation_list %}
