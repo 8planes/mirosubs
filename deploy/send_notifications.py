@@ -1,4 +1,4 @@
-#!/usr/bin/env/python
+#!/usr/bin/env python
 
 def send_notifications(suffix = ''):
     os.chdir('/var/www/universalsubtitles{0}'.format(suffix))
