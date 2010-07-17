@@ -101,7 +101,7 @@ mirosubs.subtitle.Dialog.prototype.setExtraClass_ = function() {
     else if (this.state_ == s.REVIEW)
         currentClass = extraClasses[2];
     else if (this.state_ == s.FINISHED)
-        currentClass = extraClasses[3]);
+        currentClass = extraClasses[3];
     goog.array.remove(extraClasses, currentClass);
     goog.dom.classes.addRemove(this.getContentElement(), extraClasses, currentClass);
 };
