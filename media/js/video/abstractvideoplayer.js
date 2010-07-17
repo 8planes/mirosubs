@@ -205,8 +205,6 @@ mirosubs.video.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };
 mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
-    if (this.isLoadingStopped_)
-	return;
     goog.abstractMethod();
 };
 /**
