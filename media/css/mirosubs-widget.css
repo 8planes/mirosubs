@@ -187,16 +187,15 @@ border: 0;
 
 .mirosubs-help-heading{
 padding-top: 16px;
-background: #fff url("/site_media/images/gradient_light.png") right 0px repeat-x;
 height: 30px;
-margin: 0 -1px 28px 0px;
+margin: 0 -1px 20px 0px;
 padding-left: 20px;
-border-bottom: 1px solid #eee;
+
 }
 
 
 .mirosubs-right h2{
-	color: #333 !important;
+	color: #fff !important;
 	margin: 0px 0 0 !important;
 font-size: 15px !important;
 	
@@ -281,9 +280,9 @@ margin-left: 30px !important;
 
 
 
-::-moz-selection{background: transparent !important; !important} 
+::-moz-selection{background: #bacf1c !important; !important} 
 
-::selection {background: transparent !important; !important} 
+::selection {background: #bacf1c !important; !important} 
 
 
 .mirosubs-help{
@@ -339,10 +338,10 @@ border-bottom: 1px solid #444;
 
   
 .mirosubs-extra{
-border: 1px solid #4f4f4f;
-background: #454545;
+border: 1px solid #000;
+background: #fff;
 margin: 20px;
-padding: 15px 15px 5px;
+padding: 15px 20px 10px;
    -moz-border-radius: 4px;
    -webkit-border-radius: 4px;
 position: relative;
@@ -351,8 +350,12 @@ position: relative;
 
 .mirosubs-extra p{
 margin: 0px 0 5px;
-font-size: 12px !important;
+color: #333;
 padding: 0;
+text-shadow: none;
+font-weight: bold;
+line-height: 1.4em !important;
+font-size: 16px !important;
 }
 
 .mirosubs-extra .mirosubs-spanarrow{

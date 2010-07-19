@@ -1640,6 +1640,14 @@ border-bottom: none;
 padding: 20px 20px 215px;
 }
 
+.comment-form{
+clear: both;
+background: #fff;
+border: 1px solid #aaa;
+border-bottom: none;
+padding: 20px 20px 215px;
+}
+
 #comment-form textarea{
 width: 685px;
 margin-left: 120px;
