@@ -20,7 +20,6 @@ from django.db import models
 import string
 import random
 from urlparse import urlparse, parse_qs
-from django.utils.encoding import DjangoUnicodeDecodeError
 from django.conf.global_settings import LANGUAGES
 from auth.models import CustomUser as User
 from datetime import datetime, date, timedelta

@@ -3,6 +3,14 @@ from django.db import models
 from django.conf.global_settings import LANGUAGES
 
 class CustomUser(BaseUser):
+    AUTOPLAY_ON_BROWSER = 1
+    AUTOPLAY_ON_LANGUAGES = 2
+    DONT_AUTOPLAY = 3
+    AUTOPLAY_CHOICES = (
+        (AUTOPLAY_ON_BROWSER, 'Autoplay subtitles based on browser preferred languages'),
+        (AUTOPLAY_ON_LANGUAGES, 'Autoplay subtitles in languages I know'),
+        (DONT_AUTOPLAY, 'Don\'t autoplay subtitles')
+    )
     homepage = models.URLField(verify_exists=False, blank=True)
     preferred_language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
     picture = models.ImageField(blank=True,
@@ -10,6 +18,7 @@ class CustomUser(BaseUser):
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
+    autoplay_preferences = models.IntegerField(choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
     
     objects = UserManager()
     
