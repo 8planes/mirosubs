@@ -91,7 +91,7 @@
           {% if user.is_authenticated %}
               <li class="login_link"><a href="{% url logout %}"><span>Logout</span></a></li>
           {% else %}
-              <li class="login_link"><a href="{% url auth:login %}"><span>Login</span></a></li>
+              <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info }}"><span>Login</span></a></li>
           {% endif %}
       
     <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Our Blog</span></a></li>

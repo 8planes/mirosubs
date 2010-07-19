@@ -89,9 +89,9 @@ mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
             this.captionReached_);
 };
 mirosubs.subtitle.Dialog.prototype.setExtraClass_ = function() {
-    var extraClasses = 
-        goog.array.map(['transcribe', 'sync', 'review'],
-                       function(suffix) { return 'mirosubs-modal-widget-' + suffix; });
+    var extraClasses = goog.array.map(
+        ['transcribe', 'sync', 'review', 'finished'],
+        function(suffix) { return 'mirosubs-modal-widget-' + suffix; });
     var currentClass = "";
     var s = mirosubs.subtitle.Dialog.State_;
     if (this.state_ == s.TRANSCRIBE)
@@ -100,6 +100,8 @@ mirosubs.subtitle.Dialog.prototype.setExtraClass_ = function() {
         currentClass = extraClasses[1];
     else if (this.state_ == s.REVIEW)
         currentClass = extraClasses[2];
+    else if (this.state_ == s.FINISHED)
+        currentClass = extraClasses[3];
     goog.array.remove(extraClasses, currentClass);
     goog.dom.classes.addRemove(this.getContentElement(), extraClasses, currentClass);
 };

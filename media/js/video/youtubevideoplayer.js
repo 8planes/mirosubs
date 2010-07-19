@@ -215,7 +215,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.resumeLoadingInternal = function(pla
 mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTimeInternal = function(playheadTime)
+mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime)
 {
     if (this.player_) {
         this.player_['seekTo'](playheadTime, true);

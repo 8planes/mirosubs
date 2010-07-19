@@ -318,7 +318,7 @@ mirosubs.widget.Widget.prototype.editTranslationConfirmed_ = function() {
 mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
     function(forSubtitling) 
 {
-    if (true || mirosubs.DEBUG || !goog.userAgent.GECKO)
+    if (mirosubs.DEBUG || !goog.userAgent.GECKO)
         return false;
     else {
         var url = mirosubs.siteURL() + '/onsite_widget/?';
