@@ -123,10 +123,12 @@ def start_editing_null(request, video_id, base_version_no=None):
         null_captions = video.null_captions(request.user)
         if null_captions is None:
             captions = []
+            version_no = 0
         else:
             captions = list(null_captions.videocaption_set.all())
+            version_no = 1
     return { 'can_edit': True,
-             'version': 0,
+             'version': version_no,
              'existing': [caption.to_json_dict() for
                           caption in captions] }
 

@@ -98,6 +98,9 @@ mirosubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
 mirosubs.video.AbstractVideoPlayer.prototype.isLoadingStopped = function() {
   return this.isLoadingStopped_;  
 };
+/**
+ * @protected
+ */
 mirosubs.video.AbstractVideoPlayer.prototype.setLoadingStopped = function(isLoadingStopped) {
   this.isLoadingStopped_ = isLoadingStopped;  
 };
