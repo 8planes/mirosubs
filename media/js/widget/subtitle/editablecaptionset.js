@@ -27,8 +27,7 @@ goog.provide('mirosubs.subtitle.EditableCaptionSet');
 
 /**
  * @constructor
- * @param {array.<object.<string, *>>} existingJsonCaptions Must be sorted 
- *     in ascending order
+ * @param {array.<object.<string, *>>} existingJsonCaptions No sort order necessary.
  * @param {mirosubs.UnitOfWork=} opt_unitOfWork Unit of work, only provided 
  *     if this EditableCaptionSet is not read-only
  */
@@ -42,10 +41,13 @@ mirosubs.subtitle.EditableCaptionSet = function(
     this.captions_ = goog.array.map(
         existingJsonCaptions, function(caption) { 
             c = new mirosubs.subtitle.EditableCaption(
-                opt_unitOfWork, caption);
+                opt_unitOfWork, null, caption);
             c.setParentEventTarget(that);
             return c;
         });
+    goog.array.sort(
+        this.captions_, 
+        mirosubs.subtitle.EditableCaption.orderCompare);
     var i;
     for (i = 1; i < this.captions_.length; i++) {
         this.captions_[i - 1].setNextCaption(this.captions_[i]);
@@ -103,7 +105,10 @@ mirosubs.subtitle.EditableCaptionSet.prototype.caption = function(index) {
     return this.captions_[index];
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function() {
-    var c = new mirosubs.subtitle.EditableCaption(this.unitOfWork_);
+    var lastSubOrder = 0.0;
+    if (this.captions_.length > 0)
+        lastSubOrder = this.captions_[this.captions_.length - 1].getSubOrder();
+    var c = new mirosubs.subtitle.EditableCaption(this.unitOfWork_, lastSubOrder + 1.0);
     c.setParentEventTarget(this);
     this.captions_.push(c);
     if (this.captions_.length > 1) {

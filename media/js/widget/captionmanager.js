@@ -29,7 +29,7 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     this.captions_ = captionSet.captionsWithTimes();
     goog.array.sort(
         this.captions_,
-        mirosubs.subtitle.EditableCaption.startTimeCompare);
+        mirosubs.subtitle.EditableCaption.orderCompare);
     this.binaryCompare_ = function(time, caption) {
 	return time - caption.getStartTime();
     };

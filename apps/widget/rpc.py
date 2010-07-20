@@ -412,7 +412,8 @@ def apply_caption_changes(caption_set, deleted, inserted, updated,
         vc = models.VideoCaption(caption_id=i['caption_id'],
                                  caption_text=i['caption_text'],
                                  start_time=i['start_time'],
-                                 end_time=i['end_time'])
+                                 end_time=i['end_time'],
+                                 sub_order=i['sub_order'])
         if version is not None:
             vc.version = version
         else:

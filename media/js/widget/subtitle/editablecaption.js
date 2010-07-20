@@ -23,11 +23,14 @@ goog.provide('mirosubs.subtitle.EditableCaption');
  * mirosubs.subtitle.EditableCaptionSet.
  *
  * @param {mirosubs.UnitOfWork=} opt_unitOfWork
+ * @param {Number=} opt_subOrder Order in which this sub appears. Provide 
+ *    this parameter iff the caption doesn't exist in the MiroSubs 
+ *    system.
  * @param {JSONCaption=} opt_jsonCaption optional JSON caption on which 
  *     we're operating. Provide this parameter iff the caption exists 
  *     already in the MiroSubs system.
  */
-mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_jsonCaption) {
+mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_subOrder, opt_jsonCaption) {
     goog.events.EventTarget.call(this);
     this.unitOfWork_ = opt_unitOfWork;
     this.jsonCaption = opt_jsonCaption || 
@@ -35,15 +38,16 @@ mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_jsonCaption) {
             'caption_id' : mirosubs.randomString(),
             'caption_text' : '',
             'start_time' : -1,
-            'end_time' : -1
+            'end_time' : -1,
+            'sub_order' : opt_subOrder
         };
     this.previousCaption_ = null;
     this.nextCaption_ = null;
 };
 goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
 
-mirosubs.subtitle.EditableCaption.startTimeCompare = function(a, b) {
-    return a.getStartTime() - b.getStartTime();
+mirosubs.subtitle.EditableCaption.orderCompare = function(a, b) {
+    return a.getSubOrder() - b.getSubOrder();
 };
 
 mirosubs.subtitle.EditableCaption.CHANGE = 'captionchanged';
@@ -76,6 +80,9 @@ mirosubs.subtitle.EditableCaption.prototype.setNextCaption =
 };
 mirosubs.subtitle.EditableCaption.prototype.getNextCaption = function() {
     return this.nextCaption_;
+};
+mirosubs.subtitle.EditableCaption.prototype.getSubOrder = function() {
+    return this.jsonCaption['sub_order'];
 };
 mirosubs.subtitle.EditableCaption.prototype.setText = function(text) {
     this.jsonCaption['caption_text'] = text;
