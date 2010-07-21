@@ -27,7 +27,7 @@ from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
-# from vidscraper.sites import blip
+from vidscraper.sites import blip
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -122,8 +122,8 @@ class Video(models.Model):
                           'video_type': VIDEO_TYPE_BLIPTV, 
                           'allow_community_edits': True})
             if created:
-#                video.title = blip.scrape_title(video_url)
-#                video.bliptv_flv_url = blip.scrape_file_url(video_url)
+                video.title = blip.scrape_title(video_url)
+                video.bliptv_flv_url = blip.scrape_file_url(video_url)
                 video.save()
         else:
             video, created = Video.objects.get_or_create(
