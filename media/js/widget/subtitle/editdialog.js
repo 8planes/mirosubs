@@ -76,8 +76,27 @@ mirosubs.subtitle.EditDialog.prototype.enterDocument = function() {
             mirosubs.CaptionManager.CAPTION,
             this.captionReached_);
 };
+
+mirosubs.subtitle.EditDialog.prototype.setExtraClass_ = function() {
+    var extraClasses = goog.array.map(
+        ['transcribe', 'edit', 'finished'],
+        function(suffix) { return 'mirosubs-modal-widget-' + suffix; });
+    var currentClass = "";
+    var s = mirosubs.subtitle.EditDialog.State_;
+    if (this.state_ == s.TRANSCRIBE)
+        currentClass = extraClasses[0];
+    else if (this.state_ == s.EDIT)
+        currentClass = extraClasses[1];
+    else if (this.state_ == s.FINISHED)
+        currentClass = extraClasses[2];
+    goog.array.remove(extraClasses, currentClass);
+    goog.dom.classes.addRemove(this.getContentElement(), extraClasses, currentClass);    
+};
+
 mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
     this.state_ = state;
+
+    this.setExtraClass_();
 
     var nextSubPanel = this.makeCurrentStateSubtitlePanel_();
     var captionPanel = this.getCaptioningAreaInternal();
@@ -117,6 +136,8 @@ mirosubs.subtitle.EditDialog.prototype.setState_ = function(state) {
     }
 };
 mirosubs.subtitle.EditDialog.prototype.setFinishedState_ = function() {
+    this.state_ = mirosubs.subtitle.EditDialog.State_.FINISHED;
+    this.setExtraClass_();
     var sharePanel = new mirosubs.subtitle.SharePanel(
         this.serverModel_);
     this.setRightPanelInternal(sharePanel);

@@ -77,10 +77,12 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.setButtonText_ = function() {
         mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP) {
         this.setButtonTextInternal(kc.CTRL, "Re-play last 8 seconds");
         this.setButtonTextInternal(kc.TAB, "Play next 8 seconds");
+        this.enableButtonClassInternal(kc.TAB, '-beginner', true);
     }
     else {
         this.setButtonTextInternal(kc.CTRL);
         this.setButtonTextInternal(kc.TAB);
+        this.enableButtonClassInternal(kc.TAB, '-beginner', false);
     }
 };
 

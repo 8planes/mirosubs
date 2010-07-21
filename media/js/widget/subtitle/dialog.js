@@ -161,6 +161,8 @@ mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
 };
 mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     this.saved_ = true;
+    this.state_ = mirosubs.subtitle.Dialog.State_.FINISHED;
+    this.setExtraClass_();
     var sharePanel = new mirosubs.subtitle.SharePanel(
         this.serverModel_);
     this.setRightPanelInternal(sharePanel);

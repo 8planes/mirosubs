@@ -116,6 +116,7 @@ def start_editing(request, video_id, base_version_no=None):
 
 def start_editing_null(request, video_id, base_version_no=None):
     # FIXME: note duplication with start_editing, fix that.
+    version_no = 0
     if not request.user.is_authenticated():
         captions = []
     else:
@@ -123,7 +124,6 @@ def start_editing_null(request, video_id, base_version_no=None):
         null_captions = video.null_captions(request.user)
         if null_captions is None:
             captions = []
-            version_no = 0
         else:
             captions = list(null_captions.videocaption_set.all())
             version_no = 1

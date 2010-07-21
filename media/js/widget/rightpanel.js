@@ -131,11 +131,9 @@ mirosubs.RightPanel.prototype.findSpec_ = function(keyCode) {
                            function(s) { return s.keyCode == keyCode; });
 };
 mirosubs.RightPanel.prototype.setKeyDown = function(keyCode, active) {
-    var spec = this.findSpec_(keyCode);
-    if (spec)
-        goog.dom.classes.enable(
-            spec.div, spec.divClass + '-down', active);
+    this.enableButtonClassInternal(keyCode, '-down', active);
 };
+
 /**
  * @protected
  * @param {string=} opt_text text for the button, or null to revert to original text.
@@ -146,6 +144,16 @@ mirosubs.RightPanel.prototype.setButtonTextInternal = function(keyCode, opt_text
         goog.dom.setTextContent(
             spec.textSpan, opt_text ? opt_text : spec.legendText);                    
 };
+
+mirosubs.RightPanel.prototype.enableButtonClassInternal =
+    function (keyCode, classSuffix, enable)
+{
+    var spec = this.findSpec_(keyCode);
+    if (spec)
+        goog.dom.classes.enable(
+            spec.div, spec.divClass + classSuffix, enable);
+};
+
 mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legendDiv) {
     var et = goog.events.EventType;
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
@@ -240,13 +248,7 @@ mirosubs.RightPanel.prototype.getDoneAnchor = function() {
 mirosubs.RightPanel.prototype.updateLoginState = function() {
     goog.dom.removeChildren(this.loginDiv_);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    if (this.serverModel_.currentUsername() != null)
-        this.loginDiv_.appendChild(
-            $d('div', 'mirosubs-loggedIn',
-               goog.dom.createTextNode(
-                   ["You are logged in as ", 
-                    this.serverModel_.currentUsername()].join(''))));
-    else {
+    if (this.serverModel_.currentUsername() == null) {
         var loginLink = $d('a', {'href':'#'}, "LOGIN");
         this.loginDiv_.appendChild(
             $d('div', 'mirosubs-needLogin',
