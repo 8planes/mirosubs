@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.video.Html5VideoPlayer');
@@ -35,15 +35,15 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls) {
     this.includeControls_ = !opt_excludeControls;
 
     this.progressThrottle_ = new goog.Throttle(
-        this.videoProgress_, 
+        this.videoProgress_,
         mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL,
         this);
     this.timeUpdateThrottle_ = new goog.Throttle(
-        this.sendTimeUpdateInternal, 
+        this.sendTimeUpdateInternal,
         mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL,
         this);
 };
-goog.inherits(mirosubs.video.Html5VideoPlayer, 
+goog.inherits(mirosubs.video.Html5VideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
 
 mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
@@ -63,7 +63,7 @@ mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
         if (this.includeControls_)
             params['controls'] = 'true';
         el.appendChild(
-            this.videoElem_ = 
+            this.videoElem_ =
                 $d('video', params,
                    $d('source', {'src': this.videoSource_.getVideoURL()})));
     }
@@ -82,7 +82,7 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'progress', this.videoProgressListener_).
         listen(this.videoElem_, 'loadedmetadata', this.setDimensionsKnownInternal).
         listen(this.videoElem_, 'timeupdate',
-               this.timeUpdateThrottle_.fire, 
+               this.timeUpdateThrottle_.fire,
                false, this.timeUpdateThrottle_);
 };
 
@@ -95,11 +95,11 @@ mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.videoPaused_ = function(event) {
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PAUSE);    
+    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PAUSE);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoProgressListener_ = 
-    function(event) 
+mirosubs.video.Html5VideoPlayer.prototype.videoProgressListener_ =
+    function(event)
 {
     if (event.getBrowserEvent()['loaded'] && event.getBrowserEvent()['total']) {
         this.videoLoaded_ = event.getBrowserEvent()['loaded'];
@@ -134,7 +134,7 @@ mirosubs.video.Html5VideoPlayer.prototype.getBufferedStart = function(index) {
 };
 mirosubs.video.Html5VideoPlayer.prototype.getBufferedEnd = function(index) {
     if (this.videoElem_['buffered'])
-        return this.videoElem_['buffered']['end'](index);        
+        return this.videoElem_['buffered']['end'](index);
     else if (this.videoTotal_ != 0 && this.getDuration() != 0)
         return this.getDuration() * this.videoLoaded_ / this.videoTotal_;
     else
@@ -170,7 +170,7 @@ mirosubs.video.Html5VideoPlayer.prototype.pauseInternal = function() {
 
 mirosubs.video.Html5VideoPlayer.prototype.stopLoadingInternal = function() {
     // TODO: replace this with an actual URL
-    this.videoElem_['src'] = 'http://www.google.com/';
+    this.videoElem_['src'] = 'http://holmeswilson.org/tinyblank.ogv';
     return true;
 };
 
