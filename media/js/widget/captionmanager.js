@@ -27,11 +27,11 @@ goog.provide('mirosubs.CaptionManager');
 mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     goog.events.EventTarget.call(this);
     this.captions_ = captionSet.captionsWithTimes();
-    goog.array.sort(
-        this.captions_,
-        mirosubs.subtitle.EditableCaption.orderCompare);
     this.binaryCompare_ = function(time, caption) {
 	return time - caption.getStartTime();
+    };
+    this.binaryCaptionCompare_ = function(c0, c1) {
+        return c0.getStartTime() - c1.getStartTime();
     };
     this.videoPlayer_ = videoPlayer;
     this.eventHandler_ = new goog.events.EventHandler(this);
@@ -62,6 +62,25 @@ mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
 	this.captions_ = [];
         this.currentCaptionIndex_ = -1;
 	this.dispatchCaptionEvent_(null);
+    }
+    else if (event.type == et.ADD) {
+        var caption = event.caption;
+        console.log(caption);
+        if (caption.getStartTime() != -1) {
+            goog.array.binaryInsert(
+                this.captions_, caption, this.binaryCaptionCompare_);
+            this.sendEventForRandomPlayheadTime_(
+                this.videoPlayer_.getPlayheadTime());
+        }
+    }
+    else if (event.type == et.DELETE) {
+        var caption = event.caption;
+        if (caption.getStartTime() != -1) {
+            goog.array.binaryRemove(
+                this.captions_, caption, this.binaryCaptionCompare_);
+            this.sendEventForRandomPlayheadTime_(
+                this.videoPlayer_.getPlayheadTime());
+        }
     }
     else if (event.type == mirosubs.subtitle.EditableCaption.CHANGE) {
 	if (event.timesFirstAssigned) {

@@ -114,13 +114,16 @@ mirosubs.subtitle.EditableCaptionSet.prototype.caption = function(index) {
  * @param {Number} nextSubOrder The next subtitle's subOrder 
  *     (returned by EditableCaption#getSubOrder())
  */
-mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption = function(nextSubOrder) {
+mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption = 
+    function(nextSubOrder) 
+{
     var index = this.findSubIndex_(nextSubOrder);
     var nextSub = this.captions_[index];
     prevSub = nextSub.getPreviousCaption();
     var order = ((prevSub ? prevSub.getSubOrder() : 0.0) + 
                  nextSub.getSubOrder()) / 2.0;
-    var c = new mirosubs.subtitle.EditableCaption(this.unitOfWork_, order);
+    var c = new mirosubs.subtitle.EditableCaption(
+        this.unitOfWork_, order);
     c.setParentEventTarget(this);
     goog.array.insertAt(this.captions_, c, index);
     if (prevSub) {
@@ -145,12 +148,8 @@ mirosubs.subtitle.EditableCaptionSet.prototype.setTimesOnInsertedSub_ =
         startTime = nextSub.getStartTime();
         endTime = (nextSub.getEndTime() + nextSub.getStartTime()) / 2.0;
     }
-    else if (prevSub) {
-        if (prevSub.getEndTime() == -1 && prevSub.getStartTime() != -1)
-            startTime = prevSub.getStartTime() + 
-                mirosubs.subtitle.EditableCaption.MIN_LENGTH;
-        else if (prevSub.getEndTime() != -1)
-            startTime = prevSub.getEndTime();
+    else if (prevSub && prevSub.getEndTime() != -1) {
+        startTime = prevSub.getEndTime();
     }
     if (startTime != -1) {
         insertedSub.setStartTime(startTime);

@@ -14,13 +14,11 @@ function MS_captionListener(event) {
 
 /* a few helper methods to avoid typing too much */
 
-function captionJSON(startTime, endTime, captionID) {
+function captionJSON(startTime, endTime, captionID, subOrder) {
     return {'start_time' : startTime,
 	    'end_time': endTime,
-	    'caption_id': captionID};
-}
-function addCaptions(captions) {
-    MS_captionManager.addCaptions(captions);
+	    'caption_id': captionID,
+            'sub_order': subOrder};
 }
 function sendEvents(playheadTime) {
     MS_videoPlayer.playheadTime = playheadTime;
@@ -55,7 +53,7 @@ function tearDown() {
 }
 
 function testOneCaption() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1)]);
     sendEvents(0.4);
     assertEquals(0, MS_dispatchedCaptions.length);
     sendEvents(0.5);
@@ -65,7 +63,7 @@ function testOneCaption() {
 }
 
 function testTwoUpdates() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1)]);
     sendEvents(0.2);
     sendEvents(0.4);
     assertEquals(0, MS_dispatchedCaptions.length);
@@ -75,7 +73,7 @@ function testTwoUpdates() {
 }
 
 function testRewind() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1)]);
     sendEvents(0.3);
     sendEvents(0.6);
     sendEvents(0.4);
@@ -84,7 +82,9 @@ function testRewind() {
 }
 
 function testRewind2() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2, 3, 2, 2), 
+                             captionJSON(3, 4, 3, 3)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.3);
@@ -97,7 +97,8 @@ function testRewind2() {
 }
 
 function testProgressToNextCaptionAdjacent() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2, 3, 2, 2)]);
     sendEvents(0.3);
     sendEvents(1);
     sendEvents(2.5);
@@ -107,7 +108,8 @@ function testProgressToNextCaptionAdjacent() {
 }
 
 function testProgressToNextCaptionDisjoint() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1), captionJSON(2.5, 3, 2)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2.5, 3, 2, 2)]);
     sendEvents(0.3);
     sendEvents(1);
     sendEvents(2.2);
@@ -121,7 +123,7 @@ function testProgressToNextCaptionDisjoint() {
 }
 
 function testInsertCaptionAfter() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.1);
@@ -142,7 +144,7 @@ function testInsertCaptionBefore() {
 }
 
 function testInsertCaptionUnderCurrentPlayheadTime() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.2);
@@ -153,7 +155,7 @@ function testInsertCaptionUnderCurrentPlayheadTime() {
 }
 
 function testAlterCurrentCaptionTime() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1)]);
     var c = MS_editableCaptionSet.caption(0);
     sendEvents(0.3);
     sendEvents(1.3);
@@ -166,9 +168,9 @@ function testAlterCurrentCaptionTime() {
 }
 
 function testProgressToEnd() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1),
-			     captionJSON(2, 3, 2),
-			     captionJSON(3, 4, 3)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1),
+			     captionJSON(2, 3, 2, 2),
+			     captionJSON(3, 4, 3, 3)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.3);
@@ -178,8 +180,38 @@ function testProgressToEnd() {
     assertNull(MS_dispatchedCaptions[3]);
 }
 
+function testProgressToOpenEnd() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1),
+			     captionJSON(2, 3, 2, 2),
+			     captionJSON(3, -1, 3, 3)]);
+    sendEvents(0.3);
+    sendEvents(1.3);
+    sendEvents(2.3);
+    sendEvents(3.3);
+    sendEvents(4.3);
+    assertEquals(3, MS_dispatchedCaptions.length);
+    assertEquals(3, MS_dispatchedCaptions[2].getCaptionID());
+}
+
+function testProgressToOpenEndPlusOne() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1),
+			     captionJSON(2, 3, 2, 2),
+			     captionJSON(3, -1, 3, 3),
+                             captionJSON(-1, -1, 4, 4)]);
+    sendEvents(0.3);
+    sendEvents(1.3);
+    sendEvents(2.3);
+    sendEvents(3.3);
+    sendEvents(4.3);
+    assertEquals(3, MS_dispatchedCaptions.length);
+    assertEquals(3, MS_dispatchedCaptions[2].getCaptionID());
+}
+
+
 function testProgressToEndTwice() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2, 3, 2, 2), 
+                             captionJSON(3, 4, 3, 3)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.3);
@@ -191,7 +223,9 @@ function testProgressToEndTwice() {
 }
 
 function testClearTimes() {
-    setUpForInitialCaptions([captionJSON(0.5, 2, 1), captionJSON(2, 3, 2), captionJSON(3, 4, 3)]);
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2, 3, 2, 2), 
+                             captionJSON(3, 4, 3, 3)]);
     sendEvents(0.3);
     sendEvents(1.3);
     sendEvents(2.3);
@@ -201,6 +235,73 @@ function testClearTimes() {
 
     assertEquals(3, MS_dispatchedCaptions.length);
     assertNull(MS_dispatchedCaptions[2]);
+}
+
+function testInsertSub() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2, 3, 2, 2), 
+                             captionJSON(3, 4, 3, 3)]);
+    sendEvents(2.1);
+    assertEquals(1, MS_dispatchedCaptions.length);
+    // inserting new caption under current playhead time
+    var inserted = MS_editableCaptionSet.insertCaption(
+        MS_editableCaptionSet.caption(1).getSubOrder());
+    assertEquals(2, MS_dispatchedCaptions.length);
+    assertEquals(2, MS_dispatchedCaptions[0].getCaptionID());
+    assertEquals(inserted.getCaptionID(), 
+                 MS_dispatchedCaptions[1].getCaptionID());
+    sendEvents(3.1);
+    assertEquals(3, MS_dispatchedCaptions.length);
+    assertEquals(2, MS_dispatchedCaptions[2].getCaptionID());
+}
+
+function testInsertNoTime() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1),
+			     captionJSON(2, 3, 2, 2),
+			     captionJSON(3, -1, 3, 3),
+                             captionJSON(-1, -1, 4, 4)]);
+    sendEvents(4.3);
+    assertEquals(1, MS_dispatchedCaptions.length);
+    assertEquals(3, MS_dispatchedCaptions[0].getCaptionID());
+    var inserted = MS_editableCaptionSet.insertCaption(
+        MS_editableCaptionSet.caption(3).getSubOrder());
+    assertEquals(1, MS_dispatchedCaptions.length);
+    sendEvents(4.4)
+    assertEquals(1, MS_dispatchedCaptions.length);
+}
+
+function testDeleteSub() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2, 3, 2, 2), 
+                             captionJSON(3, 4, 3, 3)]);
+    sendEvents(2.1);
+    assertEquals(1, MS_dispatchedCaptions.length);
+    MS_editableCaptionSet.deleteCaption(
+        MS_editableCaptionSet.caption(1));
+    assertEquals(2, MS_dispatchedCaptions.length);
+    assertNull(MS_dispatchedCaptions[1]);
+}
+
+function testDeleteNonCurrentSub() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1), 
+                             captionJSON(2, 3, 2, 2), 
+                             captionJSON(3, 4, 3, 3)]);
+    sendEvents(3.1);
+    assertEquals(1, MS_dispatchedCaptions.length);
+    MS_editableCaptionSet.deleteCaption(
+        MS_editableCaptionSet.caption(1));
+    assertEquals(1, MS_dispatchedCaptions.length);
+}
+
+function testDeleteSubNoTime() {
+    setUpForInitialCaptions([captionJSON(0.5, 2, 1, 1),
+			     captionJSON(2, 3, 2, 2),
+			     captionJSON(3, -1, 3, 3),
+                             captionJSON(-1, -1, 4, 4)]);
+    sendEvents(4.3);
+    MS_editableCaptionSet.deleteCaption(
+        MS_editableCaptionSet.caption(3));
+    assertEquals(1, MS_dispatchedCaptions.length);
 }
 
 {% endblock %}

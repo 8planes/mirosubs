@@ -165,6 +165,16 @@ function testInsertSubAtStart() {
     assertEquals(set.caption(1), inserted.getNextCaption());
 }
 
+function testCreateNewInsertAtStart() {
+    var set = createSet([]);
+    var caption0 = addNewCaption(set);
+    var caption1 = addNewCaption(set);
+    var caption2 = addNewCaption(set);
+    var inserted = set.insertCaption(caption0.getSubOrder());
+    assertTrue(0 < inserted.getSubOrder())
+    assertTrue(inserted.getSubOrder() < caption0.getSubOrder())
+}
+
 function testInsertSubInMiddle() {
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     var T0 = minLength / 2, T1 = T0 + minLength, T2 = T1 + minLength;
@@ -205,6 +215,16 @@ function testInsertSubInMiddleOfUntimed() {
     assertEquals(set.caption(1), inserted);
     assertEquals(set.caption(0), inserted.getPreviousCaption());
     assertEquals(set.caption(2), inserted.getNextCaption());
+    assertEquals(-1, inserted.getStartTime());
+    assertEquals(-1, inserted.getEndTime());
+}
+
+function testInsertSubFirstUntimed() {
+    var set = createSet([captionJSON(0.5, 2, 1, 1),
+			 captionJSON(2, 3, 2, 2),
+			 captionJSON(3, -1, 3, 3),
+                         captionJSON(-1, -1, 4, 4)]);
+    var inserted = set.insertCaption(set.caption(3).getSubOrder());
     assertEquals(-1, inserted.getStartTime());
     assertEquals(-1, inserted.getEndTime());
 }
