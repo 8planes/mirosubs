@@ -29,13 +29,11 @@ top: 0;
    line-height: 16px !important;
    -moz-box-shadow: 0px 3px 10px rgba(0,0,0,9) !important;
    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
-
    padding: px !important;
    background: #fff !important;
    position: absolute !important;
-top: 0 !important;
-border: 1px solid #000;
-border-top: 0;
+   border: 1px solid #000;
+   border-top: 0;
 }
 
 .mirosubs-modal-widget-content {

@@ -31,7 +31,7 @@ mirosubs.timeline.SubtitleSet = function(editableCaptionSet, videoPlayer) {
             this.captionChange_).
         listen(
             this.editableCaptionSet_,
-            mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES,
+            mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_TIMES,
             this.timesCleared_);
 };
 goog.inherits(mirosubs.timeline.SubtitleSet, goog.events.EventTarget);

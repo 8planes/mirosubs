@@ -59,14 +59,15 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
 };
 mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
     mirosubs.subtitle.SubtitleList.superClass_.enterDocument.call(this);
+    var et = mirosubs.subtitle.EditableCaptionSet.EventType;
     this.getHandler().
         listen(
             this.captionSet_,
-            mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
+            et.CLEAR_ALL,
             this.captionsCleared_).
         listen(
             this.captionSet_,
-            mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES,
+            et.CLEAR_TIMES,
             this.captionTimesCleared_);
 };
 mirosubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {

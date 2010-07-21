@@ -626,6 +626,7 @@ class VideoCaption(models.Model):
     version = models.ForeignKey(VideoCaptionVersion, null=True)
     null_captions = models.ForeignKey(NullVideoCaptions, null=True)
     caption_id = models.CharField(max_length=32)
+    sub_order = models.FloatField()
     caption_text = models.CharField(max_length=1024)
     # in seconds
     start_time = models.FloatField()
@@ -649,7 +650,8 @@ class VideoCaption(models.Model):
         return { 'caption_id' : self.caption_id, 
                  'caption_text' : text, 
                  'start_time' : self.start_time, 
-                 'end_time' : self.end_time }       
+                 'end_time' : self.end_time,
+                 'sub_order' : self.sub_order }
     
     def display_time(self):
         if self.start_time < 0:

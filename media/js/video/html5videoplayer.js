@@ -176,6 +176,7 @@ mirosubs.video.Html5VideoPlayer.prototype.stopLoadingInternal = function() {
 
 mirosubs.video.Html5VideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     this.videoElem_['src'] = this.videoSource_.getVideoURL();
+    this.setLoadingStopped(false);
     this.setPlayheadTime(playheadTime);
     this.pause();
 };

@@ -123,10 +123,12 @@ def start_editing_null(request, video_id, base_version_no=None):
         null_captions = video.null_captions(request.user)
         if null_captions is None:
             captions = []
+            version_no = 0
         else:
             captions = list(null_captions.videocaption_set.all())
+            version_no = 1
     return { 'can_edit': True,
-             'version': 0,
+             'version': version_no,
              'existing': [caption.to_json_dict() for
                           caption in captions] }
 
@@ -410,7 +412,8 @@ def apply_caption_changes(caption_set, deleted, inserted, updated,
         vc = models.VideoCaption(caption_id=i['caption_id'],
                                  caption_text=i['caption_text'],
                                  start_time=i['start_time'],
-                                 end_time=i['end_time'])
+                                 end_time=i['end_time'],
+                                 sub_order=i['sub_order'])
         if version is not None:
             vc.version = version
         else:
