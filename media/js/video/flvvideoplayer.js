@@ -189,8 +189,10 @@ mirosubs.video.FlvVideoPlayer.prototype.isPlayingInternal = function() {
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.playInternal = function() {
-    if (this.swfLoaded_)
-        this.player_['play']();
+    if (this.swfLoaded_) {
+        if (!this.isPlaying())
+            this.player_['play']();
+    }
     else
         this.commands_.push(goog.bind(this.playInternal, this));
 };
