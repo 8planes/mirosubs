@@ -79,7 +79,9 @@
         <h3>{{ user_info.username }}</h3>
         <p>Preferred Language: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
         <p>Homepage: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
-        <button class="send_message"><span>Send a Message</span></button>
+        {% if user.is_authenticated %}
+            <button class="send_message"><span>Send a Message</span></button>
+        {% endif %}
     </div>
     
     <div class="right_column">
@@ -90,6 +92,7 @@
     
     {{ block.super }}
     
+    {% if user.is_authenticated %}
     <div id="send_message" style="display: none">
       <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  
          <h3>Send {{ user_info.username }} a Message</h3>
@@ -111,4 +114,5 @@
          <button type="submit"><span>Send a Message</span></button>
       </form>
     </div>
+    {% endif %}
 {% endblock %}

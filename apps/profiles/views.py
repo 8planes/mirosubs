@@ -71,6 +71,7 @@ def profile(request, user_id=None):
     return render_to_response('profiles/view_profile.html', context,
                                   context_instance=RequestContext(request))            
 
+@login_required
 def send_message(request):
     output = dict(success=False)
     form = SendMessageForm(request.POST)
