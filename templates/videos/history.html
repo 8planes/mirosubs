@@ -85,10 +85,10 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2>{{ video }}</h2>
+    <h2><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
     <p class="what_lang">
         {% block lang_display %} 
-        in <a href="{% url videos:video video_id=video.video_id %}">Original Language</a>
+            in Original Language
         {% endblock %}
         {% block translation_list %}
             {% if translations %}
