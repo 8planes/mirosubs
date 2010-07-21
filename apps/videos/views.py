@@ -118,8 +118,6 @@ def actions_list(request):
 
 def upload_subtitles(request):
     output = dict(success=False)
-    output['success'] = True
-    return HttpResponse(json.dumps(output), "text/javascript")
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
     if form.is_valid():
         form.save()

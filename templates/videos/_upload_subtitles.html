@@ -20,7 +20,7 @@
                 dataType: 'json',
                 success: function(data, status, xhr, $form){
                     if (data.success){
-                        document.location.href = document.location.href;
+                        document.location.reload();
                     } else {
                         for (key in data.errors){
                             var $field = $('input[name="'+key+'"]', $form);
