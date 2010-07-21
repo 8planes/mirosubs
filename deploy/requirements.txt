@@ -21,3 +21,4 @@ django-haystack==1.0.1-final
 pysolr==2.0.12
 vendor/gdata-2.0.10.tar.gz
 -e git+http://git.participatoryculture.org/vidscraper#egg=vidscraper-0.0.1
+chardet==1.0.1

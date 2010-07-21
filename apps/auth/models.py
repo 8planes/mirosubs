@@ -44,9 +44,9 @@ class CustomUser(BaseUser):
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (
-        (1, 'knowpretty well'),
+        (1, 'understand enough'),
         (2, 'understand 99%'),
-        (3, 'can translate into this language'),
+        (3, 'write like a native'),
     )
     user = models.ForeignKey(CustomUser)
     language = models.CharField(max_length=16, choices=LANGUAGES, verbose_name='languages')

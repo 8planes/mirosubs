@@ -120,6 +120,7 @@ class TwitterBackend:
                 username = '%s%s' % (screen_name, same_name_count + 1)
             else:
                 username = screen_name
+            username = '@'+username
             user = User(username =  username)
             temp_password = User.objects.make_random_password(length=12)
             user.set_password(temp_password)

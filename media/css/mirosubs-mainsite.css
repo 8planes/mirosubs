@@ -1451,9 +1451,12 @@ margin-right: 10px;
 background: url(../images/sort_arrows.gif) right 12px no-repeat;
 }
 
-.table_head li a:hover{
+.table_head li a.asc:hover{
+    background: url(../images/sort_arrows.gif) right -61px no-repeat;
+}
 
-background: url(../images/sort_arrows.gif) right -61px no-repeat;
+.table_head li a.desc:hover{
+    background: url(../images/sort_arrows.gif) right -26px no-repeat;
 }
 
 .table_head li.table_text a{

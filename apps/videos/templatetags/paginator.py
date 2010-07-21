@@ -67,7 +67,7 @@ def search_ordered_paginator(context, query, adjacent_pages=2):
     return ordered_paginator(context, adjacent_pages, q=query)
 register.inclusion_tag('ordered_paginator.html', takes_context=True)(search_ordered_paginator)
 
-def ordered_paginator(context, adjacent_pages=2, **kwargs):
+def ordered_paginator(context, adjacent_pages=2, anchor='', **kwargs):
     """
     To be used in conjunction with the object_list generic view.
 
@@ -96,6 +96,8 @@ def ordered_paginator(context, adjacent_pages=2, **kwargs):
     
     for key, value in kwargs.items():
         extra_link += '&%s=%s' % (key, value)
+    
+    extra_link += anchor
                 
     return {
         'page_obj': page_obj,
@@ -154,19 +156,23 @@ class OrderedColumnNode(template.Node):
             order_type = None
          
         extra_params = [] 
+        anchor = ''
         for item in self.get_params:
-            items = item.split('=')
-            variable = template.Variable(items[1])
-            extra_params.append('&%s=%s' % (items[0], variable.resolve(context)))
+            if item.startswith('#'):
+                anchor = item
+            else:
+                items = item.split('=')
+                variable = template.Variable(items[1])
+                extra_params.append('&%s=%s' % (items[0], variable.resolve(context)))
         
-        extra_params = ''.join(extra_params)
+        extra_params = ''.join(extra_params)+anchor
             
         ot = (ordering == self.field_name and order_type == 'asc') and 'desc' or 'asc'
         if page:
             link = '?o=%s&ot=%s&page=%s%s' % (self.field_name, ot, page, extra_params)
         else:
             link = '?o=%s&ot=%s%s' % (self.field_name, ot, extra_params)
-        return '<a href="%s">%s</a>' % (link, self.title)
+        return '<a href="%s" class="%s">%s</a>' % (link, ot, self.title)
 
 @register.simple_tag   
 def progress_color(value):

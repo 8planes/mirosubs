@@ -17,13 +17,100 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from videos.models import Video, UserTestResult
+from videos.models import Video, UserTestResult, VideoCaptionVersion, VideoCaption
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from datetime import datetime
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 import re
+from utils import SrtSubtitleParser, AssSubtitleParser
+import random
+from django.utils.encoding import force_unicode
+import chardet
+from uuid import uuid4
 
+class SubtitlesUploadForm(forms.Form):
+    video = forms.ModelChoiceField(Video.objects)
+    subtitles = forms.FileField()
+    
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(SubtitlesUploadForm, self).__init__(*args, **kwargs)
+    
+    def clean_video(self):
+        video = self.cleaned_data['video']
+        if video.is_writelocked:
+            raise forms.ValidationError(_(u'Somebody add subtitles to video. Try later.'))
+        if (not video.allow_community_edits and 
+            video.owner != None and (self.user.is_anonymous() or 
+                                     video.owner.pk != self.user.pk)):
+            raise forms.ValidationError(_(u'You can\'t edit this video.'))        
+        if video.translationlanguage_set.exists():
+            raise forms.ValidationError(_(u'This video has translations.'))
+        return video
+    
+    def clean_subtitles(self):
+        subtitles = self.cleaned_data['subtitles']
+        if subtitles.size > 1024*1024:
+            raise forms.ValidationError(_(u'File size should be less 1Mb'))
+        if not subtitles.name.split('.')[-1] in ['srt', 'ass']:
+            raise forms.ValidationError(_(u'Incorrect format. Upload .srt or .ass'))
+        if not self._get_parser(subtitles.name)(subtitles.read()):
+            raise forms.ValidationError(_(u'Incorrect subtitles format'))
+        subtitles.seek(0)
+        return subtitles
+    
+    def _get_parser(self, filename):
+        end = filename.split('.')[-1]
+        if end == 'srt':
+            return SrtSubtitleParser
+        if end == 'ass':
+            return AssSubtitleParser
+        
+    def save(self):
+        subtitles = self.cleaned_data['subtitles']
+        video = self.cleaned_data['video']
+        
+        key = str(uuid4()).replace('-', '')
+        video._make_writelock(self.user, key)
+        video.save()
+        
+        latest_captions = video.captions()
+        if latest_captions is None:
+            version_no = 0
+        else:
+            version_no = latest_captions.version_no + 1
+        version = VideoCaptionVersion(
+            video=video, version_no=version_no, 
+            datetime_started=datetime.now(), user=self.user,
+            is_complete=True)
+        version.save()
+        
+        text = subtitles.read()
+        parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))
+        ids = []
+        for i, item in enumerate(parser):
+            id = int(random.random()*10e12)
+            while id in ids:
+                id = int(random.random()*10e12)
+            ids.append(id)
+            caption = VideoCaption(**item)
+            caption.version = version
+            caption.caption_id = str(id)
+            caption.sub_order = i+1
+            caption.save()
+        
+        video.release_writelock()
+        video.save()
+        
+    def get_errors(self):
+        from django.utils.encoding import force_unicode        
+        output = {}
+        for key, value in self.errors.items():
+            output[key] = '/n'.join([force_unicode(i) for i in value])
+        return output
+    
 class UserTestResultForm(forms.ModelForm):
     
     class Meta:

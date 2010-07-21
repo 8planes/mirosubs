@@ -273,13 +273,16 @@ class Video(models.Model):
 
     def writelock(self, request):
         """Writelock this video for subtitling."""
-        if request.user.is_authenticated():
-            self.writelock_owner = request.user
+        self._make_writelock(request.user, request.session[VIDEO_SESSION_KEY])
+    
+    def _make_writelock(self, user, key):
+        if user.is_authenticated():
+            self.writelock_owner = user
         else:
             self.writelock_owner = None
-        self.writelock_session_key = request.session[VIDEO_SESSION_KEY]
-        self.writelock_time = datetime.now()
-
+        self.writelock_session_key = key
+        self.writelock_time = datetime.now()        
+    
     def release_writelock(self):
         """Writelock this video for subtitling."""
         self.writelock_owner = None
@@ -308,7 +311,7 @@ class VersionModel(models.Model):
         if d == today:
             return 'Today'
         elif d == yesterday:
-            return 'Yestarday'
+            return 'Yesterday'
         else:
             d = d.strftime('%m/%d/%Y')
         return d

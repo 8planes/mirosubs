@@ -85,10 +85,10 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2>{{ video }}</h2>
+    <h2><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
     <p class="what_lang">
         {% block lang_display %} 
-        in <a href="{% url videos:video video_id=video.video_id %}">Original Language</a>
+            in Original Language
         {% endblock %}
         {% block translation_list %}
             {% if translations %}
@@ -118,6 +118,10 @@
       <li><a href="#revisions">History ({{ hits }})</a></li>
     </ul>
     
+    {% with translations|length as has_translations %}
+        {% include 'videos/_upload_subtitles.html' %}
+    {% endwith %}
+    
     <div style="display: none" id="revisions" class="tab">
         {% if revision_list|length > 1 %}
             <button class="compare_versions_button">
@@ -126,24 +130,24 @@
         {% endif %}
         
         {% if revision_list %}
-           {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
+           {% if is_paginated %}{% ordered_paginator 3 '#revisions' %}{% endif %} 
 
            {% block table %}
             <ul class="table_head">
                 <li class="table_most_recent">
-                    {% ordered_column "date" "Most Recent" %}
+                    {% ordered_column "date" "Most Recent" #revisions %}
                 </li>
                 <li class="table_user">
-                    {% ordered_column "user" "User" %}
+                    {% ordered_column "user" "User" #revisions %}
                 </li>
                 <li class="table_note">
-                    {% ordered_column "note" "Note" %}
+                    {% ordered_column "note" "Note" #revisions %}
                 </li>
                 <li class="table_time">
-                    {% ordered_column "time" "Time" %}
+                    {% ordered_column "time" "Time" #revisions %}
                 </li>
                 <li class="table_text">
-                    {% ordered_column "text" "Text" %}
+                    {% ordered_column "text" "Text" #revisions %}
                 </li>
             </ul>
             

@@ -1,0 +1,43 @@
+{% if not has_translations %}
+    <a href="#" id="upload-subtitles-link">Upload subtitles</a>
+    <div id="upload-subtitles-div" style="display: none">
+        <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <input type="hidden" name="video" value="{{ video.id }}"/>
+            <input type="file" name="subtitles" id="subtitles-file-field"/>
+            <input type="submit" value="Upload"/>
+        </form>
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function($){
+            var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}'
+            $('#upload-subtitles-link').click(function(){
+                $(this).hide();
+                $('#upload-subtitles-div').show();
+                return false;
+            });
+            
+            $('#upload-subtitles-form').ajaxForm({
+                dataType: 'json',
+                success: function(data, status, xhr, $form){
+                    if (data.success){
+                        document.location = LANGUAGE_PAGE_URL;
+                    } else {
+                        for (key in data.errors){
+                            var $field = $('input[name="'+key+'"]', $form);
+                            var error = '<p class="error_list">'+data.errors[key]+'</p>';
+                            if ($field.length){
+                                $('input[name="'+key+'"]', $form).before(error);
+                            }else{
+                                $form.prepend(error);
+                            }
+                        };
+                    }
+                },
+                beforeSubmit: function(formData, $Form, options){
+                    $('p.error_list', $Form).remove();
+                }
+            });
+        });        
+    </script>
+{% endif %}

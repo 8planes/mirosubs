@@ -22,6 +22,7 @@ from models import TranslationVersion
 urlpatterns = patterns('videos.views',
     url(r'^$', 'video_list', name='list'),
     url(r'^feedback/$', 'feedback', name='feedback'),
+    url(r'^upload_subtitles/$', 'upload_subtitles', name='upload_subtitles'),
     url(r'^create/$', 'create', name='create'),    
     url(r'^email_friend/$', 'email_friend', name='email_friend'),
     url(r'^demo/$', 'demo', name='demo'),
