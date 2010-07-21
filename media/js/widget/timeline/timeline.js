@@ -125,10 +125,10 @@ mirosubs.timeline.Timeline.prototype.onDrag = function(e) {
     this.ensureWidth_();
     this.timelineInner_.setLeft(e.left + this.oldLeft_, this.width_ / 2,
                                 this.videoPlayer_.getDuration());
-    this.videoPlayer_.setPlayheadTime(this.timelineInner_.getTime());
 };
 mirosubs.timeline.Timeline.prototype.endDrag = function(e) {
     this.oldLeft_ = null;
+    this.videoPlayer_.setPlayheadTime(this.timelineInner_.getTime());
     if (this.wasPlaying_) {
         this.videoPlayer_.play();
     }
