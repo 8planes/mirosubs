@@ -13,8 +13,11 @@ function MS_clearListener(event) {
     MS_cleared = true;
 }
 /* A couple helper functions. */
-function captionJSON(start_time, end_time, caption_id) {
-    return {'start_time' : start_time, 'end_time': end_time, 'caption_id': caption_id};
+function captionJSON(start_time, end_time, caption_id, sub_order) {
+    return {'start_time' : start_time, 
+            'end_time': end_time, 
+            'caption_id': caption_id, 
+            'sub_order': sub_order};
 }
 
 function listenToCaption(editableCaption) {
@@ -38,7 +41,7 @@ function createSet(existingCaptions) {
         listenToCaption(captionSet.caption(i));
     MS_eventHandler.listen(
         captionSet, 
-        mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
+        mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_ALL,
         MS_clearListener);
     return captionSet;
 };
@@ -134,9 +137,9 @@ function testMinMaxTimes() {
 function testExistingCaptions() {
     var T0 = 1.8, T1 = 5.6, T2 = 9.2;
     var set = createSet([
-        captionJSON(T0, T1, 1),
-        captionJSON(T1, T2, 2), 
-        captionJSON(T2, -1, 3)]);
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, T2, 2, 2), 
+        captionJSON(T2, -1, 3, 3)]);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     assertMinMaxTimes(set.caption(0), 0, T1 - minLength, 
                       T0 + minLength, T2 - minLength);
@@ -147,12 +150,71 @@ function testExistingCaptions() {
     assertEquals(0, MS_updatedCaptions.length);
 }
 
+function testInsertSubAtStart() {
+    var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    var T0 = minLength / 2, T1 = T0 + minLength, T2 = T1 + minLength;
+    var set = createSet([
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, T2, 2, 2), 
+        captionJSON(T2, 99999, 3, 3)]);
+    var inserted = set.insertCaption(1);
+    assertEquals(0, inserted.getStartTime());
+    assertEquals(minLength, inserted.getEndTime());
+    assertEquals(minLength, set.caption(1).getStartTime());
+    assertNull(inserted.getPreviousCaption());
+    assertEquals(set.caption(1), inserted.getNextCaption());
+}
+
+function testInsertSubInMiddle() {
+    var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    var T0 = minLength / 2, T1 = T0 + minLength, T2 = T1 + minLength;
+    var set = createSet([
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, T2, 2, 2), 
+        captionJSON(T2, 99999, 3, 3)]);
+    var inserted = set.insertCaption(2);
+    assertEquals(set.caption(1), inserted);
+    assertEquals(T0, set.caption(0).getStartTime());
+    assertEquals(T1, inserted.getStartTime());
+    assertEquals(T2, inserted.getEndTime());
+    assertEquals(T2, set.caption(2).getStartTime());
+}
+
+function testInsertSubInMiddleUnconstrained() {
+    var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    var T0 = minLength / 2, T1 = T0 + minLength * 3, T2 = T1 + minLength;
+    var set = createSet([
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, T2, 2, 2), 
+        captionJSON(T2, 99999, 3, 3)]);
+    var inserted = set.insertCaption(1);
+    assertEquals(set.caption(0), inserted);
+    assertEquals(T0, inserted.getStartTime());
+    assertEquals((T0 + T1) / 2, inserted.getEndTime());
+    assertEquals((T0 + T1) / 2, set.caption(1).getStartTime());
+    assertEquals(T1, set.caption(1).getEndTime());
+}
+
+function testInsertSubInMiddleOfUntimed() {
+    var set = createSet([]);
+    var caption0 = addNewCaption(set);
+    var caption1 = addNewCaption(set);
+    var caption2 = addNewCaption(set);
+    var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    var inserted = set.insertCaption(set.caption(1).getSubOrder());
+    assertEquals(set.caption(1), inserted);
+    assertEquals(set.caption(0), inserted.getPreviousCaption());
+    assertEquals(set.caption(2), inserted.getNextCaption());
+    assertEquals(-1, inserted.getStartTime());
+    assertEquals(-1, inserted.getEndTime());
+}
+
 function testSpacebarHold() {
     var T0 = 1.8, T1 = 5.6, T2 = 9.2;
     var set = createSet([
-        captionJSON(T0, T1, 1),
-        captionJSON(T1, T2, 2), 
-        captionJSON(T2, 99999, 3)]);
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, T2, 2, 2), 
+        captionJSON(T2, 99999, 3, 3)]);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     // imitating space bar held in middle of first caption.
     set.caption(0).setEndTime(T2 + 2);
@@ -168,9 +230,9 @@ function testSpacebarHold() {
 function testSpacebarHoldForFirst() {
     var T0 = 1.8, T1 = 5.6, T2 = 9.2;
     var set = createSet([
-        captionJSON(T0, T1, 1),
-        captionJSON(T1, T2, 2), 
-        captionJSON(T2, 99999, 3)]);
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, T2, 2, 2), 
+        captionJSON(T2, 99999, 3, 3)]);
     var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
     // imitating space bar held before start of first caption.
     set.caption(0).setStartTime(T1 + 2);
@@ -188,9 +250,9 @@ function testSpacebarHoldForFirst() {
 function testClearAll() {
     var T0 = 1.8, T1 = 5.6, T2 = 9.2;
     var set = createSet([
-        captionJSON(T0, T1, 1),
-        captionJSON(T1, T2, 2), 
-        captionJSON(T2, 99999, 3)]);
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, T2, 2, 2), 
+        captionJSON(T2, 99999, 3, 3)]);
     set.clear();
     assertEquals(0, set.count());
     assertTrue(MS_cleared);

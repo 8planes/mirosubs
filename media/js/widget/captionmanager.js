@@ -41,9 +41,10 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
 	this.timeUpdate_);
     this.eventHandler_.listen(
 	captionSet,
-	[mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL,
-         mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES,
-         mirosubs.subtitle.EditableCaption.CHANGE],
+        goog.array.concat(
+            goog.object.getValues(
+                mirosubs.subtitle.EditableCaptionSet.EventType),
+            mirosubs.subtitle.EditableCaption.CHANGE),
 	this.captionSetUpdate_);
 
     this.currentCaptionIndex_ = -1;
@@ -55,8 +56,9 @@ goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 mirosubs.CaptionManager.CAPTION = 'caption';
 
 mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
-    if (event.type == mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL ||
-        event.type == mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES) {
+    var et = mirosubs.subtitle.EditableCaptionSet.EventType;
+    if (event.type == et.CLEAR_ALL ||
+        event.type == et.CLEAR_TIMES) {
 	this.captions_ = [];
         this.currentCaptionIndex_ = -1;
 	this.dispatchCaptionEvent_(null);

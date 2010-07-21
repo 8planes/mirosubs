@@ -55,8 +55,13 @@ mirosubs.subtitle.EditableCaptionSet = function(
     }
 };
 goog.inherits(mirosubs.subtitle.EditableCaptionSet, goog.events.EventTarget);
-mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL = 'clearall';
-mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES = 'cleartimes';
+
+mirosubs.subtitle.EditableCaptionSet.EventType = {
+    CLEAR_ALL: 'clearall',
+    CLEAR_TIMES: 'cleartimes',
+    ADD: 'addsub',
+    DELETE: 'deletesub'
+};
 
 /**
  * Always in ascending order by start time.
@@ -90,19 +95,95 @@ mirosubs.subtitle.EditableCaptionSet.prototype.clear = function() {
         this.unitOfWork_.registerDeleted(caption);
     }
     this.dispatchEvent(
-        mirosubs.subtitle.EditableCaptionSet.CLEAR_ALL);
+        mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_ALL);
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.clearTimes = function() {
     goog.array.forEach(this.captions_, function(c) { c.clearTimes(); });
     
     this.dispatchEvent(
-        mirosubs.subtitle.EditableCaptionSet.CLEAR_TIMES);
+        mirosubs.subtitle.EditableCaptionSet.EventType.CLEAR_TIMES);
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.count = function() {
     return this.captions_.length;
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.caption = function(index) {
     return this.captions_[index];
+};
+/**
+ *
+ * @param {Number} nextSubOrder The next subtitle's subOrder 
+ *     (returned by EditableCaption#getSubOrder())
+ */
+mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption = function(nextSubOrder) {
+    var index = this.findSubIndex_(nextSubOrder);
+    var nextSub = this.captions_[index];
+    prevSub = nextSub.getPreviousCaption();
+    var order = ((prevSub ? prevSub.getSubOrder() : 0.0) + 
+                 nextSub.getSubOrder()) / 2.0;
+    var c = new mirosubs.subtitle.EditableCaption(this.unitOfWork_, order);
+    c.setParentEventTarget(this);
+    goog.array.insertAt(this.captions_, c, index);
+    if (prevSub) {
+        prevSub.setNextCaption(c);
+        c.setPreviousCaption(prevSub);
+    }
+    c.setNextCaption(nextSub);
+    nextSub.setPreviousCaption(c);
+
+    this.setTimesOnInsertedSub_(c, prevSub, nextSub);
+    this.dispatchEvent(
+        new mirosubs.subtitle.EditableCaptionSet.CaptionEvent(
+            mirosubs.subtitle.EditableCaptionSet.EventType.ADD,
+            c));
+    return c;
+};
+mirosubs.subtitle.EditableCaptionSet.prototype.setTimesOnInsertedSub_ =
+    function(insertedSub, prevSub, nextSub)
+{
+    var startTime = -1, endTime = -1;
+    if (nextSub.getStartTime() != -1) {
+        startTime = nextSub.getStartTime();
+        endTime = (nextSub.getEndTime() + nextSub.getStartTime()) / 2.0;
+    }
+    else if (prevSub) {
+        if (prevSub.getEndTime() == -1 && prevSub.getStartTime() != -1)
+            startTime = prevSub.getStartTime() + 
+                mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+        else if (prevSub.getEndTime() != -1)
+            startTime = prevSub.getEndTime();
+    }
+    if (startTime != -1) {
+        insertedSub.setStartTime(startTime);
+        if (endTime != -1)
+            insertedSub.setEndTime(endTime);
+    }
+};
+/**
+ * 
+ * @param {mirosubs.subtitle.EditableCaption} caption
+ */
+mirosubs.subtitle.EditableCaptionSet.prototype.deleteCaption = function(caption) {
+    var index = this.findSubIndex_(caption.getSubOrder());
+    var sub = this.captions_[index];
+    var prevSub = sub.getPreviousCaption();
+    var nextSub = sub.getNextCaption();
+    goog.array.removeAt(this.captions_, index);
+    if (prevSub)
+        prevSub.setNextCaption(nextSub);
+    if (nextSub)
+        nextSub.setPreviousCaption(prevSub);
+    this.unitOfWork_.registerDeleted(sub);
+    this.dispatchEvent(
+        new mirosubs.subtitle.EditableCaptionSet.CaptionEvent(
+            mirosubs.subtitle.EditableCaptionSet.EventType.DELETE,
+            sub));
+};
+mirosubs.subtitle.EditableCaptionSet.prototype.findSubIndex_ = function(order) {
+    return goog.array.binarySearch(
+        this.captions_, 42, 
+        function(x, caption) {
+            return order - caption.getSubOrder();
+        });
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function() {
     var lastSubOrder = 0.0;
@@ -139,4 +220,17 @@ mirosubs.subtitle.EditableCaptionSet.prototype.findLastForTime =
              this.captions_[i + 1].getStartTime() > time))
             return this.captions_[i];
     return null;
+};
+
+/**
+ * Used for both add and delete.
+ */
+mirosubs.subtitle.EditableCaptionSet.CaptionEvent = 
+    function(type, caption) 
+{
+    this.type = type;
+    /**
+     * @type {mirosubs.subtitle.EditableCaption}
+     */
+    this.caption = caption;
 };
