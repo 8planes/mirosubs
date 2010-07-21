@@ -311,7 +311,7 @@ class VersionModel(models.Model):
         if d == today:
             return 'Today'
         elif d == yesterday:
-            return 'Yestarday'
+            return 'Yesterday'
         else:
             d = d.strftime('%m/%d/%Y')
         return d
