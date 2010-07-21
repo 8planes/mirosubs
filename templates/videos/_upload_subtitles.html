@@ -10,6 +10,7 @@
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
+            var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}'
             $('#upload-subtitles-link').click(function(){
                 $(this).hide();
                 $('#upload-subtitles-div').show();
@@ -20,7 +21,7 @@
                 dataType: 'json',
                 success: function(data, status, xhr, $form){
                     if (data.success){
-                        document.location.reload();
+                        document.location = LANGUAGE_PAGE_URL;
                     } else {
                         for (key in data.errors){
                             var $field = $('input[name="'+key+'"]', $form);

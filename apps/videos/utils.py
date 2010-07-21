@@ -54,9 +54,9 @@ class SrtSubtitleParser(SubtitleParser):
     
     def __init__(self, file):
         pattern = r'\d+\n'
-        pattern += r'(?P<s_hour>\d{2}):(?P<s_min>\d{2}):(?P<s_sec>\d{2}),(?P<s_secfr>\d{3})'
+        pattern += r'(?P<s_hour>\d{2}):(?P<s_min>\d{2}):(?P<s_sec>\d{2}),(?P<s_secfr>\d+)'
         pattern += r' --> '
-        pattern += r'(?P<e_hour>\d{2}):(?P<e_min>\d{2}):(?P<e_sec>\d{2}),(?P<e_secfr>\d{3})'
+        pattern += r'(?P<e_hour>\d{2}):(?P<e_min>\d{2}):(?P<e_sec>\d{2}),(?P<e_secfr>\d+)'
         pattern += r'\r?\n(?P<text>.+?)\n\n'        
         super(SrtSubtitleParser, self).__init__(file, pattern, [re.DOTALL])
         #replace \r\n to \n and fix end of last subtitle
@@ -72,3 +72,17 @@ class SrtSubtitleParser(SubtitleParser):
         output['end_time'] = self._get_time(r['e_hour'], r['e_min'], r['e_sec'], r['e_secfr'])
         output['caption_text'] = r['text']
         return output
+    
+class AssSubtitleParser(SrtSubtitleParser):
+    def __init__(self, file):
+        pattern = r'Dialogue: [\w=]+,' #Dialogue: <Marked> or <Layer>,
+        pattern += '(?P<s_hour>\d):(?P<s_min>\d{2}):(?P<s_sec>\d{2})[\.\:](?P<s_secfr>\d+),' #<Start>,
+        pattern += r'(?P<e_hour>\d):(?P<e_min>\d{2}):(?P<e_sec>\d{2})[\.\:](?P<e_secfr>\d+),' #<End>,
+        pattern += r'[\w ]+,' #<Style>,
+        pattern += '[\w ]*,' #<Character name>,
+        pattern += '\d{4},\d{4},\d{4},' #<MarginL>,<MarginR>,<MarginV>,
+        pattern += '[\w ]*,' #<Efect>,
+        pattern += '(?:\{.*?\})?(?P<text>.+?)\n' #[{<Override control codes>}]<Text> 
+        super(SrtSubtitleParser, self).__init__(file, pattern, [re.DOTALL])
+        #replace \r\n to \n and fix end of last subtitle
+        self.subtitles = self.subtitles.replace('\r\n', '\n')+'\n'

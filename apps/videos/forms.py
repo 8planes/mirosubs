@@ -24,10 +24,11 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import re
-from utils import SrtSubtitleParser
+from utils import SrtSubtitleParser, AssSubtitleParser
 import random
 from django.utils.encoding import force_unicode
 import chardet
+from uuid import uuid4
 
 class SubtitlesUploadForm(forms.Form):
     video = forms.ModelChoiceField(Video.objects)
@@ -64,10 +65,16 @@ class SubtitlesUploadForm(forms.Form):
         end = filename.split('.')[-1]
         if end == 'srt':
             return SrtSubtitleParser
+        if end == 'ass':
+            return AssSubtitleParser
         
     def save(self):
         subtitles = self.cleaned_data['subtitles']
         video = self.cleaned_data['video']
+        
+        key = str(uuid4()).replace('-', '')
+        video._make_writelock(self.user, key)
+        video.save()
         
         latest_captions = video.captions()
         if latest_captions is None:
@@ -93,7 +100,10 @@ class SubtitlesUploadForm(forms.Form):
             caption.caption_id = str(id)
             caption.sub_order = i+1
             caption.save()
-    
+        
+        video.release_writelock()
+        video.save()
+        
     def get_errors(self):
         from django.utils.encoding import force_unicode        
         output = {}
