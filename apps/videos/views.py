@@ -23,7 +23,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion, ProxyVideo
-from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm
+from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
 import widget
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -115,6 +115,18 @@ def actions_list(request):
                        template_name='videos/actions_list.html',
                        template_object_name='action',
                        extra_context=extra_context)    
+
+def upload_subtitles(request):
+    output = dict(success=False)
+    output['success'] = True
+    return HttpResponse(json.dumps(output), "text/javascript")
+    form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
+    if form.is_valid():
+        form.save()
+        output['success'] = True
+    else:
+        output['errors'] = form.get_errors()
+    return HttpResponse(json.dumps(output), "text/javascript")
 
 def feedback(request):
     output = dict(success=False)
