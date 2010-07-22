@@ -113,12 +113,15 @@ mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
 };
 mirosubs.RightPanel.prototype.appendExtraHelp_ = function($d, el) {
     if (this.extraHelp_ && this.extraHelp_.length > 0) {
-        var extraDiv = $d('div', 'mirosubs-extra');
-        for (var i = 0; i < this.extraHelp_.length; i++)
-            extraDiv.appendChild($d('p', null, this.extraHelp_[i]));
-        extraDiv.appendChild($d('span', 'mirosubs-spanarrow'));
-        el.appendChild(extraDiv);
+        this.appendExtraHelpInternal($d, el);
     }
+};
+mirosubs.RightPanel.prototype.appendExtraHelpInternal = function($d, el) {
+    var extraDiv = $d('div', 'mirosubs-extra');
+    for (var i = 0; i < this.extraHelp_.length; i++)
+        extraDiv.appendChild($d('p', null, this.extraHelp_[i]));
+    extraDiv.appendChild($d('span', 'mirosubs-spanarrow'));
+    el.appendChild(extraDiv);
 };
 mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     var legendDiv = $d('div', 'mirosubs-legend');
