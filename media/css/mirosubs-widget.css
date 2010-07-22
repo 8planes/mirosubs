@@ -851,6 +851,25 @@ ul.mirosubs-titlesList li {
     list-style: none !important;
 }
 
+.mirosubs-sub-delete, .mirosubs-sub-insert {
+   position: absolute;
+   top: 0px;
+   width: 18px;
+   height: 18px;
+   text-align: center;
+   line-height: 18px;
+   border: 1px solid gray;
+   cursor: pointer;
+   cursor: hand;
+}
+
+.mirosubs-sub-delete {
+   left: 100px;
+}
+
+.mirosubs-sub-insert {
+   left: 140px;
+}
 
 ul.mirosubs-titlesList.taller {
     height: 210px !important;
