@@ -40,7 +40,7 @@ class SubtitleParser(object):
         return bool(self._pattern.search(self.subtitles))
      
     def _result_iter(self):
-        for item in self.matches:
+        for item in self._matches:
             yield self._get_data(item)
 
     def _get_data(self, match):
@@ -48,7 +48,49 @@ class SubtitleParser(object):
     
     def _get_matches(self):
         return self._pattern.finditer(self.subtitles)
-    matches = property(_get_matches)
+    _matches = property(_get_matches)
+
+from xml.dom.minidom import parseString
+from django.utils.html import strip_tags
+
+class TtmlSubtitleParser(SubtitleParser):
+    
+    def __init__(self, subtitles):
+        dom = parseString(subtitles)
+        self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
+        
+    def __len__(self):
+        return len(self.nodes)
+    
+    def __nonzero__(self):
+        return bool(len(self.nodes))
+    
+    def _get_time(self, begin, dur):
+        if not begin or not dur:
+            return -1
+        
+        try:
+            hour, min, sec = begin.split(':')
+            start = int(hour)*60*60 + int(min)*60 + float(sec)
+            
+            d_hour, d_min, d_sec = dur.split(':')
+            end = start + int(d_hour)*60*60 + int(d_min)*60 + float(d_sec)
+        except ValueError:
+            return -1
+        
+        return start, end
+        
+    def _get_data(self, node):
+        output = {
+            'caption_text': strip_tags(node.toxml())
+        }        
+        output['start_time'], output['end_time'] = \
+            self._get_time(node.getAttribute('begin'), node.getAttribute('dur'))
+        return output
+        
+    def _result_iter(self):
+        for item in self.nodes:
+            yield self._get_data(item)
         
 class SrtSubtitleParser(SubtitleParser):
     
@@ -73,7 +115,7 @@ class SrtSubtitleParser(SubtitleParser):
         output['caption_text'] = r['text']
         return output
     
-class AssSubtitleParser(SrtSubtitleParser):
+class SsaSubtitleParser(SrtSubtitleParser):
     def __init__(self, file):
         pattern = r'Dialogue: [\w=]+,' #Dialogue: <Marked> or <Layer>,
         pattern += '(?P<s_hour>\d):(?P<s_min>\d{2}):(?P<s_sec>\d{2})[\.\:](?P<s_secfr>\d+),' #<Start>,
