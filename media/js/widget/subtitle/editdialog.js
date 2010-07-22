@@ -145,6 +145,12 @@ mirosubs.subtitle.EditDialog.prototype.setFinishedState_ = function() {
     var bottomContainer = this.getBottomPanelContainerInternal();
     var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel(this);
     bottomContainer.addChild(bottomFinishedPanel, true);
+    
+    var videoPlayer = this.getVideoPlayerInternal();
+    if (this.isInDocument()) {
+        videoPlayer.setPlayheadTime(0);
+        videoPlayer.pause();
+    }
 };
 mirosubs.subtitle.EditDialog.prototype.handleKeyDown_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.CTRL) {

@@ -78,45 +78,43 @@
     <div id="languages-tab" class="tab">
         {% if translations or video.captions %} 
             <ul class="table_head">
-              <li class="table_language">Language</li>
-              <li class="table_rating">Rating</li>
-              <li class="table_done">% Done</li>
+              <li class="grid_6">Language</li>
+              <li class="grid_2">Rating</li>
+              <li class="grid_4 grid_last">% Done</li>
             </ul>
     
             <ul class="table_body">
-                <li>
-                  <ul>
-                    <li class="table_language">
+                <li class="table_row">
+
+                    <span class="grid_6">
                         <a href="{% url videos:history video.video_id %}">
                             Original
                         </a>
-                    </li>
-                    <li class="table_rating">A+</li>
-                    <li class="table_done" style="text-align: center;">
+                    </span>
+                    <span class="grid_2">A+</li>
+                    <span class="grid_4 grid_last" style="text-align: center;">
                         n/a
-                    </li>
-                  </ul>
+                    </span>
+
                 </li>                
                 {% for item in translations %}
                     <li>
-                      <ul>
-                        <li class="table_language">
+                        <span class="grid_6">
                             <a href="{% url videos:translation_history video.video_id item.language %}">
                                 {{ item.get_language_display }}
                             </a>
-                        </li>
-                        <li class="table_rating">A+</li>
-                        <li class="table_done">
+                        </span>
+                        <span class="grid_2">A+</li>
+                        <span class="grid_4 grid_last">
                             <span class="progress">
                                 <span class="completion {% progress_color item.percent_done %}" style="width: {{ item.percent_done }}%"></span>
                             </span>
-                        </li>
-                      </ul>
+                        </span>
                     </li>
                 {% endfor %}            
             </ul>
         {% else %}
-            <p>This video has no subtitles yet.  Make some!</p>
+            <p class="no_subs">This video has no subtitles yet.  Make some!</p>
         {% endif %}
         <div style="clear: both"></div>
     </div>

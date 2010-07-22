@@ -186,15 +186,15 @@ border: 0;
 
 .mirosubs-help-heading{
 padding-top: 16px;
-height: 30px;
+height: 32px;
 margin: 0 -1px 20px 0px;
 padding-left: 20px;
-
+background: #eee url("/site_media/images/gradient_light.png") 0px 20px repeat-x;
 }
 
 
 .mirosubs-right h2{
-	color: #fff !important;
+	color: #333 !important;
 	margin: 0px 0 0 !important;
 font-size: 15px !important;
 	
@@ -337,24 +337,25 @@ border-bottom: 1px solid #444;
 
   
 .mirosubs-extra{
-border: 1px solid #000;
-background: #fff;
+border: 1px solid #4f4f4f;
+background: #454545;
 margin: 20px;
 padding: 15px 20px 10px;
    -moz-border-radius: 4px;
    -webkit-border-radius: 4px;
 position: relative;
+
 }
 
 
 .mirosubs-extra p{
 margin: 0px 0 5px;
-color: #333;
+color: #fff;
 padding: 0;
-text-shadow: none;
+text-shadow: 0px 1px 1px #000;
 font-weight: bold;
 line-height: 1.4em !important;
-font-size: 16px !important;
+font-size: 12px !important;
 }
 
 .mirosubs-extra .mirosubs-spanarrow{
@@ -2274,3 +2275,19 @@ height: 0;
 overflow: hidden;
 }
 
+.mirosubs-translationResources h3.mirosubs-resources {
+    color: black;
+}
+
+.mirosubs-translationResources ul.mirosubs-resourceList {
+    list-style: disc;
+    color: black;
+}
+
+.mirosubs-translationResources a {
+    text-decoration: none;
+}
+
+.mirosubs-translationResources a:visited {
+    color: #0000EE;
+}
