@@ -1306,15 +1306,16 @@ float: right;
 .revision_list{
 padding: 20px 0 0;
 float: left;
-width: 100%;
+width: 450px !important;
 clear: both;
+margin-top: 30px !important;
 }
 
 
 .revision_list li{
 list-style: none;
 padding: 15px;
-width: 430px;
+width: 450px;
 line-height: 1.6em;
 padding: 15px !important;
 }
@@ -1649,9 +1650,10 @@ margin: 20px 0 0 !important;
 
 
 #comment-form{
+width: 938px;
 background: #fff;
 border: 1px solid #aaa;
-border-bottom: none;
+margin-left: -1px !important;
 padding: 20px 20px 215px;
 }
 
@@ -1664,8 +1666,8 @@ padding: 20px 20px 215px;
 }
 
 #comment-form textarea{
-width: 685px;
-margin-left: 120px;
+width: 815px;
+margin-left: 0px;
 padding: 10px;
 float: left;
 font-family: Arial, Helvetica, sans-serif;
@@ -2401,6 +2403,12 @@ background: #fff;
 border: 1px solid #aaa;
 }
 
+
+
+
+.revision_buttons{
+height: 135px;
+}
 
 
 

@@ -24,7 +24,7 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import re
-from utils import SrtSubtitleParser, AssSubtitleParser
+from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser
 import random
 from django.utils.encoding import force_unicode
 import chardet
@@ -54,8 +54,8 @@ class SubtitlesUploadForm(forms.Form):
         subtitles = self.cleaned_data['subtitles']
         if subtitles.size > 1024*1024:
             raise forms.ValidationError(_(u'File size should be less 1Mb'))
-        if not subtitles.name.split('.')[-1] in ['srt', 'ass']:
-            raise forms.ValidationError(_(u'Incorrect format. Upload .srt or .ass'))
+        if not subtitles.name.split('.')[-1] in ['srt', 'ass', 'ssa', 'xml']:
+            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .ass or .xml(TTML  format)'))
         if not self._get_parser(subtitles.name)(subtitles.read()):
             raise forms.ValidationError(_(u'Incorrect subtitles format'))
         subtitles.seek(0)
@@ -65,8 +65,10 @@ class SubtitlesUploadForm(forms.Form):
         end = filename.split('.')[-1]
         if end == 'srt':
             return SrtSubtitleParser
-        if end == 'ass':
-            return AssSubtitleParser
+        if end in ['ass', 'ssa']:
+            return SsaSubtitleParser
+        if end == 'xml':
+            return TtmlSubtitleParser
         
     def save(self):
         subtitles = self.cleaned_data['subtitles']

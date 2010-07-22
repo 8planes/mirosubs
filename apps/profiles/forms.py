@@ -20,6 +20,7 @@ from django import forms
 from auth.models import CustomUser as User, UserLanguage
 from django.core.mail import EmailMessage
 from django.forms.models import inlineformset_factory
+from django.utils.translation import ugettext_lazy as _
 
 UserLanguageFormset = inlineformset_factory(User, UserLanguage, extra=1)
 
@@ -28,12 +29,26 @@ class SendMessageForm(forms.Form):
     message = forms.CharField()
     user = forms.ModelChoiceField(User.objects)
     
-    def send(self, user):
+    def __init__(self, sender, *args, **kwargs):
+        self.sender = sender
+        super(SendMessageForm, self).__init__(*args, **kwargs)
+    
+    def clean_user(self):
+        user = self.cleaned_data['user']
+        if not user.email:
+            raise forms.ValidationError(_(u'This user has not email'))
+        return user
+    
+    def clean(self):
+        if not self.sender.is_authenticated():
+            raise forms.ValidationError(_(u'You are not authenticated.'))
+        return self.cleaned_data
+    
+    def send(self):
         user = self.cleaned_data.get('user')
         email = self.cleaned_data.get('email')
         headers = {'Reply-To': email}
-        username = user.username if user.is_authenticated() else 'anonymous'
-        subject = 'Personal message from %s on universalsubtitles.org' % username
+        subject = 'Personal message from %s on universalsubtitles.org' % self.sender.username
         EmailMessage(subject, self.cleaned_data.get('message'), email, \
                      [user.email], headers=headers).send()
 
