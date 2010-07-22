@@ -56,6 +56,8 @@ mirosubs.translate.EditDialog.prototype.createDom = function() {
         rightPanel,
         mirosubs.RightPanel.EventType.DONE,
         this.handleDoneKeyPress_);
+    goog.dom.classes.add(this.getContentElement(),
+                         'mirosubs-modal-widget-edittranslation');
 };
 mirosubs.translate.EditDialog.prototype.createRightPanel_ = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
