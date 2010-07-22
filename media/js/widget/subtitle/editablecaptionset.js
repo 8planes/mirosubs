@@ -124,6 +124,7 @@ mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption =
                  nextSub.getSubOrder()) / 2.0;
     var c = new mirosubs.subtitle.EditableCaption(
         this.unitOfWork_, order);
+    this.unitOfWork_.registerNew(c);
     goog.array.insertAt(this.captions_, c, index);
     if (prevSub) {
         prevSub.setNextCaption(c);

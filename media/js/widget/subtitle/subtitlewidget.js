@@ -111,6 +111,8 @@ mirosubs.subtitle.SubtitleWidget.prototype.deleteClicked_ = function(e) {
     this.subtitleSet_.deleteCaption(this.subtitle_);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.insertClicked_ = function(e) {
+    e.stopPropagation();
+    this.showInsertDeleteButtons_(false);
     this.subtitleSet_.insertCaption(this.subtitle_.getSubOrder());
 };
 mirosubs.subtitle.SubtitleWidget.prototype.timeSpinnerListener_ =
@@ -160,6 +162,11 @@ mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
         mirosubs.subtitle.SubtitleWidget.editing_.switchToView_();
         return;
     }
+    this.switchToEditMode();
+    event.stopPropagation();
+    event.preventDefault();
+};
+mirosubs.subtitle.SubtitleWidget.prototype.switchToEditMode = function() {
     this.showInsertDeleteButtons_(false);
     mirosubs.subtitle.SubtitleWidget.editing_ = this;
     this.setEditing_(true, false);
@@ -182,8 +189,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
     this.getHandler().listen(this.keyHandler_,
                              goog.events.KeyHandler.EventType.KEY,
                              this.handleKey_, false, this);
-    event.stopPropagation();
-    event.preventDefault();
+    
 };
 mirosubs.subtitle.SubtitleWidget.prototype.handleKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.ENTER) {

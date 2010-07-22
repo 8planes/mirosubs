@@ -229,6 +229,20 @@ function testInsertSubFirstUntimed() {
     assertEquals(-1, inserted.getEndTime());
 }
 
+function testInsertAndUnitOfWork() {
+    var set = createSet([captionJSON(0.5, 2, 1, 1),
+			 captionJSON(2, 3, 2, 2),
+			 captionJSON(3, -1, 3, 3),
+                         captionJSON(-1, -1, 4, 4)]);
+    var inserted = set.insertCaption(set.caption(2).getSubOrder());
+    var work = MS_unitOfWork.getWork();
+    assertEquals(1, work.neu.length);
+    assertEquals(1, work.updated.length);
+    assertEquals(0, work.deleted.length);
+    
+}
+
+
 function testSpacebarHold() {
     var T0 = 1.8, T1 = 5.6, T2 = 9.2;
     var set = createSet([
