@@ -74,9 +74,9 @@ def profile(request, user_id=None):
 @login_required
 def send_message(request):
     output = dict(success=False)
-    form = SendMessageForm(request.POST)
+    form = SendMessageForm(request.user, request.POST)
     if form.is_valid():
-        form.send(request.user)
+        form.send()
         output['success'] = True
     else:
         output['errors'] = form.get_errors()
