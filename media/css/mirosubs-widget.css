@@ -2255,3 +2255,19 @@ height: 0;
 overflow: hidden;
 }
 
+.mirosubs-translationResources h3.mirosubs-resources {
+    color: black;
+}
+
+.mirosubs-translationResources ul.mirosubs-resourceList {
+    list-style: disc;
+    color: black;
+}
+
+.mirosubs-translationResources a {
+    text-decoration: none;
+}
+
+.mirosubs-translationResources a:visited {
+    color: #0000EE;
+}

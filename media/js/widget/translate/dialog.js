@@ -55,20 +55,23 @@ mirosubs.translate.Dialog.prototype.createRightPanel_ = function() {
         "Adding a New Translation",
         [["Thanks for volunteering to translate! As soon as you submit ",
           "your translation, it will be available to everyone watching the ",
-          "video in the widget."].join(''),
-         ["Choose a language from the menu. Then translate each  ", 
-          "line, one by one, in the white space below each line."].join('')]);
-    var KC = goog.events.KeyCodes;
-    var keySpecs = [
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-tab', 'tab', 'Next Line', KC.TAB),
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-tab', 'shift+tab', 'Previous Line',
-            'shift+tab')
+          "video in our widget."].join(''),
+         ["Choose a language from the menu to the left. Then translate each  ", 
+          "line, one by one, in the white space below each line."].join(''),
+         ["If you need to rearrange the order of words or split a phrase ",
+          "differently, that's okay."].join(''),
+         ["As you're translating, you can use the \"TAB\" key to advance to ",
+          "the next line, and \"Shift-TAB\" to go back."].join('')
+        ]);
+    var extraHelp = [
+        ["Google Translate", "http://translate.google.com/"],
+        ["List of dictionaries", "http://yourdictionary.com/languages.html"],
+        ["Firefox spellcheck dictionaries", 
+         "https://addons.mozilla.org/en-US/firefox/browse/type:3"]
     ];
-    return new mirosubs.RightPanel(
-        this.serverModel_, helpContents, [], keySpecs, false, "Done?", 
-        "Submit final translation");
+    return new mirosubs.translate.TranslationRightPanel(
+        this.serverModel_, helpContents, extraHelp, [], false, "Done?", 
+        "Submit final translation", "Resources for Translators");
 };
 mirosubs.translate.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     var that = this;
