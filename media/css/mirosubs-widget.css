@@ -165,6 +165,34 @@ border: 0;
 }
 
 
+.mirosubs-modal-widget-translate .mirosubs-right{
+width: 440px !important;
+padding: 0px 0px !important;
+float: left !important;
+height: 717px;
+color: #fff;
+background: url("/site_media/images/widget_right_bg.gif") 0 0 repeat-y !important;
+border: 0;	
+}
+
+
+.mirosubs-modal-widget-translate .mirosubs-right{
+width: 440px !important;
+padding: 0px 0px !important;
+float: left !important;
+height: 717px;
+color: #fff;
+background: url("/site_media/images/widget_right_bg.gif") 0 0 repeat-y !important;
+border: 0;	
+}
+
+
+
+.mirosubs-modal-widget-translate .mirosubs-right .mirosubs-done{
+margin-top: 75px;	
+}
+
+
 
 .mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share{
 width: 350px !important;	
@@ -311,6 +339,14 @@ height: 670px !important;
 	padding: 0px 30px 0 0 !important;
 	float: right !important;
 	}
+
+
+.mirosubs-modal-widget-content.finished .mirosubs-right{
+	width: 360px !important;
+	padding: 0px 30px 0 0 !important;
+	float: right !important;
+	}
+
 
 
 
@@ -2377,12 +2413,12 @@ overflow: hidden;
 }
 
 .mirosubs-translationResources h3.mirosubs-resources {
-    color: black;
+    color: #fff;
 }
 
 .mirosubs-translationResources ul.mirosubs-resourceList {
     list-style: disc;
-    color: black;
+    color: #fff;
 }
 
 .mirosubs-translationResources a {
@@ -2390,5 +2426,5 @@ overflow: hidden;
 }
 
 .mirosubs-translationResources a:visited {
-    color: #0000EE;
+    color: #fff;
 }
