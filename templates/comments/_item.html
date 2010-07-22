@@ -10,7 +10,7 @@
             {% if item.reply_to %}
                 <a href="#comments-{{ item.reply_to.id }}">replied to comment from {{ item.reply_to.user.username }}</a>
             {% endif %}
-            <a href="#" class="small_button floatright reply"  comment_id="{{ item.id }}">
+            <a href="#" class="floatright reply"  comment_id="{{ item.id }}">
                 <span>Reply</span>
             </a>
             <p>{{ item.content }}</p>

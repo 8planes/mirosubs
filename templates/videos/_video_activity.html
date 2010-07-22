@@ -1,14 +1,15 @@
 <ul class="table_head">
-    <li class="table_most_recent">
-        Activity
+    <li class="grid_10">
+        <a href="#">Activity</a>
     </li>
-    <li class="table_user">
-        Happened
+    <li class="grid_2 grid_last">
+        <a href="#">Happened</a>
     </li>            
 </ul>
 <ul class="table_body">
 {% for item in events %}
-    <li class="table_transcript">
+    <li class="table_row">
+      <span class="grid_10 table_activity">
         {% if item.user %}
             <a class="username" href="{{ item.user.profile_url }}">{{ item.user.username }}</a>
         {% else %}
@@ -29,9 +30,10 @@
             {% endif %}
             <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
         {% endif %}
-    </li>
-    <li>
-        {{ item.created|timesince }} ago
+      </span>
+        <span class="grid_2 table_happened grid_last">
+            {{ item.created|timesince }} ago
+        </span>
     </li>
 {% endfor %}
 </ul>
