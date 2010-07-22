@@ -641,7 +641,8 @@ class VideoCaption(models.Model):
                             caption_id=self.caption_id,
                             caption_text=self.caption_text,
                             start_time=self.start_time,
-                            end_time=self.end_time)
+                            end_time=self.end_time,
+                            sub_order=self.sub_order)
 
     def update_from(self, caption_dict):
         self.caption_text = caption_dict['caption_text']
