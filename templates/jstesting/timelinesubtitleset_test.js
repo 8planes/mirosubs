@@ -8,6 +8,7 @@
 var MS_subtitleUpdateCounts;
 var MS_subtitleUpdateCount;
 var MS_addedSubtitles;
+var MS_removedSubtitles;
 var MS_eventHandler;
 var MS_videoPlayer;
 var MS_unitOfWork;
@@ -15,12 +16,16 @@ var MS_unitOfWork;
 var MIN_LENGTH = mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;
 var UNASSIGNED_SPACING = mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
 
-function MS_subUpdateListener(event) {
-    var captionID = event.target.getEditableCaption().getCaptionID() + '';
+function MS_addUpdateCount(captionID) {
     if (!MS_subtitleUpdateCounts[captionID])
         MS_subtitleUpdateCounts[captionID] = 1;
     else
         MS_subtitleUpdateCounts[captionID]++;
+}
+
+function MS_subUpdateListener(event) {
+    var captionID = event.target.getEditableCaption().getCaptionID() + '';
+    MS_addUpdateCount(captionID);
     MS_subtitleUpdateCount++;
 }
 
@@ -32,15 +37,23 @@ function MS_displaySubListener(event) {
     listenToSubtitle(event.subtitle);
 }
 
+function MS_removeSubListener(event) {
+    var captionID = event.subtitle.getEditableCaption().getCaptionID() + '';
+    MS_removedSubtitles.push(event.subtitle);
+    MS_addUpdateCount(captionID);
+    MS_subtitleUpdateCount++;
+}
+
 function MS_clearListener(event) {
     
 }
 
 /* helper functions */
-function captionJSON(start_time, end_time, caption_id) {
+function captionJSON(start_time, end_time, caption_id, sub_order) {
     return {'start_time' : start_time, 
             'end_time': end_time, 
-            'caption_id': caption_id};
+            'caption_id': caption_id,
+            'sub_order': sub_order};
 }
 
 function listenToSubtitle(timelineSub) {
@@ -71,6 +84,10 @@ function createSet(existingCaptions) {
         subtitleSet,
         mirosubs.timeline.SubtitleSet.DISPLAY_NEW,
         MS_displaySubListener);
+    MS_eventHandler.listen(
+        subtitleSet,
+        mirosubs.timeline.SubtitleSet.REMOVE,
+        MS_removeSubListener);
     return subtitleSet;
 };
 
@@ -89,14 +106,15 @@ function setUp() {
     MS_subtitleUpdateCounts = {};
     MS_subtitleUpdateCount = 0;
     MS_addedSubtitles = [];
+    MS_removedSubtitles = [];
 }
 
 function testSubsToDisplayLength() {
     var set = createSet([
-        captionJSON(0.3, 2.5, 1),
-        captionJSON(2.5, -1, 2),
-        captionJSON(-1, -1, 3),
-        captionJSON(-1, -1, 4)
+        captionJSON(0.3, 2.5, 1, 1),
+        captionJSON(2.5, -1, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)
     ]);
     assertEquals(3, set.getSubsToDisplay().length);
 }
@@ -104,10 +122,10 @@ function testSubsToDisplayLength() {
 function testSubsToDisplay() {
     var T0 = 0.3, T1 = 2.5;
     var set = createSet([
-        captionJSON(T0, T1, 1),
-        captionJSON(T1, -1, 2),
-        captionJSON(-1, -1, 3),
-        captionJSON(-1, -1, 4)
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, -1, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)
     ]);
     var subs = set.getSubsToDisplay();
     assertTimes(subs[0], T0, T1);
@@ -120,10 +138,10 @@ function testSubsToDisplay() {
 function testVideoPlayheadMove() {
     var T0 = 0.3, T1 = 2.5, T2 = 4.6;
     var set = createSet([
-        captionJSON(T0, T1, 1),
-        captionJSON(T1, -1, 2),
-        captionJSON(-1, -1, 3),
-        captionJSON(-1, -1, 4)
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, -1, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)
     ]);
     var subs = set.getSubsToDisplay();
     sendVideoTimeUpdate(0.2);
@@ -150,10 +168,10 @@ function testVideoPlayheadMove() {
 function testAssignTime() {
     var T0 = 0.3, T1 = 2.5, T2 = 4.6, T3 = 7;
     var set = createSet([
-        captionJSON(T0, T1, 1),
-        captionJSON(T1, -1, 2),
-        captionJSON(-1, -1, 3),
-        captionJSON(-1, -1, 4)
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, -1, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)
     ]);
     var subs = set.getSubsToDisplay();
     sendVideoTimeUpdate(T2);
@@ -178,10 +196,10 @@ function testAssignTime() {
 
 function testStartOut() {
     var set = createSet([
-        captionJSON(-1, -1, 1),
-        captionJSON(-1, -1, 2),
-        captionJSON(-1, -1, 3),
-        captionJSON(-1, -1, 4)
+        captionJSON(-1, -1, 1, 1),
+        captionJSON(-1, -1, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)
     ]);
     var subs = set.getSubsToDisplay();
     assertEquals(1, subs.length);
@@ -206,10 +224,10 @@ function testStartOut() {
 function testStartWithLoneUnsynced() {
     var T0 = 8, T1 = 10;
     var set = createSet([
-        captionJSON(0.5, 4, 1),
-        captionJSON(4.5, T0, 2),
-        captionJSON(-1, -1, 3),
-        captionJSON(-1, -1, 4)
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, T0, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)
     ]);
     var subs = set.getSubsToDisplay();
     assertEquals(3, subs.length);
@@ -221,6 +239,146 @@ function testStartWithLoneUnsynced() {
     assertTimes(subs[2],
                 T1 + UNASSIGNED_SPACING,
                 T1 + UNASSIGNED_SPACING + MIN_LENGTH);
+}
+
+function testInsertSimple() {
+    var set = createSet([
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, 9, 2, 2),
+        captionJSON(11, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)        
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    var newCaption = captionSet.insertCaption(
+        captionSet.caption(1).getSubOrder());
+    assertEquals(2, MS_subtitleUpdateCount);
+    assertEquals(1, MS_addedSubtitles.length);
+    assertEquals(1, MS_subtitleUpdateCounts['2']);
+    assertEquals(1, MS_subtitleUpdateCounts[newCaption.getCaptionID()]);
+    var subs = set.getSubsToDisplay();
+    assertEquals(newCaption.getCaptionID(), 
+                 subs[1].getEditableCaption().getCaptionID());
+}
+
+function testInsertUnsynced() {
+    var set = createSet([
+        captionJSON(-1, -1, 1, 1)
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    var newCaption = captionSet.insertCaption(
+        captionSet.caption(0).getSubOrder());
+    assertEquals(2, MS_subtitleUpdateCount);
+    assertEquals(1, MS_addedSubtitles.length);
+    assertEquals(1, MS_removedSubtitles.length);
+    assertEquals(1, MS_subtitleUpdateCounts['1']);
+    assertEquals(1, MS_subtitleUpdateCounts[newCaption.getCaptionID()]);
+    var subs = set.getSubsToDisplay();
+    assertEquals(1, subs.length);
+    assertEquals(newCaption.getCaptionID(),
+                 subs[0].getEditableCaption().getCaptionID());
+}
+
+function testInsertFirstUnsynced() {
+    var set = createSet([
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, 9, 2, 2),
+        captionJSON(11, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)        
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    var newCaption = captionSet.insertCaption(
+        captionSet.caption(3).getSubOrder());
+    assertEquals(2, MS_subtitleUpdateCount);
+    assertEquals(1, MS_addedSubtitles.length);
+    assertEquals(1, MS_removedSubtitles.length);
+    assertEquals(4, MS_removedSubtitles[0].getEditableCaption().getCaptionID());
+    assertEquals(1, MS_subtitleUpdateCounts['4']);
+    assertEquals(1, MS_subtitleUpdateCounts[newCaption.getCaptionID()]);
+    var subs = set.getSubsToDisplay();
+    assertEquals(newCaption.getCaptionID(), 
+                 subs[3].getEditableCaption().getCaptionID());
+}
+
+function testInsertAfterUnsynced() {
+    var set = createSet([
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, -1, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)        
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    var newCaption = captionSet.insertCaption(
+        captionSet.caption(3).getSubOrder());
+    assertEquals(0, MS_subtitleUpdateCount);
+}
+
+function testDeleteSimple() {
+    var set = createSet([
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, 9, 2, 2),
+        captionJSON(11, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)        
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    captionSet.deleteCaption(captionSet.caption(1));
+    assertEquals(1, MS_subtitleUpdateCount);
+    assertEquals(1, MS_removedSubtitles.length);
+    assertEquals(2, MS_removedSubtitles[0].getEditableCaption().getCaptionID());
+}
+
+function testDeleteLastSynced() {
+    var set = createSet([
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, 9, 2, 2),
+        captionJSON(11, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)        
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    captionSet.deleteCaption(captionSet.caption(2));
+    assertEquals(1, MS_subtitleUpdateCount);
+    assertEquals(1, MS_removedSubtitles.length);
+    assertEquals(3, MS_removedSubtitles[0].getEditableCaption().getCaptionID());    
+}
+
+function testDeleteFirstUnsynced() {
+    var set = createSet([
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, 9, 2, 2),
+        captionJSON(11, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)        
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    captionSet.deleteCaption(captionSet.caption(3));
+    assertEquals(1, MS_subtitleUpdateCount);
+    assertEquals(1, MS_removedSubtitles.length);
+    assertEquals(4, MS_removedSubtitles[0].getEditableCaption().getCaptionID());
+}
+
+function testDeleteFirstUnsyncedWithSubsequent() {
+    var set = createSet([
+        captionJSON(0.5, 4, 1, 1),
+        captionJSON(4.5, 9, 2, 2),
+        captionJSON(11, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4),
+        captionJSON(-1, -1, 5, 5)
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    captionSet.deleteCaption(captionSet.caption(3));
+    assertEquals(2, MS_subtitleUpdateCount);
+    assertEquals(1, MS_addedSubtitles.length);
+    assertEquals(1, MS_removedSubtitles.length);
+    assertEquals(5, MS_addedSubtitles[0].getEditableCaption().getCaptionID());
+    assertEquals(4, MS_removedSubtitles[0].getEditableCaption().getCaptionID());
+}
+
+function testDeleteOnly() {
+    var set = createSet([
+        captionJSON(-1, -1, 1, 1)
+    ]);
+    var captionSet = set.getEditableCaptionSet();
+    captionSet.deleteCaption(captionSet.caption(0));
+    assertEquals(1, MS_removedSubtitles.length);
+    assertEquals(0, set.getSubsToDisplay().length);
 }
 
 {% endblock %}

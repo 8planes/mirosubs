@@ -68,11 +68,26 @@ mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
         listen(
             this.captionSet_,
             et.CLEAR_TIMES,
-            this.captionTimesCleared_);
+            this.captionTimesCleared_).
+        listen(
+            this.captionSet_,
+            et.ADD,
+            this.captionAdded_).
+        listen(
+            this.captionSet_,
+            et.DELETE,
+            this.captionDeleted_);
 };
 mirosubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
     this.subtitleMap_ = {};
     this.removeChildren(true);
+};
+mirosubs.subtitle.SubtitleList.prototype.captionAdded_ = function(e) {
+    
+};
+mirosubs.subtitle.SubtitleList.prototype.captionDeleted_ = function(e) {
+    var widget = this.subtitleMap_[e.caption.getCaptionID()];
+    this.removeChild(widget, true);
 };
 mirosubs.subtitle.SubtitleList.prototype.captionTimesCleared_ = function(e) {
     var subtitleWidgets = goog.object.getValues(this.subtitleMap_);
@@ -94,6 +109,7 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
     var subtitleWidget =
         new mirosubs.subtitle.SubtitleWidget(
             subtitle,
+            this.captionSet_,
             goog.bind(this.setCurrentlyEditing_, this),
             this.displayTimes_);
     this.addChild(subtitleWidget, true);

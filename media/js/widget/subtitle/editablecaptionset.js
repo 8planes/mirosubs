@@ -124,7 +124,6 @@ mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption =
                  nextSub.getSubOrder()) / 2.0;
     var c = new mirosubs.subtitle.EditableCaption(
         this.unitOfWork_, order);
-    c.setParentEventTarget(this);
     goog.array.insertAt(this.captions_, c, index);
     if (prevSub) {
         prevSub.setNextCaption(c);
@@ -132,8 +131,8 @@ mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption =
     }
     c.setNextCaption(nextSub);
     nextSub.setPreviousCaption(c);
-
     this.setTimesOnInsertedSub_(c, prevSub, nextSub);
+    c.setParentEventTarget(this);
     this.dispatchEvent(
         new mirosubs.subtitle.EditableCaptionSet.CaptionEvent(
             mirosubs.subtitle.EditableCaptionSet.EventType.ADD,

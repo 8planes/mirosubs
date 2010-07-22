@@ -65,7 +65,6 @@ mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
     }
     else if (event.type == et.ADD) {
         var caption = event.caption;
-        console.log(caption);
         if (caption.getStartTime() != -1) {
             goog.array.binaryInsert(
                 this.captions_, caption, this.binaryCaptionCompare_);

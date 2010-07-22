@@ -18,13 +18,25 @@
 
 goog.provide('mirosubs.subtitle.SubtitleWidget');
 
-mirosubs.subtitle.SubtitleWidget = function(subtitle, editingFn, displayTimes) {
+/**
+ *
+ * @param {mirosubs.subtitle.EditableCaption} subtitle
+ * @param {mirosubs.subtitle.EditableCaptionSet} subtitleSet
+ * 
+ *
+ */
+mirosubs.subtitle.SubtitleWidget = function(subtitle, 
+                                            subtitleSet, 
+                                            editingFn, 
+                                            displayTimes) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
+    this.subtitleSet_ = subtitleSet;
     this.editingFn_ = editingFn;
     this.displayTimes_ = displayTimes;
     this.keyHandler_ = null;
     this.timeSpinner_ = null;
+    this.insertDeleteButtonsShowing_ = false;
 };
 goog.inherits(mirosubs.subtitle.SubtitleWidget, goog.ui.Component);
 
@@ -33,6 +45,10 @@ mirosubs.subtitle.SubtitleWidget.prototype.getContentElement = function() {
 };
 mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.deleteButton_ = this.createDeleteButton_($d);
+    this.insertButton_ = this.createInsertButton_($d);
+    goog.style.showElement(this.deleteButton_, false);
+    goog.style.showElement(this.insertButton_, false);
     this.contentElement_ = $d('span', 'mirosubs-timestamp');
     this.setElementInternal(
         $d('li', null,
@@ -40,7 +56,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
            this.titleElem_ =
            $d('span', {'className':'mirosubs-title'},
               this.titleElemInner_ =
-              $d('span'))));
+              $d('span')),
+           this.deleteButton_,
+           this.insertButton_));
     if (!this.displayTimes_) {
         goog.dom.classes.add(this.titleElem_, 'mirosubs-title-notime');
         this.contentElement_.style.display = 'none';
@@ -60,16 +78,26 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     this.showingTextarea_ = false
     this.editing_ = false;
 };
+mirosubs.subtitle.SubtitleWidget.prototype.createDeleteButton_ = function($d) {
+    return $d('div', 'mirosubs-sub-delete', 'X');
+};
+mirosubs.subtitle.SubtitleWidget.prototype.createInsertButton_ = function($d) {
+    return $d('div', 'mirosubs-sub-insert', '+');
+};
 mirosubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
     mirosubs.subtitle.SubtitleWidget.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.subtitle_,
-        mirosubs.subtitle.EditableCaption.CHANGE,
-        this.updateValues_);
-    this.getHandler().listen(
-        this.titleElem_,
-        goog.events.EventType.CLICK,
-        this.clicked_);
+    var et = goog.events.EventType;
+    this.getHandler().
+        listen(
+            this.subtitle_,
+            mirosubs.subtitle.EditableCaption.CHANGE,
+            this.updateValues_).
+        listen(this.titleElem_, et.CLICK, this.clicked_).
+        listen(this.getElement(),
+               [et.MOUSEOVER, et.MOUSEOUT],
+               this.mouseOverOut_).
+        listen(this.deleteButton_, et.CLICK, this.deleteClicked_).
+        listen(this.insertButton_, et.CLICK, this.insertClicked_);
     if (this.timeSpinner_)
         this.getHandler().listen(
             this.timeSpinner_,
@@ -78,6 +106,12 @@ mirosubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
 };
 mirosubs.subtitle.SubtitleWidget.prototype.setActive = function(active) {
     goog.dom.classes.enable(this.getElement(), 'active', active);
+};
+mirosubs.subtitle.SubtitleWidget.prototype.deleteClicked_ = function(e) {
+    this.subtitleSet_.deleteCaption(this.subtitle_);
+};
+mirosubs.subtitle.SubtitleWidget.prototype.insertClicked_ = function(e) {
+    this.subtitleSet_.insertCaption(this.subtitle_.getSubOrder());
 };
 mirosubs.subtitle.SubtitleWidget.prototype.timeSpinnerListener_ =
     function(event)
@@ -103,6 +137,22 @@ mirosubs.subtitle.SubtitleWidget.prototype.setEditing_ = function(editing, timeC
 mirosubs.subtitle.SubtitleWidget.prototype.getSubtitle = function() {
     return this.subtitle_;
 };
+mirosubs.subtitle.SubtitleWidget.prototype.mouseOverOut_ = function(e) {
+    if (e.type == goog.events.EventType.MOUSEOVER &&
+        !mirosubs.subtitle.SubtitleWidget.editing_)
+        this.showInsertDeleteButtons_(true);
+    else if (e.type == goog.events.EventType.MOUSEOUT)
+        this.showInsertDeleteButtons_(false);
+};
+mirosubs.subtitle.SubtitleWidget.prototype.showInsertDeleteButtons_ =
+    function(show) 
+{
+    if (show == this.insertDeleteButtonsShowing_)
+        return;
+    this.insertDeleteButtonsShowing_ = show;
+    goog.style.showElement(this.deleteButton_, show);
+    goog.style.showElement(this.insertButton_, show);
+};
 mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
     if (this.showingTextarea_)
         return;
@@ -110,6 +160,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
         mirosubs.subtitle.SubtitleWidget.editing_.switchToView_();
         return;
     }
+    this.showInsertDeleteButtons_(false);
     mirosubs.subtitle.SubtitleWidget.editing_ = this;
     this.setEditing_(true, false);
     this.showingTextarea_ = true;

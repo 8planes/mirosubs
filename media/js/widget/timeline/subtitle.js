@@ -37,6 +37,11 @@ mirosubs.timeline.Subtitle.CHANGE = 'tsubchanged';
 mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH = 2.0;
 mirosubs.timeline.Subtitle.UNASSIGNED_SPACING = 0.5;
 
+mirosubs.timeline.Subtitle.orderCompare = function(a, b) {
+    return a.getEditableCaption().getSubOrder() - 
+        b.getEditableCaption().getSubOrder();
+};
+
 mirosubs.timeline.Subtitle.prototype.captionChanged_ = function(e) {
     this.updateTimes_();
     if (this.nextSubtitle_ && this.nextSubtitle_.isLoneUnsynced_())
@@ -100,7 +105,7 @@ mirosubs.timeline.Subtitle.prototype.isNextToBeSynced = function() {
 
 mirosubs.timeline.Subtitle.prototype.setNextSubtitle = function(sub) {
     this.nextSubtitle_ = sub;
-    if (this.editableCaption_.hasStartTimeOnly())
+    if (sub && this.editableCaption_.hasStartTimeOnly())
         this.nextSubtitle_.bumpUnsyncedTimes(this.endTime_);
 };
 

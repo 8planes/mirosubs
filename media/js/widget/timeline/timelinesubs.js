@@ -38,10 +38,11 @@ mirosubs.timeline.TimelineSubs.prototype.createDom = function() {
 };
 mirosubs.timeline.TimelineSubs.prototype.enterDocument = function() {
     mirosubs.timeline.TimelineSubs.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.subtitleSet_, 
-        mirosubs.timeline.SubtitleSet.DISPLAY_NEW,
-        this.displayNewListener_);
+    this.getHandler().
+        listen(
+            this.subtitleSet_, 
+            mirosubs.timeline.SubtitleSet.DISPLAY_NEW,
+            this.displayNewListener_);
     // TODO: listen to CLEAR_ALL also (after you write it and unit test :))
 };
 mirosubs.timeline.TimelineSubs.prototype.displayNewListener_ = 
