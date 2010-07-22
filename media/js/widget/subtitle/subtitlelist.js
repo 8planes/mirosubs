@@ -68,15 +68,46 @@ mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
         listen(
             this.captionSet_,
             et.CLEAR_TIMES,
-            this.captionTimesCleared_);
+            this.captionTimesCleared_).
+        listen(
+            this.captionSet_,
+            et.ADD,
+            this.captionInserted_).
+        listen(
+            this.captionSet_,
+            et.DELETE,
+            this.captionDeleted_);
 };
 mirosubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
     this.subtitleMap_ = {};
     this.removeChildren(true);
 };
+mirosubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
+    var addedCaption = e.caption;
+    var subtitleWidget = this.createNewSubWidget_(addedCaption);
+    var nextCaption = addedCaption.getNextCaption();
+    var nextWidget = this.subtitleMap_[nextCaption.getCaptionID()];
+    this.addChildAt(subtitleWidget, this.indexOfChild(nextWidget), true);
+    this.subtitleMap_[addedCaption.getCaptionID()] = subtitleWidget;
+    subtitleWidget.switchToEditMode();
+};
+mirosubs.subtitle.SubtitleList.prototype.captionDeleted_ = function(e) {
+    var widget = this.subtitleMap_[e.caption.getCaptionID()];
+    delete this.subtitleMap_[e.caption.getCaptionID()];
+    this.removeChild(widget, true);
+};
 mirosubs.subtitle.SubtitleList.prototype.captionTimesCleared_ = function(e) {
     var subtitleWidgets = goog.object.getValues(this.subtitleMap_);
     goog.array.forEach(subtitleWidgets, function(w) { w.clearTimes(); });
+};
+mirosubs.subtitle.SubtitleList.prototype.createNewSubWidget_ = 
+    function(editableCaption)
+{
+    return new mirosubs.subtitle.SubtitleWidget(
+        editableCaption,
+        this.captionSet_,
+        goog.bind(this.setCurrentlyEditing_, this),
+        this.displayTimes_);
 };
 /**
  *
@@ -91,11 +122,7 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
         goog.dom.classes.remove(this.getElement(), 'mirosubs-beginTab');
         this.showingBeginMessage_ = false;
     }
-    var subtitleWidget =
-        new mirosubs.subtitle.SubtitleWidget(
-            subtitle,
-            goog.bind(this.setCurrentlyEditing_, this),
-            this.displayTimes_);
+    var subtitleWidget = this.createNewSubWidget_(subtitle);
     this.addChild(subtitleWidget, true);
     this.subtitleMap_[subtitle.getCaptionID()] = subtitleWidget;
     if (opt_scrollDown && typeof(opt_scrollDown) == 'boolean')
@@ -114,6 +141,8 @@ mirosubs.subtitle.SubtitleList.prototype.setTaller = function(taller) {
     goog.dom.classes.enable(this.getElement(), 'taller', taller);
 };
 mirosubs.subtitle.SubtitleList.prototype.setActiveWidget = function(captionID) {
+    if (!this.subtitleMap_[captionID])
+        return;
     this.scrollToCaption(captionID);
     this.clearActiveWidget();
     var subtitleWidget = this.subtitleMap_[captionID];
@@ -125,8 +154,10 @@ mirosubs.subtitle.SubtitleList.prototype.getActiveWidget = function() {
 };
 mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
     var subtitleWidget = this.subtitleMap_[captionID];
-    goog.style.scrollIntoContainerView(subtitleWidget.getElement(),
-                                       this.getElement(), true);
+    if (subtitleWidget)
+        goog.style.scrollIntoContainerView(
+            subtitleWidget.getElement(),
+            this.getElement(), true);
 };
 mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
     function(editing, timeChanged, subtitleWidget)

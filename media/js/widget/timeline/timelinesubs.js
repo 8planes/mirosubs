@@ -38,16 +38,28 @@ mirosubs.timeline.TimelineSubs.prototype.createDom = function() {
 };
 mirosubs.timeline.TimelineSubs.prototype.enterDocument = function() {
     mirosubs.timeline.TimelineSubs.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.subtitleSet_, 
-        mirosubs.timeline.SubtitleSet.DISPLAY_NEW,
-        this.displayNewListener_);
+    var ss = mirosubs.timeline.SubtitleSet;
+    this.getHandler().
+        listen(
+            this.subtitleSet_, 
+            ss.DISPLAY_NEW,
+            this.displayNewListener_).
+        listen(
+            this.subtitleSet_,
+            ss.REMOVE,
+            this.removeListener_);
     // TODO: listen to CLEAR_ALL also (after you write it and unit test :))
 };
 mirosubs.timeline.TimelineSubs.prototype.displayNewListener_ = 
     function(event) 
 {
     this.addSub_(event.subtitle);
+};
+mirosubs.timeline.TimelineSubs.prototype.removeListener_ = function(event) {
+    var captionID = event.subtitle.getEditableCaption().getCaptionID();
+    var timelineSub = this.subs_[captionID];
+    this.removeChild(timelineSub, true);
+    delete this.subs_[captionID];
 };
 mirosubs.timeline.TimelineSubs.prototype.addSub_ = function(sub) {
     var timelineSub = new mirosubs.timeline.TimelineSub(
