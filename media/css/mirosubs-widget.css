@@ -48,6 +48,10 @@ border-right: none !important;
 }
 
 
+.mirosubs-right div a{
+color: #fff;
+}
+
 
 .mirosubs-modal-widget-content h1{
 color: #fff !important;
@@ -155,6 +159,43 @@ width: 440px !important;
 padding: 0px 0px !important;
 float: left !important;
 height: 715px;
+color: #fff;
+background: url("/site_media/images/widget_right_bg.gif") 0 0 repeat-y !important;
+border: 0;	
+}
+
+
+
+.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share{
+width: 350px !important;	
+margin-left: 26px;
+}
+
+
+.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share h2,
+.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share h3{
+color: #333;
+width: 340px;
+margin-bottom: 10px !important;
+}
+
+
+
+
+.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share p{
+width: 340px;
+padding: 0;
+margin: 0px 0 10px;
+color: #333;
+text-shadow: none;
+}
+
+
+.mirosubs-modal-widget-finished .mirosubs-right{
+width: 440px !important;
+padding: 30px 0px !important;
+float: left !important;
+height: 404px;
 color: #fff;
 background: url("/site_media/images/widget_right_bg.gif") 0 0 repeat-y !important;
 border: 0;	
@@ -320,7 +361,7 @@ bottom: 47px !important;
 
 .mirosubs-restart{
     padding-left: 33px !important;
-    margin: 10px 0 20px 0px !important;
+    margin: 10px 0 30px 0px !important;
     font-size: 11px !important;
     float: right !important;
     text-decoration: none !important;
@@ -339,6 +380,7 @@ border-bottom: 1px solid #444;
 .mirosubs-extra{
 border: 1px solid #4f4f4f;
 background: #454545;
+
 margin: 20px;
 padding: 15px 20px 10px;
    -moz-border-radius: 4px;
@@ -358,6 +400,44 @@ line-height: 1.4em !important;
 font-size: 12px !important;
 }
 
+
+.mirosubs-extra a{
+margin: 0px 0 5px;
+color: #fff;
+padding: 0;
+text-shadow: 0px 1px 1px #000;
+font-weight: bold;
+line-height: 1.4em !important;
+font-size: 12px !important;
+}
+
+
+.mirosubs-extra h3{
+margin: 0px 0 5px;
+color: #fff !important;
+text-shadow: 0px 1px 1px #000;
+font-weight: bold;
+line-height: 1.4em !important;
+font-size: 15px !important;
+}
+
+
+
+
+
+.mirosubs-extra ul{
+margin: 0px 0 5px;
+color: #fff;
+padding: 0 0 0 15px;
+text-shadow: 0px 1px 1px #000;
+font-weight: bold;
+line-height: 1.4em !important;
+font-size: 12px !important;
+}
+
+
+
+
 .mirosubs-extra .mirosubs-spanarrow{
 display: block;
 bottom: -12px;
@@ -371,7 +451,7 @@ background: url("/site_media/images/pointing.png") 0 0 no-repeat !important;
 
 .mirosubs-backTo{
     padding-left: 29px !important;
-    margin: 10px 0 0 20px !important;
+    margin: 10px 0 30px 20px !important;
     font-size: 11px !important;
     text-decoration: none !important;
     float: left !important;
@@ -548,6 +628,20 @@ padding-top: 20px;
 }
 
 
+.mirosubs-play-beginner{
+padding-top: 12px;
+padding-bottom: 2px;
+}
+
+
+.mirosubs-play-beginner span.mirosubs-tab{
+padding-top: 10px !important;
+
+}
+
+
+
+
 .mirosubs-play:hover{
    background: url("/site_media/images/new_buttons.png") 0px -214px no-repeat !important;
    text-shadow: 1px 1px 0px #a7d29c;
@@ -599,7 +693,7 @@ line-height: 1.3em;
 font-weight: bold;
 margin-left: 24px;
 height: 41px;
-padding-top: 13px;
+padding-top: 12px;
 }
 
 
@@ -1606,13 +1700,20 @@ height: 110px !important;
 width: 720px !important;
 }
 
+.mirosubs-translating .mirosubs-buttons .mirosubs-done{
+width: 230px;
+margin: 0 0 20px !important;
+}
+
+
+
 
 .mirosubs-translating p{
 float: left !important;
-width: 420px !important;
-font-size: 15px !important;
-margin: 0 0 20px !important;
-line-height: 1.3em !important;
+width: 460px !important;
+font-size: 13px !important;
+margin: 3px 0 20px !important;
+line-height: 1.6em !important;
 
 }
 
