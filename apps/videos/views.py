@@ -32,6 +32,7 @@ from videos.utils import get_pager
 from django.contrib import messages
 from django.db.models import Q
 from widget.views import base_widget_params
+from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
 
 def create(request):
@@ -44,8 +45,16 @@ def create(request):
             if created:
                 # TODO: log to activity feed
                 pass
-            return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
-                    'videos:video', kwargs={'video_id':video.video_id})))            
+            if request.META['HTTP_USER_AGENT'].find('Mozilla') > -1:
+                return_url = reverse('videos:video', kwargs={'video_id':video.video_id})
+                return HttpResponseRedirect('{0}?{1}'.format(
+                        reverse('onsite_widget'), 
+                        urlencode({'subtitle_immediately': 'true',
+                                   'video_url': video_url,
+                                   'return_url': return_url })))
+            else:
+                return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
+                            'videos:video', kwargs={'video_id':video.video_id})))            
             #if not video.owner or video.owner == request.user or video.allow_community_edits:
             #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
             #            'videos:video', kwargs={'video_id':video.video_id})))
@@ -67,9 +76,7 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set.all()
-    context['widget_params'] = base_widget_params(request, {
-                                'video_url': video.get_video_url()
-                            })
+    context['widget_params'] = _widget_params(request, video.get_video_url(), True)
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
@@ -181,9 +188,7 @@ def history(request, video_id):
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
     context['last_version'] = video.captions()
-    context['widget_params'] = base_widget_params(request, {
-                                'video_url': video.get_video_url()
-                            })
+    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, '')
     context['commented_object'] = ProxyVideo.get(video)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -217,9 +222,7 @@ def translation_history(request, video_id, lang):
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
     context['last_version'] = video.translations(lang)
-    context['widget_params'] = base_widget_params(request, {
-                                'video_url': video.get_video_url()
-                            })
+    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, lang)
     context['commented_object'] = language
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -237,6 +240,10 @@ def _widget_params(request, video_url, hide_tab, version_no=None, language_code=
         if language_code is not None:
             base_state['language'] = language_code
         params['base_state'] = base_state
+    elif language_code == '': # FIXME: admittedly pretty hacky
+        params['base_state'] = {}
+    elif language_code is not None: #FIXME: still hacky. I suck at Python.
+        params['base_state'] = { 'language': language_code }
     return base_widget_params(request, params)
 
 def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
@@ -255,10 +262,8 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
     if cls == TranslationVersion:
         tpl = 'videos/translation_revision.html'
         context['latest_version'] = version.language.translations()
-        context['is_writelocked'] = version.language.is_writelocked
     else:
         context['latest_version'] = version.video.captions()
-        context['is_writelocked'] = version.video.is_writelocked
     return render_to_response(tpl, context,
                               context_instance=RequestContext(request))     
 
@@ -332,7 +337,6 @@ def diffing(request, first_pk, second_pk):
     context['captions'] = captions
     context['first_version'] = first_version
     context['second_version'] = second_version
-    context['is_writelocked'] = video.is_writelocked
     context['history_link'] = reverse('videos:history', args=[video.video_id])
     context['latest_version'] = video.captions()
     context['widget0_params'] = \
@@ -370,12 +374,11 @@ def translation_diffing(request, first_pk, second_pk):
     context['first_version'] = first_version
     context['second_version'] = second_version
     context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language])
-    context['is_writelocked'] = language.is_writelocked
     context['latest_version'] = language.translations()
-    context['widget1_params'] = base_widget_params(request, {
+    context['widget0_params'] = base_widget_params(request, {
                                     'video_url': video.get_video_url()
                                 })
-    context['widget2_params'] = context['widget1_params']    
+    context['widget1_params'] = context['widget1_params']    
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 

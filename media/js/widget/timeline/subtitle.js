@@ -43,7 +43,8 @@ mirosubs.timeline.Subtitle.orderCompare = function(a, b) {
 };
 
 mirosubs.timeline.Subtitle.prototype.captionChanged_ = function(e) {
-    this.updateTimes_();
+    if (this.editableCaption_.getStartTime() != -1)
+        this.updateTimes_();
     if (this.nextSubtitle_ && this.nextSubtitle_.isLoneUnsynced_())
         this.nextSubtitle_.updateTimes_();
     this.dispatchEvent(mirosubs.timeline.Subtitle.CHANGE);

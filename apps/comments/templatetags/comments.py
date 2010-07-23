@@ -30,7 +30,8 @@ def render_comment_form(context, obj):
     else:
         form = None
     return {
-        'form': form
+        'form': form,
+        'next_page': context['request'].get_full_path()
     }
 
 @register.inclusion_tag('comments/list.html', takes_context=True)

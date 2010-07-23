@@ -230,6 +230,7 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.OpenIdBackend',
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',
+   'django.contrib.auth.backends.ModelBackend'
 )
 
 SKIP_SOUTH_TESTS = True

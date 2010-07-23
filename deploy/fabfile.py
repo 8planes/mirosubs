@@ -20,19 +20,26 @@ from __future__ import with_statement
 from fabric.api import run, put, sudo, env, cd, local
 import os
 
-def _create_env(username, installation_dir):
+def _create_env(username, s3_bucket, installation_dir):
     env.hosts = ['universalsubtitles.org:2191']
     env.user = username
+    env.s3_bucket = s3_bucket
     env.base_dir = '/var/www/{0}'.format(installation_dir)
 
 def staging(username):
-    _create_env(username, 'universalsubtitles.staging')
+    _create_env(username, 
+                's3.staging.universalsubtitles.org',
+                'universalsubtitles.staging')
 
 def dev(username):
-    _create_env(username, 'universalsubtitles.dev')
+    _create_env(username,
+                None,
+                'universalsubtitles.dev')
 
 def unisubs(username):
-    _create_env(username, 'universalsubtitles')
+    _create_env(username,
+                's3.www.universalsubtitles.org',
+                'universalsubtitles')
 
 def set_permissions(home='/home/mirosubs'):
     """
@@ -81,5 +88,8 @@ def update():
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
         run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
+        if env.s3_bucket is not None:
+            run('/usr/local/s3sync/s3sync.rb -r -p -v {0}/mirosubs/media/ {1}:'.
+                format(env.base_dir, env.s3_bucket))
         run('{0}/env/bin/python deploy/create_commit_file.py'.format(env.base_dir))
         run('touch deploy/unisubs.wsgi')

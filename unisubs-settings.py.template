@@ -50,8 +50,8 @@ DATABASES = {
 
 
 DEV_MEDIA_URL = 'http://dev.universalsubtitles.org/site_media/'
-STAGING_MEDIA_URL = 'http://staging-static.universalsubtitles.org/'
-PRODUCTION_MEDIA_URL = 'http://static.universalsubtitles.org/'
+STAGING_MEDIA_URL = 'http://s3.staging.universalsubtitles.org/'
+PRODUCTION_MEDIA_URL = 'http://s3.www.universalsubtitles.org/'
 
 # should be one of the three above variables, depending on env.
 MEDIA_URL = INSERT_SITE_MEDIA_URL

@@ -115,18 +115,12 @@
     </div>    
 
     <div class="right_column">
-      <br /><br /><br /><br /><br />
-      {% if is_writelocked %}
-          <div class="viewing_old">
-              Someone is editing subtitles.
-          </div>             
-      {% else%}       
-          <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
-          {% if next_version %}
-          <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
-              <span>Roll back to version #{{ version.version_no }}</span>
-          </a>
-          {% endif %}
+      <br /><br /><br /><br /><br />     
+      <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
+      {% if next_version %}
+      <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
+          <span>Roll back to version #{{ version.version_no }}</span>
+      </a>
       {% endif %}
     </div>
     <div class="clearboth">&nbsp;</div>
