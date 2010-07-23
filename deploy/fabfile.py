@@ -28,7 +28,7 @@ def _create_env(username, s3_bucket, installation_dir):
 
 def staging(username):
     _create_env(username, 
-                'static.staging.universalsubtitles.org',
+                's3.staging.universalsubtitles.org',
                 'universalsubtitles.staging')
 
 def dev(username):
@@ -38,7 +38,7 @@ def dev(username):
 
 def unisubs(username):
     _create_env(username,
-                'static.www.universalsubtitles.org',
+                's3.www.universalsubtitles.org',
                 'universalsubtitles')
 
 def set_permissions(home='/home/mirosubs'):
@@ -89,7 +89,7 @@ def update():
         env.warn_only = False
         run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
         if env.s3_bucket is not None:
-            run('/usr/local/s3sync/s3sync.rb -r -p -v {0}/mirosubs/media/ {1}'.
+            run('/usr/local/s3sync/s3sync.rb -r -p -v {0}/mirosubs/media/ {1}:'.
                 format(env.base_dir, env.s3_bucket))
         run('{0}/env/bin/python deploy/create_commit_file.py'.format(env.base_dir))
         run('touch deploy/unisubs.wsgi')
