@@ -52,6 +52,6 @@ jQuery(document).ready(function($){
 </script>
 {% else %}
     <div class="comment-form">
-        <a href="{% url auth:login %}">Login to post a comment</a> 
+        <a href="{% url auth:login %}?next={{ next_page }}">Login to post a comment</a> 
     </div>
 {% endif %}
