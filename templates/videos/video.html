@@ -34,17 +34,19 @@
             //******** Tabs ********//
             var $last_active_tab = $($('.video_tabs li.active a').attr('href'));
             $('.video_tabs a').click(function(){
+                var href = $(this).attr('href')
                 $last_active_tab.hide();
-                $last_active_tab = $($(this).attr('href')).show();
+                $last_active_tab = $(href).show();
                 $('.video_tabs li').removeClass('active');
                 $(this).parent('li').addClass('active');
+                document.location.hash = href.split('-')[0];
                 return false;
             });
             
             if (document.location.hash){
                 var tab_name = document.location.hash.split('-', 1)
                 if (tab_name){
-                    $('a[href='+tab_name+']').click();
+                    $('a[href='+tab_name+'-tab]').click();
                     document.location.href = document.location.href;
                 }
             }          
@@ -67,7 +69,7 @@
     
     <ul class="video_tabs">
       <li class="active"><a href="#languages-tab">Languages ({{ translations|length }})</a></li>
-      <li><a href="#comments">Comments ({% get_comment_count video %})</a></li>
+      <li><a href="#comments-tab">Comments ({% get_comment_count video %})</a></li>
       <li><a href="#activity-tab">Activity stream</a></li>
     </ul>
 
@@ -119,7 +121,7 @@
         <div style="clear: both"></div>
     </div>
     
-    <div style="display: none" id="comments" class="tab">
+    <div style="display: none" id="comments-tab" class="tab">
        {% render_comment_form video %}
        {% render_comment_list video %}
        <div style="clear: both"></div>        

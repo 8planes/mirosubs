@@ -1859,7 +1859,7 @@ background: #33cc00 url(../images/gradient.png) 0 0px repeat-x;
 .replied{
 padding: 15px 20px;
 background: #ddd;
-margin: 0 0 20px 130px;
+margin: 2px 0 20px 130px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
 line-height: 1.5em;

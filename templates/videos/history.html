@@ -67,17 +67,19 @@
             //******** Tabs ********//
             var $last_active_tab = $($('.video_tabs li.active a').attr('href'));
             $('.video_tabs a').click(function(){
+                var href = $(this).attr('href')
                 $last_active_tab.hide();
-                $last_active_tab = $($(this).attr('href')).show();
+                $last_active_tab = $(href).show();
                 $('.video_tabs li').removeClass('active');
                 $(this).parent('li').addClass('active');
+                document.location.hash = href.split('-')[0];
                 return false;
             });
                         
             if (document.location.hash){
                 var tab_name = document.location.hash.split('-', 1)
                 if (tab_name){
-                    $('a[href='+tab_name+']').click();
+                    $('a[href='+tab_name+'-tab]').click();
                     document.location.href = document.location.href;
                 }
             }
@@ -111,19 +113,19 @@
 
     <ul class="video_tabs">
       <li class="active">
-          <a href="#trascripts">
+          <a href="#trascripts-tab">
             {% block trascripts_tab %}Original Language Subtitles{% endblock %}
           </a>
       </li>
-      <li><a href="#comments">Comments ({% get_comment_count commented_object %})</a></li>
-      <li><a href="#revisions">History ({{ hits }})</a></li>
+      <li><a href="#comments-tab">Comments ({% get_comment_count commented_object %})</a></li>
+      <li><a href="#revisions-tab">History ({{ hits }})</a></li>
     </ul>
     
     {% with translations|length as has_translations %}
         {% include 'videos/_upload_subtitles.html' %}
     {% endwith %}
     
-    <div style="display: none" id="revisions" class="tab">
+    <div style="display: none" id="revisions-tab" class="tab">
         {% if revision_list|length > 1 %}
             <button class="compare_versions_button">
                 <span>Compare Revisions</span>
@@ -186,96 +188,13 @@
        {% endif %}
    </div>
    
-   <div style="display: none" id="comments" class="tab">
+   <div style="display: none" id="comments-tab" class="tab">
        {% render_comment_form commented_object %}
-
-  <ul class="table_body container_12 comments">
-    
-        
-    <li class="table_comment" comment_id="6">
-        <div class="table_user_deets">
-            <span class="user_thumb"><img src="" /></span>
-
-            <a href="/profiles/3/">morganknutson</a>
-            <span class="comment_date">1 week, 5 days ago</span>
-        </div>
-        <div class="comment_text">
-
-          <div class="replied">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-
-            <a name="comments-6"></a>
-            
-                <a href="#comments-5">replied to comment from morganknutson</a>
-            
-            <a href="#" class="floatright reply"  comment_id="6">
-
-                <span>Reply</span>
-            </a>
-            <p>sdfsdfdsfsdf</p>
-        </div>
-    </li>
-    
-        
-    <li class="table_comment table_rated" comment_id="5">
-    
-      Gave this translation a B+
-
-    </li>
-
-    <li class="table_comment" comment_id="5">
-        
-
-        <div class="table_user_deets">
-            <span class="user_thumb"><img src="" /></span>
-
-            <a href="/profiles/3/">morganknutson</a>
-            <span class="comment_date">1 week, 5 days ago</span>
-        </div>
-        <div class="comment_text">
-        <div class="table_rated">Gave this translation a B+</div>
-
-            <a name="comments-5"></a>
-            
-                <a href="#comments-3">replied to comment from morganknutson</a>
-            
-            <a href="#" class="floatright reply"  comment_id="5">
-
-                <span>Reply</span>
-            </a>
-            <p>sdfsdfsdf</p>
-        </div>
-    </li>
-    
-        
-    <li class="table_comment" comment_id="4">
-        <div class="table_user_deets">
-            <span class="user_thumb"><img src="" /></span>
-
-            <a href="/profiles/3/">morganknutson</a>
-            <span class="comment_date">1 week, 5 days ago</span>
-        </div>
-        <div class="comment_text">
-            <a name="comments-4"></a>
-            
-                <a href="#comments-2">replied to comment from morganknutson</a>
-            
-            <a href="#" class="floatright reply"  comment_id="4">
-
-                <span>Reply</span>
-            </a>
-            <p>sdfsdfsdfsdf</p>
-        </div>
-    </li>
-    
-    
-</ul>
-
-
        {% render_comment_list commented_object %}
        <div style="clear: both"></div>     
    </div>
-   
-   <div id="trascripts" class="tab">
+
+   <div id="trascripts-tab" class="tab">
         <ul class="table_body"> 
             {% for item in last_version.captions %}
                 <li class="table_transcript {% cycle 'even' '' %}">
