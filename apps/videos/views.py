@@ -76,9 +76,7 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set.all()
-    context['widget_params'] = base_widget_params(request, {
-                                'video_url': video.get_video_url()
-                            })
+    context['widget_params'] = _widget_params(request, video.get_video_url(), True)
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
@@ -190,9 +188,7 @@ def history(request, video_id):
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
     context['last_version'] = video.captions()
-    context['widget_params'] = base_widget_params(request, {
-                                'video_url': video.get_video_url()
-                            })
+    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, '')
     context['commented_object'] = ProxyVideo.get(video)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -226,9 +222,7 @@ def translation_history(request, video_id, lang):
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
     context['last_version'] = video.translations(lang)
-    context['widget_params'] = base_widget_params(request, {
-                                'video_url': video.get_video_url()
-                            })
+    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, lang)
     context['commented_object'] = language
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -246,6 +240,10 @@ def _widget_params(request, video_url, hide_tab, version_no=None, language_code=
         if language_code is not None:
             base_state['language'] = language_code
         params['base_state'] = base_state
+    elif language_code == '': # FIXME: admittedly pretty hacky
+        params['base_state'] = {}
+    elif language_code is not None: #FIXME: still hacky. I suck at Python.
+        params['base_state'] = { 'language': language_code }
     return base_widget_params(request, params)
 
 def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):

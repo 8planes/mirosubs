@@ -83,6 +83,12 @@
                     document.location.href = document.location.href;
                 }
             }
+
+            $('#edit_subtitles').click(function() {
+                widget_widget_div.selectMenuItem(
+                    mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
+                return false;
+              });
         });
     </script>
 {% endblock %}
@@ -107,7 +113,9 @@
     <div class="left_column">
         {% widget widget_params %}
     </div>
-    <div class="right_column"></div>
+    <div class="right_column">
+      <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
+    </div>
     
     <div class="clearboth">&nbsp;</div>
 

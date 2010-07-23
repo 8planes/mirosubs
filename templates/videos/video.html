@@ -49,7 +49,13 @@
                     $('a[href='+tab_name+'-tab]').click();
                     document.location.href = document.location.href;
                 }
-            }          
+            }
+
+            $('#add_subtitles').click(function() {
+                widget_widget_div.selectMenuItem(
+                    mirosubs.MainMenu.Selection.ADD_SUBTITLES);
+                return false;
+            });
         });
     </script>   
 {% endblock %}
@@ -64,6 +70,9 @@
     
     <div class="right_column">
         {% include '_testing_widget.html' %}
+        {% if not video.captions %}
+        <a class="button" id="add_subtitles" href="#"><span>Add Subtitles</span></a>
+        {% endif %}
     </div>
     <div class="clearboth">&nbsp;</div>
     
