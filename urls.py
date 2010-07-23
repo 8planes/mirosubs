@@ -44,7 +44,7 @@ urlpatterns = patterns(
     (r'^embed.js$', 'widget.views.embed'),
     (r'^widget_demo/$', 'widget.views.widget_demo'),
     (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
-    (r'^onsite_widget/$', 'widget.views.onsite_widget'),
+    url(r'^onsite_widget/$', 'widget.views.onsite_widget', name='onsite_widget'),
     url(r'^widget/twitter_login/', 'socialauth.views.twitter_login', 
         kwargs={'next': '/widget/close_window/'}),
     (r'^widget/rpc/xd/(\w+)$', 'widget.views.xd_rpc'),

@@ -32,6 +32,7 @@ from videos.utils import get_pager
 from django.contrib import messages
 from django.db.models import Q
 from widget.views import base_widget_params
+from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
 
 def create(request):
@@ -44,8 +45,16 @@ def create(request):
             if created:
                 # TODO: log to activity feed
                 pass
-            return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
-                    'videos:video', kwargs={'video_id':video.video_id})))            
+            if request.META['HTTP_USER_AGENT'].find('Mozilla') > -1:
+                return_url = reverse('videos:video', kwargs={'video_id':video.video_id})
+                return HttpResponseRedirect('{0}?{1}'.format(
+                        reverse('onsite_widget'), 
+                        urlencode({'subtitle_immediately': 'true',
+                                   'video_url': video_url,
+                                   'return_url': return_url })))
+            else:
+                return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
+                            'videos:video', kwargs={'video_id':video.video_id})))            
             #if not video.owner or video.owner == request.user or video.allow_community_edits:
             #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
             #            'videos:video', kwargs={'video_id':video.video_id})))
