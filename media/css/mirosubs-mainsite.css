@@ -44,6 +44,19 @@ margin: 50px auto 80px;
 }
 
 
+
+.styled{
+border: 1px solid #aaa;;
+background: #fff;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+}
+
+.styled .head{
+background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
+}
+
+
 /*/////////////////////////////////////////////
 
 ~ Classes
