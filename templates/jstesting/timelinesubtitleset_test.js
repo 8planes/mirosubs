@@ -135,6 +135,22 @@ function testSubsToDisplay() {
                 T1 + MIN_LENGTH * 2 + UNASSIGNED_SPACING);
 }
 
+function testSubsAfterUpdate() {
+    var T0 = 0.3, T1 = 2.5;
+    var set = createSet([
+        captionJSON(T0, T1, 1, 1),
+        captionJSON(T1, -1, 2, 2),
+        captionJSON(-1, -1, 3, 3),
+        captionJSON(-1, -1, 4, 4)
+    ]);
+    var subs = set.getSubsToDisplay();
+    var captionSet = set.getEditableCaptionSet();
+    captionSet.caption(2).setText('what');
+    assertTimes(subs[2], 
+                T1 + MIN_LENGTH + UNASSIGNED_SPACING, 
+                T1 + MIN_LENGTH * 2 + UNASSIGNED_SPACING);
+}
+
 function testVideoPlayheadMove() {
     var T0 = 0.3, T1 = 2.5, T2 = 4.6;
     var set = createSet([
