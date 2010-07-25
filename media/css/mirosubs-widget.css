@@ -985,21 +985,22 @@ ul.mirosubs-titlesList li {
 .mirosubs-sub-delete, .mirosubs-sub-insert {
    position: absolute;
    top: 0px;
-   width: 18px;
-   height: 18px;
-   text-align: center;
-   line-height: 18px;
-   border: 1px solid gray;
    cursor: pointer;
    cursor: hand;
 }
 
 .mirosubs-sub-delete {
    left: 100px;
+   width: 22px;
+   height: 22px;
+   background: #fff url("../images/remove-title.png") 0 0 no-repeat;
 }
 
 .mirosubs-sub-insert {
    left: 140px;
+   width: 20px;
+   height: 23px;
+   background: #fff url("../images/add-title.png") 0 0 no-repeat;
 }
 
 ul.mirosubs-titlesList.taller {
