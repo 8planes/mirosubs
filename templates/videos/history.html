@@ -89,6 +89,12 @@
                     mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
                 return false;
               });
+
+            $('#add_translation').click(function() {
+                widget_widget_div.selectMenuItem(
+                    mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
+                return false;
+            });
         });
     </script>
 {% endblock %}
@@ -115,6 +121,7 @@
     </div>
     <div class="right_column">
       <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
+      <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
     </div>
     
     <div class="clearboth">&nbsp;</div>
