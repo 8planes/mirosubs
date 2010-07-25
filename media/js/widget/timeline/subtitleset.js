@@ -119,16 +119,19 @@ mirosubs.timeline.SubtitleSet.prototype.insertCaption_ = function(caption) {
     var insertionPoint = -index - 1;
     var previousSub = insertionPoint > 0 ? 
         this.subsToDisplay_[insertionPoint - 1] : null;
-    var nextSub = this.subsToDisplay_[insertionPoint];
+    var nextSub = insertionPoint < this.subsToDisplay_.length ? 
+        this.subsToDisplay_[insertionPoint] : null;
     if (previousSub != null)
         previousSub.setNextSubtitle(newSub);
-    if (caption.getStartTime() == -1) {
-        goog.array.removeAt(this.subsToDisplay_, insertionPoint);
-        this.dispatchEvent(new mirosubs.timeline.SubtitleSet.RemoveEvent(nextSub));
-        nextSub.dispose();
+    if (nextSub != null) {
+        if (caption.getStartTime() == -1) {
+            goog.array.removeAt(this.subsToDisplay_, insertionPoint);
+            this.dispatchEvent(new mirosubs.timeline.SubtitleSet.RemoveEvent(nextSub));
+            nextSub.dispose();
+        }
+        else
+            newSub.setNextSubtitle(nextSub);
     }
-    else
-        newSub.setNextSubtitle(nextSub);
     goog.array.insertAt(this.subsToDisplay_, newSub, insertionPoint);
     this.dispatchEvent(
         new mirosubs.timeline.SubtitleSet.DisplayNewEvent(newSub));

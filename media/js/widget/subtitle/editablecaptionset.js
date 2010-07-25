@@ -184,11 +184,12 @@ mirosubs.subtitle.EditableCaptionSet.prototype.findSubIndex_ = function(order) {
             return order - caption.getSubOrder();
         });
 };
-mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function() {
+mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function(opt_dispatchEvent) {
     var lastSubOrder = 0.0;
     if (this.captions_.length > 0)
         lastSubOrder = this.captions_[this.captions_.length - 1].getSubOrder();
-    var c = new mirosubs.subtitle.EditableCaption(this.unitOfWork_, lastSubOrder + 1.0);
+    var c = new mirosubs.subtitle.EditableCaption(
+        this.unitOfWork_, lastSubOrder + 1.0);
     c.setParentEventTarget(this);
     this.captions_.push(c);
     if (this.captions_.length > 1) {
@@ -197,6 +198,12 @@ mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function() {
         c.setPreviousCaption(previousCaption);
     }
     this.unitOfWork_.registerNew(c);
+    if (opt_dispatchEvent) {
+        this.dispatchEvent(
+            new mirosubs.subtitle.EditableCaptionSet.CaptionEvent(
+                mirosubs.subtitle.EditableCaptionSet.EventType.ADD,
+                c));
+    }
     return c;
 };
 /**
