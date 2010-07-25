@@ -30,6 +30,7 @@ mirosubs.subtitle.AddSubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.addSubLink_ = $d('a', {'href':'#'}, 'Add subtitle');
     this.setElementInternal($d('li', null, this.addSubLink_));
+    this.getElement().className = 'mirosubs-append-sub-button';
 };
 
 mirosubs.subtitle.AddSubtitleWidget.prototype.enterDocument = function() {

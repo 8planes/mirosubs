@@ -1003,6 +1003,10 @@ ul.mirosubs-titlesList li {
    background: #fff url("../images/add-title.png") 0 0 no-repeat;
 }
 
+.mirosubs-modal-widget-transcribe .mirosubs-append-sub-button {
+   display: none;
+}
+
 ul.mirosubs-titlesList.taller {
     height: 210px !important;
 }
