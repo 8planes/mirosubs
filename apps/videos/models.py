@@ -27,7 +27,7 @@ from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
-from vidscraper.sites import blip
+#from vidscraper.sites import blip
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -102,8 +102,12 @@ class Video(models.Model):
     @classmethod
     def get_or_create_for_url(cls, video_url, user):
         parsed_url = urlparse(video_url)
-        if 'youtube.com' in parsed_url.netloc:
-            yt_video_id = parse_qs(parsed_url.query)['v'][0]
+        if 'youtube.com' in parsed_url.netloc or \
+            ('v' in parsed_url.path and len(parsed_url.path.split('/')) > 2):
+            try:
+                yt_video_id = parse_qs(parsed_url.query)['v'][0]
+            except KeyError:
+                yt_video_id = parsed_url.path.strip('/').split('/')[-1]
             video, created = Video.objects.get_or_create(
                 youtube_videoid=yt_video_id,
                 defaults={'owner': user,
