@@ -54,7 +54,7 @@ urlpatterns = patterns(
     (r'^widget/close_window/$', 
      'django.views.generic.simple.direct_to_template', 
      {'template' : 'widget/close_window.html'}),
-    (r'^widget/download_srt/$', 'widget.views.srt'),
+    url(r'^widget/download_srt/$', 'widget.views.srt', name='download_srt'),
     (r'^widget/download_null_srt/$', 'widget.views.null_srt'),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),

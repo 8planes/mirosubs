@@ -96,7 +96,7 @@ def srt(request):
             list(video.captions().videocaption_set.all()))
     response = HttpResponse(response_text, mimetype="text/plain")
     response['Content-Disposition'] = \
-        'attachment; filename={0}'.format(video.srt_filename)
+        'attachment; filename={0}'.format(video.lang_srt_filename(request.GET.get('lang_code')))
     return response
 
 def null_srt(request):
