@@ -102,8 +102,7 @@ class Video(models.Model):
     @classmethod
     def get_or_create_for_url(cls, video_url, user):
         parsed_url = urlparse(video_url)
-        if 'youtube.com' in parsed_url.netloc or \
-            ('v' in parsed_url.path and len(parsed_url.path.split('/')) > 2):
+        if 'youtube.com' in parsed_url.netloc:
             try:
                 yt_video_id = parse_qs(parsed_url.query)['v'][0]
             except KeyError:
