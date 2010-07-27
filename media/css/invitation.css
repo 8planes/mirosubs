@@ -1,11 +1,11 @@
 @font-face {
 font-family: leaguegothic;
-src: url("../fonts/LeagueGothic.otf");
+src: url("/site_media/fonts/LeagueGothic.otf");
 }
 
 @font-face {
 font-family: droid;
-src: url("../fonts/DroidSans.ttf");
+src: url("/site_media/fonts/DroidSans.ttf");
 }
 
 body {
