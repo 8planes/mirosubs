@@ -37,13 +37,17 @@ mirosubs.translate.TranslationPanel = function(subtitles, allLanguages,
     this.initialTranslations_ = opt_initialTranslations;
 };
 goog.inherits(mirosubs.translate.TranslationPanel, goog.ui.Component);
+
+mirosubs.translate.TranslationPanel.NO_LANGUAGE = 'NONE';
+
 mirosubs.translate.TranslationPanel.prototype.getContentElement = function() {
     return this.contentElem_;
 };
 mirosubs.translate.TranslationPanel.prototype.createLanguageSelect_ =
     function($d)
 {
-    var selectOptions = [ $d('option', {'value':'NONE'},
+    var selectOptions = [ $d('option', 
+                             {'value': mirosubs.translate.TranslationPanel.NO_LANGUAGE},
                              'Select Language...') ];
     var initialSelectedIndex = -1;
     var i;
@@ -68,10 +72,7 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     this.languageSelect_ = this.createLanguageSelect_($d)
     el.appendChild($d('div', 'mirosubs-langDrop',
                       goog.dom.createTextNode('To begin translating: '),
-                      this.languageSelect_));
-    this.getHandler().listen(
-        this.languageSelect_, goog.events.EventType.CHANGE,
-        this.languageSelected_);
+                      this.languageSelect_));    
     el.appendChild(this.contentElem_ = $d('div'));
     this.translationList_ =
         new mirosubs.translate.TranslationList(
@@ -84,10 +85,21 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     else
         this.translationList_.setEnabled(false);
 };
+mirosubs.translate.TranslationPanel.prototype.enterDocument = function() {
+    mirosubs.translate.TranslationPanel.superClass_.enterDocument.call(this);
+    this.getHandler().listen(
+        this.languageSelect_, goog.events.EventType.CHANGE,
+        this.languageSelected_);
+};
 mirosubs.translate.TranslationPanel.prototype.languageSelected_ =
     function(event)
 {
     var languageCode = this.languageSelect_.value;
+    if (languageCode == mirosubs.translate.TranslationPanel.NO_LANGUAGE) {
+        this.serverModel_.stopTranslating();
+        this.translationList_.setEnabled(false);
+        return;
+    }
     var that = this;
     // TODO: show loading animation
     this.translationList_.setEnabled(false);

@@ -39,12 +39,10 @@ goog.inherits(mirosubs.translate.ServerModel, goog.Disposable);
  *     otherwise.
  */
 mirosubs.translate.ServerModel.prototype.startTranslating = 
-    function(languageCode, callback) {
+    function(languageCode, callback) 
+{
     var that = this;
-    this.unitOfWork_.clear();
-    this.curLanguageCode_ = null;
-    this.curVersion_ = -1;
-    this.translating_ = false;
+    this.stopTranslating();
     mirosubs.Rpc.call(
         'start_translating' + (this.isNull_ ? '_null' : ''),
         {'video_id': this.videoID_,
@@ -58,6 +56,14 @@ mirosubs.translate.ServerModel.prototype.startTranslating =
                 callback(false, 'locked by ' + result['locked_by']);
         });
 };
+
+mirosubs.translate.ServerModel.prototype.stopTranslating = function() {
+    this.unitOfWork_.clear();
+    this.curLanguageCode_ = null;
+    this.curVersion_ = -1;
+    this.translating_ = false;
+    this.stopTimer_();
+}
 
 mirosubs.translate.ServerModel.prototype.startEditing =
     function(languageCode, version) 

@@ -63,6 +63,8 @@ mirosubs.translate.TranslationWidget.prototype.setTranslation = function(transla
 
 mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {
     this.translateInput_.disabled = !enabled;
+    if (!enabled)
+        this.translateInput_.value = '';
 };
 
 mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
