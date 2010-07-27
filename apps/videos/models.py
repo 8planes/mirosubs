@@ -262,7 +262,7 @@ class Video(models.Model):
         if self.writelock_owner == None:
             return "anonymous"
         else:
-            return self.writelock_owner.username
+            return self.writelock_owner.__unicode__()
 
     @property
     def is_writelocked(self):
@@ -448,7 +448,7 @@ class TranslationLanguage(models.Model):
         if self.writelock_owner == None:
             return "anonymous"
         else:
-            return self.writelock_owner.username
+            return self.writelock_owner.__unicode__()
 
     @models.permalink
     def search_page_url(self):

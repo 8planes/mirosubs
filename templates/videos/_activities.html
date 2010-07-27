@@ -7,7 +7,7 @@
             {% if item.uprofile.picture %}
                 <img src="{% thumbnail item.uprofile.picture 32x32 %}" />
             {% endif %}
-            {{ item.time }} - <a class="username" href="{{ item.user.profile_url }}">{{ item.user.username }}</a>
+            {{ item.time }} - <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>
         {% else %}
             <span class="username anon">Anonymous</span>
         {% endif %}

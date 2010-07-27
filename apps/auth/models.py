@@ -26,6 +26,11 @@ class CustomUser(BaseUser):
         verbose_name = 'User'
         
     def __unicode__(self):
+        if self.first_name:
+            if self.last_name:
+                return self.get_full_name()
+            else:
+                return self.first_name
         return self.username
     
     @property

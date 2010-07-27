@@ -40,7 +40,7 @@
                 <a href="{% url videos:translation_revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
               </li>
               <li class="table_user">
-                  <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+                  <a href="{% url profiles:profile item.user.pk %}">{{ item.user }}</a>
               </li>
               <li class="table_note">{% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</li>
               <li class="table_time">{{ item.time_change_display }}</li>
