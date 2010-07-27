@@ -99,6 +99,10 @@
     </script>
 {% endblock %}
 
+{% block title %}
+    {% if video.title %}{{ video.title }} with Original subtitles | {% endif %}Universal Subtitles
+{% endblock %}
+
 {% block main_content %}
     <h2><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
     <p class="what_lang">

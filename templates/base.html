@@ -13,7 +13,9 @@
 <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>
 {% block scripts %}{% endblock %}
 <link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.ico" type="image/x-icon">
-<title>Universal Subtitles - Free and open tools for creating captions, subtitles, and translations for video.</title>
+<title>
+    {% block title %}Universal Subtitles - Free and open tools for creating captions, subtitles, and translations for video.{% endblock %}
+</title>
 </head>
 <body {% block body_attrs %}{% endblock %}>
   <script type="text/javascript">

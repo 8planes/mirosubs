@@ -86,7 +86,7 @@ def video_list(request):
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.annotate(translation_count=Count('translationlanguage'))
+    qs = Video.objects.annotate(translation_count=Count('translationlanguage')) 
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
@@ -296,7 +296,6 @@ def last_translation_revision(request, video_id, language_code):
 @login_required
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)
-    user = request.user
     is_writelocked = version.video.is_writelocked if (cls == VideoCaptionVersion) else version.language.is_writelocked
     if is_writelocked:
         messages.error(request, 'Can not rollback now, because someone is editing subtitles.')
@@ -399,7 +398,7 @@ def test_form_page(request):
 
 def search(request):
     q = request.REQUEST.get('q')
-    print q
+
     try:
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):

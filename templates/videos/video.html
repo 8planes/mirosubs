@@ -66,6 +66,10 @@
     </script>   
 {% endblock %}
 
+{% block title %}
+    {% if video.title %}{{ video.title }} | {% endif %}Universal Subtitles
+{% endblock %}
+
 {% block main_content %}
     <div class="left_column">
         {% if video.title %}
