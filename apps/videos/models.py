@@ -27,7 +27,7 @@ from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
-#from vidscraper.sites import blip
+from vidscraper.sites import blip
 
 yt_service = YouTubeService()
 yt_service.ssl = False
