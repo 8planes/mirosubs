@@ -126,7 +126,9 @@
     <div class="right_column">
       <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
       <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
-      <a class="button" href="{% url download_srt %}?video_id={{ video.video_id }}{% if language %}&lang_code={{ language.language }}{% endif %}"><span>Donwnload</span></a>
+      {% if video.captions %}
+        <a class="button" href="{% url download_srt %}?video_id={{ video.video_id }}{% if language %}&lang_code={{ language.language }}{% endif %}"><span>Donwnload</span></a>
+      {% endif %}
     </div>
     
     <div class="clearboth">&nbsp;</div>
