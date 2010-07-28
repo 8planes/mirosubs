@@ -3,7 +3,7 @@
 {% load paginator comments %}
 
 {% block title %}
-    {% if video.title %}{{ video.title }} with {{ language.get_language_display }} subtitles | {% endif %}Universal Subtitles
+    {{ video.title_display }} with {{ language.get_language_display }} subtitles | Universal Subtitles
 {% endblock %}
 
 {% block diffing_link %}{% url videos:translation_diffing 11111 22222 %}{% endblock %}
@@ -13,6 +13,14 @@
 {% endblock %}
 
 {% block trascripts_tab %}{{ language.get_language_display }} Subtitles{% endblock %}
+
+{% block donwload_subtitles %}
+  {% if last_version.captions %}
+        Donwnload <a href="{% url download_srt %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">SRT</a> / 
+        <a href="{% url download_ssa %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">SSA</a> /
+        <a href="{% url download_ttml %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">TTML</a>      
+  {% endif %}
+{% endblock %}
 
 {% block translation_list %}
     <p class="other_lang">

@@ -26,7 +26,8 @@ DEBUG = False
 ADMINS = (
   ('Adam Duston', 'adam@8planes.com'),
   ('Dmitriy', 'alerion.um@gmail.com'),
-  ('Rob', 'rchekaluk@pculture.org')
+  ('Rob', 'rchekaluk@pculture.org'),
+  ('usubs-errors', 'usubs-errors@pculture.org')
 )
 
 HAYSTACK_SOLR_URL = 'INSERT SOLR URL'

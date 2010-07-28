@@ -19,6 +19,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib.sites.models import Site
+from widget.srt_subs import TTMLSubtitles
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -55,6 +56,8 @@ urlpatterns = patterns(
      'django.views.generic.simple.direct_to_template', 
      {'template' : 'widget/close_window.html'}),
     url(r'^widget/download_srt/$', 'widget.views.srt', name='download_srt'),
+    url(r'^widget/download_ssa/$', 'widget.views.download_subtitles', name='download_ssa'),
+    url(r'^widget/download_ttml/$', 'widget.views.download_subtitles', {'handler': TTMLSubtitles}, name='download_ttml'),
     (r'^widget/download_null_srt/$', 'widget.views.null_srt'),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
