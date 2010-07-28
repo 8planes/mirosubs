@@ -89,8 +89,18 @@
                     mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
                 return false;
               });
+
+            $('#add_translation').click(function() {
+                widget_widget_div.selectMenuItem(
+                    mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
+                return false;
+            });
         });
     </script>
+{% endblock %}
+
+{% block title %}
+    {{ video.title_display }} with Original subtitles | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
@@ -115,9 +125,18 @@
     </div>
     <div class="right_column">
       <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
+      <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
     </div>
     
     <div class="clearboth">&nbsp;</div>
+
+  {% block donwload_subtitles %}
+      {% if video.captions %}
+        Donwnload <a href="{% url download_srt %}?video_id={{ video.video_id }}">SRT</a> / 
+        <a href="{% url download_ssa %}?video_id={{ video.video_id }}">SSA</a> /
+        <a href="{% url download_ttml %}?video_id={{ video.video_id }}">TTML</a>
+      {% endif %}
+  {% endblock %}
 
     <ul class="video_tabs">
       <li class="active">
@@ -170,7 +189,7 @@
                             <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/><a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
                         </span>
                         <span class="grid_4">
-                            <a href="{% url profiles:profile item.user.pk %}">{{ item.user.username }}</a>
+                            <a href="{% url profiles:profile item.user.pk %}">{{ item.user }}</a>
                         </span>
                         <span class="grid_2">
                             {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}

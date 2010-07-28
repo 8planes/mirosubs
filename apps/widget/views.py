@@ -16,17 +16,18 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.contrib.sites.models import Site
 from django.template import RequestContext
 from videos import models
-from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt
+from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt, SSASubtitles
 import simplejson as json
 from widget import rpc as rpc_views
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import widget
+from django.shortcuts import get_object_or_404
 
 def embed(request):
     context = widget.add_offsite_js_files({})
@@ -96,8 +97,52 @@ def srt(request):
             list(video.captions().videocaption_set.all()))
     response = HttpResponse(response_text, mimetype="text/plain")
     response['Content-Disposition'] = \
-        'attachment; filename={0}'.format(video.srt_filename)
+        'attachment; filename={0}.srt'.format(video.lang_filename(request.GET.get('lang_code')))
     return response
+
+def download_subtitles(request, handler=SSASubtitles):
+    video_id = request.GET.get('video_id')
+    lang_code = request.GET.get('lang_code')
+    
+    if not video_id:
+        #if video_id == None, Video.objects.get raise exception. Better show 404
+        #because video_id is required
+        raise Http404
+    
+    video = get_object_or_404(models.Video, video_id=video_id)
+    
+    subtitles = []
+    
+    if lang_code:
+        translation_language = video.translation_language(lang_code)
+        if not translation_language:
+            raise Http404
+        
+        translations = translation_language.translations()
+        if translations:
+            for item in translations.captions():
+                if item.caption and item.caption.start_time >= 0 and item.caption.end_time >= 0:
+                    subtitles.append({
+                        'text': item.translation_text,
+                        'start': item.caption.start_time,
+                        'end': item.caption.end_time
+                    })
+    else:
+        captions = video.captions()
+        if captions:
+            for item in captions.captions():
+                if item.start_time >= 0 and item.end_time >= 0:
+                    subtitles.append({
+                        'text': item.caption_text,
+                        'start': item.start_time,
+                        'end': item.end_time
+                    })
+    
+    h = handler(subtitles, video)
+    response = HttpResponse(unicode(h), mimetype="text/plain")
+    response['Content-Disposition'] = \
+        'attachment; filename=%s.%s' % (video.lang_filename(lang_code), h.file_type)
+    return response    
 
 def null_srt(request):
     # FIXME: possibly note duplication with srt, and fix that.

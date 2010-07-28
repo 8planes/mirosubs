@@ -1,45 +1,117 @@
-{% extends "base.html" %}
-{% block body_attrs %}id="about"{% endblock %}
-{% block scripts %}
-{% if not js_use_compiled %}
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
-{% endif %}
-{% endblock %}
-{% block main_content %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
 
-<div class="left_column">
-  <h2>Open Subtitles Design Sprint</h2>
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-  <p>The Open Subtitles Design Sprint will bring together a group of global stakeholders in the subtitling space for a tightly focused / goal oriented meeting.</p>
+<title>Open Subtitles Design Summit</title>
 
-  <h3>Meeting Goals</h3>
-  <ul>
-    <li>Map out current subtitling needs of stakeholders, including content creators and video services.</li>
-    <li>Discuss ways to solve these needs, identify existing technology that can be leveraged, and be aware of logical spaces for collaboration/cooperation.</li>
-    <li>Move towards standardizing these solutions and pushing forward the state of the art in open subtiting.</li>
-    <li>Connect various stakeholders working on projects with open subtitling needs or focus.</li>
-  </ul>
+<!--[if IE]>
+    <link rel="stylesheet" href="/site_media/css/invitation-ie.css" type="text/css" media="screen" />
+<![endif]-->
 
-  <h3>Participants</h3>
-  <p>Broadly, the participants will include: video producers, video hosting services, open source developers, standards oriented engineers, open courseware producers, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer.</p>
-  <p>Attendees are selected by invitation; however, if you or your organization would like to participate, please contact: <a href="mailto:universalsubtitles@pculture.org">universalsubtitles@pculture.org</a></p>
+<link rel="stylesheet" href="/site_media/css/invitation.css" type="text/css" media="screen" />
 
-  <h3>When & Where?</h3>
-  <p>The meeting will be held in the Fall of 2010 in New York City. The exact date and location are TBA.</p>
+<link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="paper">
+
+
+    <div id="header">
+        <h1>Open Subtitles Design Summit</h1>
+        
+        <p>The Open Subtitles Design Summit will bring together global stakeholders in the subtitling space for a tightly focused / goal oriented meeting in NYC. The event is being organized by The Participatory Culture Foundation as part of our Universal Subtitles project&mdash;expect roughly 40 participants. </p>
+    </div>
+
+
+
+
+    <div id="meeting_goals">
+        
+        <h2>Meeting Goals</h2>
+        
+        <div class="meetings_box">
+            <p><strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus.</p>
+        </div>
+        
+        <div class="meetings_box">
+            <p><strong>Identify ways</strong> to solve stakeholder subtitling needs and be aware of existing technology that can be leveraged. Find logical places for collaboration/cooperation.</p>
+        </div>
+        <div class="meetings_box">
+            <p><strong>Move towards</strong> standardizing solutions and pushing forward the state of the art in open subtiting.</p>
+        </div>
+                
+        <div style="clear: both;">
+        
+    </div>
+
+
+    <div id="participants">
+        
+        <h2>Participants</h2>
+        
+        <p>Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer.</p>
+<br />
+        <p>Attendees are selected by invitation; however, if you or your organization would like to participate, please contact: <a href="mailto:universalsubtitles@pculture.org">universalsubtitles@pculture.org</a></p>
+        
+    </div>
+
+    <div id="when_where">
+        
+        <h2>When &amp Where?</h2>
+        
+        <p>The meeting will be held in the Fall of 2010 in New York City. The tentative dates are September 29th and 30th. The location is TBA.</p>
+        
+    </div>
+
+
+    <div id="why_meet">
+        
+        <h2>Why?</h2>
+        
+        <p>The focus of this summit is increased availability and better usability for captions and subtitles, which are both sorely needed. It comes at a critical time, as internet video usage is skyrocketing. People who rely on captions are threatened to be left behind. New users from every culture are coming online en masse; standardizing and ubiquitizing the technology can make potential audiences exponentially larger and messages can cross cultural boundaries more easily. More captions will also make it simpler for computers to process, index, and make sense of the ever growing sea of online video.</p>
+        
+    </div>
+
+
+    <div id="organizers">
+        
+        <h2>Organizers, Facilitators, Sponsors</h2>
+        
+        <div class="organizers_box">
+            <h3>Organizers</h3>
+            <p>The <a href="http://www.participatoryculture.org/">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href="http://universalsubtitles.org/">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy.</p>
+        </div>
+        
+        <div class="organizers_box">
+            <h3>Facilitators</h3>
+            <p><a href="http://www.aspirationtech.org/">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate.</p>
+        </div>
+        <div class="organizers_box">
+            <h3>Sponsors</h3>
+            <p>The summit has been generously funded by the <a href="http://www.soros.org/">Open Society Institute</a>.</p>
+        </div>
+        
+        <div style="clear: both;">
+        
+    </div>
+
+
+
+
+
+
 </div>
 
-<div class="right_column">
-<h2>Organizers, Facilitators, Sponsors</h2>
-<h3>Organizers</h3>
-  <p>The <a href="http://www.pculture.org/">Participatory Culture Foundation</a> is organizing the sprint. How shall we pose our interest in organizing the event?</p>
 
-<h3>Facilitators</h3>
-  <p><a href="http://www.aspirationtech.org/">Aspiration Tech</a> is providing facilitation. Aspiration believes that face-to-face events are the most powerful way to engage facilitate interaction, network building, and collaboration. </p>
 
-<h3>Sponsors</h3>
-  <p>The sprint has been generously funded by the <a href="http://www.soros.org/">Open Society Institute</a>.</p>
+
 </div>
 
-{% endblock %}
+</body>
+</html>

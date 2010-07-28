@@ -52,10 +52,22 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
                $t('and start typing!')));
     }
     else {
+        this.addAddButton_();
         var i;
         for (i = 0; i < this.captionSet_.count(); i++)
             this.addSubtitle(this.captionSet_.caption(i));
     }
+};
+mirosubs.subtitle.SubtitleList.prototype.addAddButton_ = function() {
+    this.addSubtitleButton_ = new mirosubs.subtitle.AddSubtitleWidget();
+    this.addChild(this.addSubtitleButton_, true);
+    if (this.isInDocument())
+        this.listenForAdd_();
+};
+mirosubs.subtitle.SubtitleList.prototype.listenForAdd_ = function() {
+    this.getHandler().listen(this.addSubtitleButton_,
+                             mirosubs.subtitle.AddSubtitleWidget.ADD,
+                             this.addSubtitleClicked_);
 };
 mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
     mirosubs.subtitle.SubtitleList.superClass_.enterDocument.call(this);
@@ -77,19 +89,13 @@ mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
             this.captionSet_,
             et.DELETE,
             this.captionDeleted_);
+    if (this.addSubtitleButton_)
+        this.listenForAdd_();
 };
 mirosubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
     this.subtitleMap_ = {};
-    this.removeChildren(true);
-};
-mirosubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
-    var addedCaption = e.caption;
-    var subtitleWidget = this.createNewSubWidget_(addedCaption);
-    var nextCaption = addedCaption.getNextCaption();
-    var nextWidget = this.subtitleMap_[nextCaption.getCaptionID()];
-    this.addChildAt(subtitleWidget, this.indexOfChild(nextWidget), true);
-    this.subtitleMap_[addedCaption.getCaptionID()] = subtitleWidget;
-    subtitleWidget.switchToEditMode();
+    while (this.getChildCount() > 1)
+        this.removeChildAt(0, true);
 };
 mirosubs.subtitle.SubtitleList.prototype.captionDeleted_ = function(e) {
     var widget = this.subtitleMap_[e.caption.getCaptionID()];
@@ -121,12 +127,29 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
         goog.dom.removeChildren(this.getElement());
         goog.dom.classes.remove(this.getElement(), 'mirosubs-beginTab');
         this.showingBeginMessage_ = false;
+        this.addAddButton_();
     }
     var subtitleWidget = this.createNewSubWidget_(subtitle);
-    this.addChild(subtitleWidget, true);
+    this.addChildAt(subtitleWidget, this.getChildCount() - 1, true);
     this.subtitleMap_[subtitle.getCaptionID()] = subtitleWidget;
     if (opt_scrollDown && typeof(opt_scrollDown) == 'boolean')
         this.scrollToCaption(subtitle.getCaptionID());
+};
+mirosubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
+    var addedCaption = e.caption;
+    var subtitleWidget = this.createNewSubWidget_(addedCaption);
+    var nextCaption = addedCaption.getNextCaption();
+    if (nextCaption != null) {
+        var nextWidget = this.subtitleMap_[nextCaption.getCaptionID()];
+        this.addChildAt(subtitleWidget, this.indexOfChild(nextWidget), true);
+    }
+    else
+        this.addChildAt(subtitleWidget, this.getChildCount() - 1, true);
+    this.subtitleMap_[addedCaption.getCaptionID()] = subtitleWidget;
+    subtitleWidget.switchToEditMode();
+};
+mirosubs.subtitle.SubtitleList.prototype.addSubtitleClicked_ = function(e) {
+    this.captionSet_.addNewCaption(true);
 };
 mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
     if (this.currentActiveSubtitle_ != null) {

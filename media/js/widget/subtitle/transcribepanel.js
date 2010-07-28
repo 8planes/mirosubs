@@ -108,8 +108,8 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
          3, 0);
     var extraHelp = [
         "Press play, then type everything people say in the text " +
-            "entry below the video. Don't let subtitles get too long.",
-        "Hit Enter for a new line."
+            "entry below the video.",
+        "Don't let subtitles get too long. Hit Enter for a new line."
     ];
     var KC = goog.events.KeyCodes;
     var keySpecs = [

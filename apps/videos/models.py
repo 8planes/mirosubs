@@ -74,6 +74,7 @@ class Video(models.Model):
                                         related_name="writelock_owners")
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
+    is_subtitles = models.BooleanField(default=False)
     
     def __unicode__(self):
         if self.title:
@@ -84,6 +85,22 @@ class Video(models.Model):
             return self.youtube_videoid
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return self.bliptv_fileid
+    
+    def title_display(self):
+        if self.title:
+            return self.title
+
+        url = self.video_url
+        url = url.strip('/')
+
+        if url.startswith('http://'):
+            url = url[7:]
+
+        parts = url.split('/')
+        if len(parts) > 1:
+            return 'http://%s/.../%s' % (parts[0], parts[-1])
+        else:
+            return self.video_url
     
     @models.permalink
     def search_page_url(self):
@@ -103,7 +120,10 @@ class Video(models.Model):
     def get_or_create_for_url(cls, video_url, user):
         parsed_url = urlparse(video_url)
         if 'youtube.com' in parsed_url.netloc:
-            yt_video_id = parse_qs(parsed_url.query)['v'][0]
+            try:
+                yt_video_id = parse_qs(parsed_url.query)['v'][0]
+            except KeyError:
+                yt_video_id = parsed_url.path.strip('/').split('/')[-1]
             video, created = Video.objects.get_or_create(
                 youtube_videoid=yt_video_id,
                 defaults={'owner': user,
@@ -142,7 +162,13 @@ class Video(models.Model):
             return 'youtube_{0}.srt'.format(self.youtube_videoid)
         else:
             return 'bliptv_{0}.srt'.format(self.bliptv_fileid)
-
+    
+    def lang_filename(self, lang):
+        name = self.srt_filename
+        if lang:
+            return '%s.%s' % (name[:-4], lang)
+        return name         
+    
     @property
     def caption_state(self):
         """Subtitling state for this video 
@@ -252,7 +278,7 @@ class Video(models.Model):
         if self.writelock_owner == None:
             return "anonymous"
         else:
-            return self.writelock_owner.username
+            return self.writelock_owner.__unicode__()
 
     @property
     def is_writelocked(self):
@@ -406,6 +432,13 @@ class VideoCaptionVersion(VersionModel):
         for item in self.captions():
             item.duplicate_for(new_version).save()
         return new_version
+
+def update_video_is_subtitled(sender, instance, created, **kwargs):
+    if instance.is_complete and not instance.video.is_subtitles:
+        instance.video.is_subtitles = True
+        instance.video.save()
+        
+post_save.connect(update_video_is_subtitled, VideoCaptionVersion)
                     
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
@@ -438,7 +471,7 @@ class TranslationLanguage(models.Model):
         if self.writelock_owner == None:
             return "anonymous"
         else:
-            return self.writelock_owner.username
+            return self.writelock_owner.__unicode__()
 
     @models.permalink
     def search_page_url(self):

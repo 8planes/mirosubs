@@ -82,3 +82,80 @@ def write_padded_num(num, numchars, output):
     for i in range(numzeros):
         output.write("0")
     output.write(strnum)
+
+from math import floor
+import codecs
+
+class BaseSubtitles(object):
+    file_type = ''
+    
+    def __init__(self, subtitles, video):
+        """
+        Use video for extra data in subtitles like Title
+        Subtitles is list of {'text': 'text', 'start': 'seconds', 'end': 'seconds'}
+        """
+        self.subtitles = subtitles
+        self.video = video
+    
+    def __unicode__(self):
+        raise Exception('Should return subtitles')
+    
+class SSASubtitles(BaseSubtitles):
+    file_type = 'ssa'
+    
+    def __unicode__(self):
+        #add BOM to fix python default behaviour, because players don't play without it
+        return u''.join([unicode(codecs.BOM_UTF8, "utf8"), self._start(), self._content(), self._end()])
+    
+    def _start(self):
+        return u'[Script Info]\r\nTitle: %s\r\n' % self.video.__unicode__()
+    
+    def _end(self):
+        return u''
+    
+    def format_time(self, time):
+        hours = int(floor(time / 3600))
+        minutes = int(floor(time % 3600 / 60))
+        seconds = int(time % 60)
+        fr_seconds = int(time % 1 * 100)
+        return u'%i:%02i:%02i.%02i' % (hours, minutes, seconds, fr_seconds)
+        
+    def _content(self):
+        output = []
+        output.append(u'[Events]\r\n')
+        output.append(u'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\r\n')
+        tpl = u'Dialogue: 0,%s,%s,Default,,0000,0000,0000,,%s\r\n'
+        for item in self.subtitles:
+            start = self.format_time(item['start'])
+            end = self.format_time(item['end'])
+            output.append(tpl % (start, end, item['text']))
+        return ''.join(output)
+
+from lxml import etree
+    
+class TTMLSubtitles(BaseSubtitles):
+    file_type = 'xml'
+    
+    def __unicode__(self):
+        return u'<?xml version="1.0" encoding="UTF-8"?>\n'\
+            +etree.tounicode(self.xml_node(), pretty_print=True)
+    
+    def xml_node(self):
+        tt = etree.Element('tt', nsmap={None: 'http://www.w3.org/2006/04/ttaf1', 'tts': 'http://www.w3.org/2006/04/ttaf1#styling'})
+        etree.SubElement(tt, 'head')
+        body = etree.SubElement(tt, 'body')
+        div = etree.SubElement(body, 'div')
+        for item in self.subtitles:
+            attrib = {}
+            attrib['begin'] = self.format_time(item['start'])
+            attrib['dur'] = self.format_time(item['end']-item['start'])
+            p = etree.SubElement(div, 'p', attrib=attrib)
+            p.text = item['text']
+        return tt
+    
+    def format_time(self, time):
+        hours = int(floor(time / 3600))
+        minutes = int(floor(time % 3600 / 60))
+        seconds = int(time % 60)
+        fr_seconds = int(time % 1 * 100)
+        return u'%02i:%02i:%02i.%02i' % (hours, minutes, seconds, fr_seconds)    

@@ -79,10 +79,10 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     this.editing_ = false;
 };
 mirosubs.subtitle.SubtitleWidget.prototype.createDeleteButton_ = function($d) {
-    return $d('div', 'mirosubs-sub-delete', 'X');
+    return $d('div', 'mirosubs-sub-delete', ' ');
 };
 mirosubs.subtitle.SubtitleWidget.prototype.createInsertButton_ = function($d) {
-    return $d('div', 'mirosubs-sub-insert', '+');
+    return $d('div', 'mirosubs-sub-insert', ' ');
 };
 mirosubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
     mirosubs.subtitle.SubtitleWidget.superClass_.enterDocument.call(this);

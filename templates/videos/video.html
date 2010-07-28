@@ -56,8 +56,18 @@
                     mirosubs.MainMenu.Selection.ADD_SUBTITLES);
                 return false;
             });
+
+            $('#add_translation').click(function() {
+                widget_widget_div.selectMenuItem(
+                    mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
+                return false;
+            });
         });
     </script>   
+{% endblock %}
+
+{% block title %}
+    {{ video.title_display }} | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
@@ -72,6 +82,8 @@
         {% include '_testing_widget.html' %}
         {% if not video.captions %}
         <a class="button" id="add_subtitles" href="#"><span>Add Subtitles</span></a>
+        {% else %}
+        <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
         {% endif %}
     </div>
     <div class="clearboth">&nbsp;</div>
