@@ -86,6 +86,22 @@ class Video(models.Model):
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return self.bliptv_fileid
     
+    def title_display(self):
+        if self.title:
+            return self.title
+
+        url = self.video_url
+        url = url.strip('/')
+
+        if url.startswith('http://'):
+            url = url[7:]
+
+        parts = url.split('/')
+        if len(parts) > 1:
+            return 'http://%s/.../%s' % (parts[0], parts[-1])
+        else:
+            return self.video_url
+    
     @models.permalink
     def search_page_url(self):
         return ('videos:video', [self.video_id])
