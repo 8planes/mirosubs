@@ -90,7 +90,7 @@ def video_list(request):
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
-    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count']
+    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count', 'is_subtitles']
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
