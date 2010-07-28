@@ -147,12 +147,12 @@ class Video(models.Model):
             return 'youtube_{0}.srt'.format(self.youtube_videoid)
         else:
             return 'bliptv_{0}.srt'.format(self.bliptv_fileid)
-        
-    def lang_srt_filename(self, lang=None):
+    
+    def lang_filename(self, lang):
         name = self.srt_filename
         if lang:
-            return '%s.%s.srt' % (name[:-4], lang)
-        return name 
+            return '%s.%s' % (name[:-4], lang)
+        return name         
     
     @property
     def caption_state(self):

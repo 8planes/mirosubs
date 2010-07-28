@@ -126,12 +126,17 @@
     <div class="right_column">
       <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
       <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
-      {% if video.captions %}
-        <a class="button" href="{% url download_srt %}?video_id={{ video.video_id }}{% if language %}&lang_code={{ language.language }}{% endif %}"><span>Donwnload</span></a>
-      {% endif %}
     </div>
     
     <div class="clearboth">&nbsp;</div>
+
+  {% block donwload_subtitles %}
+      {% if video.captions %}
+        Donwnload <a href="{% url download_srt %}?video_id={{ video.video_id }}">SRT</a> / 
+        <a href="{% url download_ssa %}?video_id={{ video.video_id }}">SSA</a> /
+        <a href="{% url download_ttml %}?video_id={{ video.video_id }}">TTML</a>
+      {% endif %}
+  {% endblock %}
 
     <ul class="video_tabs">
       <li class="active">
