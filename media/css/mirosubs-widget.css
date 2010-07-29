@@ -35,6 +35,7 @@ top: 0;
    top: 0px !important;
    border: 1px solid #000;
    border-top: 0;
+   z-index: 2147483640;
 }
 
 .mirosubs-modal-widget-content {
@@ -2219,6 +2220,7 @@ color: #fff !important;
 .mirosubs-modal-login {
    border: 3px solid !important;
    position: absolute !important;
+   z-index: 2147483641;
    padding: 15px 0 !important;
    width: 540px !important;
    height: 200px !important;
@@ -2325,6 +2327,7 @@ a.mirosubs-openid span{
    font-size: 1.2em;
    font-weight: bold;
    line-height: 150%;
+   z-index: 2147483647;
 }
 
 .mirosubs-warning .mirosubs-label {
