@@ -29,9 +29,10 @@ from django.views.decorators.csrf import csrf_exempt
 import widget
 from django.shortcuts import get_object_or_404
 
-def embed(request):
+def embed(request, version_no=''):
     context = widget.add_offsite_js_files({})
-    return render_to_response('widget/embed.js', context,
+    return render_to_response('widget/embed{0}.js'.format(version_no), 
+                              context,
                               context_instance=RequestContext(request),
                               mimetype='text/javascript')
 
@@ -64,7 +65,9 @@ def widget_demo(request):
         spaces = ' ' * 9
         params = base_widget_params(request)
         context['embed_js_url'] = \
-            "http://{0}/embed.js".format(Site.objects.get_current().domain)
+            "http://{0}/embed{1}.js".format(
+            Site.objects.get_current().domain,
+            settings.EMBED_JS_VERSION)
         context['widget_params'] = params
     return render_to_response('widget/widget_demo.html', 
                               context,

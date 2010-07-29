@@ -44,6 +44,19 @@ margin: 50px auto 80px;
 }
 
 
+
+.styled{
+border: 1px solid #aaa;;
+background: #fff;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+}
+
+.styled .head{
+background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
+}
+
+
 /*/////////////////////////////////////////////
 
 ~ Classes
@@ -747,8 +760,14 @@ cursor: pointer
 background: url(../images/main_buttons.png) left -45px no-repeat;
 }
 
+
 .button:active span{
-background: url(../images/main_buttons.png) left -85px no-repeat;
+background: url(../images/main_buttons.png) left -90px no-repeat;
+}
+
+
+.button:active{
+background: url(../images/main_buttons.png) right -90px no-repeat;
 }
 
 
@@ -2411,5 +2430,14 @@ height: 135px;
 }
 
 
+@media only screen and (max-device-width: 480px) {
 
+.wrapper{
+
+
+}
+
+
+
+}
 

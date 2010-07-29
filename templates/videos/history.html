@@ -124,6 +124,8 @@
         {% widget widget_params %}
     </div>
     <div class="right_column">
+        {% include '_share_widget.html' %}
+
       <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
       <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
     </div>
@@ -132,7 +134,7 @@
 
   {% block donwload_subtitles %}
       {% if video.captions %}
-        Donwnload <a href="{% url download_srt %}?video_id={{ video.video_id }}">SRT</a> / 
+        <span class="download_icon">Download</span> <a href="{% url download_srt %}?video_id={{ video.video_id }}">SRT</a> / 
         <a href="{% url download_ssa %}?video_id={{ video.video_id }}">SSA</a> /
         <a href="{% url download_ttml %}?video_id={{ video.video_id }}">TTML</a>
       {% endif %}
