@@ -1604,6 +1604,7 @@ li.mirosubs-transcribeHelp ol li {
     -webkit-border-bottom-left-radius: 5px !important; 
     -webkit-border-bottom-rught-radius: 5px !important; 
     position: absolute !important;
+   z-index: 2147483639;
 }
 
 .mirosubs-langmenuitem {
