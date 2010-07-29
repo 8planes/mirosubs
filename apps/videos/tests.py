@@ -26,7 +26,23 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 from videos.models import Video
 from apps.auth.models import CustomUser as User
+from youtube import get_video_id
 
+class YoutubeModuleTest(TestCase):
+    
+    def setUp(self):
+        self.data = [{
+            'url': 'http://www.youtube.com/watch#!v=UOtJUmiUZ08&feature=featured&videos=Qf8YDn9mbGs',
+            'video_id': 'UOtJUmiUZ08'
+        },{
+            'url': 'http://www.youtube.com/v/6Z5msRdai-Q',
+            'video_id': '6Z5msRdai-Q'
+        }]
+    
+    def test_get_video_id(self):
+        for item in self.data:
+            self.failUnlessEqual(item['video_id'], get_video_id(item['url']))
+    
 class VideoTest(TestCase):
     
     def setUp(self):
