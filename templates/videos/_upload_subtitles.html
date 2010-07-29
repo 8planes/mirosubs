@@ -1,5 +1,9 @@
 {% if not has_translations %}
-    <a href="#" id="upload-subtitles-link">Upload subtitles</a>
+    {% if user.is_authenticated %}
+        <a href="#" id="upload-subtitles-link">Upload subtitles</a>
+    {% else %}
+        <a href="{% url auth:login %}?next={{ request.path_info }}">Login to upload subtitles</a>
+    {% endif %}
     <div id="upload-subtitles-div" style="display: none">
         <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data" >
             {% csrf_token %}

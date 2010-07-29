@@ -123,6 +123,7 @@ def actions_list(request):
                        template_object_name='action',
                        extra_context=extra_context)    
 
+@login_required
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
