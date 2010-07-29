@@ -42,7 +42,7 @@ urlpatterns = patterns(
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^embed.js$', 'widget.views.embed'),
+    (r'^embed(\d*).js$', 'widget.views.embed'),
     (r'^widget_demo/$', 'widget.views.widget_demo'),
     (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
     url(r'^onsite_widget/$', 'widget.views.onsite_widget', name='onsite_widget'),
