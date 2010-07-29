@@ -27,7 +27,7 @@ from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
-from vidscraper.sites import blip
+from vidscraper.sites import blip, google_video, fora, ustream, vimeo
 from youtube import get_video_id
 
 yt_service = YouTubeService()
@@ -37,10 +37,18 @@ NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
 VIDEO_TYPE_HTML5 = 'H'
 VIDEO_TYPE_YOUTUBE = 'Y'
 VIDEO_TYPE_BLIPTV = 'B'
+VIDEO_TYPE_GOOGLE = 'G'
+VIDEO_TYPE_FORA = 'F'
+VIDEO_TYPE_USTREAM = 'U'
+VIDEO_TYPE_VIMEO = 'V'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
     (VIDEO_TYPE_YOUTUBE, 'Youtube'),
-    (VIDEO_TYPE_BLIPTV, 'Blip.tv')
+    (VIDEO_TYPE_BLIPTV, 'Blip.tv'),
+    (VIDEO_TYPE_GOOGLE, 'video.google.com'),
+    (VIDEO_TYPE_FORA, 'Fora.tv'),
+    (VIDEO_TYPE_USTREAM, 'Ustream.tv'),
+    (VIDEO_TYPE_VIMEO, 'Vimeo.com')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
@@ -132,7 +140,7 @@ class Video(models.Model):
                 entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
                 video.title = entry.media.title.text
                 video.save()
-        elif 'blip.tv' in parsed_url.netloc:
+        elif 'blip.tv' in parsed_url.netloc and blip.BLIP_REGEX.match(video_url):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(
                 bliptv_fileid=bliptv_fileid,
@@ -143,6 +151,33 @@ class Video(models.Model):
                 video.title = blip.scrape_title(video_url)
                 video.bliptv_flv_url = blip.scrape_file_url(video_url)
                 video.save()
+        elif 'video.google.com' in parsed_url.netloc and google_video.GOOGLE_VIDEO_REGEX.match(video_url):
+            video, created = Video.objects.get_or_create(
+                video_url=video_url,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_GOOGLE,
+                          'allow_community_edits': True})
+            if created:
+                video.title = google_video.scrape_title(video_url)
+                video.save()
+        elif 'fora.tv' in parsed_url.netloc and fora.FORA_REGEX.match(video_url):
+            video, created = Video.objects.get_or_create(
+                video_url=fora.scrape_flash_enclosure_url(video_url),
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_FORA,
+                          'allow_community_edits': True})
+            if created:
+                video.title = fora.scrape_title(video_url)
+                video.save()            
+        elif 'ustream.tv' in parsed_url.netloc and ustream.USTREAM_REGEX.match(video_url):
+            video, created = Video.objects.get_or_create(
+                video_url=ustream.get_flash_enclosure_url(video_url),
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_USTREAM,
+                          'allow_community_edits': True})
+            if created:
+                video.title = ustream.get_title(video_url)
+                video.save()              
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,

@@ -34,6 +34,7 @@ from django.db.models import Q
 from widget.views import base_widget_params
 from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
+from vidscraper.errors import Error as VidscraperError
 
 def create(request):
     if request.method == 'POST':
@@ -41,7 +42,13 @@ def create(request):
         if video_form.is_valid():
             owner = request.user if request.user.is_authenticated() else None
             video_url = video_form.cleaned_data['video_url']
-            video, created = Video.get_or_create_for_url(video_url, owner)
+            try:
+                video, created = Video.get_or_create_for_url(video_url, owner)
+                
+            except VidscraperError:
+                vidscraper_error = True
+                return render_to_response('videos/create.html', locals(),
+                              context_instance=RequestContext(request))
             if created:
                 # TODO: log to activity feed
                 pass

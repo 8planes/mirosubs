@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block main_content %}
+{% if vidscraper_error %}
+    You type incorrect ulr.
+{% endif %}
 <form action="{% url videos:create %}" method="POST" class="main_video_form">
   {% csrf_token %}
   <h2 class="main_heading">Subtitle a Video</h2>
