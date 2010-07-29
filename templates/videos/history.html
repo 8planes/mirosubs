@@ -218,6 +218,7 @@
    </div>
 
    <div id="trascripts-tab" class="tab">
+        {% if last_version.captions %}
         <ul class="table_body"> 
             {% for item in last_version.captions %}
                 <li class="table_transcript {% cycle 'even' '' %}">
@@ -225,6 +226,9 @@
                 </li>
             {% endfor %}
         </ul>
+        {% else %}
+            <p class="no_subs">{% trans 'No subtitles yet.  Make some!' %}</p>
+        {% endif %}
        <div style="clear: both"></div>   
    </div>
 {% endblock %}
