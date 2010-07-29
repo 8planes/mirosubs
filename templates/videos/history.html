@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load escapejs paginator widget comments %}
+{% load escapejs paginator widget comments i18n %}
 
 {% block css %}
     {{ block.super }}
@@ -140,17 +140,13 @@
 
     <ul class="video_tabs">
       <li class="active">
-          <a href="#trascripts-tab">
+          <a href="#transcripts-tab">
             {% block trascripts_tab %}Original Language Subtitles{% endblock %}
           </a>
       </li>
       <li><a href="#comments-tab">Comments ({% get_comment_count commented_object %})</a></li>
       <li><a href="#revisions-tab">History ({{ hits }})</a></li>
     </ul>
-    
-    {% with translations|length as has_translations %}
-        {% include 'videos/_upload_subtitles.html' %}
-    {% endwith %}
     
     <div style="display: none" id="revisions-tab" class="tab">
         {% if revision_list|length > 1 %}
@@ -209,8 +205,8 @@
            {% endblock %}
        {% else %}
             <div class="nothing">
-                <strong>This revision has no subtitles</strong><br />
-                Either no subtitles have been entered, or they were deleted.
+                <strong>{% trans 'No subtitles for this language.' %}</strong><br />
+                {% trans 'Either no subtitles have been entered, or they were deleted.' %}
             </div>
        {% endif %}
    </div>
@@ -221,7 +217,8 @@
        <div style="clear: both"></div>     
    </div>
 
-   <div id="trascripts-tab" class="tab">
+   <div id="transcripts-tab" class="tab">
+        {% if last_version.captions %}
         <ul class="table_body"> 
             {% for item in last_version.captions %}
                 <li class="table_transcript {% cycle 'even' '' %}">
@@ -229,6 +226,9 @@
                 </li>
             {% endfor %}
         </ul>
+        {% else %}
+            <p class="no_subs">{% trans 'No subtitles yet.  Make some!' %}</p>
+        {% endif %}
        <div style="clear: both"></div>   
    </div>
 {% endblock %}
