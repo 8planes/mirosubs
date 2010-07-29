@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load escapejs widget comments recent_activity paginator %}
+{% load escapejs widget comments recent_activity paginator i18n %}
 
 {% block css %}
     {{ block.super }}
@@ -137,7 +137,7 @@
                 {% endfor %}            
             </ul>
         {% else %}
-            <p class="no_subs">This video has no subtitles yet.  Make some!</p>
+            <p class="no_subs">{% trans 'No subtitles for this video. Make some!' %}</p>
         {% endif %}
         <div style="clear: both"></div>
     </div>

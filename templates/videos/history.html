@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load escapejs paginator widget comments %}
+{% load escapejs paginator widget comments i18n %}
 
 {% block css %}
     {{ block.super }}
@@ -205,8 +205,8 @@
            {% endblock %}
        {% else %}
             <div class="nothing">
-                <strong>This revision has no subtitles</strong><br />
-                Either no subtitles have been entered, or they were deleted.
+                <strong>{% trans 'No subtitles for this language.' %}</strong><br />
+                {% trans 'Either no subtitles have been entered, or they were deleted.' %}
             </div>
        {% endif %}
    </div>
