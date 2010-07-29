@@ -27,7 +27,7 @@ from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
-#from vidscraper.sites import blip
+from vidscraper.sites import blip
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -74,6 +74,7 @@ class Video(models.Model):
                                         related_name="writelock_owners")
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
+    is_subtitles = models.BooleanField(default=False)
     
     def __unicode__(self):
         if self.title:
@@ -145,12 +146,12 @@ class Video(models.Model):
             return 'youtube_{0}.srt'.format(self.youtube_videoid)
         else:
             return 'bliptv_{0}.srt'.format(self.bliptv_fileid)
-        
-    def lang_srt_filename(self, lang=None):
+    
+    def lang_filename(self, lang):
         name = self.srt_filename
         if lang:
-            return '%s.%s.srt' % (name[:-4], lang)
-        return name 
+            return '%s.%s' % (name[:-4], lang)
+        return name         
     
     @property
     def caption_state(self):
@@ -415,6 +416,13 @@ class VideoCaptionVersion(VersionModel):
         for item in self.captions():
             item.duplicate_for(new_version).save()
         return new_version
+
+def update_video_is_subtitled(sender, instance, created, **kwargs):
+    if instance.is_complete and not instance.video.is_subtitles:
+        instance.video.is_subtitles = True
+        instance.video.save()
+        
+post_save.connect(update_video_is_subtitled, VideoCaptionVersion)
                     
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
