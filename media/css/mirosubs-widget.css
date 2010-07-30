@@ -35,6 +35,7 @@ top: 0;
    top: 0px !important;
    border: 1px solid #000;
    border-top: 0;
+   z-index: 2147483640;
 }
 
 .mirosubs-modal-widget-content {
@@ -847,6 +848,10 @@ margin: 20px 0 0 0px !important;
     height: 300px;
 }
 
+.mirosubs-videoTab-container {
+   height: 32px;
+}
+
 .mirosubs-widget .mirosubs-videoTab {
     font-size: 10px !important;
     float: left !important;
@@ -1603,6 +1608,7 @@ li.mirosubs-transcribeHelp ol li {
     -webkit-border-bottom-left-radius: 5px !important; 
     -webkit-border-bottom-rught-radius: 5px !important; 
     position: absolute !important;
+   z-index: 2147483639;
 }
 
 .mirosubs-langmenuitem {
@@ -2219,6 +2225,7 @@ color: #fff !important;
 .mirosubs-modal-login {
    border: 3px solid !important;
    position: absolute !important;
+   z-index: 2147483641;
    padding: 15px 0 !important;
    width: 540px !important;
    height: 200px !important;
@@ -2325,6 +2332,7 @@ a.mirosubs-openid span{
    font-size: 1.2em;
    font-weight: bold;
    line-height: 150%;
+   z-index: 2147483647;
 }
 
 .mirosubs-warning .mirosubs-label {
