@@ -604,6 +604,9 @@ padding-left: 35px !important;
 background: url("../images/sprite.png") 10px -119px no-repeat !important;
 line-height: 2em !important;
 text-align: center !important;
+position: absolute;
+top: -50px;
+left: 34px
 }
 
 
