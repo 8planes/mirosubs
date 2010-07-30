@@ -64,6 +64,11 @@ background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
 /////////////////////////////////////////////*/
 
 
+.marginleft{
+margin-left: 30px;
+}
+
+
 
 .alpha{
 background: url(../images/alpha.png) 130px 0px no-repeat;
@@ -2151,9 +2156,9 @@ display: none;
 
 
 .video_tabs{
-clear: both;
+
 float: left;
-margin: 30px 0 0;
+margin: 50px 0 0;
 padding: 0;
 
 }
@@ -2423,6 +2428,35 @@ border: 1px solid #aaa;
 }
 
 
+
+
+
+.sub_actions{
+float: right;
+}
+
+.sub_actions .button{
+float: right;
+clear: none !important;
+margin:0 0 20px 20px;
+}
+
+
+.up_down{
+text-align: right;
+}
+
+
+.upload{
+padding-left: 15px;
+background: url(../images/updown.gif) left -1px no-repeat;
+padding-right: 5px;
+}
+
+.download{
+padding-left: 20px;
+background: url(../images/updown.gif) -165px -1px no-repeat;
+}
 
 
 .revision_buttons{

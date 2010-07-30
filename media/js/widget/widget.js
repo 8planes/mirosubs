@@ -87,7 +87,11 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
     if (videoSource != null)
         this.setVideoSource_(videoSource);
     this.videoTab_ = new mirosubs.widget.VideoTab();
-    this.addChild(this.videoTab_, true);
+    var videoTabContainer = new goog.ui.Component();
+    this.addChild(videoTabContainer, true);
+    videoTabContainer.addChild(this.videoTab_, true);
+    videoTabContainer.getElement().className = 
+        'mirosubs-videoTab-container';
     if (this.hideTab_)
         goog.style.showElement(this.videoTab_.getElement(), false);
     this.videoTab_.setText("Loading...");

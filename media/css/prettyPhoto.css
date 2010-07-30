@@ -45,8 +45,8 @@ div.light_rounded .pp_close {
 	height:22px;
 	cursor: pointer;
 position: absolute;
-top: -11px;
-right: -11px;
+top: 5px;
+right: -29px;
     background: url("../images/sprite.png") 0 -256px no-repeat !important;
 padding-top: 30px;
     height: 0px !important; 
