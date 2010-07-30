@@ -50,6 +50,7 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal =
         .appendLegendContentsInternal.call(this, $d, legendDiv);
     this.playModeSelect_ = $d('select');
 
+    var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
     var speed = mirosubs.UserSettings.getStringValue(
         mirosubs.UserSettings.Settings.VIDEO_SPEED_MODE) || pm.PLAY_STOP;
     var select = this.playModeSelect_;
