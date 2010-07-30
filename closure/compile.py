@@ -51,7 +51,7 @@ def compile(output_file_name, js_file_list):
 
     output,err = call_command(("java -jar %s --js %s %s "
                                "--js_output_file %s "
-                               "--output_wrapper \"(function(){%output%})();\" "
+                               "--output_wrapper (function(){%%output%%})(); "
                                "--compilation_level ADVANCED_OPTIMIZATIONS") % 
                               (compiler_jar, calcdeps_js, deps, compiled_js))
     
