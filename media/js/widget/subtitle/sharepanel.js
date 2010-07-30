@@ -81,12 +81,24 @@ mirosubs.subtitle.SharePanel.prototype.createPermalinkSection_ = function($d, $t
 mirosubs.subtitle.SharePanel.prototype.enterDocument = function() {
     mirosubs.subtitle.SharePanel.superClass_.enterDocument.call(this);
     var that = this;
-    this.getHandler().listen(this.embedCodeInput_, ['focus', 'click'], 
-                             this.focusEmbed_);
+    this.getHandler()
+        .listen(this.embedCodeInput_, ['focus', 'click'], 
+                             this.focusEmbed_)
+        .listen(this.emailLink_, 'click',
+                this.emailLinkClicked_);
 };
 mirosubs.subtitle.SharePanel.prototype.focusEmbed_ = function() {
     var that = this;
     goog.Timer.callOnce(function() {
         that.embedCodeInput_.select();
     });
+};
+mirosubs.subtitle.SharePanel.EMAIL_TEXT =
+    "I just added subtitles to this video using the Universal Subtitles alpha.\n\n" +
+    "It's still experimental and just for testing, but if you'd like to " +
+    "check it out or try it yourself, here's the link: LINK";
+mirosubs.subtitle.SharePanel.prototype.emailLinkClicked_ = function(event) {
+    window.location = "/videos/email_friend?text=" +
+        encodeURIComponent(
+            mirosubs.subtitle.SharePanel.EMAIL_TEXT.replace("LINK", mirosubs.returnURL));
 };
