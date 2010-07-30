@@ -38,11 +38,11 @@ class YoutubeModuleTest(TestCase):
             'url': 'http://www.youtube.com/v/6Z5msRdai-Q',
             'video_id': '6Z5msRdai-Q'
         },{
-            'url': 'http://www.youtube.com/watch?v=woobL2yAxD4',
-            'video_id': 'woobL2yAxD4'
+            'url': 'http://www.youtube.com/watch?v=HOaRO-S6h64&playnext=1&videos=nPZyUUKpCEA&feature=featured',
+            'video_id': 'HOaRO-S6h64'
         },{
-            'url': 'http://www.youtube.com/watch?v=woobL2yAxD4&amp;playnext=1&amp;videos=9ikUhlPnCT0&amp;feature=featured',
-            'video_id': 'woobL2yAxD4'
+            'url': 'http://www.youtube.com/watch?v=HOaRO-S6h64',
+            'video_id': 'HOaRO-S6h64'
         }]
     
     def test_get_video_id(self):
