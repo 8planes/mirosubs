@@ -848,6 +848,10 @@ margin: 20px 0 0 0px !important;
     height: 300px;
 }
 
+.mirosubs-videoTab-container {
+   height: 32px;
+}
+
 .mirosubs-widget .mirosubs-videoTab {
     font-size: 10px !important;
     float: left !important;
