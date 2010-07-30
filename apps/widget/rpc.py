@@ -25,6 +25,7 @@ import simplejson as json
 import widget
 from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
+from django.conf import settings
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
@@ -81,6 +82,7 @@ def show_widget(request, video_url, null_widget, base_state):
             base_state.get('revision', None))
     if request.user.is_authenticated:
         return_value['username'] = request.user.username
+    return_value['embed_version'] = settings.EMBED_JS_VERSION
     return return_value
 
 def start_editing(request, video_id, base_version_no=None):

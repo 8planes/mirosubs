@@ -43,6 +43,33 @@ mirosubs.currentUsername = null;
 mirosubs.returnURL = null;
 
 /**
+ * Current version of embed code. Set when widget gets inital 
+ * state from server. Corresponds to value in settings.EMBED_JS_VERSION
+ * in Django settings.py file.
+ */
+mirosubs.embedVersion = null;
+
+/**
+ * @type {string}
+ * Set in widget constructor.
+ */
+mirosubs.videoURL = null;
+
+mirosubs.embedCode = function() {
+    var pieces = [];
+    pieces.push('<sc');
+    pieces.push('ript type="text/javascript" src="');
+    pieces.push(mirosubs.mediaURL());
+    pieces.push('embed' + mirosubs.embedVersion + '.js');
+    pieces.push('">\n');
+    pieces.push('({\n');
+    pieces.push('   video_url: "' + mirosubs.videoURL + '"\n');
+    pieces.push('})\n');
+    pieces.push('</script>');
+    return pieces.join('');
+};
+
+/**
  * Does not include trailing slash.
  */
 mirosubs.siteURL = function() {
