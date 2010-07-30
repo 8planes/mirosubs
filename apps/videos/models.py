@@ -220,7 +220,9 @@ class Video(models.Model):
         # FIXME: this should be private and static 
         # (no need for ref to self)
         subtitles = subtitle_set.videocaption_set.all()
-        translations = translation_set.translation_set.all()
+        translations = []
+        if translation_set is not None:
+            translations = translation_set.translation_set.all()
         translations_dict = dict([(trans.caption_id, trans) for
                                   trans in translations])
         return [(subtitle,
