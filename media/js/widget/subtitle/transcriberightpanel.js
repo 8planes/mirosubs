@@ -49,14 +49,21 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal =
     mirosubs.subtitle.TranscribeRightPanel.superClass_
         .appendLegendContentsInternal.call(this, $d, legendDiv);
     this.playModeSelect_ = $d('select');
+
+    var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
+    var speed = mirosubs.UserSettings.getStringValue(
+        mirosubs.UserSettings.Settings.VIDEO_SPEED_MODE) || pm.PLAY_STOP;
     var select = this.playModeSelect_;
     var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
     var text = goog.bind(this.playModeText_, this);
     goog.array.forEach(
         [pm.PLAY_STOP, pm.AUTOPAUSE, pm.NO_AUTOPAUSE],
         function(opt) {
+            var attrs = { 'value': opt };
+            if (opt == speed)
+                attrs['selected'] = 'selected';
             select.appendChild(
-                $d('option', {'value': opt}, text(opt)));                   
+                $d('option', attrs, text(opt)));
         });
     legendDiv.appendChild($d('div', 'mirosubs-speedmode',
                              $d('h4', null, 'Speed Mode'), 
@@ -88,12 +95,15 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.setButtonText_ = function() {
 
 mirosubs.subtitle.TranscribeRightPanel.prototype.playModeChanged_ = function(event) {    
     this.setButtonText_();
+    mirosubs.UserSettings.setStringValue(
+        mirosubs.UserSettings.Settings.VIDEO_SPEED_MODE,
+        this.playModeSelect_.value);
     this.dispatchEvent(
         new mirosubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent(
             this.playModeSelect_.value));
 };
 
 mirosubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent = function(mode) {
-    this.type = mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED
-    this.mode = mode;;
+    this.type = mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED;
+    this.mode = mode;
 };

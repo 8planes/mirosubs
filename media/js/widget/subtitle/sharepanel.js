@@ -57,10 +57,8 @@ mirosubs.subtitle.SharePanel.prototype.createShareList_ = function($d, $t) {
 };
 mirosubs.subtitle.SharePanel.prototype.createEmbedSection_ = function($d, $t) {
     this.embedCodeInput_ = $d('input', {'type':'text'});
-//    var embedCode = ['<sc', 'ript type="text/javascript" src="',
-//                     this.serverModel_.getEmbedCode(),
-//                     '"></script>'].join('');
-    var embedCode = "(Embed code currently unavailable)";
+
+    var embedCode = mirosubs.embedCode();
     this.embedCodeInput_['value'] = embedCode;
 
     var flashSpan = $d('span');
@@ -74,19 +72,47 @@ mirosubs.subtitle.SharePanel.prototype.createPermalinkSection_ = function($d, $t
     this.getElement().appendChild(
         $d('a', 
            {'className':'mirosubs-permalink',
-            'style': 'visibility: hidden',
             'href':this.serverModel_.getPermalink()},
            this.serverModel_.getPermalink()));
 };
 mirosubs.subtitle.SharePanel.prototype.enterDocument = function() {
     mirosubs.subtitle.SharePanel.superClass_.enterDocument.call(this);
     var that = this;
-    this.getHandler().listen(this.embedCodeInput_, ['focus', 'click'], 
-                             this.focusEmbed_);
+    this.getHandler()
+        .listen(this.embedCodeInput_, ['focus', 'click'], 
+                             this.focusEmbed_)
+        .listen(this.emailLink_, 'click',
+                this.emailLinkClicked_)
+        .listen(this.facebookLink_, 'click',
+                this.facebookLinkClicked_);
 };
 mirosubs.subtitle.SharePanel.prototype.focusEmbed_ = function() {
     var that = this;
     goog.Timer.callOnce(function() {
         that.embedCodeInput_.select();
     });
+};
+
+mirosubs.subtitle.SharePanel.EMAIL_TEXT =
+    "I just added subtitles to this video using the Universal Subtitles alpha.\n\n" +
+    "It's still experimental and just for testing, but if you'd like to " +
+    "check it out or try it yourself, here's the link: LINK";
+
+mirosubs.subtitle.SharePanel.prototype.emailLinkClicked_ = function(event) {
+    event.preventDefault();
+    window.location = "/videos/email_friend?text=" +
+        encodeURIComponent(
+            mirosubs.subtitle.SharePanel.EMAIL_TEXT.replace(
+                "LINK", this.serverModel_.getPermalink()));
+};
+
+mirosubs.subtitle.SharePanel.prototype.facebookLinkClicked_ = function(e) {
+    e.preventDefault();
+    var queryData = new goog.Uri.QueryData();
+    queryData.set('u', this.serverModel_.getPermalink());
+    queryData.set('t', 'Just added #subtitles to this video using the @universalsubs alpha');
+    var url = 'http://www.facebook.com/sharer.php?' + queryData.toString();
+    window.open(url,
+                mirosubs.randomString(),
+                'status=0,width=560,height=400');
 };

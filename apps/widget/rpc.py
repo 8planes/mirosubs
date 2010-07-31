@@ -25,6 +25,7 @@ import simplejson as json
 import widget
 from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
+from django.conf import settings
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
@@ -81,6 +82,7 @@ def show_widget(request, video_url, null_widget, base_state):
             base_state.get('revision', None))
     if request.user.is_authenticated:
         return_value['username'] = request.user.username
+    return_value['embed_version'] = settings.EMBED_JS_VERSION
     return return_value
 
 def start_editing(request, video_id, base_version_no=None):
@@ -493,6 +495,7 @@ def autoplay_subtitles(request, video, null_widget, language, revision):
             subtitles = list(video.null_captions(
                     request.user).videocaption_set.all())
         else:
-            subtitles = list(video.captions(revision).videocaption_set.all())
+            caption_version = video.captions(revision)
+            subtitles = [] if caption_version is None else list(caption_version.videocaption_set.all())
         return [subtitle.to_json_dict() 
                 for subtitle in subtitles]

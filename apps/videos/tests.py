@@ -37,6 +37,12 @@ class YoutubeModuleTest(TestCase):
         },{
             'url': 'http://www.youtube.com/v/6Z5msRdai-Q',
             'video_id': '6Z5msRdai-Q'
+        },{
+            'url': 'http://www.youtube.com/watch?v=HOaRO-S6h64&playnext=1&videos=nPZyUUKpCEA&feature=featured',
+            'video_id': 'HOaRO-S6h64'
+        },{
+            'url': 'http://www.youtube.com/watch?v=HOaRO-S6h64',
+            'video_id': 'HOaRO-S6h64'
         }]
     
     def test_get_video_id(self):

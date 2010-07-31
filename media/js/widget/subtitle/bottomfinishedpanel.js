@@ -59,9 +59,15 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ =
     this.dialog_.addTranslationsAndClose();
     event.preventDefault();
 };
+
+mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT = 
+    "Hey-- I just created subtitles using universalsubtitles.org, and I was hoping " +
+    "you'd be able to use your awesome language skills to translate them.  It's " +
+    "easy, and it would be a huge help to me.";
 mirosubs.subtitle.BottomFinishedPanel.prototype.askAFriendClicked_ =
     function(event)
 {
-    alert("Sorry.  We're still testing the widget, so we haven't enabled sharing features.  Please just email your friend a link for now.");
+    window.location.href = "/videos/email_friend?text=" +
+        encodeURIComponent(mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT);
     event.preventDefault();
 };

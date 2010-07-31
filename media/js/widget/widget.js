@@ -30,6 +30,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
      * @type {?string}
      */
     this.videoURL_ = widgetConfig['video_url'];
+    mirosubs.videoURL = this.videoURL_;
     /**
      * @type {undefined|HTMLVideoElement|HTMLObjectElement|HTMLEmbedElement}
      */
@@ -87,7 +88,11 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
     if (videoSource != null)
         this.setVideoSource_(videoSource);
     this.videoTab_ = new mirosubs.widget.VideoTab();
-    this.addChild(this.videoTab_, true);
+    var videoTabContainer = new goog.ui.Component();
+    this.addChild(videoTabContainer, true);
+    videoTabContainer.addChild(this.videoTab_, true);
+    videoTabContainer.getElement().className = 
+        'mirosubs-videoTab-container';
     if (this.hideTab_)
         goog.style.showElement(this.videoTab_.getElement(), false);
     this.videoTab_.setText("Loading...");
@@ -105,6 +110,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.stateInitialized_ = true;
     if (result['username'])
         mirosubs.currentUsername = result['username'];
+    mirosubs.embedVersion = result['embed_version'];
     if (result['flv_url'] && !this.videoSource_)
         this.setVideoSource_(new mirosubs.video.FlvVideoSource(
             result['flv_url']));
