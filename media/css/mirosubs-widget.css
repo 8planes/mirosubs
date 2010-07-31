@@ -2436,3 +2436,11 @@ overflow: hidden;
 .mirosubs-translationResources a:visited {
     color: #fff;
 }
+
+
+
+
+.mirosubs-twitter-share{
+    background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+}
+

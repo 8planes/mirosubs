@@ -24,9 +24,23 @@
             border: #666;
         }
     </style>
+
+    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
+    <style>
+        .error_list {
+            color: #fa6343;
+        }
+        
+        .success-message {
+            color: #5ae26b;
+            margin: 5px 0 0;
+        }
+    </style>
 {% endblock %}
 
 {% block scripts %}
+
+
     {% include "widget/_js_onsite_dependencies.html" %}
     {{ block.super }}
     <script type="text/javascript">
@@ -63,7 +77,19 @@
                 return false;
             });
         });
-    </script>   
+    </script>  
+    <script src="{{ MEDIA_URL }}/js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function(){
+            $.nyroModalSettings({
+                minWidth: 460,
+                minHeight: 380              
+            }); 
+            $('.test').nyroModal();
+                        
+            
+          });
+    </script> 
 {% endblock %}
 
 {% block title %}
@@ -76,7 +102,8 @@
             <h2>{{ video.title }}</h2>
         {% endif %}
         {% widget widget_params %}
-    </div>
+
+</div>
     
     <div class="right_column">
         {% include '_testing_widget.html' %}

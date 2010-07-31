@@ -1,22 +1,31 @@
 {% if not has_translations %}
-    <a href="#" id="upload-subtitles-link">Upload subtitles</a>
-    <div id="upload-subtitles-div" style="display: none">
-        <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data" >
+
+<a href="#upload_subs" id="upload-subtitles-link" class="upload">Upload Subtitles</a>
+
+
+<div id="upload_subs" style="display: none">
+
+<h3>Upload Subtitles</h3>
+
+<div class="padding">
+<p>Our site accepts SRT, SSA, and TTML format. (Additional
+information here on whether files need certain extensions or
+whatever)</p>
+<br />
+
+
+    <div id="upload-subtitles-div">
+        <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="hidden" name="video" value="{{ video.id }}"/>
-            <input type="file" name="subtitles" id="subtitles-file-field"/>
-            <input type="submit" value="Upload"/>
+            <input type="hidden" name="video" value="{{ video.id }}" />
+            <input type="file" name="subtitles" id="subtitles-file-field" />
+            <button type="submit" value="Upload"><span>Upload</span></button>
         </form>
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function($){
             var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}'
-            $('#upload-subtitles-link').click(function(){
-                $(this).hide();
-                $('#upload-subtitles-div').show();
-                return false;
-            });
-            
+      
             $('#upload-subtitles-form').ajaxForm({
                 dataType: 'json',
                 success: function(data, status, xhr, $form){
@@ -40,4 +49,6 @@
             });
         });        
     </script>
+</div>
+</div>
 {% endif %}

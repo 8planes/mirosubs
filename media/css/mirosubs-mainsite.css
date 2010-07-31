@@ -2244,7 +2244,12 @@ top:680px;
 
 /////////////////////////////////////////////*/
 
-form.message h3{
+form.message{
+margin: 0;
+}
+
+
+div#nyroModalWrapper h3{
 background: #fff url(../images/gradient.png) 0 0px repeat-x !important;
 padding: 15px;
 font-size: 14px;
@@ -2295,7 +2300,7 @@ float: left;
 
 form.message button{
 float: right;
-margin: 15px 15px 0;
+margin: 15px 15px 0 !important;
 }
 
 
@@ -2474,4 +2479,34 @@ height: 135px;
 
 
 }
+
+
+
+#upload-subtitles-form button{
+margin-left: 50px;
+}
+
+
+
+#upload-subtitles-form #subtitles-file-field{
+background: #444;
+padding: 3px !important;
+border: 1px solid #fff;
+}
+
+
+
+
+
+.mirosubs-twitter-share{
+    background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+}
+
+
+.mirosubs-facebook{
+    background: url("../images/share_icons.png") 0 0px no-repeat !important;
+}
+
+
+
 
