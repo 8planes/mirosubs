@@ -83,38 +83,33 @@
           <span class="project">a project of the participatory culture foundation</span>
         </h1>
 
+        <div class="user_panel">
+          <img src="/site_media/images/default_thumbnail_small.png" /> 
+          <a href="#">Username</a>
+          <span class="points"><strong>Points</strong> 3,999</span>
+          <span class="awards"><strong>Awards</strong> 3,999</span>
+        </div>
+
 
         <ul class="nav">
-
-
           <li class="first create_link"><a href="/videos/create/"><span>Subtitle a Video</span></a></li>
-          <li class="try_link"><a href="{% url demo %}"><span>Demo</span></a></li>
           <li class="videos_link"><a href="/videos/"><span>Videos</span></a></li>
+          <li class="last about_link last_nav"><a href="/about"><span>Volunteer</span></a></li>
+        </ul>
 
+
+        <ul class="sub_nav">
+          <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Blog</span></a></li>
+          <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
+          <li class="last about_link last_nav"><a href="/about"><span>About</span></a></li>
           {% if user.is_authenticated %}
               <li class="login_link"><a href="{% url logout %}"><span>Logout</span></a></li>
           {% else %}
               <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info }}"><span>Login</span></a></li>
           {% endif %}
-      
-    <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Blog</span></a></li>
-          <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
-
-
-
-
-
-          <li class="last about_link last_nav"><a href="/about"><span>About</span></a></li>
-
-
-
-
-
-
-
-
-
         </ul>
+
+
       </div>
       
       <div class="content">
