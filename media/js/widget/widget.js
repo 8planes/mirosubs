@@ -30,6 +30,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
      * @type {?string}
      */
     this.videoURL_ = widgetConfig['video_url'];
+    mirosubs.videoURL = this.videoURL_;
     /**
      * @type {undefined|HTMLVideoElement|HTMLObjectElement|HTMLEmbedElement}
      */
@@ -109,6 +110,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.stateInitialized_ = true;
     if (result['username'])
         mirosubs.currentUsername = result['username'];
+    mirosubs.embedVersion = result['embed_version'];
     if (result['flv_url'] && !this.videoSource_)
         this.setVideoSource_(new mirosubs.video.FlvVideoSource(
             result['flv_url']));
