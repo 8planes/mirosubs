@@ -8,12 +8,11 @@
 <h3>Upload Subtitles</h3>
 
 <div class="padding">
-<p>Our site accepts SRT, SSA, and TTML format. (Additional
-information here on whether files need certain extensions or
-whatever)</p>
-<br />
-
-
+    <p>Our site accepts SRT, SSA, and TTML format. (Additional
+    information here on whether files need certain extensions or
+    whatever)
+    </p>
+    <br />
     <div id="upload-subtitles-div">
         <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data">
             {% csrf_token %}
@@ -49,6 +48,17 @@ whatever)</p>
             });
         });        
     </script>
+    <script type="text/javascript">
+        $(function(){
+            $.nyroModalSettings({
+                minWidth: 460,
+                minHeight: 250
+            }); 
+            $('.upload').nyroModal();
+                        
+            
+          });
+    </script>     
 </div>
 </div>
 {% endif %}
