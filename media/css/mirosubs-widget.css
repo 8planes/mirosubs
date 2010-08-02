@@ -972,13 +972,12 @@ position: relative !important;
 }
 
 ul.mirosubs-titlesList {
-    margin: 0 !important;
-    padding: 0 0 150px 0 !important;
-    overflow: auto !important;
-    position: relative !important;
-    height: 130px !important;
+   margin: 0 !important;
+   padding: 0;
+   overflow: auto !important;
+   position: relative !important;
+   height: 280px !important;
 }
-
 
 ul.mirosubs-titlesList li {
     font-weight: bold !important;
@@ -1031,9 +1030,11 @@ top: 3px;
    background: url("../images/add-title.png") 0 0 no-repeat;
 }
 
+li.mirosubs-append-sub-button {
+   height: 150px;
+}
 
-
-.mirosubs-modal-widget-transcribe .mirosubs-append-sub-button {
+.mirosubs-modal-widget-transcribe .mirosubs-append-sub-link {
    display: none;
 }
 
@@ -1173,7 +1174,7 @@ iframe.mirosubs-captionDivBg {
 ul.mirosubs-titlesList.finished {
     margin: 0 !important;
     padding: 0 !important;
-    height: 56px !important;
+    height: 206px !important;
     border-bottom: 1px solid #ccc !important;
     overflow: auto !important;
 }
