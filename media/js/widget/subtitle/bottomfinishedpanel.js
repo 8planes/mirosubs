@@ -18,9 +18,13 @@
 
 goog.provide('mirosubs.subtitle.BottomFinishedPanel');
 
-mirosubs.subtitle.BottomFinishedPanel = function(dialog) {
+/**
+ * @constructor
+ */
+mirosubs.subtitle.BottomFinishedPanel = function(dialog, permalink) {
     goog.ui.Component.call(this);
     this.dialog_ = dialog;
+    this.permalink_ = permalink;
 };
 goog.inherits(mirosubs.subtitle.BottomFinishedPanel, goog.ui.Component);
 
@@ -28,9 +32,16 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.createDom = function() {
     mirosubs.subtitle.BottomFinishedPanel.superClass_.createDom.call(this);
     this.getElement().className = 'mirosubs-translating';
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var attrs = {'className': 'mirosubs-done', 'href':'#'};
-    this.addTranslationLink_ = $d('a', attrs, 'Add a Translation Now');
-    this.askAFriendLink_ = $d('a', attrs, 'Ask a Friend to Translate');
+    this.addTranslationLink_ = 
+        $d('a', 
+           {'className':'mirosubs-done', 'href':'#'}, 
+           'Add a Translation Now');
+    this.askAFriendLink_ = 
+        $d('a', 
+           {'className':'mirosubs-done', 
+            'href':this.makeAskFriendURL_(), 
+            'target':mirosubs.randomString()}, 
+           'Ask a Friend to Translate');
     this.getElement().appendChild(
         $d('div', 'mirosubs-buttons',
            this.addTranslationLink_,
@@ -50,8 +61,6 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.BottomFinishedPanel.superClass_.enterDocument.call(this);
     this.getHandler().listen(this.addTranslationLink_, 'click',
                              this.addTranslationClicked_);
-    this.getHandler().listen(this.askAFriendLink_, 'click',
-                             this.askAFriendClicked_);
 };
 mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ =
     function(event)
@@ -60,14 +69,17 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ =
     event.preventDefault();
 };
 
-mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT = 
+mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT_ = 
     "Hey-- I just created subtitles using universalsubtitles.org, and I was hoping " +
     "you'd be able to use your awesome language skills to translate them.  It's " +
-    "easy, and it would be a huge help to me.";
-mirosubs.subtitle.BottomFinishedPanel.prototype.askAFriendClicked_ =
+    "easy, and it would be a huge help to me. ";
+
+mirosubs.subtitle.BottomFinishedPanel.prototype.makeAskFriendURL_ =
     function(event)
 {
-    window.location.href = "/videos/email_friend?text=" +
-        encodeURIComponent(mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT);
-    event.preventDefault();
+    var queryData = new goog.Uri.QueryData();
+    var message = mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT_ +
+        this.permalink_ + "?translate_immediately=true";
+    queryData.set('text', message);
+    return mirosubs.siteURL() + '/videos/email_friend/?' + queryData.toString();
 };
