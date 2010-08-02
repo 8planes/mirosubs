@@ -73,7 +73,8 @@ mirosubs.embedCode = function() {
  * Does not include trailing slash.
  */
 mirosubs.siteURL = function() {
-    return mirosubs.siteConfig ? mirosubs.siteConfig['siteURL'] : '';
+    return mirosubs.siteConfig ? mirosubs.siteConfig['siteURL'] : 
+        (window.location.protocol + '//' + window.location.host);
 };
 
 /**

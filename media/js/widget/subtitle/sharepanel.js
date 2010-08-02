@@ -48,11 +48,14 @@ mirosubs.subtitle.SharePanel.prototype.createShareSection_ = function($d, $t) {
 };
 mirosubs.subtitle.SharePanel.prototype.createShareList_ = function($d, $t) {
     this.facebookLink_ = $d('a', {'href':'#'}, 'Post to Facebook');
-    this.twitterLink_ = $d('a', {'href':'#'}, 'Post to Twitter');
+    this.twitterLink_ = $d('a', 
+                           {'href':this.makeTwitterURL_(), 
+                            'target':'share_subs_on_twitter'}, 
+                           'Post to Twitter');
     this.emailLink_ = $d('a', {'href':'#'}, 'Email to friends');
     return $d('ul', null,
               $d('li', 'mirosubs-facebook', this.facebookLink_),
-              $d('li', 'mirosubs-twitter', this.twitterLink_),
+              $d('li', 'mirosubs-twitter-share', this.twitterLink_),
               $d('li', 'mirosubs-friends', this.emailLink_));
 };
 mirosubs.subtitle.SharePanel.prototype.createEmbedSection_ = function($d, $t) {
@@ -108,11 +111,25 @@ mirosubs.subtitle.SharePanel.prototype.emailLinkClicked_ = function(event) {
 
 mirosubs.subtitle.SharePanel.prototype.facebookLinkClicked_ = function(e) {
     e.preventDefault();
-    var queryData = new goog.Uri.QueryData();
-    queryData.set('u', this.serverModel_.getPermalink());
-    queryData.set('t', 'Just added #subtitles to this video using the @universalsubs alpha');
-    var url = 'http://www.facebook.com/sharer.php?' + queryData.toString();
-    window.open(url,
+    window.open(this.makeFacebookURL_(),
                 mirosubs.randomString(),
                 'status=0,width=560,height=400');
+};
+
+mirosubs.subtitle.SharePanel.SHORT_MESSAGE_PREFIX_ = 
+    'Just added #subtitles to this video using the @universalsubs alpha';
+
+mirosubs.subtitle.SharePanel.prototype.makeFacebookURL_ = function() {
+    var queryData = new goog.Uri.QueryData();
+    queryData.set('u', this.serverModel_.getPermalink());
+    queryData.set('t', mirosubs.subtitle.SharePanel.SHORT_MESSAGE_PREFIX_);
+    return 'http://www.facebook.com/sharer.php?' + queryData.toString();
+};
+
+mirosubs.subtitle.SharePanel.prototype.makeTwitterURL_ = function() {
+    var queryData = new goog.Uri.QueryData();
+    var message = mirosubs.subtitle.SharePanel.SHORT_MESSAGE_PREFIX_ +
+        ': ' + this.serverModel_.getPermalink();
+    queryData.set('status', message);
+    return 'http://twitter.com/home/?' + queryData.toString();
 };
