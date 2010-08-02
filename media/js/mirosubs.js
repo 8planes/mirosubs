@@ -34,11 +34,11 @@ mirosubs.currentUsername = null;
 
 /**
  * URL to which the page should return after widget dialog closes.
- * @type {?string}
  * This is a temporary setting to solve 
  * http://bugzilla.pculture.org/show_bug.cgi?id=13694 .
  * Only set for on-site widgets opened for Firefox workaround due
  * to video frame/background css performance problem.
+ * @type {?string}
  */
 mirosubs.returnURL = null;
 
@@ -46,6 +46,7 @@ mirosubs.returnURL = null;
  * Current version of embed code. Set when widget gets inital 
  * state from server. Corresponds to value in settings.EMBED_JS_VERSION
  * in Django settings.py file.
+ * @type {string}
  */
 mirosubs.embedVersion = null;
 
@@ -73,7 +74,8 @@ mirosubs.embedCode = function() {
  * Does not include trailing slash.
  */
 mirosubs.siteURL = function() {
-    return mirosubs.siteConfig ? mirosubs.siteConfig['siteURL'] : '';
+    return mirosubs.siteConfig ? mirosubs.siteConfig['siteURL'] : 
+        (window.location.protocol + '//' + window.location.host);
 };
 
 /**

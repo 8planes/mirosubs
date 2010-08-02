@@ -28,6 +28,9 @@ mirosubs.BrokenWarning = function() {
 };
 goog.inherits(mirosubs.BrokenWarning, goog.ui.Dialog);
 
+mirosubs.BrokenWarning.logger_ =
+    goog.debug.Logger.getLogger('mirosubs.BrokenWarning');
+
 mirosubs.BrokenWarning.prototype.createDom = function() {
     mirosubs.BrokenWarning.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
@@ -55,5 +58,11 @@ mirosubs.BrokenWarning.prototype.enterDocument = function() {
 };
 
 mirosubs.BrokenWarning.needsWarning = function() {
+    mirosubs.BrokenWarning.logger_.info(
+        "User agent is IE: " + goog.userAgent.IE);
+    mirosubs.BrokenWarning.logger_.info(
+        "Version is: " + goog.userAgent.VERSION);
+    mirosubs.BrokenWarning.logger_.info(
+        "Is version 8: " + goog.userAgent.isVersion(8));
     return goog.userAgent.IE && !goog.userAgent.isVersion(8);
 };
