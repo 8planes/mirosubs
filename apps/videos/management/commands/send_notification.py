@@ -55,8 +55,9 @@ class Command(BaseCommand):
                 'language': translation_version.language,
                 'video': video
             }
-            send_templated_email(user.email, '', 'videos/email_start_notification.html',
-                         context, fail_silently=not settings.DEBUG)
+            send_templated_email(user.email, '', 
+                                 'videos/email_start_notification.html',
+                                 context, fail_silently=not settings.DEBUG)
             
     def send_letter_translation(self, translation_version):
         qs = TranslationVersion.objects.filter(language=translation_version.language) \
@@ -86,8 +87,9 @@ class Command(BaseCommand):
                 context['captions'] = captions        
                 context['user'] = item.user
                 context['old_version'] = item
-                send_templated_email(item.user.email, '', 'videos/email_notification.html',
-                             context, fail_silently=not settings.DEBUG)            
+                send_templated_email(item.user.email, '', 
+                                     'videos/email_notification.html',
+                                     context, fail_silently=not settings.DEBUG)
             
     def send_letter_caption(self, caption_version):
         qs = VideoCaptionVersion.objects.filter(video=caption_version.video) \
@@ -118,6 +120,8 @@ class Command(BaseCommand):
                     data = [caption, scaption, changed]
                     captions.append(data)
                 context['captions'] = captions
-                        
-                send_templated_email(item.user.email, '', 'videos/email_notification.html',
-                             context, fail_silently=not settings.DEBUG)
+
+                send_templated_email(item.user.email, '', 
+                                     'videos/email_notification.html',
+                                     context, 
+                                     fail_silently=not settings.DEBUG)
