@@ -169,7 +169,8 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     this.getTimelinePanelInternal().removeChildren(true);
     this.getCaptioningAreaInternal().removeChildren(true);
     var bottomContainer = this.getBottomPanelContainerInternal();
-    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel(this);
+    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel(
+        this, this.serverModel_.getPermalink());
     bottomContainer.addChild(bottomFinishedPanel, true);
 
     var videoPlayer = this.getVideoPlayerInternal();
