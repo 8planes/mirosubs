@@ -43,6 +43,7 @@ class YoutubeModuleTest(TestCase):
         },{
             'url': 'http://www.youtube.com/watch?v=woobL2yAxD4&amp;playnext=1&amp;videos=9ikUhlPnCT0&amp;feature=featured',
             'video_id': 'woobL2yAxD4'
+
         }]
     
     def test_get_video_id(self):

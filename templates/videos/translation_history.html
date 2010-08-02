@@ -14,6 +14,9 @@
 
 {% block trascripts_tab %}{{ language.get_language_display }} Subtitles{% endblock %}
 
+{% block upload_subtitles %}
+{% endblock %}
+
 {% block donwload_subtitles %}
   {% if last_version.captions %}
         Donwnload <a href="{% url download_srt %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">SRT</a> / 

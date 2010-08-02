@@ -433,6 +433,28 @@ background-position-y: -90px !important;
 }
 
 
+.sub_nav{
+float: right;
+clear: right;
+margin: 0;
+padding: 8px 0 0;
+}
+
+
+.sub_nav li{
+margin: 0;
+padding: 0;
+list-style: none;
+display: inline;
+font-size: 12px;
+padding-left: 10px;
+}
+
+
+
+
+
+
 
 .accountstatus{
 width: 600px;
@@ -701,7 +723,7 @@ font-family: Arial, Helvetica, sans-serif;
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 button{
-padding:0 9px 0 0 !important;
+padding:0 8px 0 0 !important;
 }
 }
 
@@ -2244,7 +2266,12 @@ top:680px;
 
 /////////////////////////////////////////////*/
 
-form.message h3{
+form.message{
+margin: 0;
+}
+
+
+div#nyroModalWrapper h3{
 background: #fff url(../images/gradient.png) 0 0px repeat-x !important;
 padding: 15px;
 font-size: 14px;
@@ -2295,7 +2322,7 @@ float: left;
 
 form.message button{
 float: right;
-margin: 15px 15px 0;
+margin: 15px 15px 0 !important;
 }
 
 
@@ -2474,4 +2501,80 @@ height: 135px;
 
 
 }
+
+
+
+#upload-subtitles-form button{
+margin-left: 50px;
+}
+
+
+
+#upload-subtitles-form #subtitles-file-field{
+background: #444;
+padding: 3px !important;
+border: 1px solid #fff;
+}
+
+
+
+
+
+.mirosubs-twitter-share{
+    background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+}
+
+
+.mirosubs-facebook{
+    background: url("../images/share_icons.png") 0 0px no-repeat !important;
+}
+
+
+
+.user_panel{
+right: 0;
+top: 15px;
+font-size: 11px;
+position: absolute;
+}
+
+
+.user_panel a{
+text-decoration: none;
+padding-right: 10px;
+float: left;
+margin-top: 3px;
+margin-right: 10px;
+}
+
+.user_panel img{
+border: none;
+float: left;
+margin-right: 10px;
+}
+
+
+.points{
+background: url("../images/points.png") 0 1px no-repeat !important;
+padding-left: 15px;
+float: left;
+margin-top: 2px;
+margin-left: 0px;
+}
+
+
+.awards{
+background: url("../images/award.png") 0 1px no-repeat !important;
+padding-left: 15px;
+float: left;
+margin-left: 20px;
+margin-top: 2px;
+}
+
+
+
+
+
+
+
 

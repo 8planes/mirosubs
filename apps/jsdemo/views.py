@@ -20,6 +20,7 @@ from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 import widget
+import sys
 
 def js_dependencies():
     js_files = list(settings.JS_ONSITE)
@@ -28,6 +29,8 @@ def js_dependencies():
 
 def jsdemo(request, file_name):
     if file_name == 'raise_exception':
+        sys.stderr.write('I am also writing gratuitous text to stderr '
+                         'just to see if stderr output ends up in log')
         raise Exception('gratuitous exception')
     return render_to_response(
         'jsdemo/{0}.html'.format(file_name), 

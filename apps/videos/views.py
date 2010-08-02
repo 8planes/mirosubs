@@ -83,7 +83,7 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set.all()
-    context['widget_params'] = _widget_params(request, video.get_video_url(), True)
+    context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
                               
@@ -156,7 +156,10 @@ def email_friend(request):
     link = request.GET.get('link', '')
     if link:
         text = link if not text else '%s\n%s' % (text, link) 
-    initial = dict(message=text)
+    from_email = ''
+    if request.user.is_authenticated():
+        from_email = request.user.email
+    initial = dict(message=text, from_email=from_email)
     if request.method == 'POST':
         form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s", label_suffix="")
         if form.is_valid():
@@ -196,7 +199,7 @@ def history(request, video_id):
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video)
     context['last_version'] = video.captions()
-    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, '')
+    context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     context['commented_object'] = ProxyVideo.get(video)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -230,7 +233,7 @@ def translation_history(request, video_id, lang):
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
     context['last_version'] = video.translations(lang)
-    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, lang)
+    context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang)
     context['commented_object'] = language
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -239,10 +242,8 @@ def translation_history(request, video_id, lang):
                        template_object_name='revision',
                        extra_context=context) 
 
-def _widget_params(request, video_url, hide_tab, version_no=None, language_code=None):
+def _widget_params(request, video_url, version_no=None, language_code=None):
     params = { 'video_url': video_url }
-    if hide_tab:
-        params['hide_tab'] = True
     if version_no is not None:
         base_state = { 'revision': version_no }
         if language_code is not None:
@@ -266,7 +267,7 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
         language = version.language.language
     context['widget_params'] = \
         _widget_params(request, version.video.get_video_url(),
-                       True, version.version_no, language)
+                       version.version_no, language)
     if cls == TranslationVersion:
         tpl = 'videos/translation_revision.html'
         context['latest_version'] = version.language.translations()
@@ -283,7 +284,7 @@ def last_revision(request, video_id):
     context['version'] = video.captions()
     context['translations'] = video.translationlanguage_set.all()
     context['widget_params'] = \
-        _widget_params(request, video.get_video_url(), True)
+        _widget_params(request, video.get_video_url())
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
 
@@ -297,7 +298,7 @@ def last_translation_revision(request, video_id, language_code):
     context['language'] = language
     context['translations'] = video.translationlanguage_set.exclude(pk=language.pk)
     context['widget_params'] = \
-        _widget_params(request. video.get_video_url(), True)
+        _widget_params(request. video.get_video_url())
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
     
@@ -348,10 +349,10 @@ def diffing(request, first_pk, second_pk):
     context['latest_version'] = video.captions()
     context['widget0_params'] = \
         _widget_params(request, video.get_video_url(), 
-                       True, first_version.version_no)
+                       first_version.version_no)
     context['widget1_params'] = \
         _widget_params(request, video.get_video_url(),
-                       True, second_version.version_no)
+                       second_version.version_no)
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
 
