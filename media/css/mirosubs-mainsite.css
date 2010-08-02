@@ -2533,6 +2533,7 @@ border: 1px solid #fff;
 
 .user_panel{
 right: 0;
+display: none;
 top: 15px;
 font-size: 11px;
 position: absolute;
