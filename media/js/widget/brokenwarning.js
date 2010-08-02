@@ -58,11 +58,5 @@ mirosubs.BrokenWarning.prototype.enterDocument = function() {
 };
 
 mirosubs.BrokenWarning.needsWarning = function() {
-    var l = mirosubs.BrokenWarning.logger_;
-    l.info("User agent is IE: " + goog.userAgent.IE);
-    l.info("Version is: " + goog.userAgent.VERSION);
-    l.info("Is version 8: " + goog.userAgent.isVersion(8));
-    l.info("goog user agent string: " + goog.userAgent.getUserAgentString());
-    l.info("window user agent string: " + navigator.userAgent);
     return goog.userAgent.IE && !goog.userAgent.isVersion(8);
 };
