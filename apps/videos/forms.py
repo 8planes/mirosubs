@@ -41,7 +41,7 @@ class SubtitlesUploadForm(forms.Form):
     def clean_video(self):
         video = self.cleaned_data['video']
         if video.is_writelocked:
-            raise forms.ValidationError(_(u'Somebody add subtitles to video. Try later.'))
+            raise forms.ValidationError(_(u'Somebody is subtitling this video right now. Try later.'))
         if (not video.allow_community_edits and 
             video.owner != None and (self.user.is_anonymous() or 
                                      video.owner.pk != self.user.pk)):
