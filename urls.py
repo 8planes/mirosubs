@@ -27,8 +27,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    (r'^$', 'django.views.generic.simple.direct_to_template', 
-     {'template': 'index.html'}),
+    (r'^$', 'videos.views.index'),
     (r'^comments/', include('comments.urls', namespace='comments')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout', 
         kwargs={'next_page': '/'}),

@@ -35,6 +35,12 @@ from widget.views import base_widget_params
 from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
 
+def index(request):
+    context = widget.add_onsite_js_files({})
+    context['widget_params'] = _widget_params(request, 'http://subtesting.com/video/Usubs-IntroVideo.theora.ogg', None, '')
+    return render_to_response('index.html', context,
+                              context_instance=RequestContext(request))
+
 def create(request):
     if request.method == 'POST':
         video_form = VideoForm(request.POST, label_suffix="")
