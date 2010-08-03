@@ -72,7 +72,8 @@ class Command(BaseCommand):
         context = {
             'version': translation_version,
             'domain': self.domain,
-            'translation': True
+            'translation': True,
+            'video': translation_version.language.video
         }
         not_send = StopNotification.objects.filter(video=translation_version.language.video) \
             .values_list('user_id', flat=True)        
@@ -109,7 +110,8 @@ class Command(BaseCommand):
         context = {
             'version': caption_version,
             'domain': self.domain,
-            'translation': False
+            'translation': False,
+            'video': caption_version.video
         }
         not_send = StopNotification.objects.filter(video=caption_version.video) \
             .values_list('user_id', flat=True)         

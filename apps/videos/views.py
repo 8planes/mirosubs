@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion, ProxyVideo
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion, ProxyVideo, StopNotification
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
 import widget
 from django.contrib.sites.models import Site
@@ -433,3 +433,10 @@ def search(request):
                        template_name='videos/search.html',
                        template_object_name='result',
                        extra_context=context)   
+
+def stop_notification(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    StopNotification.objects.get_or_create(user=request.user, video=video)
+    context = dict(video=video)
+    return render_to_response('videos/stop_notification.html', context,
+                              context_instance=RequestContext(request))
