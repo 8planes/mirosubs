@@ -1761,16 +1761,19 @@ font-weight: bold !important;
 
 .mirosubs-twitter{
     background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+text-decoration: underline;
 }
 
 
 .mirosubs-facebook{
     background: url("../images/share_icons.png") 0 0px no-repeat !important;
+text-decoration: underline;
 }
 
 
 .mirosubs-friends{
     background: url("../images/share_icons.png") 0 -73px no-repeat !important;
+text-decoration: underline;
 }
 
 

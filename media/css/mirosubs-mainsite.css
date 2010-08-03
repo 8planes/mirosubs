@@ -422,8 +422,7 @@ background: url(../images/nav2.png) left -45px no-repeat;
 }
 
 
-.header .nav li.first a:active,
-#demo .header .nav li.first a{
+.header .nav li.first a:active{
 background: url(../images/nav2.png) left -89px no-repeat;
 }
 
@@ -1142,6 +1141,8 @@ background: url(../images/big_icons.png) -10px 13px no-repeat;
 
 .col1{
 margin-left: 20px;
+background: url(../images/widg_button.png) 0px 13px no-repeat;
+
 }
 
 .col1 h3, .col2 h3, .col3 h3{
@@ -2522,11 +2523,13 @@ border: 1px solid #fff;
 
 .mirosubs-twitter-share{
     background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+text-decoration: underline;
 }
 
 
 .mirosubs-facebook{
     background: url("../images/share_icons.png") 0 0px no-repeat !important;
+text-decoration: underline;
 }
 
 
