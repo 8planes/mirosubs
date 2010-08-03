@@ -933,6 +933,7 @@ margin: 20px 0 0 0px !important;
     font-weight: bold !important;
     text-align: center !important;
     font-size: 12px !important;
+min-width: 150px !important;
     text-decoration: none !important;
     border: 3px solid #90b60f !important;
     border-top: none !important;
