@@ -67,15 +67,8 @@
     var widgetConfig = 
         (new Function('return ' + script.innerHTML.replace(/\n|\r/g, '')))();
 
-    var containingElement = null;
-    var currentSibling = script.previousSibling;
-    while (containingElement == null) {
-        if (currentSibling.tagName &&
-            currentSibling.tagName.toLowerCase() == 'div')
-            containingElement = currentSibling;
-        else
-            currentSibling = currentSibling.previousSibling;
-    }
+    var $c = function(tag) { return document.createElement(tag); };
+    var containingElement = $c('div');
 
     if (/MSIE 6/i.test(navigator.userAgent)) {
         containingElement.innerHTML = 
@@ -83,10 +76,14 @@
             "Subtitles</a> doesn't " +
             "support your browser yet. Upgrade your browser or " +
             "<a href='http://getfirefox.com'>Try Firefox</a>.";
+        window.attachEvent(
+            'onload',
+            function(e) {
+                script.parentNode.insertBefore(containingElement, script);
+            });
         return;
     }
 
-    var $c = function(tag) { return document.createElement(tag); };
     var styleElement = $c('style');
     if ('textContent' in styleElement)
         styleElement.textContent = innerStyle;
@@ -102,25 +99,17 @@
     containingElement.appendChild(widgetDiv);
 
     var head = document.getElementsByTagName('head')[0];
-    if (typeof(mirosubs) != 'undefined' &&
-        typeof(mirosubs.widget) != 'undefined' &&
-        typeof(mirosubs.widget.CrossDomainEmbed) != 'undefined')
-        mirosubs.widget.CrossDomainEmbed.embed(widgetDiv, widgetConfig, siteConfig);
-    else {
-        if (!window.MiroSubsLoading) {
-            window.MiroSubsLoading = true;
-            for (var i = 0; i < scriptsToLoad.length; i++) {
-                var curScript = $c('script');
-                curScript.type = 'text/javascript';
-                curScript.src = scriptsToLoad[i];
-                curScript.charset = 'UTF-8';
-                head.appendChild(curScript);
-            }
+    if (typeof(mirosubs) == 'undefined' && !window.MiroSubsLoading) {
+        window.MiroSubsLoading = true;
+        for (var i = 0; i < scriptsToLoad.length; i++) {
+            var curScript = $c('script');
+            curScript.type = 'text/javascript';
+            curScript.src = scriptsToLoad[i];
+            curScript.charset = 'UTF-8';
+            head.appendChild(curScript);
         }
-        if (typeof(MiroSubsToEmbed) == 'undefined')
-            window.MiroSubsToEmbed = [];
-        window.MiroSubsToEmbed.push([widgetDiv, widgetConfig, siteConfig]);
     }
+
     if (!window.MiroCSSLoading) {
         window.MiroCSSLoading = true;
         var css = $c('link');
@@ -129,5 +118,49 @@
         css.href = '{{MEDIA_URL}}css/mirosubs-widget.css';
         css.media = 'screen';
         head.appendChild(css);
+    }
+
+    var insertCalled = false;
+
+    var insert = function() {
+        if (insertCalled)
+            return;
+        insertCalled = true;
+        script.parentNode.insertBefore(containingElement, script);
+        if (typeof(mirosubs) != 'undefined' &&
+            typeof(mirosubs.widget) != 'undefined' &&
+            typeof(mirosubs.widget.CrossDomainEmbed) != 'undefined')
+            mirosubs.widget.CrossDomainEmbed.embed(widgetDiv, widgetConfig, siteConfig);
+        else {
+            if (typeof(MiroSubsToEmbed) == 'undefined')
+                window.MiroSubsToEmbed = [];
+            window.MiroSubsToEmbed.push([widgetDiv, widgetConfig, siteConfig]);
+        }
+    }
+
+    if (!document.attachEvent)
+        insert(); // not IE
+    else {
+        // IE
+        document.attachEvent("onreadystatechange", function() {
+            if (document.readyState == "complete") {
+                document.detachEvent("onreadystatechange", arguments.callee);
+                insert();
+            }
+        });
+        if (document.documentElement.doScroll && window == window.top)
+            (function() {
+                if (insertCalled)
+                    return;
+                try {
+                    // Thanks to Diego Perini: http://javascript.nwbox.com/IEContentLoaded/
+                    document.documentElement.doScroll('left');
+                }
+                catch (error) {
+                    setTimeout(arguments.callee, 0);
+                    return;
+                }
+                insert();
+            })();
     }
 })();
