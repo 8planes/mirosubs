@@ -4,6 +4,7 @@
 
 {% block css %}
     {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
     <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
 {% endblock %}
 
@@ -157,18 +158,25 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
   
   <div id="how-to-video-ogg" style="display: none" width="720" height="540">
      <div class="padding">
-        {% widget widget_params %}     
+        <div id="widget_div"></div>
     </div>
   </div>
+
+<script type="text/javascript">
+  var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
+  document.getElementById('widget_div'), 
+  { "base_state": {}, "video_url": "http://subtesting.com/video/Usubs-IntroVideo.theora.ogg" });
+</script>
+
   
   <div id="how-to-video-flash" style="display: none" width="720" height="540">
      <div class="padding">
-        <object width="480" height="385">
-            <param name="movie" value="http://www.youtube.com/v/ifmKnbWJDZY&amp;hl=en&amp;fs=1"></param>
-            <param name="allowFullScreen" value="true"></param>
-            <param name="allowscriptaccess" value="always"></param>
-            <embed src="http://www.youtube.com/v/ifmKnbWJDZY&amp;hl=en&amp;fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed>
-        </object>
+       <object width="480" height="385">
+         <param name="movie" value="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1"></param>
+         <param name="allowFullScreen" value="true"></param>
+         <param name="allowscriptaccess" value="always"></param>
+         <embed src="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed>
+       </object>
      </div>
   </div>
   
