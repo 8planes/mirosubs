@@ -66,6 +66,7 @@ mirosubs.subtitle.SharePanel.prototype.createEmbedSection_ = function($d, $t) {
 
     var flashSpan = $d('span');
     flashSpan.innerHTML = mirosubs.Clippy.getHTML(embedCode);
+    this.getElement().appendChild($d('h3', null, 'Embed this video in your site'));
     this.getElement().appendChild($d('p', 'mirosubs-embed',
                                      this.embedCodeInput_,
                                      flashSpan));
