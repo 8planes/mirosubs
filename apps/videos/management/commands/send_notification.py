@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from videos.models import VideoCaptionVersion, TranslationVersion
+from videos.models import VideoCaptionVersion, TranslationVersion, StopNotification
 from django.conf import settings
 from datetime import datetime, timedelta
 from videos.utils import send_templated_email
@@ -33,15 +33,18 @@ class Command(BaseCommand):
                     self.send_letter_translation(version)
     
     def _get_users(self, version):
+        not_send = StopNotification.objects.filter(video=version.language.video) \
+            .values_list('user_id', flat=True)
         users = []
         owner = version.language.video.owner
-        if not owner == version.user and owner.changes_notification:
+        if not owner == version.user and owner.changes_notification and not owner.id in not_send:
             users.append(owner)
         qs = TranslationVersion.objects.filter(language=version.language) \
             .filter(version_no__lt=version.version_no).order_by('-version_no')
         for item in qs:
             user = item.user
-            if not user == version.user and not user in users and user.changes_notification:
+            if not user == version.user and not user in users and user.changes_notification \
+                and not user.id in not_send:
                 users.append(user)
         return users
      
@@ -71,10 +74,12 @@ class Command(BaseCommand):
             'domain': self.domain,
             'translation': True
         }
+        not_send = StopNotification.objects.filter(video=translation_version.language.video) \
+            .values_list('user_id', flat=True)        
         users = []
         for item in qs:
             if not translation_version.user == item.user and item.user.changes_notification \
-                                                    and not item.user in users:
+                and not item.user in users and not item.user.id in not_send:
                 users.append(item.user)
                 
                 second_captions = dict([(c.caption_id, c) for c in item.captions()])
@@ -106,10 +111,12 @@ class Command(BaseCommand):
             'domain': self.domain,
             'translation': False
         }
+        not_send = StopNotification.objects.filter(video=caption_version.video) \
+            .values_list('user_id', flat=True)         
         users = []
         for item in qs:
             if not caption_version.user == item.user and item.user.changes_notification \
-                                                    and not item.user in users:
+                and not item.user in users and not item.user.id in not_send:
                 users.append(item.user)
                 context['user'] = item.user
                 context['old_version'] = item

@@ -793,3 +793,7 @@ class ProxyVideo(Video):
     @classmethod
     def get(cls, video):
         return cls(pk=video.pk)
+
+class StopNotification(models.Model):
+    video = models.ForeignKey(Video)
+    user = models.ForeignKey(User)
