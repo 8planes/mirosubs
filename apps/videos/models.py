@@ -414,8 +414,11 @@ class VideoCaptionVersion(VersionModel):
         new_captions = self.captions()
         captions_length = len(new_captions)
 
-        if not old_version or not captions_length:
-            #if it's first version set changes to 0
+        if not old_version:
+            #if it's first version set changes to 100
+            self.time_change = 100
+            self.text_change = 100          
+        elif not captions_length:
             self.time_change = 0
             self.text_change = 0
         else:
@@ -587,8 +590,9 @@ class TranslationVersion(VersionModel):
         captions_length = len(new_captions)
         
         self.time_change = 0
-        if not old_version or not captions_length:
-            #if it's first version set changes to 0
+        if not old_version:
+            self.text_change = 100
+        elif not captions_length:
             self.text_change = 0
         else:
             old_captions = dict([(item.caption_id, item) for item in old_version.captions()])
@@ -840,3 +844,7 @@ class ProxyVideo(Video):
     @classmethod
     def get(cls, video):
         return cls(pk=video.pk)
+
+class StopNotification(models.Model):
+    video = models.ForeignKey(Video)
+    user = models.ForeignKey(User)
