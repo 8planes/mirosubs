@@ -54,8 +54,13 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
         else
             throw new Error("Cannot parse youtube url " + videoURL);
     }
-    else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL))
+    else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL)) {
+        // file/get/ paths from blip.tv are direct file accesses,
+        // so give them an Html5VideoSource
+        if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv\/file\/get\//.test(videoURL))
+            return new mirosubs.video.Html5VideoSource(videoURL);
         return null;
+    }
     else {
         // TODO: maybe check this in the future.
         return new mirosubs.video.Html5VideoSource(videoURL);
