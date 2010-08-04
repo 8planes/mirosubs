@@ -61,7 +61,7 @@ H2 {
 }
 
 
-#meeting_goals, #participants, #meeting_when, #meeting_where, #organizers, #why_meet {
+#meeting_goals, #participants, #when_where, #organizers, #why_meet {
     margin-bottom: 40px;
 }
 
@@ -104,12 +104,7 @@ H2 {
     padding-right: 20px;    
 }
 
-
  H3 {
     color: #222222;
     font-size: 13px;
-}
-
-#special_thanks {
-    margin-top: 30px;
 }
