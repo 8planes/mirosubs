@@ -22,5 +22,7 @@ urlpatterns = patterns(
     'auth.views',
     url(r'^login/$', 'login', name='login'),
     url(r'^create_user/$', 'create_user', name='create_user'),
-    url(r'^login_post/$', 'login_post', name='login_post')
+    url(r'^login_post/$', 'login_post', name='login_post'),
+    url(r'^twitter_login/$', 'twitter_login', name='twitter_login'),
+    url(r'^twitter_login_done/$', 'twitter_login_done', name='twitter_login_done'),
 )
