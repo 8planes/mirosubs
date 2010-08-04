@@ -27,8 +27,7 @@ from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
-from vidscraper.sites import blip, google_video, fora, ustream, vimeo
-from youtube import get_video_id
+from vidscraper.sites import blip
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -37,18 +36,10 @@ NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
 VIDEO_TYPE_HTML5 = 'H'
 VIDEO_TYPE_YOUTUBE = 'Y'
 VIDEO_TYPE_BLIPTV = 'B'
-VIDEO_TYPE_GOOGLE = 'G'
-VIDEO_TYPE_FORA = 'F'
-VIDEO_TYPE_USTREAM = 'U'
-VIDEO_TYPE_VIMEO = 'V'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
     (VIDEO_TYPE_YOUTUBE, 'Youtube'),
-    (VIDEO_TYPE_BLIPTV, 'Blip.tv'),
-    (VIDEO_TYPE_GOOGLE, 'video.google.com'),
-    (VIDEO_TYPE_FORA, 'Fora.tv'),
-    (VIDEO_TYPE_USTREAM, 'Ustream.tv'),
-    (VIDEO_TYPE_VIMEO, 'Vimeo.com')
+    (VIDEO_TYPE_BLIPTV, 'Blip.tv')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
@@ -83,10 +74,7 @@ class Video(models.Model):
                                         related_name="writelock_owners")
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
-    is_subtitles = models.BooleanField(default=False)
-    # true iff user clicked "finish" at end of captioning process.
-    is_complete = models.BooleanField()
-        
+    
     def __unicode__(self):
         if self.title:
             return self.title
@@ -96,22 +84,6 @@ class Video(models.Model):
             return self.youtube_videoid
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return self.bliptv_fileid
-    
-    def title_display(self):
-        if self.title:
-            return self.title
-
-        url = self.video_url
-        url = url.strip('/')
-
-        if url.startswith('http://'):
-            url = url[7:]
-
-        parts = url.split('/')
-        if len(parts) > 1:
-            return 'http://%s/.../%s' % (parts[0], parts[-1])
-        else:
-            return self.video_url
     
     @models.permalink
     def search_page_url(self):
@@ -131,7 +103,10 @@ class Video(models.Model):
     def get_or_create_for_url(cls, video_url, user):
         parsed_url = urlparse(video_url)
         if 'youtube.com' in parsed_url.netloc:
-            yt_video_id = get_video_id(video_url)
+            try:
+                yt_video_id = parse_qs(parsed_url.query)['v'][0]
+            except KeyError:
+                yt_video_id = parsed_url.path.strip('/').split('/')[-1]
             video, created = Video.objects.get_or_create(
                 youtube_videoid=yt_video_id,
                 defaults={'owner': user,
@@ -142,7 +117,7 @@ class Video(models.Model):
                 entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
                 video.title = entry.media.title.text
                 video.save()
-        elif 'blip.tv' in parsed_url.netloc and blip.BLIP_REGEX.match(video_url):
+        elif 'blip.tv' in parsed_url.netloc:
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(
                 bliptv_fileid=bliptv_fileid,
@@ -153,33 +128,6 @@ class Video(models.Model):
                 video.title = blip.scrape_title(video_url)
                 video.bliptv_flv_url = blip.scrape_file_url(video_url)
                 video.save()
-        elif 'video.google.com' in parsed_url.netloc and google_video.GOOGLE_VIDEO_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=video_url,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_GOOGLE,
-                          'allow_community_edits': True})
-            if created:
-                video.title = google_video.scrape_title(video_url)
-                video.save()
-        elif 'fora.tv' in parsed_url.netloc and fora.FORA_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=fora.scrape_flash_enclosure_url(video_url),
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_FORA,
-                          'allow_community_edits': True})
-            if created:
-                video.title = fora.scrape_title(video_url)
-                video.save()            
-        elif 'ustream.tv' in parsed_url.netloc and ustream.USTREAM_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=ustream.get_flash_enclosure_url(video_url),
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_USTREAM,
-                          'allow_community_edits': True})
-            if created:
-                video.title = ustream.get_title(video_url)
-                video.save()              
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
@@ -197,13 +145,7 @@ class Video(models.Model):
             return 'youtube_{0}.srt'.format(self.youtube_videoid)
         else:
             return 'bliptv_{0}.srt'.format(self.bliptv_fileid)
-    
-    def lang_filename(self, lang):
-        name = self.srt_filename
-        if lang:
-            return '%s.%s' % (name[:-4], lang)
-        return name         
-    
+
     @property
     def caption_state(self):
         """Subtitling state for this video 
@@ -215,7 +157,7 @@ class Video(models.Model):
         video_captions = self.videocaptionversion_set.all()
         if video_captions.count() == 0:
             return NO_CAPTIONS
-        if self.is_complete:
+        if video_captions.filter(is_complete__exact=True).count() > 0:
             return CAPTIONS_FINISHED
         else:
             return CAPTIONS_IN_PROGRESS
@@ -273,9 +215,7 @@ class Video(models.Model):
         # FIXME: this should be private and static 
         # (no need for ref to self)
         subtitles = subtitle_set.videocaption_set.all()
-        translations = []
-        if translation_set is not None:
-            translations = translation_set.translation_set.all()
+        translations = translation_set.translation_set.all()
         translations_dict = dict([(trans.caption_id, trans) for
                                   trans in translations])
         return [(subtitle,
@@ -315,7 +255,7 @@ class Video(models.Model):
         if self.writelock_owner == None:
             return "anonymous"
         else:
-            return self.writelock_owner.__unicode__()
+            return self.writelock_owner.username
 
     @property
     def is_writelocked(self):
@@ -399,6 +339,8 @@ class VideoCaptionVersion(VersionModel):
     changes for this session."""
     video = models.ForeignKey(Video)
     version_no = models.PositiveIntegerField(default=0)
+    # true iff user clicked "finish" at end of captioning process.
+    is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User)
     note = models.CharField(max_length=512, blank=True)
@@ -414,11 +356,8 @@ class VideoCaptionVersion(VersionModel):
         new_captions = self.captions()
         captions_length = len(new_captions)
 
-        if not old_version:
-            #if it's first version set changes to 100
-            self.time_change = 100
-            self.text_change = 100          
-        elif not captions_length:
+        if not old_version or not captions_length:
+            #if it's first version set changes to 0
             self.time_change = 0
             self.text_change = 0
         else:
@@ -464,28 +403,24 @@ class VideoCaptionVersion(VersionModel):
         latest_captions = self.video.captions()
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
-        new_version = cls(video=self.video, version_no=new_version_no, \
+        new_version = cls(video=self.video, version_no=new_version_no, is_complete=True, \
             datetime_started=datetime.now(), user=user, note=note)
         new_version.save()
         for item in self.captions():
             item.duplicate_for(new_version).save()
         return new_version
-
-def update_video_is_subtitled(sender, instance, created, **kwargs):
-    if instance.video.is_complete and not instance.video.is_subtitles:
-        instance.video.is_subtitles = True
-        instance.video.save()
-        
-post_save.connect(update_video_is_subtitled, VideoCaptionVersion)
                     
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
+    # true iff user clicked "finish" at end of captioning process.
+    is_complete = models.BooleanField()
 
 class NullTranslations(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
     language = models.CharField(max_length=16, choices=LANGUAGES)
+    is_complete = models.BooleanField()
 
 # TODO: make TranslationLanguage unique on (video, language)
 class TranslationLanguage(models.Model):
@@ -498,9 +433,7 @@ class TranslationLanguage(models.Model):
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True)
-    # true iff user has clicked "finish" in translating process.
-    is_complete = models.BooleanField()
-    
+
     # TODO: These methods are duplicated from Video, 
     # since they're both lockable. Fix the duplication.
     @property
@@ -508,7 +441,7 @@ class TranslationLanguage(models.Model):
         if self.writelock_owner == None:
             return "anonymous"
         else:
-            return self.writelock_owner.__unicode__()
+            return self.writelock_owner.username
 
     @models.permalink
     def search_page_url(self):
@@ -525,7 +458,7 @@ class TranslationLanguage(models.Model):
     @property
     def percent_done(self):
         try:
-            translation_count = len(self.translations().captions())
+            translation_count = self.translations().captions().count()
         except AttributeError:
             translation_count = 0
         captions_count = self.video.captions().captions().count()
@@ -575,6 +508,8 @@ class TranslationVersion(VersionModel):
     language = models.ForeignKey(TranslationLanguage)
     version_no = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User)
+    # true iff user has clicked "finish" in translating process.
+    is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
@@ -587,9 +522,8 @@ class TranslationVersion(VersionModel):
         captions_length = len(new_captions)
         
         self.time_change = 0
-        if not old_version:
-            self.text_change = 100
-        elif not captions_length:
+        if not old_version or not captions_length:
+            #if it's first version set changes to 0
             self.text_change = 0
         else:
             old_captions = dict([(item.caption_id, item) for item in old_version.captions()])
@@ -613,24 +547,7 @@ class TranslationVersion(VersionModel):
         return self.language.video
     
     def captions(self):
-        qs = self.translation_set.all()
-        output = []
-        not_empty = False
-        for item in qs:
-            if item.translation_text or not_empty:
-                output.append(item)
-                not_empty = True
-        output.reverse()
-        
-        j = 0
-        for i, item in enumerate(output):
-            j = i
-            if item.translation_text:
-                break
-        output = output[j:]
-        output.reverse()
-        
-        return output
+        return self.translation_set.all()
 
     def prev_version(self):
         cls = self.__class__
@@ -653,7 +570,7 @@ class TranslationVersion(VersionModel):
         latest_captions = self.language.translations()
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
-        new_version = cls(language=self.language, version_no=new_version_no,  \
+        new_version = cls(language=self.language, version_no=new_version_no, is_complete=True, \
             datetime_started=datetime.now(), user=user, note=note)
         new_version.save()
         for item in self.captions():
@@ -858,7 +775,3 @@ class ProxyVideo(Video):
     @classmethod
     def get(cls, video):
         return cls(pk=video.pk)
-
-class StopNotification(models.Model):
-    video = models.ForeignKey(Video)
-    user = models.ForeignKey(User)

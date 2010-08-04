@@ -28,9 +28,6 @@ mirosubs.BrokenWarning = function() {
 };
 goog.inherits(mirosubs.BrokenWarning, goog.ui.Dialog);
 
-mirosubs.BrokenWarning.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.BrokenWarning');
-
 mirosubs.BrokenWarning.prototype.createDom = function() {
     mirosubs.BrokenWarning.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());

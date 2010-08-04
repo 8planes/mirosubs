@@ -83,17 +83,13 @@ def update():
     Put the latest version of the code on the server and reload the app.
     """
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
-        python_exe = '{0}/env/bin/python'.format(env.base_dir)
         run('git pull')
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
-        run('{0} closure/compile.py'.format(python_exe))
-        run('{0} manage.py compile_embed {1} --settings=unisubs-settings'.format(
-                python_exe, media_dir))
+        run('{0}/env/bin/python closure/compile.py'.format(env.base_dir))
         if env.s3_bucket is not None:
-            run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
-                    media_dir, env.s3_bucket))
-        run('{0} deploy/create_commit_file.py'.format(python_exe))
+            run('/usr/local/s3sync/s3sync.rb -r -p -v {0}/mirosubs/media/ {1}:'.
+                format(env.base_dir, env.s3_bucket))
+        run('{0}/env/bin/python deploy/create_commit_file.py'.format(env.base_dir))
         run('touch deploy/unisubs.wsgi')

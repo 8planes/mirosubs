@@ -31,8 +31,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DEFAULT_FROM_EMAIL = 'feedback@universalsubtitles.org'
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -45,8 +43,7 @@ DATABASES = {
 }
 
 # 'embed{0}.js'.format(EMBED_JS_VERSION) gives the current embed script file name.
-EMBED_JS_VERSION = ''
-PREVIOUS_EMBED_JS_VERSIONS = []
+EMBED_JS_VERSION = '0008'
 
 JS_USE_COMPILED = False
 

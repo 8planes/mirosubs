@@ -47,7 +47,7 @@ mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
  */
 mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
     if (/^\s*https?:\/\/([^\.]+\.)?youtube/i.test(videoURL)) {
-        var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
+        var videoIDExtract = /v=([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
         if (videoIDExtract)
             return new mirosubs.video.YoutubeVideoSource(
                 videoIDExtract[1]);

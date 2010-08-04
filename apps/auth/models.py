@@ -1,7 +1,6 @@
 from django.contrib.auth.models import UserManager, User as BaseUser
 from django.db import models
 from django.conf.global_settings import LANGUAGES
-from django.db.models.signals import post_save
 
 class CustomUser(BaseUser):
     AUTOPLAY_ON_BROWSER = 1
@@ -27,11 +26,6 @@ class CustomUser(BaseUser):
         verbose_name = 'User'
         
     def __unicode__(self):
-        if self.first_name:
-            if self.last_name:
-                return self.get_full_name()
-            else:
-                return self.first_name
         return self.username
     
     @property
@@ -47,16 +41,6 @@ class CustomUser(BaseUser):
         unique_checks, date_checks = super(CustomUser, self)._get_unique_checks(exclude)
         unique_checks.append((CustomUser, ('email',)))
         return unique_checks, date_checks
-
-def create_custom_user(sender, instance, created, **kwargs):
-    if created:
-        values = {}
-        for field in sender._meta.local_fields:
-            values[field.attname] = getattr(instance, field.attname)
-        user = CustomUser(**values)
-        user.save()
-        
-post_save.connect(create_custom_user, BaseUser)
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (

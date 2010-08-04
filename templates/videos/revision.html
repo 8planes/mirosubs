@@ -66,7 +66,7 @@
         <div class="viewing_old">
             This is an old revision of {% if version.language %}{{ version.language.get_language_display }}
             {% else %}original{% endif %} language subtitles for "{{ video }}", 
-            as edited by {{ version.user }} at {{ version.datetime_started|date:"H:i, j F Y" }}. It may
+            as edited by {{ version.user.username }} at {{ version.datetime_started|date:"H:i, j F Y" }}. It may
             differ significantly from the current revision.
         </div>
     {% endif %}

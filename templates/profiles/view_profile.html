@@ -76,7 +76,7 @@
             {% if can_edit %}<a href="{% url profiles:my_profile %}">(Edit profile)</a>{% endif %}
         </h2>
         <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}">
-        <h3>{{ user_info }}</h3>
+        <h3>{{ user_info.username }}</h3>
         <p>Preferred Language: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
         <p>Homepage: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
         {% if user.is_authenticated and not user == user_info and user_info.email %}
@@ -86,7 +86,7 @@
     
     <div class="right_column">
         <br />
-        <h3>About {{ user_info }}</h3>
+        <h3>About {{ user_info.username }}</h3>
         <p class="user_bio">{{ user_info.biography }}</p>
     </div>
     
@@ -95,7 +95,7 @@
     {% if user.is_authenticated and not user == user_info and user_info.email %}
     <div id="send_message" style="display: none">
       <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  
-         <h3>Send {{ user_info }} a Message</h3>
+         <h3>Send {{ user_info.username }} a Message</h3>
          {% csrf_token %}
          <input type="hidden" name="user" value="{{ user_info.id }}"/>
          <div class="success-message" style="display: none">

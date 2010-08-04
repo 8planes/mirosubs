@@ -99,13 +99,12 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     vidPlayer.getElement().appendChild(this.howToImage_);
     this.addChild(vidPlayer, true);
     vidPlayer.getElement().className = 'mirosubs-howto-videocontainer';
-    var videoSize;
     if (this.usingHtml5Video_) {
         var viewportSize = goog.dom.getViewportSize();
         var videoTop = 
             Math.max(0, goog.style.getClientLeftTop(
                 this.videoPlayer_.getElement()).y);
-        videoSize = mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
+        var videoSize = mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
         if (videoTop + videoSize.height > viewportSize.height - 60) {
             var newVideoHeight = 
                 Math.max(270, viewportSize.height - videoTop - 60);
@@ -115,11 +114,9 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
                 newVideoWidth, newVideoHeight);
         }
         this.videoPlayer_.setVideoSize(videoSize.width, videoSize.height);
+        goog.style.setSize(vidPlayer.getElement(), videoSize.width, videoSize.height);
+        goog.style.setSize(this.howToImage_, videoSize.width, videoSize.height);
     }
-    else
-        videoSize = this.videoPlayer_.getVideoSize();
-    goog.style.setSize(vidPlayer.getElement(), videoSize.width, videoSize.height);
-    goog.style.setSize(this.howToImage_, videoSize.width, videoSize.height);
 };
 
 mirosubs.HowToVideoPanel.prototype.enterDocument = function() {

@@ -41,7 +41,7 @@ class SubtitlesUploadForm(forms.Form):
     def clean_video(self):
         video = self.cleaned_data['video']
         if video.is_writelocked:
-            raise forms.ValidationError(_(u'Somebody is subtitling this video right now. Try later.'))
+            raise forms.ValidationError(_(u'Somebody add subtitles to video. Try later.'))
         if (not video.allow_community_edits and 
             video.owner != None and (self.user.is_anonymous() or 
                                      video.owner.pk != self.user.pk)):
@@ -54,8 +54,7 @@ class SubtitlesUploadForm(forms.Form):
         subtitles = self.cleaned_data['subtitles']
         if subtitles.size > 1024*1024:
             raise forms.ValidationError(_(u'File size should be less 1Mb'))
-        parts = subtitles.name.split('.')
-        if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml']:
+        if not subtitles.name.split('.')[-1] in ['srt', 'ass', 'ssa', 'xml']:
             raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .ass or .xml(TTML  format)'))
         if not self._get_parser(subtitles.name)(subtitles.read()):
             raise forms.ValidationError(_(u'Incorrect subtitles format'))
@@ -63,7 +62,7 @@ class SubtitlesUploadForm(forms.Form):
         return subtitles
     
     def _get_parser(self, filename):
-        end = filename.split('.')[-1].lower()
+        end = filename.split('.')[-1]
         if end == 'srt':
             return SrtSubtitleParser
         if end in ['ass', 'ssa']:
@@ -87,7 +86,7 @@ class SubtitlesUploadForm(forms.Form):
         version = VideoCaptionVersion(
             video=video, version_no=version_no, 
             datetime_started=datetime.now(), user=self.user,
-            note='Uploaded')
+            is_complete=True)
         version.save()
         
         text = subtitles.read()
@@ -105,7 +104,6 @@ class SubtitlesUploadForm(forms.Form):
             caption.save()
         
         video.release_writelock()
-        video.is_complete = True
         video.save()
         
     def get_errors(self):

@@ -25,8 +25,7 @@ goog.provide('mirosubs.UserSettings');
 mirosubs.UserSettings = {};
 
 mirosubs.UserSettings.Settings = {
-    SKIP_HOWTO_VIDEO: 'skiphowto',
-    VIDEO_SPEED_MODE: 'videospeedmode'
+    SKIP_HOWTO_VIDEO: 'skiphowto'
 };
 
 mirosubs.UserSettings.setBooleanValue = function(setting, value) {
@@ -39,16 +38,4 @@ mirosubs.UserSettings.getBooleanValue = function(setting) {
         return goog.net.cookies.get(setting) == "1";
     else
         return false;
-};
-
-mirosubs.UserSettings.setStringValue = function(setting, value) {
-    if (goog.net.cookies.isEnabled())
-        goog.net.cookies.set(setting, value, 86400 * 365 * 2);
-};
-
-mirosubs.UserSettings.getStringValue = function(setting) {
-    if (goog.net.cookies.isEnabled())
-        return goog.net.cookies.get(setting);
-    else
-        return null;
 };

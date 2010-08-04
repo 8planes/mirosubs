@@ -19,7 +19,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib.sites.models import Site
-from widget.srt_subs import TTMLSubtitles
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -27,9 +26,11 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    (r'^$', 'videos.views.index'),
+    (r'^$', 'django.views.generic.simple.direct_to_template', 
+     {'template': 'index.html'}),
     (r'^comments/', include('comments.urls', namespace='comments')),
-    url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
+    url(r'^logout/', 'django.contrib.auth.views.logout', name='logout', 
+        kwargs={'next_page': '/'}),
     url(r'^admin/password_reset/$', 
         'django.contrib.auth.views.password_reset', 
         name='password_reset'),
@@ -40,7 +41,7 @@ urlpatterns = patterns(
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^embed(\d*).js$', 'widget.views.embed'),
+    (r'^embed.js$', 'widget.views.embed'),
     (r'^widget_demo/$', 'widget.views.widget_demo'),
     (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
     url(r'^onsite_widget/$', 'widget.views.onsite_widget', name='onsite_widget'),
@@ -53,9 +54,7 @@ urlpatterns = patterns(
     (r'^widget/close_window/$', 
      'django.views.generic.simple.direct_to_template', 
      {'template' : 'widget/close_window.html'}),
-    url(r'^widget/download_srt/$', 'widget.views.srt', name='download_srt'),
-    url(r'^widget/download_ssa/$', 'widget.views.download_subtitles', name='download_ssa'),
-    url(r'^widget/download_ttml/$', 'widget.views.download_subtitles', {'handler': TTMLSubtitles}, name='download_ttml'),
+    (r'^widget/download_srt/$', 'widget.views.srt'),
     (r'^widget/download_null_srt/$', 'widget.views.null_srt'),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),

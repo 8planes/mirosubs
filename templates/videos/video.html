@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load escapejs widget comments recent_activity paginator i18n %}
+{% load escapejs widget comments recent_activity paginator %}
 
 {% block css %}
     {{ block.super }}
@@ -24,23 +24,9 @@
             border: #666;
         }
     </style>
-
-    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
-    <style>
-        .error_list {
-            color: #fa6343;
-        }
-        
-        .success-message {
-            color: #5ae26b;
-            margin: 5px 0 0;
-        }
-    </style>
 {% endblock %}
 
 {% block scripts %}
-
-
     {% include "widget/_js_onsite_dependencies.html" %}
     {{ block.super }}
     <script type="text/javascript">
@@ -77,50 +63,37 @@
                 return false;
             });
         });
-    </script>  
-    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
-{% endblock %}
-
-{% block title %}
-    {{ video.title_display }} | Universal Subtitles
+    </script>   
 {% endblock %}
 
 {% block main_content %}
     <div class="left_column">
         {% if video.title %}
-            <h2 class="floatleft">{{ video.title }}</h2>
+            <h2>{{ video.title }}</h2>
         {% endif %}
         {% widget widget_params %}
     </div>
     
     <div class="right_column">
-        {% include '_sharing_widget.html' %}
+        {% include '_testing_widget.html' %}
+        {% if not video.captions %}
+        <a class="button" id="add_subtitles" href="#"><span>Add Subtitles</span></a>
+        {% else %}
+        <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
+        {% endif %}
     </div>
-
     <div class="clearboth">&nbsp;</div>
     
-    <div class="sub_actions">
-      {% if not video.captions %}
-      <a class="button" id="add_subtitles" href="#"><span>Add Subtitles</span></a>
-      {% else %}
-      <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
-      {% endif %}    
-
-      <div class="up_down">
-      {% with translations|length as has_translations %}
-          {% include 'videos/_upload_subtitles.html' %}
-      {% endwith %}
-      </div>
-    </div>
-
-
     <ul class="video_tabs">
       <li class="active"><a href="#languages-tab">Languages ({{ translations|length }})</a></li>
       <li><a href="#comments-tab">Comments ({% get_comment_count video %})</a></li>
       <li><a href="#activity-tab">Activity stream</a></li>
     </ul>
+
+    {% with translations|length as has_translations %}
+        {% include 'videos/_upload_subtitles.html' %}
+    {% endwith %}
     
-   
     <div id="languages-tab" class="tab">
         {% if translations or video.captions %} 
             <ul class="table_head">
@@ -160,7 +133,7 @@
                 {% endfor %}            
             </ul>
         {% else %}
-            <p class="no_subs">{% trans 'No subtitles yet. Make some!' %}</p>
+            <p class="no_subs">This video has no subtitles yet.  Make some!</p>
         {% endif %}
         <div style="clear: both"></div>
     </div>

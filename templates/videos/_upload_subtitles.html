@@ -1,9 +1,5 @@
 {% if not has_translations %}
-    {% if user.is_authenticated %}
-        <a href="#" id="upload-subtitles-link">Upload subtitles</a>
-    {% else %}
-        <a href="{% url auth:login %}?next={{ request.path_info }}">Login to upload subtitles</a>
-    {% endif %}
+    <a href="#" id="upload-subtitles-link">Upload subtitles</a>
     <div id="upload-subtitles-div" style="display: none">
         <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data" >
             {% csrf_token %}
@@ -11,43 +7,14 @@
             <input type="file" name="subtitles" id="subtitles-file-field"/>
             <input type="submit" value="Upload"/>
         </form>
-
-
-
-<a href="#upload_subs" id="upload-subtitles-link" class="upload">Upload Subtitles</a>
-
-
-<div id="upload_subs" style="display: none">
-
-    <h3>Upload Subtitles</h3>
-
-    <div class="padding">
-        <p>
-            Our site accepts SRT, SSA, and TTML format. (Additional
-            information here on whether files need certain extensions or
-            whatever). If you believe your subtitle file is compatible, 
-            <a href="mailto:feedback@universalsubtitles.org">send it to us</a>
-        </p>
-        <br />
-        <div id="upload-subtitles-div">
-            <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="video" value="{{ video.id }}" />
-                <input type="file" name="subtitles" id="subtitles-file-field" />
-                <button type="submit" value="Upload"><span>Upload</span></button>
-            </form>
-        </div>
-
     </div>
-</div>
-
-
     <script type="text/javascript">
-        (function($){
+        jQuery(document).ready(function($){
             var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}'
-
-            $('#subtitles-file-field').change(function(){
-                $('#upload-subtitles-form').submit();
+            $('#upload-subtitles-link').click(function(){
+                $(this).hide();
+                $('#upload-subtitles-div').show();
+                return false;
             });
             
             $('#upload-subtitles-form').ajaxForm({
@@ -71,15 +38,6 @@
                     $('p.error_list', $Form).remove();
                 }
             });
-         })(jQuery);
+        });        
     </script>
-    <script type="text/javascript">
-        jQuery(function(){
-            $.nyroModalSettings({
-                minWidth: 460,
-                minHeight: 250
-            }); 
-            $('.upload').nyroModal();
-          });
-    </script>    
 {% endif %}
