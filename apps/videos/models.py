@@ -526,7 +526,7 @@ class TranslationLanguage(models.Model):
     @property
     def percent_done(self):
         try:
-            translation_count = self.translations().captions().count()
+            translation_count = len(self.translations().captions())
         except AttributeError:
             translation_count = 0
         captions_count = self.video.captions().captions().count()
@@ -616,7 +616,24 @@ class TranslationVersion(VersionModel):
         return self.language.video
     
     def captions(self):
-        return self.translation_set.all()
+        qs = self.translation_set.all()
+        output = []
+        not_empty = False
+        for item in qs:
+            if item.translation_text or not_empty:
+                output.append(item)
+                not_empty = True
+        output.reverse()
+        
+        j = 0
+        for i, item in enumerate(output):
+            j = i
+            if item.translation_text:
+                break
+        output = output[j:]
+        output.reverse()
+        
+        return output
 
     def prev_version(self):
         cls = self.__class__
