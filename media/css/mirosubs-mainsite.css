@@ -44,11 +44,29 @@ margin: 50px auto 80px;
 }
 
 
+
+.styled{
+border: 1px solid #aaa;;
+background: #fff;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+}
+
+.styled .head{
+background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
+}
+
+
 /*/////////////////////////////////////////////
 
 ~ Classes
 
 /////////////////////////////////////////////*/
+
+
+.marginleft{
+margin-left: 30px;
+}
 
 
 
@@ -404,8 +422,7 @@ background: url(../images/nav2.png) left -45px no-repeat;
 }
 
 
-.header .nav li.first a:active,
-#demo .header .nav li.first a{
+.header .nav li.first a:active{
 background: url(../images/nav2.png) left -89px no-repeat;
 }
 
@@ -413,6 +430,28 @@ background: url(../images/nav2.png) left -89px no-repeat;
 .header .nav li a:active{
 background-position-y: -90px !important;
 }
+
+
+.sub_nav{
+float: right;
+clear: right;
+margin: 0;
+padding: 8px 0 0;
+}
+
+
+.sub_nav li{
+margin: 0;
+padding: 0;
+list-style: none;
+display: inline;
+font-size: 12px;
+padding-left: 10px;
+}
+
+
+
+
 
 
 
@@ -683,7 +722,7 @@ font-family: Arial, Helvetica, sans-serif;
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 button{
-padding:0 9px 0 0 !important;
+padding:0 8px 0 0 !important;
 }
 }
 
@@ -747,8 +786,14 @@ cursor: pointer
 background: url(../images/main_buttons.png) left -45px no-repeat;
 }
 
+
 .button:active span{
-background: url(../images/main_buttons.png) left -85px no-repeat;
+background: url(../images/main_buttons.png) left -90px no-repeat;
+}
+
+
+.button:active{
+background: url(../images/main_buttons.png) right -90px no-repeat;
 }
 
 
@@ -1096,6 +1141,8 @@ background: url(../images/big_icons.png) -10px 13px no-repeat;
 
 .col1{
 margin-left: 20px;
+background: url(../images/widg_button.png) 0px 13px no-repeat;
+
 }
 
 .col1 h3, .col2 h3, .col3 h3{
@@ -2132,9 +2179,9 @@ display: none;
 
 
 .video_tabs{
-clear: both;
+
 float: left;
-margin: 30px 0 0;
+margin: 50px 0 0;
 padding: 0;
 
 }
@@ -2220,7 +2267,12 @@ top:680px;
 
 /////////////////////////////////////////////*/
 
-form.message h3{
+form.message{
+margin: 0;
+}
+
+
+div#nyroModalWrapper h3{
 background: #fff url(../images/gradient.png) 0 0px repeat-x !important;
 padding: 15px;
 font-size: 14px;
@@ -2271,7 +2323,7 @@ float: left;
 
 form.message button{
 float: right;
-margin: 15px 15px 0;
+margin: 15px 15px 0 !important;
 }
 
 
@@ -2406,9 +2458,128 @@ border: 1px solid #aaa;
 
 
 
+
+.sub_actions{
+float: right;
+}
+
+.sub_actions .button{
+float: right;
+clear: none !important;
+margin:0 0 20px 20px;
+}
+
+
+.up_down{
+text-align: right;
+}
+
+
+.upload{
+padding-left: 15px;
+background: url(../images/updown.gif) left -1px no-repeat;
+padding-right: 5px;
+}
+
+.download{
+padding-left: 20px;
+background: url(../images/updown.gif) -165px -1px no-repeat;
+}
+
+
 .revision_buttons{
 height: 135px;
 }
+
+
+@media only screen and (max-device-width: 480px) {
+
+.wrapper{
+
+
+}
+
+
+
+}
+
+
+
+#upload-subtitles-form button{
+margin-left: 50px;
+}
+
+
+
+#upload-subtitles-form #subtitles-file-field{
+background: #444;
+padding: 3px !important;
+border: 1px solid #fff;
+}
+
+
+
+
+
+.mirosubs-twitter-share{
+    background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+text-decoration: underline;
+}
+
+
+.mirosubs-facebook{
+    background: url("../images/share_icons.png") 0 0px no-repeat !important;
+text-decoration: underline;
+}
+
+
+
+.user_panel{
+right: 0;
+display: none;
+top: 15px;
+font-size: 11px;
+position: absolute;
+}
+
+
+.user_panel a{
+text-decoration: none;
+padding-right: 10px;
+float: left;
+margin-top: 3px;
+margin-right: 10px;
+}
+
+.user_panel img{
+border: none;
+float: left;
+margin-right: 10px;
+}
+
+
+.points{
+background: url("../images/points.png") 0 1px no-repeat !important;
+padding-left: 15px;
+float: left;
+margin-top: 2px;
+margin-left: 0px;
+}
+
+
+.awards{
+background: url("../images/award.png") 0 1px no-repeat !important;
+padding-left: 15px;
+float: left;
+margin-left: 20px;
+margin-top: 2px;
+}
+
+
+#how-to-video-flash{
+width: 800px;
+}
+
 
 
 

@@ -25,6 +25,7 @@ import simplejson as json
 import widget
 from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
+from django.conf import settings
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
@@ -54,7 +55,7 @@ def show_widget(request, video_url, null_widget, base_state):
             translation_language_codes = []
         if null_captions is None:
             video_tab = 0
-        elif not null_captions.is_complete:
+        elif not null_captions.video.is_complete:
             video_tab = 1
         else:
             video_tab = 3
@@ -81,6 +82,7 @@ def show_widget(request, video_url, null_widget, base_state):
             base_state.get('revision', None))
     if request.user.is_authenticated:
         return_value['username'] = request.user.username
+    return_value['embed_version'] = settings.EMBED_JS_VERSION
     return return_value
 
 def start_editing(request, video_id, base_version_no=None):
@@ -271,9 +273,9 @@ def finished_captions(request, video_id, version_no, deleted, inserted, updated)
         return { "response" : "unlockable" }
     last_version = save_captions_impl(request, video, version_no, 
                                       deleted, inserted, updated)
-    last_version.is_complete = True
     last_version.save()
     video.release_writelock()
+    video.is_complete = True 
     video.save()
     return { "response" : "ok" }
 
@@ -283,8 +285,9 @@ def finished_captions_null(request, video_id, version_no, deleted, inserted, upd
     video = models.Video.objects.get(video_id=video_id)
     null_captions = save_captions_null_impl(request, video, version_no, 
                                             deleted, inserted, updated)
-    null_captions.is_complete = True
     null_captions.save()
+    null_captions.video.is_complete = True
+    null_captions.video.save()    
     return {'response':'ok'}
 
 def finished_translations(request, video_id, language_code, version_no, 
@@ -295,9 +298,9 @@ def finished_translations(request, video_id, language_code, version_no,
         return { 'response' : 'unlockable' }
     last_version = save_translations_impl(request, translation_language,
                                           version_no, inserted, updated)
-    last_version.is_complete = True
     last_version.save()
     translation_language.release_writelock()
+    translation_language.is_complete = True
     translation_language.save()
     video = models.Video.objects.get(video_id=video_id)
     return { 'response' : 'ok',
@@ -312,8 +315,9 @@ def finished_translations_null(request, video_id, language_code, version_no,
     video = models.Video.objects.get(video_id=video_id)
     null_translations = save_translations_null_impl(request, video, language_code, 
                                                     inserted, updated)
-    null_translations.is_complete = True
     null_translations.save()
+    null_translations.language.is_complete = True
+    null_translations.language.save()    
     video = models.Video.objects.get(video_id=video_id)
     return { 'response' : 'ok',
              'available_languages': 
@@ -374,10 +378,8 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
     else:
         current_version = models.VideoCaptionVersion(
             video=video, version_no=version_no, 
-            datetime_started=datetime.now(), user=request.user,
-            is_complete=False)
+            datetime_started=datetime.now(), user=request.user)
         if last_version != None:
-            current_version.is_complete = last_version.is_complete
             current_version.save()
             for caption in list(last_version.videocaption_set.all()):
                 current_version.videocaption_set.add(
@@ -429,10 +431,8 @@ def save_translations_impl(request, translation_language,
         current_version = models.TranslationVersion(language=translation_language, 
                                                     version_no=version_no,
                                                     user=request.user,
-                                                    is_complete=False,
                                                     datetime_started=datetime.now())
         if last_version != None:
-            current_version.is_complete = last_version.is_complete
             current_version.save()
             for translation in list(last_version.translation_set.all()):
                 current_version.translation_set.add(
@@ -477,6 +477,8 @@ def maybe_add_video_session(request):
 
 def autoplay_subtitles(request, video, null_widget, language, revision):
     params = { }
+    video.subtitles_fetched_count += 1
+    video.save()
     if language is not None:
         if null_widget:
             translations = \
@@ -493,6 +495,7 @@ def autoplay_subtitles(request, video, null_widget, language, revision):
             subtitles = list(video.null_captions(
                     request.user).videocaption_set.all())
         else:
-            subtitles = list(video.captions(revision).videocaption_set.all())
+            caption_version = video.captions(revision)
+            subtitles = [] if caption_version is None else list(caption_version.videocaption_set.all())
         return [subtitle.to_json_dict() 
                 for subtitle in subtitles]

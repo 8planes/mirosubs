@@ -23,6 +23,7 @@ mirosubs.Dialog = function(videoSource) {
     this.setBackgroundElementOpacity(0.8);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
+    this.setEscapeToCancel(false);
     this.controlledVideoPlayer_ = videoSource.createControlledPlayer();
     this.videoPlayer_ = this.controlledVideoPlayer_.getPlayer();
     this.timelinePanel_ = null;

@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion, ProxyVideo
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion, ProxyVideo, StopNotification
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
 import widget
 from django.contrib.sites.models import Site
@@ -34,6 +34,103 @@ from django.db.models import Q
 from widget.views import base_widget_params
 from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
+from vidscraper.errors import Error as VidscraperError
+from django.template.loader import render_to_string
+
+def index(request):
+    context = widget.add_onsite_js_files({})
+    context['widget_params'] = _widget_params(request, 'http://subtesting.com/video/Usubs-IntroVideo.theora.ogg', None, '')
+    return render_to_response('index.html', context,
+                              context_instance=RequestContext(request))
+
+def _make_facebook_url(link, title):
+    return "http://www.facebook.com/sharer.php?{0}".format(
+        urlencode({'u': link, 't': title}))
+
+def _make_twitter_url(message):
+    return "http://twitter.com/home/?{0}".format(
+        urlencode({'status': message}))
+
+def _make_email_url(message):
+    return "/videos/email_friend/?{0}".format(
+        urlencode({'text': message}))
+
+def _add_share_panel_context(context,
+                             facebook_url, twitter_url,
+                             embed_params,
+                             email_url, permalink):
+    context["share_panel_facebook_url"] = facebook_url
+    context["share_panel_twitter_url"] = twitter_url
+    context["share_panel_embed_code"] = render_to_string(
+        'videos/_offsite_widget.html',
+        {'embed_version': settings.EMBED_JS_VERSION,
+         'embed_params': embed_params,
+         'MEDIA_URL': settings.MEDIA_URL})
+    context["share_panel_email_url"] = email_url
+    context["share_panel_permalink"] = permalink
+
+def _share_video_title(video):
+    return "(\"{0}\") ".format(video.title) if video.title else ''
+
+def _add_share_panel_context_for_video(context, video):
+    home_page_url = "http://{0}{1}".format(
+        Site.objects.get_current().domain, 
+        reverse('videos:video', kwargs={'video_id':video.video_id}))
+    if video.captions() is not None:
+        twitter_fb_message = \
+            "Just found a version of this video with captions: {0}".format(
+            home_page_url)
+    else:
+        twitter_fb_message = \
+            "Check out this video and help make subtitles: {0}".format(
+            home_page_url)
+    email_message = \
+        "Hey-- check out this video {0}and help make subtitles: {1}".format(
+        _share_video_title(video), home_page_url)
+    _add_share_panel_context(
+        context,
+        _make_facebook_url(home_page_url, twitter_fb_message),
+        _make_twitter_url(twitter_fb_message),
+        { 'video_url': video.get_video_url() },
+        _make_email_url(email_message),
+        home_page_url)
+
+def _add_share_panel_context_for_history(context, video):
+    page_url = "http://{0}{1}".format(
+        Site.objects.get_current().domain,
+        reverse('videos:history', args=[video.video_id]))
+    twitter_fb_message = \
+        "Just found a version of this video with captions: {0}".format(page_url)
+    email_message = \
+        "Hey-- just found a version of this video {0}with captions: {1}".format(
+        _share_video_title(video), page_url)
+    _add_share_panel_context(
+        context,
+        _make_facebook_url(page_url, twitter_fb_message),
+        _make_twitter_url(twitter_fb_message),
+        { 'video_url': video.get_video_url(), 'base_state': {} },
+        _make_email_url(email_message),
+        page_url)
+
+def _add_share_panel_context_for_translation_history(context, video, language_code):
+    page_url = "http://{0}{1}".format(
+        Site.objects.get_current().domain,
+        reverse('videos:translation_history', 
+                args=[video.video_id, language_code]))
+    language_name = widget.LANGUAGES_MAP[language_code]
+    twitter_fb_message = \
+        "Just found a version of this video with {0} subtitles: {1}".format(
+        language_name, page_url)
+    email_message = \
+        "Hey-- just found a version of this video {0}with {1} subtitles: {2}".format(
+        _share_video_title(video), language_name, page_url)
+    _add_share_panel_context(
+        context,
+        _make_facebook_url(page_url, twitter_fb_message),
+        _make_twitter_url(twitter_fb_message),
+        { 'video_url': video.get_video_url(), 'base_state': { 'language': str(language_code) }},
+        _make_email_url(email_message),
+        page_url)
 
 def create(request):
     if request.method == 'POST':
@@ -41,7 +138,13 @@ def create(request):
         if video_form.is_valid():
             owner = request.user if request.user.is_authenticated() else None
             video_url = video_form.cleaned_data['video_url']
-            video, created = Video.get_or_create_for_url(video_url, owner)
+            try:
+                video, created = Video.get_or_create_for_url(video_url, owner)
+                
+            except VidscraperError:
+                vidscraper_error = True
+                return render_to_response('videos/create.html', locals(),
+                              context_instance=RequestContext(request))
             if created:
                 # TODO: log to activity feed
                 pass
@@ -75,22 +178,24 @@ def video(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
-    context['translations'] = video.translationlanguage_set.all()
-    context['widget_params'] = _widget_params(request, video.get_video_url(), True)
+    context['translations'] = video.translationlanguage_set \
+        .filter(translationversion__id__gt=0).distinct()
+    context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
+    _add_share_panel_context_for_video(context, video)
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
-                              
+
 def video_list(request):
     from django.db.models import Count
     try:
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.annotate(translation_count=Count('translationlanguage'))
+    qs = Video.objects.annotate(translation_count=Count('translationlanguage')) 
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
-    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count']
+    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count', 'is_subtitles']
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
@@ -123,6 +228,7 @@ def actions_list(request):
                        template_object_name='action',
                        extra_context=extra_context)    
 
+@login_required
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
@@ -148,7 +254,10 @@ def email_friend(request):
     link = request.GET.get('link', '')
     if link:
         text = link if not text else '%s\n%s' % (text, link) 
-    initial = dict(message=text)
+    from_email = ''
+    if request.user.is_authenticated():
+        from_email = request.user.email
+    initial = dict(message=text, from_email=from_email)
     if request.method == 'POST':
         form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s", label_suffix="")
         if form.is_valid():
@@ -186,10 +295,12 @@ def history(request, video_id):
 
     context['video'] = video
     context['site'] = Site.objects.get_current()
-    context['translations'] = TranslationLanguage.objects.filter(video=video)
+    context['translations'] = TranslationLanguage.objects.filter(video=video) \
+        .filter(translationversion__id__gt=0).distinct()
     context['last_version'] = video.captions()
-    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, '')
+    context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     context['commented_object'] = ProxyVideo.get(video)
+    _add_share_panel_context_for_history(context, video)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
@@ -220,10 +331,12 @@ def translation_history(request, video_id, lang):
     context['video'] = video
     context['language'] = language
     context['site'] = Site.objects.get_current()        
-    context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
+    context['translations'] = TranslationLanguage.objects.filter(video=video) \
+        .exclude(pk=language.pk).filter(translationversion__id__gt=0).distinct()
     context['last_version'] = video.translations(lang)
-    context['widget_params'] = _widget_params(request, video.get_video_url(), True, None, lang)
+    context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang)
     context['commented_object'] = language
+    _add_share_panel_context_for_translation_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
@@ -231,10 +344,8 @@ def translation_history(request, video_id, lang):
                        template_object_name='revision',
                        extra_context=context) 
 
-def _widget_params(request, video_url, hide_tab, version_no=None, language_code=None):
+def _widget_params(request, video_url, version_no=None, language_code=None):
     params = { 'video_url': video_url }
-    if hide_tab:
-        params['hide_tab'] = True
     if version_no is not None:
         base_state = { 'revision': version_no }
         if language_code is not None:
@@ -258,7 +369,7 @@ def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
         language = version.language.language
     context['widget_params'] = \
         _widget_params(request, version.video.get_video_url(),
-                       True, version.version_no, language)
+                       version.version_no, language)
     if cls == TranslationVersion:
         tpl = 'videos/translation_revision.html'
         context['latest_version'] = version.language.translations()
@@ -275,7 +386,7 @@ def last_revision(request, video_id):
     context['version'] = video.captions()
     context['translations'] = video.translationlanguage_set.all()
     context['widget_params'] = \
-        _widget_params(request, video.get_video_url(), True)
+        _widget_params(request, video.get_video_url())
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
 
@@ -289,14 +400,13 @@ def last_translation_revision(request, video_id, language_code):
     context['language'] = language
     context['translations'] = video.translationlanguage_set.exclude(pk=language.pk)
     context['widget_params'] = \
-        _widget_params(request. video.get_video_url(), True)
+        _widget_params(request. video.get_video_url())
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
     
 @login_required
 def rollback(request, pk, cls=VideoCaptionVersion):
     version = get_object_or_404(cls, pk=pk)
-    user = request.user
     is_writelocked = version.video.is_writelocked if (cls == VideoCaptionVersion) else version.language.is_writelocked
     if is_writelocked:
         messages.error(request, 'Can not rollback now, because someone is editing subtitles.')
@@ -341,10 +451,10 @@ def diffing(request, first_pk, second_pk):
     context['latest_version'] = video.captions()
     context['widget0_params'] = \
         _widget_params(request, video.get_video_url(), 
-                       True, first_version.version_no)
+                       first_version.version_no)
     context['widget1_params'] = \
         _widget_params(request, video.get_video_url(),
-                       True, second_version.version_no)
+                       second_version.version_no)
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
 
@@ -399,7 +509,7 @@ def test_form_page(request):
 
 def search(request):
     q = request.REQUEST.get('q')
-    print q
+
     try:
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
@@ -427,3 +537,10 @@ def search(request):
                        template_name='videos/search.html',
                        template_object_name='result',
                        extra_context=context)   
+
+def stop_notification(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    StopNotification.objects.get_or_create(user=request.user, video=video)
+    context = dict(video=video)
+    return render_to_response('videos/stop_notification.html', context,
+                              context_instance=RequestContext(request))

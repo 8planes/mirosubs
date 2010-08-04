@@ -82,7 +82,7 @@
     <div class="left_column">
         <h3 class="diff_title">
             Revision #{{ first_version.version_no }} - as of {{ first_version.datetime_started|date:"H:i, j F Y" }} 
-            by {{ first_version.user.username }}
+            by {{ first_version.user }}
         </h3>
         
         {% block first_navigation %}
@@ -135,7 +135,7 @@
     <div class="right_column">
         <h3 class="diff_title">
             Revision #{{ second_version.version_no }} - as of {{ second_version.datetime_started|date:"H:i, j F Y" }} 
-            by {{ second_version.user.username }}
+            by {{ second_version.user }}
         </h3>
         
         {% block second_navigation %}

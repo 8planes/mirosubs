@@ -1,0 +1,49 @@
+<script type="text/javascript">
+  function share_on_facebook(event) {
+      window.open('{{share_panel_facebook_url}}',
+                  'post_to_fb', 'status=0,width=560,height=320');
+      return false;
+  }
+</script>
+<div class="mirosubs-share">
+  <img src="{{MEDIA_URL}}images/blue_triangle.png" class="mirosubs-blueTriangle" />
+  <h2>Share your subtitles</h2>
+  
+  <p>Now everyone can watch the video with subtitles-- try it!<br />
+    Then tell the world and invite your friends to help translate:</p>
+  <ul>
+    <li class="mirosubs-facebook"><a href="#" onclick="return share_on_facebook(event);">Post to Facebook</a></li>
+    <li class="mirosubs-twitter-share"><a href="{{share_panel_twitter_url}}" target="post_to_twitter">Post to Twitter</a></li>
+    <li class="mirosubs-friends"><a href="{{share_panel_email_url}}" target="email_friends">Email to friends</a></li>
+  </ul>
+  <h3>Embed this video in your site</h3>
+  <p class="mirosubs-embed">
+    <textarea>{{share_panel_embed_code}}</textarea>
+    <span>
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+            width="110"
+            height="14"
+            id="clippy" >
+    <param name="movie" value="{{MEDIA_URL}}swf/clippy.swf"/>
+    <param name="allowScriptAccess" value="always" />
+    <param name="quality" value="high" />
+    <param name="scale" value="noscale" />
+    <param NAME="FlashVars" value="text={{share_panel_embed_code|urlencode}}"/>
+    <param name="bgcolor" value="#E4EFF3"/>
+    <embed src="{{MEDIA_URL}}swf/clippy.swf"
+           width="110"
+           height="14"
+           name="clippy"
+           quality="high"
+           allowScriptAccess="always"
+           type="application/x-shockwave-flash"
+           pluginspage="http://www.macromedia.com/go/getflashplayer"
+           FlashVars="text={{share_panel_embed_code|urlencode}}"
+           bgcolor="#E4EFF3"
+    />
+</object>
+    </span>
+  </p>
+  <h3>Permalink</h3>
+  <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
+</div>

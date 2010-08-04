@@ -1,16 +1,28 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="index"{% endblock %}
-{% load recent_activity %}
+{% load recent_activity widget %}
 
 {% block css %}
     {{ block.super }}
-    <link href="{{ MEDIA_URL }}css/prettyPhoto.css" media="all" type="text/css" rel="stylesheet" />
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
+
+    <style type="text/css">
+
+    </style>
+
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ MEDIA_URL }}js/jquery.prettyPhoto.js" type="text/javascript"></script>
+    {{ block.super }}
+    {% include "widget/_js_onsite_dependencies.html" %}
+    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function(){
+            $.nyroModalSettings({
+                minWidth: 570,
+                minHeight: 420              
+            }); 
             function supports_ogg_theora_video() {
               var v = document.createElement('video');
               return v.canPlayType && v.canPlayType('video/ogg; codecs="theora, vorbis"');
@@ -18,10 +30,7 @@
             if (supports_ogg_theora_video()){
                 $('a.how-to-video-image').attr('href', '#how-to-video-ogg');              
             };
-            $('a.how-to-video-image').prettyPhoto({
-                default_width: 425,
-                default_height: 344
-            });              
+            $('.how-to-video-image').nyroModal();
         });
     </script>
 {% endblock %}
@@ -50,7 +59,7 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
 		<p>A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos).</p>
 	</div>
 	<div class="col3">
-		<h3>Community Site</h3> 
+		<h3 class="alpha">Community Site</h3> 
 		<p>An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles).</p>
 	</div>
 	<div class="col2">
@@ -158,28 +167,26 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
   
   <div id="how-to-video-ogg" style="display: none" width="720" height="540">
      <div class="padding">
-        <video src="http://a52.video2.blip.tv/7390004349617/Miropcf-overviewtypingogg899.ogv" 
-             controls="controls"
-             width="720" height="540"
-             style="display: block">
-            Terribly sorry, but your browser doesn't support this video.      </video>
-     </div>
+        <div id="widget_div"></div>
+    </div>
   </div>
-  
-  <div id="how-to-video-flash" style="display: none" width="720" height="540">
-     <div class="padding">
-     
- <object width="425" height="344">
-          <param name="movie" value="http://www.youtube.com/v/2tP_NU9a5pE&hl=en&fs=1"></param>
-          <param name="allowFullScreen" value="true"></param>
-          <param name="allowscriptaccess" value="always"></param>
-          <embed src="http://www.youtube.com/v/2tP_NU9a5pE&hl=en&fs=1"
-                 type="application/x-shockwave-flash" allowscriptaccess="always"
-                 allowfullscreen="true" width="425" height="344">
-          </embed>
-      </object>
-     </div>
 
+<script type="text/javascript">
+  var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
+  document.getElementById('widget_div'), 
+  { "base_state": {}, "video_url": "http://subtesting.com/video/Usubs-IntroVideo.theora.ogg" });
+</script>
+
+  
+  <div id="how-to-video-flash" style="display: none">
+     <div class="padding">
+       <object width="480" height="385">
+         <param name="movie" value="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1"></param>
+         <param name="allowFullScreen" value="true"></param>
+         <param name="allowscriptaccess" value="always"></param>
+         <embed src="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed>
+       </object>
+     </div>
   </div>
   
   

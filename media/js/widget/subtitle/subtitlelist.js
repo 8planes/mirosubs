@@ -35,6 +35,12 @@ mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
     this.currentlyEditing_ = false;
     this.showBeginMessage_ = opt_showBeginMessage ? true : false;
     this.showingBeginMessage_ = false;
+    /**
+     * The last subtitle displayed.
+     * @type {?mirosubs.subtitle.SubtitleWidget} 
+     */
+    this.lastSub_ = null;
+    this.lastSubMouseHandler_ = new goog.events.EventHandler(this);
 };
 goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
 mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
@@ -55,12 +61,14 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
         this.addAddButton_();
         var i;
         for (i = 0; i < this.captionSet_.count(); i++)
-            this.addSubtitle(this.captionSet_.caption(i));
+            this.addSubtitle(this.captionSet_.caption(i), false, true);
+        this.setLastSub_();
     }
 };
 mirosubs.subtitle.SubtitleList.prototype.addAddButton_ = function() {
     this.addSubtitleButton_ = new mirosubs.subtitle.AddSubtitleWidget();
     this.addChild(this.addSubtitleButton_, true);
+    this.addSubtitleButton_.showLink(false);
     if (this.isInDocument())
         this.listenForAdd_();
 };
@@ -68,6 +76,14 @@ mirosubs.subtitle.SubtitleList.prototype.listenForAdd_ = function() {
     this.getHandler().listen(this.addSubtitleButton_,
                              mirosubs.subtitle.AddSubtitleWidget.ADD,
                              this.addSubtitleClicked_);
+    var et = goog.events.EventType;
+    this.getHandler().
+        listen(this.addSubtitleButton_.getElement(),
+               et.MOUSEOVER,
+               this.onAddSubMouseover_).
+        listen(this.addSubtitleButton_.getElement(),
+               et.MOUSEOUT,
+               this.onAddSubMouseout_);
 };
 mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
     mirosubs.subtitle.SubtitleList.superClass_.enterDocument.call(this);
@@ -121,7 +137,7 @@ mirosubs.subtitle.SubtitleList.prototype.createNewSubWidget_ =
  *
  */
 mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
-    function(subtitle, opt_scrollDown)
+    function(subtitle, opt_scrollDown, opt_dontSetLastSub)
 {
     if (this.showingBeginMessage_) {
         goog.dom.removeChildren(this.getElement());
@@ -134,6 +150,8 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
     this.subtitleMap_[subtitle.getCaptionID()] = subtitleWidget;
     if (opt_scrollDown && typeof(opt_scrollDown) == 'boolean')
         this.scrollToCaption(subtitle.getCaptionID());
+    if (!opt_dontSetLastSub)
+        this.setLastSub_();
 };
 mirosubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
     var addedCaption = e.caption;
@@ -143,10 +161,46 @@ mirosubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
         var nextWidget = this.subtitleMap_[nextCaption.getCaptionID()];
         this.addChildAt(subtitleWidget, this.indexOfChild(nextWidget), true);
     }
-    else
+    else {
         this.addChildAt(subtitleWidget, this.getChildCount() - 1, true);
+        this.setLastSub_();
+    }
     this.subtitleMap_[addedCaption.getCaptionID()] = subtitleWidget;
     subtitleWidget.switchToEditMode();
+};
+mirosubs.subtitle.SubtitleList.prototype.setLastSub_ = function() {
+    var subWidget = null;
+    if (this.getChildCount() > 1)
+        subWidget = this.getChildAt(this.getChildCount() - 2);
+    if (subWidget == this.lastSub_)
+        return;
+    this.lastSubMouseHandler_.removeAll();
+    if (subWidget != null) {
+        var et = goog.events.EventType;
+        this.lastSubMouseHandler_.
+            listen(subWidget.getElement(), 
+                   et.MOUSEOVER, 
+                   this.onAddSubMouseover_).
+            listen(subWidget.getElement(),
+                   et.MOUSEOUT,
+                   this.onAddSubMouseout_);
+    }
+};
+mirosubs.subtitle.SubtitleList.prototype.onAddSubMouseover_ = function(e) {
+    this.addSubtitleButton_.showLink(true);
+};
+mirosubs.subtitle.SubtitleList.prototype.onAddSubMouseout_ = function(e) {
+    if (this.isAddSubMouseout_(e.relatedTarget))
+        this.addSubtitleButton_.showLink(false);
+};
+mirosubs.subtitle.SubtitleList.prototype.isAddSubMouseout_ = function(relatedTarget) {
+    if (!relatedTarget)
+        return false;
+    return ((this.lastSub_ == null || 
+             !goog.dom.contains(this.lastSub_.getElement(), 
+                                relatedTarget)) &&
+            !goog.dom.contains(this.addSubtitleButton_.getElement(), 
+                               relatedTarget));
 };
 mirosubs.subtitle.SubtitleList.prototype.addSubtitleClicked_ = function(e) {
     this.captionSet_.addNewCaption(true);

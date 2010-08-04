@@ -604,6 +604,9 @@ padding-left: 35px !important;
 background: url("../images/sprite.png") 10px -119px no-repeat !important;
 line-height: 2em !important;
 text-align: center !important;
+position: absolute;
+top: -50px;
+left: 34px
 }
 
 
@@ -930,6 +933,7 @@ margin: 20px 0 0 0px !important;
     font-weight: bold !important;
     text-align: center !important;
     font-size: 12px !important;
+min-width: 150px !important;
     text-decoration: none !important;
     border: 3px solid #90b60f !important;
     border-top: none !important;
@@ -969,13 +973,12 @@ position: relative !important;
 }
 
 ul.mirosubs-titlesList {
-    margin: 0 !important;
-    padding: 0 0 150px 0 !important;
-    overflow: auto !important;
-    position: relative !important;
-    height: 130px !important;
+   margin: 0 !important;
+   padding: 0;
+   overflow: auto !important;
+   position: relative !important;
+   height: 280px !important;
 }
-
 
 ul.mirosubs-titlesList li {
     font-weight: bold !important;
@@ -992,23 +995,47 @@ ul.mirosubs-titlesList li {
    top: 0px;
    cursor: pointer;
    cursor: hand;
+
 }
 
 .mirosubs-sub-delete {
-   left: 100px;
-   width: 22px;
-   height: 22px;
-   background: #fff url("../images/remove-title.png") 0 0 no-repeat;
+   right: 3px;
+   width: 18px;
+top: 3px;
+   height: 18px;
+   background: url("../images/remove-title.png") 0 0 no-repeat;
+}
+
+.mirosubs-sub-delete:hover {
+   background: url("../images/remove-title.png") 0 -21px no-repeat;
+}
+
+
+.mirosubs-sub-delete:active {
+   background: url("../images/remove-title.png") 0 -41px no-repeat;
 }
 
 .mirosubs-sub-insert {
-   left: 140px;
-   width: 20px;
-   height: 23px;
-   background: #fff url("../images/add-title.png") 0 0 no-repeat;
+   left: 180px;
+   width: 30px;
+   top: -5px;
+   height: 28px;
+   background: url("../images/add-title.png") 0 0 no-repeat;
 }
 
-.mirosubs-modal-widget-transcribe .mirosubs-append-sub-button {
+.mirosubs-sub-insert:hover {
+   background: url("../images/add-title.png") 0 -29px no-repeat;
+}
+
+.mirosubs-sub-insert:active {
+   background: url("../images/add-title.png") 0 0 no-repeat;
+}
+
+li.mirosubs-append-sub-button {
+   height: 150px;
+}
+
+.mirosubs-modal-widget-transcribe .mirosubs-append-sub-link {
    display: none;
 }
 
@@ -1148,7 +1175,7 @@ iframe.mirosubs-captionDivBg {
 ul.mirosubs-titlesList.finished {
     margin: 0 !important;
     padding: 0 !important;
-    height: 56px !important;
+    height: 206px !important;
     border-bottom: 1px solid #ccc !important;
     overflow: auto !important;
 }
@@ -1209,19 +1236,29 @@ ul.mirosubs-titlesList li input.mirosubs-translateInput {
 margin: 7px 0 0 0 !important;
 }
 
+
+
+ul.mirosubs-titlesList li:hover .mirosubs-timestamp {
+border: 1px solid #ddd;
+padding-top: 0px !important;
+padding-right: 9px !important;
+}
+
+
+
 .mirosubs-timestamp {
     margin: 0 !important;
-    right: 0 !important;
+    right: 50px !important;
     font-size: 10px !important;
     position: absolute !important;
     line-height: 18px !important;
-    top: 0 !important;
-    .top: -3px !important;
+    top: -1px !important;
+    .top: -4px !important;
     font-weight: normal !important;
     width: 60px !important;
     color: #aaa !important;
-    height: 29px !important;
-    padding: 0 10px 0 5px !important;
+    height: 17px !important;
+    padding: 1px 10px 0 5px !important;
 }
 
 .mirosubs-timestamp.none {
@@ -1237,13 +1274,12 @@ float: right !important;
 width: 31px !important;
 margin: 0 !important;
 position: absolute !important;
-left: 0 !important;
-height: 27px !important;
-top: 0 !important;
-
+left: -1px !important;
+height: 22px !important;
+top: 0px !important;
 }
 
-.mirosubs-timestamp:hover .mirosubs-changeTime a{
+.mirosubs-titlesList li:hover .mirosubs-changeTime a{
 display: block !important;
 }
 
@@ -1275,38 +1311,48 @@ background: url("../images/time_arrows.png") left -1px no-repeat !important;
 
 
 .mirosubs-changeTime a.mirosubs-down:hover{
-cursor: default !important;
 background: url("../images/time_arrows.png") left -20px no-repeat !important;
 }
 
 
 
 .mirosubs-changeTime a.mirosubs-down:active{
-cursor: default !important;
 background: url("../images/time_arrows.png") left -39px no-repeat !important;
 }
 
 
 .mirosubs-changeTime a.mirosubs-up:hover{
-cursor: default !important;
 background: url("../images/time_arrows.png") right -20px no-repeat !important;
 }
 
 
 .mirosubs-changeTime a.mirosubs-up:active{
-cursor: default !important;
 background: url("../images/time_arrows.png") right -39px no-repeat !important;
 }
 
 
 .mirosubs-title {
-    line-height: 1.7em !important;
+    line-height: 1.4em !important;
     display: block !important;
-    padding-top: 2px !important;
+    padding:10px !important;
+cursor: pointer;
     .padding-top: 0px !important;
 
     margin-right: 65px !important;
 }
+
+li span.mirosubs-title textarea{
+width: 334px !important;
+  -moz-border-radius: 5px !important;
+    background: #fcfcfc url("../images/gradient_light.png") 0 -135px repeat-x !important;
+    -webkit-border-radius: 5px !important;
+padding: 3px;
+}
+
+
+.mirosubs-title:hover {
+}
+
 
 .mirosubs-title-notime {
     padding-left: 0 !important;
@@ -1716,16 +1762,19 @@ font-weight: bold !important;
 
 .mirosubs-twitter{
     background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+text-decoration: underline;
 }
 
 
 .mirosubs-facebook{
     background: url("../images/share_icons.png") 0 0px no-repeat !important;
+text-decoration: underline;
 }
 
 
 .mirosubs-friends{
     background: url("../images/share_icons.png") 0 -73px no-repeat !important;
+text-decoration: underline;
 }
 
 
@@ -2127,6 +2176,7 @@ color: #fff !important;
 .mirosubs-timeline-sub {
    top: 7px !important;
    height: 46px !important;
+cursor: default;
    -moz-border-radius: 3px !important;
    -webkit-border-radius: 3px !important;
    -moz-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
@@ -2191,8 +2241,8 @@ color: #fff !important;
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,01) !important;
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,01) !important;
     border: 1px solid #fff !important;
-    background: #fefefe url("../images/gradient.png") 0 9px repeat-x !important;
-    top: 12px !important;
+    background: #fefefe;
+    top: 13px !important;
     -moz-border-radius: 3px !important;
     -webkit-border-radius: 3px !important;
     display: none !important;
@@ -2208,9 +2258,21 @@ color: #fff !important;
 }
 
 .mirosubs-timeline-sub .mirosubs-grabber-over {
-    background: #fefefe url("../images/gradient.png") 0 -35px repeat-x !important;
+    background: #fefefe;
     display: block !important;
 }
+
+
+
+.mirosubs-timeline-sub span.mirosubs-grabber{
+cursor: -moz-grab !important;
+}
+
+.mirosubs-timeline-sub span.mirosubs-grabber:active{
+cursor: -moz-grabbing !important;
+cursor: 
+}
+
 
 .mirosubs-timeline-sub span.mirosubs-leftGrabber {
     left: 0 !important;
@@ -2441,3 +2503,11 @@ overflow: hidden;
 .mirosubs-translationResources a:visited {
     color: #fff;
 }
+
+
+
+
+.mirosubs-twitter-share{
+    background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+}
+

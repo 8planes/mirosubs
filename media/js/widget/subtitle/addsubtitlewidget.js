@@ -28,7 +28,11 @@ mirosubs.subtitle.AddSubtitleWidget.ADD = 'addsub';
 
 mirosubs.subtitle.AddSubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.addSubLink_ = $d('a', {'href':'#'}, 'Add subtitle');
+    this.addSubLink_ = 
+        $d('a',
+           {'href':'#', 
+            'className':'mirosubs-append-sub-link'}, 
+           'Add subtitle');
     this.setElementInternal($d('li', null, this.addSubLink_));
     this.getElement().className = 'mirosubs-append-sub-button';
 };
@@ -43,4 +47,8 @@ mirosubs.subtitle.AddSubtitleWidget.prototype.addClicked_ = function(e) {
     this.dispatchEvent(mirosubs.subtitle.AddSubtitleWidget.ADD);
     e.preventDefault();
     e.stopPropagation();
+};
+
+mirosubs.subtitle.AddSubtitleWidget.prototype.showLink = function(display) {
+    goog.style.showElement(this.addSubLink_, display);
 };

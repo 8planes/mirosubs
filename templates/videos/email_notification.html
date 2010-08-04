@@ -4,20 +4,21 @@
     {% url videos:diffing version.pk old_version.pk as diffing_url %}
 {% endif %}
 <p>
-    Dear {{ user.username }}, A transcription or translation you contributed to 
-    has been edited by {{ version.user.username }}. It would be great if you could  
-    review their changes for quality. Click here to see the latest version side 
-    by side with the <a href="http://{{ domain }}{{ diffing_url }}">
-    previous version</a>.
+    Dear {{ user }}, <br/>
+    A transcription or translation you contributed to 
+    has been edited by {{ version.user }}. It would be great if you could  
+    review their changes for quality. Click here to
+    see the latest version side by side with the previous version:<br/>
+    <a href="http://{{ domain }}{{ diffing_url }}">Compare versions side-by-side</a>.
 </p>
 <p>
     We've also included a rough summary of the changes below.  Thanks so much!<br/>
 
-    Sincerely,
+    Sincerely,<br/>
     The Universal Subtitles Community<br/><br/>
     
     To stop receiving these emails, go to your preferences page and uncheck
-    "receive notifications":
+    "receive notifications":<br/>
     <a href="http://{{ domain }}{% url profiles:my_profile %}">profile</a>
 </p>
 <p>
@@ -40,5 +41,8 @@
 {% endif %}
 <p>
     To view the current and previous versions side by side, follow this 
-    <a href="http://{{ domain }}{{ diffing_url }}">link</a>.
+    <a href="http://{{ domain }}{% url profiles:my_profile %}">link</a>.
+</p>
+<p>
+    <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}">Don't send any more emails about this particular video.</a>
 </p>
