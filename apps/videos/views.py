@@ -400,7 +400,7 @@ def last_translation_revision(request, video_id, language_code):
     context['language'] = language
     context['translations'] = video.translationlanguage_set.exclude(pk=language.pk)
     context['widget_params'] = \
-        _widget_params(request. video.get_video_url())
+        _widget_params(request, video.get_video_url())
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
     
