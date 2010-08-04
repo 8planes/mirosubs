@@ -102,12 +102,13 @@ mirosubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
     return [
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-begin', 'mirosubs-down', 'down',
-            'Tap when next subtitle should appear', KC.DOWN),
+            'Tap when next subtitle should appear', KC.DOWN, 0),
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB),
+            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB, 0),
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-skip', 'mirosubs-control', 'ctrl',
-            'Skip Back 8 Seconds', KC.CTRL)
+            'Skip Back 8 Seconds', KC.TAB,
+            mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
     ];
 
 };
@@ -133,24 +134,24 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
         this.downPressed_();
-        this.rightPanel_.setKeyDown(event.keyCode, true);
+        this.rightPanel_.setKeyDown(event.keyCode, 0, true);
     }
     else if (event.keyCode == goog.events.KeyCodes.SPACE &&
         !this.currentlyEditingSubtitle_()) {
         event.preventDefault();
         this.spacePressed_();
-        this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, true);
+        this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, 0, true);
     }
 };
 mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.DOWN && this.downHeld_) {
         event.preventDefault();
         this.downReleased_();
-        this.rightPanel_.setKeyDown(event.keyCode, false);
+        this.rightPanel_.setKeyDown(event.keyCode, 0, false);
     }
     else if (event.keyCode == goog.events.KeyCodes.SPACE &&
              !this.currentlyEditingSubtitle_())
-        this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, false);
+        this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, 0, false);
 };
 mirosubs.subtitle.SyncPanel.prototype.spacePressed_ = function() {
     this.videoPlayer_.togglePause();

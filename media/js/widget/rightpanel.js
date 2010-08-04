@@ -129,29 +129,29 @@ mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     this.appendLegendContentsInternal($d, legendDiv);
     this.appendLegendClearInternal($d, legendDiv);
 };
-mirosubs.RightPanel.prototype.findSpec_ = function(keyCode) {
+mirosubs.RightPanel.prototype.findSpec_ = function(keyCode, modifiers) {
     return goog.array.find(this.legendKeySpecs_, 
-                           function(s) { return s.keyCode == keyCode; });
+                           function(s) { return s.keyCode == keyCode && s.modifiers == modifiers; });
 };
-mirosubs.RightPanel.prototype.setKeyDown = function(keyCode, active) {
-    this.enableButtonClassInternal(keyCode, '-down', active);
+mirosubs.RightPanel.prototype.setKeyDown = function(keyCode, modifiers, active) {
+    this.enableButtonClassInternal(keyCode, modifiers, '-down', active);
 };
 
 /**
  * @protected
  * @param {string=} opt_text text for the button, or null to revert to original text.
  */
-mirosubs.RightPanel.prototype.setButtonTextInternal = function(keyCode, opt_text) {
-    var spec = this.findSpec_(keyCode);
+mirosubs.RightPanel.prototype.setButtonTextInternal = function(keyCode, modifiers, opt_text) {
+    var spec = this.findSpec_(keyCode, modifiers);
     if (spec)
         goog.dom.setTextContent(
             spec.textSpan, opt_text ? opt_text : spec.legendText);                    
 };
 
 mirosubs.RightPanel.prototype.enableButtonClassInternal =
-    function (keyCode, classSuffix, enable)
+    function (keyCode, modifiers, classSuffix, enable)
 {
-    var spec = this.findSpec_(keyCode);
+    var spec = this.findSpec_(keyCode, modifiers);
     if (spec)
         goog.dom.classes.enable(
             spec.div, spec.divClass + classSuffix, enable);
@@ -170,11 +170,11 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
         spec.textSpan = textSpan;
         this.getHandler().listen(
             key, et.CLICK, goog.bind(this.legendKeyClicked_, 
-                                     this, spec.keyCode));
+                                     this, spec.keyCode, spec.modifiers));
         this.getHandler().listen(
             key, et.MOUSEDOWN, goog.bind(this.legendKeyMousedown_, 
-                                         this, spec.keyCode));
-        var mouseupFn = goog.bind(this.legendKeyMouseup_, this, spec.keyCode);
+                                         this, spec.keyCode, spec.modifiers));
+        var mouseupFn = goog.bind(this.legendKeyMouseup_, this, spec.keyCode, spec.modifiers);
         this.getHandler().listen(key, et.MOUSEUP, mouseupFn);
         this.getHandler().listen(key, et.MOUSEOUT, mouseupFn);
     }
@@ -217,20 +217,20 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
     this.updateLoginState();
 };
-mirosubs.RightPanel.prototype.legendKeyClicked_ = function(keyCode, event) {
+mirosubs.RightPanel.prototype.legendKeyClicked_ = function(keyCode, modifiers, event) {
     this.dispatchEvent(
-        new mirosubs.RightPanel.LegendKeyEvent(keyCode, event.type));
+        new mirosubs.RightPanel.LegendKeyEvent(keyCode, modifiers, event.type));
 };
-mirosubs.RightPanel.prototype.legendKeyMousedown_ = function(keyCode, event) {
+mirosubs.RightPanel.prototype.legendKeyMousedown_ = function(keyCode, modifiers, event) {
     this.dispatchEvent(
-        new mirosubs.RightPanel.LegendKeyEvent(keyCode, event.type));
+        new mirosubs.RightPanel.LegendKeyEvent(keyCode, modifiers, event.type));
     this.mouseDownKeyCode_ = keyCode;
 };
-mirosubs.RightPanel.prototype.legendKeyMouseup_ = function(keyCode, event) {
+mirosubs.RightPanel.prototype.legendKeyMouseup_ = function(keyCode, modifiers, event) {
     if (this.mouseDownKeyCode_ != null) {
         this.mouseDownKeyCode_ = null;
         this.dispatchEvent(
-            new mirosubs.RightPanel.LegendKeyEvent(keyCode, 'mouseup'));
+            new mirosubs.RightPanel.LegendKeyEvent(keyCode, modifiers, 'mouseup'));
     }
 };
 mirosubs.RightPanel.prototype.backClickedInternal = function(event) {
@@ -285,16 +285,25 @@ mirosubs.RightPanel.HelpContents = function(header, paragraphs, opt_numSteps, op
 
 mirosubs.RightPanel.KeySpec = function(divClass, spanClass, 
                                        keyText, legendText, 
-                                       keyCode) {
+                                       keyCode, modifiers) {
     this.divClass = divClass;
     this.spanClass = spanClass;
     this.keyText = keyText;
     this.legendText = legendText;
     this.keyCode = keyCode;
+    this.modifiers = modifiers;
 };
-mirosubs.RightPanel.LegendKeyEvent = function(keyCode, eventType) {
+
+mirosubs.RightPanel.KeySpec.Modifier = {
+    SHIFT : 1,
+    ALT: 2,
+    CTRL: 4
+};
+
+mirosubs.RightPanel.LegendKeyEvent = function(keyCode, modifiers, eventType) {
     this.type = mirosubs.RightPanel.EventType.LEGENDKEY;
     this.keyCode = keyCode;
+    this.modifiers = modifiers;
     this.keyEventType = eventType;
 };
 mirosubs.RightPanel.GoToStepEvent = function(stepNo) {

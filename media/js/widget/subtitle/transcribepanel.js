@@ -114,10 +114,11 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
     var KC = goog.events.KeyCodes;
     var keySpecs = [
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB),
+            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB, 0),
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-skip', 'mirosubs-control', 'ctrl', 
-            'Skip Back 8 Seconds', KC.CTRL)
+            'Skip Back 8 Seconds', KC.TAB,
+            mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
     ];
     return new mirosubs.subtitle.TranscribeRightPanel(
         this.serverModel_, helpContents, extraHelp, keySpecs, 

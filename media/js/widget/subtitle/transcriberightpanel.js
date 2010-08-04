@@ -82,14 +82,15 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.setButtonText_ = function() {
     var kc = goog.events.KeyCodes;
     if (this.playModeSelect_.value == 
         mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP) {
-        this.setButtonTextInternal(kc.CTRL, "Re-play last 8 seconds");
-        this.setButtonTextInternal(kc.TAB, "Play next 8 seconds");
-        this.enableButtonClassInternal(kc.TAB, '-beginner', true);
+        this.setButtonTextInternal(kc.TAB, mirosubs.RightPanel.KeySpec.Modifier.SHIFT,
+                                   "Re-play last 8 seconds");
+        this.setButtonTextInternal(kc.TAB, 0, "Play next 8 seconds");
+        this.enableButtonClassInternal(kc.TAB, 0, '-beginner', true);
     }
     else {
-        this.setButtonTextInternal(kc.CTRL);
-        this.setButtonTextInternal(kc.TAB);
-        this.enableButtonClassInternal(kc.TAB, '-beginner', false);
+        this.setButtonTextInternal(kc.TAB, mirosubs.RightPanel.KeySpec.Modifier.SHIFT);
+        this.setButtonTextInternal(kc.TAB, 0);
+        this.enableButtonClassInternal(kc.TAB, 0, '-beginner', false);
     }
 };
 

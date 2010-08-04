@@ -154,34 +154,43 @@ mirosubs.subtitle.EditDialog.prototype.setFinishedState_ = function() {
     }
 };
 mirosubs.subtitle.EditDialog.prototype.handleKeyDown_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.CTRL) {
-        this.ctrlClicked_();
-        this.getRightPanelInternal().setKeyDown(event.keyCode, true);
-    }
     if (event.keyCode == goog.events.KeyCodes.TAB) {
-        // TODO: this violates accessibility guidelines.
-        // Use another key instead of TAB!
-        this.togglePause_();
+        if (event.shiftKey) {
+            this.skipBack_();
+            this.getRightPanelInternal().setKeyDown(event.keyCode,
+                mirosubs.RightPanel.KeySpec.Modifier.SHIFT, true);
+        }
+        else {
+            this.togglePause_();
+            this.getRightPanelInternal().setKeyDown(event.keyCode, 0, true);
+        }
         event.preventDefault();
-        this.getRightPanelInternal().setKeyDown(event.keyCode, true);
     }
 };
 mirosubs.subtitle.EditDialog.prototype.handleKeyUp_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.CTRL)
-        this.getRightPanelInternal().setKeyDown(event.keyCode, false);
-    else if (event.keyCode == goog.events.KeyCodes.TAB)
-        this.getRightPanelInternal().setKeyDown(event.keyCode, false);    
+    if (event.keyCode == goog.events.KeyCodes.TAB) {
+        var modifier = 0;
+        if (event.shiftKey)
+            modifier = mirosubs.RightPanel.KeySpec.Modifier.SHIFT;
+        this.getRightPanelInternal().setKeyDown(event.keyCode, modifier, false);
+    }
+    else if (event.keyCode == goog.events.KeyCodes.SHIFT) {
+        // if shift is released before tab, we still need to untoggle the legend
+        this.getRightPanelInternal().setKeyDown(goog.events.KeyCodes.TAB,
+            mirosubs.RightPanel.KeySpec.Modifier.SHIFT, false);
+    }
 };
 mirosubs.subtitle.EditDialog.prototype.handleBackKeyPress_ = function(event) {
     this.setState_(mirosubs.subtitle.EditDialog.State_.TRANSCRIBE);
 };
 mirosubs.subtitle.EditDialog.prototype.handleLegendKeyPress_ = function(event) {
-    if (event.keyCode == goog.events.KeyCodes.CTRL &&
-        event.keyEventType == goog.events.EventType.CLICK)
-        this.ctrlClicked_();
     if (event.keyCode == goog.events.KeyCodes.TAB &&
-        event.keyEventType == goog.events.EventType.CLICK)
-        this.togglePause_();
+        event.keyEventType == goog.events.EventType.CLICK) {
+        if (event.modifiers == mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
+            this.skipBack_();            
+        else
+            this.togglePause_();
+    }
 };
 mirosubs.subtitle.EditDialog.prototype.handleDoneKeyPress_ = function(event) {
     if (!this.doneButtonEnabled_)
@@ -206,7 +215,7 @@ mirosubs.subtitle.EditDialog.prototype.nextState_ = function() {
     else if (this.state == s.EDIT)
         return s.FINISHED;
 };
-mirosubs.subtitle.EditDialog.prototype.ctrlClicked_ = function() {
+mirosubs.subtitle.EditDialog.prototype.skipBack_ = function() {
     var videoPlayer = this.getVideoPlayerInternal();
     var now = videoPlayer.getPlayheadTime();
     videoPlayer.setPlayheadTime(Math.max(now - 8, 0));
