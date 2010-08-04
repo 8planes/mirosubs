@@ -24,7 +24,7 @@ class VideoAdmin(admin.ModelAdmin):
     list_filter = ['video_type']
 
 class VideoCaptionVersionAdmin(admin.ModelAdmin):
-    list_display = ['video', 'version_no', 'is_complete', 'user', 'time_change', 'text_change']
+    list_display = ['video', 'version_no', 'user', 'time_change', 'text_change']
     search_fields = ['video__title', 'video__video_url', 'video__video_id']
 
 class TranslationLanguageAdmin(admin.ModelAdmin):
