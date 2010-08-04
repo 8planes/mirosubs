@@ -2289,7 +2289,7 @@ cursor:
    position: absolute !important;
    z-index: 2147483641;
    padding: 15px 0 !important;
-   width: 540px !important;
+   width: 650px !important;
    height: 200px !important;
    background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
    -moz-border-radius: 5px !important;
@@ -2377,6 +2377,16 @@ a.mirosubs-openid span{
    padding-top: 34px !important;
    overflow: hidden !important;
    width: 99px !important;
+}
+
+.mirosubs-google {
+   height: 0 !important;
+   padding-top: 34px !important;
+   overflow: hidden !important;
+   margin-left: 17px !important;
+   width: 95px !important;
+   margin-top: 4px !important;
+   background: url("../images/social_login.png") -236px 0px no-repeat !important;
 }
 
 .big_spinner{

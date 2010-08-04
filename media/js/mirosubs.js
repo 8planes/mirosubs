@@ -125,6 +125,10 @@ mirosubs.LoginPopupType = {
         '/socialauth/openid/?next=/widget/close_window/',
         'location=0,status=0,resizable=yes'
     ],
+    GOOGLE: [
+        '/socialauth/gmail_login/?next=/widget/close_window/',
+        'location=0,status=0,resizable=yes'
+    ],
     NATIVE: [
         '/auth/login/?next=/widget/close_window/',
         'location=0,status=0,resizable=yes'
