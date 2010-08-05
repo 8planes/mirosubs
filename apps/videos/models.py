@@ -416,8 +416,8 @@ class VideoCaptionVersion(VersionModel):
 
         if not old_version:
             #if it's first version set changes to 100
-            self.time_change = 100
-            self.text_change = 100          
+            self.time_change = 1
+            self.text_change = 1          
         elif not captions_length:
             self.time_change = 0
             self.text_change = 0
@@ -588,7 +588,7 @@ class TranslationVersion(VersionModel):
         
         self.time_change = 0
         if not old_version:
-            self.text_change = 100
+            self.text_change = 1
         elif not captions_length:
             self.text_change = 0
         else:
