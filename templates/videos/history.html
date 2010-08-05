@@ -151,14 +151,14 @@
             {% endwith %}
         {% endblock %}
         
-        {% block donwload_subtitles %}
+        {% block download_subtitles %}
             {% if video.captions %}
-              <span class="download">Download Subtitles</span> <a href="{% url download_srt %}?video_id={{ video.video_id }}">SRT</a> / 
+              <span class="download">Download Subtitles</span> 
+              <a href="{% url download_srt %}?video_id={{ video.video_id }}">SRT</a> / 
               <a href="{% url download_ssa %}?video_id={{ video.video_id }}">SSA</a> /
               <a href="{% url download_ttml %}?video_id={{ video.video_id }}">TTML</a>
             {% endif %}
         {% endblock %}
-
       </div>
     </div>
 

@@ -22,12 +22,13 @@
 {% block upload_subtitles %}
 {% endblock %}
 
-{% block donwload_subtitles %}
-  {% if last_version.captions %}
-        Donwnload <a href="{% url download_srt %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">SRT</a> / 
+{% block download_subtitles %}
+    {% if last_version.captions %}
+        <span class="download">Download</span> 
+        <a href="{% url download_srt %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">SRT</a> / 
         <a href="{% url download_ssa %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">SSA</a> /
         <a href="{% url download_ttml %}?video_id={{ video.video_id }}&lang_code={{ language.language }}">TTML</a>      
-  {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block table %}
