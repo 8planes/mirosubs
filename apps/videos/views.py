@@ -70,7 +70,7 @@ def _add_share_panel_context(context,
     context["share_panel_permalink"] = permalink
 
 def _share_video_title(video):
-    return "(\"{0}\") ".format(video.title) if video.title else ''
+    return u"(\"{0}\") ".format(video.title) if video.title else ''
 
 def _add_share_panel_context_for_video(context, video):
     home_page_url = "http://{0}{1}".format(
@@ -78,14 +78,14 @@ def _add_share_panel_context_for_video(context, video):
         reverse('videos:video', kwargs={'video_id':video.video_id}))
     if video.captions() is not None:
         twitter_fb_message = \
-            "Just found a version of this video with captions: {0}".format(
+            u"Just found a version of this video with captions: {0}".format(
             home_page_url)
     else:
         twitter_fb_message = \
-            "Check out this video and help make subtitles: {0}".format(
+            u"Check out this video and help make subtitles: {0}".format(
             home_page_url)
     email_message = \
-        "Hey-- check out this video {0}and help make subtitles: {1}".format(
+        u"Hey-- check out this video {0}and help make subtitles: {1}".format(
         _share_video_title(video), home_page_url)
     _add_share_panel_context(
         context,
