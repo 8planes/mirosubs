@@ -490,7 +490,7 @@ def translation_diffing(request, first_pk, second_pk):
     context['widget0_params'] = base_widget_params(request, {
                                     'video_url': video.get_video_url()
                                 })
-    context['widget1_params'] = context['widget1_params']    
+    context['widget1_params'] = context['widget0_params']    
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 
