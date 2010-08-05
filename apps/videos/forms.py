@@ -29,6 +29,7 @@ import random
 from django.utils.encoding import force_unicode
 import chardet
 from uuid import uuid4
+from youtube import get_video_id
 
 class SubtitlesUploadForm(forms.Form):
     video = forms.ModelChoiceField(Video.objects)
@@ -131,6 +132,12 @@ class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
         fields = ('video_url',)
+        
+    def clean_video_url(self):
+        video_url = self.cleaned_data['video_url']
+        if 'youtube.com' in video_url and not get_video_id(video_url):
+            raise forms.ValidationError(_(u'Incorrect video url'))
+        return video_url
 
 class FeedbackForm(forms.Form):
     email = forms.EmailField(required=False)
