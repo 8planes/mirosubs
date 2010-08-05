@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib import admin
-from videos.models import Video, VideoCaptionVersion, TranslationLanguage
+from videos.models import Video, VideoCaptionVersion, TranslationLanguage, StopNotification
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'video_id', 'video_type']
@@ -31,6 +31,10 @@ class TranslationLanguageAdmin(admin.ModelAdmin):
     list_display = ['video', 'language']
     search_fields = ['video__title', 'video__video_url', 'video__video_id']
 
+class StopNotificationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'video']
+
+admin.site.register(StopNotification, StopNotificationAdmin)
 admin.site.register(TranslationLanguage, TranslationLanguageAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(VideoCaptionVersion, VideoCaptionVersionAdmin)
