@@ -11,10 +11,8 @@
     
         <div class="padding">
             <p>
-                Our site accepts SRT, SSA, and TTML format. (Additional
-                information here on whether files need certain extensions or
-                whatever). If you believe your subtitle file is compatible, 
-                <a href="mailto:feedback@universalsubtitles.org">send it to us</a>
+                Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
+                or .xml (for TTML) are accepted.
             </p>
             <br />
             <div id="upload-subtitles-div">
@@ -22,7 +20,6 @@
                     {% csrf_token %}
                     <input type="hidden" name="video" value="{{ video.id }}" />
                     <input type="file" name="subtitles" id="subtitles-file-field" />
-                    <button type="submit" value="Upload"><span>Upload</span></button>
                 </form>
             </div>
     
@@ -44,14 +41,10 @@
                     if (data.success){
                         document.location = LANGUAGE_PAGE_URL;
                     } else {
+                        $form.prepend('<p class="error_list">If you believe your subtitle file is compatible, <a href="mailto:feedback@universalsubtitles.org">send it to us</a></p>');
                         for (key in data.errors){
-                            var $field = $('input[name="'+key+'"]', $form);
-                            var error = '<p class="error_list">'+data.errors[key]+'</p>';
-                            if ($field.length){
-                                $('input[name="'+key+'"]', $form).before(error);
-                            }else{
-                                $form.prepend(error);
-                            }
+                            var error = '<p class="error_list">' + data.errors[key] + '</p>';
+                            $form.prepend(error);
                         };
                     }
                 },
