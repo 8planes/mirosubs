@@ -18,7 +18,7 @@
 
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate
@@ -70,70 +70,3 @@ def make_redirect_to(request):
         return '/'
     else:
         return redirect_to
-
-from socialauth.views import get_url_host
-from django.core.urlresolvers import reverse
-import urllib
-from django.conf import settings
-from socialauth.lib import oauthtwitter2 as oauthtwitter
-from django.http import HttpResponse
-from oauth import oauth
-from urllib2 import URLError
-from django.contrib import messages
-
-def twitter_login(request, next=None):
-    callback_url = None
-    next = request.GET.get('next', next)
-    if next is not None:
-        callback_url = '%s%s?next=%s' % \
-             (get_url_host(request),
-             reverse("auth:twitter_login_done"), 
-             urllib.quote(next))
-    twitter = oauthtwitter.TwitterOAuthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
-    request_token = twitter.fetch_request_token(callback_url)
-    request.session['request_token'] = request_token.to_string()
-    signin_url = twitter.authorize_token_url(request_token)
-    return HttpResponseRedirect(signin_url)
-
-def twitter_login_done(request):
-    request_token = request.session.get('request_token', None)
-    oauth_verifier = request.GET.get("oauth_verifier", None)
-
-    # If there is no request_token for session,
-    # Means we didn't redirect user to twitter
-    if not request_token:
-            # Redirect the user to the login page,
-            # So the user can click on the sign-in with twitter button
-            return HttpResponse("We didn't redirect you to twitter...")
-    
-    token = oauth.OAuthToken.from_string(request_token)
-    
-    # If the token from session and token from twitter does not match
-    #   means something bad happened to tokens
-    if token.key != request.GET.get('oauth_token', 'no-token'):
-            del request.session['request_token']
-            # Redirect the user to the login page
-            return HttpResponse("Something wrong! Tokens do not match...")
-    
-    twitter = oauthtwitter.TwitterOAuthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
-    try:  
-        access_token = twitter.fetch_access_token(token, oauth_verifier)
-    except URLError:
-        messages.error(request, 'Problem with connect to Twitter. Try again.')
-        return redirect('auth:login')
-    
-    request.session['access_token'] = access_token.to_string()
-    user = authenticate(access_token=access_token)
-    
-    # if user is authenticated then login user
-    if user:
-        auth_login(request, user)
-    else:
-        # We were not able to authenticate user
-        # Redirect to login page
-        del request.session['access_token']
-        del request.session['request_token']
-        return HttpResponseRedirect(reverse('auth:login'))
-
-    # authentication was successful, use is now logged in
-    return HttpResponseRedirect(request.GET.get('next', settings.LOGIN_REDIRECT_URL))

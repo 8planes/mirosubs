@@ -84,9 +84,7 @@ class Video(models.Model):
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
     is_subtitles = models.BooleanField(default=False)
-    # true iff user clicked "finish" at end of captioning process.
-    is_complete = models.BooleanField()
-        
+    
     def __unicode__(self):
         if self.title:
             return self.title
@@ -215,7 +213,7 @@ class Video(models.Model):
         video_captions = self.videocaptionversion_set.all()
         if video_captions.count() == 0:
             return NO_CAPTIONS
-        if self.is_complete:
+        if video_captions.filter(is_complete__exact=True).count() > 0:
             return CAPTIONS_FINISHED
         else:
             return CAPTIONS_IN_PROGRESS
@@ -399,6 +397,8 @@ class VideoCaptionVersion(VersionModel):
     changes for this session."""
     video = models.ForeignKey(Video)
     version_no = models.PositiveIntegerField(default=0)
+    # true iff user clicked "finish" at end of captioning process.
+    is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User)
     note = models.CharField(max_length=512, blank=True)
@@ -464,7 +464,7 @@ class VideoCaptionVersion(VersionModel):
         latest_captions = self.video.captions()
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
-        new_version = cls(video=self.video, version_no=new_version_no, \
+        new_version = cls(video=self.video, version_no=new_version_no, is_complete=True, \
             datetime_started=datetime.now(), user=user, note=note)
         new_version.save()
         for item in self.captions():
@@ -472,7 +472,7 @@ class VideoCaptionVersion(VersionModel):
         return new_version
 
 def update_video_is_subtitled(sender, instance, created, **kwargs):
-    if instance.video.is_complete and not instance.video.is_subtitles:
+    if instance.is_complete and not instance.video.is_subtitles:
         instance.video.is_subtitles = True
         instance.video.save()
         
@@ -481,11 +481,14 @@ post_save.connect(update_video_is_subtitled, VideoCaptionVersion)
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
+    # true iff user clicked "finish" at end of captioning process.
+    is_complete = models.BooleanField()
 
 class NullTranslations(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
     language = models.CharField(max_length=16, choices=LANGUAGES)
+    is_complete = models.BooleanField()
 
 # TODO: make TranslationLanguage unique on (video, language)
 class TranslationLanguage(models.Model):
@@ -498,9 +501,7 @@ class TranslationLanguage(models.Model):
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True)
-    # true iff user has clicked "finish" in translating process.
-    is_complete = models.BooleanField()
-    
+
     # TODO: These methods are duplicated from Video, 
     # since they're both lockable. Fix the duplication.
     @property
@@ -525,7 +526,7 @@ class TranslationLanguage(models.Model):
     @property
     def percent_done(self):
         try:
-            translation_count = len(self.translations().captions())
+            translation_count = self.translations().captions().count()
         except AttributeError:
             translation_count = 0
         captions_count = self.video.captions().captions().count()
@@ -575,6 +576,8 @@ class TranslationVersion(VersionModel):
     language = models.ForeignKey(TranslationLanguage)
     version_no = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User)
+    # true iff user has clicked "finish" in translating process.
+    is_complete = models.BooleanField()
     datetime_started = models.DateTimeField()
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
@@ -613,24 +616,7 @@ class TranslationVersion(VersionModel):
         return self.language.video
     
     def captions(self):
-        qs = self.translation_set.all()
-        output = []
-        not_empty = False
-        for item in qs:
-            if item.translation_text or not_empty:
-                output.append(item)
-                not_empty = True
-        output.reverse()
-        
-        j = 0
-        for i, item in enumerate(output):
-            j = i
-            if item.translation_text:
-                break
-        output = output[j:]
-        output.reverse()
-        
-        return output
+        return self.translation_set.all()
 
     def prev_version(self):
         cls = self.__class__
@@ -653,7 +639,7 @@ class TranslationVersion(VersionModel):
         latest_captions = self.language.translations()
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
-        new_version = cls(language=self.language, version_no=new_version_no,  \
+        new_version = cls(language=self.language, version_no=new_version_no, is_complete=True, \
             datetime_started=datetime.now(), user=user, note=note)
         new_version.save()
         for item in self.captions():

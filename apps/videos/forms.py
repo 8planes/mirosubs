@@ -87,7 +87,7 @@ class SubtitlesUploadForm(forms.Form):
         version = VideoCaptionVersion(
             video=video, version_no=version_no, 
             datetime_started=datetime.now(), user=self.user,
-            note='Uploaded')
+            is_complete=True, note='Uploaded')
         version.save()
         
         text = subtitles.read()
@@ -105,7 +105,6 @@ class SubtitlesUploadForm(forms.Form):
             caption.save()
         
         video.release_writelock()
-        video.is_complete = True
         video.save()
         
     def get_errors(self):

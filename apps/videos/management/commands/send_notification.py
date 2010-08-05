@@ -4,7 +4,6 @@ from django.conf import settings
 from datetime import datetime, timedelta
 from videos.utils import send_templated_email
 from django.contrib.sites.models import Site
-from django.db.models import Q
 
 class Command(BaseCommand):
     domain = Site.objects.get_current().domain
@@ -14,7 +13,7 @@ class Command(BaseCommand):
         
         qs = VideoCaptionVersion.objects \
             .filter(notification_sent=False) \
-            .filter(Q(video__writelock_time__isnull=True)|Q(video__writelock_time__lte=max_save_time))
+            .filter(datetime_started__lte=max_save_time)
         for version in qs:
             version.notification_sent = True
             version.update_changes()  #item is saved in update_changes
@@ -23,7 +22,7 @@ class Command(BaseCommand):
         
         translation_qs = TranslationVersion.objects \
             .filter(notification_sent=False) \
-            .filter(Q(language__writelock_time__isnull=True)|Q(language__writelock_time__lte=max_save_time))
+            .filter(datetime_started__lte=max_save_time)
         for version in translation_qs:
             version.notification_sent = True
             version.update_changes()  #item is saved in update_changes            
