@@ -1,4 +1,18 @@
 {% if not has_translations %}
+    {% if user.is_authenticated %}
+        <a href="#" id="upload-subtitles-link">Upload subtitles</a>
+    {% else %}
+        <a href="{% url auth:login %}?next={{ request.path_info }}">Login to upload subtitles</a>
+    {% endif %}
+    <div id="upload-subtitles-div" style="display: none">
+        <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <input type="hidden" name="video" value="{{ video.id }}"/>
+            <input type="file" name="subtitles" id="subtitles-file-field"/>
+            <input type="submit" value="Upload"/>
+        </form>
+
+
 
 <a href="#upload_subs" id="upload-subtitles-link" class="upload">Upload Subtitles</a>
 
@@ -23,8 +37,11 @@
                 <button type="submit" value="Upload"><span>Upload</span></button>
             </form>
         </div>
+
     </div>
 </div>
+
+
     <script type="text/javascript">
         (function($){
             var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}'

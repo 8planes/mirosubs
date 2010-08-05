@@ -112,7 +112,7 @@
 {% endblock %}
 
 {% block title %}
-    {% if video.title %}{{ video.title }} with Original subtitles | {% endif %}Universal Subtitles
+    {{ video.title_display }} with Original subtitles | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
@@ -136,11 +136,12 @@
         {% widget widget_params %}
     </div>
     <div class="right_column">
+
         {% include '_sharing_widget.html' %}
     </div>
     
+   
     <div class="clearboth">&nbsp;</div>
-
     <div class="sub_actions">
       
       <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
@@ -164,7 +165,6 @@
 
       </div>
     </div>
-
 
 
     <ul class="video_tabs">

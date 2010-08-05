@@ -34,6 +34,7 @@ from django.db.models import Q
 from widget.views import base_widget_params
 from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
+from vidscraper.errors import Error as VidscraperError
 from django.template.loader import render_to_string
 
 def index(request):
@@ -137,7 +138,13 @@ def create(request):
         if video_form.is_valid():
             owner = request.user if request.user.is_authenticated() else None
             video_url = video_form.cleaned_data['video_url']
-            video, created = Video.get_or_create_for_url(video_url, owner)
+            try:
+                video, created = Video.get_or_create_for_url(video_url, owner)
+                
+            except VidscraperError:
+                vidscraper_error = True
+                return render_to_response('videos/create.html', locals(),
+                              context_instance=RequestContext(request))
             if created:
                 # TODO: log to activity feed
                 pass
@@ -171,7 +178,8 @@ def video(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
-    context['translations'] = video.translationlanguage_set.all()
+    context['translations'] = video.translationlanguage_set \
+        .filter(translationversion__id__gt=0).distinct()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
     return render_to_response('videos/video.html', context,
@@ -220,6 +228,7 @@ def actions_list(request):
                        template_object_name='action',
                        extra_context=extra_context)    
 
+@login_required
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
@@ -286,7 +295,8 @@ def history(request, video_id):
 
     context['video'] = video
     context['site'] = Site.objects.get_current()
-    context['translations'] = TranslationLanguage.objects.filter(video=video)
+    context['translations'] = TranslationLanguage.objects.filter(video=video) \
+        .filter(translationversion__id__gt=0).distinct()
     context['last_version'] = video.captions()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     context['commented_object'] = ProxyVideo.get(video)
@@ -321,7 +331,8 @@ def translation_history(request, video_id, lang):
     context['video'] = video
     context['language'] = language
     context['site'] = Site.objects.get_current()        
-    context['translations'] = TranslationLanguage.objects.filter(video=video).exclude(pk=language.pk)
+    context['translations'] = TranslationLanguage.objects.filter(video=video) \
+        .exclude(pk=language.pk).filter(translationversion__id__gt=0).distinct()
     context['last_version'] = video.translations(lang)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang)
     context['commented_object'] = language
@@ -389,7 +400,7 @@ def last_translation_revision(request, video_id, language_code):
     context['language'] = language
     context['translations'] = video.translationlanguage_set.exclude(pk=language.pk)
     context['widget_params'] = \
-        _widget_params(request. video.get_video_url())
+        _widget_params(request, video.get_video_url())
     return render_to_response('videos/last_revision.html', context,
                               context_instance=RequestContext(request))
     

@@ -24,18 +24,34 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from auth.models import CustomUser
+from videos.models import Video
+from widget.rpc import autoplay_subtitles, fetch_captions
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+class RequestMockup(object):
+    
+    def __init__(self, user):
+        self.user = user
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+class TestRpc(TestCase):
+    fixtures = ['test_widget.json']
+    
+    def setUp(self):
+        self.user = CustomUser.objects.get(pk=3)
+        self.video_pk = 12
+        
+    def test_autoplay_subtitles(self):
+        request = RequestMockup(self.user)
+        video = Video.objects.get(pk=self.video_pk)
+        subtitles_fetched_count = video.subtitles_fetched_count
+        autoplay_subtitles(request, video, False, None, None)
+        video1 = Video.objects.get(pk=self.video_pk)
+        self.failUnlessEqual(subtitles_fetched_count+1, video1.subtitles_fetched_count)
 
->>> 1 + 1 == 2
-True
-"""}
-
+    def test_fetch_captions(self):
+        request = RequestMockup(self.user)
+        video = Video.objects.get(pk=self.video_pk)
+        subtitles_fetched_count = video.subtitles_fetched_count
+        fetch_captions(request, video.video_id)
+        video1 = Video.objects.get(pk=self.video_pk)
+        self.failUnlessEqual(subtitles_fetched_count+1, video1.subtitles_fetched_count)        

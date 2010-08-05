@@ -479,6 +479,8 @@ def maybe_add_video_session(request):
 
 def autoplay_subtitles(request, video, null_widget, language, revision):
     params = { }
+    video.subtitles_fetched_count += 1
+    video.save()
     if language is not None:
         if null_widget:
             translations = \

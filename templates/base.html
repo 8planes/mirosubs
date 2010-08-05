@@ -103,7 +103,7 @@
           <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
           <li class="last about_link last_nav"><a href="/about"><span>About</span></a></li>
           {% if user.is_authenticated %}
-              <li class="login_link"><a href="{% url logout %}"><span>Logout</span></a></li>
+              <li class="login_link"><a href="{% url logout %}?next={{ request.path_info}}"><span>Logout</span></a></li>
           {% else %}
               <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info }}"><span>Login</span></a></li>
           {% endif %}
