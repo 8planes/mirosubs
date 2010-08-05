@@ -483,12 +483,15 @@ def translation_diffing(request, first_pk, second_pk):
     context['captions'] = captions
     context['first_version'] = first_version
     context['second_version'] = second_version
-    context['history_link'] = reverse('videos:translation_history', args=[video.video_id, language.language])
+    context['history_link'] = reverse('videos:translation_history', 
+                                      args=[video.video_id, language.language])
     context['latest_version'] = language.translations()
-    context['widget0_params'] = base_widget_params(request, {
-                                    'video_url': video.get_video_url()
-                                })
-    context['widget1_params'] = context['widget1_params']    
+    context['widget0_params'] = _widget_params(request, video.get_video_url(),
+                                               first_version.version_no, 
+                                               language.language)
+    context['widget1_params'] = _widget_params(request, video.get_video_url(),
+                                               second_version.version_no, 
+                                               language.language)
     return render_to_response('videos/translation_diffing.html', context,
                               context_instance=RequestContext(request))
 
