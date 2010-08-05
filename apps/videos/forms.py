@@ -56,7 +56,7 @@ class SubtitlesUploadForm(forms.Form):
             raise forms.ValidationError(_(u'File size should be less 1Mb'))
         parts = subtitles.name.split('.')
         if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml']:
-            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .ass or .xml(TTML  format)'))
+            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)'))
         if not self._get_parser(subtitles.name)(subtitles.read()):
             raise forms.ValidationError(_(u'Incorrect subtitles format'))
         subtitles.seek(0)
