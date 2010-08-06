@@ -66,12 +66,12 @@ class Video(models.Model):
     video_id = models.CharField(max_length=255, unique=True)
     video_type = models.CharField(max_length=1, choices=VIDEO_TYPE)
     # only nonzero length for HTML5 videos
-    video_url = models.URLField(max_length=2048)
+    video_url = models.URLField(max_length=2048, blank=True)
     # only nonzero length for Youtube videos
-    youtube_videoid = models.CharField(max_length=32)
+    youtube_videoid = models.CharField(max_length=32, blank=True)
     # only nonzero length for Blip.tv videos
-    bliptv_fileid = models.CharField(max_length=32)
-    bliptv_flv_url = models.CharField(max_length=256)
+    bliptv_fileid = models.CharField(max_length=32, blank=True)
+    bliptv_flv_url = models.CharField(max_length=256, blank=True)
     title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
     # the person who was first to start captioning this video.
