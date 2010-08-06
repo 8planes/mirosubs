@@ -23,12 +23,8 @@
                 minWidth: 570,
                 minHeight: 420              
             }); 
-            function supports_ogg_theora_video() {
-              var v = document.createElement('video');
-              return v.canPlayType && v.canPlayType('video/ogg; codecs="theora, vorbis"');
-            }
-            if (supports_ogg_theora_video()){
-                $('a.how-to-video-image').attr('href', '#how-to-video-ogg');              
+            if (mirosubs.video.supportsOgg()) {
+                $('a.how-to-video-image').attr('href', '#how-to-video-ogg');
             };
             $('.how-to-video-image').nyroModal();
         });
@@ -172,9 +168,12 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
   </div>
 
 <script type="text/javascript">
-  var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
-  document.getElementById('widget_div'), 
-  { "base_state": {}, "video_url": "http://subtesting.com/video/Usubs-IntroVideo.theora.ogg" });
+  if (mirosubs.video.supportsOgg()) {
+     var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
+         document.getElementById('widget_div'), 
+         { "base_state": {}, 
+           "video_url": "http://subtesting.com/video/Usubs-IntroVideo.theora.ogg" });
+  }
 </script>
 
   

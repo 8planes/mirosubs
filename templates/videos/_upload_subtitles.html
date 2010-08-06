@@ -26,12 +26,11 @@
         </div>
     </div>
 
+  <script type="text/javascript">
+        (function($) {
+            var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
 
-    <script type="text/javascript">
-        (function($){
-            var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}'
-
-            $('#subtitles-file-field').change(function(){
+            $('#subtitles-file-field').change(function() {
                 $('#upload-subtitles-form').submit();
             });
             
@@ -42,13 +41,13 @@
                         document.location = LANGUAGE_PAGE_URL;
                     } else {
                         $form.prepend('<p class="error_list">If you believe your subtitle file is compatible, <a href="mailto:feedback@universalsubtitles.org">send it to us</a></p>');
-                        for (key in data.errors){
+                        for (key in data.errors) {
                             var error = '<p class="error_list">' + data.errors[key] + '</p>';
                             $form.prepend(error);
-                        };
+                        }
                     }
                 },
-                beforeSubmit: function(formData, $Form, options){
+                beforeSubmit: function(formData, $Form, options) {
                     $('p.error_list', $Form).remove();
                 }
             });
