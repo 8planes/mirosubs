@@ -22,6 +22,13 @@ import os
 def rel(*x):
     return os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
+gettext_noop = lambda s: s
+
+from django.conf import global_settings
+lang_dict = dict(global_settings.LANGUAGES)
+lang_dict['es-ar'] = gettext_noop('Argentinian Spanish')
+global_settings.LANGUAGES = tuple(i for i in lang_dict.items())
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
