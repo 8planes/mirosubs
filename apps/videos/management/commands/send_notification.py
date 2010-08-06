@@ -99,7 +99,7 @@ class Command(BaseCommand):
                 context['user'] = item.user
                 context['old_version'] = item
                 subject = 'New edits to "%s" by %s on Universal Subtitles' % \
-                    (item.user.__unicode__(), item.language.video.__unicode__())
+                    (item.language.video.__unicode__(), item.user.__unicode__())
                 send_templated_email(item.user.email, subject, 
                                      'videos/email_notification.html',
                                      context, 'feedback@universalsubtitles.org',

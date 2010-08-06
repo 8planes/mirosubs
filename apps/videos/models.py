@@ -187,19 +187,18 @@ class Video(models.Model):
                           'video_type': VIDEO_TYPE_HTML5,
                           'allow_community_edits': True})
         return video, created
-
-    @property
-    def srt_filename(self):
-        """The best SRT filename for this video."""
-        if self.video_type == VIDEO_TYPE_HTML5:
-            return '{0}.srt'.format(self.video_url.split('/')[-1])
-        elif self.video_type == VIDEO_TYPE_YOUTUBE:
-            return 'youtube_{0}.srt'.format(self.youtube_videoid)
-        else:
-            return 'bliptv_{0}.srt'.format(self.bliptv_fileid)
     
+    @property
+    def filename(self):
+        if self.video_type == VIDEO_TYPE_HTML5:
+            return '{0}'.format(self.video_url.split('/')[-1])
+        elif self.video_type == VIDEO_TYPE_YOUTUBE:
+            return 'youtube_{0}'.format(self.youtube_videoid)
+        else:
+            return 'bliptv_{0}'.format(self.bliptv_fileid)
+            
     def lang_filename(self, lang):
-        name = self.srt_filename
+        name = self.filename
         if lang:
             return '%s.%s' % (name[:-4], lang)
         return name         
