@@ -23,6 +23,9 @@ def send_templated_email(to, subject, body_template, body_dict,
     email = EmailMessage(subject, message, from_email, to)
     email.content_subtype = ct
     email.send(fail_silently)
+
+class SubtitleParserError(Exception):
+    pass
     
 class SubtitleParser(object):
     
@@ -52,12 +55,16 @@ class SubtitleParser(object):
     _matches = property(_get_matches)
 
 from xml.dom.minidom import parseString
+from xml.parsers.expat import ExpatError
 from django.utils.html import strip_tags
 
 class TtmlSubtitleParser(SubtitleParser):
     
     def __init__(self, subtitles):
-        dom = parseString(subtitles)
+        try:
+            dom = parseString(subtitles)
+        except ExpatError:
+            raise SubtitleParserError('Incorrect format of TTML subtitles')
         self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
         
     def __len__(self):

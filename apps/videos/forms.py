@@ -24,7 +24,7 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import re
-from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser
+from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, SubtitleParserError
 import random
 from django.utils.encoding import force_unicode
 import chardet
@@ -58,8 +58,11 @@ class SubtitlesUploadForm(forms.Form):
         parts = subtitles.name.split('.')
         if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml']:
             raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)'))
-        if not self._get_parser(subtitles.name)(subtitles.read()):
-            raise forms.ValidationError(_(u'Incorrect subtitles format'))
+        try:
+            if not self._get_parser(subtitles.name)(subtitles.read()):
+                raise forms.ValidationError(_(u'Incorrect subtitles format'))
+        except SubtitleParserError, e:
+            raise forms.ValidationError(e)
         subtitles.seek(0)
         return subtitles
     
