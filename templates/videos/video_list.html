@@ -5,23 +5,27 @@
 {% block main_content %}
 {% if video_list %}
 <h2>All Submitted Videos</h2>
-  <table>
+  <table cellpadding="0" cellspacing="0">
+  <thead>
     <tr>
-      <th width="600">URL</th>
-      <th ></th>
+      <th width="600" colspan="2"><span>URL</span></th>
       <th class="center">
           {% ordered_column "widget_views_count" "Pageloads" %}
 	  </th>
-      <th class="center">
-          {% ordered_column "subtitles_fetched_count" "Subtitle plays" %}       
+
+      <th width="160" class="center">
+          {% ordered_column "subtitles_fetched_count" "Subtitles Fetched" %}       
+
       </th>
       <th class="center">
           {% ordered_column "translation_count" "Translations" %}  	
-	   </th class="center">
-       <th>
+	   </th>
+       <th class="center last">
            {% ordered_column "is_subtitles" "Subtitled?" %}
        </th>
     </tr>
+</thead>
+<tbody>
     {% for video in video_list %}
       <tr>
         <td>
@@ -37,9 +41,10 @@
         <td class="center">{{ video.widget_views_count }}</td>
         <td class="center">{{ video.subtitles_fetched_count }}</td>
         <td class="center">{{ video.translation_count }}</td>
-        <td class="center">{{ video.is_subtitles|yesno }}</td>
+        <td class="center last">{{ video.is_subtitles|yesno }}</td>
       </tr>
     {% endfor %}
+</tbody>
   </table>
   {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
 {% else %}
