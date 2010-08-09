@@ -100,9 +100,9 @@ def _add_share_panel_context_for_history(context, video):
         Site.objects.get_current().domain,
         reverse('videos:history', args=[video.video_id]))
     twitter_fb_message = \
-        "Just found a version of this video with captions: {0}".format(page_url)
+        u"Just found a version of this video with captions: {0}".format(page_url)
     email_message = \
-        "Hey-- just found a version of this video {0}with captions: {1}".format(
+        u"Hey-- just found a version of this video {0}with captions: {1}".format(
         _share_video_title(video), page_url)
     _add_share_panel_context(
         context,
