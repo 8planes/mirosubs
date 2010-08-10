@@ -167,7 +167,7 @@ class OrderedColumnNode(template.Node):
         
         extra_params = ''.join(extra_params)+anchor
             
-        ot = (ordering == self.field_name and order_type == 'asc') and 'desc' or 'asc'
+        ot = (ordering == self.field_name and order_type == 'desc') and 'asc' or 'desc'
         if page:
             link = '?o=%s&ot=%s&page=%s%s' % (self.field_name, ot, page, extra_params)
         else:
