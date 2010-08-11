@@ -101,8 +101,8 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
         [["Thanks for making subtitles!! It's easy to learn ", 
           "and actually fun to do."].join(''),
          ["While you watch the video, type everything people ",
-          "say. Don't let the subtitles get too long -- hit ",
-          "enter after each sentence or long phrase."].join(''),
+          "say and all important text that appears ",
+          "on-screen."].join(''),
          ["Use the key controls below to pause and jump back, ", 
           "which will help you keep up."].join('')],
          3, 0);
