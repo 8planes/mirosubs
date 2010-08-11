@@ -84,9 +84,9 @@ class Video(models.Model):
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
     is_subtitles = models.BooleanField(default=False)
-    # true iff user clicked "finish" at end of captioning process.
+    # true iff we have at least one VideoCaptionVersion with finished == True
     is_complete = models.BooleanField()
-        
+
     def __unicode__(self):
         if self.title:
             return self.title
@@ -225,7 +225,11 @@ class Video(models.Model):
         If version is None, then returns latest VideoCaptionVersion."""
         try:
             if version is None:
-                return self.videocaptionversion_set.order_by('-version_no')[:1].get()
+                finished_captions = self.videocaptionversion_set.filter(finished=True)
+                if finished_captions.exists():
+                    return finished_captions.order_by('-version_no')[:1].get()
+                else:
+                    return None
             else:
                 return self.videocaptionversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
@@ -404,7 +408,8 @@ class VideoCaptionVersion(VersionModel):
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
-    
+    finished = models.BooleanField(default=False)
+
     def language_display(self):
         return 'Original'
     
@@ -497,7 +502,7 @@ class TranslationLanguage(models.Model):
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True)
-    # true iff user has clicked "finish" in translating process.
+    # true iff at least one TranslationVersion has finished == True
     is_complete = models.BooleanField()
     
     # TODO: These methods are duplicated from Video, 
@@ -557,7 +562,11 @@ class TranslationLanguage(models.Model):
         """Returns latest TranslationVersion, or None if none found"""
         try:
             if version is None:
-                return self.translationversion_set.order_by('-version_no')[:1].get()
+                finished_translations = self.translationversion_set.filter(finished=True)
+                if finished_translations.exists():
+                    return finished_translations.order_by('-version_no')[:1].get()
+                else:
+                    return None
             else:
                 return self.translationversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
@@ -579,7 +588,8 @@ class TranslationVersion(VersionModel):
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
-    
+    finished = models.BooleanField(default=False)
+
     def update_changes(self):
         old_version = self.prev_version()
         new_captions = self.captions()

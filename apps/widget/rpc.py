@@ -29,7 +29,7 @@ from django.conf import settings
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
-def show_widget(request, video_url, null_widget, base_state):
+def show_widget(request, video_url, null_widget, base_state=None):
     #FIXME: shorten this method.
     owner = request.user if request.user.is_authenticated() else None
     video, created = models.Video.get_or_create_for_url(video_url, owner)
@@ -103,14 +103,34 @@ def start_editing(request, video_id, base_version_no=None):
 
     video.writelock(request)
     video.save()
-    latest_captions = video.captions()
-    if latest_captions is None:
+    caption_versions = list(video.videocaptionversion_set.order_by('-version_no'))
+    if len(caption_versions) == 0:
         new_version_no = 0
+        base_version_no = None
+    else:
+        last_version = caption_versions[0]
+        if last_version.finished:
+            new_version_no = last_version.version_no + 1
+            base_version_no = last_version.version_no
+        else:
+            if not request.user.is_anonymous() and \
+                    last_version.user.pk == request.user.pk:
+                new_version_no = last_version.version_no
+                base_version_no = last_version.version_no
+            elif len(caption_versions) > 1:
+                last_version = caption_versions[1]
+                new_version_no = last_version.version_no + 1
+                base_version_no = last_version.version_no
+                caption_versions[0].delete()
+            else:
+                new_version_no = 0
+                base_version_no = None
+    if base_version_no is None:
         existing_captions = []
     else:
-        new_version_no = latest_captions.version_no + 1
         existing_captions = \
-            list(video.captions(base_version_no).videocaption_set.all())
+            list(video.captions(
+                base_version_no).videocaption_set.all())
     return { "can_edit" : True,
              "version" : new_version_no,
              "existing" : [caption.to_json_dict() for 
@@ -151,14 +171,36 @@ def start_translating(request, video_id, language_code, editing=False, base_vers
     if not translation_language.can_writelock(request):
         return { "can_edit": False, 
                  "locked_by" : video.writelock_owner_name }
+
+    # FIXME: duplication with start_editing. Ouch!
+
     translation_language.writelock(request)
     translation_language.save()
-    latest_translations = translation_language.translations()
-    if latest_translations is None:
+    translation_versions = list(translation_language.translationversion_set.order_by('-version_no'))
+    if len(translation_versions) == 0:
         new_version_no = 0
+        base_version_no = None
+    else:
+        last_version = translation_versions[0]
+        if last_version.finished:
+            new_version_no = last_version.version_no + 1
+            base_version_no = last_version.version_no
+        else:
+            if not request.user.is_anonymous() and \
+                    last_version.user.pk == request.user.pk:
+                new_version_no = last_version.version_no
+                base_version_no = last_version.version_no
+            elif len(translation_versions) > 1:
+                last_version = translation_versions[1]
+                new_version_no = last_version.version_no + 1
+                base_version_no = last_version.version_no
+                translation_versions[0].delete()
+            else:
+                new_version_no = 0
+                base_version_no = None
+    if base_version_no is None:
         existing_translations = []
     else:
-        new_version_no = latest_translations.version_no + 1
         existing_translations = list(
             translation_language.translations(base_version_no).translation_set.all())
     return_dict = { 'can_edit' : True,
@@ -271,9 +313,12 @@ def finished_captions(request, video_id, version_no, deleted, inserted, updated)
     video = models.Video.objects.get(video_id=video_id)
     if not video.can_writelock(request):
         return { "response" : "unlockable" }
-    last_version = save_captions_impl(request, video, version_no, 
-                                      deleted, inserted, updated)
-    last_version.save()
+    save_captions_impl(request, video, version_no, 
+                       deleted, inserted, updated)
+    last_version = video.captions(version_no)
+    if last_version is not None:
+        last_version.finished = True
+        last_version.save()
     video.release_writelock()
     video.is_complete = True 
     video.save()
@@ -296,9 +341,12 @@ def finished_translations(request, video_id, language_code, version_no,
         video_id=video_id).translation_language(language_code)
     if not translation_language.can_writelock(request):
         return { 'response' : 'unlockable' }
-    last_version = save_translations_impl(request, translation_language,
-                                          version_no, inserted, updated)
-    last_version.save()
+    save_translations_impl(request, translation_language,
+                           version_no, inserted, updated)
+    last_version = translation_language.translations(version_no)
+    if last_version is not None:
+        last_version.finished = True
+        last_version.save()
     translation_language.release_writelock()
     translation_language.is_complete = True
     translation_language.save()
@@ -372,6 +420,8 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
     if video.owner is None:
         video.owner = request.user
     video.save()
+    if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
+        return None
     last_version = video.captions()
     if last_version != None and last_version.version_no >= version_no:
         current_version = last_version
@@ -424,6 +474,8 @@ def apply_caption_changes(caption_set, deleted, inserted, updated,
 
 def save_translations_impl(request, translation_language,
                            version_no, inserted, updated):
+    if len(inserted) == 0 and len(updated) == 0:
+        return None
     last_version = translation_language.translations()
     if last_version != None and last_version.version_no >= version_no:
         current_version = last_version
