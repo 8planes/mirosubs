@@ -70,7 +70,7 @@ def _add_share_panel_context(context,
     context["share_panel_permalink"] = permalink
 
 def _share_video_title(video):
-    return u"(\"{0}\") ".format(video.title) if video.title else ''
+    return u"(\"{0}\") ".format(unicode(video.title)) if video.title else ''
 
 def _add_share_panel_context_for_video(context, video):
     home_page_url = "http://{0}{1}".format(
