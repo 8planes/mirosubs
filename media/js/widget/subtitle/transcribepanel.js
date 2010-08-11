@@ -116,7 +116,7 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB, 0),
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-skip', 'mirosubs-control', 'ctrl', 
+            'mirosubs-skip', 'mirosubs-control', 'shift\n+\n+tab', 
             'Skip Back 8 Seconds', KC.TAB,
             mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
     ];
