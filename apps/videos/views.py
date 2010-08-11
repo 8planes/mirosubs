@@ -543,6 +543,7 @@ def search(request):
                        template_object_name='result',
                        extra_context=context)   
 
+@login_required
 def stop_notification(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     StopNotification.objects.get_or_create(user=request.user, video=video)
