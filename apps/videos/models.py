@@ -778,6 +778,11 @@ class Action(models.Model):
         ordering = ['-created']
         get_latest_by = 'created'
     
+    def type(self):
+        if self.comment:
+            return 'commented'
+        return 'edited'
+    
     def time(self):
         if self.created.date() == date.today():
             format = 'g:i A'

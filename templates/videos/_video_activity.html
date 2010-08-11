@@ -8,7 +8,7 @@
 </ul>
 <ul class="table_body">
 {% for item in events %}
-    <li class="table_row">
+    <li class="table_row {{ item.type }}">
       <span class="grid_10 table_activity">
         {% if item.user %}
             <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>
