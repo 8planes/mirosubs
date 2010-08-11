@@ -81,7 +81,7 @@
                 {% endifnotequal %}
                 &#8592; 
                 <a href="{% url videos:revision pk=prev_version.pk %}">
-                    Previous Revision
+                    Version #{{ prev_version.version_no }}
                 </a>
               </li>
           {% endif %}
@@ -89,7 +89,7 @@
           {% if next_version %}
               <li class="next">
                 <a href="{% url videos:revision pk=next_version.pk %}">
-                    Next Revision
+                    Version #{{ next_version.version_no }}
                 </a> &#8594;
                 {% ifnotequal latest_version next_version %}
                     (<a href="{% url videos:diffing latest_version.pk next_version.pk %}">diff</a>) 
@@ -99,7 +99,7 @@
           
           <li class="current">
             <a href="{% url videos:revision pk=latest_version.pk %}">
-                The most recent revision
+               The most recent revision
             </a>
             {% ifnotequal latest_version version %}
                 (<a href="{% url videos:diffing latest_version.pk version.pk %}">diff</a>) 
