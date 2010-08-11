@@ -145,7 +145,7 @@ mirosubs.RightPanel.prototype.setButtonTextInternal = function(keyCode, modifier
     var spec = this.findSpec_(keyCode, modifiers);
     if (spec)
         goog.dom.setTextContent(
-            spec.textSpan, opt_text ? opt_text : spec.legendText);                    
+            spec.textSpan, opt_text ? opt_text : spec.legendText);
 };
 
 mirosubs.RightPanel.prototype.enableButtonClassInternal =
@@ -162,9 +162,14 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
         var spec = this.legendKeySpecs_[i];
         var textSpan = $d('span', null, spec.legendText);
-        var key = $d('div', spec.divClass,
-                     $d('span', spec.spanClass, spec.keyText),
-                     textSpan);
+        var keyTextSpan = $d('span', spec.spanClass);
+        var keyLines = spec.keyText.split("\n");
+        for (var j = 0; j < keyLines.length; j++) {
+            if (j > 0)
+                goog.dom.appendChild(keyTextSpan, $d('br'));
+            goog.dom.appendChild(keyTextSpan, goog.dom.createTextNode(keyLines[j]));
+        }
+        var key = $d('div', spec.divClass, keyTextSpan, textSpan);
         legendDiv.appendChild(key);
         spec.div = key;
         spec.textSpan = textSpan;

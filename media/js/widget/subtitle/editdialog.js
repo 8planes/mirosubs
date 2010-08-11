@@ -37,6 +37,11 @@ mirosubs.subtitle.EditDialog = function(videoSource, serverModel,
             this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
     this.serverModel_.init(uw, function() {});
+    
+    var anySyncedCaptions = false;
+    for (i = 0; i < existingCaptions.length; i++)
+        if (existingCaptions[i].startTime != -1 || existingCaptions[i].endTime != -1)
+            anySyncedCaptions = true;
 
     this.state_ = null;
     this.currentSubtitlePanel_ = null;
@@ -44,6 +49,8 @@ mirosubs.subtitle.EditDialog = function(videoSource, serverModel,
     this.doneButtonEnabled_ = true;
     this.addingTranslations_ = false;
     this.saved_ = false;
+    if (!anySyncedCaptions)
+        this.setState_(mirosubs.subtitle.EditDialog.State_.TRANSCRIBE);
 };
 goog.inherits(mirosubs.subtitle.EditDialog, mirosubs.Dialog);
 

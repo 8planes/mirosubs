@@ -83,13 +83,13 @@ class SubtitlesUploadForm(forms.Form):
         video._make_writelock(self.user, key)
         video.save()
         
-        latest_captions = video.captions()
+        latest_captions = video.last_captions()
         if latest_captions is None:
             version_no = 0
         else:
             version_no = latest_captions.version_no + 1
         version = VideoCaptionVersion(
-            video=video, version_no=version_no, 
+            video=video, version_no=version_no, finished=True,
             datetime_started=datetime.now(), user=self.user,
             note='Uploaded')
         version.save()
@@ -97,6 +97,7 @@ class SubtitlesUploadForm(forms.Form):
         text = subtitles.read()
         parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))
         ids = []
+
         for i, item in enumerate(parser):
             id = int(random.random()*10e12)
             while id in ids:

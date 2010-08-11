@@ -219,6 +219,12 @@ class Video(models.Model):
         else:
             return CAPTIONS_IN_PROGRESS
 
+    def last_captions(self):
+        try:
+            return self.videocaptionversion_set.all()[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
     def captions(self, version=None):
         """Returns VideoCaptionVersion, or None if no captions
         
@@ -409,7 +415,10 @@ class VideoCaptionVersion(VersionModel):
     text_change = models.FloatField(null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
-
+    
+    class Meta:
+        ordering = ['-version_no']
+    
     def language_display(self):
         return 'Original'
     
@@ -777,6 +786,11 @@ class Action(models.Model):
     class Meta:
         ordering = ['-created']
         get_latest_by = 'created'
+    
+    def type(self):
+        if self.comment:
+            return 'commented'
+        return 'edited'
     
     def time(self):
         if self.created.date() == date.today():
