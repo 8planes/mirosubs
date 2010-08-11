@@ -131,7 +131,7 @@
         <li {% cycle 'class="even"' '' %}>
           {% if item.display_time or item.display_end_time %}
             {{ item.display_time }} - {{ item.display_end_time }} 
-          {% endif %} &gt; {{ item.text }}
+          {% endif %} &gt; {{ item.text|linebreaksbr }}
         </li>
       {% endfor %}
     </ul>

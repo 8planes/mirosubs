@@ -281,7 +281,7 @@ def history(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     context = widget.add_onsite_js_files({})
 
-    qs = VideoCaptionVersion.objects.filter(video=video)   \
+    qs = VideoCaptionVersion.objects.filter(video=video).filter(finished=True)   \
         .exclude(time_change=0, text_change=0)
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
@@ -316,7 +316,7 @@ def translation_history(request, video_id, lang):
     context = widget.add_onsite_js_files({})
    
     qs = TranslationVersion.objects.filter(language=language) \
-        .exclude(time_change=0, text_change=0)
+        .exclude(time_change=0, text_change=0).filter(finished=True)
 
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
