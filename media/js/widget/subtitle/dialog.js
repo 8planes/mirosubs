@@ -160,7 +160,6 @@ mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
         this.currentSubtitlePanel_.suspendKeyEvents(suspended);
 };
 mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
-    this.saved_ = true;
     this.state_ = mirosubs.subtitle.Dialog.State_.FINISHED;
     this.setExtraClass_();
     var sharePanel = new mirosubs.subtitle.SharePanel(
@@ -231,18 +230,30 @@ mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
 mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     if (!this.doneButtonEnabled_)
         return;
-    if (this.state_ == mirosubs.subtitle.Dialog.State_.REVIEW) {
-        this.doneButtonEnabled_ = false;
-        this.getRightPanelInternal().showLoading(true);
-        var that = this;
-        this.serverModel_.finish(function() {
+    if (this.state_ == mirosubs.subtitle.Dialog.State_.REVIEW)
+        this.saveWork(false);
+    else
+        this.enterState_(this.nextState_());
+};
+
+mirosubs.subtitle.Dialog.prototype.isWorkSaved = function() {
+    return !this.unitOfWork_.everContainedWork() || this.saved_;
+};
+
+mirosubs.subtitle.Dialog.prototype.saveWork = function(closeAfterSave) {
+    this.doneButtonEnabled_ = false;
+    this.getRightPanelInternal().showLoading(true);
+    var that = this;
+    this.serverModel_.finish(function() {
+        that.saved_ = true;
+        if (closeAfterSave)
+            that.setVisible(false);
+        else {
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);
             that.setFinishedState_();
-        });
-    }
-    else
-        this.enterState_(this.nextState_());
+        }
+    });
 };
 
 mirosubs.subtitle.Dialog.prototype.enterState_ = function(state) {
