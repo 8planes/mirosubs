@@ -37,12 +37,20 @@ mirosubs.subtitle.EditDialog = function(videoSource, serverModel,
             this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
     this.serverModel_.init(uw, function() {});
+    
+    var anySyncedCaptions = false;
+    for (i = 0; i < existingCaptions.length; i++)
+        if (existingCaptions[i].startTime != -1 || existingCaptions[i].endTime != -1)
+            anySyncedCaptions = true;
 
     this.state_ = null;
     this.currentSubtitlePanel_ = null;
     this.rightPanelListener_ = new goog.events.EventHandler(this);
     this.doneButtonEnabled_ = true;
     this.addingTranslations_ = false;
+    this.saved_ = false;
+    if (!anySyncedCaptions)
+        this.setState_(mirosubs.subtitle.EditDialog.State_.TRANSCRIBE);
 };
 goog.inherits(mirosubs.subtitle.EditDialog, mirosubs.Dialog);
 
@@ -195,18 +203,28 @@ mirosubs.subtitle.EditDialog.prototype.handleLegendKeyPress_ = function(event) {
 mirosubs.subtitle.EditDialog.prototype.handleDoneKeyPress_ = function(event) {
     if (!this.doneButtonEnabled_)
         return;
-    if (this.state_ == mirosubs.subtitle.EditDialog.State_.EDIT) {
-        this.doneButtonEnabled_ = false;
-        this.getRightPanelInternal().showLoading(true);
-        var that = this;
-        this.serverModel_.finish(function() {
+    if (this.state_ == mirosubs.subtitle.EditDialog.State_.EDIT)
+        this.saveWork(false);
+    else
+        this.setState_(this.nextState_());
+};
+mirosubs.subtitle.EditDialog.prototype.isWorkSaved = function() {
+    return !this.unitOfWork_.everContainedWork() || this.saved_;
+};
+mirosubs.subtitle.EditDialog.prototype.saveWork = function(closeAfterSave) {
+    this.doneButtonEnabled_ = false;
+    this.getRightPanelInternal().showLoading(true);
+    var that = this;
+    this.serverModel_.finish(function() {
+        that.saved_ = true;
+        if (closeAfterSave)
+            that.setVisible(false);
+        else {
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);
             that.setFinishedState_();
-        });
-    }
-    else
-        this.setState_(this.nextState_());
+        }
+    });
 };
 mirosubs.subtitle.EditDialog.prototype.nextState_ = function() {
     var s = mirosubs.subtitle.EditDialog.State_;

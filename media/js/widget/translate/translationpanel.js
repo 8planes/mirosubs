@@ -51,13 +51,22 @@ mirosubs.translate.TranslationPanel.prototype.createLanguageSelect_ =
                              'Select Language...') ];
     var initialSelectedIndex = -1;
     var i;
+    
+    var languageMap = {};
+    var languageNames = [];
     for (i = 0; i < this.languages_.length; i++) {
+        languageMap[this.languages_[i]['name']] = this.languages_[i]['code'];
+        languageNames.push(this.languages_[i]['name']);
+    }
+    languageNames.sort();
+    
+    for (i = 0; i < languageNames.length; i++) {
+        var code = languageMap[languageNames[i]];
         selectOptions.push(
             $d('option',
-               {'value':this.languages_[i]['code']},
-                this.languages_[i]['name']));
-        if (this.initialLanguageCode_ &&
-            this.languages_[i]['code'] == this.initialLanguageCode_)
+               {'value': code},
+               languageNames[i]));
+        if (this.initialLanguageCode_ && code == this.initialLanguageCode_)
             initialSelectedIndex = i + 1;
     }
     var languageSelect = $d('select', null, selectOptions);
@@ -69,7 +78,7 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     mirosubs.translate.TranslationPanel.superClass_.createDom.call(this);
     var el = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.languageSelect_ = this.createLanguageSelect_($d)
+    this.languageSelect_ = this.createLanguageSelect_($d);
     el.appendChild($d('div', 'mirosubs-langDrop',
                       goog.dom.createTextNode('To begin translating: '),
                       this.languageSelect_));    

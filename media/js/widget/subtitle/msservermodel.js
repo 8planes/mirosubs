@@ -39,7 +39,6 @@ mirosubs.subtitle.MSServerModel = function(videoID, editVersion, isNull) {
     this.initialized_ = false;
     this.finished_ = false;
     this.isNull_ = isNull;
-    this.loginPesterFreq_ = 1000 * 60 * (isNull ? 10 : 1);
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
@@ -70,7 +69,6 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork, loginNagFn
             that.timerTick_();
         }, 
         (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
-    this.lastLoginPesterTime_ = new Date().getTime();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
@@ -100,7 +98,7 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
 
 mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ = 
     function(action, opt_forceLogin) {
-    
+
     mirosubs.subtitle.MSServerModel.logger_.info(
         "loginThenAction_ for " + mirosubs.currentUsername);
     if (mirosubs.currentUsername == null) {
@@ -108,21 +106,14 @@ mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ =
         if (!this.isNull_)
             mirosubs.Rpc.call("update_video_lock", 
                               { 'video_id': this.videoID_ });
-        var currentTime = new Date().getTime();
-        if (opt_forceLogin || 
-            currentTime >= this.lastLoginPesterTime_ + this.loginPesterFreq_) {
-            if (mirosubs.isLoginAttemptInProgress())
-                return;
-            this.lastLoginPesterTime_ = currentTime;
-            if (opt_forceLogin) {
-                alert("In order to finish and save your work, you need to log in.");
-                mirosubs.login(function(loggedIn) {
-                    if (loggedIn)
-                        action();
-                });
-            }
-            else
-                this.loginNagFn_();
+        if (mirosubs.isLoginAttemptInProgress())
+            return;
+        if (opt_forceLogin) {
+            alert("In order to finish and save your work, you need to log in.");
+            mirosubs.login(function(loggedIn) {
+                if (loggedIn)
+                    action();
+            });
         }
     }
     else

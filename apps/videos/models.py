@@ -33,7 +33,7 @@ from youtube import get_video_id
 yt_service = YouTubeService()
 yt_service.ssl = False
 
-NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
+NO_CAPTIONS, CAPTIONS_FINISHED = range(2)
 VIDEO_TYPE_HTML5 = 'H'
 VIDEO_TYPE_YOUTUBE = 'Y'
 VIDEO_TYPE_BLIPTV = 'B'
@@ -84,9 +84,9 @@ class Video(models.Model):
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
     is_subtitles = models.BooleanField(default=False)
-    # true iff user clicked "finish" at end of captioning process.
+    # true iff we have at least one VideoCaptionVersion with finished == True
     is_complete = models.BooleanField()
-        
+
     def __unicode__(self):
         if self.title:
             return self.title
@@ -206,26 +206,26 @@ class Video(models.Model):
     @property
     def caption_state(self):
         """Subtitling state for this video 
-
-        Either subtitling hasn't started yet, or someone has marked one 
-        VideoCaptionVersion as finished, or VideoCaptionVersions exist 
-        but none have been marked as finished yet.
         """
-        video_captions = self.videocaptionversion_set.all()
-        if video_captions.count() == 0:
-            return NO_CAPTIONS
-        if self.is_complete:
-            return CAPTIONS_FINISHED
-        else:
-            return CAPTIONS_IN_PROGRESS
+        return NO_CAPTIONS if self.captions() is None else CAPTIONS_FINISHED
 
+    def last_captions(self):
+        try:
+            return self.videocaptionversion_set.all()[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
     def captions(self, version=None):
         """Returns VideoCaptionVersion, or None if no captions
         
-        If version is None, then returns latest VideoCaptionVersion."""
+        If version is None, then returns latest finished VideoCaptionVersion."""
         try:
             if version is None:
-                return self.videocaptionversion_set.order_by('-version_no')[:1].get()
+                finished_captions = self.videocaptionversion_set.filter(finished=True)
+                if finished_captions.exists():
+                    return finished_captions.order_by('-version_no')[:1].get()
+                else:
+                    return None
             else:
                 return self.videocaptionversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
@@ -404,6 +404,10 @@ class VideoCaptionVersion(VersionModel):
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-version_no']
     
     def language_display(self):
         return 'Original'
@@ -497,7 +501,7 @@ class TranslationLanguage(models.Model):
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True)
-    # true iff user has clicked "finish" in translating process.
+    # true iff at least one TranslationVersion has finished == True
     is_complete = models.BooleanField()
     
     # TODO: These methods are duplicated from Video, 
@@ -557,7 +561,11 @@ class TranslationLanguage(models.Model):
         """Returns latest TranslationVersion, or None if none found"""
         try:
             if version is None:
-                return self.translationversion_set.order_by('-version_no')[:1].get()
+                finished_translations = self.translationversion_set.filter(finished=True)
+                if finished_translations.exists():
+                    return finished_translations.order_by('-version_no')[:1].get()
+                else:
+                    return None
             else:
                 return self.translationversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
@@ -579,7 +587,8 @@ class TranslationVersion(VersionModel):
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
-    
+    finished = models.BooleanField(default=False)
+
     def update_changes(self):
         old_version = self.prev_version()
         new_captions = self.captions()
@@ -767,6 +776,11 @@ class Action(models.Model):
     class Meta:
         ordering = ['-created']
         get_latest_by = 'created'
+    
+    def type(self):
+        if self.comment:
+            return 'commented'
+        return 'edited'
     
     def time(self):
         if self.created.date() == date.today():

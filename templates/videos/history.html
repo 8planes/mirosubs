@@ -15,7 +15,7 @@
             text-align: center;
         }
         
-        .mirosubs-videoDiv video {
+        .mirosubs-widget video {
             width: 460px;
         }
         
@@ -253,7 +253,7 @@
         <ul class="table_body"> 
             {% for item in last_version.captions %}
                 <li class="table_transcript {% cycle 'even' '' %}">
-                    {{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text }}
+                    {{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text|linebreaksbr }}
                 </li>
             {% endfor %}
         </ul>

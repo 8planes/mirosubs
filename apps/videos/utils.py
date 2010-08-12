@@ -102,13 +102,15 @@ class TtmlSubtitleParser(SubtitleParser):
         
 class SrtSubtitleParser(SubtitleParser):
     
-    def __init__(self, file):
+    def __init__(self, subtitles):
+        self._clean_pattern = re.compile(r'\{.*?\}', re.DOTALL)
         pattern = r'\d+\n'
         pattern += r'(?P<s_hour>\d{2}):(?P<s_min>\d{2}):(?P<s_sec>\d{2}),(?P<s_secfr>\d+)'
         pattern += r' --> '
         pattern += r'(?P<e_hour>\d{2}):(?P<e_min>\d{2}):(?P<e_sec>\d{2}),(?P<e_secfr>\d+)'
-        pattern += r'\r?\n(?P<text>.+?)\n\n'        
-        super(SrtSubtitleParser, self).__init__(file, pattern, [re.DOTALL])
+        pattern += r'\n(?P<text>.+?)\n\n'
+        subtitles = strip_tags(subtitles)
+        super(SrtSubtitleParser, self).__init__(subtitles, pattern, [re.DOTALL])
         #replace \r\n to \n and fix end of last subtitle
         self.subtitles = self.subtitles.replace('\r\n', '\n')+'\n\n'
     
@@ -120,19 +122,19 @@ class SrtSubtitleParser(SubtitleParser):
         output = {}
         output['start_time'] = self._get_time(r['s_hour'], r['s_min'], r['s_sec'], r['s_secfr'])
         output['end_time'] = self._get_time(r['e_hour'], r['e_min'], r['e_sec'], r['e_secfr'])
-        output['caption_text'] = r['text']
+        output['caption_text'] = self._clean_pattern.sub('', r['text'])
         return output
     
 class SsaSubtitleParser(SrtSubtitleParser):
     def __init__(self, file):
         pattern = r'Dialogue: [\w=]+,' #Dialogue: <Marked> or <Layer>,
-        pattern += '(?P<s_hour>\d):(?P<s_min>\d{2}):(?P<s_sec>\d{2})[\.\:](?P<s_secfr>\d+),' #<Start>,
+        pattern += r'(?P<s_hour>\d):(?P<s_min>\d{2}):(?P<s_sec>\d{2})[\.\:](?P<s_secfr>\d+),' #<Start>,
         pattern += r'(?P<e_hour>\d):(?P<e_min>\d{2}):(?P<e_sec>\d{2})[\.\:](?P<e_secfr>\d+),' #<End>,
         pattern += r'[\w ]+,' #<Style>,
-        pattern += '[\w ]*,' #<Character name>,
-        pattern += '\d{4},\d{4},\d{4},' #<MarginL>,<MarginR>,<MarginV>,
-        pattern += '[\w ]*,' #<Efect>,
-        pattern += '(?:\{.*?\})?(?P<text>.+?)\n' #[{<Override control codes>}]<Text> 
+        pattern += r'[\w ]*,' #<Character name>,
+        pattern += r'\d{4},\d{4},\d{4},' #<MarginL>,<MarginR>,<MarginV>,
+        pattern += r'[\w ]*,' #<Efect>,
+        pattern += r'(?:\{.*?\})?(?P<text>.+?)\n' #[{<Override control codes>}]<Text> 
         super(SrtSubtitleParser, self).__init__(file, pattern, [re.DOTALL])
         #replace \r\n to \n and fix end of last subtitle
         self.subtitles = self.subtitles.replace('\r\n', '\n')+'\n'
