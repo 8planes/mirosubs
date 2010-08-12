@@ -300,9 +300,10 @@ class Video(models.Model):
             pass
 
     def translation_language_codes(self):
-        """All iso language codes with translations."""
+        """All iso language codes with finished translations."""
         return set([trans.language for trans 
-                    in self.translationlanguage_set.all()])
+                    in self.translationlanguage_set.filter(
+                    is_complete=True)])
 
     def null_translation_language_codes(self, user):
         null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)
