@@ -265,6 +265,8 @@ def release_video_lock(request, video_id):
     return { "response": "ok" }
 
 def get_my_user_info(request):
+#    print('get_my_user_info authenticated: {0}'.format(request.user.is_authenticated()))
+
     if request.user.is_authenticated():
         return { "logged_in" : True,
                  "username" : request.user.username }
