@@ -397,7 +397,7 @@ mirosubs.widget.Widget.prototype.editSubtitlesImpl_ =
 {
     this.videoPlayer_.stopLoading();
     this.turnOffSubs_();
-    var dialog = new mirosubs.subtitle.EditDialog(
+    var dialog = new mirosubs.subtitle.Dialog(
         this.videoSource_,
         new mirosubs.subtitle.MSServerModel(
             this.videoID_, version, this.nullWidget_),
