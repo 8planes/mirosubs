@@ -143,7 +143,20 @@
                     <td>A+</td>
                     <td style="text-align: center;">
                         n/a
+
+                    <span class="grid_2">A+</span>
+                    <span class="grid_4 grid_last" style="text-align: center;">
+                        {% if video.captions %}
+                            <span class="progress">
+                                <span class="completion {% progress_color 0 %}" style="width: 0%"></span>
+                                {{ video.captions.videocaption_set.all|length }} subtitles
+                            </span>
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </span>
                     </td>
+
 
                 </tr>                
                 {% for item in translations %}
