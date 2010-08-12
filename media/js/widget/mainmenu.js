@@ -114,35 +114,13 @@ mirosubs.MainMenu.prototype.showMenu = function(target, x, y) {
     if (!this.isVisible() && !this.wasRecentlyHidden())
         this.setMenuItems_();
 
-    if (this.warning_)
-        return;
-
     if (mirosubs.BrokenWarning.needsWarning()) {
         var warning = new mirosubs.BrokenWarning();
         warning.setVisible(true);
         return;
     }
 
-    if (mirosubs.isEmbeddedInDifferentDomain()) {
-        this.warning_ = new mirosubs.EmbedWarning(
-            goog.bind(this.showMenuInternal_, this, target, x, y));
-        if (this.warning_.showWarning()) {
-            var that = this;
-            goog.events.listenOnce(
-                this.warning_,
-                goog.ui.Dialog.EventType.AFTER_HIDE,
-                function(event) {
-                    that.warning_ = null;
-                });
-        }
-        else {
-            this.warning_.dispose();
-            this.warning_ = null;
-        }
-    }
-    else {
-        this.showMenuInternal_(target, x, y);
-    }
+    this.showMenuInternal_(target, x, y);
 };
 mirosubs.MainMenu.prototype.showMenuInternal_ = function(target, x, y) {
     mirosubs.MainMenu.superClass_.showMenu.call(this, target, x, y);
