@@ -124,7 +124,9 @@
       {% endif %}
     </div>
     <div class="clearboth">&nbsp;</div>
-    <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}" class="return_history floatright">&lt;&lt; Return to revision history</a>
+    <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}#revisions" class="return_history floatright">
+        &lt;&lt; See full revision history
+    </a>
     
     <ul class="revision_list">
       {% for item in version.captions %}
