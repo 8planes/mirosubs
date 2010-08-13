@@ -117,6 +117,14 @@
 
 {% block main_content %}
     <h2><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
+
+    <ul class="breadcrumb"> 
+      <li><a href="#">English Subtitles</a></li>
+      <li><a href="#">Revision History</a></li>
+      <li><a href="#">Revision #5</a></li>
+    </ul>
+
+
     <p class="what_lang">
         {% block lang_display %} 
             in Original Language.
@@ -176,11 +184,10 @@
 
     <div style="display: none" id="revisions-tab" class="tab">
         {% if revision_list|length > 1 %}
-            <button class="compare_versions_button">
+            <button class="compare_versions_button small_button">
                 <span>Compare Revisions</span>
             </button>
-        {% endif %}
-        
+        {% endif %}        
         {% if revision_list %}
            {% if is_paginated %}{% ordered_paginator 3 '#revisions' %}{% endif %} 
 
