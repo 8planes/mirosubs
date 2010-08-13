@@ -1,4 +1,4 @@
-{% load feedback %}
+{% load feedback thumbnail %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -82,14 +82,15 @@
           {% block logo %}<a href="/">Universal Subtitles</a>{% endblock %}
           <span class="project">a project of the participatory culture foundation</span>
         </h1>
-
+        
+        {% if user.is_authenticated %}
         <div class="user_panel">
-          <img src="/site_media/images/default_thumbnail_small.png" /> 
-          <a href="#">Username</a>
+          <img src="{% thumbnail user.picture 25x25 %}" /> 
+          <a href="#">{{ user }}</a>
           <span class="points"><strong>Points</strong> 3,999</span>
           <span class="awards"><strong>Awards</strong> 3,999</span>
         </div>
-
+        {% endif %}
 
         <ul class="nav">
           <li class="first create_link"><a href="/videos/create/"><span>Subtitle a Video</span></a></li>
