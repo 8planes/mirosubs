@@ -58,5 +58,7 @@ mirosubs.BrokenWarning.prototype.enterDocument = function() {
 };
 
 mirosubs.BrokenWarning.needsWarning = function() {
-    return goog.userAgent.IE && !goog.userAgent.isVersion(8);;
+    mirosubs.BrokenWarning.logger_.info(goog.userAgent.VERSION);
+    mirosubs.BrokenWarning.logger_.info(goog.userAgent.isVersion(8));
+    return goog.userAgent.IE && !goog.userAgent.isVersion(8);
 };
