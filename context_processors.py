@@ -29,4 +29,7 @@ def current_commit(request):
     return {'LAST_COMMIT_GUID': settings.LAST_COMMIT_GUID}
 
 def custom(request):
-    return {'GOOGLE_ANALYTICS_NUMBER': settings.GOOGLE_ANALYTICS_NUMBER}
+    return {
+        'GOOGLE_ANALYTICS_NUMBER': settings.GOOGLE_ANALYTICS_NUMBER,
+        'DEBUG': settings.DEBUG
+    }
