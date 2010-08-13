@@ -197,7 +197,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'context_processors.current_site',
     'context_processors.current_commit',
-    "django.contrib.messages.context_processors.messages",
+    'context_processors.custom',
+    'django.contrib.messages.context_processors.messages',
 )
 
 INSTALLED_APPS = (
@@ -267,6 +268,8 @@ FEEDBACK_RESPONSE_TEMPLATE = 'feedback_response.html'
 PROJECT_VERSION = '0.5'
 
 EDIT_END_THRESHOLD = 120
+
+GOOGLE_ANALYTICS_NUMBER = 'UA-xxxxxx-x'
 
 try:
     from commit import LAST_COMMIT_GUID
