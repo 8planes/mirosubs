@@ -32,6 +32,11 @@ line-height: 1.5em;
 }
 
 
+
+
+
+
+
 #id_changes_notification{
 width: 1em !important;
 float: left;
@@ -55,6 +60,74 @@ background: #fff;
 .styled .head{
 background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
 }
+
+
+
+
+
+table{
+width: 980px;
+background: #fff;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+clear: both;
+border: 1px solid #ddd;
+}
+
+thead{
+-moz-border-radius: 5px;  
+background: #fff url(../images/gradient_light.png) 0 2px repeat-x;
+-webkit-border-radius: 5px;
+border-bottom: 1px solid #aaa;
+}
+
+th{
+text-align: left;
+padding: 0;
+border-bottom: 1px solid #aaa;
+border-right: 1px solid #ccc;
+}
+
+th span, th a{
+color: #333 !important;
+padding: 10px 15px;
+display: block;
+
+text-shadow: 1px 1px 0px #fff;
+}
+
+
+th a{
+margin-right: 15px;
+padding-right: 25px;
+text-decoration: none !important;
+background: url(../images/sort_arrows.gif) right 11px no-repeat;
+
+}
+
+
+tr.even{
+background: #edfcfd !important;
+}
+
+
+th.last{
+border-right: none !important;
+}
+
+
+td{
+text-align: left;
+border-bottom: 1px solid #ddd;
+padding: 15px;
+border-right: 1px solid #ddd;
+
+}
+
+td.last{
+border-right: none;
+}
+
 
 
 /*/////////////////////////////////////////////
@@ -281,7 +354,7 @@ position: relative;
 h2{
 margin: 0px 0 15px;
 clear: both !important;
-line-height: 15px;
+line-height: 1.1em;
 font-size: 20px;
 }
 
@@ -488,18 +561,6 @@ background: url(../images/watercolor2.png) center 30px no-repeat;
 
 }
 
-
-
-table{
-width: 980px;
-}
-
-th, td{
-text-align: left;
-border-bottom: 1px solid #ddd;
-padding: 5px;
-}
-
 .main_video_form{
 padding-top: 30px;
 width: 880px;
@@ -688,12 +749,8 @@ line-height: 30px;
 
 form p input, form p textarea, #feedback_form p input{
 display: block;
-border-top: 1px solid #bed3d7;
-border-bottom: 1px solid #ebfcff;
-border-left: 1px solid #c6dee2;
-border-right: 1px solid #c6dee2;
+border: 0;
 font-size: 15px;
-background: #fff url(../images/gradient_light.png) 0 -135px repeat-x;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
 padding: 10px;
@@ -701,6 +758,10 @@ margin-bottom: 5px;
 width: 378px;
 line-height: 15px;
 font-family: Arial, Helvetica, sans-serif;
+box-shadow:inset 0px 1px 2px #555;
+-moz-box-shadow:inset 0px 1px 2px #555;
+-webkit-box-shadow:inset 0px 1px 2px #555;
+background: -moz-linear-gradient(top,  #ddd,  #fff);
 }
 
 form p textarea{
@@ -1212,7 +1273,6 @@ float: left !important;
 clear: none !important;
 width: 320px;
 margin: 0 50px 0 0;
-padding-top: 8px;
 }
 
 
@@ -1220,7 +1280,11 @@ padding-top: 8px;
 .get_updates form p input{
 float: left !important;
 clear: none;
+margin: 0;
 width: 305px;
+padding-top: 14px;
+padding-left: 14px;
+border-bottom: #333;
 }
 
 
@@ -1689,11 +1753,14 @@ margin-right: 20px;
 }
 
 
+
+
 .compare_versions_button{
-float: right;
-clear: none !important;
-margin: 20px 0 0 !important;
+position:absolute;
+left: 0;
+margin-top: 5px;
 }
+
 
 
 #comment-form{
@@ -2085,11 +2152,6 @@ padding-bottom: 12px;
 
 .footer{
 padding: 20px 30px 16px;
-border: 1px solid #f2fdff;
-border-right: 0;
-border-left: 0;
-border-top: 1px solid #bed3d7;
-
 margin: 50px 0 80px;
 color: #333;
 clear: both;
@@ -2097,7 +2159,6 @@ width: 920px;
 margin: 60px auto;
 font-weight: bold;
 font-size: 13px;
-text-shadow: 1px 1px 1px #fff;
 background: url(../images/1x1.png);
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
@@ -2105,21 +2166,14 @@ height: 1.6em;
 }
 
 
-
 .footer a{
 color: #333;
-text-shadow: 1px 1px 1px #fff;
 }
-
 
 
 .footer .floatright a{
 padding-left: 20px;
 }
-
-
-
-
 
 
 .drumbeat{
@@ -2135,14 +2189,10 @@ margin: 17px 40px 20px 0;
 }
 
 
-
-
-
 .drumbeat div{
 float: left;
 width: 500px;
 }
-
 
 
 .drumbeat div p{
@@ -2150,12 +2200,9 @@ margin: 0 0 10px;
 }
 
 
-
-
 .drumbeat div p a{
 padding-left: 40px;
 }
-
 
 
 .how-to-video-image{
@@ -2536,7 +2583,6 @@ text-decoration: underline;
 
 .user_panel{
 right: 0;
-display: none;
 top: 15px;
 font-size: 11px;
 position: absolute;
@@ -2579,6 +2625,132 @@ margin-top: 2px;
 #how-to-video-flash{
 width: 800px;
 }
+
+
+
+
+
+
+
+
+/* State selector menu */
+ul.breadcrumb li ul.state-select {  
+     list-style: none;  
+     position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/  
+     left: -1px;  
+     background: #fff;  
+     margin: 0; padding: 0;  
+     display: none;  
+     float: left;  
+     width: 172px;  
+top: 47px;
+border: 1px solid #ddd;
+border-top: 0;
+
+}
+
+
+ul.breadcrumb li ul.state-select li {  
+     list-style: none;  
+     width: 170px;  
+background: none !important;
+}
+
+ul.breadcrumb li ul.state-select li a{  
+     list-style: none;  
+     width: 122px;  
+background: none !important;
+border-top: 1px solid #ddd;
+}
+
+ul.breadcrumb li ul.state-select li a:hover{  
+background: #fbfbfc !important;
+}
+
+
+
+ul.breadcrumb li span.subhover {background-position: center bottombottom; cursor: pointer;} /*--Hover effect for trigger--*/  
+
+
+.breadcrumb{
+border: 1px solid #ddd;
+-moz-border-radius: 4px;
+height: 40px;
+padding: 0;
+clear: both;
+width: 100%;
+letter-spacing: 0.01em;
+float: left;
+margin: 15px 0 20px;
+}
+
+.breadcrumb li{
+float: left;
+list-style: none;
+background: url(../images/crumb.png) right -1px no-repeat;
+-moz-border-radius-topleft: 4px;
+clear: none;
+position: relative;
+z-index: 100;
+}
+
+.breadcrumb li a span{
+padding: 0 0 0 15px;
+}
+
+
+
+
+.breadcrumb .first{
+z-index: 95;
+margin-left: -30px;
+}
+
+
+.breadcrumb .first a{
+padding-left: 45px;
+}
+
+
+.breadcrumb .second{
+z-index: 90;
+margin-left: -30px;
+}
+
+
+.breadcrumb .second a{
+padding-left: 45px;
+}
+
+
+.breadcrumb li a{
+float: left;
+height: 24px;
+list-style: none;
+padding: 16px 35px 0 15px;
+text-decoration: none;
+color: #333; 
+line-height: 1em;
+font-size: 11px;
+margin: 0;
+position: relative;
+}
+
+
+
+
+
+.breadcrumb li:hover{
+z-index: 120;
+}
+
+
+.breadcrumb li a:hover{
+text-decoration: underline;
+}
+
+
+
 
 
 

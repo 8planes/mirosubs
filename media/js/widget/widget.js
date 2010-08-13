@@ -154,10 +154,6 @@ mirosubs.widget.Widget.prototype.setInitialVideoTabState_ =
     var M = mirosubs.widget.VideoTab.Messages;
     if (initialTab == IS.SUBTITLE_ME)
         this.videoTab_.setText(M.SUBTITLE_ME);
-    else if (initialTab == IS.CONTINUE)
-        this.videoTab_.setText(M.CONTINUE);
-    else if (initialTab == IS.IN_PROGRESS)
-        this.videoTab_.setText(M.IN_PROGRESS + opt_lockedBy);
     else if (initialTab == IS.CHOOSE_LANGUAGE)
         this.videoTab_.setText(M.CHOOSE_LANGUAGE);
 };
@@ -401,7 +397,7 @@ mirosubs.widget.Widget.prototype.editSubtitlesImpl_ =
 {
     this.videoPlayer_.stopLoading();
     this.turnOffSubs_();
-    var dialog = new mirosubs.subtitle.EditDialog(
+    var dialog = new mirosubs.subtitle.Dialog(
         this.videoSource_,
         new mirosubs.subtitle.MSServerModel(
             this.videoID_, version, this.nullWidget_),

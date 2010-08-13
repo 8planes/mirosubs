@@ -22,6 +22,7 @@ goog.provide('mirosubs.UnitOfWork.EventType');
 mirosubs.UnitOfWork = function() {
     goog.events.EventTarget.call(this);
     this.instantiateLists_();
+    this.everContainedWork_ = false;
 };
 goog.inherits(mirosubs.UnitOfWork, goog.events.EventTarget);
 
@@ -40,6 +41,7 @@ mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
         goog.array.contains(this.deleted, obj) ||
         goog.array.contains(this.neu, obj))
         throw new "registerNew failed";
+    this.everContainedWork_ = true;
     this.neu.push(obj);
     this.issueWorkEvent_();
 };
@@ -49,6 +51,7 @@ mirosubs.UnitOfWork.prototype.registerUpdated = function(obj) {
         throw new "registerUpdated failed";
     if (!goog.array.contains(this.neu, obj) && 
         !goog.array.contains(this.updated, obj)) {
+        this.everContainedWork_ = true;
         this.updated.push(obj);
         this.issueWorkEvent_();
     }
@@ -58,11 +61,16 @@ mirosubs.UnitOfWork.prototype.registerDeleted = function(obj) {
     if (goog.array.contains(this.neu, obj))
         goog.array.remove(this.neu, obj);
     else {
+        this.everContainedWork_ = true;
         goog.array.remove(this.updated, obj);
         if (!goog.array.contains(this.deleted))
             this.deleted.push(obj);
         this.issueWorkEvent_();
     }
+};
+
+mirosubs.UnitOfWork.prototype.everContainedWork = function() {
+    return this.everContainedWork_;
 };
 
 mirosubs.UnitOfWork.prototype.containsWork = function() {

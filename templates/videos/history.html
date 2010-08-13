@@ -15,7 +15,7 @@
             text-align: center;
         }
         
-        .mirosubs-videoDiv video {
+        .mirosubs-widget video {
             width: 460px;
         }
         
@@ -117,6 +117,14 @@
 
 {% block main_content %}
     <h2><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
+
+    <ul class="breadcrumb"> 
+      <li><a href="#">English Subtitles</a></li>
+      <li><a href="#">Revision History</a></li>
+      <li><a href="#">Revision #5</a></li>
+    </ul>
+
+
     <p class="what_lang">
         {% block lang_display %} 
             in Original Language.
@@ -176,56 +184,60 @@
 
     <div style="display: none" id="revisions-tab" class="tab">
         {% if revision_list|length > 1 %}
-            <button class="compare_versions_button">
+            <button class="compare_versions_button small_button">
                 <span>Compare Revisions</span>
             </button>
-        {% endif %}
-        
+        {% endif %}        
         {% if revision_list %}
            {% if is_paginated %}{% ordered_paginator 3 '#revisions' %}{% endif %} 
 
            {% block table %}
-            <ul class="table_head">
-                <li class="grid_4">
+            <table cellpadding="0" cellspacing="0">
+            <thead>
+              <tr>
+                <th>
                     {% ordered_column "date" "Most Recent" #revisions %}
-                </li>
-                <li class="grid_4">
+                </th>
+                <th>
                     {% ordered_column "user" "User" #revisions %}
-                </li>
-                <li class="grid_2">
+                </th>
+                <th>
                     {% ordered_column "note" "Note" #revisions %}
-                </li>
-                <li class="grid_1">
+                </th>
+                <th>
                     {% ordered_column "time" "Time" #revisions %}
-                </li>
-                <li class="grid_1 grid_last">
+                </th>
+                <th>
                     {% ordered_column "text" "Text" #revisions %}
-                </li>
-            </ul>
+                </th>
+              </tr> 
+            </thead>
             
-            <ul class="table_body">
+            <tbody>
                 {% for item in revision_list %}
-                <li {% cycle 'class="even"' '' %}>
+                
+                <tr {% cycle 'class="even"' '' %}>
 
-                        <span class="grid_4">
-                            <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/><a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
-                        </span>
-                        <span class="grid_4">
-                            <a href="{% url profiles:profile item.user.pk %}">{{ item.user }}</a>
-                        </span>
-                        <span class="grid_2">
-                            {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}
-                        </span>
-                        <span class="grid_1">
-                            {{ item.time_change_display }}
-                        </span>
-                        <span class="grid_1 grid_last">
-                            {{ item.text_change_display }}
-                        </span>
+                  <td>
+                      <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/><a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
+                  </td>
+                  <td>
+                      <a href="{% url profiles:profile item.user.pk %}">{{ item.user }}</a>
+                  </td>
+                  <td>
+                      {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td>
+                      {{ item.time_change_display }}
+                  </td>
+                  <td>
+                      {{ item.text_change_display }}
+                  </td>
 
-                </li>
+                </tr>
                 {% endfor %}
-            </ul>
+              </tbody>
+            </table>
             
             <div style="clear: both"></div>
            {% endblock %}

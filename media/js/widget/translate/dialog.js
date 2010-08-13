@@ -36,6 +36,7 @@ mirosubs.translate.Dialog = function(videoSource,
      * @type {?Array.<{'code':string, 'name':string}>}
      */
     this.availableLanguages_ = null;
+    this.saved_ = false;
 };
 goog.inherits(mirosubs.translate.Dialog, mirosubs.Dialog);
 mirosubs.translate.Dialog.prototype.createDom = function() {
@@ -76,12 +77,19 @@ mirosubs.translate.Dialog.prototype.createRightPanel_ = function() {
         "Submit final translation", "Resources for Translators");
 };
 mirosubs.translate.Dialog.prototype.handleDoneKeyPress_ = function(event) {
+    this.saveWork(true);
+    event.preventDefault();
+};
+mirosubs.translate.Dialog.prototype.isWorkSaved = function() {
+    return !this.unitOfWork_.everContainedWork() || this.saved_;
+};
+mirosubs.translate.Dialog.prototype.saveWork = function(closeAfterSave) {
     var that = this;
     this.serverModel_.finish(function(availableLanguages) {
+        that.saved_ = true;
         that.availableLanguages_ = availableLanguages;
         that.setVisible(false);
     });
-    event.preventDefault();
 };
 mirosubs.translate.Dialog.prototype.getAvailableLanguages = function() {
     return this.availableLanguages_;

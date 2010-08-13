@@ -34,15 +34,11 @@ goog.inherits(mirosubs.widget.VideoTab, goog.ui.Component);
 
 mirosubs.widget.VideoTab.InitialState = {
     SUBTITLE_ME: 0,
-    CONTINUE: 1,
-    IN_PROGRESS: 2,
-    CHOOSE_LANGUAGE: 3    
+    CHOOSE_LANGUAGE: 1
 };
 
 mirosubs.widget.VideoTab.Messages = {
     SUBTITLE_ME: 'Subtitle me',
-    CONTINUE : 'Continue subtitling',
-    IN_PROGRESS : 'Subtitling in progress/',
     CHOOSE_LANGUAGE : 'Choose language'
 };
 
@@ -57,9 +53,11 @@ mirosubs.widget.VideoTab.prototype.createDom = function() {
            this.imageElem_, this.spanElem_);
     this.getElement().appendChild(this.anchorElem_);
 };
+
 mirosubs.widget.VideoTab.prototype.showLoading = function(loading) {
     this.imageElem_.src = loading ? this.spinnerGifURL_ : this.logoURL_;
 };
+
 mirosubs.widget.VideoTab.prototype.setText = function(text) {
     goog.dom.setTextContent(this.spanElem_, text);
 };

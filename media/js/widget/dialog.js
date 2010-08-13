@@ -50,6 +50,12 @@ mirosubs.Dialog.prototype.createDom = function() {
     this.addChild(
         this.bottomPanelContainer_ = new goog.ui.Component(), true);
 };
+mirosubs.Dialog.prototype.enterDocument = function() {
+    mirosubs.Dialog.superClass_.enterDocument.call(this);
+    this.getHandler().listen(mirosubs.ClosingWindow.getInstance(),
+                             mirosubs.ClosingWindow.BEFORE_UNLOAD,
+                             this.onWindowUnload_);
+};
 /**
  * Used to display a temporary overlay, for example the instructional
  * video panel in between subtitling steps.
@@ -97,13 +103,51 @@ mirosubs.Dialog.prototype.getBottomPanelContainerInternal = function() {
 mirosubs.Dialog.prototype.updateLoginState = function() {
     this.rightPanel_.updateLoginState();
 };
+/**
+ * Returns true if there's no work, or if there has been work
+ * but it was saved.
+ * @protected
+ */
+mirosubs.Dialog.prototype.isWorkSaved = goog.abstractMethod;
+/**
+ * @protected
+ * @param {boolean} closeAfterSave
+ */
+mirosubs.Dialog.prototype.saveWork = function(closeAfterSave) {
+    goog.abstractMethod();
+};
+mirosubs.Dialog.prototype.onWindowUnload_ = function(event) {
+    if (!this.isWorkSaved())
+        event.message = "You have unsaved work.";
+};
 mirosubs.Dialog.prototype.setVisible = function(visible) {
-    mirosubs.Dialog.superClass_.setVisible.call(this, visible);
-    if (!visible && mirosubs.returnURL != null) {
+    if (visible)
+        mirosubs.Dialog.superClass_.setVisible.call(this, true);
+    else {
+        if (this.isWorkSaved())
+            this.hideDialogImpl_();
+        else {
+            this.showSaveWorkDialog_();
+        }
+    }
+};
+mirosubs.Dialog.prototype.showSaveWorkDialog_ = function() {
+    var that = this;
+    var unsavedWarning = new mirosubs.UnsavedWarning(function(submit) {
+        if (submit)
+            that.saveWork(true);
+        else
+            that.hideDialogImpl_(false);
+    });
+    unsavedWarning.setVisible(true);
+};
+mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
+    mirosubs.Dialog.superClass_.setVisible.call(this, false);
+    if (mirosubs.returnURL != null) {
         goog.Timer.callOnce(function() {
             window.location.replace(mirosubs.returnURL);
         });
-    }
+    }    
 };
 mirosubs.Dialog.prototype.disposeInternal = function() {
     mirosubs.Dialog.superClass_.disposeInternal.call(this);

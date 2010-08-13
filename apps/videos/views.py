@@ -36,6 +36,8 @@ from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
 from vidscraper.errors import Error as VidscraperError
 from django.template.loader import render_to_string
+from django.utils.http import urlquote_plus
+from auth.models import CustomUser as User
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -179,7 +181,7 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set \
-        .filter(translationversion__id__gt=0).distinct()
+        .filter(is_complete=True)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
     return render_to_response('videos/video.html', context,
@@ -298,7 +300,7 @@ def history(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .filter(translationversion__id__gt=0).distinct()
+        .filter(is_complete=True)
     context['last_version'] = video.captions()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     context['commented_object'] = ProxyVideo.get(video)
@@ -334,7 +336,7 @@ def translation_history(request, video_id, lang):
     context['language'] = language
     context['site'] = Site.objects.get_current()        
     context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .exclude(pk=language.pk).filter(translationversion__id__gt=0).distinct()
+        .exclude(pk=language.pk).filter(is_complete=True).distinct()
     context['last_version'] = video.translations(lang)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang)
     context['commented_object'] = language
@@ -415,7 +417,7 @@ def rollback(request, pk, cls=VideoCaptionVersion):
     elif not version.next_version():
         messages.error(request, message='Can not rollback to the last version')
     else:
-        messages.success(request, message='Rollback was success')
+        messages.success(request, message='Rollback successful')
         version = version.rollback(request.user)
     url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
     return redirect('videos:%s' % url_name, pk=version.pk)
@@ -545,6 +547,11 @@ def search(request):
 
 @login_required
 def stop_notification(request, video_id):
+    user_id = request.GET.get('u')
+    if user_id:
+        u = get_object_or_404(User, id=user_id)
+        if not request.user == u:
+            return redirect(reverse('logout')+'?next='+urlquote_plus(request.get_full_path()))
     video = get_object_or_404(Video, video_id=video_id)
     StopNotification.objects.get_or_create(user=request.user, video=video)
     context = dict(video=video)

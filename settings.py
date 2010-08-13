@@ -65,6 +65,7 @@ JS_CORE = ['mirosubs.js',
            'flash.js',
            'spinner.js',
            'sliderbase.js',
+           'closingwindow.js',
            'video/video.js',
            'video/abstractvideoplayer.js',
            'video/html5videoplayer.js',
@@ -81,13 +82,12 @@ JS_CORE = ['mirosubs.js',
            'widget/howtovideopanel.js',
            'widget/dialog.js',
            'widget/captionmanager.js',
-           'widget/embedwarning.js',
            'widget/brokenwarning.js',
            'widget/mainmenu.js',
            'widget/rightpanel.js',
            'widget/basestate.js',
+           'widget/unsavedwarning.js',
            'widget/subtitle/dialog.js',
-           'widget/subtitle/editdialog.js',
            'widget/subtitle/msservermodel.js',
            'widget/subtitle/editablecaption.js',
            'widget/subtitle/editablecaptionset.js',
@@ -197,7 +197,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'context_processors.current_site',
     'context_processors.current_commit',
-    "django.contrib.messages.context_processors.messages",
+    'context_processors.custom',
+    'django.contrib.messages.context_processors.messages',
 )
 
 INSTALLED_APPS = (
@@ -267,6 +268,8 @@ FEEDBACK_RESPONSE_TEMPLATE = 'feedback_response.html'
 PROJECT_VERSION = '0.5'
 
 EDIT_END_THRESHOLD = 120
+
+GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
 
 try:
     from commit import LAST_COMMIT_GUID

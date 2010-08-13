@@ -33,7 +33,7 @@ from youtube import get_video_id
 yt_service = YouTubeService()
 yt_service.ssl = False
 
-NO_CAPTIONS, CAPTIONS_IN_PROGRESS, CAPTIONS_FINISHED = range(3)
+NO_CAPTIONS, CAPTIONS_FINISHED = range(2)
 VIDEO_TYPE_HTML5 = 'H'
 VIDEO_TYPE_YOUTUBE = 'Y'
 VIDEO_TYPE_BLIPTV = 'B'
@@ -206,18 +206,8 @@ class Video(models.Model):
     @property
     def caption_state(self):
         """Subtitling state for this video 
-
-        Either subtitling hasn't started yet, or someone has marked one 
-        VideoCaptionVersion as finished, or VideoCaptionVersions exist 
-        but none have been marked as finished yet.
         """
-        video_captions = self.videocaptionversion_set.all()
-        if video_captions.count() == 0:
-            return NO_CAPTIONS
-        if self.is_complete:
-            return CAPTIONS_FINISHED
-        else:
-            return CAPTIONS_IN_PROGRESS
+        return NO_CAPTIONS if self.captions() is None else CAPTIONS_FINISHED
 
     def last_captions(self):
         try:
@@ -228,7 +218,7 @@ class Video(models.Model):
     def captions(self, version=None):
         """Returns VideoCaptionVersion, or None if no captions
         
-        If version is None, then returns latest VideoCaptionVersion."""
+        If version is None, then returns latest finished VideoCaptionVersion."""
         try:
             if version is None:
                 finished_captions = self.videocaptionversion_set.filter(finished=True)
@@ -310,9 +300,10 @@ class Video(models.Model):
             pass
 
     def translation_language_codes(self):
-        """All iso language codes with translations."""
+        """All iso language codes with finished translations."""
         return set([trans.language for trans 
-                    in self.translationlanguage_set.all()])
+                    in self.translationlanguage_set.filter(
+                    is_complete=True)])
 
     def null_translation_language_codes(self, user):
         null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)

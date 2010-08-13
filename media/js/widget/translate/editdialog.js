@@ -41,6 +41,7 @@ mirosubs.translate.EditDialog = function(videoSource,
         videoID, this.unitOfWork_, nullWidget,
         function() {});
     this.serverModel_.startEditing(languageCode, version);
+    this.saved_ = false;
 };
 goog.inherits(mirosubs.translate.EditDialog, mirosubs.Dialog);
 mirosubs.translate.EditDialog.prototype.createDom = function() {
@@ -83,15 +84,22 @@ mirosubs.translate.EditDialog.prototype.createRightPanel_ = function() {
         "Submit final translation", "Resources for Translators");
 };
 mirosubs.translate.EditDialog.prototype.handleDoneKeyPress_ = function(event) {
-    var that = this;
-    this.serverModel_.finish(function(availableLanguages) {
-        that.availableLanguages_ = availableLanguages;
-        that.setVisible(false);
-    });
+    this.saveWork(true);
     event.preventDefault();
 };
 mirosubs.translate.EditDialog.prototype.getAvailableLanguages = function() {
     return this.availableLanguages_;
+};
+mirosubs.translate.EditDialog.prototype.isWorkSaved = function() {
+    return !this.unitOfWork_.everContainedWork() || this.saved_;
+};
+mirosubs.translate.EditDialog.prototype.saveWork = function(closeAfterSave) {
+    var that = this;
+    this.serverModel_.finish(function(availableLanguages) {
+        that.saved_ = true;
+        that.availableLanguages_ = availableLanguages;
+        that.setVisible(false);
+    });
 };
 mirosubs.translate.EditDialog.prototype.disposeInternal = function() {
     mirosubs.translate.EditDialog.superClass_.disposeInternal.call(this);

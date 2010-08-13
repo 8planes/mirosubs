@@ -53,24 +53,16 @@ def show_widget(request, video_url, null_widget, base_state=None):
                 video.null_translation_language_codes(request.user)
         else:
             translation_language_codes = []
-        if null_captions is None:
+        if null_captions is None or not null_captions.video.is_complete:
             video_tab = 0
-        elif not null_captions.video.is_complete:
-            video_tab = 1
         else:
-            video_tab = 3
+            video_tab = 1
     else:
         translation_language_codes = video.translation_language_codes()
         if video.caption_state == models.NO_CAPTIONS:
             video_tab = 0
-        elif video.caption_state == models.CAPTIONS_IN_PROGRESS:
-            if request.user.is_authenticated and request.user == video.owner:
-                video_tab = 1
-            else:
-                video_tab = 2
-                return_value['owned_by'] = video.owner.username
         else:
-            video_tab = 3
+            video_tab = 1
     return_value['initial_tab'] = video_tab
     return_value['translation_languages'] = \
         [widget.language_to_map(code, LANGUAGES_MAP[code]) for 
@@ -265,6 +257,8 @@ def release_video_lock(request, video_id):
     return { "response": "ok" }
 
 def get_my_user_info(request):
+#    print('get_my_user_info authenticated: {0}'.format(request.user.is_authenticated()))
+
     if request.user.is_authenticated():
         return { "logged_in" : True,
                  "username" : request.user.username }
