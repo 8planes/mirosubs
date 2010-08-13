@@ -415,7 +415,7 @@ def rollback(request, pk, cls=VideoCaptionVersion):
     elif not version.next_version():
         messages.error(request, message='Can not rollback to the last version')
     else:
-        messages.success(request, message='Rollback was success')
+        messages.success(request, message='Rollback successful')
         version = version.rollback(request.user)
     url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
     return redirect('videos:%s' % url_name, pk=version.pk)
