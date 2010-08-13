@@ -36,6 +36,8 @@ from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
 from vidscraper.errors import Error as VidscraperError
 from django.template.loader import render_to_string
+from django.utils.http import urlquote_plus
+from auth.models import CustomUser as User
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -545,6 +547,11 @@ def search(request):
 
 @login_required
 def stop_notification(request, video_id):
+    user_id = request.GET.get('u')
+    if user_id:
+        u = get_object_or_404(User, id=user_id)
+        if not request.user == u:
+            return redirect(reverse('logout')+'?next='+urlquote_plus(request.get_full_path()))
     video = get_object_or_404(Video, video_id=video_id)
     StopNotification.objects.get_or_create(user=request.user, video=video)
     context = dict(video=video)
