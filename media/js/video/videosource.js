@@ -57,8 +57,12 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
     else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL)) {
         // file/get/ paths from blip.tv are direct file accesses,
         // so give them an Html5VideoSource
-        if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv\/file\/get\//.test(videoURL))
-            return new mirosubs.video.Html5VideoSource(videoURL);
+        if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv\/file\/get\//.test(videoURL)) {
+            if (/\.flv$/.test(videoURL))
+                return new mirosubs.video.FlvVideoSource(videoURL);
+            else 
+                return new mirosubs.video.Html5VideoSource(videoURL);
+        }
         return null;
     }
     else {

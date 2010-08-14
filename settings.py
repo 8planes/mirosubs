@@ -38,6 +38,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+P3P_COMPACT = 'CP="CURa ADMa DEVa OUR IND DSP CAO COR"'
+
 DEFAULT_FROM_EMAIL = 'feedback@universalsubtitles.org'
 
 DATABASES = {
@@ -179,6 +181,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
+    'middleware.P3PHeaderMiddleware',
 )
 
 ROOT_URLCONF = 'mirosubs.urls'
