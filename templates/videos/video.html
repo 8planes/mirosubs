@@ -86,10 +86,13 @@
 {% endblock %}
 
 {% block main_content %}
-    <div class="left_column">
-        {% if video.title %}
-            <h2 class="floatleft">{{ video.title }}</h2>
+
+   {% if video.title %}
+            <h2 class="main-title">{{ video.title }}</h2>
         {% endif %}
+
+    <div class="left_column">
+     
         {% widget widget_params %}
     </div>
     
@@ -97,7 +100,7 @@
         {% include '_sharing_widget.html' %}
     </div>
 
-    <div class="clearboth">&nbsp;</div>
+        <hr />
     
     <div class="sub_actions">
       {% if not video.captions %}
@@ -112,11 +115,11 @@
       {% endwith %}
       </div>
     </div>
-
+      
 
     <ul class="video_tabs">
-      <li class="active"><a href="#languages-tab">Languages ({{ translations|length }})</a></li>
-      <li><a href="#comments-tab">Comments ({% get_comment_count video %})</a></li>
+      <li class="active"><a href="#languages-tab">Languages <span class="badgy_out"><span class="badgy">{{ translations|length }}</span></span></a></li>
+      <li><a href="#comments-tab">Comments <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
       <li><a href="#activity-tab">Activity stream</a></li>
     </ul>
     
@@ -126,40 +129,34 @@
             <table cellpadding="0" cellspacing="0">
               <thead>
                 <tr>
-                <th>Language</th>
-                <th>Rating</th>
-                <th>% Done</th>
+                <th><a href="#">Language</a></th>
+                <th><a href="#">Rating</a></th>
+                <th class="last"><a href="#">% Done</a></th>
               </tr>              
               </thead>
     
-            <tbody>
-              <tr>
-               
+              <tbody>
+                <tr>
                     <td>
                         <a href="{% url videos:history video.video_id %}">
                             Original
                         </a>
                     </td>
                     <td>A+</td>
-                    <td style="text-align: center;">
-                        n/a
-
-                    <span class="grid_2">A+</span>
-                    <span class="grid_4 grid_last" style="text-align: center;">
-                        {% if video.captions %}
-                            <span class="progress">
-                                <span class="completion {% progress_color 0 %}" style="width: 0%"></span>
-                                {{ video.captions.videocaption_set.all|length }} subtitles
-                            </span>
-                        {% else %}
-                            n/a
+                    <td>
+                      {% if video.captions %}
+                        <span class="progress">
+                            <span class="completion {% progress_color 0 %}" style="width: 0%"></span>
+                        </span>
+                        <span class="badgy">{{ video.captions.videocaption_set.all|length }} Subtitles</span>
+                      {% else %}
+                            No Subtitles
                         {% endif %}
-                    </span>
+                    
                     </td>
 
 
-                </tr>                
-                {% for item in translations %}
+                {% for item in translations %}  
                     <tr>
                         <td>
                             <a href="{% url videos:translation_history video.video_id item.language %}">
@@ -174,6 +171,7 @@
                         </td>
                     </tr>
                 {% endfor %} 
+
 
             </tbody>
             </table>
