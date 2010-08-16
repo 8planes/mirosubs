@@ -141,10 +141,7 @@
                     </td>
                     <td style="text-align: center;">
                         {% if video.captions %}
-                            <span class="progress">
-                                <span class="completion {% progress_color 0 %}" style="width: 0%"></span>
-                                {{ video.captions.videocaption_set.all|length }} subtitles
-                            </span>
+                           {{ video.captions.videocaption_set.all|length }} subtitles
                         {% else %}
                             n/a
                         {% endif %}
