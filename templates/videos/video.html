@@ -127,7 +127,6 @@
               <thead>
                 <tr>
                 <th>Language</th>
-                <th>Rating</th>
                 <th>% Done</th>
               </tr>              
               </thead>
@@ -140,7 +139,6 @@
                             Original
                         </a>
                     </td>
-                    <td>A+</td>
                     <td style="text-align: center;">
                         {% if video.captions %}
                             <span class="progress">
@@ -159,7 +157,6 @@
                                 {{ item.get_language_display }}
                             </a>
                         </td>
-                        <td>A+</td>
                         <td>
                             <span class="progress">
                                 <span class="completion {% progress_color item.percent_done %}" style="width: {{ item.percent_done }}%"></span>
