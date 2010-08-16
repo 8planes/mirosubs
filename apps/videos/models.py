@@ -83,9 +83,8 @@ class Video(models.Model):
                                         related_name="writelock_owners")
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
-    is_subtitles = models.BooleanField(default=False)
-    # true iff we have at least one VideoCaptionVersion with finished == True
-    is_complete = models.BooleanField()
+    is_subtitled = models.BooleanField(default=False)
+    was_subtitled = models.BooleanField(default=False)
 
     def __unicode__(self):
         if self.title:
@@ -475,12 +474,34 @@ class VideoCaptionVersion(VersionModel):
             item.duplicate_for(new_version).save()
         return new_version
 
-def update_video_is_subtitled(sender, instance, created, **kwargs):
-    if instance.video.is_complete and not instance.video.is_subtitles:
-        instance.video.is_subtitles = True
-        instance.video.save()
-        
-post_save.connect(update_video_is_subtitled, VideoCaptionVersion)
+    def is_all_blank(self):
+        for vc in self.videocaption_set.all():
+            if vc.caption_text.strip() != '':
+                return False
+        return True
+
+def update_video_subtitled_state(sender, instance, created, **kwargs):
+    if instance.finished:
+        video = Video.objects.get(id=instance.video.id)
+        if instance.is_all_blank():
+            finished_count = instance.video.videocaptionversion_set.filter(finished=True).count()
+            if finished_count == 1:
+                instance.delete()
+                video.is_subtitled = False
+                video.was_subtitled = False
+            else:
+                video_captions = list(instance.videocaption_set.all())
+                for vc in video_captions:
+                    vc.delete()
+                video.is_subtitled = False
+                video.was_subtitled = True
+        else:
+            video.is_subtitled = True
+            video.was_subtitled = True
+        video.save()
+
+post_save.connect(update_video_subtitled_state, VideoCaptionVersion)
+
                     
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)

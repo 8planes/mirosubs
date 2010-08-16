@@ -110,7 +110,6 @@ class SubtitlesUploadForm(forms.Form):
             caption.save()
         
         video.release_writelock()
-        video.is_complete = True
         video.save()
         
     def get_errors(self):

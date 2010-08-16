@@ -52,10 +52,12 @@ class TestRpc(TestCase):
 
     def test_fetch_captions(self):
         request = RequestMockup(self.user_0)
-        video = Video.objects.get(pk=self.video_pk)
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_captions(request, video.video_id, 0,
+                              [], [], [])
         subtitles_fetched_count = video.subtitles_fetched_count
         rpc.fetch_captions(request, video.video_id)
-        video1 = Video.objects.get(pk=self.video_pk)
+        video1 = Video.objects.get(pk=video.id)
         self.assertEqual(subtitles_fetched_count+1, video1.subtitles_fetched_count)
 
     def test_keep_subtitling_dialog_open(self):
@@ -78,27 +80,15 @@ class TestRpc(TestCase):
 
     def test_exit_dialog_then_reopen(self):
         request = RequestMockup(self.user_1)
-        return_value = rpc.show_widget(
-            request,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
-        video_id = return_value['video_id']
-        rpc.start_editing(request, video_id)
-        inserted = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': 'hey!',
-                     'start_time': 2.3,
-                     'end_time': 3.4,
-                     'sub_order': 1.0}]
-        rpc.save_captions(request, video_id, 0, 
-                          [], inserted, [])
-        video = Video.objects.get(video_id=video_id)
+        video = self._create_video_with_one_caption_set(request)
         self.assertEqual(None, video.captions())
         # now dialog closes and we also wait 30 seconds, so we lose lock.
-        rpc.release_video_lock(request, video_id)
+        rpc.release_video_lock(request, video.video_id)
         # same user reopens the dialog before anyone else has a chance.
         rpc.show_widget(
             request,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
-        return_value = rpc.start_editing(request, video_id)
+        return_value = rpc.start_editing(request, video.video_id)
         # make sure we are getting back the unfinished draft.
         self.assertEqual(True, return_value['can_edit'])
         self.assertEqual(0, return_value['version'])
@@ -129,6 +119,25 @@ class TestRpc(TestCase):
         self.assertEqual(True, return_value['can_edit'])
         self.assertEqual(0, return_value['version'])
         self.assertEqual(0, len(return_value['existing']))
+
+    def test_insert_then_update(self):
+        request = RequestMockup(self.user_1)
+        video = self._create_video_with_one_caption_set(request)
+        updated = [{'caption_id': 'sfdsfsdf',
+                     'caption_text': 'hey you!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_captions(request, video.video_id, 0, 
+                          [], [], updated)
+
+    def test_finish(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_captions(request, video.video_id, 0, [], [], [])
+        video_1 = Video.objects.get(video_id=video.video_id)
+        self.assertTrue(video_1.was_subtitled)
+        self.assertTrue(video_1.is_subtitled)
 
     def test_finish_then_other_user_opens(self):
         request_0 = RequestMockup(self.user_0)
@@ -195,3 +204,62 @@ class TestRpc(TestCase):
         self.assertEqual(1, len(return_value['existing']))
         # the draft VideoCaptionVersion should be deleted at this point.
         self.assertEqual(1, len(Video.objects.get(video_id=video_id).videocaptionversion_set.all()))
+
+    def test_zero_out_version_1(self):
+        request_0 = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request_0)
+        rpc.finished_captions(request_0, video.video_id, 0, [], [], [])
+        # now dialog closes and we also wait 30 seconds, so we lose lock.
+        rpc.release_video_lock(request_0, video.video_id)
+        # different user opens dialog for video
+        request_1 = RequestMockup(self.user_1)
+        rpc.show_widget(
+            request_1,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+        rpc.start_editing(request_1, video.video_id)
+        # user_1 updates the solitary caption to have blank text.
+        updated = [{'caption_id': 'sfdsfsdf',
+                     'caption_text': '',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_captions(request_1, video.video_id, 1, [], [], updated)
+        rpc.finished_captions(request_1, video.video_id, 1, [], [], [])
+        video = Video.objects.get(pk=video.pk)
+        self.assertEqual(2, video.videocaptionversion_set.count())
+        self.assertEqual(0, video.captions().videocaption_set.count())
+        self.assertEquals(True, video.was_subtitled)
+        self.assertEquals(False, video.is_subtitled)
+
+    def test_zero_out_version_0(self):
+        request_0 = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request_0)
+        # we update the text of the sole subtitle to be blank.
+        updated = [{'caption_id': u'sfdsfsdf',
+                    'caption_text': '',
+                    'start_time': 2.3,
+                    'end_time': 3.4,
+                    'sub_order': 1.0}]
+        video = Video.objects.get(pk=video.pk)
+        vc_set = video.videocaptionversion_set.get(version_no=0).videocaption_set.all()
+        rpc.save_captions(request_0, video.video_id, 0, [], [], updated)
+        rpc.finished_captions(request_0, video.video_id, 0, [], [], [])
+        self.assertEquals(0, video.videocaptionversion_set.count())
+        self.assertEquals(None, video.captions())
+        self.assertEquals(False, video.was_subtitled)
+        self.assertEquals(False, video.is_subtitled)
+
+    def _create_video_with_one_caption_set(self, request):
+        return_value = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+        video_id = return_value['video_id']
+        rpc.start_editing(request, video_id)
+        inserted = [{'caption_id': u'sfdsfsdf',
+                     'caption_text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_captions(request, video_id, 0, 
+                          [], inserted, [])
+        return Video.objects.get(video_id=video_id)
