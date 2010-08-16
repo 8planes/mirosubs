@@ -80,26 +80,11 @@
             "video_type": "Y",
             "bliptv_flv_url": "",
             "youtube_videoid": "6Uc__PfmANE",
-            "is_subtitles": true,
+            "is_subtitled": true,
             "owner": 3,
             "allow_community_edits": true,
             "widget_views_count": 0,
             "subtitles_fetched_count": 0
         }
-    },
-    {
-        "pk": 6,
-        "model": "videos.videocaptionversion",
-        "fields": {
-            "note": "",
-            "notification_sent": 0,
-            "version_no": 0,
-            "video": 12,
-            "user": 3,
-            "time_change": 0.0,
-            "text_change": 0.0,
-            "finished": true,
-            "datetime_started": "2010-04-16 12:10:14"
-        }
-    }    
+    }
 ]

@@ -53,7 +53,7 @@ def show_widget(request, video_url, null_widget, base_state=None):
                 video.null_translation_language_codes(request.user)
         else:
             translation_language_codes = []
-        if null_captions is None or not null_captions.video.is_complete:
+        if null_captions is None:
             video_tab = 0
         else:
             video_tab = 1
@@ -257,8 +257,6 @@ def release_video_lock(request, video_id):
     return { "response": "ok" }
 
 def get_my_user_info(request):
-#    print('get_my_user_info authenticated: {0}'.format(request.user.is_authenticated()))
-
     if request.user.is_authenticated():
         return { "logged_in" : True,
                  "username" : request.user.username }
@@ -313,8 +311,8 @@ def finished_captions(request, video_id, version_no, deleted, inserted, updated)
     if last_version is not None:
         last_version.finished = True
         last_version.save()
+    video = models.Video.objects.get(pk=video.pk)
     video.release_writelock()
-    video.is_complete = True 
     video.save()
     return { "response" : "ok" }
 
@@ -325,7 +323,6 @@ def finished_captions_null(request, video_id, version_no, deleted, inserted, upd
     null_captions = save_captions_null_impl(request, video, version_no, 
                                             deleted, inserted, updated)
     null_captions.save()
-    null_captions.video.is_complete = True
     null_captions.video.save()    
     return {'response':'ok'}
 
@@ -416,7 +413,7 @@ def save_captions_impl(request, video, version_no, deleted, inserted, updated):
     video.save()
     if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
         return None
-    last_version = video.captions()
+    last_version = video.last_captions()
     if last_version != None and last_version.version_no >= version_no:
         current_version = last_version
     else:

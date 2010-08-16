@@ -106,6 +106,12 @@
                     mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
                 return false;
             });
+            
+            $('.time_link').click(function() {
+                widget_widget_div.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });              
         });
     </script>
   <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -274,6 +280,7 @@
             </td>
           </tr>
         {% endfor %}
+
         {% else %}
             <p class="no_subs">{% trans 'No subtitles yet.  Make some!' %}</p>
         {% endif %}

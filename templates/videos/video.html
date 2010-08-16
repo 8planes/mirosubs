@@ -129,10 +129,10 @@
             <table cellpadding="0" cellspacing="0">
               <thead>
                 <tr>
-                <th><a href="#">Language</a></th>
-                <th><a href="#">Rating</a></th>
-                <th class="last"><a href="#">% Done</a></th>
-              </tr>              
+                  <th><a href="#">Language</a></th>
+                  <th><a href="#">Rating</a></th>
+                  <th class="last"><a href="#">% Done</a></th>
+                </tr>              
               </thead>
     
               <tbody>
@@ -157,13 +157,13 @@
 
 
                 {% for item in translations %}  
+
                     <tr>
                         <td>
                             <a href="{% url videos:translation_history video.video_id item.language %}">
                                 {{ item.get_language_display }}
                             </a>
                         </td>
-                        <td>A+</td>
                         <td>
                             <span class="progress">
                                 <span class="completion {% progress_color item.percent_done %}" style="width: {{ item.percent_done }}%"></span>

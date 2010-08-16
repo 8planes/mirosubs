@@ -53,6 +53,11 @@
                     $(this).find('.data').text()));
                 return false;
             });
+            $('.time_link').click(function() {
+                widget_widget_div.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });          
         });
     </script>
     {% include "widget/_js_onsite_dependencies.html" %}
@@ -60,7 +65,13 @@
 
 {% block main_content %}
     <h2>Revision #{{ version.version_no }} - {{ version.revision_time }}</h2>
-    {{ video }} in language {{ version.language_display }} language<br/><br/>
+    {{ video }} in
+    {% if version.language_display == 'Original' %} 
+        {{ version.language_display }} language
+    {% else %}
+        {{ version.language_display }}
+    {% endif %}
+    <br/><br/>
         
     {% if next_version %}
         <div class="viewing_old">
@@ -116,10 +127,12 @@
 
     <div class="right_column">
       <br /><br /><br /><br /><br />     
-      <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
+      <a href="#" class="new_edit">
+          <span>Submit a new edit based on this version (#{{ version.version_no }})</span>
+      </a>
       {% if next_version %}
       <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
-          <span>Roll back to version #{{ version.version_no }}</span>
+          <span>Roll back to version (#{{ version.version_no }})</span>
       </a>
       {% endif %}
     </div>
@@ -132,7 +145,10 @@
       {% for item in version.captions %}
         <li {% cycle 'class="even"' '' %}>
           {% if item.display_time or item.display_end_time %}
-            {{ item.display_time }} - {{ item.display_end_time }} 
+            <a href="#" class="time_link">
+                <span class="data">{{item.start_time}}</span>
+                {{ item.display_time }} - {{ item.display_end_time }}
+            </a> 
           {% endif %} &gt; {{ item.text|linebreaksbr }}
         </li>
       {% endfor %}
