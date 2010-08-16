@@ -103,10 +103,12 @@
 
 
         <div class="revision_buttons">
-            <a href="#" class="new_edit" id="edit_0">Submit a new edit based on this version</a>
+            <a href="#" class="new_edit" id="edit_0">
+                Submit a new edit based on this version (#{{ first_version.version_no }})
+            </a>
             {% if first_version.next_version %}
                 <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
-                    Roll back to version #{{ first_version.version_no }}
+                    Roll back to version (#{{ first_version.version_no }})
                 </a>
             {% endif %}
         </div>
@@ -155,10 +157,12 @@
         <div class="clear tall">&nbsp;</div>
         
         <div class="revision_buttons">
-            <a href="#" class="new_edit">Submit a new edit based on this version</a>
+            <a href="#" class="new_edit">
+                Submit a new edit based on this version (#{{ second_version.version_no }})
+            </a>
             {% if second_version.next_version %}
                 <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
-                    Roll back to version #{{ second_version.version_no }}
+                    Roll back to version (#{{ second_version.version_no }})
                 </a>
             {% endif %}
         </div>

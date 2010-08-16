@@ -122,10 +122,12 @@
 
     <div class="right_column">
       <br /><br /><br /><br /><br />     
-      <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
+      <a href="#" class="new_edit">
+          <span>Submit a new edit based on this version (#{{ version.version_no }})</span>
+      </a>
       {% if next_version %}
       <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
-          <span>Roll back to version #{{ version.version_no }}</span>
+          <span>Roll back to version (#{{ version.version_no }})</span>
       </a>
       {% endif %}
     </div>
