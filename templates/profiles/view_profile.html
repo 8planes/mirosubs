@@ -34,10 +34,14 @@
                 success: function(data, status, xhr, $form){
                     if (data.success){
                         $form.resetForm();
-                        $('.success-message', $form).show(500);
-                        setTimeout(function(){
-                            $('.success-message', $form).hide(500);
-                        }, 3500);
+                        var $messages = $('#messages');
+                        if ( ! $messages.length){
+                            $messages = $('<div id="messages"></div>').prependTo('div.top_bar');
+                        }else{
+                            $messages.html('');
+                        };
+                        $messages.html('<p>Email sent</p>');
+                        $.nyroModalRemove();
                     } else {
                         for (key in data.errors){
                             var $field = $('input[name="'+key+'"]', $form);
@@ -98,9 +102,6 @@
          <h3>Send {{ user_info }} a Message</h3>
          {% csrf_token %}
          <input type="hidden" name="user" value="{{ user_info.id }}"/>
-         <div class="success-message" style="display: none">
-            Message sent
-         </div>
          <p>
            <label>From</label>
            <input type="text" value="{{ user.email }}" name="email"/>    
