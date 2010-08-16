@@ -53,6 +53,11 @@
                     $(this).find('.data').text()));
                 return false;
             });
+            $('.time_link').click(function() {
+                widget_widget_div.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });          
         });
     </script>
     {% include "widget/_js_onsite_dependencies.html" %}
@@ -140,7 +145,10 @@
       {% for item in version.captions %}
         <li {% cycle 'class="even"' '' %}>
           {% if item.display_time or item.display_end_time %}
-            {{ item.display_time }} - {{ item.display_end_time }} 
+            <a href="#" class="time_link">
+                <span class="data">{{item.start_time}}</span>
+                {{ item.display_time }} - {{ item.display_end_time }}
+            </a> 
           {% endif %} &gt; {{ item.text|linebreaksbr }}
         </li>
       {% endfor %}

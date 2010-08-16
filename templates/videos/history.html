@@ -106,6 +106,12 @@
                     mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
                 return false;
             });
+            
+            $('.time_link').click(function() {
+                widget_widget_div.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });              
         });
     </script>
   <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -260,7 +266,11 @@
         <ul class="table_body"> 
             {% for item in last_version.captions %}
                 <li class="table_transcript {% cycle 'even' '' %}">
-                    {{ item.display_time }} - {{ item.display_end_time }} &gt; {{ item.text|linebreaksbr }}
+                    <a href="#" class="time_link">
+                        <span class="data" style="display: none">{{item.start_time}}</span>
+                        {{ item.display_time }} - {{ item.display_end_time }}
+                    </a> 
+                    &gt; {{ item.text|linebreaksbr }}
                 </li>
             {% endfor %}
         </ul>
