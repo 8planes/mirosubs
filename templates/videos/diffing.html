@@ -72,7 +72,12 @@
     <h2>
         Comparing revisions #{{ first_version.version_no }} and #{{ second_version.version_no }}
     </h2>
-    {{ video }} in language {{ first_version.language_display }} language<br/><br/>
+    {{ video }} in 
+    {% if version.language_display == 'Original' %} 
+        {{ version.language_display }} language
+    {% else %}
+        {{ version.language_display }}
+    {% endif %}<br/><br/>
     
     <a href="{{ history_link }}#revisions" class="return_history">
         &lt;&lt; See full revision history
