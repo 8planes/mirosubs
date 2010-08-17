@@ -8,38 +8,33 @@ from django.db import models
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
+        
+        # Deleting field 'TranslationLanguage.is_complete'
+        db.rename_column('videos_translationlanguage', 'is_complete', 'is_translated')
 
-        # Renaming field 'Video.is_subtitles' to 'Video.is_subtitled'
-        db.rename_column('videos_video', 'is_subtitles', 'is_subtitled')
-
-        # Deleting field 'Video.is_complete'
-        db.delete_column('videos_video', 'is_complete')
-
-        # Adding field 'Video.was_subtitled'
-        db.add_column('videos_video', 'was_subtitled', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
+        # Adding field 'TranslationLanguage.was_translated'
+        db.add_column('videos_translationlanguage', 'was_translated', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
 
         if not db.dry_run:
-            for video in videos.models.Video.objects.all():
-                qs = video.videocaptionversion_set.filter(finished=True)
+            for language in videos.models.TranslationLanguage.objects.all():
+                qs = language.translationversion_set.filter(finished=True)
                 if qs.exists():
-                    finished_captions = qs.order_by('-version_no')[:1].get()
-                    videos.models.update_video_subtitled_state(
-                        None, finished_captions, False)
+                    finished_translations = qs.order_by('-version_no')[:1].get()
+                    videos.models.update_translated_state(
+                        None, finished_translations, False)
                 else:
-                    video.is_subtitled = False
-                    video.was_subtitled = False
+                    language.is_translated = False
+                    language.was_translated = False
 
     def backwards(self, orm):
+        
+        # Adding field 'TranslationLanguage.is_complete'
+        db.rename_column('videos_translationlanguage', 'is_translated', 'is_complete')
 
-        # Renaming field 'Video.is_subtitled' to 'Video.is_subtitles'
-        db.rename_column('videos_video', 'is_subtitled', 'is_subtitles')
-
-        # Adding field 'Video.is_complete'
-        db.add_column('videos_video', 'is_complete', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
-
-        # Deleting field 'Video.was_subtitled'
-        db.delete_column('videos_video', 'was_subtitled')
-
+        # Deleting field 'TranslationLanguage.was_translated'
+        db.delete_column('videos_translationlanguage', 'was_translated')
+    
+    
     models = {
         'auth.customuser': {
             'Meta': {'object_name': 'CustomUser', '_ormbases': ['auth.User']},
@@ -141,9 +136,10 @@ class Migration(SchemaMigration):
         'videos.translationlanguage': {
             'Meta': {'object_name': 'TranslationLanguage'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_complete': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'is_translated': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"}),
+            'was_translated': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'writelock_owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True'}),
             'writelock_session_key': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'writelock_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})

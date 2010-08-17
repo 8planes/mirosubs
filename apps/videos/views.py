@@ -181,7 +181,7 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set \
-        .filter(is_complete=True)
+        .filter(was_translated=True)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
     return render_to_response('videos/video.html', context,
@@ -300,7 +300,7 @@ def history(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .filter(is_complete=True)
+        .filter(was_translated=True)
     context['last_version'] = video.captions()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     context['commented_object'] = ProxyVideo.get(video)
@@ -334,9 +334,9 @@ def translation_history(request, video_id, lang):
     
     context['video'] = video
     context['language'] = language
-    context['site'] = Site.objects.get_current()        
+    context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .exclude(pk=language.pk).filter(is_complete=True).distinct()
+        .exclude(pk=language.pk).filter(was_translated=True).distinct()
     context['last_version'] = video.translations(lang)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang)
     context['commented_object'] = language

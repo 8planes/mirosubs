@@ -130,6 +130,10 @@ class TestRpc(TestCase):
                      'sub_order': 1.0}]
         rpc.save_captions(request, video.video_id, 0, 
                           [], [], updated)
+        rpc.finished_captions(request, video.video_id, 0, [], [], [])
+        video = Video.objects.get(pk=video.pk)
+        self.assertEquals(1, video.videocaptionversion_set.count())
+
 
     def test_finish(self):
         request = RequestMockup(self.user_0)
@@ -241,13 +245,85 @@ class TestRpc(TestCase):
                     'end_time': 3.4,
                     'sub_order': 1.0}]
         video = Video.objects.get(pk=video.pk)
-        vc_set = video.videocaptionversion_set.get(version_no=0).videocaption_set.all()
         rpc.save_captions(request_0, video.video_id, 0, [], [], updated)
         rpc.finished_captions(request_0, video.video_id, 0, [], [], [])
         self.assertEquals(0, video.videocaptionversion_set.count())
         self.assertEquals(None, video.captions())
         self.assertEquals(False, video.was_subtitled)
         self.assertEquals(False, video.is_subtitled)
+
+    def test_start_translating(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_captions(request, video.video_id, 0, [], [], [])
+        rpc.release_video_lock(request, video.video_id)
+        # open translation dialog.
+        response = rpc.start_translating(request, video.video_id, 'es')
+        self.assertEquals(True, response['can_edit'])
+        self.assertEquals(0, response['version'])
+        self.assertEquals(0, len(response['existing']))
+        inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        rpc.save_translations(request, video.video_id, 'es', 0,
+                              inserted, [])
+        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
+        language = Video.objects.get(pk=video.pk).translation_language('es')
+        translations = rpc.fetch_translations(request, video.video_id, 'es')
+        self.assertEquals(1, len(translations))
+        self.assertEquals('heyoes', translations[0]['caption_text'])
+        self.assertEquals(1, language.translationversion_set.count())
+
+    def test_update_translation(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_captions(request, video.video_id, 0, [], [], [])
+        rpc.release_video_lock(request, video.video_id)
+        # open translation dialog.
+        response = rpc.start_translating(request, video.video_id, 'es')
+        inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        rpc.save_translations(request, video.video_id, 'es', 0,
+                              inserted, [])
+        updated = [{'caption_id': 'sfdsfsdf', 'text': 'new text'}]
+        rpc.save_translations(request, video.video_id, 'es', 0, [], updated)
+        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
+        translations = rpc.fetch_translations(request, video.video_id, 'es')
+        self.assertEquals('new text', translations[0]['caption_text'])
+        video = Video.objects.get(pk=video.pk)
+        self.assertEquals(1, video.translation_language('es').translationversion_set.count())
+
+    def test_zero_out_trans_version_1(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_translation(request)
+        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
+        # user_1 opens translate dialog
+        request_1 = RequestMockup(self.user_1)
+        rpc.show_widget(
+            request_1, 
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+        response = rpc.start_translating(request_1, video.video_id, 'es')
+        self.assertEquals(True, response['can_edit'])
+        self.assertEquals(1, response['version'])
+        self.assertEquals(1, len(response['existing']))
+        # user_1 updates solitary translation to have blank text.
+        updated = [{'caption_id': 'sfdsfsdf', 'text': ''}]
+        rpc.save_translations(request_1, video.video_id, 'es', 1, [], updated)
+        rpc.finished_translations(request_1, video.video_id, 'es', 1, [], [])
+        language = Video.objects.get(pk=video.pk).translation_language('es')
+        self.assertEquals(2, language.translationversion_set.count())
+        self.assertEquals(0, language.translations().translation_set.count())
+        self.assertEquals(True, language.was_translated)
+        self.assertEquals(False, language.is_translated)
+
+    def test_zero_out_trans_version_0(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_translation(request)
+        updated = [{'caption_id': 'sfdsfsdf', 'text': ''}]
+        rpc.save_translations(request, video.video_id, 'es', 0, [], updated)
+        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
+        language = Video.objects.get(pk=video.pk).translation_language('es')
+        self.assertEquals(0, language.translationversion_set.count())
+        self.assertEquals(None, video.translations('es'))
+        self.assertEquals(False, language.was_translated)
+        self.assertEquals(False, language.is_translated)
 
     def _create_video_with_one_caption_set(self, request):
         return_value = rpc.show_widget(
@@ -263,3 +339,13 @@ class TestRpc(TestCase):
         rpc.save_captions(request, video_id, 0, 
                           [], inserted, [])
         return Video.objects.get(video_id=video_id)
+
+    def _create_video_with_one_translation(self, request):
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_captions(request, video.video_id, 0, [], [], [])
+        rpc.release_video_lock(request, video.video_id)
+        response = rpc.start_translating(request, video.video_id, 'es')
+        inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        rpc.save_translations(request, video.video_id, 'es', 0,
+                              inserted, [])
+        return video
