@@ -130,7 +130,6 @@
               <thead>
                 <tr>
                   <th><a href="#">Language</a></th>
-                  <th><a href="#">Rating</a></th>
                   <th class="last"><a href="#">% Done</a></th>
                 </tr>              
               </thead>
@@ -142,15 +141,11 @@
                             Original
                         </a>
                     </td>
-                    <td>A+</td>
                     <td>
                       {% if video.captions %}
-                        <span class="progress">
-                            <span class="completion {% progress_color 0 %}" style="width: 0%"></span>
-                        </span>
                         <span class="badgy">{{ video.captions.videocaption_set.all|length }} Subtitles</span>
                       {% else %}
-                            No Subtitles
+                            <span class="badgy">No Subtitles</span>
                         {% endif %}
                     
                     </td>
