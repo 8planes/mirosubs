@@ -15,6 +15,12 @@ p{
 line-height: 1.5em;
 }
 
+.small{
+display: block;
+font-size: 11px;
+color: #888;
+padding-top: 5px;
+}
 
 
 h2{
