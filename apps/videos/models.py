@@ -206,14 +206,20 @@ class Video(models.Model):
     def caption_state(self):
         """Subtitling state for this video 
         """
-        return NO_CAPTIONS if self.captions() is None else CAPTIONS_FINISHED
+        captions = self.captions()
+        if captions is None:
+            return NO_CAPTIONS
+        elif captions.videocaption_set.count() == 0:
+            return NO_CAPTIONS
+        else:
+            return CAPTIONS_FINISHED
 
     def last_captions(self):
         try:
             return self.videocaptionversion_set.all()[:1].get()
         except models.ObjectDoesNotExist:
             pass
-        
+
     def captions(self, version=None):
         """Returns VideoCaptionVersion, or None if no captions
         
