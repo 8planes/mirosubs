@@ -70,7 +70,7 @@
 
 {% block main_content %}
     <h2>
-        Comparing revisions #{{ first_version.version_no }} and #{{ second_version.version_no }}
+        Comparing older revision #{{ first_version.version_no }} to current revision #{{ second_version.version_no }}
     </h2>
     {{ video }} in 
     {% if version.language_display == 'Original' %} 
@@ -86,15 +86,10 @@
     
     <div class="left_column">
         <h3 class="diff_title">
-            Revision #{{ first_version.version_no }} - as of {{ first_version.datetime_started|date:"H:i, j F Y" }} 
-            by {{ first_version.user }}
+            Older Revision #{{ first_version.version_no }} by {{ first_version.user }}
+             <span class="small">{{ first_version.datetime_started|date:"H:i, j F Y" }} </span>
         </h3>
-        
-        {% block first_navigation %}
-            {% with first_version as version %}
-                {% include 'videos/_revision_navigation.html' %}
-            {% endwith %}
-        {% endblock %}
+   
         
         <div class="clear">&nbsp;</div>
         
@@ -141,16 +136,10 @@
     
     <div class="right_column">
         <h3 class="diff_title">
-            Revision #{{ second_version.version_no }} - as of {{ second_version.datetime_started|date:"H:i, j F Y" }} 
-            by {{ second_version.user }}
+            Current Revision #{{ second_version.version_no }} by {{ second_version.user }}
+            <span class="small">as of {{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
         </h3>
-        
-        {% block second_navigation %}
-            {% with second_version as version %}
-                {% include 'videos/_revision_navigation.html' %}
-            {% endwith %}
-        {% endblock %}
-        
+      
         <div class="clear">&nbsp;</div>
         
         {% widget widget1_params 'widget_div_1' %}

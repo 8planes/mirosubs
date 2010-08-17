@@ -16,19 +16,23 @@
             <span class="username anon">Anonymous</span>
         {% endif %}
         
-        {% if item.comment %}
-            {% if item.comment.get_language %}
-                commented on {{ item.comment.get_language }}.
-            {% else %}
-                commented on this video.
-            {% endif %}
+        {% if item.is_add_video %}
+            submited this video.
         {% else %}
-            {% if item.language %}
-                edited <a href="{% url videos:translation_history item.video.video_id item.language %}">{{ item.get_language_display }} translation</a> for 
+            {% if item.comment %}
+                {% if item.comment.get_language %}
+                    commented on {{ item.comment.get_language }}.
+                {% else %}
+                    commented on this video.
+                {% endif %}
             {% else %}
-                edited <a href="{% url videos:history item.video.video_id %}">original language subtitles</a> for
+                {% if item.language %}
+                    edited <a href="{% url videos:translation_history item.video.video_id item.language %}">{{ item.get_language_display }} translation</a> for 
+                {% else %}
+                    edited <a href="{% url videos:history item.video.video_id %}">original language subtitles</a> for
+                {% endif %}
+                <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
             {% endif %}
-            <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
         {% endif %}
       </span>
         <span class="grid_2 table_happened grid_last">
