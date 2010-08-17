@@ -792,15 +792,25 @@ class VideoCaption(models.Model):
         return self.caption_text
     
 class Action(models.Model):
+    DEFAULT = 0
+    ADD_VIDEO = 1
+    TYPES = (
+        (ADD_VIDEO, u'add video'),
+        (DEFAULT, u'')
+    )
     user = models.ForeignKey(User)
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
     comment = models.ForeignKey(Comment, blank=True, null=True)
+    action_type = models.IntegerField(choices=TYPES, default=DEFAULT)
     created = models.DateTimeField()
     
     class Meta:
         ordering = ['-created']
         get_latest_by = 'created'
+    
+    def is_add_video(self):
+        return self.action_type == self.ADD_VIDEO
     
     def type(self):
         if self.comment:
@@ -877,10 +887,21 @@ class Action(models.Model):
             obj = cls(user=user, video=video)
             obj.created = instance.datetime_started
             obj.save()            
-
+    
+    @classmethod
+    def create_video_handler(cls, sender, instance, created, **kwargs):
+        if created:
+            user = instance.owner
+            video = instance
+            obj = cls(user=user, video=video)
+            obj.action_type = cls.ADD_VIDEO
+            obj.created = datetime.now()
+            obj.save()
+                
 post_save.connect(Action.create_comment_handler, Comment)        
 post_save.connect(Action.create_translation_handler, TranslationVersion)
 post_save.connect(Action.create_caption_handler, VideoCaptionVersion)
+post_save.connect(Action.create_video_handler, Video)
 
 class UserTestResult(models.Model):
     email = models.EmailField()
