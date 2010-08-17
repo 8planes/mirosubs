@@ -32,17 +32,15 @@ mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal =
 {
     var helpContents = new mirosubs.RightPanel.HelpContents(
         "Review and make corrections",
-        [["Now it's time to watch your subtitles, making changes if ",
-          "neccesary. Click on any subtitle to edit its text."]
-         .join(''),
-         ["Adjust subtitle timing by dragging their edges in the ",
-          "timeline to the left and watching the results."].join(''),
-         ["You can also edit timing by rolling over any timestamp, ",
-          "and clicking the left/right buttons that appear. After ",
-          "you click, your change will play back."].join(''),
-         "You can still use the down arrow too, to start the next subtitle."],
-        3, 2);
-    return new mirosubs.RightPanel(
+        null, 3, 2);
+    helpContents.html = 
+        "<p>Watch the video one more time and correct any mistakes in text or timing. Tips for making high quality subtitles:</p>" +
+        "<ul>" +
+        "<li>Include text that appears in the video (signs, etc.)</li>" +
+        "<li>Include important sounds in [brackets]</li>" +  
+        "<li>It's best to split subtitles at the end of a sentence or a long phrase.</li>" +
+        "</ul>";
+    return new mirosubs.subtitle.ReviewRightPanel(
         this.serverModel, helpContents, [],
         this.makeKeySpecsInternal(), false, "Done?",
         "Submit your work");
