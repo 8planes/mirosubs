@@ -3,5 +3,9 @@
 {% load i18n %}
 
 {% block main_content %}
-    <h2>Notifications stopped for {{ video }}.</h2>
+    {% if error %}
+        <h2>{{ error }}.</h2>
+    {% else %}
+        <h2>Notifications to {{ u }} stopped for {{ video }}.</h2>
+    {% endif %}
 {% endblock %}

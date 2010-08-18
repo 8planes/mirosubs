@@ -38,6 +38,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+P3P_COMPACT = 'CP="CURa ADMa DEVa OUR IND DSP CAO COR"'
+
 DEFAULT_FROM_EMAIL = 'feedback@universalsubtitles.org'
 
 DATABASES = {
@@ -99,6 +101,7 @@ JS_CORE = ['mirosubs.js',
            'widget/subtitle/transcriberightpanel.js',
            'widget/subtitle/syncpanel.js',
            'widget/subtitle/reviewpanel.js',
+           'widget/subtitle/reviewrightpanel.js',
            'widget/subtitle/sharepanel.js',
            'widget/subtitle/editpanel.js',
            'widget/subtitle/editrightpanel.js',
@@ -179,6 +182,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
+    'middleware.P3PHeaderMiddleware',
 )
 
 ROOT_URLCONF = 'mirosubs.urls'
@@ -269,6 +273,7 @@ PROJECT_VERSION = '0.5'
 
 EDIT_END_THRESHOLD = 120
 
+#Use on production
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
 
 try:

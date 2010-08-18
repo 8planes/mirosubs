@@ -74,6 +74,7 @@ class Video(models.Model):
     bliptv_flv_url = models.CharField(max_length=256, blank=True)
     title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
+    duration = models.PositiveIntegerField(null=True, blank=True)
     # the person who was first to start captioning this video.
     owner = models.ForeignKey(User, null=True)
     allow_community_edits = models.BooleanField()
@@ -83,10 +84,10 @@ class Video(models.Model):
                                         related_name="writelock_owners")
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
-    is_subtitles = models.BooleanField(default=False)
-    # true iff we have at least one VideoCaptionVersion with finished == True
-    is_complete = models.BooleanField()
-
+    is_subtitled = models.BooleanField(default=False)
+    was_subtitled = models.BooleanField(default=False)
+    thumbnail = models.CharField(max_length=500, blank=True)
+    
     def __unicode__(self):
         if self.title:
             return self.title
@@ -96,6 +97,9 @@ class Video(models.Model):
             return self.youtube_videoid
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return self.bliptv_fileid
+    
+    def is_html5(self):
+        return self.video_type == VIDEO_TYPE_HTML5
     
     def title_display(self):
         if self.title:
@@ -141,6 +145,9 @@ class Video(models.Model):
             if created:
                 entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
                 video.title = entry.media.title.text
+                video.duration = entry.media.duration.seconds
+                if entry.media.thumbnail:
+                    video.thumbnail = entry.media.thumbnail[-1].url
                 video.save()
         elif 'blip.tv' in parsed_url.netloc and blip.BLIP_REGEX.match(video_url):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
@@ -152,6 +159,7 @@ class Video(models.Model):
             if created:
                 video.title = blip.scrape_title(video_url)
                 video.bliptv_flv_url = blip.scrape_file_url(video_url)
+                video.thumbnail = blip.get_thumbnail_url(video_url)
                 video.save()
         elif 'video.google.com' in parsed_url.netloc and google_video.GOOGLE_VIDEO_REGEX.match(video_url):
             video, created = Video.objects.get_or_create(
@@ -169,6 +177,7 @@ class Video(models.Model):
                           'video_type': VIDEO_TYPE_FORA,
                           'allow_community_edits': True})
             if created:
+                video.thumbnail = fora.scrape_thumbnail_url(video_url)
                 video.title = fora.scrape_title(video_url)
                 video.save()            
         elif 'ustream.tv' in parsed_url.netloc and ustream.USTREAM_REGEX.match(video_url):
@@ -179,6 +188,7 @@ class Video(models.Model):
                           'allow_community_edits': True})
             if created:
                 video.title = ustream.get_title(video_url)
+                video.thumbnail = ustream.get_thumbnail_url(video_url)
                 video.save()              
         else:
             video, created = Video.objects.get_or_create(
@@ -207,14 +217,20 @@ class Video(models.Model):
     def caption_state(self):
         """Subtitling state for this video 
         """
-        return NO_CAPTIONS if self.captions() is None else CAPTIONS_FINISHED
+        captions = self.captions()
+        if captions is None:
+            return NO_CAPTIONS
+        elif captions.videocaption_set.count() == 0:
+            return NO_CAPTIONS
+        else:
+            return CAPTIONS_FINISHED
 
     def last_captions(self):
         try:
             return self.videocaptionversion_set.all()[:1].get()
         except models.ObjectDoesNotExist:
             pass
-        
+
     def captions(self, version=None):
         """Returns VideoCaptionVersion, or None if no captions
         
@@ -303,7 +319,7 @@ class Video(models.Model):
         """All iso language codes with finished translations."""
         return set([trans.language for trans 
                     in self.translationlanguage_set.filter(
-                    is_complete=True)])
+                    is_translated=True)])
 
     def null_translation_language_codes(self, user):
         null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)
@@ -352,7 +368,18 @@ class Video(models.Model):
         self.writelock_session_key = ''
         self.writelock_time = None
 
-
+    def notification_list(self, exclude=None):
+        qs = VideoCaptionVersion.objects.filter(video=self)
+        not_send = StopNotification.objects.filter(video=self) \
+            .values_list('user_id', flat=True)         
+        users = []
+        for item in qs:
+            if item.user.changes_notification \
+                and not item.user in users and not item.user.id in not_send \
+                and not exclude == item.user:
+                users.append(item.user)
+        return users
+                    
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
         return
@@ -469,18 +496,40 @@ class VideoCaptionVersion(VersionModel):
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
         new_version = cls(video=self.video, version_no=new_version_no, \
-            datetime_started=datetime.now(), user=user, note=note)
+            datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
         for item in self.captions():
             item.duplicate_for(new_version).save()
         return new_version
 
-def update_video_is_subtitled(sender, instance, created, **kwargs):
-    if instance.video.is_complete and not instance.video.is_subtitles:
-        instance.video.is_subtitles = True
-        instance.video.save()
-        
-post_save.connect(update_video_is_subtitled, VideoCaptionVersion)
+    def is_all_blank(self):
+        for vc in self.videocaption_set.all():
+            if vc.caption_text.strip() != '':
+                return False
+        return True
+
+def update_video_subtitled_state(sender, instance, created, **kwargs):
+    if instance.finished:
+        video = instance.video
+        if instance.is_all_blank():
+            finished_count = video.videocaptionversion_set.filter(finished=True).count()
+            if finished_count == 1:
+                instance.delete()
+                video.is_subtitled = False
+                video.was_subtitled = False
+            else:
+                video_captions = list(instance.videocaption_set.all())
+                for vc in video_captions:
+                    vc.delete()
+                video.is_subtitled = False
+                video.was_subtitled = True
+        else:
+            video.is_subtitled = True
+            video.was_subtitled = True
+        video.save()
+
+post_save.connect(update_video_subtitled_state, VideoCaptionVersion)
+
                     
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
@@ -502,9 +551,13 @@ class TranslationLanguage(models.Model):
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True)
+    # true iff at least one TranslationVersion has finished == True,
+    # and most recent finished TranslationVersion contains at least one
+    # nonblank translation.
+    is_translated = models.BooleanField()
     # true iff at least one TranslationVersion has finished == True
-    is_complete = models.BooleanField()
-    
+    was_translated = models.BooleanField(default=False)
+
     # TODO: These methods are duplicated from Video, 
     # since they're both lockable. Fix the duplication.
     @property
@@ -529,7 +582,10 @@ class TranslationLanguage(models.Model):
     @property
     def percent_done(self):
         try:
-            translation_count = len(self.translations().captions())
+            translation_count = 0
+            for item in self.translations().captions():
+                if item.translation_text:
+                    translation_count += 1
         except AttributeError:
             translation_count = 0
         captions_count = self.video.captions().captions().count()
@@ -557,6 +613,12 @@ class TranslationLanguage(models.Model):
         self.writelock_owner = None
         self.writelock_session_key = ''
         self.writelock_time = None
+
+    def last_translations(self):
+        try:
+            return self.translationversion_set.all()[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def translations(self, version=None):
         """Returns latest TranslationVersion, or None if none found"""
@@ -663,11 +725,39 @@ class TranslationVersion(VersionModel):
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
         new_version = cls(language=self.language, version_no=new_version_no,  \
-            datetime_started=datetime.now(), user=user, note=note)
+            datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
         for item in self.captions():
             item.duplicate_for(new_version).save()
         return new_version
+
+    def is_all_blank(self):
+        for t in self.translation_set.all():
+            if t.translation_text.strip() != '':
+                return False
+        return True
+
+def update_translated_state(sender, instance, created, **kwargs):
+    if instance.finished:
+        language = instance.language
+        if instance.is_all_blank():
+            finished_count = language.translationversion_set.filter(finished=True).count()
+            if finished_count == 1:
+                instance.delete()
+                language.is_translated = False
+                language.was_translated = False
+            else:
+                translations = list(instance.translation_set.all())
+                for t in translations:
+                    t.delete()
+                language.is_translated = False
+                language.was_translated = True
+        else:
+            language.is_translated = True
+            language.was_translated = True
+        language.save()
+
+post_save.connect(update_translated_state, TranslationVersion)
             
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
@@ -768,15 +858,31 @@ class VideoCaption(models.Model):
         return self.caption_text
     
 class Action(models.Model):
-    user = models.ForeignKey(User)
+    DEFAULT = 0
+    ADD_VIDEO = 1
+    CHANGE_TITLE = 2
+    TYPES = (
+        (ADD_VIDEO, u'add video'),
+        (CHANGE_TITLE, u'change title'),
+        (DEFAULT, u'')
+    )
+    user = models.ForeignKey(User, null=True, blank=True)
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
     comment = models.ForeignKey(Comment, blank=True, null=True)
+    action_type = models.IntegerField(choices=TYPES, default=DEFAULT)
+    new_video_title = models.CharField(max_length=2048, blank=True)
     created = models.DateTimeField()
     
     class Meta:
         ordering = ['-created']
         get_latest_by = 'created'
+    
+    def is_change_title(self):
+        return self.action_type == self.CHANGE_TITLE
+    
+    def is_add_video(self):
+        return self.action_type == self.ADD_VIDEO
     
     def type(self):
         if self.comment:
@@ -853,10 +959,21 @@ class Action(models.Model):
             obj = cls(user=user, video=video)
             obj.created = instance.datetime_started
             obj.save()            
-
+    
+    @classmethod
+    def create_video_handler(cls, sender, instance, created, **kwargs):
+        if created:
+            user = instance.owner
+            video = instance
+            obj = cls(user=user, video=video)
+            obj.action_type = cls.ADD_VIDEO
+            obj.created = datetime.now()
+            obj.save()
+                
 post_save.connect(Action.create_comment_handler, Comment)        
 post_save.connect(Action.create_translation_handler, TranslationVersion)
 post_save.connect(Action.create_caption_handler, VideoCaptionVersion)
+post_save.connect(Action.create_video_handler, Video)
 
 class UserTestResult(models.Model):
     email = models.EmailField()

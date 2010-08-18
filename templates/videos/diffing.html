@@ -70,26 +70,36 @@
 
 {% block main_content %}
     <h2>
-        Comparing revisions #{{ first_version.version_no }} and #{{ second_version.version_no }}
+        Comparing older revision #{{ first_version.version_no }} to current revision #{{ second_version.version_no }}
     </h2>
-    {{ video }} in language {{ first_version.language_display }} language<br/><br/>
+    {{ video }} in 
+    {% if  first_version.language_display == 'Original' %} 
+        {{ first_version.language_display }} language
+    {% else %}
+        {{ first_version.language_display }}
+    {% endif %}<br/><br/>
+
+    {% block breadcrumb %}
+        <ul class="breadcrumb"> 
+          <li>
+              <a href="{{ history_link }}">
+                  {{ first_version.language_display }} Subtitles
+              </a>
+          </li>
+          <li>
+              Comparing Revision #{{ first_version.version_no }} & #{{ second_version.version_no }}
+          </li>
+        </ul>
+    {% endblock %}
     
-    <a href="{{ history_link }}#revisions" class="return_history">
-        &lt;&lt; See full revision history
-    </a>
     <div style="clear: both"></div>
     
     <div class="left_column">
         <h3 class="diff_title">
-            Revision #{{ first_version.version_no }} - as of {{ first_version.datetime_started|date:"H:i, j F Y" }} 
-            by {{ first_version.user }}
+            Older Revision #{{ first_version.version_no }} by {{ first_version.user }}
+             <span class="small">{{ first_version.datetime_started|date:"H:i, j F Y" }} </span>
         </h3>
-        
-        {% block first_navigation %}
-            {% with first_version as version %}
-                {% include 'videos/_revision_navigation.html' %}
-            {% endwith %}
-        {% endblock %}
+   
         
         <div class="clear">&nbsp;</div>
         
@@ -98,10 +108,12 @@
 
 
         <div class="revision_buttons">
-            <a href="#" class="new_edit" id="edit_0">Submit a new edit based on this version</a>
+            <a href="#" class="new_edit" id="edit_0">
+                Submit a new edit based on this version (#{{ first_version.version_no }})
+            </a>
             {% if first_version.next_version %}
                 <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
-                    Roll back to version #{{ first_version.version_no }}
+                    Roll back to version (#{{ first_version.version_no }})
                 </a>
             {% endif %}
         </div>
@@ -134,26 +146,22 @@
     
     <div class="right_column">
         <h3 class="diff_title">
-            Revision #{{ second_version.version_no }} - as of {{ second_version.datetime_started|date:"H:i, j F Y" }} 
-            by {{ second_version.user }}
+            Current Revision #{{ second_version.version_no }} by {{ second_version.user }}
+            <span class="small">as of {{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
         </h3>
-        
-        {% block second_navigation %}
-            {% with second_version as version %}
-                {% include 'videos/_revision_navigation.html' %}
-            {% endwith %}
-        {% endblock %}
-        
+      
         <div class="clear">&nbsp;</div>
         
         {% widget widget1_params 'widget_div_1' %}
         <div class="clear tall">&nbsp;</div>
         
         <div class="revision_buttons">
-            <a href="#" class="new_edit">Submit a new edit based on this version</a>
+            <a href="#" class="new_edit">
+                Submit a new edit based on this version (#{{ second_version.version_no }})
+            </a>
             {% if second_version.next_version %}
                 <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
-                    Roll back to version #{{ second_version.version_no }}
+                    Roll back to version (#{{ second_version.version_no }})
                 </a>
             {% endif %}
         </div>

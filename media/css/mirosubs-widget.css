@@ -852,6 +852,10 @@ margin: 20px 0 0 0px !important;
 
 }
 
+.mirosubs-videoDiv {
+   text-align: left !important;
+}
+
 .mirosubs-left .mirosubs-videoDiv {
    width: 400px;
    height: 350px;
@@ -1753,7 +1757,7 @@ padding: 0 !important;
 
 .mirosubs-share ul li{
 list-style: none !important;
-padding: 0 !important;
+padding: 0 0 0 28px !important;
 margin-bottom: 5px
 
 }
@@ -1762,11 +1766,10 @@ margin-bottom: 5px
 .mirosubs-share ul li a{
 list-style: none !important;
 line-height: 1.8em !important;
-padding: 0 0 0 28px !important;
+padding: 0 !important;
 margin-bottom: 5px
 display: block !important;
 color: #333 !important;
-text-decoration: none !important;
 font-weight: bold !important;
 }
 

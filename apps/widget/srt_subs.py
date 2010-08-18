@@ -146,6 +146,8 @@ class TTMLSubtitles(BaseSubtitles):
         body = etree.SubElement(tt, 'body')
         div = etree.SubElement(body, 'div')
         for item in self.subtitles:
+            if not item['text']:
+                continue
             attrib = {}
             attrib['begin'] = self.format_time(item['start'])
             attrib['dur'] = self.format_time(item['end']-item['start'])

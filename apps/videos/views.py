@@ -18,7 +18,7 @@
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
@@ -38,6 +38,9 @@ from vidscraper.errors import Error as VidscraperError
 from django.template.loader import render_to_string
 from django.utils.http import urlquote_plus
 from auth.models import CustomUser as User
+from datetime import datetime
+from videos.utils import send_templated_email
+from django.contrib.auth import logout
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -134,6 +137,43 @@ def _add_share_panel_context_for_translation_history(context, video, language_co
         _make_email_url(email_message),
         page_url)
 
+def ajax_change_video_title(request):
+    video_id = request.POST.get('video_id')
+    title = request.POST.get('title')
+    user = request.user
+    
+    try:
+        video = Video.objects.get(video_id=video_id)
+        if title and not video.title or video.is_html5():
+            old_title = video.title or video.video_url
+            video.title = title
+            video.save()
+            action = Action(new_video_title=video.title, video=video)
+            action.user = user.is_authenticated and user or None
+            action.created = datetime.now()
+            action.action_type = Action.CHANGE_TITLE
+            action.save()
+            
+            users = video.notification_list(user)
+            for obj in users:
+                subject = u'Video\'s title changed on Universal Subtitles'
+                context = {
+                    'user': obj,
+                    'domain': Site.objects.get_current().domain,
+                    'video': video,
+                    'editor': user,
+                    'old_title': old_title,
+                    'hash': obj.hash_for_video(video.video_id)
+                }
+                send_templated_email(obj.email, subject, 
+                                     'videos/email_title_changed.html',
+                                     context, 'feedback@universalsubtitles.org',
+                                     fail_silently=not settings.DEBUG)            
+    except Video.DoesNotExist:
+        pass
+    
+    return HttpResponse('')
+
 def create(request):
     if request.method == 'POST':
         video_form = VideoForm(request.POST, label_suffix="")
@@ -181,7 +221,7 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set \
-        .filter(is_complete=True)
+        .filter(was_translated=True)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
     return render_to_response('videos/video.html', context,
@@ -197,7 +237,7 @@ def video_list(request):
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
-    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count', 'is_subtitles']
+    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count', 'is_subtitled']
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
@@ -300,7 +340,7 @@ def history(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .filter(is_complete=True)
+        .filter(was_translated=True)
     context['last_version'] = video.captions()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     context['commented_object'] = ProxyVideo.get(video)
@@ -334,9 +374,9 @@ def translation_history(request, video_id, lang):
     
     context['video'] = video
     context['language'] = language
-    context['site'] = Site.objects.get_current()        
+    context['site'] = Site.objects.get_current()
     context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .exclude(pk=language.pk).filter(is_complete=True).distinct()
+        .exclude(pk=language.pk).filter(was_translated=True).distinct()
     context['last_version'] = video.translations(lang)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang)
     context['commented_object'] = language
@@ -548,12 +588,20 @@ def search(request):
 @login_required
 def stop_notification(request, video_id):
     user_id = request.GET.get('u')
-    if user_id:
-        u = get_object_or_404(User, id=user_id)
-        if not request.user == u:
-            return redirect(reverse('logout')+'?next='+urlquote_plus(request.get_full_path()))
+    hash = request.GET.get('h')
+
+    if not user_id or not hash:
+        raise Http404
+    
     video = get_object_or_404(Video, video_id=video_id)
-    StopNotification.objects.get_or_create(user=request.user, video=video)
-    context = dict(video=video)
+    user = get_object_or_404(User, id=user_id)
+    context = dict(video=video, u=user)
+
+    if hash and user.hash_for_video(video_id) == hash:
+        StopNotification.objects.get_or_create(user=user, video=video)
+        if request.user.is_authenticated() and not request.user == user:
+            logout(request)
+    else:
+        context['error'] = u'Incorrect secret hash'
     return render_to_response('videos/stop_notification.html', context,
                               context_instance=RequestContext(request))

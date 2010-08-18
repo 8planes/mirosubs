@@ -21,7 +21,7 @@
           {% ordered_column "translation_count" "Translations" %}  	
 	   </th>
        <th class="center last">
-           {% ordered_column "is_subtitles" "Subtitled?" %}
+           {% ordered_column "is_subtitled" "Subtitled?" %}
        </th>
     </tr>
 </thead>
@@ -41,7 +41,7 @@
         <td class="center">{{ video.widget_views_count }}</td>
         <td class="center">{{ video.subtitles_fetched_count }}</td>
         <td class="center">{{ video.translation_count }}</td>
-        <td class="center last">{{ video.is_subtitles|yesno }}</td>
+        <td class="center last">{{ video.is_subtitled|yesno }}</td>
       </tr>
     {% endfor %}
 </tbody>

@@ -89,11 +89,11 @@ class SubtitlesUploadForm(forms.Form):
         else:
             version_no = latest_captions.version_no + 1
         version = VideoCaptionVersion(
-            video=video, version_no=version_no, finished=True,
+            video=video, version_no=version_no,
             datetime_started=datetime.now(), user=self.user,
             note='Uploaded')
         version.save()
-        
+
         text = subtitles.read()
         parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))
         ids = []
@@ -109,8 +109,10 @@ class SubtitlesUploadForm(forms.Form):
             caption.sub_order = i+1
             caption.save()
         
+        version.finished = True
+        version.save()
+        
         video.release_writelock()
-        video.is_complete = True
         video.save()
         
     def get_errors(self):

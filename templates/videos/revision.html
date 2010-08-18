@@ -53,6 +53,11 @@
                     $(this).find('.data').text()));
                 return false;
             });
+            $('.time_link').click(function() {
+                widget_widget_div.playAt(parseFloat(
+                    $(this).find('.data').text()));
+                return false;
+            });          
         });
     </script>
     {% include "widget/_js_onsite_dependencies.html" %}
@@ -60,7 +65,20 @@
 
 {% block main_content %}
     <h2>Revision #{{ version.version_no }} - {{ version.revision_time }}</h2>
-    {{ video }} in language {{ version.language_display }} language<br/><br/>
+    {{ video }} in
+    {% if version.language_display == 'Original' %} 
+        {{ version.language_display }} language
+    {% else %}
+        {{ version.language_display }}
+    {% endif %}
+    <br/><br/>
+
+    {% block breadcrumb %}
+        <ul class="breadcrumb"> 
+          <li><a href="{% url videos:history video_id=video.video_id %}">Original Subtitles</a></li>
+          <li>Revision #{{ version.version_no }}</li>
+        </ul>
+    {% endblock %}
         
     {% if next_version %}
         <div class="viewing_old">
@@ -76,12 +94,9 @@
             
           {% if prev_version %}
               <li class="previous">
-                {% ifnotequal latest_version prev_version %}
-                    (<a href="{% url videos:diffing latest_version.pk prev_version.pk %}">diff</a>) 
-                {% endifnotequal %}
                 &#8592; 
                 <a href="{% url videos:revision pk=prev_version.pk %}">
-                    Version #{{ prev_version.version_no }}
+                    Compare #{{ version.version_no }} to #{{ prev_version.version_no }}
                 </a>
               </li>
           {% endif %}
@@ -89,21 +104,15 @@
           {% if next_version %}
               <li class="next">
                 <a href="{% url videos:revision pk=next_version.pk %}">
-                    Version #{{ next_version.version_no }}
-                </a> &#8594;
-                {% ifnotequal latest_version next_version %}
-                    (<a href="{% url videos:diffing latest_version.pk next_version.pk %}">diff</a>) 
-                {% endifnotequal %}                
+                    Compare #{{ version.version_no }} to #{{ next_version.version_no }}
+                </a> &#8594;              
               </li>
           {% endif %}
           
           <li class="current">
             <a href="{% url videos:revision pk=latest_version.pk %}">
-               The most recent revision
-            </a>
-            {% ifnotequal latest_version version %}
-                (<a href="{% url videos:diffing latest_version.pk version.pk %}">diff</a>) 
-            {% endifnotequal %}               
+               Compare #{{ version.version_no }} to #{{ latest_version.version_no }}(current)
+            </a>              
           </li>
           
         </ul>
@@ -116,10 +125,12 @@
 
     <div class="right_column">
       <br /><br /><br /><br /><br />     
-      <a href="#" class="new_edit"><span>Submit a new edit based on this version</span></a>
+      <a href="#" class="new_edit">
+          <span>Submit a new edit based on this version (#{{ version.version_no }})</span>
+      </a>
       {% if next_version %}
       <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
-          <span>Roll back to version #{{ version.version_no }}</span>
+          <span>Roll back to version (#{{ version.version_no }})</span>
       </a>
       {% endif %}
     </div>
@@ -132,7 +143,10 @@
       {% for item in version.captions %}
         <li {% cycle 'class="even"' '' %}>
           {% if item.display_time or item.display_end_time %}
-            {{ item.display_time }} - {{ item.display_end_time }} 
+            <a href="#" class="time_link">
+                <span class="data">{{item.start_time}}</span>
+                {{ item.display_time }} - {{ item.display_end_time }}
+            </a> 
           {% endif %} &gt; {{ item.text|linebreaksbr }}
         </li>
       {% endfor %}

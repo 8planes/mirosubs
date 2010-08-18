@@ -76,6 +76,21 @@
                     mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
                 return false;
             });
+            
+            var CHANGE_TITLE_LINK = '{% url videos:ajax_change_video_title %}';
+            var VIDEO_ID = '{{ video.video_id }}';
+            
+            $('.edit-title').click(function(){
+                var title = prompt('Enter new title', $('.main-title').html());
+                if (title){
+                    $('.main-title').html(title);
+                    $.post(CHANGE_TITLE_LINK, {
+                        video_id: VIDEO_ID,
+                        title: title
+                    });
+                }
+                return false;
+            });
         });
     </script>  
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -86,10 +101,14 @@
 {% endblock %}
 
 {% block main_content %}
+
+    <h2 class="main-title">{% if video.title %}{{ video.title }}{% endif %}</h2>
+    {% if not video.title or video.is_html5 %}
+        <a href="#" class="edit-title">edit title</a>   
+    {% endif %}
+
     <div class="left_column">
-        {% if video.title %}
-            <h2 class="floatleft">{{ video.title }}</h2>
-        {% endif %}
+     
         {% widget widget_params %}
     </div>
     
@@ -97,7 +116,7 @@
         {% include '_sharing_widget.html' %}
     </div>
 
-    <div class="clearboth">&nbsp;</div>
+        <hr />
     
     <div class="sub_actions">
       {% if not video.captions %}
@@ -112,11 +131,11 @@
       {% endwith %}
       </div>
     </div>
-
+      
 
     <ul class="video_tabs">
-      <li class="active"><a href="#languages-tab">Languages ({{ translations|length }})</a></li>
-      <li><a href="#comments-tab">Comments ({% get_comment_count video %})</a></li>
+      <li class="active"><a href="#languages-tab">Languages <span class="badgy_out"><span class="badgy">{{ translations|length }}</span></span></a></li>
+      <li><a href="#comments-tab">Comments <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
       <li><a href="#activity-tab">Activity stream</a></li>
     </ul>
     
@@ -126,47 +145,36 @@
             <table cellpadding="0" cellspacing="0">
               <thead>
                 <tr>
-                <th>Language</th>
-                <th>Rating</th>
-                <th>% Done</th>
-              </tr>              
+                  <th><a href="#">Language</a></th>
+                  <th class="last"><a href="#">% Done</a></th>
+                </tr>              
               </thead>
     
-            <tbody>
-              <tr>
-               
+              <tbody>
+                <tr>
                     <td>
                         <a href="{% url videos:history video.video_id %}">
                             Original
                         </a>
                     </td>
-                    <td>A+</td>
-                    <td style="text-align: center;">
-                        n/a
-
-                    <span class="grid_2">A+</span>
-                    <span class="grid_4 grid_last" style="text-align: center;">
-                        {% if video.captions %}
-                            <span class="progress">
-                                <span class="completion {% progress_color 0 %}" style="width: 0%"></span>
-                                {{ video.captions.videocaption_set.all|length }} subtitles
-                            </span>
-                        {% else %}
-                            n/a
+                    <td>
+                      {% if video.captions %}
+                        <span class="badgy">{{ video.captions.videocaption_set.all|length }} Subtitles</span>
+                      {% else %}
+                            <span class="badgy">No Subtitles</span>
                         {% endif %}
-                    </span>
+                    
                     </td>
 
 
-                </tr>                
-                {% for item in translations %}
+                {% for item in translations %}  
+
                     <tr>
                         <td>
                             <a href="{% url videos:translation_history video.video_id item.language %}">
                                 {{ item.get_language_display }}
                             </a>
                         </td>
-                        <td>A+</td>
                         <td>
                             <span class="progress">
                                 <span class="completion {% progress_color item.percent_done %}" style="width: {{ item.percent_done }}%"></span>
@@ -174,6 +182,7 @@
                         </td>
                     </tr>
                 {% endfor %} 
+
 
             </tbody>
             </table>
