@@ -74,6 +74,7 @@ class Video(models.Model):
     bliptv_flv_url = models.CharField(max_length=256, blank=True)
     title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
+    duration = models.PositiveIntegerField(null=True, blank=True)
     # the person who was first to start captioning this video.
     owner = models.ForeignKey(User, null=True)
     allow_community_edits = models.BooleanField()
@@ -85,7 +86,8 @@ class Video(models.Model):
     widget_views_count = models.IntegerField(default=0)
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False)
-
+    thumbnail = models.CharField(max_length=500, blank=True)
+    
     def __unicode__(self):
         if self.title:
             return self.title
@@ -143,6 +145,9 @@ class Video(models.Model):
             if created:
                 entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
                 video.title = entry.media.title.text
+                video.duration = entry.media.duration.seconds
+                if entry.media.thumbnail:
+                    video.thumbnail = entry.media.thumbnail[-1].url
                 video.save()
         elif 'blip.tv' in parsed_url.netloc and blip.BLIP_REGEX.match(video_url):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
@@ -154,6 +159,7 @@ class Video(models.Model):
             if created:
                 video.title = blip.scrape_title(video_url)
                 video.bliptv_flv_url = blip.scrape_file_url(video_url)
+                video.thumbnail = blip.get_thumbnail_url(video_url)
                 video.save()
         elif 'video.google.com' in parsed_url.netloc and google_video.GOOGLE_VIDEO_REGEX.match(video_url):
             video, created = Video.objects.get_or_create(
@@ -171,6 +177,7 @@ class Video(models.Model):
                           'video_type': VIDEO_TYPE_FORA,
                           'allow_community_edits': True})
             if created:
+                video.thumbnail = fora.scrape_thumbnail_url(video_url)
                 video.title = fora.scrape_title(video_url)
                 video.save()            
         elif 'ustream.tv' in parsed_url.netloc and ustream.USTREAM_REGEX.match(video_url):
@@ -181,6 +188,7 @@ class Video(models.Model):
                           'allow_community_edits': True})
             if created:
                 video.title = ustream.get_title(video_url)
+                video.thumbnail = ustream.get_thumbnail_url(video_url)
                 video.save()              
         else:
             video, created = Video.objects.get_or_create(
