@@ -38,6 +38,8 @@ from vidscraper.errors import Error as VidscraperError
 from django.template.loader import render_to_string
 from django.utils.http import urlquote_plus
 from auth.models import CustomUser as User
+from datetime import datetime
+from videos.utils import send_templated_email
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -133,6 +135,41 @@ def _add_share_panel_context_for_translation_history(context, video, language_co
         { 'video_url': video.get_video_url(), 'base_state': { 'language': str(language_code) }},
         _make_email_url(email_message),
         page_url)
+
+def ajax_change_video_title(request):
+    video_id = request.POST.get('video_id')
+    title = request.POST.get('title')
+    user = request.user
+    
+    try:
+        video = Video.objects.get(video_id=video_id)
+        if title and not video.title or video.is_html5():
+            old_title = video.title or video.video_url
+            video.title = title
+            video.save()
+            action = Action(new_video_title=video.title, video=video)
+            action.user = user.is_authenticated and user or None
+            action.created = datetime.now()
+            action.action_type = Action.CHANGE_TITLE
+            action.save()
+            
+            users = video.notification_list(user)
+            for obj in users:
+                subject = u'Video\'s title changed on Universal Subtitles'
+                context = {
+                    'user': obj,
+                    'video': video,
+                    'editor': user,
+                    'old_title': old_title
+                }
+                send_templated_email(obj.email, subject, 
+                                     'videos/email_title_changed.html',
+                                     context, 'feedback@universalsubtitles.org',
+                                     fail_silently=not settings.DEBUG)            
+    except Video.DoesNotExist:
+        pass
+    
+    return HttpResponse('')
 
 def create(request):
     if request.method == 'POST':

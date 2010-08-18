@@ -96,6 +96,9 @@ class Video(models.Model):
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return self.bliptv_fileid
     
+    def is_html5(self):
+        return self.video_type == VIDEO_TYPE_HTML5
+    
     def title_display(self):
         if self.title:
             return self.title
@@ -357,7 +360,18 @@ class Video(models.Model):
         self.writelock_session_key = ''
         self.writelock_time = None
 
-
+    def notification_list(self, exclude=None):
+        qs = VideoCaptionVersion.objects.filter(video=self)
+        not_send = StopNotification.objects.filter(video=self) \
+            .values_list('user_id', flat=True)         
+        users = []
+        for item in qs:
+            if item.user.changes_notification \
+                and not item.user in users and not item.user.id in not_send \
+                and not exclude == item.user:
+                users.append(item.user)
+        return users
+                    
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
         return
@@ -838,8 +852,10 @@ class VideoCaption(models.Model):
 class Action(models.Model):
     DEFAULT = 0
     ADD_VIDEO = 1
+    CHANGE_TITLE = 2
     TYPES = (
         (ADD_VIDEO, u'add video'),
+        (CHANGE_TITLE, u'change title'),
         (DEFAULT, u'')
     )
     user = models.ForeignKey(User)
@@ -847,11 +863,15 @@ class Action(models.Model):
     language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
     comment = models.ForeignKey(Comment, blank=True, null=True)
     action_type = models.IntegerField(choices=TYPES, default=DEFAULT)
+    new_video_title = models.CharField(max_length=2048, blank=True)
     created = models.DateTimeField()
     
     class Meta:
         ordering = ['-created']
         get_latest_by = 'created'
+    
+    def is_change_title(self):
+        return self.action_type == self.CHANGE_TITLE
     
     def is_add_video(self):
         return self.action_type == self.ADD_VIDEO

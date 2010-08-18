@@ -18,7 +18,13 @@
         
         {% if item.is_add_video %}
             submited this video.
-        {% else %}
+        {% endif %}
+        
+        {% if item.is_change_title %}
+            changed title to "{{ item.new_video_title }}"
+        {% endif %}
+        
+        {% if not item.action_type %}
             {% if item.comment %}
                 {% if item.comment.get_language %}
                     commented on {{ item.comment.get_language }}.

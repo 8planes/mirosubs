@@ -72,6 +72,13 @@
         {{ version.language_display }}
     {% endif %}
     <br/><br/>
+
+    {% block breadcrumb %}
+        <ul class="breadcrumb"> 
+          <li><a href="{% url videos:history video_id=video.video_id %}">Original Subtitles</a></li>
+          <li>Revision #{{ version.version_no }}</li>
+        </ul>
+    {% endblock %}
         
     {% if next_version %}
         <div class="viewing_old">

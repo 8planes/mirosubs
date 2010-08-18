@@ -6,6 +6,12 @@
     {{ video.title_display }} with {{ language.get_language_display }} subtitles | Universal Subtitles
 {% endblock %}
 
+{% block breadcrumb %}
+    <ul class="breadcrumb"> 
+      <li>{{ language.get_language_display }} Subtitles</li>
+    </ul>
+{% endblock %}
+
 {% block diffing_link %}{% url videos:translation_diffing 11111 22222 %}{% endblock %}
 
 {% block lang_display %}

@@ -73,15 +73,25 @@
         Comparing older revision #{{ first_version.version_no }} to current revision #{{ second_version.version_no }}
     </h2>
     {{ video }} in 
-    {% if version.language_display == 'Original' %} 
-        {{ version.language_display }} language
+    {% if  first_version.language_display == 'Original' %} 
+        {{ first_version.language_display }} language
     {% else %}
-        {{ version.language_display }}
+        {{ first_version.language_display }}
     {% endif %}<br/><br/>
+
+    {% block breadcrumb %}
+        <ul class="breadcrumb"> 
+          <li>
+              <a href="{{ history_link }}">
+                  {{ first_version.language_display }} Subtitles
+              </a>
+          </li>
+          <li>
+              Comparing Revision #{{ first_version.version_no }} & #{{ second_version.version_no }}
+          </li>
+        </ul>
+    {% endblock %}
     
-    <a href="{{ history_link }}#revisions" class="return_history">
-        &lt;&lt; See full revision history
-    </a>
     <div style="clear: both"></div>
     
     <div class="left_column">

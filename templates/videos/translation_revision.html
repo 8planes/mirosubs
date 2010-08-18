@@ -6,6 +6,17 @@
 
 {% block roolback_link %}{% url videos:translation_rollback version.pk %}{% endblock %}
 
+{% block breadcrumb %}
+    <ul class="breadcrumb"> 
+      <li>
+          <a href="{% url videos:translation_history video.video_id version.language.language %}">
+            {{ version.language_display }} Subtitles
+          </a>
+      </li>
+      <li>Revision #{{ version.version_no }}</li>
+    </ul>
+{% endblock %}
+
 {% block navigation %}
     <ul class="pag" style="width: 420px">
         

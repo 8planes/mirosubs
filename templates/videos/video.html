@@ -76,6 +76,21 @@
                     mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
                 return false;
             });
+            
+            var CHANGE_TITLE_LINK = '{% url videos:ajax_change_video_title %}';
+            var VIDEO_ID = '{{ video.video_id }}';
+            
+            $('.edit-title').click(function(){
+                var title = prompt('Enter new title', $('.main-title').html());
+                if (title){
+                    $('.main-title').html(title);
+                    $.post(CHANGE_TITLE_LINK, {
+                        video_id: VIDEO_ID,
+                        title: title
+                    });
+                }
+                return false;
+            });
         });
     </script>  
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -87,9 +102,10 @@
 
 {% block main_content %}
 
-   {% if video.title %}
-            <h2 class="main-title">{{ video.title }}</h2>
-        {% endif %}
+    <h2 class="main-title">{% if video.title %}{{ video.title }}{% endif %}</h2>
+    {% if not video.title or video.is_html5 %}
+        <a href="#" class="edit-title">edit title</a>   
+    {% endif %}
 
     <div class="left_column">
      
