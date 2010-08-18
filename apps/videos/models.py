@@ -468,7 +468,7 @@ class VideoCaptionVersion(VersionModel):
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
         new_version = cls(video=self.video, version_no=new_version_no, \
-            datetime_started=datetime.now(), user=user, note=note)
+            datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
         for item in self.captions():
             item.duplicate_for(new_version).save()
@@ -687,7 +687,7 @@ class TranslationVersion(VersionModel):
         new_version_no = latest_captions.version_no + 1
         note = 'rollback to version #%s' % self.version_no
         new_version = cls(language=self.language, version_no=new_version_no,  \
-            datetime_started=datetime.now(), user=user, note=note)
+            datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
         for item in self.captions():
             item.duplicate_for(new_version).save()
