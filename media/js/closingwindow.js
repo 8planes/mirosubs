@@ -37,7 +37,7 @@ mirosubs.ClosingWindow = function() {
             return ret;
         if (oldRet != null)
             return oldRet;
-        return null;
+        // returns undefined.
     };
 };
 goog.inherits(mirosubs.ClosingWindow, goog.events.EventTarget);
