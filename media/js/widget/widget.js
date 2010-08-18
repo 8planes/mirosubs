@@ -459,9 +459,15 @@ mirosubs.widget.Widget.prototype.subsLoaded_ =
     this.languageCodePlaying_ = languageCode;
     this.playManager_ = new mirosubs.play.Manager(
         this.videoPlayer_, subtitles);
-    this.videoTab_.setText(
-        languageCode == null ? "Original language" : 
-            this.findLanguage_(languageCode)['name']);
+    var videoTabText;
+    if (languageCode == null)
+        videoTabText = 
+            subtitles.length == 0 ? 
+            mirosubs.widget.VideoTab.Messages.SUBTITLE_ME : 
+            "Original language";
+    else
+        videoTabText = this.findLanguage_(languageCode)['name'];
+    this.videoTab_.setText(videoTabText);            
     this.popupMenu_.setCurrentLangCode(languageCode);
     this.popupMenu_.setShowingSubs(true);
 };

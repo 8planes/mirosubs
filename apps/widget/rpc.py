@@ -338,8 +338,8 @@ def finished_translations(request, video_id, language_code, version_no,
     if last_version is not None:
         last_version.finished = True
         last_version.save()
+    translation_language = models.TranslationLanguage.objects.get(pk=translation_language.pk)
     translation_language.release_writelock()
-    translation_language.is_complete = True
     translation_language.save()
     video = models.Video.objects.get(video_id=video_id)
     return { 'response' : 'ok',
@@ -355,7 +355,6 @@ def finished_translations_null(request, video_id, language_code, version_no,
     null_translations = save_translations_null_impl(request, video, language_code, 
                                                     inserted, updated)
     null_translations.save()
-    null_translations.language.is_complete = True
     null_translations.language.save()    
     video = models.Video.objects.get(video_id=video_id)
     return { 'response' : 'ok',
@@ -467,7 +466,7 @@ def save_translations_impl(request, translation_language,
                            version_no, inserted, updated):
     if len(inserted) == 0 and len(updated) == 0:
         return None
-    last_version = translation_language.translations()
+    last_version = translation_language.last_translations()
     if last_version != None and last_version.version_no >= version_no:
         current_version = last_version
     else:

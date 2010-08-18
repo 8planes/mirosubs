@@ -76,6 +76,8 @@ mirosubs.RightPanel.prototype.createDom = function() {
 
     this.appendLegendContents_($d, el);
 
+    this.appendMiddleContentsInternal($d, el);
+
     this.appendStepsContents_($d, el);
 };
 mirosubs.RightPanel.prototype.showLoading = function(show) {
@@ -107,9 +109,15 @@ mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
         }
         helpHeadingDiv.appendChild(stepsUL);
     }
-    goog.array.forEach(this.helpContents_.paragraphs, function(p) {
-        el.appendChild($d('p', null, p));
-    });
+    if (this.helpContents_.html) {
+        var div = $d('div');
+        div.innerHTML = this.helpContents_.html;
+        el.appendChild(div);
+    }
+    else
+        goog.array.forEach(this.helpContents_.paragraphs, function(p) {
+            el.appendChild($d('p', null, p));
+        });
 };
 mirosubs.RightPanel.prototype.appendExtraHelp_ = function($d, el) {
     if (this.extraHelp_ && this.extraHelp_.length > 0) {
@@ -186,6 +194,9 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
 };
 mirosubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv) {
     legendDiv.appendChild($d('div', 'mirosubs-clear'));    
+};
+mirosubs.RightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
+    // dear subclasses, override me if you want. love, rightpanel.
 };
 mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.loginDiv_ = $d('div');
@@ -286,6 +297,8 @@ mirosubs.RightPanel.HelpContents = function(header, paragraphs, opt_numSteps, op
     this.paragraphs = paragraphs;
     this.numSteps = opt_numSteps;
     this.activeStep = opt_activeStep;
+    // set html to override paragraphs with custom html.
+    this.html = null;
 };
 
 mirosubs.RightPanel.KeySpec = function(divClass, spanClass, 

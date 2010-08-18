@@ -206,14 +206,20 @@ class Video(models.Model):
     def caption_state(self):
         """Subtitling state for this video 
         """
-        return NO_CAPTIONS if self.captions() is None else CAPTIONS_FINISHED
+        captions = self.captions()
+        if captions is None:
+            return NO_CAPTIONS
+        elif captions.videocaption_set.count() == 0:
+            return NO_CAPTIONS
+        else:
+            return CAPTIONS_FINISHED
 
     def last_captions(self):
         try:
             return self.videocaptionversion_set.all()[:1].get()
         except models.ObjectDoesNotExist:
             pass
-        
+
     def captions(self, version=None):
         """Returns VideoCaptionVersion, or None if no captions
         
@@ -302,7 +308,7 @@ class Video(models.Model):
         """All iso language codes with finished translations."""
         return set([trans.language for trans 
                     in self.translationlanguage_set.filter(
-                    is_complete=True)])
+                    is_translated=True)])
 
     def null_translation_language_codes(self, user):
         null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)
@@ -482,9 +488,9 @@ class VideoCaptionVersion(VersionModel):
 
 def update_video_subtitled_state(sender, instance, created, **kwargs):
     if instance.finished:
-        video = Video.objects.get(id=instance.video.id)
+        video = instance.video
         if instance.is_all_blank():
-            finished_count = instance.video.videocaptionversion_set.filter(finished=True).count()
+            finished_count = video.videocaptionversion_set.filter(finished=True).count()
             if finished_count == 1:
                 instance.delete()
                 video.is_subtitled = False
@@ -523,9 +529,13 @@ class TranslationLanguage(models.Model):
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
     writelock_owner = models.ForeignKey(User, null=True)
+    # true iff at least one TranslationVersion has finished == True,
+    # and most recent finished TranslationVersion contains at least one
+    # nonblank translation.
+    is_translated = models.BooleanField()
     # true iff at least one TranslationVersion has finished == True
-    is_complete = models.BooleanField()
-    
+    was_translated = models.BooleanField(default=False)
+
     # TODO: These methods are duplicated from Video, 
     # since they're both lockable. Fix the duplication.
     @property
@@ -581,6 +591,12 @@ class TranslationLanguage(models.Model):
         self.writelock_owner = None
         self.writelock_session_key = ''
         self.writelock_time = None
+
+    def last_translations(self):
+        try:
+            return self.translationversion_set.all()[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
 
     def translations(self, version=None):
         """Returns latest TranslationVersion, or None if none found"""
@@ -692,6 +708,34 @@ class TranslationVersion(VersionModel):
         for item in self.captions():
             item.duplicate_for(new_version).save()
         return new_version
+
+    def is_all_blank(self):
+        for t in self.translation_set.all():
+            if t.translation_text.strip() != '':
+                return False
+        return True
+
+def update_translated_state(sender, instance, created, **kwargs):
+    if instance.finished:
+        language = instance.language
+        if instance.is_all_blank():
+            finished_count = language.translationversion_set.filter(finished=True).count()
+            if finished_count == 1:
+                instance.delete()
+                language.is_translated = False
+                language.was_translated = False
+            else:
+                translations = list(instance.translation_set.all())
+                for t in translations:
+                    t.delete()
+                language.is_translated = False
+                language.was_translated = True
+        else:
+            language.is_translated = True
+            language.was_translated = True
+        language.save()
+
+post_save.connect(update_translated_state, TranslationVersion)
             
 # TODO: make Translation unique on (version, caption_id)
 class Translation(models.Model):
