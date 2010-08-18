@@ -58,7 +58,8 @@ class Command(BaseCommand):
                 'domain': self.domain,
                 'user': user,
                 'language': language,
-                'video': video
+                'video': video,
+                'hash': user.hash_for_video(video.video_id)
             }
             subject = 'New %s translation by %s of "%s"' % \
                 (language.get_language_display(), translation_version.user.__unicode__(), video.__unicode__())
@@ -98,6 +99,7 @@ class Command(BaseCommand):
                 context['captions'] = captions        
                 context['user'] = item.user
                 context['old_version'] = item
+                context['hash'] = item.user.hash_for_video(context['video'].video_id)
                 subject = 'New edits to "%s" by %s on Universal Subtitles' % \
                     (item.language.video.__unicode__(), item.user.__unicode__())
                 send_templated_email(item.user.email, subject, 
@@ -137,6 +139,7 @@ class Command(BaseCommand):
                     data = [caption, scaption, changed]
                     captions.append(data)
                 context['captions'] = captions
+                context['hash'] = item.user.hash_for_video(context['video'].video_id)
                 subject = 'New edits to "%s" by %s on Universal Subtitles' % \
                     (item.user.__unicode__(), item.video.__unicode__())
                 send_templated_email(item.user.email, subject, 

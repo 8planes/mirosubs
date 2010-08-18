@@ -18,7 +18,7 @@
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
@@ -40,6 +40,7 @@ from django.utils.http import urlquote_plus
 from auth.models import CustomUser as User
 from datetime import datetime
 from videos.utils import send_templated_email
+from django.contrib.auth import logout
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -158,9 +159,11 @@ def ajax_change_video_title(request):
                 subject = u'Video\'s title changed on Universal Subtitles'
                 context = {
                     'user': obj,
+                    'domain': Site.objects.get_current().domain,
                     'video': video,
                     'editor': user,
-                    'old_title': old_title
+                    'old_title': old_title,
+                    'hash': obj.hash_for_video(video.video_id)
                 }
                 send_templated_email(obj.email, subject, 
                                      'videos/email_title_changed.html',
@@ -585,12 +588,20 @@ def search(request):
 @login_required
 def stop_notification(request, video_id):
     user_id = request.GET.get('u')
-    if user_id:
-        u = get_object_or_404(User, id=user_id)
-        if not request.user == u:
-            return redirect(reverse('logout')+'?next='+urlquote_plus(request.get_full_path()))
+    hash = request.GET.get('h')
+
+    if not user_id or not hash:
+        raise Http404
+    
     video = get_object_or_404(Video, video_id=video_id)
-    StopNotification.objects.get_or_create(user=request.user, video=video)
-    context = dict(video=video)
+    user = get_object_or_404(User, id=user_id)
+    context = dict(video=video, u=user)
+
+    if hash and user.hash_for_video(video_id) == hash:
+        StopNotification.objects.get_or_create(user=user, video=video)
+        if request.user.is_authenticated() and not request.user == user:
+            logout(request)
+    else:
+        context['error'] = u'Incorrect secret hash'
     return render_to_response('videos/stop_notification.html', context,
                               context_instance=RequestContext(request))

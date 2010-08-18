@@ -2,6 +2,8 @@ from django.contrib.auth.models import UserManager, User as BaseUser
 from django.db import models
 from django.conf.global_settings import LANGUAGES
 from django.db.models.signals import post_save
+from django.conf import settings
+import sha
 
 class CustomUser(BaseUser):
     AUTOPLAY_ON_BROWSER = 1
@@ -41,7 +43,10 @@ class CustomUser(BaseUser):
     @models.permalink
     def profile_url(self):
         return ('profiles:profile', [self.pk])
-
+    
+    def hash_for_video(self, video_id):
+        return sha.new(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
+    
     def _get_unique_checks(self, exclude=None):
         #add email field validate like unique
         unique_checks, date_checks = super(CustomUser, self)._get_unique_checks(exclude)
