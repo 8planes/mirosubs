@@ -842,7 +842,7 @@ class Action(models.Model):
         (ADD_VIDEO, u'add video'),
         (DEFAULT, u'')
     )
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True, blank=True)
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
     comment = models.ForeignKey(Comment, blank=True, null=True)
