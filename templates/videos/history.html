@@ -124,17 +124,6 @@
 {% block main_content %}
     <h2 class="main-title"><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
 
-    <p class="what_lang">
-        {% block lang_display %} 
-            in Original Language.
-            {% if translations %}
-                Other Languages:
-                    {% for item in translations %}
-                        <a href="{% url videos:translation_history video.video_id item.language %}">{{ item.get_language_display }}</a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-            {% endif %}
-        {% endblock %}      
-    </p>
     <div class="left_column">
         {% widget widget_params %}
     </div>
