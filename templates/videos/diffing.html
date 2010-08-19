@@ -70,13 +70,13 @@
 
 {% block main_content %}
     <h2>
-        Comparing older revision #{{ first_version.version_no }} to current revision #{{ second_version.version_no }}
+        Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}
     </h2>
     {{ video }} in 
-    {% if version.language_display == 'Original' %} 
-        {{ version.language_display }} language
+    {% if first_version.language_display == 'Original' %} 
+        {{ first_version.language_display }} language
     {% else %}
-        {{ version.language_display }}
+        {{ first_version.language_display }}
     {% endif %}<br/><br/>
     
     <a href="{{ history_link }}#revisions" class="return_history">
@@ -86,7 +86,7 @@
     
     <div class="left_column">
         <h3 class="diff_title">
-            Older Revision #{{ first_version.version_no }} by {{ first_version.user }}
+            Revision #{{ first_version.version_no }} by {{ first_version.user }}
              <span class="small">{{ first_version.datetime_started|date:"H:i, j F Y" }} </span>
         </h3>
    
@@ -137,7 +137,7 @@
     
     <div class="right_column">
         <h3 class="diff_title">
-            Current Revision #{{ second_version.version_no }} by {{ second_version.user }}
+            Revision #{{ second_version.version_no }} by {{ second_version.user }}
             <span class="small">as of {{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
         </h3>
       
