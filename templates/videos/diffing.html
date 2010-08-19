@@ -97,6 +97,54 @@
     
     <div class="left_column">
         <h3 class="diff_title">
+            Revision #{{ second_version.version_no }} by {{ second_version.user }}
+            <span class="small">as of {{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
+        </h3>
+      
+        <div class="clear">&nbsp;</div>
+        
+        {% widget widget1_params 'widget_div_1' %}
+        <div class="clear tall">&nbsp;</div>
+        
+        <div class="revision_buttons">
+            <a href="#" class="new_edit">
+                Submit a new edit based on this version (#{{ second_version.version_no }})
+            </a>
+            {% if second_version.next_version %}
+                <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
+                    Roll back to version (#{{ second_version.version_no }})
+                </a>
+            {% endif %}
+        </div>
+        
+        <ul class="revision_list table_body">
+          {% for item in captions %}
+            <li {% cycle 'class="even"' '' %}>
+                {% if item.1 %}
+                    <span class="time-span time_link_1">
+                        <span class="data">{{item.1.start_time}}</span>
+                        <span class="badgy start{% if item.2.time %} time_change{% endif %}">
+                            {{ item.1.display_time }}
+                        </span>
+                        <span class="connector"></span>
+                        <span class="badgy end{% if item.2.end_time %} time_change{% endif %}">
+                            {{ item.1.display_end_time }}
+                        </span> 
+                    </span>                 
+                  &gt; 
+                  <span {% if item.2.text %}class="time_change"{% endif %}>
+                    {{ item.1.text }}
+                  </span>
+                {% else %}
+                    &nbsp;
+                {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="right_column">
+        <h3 class="diff_title">
             Revision #{{ first_version.version_no }} by {{ first_version.user }}
              <span class="small">{{ first_version.datetime_started|date:"H:i, j F Y" }} </span>
         </h3>
@@ -143,54 +191,5 @@
             </li>
           {% endfor %}
         </ul>
-    </div>
-    
-    
-    <div class="right_column">
-        <h3 class="diff_title">
-            Revision #{{ second_version.version_no }} by {{ second_version.user }}
-            <span class="small">as of {{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
-        </h3>
-      
-        <div class="clear">&nbsp;</div>
-        
-        {% widget widget1_params 'widget_div_1' %}
-        <div class="clear tall">&nbsp;</div>
-        
-        <div class="revision_buttons">
-            <a href="#" class="new_edit">
-                Submit a new edit based on this version (#{{ second_version.version_no }})
-            </a>
-            {% if second_version.next_version %}
-                <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
-                    Roll back to version (#{{ second_version.version_no }})
-                </a>
-            {% endif %}
-        </div>
-        
-        <ul class="revision_list table_body">
-          {% for item in captions %}
-            <li {% cycle 'class="even"' '' %}>
-                {% if item.1 %}
-                    <span class="time-span time_link_1">
-                        <span class="data">{{item.1.start_time}}</span>
-                        <span class="badgy start{% if item.2.time %} time_change{% endif %}">
-                            {{ item.1.display_time }}
-                        </span>
-                        <span class="connector"></span>
-                        <span class="badgy end{% if item.2.end_time %} time_change{% endif %}">
-                            {{ item.1.display_end_time }}
-                        </span> 
-                    </span>                 
-                  &gt; 
-                  <span {% if item.2.text %}class="time_change"{% endif %}>
-                    {{ item.1.text }}
-                  </span>
-                {% else %}
-                    &nbsp;
-                {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
-    </div>
+    </div>    
 {% endblock %}
