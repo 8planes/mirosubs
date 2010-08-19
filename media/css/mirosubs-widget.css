@@ -2030,8 +2030,8 @@ cursor: pointer !important;
 
 .mirosubs-scrobbler {
    border: 1px solid !important;
-width: 4px;
-height: 20px;
+   width: 4px;
+   height: 20px;
    position: absolute !important;
    left: -10px;
    border-top: 1px solid #333 !important;
@@ -2046,6 +2046,17 @@ height: 20px;
    -moz-border-radius: 10px !important;
    -webkit-border-radius: 10px !important;
 }
+
+.mirosubs-scrobbler span {
+position: absolute;
+top: -8px;
+left: -8px;
+width: 20px;
+background: url("../images/scrob.png") 0 0px repeat-x !important;
+height: 20px;
+}
+
+
 
 .mirosubs-scrobbler:hover{
 background: #fff url("../images/gradient.png") 0 31px repeat-x !important;
