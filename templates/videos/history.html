@@ -124,13 +124,6 @@
 {% block main_content %}
     <h2 class="main-title"><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
 
-    <ul class="breadcrumb"> 
-      <li><a href="#">English Subtitles</a></li>
-      <li><a href="#">Revision History</a></li>
-      <li><a href="#">Revision #5</a></li>
-    </ul>
-
-
     <p class="what_lang">
         {% block lang_display %} 
             in Original Language.
