@@ -262,9 +262,15 @@
           <tr class="{% cycle 'even' '' %}">      
             <td class="last">
               {% if item.display_time %}
-                <span class="time-span">
-                <span class="badgy start">{{ item.display_time }}</span>{% if item.display_end_time %}<span class="connector"></span><span class="badgy end">{{ item.display_end_time }}</span> 
-                {% endif %}
+                <span class="time-span time_link">
+                    <span class="data">{{ item.start_time }}</span>
+                    <span class="badgy start">
+                        {{ item.display_time }}
+                    </span>
+                    {% if item.display_end_time %}
+                        <span class="connector"></span>
+                        <span class="badgy end">{{ item.display_end_time }}</span> 
+                    {% endif %}
                 </span>
               {% else %}  
                 <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
