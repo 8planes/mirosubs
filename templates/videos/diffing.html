@@ -72,12 +72,8 @@
     <h2>
         Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}
     </h2>
-    {{ video }} in 
-    {% if  first_version.language_display == 'Original' %} 
-        {{ first_version.language_display }} language
-    {% else %}
-        {{ first_version.language_display }}
-    {% endif %}<br/><br/>
+
+    {{ video }}<br/><br/>
 
     {% block breadcrumb %}
         <ul class="breadcrumb"> 

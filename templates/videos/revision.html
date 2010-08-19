@@ -65,12 +65,7 @@
 
 {% block main_content %}
     <h2>Revision #{{ version.version_no }} - {{ version.revision_time }}</h2>
-    {{ video }} in
-    {% if version.language_display == 'Original' %} 
-        {{ version.language_display }} language
-    {% else %}
-        {{ version.language_display }}
-    {% endif %}
+    {{ video }}
     <br/><br/>
 
     {% block breadcrumb %}
