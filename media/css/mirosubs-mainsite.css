@@ -526,7 +526,8 @@ padding: 0 22px;
 
 .header .nav li a:active,
 #login .header .nav li.login_link a,
-#faq .header .nav li.faq_link a{
+#faq .header .nav li.faq_link a,
+#video .header .nav li.videos_link a{
 background: url(../images/nav2.png) center -89px no-repeat;
 }
 
