@@ -103,6 +103,7 @@
 {% block main_content %}
 
     <h2 class="main-title">{{ video.title_display }}</h2>
+
     {% if not video.title or video.is_html5 %}
         <a href="#" class="edit-title">edit title</a>   
     {% endif %}
