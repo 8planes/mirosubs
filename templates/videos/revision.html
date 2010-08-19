@@ -143,10 +143,16 @@
       {% for item in version.captions %}
         <li {% cycle 'class="even"' '' %}>
           {% if item.display_time or item.display_end_time %}
-            <a href="#" class="time_link">
-                <span class="data">{{item.start_time}}</span>
-                {{ item.display_time }} - {{ item.display_end_time }}
-            </a> 
+            <span class="time-span time_link">
+                <span class="data">{{ item.start_time }}</span>
+                <span class="badgy start">
+                    {{ item.display_time }}
+                </span>
+                {% if item.display_end_time %}
+                    <span class="connector"></span>
+                    <span class="badgy end">{{ item.display_end_time }}</span> 
+                {% endif %}
+            </span>          
           {% endif %} &gt; {{ item.text|linebreaksbr }}
         </li>
       {% endfor %}

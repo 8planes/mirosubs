@@ -122,15 +122,16 @@
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
                 {% if item.0 %}
-                  <a href="#" class="time_link_0">
-                    <span class="data">{{item.0.start_time}}</span>
-                    <span {% if item.2.time %}class="time_change"{% endif %}>
-                        {{ item.0.display_time }}
-                    </span> -
-                    <span {% if item.2.end_time %}class="time_change"{% endif %}>
-                        {{ item.0.display_end_time }}
-                    </span>
-                  </a>
+                    <span class="time-span time_link_0">
+                        <span class="data">{{item.0.start_time}}</span>
+                        <span class="badgy start{% if item.2.time %} time_change{% endif %}">
+                            {{ item.0.display_time }}
+                        </span>
+                        <span class="connector"></span>
+                        <span class="badgy end{% if item.2.end_time %} time_change{% endif %}">
+                            {{ item.0.display_end_time }}
+                        </span> 
+                    </span>                
                   &gt; 
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.0.text }}
@@ -170,15 +171,16 @@
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
                 {% if item.1 %}
-                  <a href="#" class="time_link_1">
-                  <span class="data">{{item.1.start_time}}</span>
-                    <span {% if item.2.time %}class="time_change"{% endif %}>
-                      {{ item.1.display_time }}
-                    </span> -
-                    <span {% if item.2.end_time %}class="time_change"{% endif %}>
-                      {{ item.1.display_end_time }}
-                    </span>
-                  </a>
+                    <span class="time-span time_link_1">
+                        <span class="data">{{item.1.start_time}}</span>
+                        <span class="badgy start{% if item.2.time %} time_change{% endif %}">
+                            {{ item.1.display_time }}
+                        </span>
+                        <span class="connector"></span>
+                        <span class="badgy end{% if item.2.end_time %} time_change{% endif %}">
+                            {{ item.1.display_end_time }}
+                        </span> 
+                    </span>                 
                   &gt; 
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.1.text }}

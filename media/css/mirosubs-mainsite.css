@@ -2848,6 +2848,11 @@ border-top: 1px solid #d4e8eb;
 float: left;
 margin-right: 20px;
 width: 100px;
+cursor: pointer;
+}
+
+.time-span .data{
+    display: none;
 }
 
 .connector{
