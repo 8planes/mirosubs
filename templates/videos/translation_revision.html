@@ -13,6 +13,11 @@
             {{ version.language_display }} Subtitles
           </a>
       </li>
+      <li>
+          <a href="{% url videos:translation_history video.video_id version.language.language %}#revisions">
+              Revision History
+          </a>
+      </li>       
       <li>Revision #{{ version.version_no }}</li>
     </ul>
 {% endblock %}

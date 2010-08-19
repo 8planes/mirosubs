@@ -71,6 +71,11 @@
     {% block breadcrumb %}
         <ul class="breadcrumb"> 
           <li><a href="{% url videos:history video_id=video.video_id %}">Original Subtitles</a></li>
+          <li>
+              <a href="{% url videos:history video_id=video.video_id %}#revisions">
+                  Revision History
+              </a>
+          </li>           
           <li>Revision #{{ version.version_no }}</li>
         </ul>
     {% endblock %}
