@@ -184,6 +184,9 @@ def video(request, video_id):
         .filter(was_translated=True)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
+    context['lang_count'] = len(context['translations'])
+    if video.captions():
+        context['lang_count'] += 1
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
