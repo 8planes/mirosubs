@@ -403,7 +403,10 @@ font-size: 20px;
 border-bottom: 1px solid #fff !important;
 }
 
-
+h2.main-title span{
+float: right;
+font-weight: normal
+}
 
 .header{
 border-bottom: 1px solid #fff;
@@ -1461,11 +1464,11 @@ float: right;
 
 
 .revision_list{
-padding: 20px 0 0;
+padding:0;
+clear: none;
 float: left;
 width: 450px !important;
-clear: both;
-margin-top: 30px !important;
+margin: 0 !important;
 }
 
 
@@ -1478,45 +1481,55 @@ padding: 15px !important;
 }
 
 
-li.even, li.even li, li.even span, li.even div{
+li.even, li.even li{
 background: #edfcfd !important;
 }
 
 
 
 a.roll_back{
-width: 300px;
+width: 458px;
 display: block;
-margin: 20px auto ;
+margin: 0px auto;
 padding: 15px 10px;
-background: #ff0000 url(../images/gradient.png) 0 0px repeat-x;
+background: #c74141 url(../images/gradient_light.png) 0 0px repeat-x;
 text-align: center;
 text-decoration: none;
 font-weight: bold;
-color: #fff;
+color: #000;
 border: 1px solid #9e381d;
 font-size: 14px;
--moz-border-radius: 5px;  
--webkit-border-radius: 5px;
+text-shadow: 1px 1px 0px #c67573;
+box-shadow:inset 0px 1px 1px #c67573;
+-moz-box-shadow:inset 0px 1px 0px #c67573;
+-webkit-box-shadow:inset 0px 1px 2px #c67573;
 }
 
 
 a.new_edit{
-width: 300px;
+width: 458px;
 display: block;
 margin: 0px auto 0;
 padding: 15px 10px;
-background: #1fd211 url(../images/gradient.png) 0 0 repeat-x;
+background: #69b165 url(../images/gradient_light.png) 0 0 repeat-x;
 text-align: center;
 text-decoration: none;
 font-weight: bold;
-color: #fff;
+color: #052803;
 border: 1px solid #2a6a20;
 font-size: 14px;
--moz-border-radius: 5px;  
+-moz-border-radius-topright: 5px;  
+-moz-border-radius-topleft: 5px;  
 -webkit-border-radius: 5px;
+text-shadow: 1px 1px 0px #97c595;
+box-shadow:inset 0px 1px 1px #97c595;
+-moz-box-shadow:inset 0px 1px 0px #97c595;
+-webkit-box-shadow:inset 0px 1px 2px #97c595;
 }
 
+.revision_buttons{
+margin: 0;
+}
 
 
 
@@ -1968,8 +1981,9 @@ display: block;
 -webkit-border-radius: 15px;
 box-shadow:inset 0px 1px 1px #555;
 -moz-box-shadow:inset 0px 1px 0px #999;
-position: relative;
 -webkit-box-shadow:inset 0px 1px 2px #555;
+
+position: relative;
 background: -moz-linear-gradient(top,  #ddd,  #fff);
 }
 
@@ -2610,9 +2624,6 @@ background: url(../images/updown.gif) -165px -1px no-repeat;
 }
 
 
-.revision_buttons{
-height: 135px;
-}
 
 
 @media only screen and (max-device-width: 480px) {
@@ -2860,4 +2871,10 @@ padding: 0 18px 0 0;
 background: url(../images/connector.png) right center no-repeat;
 }
 
+
+
+.nohover:hover{
+text-decoration: none !important;
+cursor: default;
+}
 

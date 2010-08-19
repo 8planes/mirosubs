@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block body_attrs %}id="video"{% endblock %}
 
 {% load widget %}
 
@@ -69,11 +70,10 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2>
-        Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}
+    <h2 class="main-title">
+        {{ video }}
+        <span>Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}</span>
     </h2>
-
-    {{ video }}<br/><br/>
 
     {% block breadcrumb %}
         <ul class="breadcrumb"> 
@@ -88,7 +88,7 @@
               </a>
           </li>          
           <li>
-              Comparing Revision #{{ first_version.version_no }} & #{{ second_version.version_no }}
+              <a href="#" class="nohover">Comparing Revision #{{ first_version.version_no }} & #{{ second_version.version_no }}</a>
           </li>
         </ul>
     {% endblock %}
@@ -120,24 +120,26 @@
         <ul class="revision_list table_body">
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
-                {% if item.1 %}
-                    <span class="time-span time_link_1">
+                {% if item.1.display_time %}
+                    <span class="time-span time_link">
                         <span class="data">{{item.1.start_time}}</span>
-                        <span class="badgy start{% if item.2.time %} time_change{% endif %}">
+                        <span class="badgy start">
                             {{ item.1.display_time }}
                         </span>
-                        <span class="connector"></span>
-                        <span class="badgy end{% if item.2.end_time %} time_change{% endif %}">
-                            {{ item.1.display_end_time }}
-                        </span> 
-                    </span>                 
-                  &gt; 
+                        {% if item.1.display_end_time %}
+                          <span class="connector"></span>
+                          <span class="badgy end">
+                              {{ item.1.display_end_time }}
+                          </span> 
+                        {% endif %}
+                    </span>                
+            
+                {% else %}
+                <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
+                {% endif %}
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.1.text }}
                   </span>
-                {% else %}
-                    &nbsp;
-                {% endif %}
             </li>
           {% endfor %}
         </ul>
@@ -168,28 +170,49 @@
         </div>
         
         <ul class="revision_list table_body">
+
+
+
+
+
+
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
-                {% if item.0 %}
-                    <span class="time-span time_link_0">
+                {% if item.0.display_time %}
+                    <span class="time-span time_link">
                         <span class="data">{{item.0.start_time}}</span>
-                        <span class="badgy start{% if item.2.time %} time_change{% endif %}">
+                        <span class="badgy start">
                             {{ item.0.display_time }}
                         </span>
-                        <span class="connector"></span>
-                        <span class="badgy end{% if item.2.end_time %} time_change{% endif %}">
-                            {{ item.0.display_end_time }}
-                        </span> 
+                        {% if item.0.display_end_time %}
+                          <span class="connector"></span>
+                          <span class="badgy end">
+                              {{ item.0.display_end_time }}
+                          </span> 
+                        {% endif %}
                     </span>                
-                  &gt; 
+            
+                {% else %}
+                <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
+                {% endif %}
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.0.text }}
                   </span>
-                {% else %}
-                    &nbsp;
-                {% endif %}
             </li>
           {% endfor %}
+
+
+
+
+
+
         </ul>
     </div>    
+
+
+
+
+
+
+
 {% endblock %}
