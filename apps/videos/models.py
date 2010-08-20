@@ -289,7 +289,6 @@ class Video(models.Model):
         translations = []
         if translation_set is not None:
             translations = translation_set.translation_set.all()
-        print translation_set
         translations_dict = dict([(trans.caption_id, trans) for
                                   trans in translations])
         return [(subtitle,
