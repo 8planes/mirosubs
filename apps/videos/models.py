@@ -418,6 +418,16 @@ class VersionModel(models.Model):
         else:
             return '%.0f%%' % (self.text_change*100)
 
+class SubtitleLanguage(models.Model):
+    video = models.ForeignKey(Video)
+    is_original = models.BooleanField()
+    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    writelock_time = models.DateTimeField(null=True)
+    writelock_session_key = models.CharField(max_length=255, blank=True)
+    writelock_owner = models.ForeignKey(User, null=True)
+    is_complete = models.BooleanField(default=False)
+    was_complete = models.BooleanField(default=False)
+
 class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.
 
