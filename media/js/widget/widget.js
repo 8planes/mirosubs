@@ -332,8 +332,11 @@ mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
             queryData.set('debug_js', 'true');
         if (forSubtitling)
             queryData.set('subtitle_immediately', 'true');
-        else
+        else {
             queryData.set('translate_immediately', 'true');
+            queryData.set('base_state',
+                          goog.json.serialize( {'language': this.languageCodePlaying_ } ));
+        }
         if (this.baseState_.NOT_NULL)
             queryData.set(
                 'base_state', 
