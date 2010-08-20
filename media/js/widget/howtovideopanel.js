@@ -44,25 +44,25 @@ mirosubs.HowToVideoPanel.CONTINUE = 'continue';
 mirosubs.HowToVideoPanel.VideoChoice = {
     TRANSCRIBE: {
         videos: {
-            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep1200.ogv',
-            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep1107.mp4',
-            yt: 'nIVRa9JieIQ'
+            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep1573.ogv',
+            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep1328.mp4',
+            yt: '0MCpmace_lc'
         },
         image: 'howto-step1.png'
     },
     SYNC: {
         videos: {
-            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep2510.ogv',
-            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep2428.mp4',
-            yt: '1V_UcxtokmA'
+            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep2876.ogv',
+            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep2530.mp4',
+            yt: 'bkwiFF-I2nI'
         },
         image: 'howto-step2.png'
     },
     REVIEW: {
         videos: {
-            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep3361.ogv',
-            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep3905.mp4',
-            yt: 'n-EAEtfojgw'
+            ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep3571.ogv',
+            h264: 'http://blip.tv/file/get/Miropcf-tutorialstep3146.mp4',
+            yt: 'Y5vGEGKMkMk'
         },
         image: 'howto-step3.png'
     }
