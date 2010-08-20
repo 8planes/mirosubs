@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block body_attrs %}id="video"{% endblock %}
 
 {% load escapejs widget comments recent_activity paginator i18n %}
 
@@ -102,13 +103,13 @@
 
 {% block main_content %}
 
-    <h2 class="main-title">{% if video.title %}{{ video.title }}{% endif %}</h2>
+    <h2 class="main-title">{{ video.title_display }}</h2>
+
     {% if not video.title or video.is_html5 %}
         <a href="#" class="edit-title">edit title</a>   
     {% endif %}
 
     <div class="left_column">
-     
         {% widget widget_params %}
     </div>
     
@@ -134,7 +135,7 @@
       
 
     <ul class="video_tabs">
-      <li class="active"><a href="#languages-tab">Languages <span class="badgy_out"><span class="badgy">{{ translations|length }}</span></span></a></li>
+      <li class="active"><a href="#languages-tab">Languages <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
       <li><a href="#comments-tab">Comments <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
       <li><a href="#activity-tab">Activity stream</a></li>
     </ul>

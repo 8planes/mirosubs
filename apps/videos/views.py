@@ -221,19 +221,23 @@ def video(request, video_id):
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.translationlanguage_set \
-        .filter(was_translated=True)
+        .filter(is_translated=True)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
+    context['lang_count'] = len(context['translations'])
+    if video.captions():
+        context['lang_count'] += 1
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    from django.db.models import Count
+    from django.db.models import Count, Q
     try:
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.annotate(translation_count=Count('translationlanguage')) 
+    qs = Video.objects.filter(Q(translationlanguage__is_translated=True)|Q(translationlanguage__isnull=True)) \
+        .annotate(translation_count=Count('translationlanguage')) 
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}

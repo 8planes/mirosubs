@@ -1156,7 +1156,8 @@ ul.mirosubs-titlesList.sync {
 
 .mirosubs-captionDiv {
    position: absolute !important;
-   letter-spacing: .04em !important;
+   letter-spacing: .06em !important;
+   line-height: 1.4em;
    text-shadow:
       0px 2px 1px #000,
       -1px 3px 1px #000,
@@ -1170,12 +1171,17 @@ ul.mirosubs-titlesList.sync {
       -2px -1px 1px #000,
       -1px -3px 1px #000,
       -3px -2px 1px #000 !important;
-   width: 360px;
+   width: 310px !important;
    font-size: 14px !important;
    text-align: center !important;
    color: white !important;
-   font-weight: bold !important;
-   padding: 8px 20px !important;
+   font-weight: normal !important;
+   margin: 0 40px;
+   background: #000;
+   opacity: .8;
+   -moz-border-radius: 5px !important;
+   -webkit-border-radius: 5px !important;
+   padding: 10px 3px !important;
 }
 
 iframe.mirosubs-captionDivBg { 
@@ -1359,8 +1365,9 @@ cursor: pointer;
 li span.mirosubs-title textarea{
 width: 334px !important;
   -moz-border-radius: 5px !important;
-    background: #fcfcfc url("../images/gradient_light.png") 0 -135px repeat-x !important;
     -webkit-border-radius: 5px !important;
+    background: #fcfcfc url("../images/gradient_light.png") 0 -135px repeat-x !important;
+
 padding: 3px;
 }
 
@@ -2023,8 +2030,8 @@ cursor: pointer !important;
 
 .mirosubs-scrobbler {
    border: 1px solid !important;
-width: 4px;
-height: 20px;
+   width: 4px;
+   height: 20px;
    position: absolute !important;
    left: -10px;
    border-top: 1px solid #333 !important;
@@ -2039,6 +2046,17 @@ height: 20px;
    -moz-border-radius: 10px !important;
    -webkit-border-radius: 10px !important;
 }
+
+.mirosubs-scrobbler span {
+position: absolute;
+top: -8px;
+left: -8px;
+width: 20px;
+background: url("../images/scrob.png") 0 0px repeat-x !important;
+height: 20px;
+}
+
+
 
 .mirosubs-scrobbler:hover{
 background: #fff url("../images/gradient.png") 0 31px repeat-x !important;

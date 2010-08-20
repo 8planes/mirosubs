@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block body_attrs %}id="video"{% endblock %}
 
 {% load escapejs paginator widget comments i18n %}
 
@@ -126,21 +127,10 @@
 
     {% block breadcrumb %}
         <ul class="breadcrumb"> 
-          <li>Original Subtitles</li>
+          <li><a href="#" class="nohover">Original Subtitles</a></li>
         </ul>
     {% endblock %}
 
-    <p class="what_lang">
-        {% block lang_display %} 
-            in Original Language.
-            {% if translations %}
-                Other Languages:
-                    {% for item in translations %}
-                        <a href="{% url videos:translation_history video.video_id item.language %}">{{ item.get_language_display }}</a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-            {% endif %}
-        {% endblock %}      
-    </p>
     <div class="left_column">
         {% widget widget_params %}
     </div>
@@ -268,9 +258,15 @@
           <tr class="{% cycle 'even' '' %}">      
             <td class="last">
               {% if item.display_time %}
-                <span class="time-span">
-                <span class="badgy start">{{ item.display_time }}</span>{% if item.display_end_time %}<span class="connector"></span><span class="badgy end">{{ item.display_end_time }}</span> 
-                {% endif %}
+                <span class="time-span time_link">
+                    <span class="data">{{ item.start_time }}</span>
+                    <span class="badgy start">
+                        {{ item.display_time }}
+                    </span>
+                    {% if item.display_end_time %}
+                        <span class="connector"></span>
+                        <span class="badgy end">{{ item.display_end_time }}</span> 
+                    {% endif %}
                 </span>
               {% else %}  
                 <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
