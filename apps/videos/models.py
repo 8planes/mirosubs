@@ -428,6 +428,92 @@ class SubtitleLanguage(models.Model):
     is_complete = models.BooleanField(default=False)
     was_complete = models.BooleanField(default=False)
 
+class SubtitleVersion(models.Model):
+    language = models.ForeignKey(SubtitleLanguage)
+    version_no = models.PositiveIntegerField(default=0)
+    datetime_started = models.DateTimeField()
+    user = models.ForeignKey(User)
+    note = models.CharField(max_length=512, blank=True)
+    time_change = models.FloatField(null=True, blank=True)
+    text_change = models.FloatField(null=True, blank=True)
+    notification_sent = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-version_no']
+    
+    def language_display(self):
+        return 'Original'
+    
+    def update_changes(self):
+        old_version = self.prev_version()
+        new_captions = self.captions()
+        captions_length = len(new_captions)
+
+        if not old_version:
+            #if it's first version set changes to 100
+            self.time_change = 1
+            self.text_change = 1          
+        elif not captions_length:
+            self.time_change = 0
+            self.text_change = 0
+        else:
+            old_captions = dict([(item.caption_id, item) for item in old_version.captions()])
+            time_count_changed, text_count_changed = 0, 0
+            #compare captions one by one and count changes in time and text
+            for caption in new_captions:
+                try:
+                    old_caption = old_captions[caption.caption_id]
+                    if not old_caption.caption_text == caption.caption_text:
+                        text_count_changed += 1
+                    if not old_caption.start_time == caption.start_time or \
+                                    not old_caption.end_time == caption.end_time:
+                        time_count_changed += 1
+                except KeyError:
+                    time_count_changed += 1
+                    text_count_changed += 1
+            self.time_change = time_count_changed / 1. / captions_length
+            self.text_change = text_count_changed / 1. / captions_length
+        self.save()
+    
+    def captions(self):
+        return self.videocaption_set.order_by('start_time')
+            
+    def prev_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__lt=self.datetime_started) \
+                      .filter(video=self.video)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
+    def next_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(datetime_started__gt=self.datetime_started) \
+                      .filter(video=self.video).order_by('datetime_started')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+    
+    def rollback(self, user):
+        cls = self.__class__
+        latest_captions = self.video.captions()
+        new_version_no = latest_captions.version_no + 1
+        note = 'rollback to version #%s' % self.version_no
+        new_version = cls(video=self.video, version_no=new_version_no, \
+            datetime_started=datetime.now(), user=user, note=note, finished=True)
+        new_version.save()
+        for item in self.captions():
+            item.duplicate_for(new_version).save()
+        return new_version
+
+    def is_all_blank(self):
+        for vc in self.videocaption_set.all():
+            if vc.caption_text.strip() != '':
+                return False
+        return True
+    
+
 class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.
 
