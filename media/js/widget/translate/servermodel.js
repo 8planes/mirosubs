@@ -96,10 +96,12 @@ mirosubs.translate.ServerModel.prototype.timerTick_ = function() {
 /**
  *
  *
- * @param {function(Object.<string, string>)} callback Function that takes 
+ * @param {function(Object.<string, string>)} successCallback Function that takes 
  *     new available languages for video, in json format.
+ * @param {function(Object.<string, string>)} opt_cancelCallback Optional function
+ *     called if the login process is cancelled
  */
-mirosubs.translate.ServerModel.prototype.finish = function(callback) {
+mirosubs.translate.ServerModel.prototype.finish = function(successCallback, opt_cancelCallback) {
     goog.asserts.assert(this.translating_);
     goog.asserts.assert(!this.finished_);
     this.stopTimer_();
@@ -114,13 +116,13 @@ mirosubs.translate.ServerModel.prototype.finish = function(callback) {
                                   // should never happen
                                   alert('problem saving translations. response: ' +
                                         result['response']);
-                              callback(result['available_languages']);
+                              successCallback(result['available_languages']);
                           });
-    }, true);
+        }, opt_cancelCallback, true);
 };
 
 mirosubs.translate.ServerModel.prototype.loginThenAction_ = 
-    function(action, opt_forceLogin) {
+    function(successAction, opt_cancelAction, opt_forceLogin) {
     if (mirosubs.currentUsername == null) {
         // first update lock
         if (!this.isNull_)
@@ -134,12 +136,12 @@ mirosubs.translate.ServerModel.prototype.loginThenAction_ =
                 return;            
             this.lastLoginPesterTime_ = currentTime;
             if (opt_forceLogin) {
-                alert("In order to finish and save your work, " +
-                      "you need to log in.");
                 mirosubs.login(function(loggedIn) {
                     if (loggedIn)
-                        action();
-                });
+                        successAction();
+                    else if (opt_cancelAction)
+                        opt_cancelAction();
+                }, "In order to finish and save your work, you need to log in.");
             }
             else
                 this.loginNagFn_();

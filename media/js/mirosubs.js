@@ -104,15 +104,17 @@ mirosubs.loginAttemptInProgress_ = false;
  *
  * @param opt_finishFn {function(boolean)=} Called when login process
  *     completes. Passed true if logged in successfully, false otherwise.
+ * @param opt_message {String} Optional message to show at the top of the
+ *     login dialog.
  */
-mirosubs.login = function(opt_finishFn) {
+mirosubs.login = function(opt_finishFn, opt_message) {
     if (mirosubs.currentUsername != null) {
         if (opt_finishFn)
             opt_finishFn(true);
         return;
     }
 
-    var loginDialog = new mirosubs.LoginDialog(opt_finishFn);
+    var loginDialog = new mirosubs.LoginDialog(opt_finishFn, opt_message);
     loginDialog.setVisible(true);
 };
 
