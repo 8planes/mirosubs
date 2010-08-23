@@ -253,6 +253,12 @@ class Video(models.Model):
         except models.ObjectDoesNotExist:
             return None
 
+    def subtitle_language(self, language_code):
+        try:
+            return self.subtitlelanguage_set.filter(language=language_code)[:1].get()
+        except models.ObjectDoesNotExist:
+            return None
+
     def subtitles(self):
         return self.original_subtitle_language().\
             latest_finished_version().subtitles()
@@ -261,6 +267,13 @@ class Video(models.Model):
         """Returns NullVideoCaptions for user, or None if none exist."""
         try:
             return self.nullvideocaptions_set.filter(
+                user__id__exact=user.id)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+
+    def null_subtitles(self, user):
+        try:
+            return self.nullsubtitles_set.filter(
                 user__id__exact=user.id)[:1].get()
         except models.ObjectDoesNotExist:
             pass
@@ -325,12 +338,14 @@ class Video(models.Model):
 
     def translation_language_codes(self):
         """All iso language codes with finished translations."""
-        return set([trans.language for trans 
-                    in self.translationlanguage_set.filter(
-                    is_translated=True)])
+        return set([sl.language for sl 
+                    in self.subtitlelanguage_set.filter(
+                    is_complete=True).filter(is_original=False)])
 
     def null_translation_language_codes(self, user):
-        null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)
+        null_translations = self.nullsubtitles_set.filter(
+            user__id__exact=user.id).filter(
+            is_original=False)
         return set([trans.language for trans in null_translations])
 
     @property
