@@ -71,10 +71,9 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork, loginNagFn
         (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
 };
 
-mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
+mirosubs.subtitle.MSServerModel.prototype.finish = function(successCallback, opt_cancelCallback) {
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
-    this.finished_ = true;
     this.stopTimer_();
     var that = this;
     this.loginThenAction_(function() {
@@ -87,9 +86,10 @@ mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
                                       // this should never happen.
                                       alert('Problem saving subtitles. Response: ' +
                                             result["response"]);
-                                  callback();
+                                  this.finished_ = true;
+                                  successCallback();
                               });
-        }, true);
+            }, opt_cancelCallback, true);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
@@ -97,7 +97,7 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ = 
-    function(action, opt_forceLogin) {
+    function(successAction, opt_cancelAction, opt_forceLogin) {
 
     mirosubs.subtitle.MSServerModel.logger_.info(
         "loginThenAction_ for " + mirosubs.currentUsername);
@@ -109,11 +109,12 @@ mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ =
         if (mirosubs.isLoginAttemptInProgress())
             return;
         if (opt_forceLogin) {
-            alert("In order to finish and save your work, you need to log in.");
             mirosubs.login(function(loggedIn) {
                 if (loggedIn)
-                    action();
-            });
+                    successAction();
+                else if (opt_cancelAction)
+                    opt_cancelAction();
+            }, "In order to finish and save your work, you need to log in.");
         }
     }
     else
