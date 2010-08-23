@@ -247,6 +247,16 @@ class Video(models.Model):
         except models.ObjectDoesNotExist:
             pass
 
+    def original_subtitle_language(self):
+        try:
+            return self.subtitlelanguage_set.filter(is_original=True)[:1].get()
+        except models.ObjectDoesNotExist:
+            return None
+
+    def subtitles(self):
+        return self.original_subtitle_language().\
+            latest_finished_version().subtitles()
+
     def null_captions(self, user):
         """Returns NullVideoCaptions for user, or None if none exist."""
         try:
@@ -426,8 +436,87 @@ class SubtitleLanguage(models.Model):
     is_complete = models.BooleanField(default=False)
     was_complete = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = (('video', 'language'),)
+
     def language_display(self):
         return 'Original' if is_original else self.get_language_display()
+
+    @property
+    def writelock_owner_name(self):
+        if self.writelock_owner == None:
+            return "anonymous"
+        else:
+            return self.writelock_owner.__unicode__()
+
+    @property
+    def is_writelocked(self):
+        if self.writelock_time == None:
+            return False
+        delta = datetime.now() - self.writelock_time
+        seconds = delta.days * 24 * 60 * 60 + delta.seconds
+        return seconds < WRITELOCK_EXPIRATION
+    
+    def can_writelock(self, request):
+        if VIDEO_SESSION_KEY not in request.session:
+            return False
+        return self.writelock_session_key == \
+            request.session[VIDEO_SESSION_KEY] or \
+            not self.is_writelocked
+
+    def writelock(self, request):
+        if request.user.is_authenticated():
+            self.writelock_owner = request.user
+        else:
+            self.writelock_owner = None
+        self.writelock_session_key = request.session[VIDEO_SESSION_KEY]
+        self.writelock_time = datetime.now()
+
+    def release_writelock(self):
+        self.writelock_owner = None
+        self.writelock_session_key = ''
+        self.writelock_time = None
+
+    def latest_version(self):
+        try:
+            return self.subtitleversion_set.all()[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+
+    def version(version_no):
+        try:
+            return self.subtitleversion_set.get(version_no=version)
+        except models.ObjectDoesNotExist:
+            pass
+
+    def latest_finished_version(self):
+        """Returns latest SubtitleVersion, or None if none found"""
+        try:
+            finished_subtitles = self.subtitleversion_set.filter(finished=True)
+            if finished_subtitles.exists():
+                return finished_subtitles.order_by('-version_no')[:1].get()
+            else:
+                return None
+        except models.ObjectDoesNotExist:
+            pass
+
+    @property
+    def percent_done(self):
+        if not self.is_original:
+            try:
+                translation_count = 0
+                for item in self.latest_finished_version().subtitles():
+                    if item.subtitle_text:
+                        translation_count += 1
+            except AttributeError:
+                translation_count = 0
+            subtitles_count = self.video.subtitles().count()
+            try:
+                return int(translation_count / 1. / subtitles_count * 100)
+            except ZeroDivisionError:
+                return 0 
+        else:
+            return 0
 
 class SubtitleVersion(models.Model):
     language = models.ForeignKey(SubtitleLanguage)
@@ -439,13 +528,42 @@ class SubtitleVersion(models.Model):
     text_change = models.FloatField(null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
-    
+
     class Meta:
         ordering = ['-version_no']
+        unique_together = (('language', 'version_no'),)
+
+    def revision_time(self):
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+        d = self.datetime_started.date()
+        if d == today:
+            return 'Today'
+        elif d == yesterday:
+            return 'Yesterday'
+        else:
+            d = d.strftime('%m/%d/%Y')
+        return d
     
+    def time_change_display(self):
+        if not self.time_change:
+            return '0%'
+        else:
+            return '%.0f%%' % (self.time_change*100)
+
+    def text_change_display(self):
+        if not self.text_change:
+            return '0%'
+        else:
+            return '%.0f%%' % (self.text_change*100)
+
     def language_display(self):
         return self.language.language_display()
-    
+
+    @property
+    def video(self):
+        return self.language.video;
+
     def update_changes(self):
         old_version = self.prev_version()
         new_subtitles = self.subtitles()
@@ -514,6 +632,29 @@ class SubtitleVersion(models.Model):
             if s.subtitle_text.strip() != '':
                 return False
         return True
+
+def update_language_complete_state(sender, instance, created, **kwargs):
+    if instance.finished:
+        language = instance.language
+        if instance.is_all_blank():
+            finished_count = language.subtitleversion_set.filter(finished=True).count()
+            if finished_count == 1:
+                instance.delete()
+                language.is_complete = False
+                language.was_complete = False
+            else:
+                subtitles = list(instance.subtitle_set.all())
+                for s in subtitles:
+                    s.delete()
+                language.is_complete = False
+                language.was_complete = True
+        else:
+            language.is_complete = True
+            language.was_complete = True
+        language.save()
+
+post_save.connect(update_language_complete_state, SubtitleVersion)
+
 
 class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.
@@ -630,6 +771,12 @@ post_save.connect(update_video_subtitled_state, VideoCaptionVersion)
 class NullSubtitles(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
+    is_original = models.BooleanField()
+    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+
+    class Meta:
+        unique_together = (('video', 'user', 'language'),)
+
 
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
@@ -908,11 +1055,11 @@ class Subtitle(models.Model):
     version = models.ForeignKey(SubtitleVersion, null=True)
     null_subtitles = models.ForeignKey(NullSubtitles, null=True)
     subtitle_id = models.CharField(max_length=32, blank=True)
-    subtitle_order = models.FloatField()
+    subtitle_order = models.FloatField(null=True)
     subtitle_text = models.CharField(max_length=1024, blank=True)
     # in seconds
-    start_time = models.FloatField()
-    end_time = models.FloatField()
+    start_time = models.FloatField(null=True)
+    end_time = models.FloatField(null=True)
 
     def duplicate_for(self, new_version):
         return Subtitle(version=new_version,

@@ -40,11 +40,11 @@ class Migration(SchemaMigration):
         # Adding model 'Subtitle'
         db.create_table('videos_subtitle', (
             ('subtitle_id', self.gf('django.db.models.fields.CharField')(max_length=32, blank=True)),
-            ('start_time', self.gf('django.db.models.fields.FloatField')()),
+            ('start_time', self.gf('django.db.models.fields.FloatField')(null=True)),
             ('subtitle_text', self.gf('django.db.models.fields.CharField')(max_length=1024, blank=True)),
-            ('subtitle_order', self.gf('django.db.models.fields.FloatField')()),
+            ('subtitle_order', self.gf('django.db.models.fields.FloatField')(null=True)),
             ('version', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.SubtitleVersion'], null=True)),
-            ('end_time', self.gf('django.db.models.fields.FloatField')()),
+            ('end_time', self.gf('django.db.models.fields.FloatField')(null=True)),
             ('null_subtitles', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.NullSubtitles'], null=True)),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
         ))
@@ -52,8 +52,10 @@ class Migration(SchemaMigration):
 
         # Adding model 'NullSubtitles'
         db.create_table('videos_nullsubtitles', (
+            ('is_original', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
             ('video', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.Video'])),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('language', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.CustomUser'])),
         ))
         db.send_create_signal('videos', ['NullSubtitles'])
@@ -65,13 +67,17 @@ class Migration(SchemaMigration):
             self._migrate_videos(orm)
 
     def _migrate_videos(self, orm):
+        count = orm.Video.objects.count()
+        cur_video = 1
         for video in orm.Video.objects.all():
-            self._migrate_video(video)
+            self._migrate_video(orm, video)
+            print("Migrated video {0} of {1}".format(cur_video, count))
+            cur_video += 1
 
-    def _migrate_video(self, video):
+    def _migrate_video(self, orm, video):
         original_language = None
         if video.videocaptionversion_set.count() > 0:
-            original_language = SubtitleLanguage(
+            original_language = orm.SubtitleLanguage(
                 video=video,
                 is_original=True,
                 language='',
@@ -80,20 +86,106 @@ class Migration(SchemaMigration):
             original_language.save()
         for vcv in video.videocaptionversion_set.all():
             self._migrate_video_caption_version(orm, vcv, original_language)
+        for tl in video.translationlanguage_set.all():
+            self._migrate_translation_language(orm, video, tl)
+        for nvc in video.nullvideocaptions_set.all():
+            self._migrate_null_video_captions(orm, nvc, video)
+        for nt in video.nulltranslations_set.all():
+            self._migrate_null_translations(orm, nt, video)
+
+    def _migrate_null_video_captions(self, orm, null_video_captions, video):
+        null_subtitles = orm.NullSubtitles(
+            video=video,
+            user=null_video_captions.user,
+            is_original=True,
+            language='')
+        for vc in null_video_captions.videocaption_set.all():
+            self._migrate_null_caption(orm, null_subtitles, vc)
+
+    def _migrate_null_translations(self, orm, null_translations, video):
+        null_subtitles = orm.NullSubtitles(
+            video=video,
+            user=null_translations.user,
+            is_original=False,
+            language=null_translations.language)
+        for t in null_translations.translation_set.all():
+            self._migrate_null_translation(orm, null_subtitles, t)
+
+    def _migrate_translation_language(self, orm, video, translation_language):
+        language = orm.SubtitleLanguage(
+            video=video,
+            is_original=False,
+            language=translation_language.language,
+            is_complete=translation_language.is_translated,
+            was_complete=translation_language.was_translated)
+        language.save()
+        for tv in translation_language.translationversion_set.all():
+            self._migrate_translation_version(orm, tv, language)
+
+    def _migrate_translation_version(self, orm, translation_version, subtitle_language):
+        subtitle_version = orm.SubtitleVersion(
+            language=subtitle_language,
+            version_no=translation_version.version_no,
+            datetime_started=translation_version.datetime_started,
+            user=translation_version.user,
+            note=translation_version.note,
+            time_change=translation_version.time_change,
+            text_change=translation_version.text_change,
+            notification_sent=translation_version.notification_sent,
+            finished=translation_version.finished)
+        subtitle_version.save()
+        for t in translation_version.translation_set.all():
+            self._migrate_translation(orm, t, subtitle_version)
 
     def _migrate_video_caption_version(self, orm, video_caption_version, original_language):
-        version = SubtitleVersion(
+        version = orm.SubtitleVersion(
             language=original_language,
-            version_no=vcv.version_no,
-            datetime_started=vcv.datetime_started,
-            user=vcv.user,
-            note=vcv.note,
-            time_change=vcv.time_change,
-            text_change=vcv.text_change,
-            notification_sent=vcv.notification_sent,
-            finished=vcv.finished)
+            version_no=video_caption_version.version_no,
+            datetime_started=video_caption_version.datetime_started,
+            user=video_caption_version.user,
+            note=video_caption_version.note,
+            time_change=video_caption_version.time_change,
+            text_change=video_caption_version.text_change,
+            notification_sent=video_caption_version.notification_sent,
+            finished=video_caption_version.finished)
         version.save()
-        
+        for vc in video_caption_version.videocaption_set.all():
+            self._migrate_video_caption(orm, vc, version)
+
+    def _migrate_translation(self, orm, translation, subtitle_version):
+        subtitle = orm.Subtitle(
+            version=subtitle_version,
+            subtitle_id=translation.caption_id,
+            subtitle_text=translation.translation_text)
+        subtitle.save()
+
+    def _migrate_video_caption(self, orm, video_caption, subtitle_version):
+        subtitle = orm.Subtitle(
+            version=subtitle_version,
+            subtitle_id=video_caption.caption_id,
+            subtitle_order=video_caption.sub_order,
+            subtitle_text=video_caption.caption_text,
+            start_time=video_caption.start_time,
+            end_time=video_caption.end_time)
+        subtitle.save()
+
+    def _migrate_null_caption(self, orm, null_subtitles, video_caption):
+        subtitle = orm.Subtitle(
+            null_subtitles=null_subtitles,
+            subtitle_id=video_caption.caption_id,
+            subtitle_order=video_caption.sub_order,
+            subtitle_text=video_caption.caption_text,
+            start_time=video_caption.start_time,
+            end_time=video_caption.end_time)
+        subtitle.save()
+
+    def _migrate_null_translation(self, orm, null_subtitles, t):
+        subtitle = orm.Subtitle(
+            null_subtitles=null_subtitles,
+            subtitle_id=t.caption_id,
+            subtitle_text=t.translation_text)
+        subtitle.save()
+    
     
     def backwards(self, orm):
         
@@ -183,8 +275,10 @@ class Migration(SchemaMigration):
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
         },
         'videos.nullsubtitles': {
-            'Meta': {'object_name': 'NullSubtitles'},
+            'Meta': {'unique_together': "(('video', 'user', 'language'),)", 'object_name': 'NullSubtitles'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_original': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']"}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
         },
@@ -213,17 +307,17 @@ class Migration(SchemaMigration):
         },
         'videos.subtitle': {
             'Meta': {'object_name': 'Subtitle'},
-            'end_time': ('django.db.models.fields.FloatField', [], {}),
+            'end_time': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'null_subtitles': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.NullSubtitles']", 'null': 'True'}),
-            'start_time': ('django.db.models.fields.FloatField', [], {}),
+            'start_time': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'subtitle_id': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
-            'subtitle_order': ('django.db.models.fields.FloatField', [], {}),
+            'subtitle_order': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'subtitle_text': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'blank': 'True'}),
             'version': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleVersion']", 'null': 'True'})
         },
         'videos.subtitlelanguage': {
-            'Meta': {'object_name': 'SubtitleLanguage'},
+            'Meta': {'unique_together': "(('video', 'language'),)", 'object_name': 'SubtitleLanguage'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_complete': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'is_original': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
@@ -235,7 +329,7 @@ class Migration(SchemaMigration):
             'writelock_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
         },
         'videos.subtitleversion': {
-            'Meta': {'object_name': 'SubtitleVersion'},
+            'Meta': {'unique_together': "(('language', 'version_no'),)", 'object_name': 'SubtitleVersion'},
             'datetime_started': ('django.db.models.fields.DateTimeField', [], {}),
             'finished': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
