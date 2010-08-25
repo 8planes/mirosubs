@@ -118,7 +118,7 @@ mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ =
         }
     }
     else
-        action();
+        successAction();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {

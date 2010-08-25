@@ -148,7 +148,7 @@ mirosubs.translate.ServerModel.prototype.loginThenAction_ =
         }
     }
     else
-        action();
+        successAction();
 };
 
 mirosubs.translate.ServerModel.prototype.saveImpl_ = function() {

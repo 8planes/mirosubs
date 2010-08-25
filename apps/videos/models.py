@@ -72,6 +72,10 @@ class Video(models.Model):
     # only nonzero length for Blip.tv videos
     bliptv_fileid = models.CharField(max_length=32, blank=True)
     bliptv_flv_url = models.CharField(max_length=256, blank=True)
+    # only nonzero length for Vimeo videos
+    vimeo_videoid = models.CharField(max_length=32, blank=True)
+    # only nonzero length for Dailymotion videos
+    dailymotion_videoid = models.CharField(max_length=32, blank=True)
     title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
@@ -97,6 +101,8 @@ class Video(models.Model):
             return self.youtube_videoid
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return self.bliptv_fileid
+        elif self.video_type == VIDEO_TYPE_VIMEO:
+            return self.get_video_url()
     
     def is_html5(self):
         return self.video_type == VIDEO_TYPE_HTML5
@@ -131,6 +137,8 @@ class Video(models.Model):
             return 'http://www.youtube.com/watch?v={0}'.format(self.youtube_videoid)
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return 'http://blip.tv/file/{0}/'.format(self.bliptv_fileid)
+        elif self.video_type == VIDEO_TYPE_VIMEO:
+            return 'http://vimeo.com/{0}'.format(self.vimeo_videoid)
         else:
             return self.video_url
 
@@ -192,7 +200,16 @@ class Video(models.Model):
             if created:
                 video.title = ustream.get_title(video_url)
                 video.thumbnail = ustream.get_thumbnail_url(video_url)
-                video.save()              
+                video.save()  
+        elif 'vimeo.com' in parsed_url.netloc and vimeo.VIMEO_REGEX.match(video_url):
+            vimeo_videoid = vimeo.VIMEO_REGEX.match(video_url).group(2)
+            video, created = Video.objects.get_or_create(
+                vimeo_videoid = vimeo_videoid,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_VIMEO,
+                          'allow_community_edits': True})
+            # TODO: title and thumbnail -- we can't get them without
+            # an application oauth key/secret
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
