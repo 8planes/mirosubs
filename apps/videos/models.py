@@ -33,7 +33,7 @@ from youtube import get_video_id
 yt_service = YouTubeService()
 yt_service.ssl = False
 
-NO_CAPTIONS, CAPTIONS_FINISHED = range(2)
+NO_SUBTITLES, SUBTITLES_FINISHED = range(2)
 VIDEO_TYPE_HTML5 = 'H'
 VIDEO_TYPE_YOUTUBE = 'Y'
 VIDEO_TYPE_BLIPTV = 'B'
@@ -214,16 +214,15 @@ class Video(models.Model):
         return name         
     
     @property
-    def caption_state(self):
+    def subtitle_state(self):
         """Subtitling state for this video 
         """
-        captions = self.captions()
-        if captions is None:
-            return NO_CAPTIONS
-        elif captions.videocaption_set.count() == 0:
-            return NO_CAPTIONS
-        else:
-            return CAPTIONS_FINISHED
+        
+        original_language = self.original_subtitle_language()
+        if original_language is None:
+            return NO_SUBTITLES
+        elif original_language.is_complete:
+            return SUBTITLES_FINISHED
 
     def last_captions(self):
         try:
@@ -1089,13 +1088,16 @@ class Subtitle(models.Model):
         self.start_time = caption_dict['start_time']
         self.end_time = caption_dict['end_time']
 
-    def to_json_dict(self, text_to_use=None):
-        text = self.subtitle_text if text_to_use is None else text_to_use
-        return { 'caption_id' : self.subtitle_id, 
-                 'caption_text' : text, 
-                 'start_time' : self.start_time, 
-                 'end_time' : self.end_time,
-                 'sub_order' : self.subtitle_order }
+    def to_json_dict(self, is_dependent_translation=False):
+        if is_dependent_translation:
+            return { 'caption_id' : self.subtitle_id,
+                     'text' : self.subtitle_text }
+        else:
+            return { 'caption_id' : self.subtitle_id, 
+                     'caption_text' : text, 
+                     'start_time' : self.start_time, 
+                     'end_time' : self.end_time,
+                     'sub_order' : self.subtitle_order }
 
     def display_time(self):
         if self.start_time < 0:
