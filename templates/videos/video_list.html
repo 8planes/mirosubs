@@ -30,7 +30,7 @@
     {% for video in video_list %}
       <tr>
         <td>
-            <a href="{% url videos:video video_id=video.video_id %}">
+            <a href="{{ video.get_absolute_url }}">
                 {{ video|slice:":70" }}
             </a>
         </td>

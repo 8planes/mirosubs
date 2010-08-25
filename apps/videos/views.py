@@ -220,13 +220,12 @@ def video(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
-    context['translations'] = video.translationlanguage_set \
-        .filter(is_translated=True)
+    context['translations'] = video.subtitlelanguage_set.filter(is_complete=True) \
+        .filter(is_original=False)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = len(context['translations'])
-    if video.captions():
-        context['lang_count'] += 1
+    context['original'] = video.original_subtitle_language()
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
@@ -236,8 +235,8 @@ def video_list(request):
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.filter(Q(translationlanguage__is_translated=True)|Q(translationlanguage__isnull=True)) \
-        .annotate(translation_count=Count('translationlanguage')) 
+    qs = Video.objects.filter(Q(subtitlelanguage__is_complete=True, subtitlelanguage__is_original=False)|Q(subtitlelanguage__isnull=True)) \
+        .annotate(translation_count=Count('subtitlelanguage')) 
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
@@ -323,11 +322,19 @@ def demo(request):
     return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
-def history(request, video_id):
+def history(request, video_id, lang=None):
     video = get_object_or_404(Video, video_id=video_id)
     context = widget.add_onsite_js_files({})
-
-    qs = VideoCaptionVersion.objects.filter(video=video).filter(finished=True)   \
+    
+    if lang is None:
+        language = video.original_subtitle_language()
+    else:
+        language = video.subtitle_language(lang)
+    
+    if not language:
+        raise Http404
+        
+    qs = language.subtitleversion_set.filter(finished=True)   \
         .exclude(time_change=0, text_change=0)
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
@@ -343,66 +350,28 @@ def history(request, video_id):
 
     context['video'] = video
     context['site'] = Site.objects.get_current()
-    context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .filter(was_translated=True)
-    context['last_version'] = video.captions()
-    context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
-    context['commented_object'] = ProxyVideo.get(video)
+    context['translations'] = video.subtitlelanguage_set.filter(is_original=False) \
+        .exclude(pk=language.pk).filter(was_complete=True)
+    context['last_version'] = language.latest_version()
+    context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang or '')
+    context['language'] = language
     _add_share_panel_context_for_history(context, video)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
                        page=request.GET.get('page', 1),
                        template_name='videos/history.html',
                        template_object_name='revision',
-                       extra_context=context)      
-
-def translation_history(request, video_id, lang):
-    video = get_object_or_404(Video, video_id=video_id)
-    language = get_object_or_404(TranslationLanguage, video=video, language=lang)
-    context = widget.add_onsite_js_files({})
-   
-    qs = TranslationVersion.objects.filter(language=language) \
-        .exclude(time_change=0, text_change=0).filter(finished=True)
-
-    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
-    order_fields = {
-        'date': 'datetime_started', 
-        'user': 'user__username', 
-        'note': 'note', 
-        'time': 'time_change', 
-        'text': 'text_change'
-    }
-    if ordering in order_fields and order_type in ['asc', 'desc']:
-        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
-        context['ordering'], context['order_type'] = ordering, order_type 
-    
-    context['video'] = video
-    context['language'] = language
-    context['site'] = Site.objects.get_current()
-    context['translations'] = TranslationLanguage.objects.filter(video=video) \
-        .exclude(pk=language.pk).filter(was_translated=True).distinct()
-    context['last_version'] = video.translations(lang)
-    context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang)
-    context['commented_object'] = language
-    _add_share_panel_context_for_translation_history(context, video, lang)
-    return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=settings.REVISIONS_ONPAGE, 
-                       page=request.GET.get('page', 1),
-                       template_name='videos/translation_history.html',
-                       template_object_name='revision',
-                       extra_context=context) 
+                       extra_context=context)
 
 def _widget_params(request, video_url, version_no=None, language_code=None):
-    params = { 'video_url': video_url }
-    if version_no is not None:
-        base_state = { 'revision': version_no }
-        if language_code is not None:
-            base_state['language'] = language_code
-        params['base_state'] = base_state
-    elif language_code == '': # FIXME: admittedly pretty hacky
-        params['base_state'] = {}
-    elif language_code is not None: #FIXME: still hacky. I suck at Python.
-        params['base_state'] = { 'language': language_code }
+    params = {'video_url': video_url, 'base_state': {}}
+    
+    if version_no:
+        params['base_state']['revision'] = version_no
+        
+    if language_code:
+        params['base_state']['language'] = language_code
+
     return base_widget_params(request, params)
 
 def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
