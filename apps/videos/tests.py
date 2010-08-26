@@ -124,10 +124,14 @@ class ViewsTest(TestCase):
         self.auth = dict(username='admin', password='admin')
         self.user = User.objects.get(username=self.auth['username'])
         self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
+
+    def _simple_test(self, url_name, args=None, kwargs=None, status=200):
+        response = self.client.get(reverse(url_name, args=args, kwargs=kwargs))
+        self.assertEqual(response.status_code, status) 
+        return response
     
     def test_index(self):
-        response = self.client.get(reverse('videos.views.index'))
-        self.assertEqual(response.status_code, 200)
+        self._simple_test('videos.views.index')
         
     def test_feedback(self):
         data = {
@@ -159,8 +163,7 @@ class ViewsTest(TestCase):
         self.client.login(**self.auth)
         url = reverse('videos:create')
         
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self._simple_test('videos:create')
         
         data = {
             'video_url': 'http://www.youtube.com/watch?v=osexbB_hX4g&feature=popular'
@@ -185,21 +188,17 @@ class ViewsTest(TestCase):
         self.assertEqual(response['Location'], 'http://testserver'+self.video.get_absolute_url())
         
     def test_video(self):
-        response = self.client.get(reverse('videos:video', args=[self.video.video_id]))
-        self.assertEqual(response.status_code, 200)
+        self._simple_test('videos:video', [self.video.video_id])
         
     def test_video_list(self):
-        response = self.client.get(reverse('videos:list'))
-        self.assertEqual(response.status_code, 200)
+        self._simple_test('videos:list')
         
     def test_actions_list(self):
-        response = self.client.get(reverse('videos:actions_list'))
-        self.assertEqual(response.status_code, 200)
+        self._simple_test('videos:actions_list')
         
     def test_upload_subtitles(self):
         import os.path
-        response = self.client.get(reverse('videos:upload_subtitles'))
-        self.assertEqual(response.status_code, 302)
+        self._simple_test('videos:upload_subtitles', status=302)
         
         self.client.login(**self.auth)
         
@@ -217,5 +216,22 @@ class ViewsTest(TestCase):
         self.assertEqual(version.version_no, 0)
         self.assertEqual(version.subtitles().count(), 32)
     
+    def test_email_friend(self):
+        self._simple_test('videos:email_friend')
+        
+        data = {
+            'from_email': 'test@test.com',
+            'to_emails': 'test1@test.com,test@test.com',
+            'subject': 'test',
+            'message': 'test'
+        }
+        response = self.client.post(reverse('videos:email_friend'), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEquals(len(mail.outbox), 1)
 
-    
+    def test_demo(self):
+        self._simple_test('videos:demo')
+        
+    def test_history(self):
+        self._simple_test('videos:history', [self.video.video_id])
+   

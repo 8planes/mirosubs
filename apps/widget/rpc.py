@@ -293,7 +293,7 @@ def _autoplay_subtitles(request, video, null_widget, language, revision):
             subtitles = list(video.null_captions(
                     request.user).videocaption_set.all())
         else:
-            caption_version = video.captions(revision)
-            subtitles = [] if caption_version is None else list(caption_version.videocaption_set.all())
+            caption_version = video.version(revision)
+            subtitles = [] if caption_version is None else list(caption_version.subtitles())
         return [subtitle.to_json_dict() 
                 for subtitle in subtitles]
