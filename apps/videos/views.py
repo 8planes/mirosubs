@@ -183,24 +183,14 @@ def create(request):
             video_url = video_form.cleaned_data['video_url']
             try:
                 video, created = Video.get_or_create_for_url(video_url, owner)
-                
             except VidscraperError:
                 vidscraper_error = True
                 return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
-            if created:
-                # TODO: log to activity feed
-                pass
-            if request.META['HTTP_USER_AGENT'].find('Mozilla') > -1:
-                return_url = reverse('videos:video', kwargs={'video_id':video.video_id})
-                return HttpResponseRedirect('{0}?{1}'.format(
-                        reverse('onsite_widget'), 
-                        urlencode({'subtitle_immediately': 'true',
-                                   'video_url': video_url,
-                                   'return_url': return_url })))
-            else:
-                return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
-                            'videos:video', kwargs={'video_id':video.video_id})))            
+            messages.info(request, message=u'''Here is the subtitle workspace for your video.  You can
+share the video with friends, or get an embed code for your site.  To add or
+improve subtitles, click the button below the video''')
+            return redirect(video)        
             #if not video.owner or video.owner == request.user or video.allow_community_edits:
             #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
             #            'videos:video', kwargs={'video_id':video.video_id})))
