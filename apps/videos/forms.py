@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from videos.models import Video, UserTestResult, VideoCaptionVersion, VideoCaption
+from videos.models import Video, UserTestResult, SubtitleVersion, Subtitle, SubtitleLanguage
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from datetime import datetime
@@ -47,7 +47,8 @@ class SubtitlesUploadForm(forms.Form):
             video.owner != None and (self.user.is_anonymous() or 
                                      video.owner.pk != self.user.pk)):
             raise forms.ValidationError(_(u'You can\'t edit this video.'))        
-        if video.translationlanguage_set.exists():
+        if video.subtitlelanguage_set.filter(is_complete=True) \
+                .filter(is_original=False).exists():
             raise forms.ValidationError(_(u'This video has translations.'))
         return video
     
@@ -83,13 +84,20 @@ class SubtitlesUploadForm(forms.Form):
         video._make_writelock(self.user, key)
         video.save()
         
-        latest_captions = video.last_captions()
+        language = video.subtitle_language()
+        
+        if not language:
+            language = SubtitleLanguage(video=video, is_original=True, is_complete=True)
+            language.save()
+            
+        latest_captions = language.latest_version()
         if latest_captions is None:
             version_no = 0
         else:
             version_no = latest_captions.version_no + 1
-        version = VideoCaptionVersion(
-            video=video, version_no=version_no,
+            
+        version = SubtitleVersion(
+            language=language, version_no=version_no,
             datetime_started=datetime.now(), user=self.user,
             note='Uploaded')
         version.save()
@@ -103,9 +111,9 @@ class SubtitlesUploadForm(forms.Form):
             while id in ids:
                 id = int(random.random()*10e12)
             ids.append(id)
-            caption = VideoCaption(**item)
+            caption = Subtitle(**item)
             caption.version = version
-            caption.caption_id = str(id)
+            caption.subtitle_id = str(id)
             caption.sub_order = i+1
             caption.save()
         
@@ -116,7 +124,6 @@ class SubtitlesUploadForm(forms.Form):
         video.save()
         
     def get_errors(self):
-        from django.utils.encoding import force_unicode        
         output = {}
         for key, value in self.errors.items():
             output[key] = '/n'.join([force_unicode(i) for i in value])

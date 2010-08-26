@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, SubtitleVersion, StopNotification
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, SubtitleVersion, StopNotification, SubtitleLanguage
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
 from apps.videos.models import SubtitleVersion
 import widget
@@ -469,7 +469,7 @@ def search(request):
     if q:
         qs = SearchQuerySet().auto_query(q).highlight()
     else:
-        qs = TranslationLanguage.objects.none()
+        qs = SubtitleLanguage.objects.none()
         
     context = {
         'query': q

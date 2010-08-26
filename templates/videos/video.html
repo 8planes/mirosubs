@@ -40,8 +40,6 @@
 {% endblock %}
 
 {% block scripts %}
-
-
     {% include "widget/_js_onsite_dependencies.html" %}
     {{ block.super }}
     <script type="text/javascript">
@@ -132,17 +130,15 @@
       {% endwith %}
       </div>
     </div>
-      
 
     <ul class="video_tabs">
       <li class="active"><a href="#languages-tab">Languages <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
       <li><a href="#comments-tab">Comments <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
       <li><a href="#activity-tab">Activity stream</a></li>
     </ul>
-    
    
     <div id="languages-tab" class="tab">
-        {% if translations or video.captions %} 
+        {% if translations or video.subtitle_language %} 
             <table cellpadding="0" cellspacing="0">
               <thead>
                 <tr>
@@ -169,9 +165,7 @@
                     </tr>
                   {% endif %}
 
-
                 {% for item in translations %}  
-
                     <tr>
                         <td>
                             <a href="{{ item.get_absolute_url }}">
@@ -185,8 +179,6 @@
                         </td>
                     </tr>
                 {% endfor %} 
-
-
             </tbody>
             </table>
         {% else %}
