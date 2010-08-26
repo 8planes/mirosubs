@@ -66,7 +66,7 @@ def _add_share_panel_context(context,
     context["share_panel_embed_code"] = render_to_string(
         'videos/_offsite_widget.html',
         {'embed_version': settings.EMBED_JS_VERSION,
-         'embed_params': embed_params,
+         'embed_params': json.dumps(embed_params),
          'MEDIA_URL': settings.MEDIA_URL})
     context["share_panel_email_url"] = email_url
     context["share_panel_permalink"] = permalink
