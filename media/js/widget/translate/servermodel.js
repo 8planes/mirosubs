@@ -21,20 +21,19 @@ goog.provide('mirosubs.translate.ServerModel');
 // Currently this class has a lot in common with mirosubs.subtitle.MSServerModel.
 // TODO: fix the duplication, probably by turning the two classes into one.
 
-mirosubs.translate.ServerModel = function(videoID, unitOfWork, isNull, loginNagFn) {
+mirosubs.translate.ServerModel = function(videoID, unitOfWork, loginNagFn) {
     goog.Disposable.call(this);
     this.videoID_ = videoID;
     this.unitOfWork_ = unitOfWork;
     this.translating_ = false;
-    this.isNull_ = isNull;
     this.loginNagFn_ = loginNagFn;
-    this.loginPesterFreq_ = 1000 * 60 * (isNull ? 10 : 1);
+    this.loginPesterFreq_ = 1000 * 60 * (mirosubs.IS_NULL ? 10 : 1);
 };
 goog.inherits(mirosubs.translate.ServerModel, goog.Disposable);
 
 /**
  * 
- * @param {function(boolean, *)} calback. First arg is true iff successful, second 
+ * @param {function(boolean, *)} callback. First arg is true iff successful, second 
  *     arg is string with failure message if failed, array of json translations 
  *     otherwise.
  */
@@ -44,7 +43,7 @@ mirosubs.translate.ServerModel.prototype.startTranslating =
     var that = this;
     this.stopTranslating();
     mirosubs.Rpc.call(
-        'start_translating' + (this.isNull_ ? '_null' : ''),
+        'start_editing',
         {'video_id': this.videoID_,
          'language_code': languageCode },
         function(result) {
@@ -108,8 +107,7 @@ mirosubs.translate.ServerModel.prototype.finish = function(successCallback, opt_
     var that = this;
     this.loginThenAction_(function() {
         var saveArgs = that.makeSaveArgs_();
-        mirosubs.Rpc.call('finished_translations' + 
-                          (that.isNull_ ? '_null' : ''),
+        mirosubs.Rpc.call('finished_subtitles',
                           saveArgs,
                           function(result) {
                               if (result['response'] != 'ok')
@@ -125,8 +123,8 @@ mirosubs.translate.ServerModel.prototype.loginThenAction_ =
     function(successAction, opt_cancelAction, opt_forceLogin) {
     if (mirosubs.currentUsername == null) {
         // first update lock
-        if (!this.isNull_)
-            mirosubs.Rpc.call('update_video_translation_lock',
+        if (!mirosubs.IS_NULL)
+            mirosubs.Rpc.call('update_lock',
                               { 'video_id' : this.videoID_,
                                 'language_code' : this.curLanguageCode_ });
         var currentTime = new Date().getTime();
@@ -155,14 +153,15 @@ mirosubs.translate.ServerModel.prototype.saveImpl_ = function() {
     // TODO: at some point in the future, account for possibly failed save.
     var $s = goog.json.serialize;
     var saveArgs = this.makeSaveArgs_();
-    mirosubs.Rpc.call('save_translations' + (this.isNull_ ? '_null' : ''), 
-                      saveArgs,
-                      function(result) {
-                          if (result['response'] != 'ok')
-                              // should never happen
-                              alert('problem saving translations. Response: ' +
-                                    result['response']);
-                      });
+    mirosubs.Rpc.call(
+        'save_subtitles',
+        saveArgs,
+        function(result) {
+            if (result['response'] != 'ok')
+                // should never happen
+                alert('problem saving translations. Response: ' +
+                      result['response']);
+        });
 };
 
 mirosubs.translate.ServerModel.prototype.makeSaveArgs_ = function() {
@@ -175,10 +174,9 @@ mirosubs.translate.ServerModel.prototype.makeSaveArgs_ = function() {
     };
     return {
         'video_id': this.videoID_,
-            'language_code': this.curLanguageCode_,
-            'version_no' : this.curVersion_,
-            'inserted': toJsonTranslations(work.neu),
-            'updated' : toJsonTranslations(work.updated)
+        'language_code': this.curLanguageCode_,
+        'inserted': toJsonTranslations(work.neu),
+        'updated' : toJsonTranslations(work.updated)
     };
 };
 

@@ -23,13 +23,16 @@ mirosubs.Rpc.logger_ =
     goog.debug.Logger.getLogger('mirosubs.Rpc');
 
 mirosubs.Rpc.baseURL = function() {
-    return mirosubs.siteURL() + '/widget/rpc/';
+    return [mirosubs.siteURL(), 
+            '/widget/',
+            mirosubs.IS_NULL ? 'null_' : '',
+            'rpc/'].join('');
 };
 
 mirosubs.Rpc.callCrossDomain_ = function(methodName, serializedArgs, opt_callback) {
     var p = goog.json.parse;
     goog.net.CrossDomainRpc.
-        send([mirosubs.Rpc.baseURL(), "xd/", methodName].join(''),
+        send([mirosubs.Rpc.baseURL(), 'xd/', methodName].join(''),
              function(event) {
                  var responseText = event["target"]
                  ["responseText"];
@@ -43,7 +46,7 @@ mirosubs.Rpc.callCrossDomain_ = function(methodName, serializedArgs, opt_callbac
 
 mirosubs.Rpc.callXhr_ = function(methodName, serializedArgs, opt_callback) {
     goog.net.XhrIo.send(
-        [mirosubs.Rpc.baseURL(), "xhr/", methodName].join(''),
+        [mirosubs.Rpc.baseURL(), 'xhr/', methodName].join(''),
         function(event) {
             if (opt_callback)
                 opt_callback(event.target.getResponseJson());
@@ -60,7 +63,7 @@ mirosubs.Rpc.encodeKeyValuePairs_ = function(serializedArgs) {
 
 mirosubs.Rpc.callWithJsonp_ = function(methodName, serializedArgs, opt_callback) {
     var jsonp = new goog.net.Jsonp(
-        [mirosubs.Rpc.baseURL(), "jsonp/", methodName].join(''));
+        [mirosubs.Rpc.baseURL(), 'jsonp/', methodName].join(''));
     jsonp.send(serializedArgs,
                function(result) {
                    if (mirosubs.DEBUG)

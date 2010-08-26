@@ -27,8 +27,7 @@ mirosubs.translate.EditDialog = function(videoSource,
                                          allLanguages,
                                          version,
                                          languageCode,
-                                         existingTranslations,
-                                         nullWidget) {
+                                         existingTranslations) {
     mirosubs.Dialog.call(this, videoSource);
     this.videoID_ = videoID;
     this.subtitles_ = subtitles;
@@ -38,8 +37,7 @@ mirosubs.translate.EditDialog = function(videoSource,
     this.existingTranslations_ = existingTranslations;
     this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.serverModel_ = new mirosubs.translate.ServerModel(
-        videoID, this.unitOfWork_, nullWidget,
-        function() {});
+        videoID, this.unitOfWork_, function() {});
     this.serverModel_.startEditing(languageCode, version);
     this.saved_ = false;
 };

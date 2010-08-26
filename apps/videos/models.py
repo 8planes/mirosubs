@@ -260,7 +260,8 @@ class Video(models.Model):
         return self.version(version_no, language_code).subtitles()
 
     def latest_finished_subtitles(self, language_code=None):
-        return self.latest_finished_version(language_code).subtitles()
+        version = self.latest_finished_version(language_code)
+        return [] if version is None else version.subtitles()
 
     def null_subtitles(self, user, language_code=None):
         """Returns NullVideoCaptions for user, or None if none exist."""

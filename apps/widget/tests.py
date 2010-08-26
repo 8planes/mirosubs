@@ -26,13 +26,15 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 from auth.models import CustomUser
 from videos.models import Video
-from widget import rpc
+from widget.rpc import Rpc
 
 class RequestMockup(object):
     
     def __init__(self, user):
         self.user = user
         self.session = {}
+
+rpc = Rpc()
 
 class TestRpc(TestCase):
     fixtures = ['test_widget.json']
@@ -55,7 +57,7 @@ class TestRpc(TestCase):
         request = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
             request, 
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         video_id = return_value['video_id']
         return_value = rpc.start_editing(request, video_id)
         self.assertEqual(True, return_value['can_edit'])
@@ -78,7 +80,7 @@ class TestRpc(TestCase):
         # same user reopens the dialog before anyone else has a chance.
         rpc.show_widget(
             request,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         return_value = rpc.start_editing(request, video.video_id)
         # make sure we are getting back the unfinished draft.
         self.assertEqual(True, return_value['can_edit'])
@@ -89,7 +91,7 @@ class TestRpc(TestCase):
         request_0 = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
             request_0,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
         inserted = [{'caption_id': 'sfdsfsdf',
@@ -103,7 +105,7 @@ class TestRpc(TestCase):
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         return_value = rpc.start_editing(request_1, video_id)
         # make sure we are not getting back the unfinished draft.
         self.assertEqual(True, return_value['can_edit'])
@@ -135,7 +137,7 @@ class TestRpc(TestCase):
         request_0 = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
             request_0,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
         inserted = [{'caption_id': 'sfdsfsdf',
@@ -149,7 +151,7 @@ class TestRpc(TestCase):
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         return_value = rpc.start_editing(request_1, video_id)
         # make sure we are getting back finished subs.
         self.assertEqual(True, return_value['can_edit'])
@@ -160,7 +162,7 @@ class TestRpc(TestCase):
         request_0 = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
             request_0,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
         inserted = [{'caption_id': 'sfdsfsdf',
@@ -184,7 +186,7 @@ class TestRpc(TestCase):
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         return_value = rpc.start_editing(request_1, video_id)
         # make sure we are not getting back the draft.
         self.assertEqual(True, return_value['can_edit'])
@@ -201,7 +203,7 @@ class TestRpc(TestCase):
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         rpc.start_editing(request_1, video.video_id)
         # user_1 updates the solitary caption to have blank text.
         updated = [{'caption_id': 'sfdsfsdf',
@@ -283,7 +285,7 @@ class TestRpc(TestCase):
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1, 
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         response = rpc.start_editing(request_1, video.video_id, language_code='es')
         self.assertEquals(True, response['can_edit'])
         self.assertEquals(1, response['version'])
@@ -313,7 +315,7 @@ class TestRpc(TestCase):
     def _create_video_with_one_caption_set(self, request):
         return_value = rpc.show_widget(
             request,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
         video_id = return_value['video_id']
         rpc.start_editing(request, video_id)
 

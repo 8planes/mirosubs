@@ -57,17 +57,16 @@ mirosubs.embedVersion = null;
 mirosubs.videoURL = null;
 
 mirosubs.embedCode = function() {
-    var pieces = [];
-    pieces.push('<sc');
-    pieces.push('ript type="text/javascript" src="');
-    pieces.push(mirosubs.mediaURL());
-    pieces.push('embed' + mirosubs.embedVersion + '.js');
-    pieces.push('">\n');
-    pieces.push('({\n');
-    pieces.push('   video_url: "' + mirosubs.videoURL + '"\n');
-    pieces.push('})\n');
-    pieces.push('</script>');
-    return pieces.join('');
+    return [
+        '<sc',
+        'ript type="text/javascript" src="',
+        mirosubs.mediaURL(),
+        'embed', mirosubs.embedVersion, '.js',
+        '">\n',
+        '({\n',
+        '   video_url: "', mirosubs.videoURL, '"\n',
+        '})\n',
+        '</script>'].join('');
 };
 
 /**
@@ -90,7 +89,15 @@ mirosubs.imageAssetURL = function(imageFileName) {
     return [mirosubs.mediaURL(), 'images/', imageFileName].join('');
 };
 
+/**
+ * Set during loading.
+ */
 mirosubs.DEBUG = false;
+
+/**
+ * Set during loading.
+ */
+mirosubs.IS_NULL = false;
 
 mirosubs.EventType = {
     LOGIN : 'login',

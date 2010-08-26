@@ -21,15 +21,14 @@ goog.provide('mirosubs.translate.Dialog');
 mirosubs.translate.Dialog = function(videoSource, 
                                      videoID,
                                      subtitles, 
-                                     allLanguages,
-                                     nullWidget) {
+                                     allLanguages) {
     mirosubs.Dialog.call(this, videoSource);
     this.videoID_ = videoID;
     this.subtitles_ = subtitles;
     this.languages_ = allLanguages;
     this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.serverModel_ = new mirosubs.translate.ServerModel(
-        videoID, this.unitOfWork_, nullWidget,
+        videoID, this.unitOfWork_,
         goog.bind(this.showLoginNag_, this));
     /**
      * Null unless "Done" gets clicked and translations get saved.
