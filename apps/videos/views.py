@@ -17,125 +17,31 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_HTML5, Action, TranslationLanguage, VideoCaptionVersion, TranslationVersion, ProxyVideo, StopNotification
+from videos.models import Video, Action, StopNotification, SubtitleLanguage
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
 import widget
 from django.contrib.sites.models import Site
 from django.conf import settings
 import simplejson as json
-from videos.utils import get_pager
 from django.contrib import messages
-from django.db.models import Q
 from widget.views import base_widget_params
-from django.utils.http import urlencode
 from haystack.query import SearchQuerySet
 from vidscraper.errors import Error as VidscraperError
-from django.template.loader import render_to_string
-from django.utils.http import urlquote_plus
 from auth.models import CustomUser as User
 from datetime import datetime
 from videos.utils import send_templated_email
 from django.contrib.auth import logout
+from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 
 def index(request):
     context = widget.add_onsite_js_files({})
     context['widget_params'] = _widget_params(request, 'http://subtesting.com/video/Usubs-IntroVideo.theora.ogg', None, '')
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
-
-def _make_facebook_url(link, title):
-    return "http://www.facebook.com/sharer.php?{0}".format(
-        urlencode({'u': link, 't': title}))
-
-def _make_twitter_url(message):
-    return "http://twitter.com/home/?{0}".format(
-        urlencode({'status': message}))
-
-def _make_email_url(message):
-    return "/videos/email_friend/?{0}".format(
-        urlencode({'text': message}))
-
-def _add_share_panel_context(context,
-                             facebook_url, twitter_url,
-                             embed_params,
-                             email_url, permalink):
-    context["share_panel_facebook_url"] = facebook_url
-    context["share_panel_twitter_url"] = twitter_url
-    context["share_panel_embed_code"] = render_to_string(
-        'videos/_offsite_widget.html',
-        {'embed_version': settings.EMBED_JS_VERSION,
-         'embed_params': embed_params,
-         'MEDIA_URL': settings.MEDIA_URL})
-    context["share_panel_email_url"] = email_url
-    context["share_panel_permalink"] = permalink
-
-def _share_video_title(video):
-    return u"(\"{0}\") ".format(video.title) if video.title else ''
-
-def _add_share_panel_context_for_video(context, video):
-    home_page_url = "http://{0}{1}".format(
-        Site.objects.get_current().domain, 
-        reverse('videos:video', kwargs={'video_id':video.video_id}))
-    if video.captions() is not None:
-        twitter_fb_message = \
-            u"Just found a version of this video with captions: {0}".format(
-            home_page_url)
-    else:
-        twitter_fb_message = \
-            u"Check out this video and help make subtitles: {0}".format(
-            home_page_url)
-    email_message = \
-        u"Hey-- check out this video {0}and help make subtitles: {1}".format(
-        _share_video_title(video), home_page_url)
-    _add_share_panel_context(
-        context,
-        _make_facebook_url(home_page_url, twitter_fb_message),
-        _make_twitter_url(twitter_fb_message),
-        { 'video_url': video.get_video_url() },
-        _make_email_url(email_message),
-        home_page_url)
-
-def _add_share_panel_context_for_history(context, video):
-    page_url = "http://{0}{1}".format(
-        Site.objects.get_current().domain,
-        reverse('videos:history', args=[video.video_id]))
-    twitter_fb_message = \
-        u"Just found a version of this video with captions: {0}".format(page_url)
-    email_message = \
-        u"Hey-- just found a version of this video {0}with captions: {1}".format(
-        _share_video_title(video), page_url)
-    _add_share_panel_context(
-        context,
-        _make_facebook_url(page_url, twitter_fb_message),
-        _make_twitter_url(twitter_fb_message),
-        { 'video_url': video.get_video_url(), 'base_state': {} },
-        _make_email_url(email_message),
-        page_url)
-
-def _add_share_panel_context_for_translation_history(context, video, language_code):
-    page_url = "http://{0}{1}".format(
-        Site.objects.get_current().domain,
-        reverse('videos:translation_history', 
-                args=[video.video_id, language_code]))
-    language_name = widget.LANGUAGES_MAP[language_code]
-    twitter_fb_message = \
-        "Just found a version of this video with {0} subtitles: {1}".format(
-        language_name, page_url)
-    email_message = \
-        "Hey-- just found a version of this video {0}with {1} subtitles: {2}".format(
-        _share_video_title(video), language_name, page_url)
-    _add_share_panel_context(
-        context,
-        _make_facebook_url(page_url, twitter_fb_message),
-        _make_twitter_url(twitter_fb_message),
-        { 'video_url': video.get_video_url(), 'base_state': { 'language': str(language_code) }},
-        _make_email_url(email_message),
-        page_url)
 
 def ajax_change_video_title(request):
     video_id = request.POST.get('video_id')
@@ -149,7 +55,7 @@ def ajax_change_video_title(request):
             video.title = title
             video.save()
             action = Action(new_video_title=video.title, video=video)
-            action.user = user.is_authenticated and user or None
+            action.user = user.is_authenticated() and user or None
             action.created = datetime.now()
             action.action_type = Action.CHANGE_TITLE
             action.save()
@@ -182,24 +88,14 @@ def create(request):
             video_url = video_form.cleaned_data['video_url']
             try:
                 video, created = Video.get_or_create_for_url(video_url, owner)
-                
             except VidscraperError:
                 vidscraper_error = True
                 return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
-            if created:
-                # TODO: log to activity feed
-                pass
-            if request.META['HTTP_USER_AGENT'].find('Mozilla') > -1:
-                return_url = reverse('videos:video', kwargs={'video_id':video.video_id})
-                return HttpResponseRedirect('{0}?{1}'.format(
-                        reverse('onsite_widget'), 
-                        urlencode({'subtitle_immediately': 'true',
-                                   'video_url': video_url,
-                                   'return_url': return_url })))
-            else:
-                return HttpResponseRedirect('{0}?subtitle_immediately=true'.format(reverse(
-                            'videos:video', kwargs={'video_id':video.video_id})))            
+            messages.info(request, message=u'''Here is the subtitle workspace for your video.  You can
+share the video with friends, or get an embed code for your site.  To add or
+improve subtitles, click the button below the video''')
+            return redirect(video)        
             #if not video.owner or video.owner == request.user or video.allow_community_edits:
             #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
             #            'videos:video', kwargs={'video_id':video.video_id})))
@@ -225,7 +121,7 @@ def video(request, video_id):
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = len(context['translations'])
-    context['original'] = video.original_subtitle_language()
+    context['original'] = video.subtitle_language()
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
@@ -326,10 +222,7 @@ def history(request, video_id, lang=None):
     video = get_object_or_404(Video, video_id=video_id)
     context = widget.add_onsite_js_files({})
     
-    if lang is None:
-        language = video.original_subtitle_language()
-    else:
-        language = video.subtitle_language(lang)
+    language = video.subtitle_language(lang)
     
     if not language:
         raise Http404
@@ -374,85 +267,55 @@ def _widget_params(request, video_url, version_no=None, language_code=None):
 
     return base_widget_params(request, params)
 
-def revision(request, pk, cls=VideoCaptionVersion, tpl='videos/revision.html'):
-    version = get_object_or_404(cls, pk=pk)
+def revision(request, pk):
+    version = get_object_or_404(SubtitleVersion, pk=pk)
     context = widget.add_onsite_js_files({})
     context['video'] = version.video
     context['version'] = version
     context['next_version'] = version.next_version()
     context['prev_version'] = version.prev_version()
-    language = None
-    if cls == TranslationVersion:
-        language = version.language.language
-    context['widget_params'] = \
-        _widget_params(request, version.video.get_video_url(),
-                       version.version_no, language)
-    if cls == TranslationVersion:
-        tpl = 'videos/translation_revision.html'
-        context['latest_version'] = version.language.translations()
-    else:
-        context['latest_version'] = version.video.captions()
-    return render_to_response(tpl, context,
-                              context_instance=RequestContext(request))     
-
-def last_revision(request, video_id):
-    video = get_object_or_404(Video, video_id=video_id)
-    
-    context = widget.add_onsite_js_files({})
-    context['video'] = video
-    context['version'] = video.captions()
-    context['translations'] = video.translationlanguage_set.all()
-    context['widget_params'] = \
-        _widget_params(request, video.get_video_url())
-    return render_to_response('videos/last_revision.html', context,
-                              context_instance=RequestContext(request))
-
-def last_translation_revision(request, video_id, language_code):
-    video = get_object_or_404(Video, video_id=video_id)
-    language = video.translation_language(language_code)
-    
-    context = widget.add_onsite_js_files({})
-    context['video'] = video
-    context['version'] = video.translations(language_code)
+    language = version.language
     context['language'] = language
-    context['translations'] = video.translationlanguage_set.exclude(pk=language.pk)
-    context['widget_params'] = \
-        _widget_params(request. video.get_video_url())
-    return render_to_response('videos/last_revision.html', context,
-                              context_instance=RequestContext(request))
+    context['widget_params'] = _widget_params(request, \
+            language.video.get_video_url(), version.version_no, language.language)
+    context['latest_version'] = language.latest_finished_version()
+    return render_to_response('videos/revision.html', context,
+                              context_instance=RequestContext(request))     
     
 @login_required
-def rollback(request, pk, cls=VideoCaptionVersion):
-    version = get_object_or_404(cls, pk=pk)
-    is_writelocked = version.video.is_writelocked if (cls == VideoCaptionVersion) else version.language.is_writelocked
+def rollback(request, pk):
+    version = get_object_or_404(SubtitleVersion, pk=pk)
+    is_writelocked = version.language.is_writelocked
     if is_writelocked:
-        messages.error(request, 'Can not rollback now, because someone is editing subtitles.')
+        messages.error(request, u'Can not rollback now, because someone is editing subtitles.')
     elif not version.next_version():
-        messages.error(request, message='Can not rollback to the last version')
+        messages.error(request, message=u'Can not rollback to the last version')
     else:
-        messages.success(request, message='Rollback successful')
+        messages.success(request, message=u'Rollback successful')
         version = version.rollback(request.user)
-    url_name = (cls == TranslationVersion) and 'translation_revision' or 'revision'
-    return redirect('videos:%s' % url_name, pk=version.pk)
+    return redirect(version)
 
 def diffing(request, first_pk, second_pk):
-    first_version = get_object_or_404(VideoCaptionVersion, pk=first_pk)
-    video = first_version.video
-    second_version = get_object_or_404(VideoCaptionVersion, pk=second_pk, video=video)
+    first_version = get_object_or_404(SubtitleVersion, pk=first_pk)
+    language = first_version.language
+    second_version = get_object_or_404(SubtitleVersion, pk=second_pk, language=language)
+    
+    video = first_version.language.video
     if second_version.datetime_started > first_version.datetime_started:
         first_version, second_version = second_version, first_version
     
-    second_captions = dict([(item.caption_id, item) for item in second_version.captions()])
+    second_captions = dict([(item.subtitle_id, item) for item in second_version.subtitles()])
     captions = []
-    for caption in first_version.captions():
+
+    for caption in first_version.subtitles():
         try:
-            scaption = second_captions[caption.caption_id]
+            scaption = second_captions[caption.subtitle_id]
         except KeyError:
             scaption = None
             changed = dict(text=True, time=True)
         else:
             changed = {
-                'text': (not caption.caption_text == scaption.caption_text), 
+                'text': (not caption.subtitle_text == scaption.subtitle_text), 
                 'time': (not caption.start_time == scaption.start_time),
                 'end_time': (not caption.end_time == scaption.end_time)
             }
@@ -462,10 +325,10 @@ def diffing(request, first_pk, second_pk):
     context = widget.add_onsite_js_files({})
     context['video'] = video
     context['captions'] = captions
+    context['language'] = language
     context['first_version'] = first_version
     context['second_version'] = second_version
-    context['history_link'] = reverse('videos:history', args=[video.video_id])
-    context['latest_version'] = video.captions()
+    context['latest_version'] = language.latest_finished_version()
     context['widget0_params'] = \
         _widget_params(request, video.get_video_url(), 
                        first_version.version_no)
@@ -474,43 +337,6 @@ def diffing(request, first_pk, second_pk):
                        second_version.version_no)
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 
-
-def translation_diffing(request, first_pk, second_pk):
-    first_version = get_object_or_404(TranslationVersion, pk=first_pk)
-    language = first_version.language
-    video = first_version.video
-    second_version = get_object_or_404(TranslationVersion, pk=second_pk, language=language)
-    if second_version.datetime_started > first_version.datetime_started:
-        first_version, second_version = second_version, first_version
-    
-    second_captions = dict([(item.caption_id, item) for item in second_version.captions()])
-    captions = []
-    for caption in first_version.captions():
-        try:
-            scaption = second_captions[caption.caption_id]
-        except KeyError:
-            scaption = None
-        changed = scaption and not caption.translation_text == scaption.translation_text 
-        data = [caption, scaption, dict(text=changed, time=False, end_time=False)]
-        captions.append(data)
-        
-    context = widget.add_onsite_js_files({})
-    
-    context['video'] = video
-    context['captions'] = captions
-    context['first_version'] = first_version
-    context['second_version'] = second_version
-    context['history_link'] = reverse('videos:translation_history', 
-                                      args=[video.video_id, language.language])
-    context['latest_version'] = language.translations()
-    context['widget0_params'] = _widget_params(request, video.get_video_url(),
-                                               first_version.version_no, 
-                                               language.language)
-    context['widget1_params'] = _widget_params(request, video.get_video_url(),
-                                               second_version.version_no, 
-                                               language.language)
-    return render_to_response('videos/translation_diffing.html', context,
-                              context_instance=RequestContext(request))
 
 def test_form_page(request):
     if request.method == 'POST':
@@ -538,7 +364,7 @@ def search(request):
     if q:
         qs = SearchQuerySet().auto_query(q).highlight()
     else:
-        qs = TranslationLanguage.objects.none()
+        qs = SubtitleLanguage.objects.none()
         
     context = {
         'query': q

@@ -375,18 +375,20 @@ class Video(models.Model):
         self.writelock_time = None
 
     def notification_list(self, exclude=None):
-        if self.original_subtitle_language():
-            qs = SubtitleVersion.objects.filter(language=self.original_subtitle_language())
+        if self.subtitle_language():
+            qs = SubtitleVersion.objects.filter(language=self.subtitle_language())
         else:
             qs = SubtitleVersion.objects.none()
         not_send = StopNotification.objects.filter(video=self) \
-            .values_list('user_id', flat=True)         
+            .values_list('user_id', flat=True)
+        for_check = [item.user for item in qs]
+        self.owner and for_check.append(self.owner)        
         users = []
-        for item in qs:
-            if item.user.changes_notification \
-                and not item.user in users and not item.user.id in not_send \
-                and not exclude == item.user:
-                users.append(item.user)
+        for user in for_check:
+            if user.changes_notification \
+                and not user in users and not user.id in not_send \
+                and not exclude == user:
+                users.append(user)
         return users
                     
 def create_video_id(sender, instance, **kwargs):
@@ -538,7 +540,11 @@ class SubtitleVersion(models.Model):
     class Meta:
         ordering = ['-version_no']
         unique_together = (('language', 'version_no'),)
-
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('videos:revision', [self.pk])
+    
     def revision_time(self):
         today = date.today()
         yesterday = today - timedelta(days=1)
@@ -625,7 +631,7 @@ class SubtitleVersion(models.Model):
         cls = self.__class__
         latest_subtitles = self.language.latest_version()
         new_version_no = latest_subtitles.version_no + 1
-        note = 'rollback to version #%s' % self.version_no
+        note = u'rollback to version #%s' % self.version_no
         new_version = cls(language=self.language, version_no=new_version_no, \
             datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
