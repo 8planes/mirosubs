@@ -118,9 +118,7 @@
         <hr />
     
     <div class="sub_actions">
-      {% if not video.latest_finished_version %}
-      <a class="button" id="add_subtitles" href="#"><span>Add Subtitles</span></a>
-      {% else %}
+      {% if video.latest_finished_version %}
       <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
       {% endif %}    
 
@@ -182,7 +180,7 @@
             </tbody>
             </table>
         {% else %}
-            <p class="no_subs">{% trans 'No subtitles yet. Make some!' %}</p>
+            <p class="no_subs">{% trans 'No subtitles yet.' %} <a href="#">{% trans 'Make some!' %}</a></p>
         {% endif %}
         <div style="clear: both"></div>
     </div>
