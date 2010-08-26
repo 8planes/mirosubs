@@ -152,27 +152,29 @@
               </thead>
     
               <tbody>
-                <tr>
-                    <td>
-                        <a href="{% url videos:history video.video_id %}">
-                            Original
-                        </a>
-                    </td>
-                    <td>
-                      {% if video.captions %}
-                        <span class="badgy">{{ video.captions.videocaption_set.all|length }} Subtitles</span>
-                      {% else %}
-                            <span class="badgy">No Subtitles</span>
-                        {% endif %}
-                    
-                    </td>
+                  {% if original %}
+                    <tr>
+                        <td>
+                            <a href="{{ original.get_absolute_url }}">
+                                Original
+                            </a>
+                        </td>
+                        <td>
+                          {% if original.latest_version %}
+                              <span class="badgy">{{ original.latest_version.subtitles|length }} Subtitles</span>
+                          {% else %}
+                              <span class="badgy">No Subtitles</span>
+                          {% endif %}
+                        </td>
+                    </tr>
+                  {% endif %}
 
 
                 {% for item in translations %}  
 
                     <tr>
                         <td>
-                            <a href="{% url videos:translation_history video.video_id item.language %}">
+                            <a href="{{ item.get_absolute_url }}">
                                 {{ item.get_language_display }}
                             </a>
                         </td>

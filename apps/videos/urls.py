@@ -39,6 +39,6 @@ urlpatterns = patterns('videos.views',
     url(r'^diffing/t(?P<first_pk>\d+)/t(?P<second_pk>\d+)/$', 'translation_diffing', name='translation_diffing'),
     url(r'^test/$', 'test_form_page', name='test_form_page'),
     url(r'^(?P<video_id>(\w|-)+)/original/$', 'history', name='history'),
-    url(r'^(?P<video_id>(\w|-)+)/(?P<lang>[\w\-]+)/$', 'translation_history', name='translation_history'),
+    url(r'^(?P<video_id>(\w|-)+)/(?P<lang>[\w\-]+)/$', 'history', name='translation_history'),
     url(r'(?P<video_id>(\w|-)+)/$', 'video', name='video'),
 )
