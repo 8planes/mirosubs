@@ -146,7 +146,7 @@ mirosubs.translate.ServerModel.prototype.loginThenAction_ =
         }
     }
     else
-        action();
+        successAction();
 };
 
 mirosubs.translate.ServerModel.prototype.saveImpl_ = function() {
@@ -176,7 +176,8 @@ mirosubs.translate.ServerModel.prototype.makeSaveArgs_ = function() {
         'video_id': this.videoID_,
         'language_code': this.curLanguageCode_,
         'inserted': toJsonTranslations(work.neu),
-        'updated' : toJsonTranslations(work.updated)
+        'updated': toJsonTranslations(work.updated),
+        'deleted': []
     };
 };
 

@@ -21,8 +21,6 @@ from widget.srt_subs import TTMLSubtitles
 
 urlpatterns = patterns(
     'widget.views',
-    url(r'^twitter_login/', 'auth.views.twitter_login', 
-        kwargs={'next': '/widget/close_window/'}),
     url(r'^rpc/xd/(\w+)$', 'xd_rpc'),
     url(r'^rpc/null_xd/(\w+)$', 'xd_rpc', kwargs={'null':True}),
     url(r'^rpc/xhr/(\w+)$', 'rpc'),
@@ -30,12 +28,18 @@ urlpatterns = patterns(
     url(r'^rpc/jsonp/(\w+)$', 'jsonp'),
     url(r'^rpc/null_jsonp/(\w+)$', 'jsonp', kwargs={'null':True}),
     url(r'^login/$', 'django.contrib.auth.views.login'),
-    url(r'^close_window/$', 
-        'django.views.generic.simple.direct_to_template', 
-        {'template' : 'widget/close_window.html'}),
     url(r'^download_srt/$', 'srt', name='download_srt'),
     url(r'^download_ssa/$', 'download_subtitles', name='download_ssa'),
     url(r'^download_ttml/$', 'download_subtitles', 
         {'handler': TTMLSubtitles}, name='download_ttml'),
     url(r'^download_null_srt/$', 'null_srt'),
+)
+
+urlpatterns += patterns(
+    '',
+    url(r'^twitter_login/', 'auth.views.twitter_login', 
+        kwargs={'next': '/widget/close_window/'}),
+    url(r'^close_window/$', 
+        'django.views.generic.simple.direct_to_template', 
+        {'template' : 'widget/close_window.html'}),
 )

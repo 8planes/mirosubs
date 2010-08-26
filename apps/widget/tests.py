@@ -34,6 +34,12 @@ class RequestMockup(object):
         self.user = user
         self.session = {}
 
+class NotAuthenticatedUser:
+    def is_authenticated(self):
+        return False
+    def is_anonymous(self):
+        return True
+
 rpc = Rpc()
 
 class TestRpc(TestCase):
@@ -70,6 +76,7 @@ class TestRpc(TestCase):
         # if video.latest_finished_version() returns anything other than None,
         # video.html will show that the video has subtitles.
         self.assertEqual(None, video.latest_finished_version())
+
 
     def test_exit_dialog_then_reopen(self):
         request = RequestMockup(self.user_1)
@@ -133,6 +140,22 @@ class TestRpc(TestCase):
         self.assertTrue(language.was_complete)
         self.assertTrue(language.is_complete)
 
+    def test_cant_edit_because_locked(self):
+        request_0 = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request_0,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        video_id = return_value['video_id']
+        rpc.start_editing(request_0, video_id)
+        request_1 = RequestMockup(self.user_1)
+        rpc.show_widget(
+            request_1,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        return_value = rpc.start_editing(request_1, video_id)
+        self.assertEqual(False, return_value['can_edit'])
+        self.assertEqual(self.user_0.__unicode__(), 
+                         return_value['locked_by'])
+
     def test_finish_then_other_user_opens(self):
         request_0 = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
@@ -157,6 +180,60 @@ class TestRpc(TestCase):
         self.assertEqual(True, return_value['can_edit'])
         self.assertEqual(1, return_value['version'])
         self.assertEqual(1, len(return_value['existing']))
+
+    def test_save_while_not_authenticated(self):
+        request_0 = RequestMockup(NotAuthenticatedUser())
+        return_value = rpc.show_widget(
+            request_0,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        video_id = return_value['video_id']
+        rpc.start_editing(request_0, video_id)
+        inserted = [{'caption_id': 'sfdsfsdf',
+                     'caption_text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        # note: the client-side code of the widget guards 
+        # against this behavior.
+        response = rpc.save_subtitles(request_0, video_id, [], inserted, [])
+        self.assertEqual('not_logged_in', response['response'])
+
+    def test_log_in_then_save(self):
+        request_0 = RequestMockup(NotAuthenticatedUser())
+        return_value = rpc.show_widget(
+            request_0,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        video_id = return_value['video_id']
+        rpc.start_editing(request_0, video_id)
+        request_0.user = self.user_0
+        inserted = [{'caption_id': 'sfdsfsdf',
+                     'caption_text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        response = rpc.save_subtitles(request_0, video_id, [], inserted, [])
+        self.assertEqual('ok', response['response'])
+        rpc.finished_subtitles(request_0, video_id, [], [], [])
+        self.assertEqual(request_0.user.pk,
+                         Video.objects.get(video_id=video_id).\
+                             latest_finished_version().user.pk)
+
+    def test_overwrite_anonymous_draft(self):
+        request_0 = RequestMockup(NotAuthenticatedUser())
+        return_value = rpc.show_widget(
+            request_0,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        video_id = return_value['video_id']
+        rpc.start_editing(request_0, video_id)
+        rpc.release_lock(request_0, video_id)
+        request_1 = RequestMockup(self.user_1)
+        rpc.show_widget(
+            request_1,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        return_value = rpc.start_editing(request_1, video_id)
+        self.assertEqual(True, return_value['can_edit'])
+        self.assertEqual(0, return_value['version'])
+        self.assertEqual(0, len(return_value['existing']))
 
     def test_finish_then_draft(self):
         request_0 = RequestMockup(self.user_0)

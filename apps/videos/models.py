@@ -221,11 +221,8 @@ class Video(models.Model):
         """Subtitling state for this video 
         """
 
-        original_language = self._original_subtitle_language()
-        if original_language is None:
-            return NO_SUBTITLES
-        elif original_language.is_complete:
-            return SUBTITLES_FINISHED
+        return NO_SUBTITLES if self.latest_finished_version() \
+            is None else SUBTITLES_FINISHED
 
     def _original_subtitle_language(self):
         if not hasattr(self, '_original_subtitle'):
@@ -530,7 +527,8 @@ class SubtitleVersion(models.Model):
     language = models.ForeignKey(SubtitleLanguage)
     version_no = models.PositiveIntegerField(default=0)
     datetime_started = models.DateTimeField()
-    user = models.ForeignKey(User)
+    # note: cannot possibly be null for finished SubtitleVersions.
+    user = models.ForeignKey(User, null=True)
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)

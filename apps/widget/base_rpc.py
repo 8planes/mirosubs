@@ -50,7 +50,7 @@ class BaseRpc:
                 request.user, video, 
                 base_state.get('language', None),
                 base_state.get('revision', None))
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             return_value['username'] = request.user.username
         return_value['embed_version'] = settings.EMBED_JS_VERSION
         return return_value

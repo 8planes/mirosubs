@@ -39,10 +39,10 @@ class Rpc(BaseRpc):
 
         self._maybe_add_video_session(request)
 
-        language = self._get_language_for_editing(
+        language, can_writelock = self._get_language_for_editing(
             request, video_id, language_code)
 
-        if language is None:
+        if not can_writelock:
             return { "can_edit": False, 
                      "locked_by" : language.writelock_owner_name }
 
@@ -102,9 +102,9 @@ class Rpc(BaseRpc):
         self._save_subtitles_impl(request, language, deleted, 
                                   inserted, updated)
         last_version = language.latest_version()
-        if last_version is not None:
-            last_version.finished = True
-            last_version.save()
+        last_version.finished = True
+        last_version.user = request.user
+        last_version.save()
         language = models.SubtitleLanguage.objects.get(pk=language.pk)
         language.release_writelock()
         language.save()
@@ -126,7 +126,7 @@ class Rpc(BaseRpc):
                     for s in video.dependent_translations(language_code)]
 
     def fetch_subtitles_and_open_languages(self, request, video_id):
-        return { 'captions': fetch_subtitles(request, video_id),
+        return { 'captions': self.fetch_subtitles(request, video_id),
                  'languages': [widget.language_to_map(lang[0], lang[1]) 
                                for lang in LANGUAGES]}
 
@@ -184,8 +184,9 @@ class Rpc(BaseRpc):
             new_version = models.SubtitleVersion(
                 language=language,
                 version_no=new_version_no,
-                datetime_started=datetime.now(),
-                user=user)
+                datetime_started=datetime.now())
+            if user.is_authenticated():
+                new_version.user = user
             new_version.save()
             if version_to_copy is not None:
                 for subtitle in version_to_copy.subtitle_set.all():
@@ -202,6 +203,7 @@ class Rpc(BaseRpc):
                 new_version_no = version_to_copy.version_no + 1
             else:
                 if not user.is_anonymous() and \
+                        version_to_copy.user is not None and \
                         version_to_copy.user.pk == user.pk:
                     new_version_no = version_to_copy.version_no                    
                 elif len(subtitle_versions) > 1:
@@ -225,10 +227,10 @@ class Rpc(BaseRpc):
                 writelock_session_key='')
             language.save()
         if not language.can_writelock(request):
-            return None
+            return language, False
         language.writelock(request)
         language.save()
-        return language
+        return language, True
 
     def _autoplay_subtitles(self, user, video, language_code, version_no):
         video.subtitles_fetched_count += 1
