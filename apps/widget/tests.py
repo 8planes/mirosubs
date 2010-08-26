@@ -41,24 +41,15 @@ class TestRpc(TestCase):
         self.user_0 = CustomUser.objects.get(pk=3)
         self.user_1 = CustomUser.objects.get(pk=4)
         self.video_pk = 12
-        
-    def test_autoplay_subtitles(self):
-        request = RequestMockup(self.user_0)
-        video = Video.objects.get(pk=self.video_pk)
-        subtitles_fetched_count = video.subtitles_fetched_count
-        rpc.autoplay_subtitles(request, video, False, None, None)
-        video1 = Video.objects.get(pk=self.video_pk)
-        self.assertEqual(subtitles_fetched_count+1, video1.subtitles_fetched_count)
 
-    def test_fetch_captions(self):
+    def test_fetch_subtitles(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_caption_set(request)
-        rpc.finished_captions(request, video.video_id, 0,
-                              [], [], [])
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
         subtitles_fetched_count = video.subtitles_fetched_count
-        rpc.fetch_captions(request, video.video_id)
+        rpc.fetch_subtitles(request, video.video_id)
         video1 = Video.objects.get(pk=video.id)
-        self.assertEqual(subtitles_fetched_count+1, video1.subtitles_fetched_count)
+        self.assertEqual(subtitles_fetched_count + 1, video1.subtitles_fetched_count)
 
     def test_keep_subtitling_dialog_open(self):
         request = RequestMockup(self.user_0)
@@ -72,18 +63,18 @@ class TestRpc(TestCase):
         self.assertEqual(0, len(return_value['existing']))
         # the subtitling dialog sends its message back, even 
         # though we've done no subtitling work yet.
-        rpc.save_captions(request, video_id, 0, [], [], [])
+        rpc.save_subtitles(request, video_id, [], [], [])
         video = Video.objects.get(video_id=video_id)
-        # if video.captions() returns anything other than None,
+        # if video.latest_finished_version() returns anything other than None,
         # video.html will show that the video has subtitles.
-        self.assertEqual(None, video.captions())
+        self.assertEqual(None, video.latest_finished_version())
 
     def test_exit_dialog_then_reopen(self):
         request = RequestMockup(self.user_1)
         video = self._create_video_with_one_caption_set(request)
-        self.assertEqual(None, video.captions())
+        self.assertEqual(None, video.latest_finished_version())
         # now dialog closes and we also wait 30 seconds, so we lose lock.
-        rpc.release_video_lock(request, video.video_id)
+        rpc.release_lock(request, video.video_id)
         # same user reopens the dialog before anyone else has a chance.
         rpc.show_widget(
             request,
@@ -106,9 +97,8 @@ class TestRpc(TestCase):
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
-        rpc.save_captions(request_0, video_id, 0, 
-                          [], inserted, [])
-        rpc.release_video_lock(request_0, video_id)
+        rpc.save_subtitles(request_0, video_id, [], inserted, [])
+        rpc.release_lock(request_0, video_id)
         # different user opens the dialog
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
@@ -128,20 +118,18 @@ class TestRpc(TestCase):
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
-        rpc.save_captions(request, video.video_id, 0, 
-                          [], [], updated)
-        rpc.finished_captions(request, video.video_id, 0, [], [], [])
+        rpc.save_subtitles(request, video.video_id, [], [], updated)
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
         video = Video.objects.get(pk=video.pk)
-        self.assertEquals(1, video.videocaptionversion_set.count())
-
+        self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
 
     def test_finish(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_caption_set(request)
-        rpc.finished_captions(request, video.video_id, 0, [], [], [])
-        video_1 = Video.objects.get(video_id=video.video_id)
-        self.assertTrue(video_1.was_subtitled)
-        self.assertTrue(video_1.is_subtitled)
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
+        language = Video.objects.get(video_id=video.video_id).subtitle_language()
+        self.assertTrue(language.was_complete)
+        self.assertTrue(language.is_complete)
 
     def test_finish_then_other_user_opens(self):
         request_0 = RequestMockup(self.user_0)
@@ -155,10 +143,8 @@ class TestRpc(TestCase):
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
-        rpc.save_captions(request_0, video_id, 0, 
-                          [], inserted, [])
-        rpc.finished_captions(request_0, video_id, 0,
-                              [], [], [])
+        rpc.save_subtitles(request_0, video_id, [], inserted, [])
+        rpc.finished_subtitles(request_0, video_id, [], [], [])
         # different user opens the dialog for video
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
@@ -182,10 +168,8 @@ class TestRpc(TestCase):
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
-        rpc.save_captions(request_0, video_id, 0, 
-                          [], inserted, [])
-        rpc.finished_captions(request_0, video_id, 0,
-                              [], [], [])
+        rpc.save_subtitles(request_0, video_id, [], inserted, [])
+        rpc.finished_subtitles(request_0, video_id, [], [], [])
         # user 0 opens dialog again and makes an edit.
         rpc.start_editing(request_0, video_id)
         inserted = [{'caption_id': 'sfdsdsdsdfsdf',
@@ -193,9 +177,9 @@ class TestRpc(TestCase):
                      'start_time': 3.5,
                      'end_time': 5.4,
                      'sub_order': 2.0}]
-        rpc.save_captions(request_0, video_id, 1, [], inserted, [])
+        rpc.save_subtitles(request_0, video_id, [], inserted, [])
         # but, user 0 doesn't finish the new draft and exits the dialog.
-        rpc.release_video_lock(request_0, video_id)
+        rpc.release_lock(request_0, video_id)
         # different user opens the dialog before anyone else has a chance.
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
@@ -206,15 +190,13 @@ class TestRpc(TestCase):
         self.assertEqual(True, return_value['can_edit'])
         self.assertEqual(1, return_value['version'])
         self.assertEqual(1, len(return_value['existing']))
-        # the draft VideoCaptionVersion should be deleted at this point.
-        self.assertEqual(1, len(Video.objects.get(video_id=video_id).videocaptionversion_set.all()))
 
     def test_zero_out_version_1(self):
         request_0 = RequestMockup(self.user_0)
         video = self._create_video_with_one_caption_set(request_0)
-        rpc.finished_captions(request_0, video.video_id, 0, [], [], [])
+        rpc.finished_subtitles(request_0, video.video_id, [], [], [])
         # now dialog closes and we also wait 30 seconds, so we lose lock.
-        rpc.release_video_lock(request_0, video.video_id)
+        rpc.release_lock(request_0, video.video_id)
         # different user opens dialog for video
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
@@ -227,13 +209,15 @@ class TestRpc(TestCase):
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
-        rpc.save_captions(request_1, video.video_id, 1, [], [], updated)
-        rpc.finished_captions(request_1, video.video_id, 1, [], [], [])
+        rpc.save_subtitles(request_1, video.video_id, [], [], updated)
+        rpc.finished_subtitles(request_1, video.video_id, [], [], [])
         video = Video.objects.get(pk=video.pk)
-        self.assertEqual(2, video.videocaptionversion_set.count())
-        self.assertEqual(0, video.captions().videocaption_set.count())
-        self.assertEquals(True, video.was_subtitled)
-        self.assertEquals(False, video.is_subtitled)
+        language = video.subtitle_language()
+        self.assertEqual(2, language.subtitleversion_set.count())
+        self.assertEqual(
+            0, language.latest_finished_version().subtitle_set.count())
+        self.assertEquals(True, language.was_complete)
+        self.assertEquals(False, language.is_complete)
 
     def test_zero_out_version_0(self):
         request_0 = RequestMockup(self.user_0)
@@ -245,85 +229,86 @@ class TestRpc(TestCase):
                     'end_time': 3.4,
                     'sub_order': 1.0}]
         video = Video.objects.get(pk=video.pk)
-        rpc.save_captions(request_0, video.video_id, 0, [], [], updated)
-        rpc.finished_captions(request_0, video.video_id, 0, [], [], [])
-        self.assertEquals(0, video.videocaptionversion_set.count())
-        self.assertEquals(None, video.captions())
-        self.assertEquals(False, video.was_subtitled)
-        self.assertEquals(False, video.is_subtitled)
+        rpc.save_subtitles(request_0, video.video_id, [], [], updated)
+        rpc.finished_subtitles(request_0, video.video_id, [], [], [])
+        language = video.subtitle_language()
+        self.assertEquals(0, language.subtitleversion_set.count())
+        self.assertEquals(None, language.latest_finished_version())
+        self.assertEquals(False, language.was_complete)
+        self.assertEquals(False, language.is_complete)
 
     def test_start_translating(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_caption_set(request)
-        rpc.finished_captions(request, video.video_id, 0, [], [], [])
-        rpc.release_video_lock(request, video.video_id)
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
+        rpc.release_lock(request, video.video_id)
         # open translation dialog.
-        response = rpc.start_translating(request, video.video_id, 'es')
+        response = rpc.start_editing(request, video.video_id, language_code='es')
         self.assertEquals(True, response['can_edit'])
         self.assertEquals(0, response['version'])
         self.assertEquals(0, len(response['existing']))
         inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
-        rpc.save_translations(request, video.video_id, 'es', 0,
-                              inserted, [])
-        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
-        language = Video.objects.get(pk=video.pk).translation_language('es')
-        translations = rpc.fetch_translations(request, video.video_id, 'es')
+        rpc.save_subtitles(request, video.video_id,
+                           [], inserted, [], language_code='es')
+        rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
+        translations = rpc.fetch_subtitles(request, video.video_id, language_code='es')
         self.assertEquals(1, len(translations))
         self.assertEquals('heyoes', translations[0]['caption_text'])
-        self.assertEquals(1, language.translationversion_set.count())
+        language = video.subtitle_language('es')
+        self.assertEquals(1, language.subtitleversion_set.count())
 
     def test_update_translation(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_caption_set(request)
-        rpc.finished_captions(request, video.video_id, 0, [], [], [])
-        rpc.release_video_lock(request, video.video_id)
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
+        rpc.release_lock(request, video.video_id)
         # open translation dialog.
-        response = rpc.start_translating(request, video.video_id, 'es')
+        response = rpc.start_editing(request, video.video_id, language_code='es')
         inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
-        rpc.save_translations(request, video.video_id, 'es', 0,
-                              inserted, [])
+        rpc.save_subtitles(request, video.video_id, [],
+                              inserted, [], language_code='es')
         updated = [{'caption_id': 'sfdsfsdf', 'text': 'new text'}]
-        rpc.save_translations(request, video.video_id, 'es', 0, [], updated)
-        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
-        translations = rpc.fetch_translations(request, video.video_id, 'es')
+        rpc.save_subtitles(request, video.video_id, [], [], updated, language_code='es')
+        rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
+        translations = rpc.fetch_subtitles(request, video.video_id, language_code='es')
         self.assertEquals('new text', translations[0]['caption_text'])
         video = Video.objects.get(pk=video.pk)
-        self.assertEquals(1, video.translation_language('es').translationversion_set.count())
+        self.assertEquals(1, video.subtitle_language('es').subtitleversion_set.count())
 
     def test_zero_out_trans_version_1(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_translation(request)
-        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
+        rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
         # user_1 opens translate dialog
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1, 
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
-        response = rpc.start_translating(request_1, video.video_id, 'es')
+        response = rpc.start_editing(request_1, video.video_id, language_code='es')
         self.assertEquals(True, response['can_edit'])
         self.assertEquals(1, response['version'])
         self.assertEquals(1, len(response['existing']))
         # user_1 updates solitary translation to have blank text.
         updated = [{'caption_id': 'sfdsfsdf', 'text': ''}]
-        rpc.save_translations(request_1, video.video_id, 'es', 1, [], updated)
-        rpc.finished_translations(request_1, video.video_id, 'es', 1, [], [])
-        language = Video.objects.get(pk=video.pk).translation_language('es')
-        self.assertEquals(2, language.translationversion_set.count())
-        self.assertEquals(0, language.translations().translation_set.count())
-        self.assertEquals(True, language.was_translated)
-        self.assertEquals(False, language.is_translated)
+        rpc.save_subtitles(request_1, video.video_id, [], [], updated, language_code='es')
+        rpc.finished_subtitles(request_1, video.video_id, [], [], [], language_code='es')
+        language = Video.objects.get(pk=video.pk).subtitle_language('es')
+        self.assertEquals(2, language.subtitleversion_set.count())
+        self.assertEquals(0, language.latest_finished_version().subtitle_set.count())
+        self.assertEquals(True, language.was_complete)
+        self.assertEquals(False, language.is_complete)
 
     def test_zero_out_trans_version_0(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_translation(request)
         updated = [{'caption_id': 'sfdsfsdf', 'text': ''}]
-        rpc.save_translations(request, video.video_id, 'es', 0, [], updated)
-        rpc.finished_translations(request, video.video_id, 'es', 0, [], [])
-        language = Video.objects.get(pk=video.pk).translation_language('es')
-        self.assertEquals(0, language.translationversion_set.count())
-        self.assertEquals(None, video.translations('es'))
-        self.assertEquals(False, language.was_translated)
-        self.assertEquals(False, language.is_translated)
+        rpc.save_subtitles(request, video.video_id, [], [], updated, language_code='es')
+        rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
+        language = Video.objects.get(pk=video.pk).subtitle_language('es')
+        self.assertEquals(0, language.subtitleversion_set.count())
+        self.assertEquals(None, video.latest_finished_version('es'))
+        self.assertEquals(False, language.was_complete)
+        self.assertEquals(False, language.is_complete)
 
     def _create_video_with_one_caption_set(self, request):
         return_value = rpc.show_widget(
@@ -331,21 +316,22 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', False)
         video_id = return_value['video_id']
         rpc.start_editing(request, video_id)
+
         inserted = [{'caption_id': u'sfdsfsdf',
                      'caption_text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
-        rpc.save_captions(request, video_id, 0, 
-                          [], inserted, [])
+        rpc.save_subtitles(request, video_id, 
+                           [], inserted, [])
         return Video.objects.get(video_id=video_id)
 
     def _create_video_with_one_translation(self, request):
         video = self._create_video_with_one_caption_set(request)
-        rpc.finished_captions(request, video.video_id, 0, [], [], [])
-        rpc.release_video_lock(request, video.video_id)
-        response = rpc.start_translating(request, video.video_id, 'es')
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
+        rpc.release_lock(request, video.video_id)
+        response = rpc.start_editing(request, video.video_id, language_code='es')
         inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
-        rpc.save_translations(request, video.video_id, 'es', 0,
-                              inserted, [])
+        rpc.save_subtitles(request, video.video_id, [],
+                           inserted, [], language_code='es')
         return video
