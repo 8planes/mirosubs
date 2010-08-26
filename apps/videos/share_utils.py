@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 import widget
+from django.utils.simplejson import dumps as json
 
 def _make_facebook_url(link, title):
     return "http://www.facebook.com/sharer.php?{0}".format(
@@ -26,7 +27,7 @@ def _add_share_panel_context(context,
     context["share_panel_embed_code"] = render_to_string(
         'videos/_offsite_widget.html',
         {'embed_version': settings.EMBED_JS_VERSION,
-         'embed_params': embed_params,
+         'embed_params': json(embed_params),
          'MEDIA_URL': settings.MEDIA_URL})
     context["share_panel_email_url"] = email_url
     context["share_panel_permalink"] = permalink
