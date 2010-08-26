@@ -75,23 +75,21 @@
         <span>Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}</span>
     </h2>
 
-    {% block breadcrumb %}
-        <ul class="breadcrumb"> 
-          <li>
-              <a href="{{ history_link }}">
-                  {{ first_version.language_display }} Subtitles
-              </a>
-          </li>
-          <li>
-              <a href="{{ history_link }}#revisions">
-                  Revision History
-              </a>
-          </li>          
-          <li>
-              <a href="#" class="nohover">Comparing Revision #{{ first_version.version_no }} & #{{ second_version.version_no }}</a>
-          </li>
-        </ul>
-    {% endblock %}
+    <ul class="breadcrumb"> 
+      <li>
+          <a href="{{ language.get_absolute_url }}">
+              {{ language.language_display }} Subtitles
+          </a>
+      </li>
+      <li>
+          <a href="{{ language.get_absolute_url }}#revisions">
+              Revision History
+          </a>
+      </li>          
+      <li>
+          <a href="#" class="nohover">Comparing Revision #{{ first_version.version_no }} & #{{ second_version.version_no }}</a>
+      </li>
+    </ul>
     
     <div style="clear: both"></div>
     
@@ -111,7 +109,7 @@
                 Submit a new edit based on this version (#{{ second_version.version_no }})
             </a>
             {% if second_version.next_version %}
-                <a href="{% block second_roolback_link %}{% url videos:rollback second_version.pk %}{% endblock %}" class="roll_back">
+                <a href="{% url videos:rollback second_version.pk %}" class="roll_back">
                     Roll back to version (#{{ second_version.version_no }})
                 </a>
             {% endif %}
@@ -138,7 +136,7 @@
                 <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
                 {% endif %}
                   <span {% if item.2.text %}class="time_change"{% endif %}>
-                    {{ item.1.text }}
+                    {{ item.1.subtitle_text }}
                   </span>
             </li>
           {% endfor %}
@@ -163,18 +161,13 @@
                 Submit a new edit based on this version (#{{ first_version.version_no }})
             </a>
             {% if first_version.next_version %}
-                <a href="{% block first_roolback_link %}{% url videos:rollback first_version.pk %}{% endblock %}" class="roll_back">
+                <a href="{% url videos:rollback first_version.pk %}" class="roll_back">
                     Roll back to version (#{{ first_version.version_no }})
                 </a>
             {% endif %}
         </div>
         
         <ul class="revision_list table_body">
-
-
-
-
-
 
           {% for item in captions %}
             <li {% cycle 'class="even"' '' %}>
@@ -196,23 +189,10 @@
                 <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
                 {% endif %}
                   <span {% if item.2.text %}class="time_change"{% endif %}>
-                    {{ item.0.text }}
+                    {{ item.0.subtitle_text }}
                   </span>
             </li>
           {% endfor %}
-
-
-
-
-
-
         </ul>
     </div>    
-
-
-
-
-
-
-
 {% endblock %}

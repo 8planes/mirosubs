@@ -135,10 +135,15 @@ class UserTestResultForm(forms.ModelForm):
         return obj
 
 class VideoForm(forms.ModelForm):
+    
     class Meta:
         model = Video
         fields = ('video_url',)
-        
+    
+    def __init__(self, *args, **kwargs):
+        super(VideoForm, self).__init__(*args, **kwargs)
+        self.fields['video_url'].required = True
+    
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
         if 'youtube.com' in video_url and not get_video_id(video_url):

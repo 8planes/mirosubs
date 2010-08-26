@@ -537,7 +537,11 @@ class SubtitleVersion(models.Model):
     class Meta:
         ordering = ['-version_no']
         unique_together = (('language', 'version_no'),)
-
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('videos:revision', [self.pk])
+    
     def revision_time(self):
         today = date.today()
         yesterday = today - timedelta(days=1)
@@ -624,7 +628,7 @@ class SubtitleVersion(models.Model):
         cls = self.__class__
         latest_subtitles = self.language.latest_version()
         new_version_no = latest_subtitles.version_no + 1
-        note = 'rollback to version #%s' % self.version_no
+        note = u'rollback to version #%s' % self.version_no
         new_version = cls(language=self.language, version_no=new_version_no, \
             datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
