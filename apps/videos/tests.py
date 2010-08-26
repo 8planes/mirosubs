@@ -16,19 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
-from videos.models import Video
+from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE
 from apps.auth.models import CustomUser as User
 from youtube import get_video_id
 from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser
+from django.core.urlresolvers import reverse
+from django.core import mail
+from videos.forms import SubtitlesUploadForm
 
 class SubtitleParserTest(TestCase):
     
@@ -120,3 +115,107 @@ class VideoTest(TestCase):
         more_video, created = Video.get_or_create_for_url(video_url, self.user)
         self.failIf(created)
         self.failUnlessEqual(video, more_video)        
+    
+class ViewsTest(TestCase):
+    
+    fixtures = ['test.json']
+    
+    def setUp(self):
+        self.auth = dict(username='admin', password='admin')
+        self.user = User.objects.get(username=self.auth['username'])
+        self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
+    
+    def test_index(self):
+        response = self.client.get(reverse('videos.views.index'))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_feedback(self):
+        data = {
+            'email': 'test@test.com',
+            'message': 'Test'
+        }
+        response = self.client.post(reverse('videos:feedback'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(mail.outbox), 2)
+    
+    def test_ajax_change_video_title(self):
+        video = Video.objects.get(video_id='S7HMxzLmS9gw')
+        data = {
+            'video_id': video.video_id,
+            'title': 'New title'
+        }
+        response = self.client.post(reverse('videos:ajax_change_video_title'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(mail.outbox), 1)
+        
+        try:
+            Action.objects.get(video=video, \
+                               new_video_title=data['title'], \
+                               action_type=Action.CHANGE_TITLE)
+        except Action.DoesNotExist:
+            self.fail()
+            
+    def _test_create(self):
+        self.client.login(**self.auth)
+        url = reverse('videos:create')
+        
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        
+        data = {
+            'video_url': 'http://www.youtube.com/watch?v=osexbB_hX4g&feature=popular'
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        
+        try:
+            video = Video.objects.get(youtube_videoid='osexbB_hX4g', video_type=VIDEO_TYPE_YOUTUBE)
+        except Video.DoesNotExist:
+            self.fail()
+        
+        self.assertEqual(response['Location'], 'http://testserver'+video.get_absolute_url())
+        
+        len_before = Video.objects.count()    
+        data = {
+            'video_url': 'http://www.youtube.com/watch?v='+self.video.youtube_videoid
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len_before, Video.objects.count())
+        self.assertEqual(response['Location'], 'http://testserver'+self.video.get_absolute_url())
+        
+    def test_video(self):
+        response = self.client.get(reverse('videos:video', args=[self.video.video_id]))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_video_list(self):
+        response = self.client.get(reverse('videos:list'))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_actions_list(self):
+        response = self.client.get(reverse('videos:actions_list'))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_upload_subtitles(self):
+        import os.path
+        response = self.client.get(reverse('videos:upload_subtitles'))
+        self.assertEqual(response.status_code, 302)
+        
+        self.client.login(**self.auth)
+        
+        data = {
+            'video': self.video.id,
+            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
+        }
+        self.assertEqual(self.video.subtitle_language(), None)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        
+        self.video = Video.objects.get(id=self.video.id)
+        language = self.video.subtitle_language()
+        version = language.latest_version()
+        self.assertEqual(version.version_no, 0)
+        self.assertEqual(version.subtitles().count(), 32)
+    
+
+    
