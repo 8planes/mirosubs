@@ -255,9 +255,7 @@ class Video(models.Model):
     def captions_and_translations(self, language_code, version=None):
         """(VideoCaption, Translation) pair list
 
-        Returns (VideoCaption, Translation) tuple list, where the 
-        Translation in each tuple might be None if there's no trans 
-        for the caption
+        Returns (VideoCaption, Translation) tuple list
         """
         return self.make_captions_and_translations(
             self.captions(), self.translations(language_code, version))
@@ -283,9 +281,9 @@ class Video(models.Model):
         translations_dict = dict([(trans.caption_id, trans) for
                                   trans in translations])
         return [(subtitle,
-                 None if subtitle.caption_id not in translations_dict
-                 else translations_dict[subtitle.caption_id])
-                for subtitle in subtitles]
+                 translations_dict[subtitle.caption_id])
+                for subtitle in subtitles 
+                if (subtitle.caption_id in translations_dict)]
 
     def translations(self, language_code, version=None):
         """Returns TranslationVersion for language_code, or None if none found 

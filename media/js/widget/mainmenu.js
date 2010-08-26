@@ -129,8 +129,9 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
     this.removeChildren(true);
     var mv = mirosubs.MainMenu.MenuValues_;
     if (this.showingSubs_) {
-        this.addChild(new goog.ui.MenuItem(
-            'Edit subs', mv.EDIT_SUBTITLES), true);
+        if (this.isSubtitled_)
+            this.addChild(new goog.ui.MenuItem(
+                'Edit subs', mv.EDIT_SUBTITLES), true);
         this.addChild(new goog.ui.MenuItem(
             'Turn off subs', mv.TURNOFFSUBS), true);
         this.addChild(new goog.ui.MenuSeparator(), true);
