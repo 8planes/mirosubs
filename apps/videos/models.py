@@ -238,11 +238,8 @@ class Video(models.Model):
         """Subtitling state for this video 
         """
 
-        original_language = self._original_subtitle_language()
-        if original_language is None:
-            return NO_SUBTITLES
-        elif original_language.is_complete:
-            return SUBTITLES_FINISHED
+        return NO_SUBTITLES if self.latest_finished_version() \
+            is None else SUBTITLES_FINISHED
 
     def _original_subtitle_language(self):
         if not hasattr(self, '_original_subtitle'):
@@ -274,10 +271,15 @@ class Video(models.Model):
         return None if language is None else language.latest_finished_version()
 
     def subtitles(self, version_no=None, language_code=None):
-        return self.version(version_no, language_code).subtitles()
+        version = self.version(version_no, language_code)
+        if version:
+            return version.subtitles()
+        else:
+            return Subtitle.objects.none()
 
     def latest_finished_subtitles(self, language_code=None):
-        return self.latest_finished_version(language_code).subtitles()
+        version = self.latest_finished_version(language_code)
+        return [] if version is None else version.subtitles()
 
     def null_subtitles(self, user, language_code=None):
         """Returns NullVideoCaptions for user, or None if none exist."""
@@ -391,19 +393,10 @@ class Video(models.Model):
         self.writelock_time = None
 
     def notification_list(self, exclude=None):
-        if self.original_subtitle_language():
-            qs = SubtitleVersion.objects.filter(language=self.original_subtitle_language())
+        if self.subtitle_language():
+            return self.subtitle_language().notification_list(exclude)
         else:
-            qs = SubtitleVersion.objects.none()
-        not_send = StopNotification.objects.filter(video=self) \
-            .values_list('user_id', flat=True)         
-        users = []
-        for item in qs:
-            if item.user.changes_notification \
-                and not item.user in users and not item.user.id in not_send \
-                and not exclude == item.user:
-                users.append(item.user)
-        return users
+            return []
                     
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
@@ -455,6 +448,9 @@ class SubtitleLanguage(models.Model):
 
     class Meta:
         unique_together = (('video', 'language'),)
+    
+    def __unicode__(self):
+        return '%s(%s)' % (self.video, self.language_display())
     
     @models.permalink
     def get_absolute_url(self):
@@ -540,11 +536,26 @@ class SubtitleLanguage(models.Model):
         else:
             return 0
 
+    def notification_list(self, exclude=None):
+        qs = self.subtitleversion_set.all()
+        not_send = StopNotification.objects.filter(video=self.video) \
+            .values_list('user_id', flat=True)
+        for_check = [item.user for item in qs]
+        self.video.owner and for_check.append(self.video.owner)        
+        users = []
+        for user in for_check:
+            if user.changes_notification \
+                and not user in users and not user.id in not_send \
+                and not exclude == user:
+                users.append(user)
+        return users
+
 class SubtitleVersion(models.Model):
     language = models.ForeignKey(SubtitleLanguage)
     version_no = models.PositiveIntegerField(default=0)
     datetime_started = models.DateTimeField()
-    user = models.ForeignKey(User)
+    # note: cannot possibly be null for finished SubtitleVersions.
+    user = models.ForeignKey(User, null=True)
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True)
     text_change = models.FloatField(null=True, blank=True)
@@ -554,7 +565,14 @@ class SubtitleVersion(models.Model):
     class Meta:
         ordering = ['-version_no']
         unique_together = (('language', 'version_no'),)
-
+    
+    def __unicode__(self):
+        return '%s #%s' % (self.language, self.version_no)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('videos:revision', [self.pk])
+    
     def revision_time(self):
         today = date.today()
         yesterday = today - timedelta(days=1)
@@ -641,7 +659,7 @@ class SubtitleVersion(models.Model):
         cls = self.__class__
         latest_subtitles = self.language.latest_version()
         new_version_no = latest_subtitles.version_no + 1
-        note = 'rollback to version #%s' % self.version_no
+        note = u'rollback to version #%s' % self.version_no
         new_version = cls(language=self.language, version_no=new_version_no, \
             datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
@@ -902,7 +920,7 @@ class TranslationLanguage(models.Model):
                 return self.translationversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
             pass
-
+    
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(VersionModel):
     """Snapshot of translations for a (video, language) pair at the end of a translating session.
@@ -1084,7 +1102,7 @@ class Subtitle(models.Model):
     end_time = models.FloatField(null=True)
     
     class Meta:
-        ordering = ['start_time']
+        ordering = ['subtitle_order']
     
     def duplicate_for(self, new_version):
         return Subtitle(version=new_version,

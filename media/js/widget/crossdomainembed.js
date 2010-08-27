@@ -30,6 +30,7 @@ mirosubs.widget.CrossDomainEmbed.embed =
         debugWindow.init();
         mirosubs.DEBUG = true;
     }
+    mirosubs.IS_NULL = !!widgetConfig['null_widget'];
     var widget = new mirosubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
 };

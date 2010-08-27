@@ -120,7 +120,7 @@
 
 {% block title %}
     {% if language.is_original %}
-        {{ video.title_display }} with Original subtitles | Universal Subtitles
+        {{ video.title_display }} with subtitles | Universal Subtitles
     {% else %}
         {{ video.title_display }} with {{ language.get_language_display }} subtitles | Universal Subtitles
     {% endif %}
@@ -129,7 +129,8 @@
 {% block main_content %}
     <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
 
-    <ul class="breadcrumb"> 
+    <ul class="breadcrumb">
+        <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
         <li>{{ language.language_display }} Subtitles</li>
     </ul>
 
@@ -156,9 +157,9 @@
         
         {% if last_version.subtitles %}
             <span class="download">Download Subtitles</span> 
-            <a href="{% url download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a> / 
-            <a href="{% url download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a> /
-            <a href="{% url download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a>
+            <a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a> / 
+            <a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a> /
+            <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a>
         {% endif %}
       </div>
     </div>

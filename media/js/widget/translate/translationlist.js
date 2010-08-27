@@ -30,6 +30,11 @@ mirosubs.translate.TranslationList = function(subtitles,
      * Array of subtitles in json format
      */
     this.subtitles_ = subtitles;
+    goog.array.sort(
+        this.subtitles_,
+        function(a, b) {
+            return a['sub_order'] - b['sub_order'];
+        });
     /**
      * @type {Array.<mirosubs.translate.TranslationWidget>}
      */

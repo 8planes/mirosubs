@@ -65,38 +65,36 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2>Revision #{{ version.version_no }} - {{ version.revision_time }}</h2>
+    <h2>Revision #{{ version.version_no }} - {{ version.datetime_started|date:"H:i, j F Y" }}</h2>
     {{ video }}
     <br/><br/>
 
-    {% block breadcrumb %}
-        <ul class="breadcrumb"> 
-          <li><a href="{% url videos:history video_id=video.video_id %}">Original Subtitles</a></li>
-          <li>
-              <a href="{% url videos:history video_id=video.video_id %}#revisions">
-                  Revision History
-              </a>
-          </li>           
-          <li><a href="#" class="nohover">Revision #{{ version.version_no }}</a></li>
-        </ul>
-    {% endblock %}
+    <ul class="breadcrumb">
+      <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
+      <li><a href="{{ language.get_absolute_url }}">{{ language.language_display }} Subtitles</a></li>
+      <li>
+          <a href="{{ language.get_absolute_url }}#revisions">
+              Revision History
+          </a>
+      </li>           
+      <li>Revision #{{ version.version_no }}</li>
+    </ul>
         
     {% if next_version %}
         <div class="viewing_old">
-            This is an old revision of {% if version.language %}{{ version.language.get_language_display }}
-            {% else %}original{% endif %} language subtitles for "{{ video }}", 
+            This is an old revision of {{ language.language_display }}
+            language subtitles for "{{ video }}", 
             as edited by {{ version.user }} at {{ version.datetime_started|date:"H:i, j F Y" }}. It may
             differ significantly from the current revision.
         </div>
     {% endif %}
     
-    {% block navigation %}
         <ul class="pag" style="width: 420px">
             
           {% if prev_version %}
               <li class="previous">
                 &#8592; 
-                <a href="{% url videos:revision pk=prev_version.pk %}">
+                <a href="{{ prev_version.get_absolute_url }}">
                     Compare #{{ version.version_no }} to #{{ prev_version.version_no }}
                 </a>
               </li>
@@ -104,20 +102,19 @@
           
           {% if next_version %}
               <li class="next">
-                <a href="{% url videos:revision pk=next_version.pk %}">
+                <a href="{{ next_version.get_absolute_url }}">
                     Compare #{{ version.version_no }} to #{{ next_version.version_no }}
                 </a> &#8594;              
               </li>
           {% endif %}
           
           <li class="current">
-            <a href="{% url videos:revision pk=latest_version.pk %}">
+            <a href="{{ latest_version.get_absolute_url }}">
                Compare #{{ version.version_no }} to #{{ latest_version.version_no }}(current)
             </a>              
           </li>
           
         </ul>
-    {% endblock %}
     
     <div class="left_column">
         <br />
@@ -130,18 +127,18 @@
           <span>Submit a new edit based on this version (#{{ version.version_no }})</span>
       </a>
       {% if next_version %}
-      <a href="{% block roolback_link %}{% url videos:rollback version.pk %}{% endblock %}" class="roll_back">
+      <a href="{% url videos:rollback version.pk %}" class="roll_back">
           <span>Roll back to version (#{{ version.version_no }})</span>
       </a>
       {% endif %}
     </div>
     <div class="clearboth">&nbsp;</div>
-    <a href="{% block history_link %}{% url videos:history video_id=video.video_id %}{% endblock %}#revisions" class="return_history floatright">
+    <a href="{{ language.get_absolute_url }}#revisions" class="return_history floatright">
         &lt;&lt; See full revision history
     </a>
     
     <ul class="revision_list">
-      {% for item in version.captions %}
+      {% for item in version.subtitles %}
         <li {% cycle 'class="even"' '' %}>
           {% if item.display_time or item.display_end_time %}
             <span class="time-span time_link">
@@ -154,7 +151,7 @@
                     <span class="badgy end">{{ item.display_end_time }}</span> 
                 {% endif %}
             </span>          
-          {% endif %} &gt; {{ item.text|linebreaksbr }}
+          {% endif %} &gt; {{ item.subtitle_text|linebreaksbr }}
         </li>
       {% endfor %}
     </ul>

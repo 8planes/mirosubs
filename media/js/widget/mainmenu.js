@@ -25,7 +25,7 @@ goog.provide('mirosubs.MainMenu');
  *     json translation languages, where each language
  *     has a code and name.
  */
-mirosubs.MainMenu = function(videoID, nullWidget,
+mirosubs.MainMenu = function(videoID,
                              isSubtitled, opt_translationLanguages) {
     goog.ui.PopupMenu.call(this);
     // FIXME: is there a better way to do this rather than setting globals?
@@ -33,7 +33,6 @@ mirosubs.MainMenu = function(videoID, nullWidget,
     goog.ui.MenuItemRenderer.CSS_CLASS = goog.getCssName('mirosubs-langmenuitem');
     goog.ui.MenuSeparatorRenderer.CSS_CLASS = goog.getCssName('mirosubs-langmenusep');
     this.videoID_ = videoID;
-    this.nullWidget_ = nullWidget;
     this.isSubtitled_ = isSubtitled;
     this.translationLanguages_ = opt_translationLanguages || [];
     this.currentLangCode_ = null;
@@ -169,7 +168,7 @@ mirosubs.MainMenu.prototype.setMenuItems_ = function() {
 mirosubs.MainMenu.prototype.createDownloadSRTLink_ = function() {
     var url = [mirosubs.siteURL(),
                "/widget/download_",
-               (this.nullWidget_ ? "null_" : ""),
+               (mirosubs.IS_NULL ? "null_" : ""),
                "srt/?video_id=",
                '' + this.videoID_].join('');
     if (this.currentLangCode_)

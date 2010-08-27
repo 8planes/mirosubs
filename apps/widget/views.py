@@ -23,11 +23,15 @@ from django.template import RequestContext
 from videos import models
 from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt, SSASubtitles
 import simplejson as json
-from widget import rpc as rpc_views
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import widget
 from django.shortcuts import get_object_or_404
+from widget.rpc import Rpc
+from widget.null_rpc import NullRpc
+
+rpc_views = Rpc()
+null_rpc_views = NullRpc()
 
 def embed(request, version_no=''):
     context = widget.add_offsite_js_files({})
@@ -163,21 +167,23 @@ def null_srt(request):
     return response
 
 @csrf_exempt
-def rpc(request, method_name):
+def rpc(request, method_name, null=False):
     args = { 'request': request }
     for k, v in request.POST.items():
         args[k.encode('ascii')] = json.loads(v)
-    func = getattr(rpc_views, method_name)
+    rpc_module = null_rpc_views if null else rpc_views
+    func = getattr(rpc_module, method_name)
     result = func(**args)
     return HttpResponse(json.dumps(result), "application/json")
 
 @csrf_exempt
-def xd_rpc(request, method_name):
+def xd_rpc(request, method_name, null=False):
     args = { 'request' : request }
     for k, v in request.POST.items():
         if k[0:4] == 'xdp:':
             args[k[4:].encode('ascii')] = json.loads(v)
-    func = getattr(rpc_views, method_name)
+    rpc_module = null_rpc_views if null else rpc_views
+    func = getattr(rpc_module, method_name)
     result = func(**args)
     params = {
         'request_id' : request.POST['xdpe:request-id'],
@@ -187,13 +193,14 @@ def xd_rpc(request, method_name):
                               widget.add_offsite_js_files(params), 
                               context_instance = RequestContext(request))
 
-def jsonp(request, method_name):
+def jsonp(request, method_name, null=False):
     callback = request.GET['callback']
     args = { 'request' : request }
     for k, v in request.GET.items():
         if k != 'callback':
             args[k.encode('ascii')] = json.loads(v)
-    func = getattr(rpc_views, method_name)
+    rpc_module = null_rpc_views if null else rpc_views
+    func = getattr(rpc_module, method_name)
     result = func(**args)
     return HttpResponse(
         "{0}({1});".format(callback, json.dumps(result)),

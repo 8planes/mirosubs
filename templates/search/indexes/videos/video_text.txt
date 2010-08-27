@@ -1,4 +1,1 @@
 {{ object }}
-{% for item in object.captions.videocaption_set.all %}
-    {{ item.caption_text }}
-{% endfor %}

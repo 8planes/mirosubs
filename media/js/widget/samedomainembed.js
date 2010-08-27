@@ -27,6 +27,7 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
         debugWindow.init(); 
         mirosubs.DEBUG = true;
     }
+    mirosubs.IS_NULL = !!widgetConfig['null_widget'];
     if (widgetConfig['returnURL'])
         mirosubs.returnURL = widgetConfig['returnURL'];
     var widget = new mirosubs.widget.Widget(widgetConfig);

@@ -1,0 +1,4 @@
+{{ object.language_display }}
+{% for item in object.latest_finished_version.subtitles %}
+    {{ item.subtitle_text }}
+{% endfor %}
