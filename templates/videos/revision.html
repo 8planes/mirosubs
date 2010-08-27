@@ -69,7 +69,8 @@
     {{ video }}
     <br/><br/>
 
-    <ul class="breadcrumb"> 
+    <ul class="breadcrumb">
+      <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
       <li><a href="{{ language.get_absolute_url }}">{{ language.language_display }} Subtitles</a></li>
       <li>
           <a href="{{ language.get_absolute_url }}#revisions">
