@@ -126,11 +126,13 @@ def video(request, video_id):
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    from django.db.models import Count, Q
-    try:
-        page = int(request.GET['page'])
-    except (ValueError, TypeError, KeyError):
-        page = 1
+    page = request.GET.get('page')
+    if not page == 'last':
+        try:
+            page = int(page)
+        except (ValueError, TypeError, KeyError):
+            page = 1
+            
     qs = Video.objects.all().extra(select={'translation_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
@@ -360,10 +362,12 @@ def test_form_page(request):
 def search(request):
     q = request.REQUEST.get('q')
 
-    try:
-        page = int(request.GET['page'])
-    except (ValueError, TypeError, KeyError):
-        page = 1  
+    page = request.GET.get('page')
+    if not page == 'last':
+        try:
+            page = int(page)
+        except (ValueError, TypeError, KeyError):
+            page = 1
           
     if q:
         qs = SearchQuerySet().auto_query(q).highlight()
