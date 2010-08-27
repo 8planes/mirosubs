@@ -1,5 +1,5 @@
 <p>
-    Dear {{ user }}, <br/>
+    Dear {{ user }}, <br/><br/>
     A transcription or translation you contributed to 
     has been edited by {{ version.user }}. <br/>
     It would be great if you could review their changes for quality. <br/>
@@ -16,6 +16,9 @@
     To stop receiving these emails, go to your preferences page and uncheck
     "receive notifications":<br/><br/>
     <a href="http://{{ domain }}{% url profiles:my_profile %}">My profile / preferences</a>
+</p>
+<p>
+    <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">Don't send any more emails about this particular video.</a>
 </p>
 <p>
     ##SUMMARY OF CHANGES##<br/>
@@ -38,7 +41,4 @@
 <p>
     To view the current and previous versions side by side, follow this 
     <a href="http://{{ domain }}{% url profiles:my_profile %}">link</a>.
-</p>
-<p>
-    <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">Don't send any more emails about this particular video.</a>
 </p>
