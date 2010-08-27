@@ -1,15 +1,10 @@
-{% if translation %}
-    {% url videos:translation_diffing version.pk old_version.pk as diffing_url %}
-{% else %}
-    {% url videos:diffing version.pk old_version.pk as diffing_url %}
-{% endif %}
 <p>
     Dear {{ user }}, <br/>
     A transcription or translation you contributed to 
     has been edited by {{ version.user }}. <br/>
     It would be great if you could review their changes for quality. <br/>
     Click here to see the latest version side by side with the previous version:<br/><br/>
-    <a href="http://{{ domain }}{{ diffing_url }}">Compare versions side-by-side</a>.
+    <a href="http://{{ domain }}{% url videos:diffing version.pk old_version.pk %}">Compare versions side-by-side</a>.
 </p>
 <p>
     We've also included a rough summary of the changes below.  Thanks so much!<br/>
@@ -33,8 +28,8 @@
         {% for item in captions %}
             {% if item.2 %}
                 <p>
-                    NEW: {{ item.0.text }}<br/>
-                    OLD: {{ item.1.text }}
+                    NEW: {{ item.0.subtitle_text }}<br/>
+                    OLD: {{ item.1.subtitle_text }}
                 </p>
             {% endif %}
         {% endfor %}

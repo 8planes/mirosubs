@@ -1,10 +1,10 @@
 <p>
     Dear {{ user }},<br/> 
-    Great news!  {{ version.user }} has just started a {{ language.get_language_display }} 
+    Great news!  {{ version.user }} has just started a {{ language.language_display }} 
     translation of your video{% if video.title %}, "{{ video.title }}"{% endif %}.
     <br/>
     You can review the translation and thank them for their contribution on this page: <br/>
-    <a href="http://{{ domain }}{% url videos:last_translation_revision video.video_id language.language %}">Translation homepage</a> 
+    <a href="http://{{ domain }}{{ language.get_absolute_url }}">Translation homepage</a> 
 </p>
 <p>
     Thanks for your great work,

@@ -377,20 +377,9 @@ class Video(models.Model):
 
     def notification_list(self, exclude=None):
         if self.subtitle_language():
-            qs = SubtitleVersion.objects.filter(language=self.subtitle_language())
+            return self.subtitle_language().notification_list(exclude)
         else:
-            qs = SubtitleVersion.objects.none()
-        not_send = StopNotification.objects.filter(video=self) \
-            .values_list('user_id', flat=True)
-        for_check = [item.user for item in qs]
-        self.owner and for_check.append(self.owner)        
-        users = []
-        for user in for_check:
-            if user.changes_notification \
-                and not user in users and not user.id in not_send \
-                and not exclude == user:
-                users.append(user)
-        return users
+            return []
                     
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
@@ -529,6 +518,20 @@ class SubtitleLanguage(models.Model):
                 return 0 
         else:
             return 0
+
+    def notification_list(self, exclude=None):
+        qs = self.subtitleversion_set.all()
+        not_send = StopNotification.objects.filter(video=self.video) \
+            .values_list('user_id', flat=True)
+        for_check = [item.user for item in qs]
+        self.video.owner and for_check.append(self.video.owner)        
+        users = []
+        for user in for_check:
+            if user.changes_notification \
+                and not user in users and not user.id in not_send \
+                and not exclude == user:
+                users.append(user)
+        return users
 
 class SubtitleVersion(models.Model):
     language = models.ForeignKey(SubtitleLanguage)
@@ -900,7 +903,7 @@ class TranslationLanguage(models.Model):
                 return self.translationversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
             pass
-
+    
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(VersionModel):
     """Snapshot of translations for a (video, language) pair at the end of a translating session.
