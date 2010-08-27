@@ -116,11 +116,11 @@ def video(request, video_id):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
-    context['translations'] = video.subtitlelanguage_set.filter(is_complete=True) \
+    context['translations'] = video.subtitlelanguage_set.filter(was_complete=True) \
         .filter(is_original=False)
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
     _add_share_panel_context_for_video(context, video)
-    context['lang_count'] = len(context['translations'])
+    context['lang_count'] = video.subtitlelanguage_set.filter(is_complete=True).count()
     context['original'] = video.subtitle_language()
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
@@ -131,10 +131,12 @@ def video_list(request):
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.filter(Q(subtitlelanguage__is_complete=True, subtitlelanguage__is_original=False) \
-                              |Q(subtitlelanguage__isnull=True)\
-                              |Q(subtitlelanguage__is_original=True)) \
-        .annotate(translation_count=Count('subtitlelanguage')) 
+    qs = Video.objects.all().extra(select={'translation_count': 'SELECT COUNT(id) '+
+        'FROM videos_subtitlelanguage WHERE '+
+        'videos_subtitlelanguage.video_id = videos_video.id AND '+
+        'videos_subtitlelanguage.was_complete AND '+
+        'NOT videos_subtitlelanguage.is_original'})
+
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
