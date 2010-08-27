@@ -33,6 +33,7 @@
         
         <div class="left_column">
             <h3>Personal Info</h3>
+            {{ form.non_field_errors }}
             <p>
                 {{ form.first_name.errors }}
                 {{ form.first_name.label_tag }}
@@ -116,6 +117,7 @@
             </div>
             <ul class="language_list">
                 {{ formset.management_form }}
+                {{ formset.non_field_errors }}
                 {% for form in formset.forms %}
                     <li>
                         {{ form.non_field_errors }}
