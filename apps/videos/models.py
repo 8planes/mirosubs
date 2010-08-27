@@ -254,7 +254,11 @@ class Video(models.Model):
         return None if language is None else language.latest_finished_version()
 
     def subtitles(self, version_no=None, language_code=None):
-        return self.version(version_no, language_code).subtitles()
+        version = self.version(version_no, language_code)
+        if version:
+            return version.subtitles()
+        else:
+            return Subtitle.objects.none()
 
     def latest_finished_subtitles(self, language_code=None):
         version = self.latest_finished_version(language_code)
