@@ -49,9 +49,12 @@
                 {{ form.homepage }}
             </p>
             <p>
+                <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}"/>
                 {{ form.picture.errors }}
-                {{ form.picture.label_tag }}
-                {{ form.picture }}
+                <input type="file" id="id_picture" name="picture" size="6"/>
+                <button class="small_button upload-picture1" style="z-index: 1; padding-left: 10px;">
+                    <span><span class="plus"></span>Upload picture</span>
+                </button>             
             </p>
             <p>
                 {{ form.email.errors }}
@@ -92,11 +95,13 @@
                 {{ form.preferred_language.label_tag }}
                 {{ form.preferred_language }}
             </p>
+            {% comment %}
             <p>
                 {{ form.autoplay_preferences.errors }}
                 {{ form.autoplay_preferences.label_tag }}
                 {{ form.autoplay_preferences }}                
             </p>
+            {% endcomment %}
             <h4>Languages I Know</h4>
             <div class="empty-form" style="display: none">
                 <li>
@@ -153,6 +158,9 @@
         $form_count_field.val(form_count);
         var form = empty_form.replace(/__prefix__/g, form_count);
         $('.language_list li:last').after(form);
+        return false;
+    });
+    $('.upload-picture').click(function(){
         return false;
     });
 </script>

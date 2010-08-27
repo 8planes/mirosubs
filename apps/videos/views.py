@@ -21,7 +21,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, Action, StopNotification, SubtitleLanguage
+from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
 import widget
 from django.contrib.sites.models import Site
@@ -131,7 +131,9 @@ def video_list(request):
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.filter(Q(subtitlelanguage__is_complete=True, subtitlelanguage__is_original=False)|Q(subtitlelanguage__isnull=True)) \
+    qs = Video.objects.filter(Q(subtitlelanguage__is_complete=True, subtitlelanguage__is_original=False) \
+                              |Q(subtitlelanguage__isnull=True)\
+                              |Q(subtitlelanguage__is_original=True)) \
         .annotate(translation_count=Count('subtitlelanguage')) 
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
