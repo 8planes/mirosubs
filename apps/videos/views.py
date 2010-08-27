@@ -131,7 +131,9 @@ def video_list(request):
         page = int(request.GET['page'])
     except (ValueError, TypeError, KeyError):
         page = 1
-    qs = Video.objects.filter(Q(subtitlelanguage__is_complete=True, subtitlelanguage__is_original=False)|Q(subtitlelanguage__isnull=True)) \
+    qs = Video.objects.filter(Q(subtitlelanguage__is_complete=True, subtitlelanguage__is_original=False) \
+                              |Q(subtitlelanguage__isnull=True)\
+                              |Q(subtitlelanguage__is_original=True)) \
         .annotate(translation_count=Count('subtitlelanguage')) 
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')

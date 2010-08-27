@@ -443,6 +443,9 @@ class SubtitleLanguage(models.Model):
     class Meta:
         unique_together = (('video', 'language'),)
     
+    def __unicode__(self):
+        return '%s(%s)' % (self.video, self.language_display())
+    
     @models.permalink
     def get_absolute_url(self):
         if self.is_original:
@@ -542,6 +545,9 @@ class SubtitleVersion(models.Model):
     class Meta:
         ordering = ['-version_no']
         unique_together = (('language', 'version_no'),)
+    
+    def __unicode__(self):
+        return '%s #%s' % (self.language, self.version_no)
     
     @models.permalink
     def get_absolute_url(self):
@@ -1076,7 +1082,7 @@ class Subtitle(models.Model):
     end_time = models.FloatField(null=True)
     
     class Meta:
-        ordering = ['start_time']
+        ordering = ['subtitle_order']
     
     def duplicate_for(self, new_version):
         return Subtitle(version=new_version,
