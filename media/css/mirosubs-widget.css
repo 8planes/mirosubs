@@ -866,121 +866,8 @@ margin: 20px 0 0 0px !important;
     height: 300px;
 }
 
-.mirosubs-videoTab-container {
-   height: 32px;
-}
-
-.mirosubs-widget .mirosubs-videoTab {
-    font-size: 10px !important;
-    float: left !important;
-    margin: -5px 0 0 0 !important;
-}
-
-.mirosubs-loginStatus {
-    margin: 0 !important;
-    padding: 5px 8px !important;
-    list-style: none !important;
-    float: left !important;
-    display: none !important;
-}
-
-.mirosubs-loginStatus.notLogged {
-    display: none !important;
-}
-
-.mirosubs-dropdown {
-    width: 250px !important;
-    position: absolute !important;
-    top: 27px !important;
-    left: 0 !important;
-    border: 1px solid #aaa !important;
-    border-top: none !important;
-    background: #fefefe !important;
-    -moz-border-radius-bottomright: 5px !important;
-    -moz-border-radius-bottomleft: 5px !important;
-    -webkit-border-radius-right-bottom: 5px !important;
-    -webkit-border-radius-left-bottom: 5px !important;
-}
-
-.mirosubs-dropdown ul.mirosubs-languageList {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.mirosubs-dropdown ul.mirosubs-languageList li {
-    list-style: none !important;
-}
-
-.mirosubs-dropdown ul.mirosubs-languageList a {
-    padding: 0 !important;
-    margin: 0 !important;
-    font-size: 11px !important;
-    display: block !important;
-    border-top: 1px solid #ddd !important;
-    text-decoration: none !important;
-    padding: 2px 7px !important;
-}
-
-.mirosubs-dropdown ul.mirosubs-languageList a:hover {
-    text-decoration: underline !important;
-}
-
-.mirosubs-dropdown p {
-    padding: 0 !important;
-    margin: 0 !important;
-    font-size: 11px !important;
-    display: block !important;
-    padding: 2px 7px !important;
-}
-
-.mirosubs-videoTab a {
-    color: #333 !important;
-}
-
-.mirosubs-videoTab a.mirosubs-subtitleMeLink {
-    -moz-border-radius-bottomleft: 5px !important;
-    -moz-border-radius-bottomright: 5px !important;
-    background: #fff url("../images/gradient.png") right 2px repeat-x !important;
-    -webkit-border-bottom-left-radius: 5px !important; 
-    -webkit-border-bottom-rught-radius: 5px !important; 
-    display:block !important;
-    line-height: 1.1em !important;
-    font-weight: bold !important;
-    text-align: center !important;
-    font-size: 12px !important;
-min-width: 150px !important;
-    text-decoration: none !important;
-    border: 3px solid #90b60f !important;
-    border-top: none !important;
-}
-
-.mirosubs-videoTab a.mirosubs-subtitleMeLink img {
-    float: left !important;
-    border: none !important;
-    height: 17px !important;
-    width: 17px !important;
-    margin: 7px 0 0 7px !important;
-}
-
-.mirosubs-videoTab a.mirosubs-subtitleMeLink span {
-    display: block !important;
-    padding: 8px 10px 8px 30px !important;
-    -moz-border-radius-bottomleft: 5px !important;
-    -moz-border-radius-bottomright: 5px !important;
-    -webkit-border-bottom-left-radius: 5px !important; 
-    -webkit-border-bottom-rught-radius: 5px !important; 
-    border-bottom: 1px solid #ddd !important;
-}
 
 
-.mirosubs-subtitleMe a.mirosubs-subtitleMeLink:hover {
-    background: #fff url("../images/arrow.gif") 7px center no-repeat !important;
-}
-
-
-.mirosubs-subtitleMe a.mirosubs-subtitleMeLink:hover span{
-    border-bottom: 1px solid #fff !important;
-}
 
 .mirosubs-captioningArea {
 position: relative !important;
@@ -1177,8 +1064,7 @@ ul.mirosubs-titlesList.sync {
    color: white !important;
    font-weight: normal !important;
    margin: 0 40px;
-   background: #000;
-   opacity: .8;
+    background: url("../images/caption_bg.png") !important;
    -moz-border-radius: 5px !important;
    -webkit-border-radius: 5px !important;
    padding: 10px 3px !important;
@@ -2552,4 +2438,320 @@ overflow: hidden;
 .mirosubs-twitter-share{
     background: url("../images/share_icons.png") 0 -37px no-repeat !important;
 }
+
+
+
+
+
+/*///////////////////////////////////////////////
+
+~ Widget Bar
+
+///////////////////////////////////////////////*/
+
+
+.mirosubs-videoTab-container {
+   height: 32px;
+}
+
+
+
+.mirosubs-loginStatus {
+    margin: 0 !important;
+    padding: 5px 8px !important;
+    list-style: none !important;
+    float: left !important;
+    display: none !important;
+}
+
+.mirosubs-loginStatus.notLogged {
+    display: none !important;
+}
+
+
+
+
+.mirosubs-videoTab{
+width: 100%;
+    margin: -5px 0 0 0 !important;
+}
+
+.mirosubs-videoTab a {
+font-size: 13px;
+background: #333 url("../images/gradient_light.png") 0 0px repeat-x !important;
+text-decoration: none;
+display: block !important;
+color: #fff !important;
+float: left;
+border-right: 1px solid #888;
+}
+
+
+.mirosubs-videoTab a:hover {
+
+background: #333;
+
+}
+
+
+.mirosubs-videoTab a.mirosubs-subtitleMeLink img {
+    float: left !important;
+    border: none !important;
+    height: 17px !important;
+    width: 17px !important;
+    margin: 7px 7px 0 7px !important;
+}
+
+
+
+.mirosubs-widgetBar{
+   font-family: Arial, Helvetica, sans-serif !important;
+   font-size: 12px !important;
+   color: #000 !important;
+   background: #ccc url("../images/gradient_light.png") 0 0px repeat-x !important;
+   line-height: 16px !important;
+margin: 0;
+float: left;
+min-width: 480px;
+
+}
+
+.mirosubs-widgetBar .mirosubs-languageTrigger,
+.mirosubs-widgetBar .mirosubs-finishTranslation{
+float: left;
+color: #fff;
+width: 50%;
+font-size: 13px;
+background: #333 url("../images/gradient_light.png") 0 0px repeat-x !important;
+text-decoration: none;
+}
+
+
+.mirosubs-tabTextchoose{
+margin-right: 10px !important;
+min-width: 160px;
+}
+
+.mirosubs-tabTextchoose,
+.mirosubs-tabTextfinish{
+
+display: block;
+padding: 8px 12px 8px 5px;
+background: url("../images/white_arrows.png") right -12px no-repeat;
+}
+
+.mirosubs-tabTextfinish {
+padding-right: 25px;
+padding-left: 14px;
+margin-right: 10px;
+background-position: right 10px !important;
+}
+
+
+
+
+.mirosubs-languageTrigger:hover,
+.mirosubs-finishTranslation:hover{
+background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
+}
+
+
+
+
+
+
+.mirosubs-dropdown {
+    position: absolute !important;
+    top: 415px !important;
+    left: 0 !important;
+border: 1px solid;
+width: 100%;
+background: #000;
+}
+
+.mirosubs-dropdown .mirosubs-languageList ul{
+    padding: 0 !important;
+    margin: 0 !important;
+width: 290px;
+background: #fff;
+height: 280px;
+float: left;
+overflow-y: auto;
+}
+
+.mirosubs-dropdown .mirosubs-languageList ul li {
+    list-style: none !important;
+    border-bottom: 1px solid #ddd !important;
+
+}
+
+.mirosubs-dropdown .mirosubs-languageList ul li:hover {
+    list-style: none !important;
+    border-bottom: 1px solid #aaa !important;
+background: url("../images/gradient_light.png") 0 1px repeat-x !important;
+}
+
+.mirosubs-dropdown .mirosubs-languageList li.mirosubs-activeLanguage {
+    list-style: none !important;
+    border-bottom: 1px solid #aaa !important;
+background: url("../images/gradient_light.png") 0 1px repeat-x !important;
+}
+
+
+.mirosubs-dropdown .mirosubs-languageList li.mirosubs-activeLanguage a {
+    text-decoration: none !important;
+font-weight: bold;
+background: url("../images/dropdown_icons.png") 250px -231px no-repeat !important;
+}
+
+
+
+
+.mirosubs-dropdown .mirosubs-languageList ul li a {
+    margin: 0 !important;
+    font-size: 14px !important;
+    display: block !important;
+color: #333;
+    text-decoration: none !important;
+    padding: 10px 0 8px 10px !important;
+}
+
+.mirosubs-dropdown .mirosubs-languageList ul li a:hover {
+    text-decoration: none !important;
+}
+
+
+
+.mirosubs-dropdown .mirosubs-languageList ul li span.mirosubs-languageStatus {
+color: #999;
+font-size: 11px;
+line-height: 1em !important;
+padding-left: 5px;
+}
+
+
+.mirosubs-dropdown .mirosubs-languageList ul li span.mirosubs-languageStatus-auto {
+
+}
+
+
+.mirosubs-asterisk{
+color: red;
+padding-left: 3px;
+}
+
+
+.mirosubs-dropdown .mirosubs-actions{
+margin-left: 290px
+}
+
+
+.mirosubs-dropdown .mirosubs-actions ul{
+margin: 0;
+padding: 5px 0 5px;
+}
+
+.mirosubs-dropdown .mirosubs-actions ul li{
+margin: 0;
+padding: 0;
+list-style: none;
+}
+
+
+.mirosubs-dropdown .mirosubs-actions ul a{
+color: #fff;
+text-decoration: none;
+padding: 5px 4px 5px 40px !important;
+display: block;
+}
+
+
+
+
+.mirosubs-dropdown .mirosubs-actions h5{
+margin: 0;
+padding: 0;
+overflow: hidden;
+padding-top: 35px;
+height: 0;
+color: #fff;
+background: url("../images/tiny_logo.png") 18px 8px no-repeat !important;
+}
+
+
+.mirosubs-dropdown .mirosubs-actions h4{
+margin: 0;
+padding: 5px 4px 5px 20px;
+background: #333;
+color: #999;
+font-size: 11px;
+font-weight: normal;
+letter-spacing: .04em;
+}
+
+
+
+
+
+
+.mirosubs-dropdown .mirosubs-addTranslation{
+background: url("../images/dropdown_icons.png") 19px 7px no-repeat !important;
+color: #a9c712;
+}
+
+
+.mirosubs-dropdown .mirosubs-improveSubtitles{
+background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;
+color: #42bce9;
+}
+
+.mirosubs-dropdown .mirosubs-improveSubtitles{
+background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;
+color: #42bce9;
+}
+
+.mirosubs-dropdown .mirosubs-addTranslation a{
+color: #a9c712 !important;
+}
+
+.mirosubs-dropdown .mirosubs-improveSubtitles a{
+color: #42bce9 !important;
+}
+
+
+.mirosubs-dropdown .mirosubs-subtitleHomepage{
+background: url("../images/dropdown_icons.png") 19px -64px no-repeat !important;
+}
+
+.mirosubs-dropdown .mirosubs-downloadSubtitles{
+background: url("../images/dropdown_icons.png") 19px -100px no-repeat !important;
+}
+
+.mirosubs-dropdown .mirosubs-createAccount{
+background: url("../images/dropdown_icons.png") 19px -137px no-repeat !important;
+}
+
+.mirosubs-dropdown .mirosubs-languagePreferences{
+background: url("../images/dropdown_icons.png") 19px -174px no-repeat !important;
+}
+
+
+
+
+.mirosubs-hintTranslate{
+clear: both;
+padding: 3px 3px 3px 6px;
+font-size: 11px;
+color: #999;
+}
+
+
+
+
+
+
+
+
+
+
 
