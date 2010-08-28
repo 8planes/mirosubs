@@ -61,6 +61,13 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
         else
             throw new Error("Cannot parse vimeo url " + videoURL);
     }
+    else if (/^\s*https?:\/\/(^\.]+\.)?dailymotion/.test(videoURL)) {
+        var videoIDExtract = /dailymotion.com\/video\/([0-9a-z]+)/i.exec(videoURL);
+        if (videoIDExtract)
+            return new mirosubs.video.DailymotionVideoSource(videoIDExtract[1]);
+        else
+            throw new Error("Cannot parse dailymotion url " + videoURL);
+    }
     else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL)) {
         // file/get/ paths from blip.tv are direct file accesses,
         // so give them an Html5VideoSource

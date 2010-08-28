@@ -29,6 +29,7 @@ from gdata.youtube.service import YouTubeService
 from comments.models import Comment
 from vidscraper.sites import blip, google_video, fora, ustream, vimeo
 from youtube import get_video_id
+from dailymotion import DAILYMOTION_REGEX
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -41,6 +42,7 @@ VIDEO_TYPE_GOOGLE = 'G'
 VIDEO_TYPE_FORA = 'F'
 VIDEO_TYPE_USTREAM = 'U'
 VIDEO_TYPE_VIMEO = 'V'
+VIDEO_TYPE_DAILYMOTION = 'D'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
     (VIDEO_TYPE_YOUTUBE, 'Youtube'),
@@ -48,7 +50,8 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_GOOGLE, 'video.google.com'),
     (VIDEO_TYPE_FORA, 'Fora.tv'),
     (VIDEO_TYPE_USTREAM, 'Ustream.tv'),
-    (VIDEO_TYPE_VIMEO, 'Vimeo.com')
+    (VIDEO_TYPE_VIMEO, 'Vimeo.com'),
+    (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
@@ -103,6 +106,8 @@ class Video(models.Model):
             return self.bliptv_fileid
         elif self.video_type == VIDEO_TYPE_VIMEO:
             return self.get_video_url()
+        elif self.video_type == VIDEO_TYPE_DAILYMOTION:
+            return self.get_video_url()
     
     def is_html5(self):
         return self.video_type == VIDEO_TYPE_HTML5
@@ -139,6 +144,8 @@ class Video(models.Model):
             return 'http://blip.tv/file/{0}/'.format(self.bliptv_fileid)
         elif self.video_type == VIDEO_TYPE_VIMEO:
             return 'http://vimeo.com/{0}'.format(self.vimeo_videoid)
+        elif self.video_type == VIDEO_TYPE_DAILYMOTION:
+            return 'http://dailymotion.com/video/{0}'.format(self.dailymotion_videoid)
         else:
             return self.video_url
 
@@ -210,6 +217,14 @@ class Video(models.Model):
                           'allow_community_edits': True})
             # TODO: title and thumbnail -- we can't get them without
             # an application oauth key/secret
+        elif 'dailymotion.com' in parsed_url.netloc and DAILYMOTION_REGEX.match(video_url):
+            dailymotion_videoid = DAILYMOTION_REGEX.match(video_url).group(1)
+            video, created = Video.objects.get_or_create(
+                dailymotion_videoid = dailymotion_videoid,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_DAILYMOTION,
+                          'allow_community_edits': True})
+            # TODO: title and thumbnail -- need dailymotion support in vidscraper
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
