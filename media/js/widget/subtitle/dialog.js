@@ -253,6 +253,10 @@ mirosubs.subtitle.Dialog.prototype.saveWork = function(closeAfterSave) {
             that.getRightPanelInternal().showLoading(false);
             that.setFinishedState_();
         }
+    },
+    function() {
+        that.doneButtonEnabled_ = true;
+        that.getRightPanelInternal().showLoading(false);
     });
 };
 

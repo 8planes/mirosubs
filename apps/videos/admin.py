@@ -17,24 +17,24 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib import admin
-from videos.models import Video, VideoCaptionVersion, TranslationLanguage, TranslationVersion
-
-class TranslationVersionAdmin(admin.ModelAdmin):
-    list_display = ['version_no', 'time_change', 'text_change']
+from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'video_id', 'video_type']
     list_filter = ['video_type']
 
-class VideoCaptionVersionAdmin(admin.ModelAdmin):
-    list_display = ['video', 'version_no', 'user', 'time_change', 'text_change']
-    search_fields = ['video__title', 'video__video_url', 'video__video_id']
+class SubtitleLanguageAdmin(admin.ModelAdmin):
+    list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete']
+    list_filter = ['is_original', 'is_complete']
 
-class TranslationLanguageAdmin(admin.ModelAdmin):
-    list_display = ['video', 'language']
-    search_fields = ['video__title', 'video__video_url', 'video__video_id']
+class SubtitleVersionAdmin(admin.ModelAdmin):
+    list_display = ['language', 'version_no', 'note', 'time_change', 'text_change', 'finished']
+    list_filter = ['finished']
 
-admin.site.register(TranslationVersion, TranslationVersionAdmin)
-admin.site.register(TranslationLanguage, TranslationLanguageAdmin)
+class SubtitleAdmin(admin.ModelAdmin):
+    list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']
+
+admin.site.register(Subtitle, SubtitleAdmin)
+admin.site.register(SubtitleVersion, SubtitleVersionAdmin)    
 admin.site.register(Video, VideoAdmin)
-admin.site.register(VideoCaptionVersion, VideoCaptionVersionAdmin)
+admin.site.register(SubtitleLanguage, SubtitleLanguageAdmin)

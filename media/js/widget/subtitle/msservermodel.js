@@ -32,13 +32,12 @@ goog.provide('mirosubs.subtitle.MSServerModel');
  * @param {string} videoID MiroSubs videoid
  * @param {number} editVersion MiroSubs version number we are editing
  */
-mirosubs.subtitle.MSServerModel = function(videoID, editVersion, isNull) {
+mirosubs.subtitle.MSServerModel = function(videoID, editVersion) {
     goog.Disposable.call(this);
     this.videoID_ = videoID;
     this.editVersion_ = editVersion;
     this.initialized_ = false;
     this.finished_ = false;
-    this.isNull_ = isNull;
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
@@ -71,25 +70,26 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork, loginNagFn
         (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
 };
 
-mirosubs.subtitle.MSServerModel.prototype.finish = function(callback) {
+mirosubs.subtitle.MSServerModel.prototype.finish = function(successCallback, opt_cancelCallback) {
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
-    this.finished_ = true;
     this.stopTimer_();
     var that = this;
     this.loginThenAction_(function() {
             var $e = goog.json.serialize;
             var saveArgs = that.makeSaveArgs_();
-            mirosubs.Rpc.call('finished_captions' + (that.isNull_ ? '_null' : ''), 
-                              saveArgs,
-                              function(result) {
-                                  if (result['response'] != 'ok')
-                                      // this should never happen.
-                                      alert('Problem saving subtitles. Response: ' +
-                                            result["response"]);
-                                  callback();
-                              });
-        }, true);
+            mirosubs.Rpc.call(
+                'finished_subtitles', 
+                saveArgs,
+                function(result) {
+                    if (result['response'] != 'ok')
+                        // this should never happen.
+                        alert('Problem saving subtitles. Response: ' +
+                              result["response"]);
+                    this.finished_ = true;
+                    successCallback();
+                });
+            }, opt_cancelCallback, true);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
@@ -97,34 +97,35 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ = 
-    function(action, opt_forceLogin) {
+    function(successAction, opt_cancelAction, opt_forceLogin) {
 
     mirosubs.subtitle.MSServerModel.logger_.info(
         "loginThenAction_ for " + mirosubs.currentUsername);
     if (mirosubs.currentUsername == null) {
         // first update lock anyway.
-        if (!this.isNull_)
-            mirosubs.Rpc.call("update_video_lock", 
+        if (!mirosubs.IS_NULL)
+            mirosubs.Rpc.call("update_lock", 
                               { 'video_id': this.videoID_ });
         if (mirosubs.isLoginAttemptInProgress())
             return;
         if (opt_forceLogin) {
-            alert("In order to finish and save your work, you need to log in.");
             mirosubs.login(function(loggedIn) {
                 if (loggedIn)
-                    action();
-            });
+                    successAction();
+                else if (opt_cancelAction)
+                    opt_cancelAction();
+            }, "In order to finish and save your work, you need to log in.");
         }
     }
     else
-        action();
+        successAction();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
     // TODO: at some point in future, account for possibly failed save.
     var $e = goog.json.serialize;
     var saveArgs = this.makeSaveArgs_();
-    mirosubs.Rpc.call('save_captions' + (this.isNull_ ? '_null' : ''), 
+    mirosubs.Rpc.call('save_subtitles',
                       saveArgs, 
                       function(result) {
                           if (result['response'] != 'ok')
@@ -144,11 +145,10 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
     };
     return {
         'video_id': this.videoID_,
-            'version_no': this.editVersion_,
-            'deleted': toJsonCaptions(work.deleted),
-            'inserted': toJsonCaptions(work.neu),
-            'updated': toJsonCaptions(work.updated)
-            };
+        'deleted': toJsonCaptions(work.deleted),
+        'inserted': toJsonCaptions(work.neu),
+        'updated': toJsonCaptions(work.updated)
+    };
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {

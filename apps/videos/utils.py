@@ -90,7 +90,7 @@ class TtmlSubtitleParser(SubtitleParser):
         
     def _get_data(self, node):
         output = {
-            'caption_text': strip_tags(node.toxml())
+            'subtitle_text': strip_tags(node.toxml())
         }        
         output['start_time'], output['end_time'] = \
             self._get_time(node.getAttribute('begin'), node.getAttribute('dur'))
@@ -122,7 +122,7 @@ class SrtSubtitleParser(SubtitleParser):
         output = {}
         output['start_time'] = self._get_time(r['s_hour'], r['s_min'], r['s_sec'], r['s_secfr'])
         output['end_time'] = self._get_time(r['e_hour'], r['e_min'], r['e_sec'], r['e_secfr'])
-        output['caption_text'] = self._clean_pattern.sub('', r['text'])
+        output['subtitle_text'] = self._clean_pattern.sub('', r['text'])
         return output
     
 class SsaSubtitleParser(SrtSubtitleParser):

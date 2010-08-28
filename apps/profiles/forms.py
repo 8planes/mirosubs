@@ -73,7 +73,7 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'homepage', 'preferred_language', 'picture', 
-                  'changes_notification', 'biography', 'autoplay_preferences')
+                  'changes_notification', 'biography')
         
     def clean(self):
         current, new, verify = map(self.cleaned_data.get,

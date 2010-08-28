@@ -19,7 +19,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib.sites.models import Site
-from widget.srt_subs import TTMLSubtitles
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -44,19 +43,7 @@ urlpatterns = patterns(
     (r'^widget_demo/$', 'widget.views.widget_demo'),
     (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
     url(r'^onsite_widget/$', 'widget.views.onsite_widget', name='onsite_widget'),
-    url(r'^widget/twitter_login/', 'auth.views.twitter_login', 
-        kwargs={'next': '/widget/close_window/'}),
-    (r'^widget/rpc/xd/(\w+)$', 'widget.views.xd_rpc'),
-    (r'^widget/rpc/xhr/(\w+)$', 'widget.views.rpc'),
-    (r'^widget/rpc/jsonp/(\w+)$', 'widget.views.jsonp'),
-    (r'^widget/login/$', 'django.contrib.auth.views.login'),
-    (r'^widget/close_window/$', 
-     'django.views.generic.simple.direct_to_template', 
-     {'template' : 'widget/close_window.html'}),
-    url(r'^widget/download_srt/$', 'widget.views.srt', name='download_srt'),
-    url(r'^widget/download_ssa/$', 'widget.views.download_subtitles', name='download_ssa'),
-    url(r'^widget/download_ttml/$', 'widget.views.download_subtitles', {'handler': TTMLSubtitles}, name='download_ttml'),
-    (r'^widget/download_null_srt/$', 'widget.views.null_srt'),
+    (r'^widget/', include('widget.urls', namespace='widget', app_name='widget')),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
     (r'^videos/', include('videos.urls', namespace='videos', 

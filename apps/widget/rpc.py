@@ -19,525 +19,231 @@
 from django.conf.global_settings import LANGUAGES
 from videos import models
 from datetime import datetime
-from uuid import uuid4
 import re
 import simplejson as json
 import widget
+from widget.base_rpc import BaseRpc
 from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
 from django.conf import settings
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
-def show_widget(request, video_url, null_widget, base_state=None):
-    #FIXME: shorten this method.
-    owner = request.user if request.user.is_authenticated() else None
-    video, created = models.Video.get_or_create_for_url(video_url, owner)
-    video.widget_views_count += 1
-    video.save()
+class Rpc(BaseRpc):
+    def start_editing(self, request, video_id, 
+                      base_version_no=None, language_code=None, 
+                      editing=False):
+        """Called by subtitling widget when subtitling or translation 
+        is to commence or recommence on a video.
+        """
 
-    return_value = {
-            'video_id' : video.video_id,
-            'writelock_expiration' : models.WRITELOCK_EXPIRATION 
-        }
-    if video.video_type == models.VIDEO_TYPE_BLIPTV:
-        return_value['flv_url'] = video.bliptv_flv_url
-    # video_tab corresponds to mirosubs.widget.VideoTab.InitialState in
-    # javascript.
-    video_tab = 0
-    if null_widget:
-        null_captions = None
-        if request.user.is_authenticated:
-            null_captions = video.null_captions(request.user)
-            translation_language_codes = \
-                video.null_translation_language_codes(request.user)
+        self._maybe_add_video_session(request)
+
+        language, can_writelock = self._get_language_for_editing(
+            request, video_id, language_code)
+
+        if not can_writelock:
+            return { "can_edit": False, 
+                     "locked_by" : language.writelock_owner_name }
+
+        version = self._get_version_for_editing(request.user, language, base_version_no)
+
+        existing_subtitles = \
+            [s.to_json_dict(is_dependent_translation=language_code is not None)
+             for s in version.subtitle_set.all()]
+
+        return_dict = { "can_edit" : True,
+                        "version" : version.version_no,
+                        "existing" : existing_subtitles }
+        if editing and language_code is not None:
+            return_dict['existing_captions'] = \
+                self.fetch_subtitles(request, video_id)
+            return_dict['languages'] = \
+                [widget.language_to_map(lang[0], lang[1]) 
+                 for lang in LANGUAGES]
+        return return_dict
+
+    def update_lock(self, request, video_id, language_code=None):
+        language = models.Video.objects.get(
+            video_id=video_id).subtitle_language(language_code)
+        if language.can_writelock(request):
+            language.writelock(request)
+            language.save()
+            return { "response" : "ok" }
         else:
-            translation_language_codes = []
-        if null_captions is None:
-            video_tab = 0
-        else:
-            video_tab = 1
-    else:
-        translation_language_codes = video.translation_language_codes()
-        if video.caption_state == models.NO_CAPTIONS:
-            video_tab = 0
-        else:
-            video_tab = 1
-    return_value['initial_tab'] = video_tab
-    return_value['translation_languages'] = \
-        [widget.language_to_map(code, LANGUAGES_MAP[code]) for 
-         code in translation_language_codes]
-    if base_state is not None:
-        return_value['subtitles'] = autoplay_subtitles(
-            request, video, null_widget, 
-            base_state.get('language', None),
-            base_state.get('revision', None))
-    if request.user.is_authenticated:
-        return_value['username'] = request.user.username
-    return_value['embed_version'] = settings.EMBED_JS_VERSION
-    return return_value
+            return { "response" : "failed" }        
 
-def start_editing(request, video_id, base_version_no=None):
-    """Called by subtitling widget when subtitling is to commence or recommence on a video.
+    def release_lock(self, request, video_id, language_code=None):
+        language = models.Video.objects.get(
+            video_id=video_id).subtitle_language(language_code)
+        if language.can_writelock(request):
+            language.release_writelock()
+            language.save()
+        return { "response": "ok" }
 
-    Three cases: either the video is locked, or it is owned by someone else 
-    already and doesn't allow community edits, or i can freely edit it."""
+    def save_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
+        if not request.user.is_authenticated():
+            return { "response" : "not_logged_in" }
 
-    maybe_add_video_session(request)
+        language = models.Video.objects.get(
+            video_id=video_id).subtitle_language(language_code)
+        if not language.can_writelock(request):
+            return { "response" : "unlockable" }
+        language.writelock(request)
+        self._save_subtitles_impl(request, language, deleted, inserted, updated)
+        return {"response" : "ok"}
 
-    video = models.Video.objects.get(video_id=video_id)
-    if (not video.allow_community_edits and 
-        video.owner != None and (request.user.is_anonymous() or 
-                                 video.owner.pk != request.user.pk)):
-        return { "can_edit": False, "owned_by" : video.owner.username }
-    if not video.can_writelock(request):
-        return { "can_edit": False, "locked_by" : video.writelock_owner_name }
-
-    video.writelock(request)
-    video.save()
-    caption_versions = list(video.videocaptionversion_set.order_by('-version_no'))
-    if len(caption_versions) == 0:
-        new_version_no = 0
-        base_version_no = None
-    else:
-        last_version = caption_versions[0]
-        if last_version.finished:
-            new_version_no = last_version.version_no + 1
-            base_version_no = last_version.version_no
-        else:
-            if not request.user.is_anonymous() and \
-                    last_version.user.pk == request.user.pk:
-                new_version_no = last_version.version_no
-                base_version_no = last_version.version_no
-            elif len(caption_versions) > 1:
-                last_version = caption_versions[1]
-                new_version_no = last_version.version_no + 1
-                base_version_no = last_version.version_no
-                caption_versions[0].delete()
-            else:
-                new_version_no = 0
-                base_version_no = None
-    if base_version_no is None:
-        existing_captions = []
-    else:
-        existing_captions = \
-            list(video.captions(
-                base_version_no).videocaption_set.all())
-    return { "can_edit" : True,
-             "version" : new_version_no,
-             "existing" : [caption.to_json_dict() for 
-                           caption in existing_captions] }
-
-def start_editing_null(request, video_id, base_version_no=None):
-    # FIXME: note duplication with start_editing, fix that.
-    version_no = 0
-    if not request.user.is_authenticated():
-        captions = []
-    else:
-        video = models.Video.objects.get(video_id=video_id)
-        null_captions = video.null_captions(request.user)
-        if null_captions is None:
-            captions = []
-        else:
-            captions = list(null_captions.videocaption_set.all())
-            version_no = 1
-    return { 'can_edit': True,
-             'version': version_no,
-             'existing': [caption.to_json_dict() for
-                          caption in captions] }
-
-def start_translating(request, video_id, language_code, editing=False, base_version_no=None):
-    """Called by widget whenever translating is about to commence or recommence."""
-
-    maybe_add_video_session(request)
-
-    video = models.Video.objects.get(video_id=video_id)
-    translation_language = video.translation_language(language_code)
-    if translation_language == None:
-        translation_language = models.TranslationLanguage(
-            video=video,
-            language=language_code,
-            writelock_session_key='')
-        translation_language.save()
-    # TODO: note duplication with start_editing. Figure out a way to fix this.
-    if not translation_language.can_writelock(request):
-        return { "can_edit": False, 
-                 "locked_by" : video.writelock_owner_name }
-
-    # FIXME: duplication with start_editing. Ouch!
-
-    translation_language.writelock(request)
-    translation_language.save()
-    translation_versions = list(translation_language.translationversion_set.order_by('-version_no'))
-    if len(translation_versions) == 0:
-        new_version_no = 0
-        base_version_no = None
-    else:
-        last_version = translation_versions[0]
-        if last_version.finished:
-            new_version_no = last_version.version_no + 1
-            base_version_no = last_version.version_no
-        else:
-            if not request.user.is_anonymous() and \
-                    last_version.user.pk == request.user.pk:
-                new_version_no = last_version.version_no
-                base_version_no = last_version.version_no
-            elif len(translation_versions) > 1:
-                last_version = translation_versions[1]
-                new_version_no = last_version.version_no + 1
-                base_version_no = last_version.version_no
-                translation_versions[0].delete()
-            else:
-                new_version_no = 0
-                base_version_no = None
-    if base_version_no is None:
-        existing_translations = []
-    else:
-        existing_translations = list(
-            translation_language.translations(base_version_no).translation_set.all())
-    return_dict = { 'can_edit' : True,
-                    'version' : new_version_no, 
-                    'existing' : [trans.to_json_dict() for 
-                                  trans in existing_translations] }
-    if editing:
-        return_dict['existing_captions'] = fetch_captions(request, video_id)
-        return_dict['languages'] = [widget.language_to_map(lang[0], lang[1]) 
-                                    for lang in LANGUAGES]
-    return return_dict
-
-def start_translating_null(request, video_id, language_code, editing=False, base_version_no=None):
-    # FIXME: note duplication with start_translating, fix that.
-
-    maybe_add_video_session(request)
-
-    if not request.user.is_authenticated():
-        translations = []
-    else:
-        video = models.Video.objects.get(video_id=video_id)
-        null_translations = video.null_translations(request.user, 
-                                                    language_code)
-        if null_translations is None:
-            translations = []
-        else:
-            translations = list(null_translations.translation_set.all())
-    return_dict = { 'can_edit': True,
-                    'version': 0,
-                    'existing': [trans.to_json_dict() for
-                                 trans in translations] }
-    if editing:
-        return_dict['existing_captions'] = fetch_captions_null(request, video_id)
-        return_dict['languages'] = [widget.language_to_map(lang[0], lang[1])
-                                    for lang in LANGUAGES]
-    return return_dict
-
-def update_video_lock(request, video_id):
-    video = models.Video.objects.get(video_id=video_id)
-    if video.can_writelock(request):
-        video.writelock(request)
-        video.save()
-        return { "response" : "ok" }
-    else:
-        return { "response" : "failed" }        
-
-def update_video_translation_lock(request, video_id, language_code):
-    translation_language = models.Video.objects.get(
-        video_id=video_id).translation_language(language_code)
-    if translation_language.can_writelock(request):
-        translation_language.writelock(request)
-        translation_language.save()
-        return { 'response' : 'ok' }
-    else:
-        return { 'response' : 'failed' }
-
-def release_video_lock(request, video_id):
-    video = models.Video.objects.get(video_id=video_id)
-    if video.can_writelock(request):
-        video.release_writelock()
-        video.save()
-    return { "response": "ok" }
-
-def get_my_user_info(request):
-    if request.user.is_authenticated():
-        return { "logged_in" : True,
-                 "username" : request.user.username }
-    else:
-        return { "logged_in" : False }
-
-def save_captions(request, video_id, version_no, deleted, inserted, updated):
-    if not request.user.is_authenticated():
-        return { "response" : "not_logged_in" }
-    video = models.Video.objects.get(video_id=video_id)
-    if not video.can_writelock(request):
-        return { "response" : "unlockable" }
-    video.writelock(request)
-    save_captions_impl(request, video, version_no, deleted, inserted, updated)
-    return {"response" : "ok"}
-
-def save_captions_null(request, video_id, version_no, deleted, inserted, updated):
-    if not request.user.is_authenticated():
-        return { "response" : "not_logged_in" }
-    video = models.Video.objects.get(video_id=video_id)
-    save_captions_null_impl(request, video, version_no, deleted, inserted, updated)
-    return {'response':'ok'}
-
-def save_translations(request, video_id, language_code, version_no, 
-                      inserted, updated):
-    if not request.user.is_authenticated():
-        return { "response" : "not_logged_in" }
-    translation_language = models.Video.objects.get(
-        video_id=video_id).translation_language(language_code)
-    if not translation_language.can_writelock(request):
-        return { 'response' : 'unlockable' }
-    translation_language.writelock(request)
-    save_translations_impl(request, translation_language, 
-                           version_no, inserted, updated)
-    return {'response':'ok'}
-
-def save_translations_null(request, video_id, language_code, 
-                           version_no, inserted, updated):
-    if not request.user.is_authenticated():
-        return { "response" : "not_logged_in" }
-    video = models.Video.objects.get(video_id=video_id)
-    save_translations_null_impl(request, video, language_code, inserted, updated)
-    return {'response':'ok'}
-
-def finished_captions(request, video_id, version_no, deleted, inserted, updated):
-    video = models.Video.objects.get(video_id=video_id)
-    if not video.can_writelock(request):
-        return { "response" : "unlockable" }
-    save_captions_impl(request, video, version_no, 
-                       deleted, inserted, updated)
-    last_version = video.captions(version_no)
-    if last_version is not None:
+    def finished_subtitles(self, request, video_id, deleted, inserted, 
+                           updated, language_code=None):
+        language = models.Video.objects.get(
+            video_id=video_id).subtitle_language(language_code)
+        if not language.can_writelock(request):
+            return { "response" : "unlockable" }
+        self._save_subtitles_impl(request, language, deleted, 
+                                  inserted, updated)
+        last_version = language.latest_version()
         last_version.finished = True
+        last_version.user = request.user
         last_version.save()
-    video = models.Video.objects.get(pk=video.pk)
-    video.release_writelock()
-    video.save()
-    return { "response" : "ok" }
+        language = models.SubtitleLanguage.objects.get(pk=language.pk)
+        language.release_writelock()
+        language.save()
+        return_dict = { "response" : "ok" }
+        if language_code is not None:
+            return_dict["available_languages"] = \
+                [widget.language_to_map(code, LANGUAGES_MAP[code]) for
+                 code in language.video.translation_language_codes()]
+        return return_dict
 
-def finished_captions_null(request, video_id, version_no, deleted, inserted, updated):
-    if not request.user.is_authenticated():
-        return { "response" : "not_logged_in" }
-    video = models.Video.objects.get(video_id=video_id)
-    null_captions = save_captions_null_impl(request, video, version_no, 
-                                            deleted, inserted, updated)
-    null_captions.save()
-    null_captions.video.save()    
-    return {'response':'ok'}
-
-def finished_translations(request, video_id, language_code, version_no, 
-                          inserted, updated):
-    translation_language = models.Video.objects.get(
-        video_id=video_id).translation_language(language_code)
-    if not translation_language.can_writelock(request):
-        return { 'response' : 'unlockable' }
-    save_translations_impl(request, translation_language,
-                           version_no, inserted, updated)
-    last_version = translation_language.translations(version_no)
-    if last_version is not None:
-        last_version.finished = True
-        last_version.save()
-    translation_language = models.TranslationLanguage.objects.get(pk=translation_language.pk)
-    translation_language.release_writelock()
-    translation_language.save()
-    video = models.Video.objects.get(video_id=video_id)
-    return { 'response' : 'ok',
-             'available_languages': 
-             [widget.language_to_map(code, LANGUAGES_MAP[code]) for
-              code in video.translation_language_codes()] }
-
-def finished_translations_null(request, video_id, language_code, version_no, 
-                               inserted, updated):
-    if not request.user.is_authenticated():
-        return { "response" : "not_logged_in" }
-    video = models.Video.objects.get(video_id=video_id)
-    null_translations = save_translations_null_impl(request, video, language_code, 
-                                                    inserted, updated)
-    null_translations.save()
-    null_translations.language.save()    
-    video = models.Video.objects.get(video_id=video_id)
-    return { 'response' : 'ok',
-             'available_languages': 
-             [widget.language_to_map(code, LANGUAGES_MAP[code]) for
-              code in video.null_translation_language_codes(request.user)] }
-
-def logout(request):
-    from django.contrib.auth import logout
-    logout(request)
-    return {"respones" : "ok"}
-
-def fetch_captions(request, video_id):
-    video = models.Video.objects.get(video_id=video_id)
-    video.subtitles_fetched_count += 1
-    video.save()
-    captions = list(video.captions().videocaption_set.all())
-    return [caption.to_json_dict() for caption in captions]
-
-def fetch_captions_null(request, video_id):
-    video = models.Video.objects.get(video_id=video_id)
-    captions = list(video.null_captions(request.user).videocaption_set.all())
-    return [caption.to_json_dict() for caption in captions]
-
-def fetch_translations(request, video_id, language_code):
-    video = models.Video.objects.get(video_id=video_id)
-    video.subtitles_fetched_count += 1
-    video.save()    
-    return captions_and_translations_dict(
-        video.captions_and_translations(language_code))
-
-def fetch_translations_null(request, video_id, language_code):
-    video = models.Video.objects.get(video_id=video_id)
-    return captions_and_translations_dict(
-        video.null_captions_and_translations(request.user, language_code))
-
-def captions_and_translations_dict(captions_and_translations):
-    return [s[0].to_json_dict(
-            None if s[1] is None else s[1].translation_text)
-            for s in captions_and_translations]
-
-def fetch_captions_and_open_languages(request, video_id):
-    return { 'captions': fetch_captions(request, video_id),
-             'languages': [widget.language_to_map(lang[0], lang[1]) 
-                           for lang in LANGUAGES]}
-
-def fetch_captions_and_open_languages_null(request, video_id):
-    return { 'captions': fetch_captions_null(request, video_id),
-             'languages': [widget.language_to_map(lang[0], lang[1]) 
-                           for lang in LANGUAGES]}
-
-def save_captions_impl(request, video, version_no, deleted, inserted, updated):
-    if video.owner is None:
-        video.owner = request.user
-    video.save()
-    if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
-        return None
-    last_version = video.last_captions()
-    if last_version != None and last_version.version_no >= version_no:
-        current_version = last_version
-    else:
-        current_version = models.VideoCaptionVersion(
-            video=video, version_no=version_no, 
-            datetime_started=datetime.now(), user=request.user)
-        if last_version != None:
-            current_version.save()
-            for caption in list(last_version.videocaption_set.all()):
-                current_version.videocaption_set.add(
-                    caption.duplicate_for(current_version))
+    def fetch_subtitles(self, request, video_id, language_code=None):
+        video = models.Video.objects.get(video_id=video_id)
+        video.subtitles_fetched_count += 1
+        video.save()
+        if language_code is None:
+            return [s.to_json_dict() for s in video.latest_finished_subtitles()]
         else:
-            current_version.save()
-    apply_caption_changes(current_version.videocaption_set, deleted, inserted, 
-                          updated, current_version)
-    current_version.save()
-    return current_version
+            return [s[0].to_json_dict(text_to_use=s[1].subtitle_text)
+                    for s in video.dependent_translations(language_code)]
 
-def save_captions_null_impl(request, video, version_no, deleted, inserted, updated):
-    null_captions = video.null_captions(request.user)
-    if null_captions is None:
-        null_captions = models.NullVideoCaptions(video=video,
-                                                 user=request.user)
-        null_captions.save()
-    apply_caption_changes(null_captions.videocaption_set, deleted, inserted, 
-                          updated, None, null_captions)
-    null_captions.save()
-    return null_captions
+    def fetch_subtitles_and_open_languages(self, request, video_id):
+        return { 'captions': self.fetch_subtitles(request, video_id),
+                 'languages': [widget.language_to_map(lang[0], lang[1]) 
+                               for lang in LANGUAGES]}
 
-def apply_caption_changes(caption_set, deleted, inserted, updated, 
-                          version=None, null_captions=None):
-    for d in deleted:
-        caption_set.remove(caption_set.get(caption_id=d['caption_id']))
-    for u in updated:
-        caption = caption_set.get(caption_id=u['caption_id'])
-        caption.update_from(u)
-        caption.save()
-    for i in inserted:
-        vc = models.VideoCaption(caption_id=i['caption_id'],
-                                 caption_text=i['caption_text'],
-                                 start_time=i['start_time'],
-                                 end_time=i['end_time'],
-                                 sub_order=i['sub_order'])
-        if version is not None:
-            vc.version = version
+    def _save_subtitles_impl(self, request, language, deleted, inserted, updated):
+        if language.video.owner is None:
+            language.video.owner = request.user
+            language.video.save()
+        if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
+            return None
+        current_version = language.latest_version()
+        self._apply_subtitle_changes(
+            current_version.subtitle_set, deleted, inserted, 
+            updated, current_version, is_dependent_translation=not language.is_original)
+        current_version.save()
+
+    def _apply_subtitle_changes(self, subtitle_set, deleted, inserted, updated, 
+                                version, is_dependent_translation=False):
+        for d in deleted:
+            subtitle_set.remove(subtitle_set.get(subtitle_id=d['caption_id']))
+        for u in updated:
+            subtitle = subtitle_set.get(subtitle_id=u['caption_id'])
+            subtitle.update_from(u, is_dependent_translation)
+            subtitle.save()
+        for i in inserted:
+            # TODO: make sure you can't insert subs with duplicate subtitle_ids
+            if is_dependent_translation:
+                subtitle = models.Subtitle(
+                    subtitle_id=i['caption_id'],
+                    subtitle_text=i['text'])
+            else:
+                subtitle = models.Subtitle(
+                    version=version,
+                    subtitle_id=i['caption_id'],
+                    subtitle_text=i['caption_text'],
+                    start_time=i['start_time'],
+                    end_time=i['end_time'],
+                    subtitle_order=i['sub_order'])
+            subtitle_set.add(subtitle)
+
+    def _get_version_for_editing(self, user, language, base_version_no=None):
+        subtitle_versions = list(language.subtitleversion_set.order_by('-version_no'))
+
+        if base_version_no is None:
+            version_to_copy, new_version_no = \
+                self._prepare_version_to_edit_latest(user, subtitle_versions)
         else:
-            vc.null_captions = null_captions
-        caption_set.add(vc)
+            version_to_copy = language.version(base_version_no)
+            latest_version = language.latest_version()
+            if not latest_version.finished:
+                latest_version.delete()
+            new_version_no = language.latest_finished_version().version_no + 1
 
-def save_translations_impl(request, translation_language,
-                           version_no, inserted, updated):
-    if len(inserted) == 0 and len(updated) == 0:
-        return None
-    last_version = translation_language.last_translations()
-    if last_version != None and last_version.version_no >= version_no:
-        current_version = last_version
-    else:
-        current_version = models.TranslationVersion(language=translation_language, 
-                                                    version_no=version_no,
-                                                    user=request.user,
-                                                    datetime_started=datetime.now())
-        if last_version != None:
-            current_version.save()
-            for translation in list(last_version.translation_set.all()):
-                current_version.translation_set.add(
-                    translation.duplicate_for(current_version))
+        new_version = None
+        if version_to_copy is None or new_version_no > version_to_copy.version_no:
+            new_version = models.SubtitleVersion(
+                language=language,
+                version_no=new_version_no,
+                datetime_started=datetime.now())
+            if user.is_authenticated():
+                new_version.user = user
+            new_version.save()
+            if version_to_copy is not None:
+                for subtitle in version_to_copy.subtitle_set.all():
+                    new_version.subtitle_set.add(subtitle.duplicate_for(new_version))
+        return version_to_copy if new_version is None else new_version
+
+    def _prepare_version_to_edit_latest(self, user, subtitle_versions):
+        version_to_copy = None
+        if len(subtitle_versions) == 0:
+            new_version_no = 0
         else:
-            current_version.save()
-    apply_translation_changes(current_version.translation_set, inserted, 
-                              updated, current_version)
-    current_version.save()
-    return current_version
+            version_to_copy = subtitle_versions[0]
+            if version_to_copy.finished:
+                new_version_no = version_to_copy.version_no + 1
+            else:
+                if not user.is_anonymous() and \
+                        version_to_copy.user is not None and \
+                        version_to_copy.user.pk == user.pk:
+                    new_version_no = version_to_copy.version_no                    
+                elif len(subtitle_versions) > 1:
+                    version_to_copy = subtitle_versions[1]
+                    new_version_no = version_to_copy.version_no + 1
+                    subtitle_versions[0].delete()
+                else:
+                    version_to_copy = None
+                    new_version_no = 0
+                    subtitle_versions[0].delete()
+        return version_to_copy, new_version_no
 
-def save_translations_null_impl(request, video, language_code, inserted, updated):
-    null_translations = video.null_translations(request.user, language_code)
-    if null_translations is None:
-        null_translations = models.NullTranslations(video=video,
-                                                    user=request.user,
-                                                    language=language_code)
-        null_translations.save()
-    apply_translation_changes(null_translations.translation_set, inserted, 
-                              updated, None, null_translations)
-    null_translations.save()
-    return null_translations
+    def _get_language_for_editing(self, request, video_id, language_code):
+        video = models.Video.objects.get(video_id=video_id)
+        language = video.subtitle_language(language_code)
+        if language == None:
+            language = models.SubtitleLanguage(
+                video=video,
+                is_original=(language_code==None),
+                language=('' if language_code is None else language_code),
+                writelock_session_key='')
+            language.save()
+        if not language.can_writelock(request):
+            return language, False
+        language.writelock(request)
+        language.save()
+        return language, True
 
-def apply_translation_changes(translations_set, inserted, updated, 
-                              version=None, null_translations=None):
-    for u in updated:
-        translation = translations_set.get(caption_id=u['caption_id'])
-        translation.update_from(u)
-        translation.save()
-    for i in inserted:
-        t = models.Translation(caption_id=i['caption_id'],
-                               translation_text=i['text'])
-        if version is not None:
-            t.version = version
+    def _autoplay_subtitles(self, user, video, language_code, version_no):
+        video.subtitles_fetched_count += 1
+        video.save()
+        if language_code is not None:
+            return [t[0].to_json_dict(text_to_use=t[1].subtitle_text)
+                    for t in video.dependent_translations(
+                    language_code, version_no)]
         else:
-            t.null_translations = null_translations
-        translations_set.add(t)
+            return [s.to_json_dict() for s in video.subtitles(version_no=version_no)]
 
-def maybe_add_video_session(request):
-    if VIDEO_SESSION_KEY not in request.session:
-        request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
+    def _initial_video_tab(self, user, video):
+        return 0 if video.subtitle_state == models.NO_SUBTITLES else 1
 
-def autoplay_subtitles(request, video, null_widget, language, revision):
-    params = { }
-    video.subtitles_fetched_count += 1
-    video.save()
-    if language is not None:
-        if null_widget:
-            translations = \
-                video.null_captions_and_translations(
-                request.user, language)
-        else:
-            translations = \
-                video.captions_and_translations(language, revision)
-        return [t[0].to_json_dict(
-                None if t[1] is None else t[1].translation_text)
-                for t in translations]
-    else:
-        if null_widget:
-            subtitles = list(video.null_captions(
-                    request.user).videocaption_set.all())
-        else:
-            caption_version = video.captions(revision)
-            subtitles = [] if caption_version is None else list(caption_version.videocaption_set.all())
-        return [subtitle.to_json_dict() 
-                for subtitle in subtitles]
+    def _initial_language_codes(self, user, video):
+        return video.translation_language_codes()

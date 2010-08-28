@@ -78,10 +78,14 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     mirosubs.translate.TranslationPanel.superClass_.createDom.call(this);
     var el = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.languageSelect_ = this.createLanguageSelect_($d);
-    el.appendChild($d('div', 'mirosubs-langDrop',
-                      goog.dom.createTextNode('To begin translating: '),
-                      this.languageSelect_));    
+    
+    if (!this.initialLanguageCode_) {
+        this.languageSelect_ = this.createLanguageSelect_($d);
+        el.appendChild($d('div', 'mirosubs-langDrop',
+                          goog.dom.createTextNode('To begin translating: '),
+                          this.languageSelect_));
+    }
+    
     el.appendChild(this.contentElem_ = $d('div'));
     this.translationList_ =
         new mirosubs.translate.TranslationList(
@@ -96,9 +100,10 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
 };
 mirosubs.translate.TranslationPanel.prototype.enterDocument = function() {
     mirosubs.translate.TranslationPanel.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.languageSelect_, goog.events.EventType.CHANGE,
-        this.languageSelected_);
+    if (this.languageSelect_)
+        this.getHandler().listen(
+            this.languageSelect_, goog.events.EventType.CHANGE,
+            this.languageSelected_);
 };
 mirosubs.translate.TranslationPanel.prototype.languageSelected_ =
     function(event)

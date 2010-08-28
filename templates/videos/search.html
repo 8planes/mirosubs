@@ -9,39 +9,41 @@
         <input type="submit" value="Search"/>
     </form>
     <div class="left_column">
-            <ul class="table_head">
-                <li class="table_most_recent">
-                    {% ordered_column "title" "URL/title" q=query %}
-                </li>
-                <li class="table_user">
-                    {% ordered_column "language" "Language" q=query %}
-                </li>
-                <li class="table_user">
-                    Does %
-                </li>                 
-            </ul>
+      <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+              <th class="center">
+                  {% ordered_column "title" "URL/title" q=query %}
+              </th>
+              <th width="160" class="center">
+                  {% ordered_column "language" "Language" q=query %}
+              </th>
+              <th class="center">
+                  Does %
+               </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in result_list %}
+            <tr {%  cycle 'class="even"' '' %}>
+                <td class="table_most_recent">
+                    <a href="{{ item.object.get_absolute_url }}">
+                        {{item.title}}
+                    </a>
+                </td>
+                <td class="table_user">
+                    {{ item.language }}
+                </td>
+                <td class="table_user">
+                    {{ item.object.percent_done|default:'' }}
+                </td>                          
+            </tr>
+            {% endfor %}            
+        </tbody>
+      </table>
             
-            <ul class="table_body">
-                {% for item in result_list %}
-                <li {%  cycle 'class="even"' '' %}>
-                    <ul>
-                        <li class="table_most_recent">
-                            <a href="{{ item.object.search_page_url }}">
-                                {{item.title}}
-                            </a>
-                        </li>
-                        <li class="table_user">
-                            {{ item.language }}
-                        </li>
-                        <li class="table_user">
-                            {{ item.object.percent_done|default:'' }}
-                        </li>                          
-                </li>
-                {% endfor %}
-            </ul>
-            
-            <div style="clear: both"></div>
-            {% if is_paginated %}{% search_ordered_paginator query 3 %}{% endif %}
+    <div style="clear: both"></div>
+    {% if is_paginated %}{% search_ordered_paginator query 3 %}{% endif %}
     </div>
         
 {% endblock %}

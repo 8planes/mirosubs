@@ -33,7 +33,7 @@ from youtube import get_video_id
 yt_service = YouTubeService()
 yt_service.ssl = False
 
-NO_CAPTIONS, CAPTIONS_FINISHED = range(2)
+NO_SUBTITLES, SUBTITLES_FINISHED = range(2)
 VIDEO_TYPE_HTML5 = 'H'
 VIDEO_TYPE_YOUTUBE = 'Y'
 VIDEO_TYPE_BLIPTV = 'B'
@@ -72,6 +72,10 @@ class Video(models.Model):
     # only nonzero length for Blip.tv videos
     bliptv_fileid = models.CharField(max_length=32, blank=True)
     bliptv_flv_url = models.CharField(max_length=256, blank=True)
+    # only nonzero length for Vimeo videos
+    vimeo_videoid = models.CharField(max_length=32, blank=True)
+    # only nonzero length for Dailymotion videos
+    dailymotion_videoid = models.CharField(max_length=32, blank=True)
     title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
@@ -97,6 +101,8 @@ class Video(models.Model):
             return self.youtube_videoid
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return self.bliptv_fileid
+        elif self.video_type == VIDEO_TYPE_VIMEO:
+            return self.get_video_url()
     
     def is_html5(self):
         return self.video_type == VIDEO_TYPE_HTML5
@@ -117,8 +123,11 @@ class Video(models.Model):
         else:
             return self.video_url
     
-    @models.permalink
     def search_page_url(self):
+        return self.get_absolute_url()
+    
+    @models.permalink
+    def get_absolute_url(self):
         return ('videos:video', [self.video_id])
     
     def get_video_url(self):
@@ -128,6 +137,8 @@ class Video(models.Model):
             return 'http://www.youtube.com/watch?v={0}'.format(self.youtube_videoid)
         elif self.video_type == VIDEO_TYPE_BLIPTV:
             return 'http://blip.tv/file/{0}/'.format(self.bliptv_fileid)
+        elif self.video_type == VIDEO_TYPE_VIMEO:
+            return 'http://vimeo.com/{0}'.format(self.vimeo_videoid)
         else:
             return self.video_url
 
@@ -189,7 +200,16 @@ class Video(models.Model):
             if created:
                 video.title = ustream.get_title(video_url)
                 video.thumbnail = ustream.get_thumbnail_url(video_url)
-                video.save()              
+                video.save()  
+        elif 'vimeo.com' in parsed_url.netloc and vimeo.VIMEO_REGEX.match(video_url):
+            vimeo_videoid = vimeo.VIMEO_REGEX.match(video_url).group(2)
+            video, created = Video.objects.get_or_create(
+                vimeo_videoid = vimeo_videoid,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_VIMEO,
+                          'allow_community_edits': True})
+            # TODO: title and thumbnail -- we can't get them without
+            # an application oauth key/secret
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
@@ -214,98 +234,100 @@ class Video(models.Model):
         return name         
     
     @property
-    def caption_state(self):
+    def subtitle_state(self):
         """Subtitling state for this video 
         """
-        captions = self.captions()
-        if captions is None:
-            return NO_CAPTIONS
-        elif captions.videocaption_set.count() == 0:
-            return NO_CAPTIONS
-        else:
-            return CAPTIONS_FINISHED
 
-    def last_captions(self):
-        try:
-            return self.videocaptionversion_set.all()[:1].get()
-        except models.ObjectDoesNotExist:
-            pass
+        return NO_SUBTITLES if self.latest_finished_version() \
+            is None else SUBTITLES_FINISHED
 
-    def captions(self, version=None):
-        """Returns VideoCaptionVersion, or None if no captions
-        
-        If version is None, then returns latest finished VideoCaptionVersion."""
+    def _original_subtitle_language(self):
+        if not hasattr(self, '_original_subtitle'):
+            try:
+                original = self.subtitlelanguage_set.filter(is_original=True)[:1].get()
+            except models.ObjectDoesNotExist:
+                original = None
+
+            setattr(self, '_original_subtitle', original)
+
+        return getattr(self, '_original_subtitle')       
+
+    def subtitle_language(self, language_code=None):
         try:
-            if version is None:
-                finished_captions = self.videocaptionversion_set.filter(finished=True)
-                if finished_captions.exists():
-                    return finished_captions.order_by('-version_no')[:1].get()
-                else:
-                    return None
+            if language_code is None:
+                return self._original_subtitle_language()
             else:
-                return self.videocaptionversion_set.get(version_no=version)
+                return self.subtitlelanguage_set.filter(
+                    language=language_code)[:1].get()
         except models.ObjectDoesNotExist:
-            pass
+            return None
 
-    def null_captions(self, user):
+    def version(self, version_no=None, language_code=None):
+        language = self.subtitle_language(language_code)
+        return None if language is None else language.version(version_no)
+
+    def latest_finished_version(self, language_code=None):
+        language = self.subtitle_language(language_code)
+        return None if language is None else language.latest_finished_version()
+
+    def subtitles(self, version_no=None, language_code=None):
+        version = self.version(version_no, language_code)
+        if version:
+            return version.subtitles()
+        else:
+            return Subtitle.objects.none()
+
+    def latest_finished_subtitles(self, language_code=None):
+        version = self.latest_finished_version(language_code)
+        return [] if version is None else version.subtitles()
+
+    def null_subtitles(self, user, language_code=None):
         """Returns NullVideoCaptions for user, or None if none exist."""
         try:
             return self.nullvideocaptions_set.filter(
-                user__id__exact=user.id)[:1].get()
+                user__id__exact=user.id).filter(
+                language=('' if language_code is None 
+                          else language_code))[:1].get()
         except models.ObjectDoesNotExist:
             pass
 
-    def translation_language(self, language_code):
-        """Returns a TranslationLanguage, or None if none found"""
-        try:
-            return self.translationlanguage_set.filter(
-                language__exact=language_code)[:1].get()
-        except models.ObjectDoesNotExist:
-            pass
+    def dependent_translations(self, language_code, version=None):
+        """(Subtitle, Subtitle) pair list
 
-    def captions_and_translations(self, language_code, version=None):
-        """(VideoCaption, Translation) pair list
-
-        Returns (VideoCaption, Translation) tuple list, where the 
-        Translation in each tuple might be None if there's no trans 
-        for the caption
+        First Subtitle is the original language subtitle. Second is
+        dependent translation.
         """
-        return self.make_captions_and_translations(
-            self.captions(), self.translations(language_code, version))
+        return self._make_subtitles_and_translations(
+            self.subtitles(), self.subtitles(version, language_code))
 
-    def null_captions_and_translations(self, user, language_code):
-        """(VideoCaption, Translation) pair list
+    def null_dependent_translations(self, user, language_code):
+        """(Subtitle, Subtitle) pair list
 
-        Returns (VideoCaption, Translation) tuple list, where the 
-        Translation in each tuple might be None if there's no trans 
-        for the caption
+        First Subtitle is the original language subtitle. Second is
+        dependent translation.
         """
-        return self.make_captions_and_translations(
-            self.null_captions(user), 
-            self.null_translations(user, language_code))
+        return self._make_subtitles_and_translations(
+            self.null_subtitles(user), 
+            self.null_subtitles(user, language_code))
 
-    def make_captions_and_translations(self, subtitle_set, translation_set):
-        # FIXME: this should be private and static 
-        # (no need for ref to self)
-        subtitles = subtitle_set.videocaption_set.all()
+    @classmethod
+    def _make_subtitles_and_translations(cls, subtitle_set, translation_set):
         translations = []
-        if translation_set is not None:
-            translations = translation_set.translation_set.all()
-        translations_dict = dict([(trans.caption_id, trans) for
-                                  trans in translations])
+        translations_dict = dict([(trans.subtitle_id, trans) for
+                                  trans in translation_set])
         return [(subtitle,
-                 None if subtitle.caption_id not in translations_dict
-                 else translations_dict[subtitle.caption_id])
-                for subtitle in subtitles]
+                 translations_dict[subtitle.subtitle_id])
+                for subtitle in subtitle_set 
+                if (subtitle.subtitle_id in translations_dict)]
 
     def translations(self, language_code, version=None):
         """Returns TranslationVersion for language_code, or None if none found 
         
         version is None means that we fetch latest version."""
-        trans_lang = self.translation_language(language_code)
+        trans_lang = self.subtitle_language(language_code)
         if trans_lang is None:
             return None
-        return trans_lang.translations(version)
+        return trans_lang.version(version)
 
     def null_translations(self, user, language_code):
         try:
@@ -317,12 +339,14 @@ class Video(models.Model):
 
     def translation_language_codes(self):
         """All iso language codes with finished translations."""
-        return set([trans.language for trans 
-                    in self.translationlanguage_set.filter(
-                    is_translated=True)])
+        return set([sl.language for sl 
+                    in self.subtitlelanguage_set.filter(
+                    is_complete=True).filter(is_original=False)])
 
     def null_translation_language_codes(self, user):
-        null_translations = self.nulltranslations_set.filter(user__id__exact=user.id)
+        null_translations = self.nullsubtitles_set.filter(
+            user__id__exact=user.id).filter(
+            is_original=False)
         return set([trans.language for trans in null_translations])
 
     @property
@@ -369,16 +393,10 @@ class Video(models.Model):
         self.writelock_time = None
 
     def notification_list(self, exclude=None):
-        qs = VideoCaptionVersion.objects.filter(video=self)
-        not_send = StopNotification.objects.filter(video=self) \
-            .values_list('user_id', flat=True)         
-        users = []
-        for item in qs:
-            if item.user.changes_notification \
-                and not item.user in users and not item.user.id in not_send \
-                and not exclude == item.user:
-                users.append(item.user)
-        return users
+        if self.subtitle_language():
+            return self.subtitle_language().notification_list(exclude)
+        else:
+            return []
                     
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
@@ -417,6 +435,266 @@ class VersionModel(models.Model):
             return '0%'
         else:
             return '%.0f%%' % (self.text_change*100)
+
+class SubtitleLanguage(models.Model):
+    video = models.ForeignKey(Video)
+    is_original = models.BooleanField()
+    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    writelock_time = models.DateTimeField(null=True)
+    writelock_session_key = models.CharField(max_length=255, blank=True)
+    writelock_owner = models.ForeignKey(User, null=True)
+    is_complete = models.BooleanField(default=False)
+    was_complete = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = (('video', 'language'),)
+    
+    def __unicode__(self):
+        return '%s(%s)' % (self.video, self.language_display())
+    
+    @models.permalink
+    def get_absolute_url(self):
+        if self.is_original:
+            return ('videos:history', [self.video.video_id])
+        else:
+            return ('videos:translation_history', [self.video.video_id, self.language])
+    
+    def language_display(self):
+        return 'Original' if self.is_original else self.get_language_display()
+
+    @property
+    def writelock_owner_name(self):
+        if self.writelock_owner == None:
+            return "anonymous"
+        else:
+            return self.writelock_owner.__unicode__()
+
+    @property
+    def is_writelocked(self):
+        if self.writelock_time == None:
+            return False
+        delta = datetime.now() - self.writelock_time
+        seconds = delta.days * 24 * 60 * 60 + delta.seconds
+        return seconds < WRITELOCK_EXPIRATION
+    
+    def can_writelock(self, request):
+        if VIDEO_SESSION_KEY not in request.session:
+            return False
+        return self.writelock_session_key == \
+            request.session[VIDEO_SESSION_KEY] or \
+            not self.is_writelocked
+
+    def writelock(self, request):
+        if request.user.is_authenticated():
+            self.writelock_owner = request.user
+        else:
+            self.writelock_owner = None
+        self.writelock_session_key = request.session[VIDEO_SESSION_KEY]
+        self.writelock_time = datetime.now()
+
+    def release_writelock(self):
+        self.writelock_owner = None
+        self.writelock_session_key = ''
+        self.writelock_time = None
+
+    def version(self, version_no=None):
+        if version_no is None:
+            return self.latest_finished_version()
+        try:
+            return self.subtitleversion_set.get(version_no=version_no)
+        except models.ObjectDoesNotExist:
+            pass
+    
+    def latest_version(self):
+        try:
+            return self.subtitleversion_set.all()[:1].get()
+        except models.ObjectDoesNotExist:
+            pass        
+    
+    def latest_finished_version(self):
+        """Returns latest SubtitleVersion, or None if none found"""
+        try:
+            return self.subtitleversion_set.filter(finished=True)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+
+    @property
+    def percent_done(self):
+        if not self.is_original:
+            try:
+                translation_count = 0
+                for item in self.latest_finished_version().subtitles():
+                    if item.subtitle_text:
+                        translation_count += 1
+            except AttributeError:
+                translation_count = 0
+            subtitles_count = self.video.subtitles().count()
+            try:
+                return int(translation_count / 1. / subtitles_count * 100)
+            except ZeroDivisionError:
+                return 0 
+        else:
+            return 0
+
+    def notification_list(self, exclude=None):
+        qs = self.subtitleversion_set.all()
+        not_send = StopNotification.objects.filter(video=self.video) \
+            .values_list('user_id', flat=True)
+        for_check = [item.user for item in qs]
+        self.video.owner and for_check.append(self.video.owner)        
+        users = []
+        for user in for_check:
+            if user.changes_notification \
+                and not user in users and not user.id in not_send \
+                and not exclude == user:
+                users.append(user)
+        return users
+
+class SubtitleVersion(models.Model):
+    language = models.ForeignKey(SubtitleLanguage)
+    version_no = models.PositiveIntegerField(default=0)
+    datetime_started = models.DateTimeField()
+    # note: cannot possibly be null for finished SubtitleVersions.
+    user = models.ForeignKey(User, null=True)
+    note = models.CharField(max_length=512, blank=True)
+    time_change = models.FloatField(null=True, blank=True)
+    text_change = models.FloatField(null=True, blank=True)
+    notification_sent = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-version_no']
+        unique_together = (('language', 'version_no'),)
+    
+    def __unicode__(self):
+        return '%s #%s' % (self.language, self.version_no)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('videos:revision', [self.pk])
+    
+    def revision_time(self):
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+        d = self.datetime_started.date()
+        if d == today:
+            return 'Today'
+        elif d == yesterday:
+            return 'Yesterday'
+        else:
+            d = d.strftime('%m/%d/%Y')
+        return d
+    
+    def time_change_display(self):
+        if not self.time_change:
+            return '0%'
+        else:
+            return '%.0f%%' % (self.time_change*100)
+
+    def text_change_display(self):
+        if not self.text_change:
+            return '0%'
+        else:
+            return '%.0f%%' % (self.text_change*100)
+
+    def language_display(self):
+        return self.language.language_display()
+
+    @property
+    def video(self):
+        return self.language.video;
+
+    def update_changes(self):
+        old_version = self.prev_version()
+        new_subtitles = self.subtitles()
+        subtitles_length = len(new_subtitles)
+
+        if not old_version:
+            #if it's first version set changes to 100
+            self.time_change = 1
+            self.text_change = 1          
+        elif not subtitles_length:
+            self.time_change = 0
+            self.text_change = 0
+        else:
+            old_subtitles = dict([(item.subtitle_id, item) 
+                                  for item in old_version.subtitles()])
+            time_count_changed, text_count_changed = 0, 0
+            #compare subtitless one by one and count changes in time and text
+            for subtitle in new_subtitles:
+                try:
+                    old_subtitle = old_subtitles[subtitle.subtitle_id]
+                    if not old_subtitle.subtitle_text == subtitle.subtitle_text:
+                        text_count_changed += 1
+                    if not old_subtitle.start_time == subtitle.start_time or \
+                            not old_subtitle.end_time == subtitle.end_time:
+                        time_count_changed += 1
+                except KeyError:
+                    time_count_changed += 1
+                    text_count_changed += 1
+            self.time_change = time_count_changed / 1. / subtitles_length
+            self.text_change = text_count_changed / 1. / subtitles_length
+        self.save()
+
+    def subtitles(self):
+        return self.subtitle_set.all()
+
+    def prev_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(version_no__lt=self.version_no) \
+                      .filter(language=self.language, finished=True)[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+        
+    def next_version(self):
+        cls = self.__class__
+        try:
+            return cls.objects.filter(version_no__gt=self.version_no) \
+                      .filter(language=self.language, finished=True).order_by('version_no')[:1].get()
+        except models.ObjectDoesNotExist:
+            pass
+
+    def rollback(self, user):
+        cls = self.__class__
+        latest_subtitles = self.language.latest_version()
+        new_version_no = latest_subtitles.version_no + 1
+        note = u'rollback to version #%s' % self.version_no
+        new_version = cls(language=self.language, version_no=new_version_no, \
+            datetime_started=datetime.now(), user=user, note=note, finished=True)
+        new_version.save()
+        for item in self.subtitles():
+            item.duplicate_for(new_version).save()
+        return new_version
+
+    def is_all_blank(self):
+        for s in self.subtitles():
+            if s.subtitle_text.strip() != '':
+                return False
+        return True
+
+def update_language_complete_state(sender, instance, created, **kwargs):
+    if instance.finished:
+        language = instance.language
+        if instance.is_all_blank():
+            finished_count = language.subtitleversion_set.filter(finished=True).count()
+            if finished_count == 1:
+                instance.delete()
+                language.is_complete = False
+                language.was_complete = False
+            else:
+                subtitles = list(instance.subtitle_set.all())
+                for s in subtitles:
+                    s.delete()
+                language.is_complete = False
+                language.was_complete = True
+        else:
+            language.is_complete = True
+            language.was_complete = True
+        language.save()
+
+post_save.connect(update_language_complete_state, SubtitleVersion)
+
 
 class VideoCaptionVersion(VersionModel):
     """A video subtitles snapshot at the end of a particular subtitling session.
@@ -530,7 +808,16 @@ def update_video_subtitled_state(sender, instance, created, **kwargs):
 
 post_save.connect(update_video_subtitled_state, VideoCaptionVersion)
 
-                    
+class NullSubtitles(models.Model):
+    video = models.ForeignKey(Video)
+    user = models.ForeignKey(User)
+    is_original = models.BooleanField()
+    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+
+    class Meta:
+        unique_together = (('video', 'user', 'language'),)
+
+
 class NullVideoCaptions(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
@@ -633,7 +920,7 @@ class TranslationLanguage(models.Model):
                 return self.translationversion_set.get(version_no=version)
         except models.ObjectDoesNotExist:
             pass
-
+    
 # TODO: make TranslationVersion unique on (video, version_no, language)
 class TranslationVersion(VersionModel):
     """Snapshot of translations for a (video, language) pair at the end of a translating session.
@@ -803,7 +1090,93 @@ class Translation(models.Model):
 
     def display_end_time(self):
         return self.caption and format_time(self.caption.end_time) or ''   
+
+class Subtitle(models.Model):
+    version = models.ForeignKey(SubtitleVersion, null=True)
+    null_subtitles = models.ForeignKey(NullSubtitles, null=True)
+    subtitle_id = models.CharField(max_length=32, blank=True)
+    subtitle_order = models.FloatField(null=True)
+    subtitle_text = models.CharField(max_length=1024, blank=True)
+    # in seconds
+    start_time = models.FloatField(null=True)
+    end_time = models.FloatField(null=True)
     
+    class Meta:
+        ordering = ['subtitle_order']
+    
+    def duplicate_for(self, new_version):
+        return Subtitle(version=new_version,
+                        subtitle_id=self.subtitle_id,
+                        subtitle_order=self.subtitle_order,
+                        subtitle_text=self.subtitle_text,
+                        start_time=self.start_time,
+                        end_time=self.end_time)
+
+    def update_from(self, caption_dict, is_dependent_translation=False):
+        if is_dependent_translation:
+            self.subtitle_text = caption_dict['text']
+        else:
+            self.subtitle_text = caption_dict['caption_text']
+            self.start_time = caption_dict['start_time']
+            self.end_time = caption_dict['end_time']
+
+
+    def to_json_dict(self, text_to_use=None, is_dependent_translation=False):
+        text = self.subtitle_text if text_to_use is None else text_to_use
+        if is_dependent_translation:
+            return { 'caption_id' : self.subtitle_id,
+                     'text' : text }
+        else:
+            return { 'caption_id' : self.subtitle_id, 
+                     'caption_text' : text, 
+                     'start_time' : self.start_time, 
+                     'end_time' : self.end_time,
+                     'sub_order' : self.subtitle_order }
+
+    
+    @property
+    def original_subtitle(self):
+        if not hasattr(self, '_original_subtitle'):
+            subtitle = None
+            if self.version.language.is_original:
+                subtitle = self
+            last_version = self.version.language.video.last_captions()
+            if last_version:
+                try:
+                    subtitle = last_version.subtitles().get(subtitle_id=self.subtitle_id)
+                except models.ObjectDoesNotExist:
+                    pass
+            setattr(self, '_original_subtitle', subtitle)            
+        return self._original_subtitle
+    
+    def get_start_time(self):
+        t = self.start_time
+        if not t and not self.version.language.is_original:
+            if self.original_subtitle:
+                t = self.original_subtitle.start_time
+        return t
+
+    def get_end_time(self):
+        t = self.end_time
+        if not t and not self.version.language.is_original:
+            if self.original_subtitle:
+                t = self.original_subtitle.end_time
+        return t
+
+    def display_time(self):
+        t = self.get_start_time()
+        if t < 0:
+            return ''
+        return format_time(t)
+    
+    def display_end_time(self):
+        t = self.get_end_time()   
+        if t == -1 and self.get_start_time() != -1:
+            return 'END'
+        if t < 0:
+            return ''
+        return format_time(t)
+
 class VideoCaption(models.Model):
     """A single subtitle for a video.
 

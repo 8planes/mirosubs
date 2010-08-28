@@ -22,10 +22,12 @@ goog.provide('mirosubs.LoginDialog');
  * @constructor 
  * @param {function(boolean)=} Called when login process completes.
  *     Passed true if logged in successfully, false otherwise.
+ * @param {String} Optional message to show at the top of the login dialog.
  */
-mirosubs.LoginDialog = function(opt_finishFn) {
+mirosubs.LoginDialog = function(opt_finishFn, opt_message) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-login', true);
     this.finishFn_ = opt_finishFn;
+    this.message_ = opt_message;
     this.loggedIn_ = mirosubs.currentUsername != null;
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
@@ -56,6 +58,10 @@ mirosubs.LoginDialog.prototype.createDom = function() {
         $d('a', {'className': 'mirosubs-google', 'href': '#'},
            $d('span', null, 'Google'));
     var el = this.getContentElement();
+    if (this.message_)
+        goog.dom.appendChild(el,
+            $d('h4', {'className': 'mirosubs-login-message'},
+               this.message_));
     goog.dom.appendChild(
         el, $d('h4', null, 'Login using any of these options'));
     goog.dom.appendChild(el, this.loginLink_);

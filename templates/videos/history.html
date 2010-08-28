@@ -119,49 +119,48 @@
 {% endblock %}
 
 {% block title %}
-    {{ video.title_display }} with Original subtitles | Universal Subtitles
+    {% if language.is_original %}
+        {{ video.title_display }} with subtitles | Universal Subtitles
+    {% else %}
+        {{ video.title_display }} with {{ language.get_language_display }} subtitles | Universal Subtitles
+    {% endif %}
 {% endblock %}
 
 {% block main_content %}
-    <h2 class="main-title"><a href="{% url videos:video video_id=video.video_id %}">{{ video }}</a></h2>
+    <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
 
-    {% block breadcrumb %}
-        <ul class="breadcrumb"> 
-          <li><a href="#" class="nohover">Original Subtitles</a></li>
-        </ul>
-    {% endblock %}
+    <ul class="breadcrumb">
+        <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
+        <li>{{ language.language_display }} Subtitles</li>
+    </ul>
 
     <div class="left_column">
         {% widget widget_params %}
     </div>
     <div class="right_column">
-
         {% include '_sharing_widget.html' %}
     </div>
     
-   
-<hr />
+    <hr />
+    
     <div class="sub_actions">
       
       <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
       <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
-      
 
       <div class="up_down">
-        {% block upload_subtitles %}
+        {% if language.is_original %}
             {% with translations|length as has_translations %}
                 {% include 'videos/_upload_subtitles.html' %}
             {% endwith %}
-        {% endblock %}
+        {% endif %}
         
-        {% block download_subtitles %}
-            {% if video.captions %}
-              <span class="download">Download Subtitles</span> 
-              <a href="{% url download_srt %}?video_id={{ video.video_id }}">SRT</a> / 
-              <a href="{% url download_ssa %}?video_id={{ video.video_id }}">SSA</a> /
-              <a href="{% url download_ttml %}?video_id={{ video.video_id }}">TTML</a>
-            {% endif %}
-        {% endblock %}
+        {% if last_version.subtitles %}
+            <span class="download">Download Subtitles</span> 
+            <a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a> / 
+            <a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a> /
+            <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a>
+        {% endif %}
       </div>
     </div>
 
@@ -169,10 +168,14 @@
     <ul class="video_tabs">
       <li class="active">
           <a href="#transcripts-tab">
-            {% block trascripts_tab %}Original Language Subtitles{% endblock %}
+            {% if language.is_original %}
+                Original Language Subtitles
+            {% else %}
+                {{ language.get_language_display }} Subtitles
+            {% endif %}
           </a>
       </li>
-      <li><a href="#comments-tab">Comments ({% get_comment_count commented_object %})</a></li>
+      <li><a href="#comments-tab">Comments ({% get_comment_count language %})</a></li>
       <li><a href="#revisions-tab">History ({{ hits }})</a></li>
     </ul>
     
@@ -186,7 +189,6 @@
         {% if revision_list %}
            {% if is_paginated %}{% ordered_paginator 3 '#revisions' %}{% endif %} 
 
-           {% block table %}
             <table cellpadding="0" cellspacing="0">
             <thead>
               <tr>
@@ -228,14 +230,12 @@
                   <td class="last">
                       {{ item.text_change_display }}
                   </td>
-
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
             
             <div style="clear: both"></div>
-           {% endblock %}
        {% else %}
             <div class="nothing">
                 <strong>{% trans 'No subtitles for this language.' %}</strong><br />
@@ -245,37 +245,35 @@
    </div>
    
    <div style="display: none" id="comments-tab" class="tab">
-       {% render_comment_form commented_object %}
-       {% render_comment_list commented_object %}
+       {% render_comment_form language %}
+       {% render_comment_list language %}
        <div style="clear: both"></div>     
    </div>
 
    <div id="transcripts-tab" class="tab">
       <table cellpadding="0" cellspacing="0"> 
-        {% if last_version.captions %}
-  
-        {% for item in last_version.captions %}
-          <tr class="{% cycle 'even' '' %}">      
-            <td class="last">
-              {% if item.display_time %}
-                <span class="time-span time_link">
-                    <span class="data">{{ item.start_time }}</span>
-                    <span class="badgy start">
-                        {{ item.display_time }}
-                    </span>
-                    {% if item.display_end_time %}
-                        <span class="connector"></span>
-                        <span class="badgy end">{{ item.display_end_time }}</span> 
-                    {% endif %}
-                </span>
-              {% else %}  
-                <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
-              {% endif %}
-              {{ item.text|linebreaksbr }}
-            </td>
-          </tr>
-        {% endfor %}
-
+        {% if last_version.subtitles %}
+            {% for item in last_version.subtitles %}
+              <tr class="{% cycle 'even' '' %}">      
+                <td class="last">
+                  {% if item.display_time %}
+                      <span class="time-span time_link">
+                        <span class="data">{{ item.start_time }}</span>
+                        <span class="badgy start">
+                            {{ item.display_time }}
+                        </span>
+                        {% if item.display_end_time %}
+                            <span class="connector"></span>
+                            <span class="badgy end">{{ item.display_end_time }}</span> 
+                        {% endif %}
+                      </span>
+                  {% else %}  
+                      <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
+                  {% endif %}
+                  {{ item.subtitle_text|linebreaksbr }}
+                </td>
+              </tr>
+            {% endfor %}
         {% else %}
             <p class="no_subs">{% trans 'No subtitles yet.  Make some!' %}</p>
         {% endif %}
