@@ -71,8 +71,7 @@
 
 {% block main_content %}
     <h2 class="main-title">
-        {{ video }}
-        <span>Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}</span>
+        {{ video }} - {{ language.language_display }} - Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}
     </h2>
 
     <ul class="breadcrumb"> 

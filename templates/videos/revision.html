@@ -65,9 +65,7 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2>Revision #{{ version.version_no }} - {{ version.datetime_started|date:"H:i, j F Y" }}</h2>
-    {{ video }}
-    <br/><br/>
+    <h2>{{ video }} - {{ language.language_display }} - Revision #{{ version.version_no }} ({{ version.datetime_started|date:"n/j/Y" }})</h2>
 
     <ul class="breadcrumb">
       <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
