@@ -61,6 +61,7 @@ def ajax_change_video_title(request):
             action.save()
             
             users = video.notification_list(user)
+            
             for obj in users:
                 subject = u'Video\'s title changed on Universal Subtitles'
                 context = {

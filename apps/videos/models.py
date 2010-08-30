@@ -412,7 +412,10 @@ class Video(models.Model):
         if self.subtitle_language():
             return self.subtitle_language().notification_list(exclude)
         else:
-            return []
+            if self.owner and not self.owner == exclude:
+                return [self.owner]
+            else:
+                return []
                     
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
@@ -557,7 +560,7 @@ class SubtitleLanguage(models.Model):
         not_send = StopNotification.objects.filter(video=self.video) \
             .values_list('user_id', flat=True)
         for_check = [item.user for item in qs]
-        self.video.owner and for_check.append(self.video.owner)        
+        self.video.owner and for_check.append(self.video.owner)
         users = []
         for user in for_check:
             if user.changes_notification \

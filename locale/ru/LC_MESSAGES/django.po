@@ -1,0 +1,272 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-08-30 14:06+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: .\settings.py:29
+msgid "Argentinian Spanish"
+msgstr ""
+
+#: .\apps\profiles\forms.py:39
+msgid "This user has not email"
+msgstr ""
+
+#: .\apps\profiles\forms.py:44
+msgid "You are not authenticated."
+msgstr ""
+
+#: .\apps\videos\forms.py:45
+msgid "Somebody is subtitling this video right now. Try later."
+msgstr ""
+
+#: .\apps\videos\forms.py:49
+msgid "You can't edit this video."
+msgstr ""
+
+#: .\apps\videos\forms.py:52
+msgid "This video has translations."
+msgstr ""
+
+#: .\apps\videos\forms.py:58
+msgid "File size should be less 1Mb"
+msgstr ""
+
+#: .\apps\videos\forms.py:61
+msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
+msgstr ""
+
+#: .\apps\videos\forms.py:64
+msgid "Incorrect subtitles format"
+msgstr ""
+
+#: .\apps\videos\forms.py:157
+msgid "Incorrect video url"
+msgstr ""
+
+#: .\templates\openid_consumer\signin.html.py:12
+#: .\templates\openid_consumer\signin.html.py:31
+msgid "Sign in with your OpenID"
+msgstr ""
+
+#: .\templates\openid_consumer\signin.html.py:18
+msgid "Sign in"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:4
+#: .\templates\registration\password_reset_confirm.html.py:4
+#: .\templates\registration\password_reset_done.html.py:4
+#: .\templates\registration\password_reset_form.html.py:4
+msgid "Home"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:4
+#: .\templates\registration\password_reset_confirm.html.py:6
+#: .\templates\registration\password_reset_done.html.py:4
+#: .\templates\registration\password_reset_form.html.py:4
+#: .\templates\registration\password_reset_form.html.py:6
+#: .\templates\registration\password_reset_form.html.py:10
+msgid "Password reset"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:6
+#: .\templates\registration\password_reset_complete.html.py:10
+msgid "Password reset complete"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:12
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:14
+msgid "Log in"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:4
+msgid "Password reset confirmation"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:12
+msgid "Enter new password"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:14
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:19
+msgid "New password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:21
+msgid "Confirm password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:22
+msgid "Change my password"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:31
+msgid "Password reset unsuccessful"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:33
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: .\templates\registration\password_reset_done.html.py:6
+#: .\templates\registration\password_reset_done.html.py:10
+msgid "Password reset successful"
+msgstr ""
+
+#: .\templates\registration\password_reset_done.html.py:12
+msgid ""
+"We've e-mailed you instructions for setting your password to the e-mail "
+"address you submitted. You should be receiving it shortly."
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:2
+msgid "You're receiving this e-mail because you requested a password reset"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:3
+#, python-format
+msgid "for your user account at %(site_name)s"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:5
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:9
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:11
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:13
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html.py:12
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll e-mail "
+"instructions for setting a new one."
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html.py:17
+msgid "E-mail address:"
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html.py:18
+msgid "Reset my password"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:12
+msgid "Anonymous"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:17
+msgid "commented on"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:19
+msgid "commented on this video"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:23
+#, python-format
+msgid " edited %(lang)s translations for "
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:25
+msgid "edited subtitles for"
+msgstr ""
+
+#: .\templates\videos\_error_feedback_form.html.py:7
+msgid "Please let us know what you were doing when you encountered this error."
+msgstr ""
+
+#: .\templates\videos\_error_feedback_form.html.py:9
+msgid "Sorry, the page you requested was not found."
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:28
+msgid "What did you think about the site?"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:32
+msgid "Please let us know if you have any comments, questions, or suggestions!"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:37
+msgid "Your Feedback"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:41
+msgid "Send Feedback"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:47
+msgid "Thank you for your feedback."
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:49
+msgid "please go to our"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:49
+msgid "Litmus regression tests"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:50
+msgid "For new testers, we have"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:50
+msgid "a getting started guide"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:52
+msgid "Send more feedback."
+msgstr ""
+
+#: .\templates\videos\history.html.py:241
+msgid "No subtitles for this language."
+msgstr ""
+
+#: .\templates\videos\history.html.py:242
+msgid "Either no subtitles have been entered, or they were deleted."
+msgstr ""
+
+#: .\templates\videos\history.html.py:278
+msgid "No subtitles yet.  Make some!"
+msgstr ""
+
+#: .\templates\videos\video.html.py:183
+msgid "No subtitles yet."
+msgstr ""
+
+#: .\templates\videos\video.html.py:183
+msgid "Make some!"
+msgstr ""

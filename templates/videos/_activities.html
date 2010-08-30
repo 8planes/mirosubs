@@ -1,4 +1,4 @@
-{% load thumbnail %}
+{% load thumbnail i18n %}
 
 <ul class="table_body">
 {% for item in events %}
@@ -9,20 +9,20 @@
             {% endif %}
             {{ item.time }} - <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>
         {% else %}
-            <span class="username anon">Anonymous</span>
+            <span class="username anon">{% trans 'Anonymous' %}</span>
         {% endif %}
         
         {% if item.comment %}
             {% if item.comment.get_language %}
-                commented on {{ item.comment.get_language }}.
+                {% trans 'commented on' %} {{ item.comment.get_language }}.
             {% else %}
-                commented on this video.
+                {% trans 'commented on this video' %}.
             {% endif %}
         {% else %}
             {% if item.language %}
-                edited {{ item.get_language_display }} translations for 
+                {% blocktrans with item.get_language_display as lang %} edited {{ lang }} translations for {% endblocktrans %}
             {% else %}
-                edited subtitles for
+                {% trans 'edited subtitles for' %}
             {% endif %}
             <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
         {% endif %}

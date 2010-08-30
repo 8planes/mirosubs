@@ -1,10 +1,12 @@
 {% extends 'videos/_feedback_form.html' %}
 
+{% load i18n %}
+
 {% block form_title %}
     {% if error == 500 %}
-        Please let us know what you were doing when you encountered this error.
+        {% trans 'Please let us know what you were doing when you encountered this error.' %}
     {% else %}
-        Sorry, the page you requested was not found.
+        {% trans 'Sorry, the page you requested was not found.' %}
     {% endif %}
 {% endblock %}
 

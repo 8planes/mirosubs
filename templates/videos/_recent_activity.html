@@ -1,2 +1,3 @@
 {% include 'videos/_activities.html' %}
-<a class="view_all" href="{% url videos:actions_list %}">View all</a>
+{% load i18n %}
+<a class="view_all" href="{% url videos:actions_list %}">{% trans 'View all' %}</a>

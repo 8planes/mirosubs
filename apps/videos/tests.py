@@ -56,23 +56,23 @@ Hide these tags: {\some_letters_or_numbers_or_chars}
         
         self.assertEqual(result[0]['start_time'], 0.0)
         self.assertEqual(result[0]['end_time'], 0.0)
-        self.assertEqual(result[0]['caption_text'], u'Don\'t show this text it may be used to insert hidden data')
+        self.assertEqual(result[0]['subtitle_text'], u'Don\'t show this text it may be used to insert hidden data')
         
         self.assertEqual(result[1]['start_time'], 1.5)
         self.assertEqual(result[1]['end_time'], 4.5)
-        self.assertEqual(result[1]['caption_text'], u'SubRip subtitles capability tester 1.2p by ale5000\nUse Media Player Classic as reference\nThis text should be blue')
+        self.assertEqual(result[1]['subtitle_text'], u'SubRip subtitles capability tester 1.2p by ale5000\nUse Media Player Classic as reference\nThis text should be blue')
 
         self.assertEqual(result[2]['start_time'], 4.5)
         self.assertEqual(result[2]['end_time'], 4.5)
-        self.assertEqual(result[2]['caption_text'], u'Hidden')
+        self.assertEqual(result[2]['subtitle_text'], u'Hidden')
         
         self.assertEqual(result[3]['start_time'], 7.501)
         self.assertEqual(result[3]['end_time'], 11.5)
-        self.assertEqual(result[3]['caption_text'], u'This should be an E with an accent: \xc8\n\u65e5\u672c\u8a9e')
+        self.assertEqual(result[3]['subtitle_text'], u'This should be an E with an accent: \xc8\n\u65e5\u672c\u8a9e')
 
         self.assertEqual(result[4]['start_time'], 55.501)
         self.assertEqual(result[4]['end_time'], 58.5)
-        self.assertEqual(result[4]['caption_text'], u'Hide these tags: ')
+        self.assertEqual(result[4]['subtitle_text'], u'Hide these tags: ')
 
         
 class YoutubeModuleTest(TestCase):
@@ -147,6 +147,7 @@ class ViewsTest(TestCase):
     
     def test_ajax_change_video_title(self):
         video = Video.objects.get(video_id='S7HMxzLmS9gw')
+
         data = {
             'video_id': video.video_id,
             'title': 'New title'
