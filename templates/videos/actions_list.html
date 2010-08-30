@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% load paginator %}
+{% load paginator i18n %}
 
 {% block main_content %}
     {% if action_list %}
         
-        <h2>All activities</h2>
+        <h2>{% trans 'All activities' %}</h2>
         
         <p>
             Order by:
@@ -21,6 +21,6 @@
         {% if is_paginated %}{% ordered_paginator 3 %}{% endif %}
          
     {% else %}
-        <p> There are no activities.</p>
+        <p>{% trans 'There are no activities.' %}</p>
     {% endif %}
 {% endblock %}

@@ -1,22 +1,24 @@
+{% load i18n %}
 <p>
-    Dear {{ user }},<br/><br/>
-    Great news!  {{ version.user }} has just started a {{ language.language_display }} 
-    translation of your video{% if video.title %}, "{{ video.title }}"{% endif %}.
+    {% trans 'Dear' %} {{ user }},<br/><br/>
+    {% blocktrans with version.user as user and language.language_display as language %}
+    Great news! {{ user }} has just started a {{ language }} 
+    translation of your video{% endblocktrans %}{% if video.title %}, "{{ video.title }}"{% endif %}.
     <br/>
-    You can review the translation and thank them for their contribution on this page: <br/>
-    <a href="http://{{ domain }}{{ language.get_absolute_url }}">Translation homepage</a> 
+    {% trans 'You can review the translation and thank them for their contribution on this page:' %} <br/>
+    <a href="http://{{ domain }}{{ language.get_absolute_url }}">{% trans 'Translation homepage' %}</a> 
 </p>
 <p>
-    Thanks for your great work,
+    {% trans 'Thanks for your great work,' %}
     <br/>
-    Sincerely,<br/><br/>
-    The Universal Subtitles Community
+    {% trans 'Sincerely' %},<br/><br/>
+    {% trans 'The Universal Subtitles Community' %}
 </p>
 <p>
-    To stop receiving these emails, go to your preferences page and uncheck
-    "receive notifications":<br/>
-    <a href="http://{{ domain }}{% url profiles:my_profile %}">My profile / preferences</a>
+    {% trans 'To stop receiving these emails, go to your preferences page and uncheck
+    "receive notifications":' %}<br/>
+    <a href="http://{{ domain }}{% url profiles:my_profile %}">{% trans 'My profile / preferences' %}</a>
 </p>
 <p>
-    <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">Don't send any more emails about this particular video.</a>
+    <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">{% trans "Don't send any more emails about this particular video." %}</a>
 </p>

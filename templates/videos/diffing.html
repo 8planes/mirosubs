@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load widget %}
+{% load widget i18n %}
 
 {% block css %}
   {{ block.super }}
@@ -34,13 +34,13 @@
             var IS_AUTHENTICATED = '{{ user.is_authenticated }}' == 'True';
             if (IS_AUTHENTICATED){
                 $('.roll_back').click(function(){
-                    if ( ! confirm('Subtitles will be rolled back to a previous version')){
+                    if ( ! confirm('{% trans "Subtitles will be rolled back to a previous version" %}')){
                         return false;
                     }                    
                 });                
             }else{
                 $('.roll_back, .new_edit').click(function(){
-                    alert('You need to log in to do that.');
+                    alert('{% trans "You need to log in to do that." %}');
                     return false;
                 });
             }
@@ -71,22 +71,25 @@
 
 {% block main_content %}
     <h2 class="main-title">
-        {{ video }} - {{ language.language_display }} - Comparing #{{ first_version.version_no }} and #{{ second_version.version_no }}
+        {{ video }} - {{ language.language_display }} - 
+        {% blocktrans with first_version.version_no as version_no and second_version.version_no as second_version_no %}
+        Comparing #{{ version_no }} and #{{ second_version_no }}
+        {% endblocktrans %}
     </h2>
 
     <ul class="breadcrumb"> 
       <li>
           <a href="{{ language.get_absolute_url }}">
-              {{ language.language_display }} Subtitles
+              {{ language.language_display }} {% trans 'Subtitles' %}
           </a>
       </li>
       <li>
           <a href="{{ language.get_absolute_url }}#revisions">
-              Revision History
+              {% trans 'Revision History' %}
           </a>
       </li>          
       <li>
-          <a href="#" class="nohover">Comparing Revision #{{ first_version.version_no }} & #{{ second_version.version_no }}</a>
+          <a href="#" class="nohover">{% trans 'Comparing Revision' %} #{{ first_version.version_no }} & #{{ second_version.version_no }}</a>
       </li>
     </ul>
     
@@ -94,8 +97,10 @@
     
     <div class="left_column">
         <h3 class="diff_title">
-            Revision #{{ second_version.version_no }} by {{ second_version.user }}
-            <span class="small">as of {{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
+            {% blocktrans with second_version.version_no as version_no and second_version.user as user %}
+            Revision #{{ version_no }} by {{ user }}
+            {% endblocktrans %}
+            <span class="small">{{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
         </h3>
       
         <div class="clear">&nbsp;</div>
@@ -105,11 +110,11 @@
         
         <div class="revision_buttons">
             <a href="#" class="new_edit">
-                Submit a new edit based on this version (#{{ second_version.version_no }})
+                {% trans 'Submit a new edit based on this version' %} (#{{ second_version.version_no }})
             </a>
             {% if second_version.next_version %}
                 <a href="{% url videos:rollback second_version.pk %}" class="roll_back">
-                    Roll back to version (#{{ second_version.version_no }})
+                    {% trans 'Roll back to version' %} (#{{ second_version.version_no }})
                 </a>
             {% endif %}
         </div>
@@ -132,7 +137,7 @@
                     </span>                
             
                 {% else %}
-                <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
+                <span class="time-span"><span class="badgy no-sync">{% trans 'Not Synced' %}</span></span> 
                 {% endif %}
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.1.subtitle_text }}
@@ -144,7 +149,9 @@
     
     <div class="right_column">
         <h3 class="diff_title">
-            Revision #{{ first_version.version_no }} by {{ first_version.user }}
+            {% blocktrans with first_version.version_no as version_no and first_version.user as user %}
+            Revision #{{ version_no }} by {{ user }}
+            {% endblocktrans %}            
              <span class="small">{{ first_version.datetime_started|date:"H:i, j F Y" }} </span>
         </h3>
    
@@ -157,11 +164,11 @@
 
         <div class="revision_buttons">
             <a href="#" class="new_edit" id="edit_0">
-                Submit a new edit based on this version (#{{ first_version.version_no }})
+                {% trans 'Submit a new edit based on this version' %} (#{{ first_version.version_no }})
             </a>
             {% if first_version.next_version %}
                 <a href="{% url videos:rollback first_version.pk %}" class="roll_back">
-                    Roll back to version (#{{ first_version.version_no }})
+                    {% trans 'Roll back to version' %} (#{{ first_version.version_no }})
                 </a>
             {% endif %}
         </div>
@@ -185,7 +192,7 @@
                     </span>                
             
                 {% else %}
-                <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
+                <span class="time-span"><span class="badgy no-sync">{% trans 'Not Synced' %}</span></span> 
                 {% endif %}
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.0.subtitle_text }}

@@ -1,21 +1,24 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+
 {% block body_attrs %}id="create"{% endblock %}
 
 {% block main_content %}
 {% if vidscraper_error %}
-    You type incorrect ulr.
+    {% trans 'You type incorrect ulr.' %}
 {% endif %}
 <form action="{% url videos:create %}" method="POST" class="main_video_form">
   {% csrf_token %}
-  <h2 class="main_heading">Subtitle a Video</h2>
+  <h2 class="main_heading">{% trans 'Subtitle a Video' %}</h2>
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
   {{ video_form.video_url.errors }}
   <input type="text" name="video_url" class="main_video_form_field" />
-  <button class="marginleft" type="submit" value="Begin"><span>Begin</span></button>
+  <button class="marginleft" type="submit" value="Begin"><span>{% trans 'Begin' %}</span></button>
   <p>
-      To enable collaborative subtitles, enter the URL to any video in the<br />
+      {% trans 'To enable collaborative subtitles, enter the URL to any video in the<br />
       following formats: Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, Fora.tv,
-      Ustream.tv
+      Ustream.tv' %}
   </p>
 </form>
 

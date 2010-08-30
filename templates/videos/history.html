@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block body_attrs %}id="video"{% endblock %}
 
 {% load escapejs paginator widget comments i18n %}
@@ -69,7 +70,7 @@
             $('.compare_versions_button').click(function(){
                 var $checked = $('.version_checkbox:checked');
                 if ($checked.length !== 2) {
-                    alert('Select two revisions for compare, please');
+                    alert('{% trans "Select two revisions for compare, please" %}');
                 }
                 else {
                     var url = get_compare_link($checked[0].value, $checked[1].value);
@@ -120,18 +121,22 @@
 
 {% block title %}
     {% if language.is_original %}
-        {{ video.title_display }} with subtitles | Universal Subtitles
+        {% blocktrans with video.title_display as title %}
+            {{ title }} with subtitles | Universal Subtitles
+        {% endblocktrans %}
     {% else %}
-        {{ video.title_display }} with {{ language.get_language_display }} subtitles | Universal Subtitles
+        {% blocktrans with video.title_display as title and language.get_language_display as language %}
+            {{ title }} with {{ language }} subtitles | Universal Subtitles
+        {% endblocktrans %}
     {% endif %}
 {% endblock %}
 
 {% block main_content %}
     <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
-
+    {{ LANGUAGE_CODE }}
     <ul class="breadcrumb">
         <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
-        <li>{{ language.language_display }} Subtitles</li>
+        <li>{{ language.language_display }} {% trans 'Subtitles' %}</li>
     </ul>
 
     <div class="left_column">
@@ -145,8 +150,8 @@
     
     <div class="sub_actions">
       
-      <a class="button" id="edit_subtitles" href="#"><span>Edit Subtitles</span></a>
-      <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
+      <a class="button" id="edit_subtitles" href="#"><span>{% trans 'Edit Subtitles' %}</span></a>
+      <a class="button" id="add_translation" href="#"><span>{% trans 'Add Translation' %}</span></a>
 
       <div class="up_down">
         {% if language.is_original %}
@@ -156,7 +161,7 @@
         {% endif %}
         
         {% if last_version.subtitles %}
-            <span class="download">Download Subtitles</span> 
+            <span class="download">{% trans 'Download Subtitles' %}</span> 
             <a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a> / 
             <a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a> /
             <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a>
@@ -169,21 +174,21 @@
       <li class="active">
           <a href="#transcripts-tab">
             {% if language.is_original %}
-                Original Language Subtitles
+                {% trans 'Original Language Subtitles' %}
             {% else %}
-                {{ language.get_language_display }} Subtitles
+                {{ language.get_language_display }} {% trans 'Subtitles' %}
             {% endif %}
           </a>
       </li>
-      <li><a href="#comments-tab">Comments <span class="badgy_out"><span class="badgy">{% get_comment_count language %}</span></span></a></li>
-      <li><a href="#revisions-tab">History <span class="badgy_out"><span class="badgy">{{ hits }}</span></span></a></li>
+      <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count language %}</span></span></a></li>
+      <li><a href="#revisions-tab">{% trans 'History' %} <span class="badgy_out"><span class="badgy">{{ hits }}</span></span></a></li>
     </ul>
     
 
     <div style="display: none" id="revisions-tab" class="tab">
         {% if revision_list|length > 1 %}
             <button class="compare_versions_button small_button">
-                <span>Compare Revisions</span>
+                <span>{% trans 'Compare Revisions' %}</span>
             </button>
         {% endif %}        
         {% if revision_list %}
@@ -268,7 +273,7 @@
                         {% endif %}
                       </span>
                   {% else %}  
-                      <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
+                      <span class="time-span"><span class="badgy no-sync">{% trans 'Not Synced' %}</span></span> 
                   {% endif %}
                   {{ item.subtitle_text|linebreaksbr }}
                 </td>
