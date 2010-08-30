@@ -108,12 +108,13 @@
               </li>
           {% endif %}
           
+          {% if next_version or prev_version %}
           <li class="current">
             <a href="{{ latest_version.get_absolute_url }}">
                Compare #{{ version.version_no }} to #{{ latest_version.version_no }}(current)
             </a>              
           </li>
-          
+          {% endif %}
         </ul>
     
     <div class="left_column">
