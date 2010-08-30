@@ -29,12 +29,3 @@ class Comment(models.Model):
             return self.objects.filter(content_type=ct, object_pk=obj.pk)
         else:
             return self.objects.none()
-    
-    def get_language(self):
-        from videos.models import ProxyVideo, TranslationLanguage
-        
-        model_class = self.content_type.model_class()
-        if issubclass(model_class, ProxyVideo):
-            return 'Original'
-        if issubclass(model_class, TranslationLanguage):
-            return self.content_object.get_language_display()

@@ -1,18 +1,23 @@
+{% load i18n %}
 {% if not has_translations %}
     {% if user.is_authenticated %}
-        <a href="#upload_subs-div" id="upload-subtitles-link" class="upload">Upload Subtitles</a>
+        <a href="#upload_subs-div" id="upload-subtitles-link" class="upload">
+            {% trans 'Upload Subtitles' %}
+        </a>
     {% else %}
-        <a href="{% url auth:login %}?next={{ request.path_info }}">Login to upload subtitles</a>
+        <a href="{% url auth:login %}?next={{ request.path_info }}">
+            {% trans 'Login to upload subtitles' %}
+        </a>
     {% endif %}
 
     <div id="upload_subs-div" style="display: none">
     
-        <h3>Upload Subtitles</h3>
+        <h3>{% trans 'Upload Subtitles' %}</h3>
     
         <div class="padding">
             <p>
-                Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
-                or .xml (for TTML) are accepted.
+                {% trans 'Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
+                or .xml (for TTML) are accepted.' %}
             </p>
             <br />
             <div id="upload-subtitles-div">
@@ -29,7 +34,8 @@
   <script type="text/javascript">
         (function($) {
             var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
-
+            var MSG = "{% trans "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>" %}";
+            
             $('#subtitles-file-field').change(function() {
                 $('#upload-subtitles-form').submit();
             });
@@ -40,7 +46,7 @@
                     if (data.success){
                         document.location = LANGUAGE_PAGE_URL;
                     } else {
-                        $form.prepend('<p class="error_list">If you believe your subtitle file is compatible, <a href="mailto:feedback@universalsubtitles.org">send it to us</a></p>');
+                        $form.prepend('<p class="error_list">'+MSG+'</p>');
                         for (key in data.errors) {
                             var error = '<p class="error_list">' + data.errors[key] + '</p>';
                             $form.prepend(error);

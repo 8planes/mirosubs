@@ -54,6 +54,7 @@
     
 <script type="text/javascript">
     jQuery(document).ready(function($){
+        var ERROR_MSG = "{% trans 'Enter feedback please.' %}";
         $('#send_more_feedback').click(function(){
            $(this).parent('div').hide().prev().show(); 
            return false;
@@ -75,7 +76,7 @@
                 $('p.error_list', $Form).remove();
                 var form = $Form[0];
                 if (!form.message.value){
-                    $(form.message).before('<p class="error_list">Enter feedback please.</p>');
+                    $(form.message).before('<p class="error_list">'+ERROR_MSG+'</p>');
                     return false;
                 }
             }

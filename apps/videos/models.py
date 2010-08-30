@@ -1250,25 +1250,33 @@ class VideoCaption(models.Model):
         return self.caption_text
     
 class Action(models.Model):
-    DEFAULT = 0
     ADD_VIDEO = 1
     CHANGE_TITLE = 2
+    COMMENT = 3
+    ADD_VERSION = 4
     TYPES = (
         (ADD_VIDEO, u'add video'),
         (CHANGE_TITLE, u'change title'),
-        (DEFAULT, u'')
+        (COMMENT, u'comment'),
+        (ADD_VERSION, u'add version')
     )
     user = models.ForeignKey(User, null=True, blank=True)
     video = models.ForeignKey(Video)
-    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    language = models.ForeignKey(SubtitleLanguage, blank=True, null=True)
     comment = models.ForeignKey(Comment, blank=True, null=True)
-    action_type = models.IntegerField(choices=TYPES, default=DEFAULT)
+    action_type = models.IntegerField(choices=TYPES)
     new_video_title = models.CharField(max_length=2048, blank=True)
     created = models.DateTimeField()
     
     class Meta:
         ordering = ['-created']
         get_latest_by = 'created'
+    
+    def is_add_version(self):
+        return self.action_type == self.ADD_VERSION
+    
+    def is_comment(self):
+        return self.action_type == self.COMMENT
     
     def is_change_title(self):
         return self.action_type == self.CHANGE_TITLE
@@ -1298,57 +1306,26 @@ class Action(models.Model):
     def create_comment_handler(cls, sender, instance, created, **kwargs):
         if created:
             model_class = instance.content_type.model_class()
+            obj = cls(user=instance.user)
+            obj.comment = instance
+            obj.created = instance.submit_date
+            obj.action_type = cls.COMMENT
             if issubclass(model_class, Video):
-                obj = cls(user=instance.user)
                 obj.video_id = instance.object_pk
-                obj.comment = instance
-                obj.created = instance.submit_date
-                obj.save()
-            if issubclass(model_class, TranslationLanguage):
-                obj = cls(user=instance.user)
-                language = instance.content_object
-                obj.comment = instance
-                obj.video = language.video
-                obj.created = instance.submit_date
-                obj.save()
-    
-    @classmethod
-    def create_translation_handler(cls, sender, instance, created, **kwargs):
-        if created:
-            video = instance.language.video
-            user = instance.user
-            language = instance.language.language
-            
-            try:
-                la = cls.objects.latest()
-                if la.user == user and la.video == video and la.language == language:
-                    la.created = instance.datetime_started
-                    la.save()
-                    return
-            except cls.DoesNotExist:
-                pass
-            
-            obj = cls(user=user, video=video)
-            obj.language = language
-            obj.created = instance.datetime_started
+            if issubclass(model_class, SubtitleLanguage):
+                obj.language_id = instance.object_pk
+                obj.video = instance.content_object.video
             obj.save()
     
     @classmethod
     def create_caption_handler(cls, sender, instance, created, **kwargs):
         if created:
             user = instance.user
-            video = instance.video
-
-            try:
-                la = cls.objects.latest()
-                if la.user == user and la.video == video:
-                    la.created = instance.datetime_started
-                    la.save()                    
-                    return
-            except cls.DoesNotExist:
-                pass
-                       
-            obj = cls(user=user, video=video)
+            video = instance.language.video
+            language = instance.language
+            
+            obj = cls(user=user, video=video, language=language)
+            obj.action_type = cls.ADD_VERSION
             obj.created = instance.datetime_started
             obj.save()            
     
@@ -1363,8 +1340,7 @@ class Action(models.Model):
             obj.save()
                 
 post_save.connect(Action.create_comment_handler, Comment)        
-post_save.connect(Action.create_translation_handler, TranslationVersion)
-post_save.connect(Action.create_caption_handler, VideoCaptionVersion)
+post_save.connect(Action.create_caption_handler, SubtitleVersion)
 post_save.connect(Action.create_video_handler, Video)
 
 class UserTestResult(models.Model):
@@ -1374,13 +1350,6 @@ class UserTestResult(models.Model):
     task2 = models.TextField(blank=True)
     task3 = models.TextField(blank=True)
     get_updates = models.BooleanField(default=False)
-
-#for two threads of comments
-class ProxyVideo(Video):
-    
-    @classmethod
-    def get(cls, video):
-        return cls(pk=video.pk)
 
 class StopNotification(models.Model):
     video = models.ForeignKey(Video)
