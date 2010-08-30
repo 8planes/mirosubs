@@ -96,6 +96,7 @@ class Video(models.Model):
     thumbnail = models.CharField(max_length=500, blank=True)
     
     def __unicode__(self):
+        return self.title_display()
         if self.title:
             return self.title
         if self.video_type == VIDEO_TYPE_HTML5:
@@ -124,9 +125,9 @@ class Video(models.Model):
 
         parts = url.split('/')
         if len(parts) > 1:
-            return 'http://%s/.../%s' % (parts[0], parts[-1])
+            return '%s/.../%s' % (parts[0], parts[-1])
         else:
-            return self.video_url
+            return url
     
     def search_page_url(self):
         return self.get_absolute_url()
