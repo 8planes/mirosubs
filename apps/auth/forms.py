@@ -18,7 +18,6 @@
 
 from django.contrib.auth.forms import UserCreationForm
 from models import CustomUser as User
-from django import forms
 
 class CustomUserCreationForm(UserCreationForm):
     

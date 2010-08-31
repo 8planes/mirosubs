@@ -2,6 +2,7 @@ from django import forms
 from comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 COMMENT_MAX_LENGTH = getattr(settings,'COMMENT_MAX_LENGTH',3000)
 
@@ -31,7 +32,7 @@ class CommentForm(forms.ModelForm):
         object_pk = self.cleaned_data.get('object_pk')
         if reply_to and content_type and object_pk:
             if not reply_to.content_type == content_type and not reply_to.object_pk == object_pk:
-                raise forms.ValidationError('You car reply only comments for same object')
+                raise forms.ValidationError(_(u'You car reply only comments for same object'))
         return self.cleaned_data
     
     def clean_honeypot(self):

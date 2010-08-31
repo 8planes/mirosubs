@@ -99,7 +99,7 @@ class SubtitlesUploadForm(forms.Form):
         version = SubtitleVersion(
             language=language, version_no=version_no,
             datetime_started=datetime.now(), user=self.user,
-            note='Uploaded')
+            note=u'Uploaded')
         version.save()
 
         text = subtitles.read()
@@ -198,7 +198,7 @@ email_list_re = re.compile(
 
 class EmailListField(forms.RegexField):
     default_error_messages = {
-        'invalid': u'Enter valid e-mail addresses separated by commas.',
+        'invalid': _(u'Enter valid e-mail addresses separated by commas.')
     }
     
     def __init__(self, max_length=None, min_length=None, *args, **kwargs):
