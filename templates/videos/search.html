@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% load escapejs paginator widget %}
+{% load escapejs paginator widget i18n %}
 
 {% block main_content %}
-    <h2>Search</h2>
+    <h2>{% trans 'Search' %}</h2>
     <form method="get" action="{% url search %}">
         <input type="text" name="q" />
         <input type="submit" value="Search"/>
@@ -19,7 +19,7 @@
                   {% ordered_column "language" "Language" q=query %}
               </th>
               <th class="center">
-                  Does %
+                  {% trans 'Does' %} %
                </th>
             </tr>
         </thead>
@@ -28,7 +28,7 @@
             <tr {%  cycle 'class="even"' '' %}>
                 <td class="table_most_recent">
                     <a href="{{ item.object.get_absolute_url }}">
-                        {{item.title}}
+                        {{ item.title }}
                     </a>
                 </td>
                 <td class="table_user">

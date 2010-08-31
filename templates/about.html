@@ -1,104 +1,172 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+
 {% block body_attrs %}id="about"{% endblock %}
+
 {% block scripts %}
-{% if not js_use_compiled %}
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
-{% endif %}
+    {% if not js_use_compiled %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js">
+    </script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js">
+    </script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js">
+    </script>
+    {% endif %}
 {% endblock %}
+
 {% block main_content %}
-
-
 <div class="left_column">
-<br /><br />
-	<h2>About Universal Subtitles</h2>
-
-	<p>The lack of captions and subtitles on video is a major obstacle for people with hearing disabilities and a huge language barrier for the whole world.</p>
-
-	<p>We want to give individuals and communities the power to overcome these barriers. The tools we're building are free and open source and will make the work of subtitling and translating video simpler, more appealing, and, most of all, more collaborative.</p>
-
-	<p><strong>The benefits of captioning and subtitling are immense:</strong></p>
-
-	<ul>
-		<li>captions make video more accessible for people with hearing disabilities</li>
-		<li>translated subtitles make it possible for all of us to watch video in languages that we don't speak</li>
-		<li>as an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations</li>
-	</ul>
-
-	<p><strong>Universal Subtitles is composed of three main parts:</strong></p> 
-
-	<ul>
-		<li>a subtitle creation and viewing tool (aka the widget)</li>
-		<li>a collaborative subtitling website</li>
-		<li>an open protocol for subtitle search/delivery</li>
-	</ul>
-
-	<p><strong>The subtitling widget</strong> currently exists as a browser-based javascript tool that features an user friendly interface for adding captions to almost any video on the web (without the hassle of re-transcoding or re-uploading). We're inviting people to check it out and we're curious to know what you think.</p>
-
-	<p><strong>The collaborative website</strong> will develop as a space for collaborative subtitling and translating videos.  The site will encourage dynamics like: formation of teams for subtitling a program, or a topic; tracking which subtitling or translation tasks are the most requested, and mobilizing volunteers; volunteers recruiting their friends for help transcribing or translating a video.</p>
-
-	<p><strong>The protocol/open spec</strong> (still in the early stages) will allow clients such as Firefox extensions, desktop video players, websites, or browsers to look up and download matching subtitles from subtitle database(s).</p>
-
-	<p>Everything we do will be available under the open source AGPL license.</p>
-<br /><br />
-
+    <br/>
+    <br/>
+    {% blocktrans %}
+    <h2>About Universal Subtitles</h2>
+    <p>
+        The lack of captions and subtitles on video is a major obstacle for people with hearing disabilities and a huge language barrier for the whole world.
+    </p>
+    <p>
+        We want to give individuals and communities the power to overcome these barriers. The tools we're building are free and open source and will make the work of subtitling and translating video simpler, more appealing, and, most of all, more collaborative.
+    </p>
+    <p>
+        <strong>The benefits of captioning and subtitling are immense:</strong>
+    </p>
+    <ul>
+        <li>
+            captions make video more accessible for people with hearing disabilities
+        </li>
+        <li>
+            translated subtitles make it possible for all of us to watch video in languages that we don't speak
+        </li>
+        <li>
+            as an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations
+        </li>
+    </ul>
+    <p>
+        <strong>Universal Subtitles is composed of three main parts:</strong>
+    </p>
+    <ul>
+        <li>
+            a subtitle creation and viewing tool (aka the widget)
+        </li>
+        <li>
+            a collaborative subtitling website
+        </li>
+        <li>
+            an open protocol for subtitle search/delivery
+        </li>
+    </ul>
+    <p>
+        <strong>The subtitling widget</strong>
+        currently exists as a browser-based javascript tool that features an user friendly interface for adding captions to almost any video on the web (without the hassle of re-transcoding or re-uploading). We're inviting people to check it out and we're curious to know what you think.
+    </p>
+    <p>
+        <strong>The collaborative website</strong>
+        will develop as a space for collaborative subtitling and translating videos.  The site will encourage dynamics like: formation of teams for subtitling a program, or a topic; tracking which subtitling or translation tasks are the most requested, and mobilizing volunteers; volunteers recruiting their friends for help transcribing or translating a video.
+    </p>
+    <p>
+        <strong>The protocol/open spec</strong>
+        (still in the early stages) will allow clients such as Firefox extensions, desktop video players, websites, or browsers to look up and download matching subtitles from subtitle database(s).
+    </p>
+    <p>
+        Everything we do will be available under the open source AGPL license.
+    </p>
+    {% endblocktrans %}
+    <br/>
+    <br/>
 </div>
 
 <div class="right_column">
-<br /><br />
-<h2>Three Important Ways You Can Help</h2>
-<p>Universal Subtitles is an open source, non-profit project.  We are volunteer
-  driven and would love to have your help!</p>
-<p>Here are three ways you can get involved:</p>
-<ul>
-  <li>Want to help us test new versions of the software before it's released?
-    <a href="http://groups.google.com/group/universal-subtitles-testing/?utm_source=MailingList&utm_medium=email&utm_campaign=Welcome+Drumbeat">Join the testers list</a>!
-  </li>
-  <li>If you are a developer, check out the 
-    <a href="http://wiki.github.com/8planes/mirosubs/dev-center">development center</a> 
-    and start with some 'bite-sized' tickets that are listed there.
-  </li>
-  <li>
-    Help out new users!  Take a look at the <a href="/videos/">videos list</a>
-    and give positive and helpful feedback to people that have added subtitles to
-    various videos.
-  </li>
-</ul>
-<br/><br/>
-	<h2>Who's Behind the Project?</h2>
-	<p><a href="http://www.pculture.org">Participatory Culture Foundation</a> is a non-profit organization building free and open tools for more a democratic and decentralized media.  Other projects of ours include <a href="http://www.getmiro.com">Miro</a>, <a href="http://www.mirovideoconverter.com">Miro Video Converter</a>, <a href="http://www.mirocommunity.org">Miro Community</a>, and <a href="http://www.openvideoalliance.org">Open Video Alliance</a>.</p>
-	
-	<p>Universal Subtitles is a featured project of <a href="http://www.drumbeat.org/">Mozilla Drumbeat</a>, which has provided invaluable support.</p>
-
-	<p>Software development for Universal Subtitles is being done in partnership with <a href="http://www.8planes.com">8 Planes</a>.</p>
-<br /><br />
-
-	<h2>What's Coming Next?</h2>
-
-	<p>We are currently in the alpha stages of this website and the subtitling tool-- that means we're just getting started!  But we've opened up the site so that we can begin testing and get early feedback.</p>
-
-	<p>Many very important features are missing.  Here's some of what we'll be working on in the coming months:</p>
-	<ul>
-		<li>Ability to link multiple URLs to a video</li>
-		<li>Discussion spaces on every video and translation ('talk' pages)</li>
-		<li>Support on all modern web browsers</li>
-		<li>Caption -> subtitle conversion / options</li>
-		<li>Support for non-latin character sets</li>		
-		<li>Machine translation option once subtitles have been transcribed</li>
-		<li>Keyboard accessbility for site and widget</li>
-		<li>Support for translating the interface of the subtitling tool and website</li>
-		<li>Subtitle ratings and flagging</li>
-		<li>Messaging among Universal Subtitles users</li>
-		<li>HTML5 embedding code that includes flash fallback options</li>
-		<li>Compliance with emerging timed text standards</li>
-		<li>Additional import / export subtitle formats</li>
-	</ul>
-
-	<p>Are there other features that you'd like to see?  Things that you think are particularly important in this early testing stage?  We'd love to hear from you.  Email us: <a href="mailto:universalsubtitles@pculture.org">universalsubtitles@pculture.org</a></p>
-
+    <br/>
+    <br/>
+    {% blocktrans %}
+    <h2>Three Important Ways You Can Help</h2>
+    <p>
+        Universal Subtitles is an open source, non-profit project.  We are volunteer
+        driven and would love to have your help!
+    </p>
+    <p>
+        Here are three ways you can get involved:
+    </p>
+    <ul>
+        <li>
+            Want to help us test new versions of the software before it's released?<a href="http://groups.google.com/group/universal-subtitles-testing/?utm_source=MailingList&utm_medium=email&utm_campaign=Welcome+Drumbeat">Join the testers list</a>!
+        </li>
+        <li>
+            If you are a developer, check out the <a href="http://wiki.github.com/8planes/mirosubs/dev-center">development center</a>
+            and start with some 'bite-sized' tickets that are listed there.
+        </li>
+        <li>
+            Help out new users!  Take a look at the <a href="/videos/">videos list</a>
+            and give positive and helpful feedback to people that have added subtitles to
+            various videos.
+        </li>
+    </ul>
+    <br/>
+    <br/>
+    <h2>Who's Behind the Project?</h2>
+    <p>
+        <a href="http://www.pculture.org">Participatory Culture Foundation</a>
+        is a non-profit organization building free and open tools for more a democratic and decentralized media.  Other projects of ours include <a href="http://www.getmiro.com">Miro</a>, <a href="http://www.mirovideoconverter.com">Miro Video Converter</a>, <a href="http://www.mirocommunity.org">Miro Community</a>, and <a href="http://www.openvideoalliance.org">Open Video Alliance</a>.
+    </p>
+    <p>
+        Universal Subtitles is a featured project of <a href="http://www.drumbeat.org/">Mozilla Drumbeat</a>, which has provided invaluable support.
+    </p>
+    <p>
+        Software development for Universal Subtitles is being done in partnership with <a href="http://www.8planes.com">8 Planes</a>.
+    </p>
+    <br/>
+    <br/>
+    <h2>What's Coming Next?</h2>
+    <p>
+        We are currently in the alpha stages of this website and the subtitling tool-- that means we're just getting started!  But we've opened up the site so that we can begin testing and get early feedback.
+    </p>
+    <p>
+        Many very important features are missing.  Here's some of what we'll be working on in the coming months:
+    </p>
+    <ul>
+        <li>
+            Ability to link multiple URLs to a video
+        </li>
+        <li>
+            Discussion spaces on every video and translation ('talk' pages)
+        </li>
+        <li>
+            Support on all modern web browsers
+        </li>
+        <li>
+            Caption -> subtitle conversion / options
+        </li>
+        <li>
+            Support for non-latin character sets
+        </li>
+        <li>
+            Machine translation option once subtitles have been transcribed
+        </li>
+        <li>
+            Keyboard accessbility for site and widget
+        </li>
+        <li>
+            Support for translating the interface of the subtitling tool and website
+        </li>
+        <li>
+            Subtitle ratings and flagging
+        </li>
+        <li>
+            Messaging among Universal Subtitles users
+        </li>
+        <li>
+            HTML5 embedding code that includes flash fallback options
+        </li>
+        <li>
+            Compliance with emerging timed text standards
+        </li>
+        <li>
+            Additional import / export subtitle formats
+        </li>
+    </ul>
+    <p>
+        Are there other features that you'd like to see?  Things that you think are particularly important in this early testing stage?  We'd love to hear from you.  Email us: <a href="mailto:universalsubtitles@pculture.org">universalsubtitles@pculture.org</a>
+    </p>
+    {% endblocktrans %}
 </div>
-
-
-
 {% endblock %}

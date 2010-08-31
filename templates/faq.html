@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+
 {% block body_attrs %}id="faq"{% endblock %}
 
 {% block scripts %}
@@ -10,107 +13,105 @@
 {% endblock %}
 {% block main_content %}
 
-
-<h2>Frequently Asked Questions</h2>
-
+<h2>{% trans 'Frequently Asked Questions' %}</h2>
 
 <ul class="question-linked">
-<li><a href="#q-what">What is Universal Subtitles?</a></li>
-<li><a href="#q-how">How can I use Universal Subtitles?</a></li>
-<li><a href="#q-benefits">What are the benefits of subtitles?</a></li>
-<li><a href="#q-who">Who is the Participatory Culture Foundation and why are they making Universal Subtitles?</a></li>
-<li><a href="#q-captions">Will Universal Subtitles support closed captions for the deaf and hard of hearing?</a></li>
-<li><a href="#q-languages">Will your subtitles support my language or characterset?</a></li>
-<li><a href="#q-translatedinterfaces">When will the tools, including this site, be available in my language?</a></li>
-<li><a href="#q-howtouse">How can I add subtitles to my video?</a></li>
-<li><a href="#q-license">What open source license do you use?</a></li>
-<li><a href="#q-developers">I'm a developer, can I help out?</a></li>
-<li><a href="#q-helpus">Can non-technical people get involved with the project?</a></li>
-<li><a href="#q-donate">Do you accept donations? Are they tax deductible?</a></li>
-<li><a href="#q-drumbeat">What is your relationship with Mozilla Drumbeat?</a></li>
-<li><a href="#q-download">Where can I download subtitles in .SRT or other formats?</a></li>
-<li><a href="#q-change-timing">Why can't I change the timing on a translation?</a></li>
+<li><a href="#q-what">{% trans 'What is Universal Subtitles?' %}</a></li>
+<li><a href="#q-how">{% trans 'How can I use Universal Subtitles?' %}</a></li>
+<li><a href="#q-benefits">{% trans 'What are the benefits of subtitles?' %}</a></li>
+<li><a href="#q-who">{% trans 'Who is the Participatory Culture Foundation and why are they making Universal Subtitles?' %}</a></li>
+<li><a href="#q-captions">{% trans 'Will Universal Subtitles support closed captions for the deaf and hard of hearing?' %}</a></li>
+<li><a href="#q-languages">{% trans 'Will your subtitles support my language or characterset?' %}</a></li>
+<li><a href="#q-translatedinterfaces">{% trans 'When will the tools, including this site, be available in my language?' %}</a></li>
+<li><a href="#q-howtouse">{% trans 'How can I add subtitles to my video?' %}</a></li>
+<li><a href="#q-license">{% trans 'What open source license do you use?' %}</a></li>
+<li><a href="#q-developers">{% trans "I'm a developer, can I help out?" %}</a></li>
+<li><a href="#q-helpus">{% trans 'Can non-technical people get involved with the project?' %}</a></li>
+<li><a href="#q-donate">{% trans 'Do you accept donations? Are they tax deductible?' %}</a></li>
+<li><a href="#q-drumbeat">{% trans 'What is your relationship with Mozilla Drumbeat?' %}</a></li>
+<li><a href="#q-download">{% trans 'Where can I download subtitles in .SRT or other formats?' %}</a></li>
+<li><a href="#q-change-timing">{% trans "Why can't I change the timing on a translation?" %}</a></li>
 </ul>
 
 <ol class="questions">
   
   <li id="q-what">
-    <h3>What is Universal Subtitles?</h3>
-    <p>Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone.</p>
+    <h3>{% trans 'What is Universal Subtitles?' %}</h3>
+    <p>{% trans "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone." %}</p>
   </li>
   <li id="q-how">
-    <h3>How can I use Universal Subtitles?</h3>
-    <p>You're welcome to try the subtitling technology in our <a href="/demo/">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010).</p>
+    <h3>{% trans 'How can I use Universal Subtitles?' %}</h3>
+    <p>{% blocktrans %}You're welcome to try the subtitling technology in our <a href="/demo/">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010).{% endblocktrans %}</p>
   </li>
   <li id="q-benefits">
-    <h3>What are the benefits of subtitles?</h3>
-    <p>Video subtitles are a gold mine of untapped potential.</p>
+    <h3>{% trans 'What are the benefits of subtitles?' %}</h3>
+    <p>{% trans 'Video subtitles are a gold mine of untapped potential.' %}</p>
     <ul>
-      <li>Captions make video more accessible for people with hearing disabilities</li>
-      <li>Translated subtitles make it possible for all of us to watch video in languages that we don't speak</li>
-      <li>As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations</li>
+      <li>{% trans 'Captions make video more accessible for people with hearing disabilities' %}</li>
+      <li>{% trans "Translated subtitles make it possible for all of us to watch video in languages that we don't speak" %}</li>
+      <li>{% trans 'As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations' %}</li>
     </ul>
   </li>
   <li id="q-who">
-    <h3>Who is the Participatory Culture Foundation and why are they making Universal Subtitles?</h3>
-    <p>The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need.</p>
+    <h3>{% trans 'Who is the Participatory Culture Foundation and why are they making Universal Subtitles?' %}</h3>
+    <p>{% trans 'The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need.' %}</p>
   </li>
   <li id="q-captions">
-    <h3>Will Universal Subtitles support closed captions for the deaf and hard of hearing?</h3>
-    <p>Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations.</p>
+    <h3>{% trans 'Will Universal Subtitles support closed captions for the deaf and hard of hearing?' %}</h3>
+    <p>{% trans 'Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations.' %}</p>
   </li>
   <li id="q-languages">
-    <h3>Will your subtitles support my language or characterset?</h3>
-    <p>We will be working to support as many languages/charactersets as possible.</p>
+    <h3>{% trans 'Will your subtitles support my language or characterset?' %}</h3>
+    <p>{% trans 'We will be working to support as many languages/charactersets as possible.' %}</p>
   </li>
   <li id="q-translatedinterfaces">
-    <h3>When will the tools, including this site, be available in my language?</h3>
-    <p>We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language.</p>
+    <h3>{% trans 'When will the tools, including this site, be available in my language?' %}</h3>
+    <p>{% trans "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language." %}</p>
   </li>
   <li id="q-howtouse">
-    <h3>How can I add subtitles to my video?</h3>
-    <p>Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible.</p>
+    <h3>{% trans 'How can I add subtitles to my video?' %}</h3>
+    <p>{% trans "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible." %}</p>
   </li>
   <li id="q-license">
-    <h3>What open source license do you use?</h3>
-    <p>For our subtitling widget and community website, we're using the <a href="http://en.wikipedia.org/wiki/Affero_General_Public_License">AGPL</a>.</p>
+    <h3>{% trans 'What open source license do you use?' %}</h3>
+    <p>{% blocktrans %}For our subtitling widget and community website, we're using the <a href="http://en.wikipedia.org/wiki/Affero_General_Public_License">AGPL</a>.{% endblocktrans %}</p>
   </li>
   <li id="q-developers">
-    <h3>I'm a developer, can I help out?</h3>
-    <p>Please do! If you're interested in coding and development, please visit our <a href="http://wiki.github.com/8planes/mirosubs/dev-center">developer center</a>.</p>
+    <h3>{% trans "I'm a developer, can I help out?" %}</h3>
+    <p>{% blocktrans %}Please do! If you're interested in coding and development, please visit our <a href="http://wiki.github.com/8planes/mirosubs/dev-center">developer center</a>.{% endblocktrans %}</p>
   </li>
   <li id="q-helpus">
-    <h3>Can non-technical people get involved with the project?</h3>
-    <p>If you're interested in general involvement, please see our <a href="https://www.drumbeat.org/project/universal-subtitles">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href="mailto:universalsubtitles@pculture.org">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details).</p>
+    <h3>{% trans 'Can non-technical people get involved with the project?' %}</h3>
+    <p>{% blocktrans %}If you're interested in general involvement, please see our <a href="https://www.drumbeat.org/project/universal-subtitles">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href="mailto:universalsubtitles@pculture.org">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details).{% endblocktrans %}</p>
   </li>
   <li id="q-donate">
-    <h3>Do you accept donations? Are they tax deductible?</h3>
-    <p>Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href="http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/">donate here</a>.</p>
+    <h3>{% trans 'Do you accept donations? Are they tax deductible?' %}</h3>
+    <p>{% trans 'Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href="http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/">donate here</a>.' %}</p>
   </li>
   <li id="q-drumbeat">
-    <h3>What is your relationship with Mozilla Drumbeat?</h3>
-    <p>The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href="http://www.drumbeat.org/about">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!</p>
+    <h3>{% trans 'What is your relationship with Mozilla Drumbeat?' %}</h3>
+    <p>{% trans 'The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href="http://www.drumbeat.org/about">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!' %}</p>
   </li>
   <li id="q-download">
-    <h3>Where can I download subtitles in .SRT or other formats?</h3>
+    <h3>{% trans 'Where can I download subtitles in .SRT or other formats?' %}</h3>
     <p>
+        {% blocktrans %}
         When subtitles exist, you can download them in .SRT, .SSA, and TTML formats on
-        the page for that language (<a
-        href="http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/">example</a>). 
+        the page for that language (<a href="http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/">example</a>). 
         Click the links in the lower right under the green "Edit Subtitles" button.
+        {% endblocktrans %}
     </p>
   </li>
   <li id="q-change-timing">
-    <h3>Why can't I change the timing on a translation?</h3>
+    <h3>{% trans "Why can't I change the timing on a translation?" %}</h3>
     <p>
+        {% blocktrans %}
         Right now, the timing information of a translation is linked to the timing of
         the original transcript.  Soon we will let users "fork" the timing of
         translations, creating new versions that can have different timing
-        or--potentially--a totally different number of subtitles.        
+        or--potentially--a totally different number of subtitles.
+        {% endblocktrans %}
     </p>
   </li>
 </ol>
-
-
-
 {% endblock %}

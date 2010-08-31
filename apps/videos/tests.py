@@ -299,4 +299,27 @@ class ViewsTest(TestCase):
             StopNotification.objects.get(video=self.video, user=self.user)
         except StopNotification.DoesNotExist:
             self.fail()
-            
+    
+    def test_test_mp4_page(self):
+        self._simple_test('test-mp4-page')
+        
+    def test_test_ogg_page(self):
+        self._simple_test('test-ogg-page')
+        
+    def test_opensubtitles2010_page(self):
+        self._simple_test('opensubtitles2010_page')
+        
+    def test_faq_page(self):
+        self._simple_test('faq_page')
+        
+    def test_about_page(self):
+        self._simple_test('about_page')
+        
+    def test_demo_page(self):
+        self._simple_test('demo')
+        
+    def test_privacy_page(self):
+        self._simple_test('privacy_page')
+        
+    def test_policy_page(self):
+        self._simple_test('policy_page')

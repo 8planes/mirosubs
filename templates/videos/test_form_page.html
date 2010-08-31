@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block scripts %}
     <link media="all" rel="stylesheet" href="{{ MEDIA_URL }}css/mirosubs-widget.css" />
 {% endblock %}
@@ -13,34 +15,34 @@
         {% csrf_token %}
         <div>
             {{ form.email.errors }}
-            <label for="id_email">Your Email</label>
+            <label for="id_email">{% trans 'Your Email' %}</label>
             {{ form.email }}
         </div>
         <div>
             {{ form.task1.errors }}
-            <label for="id_task1">Task 1</label>
-            <span>Try creating subtitles on the following <a href="#" class="test-video-link">video</a></span>
-            <textarea id="task1_id" name="task1" class="task-input" cols="" rows="">how was it? were the instructions clear? what would improve it?</textarea>
+            <label for="id_task1">{% trans 'Task 1' %}</label>
+            <span>{% trans 'Try creating subtitles on the following' %} <a href="#" class="test-video-link">{% trans 'video' %}</a></span>
+            <textarea id="task1_id" name="task1" class="task-input" cols="" rows="">{% trans 'how was it? were the instructions clear? what would improve it?' %}</textarea>
         </div>
         <div>
             {{ form.task2.errors }}
-            <label for="id_task2">Task 2</label>
-            <span>Try fixing errors on the video (or just get back in and make an edit)</span>
-            <textarea id="task2_id" name="task2" class="task-input" cols="" rows="">how was it? were the instructions clear? what would improve it?</textarea>
+            <label for="id_task2">{% trans 'Task 2' %}</label>
+            <span>{% trans 'Try fixing errors on the video (or just get back in and make an edit)' %}</span>
+            <textarea id="task2_id" name="task2" class="task-input" cols="" rows="">{% trans 'how was it? were the instructions clear? what would improve it?' %}</textarea>
         </div>
         <div>
             {{ form.task3.errors }}
-            <label for="id_task3">Task 3</label>
-            <span>Translate the video (fake it if you’re not bilingual!)</span>
-            <textarea id="task3_id" name="task3" class="task-input" cols="" rows="">how was it? were the instructions clear? what would improve it?</textarea>
+            <label for="id_task3">{% trans 'Task 3' %}</label>
+            <span>{% trans 'Translate the video (fake it if you’re not bilingual!)' %}</span>
+            <textarea id="task3_id" name="task3" class="task-input" cols="" rows="">{% trans 'how was it? were the instructions clear? what would improve it?' %}</textarea>
         </div>
         <div class="checkbox">
             {{ form.get_updates.errors }}
             {{ form.get_updates }}
-            <label>optional: get updates about Universal Subtitles</label>
+            <label>{% trans 'optional: get updates about Universal Subtitles' %}</label>
         </div>
         <div>
-            <button><span>Submit!</span></button>
+            <button><span>{% trans 'Submit!' %}</span></button>
         </div>
     </form>
 </div>
@@ -52,7 +54,7 @@
             return !!document.createElement('video').canPlayType;
         }
         $('.test-video-link').attr('href', supports_video() && ogg_url || mp4_url);
-        var init_value = 'how was it? were the instructions clear? what would improve it?';
+        var init_value = '{% trans "how was it? were the instructions clear? what would improve it?" %}';
         $('.task-input').one('click', function(){
             ($(this).val() == init_value) && $(this).val('');
         });
@@ -62,10 +64,14 @@
 <div class="right_column">
     <div class="mirosubs-share">
         <img src="{{ MEDIA_URL }}images/blue_triangle.png" class="mirosubs-blueTriangle" />
-        <h2>Simple Instructions</h2>
-        <p>Clicking the links in the tasks will open a new page. Do your best to accomplish the task at hand. Switch back to this tab at any time during the process to give us feedback.</p>
-        <p>All tasks 2 & 3 are optional (but we recommend trying them all).</p>
-        <p>That’s it!</p>
+        <h2>{% trans 'Simple Instructions' %}</h2>
+        <p>
+            {% trans 'Clicking the links in the tasks will open a new page. 
+            Do your best to accomplish the task at hand. 
+            Switch back to this tab at any time during the process to give us feedback.' %}
+        </p>
+        <p>{% trans 'All tasks 2 & 3 are optional (but we recommend trying them all).' %}</p>
+        <p>{% trans 'That’s it!' %}</p>
     </div>
 </div>
 {% endblock %}
