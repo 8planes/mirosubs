@@ -9,9 +9,9 @@
         
         <p>
             Order by:
-            {% ordered_column "user__username" "User" %}
-            {% ordered_column "created" "Date" %}
-            {% ordered_column "video__video_id" "Video" %}
+            {% ordered_column "user__username" _("User") %}
+            {% ordered_column "created" _("Date") %}
+            {% ordered_column "video__video_id" _("Video") %}
         </p>
         
         {% with action_list as events %}
