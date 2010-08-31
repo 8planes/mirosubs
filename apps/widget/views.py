@@ -120,30 +120,21 @@ def download_subtitles(request, handler=SSASubtitles):
     
     subtitles = []
     
-    if lang_code:
-        translation_language = video.translation_language(lang_code)
-        if not translation_language:
-            raise Http404
-        
-        translations = translation_language.translations()
-        if translations:
-            for item in translations.captions():
-                if item.caption and item.caption.start_time >= 0 and item.caption.end_time >= 0:
-                    subtitles.append({
-                        'text': item.translation_text,
-                        'start': item.caption.start_time,
-                        'end': item.caption.end_time
-                    })
-    else:
-        captions = video.captions()
-        if captions:
-            for item in captions.captions():
-                if item.start_time >= 0 and item.end_time >= 0:
-                    subtitles.append({
-                        'text': item.caption_text,
-                        'start': item.start_time,
-                        'end': item.end_time
-                    })
+
+    language = video.subtitle_language(lang_code)
+    if not language:
+        raise Http404
+    
+    version = language.version()
+    if not version:
+        raise Http404    
+    
+    for item in version.subtitles():
+        subtitles.append({
+            'text': item.subtitle_text,
+            'start': item.start_time,
+            'end': item.end_time
+        })
     
     h = handler(subtitles, video)
     response = HttpResponse(unicode(h), mimetype="text/plain")
