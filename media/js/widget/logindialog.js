@@ -47,7 +47,7 @@ mirosubs.LoginDialog.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.loginLink_ = 
         $d('a', {'className': 'mirosubs-log', 'href': '#'},
-           $d('span', null, gettext('Log in or Create an Account')));
+           $d('span', null, 'Log in or Create an Account'));
     this.twitterLink_ = 
         $d('a', {'className': 'mirosubs-twitter', 'href': '#'},
            $d('span', null, 'Twitter'));
@@ -63,7 +63,7 @@ mirosubs.LoginDialog.prototype.createDom = function() {
             $d('h4', {'className': 'mirosubs-login-message'},
                this.message_));
     goog.dom.appendChild(
-        el, $d('h4', null, gettext('Login using any of these options')));
+        el, $d('h4', null, 'Login using any of these options'));
     goog.dom.appendChild(el, this.loginLink_);
     goog.dom.appendChild(el, this.twitterLink_);
     goog.dom.appendChild(el, this.openidLink_);
@@ -71,7 +71,7 @@ mirosubs.LoginDialog.prototype.createDom = function() {
     goog.dom.appendChild(
         el, 
         $d('p', 'mirosubs-small', 
-           gettext('For security, the login prompt will open in a separate window.')));
+           'For security, the login prompt will open in a separate window.'));
 };
 
 mirosubs.LoginDialog.prototype.showLoading_ = function() {

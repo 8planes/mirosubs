@@ -27,6 +27,7 @@ urlpatterns = patterns(
     url(r'^rpc/null_xhr/(\w+)$', 'rpc', kwargs={'null':True}),
     url(r'^rpc/jsonp/(\w+)$', 'jsonp'),
     url(r'^rpc/null_jsonp/(\w+)$', 'jsonp', kwargs={'null':True}),
+    url(r'^widgetize_demo.html$', 'widgetize_demo'),
     url(r'^download_srt/$', 'srt', name='download_srt'),
     url(r'^download_ssa/$', 'download_subtitles', name='download_ssa'),
     url(r'^download_ttml/$', 'download_subtitles', 
@@ -42,4 +43,8 @@ urlpatterns += patterns(
     url(r'^close_window/$', 
         'django.views.generic.simple.direct_to_template', 
         {'template' : 'widget/close_window.html'}),
+    url(r'^widgetizerconfig.js$', 
+        'django.views.generic.simple.direct_to_template', 
+        {'template': 'widget/widgetizerconfig.js',
+         'mimetype': 'text/javascript' })
 )

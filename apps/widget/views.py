@@ -77,6 +77,12 @@ def widget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
+def widgetize_demo(request):
+    context = widget.add_widgetize_js_files({})
+    return render_to_response('widget/widgetize_demo.html',
+                              context,
+                              context_instance=RequestContext(request))
+
 def base_widget_params(request, extra_params={}):
     params = {}
     params['video_url'] = request.GET.get('video_url')
