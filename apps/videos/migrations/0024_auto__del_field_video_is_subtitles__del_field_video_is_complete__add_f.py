@@ -19,7 +19,7 @@ class Migration(SchemaMigration):
         db.add_column('videos_video', 'was_subtitled', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
 
         if not db.dry_run:
-            for video in videos.models.Video.objects.all():
+            for video in orm.Video.objects.all():
                 qs = video.videocaptionversion_set.filter(finished=True)
                 if qs.exists():
                     finished_captions = qs.order_by('-version_no')[:1].get()
