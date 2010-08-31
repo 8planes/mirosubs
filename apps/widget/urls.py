@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
-from widget.srt_subs import TTMLSubtitles
+from widget.srt_subs import TTMLSubtitles, TXTSubtitles
 
 urlpatterns = patterns(
     'widget.views',
@@ -32,6 +32,8 @@ urlpatterns = patterns(
     url(r'^download_ssa/$', 'download_subtitles', name='download_ssa'),
     url(r'^download_ttml/$', 'download_subtitles', 
         {'handler': TTMLSubtitles}, name='download_ttml'),
+    url(r'^download_txt/$', 'download_subtitles', 
+        {'handler': TXTSubtitles}, name='download_txt'),        
     url(r'^download_null_srt/$', 'null_srt'),
 )
 

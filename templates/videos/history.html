@@ -163,7 +163,8 @@
             <span class="download">{% trans 'Download Subtitles' %}</span> 
             <a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a> / 
             <a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a> /
-            <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a>
+            <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a> /
+            <a href="{% url widget:download_txt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TXT</a>
         {% endif %}
       </div>
     </div>

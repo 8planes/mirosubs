@@ -30,6 +30,8 @@ from comments.models import Comment
 from vidscraper.sites import blip, google_video, fora, ustream, vimeo
 from youtube import get_video_id
 from dailymotion import DAILYMOTION_REGEX
+import urllib
+from videos.utils import YoutubeSubtitleParser
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -149,7 +151,39 @@ class Video(models.Model):
             return 'http://dailymotion.com/video/{0}'.format(self.dailymotion_videoid)
         else:
             return self.video_url
-
+    
+    def _get_subtitles_from_youtube(self):
+        if not self.youtube_videoid:
+            return 
+        
+        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.youtube_videoid
+        d = urllib.urlopen(url)
+        parser = YoutubeSubtitleParser(d.read())
+        
+        language = SubtitleLanguage(video=self)
+        language.is_original = False
+        language.language = parser.language
+        language.save()
+        
+        version = SubtitleVersion(language=language)
+        version.datetime_started = datetime.now()
+        version.user = self.owner
+        version.note = u'From youtube'
+        version.save()
+        
+        for i, item in enumerate(parser):
+            subtitle = Subtitle(**item)
+            subtitle.version = version
+            subtitle.subtitle_id = int(random.random()*10e12)
+            subtitle.sub_order = i+1
+            subtitle.save()
+        
+        version.finished = True
+        version.save()
+        
+        language.is_complete = True
+        language.save()
+        
     @classmethod
     def get_or_create_for_url(cls, video_url, user):
         parsed_url = urlparse(video_url)
@@ -168,6 +202,7 @@ class Video(models.Model):
                 if entry.media.thumbnail:
                     video.thumbnail = entry.media.thumbnail[-1].url
                 video.save()
+                video._get_subtitles_from_youtube()
         elif 'blip.tv' in parsed_url.netloc and blip.BLIP_REGEX.match(video_url):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(

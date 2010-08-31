@@ -1,6 +1,7 @@
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.utils import simplejson as json
 import re
 
 def get_pager(objects, on_page=15, page='1', orphans=0):
@@ -54,6 +55,30 @@ class SubtitleParser(object):
         return self._pattern.finditer(self.subtitles)
     _matches = property(_get_matches)
 
+class YoutubeSubtitleParser(SubtitleParser):
+    
+    def __init__(self, data):
+        data = json.loads(data)[0]
+        self.subtitles = data['plaintext_list'] 
+        self.language = data['language']
+    
+    def __len__(self):
+        return len(self.subtitles)
+    
+    def __nonzero__(self):
+        return bool(self.subtitles)
+    
+    def _result_iter(self):
+        for item in self.subtitles:
+            yield self._get_data(item)
+
+    def _get_data(self, item):
+        output = {}
+        output['start_time'] = item['start_ms'] * 1000
+        output['end_time'] = output['start_time'] + item['dur_ms'] * 1000
+        output['subtitle_text'] = item['text']
+        return output
+ 
 from xml.dom.minidom import parseString
 from xml.parsers.expat import ExpatError
 from django.utils.html import strip_tags

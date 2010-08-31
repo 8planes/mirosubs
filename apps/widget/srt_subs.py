@@ -99,6 +99,15 @@ class BaseSubtitles(object):
     
     def __unicode__(self):
         raise Exception('Should return subtitles')
+
+class TXTSubtitles(BaseSubtitles):
+    file_type = 'txt'
+    
+    def __unicode__(self):
+        output = []
+        for item in self.subtitles:
+            output.append(item['text'])
+        return u'\n\n'.join(output)
     
 class SSASubtitles(BaseSubtitles):
     file_type = 'ssa'
