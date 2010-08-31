@@ -228,6 +228,7 @@ INSTALLED_APPS = (
     'south',
     'haystack',
     'comments',
+    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 
 #Haystack configuration
@@ -286,3 +287,8 @@ try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
     LAST_COMMIT_GUID = ''
+
+try:
+    from settings_local import *
+except ImportError:
+    pass

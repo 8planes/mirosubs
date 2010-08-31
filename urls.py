@@ -24,8 +24,13 @@ from django.contrib.sites.models import Site
 from django.contrib import admin
 admin.autodiscover()
 
+js_info_dict = {
+    'packages': ('mirosubs'),
+}
+
 urlpatterns = patterns(
     '',
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_i18n_catalog'),
     (r'^$', 'videos.views.index'),
     (r'^comments/', include('comments.urls', namespace='comments')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
