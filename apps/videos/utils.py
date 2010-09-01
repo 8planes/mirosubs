@@ -58,7 +58,9 @@ class SubtitleParser(object):
 class YoutubeSubtitleParser(SubtitleParser):
     
     def __init__(self, data):
-        data = json.loads(data)[0]
+        data = json.loads(data)
+        if data:
+            data = data[0]
         self.subtitles = data['plaintext_list'] 
         self.language = data['language']
     

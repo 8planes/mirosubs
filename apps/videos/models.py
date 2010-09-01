@@ -160,6 +160,9 @@ class Video(models.Model):
         d = urllib.urlopen(url)
         parser = YoutubeSubtitleParser(d.read())
         
+        if not parser:
+            return
+        
         language = SubtitleLanguage(video=self)
         language.is_original = False
         language.language = parser.language
@@ -167,7 +170,10 @@ class Video(models.Model):
         
         version = SubtitleVersion(language=language)
         version.datetime_started = datetime.now()
-        version.user = self.owner
+        if self.owner:
+            version.user = self.owner
+        else:
+            version.user = User.get_youtube_anonymous()
         version.note = u'From youtube'
         version.save()
         

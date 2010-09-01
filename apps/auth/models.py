@@ -55,7 +55,11 @@ class CustomUser(BaseUser):
         unique_checks, date_checks = super(CustomUser, self)._get_unique_checks(exclude)
         unique_checks.append((CustomUser, ('email',)))
         return unique_checks, date_checks
-
+    
+    @classmethod
+    def get_youtube_anonymous(cls):
+        return cls.objects.get(pk=10000)
+    
 def create_custom_user(sender, instance, created, **kwargs):
     if created:
         values = {}
