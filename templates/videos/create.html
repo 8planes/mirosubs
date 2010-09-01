@@ -16,9 +16,11 @@
   <input type="text" name="video_url" class="main_video_form_field" />
   <button class="marginleft" type="submit" value="Begin"><span>{% trans 'Begin' %}</span></button>
   <p>
-      {% trans 'To enable collaborative subtitles, enter the URL to any video in the<br />
+      {% blocktrans %}
+      To enable collaborative subtitles, enter the URL to any video in the<br />
       following formats: Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, Fora.tv,
-      Ustream.tv' %}
+      Ustream.tv
+      {% endblocktrans %}
   </p>
 </form>
 
