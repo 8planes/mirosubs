@@ -5,6 +5,9 @@ from django.db.models.signals import post_save
 from django.conf import settings
 import sha
 
+SORTED_LANGUAGES = list(LANGUAGES)
+SORTED_LANGUAGES.sort(key=lambda item: item[1])
+
 class CustomUser(BaseUser):
     AUTOPLAY_ON_BROWSER = 1
     AUTOPLAY_ON_LANGUAGES = 2
@@ -15,7 +18,7 @@ class CustomUser(BaseUser):
         (DONT_AUTOPLAY, 'Don\'t autoplay subtitles')
     )
     homepage = models.URLField(verify_exists=False, blank=True)
-    preferred_language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    preferred_language = models.CharField(max_length=16, choices=SORTED_LANGUAGES, blank=True)
     picture = models.ImageField(blank=True,
                                       upload_to='profile_images/%y/%m/')
     valid_email = models.BooleanField(default=False)
@@ -70,7 +73,7 @@ class UserLanguage(models.Model):
         (3, 'write like a native'),
     )
     user = models.ForeignKey(CustomUser)
-    language = models.CharField(max_length=16, choices=LANGUAGES, verbose_name='languages')
+    language = models.CharField(max_length=16, choices=SORTED_LANGUAGES, verbose_name='languages')
     proficiency = models.IntegerField(choices=PROFICIENCY_CHOICES)
     
     class Meta:
