@@ -1,33 +1,32 @@
 {% load i18n %}
 {% if not has_translations %}
-    {% if user.is_authenticated %}
         <a href="#upload_subs-div" id="upload-subtitles-link" class="upload">
             {% trans 'Upload Subtitles' %}
         </a>
-    {% else %}
-        <a href="{% url auth:login %}?next={{ request.path_info }}">
-            {% trans 'Login to upload subtitles' %}
-        </a>
-    {% endif %}
 
     <div id="upload_subs-div" style="display: none">
     
         <h3>{% trans 'Upload Subtitles' %}</h3>
     
         <div class="padding">
-            <p>
-                {% trans 'Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
-                or .xml (for TTML) are accepted.' %}
-            </p>
-            <br />
-            <div id="upload-subtitles-div">
-                <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="video" value="{{ video.id }}" />
-                    <input type="file" name="subtitles" id="subtitles-file-field" />
-                </form>
-            </div>
-    
+            {% if user.is_authenticated %}
+                <p>
+                    {% trans 'Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
+                    or .xml (for TTML) are accepted.' %}
+                </p>
+                <br />
+                <div id="upload-subtitles-div">
+                    <form method="post" id="upload-subtitles-form" action="{% url videos:upload_subtitles %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="video" value="{{ video.id }}" />
+                        <input type="file" name="subtitles" id="subtitles-file-field" />
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url auth:login %}?next={{ request.path_info }}">
+                    {% trans 'Login to upload subtitles' %}
+                </a>
+            {% endif %}    
         </div>
     </div>
 
