@@ -4,6 +4,7 @@ from django.conf.global_settings import LANGUAGES
 from django.db.models.signals import post_save
 from django.conf import settings
 import sha
+from django.utils.translation import ugettext_lazy as _
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -25,6 +26,7 @@ class CustomUser(BaseUser):
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
     autoplay_preferences = models.IntegerField(choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
+    award_points = models.IntegerField(default=0)
     
     objects = UserManager()
     
@@ -69,6 +71,40 @@ def create_custom_user(sender, instance, created, **kwargs):
         user.save()
         
 post_save.connect(create_custom_user, BaseUser)
+
+class Awards(models.Model):
+    COMMENT = 1
+    START_SUBTITLES = 2
+    START_TRANSLATION = 3
+    TYPE_CHOICES = (
+        (COMMENT, _(u'Add comment')),
+        (START_SUBTITLES, _(u'Start subtitles')),
+        (START_TRANSLATION, _(u'Start translation'))
+    )
+    points = models.IntegerField()
+    type = models.IntegerField(choices=TYPE_CHOICES)
+    user = models.ForeignKey(CustomUser)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    def _set_points(self):
+        if self.type == self.COMMENT:
+            self.points = 10
+        elif self.type == self.START_SUBTITLES:
+            self.points = 100
+        elif self.type == self.START_TRANSLATION:
+            self.points = 100    
+        
+    def save(self, *args, **kwrags):
+        self.points or self._set_points()
+        if not self.pk:
+            CustomUser.objects.filter(pk=self.user.pk).update(award_points=models.F('award_points')+self.points)
+        return super(Awards, self).save(*args, **kwrags)
+    
+    @classmethod
+    def on_comment_save(cls, sender, instance, created, **kwargs):
+        if created:
+            obj = cls(user=instance.user, type = cls.COMMENT)
+            obj.save()
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (

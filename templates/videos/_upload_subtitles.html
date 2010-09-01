@@ -11,8 +11,10 @@
         <div class="padding">
             {% if user.is_authenticated %}
                 <p>
-                    {% trans 'Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
-                    or .xml (for TTML) are accepted.' %}
+                    {% blocktrans %}
+                    Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
+                    or .xml (for TTML) are accepted.
+                    {% endblocktrans %}
                 </p>
                 <br />
                 <div id="upload-subtitles-div">
