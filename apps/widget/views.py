@@ -99,20 +99,6 @@ def base_widget_params(request, extra_params={}):
     params.update(extra_params)
     return json.dumps(params)[1:-1]
 
-def srt(request):
-    video = models.Video.objects.get(video_id=request.GET['video_id'])
-    if 'lang_code' in request.GET:
-        lang_code = request.GET['lang_code']
-        response_text = captions_and_translations_to_srt(
-            video.captions_and_translations(lang_code))
-    else:
-        response_text = captions_to_srt(
-            list(video.captions().videocaption_set.all()))
-    response = HttpResponse(response_text, mimetype="text/plain")
-    response['Content-Disposition'] = \
-        'attachment; filename={0}.srt'.format(video.lang_filename(request.GET.get('lang_code')))
-    return response
-
 def download_subtitles(request, handler=SSASubtitles):
     video_id = request.GET.get('video_id')
     lang_code = request.GET.get('lang_code')
@@ -126,7 +112,6 @@ def download_subtitles(request, handler=SSASubtitles):
     
     subtitles = []
     
-
     language = video.subtitle_language(lang_code)
     if not language:
         raise Http404
@@ -138,8 +123,8 @@ def download_subtitles(request, handler=SSASubtitles):
     for item in version.subtitles():
         subtitles.append({
             'text': item.subtitle_text,
-            'start': item.start_time,
-            'end': item.end_time
+            'start': item.get_start_time(),
+            'end': item.get_end_time()
         })
     
     h = handler(subtitles, video)

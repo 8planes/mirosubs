@@ -1194,7 +1194,7 @@ class Subtitle(models.Model):
             subtitle = None
             if self.version.language.is_original:
                 subtitle = self
-            last_version = self.version.language.video.last_captions()
+            last_version = self.version.language.video.latest_finished_version()
             if last_version:
                 try:
                     subtitle = last_version.subtitles().get(subtitle_id=self.subtitle_id)
