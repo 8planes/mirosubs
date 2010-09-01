@@ -727,6 +727,28 @@ class SubtitleVersion(models.Model):
                 return False
         return True
 
+def update_video_is_subtitled_state(sender, instance, created, **kwargs):
+    if instance.finished and instance.language.is_original:
+        video = instance.video
+        if instance.is_all_blank():
+            finished_count = sender.objects.filter(finished=True, language=instance.language).count()
+            if finished_count == 1:
+                instance.delete()
+                video.is_subtitled = False
+                video.was_subtitled = False
+            else:
+                video_captions = list(instance.subtitles())
+                for vc in video_captions:
+                    vc.delete()
+                video.is_subtitled = False
+                video.was_subtitled = True
+        else:
+            video.is_subtitled = True
+            video.was_subtitled = True
+        video.save()
+
+post_save.connect(update_video_is_subtitled_state, SubtitleVersion)
+
 def update_language_complete_state(sender, instance, created, **kwargs):
     if instance.finished:
         language = instance.language
