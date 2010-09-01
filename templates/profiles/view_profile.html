@@ -47,7 +47,7 @@
                             var $field = $('input[name="'+key+'"]', $form);
                             var error = '<div class="error_list">'+data.errors[key]+'</div>';
                             if ($field.length){
-                                $('input[name="'+key+'"]', $form).before(error);
+                                $field.before(error);
                             }else{
                                 $form.prepend(error);
                             }

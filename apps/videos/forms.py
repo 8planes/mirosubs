@@ -30,6 +30,7 @@ from django.utils.encoding import force_unicode
 import chardet
 from uuid import uuid4
 from youtube import get_video_id
+from math_captcha.forms import MathCaptchaForm
 
 class SubtitlesUploadForm(forms.Form):
     video = forms.ModelChoiceField(Video.objects)
@@ -157,7 +158,7 @@ class VideoForm(forms.ModelForm):
             raise forms.ValidationError(_(u'Incorrect video url'))
         return video_url
 
-class FeedbackForm(forms.Form):
+class FeedbackForm(MathCaptchaForm):
     email = forms.EmailField(required=False)
     message = forms.CharField(widget=forms.Textarea())
     error = forms.CharField(required=False)

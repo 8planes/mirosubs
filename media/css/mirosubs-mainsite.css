@@ -1020,7 +1020,7 @@ width: 600px;
 margin: 0 auto;
 }
 
-input#feedback_email{
+input#feedback_email, input#feedback_math_captcha_field{
 margin: 0 auto;
 width: 300px;
 float: none;
