@@ -1,6 +1,6 @@
 {% extends "profiles/base.html" %}
 
-{% load thumbnail %}
+{% load thumbnail i18n %}
 
 {% block css %}
     {{ block.super }}
@@ -40,7 +40,7 @@
                         }else{
                             $messages.html('');
                         };
-                        $messages.html('<p>Email sent</p>');
+                        $messages.html('<p>{% trans "Email sent" %}</p>');
                         $.nyroModalRemove();
                     } else {
                         for (key in data.errors){
@@ -59,11 +59,11 @@
                     var form = $Form[0];
                     var valid = true;
                     if (!form.message.value){
-                        $(form.message).before('<div class="error_list">Enter message please.</div>');
+                        $(form.message).before('<div class="error_list">{% trans "Enter message please." %}</div>');
                         valid = false;
                     }
                     if (!form.email.value){
-                        $(form.email).before('<div class="error_list">Enter email please.</div>');
+                        $(form.email).before('<div class="error_list">{% trans "Enter email please." %}</div>');
                         valid = false;                      
                     }
                     return valid;
@@ -80,18 +80,18 @@
             {% if can_edit %}<a href="{% url profiles:my_profile %}">(Edit profile)</a>{% endif %}
         </h2>
         <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}">
-        <p>Preferred Language: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
-        <p>Homepage: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
+        <p>{% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
+        <p>{% trans 'Homepage' %}: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
         {% if user.is_authenticated and not user == user_info and user_info.email %}
-            <button class="send_message"><span>Send a Message</span></button>
+            <button class="send_message"><span>{% trans 'Send a Message' %}</span></button>
         {% endif %}
     </div>
     
     <div class="right_column">
         <br />
-        <h3>About {{ user_info }}</h3>
+        <h3>{% trans 'About' %} {{ user_info }}</h3>
         <p class="user_bio">
-            {{ user_info.biography|default:'<i>User has not submitted a bio.</i>' }}
+            {{ user_info.biography|default:_('<i>User has not submitted a bio.</i>') }}
         </p>
     </div>
     
@@ -100,20 +100,20 @@
     {% if user.is_authenticated and not user == user_info and user_info.email %}
     <div id="send_message" style="display: none">
       <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  
-         <h3>Send {{ user_info }} a Message</h3>
+         <h3>{% blocktrans %}Send {{ user_info }} a Message{% endblocktrans %}</h3>
          {% csrf_token %}
          <input type="hidden" name="user" value="{{ user_info.id }}"/>
          <p>
-           <label>From</label>
+           <label>{% trans 'From' %}</label>
            <input type="text" value="{{ user.email }}" name="email"/>    
          </p>
          <p>
-           <label>Message</label>
+           <label>{% trans 'Message' %}</label>
            <textarea class="to" type="text" name="message"></textarea>  
-           <span>No HTML</span>
-           <span>Note: when you send a message the recipient can see your email and reply directly</span>
+           <span>{% trans 'No HTML' %}</span>
+           <span>{% trans 'Note: when you send a message the recipient can see your email and reply directly' %}</span>
          </p>
-         <button type="submit"><span>Send a Message</span></button>
+         <button type="submit"><span>{% trans 'Send a Message' %}</span></button>
       </form>
     </div>
     {% endif %}

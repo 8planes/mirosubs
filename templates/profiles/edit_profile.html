@@ -4,19 +4,19 @@
 
 {% block main_content %}
 <div class="left_column">
-    <h2>User Profile <a href="{% url profiles:profile user_info %}">(View profile)</a></h2>
+    <h2>{% trans 'User Profile' %} <a href="{% url profiles:profile user_info %}">({% trans 'View profile' %})</a></h2>
     <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}"><h3>{{ user_info }}</h3>
     <p>
-        Preferred Language: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
+        {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
     </p>
     <p>
-        Homepage: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a>
+        {% trans 'Homepage' %}: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a>
     </p>
 </div>
 
 <div class="right_column">
     <br/>
-    <h3>About {{ user_info }}</h3>
+    <h3>{% trans 'About' %} {{ user_info }}</h3>
     <p class="user_bio">
         {{ user_info.biography }}
     </p>
@@ -25,14 +25,14 @@
     {% csrf_token %}
     <div class="edit_profile_shell">
         <h2>
-            Edit Your Profile
+            {% trans 'Edit Your Profile' %}
             <button class="small_button" type="submit" value="Save">
-                <span>Save Edits to Profile</span>
+                <span>{% trans 'Save Edits to Profile' %}</span>
             </button>
         </h2>
         
         <div class="left_column">
-            <h3>Personal Info</h3>
+            <h3>{% trans 'Personal Info' %}</h3>
             {{ form.non_field_errors }}
             <p>
                 {{ form.first_name.errors }}
@@ -54,7 +54,7 @@
                 {{ form.picture.errors }}
                 <input type="file" id="id_picture" name="picture" size="6"/>
                 <button class="small_button upload-picture1" style="z-index: 1; padding-left: 10px;">
-                    <span><span class="plus"></span>Upload picture</span>
+                    <span><span class="plus"></span>{% trans 'Upload picture' %}</span>
                 </button>             
             </p>
             <p>
@@ -80,7 +80,7 @@
             <p>
                 {{ form.changes_notification.errors }}
                                {{ form.changes_notification }}
- <label for="id_changes_notification">Email me when something I've edited gets changed</label>
+ <label for="id_changes_notification">{% trans "Email me when something I've edited gets changed" %}</label>
             </p>
             <p>
                 {{ form.biography.errors }}
@@ -90,7 +90,7 @@
         </div>
         
         <div class="right_column">
-            <h3>Language Info</h3>
+            <h3>{% trans 'Language Info' %}</h3>
             <p>
                 {{ form.preferred_language.errors }}
                 {{ form.preferred_language.label_tag }}
@@ -103,10 +103,10 @@
                 {{ form.autoplay_preferences }}                
             </p>
             {% endcomment %}
-            <h4>Languages I Know</h4>
+            <h4>{% trans 'Languages I Know' %}</h4>
             <div class="empty-form" style="display: none">
                 <li>
-                    <a href="#" class="small_close remove-language">Remove Language</a>
+                    <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
                     {{ formset.empty_form.id }}
                     {{ formset.empty_form.language }}
                     {{ formset.empty_form.proficiency }}
@@ -121,7 +121,7 @@
                 {% for form in formset.forms %}
                     <li>
                         {{ form.non_field_errors }}
-                        <a href="#" class="small_close remove-language">Remove Language</a>
+                        <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
                         {{ form.id }}
                         {{ form.language.errors }}
                         {{ form.language }}
@@ -133,7 +133,7 @@
                     </li>
                 {% endfor %}
             <button class="small_button add-language">
-                <span><span class="plus"></span>Add Language</span>
+                <span><span class="plus"></span>{% trans 'Add Language' %}</span>
             </button>
         </div>
         <div class="clearboth">
