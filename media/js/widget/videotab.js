@@ -47,7 +47,7 @@ mirosubs.widget.VideoTab.prototype.createDom = function() {
     this.getElement().className = 'mirosubs-videoTab';
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.imageElem_ = $d('img', {'alt': 'small logo'});
-    this.spanElem_ = $d('span', 'mirosubs-tabText');
+    this.spanElem_ = $d('span', 'mirosubs-tabTextchoose');
     this.anchorElem_ = 
         $d('a', {'className': 'mirosubs-subtitleMeLink', 'href':'#'},
            this.imageElem_, this.spanElem_);

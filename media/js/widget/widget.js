@@ -47,6 +47,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
      * to the server yet.
      */
     this.stateInitialized_ = false;
+    this.state_ = null;
 };
 goog.inherits(mirosubs.widget.Widget, goog.ui.Component);
 
@@ -96,6 +97,7 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
         goog.style.showElement(this.videoTab_.getElement(), false);
     this.videoTab_.setText("Loading...");
     this.videoTab_.showLoading(true);
+    
     mirosubs.Rpc.call(
         'show_widget', {
             'video_url' : this.videoURL_,
@@ -118,14 +120,8 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
 
     var initialTab = result['initial_tab'];
     var IS = mirosubs.widget.VideoTab.InitialState;
-    this.popupMenu_ = new mirosubs.MainMenu(
-        this.videoID_, initialTab == IS.CHOOSE_LANGUAGE, 
-        result['translation_languages']);
-    this.popupMenu_.render(document.body);
-    this.popupMenu_.attach(
-        this.videoTab_.getAnchorElem(), 
-        goog.positioning.Corner.BOTTOM_LEFT,
-        goog.positioning.Corner.TOP_LEFT);
+    this.addChild(this.popupMenu_ = new mirosubs.widget.DropDown(this, this.videoID_, initialTab == IS.CHOOSE_LANGUAGE, result['translation_languages']), true);
+    goog.style.showElement(this.popupMenu_.getElement(), false);
 
     this.setInitialVideoTabState_(initialTab, result['owned_by']);
 
@@ -182,11 +178,15 @@ mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
 mirosubs.widget.Widget.prototype.attachEvents_ = function() {
     if (!this.stateInitialized_ || !this.isInDocument())
         return;
+    var that = this;
     this.getHandler().
         listen(this.videoTab_.getAnchorElem(), 'click',
-               function(e) { e.preventDefault(); }).
+               function(e) {
+                   e.preventDefault();
+                   goog.style.showElement(that.popupMenu_.getElement(), true);
+               }).
         listen(this.popupMenu_, 
-               goog.object.getValues(mirosubs.MainMenu.Selection),
+               goog.object.getValues(mirosubs.widget.DropDown.Selection),
                this.menuItemSelected_).
         listen(mirosubs.userEventTarget,
                goog.object.getValues(mirosubs.EventType),
@@ -271,6 +271,9 @@ mirosubs.widget.Widget.prototype.subtitleImpl_ = function() {
             }
         });
 
+};
+mirosubs.widget.Widget.prototype.getState = function() {
+    return self.state_;
 };
 mirosubs.widget.Widget.prototype.editSubtitles_ = function() {
     if (this.languageCodePlaying_ == null) {
@@ -415,7 +418,7 @@ mirosubs.widget.Widget.prototype.editSubtitlesImpl_ =
 };
 mirosubs.widget.Widget.prototype.languageSelected_ = function(opt_languageCode) {
     // this clears out the base state.
-    this.baseState_ = new mirosubs.widget.BaseState(null);
+    //this.baseState_ = new mirosubs.widget.BaseState(null);
     if (opt_languageCode)
         this.translationSelected_(opt_languageCode);
     else
@@ -459,17 +462,17 @@ mirosubs.widget.Widget.prototype.subsLoaded_ =
     this.languageCodePlaying_ = languageCode;
     this.playManager_ = new mirosubs.play.Manager(
         this.videoPlayer_, subtitles);
-    var videoTabText;
-    if (languageCode == null)
-        videoTabText = 
-            subtitles.length == 0 ? 
-            mirosubs.widget.VideoTab.Messages.SUBTITLE_ME : 
-            "Original language";
+    if (languageCode == null) {
+        if (subtitles.length == 0)
+            this.state_ = new mirosubs.widget.NoSubtitlesState();
+        else
+            this.state_ = new mirosubs.widget.SubtitleState();
+    }
     else
-        videoTabText = this.findLanguage_(languageCode)['name'];
-    this.videoTab_.setText(videoTabText);            
-    this.popupMenu_.setCurrentLangCode(languageCode);
-    this.popupMenu_.setShowingSubs(true);
+        this.state_ = new mirosubs.widget.TranslateState(languageCode);
+    this.videoTab_.setText(this.state_.getVideoTabText());
+    //this.popupMenu_.setCurrentLangCode(languageCode);
+    //this.popupMenu_.setShowingSubs(true);
 };
 mirosubs.widget.Widget.prototype.findLanguage_ = function(code) {
     return goog.array.find(
