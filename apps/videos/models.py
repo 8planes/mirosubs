@@ -21,7 +21,7 @@ import string
 import random
 from urlparse import urlparse, parse_qs
 from django.conf.global_settings import LANGUAGES
-from auth.models import CustomUser as User
+from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
@@ -32,6 +32,7 @@ from youtube import get_video_id
 from dailymotion import DAILYMOTION_REGEX
 import urllib
 from videos.utils import YoutubeSubtitleParser
+from django.db.models.signals import post_save
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -732,6 +733,8 @@ class SubtitleVersion(models.Model):
             if s.subtitle_text.strip() != '':
                 return False
         return True
+
+post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
 
 def update_video_is_subtitled_state(sender, instance, created, **kwargs):
     if instance.finished and instance.language.is_original:

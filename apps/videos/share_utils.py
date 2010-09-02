@@ -82,10 +82,10 @@ def _add_share_panel_context_for_translation_history(context, video, language_co
                 args=[video.video_id, language_code]))
     language_name = widget.LANGUAGES_MAP[language_code]
     twitter_fb_message = \
-        "Just found a version of this video with {0} subtitles: {1}".format(
+        u"Just found a version of this video with {0} subtitles: {1}".format(
         language_name, page_url)
     email_message = \
-        "Hey-- just found a version of this video {0}with {1} subtitles: {2}".format(
+        u"Hey-- just found a version of this video {0}with {1} subtitles: {2}".format(
         _share_video_title(video), language_name, page_url)
     _add_share_panel_context(
         context,

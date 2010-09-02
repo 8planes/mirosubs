@@ -76,10 +76,15 @@ class Awards(models.Model):
     COMMENT = 1
     START_SUBTITLES = 2
     START_TRANSLATION = 3
+    EDIT_SUBTITLES = 4
+    EDIT_TRANSLATION = 5
+    RATING = 6
     TYPE_CHOICES = (
         (COMMENT, _(u'Add comment')),
         (START_SUBTITLES, _(u'Start subtitles')),
-        (START_TRANSLATION, _(u'Start translation'))
+        (START_TRANSLATION, _(u'Start translation')),
+        (EDIT_SUBTITLES, _(u'Edit subtitles')),
+        (EDIT_TRANSLATION, _(u'Edit translation'))
     )
     points = models.IntegerField()
     type = models.IntegerField(choices=TYPE_CHOICES)
@@ -92,7 +97,13 @@ class Awards(models.Model):
         elif self.type == self.START_SUBTITLES:
             self.points = 100
         elif self.type == self.START_TRANSLATION:
-            self.points = 100    
+            self.points = 100
+        elif self.type == self.EDIT_SUBTITLES:
+            self.points = 50
+        elif self.type == self.EDIT_TRANSLATION:
+            self.points = 50
+        else:
+            self.points = 0
         
     def save(self, *args, **kwrags):
         self.points or self._set_points()
@@ -103,8 +114,21 @@ class Awards(models.Model):
     @classmethod
     def on_comment_save(cls, sender, instance, created, **kwargs):
         if created:
-            obj = cls(user=instance.user, type = cls.COMMENT)
-            obj.save()
+            cls.objects.get_or_create(user=instance.user, type = cls.COMMENT)
+    
+    @classmethod
+    def on_subtitle_version_save(cls, sender, instance, created, **kwargs):
+        if created and instance.version_no == 0:
+            if instance.language.is_original:
+                type = cls.START_SUBTITLES
+            else:
+                type = cls.START_TRANSLATION
+        else:
+            if instance.language.is_original:
+                type = cls.EDIT_SUBTITLES
+            else:
+                type = cls.EDIT_TRANSLATION
+        cls.objects.get_or_create(user=instance.user, type=type)
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (
