@@ -17,6 +17,9 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from widget.base_rpc import BaseRpc
+from videos import models
+from django.conf.global_settings import LANGUAGES
+import widget
 
 class NullRpc(BaseRpc):
     def start_editing(self, request, video_id, language_code=None, editing=False, base_version_no=None):
@@ -26,7 +29,7 @@ class NullRpc(BaseRpc):
         else:
             video = models.Video.objects.get(video_id=video_id)
             null_subtitles, created = self._get_null_subtitles_for_editing(
-                request.user, video)
+                request.user, video, language_code)
             subtitles = \
                 [s.to_json_dict(is_dependent_translation=
                                 language_code is not None) 
@@ -37,7 +40,7 @@ class NullRpc(BaseRpc):
                         'existing': subtitles }
         if editing and language_code is not None:
             return_dict['existing_captions'] = \
-                self.fetch_subtitles(video_id, request.user)
+                self.fetch_subtitles(request, video_id)
             return_dict['languages'] = \
                 [widget.language_to_map(lang[0], lang[1])
                  for lang in LANGUAGES]
@@ -48,18 +51,30 @@ class NullRpc(BaseRpc):
             return { "response" : "not_logged_in" }
         video = models.Video.objects.get(video_id=video_id)
         null_subtitles, created = self._get_null_subtitles_for_editing(
-            request.user, video)
+            request.user, video, language_code)
         self._save_subtitles_impl(request, null_subtitles, deleted, inserted, updated)
         return {'response':'ok'}
 
     def finished_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
+        # there is no concept of "finished" for null subs
         return self.save_subtitles(
-            request, video_id, version_no, deleted, inserted, updated)
+            request, video_id, deleted, inserted, updated, language_code)
 
     def fetch_subtitles(self, request, video_id, language_code=None):
-        null_subtitles = models.Video.objects.get(
-            video_id=video_id).null_subtitles(user, language_code)
-        return [s.to_json_dict() for s in null_subtitles.subtitle_set.all()]
+        if request.user.is_anonymous():
+            return []
+        video = models.Video.objects.get(video_id=video_id)
+        null_subtitles = video.null_subtitles(request.user, language_code)
+        if null_subtitles is None:
+            return []
+        else:
+            if language_code is None:
+                return [s.to_json_dict() for s 
+                        in null_subtitles.subtitle_set.all()]
+            else:
+                return [s[0].to_json_dict(text_to_use=s[1].subtitle_text)
+                        for s in video.null_dependent_translations(
+                        request.user, language_code)]
 
     def fetch_subtitles_and_open_languages(self, request, video_id):
         return { 'captions': self.fetch_subtitles(request, video_id),
@@ -67,26 +82,24 @@ class NullRpc(BaseRpc):
                                for lang in LANGUAGES]}
 
 
-    def _get_null_subtitles_for_editing(self, user, video):
+    def _get_null_subtitles_for_editing(self, user, video, language_code):
         null_subtitles = video.null_subtitles(user, language_code)
         created = False
         if null_subtitles is None:
             null_subtitles = models.NullSubtitles(
                 video=video,
                 language=('' if language_code is None else language_code),
-                user=user,
-                is_original=(language_code is None))
+                is_original=(language_code is None),                
+                user=user)
             null_subtitles.save()
             created = True
         return null_subtitles, created
 
-
     def _save_subtitles_impl(self, request, null_subtitles, deleted, inserted, updated):
-        self._apply_caption_changes(
-            null_captions.videocaption_set, deleted, inserted, 
-                              updated, None, null_captions)
-        null_captions.save()
-        return null_captions
+        self._apply_subtitle_changes(
+            null_subtitles.subtitle_set, deleted, inserted, updated, 
+            is_dependent_translation=not null_subtitles.is_original)
+        null_subtitles.save()
 
     def _autoplay_subtitles(self, user, video, base_state, language_code, revision_no):
         if langugage_code is not None:

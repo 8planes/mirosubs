@@ -365,8 +365,8 @@ class Video(models.Model):
         dependent translation.
         """
         return self._make_subtitles_and_translations(
-            self.null_subtitles(user), 
-            self.null_subtitles(user, language_code))
+            self.null_subtitles(user).subtitle_set.all(), 
+            self.null_subtitles(user, language_code).subtitle_set.all())
 
     @classmethod
     def _make_subtitles_and_translations(cls, subtitle_set, translation_set):
@@ -742,8 +742,7 @@ def update_language_complete_state(sender, instance, created, **kwargs):
         if instance.is_all_blank():
             finished_count = language.subtitleversion_set.filter(finished=True).count()
             if finished_count == 1:
-                if instance.id:
-                    instance.delete()
+                instance.delete()
                 language.is_complete = False
                 language.was_complete = False
             else:

@@ -27,6 +27,7 @@ from django.test import TestCase
 from auth.models import CustomUser
 from videos.models import Video
 from widget.rpc import Rpc
+from widget.null_rpc import NullRpc
 
 class RequestMockup(object):
     
@@ -41,6 +42,65 @@ class NotAuthenticatedUser:
         return True
 
 rpc = Rpc()
+null_rpc = NullRpc()
+
+class TestNullRpc(TestCase):
+    fixtures = ['test_widget.json']
+
+    def setUp(self):
+        self.user_0 = CustomUser.objects.get(pk=3)
+        self.user_1 = CustomUser.objects.get(pk=4)
+
+    def test_save_subtitles(self):
+        request = RequestMockup(self.user_0)
+        return_value = null_rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        video_id = return_value['video_id']
+        return_value = null_rpc.start_editing(request, video_id)
+        self.assertEqual(True, return_value['can_edit'])
+        self.assertEqual(0, return_value['version'])
+        inserted = [{'caption_id': u'sfdsfsdf',
+                     'caption_text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        return_value = null_rpc.save_subtitles(request, video_id, 
+                           [], inserted, [])
+        self.assertEquals('ok', return_value['response'])
+        null_rpc.finished_subtitles(request, video_id, [], [], [])
+        subs = null_rpc.fetch_subtitles(request, video_id)
+        self.assertEqual(1, len(subs))
+        other_subs = null_rpc.fetch_subtitles(RequestMockup(self.user_1), video_id)
+        self.assertEqual(0, len(other_subs))
+
+    def test_translate(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_subtitle(request)
+        null_rpc.finished_subtitles(request, video.video_id, [], [], [])
+        response = null_rpc.start_editing(request, video.video_id, language_code='es')
+        self.assertEquals(True, response['can_edit'])
+        inserted = [{'caption_id': u'sfdsfsdf', 'text': 'asdfdsf'}]
+        null_rpc.save_subtitles(request, video.video_id, [], inserted, [], language_code='es')
+        null_rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
+        subs = null_rpc.fetch_subtitles(request, video.video_id, language_code='es')
+        self.assertEqual(1, len(subs))
+        
+
+    def _create_video_with_one_subtitle(self, request):
+        return_value = null_rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
+        video_id = return_value['video_id']
+        null_rpc.start_editing(request, video_id)
+        inserted = [{'caption_id': u'sfdsfsdf',
+                     'caption_text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        null_rpc.save_subtitles(request, video_id, 
+                                [], inserted, [])
+        return Video.objects.get(video_id=video_id)
 
 class TestRpc(TestCase):
     fixtures = ['test_widget.json']
