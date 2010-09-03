@@ -4,8 +4,8 @@
 
 {% block main_content %}
 <div class="left_column">
-    <h2>{% trans 'User Profile' %} <a href="{% url profiles:profile user_info %}">({% trans 'View profile' %})</a></h2>
-    <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}"><h3>{{ user_info }}</h3>
+    <h2>{% trans 'Edit Your Profile' %} <a href="{% url profiles:profile user_info %}">({% trans 'View profile' %})</a></h2>
+    <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}">
     <p>
         {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
     </p>
@@ -16,7 +16,7 @@
 
 <div class="right_column">
     <br/>
-    <h3>{% trans 'About' %} {{ user_info }}</h3>
+    <h3>{% trans 'About' %}</h3>
     <p class="user_bio">
         {{ user_info.biography }}
     </p>

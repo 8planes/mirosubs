@@ -88,7 +88,7 @@ class Awards(models.Model):
     )
     points = models.IntegerField()
     type = models.IntegerField(choices=TYPE_CHOICES)
-    user = models.ForeignKey(CustomUser)
+    user = models.ForeignKey(CustomUser, null=True)
     created = models.DateTimeField(auto_now_add=True)
     
     def _set_points(self):
@@ -118,6 +118,9 @@ class Awards(models.Model):
     
     @classmethod
     def on_subtitle_version_save(cls, sender, instance, created, **kwargs):
+        if not instance.user:
+            return
+        
         if created and instance.version_no == 0:
             if instance.language.is_original:
                 type = cls.START_SUBTITLES
