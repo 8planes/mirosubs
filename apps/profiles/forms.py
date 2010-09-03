@@ -64,7 +64,7 @@ class EditUserForm(forms.ModelForm):
     new_password = forms.CharField(widget=forms.PasswordInput, required=False)
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
                                           required=False,
-                                          label='Confirm new password:')
+                                          label=_(u'Confirm new password:'))
 
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
@@ -91,7 +91,7 @@ class EditUserForm(forms.ModelForm):
         if value:
             try:
                 User.objects.exclude(pk=self.instance.pk).get(email=value)
-                raise forms.ValidationError(_u('This email is used already.'))
+                raise forms.ValidationError(_(u'This email is used already.'))
             except User.DoesNotExist:
                 pass
         return value

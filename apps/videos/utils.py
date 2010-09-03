@@ -61,8 +61,11 @@ class YoutubeSubtitleParser(SubtitleParser):
         data = json.loads(data)
         if data:
             data = data[0]
-        self.subtitles = data['plaintext_list'] 
-        self.language = data['language']
+            self.subtitles = data['plaintext_list']
+            self.language = data['language']
+        else:
+            self.subtitles = []
+            self.language = None            
     
     def __len__(self):
         return len(self.subtitles)

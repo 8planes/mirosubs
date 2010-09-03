@@ -139,11 +139,11 @@ class Rpc(BaseRpc):
         current_version = language.latest_version()
         self._apply_subtitle_changes(
             current_version.subtitle_set, deleted, inserted, 
-            updated, current_version, is_dependent_translation=not language.is_original)
+            updated, is_dependent_translation=not language.is_original)
         current_version.save()
 
     def _apply_subtitle_changes(self, subtitle_set, deleted, inserted, updated, 
-                                version, is_dependent_translation=False):
+                                is_dependent_translation=False):
         for d in deleted:
             subtitle_set.remove(subtitle_set.get(subtitle_id=d['caption_id']))
         for u in updated:
@@ -158,7 +158,6 @@ class Rpc(BaseRpc):
                     subtitle_text=i['text'])
             else:
                 subtitle = models.Subtitle(
-                    version=version,
                     subtitle_id=i['caption_id'],
                     subtitle_text=i['caption_text'],
                     start_time=i['start_time'],

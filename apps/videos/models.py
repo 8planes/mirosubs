@@ -21,7 +21,7 @@ import string
 import random
 from urlparse import urlparse, parse_qs
 from django.conf.global_settings import LANGUAGES
-from auth.models import CustomUser as User
+from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
@@ -32,6 +32,7 @@ from youtube import get_video_id
 from dailymotion import DAILYMOTION_REGEX
 import urllib
 from videos.utils import YoutubeSubtitleParser
+from django.db.models.signals import post_save
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -339,9 +340,9 @@ class Video(models.Model):
         return [] if version is None else version.subtitles()
 
     def null_subtitles(self, user, language_code=None):
-        """Returns NullVideoCaptions for user, or None if none exist."""
+        """Returns NullSubtitles for user, or None if none exist."""
         try:
-            return self.nullvideocaptions_set.filter(
+            return self.nullsubtitles_set.filter(
                 user__id__exact=user.id).filter(
                 language=('' if language_code is None 
                           else language_code))[:1].get()
@@ -733,27 +734,7 @@ class SubtitleVersion(models.Model):
                 return False
         return True
 
-def update_video_is_subtitled_state(sender, instance, created, **kwargs):
-    if instance.finished and instance.language.is_original:
-        video = instance.video
-        if instance.is_all_blank():
-            finished_count = sender.objects.filter(finished=True, language=instance.language).count()
-            if finished_count == 1:
-                instance.delete()
-                video.is_subtitled = False
-                video.was_subtitled = False
-            else:
-                video_captions = list(instance.subtitles())
-                for vc in video_captions:
-                    vc.delete()
-                video.is_subtitled = False
-                video.was_subtitled = True
-        else:
-            video.is_subtitled = True
-            video.was_subtitled = True
-        video.save()
-
-post_save.connect(update_video_is_subtitled_state, SubtitleVersion)
+post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
 
 def update_language_complete_state(sender, instance, created, **kwargs):
     if instance.finished:
@@ -761,7 +742,8 @@ def update_language_complete_state(sender, instance, created, **kwargs):
         if instance.is_all_blank():
             finished_count = language.subtitleversion_set.filter(finished=True).count()
             if finished_count == 1:
-                instance.delete()
+                if instance.id:
+                    instance.delete()
                 language.is_complete = False
                 language.was_complete = False
             else:
@@ -773,6 +755,11 @@ def update_language_complete_state(sender, instance, created, **kwargs):
         else:
             language.is_complete = True
             language.was_complete = True
+        if language.is_original:
+            video = language.video
+            video.is_subtitled = language.is_complete
+            video.was_subtitled = language.was_complete
+            video.save()
         language.save()
 
 post_save.connect(update_language_complete_state, SubtitleVersion)
