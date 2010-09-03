@@ -16,23 +16,32 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SubtitleState');
+goog.provide('mirosubs.widget.InitialState');
 
-mirosubs.widget.SubtitleState = function(widget, videoID, baseState) {
+mirosubs.widget.InitialState = function(widget, videoURL, baseState) {
     mirosubs.widget.WidgetState.call(this, widget);
-    this.videoID_ = videoID;
+    this.videoURL_ = videoURL;
     this.baseState_ = baseState;
+    
+    this.videoTabText_ = "Subtitle Me";
 };
-goog.inherits(mirosubs.widget.SubtitleState, mirosubs.widget.WidgetState);
 
-mirosubs.widget.SubtitleState.prototype.initialize = function(callback) {
+goog.inherits(mirosubs.widget.InitialState, mirosubs.widget.WidgetState);
+
+mirosubs.widget.InitialState.prototype.initialize = function(callback) {
+    var that = this;
     mirosubs.Rpc.call(
-        "start_editing",
-        { "video_id": this.videoID_,
-          "base_version_no": this.baseState_.REVISION},
-        callback);
+        'show_widget', {
+            'video_url' : this.videoURL_,
+            'base_state': this.baseState_.ORIGINAL_PARAM
+        },
+        function (result) {
+            if (result['subtitles'].length > 0)
+                that.videoTabText_ = "Choose Language";
+            callback(result); 
+        });
 };
 
-mirosubs.widget.SubtitleState.prototype.getVideoTabText = function() {
-    return "Currently Subtitling";
+mirosubs.widget.InitialState.prototype.getVideoTabText = function() {
+    return this.videoTabText_;
 };

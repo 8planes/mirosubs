@@ -16,23 +16,26 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SubtitleState');
+goog.provide('mirosubs.widget.EditTranslationState');
 
-mirosubs.widget.SubtitleState = function(widget, videoID, baseState) {
+mirosubs.widget.EditTranslationState = function(widget, videoID, languageCode, baseState) {
     mirosubs.widget.WidgetState.call(this, widget);
     this.videoID_ = videoID;
+    this.languageCode_ = languageCode;
     this.baseState_ = baseState;
 };
-goog.inherits(mirosubs.widget.SubtitleState, mirosubs.widget.WidgetState);
+goog.inherits(mirosubs.widget.EditTranslationState, mirosubs.widget.WidgetState);
 
-mirosubs.widget.SubtitleState.prototype.initialize = function(callback) {
+mirosubs.widget.EditTranslationState.prototype.initialize = function(callback) {
     mirosubs.Rpc.call(
         "start_editing",
         { "video_id": this.videoID_,
+          "language_code": this.languageCode_,
+          "editing": true,
           "base_version_no": this.baseState_.REVISION},
         callback);
 };
 
-mirosubs.widget.SubtitleState.prototype.getVideoTabText = function() {
-    return "Currently Subtitling";
+mirosubs.widget.EditTranslationState.prototype.getVideoTabText = function() {
+    return "Editing translations";
 };

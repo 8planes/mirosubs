@@ -16,13 +16,21 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.NoSubtitlesState');
+goog.provide('mirosubs.widget.NewTranslationState');
 
-mirosubs.widget.NoSubtitlesState = function() {
-    mirosubs.widget.WidgetState.call(this);
+mirosubs.widget.NewTranslationState = function(widget, videoID) {
+    mirosubs.widget.WidgetState.call(this, widget);
+    this.videoID_ = videoID;
 };
-goog.inherits(mirosubs.widget.NoSubtitlesState, mirosubs.widget.WidgetState);
+goog.inherits(mirosubs.widget.NewTranslationState, mirosubs.widget.WidgetState);
 
-mirosubs.widget.NoSubtitlesState.prototype.getVideoTabText = function() {
-    return "Subtitle Me";
+mirosubs.widget.NewTranslationState.prototype.initialize = function(callback) {
+    mirosubs.Rpc.call(
+        "fetch_subtitles_and_open_languages",
+        { "video_id": this.videoID_ },
+        callback);
+};
+
+mirosubs.widget.NewTranslationState.prototype.getVideoTabText = function() {
+    return "Translating...";
 };

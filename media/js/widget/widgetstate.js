@@ -18,8 +18,9 @@
 
 goog.provide('mirosubs.widget.WidgetState');
 
-mirosubs.widget.WidgetState = function() {
+mirosubs.widget.WidgetState = function(widget) {
     this.baseState_ = mirosubs.widget.BaseState(null);
+    this.widget_ = widget;
 };
 
 mirosubs.widget.WidgetState.prototype.getBaseState = function() {
