@@ -18,8 +18,29 @@
 
 goog.provide('mirosubs.video');
 
+mirosubs.video.Html5VideoType = {
+    H264: 1,
+    OGG: 2,
+    WEBM: 3
+};
+
 mirosubs.video.supportsVideo = function() {
     return !!goog.dom.createElement('video')['canPlayType'];
+};
+
+mirosubs.video.supportsVideoType = function(html5VideoType) {
+    var v = mirosubs.video;
+    var vt = v.Html5VideoType;
+    switch (html5VideoType) {
+    case vt.H264:
+        return v.supportsH264();
+    case vt.OGG:
+        return v.supportsOgg();
+    case vt.WEBM:
+        return v.supportsWebM();
+    default:
+        throw "unknown type";
+    }
 };
 
 mirosubs.video.supports_ = function(playType) {

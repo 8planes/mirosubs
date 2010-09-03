@@ -19,6 +19,7 @@
 from django.db import models
 import string
 import random
+import re
 from urlparse import urlparse, parse_qs
 from django.conf.global_settings import LANGUAGES
 from auth.models import CustomUser as User, Awards
@@ -54,10 +55,12 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_FORA, 'Fora.tv'),
     (VIDEO_TYPE_USTREAM, 'Ustream.tv'),
     (VIDEO_TYPE_VIMEO, 'Vimeo.com'),
-    (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com')
+    (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com'),
+    (VIDEO_TYPE_FLV, 'FLV')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
+FLV_REGEX = re.compile(r"\.flv$")
 
 def format_time(time):
     if time < 0:
@@ -268,6 +271,12 @@ class Video(models.Model):
                           'video_type': VIDEO_TYPE_DAILYMOTION,
                           'allow_community_edits': True})
             # TODO: title and thumbnail -- need dailymotion support in vidscraper
+        elif FLV_REGEX.match(video_url):
+            video, created = Video.objects.get_or_create(
+                video_url=video_url,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_FLV,
+                          'allow_community_edits': True})
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
