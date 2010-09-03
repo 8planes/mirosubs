@@ -133,7 +133,6 @@
 
 {% block main_content %}
     <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
-    {{ LANGUAGE_CODE }}
     <ul class="breadcrumb">
         <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
         <li>{{ language.language_display }} {% trans 'Subtitles' %}</li>
@@ -164,7 +163,8 @@
             <span class="download">{% trans 'Download Subtitles' %}</span> 
             <a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a> / 
             <a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a> /
-            <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a>
+            <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a> /
+            <a href="{% url widget:download_txt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TXT</a>
         {% endif %}
       </div>
     </div>
@@ -198,19 +198,19 @@
             <thead>
               <tr>
                 <th>
-                    {% ordered_column "date" "Most Recent" #revisions %}
+                    {% ordered_column "date" _("Most Recent") #revisions %}
                 </th>
                 <th>
-                    {% ordered_column "user" "User" #revisions %}
+                    {% ordered_column "user" _("User") #revisions %}
                 </th>
                 <th>
-                    {% ordered_column "note" "Note" #revisions %}
+                    {% ordered_column "note" _("Note") #revisions %}
                 </th>
                 <th>
-                    {% ordered_column "time" "Time" #revisions %}
+                    {% ordered_column "time" _("Time") #revisions %}
                 </th>
                 <th class="last">
-                    {% ordered_column "text" "Text" #revisions %}
+                    {% ordered_column "text" _("Text") #revisions %}
                 </th>
               </tr> 
             </thead>

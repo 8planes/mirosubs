@@ -143,6 +143,7 @@ JS_OFFSITE.append('widget/crossdomainembed.js')
 JS_ONSITE = list(JS_CORE)
 JS_ONSITE.append('widget/samedomainembed.js')
 
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -228,6 +229,7 @@ INSTALLED_APPS = (
     'south',
     'haystack',
     'comments',
+    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 
 #Haystack configuration
@@ -286,3 +288,8 @@ try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
     LAST_COMMIT_GUID = ''
+
+try:
+    from settings_local import *
+except ImportError:
+    pass

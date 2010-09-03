@@ -1,7 +1,7 @@
 <div class="pagination">
    {% if has_previous %}
       <span class="page">
-      <a href="?page={{ previous }}{{ extra_link }}">&laquo; prev</a>
+      <a href="?page={{ previous }}{{ extra_link }}">&laquo; {% trans 'prev' %}</a>
       </span>
    {% endif %}
 
@@ -22,6 +22,6 @@
       <span class="page"><a href="?page=last{{ extra_link }}">{{ pages }}</a></span>
    {% endif %}
    {% if has_next %}
-      <span class="page"><a href="?page={{ next }}{{ extra_link }}">next &raquo;</a></span>
+      <span class="page"><a href="?page={{ next }}{{ extra_link }}">{% trans 'next' %} &raquo;</a></span>
    {% endif %}
 </div>

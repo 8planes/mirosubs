@@ -23,18 +23,25 @@
     <div>
         <form method="post" action="{% url videos:feedback %}" id="feedback_form">
         {% csrf_token %}
-        <h2>
-            {% block form_title %}
-                {% trans 'What did you think about the site?' %}
-            {% endblock %}
-        </h2>
+            <h2>
+                {% block form_title %}
+                    {% trans 'What did you think about the site?' %}
+                {% endblock %}
+            </h2>
             {% block hidden_fields %}{% endblock %}
             <p>{% trans 'Please let us know if you have any comments, questions, or suggestions!' %}</p>
+            <div class="global-errors">
+                
+            </div>
             <p>
                 <label for="feedback_email">{% trans 'Your email:' %} </label>{{ form.email }}
             </p>
             <p>
-            <label>{% trans 'Your Feedback' %}</label>
+                {{ form.math_captcha_field|safe }}
+                {{ form.math_captcha_question|safe }}
+            </p>
+            <p>
+                <label>{% trans 'Your Feedback' %}</label>
                 {{ form.message }}
             </p>
 
@@ -68,7 +75,13 @@
                     $form.parent().hide().next().show();
                 } else {
                     for (key in data.errors){
-                        $form.prepend('<p class="error_list">'+data.errors[key]+'</p>');
+                        var $field = $('input[name="'+key+'"]', $form);
+                        var error = '<p class="error_list">'+data.errors[key]+'</p>';
+                        if ($field.length){
+                            $field.before(error);
+                        }else{
+                            $('.global-errors', $form).prepend(error);
+                        }
                     };
                 }
             },
@@ -76,7 +89,7 @@
                 $('p.error_list', $Form).remove();
                 var form = $Form[0];
                 if (!form.message.value){
-                    $(form.message).before('<p class="error_list">'+ERROR_MSG+'</p>');
+                    $(form.message).before('<dp class="error_list">'+ERROR_MSG+'</p>');
                     return false;
                 }
             }

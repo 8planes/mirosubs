@@ -71,13 +71,23 @@
 
 {% block main_content %}
     <h2 class="main-title">
-        {{ video }} - {{ language.language_display }} - 
-        {% blocktrans with first_version.version_no as version_no and second_version.version_no as second_version_no %}
-        Comparing #{{ version_no }} and #{{ second_version_no }}
-        {% endblocktrans %}
+        {% if first_version.next_version %}
+            {% blocktrans with first_version.version_no as version_no and second_version.version_no as second_version_no %}
+            Comparing older revision (#{{ second_version_no }}) to revision (#{{ version_no }})
+            {% endblocktrans %}
+        {% else %}
+            {% blocktrans with first_version.version_no as version_no and second_version.version_no as second_version_no %}
+            Comparing older revision (#{{ second_version_no }}) to current revision (#{{ version_no }})
+            {% endblocktrans %}        
+        {% endif %}
     </h2>
 
-    <ul class="breadcrumb"> 
+    <ul class="breadcrumb">
+      <li>
+          <a href="{{ video.get_absolute_url }}">
+              {{ video }}
+          </a>
+      </li>        
       <li>
           <a href="{{ language.get_absolute_url }}">
               {{ language.language_display }} {% trans 'Subtitles' %}

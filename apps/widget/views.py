@@ -77,6 +77,12 @@ def widget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
+def widgetize_demo(request):
+    context = widget.add_widgetize_js_files({})
+    return render_to_response('widget/widgetize_demo.html',
+                              context,
+                              context_instance=RequestContext(request))
+
 def base_widget_params(request, extra_params={}):
     params = {}
     params['video_url'] = request.GET.get('video_url')
@@ -93,20 +99,6 @@ def base_widget_params(request, extra_params={}):
     params.update(extra_params)
     return json.dumps(params)[1:-1]
 
-def srt(request):
-    video = models.Video.objects.get(video_id=request.GET['video_id'])
-    if 'lang_code' in request.GET:
-        lang_code = request.GET['lang_code']
-        response_text = captions_and_translations_to_srt(
-            video.captions_and_translations(lang_code))
-    else:
-        response_text = captions_to_srt(
-            list(video.captions().videocaption_set.all()))
-    response = HttpResponse(response_text, mimetype="text/plain")
-    response['Content-Disposition'] = \
-        'attachment; filename={0}.srt'.format(video.lang_filename(request.GET.get('lang_code')))
-    return response
-
 def download_subtitles(request, handler=SSASubtitles):
     video_id = request.GET.get('video_id')
     lang_code = request.GET.get('lang_code')
@@ -120,30 +112,20 @@ def download_subtitles(request, handler=SSASubtitles):
     
     subtitles = []
     
-    if lang_code:
-        translation_language = video.translation_language(lang_code)
-        if not translation_language:
-            raise Http404
-        
-        translations = translation_language.translations()
-        if translations:
-            for item in translations.captions():
-                if item.caption and item.caption.start_time >= 0 and item.caption.end_time >= 0:
-                    subtitles.append({
-                        'text': item.translation_text,
-                        'start': item.caption.start_time,
-                        'end': item.caption.end_time
-                    })
-    else:
-        captions = video.captions()
-        if captions:
-            for item in captions.captions():
-                if item.start_time >= 0 and item.end_time >= 0:
-                    subtitles.append({
-                        'text': item.caption_text,
-                        'start': item.start_time,
-                        'end': item.end_time
-                    })
+    language = video.subtitle_language(lang_code)
+    if not language:
+        raise Http404
+    
+    version = language.version()
+    if not version:
+        raise Http404    
+    
+    for item in version.subtitles():
+        subtitles.append({
+            'text': item.subtitle_text,
+            'start': item.get_start_time(),
+            'end': item.get_end_time()
+        })
     
     h = handler(subtitles, video)
     response = HttpResponse(unicode(h), mimetype="text/plain")

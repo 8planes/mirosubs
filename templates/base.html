@@ -1,4 +1,4 @@
-{% load feedback thumbnail %}
+{% load feedback thumbnail i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -10,11 +10,12 @@
 
 {% endblock %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
 <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>
 {% block scripts %}{% endblock %}
 <link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.ico" type="image/x-icon">
 <title>
-    {% block title %}Universal Subtitles - Free and open tools for creating captions, subtitles, and translations for video.{% endblock %}
+    {% block title %}Universal Subtitles - {% trans 'Free and open tools for creating captions, subtitles, and translations for video.' %}{% endblock %}
 </title>
 {% if not DEBUG %}
 <script type="text/javascript">
@@ -33,7 +34,7 @@
 <body {% block body_attrs %}{% endblock %}>
 {% comment %}
 <!--[if lte IE 6]>
-  <div class="note"><strong>Universal Subtitles does not support your browser. Upgrade your browser or <a href="http://getfirefox.com">Try Firefox</a>.</strong></div>
+  <div class="note"><strong>{% trans 'Universal Subtitles does not support your browser. Upgrade your browser or <a href="http://getfirefox.com">Try Firefox</a>.' %}</strong></div>
 <![endif]-->
 {% endcomment %}
     <div class="cloud">
@@ -55,33 +56,33 @@
 
         <h1>
           {% block logo %}<a href="/">Universal Subtitles</a>{% endblock %}
-          <span class="project">a project of the participatory culture foundation</span>
+          <span class="project">{% trans 'a project of the participatory culture foundation' %}</span>
         </h1>
         
         {% if user.is_authenticated %}
         <div class="user_panel">
           <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" /> 
           <a href="{% url profiles:my_profile %}">{{ user }}</a>
-          {#<span class="points"><strong>Points</strong> 3,999</span>#}
-          {#<span class="awards"><strong>Awards</strong> 3,999</span>#}
+          {#<span class="points"><strong>{% trans 'Points' %}</strong> 3,999</span>#}
+          {#<span class="awards"><strong>{% trans 'Awards' %}</strong> 3,999</span>#}
         </div>
         {% endif %}
         
         <ul class="nav">
-          <li class="first create_link"><a href="/videos/create/"><span>Subtitle a Video</span></a></li>
-          <li class="videos_link"><a href="/videos/"><span>Videos</span></a></li>
-          <li class="last about_link last_nav"><a href="/about"><span>Volunteer</span></a></li>
+          <li class="first create_link"><a href="/videos/create/"><span>{% trans 'Subtitle a Video' %}</span></a></li>
+          <li class="videos_link"><a href="/videos/"><span>{% trans 'Videos' %}</span></a></li>
+          <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li>
         </ul>
 
 
         <ul class="sub_nav">
-          <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>Blog</span></a></li>
-          <li class="faq_link"><a href="{% url faq_page %}"><span>FAQ</span></a></li>
-          <li class="last about_link last_nav"><a href="/about"><span>About</span></a></li>
+          <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>{% trans 'Blog' %}</span></a></li>
+          <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
+          <li class="last about_link last_nav"><a href="/about"><span>{% trans 'About' %}</span></a></li>
           {% if user.is_authenticated %}
-              <li class="login_link"><a href="{% url logout %}?next={{ request.path_info}}"><span>Logout</span></a></li>
+              <li class="login_link"><a href="{% url logout %}?next={{ request.path_info}}"><span>{% trans 'Logout' %}</span></a></li>
           {% else %}
-              <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info }}"><span>Login</span></a></li>
+              <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info }}"><span>{% trans 'Login' %}</span></a></li>
           {% endif %}
         </ul>
 
@@ -91,32 +92,26 @@
       <div class="content">
       {% block main_content %}
       
-      
       {% endblock %}
       </div>
-
-      
       </div>
       {% block feedback_form %}
         {% feedback_form %}
       {% endblock %}
     <div class="footer">
         <div class="floatleft">
-            Universal Subtitles is a project of <a
-            href="http://participatoryculture.org/">PCF</a>.  
+            {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
         </div>   
     
         <div class="floatright">
             <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
             <a href="http://twitter.com/universalsubs">Twitter</a>
-            <a href="mailto:universalsubtitles@pculture.org">Contact Us</a>
-            <a href="/w3c/privacy.html">Privacy Policy</a>
+            <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
+            <a href="/w3c/privacy.html">{% trans 'Privacy Policy' %}</a>
         </div>      
     </div> 
     <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
  </div>
-      
- 
   </div>
 </body>
 </html>

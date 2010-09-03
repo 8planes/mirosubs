@@ -1,3 +1,4 @@
+{% load i18n %}
 <script type="text/javascript">
   function share_on_facebook(event) {
       window.open('{{share_panel_facebook_url}}',
@@ -7,16 +8,16 @@
 </script>
 <div class="mirosubs-share">
   <img src="{{MEDIA_URL}}images/blue_triangle.png" class="mirosubs-blueTriangle" />
-  <h2>Share your subtitles</h2>
+  <h2>{% trans 'Share your subtitles' %}</h2>
   
-  <p>Now everyone can watch the video with subtitles-- try it!<br />
-    Then tell the world and invite your friends to help translate:</p>
+  <p>{% trans 'Now everyone can watch the video with subtitles-- try it!' %}<br />
+    {% trans 'Then tell the world and invite your friends to help translate:' %}</p>
   <ul>
-    <li class="mirosubs-facebook"><a href="#" onclick="return share_on_facebook(event);">Post to Facebook</a></li>
-    <li class="mirosubs-twitter-share"><a href="{{share_panel_twitter_url}}" target="post_to_twitter">Post to Twitter</a></li>
-    <li class="mirosubs-friends"><a href="{{share_panel_email_url}}" target="email_friends">Email to friends</a></li>
+    <li class="mirosubs-facebook"><a href="#" onclick="return share_on_facebook(event);">{% trans 'Post to Facebook' %}</a></li>
+    <li class="mirosubs-twitter-share"><a href="{{share_panel_twitter_url}}" target="post_to_twitter">{% trans 'Post to Twitter' %}</a></li>
+    <li class="mirosubs-friends"><a href="{{share_panel_email_url}}" target="email_friends">{% trans 'Email to friends' %}</a></li>
   </ul>
-  <h3>Embed this video in your site</h3>
+  <h3>{% trans 'Embed this video in your site' %}</h3>
   <p class="mirosubs-embed">
     <textarea>{{share_panel_embed_code}}</textarea>
     <span>
@@ -44,6 +45,6 @@
 </object>
     </span>
   </p>
-  <h3>Permalink</h3>
+  <h3>{% trans 'Permalink' %}</h3>
   <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
 </div>

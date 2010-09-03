@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="index"{% endblock %}
-{% load recent_activity widget %}
+{% load recent_activity widget i18n %}
 
 {% block css %}
     {{ block.super }}
@@ -35,32 +35,31 @@
 
 {% block main_content %}
 <div class="watercolor2"> 
-<h2 class="centered">Subtitles and Captions for Every Video on the Web</h2>
+<h2 class="centered">{% trans 'Subtitles and Captions for Every Video on the Web' %}</h2>
 
 <p class="pitch">
-<span class="problem"><strong>The Problem</strong> <span>Web video is beginning to rival television, but there isn't a good open resource for subtitling.</span></span> 
+<span class="problem"><strong>{% trans 'The Problem' %}</strong> <span>{% trans "Web video is beginning to rival television, but there isn't a good open resource for subtitling." %}</span></span> 
 
-<span class="mission"><strong>Our Mission</strong> <span>We're trying to make captioning, subtitling, and translating video publicly accessible 
-in a way that's free and open, just like the Web.</span> <a href="/about">Learn More</a></span>
+<span class="mission"><strong>{% trans 'Our Mission' %}</strong> <span>{% trans "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web." %}</span> <a href="/about">{% trans 'Learn More' %}</a></span>
 
 
-<span class="right_now"><strong>Right now</strong> we're in an alpha stage, building and testing. You can help!<br/>
-<a href="{% url demo %}">Try our demo</a> - <a href="/videos/create/">Subtitle a video</a> - <a href="http://pcf-qa.github.com/universal-subtitles/">Become a tester</a></span>
+<span class="right_now"><strong>{% trans 'Right now' %}</strong> {% trans "we're in an alpha stage, building and testing. You can help!" %}<br/>
+<a href="{% url demo %}">{% trans 'Try our demo' %}</a> - <a href="/videos/create/">Subtitle a video</a> - <a href="http://pcf-qa.github.com/universal-subtitles/">{% trans 'Become a tester' %}</a></span>
 
 </p>											
 
 <div class="three_column">
 	<div class="col1">
-		<h3 class="alpha">Subtitle Widget</h3>
-		<p>A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos).</p>
+		<h3 class="alpha">{% trans 'Subtitle Widget' %}</h3>
+		<p>{% trans 'A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos).' %}</p>
 	</div>
 	<div class="col3">
-		<h3 class="alpha">Community Site</h3> 
-		<p>An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles).</p>
+		<h3 class="alpha">{% trans 'Community Site' %}</h3> 
+		<p>{% trans "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)." %}</p>
 	</div>
 	<div class="col2">
-		<h3>Subtitle Lookup Protocol</h3>
-		<p>An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video.</p>
+		<h3>{% trans 'Subtitle Lookup Protocol' %}</h3>
+		<p>{% trans 'An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video.' %}</p>
 	</div>
 </div>
 
@@ -68,20 +67,19 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
 
 </div>
 
-
 <div class="get_updates">
 
-	<p class="update_text">Get updates and find out first when we launch</p>
+	<p class="update_text">{% trans 'Get updates and find out first when we launch' %}</p>
 	<form method="post" action="http://pcf8.pculture.org/interspire/form.php?form=3" id="frmSS3" onsubmit="return CheckForm3(this);">
 	    {% csrf_token %}
 		<p><input type="text" name="email" /></p>
 		<input type="hidden" name="format" value="h" />
-		<button type="submit" /><span>Get Updates!</span></button>
+		<button type="submit" /><span>{% trans 'Get Updates!' %}</span></button>
 	</form>
 
 	<script type="text/javascript">
 	// <![CDATA[
-                var email_source = 'Please enter a valid email address';
+                var email_source = '{% trans "Please enter a valid email address" %}';
                 $('.get_updates input[name=email]')
                     .val(email_source)
                     .focus(function(){
@@ -114,7 +112,7 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
 			function CheckForm1(f) {
 				var email_re = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
 				if (!email_re.test(f.email.value)) {
-					alert("Please enter your email address.");
+					alert("{% trans 'Please enter your email address.' %}");
 					f.email.focus();
 					return false;
 				}
@@ -126,9 +124,6 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
 	</script>
 </div>
 
-
-
-
 <div class="right_column">	
 
   <div class="box">
@@ -136,9 +131,8 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
   <div class="drumbeat">
         </div>
   
-<h3>Mozilla will double your donation!</h3>
-      <p>We're a featured Mozilla Drumbeat project!<a href="http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/">Donate Now</a></p>
-
+<h3>{% trans 'Mozilla will double your donation!' %}</h3>
+    <p>{% trans "We're a featured Mozilla Drumbeat project!" %}<a href="http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/">{% trans 'Donate Now' %}</a></p>
 </div>
 
 
@@ -146,12 +140,9 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
     
       <img src="{{ MEDIA_URL }}images/widg_button.png" class="floatleft" border="0" />
 
-  <h3>Check out the widget</h3>
-      <p>Test our subtitling widget <a href="/demo">Try the Demo</a></p>
+  <h3>{% trans 'Check out the widget' %}</h3>
+      <p>{% trans 'Test our subtitling widget' %} <a href="/demo">{% trans 'Try the Demo' %}</a></p>
   </div>
-
-
-
 
  </div>
 
@@ -175,7 +166,6 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
            "video_url": "http://subtesting.com/video/Usubs-IntroVideo.theora.ogg" });
   }
 </script>
-
   
   <div id="how-to-video-flash" style="display: none">
      <div class="padding">
@@ -188,11 +178,7 @@ in a way that's free and open, just like the Web.</span> <a href="/about">Learn 
      </div>
   </div>
   
-  
-  
   <div class="clear">&nbsp;</div>
-  
-  
 </div>
 
 {% endblock %}

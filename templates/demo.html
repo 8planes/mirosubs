@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+
 {% block body_attrs %}id="demo"{% endblock %}
 
 {% block scripts %}
@@ -13,8 +16,9 @@
 
 
 
-<h2 class="centered">Welcome to our alpha demo!</h2>
+<h2 class="centered">{% trans 'Welcome to our alpha demo!' %}</h2>
 <div style="text-align: center;">
+  {% blocktrans %}
   <p><strong>What's this?</strong> The video below is for 
     demonstration purposes &mdash; try clicking the 'Subtitle Me' button!</p> 
   <p>We're just getting started, so expect to see better cross-browser 
@@ -24,6 +28,7 @@
     <em>Note: Your subtitles will not be permanently saved 
       (even if you log in).</em>
   </p>
+  {% endblocktrans %}
     <div id="widget_div" class="mirosubs-widget"></div>
   <script language="JavaScript" type="text/javascript">
       var videoURL = mirosubs.video.supportsOgg() ? 
@@ -33,10 +38,12 @@
           document.getElementById('widget_div'),
           { video_url: videoURL, null_widget: true });
   </script>
+  {% blocktrans %}
   <p style="clear: both"><strong>Got feedback?</strong> Use the form at the bottom of 
     this page to give us your feedback, bugs, and opinions.</p>
   <p><strong>What's next?</strong> We’re working on an alpha 
     version of our community website that will enable basic 
     collaboration on subtitles and translations. Stay tuned!</p>
+  {% endblocktrans %}
 </div>
 {% endblock %}

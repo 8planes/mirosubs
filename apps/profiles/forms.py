@@ -48,7 +48,7 @@ class SendMessageForm(forms.Form):
         user = self.cleaned_data.get('user')
         email = self.cleaned_data.get('email')
         headers = {'Reply-To': email}
-        subject = 'Personal message from %s on universalsubtitles.org' % self.sender.username
+        subject = _('Personal message from %(sender)s on universalsubtitles.org') % {'sender': self.sender.username}
         EmailMessage(subject, self.cleaned_data.get('message'), email, \
                      [user.email], headers=headers).send()
 
@@ -64,7 +64,7 @@ class EditUserForm(forms.ModelForm):
     new_password = forms.CharField(widget=forms.PasswordInput, required=False)
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
                                           required=False,
-                                          label='Confirm new password:')
+                                          label=_(u'Confirm new password:'))
 
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
@@ -79,9 +79,9 @@ class EditUserForm(forms.ModelForm):
         current, new, verify = map(self.cleaned_data.get,
                     ('current_password', 'new_password', 'new_password_verify'))
         if current and not self.instance.check_password(current):
-            raise forms.ValidationError('Invalid password.')
+            raise forms.ValidationError(_(u'Invalid password.'))
         if new and new != verify:
-            raise forms.ValidationError('The two passwords did not match.')
+            raise forms.ValidationError(_(u'The two passwords did not match.'))
         if not self.cleaned_data['picture']:
             del self.cleaned_data['picture']
         return self.cleaned_data
@@ -91,7 +91,7 @@ class EditUserForm(forms.ModelForm):
         if value:
             try:
                 User.objects.exclude(pk=self.instance.pk).get(email=value)
-                raise forms.ValidationError('This email is used already.')
+                raise forms.ValidationError(_(u'This email is used already.'))
             except User.DoesNotExist:
                 pass
         return value

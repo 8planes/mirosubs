@@ -24,8 +24,13 @@ from django.contrib.sites.models import Site
 from django.contrib import admin
 admin.autodiscover()
 
+js_info_dict = {
+    'packages': ('mirosubs'),
+}
+
 urlpatterns = patterns(
     '',
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_i18n_catalog'),
     (r'^$', 'videos.views.index'),
     (r'^comments/', include('comments.urls', namespace='comments')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
@@ -56,12 +61,12 @@ urlpatterns = patterns(
     url(r'^w3c/p3p.xml$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'p3p.xml'}),
     url(r'^w3c/Policies.xml$', 'django.views.generic.simple.direct_to_template', 
-        {'template': 'Policies.xml'}),
+        {'template': 'Policies.xml'}, 'policy_page'),
     url(r'^w3c/privacy.html$', 'django.views.generic.simple.direct_to_template', 
-        {'template': 'privacy.html'}),
+        {'template': 'privacy.html'}, 'privacy_page'),
     url(r'^demo/$', 'videos.views.demo', name="demo"),
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
-     {'template': 'about.html'}),
+     {'template': 'about.html'}, 'about_page'),
 		(r'^faq$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'faq.html'}, 'faq_page'),
 		(r'^opensubtitles2010$',  'django.views.generic.simple.direct_to_template', 

@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
-from widget.srt_subs import TTMLSubtitles
+from widget.srt_subs import TTMLSubtitles, TXTSubtitles, SRTSubtitles
 
 urlpatterns = patterns(
     'widget.views',
@@ -27,10 +27,14 @@ urlpatterns = patterns(
     url(r'^rpc/null_xhr/(\w+)$', 'rpc', kwargs={'null':True}),
     url(r'^rpc/jsonp/(\w+)$', 'jsonp'),
     url(r'^rpc/null_jsonp/(\w+)$', 'jsonp', kwargs={'null':True}),
-    url(r'^download_srt/$', 'srt', name='download_srt'),
+    url(r'^widgetize_demo.html$', 'widgetize_demo'),
+    url(r'^download_srt/$', 'download_subtitles', 
+        {'handler': SRTSubtitles}, name='download_srt'),
     url(r'^download_ssa/$', 'download_subtitles', name='download_ssa'),
     url(r'^download_ttml/$', 'download_subtitles', 
         {'handler': TTMLSubtitles}, name='download_ttml'),
+    url(r'^download_txt/$', 'download_subtitles', 
+        {'handler': TXTSubtitles}, name='download_txt'),        
     url(r'^download_null_srt/$', 'null_srt'),
 )
 
@@ -42,4 +46,8 @@ urlpatterns += patterns(
     url(r'^close_window/$', 
         'django.views.generic.simple.direct_to_template', 
         {'template' : 'widget/close_window.html'}),
+    url(r'^widgetizerconfig.js$', 
+        'django.views.generic.simple.direct_to_template', 
+        {'template': 'widget/widgetizerconfig.js',
+         'mimetype': 'text/javascript' })
 )

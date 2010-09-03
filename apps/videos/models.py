@@ -21,7 +21,7 @@ import string
 import random
 from urlparse import urlparse, parse_qs
 from django.conf.global_settings import LANGUAGES
-from auth.models import CustomUser as User
+from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
@@ -30,6 +30,9 @@ from comments.models import Comment
 from vidscraper.sites import blip, google_video, fora, ustream, vimeo
 from youtube import get_video_id
 from dailymotion import DAILYMOTION_REGEX
+import urllib
+from videos.utils import YoutubeSubtitleParser
+from django.db.models.signals import post_save
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -59,7 +62,7 @@ VIDEO_SESSION_KEY = 'video_session'
 def format_time(time):
     if time < 0:
         return ''
-    t = int(time)
+    t = int(round(time))
     s = t % 60
     s = s > 9 and s or '0%s' % s 
     return '%s:%s' % (t / 60, s)   
@@ -149,7 +152,45 @@ class Video(models.Model):
             return 'http://dailymotion.com/video/{0}'.format(self.dailymotion_videoid)
         else:
             return self.video_url
-
+    
+    def _get_subtitles_from_youtube(self):
+        if not self.youtube_videoid:
+            return 
+        
+        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.youtube_videoid
+        d = urllib.urlopen(url)
+        parser = YoutubeSubtitleParser(d.read())
+        
+        if not parser:
+            return
+        
+        language = SubtitleLanguage(video=self)
+        language.is_original = False
+        language.language = parser.language
+        language.save()
+        
+        version = SubtitleVersion(language=language)
+        version.datetime_started = datetime.now()
+        if self.owner:
+            version.user = self.owner
+        else:
+            version.user = User.get_youtube_anonymous()
+        version.note = u'From youtube'
+        version.save()
+        
+        for i, item in enumerate(parser):
+            subtitle = Subtitle(**item)
+            subtitle.version = version
+            subtitle.subtitle_id = int(random.random()*10e12)
+            subtitle.sub_order = i+1
+            subtitle.save()
+        
+        version.finished = True
+        version.save()
+        
+        language.is_complete = True
+        language.save()
+        
     @classmethod
     def get_or_create_for_url(cls, video_url, user):
         parsed_url = urlparse(video_url)
@@ -168,6 +209,7 @@ class Video(models.Model):
                 if entry.media.thumbnail:
                     video.thumbnail = entry.media.thumbnail[-1].url
                 video.save()
+                video._get_subtitles_from_youtube()
         elif 'blip.tv' in parsed_url.netloc and blip.BLIP_REGEX.match(video_url):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(
@@ -692,6 +734,30 @@ class SubtitleVersion(models.Model):
                 return False
         return True
 
+post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
+
+def update_video_is_subtitled_state(sender, instance, created, **kwargs):
+    if instance.finished and instance.language.is_original:
+        video = instance.video
+        if instance.is_all_blank():
+            finished_count = sender.objects.filter(finished=True, language=instance.language).count()
+            if finished_count == 1:
+                instance.delete()
+                video.is_subtitled = False
+                video.was_subtitled = False
+            else:
+                video_captions = list(instance.subtitles())
+                for vc in video_captions:
+                    vc.delete()
+                video.is_subtitled = False
+                video.was_subtitled = True
+        else:
+            video.is_subtitled = True
+            video.was_subtitled = True
+        video.save()
+
+post_save.connect(update_video_is_subtitled_state, SubtitleVersion)
+
 def update_language_complete_state(sender, instance, created, **kwargs):
     if instance.finished:
         language = instance.language
@@ -1159,7 +1225,7 @@ class Subtitle(models.Model):
             subtitle = None
             if self.version.language.is_original:
                 subtitle = self
-            last_version = self.version.language.video.last_captions()
+            last_version = self.version.language.video.latest_finished_version()
             if last_version:
                 try:
                     subtitle = last_version.subtitles().get(subtitle_id=self.subtitle_id)

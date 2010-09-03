@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from auth.models import CustomUser as User
+from auth.models import CustomUser as User, Awards
 from django.conf import settings
+from django.db.models.signals import post_save
 
 COMMENT_MAX_LENGTH = getattr(settings,'COMMENT_MAX_LENGTH', 3000)
 
@@ -29,3 +30,5 @@ class Comment(models.Model):
             return self.objects.filter(content_type=ct, object_pk=obj.pk)
         else:
             return self.objects.none()
+        
+post_save.connect(Awards.on_comment_save, Comment)

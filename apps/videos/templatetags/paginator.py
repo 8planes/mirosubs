@@ -127,7 +127,7 @@ def ordered_column(parser, token):
         get_params = tokens[3:]
     except ValueError:
         raise template.TemplateSyntaxError, "%r tag requires exactly two arguments" % token.contents.split()[0]
-    return OrderedColumnNode(field_name[1:-1], title[1:-1], get_params)
+    return OrderedColumnNode(parser.compile_filter(field_name), parser.compile_filter(title), get_params)
     
 class OrderedColumnNode(template.Node):
     
@@ -154,7 +154,7 @@ class OrderedColumnNode(template.Node):
             order_type = self.order_type.resolve(context)
         else:
             order_type = None
-         
+        
         extra_params = [] 
         anchor = ''
         for item in self.get_params:
@@ -169,10 +169,10 @@ class OrderedColumnNode(template.Node):
             
         ot = (ordering == self.field_name and order_type == 'desc') and 'asc' or 'desc'
         if page:
-            link = '?o=%s&ot=%s&page=%s%s' % (self.field_name, ot, page, extra_params)
+            link = '?o=%s&ot=%s&page=%s%s' % (self.field_name.resolve(context, True), ot, page, extra_params)
         else:
-            link = '?o=%s&ot=%s%s' % (self.field_name, ot, extra_params)
-        return '<a href="%s" class="%s">%s</a>' % (link, ot, self.title)
+            link = '?o=%s&ot=%s%s' % (self.field_name.resolve(context, True), ot, extra_params)
+        return '<a href="%s" class="%s">%s</a>' % (link, ot, self.title.resolve(context, True))
 
 @register.simple_tag   
 def progress_color(value):

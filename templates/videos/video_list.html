@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load paginator %}
+{% load paginator i18n %}
 
 {% block main_content %}
 {% if video_list %}
-<h2>All Submitted Videos</h2>
+<h2>{% trans 'All Submitted Videos' %}</h2>
   <table cellpadding="0" cellspacing="0">
   <thead>
     <tr>
-      <th width="600" colspan="2"><span>URL</span></th>
+      <th width="600" colspan="2"><span>{% trans 'URL' %}</span></th>
       <th class="center">
-          {% ordered_column "widget_views_count" "Pageloads" %}
+          {% ordered_column "widget_views_count" _("Pageloads") %}
 	  </th>
 
       <th width="160" class="center">
-          {% ordered_column "subtitles_fetched_count" "Subtitles Fetched" %}       
+          {% ordered_column "subtitles_fetched_count" _("Subtitles Fetched") %}       
 
       </th>
       <th class="center">
-          {% ordered_column "translation_count" "Translations" %}  	
+          {% ordered_column "translation_count" _("Translations") %}  	
 	   </th>
        <th class="center last">
-           {% ordered_column "is_subtitled" "Subtitled?" %}
+           {% ordered_column "is_subtitled" _('Subtitled?') %}
        </th>
     </tr>
 </thead>
@@ -36,7 +36,7 @@
         </td>
         <td>
             <a href="{% url  videos:history video_id=video.video_id %}">
-                history
+                {% trans 'history' %}
             </a>            
         </td>
         <td class="center">{{ video.widget_views_count }}</td>
@@ -49,6 +49,6 @@
   </table>
   {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
 {% else %}
-  <p> There are no videos.</p>
+  <p>{% trans 'There are no videos.' %}</p>
 {% endif %}
 {% endblock %}

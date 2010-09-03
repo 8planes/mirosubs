@@ -75,3 +75,8 @@ def compile(output_file_name, js_file_list):
 
 compile('mirosubs-offsite-compiled.js', settings.JS_OFFSITE)
 compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
+
+widgetizer_js_files = list(settings.JS_OFFSITE)
+widgetizer_js_files.append('widgetizer/widgetizerconfig.js')
+widgetizer_js_files.append('widgetizer/widgetizer.js')
+compile('mirosubs-widgetizer.js', widgetizer_js_files)

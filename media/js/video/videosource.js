@@ -46,7 +46,7 @@ mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
  *
  */
 mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
-    if (/^\s*https?:\/\/([^\.]+\.)?youtube/i.test(videoURL)) {
+    if (mirosubs.video.VideoSource.isYoutube(videoURL)) {
         var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
         if (videoIDExtract)
             return new mirosubs.video.YoutubeVideoSource(
@@ -83,4 +83,8 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
         // TODO: maybe check this in the future.
         return new mirosubs.video.Html5VideoSource(videoURL);
     }
+};
+
+mirosubs.video.VideoSource.isYoutube = function(videoURL) {
+    return /^\s*https?:\/\/([^\.]+\.)?youtube/i.test(videoURL);
 };

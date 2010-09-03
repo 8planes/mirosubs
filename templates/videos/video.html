@@ -80,7 +80,7 @@
             var VIDEO_ID = '{{ video.video_id }}';
             
             $('.edit-title').click(function(){
-                var title = prompt('Enter new title', $('.main-title').html());
+                var title = prompt('{% trans "Enter new title" %}', $('.main-title').html());
                 if (title){
                     $('.main-title').html(title);
                     $.post(CHANGE_TITLE_LINK, {
@@ -104,7 +104,7 @@
     <h2 class="main-title">{{ video.title_display }}</h2>
 
     {% if not video.title or video.is_html5 %}
-        <a href="#" class="edit-title">edit title</a>   
+        <a href="#" class="edit-title">{% trans 'edit title' %}</a>   
     {% endif %}
 
     <div class="left_column">
@@ -119,7 +119,7 @@
     
     <div class="sub_actions">
       {% if video.latest_finished_version %}
-      <a class="button" id="add_translation" href="#"><span>Add Translation</span></a>
+      <a class="button" id="add_translation" href="#"><span>{% trans 'Add Translation' %}</span></a>
       {% endif %}    
 
       <div class="up_down">
@@ -130,9 +130,9 @@
     </div>
 
     <ul class="video_tabs">
-      <li class="active"><a href="#languages-tab">Languages <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
-      <li><a href="#comments-tab">Comments <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
-      <li><a href="#activity-tab">Activity stream</a></li>
+      <li class="active"><a href="#languages-tab">{% trans 'Languages' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
+      <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+      <li><a href="#activity-tab">{% trans 'Activity stream' %}</a></li>
     </ul>
    
     <div id="languages-tab" class="tab">
@@ -140,8 +140,8 @@
             <table cellpadding="0" cellspacing="0">
               <thead>
                 <tr>
-                  <th><a href="#">Language</a></th>
-                  <th class="last"><a href="#">% Done</a></th>
+                  <th><span>{% trans 'Language' %}</span></th>
+                  <th class="last"><span>{% trans '% Done' %}</span></th>
                 </tr>              
               </thead>
     
@@ -150,14 +150,14 @@
                     <tr>
                         <td>
                             <a href="{{ original.get_absolute_url }}">
-                                Original
+                                {% trans 'Original' %}
                             </a>
                         </td>
                         <td>
                           {% if original.latest_version %}
-                              <span class="badgy">{{ original.latest_version.subtitles|length }} Subtitles</span>
+                              <span class="badgy">{{ original.latest_version.subtitles|length }} {% trans 'Subtitles' %}</span>
                           {% else %}
-                              <span class="badgy">No Subtitles</span>
+                              <span class="badgy">{% trans 'No Subtitles' %}</span>
                           {% endif %}
                         </td>
                     </tr>
