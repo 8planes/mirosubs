@@ -203,7 +203,7 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
     if (selection == s.ADD_TRANSLATION)
         this.addNewLanguageClicked_();
     else if (selection == s.IMPROVE_SUBTITLES)
-        this.subtitleClicked_();
+        this.editSubtitles_();
     else if (selection == s.SUBTITLE_HOMEPAGE)
         alert('subtitle homepage');
     else if (selection == s.DOWNLOAD_SUBTITLES)
@@ -247,7 +247,7 @@ mirosubs.widget.Widget.prototype.subtitle_ = function() {
 mirosubs.widget.Widget.prototype.subtitleImpl_ = function() {
     this.videoTab_.showLoading(true);
     var that = this;
-    this.state_ = new SubtitleState(this, this.videoID_, this.baseState_);
+    this.state_ = new mirosubs.widget.SubtitleState(this, this.videoID_, this.baseState_);
     this.state_.initialize(
         function(result) {
             that.videoTab_.showLoading(false);
@@ -303,7 +303,7 @@ mirosubs.widget.Widget.prototype.editTranslationImpl_ = function() {
 mirosubs.widget.Widget.prototype.editTranslationConfirmed_ = function() {
     var languageCode = this.baseState_.LANGUAGE ? 
         this.baseState_.LANGUAGE : this.languageCodePlaying_;
-    this.state_ = new mirosubs.widget.TranslateState(this, this.videoID_,
+    this.state_ = new mirosubs.widget.EditTranslationState(this, this.videoID_,
         languageCode, this.baseState_);
     this.videoTab_.showLoading(true);
     this.state_.initialize(goog.bind(this.editTranslations_, this));
@@ -319,22 +319,23 @@ mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
     else {
         var url = mirosubs.siteURL() + '/onsite_widget/?';
         var queryData = new goog.Uri.QueryData();
+        var newBaseState = {};
         queryData.set('video_url', this.videoURL_);
         if (mirosubs.IS_NULL)
             queryData.set('null_widget', 'true');
         if (mirosubs.DEBUG)
             queryData.set('debug_js', 'true');
+
+        if (this.baseState_.NOT_NULL)
+            newBaseState = this.baseState_.ORIGINAL_PARAM;
+
         if (forSubtitling)
             queryData.set('subtitle_immediately', 'true');
         else {
             queryData.set('translate_immediately', 'true');
-            queryData.set('base_state',
-                          goog.json.serialize( {'language': this.languageCodePlaying_ } ));
+            newBaseState['language'] = this.languageCodePlaying_;
         }
-        if (this.baseState_.NOT_NULL)
-            queryData.set(
-                'base_state', 
-                goog.json.serialize(this.baseState_.ORIGINAL_PARAM));
+        queryData.set('base_state', goog.json.serialize(newBaseState));
         queryData.set('return_url', window.location.href);
         window.location.assign(url + queryData.toString());
         return true;
