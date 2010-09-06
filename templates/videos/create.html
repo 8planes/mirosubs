@@ -6,7 +6,13 @@
 
 {% block main_content %}
 {% if vidscraper_error %}
-    {% trans 'You type incorrect ulr.' %}
+    {% blocktrans %}
+    "Sorry, we couldn't identify the video at the link you sent.  Perhaps
+    it's a link we don't recognize, or perhaps you've linked to a page
+    that has multiple videos.  Try entering a different link to the video
+    you want to submit.  If you think there's been some mistake,
+    <a href="mailto:feedback@universalsubtitles.org">contact us</a>!"
+    {% endblocktrans %}
 {% endif %}
 <form action="{% url videos:create %}" method="POST" class="main_video_form">
   {% csrf_token %}
