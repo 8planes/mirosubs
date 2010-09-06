@@ -20,9 +20,12 @@ goog.provide('mirosubs.video.Html5VideoSource');
 
 /**
  * @constructor
+ * @param {string} videoURL
+ * @param {mirosubs.video.Html5VideoType} videoType
  */
-mirosubs.video.Html5VideoSource = function(videoURL) {
+mirosubs.video.Html5VideoSource = function(videoURL, videoType) {
     this.videoURL_ = videoURL;
+    this.videoType_ = videoType;
 };
 
 mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
@@ -40,10 +43,15 @@ mirosubs.video.Html5VideoSource.prototype.createPlayer_ =
     function(forSubDialog) 
 {
     return new mirosubs.video.Html5VideoPlayer(
-        new mirosubs.video.Html5VideoSource(this.videoURL_), 
+        new mirosubs.video.Html5VideoSource(
+            this.videoURL_, this.videoType_), 
         forSubDialog);
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
     return this.videoURL_;
+};
+
+mirosubs.video.Html5VideoSource.prototype.getVideoType = function() {
+    return this.videoType_;
 };

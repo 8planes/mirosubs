@@ -19,6 +19,7 @@
 from django.db import models
 import string
 import random
+import re
 from urlparse import urlparse, parse_qs
 from django.conf.global_settings import LANGUAGES
 from auth.models import CustomUser as User, Awards
@@ -46,6 +47,7 @@ VIDEO_TYPE_FORA = 'F'
 VIDEO_TYPE_USTREAM = 'U'
 VIDEO_TYPE_VIMEO = 'V'
 VIDEO_TYPE_DAILYMOTION = 'D'
+VIDEO_TYPE_FLV = 'L'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
     (VIDEO_TYPE_YOUTUBE, 'Youtube'),
@@ -54,10 +56,12 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_FORA, 'Fora.tv'),
     (VIDEO_TYPE_USTREAM, 'Ustream.tv'),
     (VIDEO_TYPE_VIMEO, 'Vimeo.com'),
-    (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com')
+    (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com'),
+    (VIDEO_TYPE_FLV, 'FLV')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
+FLV_REGEX = re.compile(r"\.flv$")
 
 def format_time(time):
     if time < 0:
@@ -268,6 +272,12 @@ class Video(models.Model):
                           'video_type': VIDEO_TYPE_DAILYMOTION,
                           'allow_community_edits': True})
             # TODO: title and thumbnail -- need dailymotion support in vidscraper
+        elif FLV_REGEX.match(video_url):
+            video, created = Video.objects.get_or_create(
+                video_url=video_url,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_FLV,
+                          'allow_community_edits': True})
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
@@ -340,9 +350,9 @@ class Video(models.Model):
         return [] if version is None else version.subtitles()
 
     def null_subtitles(self, user, language_code=None):
-        """Returns NullVideoCaptions for user, or None if none exist."""
+        """Returns NullSubtitles for user, or None if none exist."""
         try:
-            return self.nullvideocaptions_set.filter(
+            return self.nullsubtitles_set.filter(
                 user__id__exact=user.id).filter(
                 language=('' if language_code is None 
                           else language_code))[:1].get()
@@ -365,8 +375,8 @@ class Video(models.Model):
         dependent translation.
         """
         return self._make_subtitles_and_translations(
-            self.null_subtitles(user), 
-            self.null_subtitles(user, language_code))
+            self.null_subtitles(user).subtitle_set.all(), 
+            self.null_subtitles(user, language_code).subtitle_set.all())
 
     @classmethod
     def _make_subtitles_and_translations(cls, subtitle_set, translation_set):
@@ -736,28 +746,6 @@ class SubtitleVersion(models.Model):
 
 post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
 
-def update_video_is_subtitled_state(sender, instance, created, **kwargs):
-    if instance.finished and instance.language.is_original:
-        video = instance.video
-        if instance.is_all_blank():
-            finished_count = sender.objects.filter(finished=True, language=instance.language).count()
-            if finished_count == 1:
-                instance.delete()
-                video.is_subtitled = False
-                video.was_subtitled = False
-            else:
-                video_captions = list(instance.subtitles())
-                for vc in video_captions:
-                    vc.delete()
-                video.is_subtitled = False
-                video.was_subtitled = True
-        else:
-            video.is_subtitled = True
-            video.was_subtitled = True
-        video.save()
-
-post_save.connect(update_video_is_subtitled_state, SubtitleVersion)
-
 def update_language_complete_state(sender, instance, created, **kwargs):
     if instance.finished:
         language = instance.language
@@ -776,6 +764,11 @@ def update_language_complete_state(sender, instance, created, **kwargs):
         else:
             language.is_complete = True
             language.was_complete = True
+        if language.is_original:
+            video = language.video
+            video.is_subtitled = language.is_complete
+            video.was_subtitled = language.was_complete
+            video.save()
         language.save()
 
 post_save.connect(update_language_complete_state, SubtitleVersion)
