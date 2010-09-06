@@ -102,9 +102,15 @@ mirosubs.subtitle.SharePanel.EMAIL_TEXT =
     "It's still experimental and just for testing, but if you'd like to " +
     "check it out or try it yourself, here's the link: LINK";
 
-mirosubs.subtitle.SharePanel.prototype.emailLinkClicked_ = function(event) {
-    event.preventDefault();
-    window.location = "/videos/email_friend?text=" +
+mirosubs.subtitle.SharePanel.prototype.emailLinkClicked_ = function(e) {
+    e.preventDefault();
+    window.open(this.makeEmailURL_(),
+                mirosubs.randomString(),
+                'scrollbars=yes,width=900,height=600');
+};
+
+mirosubs.subtitle.SharePanel.prototype.makeEmailURL_ = function() {
+    return "/videos/email_friend?text=" +
         encodeURIComponent(
             mirosubs.subtitle.SharePanel.EMAIL_TEXT.replace(
                 "LINK", this.serverModel_.getPermalink()));
@@ -114,7 +120,7 @@ mirosubs.subtitle.SharePanel.prototype.facebookLinkClicked_ = function(e) {
     e.preventDefault();
     window.open(this.makeFacebookURL_(),
                 mirosubs.randomString(),
-                'status=0,width=560,height=400');
+                'scrollbars=yes,status=0,width=560,height=400');
 };
 
 mirosubs.subtitle.SharePanel.SHORT_MESSAGE_PREFIX_ = 
