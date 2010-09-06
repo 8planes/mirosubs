@@ -1,0 +1,10 @@
+{% extends "jsdemo/base_demo.html" %}
+{% block body%}
+<div style="width: 200px; text-align: center; font-size: 16px; padding: 10px; border: 2px dashed red;">
+  <strong>
+    <a href="javascript:(function(){scr=document.createElement('script');scr.type='text/javascript';scr.src='http://dev.universalsubtitles.org/site_media/js/mirosubs-widgetizer.js';document.getElementsByTagName('head')[0].appendChild(scr);})();">
+      widgetize!
+    </a>
+  </strong>
+<div>
+{% endblock %}
