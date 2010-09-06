@@ -76,20 +76,20 @@ mirosubs.subtitle.MSServerModel.prototype.finish = function(successCallback, opt
     this.stopTimer_();
     var that = this;
     this.loginThenAction_(function() {
-            var $e = goog.json.serialize;
-            var saveArgs = that.makeSaveArgs_();
-            mirosubs.Rpc.call(
-                'finished_subtitles', 
-                saveArgs,
-                function(result) {
-                    if (result['response'] != 'ok')
-                        // this should never happen.
-                        alert('Problem saving subtitles. Response: ' +
-                              result["response"]);
-                    this.finished_ = true;
-                    successCallback();
-                });
-            }, opt_cancelCallback, true);
+        var $e = goog.json.serialize;
+        var saveArgs = that.makeSaveArgs_();
+        mirosubs.Rpc.call(
+            'finished_subtitles', 
+            saveArgs,
+            function(result) {
+                if (result['response'] != 'ok')
+                    // this should never happen.
+                    alert('Problem saving subtitles. Response: ' +
+                          result["response"]);
+                this.finished_ = true;
+                successCallback();
+            });
+    }, opt_cancelCallback, true);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
