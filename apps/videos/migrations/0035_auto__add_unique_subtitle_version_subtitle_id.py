@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
                         subtitle_dict[subtitle.subtitle_id].append(subtitle)
                     else:
                         subtitle_dict[subtitle.subtitle_id] = [subtitle]
-                for k, v in subtitle_dict:
+                for k, v in subtitle_dict.items():
                     if len(v) > 1:
                         subs_to_remove = self._subs_to_remove(v)
                         for subtitle in subs_to_remove:
