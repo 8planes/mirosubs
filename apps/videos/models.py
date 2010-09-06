@@ -1181,6 +1181,7 @@ class Subtitle(models.Model):
     
     class Meta:
         ordering = ['subtitle_order']
+        unique_together = (('version', 'subtitle_id'),)
     
     def duplicate_for(self, new_version):
         return Subtitle(version=new_version,
