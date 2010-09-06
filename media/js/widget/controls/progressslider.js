@@ -39,8 +39,10 @@ mirosubs.controls.ProgressSlider.prototype.getCssClass = function(orient) {
 /** @inheritDoc */
 mirosubs.controls.ProgressSlider.prototype.createThumb = function() {
     var element = this.getElement();
-    var thumb = this.getDomHelper().createDom(
-	'div', mirosubs.controls.ProgressSlider.THUMB_CSS_CLASS);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    var thumb = 
+        $d('div', mirosubs.controls.ProgressSlider.THUMB_CSS_CLASS,
+           $d('span'));
     goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
     element.appendChild(thumb);
     this.thumb = thumb;
