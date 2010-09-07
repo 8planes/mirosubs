@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-class CustomUserCreationForm(forms.ModelForm):
+class CustomUserCreationForm(UserCreationForm):
     username = forms.RegexField(label=_("Username"), max_length=30, regex=r'^\w+$',
         help_text = _("Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."),
         error_message = _("This value must contain only letters, numbers and underscores."))
@@ -18,9 +18,9 @@ class CustomUserCreationForm(forms.ModelForm):
         model = CustomUser
         fields = ("username", "email")
 
-
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser')
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
