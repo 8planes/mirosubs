@@ -615,7 +615,7 @@ class SubtitleLanguage(models.Model):
         self.video.owner and for_check.append(self.video.owner)
         users = []
         for user in for_check:
-            if user.changes_notification \
+            if user and user.changes_notification \
                 and not user in users and not user.id in not_send \
                 and not exclude == user:
                 users.append(user)
@@ -1181,6 +1181,7 @@ class Subtitle(models.Model):
     
     class Meta:
         ordering = ['subtitle_order']
+        unique_together = (('version', 'subtitle_id'),)
     
     def duplicate_for(self, new_version):
         return Subtitle(version=new_version,

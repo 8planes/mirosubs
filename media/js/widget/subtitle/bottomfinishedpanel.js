@@ -39,8 +39,7 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.createDom = function() {
     this.askAFriendLink_ = 
         $d('a', 
            {'className':'mirosubs-done', 
-            'href':this.makeAskFriendURL_(), 
-            'target':mirosubs.randomString()}, 
+            'href':'#'},
            'Ask a Friend to Translate');
     this.getElement().appendChild(
         $d('div', 'mirosubs-buttons',
@@ -59,8 +58,11 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.createDom = function() {
 };
 mirosubs.subtitle.BottomFinishedPanel.prototype.enterDocument = function() {
     mirosubs.subtitle.BottomFinishedPanel.superClass_.enterDocument.call(this);
-    this.getHandler().listen(this.addTranslationLink_, 'click',
-                             this.addTranslationClicked_);
+    this.getHandler().
+        listen(this.addTranslationLink_, 'click',
+               this.addTranslationClicked_).
+        listen(this.askAFriendLink_, 'click',
+               this.askAFriendClicked_);
 };
 mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ =
     function(event)
@@ -69,13 +71,21 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ =
     event.preventDefault();
 };
 
+mirosubs.subtitle.BottomFinishedPanel.prototype.askAFriendClicked_ = function(e) {
+    e.preventDefault();
+    window.open(
+        this.makeAskFriendURL_(),
+        mirosubs.randomString(),
+        'scrollbars=yes,width=900,height=600');
+};
+
 mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT_ = 
     "Hey-- I just created subtitles using universalsubtitles.org, and I was hoping " +
     "you'd be able to use your awesome language skills to translate them.  It's " +
     "easy, and it would be a huge help to me. ";
 
 mirosubs.subtitle.BottomFinishedPanel.prototype.makeAskFriendURL_ =
-    function(event)
+    function()
 {
     var queryData = new goog.Uri.QueryData();
     var message = mirosubs.subtitle.BottomFinishedPanel.ASK_A_FRIEND_TEXT_ +

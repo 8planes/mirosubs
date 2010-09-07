@@ -97,6 +97,12 @@
                 }
             }
 
+            $('#add_subtitles').click(function() {
+                widget_widget_div.selectMenuItem(
+                    mirosubs.MainMenu.Selection.ADD_SUBTITLES);
+                return false;
+            });
+
             $('#edit_subtitles').click(function() {
                 widget_widget_div.selectMenuItem(
                     mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
@@ -280,7 +286,7 @@
               </tr>
             {% endfor %}
         {% else %}
-            <p class="no_subs">{% trans 'No subtitles yet.  Make some!' %}</p>
+            <p class="no_subs">{% trans 'No subtitles yet.' %} <a href="#" id="add_subtitles">{% trans 'Make some!' %}</a></p>
         {% endif %}
       </table>
 

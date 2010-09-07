@@ -240,7 +240,7 @@ mirosubs.subtitle.Dialog.prototype.isWorkSaved = function() {
     return !this.unitOfWork_.everContainedWork() || this.saved_;
 };
 
-mirosubs.subtitle.Dialog.prototype.saveWork = function(closeAfterSave) {
+mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     this.doneButtonEnabled_ = false;
     this.getRightPanelInternal().showLoading(true);
     var that = this;

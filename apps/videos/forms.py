@@ -31,6 +31,9 @@ import chardet
 from uuid import uuid4
 from youtube import get_video_id
 from math_captcha.forms import MathCaptchaForm
+from vidscraper.sites import blip, google_video, fora, ustream, vimeo
+from dailymotion import DAILYMOTION_REGEX
+from django.utils.safestring import mark_safe
 
 class SubtitlesUploadForm(forms.Form):
     video = forms.ModelChoiceField(Video.objects)
@@ -143,6 +146,7 @@ class UserTestResultForm(forms.ModelForm):
         return obj
 
 class VideoForm(forms.ModelForm):
+    URL_REGEX = re.compile('^http://.+\.(ogv|ogg|mp3|mp4|m4v|flv|webm)$')
     
     class Meta:
         model = Video
@@ -154,8 +158,18 @@ class VideoForm(forms.ModelForm):
     
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
-        if 'youtube.com' in video_url and not get_video_id(video_url):
-            raise forms.ValidationError(_(u'Incorrect video url'))
+        if not blip.BLIP_REGEX.match(video_url) and \
+            not google_video.GOOGLE_VIDEO_REGEX.match(video_url) and \
+            not fora.FORA_REGEX.match(video_url) and \
+            not ustream.USTREAM_REGEX.match(video_url) and \
+            not vimeo.VIMEO_REGEX.match(video_url) and \
+            not DAILYMOTION_REGEX.match(video_url) and \
+            not ('youtube.com' in video_url and get_video_id(video_url)) and \
+            not self.URL_REGEX.match(video_url):
+            raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
+If you'd like to us to add support for a new site or format, or if you
+think there's been some mistake, <a
+href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL)) 
         return video_url
 
 class FeedbackForm(MathCaptchaForm):

@@ -114,6 +114,12 @@ mirosubs.Dialog.prototype.isWorkSaved = goog.abstractMethod;
  * @param {boolean} closeAfterSave
  */
 mirosubs.Dialog.prototype.saveWork = function(closeAfterSave) {
+    if (mirosubs.currentUsername == null && !mirosubs.isLoginAttemptInProgress())
+        mirosubs.login()
+    else
+        this.saveWorkInternal(closeAfterSave);
+};
+mirosubs.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     goog.abstractMethod();
 };
 mirosubs.Dialog.prototype.onWindowUnload_ = function(event) {

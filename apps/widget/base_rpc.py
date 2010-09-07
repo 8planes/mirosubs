@@ -80,16 +80,16 @@ class BaseRpc:
             subtitle.update_from(u, is_dependent_translation)
             subtitle.save()
         for i in inserted:
-            # TODO: make sure you can't insert subs with duplicate subtitle_ids
-            if is_dependent_translation:
-                subtitle = models.Subtitle(
-                    subtitle_id=i['caption_id'],
-                    subtitle_text=i['text'])
-            else:
-                subtitle = models.Subtitle(
-                    subtitle_id=i['caption_id'],
-                    subtitle_text=i['caption_text'],
-                    start_time=i['start_time'],
-                    end_time=i['end_time'],
-                    subtitle_order=i['sub_order'])
-            subtitle_set.add(subtitle)
+            if not subtitle_set.filter(subtitle_id=i['caption_id']).exists():
+                if is_dependent_translation:
+                    subtitle = models.Subtitle(
+                        subtitle_id=i['caption_id'],
+                        subtitle_text=i['text'])
+                else:
+                    subtitle = models.Subtitle(
+                        subtitle_id=i['caption_id'],
+                        subtitle_text=i['caption_text'],
+                        start_time=i['start_time'],
+                        end_time=i['end_time'],
+                        subtitle_order=i['sub_order'])
+                subtitle_set.add(subtitle)

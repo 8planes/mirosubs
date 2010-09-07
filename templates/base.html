@@ -81,6 +81,9 @@
           <li class="last about_link last_nav"><a href="/about"><span>{% trans 'About' %}</span></a></li>
           {% if user.is_authenticated %}
               <li class="login_link"><a href="{% url logout %}?next={{ request.path_info}}"><span>{% trans 'Logout' %}</span></a></li>
+              {% if user.is_staff %}
+                <li class="login_link"><a href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a></li>
+              {% endif %}
           {% else %}
               <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info }}"><span>{% trans 'Login' %}</span></a></li>
           {% endif %}
