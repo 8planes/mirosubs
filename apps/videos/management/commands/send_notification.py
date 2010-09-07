@@ -1,10 +1,13 @@
 from django.core.management.base import BaseCommand
-from videos.models import SubtitleVersion, StopNotification
+from videos.models import SubtitleVersion, StopNotification, SubtitleLanguage
 from django.conf import settings
 from datetime import datetime, timedelta
 from videos.utils import send_templated_email
 from django.contrib.sites.models import Site
 from django.db.models import Q
+import urllib
+from django.utils import simplejson as json
+from django.utils.http import urlquote_plus
 
 class Command(BaseCommand):
     domain = Site.objects.get_current().domain
@@ -16,6 +19,7 @@ class Command(BaseCommand):
             .filter(notification_sent=False) \
             .filter(Q(language__writelock_time__isnull=True)|Q(language__writelock_time__lte=max_save_time))
         for version in qs:
+            self._update_language(version)
             version.notification_sent = True
             version.update_changes()  #item is saved in update_changes            
             if version.version_no == 0 and not version.language.is_original:
@@ -23,6 +27,23 @@ class Command(BaseCommand):
             else:
                 if version.text_change or version.time_change:
                     self.send_letter_caption(version)
+
+    def _update_language(self, version):
+        language = version.language
+        if language.is_original:# and not language.language:
+            url = 'http://ajax.googleapis.com/ajax/services/language/detect?v=1.0&q=%s'
+            text = []
+            for item in version.subtitles():
+                text.append(item.subtitle_text)
+            text = '. '.join(text)
+            text = text[:300]
+            r = json.loads(urllib.urlopen(url % urlquote_plus(text)).read())
+            if not 'error' in r:
+                try:
+                    SubtitleLanguage.objects.get(video=language.video, language=r['responseData']['language'])
+                except SubtitleLanguage.DoesNotExist:
+                    language.language = r['responseData']['language']
+                    language.save()
 
     def send_letter_translation_start(self, translation_version):
         video = translation_version.language.video
