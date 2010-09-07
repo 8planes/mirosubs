@@ -164,7 +164,7 @@ class VideoForm(forms.ModelForm):
             not ustream.USTREAM_REGEX.match(video_url) and \
             not vimeo.VIMEO_REGEX.match(video_url) and \
             not DAILYMOTION_REGEX.match(video_url) and \
-            ('youtube.com' in video_url and not get_video_id(video_url)) and \
+            not ('youtube.com' in video_url and get_video_id(video_url)) and \
             not self.URL_REGEX.match(video_url):
             raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
 If you'd like to us to add support for a new site or format, or if you
