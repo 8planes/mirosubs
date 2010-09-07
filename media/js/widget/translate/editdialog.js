@@ -91,7 +91,7 @@ mirosubs.translate.EditDialog.prototype.getAvailableLanguages = function() {
 mirosubs.translate.EditDialog.prototype.isWorkSaved = function() {
     return !this.unitOfWork_.everContainedWork() || this.saved_;
 };
-mirosubs.translate.EditDialog.prototype.saveWork = function(closeAfterSave) {
+mirosubs.translate.EditDialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
     this.serverModel_.finish(function(availableLanguages) {
         that.saved_ = true;

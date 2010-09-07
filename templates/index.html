@@ -21,7 +21,10 @@
         $(function(){
             $.nyroModalSettings({
                 minWidth: 570,
-                minHeight: 420              
+                minHeight: 420,
+                endShowContent: function(){
+                    widget_widget_div.playAt(0);                    
+                }
             }); 
             if (mirosubs.video.supportsOgg()) {
                 $('a.how-to-video-image').attr('href', '#how-to-video-ogg');

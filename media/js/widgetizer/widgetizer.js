@@ -88,8 +88,24 @@ mirosubs.Widgetizer.prototype.onLoaded_ = function() {
         return;
     this.widgetized_ = true;
     this.addHeadCss_();
-    this.widgetizeVideoElements_(document.getElementsByTagName('video'));
-    this.widgetizeObjectElements_(document.getElementsByTagName('object'));
+    this.findAndWidgetizeElements_();
+};
+
+mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
+    // including some heuristics here for some of the bigger sites.
+    if (window.location.hostname.match(/youtube\.com$/) != null) {
+        this.widgetizeElem_(
+            goog.dom.getElement('movie_player'),
+            window.location.href);
+    }
+    else {
+        this.widgetizeVideoElements_(
+            this.filterWidgetized_(
+                document.getElementsByTagName('video')));
+        this.widgetizeObjectElements_(
+            this.filterWidgetized_(
+                document.getElementsByTagName('object')));
+    }
 };
 
 mirosubs.Widgetizer.prototype.addHeadCss_ = function() {
@@ -104,6 +120,24 @@ mirosubs.Widgetizer.prototype.addHeadCss_ = function() {
         css.media = 'screen';
         head.appendChild(css);
     }
+};
+
+mirosubs.Widgetizer.prototype.filterWidgetized_ = function(elementArray) {
+    var that = this;
+    return goog.array.filter(
+        elementArray,
+        function(elem) {
+            return !that.alreadyWidgetized_(elem);
+        });
+};
+
+mirosubs.Widgetizer.prototype.alreadyWidgetized_ = function(elem) {
+    // we consider it to be widgetized if it's contained in a widget div or
+    // it's contained in the subtitling dialog.
+    return goog.dom.getAncestorByTagNameAndClass(
+        elem, 'div', 'mirosubs-widget') != null ||
+        goog.dom.getAncestorByTagNameAndClass(
+            elem, 'div', 'mirosubs-modal-widget') != null;
 };
 
 mirosubs.Widgetizer.prototype.widgetizeVideoElements_ = function(videoElems) {
@@ -147,6 +181,7 @@ mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
     }
     containingElement.appendChild(styleElement);
     var widgetDiv = document.createElement('div');
+    widgetDiv.className = 'mirosubs-widget';
     containingElement.appendChild(widgetDiv);
 
     var parentElem = elem.parentNode;

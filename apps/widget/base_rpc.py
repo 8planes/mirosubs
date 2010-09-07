@@ -70,3 +70,26 @@ class BaseRpc:
     def _maybe_add_video_session(self, request):
         if VIDEO_SESSION_KEY not in request.session:
             request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
+
+    def _apply_subtitle_changes(self, subtitle_set, deleted, inserted, updated, 
+                                is_dependent_translation=False):
+        for d in deleted:
+            subtitle_set.remove(subtitle_set.get(subtitle_id=d['caption_id']))
+        for u in updated:
+            subtitle = subtitle_set.get(subtitle_id=u['caption_id'])
+            subtitle.update_from(u, is_dependent_translation)
+            subtitle.save()
+        for i in inserted:
+            if not subtitle_set.filter(subtitle_id=i['caption_id']).exists():
+                if is_dependent_translation:
+                    subtitle = models.Subtitle(
+                        subtitle_id=i['caption_id'],
+                        subtitle_text=i['text'])
+                else:
+                    subtitle = models.Subtitle(
+                        subtitle_id=i['caption_id'],
+                        subtitle_text=i['caption_text'],
+                        start_time=i['start_time'],
+                        end_time=i['end_time'],
+                        subtitle_order=i['sub_order'])
+                subtitle_set.add(subtitle)

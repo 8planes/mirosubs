@@ -51,22 +51,16 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
         if (videoIDExtract)
             return new mirosubs.video.YoutubeVideoSource(
                 videoIDExtract[1]);
-        else
-            throw new Error("Cannot parse youtube url " + videoURL);
     }
     else if (/^\s*https?:\/\/(^\.]+\.)?vimeo/.test(videoURL)) {
         var videoIDExtract = /vimeo.com\/([0-9]+)/i.exec(videoURL);
         if (videoIDExtract)
             return new mirosubs.video.VimeoVideoSource(videoIDExtract[1]);
-        else
-            throw new Error("Cannot parse vimeo url " + videoURL);
     }
     else if (/^\s*https?:\/\/(^\.]+\.)?dailymotion/.test(videoURL)) {
         var videoIDExtract = /dailymotion.com\/video\/([0-9a-z]+)/i.exec(videoURL);
         if (videoIDExtract)
             return new mirosubs.video.DailymotionVideoSource(videoIDExtract[1]);
-        else
-            throw new Error("Cannot parse dailymotion url " + videoURL);
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL)) {
         // file/get/ paths from blip.tv are direct file accesses,
@@ -79,10 +73,23 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
         }
         return null;
     }
-    else {
-        // TODO: maybe check this in the future.
-        return new mirosubs.video.Html5VideoSource(videoURL);
+    else if (/\.flv$/.test(videoURL)) {
+        return new mirosubs.video.FlvVideoSource(videoURL);
     }
+    else {
+        var vt = mirosubs.video.Html5VideoType;
+        var videoType = null;
+        if (/\.ogv$|\.ogg$/.test(videoURL))
+            videoType = vt.OGG;
+        else if (/\.mp4$/.test(videoURL))
+            videoType = vt.H264;
+        else if (/\.webm$/.test(videoURL))
+            videoType = vt.WEBM;
+        if (videoType != null)
+            return new mirosubs.video.Html5VideoSource(videoURL, videoType);
+    }
+    
+    throw new Error("Unrecognized video url " + videoURL);
 };
 
 mirosubs.video.VideoSource.isYoutube = function(videoURL) {

@@ -19,6 +19,7 @@
 from django.db import models
 import string
 import random
+import re
 from urlparse import urlparse, parse_qs
 from django.conf.global_settings import LANGUAGES
 from auth.models import CustomUser as User, Awards
@@ -46,6 +47,7 @@ VIDEO_TYPE_FORA = 'F'
 VIDEO_TYPE_USTREAM = 'U'
 VIDEO_TYPE_VIMEO = 'V'
 VIDEO_TYPE_DAILYMOTION = 'D'
+VIDEO_TYPE_FLV = 'L'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
     (VIDEO_TYPE_YOUTUBE, 'Youtube'),
@@ -54,10 +56,12 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_FORA, 'Fora.tv'),
     (VIDEO_TYPE_USTREAM, 'Ustream.tv'),
     (VIDEO_TYPE_VIMEO, 'Vimeo.com'),
-    (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com')
+    (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com'),
+    (VIDEO_TYPE_FLV, 'FLV')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
+FLV_REGEX = re.compile(r"\.flv$")
 
 def format_time(time):
     if time < 0:
@@ -268,6 +272,12 @@ class Video(models.Model):
                           'video_type': VIDEO_TYPE_DAILYMOTION,
                           'allow_community_edits': True})
             # TODO: title and thumbnail -- need dailymotion support in vidscraper
+        elif FLV_REGEX.match(video_url):
+            video, created = Video.objects.get_or_create(
+                video_url=video_url,
+                defaults={'owner': user,
+                          'video_type': VIDEO_TYPE_FLV,
+                          'allow_community_edits': True})
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
@@ -365,8 +375,8 @@ class Video(models.Model):
         dependent translation.
         """
         return self._make_subtitles_and_translations(
-            self.null_subtitles(user), 
-            self.null_subtitles(user, language_code))
+            self.null_subtitles(user).subtitle_set.all(), 
+            self.null_subtitles(user, language_code).subtitle_set.all())
 
     @classmethod
     def _make_subtitles_and_translations(cls, subtitle_set, translation_set):
@@ -605,7 +615,7 @@ class SubtitleLanguage(models.Model):
         self.video.owner and for_check.append(self.video.owner)
         users = []
         for user in for_check:
-            if user.changes_notification \
+            if user and user.changes_notification \
                 and not user in users and not user.id in not_send \
                 and not exclude == user:
                 users.append(user)
@@ -742,8 +752,7 @@ def update_language_complete_state(sender, instance, created, **kwargs):
         if instance.is_all_blank():
             finished_count = language.subtitleversion_set.filter(finished=True).count()
             if finished_count == 1:
-                if instance.id:
-                    instance.delete()
+                instance.delete()
                 language.is_complete = False
                 language.was_complete = False
             else:
@@ -1172,6 +1181,7 @@ class Subtitle(models.Model):
     
     class Meta:
         ordering = ['subtitle_order']
+        unique_together = (('version', 'subtitle_id'),)
     
     def duplicate_for(self, new_version):
         return Subtitle(version=new_version,

@@ -86,15 +86,16 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         this.width_ = 
             (this.chromeless_ ? 
              mirosubs.video.YoutubeVideoPlayer.SMALL_WIDTH : 
-             mirosubs.video.YoutubeVideoPlayer.REGULAR_WIDTH) + '';
+             mirosubs.video.YoutubeVideoPlayer.REGULAR_WIDTH);
         this.height_ = 
             (this.chromeless_ ? 
              mirosubs.video.YoutubeVideoPlayer.SMALL_HEIGHT : 
-             mirosubs.video.YoutubeVideoPlayer.REGULAR_HEIGHT) + '';
+             mirosubs.video.YoutubeVideoPlayer.REGULAR_HEIGHT);
+        goog.style.setSize(this.getElement(), this.width_, this.height_);
         this.setDimensionsKnownInternal();
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
-            videoDiv.id, this.width_, this.height_, "8",
+            videoDiv.id, this.width_ + '', this.height_ + '', "8",
             null, null, params, atts);
     }
     this.getHandler().
