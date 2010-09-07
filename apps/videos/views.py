@@ -134,7 +134,7 @@ def video_list(request):
         except (ValueError, TypeError, KeyError):
             page = 1
             
-    qs = Video.objects.all().extra(select={'translation_count': 'SELECT COUNT(id) '+
+    qs = Video.objects.filter(was_subtitled=True).extra(select={'translation_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
         'videos_subtitlelanguage.was_complete AND '+
@@ -143,7 +143,7 @@ def video_list(request):
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
-    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count', 'is_subtitled']
+    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count', 'was_subtitled']
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
