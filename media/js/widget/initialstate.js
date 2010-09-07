@@ -36,7 +36,7 @@ mirosubs.widget.InitialState.prototype.initialize = function(callback) {
             'base_state': this.baseState_.ORIGINAL_PARAM
         },
         function (result) {
-            if (result['subtitles'].length > 0)
+            if (result['subtitles'] && result['subtitles'].length > 0)
                 that.videoTabText_ = "Choose Language";
             callback(result); 
         });
