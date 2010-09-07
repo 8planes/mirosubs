@@ -93,10 +93,10 @@ mirosubs.Widgetizer.prototype.onLoaded_ = function() {
 
 mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
     // including some heuristics here for some of the bigger sites.
-    if (this.location.hostname.match(/youtube\.com$/) != null) {
+    if (window.location.hostname.match(/youtube\.com$/) != null) {
         this.widgetizeElem_(
             goog.dom.getElement('movie_player'),
-            this.location.href);
+            window.location.href);
     }
     else {
         this.widgetizeVideoElements_(
