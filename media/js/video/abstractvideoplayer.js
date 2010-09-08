@@ -156,6 +156,12 @@ mirosubs.video.AbstractVideoPlayer.prototype.playWithNoUpdateEvents =
     this.noUpdateStartTime_ = timeToStart;
     this.noUpdateEndTime_ = timeToStart + secondsToPlay;
 };
+/**
+ * @protected
+ */
+mirosubs.video.AbstractVideoPlayer.prototype.dispatchEndedEvent = function() {
+    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED);
+};
 mirosubs.video.AbstractVideoPlayer.prototype.sendTimeUpdateInternal = 
     function() 
 {
@@ -215,6 +221,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playhead
  * @param {String} text Caption text to display in video. null for blank.
  */
 mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
+    // TODO: shorten this method and use the google closure library!
     if (text == null || text == "") {
         if (this.captionElem_ != null) {
             this.getElement().removeChild(this.captionElem_);
@@ -283,6 +290,8 @@ mirosubs.video.AbstractVideoPlayer.EventType = {
     /** dispatched when playback starts or resumes. */
     PLAY : 'videoplay',
     PLAY_CALLED : 'videoplaycalled',
+    /** dispatched when the video finishes playing. */
+    PLAY_ENDED : 'videoplayended',
     /** dispatched when playback is paused. */
     PAUSE : 'videopause',
     PAUSE_CALLED : 'videopausecalled',

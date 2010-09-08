@@ -131,14 +131,18 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     }
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
-    if (newState == mirosubs.video.YoutubeVideoPlayer.State_.PLAYING) {
-        this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
+    var s = mirosubs.video.YoutubeVideoPlayer.State_;
+    var et = mirosubs.video.AbstractVideoPlayer.EventType;
+    if (newState == s.PLAYING) {
+        this.dispatchEvent(et.PLAY);
         this.timeUpdateTimer_.start();
     }
-    else if (newState == mirosubs.video.YoutubeVideoPlayer.State_.PAUSED) {
-        this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PAUSE);
+    else if (newState == s.PAUSED) {
+        this.dispatchEvent(et.PAUSE);
         this.timeUpdateTimer_.stop();
     }
+    else if (newState == s.ENDED)
+        this.dispatchEndedEvent();
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedLength = function() {
     return this.getDuration() > 0  ? 1 : 0;
