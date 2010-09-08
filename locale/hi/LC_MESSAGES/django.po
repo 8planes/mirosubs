@@ -8,15 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-07 15:12+0300\n"
+"POT-Creation-Date: 2010-09-07 14:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: .\settings.py:29
 msgid "Argentinian Spanish"
@@ -49,29 +47,24 @@ msgid "Email"
 msgstr ""
 
 #: .\apps\auth\models.py:83
-#, fuzzy
 msgid "Add comment"
-msgstr "Комментарии"
+msgstr ""
 
 #: .\apps\auth\models.py:84
-#, fuzzy
 msgid "Start subtitles"
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: .\apps\auth\models.py:85
-#, fuzzy
 msgid "Start translation"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: .\apps\auth\models.py:86
-#, fuzzy
 msgid "Edit subtitles"
-msgstr "редактировать название"
+msgstr ""
 
 #: .\apps\auth\models.py:87
-#, fuzzy
 msgid "Edit translation"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
@@ -106,40 +99,39 @@ msgstr ""
 msgid "This email is used already."
 msgstr ""
 
-#: .\apps\videos\forms.py:49
+#: .\apps\videos\forms.py:48
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr ""
 
-#: .\apps\videos\forms.py:53
+#: .\apps\videos\forms.py:52
 msgid "You can't edit this video."
 msgstr ""
 
-#: .\apps\videos\forms.py:56
+#: .\apps\videos\forms.py:55
 msgid "This video has translations."
 msgstr ""
 
-#: .\apps\videos\forms.py:62
+#: .\apps\videos\forms.py:61
 msgid "File size should be less 1Mb"
 msgstr ""
 
-#: .\apps\videos\forms.py:65
+#: .\apps\videos\forms.py:64
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
 msgstr ""
 
-#: .\apps\videos\forms.py:68
+#: .\apps\videos\forms.py:67
 msgid "Incorrect subtitles format"
 msgstr ""
 
-#: .\apps\videos\forms.py:169
-#, python-format
+#: .\apps\videos\forms.py:166
 msgid ""
 "Universal Subtitles does not support that website or video format.\n"
 "If you'd like to us to add support for a new site or format, or if you\n"
 "think there's been some mistake, <a\n"
-"href=\"mailto:%s\">contact us</a>!"
+"href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!"
 msgstr ""
 
-#: .\apps\videos\forms.py:216
+#: .\apps\videos\forms.py:213
 msgid "Enter valid e-mail addresses separated by commas."
 msgstr ""
 
@@ -772,9 +764,8 @@ msgid "Become a tester"
 msgstr ""
 
 #: .\templates\index.html.py:56
-#, fuzzy
 msgid "Subtitle Widget"
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: .\templates\index.html.py:57
 msgid ""
@@ -991,9 +982,8 @@ msgid "prev"
 msgstr ""
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
-#, fuzzy
 msgid "next"
-msgstr "Текст"
+msgstr ""
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
@@ -1399,9 +1389,8 @@ msgid ""
 msgstr ""
 
 #: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
-#, fuzzy
 msgid "Universal Subtitles"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
@@ -1427,9 +1416,8 @@ msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:10
 #: .\templates\profiles\view_profile.html.py:83
-#, fuzzy
 msgid "Preferred Language"
-msgstr "Язык"
+msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:13
 #: .\templates\profiles\view_profile.html.py:84
@@ -1453,25 +1441,21 @@ msgid "Email me when something I've edited gets changed"
 msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:93
-#, fuzzy
 msgid "Language Info"
-msgstr "Язык"
+msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:106
-#, fuzzy
 msgid "Languages I Know"
-msgstr "Языки"
+msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
-#, fuzzy
 msgid "Remove Language"
-msgstr "Язык"
+msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:136
-#, fuzzy
 msgid "Add Language"
-msgstr "Язык"
+msgstr ""
 
 #: .\templates\profiles\view_profile.html.py:43
 msgid "Email sent"
@@ -2082,43 +2066,43 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
 msgid "Add Translation"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: .\templates\videos\history.html.py:169
 msgid "Download Subtitles"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: .\templates\videos\history.html.py:183
 msgid "Original Language Subtitles"
-msgstr "Оригинальные субтитры"
+msgstr ""
 
 #: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
-msgstr "Комментарии"
+msgstr ""
 
 #: .\templates\videos\history.html.py:190
 msgid "History"
-msgstr "История изменений"
+msgstr ""
 
 #: .\templates\videos\history.html.py:197
 msgid "Compare Revisions"
-msgstr "Сравнить версии"
+msgstr ""
 
 #: .\templates\videos\history.html.py:207
 msgid "Most Recent"
-msgstr "Самые новые"
+msgstr ""
 
 #: .\templates\videos\history.html.py:213
 msgid "Note"
-msgstr "Описание"
+msgstr ""
 
 #: .\templates\videos\history.html.py:216
 msgid "Time"
-msgstr "Время"
+msgstr ""
 
 #: .\templates\videos\history.html.py:219
 msgid "Text"
-msgstr "Текст"
+msgstr ""
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
@@ -2130,17 +2114,16 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "Make some!"
-msgstr "Создай!"
+msgstr ""
 
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
-#, fuzzy
 msgid "Revision"
-msgstr "Сравнить версии"
+msgstr ""
 
 #: .\templates\videos\revision.html.py:83
 #, python-format
@@ -2183,7 +2166,7 @@ msgstr ""
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
-msgstr "Поиск"
+msgstr ""
 
 #: .\templates\videos\search.html.py:16
 msgid "URL/title"
@@ -2191,7 +2174,7 @@ msgstr ""
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
-msgstr "Язык"
+msgstr ""
 
 #: .\templates\videos\search.html.py:22
 msgid "Does"
@@ -2247,7 +2230,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr "Отправить"
+msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
@@ -2263,15 +2246,15 @@ msgstr ""
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr "Введите новое название"
+msgstr ""
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr "редактировать название"
+msgstr ""
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr "Языки"
+msgstr ""
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
@@ -2279,16 +2262,15 @@ msgstr ""
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr "% завершено"
+msgstr ""
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
 msgstr ""
 
 #: .\templates\videos\video.html.py:160
-#, fuzzy
 msgid "No Subtitles"
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
@@ -2296,34 +2278,28 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:12
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: .\templates\videos\video_list.html.py:14
 msgid "Pageloads"
-msgstr "Загружено"
+msgstr ""
 
 #: .\templates\videos\video_list.html.py:18
-#, fuzzy
 msgid "Subtitles Fetched"
-msgstr "Субтитры просмотрено."
+msgstr ""
 
 #: .\templates\videos\video_list.html.py:22
-#, fuzzy
 msgid "Translations"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: .\templates\videos\video_list.html.py:25
 msgid "Subtitled?"
-msgstr "Есть субтитры?"
+msgstr ""
 
 #: .\templates\videos\video_list.html.py:39
-#, fuzzy
 msgid "history"
-msgstr "История изменений"
+msgstr ""
 
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
-msgstr "Видео отсутствуют"
-
-#~ msgid "No subtitles yet.  Make some!"
-#~ msgstr "Субтитры отсутствуют. Создай!"
+msgstr ""
