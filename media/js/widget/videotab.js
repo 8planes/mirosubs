@@ -23,6 +23,9 @@ mirosubs.widget.VideoTab = function() {
     this.anchorElem_ = null;
     this.imageElem_ = null;
     this.spanElem_ = null;
+    this.nudgeElem_ = null;
+    this.nudgeSpanElem_ = null;
+    this.nudgeClickCallback_ = null;
     this.spinnerGifURL_ = mirosubs.imageAssetURL('spinner.gif');
     this.logoURL_ = mirosubs.imageAssetURL('small_logo.png');
     this.imageLoader_ = new goog.net.ImageLoader();
@@ -51,7 +54,17 @@ mirosubs.widget.VideoTab.prototype.createDom = function() {
     this.anchorElem_ = 
         $d('a', {'className': 'mirosubs-subtitleMeLink', 'href':'#'},
            this.imageElem_, this.spanElem_);
+    this.nudgeSpanElem_ = $d('span', 'mirosubs-tabTextfinish', 'NUDGE TEXT');
+    this.nudgeElem_ = $d('a', {'href':'#'}, this.nudgeSpanElem_);
     this.getElement().appendChild(this.anchorElem_);
+    this.getElement().appendChild(this.nudgeElem_);
+};
+
+mirosubs.widget.VideoTab.prototype.enterDocument = function() {
+    mirosubs.widget.VideoTab.superClass_.enterDocument.call(this);
+    goog.style.showElement(this.nudgeElem_, false);
+    this.getHandler().
+        listen(this.nudgeElem_, 'click', this.nudgeClicked_);
 };
 
 mirosubs.widget.VideoTab.prototype.showLoading = function(loading) {
@@ -64,6 +77,20 @@ mirosubs.widget.VideoTab.prototype.setText = function(text) {
 mirosubs.widget.VideoTab.prototype.getAnchorElem = function() {
     return this.anchorElem_;
 };
+
+mirosubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
+    e.preventDefault();
+    if (this.nudgeClickCallback_)
+        this.nudgeClickCallback_();
+};
+mirosubs.widget.VideoTab.prototype.showNudge = function(showHide) {
+    goog.style.showElement(this.nudgeElem_, showHide);
+};
+mirosubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
+    goog.dom.setTextContent(this.nudgeSpanElem_, text);
+    this.nudgeClickCallback_ = fn;
+};
+
 mirosubs.widget.VideoTab.prototype.disposeInternal = function() {
     mirosubs.widget.VideoTab.superClass_.disposeInternal.call(this);
     this.imageLoader_.dispose();
