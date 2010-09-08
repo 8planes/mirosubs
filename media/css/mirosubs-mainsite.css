@@ -2189,12 +2189,16 @@ border-bottom: 1px solid #bbd2d8;
 background: url(../images/1x1.png);
 }
 
-.edit_profile_shell #id_picture {
+.edit_profile_shell #id_picture{
     position: absolute;
     margin-left: 175px;
     margin-top: 3px;
     opacity: 0;
     z-index: 2;
+}
+
+.edit_profile_shell .upload-picture {
+    position: absolute;
 }
 
 .edit_profile{
