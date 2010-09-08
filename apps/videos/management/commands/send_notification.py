@@ -30,13 +30,13 @@ class Command(BaseCommand):
 
     def _update_language(self, version):
         language = version.language
-        if language.is_original:# and not language.language:
+        if language.is_original and not language.language:
             url = 'http://ajax.googleapis.com/ajax/services/language/detect?v=1.0&q=%s'
-            text = []
+            text = ''
             for item in version.subtitles():
-                text.append(item.subtitle_text)
-            text = '. '.join(text)
-            text = text[:300]
+                text += ' %s' % item.subtitle_text
+                if len(text) >= 300:
+                    break
             r = json.loads(urllib.urlopen(url % urlquote_plus(text)).read())
             if not 'error' in r:
                 try:
