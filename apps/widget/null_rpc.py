@@ -115,9 +115,11 @@ class NullRpc(BaseRpc):
             null_subtitles = video.null_subtitles(user)
         return 0 if null_subtitles is None else 1
 
-    def _initial_language_codes(self, user, video):
+    def _initial_languages(self, user, video):
         if user.is_authenticated:
-            return video.null_translation_language_codes(user)
+            # we don't calculate percent done for null translations, 
+            # so use the answer to everything, 42
+            return [(code, 42) for code in video.null_translation_language_codes(user)]
         else:
             return []
 
