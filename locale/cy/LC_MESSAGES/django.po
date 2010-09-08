@@ -1,0 +1,2301 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-07 14:10+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\settings.py:29
+msgid "Argentinian Spanish"
+msgstr ""
+
+#: .\apps\auth\admin.py:10
+msgid "Username"
+msgstr ""
+
+#: .\apps\auth\admin.py:11
+msgid ""
+"Required. 30 characters or fewer. Alphanumeric characters only (letters, "
+"digits and underscores)."
+msgstr ""
+
+#: .\apps\auth\admin.py:12
+msgid "This value must contain only letters, numbers and underscores."
+msgstr ""
+
+#: .\apps\auth\admin.py:13
+msgid "Password"
+msgstr ""
+
+#: .\apps\auth\admin.py:14
+msgid "Password confirmation"
+msgstr ""
+
+#: .\apps\auth\admin.py:15
+msgid "Email"
+msgstr ""
+
+#: .\apps\auth\models.py:83
+msgid "Add comment"
+msgstr ""
+
+#: .\apps\auth\models.py:84
+msgid "Start subtitles"
+msgstr ""
+
+#: .\apps\auth\models.py:85
+msgid "Start translation"
+msgstr ""
+
+#: .\apps\auth\models.py:86
+msgid "Edit subtitles"
+msgstr ""
+
+#: .\apps\auth\models.py:87
+msgid "Edit translation"
+msgstr ""
+
+#: .\apps\comments\forms.py:35
+msgid "You car reply only comments for same object"
+msgstr ""
+
+#: .\apps\profiles\forms.py:39
+msgid "This user has not email"
+msgstr ""
+
+#: .\apps\profiles\forms.py:44
+msgid "You are not authenticated."
+msgstr ""
+
+#: .\apps\profiles\forms.py:51
+#, python-format
+msgid "Personal message from %(sender)s on universalsubtitles.org"
+msgstr ""
+
+#: .\apps\profiles\forms.py:67
+msgid "Confirm new password:"
+msgstr ""
+
+#: .\apps\profiles\forms.py:82
+msgid "Invalid password."
+msgstr ""
+
+#: .\apps\profiles\forms.py:84
+msgid "The two passwords did not match."
+msgstr ""
+
+#: .\apps\profiles\forms.py:94
+msgid "This email is used already."
+msgstr ""
+
+#: .\apps\videos\forms.py:46
+msgid "Somebody is subtitling this video right now. Try later."
+msgstr ""
+
+#: .\apps\videos\forms.py:50
+msgid "You can't edit this video."
+msgstr ""
+
+#: .\apps\videos\forms.py:53
+msgid "This video has translations."
+msgstr ""
+
+#: .\apps\videos\forms.py:59
+msgid "File size should be less 1Mb"
+msgstr ""
+
+#: .\apps\videos\forms.py:62
+msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
+msgstr ""
+
+#: .\apps\videos\forms.py:65
+msgid "Incorrect subtitles format"
+msgstr ""
+
+#: .\apps\videos\forms.py:158
+msgid "Incorrect video url"
+msgstr ""
+
+#: .\apps\videos\forms.py:202
+msgid "Enter valid e-mail addresses separated by commas."
+msgstr ""
+
+#: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
+msgid "Share your subtitles"
+msgstr ""
+
+#: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
+msgid "Now everyone can watch the video with subtitles-- try it!"
+msgstr ""
+
+#: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
+msgid "Then tell the world and invite your friends to help translate:"
+msgstr ""
+
+#: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
+msgid "Post to Facebook"
+msgstr ""
+
+#: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
+msgid "Post to Twitter"
+msgstr ""
+
+#: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
+msgid "Email to friends"
+msgstr ""
+
+#: .\templates\_share_widget.html.py:15
+msgid "Embed Code"
+msgstr ""
+
+#: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
+msgid "Permalink"
+msgstr ""
+
+#: .\templates\_sharing_widget.html.py:20
+msgid "Embed this video in your site"
+msgstr ""
+
+#: .\templates\_testing_widget.html.py:3
+msgid "We&#8217;d like help testing our subtitling widget"
+msgstr ""
+
+#: .\templates\_testing_widget.html.py:5
+msgid "Just launch our feedback form and try captioning a video"
+msgstr ""
+
+#: .\templates\_testing_widget.html.py:7
+msgid "Test the Widget"
+msgstr ""
+
+#: .\templates\_testing_widget.html.py:12
+msgid ""
+"Warning: These videos should not be embeded--there is a good possibility "
+"they will break at some point!"
+msgstr ""
+
+#: .\templates\_testing_widget.html.py:16
+msgid ""
+"Warning #2: These subtitles are non-permanent and should not be relied on -- "
+"someone could change them."
+msgstr ""
+
+#: .\templates\_testing_widget.html.py:17
+msgid "This alpha site is for purely testing purposes."
+msgstr ""
+
+#: .\templates\about.html.py:22
+msgid ""
+"\n"
+"    <h2>About Universal Subtitles</h2>\n"
+"    <p>\n"
+"        The lack of captions and subtitles on video is a major obstacle for "
+"people with hearing disabilities and a huge language barrier for the whole "
+"world.\n"
+"    </p>\n"
+"    <p>\n"
+"        We want to give individuals and communities the power to overcome "
+"these barriers. The tools we're building are free and open source and will "
+"make the work of subtitling and translating video simpler, more appealing, "
+"and, most of all, more collaborative.\n"
+"    </p>\n"
+"    <p>\n"
+"        <strong>The benefits of captioning and subtitling are immense:</"
+"strong>\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            captions make video more accessible for people with hearing "
+"disabilities\n"
+"        </li>\n"
+"        <li>\n"
+"            translated subtitles make it possible for all of us to watch "
+"video in languages that we don't speak\n"
+"        </li>\n"
+"        <li>\n"
+"            as an educator, storyteller, scientist, or anyone with a "
+"message, the potential size of your audience increases exponentially when "
+"you have subtitles and translations\n"
+"        </li>\n"
+"    </ul>\n"
+"    <p>\n"
+"        <strong>Universal Subtitles is composed of three main parts:</"
+"strong>\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            a subtitle creation and viewing tool (aka the widget)\n"
+"        </li>\n"
+"        <li>\n"
+"            a collaborative subtitling website\n"
+"        </li>\n"
+"        <li>\n"
+"            an open protocol for subtitle search/delivery\n"
+"        </li>\n"
+"    </ul>\n"
+"    <p>\n"
+"        <strong>The subtitling widget</strong>\n"
+"        currently exists as a browser-based javascript tool that features an "
+"user friendly interface for adding captions to almost any video on the web "
+"(without the hassle of re-transcoding or re-uploading). We're inviting "
+"people to check it out and we're curious to know what you think.\n"
+"    </p>\n"
+"    <p>\n"
+"        <strong>The collaborative website</strong>\n"
+"        will develop as a space for collaborative subtitling and translating "
+"videos.  The site will encourage dynamics like: formation of teams for "
+"subtitling a program, or a topic; tracking which subtitling or translation "
+"tasks are the most requested, and mobilizing volunteers; volunteers "
+"recruiting their friends for help transcribing or translating a video.\n"
+"    </p>\n"
+"    <p>\n"
+"        <strong>The protocol/open spec</strong>\n"
+"        (still in the early stages) will allow clients such as Firefox "
+"extensions, desktop video players, websites, or browsers to look up and "
+"download matching subtitles from subtitle database(s).\n"
+"    </p>\n"
+"    <p>\n"
+"        Everything we do will be available under the open source AGPL "
+"license.\n"
+"    </p>\n"
+"    "
+msgstr ""
+
+#: .\templates\about.html.py:81
+msgid ""
+"\n"
+"    <h2>Three Important Ways You Can Help</h2>\n"
+"    <p>\n"
+"        Universal Subtitles is an open source, non-profit project.  We are "
+"volunteer\n"
+"        driven and would love to have your help!\n"
+"    </p>\n"
+"    <p>\n"
+"        Here are three ways you can get involved:\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            Want to help us test new versions of the software before it's "
+"released?<a href=\"http://groups.google.com/group/universal-subtitles-"
+"testing/?utm_source=MailingList&utm_medium=email&utm_campaign=Welcome"
+"+Drumbeat\">Join the testers list</a>!\n"
+"        </li>\n"
+"        <li>\n"
+"            If you are a developer, check out the <a href=\"http://wiki."
+"github.com/8planes/mirosubs/dev-center\">development center</a>\n"
+"            and start with some 'bite-sized' tickets that are listed there.\n"
+"        </li>\n"
+"        <li>\n"
+"            Help out new users!  Take a look at the <a href=\"/videos/"
+"\">videos list</a>\n"
+"            and give positive and helpful feedback to people that have added "
+"subtitles to\n"
+"            various videos.\n"
+"        </li>\n"
+"    </ul>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <h2>Who's Behind the Project?</h2>\n"
+"    <p>\n"
+"        <a href=\"http://www.pculture.org\">Participatory Culture "
+"Foundation</a>\n"
+"        is a non-profit organization building free and open tools for more a "
+"democratic and decentralized media.  Other projects of ours include <a href="
+"\"http://www.getmiro.com\">Miro</a>, <a href=\"http://www.mirovideoconverter."
+"com\">Miro Video Converter</a>, <a href=\"http://www.mirocommunity.org"
+"\">Miro Community</a>, and <a href=\"http://www.openvideoalliance.org\">Open "
+"Video Alliance</a>.\n"
+"    </p>\n"
+"    <p>\n"
+"        Universal Subtitles is a featured project of <a href=\"http://www."
+"drumbeat.org/\">Mozilla Drumbeat</a>, which has provided invaluable "
+"support.\n"
+"    </p>\n"
+"    <p>\n"
+"        Software development for Universal Subtitles is being done in "
+"partnership with <a href=\"http://www.8planes.com\">8 Planes</a>.\n"
+"    </p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <h2>What's Coming Next?</h2>\n"
+"    <p>\n"
+"        We are currently in the alpha stages of this website and the "
+"subtitling tool-- that means we're just getting started!  But we've opened "
+"up the site so that we can begin testing and get early feedback.\n"
+"    </p>\n"
+"    <p>\n"
+"        Many very important features are missing.  Here's some of what we'll "
+"be working on in the coming months:\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            Ability to link multiple URLs to a video\n"
+"        </li>\n"
+"        <li>\n"
+"            Discussion spaces on every video and translation ('talk' pages)\n"
+"        </li>\n"
+"        <li>\n"
+"            Support on all modern web browsers\n"
+"        </li>\n"
+"        <li>\n"
+"            Caption -> subtitle conversion / options\n"
+"        </li>\n"
+"        <li>\n"
+"            Support for non-latin character sets\n"
+"        </li>\n"
+"        <li>\n"
+"            Machine translation option once subtitles have been transcribed\n"
+"        </li>\n"
+"        <li>\n"
+"            Keyboard accessbility for site and widget\n"
+"        </li>\n"
+"        <li>\n"
+"            Support for translating the interface of the subtitling tool and "
+"website\n"
+"        </li>\n"
+"        <li>\n"
+"            Subtitle ratings and flagging\n"
+"        </li>\n"
+"        <li>\n"
+"            Messaging among Universal Subtitles users\n"
+"        </li>\n"
+"        <li>\n"
+"            HTML5 embedding code that includes flash fallback options\n"
+"        </li>\n"
+"        <li>\n"
+"            Compliance with emerging timed text standards\n"
+"        </li>\n"
+"        <li>\n"
+"            Additional import / export subtitle formats\n"
+"        </li>\n"
+"    </ul>\n"
+"    <p>\n"
+"        Are there other features that you'd like to see?  Things that you "
+"think are particularly important in this early testing stage?  We'd love to "
+"hear from you.  Email us: <a href=\"mailto:universalsubtitles@pculture.org"
+"\">universalsubtitles@pculture.org</a>\n"
+"    </p>\n"
+"    "
+msgstr ""
+
+#: .\templates\base.html.py:18
+msgid ""
+"Free and open tools for creating captions, subtitles, and translations for "
+"video."
+msgstr ""
+
+#: .\templates\base.html.py:37
+msgid ""
+"Universal Subtitles does not support your browser. Upgrade your browser or "
+"<a href=\"http://getfirefox.com\">Try Firefox</a>."
+msgstr ""
+
+#: .\templates\base.html.py:59
+msgid "a project of the participatory culture foundation"
+msgstr ""
+
+#: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
+msgid "Subtitle a Video"
+msgstr ""
+
+#: .\templates\base.html.py:73
+msgid "Videos"
+msgstr ""
+
+#: .\templates\base.html.py:74
+msgid "Volunteer"
+msgstr ""
+
+#: .\templates\base.html.py:79
+msgid "Blog"
+msgstr ""
+
+#: .\templates\base.html.py:80
+msgid "FAQ"
+msgstr ""
+
+#: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
+#: .\templates\profiles\view_profile.html.py:92
+msgid "About"
+msgstr ""
+
+#: .\templates\base.html.py:83
+msgid "Logout"
+msgstr ""
+
+#: .\templates\base.html.py:85
+msgid "Admin"
+msgstr ""
+
+#: .\templates\base.html.py:88
+msgid "Login"
+msgstr ""
+
+#: .\templates\base.html.py:106
+msgid ""
+"Universal Subtitles is a project of <a href=\"http://participatoryculture."
+"org/\">PCF</a>."
+msgstr ""
+
+#: .\templates\base.html.py:112
+msgid "Contact Us"
+msgstr ""
+
+#: .\templates\base.html.py:113
+msgid "Privacy Policy"
+msgstr ""
+
+#: .\templates\demo.html.py:19
+msgid "Welcome to our alpha demo!"
+msgstr ""
+
+#: .\templates\demo.html.py:21
+msgid ""
+"\n"
+"  <p><strong>What's this?</strong> The video below is for \n"
+"    demonstration purposes &mdash; try clicking the 'Subtitle Me' button!</"
+"p> \n"
+"  <p>We're just getting started, so expect to see better cross-browser \n"
+"    support (Firefox 3.5+ works best right now) and we'll make it \n"
+"    compatible with lots of different video formats/hosts. Feel free \n"
+"    to drop us a note at the bottom of the page. \n"
+"    <em>Note: Your subtitles will not be permanently saved \n"
+"      (even if you log in).</em>\n"
+"  </p>\n"
+"  "
+msgstr ""
+
+#: .\templates\demo.html.py:41
+msgid ""
+"\n"
+"  <p style=\"clear: both\"><strong>Got feedback?</strong> Use the form at "
+"the bottom of \n"
+"    this page to give us your feedback, bugs, and opinions.</p>\n"
+"  <p><strong>What's next?</strong> We’re working on an alpha \n"
+"    version of our community website that will enable basic \n"
+"    collaboration on subtitles and translations. Stay tuned!</p>\n"
+"  "
+msgstr ""
+
+#: .\templates\faq.html.py:16
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: .\templates\faq.html.py:19 .\templates\faq.html.py:39
+msgid "What is Universal Subtitles?"
+msgstr ""
+
+#: .\templates\faq.html.py:20 .\templates\faq.html.py:43
+msgid "How can I use Universal Subtitles?"
+msgstr ""
+
+#: .\templates\faq.html.py:21 .\templates\faq.html.py:47
+msgid "What are the benefits of subtitles?"
+msgstr ""
+
+#: .\templates\faq.html.py:22 .\templates\faq.html.py:56
+msgid ""
+"Who is the Participatory Culture Foundation and why are they making "
+"Universal Subtitles?"
+msgstr ""
+
+#: .\templates\faq.html.py:23 .\templates\faq.html.py:60
+msgid ""
+"Will Universal Subtitles support closed captions for the deaf and hard of "
+"hearing?"
+msgstr ""
+
+#: .\templates\faq.html.py:24 .\templates\faq.html.py:64
+msgid "Will your subtitles support my language or characterset?"
+msgstr ""
+
+#: .\templates\faq.html.py:25 .\templates\faq.html.py:68
+msgid "When will the tools, including this site, be available in my language?"
+msgstr ""
+
+#: .\templates\faq.html.py:26 .\templates\faq.html.py:72
+msgid "How can I add subtitles to my video?"
+msgstr ""
+
+#: .\templates\faq.html.py:27 .\templates\faq.html.py:76
+msgid "What open source license do you use?"
+msgstr ""
+
+#: .\templates\faq.html.py:28 .\templates\faq.html.py:80
+msgid "I'm a developer, can I help out?"
+msgstr ""
+
+#: .\templates\faq.html.py:29 .\templates\faq.html.py:84
+msgid "Can non-technical people get involved with the project?"
+msgstr ""
+
+#: .\templates\faq.html.py:30 .\templates\faq.html.py:88
+msgid "Do you accept donations? Are they tax deductible?"
+msgstr ""
+
+#: .\templates\faq.html.py:31 .\templates\faq.html.py:92
+msgid "What is your relationship with Mozilla Drumbeat?"
+msgstr ""
+
+#: .\templates\faq.html.py:32 .\templates\faq.html.py:96
+msgid "Where can I download subtitles in .SRT or other formats?"
+msgstr ""
+
+#: .\templates\faq.html.py:33 .\templates\faq.html.py:106
+msgid "Why can't I change the timing on a translation?"
+msgstr ""
+
+#: .\templates\faq.html.py:40
+msgid ""
+"Our goal with Universal Subtitles is to make it easy for anyone to add "
+"subtitles, captions, or translate nearly any video on the web. Furthermore, "
+"we're building in collaborative tools, and hope to attract a large body of "
+"contributors to assist in the subtitling effort. The software we're building "
+"is free and open source and can be used and improved upon by anyone."
+msgstr ""
+
+#: .\templates\faq.html.py:44
+msgid ""
+"You're welcome to try the subtitling technology in our <a href=\"/demo/"
+"\">alpha demonstration</a>. This demo doesn't yet allow you to save "
+"subtitles, but that feature will be included in the alpha community launch "
+"(targeted for July 2010)."
+msgstr ""
+
+#: .\templates\faq.html.py:48
+msgid "Video subtitles are a gold mine of untapped potential."
+msgstr ""
+
+#: .\templates\faq.html.py:50
+msgid ""
+"Captions make video more accessible for people with hearing disabilities"
+msgstr ""
+
+#: .\templates\faq.html.py:51
+msgid ""
+"Translated subtitles make it possible for all of us to watch video in "
+"languages that we don't speak"
+msgstr ""
+
+#: .\templates\faq.html.py:52
+msgid ""
+"As an educator, storyteller, scientist, or anyone with a message, the "
+"potential size of your audience increases exponentially when you have "
+"subtitles and translations"
+msgstr ""
+
+#: .\templates\faq.html.py:57
+msgid ""
+"The Participatory Culture Foundation is a 501c3 non-profit organization "
+"whose mission, through software and advocacy, is to build a fairer, more "
+"open, and more democratic media space. PCF saw a gap in the marketplace for "
+"more open and collaborative subtitling -- Universal Subtitles is an attempt "
+"to fill that need."
+msgstr ""
+
+#: .\templates\faq.html.py:61
+msgid ""
+"Yes, we are working on a solution for making closed captions [including "
+"information about sounds and music], as well as subtitles/translations."
+msgstr ""
+
+#: .\templates\faq.html.py:65
+msgid ""
+"We will be working to support as many languages/charactersets as possible."
+msgstr ""
+
+#: .\templates\faq.html.py:69
+msgid ""
+"We're working towards having the subtitling widget and community website "
+"fully translatable, so the interfaces can be available in the user's native "
+"language."
+msgstr ""
+
+#: .\templates\faq.html.py:73
+msgid ""
+"Please add yourself to our announcement list (on the front page) and we'll "
+"let you know as soon as this is possible."
+msgstr ""
+
+#: .\templates\faq.html.py:77
+msgid ""
+"For our subtitling widget and community website, we're using the <a href="
+"\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
+msgstr ""
+
+#: .\templates\faq.html.py:81
+msgid ""
+"Please do! If you're interested in coding and development, please visit our "
+"<a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer "
+"center</a>."
+msgstr ""
+
+#: .\templates\faq.html.py:85
+msgid ""
+"If you're interested in general involvement, please see our <a href="
+"\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat "
+"page</a>. If you have a specific idea, please get in touch: <a href=\"mailto:"
+"universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> And as "
+"a 501c3 non-profit org, we do accept donations (see the next question for "
+"details)."
+msgstr ""
+
+#: .\templates\faq.html.py:89
+msgid ""
+"Yes and yes! Right now, the Mozilla Foundation will match all contributions, "
+"up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles."
+"org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/"
+"\">donate here</a>."
+msgstr ""
+
+#: .\templates\faq.html.py:93
+msgid ""
+"The Mozilla Foundation has provided Universal Subtitles with seed funding, "
+"community support, and fundraising support through <a href=\"http://www."
+"drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web "
+"open for the next 100 years, and Universal Subtitles is a featured project!"
+msgstr ""
+
+#: .\templates\faq.html.py:98
+msgid ""
+"\n"
+"        When subtitles exist, you can download them in .SRT, .SSA, and TTML "
+"formats on\n"
+"        the page for that language (<a href=\"http://universalsubtitles.org/"
+"videos/yKsUAgChJlGA/lt/\">example</a>). \n"
+"        Click the links in the lower right under the green \"Edit Subtitles"
+"\" button.\n"
+"        "
+msgstr ""
+
+#: .\templates\faq.html.py:108
+msgid ""
+"\n"
+"        Right now, the timing information of a translation is linked to the "
+"timing of\n"
+"        the original transcript.  Soon we will let users \"fork\" the timing "
+"of\n"
+"        translations, creating new versions that can have different timing\n"
+"        or--potentially--a totally different number of subtitles.\n"
+"        "
+msgstr ""
+
+#: .\templates\feedback_response.html.py:3
+msgid ""
+"Thanks for getting in touch! We love hearing your ideas, bugs, feedback, "
+"opinions and such."
+msgstr ""
+
+#: .\templates\feedback_response.html.py:6
+msgid "Stay tuned as the project evolves!"
+msgstr ""
+
+#: .\templates\feedback_response.html.py:9
+msgid "Announcement Signup"
+msgstr ""
+
+#: .\templates\feedback_response.html.py:12
+msgid "Best"
+msgstr ""
+
+#: .\templates\feedback_response.html.py:16
+msgid ""
+"PS. We do our best to respond to all questions, but please be patient -- we "
+"get a lot of email"
+msgstr ""
+
+#: .\templates\index.html.py:41
+msgid "Subtitles and Captions for Every Video on the Web"
+msgstr ""
+
+#: .\templates\index.html.py:44
+msgid "The Problem"
+msgstr ""
+
+#: .\templates\index.html.py:44
+msgid ""
+"Web video is beginning to rival television, but there isn't a good open "
+"resource for subtitling."
+msgstr ""
+
+#: .\templates\index.html.py:46
+msgid "Our Mission"
+msgstr ""
+
+#: .\templates\index.html.py:46
+msgid ""
+"We're trying to make captioning, subtitling, and translating video publicly "
+"accessible in a way that's free and open, just like the Web."
+msgstr ""
+
+#: .\templates\index.html.py:46
+msgid "Learn More"
+msgstr ""
+
+#: .\templates\index.html.py:49
+msgid "Right now"
+msgstr ""
+
+#: .\templates\index.html.py:49
+msgid "we're in an alpha stage, building and testing. You can help!"
+msgstr ""
+
+#: .\templates\index.html.py:50
+msgid "Try our demo"
+msgstr ""
+
+#: .\templates\index.html.py:50
+msgid "Become a tester"
+msgstr ""
+
+#: .\templates\index.html.py:56
+msgid "Subtitle Widget"
+msgstr ""
+
+#: .\templates\index.html.py:57
+msgid ""
+"A simple way to create and add captions to almost any video on the web "
+"(without having to transcode or re-upload videos)."
+msgstr ""
+
+#: .\templates\index.html.py:60
+msgid "Community Site"
+msgstr ""
+
+#: .\templates\index.html.py:61
+msgid ""
+"An online community for collaboratively subtitling and translating the "
+"world's videos (like a Wikipedia for subtitles)."
+msgstr ""
+
+#: .\templates\index.html.py:64
+msgid "Subtitle Lookup Protocol"
+msgstr ""
+
+#: .\templates\index.html.py:65
+msgid ""
+"An open standard to let Firefox extensions, desktop video players, websites, "
+"browsers--any client--find and retrieve subtitles for any video."
+msgstr ""
+
+#: .\templates\index.html.py:75
+msgid "Get updates and find out first when we launch"
+msgstr ""
+
+#: .\templates\index.html.py:80
+msgid "Get Updates!"
+msgstr ""
+
+#: .\templates\index.html.py:85
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: .\templates\index.html.py:118
+msgid "Please enter your email address."
+msgstr ""
+
+#: .\templates\index.html.py:137
+msgid "Mozilla will double your donation!"
+msgstr ""
+
+#: .\templates\index.html.py:138
+msgid "We're a featured Mozilla Drumbeat project!"
+msgstr ""
+
+#: .\templates\index.html.py:138
+msgid "Donate Now"
+msgstr ""
+
+#: .\templates\index.html.py:146
+msgid "Check out the widget"
+msgstr ""
+
+#: .\templates\index.html.py:147
+msgid "Test our subtitling widget"
+msgstr ""
+
+#: .\templates\index.html.py:147
+msgid "Try the Demo"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:8
+#: .\templates\opensubtitles2010.html.py:26
+msgid "Open Subtitles Design Summit"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:28
+msgid ""
+"The Open Subtitles Design Summit will bring together global stakeholders in "
+"the subtitling space for a tightly focused / goal oriented meeting in NYC. "
+"The event is being organized by The Participatory Culture Foundation, "
+"developers of the Universal Subtitles project. We expect roughly 40 "
+"participants."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:34
+msgid "Meeting Goals"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:37
+msgid ""
+"<strong>Connect</strong> major stakeholders from projects, organizations, "
+"and movements that have open subtitling needs or focus."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:41
+msgid ""
+"<strong>Identify ways</strong> to solve stakeholder subtitling needs and be "
+"aware of existing technology that can be leveraged. Find logical places for "
+"collaboration/cooperation."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:44
+msgid ""
+"<strong>Move towards</strong> standardizing solutions and pushing forward "
+"the state of the art in open subtiting."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:53
+msgid "Participants"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:55
+msgid ""
+"Participants will include: video creators and producers, end-users, "
+"representatives from major video hosting services, standards engineers, "
+"accessibility advocates, open source developers, educational leaders, and "
+"other individuals and organizations with a stake in the subtitling world. "
+"We'll make a roster available when the event draws closer."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:57
+msgid ""
+"Attendees are selected by invitation; however, if you or your organization "
+"would like to participate, please contact:"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:62
+msgid "When"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:63
+msgid "September 29th and 30th, beginning at 9am on both days."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:67
+msgid "Where"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:68
+msgid ""
+"The summit will be held at the beautiful Open Plans penthouse in Soho, which "
+"is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://"
+"maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor"
+"+12,+New+York+City&sll=40.701809,-"
+"73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,"
+"+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:73
+msgid "Why"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:75
+msgid ""
+"\n"
+"            The focus of this summit is increased availability and better "
+"usability for captions and subtitles, \n"
+"            which are both sorely needed. It comes at a critical time, \n"
+"            as internet video usage is skyrocketing&mdash;people who rely on "
+"captions are threatened to be left behind. \n"
+"            New users from every culture are coming online en masse; \n"
+"            standardizing and ubiquitizing the technology can make potential "
+"audiences exponentially larger and messages can cross cultural boundaries "
+"more easily. \n"
+"            More captions will also make it simpler for computers to "
+"process, index, \n"
+"            and make sense of the ever growing sea of online video.\n"
+"           "
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:91
+msgid "Organizers, Facilitators, Sponsors"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:94
+msgid "Organizers"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:95
+msgid ""
+"The <a href=\"http://www.participatoryculture.org/\">Participatory Culture "
+"Foundation</a> is organizing the summit. Their most recent project, <a href="
+"\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open "
+"source and collaborative subtitling and translation easy."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:99
+msgid "Facilitators"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:100
+msgid ""
+"<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing "
+"facilitation and agenda design. Aspiration believes that face-to-face events "
+"are the most powerful way to facilitate interaction, build networks, and "
+"collaborate."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:103
+msgid "Sponsors"
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:104
+msgid ""
+"The summit has been generously funded by the <a href=\"http://www.soros.org/"
+"\">Open Society Institute</a>."
+msgstr ""
+
+#: .\templates\opensubtitles2010.html.py:113
+msgid ""
+"Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for "
+"providing meeting space!"
+msgstr ""
+
+#: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
+msgid "prev"
+msgstr ""
+
+#: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
+msgid "next"
+msgstr ""
+
+#: .\templates\privacy.html.py:6
+msgid "Universal Subtitles Privacy Policy"
+msgstr ""
+
+#: .\templates\privacy.html.py:8
+msgid "Last Updated: August 10, 2010"
+msgstr ""
+
+#: .\templates\privacy.html.py:11
+msgid ""
+"This privacy policy applies to all web sites and web services operated by "
+"the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this "
+"policy) unless the web site or service has a separate privacy policy."
+msgstr ""
+
+#: .\templates\privacy.html.py:14
+msgid ""
+"Except as described below, PCF does not collect or require visitors to its "
+"web sites to furnish personally identifying information such as names, email "
+"addresses, and phone numbers. Like most web site operators, PCF does collect "
+"non-personally identifying information of the sort that web browsers and "
+"servers typically make available, such as the browser type, operating "
+"system, language preference, referring site and date and time of each "
+"visitor request. PCF also collects potentially-personally identifying "
+"information like Internet Protocol (IP) addresses, which are non-personally "
+"identifying in and of themselves but could be used in conjunction with other "
+"information to personally identify users."
+msgstr ""
+
+#: .\templates\privacy.html.py:17
+msgid ""
+"PCF's purpose in collecting this information is to better understand how "
+"PCF's visitors use its web sites. To that end, PCF may share potentially-"
+"personally identifying information with its employees, contractors, service "
+"providers, and subsidiaries and related organizations. PCF may also release "
+"its results of such analyses of non-personally identifying information about "
+"visitors by publishing a report on web site usage trends. Otherwise, PCF "
+"will not publicly release potentially-personally identifying information "
+"except under the same circumstances as PCF releases personally identifying "
+"information. Those circumstances are explained below."
+msgstr ""
+
+#: .\templates\privacy.html.py:21
+msgid "Community Members"
+msgstr ""
+
+#: .\templates\privacy.html.py:23
+msgid ""
+"Certain members of the PCF community (contributors, customers, etc.) choose "
+"to interact with PCF in ways that require PCF and others to know more about "
+"them. The amount and type of information that PCF gathers from those members "
+"depends on the nature of the interaction. For example, members who wish to "
+"post content to certain portions of PCF's web sites or participate in live "
+"chat session(s) are asked to provide usernames that are used to identify "
+"content as having been posted by a particular member (who is identified by "
+"the username)."
+msgstr ""
+
+#: .\templates\privacy.html.py:26
+msgid ""
+"Developers, by comparison, are asked to provide contact information, up to "
+"and sometimes including telephone or fax numbers, so that they can be "
+"contacted as necessary. Typically, developers will be contacted by email, "
+"IRC (internet relay chat), or IM (instant messaging services). However, in "
+"the event of a time-sensitive question relating to the work the developer is "
+"doing in connection with PCF and where other means of contact have failed, a "
+"developerтАЩs phone number or fax number may be used to contact the "
+"developer. This information is available to PCF employees, contractors, "
+"subsidiaries, and potentially to other members of the community. A developer "
+"can choose not to provide a phone number or fax number. On occasion, "
+"developers and other community members are contacted by email and asked for "
+"a physical address or geographic location so that they may be sent PCF-"
+"related t-shirts and other schwag or invited to a meetup or other PCF-"
+"related gathering. In such cases, the purpose for which their physical "
+"address is sought will be made explicit."
+msgstr ""
+
+#: .\templates\privacy.html.py:29
+msgid ""
+"Customers of PCF stores (which sell merchandise and services on behalf of "
+"PCF) are asked to provide even more information, including billing and "
+"shipping addresses and credit card or similar information to third party "
+"vendors so that their transactions can be processed and fulfilled by PCF or "
+"a third-party fulfillment vendor."
+msgstr ""
+
+#: .\templates\privacy.html.py:32
+msgid ""
+"We also permit community members to provide their name and email addresses "
+"so that they can have a more direct engagement with PCF and so that PCF can "
+"send them information related to PCF, such as educational material, "
+"promotional and cross-promotional material, surveys to be completed, "
+"messages about PCF, events information, and other such information and "
+"materials. These are opt-in interactions where community members "
+"affirmatively sign-up for inclusion in a direct communication with PCF (and "
+"with an ability to unsubscribe/opt-out on any email received). These "
+"campaigns may be conducted with the help of a third-party customer "
+"relationship manager to help us manage the database of information and its "
+"analysis and use, in each case such third partyтАЩs involvement with all the "
+"data collected will be solely on PCFтАЩs behalf. As part of these marketing "
+"campaigns, we might also ask you to provide demographic information such as "
+"gender, age, job or role, country, geographic location, and areas of "
+"interest. If we ask you for this information, we will use it to customize "
+"our communication with you and to better understand those interested in PCF "
+"and its products. As part of these marketing campaigns, we may collect a "
+"campaign source ID, marketing campaign ID, and a campaign referrer ID. These "
+"types of information are used so that we may better understand your "
+"interests and the effectiveness of particular marketing campaigns. We may "
+"also use this information to customize our communications with you. For "
+"example, if a community member plans to host a PCF-themed party to promote a "
+"product launch or other event and would like to receive PCF promotional "
+"items like t-shirts, buttons, and stickers for her guests (which we call "
+"тАЬschwagтАЭ), the community member may submit her name, mailing address, "
+"and details about the event (such as date and number of anticipated guests) "
+"through Bugzilla so that we (or our service providers) can process this "
+"request. In each case, PCF collects personally identifying information only "
+"insofar as is necessary to fulfill the purpose of the community member's "
+"interaction with PCF. And in the case of a schwag request, those bugs allow "
+"you to select restricted access so that only PCF contractors and employees "
+"and the individuals listed in the bug can access your information via "
+"Bugzilla itself."
+msgstr ""
+
+#: .\templates\privacy.html.py:35
+msgid ""
+"Applicants for employment with PCF are required to provide contact "
+"information, including name, street address, telephone number, and email "
+"address, as well as resume information. We use this information to process "
+"and evaluate the application for employment, and to communicate with the "
+"applicant about employment opportunities. If we elect to make an offer of "
+"employment, this information may become part of the employee file and may be "
+"used for other employment and work-related purposes."
+msgstr ""
+
+#: .\templates\privacy.html.py:38
+msgid ""
+"PCF is an open organization that believes in sharing as much information as "
+"possible about its products, its operations and its associations. "
+"Accordingly, community members should assume - as should most folks who "
+"interact with PCF - that any personally identifying information provided to "
+"PCF will be made available to the public. There are four broad exceptions to "
+"that rule:"
+msgstr ""
+
+#: .\templates\privacy.html.py:41
+msgid ""
+"PCF does not publicly release information gathered in connection with "
+"commercial transactions (i.e., transactions involving money), including "
+"transactions conducted through PCF Store or donations to PCF."
+msgstr ""
+
+#: .\templates\privacy.html.py:43
+msgid ""
+"PCF does not publicly release personally identifying information collected "
+"in connection with an application for employment with PCF."
+msgstr ""
+
+#: .\templates\privacy.html.py:45
+msgid ""
+"PCF does not make publicly available information that is used to "
+"authenticate users the publication of which would compromise the security of "
+"PCF's web sites (e.g., passwords)."
+msgstr ""
+
+#: .\templates\privacy.html.py:47
+msgid ""
+"PCF does not make publicly available information that it specifically "
+"promises at the time of collection to maintain in confidence."
+msgstr ""
+
+#: .\templates\privacy.html.py:50
+msgid ""
+"Outside those four contexts, users should assume that personally identifying "
+"information provided through PCF's web sites may be made available to the "
+"public."
+msgstr ""
+
+#: .\templates\privacy.html.py:53
+msgid "Interactive Product Features"
+msgstr ""
+
+#: .\templates\privacy.html.py:55
+msgid ""
+"Certain PCF products contain features that report, or that permit users to "
+"report, the user's usage patterns and problems - whether caused by PCF's "
+"software, third-party software, or third-party web sites - to PCF. The "
+"reports generated by these features typically include non-personally "
+"identifying information such as the configuration of the user's computer and "
+"the code running at the time the problem occurred."
+msgstr ""
+
+#: .\templates\privacy.html.py:58
+msgid ""
+"Some of these features give users the option of providing personally "
+"identifying information, though none of these features require it. Some PCF "
+"software features that do permit users to provide personally identifying "
+"information advise, in advance, that such information will not be made "
+"publicly available. PCF analyzes the information provided by these "
+"interactive product features to develop a better understanding of how its "
+"products are performing and being used. It does not use the information to "
+"track the usage of its products by identifiable individuals."
+msgstr ""
+
+#: .\templates\privacy.html.py:61
+msgid "Protection of Certain Personally-Identifying Information"
+msgstr ""
+
+#: .\templates\privacy.html.py:64
+msgid ""
+"Where PCF has collected personally identifying information subject to one of "
+"the four exceptions described in the Community Members section, above, it "
+"discloses that information only to those of its employees, contractors, "
+"service providers, and subsidiaries and related organizations that need to "
+"know that information in order to process it on PCF's behalf and that have "
+"agreed not to disclose it to others. Some of these employees, contractors, "
+"service providers, and subsidiaries and related organizations may be located "
+"outside of your home country; by using PCF's web sites, you consent to the "
+"transfer of your information to them, which may involve the transfer of your "
+"information to countries that may provide a lesser level of data protection "
+"than your country of residence. PCF does not rent or sell such information "
+"to anyone. PCF may be required to disclose information to the government or "
+"others. This may happen if we receive a valid search warrant, subpoena, "
+"court order, or other legal mandate. For example, the DMCA framework "
+"(specifically Section 512(h)) contains an expedited subpoena process for "
+"copyright holders to request and receive information service providers have "
+"regarding the identity of alleged copyright infringers. In certain other "
+"limited situations, PCF may disclose personally identifying or other "
+"information, such as when necessary to protect our websites and operations "
+"(e.g., against attacks); to protect the rights, privacy, safety, or property "
+"of PCF or its users; to enforce our terms of service; and to pursue "
+"available legal remedies. Additionally, PCF may need to transfer personally "
+"identifying information to an affiliate or successor in the event of a "
+"change of our corporate structure or status, such as in the event of a "
+"restructuring, sale, or bankruptcy. We will retain any personally "
+"identifying information for the period necessary to fulfill the purposes "
+"outlined in this privacy policy."
+msgstr ""
+
+#: .\templates\privacy.html.py:67
+msgid "Security"
+msgstr ""
+
+#: .\templates\privacy.html.py:69
+msgid ""
+"PCF undertakes a range of security measures including physical access "
+"restraints, technical security monitoring, and internal security reviews of "
+"the environment to help to protect your personal information from "
+"unauthorized access, alteration, disclosure, or destruction. We also have "
+"policies in place to prohibit employees from viewing personal information "
+"without business justification."
+msgstr ""
+
+#: .\templates\privacy.html.py:72
+msgid "Updating of Personally-Identifying Information"
+msgstr ""
+
+#: .\templates\privacy.html.py:74
+msgid ""
+"You may request access, correction, or deletion of your personally "
+"identifiable information or potentially personally identifiable information, "
+"as permitted by law. PCF will seek to comply with such requests, provided "
+"that we have sufficient information to identify the personally identifiable "
+"information or potentially personally identifiable information related to "
+"you. To do so, users should look for links or contact information available "
+"on whichever PCF web sites store the relevant information (e.g., Bugzilla "
+"users should go to Account Settings) or contact PCF by using one of the "
+"email addresses listed below."
+msgstr ""
+
+#: .\templates\privacy.html.py:77
+msgid "Cookies and Clear GIFs"
+msgstr ""
+
+#: .\templates\privacy.html.py:79
+msgid ""
+"What Are Cookies? A cookie is a string of information that a web site stores "
+"on a visitor's computer, and that the visitor's browser provides to the web "
+"site each time the visitor returns. Most major web sites use cookies. "
+"Because the browser provides this cookie information to the web site at each "
+"visit, cookies serve as a sort of label that allows a web site to \"recognize"
+"\" a browser when it returns to the site. The domain name in PCF cookies "
+"will clearly identify their affiliation with PCF and, where applicable, its "
+"third-party service provider."
+msgstr ""
+
+#: .\templates\privacy.html.py:82
+msgid "What Are Clear GIFs?"
+msgstr ""
+
+#: .\templates\privacy.html.py:84
+msgid ""
+"Clear gifs (also known as web beacons) are used in combination with cookies "
+"to help web site operators understand how visitors interact with their web "
+"sites. A clear gif is typically a transparent graphic image (usually 1 pixel "
+"x 1 pixel) that is placed on a site. The use of a clear gif allows the site "
+"to measure the actions of the visitor opening the page that contains the "
+"clear gif. It makes it easer to follow and record the activities of a "
+"recognized browser, such as the path of pages visited at a web site."
+msgstr ""
+
+#: .\templates\privacy.html.py:87
+msgid "How We Use Cookies and Clear GIFs."
+msgstr ""
+
+#: .\templates\privacy.html.py:89
+msgid ""
+"PCF's web sites use cookies to help PCF identify and track visitors, their "
+"usage of PCF web sites, and their web site access preferences across "
+"multiple requests and visits to PCF's web sites. Our web sites, and "
+"advertisements that PCF may run occasionally on thirdparty advertising "
+"networks, also may use clear gifs for these purposes. The basic idea is to "
+"gather aggregate data about how people use PCF web sites. The term usually "
+"used to describe this is \"web analytics\" and the cookies and clear gifs "
+"are the tools by which a website owner collects this web analytics data."
+msgstr ""
+
+#: .\templates\privacy.html.py:92
+msgid ""
+"PCF will use the web analytics data only to determine aggregate usage "
+"patterns for our web sites as described above. PCF web sites do this by "
+"using either our own internal analytics software or by sending this "
+"information to a third-party service provider to help PCF analyze this data. "
+"PCF web sites using third-party web analytics tools are listed here. PCF has "
+"agreements with its third-party service providers that they will not share "
+"this information with others or use the information for purposes other than "
+"to maintain the services they provide to PCF. It is possible to link cookies "
+"and clear gifs to personally identifying information, thereby permitting web "
+"site operators, including our third-party analytics providers, to track the "
+"online movements of particular individuals. PCF does not do so and its third-"
+"party service providers are not allowed to correlate PCF data with any other "
+"data."
+msgstr ""
+
+#: .\templates\privacy.html.py:95
+msgid ""
+"PCF uses the information provided by cookies and clear gifs to develop a "
+"better understanding of how PCF's visitors use PCF's web sites, and to "
+"facilitate those visitors' interactions with PCF's web sites. PCF may make "
+"the aggregate data obtained from web analytics (including from our third-"
+"party analytics providers, if applicable) publicly available. If this data "
+"is made available, none of the information will be personally identifying "
+"information or potentially-personally identifying information"
+msgstr ""
+
+#: .\templates\privacy.html.py:98
+msgid "Other Third Party Cookies."
+msgstr ""
+
+#: .\templates\privacy.html.py:100
+msgid ""
+"Content from other sources that is hosted on PCF web sites may sometimes "
+"contain cookies that send information to those third parties. In certain "
+"cases, often associated with embedded content such as YouTube videos and "
+"other site linking buttons, a third party cookie may be set by the 3rd party "
+"content or provider. In these cases, the privacy policy of the 3rd party "
+"governs with respect to information that may be collected by and sent to the "
+"respective 3rd party. If you are concerned about these third party cookies, "
+"please see the information below on how to decline cookies."
+msgstr ""
+
+#: .\templates\privacy.html.py:103
+msgid "How to Control the Use of Cookies."
+msgstr ""
+
+#: .\templates\privacy.html.py:105
+msgid ""
+"You have the ability to accept or decline cookies. PCF visitors who do not "
+"wish to have cookies placed on their computers by PCF, its contractors, or "
+"third-party service providers should set their browsers to refuse cookies "
+"before linking to PCF's web sites. Certain features of PCF's web sites may "
+"not function properly without the aid of cookies."
+msgstr ""
+
+#: .\templates\privacy.html.py:108
+msgid "Opt-out Procedures"
+msgstr ""
+
+#: .\templates\privacy.html.py:110
+msgid ""
+"If you do not want to allow your session visitation information on PCF web "
+"sites to be aggregated and analyzed by PCF (or its third-party analytics "
+"providers) you may utilize the following opt-out mechanisms listed here. "
+"Additionally, if you signed up to receive but no longer wish to receive "
+"electronic marketing communications from PCF, you can opt-out from receiving "
+"these communications by following the тАЬunsubscribeтАЭ instructions in any "
+"such communication you receive."
+msgstr ""
+
+#: .\templates\privacy.html.py:113
+msgid "Privacy Policy Changes"
+msgstr ""
+
+#: .\templates\privacy.html.py:115
+msgid ""
+"By using the web sites, you agree to the terms and conditions of this "
+"privacy policy. If you do not agree to the terms and conditions of this "
+"privacy policy, please do not use the web sites. PCF may change its Privacy "
+"Policy from time to time. Any and all changes will be reflected on this "
+"page. Substantive changes will also be announced through the standard "
+"mechanisms through which PCF communicates with the PCF community, including "
+"PCF's тАЬannounceтАЭ mailing list and newsgroup."
+msgstr ""
+
+#: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
+msgid "Universal Subtitles"
+msgstr ""
+
+#: .\templates\admin\base_site.html.py:12
+msgid "View site"
+msgstr ""
+
+#: .\templates\openid_consumer\signin.html.py:12
+#: .\templates\openid_consumer\signin.html.py:31
+msgid "Sign in with your OpenID"
+msgstr ""
+
+#: .\templates\openid_consumer\signin.html.py:18
+msgid "Sign in"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:7
+#: .\templates\profiles\edit_profile.html.py:28
+msgid "Edit Your Profile"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:7
+msgid "View profile"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:10
+#: .\templates\profiles\view_profile.html.py:83
+msgid "Preferred Language"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:13
+#: .\templates\profiles\view_profile.html.py:84
+msgid "Homepage"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:30
+msgid "Save Edits to Profile"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:35
+msgid "Personal Info"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:57
+msgid "Upload picture"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:83
+msgid "Email me when something I've edited gets changed"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:93
+msgid "Language Info"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:106
+msgid "Languages I Know"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:109
+#: .\templates\profiles\edit_profile.html.py:124
+msgid "Remove Language"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:136
+msgid "Add Language"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:43
+msgid "Email sent"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:62
+msgid "Enter message please."
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:66
+msgid "Enter email please."
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:86
+#: .\templates\profiles\view_profile.html.py:116
+msgid "Send a Message"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:94
+msgid "<i>User has not submitted a bio.</i>"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:103
+#, python-format
+msgid "Send %(user_info)s a Message"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:107
+msgid "From"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:111
+msgid "Message"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:113
+msgid "No HTML"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:114
+msgid ""
+"Note: when you send a message the recipient can see your email and reply "
+"directly"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:4
+#: .\templates\registration\password_reset_confirm.html.py:4
+#: .\templates\registration\password_reset_done.html.py:4
+#: .\templates\registration\password_reset_form.html.py:4
+msgid "Home"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:4
+#: .\templates\registration\password_reset_confirm.html.py:6
+#: .\templates\registration\password_reset_done.html.py:4
+#: .\templates\registration\password_reset_form.html.py:4
+#: .\templates\registration\password_reset_form.html.py:6
+#: .\templates\registration\password_reset_form.html.py:10
+msgid "Password reset"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:6
+#: .\templates\registration\password_reset_complete.html.py:10
+msgid "Password reset complete"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:12
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html.py:14
+msgid "Log in"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:4
+msgid "Password reset confirmation"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:12
+msgid "Enter new password"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:14
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:19
+msgid "New password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:21
+msgid "Confirm password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:22
+msgid "Change my password"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:31
+msgid "Password reset unsuccessful"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html.py:33
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: .\templates\registration\password_reset_done.html.py:6
+#: .\templates\registration\password_reset_done.html.py:10
+msgid "Password reset successful"
+msgstr ""
+
+#: .\templates\registration\password_reset_done.html.py:12
+msgid ""
+"We've e-mailed you instructions for setting your password to the e-mail "
+"address you submitted. You should be receiving it shortly."
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:2
+msgid "You're receiving this e-mail because you requested a password reset"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:3
+#, python-format
+msgid "for your user account at %(site_name)s"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:5
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:9
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:11
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html.py:13
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html.py:12
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll e-mail "
+"instructions for setting a new one."
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html.py:17
+msgid "E-mail address:"
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html.py:18
+msgid "Reset my password"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:12
+#: .\templates\videos\_video_activity.html.py:17
+msgid "Anonymous"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:17
+msgid "commented on"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:19
+msgid "commented on this video"
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:23
+#, python-format
+msgid " edited %(lang)s translations for "
+msgstr ""
+
+#: .\templates\videos\_activities.html.py:25
+msgid "edited subtitles for"
+msgstr ""
+
+#: .\templates\videos\_error_feedback_form.html.py:7
+msgid "Please let us know what you were doing when you encountered this error."
+msgstr ""
+
+#: .\templates\videos\_error_feedback_form.html.py:9
+msgid "Sorry, the page you requested was not found."
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:28
+msgid "What did you think about the site?"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:32
+msgid "Please let us know if you have any comments, questions, or suggestions!"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:37
+msgid "Your email:"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:44
+msgid "Your Feedback"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:48
+msgid "Send Feedback"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:54
+msgid "Thank you for your feedback."
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:55
+msgid "If you would like to perform some additional testing"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:56
+msgid "please go to our"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:56
+msgid "Litmus regression tests"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:57
+msgid "For new testers, we have"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:57
+msgid "a getting started guide"
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:59
+msgid "Send more feedback."
+msgstr ""
+
+#: .\templates\videos\_feedback_form.html.py:64
+msgid "Enter feedback please."
+msgstr ""
+
+#: .\templates\videos\_recent_activity.html.py:3
+msgid "View all"
+msgstr ""
+
+#: .\templates\videos\_upload_subtitles.html.py:4
+#: .\templates\videos\_upload_subtitles.html.py:9
+msgid "Upload Subtitles"
+msgstr ""
+
+#: .\templates\videos\_upload_subtitles.html.py:14
+msgid ""
+"\n"
+"                    Our site accepts SRT, SSA, and TTML format. Only files "
+"ending in .srt, .ssa, \n"
+"                    or .xml (for TTML) are accepted.\n"
+"                    "
+msgstr ""
+
+#: .\templates\videos\_upload_subtitles.html.py:29
+msgid "Login to upload subtitles"
+msgstr ""
+
+#: .\templates\videos\_upload_subtitles.html.py:38
+msgid ""
+"If you believe your subtitle file is compatible, <a href='mailto:"
+"feedback@universalsubtitles.org'>send it to us</a>"
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:4
+msgid "Activity"
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:7
+msgid "Happened"
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:21
+msgid "submited this video."
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:25
+#, python-format
+msgid ""
+"\n"
+"            changed title to \"%(title)s\"\n"
+"            "
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:32
+#, python-format
+msgid ""
+"\n"
+"                commented on %(language)s.\n"
+"                "
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:36
+msgid "commented on this video."
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:41
+msgid "edited"
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:44
+msgid "original subtitles"
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:46
+msgid "translation"
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:48
+msgid "for"
+msgstr ""
+
+#: .\templates\videos\_video_activity.html.py:53
+msgid "ago"
+msgstr ""
+
+#: .\templates\videos\actions_list.html.py:8
+msgid "All activities"
+msgstr ""
+
+#: .\templates\videos\actions_list.html.py:12
+#: .\templates\videos\history.html.py:210
+msgid "User"
+msgstr ""
+
+#: .\templates\videos\actions_list.html.py:13
+msgid "Date"
+msgstr ""
+
+#: .\templates\videos\actions_list.html.py:14
+msgid "Video"
+msgstr ""
+
+#: .\templates\videos\actions_list.html.py:24
+msgid "There are no activities."
+msgstr ""
+
+#: .\templates\videos\create.html.py:9
+msgid ""
+"\n"
+"    \"Sorry, we couldn't identify the video at the link you sent.  Perhaps\n"
+"    it's a link we don't recognize, or perhaps you've linked to a page\n"
+"    that has multiple videos.  Try entering a different link to the video\n"
+"    you want to submit.  If you think there's been some mistake,\n"
+"    <a href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!\"\n"
+"    "
+msgstr ""
+
+#: .\templates\videos\create.html.py:23
+msgid "Begin"
+msgstr ""
+
+#: .\templates\videos\create.html.py:25
+msgid ""
+"\n"
+"      To enable collaborative subtitles, enter the URL to any video in "
+"the<br />\n"
+"      following formats: Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, "
+"Fora.tv,\n"
+"      Ustream.tv\n"
+"      "
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:37
+msgid "Subtitles will be rolled back to a previous version"
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:43
+msgid "You need to log in to do that."
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:75
+#, python-format
+msgid ""
+"\n"
+"            Comparing older revision (#%(second_version_no)s) to revision (#%"
+"(version_no)s)\n"
+"            "
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:79
+#, python-format
+msgid ""
+"\n"
+"            Comparing older revision (#%(second_version_no)s) to current "
+"revision (#%(version_no)s)\n"
+"            "
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:93
+#: .\templates\videos\history.html.py:144
+#: .\templates\videos\history.html.py:185
+#: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
+msgid "Subtitles"
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:98
+#: .\templates\videos\revision.html.py:75
+msgid "Revision History"
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:102
+msgid "Comparing Revision"
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:110
+#: .\templates\videos\diffing.html.py:162
+#, python-format
+msgid ""
+"\n"
+"            Revision #%(version_no)s by %(user)s\n"
+"            "
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:123
+#: .\templates\videos\diffing.html.py:177
+#: .\templates\videos\revision.html.py:134
+msgid "Submit a new edit based on this version"
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:127
+#: .\templates\videos\diffing.html.py:181
+#: .\templates\videos\revision.html.py:138
+msgid "Roll back to version"
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:150
+#: .\templates\videos\diffing.html.py:205
+#: .\templates\videos\history.html.py:282
+msgid "Not Synced"
+msgstr ""
+
+#: .\templates\videos\email_friend.html.py:6
+msgid "Email this to a friend"
+msgstr ""
+
+#: .\templates\videos\email_friend.html.py:10
+msgid "Send to Friend!"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:3
+#: .\templates\videos\email_start_notification.html.py:3
+#: .\templates\videos\email_title_changed.html.py:3
+msgid "Dear"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:4
+#, python-format
+msgid ""
+"\n"
+"    A transcription or translation you contributed to \n"
+"    has been edited by %(u)s. \n"
+"    "
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:8
+msgid "It would be great if you could review their changes for quality."
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:9
+msgid ""
+"Click here to see the latest version side by side with the previous version:"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:10
+msgid "Compare versions side-by-side"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:13
+msgid ""
+"We've also included a rough summary of the changes below. Thanks so much!"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:15
+#: .\templates\videos\email_start_notification.html.py:14
+#: .\templates\videos\email_title_changed.html.py:10
+msgid "Sincerely"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:17
+#: .\templates\videos\email_start_notification.html.py:15
+#: .\templates\videos\email_title_changed.html.py:12
+msgid "The Universal Subtitles Community"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:24
+#: .\templates\videos\email_start_notification.html.py:23
+#: .\templates\videos\email_title_changed.html.py:28
+msgid "Don't send any more emails about this particular video."
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:27
+msgid "SUMMARY OF CHANGES"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:28
+#, python-format
+msgid ""
+"\n"
+"        %(change_percent)s of the text was changed.\n"
+"    "
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:31
+#, python-format
+msgid ""
+"  \n"
+"        %(change_percent)s of the timing was changed.\n"
+"    "
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:37
+msgid "Here is a list of text changes:"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:41
+#: .\templates\videos\email_title_changed.html.py:19
+msgid "NEW"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:42
+#: .\templates\videos\email_title_changed.html.py:23
+msgid "OLD"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:49
+msgid "To view the current and previous versions side by side, follow this"
+msgstr ""
+
+#: .\templates\videos\email_notification.html.py:50
+msgid "link"
+msgstr ""
+
+#: .\templates\videos\email_start_notification.html.py:4
+#, python-format
+msgid ""
+"\n"
+"    Great news! %(user)s has just started a %(language)s \n"
+"    translation of your video"
+msgstr ""
+
+#: .\templates\videos\email_start_notification.html.py:8
+msgid ""
+"You can review the translation and thank them for their contribution on this "
+"page:"
+msgstr ""
+
+#: .\templates\videos\email_start_notification.html.py:9
+msgid "Translation homepage"
+msgstr ""
+
+#: .\templates\videos\email_start_notification.html.py:12
+msgid "Thanks for your great work,"
+msgstr ""
+
+#: .\templates\videos\email_start_notification.html.py:20
+#: .\templates\videos\email_title_changed.html.py:16
+msgid "My profile / preferences"
+msgstr ""
+
+#: .\templates\videos\email_title_changed.html.py:4
+#, python-format
+msgid ""
+"A title of video you contributed to \n"
+"    has been edited by %(editor)s."
+msgstr ""
+
+#: .\templates\videos\email_title_changed.html.py:8
+msgid ""
+"We've also included a rough summary of the changes below.  Thanks so much!"
+msgstr ""
+
+#: .\templates\videos\email_title_changed.html.py:21
+#: .\templates\videos\email_title_changed.html.py:25
+msgid "TITLE"
+msgstr ""
+
+#: .\templates\videos\history.html.py:73
+msgid "Select two revisions for compare, please"
+msgstr ""
+
+#: .\templates\videos\history.html.py:130
+#, python-format
+msgid ""
+"\n"
+"            %(title)s with subtitles | Universal Subtitles\n"
+"        "
+msgstr ""
+
+#: .\templates\videos\history.html.py:134
+#, python-format
+msgid ""
+"\n"
+"            %(title)s with %(language)s subtitles | Universal Subtitles\n"
+"        "
+msgstr ""
+
+#: .\templates\videos\history.html.py:158
+msgid "Edit Subtitles"
+msgstr ""
+
+#: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
+msgid "Add Translation"
+msgstr ""
+
+#: .\templates\videos\history.html.py:169
+msgid "Download Subtitles"
+msgstr ""
+
+#: .\templates\videos\history.html.py:183
+msgid "Original Language Subtitles"
+msgstr ""
+
+#: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
+msgid "Comments"
+msgstr ""
+
+#: .\templates\videos\history.html.py:190
+msgid "History"
+msgstr ""
+
+#: .\templates\videos\history.html.py:197
+msgid "Compare Revisions"
+msgstr ""
+
+#: .\templates\videos\history.html.py:207
+msgid "Most Recent"
+msgstr ""
+
+#: .\templates\videos\history.html.py:213
+msgid "Note"
+msgstr ""
+
+#: .\templates\videos\history.html.py:216
+msgid "Time"
+msgstr ""
+
+#: .\templates\videos\history.html.py:219
+msgid "Text"
+msgstr ""
+
+#: .\templates\videos\history.html.py:252
+msgid "No subtitles for this language."
+msgstr ""
+
+#: .\templates\videos\history.html.py:253
+msgid "Either no subtitles have been entered, or they were deleted."
+msgstr ""
+
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
+msgid "No subtitles yet."
+msgstr ""
+
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
+msgid "Make some!"
+msgstr ""
+
+#: .\templates\videos\revision.html.py:68
+#: .\templates\videos\revision.html.py:78
+msgid "Revision"
+msgstr ""
+
+#: .\templates\videos\revision.html.py:83
+#, python-format
+msgid ""
+"\n"
+"            This is an old revision of %(lang)s\n"
+"            language subtitles for \"%(video)s\", \n"
+"            as edited by %(user)s at %(date)s. It may\n"
+"            differ significantly from the current revision.\n"
+"            "
+msgstr ""
+
+#: .\templates\videos\revision.html.py:98
+#, python-format
+msgid ""
+"\n"
+"                    Compare #%(version_no)s to #%(prev_version_no)s\n"
+"                    "
+msgstr ""
+
+#: .\templates\videos\revision.html.py:108
+#, python-format
+msgid ""
+"\n"
+"                    Compare #%(version_no)s to #%(next_version_no)s\n"
+"                    "
+msgstr ""
+
+#: .\templates\videos\revision.html.py:118
+#, python-format
+msgid ""
+"\n"
+"               Compare #%(version_no)s to #%(latest_version_no)s(current)\n"
+"               "
+msgstr ""
+
+#: .\templates\videos\revision.html.py:144
+msgid "See full revision history"
+msgstr ""
+
+#: .\templates\videos\search.html.py:6
+msgid "Search"
+msgstr ""
+
+#: .\templates\videos\search.html.py:16
+msgid "URL/title"
+msgstr ""
+
+#: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
+msgid "Language"
+msgstr ""
+
+#: .\templates\videos\search.html.py:22
+msgid "Does"
+msgstr ""
+
+#: .\templates\videos\stop_notification.html.py:9
+#, python-format
+msgid "Notifications to %(u)s stopped for %(video)s."
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:18
+msgid "Your Email"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:23
+msgid "Task 1"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:24
+msgid "Try creating subtitles on the following"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:24
+msgid "video"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:25
+#: .\templates\videos\test_form_page.html.py:31
+#: .\templates\videos\test_form_page.html.py:37
+#: .\templates\videos\test_form_page.html.py:57
+msgid "how was it? were the instructions clear? what would improve it?"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:29
+msgid "Task 2"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:30
+msgid "Try fixing errors on the video (or just get back in and make an edit)"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:35
+msgid "Task 3"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:36
+msgid "Translate the video (fake it if you’re not bilingual!)"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:42
+msgid "optional: get updates about Universal Subtitles"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:45
+msgid "Submit!"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:67
+msgid "Simple Instructions"
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:73
+msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
+msgstr ""
+
+#: .\templates\videos\test_form_page.html.py:74
+msgid "That’s it!"
+msgstr ""
+
+#: .\templates\videos\video.html.py:83
+msgid "Enter new title"
+msgstr ""
+
+#: .\templates\videos\video.html.py:107
+msgid "edit title"
+msgstr ""
+
+#: .\templates\videos\video.html.py:133
+msgid "Languages"
+msgstr ""
+
+#: .\templates\videos\video.html.py:135
+msgid "Activity stream"
+msgstr ""
+
+#: .\templates\videos\video.html.py:144
+msgid "% Done"
+msgstr ""
+
+#: .\templates\videos\video.html.py:153
+msgid "Original"
+msgstr ""
+
+#: .\templates\videos\video.html.py:160
+msgid "No Subtitles"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:8
+msgid "All Submitted Videos"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:12
+msgid "URL"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:14
+msgid "Pageloads"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:18
+msgid "Subtitles Fetched"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:22
+msgid "Translations"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:25
+msgid "Subtitled?"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:39
+msgid "history"
+msgstr ""
+
+#: .\templates\videos\video_list.html.py:52
+msgid "There are no videos."
+msgstr ""
