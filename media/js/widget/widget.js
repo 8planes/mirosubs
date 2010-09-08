@@ -263,9 +263,12 @@ mirosubs.widget.Widget.prototype.subtitleImpl_ = function() {
                 if (result["owned_by"])
                     alert("Sorry, this video is owned by " + 
                           result["owned_by"]);
-                else
-                    alert("Sorry, this video is locked by " +
-                          result["locked_by"]);
+                else {
+                    var username = 
+                        (result['locked_by'] == 'anonymous' ?
+                         'Someone else' : ('The user ' + result['locked_by']));
+                    alert(username + ' is currently editing these subtitles. Please wait and try again later.');
+                }
             }
         });
 };
