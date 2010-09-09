@@ -393,7 +393,7 @@ float: left;
 
 
 .wrapper{
-padding: 0 0px 10px;
+padding: 0 20px 10px;
 width: 940px !important;
 margin: 0 auto;
 position: relative;
@@ -680,13 +680,14 @@ padding: 15px 0 0 227px;
 }
 
 .right_column{
-width: 460px;
+width: 440px;
 float: right;
 }
 
 .left_column{
-width: 460px;
+width: 440px;
 float: left;
+
 }
 
 
@@ -1468,7 +1469,7 @@ float: right;
 padding:0;
 clear: none;
 float: left;
-width: 450px !important;
+width: 440px !important;
 margin: 0 !important;
 }
 
@@ -1476,7 +1477,7 @@ margin: 0 !important;
 .revision_list li{
 list-style: none;
 padding: 15px;
-width: 450px;
+width: 410px;
 line-height: 1.6em;
 padding: 15px !important;
 }
@@ -1489,7 +1490,7 @@ background: #edfcfd !important;
 
 
 a.roll_back{
-width: 458px;
+width: 419px;
 display: block;
 margin: 0px auto;
 padding: 15px 10px;
@@ -1508,7 +1509,7 @@ box-shadow:inset 0px 1px 1px #c67573;
 
 
 a.new_edit{
-width: 458px;
+width: 419px;
 display: block;
 margin: 0px auto 0;
 padding: 15px 10px;
