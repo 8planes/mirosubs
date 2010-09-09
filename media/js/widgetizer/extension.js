@@ -61,8 +61,7 @@ mirosubs.Extension.prototype.addElementToPage_ = function(enabled) {
 };
 
 mirosubs.Extension.prototype.createEnableLink_ = function($d, enabled) {
-    var link = $d('a', {'href':'#'}, enabled ? 'disable' : 'enable');
-    return link;
+    return $d('a', {'href':'#'}, enabled ? 'disable' : 'enable');
 };
 
 mirosubs.Extension.prototype.createReportProblemLink_ = function($d) {

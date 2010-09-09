@@ -54,6 +54,7 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
 goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 
 mirosubs.CaptionManager.CAPTION = 'caption';
+mirosubs.CaptionManager.CAPTIONS_FINISHED = 'captionsfinished';
 
 mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
     var et = mirosubs.subtitle.EditableCaptionSet.EventType;
@@ -138,9 +139,11 @@ mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
     }
     if ((nextCaption == null ||
          playheadTime < nextCaption.getStartTime()) &&
-        (curCaption == null || 
+        (curCaption == null ||
          playheadTime >= curCaption.getStartTime())) {
         this.dispatchCaptionEvent_(null);
+        if (nextCaption == null && !this.eventsDisabled_)
+            this.dispatchEvent(mirosubs.CaptionManager.CAPTIONS_FINISHED);
         return;
     }
     this.sendEventForRandomPlayheadTime_(playheadTime);

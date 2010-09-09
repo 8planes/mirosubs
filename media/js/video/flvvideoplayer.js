@@ -106,6 +106,9 @@ mirosubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     this.getClip_()['onPause'](function() {
         that.onPause_();
     });
+    this.getClip_()['onFinish'](function() {
+        that.dispatchEndedEvent();
+    });
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.progressTick_ = function(e) {

@@ -221,5 +221,7 @@ class Rpc(BaseRpc):
     def _initial_video_tab(self, user, video):
         return 0 if video.subtitle_state == models.NO_SUBTITLES else 1
 
-    def _initial_language_codes(self, user, video):
-        return video.translation_language_codes()
+    def _initial_languages(self, user, video):
+        translated_languages = video.subtitlelanguage_set.filter(
+            is_complete=True).filter(is_original=False)
+        return [(t.language, t.percent_done) for t in translated_languages]

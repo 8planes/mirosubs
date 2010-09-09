@@ -197,6 +197,17 @@ def feedback(request):
         output['errors'] = form.get_errors()
     return HttpResponse(json.dumps(output), "text/javascript")
 
+def site_feedback(request):
+    text = request.GET.get('text', '')
+    email = ''
+    if request.user.is_authenticated():
+        email = request.user.email
+    initial = dict(message=text, email=email)
+    form = FeedbackForm(initial=initial)
+    return render_to_response(
+        'videos/site_feedback.html', {'form':form},
+        context_instance=RequestContext(request))
+
 def email_friend(request):
     text = request.GET.get('text', '')
     link = request.GET.get('link', '')
