@@ -97,21 +97,15 @@
                 }
             }
 
-            $('#add_subtitles').click(function() {
+            $('#add_subtitles, #edit_subtitles').click(function() {
                 widget_widget_div.selectMenuItem(
-                    mirosubs.MainMenu.Selection.ADD_SUBTITLES);
+                    mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
             });
 
-            $('#edit_subtitles').click(function() {
-                widget_widget_div.selectMenuItem(
-                    mirosubs.MainMenu.Selection.EDIT_SUBTITLES);
-                return false;
-              });
-
             $('#add_translation').click(function() {
                 widget_widget_div.selectMenuItem(
-                    mirosubs.MainMenu.Selection.ADD_NEW_LANGUAGE);
+                    mirosubs.widget.DropDown.Selection.ADD_TRANSLATION);
                 return false;
             });
             

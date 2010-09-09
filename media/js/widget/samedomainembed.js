@@ -57,12 +57,11 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
         mirosubs.widget.Widget.prototype.playAt);
 
     goog.exportSymbol(
-        "mirosubs.MainMenu.Selection",
-        mirosubs.MainMenu.Selection);
-    var s = mirosubs.MainMenu.Selection;
-    s['ADD_SUBTITLES'] = s.ADD_SUBTITLES;
-    s['EDIT_SUBTITLES'] = s.EDIT_SUBTITLES;
+        "mirosubs.widget.DropDown.Selection",
+        mirosubs.widget.DropDown.Selection);
+    var s = mirosubs.widget.DropDown.Selection;
+    s['IMPROVE_SUBTITLES'] = s.IMPROVE_SUBTITLES;
     s['LANGUAGE_SELECTED'] = s.LANGUAGE_SELECTED;
-    s['ADD_NEW_LANGUAGE'] = s.ADD_NEW_LANGUAGE;
-    s['TURN_OFF_SUBS'] = s.TURN_OFF_SUBS;
+    s['ADD_TRANSLATION'] = s.ADD_TRANSLATION;
+    s['SUBTITLES_OFF'] = s.SUBTITLES_OFF;
 })();
