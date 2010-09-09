@@ -1,3 +1,15 @@
+.mirosubs-videoDiv{
+margin: 0 !important;
+overflow: hidden;
+height: 360px;
+}
+
+#widget_div video{
+margin: 0 !important;
+
+}
+
+
 .mirosubs-widgetContainer {
     width: 100% !important;
     height: 100% !important;
@@ -9,6 +21,8 @@
 outline: none !important;
 
 }
+
+
 
 .mirosubs-widget {
    font-family: Arial, Helvetica, sans-serif !important;
@@ -864,7 +878,8 @@ margin: 20px 0 0 0px !important;
    height: 350px;
 }
 
-.mirosubs-left video{
+.mirosubs-left video,
+.mirosubs-left object{
     width: 400px;
     height: 300px;
 }
@@ -2476,7 +2491,6 @@ overflow: hidden;
 
 .mirosubs-videoTab{
 width: 100%;
-    margin: -5px 0 0 0 !important;
 }
 
 .mirosubs-videoTab a {
@@ -2486,7 +2500,7 @@ text-decoration: none;
 display: block;
 color: #fff !important;
 float: left;
-border-right: 1px solid #888;
+
 }
 
 
