@@ -35,17 +35,21 @@ mirosubs.widget.CrossDomainEmbed.embed =
     widget.decorate(widgetDiv);
 };
 
-// see http://code.google.com/closure/compiler/docs/api-tutorial3.html#mixed
-window["mirosubs"] = mirosubs;
-mirosubs["widget"] = mirosubs.widget;
-mirosubs.widget["CrossDomainEmbed"] = mirosubs.widget.CrossDomainEmbed;
-mirosubs.widget.CrossDomainEmbed["embed"] = 
-    mirosubs.widget.CrossDomainEmbed.embed;
-mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
-mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
-mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;
+mirosubs.widget.CrossDomainEmbed.Type = {
+    EMBED_SCRIPT : 1,
+    WIDGETIZER : 2,
+    BOOKMARKLET : 3,
+    EXTENSION : 4
+};
 
 (function() {
+    goog.exportSymbol(
+        'mirosubs.widget.CrossDomainEmbed.embed',
+        mirosubs.widget.CrossDomainEmbed.embed);
+    mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
+    mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
+    mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;
+
     var m = window["MiroSubsToEmbed"];
     if (typeof(m) != 'undefined')
         for (var i = 0; i < m.length; i++)
