@@ -322,10 +322,10 @@ def diffing(request, first_pk, second_pk):
     if second_version.datetime_started > first_version.datetime_started:
         first_version, second_version = second_version, first_version
     
-    second_captions = dict([(item.subtitle_id, item) for item in second_version.subtitles()])
+    second_captions = dict([(item.subtitle_id, item) for item in second_version.ordered_subtitles()])
     captions = []
 
-    for caption in first_version.subtitles():
+    for caption in first_version.ordered_subtitles():
         try:
             scaption = second_captions[caption.subtitle_id]
         except KeyError:

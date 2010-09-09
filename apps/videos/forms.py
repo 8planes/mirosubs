@@ -58,13 +58,14 @@ class SubtitlesUploadForm(forms.Form):
     
     def clean_subtitles(self):
         subtitles = self.cleaned_data['subtitles']
-        if subtitles.size > 1024*1024:
-            raise forms.ValidationError(_(u'File size should be less 1Mb'))
+        if subtitles.size > 256*1024:
+            raise forms.ValidationError(_(u'File size should be less 256 kb'))
         parts = subtitles.name.split('.')
         if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml']:
             raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)'))
         try:
-            if not self._get_parser(subtitles.name)(subtitles.read()):
+            text = subtitles.read()
+            if not self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding'])):
                 raise forms.ValidationError(_(u'Incorrect subtitles format'))
         except SubtitleParserError, e:
             raise forms.ValidationError(e)

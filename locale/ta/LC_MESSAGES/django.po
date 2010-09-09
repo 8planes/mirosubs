@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-07 15:21+0300\n"
+"POT-Creation-Date: 2010-09-09 10:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,6 +184,58 @@ msgstr ""
 msgid "This email is used already."
 msgstr ""
 
+#: .\apps\teams\models.py:10
+msgid "Application"
+msgstr ""
+
+#: .\apps\teams\models.py:11
+msgid "Invitation Only"
+msgstr ""
+
+#: .\apps\teams\models.py:12
+msgid "Open"
+msgstr ""
+
+#: .\apps\teams\models.py:13
+msgid "Private"
+msgstr ""
+
+#: .\apps\teams\models.py:19
+msgid "Members add/remove"
+msgstr ""
+
+#: .\apps\teams\models.py:20
+msgid "Managers add/remove"
+msgstr ""
+
+#: .\apps\teams\models.py:21
+msgid "Members add videos"
+msgstr ""
+
+#: .\apps\teams\models.py:24
+msgid "name"
+msgstr ""
+
+#: .\apps\teams\models.py:25
+msgid "description"
+msgstr ""
+
+#: .\apps\teams\models.py:26
+msgid "logo"
+msgstr ""
+
+#: .\apps\teams\models.py:27
+msgid "membership policy"
+msgstr ""
+
+#: .\apps\teams\models.py:28
+msgid "video policy"
+msgstr ""
+
+#: .\apps\teams\models.py:29
+msgid "is public visible"
+msgstr ""
+
 #: .\apps\videos\forms.py:49
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr ""
@@ -197,18 +249,18 @@ msgid "This video has translations."
 msgstr ""
 
 #: .\apps\videos\forms.py:62
-msgid "File size should be less 1Mb"
+msgid "File size should be less 256 kb"
 msgstr ""
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
 msgstr ""
 
-#: .\apps\videos\forms.py:68
+#: .\apps\videos\forms.py:69
 msgid "Incorrect subtitles format"
 msgstr ""
 
-#: .\apps\videos\forms.py:169
+#: .\apps\videos\forms.py:170
 #, python-format
 msgid ""
 "Universal Subtitles does not support that website or video format.\n"
@@ -217,7 +269,7 @@ msgid ""
 "href=\"mailto:%s\">contact us</a>!"
 msgstr ""
 
-#: .\apps\videos\forms.py:216
+#: .\apps\videos\forms.py:217
 msgid "Enter valid e-mail addresses separated by commas."
 msgstr ""
 
@@ -578,75 +630,271 @@ msgid ""
 "  "
 msgstr ""
 
+#: .\templates\dmca.html.py:6
+msgid "Copyright Infringement Notification"
+msgstr ""
+
+#: .\templates\dmca.html.py:9
+msgid ""
+"\n"
+"To file a copyright infringement notification with us, you will need to send "
+"a\n"
+"written communication that includes substantially the following (please "
+"consult\n"
+"your legal counsel or see Section 512(c)(3) of the Copyright Act to confirm\n"
+"these requirements):\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:18
+msgid ""
+"\n"
+"A physical or electronic signature of a person authorized to act on behalf "
+"of\n"
+"the owner of an exclusive right that is allegedly infringed.\n"
+"Identification of the copyrighted work claimed to have been infringed, or, "
+"if\n"
+"multiple copyrighted works at a single online site are covered by a single\n"
+"notification, a representative list of such works at that site.\n"
+"Identification of the material that is claimed to be infringing or to be "
+"the\n"
+"subject of infringing activity and that is to be removed or access to which "
+"is\n"
+"to be disabled, and information reasonably sufficient to permit the service\n"
+"provider to locate the material. Providing URLs in the body of an email is "
+"the\n"
+"best way to help us locate content quickly.\n"
+"Information reasonably sufficient to permit the service provider to contact "
+"the\n"
+"complaining party, such as an address, telephone number, and, if available, "
+"an\n"
+"electronic mail address at which the complaining party may be contacted.\n"
+"A statement that the complaining party has a good faith belief that use of "
+"the\n"
+"material in the manner complained of is not authorized by the copyright "
+"owner,\n"
+"its agent, or the law.\n"
+"A statement that the information in the notification is accurate, and under\n"
+"penalty of perjury, that the complaining party is authorized to act on "
+"behalf\n"
+"of the owner of an exclusive right that is allegedly infringed.\n"
+"Such written notice should be sent to our designated agent as follows:\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:55
+msgid ""
+"\n"
+"Please also note that under Section 512(f) any person who knowingly "
+"materially\n"
+"misrepresents that material or activity is infringing may be subject to\n"
+"liability.\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:63
+msgid "Counter-Notification"
+msgstr ""
+
+#: .\templates\dmca.html.py:65
+msgid ""
+"\n"
+"Please note that under Section 512(f) of the Copyright Act, any person who\n"
+"knowingly materially misrepresents that material or activity was removed or\n"
+"disabled by mistake or misidentification may be subject to liability. "
+"Please\n"
+"also be advised that we enforce a policy that provides for the termination "
+"in\n"
+"appropriate circumstances of subscribers who are repeat infringers.\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:75
+msgid "How do I file a DMCA counter notice?"
+msgstr ""
+
+#: .\templates\dmca.html.py:77
+msgid ""
+"\n"
+"The process for counter-notifications is governed by Section 512(g) of the\n"
+"Digital Millennium Copyright Act: http://www.copyright.gov/legislation/dmca."
+"pdf\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:82
+msgid ""
+"\n"
+"To file a counter notification with us, you must provide a written\n"
+"communication that sets forth the items specified below.\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:87
+msgid ""
+"\n"
+"Please note that under Section 512(f) of the Copyright Act, any person who\n"
+"knowingly materially misrepresents that material or activity was removed or\n"
+"disabled by mistake or misidentification may be subject to liability. "
+"Please\n"
+"also be advised that we enforce a policy that provides for the termination "
+"in\n"
+"appropriate circumstances of subscribers who are repeat infringers.\n"
+"Accordingly, if you are not sure whether certain material infringes the\n"
+"copyrights of others, we suggest that you first contact an attorney.\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:99
+msgid "Elements of Counter-Notification"
+msgstr ""
+
+#: .\templates\dmca.html.py:101
+msgid ""
+"\n"
+"A sample counter notification may be found at:\n"
+"http://www.chillingeffects.org/dmca/counter512.pdf. To expedite our ability "
+"to\n"
+"process your counter notification, please use the following format "
+"(including\n"
+"section numbers):\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:109
+msgid ""
+"\n"
+"Identify the specific URLs of material that Miro Guide has removed or to "
+"which\n"
+"Miro Guide has disabled access.\n"
+"Provide your full name, address, telephone number, and email address, and "
+"the\n"
+"username of your Miro Guide account.\n"
+"Provide a statement that you consent to the jurisdiction of Federal "
+"District\n"
+"Court for the judicial district in which your address is located (or San\n"
+"Francisco County, California if your address is outside of the United "
+"States),\n"
+"and that you will accept service of process from the person who provided\n"
+"notification under subsection (c)(1)(C) or an agent of such person.\n"
+"Include the following statement: \"I swear, under penalty of perjury, that "
+"I\n"
+"have a good faith belief that the material was removed or disabled as a "
+"result\n"
+"of a mistake or misidentification of the material to be removed or disabled."
+"\"\n"
+"Sign the notice. If you are providing notice by e-mail, a scanned physical\n"
+"signature or a valid electronic signature will be accepted.\n"
+"Send the written communication to the following address:\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:141
+msgid "What happens next?"
+msgstr ""
+
+#: .\templates\dmca.html.py:143
+msgid ""
+"\n"
+"After we receive your counter-notification, we will forward it to the party "
+"who\n"
+"submitted the original claim of copyright infringement. Please note that "
+"when\n"
+"we forward the counter-notification, it includes your personal information. "
+"By\n"
+"submitting a counter-notification, you consent to having your information\n"
+"revealed in this way. We will not forward the counter-notification to any "
+"party\n"
+"other than the original claimant.\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:153
+msgid ""
+"\n"
+"After we send out the counter-notification, the claimant must then notify "
+"us\n"
+"within 10 days that he or she has filed an action seeking a court order to\n"
+"restrain you from engaging in infringing activity relating to the material "
+"on\n"
+"the Miro Guide. If we receive such notification we will be unable to "
+"restore\n"
+"the material. If we do not receive such notification, we may reinstate the\n"
+"material.\n"
+msgstr ""
+
+#: .\templates\dmca.html.py:163
+msgid ""
+"\n"
+"DISCLAIMER: WE ARE NOT YOUR ATTORNEYS, AND THE INFORMATION WE PRESENT HERE "
+"IS\n"
+"NOT LEGAL ADVICE. WE PRESENT THIS INFORMATION FOR INFORMATIONAL PURPOSES "
+"ONLY.\n"
+msgstr ""
+
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: .\templates\faq.html.py:19 .\templates\faq.html.py:39
+#: .\templates\faq.html.py:19 .\templates\faq.html.py:40
 msgid "What is Universal Subtitles?"
 msgstr ""
 
-#: .\templates\faq.html.py:20 .\templates\faq.html.py:43
+#: .\templates\faq.html.py:20 .\templates\faq.html.py:44
 msgid "How can I use Universal Subtitles?"
 msgstr ""
 
-#: .\templates\faq.html.py:21 .\templates\faq.html.py:47
+#: .\templates\faq.html.py:21 .\templates\faq.html.py:48
 msgid "What are the benefits of subtitles?"
 msgstr ""
 
-#: .\templates\faq.html.py:22 .\templates\faq.html.py:56
+#: .\templates\faq.html.py:22 .\templates\faq.html.py:57
 msgid ""
 "Who is the Participatory Culture Foundation and why are they making "
 "Universal Subtitles?"
 msgstr ""
 
-#: .\templates\faq.html.py:23 .\templates\faq.html.py:60
+#: .\templates\faq.html.py:23 .\templates\faq.html.py:61
 msgid ""
 "Will Universal Subtitles support closed captions for the deaf and hard of "
 "hearing?"
 msgstr ""
 
-#: .\templates\faq.html.py:24 .\templates\faq.html.py:64
+#: .\templates\faq.html.py:24 .\templates\faq.html.py:65
 msgid "Will your subtitles support my language or characterset?"
 msgstr ""
 
-#: .\templates\faq.html.py:25 .\templates\faq.html.py:68
+#: .\templates\faq.html.py:25 .\templates\faq.html.py:69
 msgid "When will the tools, including this site, be available in my language?"
 msgstr ""
 
-#: .\templates\faq.html.py:26 .\templates\faq.html.py:72
+#: .\templates\faq.html.py:26 .\templates\faq.html.py:73
 msgid "How can I add subtitles to my video?"
 msgstr ""
 
-#: .\templates\faq.html.py:27 .\templates\faq.html.py:76
+#: .\templates\faq.html.py:27 .\templates\faq.html.py:77
 msgid "What open source license do you use?"
 msgstr ""
 
-#: .\templates\faq.html.py:28 .\templates\faq.html.py:80
+#: .\templates\faq.html.py:28 .\templates\faq.html.py:81
 msgid "I'm a developer, can I help out?"
 msgstr ""
 
-#: .\templates\faq.html.py:29 .\templates\faq.html.py:84
+#: .\templates\faq.html.py:29 .\templates\faq.html.py:85
 msgid "Can non-technical people get involved with the project?"
 msgstr ""
 
-#: .\templates\faq.html.py:30 .\templates\faq.html.py:88
+#: .\templates\faq.html.py:30 .\templates\faq.html.py:89
 msgid "Do you accept donations? Are they tax deductible?"
 msgstr ""
 
-#: .\templates\faq.html.py:31 .\templates\faq.html.py:92
+#: .\templates\faq.html.py:31 .\templates\faq.html.py:93
 msgid "What is your relationship with Mozilla Drumbeat?"
 msgstr ""
 
-#: .\templates\faq.html.py:32 .\templates\faq.html.py:96
+#: .\templates\faq.html.py:32 .\templates\faq.html.py:97
 msgid "Where can I download subtitles in .SRT or other formats?"
 msgstr ""
 
-#: .\templates\faq.html.py:33 .\templates\faq.html.py:106
+#: .\templates\faq.html.py:33 .\templates\faq.html.py:107
+msgid "It says \"Someone else is currently editing these subtitles\" and I can"
+msgstr ""
+
+#: .\templates\faq.html.py:34 .\templates\faq.html.py:117
 msgid "Why can't I change the timing on a translation?"
 msgstr ""
 
-#: .\templates\faq.html.py:40
+#: .\templates\faq.html.py:41
 msgid ""
 "Our goal with Universal Subtitles is to make it easy for anyone to add "
 "subtitles, captions, or translate nearly any video on the web. Furthermore, "
@@ -655,7 +903,7 @@ msgid ""
 "is free and open source and can be used and improved upon by anyone."
 msgstr ""
 
-#: .\templates\faq.html.py:44
+#: .\templates\faq.html.py:45
 msgid ""
 "You're welcome to try the subtitling technology in our <a href=\"/demo/"
 "\">alpha demonstration</a>. This demo doesn't yet allow you to save "
@@ -663,29 +911,29 @@ msgid ""
 "(targeted for July 2010)."
 msgstr ""
 
-#: .\templates\faq.html.py:48
+#: .\templates\faq.html.py:49
 msgid "Video subtitles are a gold mine of untapped potential."
 msgstr ""
 
-#: .\templates\faq.html.py:50
+#: .\templates\faq.html.py:51
 msgid ""
 "Captions make video more accessible for people with hearing disabilities"
 msgstr ""
 
-#: .\templates\faq.html.py:51
+#: .\templates\faq.html.py:52
 msgid ""
 "Translated subtitles make it possible for all of us to watch video in "
 "languages that we don't speak"
 msgstr ""
 
-#: .\templates\faq.html.py:52
+#: .\templates\faq.html.py:53
 msgid ""
 "As an educator, storyteller, scientist, or anyone with a message, the "
 "potential size of your audience increases exponentially when you have "
 "subtitles and translations"
 msgstr ""
 
-#: .\templates\faq.html.py:57
+#: .\templates\faq.html.py:58
 msgid ""
 "The Participatory Culture Foundation is a 501c3 non-profit organization "
 "whose mission, through software and advocacy, is to build a fairer, more "
@@ -694,44 +942,44 @@ msgid ""
 "to fill that need."
 msgstr ""
 
-#: .\templates\faq.html.py:61
+#: .\templates\faq.html.py:62
 msgid ""
 "Yes, we are working on a solution for making closed captions [including "
 "information about sounds and music], as well as subtitles/translations."
 msgstr ""
 
-#: .\templates\faq.html.py:65
+#: .\templates\faq.html.py:66
 msgid ""
 "We will be working to support as many languages/charactersets as possible."
 msgstr ""
 
-#: .\templates\faq.html.py:69
+#: .\templates\faq.html.py:70
 msgid ""
 "We're working towards having the subtitling widget and community website "
 "fully translatable, so the interfaces can be available in the user's native "
 "language."
 msgstr ""
 
-#: .\templates\faq.html.py:73
+#: .\templates\faq.html.py:74
 msgid ""
 "Please add yourself to our announcement list (on the front page) and we'll "
 "let you know as soon as this is possible."
 msgstr ""
 
-#: .\templates\faq.html.py:77
+#: .\templates\faq.html.py:78
 msgid ""
 "For our subtitling widget and community website, we're using the <a href="
 "\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
 msgstr ""
 
-#: .\templates\faq.html.py:81
+#: .\templates\faq.html.py:82
 msgid ""
 "Please do! If you're interested in coding and development, please visit our "
 "<a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer "
 "center</a>."
 msgstr ""
 
-#: .\templates\faq.html.py:85
+#: .\templates\faq.html.py:86
 msgid ""
 "If you're interested in general involvement, please see our <a href="
 "\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat "
@@ -741,7 +989,7 @@ msgid ""
 "details)."
 msgstr ""
 
-#: .\templates\faq.html.py:89
+#: .\templates\faq.html.py:90
 msgid ""
 "Yes and yes! Right now, the Mozilla Foundation will match all contributions, "
 "up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles."
@@ -749,7 +997,7 @@ msgid ""
 "\">donate here</a>."
 msgstr ""
 
-#: .\templates\faq.html.py:93
+#: .\templates\faq.html.py:94
 msgid ""
 "The Mozilla Foundation has provided Universal Subtitles with seed funding, "
 "community support, and fundraising support through <a href=\"http://www."
@@ -757,7 +1005,7 @@ msgid ""
 "open for the next 100 years, and Universal Subtitles is a featured project!"
 msgstr ""
 
-#: .\templates\faq.html.py:98
+#: .\templates\faq.html.py:99
 msgid ""
 "\n"
 "        When subtitles exist, you can download them in .SRT, .SSA, and TTML "
@@ -769,7 +1017,18 @@ msgid ""
 "        "
 msgstr ""
 
-#: .\templates\faq.html.py:108
+#: .\templates\faq.html.py:109
+msgid ""
+"\n"
+"        The system currently only allows one user to edit subtitles for any "
+"given video \n"
+"        at a time. So, if someone else is already editing subtitles for the "
+"video when \n"
+"        you try to edit the subtitles, you'll get this message.\n"
+"        "
+msgstr ""
+
+#: .\templates\faq.html.py:119
 msgid ""
 "\n"
 "        Right now, the timing information of a translation is linked to the "
@@ -1965,13 +2224,13 @@ msgstr ""
 
 #: .\templates\videos\diffing.html.py:123
 #: .\templates\videos\diffing.html.py:177
-#: .\templates\videos\revision.html.py:134
+#: .\templates\videos\revision.html.py:135
 msgid "Submit a new edit based on this version"
 msgstr ""
 
 #: .\templates\videos\diffing.html.py:127
 #: .\templates\videos\diffing.html.py:181
-#: .\templates\videos\revision.html.py:138
+#: .\templates\videos\revision.html.py:140
 msgid "Roll back to version"
 msgstr ""
 
@@ -2246,7 +2505,7 @@ msgid ""
 "               "
 msgstr ""
 
-#: .\templates\videos\revision.html.py:144
+#: .\templates\videos\revision.html.py:146
 msgid "See full revision history"
 msgstr ""
 
