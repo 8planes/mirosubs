@@ -116,9 +116,13 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
 
     var initialTab = result['initial_tab'];
     var IS = mirosubs.widget.VideoTab.InitialState;
-    this.addChild(this.popupMenu_ = new mirosubs.widget.DropDown(this,
-        this.videoID_, result['subtitles'].length, result['translation_languages']),
-                  true);
+
+    var subtitleCount = result['subtitles'] ? 
+        result['subtitles'].length : result['subtitle_count'];
+
+    this.addChild(this.popupMenu_ = new mirosubs.widget.DropDown(
+        this, this.videoID_, subtitleCount, 
+        result['translation_languages']), true);
     goog.style.showElement(this.popupMenu_.getElement(), false);
 
     this.setInitialVideoTabState_(initialTab, result['owned_by']);
@@ -339,7 +343,9 @@ mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
             queryData.set('translate_immediately', 'true');
             newBaseState['language'] = this.languageCodePlaying_;
         }
-        queryData.set('base_state', goog.json.serialize(newBaseState));
+
+        if (this.baseState_.NOT_NULL || !forSubtitling)
+            queryData.set('base_state', goog.json.serialize(newBaseState));
         queryData.set('return_url', window.location.href);
         window.location.assign(url + queryData.toString());
         return true;
@@ -389,7 +395,8 @@ mirosubs.widget.Widget.prototype.startSubtitling_ =
             if (subtitleDialog.isSaved()) {
                 that.videoTab_.setText(
                     mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE);
-                that.popupMenu_.setSubtitled();
+// FIXME: this method is not implemented
+//                that.popupMenu_.setSubtitled();
             }
         });
 };

@@ -101,13 +101,18 @@ class NullRpc(BaseRpc):
             is_dependent_translation=not null_subtitles.is_original)
         null_subtitles.save()
 
-    def _autoplay_subtitles(self, user, video, base_state, language_code, revision_no):
-        if langugage_code is not None:
+    def _autoplay_subtitles(self, user, video, language_code, revision_no):
+        if language_code is not None:
             return [t[0].to_json_dict(text_to_use=t[1].subtitle_text)
                     for t in video.null_dependent_translations(
                     user, language_code)]
         else:
-            return [s.to_json_dict() for s in video.null_subtitles(user)]
+            return [s.to_json_dict() for s 
+                    in video.null_subtitles(user).subtitle_set.all()]
+
+    def _subtitle_count(self, user, video):
+        null_subs = video.null_subtitles(user)
+        return 0 if null_subs is None else null_subs.subtitle_set.count()
 
     def _initial_video_tab(self, user, video):
         null_subtitles = None

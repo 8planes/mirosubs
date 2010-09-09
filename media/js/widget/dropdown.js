@@ -19,7 +19,7 @@
 goog.provide('mirosubs.widget.DropDown');
 
 /**
- *
+ * @constructor
  * @param {string} videoID
  * @param subtitleCount the number of subtitles in the original language
  * @param translationLanguages an array of json languages,
@@ -33,7 +33,7 @@ mirosubs.widget.DropDown = function(widget, videoID, subtitleCount, translationL
     this.videoID_ = videoID;
     this.subtitleCount_ = subtitleCount;
     this.translationLanguages_ = translationLanguages || [];
-    
+
     this.currentLanguageCode_ = null;
     this.shown = false;
 };
@@ -121,26 +121,36 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.videoActions_ = $d('ul', null);    
     this.settingsActions_ = $d('ul', null);
     
-    this.unisubsLink_ = $d('h5', {'className': 'mirosubs-uniLogo'}, 'Universal Subtitles');
-    this.addTranslationLink_ = $d('li', {'className': 'mirosubs-addTranslation'},
-                                  $d('a', {'href': '#'}, 'Add New Translation'));
-    this.improveSubtitlesLink_ = $d('li', {'className': 'mirosubs-improveSubtitles'},
-                                    $d('a', {'href': '#'}, 'Improve These Subtitles'));
-    this.subtitleHomepageLink_ = $d('li', {'className': 'mirosubs-subtitleHomepage'},
-                                    $d('a', {'href': this.createSubtitleHomepageURL_()},
-                                       'Subtitle Homepage'));
-    this.downloadSubtitlesLink_ = $d('li', {'className': 'mirosubs-downloadSubtitles'},
-                                     $d('a', {'href': this.createDownloadSRTURL_()},
-                                        'Download Subtitles'));
+    this.unisubsLink_ = 
+        $d('h5', {'className': 'mirosubs-uniLogo'}, 
+           'Universal Subtitles');
+    this.addTranslationLink_ = 
+        $d('li', {'className': 'mirosubs-addTranslation'},
+           $d('a', {'href': '#'}, 'Add New Translation'));
+    this.improveSubtitlesLink_ = 
+        $d('li', {'className': 'mirosubs-improveSubtitles'},
+           $d('a', {'href': '#'}, 'Improve These Subtitles'));
+    this.subtitleHomepageLink_ = 
+        $d('li', {'className': 'mirosubs-subtitleHomepage'},
+           $d('a', {'href': this.createSubtitleHomepageURL_()},
+              'Subtitle Homepage'));
+    this.downloadSubtitlesLink_ = 
+        $d('li', {'className': 'mirosubs-downloadSubtitles'},
+           $d('a', {'href': this.createDownloadSRTURL_()},
+              'Download Subtitles'));
     
-    this.createAccountLink_ = $d('li', {'className': 'mirosubs-createAccount'},
-                                 $d('a', {'href': '#'}, 'Login or Create Account'));
-    this.languagePreferencesLink_ = $d('li', {'className': 'mirosubs-languagePreferences'},
-                                       $d('a', {'href': '#'}, 'Language Preferences'));
-    this.usernameLink_ = $d('li', null,
-                            $d('a', {'href': '#'}, 'USERNAME'));
-    this.logoutLink_ = $d('li', null,
-                          $d('a', {'href': '#'}, 'Logout'));
+    this.createAccountLink_ = 
+        $d('li', {'className': 'mirosubs-createAccount'},
+           $d('a', {'href': '#'}, 'Login or Create Account'));
+    this.languagePreferencesLink_ = 
+        $d('li', {'className': 'mirosubs-languagePreferences'},
+           $d('a', {'href': '#'}, 'Language Preferences'));
+    this.usernameLink_ = 
+        $d('li', null,
+           $d('a', {'href': '#'}, 'USERNAME'));
+    this.logoutLink_ = 
+        $d('li', null,
+           $d('a', {'href': '#'}, 'Logout'));
 };
 
 mirosubs.widget.DropDown.prototype.updateActions_ = function() {
