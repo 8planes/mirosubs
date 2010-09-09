@@ -150,7 +150,7 @@ mirosubs.widget.Widget.prototype.setInitialVideoTabState_ =
     var IS = mirosubs.widget.VideoTab.InitialState;
     var M = mirosubs.widget.VideoTab.Messages;
     if (initialTab == IS.SUBTITLE_ME)
-        this.videoTab_.setText(M.SUBTITLE_ME);
+        this.videoTab_.setText(M.SUBTITLE_ME, true);
     else if (initialTab == IS.CHOOSE_LANGUAGE)
         this.videoTab_.setText(M.CHOOSE_LANGUAGE);
 };
@@ -193,7 +193,10 @@ mirosubs.widget.Widget.prototype.attachEvents_ = function() {
 };
 
 mirosubs.widget.Widget.prototype.videoAnchorClicked_ = function(e) {
-    this.popupMenu_.toggleShow();
+    if (this.videoTab_.hasNoSubtitles())
+        this.subtitleClicked_();
+    else
+        this.popupMenu_.toggleShow();
     e.preventDefault();
 };
 
