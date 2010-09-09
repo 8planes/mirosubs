@@ -197,6 +197,17 @@ def feedback(request):
         output['errors'] = form.get_errors()
     return HttpResponse(json.dumps(output), "text/javascript")
 
+def site_feedback(request):
+    text = request.GET.get('text', '')
+    email = ''
+    if request.user.is_authenticated():
+        email = request.user.email
+    initial = dict(message=text, email=email)
+    form = FeedbackForm(initial=initial)
+    return render_to_response(
+        'videos/site_feedback.html', {'form':form},
+        context_instance=RequestContext(request))
+
 def email_friend(request):
     text = request.GET.get('text', '')
     link = request.GET.get('link', '')
@@ -311,10 +322,10 @@ def diffing(request, first_pk, second_pk):
     if second_version.datetime_started > first_version.datetime_started:
         first_version, second_version = second_version, first_version
     
-    second_captions = dict([(item.subtitle_id, item) for item in second_version.subtitles()])
+    second_captions = dict([(item.subtitle_id, item) for item in second_version.ordered_subtitles()])
     captions = []
 
-    for caption in first_version.subtitles():
+    for caption in first_version.ordered_subtitles():
         try:
             scaption = second_captions[caption.subtitle_id]
         except KeyError:

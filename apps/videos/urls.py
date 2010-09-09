@@ -19,11 +19,13 @@
 from django.conf.urls.defaults import *
 from models import TranslationVersion
 
-urlpatterns = patterns('videos.views',
+urlpatterns = patterns(
+    'videos.views',
     url(r'^$', 'video_list', name='list'),
     url(r'^feedback/$', 'feedback', name='feedback'),
     url(r'^upload_subtitles/$', 'upload_subtitles', name='upload_subtitles'),
-    url(r'^create/$', 'create', name='create'),    
+    url(r'^create/$', 'create', name='create'),
+    url(r'^site_feedback/$', 'site_feedback', name='site_feedback'),
     url(r'^email_friend/$', 'email_friend', name='email_friend'),
     url(r'^demo/$', 'demo', name='demo'),
     url(r'^activities/$', 'actions_list', name='actions_list'),

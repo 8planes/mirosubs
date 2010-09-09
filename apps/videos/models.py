@@ -709,7 +709,19 @@ class SubtitleVersion(models.Model):
 
     def subtitles(self):
         return self.subtitle_set.all()
-
+    
+    def ordered_subtitles(self):
+        if self.language.is_original:
+            return list(self.subtitles())
+        else:
+            last_original_version = self.language.video.latest_finished_version()
+            if not last_original_version:
+                return list(self.subtitles())
+            else:
+                subs_ans_trans = Video._make_subtitles_and_translations(last_original_version.subtitles(), self.subtitles())
+                subs_ans_trans.sort(key=lambda item: item[0].subtitle_order)
+                return [item[1] for item in subs_ans_trans]
+    
     def prev_version(self):
         cls = self.__class__
         try:

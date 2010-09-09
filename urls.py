@@ -69,6 +69,8 @@ urlpatterns = patterns(
     url(r'^demo/$', 'videos.views.demo', name="demo"),
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'about.html'}, 'about_page'),
+    (r'^dmca$',  'django.views.generic.simple.direct_to_template', 
+     {'template': 'dmca.html'}, 'dmca_page'),     
 		(r'^faq$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'faq.html'}, 'faq_page'),
 		(r'^opensubtitles2010$',  'django.views.generic.simple.direct_to_template', 

@@ -2483,7 +2483,7 @@ width: 100%;
 font-size: 13px;
 background: #333 url("../images/gradient_light.png") 0 0px repeat-x !important;
 text-decoration: none;
-display: block !important;
+display: block;
 color: #fff !important;
 float: left;
 border-right: 1px solid #888;

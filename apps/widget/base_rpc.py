@@ -31,7 +31,7 @@ class BaseRpc:
         video, created = models.Video.get_or_create_for_url(video_url, owner)
         video.widget_views_count += 1
         video.save()
-    
+
         return_value = {
             'video_id' : video.video_id,
             'writelock_expiration' : models.WRITELOCK_EXPIRATION 
@@ -40,16 +40,19 @@ class BaseRpc:
             return_value['flv_url'] = video.bliptv_flv_url
         return_value['initial_tab'] = \
             self._initial_video_tab(request.user, video)
-        translation_language_codes = \
-            self._initial_language_codes(request.user, video)
+        translation_languages = \
+            self._initial_languages(request.user, video)
         return_value['translation_languages'] = \
-            [widget.language_to_map(code, LANGUAGES_MAP[code]) for 
-             code in translation_language_codes]
+            [widget.language_to_map(t[0], LANGUAGES_MAP[t[0]], percent_done=t[1]) for 
+             t in translation_languages]
         if base_state is not None:
             return_value['subtitles'] = self._autoplay_subtitles(
                 request.user, video, 
                 base_state.get('language', None),
                 base_state.get('revision', None))
+        else:
+            return_value['subtitle_count'] = self._subtitle_count(
+                request.user, video)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
         return_value['embed_version'] = settings.EMBED_JS_VERSION

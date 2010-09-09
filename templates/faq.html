@@ -30,6 +30,7 @@
 <li><a href="#q-donate">{% trans 'Do you accept donations? Are they tax deductible?' %}</a></li>
 <li><a href="#q-drumbeat">{% trans 'What is your relationship with Mozilla Drumbeat?' %}</a></li>
 <li><a href="#q-download">{% trans 'Where can I download subtitles in .SRT or other formats?' %}</a></li>
+<li><a href="#q-locked">{% trans 'It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?' %}</a></li>
 <li><a href="#q-change-timing">{% trans "Why can't I change the timing on a translation?" %}</a></li>
 </ul>
 
@@ -99,6 +100,16 @@
         When subtitles exist, you can download them in .SRT, .SSA, and TTML formats on
         the page for that language (<a href="http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/">example</a>). 
         Click the links in the lower right under the green "Edit Subtitles" button.
+        {% endblocktrans %}
+    </p>
+  </li>
+  <li id="q-locked">
+    <h3>{% trans 'It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?' %}</h3>
+    <p>
+        {% blocktrans %}
+        The system currently only allows one user to edit subtitles for any given video 
+        at a time. So, if someone else is already editing subtitles for the video when 
+        you try to edit the subtitles, you'll get this message.
         {% endblocktrans %}
     </p>
   </li>

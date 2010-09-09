@@ -184,13 +184,20 @@ mirosubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id)
     goog.array.forEach(this.commands_, function(cmd) { cmd(); });
     this.commands_ = [];
     
-    var onLoadingFn = "onLoading_";
     var that = this;
+
+    var onLoadingFn = "onVimeoLoa" + mirosubs.randomString();
     window[onLoadingFn] = function(data, swf_id) {
         that.loadedFraction_ = data;
         that.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
     };
-    this.player_.api_addEventListener('onLoading', 'onLoading_');
+    this.player_.api_addEventListener('onLoading', onLoadingFn);
+
+    var onFinishFn = "onVimeoFin" + mirosubs.randomString();
+    window[onFinishFn] = function(data, swf_id) {
+        that.dispatchEndedEvent();
+    };
+    this.player_.api_addEventListener('onFinish', onFinishFn);
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.disposeInternal = function() {

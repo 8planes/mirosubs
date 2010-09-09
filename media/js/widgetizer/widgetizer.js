@@ -23,7 +23,7 @@ goog.provide('mirosubs.Widgetizer');
  * This is a singleton, so don't call this method directly.
  */
 mirosubs.Widgetizer = function() {
-    this.widgetizeBound_ = false;
+    this.widgetizeCalled_ = false;
     this.widgetized_ = false;
 };
 goog.addSingletonGetter(mirosubs.Widgetizer);
@@ -33,82 +33,60 @@ goog.addSingletonGetter(mirosubs.Widgetizer);
  *
  */
 mirosubs.Widgetizer.prototype.widgetize = function() {
-    if (this.widgetizeBound_)
+    if (this.widgetizeCalled_)
         return;
-    this.widgetizeBound_ = true;
-    if (document.readyState == "complete")
+    this.widgetizeCalled_ = true;
+    if (mirosubs.LoadingDom.getInstance().isDomLoaded())
         this.onLoaded_();
     else
-        this.addReadyEventListener_();
+        goog.events.listenOnce(
+            mirosubs.LoadingDom.getInstance(),
+            mirosubs.LoadingDom.DOMLOAD,
+            this.onLoaded_, false, this);
 };
 
-mirosubs.Widgetizer.prototype.addReadyEventListener_ = function() {
-    var that = this;
-    if (document.addEventListener) {
-        var EVENT = "DOMContentLoaded";
-        document.addEventListener(
-            EVENT,
-            function() {
-                document.removeEventListener(EVENT, arguments.callee, false);
-                that.onLoaded_();
-            }, false);
-    }
-    else if (document.attachEvent) {
-        var EVENT = "onreadystatechange";
-        // TODO: this code is copied from templates/widget/embed.js.
-        // Possilby remove duplication in the future.
-        document.attachEvent(EVENT, function() {
-            if (document.readyState == "complete") {
-                document.detachEvent(EVENT, arguments.callee);
-                that.onLoaded_();
-            }
-        });
-        if (document.documentElement.doScroll && window == window.top)
-            (function() {
-                if (that.widgetized_)
-                    return;
-                try {
-                    // Thanks to Diego Perini: http://javascript.nwbox.com/IEContentLoaded/
-                    document.documentElement.doScroll('left');
-                }
-                catch (error) {
-                    setTimeout(arguments.callee, 0);
-                    return;
-                }
-                that.onLoaded_();
-            })();        
-    }
-    // in case nothing else works: load event
-    goog.events.listen(window, goog.events.EventType.LOAD,
-                       this.onLoaded_, false, this);
-};
+mirosubs.Widgetizer.prototype.videosExist = function() {
+    return this.findAndWidgetizeElements_(true);
+}
 
 mirosubs.Widgetizer.prototype.onLoaded_ = function() {
     if (this.widgetized_)
         return;
     this.widgetized_ = true;
-    this.addHeadCss_();
+    this.addHeadCss();
     this.findAndWidgetizeElements_();
 };
 
-mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
+mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = 
+    function(opt_findOnly) 
+{
     // including some heuristics here for some of the bigger sites.
     if (window.location.hostname.match(/youtube\.com$/) != null) {
-        this.widgetizeElem_(
-            goog.dom.getElement('movie_player'),
-            window.location.href);
+        var videoElem = goog.dom.getElement('movie_player');
+        if (videoElem) {
+            if (!findOnly)
+                this.widgetizeElem_(videoElem, window.location.href);
+            return true;
+        }
+        else
+            return false;
     }
     else {
-        this.widgetizeVideoElements_(
-            this.filterWidgetized_(
-                document.getElementsByTagName('video')));
-        this.widgetizeObjectElements_(
-            this.filterWidgetized_(
-                document.getElementsByTagName('object')));
+        var uniwidgetizedVideos = this.filterUnwidgetized_(
+            document.getElementsByTagName('video'));
+        if (!opt_findOnly)
+            this.widgetizeVideoElements_(unwidgetized);
+        var objectsFound = this.widgetizeObjectElements_(
+            this.filterUnwidgetized_(
+                document.getElementsByTagName('object')), 
+            opt_findOnly);
+        return unwidgetizedVideos.length > 0 || objectsFound;
     }
+    else
+        return false;
 };
 
-mirosubs.Widgetizer.prototype.addHeadCss_ = function() {
+mirosubs.Widgetizer.prototype.addHeadCss = function() {
     if (!window.MiroCSSLoading) {
         window.MiroCSSLoading = true;
         var head = document.getElementsByTagName('head')[0];
@@ -122,7 +100,7 @@ mirosubs.Widgetizer.prototype.addHeadCss_ = function() {
     }
 };
 
-mirosubs.Widgetizer.prototype.filterWidgetized_ = function(elementArray) {
+mirosubs.Widgetizer.prototype.filterUnwidgetized_ = function(elementArray) {
     var that = this;
     return goog.array.filter(
         elementArray,
@@ -145,12 +123,19 @@ mirosubs.Widgetizer.prototype.widgetizeVideoElements_ = function(videoElems) {
         this.widgetizeElem_(videoElems[i], this.findHtml5URL_(videoElems[i]));
 };
 
-mirosubs.Widgetizer.prototype.widgetizeObjectElements_ = function(objectElems) {
+mirosubs.Widgetizer.prototype.widgetizeObjectElements_ = 
+    function(objectElems, findOnly) 
+{
+    var found = false;
     for (var i = 0; i < objectElems.length; i++) {
         var youtubeURL = this.findYoutubeURL_(objectElems[i]);
-        if (youtubeURL != null)
-            this.widgetizeElem_(objectElems[i], youtubeURL);
+        if (youtubeURL != null) {
+            found = true;
+            if (!findOnly)
+                this.widgetizeElem_(objectElems[i], youtubeURL);
+        }
     }
+    return found;
 };
 
 mirosubs.Widgetizer.prototype.findHtml5URL_ = function(videoElem) {
@@ -190,5 +175,3 @@ mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
     mirosubs.widget.CrossDomainEmbed.embed(
         widgetDiv, { 'video_url': videoURL }, mirosubs.WidgetizerConfig.siteConfig);
 };
-
-mirosubs.Widgetizer.getInstance().widgetize();

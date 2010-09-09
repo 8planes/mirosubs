@@ -60,5 +60,8 @@ def add_js_files(context, use_compiled, js_files, compiled_file_name=None, full_
     context["site"] = Site.objects.get_current()
     return context;    
 
-def language_to_map(code, name):
-    return { 'code': code, 'name': name };
+def language_to_map(code, name, percent_done=None):
+    map = { 'code': code, 'name': name };
+    if percent_done is not None:
+        map['percent_done'] = percent_done
+    return map

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-31 13:53+0300\n"
+"POT-Creation-Date: 2010-09-07 15:12+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,61 @@ msgstr ""
 msgid "Argentinian Spanish"
 msgstr ""
 
+#: .\apps\auth\admin.py:10
+msgid "Username"
+msgstr ""
+
+#: .\apps\auth\admin.py:11
+msgid ""
+"Required. 30 characters or fewer. Alphanumeric characters only (letters, "
+"digits and underscores)."
+msgstr ""
+
+#: .\apps\auth\admin.py:12
+msgid "This value must contain only letters, numbers and underscores."
+msgstr ""
+
+#: .\apps\auth\admin.py:13
+msgid "Password"
+msgstr ""
+
+#: .\apps\auth\admin.py:14
+msgid "Password confirmation"
+msgstr ""
+
+#: .\apps\auth\admin.py:15
+msgid "Email"
+msgstr ""
+
+#: .\apps\auth\models.py:83
+#, fuzzy
+msgid "Add comment"
+msgstr "Комментарии"
+
+#: .\apps\auth\models.py:84
+#, fuzzy
+msgid "Start subtitles"
+msgstr "Субтитры отсутствуют."
+
+#: .\apps\auth\models.py:85
+#, fuzzy
+msgid "Start translation"
+msgstr "Добавить перевод"
+
+#: .\apps\auth\models.py:86
+#, fuzzy
+msgid "Edit subtitles"
+msgstr "редактировать название"
+
+#: .\apps\auth\models.py:87
+#, fuzzy
+msgid "Edit translation"
+msgstr "Добавить перевод"
+
+#: .\apps\comments\forms.py:35
+msgid "You car reply only comments for same object"
+msgstr ""
+
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
 msgstr ""
@@ -30,32 +85,62 @@ msgstr ""
 msgid "You are not authenticated."
 msgstr ""
 
-#: .\apps\videos\forms.py:45
-msgid "Somebody is subtitling this video right now. Try later."
+#: .\apps\profiles\forms.py:51
+#, python-format
+msgid "Personal message from %(sender)s on universalsubtitles.org"
+msgstr ""
+
+#: .\apps\profiles\forms.py:67
+msgid "Confirm new password:"
+msgstr ""
+
+#: .\apps\profiles\forms.py:82
+msgid "Invalid password."
+msgstr ""
+
+#: .\apps\profiles\forms.py:84
+msgid "The two passwords did not match."
+msgstr ""
+
+#: .\apps\profiles\forms.py:94
+msgid "This email is used already."
 msgstr ""
 
 #: .\apps\videos\forms.py:49
+msgid "Somebody is subtitling this video right now. Try later."
+msgstr ""
+
+#: .\apps\videos\forms.py:53
 msgid "You can't edit this video."
 msgstr ""
 
-#: .\apps\videos\forms.py:52
+#: .\apps\videos\forms.py:56
 msgid "This video has translations."
 msgstr ""
 
-#: .\apps\videos\forms.py:58
+#: .\apps\videos\forms.py:62
 msgid "File size should be less 1Mb"
 msgstr ""
 
-#: .\apps\videos\forms.py:61
+#: .\apps\videos\forms.py:65
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
 msgstr ""
 
-#: .\apps\videos\forms.py:64
+#: .\apps\videos\forms.py:68
 msgid "Incorrect subtitles format"
 msgstr ""
 
-#: .\apps\videos\forms.py:157
-msgid "Incorrect video url"
+#: .\apps\videos\forms.py:169
+#, python-format
+msgid ""
+"Universal Subtitles does not support that website or video format.\n"
+"If you'd like to us to add support for a new site or format, or if you\n"
+"think there's been some mistake, <a\n"
+"href=\"mailto:%s\">contact us</a>!"
+msgstr ""
+
+#: .\apps\videos\forms.py:216
+msgid "Enter valid e-mail addresses separated by commas."
 msgstr ""
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
@@ -316,65 +401,70 @@ msgid ""
 "    "
 msgstr ""
 
-#: .\templates\base.html.py:17
+#: .\templates\base.html.py:18
 msgid ""
 "Free and open tools for creating captions, subtitles, and translations for "
 "video."
 msgstr ""
 
-#: .\templates\base.html.py:36
+#: .\templates\base.html.py:37
 msgid ""
 "Universal Subtitles does not support your browser. Upgrade your browser or "
 "<a href=\"http://getfirefox.com\">Try Firefox</a>."
 msgstr ""
 
-#: .\templates\base.html.py:58
+#: .\templates\base.html.py:59
 msgid "a project of the participatory culture foundation"
 msgstr ""
 
-#: .\templates\base.html.py:71 .\templates\videos\create.html.py:13
+#: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
 msgstr ""
 
-#: .\templates\base.html.py:72
+#: .\templates\base.html.py:73
 msgid "Videos"
 msgstr ""
 
-#: .\templates\base.html.py:73
+#: .\templates\base.html.py:74
 msgid "Volunteer"
 msgstr ""
 
-#: .\templates\base.html.py:78
+#: .\templates\base.html.py:79
 msgid "Blog"
 msgstr ""
 
-#: .\templates\base.html.py:79
+#: .\templates\base.html.py:80
 msgid "FAQ"
 msgstr ""
 
-#: .\templates\base.html.py:80
+#: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
+#: .\templates\profiles\view_profile.html.py:92
 msgid "About"
 msgstr ""
 
-#: .\templates\base.html.py:82
+#: .\templates\base.html.py:83
 msgid "Logout"
 msgstr ""
 
-#: .\templates\base.html.py:84
+#: .\templates\base.html.py:85
+msgid "Admin"
+msgstr ""
+
+#: .\templates\base.html.py:88
 msgid "Login"
 msgstr ""
 
-#: .\templates\base.html.py:102
+#: .\templates\base.html.py:106
 msgid ""
 "Universal Subtitles is a project of <a href=\"http://participatoryculture."
 "org/\">PCF</a>."
 msgstr ""
 
-#: .\templates\base.html.py:108
+#: .\templates\base.html.py:112
 msgid "Contact Us"
 msgstr ""
 
-#: .\templates\base.html.py:109
+#: .\templates\base.html.py:113
 msgid "Privacy Policy"
 msgstr ""
 
@@ -637,118 +727,118 @@ msgid ""
 "get a lot of email"
 msgstr ""
 
-#: .\templates\index.html.py:38
+#: .\templates\index.html.py:41
 msgid "Subtitles and Captions for Every Video on the Web"
 msgstr ""
 
-#: .\templates\index.html.py:41
+#: .\templates\index.html.py:44
 msgid "The Problem"
 msgstr ""
 
-#: .\templates\index.html.py:41
+#: .\templates\index.html.py:44
 msgid ""
 "Web video is beginning to rival television, but there isn't a good open "
 "resource for subtitling."
 msgstr ""
 
-#: .\templates\index.html.py:43
+#: .\templates\index.html.py:46
 msgid "Our Mission"
 msgstr ""
 
-#: .\templates\index.html.py:43
+#: .\templates\index.html.py:46
 msgid ""
 "We're trying to make captioning, subtitling, and translating video publicly "
 "accessible in a way that's free and open, just like the Web."
 msgstr ""
 
-#: .\templates\index.html.py:43
+#: .\templates\index.html.py:46
 msgid "Learn More"
 msgstr ""
 
-#: .\templates\index.html.py:46
+#: .\templates\index.html.py:49
 msgid "Right now"
 msgstr ""
 
-#: .\templates\index.html.py:46
+#: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
 msgstr ""
 
-#: .\templates\index.html.py:47
+#: .\templates\index.html.py:50
 msgid "Try our demo"
 msgstr ""
 
-#: .\templates\index.html.py:47
+#: .\templates\index.html.py:50
 msgid "Become a tester"
 msgstr ""
 
-#: .\templates\index.html.py:53
+#: .\templates\index.html.py:56
 #, fuzzy
 msgid "Subtitle Widget"
 msgstr "Субтитры отсутствуют."
 
-#: .\templates\index.html.py:54
+#: .\templates\index.html.py:57
 msgid ""
 "A simple way to create and add captions to almost any video on the web "
 "(without having to transcode or re-upload videos)."
 msgstr ""
 
-#: .\templates\index.html.py:57
+#: .\templates\index.html.py:60
 msgid "Community Site"
 msgstr ""
 
-#: .\templates\index.html.py:58
+#: .\templates\index.html.py:61
 msgid ""
 "An online community for collaboratively subtitling and translating the "
 "world's videos (like a Wikipedia for subtitles)."
 msgstr ""
 
-#: .\templates\index.html.py:61
+#: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
 msgstr ""
 
-#: .\templates\index.html.py:62
+#: .\templates\index.html.py:65
 msgid ""
 "An open standard to let Firefox extensions, desktop video players, websites, "
 "browsers--any client--find and retrieve subtitles for any video."
 msgstr ""
 
-#: .\templates\index.html.py:72
+#: .\templates\index.html.py:75
 msgid "Get updates and find out first when we launch"
 msgstr ""
 
-#: .\templates\index.html.py:77
+#: .\templates\index.html.py:80
 msgid "Get Updates!"
 msgstr ""
 
-#: .\templates\index.html.py:82
+#: .\templates\index.html.py:85
 msgid "Please enter a valid email address"
 msgstr ""
 
-#: .\templates\index.html.py:115
+#: .\templates\index.html.py:118
 msgid "Please enter your email address."
 msgstr ""
 
-#: .\templates\index.html.py:134
+#: .\templates\index.html.py:137
 msgid "Mozilla will double your donation!"
 msgstr ""
 
-#: .\templates\index.html.py:135
+#: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
 msgstr ""
 
-#: .\templates\index.html.py:135
+#: .\templates\index.html.py:138
 msgid "Donate Now"
 msgstr ""
 
-#: .\templates\index.html.py:143
+#: .\templates\index.html.py:146
 msgid "Check out the widget"
 msgstr ""
 
-#: .\templates\index.html.py:144
+#: .\templates\index.html.py:147
 msgid "Test our subtitling widget"
 msgstr ""
 
-#: .\templates\index.html.py:144
+#: .\templates\index.html.py:147
 msgid "Try the Demo"
 msgstr ""
 
@@ -1308,6 +1398,15 @@ msgid ""
 "PCF's тАЬannounceтАЭ mailing list and newsgroup."
 msgstr ""
 
+#: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
+#, fuzzy
+msgid "Universal Subtitles"
+msgstr "Скачать субтитры"
+
+#: .\templates\admin\base_site.html.py:12
+msgid "View site"
+msgstr ""
+
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
 msgid "Sign in with your OpenID"
@@ -1315,6 +1414,107 @@ msgstr ""
 
 #: .\templates\openid_consumer\signin.html.py:18
 msgid "Sign in"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:7
+#: .\templates\profiles\edit_profile.html.py:28
+msgid "Edit Your Profile"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:7
+msgid "View profile"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:10
+#: .\templates\profiles\view_profile.html.py:83
+#, fuzzy
+msgid "Preferred Language"
+msgstr "Язык"
+
+#: .\templates\profiles\edit_profile.html.py:13
+#: .\templates\profiles\view_profile.html.py:84
+msgid "Homepage"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:30
+msgid "Save Edits to Profile"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:35
+msgid "Personal Info"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:57
+msgid "Upload picture"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:83
+msgid "Email me when something I've edited gets changed"
+msgstr ""
+
+#: .\templates\profiles\edit_profile.html.py:93
+#, fuzzy
+msgid "Language Info"
+msgstr "Язык"
+
+#: .\templates\profiles\edit_profile.html.py:106
+#, fuzzy
+msgid "Languages I Know"
+msgstr "Языки"
+
+#: .\templates\profiles\edit_profile.html.py:109
+#: .\templates\profiles\edit_profile.html.py:124
+#, fuzzy
+msgid "Remove Language"
+msgstr "Язык"
+
+#: .\templates\profiles\edit_profile.html.py:136
+#, fuzzy
+msgid "Add Language"
+msgstr "Язык"
+
+#: .\templates\profiles\view_profile.html.py:43
+msgid "Email sent"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:62
+msgid "Enter message please."
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:66
+msgid "Enter email please."
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:86
+#: .\templates\profiles\view_profile.html.py:116
+msgid "Send a Message"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:94
+msgid "<i>User has not submitted a bio.</i>"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:103
+#, python-format
+msgid "Send %(user_info)s a Message"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:107
+msgid "From"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:111
+msgid "Message"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:113
+msgid "No HTML"
+msgstr ""
+
+#: .\templates\profiles\view_profile.html.py:114
+msgid ""
+"Note: when you send a message the recipient can see your email and reply "
+"directly"
 msgstr ""
 
 #: .\templates\registration\password_reset_complete.html.py:4
@@ -1471,47 +1671,47 @@ msgstr ""
 msgid "Please let us know if you have any comments, questions, or suggestions!"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:34
+#: .\templates\videos\_feedback_form.html.py:37
 msgid "Your email:"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:37
+#: .\templates\videos\_feedback_form.html.py:44
 msgid "Your Feedback"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:41
+#: .\templates\videos\_feedback_form.html.py:48
 msgid "Send Feedback"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:47
+#: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:48
+#: .\templates\videos\_feedback_form.html.py:55
 msgid "If you would like to perform some additional testing"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:49
+#: .\templates\videos\_feedback_form.html.py:56
 msgid "please go to our"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:49
+#: .\templates\videos\_feedback_form.html.py:56
 msgid "Litmus regression tests"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:50
+#: .\templates\videos\_feedback_form.html.py:57
 msgid "For new testers, we have"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:50
+#: .\templates\videos\_feedback_form.html.py:57
 msgid "a getting started guide"
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:52
+#: .\templates\videos\_feedback_form.html.py:59
 msgid "Send more feedback."
 msgstr ""
 
-#: .\templates\videos\_feedback_form.html.py:57
+#: .\templates\videos\_feedback_form.html.py:64
 msgid "Enter feedback please."
 msgstr ""
 
@@ -1519,16 +1719,25 @@ msgstr ""
 msgid "View all"
 msgstr ""
 
-#: .\templates\videos\_upload_subtitles.html.py:5
-#: .\templates\videos\_upload_subtitles.html.py:15
+#: .\templates\videos\_upload_subtitles.html.py:4
+#: .\templates\videos\_upload_subtitles.html.py:9
 msgid "Upload Subtitles"
 msgstr ""
 
-#: .\templates\videos\_upload_subtitles.html.py:9
+#: .\templates\videos\_upload_subtitles.html.py:14
+msgid ""
+"\n"
+"                    Our site accepts SRT, SSA, and TTML format. Only files "
+"ending in .srt, .ssa, \n"
+"                    or .xml (for TTML) are accepted.\n"
+"                    "
+msgstr ""
+
+#: .\templates\videos\_upload_subtitles.html.py:29
 msgid "Login to upload subtitles"
 msgstr ""
 
-#: .\templates\videos\_upload_subtitles.html.py:37
+#: .\templates\videos\_upload_subtitles.html.py:38
 msgid ""
 "If you believe your subtitle file is compatible, <a href='mailto:"
 "feedback@universalsubtitles.org'>send it to us</a>"
@@ -1591,7 +1800,7 @@ msgid "All activities"
 msgstr ""
 
 #: .\templates\videos\actions_list.html.py:12
-#: .\templates\videos\history.html.py:204
+#: .\templates\videos\history.html.py:210
 msgid "User"
 msgstr ""
 
@@ -1608,11 +1817,29 @@ msgid "There are no activities."
 msgstr ""
 
 #: .\templates\videos\create.html.py:9
-msgid "You type incorrect ulr."
+msgid ""
+"\n"
+"    \"Sorry, we couldn't identify the video at the link you sent.  Perhaps\n"
+"    it's a link we don't recognize, or perhaps you've linked to a page\n"
+"    that has multiple videos.  Try entering a different link to the video\n"
+"    you want to submit.  If you think there's been some mistake,\n"
+"    <a href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!\"\n"
+"    "
 msgstr ""
 
-#: .\templates\videos\create.html.py:17
+#: .\templates\videos\create.html.py:23
 msgid "Begin"
+msgstr ""
+
+#: .\templates\videos\create.html.py:25
+msgid ""
+"\n"
+"      To enable collaborative subtitles, enter the URL to any video in "
+"the<br />\n"
+"      following formats: Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, "
+"Fora.tv,\n"
+"      Ustream.tv\n"
+"      "
 msgstr ""
 
 #: .\templates\videos\diffing.html.py:37
@@ -1627,28 +1854,38 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"        Comparing #%(version_no)s and #%(second_version_no)s\n"
-"        "
+"            Comparing older revision (#%(second_version_no)s) to revision (#%"
+"(version_no)s)\n"
+"            "
 msgstr ""
 
-#: .\templates\videos\diffing.html.py:83
-#: .\templates\videos\history.html.py:139
-#: .\templates\videos\history.html.py:179
+#: .\templates\videos\diffing.html.py:79
+#, python-format
+msgid ""
+"\n"
+"            Comparing older revision (#%(second_version_no)s) to current "
+"revision (#%(version_no)s)\n"
+"            "
+msgstr ""
+
+#: .\templates\videos\diffing.html.py:93
+#: .\templates\videos\history.html.py:144
+#: .\templates\videos\history.html.py:185
 #: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
 msgstr ""
 
-#: .\templates\videos\diffing.html.py:88
+#: .\templates\videos\diffing.html.py:98
 #: .\templates\videos\revision.html.py:75
 msgid "Revision History"
 msgstr ""
 
-#: .\templates\videos\diffing.html.py:92
+#: .\templates\videos\diffing.html.py:102
 msgid "Comparing Revision"
 msgstr ""
 
-#: .\templates\videos\diffing.html.py:100
-#: .\templates\videos\diffing.html.py:152
+#: .\templates\videos\diffing.html.py:110
+#: .\templates\videos\diffing.html.py:162
 #, python-format
 msgid ""
 "\n"
@@ -1656,21 +1893,21 @@ msgid ""
 "            "
 msgstr ""
 
-#: .\templates\videos\diffing.html.py:113
-#: .\templates\videos\diffing.html.py:167
+#: .\templates\videos\diffing.html.py:123
+#: .\templates\videos\diffing.html.py:177
 #: .\templates\videos\revision.html.py:134
 msgid "Submit a new edit based on this version"
 msgstr ""
 
-#: .\templates\videos\diffing.html.py:117
-#: .\templates\videos\diffing.html.py:171
+#: .\templates\videos\diffing.html.py:127
+#: .\templates\videos\diffing.html.py:181
 #: .\templates\videos\revision.html.py:138
 msgid "Roll back to version"
 msgstr ""
 
-#: .\templates\videos\diffing.html.py:140
-#: .\templates\videos\diffing.html.py:195
-#: .\templates\videos\history.html.py:276
+#: .\templates\videos\diffing.html.py:150
+#: .\templates\videos\diffing.html.py:205
+#: .\templates\videos\history.html.py:282
 msgid "Not Synced"
 msgstr ""
 
@@ -1823,7 +2060,7 @@ msgstr ""
 msgid "Select two revisions for compare, please"
 msgstr ""
 
-#: .\templates\videos\history.html.py:124
+#: .\templates\videos\history.html.py:130
 #, python-format
 msgid ""
 "\n"
@@ -1831,7 +2068,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: .\templates\videos\history.html.py:128
+#: .\templates\videos\history.html.py:134
 #, python-format
 msgid ""
 "\n"
@@ -1839,61 +2076,65 @@ msgid ""
 "        "
 msgstr ""
 
-#: .\templates\videos\history.html.py:153
+#: .\templates\videos\history.html.py:158
 msgid "Edit Subtitles"
 msgstr ""
 
-#: .\templates\videos\history.html.py:154 .\templates\videos\video.html.py:122
+#: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
 msgid "Add Translation"
 msgstr "Добавить перевод"
 
-#: .\templates\videos\history.html.py:164
+#: .\templates\videos\history.html.py:169
 msgid "Download Subtitles"
 msgstr "Скачать субтитры"
 
-#: .\templates\videos\history.html.py:177
+#: .\templates\videos\history.html.py:183
 msgid "Original Language Subtitles"
 msgstr "Оригинальные субтитры"
 
-#: .\templates\videos\history.html.py:183 .\templates\videos\video.html.py:134
+#: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
 msgstr "Комментарии"
 
-#: .\templates\videos\history.html.py:184
+#: .\templates\videos\history.html.py:190
 msgid "History"
 msgstr "История изменений"
 
-#: .\templates\videos\history.html.py:191
+#: .\templates\videos\history.html.py:197
 msgid "Compare Revisions"
 msgstr "Сравнить версии"
 
-#: .\templates\videos\history.html.py:201
+#: .\templates\videos\history.html.py:207
 msgid "Most Recent"
 msgstr "Самые новые"
 
-#: .\templates\videos\history.html.py:207
+#: .\templates\videos\history.html.py:213
 msgid "Note"
 msgstr "Описание"
 
-#: .\templates\videos\history.html.py:210
+#: .\templates\videos\history.html.py:216
 msgid "Time"
 msgstr "Время"
 
-#: .\templates\videos\history.html.py:213
+#: .\templates\videos\history.html.py:219
 msgid "Text"
 msgstr "Текст"
 
-#: .\templates\videos\history.html.py:246
+#: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
 msgstr ""
 
-#: .\templates\videos\history.html.py:247
+#: .\templates\videos\history.html.py:253
 msgid "Either no subtitles have been entered, or they were deleted."
 msgstr ""
 
-#: .\templates\videos\history.html.py:283
-msgid "No subtitles yet.  Make some!"
-msgstr "Субтитры отсутствуют. Создай!"
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
+msgid "No subtitles yet."
+msgstr "Субтитры отсутствуют."
+
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
+msgid "Make some!"
+msgstr "Создай!"
 
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
@@ -2049,14 +2290,6 @@ msgstr ""
 msgid "No Subtitles"
 msgstr "Субтитры отсутствуют."
 
-#: .\templates\videos\video.html.py:183
-msgid "No subtitles yet."
-msgstr "Субтитры отсутствуют."
-
-#: .\templates\videos\video.html.py:183
-msgid "Make some!"
-msgstr "Создай!"
-
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
 msgstr ""
@@ -2091,3 +2324,6 @@ msgstr "История изменений"
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
 msgstr "Видео отсутствуют"
+
+#~ msgid "No subtitles yet.  Make some!"
+#~ msgstr "Субтитры отсутствуют. Создай!"

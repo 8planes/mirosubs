@@ -18,7 +18,7 @@
 
 goog.provide('mirosubs.play.Manager');
 
-mirosubs.play.Manager = function(videoPlayer, captions) {
+mirosubs.play.Manager = function(videoPlayer, captions, finishedCallback) {
     goog.Disposable.call(this);
     this.videoPlayer_ = videoPlayer;
     var captionSet = 
@@ -28,6 +28,12 @@ mirosubs.play.Manager = function(videoPlayer, captions) {
     goog.events.listen(this.captionManager_,
                        mirosubs.CaptionManager.CAPTION,
                        this.captionReached_);
+    goog.events.listen(this.captionManager_,
+                       mirosubs.CaptionManager.CAPTIONS_FINISHED,
+                       finishedCallback);
+    goog.events.listen(this.videoPlayer_,
+                       mirosubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
+                       finishedCallback);
 };
 goog.inherits(mirosubs.play.Manager, goog.Disposable);
 mirosubs.play.Manager.prototype.captionReached_ = function(event) {

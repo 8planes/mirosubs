@@ -203,14 +203,18 @@ mirosubs.video.DailymotionVideoPlayer.prototype.resumeLoadingInternal = function
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.playerStateChange_ = function(newState) {
-    if (newState == mirosubs.video.DailymotionVideoPlayer.State_.PLAYING) {
-        this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
+    var s = mirosubs.video.DailymotionVideoPlayer.State_;
+    var et = mirosubs.video.AbstractVideoPlayer.EventType;
+    if (newState == s.PLAYING) {
+        this.dispatchEvent(et.PLAY);
         this.timeUpdateTimer_.start();
     }
-    else if (newState == mirosubs.video.DailymotionVideoPlayer.State_.PAUSED) {
-        this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PAUSE);
+    else if (newState == s.PAUSED) {
+        this.dispatchEvent(et.PAUSE);
         this.timeUpdateTimer_.stop();
     }
+    else if (newState == s.ENDED)
+        this.dispatchEndedEvent();
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.getPlayerState_ = function() {

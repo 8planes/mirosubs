@@ -60,7 +60,7 @@ mirosubs.translate.EditDialog.prototype.createDom = function() {
 };
 mirosubs.translate.EditDialog.prototype.createRightPanel_ = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
-        "Adding a New Translation",
+        "Editing Translation",
         [["Thanks for volunteering to translate! As soon as you submit ",
           "your translation, it will be available to everyone watching the ",
           "video in our widget."].join(''),
