@@ -107,6 +107,12 @@
         <a href="#" class="edit-title">{% trans 'edit title' %}</a>   
     {% endif %}
 
+    {% if saved %}
+        <h2>Subtitles saved!  You can share the video with friends, 
+          or get an embed code for your site.  To add a
+          translation, click the button below.</h2>
+    {% endif %}
+
     <div class="left_column">
         {% widget widget_params %}
     </div>

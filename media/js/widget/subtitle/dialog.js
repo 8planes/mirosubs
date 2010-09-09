@@ -160,6 +160,10 @@ mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
         this.currentSubtitlePanel_.suspendKeyEvents(suspended);
 };
 mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
+    if (!mirosubs.isEmbeddedInDifferentDomain()) {
+        window.location.assign(this.serverModel_.getPermalink() + '?saved=true');
+        return;
+    }
     this.state_ = mirosubs.subtitle.Dialog.State_.FINISHED;
     this.setExtraClass_();
     var sharePanel = new mirosubs.subtitle.SharePanel(
