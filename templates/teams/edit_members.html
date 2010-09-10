@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Team members' %} | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+    <h2 class="main-title">{% trans 'Team members page' %}</h2>
+    
+    <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
+    
+    {% for member in team.members.select_related %}
+        <p>
+            {{ member.user }}
+            <br/>
+            <a href="{{ member.user.get_absolute_url }}">{% trans 'View' %}</a>
+            |
+            <a href="#">{% trans 'Remove from team' %}</a>
+            |
+            <a href="#">{% trans 'Demote to member' %}</a>
+        </p>
+    {% endfor %}
+{% endblock %}

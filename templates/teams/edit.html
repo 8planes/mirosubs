@@ -11,7 +11,9 @@
     
     <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
     |
-    <a href="{{ team.get_edit_video_url }}">{% trans 'Team videos' %}</a>
+    <a href="{% url teams:edit_video team.pk %}">{% trans 'Team videos' %}</a>
+    |
+    <a href="{% url teams:edit_members team.pk %}">{% trans 'Team members' %}</a>
     <form method='post' action="." enctype="multipart/form-data">
         {% csrf_token %}
         <table>

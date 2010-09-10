@@ -91,10 +91,6 @@ class Team(models.Model):
     def get_edit_url(self):
         return ('teams:edit', [self.pk])
     
-    @models.permalink
-    def get_edit_video_url(self):
-        return ('teams:edit_video', [self.pk])
-    
     def is_manager(self, user):
         return self.members.filter(user=user, is_manager=True).exists()
     
@@ -124,10 +120,8 @@ class Application(models.Model):
     team = models.ForeignKey(Team, related_name='applications')
     user = models.ForeignKey(User, related_name='team_applications')
     note = models.TextField(blank=True)
-    declined = models.BooleanField(default=False)
     
 class Invite(models.Model):
     team = models.ForeignKey(Team, related_name='invitations')
     user = models.ForeignKey(User, related_name='team_invitations')
     note = models.TextField(blank=True)
-    declined = models.BooleanField(default=False)    

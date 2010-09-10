@@ -29,6 +29,7 @@ urlpatterns = patterns('teams.views',
     url('^create/$', 'create', name='create'),
     url('^edit/(?P<pk>\d+)/$', 'edit', name='edit'),
     url('^edit/video/(?P<pk>\d+)/$', 'edit_video', name='edit_video'),
+    url('^edit/members/(?P<pk>\d+)/$', 'edit_members', name='edit_members'),
     url('^edit/(?P<pk>\d+)/(?P<video_pk>\d+)/$', 'remove_video', name='remove_video'),
     url('^(?P<pk>\d+)/$', 'detail', name='detail'),
 )

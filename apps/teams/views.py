@@ -120,3 +120,10 @@ def remove_video(request, pk, video_pk):
             'success': False,
             'error': _('You can\'t remove video')
         }
+
+@render_to('teams/edit_members.html')        
+def edit_members(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    return {
+        'team': team
+    }
