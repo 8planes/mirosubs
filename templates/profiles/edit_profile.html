@@ -38,11 +38,13 @@
                 {{ form.first_name.errors }}
                 {{ form.first_name.label_tag }}
                 {{ form.first_name }}
+                <span>{% trans 'will display publicly' %}</span>
             </p>
             <p>
                 {{ form.last_name.errors }}
                 {{ form.last_name.label_tag }}
                 {{ form.last_name }}
+                <span>{% trans 'will display publicly' %}</span>
             </p>
             <p>
                 {{ form.homepage.errors }}
