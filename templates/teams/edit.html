@@ -10,7 +10,8 @@
     <h2 class="main-title">{% trans 'Team settings' %}</h2>
     
     <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
-    
+    |
+    <a href="{{ team.get_edit_video_url }}">{% trans 'Team videos' %}</a>
     <form method='post' action="." enctype="multipart/form-data">
         {% csrf_token %}
         <table>

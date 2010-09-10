@@ -24,6 +24,10 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from django.http import HttpResponse
+from django.utils import simplejson
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.functional import update_wrapper
 
 def render_to(template):
     """
@@ -47,5 +51,12 @@ def render_to(template):
             elif isinstance(output, dict):
                 return render_to_response(template, output, RequestContext(request))
             return output
-        return wrapper
+        return update_wrapper(wrapper, func)
     return renderer
+
+def render_to_json(func):
+    def wrapper(request, *args, **kwargs):
+        result = func(request, *args, **kwargs)
+        json = simplejson.dumps(result, cls=DjangoJSONEncoder)
+        return HttpResponse(json, mimetype="application/json")
+    return update_wrapper(wrapper, func)

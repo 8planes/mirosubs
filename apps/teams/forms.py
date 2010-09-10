@@ -30,7 +30,7 @@ class CreateTeamForm(forms.ModelForm):
     
     class Meta:
         model = Team
-        exclude = ('videos', 'users')
+        exclude = ('videos', 'users', 'applicants', 'invited')
     
     def save(self, user):
         team = super(CreateTeamForm, self).save()
@@ -41,7 +41,7 @@ class EditTeamForm(forms.ModelForm):
     
     class Meta:
         model = Team
-        exclude = ('videos', 'users') 
+        exclude = ('videos', 'users', 'applicants', 'invited') 
         
     def clean(self):
         if not self.cleaned_data['logo']:

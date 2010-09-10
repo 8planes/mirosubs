@@ -66,6 +66,8 @@ class Team(models.Model):
     videos = models.ManyToManyField(Video, blank=True, verbose_name=_('videos'))
     users = models.ManyToManyField(User, through='TeamMember', related_name='teams', verbose_name=_('users'))
     points = models.IntegerField(default=0, editable=False)
+    applicants = models.ManyToManyField(User, through='Application', related_name='applicated_teams', verbose_name=_('applicants'))
+    invited = models.ManyToManyField(User, through='Invite', verbose_name=_('invited'))
     
     objects = TeamManager()
     
@@ -89,13 +91,43 @@ class Team(models.Model):
     def get_edit_url(self):
         return ('teams:edit', [self.pk])
     
+    @models.permalink
+    def get_edit_video_url(self):
+        return ('teams:edit_video', [self.pk])
+    
     def is_manager(self, user):
         return self.members.filter(user=user, is_manager=True).exists()
     
     def is_member(self, user):
         return self.members.filter(user=user).exists()
     
+    def can_remove_video(self, user):
+        if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
+            return True
+        if self.video_policy == self.MEMBER_REMOVE and self.is_member(user):
+            return True
+        return False
+    
+    def can_add_video(self, user):
+        if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
+            return True
+        if self.is_member(user):
+            return True
+        return False
+    
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')
     user = models.ForeignKey(User)
     is_manager = models.BooleanField(default=False)
+    
+class Application(models.Model):
+    team = models.ForeignKey(Team, related_name='applications')
+    user = models.ForeignKey(User, related_name='team_applications')
+    note = models.TextField(blank=True)
+    declined = models.BooleanField(default=False)
+    
+class Invite(models.Model):
+    team = models.ForeignKey(Team, related_name='invitations')
+    user = models.ForeignKey(User, related_name='team_invitations')
+    note = models.TextField(blank=True)
+    declined = models.BooleanField(default=False)    

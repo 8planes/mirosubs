@@ -22,7 +22,7 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from utils import render_to
+from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm
 from teams.models import Team
 from django.shortcuts import get_object_or_404, redirect
@@ -32,6 +32,7 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.views.generic.list_detail import object_list
+from videos.models import Video
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 
@@ -93,3 +94,29 @@ def edit(request, pk):
         'form': form,
         'team': team
     }
+
+@render_to('teams/edit_video.html')
+@login_required
+def edit_video(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    
+    return {
+        'team': team,
+        'can_remove_video': team.can_remove_video(request.user)
+    }
+
+@render_to_json    
+def remove_video(request, pk, video_pk):
+    team = get_object_or_404(Team, pk=pk)
+    
+    if team.can_remove_video(request.user):
+        video = get_object_or_404(Video, pk=video_pk)
+        team.videos.remove(video)
+        return {
+            'success': True
+        }        
+    else:
+        return {
+            'success': False,
+            'error': _('You can\'t remove video')
+        }
