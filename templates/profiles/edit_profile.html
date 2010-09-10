@@ -38,24 +38,26 @@
                 {{ form.first_name.errors }}
                 {{ form.first_name.label_tag }}
                 {{ form.first_name }}
+                <span>{% trans 'will display publicly' %}</span>
             </p>
             <p>
                 {{ form.last_name.errors }}
                 {{ form.last_name.label_tag }}
                 {{ form.last_name }}
+                <span>{% trans 'will display publicly' %}</span>
             </p>
             <p>
                 {{ form.homepage.errors }}
                 {{ form.homepage.label_tag }}
                 {{ form.homepage }}
             </p>
+            {{ form.picture.errors }}
             <p>
                 <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}"/>
-                {{ form.picture.errors }}
                 <input type="file" id="id_picture" name="picture" size="6"/>
                 <button class="small_button upload-picture" style="z-index: 1; padding-left: 10px;">
                     <span><span class="plus"></span>{% trans 'Upload picture' %}</span>
-                </button>             
+                </button>
             </p>
             <p>
                 {{ form.email.errors }}

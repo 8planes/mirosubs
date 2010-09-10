@@ -55,6 +55,8 @@ urlpatterns = patterns(
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
     (r'^videos/', include('videos.urls', namespace='videos', 
                           app_name='videos')),
+    (r'^teams/', include('teams.urls', namespace='teams', 
+                          app_name='teams')),                          
     (r'^profiles/', include('profiles.urls', namespace='profiles', 
                             app_name='profiles')),
     (r'auth/', include('auth.urls', namespace='auth',

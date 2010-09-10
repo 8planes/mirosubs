@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load i18n teams_tags %}
+
+{% block title %}
+    {{ team }} | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+    <h2 class="main-title">{{ team }}</h2>
+    
+    <p>
+        {% if team.logo %}
+            <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
+        {% endif %}
+        {% if team|is_team_member:user %}
+            {% trans 'You are member of this team' %}
+        {% endif %}
+        {% if team|is_team_manager:user %}
+            <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a>
+        {% endif %}
+    </p>    
+{% endblock %}
