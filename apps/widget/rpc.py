@@ -218,6 +218,10 @@ class Rpc(BaseRpc):
         else:
             return [s.to_json_dict() for s in video.subtitles(version_no=version_no)]
 
+    def _subtitle_count(self, user, video):
+        version = video.latest_finished_version()
+        return 0 if version is None else version.subtitle_set.count()
+
     def _initial_video_tab(self, user, video):
         return 0 if video.subtitle_state == models.NO_SUBTITLES else 1
 

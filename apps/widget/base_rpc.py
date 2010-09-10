@@ -50,6 +50,9 @@ class BaseRpc:
                 request.user, video, 
                 base_state.get('language', None),
                 base_state.get('revision', None))
+        else:
+            return_value['subtitle_count'] = self._subtitle_count(
+                request.user, video)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
         return_value['embed_version'] = settings.EMBED_JS_VERSION

@@ -84,7 +84,7 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'timeupdate',
                this.timeUpdateThrottle_.fire,
                false, this.timeUpdateThrottle_).
-        listen(this.videoElem_, 'ended', this.dispatchEndedEvent_);
+        listen(this.videoElem_, 'ended', this.dispatchEndedEvent);
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {

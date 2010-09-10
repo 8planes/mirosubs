@@ -1,3 +1,15 @@
+.mirosubs-videoDiv{
+margin: 0 !important;
+overflow: hidden;
+height: 360px;
+}
+
+#widget_div video{
+margin: 0 !important;
+
+}
+
+
 .mirosubs-widgetContainer {
     width: 100% !important;
     height: 100% !important;
@@ -9,6 +21,8 @@
 outline: none !important;
 
 }
+
+
 
 .mirosubs-widget {
    font-family: Arial, Helvetica, sans-serif !important;
@@ -199,6 +213,9 @@ margin-top: 75px;
 width: 350px !important;	
 margin-left: 26px;
 }
+
+
+
 
 
 .mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share h2,
@@ -861,7 +878,8 @@ margin: 20px 0 0 0px !important;
    height: 350px;
 }
 
-.mirosubs-left video{
+.mirosubs-left video,
+.mirosubs-left object{
     width: 400px;
     height: 300px;
 }
@@ -2473,7 +2491,6 @@ overflow: hidden;
 
 .mirosubs-videoTab{
 width: 100%;
-    margin: -5px 0 0 0 !important;
 }
 
 .mirosubs-videoTab a {
@@ -2483,7 +2500,7 @@ text-decoration: none;
 display: block;
 color: #fff !important;
 float: left;
-border-right: 1px solid #888;
+
 }
 
 
@@ -2495,13 +2512,24 @@ background: #333;
 
 
 
+.mirosubs-videoTab a.mirosubs-subtitleMeLink  {
+    min-width: 200px !important;
+
+}
+
+
+
+.mirosubs-videoTab a.mirosubs-subtitleMeLink  .mirosubs-tabText{
+margin-right: 10px;   
+
+}
 
 
 
 .mirosubs-videoTab a.mirosubs-subtitleMeLink img {
     float: left !important;
     border: none !important;
-    height: 17px !important;
+    height: 17px !important
     width: 17px !important;
     margin: 7px 7px 0 7px !important;
 }
@@ -2589,7 +2617,7 @@ background: #000;
     margin: 0 !important;
 width: 290px;
 background: #fff;
-height: 280px;
+height: 290px;
 float: left;
 overflow-y: auto;
 }
@@ -2763,10 +2791,44 @@ color: #999;
 
 
 
+.mirosubs-modal-widget-content.mirosubs-modal-widget-finished .mirosubs-right{
+background: none !important;
+}
 
 
 
+.mirosubs-otherClose {
+color: #fff;
+font-size: 20px;
+text-decoration: none;
+float: left;
+line-height: 1.3em;
+margin-left: 28px;
+}
+
+
+.mirosubs-otherClose span{
+background: url("../images/sprite.png") -2px -258px no-repeat !important;
+padding-top: 24px;
+color: #fff;
+height: 0px;
+margin-right: 10px;
+float: left;
+width: 24px !important;
+font-size: 20px;
+text-decoration: none;
+
+-moz-border-radius: 5px;
+}
 
 
 
+.mirosubs-goBack {
+color: #fff;
+font-size: 20px;
+text-decoration: none;
+float: right;
+line-height: 1.3em;
+margin-right: 28px;
+}
 

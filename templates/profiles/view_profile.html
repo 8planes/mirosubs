@@ -96,7 +96,8 @@
     </div>
     
     {{ block.super }}
-    
+
+
     {% if user.is_authenticated and not user == user_info and user_info.email %}
     <div id="send_message" style="display: none">
       <form class="message" method="post" action="{% url profiles:send_message %}" id="message-form">  

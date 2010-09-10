@@ -123,6 +123,7 @@ def video(request, video_id):
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(is_complete=True).count()
     context['original'] = video.subtitle_language()
+    context['saved'] = request.GET.get('saved', 'false') == 'true'
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
