@@ -22,3 +22,18 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
+from django import template
+
+register = template.Library()
+
+@register.filter
+def is_team_manager(team, user):
+    if not user.is_authenticated():
+        return False
+    return team.is_manager(user)
+
+@register.filter
+def is_team_member(team, user):
+    if not user.is_authenticated():
+        return False
+    return team.is_member(user)

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load paginator i18n teams_tags %}
+
+{% block title %}
+    Teams | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+    <h2 class="main-title">{% trans 'Teams' %}</h2>
+    
+    <p>
+        {% if user.is_authenticated %}
+            <a href="{% url teams:create %}">{% trans '+ start a new team' %}</a>
+        {% else %}
+            <a href="{% url auth:login %}?next={{ request.path_info }}">{% trans 'Login' %}</a> to start a team.
+        {% endif %}
+    </p>
+    
+    {% if teams_list %}
+        {% for team in teams_list %}
+            <p>
+                {% if team.logo %}
+                    <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
+                {% endif %}
+                <a href="{{ team.get_absolute_url }}">
+                    {{ team }}{% if team|is_team_member:user %}({% trans 'your team' %}){% endif %}
+                </a>
+                {% if team|is_team_manager:user %}
+                    <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a>
+                {% endif %}
+            </p>
+        {% endfor %}
+        {% if is_paginated %}{% ordered_paginator 3 %}{% endif %}
+    {% else %}
+        <p>{% trans 'There are no teams.' %}</p>
+    {% endif %}
+    
+{% endblock %}

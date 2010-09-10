@@ -22,3 +22,14 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
+from django.contrib import admin
+from teams.models import Team, TeamMember
+
+class TeamMemberInline(admin.TabularInline):
+    model = TeamMember
+    
+class TeamAdmin(admin.ModelAdmin):
+    list_display = ('name', 'membership_policy', 'video_policy', 'is_visible')
+    inlines = [TeamMemberInline]
+    
+admin.site.register(Team, TeamAdmin)

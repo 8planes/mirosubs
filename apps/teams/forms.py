@@ -22,3 +22,28 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
+from django import forms
+from teams.models import Team, TeamMember
+from django.utils.translation import ugettext_lazy as _
+
+class CreateTeamForm(forms.ModelForm):
+    
+    class Meta:
+        model = Team
+        exclude = ('videos', 'users')
+    
+    def save(self, user):
+        team = super(CreateTeamForm, self).save()
+        TeamMember(team=team, user=user, is_manager=True).save()
+        return team
+    
+class EditTeamForm(forms.ModelForm):
+    
+    class Meta:
+        model = Team
+        exclude = ('videos', 'users') 
+        
+    def clean(self):
+        if not self.cleaned_data['logo']:
+            del self.cleaned_data['logo']
+        return self.cleaned_data           
