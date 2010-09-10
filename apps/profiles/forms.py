@@ -82,7 +82,7 @@ class EditUserForm(forms.ModelForm):
             raise forms.ValidationError(_(u'Invalid password.'))
         if new and new != verify:
             raise forms.ValidationError(_(u'The two passwords did not match.'))
-        if not self.cleaned_data.get('picture'):
+        if 'picture' in self.cleaned_data and not self.cleaned_data.get('picture'):
             del self.cleaned_data['picture']
         return self.cleaned_data
     
