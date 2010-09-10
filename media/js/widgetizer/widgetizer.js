@@ -23,8 +23,6 @@ goog.provide('mirosubs.Widgetizer');
  * This is a singleton, so don't call this method directly.
  */
 mirosubs.Widgetizer = function() {
-    this.widgetizeCalled_ = false;
-    this.widgetized_ = false;
 };
 goog.addSingletonGetter(mirosubs.Widgetizer);
 
@@ -33,9 +31,6 @@ goog.addSingletonGetter(mirosubs.Widgetizer);
  *
  */
 mirosubs.Widgetizer.prototype.widgetize = function() {
-    if (this.widgetizeCalled_)
-        return;
-    this.widgetizeCalled_ = true;
     if (mirosubs.LoadingDom.getInstance().isDomLoaded())
         this.onLoaded_();
     else
@@ -50,9 +45,6 @@ mirosubs.Widgetizer.prototype.videosExist = function() {
 }
 
 mirosubs.Widgetizer.prototype.onLoaded_ = function() {
-    if (this.widgetized_)
-        return;
-    this.widgetized_ = true;
     this.addHeadCss();
     this.findAndWidgetizeElements_();
 };
@@ -72,18 +64,16 @@ mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ =
             return false;
     }
     else {
-        var uniwidgetizedVideos = this.filterUnwidgetized_(
+        var unwidgetizedVideos = this.filterUnwidgetized_(
             document.getElementsByTagName('video'));
         if (!opt_findOnly)
-            this.widgetizeVideoElements_(unwidgetized);
+            this.widgetizeVideoElements_(unwidgetizedVideos);
         var objectsFound = this.widgetizeObjectElements_(
             this.filterUnwidgetized_(
                 document.getElementsByTagName('object')), 
             opt_findOnly);
         return unwidgetizedVideos.length > 0 || objectsFound;
     }
-    else
-        return false;
 };
 
 mirosubs.Widgetizer.prototype.addHeadCss = function() {
