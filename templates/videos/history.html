@@ -79,12 +79,12 @@
             });
             //******** Tabs ********//
             var $last_active_tab = $($('.video_tabs li.active a').attr('href'));
-            $('.video_tabs a').click(function(){
+            $('.video_tabs a, a.link_to_tab').click(function(){
                 var href = $(this).attr('href')
                 $last_active_tab.hide();
                 $last_active_tab = $(href).show();
                 $('.video_tabs li').removeClass('active');
-                $(this).parent('li').addClass('active');
+                $('.video_tabs a[href='+href+']').parent('li').addClass('active');
                 document.location.hash = href.split('-')[0];
                 return false;
             });
@@ -280,7 +280,17 @@
               </tr>
             {% endfor %}
         {% else %}
-            <p class="no_subs">{% trans 'No subtitles yet.' %} <a href="#" id="add_subtitles">{% trans 'Make some!' %}</a></p>
+            {% if revision_list|length > 1 %}
+                <p class="no_subs">
+                    {% blocktrans %}
+                    The most recent revision for this language is blank, but there are older
+                    revisions that contain subtitles.
+                    {% endblocktrans %} 
+                    <a href="#revisions-tab" class="link_to_tab">{% trans 'View revision history' %}</a>
+                </p>
+            {% else %}
+                <p class="no_subs">{% trans 'No subtitles yet.' %} <a href="#" id="add_subtitles">{% trans 'Make some!' %}</a></p>
+            {% endif %}
         {% endif %}
       </table>
 
