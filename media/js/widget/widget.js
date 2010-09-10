@@ -432,6 +432,7 @@ mirosubs.widget.Widget.prototype.languageSelected_ = function(opt_languageCode) 
 mirosubs.widget.Widget.prototype.turnOffSubs_ = function(event) {
     if (this.playManager_) {
         this.popupMenu_.setShowingSubs(false);
+        this.popupMenu_.hide();
         this.videoTab_.setText("Subtitles Off");
         this.videoTab_.showNudge(false);
         this.disposePlayManager_();
@@ -463,6 +464,7 @@ mirosubs.widget.Widget.prototype.subsLoaded_ =
 
     this.videoTab_.setText(this.state_.getVideoTabText());
     this.popupMenu_.setCurrentLanguageCode(languageCode);
+    this.popupMenu_.hide();
 };
 
 mirosubs.widget.Widget.prototype.lastCaptionFinished_ = function(evt) {
