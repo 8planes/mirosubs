@@ -60,7 +60,7 @@ def profile(request, user_id=None):
         except User.DoesNotExist:
             try:
                 user = User.objects.get(id=user_id)
-            except User.DoesNotExist:
+            except (User.DoesNotExist, ValueError):
                 raise Http404
     else:
         user = request.user
