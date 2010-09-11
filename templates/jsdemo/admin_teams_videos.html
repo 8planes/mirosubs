@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block body_attrs %}id="teams"{% endblock %}
+
+
+
+{% block main_content %}
+
+
+
+        <div class="sort_button floatright margin-top">
+          <div class='arrow'></div>
+
+          <span class="sort_label">
+            Managing <strong>Democracy Now!</strong>
+          </span>
+          <ul>
+            <li><a href="/people?sort=name" data-remote="true" class="first">Most Members</a></li>
+            <li><a href="/people?sort=district" data-remote="true">Newest</a></li>
+            <li><a href="/people?sort=citations" data-remote="true" class="last">A-Z</a></li>
+          </ul>
+        </div>
+
+
+  <h2>Manage Settings & Teams</h2>
+
+
+  <div class="grid_2 left_nav_wrapper omega alpha">
+
+    <ul class="left_nav">
+
+      <li class="active"><a href="#">Your Teams</a></li>
+      <li><a href="#">Languages</a></li>    
+
+
+    </ul>
+
+  </div>
+
+
+
+
+
+
+
+
+
+  <div class="grid_10 alpha omega admin_wrap">
+
+
+  
+    <ul class="video_tabs">
+      <li><a href="admin_teams_settings">Team Settings</a></li>
+      <li><a href="#">Team Members <span class="badgy_out"><span class="badgy">0</span></span></a></li>
+      <li class="active"><a href="admin_teams_videos">Team Videos <span class="badgy_out"><span class="badgy">1</span></span></a></li>
+      <li><a href="admin_teams_applicants">Review Applicants <span class="badgy_out"><span class="badgy">1</span></span></a></li>
+    </ul>
+    
+    <div class="boxx">
+      <div class="padding">
+        <div class="grid_9">
+       
+
+
+
+            <h3>Democracy Now! Team Videos</h3>
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th width="30" class="checkbox"><span><input type="radio" /></span></th>
+                  <th><a href="#">Username</a></th>
+                </tr>
+              </thead>
+      
+              <tbody>
+                <tr>
+                  <td class="checkbox"><input type="radio" /></td>
+                  <td>
+                    <a href="#"><strong>Video Name Right Here</strong></a>
+                    <div class="small grey"><a href="#">View</a> | <a href="#">Remove from Team</a> | <a href="#">Promote to Manager</a> | <a href="#">Contact User</a></div>                    
+
+                  </td>
+                </tr>
+
+
+
+
+
+
+              </tbody>
+
+            </table>
+
+            
+
+         </div>
+      <div class="clearfix"></div>
+
+      </div>
+      <div class="clearfix"></div>
+
+    </div>
+        <div class="clearfix"></div>
+
+  </div>
+
+
+
+
+
+
+
+{% endblock %}

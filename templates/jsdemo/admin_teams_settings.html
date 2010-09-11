@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block body_attrs %}id="teams"{% endblock %}
+
+
+
+{% block main_content %}
+
+
+
+        <div class="sort_button floatright margin-top">
+          <div class='arrow'></div>
+
+          <span class="sort_label">
+            Managing <strong>Democracy Now!</strong>
+          </span>
+          <ul>
+            <li><a href="/people?sort=name" data-remote="true" class="first">Most Members</a></li>
+            <li><a href="/people?sort=district" data-remote="true">Newest</a></li>
+            <li><a href="/people?sort=citations" data-remote="true" class="last">A-Z</a></li>
+          </ul>
+        </div>
+
+  <h2>Manage Settings & Teams</h2>
+
+
+  <div class="grid_2 left_nav_wrapper omega alpha">
+
+    <ul class="left_nav">
+
+      <li class="active"><a href="#">Your Teams</a></li>
+      <li><a href="#">Languages</a></li>    
+
+
+    </ul>
+
+  </div>
+
+
+
+
+
+
+
+
+
+  <div class="grid_10 alpha omega admin_wrap">
+
+
+  
+    <ul class="video_tabs">
+      <li class="active"><a href="#">Team Settings</a></li>
+      <li><a href="admin_teams_members">Team Members <span class="badgy_out"><span class="badgy">0</span></span></a></li>
+      <li><a href="#revisions-tab">Team Videos <span class="badgy_out"><span class="badgy">1</span></span></a></li>
+      <li><a href="#revisions-tab">Review Applicants <span class="badgy_out"><span class="badgy">1</span></span></a></li>
+    </ul>
+    
+    <div class="boxx">
+      <div class="padding">
+        <div class="grid_9">
+       
+
+          <div class="grid_5 alpha">
+            <h3>Details About Your Group</h3>
+            <form>
+            <p>
+              <label>Name</label>
+              <input type="text" />
+            </p>
+
+            <p>
+              <label>Description</label>
+              <textarea></textarea>
+            </p>
+            </form>
+
+            
+            <h3>Upload Group Logo</h3>
+            <p class="small">(jpg, gif, png. Image will be resized to max of 500x500px.)</p>
+
+          </div>
+
+          <div class="grid_4 omega">
+
+            <h3>Group Member Settings</h3>
+
+            <form>
+            <p>
+              <label>Who can Join this Group?</label><br />
+              <select>
+                <option>Invite Only</option>
+        
+              </select>
+            </p>
+            <p>
+              <label>Who can add videos to this group?</label>
+              <select>
+                <option>Invite Only</option>
+        
+              </select>
+            </p>
+            <p>
+              <label>Who can invite people to this Group?</label>
+              <select>
+                <option>Invite Only</option>
+        
+              </select>
+            </p>
+
+
+            <h3>Group Privacy Settings</h3>
+            
+            <p class="checkbox">
+              <input type="radio" /><label>Anyone can see this group</label>
+            </p>
+            <p class="checkbox">
+              <input type="radio" /><label>Only members can see this group</label>
+            </p>
+
+            </form>
+
+          
+
+          </div>
+
+    
+      
+         </div>
+      <div class="clearfix"></div>
+
+      </div>
+      <div class="clearfix"></div>
+
+    </div>
+        <div class="clearfix"></div>
+
+  </div>
+
+
+
+
+
+
+
+{% endblock %}
