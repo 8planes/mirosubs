@@ -6,16 +6,12 @@
 
 {% block main_content %}
 
-      <a href="#" class="button start_team"><span>Start a Team</span></a>
 
   <h2>Team Directory</h2>
 
 
   <div class="grid_8 alpha">
 
-    <p class="intro">
-      Teams are a great way to work together on subtitling videos. Membership and participation policies vary from team to team. Don't know where to start? Check the sidebar!
-    </p>
 
     <ul class="video_tabs">
       <li class="active">
@@ -30,8 +26,8 @@
       <li><a href="#revisions-tab">History <span class="badgy_out"><span class="badgy">1</span></span></a></li>
     </ul>
     
-
       <div class="boxx">
+      <div class="padding_small">
         <div class="sort_button">
           <div class='arrow'></div>
 
@@ -39,9 +35,9 @@
             Sort by <strong>Name</strong>
           </span>
           <ul>
-            <li><a href="/people?sort=name" data-remote="true">Name</a></li>
-            <li><a href="/people?sort=district" data-remote="true">District</a></li>
-            <li><a href="/people?sort=citations" data-remote="true">Public Interest</a></li>
+            <li><a href="/people?sort=name" data-remote="true" class="first">Most Members</a></li>
+            <li><a href="/people?sort=district" data-remote="true">Newest</a></li>
+            <li><a href="/people?sort=citations" data-remote="true" class="last">A-Z</a></li>
           </ul>
         </div>
 
@@ -57,7 +53,7 @@
     <div class="clearfix"></div>
     </div>
 
-
+    </div>
 
 
 
