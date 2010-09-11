@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Team video' %} | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+    <h2 class="main-title">{% trans 'Team video page' %}</h2>
+    
+    <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
+    
+    {% for video in team.videos.all %}
+        <p class="video-container">
+            {{ video }}
+            <br/>
+            <a href="{{ video.get_absolute_url }}">{% trans 'view' %}</a>
+            {% if can_remove_video %}
+            |
+            <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
+            {% endif %}
+        </p>
+    {% empty %}
+        {% trans 'Team has no video' %}
+    {% endfor %}
+    
+    <script type="text/javascript">
+        $('a.remove-video').click(function(){
+            if (confirm('{% trans "Remove this video?" %}')){
+                var $video_container = $(this).parents('.video-container');
+                $.post($(this).attr('href'), {}, function(response){
+                    if ( ! response.success){
+                        alert(response.error);
+                    }else{
+                        $video_container.remove();
+                    }
+                }, 'json');
+            }
+            return false;
+        });
+    </script> 
+{% endblock %}

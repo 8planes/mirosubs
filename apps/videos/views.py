@@ -135,7 +135,7 @@ def video_list(request):
         except (ValueError, TypeError, KeyError):
             page = 1
             
-    qs = Video.objects.filter(was_subtitled=True).extra(select={'translation_count': 'SELECT COUNT(id) '+
+    qs = Video.objects.exclude(subtitlelanguage=None).extra(select={'translation_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
         'videos_subtitlelanguage.was_complete AND '+

@@ -2831,3 +2831,16 @@ line-height: 1.3em;
 margin-right: 28px;
 }
 
+.mirosubs-extension {
+   position: fixed;
+   right: 10px;
+   bottom: 10px;
+   z-index: 100;
+   border: 1px solid #AAAAAA;
+   padding: 10px;
+   background-color: #FFFFFF;
+}
+
+.mirosubs-extension-enabled {
+   background-color: #99FF99;
+}

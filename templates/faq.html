@@ -30,7 +30,7 @@
 <li><a href="#q-donate">{% trans 'Do you accept donations? Are they tax deductible?' %}</a></li>
 <li><a href="#q-drumbeat">{% trans 'What is your relationship with Mozilla Drumbeat?' %}</a></li>
 <li><a href="#q-download">{% trans 'Where can I download subtitles in .SRT or other formats?' %}</a></li>
-<li><a href="#q-locked">{% trans 'It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?' %}</a></li>
+<li><a href="#q-locked">{% blocktrans %}It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?{% endblocktrans %}</a></li>
 <li><a href="#q-change-timing">{% trans "Why can't I change the timing on a translation?" %}</a></li>
 </ul>
 
@@ -104,7 +104,7 @@
     </p>
   </li>
   <li id="q-locked">
-    <h3>{% trans 'It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?' %}</h3>
+    <h3>{% blocktrans %}It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?{% endblocktrans %}</h3>
     <p>
         {% blocktrans %}
         The system currently only allows one user to edit subtitles for any given video 

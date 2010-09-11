@@ -233,6 +233,7 @@ INSTALLED_APPS = (
     'profiles',
     'sorl.thumbnail',
     'videos',
+    'teams',
     'widget',
     'south',
     'haystack',
@@ -284,6 +285,9 @@ FEEDBACK_SUBJECT = 'Universal Subtitles Feedback'
 FEEDBACK_RESPONSE_SUBJECT = 'Thanks for trying Universal Subtitles'
 FEEDBACK_RESPONSE_EMAIL = 'universalsubtitles@pculture.org'
 FEEDBACK_RESPONSE_TEMPLATE = 'feedback_response.html'
+
+#teams
+TEAMS_ON_PAGE = 12
 
 PROJECT_VERSION = '0.5'
 

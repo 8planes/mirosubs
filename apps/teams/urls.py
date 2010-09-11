@@ -22,3 +22,14 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
+from django.conf.urls.defaults import *
+
+urlpatterns = patterns('teams.views',
+    url('^$', 'index', name='index'),
+    url('^create/$', 'create', name='create'),
+    url('^edit/(?P<pk>\d+)/$', 'edit', name='edit'),
+    url('^edit/video/(?P<pk>\d+)/$', 'edit_video', name='edit_video'),
+    url('^edit/members/(?P<pk>\d+)/$', 'edit_members', name='edit_members'),
+    url('^edit/(?P<pk>\d+)/(?P<video_pk>\d+)/$', 'remove_video', name='remove_video'),
+    url('^(?P<pk>\d+)/$', 'detail', name='detail'),
+)

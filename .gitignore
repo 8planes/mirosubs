@@ -13,3 +13,4 @@ settings_local.py
 commit.py
 media/js/widgetizer/widgetizerconfig.js
 media/js/mirosubs-widgetizer.js
+media/teams/*

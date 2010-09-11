@@ -452,7 +452,7 @@ mirosubs.widget.Widget.prototype.subsLoaded_ =
         goog.bind(this.lastCaptionFinished_, this));
     
     var lang = this.findLanguage_(languageCode);
-    if (languageCode != null && lang['percent_done'] < 100) {
+    if (lang != null && lang['percent_done'] < 100) {
         this.videoTab_.updateNudge("Finish this Translation",
                                    goog.bind(this.editSubtitles_, this));
         this.videoTab_.showNudge(true);
