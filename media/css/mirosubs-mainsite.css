@@ -2643,11 +2643,10 @@ margin: 47px 10px 0 0;
 }
 
 
-.pagination span{
+.pagination span.previous_page {
 float: left;
 margin-right: 5px;
 }
-
 
 .pagination span.page{
 }
@@ -3594,7 +3593,7 @@ margin-right: -19px;
 
 a.next_page,
 a.previous_page{
-margin-top: -4px;
+margin-top: -6px;
 }
 
 

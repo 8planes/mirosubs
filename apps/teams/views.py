@@ -204,18 +204,17 @@ def edit_members(request, pk):
     order_type = request.GET.get('ot')
     
     if ordering == 'username' and order_type in ['asc', 'desc']:
-        qs = list(qs)
-        qs.sort(key=lambda item: str(item.user), reverse=(order_type == 'desc'))
+        pr = '-' if order_type == 'desc' else ''
+        qs = qs.order_by(pr+'user__first_name', pr+'user__last_name', pr+'user__username')
     elif ordering == 'role' and order_type in ['asc', 'desc']:
-        qs = list(qs)
-        qs.sort(key=lambda item: item.is_manager, reverse=(order_type == 'desc'))
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+'is_manager')
     extra_context = {
         'team': team,
         'ordering': ordering,
         'order_type': order_type
     }
     return object_list(request, queryset=qs,
-                       paginate_by=2,
+                       paginate_by=50,
                        template_name='teams/edit_members.html',
                        template_object_name='members',
                        extra_context=extra_context)    

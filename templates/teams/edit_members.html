@@ -43,7 +43,7 @@
             <div class="grid_9">
                 <a href="#" class="small_button floatright no-margin"><span>{% trans 'Invite User' %}</span></a>
                 <h3>{{ team }} {% trans 'Team Members' %}</h3>
-                {% if is_paginated %}{% ordered_paginator %}{% endif %}
+                {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
                 <table>
                     <thead>
                         <tr>

@@ -118,6 +118,11 @@ def ordered_paginator(context, adjacent_pages=3, anchor='', **kwargs):
 
 register.inclusion_tag('_ordered_paginator.html', takes_context=True)(ordered_paginator)
 
+def teams_ordered_paginator(context, adjacent_pages=3, anchor='', **kwargs):
+    return ordered_paginator(context, adjacent_pages, anchor, **kwargs)
+
+register.inclusion_tag('_teams_ordered_paginator.html', takes_context=True)(teams_ordered_paginator)
+
 @register.tag
 def ordered_column(parser, token):
     try:
