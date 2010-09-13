@@ -121,13 +121,6 @@ def video(request, video_id):
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    page = request.GET.get('page')
-    if not page == 'last':
-        try:
-            page = int(page)
-        except (ValueError, TypeError, KeyError):
-            page = 1
-            
     qs = Video.objects.exclude(subtitlelanguage=None).extra(select={'translation_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
@@ -142,8 +135,8 @@ def video_list(request):
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
         extra_context['order_type'] = order_type
-    return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=50, page=page,
+    return object_list(request, queryset=qs,
+                       paginate_by=50,
                        template_name='videos/video_list.html',
                        template_object_name='video',
                        extra_context=extra_context)

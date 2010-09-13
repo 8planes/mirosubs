@@ -27,7 +27,7 @@ from django import template
 
 register = template.Library()
 
-def paginator(context, adjacent_pages=2):
+def paginator(context, adjacent_pages=3):
     """
     To be used in conjunction with the object_list generic view.
 
@@ -61,13 +61,13 @@ def paginator(context, adjacent_pages=2):
         'show_last': context['pages'] not in page_numbers,
     }
 
-register.inclusion_tag('paginator.html', takes_context=True)(paginator)
+register.inclusion_tag('_paginator.html', takes_context=True)(paginator)
 
 def search_ordered_paginator(context, query, adjacent_pages=2):
     return ordered_paginator(context, adjacent_pages, q=query)
-register.inclusion_tag('ordered_paginator.html', takes_context=True)(search_ordered_paginator)
+register.inclusion_tag('_ordered_paginator.html', takes_context=True)(search_ordered_paginator)
 
-def ordered_paginator(context, adjacent_pages=2, anchor='', **kwargs):
+def ordered_paginator(context, adjacent_pages=3, anchor='', **kwargs):
     """
     To be used in conjunction with the object_list generic view.
 
@@ -116,7 +116,7 @@ def ordered_paginator(context, adjacent_pages=2, anchor='', **kwargs):
         'extra_link': extra_link
     }
 
-register.inclusion_tag('ordered_paginator.html', takes_context=True)(ordered_paginator)
+register.inclusion_tag('_ordered_paginator.html', takes_context=True)(ordered_paginator)
 
 @register.tag
 def ordered_column(parser, token):
@@ -166,12 +166,13 @@ class OrderedColumnNode(template.Node):
                 extra_params.append('&%s=%s' % (items[0], variable.resolve(context)))
         
         extra_params = ''.join(extra_params)+anchor
-            
-        ot = (ordering == self.field_name and order_type == 'desc') and 'asc' or 'desc'
+        field_name = self.field_name.resolve(context, True)
+        
+        ot = (ordering == field_name and order_type == 'desc') and 'asc' or 'desc'
         if page:
-            link = '?o=%s&ot=%s&page=%s%s' % (self.field_name.resolve(context, True), ot, page, extra_params)
+            link = '?o=%s&ot=%s&page=%s%s' % (field_name, ot, page, extra_params)
         else:
-            link = '?o=%s&ot=%s%s' % (self.field_name.resolve(context, True), ot, extra_params)
+            link = '?o=%s&ot=%s%s' % (field_name, ot, extra_params)
         return '<a href="%s" class="%s">%s</a>' % (link, ot, self.title.resolve(context, True))
 
 @register.simple_tag   

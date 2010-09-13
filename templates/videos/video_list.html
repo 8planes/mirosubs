@@ -47,7 +47,7 @@
     {% endfor %}
 </tbody>
   </table>
-  {% if is_paginated %}{% ordered_paginator 3 %}{% endif %} 
+  {% if is_paginated %}{% ordered_paginator %}{% endif %} 
 {% else %}
   <p>{% trans 'There are no videos.' %}</p>
 {% endif %}

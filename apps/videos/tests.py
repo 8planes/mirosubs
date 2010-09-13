@@ -109,10 +109,10 @@ class VideoTest(TestCase):
         self._create_video(self.html5_video)
         
     def _create_video(self, video_url):
-        video, created = Video.get_or_create_for_url(video_url, self.user)
+        video, created = Video.get_or_create_for_url(video_url)
         self.failUnless(video)
         self.failUnless(created)
-        more_video, created = Video.get_or_create_for_url(video_url, self.user)
+        more_video, created = Video.get_or_create_for_url(video_url)
         self.failIf(created)
         self.failUnlessEqual(video, more_video)        
     
@@ -154,7 +154,6 @@ class ViewsTest(TestCase):
         }
         response = self.client.post(reverse('videos:ajax_change_video_title'), data)
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(mail.outbox), 1)
         
         try:
             Action.objects.get(video=video, \

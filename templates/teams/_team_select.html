@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<div class="sort_button floatright margin-top">
+    <div class='arrow'>
+    </div>
+    <span class="sort_label">{% trans 'Managing' %} <strong>{{ team }}</strong></span>
+    <ul>
+        {% for item in objects %}
+        <li>
+            <a href="{% url teams:edit item.pk %}" class="first">{{ item }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

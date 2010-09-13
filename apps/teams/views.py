@@ -24,30 +24,24 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm
-from teams.models import Team
+from teams.models import Team, TeamMember
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.conf import settings
 from django.views.generic.list_detail import object_list
 from videos.models import Video
+from auth.models import CustomUser as User
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 
 def index(request):
-    page = request.GET.get('page')
-    if not page == 'last':
-        try:
-            page = int(page)
-        except (ValueError, TypeError, KeyError):
-            page = 1
-            
     qs = Team.objects.for_user(request.user)
     extra_context = {}
-    return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=TEAMS_ON_PAGE, page=page,
+    return object_list(request, queryset=qs,
+                       paginate_by=TEAMS_ON_PAGE,
                        template_name='teams/index.html',
                        template_object_name='teams',
                        extra_context=extra_context)
@@ -79,8 +73,13 @@ def create(request):
 def edit(request, pk):
     team = get_object_or_404(Team, pk=pk)
     
-    if not team.is_manager(request.user):
+    if not team.is_member(request.user):
         raise Http404
+    
+    if not team.is_manager(request.user):
+        return {
+            'team': team
+        }
     
     if request.method == 'POST':
         form = EditTeamForm(request.POST, request.FILES, instance=team)
@@ -95,19 +94,32 @@ def edit(request, pk):
         'team': team
     }
 
-@render_to('teams/edit_video.html')
 @login_required
 def edit_video(request, pk):
     team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
     
-    return {
+    qs = team.videos.all()
+    
+    extra_context = {
         'team': team,
         'can_remove_video': team.can_remove_video(request.user)
     }
+    return object_list(request, queryset=qs,
+                       paginate_by=3,
+                       template_name='teams/edit_video.html',
+                       template_object_name='videos',
+                       extra_context=extra_context)
 
-@render_to_json    
+@render_to_json
+@login_required    
 def remove_video(request, pk, video_pk):
     team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
     
     if team.can_remove_video(request.user):
         video = get_object_or_404(Video, pk=video_pk)
@@ -118,12 +130,104 @@ def remove_video(request, pk, video_pk):
     else:
         return {
             'success': False,
-            'error': _('You can\'t remove video')
+            'error': ugettext('You can\'t remove video')
         }
+        
+@render_to_json
+@login_required
+def remove_member(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
 
-@render_to('teams/edit_members.html')        
+    if not team.is_member(request.user):
+        raise Http404
+
+    if team.is_manager(request.user):
+        user = get_object_or_404(User, pk=user_pk)
+        if not user == request.user:
+            TeamMember.objects.filter(team=team, user=user).delete()
+            return {
+                'success': True
+            }
+        else:
+            return {
+                'success': False,
+                'error': ugettext('You can\'t remove youself')
+            }          
+    else:
+        return {
+            'success': False,
+            'error': ugettext('You can\'t remove user')
+        }        
+
+@login_required
+def demote_member(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+
+    if team.is_manager(request.user):
+        user = get_object_or_404(User, pk=user_pk)
+        if not user == request.user:
+            TeamMember.objects.filter(team=team, user=user).update(is_manager=False)
+        else:
+            messages.error(request, _('You can\'t demote to member yorself'))
+    else:
+        messages.error(request, _('You can\'t demote to member'))          
+    return redirect('teams:edit_members', team.pk)
+
+@login_required
+def promote_member(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+
+    if team.is_manager(request.user):
+        user = get_object_or_404(User, pk=user_pk)
+        if not user == request.user:
+            TeamMember.objects.filter(team=team, user=user).update(is_manager=True)
+    else:
+        messages.error(request, _('You can\'t promote to manager'))
+    return redirect('teams:edit_members', team.pk)
+
+@login_required        
 def edit_members(request, pk):
     team = get_object_or_404(Team, pk=pk)
+    
+    if not team.is_member(request.user):
+        raise Http404
+        
+    qs = team.members.select_related()
+    
+    ordering = request.GET.get('o')
+    order_type = request.GET.get('ot')
+    
+    if ordering == 'username' and order_type in ['asc', 'desc']:
+        qs = list(qs)
+        qs.sort(key=lambda item: str(item.user), reverse=(order_type == 'desc'))
+    elif ordering == 'role' and order_type in ['asc', 'desc']:
+        qs = list(qs)
+        qs.sort(key=lambda item: item.is_manager, reverse=(order_type == 'desc'))
+    extra_context = {
+        'team': team,
+        'ordering': ordering,
+        'order_type': order_type
+    }
+    return object_list(request, queryset=qs,
+                       paginate_by=2,
+                       template_name='teams/edit_members.html',
+                       template_object_name='members',
+                       extra_context=extra_context)    
+
+@render_to('teams/aplications.html')
+@login_required
+def aplications(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    
+    if not team.is_member(request.user):
+        raise Http404
+        
     return {
         'team': team
-    }
+    }    

@@ -60,9 +60,9 @@ class Team(models.Model):
     name = models.CharField(_(u'name'), max_length=250, unique=True)
     description = models.TextField(_(u'description'), blank=True)
     logo = models.ImageField(_(u'logo'), upload_to='teams/logo/', blank=True)
-    membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES)
-    video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES)
-    is_visible = models.BooleanField(_(u'is public visible'), default=True)
+    membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES, default=OPEN)
+    video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES, default=MEMBER_REMOVE)
+    is_visible = models.BooleanField(_(u'is public visible?'), default=True)
     videos = models.ManyToManyField(Video, blank=True, verbose_name=_('videos'))
     users = models.ManyToManyField(User, through='TeamMember', related_name='teams', verbose_name=_('users'))
     points = models.IntegerField(default=0, editable=False)
@@ -110,6 +110,24 @@ class Team(models.Model):
         if self.is_member(user):
             return True
         return False
+    
+    @property
+    def member_count(self):
+        if not hasattr(self, '_member_count'):
+            setattr(self, '_member_count', self.users.count())
+        return self._member_count
+    
+    @property
+    def videos_count(self):
+        if not hasattr(self, '_videos_count'):
+            setattr(self, '_videos_count', self.videos.count())
+        return self._videos_count        
+    
+    @property
+    def applications_count(self):
+        if not hasattr(self, '_applications_count'):
+            setattr(self, '_applications_count', self.applications.count())
+        return self._applications_count            
     
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')

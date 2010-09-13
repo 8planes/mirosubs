@@ -44,6 +44,6 @@ class EditTeamForm(forms.ModelForm):
         exclude = ('videos', 'users', 'applicants', 'invited') 
         
     def clean(self):
-        if not self.cleaned_data['logo']:
+        if 'logo' in self.cleaned_data and not self.cleaned_data.get('logo'):
             del self.cleaned_data['logo']
         return self.cleaned_data           

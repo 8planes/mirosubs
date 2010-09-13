@@ -1,27 +1,107 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n teams_tags %}
+
+{% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
     {% trans 'Team settings' %} | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
-    <h2 class="main-title">{% trans 'Team settings' %}</h2>
-    
-    <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
-    |
-    <a href="{% url teams:edit_video team.pk %}">{% trans 'Team videos' %}</a>
-    |
-    <a href="{% url teams:edit_members team.pk %}">{% trans 'Team members' %}</a>
-    <form method='post' action="." enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-            {{ form }}
-            <tr>
-                <td></td>
-                <td><input type="submit" value="{% trans 'Save' %}"/></td>
-            </tr>            
-        </table>
-    </form>    
+
+{% team_select team %}
+
+<h2>{% trans 'Manage Settings & Teams' %}</h2>
+<div class="grid_2 left_nav_wrapper omega alpha">
+    <ul class="left_nav">
+        <li class="active">
+            <a href="#">{% trans 'Your Teams' %}</a>
+        </li>
+        <li>
+            <a href="#">{% trans 'Languages' %}</a>
+        </li>
+    </ul>
+</div>
+<div class="grid_10 alpha omega admin_wrap">
+    <ul class="video_tabs">
+        <li class="active">
+            <span class="tab-item">{% trans 'Team Settings' %}</span>
+        </li>
+        <li>
+            <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
+        </li>
+        <li>
+            <a href="{% url teams:edit_video team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+        </li>
+        <li>
+            <a href="{% url teams:aplications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+        </li>
+    </ul>
+    <div class="boxx">
+        <div class="padding">
+            {% if form %}
+            <form method='post' action="." enctype="multipart/form-data">
+            <div class="grid_9">
+                {% csrf_token %}
+                <div class="grid_5 alpha">
+                    <h3>{% trans 'Details About Your Team' %}</h3>
+                        <p>
+                            {{ form.name.errors }}
+                            {{ form.name.label_tag }}
+                            {{ form.name }}
+                        </p>
+                        <p>
+                            {{ form.description.errors }}
+                            {{ form.description.label_tag }}
+                            {{ form.description }}
+                        </p>
+                    <h3>{% trans 'Upload Team Logo' %}</h3>
+                    <p class="small">
+                        {% if team.logo %}<img src="{{ team.logo_thumbnail }}" />{% endif %}
+                        {{ form.logo.errors }}
+                        {{ form.logo }}
+                     </p>
+                </div>
+                <div class="grid_4 omega">
+                    <h3>{% trans 'Team Member Settings' %}</h3>
+                        <p>
+                            <label>
+                                {% trans 'Who can Join this Team?' %}
+                            </label>
+                            {{ form.membership_policy.errors }}
+                            {{ form.membership_policy }}  
+                        </p>
+                        <p>
+                            <label>
+                                {% trans 'Who can Add Videos to this Team?' %}
+                            </label>
+                            {{ form.video_policy.errors }}
+                            {{ form.video_policy }}  
+                        </p>
+                        <h3>{% trans 'Team Privacy Settings' %}</h3>
+                        <p class="checkbox">
+                            {{ form.is_visible.errors }}
+                            {{ form.is_visible }}
+                            {{ form.is_visible.label_tag }}
+                        </p>
+                </div>
+            </div>
+            <p>
+                <input type="submit" value="{% trans 'Save' %}"/>
+            </p>
+            </form>
+            <div class="clearfix"></div>
+            {% else %}
+               {% trans 'You are not a manager of this team.' %}
+               <br/>
+               <br/>
+               <br/>
+               <br/> 
+            {% endif %}            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+</div>
 {% endblock %}

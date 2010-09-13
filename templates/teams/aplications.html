@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block body_attrs %}id="teams"{% endblock %}
+
+{% load i18n teams_tags %}
+
+{% block title %}
+    {% trans 'Team Aplications' %} | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+
+{% team_select team %}
+
+<h2>{% trans 'Manage Settings & Teams' %}</h2>
+<div class="grid_2 left_nav_wrapper omega alpha">
+    <ul class="left_nav">
+        <li class="active">
+            <a href="#">Your Teams</a>
+        </li>
+        <li>
+            <a href="#">Languages</a>
+        </li>
+    </ul>
+</div>
+<div class="grid_10 alpha omega admin_wrap">
+    <ul class="video_tabs">
+        <li>
+            <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
+        </li>
+        <li>
+            <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url teams:edit_video team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+        </li>
+        <li class="active">
+            <span class="tab-item">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></span>
+        </li>
+    </ul>
+    <div class="boxx">
+        <div class="padding">
+            <div class="grid_9">
+                <h3>Democracy Now! Team Videos</h3>
+                <div class="pagination">
+                    <span class="previous_page disabled">&#8592; Previous</span>
+                    <em>1</em>
+                    <a href="#" rel="next">2</a>
+                    <a href="#" rel="next">3</a>
+                    <a href="#" rel="next">4</a>
+                    <a href="#" rel="next">5</a>
+                    <a class="next_page" href="#" rel="next">Next &#8594;</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30" class="checkbox">
+                                <span><input type="radio" /></span>
+                            </th>
+                            <th>
+                                <a href="#">Username</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="checkbox">
+                                <input type="radio" />
+                            </td>
+                            <td>
+                                <a href="#"><strong>Video Name Right Here</strong></a>
+                                <div class="small grey">
+                                    <a href="#">View</a>
+                                    | <a href="#">Remove from Team</a>
+                                    | <a href="#">Promote to Manager</a>
+                                    | <a href="#">Contact User</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+</div>
+{% endblock %}

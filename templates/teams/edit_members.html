@@ -1,25 +1,124 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n teams_tags paginator %}
+
+{% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
     {% trans 'Team members' %} | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
-    <h2 class="main-title">{% trans 'Team members page' %}</h2>
+
+{% team_select team %}
+
+<h2>{% trans 'Manage Settings & Teams' %}</h2>
+<div class="grid_2 left_nav_wrapper omega alpha">
+    <ul class="left_nav">
+        <li class="active">
+            <a href="#">{% trans 'Your Teams' %}</a>
+        </li>
+        <li>
+            <a href="#">{% trans 'Languages' %}</a>
+        </li>
+    </ul>
+</div>
+<div class="grid_10 alpha omega admin_wrap">
+    <ul class="video_tabs">
+        <li>
+            <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
+        </li>
+        <li class="active">
+            <span class="tab-item">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></span>
+        </li>
+        <li>
+            <a href="{% url teams:edit_video team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+        </li>
+        <li>
+            <a href="{% url teams:aplications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+        </li>
+    </ul>
+    <div class="boxx">
+        <div class="padding">
+            <div class="grid_9">
+                <a href="#" class="small_button floatright no-margin"><span>{% trans 'Invite User' %}</span></a>
+                <h3>{{ team }} {% trans 'Team Members' %}</h3>
+                {% if is_paginated %}{% ordered_paginator %}{% endif %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                {% ordered_column "username" _("Username") %}
+                            </th>
+                            <th>
+                                {% ordered_column "role" _("Role") %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members_list %}
+                        <tr class="user-container">
+                            <td>
+                                <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
+                                <div class="small grey">
+                                    <a href="{{ member.user.get_absolute_url }}">{% trans 'View' %}</a>
+                                    {% if team|is_team_manager:user and not member.user == user %}
+                                        | <a href="{% url teams:remove_member team.pk member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
+                                        {% if member.is_manager %}
+                                            | <a href="{% url teams:demote_member team.pk member.user.pk %}" class="demote-user">
+                                                {% trans 'Demote to Member' %}
+                                              </a>
+                                        {% else %}
+                                            | <a href="{% url teams:promote_member team.pk member.user.pk %}" class="promote-user">
+                                                {% trans 'Promote to Manager' %}
+                                              </a>
+                                        {% endif %}
+                                          </a>
+                                    {% endif %}
+                                    | <a href="#">{% trans 'Contact User' %}</a>
+                                </div>
+                            </td>
+                            <td>
+                                {% if member.is_manager %}
+                                    {% trans 'Manager' %}
+                                {% else %}
+                                    {% trans 'Member' %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+</div>
+<script type="text/javascript">
+    $('a.remove-user').click(function(){
+        if (confirm('{% trans "Remove this user?" %}')){
+            var $user_container = $(this).parents('.user-container');
+            $.post($(this).attr('href'), {}, function(response){
+                if (response.success){
+                    $user_container.remove();
+                }else{
+                    alert(response.error);
+                }
+            }, 'json');
+        }
+        return false;
+    });
     
-    <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
-    
-    {% for member in team.members.select_related %}
-        <p>
-            {{ member.user }}
-            <br/>
-            <a href="{{ member.user.get_absolute_url }}">{% trans 'View' %}</a>
-            |
-            <a href="#">{% trans 'Remove from team' %}</a>
-            |
-            <a href="#">{% trans 'Demote to member' %}</a>
-        </p>
-    {% endfor %}
+    $('a.demote-user, a.promote-user').click(function(){
+        var confirm_text = $(this).hasClass('demote-user') ?
+            '{% trans "Do you want demote user to member?" %}' :
+            '{% trans "Do you want promote user to manager?" %}';
+        return confirm(confirm_text);
+    })
+</script> 
 {% endblock %}

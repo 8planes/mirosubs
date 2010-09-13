@@ -2446,7 +2446,7 @@ float: left;
 }
 
 
-.video_tabs li a{
+.video_tabs li a, .video_tabs li span.tab-item{
 
 list-style: none;
 padding: 10px 20px 9px;
@@ -2484,7 +2484,7 @@ background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ *
 }
 
 
-.video_tabs li.active a{
+.video_tabs li.active a, .video_tabs li.active span.tab-item{
 font-weight: bold;
 border-bottom:none;
 margin-top: 1px;
