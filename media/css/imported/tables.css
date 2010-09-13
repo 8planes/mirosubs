@@ -1,0 +1,86 @@
+
+table{
+width: 100%;
+background: #fff;
+   border-collapse: collapse;
+padding: 0;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+clear: both;
+border: 1px solid #ccc;
+}
+
+thead{
+-moz-border-radius: 5px;  
+background: #fff url(../../images/gradient_light.png) 0 2px repeat-x;
+-webkit-border-radius: 5px;
+border-bottom: 1px solid #aaa;
+}
+
+th{
+text-align: left;
+padding: 0;
+border-bottom: 1px solid #aaa;
+border-right: 1px solid #ccc;
+}
+
+th a{
+margin-right: 15px;
+padding-right: 25px;
+text-decoration: none !important;
+background: url(../../images/sort_arrows.gif) right 11px no-repeat;
+}
+
+
+td.last{
+border-right: none;
+}
+
+
+
+th span, th a{
+color: #333 !important;
+padding: 10px 15px;
+display: block;
+
+text-shadow: 1px 1px 0px #fff;
+}
+
+
+td{
+text-align: left;
+border-bottom: 1px solid #ddd;
+padding: 15px;
+border-right: 1px solid #ddd;
+
+}
+
+tr.even{
+background: #edfcfd !important;
+}
+
+
+th.last{
+border-right: none !important;
+}
+
+
+
+.checkbox input{
+float: left;
+width: 15px;
+margin: 7px 10px 0 0;
+
+}
+
+
+table .checkbox input{
+float: none;
+margin: 0;
+width: 15px !important;
+margin: 0px 0px 0 0;
+
+}
+
+
+

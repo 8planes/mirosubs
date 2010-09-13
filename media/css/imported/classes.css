@@ -1,0 +1,340 @@
+
+/*/////////////////////////////////////////////
+
+~ Classes
+
+/////////////////////////////////////////////*/
+
+
+
+/*//////////   ~  Inline Type  ~   //////////*/
+
+
+
+h2.main-title{
+  margin: 0 0 20px;
+  padding: 0 0 20px 0;
+  clear: both !important;
+  font-size: 20px;
+  border-bottom: 1px solid #fff !important;
+  }
+
+
+
+
+h2.main-title span{
+  float: right;
+  font-weight: normal
+  }
+
+
+
+
+.center{
+  text-align: center;
+  }
+  
+
+
+
+
+
+/*//////////   ~  Block Type  ~   //////////*/
+
+
+.small{
+  display: block;
+  font-size: 11px;
+  color: #888;
+  padding-top: 5px;
+  }
+
+
+
+/*//////////   ~  Icons  ~   //////////*/
+
+
+.points{
+  background: url("../../images/points.png") 0 1px no-repeat !important;
+  padding-left: 15px;
+  float: left;
+  margin-top: 2px;
+  margin-left: 0px;
+  }
+
+
+.awards{
+  background: url("../../images/award.png") 0 1px no-repeat !important;
+  padding-left: 15px;
+  float: left;
+  margin-left: 20px;
+  margin-top: 2px;
+  }
+  
+
+.mirosubs-twitter-share{
+  background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+  text-decoration: underline;
+  }
+
+
+.mirosubs-facebook{
+  background: url("../images/share_icons.png") 0 0px no-repeat !important;
+  text-decoration: underline;
+  }
+  
+
+
+
+
+
+.rolled_back{
+  background: url(../../images/history_icons.png) 20px 12px no-repeat;
+  }
+
+.thumb_up{
+  background: url(../../images/history_icons.png) 20px -23px no-repeat;
+  }
+
+.thumb_down{
+  background: url(../../images/history_icons.png) 20px -59px no-repeat;
+  }
+
+.commented{
+  background: url(../../images/history_icons.png) 20px -96px no-repeat;
+  }
+
+.language_rating{
+  background: url(../../images/history_icons.png) 20px -132px no-repeat;
+  }
+
+.language_begins{
+  background: url(../../images/history_icons.png) 20px -168px no-repeat;
+  }
+
+.video_begins{
+  background: url(../../images/history_icons.png) 20px -204px no-repeat;
+  }
+
+
+
+/*//////////   ~  Cancelations  ~   //////////*/
+
+
+.nohover:hover{
+  text-decoration: none !important;
+  cursor: default;
+  }
+
+
+.nomargin{
+  margin: 0 !important;
+  }
+
+
+.nothing{
+  background: white;
+  width: 940px;
+  padding: 20px;
+  clear: both;
+  border: 1px solid #aaa;
+  }
+  
+
+
+.disabled{
+cursor: default !important;
+}
+
+
+
+
+
+/*//////////   ~  Inline Box Styling  ~   //////////*/
+
+
+.badgy{
+  background: #bcd6dd;
+  padding: 6px 9px 4px;
+  -moz-border-radius: 3px;  
+  -webkit-border-radius: 3px;
+  font-size: 11px;
+  }
+
+
+
+
+.styled{
+  border: 1px solid #aaa;;
+  background: #fff;
+  -moz-border-radius: 5px;  
+  -webkit-border-radius: 5px;
+  }
+
+.styled .head{
+  background: #fff url(../../images/table_head.gif) 0px 0px repeat-x;
+  }
+
+
+
+.boxx{
+  -moz-border-radius: 5px;
+  -moz-border-radius-topleft: 0px;
+  
+  -webkit-border-radius: 5px;
+  -webkit-border-radius-top-left: 0px;
+  
+  border-radius:5px;
+  background: #ecf9fc;
+  clear: both;
+  
+  -moz-box-shadow:inset 1px -1px 0px #a4c3ca, inset -1px -1px 0px #a4c3ca;
+  -webkit-box-shadow: inset 1px -1px 0px #a4c3ca, inset -1px -1px 0px #a4c3ca;
+  box-shadow: inset 1px -1px 0px #a4c3ca, inset -1px -1px 0px #a4c3ca;
+  }
+
+
+.intro{
+  color: #666;
+  margin-bottom: 20px;
+  }
+
+
+
+
+/*/////////////////////////////////////////////
+
+~ Note
+
+/////////////////////////////////////////////*/
+
+
+#index .note{
+display: none;
+}
+
+.note{
+text-align: center;
+color: #333;
+background: #faf9c5 url(../../images/note.gif) left 0 repeat-x;
+text-shadow: 1px 1px 1px #fff;
+font-size: 16px;
+border-bottom: 1px solid #bfbe78;
+height: 42px;
+padding-top: 22px;
+}
+
+.note a{
+color: #333;
+font-weight: bold;
+}
+
+
+
+
+
+.marginleft{
+margin-left: 30px;
+}
+
+
+.clearboth,
+.clear{
+clear: both !important;
+}
+
+
+.floatleft{
+float: left !important;
+}
+
+
+.floatright{
+float: right !important;
+}
+
+.margin-top{
+margin-top: 40px;
+}
+
+.clear.tall{
+margin-top: 40px;
+}
+
+
+.full_width{
+width: 960px;
+float: left;
+margin-bottom: 30px;  
+}
+
+
+.full_width.center{
+text-align: center;
+}
+
+.full_width #widget_div{
+
+
+}
+
+
+.no-margin{
+margin: 0 !important;
+}
+
+.padding{
+padding: 30px;
+}
+
+
+.padding_small{
+padding: 10px;
+}
+
+
+
+
+.no_subs{
+clear: both;
+padding: 30px;
+background: #fff;
+border: 1px solid #aaa;
+}
+
+
+
+
+
+.sub_actions{
+float: right;
+}
+
+.sub_actions .button{
+float: right;
+clear: none !important;
+margin:0 0 20px 20px;
+}
+
+
+.up_down{
+text-align: right;
+}
+
+
+.upload{
+padding-left: 15px;
+background: url(../../images/updown.gif) left -1px no-repeat;
+padding-right: 5px;
+}
+
+.download{
+padding-left: 20px;
+background: url(../../images/updown.gif) -165px -1px no-repeat;
+}
+
+
+
+
+
+
