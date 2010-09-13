@@ -4,6 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  {% if not current_site.name == 'unisubs' %}
+  <meta NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW"/>
+  {% endif %}
 {% block css %}
 
 <link href="{{ MEDIA_URL }}css/mirosubs-mainsite.css" media="all" type="text/css" rel="stylesheet" />
