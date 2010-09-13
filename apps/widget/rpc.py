@@ -131,9 +131,6 @@ class Rpc(BaseRpc):
                                for lang in LANGUAGES]}
 
     def _save_subtitles_impl(self, request, language, deleted, inserted, updated):
-        if language.video.owner is None:
-            language.video.owner = request.user
-            language.video.save()
         if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
             return None
         current_version = language.latest_version()

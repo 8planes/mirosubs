@@ -47,10 +47,6 @@ class SubtitlesUploadForm(forms.Form):
         video = self.cleaned_data['video']
         if video.is_writelocked:
             raise forms.ValidationError(_(u'Somebody is subtitling this video right now. Try later.'))
-        if (not video.allow_community_edits and 
-            video.owner != None and (self.user.is_anonymous() or 
-                                     video.owner.pk != self.user.pk)):
-            raise forms.ValidationError(_(u'You can\'t edit this video.'))        
         if video.subtitlelanguage_set.filter(is_complete=True) \
                 .filter(is_original=False).exists():
             raise forms.ValidationError(_(u'This video has translations.'))

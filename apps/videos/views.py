@@ -85,10 +85,9 @@ def create(request):
     if request.method == 'POST':
         video_form = VideoForm(request.POST, label_suffix="")
         if video_form.is_valid():
-            owner = request.user if request.user.is_authenticated() else None
             video_url = video_form.cleaned_data['video_url']
             try:
-                video, created = Video.get_or_create_for_url(video_url, owner)
+                video, created = Video.get_or_create_for_url(video_url)
             except VidscraperError:
                 vidscraper_error = True
                 return render_to_response('videos/create.html', locals(),
@@ -96,13 +95,7 @@ def create(request):
             messages.info(request, message=u'''Here is the subtitle workspace for your video.  You can
 share the video with friends, or get an embed code for your site.  To add or
 improve subtitles, click the button below the video''')
-            return redirect(video)        
-            #if not video.owner or video.owner == request.user or video.allow_community_edits:
-            #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
-            #            'videos:video', kwargs={'video_id':video.video_id})))
-            #else:
-            #    # TODO: better error page?
-            #    return HttpResponse('You are not allowed to add transcriptions to this video.')
+            return redirect(video)
     else:
         video_form = VideoForm(label_suffix="")
     return render_to_response('videos/create.html', locals(),
