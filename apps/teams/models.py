@@ -81,7 +81,7 @@ class Team(models.Model):
     
     def logo_thumbnail(self):
         if self.logo:
-            return DjangoThumbnail(self.logo, (128, 128), opts={'crop': 'smart'})
+            return DjangoThumbnail(self.logo, (100, 100), opts={'crop': 'smart'})
     
     @models.permalink
     def get_absolute_url(self):

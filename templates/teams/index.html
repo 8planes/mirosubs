@@ -2,8 +2,117 @@
 
 {% load paginator i18n teams_tags %}
 
+{% block body_attrs %}id="teams"{% endblock %}
+
 {% block title %}
-    Teams | Universal Subtitles
+    {% trans 'Teams' %} | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+{% if user.is_authenticated %}
+    <a href="{% url teams:create %}" class="green_button big start_team">
+        <span>{% trans 'Start a Team' %}</span>
+    </a>
+{% else %}
+    <a href="{% url auth:login %}?next={{ request.path_info }}" class="green_button big start_team">
+        <span>{% trans 'Login to start a team' %}</span>
+    </a>
+{% endif %}
+
+<h2>{% trans 'Team Directory' %}</h2>
+
+<div class="grid_8 alpha">
+    <p class="intro">
+        {% blocktrans %}
+        Teams are a great way to work together on subtitling videos. 
+        Membership and participation policies vary from team to team. 
+        Don't know where to start? Check the sidebar!
+        {% endblocktrans %}
+    </p>
+    <div class="boxx">
+        <div class="padding_small">
+            <div class="sort_button">
+                <div class='arrow'>
+                </div>
+                <span class="sort_label">Sort by <strong>Name</strong></span>
+                <ul>
+                    <li>
+                        <a href="/people?sort=name" data-remote="true" class="first">Most Members</a>
+                    </li>
+                    <li>
+                        <a href="/people?sort=district" data-remote="true">Newest</a>
+                    </li>
+                    <li>
+                        <a href="/people?sort=citations" data-remote="true" class="last">A-Z</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="inline_search">
+                <form>
+                    <input type="text">
+                    <button class="search_button">
+                        <span>Search</span>
+                    </button>
+                </form>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+    </div>
+    <div class="grid_8 clearfix">
+        <br/>
+        <br/>
+    </div>
+    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    <ul class="big_list">
+        {% for team in teams_list %}
+        <li>
+            <a href="{{ team.get_absolute_url }}" class="thumbnail_medium">
+                {% if team.logo %}<img src="{{ team.logo_thumbnail }}" width="100" height="100" alt="{{ team }}" title="{{ team }}"/>{% endif %}
+            </a>
+            <div class="info">
+                <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
+                <span class="small_sub">
+                    {% blocktrans with team.member_count as count %}
+                    Team with {{ count }} Members
+                    {% endblocktrans %}
+                </span>
+                {% if team.description %}
+                <p>
+                    {{ team.description }}
+                </p>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+</div>
+<div class="grid_4 omega">
+    <h3>Highlighted Teams</h3>
+    <ul class="small_list">
+        <li>
+            <a href="#" class="thumbnail_small"></a>
+            <div class="info">
+                <h4><a href="teams_profile">Democracy Now!</a></h4>
+                <span class="small_sub">Team with 23 Members</span>
+                <p>
+                    Lorem ipsum dalor sit amet lorem ipsulor sit amet lorem ipsum dor sit amet, Lorem ipsum dalor sit amet lorm dalor sit amet lorem ipsum dalor it amet, rem um dalor sit ametoripsum daloremipsum dalor sit amet lorem ipsum dalor sit amet lorem ipsum dalor sit amet.
+                </p>
+            </div>
+        </li>
+        <li>
+            <a href="#" class="thumbnail_small"></a>
+            <div class="info">
+                <h4><a href="teams_profile">Democracy Now!</a></h4>
+                <span class="small_sub">Team with 23 Members</span>
+                <p>
+                    Lorem ipsum dalor sit amet lorem ipsulor sit amet lorem ipsum dor sit amet, Lorem ipsum dalor sit amet lorm dalor sit amet lorem ipsum dalor it amet, rem um dalor sit ametoripsum daloremipsum dalor sit amet lorem ipsum dalor sit amet lorem ipsum dalor sit amet.
+                </p>
+            </div>
+        </li>
+    </ul>
+</div>
 {% endblock %}
 
 {% block main_content1 %}

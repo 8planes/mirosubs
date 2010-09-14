@@ -43,6 +43,6 @@ urlpatterns = patterns('teams.views',
 
 urlpatterns += patterns('',
     ('^t1$', 'django.views.generic.simple.direct_to_template', {
-        'template': 'jsdemo/teams_directory.html'
+        'template': 'jsdemo/teams_profile.html'
     }),
 )
