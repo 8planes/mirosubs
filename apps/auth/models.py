@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.conf import settings
 import sha
 from django.utils.translation import ugettext_lazy as _
+from django.utils.http import urlquote_plus
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -40,6 +41,10 @@ class CustomUser(BaseUser):
             else:
                 return self.first_name
         return self.username
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('profiles:profile', [urlquote_plus(self.username)])
     
     @property
     def language(self):

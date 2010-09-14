@@ -21,11 +21,10 @@
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function(){
-            $.nyroModalSettings({
+            $('.send_message').nyroModal({
                 minWidth: 460,
                 minHeight: 380              
-            }); 
-            $('.send_message').nyroModal();
+            });
                         
             $('button.send_message').attr('href', '#send_message');              
             

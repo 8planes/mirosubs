@@ -1,11 +1,74 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator %}
+{% load i18n teams_tags paginator profiles_tags %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
     {% trans 'Team members' %} | Universal Subtitles
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(function($){
+            var TEAM_ID = '{{ team.pk }}';
+            var INVITE_URL = '{% url teams:invite %}';
+            
+            $('.invite-user').nyroModal({
+                minHeight: 160,
+                minWidth: 400,
+            });
+
+            $('a.invite-button').click(function(){
+                var username = $('.username-invite-field').val();
+                if (username){
+                    $.post(INVITE_URL, {
+                        username: username,
+                        team_id: TEAM_ID,
+                        note: $('.user-invite-note').val()
+                    }, function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error);
+                        }else{
+                            $.msg.clean().add('{% trans "User invited success." %}');
+                            $.nyroModalRemove();
+                            $('.username-invite-field, .user-invite-note').val('');
+                        }
+                    }, 'json');
+                }else{
+                    $.msg.clean().add('{% trans "Enter username." %}');
+                }
+            });
+            
+            $('a.remove-user').click(function(){
+                if (confirm('{% trans "Remove this user?" %}')){
+                    var $user_container = $(this).parents('.user-container');
+                    $.post($(this).attr('href'), {}, function(response){
+                        if (response.success){
+                            $user_container.remove();
+                        }else{
+                            alert(response.error);
+                        }
+                    }, 'json');
+                }
+                return false;
+            });
+            
+            $('a.demote-user, a.promote-user').click(function(){
+                var confirm_text = $(this).hasClass('demote-user') ?
+                    '{% trans "Do you want demote user to member?" %}' :
+                    '{% trans "Do you want promote user to manager?" %}';
+                return confirm(confirm_text);
+            })                        
+        });
+    </script>
 {% endblock %}
 
 {% block main_content %}
@@ -39,9 +102,11 @@
             <a href="{% url teams:aplications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
         </li>
     </ul>
-    <div class="action_buttons"  >     
-        <a href="#" class="blue_button small">Invite User</a>
-    </div>    
+    {% if team|can_invite_to_team:user %}
+    <div class="action_buttons">     
+        <a href="#invite-user" class="blue_button small invite-user">{% trans 'Invite User' %}</a>
+    </div>
+    {% endif %}    
     {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
     <table>
         <thead>
@@ -74,7 +139,9 @@
                             {% endif %}
                               </a>
                         {% endif %}
-                        | <a href="#">{% trans 'Contact User' %}</a>
+                        {% if not member.user == user and member.user.email %}
+                        | <a href="#" class="send_message" user_id="{{ member.user.pk }}">{% trans 'Contact User' %}</a>
+                        {% endif %}
                     </div>
                 </td>
                 <td>
@@ -91,26 +158,20 @@
     </div>
     <div class="clearfix"></div>
 </div>
-<script type="text/javascript">
-    $('a.remove-user').click(function(){
-        if (confirm('{% trans "Remove this user?" %}')){
-            var $user_container = $(this).parents('.user-container');
-            $.post($(this).attr('href'), {}, function(response){
-                if (response.success){
-                    $user_container.remove();
-                }else{
-                    alert(response.error);
-                }
-            }, 'json');
-        }
-        return false;
-    });
-    
-    $('a.demote-user, a.promote-user').click(function(){
-        var confirm_text = $(this).hasClass('demote-user') ?
-            '{% trans "Do you want demote user to member?" %}' :
-            '{% trans "Do you want promote user to manager?" %}';
-        return confirm(confirm_text);
-    })
-</script> 
+
+{% send_message %}
+
+{% if team|can_invite_to_team:user %}
+<div id="invite-user" style="display: none">
+    <h3>{% trans 'Invite user' %}</h3>
+    <label>{% trans 'Username' %}</label>
+    <input type="text" style="margin: 10px;" class="username-invite-field"/>
+    <br/>
+    <label>{% trans 'Message' %}</label>
+    <textarea class="user-invite-note"></textarea>
+    <div class="action_buttons" style="border-top: none;">     
+        <a class="blue_button small invite-button">{% trans 'Invite User' %}</a>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

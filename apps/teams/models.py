@@ -129,6 +129,12 @@ class Team(models.Model):
             setattr(self, '_applications_count', self.applications.count())
         return self._applications_count            
     
+    def can_invite(self, user):
+        if self.membership_policy == self.INVITATION_BY_MANAGER:
+            return self.is_manager(user)
+        
+        return True
+    
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')
     user = models.ForeignKey(User)

@@ -28,6 +28,12 @@ from teams.models import Team
 register = template.Library()
 
 @register.filter
+def can_invite_to_team(team, user):
+    if not user.is_authenticated():
+        return False
+    return team.can_invite(user)
+
+@register.filter
 def is_team_manager(team, user):
     if not user.is_authenticated():
         return False

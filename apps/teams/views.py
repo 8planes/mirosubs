@@ -24,7 +24,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm
-from teams.models import Team, TeamMember
+from teams.models import Team, TeamMember, Invite
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -229,4 +229,36 @@ def aplications(request, pk):
         
     return {
         'team': team
-    }    
+    }
+
+@render_to_json
+@login_required
+def invite(request):
+    team_pk = request.POST.get('team_id')
+    username = request.POST.get('username')
+    note = request.POST.get('note', '')
+    
+    if not team_pk and not username:
+        raise Http404
+    
+    team = get_object_or_404(Team, pk=team_pk)
+    
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return {
+            'error': ugettext(u'User does not exist.')
+        }
+    
+    if not team.can_invite(request.user):
+        return {
+            'error': ugettext(u'You can\'t invite to team.')
+        }
+        
+    if team.is_member(user):
+        return {
+            'error': ugettext(u'This user is member of team already.')
+        }
+        
+    Invite.objects.get_or_create(team=team, user=user, defaults={'note': note})
+    return {}
