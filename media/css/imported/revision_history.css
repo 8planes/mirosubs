@@ -136,13 +136,6 @@ margin-right: 20px;
 
 
 
-.compare_versions_button{
-position:absolute;
-left: 0;
-top: -90px;
-}
-
-
 
 .user_thumb{
 height: 100px;
@@ -155,7 +148,7 @@ background: url(../../images/default_thumb.png) 0 0px repeat-x;
 .progress{
 background: url(../../images/gradient.png) 0 -50px repeat-x;
 border: 1px solid #666;
-width: 760px;
+width: 500px;
 height: 13px;
 float: left;
 display: block;
@@ -220,14 +213,6 @@ background: #33cc00 url(../../images/gradient.png) 0 0px repeat-x;
 }
 
 
-.replied{
-padding: 15px 20px;
-background: #ddd;
-margin: 2px 0 20px 130px;
--moz-border-radius: 5px;  
--webkit-border-radius: 5px;
-line-height: 1.5em;
-}
 
 
 
@@ -289,132 +274,6 @@ color: #fff;
 background:  url(../../images/thumb.png) 3px bottom no-repeat !important;
 }
 
-
-
-
-
-
-.badgy_out{
-padding: 0 0 0 25px;
-}
-
-
-.video_tabs{
-float: left;
-margin: 0px 0 0;
-padding: 0;
-}
-
-.video_tabs li.active .badgy{
-padding: 4px 8px 2px;
-position: absolute;
-margin: 0px;
-font-weight: normal;
-top: 9px;
-border: 1px solid #ddd;
-right: 9px;
-}
-
-
-.video_tabs .badgy{
-padding: 4px 8px 2px;
-position: absolute;
-margin: 0px;
-font-weight: normal;
-top: 6px;
-background: #fff;
-right: 6px;
-}
-
-
-.video_tabs li{
-list-style: none;
-padding: 0;
-position: relative;
-margin: 0;
-float: left;
-}
-
-
-.video_tabs li a, .video_tabs li span.tab-item{
-
-list-style: none;
-padding: 10px 20px 9px;
-float: left;
-position: relative;
-font-size: 13px;
-color: #333;
-margin: 4px 10px 0 0;
-text-decoration: none;
-text-shadow: 0 1px 0px #fff;
-
-
--moz-border-radius-topleft: 3px;
--moz-border-radius-topright: 3px;
--webkit-border-radius-top-right: 3px;
--webkit-border-radius-top-left: 3px;
-border-radius:3px;
-
-
-border: 1px solid #a7c3c9;
-border-top: 1px solid #c6d9de;
-border-bottom: none;
-
-
--moz-box-shadow:inset 0 1px 0px #fff;
--webkit-box-shadow:inset 0 1px 0px #fff;
-box-shadow:inset 0 1px 0px #fff;
-
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ddddd'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ */
-
-
-
-}
-
-
-.video_tabs li.active a, .video_tabs li.active span.tab-item{
-font-weight: bold;
-border-bottom:none;
-margin-top: 1px;
-padding: 11px 20px 11px;
-font-size: 14px;
-cursor: default;
-
-
--moz-border-radius-bottomright: 0px;
--moz-border-radius-bottomleft: 0px;
--webkit-border-radius: 3px;
-border-radius:3px;
-
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ddddd'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
-
-
-}
-
-
-
-
-.video_tabs li a:hover{
--moz-border-radius-bottomright: 0px;
--moz-border-radius-bottomleft: 0px;
--webkit-border-radius: 3px;
-border-radius:3px;
-
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ddddd'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
-
-}
-
-
-
-.video_tabs li.active a:hover{
-border-bottom:none;
-}
 
 
 

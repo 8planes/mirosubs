@@ -6,7 +6,7 @@
   <form action="{% url auth:login_post %}" method="post">
     {% csrf_token %}
     {{ login_form.as_p }}
-    <button type="submit" value="login"><span>Login</span></button>
+    <button type="submit" class="green_button big" value="login">Login</button>
     <a class="forgot" href="{% url password_reset %}">Forgot password?</a>
     <input type="hidden" name="next" value="{{ next }}" />
   </form>

@@ -1,11 +1,11 @@
 {% load thumbnail %}
-    <li class="table_comment" comment_id="{{ item.id }}">
-        <div class="table_user_deets">
+    <li class="comment" comment_id="{{ item.id }}">
+        <div class="user_deets">
             <span class="user_thumb"><img src="{% thumbnail item.user.picture 100x100 %}" /></span>
             <a href="{{ item.user.profile_url }}">{{ item.user }}</a>
             <span class="comment_date">{{ item.submit_date|timesince }} ago</span>
         </div>
-        <div class="comment_text">
+        <div class="info">
             <a name="comments-{{ item.id }}"></a>
             <a href="#" class="floatright reply"  comment_id="{{ item.id }}">
                 <span>Reply</span>

@@ -1,8 +1,8 @@
 {% load thumbnail i18n %}
 
-<ul class="table_body">
+<ul class="big_list">
 {% for item in events %}
-    <li class="table_transcript">
+    <li>
         {% if item.user %}
             {% if item.uprofile.picture %}
                 <img src="{% thumbnail item.uprofile.picture 32x32 %}" />

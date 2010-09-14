@@ -1,38 +1,34 @@
 
 .time-span{
-float: left;
-margin-right: 20px;
-width: 100px;
-cursor: pointer;
-}
+  float: left;
+  margin-right: 20px;
+  width: 100px;
+  cursor: pointer;
+  }
 
-.time-span .data{
-    display: none;
-}
-
-
+.time-span .data{ display: none;}
 
 .badgy.no-sync{
-color: #fff;
-padding: 6px 20px 4px;
-text-align: center;
-}
+  color: #fff;
+  padding: 6px 20px 4px;
+  text-align: center;
+  }
 
 
 .badgy.start{
-background: #829601;
-color: #fff;
-}
+  background: #829601;
+  color: #fff;
+  }
 
 
 .badgy.end{
-background: #9b3e3e;
-color: #fff;
-}
+  background: #9b3e3e;
+  color: #fff;
+  }
 
 
 .connector{
-padding: 0 18px 0 0;
-background: url(../../images/connector.png) right center no-repeat;
-}
-
+  padding: 0 18px 0 0;
+  background: url(../../images/connector.png) right center no-repeat;
+  }
+  

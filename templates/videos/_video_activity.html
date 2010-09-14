@@ -1,16 +1,18 @@
 {% load i18n %}
-<ul class="table_head">
-    <li class="grid_10">
-        <span>{% trans 'Activity' %}</span>
-    </li>
-    <li class="grid_2 grid_last">
-        <span>{% trans 'Happened' %}</span>
-    </li>            
-</ul>
-<ul class="table_body">
+
+<table>
+  <thead>
+    <tr>
+      <th class="grid_7"><a>{% trans 'Activity' %}</a></th>
+      <th class="grid_2"><a>{% trans 'Happened' %}</a></th>            
+    </tr>
+  </thead>
+
+
+  <tbody>
 {% for item in events %}
-    <li class="table_row {{ item.type }}">
-      <span class="grid_10 table_activity">
+    <tr class="{{ item.type }}">
+      <td class="grid_9 table_activity">
         {% if item.user %}
             <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>
         {% else %}
@@ -48,10 +50,11 @@
             </a> {% trans 'for' %} 
             <a class="url" href="{{ item.video.get_absolute_url }}">{{ item.video }}</a> 
         {% endif %}
-      </span>
-      <span class="grid_2 table_happened grid_last">
+      </td>
+      <td class="grid_3 last">
           {{ item.created|timesince }} {% trans 'ago' %}
-      </span>
-    </li>
+      </td>
+    </tr>
 {% endfor %}
-</ul>
+  </tbody>
+</table>

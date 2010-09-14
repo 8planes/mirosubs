@@ -149,8 +149,8 @@
     
     <div class="sub_actions">
       
-      <a class="button" id="edit_subtitles" href="#"><span>{% trans 'Edit Subtitles' %}</span></a>
-      <a class="button" id="add_translation" href="#"><span>{% trans 'Add Translation' %}</span></a>
+      <a  class="green_button big" id="edit_subtitles" href="#"><span>{% trans 'Edit Subtitles' %}</span></a>
+      <a  class="green_button big" id="add_translation" href="#"><span>{% trans 'Add Translation' %}</span></a>
 
       <div class="up_down">
         {% if language.is_original %}
@@ -187,7 +187,7 @@
 
     <div style="display: none" id="revisions-tab" class="tab">
         {% if revision_list|length > 1 %}
-            <button class="compare_versions_button small_button">
+            <button class="compare_versions_button green_button small">
                 <span>{% trans 'Compare Revisions' %}</span>
             </button>
         {% endif %}        

@@ -1,4 +1,4 @@
-<ul class="table_body comments">
+<ul class="comments big_list">
     {% for item in qs %}
         {% include 'comments/_item.html' %}
     {% endfor %}
@@ -7,20 +7,20 @@
     function update_comments(){
         jQuery.post('{% url comments:update_comments %}', {
             ct: '{{ content_type.pk }}',
-            last_comment_id: jQuery('.table_comment:first').attr('comment_id') || '',
+            last_comment_id: jQuery('.comment:first').attr('comment_id') || '',
             obj_id: '{{ obj.pk }}'
         }, function(data){
-            jQuery('.table_body.comments').prepend(data)
+            jQuery('.comments').prepend(data)
         }, 'html')
     }    
 </script>
 
 {% comment %}
-    <li class="table_comment table_rated" comment_id="5">
+    <li class="comment table_rated" comment_id="5">
       Gave this translation a B+
     </li>
 
-    <li class="table_comment" comment_id="5">
+    <li class="comment" comment_id="5">
         <div class="table_user_deets">
             <span class="user_thumb"><img src="" /></span>
 

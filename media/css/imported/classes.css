@@ -10,18 +10,6 @@
 /*//////////   ~  Inline Type  ~   //////////*/
 
 
-
-h2.main-title{
-  margin: 0 0 20px;
-  padding: 0 0 20px 0;
-  clear: both !important;
-  font-size: 20px;
-  border-bottom: 1px solid #fff !important;
-  }
-
-
-
-
 h2.main-title span{
   float: right;
   font-weight: normal
@@ -36,7 +24,9 @@ h2.main-title span{
   
 
 
-
+.bull{
+padding: 0 10px !important;
+}
 
 
 /*//////////   ~  Block Type  ~   //////////*/
@@ -85,6 +75,19 @@ h2.main-title span{
   
 
 
+.up_down{ text-align: right;}
+
+
+.upload{
+  padding-left: 15px;
+  background: url(../../images/updown.gif) left -1px no-repeat;
+  padding-right: 5px;
+  }
+
+.download{
+  padding-left: 20px;
+  background: url(../../images/updown.gif) -165px -1px no-repeat;
+  }
 
 
 
@@ -100,8 +103,14 @@ h2.main-title span{
   background: url(../../images/history_icons.png) 20px -59px no-repeat;
   }
 
-.commented{
-  background: url(../../images/history_icons.png) 20px -96px no-repeat;
+.commented .table_activity{
+  background: url(../../images/history_icons.png) 15px -92px no-repeat;
+  padding-left: 40px;
+  }
+
+.edited .table_activity{
+  background: url(../../images/history_icons.png) 15px -242px no-repeat;
+  padding-left: 40px;
   }
 
 .language_rating{
@@ -118,6 +127,39 @@ h2.main-title span{
 
 
 
+/*//////////   ~  Margins/Paddings  ~   //////////*/
+
+
+
+.marginleft{ margin-left: 30px;}
+.margin-top{ margin-top: 40px;}
+.no-margin{ margin: 0 !important;}
+.nomargin{
+  margin: 0 !important;
+  }
+
+
+.padding{ padding: 30px;}
+.padding_small{ padding: 10px;}
+
+
+/*//////////   ~  Floats  ~   //////////*/
+
+
+.clearboth,
+.clear{ clear: both !important;}
+
+
+.floatleft{ float: left !important;}
+
+
+.floatright{ float: right !important;}
+
+
+.clear.tall{ margin-top: 40px;}
+
+
+
 /*//////////   ~  Cancelations  ~   //////////*/
 
 
@@ -126,10 +168,6 @@ h2.main-title span{
   cursor: default;
   }
 
-
-.nomargin{
-  margin: 0 !important;
-  }
 
 
 .nothing{
@@ -142,9 +180,7 @@ h2.main-title span{
   
 
 
-.disabled{
-cursor: default !important;
-}
+.disabled{ cursor: default !important;}
 
 
 
@@ -163,7 +199,6 @@ cursor: default !important;
 
 
 
-
 .styled{
   border: 1px solid #aaa;;
   background: #fff;
@@ -177,29 +212,50 @@ cursor: default !important;
 
 
 
-.boxx{
-  -moz-border-radius: 5px;
-  -moz-border-radius-topleft: 0px;
+/*/////////////////////////////////////////////
+
+~ Middle Wrap
+
+/////////////////////////////////////////////*/
+
+
+.wrap{
   
-  -webkit-border-radius: 5px;
-  -webkit-border-radius-top-left: 0px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-topright: 3px;
+  
+  -webkit-border-radius-top-left: 3px;
+  -webkit-border-radius-top-right: 3px;
   
   border-radius:5px;
+
   background: #ecf9fc;
-  clear: both;
+
+  margin-bottom: 50px;
   
-  -moz-box-shadow:inset 1px -1px 0px #a4c3ca, inset -1px -1px 0px #a4c3ca;
-  -webkit-box-shadow: inset 1px -1px 0px #a4c3ca, inset -1px -1px 0px #a4c3ca;
-  box-shadow: inset 1px -1px 0px #a4c3ca, inset -1px -1px 0px #a4c3ca;
+  -moz-box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
+  -webkit-box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
+  box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
   }
 
 
 .intro{
   color: #666;
   margin-bottom: 20px;
+  background: #a4c3ca;
+  padding: 20px;
+  margin: 0;
+  color: #fff;  
+clear: both;
   }
 
+.action_buttons{ border-top: 1px solid #fff;}
 
+.action_buttons .blue_button,
+.action_buttons .sort_button{
+  margin: 10px; 
+  float: right;
+  }
 
 
 /*/////////////////////////////////////////////
@@ -209,130 +265,42 @@ cursor: default !important;
 /////////////////////////////////////////////*/
 
 
-#index .note{
-display: none;
-}
+#index .note{ display: none;}
 
 .note{
-text-align: center;
-color: #333;
-background: #faf9c5 url(../../images/note.gif) left 0 repeat-x;
-text-shadow: 1px 1px 1px #fff;
-font-size: 16px;
-border-bottom: 1px solid #bfbe78;
-height: 42px;
-padding-top: 22px;
-}
+  text-align: center;
+  color: #333;
+  background: #faf9c5 url(../../images/note.gif) left 0 repeat-x;
+  text-shadow: 1px 1px 1px #fff;
+  font-size: 16px;
+  border-bottom: 1px solid #bfbe78;
+  height: 42px;
+  padding-top: 22px;
+  }
 
 .note a{
-color: #333;
-font-weight: bold;
-}
-
-
-
-
-
-.marginleft{
-margin-left: 30px;
-}
-
-
-.clearboth,
-.clear{
-clear: both !important;
-}
-
-
-.floatleft{
-float: left !important;
-}
-
-
-.floatright{
-float: right !important;
-}
-
-.margin-top{
-margin-top: 40px;
-}
-
-.clear.tall{
-margin-top: 40px;
-}
-
-
-.full_width{
-width: 960px;
-float: left;
-margin-bottom: 30px;  
-}
-
-
-.full_width.center{
-text-align: center;
-}
-
-.full_width #widget_div{
-
-
-}
-
-
-.no-margin{
-margin: 0 !important;
-}
-
-.padding{
-padding: 30px;
-}
-
-
-.padding_small{
-padding: 10px;
-}
-
+  color: #333;
+  font-weight: bold;
+  }
 
 
 
 .no_subs{
-clear: both;
-padding: 30px;
-background: #fff;
-border: 1px solid #aaa;
-}
+  clear: both;
+  padding: 30px;
+  background: #fff;
+  border: 1px solid #aaa;
+  }
 
 
 
-
-
-.sub_actions{
-float: right;
-}
+.sub_actions{ float: right;}
 
 .sub_actions .button{
-float: right;
-clear: none !important;
-margin:0 0 20px 20px;
-}
-
-
-.up_down{
-text-align: right;
-}
-
-
-.upload{
-padding-left: 15px;
-background: url(../../images/updown.gif) left -1px no-repeat;
-padding-right: 5px;
-}
-
-.download{
-padding-left: 20px;
-background: url(../../images/updown.gif) -165px -1px no-repeat;
-}
-
+  float: right;
+  clear: none !important;
+  margin:0 0 20px 20px;
+  }
 
 
 
