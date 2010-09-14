@@ -24,7 +24,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm
-from teams.models import Team, TeamMember, Invite
+from teams.models import Team, TeamMember, Invite, Application
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -36,6 +36,9 @@ from videos.models import Video
 from auth.models import CustomUser as User
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
+VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
+MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
+APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 
 def index(request):
     qs = Team.objects.for_user(request.user)
@@ -108,7 +111,7 @@ def edit_video(request, pk):
         'can_remove_video': team.can_remove_video(request.user)
     }
     return object_list(request, queryset=qs,
-                       paginate_by=3,
+                       paginate_by=VIDEOS_ON_PAGE,
                        template_name='teams/edit_video.html',
                        template_object_name='videos',
                        extra_context=extra_context)
@@ -214,22 +217,62 @@ def edit_members(request, pk):
         'order_type': order_type
     }
     return object_list(request, queryset=qs,
-                       paginate_by=2,
+                       paginate_by=MEMBERS_ON_PAGE,
                        template_name='teams/edit_members.html',
                        template_object_name='members',
                        extra_context=extra_context)    
 
-@render_to('teams/aplications.html')
 @login_required
-def aplications(request, pk):
+def applications(request, pk):
     team = get_object_or_404(Team, pk=pk)
     
     if not team.is_member(request.user):
         raise Http404
+    
+    qs = team.applications.all()
         
-    return {
+    extra_context = {
         'team': team
     }
+    return object_list(request, queryset=qs,
+                       paginate_by=APLICATIONS_ON_PAGE,
+                       template_name='teams/applications.html',
+                       template_object_name='applications',
+                       extra_context=extra_context) 
+
+@login_required
+def approve_application(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+    
+    if team.can_approve_application(request.user):
+        try:
+            Application.objects.get(team=team, user=user_pk).approve()
+            messages.success(request, _(u'Application approved.'))
+        except Application.DoesNotExist:
+            messages.error(request, _(u'Application does not exist.'))
+    else:
+        messages.error(request, _(u'You can\'t approve application.'))
+    return redirect('teams:applications', team.pk)
+
+@login_required
+def deny_application(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+    
+    if team.can_approve_application(request.user):
+        try:
+            Application.objects.get(team=team, user=user_pk).deny()
+            messages.success(request, _(u'Application denied.'))
+        except Application.DoesNotExist:
+            messages.error(request, _(u'Application does not exist.'))
+    else:
+        messages.error(request, _(u'You can\'t deny application.'))
+    return redirect('teams:applications', team.pk)
 
 @render_to_json
 @login_required

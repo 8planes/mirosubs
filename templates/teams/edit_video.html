@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags %}
+{% load i18n teams_tags paginator %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
@@ -36,26 +36,31 @@
         </li>
         <li class="bull">&bull;</li>
         <li>
-            <a href="{% url teams:aplications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+            <a href="{% url teams:applications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
         </li>
     </ul>
-        <table>
-            <tbody>
-                {% for video in videos_list %}
-                <tr class="video-container">
-                    <td>
-                        <a href="{{ video.get_absolute_url }}"><strong>{{ video }}</strong></a>
-                        <div class="small grey">
-                            <a href="{{ video.get_absolute_url }}">{% trans 'View' %}</a>
-                            {% if can_remove_video %}
-                            | <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
-                            {% endif %}
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    <table>
+        <tbody>
+            {% for video in videos_list %}
+            <tr class="video-container">
+                <td>
+                    <a href="{{ video.get_absolute_url }}"><strong>{{ video }}</strong></a>
+                    <div class="small grey">
+                        <a href="{{ video.get_absolute_url }}">{% trans 'View' %}</a>
+                        {% if can_remove_video %}
+                        | <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td>{% trans 'Team has not videos.' %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     </div>
     <div class="clearfix">
     </div>
