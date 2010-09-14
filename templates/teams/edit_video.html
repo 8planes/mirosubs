@@ -13,64 +13,52 @@
 {% team_select team %}
 
 <h2>Manage Settings & Teams</h2>
-<div class="grid_2 left_nav_wrapper omega alpha">
+<div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
         <li class="active">
             <a href="#">Your Teams</a>
         </li>
-        <li>
-            <a href="#">Languages</a>
-        </li>
     </ul>
 </div>
-<div class="grid_10 alpha omega admin_wrap">
-    <ul class="video_tabs">
-        {% if team|is_team_manager:user %}
+<div class="wrap grid_9 omega">
+    <h4 class="inline">{{ team }}</h4>
+    <ul class="inline_tabs">
         <li>
             <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
         </li>
-        {% endif %}
+        <li class="bull">&bull;</li>
         <li>
             <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
         </li>
+        <li class="bull">&bull;</li>
         <li class="active">
             <span class="tab-item">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span>
         </li>
+        <li class="bull">&bull;</li>
         <li>
             <a href="{% url teams:aplications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
         </li>
     </ul>
-    <div class="boxx">
-        <div class="padding">
-            <div class="grid_9">
-                <h3>Democracy Now! Team Videos</h3>
-                <table>
-                    <tbody>
-                        {% for video in videos_list %}
-                        <tr class="video-container">
-                            <td>
-                                <a href="{{ video.get_absolute_url }}"><strong>{{ video }}</strong></a>
-                                <div class="small grey">
-                                    <a href="{{ video.get_absolute_url }}">{% trans 'View' %}</a>
-                                    {% if can_remove_video %}
-                                    | <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="clearfix">
-            </div>
-        </div>
-        <div class="clearfix">
-        </div>
+        <table>
+            <tbody>
+                {% for video in videos_list %}
+                <tr class="video-container">
+                    <td>
+                        <a href="{{ video.get_absolute_url }}"><strong>{{ video }}</strong></a>
+                        <div class="small grey">
+                            <a href="{{ video.get_absolute_url }}">{% trans 'View' %}</a>
+                            {% if can_remove_video %}
+                            | <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     <div class="clearfix">
     </div>
-</div>
 <script type="text/javascript">
     $('a.remove-video').click(function(){
         if (confirm('{% trans "Remove this video?" %}')){

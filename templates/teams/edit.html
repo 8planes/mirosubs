@@ -13,27 +13,28 @@
 {% team_select team %}
 
 <h2>{% trans 'Manage Settings & Teams' %}</h2>
-<div class="grid_2 left_nav_wrapper omega alpha">
+<div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
         <li class="active">
             <a href="#">{% trans 'Your Teams' %}</a>
         </li>
-        <li>
-            <a href="#">{% trans 'Languages' %}</a>
-        </li>
     </ul>
 </div>
-<div class="grid_10 alpha omega admin_wrap">
-    <ul class="video_tabs">
+<div class="wrap grid_9 omega">
+    <h4 class="inline">{{ team }}</h4>
+    <ul class="inline_tabs">
         <li class="active">
             <span class="tab-item">{% trans 'Team Settings' %}</span>
         </li>
+        <li class="bull">&bull;</li>        
         <li>
             <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
         </li>
+        <li class="bull">&bull;</li>        
         <li>
             <a href="{% url teams:edit_video team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
         </li>
+        <li class="bull">&bull;</li>        
         <li>
             <a href="{% url teams:aplications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
         </li>

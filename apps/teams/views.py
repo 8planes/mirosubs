@@ -214,7 +214,7 @@ def edit_members(request, pk):
         'order_type': order_type
     }
     return object_list(request, queryset=qs,
-                       paginate_by=50,
+                       paginate_by=2,
                        template_name='teams/edit_members.html',
                        template_object_name='members',
                        extra_context=extra_context)    
