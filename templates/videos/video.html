@@ -45,17 +45,17 @@
     <script type="text/javascript">
         jQuery(document).ready(function($){
             //******** Tabs ********//
-            var $last_active_tab = $($('.video_tabs li.active a').attr('href'));
-            $('.video_tabs a').click(function(){
+            var $last_active_tab = $($('.inline_tabs li.active a').attr('href'));
+            $('.inline_tabs a, a.link_to_tab').click(function(){
                 var href = $(this).attr('href')
                 $last_active_tab.hide();
                 $last_active_tab = $(href).show();
-                $('.video_tabs li').removeClass('active');
-                $(this).parent('li').addClass('active');
+                $('.inline_tabs li').removeClass('active');
+                $('.inline_tabs a[href='+href+']').parent('li').addClass('active');
                 document.location.hash = href.split('-')[0];
                 return false;
             });
-            
+                        
             if (document.location.hash){
                 var tab_name = document.location.hash.split('-', 1)
                 if (tab_name){
@@ -108,9 +108,9 @@
     {% endif %}
 
     {% if saved %}
-        <h2>Subtitles saved!  You can share the video with friends, 
+        <h2>{% blocktrans %}Subtitles saved!  You can share the video with friends, 
           or get an embed code for your site.  To add a
-          translation, click the button below.</h2>
+          translation, click the button below.{% endblocktrans %}</h2>
     {% endif %}
 
     <div class="grid_6 alpha left_column">
@@ -131,328 +131,49 @@
       </div>
     </div>
 
-
-
-
-<!-- Start Transcript -->
-
-
   <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
-
-      <li><a href="#">Video Info</a></li>
-      <li class="active"><a href="#">English</a></li>    
-
-
-        {% if translations or video.subtitle_language %} 
+        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
+        {% if video.subtitle_language %}
+            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{% trans 'Original' %}</a></li>
+        {% endif %}
+        {% if translations %} 
           {% for item in translations %}  
-             <li><a href="#">{{ item.get_language_display }}</a></li>
+             <li {% if language == item %}class="active"{% endif %}><a href="{{ item.get_absolute_url }}">{{ item.get_language_display }}</a></li>
           {% endfor %} 
         {% endif %}
-
     </ul>
     {% if video.latest_finished_version %}
     <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
-    {% endif %}    
-  </div>
-
-
-  <div class="wrap grid_9 omega">  
-
-    <div id="languages-tab" class="grid_9 alpha omega">  
-
-      <h4 class="inline">English</h4>      
-
-      <ul class="inline_tabs">
-        <li class="active"><a href="#languages-tab">{% trans 'Subtitles' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        <li><a href="#activity-tab">{% trans 'History' %}</a></li>
-      </ul>
-
-      <div class="action_buttons grid_9 alpha omega">
-
-
-        <div class="sort_button floatleft">
-          <div class='arrow'></div>
-
-          <span class="sort_label">
-            <strong>Download Subtitles</strong>
-          </span>
-          <ul>
-            <li><a href="/people?sort=name" data-remote="true" class="first">Text</a></li>
-            <li><a href="/people?sort=district" data-remote="true">SRT</a></li>
-            <li><a href="/people?sort=citations" data-remote="true">SSA</a></li>
-            <li><a href="/people?sort=citations" data-remote="true" class="last">TTML</a></li>
-          </ul>
-        </div>
-
-
-        <a href="#" class="blue_button small">Edit Subtitles</a>
-        <a href="#" class="blue_button small">Upload New Subtitles</a>
-        <div class="clear">&nbsp;</div>
-      </div>
-
-
-
-      <div class="intro clearfix">
-        Some explanatory text here, explanatory text here, explanatory text here, explanatory text here.        Some explanatory text here, explanatory text here, explanatory text here, explanatory text here.
-      </div>
-
-         <table cellpadding="0" cellspacing="0"> 
-        
-            
-              <tr class="even">      
-                <td class="last">
-                    
-                      <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
-                  
-                  sdfdsf
-                </td>
-
-              </tr>
-            
-              <tr class="">      
-                <td class="last">
-                    
-                      <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
-                  
-                  
-                </td>
-              </tr>
-            
-              <tr class="even">      
-                <td class="last">
-                    
-                      <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
-                  
-                  sdf
-                </td>
-
-              </tr>
-            
-              <tr class="">      
-                <td class="last">
-                    
-                      <span class="time-span"><span class="badgy no-sync">Not Synced</span></span> 
-                  
-                  dsf
-                </td>
-              </tr>
-          </table>
-
-        <div style="clear: both"></div>
-    </div>
-
-  </div>
-
-
-<!-- Start History -->
-
-
-  <div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-
-      <li><a href="#">Video Info</a></li>
-      <li class="active"><a href="#">English</a></li>    
-
-
-        {% if translations or video.subtitle_language %} 
-          {% for item in translations %}  
-             <li><a href="#">{{ item.get_language_display }}</a></li>
-          {% endfor %} 
-        {% endif %}
-
-    </ul>
-    {% if video.latest_finished_version %}
-    <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
-    {% endif %}    
-  </div>
-
-
-  <div class="wrap grid_9 omega">  
-
-     <div id="revisions-tab" class="grid_9 alpha omega">  
-
-      <h4 class="inline">English</h4>      
-
-      <ul class="inline_tabs">
-        <li><a href="#languages-tab">{% trans 'Subtitles' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        <li class="active"><a href="#activity-tab">{% trans 'History' %}</a></li>
-      </ul>
-
-      <div class="action_buttons grid_9 alpha omega">
-
-
-            <button class="compare_versions_button blue_button small">
-                <span>Compare Revisions</span>
-
-            </button>
-                
-        <div class="clear">&nbsp;</div>
-      </div>
-
-
-
-      <div class="intro clearfix">
-        Some explanatory text here, explanatory text here, explanatory text here, explanatory text here.        Some explanatory text here, explanatory text here, explanatory text here, explanatory text here.
-      </div>
-
-
-        
-            
-
-            <table cellpadding="0" cellspacing="0">
-            <thead>
-              <tr>
-                <th>
-                    <a href="?o=date&ot=desc&page=1#revisions" class="desc">Most Recent</a>
-                </th>
-                <th>
-
-                    <a href="?o=user&ot=desc&page=1#revisions" class="desc">User</a>
-                </th>
-                <th>
-                    <a href="?o=note&ot=desc&page=1#revisions" class="desc">Note</a>
-                </th>
-                <th>
-                    <a href="?o=time&ot=desc&page=1#revisions" class="desc">Time</a>
-
-                </th>
-                <th class="last">
-                    <a href="?o=text&ot=desc&page=1#revisions" class="desc">Text</a>
-                </th>
-              </tr> 
-            </thead>
-            
-            <tbody>
-                
-                
-                <tr class="even">
-
-                  <td>
-                      <input type="checkbox" class="version_checkbox" value="7"/><a href="/videos/revision/7/">#1</a> (Today)
-                  </td>
-                  <td>
-                      <a href="/profiles/10001/">Morgan Allan Knutson</a>
-                  </td>
-                  <td>
-                      &nbsp;
-
-                  </td>
-                  <td>
-                      0%
-                  </td>
-                  <td class="last">
-                      0%
-                  </td>
-                </tr>
-                
-                
-                <tr >
-
-                  <td>
-                      <input type="checkbox" class="version_checkbox" value="1"/><a href="/videos/revision/1/">#0</a> (09/02/2010)
-                  </td>
-                  <td>
-                      <a href="/profiles/10001/">Morgan Allan Knutson</a>
-                  </td>
-                  <td>
-                      &nbsp;
-
-                  </td>
-                  <td>
-                      0%
-                  </td>
-                  <td class="last">
-                      0%
-                  </td>
-                </tr>
-                
-              </tbody>
-            </table>
-
-            
-            <div style="clear: both"></div>
-       
-   </div>
-  </div>
-
-
-
-<!-- Start Comments -->
-
-
-  <div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-      <li class="active"><a href="#">Video Info</a></li>
-      <li><a href="#">English</a></li>    
-    </ul>
-    {% if video.latest_finished_version %}
-    <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
-    {% endif %}    
+    {% endif %}   
   </div>
 
   <div class="wrap grid_9 omega">  
-      <h4 class="inline">Video Info</h4>      
+      <h4 class="inline">{% trans 'Video Info' %}</h4>      
 
       <ul class="inline_tabs">
-        <li class="active"><a href="#languages-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
+        <li class="active"><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
         <li class="bull">&bull;</li>
+        {% comment %}
         <li><a href="#comments-tab">{% trans 'Video URLS' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
+        {% endcomment %}
         <li><a href="#activity-tab">{% trans 'Activity Stream' %}</a></li>
       </ul>
-
-    <div id="comments-tab" class="grid_9 alpha omega">
-       {% render_comment_form video %}
-       {% render_comment_list video %}
-       <div style="clear: both"></div>        
-    </div>
-  </div>  
-
-
-<!-- Start Activity -->
-
-
-  <div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-
-      <li class="active"><a href="#">Video Info</a></li>
-      <li><a href="#">English</a></li>    
-
-    </ul>
-    {% if video.latest_finished_version %}
-    <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
-    {% endif %}    
-  </div>
-
-  <div class="wrap grid_9 omega">  
-
-      <h4 class="inline">Video Info</h4>      
-
-      <ul class="inline_tabs">
-        <li><a href="#languages-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        <li><a href="#comments-tab">{% trans 'Video URLS' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        <li class="active"><a href="#activity-tab">{% trans 'Activity Stream' %}</a></li>
-      </ul>
-
-
-      <div class="intro">
-        Some explanatory text here, explanatory text here, explanatory text here, explanatory text here.        Some explanatory text here, explanatory text here, explanatory text here, explanatory text here.
+      
+      <div id="comments-tab">
+          <div class="grid_9 alpha omega">
+            {% render_comment_form video %}
+            {% render_comment_list video %}
+            <div style="clear: both"></div>        
+          </div>
       </div>
-
-
-    <div id="activity-tab" class="grid_9 alpha omega">
-        {% video_activity video %}
-    </div>    
+      
+      <div id="activity-tab" style="display: none">
+          <div class="grid_9 alpha omega">
+          {% video_activity video %}
+          </div>
+      </div>
   </div>  
-
 
 {% endblock %}
