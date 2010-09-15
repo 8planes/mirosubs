@@ -89,7 +89,6 @@ background: url(../../images/1x1.png);
 
 .edit_profile_shell #id_picture{
     position: absolute;
-    margin-left: 175px;
     margin-top: 3px;
     opacity: 0;
     z-index: 2;
