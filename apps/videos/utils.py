@@ -154,7 +154,20 @@ class SrtSubtitleParser(SubtitleParser):
         output['end_time'] = self._get_time(r['e_hour'], r['e_min'], r['e_sec'], r['e_secfr'])
         output['subtitle_text'] = self._clean_pattern.sub('', r['text'])
         return output
-    
+
+class SbvSubtitleParser(SrtSubtitleParser):
+
+    def __init__(self, subtitles):
+        self._clean_pattern = re.compile(r'\{.*?\}', re.DOTALL)
+        pattern = r'(?P<s_hour>\d{1}):(?P<s_min>\d{2}):(?P<s_sec>\d{2})\.(?P<s_secfr>\d{3})'
+        pattern += r','
+        pattern += r'(?P<e_hour>\d{1}):(?P<e_min>\d{2}):(?P<e_sec>\d{2})\.(?P<e_secfr>\d{3})'
+        pattern += r'\n(?P<text>.+?)\n\n'
+        subtitles = strip_tags(subtitles)
+        super(SrtSubtitleParser, self).__init__(subtitles, pattern, [re.DOTALL])
+        #replace \r\n to \n and fix end of last subtitle
+        self.subtitles = self.subtitles.replace('\r\n', '\n')+'\n\n'
+        
 class SsaSubtitleParser(SrtSubtitleParser):
     def __init__(self, file):
         pattern = r'Dialogue: [\w=]+,' #Dialogue: <Marked> or <Layer>,
