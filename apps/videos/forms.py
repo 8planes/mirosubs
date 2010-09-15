@@ -31,7 +31,7 @@ import chardet
 from uuid import uuid4
 from youtube import get_video_id
 from math_captcha.forms import MathCaptchaForm
-from vidscraper.sites import blip, google_video, fora, ustream, vimeo
+from vidscraper.sites import blip, google_video, ustream, vimeo
 from dailymotion import DAILYMOTION_REGEX
 from django.utils.safestring import mark_safe
 
@@ -159,7 +159,6 @@ class VideoForm(forms.ModelForm):
         video_url = self.cleaned_data['video_url']
         if not blip.BLIP_REGEX.match(video_url) and \
             not google_video.GOOGLE_VIDEO_REGEX.match(video_url) and \
-            not fora.FORA_REGEX.match(video_url) and \
             not ustream.USTREAM_REGEX.match(video_url) and \
             not vimeo.VIMEO_REGEX.match(video_url) and \
             not DAILYMOTION_REGEX.match(video_url) and \

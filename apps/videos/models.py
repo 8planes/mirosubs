@@ -227,16 +227,7 @@ class Video(models.Model):
                           'allow_community_edits': True})
             if created:
                 video.title = google_video.scrape_title(video_url)
-                video.save()
-        elif 'fora.tv' in parsed_url.netloc and fora.FORA_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=fora.scrape_flash_enclosure_url(video_url),
-                defaults={'video_type': VIDEO_TYPE_FORA,
-                          'allow_community_edits': True})
-            if created:
-                video.thumbnail = fora.scrape_thumbnail_url(video_url)
-                video.title = fora.scrape_title(video_url)
-                video.save()            
+                video.save()           
         elif 'ustream.tv' in parsed_url.netloc and ustream.USTREAM_REGEX.match(video_url):
             video, created = Video.objects.get_or_create(
                 video_url=ustream.get_flash_enclosure_url(video_url),
