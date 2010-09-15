@@ -105,7 +105,8 @@ mirosubs.Extension.prototype.createReportProblemLink_ = function($d) {
         'I had a problem with the Universal Subtitles Firefox ' +
         'extension on this page: ' + 
         window.location.href;
-    var uri = new goog.Uri(mirosubs.siteURL() + '/videos/site_feedback/');
+    var uri = new goog.Uri(mirosubs.WidgetizerConfig.siteConfig['siteURL'] + 
+                           '/videos/site_feedback/');
     uri.setParameterValue('text', message);
     return $d('a', {'href': uri.toString(), 
                     'target': mirosubs.randomString()},
@@ -119,6 +120,7 @@ mirosubs.Extension.prototype.createLearnMoreLink_ = function($d) {
 };
 
 (function() {
+    
     var extension = mirosubs.Extension.getInstance();
     window['mirosubs'] = mirosubs;
     mirosubs['showExtension'] = function(enabled) {

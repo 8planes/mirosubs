@@ -25,7 +25,7 @@ goog.provide('mirosubs.LoadingDom');
 mirosubs.LoadingDom = function() {
     goog.events.EventTarget.call(this);
     this.isDomLoaded_ = false;
-        var that = this;
+    var that = this;
     if (document.addEventListener) {
         var EVENT = "DOMContentLoaded";
         document.addEventListener(
@@ -45,7 +45,7 @@ mirosubs.LoadingDom = function() {
         });
         if (document.documentElement.doScroll && window == window.top)
             (function() {
-                if (that.widgetized_)
+                if (that.isDomLoaded_)
                     return;
                 try {
                     // Thanks to Diego Perini: http://javascript.nwbox.com/IEContentLoaded/
@@ -65,20 +65,19 @@ mirosubs.LoadingDom = function() {
 goog.inherits(mirosubs.LoadingDom, goog.events.EventTarget);
 goog.addSingletonGetter(mirosubs.LoadingDom);
 
+mirosubs.LoadingDom.logger_ =
+    goog.debug.Logger.getLogger('mirosubs.LoadingDom');
+
 mirosubs.LoadingDom.DOMLOAD = 'domloaded';
 
 mirosubs.LoadingDom.prototype.onDomLoaded_ = function() {
+    mirosubs.LoadingDom.logger_.info('onDomLoaded_ called');
     if (this.isDomLoaded_)
         return;
     this.isDomLoaded_ = true;
-    this.dispatchEvent(this, new mirosubs.LoadingDom.OnDomLoadEvent());
+    this.dispatchEvent(mirosubs.LoadingDom.DOMLOAD);
 };
 
 mirosubs.LoadingDom.prototype.isDomLoaded = function() {
     return this.isDomLoaded_ || document.readyState == 'complete';
 };
-
-mirosubs.LoadingDom.OnDomLoadEvent = function() {
-    goog.events.Event.call(this, mirosubs.LoadingDom.DOMLOAD);
-};
-goog.inherits(mirosubs.LoadingDom.OnDomLoadEvent, goog.events.Event);
