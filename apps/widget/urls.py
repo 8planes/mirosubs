@@ -49,5 +49,8 @@ urlpatterns += patterns(
     url(r'^widgetizerconfig.js$', 
         'django.views.generic.simple.direct_to_template', 
         {'template': 'widget/widgetizerconfig.js',
-         'mimetype': 'text/javascript' })
+         'mimetype': 'text/javascript' }),
+    url(r'^extension_demo.html$',
+        'django.views.generic.simple.direct_to_template',
+        {'template':'widget/extension_demo.html'})
 )

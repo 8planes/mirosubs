@@ -18,21 +18,21 @@
 
 goog.provide('mirosubs.Extension');
 
+/**
+ * @constructor
+ */
 mirosubs.Extension = function() {
     this.shown_ = false;
-    if (window[mirosubs.Extension.LOADED_FUN])
-        goog.Timer.callOnce(window[mirosubs.Extension.LOADED_FUN]);
+    var element = document.createElement('MirosubsExtensionLoaded');
+    document.documentElement.appendChild(element);
+    var evt = document.createEvent('Events');
+    evt.initEvent("MirosubsExtensionLoadedEvent", true, false);
+    element.dispatchEvent(evt);
+    this.show_(evt.target.getAttribute('enabled') == 'true');
 };
 goog.addSingletonGetter(mirosubs.Extension);
 
-mirosubs.Extension.LOADED_FUN = 'onUnisubsExtensionLoaded';
-mirosubs.Extension.TOGGLE_FUN = 'onUnisubsExtensionToggled';
-
-/**
- * Called by jetpack code whenever the page is loaded.
- * @param {boolean} enabled whether the extension is enabled or not
- */
-mirosubs.Extension.prototype.show = function(enabled) {
+mirosubs.Extension.prototype.show_ = function(enabled) {
     if (this.shown_)
         return;
     this.shown_ = true;
@@ -73,7 +73,17 @@ mirosubs.Extension.prototype.enableClicked_ = function(e) {
     goog.dom.setTextContent(this.enabledSpan_, this.enabledSpanText_());
     goog.dom.classes.enable(
         this.element_, 'mirosubs-extension-enabled', this.enabled_);
-    window[mirosubs.Extension.TOGGLE_FUN](this.enabled_);
+
+    if (!this.toggleElement_) {
+        this.toggleElement_ = document.createElement('MirosubsExtensionToggled');
+        document.documentElement.appendChild(this.toggleElement_);
+    }
+    this.toggleElement_.setAttribute(
+        'enabled', this.enabled_ ? 'true' : 'false');
+    var evt = document.createEvent('Events');
+    evt.initEvent("MirosubsExtensionToggledEvent", true, false);
+    this.toggleElement_.dispatchEvent(evt);
+
     if (this.enabled_)
         mirosubs.Widgetizer.getInstance().widgetize();
 };

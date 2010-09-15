@@ -30,15 +30,12 @@ output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/closure-dependencies.
                          "-p %s/ -o script") % 
                         (CLOSURE_LIB, JS_LIB, CLOSURE_LIB))
 
-calcdeps_file = open(calcdeps_js, "w")
-calcdeps_file.write(output)
-calcdeps_file.close()
-
 logging.info("Compiling JavaScript")
 
 def compile(output_file_name, js_file_list):
     output_file_path = os.path.join(JS_LIB, output_file_name)
     with open(output_file_path, 'w') as compiled_js_file:
+        compiled_js_file.write('(function(){');
         with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
             compiled_js_file.write(swfobject_file.read())
         with open(FLOWPLAYER_JS, 'r') as flowplayerjs_file:
@@ -49,8 +46,23 @@ def compile(output_file_name, js_file_list):
             logging.info('Adding {0}'.format(dep_file_name))
             with open(dep_file_name, 'r') as dep_file:
                 compiled_js_file.write(dep_file.read())
+        compiled_js_file.write('})();');
 
-compile('mirosubs-offsite-compiled.js', settings.JS_OFFSITE)
-compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
+# compile('mirosubs-offsite-compiled.js', settings.JS_OFFSITE)
+# compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
+
+# widgetizer_js_files = list(settings.JS_OFFSITE)
+# assumes that some other process has generated widgetizer/widgetizerconfig.js
+# widgetizer_js_files.append('widgetizer/widgetizerconfig.js')
+# widgetizer_js_files.append('widgetizer/widgetizer.js')
+# widgetizer_js_files.append('widgetizer/dowidgetize.js')
+compile('mirosubs-widgetizer.js', [])
+
+# extension_js_files = list(settings.JS_OFFSITE)
+# assumes that some other process has generated widgetizer/widgetizerconfig.js
+# extension_js_files.append('widgetizer/widgetizerconfig.js')
+# extension_js_files.append('widgetizer/widgetizer.js')
+# extension_js_files.append('widgetizer/extension.js')
+# compile('mirosubs-extension.js', extension_js_files)
 
 logging.info("Success")
