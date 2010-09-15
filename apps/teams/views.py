@@ -34,6 +34,7 @@ from django.conf import settings
 from django.views.generic.list_detail import object_list
 from videos.models import Video
 from auth.models import CustomUser as User
+from django.db.models import Q, Count
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
@@ -41,8 +42,34 @@ MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
 APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 
 def index(request):
-    qs = Team.objects.for_user(request.user)
-    extra_context = {}
+    q = request.REQUEST.get('q')
+    
+    qs = Team.objects.for_user(request.user).annotate(count_members=Count('id'))
+
+    
+    if q:
+        qs = qs.filter(Q(name__icontains=q)|Q(description__icontains=q))
+    
+    ordering, order_type = request.GET.get('o', 'name'), request.GET.get('ot', 'asc')
+    order_fields = {
+        'name': 'name',
+        'date': 'created',
+        'members': 'count_members'
+    }
+    order_fields_name = {
+        'name': _(u'Name'),
+        'date': _(u'Newest'),
+        'members': _(u'Most Members')
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+    
+    extra_context = {
+        'query': q,
+        'ordering': ordering,
+        'order_type': order_type,
+        'order_name': order_fields_name[ordering]
+    }
     return object_list(request, queryset=qs,
                        paginate_by=TEAMS_ON_PAGE,
                        template_name='teams/index.html',

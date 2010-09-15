@@ -68,6 +68,7 @@ class Team(models.Model):
     points = models.IntegerField(default=0, editable=False)
     applicants = models.ManyToManyField(User, through='Application', related_name='applicated_teams', verbose_name=_('applicants'))
     invited = models.ManyToManyField(User, through='Invite', verbose_name=_('invited'))
+    created = models.DateTimeField(auto_now_add=True)
     
     objects = TeamManager()
     
