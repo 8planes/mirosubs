@@ -217,6 +217,7 @@ class Video(models.Model):
             if created:
                 video.title = blip.scrape_title(video_url)
                 video.bliptv_flv_url = blip.scrape_file_url(video_url)
+                video.video_url = video.bliptv_flv_url
                 video.thumbnail = blip.get_thumbnail_url(video_url)
                 video.save()
         elif 'video.google.com' in parsed_url.netloc and google_video.GOOGLE_VIDEO_REGEX.match(video_url):

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if not has_translations %}
-        <a href="#upload_subs-div" id="upload-subtitles-link" class="upload">
+        <a href="#upload_subs-div" id="upload-subtitles-link" class="upload-button blue_button small">
             {% trans 'Upload Subtitles' %}
         </a>
 
@@ -78,7 +78,7 @@
                     $('#clippy').hide();
                 }
             }); 
-            $('.upload').nyroModal();
+            $('.upload-button').nyroModal();
           });
     </script>    
 {% endif %}
