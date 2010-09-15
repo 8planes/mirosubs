@@ -68,6 +68,7 @@ class Team(models.Model):
     points = models.IntegerField(default=0, editable=False)
     applicants = models.ManyToManyField(User, through='Application', related_name='applicated_teams', verbose_name=_('applicants'))
     invited = models.ManyToManyField(User, through='Invite', verbose_name=_('invited'))
+    created = models.DateTimeField(auto_now_add=True)
     
     objects = TeamManager()
     
@@ -81,7 +82,7 @@ class Team(models.Model):
     
     def logo_thumbnail(self):
         if self.logo:
-            return DjangoThumbnail(self.logo, (128, 128), opts={'crop': 'smart'})
+            return DjangoThumbnail(self.logo, (100, 100), opts={'crop': 'smart'})
     
     @models.permalink
     def get_absolute_url(self):
@@ -92,9 +93,13 @@ class Team(models.Model):
         return ('teams:edit', [self.pk])
     
     def is_manager(self, user):
+        if not user.is_authenticated():
+            return False
         return self.members.filter(user=user, is_manager=True).exists()
     
     def is_member(self, user):
+        if not user.is_authenticated():
+            return False        
         return self.members.filter(user=user).exists()
     
     def can_remove_video(self, user):
@@ -107,9 +112,16 @@ class Team(models.Model):
     def can_add_video(self, user):
         if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
             return True
-        if self.is_member(user):
-            return True
-        return False
+        return self.is_member(user)
+
+    def can_invite(self, user):
+        if self.membership_policy == self.INVITATION_BY_MANAGER:
+            return self.is_manager(user)
+        
+        return self.is_member(user)
+    
+    def can_approve_application(self, user):
+        return self.is_member(user)
     
     @property
     def member_count(self):
@@ -129,23 +141,40 @@ class Team(models.Model):
             setattr(self, '_applications_count', self.applications.count())
         return self._applications_count            
     
-    def can_invite(self, user):
-        if self.membership_policy == self.INVITATION_BY_MANAGER:
-            return self.is_manager(user)
-        
-        return True
-    
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')
     user = models.ForeignKey(User)
     is_manager = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = (('team', 'user'),)
     
 class Application(models.Model):
     team = models.ForeignKey(Team, related_name='applications')
     user = models.ForeignKey(User, related_name='team_applications')
     note = models.TextField(blank=True)
     
+    class Meta:
+        unique_together = (('team', 'user'),)
+    
+    def approve(self):
+        TeamMember.objects.get_or_create(team=self.team, user=self.user)
+        self.delete()
+    
+    def deny(self):
+        self.delete()
+        
 class Invite(models.Model):
     team = models.ForeignKey(Team, related_name='invitations')
     user = models.ForeignKey(User, related_name='team_invitations')
     note = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = (('team', 'user'),)
+    
+    def accept(self):
+        TeamMember.objects.get_or_create(team=self.team, user=self.user)
+        self.delete()
+        
+    def deny(self):
+        self.delete()

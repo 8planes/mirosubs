@@ -78,13 +78,13 @@
                 }
             });
             //******** Tabs ********//
-            var $last_active_tab = $($('.video_tabs li.active a').attr('href'));
-            $('.video_tabs a, a.link_to_tab').click(function(){
+            var $last_active_tab = $($('.inline_tabs li.active a').attr('href'));
+            $('.inline_tabs a, a.link_to_tab').click(function(){
                 var href = $(this).attr('href')
                 $last_active_tab.hide();
                 $last_active_tab = $(href).show();
-                $('.video_tabs li').removeClass('active');
-                $('.video_tabs a[href='+href+']').parent('li').addClass('active');
+                $('.inline_tabs li').removeClass('active');
+                $('.inline_tabs a[href='+href+']').parent('li').addClass('active');
                 document.location.hash = href.split('-')[0];
                 return false;
             });
@@ -146,155 +146,182 @@
     </div>
     
     <hr />
-    
-    <div class="sub_actions">
-      
-      <a  class="green_button big" id="edit_subtitles" href="#"><span>{% trans 'Edit Subtitles' %}</span></a>
-      <a  class="green_button big" id="add_translation" href="#"><span>{% trans 'Add Translation' %}</span></a>
 
-      <div class="up_down">
-        {% if language.is_original %}
-            {% with translations|length as has_translations %}
-                {% include 'videos/_upload_subtitles.html' %}
-            {% endwith %}
+<!-- Start Transcript -->
+
+  <div class="grid_3 left_nav_wrapper alpha">
+    <ul class="left_nav">
+        <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
+        {% if video.subtitle_language %}
+            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{% trans 'Original' %}</a></li>
         {% endif %}
-        
-        {% if last_version.subtitles %}
-            <span class="download">{% trans 'Download Subtitles' %}</span> 
-            <a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a> / 
-            <a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a> /
-            <a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a> /
-            <a href="{% url widget:download_txt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TXT</a>
+        {% if translations %} 
+          {% for item in translations %}  
+             <li {% if language == item %}class="active"{% endif %}><a href="{{ item.get_absolute_url }}">{{ item.get_language_display }}</a></li>
+          {% endfor %} 
         {% endif %}
-      </div>
-    </div>
-
-
-    <ul class="video_tabs">
-      <li class="active">
-          <a href="#transcripts-tab">
-            {% if language.is_original %}
-                {% trans 'Original Language Subtitles' %}
-            {% else %}
-                {{ language.get_language_display }} {% trans 'Subtitles' %}
-            {% endif %}
-          </a>
-      </li>
-      <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count language %}</span></span></a></li>
-      <li><a href="#revisions-tab">{% trans 'History' %} <span class="badgy_out"><span class="badgy">{{ hits }}</span></span></a></li>
     </ul>
-    
+    {% if video.latest_finished_version %}
+    <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+    {% endif %}    
+  </div>
 
-    <div style="display: none" id="revisions-tab" class="tab">
-        {% if revision_list|length > 1 %}
-            <button class="compare_versions_button green_button small">
-                <span>{% trans 'Compare Revisions' %}</span>
-            </button>
-        {% endif %}        
-        {% if revision_list %}
-           {% if is_paginated %}{% ordered_paginator 3 '#revisions' %}{% endif %} 
+  <div class="wrap grid_9 omega">  
+    <div id="languages-tab" class="grid_9 alpha omega">  
+      <h4 class="inline">{{ language.get_language_display }}</h4> 
+      <ul class="inline_tabs">
+          <li class="active">
+              <a href="#transcripts-tab">
+                {% if language.is_original %}
+                    {% trans 'Original Language Subtitles' %}
+                {% else %}
+                    {{ language.get_language_display }} {% trans 'Subtitles' %}
+                {% endif %}
+              </a>
+          </li>
+          <li class="bull">&bull;</li>
+          <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count language %}</span></span></a></li>
+          <li class="bull">&bull;</li>
+          <li><a href="#revisions-tab">{% trans 'History' %} <span class="badgy_out"><span class="badgy">{{ hits }}</span></span></a></li>
+      </ul>
 
-            <table cellpadding="0" cellspacing="0">
-            <thead>
-              <tr>
-                <th>
-                    {% ordered_column "date" _("Most Recent") #revisions %}
-                </th>
-                <th>
-                    {% ordered_column "user" _("User") #revisions %}
-                </th>
-                <th>
-                    {% ordered_column "note" _("Note") #revisions %}
-                </th>
-                <th>
-                    {% ordered_column "time" _("Time") #revisions %}
-                </th>
-                <th class="last">
-                    {% ordered_column "text" _("Text") #revisions %}
-                </th>
-              </tr> 
-            </thead>
-            
-            <tbody>
-                {% for item in revision_list %}
-                
-                <tr {% cycle 'class="even"' '' %}>
-
-                  <td>
-                      <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/><a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
-                  </td>
-                  <td>
-                      <a href="{% url profiles:profile item.user.pk %}">{{ item.user }}</a>
-                  </td>
-                  <td>
-                      {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}
-                  </td>
-                  <td>
-                      {{ item.time_change_display }}
-                  </td>
-                  <td class="last">
-                      {{ item.text_change_display }}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            
-            <div style="clear: both"></div>
-       {% else %}
-            <div class="nothing">
-                <strong>{% trans 'No subtitles for this language.' %}</strong><br />
-                {% trans 'Either no subtitles have been entered, or they were deleted.' %}
+      <div id="transcripts-tab">
+          <div class="action_buttons grid_9 alpha omega">
+            {% if last_version.subtitles %}
+            <div class="sort_button floatleft">
+              <div class='arrow'></div>
+              <span class="sort_label">
+                <strong>{% trans 'Download Subtitles' %}</strong>
+              </span>
+              <ul>
+                <li><a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a></li>
+                <li><a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a></li>
+                <li><a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a></li>
+                <li><a href="{% url widget:download_txt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TXT</a></li>
+                <li><a href="{% url widget:download_sbv %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SBV</a></li>
+              </ul>
             </div>
-       {% endif %}
-   </div>
-   
-   <div style="display: none" id="comments-tab" class="tab">
-       {% render_comment_form language %}
-       {% render_comment_list language %}
-       <div style="clear: both"></div>     
-   </div>
-
-   <div id="transcripts-tab" class="tab">
-      <table cellpadding="0" cellspacing="0"> 
-        {% if last_version.subtitles %}
-            {% for item in last_version.ordered_subtitles %}
-              <tr class="{% cycle 'even' '' %}">      
-                <td class="last">
-                  {% if item.display_time %}
-                      <span class="time-span time_link">
-                        <span class="data">{{ item.start_time }}</span>
-                        <span class="badgy start">
-                            {{ item.display_time }}
-                        </span>
-                        {% if item.display_end_time %}
-                            <span class="connector"></span>
-                            <span class="badgy end">{{ item.display_end_time }}</span> 
-                        {% endif %}
-                      </span>
-                  {% else %}  
-                      <span class="time-span"><span class="badgy no-sync">{% trans 'Not Synced' %}</span></span> 
-                  {% endif %}
-                  {{ item.subtitle_text|linebreaksbr }}
-                </td>
-              </tr>
-            {% endfor %}
-        {% else %}
-            {% if revision_list|length > 1 %}
-                <p class="no_subs">
-                    {% blocktrans %}
-                    The most recent revision for this language is blank, but there are older
-                    revisions that contain subtitles.
-                    {% endblocktrans %} 
-                    <a href="#revisions-tab" class="link_to_tab">{% trans 'View revision history' %}</a>
-                </p>
-            {% else %}
-                <p class="no_subs">{% trans 'No subtitles yet.' %} <a href="#" id="add_subtitles">{% trans 'Make some!' %}</a></p>
             {% endif %}
-        {% endif %}
-      </table>
+    
+            <a href="#" class="blue_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
+            {% if language.is_original %}
+                {% with translations|length as has_translations %}
+                    {% include 'videos/_upload_subtitles.html' %}
+                {% endwith %}
+            {% endif %}
+            <div class="clear">&nbsp;</div>
+          </div>
 
-       <div style="clear: both"></div>   
-   </div>
+         <table cellpadding="0" cellspacing="0">
+            {% if last_version.subtitles %}
+                {% for item in last_version.ordered_subtitles %}
+                  <tr class="even">      
+                    <td class="last">
+                      {% if item.display_time %}
+                          <span class="time-span time_link">
+                            <span class="data">{{ item.start_time }}</span>
+                            <span class="badgy start">
+                                {{ item.display_time }}
+                            </span>
+                            {% if item.display_end_time %}
+                                <span class="connector"></span>
+                                <span class="badgy end">{{ item.display_end_time }}</span> 
+                            {% endif %}
+                          </span>
+                      {% else %}  
+                          <span class="time-span"><span class="badgy no-sync">{% trans 'Not Synced' %}</span></span> 
+                      {% endif %}
+                      {{ item.subtitle_text|linebreaksbr }}
+                    </td>
+                  </tr>
+                {% endfor %}
+            {% else %}
+                {% if revision_list|length > 1 %}
+                    <p class="no_subs">
+                        {% blocktrans %}
+                        The most recent revision for this language is blank, but there are older
+                        revisions that contain subtitles.
+                        {% endblocktrans %} 
+                        <a href="#revisions-tab" class="link_to_tab">{% trans 'View revision history' %}</a>
+                    </p>
+                {% else %}
+                    <p class="no_subs">{% trans 'No subtitles yet.' %} <a href="#" id="add_subtitles">{% trans 'Make some!' %}</a></p>
+                {% endif %}
+            {% endif %}
+          </table>
+        </div>
+        
+        <div id="comments-tab"  style="display: none" class="grid_9 alpha omega">
+          {% render_comment_form language %}
+          {% render_comment_list language %}
+        </div>
+
+        <div style="display: none" id="revisions-tab" class="action_buttons grid_9 alpha omega">
+            {% if revision_list|length > 1 %}
+                <button class="compare_versions_button blue_button small">
+                    <span>{% trans 'Compare Revisions' %}</span>
+                </button>
+            {% endif %}        
+            {% if revision_list %}
+               {% if is_paginated %}{% ordered_paginator 3 '#revisions' %}{% endif %} 
+    
+                <table cellpadding="0" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>
+                        {% ordered_column "date" _("Most Recent") #revisions %}
+                    </th>
+                    <th>
+                        {% ordered_column "user" _("User") #revisions %}
+                    </th>
+                    <th>
+                        {% ordered_column "note" _("Note") #revisions %}
+                    </th>
+                    <th>
+                        {% ordered_column "time" _("Time") #revisions %}
+                    </th>
+                    <th class="last">
+                        {% ordered_column "text" _("Text") #revisions %}
+                    </th>
+                  </tr> 
+                </thead>
+                
+                <tbody>
+                    {% for item in revision_list %}
+                    
+                    <tr {% cycle 'class="even"' '' %}>
+    
+                      <td>
+                          <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/><a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
+                      </td>
+                      <td>
+                          <a href="{% url profiles:profile item.user.pk %}">{{ item.user }}</a>
+                      </td>
+                      <td>
+                          {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}
+                      </td>
+                      <td>
+                          {{ item.time_change_display }}
+                      </td>
+                      <td class="last">
+                          {{ item.text_change_display }}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                
+                <div style="clear: both"></div>
+           {% else %}
+                <div class="nothing">
+                    <strong>{% trans 'No subtitles for this language.' %}</strong><br />
+                    {% trans 'Either no subtitles have been entered, or they were deleted.' %}
+                </div>
+           {% endif %}
+       </div>
+                  
+        <div style="clear: both"></div>
+    </div>
+  </div>
 {% endblock %}
 

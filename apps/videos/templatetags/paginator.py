@@ -63,7 +63,7 @@ def paginator(context, adjacent_pages=3):
 
 register.inclusion_tag('_paginator.html', takes_context=True)(paginator)
 
-def search_ordered_paginator(context, query, adjacent_pages=2):
+def search_ordered_paginator(context, query, adjacent_pages=3):
     return ordered_paginator(context, adjacent_pages, q=query)
 register.inclusion_tag('_ordered_paginator.html', takes_context=True)(search_ordered_paginator)
 

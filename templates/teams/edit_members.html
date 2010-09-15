@@ -99,7 +99,7 @@
         </li>
         <li class="bull">&bull;</li>
         <li>
-            <a href="{% url teams:aplications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+            <a href="{% url teams:applications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
         </li>
     </ul>
     {% if team|can_invite_to_team:user %}
