@@ -158,7 +158,6 @@ msgid "Embed Code"
 msgstr "Code d'intégration"
 
 #: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
-#, fuzzy
 msgid "Permalink"
 msgstr "Lien permanent"
 
@@ -176,19 +175,19 @@ msgstr ""
 
 #: .\templates\_testing_widget.html.py:7
 msgid "Test the Widget"
-msgstr ""
+msgstr "Essayer le Widget"
 
 #: .\templates\_testing_widget.html.py:12
 msgid "Warning: These videos should not be embeded--there is a good possibility they will break at some point!"
-msgstr ""
+msgstr "Attention : Ces vidéos ne doivent pas être intégrées a un site extérieur, il est fortement possible qu'elle ne fonctionnent plus après une certaine période."
 
 #: .\templates\_testing_widget.html.py:16
 msgid "Warning #2: These subtitles are non-permanent and should not be relied on -- someone could change them."
-msgstr ""
+msgstr "Attention encore: Ces sous-titres ne sont pas permanents - Ils peuvent être modifiés."
 
 #: .\templates\_testing_widget.html.py:17
 msgid "This alpha site is for purely testing purposes."
-msgstr ""
+msgstr "Cette version alpha du site est purement destinée aux tests."
 
 #: .\templates\about.html.py:22
 msgid ""
@@ -346,7 +345,7 @@ msgstr ""
 
 #: .\templates\base.html.py:37
 msgid "Universal Subtitles does not support your browser. Upgrade your browser or <a href=\"http://getfirefox.com\">Try Firefox</a>."
-msgstr ""
+msgstr "Universal Subtitles ne fonctionne pas avec votre navigateur. Mettez le à jour ou <a href=\"http://www.mozilla-europe.org/fr/firefox/\">Essayez Firefox</a>"
 
 #: .\templates\base.html.py:59
 msgid "a project of the participatory culture foundation"
@@ -354,36 +353,36 @@ msgstr ""
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
-msgstr ""
+msgstr "Sous-titrer une vidéo"
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr ""
+msgstr "Vidéos"
 
 #: .\templates\base.html.py:74
 msgid "Volunteer"
-msgstr ""
+msgstr "Participer"
 
 #: .\templates\base.html.py:79
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: .\templates\base.html.py:80
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
-msgstr ""
+msgstr "A propos"
 
 #: .\templates\base.html.py:83
 msgid "Logout"
-msgstr ""
+msgstr "Déconnexion"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: .\templates\base.html.py:88
 msgid "Login"
