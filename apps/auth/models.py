@@ -81,12 +81,6 @@ class CustomUser(BaseUser):
     def hash_for_video(self, video_id):
         return sha.new(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
     
-    def _get_unique_checks(self, exclude=None):
-        #add email field validate like unique
-        unique_checks, date_checks = super(CustomUser, self)._get_unique_checks(exclude)
-        unique_checks.append((CustomUser, ('email',)))
-        return unique_checks, date_checks
-    
     @classmethod
     def get_youtube_anonymous(cls):
         return cls.objects.get(pk=10000)
