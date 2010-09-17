@@ -36,6 +36,7 @@ from datetime import datetime
 from videos.utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
+from gdata.service import RequestError
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -85,24 +86,17 @@ def create(request):
     if request.method == 'POST':
         video_form = VideoForm(request.POST, label_suffix="")
         if video_form.is_valid():
-            owner = request.user if request.user.is_authenticated() else None
             video_url = video_form.cleaned_data['video_url']
             try:
-                video, created = Video.get_or_create_for_url(video_url, owner)
-            except VidscraperError:
+                video, created = Video.get_or_create_for_url(video_url)
+            except (VidscraperError, RequestError):
                 vidscraper_error = True
                 return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
             messages.info(request, message=u'''Here is the subtitle workspace for your video.  You can
 share the video with friends, or get an embed code for your site.  To add or
 improve subtitles, click the button below the video''')
-            return redirect(video)        
-            #if not video.owner or video.owner == request.user or video.allow_community_edits:
-            #    return HttpResponseRedirect('{0}?autosub=true'.format(reverse(
-            #            'videos:video', kwargs={'video_id':video.video_id})))
-            #else:
-            #    # TODO: better error page?
-            #    return HttpResponse('You are not allowed to add transcriptions to this video.')
+            return redirect(video)
     else:
         video_form = VideoForm(label_suffix="")
     return render_to_response('videos/create.html', locals(),
@@ -128,13 +122,6 @@ def video(request, video_id):
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    page = request.GET.get('page')
-    if not page == 'last':
-        try:
-            page = int(page)
-        except (ValueError, TypeError, KeyError):
-            page = 1
-            
     qs = Video.objects.exclude(subtitlelanguage=None).extra(select={'translation_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
@@ -149,8 +136,8 @@ def video_list(request):
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
         extra_context['order_type'] = order_type
-    return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=50, page=page,
+    return object_list(request, queryset=qs,
+                       paginate_by=50,
                        template_name='videos/video_list.html',
                        template_object_name='video',
                        extra_context=extra_context)
@@ -263,7 +250,7 @@ def history(request, video_id, lang=None):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['translations'] = video.subtitlelanguage_set.filter(is_original=False) \
-        .exclude(pk=language.pk).filter(was_complete=True)
+        .filter(was_complete=True)
     context['last_version'] = language.latest_version()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang or '')
     context['language'] = language

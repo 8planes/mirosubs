@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if not has_translations %}
-        <a href="#upload_subs-div" id="upload-subtitles-link" class="upload">
+        <a href="#upload_subs-div" id="upload-subtitles-link" class="upload-button blue_button small">
             {% trans 'Upload Subtitles' %}
         </a>
 
@@ -12,7 +12,7 @@
             {% if user.is_authenticated %}
                 <p>
                     {% blocktrans %}
-                    Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, 
+                    Our site accepts SRT, SSA, and TTML format. Only files ending in .srt, .ssa, .sbv
                     or .xml (for TTML) are accepted.
                     {% endblocktrans %}
                 </p>
@@ -78,7 +78,7 @@
                     $('#clippy').hide();
                 }
             }); 
-            $('.upload').nyroModal();
+            $('.upload-button').nyroModal();
           });
     </script>    
 {% endif %}

@@ -23,26 +23,40 @@ goog.provide('mirosubs.Widgetizer');
  * This is a singleton, so don't call this method directly.
  */
 mirosubs.Widgetizer = function() {
-    this.widgetizeCalled_ = false;
-    this.widgetized_ = false;
+    var myURI = new goog.Uri(window.location);
+    var DEBUG_WIN_NAME = 'mirosubsdebuggingmain';
+    if (myURI.getParameterValue('debug_mirosubs_js') == 'true' &&
+       window.name != DEBUG_WIN_NAME) {
+        var debugWindow = new goog.debug.FancyWindow(DEBUG_WIN_NAME);
+        debugWindow.setEnabled(true);
+        debugWindow.init();
+        mirosubs.DEBUG = true;
+    }
 };
 goog.addSingletonGetter(mirosubs.Widgetizer);
+
+mirosubs.Widgetizer.logger_ = 
+    goog.debug.Logger.getLogger('mirosubs.Widgetizer');
 
 /**
  * Converts all videos in the page to Mirosubs widgets.
  *
  */
 mirosubs.Widgetizer.prototype.widgetize = function() {
-    if (this.widgetizeCalled_)
-        return;
-    this.widgetizeCalled_ = true;
-    if (mirosubs.LoadingDom.getInstance().isDomLoaded())
+    mirosubs.Widgetizer.logger_.info('widgetize called');
+    mirosubs.Widgetizer.logger_.info(
+        'is dom loaded: ' +
+            (mirosubs.LoadingDom.getInstance().isDomLoaded() ? 
+             'true' : 'false'));
+    if (mirosubs.LoadingDom.getInstance().isDomLoaded()) {
         this.onLoaded_();
-    else
+    }
+    else {
         goog.events.listenOnce(
             mirosubs.LoadingDom.getInstance(),
             mirosubs.LoadingDom.DOMLOAD,
             this.onLoaded_, false, this);
+    }
 };
 
 mirosubs.Widgetizer.prototype.videosExist = function() {
@@ -50,9 +64,7 @@ mirosubs.Widgetizer.prototype.videosExist = function() {
 }
 
 mirosubs.Widgetizer.prototype.onLoaded_ = function() {
-    if (this.widgetized_)
-        return;
-    this.widgetized_ = true;
+    mirosubs.Widgetizer.logger_.info('onLoaded_ called');
     this.addHeadCss();
     this.findAndWidgetizeElements_();
 };
@@ -64,7 +76,7 @@ mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ =
     if (window.location.hostname.match(/youtube\.com$/) != null) {
         var videoElem = goog.dom.getElement('movie_player');
         if (videoElem) {
-            if (!findOnly)
+            if (!opt_findOnly)
                 this.widgetizeElem_(videoElem, window.location.href);
             return true;
         }
@@ -72,18 +84,16 @@ mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ =
             return false;
     }
     else {
-        var uniwidgetizedVideos = this.filterUnwidgetized_(
+        var unwidgetizedVideos = this.filterUnwidgetized_(
             document.getElementsByTagName('video'));
         if (!opt_findOnly)
-            this.widgetizeVideoElements_(unwidgetized);
+            this.widgetizeVideoElements_(unwidgetizedVideos);
         var objectsFound = this.widgetizeObjectElements_(
             this.filterUnwidgetized_(
                 document.getElementsByTagName('object')), 
             opt_findOnly);
         return unwidgetizedVideos.length > 0 || objectsFound;
     }
-    else
-        return false;
 };
 
 mirosubs.Widgetizer.prototype.addHeadCss = function() {
@@ -154,6 +164,7 @@ mirosubs.Widgetizer.prototype.findYoutubeURL_ = function(objectElem) {
 };
 
 mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
+    mirosubs.Widgetizer.logger_.info('widgetizeElem_ called for ' + videoURL);
     var containingElement = document.createElement('div');
     var styleElement = document.createElement('style');
     var innerStyle = mirosubs.WidgetizerConfig.innerStyle;
@@ -172,6 +183,7 @@ mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
     var parentElem = elem.parentNode;
     parentElem.insertBefore(containingElement, elem);
     parentElem.removeChild(elem);
+    var widgetConfig = { 'video_url': videoURL };
     mirosubs.widget.CrossDomainEmbed.embed(
-        widgetDiv, { 'video_url': videoURL }, mirosubs.WidgetizerConfig.siteConfig);
+        widgetDiv, widgetConfig, mirosubs.WidgetizerConfig.siteConfig);
 };

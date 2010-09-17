@@ -1,13 +1,3 @@
-.mirosubs-videoDiv{
-margin: 0 !important;
-overflow: hidden;
-height: 360px;
-}
-
-#widget_div video{
-margin: 0 !important;
-
-}
 
 
 .mirosubs-widgetContainer {
@@ -870,12 +860,13 @@ margin: 20px 0 0 0px !important;
 }
 
 .mirosubs-videoDiv {
-   text-align: left !important;
+
 }
 
 .mirosubs-left .mirosubs-videoDiv {
    width: 400px;
-   height: 350px;
+   height: 300px;
+
 }
 
 .mirosubs-left video,
@@ -885,6 +876,13 @@ margin: 20px 0 0 0px !important;
 }
 
 
+.mirosubs-videoDiv video,
+.mirosubs-videoDiv video *,
+.mirosubs-videoDiv object{
+    width: 440px !important;
+display: block;
+
+}
 
 
 .mirosubs-captioningArea {
@@ -2586,6 +2584,7 @@ background: url("../images/white_arrows.png") right -12px no-repeat;
 padding-right: 25px;
 padding-left: 14px;
 margin-right: 10px;
+border-left: 1px solid #666;
 background-position: right 10px !important;
 }
 
@@ -2832,3 +2831,16 @@ line-height: 1.3em;
 margin-right: 28px;
 }
 
+.mirosubs-extension {
+   position: fixed;
+   right: 10px;
+   bottom: 10px;
+   z-index: 100;
+   border: 1px solid #AAAAAA;
+   padding: 10px;
+   background-color: #FFFFFF;
+}
+
+.mirosubs-extension-enabled {
+   background-color: #99FF99;
+}

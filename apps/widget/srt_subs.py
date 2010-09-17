@@ -123,6 +123,28 @@ class SRTSubtitles(BaseSubtitles):
         fr_seconds = int(time % 1 * 100)
         return u'%02i:%02i:%02i,%02i' % (hours, minutes, seconds, fr_seconds)
 
+class SBVSubtitles(BaseSubtitles):
+    file_type = 'sbv'
+
+    def __unicode__(self):
+        output = []
+        
+        for i, item in enumerate(self.subtitles):
+            start = self.format_time(item['start'])
+            end = self.format_time(item['end'])
+            output.append(u'%s,%s' % (start, end))
+            output.append(item['text'])
+            output.append(u'')
+        
+        return u'\n'.join(output)
+
+    def format_time(self, time):
+        hours = int(floor(time / 3600))
+        minutes = int(floor(time % 3600 / 60))
+        seconds = int(time % 60)
+        fr_seconds = int(time % 1 * 1000)
+        return u'%01i:%02i:%02i.%03i' % (hours, minutes, seconds, fr_seconds)
+
 class TXTSubtitles(BaseSubtitles):
     file_type = 'txt'
     

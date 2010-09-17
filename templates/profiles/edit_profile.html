@@ -26,7 +26,7 @@
     <div class="edit_profile_shell">
         <h2>
             {% trans 'Edit Your Profile' %}
-            <button class="small_button" type="submit" value="Save">
+            <button class="green_button small" type="submit" value="Save">
                 <span>{% trans 'Save Edits to Profile' %}</span>
             </button>
         </h2>
@@ -54,11 +54,13 @@
             {{ form.picture.errors }}
             <p>
                 <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}"/>
+            </p>
+            <div style="float: left; clear: both; margin-bottom: 30px;">
                 <input type="file" id="id_picture" name="picture" size="6"/>
-                <button class="small_button upload-picture" style="z-index: 1; padding-left: 10px;">
+                <button  class="green_button small upload-picture" style="z-index: 1; padding-left: 10px;">
                     <span><span class="plus"></span>{% trans 'Upload picture' %}</span>
                 </button>
-            </p>
+            </div>            
             <p>
                 {{ form.email.errors }}
                 {{ form.email.label_tag }}
@@ -81,8 +83,10 @@
             </p>
             <p>
                 {{ form.changes_notification.errors }}
-                               {{ form.changes_notification }}
- <label for="id_changes_notification">{% trans "Email me when something I've edited gets changed" %}</label>
+                {{ form.changes_notification }}
+                <label for="id_changes_notification">
+                    {% trans "Email me when something I've edited gets changed" %}
+                </label>
             </p>
             <p>
                 {{ form.biography.errors }}
@@ -134,7 +138,7 @@
                         </div>
                     </li>
                 {% endfor %}
-            <button class="small_button add-language">
+            <button class="green_button small add-language">
                 <span><span class="plus"></span>{% trans 'Add Language' %}</span>
             </button>
         </div>

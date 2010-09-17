@@ -63,6 +63,7 @@ class OpenIdBackend:
             else:
                 valid_username = True
             name_count = User.objects.filter(username__startswith = nickname).count()
+                
             if name_count:
                 username = '%s%s'%(nickname, name_count + 1)
                 user = User.objects.create_user(username,email or '')

@@ -23,21 +23,23 @@ mirosubs.widget.InitialState = function(widget, videoURL, baseState) {
     this.videoURL_ = videoURL;
     this.baseState_ = baseState;
     
-    this.videoTabText_ = "Subtitle Me";
+    this.videoTabText_ = mirosubs.widget.VideoTab.Messages.SUBTITLE_ME;
 };
 
 goog.inherits(mirosubs.widget.InitialState, mirosubs.widget.WidgetState);
 
 mirosubs.widget.InitialState.prototype.initialize = function(callback) {
-    var that = this;
+    var that = this;    
     mirosubs.Rpc.call(
         'show_widget', {
             'video_url' : this.videoURL_,
+            'is_remote' : mirosubs.isEmbeddedInDifferentDomain(),
             'base_state': this.baseState_.ORIGINAL_PARAM
         },
         function (result) {
             if (result['subtitles'] && result['subtitles'].length > 0)
-                that.videoTabText_ = "Choose Language";
+                that.videoTabText_ = 
+                    mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE;
             callback(result); 
         });
 };

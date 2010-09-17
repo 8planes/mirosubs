@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block body_attrs %}id="teams"{% endblock %}
+
+{% load i18n teams_tags paginator %}
+
+{% block title %}
+    {% trans 'Team Aplications' %} | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+
+{% team_select team %}
+
+<h2>{% trans 'Manage Settings & Teams' %}</h2>
+<div class="grid_3 left_nav_wrapper alpha">
+    <ul class="left_nav">
+        <li class="active">
+            <a href="#">{% trans 'Your Teams' %}</a>
+        </li>
+    </ul>
+</div>
+<div class="wrap grid_9 omega">
+    <h4 class="inline">{{ team }}</h4>
+    <ul class="inline_tabs">
+        <li>
+            <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
+        </li>
+        <li class="bull">&bull;</li>
+        <li>
+            <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span>
+            </a>
+        </li>
+        <li class="bull">&bull;</li>
+        <li>
+            <a href="{% url teams:edit_video team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+        </li>
+        <li class="bull">&bull;</li>
+        <li class="active">
+            <span class="tab-item">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></span>
+        </li>
+    </ul>
+    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    <table>
+        <tbody>
+            {% for item in applications_list %}
+            <tr>
+                <td>
+                    <a href="{{ item.user.get_absolute_url }}">
+                        <strong>{{ item.user }}</strong>
+                    </a>
+                    {% if item.note %}
+                    <p>
+                        {{ item.note }}
+                    </p>
+                    {% endif %}
+                    {% if team|can_approve_application:user %}
+                    <div class="small grey">
+                        <a href="{% url teams:approve_application team.pk item.user.pk %}">{% trans 'Approve' %}</a>
+                        | <a href="{% url teams:deny_application team.pk item.user.pk %}">{% trans 'Deny' %}</a>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div class="clearfix">
+    </div>
+</div>
+{% endblock %}

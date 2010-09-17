@@ -71,13 +71,10 @@ mirosubs.widget.VideoTab.prototype.showLoading = function(loading) {
     this.imageElem_.src = loading ? this.spinnerGifURL_ : this.logoURL_;
 };
 
-/**
- *
- * @param {boolean=} opt_noSubtitles True to indicate that the video has no subs.
- */
-mirosubs.widget.VideoTab.prototype.setText = function(text, opt_noSubtitles) {
+mirosubs.widget.VideoTab.prototype.setText = function(text) {
     goog.dom.setTextContent(this.spanElem_, text);
-    this.noSubtitles_ = !!opt_noSubtitles;
+    this.noSubtitles_ = 
+        text == mirosubs.widget.VideoTab.Messages.SUBTITLE_ME;
 };
 mirosubs.widget.VideoTab.prototype.hasNoSubtitles = function() {
     return this.noSubtitles_;

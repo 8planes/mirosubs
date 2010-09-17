@@ -60,3 +60,12 @@ def render_to_json(func):
         json = simplejson.dumps(result, cls=DjangoJSONEncoder)
         return HttpResponse(json, mimetype="application/json")
     return update_wrapper(wrapper, func)
+
+def get_page(request):
+    page = request.GET.get('page')
+    if not page == 'last':
+        try:
+            page = int(page)
+        except (ValueError, TypeError, KeyError):
+            page = 1
+    return page    

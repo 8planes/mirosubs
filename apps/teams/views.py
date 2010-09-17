@@ -24,30 +24,54 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm
-from teams.models import Team
+from teams.models import Team, TeamMember, Invite, Application
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.conf import settings
 from django.views.generic.list_detail import object_list
 from videos.models import Video
+from auth.models import CustomUser as User
+from django.db.models import Q, Count
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
+VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
+MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
+APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 
 def index(request):
-    page = request.GET.get('page')
-    if not page == 'last':
-        try:
-            page = int(page)
-        except (ValueError, TypeError, KeyError):
-            page = 1
-            
-    qs = Team.objects.for_user(request.user)
-    extra_context = {}
-    return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=TEAMS_ON_PAGE, page=page,
+    q = request.REQUEST.get('q')
+    
+    qs = Team.objects.for_user(request.user).annotate(count_members=Count('id'))
+
+    
+    if q:
+        qs = qs.filter(Q(name__icontains=q)|Q(description__icontains=q))
+    
+    ordering, order_type = request.GET.get('o', 'name'), request.GET.get('ot', 'asc')
+    order_fields = {
+        'name': 'name',
+        'date': 'created',
+        'members': 'count_members'
+    }
+    order_fields_name = {
+        'name': _(u'Name'),
+        'date': _(u'Newest'),
+        'members': _(u'Most Members')
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+    
+    extra_context = {
+        'query': q,
+        'ordering': ordering,
+        'order_type': order_type,
+        'order_name': order_fields_name[ordering]
+    }
+    return object_list(request, queryset=qs,
+                       paginate_by=TEAMS_ON_PAGE,
                        template_name='teams/index.html',
                        template_object_name='teams',
                        extra_context=extra_context)
@@ -79,8 +103,13 @@ def create(request):
 def edit(request, pk):
     team = get_object_or_404(Team, pk=pk)
     
-    if not team.is_manager(request.user):
+    if not team.is_member(request.user):
         raise Http404
+    
+    if not team.is_manager(request.user):
+        return {
+            'team': team
+        }
     
     if request.method == 'POST':
         form = EditTeamForm(request.POST, request.FILES, instance=team)
@@ -95,19 +124,32 @@ def edit(request, pk):
         'team': team
     }
 
-@render_to('teams/edit_video.html')
 @login_required
 def edit_video(request, pk):
     team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
     
-    return {
+    qs = team.videos.all()
+    
+    extra_context = {
         'team': team,
         'can_remove_video': team.can_remove_video(request.user)
     }
+    return object_list(request, queryset=qs,
+                       paginate_by=VIDEOS_ON_PAGE,
+                       template_name='teams/edit_video.html',
+                       template_object_name='videos',
+                       extra_context=extra_context)
 
-@render_to_json    
+@render_to_json
+@login_required    
 def remove_video(request, pk, video_pk):
     team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
     
     if team.can_remove_video(request.user):
         video = get_object_or_404(Video, pk=video_pk)
@@ -118,12 +160,175 @@ def remove_video(request, pk, video_pk):
     else:
         return {
             'success': False,
-            'error': _('You can\'t remove video')
+            'error': ugettext('You can\'t remove video')
         }
+        
+@render_to_json
+@login_required
+def remove_member(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
 
-@render_to('teams/edit_members.html')        
+    if not team.is_member(request.user):
+        raise Http404
+
+    if team.is_manager(request.user):
+        user = get_object_or_404(User, pk=user_pk)
+        if not user == request.user:
+            TeamMember.objects.filter(team=team, user=user).delete()
+            return {
+                'success': True
+            }
+        else:
+            return {
+                'success': False,
+                'error': ugettext('You can\'t remove youself')
+            }          
+    else:
+        return {
+            'success': False,
+            'error': ugettext('You can\'t remove user')
+        }        
+
+@login_required
+def demote_member(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+
+    if team.is_manager(request.user):
+        user = get_object_or_404(User, pk=user_pk)
+        if not user == request.user:
+            TeamMember.objects.filter(team=team, user=user).update(is_manager=False)
+        else:
+            messages.error(request, _('You can\'t demote to member yorself'))
+    else:
+        messages.error(request, _('You can\'t demote to member'))          
+    return redirect('teams:edit_members', team.pk)
+
+@login_required
+def promote_member(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+
+    if team.is_manager(request.user):
+        user = get_object_or_404(User, pk=user_pk)
+        if not user == request.user:
+            TeamMember.objects.filter(team=team, user=user).update(is_manager=True)
+    else:
+        messages.error(request, _('You can\'t promote to manager'))
+    return redirect('teams:edit_members', team.pk)
+
+@login_required        
 def edit_members(request, pk):
     team = get_object_or_404(Team, pk=pk)
-    return {
+    
+    if not team.is_member(request.user):
+        raise Http404
+        
+    qs = team.members.select_related()
+    
+    ordering = request.GET.get('o')
+    order_type = request.GET.get('ot')
+    
+    if ordering == 'username' and order_type in ['asc', 'desc']:
+        pr = '-' if order_type == 'desc' else ''
+        qs = qs.order_by(pr+'user__first_name', pr+'user__last_name', pr+'user__username')
+    elif ordering == 'role' and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+'is_manager')
+    extra_context = {
+        'team': team,
+        'ordering': ordering,
+        'order_type': order_type
+    }
+    return object_list(request, queryset=qs,
+                       paginate_by=MEMBERS_ON_PAGE,
+                       template_name='teams/edit_members.html',
+                       template_object_name='members',
+                       extra_context=extra_context)    
+
+@login_required
+def applications(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    
+    if not team.is_member(request.user):
+        raise Http404
+    
+    qs = team.applications.all()
+        
+    extra_context = {
         'team': team
     }
+    return object_list(request, queryset=qs,
+                       paginate_by=APLICATIONS_ON_PAGE,
+                       template_name='teams/applications.html',
+                       template_object_name='applications',
+                       extra_context=extra_context) 
+
+@login_required
+def approve_application(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+    
+    if team.can_approve_application(request.user):
+        try:
+            Application.objects.get(team=team, user=user_pk).approve()
+            messages.success(request, _(u'Application approved.'))
+        except Application.DoesNotExist:
+            messages.error(request, _(u'Application does not exist.'))
+    else:
+        messages.error(request, _(u'You can\'t approve application.'))
+    return redirect('teams:applications', team.pk)
+
+@login_required
+def deny_application(request, pk, user_pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+    
+    if team.can_approve_application(request.user):
+        try:
+            Application.objects.get(team=team, user=user_pk).deny()
+            messages.success(request, _(u'Application denied.'))
+        except Application.DoesNotExist:
+            messages.error(request, _(u'Application does not exist.'))
+    else:
+        messages.error(request, _(u'You can\'t deny application.'))
+    return redirect('teams:applications', team.pk)
+
+@render_to_json
+@login_required
+def invite(request):
+    team_pk = request.POST.get('team_id')
+    username = request.POST.get('username')
+    note = request.POST.get('note', '')
+    
+    if not team_pk and not username:
+        raise Http404
+    
+    team = get_object_or_404(Team, pk=team_pk)
+    
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return {
+            'error': ugettext(u'User does not exist.')
+        }
+    
+    if not team.can_invite(request.user):
+        return {
+            'error': ugettext(u'You can\'t invite to team.')
+        }
+        
+    if team.is_member(user):
+        return {
+            'error': ugettext(u'This user is member of team already.')
+        }
+        
+    Invite.objects.get_or_create(team=team, user=user, defaults={'note': note})
+    return {}

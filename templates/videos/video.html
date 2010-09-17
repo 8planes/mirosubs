@@ -45,17 +45,17 @@
     <script type="text/javascript">
         jQuery(document).ready(function($){
             //******** Tabs ********//
-            var $last_active_tab = $($('.video_tabs li.active a').attr('href'));
-            $('.video_tabs a').click(function(){
+            var $last_active_tab = $($('.inline_tabs li.active a').attr('href'));
+            $('.inline_tabs a, a.link_to_tab').click(function(){
                 var href = $(this).attr('href')
                 $last_active_tab.hide();
                 $last_active_tab = $(href).show();
-                $('.video_tabs li').removeClass('active');
-                $(this).parent('li').addClass('active');
+                $('.inline_tabs li').removeClass('active');
+                $('.inline_tabs a[href='+href+']').parent('li').addClass('active');
                 document.location.hash = href.split('-')[0];
                 return false;
             });
-            
+                        
             if (document.location.hash){
                 var tab_name = document.location.hash.split('-', 1)
                 if (tab_name){
@@ -108,96 +108,70 @@
     {% endif %}
 
     {% if saved %}
-        <h2>Subtitles saved!  You can share the video with friends, 
+        <h2>{% blocktrans %}Subtitles saved!  You can share the video with friends, 
           or get an embed code for your site.  To add a
-          translation, click the button below.</h2>
+          translation, click the button below.{% endblocktrans %}</h2>
     {% endif %}
 
-    <div class="left_column">
+    <div class="grid_6 alpha left_column">
         {% widget widget_params %}
     </div>
     
-    <div class="right_column">
+    <div class="grid_6 omega right_column">
         {% include '_sharing_widget.html' %}
     </div>
 
-        <hr />
-    
-    <div class="sub_actions">
-      {% if video.latest_finished_version %}
-      <a class="button" id="add_translation" href="#"><span>{% trans 'Add Translation' %}</span></a>
-      {% endif %}    
+    <hr />
 
-      <div class="up_down">
-      {% with translations|length as has_translations %}
-          {% include 'videos/_upload_subtitles.html' %}
-      {% endwith %}
-      </div>
-    </div>
-
-    <ul class="video_tabs">
-      <li class="active"><a href="#languages-tab">{% trans 'Languages' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
-      <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
-      <li><a href="#activity-tab">{% trans 'Activity stream' %}</a></li>
-    </ul>
-   
-    <div id="languages-tab" class="tab">
-        {% if translations or video.subtitle_language %} 
-            <table cellpadding="0" cellspacing="0">
-              <thead>
-                <tr>
-                  <th><span>{% trans 'Language' %}</span></th>
-                  <th class="last"><span>{% trans '% Done' %}</span></th>
-                </tr>              
-              </thead>
-    
-              <tbody>
-                  {% if original %}
-                    <tr>
-                        <td>
-                            <a href="{{ original.get_absolute_url }}">
-                                {% trans 'Original' %}
-                            </a>
-                        </td>
-                        <td>
-                          {% if original.latest_version %}
-                              <span class="badgy">{{ original.latest_version.subtitles|length }} {% trans 'Subtitles' %}</span>
-                          {% else %}
-                              <span class="badgy">{% trans 'No Subtitles' %}</span>
-                          {% endif %}
-                        </td>
-                    </tr>
-                  {% endif %}
-
-                {% for item in translations %}  
-                    <tr>
-                        <td>
-                            <a href="{{ item.get_absolute_url }}">
-                                {{ item.get_language_display }}
-                            </a>
-                        </td>
-                        <td>
-                            <span class="progress">
-                                <span class="completion {% progress_color item.percent_done %}" style="width: {{ item.percent_done }}%"></span>
-                            </span>
-                        </td>
-                    </tr>
-                {% endfor %} 
-            </tbody>
-            </table>
-        {% else %}
-            <p class="no_subs">{% trans 'No subtitles yet.' %} <a href="#" id="add_subtitles">{% trans 'Make some!' %}</a></p>
+  <div class="grid_3 left_nav_wrapper alpha">
+    <ul class="left_nav">
+        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
+        {% if video.subtitle_language %}
+            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{% trans 'Original' %}</a></li>
         {% endif %}
-        <div style="clear: both"></div>
-    </div>
-    
-    <div style="display: none" id="comments-tab" class="tab">
-       {% render_comment_form video %}
-       {% render_comment_list video %}
-       <div style="clear: both"></div>        
-    </div>
-    
-    <div style="display: none" id="activity-tab" class="tab">
-        {% video_activity video %}
-    </div>    
+        {% if translations %} 
+          {% for item in translations %}  
+             <li {% if language == item %}class="active"{% endif %}><a href="{{ item.get_absolute_url }}">{{ item.get_language_display }}</a></li>
+          {% endfor %} 
+        {% endif %}
+    </ul>
+    {% if video.latest_finished_version %}
+    <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+    {% endif %}   
+  </div>
+
+  <div class="wrap grid_9 omega">  
+      <h4 class="inline">{% trans 'Video Info' %}</h4>      
+
+      <ul class="inline_tabs">
+        <li class="active"><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
+        <li class="bull">&bull;</li>
+        {% comment %}
+        <li><a href="#comments-tab">{% trans 'Video URLS' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+        <li class="bull">&bull;</li>
+        {% endcomment %}
+        <li><a href="#activity-tab">{% trans 'Activity Stream' %}</a></li>
+      </ul>
+
+      <div class="action_buttons grid_9 alpha omega">
+          {% with translations|length as has_translations %}
+              {% include 'videos/_upload_subtitles.html' %}
+          {% endwith %}       
+      </div>
+      
+      <div id="comments-tab">
+          <div class="grid_9 alpha omega">
+            {% render_comment_form video %}
+            {% render_comment_list video %}
+            <div style="clear: both"></div>        
+          </div>
+      </div>
+      
+      <div id="activity-tab" style="display: none">
+          <div class="grid_9 alpha omega">
+          {% video_activity video %}
+          </div>
+      </div>
+  </div>  
+
 {% endblock %}

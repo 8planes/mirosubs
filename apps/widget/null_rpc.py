@@ -102,6 +102,8 @@ class NullRpc(BaseRpc):
         null_subtitles.save()
 
     def _autoplay_subtitles(self, user, video, language_code, revision_no):
+        if video.null_subtitles(user, language_code) is None:
+            return None
         if language_code is not None:
             return [t[0].to_json_dict(text_to_use=t[1].subtitle_text)
                     for t in video.null_dependent_translations(

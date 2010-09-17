@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
-from widget.srt_subs import TTMLSubtitles, TXTSubtitles, SRTSubtitles
+from widget.srt_subs import TTMLSubtitles, TXTSubtitles, SRTSubtitles, SBVSubtitles
 
 urlpatterns = patterns(
     'widget.views',
@@ -34,7 +34,9 @@ urlpatterns = patterns(
     url(r'^download_ttml/$', 'download_subtitles', 
         {'handler': TTMLSubtitles}, name='download_ttml'),
     url(r'^download_txt/$', 'download_subtitles', 
-        {'handler': TXTSubtitles}, name='download_txt'),        
+        {'handler': TXTSubtitles}, name='download_txt'),
+    url(r'^download_sbv/$', 'download_subtitles', 
+        {'handler': SBVSubtitles}, name='download_sbv'),                  
     url(r'^download_null_srt/$', 'null_srt'),
 )
 
@@ -49,5 +51,8 @@ urlpatterns += patterns(
     url(r'^widgetizerconfig.js$', 
         'django.views.generic.simple.direct_to_template', 
         {'template': 'widget/widgetizerconfig.js',
-         'mimetype': 'text/javascript' })
+         'mimetype': 'text/javascript' }),
+    url(r'^extension_demo.html$',
+        'django.views.generic.simple.direct_to_template',
+        {'template':'widget/extension_demo.html'})
 )

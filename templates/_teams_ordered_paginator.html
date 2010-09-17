@@ -1,0 +1,32 @@
+{% load i18n %}
+<div class="pagination">
+   {% if has_previous %}
+        <a class="previous_page" href="?page={{ previous }}{{ extra_link }}" rel="next">&#8592; {% trans 'Previous' %}</a>
+   {% else %}
+        <span class="previous_page disabled">&#8592; {% trans 'Previous' %}</span>
+   {% endif %}    
+
+   {% if show_first %}
+      <a rel="next" href="?page=1{{ extra_link }}">1</a>
+      <em>...</em>
+   {% endif %}
+
+   {% for linkpage in page_numbers %}
+      {% ifequal linkpage page %}
+         <em>{{ page }}</em>
+      {% else %}
+         <a rel="next" href="?page={{ linkpage }}{{ extra_link }}">{{ linkpage }}</a>
+      {% endifequal %}
+   {% endfor %}
+
+   {% if show_last %}
+      <em>...</em>
+      <a rel="next" href="?page=last{{ extra_link }}">{{ pages }}</a>
+   {% endif %}
+    
+   {% if has_next %}
+        <a class="next_page" href="?page={{ next }}{{ extra_link }}" rel="next">{% trans 'Next' %} &#8594;</a>
+   {% else %}
+        <span class="next_page disabled">{% trans 'Next' %} &#8594;</span>
+   {% endif %}     
+</div>

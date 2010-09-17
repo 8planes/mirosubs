@@ -20,12 +20,11 @@
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
   {{ video_form.video_url.errors }}
   <input type="text" name="video_url" class="main_video_form_field" />
-  <button class="marginleft" type="submit" value="Begin"><span>{% trans 'Begin' %}</span></button>
+  <button class="green_button big marginleft" type="submit" value="Begin">{% trans 'Begin' %}</button>
   <p>
       {% blocktrans %}
       To enable collaborative subtitles, enter the URL to any video in the<br />
-      following formats: Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, Fora.tv,
-      Ustream.tv
+      following formats: Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, Ustream.tv
       {% endblocktrans %}
   </p>
 </form>

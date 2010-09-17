@@ -24,14 +24,14 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import re
-from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, SubtitleParserError
+from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, SubtitleParserError, SbvSubtitleParser
 import random
 from django.utils.encoding import force_unicode
 import chardet
 from uuid import uuid4
 from youtube import get_video_id
 from math_captcha.forms import MathCaptchaForm
-from vidscraper.sites import blip, google_video, fora, ustream, vimeo
+from vidscraper.sites import blip, google_video, ustream, vimeo
 from dailymotion import DAILYMOTION_REGEX
 from django.utils.safestring import mark_safe
 
@@ -47,10 +47,6 @@ class SubtitlesUploadForm(forms.Form):
         video = self.cleaned_data['video']
         if video.is_writelocked:
             raise forms.ValidationError(_(u'Somebody is subtitling this video right now. Try later.'))
-        if (not video.allow_community_edits and 
-            video.owner != None and (self.user.is_anonymous() or 
-                                     video.owner.pk != self.user.pk)):
-            raise forms.ValidationError(_(u'You can\'t edit this video.'))        
         if video.subtitlelanguage_set.filter(is_complete=True) \
                 .filter(is_original=False).exists():
             raise forms.ValidationError(_(u'This video has translations.'))
@@ -61,8 +57,8 @@ class SubtitlesUploadForm(forms.Form):
         if subtitles.size > 256*1024:
             raise forms.ValidationError(_(u'File size should be less 256 kb'))
         parts = subtitles.name.split('.')
-        if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml']:
-            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)'))
+        if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml', 'sbv']:
+            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)'))
         try:
             text = subtitles.read()
             if not self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding'])):
@@ -80,6 +76,8 @@ class SubtitlesUploadForm(forms.Form):
             return SsaSubtitleParser
         if end == 'xml':
             return TtmlSubtitleParser
+        if end == 'sbv':
+            return SbvSubtitleParser
         
     def save(self):
         subtitles = self.cleaned_data['subtitles']
@@ -161,7 +159,6 @@ class VideoForm(forms.ModelForm):
         video_url = self.cleaned_data['video_url']
         if not blip.BLIP_REGEX.match(video_url) and \
             not google_video.GOOGLE_VIDEO_REGEX.match(video_url) and \
-            not fora.FORA_REGEX.match(video_url) and \
             not ustream.USTREAM_REGEX.match(video_url) and \
             not vimeo.VIMEO_REGEX.match(video_url) and \
             not DAILYMOTION_REGEX.match(video_url) and \

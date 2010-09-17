@@ -21,11 +21,10 @@
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function(){
-            $.nyroModalSettings({
+            $('.send_message').nyroModal({
                 minWidth: 460,
                 minHeight: 380              
-            }); 
-            $('.send_message').nyroModal();
+            });
                         
             $('button.send_message').attr('href', '#send_message');              
             
@@ -83,7 +82,7 @@
         <p>{% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
         <p>{% trans 'Homepage' %}: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
         {% if user.is_authenticated and not user == user_info and user_info.email %}
-            <button class="send_message"><span>{% trans 'Send a Message' %}</span></button>
+            <button  class="green_button big send_message"><span>{% trans 'Send a Message' %}</span></button>
         {% endif %}
     </div>
     

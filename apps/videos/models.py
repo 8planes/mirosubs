@@ -89,8 +89,6 @@ class Video(models.Model):
     title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
-    # the person who was first to start captioning this video.
-    owner = models.ForeignKey(User, null=True)
     allow_community_edits = models.BooleanField()
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255)
@@ -175,10 +173,7 @@ class Video(models.Model):
         
         version = SubtitleVersion(language=language)
         version.datetime_started = datetime.now()
-        if self.owner:
-            version.user = self.owner
-        else:
-            version.user = User.get_youtube_anonymous()
+        version.user = User.get_youtube_anonymous()
         version.note = u'From youtube'
         version.save()
         
@@ -196,14 +191,13 @@ class Video(models.Model):
         language.save()
         
     @classmethod
-    def get_or_create_for_url(cls, video_url, user):
+    def get_or_create_for_url(cls, video_url):
         parsed_url = urlparse(video_url)
         if 'youtube.com' in parsed_url.netloc:
             yt_video_id = get_video_id(video_url)
             video, created = Video.objects.get_or_create(
                 youtube_videoid=yt_video_id,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_YOUTUBE, 
+                defaults={'video_type': VIDEO_TYPE_YOUTUBE, 
                           'allow_community_edits': True})
          
             if created:
@@ -218,38 +212,26 @@ class Video(models.Model):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(
                 bliptv_fileid=bliptv_fileid,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_BLIPTV, 
+                defaults={'video_type': VIDEO_TYPE_HTML5, 
                           'allow_community_edits': True})
             if created:
                 video.title = blip.scrape_title(video_url)
                 video.bliptv_flv_url = blip.scrape_file_url(video_url)
+                video.video_url = video.bliptv_flv_url
                 video.thumbnail = blip.get_thumbnail_url(video_url)
                 video.save()
         elif 'video.google.com' in parsed_url.netloc and google_video.GOOGLE_VIDEO_REGEX.match(video_url):
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_GOOGLE,
+                defaults={'video_type': VIDEO_TYPE_GOOGLE,
                           'allow_community_edits': True})
             if created:
                 video.title = google_video.scrape_title(video_url)
-                video.save()
-        elif 'fora.tv' in parsed_url.netloc and fora.FORA_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=fora.scrape_flash_enclosure_url(video_url),
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_FORA,
-                          'allow_community_edits': True})
-            if created:
-                video.thumbnail = fora.scrape_thumbnail_url(video_url)
-                video.title = fora.scrape_title(video_url)
-                video.save()            
+                video.save()           
         elif 'ustream.tv' in parsed_url.netloc and ustream.USTREAM_REGEX.match(video_url):
             video, created = Video.objects.get_or_create(
                 video_url=ustream.get_flash_enclosure_url(video_url),
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_USTREAM,
+                defaults={'video_type': VIDEO_TYPE_USTREAM,
                           'allow_community_edits': True})
             if created:
                 video.title = ustream.get_title(video_url)
@@ -259,8 +241,7 @@ class Video(models.Model):
             vimeo_videoid = vimeo.VIMEO_REGEX.match(video_url).group(2)
             video, created = Video.objects.get_or_create(
                 vimeo_videoid = vimeo_videoid,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_VIMEO,
+                defaults={'video_type': VIDEO_TYPE_VIMEO,
                           'allow_community_edits': True})
             # TODO: title and thumbnail -- we can't get them without
             # an application oauth key/secret
@@ -268,21 +249,18 @@ class Video(models.Model):
             dailymotion_videoid = DAILYMOTION_REGEX.match(video_url).group(1)
             video, created = Video.objects.get_or_create(
                 dailymotion_videoid = dailymotion_videoid,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_DAILYMOTION,
+                defaults={'video_type': VIDEO_TYPE_DAILYMOTION,
                           'allow_community_edits': True})
             # TODO: title and thumbnail -- need dailymotion support in vidscraper
         elif FLV_REGEX.match(video_url):
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_FLV,
+                defaults={'video_type': VIDEO_TYPE_FLV,
                           'allow_community_edits': True})
         else:
             video, created = Video.objects.get_or_create(
                 video_url=video_url,
-                defaults={'owner': user,
-                          'video_type': VIDEO_TYPE_HTML5,
+                defaults={'video_type': VIDEO_TYPE_HTML5,
                           'allow_community_edits': True})
         return video, created
     
@@ -464,11 +442,8 @@ class Video(models.Model):
         if self.subtitle_language():
             return self.subtitle_language().notification_list(exclude)
         else:
-            if self.owner and not self.owner == exclude:
-                return [self.owner]
-            else:
-                return []
-                    
+            return []
+
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
         return
@@ -612,7 +587,6 @@ class SubtitleLanguage(models.Model):
         not_send = StopNotification.objects.filter(video=self.video) \
             .values_list('user_id', flat=True)
         for_check = [item.user for item in qs]
-        self.video.owner and for_check.append(self.video.owner)
         users = []
         for user in for_check:
             if user and user.changes_notification \
@@ -1404,9 +1378,11 @@ class Action(models.Model):
     @classmethod
     def create_video_handler(cls, sender, instance, created, **kwargs):
         if created:
-            user = instance.owner
             video = instance
-            obj = cls(user=user, video=video)
+            # FIXME marking user as None is a temporary fix. We need to 
+            # either get rid of
+            # this action or just report it on first subtitling.
+            obj = cls(user=None, video=video)
             obj.action_type = cls.ADD_VIDEO
             obj.created = datetime.now()
             obj.save()

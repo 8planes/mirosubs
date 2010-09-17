@@ -1,43 +1,82 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n teams_tags paginator %}
+
+{% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
     {% trans 'Team video' %} | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
-    <h2 class="main-title">{% trans 'Team video page' %}</h2>
-    
-    <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
-    
-    {% for video in team.videos.all %}
-        <p class="video-container">
-            {{ video }}
-            <br/>
-            <a href="{{ video.get_absolute_url }}">{% trans 'view' %}</a>
-            {% if can_remove_video %}
-            |
-            <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
-            {% endif %}
-        </p>
-    {% empty %}
-        {% trans 'Team has no video' %}
-    {% endfor %}
-    
-    <script type="text/javascript">
-        $('a.remove-video').click(function(){
-            if (confirm('{% trans "Remove this video?" %}')){
-                var $video_container = $(this).parents('.video-container');
-                $.post($(this).attr('href'), {}, function(response){
-                    if ( ! response.success){
-                        alert(response.error);
-                    }else{
-                        $video_container.remove();
-                    }
-                }, 'json');
-            }
-            return false;
-        });
-    </script> 
+
+{% team_select team %}
+
+<h2>Manage Settings & Teams</h2>
+<div class="grid_3 left_nav_wrapper alpha">
+    <ul class="left_nav">
+        <li class="active">
+            <a href="#">Your Teams</a>
+        </li>
+    </ul>
+</div>
+<div class="wrap grid_9 omega">
+    <h4 class="inline">{{ team }}</h4>
+    <ul class="inline_tabs">
+        <li>
+            <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
+        </li>
+        <li class="bull">&bull;</li>
+        <li>
+            <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
+        </li>
+        <li class="bull">&bull;</li>
+        <li class="active">
+            <span class="tab-item">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span>
+        </li>
+        <li class="bull">&bull;</li>
+        <li>
+            <a href="{% url teams:applications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+        </li>
+    </ul>
+    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    <table>
+        <tbody>
+            {% for video in videos_list %}
+            <tr class="video-container">
+                <td>
+                    <a href="{{ video.get_absolute_url }}"><strong>{{ video }}</strong></a>
+                    <div class="small grey">
+                        <a href="{{ video.get_absolute_url }}">{% trans 'View' %}</a>
+                        {% if can_remove_video %}
+                        | <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td>{% trans 'Team has not videos.' %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div class="clearfix">
+    </div>
+<script type="text/javascript">
+    $('a.remove-video').click(function(){
+        if (confirm('{% trans "Remove this video?" %}')){
+            var $video_container = $(this).parents('.video-container');
+            $.post($(this).attr('href'), {}, function(response){
+                if (response.success){
+                    $video_container.remove();
+                }else{
+                    alert(response.error)
+                }
+            }, 'json');
+        }
+        return false;
+    });
+</script> 
 {% endblock %}

@@ -1,25 +1,177 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n teams_tags paginator profiles_tags %}
+
+{% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
     {% trans 'Team members' %} | Universal Subtitles
 {% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(function($){
+            var TEAM_ID = '{{ team.pk }}';
+            var INVITE_URL = '{% url teams:invite %}';
+            
+            $('.invite-user').nyroModal({
+                minHeight: 160,
+                minWidth: 400,
+            });
+
+            $('a.invite-button').click(function(){
+                var username = $('.username-invite-field').val();
+                if (username){
+                    $.post(INVITE_URL, {
+                        username: username,
+                        team_id: TEAM_ID,
+                        note: $('.user-invite-note').val()
+                    }, function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error);
+                        }else{
+                            $.msg.clean().add('{% trans "User invited success." %}');
+                            $.nyroModalRemove();
+                            $('.username-invite-field, .user-invite-note').val('');
+                        }
+                    }, 'json');
+                }else{
+                    $.msg.clean().add('{% trans "Enter username." %}');
+                }
+            });
+            
+            $('a.remove-user').click(function(){
+                if (confirm('{% trans "Remove this user?" %}')){
+                    var $user_container = $(this).parents('.user-container');
+                    $.post($(this).attr('href'), {}, function(response){
+                        if (response.success){
+                            $user_container.remove();
+                        }else{
+                            alert(response.error);
+                        }
+                    }, 'json');
+                }
+                return false;
+            });
+            
+            $('a.demote-user, a.promote-user').click(function(){
+                var confirm_text = $(this).hasClass('demote-user') ?
+                    '{% trans "Do you want demote user to member?" %}' :
+                    '{% trans "Do you want promote user to manager?" %}';
+                return confirm(confirm_text);
+            })                        
+        });
+    </script>
+{% endblock %}
+
 {% block main_content %}
-    <h2 class="main-title">{% trans 'Team members page' %}</h2>
-    
-    <a href="{{ team.get_absolute_url }}">{% trans 'See profile' %}</a>
-    
-    {% for member in team.members.select_related %}
-        <p>
-            {{ member.user }}
-            <br/>
-            <a href="{{ member.user.get_absolute_url }}">{% trans 'View' %}</a>
-            |
-            <a href="#">{% trans 'Remove from team' %}</a>
-            |
-            <a href="#">{% trans 'Demote to member' %}</a>
-        </p>
-    {% endfor %}
+
+{% team_select team %}
+
+<h2>{% trans 'Manage Settings & Teams' %}</h2>
+<div class="grid_3 left_nav_wrapper alpha">
+    <ul class="left_nav">
+        <li class="active">
+            <a href="#">{% trans 'Your Teams' %}</a>
+        </li>
+    </ul>
+</div>
+<div class="wrap grid_9 omega">
+    <h4 class="inline">{{ team }}</h4>
+    <ul class="inline_tabs">
+        <li>
+            <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
+        </li>
+        <li class="bull">&bull;</li>
+        <li class="active">
+            <span class="tab-item">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></span>
+        </li>
+        <li class="bull">&bull;</li>
+        <li>
+            <a href="{% url teams:edit_video team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+        </li>
+        <li class="bull">&bull;</li>
+        <li>
+            <a href="{% url teams:applications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+        </li>
+    </ul>
+    {% if team|can_invite_to_team:user %}
+    <div class="action_buttons">     
+        <a href="#invite-user" class="blue_button small invite-user">{% trans 'Invite User' %}</a>
+    </div>
+    {% endif %}    
+    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    {% ordered_column "username" _("Username") %}
+                </th>
+                <th>
+                    {% ordered_column "role" _("Role") %}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members_list %}
+            <tr class="user-container">
+                <td>
+                    <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
+                    <div class="small grey">
+                        <a href="{{ member.user.get_absolute_url }}">{% trans 'View' %}</a>
+                        {% if team|is_team_manager:user and not member.user == user %}
+                            | <a href="{% url teams:remove_member team.pk member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
+                            {% if member.is_manager %}
+                                | <a href="{% url teams:demote_member team.pk member.user.pk %}" class="demote-user">
+                                    {% trans 'Demote to Member' %}
+                                  </a>
+                            {% else %}
+                                | <a href="{% url teams:promote_member team.pk member.user.pk %}" class="promote-user">
+                                    {% trans 'Promote to Manager' %}
+                                  </a>
+                            {% endif %}
+                              </a>
+                        {% endif %}
+                        {% if not member.user == user and member.user.email %}
+                        | <a href="#" class="send_message" user_id="{{ member.user.pk }}">{% trans 'Contact User' %}</a>
+                        {% endif %}
+                    </div>
+                </td>
+                <td>
+                    {% if member.is_manager %}
+                        {% trans 'Manager' %}
+                    {% else %}
+                        {% trans 'Member' %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+{% send_message %}
+
+{% if team|can_invite_to_team:user %}
+<div id="invite-user" style="display: none">
+    <h3>{% trans 'Invite user' %}</h3>
+    <label>{% trans 'Username' %}</label>
+    <input type="text" style="margin: 10px;" class="username-invite-field"/>
+    <br/>
+    <label>{% trans 'Message' %}</label>
+    <textarea class="user-invite-note"></textarea>
+    <div class="action_buttons" style="border-top: none;">     
+        <a class="blue_button small invite-button">{% trans 'Invite User' %}</a>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
