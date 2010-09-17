@@ -1,3 +1,27 @@
+# Universal Subtitles, universalsubtitles.org
+# 
+# Copyright (C) 2010 Participatory Culture Foundation
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see 
+# http://www.gnu.org/licenses/agpl-3.0.html.
+
+#  Based on: http://www.djangosnippets.org/snippets/73/
+#
+#  Modified by Sean Reifschneider to be smarter about surrounding page
+#  link context.  For usage documentation see:
+#
+#     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib.auth.models import UserManager, User as BaseUser
 from django.db import models
 from django.conf.global_settings import LANGUAGES
@@ -6,6 +30,7 @@ from django.conf import settings
 import sha
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
+from utils.files_storages import S3Storage
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -21,8 +46,7 @@ class CustomUser(BaseUser):
     )
     homepage = models.URLField(verify_exists=False, blank=True)
     preferred_language = models.CharField(max_length=16, choices=SORTED_LANGUAGES, blank=True)
-    picture = models.ImageField(blank=True,
-                                      upload_to='profile_images/%y/%m/')
+    picture = models.ImageField(blank=True, storage=S3Storage())
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)

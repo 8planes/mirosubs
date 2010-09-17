@@ -301,6 +301,10 @@ try:
 except ImportError:
     LAST_COMMIT_GUID = ''
 
+ACCESS_KEY_NAME = 'AWS_ACCESS_KEY_ID'
+SECRET_KEY_NAME = 'AWS_SECRET_ACCESS_KEY'
+AWS_STORAGE_BUCKET_NAME = ''
+
 try:
     from settings_local import *
 except ImportError:
