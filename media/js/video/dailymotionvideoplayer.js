@@ -73,7 +73,8 @@ mirosubs.video.DailymotionVideoPlayer.prototype.enterDocument = function() {
         var baseURL = 'http://www.dailymotion.com/swf';
         var queryString =
             ['?chromeless=', this.chromeless_ ? 1 : 0,
-             '&enableApi=1'].join('');
+             '&enableApi=1',
+             '&playerapiid=', this.playerAPIID_].join('');
         this.setDimensionsKnownInternal();
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
@@ -93,7 +94,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.exitDocument = function() {
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.getPlayheadTimeInternal = function() {
-    return this.player_ ? this.player_.getCurrentTime() : 0;
+    return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.progressTick_ = function(e) {
@@ -108,7 +109,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.timeUpdateTick_ = function(e) {
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.getDuration = function() {
-    return this.player_ && this.player_.getDuration ? this.player_.getDuration() : 0;
+    return this.player_ && this.player_['getDuration'] ? this.player_['getDuration']() : 0;
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.getBufferedLength = function() {
@@ -117,26 +118,26 @@ mirosubs.video.DailymotionVideoPlayer.prototype.getBufferedLength = function() {
 mirosubs.video.DailymotionVideoPlayer.prototype.getBufferedStart = function(index) {
     if (!this.player_) return 0;
     
-    var startBytes = this.player_.getVideoStartBytes();
-    var totalBytes = this.player_.getVideoBytesTotal();
+    var startBytes = this.player_['getVideoStartBytes']();
+    var totalBytes = this.player_['getVideoBytesTotal']();
     return this.getDuration() * (1.0 * startBytes / (startBytes + totalBytes));
 };
 mirosubs.video.DailymotionVideoPlayer.prototype.getBufferedEnd = function(index) {
     if (!this.player_) return 0;
     
-    var startBytes = this.player_.getVideoStartBytes();
-    var totalBytes = this.player_.getVideoBytesTotal();
-    var loadedBytes = this.player_.getVideoBytesLoaded();
+    var startBytes = this.player_['getVideoStartBytes']();
+    var totalBytes = this.player_['getVideoBytesTotal']();
+    var loadedBytes = this.player_['getVideoBytesLoaded']();
     return this.getDuration() *
         (1.0 * (startBytes + loadedBytes) / (startBytes + totalBytes));
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.getVolume = function() {
-    return this.player_ ? this.player_.getVolume() / 100.0 : 0;
+    return this.player_ ? this.player_['getVolume']() / 100.0 : 0;
 };
 mirosubs.video.DailymotionVideoPlayer.prototype.setVolume = function(volume) {
     if (this.player_) {
-        this.player_.setVolume(100 * volume);
+        this.player_['setVolume'](100 * volume);
     }
     else
         this.commands_.push(goog.bind(this.setVolume, this, volume));
@@ -144,7 +145,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.setVolume = function(volume) {
 
 mirosubs.video.DailymotionVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     if (this.player_) {
-        this.player_.seekTo(playheadTime);
+        this.player_['seekTo'](playheadTime);
         this.sendTimeUpdateInternal();
     }
     else
@@ -167,7 +168,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.videoEndedInternal = function() 
 };
 mirosubs.video.DailymotionVideoPlayer.prototype.playInternal = function() {
     if (this.player_) {
-        this.player_.playVideo();
+        this.player_['playVideo']();
         this.timeUpdateTimer_.start();
     }
     else
@@ -175,7 +176,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.playInternal = function() {
 };
 mirosubs.video.DailymotionVideoPlayer.prototype.pauseInternal = function() {
     if (this.player_) {
-        this.player_.pauseVideo();
+        this.player_['pauseVideo']();
         this.timeUpdateTimer_.stop();
     }
     else
@@ -184,7 +185,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.pauseInternal = function() {
 
 mirosubs.video.DailymotionVideoPlayer.prototype.stopLoadingInternal = function() {
     if (this.player_) {
-        this.player_.stopVideo();
+        this.player_['stopVideo']();
         return true;
     }
     else {
@@ -194,7 +195,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.stopLoadingInternal = function()
 };
 mirosubs.video.DailymotionVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     if (this.player_) {
-        this.player_.cueVideoById(this.videoSource_.getVideoId());
+        this.player_['cueVideoById'](this.videoSource_.getVideoId());
         this.setPlayheadTime(playheadTime);
 	this.setLoadingStopped(false);
     }
@@ -218,18 +219,20 @@ mirosubs.video.DailymotionVideoPlayer.prototype.playerStateChange_ = function(ne
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.getPlayerState_ = function() {
-    return this.player_ ? this.player_.getPlayerState() : -1;
+    return this.player_ ? this.player_['getPlayerState']() : -1;
 };
 
-mirosubs.video.DailymotionVideoPlayer.prototype.onDailymotionPlayerReady_ = function(playerId) {
-    var player = goog.dom.$(this.playerElemID_);
-    player.cueVideoById(this.videoSource_.getVideoId());
-    goog.array.forEach(this.commands_, function(cmd) { cmd(); });
-    this.commands_ = [];
-    window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
-    this.player_ = player;
-    this.progressTimer_.start();
-    this.player_.addEventListener('onStateChange', this.eventFunction_);
+mirosubs.video.DailymotionVideoPlayer.prototype.onDailymotionPlayerReady_ = 
+    function(playerAPIID) {
+    if (playerAPIID == this.playerAPIID_) {
+        this.player_ = goog.dom.$(this.playerElemID_);
+        this.player_['cueVideoById'](this.videoSource_.getVideoId());
+        goog.array.forEach(this.commands_, function(cmd) { cmd(); });
+        this.commands_ = [];
+        window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
+        this.progressTimer_.start();
+        this.player_['addEventListener']('onStateChange', this.eventFunction_);
+    }
 };
 
 mirosubs.video.DailymotionVideoPlayer.prototype.disposeInternal = function() {
