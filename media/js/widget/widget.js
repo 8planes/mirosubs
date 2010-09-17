@@ -98,7 +98,8 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
     this.videoTab_.setText("Loading...");
     this.videoTab_.showLoading(true);
 
-    this.state_ = new mirosubs.widget.InitialState(this, this.videoURL_, this.baseState_);
+    this.state_ = new mirosubs.widget.InitialState(
+        this, this.videoURL_, this.baseState_);
     this.state_.initialize(goog.bind(this.initializeState_, this));
 };
 
@@ -131,6 +132,10 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     if (this.baseState_.NOT_NULL)
         this.subsLoaded_(
             this.baseState_.LANGUAGE, result['subtitles']);
+    else if (result['subtitles']) 
+        // subs loaded based on autoplay preferences
+        this.subsLoaded_(
+            result['subtitles_language'], result['subtitles']);
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(goog.bind(this.subtitle_, this));
     else if (this.translateImmediately_) {

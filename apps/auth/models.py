@@ -20,13 +20,15 @@ class CustomUser(BaseUser):
         (DONT_AUTOPLAY, 'Don\'t autoplay subtitles')
     )
     homepage = models.URLField(verify_exists=False, blank=True)
-    preferred_language = models.CharField(max_length=16, choices=SORTED_LANGUAGES, blank=True)
+    preferred_language = models.CharField(
+        max_length=16, choices=SORTED_LANGUAGES, blank=True)
     picture = models.ImageField(blank=True,
-                                      upload_to='profile_images/%y/%m/')
+                                upload_to='profile_images/%y/%m/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
-    autoplay_preferences = models.IntegerField(choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
+    autoplay_preferences = models.IntegerField(
+        choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
     award_points = models.IntegerField(default=0)
     
     objects = UserManager()

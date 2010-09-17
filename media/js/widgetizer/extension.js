@@ -120,7 +120,6 @@ mirosubs.Extension.prototype.createLearnMoreLink_ = function($d) {
 };
 
 (function() {
-    
     var extension = mirosubs.Extension.getInstance();
     window['mirosubs'] = mirosubs;
     mirosubs['showExtension'] = function(enabled) {

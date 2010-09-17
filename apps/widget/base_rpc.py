@@ -26,7 +26,8 @@ import widget
 LANGUAGES_MAP = dict(LANGUAGES)
 
 class BaseRpc:
-    def show_widget(self, request, video_url, base_state=None):
+    def show_widget(self, request, video_url, is_remote, 
+                    browser_language, base_state=None):
         video, created = models.Video.get_or_create_for_url(video_url)
         video.widget_views_count += 1
         video.save()
@@ -50,12 +51,30 @@ class BaseRpc:
                 base_state.get('language', None),
                 base_state.get('revision', None))
         else:
+            if is_remote:
+                self._maybe_add_autoplay_subtitles(
+                    return_value, request.user, video, browser_language)
             return_value['subtitle_count'] = self._subtitle_count(
                 request.user, video)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
         return_value['embed_version'] = settings.EMBED_JS_VERSION
         return return_value
+
+    def _maybe_add_autoplay_subtitles(
+        self, return_value, user, video, browser_language):
+
+        language = None
+        if user.is_anonymous() or user.preferred_language is None:
+            language = browser_language
+        else:
+            language = user.preferred_language
+
+        if language is not None:
+            subs = self._autoplay_subtitles(user, video, language)
+            if subs is not None:
+                return_value['subtitles'] = subs
+                return_value['subtitles_language'] = language
 
     def get_my_user_info(self, request):
         if request.user.is_authenticated():
