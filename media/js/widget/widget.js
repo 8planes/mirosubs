@@ -116,10 +116,11 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.videoID_ = result['video_id'];
 
     var initialTab = result['initial_tab'];
+    var subtitles = result['subtitles'];
     var IS = mirosubs.widget.VideoTab.InitialState;
 
-    var subtitleCount = result['subtitles'] ? 
-        result['subtitles'].length : result['subtitle_count'];
+    var subtitleCount = subtitles ? 
+        subtitles.length : result['subtitle_count'];
 
     this.addChild(this.popupMenu_ = new mirosubs.widget.DropDown(
         this, this.videoID_, subtitleCount, 
@@ -129,13 +130,13 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.setInitialVideoTabState_(initialTab, result['owned_by']);
     this.videoTab_.showNudge(false);
 
-    if (this.baseState_.NOT_NULL)
+    if (this.baseState_.NOT_NULL && ((subtitles && subtitles.length > 0) || this.baseState_.LANGUAGE))
         this.subsLoaded_(
-            this.baseState_.LANGUAGE, result['subtitles']);
-    else if (result['subtitles']) 
+            this.baseState_.LANGUAGE, subtitles);
+    else if (subtitles && subtitles.length > 0) 
         // subs loaded based on autoplay preferences
         this.subsLoaded_(
-            result['subtitles_language'], result['subtitles']);
+            result['subtitles_language'], subtitles);
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(goog.bind(this.subtitle_, this));
     else if (this.translateImmediately_) {
