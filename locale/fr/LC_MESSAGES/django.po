@@ -79,7 +79,7 @@ msgstr "Vous n'êtes pas authentifié."
 #: .\apps\profiles\forms.py:51
 #, python-format
 msgid "Personal message from %(sender)s on universalsubtitles.org"
-msgstr ""
+msgstr "Message personnel de %(sender) sur universalsubtitles.org"
 
 #: .\apps\profiles\forms.py:67
 msgid "Confirm new password:"
@@ -99,75 +99,76 @@ msgstr "Cette adresse email est déjà utilisée."
 
 #: .\apps\videos\forms.py:46
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr ""
+msgstr "Quelqu'un sous titre déjà cette vidéo actuellement. Essayez plus tard."
 
 #: .\apps\videos\forms.py:50
 msgid "You can't edit this video."
-msgstr ""
+msgstr "Vous ne pouvez pas éditer cette vidéo"
 
 #: .\apps\videos\forms.py:53
 msgid "This video has translations."
-msgstr ""
+msgstr "Cette vidéo possède des traductions."
 
 #: .\apps\videos\forms.py:59
 msgid "File size should be less 1Mb"
-msgstr ""
+msgstr "La taille du fichier doit être inférieur à 1Mb."
 
 #: .\apps\videos\forms.py:62
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
-msgstr ""
+msgstr "Format incorrect. Le fichier doit être de type .srt, .ssa, ou .xml (format TTML)."
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect subtitles format"
-msgstr ""
+msgstr "Format incorrect."
 
 #: .\apps\videos\forms.py:158
 msgid "Incorrect video url"
-msgstr ""
+msgstr "URL de vidéo incorrect."
 
 #: .\apps\videos\forms.py:202
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr ""
+msgstr "Entrez des adresse email valide, séparées par des virgules."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
-msgstr ""
+msgstr "Partagez vos sous-titres."
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr ""
+msgstr "A présent, tout le monde peut regarder la vidéo sous-titrée - Essayez !"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
-msgstr ""
+msgstr "Puis faites passer le mot et invitez vos amis pour aider à traduire :"
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
-msgstr ""
+msgstr "Poster sur Facebook"
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
-msgstr ""
+msgstr "Poster sur Twitter"
 
 #: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
-msgstr ""
+msgstr "Envoyer par mail"
 
 #: .\templates\_share_widget.html.py:15
 msgid "Embed Code"
-msgstr ""
+msgstr "Code d'intégration"
 
 #: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
+#, fuzzy
 msgid "Permalink"
-msgstr ""
+msgstr "Lien permanent"
 
 #: .\templates\_sharing_widget.html.py:20
 msgid "Embed this video in your site"
-msgstr ""
+msgstr "Intégrez cette vidéo a votre site"
 
 #: .\templates\_testing_widget.html.py:3
 msgid "We&#8217;d like help testing our subtitling widget"
-msgstr ""
+msgstr "Aidez nous à tester notre widget de sous-titrage"
 
 #: .\templates\_testing_widget.html.py:5
 msgid "Just launch our feedback form and try captioning a video"
