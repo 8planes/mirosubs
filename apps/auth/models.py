@@ -1,3 +1,27 @@
+# Universal Subtitles, universalsubtitles.org
+# 
+# Copyright (C) 2010 Participatory Culture Foundation
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see 
+# http://www.gnu.org/licenses/agpl-3.0.html.
+
+#  Based on: http://www.djangosnippets.org/snippets/73/
+#
+#  Modified by Sean Reifschneider to be smarter about surrounding page
+#  link context.  For usage documentation see:
+#
+#     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib.auth.models import UserManager, User as BaseUser
 from django.db import models
 from django.conf.global_settings import LANGUAGES
@@ -6,6 +30,7 @@ from django.conf import settings
 import sha
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
+from utils.files_storages import S3Storage
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -15,15 +40,16 @@ class CustomUser(BaseUser):
     AUTOPLAY_ON_LANGUAGES = 2
     DONT_AUTOPLAY = 3
     AUTOPLAY_CHOICES = (
-        (AUTOPLAY_ON_BROWSER, 'Autoplay subtitles based on browser preferred languages'),
+        (AUTOPLAY_ON_BROWSER, 
+         'Autoplay subtitles based on browser preferred languages'),
         (AUTOPLAY_ON_LANGUAGES, 'Autoplay subtitles in languages I know'),
         (DONT_AUTOPLAY, 'Don\'t autoplay subtitles')
     )
     homepage = models.URLField(verify_exists=False, blank=True)
     preferred_language = models.CharField(
         max_length=16, choices=SORTED_LANGUAGES, blank=True)
-    picture = models.ImageField(blank=True,
-                                upload_to='profile_images/%y/%m/')
+    picture = models.ImageField(
+        blank=True, storage=S3Storage(), upload_to='/pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
@@ -58,12 +84,6 @@ class CustomUser(BaseUser):
     
     def hash_for_video(self, video_id):
         return sha.new(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
-    
-    def _get_unique_checks(self, exclude=None):
-        #add email field validate like unique
-        unique_checks, date_checks = super(CustomUser, self)._get_unique_checks(exclude)
-        unique_checks.append((CustomUser, ('email',)))
-        return unique_checks, date_checks
     
     @classmethod
     def get_youtube_anonymous(cls):

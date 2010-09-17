@@ -212,7 +212,7 @@ class Video(models.Model):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(
                 bliptv_fileid=bliptv_fileid,
-                defaults={'video_type': VIDEO_TYPE_BLIPTV, 
+                defaults={'video_type': VIDEO_TYPE_HTML5, 
                           'allow_community_edits': True})
             if created:
                 video.title = blip.scrape_title(video_url)

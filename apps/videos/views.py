@@ -36,6 +36,7 @@ from datetime import datetime
 from videos.utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
+from gdata.service import RequestError
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -88,7 +89,7 @@ def create(request):
             video_url = video_form.cleaned_data['video_url']
             try:
                 video, created = Video.get_or_create_for_url(video_url)
-            except VidscraperError:
+            except (VidscraperError, RequestError):
                 vidscraper_error = True
                 return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
