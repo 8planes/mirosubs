@@ -466,7 +466,12 @@ mirosubs.widget.Widget.prototype.subsLoaded_ =
         this.videoTab_.showNudge(false);
     }
 
-    this.videoTab_.setText(this.state_.getVideoTabText());
+    // FIXME: duplication with mirosubs.widget.ViewState
+    var tabText = "Original Subtitles";
+    if (lang)
+        tabText = lang['name'] + " Subtitles";
+
+    this.videoTab_.setText(tabText);
     this.popupMenu_.setCurrentLanguageCode(languageCode);
 };
 

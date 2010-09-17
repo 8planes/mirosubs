@@ -236,15 +236,6 @@ mirosubs.isEmbeddedInDifferentDomain = function() {
     return mirosubs.siteConfig != null;
 };
 
-mirosubs.browserLanguage = function() {
-    if (navigator['userLanguage'])
-        return navigator['userLanguage'];
-    else if (navigator['language'])
-        return navigator['language'];
-    else
-        return 'en';
-};
-
 mirosubs.LoginEvent = function(username) {
     this.type = mirosubs.EventType.LOGIN;
     this.username = username;

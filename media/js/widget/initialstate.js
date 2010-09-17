@@ -34,13 +34,12 @@ mirosubs.widget.InitialState.prototype.initialize = function(callback) {
         'show_widget', {
             'video_url' : this.videoURL_,
             'is_remote' : mirosubs.isEmbeddedInDifferentDomain(),
-            'browser_language' : mirosubs.browserLanguage(),
             'base_state': this.baseState_.ORIGINAL_PARAM
         },
         function (result) {
             if (result['subtitles'] && result['subtitles'].length > 0)
                 that.videoTabText_ = 
-                mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE;
+                    mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE;
             callback(result); 
         });
 };
