@@ -17,5 +17,20 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 import re
+import httplib
+import json
 
 DAILYMOTION_REGEX = re.compile(r'https?://(?:[^/]+[.])?dailymotion.com/video/(?P<video_id>[-0-9a-zA-Z]+)(?:_.*)?')
+
+def get_video_id(video_url):
+    return DAILYMOTION_REGEX.match(video_url).group(1)
+
+def get_metadata(video_url):
+    video_id = get_video_id(video_url)
+    
+    conn = httplib.HTTPConnection("www.dailymotion.com")
+    conn.request("GET", "/json/video/" + video_id)
+    response = conn.getresponse()
+    body = response.read()
+
+    return json.loads(body)
