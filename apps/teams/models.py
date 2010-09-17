@@ -60,7 +60,7 @@ class Team(models.Model):
     
     name = models.CharField(_(u'name'), max_length=250, unique=True)
     description = models.TextField(_(u'description'), blank=True)
-    logo = models.ImageField(_(u'logo'), storage=S3Storage(), blank=True)
+    logo = models.ImageField(_(u'logo'), storage=S3Storage(), blank=True, upload_to='/logo/')
     membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES, default=OPEN)
     video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES, default=MEMBER_REMOVE)
     is_visible = models.BooleanField(_(u'is public visible?'), default=True)

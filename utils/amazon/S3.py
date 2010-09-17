@@ -21,6 +21,7 @@ import urlparse
 import xml.sax
 
 DEFAULT_HOST = 's3.amazonaws.com'
+DEFAULT_HOST = 'mechanicalturk.sandbox.amazonaws.com'
 PORTS_BY_SECURITY = { True: 443, False: 80 }
 METADATA_PREFIX = 'x-amz-meta-'
 AMAZON_HEADER_PREFIX = 'x-amz-'

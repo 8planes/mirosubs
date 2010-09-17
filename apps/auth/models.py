@@ -46,7 +46,7 @@ class CustomUser(BaseUser):
     )
     homepage = models.URLField(verify_exists=False, blank=True)
     preferred_language = models.CharField(max_length=16, choices=SORTED_LANGUAGES, blank=True)
-    picture = models.ImageField(blank=True, storage=S3Storage())
+    picture = models.ImageField(blank=True, storage=S3Storage(), upload_to='/pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)

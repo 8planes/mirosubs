@@ -23,13 +23,11 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from mimetypes import guess_type
-from StringIO import StringIO
-import urlparse
 import os
 
 from django.core.exceptions import ImproperlyConfigured
-from django.core.filestorage.base import Storage, RemoteFile
-from django.core.filestorage.filesystem import FileSystemStorage
+from django.core.files.storage import Storage
+from django.core.files import File
 from django.utils.functional import curry
 from django.conf import settings
 
@@ -90,7 +88,7 @@ class S3Storage(Storage):
     def open(self, filename, mode='rb'):
         response = self.connection.get(self.bucket, filename)
         writer = curry(self._put_file, filename)
-        return RemoteFile(self, response.object.data, mode, writer)
+        return File(response.object.data)
 
     def exists(self, filename):
         response = self.connection.make_request('HEAD', self.bucket, filename)
