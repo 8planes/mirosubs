@@ -129,19 +129,20 @@
             {% endif %}
         </div>
         
-        <ul class="revision_list table_body">
+        <table cellpadding="0" cellspacing="0">
           {% for item in captions %}
-            <li {% cycle 'class="even"' '' %}>
-                {% if item.1.display_time %}
+            <tr {% cycle 'class="even"' '' %}>
+                  <td>
+                    {% if item.1.display_time %}
                     <span class="time-span time_link">
                         <span class="data">{{item.1.start_time}}</span>
                         <span class="badgy start">
-                            {{ item.1.display_time }}
+                            <span class="stamp_text">{{ item.1.display_time }}</span>
                         </span>
                         {% if item.1.display_end_time %}
                           <span class="connector"></span>
                           <span class="badgy end">
-                              {{ item.1.display_end_time }}
+                              <span class="stamp_text">{{ item.1.display_end_time }}</span>
                           </span> 
                         {% endif %}
                     </span>                
@@ -152,9 +153,10 @@
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.1.subtitle_text }}
                   </span>
-            </li>
+                  </td>
+            </tr>
           {% endfor %}
-        </ul>
+        </table>
     </div>
     
     <div class="right_column">
@@ -183,32 +185,34 @@
             {% endif %}
         </div>
         
-        <ul class="revision_list table_body">
+        <table cellpadding="0" cellspacing="0">
 
           {% for item in captions %}
-            <li {% cycle 'class="even"' '' %}>
+            <tr {% cycle 'class="even"' '' %}>
+                  <td>
+
                 {% if item.0.display_time %}
                     <span class="time-span time_link">
                         <span class="data">{{item.0.start_time}}</span>
                         <span class="badgy start">
-                            {{ item.0.display_time }}
+                           <span class="stamp_text">{{ item.0.display_time }}</span>
                         </span>
                         {% if item.0.display_end_time %}
                           <span class="connector"></span>
                           <span class="badgy end">
-                              {{ item.0.display_end_time }}
+                              <span class="stamp_text">{{ item.0.display_end_time }}</span>
                           </span> 
                         {% endif %}
                     </span>                
-            
                 {% else %}
                 <span class="time-span"><span class="badgy no-sync">{% trans 'Not Synced' %}</span></span> 
                 {% endif %}
                   <span {% if item.2.text %}class="time_change"{% endif %}>
                     {{ item.0.subtitle_text }}
                   </span>
-            </li>
+                  </td>
+            </tr>
           {% endfor %}
-        </ul>
+        </table>
     </div>    
 {% endblock %}
