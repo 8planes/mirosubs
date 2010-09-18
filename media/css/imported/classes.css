@@ -5,6 +5,34 @@
 
 /////////////////////////////////////////////*/
 
+/*//////////   ~  Thumbnails  ~   //////////*/
+
+
+.thumbnail_medium{
+  width:100px;
+  height:100px;
+  float: left;
+  padding: 4px;
+  margin-right: 30px;
+  background:  url(../../images/default_thumb.png) 0px top no-repeat !important;
+  }
+
+.thumbnail_small{
+  width: 50px;
+  height: 50px;
+  float: left;
+  padding: 4px;
+  margin-right: 30px;
+  background:  url(../../images/default_thumb.png) 0px bottom no-repeat !important;
+  }
+
+
+.thumbnail_medium img,
+.thumbnail_small img{
+  border: none !important;
+  }
+
+
 
 
 /*//////////   ~  Inline Type  ~   //////////*/
@@ -15,18 +43,11 @@ h2.main-title span{
   font-weight: normal
   }
 
-
-
-
 .center{
   text-align: center;
   }
   
-
-
-.bull{
-padding: 0 10px !important;
-}
+.bull{ padding: 0 10px !important;}
 
 
 /*//////////   ~  Block Type  ~   //////////*/
@@ -189,15 +210,6 @@ padding: 0 10px !important;
 /*//////////   ~  Inline Box Styling  ~   //////////*/
 
 
-.badgy{
-  background: #bcd6dd;
-  padding: 6px 9px 4px;
-  -moz-border-radius: 3px;  
-  -webkit-border-radius: 3px;
-  font-size: 11px;
-  }
-
-
 
 .styled{
   border: 1px solid #aaa;;
@@ -246,7 +258,7 @@ padding: 0 10px !important;
   padding: 20px;
   margin: 0;
   color: #fff;  
-clear: both;
+  clear: both;
   }
 
 .action_buttons{ border-top: 1px solid #fff;}
