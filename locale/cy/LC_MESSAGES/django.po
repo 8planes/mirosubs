@@ -428,6 +428,13 @@ msgid ""
 "    collaboration on subtitles and translations. Stay tuned!</p>\n"
 "  "
 msgstr ""
+"\n"
+" <p style=\"clear: both\"> <strong>Unrhyw adborth?</strong> Defnyddiwch y ffurflen ar waelod y \n"
+" y dudalen hon i roi eich adborth, gwallau neu farn i ni. </p> \n"
+" <p> <strong>Beth nesa?</strong> Rydym yn gweithio ar \n"
+" fersiwn alffa o'n gwefan gymunedol a fydd yn galluogi \n"
+" cydweithio syml ar isdeitlau a chyfieithiadau. Cadwch olwg! </p> \n"
+"  "
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
@@ -495,15 +502,15 @@ msgstr "Pam alla'i ddim newid yr amser ar gyfieithiad?"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
-msgstr ""
+msgstr "Ein nod gydag Isdeitlau Ymhobmab yw ei wneud yn hawdd i unrhyw un i ychwanegu isdeitlau, capsiynau, neu gyfieithu bron unrhyw fideo ar y we. Ymhellach, rydym yn adeiladu offer i gydweithio, ac yn gobeithio denu corff mawr o gyfranwyr i gynorthwyo gyda'r ymdrech isdeitlo. Mae'r meddalwedd rydym yn adeilad yn god agored ac am ddim a gellir ei ddefnyddio a'i wella gan unrhyw un."
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
-msgstr ""
+msgstr "Mae croeso i chi roi cynnig ar y dechnoleg isdeitlo yn ein <a href=\"/demo/\">demo alffa</a>. Nid yw'r demo yn eich galluogi i gadw isdeitlau, ond bydd hynny'n cynnwys cael ei gynnwys yn y lansiad cymuned alffa (wedi'i dargedu ar gyfer Gorffennaf 2010)."
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
-msgstr ""
+msgstr "Mae isdeitlau fideo yn drysorfa o botensial heb ei gyffwrdd."
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
@@ -519,7 +526,7 @@ msgstr "Fel addysgwr, storïwr, gwyddonydd, neu unrhyw un gyda neges, mae maint 
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
-msgstr ""
+msgstr "Mae'r Sefydliad Diwylliant Cyfranogol yn sefydliad di-elw 501c3 gyda'r bwriad, drwy feddalwedd ac eiriolaeth, o adeiladu gofod cyfryngol tecach, mwy agored a democrataidd. Roedd yr SDC yn gweld bwlch yn y farchnad am fwy o isdeitlo agored a chydweithredol - mae Isdeitlau Ymhobman yn ymgais i lenwi'r angen hwnnw."
 
 #: .\templates\faq.html.py:61
 msgid "Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations."
@@ -654,11 +661,11 @@ msgstr "Cymuned ar lein ar gyfer cydweithio ar isdeitlo a chyfieithu fideos y by
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "Protocol Ymholiad Isdeitlau"
 
 #: .\templates\index.html.py:65
 msgid "An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video."
-msgstr ""
+msgstr "Safon agored sy'n caniatáu estyniadau Firefox, chwaraewyr fideo pen desg, gwefannau, porwyr - unrhyw gleient - ddod o hyd i ac adalw isdeitlau ar gyfer unrhyw fideo."
 
 #: .\templates\index.html.py:75
 msgid "Get updates and find out first when we launch"
