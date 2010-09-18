@@ -1222,72 +1222,72 @@ msgstr ""
 
 #: .\templates\videos\_error_feedback_form.html.py:7
 msgid "Please let us know what you were doing when you encountered this error."
-msgstr ""
+msgstr "Merci de nous informer de ce que vous faisiez lorsque l'erreur est apparue."
 
 #: .\templates\videos\_error_feedback_form.html.py:9
 msgid "Sorry, the page you requested was not found."
-msgstr ""
+msgstr "Désolé, la page souhaitée n'a pas été trouvée."
 
 #: .\templates\videos\_feedback_form.html.py:28
 msgid "What did you think about the site?"
-msgstr ""
+msgstr "Que pensez-vous du site ?"
 
 #: .\templates\videos\_feedback_form.html.py:32
 msgid "Please let us know if you have any comments, questions, or suggestions!"
-msgstr ""
+msgstr "Merci de nous transmettre tous vos commentaires, questions ou suggestions !"
 
 #: .\templates\videos\_feedback_form.html.py:37
 msgid "Your email:"
-msgstr ""
+msgstr "Votre adresse email :"
 
 #: .\templates\videos\_feedback_form.html.py:44
 msgid "Your Feedback"
-msgstr ""
+msgstr "Votre commentaire"
 
 #: .\templates\videos\_feedback_form.html.py:48
 msgid "Send Feedback"
-msgstr ""
+msgstr "Envoyer commentaire"
 
 #: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
-msgstr ""
+msgstr "Merci pour votre commentaire."
 
 #: .\templates\videos\_feedback_form.html.py:55
 msgid "If you would like to perform some additional testing"
-msgstr ""
+msgstr "Si vous désirez effectuez davantage de tests"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "please go to our"
-msgstr ""
+msgstr "rendez-vous sur nos"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "Litmus regression tests"
-msgstr ""
+msgstr "tests de régression Litmus."
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "For new testers, we have"
-msgstr ""
+msgstr "Pour les nouveaux testeurs, nous avons"
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "a getting started guide"
-msgstr ""
+msgstr "un guide de démarrage rapide"
 
 #: .\templates\videos\_feedback_form.html.py:59
 msgid "Send more feedback."
-msgstr ""
+msgstr "Envoyer un autre commentaire."
 
 #: .\templates\videos\_feedback_form.html.py:64
 msgid "Enter feedback please."
-msgstr ""
+msgstr "Merci d'entrer votre commentaire."
 
 #: .\templates\videos\_recent_activity.html.py:3
 msgid "View all"
-msgstr ""
+msgstr "Tout afficher"
 
 #: .\templates\videos\_upload_subtitles.html.py:4
 #: .\templates\videos\_upload_subtitles.html.py:9
 msgid "Upload Subtitles"
-msgstr ""
+msgstr "Envoyer des sous-titres"
 
 #: .\templates\videos\_upload_subtitles.html.py:14
 msgid ""
@@ -1296,26 +1296,30 @@ msgid ""
 "                    or .xml (for TTML) are accepted.\n"
 "                    "
 msgstr ""
+"\n"
+"                    Notre site accepte les formats SRT, SSA, et TTML. Seuls les fichiers se terminant par .srt, .ssa, \n"
+"                    ou .xml (pour TTML) sont acceptés.\n"
+"                    "
 
 #: .\templates\videos\_upload_subtitles.html.py:29
 msgid "Login to upload subtitles"
-msgstr ""
+msgstr "Connectez-vous pour envoyer des sous-titres"
 
 #: .\templates\videos\_upload_subtitles.html.py:38
 msgid "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
-msgstr ""
+msgstr "Si vous pensez que votre fichier de sous-titres est compatible, <a href='mailto:feedback@universalsubtitles.org'>envoyez-le nous</a>"
 
 #: .\templates\videos\_video_activity.html.py:4
 msgid "Activity"
-msgstr ""
+msgstr "Activité"
 
 #: .\templates\videos\_video_activity.html.py:7
 msgid "Happened"
-msgstr ""
+msgstr "Arrivé à"
 
 #: .\templates\videos\_video_activity.html.py:21
 msgid "submited this video."
-msgstr ""
+msgstr "soumis cette vidéo"
 
 #: .\templates\videos\_video_activity.html.py:25
 #, python-format
@@ -1324,6 +1328,9 @@ msgid ""
 "            changed title to \"%(title)s\"\n"
 "            "
 msgstr ""
+"\n"
+"            changé le titre en \"%(title)s\"\n"
+"            "
 
 #: .\templates\videos\_video_activity.html.py:32
 #, python-format
@@ -1332,51 +1339,56 @@ msgid ""
 "                commented on %(language)s.\n"
 "                "
 msgstr ""
+"\n"
+"                a ajouté un commentaire sur %(language)s.\n"
+"                "
 
 #: .\templates\videos\_video_activity.html.py:36
 msgid "commented on this video."
-msgstr ""
+msgstr "a commenté cette vidéo."
 
 #: .\templates\videos\_video_activity.html.py:41
 msgid "edited"
-msgstr ""
+msgstr "édité"
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
-msgstr ""
+msgstr "sous-titres originaux"
 
 #: .\templates\videos\_video_activity.html.py:46
 msgid "translation"
-msgstr ""
+msgstr "traduction"
 
 #: .\templates\videos\_video_activity.html.py:48
+#, fuzzy
 msgid "for"
-msgstr ""
+msgstr "pour"
 
 #: .\templates\videos\_video_activity.html.py:53
+#, fuzzy
 msgid "ago"
-msgstr ""
+msgstr "il y a"
 
 #: .\templates\videos\actions_list.html.py:8
 msgid "All activities"
-msgstr ""
+msgstr "Toutes les activités"
 
 #: .\templates\videos\actions_list.html.py:12
 #: .\templates\videos\history.html.py:210
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: .\templates\videos\actions_list.html.py:13
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: .\templates\videos\actions_list.html.py:14
 msgid "Video"
-msgstr ""
+msgstr "Vidéo"
 
 #: .\templates\videos\actions_list.html.py:24
 msgid "There are no activities."
-msgstr ""
+msgstr "Il n'y a aucune activité"
 
 #: .\templates\videos\create.html.py:9
 msgid ""
@@ -1388,10 +1400,17 @@ msgid ""
 "    <a href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!\"\n"
 "    "
 msgstr ""
+"\n"
+"    \"Désolé, nous n'avons pu identifier la vidéo pour le lien que vous avez envoyé. Peut-être \n"
+" s'agit-il d'un lien que nous ne pouvons reconnaitre, ou un lien vers une page\n"
+"   contenant plusieurs vidéos.  Essayez d'envoyer un antre lien vers la vidéo que\n"
+"    vous voulez soumettre.  Si vous pensez qu'il s'agit d'une erreur,\n"
+"    <a href=\"mailto:feedback@universalsubtitles.org\">contactez-nous</a>!\"\n"
+"    "
 
 #: .\templates\videos\create.html.py:23
 msgid "Begin"
-msgstr ""
+msgstr "Commencer"
 
 #: .\templates\videos\create.html.py:25
 msgid ""
@@ -1401,10 +1420,15 @@ msgid ""
 "      Ustream.tv\n"
 "      "
 msgstr ""
+"\n"
+"      Pour mettre en place des sous-titres collaboratifs, entrez un URL menant à une vidéo dans<br />\n"
+"      un de ces formats : Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, Fora.tv,\n"
+"      Ustream.tv\n"
+"      "
 
 #: .\templates\videos\diffing.html.py:37
 msgid "Subtitles will be rolled back to a previous version"
-msgstr ""
+msgstr "Les sous-titres seront rétablis à la version précédente."
 
 #: .\templates\videos\diffing.html.py:43
 msgid "You need to log in to do that."
