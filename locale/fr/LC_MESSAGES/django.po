@@ -1524,11 +1524,11 @@ msgstr ""
 #: .\templates\videos\email_start_notification.html.py:23
 #: .\templates\videos\email_title_changed.html.py:28
 msgid "Don't send any more emails about this particular video."
-msgstr ""
+msgstr "Ne m'envoyez plus d'emails à propos de cette vidéo."
 
 #: .\templates\videos\email_notification.html.py:27
 msgid "SUMMARY OF CHANGES"
-msgstr ""
+msgstr "RÉSUMÉ DES CHANGEMENTS"
 
 #: .\templates\videos\email_notification.html.py:28
 #, python-format
@@ -1537,6 +1537,9 @@ msgid ""
 "        %(change_percent)s of the text was changed.\n"
 "    "
 msgstr ""
+"\n"
+"        %(change_percent)s du texte a été modifié.\n"
+"    "
 
 #: .\templates\videos\email_notification.html.py:31
 #, python-format
@@ -1545,28 +1548,31 @@ msgid ""
 "        %(change_percent)s of the timing was changed.\n"
 "    "
 msgstr ""
+"  \n"
+"        %(change_percent)s du timing a été modifié.\n"
+"    "
 
 #: .\templates\videos\email_notification.html.py:37
 msgid "Here is a list of text changes:"
-msgstr ""
+msgstr "Voici la liste des changements de texte :"
 
 #: .\templates\videos\email_notification.html.py:41
 #: .\templates\videos\email_title_changed.html.py:19
 msgid "NEW"
-msgstr ""
+msgstr "NOUVEAU"
 
 #: .\templates\videos\email_notification.html.py:42
 #: .\templates\videos\email_title_changed.html.py:23
 msgid "OLD"
-msgstr ""
+msgstr "ANCIEN"
 
 #: .\templates\videos\email_notification.html.py:49
 msgid "To view the current and previous versions side by side, follow this"
-msgstr ""
+msgstr "Pour voir la version actuelle et précédente l'une à côté de l'autre, suivez ce"
 
 #: .\templates\videos\email_notification.html.py:50
 msgid "link"
-msgstr ""
+msgstr "lien"
 
 #: .\templates\videos\email_start_notification.html.py:4
 #, python-format
@@ -1575,23 +1581,26 @@ msgid ""
 "    Great news! %(user)s has just started a %(language)s \n"
 "    translation of your video"
 msgstr ""
+"\n"
+"    Bonne nouvelle ! %(user)s vient de commencer une traduction en %(language)s \n"
+"    de votre vidéo"
 
 #: .\templates\videos\email_start_notification.html.py:8
 msgid "You can review the translation and thank them for their contribution on this page:"
-msgstr ""
+msgstr "Vous pouvez vérifier la traduction et les remercier pour leur contribution sur cette page :"
 
 #: .\templates\videos\email_start_notification.html.py:9
 msgid "Translation homepage"
-msgstr ""
+msgstr "Page d'accueil de la traduction"
 
 #: .\templates\videos\email_start_notification.html.py:12
 msgid "Thanks for your great work,"
-msgstr ""
+msgstr "Merci pour votre bon travail,"
 
 #: .\templates\videos\email_start_notification.html.py:20
 #: .\templates\videos\email_title_changed.html.py:16
 msgid "My profile / preferences"
-msgstr ""
+msgstr "Mon profil / préférences"
 
 #: .\templates\videos\email_title_changed.html.py:4
 #, python-format
@@ -1599,19 +1608,21 @@ msgid ""
 "A title of video you contributed to \n"
 "    has been edited by %(editor)s."
 msgstr ""
+"Un titre de vidéo à laquelle vous avez contribuée \n"
+"    a été édité par %(editor)s."
 
 #: .\templates\videos\email_title_changed.html.py:8
 msgid "We've also included a rough summary of the changes below.  Thanks so much!"
-msgstr ""
+msgstr "Nous avons également inclut un résumé rapide des changement ci-dessous. Merci beaucoup !"
 
 #: .\templates\videos\email_title_changed.html.py:21
 #: .\templates\videos\email_title_changed.html.py:25
 msgid "TITLE"
-msgstr ""
+msgstr "TITRE"
 
 #: .\templates\videos\history.html.py:73
 msgid "Select two revisions for compare, please"
-msgstr ""
+msgstr "Sélectionnez deux révisions à comparer, s'il vous plait."
 
 #: .\templates\videos\history.html.py:130
 #, python-format
@@ -1620,6 +1631,9 @@ msgid ""
 "            %(title)s with subtitles | Universal Subtitles\n"
 "        "
 msgstr ""
+"\n"
+"            %(title)s avec sous-titres | Universal Subtitles\n"
+"        "
 
 #: .\templates\videos\history.html.py:134
 #, python-format
@@ -1628,6 +1642,9 @@ msgid ""
 "            %(title)s with %(language)s subtitles | Universal Subtitles\n"
 "        "
 msgstr ""
+"\n"
+"            %(title)s avec sous-titres en %(language)s | Universal Subtitles\n"
+"        "
 
 #: .\templates\videos\history.html.py:158
 msgid "Edit Subtitles"
