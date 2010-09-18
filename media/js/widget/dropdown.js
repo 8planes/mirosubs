@@ -281,14 +281,20 @@ mirosubs.widget.DropDown.prototype.setTranslationLanguages =
 };
 
 mirosubs.widget.DropDown.prototype.toggleShow = function() {
-    if (this.shown) {
-        goog.style.showElement(this.getElement(), false);
-        this.shown = false;
-    }
-    else {
-        goog.style.showElement(this.getElement(), true);
-        this.shown = true;
-    }
+    if (this.shown)
+        this.hide();
+    else
+        this.show();
+};
+
+mirosubs.widget.DropDown.prototype.hide = function() {
+    goog.style.showElement(this.getElement(), false);
+    this.shown = false;
+};
+
+mirosubs.widget.DropDown.prototype.show = function() {
+    goog.style.showElement(this.getElement(), true);
+    this.shown = true;
 };
 
 mirosubs.widget.DropDown.prototype.loginStatusChanged = function() {

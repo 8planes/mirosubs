@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.global_settings import LANGUAGES
+from django.utils import translation
 from videos import models
 from django.conf import settings
 from videos.models import VIDEO_SESSION_KEY
@@ -26,7 +27,7 @@ import widget
 LANGUAGES_MAP = dict(LANGUAGES)
 
 class BaseRpc:
-    def show_widget(self, request, video_url, base_state=None):
+    def show_widget(self, request, video_url, is_remote, base_state=None):
         video, created = models.Video.get_or_create_for_url(video_url)
         video.widget_views_count += 1
         video.save()
@@ -50,12 +51,28 @@ class BaseRpc:
                 base_state.get('language', None),
                 base_state.get('revision', None))
         else:
+            if is_remote:
+                self._maybe_add_autoplay_subtitles(
+                    request, video, return_value)
             return_value['subtitle_count'] = self._subtitle_count(
                 request.user, video)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
         return_value['embed_version'] = settings.EMBED_JS_VERSION
         return return_value
+
+    def _maybe_add_autoplay_subtitles(self, request, video, return_value):
+        language = None
+        if request.user.is_anonymous() or request.user.preferred_language == '':
+            language = translation.get_language_from_request(request)
+        else:
+            language = request.user.preferred_language
+
+        if language is not None and language != '':
+            subs = self._autoplay_subtitles(request.user, video, language, None)
+            if subs is not None:
+                return_value['subtitles'] = subs
+                return_value['subtitles_language'] = language
 
     def get_my_user_info(self, request):
         if request.user.is_authenticated():

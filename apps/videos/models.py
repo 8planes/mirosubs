@@ -30,7 +30,7 @@ from gdata.youtube.service import YouTubeService
 from comments.models import Comment
 from vidscraper.sites import blip, google_video, fora, ustream, vimeo
 from youtube import get_video_id
-from dailymotion import DAILYMOTION_REGEX
+import dailymotion
 import urllib
 from videos.utils import YoutubeSubtitleParser
 from django.db.models.signals import post_save
@@ -212,7 +212,7 @@ class Video(models.Model):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(
                 bliptv_fileid=bliptv_fileid,
-                defaults={'video_type': VIDEO_TYPE_BLIPTV, 
+                defaults={'video_type': VIDEO_TYPE_HTML5, 
                           'allow_community_edits': True})
             if created:
                 video.title = blip.scrape_title(video_url)
@@ -245,13 +245,24 @@ class Video(models.Model):
                           'allow_community_edits': True})
             # TODO: title and thumbnail -- we can't get them without
             # an application oauth key/secret
-        elif 'dailymotion.com' in parsed_url.netloc and DAILYMOTION_REGEX.match(video_url):
-            dailymotion_videoid = DAILYMOTION_REGEX.match(video_url).group(1)
-            video, created = Video.objects.get_or_create(
-                dailymotion_videoid = dailymotion_videoid,
-                defaults={'video_type': VIDEO_TYPE_DAILYMOTION,
-                          'allow_community_edits': True})
-            # TODO: title and thumbnail -- need dailymotion support in vidscraper
+        elif 'dailymotion.com' in parsed_url.netloc and dailymotion.DAILYMOTION_REGEX.match(video_url):
+            metadata = dailymotion.get_metadata(video_url)
+
+            stream_flv_mini_url = metadata.get('stream_flv_mini_url', '')
+            if stream_flv_mini_url and stream_flv_mini_url != '':
+                dailymotion_videoid = dailymotion.get_video_id(video_url)
+                video, created = Video.objects.get_or_create(
+                    dailymotion_videoid = dailymotion_videoid,
+                    defaults={'video_type': VIDEO_TYPE_DAILYMOTION,
+                              'allow_community_edits': True})
+                if created:
+                    video.title = metadata.get('title') or dailymotion_videoid
+                    video.thumbnail = metadata.get('thumbnail_url') or ''
+                    video.save()
+            else:
+                # not hosted by dailymotion and uses a different player
+                # TODO: error message / specific exception type?
+                raise Exception("dailymotion video actually hosted by partner -- we can't handle this")
         elif FLV_REGEX.match(video_url):
             video, created = Video.objects.get_or_create(
                 video_url=video_url,

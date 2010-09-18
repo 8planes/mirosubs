@@ -29,15 +29,17 @@ mirosubs.widget.InitialState = function(widget, videoURL, baseState) {
 goog.inherits(mirosubs.widget.InitialState, mirosubs.widget.WidgetState);
 
 mirosubs.widget.InitialState.prototype.initialize = function(callback) {
-    var that = this;
+    var that = this;    
     mirosubs.Rpc.call(
         'show_widget', {
             'video_url' : this.videoURL_,
+            'is_remote' : mirosubs.isEmbeddedInDifferentDomain(),
             'base_state': this.baseState_.ORIGINAL_PARAM
         },
         function (result) {
             if (result['subtitles'] && result['subtitles'].length > 0)
-                that.videoTabText_ = mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE;
+                that.videoTabText_ = 
+                    mirosubs.widget.VideoTab.Messages.CHOOSE_LANGUAGE;
             callback(result); 
         });
 };

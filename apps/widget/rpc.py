@@ -206,6 +206,8 @@ class Rpc(BaseRpc):
         return language, True
 
     def _autoplay_subtitles(self, user, video, language_code, version_no):
+        if video.subtitle_language(language_code) is None:
+            return None
         video.subtitles_fetched_count += 1
         video.save()
         if language_code is not None:
