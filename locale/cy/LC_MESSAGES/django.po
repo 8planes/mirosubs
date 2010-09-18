@@ -507,15 +507,15 @@ msgstr ""
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
-msgstr ""
+msgstr "Mae capsiynau gwneud fideo yn fwy hygyrch i bobl ag anableddau clyw"
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
-msgstr ""
+msgstr "Mae isdeitlau wedi eu cyfieithu yn gwneud hi'n bosibl i bob un ohonom wylio fideo mewn ieithoedd nad ydym yn siarad"
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr ""
+msgstr "Fel addysgwr, storïwr, gwyddonydd, neu unrhyw un gyda neges, mae maint posibl eich cynulleidfa yn cynyddu yn esbonyddol pan mae gennych is-deitlau a chyfieithiadau"
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
@@ -523,39 +523,39 @@ msgstr ""
 
 #: .\templates\faq.html.py:61
 msgid "Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations."
-msgstr ""
+msgstr "Ydyn, rydyn yn gweithio ar ateb i wneud penawdau caeëdig [gan gynnwys gwybodaeth am sain a cherddoriaeth], yn ogystal ag isdeitlau/cyfieithiadau."
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
-msgstr ""
+msgstr "Byddwn yn gweithio i gefnogi cyn gymaint o ieithoedd/set nodau ag y bo modd."
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
-msgstr ""
+msgstr "Rydym yn gweithio tuag at gael y teclyn isdeitlo a'r wefan gymunedol wedi eu cyfieithu yn llawn, felly y bydd y rhyngwynebau ar gael yn iaith y defnyddiwr."
 
 #: .\templates\faq.html.py:73
 msgid "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible."
-msgstr ""
+msgstr "Ychwanegwch eich hun at ein rhestr cyhoeddiadau (ar y dudalen flaen) a byddwn yn rhoi gwybod i chi cyn gynted ag y bo hyn yn bosibl."
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "Ar gyfer ein teclyn isdeitlo a'r wefan gymunedol, rydym yn defnyddio'r <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a> ."
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
-msgstr ""
+msgstr "Os gwelwch yn dda! Os oes gennych ddiddordeb mewn codio a datblygu, ewch i'n <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">canolfan ddatblygwyr</a> ."
 
 #: .\templates\faq.html.py:85
 msgid "If you're interested in general involvement, please see our <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details)."
-msgstr ""
+msgstr "Os oes gennych ddiddordeb mewn cyfrannu yn gyffredinol, gweler ein <a href=\"https://www.drumbeat.org/project/universal-subtitles\">tudalen Mozilla Drumbeat </a> . Os oes gennych chi syniad penodol, cysylltwch â ni: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> A fel sefydladi di-elw 501c3, rydym yn derbyn rhoddion (gweler y cwestiwn nesaf am fanylion)."
 
 #: .\templates\faq.html.py:89
 msgid "Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donate here</a>."
-msgstr ""
+msgstr "Ie ac ie! Ar hyn o bryd, fe fydd Sefydliad Mozilla yn cyfateb pob cyfraniad, hyd at gyfanswm o $25,000! Gallwch chi <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">gyfrannu yma</a>."
 
 #: .\templates\faq.html.py:93
 msgid "The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!"
-msgstr ""
+msgstr "Mae Sefydliad Mozilla wedi rhoi cyllid cychwynnol i Isdeitlau Ymhobmanm ynghyd â chymorth cymunedol a chymorth codi arian drwy <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Mae Drumbeat yn fudiad i gadw'r y we ar agor ar gyfer y 100 mlynedd nesaf, a mae Isdeitlau Ymhobman yn brosiect nodweddol!"
 
 #: .\templates\faq.html.py:98
 msgid ""
@@ -578,79 +578,79 @@ msgstr ""
 
 #: .\templates\feedback_response.html.py:3
 msgid "Thanks for getting in touch! We love hearing your ideas, bugs, feedback, opinions and such."
-msgstr ""
+msgstr "Diolch am gysylltu! Rydym wrth ein bodd yn clywed eich syniadau, gwallau, adborth, eich barn a pethau felly."
 
 #: .\templates\feedback_response.html.py:6
 msgid "Stay tuned as the project evolves!"
-msgstr ""
+msgstr "Cadwch olwg wrth i'r prosiect ddatblygu!"
 
 #: .\templates\feedback_response.html.py:9
 msgid "Announcement Signup"
-msgstr ""
+msgstr "Tanysgrifio i'r Cyhoeddiadadau"
 
 #: .\templates\feedback_response.html.py:12
 msgid "Best"
-msgstr ""
+msgstr "Gorau"
 
 #: .\templates\feedback_response.html.py:16
 msgid "PS. We do our best to respond to all questions, but please be patient -- we get a lot of email"
-msgstr ""
+msgstr "PS. Rydym yn gwneud ein gorau i ymateb i bob cwestiwn, ond byddwch yn amyneddgar - rydym yn cael llawer o ebost"
 
 #: .\templates\index.html.py:41
 msgid "Subtitles and Captions for Every Video on the Web"
-msgstr ""
+msgstr "Isdeitlau a Capsiynau ar gyfer pob Fideo ar y We"
 
 #: .\templates\index.html.py:44
 msgid "The Problem"
-msgstr ""
+msgstr "Y Broblem"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
-msgstr ""
+msgstr "Mae fideo ar y we yn dechrau cystadlu gyda teledu, ond nid oes adnodd ar agor da ar gyfer isdeitlo."
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
-msgstr ""
+msgstr "Ein Bwriad"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
-msgstr ""
+msgstr "Rydym yn ceisio gwneud capsiynu, isdeitlo, a chyfieithu fideo ar gael i'r cyhoedd mewn modd sydd am ddim ac yn agored, yn union fel y We."
 
 #: .\templates\index.html.py:46
 msgid "Learn More"
-msgstr ""
+msgstr "Dysgwch Fwy"
 
 #: .\templates\index.html.py:49
 msgid "Right now"
-msgstr ""
+msgstr "Ar hyn o bryd"
 
 #: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
-msgstr ""
+msgstr "rydym ni'n mewn cyfnod alffa, yn adeiladu a phrofi. Gallwch chi helpu!"
 
 #: .\templates\index.html.py:50
 msgid "Try our demo"
-msgstr ""
+msgstr "Rhowch gynnig ar ein demo"
 
 #: .\templates\index.html.py:50
 msgid "Become a tester"
-msgstr ""
+msgstr "Dewch yn brofwr"
 
 #: .\templates\index.html.py:56
 msgid "Subtitle Widget"
-msgstr ""
+msgstr "Teclyn Isdeitlo"
 
 #: .\templates\index.html.py:57
 msgid "A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos)."
-msgstr ""
+msgstr "Ffordd syml i greu ac ychwanegu capsiynau i bron unrhyw fideo ar y we (heb orfod trawsgodio neu ail-lwytho fideos)."
 
 #: .\templates\index.html.py:60
 msgid "Community Site"
-msgstr ""
+msgstr "Gwefan y Gymuned"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
-msgstr ""
+msgstr "Cymuned ar lein ar gyfer cydweithio ar isdeitlo a chyfieithu fideos y byd (fel Wikipedia ar gyfer isdeitlau)."
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
@@ -670,35 +670,35 @@ msgstr ""
 
 #: .\templates\index.html.py:85
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "Rhowch gyfeiriad ebost dilys"
 
 #: .\templates\index.html.py:118
 msgid "Please enter your email address."
-msgstr ""
+msgstr "Rhowch eich cyfeiriad ebost."
 
 #: .\templates\index.html.py:137
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "Bydd Mozilla yn dyblu eich rhodd!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "Rydym yn prosiect nodwedd Mozilla Drumbeat!"
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
-msgstr ""
+msgstr "Rhowch nawr"
 
 #: .\templates\index.html.py:146
 msgid "Check out the widget"
-msgstr ""
+msgstr "Rhowch cynnig ar y teclyn"
 
 #: .\templates\index.html.py:147
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "Profwch ein teclyn isdeitlo"
 
 #: .\templates\index.html.py:147
 msgid "Try the Demo"
-msgstr ""
+msgstr "Rhowch gynnig ar y Demo"
 
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
