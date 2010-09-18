@@ -722,19 +722,19 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:37
 msgid "<strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus."
-msgstr ""
+msgstr "<strong>Cysylltu</strong> prif randdeiliaid drwy brosiectau, sefydliadau, a symudiadau sydd ag anghenion isdeitlo agored."
 
 #: .\templates\opensubtitles2010.html.py:41
 msgid "<strong>Identify ways</strong> to solve stakeholder subtitling needs and be aware of existing technology that can be leveraged. Find logical places for collaboration/cooperation."
-msgstr ""
+msgstr "<strong>Nodi ffyrdd</strong> o ddatrys anghenion isdeitlo budd-ddeiliaid a bod yn ymwybodol o dechnoleg sy'n bodoli eisoes y gellir eu defnyddio. Dod o hyd i lefydd addas ar gyfer cydweithredu / cydweithrediad."
 
 #: .\templates\opensubtitles2010.html.py:44
 msgid "<strong>Move towards</strong> standardizing solutions and pushing forward the state of the art in open subtiting."
-msgstr ""
+msgstr "<strong>Symud tuag at</strong> safoni atebion a gwthio'r dechnoleg ddiweddaraf ym maes isdeitlo agored."
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
-msgstr ""
+msgstr "Cyfrannwyr"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
@@ -746,15 +746,15 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "Pryd"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "Medi 29 a'r 30ain, gan ddechrau am 9am ar y ddau ddiwrnod."
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "Lle"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
