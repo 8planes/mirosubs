@@ -1408,7 +1408,7 @@ msgstr ""
 
 #: .\templates\videos\diffing.html.py:43
 msgid "You need to log in to do that."
-msgstr ""
+msgstr "Vous devez vous connecter pour faire cela."
 
 #: .\templates\videos\diffing.html.py:75
 #, python-format
@@ -1417,6 +1417,9 @@ msgid ""
 "            Comparing older revision (#%(second_version_no)s) to revision (#%(version_no)s)\n"
 "            "
 msgstr ""
+"\n"
+"            Comparaison de l'ancienne révision (#%(second_version_no)s) à la révision (#%(version_no)s)\n"
+"            "
 
 #: .\templates\videos\diffing.html.py:79
 #, python-format
@@ -1425,22 +1428,25 @@ msgid ""
 "            Comparing older revision (#%(second_version_no)s) to current revision (#%(version_no)s)\n"
 "            "
 msgstr ""
+"\n"
+"            Comparaison de l'ancienne révision (#%(second_version_no)s) à la révision actuelle (#%(version_no)s)\n"
+"            "
 
 #: .\templates\videos\diffing.html.py:93
 #: .\templates\videos\history.html.py:144
 #: .\templates\videos\history.html.py:185
 #: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
-msgstr ""
+msgstr "Sous-titres"
 
 #: .\templates\videos\diffing.html.py:98
 #: .\templates\videos\revision.html.py:75
 msgid "Revision History"
-msgstr ""
+msgstr "Historique des révisions"
 
 #: .\templates\videos\diffing.html.py:102
 msgid "Comparing Revision"
-msgstr ""
+msgstr "Comparaison des révisions"
 
 #: .\templates\videos\diffing.html.py:110
 #: .\templates\videos\diffing.html.py:162
@@ -1450,38 +1456,41 @@ msgid ""
 "            Revision #%(version_no)s by %(user)s\n"
 "            "
 msgstr ""
+"\n"
+"            Révision #%(version_no)s par %(user)s\n"
+"            "
 
 #: .\templates\videos\diffing.html.py:123
 #: .\templates\videos\diffing.html.py:177
 #: .\templates\videos\revision.html.py:134
 msgid "Submit a new edit based on this version"
-msgstr ""
+msgstr "Soumettre une nouvelle modification basée sur cette version"
 
 #: .\templates\videos\diffing.html.py:127
 #: .\templates\videos\diffing.html.py:181
 #: .\templates\videos\revision.html.py:138
 msgid "Roll back to version"
-msgstr ""
+msgstr "Revenir à la version"
 
 #: .\templates\videos\diffing.html.py:150
 #: .\templates\videos\diffing.html.py:205
 #: .\templates\videos\history.html.py:282
 msgid "Not Synced"
-msgstr ""
+msgstr "Non synchronisé"
 
 #: .\templates\videos\email_friend.html.py:6
 msgid "Email this to a friend"
-msgstr ""
+msgstr "Envoyer à un ami"
 
 #: .\templates\videos\email_friend.html.py:10
 msgid "Send to Friend!"
-msgstr ""
+msgstr "Envoyer à un ami !"
 
 #: .\templates\videos\email_notification.html.py:3
 #: .\templates\videos\email_start_notification.html.py:3
 #: .\templates\videos\email_title_changed.html.py:3
 msgid "Dear"
-msgstr ""
+msgstr "Cher"
 
 #: .\templates\videos\email_notification.html.py:4
 #, python-format
@@ -1491,34 +1500,39 @@ msgid ""
 "    has been edited by %(u)s. \n"
 "    "
 msgstr ""
+"\n"
+"    Une transcription ou traduction à laquelle vous avez contribué \n"
+"    a été éditée par %(u)s. \n"
+"    "
 
 #: .\templates\videos\email_notification.html.py:8
 msgid "It would be great if you could review their changes for quality."
-msgstr ""
+msgstr "N'hésitez pas à vérifier la qualité des changements effectués."
 
 #: .\templates\videos\email_notification.html.py:9
 msgid "Click here to see the latest version side by side with the previous version:"
-msgstr ""
+msgstr "Cliquez ici pour faire apparaitre la dernière version et la précédente version l'une à côté de l'autre."
 
 #: .\templates\videos\email_notification.html.py:10
 msgid "Compare versions side-by-side"
-msgstr ""
+msgstr "Comparer les versions"
 
 #: .\templates\videos\email_notification.html.py:13
 msgid "We've also included a rough summary of the changes below. Thanks so much!"
-msgstr ""
+msgstr "Nous avons également inclus un résumé rapide des changements ci-dessous. Merci !"
 
 #: .\templates\videos\email_notification.html.py:15
 #: .\templates\videos\email_start_notification.html.py:14
 #: .\templates\videos\email_title_changed.html.py:10
+#, fuzzy
 msgid "Sincerely"
-msgstr ""
+msgstr "Sincèrement"
 
 #: .\templates\videos\email_notification.html.py:17
 #: .\templates\videos\email_start_notification.html.py:15
 #: .\templates\videos\email_title_changed.html.py:12
 msgid "The Universal Subtitles Community"
-msgstr ""
+msgstr "La Communauté Universal Subtitles"
 
 #: .\templates\videos\email_notification.html.py:24
 #: .\templates\videos\email_start_notification.html.py:23
