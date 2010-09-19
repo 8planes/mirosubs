@@ -99,27 +99,27 @@ msgstr "Bu eposta kullanılıyor."
 
 #: .\apps\videos\forms.py:49
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr ""
+msgstr "Birisi şimdi bu video için altyazı hazırlıyor. Sonra deneyin."
 
 #: .\apps\videos\forms.py:53
 msgid "You can't edit this video."
-msgstr ""
+msgstr "Bu videoyu düzenleyemezsiniz."
 
 #: .\apps\videos\forms.py:56
 msgid "This video has translations."
-msgstr ""
+msgstr "Bu videonun çevirileri mevcut. "
 
 #: .\apps\videos\forms.py:62
 msgid "File size should be less 1Mb"
-msgstr ""
+msgstr "Dosya boyutu 1MBden küçük olmalı"
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
-msgstr ""
+msgstr "Yanlış biçim .srt, .ssa ya da .xml dosyası yükleyin (TTML biçimi)"
 
 #: .\apps\videos\forms.py:68
 msgid "Incorrect subtitles format"
-msgstr ""
+msgstr "Yanlış altyazı biçimi"
 
 #: .\apps\videos\forms.py:169
 #, python-format
@@ -132,23 +132,23 @@ msgstr ""
 
 #: .\apps\videos\forms.py:216
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr ""
+msgstr "Virgülle ayrılmış geçerli eposta adresleri girin."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
-msgstr ""
+msgstr "Aaltyazıları paylaşın."
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr ""
+msgstr "Şimdi herkes videoları altyazılarla izleyebilir, siz de deneyin!"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
-msgstr ""
+msgstr "Herkesi haberdar edin, çeviri yardımı için arkadaşlarınızı çağırın:"
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
-msgstr ""
+msgstr "Facebook'a gönderin"
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
