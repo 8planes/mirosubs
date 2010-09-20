@@ -362,52 +362,52 @@ msgstr "Bir Video için altyazı oluşturun"
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr ""
+msgstr "Videolar"
 
 #: .\templates\base.html.py:74
 msgid "Volunteer"
-msgstr ""
+msgstr "Gönüllü"
 
 #: .\templates\base.html.py:79
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: .\templates\base.html.py:80
 msgid "FAQ"
-msgstr ""
+msgstr "SSS"
 
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: .\templates\base.html.py:83
 msgid "Logout"
-msgstr ""
+msgstr "Çıkış"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
-msgstr ""
+msgstr "Yönetici"
 
 #: .\templates\base.html.py:88
 msgid "Login"
-msgstr ""
+msgstr "Giriş"
 
 #: .\templates\base.html.py:106
 msgid "Universal Subtitles is a project of <a href=\"http://participatoryculture.org/\">PCF</a>."
-msgstr ""
+msgstr "Universal Subtitles bir <a href=\"http://participatoryculture.org/\">PCF</a> projesidir."
 
 #: .\templates\base.html.py:112
 msgid "Contact Us"
-msgstr ""
+msgstr "Bizimle İletişim Kurun"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Gizlilik Politikası"
 
 #: .\templates\demo.html.py:19
 msgid "Welcome to our alpha demo!"
-msgstr ""
+msgstr "Alpha denememize hoş geldiniz!"
 
 #: .\templates\demo.html.py:21
 msgid ""
@@ -437,67 +437,67 @@ msgstr ""
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Sık Sorulan Sorular"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Universal Subtitles Nedir?"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Universal Subtitles Nasıl Kullanılır?"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "Altyazıların faydaları nedir?"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
-msgstr ""
+msgstr "Participatory Culture Foundation kimdir ve neden Universal Subtitles projesini gerçekleştiriyorlar?"
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
-msgstr ""
+msgstr "Universal Subtitles işitme engeleliler ve duyma zorluğu olanlar için kapalı başlıkları destekleyecek mi?"
 
 #: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
-msgstr ""
+msgstr "Altyazılar benim dilimi ya da karakter kodlamamı destekleyecek mi?"
 
 #: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
-msgstr ""
+msgstr "Araçlar ve bu web sayfası ne zaman benim dilimde hizmete başlayacak?"
 
 #: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
-msgstr ""
+msgstr "Videoma nasıl altyazı ekleyebilirim?"
 
 #: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
-msgstr ""
+msgstr "Hangi açık kaynak kodu lisansını kullanıyorsunuz"
 
 #: .\templates\faq.html.py:28 .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
-msgstr ""
+msgstr "Ben bir geliştiriciyim, size yardımcı olabilir miyim?"
 
 #: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
-msgstr ""
+msgstr "Teknik bilgisi fazla olmayan insanlar bu projeye katılabilir mi?"
 
 #: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
-msgstr ""
+msgstr "Bağış kabul ediyor musunuz? Bağışlar vergiden düşülebilir mi?"
 
 #: .\templates\faq.html.py:31 .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
-msgstr ""
+msgstr "Mozilla Drumbeat ile ilişkiniz nedir?"
 
 #: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr ""
+msgstr "Altyazıları .SRT ve diğer biçimlerde nerden indirebilirim?"
 
 #: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
-msgstr ""
+msgstr "Neden çevirideki zamanlamayı değiştiremiyorum?"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
@@ -509,19 +509,19 @@ msgstr ""
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
-msgstr ""
+msgstr "Video altyazıları büyük potansiyeli olan dokunulmamış bir altın madeni gibi."
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
-msgstr ""
+msgstr "Başlıklar, videoları işitme zorluğu çeken insanlar için daha ulaşılabilir kılar."
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
-msgstr ""
+msgstr "Çevirilmiş videolar, bilemdiğimiz dillerdeki vidoeları izlemeyi hepimiz için kolaylaştırır."
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr ""
+msgstr "Bir eğitimci, hikayeci, bilim adamı ya da bir mesajı olan biri olarak ulaşacağınız kitle altyazı ve çevirileriniz varsa büyük oranda artar."
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
@@ -533,7 +533,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
-msgstr ""
+msgstr "Mümkün olduğunca çok dil ve karakter setini desteklemek için çalışacağız."
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
@@ -541,11 +541,11 @@ msgstr ""
 
 #: .\templates\faq.html.py:73
 msgid "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible."
-msgstr ""
+msgstr "Lütfen kenidinizi duyuru listemize kaydedin (ana sayfada), bu mümkün olur olmaz size haber vereceğiz."
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "Altyazı aracımız ve topluluk sitemiz için <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>  lisansı kullanıyoruz"
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
@@ -1848,32 +1848,32 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "Tüm Yüklenen Videolar"
 
 #: .\templates\videos\video_list.html.py:12
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: .\templates\videos\video_list.html.py:14
 msgid "Pageloads"
-msgstr ""
+msgstr "Sayfa görüntüleme"
 
 #: .\templates\videos\video_list.html.py:18
 msgid "Subtitles Fetched"
-msgstr ""
+msgstr "Bulunan Altyazılar"
 
 #: .\templates\videos\video_list.html.py:22
 msgid "Translations"
-msgstr ""
+msgstr "Çeviriler"
 
 #: .\templates\videos\video_list.html.py:25
 msgid "Subtitled?"
-msgstr ""
+msgstr "Çevrildi mi?"
 
 #: .\templates\videos\video_list.html.py:39
 msgid "history"
-msgstr ""
+msgstr "geçmiş"
 
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
-msgstr ""
+msgstr "Hiç video yok"
