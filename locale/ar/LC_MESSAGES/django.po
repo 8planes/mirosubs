@@ -437,15 +437,17 @@ msgstr ""
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "ما هي الترجمة العالمية؟"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
+#, fuzzy
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "كيف يمكنني استخدام الترجمة العالمي؟"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
+#, fuzzy
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "ما هي فوائد الترجمة؟"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
@@ -461,31 +463,31 @@ msgstr ""
 
 #: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
-msgstr ""
+msgstr "متى ستكون الأدوات ، بما في ذلك هذا الموقع ، متاحة في لغتي؟"
 
 #: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
-msgstr ""
+msgstr "كيف يمكنني إضافة الترجمة إلى الفيديو الخاص بي؟"
 
 #: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
-msgstr ""
+msgstr "ما هي الرخصة مفتوحة المصدر التي تستخدمونها؟"
 
 #: .\templates\faq.html.py:28 .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
-msgstr ""
+msgstr "أنا مطوّر ، هل يمكنني أن أساعد؟"
 
 #: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
-msgstr ""
+msgstr "هل يمكن لأشخاص غير فنيّين الإنظمام للمشروع؟"
 
 #: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
-msgstr ""
+msgstr "هل تقبلون التبرّعات؟ هل الضرائب مستقطعة؟"
 
 #: .\templates\faq.html.py:31 .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
-msgstr ""
+msgstr "ما هي علاقتكم مع موزيلا درام بِيت؟"
 
 #: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
@@ -493,7 +495,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
-msgstr ""
+msgstr "لماذا لا يمكنني تغيير توقيت الترجمة؟"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
