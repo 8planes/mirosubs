@@ -142,8 +142,11 @@ class Awards(models.Model):
     @classmethod
     def on_comment_save(cls, sender, instance, created, **kwargs):
         if created:
-            cls.objects.get_or_create(user=instance.user, type = cls.COMMENT)
-    
+            try:
+                cls.objects.get_or_create(user=instance.user, type = cls.COMMENT)
+            except MultipleObjectsReturned:
+                pass
+            
     @classmethod
     def on_subtitle_version_save(cls, sender, instance, created, **kwargs):
         if not instance.user:
