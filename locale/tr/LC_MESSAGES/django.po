@@ -1848,32 +1848,32 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "Tüm Yüklenen Videolar"
 
 #: .\templates\videos\video_list.html.py:12
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: .\templates\videos\video_list.html.py:14
 msgid "Pageloads"
-msgstr ""
+msgstr "Sayfa görüntüleme"
 
 #: .\templates\videos\video_list.html.py:18
 msgid "Subtitles Fetched"
-msgstr ""
+msgstr "Bulunan Altyazılar"
 
 #: .\templates\videos\video_list.html.py:22
 msgid "Translations"
-msgstr ""
+msgstr "Çeviriler"
 
 #: .\templates\videos\video_list.html.py:25
 msgid "Subtitled?"
-msgstr ""
+msgstr "Çevrildi mi?"
 
 #: .\templates\videos\video_list.html.py:39
 msgid "history"
-msgstr ""
+msgstr "geçmiş"
 
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
-msgstr ""
+msgstr "Hiç video yok"
