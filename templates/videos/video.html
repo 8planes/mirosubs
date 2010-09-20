@@ -138,7 +138,7 @@
       <h4 class="inline">{% trans 'Video Info' %}</h4>      
 
       <ul class="inline_tabs">
-        <li class="active"><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
+        <li class="active"><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
         {% comment %}
         <li><a href="#comments-tab">{% trans 'Video URLS' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
