@@ -25,12 +25,10 @@ register = template.Library()
 
 @register.inclusion_tag('comments/form.html', takes_context=True)
 def render_comment_form(context, obj):
-    if context['user'].is_authenticated():
-        form = CommentForm(obj, auto_id='id_comment_form_%s')
-    else:
-        form = None
+    form = CommentForm(obj, auto_id='id_comment_form_%s')
     return {
         'form': form,
+        'is_authnticated': context['user'].is_authenticated(),
         'next_page': context['request'].get_full_path()
     }
 
