@@ -148,6 +148,14 @@
       </ul>
 
       <div class="action_buttons grid_9 alpha omega">
+          {% if not video.subtitle_language %}
+            <h2>
+                {% trans 'There are no subtitles for this video yet.' %}
+            </h2>
+            <a href="#" id="add_subtitles" class="blue_button small">
+                {% trans 'Add Subtitles' %}
+            </a>          
+          {% endif %}
           {% with translations|length as has_translations %}
               {% include 'videos/_upload_subtitles.html' %}
           {% endwith %}       
