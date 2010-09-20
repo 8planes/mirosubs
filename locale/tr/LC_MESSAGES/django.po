@@ -485,19 +485,19 @@ msgstr ""
 
 #: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
-msgstr ""
+msgstr "Bağış kabul ediyor musunuz? Bağışlar vergiden düşülebilir mi?"
 
 #: .\templates\faq.html.py:31 .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
-msgstr ""
+msgstr "Mozilla Drumbeat ile ilişkiniz nedir?"
 
 #: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr ""
+msgstr "Altyazıları .SRT ve diğer biçimlerde nerden indirebilirim?"
 
 #: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
-msgstr ""
+msgstr "Neden çevirideki zamanlamayı değiştiremiyorum?"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
@@ -509,15 +509,15 @@ msgstr ""
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
-msgstr ""
+msgstr "Video altyazıları büyük potansiyeli olan dokunulmamış bir altın madeni gibi."
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
-msgstr ""
+msgstr "Başlıklar, videoları işitme zorluğu çeken insanlar için daha ulaşılabilir kılar."
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
-msgstr ""
+msgstr "Çevirilmiş videolar, bilemdiğimiz dillerdeki vidoeları izlemeyi hepimiz için kolaylaştırır."
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
