@@ -21,7 +21,6 @@ msgid "Argentinian Spanish"
 msgstr "الأرجنتيني الإسباني"
 
 #: .\apps\auth\admin.py:10
-#, fuzzy
 msgid "Username"
 msgstr "اسم المستخدم"
 
@@ -31,26 +30,23 @@ msgstr ""
 
 #: .\apps\auth\admin.py:12
 msgid "This value must contain only letters, numbers and underscores."
-msgstr ""
+msgstr "هذه القيمة يجب أن تحتوي فقط على الأحرف والأرقام والتسطير."
 
 #: .\apps\auth\admin.py:13
-#, fuzzy
 msgid "Password"
-msgstr "كلمة السر"
+msgstr "كلمة المرور"
 
 #: .\apps\auth\admin.py:14
 msgid "Password confirmation"
 msgstr "تأكيد كلمة السر"
 
 #: .\apps\auth\admin.py:15
-#, fuzzy
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
 #: .\apps\auth\models.py:83
-#, fuzzy
 msgid "Add comment"
-msgstr "أضف تعليق"
+msgstr "أضف تعليقك"
 
 #: .\apps\auth\models.py:84
 msgid "Start subtitles"
@@ -61,7 +57,6 @@ msgid "Start translation"
 msgstr "بدء الترجمة"
 
 #: .\apps\auth\models.py:86
-#, fuzzy
 msgid "Edit subtitles"
 msgstr "تحرير الترجمة"
 
@@ -71,15 +66,15 @@ msgstr "تعديل الترجمة"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
-msgstr ""
+msgstr "يمكنك الرد التعليقات فقط على نفس الموضوع"
 
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
-msgstr ""
+msgstr "هذا المستخدم لا يملك بريد إلكتروني"
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
-msgstr ""
+msgstr "أنت لست موثّق."
 
 #: .\apps\profiles\forms.py:51
 #, python-format
@@ -87,12 +82,10 @@ msgid "Personal message from %(sender)s on universalsubtitles.org"
 msgstr ""
 
 #: .\apps\profiles\forms.py:67
-#, fuzzy
 msgid "Confirm new password:"
 msgstr "تأكيد كلمة المرور الجديدة :"
 
 #: .\apps\profiles\forms.py:82
-#, fuzzy
 msgid "Invalid password."
 msgstr "كلمة المرور غير صالحة."
 
@@ -106,19 +99,19 @@ msgstr "هذا البريد الإلكتروني مستخدم."
 
 #: .\apps\videos\forms.py:46
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr ""
+msgstr "يوجد من يترجم هذا الفيديو في الوقت الحالي. حاول في وقت لاحق."
 
 #: .\apps\videos\forms.py:50
 msgid "You can't edit this video."
-msgstr ""
+msgstr "لا يمكنك تحرير هذا الفيديو."
 
 #: .\apps\videos\forms.py:53
 msgid "This video has translations."
-msgstr ""
+msgstr "يوجد لهذا الفيديو ترجمات."
 
 #: .\apps\videos\forms.py:59
 msgid "File size should be less 1Mb"
-msgstr ""
+msgstr " ينبغي أن يكون حجم الملف أقل من 1 Mb"
 
 #: .\apps\videos\forms.py:62
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
@@ -126,11 +119,11 @@ msgstr ""
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect subtitles format"
-msgstr ""
+msgstr "فورمات الترجمة غير صحيح"
 
 #: .\apps\videos\forms.py:158
 msgid "Incorrect video url"
-msgstr ""
+msgstr "رابط الفيديو غير صحيح"
 
 #: .\apps\videos\forms.py:202
 msgid "Enter valid e-mail addresses separated by commas."
