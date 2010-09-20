@@ -31,6 +31,7 @@ import sha
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
 from utils.files_storages import S3Storage
+from django.core.exceptions import MultipleObjectsReturned
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -158,7 +159,10 @@ class Awards(models.Model):
                 type = cls.EDIT_SUBTITLES
             else:
                 type = cls.EDIT_TRANSLATION
-        cls.objects.get_or_create(user=instance.user, type=type)
+        try:
+            cls.objects.get_or_create(user=instance.user, type=type)
+        except MultipleObjectsReturned:
+            pass
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (
