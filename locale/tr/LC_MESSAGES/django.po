@@ -457,7 +457,7 @@ msgstr "Participatory Culture Foundation kimdir ve neden Universal Subtitles pro
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
-msgstr ""
+msgstr "Universal Subtitles işitme engeleliler ve duyma zorluğu olanlar için kapalı başlıkları destekleyecek mi?"
 
 #: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
@@ -481,7 +481,7 @@ msgstr "Ben bir geliştiriciyim, size yardımcı olabilir miyim?"
 
 #: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
-msgstr ""
+msgstr "Teknik bilgisi fazla olmayan insanlar bu projeye katılabilir mi?"
 
 #: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
@@ -521,7 +521,7 @@ msgstr "Çevirilmiş videolar, bilemdiğimiz dillerdeki vidoeları izlemeyi hepi
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr ""
+msgstr "Bir eğitimci, hikayeci, bilim adamı ya da bir mesajı olan biri olarak ulaşacağınız kitle altyazı ve çevirileriniz varsa büyük oranda artar."
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
@@ -533,7 +533,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
-msgstr ""
+msgstr "Mümkün olduğunca çok dil ve karakter setini desteklemek için çalışacağız."
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
@@ -541,11 +541,11 @@ msgstr ""
 
 #: .\templates\faq.html.py:73
 msgid "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible."
-msgstr ""
+msgstr "Lütfen kenidinizi duyuru listemize kaydedin (ana sayfada), bu mümkün olur olmaz size haber vereceğiz."
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "Altyazı aracımız ve topluluk sitemiz için <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>  lisansı kullanıyoruz"
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
