@@ -437,23 +437,23 @@ msgstr ""
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Sık Sorulan Sorular"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Universal Subtitles Nedir?"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Universal Subtitles Nasıl Kullanılır?"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "Altyazıların faydaları nedir?"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
-msgstr ""
+msgstr "Participatory Culture Foundation kimdir ve neden Universal Subtitles projesini gerçekleştiriyorlar?"
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
@@ -461,23 +461,23 @@ msgstr ""
 
 #: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
-msgstr ""
+msgstr "Altyazılar benim dilimi ya da karakter kodlamamı destekleyecek mi?"
 
 #: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
-msgstr ""
+msgstr "Araçlar ve bu web sayfası ne zaman benim dilimde hizmete başlayacak?"
 
 #: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
-msgstr ""
+msgstr "Videoma nasıl altyazı ekleyebilirim?"
 
 #: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
-msgstr ""
+msgstr "Hangi açık kaynak kodu lisansını kullanıyorsunuz"
 
 #: .\templates\faq.html.py:28 .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
-msgstr ""
+msgstr "Ben bir geliştiriciyim, size yardımcı olabilir miyim?"
 
 #: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
