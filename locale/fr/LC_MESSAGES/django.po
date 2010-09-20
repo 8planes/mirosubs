@@ -599,11 +599,11 @@ msgstr "PS: Nous faisons de notre mieux pour répondre à toutes les questions, 
 
 #: .\templates\index.html.py:41
 msgid "Subtitles and Captions for Every Video on the Web"
-msgstr ""
+msgstr "Des sous-titres et des légendes pour chaque vidéo sur le net"
 
 #: .\templates\index.html.py:44
 msgid "The Problem"
-msgstr ""
+msgstr "Le problème"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
