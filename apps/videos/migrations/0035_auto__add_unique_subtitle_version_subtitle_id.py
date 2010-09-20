@@ -14,14 +14,13 @@ class Migration(SchemaMigration):
             for version in orm.SubtitleVersion.objects.all():
                 subtitle_dict = {}
                 for subtitle in version.subtitle_set.all():
-                    if subtitle.subtitle_id in subtitle_dict:
-                        subtitle_dict.setdefault(subtitle.subtitle_id, []) \
-                            .append(subtitle)
+                    subtitle_dict.setdefault(subtitle.subtitle_id, []) \
+                        .append(subtitle)
                 for k, v in subtitle_dict.items():
                     if len(v) > 1:
                         subs_to_remove = self._subs_to_remove(v)
                         for subtitle in subs_to_remove:
-                            version.remove(subtitle)
+                            version.subtitle_set.remove(subtitle)
                             subtitle.delete()
         
         # Adding unique constraint on 'Subtitle', fields ['version', 'subtitle_id']
