@@ -11,25 +11,13 @@ class Migration(SchemaMigration):
     )    
     
     def forwards(self, orm):
-        
-        # Renaming column for 'Action.language' to match new field type.
-        db.rename_column('videos_action', 'language', 'language_id')
-        # Changing field 'Action.language'
-        db.alter_column('videos_action', 'language_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.SubtitleLanguage'], null=True, blank=True))
-
-        # Adding index on 'Action', fields ['language']
-        db.create_index('videos_action', ['language_id'])
+        db.delete_column('videos_action', 'language')        
+        db.add_column('videos_action', 'language', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.SubtitleLanguage'], null=True, blank=True))
    
     def backwards(self, orm):
-        
-        # Renaming column for 'Action.language' to match new field type.
-        db.rename_column('videos_action', 'language_id', 'language')
-        # Changing field 'Action.language'
-        db.alter_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True))
-
-        # Removing index on 'Action', fields ['language']
-        db.delete_index('videos_action', ['language_id'])
-   
+        db.delete_column('videos_action', 'language_id')
+        db.add_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(default='', max_length=16, blank=True))
+           
     models = {
         'auth.customuser': {
             'Meta': {'object_name': 'CustomUser', '_ormbases': ['auth.User']},
@@ -94,7 +82,7 @@ class Migration(SchemaMigration):
             'comment': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['comments.Comment']", 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']", 'null': 'True', 'blank': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'new_video_title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
