@@ -354,32 +354,32 @@ msgstr ""
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
-msgstr ""
+msgstr "ترجم فيديو"
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr ""
+msgstr "الفيديوهات"
 
 #: .\templates\base.html.py:74
 msgid "Volunteer"
-msgstr ""
+msgstr "تطوّع"
 
 #: .\templates\base.html.py:79
 msgid "Blog"
-msgstr ""
+msgstr "مدوّنة"
 
 #: .\templates\base.html.py:80
 msgid "FAQ"
-msgstr ""
+msgstr "أسئلة وأجوبة"
 
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
-msgstr ""
+msgstr "من نحنُ"
 
 #: .\templates\base.html.py:83
 msgid "Logout"
-msgstr ""
+msgstr "خروج"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
