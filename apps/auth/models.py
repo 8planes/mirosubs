@@ -30,7 +30,7 @@ from django.conf import settings
 import sha
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
-from utils.files_storages import S3Storage
+from utils.files_storages import default_image_storage
 from django.core.exceptions import MultipleObjectsReturned
 
 SORTED_LANGUAGES = list(LANGUAGES)
@@ -50,7 +50,7 @@ class CustomUser(BaseUser):
     preferred_language = models.CharField(
         max_length=16, choices=SORTED_LANGUAGES, blank=True)
     picture = models.ImageField(
-        blank=True, storage=S3Storage(), upload_to='/pictures/')
+        blank=True, storage=default_image_storage, upload_to='pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)

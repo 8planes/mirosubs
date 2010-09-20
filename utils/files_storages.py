@@ -30,6 +30,7 @@ from django.core.files.storage import Storage
 from django.core.files import File
 from django.utils.functional import curry
 from django.conf import settings
+from django.core.files.storage import default_storage
 
 ACCESS_KEY_NAME = 'AWS_ACCESS_KEY_ID'
 SECRET_KEY_NAME = 'AWS_SECRET_ACCESS_KEY'
@@ -60,9 +61,6 @@ class S3Storage(Storage):
     def _get_access_keys(self):
         access_key = getattr(settings, ACCESS_KEY_NAME, None)
         secret_key = getattr(settings, SECRET_KEY_NAME, None)
-        if (access_key or secret_key) and (not access_key or not secret_key):
-            access_key = os.environ.get(ACCESS_KEY_NAME)
-            secret_key = os.environ.get(SECRET_KEY_NAME)
 
         if access_key and secret_key:
             # Both were provided, so use them
@@ -105,5 +103,8 @@ class S3Storage(Storage):
     def get_available_filename(self, filename):
         """ Overwrite existing file with the same name. """
         return filename
-
-
+    
+if not getattr(settings, ACCESS_KEY_NAME, None) and not getattr(settings, SECRET_KEY_NAME, None):
+    default_image_storage = default_storage
+else:
+    default_image_storage = S3Storage()
