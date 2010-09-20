@@ -107,15 +107,6 @@
         <a href="#" class="edit-title">{% trans 'edit title' %}</a>   
     {% endif %}
 
-    {% if saved %}
-        <div id="messages">
-          <h2>{% blocktrans %}Subtitles saved!  You can share the video with friends, 
-          or get an embed code for your site.  To add a
-          translation, click the button below.{% endblocktrans %}</h2>
-<a href="#" id="closeBut">Close</a>
-        </div>
-    {% endif %}
-
     <div class="grid_6 alpha left_column">
         {% widget widget_params %}
     </div>
