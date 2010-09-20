@@ -631,11 +631,11 @@ msgstr "nous sommes dans la phase alpha, nous construisons et testons. Vous pouv
 
 #: .\templates\index.html.py:50
 msgid "Try our demo"
-msgstr ""
+msgstr "Essayez notre démo"
 
 #: .\templates\index.html.py:50
 msgid "Become a tester"
-msgstr ""
+msgstr "Devenez testeur"
 
 #: .\templates\index.html.py:56
 msgid "Subtitle Widget"
@@ -647,7 +647,7 @@ msgstr ""
 
 #: .\templates\index.html.py:60
 msgid "Community Site"
-msgstr ""
+msgstr "Site communautaire"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
@@ -667,19 +667,19 @@ msgstr ""
 
 #: .\templates\index.html.py:80
 msgid "Get Updates!"
-msgstr ""
+msgstr "Obtenez des mises à jour!"
 
 #: .\templates\index.html.py:85
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "Merci de saisir une adresse mail valide"
 
 #: .\templates\index.html.py:118
 msgid "Please enter your email address."
-msgstr ""
+msgstr "Merci de saisir votre adresse mail."
 
 #: .\templates\index.html.py:137
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "Mozilla va doubler le montant de votre donation!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
@@ -687,7 +687,7 @@ msgstr ""
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
-msgstr ""
+msgstr "Donnez maintenant"
 
 #: .\templates\index.html.py:146
 msgid "Check out the widget"
@@ -699,7 +699,7 @@ msgstr ""
 
 #: .\templates\index.html.py:147
 msgid "Try the Demo"
-msgstr ""
+msgstr "Essayez la démonstration"
 
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
@@ -728,7 +728,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
-msgstr ""
+msgstr "Participants"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
@@ -740,7 +740,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "Quand"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
@@ -748,7 +748,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "Où"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
@@ -756,7 +756,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
-msgstr ""
+msgstr "Pourquoi"
 
 #: .\templates\opensubtitles2010.html.py:75
 msgid ""
@@ -777,7 +777,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
-msgstr ""
+msgstr "Organisateurs"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
@@ -793,7 +793,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsors"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
@@ -805,11 +805,11 @@ msgstr ""
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "préc."
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "suiv."
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
@@ -817,7 +817,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
-msgstr ""
+msgstr "Dernière mise à jour: 10 août 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
@@ -833,7 +833,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:21
 msgid "Community Members"
-msgstr ""
+msgstr "Membres de la communauté"
 
 #: .\templates\privacy.html.py:23
 msgid "Certain members of the PCF community (contributors, customers, etc.) choose to interact with PCF in ways that require PCF and others to know more about them. The amount and type of information that PCF gathers from those members depends on the nature of the interaction. For example, members who wish to post content to certain portions of PCF's web sites or participate in live chat session(s) are asked to provide usernames that are used to identify content as having been posted by a particular member (who is identified by the username)."
@@ -901,7 +901,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:67
 msgid "Security"
-msgstr ""
+msgstr "Sécurité"
 
 #: .\templates\privacy.html.py:69
 msgid "PCF undertakes a range of security measures including physical access restraints, technical security monitoring, and internal security reviews of the environment to help to protect your personal information from unauthorized access, alteration, disclosure, or destruction. We also have policies in place to prohibit employees from viewing personal information without business justification."
@@ -957,7 +957,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:103
 msgid "How to Control the Use of Cookies."
-msgstr ""
+msgstr "Comment contrôler l'usage des Cookies"
 
 #: .\templates\privacy.html.py:105
 msgid "You have the ability to accept or decline cookies. PCF visitors who do not wish to have cookies placed on their computers by PCF, its contractors, or third-party service providers should set their browsers to refuse cookies before linking to PCF's web sites. Certain features of PCF's web sites may not function properly without the aid of cookies."
@@ -985,47 +985,47 @@ msgstr ""
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
-msgstr ""
+msgstr "Voir le site"
 
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
 msgid "Sign in with your OpenID"
-msgstr ""
+msgstr "Se connecter avec votre OpenID"
 
 #: .\templates\openid_consumer\signin.html.py:18
 msgid "Sign in"
-msgstr ""
+msgstr "Se connecter"
 
 #: .\templates\profiles\edit_profile.html.py:7
 #: .\templates\profiles\edit_profile.html.py:28
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "Modifier votre profil"
 
 #: .\templates\profiles\edit_profile.html.py:7
 msgid "View profile"
-msgstr ""
+msgstr "Voir votre profil"
 
 #: .\templates\profiles\edit_profile.html.py:10
 #: .\templates\profiles\view_profile.html.py:83
 msgid "Preferred Language"
-msgstr ""
+msgstr "Langage favori"
 
 #: .\templates\profiles\edit_profile.html.py:13
 #: .\templates\profiles\view_profile.html.py:84
 msgid "Homepage"
-msgstr ""
+msgstr "Page d'accueil"
 
 #: .\templates\profiles\edit_profile.html.py:30
 msgid "Save Edits to Profile"
-msgstr ""
+msgstr "Enregistrer les modifications du profil"
 
 #: .\templates\profiles\edit_profile.html.py:35
 msgid "Personal Info"
-msgstr ""
+msgstr "Infos personnelles"
 
 #: .\templates\profiles\edit_profile.html.py:57
 msgid "Upload picture"
-msgstr ""
+msgstr "Envoyer une image"
 
 #: .\templates\profiles\edit_profile.html.py:83
 msgid "Email me when something I've edited gets changed"
@@ -1046,28 +1046,28 @@ msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
-msgstr ""
+msgstr "Ajouter une langue"
 
 #: .\templates\profiles\view_profile.html.py:43
 msgid "Email sent"
-msgstr ""
+msgstr "Email envoyé"
 
 #: .\templates\profiles\view_profile.html.py:62
 msgid "Enter message please."
-msgstr ""
+msgstr "Veuillez saisir un message"
 
 #: .\templates\profiles\view_profile.html.py:66
 msgid "Enter email please."
-msgstr ""
+msgstr "Veuillez saisir une adresse mail"
 
 #: .\templates\profiles\view_profile.html.py:86
 #: .\templates\profiles\view_profile.html.py:116
 msgid "Send a Message"
-msgstr ""
+msgstr "Envoyer un message"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
-msgstr ""
+msgstr "<i>L'utilisateur n'a pas soumis de biographie.</i>"
 
 #: .\templates\profiles\view_profile.html.py:103
 #, python-format
@@ -1076,11 +1076,11 @@ msgstr ""
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
-msgstr ""
+msgstr "De"
 
 #: .\templates\profiles\view_profile.html.py:111
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
@@ -1095,7 +1095,7 @@ msgstr ""
 #: .\templates\registration\password_reset_done.html.py:4
 #: .\templates\registration\password_reset_form.html.py:4
 msgid "Home"
-msgstr ""
+msgstr "Accueil"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:6
@@ -1125,7 +1125,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
-msgstr ""
+msgstr "Saisissez le nouveau mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
@@ -1133,15 +1133,15 @@ msgstr ""
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr ""
+msgstr "Nouveau mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr ""
+msgstr "Confirmer le mot de passe:"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr ""
+msgstr "Changer mon mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
@@ -1175,11 +1175,11 @@ msgstr ""
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Votre nom d'utilisateur, au cas où vous l'auriez oublié:"
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Merci d'utiliser notre site!"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
@@ -1192,7 +1192,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
-msgstr ""
+msgstr "Adresse mail:"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
@@ -1201,7 +1201,7 @@ msgstr ""
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonyme"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
