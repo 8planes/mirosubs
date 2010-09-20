@@ -383,11 +383,11 @@ msgstr "خروج"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
-msgstr ""
+msgstr "مشرف"
 
 #: .\templates\base.html.py:88
 msgid "Login"
-msgstr ""
+msgstr "دخول"
 
 #: .\templates\base.html.py:106
 msgid "Universal Subtitles is a project of <a href=\"http://participatoryculture.org/\">PCF</a>."
@@ -395,15 +395,15 @@ msgstr ""
 
 #: .\templates\base.html.py:112
 msgid "Contact Us"
-msgstr ""
+msgstr "اتصل بنا"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"
-msgstr ""
+msgstr "سياسة الخصوصية"
 
 #: .\templates\demo.html.py:19
 msgid "Welcome to our alpha demo!"
-msgstr ""
+msgstr "مرحبا بكم في عرض ألفا!"
 
 #: .\templates\demo.html.py:21
 msgid ""
@@ -433,19 +433,17 @@ msgstr ""
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "أسئلة وأجوبة"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
 msgstr "ما هي الترجمة العالمية؟"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
-#, fuzzy
 msgid "How can I use Universal Subtitles?"
-msgstr "كيف يمكنني استخدام الترجمة العالمي؟"
+msgstr "كيف يمكنني استخدام الترجمة العالمية؟"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
-#, fuzzy
 msgid "What are the benefits of subtitles?"
 msgstr "ما هي فوائد الترجمة؟"
 
@@ -582,19 +580,19 @@ msgstr ""
 
 #: .\templates\feedback_response.html.py:3
 msgid "Thanks for getting in touch! We love hearing your ideas, bugs, feedback, opinions and such."
-msgstr ""
+msgstr "شكرا على الإتصال! نحن نحب سماع أفكاركم ، وشوائب الأدوات والموقع وما الى ذلك ، وردود الفعل والآراء والى آخره."
 
 #: .\templates\feedback_response.html.py:6
 msgid "Stay tuned as the project evolves!"
-msgstr ""
+msgstr "إبق على اتصال مع تطور المشروع!"
 
 #: .\templates\feedback_response.html.py:9
 msgid "Announcement Signup"
-msgstr ""
+msgstr "اعلان اشتراك"
 
 #: .\templates\feedback_response.html.py:12
 msgid "Best"
-msgstr ""
+msgstr "أفضل"
 
 #: .\templates\feedback_response.html.py:16
 msgid "PS. We do our best to respond to all questions, but please be patient -- we get a lot of email"
@@ -602,11 +600,11 @@ msgstr ""
 
 #: .\templates\index.html.py:41
 msgid "Subtitles and Captions for Every Video on the Web"
-msgstr ""
+msgstr "ترجمة وتعليق لكل فيديو على شبكة الانترنت"
 
 #: .\templates\index.html.py:44
 msgid "The Problem"
-msgstr ""
+msgstr "المشكلة"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
@@ -614,7 +612,7 @@ msgstr ""
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
-msgstr ""
+msgstr "مهمتنا"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
@@ -622,11 +620,11 @@ msgstr ""
 
 #: .\templates\index.html.py:46
 msgid "Learn More"
-msgstr ""
+msgstr "اعرف المزيد"
 
 #: .\templates\index.html.py:49
 msgid "Right now"
-msgstr ""
+msgstr "في الوقت الحالي"
 
 #: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
