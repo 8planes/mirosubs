@@ -30,7 +30,8 @@ from django.conf import settings
 import sha
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
-from utils.files_storages import S3Storage
+from utils.files_storages import default_image_storage
+from django.core.exceptions import MultipleObjectsReturned
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -49,7 +50,7 @@ class CustomUser(BaseUser):
     preferred_language = models.CharField(
         max_length=16, choices=SORTED_LANGUAGES, blank=True)
     picture = models.ImageField(
-        blank=True, storage=S3Storage(), upload_to='/pictures/')
+        blank=True, storage=default_image_storage, upload_to='pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
@@ -141,8 +142,11 @@ class Awards(models.Model):
     @classmethod
     def on_comment_save(cls, sender, instance, created, **kwargs):
         if created:
-            cls.objects.get_or_create(user=instance.user, type = cls.COMMENT)
-    
+            try:
+                cls.objects.get_or_create(user=instance.user, type = cls.COMMENT)
+            except MultipleObjectsReturned:
+                pass
+            
     @classmethod
     def on_subtitle_version_save(cls, sender, instance, created, **kwargs):
         if not instance.user:
@@ -158,7 +162,10 @@ class Awards(models.Model):
                 type = cls.EDIT_SUBTITLES
             else:
                 type = cls.EDIT_TRANSLATION
-        cls.objects.get_or_create(user=instance.user, type=type)
+        try:
+            cls.objects.get_or_create(user=instance.user, type=type)
+        except MultipleObjectsReturned:
+            pass
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (

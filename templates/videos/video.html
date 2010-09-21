@@ -107,12 +107,6 @@
         <a href="#" class="edit-title">{% trans 'edit title' %}</a>   
     {% endif %}
 
-    {% if saved %}
-        <h2>{% blocktrans %}Subtitles saved!  You can share the video with friends, 
-          or get an embed code for your site.  To add a
-          translation, click the button below.{% endblocktrans %}</h2>
-    {% endif %}
-
     <div class="grid_6 alpha left_column">
         {% widget widget_params %}
     </div>
@@ -125,10 +119,10 @@
 
   <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
-        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if video.subtitle_language %}
             <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{% trans 'Original' %}</a></li>
         {% endif %}
+        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if translations %} 
           {% for item in translations %}  
              <li {% if language == item %}class="active"{% endif %}><a href="{{ item.get_absolute_url }}">{{ item.get_language_display }}</a></li>
@@ -144,22 +138,30 @@
       <h4 class="inline">{% trans 'Video Info' %}</h4>      
 
       <ul class="inline_tabs">
-        <li class="active"><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{{ lang_count }}</span></span></a></li>
+        <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
         {% comment %}
         <li><a href="#comments-tab">{% trans 'Video URLS' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
         {% endcomment %}
-        <li><a href="#activity-tab">{% trans 'Activity Stream' %}</a></li>
+        <li class="active"><a href="#activity-tab">{% trans 'Activity Stream' %}</a></li>
       </ul>
 
       <div class="action_buttons grid_9 alpha omega">
+          {% if not video.subtitle_language %}
+            <h2>
+                {% trans 'There are no subtitles for this video yet.' %}
+            </h2>
+            <a href="#" id="add_subtitles" class="blue_button small">
+                {% trans 'Add Subtitles' %}
+            </a>          
+          {% endif %}
           {% with translations|length as has_translations %}
               {% include 'videos/_upload_subtitles.html' %}
           {% endwith %}       
       </div>
       
-      <div id="comments-tab">
+      <div id="comments-tab" style="display: none">
           <div class="grid_9 alpha omega">
             {% render_comment_form video %}
             {% render_comment_list video %}
@@ -167,7 +169,7 @@
           </div>
       </div>
       
-      <div id="activity-tab" style="display: none">
+      <div id="activity-tab">
           <div class="grid_9 alpha omega">
           {% video_activity video %}
           </div>

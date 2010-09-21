@@ -51,7 +51,7 @@ class OpenIdBackend:
                 else:
                     email = request.openid.ax.get('email')
                     nickname = request.openid.ax.get('nickname')
- 
+
             if nickname is None :
                 if email:
                     nickname = email.split('@')[0]
@@ -94,7 +94,10 @@ class OpenIdBackend:
             return user
         except User.DoesNotExist:
             return None
-        
+
+from urllib import urlopen
+from django.core.files.base import ContentFile
+
 class TwitterBackend:
     """TwitterBackend for authentication
     """
@@ -102,6 +105,7 @@ class TwitterBackend:
         '''authenticates the token by requesting user information from twitter
         '''
         twitter = oauthtwitter.OAuthApi(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, access_token)
+
         try:
             userinfo = twitter.GetUserInfo()
         except:
@@ -109,6 +113,7 @@ class TwitterBackend:
             raise
 
         screen_name = userinfo.screen_name
+        img_url = userinfo.profile_image_url
         
         try:
             user_profile = TwitterUserProfile.objects.get(screen_name = screen_name)
@@ -122,6 +127,12 @@ class TwitterBackend:
             else:
                 username = screen_name
             username = '@'+username
+            
+            name_count = User.objects.filter(username__startswith = username).count()
+                
+            if name_count:
+                username = '%s%s'%(username, name_count + 1)
+                            
             user = User(username =  username)
             temp_password = User.objects.make_random_password(length=12)
             user.set_password(temp_password)
@@ -131,6 +142,10 @@ class TwitterBackend:
             except:
                 first_name, last_name =  screen_name, ''
             user.first_name, user.last_name = first_name, last_name
+            if img_url:
+                img = ContentFile(urlopen(img_url).read())
+                name = img_url.split('/')[-1]
+                user.picture.save(name, img, False)            
             #user.email = '%s@twitteruser.%s.com'%(userinfo.screen_name, settings.SITE_NAME)
             user.save()
             userprofile = TwitterUserProfile(user = user, screen_name = screen_name)
@@ -140,7 +155,7 @@ class TwitterBackend:
             userprofile.description = userinfo.description
             userprofile.profile_image_url = userinfo.profile_image_url
             userprofile.save()
-            auth_meta = AuthMeta(user=user, provider='Twitter').save()
+            AuthMeta(user=user, provider='Twitter').save()
             return user
 
     def get_user(self, user_id):

@@ -133,10 +133,6 @@
 
 {% block main_content %}
     <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
-    <ul class="breadcrumb">
-        <li><a href="{{ video.get_absolute_url }}">{{ video }}</a></li> 
-        <li><a class="nohover" href="#">{{ language.language_display }} {% trans 'Subtitles' %}</a></li>
-    </ul>
 
     <div class="left_column">
         {% widget widget_params %}
@@ -151,10 +147,10 @@
 
   <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
-        <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if video.subtitle_language %}
             <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{% trans 'Original' %}</a></li>
         {% endif %}
+        <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if translations %} 
           {% for item in translations %}  
              <li {% if language == item %}class="active"{% endif %}><a href="{{ item.get_absolute_url }}">{{ item.get_language_display }}</a></li>
@@ -221,11 +217,11 @@
                           <span class="time-span time_link">
                             <span class="data">{{ item.start_time }}</span>
                             <span class="badgy start">
-                                {{ item.display_time }}
+                                <span class="stamp_text">{{ item.display_time }}</span>
                             </span>
                             {% if item.display_end_time %}
                                 <span class="connector"></span>
-                                <span class="badgy end">{{ item.display_end_time }}</span> 
+                                <span class="badgy end"><span class="stamp_text">{{ item.display_end_time }}</span></span> 
                             {% endif %}
                           </span>
                       {% else %}  

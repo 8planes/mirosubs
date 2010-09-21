@@ -49,7 +49,7 @@ font-size: 15px;
 background: url(../../images/form.png) -2px -10px no-repeat;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
-padding: 5px 8px;
+padding: 4px 8px;
 margin-bottom: 5px;
 width: 380px;
 line-height: 15px;
@@ -108,18 +108,20 @@ line-height: 30px;
 form p input, form p textarea, #feedback_form p input{
 display: block;
 border: 0;
-font-size: 13px;
+font-size: 12px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
-margin: 0 0 5px -7px;
+margin: 0 0 5px 0px;
 line-height: 15px;
-padding: 12px 0 8px 7px;
+padding: 8px 0 5px 8px;
 
 width: inherit;
 font-family: Arial, Helvetica, sans-serif;
+
 box-shadow:inset 0px 1px 2px #555;
--moz-box-shadow:inset 0px 1px 2px #555;
+-moz-box-shadow:inset 0px 1px 1px #555;
 -webkit-box-shadow:inset 0px 1px 2px #555;
+
 background: -moz-linear-gradient(top,  #eee,  #fff);
 }
 

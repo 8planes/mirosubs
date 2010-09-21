@@ -1,4 +1,3 @@
-{% if form %}
 <form method="post" action="{% url comments:post %}" id="comment-form">
     {% csrf_token %}
     {% for field in form %}
@@ -7,12 +6,27 @@
         {% endif %}
     {% endfor %}
     <div>
+        {% if not is_authnticated %}
+        <div style="padding: 0 0 10px 15px; display: none" class="login-for-comment">
+            <a href="{% url auth:login %}?next={{ next_page }}">Login to post a comment</a> 
+        </div>
+        {% endif %}
         {{ form.content }}
     </div>
-    <button class="green_button big" type="submit">Comment</button>    
+    <button class="green_button big post-comment-button" type="submit">Comment</button>    
 </form>
 <script type="text/javascript">
 jQuery(document).ready(function($){
+    var IS_AUTHENTICATED = '{{ is_authnticated }}' == 'True';
+    
+    function login_callback(){
+        $('.login-for-comment').show();
+        return false;
+    }
+    if ( ! IS_AUTHENTICATED){
+        $('#id_comment_form_content').focus(login_callback);
+        $('.post-comment-button').click(login_callback);
+    }
     $('#comment-form').ajaxForm({
         dataType: 'json',
         success: function(data, status, xhr, $form){
@@ -50,8 +64,4 @@ jQuery(document).ready(function($){
     });
 });
 </script>
-{% else %}
-    <div class="comment-form">
-        <a href="{% url auth:login %}?next={{ next_page }}">Login to post a comment</a> 
-    </div>
-{% endif %}
+        
