@@ -38,7 +38,7 @@ msgstr "كلمة المرور"
 
 #: .\apps\auth\admin.py:14
 msgid "Password confirmation"
-msgstr "تأكيد كلمة السر"
+msgstr "تأكيد كلمة المرور"
 
 #: .\apps\auth\admin.py:15
 msgid "Email"
