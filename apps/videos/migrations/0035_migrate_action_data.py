@@ -3,6 +3,7 @@ import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
+from videos.models import Action
 
 class Migration(SchemaMigration):
     
@@ -10,14 +11,20 @@ class Migration(SchemaMigration):
         
         if not db.dry_run:
             for item in orm.Action.objects.all():
-                print '.'
+                print 'Migrate action %s...' % item.pk 
+                if item.comment:
+                    item.action_type = Action.COMMENT
+                elif item.language:
+                    item.action_type = Action.ADD_VERSION
+                else:
+                    item.action_type = Action.ADD_VIDEO
                 if item.video and item.language:
                     try:
                         language = orm.SubtitleLanguage.objects.get(video=item.video, language=item.language)
                         item.language_fk = language
-                        item.save() 
                     except models.ObjectDoesNotExist:
                         pass
+                item.save() 
                 
     def backwards(self, orm):
         pass
