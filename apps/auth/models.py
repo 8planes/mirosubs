@@ -32,6 +32,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
 from utils.files_storages import default_image_storage
 from django.core.exceptions import MultipleObjectsReturned
+from utils.amazon.thumbnail import AmazonThumbnail
+from utils.amazon import S3EnabledImageField
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -49,8 +51,7 @@ class CustomUser(BaseUser):
     homepage = models.URLField(verify_exists=False, blank=True)
     preferred_language = models.CharField(
         max_length=16, choices=SORTED_LANGUAGES, blank=True)
-    picture = models.ImageField(
-        blank=True, storage=default_image_storage, upload_to='pictures/')
+    picture = S3EnabledImageField(blank=True, upload_to='pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
