@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-07 14:26+0300\n"
-"PO-Revision-Date: 2010-09-21 21:30+0100\n"
+"PO-Revision-Date: 2010-09-21 22:37+0100\n"
 "Last-Translator: guillaume <guill.vidal@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -672,7 +672,7 @@ msgstr "Pourquoi ne puis-je modifier le timing sur une traduction ?"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
-msgstr ""
+msgstr "Notre but avec Universal Subtitles est de rendre aisé pour quiconque d'ajouter des sous-titres et des traductions pour presque n'importe quelle video sur internet. De plus, nous construisons des outils collaboratifs, et nous esperons attirer de nombreux contributeurs pour nous aider dans le travail de traduction. Le logiciel que nous créons est gratuit et open source et peut être utilisé et amélioré par n'importe qui."
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
@@ -831,15 +831,15 @@ msgstr ""
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "Subtitle Lookup Protocol"
 
 #: .\templates\index.html.py:65
 msgid "An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video."
-msgstr ""
+msgstr "Un standard ouvert permettant à des extensions Firefox, des lecteurs vidéo, des sites, des navigateurs--tout type de clients--de trouver et de récuperer les sous-titres d'une vidéo."
 
 #: .\templates\index.html.py:75
 msgid "Get updates and find out first when we launch"
-msgstr ""
+msgstr "Restez informés et soyez avertis du lancement"
 
 #: .\templates\index.html.py:80
 msgid "Get Updates!"
@@ -859,7 +859,7 @@ msgstr "Mozilla va doubler le montant de votre donation!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "Nous sommes mis en avant par Mozilla Drumbeat!"
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
@@ -867,11 +867,11 @@ msgstr "Donnez maintenant"
 
 #: .\templates\index.html.py:146
 msgid "Check out the widget"
-msgstr ""
+msgstr "Essayez le widget"
 
 #: .\templates\index.html.py:147
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "Testez notre widget de traduction"
 
 #: .\templates\index.html.py:147
 msgid "Try the Demo"
@@ -880,27 +880,27 @@ msgstr "Essayez la démonstration"
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
 msgid "Open Subtitles Design Summit"
-msgstr ""
+msgstr "Sommet Open Subtitles Design"
 
 #: .\templates\opensubtitles2010.html.py:28
 msgid "The Open Subtitles Design Summit will bring together global stakeholders in the subtitling space for a tightly focused / goal oriented meeting in NYC. The event is being organized by The Participatory Culture Foundation, developers of the Universal Subtitles project. We expect roughly 40 participants."
-msgstr ""
+msgstr "The sommet Open Subtitles Design réunira les parti prenantes du monde du sous-titrage pour une rencontre ciblée à New York. Cet évènement est organisé par la Participatory Culture Foundation, qui développent le projet Universal Subtitles. Nous attendons une quarantaine de participants."
 
 #: .\templates\opensubtitles2010.html.py:34
 msgid "Meeting Goals"
-msgstr ""
+msgstr "But de la réunion"
 
 #: .\templates\opensubtitles2010.html.py:37
 msgid "<strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus."
-msgstr ""
+msgstr "<strong>Connecter</strong> les acteurs principaux des projets, organisations et mouvements qui ont pour but ou besoin le sous-titrage ouvert."
 
 #: .\templates\opensubtitles2010.html.py:41
 msgid "<strong>Identify ways</strong> to solve stakeholder subtitling needs and be aware of existing technology that can be leveraged. Find logical places for collaboration/cooperation."
-msgstr ""
+msgstr "<strong>Identifier des moyens</strong> pour resoudre des besoins de sous-titrage des acteurs et reconnaitre les technologies existantes qui peuvent être utilisées dans ce but. Trouver des espaces de collaboration et de coopération."
 
 #: .\templates\opensubtitles2010.html.py:44
 msgid "<strong>Move towards</strong> standardizing solutions and pushing forward the state of the art in open subtiting."
-msgstr ""
+msgstr "<strong>Avancer vers</strong> des solutions de standardisation et faire avancer l'état de l'art du sous-titrage ouvert."
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
@@ -908,11 +908,11 @@ msgstr "Participants"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
-msgstr ""
+msgstr "Les participants incluront: Créateurs et producteurs de video, utilisateurs, représentants des principaux services d'hébergement de vidéo, ingénieurs des standards, experts en accessibilité, développeurs open source, éducateurs, et autres individus et organisation ayant un intéret dans le monde du sous-titrage. Nous annoncerons une liste lorsque l'évènement approchera."
 
 #: .\templates\opensubtitles2010.html.py:57
 msgid "Attendees are selected by invitation; however, if you or your organization would like to participate, please contact:"
-msgstr ""
+msgstr "Les participants sont sélectionnés par invitation; cependant, si vous ou votre organisation souhaitez participer, veuillez contacter:"
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
@@ -920,7 +920,7 @@ msgstr "Quand"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "29 et 30 Septembre, à partir de 9h."
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
@@ -928,7 +928,7 @@ msgstr "Où"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
-msgstr ""
+msgstr "Le sommet aura lieu au penthouse Open Plans à Soho, qui se situe au 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
@@ -946,10 +946,19 @@ msgid ""
 "            and make sense of the ever growing sea of online video.\n"
 "           "
 msgstr ""
+"\n"
+"            L'attention du sommet sera fixé particulièrement sur l'amélioration de la disponibilité et de l'accessibilité des sous-titres, \n"
+"            qui sont tout deux très demandé. Il arrive à un moment crucial, \n"
+"            tandis que l'utilisation de la vidéo sur internet est en forte augmentation&mdash; ceux qui ont besoin de sous-titres risquent d'être oubliés. \n"
+"            De nouveaux utilisateurs de toutes les cultures arrivent en masse; \n"
+"            la standardisation et la mise à disposition de cette technologie peut augmenter exponentiellement l'audience potentielle, et permettre aux messages de traverser les frontières culturelles plus facilement. \n"
+"            Plus de sous-titres permettront également de faciliter pour les ordinateurs le traitement, l'indexation,\n"
+"            et la compréhension de la masse de vidéo que l'on trouve sur internet.\n"
+"           "
 
 #: .\templates\opensubtitles2010.html.py:91
 msgid "Organizers, Facilitators, Sponsors"
-msgstr ""
+msgstr "Organisateurs, Animateurs, Sponsors"
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
@@ -957,11 +966,11 @@ msgstr "Organisateurs"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
-msgstr ""
+msgstr "La <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> organise le sommet. Leur projet le plus récent, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, et une solution de sous-titrage et de traduction collaborative simple et open source."
 
 #: .\templates\opensubtitles2010.html.py:99
 msgid "Facilitators"
-msgstr ""
+msgstr "Animateurs"
 
 #: .\templates\opensubtitles2010.html.py:100
 msgid "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate."
@@ -1160,7 +1169,7 @@ msgstr ""
 #: .\templates\admin\base_site.html.py:4
 #: .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
-msgstr ""
+msgstr "Universal Subtitles"
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
@@ -1208,20 +1217,20 @@ msgstr "Envoyer une image"
 
 #: .\templates\profiles\edit_profile.html.py:83
 msgid "Email me when something I've edited gets changed"
-msgstr ""
+msgstr "Envoyez moi un mail quand quelque chose que j'ai édité change"
 
 #: .\templates\profiles\edit_profile.html.py:93
 msgid "Language Info"
-msgstr ""
+msgstr "Info Langue"
 
 #: .\templates\profiles\edit_profile.html.py:106
 msgid "Languages I Know"
-msgstr ""
+msgstr "Langues Connues"
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
 msgid "Remove Language"
-msgstr ""
+msgstr "Retirer Langue"
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
@@ -1251,7 +1260,7 @@ msgstr "<i>L'utilisateur n'a pas soumis de biographie.</i>"
 #: .\templates\profiles\view_profile.html.py:103
 #, python-format
 msgid "Send %(user_info)s a Message"
-msgstr ""
+msgstr "Envoyer un message à %(user_info)s"
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
@@ -1263,11 +1272,11 @@ msgstr "Message"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "Sans HTML"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
-msgstr ""
+msgstr "Note: Quand vous envoyez un message, le destinataire peut voir votre adresse email et vous répondre directement"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:4
@@ -1283,24 +1292,24 @@ msgstr "Accueil"
 #: .\templates\registration\password_reset_form.html.py:6
 #: .\templates\registration\password_reset_form.html.py:10
 msgid "Password reset"
-msgstr ""
+msgstr "Réinitialisation du mot de passe"
 
 #: .\templates\registration\password_reset_complete.html.py:6
 #: .\templates\registration\password_reset_complete.html.py:10
 msgid "Password reset complete"
-msgstr ""
+msgstr "Réinitialisation du mot de passe terminée"
 
 #: .\templates\registration\password_reset_complete.html.py:12
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "Votre mot de passe à été défini. Vous pouvez à présent vous connecter."
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "Connection"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
-msgstr ""
+msgstr "Confirmation de réinitialisation du mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
@@ -1308,7 +1317,7 @@ msgstr "Saisissez le nouveau mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Veuillez entrer votre nouveau mot de passe deux fois."
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
@@ -1324,33 +1333,33 @@ msgstr "Changer mon mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr ""
+msgstr "Réinitialisation du mot de passe échoué"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr ""
+msgstr "Le lien de réinitialisation du mot de passe est invalide, possiblement parce qu'il à déja été utilisé. Veuillez demander une nouvelle réinitialisation."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr ""
+msgstr "Réinitialisation du mot de passe réussie"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr ""
+msgstr "Nous avons envoyé des instructions pour choisir un mot de passe à l'adresse que vous avez fourni. Vous devez les recevoir sous peu."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
+msgstr "Vous recevez cet email parce que vous avez demandé une réinitialisation de mot de passe"
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr ""
+msgstr "pour votre compte utilisateur sur %(site_name)s"
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Veuillez aller à la page suivante et choisir un nouveau mot de passe: "
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
@@ -1363,11 +1372,11 @@ msgstr "Merci d'utiliser notre site!"
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "L'équipe de  %(site_name)s"
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
-msgstr ""
+msgstr "Mot de passe oublié? Entrez votre adresse email ci-dessous, et nous vous enverrons des instructions pour en choisir un nouveau"
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
@@ -1375,7 +1384,7 @@ msgstr "Adresse mail:"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Réinitialiser mon mot de passe"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
@@ -1384,20 +1393,20 @@ msgstr "Anonyme"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
-msgstr ""
+msgstr "à commenté"
 
 #: .\templates\videos\_activities.html.py:19
 msgid "commented on this video"
-msgstr ""
+msgstr "à commenté cette vidéo"
 
 #: .\templates\videos\_activities.html.py:23
 #, python-format
 msgid " edited %(lang)s translations for "
-msgstr ""
+msgstr "à edité la traduction %(lang)s pour"
 
 #: .\templates\videos\_activities.html.py:25
 msgid "edited subtitles for"
-msgstr ""
+msgstr "à edité les sous-titres pour"
 
 #: .\templates\videos\_error_feedback_form.html.py:7
 msgid "Please let us know what you were doing when you encountered this error."
