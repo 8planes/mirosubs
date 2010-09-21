@@ -89,7 +89,7 @@ mirosubs.subtitle.EditableCaption.prototype.setText = function(text) {
     this.changed_(false);
 };
 mirosubs.subtitle.EditableCaption.prototype.getText = function() {
-    return this.jsonCaption['subtitle_text'];
+    return this.jsonCaption['text'];
 };
 mirosubs.subtitle.EditableCaption.prototype.setStartTime = 
     function(startTime) 
