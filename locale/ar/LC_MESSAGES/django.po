@@ -1344,40 +1344,40 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
-msgstr ""
+msgstr "الترجمة الأصلية"
 
 #: .\templates\videos\_video_activity.html.py:46
 msgid "translation"
-msgstr ""
+msgstr "ترجمة"
 
 #: .\templates\videos\_video_activity.html.py:48
 msgid "for"
-msgstr ""
+msgstr "إلى"
 
 #: .\templates\videos\_video_activity.html.py:53
 msgid "ago"
-msgstr ""
+msgstr "منذ"
 
 #: .\templates\videos\actions_list.html.py:8
 msgid "All activities"
-msgstr ""
+msgstr "جميع الأنشطة"
 
 #: .\templates\videos\actions_list.html.py:12
 #: .\templates\videos\history.html.py:210
 msgid "User"
-msgstr ""
+msgstr "المستخدم"
 
 #: .\templates\videos\actions_list.html.py:13
 msgid "Date"
-msgstr ""
+msgstr "التاريخ"
 
 #: .\templates\videos\actions_list.html.py:14
 msgid "Video"
-msgstr ""
+msgstr "الفيديو"
 
 #: .\templates\videos\actions_list.html.py:24
 msgid "There are no activities."
-msgstr ""
+msgstr "لا توجد أية أنشطة."
 
 #: .\templates\videos\create.html.py:9
 msgid ""
@@ -1392,7 +1392,7 @@ msgstr ""
 
 #: .\templates\videos\create.html.py:23
 msgid "Begin"
-msgstr ""
+msgstr "بدء"
 
 #: .\templates\videos\create.html.py:25
 msgid ""
@@ -1405,11 +1405,11 @@ msgstr ""
 
 #: .\templates\videos\diffing.html.py:37
 msgid "Subtitles will be rolled back to a previous version"
-msgstr ""
+msgstr "سيتم إعادة الترجمة إلى إصدارها السابق"
 
 #: .\templates\videos\diffing.html.py:43
 msgid "You need to log in to do that."
-msgstr ""
+msgstr "ينبغي تسجيل الدخول للقيام بذلك."
 
 #: .\templates\videos\diffing.html.py:75
 #, python-format
@@ -1432,16 +1432,16 @@ msgstr ""
 #: .\templates\videos\history.html.py:185
 #: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
-msgstr ""
+msgstr "الترجمة"
 
 #: .\templates\videos\diffing.html.py:98
 #: .\templates\videos\revision.html.py:75
 msgid "Revision History"
-msgstr ""
+msgstr "تاريخ المراجعة "
 
 #: .\templates\videos\diffing.html.py:102
 msgid "Comparing Revision"
-msgstr ""
+msgstr "مقارنة المراجعات"
 
 #: .\templates\videos\diffing.html.py:110
 #: .\templates\videos\diffing.html.py:162
