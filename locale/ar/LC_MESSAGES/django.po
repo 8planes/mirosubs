@@ -1761,86 +1761,86 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
-msgstr ""
+msgstr "المهمة 1"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "Try creating subtitles on the following"
-msgstr ""
+msgstr "حاول ترجمة ما يلي"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "video"
-msgstr ""
+msgstr "فيديو"
 
 #: .\templates\videos\test_form_page.html.py:25
 #: .\templates\videos\test_form_page.html.py:31
 #: .\templates\videos\test_form_page.html.py:37
 #: .\templates\videos\test_form_page.html.py:57
 msgid "how was it? were the instructions clear? what would improve it?"
-msgstr ""
+msgstr "كيف كان؟ وهل كانت التعليمات واضحة؟ ما الذي يمكن أن يحسنهُ؟"
 
 #: .\templates\videos\test_form_page.html.py:29
 msgid "Task 2"
-msgstr ""
+msgstr "المهمة 2"
 
 #: .\templates\videos\test_form_page.html.py:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
-msgstr ""
+msgstr "حاول إصلاح الأخطاء في الفيديو (أو عُد اليه وعدّل)"
 
 #: .\templates\videos\test_form_page.html.py:35
 msgid "Task 3"
-msgstr ""
+msgstr "المهمة 3"
 
 #: .\templates\videos\test_form_page.html.py:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
-msgstr ""
+msgstr "ترجم الفيديو (وزيّف الترجمة إذا لم تكن ثنائي اللغة!)"
 
 #: .\templates\videos\test_form_page.html.py:42
 msgid "optional: get updates about Universal Subtitles"
-msgstr ""
+msgstr "اختياري : الحصول على التحديثات عن الترجمة العالمية"
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr ""
+msgstr "تقدّم!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "تعليمات بسيطة"
 
 #: .\templates\videos\test_form_page.html.py:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
-msgstr ""
+msgstr "المهام 2 و 3 اختياريتان (ولكن من المستحسن محاولة كلّ منهما)."
 
 #: .\templates\videos\test_form_page.html.py:74
 msgid "That’s it!"
-msgstr ""
+msgstr "هذا كل شيء!"
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr ""
+msgstr "أدخل عنوان جديد"
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr ""
+msgstr "تحرير العنوان"
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr ""
+msgstr "اللغات"
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
-msgstr ""
+msgstr "تيار النشاط "
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr ""
+msgstr "تم ٪"
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
-msgstr ""
+msgstr "أصلي"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
-msgstr ""
+msgstr "بدون ترجمة"
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
