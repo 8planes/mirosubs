@@ -607,23 +607,21 @@ msgstr "Beste"
 
 #: .\templates\feedback_response.html.py:16
 msgid "PS. We do our best to respond to all questions, but please be patient -- we get a lot of email"
-msgstr ""
+msgstr "PS: Wir tun unser Bestes alle Fragen zu beantworten, aber bitte haben Sie etwas Geduld – wir bekommen eine Menge E-Mails"
 
 #: .\templates\index.html.py:41
 msgid "Subtitles and Captions for Every Video on the Web"
-msgstr ""
+msgstr "Untertitel und Bildunterschriften für jedes Video im Web"
 
 #: .\templates\index.html.py:44
-#, fuzzy
 msgid "The Problem"
 msgstr "Das Problem"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
-msgstr ""
+msgstr "Web-Video wird zum Fernseh-Rivalen, aber es gibt noch keine gute, offene Ressource für die Untertitelung."
 
 #: .\templates\index.html.py:46
-#, fuzzy
 msgid "Our Mission"
 msgstr "Unsere Mission"
 
