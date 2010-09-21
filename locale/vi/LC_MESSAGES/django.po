@@ -1823,15 +1823,15 @@ msgstr ""
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr ""
+msgstr "Nhập tựa đề mới"
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr ""
+msgstr "sửa tựa đề"
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr ""
+msgstr "Ngôn ngữ"
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
@@ -1839,23 +1839,23 @@ msgstr ""
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr ""
+msgstr "% Hoàn tất"
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
-msgstr ""
+msgstr "Gốc"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
-msgstr ""
+msgstr "Không Phụ Đề"
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "Mọi Video Được Gửi Lên"
 
 #: .\templates\videos\video_list.html.py:12
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: .\templates\videos\video_list.html.py:14
 msgid "Pageloads"
@@ -1867,16 +1867,16 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:22
 msgid "Translations"
-msgstr ""
+msgstr "Bản Dịch"
 
 #: .\templates\videos\video_list.html.py:25
 msgid "Subtitled?"
-msgstr ""
+msgstr "Làm phụ đề?"
 
 #: .\templates\videos\video_list.html.py:39
 msgid "history"
-msgstr ""
+msgstr "lịch sử"
 
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
-msgstr ""
+msgstr "Không có video nào."
