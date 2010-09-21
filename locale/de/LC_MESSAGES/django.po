@@ -458,51 +458,52 @@ msgstr ""
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
-msgstr ""
+msgstr "Wer ist die Participatory Culture Foundation und warum machen sie so Universal Subtitles?"
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
+#, fuzzy
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
-msgstr ""
+msgstr "Wird Universal Subtitles Untertitel für Gehörlose und Schwerhörige unterstützen?"
 
 #: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
-msgstr ""
+msgstr "Werden Untertitel in meiner Sprache oder Zeichensatz unterstützt?"
 
 #: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
-msgstr ""
+msgstr "Wann werden die Werkzeuge, einschließlich dieser Website, in meiner Sprache verfügbar sein?"
 
 #: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
-msgstr ""
+msgstr "Wie kann ich Untertitel zu meinem Video hinzufügen?"
 
 #: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
-msgstr ""
+msgstr "Welche Open-Source-Lizenz wird verwendet?"
 
 #: .\templates\faq.html.py:28 .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
-msgstr ""
+msgstr "Ich bin ein Entwickler, kann ich helfen?"
 
 #: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
-msgstr ""
+msgstr "Können nicht-technisch-versierte Menschen sich an dem Projekt beteiligen?"
 
 #: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
-msgstr ""
+msgstr "Akzeptieren Sie Spenden? Sind sie steuerlich absetzbar?"
 
 #: .\templates\faq.html.py:31 .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
-msgstr ""
+msgstr "Was ist eure Beziehung mit Mozilla Drumbeat?"
 
 #: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr ""
+msgstr "Wo kann ich Untertitel im .SRT- oder anderen Formaten herunterladen?"
 
 #: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
-msgstr ""
+msgstr "Warum kann ich das Timing der Übersetzung nicht ändern?"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
@@ -514,31 +515,32 @@ msgstr ""
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
-msgstr ""
+msgstr "Video Untertitel sind eine Goldgrube ungenutzten Potenzials."
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
-msgstr ""
+msgstr "Bildunterschriften machen Videos zugänglicher für Menschen mit Hörbehinderung"
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
-msgstr ""
+msgstr "Übersetzte Untertitel machen es uns allen möglich ein Video in Sprachen zu sehen, die wir nicht sprechen"
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr ""
+msgstr "Als Lehrer, Erzähler, Wissenschaftler oder jemand mit einer Botschaft erhöht sich die potenzielle Größe des Publikums exponentiell, wenn das Video Untertitel und Übersetzungen hat"
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
 msgstr ""
 
 #: .\templates\faq.html.py:61
+#, fuzzy
 msgid "Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations."
-msgstr ""
+msgstr "Ja, wir arbeiten an einer Lösung zur Herstellung von Untertiteln [einschließlich Informationen über Sound und Musik], sowie Untertitel / Übersetzungen."
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
-msgstr ""
+msgstr "Wir werden daran arbeiten, möglichst viele Sprachen / Zeichensätze zu unterstützen."
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
@@ -589,19 +591,19 @@ msgstr ""
 
 #: .\templates\feedback_response.html.py:3
 msgid "Thanks for getting in touch! We love hearing your ideas, bugs, feedback, opinions and such."
-msgstr ""
+msgstr "Vielen Dank für die Anfrage! Wir lieben es Ideen, Bugs, Feedback, Meinungen und so weiter zu hören."
 
 #: .\templates\feedback_response.html.py:6
 msgid "Stay tuned as the project evolves!"
-msgstr ""
+msgstr "Bleiben Sie dabei, während das Projekt entwickelt!"
 
 #: .\templates\feedback_response.html.py:9
 msgid "Announcement Signup"
-msgstr ""
+msgstr "Bekanntmachungs-Anmeldung"
 
 #: .\templates\feedback_response.html.py:12
 msgid "Best"
-msgstr ""
+msgstr "Beste"
 
 #: .\templates\feedback_response.html.py:16
 msgid "PS. We do our best to respond to all questions, but please be patient -- we get a lot of email"
@@ -612,16 +614,18 @@ msgid "Subtitles and Captions for Every Video on the Web"
 msgstr ""
 
 #: .\templates\index.html.py:44
+#, fuzzy
 msgid "The Problem"
-msgstr ""
+msgstr "Das Problem"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
 msgstr ""
 
 #: .\templates\index.html.py:46
+#, fuzzy
 msgid "Our Mission"
-msgstr ""
+msgstr "Unsere Mission"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
