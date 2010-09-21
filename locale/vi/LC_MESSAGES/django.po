@@ -1655,7 +1655,7 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
-msgstr ""
+msgstr "Bình Luận"
 
 #: .\templates\videos\history.html.py:190
 msgid "History"
@@ -1739,19 +1739,19 @@ msgstr ""
 
 #: .\templates\videos\revision.html.py:144
 msgid "See full revision history"
-msgstr ""
+msgstr "Xem lịch sử phiên bản đầy đủ"
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
-msgstr ""
+msgstr "Tìm kiếm"
 
 #: .\templates\videos\search.html.py:16
 msgid "URL/title"
-msgstr ""
+msgstr "URL/tựa đề"
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
-msgstr ""
+msgstr "Ngôn ngữ"
 
 #: .\templates\videos\search.html.py:22
 msgid "Does"
@@ -1764,62 +1764,62 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:18
 msgid "Your Email"
-msgstr ""
+msgstr "Email của bạn"
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
-msgstr ""
+msgstr "Tác vụ 1"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "Try creating subtitles on the following"
-msgstr ""
+msgstr "Thử tạo phụ đề cho"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "video"
-msgstr ""
+msgstr "video"
 
 #: .\templates\videos\test_form_page.html.py:25
 #: .\templates\videos\test_form_page.html.py:31
 #: .\templates\videos\test_form_page.html.py:37
 #: .\templates\videos\test_form_page.html.py:57
 msgid "how was it? were the instructions clear? what would improve it?"
-msgstr ""
+msgstr "sau thì làm thế nào? hướng dẫn có rõ ràng không? cái gì giúp cải thiện nó?"
 
 #: .\templates\videos\test_form_page.html.py:29
 msgid "Task 2"
-msgstr ""
+msgstr "Tác vụ 2"
 
 #: .\templates\videos\test_form_page.html.py:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
-msgstr ""
+msgstr "Thử sửa các lỗi trên video (hoặc chỉ ghi lại nó và sửa đổi sau)"
 
 #: .\templates\videos\test_form_page.html.py:35
 msgid "Task 3"
-msgstr ""
+msgstr "Tác vụ 3"
 
 #: .\templates\videos\test_form_page.html.py:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
-msgstr ""
+msgstr "Dịch video (làm giả nó nếu bạn không thạo 2 thứ tiếng!)"
 
 #: .\templates\videos\test_form_page.html.py:42
 msgid "optional: get updates about Universal Subtitles"
-msgstr ""
+msgstr "tùy chọn: cập nhật từ Universal Subtitles"
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr ""
+msgstr "Gửi Lên!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Hướng Dẫn Đơn Giản"
 
 #: .\templates\videos\test_form_page.html.py:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
-msgstr ""
+msgstr "Cả tác vụ 2 & 3 đều là tùy chọn (nhưng chúng tôi khuyên bạn nên thử hết chúng)."
 
 #: .\templates\videos\test_form_page.html.py:74
 msgid "That’s it!"
-msgstr ""
+msgstr "Đó là nó!"
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
