@@ -1660,40 +1660,40 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:207
 msgid "Most Recent"
-msgstr ""
+msgstr "الأحدث"
 
 #: .\templates\videos\history.html.py:213
 msgid "Note"
-msgstr ""
+msgstr "ملاحظة"
 
 #: .\templates\videos\history.html.py:216
 msgid "Time"
-msgstr ""
+msgstr "الوقت"
 
 #: .\templates\videos\history.html.py:219
 msgid "Text"
-msgstr ""
+msgstr "نص"
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
-msgstr ""
+msgstr "لا توجد ترجمة لهذه اللغة."
 
 #: .\templates\videos\history.html.py:253
 msgid "Either no subtitles have been entered, or they were deleted."
-msgstr ""
+msgstr "إمّا أن لم يتم إدخال أية ترجمة ، أو قد تم حذفها."
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
-msgstr ""
+msgstr "لا توجد ترجمة حالياً."
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "Make some!"
-msgstr ""
+msgstr "ترجم قليلاً!"
 
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
 msgid "Revision"
-msgstr ""
+msgstr "مراجعة"
 
 #: .\templates\videos\revision.html.py:83
 #, python-format
@@ -1732,23 +1732,23 @@ msgstr ""
 
 #: .\templates\videos\revision.html.py:144
 msgid "See full revision history"
-msgstr ""
+msgstr "ألقِ نظرة على تاريخ المراجعة بأكمله"
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
-msgstr ""
+msgstr "بحث"
 
 #: .\templates\videos\search.html.py:16
 msgid "URL/title"
-msgstr ""
+msgstr "عنوان الموقع / عنوان"
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
-msgstr ""
+msgstr "لغة"
 
 #: .\templates\videos\search.html.py:22
 msgid "Does"
-msgstr ""
+msgstr "يفعل"
 
 #: .\templates\videos\stop_notification.html.py:9
 #, python-format
@@ -1757,7 +1757,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:18
 msgid "Your Email"
-msgstr ""
+msgstr "بريدك الإلكتروني"
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
