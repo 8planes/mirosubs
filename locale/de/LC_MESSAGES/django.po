@@ -1210,7 +1210,7 @@ msgstr ""
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "Das %(site_name)s Team"
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
@@ -1240,7 +1240,7 @@ msgstr ""
 #: .\templates\videos\_activities.html.py:23
 #, python-format
 msgid " edited %(lang)s translations for "
-msgstr ""
+msgstr "%(lang)s-Übersetzungen bearbeitet für"
 
 #: .\templates\videos\_activities.html.py:25
 msgid "edited subtitles for"
