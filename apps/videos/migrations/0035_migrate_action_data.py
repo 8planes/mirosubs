@@ -10,6 +10,7 @@ class Migration(SchemaMigration):
         
         if not db.dry_run:
             for item in orm.Action.objects.all():
+                print '.'
                 if item.video and item.language:
                     try:
                         language = orm.SubtitleLanguage.objects.get(video=item.video, language=item.language)

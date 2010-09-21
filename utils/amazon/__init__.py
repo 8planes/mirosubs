@@ -18,6 +18,8 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files import File
 import os
 
+DEFAULT_HOST = 's3.amazonaws.com'
+
 class S3Storage(FileSystemStorage):
     def __init__(self, bucket=None, location=None, base_url=None):
         if bucket is None:
@@ -79,7 +81,7 @@ class S3Storage(FileSystemStorage):
         return self.bucket.get_key(name).size
 
     def url(self, name):
-        return 'https://%s.s3.amazonaws.com/%s' % (self.bucket.name, name)
+        return 'https://%s.%s/%s' % (self.bucket.name, DEFAULT_HOST, name)
         #return Key(self.bucket, name).generate_url(100000)
     
     def get_available_name(self, name):
