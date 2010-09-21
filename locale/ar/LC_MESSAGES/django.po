@@ -171,7 +171,7 @@ msgstr ""
 
 #: .\templates\_testing_widget.html.py:5
 msgid "Just launch our feedback form and try captioning a video"
-msgstr ""
+msgstr "أطلق نموذج ردود الفعل وجرّب ترجمة فيديو واحد"
 
 #: .\templates\_testing_widget.html.py:7
 #, fuzzy
@@ -180,11 +180,11 @@ msgstr "اختبر القطعة"
 
 #: .\templates\_testing_widget.html.py:12
 msgid "Warning: These videos should not be embeded--there is a good possibility they will break at some point!"
-msgstr ""
+msgstr "تحذير : لا تضع هذه الأفلام على الموقع  -- هنالك احتمال جيد أنها ستصبح غير صالحة عاجلاً أم آجلاً!"
 
 #: .\templates\_testing_widget.html.py:16
 msgid "Warning #2: These subtitles are non-permanent and should not be relied on -- someone could change them."
-msgstr ""
+msgstr "تحذير رقم 2 : هذه الترجمة غير دائمة ويجب عدم الاعتماد عليها -- أي شخص يمكنه تغييرها."
 
 #: .\templates\_testing_widget.html.py:17
 msgid "This alpha site is for purely testing purposes."
@@ -342,7 +342,7 @@ msgstr ""
 
 #: .\templates\base.html.py:18
 msgid "Free and open tools for creating captions, subtitles, and translations for video."
-msgstr ""
+msgstr "أدوات مجانية ومفتوحة لترجمة الفيديو."
 
 #: .\templates\base.html.py:37
 msgid "Universal Subtitles does not support your browser. Upgrade your browser or <a href=\"http://getfirefox.com\">Try Firefox</a>."
@@ -350,7 +350,7 @@ msgstr ""
 
 #: .\templates\base.html.py:59
 msgid "a project of the participatory culture foundation"
-msgstr ""
+msgstr "مشروع مؤسسة الثقافة التشاركية"
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
@@ -449,15 +449,15 @@ msgstr "ما هي فوائد الترجمة؟"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
-msgstr ""
+msgstr "ما هي مؤسسة الثقافة التشاركية ، ولماذا يعملون على الترجمة العالمي؟"
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
-msgstr ""
+msgstr "هل ستوفّر الترجمة العالمية التعليق على الصوت بصيغة الكلمات للصُمّ وضعاف السّمع؟"
 
 #: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
-msgstr ""
+msgstr "هل ستكون الترجمة متاحة بلغتي؟"
 
 #: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
@@ -489,7 +489,7 @@ msgstr "ما هي علاقتكم مع موزيلا درام بِيت؟"
 
 #: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr ""
+msgstr "أين يمكنني تنزيل الترجمة في صيغة اس آر تي أو غيرها من الصّيغ؟ "
 
 #: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
