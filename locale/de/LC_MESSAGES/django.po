@@ -408,11 +408,11 @@ msgstr "Kontakt"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Datenschutz"
 
 #: .\templates\demo.html.py:19
 msgid "Welcome to our alpha demo!"
-msgstr ""
+msgstr "Willkommen zu unserer Alpha-Demo!"
 
 #: .\templates\demo.html.py:21
 msgid ""
@@ -441,20 +441,22 @@ msgid ""
 msgstr ""
 
 #: .\templates\faq.html.py:16
+#, fuzzy
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Häufig gestellte Fragen"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Was ist Universal Subtitles?"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Wie kann ich Universal Subtitles verwenden?"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
+#, fuzzy
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "Was sind die Vorteile der Untertitel?"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
@@ -630,88 +632,97 @@ msgid "We're trying to make captioning, subtitling, and translating video public
 msgstr ""
 
 #: .\templates\index.html.py:46
+#, fuzzy
 msgid "Learn More"
-msgstr ""
+msgstr "Mehr dazu"
 
 #: .\templates\index.html.py:49
+#, fuzzy
 msgid "Right now"
-msgstr ""
+msgstr "Jetzt"
 
 #: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
 msgstr ""
 
 #: .\templates\index.html.py:50
+#, fuzzy
 msgid "Try our demo"
-msgstr ""
+msgstr "Testen Sie unsere Demo"
 
 #: .\templates\index.html.py:50
+#, fuzzy
 msgid "Become a tester"
-msgstr ""
+msgstr "Werde ein Tester"
 
 #: .\templates\index.html.py:56
 msgid "Subtitle Widget"
-msgstr ""
+msgstr "Untertitel-Widget"
 
 #: .\templates\index.html.py:57
 msgid "A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos)."
-msgstr ""
+msgstr "Eine einfache Möglichkeit zum Erstellen und Hinzufügen von Bildunterschriften zu fast jedem Video im Web (ohne transkodieren oder neu hochladen der Videos)."
 
 #: .\templates\index.html.py:60
 msgid "Community Site"
-msgstr ""
+msgstr "Community Seite"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
-msgstr ""
+msgstr "Eine Online-Community um die Videos dieser Welt kollaborativ zu untertiteln und zu übersetzen (wie ein Wikipedia für Untertitel)."
 
 #: .\templates\index.html.py:64
+#, fuzzy
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "Untertitel Lookup-Protokoll"
 
 #: .\templates\index.html.py:65
 msgid "An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video."
-msgstr ""
+msgstr "Ein offener Standard um Firefox-Erweiterungen, Desktop-Video-Player, Webseiten, Browser – jedem Client – zu erlauben für beliebige Videos Untertitel abzurufen."
 
 #: .\templates\index.html.py:75
+#, fuzzy
 msgid "Get updates and find out first when we launch"
-msgstr ""
+msgstr "Neuigkeiten erhalten und zuerst erfahren wenn gelauncht wird"
 
 #: .\templates\index.html.py:80
+#, fuzzy
 msgid "Get Updates!"
-msgstr ""
+msgstr "Holen Sie sich Neuigkeiten!"
 
 #: .\templates\index.html.py:85
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein"
 
 #: .\templates\index.html.py:118
 msgid "Please enter your email address."
-msgstr ""
+msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein."
 
 #: .\templates\index.html.py:137
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "Mozilla wird Ihre Spende verdoppeln!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "Wir sind ein gefeaturtes Mozilla Drumbeat Projekt!"
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
-msgstr ""
+msgstr "Jetzt Spenden"
 
 #: .\templates\index.html.py:146
+#, fuzzy
 msgid "Check out the widget"
-msgstr ""
+msgstr "Sehen Sie sich das Widget an"
 
 #: .\templates\index.html.py:147
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "Testen Sie unser Untertitelungs-Widget"
 
 #: .\templates\index.html.py:147
+#, fuzzy
 msgid "Try the Demo"
-msgstr ""
+msgstr "Probieren Sie die Demo"
 
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
@@ -724,11 +735,12 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:34
 msgid "Meeting Goals"
-msgstr ""
+msgstr "Ziele des Treffens"
 
 #: .\templates\opensubtitles2010.html.py:37
+#, fuzzy
 msgid "<strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus."
-msgstr ""
+msgstr "<strong>Verbinden</strong> von wichtigen Akteuren von Projekten, Organisationen und Bewegungen, die Notwendigkeiten oder als Ziel offene Untertitelung haben."
 
 #: .\templates\opensubtitles2010.html.py:41
 msgid "<strong>Identify ways</strong> to solve stakeholder subtitling needs and be aware of existing technology that can be leveraged. Find logical places for collaboration/cooperation."
@@ -740,7 +752,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
-msgstr ""
+msgstr "Teilnehmer"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
@@ -752,7 +764,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "Wann"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
@@ -760,7 +772,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "Wo"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
@@ -768,7 +780,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
-msgstr ""
+msgstr "Warum"
 
 #: .\templates\opensubtitles2010.html.py:75
 msgid ""
@@ -785,7 +797,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:91
 msgid "Organizers, Facilitators, Sponsors"
-msgstr ""
+msgstr "Organisatoren, Moderatoren, Sponsoren"
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
