@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
         db.delete_column('videos_action', 'language')
         db.delete_foreign_key('videos_action', 'language_fk_id')
         db.rename_column('videos_action', 'language_fk_id', 'language_id')
-        db.alter_column('videos_action', 'language_id', models.ForeignKey(orm['SubtitleLanguage'], blank=True, null=True))
+        db.alter_column('videos_action', 'language_id', models.ForeignKey(orm['videos.SubtitleLanguage'], blank=True, null=True))
                 
     def backwards(self, orm):
         db.add_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(default='', max_length=16, blank=True))
