@@ -3,7 +3,7 @@ from sorl.thumbnail.base import ThumbnailException
 from os.path import isfile, isdir, getmtime, dirname, splitext, getsize
 import os
 from django.conf import settings
-from utils.files_storages import S3Storage
+from utils.amazon import S3Storage
 from django.conf import settings
 from django.utils.encoding import iri_to_uri, force_unicode
 
@@ -65,7 +65,6 @@ class AmazonThumbnail(DjangoThumbnail):
             raise ThumbnailException("No destination filename set.")
         
         new_generated = False
-
         if not isinstance(self.dest, basestring):
             # We'll assume dest is a file-like instance if it exists but isn't
             # a string.
@@ -74,13 +73,22 @@ class AmazonThumbnail(DjangoThumbnail):
             
         elif not isfile(self.dest) or (self.source_exists and
             getmtime(self.source) > getmtime(self.dest)):
-            
+    
             if is_on_s3(self.relative_dest):
-                 # "thumb is on s3"
+                # "thumb is on s3"
                 pull_from_s3(self.relative_dest)
                 self._source_exists = True
             else:
-                 # "thumb not on s3"
+                # "thumb not on s3"
+                if not self.source_exists:
+                    # file's missing.
+                    if is_on_s3(self.relative_source):
+                        pull_from_s3(self.relative_source)
+                        self._source_exists = True
+                    else:
+                        # "source is not on S3!"
+                        self._source_exists = False
+    
                 if self.source_exists:
                     # Ensure the directory exists
                     directory = dirname(self.dest)
@@ -88,21 +96,10 @@ class AmazonThumbnail(DjangoThumbnail):
                         os.makedirs(directory)
     
                     self._do_generate()
-                    new_generated = True                  
-                else:
-                    # file's missing.
-                    print self.relative_source
-                    if is_on_s3(self.relative_source):
-                        pull_from_s3(self.relative_source)
-                        self._source_exists = True
-                    else:
-                         # "source is not on S3!"
-                        self._source_exists = False
-    
-
+                    new_generated = True
     
         if new_generated:
-            push_to_s3(self.dest)
+            push_to_s3(self.relative_dest)
 
     def _get_relative_source(self):
         # Hack.
@@ -116,9 +113,11 @@ class AmazonThumbnail(DjangoThumbnail):
 
 def push_to_s3(file_path):
     s3_storage = S3Storage()
-    img_file = open("%s%s" % (settings.MEDIA_ROOT,file_path),'r')    
-    s3_storage.save(file_path.split('/')[-1], img_file.read())
+    img_file = open("%s%s" % (settings.MEDIA_ROOT,file_path),'r')
+    s3_img_file = s3_storage.open("%s" % (file_path), 'w')
+    s3_img_file.write(img_file.read())
     img_file.close()
+    s3_img_file.close()
 
 def is_on_s3(file_path):
     s3_storage = S3Storage() 
@@ -127,9 +126,9 @@ def is_on_s3(file_path):
 def pull_from_s3(file_path):
     s3_storage = S3Storage()     
     img_file = open("%s%s" % (settings.MEDIA_ROOT,file_path),'w')
-    s3_img_file = s3_storage.open(file_path)
-    print s3_img_file
+    s3_img_file = s3_storage.open(file_path, 'r')
     img_file.write(s3_img_file.read())
     s3_img_file.close()
     img_file.close()
+
     
