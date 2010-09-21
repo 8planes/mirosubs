@@ -134,7 +134,7 @@ mirosubs.translate.TranslationPanel.prototype.startEditing_ =
             existingTranslations,
             function(transJson) {
                 return new mirosubs.translate.EditableTranslation(
-                    uw, transJson['caption_id'], transJson);
+                    uw, transJson['subtitle_id'], transJson);
             });
     this.translationList_.setTranslations(editableTranslations);
     this.translationList_.setEnabled(true);

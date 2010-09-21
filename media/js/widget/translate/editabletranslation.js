@@ -24,7 +24,7 @@ mirosubs.translate.EditableTranslation = function(unitOfWork, captionID,
     this.captionID_ = captionID;
     this.jsonTranslation = opt_jsonTranslation || 
         {
-            'caption_id': captionID,
+            'subtitle_id': captionID,
             'text': ''
         };
     if (!opt_jsonTranslation)
@@ -41,5 +41,5 @@ mirosubs.translate.EditableTranslation.prototype.getText = function() {
 };
 
 mirosubs.translate.EditableTranslation.prototype.getCaptionID = function() {
-    return this.jsonTranslation['caption_id'];
+    return this.jsonTranslation['subtitle_id'];
 };

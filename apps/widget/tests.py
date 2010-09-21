@@ -61,8 +61,8 @@ class TestNullRpc(TestCase):
         return_value = null_rpc.start_editing(request, video_id)
         self.assertEqual(True, return_value['can_edit'])
         self.assertEqual(0, return_value['version'])
-        inserted = [{'caption_id': u'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': u'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -81,7 +81,7 @@ class TestNullRpc(TestCase):
         null_rpc.finished_subtitles(request, video.video_id, [], [], [])
         response = null_rpc.start_editing(request, video.video_id, language_code='es')
         self.assertEquals(True, response['can_edit'])
-        inserted = [{'caption_id': u'sfdsfsdf', 'text': 'asdfdsf'}]
+        inserted = [{'subtitle_id': u'sfdsfsdf', 'text': 'asdfdsf'}]
         null_rpc.save_subtitles(request, video.video_id, [], inserted, [], language_code='es')
         null_rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
         subs = null_rpc.fetch_subtitles(request, video.video_id, language_code='es')
@@ -95,8 +95,8 @@ class TestNullRpc(TestCase):
             False)
         video_id = return_value['video_id']
         null_rpc.start_editing(request, video_id)
-        inserted = [{'caption_id': u'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': u'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -166,8 +166,8 @@ class TestRpc(TestCase):
             False)
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
-        inserted = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -188,8 +188,8 @@ class TestRpc(TestCase):
     def test_insert_then_update(self):
         request = RequestMockup(self.user_1)
         video = self._create_video_with_one_caption_set(request)
-        updated = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': 'hey you!',
+        updated = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey you!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -232,8 +232,8 @@ class TestRpc(TestCase):
             False)
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
-        inserted = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -259,8 +259,8 @@ class TestRpc(TestCase):
             False)
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
-        inserted = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -278,8 +278,8 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
         request_0.user = self.user_0
-        inserted = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -317,8 +317,8 @@ class TestRpc(TestCase):
             False)
         video_id = return_value['video_id']
         rpc.start_editing(request_0, video_id)
-        inserted = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -326,8 +326,8 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request_0, video_id, [], [], [])
         # user 0 opens dialog again and makes an edit.
         rpc.start_editing(request_0, video_id)
-        inserted = [{'caption_id': 'sfdsdsdsdfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': 'sfdsdsdsdfsdf',
+                     'text': 'hey!',
                      'start_time': 3.5,
                      'end_time': 5.4,
                      'sub_order': 2.0}]
@@ -360,8 +360,8 @@ class TestRpc(TestCase):
             False)
         rpc.start_editing(request_1, video.video_id)
         # user_1 updates the solitary caption to have blank text.
-        updated = [{'caption_id': 'sfdsfsdf',
-                     'caption_text': '',
+        updated = [{'subtitle_id': 'sfdsfsdf',
+                     'text': '',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -379,8 +379,8 @@ class TestRpc(TestCase):
         request_0 = RequestMockup(self.user_0)
         video = self._create_video_with_one_caption_set(request_0)
         # we update the text of the sole subtitle to be blank.
-        updated = [{'caption_id': u'sfdsfsdf',
-                    'caption_text': '',
+        updated = [{'subtitle_id': u'sfdsfsdf',
+                    'text': '',
                     'start_time': 2.3,
                     'end_time': 3.4,
                     'sub_order': 1.0}]
@@ -403,13 +403,13 @@ class TestRpc(TestCase):
         self.assertEquals(True, response['can_edit'])
         self.assertEquals(0, response['version'])
         self.assertEquals(0, len(response['existing']))
-        inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
         rpc.save_subtitles(request, video.video_id,
                            [], inserted, [], language_code='es')
         rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
         translations = rpc.fetch_subtitles(request, video.video_id, language_code='es')
         self.assertEquals(1, len(translations))
-        self.assertEquals('heyoes', translations[0]['caption_text'])
+        self.assertEquals('heyoes', translations[0]['text'])
         language = video.subtitle_language('es')
         self.assertEquals(1, language.subtitleversion_set.count())
 
@@ -420,14 +420,14 @@ class TestRpc(TestCase):
         rpc.release_lock(request, video.video_id)
         # open translation dialog.
         response = rpc.start_editing(request, video.video_id, language_code='es')
-        inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
         rpc.save_subtitles(request, video.video_id, [],
                               inserted, [], language_code='es')
-        updated = [{'caption_id': 'sfdsfsdf', 'text': 'new text'}]
+        updated = [{'subtitle_id': 'sfdsfsdf', 'text': 'new text'}]
         rpc.save_subtitles(request, video.video_id, [], [], updated, language_code='es')
         rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
         translations = rpc.fetch_subtitles(request, video.video_id, language_code='es')
-        self.assertEquals('new text', translations[0]['caption_text'])
+        self.assertEquals('new text', translations[0]['text'])
         video = Video.objects.get(pk=video.pk)
         self.assertEquals(1, video.subtitle_language('es').subtitleversion_set.count())
 
@@ -446,7 +446,7 @@ class TestRpc(TestCase):
         self.assertEquals(1, response['version'])
         self.assertEquals(1, len(response['existing']))
         # user_1 updates solitary translation to have blank text.
-        updated = [{'caption_id': 'sfdsfsdf', 'text': ''}]
+        updated = [{'subtitle_id': 'sfdsfsdf', 'text': ''}]
         rpc.save_subtitles(request_1, video.video_id, [], [], updated, language_code='es')
         rpc.finished_subtitles(request_1, video.video_id, [], [], [], language_code='es')
         language = Video.objects.get(pk=video.pk).subtitle_language('es')
@@ -458,7 +458,7 @@ class TestRpc(TestCase):
     def test_zero_out_trans_version_0(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_translation(request)
-        updated = [{'caption_id': 'sfdsfsdf', 'text': ''}]
+        updated = [{'subtitle_id': 'sfdsfsdf', 'text': ''}]
         rpc.save_subtitles(request, video.video_id, [], [], updated, language_code='es')
         rpc.finished_subtitles(request, video.video_id, [], [], [], language_code='es')
         language = Video.objects.get(pk=video.pk).subtitle_language('es')
@@ -475,8 +475,8 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         rpc.start_editing(request, video_id)
 
-        inserted = [{'caption_id': u'sfdsfsdf',
-                     'caption_text': 'hey!',
+        inserted = [{'subtitle_id': u'sfdsfsdf',
+                     'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
@@ -489,7 +489,7 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, video.video_id, [], [], [])
         rpc.release_lock(request, video.video_id)
         response = rpc.start_editing(request, video.video_id, language_code='es')
-        inserted = [{'caption_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
         rpc.save_subtitles(request, video.video_id, [],
                            inserted, [], language_code='es')
         return video
