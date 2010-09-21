@@ -1844,15 +1844,15 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "كل الأفلام المقدّمة"
 
 #: .\templates\videos\video_list.html.py:12
 msgid "URL"
-msgstr ""
+msgstr "عنوان الموقع"
 
 #: .\templates\videos\video_list.html.py:14
 msgid "Pageloads"
-msgstr ""
+msgstr "تحميل الصفحات"
 
 #: .\templates\videos\video_list.html.py:18
 msgid "Subtitles Fetched"
@@ -1860,16 +1860,16 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:22
 msgid "Translations"
-msgstr ""
+msgstr "ترجمة"
 
 #: .\templates\videos\video_list.html.py:25
 msgid "Subtitled?"
-msgstr ""
+msgstr "مترجَم؟"
 
 #: .\templates\videos\video_list.html.py:39
 msgid "history"
-msgstr ""
+msgstr "تاريخ"
 
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
-msgstr ""
+msgstr "لا توجد أفلام."
