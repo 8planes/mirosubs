@@ -6,18 +6,21 @@ from django.db import models
 
 class Migration(SchemaMigration):
     
-    depends_on = (
-        ("auth", "0001_initial"),
-    )    
-    
     def forwards(self, orm):
-        db.delete_column('videos_action', 'language')        
-        db.add_column('videos_action', 'language', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.SubtitleLanguage'], null=True, blank=True))
-   
+        
+        if not db.dry_run:
+            for item in orm.Action.objects.all():
+                if item.video and item.language:
+                    try:
+                        language = orm.SubtitleLanguage.objects.get(video=item.video, language=item.language)
+                        item.language_fk = language
+                        item.save() 
+                    except models.ObjectDoesNotExist:
+                        pass
+                
     def backwards(self, orm):
-        db.delete_column('videos_action', 'language_id')
-        db.add_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(default='', max_length=16, blank=True))
-           
+        pass
+    
     models = {
         'auth.customuser': {
             'Meta': {'object_name': 'CustomUser', '_ormbases': ['auth.User']},
@@ -83,6 +86,7 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
+            'language_fk': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']", 'null': 'True', 'blank': 'True'}),
             'new_video_title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
