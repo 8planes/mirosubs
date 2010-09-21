@@ -21,7 +21,6 @@ import urlparse
 import xml.sax
 
 DEFAULT_HOST = 's3.amazonaws.com'
-DEFAULT_HOST = 'mechanicalturk.sandbox.amazonaws.com'
 PORTS_BY_SECURITY = { True: 443, False: 80 }
 METADATA_PREFIX = 'x-amz-meta-'
 AMAZON_HEADER_PREFIX = 'x-amz-'
@@ -139,8 +138,6 @@ class CallingFormat:
 class Location:
     DEFAULT = None
     EU = 'EU'
-
-
 
 class AWSAuthConnection:
     def __init__(self, aws_access_key_id, aws_secret_access_key, is_secure=True,
@@ -450,9 +447,16 @@ class Response:
             self.message = self.body
         else:
             self.message = "%03d %s" % (http_response.status, http_response.reason)
-
-
-
+        
+    def print_response(self):
+        print '-----S3 response----'
+        print self.http_response.status
+        print '--------------------'
+        print self.body
+        print '--------------------'
+        print self.message
+        print '--------------------'        
+    
 class ListBucketResponse(Response):
     def __init__(self, http_response):
         Response.__init__(self, http_response)

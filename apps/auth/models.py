@@ -32,6 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
 from utils.files_storages import default_image_storage
 from django.core.exceptions import MultipleObjectsReturned
+from utils.amazon.thumbnail import AmazonThumbnail
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -70,6 +71,10 @@ class CustomUser(BaseUser):
             else:
                 return self.first_name
         return self.username
+    
+    def avatar(self):
+        if self.picture:
+            return AmazonThumbnail(self.picture, (128, 128))
     
     @models.permalink
     def get_absolute_url(self):

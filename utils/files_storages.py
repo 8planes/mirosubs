@@ -35,11 +35,7 @@ from django.core.files.storage import default_storage
 ACCESS_KEY_NAME = 'AWS_ACCESS_KEY_ID'
 SECRET_KEY_NAME = 'AWS_SECRET_ACCESS_KEY'
 
-try:
-    from utils.amazon.S3 import AWSAuthConnection, QueryStringAuthGenerator, CallingFormat
-except ImportError:
-    raise ImproperlyConfigured, "Could not load amazon's S3 bindings.\
-    \nSee http://developer.amazonwebservices.com/connect/entry.jspa?externalID=134"
+from utils.amazon.S3 import AWSAuthConnection, QueryStringAuthGenerator, CallingFormat
 
 class S3Storage(Storage):
     """Amazon Simple Storage Service"""
@@ -57,7 +53,11 @@ class S3Storage(Storage):
                             calling_format=calling_format)
         self.generator = QueryStringAuthGenerator(access_key, secret_key, 
                             calling_format=calling_format, is_secure=False)
-
+        
+        #print self.connection.check_bucket_exists(self.bucket).read()
+        #if not self.connection.check_bucket_exists(self.bucket):
+        self.connection.create_bucket(self.bucket)
+         
     def _get_access_keys(self):
         access_key = getattr(settings, ACCESS_KEY_NAME, None)
         secret_key = getattr(settings, SECRET_KEY_NAME, None)
@@ -75,12 +75,12 @@ class S3Storage(Storage):
         content_type = guess_type(filename)[0] or "application/x-octet-stream"
         headers = {'x-amz-acl':  self.acl, 'Content-Type': content_type}
         response = self.connection.put(self.bucket, filename, raw_contents, headers)
-
+        
     def url(self, filename):
         return self.generator.make_bare_url(self.bucket, filename)
 
     def filesize(self, filename):
-        response = self.connection.make_request('HEAD', self.bucket, filename)
+        response = self.connection._make_request('HEAD', self.bucket, filename)
         return int(response.getheader('Content-Length'))
 
     def open(self, filename, mode='rb'):
@@ -89,7 +89,7 @@ class S3Storage(Storage):
         return File(response.object.data)
 
     def exists(self, filename):
-        response = self.connection.make_request('HEAD', self.bucket, filename)
+        response = self.connection._make_request('HEAD', self.bucket, filename)
         return response.status == 200
 
     def save(self, filename, raw_contents):
