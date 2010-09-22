@@ -102,27 +102,27 @@ msgstr "Den emailadressen används redan."
 
 #: .\apps\videos\forms.py:49
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr ""
+msgstr "Någon annan gör undertexter för denna videon just nu. Försök senare."
 
 #: .\apps\videos\forms.py:53
 msgid "You can't edit this video."
-msgstr ""
+msgstr "Du kan inte redigera denna videon."
 
 #: .\apps\videos\forms.py:56
 msgid "This video has translations."
-msgstr ""
+msgstr "Denna videon har översättningar."
 
 #: .\apps\videos\forms.py:62
 msgid "File size should be less 1Mb"
-msgstr ""
+msgstr "Filstorleken borde vara under 1 MB."
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
-msgstr ""
+msgstr "Felaktigt format. Ladda upp .srt, .ssa eller .xml (TTML-format)"
 
 #: .\apps\videos\forms.py:68
 msgid "Incorrect subtitles format"
-msgstr ""
+msgstr "Felaktigt undertextformat"
 
 #: .\apps\videos\forms.py:169
 #, python-format
@@ -132,42 +132,50 @@ msgid ""
 "think there's been some mistake, <a\n"
 "href=\"mailto:%s\">contact us</a>!"
 msgstr ""
+"Universal Subtitles stöder inte den sidan eller det videoformatet.\n"
+"Om du vill att vi ska lägga till stöd för en ny sida eller format, eller om du\n"
+"tror att det är något misstag, <a\n"
+"href=\"mailto:%s\">kontakta oss</a>!"
 
 #: .\apps\videos\forms.py:216
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr ""
+msgstr "Ange giltiga emailadresser separerade med komman."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
-msgstr ""
+msgstr "Dela med dig av dina undertexter"
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr ""
+msgstr "Nu kan alla se videon med undertexter - testa!"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
-msgstr ""
+msgstr "Berätta sedan för världen och bjud in dina vänner att hjälpa till att översätta:"
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
+#, fuzzy
 msgid "Post to Facebook"
-msgstr ""
+msgstr "Skicka till Facebook"
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
+#, fuzzy
 msgid "Post to Twitter"
-msgstr ""
+msgstr "Skicka till Twitter"
 
 #: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
+#, fuzzy
 msgid "Email to friends"
-msgstr ""
+msgstr "Skicka via email"
 
 #: .\templates\_share_widget.html.py:15
+#, fuzzy
 msgid "Embed Code"
-msgstr ""
+msgstr "Bädda in kod"
 
 #: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
 msgid "Permalink"
-msgstr ""
+msgstr "Permanent länk"
 
 #: .\templates\_sharing_widget.html.py:20
 msgid "Embed this video in your site"
