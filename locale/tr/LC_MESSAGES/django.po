@@ -1664,40 +1664,40 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:207
 msgid "Most Recent"
-msgstr ""
+msgstr "En güncel"
 
 #: .\templates\videos\history.html.py:213
 msgid "Note"
-msgstr ""
+msgstr "Not"
 
 #: .\templates\videos\history.html.py:216
 msgid "Time"
-msgstr ""
+msgstr "Zaman"
 
 #: .\templates\videos\history.html.py:219
 msgid "Text"
-msgstr ""
+msgstr "Metin"
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
-msgstr ""
+msgstr "Bu dil için altyazı yok"
 
 #: .\templates\videos\history.html.py:253
 msgid "Either no subtitles have been entered, or they were deleted."
-msgstr ""
+msgstr "Ya hiç bir altyazı yüklenmedi ya da var olanlar silindi."
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
-msgstr ""
+msgstr "Hala altyazı yok"
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "Make some!"
-msgstr ""
+msgstr "Biraz oluştur!"
 
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
 msgid "Revision"
-msgstr ""
+msgstr "Gözden geçirme"
 
 #: .\templates\videos\revision.html.py:83
 #, python-format
@@ -1736,19 +1736,19 @@ msgstr ""
 
 #: .\templates\videos\revision.html.py:144
 msgid "See full revision history"
-msgstr ""
+msgstr "Tüm değiştirme geçmişini görüntüle"
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
-msgstr ""
+msgstr "Ara"
 
 #: .\templates\videos\search.html.py:16
 msgid "URL/title"
-msgstr ""
+msgstr "URL/başlık"
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
-msgstr ""
+msgstr "Dil"
 
 #: .\templates\videos\search.html.py:22
 msgid "Does"
@@ -1761,7 +1761,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:18
 msgid "Your Email"
-msgstr ""
+msgstr "Eposta adresiniz"
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
