@@ -1571,7 +1571,7 @@ msgstr ""
 
 #: .\templates\videos\email_notification.html.py:50
 msgid "link"
-msgstr ""
+msgstr "bağlantı"
 
 #: .\templates\videos\email_start_notification.html.py:4
 #, python-format
@@ -1582,21 +1582,22 @@ msgid ""
 msgstr ""
 
 #: .\templates\videos\email_start_notification.html.py:8
+#, fuzzy
 msgid "You can review the translation and thank them for their contribution on this page:"
-msgstr ""
+msgstr "Çevirileri gözden geçirip katkıları için onlara bu sayfadan teşekkür edebilirsin:"
 
 #: .\templates\videos\email_start_notification.html.py:9
 msgid "Translation homepage"
-msgstr ""
+msgstr "Çeviri anasayfası"
 
 #: .\templates\videos\email_start_notification.html.py:12
 msgid "Thanks for your great work,"
-msgstr ""
+msgstr "Yaptığınız bu güzel çalısma için tebrikler,"
 
 #: .\templates\videos\email_start_notification.html.py:20
 #: .\templates\videos\email_title_changed.html.py:16
 msgid "My profile / preferences"
-msgstr ""
+msgstr "Profilim / tercihlerim"
 
 #: .\templates\videos\email_title_changed.html.py:4
 #, python-format
@@ -1607,16 +1608,16 @@ msgstr ""
 
 #: .\templates\videos\email_title_changed.html.py:8
 msgid "We've also included a rough summary of the changes below.  Thanks so much!"
-msgstr ""
+msgstr "Aşağıda yapılan değişiklikleri kısa bir özetini oluşturduk. Çok teşekkürler!"
 
 #: .\templates\videos\email_title_changed.html.py:21
 #: .\templates\videos\email_title_changed.html.py:25
 msgid "TITLE"
-msgstr ""
+msgstr "BAŞLIK"
 
 #: .\templates\videos\history.html.py:73
 msgid "Select two revisions for compare, please"
-msgstr ""
+msgstr "Karşılaştırmak için iki farklı sürüm seçin, lütfen"
 
 #: .\templates\videos\history.html.py:130
 #, python-format
@@ -1636,31 +1637,31 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:158
 msgid "Edit Subtitles"
-msgstr ""
+msgstr "Altyazıları Düzenle"
 
 #: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
 msgid "Add Translation"
-msgstr ""
+msgstr "Çeviri Ekle"
 
 #: .\templates\videos\history.html.py:169
 msgid "Download Subtitles"
-msgstr ""
+msgstr "Altyazı İndir"
 
 #: .\templates\videos\history.html.py:183
 msgid "Original Language Subtitles"
-msgstr ""
+msgstr "Orijinal Dil Altyazıları"
 
 #: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
-msgstr ""
+msgstr "Yorumlar"
 
 #: .\templates\videos\history.html.py:190
 msgid "History"
-msgstr ""
+msgstr "Tarih "
 
 #: .\templates\videos\history.html.py:197
 msgid "Compare Revisions"
-msgstr ""
+msgstr "Sürümleri Karşılaştır"
 
 #: .\templates\videos\history.html.py:207
 msgid "Most Recent"
