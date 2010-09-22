@@ -508,8 +508,9 @@ msgid "Why can't I change the timing on a translation?"
 msgstr "Warum kann ich das Timing der Übersetzung nicht ändern?"
 
 #: .\templates\faq.html.py:40
+#, fuzzy
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
-msgstr ""
+msgstr "Unser Ziel für Universal Subtitles ist es, das Hinzufügen von Untertiteln oder die Übersetzung von nahezu allen Videos im Internet für alle so einfach wie möglich zu machen. Dazu erstellen wir kollaborative Werkzeuge und hoffen, so eine große Zahl an Mitstreitern für die Untertitelung zu gewinnen. Die Software, die wir entwickeln, ist kostenlos und Open Source und kann von jedem genutzt und verbessert werden."
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
@@ -533,7 +534,7 @@ msgstr "Als Lehrer, Erzähler, Wissenschaftler oder jemand mit einer Botschaft e
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
-msgstr ""
+msgstr "Die Participatory Culture Foundation ist eine 501c3 Non-profit Organisation mit dem Ziel, durch Software und Interessenvertretung eine faire, offenere und demokratischere Medienlandschaft zu erschaffen. PCF hat eine Marktlücke für offenere und kollaborative Untertitel entdeckt - Universal Subtitles ist der Versuch, diese Lücke zu schließen."
 
 #: .\templates\faq.html.py:61
 #, fuzzy
@@ -546,19 +547,19 @@ msgstr "Wir werden daran arbeiten, möglichst viele Sprachen / Zeichensätze zu 
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
-msgstr ""
+msgstr "Wir arbeiten daran, das Untertitel-Widget sowie die Community-Website vollständig zu übersetzen, damit die Bedienoberflächen in der Muttersprache der Nutzenden zur Verfügung steht."
 
 #: .\templates\faq.html.py:73
 msgid "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible."
-msgstr ""
+msgstr "Bitte tragen Sie sich in die Ankündigungsliste auf der Startseite ein und wir informieren Sie, sobald es möglich ist."
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "Für unser Untertitel-Widget und die Community-Website nutzen wir die <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a> Lizenz."
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
-msgstr ""
+msgstr "Machen Sie mit! Wenn Sie an Programmierung und Entwicklung interessiert sind, besuchen Sie bitte unser <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">Entwicklungszentrum</a>."
 
 #: .\templates\faq.html.py:85
 msgid "If you're interested in general involvement, please see our <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details)."
