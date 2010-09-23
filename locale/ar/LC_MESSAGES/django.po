@@ -991,80 +991,80 @@ msgstr ""
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
 msgid "Sign in with your OpenID"
-msgstr ""
+msgstr "تسجيل الدخول عن طريق اوبن آي دي"
 
 #: .\templates\openid_consumer\signin.html.py:18
 msgid "Sign in"
-msgstr ""
+msgstr "تسجيل الدخول"
 
 #: .\templates\profiles\edit_profile.html.py:7
 #: .\templates\profiles\edit_profile.html.py:28
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "تحرير ملفك الشخصي"
 
 #: .\templates\profiles\edit_profile.html.py:7
 msgid "View profile"
-msgstr ""
+msgstr "عرض الملف الشخصي"
 
 #: .\templates\profiles\edit_profile.html.py:10
 #: .\templates\profiles\view_profile.html.py:83
 msgid "Preferred Language"
-msgstr ""
+msgstr "اللغة المفضلة"
 
 #: .\templates\profiles\edit_profile.html.py:13
 #: .\templates\profiles\view_profile.html.py:84
 msgid "Homepage"
-msgstr ""
+msgstr "الصفحة الرئيسية"
 
 #: .\templates\profiles\edit_profile.html.py:30
 msgid "Save Edits to Profile"
-msgstr ""
+msgstr "حفظ التعديلات على الملف"
 
 #: .\templates\profiles\edit_profile.html.py:35
 msgid "Personal Info"
-msgstr ""
+msgstr "معلومات شخصية"
 
 #: .\templates\profiles\edit_profile.html.py:57
 msgid "Upload picture"
-msgstr ""
+msgstr "تحميل صور"
 
 #: .\templates\profiles\edit_profile.html.py:83
 msgid "Email me when something I've edited gets changed"
-msgstr ""
+msgstr "أعلمني بواسطة البريد الإلكتروني عندما يقوم أحدٌ بتعديل شيء قد بدأته أنا "
 
 #: .\templates\profiles\edit_profile.html.py:93
 msgid "Language Info"
-msgstr ""
+msgstr "معلومات عن اللغة "
 
 #: .\templates\profiles\edit_profile.html.py:106
 msgid "Languages I Know"
-msgstr ""
+msgstr "اللغات التي أجيدها"
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
 msgid "Remove Language"
-msgstr ""
+msgstr "إزالة لغة"
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
-msgstr ""
+msgstr "أضف لغة"
 
 #: .\templates\profiles\view_profile.html.py:43
 msgid "Email sent"
-msgstr ""
+msgstr "تم إرسال البريد الإلكتروني"
 
 #: .\templates\profiles\view_profile.html.py:62
 msgid "Enter message please."
-msgstr ""
+msgstr "الرجاء إدخال الرسالة."
 
 #: .\templates\profiles\view_profile.html.py:66
 msgid "Enter email please."
-msgstr ""
+msgstr "الرجاء إدخال البريد الإلكتروني."
 
 #: .\templates\profiles\view_profile.html.py:86
 #: .\templates\profiles\view_profile.html.py:116
 msgid "Send a Message"
-msgstr ""
+msgstr "أرسل رسالة"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
