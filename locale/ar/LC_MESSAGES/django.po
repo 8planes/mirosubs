@@ -910,31 +910,34 @@ msgstr ""
 
 #: .\templates\privacy.html.py:72
 msgid "Updating of Personally-Identifying Information"
-msgstr ""
+msgstr "تحديث المعلومات الشخصية"
 
 #: .\templates\privacy.html.py:74
 msgid "You may request access, correction, or deletion of your personally identifiable information or potentially personally identifiable information, as permitted by law. PCF will seek to comply with such requests, provided that we have sufficient information to identify the personally identifiable information or potentially personally identifiable information related to you. To do so, users should look for links or contact information available on whichever PCF web sites store the relevant information (e.g., Bugzilla users should go to Account Settings) or contact PCF by using one of the email addresses listed below."
 msgstr ""
 
 #: .\templates\privacy.html.py:77
+#, fuzzy
 msgid "Cookies and Clear GIFs"
-msgstr ""
+msgstr "إزالة الكوكيز والصور المتحركة الواضحة "
 
 #: .\templates\privacy.html.py:79
 msgid "What Are Cookies? A cookie is a string of information that a web site stores on a visitor's computer, and that the visitor's browser provides to the web site each time the visitor returns. Most major web sites use cookies. Because the browser provides this cookie information to the web site at each visit, cookies serve as a sort of label that allows a web site to \"recognize\" a browser when it returns to the site. The domain name in PCF cookies will clearly identify their affiliation with PCF and, where applicable, its third-party service provider."
 msgstr ""
 
 #: .\templates\privacy.html.py:82
+#, fuzzy
 msgid "What Are Clear GIFs?"
-msgstr ""
+msgstr "ما هي الصور المتحركة الواضحة؟"
 
 #: .\templates\privacy.html.py:84
 msgid "Clear gifs (also known as web beacons) are used in combination with cookies to help web site operators understand how visitors interact with their web sites. A clear gif is typically a transparent graphic image (usually 1 pixel x 1 pixel) that is placed on a site. The use of a clear gif allows the site to measure the actions of the visitor opening the page that contains the clear gif. It makes it easer to follow and record the activities of a recognized browser, such as the path of pages visited at a web site."
 msgstr ""
 
 #: .\templates\privacy.html.py:87
+#, fuzzy
 msgid "How We Use Cookies and Clear GIFs."
-msgstr ""
+msgstr "كيف نستخدم الكوكيز والصور المتحركة الواضحة."
 
 #: .\templates\privacy.html.py:89
 msgid "PCF's web sites use cookies to help PCF identify and track visitors, their usage of PCF web sites, and their web site access preferences across multiple requests and visits to PCF's web sites. Our web sites, and advertisements that PCF may run occasionally on thirdparty advertising networks, also may use clear gifs for these purposes. The basic idea is to gather aggregate data about how people use PCF web sites. The term usually used to describe this is \"web analytics\" and the cookies and clear gifs are the tools by which a website owner collects this web analytics data."
@@ -950,7 +953,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:98
 msgid "Other Third Party Cookies."
-msgstr ""
+msgstr "الكوكيز من طرف ثالث."
 
 #: .\templates\privacy.html.py:100
 msgid "Content from other sources that is hosted on PCF web sites may sometimes contain cookies that send information to those third parties. In certain cases, often associated with embedded content such as YouTube videos and other site linking buttons, a third party cookie may be set by the 3rd party content or provider. In these cases, the privacy policy of the 3rd party governs with respect to information that may be collected by and sent to the respective 3rd party. If you are concerned about these third party cookies, please see the information below on how to decline cookies."
@@ -958,7 +961,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:103
 msgid "How to Control the Use of Cookies."
-msgstr ""
+msgstr "كيفية التحكم في استخدام الكوكيز."
 
 #: .\templates\privacy.html.py:105
 msgid "You have the ability to accept or decline cookies. PCF visitors who do not wish to have cookies placed on their computers by PCF, its contractors, or third-party service providers should set their browsers to refuse cookies before linking to PCF's web sites. Certain features of PCF's web sites may not function properly without the aid of cookies."
@@ -974,7 +977,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:113
 msgid "Privacy Policy Changes"
-msgstr ""
+msgstr "تغييرات سياسة الخصوصية"
 
 #: .\templates\privacy.html.py:115
 msgid "By using the web sites, you agree to the terms and conditions of this privacy policy. If you do not agree to the terms and conditions of this privacy policy, please do not use the web sites. PCF may change its Privacy Policy from time to time. Any and all changes will be reflected on this page. Substantive changes will also be announced through the standard mechanisms through which PCF communicates with the PCF community, including PCF's тАЬannounceтАЭ mailing list and newsgroup."
@@ -982,11 +985,11 @@ msgstr ""
 
 #: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
-msgstr ""
+msgstr "الترجمة العالمية"
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
-msgstr ""
+msgstr "عرض الموقع"
 
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
