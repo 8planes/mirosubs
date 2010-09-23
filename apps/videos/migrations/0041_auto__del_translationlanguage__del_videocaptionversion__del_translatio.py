@@ -7,9 +7,12 @@ from django.db import models
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
-        
-        # Deleting model 'TranslationLanguage'
-        db.delete_table('videos_translationlanguage')
+
+        # Deleting model 'Translation'
+        db.delete_table('videos_translation')
+
+        # Deleting model 'VideoCaption'
+        db.delete_table('videos_videocaption')
 
         # Deleting model 'VideoCaptionVersion'
         db.delete_table('videos_videocaptionversion')
@@ -17,17 +20,14 @@ class Migration(SchemaMigration):
         # Deleting model 'TranslationVersion'
         db.delete_table('videos_translationversion')
 
-        # Deleting model 'VideoCaption'
-        db.delete_table('videos_videocaption')
+        # Deleting model 'TranslationLanguage'
+        db.delete_table('videos_translationlanguage')
 
         # Deleting model 'NullVideoCaptions'
         db.delete_table('videos_nullvideocaptions')
 
         # Deleting model 'NullTranslations'
         db.delete_table('videos_nulltranslations')
-
-        # Deleting model 'Translation'
-        db.delete_table('videos_translation')
     
     
     def backwards(self, orm):
