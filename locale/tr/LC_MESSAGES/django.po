@@ -1369,19 +1369,19 @@ msgstr "Tüm etkinlikler"
 #: .\templates\videos\actions_list.html.py:12
 #: .\templates\videos\history.html.py:210
 msgid "User"
-msgstr ""
+msgstr "Kullanıcı"
 
 #: .\templates\videos\actions_list.html.py:13
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 #: .\templates\videos\actions_list.html.py:14
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: .\templates\videos\actions_list.html.py:24
 msgid "There are no activities."
-msgstr ""
+msgstr "Hiç bir etkinlik yok"
 
 #: .\templates\videos\create.html.py:9
 msgid ""
@@ -1396,7 +1396,7 @@ msgstr ""
 
 #: .\templates\videos\create.html.py:23
 msgid "Begin"
-msgstr ""
+msgstr "Başla"
 
 #: .\templates\videos\create.html.py:25
 msgid ""
@@ -1413,7 +1413,7 @@ msgstr ""
 
 #: .\templates\videos\diffing.html.py:43
 msgid "You need to log in to do that."
-msgstr ""
+msgstr "Bu işlemi yapmak için giriş yapmalısınız."
 
 #: .\templates\videos\diffing.html.py:75
 #, python-format
@@ -1436,16 +1436,16 @@ msgstr ""
 #: .\templates\videos\history.html.py:185
 #: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
-msgstr ""
+msgstr "Altyazılar"
 
 #: .\templates\videos\diffing.html.py:98
 #: .\templates\videos\revision.html.py:75
 msgid "Revision History"
-msgstr ""
+msgstr "Gözden geçirme özeti"
 
 #: .\templates\videos\diffing.html.py:102
 msgid "Comparing Revision"
-msgstr ""
+msgstr "Gözden geçirmeleri karşılaştır"
 
 #: .\templates\videos\diffing.html.py:110
 #: .\templates\videos\diffing.html.py:162
@@ -1460,27 +1460,27 @@ msgstr ""
 #: .\templates\videos\diffing.html.py:177
 #: .\templates\videos\revision.html.py:134
 msgid "Submit a new edit based on this version"
-msgstr ""
+msgstr "Bu sürüme dayalı yeni bir düzenleme gönder"
 
 #: .\templates\videos\diffing.html.py:127
 #: .\templates\videos\diffing.html.py:181
 #: .\templates\videos\revision.html.py:138
 msgid "Roll back to version"
-msgstr ""
+msgstr "Sürüme geri dön"
 
 #: .\templates\videos\diffing.html.py:150
 #: .\templates\videos\diffing.html.py:205
 #: .\templates\videos\history.html.py:282
 msgid "Not Synced"
-msgstr ""
+msgstr "Sekronıze edilmemiş"
 
 #: .\templates\videos\email_friend.html.py:6
 msgid "Email this to a friend"
-msgstr ""
+msgstr "Bunu arkadaşa eposta gönder"
 
 #: .\templates\videos\email_friend.html.py:10
 msgid "Send to Friend!"
-msgstr ""
+msgstr "Arkadaşına gönder!"
 
 #: .\templates\videos\email_notification.html.py:3
 #: .\templates\videos\email_start_notification.html.py:3
