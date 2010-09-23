@@ -821,7 +821,7 @@ msgstr "Organisatoren, Moderatoren, Sponsoren"
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
-msgstr ""
+msgstr "Organisatoren"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
@@ -829,7 +829,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:99
 msgid "Facilitators"
-msgstr ""
+msgstr "Moderatoren"
 
 #: .\templates\opensubtitles2010.html.py:100
 msgid "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate."
@@ -837,7 +837,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsoren"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
@@ -849,23 +849,23 @@ msgstr ""
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "zurück"
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "weiter"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr ""
+msgstr "Universal Subtitles Datenschutzrichtlinie"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
-msgstr ""
+msgstr "Zuletzt aktualisiert: 10. August 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
-msgstr ""
+msgstr "Diese Datenschutzrichtlinie gilt für alle Websites und Webservices der Participatory Culture Foundation (in der Richtlinie als тАЬPCFтАЭ bezeichnet), sofern die Website oder der Webservice keine eigene Datenschutzrichtlinie hat."
 
 #: .\templates\privacy.html.py:14
 msgid "Except as described below, PCF does not collect or require visitors to its web sites to furnish personally identifying information such as names, email addresses, and phone numbers. Like most web site operators, PCF does collect non-personally identifying information of the sort that web browsers and servers typically make available, such as the browser type, operating system, language preference, referring site and date and time of each visitor request. PCF also collects potentially-personally identifying information like Internet Protocol (IP) addresses, which are non-personally identifying in and of themselves but could be used in conjunction with other information to personally identify users."
