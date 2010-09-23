@@ -36,7 +36,7 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
         $d('li', null,
            $d('div', null, 
               $d('span', 'mirosubs-title mirosubs-title-notime', 
-                 this.subtitle_['caption_text'])),
+                 this.subtitle_['text'])),
            this.translateInput_ = 
            $d('textarea', 'mirosubs-translateField')));
     this.getHandler().listen(
@@ -68,5 +68,5 @@ mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {
 };
 
 mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
-    return this.subtitle_['caption_id'];
+    return this.subtitle_['subtitle_id'];
 };

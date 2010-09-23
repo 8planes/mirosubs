@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-07 14:26+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2010-09-21 22:37+0100\n"
+"Last-Translator: guillaume <guill.vidal@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -244,6 +244,58 @@ msgid ""
 "    </p>\n"
 "    "
 msgstr ""
+"\n"
+"    <h2>A Propos d'Universal Subtitles</h2>\n"
+"    <p>\n"
+"        L'absence de sous-titrage sur les vidéos est un obstacle majeur pour l'accès au web des malentendants, et représente une grande barrière linguistique pour le monde entier.\n"
+"    </p>\n"
+"    <p>\n"
+"        Nous voulons donner à chaque individu et chaque communauté le pouvoir de franchir ces barrières. Les outils que nous construisons sont gratuit, open source, et rendrons le travail de sous-titrage et de traduction plus simple, plus attirant, et surtout plus collaboratif.\n"
+"    </p>\n"
+"    <p>\n"
+"        <strong>Les bénéfices du sous-titrages sont immenses</strong>\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            les sous-titres rendent les vidéos plus accessibles aux sourds et malentendants \n"
+"        </li>\n"
+"        <li>\n"
+"            la traduction des sous-titres nous permet a tous de regarder des vidéos dans des langues qui nous sont inconnues\n"
+"        </li>\n"
+"        <li>\n"
+"            en tant qu'éducateur, conteur, scientifique, ou quiconque qui ait un message, la taille de votre auditoire potentiel augmente exponentiellement si vous disposez de sous-titres et de traductions\n"
+"        </li>\n"
+"    </ul>\n"
+"    <p>\n"
+"        <strong>Universal Subtitles est composé de trois parties principales:</strong>\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            un outil de création et de visualisation de sous-titres (aussi appelé widget)\n"
+"        </li>\n"
+"        <li>\n"
+"            un site internet de traduction collaborative\n"
+"        </li>\n"
+"        <li>\n"
+"            un protocole ouvert pour la recherche et la délivrance de sous-titres\n"
+"        </li>\n"
+"    </ul>\n"
+"    <p>\n"
+"        <strong>Le widget de sous-titrage</strong>\n"
+"        existe actuellement sous la forme d'un outil javascript basé sur le navigateur, doté d'une interface simple et pratique pour ajouter des sous-titres sur presque toutes les vidéos du net (sans avoir à re-encoder la vidéo ou la re-télécharger). Nous invitons le public à l'essayer et sommes curieux de connaitre votre avis.\n"
+"    </p>\n"
+"    <p>\n"
+"        <strong>Le site collaboratif</strong>\n"
+"        est voué a devenir un espace dédié au sous-titrage et à la traduction collaborative. Le site encouragera les initiatives comme: la création d'équipes pour sous-titrer un programme, ou un sujet; suivre quelles sous-titres ou traductions sont les plus demandées, et la mobilisation de volontaires; notamment le recrutement par un volontaire de ses amis pour sous-titrer une vidéo.\n"
+"    </p>\n"
+"    <p>\n"
+"        <strong>Le protocole/spécification</strong>\n"
+"        (encore à ses débuts) permettra à des clients tels que des extensions Firefox, des lecteurs vidéos, des sites ou des navigateurs de rechercher et de télécharger des sous-titres appropriés parmis une ou plusieurs bases de sous-titres.\n"
+"    </p>\n"
+"    <p>\n"
+"        Tout ce que nous faisons sera disponible sous la licence open source AGPL.\n"
+"    </p>\n"
+"    "
 
 #: .\templates\about.html.py:81
 msgid ""
@@ -338,6 +390,95 @@ msgid ""
 "    </p>\n"
 "    "
 msgstr ""
+"\n"
+"    <h2>Trois Moyens Principaux Pour Aider</h2>\n"
+"    <p>\n"
+"        Universal Subtitles est un projet open source à but non lucratif.  Nous sommes bénévoles\n"
+"        et votre aide nous serait précieuse !\n"
+"    </p>\n"
+"    <p>\n"
+"        Voici trois façons de vous impliquer\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            Vous voulez nous aider à tester les nouvelles versions avant qu'elles ne sortent?<a href=\"http://groups.google.com/group/universal-subtitles-testing/?utm_source=MailingList&utm_medium=email&utm_campaign=Welcome+Drumbeat\">Rejoignez la liste de testeurs!</a>!\n"
+"        </li>\n"
+"        <li>\n"
+"            Si vous êtes développer, allez voir le <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">centre de développement</a>\n"
+"            et commencez avec quelques 'petits' tickets répertoriés la bas.\n"
+"        </li>\n"
+"        <li>\n"
+"            Aidez les nouveaux!  Regardez la <a href=\"/videos/\">liste de vidéos</a>\n"
+"            et donnez des retours positifs et constructifs sur le travail de sous-titrage effectué.\n"
+"        </li>\n"
+"    </ul>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <h2>Qui est derrière ce projet?</h2>\n"
+"    <p>\n"
+"        La <a href=\"http://www.pculture.org\">Participatory Culture Foundation</a>\n"
+"        est une organisation à but non lucratif, construsant des outils gratuits et open source pour des médias plus démocratique et décentralisés. Nos autres projets incluent <a href=\"http://www.getmiro.com\">Miro</a>, <a href=\"http://www.mirovideoconverter.com\">Miro Video Converter</a>, <a href=\"http://www.mirocommunity.org\">Miro Community</a>, et <a href=\"http://www.openvideoalliance.org\">Open Video Alliance</a>.\n"
+"    </p>\n"
+"    <p>\n"
+"        Universal Subtitles est un projet mis en avant par <a href=\"http://www.drumbeat.org/\">Mozilla Drumbeat</a>, qui nous à fourni un support inestimable.\n"
+"    </p>\n"
+"    <p>\n"
+"        Le développement logiciel pour Universal Subtitles est fait en partenariat avec <a href=\"http://www.8planes.com\">8 Planes</a>.\n"
+"    </p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <h2>Qu'est ce qui Arrive?</h2>\n"
+"    <p>\n"
+"        Nous sommes actuellement dans la phase alpha sur site et de l'outil de sous-titrage -- nous venons donc juste de commencer ! Mais nous avons ouvert ce site pour commencer les tests et obtenir des retours.\n"
+"    </p>\n"
+"    <p>\n"
+"        Beaucoup de choses très importantes manquent encore. Voici ce sur quoi nous allons travailler dans les prochains mois:\n"
+"    </p>\n"
+"    <ul>\n"
+"        <li>\n"
+"            Possibilité de lier plusieurs adresses à une vidéo\n"
+"        </li>\n"
+"        <li>\n"
+"            Espaces de discussion sur toutes les vidéos et traductions (pages 'commentaires'))\n"
+"        </li>\n"
+"        <li>\n"
+"            Support de tout les navigateurs modernes\n"
+"        </li>\n"
+"        <li>\n"
+"            Conversion des sous-titres malentendants vers sous-titres normaux\n"
+"        </li>\n"
+"        <li>\n"
+"            Supports des jeux de caractères hors latin\n"
+"        </li>\n"
+"        <li>\n"
+"            Option de traduction machine après transcription des sous-titres\n"
+"        </li>\n"
+"        <li>\n"
+"            Accessibilité au clavier pour le site et le widget\n"
+"        </li>\n"
+"        <li>\n"
+"            Support de traduction le l'interface du widget et du site\n"
+"        </li>\n"
+"        <li>\n"
+"            Possibilité de notation et signalement des sous-titres\n"
+"        </li>\n"
+"        <li>\n"
+"            Messagerie entre utilisateurs\n"
+"        </li>\n"
+"        <li>\n"
+"            Code d'intégration HTML5 incluant des options flash en cas de besoin\n"
+"        </li>\n"
+"        <li>\n"
+"            Conformité aux standards émergents de texte minutés\n"
+"        </li>\n"
+"        <li>\n"
+"            Options supplémentaires de format pour l'import / export de sous-titres\n"
+"        </li>\n"
+"    </ul>\n"
+"    <p>\n"
+"        Il y a t'il d'autres possibilités que vous souhaiteriez voir? Des choses que vous pensez particulièrement importantes pour les premiers tests? Nous vous lirons avec plaisir. Emailez nous à l'adresse : <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>\n"
+"    </p>\n"
+"    "
 
 #: .\templates\base.html.py:18
 msgid "Free and open tools for creating captions, subtitles, and translations for video."
@@ -418,6 +559,17 @@ msgid ""
 "  </p>\n"
 "  "
 msgstr ""
+"\n"
+"  <p><strong>Qu'est ce que c'est?</strong> Cette vidéo est utilisée à \n"
+"    des fins de démonstrations &mdash; essayez de cliquer sur le bouton 'Sous-titrez moi'!</p> \n"
+"  <p>Nous débutons tout juste, attendez vous à une meilleure compatibilité \n"
+"    avec des navigateurs (Firefox 3.5+ est celui qui fonctionne le mieux pour l'instant) \n"
+"    ainsi que différents formats et hébergeurs de vidéos. Ecrivez nous \n"
+"    si vous le souhaitez en bas de la page. \n"
+"    <em>Note: Vos sous-titres ne seront pas sauvegardés de façon permanente \n"
+"      (même si vous êtes connecté).</em>\n"
+"  </p>\n"
+"  "
 
 #: .\templates\demo.html.py:41
 msgid ""
@@ -496,7 +648,7 @@ msgstr "Pourquoi ne puis-je modifier le timing sur une traduction ?"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
-msgstr ""
+msgstr "Notre but avec Universal Subtitles est de rendre aisé pour quiconque d'ajouter des sous-titres et des traductions pour presque n'importe quelle video sur internet. De plus, nous construisons des outils collaboratifs, et nous esperons attirer de nombreux contributeurs pour nous aider dans le travail de traduction. Le logiciel que nous créons est gratuit et open source et peut être utilisé et amélioré par n'importe qui."
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
@@ -655,15 +807,15 @@ msgstr ""
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "Subtitle Lookup Protocol"
 
 #: .\templates\index.html.py:65
 msgid "An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video."
-msgstr ""
+msgstr "Un standard ouvert permettant à des extensions Firefox, des lecteurs vidéo, des sites, des navigateurs--tout type de clients--de trouver et de récuperer les sous-titres d'une vidéo."
 
 #: .\templates\index.html.py:75
 msgid "Get updates and find out first when we launch"
-msgstr ""
+msgstr "Restez informés et soyez avertis du lancement"
 
 #: .\templates\index.html.py:80
 msgid "Get Updates!"
@@ -683,7 +835,7 @@ msgstr "Mozilla va doubler le montant de votre donation!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "Nous sommes mis en avant par Mozilla Drumbeat!"
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
@@ -691,11 +843,11 @@ msgstr "Donnez maintenant"
 
 #: .\templates\index.html.py:146
 msgid "Check out the widget"
-msgstr ""
+msgstr "Essayez le widget"
 
 #: .\templates\index.html.py:147
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "Testez notre widget de traduction"
 
 #: .\templates\index.html.py:147
 msgid "Try the Demo"
@@ -704,27 +856,27 @@ msgstr "Essayez la démonstration"
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
 msgid "Open Subtitles Design Summit"
-msgstr ""
+msgstr "Sommet Open Subtitles Design"
 
 #: .\templates\opensubtitles2010.html.py:28
 msgid "The Open Subtitles Design Summit will bring together global stakeholders in the subtitling space for a tightly focused / goal oriented meeting in NYC. The event is being organized by The Participatory Culture Foundation, developers of the Universal Subtitles project. We expect roughly 40 participants."
-msgstr ""
+msgstr "The sommet Open Subtitles Design réunira les parti prenantes du monde du sous-titrage pour une rencontre ciblée à New York. Cet évènement est organisé par la Participatory Culture Foundation, qui développent le projet Universal Subtitles. Nous attendons une quarantaine de participants."
 
 #: .\templates\opensubtitles2010.html.py:34
 msgid "Meeting Goals"
-msgstr ""
+msgstr "But de la réunion"
 
 #: .\templates\opensubtitles2010.html.py:37
 msgid "<strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus."
-msgstr ""
+msgstr "<strong>Connecter</strong> les acteurs principaux des projets, organisations et mouvements qui ont pour but ou besoin le sous-titrage ouvert."
 
 #: .\templates\opensubtitles2010.html.py:41
 msgid "<strong>Identify ways</strong> to solve stakeholder subtitling needs and be aware of existing technology that can be leveraged. Find logical places for collaboration/cooperation."
-msgstr ""
+msgstr "<strong>Identifier des moyens</strong> pour resoudre des besoins de sous-titrage des acteurs et reconnaitre les technologies existantes qui peuvent être utilisées dans ce but. Trouver des espaces de collaboration et de coopération."
 
 #: .\templates\opensubtitles2010.html.py:44
 msgid "<strong>Move towards</strong> standardizing solutions and pushing forward the state of the art in open subtiting."
-msgstr ""
+msgstr "<strong>Avancer vers</strong> des solutions de standardisation et faire avancer l'état de l'art du sous-titrage ouvert."
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
@@ -732,11 +884,11 @@ msgstr "Participants"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
-msgstr ""
+msgstr "Les participants incluront: Créateurs et producteurs de video, utilisateurs, représentants des principaux services d'hébergement de vidéo, ingénieurs des standards, experts en accessibilité, développeurs open source, éducateurs, et autres individus et organisation ayant un intéret dans le monde du sous-titrage. Nous annoncerons une liste lorsque l'évènement approchera."
 
 #: .\templates\opensubtitles2010.html.py:57
 msgid "Attendees are selected by invitation; however, if you or your organization would like to participate, please contact:"
-msgstr ""
+msgstr "Les participants sont sélectionnés par invitation; cependant, si vous ou votre organisation souhaitez participer, veuillez contacter:"
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
@@ -744,7 +896,7 @@ msgstr "Quand"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "29 et 30 Septembre, à partir de 9h."
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
@@ -752,7 +904,7 @@ msgstr "Où"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
-msgstr ""
+msgstr "Le sommet aura lieu au penthouse Open Plans à Soho, qui se situe au 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
@@ -770,10 +922,19 @@ msgid ""
 "            and make sense of the ever growing sea of online video.\n"
 "           "
 msgstr ""
+"\n"
+"            L'attention du sommet sera fixé particulièrement sur l'amélioration de la disponibilité et de l'accessibilité des sous-titres, \n"
+"            qui sont tout deux très demandé. Il arrive à un moment crucial, \n"
+"            tandis que l'utilisation de la vidéo sur internet est en forte augmentation&mdash; ceux qui ont besoin de sous-titres risquent d'être oubliés. \n"
+"            De nouveaux utilisateurs de toutes les cultures arrivent en masse; \n"
+"            la standardisation et la mise à disposition de cette technologie peut augmenter exponentiellement l'audience potentielle, et permettre aux messages de traverser les frontières culturelles plus facilement. \n"
+"            Plus de sous-titres permettront également de faciliter pour les ordinateurs le traitement, l'indexation,\n"
+"            et la compréhension de la masse de vidéo que l'on trouve sur internet.\n"
+"           "
 
 #: .\templates\opensubtitles2010.html.py:91
 msgid "Organizers, Facilitators, Sponsors"
-msgstr ""
+msgstr "Organisateurs, Animateurs, Sponsors"
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
@@ -781,11 +942,11 @@ msgstr "Organisateurs"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
-msgstr ""
+msgstr "La <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> organise le sommet. Leur projet le plus récent, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, et une solution de sous-titrage et de traduction collaborative simple et open source."
 
 #: .\templates\opensubtitles2010.html.py:99
 msgid "Facilitators"
-msgstr ""
+msgstr "Animateurs"
 
 #: .\templates\opensubtitles2010.html.py:100
 msgid "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate."
@@ -813,7 +974,7 @@ msgstr "suiv."
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr ""
+msgstr "Universal Subtitles Politique de Confidentialité"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
@@ -881,7 +1042,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:53
 msgid "Interactive Product Features"
-msgstr ""
+msgstr "Caractéristiques interactives du produit"
 
 #: .\templates\privacy.html.py:55
 msgid "Certain PCF products contain features that report, or that permit users to report, the user's usage patterns and problems - whether caused by PCF's software, third-party software, or third-party web sites - to PCF. The reports generated by these features typically include non-personally identifying information such as the configuration of the user's computer and the code running at the time the problem occurred."
@@ -981,7 +1142,7 @@ msgstr ""
 
 #: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
-msgstr ""
+msgstr "Universal Subtitles"
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
@@ -1029,20 +1190,20 @@ msgstr "Envoyer une image"
 
 #: .\templates\profiles\edit_profile.html.py:83
 msgid "Email me when something I've edited gets changed"
-msgstr ""
+msgstr "Envoyez moi un mail quand quelque chose que j'ai édité change"
 
 #: .\templates\profiles\edit_profile.html.py:93
 msgid "Language Info"
-msgstr ""
+msgstr "Info Langue"
 
 #: .\templates\profiles\edit_profile.html.py:106
 msgid "Languages I Know"
-msgstr ""
+msgstr "Langues Connues"
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
 msgid "Remove Language"
-msgstr ""
+msgstr "Retirer Langue"
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
@@ -1072,7 +1233,7 @@ msgstr "<i>L'utilisateur n'a pas soumis de biographie.</i>"
 #: .\templates\profiles\view_profile.html.py:103
 #, python-format
 msgid "Send %(user_info)s a Message"
-msgstr ""
+msgstr "Envoyer un message à %(user_info)s"
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
@@ -1084,11 +1245,11 @@ msgstr "Message"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "Sans HTML"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
-msgstr ""
+msgstr "Note: Quand vous envoyez un message, le destinataire peut voir votre adresse email et vous répondre directement"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:4
@@ -1104,24 +1265,24 @@ msgstr "Accueil"
 #: .\templates\registration\password_reset_form.html.py:6
 #: .\templates\registration\password_reset_form.html.py:10
 msgid "Password reset"
-msgstr ""
+msgstr "Réinitialisation du mot de passe"
 
 #: .\templates\registration\password_reset_complete.html.py:6
 #: .\templates\registration\password_reset_complete.html.py:10
 msgid "Password reset complete"
-msgstr ""
+msgstr "Réinitialisation du mot de passe terminée"
 
 #: .\templates\registration\password_reset_complete.html.py:12
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "Votre mot de passe à été défini. Vous pouvez à présent vous connecter."
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "Connection"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
-msgstr ""
+msgstr "Confirmation de réinitialisation du mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
@@ -1129,7 +1290,7 @@ msgstr "Saisissez le nouveau mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Veuillez entrer votre nouveau mot de passe deux fois."
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
@@ -1145,33 +1306,33 @@ msgstr "Changer mon mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr ""
+msgstr "Réinitialisation du mot de passe échoué"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr ""
+msgstr "Le lien de réinitialisation du mot de passe est invalide, possiblement parce qu'il à déja été utilisé. Veuillez demander une nouvelle réinitialisation."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr ""
+msgstr "Réinitialisation du mot de passe réussie"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr ""
+msgstr "Nous avons envoyé des instructions pour choisir un mot de passe à l'adresse que vous avez fourni. Vous devez les recevoir sous peu."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
+msgstr "Vous recevez cet email parce que vous avez demandé une réinitialisation de mot de passe"
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr ""
+msgstr "pour votre compte utilisateur sur %(site_name)s"
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Veuillez aller à la page suivante et choisir un nouveau mot de passe: "
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
@@ -1184,11 +1345,11 @@ msgstr "Merci d'utiliser notre site!"
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "L'équipe de  %(site_name)s"
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
-msgstr ""
+msgstr "Mot de passe oublié? Entrez votre adresse email ci-dessous, et nous vous enverrons des instructions pour en choisir un nouveau"
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
@@ -1196,7 +1357,7 @@ msgstr "Adresse mail:"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Réinitialiser mon mot de passe"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
@@ -1205,20 +1366,20 @@ msgstr "Anonyme"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
-msgstr ""
+msgstr "à commenté"
 
 #: .\templates\videos\_activities.html.py:19
 msgid "commented on this video"
-msgstr ""
+msgstr "à commenté cette vidéo"
 
 #: .\templates\videos\_activities.html.py:23
 #, python-format
 msgid " edited %(lang)s translations for "
-msgstr ""
+msgstr "à edité la traduction %(lang)s pour"
 
 #: .\templates\videos\_activities.html.py:25
 msgid "edited subtitles for"
-msgstr ""
+msgstr "à edité les sous-titres pour"
 
 #: .\templates\videos\_error_feedback_form.html.py:7
 msgid "Please let us know what you were doing when you encountered this error."
@@ -1360,12 +1521,10 @@ msgid "translation"
 msgstr "traduction"
 
 #: .\templates\videos\_video_activity.html.py:48
-#, fuzzy
 msgid "for"
 msgstr "pour"
 
 #: .\templates\videos\_video_activity.html.py:53
-#, fuzzy
 msgid "ago"
 msgstr "il y a"
 
@@ -1548,7 +1707,6 @@ msgstr "Nous avons également inclus un résumé rapide des changements ci-desso
 #: .\templates\videos\email_notification.html.py:15
 #: .\templates\videos\email_start_notification.html.py:14
 #: .\templates\videos\email_title_changed.html.py:10
-#, fuzzy
 msgid "Sincerely"
 msgstr "Sincèrement"
 

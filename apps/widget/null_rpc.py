@@ -22,18 +22,16 @@ from django.conf.global_settings import LANGUAGES
 import widget
 
 class NullRpc(BaseRpc):
-    def start_editing(self, request, video_id, language_code=None, editing=False, base_version_no=None):
+    def start_editing(self, request, video_id, language_code=None, 
+                      base_version_no=None, fork=False, editing=False):
         version_no = 0
         if not request.user.is_authenticated():
             subtitles = []
         else:
             video = models.Video.objects.get(video_id=video_id)
             null_subtitles, created = self._get_null_subtitles_for_editing(
-                request.user, video, language_code)
-            subtitles = \
-                [s.to_json_dict(is_dependent_translation=
-                                language_code is not None) 
-                 for s in null_subtitles.subtitle_set.all()]
+                request.user, video, language_code, fork)
+            subtitles = [s.__dict__ for s in null_subtitles.subtitles()]
             version_no = 0 if created else 1
         return_dict = { 'can_edit': True,
                         'version': version_no,
@@ -64,25 +62,16 @@ class NullRpc(BaseRpc):
         if request.user.is_anonymous():
             return []
         video = models.Video.objects.get(video_id=video_id)
-        null_subtitles = video.null_subtitles(request.user, language_code)
-        if null_subtitles is None:
-            return []
-        else:
-            if language_code is None:
-                return [s.to_json_dict() for s 
-                        in null_subtitles.subtitle_set.all()]
-            else:
-                return [s[0].to_json_dict(text_to_use=s[1].subtitle_text)
-                        for s in video.null_dependent_translations(
-                        request.user, language_code)]
+        null_subs = video.null_subtitles(request.user, language_code)
+        return [] if not null_subs \
+            else [s.__dict__ for s in null_subs.subtitles()]
 
     def fetch_subtitles_and_open_languages(self, request, video_id):
         return { 'captions': self.fetch_subtitles(request, video_id),
                  'languages': [widget.language_to_map(lang[0], lang[1]) 
                                for lang in LANGUAGES]}
 
-
-    def _get_null_subtitles_for_editing(self, user, video, language_code):
+    def _get_null_subtitles_for_editing(self, user, video, language_code, fork=False):
         null_subtitles = video.null_subtitles(user, language_code)
         created = False
         if null_subtitles is None:
@@ -91,26 +80,23 @@ class NullRpc(BaseRpc):
                 language=('' if language_code is None else language_code),
                 is_original=(language_code is None),                
                 user=user)
+            if fork:
+                null_subtitles.is_forked = True
             null_subtitles.save()
             created = True
         return null_subtitles, created
 
     def _save_subtitles_impl(self, request, null_subtitles, deleted, inserted, updated):
         self._apply_subtitle_changes(
-            null_subtitles.subtitle_set, deleted, inserted, updated, 
-            is_dependent_translation=not null_subtitles.is_original)
+            null_subtitles, deleted, inserted, updated)
         null_subtitles.save()
 
     def _autoplay_subtitles(self, user, video, language_code, revision_no):
-        if video.null_subtitles(user, language_code) is None:
+        null_subs = video.null_subtitles(user, language_code)
+        if null_subs is None:
             return None
-        if language_code is not None:
-            return [t[0].to_json_dict(text_to_use=t[1].subtitle_text)
-                    for t in video.null_dependent_translations(
-                    user, language_code)]
         else:
-            return [s.to_json_dict() for s 
-                    in video.null_subtitles(user).subtitle_set.all()]
+            return [s.__dict__ for s in null_subs.subtitles()]
 
     def _subtitle_count(self, user, video):
         null_subs = video.null_subtitles(user)

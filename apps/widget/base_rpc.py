@@ -90,24 +90,24 @@ class BaseRpc:
         if VIDEO_SESSION_KEY not in request.session:
             request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
 
-    def _apply_subtitle_changes(self, subtitle_set, deleted, inserted, updated, 
-                                is_dependent_translation=False):
+    def _apply_subtitle_changes(self, sub_collection, deleted, inserted, updated):
+        subtitle_set = sub_collection.subtitle_set
         for d in deleted:
-            subtitle_set.remove(subtitle_set.get(subtitle_id=d['caption_id']))
+            subtitle_set.remove(subtitle_set.get(subtitle_id=d['subtitle_id']))
         for u in updated:
-            subtitle = subtitle_set.get(subtitle_id=u['caption_id'])
-            subtitle.update_from(u, is_dependent_translation)
+            subtitle = subtitle_set.get(subtitle_id=u['subtitle_id'])
+            subtitle.update_from(u, sub_collection.is_dependent())
             subtitle.save()
         for i in inserted:
-            if not subtitle_set.filter(subtitle_id=i['caption_id']).exists():
-                if is_dependent_translation:
+            if not subtitle_set.filter(subtitle_id=i['subtitle_id']).exists():
+                if sub_collection.is_dependent():
                     subtitle = models.Subtitle(
-                        subtitle_id=i['caption_id'],
+                        subtitle_id=i['subtitle_id'],
                         subtitle_text=i['text'])
                 else:
                     subtitle = models.Subtitle(
-                        subtitle_id=i['caption_id'],
-                        subtitle_text=i['caption_text'],
+                        subtitle_id=i['subtitle_id'],
+                        subtitle_text=i['text'],
                         start_time=i['start_time'],
                         end_time=i['end_time'],
                         subtitle_order=i['sub_order'])

@@ -18,11 +18,11 @@ msgstr ""
 
 #: .\settings.py:29
 msgid "Argentinian Spanish"
-msgstr ""
+msgstr "Аргентинский испанский"
 
 #: .\apps\auth\admin.py:10
 msgid "Username"
-msgstr ""
+msgstr "Имя пользователя"
 
 #: .\apps\auth\admin.py:11
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
@@ -30,7 +30,7 @@ msgstr "Обязательный параметр. 30 символов или м
 
 #: .\apps\auth\admin.py:12
 msgid "This value must contain only letters, numbers and underscores."
-msgstr ""
+msgstr "Это строка должна содержать только буквы, цифры и подчеркивания."
 
 #: .\apps\auth\admin.py:13
 msgid "Password"
@@ -42,17 +42,15 @@ msgstr "доказательство пароля"
 
 #: .\apps\auth\admin.py:15
 msgid "Email"
-msgstr ""
+msgstr "Электронная почта"
 
 #: .\apps\auth\models.py:83
-#, fuzzy
 msgid "Add comment"
-msgstr "Комментарии"
+msgstr "Добавить комментарий"
 
 #: .\apps\auth\models.py:84
-#, fuzzy
 msgid "Start subtitles"
-msgstr "Субтитры отсутствуют."
+msgstr "Субтитры отсутствуют"
 
 #: .\apps\auth\models.py:85
 #, fuzzy
@@ -69,44 +67,44 @@ msgstr "редактировать перевод"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
-msgstr ""
+msgstr "Вы можете ответить только комментариями на ту же тему"
 
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
-msgstr ""
+msgstr "Этот пользователь не указал адрес электронной почты"
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
-msgstr ""
+msgstr "Вы не авторизованны"
 
 #: .\apps\profiles\forms.py:51
 #, python-format
 msgid "Personal message from %(sender)s on universalsubtitles.org"
-msgstr ""
+msgstr "Личное сообщение от %(sender)s из universalsubtitles.org"
 
 #: .\apps\profiles\forms.py:67
 msgid "Confirm new password:"
-msgstr ""
+msgstr "Подтвердите новый пароль:"
 
 #: .\apps\profiles\forms.py:82
 msgid "Invalid password."
-msgstr ""
+msgstr "Неверный пароль."
 
 #: .\apps\profiles\forms.py:84
 msgid "The two passwords did not match."
-msgstr ""
+msgstr "Пароли не совпадают."
 
 #: .\apps\profiles\forms.py:94
 msgid "This email is used already."
-msgstr ""
+msgstr "Этот адрес уже используется."
 
 #: .\apps\videos\forms.py:49
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr ""
+msgstr "Кто-то сейчас уже снабжает субтитрами это видео. Попробуйте позднее."
 
 #: .\apps\videos\forms.py:53
 msgid "You can't edit this video."
-msgstr ""
+msgstr "Вы не можете редактировать видео."
 
 #: .\apps\videos\forms.py:56
 msgid "This video has translations."
@@ -118,7 +116,7 @@ msgstr "рязмер фаила должен быть меньше 1мб"
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
-msgstr ""
+msgstr "Неправильный формат. Загрузите файл с расширением .srt, .ssa, или .xml (формата TTML)"
 
 #: .\apps\videos\forms.py:68
 msgid "Incorrect subtitles format"
@@ -132,10 +130,14 @@ msgid ""
 "think there's been some mistake, <a\n"
 "href=\"mailto:%s\">contact us</a>!"
 msgstr ""
+"Universal Subtitles не поддерживает веб-сайт или формат видео.\n"
+"Если вы хотите присоединиться к нам, чтобы добавить поддержку нового сайта или формат, или если вы\n"
+"думаете, что есть какая-то ошибка, <a\n"
+"href=\"mailto:%s\"> свяжитесь с нами</a>!"
 
 #: .\apps\videos\forms.py:216
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr ""
+msgstr "Введите действующие адреса электронной почты через запятую."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
