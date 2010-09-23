@@ -1348,23 +1348,23 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
-msgstr ""
+msgstr "orijinal altyazılar"
 
 #: .\templates\videos\_video_activity.html.py:46
 msgid "translation"
-msgstr ""
+msgstr "çeviri"
 
 #: .\templates\videos\_video_activity.html.py:48
 msgid "for"
-msgstr ""
+msgstr "için "
 
 #: .\templates\videos\_video_activity.html.py:53
 msgid "ago"
-msgstr ""
+msgstr "önce"
 
 #: .\templates\videos\actions_list.html.py:8
 msgid "All activities"
-msgstr ""
+msgstr "Tüm etkinlikler"
 
 #: .\templates\videos\actions_list.html.py:12
 #: .\templates\videos\history.html.py:210
