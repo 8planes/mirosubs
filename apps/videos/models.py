@@ -564,14 +564,15 @@ class SubtitleLanguage(models.Model):
     
     def latest_version(self):
         try:
-            return self.subtitleversion_set.all()[:1].get()
+            return self.subtitleversion_set.exclude(time_change=0, text_change=0)[:1].get()
         except models.ObjectDoesNotExist:
             pass        
     
     def latest_finished_version(self):
         """Returns latest SubtitleVersion, or None if none found"""
         try:
-            return self.subtitleversion_set.filter(finished=True)[:1].get()
+            return self.subtitleversion_set.exclude(time_change=0, text_change=0) \
+                .filter(finished=True)[:1].get()
         except models.ObjectDoesNotExist:
             pass
 
