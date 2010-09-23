@@ -428,6 +428,17 @@ msgid ""
 "  </p>\n"
 "  "
 msgstr ""
+"\n"
+" <p><strong>Was ist das?</strong> Das unten stehende Video dient nur zur \n"
+" Demonstration &mdash; klicken Sie doch einmal auf 'Untertitel mich'! </p> \n"
+" <p>Wir fangen gerade erst an, Sie dürfen also in späteren Versionen eine bessere Unterstützung vieler verschiedener Browser \n"
+" erwarten (Firefox 3.5+ funktioniert im Moment am Besten) und wir werden \n"
+" künftig auch zahlreiche Videoformate und -anbieter unterstützen. Sie können \n"
+" uns gerne eine Nachricht hinterlassen (am Ende der Seite). \n"
+" <em>Hinweis: Ihre Untertitel werden nicht dauerhaft gespeichert \n"
+" (auch wenn Sie sich anmelden).</em>\n"
+" </p>\n"
+" "
 
 #: .\templates\demo.html.py:41
 msgid ""
@@ -439,6 +450,13 @@ msgid ""
 "    collaboration on subtitles and translations. Stay tuned!</p>\n"
 "  "
 msgstr ""
+"\n"
+"  <p style=\"clear: both\"><strong>Haben Sie eine Rückmeldung für uns?</strong> Nutzen Sie das Formular am Ende \n"
+"    dieser Seite, um uns Ihre Rückmeldung, Fehlerhinweise oder Meinung mitzuteilen.</p>\n"
+"  <p><strong>Wie geht es weiter?</strong> Wir arbeiten an einer Alpha \n"
+"    Version unserer Community-Website, mit der eine einfache \n"
+"    gemeinsame Erstellung von Untertiteln und Übersetzungen möglich ist. Bleiben Sie dran!</p>\n"
+"  "
 
 #: .\templates\faq.html.py:16
 #, fuzzy
@@ -514,7 +532,7 @@ msgstr "Unser Ziel für Universal Subtitles ist es, das Hinzufügen von Untertit
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
-msgstr ""
+msgstr "Sie sind eingeladen, die Untertitelung in unserer <a href=\"/demo/\">Alpha-Demonstration</a> auszuprobieren. Diese Demonstration ermöglicht noch nicht das Speichern von Untertiteln, aber mit dem Start der Alpha-Community wird auch das möglich sein (geplant für Juli 2010)."
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
@@ -567,11 +585,11 @@ msgstr ""
 
 #: .\templates\faq.html.py:89
 msgid "Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donate here</a>."
-msgstr ""
+msgstr "Ja und ja! Die Mozilla Foundation wird für jeden gespendeten Dollar einen Dollar dazu geben, bis zu einer Gesamthöhe von $25.000! Sie können <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">hier spenden</a>."
 
 #: .\templates\faq.html.py:93
 msgid "The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!"
-msgstr ""
+msgstr "Die Mozilla Foundation unterstützt Universal Subtitles mit einer Anschubfinanzierung, Community-Unterstützung und Spendensammlung über <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat ist eine Bewegung, die das Web die nächsten 100 Jahre offen gehalten will und Universal Subtitles ist ein unterstütztes Projekt!"
 
 #: .\templates\faq.html.py:98
 msgid ""
@@ -630,7 +648,7 @@ msgstr "Unsere Mission"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
-msgstr ""
+msgstr "Wir versuchen, das Untertiteln und Übersetzen von Videos öffentlich zugänglich zu machen, frei und offen, genau wie das Web."
 
 #: .\templates\index.html.py:46
 #, fuzzy
@@ -644,7 +662,7 @@ msgstr "Jetzt"
 
 #: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
-msgstr ""
+msgstr "wir sind in der Alpha-Phase, entwickeln und testen. Sie können helfen!"
 
 #: .\templates\index.html.py:50
 #, fuzzy
@@ -727,8 +745,9 @@ msgstr "Probieren Sie die Demo"
 
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
+#, fuzzy
 msgid "Open Subtitles Design Summit"
-msgstr ""
+msgstr "Open Subtitles Design Summit"
 
 #: .\templates\opensubtitles2010.html.py:28
 msgid "The Open Subtitles Design Summit will bring together global stakeholders in the subtitling space for a tightly focused / goal oriented meeting in NYC. The event is being organized by The Participatory Culture Foundation, developers of the Universal Subtitles project. We expect roughly 40 participants."
@@ -769,7 +788,7 @@ msgstr "Wann"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "Am 29. und 30. September, Beginn ist jeweils um 9 Uhr."
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
