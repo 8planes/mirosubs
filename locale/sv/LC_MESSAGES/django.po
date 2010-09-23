@@ -179,7 +179,7 @@ msgstr "Permanent länk"
 
 #: .\templates\_sharing_widget.html.py:20
 msgid "Embed this video in your site"
-msgstr ""
+msgstr "Bädda in denna videon på din sida"
 
 #: .\templates\_testing_widget.html.py:3
 msgid "We&#8217;d like help testing our subtitling widget"
@@ -191,7 +191,7 @@ msgstr ""
 
 #: .\templates\_testing_widget.html.py:7
 msgid "Test the Widget"
-msgstr ""
+msgstr "Testa widgeten"
 
 #: .\templates\_testing_widget.html.py:12
 msgid "Warning: These videos should not be embeded--there is a good possibility they will break at some point!"
@@ -203,7 +203,7 @@ msgstr ""
 
 #: .\templates\_testing_widget.html.py:17
 msgid "This alpha site is for purely testing purposes."
-msgstr ""
+msgstr "Denna alpha-sida är enbart avsedd för tester."
 
 #: .\templates\about.html.py:22
 msgid ""
@@ -357,7 +357,7 @@ msgstr ""
 
 #: .\templates\base.html.py:18
 msgid "Free and open tools for creating captions, subtitles, and translations for video."
-msgstr ""
+msgstr "Fria och öppna verktyg för att skapa rubriker, undertexter och översättningar för videor."
 
 #: .\templates\base.html.py:37
 msgid "Universal Subtitles does not support your browser. Upgrade your browser or <a href=\"http://getfirefox.com\">Try Firefox</a>."
@@ -365,7 +365,7 @@ msgstr ""
 
 #: .\templates\base.html.py:59
 msgid "a project of the participatory culture foundation"
-msgstr ""
+msgstr "ett projekt av the participatory culture foundation"
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
