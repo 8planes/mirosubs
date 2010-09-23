@@ -1176,15 +1176,15 @@ msgstr ""
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Yeni bir şifre seçmek için lütfen bir sonraki sayfaya gidin."
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Kullanıcı adınız, her ihtimale karşı"
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Sitemizi kullandığınız için teşekkürler!"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
@@ -1193,28 +1193,28 @@ msgstr ""
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
-msgstr ""
+msgstr "Şifrenizi mi unuttunuz? Eposta adresinizi aşağıya girin, yeni bir şifre oluşturma talimatlarını size eposta gönderelim."
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
-msgstr ""
+msgstr "Eposta adresi:"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Şifremi sıfırla"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
 msgid "Anonymous"
-msgstr ""
+msgstr "Belirsiz"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
-msgstr ""
+msgstr "yorum yaptı"
 
 #: .\templates\videos\_activities.html.py:19
 msgid "commented on this video"
-msgstr ""
+msgstr "bu vıdeoya yorum yaptı"
 
 #: .\templates\videos\_activities.html.py:23
 #, python-format
@@ -1223,35 +1223,35 @@ msgstr ""
 
 #: .\templates\videos\_activities.html.py:25
 msgid "edited subtitles for"
-msgstr ""
+msgstr "için altyazıları düzenledi"
 
 #: .\templates\videos\_error_feedback_form.html.py:7
 msgid "Please let us know what you were doing when you encountered this error."
-msgstr ""
+msgstr "Lütfen bu hatayla karşılaştığınızda ne yapmakta olduğunuzu bize bildirin."
 
 #: .\templates\videos\_error_feedback_form.html.py:9
 msgid "Sorry, the page you requested was not found."
-msgstr ""
+msgstr "Üzgünüz, aradığınız sayfa bulunamadı."
 
 #: .\templates\videos\_feedback_form.html.py:28
 msgid "What did you think about the site?"
-msgstr ""
+msgstr "Site hakkında ne düşünüyordunuz?"
 
 #: .\templates\videos\_feedback_form.html.py:32
 msgid "Please let us know if you have any comments, questions, or suggestions!"
-msgstr ""
+msgstr "Yorumlarınız, sorualrınız ya da önerileriniz varsa lütfen bize bildirin."
 
 #: .\templates\videos\_feedback_form.html.py:37
 msgid "Your email:"
-msgstr ""
+msgstr "Eposta adresiniz:"
 
 #: .\templates\videos\_feedback_form.html.py:44
 msgid "Your Feedback"
-msgstr ""
+msgstr "Geribildiriminiz"
 
 #: .\templates\videos\_feedback_form.html.py:48
 msgid "Send Feedback"
-msgstr ""
+msgstr "Geribildirim Gönder"
 
 #: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
