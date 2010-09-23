@@ -1255,15 +1255,15 @@ msgstr ""
 
 #: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
-msgstr ""
+msgstr "Geribildiriminiz için teşekkürler."
 
 #: .\templates\videos\_feedback_form.html.py:55
 msgid "If you would like to perform some additional testing"
-msgstr ""
+msgstr "Eğer ekstra denelemer yapmak istiyorsanız"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "please go to our"
-msgstr ""
+msgstr "lütfen şuraya gidin:"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "Litmus regression tests"
@@ -1271,28 +1271,28 @@ msgstr ""
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "For new testers, we have"
-msgstr ""
+msgstr "Yeni deneyiciler için, "
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "a getting started guide"
-msgstr ""
+msgstr "bir başlangıç klavuzumuz var"
 
 #: .\templates\videos\_feedback_form.html.py:59
 msgid "Send more feedback."
-msgstr ""
+msgstr "Daha fazla geribildirim gönder."
 
 #: .\templates\videos\_feedback_form.html.py:64
 msgid "Enter feedback please."
-msgstr ""
+msgstr "Lütfen geribildirim girin."
 
 #: .\templates\videos\_recent_activity.html.py:3
 msgid "View all"
-msgstr ""
+msgstr "Tümünü gör"
 
 #: .\templates\videos\_upload_subtitles.html.py:4
 #: .\templates\videos\_upload_subtitles.html.py:9
 msgid "Upload Subtitles"
-msgstr ""
+msgstr "Altyazı yükle"
 
 #: .\templates\videos\_upload_subtitles.html.py:14
 msgid ""
@@ -1304,7 +1304,7 @@ msgstr ""
 
 #: .\templates\videos\_upload_subtitles.html.py:29
 msgid "Login to upload subtitles"
-msgstr ""
+msgstr "Altyazı yüklmek için giriş yapın"
 
 #: .\templates\videos\_upload_subtitles.html.py:38
 msgid "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
@@ -1312,15 +1312,15 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:4
 msgid "Activity"
-msgstr ""
+msgstr "Etkinlik"
 
 #: .\templates\videos\_video_activity.html.py:7
 msgid "Happened"
-msgstr ""
+msgstr "Oldu"
 
 #: .\templates\videos\_video_activity.html.py:21
 msgid "submited this video."
-msgstr ""
+msgstr "bu video yüklendi."
 
 #: .\templates\videos\_video_activity.html.py:25
 #, python-format
@@ -1340,11 +1340,11 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:36
 msgid "commented on this video."
-msgstr ""
+msgstr "bu videoya yorum yaptı."
 
 #: .\templates\videos\_video_activity.html.py:41
 msgid "edited"
-msgstr ""
+msgstr "düzenledi."
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
