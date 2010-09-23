@@ -517,7 +517,9 @@ class SubtitleLanguage(models.Model):
             return ('videos:translation_history', [self.video.video_id, self.language])
     
     def language_display(self):
-        return 'Original' if self.is_original else self.get_language_display()
+        if self.is_original and not self.language:
+            return 'Original'
+        return self.get_language_display()
 
     @property
     def writelock_owner_name(self):
