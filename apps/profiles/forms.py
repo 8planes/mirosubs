@@ -21,6 +21,8 @@ from auth.models import CustomUser as User, UserLanguage
 from django.core.mail import EmailMessage
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
+from utils.validators import MaxFileSizeValidator
+from django.conf import settings
 
 UserLanguageFormset = inlineformset_factory(User, UserLanguage, extra=1)
 
@@ -65,7 +67,8 @@ class EditUserForm(forms.ModelForm):
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
                                           required=False,
                                           label=_(u'Confirm new password:'))
-
+    picture = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)])
+    
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
         self.fields['email'].required = True
