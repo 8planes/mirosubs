@@ -17,7 +17,6 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
-from models import TranslationVersion
 
 urlpatterns = patterns(
     'videos.views',
