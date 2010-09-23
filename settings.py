@@ -29,10 +29,11 @@ lang_dict = dict(global_settings.LANGUAGES)
 lang_dict['es-ar'] = gettext_noop('Argentinian Spanish')
 global_settings.LANGUAGES = tuple(i for i in lang_dict.items())
 
-METADATA_LANGUAGES = 
-(('meta-tw', 'Metadata: Twitter'),
- ('meta-geo', 'Metadata: Geo'),
- ('meta-wiki', 'Metadata: Wikipedia'),)
+METADATA_LANGUAGES = (
+    ('meta-tw', 'Metadata: Twitter'),
+    ('meta-geo', 'Metadata: Geo'),
+    ('meta-wiki', 'Metadata: Wikipedia'),
+)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
