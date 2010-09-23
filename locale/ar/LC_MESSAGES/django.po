@@ -1077,26 +1077,26 @@ msgstr ""
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
-msgstr ""
+msgstr "مِن"
 
 #: .\templates\profiles\view_profile.html.py:111
 msgid "Message"
-msgstr ""
+msgstr "رسالة"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "لا أتش تي أم أل"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
-msgstr ""
+msgstr "ملاحظة : عند إرسال رسالة يمكن لمتلقّي البريد الالكتروني رؤية رسالتك والرد مباشرة"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:4
 #: .\templates\registration\password_reset_done.html.py:4
 #: .\templates\registration\password_reset_form.html.py:4
 msgid "Home"
-msgstr ""
+msgstr "الصفحة الرئيسية"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:6
@@ -1105,65 +1105,65 @@ msgstr ""
 #: .\templates\registration\password_reset_form.html.py:6
 #: .\templates\registration\password_reset_form.html.py:10
 msgid "Password reset"
-msgstr ""
+msgstr "إعادة تعيين كلمة المرور"
 
 #: .\templates\registration\password_reset_complete.html.py:6
 #: .\templates\registration\password_reset_complete.html.py:10
 msgid "Password reset complete"
-msgstr ""
+msgstr "تمّت إعادة تعيين كلمة المرور"
 
 #: .\templates\registration\password_reset_complete.html.py:12
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "تم تعيين كلمة المرور الخاصة بك. يمكنك الآن تسجيل الدخول"
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "تسجيل الدخول"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
-msgstr ""
+msgstr "تأكيد إعادة تعيين كلمة المرور "
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
-msgstr ""
+msgstr "أدخل كلمة المرور الجديدة"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "الرجاء إدخال كلمة المرور الجديدة مرتين كي نتأكد أنك كتبتها بشكل صحيح."
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr ""
+msgstr "كلمة المرور الجديدة :"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr ""
+msgstr "تأكيد كلمة المرور :"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr ""
+msgstr "تغيير كلمة المرور"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr ""
+msgstr "إعادة تعيين كلمة المرور غير ناجحة"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr ""
+msgstr "رابط إعادة تعيين كلمة المرور لم يعُد صالحاً ، ربما لأنه قد تم استخدامه. الرجاء طلب إعادة تعيين كلمة المرور الجديدة مرة أخرى."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr ""
+msgstr "إعادة تعيين كلمة المرور نجح"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr ""
+msgstr "لقد أرسانا لك تعليمات تعيين كلمة مرورك إلى عنوان البريد الإلكتروني الذي قدمته . ستصلك الرسالة في وقتٍ قصير."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
+msgstr "أنت تتلقى هذا البريد الإلكتروني لأنك طلبت إعادة تعيين كلمة المرور"
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
