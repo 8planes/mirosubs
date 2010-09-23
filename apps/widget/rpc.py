@@ -30,9 +30,8 @@ from django.conf import settings
 LANGUAGES_MAP = dict(LANGUAGES)
 
 class Rpc(BaseRpc):
-    def start_editing(self, request, video_id, 
-                      base_version_no=None, language_code=None, 
-                      editing=False):
+    def start_editing(self, request, video_id, language_code=None, 
+                      base_version_no=None, fork=False, editing=False):
         """Called by subtitling widget when subtitling or translation 
         is to commence or recommence on a video.
         """
@@ -46,7 +45,8 @@ class Rpc(BaseRpc):
             return { "can_edit": False, 
                      "locked_by" : language.writelock_owner_name }
 
-        version = self._get_version_for_editing(request.user, language, base_version_no)
+        version = self._get_version_for_editing(
+            request.user, language, base_version_no, fork)
 
         existing_subtitles = [s.__dict__ for s in version.subtitles()]
 
@@ -133,7 +133,8 @@ class Rpc(BaseRpc):
             current_version, deleted, inserted, updated)
         current_version.save()
 
-    def _get_version_for_editing(self, user, language, base_version_no=None):
+    def _get_version_for_editing(self, user, language, 
+                                 base_version_no=None, fork=False):
         subtitle_versions = list(language.subtitleversion_set.order_by('-version_no'))
 
         if base_version_no is None:
@@ -152,6 +153,12 @@ class Rpc(BaseRpc):
                 language=language,
                 version_no=new_version_no,
                 datetime_started=datetime.now())
+            if fork or (version_to_copy is not None and 
+                        version_to_copy.is_forked):
+                new_version.is_forked = True
+                if not language.is_forked:
+                    language.is_forked = True
+                    language.save()
             if user.is_authenticated():
                 new_version.user = user
             new_version.save()

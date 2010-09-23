@@ -22,14 +22,15 @@ from django.conf.global_settings import LANGUAGES
 import widget
 
 class NullRpc(BaseRpc):
-    def start_editing(self, request, video_id, language_code=None, editing=False, base_version_no=None):
+    def start_editing(self, request, video_id, language_code=None, 
+                      base_version_no=None, fork=False, editing=False):
         version_no = 0
         if not request.user.is_authenticated():
             subtitles = []
         else:
             video = models.Video.objects.get(video_id=video_id)
             null_subtitles, created = self._get_null_subtitles_for_editing(
-                request.user, video, language_code)
+                request.user, video, language_code, fork)
             subtitles = [s.__dict__ for s in null_subtitles.subtitles()]
             version_no = 0 if created else 1
         return_dict = { 'can_edit': True,
@@ -70,7 +71,7 @@ class NullRpc(BaseRpc):
                  'languages': [widget.language_to_map(lang[0], lang[1]) 
                                for lang in LANGUAGES]}
 
-    def _get_null_subtitles_for_editing(self, user, video, language_code):
+    def _get_null_subtitles_for_editing(self, user, video, language_code, fork=False):
         null_subtitles = video.null_subtitles(user, language_code)
         created = False
         if null_subtitles is None:
@@ -79,6 +80,8 @@ class NullRpc(BaseRpc):
                 language=('' if language_code is None else language_code),
                 is_original=(language_code is None),                
                 user=user)
+            if fork:
+                null_subtitles.is_forked = True
             null_subtitles.save()
             created = True
         return null_subtitles, created
