@@ -1,10 +1,29 @@
 # encoding: utf-8
 import datetime
-import videos
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+def update_translated_state(sender, instance, created, **kwargs):
+    if instance.finished:
+        language = instance.language
+        if instance.is_all_blank():
+            finished_count = language.translationversion_set.filter(finished=True).count()
+            if finished_count == 1:
+                instance.delete()
+                language.is_translated = False
+                language.was_translated = False
+            else:
+                translations = list(instance.translation_set.all())
+                for t in translations:
+                    t.delete()
+                language.is_translated = False
+                language.was_translated = True
+        else:
+            language.is_translated = True
+            language.was_translated = True
+        language.save()
+lambda: lambda : None
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
@@ -16,12 +35,11 @@ class Migration(SchemaMigration):
         db.add_column('videos_translationlanguage', 'was_translated', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
 
         if not db.dry_run:
-            for language in videos.models.TranslationLanguage.objects.all():
+            for language in orm['videos.TranslationLanguage'].objects.all():
                 qs = language.translationversion_set.filter(finished=True)
                 if qs.exists():
                     finished_translations = qs.order_by('-version_no')[:1].get()
-                    videos.models.update_translated_state(
-                        None, finished_translations, False)
+                    update_translated_state(None, finished_translations, False)
                 else:
                     language.is_translated = False
                     language.was_translated = False
