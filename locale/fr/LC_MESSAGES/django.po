@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-07 14:26+0300\n"
-"PO-Revision-Date: 2010-09-21 22:37+0100\n"
+"PO-Revision-Date: 2010-09-23 21:34+0100\n"
 "Last-Translator: guillaume <guill.vidal@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -129,27 +129,33 @@ msgstr "URL de vidéo incorrect."
 msgid "Enter valid e-mail addresses separated by commas."
 msgstr "Entrez des adresse email valide, séparées par des virgules."
 
-#: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
+#: .\templates\_share_widget.html.py:4
+#: .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
 msgstr "Partagez vos sous-titres."
 
-#: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
+#: .\templates\_share_widget.html.py:6
+#: .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
 msgstr "A présent, tout le monde peut regarder la vidéo sous-titrée - Essayez !"
 
-#: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
+#: .\templates\_share_widget.html.py:7
+#: .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
 msgstr "Puis faites passer le mot et invitez vos amis pour aider à traduire :"
 
-#: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
+#: .\templates\_share_widget.html.py:10
+#: .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
 msgstr "Poster sur Facebook"
 
-#: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
+#: .\templates\_share_widget.html.py:11
+#: .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
 msgstr "Poster sur Twitter"
 
-#: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
+#: .\templates\_share_widget.html.py:12
+#: .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
 msgstr "Envoyer par mail"
 
@@ -157,7 +163,8 @@ msgstr "Envoyer par mail"
 msgid "Embed Code"
 msgstr "Code d'intégration"
 
-#: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
+#: .\templates\_share_widget.html.py:25
+#: .\templates\_sharing_widget.html.py:48
 msgid "Permalink"
 msgstr "Lien permanent"
 
@@ -492,7 +499,8 @@ msgstr "Universal Subtitles ne fonctionne pas avec votre navigateur. Mettez le �
 msgid "a project of the participatory culture foundation"
 msgstr "un projet de Participatory Culture Foundation."
 
-#: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
+#: .\templates\base.html.py:72
+#: .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
 msgstr "Sous-titrer une vidéo"
 
@@ -512,7 +520,8 @@ msgstr "Blog"
 msgid "FAQ"
 msgstr "FAQ"
 
-#: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
+#: .\templates\base.html.py:81
+#: .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
 msgstr "A propos"
@@ -581,68 +590,90 @@ msgid ""
 "    collaboration on subtitles and translations. Stay tuned!</p>\n"
 "  "
 msgstr ""
+"\n"
+"  <p style=\"clear: both\"><strong>Feedback</strong> Utilisez le formulaire en bas de \n"
+"    cette page pour nous donner vos retours ou rapporter des bugs.</p>\n"
+"  <p><strong>A venir</strong> Nous travaillons sur une \n"
+"    version alpha de notre site communautaire qui permettra \n"
+"    de collaborer sur les sous-titres et les tranductions. Restez connectés.</p>\n"
+" "
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
 msgstr "Foire aux questions"
 
-#: .\templates\faq.html.py:19 .\templates\faq.html.py:39
+#: .\templates\faq.html.py:19
+#: .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
 msgstr "Qu'est-ce que Universal Subtitles ?"
 
-#: .\templates\faq.html.py:20 .\templates\faq.html.py:43
+#: .\templates\faq.html.py:20
+#: .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
 msgstr "Comment puis-je utiliser Universal Subtitles ?"
 
-#: .\templates\faq.html.py:21 .\templates\faq.html.py:47
+#: .\templates\faq.html.py:21
+#: .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
 msgstr "Quels sont les avantages des sous-titres ?"
 
-#: .\templates\faq.html.py:22 .\templates\faq.html.py:56
+#: .\templates\faq.html.py:22
+#: .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
 msgstr "Qui est la Participatory Culture Foundation et pourquoi a-t-elle créé Universalis Subtitles ?"
 
-#: .\templates\faq.html.py:23 .\templates\faq.html.py:60
+#: .\templates\faq.html.py:23
+#: .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
 msgstr "Universal Subtitles permettra-t-il de créer des sous-titres pour les sourds et les malentendants ?"
 
-#: .\templates\faq.html.py:24 .\templates\faq.html.py:64
+#: .\templates\faq.html.py:24
+#: .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
 msgstr "Les sous-titres permettront-ils d'utiliser ma langue ou mon jeu de caractères ?"
 
-#: .\templates\faq.html.py:25 .\templates\faq.html.py:68
+#: .\templates\faq.html.py:25
+#: .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
 msgstr "Quand les outils, y compris ce site, seront-ils disponibles dans ma langue ?"
 
-#: .\templates\faq.html.py:26 .\templates\faq.html.py:72
+#: .\templates\faq.html.py:26
+#: .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
 msgstr "Comment ajouter des sous-titres à ma vidéo ?"
 
-#: .\templates\faq.html.py:27 .\templates\faq.html.py:76
+#: .\templates\faq.html.py:27
+#: .\templates\faq.html.py:76
 msgid "What open source license do you use?"
 msgstr "Quelle licence libre utilisez-vous ?"
 
-#: .\templates\faq.html.py:28 .\templates\faq.html.py:80
+#: .\templates\faq.html.py:28
+#: .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
 msgstr "Je suis un développeur, puis-je aider ?"
 
-#: .\templates\faq.html.py:29 .\templates\faq.html.py:84
+#: .\templates\faq.html.py:29
+#: .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
 msgstr "Les gens sans connaissances techniques peuvent-ils s'impliquer dans le projet ?"
 
-#: .\templates\faq.html.py:30 .\templates\faq.html.py:88
+#: .\templates\faq.html.py:30
+#: .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
 msgstr "Acceptez-vous les dons ? Sont-ils déductibles d'impôt ?"
 
-#: .\templates\faq.html.py:31 .\templates\faq.html.py:92
+#: .\templates\faq.html.py:31
+#: .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
 msgstr "Quelle est votre relation avec Mozilla Drumbeat ?"
 
-#: .\templates\faq.html.py:32 .\templates\faq.html.py:96
+#: .\templates\faq.html.py:32
+#: .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
 msgstr "Où puis-je télécharger des sous-titres en .SRT ou en d'autres formats?"
 
-#: .\templates\faq.html.py:33 .\templates\faq.html.py:106
+#: .\templates\faq.html.py:33
+#: .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
 msgstr "Pourquoi ne puis-je modifier le timing sur une traduction ?"
 
@@ -652,7 +683,7 @@ msgstr "Notre but avec Universal Subtitles est de rendre aisé pour quiconque d'
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
-msgstr ""
+msgstr "Nous vous invitons à essayer notre technologie de sous-titrage avec notre <a href=\"/demo/\">demonstration alpha</a>. Cette démo ne permettra pas encore de sauvegarder les sous-titres, mais cela sera inclut au lancement de la version alpha communautaire (Prévue pour Juillet 2010)."
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
@@ -668,15 +699,15 @@ msgstr "Les sous-titres traduits nous permettent à tous de regarder des vidéos
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr ""
+msgstr "En tant qu'éducateur, conteur, scientifique, ou quiconque qui ait un message, la taille de votre auditoire potentiel augmente exponentiellement si vous disposez de sous-titres et de traductions"
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
-msgstr ""
+msgstr "La Participatory Culture Foundation est une organisation à but non lucratif dont la mission est de contruire un espace médiatique plus ouvert, plus démocratique et plus juste. La PCF a vu une place sur le marché pour des outils de sous-titrage plus ouvert et plus collaboratif; Universal Subtitles est une tentative pour remplir ce besoin."
 
 #: .\templates\faq.html.py:61
 msgid "Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations."
-msgstr ""
+msgstr "Oui, nous travaillons à une solution pour faire des sous-titres sourds et malentendants, incluant des informations sur les sons et la musique"
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
@@ -684,31 +715,31 @@ msgstr "Nous travaillons afin de supporter autant de langues / jeu de caractère
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
-msgstr ""
+msgstr "Nous travaillons pour rendre le widget de sous-titrage et le site communautaire entièrement traduisible, pour rendre les interfaces utilisables dans la langue natale de chaque utilisateur."
 
 #: .\templates\faq.html.py:73
 msgid "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible."
-msgstr ""
+msgstr "Inscrivez vous sur notre liste de diffusion (sur la page principale) et nous vous avertiront dès que ce sera possible."
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "Notre widget de sous-titrage et notre site sont sous la licence <a href=\"http://fr.wikipedia.org/wiki/AGPL\">AGPL</a>."
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
-msgstr ""
+msgstr "Avec plaisir! Si vous êtes intéressé par le code et developpement, veuillez visitez notre <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">center de développement</a>."
 
 #: .\templates\faq.html.py:85
 msgid "If you're interested in general involvement, please see our <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details)."
-msgstr ""
+msgstr "Si vous êtes interessé pour vous impliquer de façon générale, veuillez visiter notre <a href=\"https://www.drumbeat.org/project/universal-subtitles\">page Mozilla Drumbeat </a>. Si vous avez une idée en particulier, veuillez nous contacter: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>. Et en tant qu'organisation à but non lucratif, nous acceptons les donations (Voir la question suivante pour les détails)."
 
 #: .\templates\faq.html.py:89
 msgid "Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donate here</a>."
-msgstr ""
+msgstr "Oui et encore oui! En ce moment, la fondation Mozilla doublera votre contribution, jusqu'a 25000$! Vous pouvez <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donner ici</a>."
 
 #: .\templates\faq.html.py:93
 msgid "The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!"
-msgstr ""
+msgstr "La fondation Mozilla à fourni à Universal Subtitles du financement, un support communautaire, et de l'aide pour lever des fonds avec <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat est un mouvement destiné à garder le web ouvert pour les 100 prochaines années, et Universal Subtitles est un de ses projets principaux."
 
 #: .\templates\faq.html.py:98
 msgid ""
@@ -718,6 +749,11 @@ msgid ""
 "        Click the links in the lower right under the green \"Edit Subtitles\" button.\n"
 "        "
 msgstr ""
+"\n"
+"        Quand des sous-titres exisent, vous pouvez les télécharger au format .SRT, .SSA et TTML sur \n"
+"        la page pour cette langue (<a href=\"http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/\">exemple</a>). \n"
+"       Cliquez sur les liens dans le coin bas droit sous le bouton vert \"Editer Sous-titres\" \n"
+" 		 "
 
 #: .\templates\faq.html.py:108
 msgid ""
@@ -728,6 +764,12 @@ msgid ""
 "        or--potentially--a totally different number of subtitles.\n"
 "        "
 msgstr ""
+"\n"
+"        Pour le moment, les informations de timing d'une traduction sont reliées au timing \n"
+"        de la transcription originale. Bientot, nous permettrons aux utilisateurs de \"séparer\"\n"
+"        les timings des traductions, créeant de nouvelles versions ayant des timings differents\n"
+"        ou--potentiellement--un nombre de sous-titres differents.\n"
+"        "
 
 #: .\templates\feedback_response.html.py:3
 msgid "Thanks for getting in touch! We love hearing your ideas, bugs, feedback, opinions and such."
@@ -759,7 +801,7 @@ msgstr "Le problème"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
-msgstr ""
+msgstr "La vidéo sur le web commence à rivaliser avec la télévision, mais il n'y à pas de bonne ressource pour le sous-titrage ouvert."
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
@@ -767,7 +809,7 @@ msgstr "Notre Mission"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
-msgstr ""
+msgstr "Nous voulons rendre le sous-titrage et la traduction de vidéo publiquement accessible, aussi gratuits et ouverts que le Web lui même. "
 
 #: .\templates\index.html.py:46
 msgid "Learn More"
@@ -791,11 +833,11 @@ msgstr "Devenez testeur"
 
 #: .\templates\index.html.py:56
 msgid "Subtitle Widget"
-msgstr ""
+msgstr "Widget de Sous-titrage"
 
 #: .\templates\index.html.py:57
 msgid "A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos)."
-msgstr ""
+msgstr "Une façon simple de créer des sous-titres pour presque toute les vidéos du web (sans avoir à les transcoder ou les re-uploader)."
 
 #: .\templates\index.html.py:60
 msgid "Community Site"
@@ -803,7 +845,7 @@ msgstr "Site communautaire"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
-msgstr ""
+msgstr "Une communauté en ligne destinée au sous-titrage et à la traduction de toutes les vidéos du monde (une sorte de Wikipédia des sous-titres)."
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
@@ -964,11 +1006,13 @@ msgstr ""
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
 msgstr ""
 
-#: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
+#: .\templates\ordered_paginator.html.py:4
+#: .\templates\paginator.html.py:4
 msgid "prev"
 msgstr "préc."
 
-#: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
+#: .\templates\ordered_paginator.html.py:25
+#: .\templates\paginator.html.py:25
 msgid "next"
 msgstr "suiv."
 
@@ -1078,43 +1122,43 @@ msgstr ""
 
 #: .\templates\privacy.html.py:77
 msgid "Cookies and Clear GIFs"
-msgstr ""
+msgstr "Cookies et GIFS Transparents"
 
 #: .\templates\privacy.html.py:79
 msgid "What Are Cookies? A cookie is a string of information that a web site stores on a visitor's computer, and that the visitor's browser provides to the web site each time the visitor returns. Most major web sites use cookies. Because the browser provides this cookie information to the web site at each visit, cookies serve as a sort of label that allows a web site to \"recognize\" a browser when it returns to the site. The domain name in PCF cookies will clearly identify their affiliation with PCF and, where applicable, its third-party service provider."
-msgstr ""
+msgstr "Qu'est ce qu'un Cookie? Un cookie est une chaine d'information qu'un site internet stocke sur l'ordinateur d'un visiteur, et que le navigateur de ce visteur fournit au site lorsque le visiteur revient. La plupart des sites internets utilisent des cookies. Grace au navigateur qui transmet les informations du cookie à chaque visite, les cookies servent comme une sorte d'étiquette qui perment à un site de  \"recognize\" un navigateur quand il revient. Les cookies de PCF sont clairement identifiable grace à leur nom de domaine, et, selon les cas, au prestataire de service de PCF."
 
 #: .\templates\privacy.html.py:82
 msgid "What Are Clear GIFs?"
-msgstr ""
+msgstr "Que sont les GIFs Transparents?"
 
 #: .\templates\privacy.html.py:84
 msgid "Clear gifs (also known as web beacons) are used in combination with cookies to help web site operators understand how visitors interact with their web sites. A clear gif is typically a transparent graphic image (usually 1 pixel x 1 pixel) that is placed on a site. The use of a clear gif allows the site to measure the actions of the visitor opening the page that contains the clear gif. It makes it easer to follow and record the activities of a recognized browser, such as the path of pages visited at a web site."
-msgstr ""
+msgstr "Les gifs transparent (ou pixel espion) sont utilisés avec les cookie pour aider les gestionnaires de site internet à comprendre comment les visiteurs naviguent au sein de leur sites. Un gif transparent est typiquement une image transparent (en général d'un pixel sur un pixel) placé sur un site. L'utilisation du gif transparent permet au site de mesurer les actions du visiteur sur la page qui le contient. Il permet de suivre facilement et d'enregistrer les actions d'un navigateur, telles que le chemins des pages visitées sur le site."
 
 #: .\templates\privacy.html.py:87
 msgid "How We Use Cookies and Clear GIFs."
-msgstr ""
+msgstr "Comment nous utilisons les Cookies et GIFs Transparents."
 
 #: .\templates\privacy.html.py:89
 msgid "PCF's web sites use cookies to help PCF identify and track visitors, their usage of PCF web sites, and their web site access preferences across multiple requests and visits to PCF's web sites. Our web sites, and advertisements that PCF may run occasionally on thirdparty advertising networks, also may use clear gifs for these purposes. The basic idea is to gather aggregate data about how people use PCF web sites. The term usually used to describe this is \"web analytics\" and the cookies and clear gifs are the tools by which a website owner collects this web analytics data."
-msgstr ""
+msgstr "Les sites de PCF utilisent les cookies pour aider PCF à identifier et suivre les visiteurs, leur utilisation des sites PCF, et leurs préférences d'acces entre les visite. Nos sites web, ainsi que les pubs qui peuvent occasionnellement être diffusées sur des réseaux de diffusion tiers, utilisent également les gifs transparents dans ce but. Le but de base est de réunir des données sur l'utilisation des sites PCF. Le terme utilisé pour cette pratique est \"analyse de traffic\", et les cookies et gifs transparents sont les outils de collecte de ces données."
 
 #: .\templates\privacy.html.py:92
 msgid "PCF will use the web analytics data only to determine aggregate usage patterns for our web sites as described above. PCF web sites do this by using either our own internal analytics software or by sending this information to a third-party service provider to help PCF analyze this data. PCF web sites using third-party web analytics tools are listed here. PCF has agreements with its third-party service providers that they will not share this information with others or use the information for purposes other than to maintain the services they provide to PCF. It is possible to link cookies and clear gifs to personally identifying information, thereby permitting web site operators, including our third-party analytics providers, to track the online movements of particular individuals. PCF does not do so and its third-party service providers are not allowed to correlate PCF data with any other data."
-msgstr ""
+msgstr "PCF utilisera les mesures de traffic uniquement déterminer des tendances d'usage agrégés pour nos sites. Les sites PCF utilisent pour cela soit notre outil d'analyse interne ou en envoyant ces informations à un prestataire tiers qui aide PCF à analyser ces données. Les sites PCF utilisant des outils tiers d'analyse sont listés ici. PCF possède des accords avec des prestataires garantissant qu'ils ne partageront pas ces informations et ne les utiliseront pas pour d'autres but que le maintien des services qu'ils fournissent à PCF. Il est possible de relier les cookies et les gifs transparents à des informations personnelles, permettant ainsi à des opérateurs de sites de suivre les mouvements en ligne d'individus en particulier. PCF ne le fait pas et ses prestataires ne sont pas autorisés à corréler les données de PCF avec d'autres données quelles qu'elles soient."
 
 #: .\templates\privacy.html.py:95
 msgid "PCF uses the information provided by cookies and clear gifs to develop a better understanding of how PCF's visitors use PCF's web sites, and to facilitate those visitors' interactions with PCF's web sites. PCF may make the aggregate data obtained from web analytics (including from our third-party analytics providers, if applicable) publicly available. If this data is made available, none of the information will be personally identifying information or potentially-personally identifying information"
-msgstr ""
+msgstr "PCF utilise les informations fournies par les cookies et les gifs transparents pour une meilleur comprehension de l'utilisation des sites PCF par les visiteurs et faciliter leurs futures visites. PCF peut rendre publiques les données obtenues par l'analyse de traffic (incluant celle de nos prestataires tiers). Si ces données sont rendues disponible, les informations ne permettront pas d'identifier formellement ou potentiellement quiconque."
 
 #: .\templates\privacy.html.py:98
 msgid "Other Third Party Cookies."
-msgstr ""
+msgstr "Autres Cookies Tiers."
 
 #: .\templates\privacy.html.py:100
 msgid "Content from other sources that is hosted on PCF web sites may sometimes contain cookies that send information to those third parties. In certain cases, often associated with embedded content such as YouTube videos and other site linking buttons, a third party cookie may be set by the 3rd party content or provider. In these cases, the privacy policy of the 3rd party governs with respect to information that may be collected by and sent to the respective 3rd party. If you are concerned about these third party cookies, please see the information below on how to decline cookies."
-msgstr ""
+msgstr "Le contenu d'autres sources hébergés sur les sites PCF peut contenir des cookies qui envoient des informations à ces tiers. Dans certains cas, en particulier ceux des vidéos intégrées aux pages comme les vidéos YouTube ou des boutons de partage vers d'autres sites, un cookie tiers peut être établi par ce tier. Dans ce cas, la politique de confidentialité du tiers détermine les conditions de traitement des informations qui peuvent être collectées et envoyées aux tiers. Si vous êtes inquiet à propos de ces cookie tiers, veuillez voir en dessous pour comment les désactiver."
 
 #: .\templates\privacy.html.py:103
 msgid "How to Control the Use of Cookies."
@@ -1122,25 +1166,26 @@ msgstr "Comment contrôler l'usage des Cookies"
 
 #: .\templates\privacy.html.py:105
 msgid "You have the ability to accept or decline cookies. PCF visitors who do not wish to have cookies placed on their computers by PCF, its contractors, or third-party service providers should set their browsers to refuse cookies before linking to PCF's web sites. Certain features of PCF's web sites may not function properly without the aid of cookies."
-msgstr ""
+msgstr "Vous avez la possibilité d'accepter ou de refuser les cookie. Les visiteurs de PCF qui ne veulent pas de cookies sur leur ordinateur de la part de PCF, ses partenaires, ou de services tiers doivent regler leur navigateur pour refuser les cookie avant de visiter les sites PCF. Certaines possibilités des sites PCF peuvent ne pas fonctionner sans cookies."
 
 #: .\templates\privacy.html.py:108
 msgid "Opt-out Procedures"
-msgstr ""
+msgstr "Procédures de retrait"
 
 #: .\templates\privacy.html.py:110
 msgid "If you do not want to allow your session visitation information on PCF web sites to be aggregated and analyzed by PCF (or its third-party analytics providers) you may utilize the following opt-out mechanisms listed here. Additionally, if you signed up to receive but no longer wish to receive electronic marketing communications from PCF, you can opt-out from receiving these communications by following the тАЬunsubscribeтАЭ instructions in any such communication you receive."
-msgstr ""
+msgstr "Si vous ne voulez pas permettre que vous informations de visites sur les sites PCF soient aggrégées et analysées par PCF (ou ses prestataires de services), vous pouvez utilisez les procédures de désengagement notées ici. De plus, si vous vous êtes inscrit pour recevoir des nouvelles de PCF mais que vous ne souhaitez plus les recevoir, vous pouvez vous en désengager en suivant les instructions тАЬdésinscriptionтАЭ sur chacun des mails que vous recevez."
 
 #: .\templates\privacy.html.py:113
 msgid "Privacy Policy Changes"
-msgstr ""
+msgstr "Changement de Politique de Confidentialité"
 
 #: .\templates\privacy.html.py:115
 msgid "By using the web sites, you agree to the terms and conditions of this privacy policy. If you do not agree to the terms and conditions of this privacy policy, please do not use the web sites. PCF may change its Privacy Policy from time to time. Any and all changes will be reflected on this page. Substantive changes will also be announced through the standard mechanisms through which PCF communicates with the PCF community, including PCF's тАЬannounceтАЭ mailing list and newsgroup."
-msgstr ""
+msgstr "En utilisant ces sites web, vous acceptez les conditions de ce politique de confidentialité. Si nous n'acceptez pas les conditions de ce politique, veuillez ne pas utilisez nos sites. PCF peut changer sa politique de confidentialité occasionnellement. Tout les changements seronts inscrits sur cette page. Les changements substanciels seront annoncées par les moyens usuels de communication entre PCF et la communauté PCF, y compris la liste тАЬannounceтАЭ et les groupes de discussion."
 
-#: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
+#: .\templates\admin\base_site.html.py:4
+#: .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
 msgstr "Universal Subtitles"
 
@@ -1618,7 +1663,8 @@ msgstr ""
 #: .\templates\videos\diffing.html.py:93
 #: .\templates\videos\history.html.py:144
 #: .\templates\videos\history.html.py:185
-#: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
+#: .\templates\videos\revision.html.py:72
+#: .\templates\videos\video.html.py:158
 msgid "Subtitles"
 msgstr "Sous-titres"
 
@@ -1846,7 +1892,8 @@ msgstr ""
 msgid "Edit Subtitles"
 msgstr "Modifier les sous-titres"
 
-#: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
+#: .\templates\videos\history.html.py:159
+#: .\templates\videos\video.html.py:122
 msgid "Add Translation"
 msgstr "Ajouter une traduction"
 
@@ -1858,7 +1905,8 @@ msgstr "Télécharger les sous-titres"
 msgid "Original Language Subtitles"
 msgstr "Sous-titres en version originale"
 
-#: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
+#: .\templates\videos\history.html.py:189
+#: .\templates\videos\video.html.py:134
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -1894,11 +1942,13 @@ msgstr "Pas de sous-titres pour cette langue"
 msgid "Either no subtitles have been entered, or they were deleted."
 msgstr "Les sous-titres n'ont pas été entrés ou ont été supprimés."
 
-#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
+#: .\templates\videos\history.html.py:289
+#: .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
 msgstr "Pas encore de sous-titres."
 
-#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
+#: .\templates\videos\history.html.py:289
+#: .\templates\videos\video.html.py:183
 msgid "Make some!"
 msgstr "Créez-en !"
 
@@ -1969,7 +2019,8 @@ msgstr "Rechercher"
 msgid "URL/title"
 msgstr "URL / titre"
 
-#: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
+#: .\templates\videos\search.html.py:19
+#: .\templates\videos\video.html.py:143
 msgid "Language"
 msgstr "Langue"
 
@@ -2100,3 +2151,4 @@ msgstr "historique"
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
 msgstr "Il n'y a aucun vidéo."
+
