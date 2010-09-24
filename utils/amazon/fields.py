@@ -9,8 +9,18 @@ from django.core.files.base import ContentFile
 from hashlib import sha1
 from time import time
 from uuid import uuid4
+from thread import start_new_thread
 
 THUMB_SIZES = getattr(settings, 'THUMBNAILS_SIZE', ())
+USE_THREADED_THUMBNAIL_CREATING = getattr(settings, 'USE_THREADED_THUMBNAIL_CREATING', False)
+
+def create_thumbnails(obj, content):
+    for size in obj.field.thumb_sizes:
+        img = StringIO()
+        content.seek(0)
+        Thumbnail(StringIO(content.read(content.size)), size, dest=img, opts=obj.field.thumb_options)
+        thumb_name = obj.build_thumbnail_name(obj.name, size)
+        obj.storage.save(thumb_name, ContentFile(img.read()))
 
 class S3ImageFieldFile(FieldFile):
     
@@ -35,12 +45,10 @@ class S3ImageFieldFile(FieldFile):
         self._size = len(content)
         self._committed = True
         
-        for size in self.field.thumb_sizes:
-            img = StringIO()
-            content.seek(0)
-            Thumbnail(StringIO(content.read(content.size)), size, dest=img, opts=self.field.thumb_options)
-            thumb_name = self.build_thumbnail_name(self.name, size)
-            self.storage.save(thumb_name, ContentFile(img.read()))
+        if USE_THREADED_THUMBNAIL_CREATING:
+            start_new_thread(create_thumbnails, (self, content))
+        else:
+            create_thumbnails(self, content)
 
         # Save the object because it has changed, unless save is False
         if save:
