@@ -111,79 +111,80 @@ msgstr "Ĉi tiu filmo havas tradukaĵojn."
 
 #: .\apps\videos\forms.py:62
 msgid "File size should be less 1Mb"
-msgstr ""
+msgstr "Dosiera grandeco estu malpli ol unu megabitoko"
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
-msgstr ""
+msgstr "Malbona dosierspeco, uzu .srt, .ssa, aŭ .xml (TTML)!"
 
 #: .\apps\videos\forms.py:68
 msgid "Incorrect subtitles format"
-msgstr ""
+msgstr "Malbona subteksta dosierspeco!"
 
 #: .\apps\videos\forms.py:215
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr ""
+msgstr "Enigi validajn retpoŝtajn adresojn, apartigitajn per komoj."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
+#, fuzzy
 msgid "Share your subtitles"
-msgstr ""
+msgstr "Disdoni viajn subtekstojn"
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr ""
+msgstr "Nun ĉiuj povas spekti la videon kun subtekstoj, provu ĝin"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
-msgstr ""
+msgstr "Anonci al la mondo, kaj inviti viajn amikojn traduki:"
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
-msgstr ""
+msgstr "Poŝti al Facebook"
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
-msgstr ""
+msgstr "Poŝti al Twitter"
 
 #: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
-msgstr ""
+msgstr "Retpoŝti al amikoj"
 
 #: .\templates\_share_widget.html.py:15
 msgid "Embed Code"
-msgstr ""
+msgstr "Enkorpigi kodon"
 
 #: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
 msgid "Permalink"
-msgstr ""
+msgstr "Konstanta ligilo"
 
 #: .\templates\_sharing_widget.html.py:20
 msgid "Embed this video in your site"
-msgstr ""
+msgstr "Enkorpigi ĉi tiun videon en vian retejon"
 
 #: .\templates\_testing_widget.html.py:3
 msgid "We&#8217;d like help testing our subtitling widget"
-msgstr ""
+msgstr "Ni volus helpon kontroli nian subtekstigilon"
 
 #: .\templates\_testing_widget.html.py:5
 msgid "Just launch our feedback form and try captioning a video"
-msgstr ""
+msgstr "Simple lanĉi nian reag-formularon kaj provi subtekstigi videon"
 
 #: .\templates\_testing_widget.html.py:7
 msgid "Test the Widget"
-msgstr ""
+msgstr "Kontroli la subtekstigilon"
 
 #: .\templates\_testing_widget.html.py:12
 msgid "Warning: These videos should not be embeded--there is a good possibility they will break at some point!"
-msgstr ""
+msgstr "Averton: tiuj videoj ne estas enkorpigeblaj ĉar riskas onte rompi"
 
 #: .\templates\_testing_widget.html.py:16
 msgid "Warning #2: These subtitles are non-permanent and should not be relied on -- someone could change them."
-msgstr ""
+msgstr "Averton: tiuj subtekstoj ne estas konstantaj.  Ne fidu ilin, iu povus ilin ŝanĝi."
 
 #: .\templates\_testing_widget.html.py:17
 msgid "This alpha site is for purely testing purposes."
-msgstr ""
+msgstr "Ĉi tiu retejo estas alfa versio, nur por kontrolaj celoj."
 
 #: .\templates\about.html.py:22
 msgid ""
