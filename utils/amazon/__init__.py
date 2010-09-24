@@ -16,7 +16,10 @@ from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from django.core.files.storage import FileSystemStorage
 from django.core.files import File
+from fields import S3EnabledImageField, S3EnabledFileField
 import os
+
+__all__ = ['S3EnabledImageField', 'S3EnabledFileField', 'S3Storage']
 
 DEFAULT_HOST = 's3.amazonaws.com'
 
@@ -66,7 +69,8 @@ class S3Storage(FileSystemStorage):
         return name
 
     def delete(self, name):
-        self.bucket.delete_key(name)
+        if name and self.exists(name):
+            self.bucket.delete_key(name)
 
     def exists(self, name):
         return Key(self.bucket, name).exists()
@@ -81,30 +85,10 @@ class S3Storage(FileSystemStorage):
         return self.bucket.get_key(name).size
 
     def url(self, name):
+        name = name.replace('\\', '/')
         return 'https://%s.%s/%s' % (self.bucket.name, DEFAULT_HOST, name)
         #return Key(self.bucket, name).generate_url(100000)
     
     def get_available_name(self, name):
         return name
 
-class S3EnabledFileField(models.FileField):
-    def __init__(self, bucket=settings.DEFAULT_BUCKET, verbose_name=None, name=None, upload_to='', storage=None, **kwargs):
-        if settings.USE_AMAZON_S3:
-            self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-            if not self.connection.lookup(bucket):
-                self.connection.create_bucket(bucket)
-            self.bucket = self.connection.get_bucket(bucket)
-            storage = S3Storage(self.bucket)
-            upload_to=''
-        super(S3EnabledFileField, self).__init__(verbose_name, name, upload_to, storage, **kwargs)    
-        
-        
-class S3EnabledImageField(models.ImageField):
-    def __init__(self, bucket=settings.DEFAULT_BUCKET, verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
-        if settings.USE_AMAZON_S3:
-            self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-            if not self.connection.lookup(bucket):
-                self.connection.create_bucket(bucket)
-            self.bucket = self.connection.get_bucket(bucket)
-            kwargs['storage'] = S3Storage(self.bucket)
-        super(S3EnabledImageField, self).__init__(verbose_name, name, width_field, height_field, **kwargs) 

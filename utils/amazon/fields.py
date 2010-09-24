@@ -1,0 +1,105 @@
+from sorl.thumbnail.base import Thumbnail
+from sorl.thumbnail.main import build_thumbnail_name
+from StringIO import StringIO        
+from django.conf import settings
+from django.db import models
+from django.db.models.fields.files import FieldFile
+from boto.s3.connection import S3Connection
+from django.core.files.base import ContentFile
+from hashlib import sha1
+from time import time
+from uuid import uuid4
+
+THUMB_SIZES = getattr(settings, 'THUMBNAILS_SIZE', ())
+
+class S3ImageFieldFile(FieldFile):
+    
+    def thumb_url(self, w, h):
+        name = self.build_thumbnail_name(self.name, (w, h))
+        return self.storage.url(name)
+    
+    def generate_file_name(self):
+        return sha1(settings.SECRET_KEY+str(time())+str(uuid4())).hexdigest()
+    
+    def build_thumbnail_name(self, name, size, options=None):
+        options = options or self.field.thumb_options
+        return build_thumbnail_name(name, size, options)
+    
+    def save(self, name, content, save=True):
+        name = self.generate_file_name()
+        name = self.field.generate_filename(self.instance, name)
+        self.name = self.storage.save(name, content)
+        setattr(self.instance, self.field.name, self.name)
+
+        # Update the filesize cache
+        self._size = len(content)
+        self._committed = True
+        
+        for size in self.field.thumb_sizes:
+            img = StringIO()
+            content.seek(0)
+            Thumbnail(StringIO(content.read(content.size)), size, dest=img, opts=self.field.thumb_options)
+            thumb_name = self.build_thumbnail_name(self.name, size)
+            self.storage.save(thumb_name, ContentFile(img.read()))
+
+        # Save the object because it has changed, unless save is False
+        if save:
+            self.instance.save()
+    save.alters_data = True
+
+    def delete(self, save=True):
+        # Only close the file if it's already open, which we know by the
+        # presence of self._file
+        print 'deleting'
+        if hasattr(self, '_file'):
+            self.close()
+            del self.file
+
+        self.storage.delete(self.name)
+        
+        for size in self.field.thumb_sizes:
+            name = self.build_thumbnail_name(self.name, size)
+            self.storage.delete(name)
+        
+        self.name = None
+        setattr(self.instance, self.field.name, self.name)
+
+        # Delete the filesize cache
+        if hasattr(self, '_size'):
+            del self._size
+        self._committed = False
+
+        if save:
+            self.instance.save()
+    delete.alters_data = True
+
+class S3EnabledImageField(models.ImageField):
+    
+    attr_class = S3ImageFieldFile
+    
+    def __init__(self, bucket=settings.DEFAULT_BUCKET, thumb_sizes=THUMB_SIZES, thumb_options=dict(crop='smart'), verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
+        self.thumb_sizes = thumb_sizes
+        self.thumb_options = thumb_options
+        
+        if settings.USE_AMAZON_S3:
+            from utils.amazon import S3Storage
+            
+            self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+            if not self.connection.lookup(bucket):
+                self.connection.create_bucket(bucket)
+            self.bucket = self.connection.get_bucket(bucket)
+            kwargs['storage'] = S3Storage(self.bucket)
+        super(S3EnabledImageField, self).__init__(verbose_name, name, width_field, height_field, **kwargs)
+    
+class S3EnabledFileField(models.FileField):
+    def __init__(self, bucket=settings.DEFAULT_BUCKET, verbose_name=None, name=None, upload_to='', storage=None, **kwargs):
+        if settings.USE_AMAZON_S3:
+            from utils.amazon import S3Storage
+            
+            self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+            if not self.connection.lookup(bucket):
+                self.connection.create_bucket(bucket)
+            self.bucket = self.connection.get_bucket(bucket)
+            storage = S3Storage(self.bucket)
+            upload_to=''
+        super(S3EnabledFileField, self).__init__(verbose_name, name, upload_to, storage, **kwargs)    
