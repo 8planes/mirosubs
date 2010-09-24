@@ -411,3 +411,17 @@ def stop_notification(request, video_id):
         context['error'] = u'Incorrect secret hash'
     return render_to_response('videos/stop_notification.html', context,
                               context_instance=RequestContext(request))
+
+def info(request):
+    from django.db.models import Sum
+    from comments.models import Comment
+    context = {
+        'subtitles_fetched_count': Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c'],
+        'view_count': Video.objects.aggregate(c=Sum('view_count'))['c'],
+        'videos_with_captions': Video.objects.exclude(subtitlelanguage=None).count(),
+        'all_videos': Video.objects.count(),
+        'all_users': User.objects.count(),
+        'translations_count': SubtitleLanguage.objects.filter(is_original=False).count(),
+        'all_comments': Comment.objects.count()
+    }
+    return render_to_response('info.html', context, context_instance=RequestContext(request))

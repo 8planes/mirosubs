@@ -26,6 +26,7 @@ from widget.base_rpc import BaseRpc
 from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
 from django.conf import settings
+from django.db.models import Sum
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
@@ -129,7 +130,15 @@ class Rpc(BaseRpc):
         return { 'captions': self.fetch_subtitles(request, video_id),
                  'languages': [widget.language_to_map(lang[0], lang[1]) 
                                for lang in LANGUAGES]}
-
+    
+    def get_widget_info(self, request):
+        return {
+            'all_videos': models.Video.objects.count(),
+            'subtitles_fetched_count': models.Video.objects.aggregate(s=Sum('subtitles_fetched_count'))['s'],
+            'videos_with_captions': models.Video.objects.exclude(subtitlelanguage=None).count(),
+            'translations_count': models.SubtitleLanguage.objects.filter(is_original=False).count()
+        }
+    
     def _save_subtitles_impl(self, request, language, deleted, inserted, updated):
         if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
             return None
