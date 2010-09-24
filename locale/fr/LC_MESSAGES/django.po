@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -129,33 +129,27 @@ msgstr "URL de vidéo incorrect."
 msgid "Enter valid e-mail addresses separated by commas."
 msgstr "Entrez des adresse email valide, séparées par des virgules."
 
-#: .\templates\_share_widget.html.py:4
-#: .\templates\_sharing_widget.html.py:11
+#: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
 msgstr "Partagez vos sous-titres."
 
-#: .\templates\_share_widget.html.py:6
-#: .\templates\_sharing_widget.html.py:13
+#: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
 msgstr "A présent, tout le monde peut regarder la vidéo sous-titrée - Essayez !"
 
-#: .\templates\_share_widget.html.py:7
-#: .\templates\_sharing_widget.html.py:14
+#: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
 msgstr "Puis faites passer le mot et invitez vos amis pour aider à traduire :"
 
-#: .\templates\_share_widget.html.py:10
-#: .\templates\_sharing_widget.html.py:16
+#: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
 msgstr "Poster sur Facebook"
 
-#: .\templates\_share_widget.html.py:11
-#: .\templates\_sharing_widget.html.py:17
+#: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
 msgstr "Poster sur Twitter"
 
-#: .\templates\_share_widget.html.py:12
-#: .\templates\_sharing_widget.html.py:18
+#: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
 msgstr "Envoyer par mail"
 
@@ -163,8 +157,7 @@ msgstr "Envoyer par mail"
 msgid "Embed Code"
 msgstr "Code d'intégration"
 
-#: .\templates\_share_widget.html.py:25
-#: .\templates\_sharing_widget.html.py:48
+#: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
 msgid "Permalink"
 msgstr "Lien permanent"
 
@@ -499,8 +492,7 @@ msgstr "Universal Subtitles ne fonctionne pas avec votre navigateur. Mettez le �
 msgid "a project of the participatory culture foundation"
 msgstr "un projet de Participatory Culture Foundation."
 
-#: .\templates\base.html.py:72
-#: .\templates\videos\create.html.py:19
+#: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
 msgstr "Sous-titrer une vidéo"
 
@@ -520,8 +512,7 @@ msgstr "Blog"
 msgid "FAQ"
 msgstr "FAQ"
 
-#: .\templates\base.html.py:81
-#: .\templates\profiles\edit_profile.html.py:19
+#: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
 msgstr "A propos"
@@ -602,78 +593,63 @@ msgstr ""
 msgid "Frequently Asked Questions"
 msgstr "Foire aux questions"
 
-#: .\templates\faq.html.py:19
-#: .\templates\faq.html.py:39
+#: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
 msgstr "Qu'est-ce que Universal Subtitles ?"
 
-#: .\templates\faq.html.py:20
-#: .\templates\faq.html.py:43
+#: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
 msgstr "Comment puis-je utiliser Universal Subtitles ?"
 
-#: .\templates\faq.html.py:21
-#: .\templates\faq.html.py:47
+#: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
 msgstr "Quels sont les avantages des sous-titres ?"
 
-#: .\templates\faq.html.py:22
-#: .\templates\faq.html.py:56
+#: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
 msgstr "Qui est la Participatory Culture Foundation et pourquoi a-t-elle créé Universalis Subtitles ?"
 
-#: .\templates\faq.html.py:23
-#: .\templates\faq.html.py:60
+#: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
 msgstr "Universal Subtitles permettra-t-il de créer des sous-titres pour les sourds et les malentendants ?"
 
-#: .\templates\faq.html.py:24
-#: .\templates\faq.html.py:64
+#: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
 msgstr "Les sous-titres permettront-ils d'utiliser ma langue ou mon jeu de caractères ?"
 
-#: .\templates\faq.html.py:25
-#: .\templates\faq.html.py:68
+#: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
 msgstr "Quand les outils, y compris ce site, seront-ils disponibles dans ma langue ?"
 
-#: .\templates\faq.html.py:26
-#: .\templates\faq.html.py:72
+#: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
 msgstr "Comment ajouter des sous-titres à ma vidéo ?"
 
-#: .\templates\faq.html.py:27
-#: .\templates\faq.html.py:76
+#: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
 msgstr "Quelle licence libre utilisez-vous ?"
 
-#: .\templates\faq.html.py:28
-#: .\templates\faq.html.py:80
+#: .\templates\faq.html.py:28 .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
 msgstr "Je suis un développeur, puis-je aider ?"
 
-#: .\templates\faq.html.py:29
-#: .\templates\faq.html.py:84
+#: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
 msgstr "Les gens sans connaissances techniques peuvent-ils s'impliquer dans le projet ?"
 
-#: .\templates\faq.html.py:30
-#: .\templates\faq.html.py:88
+#: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
 msgstr "Acceptez-vous les dons ? Sont-ils déductibles d'impôt ?"
 
-#: .\templates\faq.html.py:31
-#: .\templates\faq.html.py:92
+#: .\templates\faq.html.py:31 .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
 msgstr "Quelle est votre relation avec Mozilla Drumbeat ?"
 
-#: .\templates\faq.html.py:32
-#: .\templates\faq.html.py:96
+#: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
 msgstr "Où puis-je télécharger des sous-titres en .SRT ou en d'autres formats?"
 
-#: .\templates\faq.html.py:33
-#: .\templates\faq.html.py:106
+#: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
 msgstr "Pourquoi ne puis-je modifier le timing sur une traduction ?"
 
@@ -753,7 +729,7 @@ msgstr ""
 "        Quand des sous-titres exisent, vous pouvez les télécharger au format .SRT, .SSA et TTML sur \n"
 "        la page pour cette langue (<a href=\"http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/\">exemple</a>). \n"
 "       Cliquez sur les liens dans le coin bas droit sous le bouton vert \"Editer Sous-titres\" \n"
-" 		 "
+" \t\t "
 
 #: .\templates\faq.html.py:108
 msgid ""
@@ -1006,13 +982,11 @@ msgstr ""
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
 msgstr ""
 
-#: .\templates\ordered_paginator.html.py:4
-#: .\templates\paginator.html.py:4
+#: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
 msgstr "préc."
 
-#: .\templates\ordered_paginator.html.py:25
-#: .\templates\paginator.html.py:25
+#: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
 msgstr "suiv."
 
@@ -1184,8 +1158,7 @@ msgstr "Changement de Politique de Confidentialité"
 msgid "By using the web sites, you agree to the terms and conditions of this privacy policy. If you do not agree to the terms and conditions of this privacy policy, please do not use the web sites. PCF may change its Privacy Policy from time to time. Any and all changes will be reflected on this page. Substantive changes will also be announced through the standard mechanisms through which PCF communicates with the PCF community, including PCF's тАЬannounceтАЭ mailing list and newsgroup."
 msgstr "En utilisant ces sites web, vous acceptez les conditions de ce politique de confidentialité. Si nous n'acceptez pas les conditions de ce politique, veuillez ne pas utilisez nos sites. PCF peut changer sa politique de confidentialité occasionnellement. Tout les changements seronts inscrits sur cette page. Les changements substanciels seront annoncées par les moyens usuels de communication entre PCF et la communauté PCF, y compris la liste тАЬannounceтАЭ et les groupes de discussion."
 
-#: .\templates\admin\base_site.html.py:4
-#: .\templates\admin\base_site.html.py:7
+#: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
 msgstr "Universal Subtitles"
 
@@ -1335,74 +1308,74 @@ msgstr "Saisissez le nouveau mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr "Veuillez entrer votre nouveau mot de passe deux fois."
+msgstr "Merci d'entrer votre nouveau mot de passe deux fois afin de vérifier qu'il a été tapé correctement."
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr "Nouveau mot de passe"
+msgstr "Nouveau mot de passe :"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr "Confirmer le mot de passe:"
+msgstr "Confirmer mot de passe :"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr "Changer mon mot de passe"
+msgstr "Modifier mon mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr "Réinitialisation du mot de passe échoué"
+msgstr "Erreur de changement du mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr "Le lien de réinitialisation du mot de passe est invalide, possiblement parce qu'il à déja été utilisé. Veuillez demander une nouvelle réinitialisation."
+msgstr "Le lien utilisé pour le changement du mot de passe est invalide, peut-être parce qu'il a déjà été utilisé. Merci de demander un nouveau changement de votre mot de passe."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr "Réinitialisation du mot de passe réussie"
+msgstr "Changement du mot de passe réussi"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr "Nous avons envoyé des instructions pour choisir un mot de passe à l'adresse que vous avez fourni. Vous devez les recevoir sous peu."
+msgstr "Nous avons envoyé à votre adresse e-mail des instructions  pour régler votre mot de passe. Vous devriez bientôt le recevoir."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr "Vous recevez cet email parce que vous avez demandé une réinitialisation de mot de passe"
+msgstr "Vous recevez cet email parce que vous avez demandé un changement de mot de passe"
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr "pour votre compte utilisateur sur %(site_name)s"
+msgstr "pour votre compte sur %(site_name)s"
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr "Veuillez aller à la page suivante et choisir un nouveau mot de passe: "
+msgstr "Veuillez cliquer sur le lien suivant et choisir un nouveau mot de passe :"
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
-msgstr "Votre nom d'utilisateur, au cas où vous l'auriez oublié:"
+msgstr "Votre nom d'utilisateur, si vous l'avez oublié :"
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr "Merci d'utiliser notre site!"
+msgstr "Merci d'utiliser notre site !"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr "L'équipe de  %(site_name)s"
+msgstr "L'équipe %(site_name)s"
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
-msgstr "Mot de passe oublié? Entrez votre adresse email ci-dessous, et nous vous enverrons des instructions pour en choisir un nouveau"
+msgstr "Vous avez oublié votre mot de passe ? Entrez votre adresse email ci-dessous, et nous vous enverrons des instructions pour le changer."
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
-msgstr "Adresse mail:"
+msgstr "Adresse email :"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr "Réinitialiser mon mot de passe"
+msgstr "Changer mon mot de passe"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
@@ -1411,11 +1384,11 @@ msgstr "Anonyme"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
-msgstr "à commenté"
+msgstr "a commenté"
 
 #: .\templates\videos\_activities.html.py:19
 msgid "commented on this video"
-msgstr "à commenté cette vidéo"
+msgstr "a commenté cette vidéo"
 
 #: .\templates\videos\_activities.html.py:23
 #, python-format
@@ -1663,8 +1636,7 @@ msgstr ""
 #: .\templates\videos\diffing.html.py:93
 #: .\templates\videos\history.html.py:144
 #: .\templates\videos\history.html.py:185
-#: .\templates\videos\revision.html.py:72
-#: .\templates\videos\video.html.py:158
+#: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
 msgstr "Sous-titres"
 
@@ -1892,8 +1864,7 @@ msgstr ""
 msgid "Edit Subtitles"
 msgstr "Modifier les sous-titres"
 
-#: .\templates\videos\history.html.py:159
-#: .\templates\videos\video.html.py:122
+#: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
 msgid "Add Translation"
 msgstr "Ajouter une traduction"
 
@@ -1905,8 +1876,7 @@ msgstr "Télécharger les sous-titres"
 msgid "Original Language Subtitles"
 msgstr "Sous-titres en version originale"
 
-#: .\templates\videos\history.html.py:189
-#: .\templates\videos\video.html.py:134
+#: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -1942,13 +1912,11 @@ msgstr "Pas de sous-titres pour cette langue"
 msgid "Either no subtitles have been entered, or they were deleted."
 msgstr "Les sous-titres n'ont pas été entrés ou ont été supprimés."
 
-#: .\templates\videos\history.html.py:289
-#: .\templates\videos\video.html.py:183
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
 msgstr "Pas encore de sous-titres."
 
-#: .\templates\videos\history.html.py:289
-#: .\templates\videos\video.html.py:183
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "Make some!"
 msgstr "Créez-en !"
 
@@ -2019,8 +1987,7 @@ msgstr "Rechercher"
 msgid "URL/title"
 msgstr "URL / titre"
 
-#: .\templates\videos\search.html.py:19
-#: .\templates\videos\video.html.py:143
+#: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
 msgstr "Langue"
 
@@ -2151,4 +2118,3 @@ msgstr "historique"
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
 msgstr "Il n'y a aucun vidéo."
-
