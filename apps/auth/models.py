@@ -31,7 +31,6 @@ import sha
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
 from django.core.exceptions import MultipleObjectsReturned
-from utils.amazon.thumbnail import AmazonThumbnail
 from utils.amazon import S3EnabledImageField
 
 SORTED_LANGUAGES = list(LANGUAGES)
