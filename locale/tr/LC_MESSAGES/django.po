@@ -1081,26 +1081,26 @@ msgstr ""
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
-msgstr ""
+msgstr "Bu kişiden"
 
 #: .\templates\profiles\view_profile.html.py:111
 msgid "Message"
-msgstr ""
+msgstr "Mesaj"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "HTML Yok"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
-msgstr ""
+msgstr "Not: Mesaj gönderdiğinizde alıcı eposta adresınızı görüp size doğrudan mesaj gönderebilir."
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:4
 #: .\templates\registration\password_reset_done.html.py:4
 #: .\templates\registration\password_reset_form.html.py:4
 msgid "Home"
-msgstr ""
+msgstr "Ana Sayfa"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:6
@@ -1109,65 +1109,65 @@ msgstr ""
 #: .\templates\registration\password_reset_form.html.py:6
 #: .\templates\registration\password_reset_form.html.py:10
 msgid "Password reset"
-msgstr ""
+msgstr "Şifre sıfırla"
 
 #: .\templates\registration\password_reset_complete.html.py:6
 #: .\templates\registration\password_reset_complete.html.py:10
 msgid "Password reset complete"
-msgstr ""
+msgstr "şifre sıfırlama tamamlandı"
 
 #: .\templates\registration\password_reset_complete.html.py:12
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "Şifreniz konuldu. şimdi devam edip giriş yapabilirsiniz."
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "Giriş"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
-msgstr ""
+msgstr "Şifre sıfırlama onayı"
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
-msgstr ""
+msgstr "Yeni şifre girin"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Lütfen yenni şifrenizi iki kez girin, böylece doğru yazdığınızdan emin olabiliriz."
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr ""
+msgstr "Yeni Şifre:"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr ""
+msgstr "Şifreyi doğrula:"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr ""
+msgstr "Şifremi değiştir"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr ""
+msgstr "Şifre sıfırlma başarısız"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr ""
+msgstr "Şifre sıfırlama bağlantısı geçersizdi, muhtemeleen bu bağlantı daha önce kullanıldı. Lütfen yeni bir şifre sıfırlama bağlantısı talep edin."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr ""
+msgstr "Şifre sıfırlama başarılı"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr ""
+msgstr "Belirttiğiniz eposta adresine şifrenizi sıfırlama talimatlarını gönderdik. Bu eposta kısa zamanda size ulaşacaktır."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
+msgstr "Şifrenizi sıfırlamayı talep ettiğiniz için bu mesajı gönderdik."
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
