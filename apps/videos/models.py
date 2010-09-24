@@ -835,20 +835,16 @@ class Action(models.Model):
             obj.save()            
     
     @classmethod
-    def create_video_handler(cls, sender, instance, created, **kwargs):
-        if created:
-            video = instance
-            # FIXME marking user as None is a temporary fix. We need to 
-            # either get rid of
-            # this action or just report it on first subtitling.
-            obj = cls(user=None, video=video)
-            obj.action_type = cls.ADD_VIDEO
-            obj.created = datetime.now()
-            obj.save()
+    def create_video_handler(cls, instance, user):
+        video = instance
+        obj = cls(user=user, video=video)
+        obj.action_type = cls.ADD_VIDEO
+        obj.created = datetime.now()
+        obj.save()
                 
 post_save.connect(Action.create_comment_handler, Comment)        
 post_save.connect(Action.create_caption_handler, SubtitleVersion)
-post_save.connect(Action.create_video_handler, Video)
+#post_save.connect(Action.create_video_handler, Video)
 
 class UserTestResult(models.Model):
     email = models.EmailField()

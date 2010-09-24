@@ -89,6 +89,8 @@ def create(request):
             video_url = video_form.cleaned_data['video_url']
             try:
                 video, created = Video.get_or_create_for_url(video_url)
+                if created:
+                    Action.create_video_handler(video, request.user)
             except (VidscraperError, RequestError):
                 vidscraper_error = True
                 return render_to_response('videos/create.html', locals(),
