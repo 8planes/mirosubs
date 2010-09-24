@@ -995,84 +995,84 @@ msgstr ""
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
 msgid "Sign in with your OpenID"
-msgstr ""
+msgstr "OpenID ile giriş"
 
 #: .\templates\openid_consumer\signin.html.py:18
 msgid "Sign in"
-msgstr ""
+msgstr "Giriş Yap"
 
 #: .\templates\profiles\edit_profile.html.py:7
 #: .\templates\profiles\edit_profile.html.py:28
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "Profilini düzenle"
 
 #: .\templates\profiles\edit_profile.html.py:7
 msgid "View profile"
-msgstr ""
+msgstr "Profili görüntüle"
 
 #: .\templates\profiles\edit_profile.html.py:10
 #: .\templates\profiles\view_profile.html.py:83
 msgid "Preferred Language"
-msgstr ""
+msgstr "Tercih edilen dil"
 
 #: .\templates\profiles\edit_profile.html.py:13
 #: .\templates\profiles\view_profile.html.py:84
 msgid "Homepage"
-msgstr ""
+msgstr "Anasayfa"
 
 #: .\templates\profiles\edit_profile.html.py:30
 msgid "Save Edits to Profile"
-msgstr ""
+msgstr "Düzenlemeleri profile kaydet"
 
 #: .\templates\profiles\edit_profile.html.py:35
 msgid "Personal Info"
-msgstr ""
+msgstr "Kişisel Bilgi"
 
 #: .\templates\profiles\edit_profile.html.py:57
 msgid "Upload picture"
-msgstr ""
+msgstr "Resim Yükle"
 
 #: .\templates\profiles\edit_profile.html.py:83
 msgid "Email me when something I've edited gets changed"
-msgstr ""
+msgstr "Düzenlediğim bir parça değişirse bana eposta gönder"
 
 #: .\templates\profiles\edit_profile.html.py:93
 msgid "Language Info"
-msgstr ""
+msgstr "Dil bilgisi"
 
 #: .\templates\profiles\edit_profile.html.py:106
 msgid "Languages I Know"
-msgstr ""
+msgstr "Bildiğim Diller"
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
 msgid "Remove Language"
-msgstr ""
+msgstr "Dili Kaldır"
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
-msgstr ""
+msgstr "Dil ekle"
 
 #: .\templates\profiles\view_profile.html.py:43
 msgid "Email sent"
-msgstr ""
+msgstr "Eposta gönderildi"
 
 #: .\templates\profiles\view_profile.html.py:62
 msgid "Enter message please."
-msgstr ""
+msgstr "Lütfen mesajınızı girin"
 
 #: .\templates\profiles\view_profile.html.py:66
 msgid "Enter email please."
-msgstr ""
+msgstr "Lütfen eposta adresini girin"
 
 #: .\templates\profiles\view_profile.html.py:86
 #: .\templates\profiles\view_profile.html.py:116
 msgid "Send a Message"
-msgstr ""
+msgstr "Mesaj gönder"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
-msgstr ""
+msgstr "<i>Kullanıcı biyografi girmemiş.</i>"
 
 #: .\templates\profiles\view_profile.html.py:103
 #, python-format
