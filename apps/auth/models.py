@@ -27,7 +27,7 @@ from django.db import models
 from django.conf.global_settings import LANGUAGES
 from django.db.models.signals import post_save
 from django.conf import settings
-import sha
+import hashlib
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
 from django.core.exceptions import MultipleObjectsReturned
@@ -71,6 +71,9 @@ class CustomUser(BaseUser):
                 return self.first_name
         return self.username
     
+    def avatar(self):
+        return self.picture.thumb_url(128, 128)
+    
     @models.permalink
     def get_absolute_url(self):
         return ('profiles:profile', [urlquote_plus(self.username)])
@@ -84,7 +87,7 @@ class CustomUser(BaseUser):
         return ('profiles:profile', [self.pk])
     
     def hash_for_video(self, video_id):
-        return sha.new(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
+        return hashlib.sha224(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
     
     @classmethod
     def get_youtube_anonymous(cls):
