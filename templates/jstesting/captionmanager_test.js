@@ -252,7 +252,7 @@ function testInsertSub() {
                  MS_dispatchedCaptions[1].getCaptionID());
     sendEvents(3.1);
     assertEquals(3, MS_dispatchedCaptions.length);
-    assertEquals(2, MS_dispatchedCaptions[2].getCaptionID());
+    assertEquals(3, MS_dispatchedCaptions[2].getCaptionID());
 }
 
 function testInsertNoTime() {
