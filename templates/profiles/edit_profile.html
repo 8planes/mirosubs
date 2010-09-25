@@ -125,7 +125,7 @@
                 {{ formset.management_form }}
                 {{ formset.non_field_errors }}
                 {% for form in formset.forms %}
-                    <li>
+                    <li class="user_language">
                         {{ form.non_field_errors }}
                         <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
                         {{ form.id }}

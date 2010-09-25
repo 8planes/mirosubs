@@ -455,7 +455,8 @@ background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
 
 .sort_button{
 float: left;
-width: 250px;
+width: 200px;
+margin: 10px 10px 0 0;
 }
 
 
@@ -468,8 +469,12 @@ width: 300px;
 
 
 .sort_button .sort_label{
-padding: 8px 10px;
+  font-size: 11px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0px #fff;
 display: block;
+color: #506a70;
 }
 
 
@@ -477,10 +482,10 @@ display: block;
 
 .sort_button .arrow{
 float: right;
-height: 32px;
+height: 26px;
 border-left: 1px solid #c4d9de;
-width: 35px;
-background: url(../../images/sort_arrows.gif) 13px -125px no-repeat;
+width: 28px;
+background: url(../../images/sort_arrows.gif) 10px -129px no-repeat;
 
 }
 
@@ -492,7 +497,7 @@ background: url(../../images/sort_arrows.gif) 13px -125px no-repeat;
 -webkit-border-radius-bottom-left: 3px;
 border-radius-bottomleft:3px;
 
-background: #d5e9ec url(../../images/sort_arrows.gif) 13px -125px no-repeat;
+background: #d5e9ec url(../../images/sort_arrows.gif) 10px -129px no-repeat;
 }
 
 
@@ -511,7 +516,7 @@ z-index: 999999;
 
 width: 100%;
 padding: 0;
-top: 32px;
+top: 27px;
 left: -1px;
 margin: 0;
 

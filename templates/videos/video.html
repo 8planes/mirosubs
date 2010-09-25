@@ -100,12 +100,12 @@
 {% endblock %}
 
 {% block main_content %}
-
+    {% if not video.title or video.is_html5 %}
+        <a class="floatright" href="#" class="edit-title">{% trans 'edit title' %}</a>   
+    {% endif %}
     <h2 class="main-title">{{ video.title_display }}</h2>
 
-    {% if not video.title or video.is_html5 %}
-        <a href="#" class="edit-title">{% trans 'edit title' %}</a>   
-    {% endif %}
+
 
     <div class="grid_6 alpha left_column">
         {% widget widget_params %}
@@ -138,13 +138,13 @@
       <h4 class="inline">{% trans 'Video Info' %}</h4>      
 
       <ul class="inline_tabs">
-        <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+        <li><a href="#comments-tab"><span class="inline_text">{% trans 'Comments' %}</span> <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
         {% comment %}
-        <li><a href="#comments-tab">{% trans 'Video URLS' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+        <li><a href="#comments-tab"><span class="inline_text">{% trans 'Video URLS' %}</span> <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
         {% endcomment %}
-        <li class="active"><a href="#activity-tab">{% trans 'Activity Stream' %}</a></li>
+        <li class="active"><a href="#activity-tab"><span class="inline_text">{% trans 'Activity Stream' %}</span></a></li>
       </ul>
 
       <div class="action_buttons grid_9 alpha omega">
