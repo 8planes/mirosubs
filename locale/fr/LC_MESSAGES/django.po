@@ -976,11 +976,11 @@ msgstr "Sponsors"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
-msgstr ""
+msgstr "Le sommet a été généreusement financé par le <a href=\"http://www.soros.org/\">Open Society Institute</a>."
 
 #: .\templates\opensubtitles2010.html.py:113
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
-msgstr ""
+msgstr "Un grand merci à <a href=\"http://openplans.org/\">Open Plans</a> de nous avoir fourni un espace de rencontre !"
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
@@ -1000,7 +1000,7 @@ msgstr "Dernière mise à jour: 10 août 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
-msgstr ""
+msgstr "Cette politique de confidentialité s'applique à tous les sites web et services web gérés par la Participatory Culture Foundation (ci-après nommée тАЬPCFтАЭ) sauf si le site web ou service web possède une politique de confidentialité différente."
 
 #: .\templates\privacy.html.py:14
 msgid "Except as described below, PCF does not collect or require visitors to its web sites to furnish personally identifying information such as names, email addresses, and phone numbers. Like most web site operators, PCF does collect non-personally identifying information of the sort that web browsers and servers typically make available, such as the browser type, operating system, language preference, referring site and date and time of each visitor request. PCF also collects potentially-personally identifying information like Internet Protocol (IP) addresses, which are non-personally identifying in and of themselves but could be used in conjunction with other information to personally identify users."
@@ -1072,7 +1072,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:61
 msgid "Protection of Certain Personally-Identifying Information"
-msgstr ""
+msgstr "Protection de Certaines Informations D'identification Personnelle"
 
 #: .\templates\privacy.html.py:64
 msgid "Where PCF has collected personally identifying information subject to one of the four exceptions described in the Community Members section, above, it discloses that information only to those of its employees, contractors, service providers, and subsidiaries and related organizations that need to know that information in order to process it on PCF's behalf and that have agreed not to disclose it to others. Some of these employees, contractors, service providers, and subsidiaries and related organizations may be located outside of your home country; by using PCF's web sites, you consent to the transfer of your information to them, which may involve the transfer of your information to countries that may provide a lesser level of data protection than your country of residence. PCF does not rent or sell such information to anyone. PCF may be required to disclose information to the government or others. This may happen if we receive a valid search warrant, subpoena, court order, or other legal mandate. For example, the DMCA framework (specifically Section 512(h)) contains an expedited subpoena process for copyright holders to request and receive information service providers have regarding the identity of alleged copyright infringers. In certain other limited situations, PCF may disclose personally identifying or other information, such as when necessary to protect our websites and operations (e.g., against attacks); to protect the rights, privacy, safety, or property of PCF or its users; to enforce our terms of service; and to pursue available legal remedies. Additionally, PCF may need to transfer personally identifying information to an affiliate or successor in the event of a change of our corporate structure or status, such as in the event of a restructuring, sale, or bankruptcy. We will retain any personally identifying information for the period necessary to fulfill the purposes outlined in this privacy policy."
