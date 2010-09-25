@@ -7,41 +7,20 @@ from django.db import models
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
-
-        if not db.dry_run:
-            # remove subtitles that don't have a unique (version, subtitle_id) pair
-            # (somewhat arbitrarily) keeping the sub with highest id
-            for version in orm.SubtitleVersion.objects.all():
-                subtitle_dict = {}
-                for subtitle in version.subtitle_set.all():
-                    if subtitle.subtitle_id in subtitle_dict:
-                        subtitle_dict.setdefault(subtitle.subtitle_id, []) \
-                            .append(subtitle)
-                for k, v in subtitle_dict.items():
-                    if len(v) > 1:
-                        subs_to_remove = self._subs_to_remove(v)
-                        for subtitle in subs_to_remove:
-                            version.remove(subtitle)
-                            subtitle.delete()
-        
-        # Adding unique constraint on 'Subtitle', fields ['version', 'subtitle_id']
-        db.create_unique('videos_subtitle', ['version_id', 'subtitle_id'])
-
-    def _subs_to_remove(self, subtitles):
-        max_id = max([s.id for s in subtitles])
-        return [s for s in subtitles if s.id != max_id]
-
+        db.delete_column('videos_action', 'language')
+        db.delete_foreign_key('videos_action', 'language_fk_id')
+        db.rename_column('videos_action', 'language_fk_id', 'language_id')
+        db.alter_column('videos_action', 'language_id', models.ForeignKey(orm['videos.SubtitleLanguage'], blank=True, null=True))
+                
     def backwards(self, orm):
+        db.add_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(default='', max_length=16, blank=True))
+        db.delete_foreign_key('videos_action', 'language_id')
+        db.rename_column('videos_action', 'language_id', 'language_fk_id')
         
-        # Removing unique constraint on 'Subtitle', fields ['version', 'subtitle_id']
-        db.delete_unique('videos_subtitle', ['version_id', 'subtitle_id'])
-    
-    
     models = {
         'auth.customuser': {
             'Meta': {'object_name': 'CustomUser', '_ormbases': ['auth.User']},
             'autoplay_preferences': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'award_points': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'biography': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'changes_notification': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'homepage': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
@@ -98,11 +77,12 @@ class Migration(SchemaMigration):
         },
         'videos.action': {
             'Meta': {'object_name': 'Action'},
-            'action_type': ('django.db.models.fields.IntegerField', [], {}),
+            'action_type': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'comment': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['comments.Comment']", 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']", 'null': 'True', 'blank': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
+            'language_fk': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']", 'null': 'True', 'blank': 'True'}),
             'new_video_title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
@@ -135,7 +115,7 @@ class Migration(SchemaMigration):
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
         },
         'videos.subtitle': {
-            'Meta': {'unique_together': "(('version', 'subtitle_id'),)", 'object_name': 'Subtitle'},
+            'Meta': {'object_name': 'Subtitle'},
             'end_time': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'null_subtitles': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.NullSubtitles']", 'null': 'True'}),

@@ -52,12 +52,12 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
             return new mirosubs.video.YoutubeVideoSource(
                 videoIDExtract[1]);
     }
-    else if (/^\s*https?:\/\/(^\.]+\.)?vimeo/.test(videoURL)) {
+    else if (/^\s*https?:\/\/([^\.]+\.)?vimeo/.test(videoURL)) {
         var videoIDExtract = /vimeo.com\/([0-9]+)/i.exec(videoURL);
         if (videoIDExtract)
             return new mirosubs.video.VimeoVideoSource(videoIDExtract[1]);
     }
-    else if (/^\s*https?:\/\/(^\.]+\.)?dailymotion/.test(videoURL)) {
+    else if (/^\s*https?:\/\/([^\.]+\.)?dailymotion/.test(videoURL)) {
         var videoIDExtract = /dailymotion.com\/video\/([0-9a-z]+)/i.exec(videoURL);
         if (videoIDExtract)
             return new mirosubs.video.DailymotionVideoSource(videoIDExtract[1]);

@@ -27,7 +27,7 @@ from django.utils.translation import ugettext_lazy as _
 from videos.models import Video
 from auth.models import CustomUser as User
 from sorl.thumbnail.main import DjangoThumbnail
-from utils.files_storages import default_image_storage
+from utils.amazon import S3EnabledImageField
 
 class TeamManager(models.Manager):
     
@@ -60,7 +60,7 @@ class Team(models.Model):
     
     name = models.CharField(_(u'name'), max_length=250, unique=True)
     description = models.TextField(_(u'description'), blank=True)
-    logo = models.ImageField(_(u'logo'), storage=default_image_storage, blank=True, upload_to='teams/logo/')
+    logo = S3EnabledImageField(verbose_name=_(u'logo'), thumb_sizes=((100, 100),), blank=True, upload_to='teams/logo/')
     membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES, default=OPEN)
     video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES, default=MEMBER_REMOVE)
     is_visible = models.BooleanField(_(u'is public visible?'), default=True)
@@ -83,7 +83,7 @@ class Team(models.Model):
     
     def logo_thumbnail(self):
         if self.logo:
-            return DjangoThumbnail(self.logo, (100, 100), opts={'crop': 'smart'})
+            return self.logo.thumb_url(100, 100)
     
     @models.permalink
     def get_absolute_url(self):

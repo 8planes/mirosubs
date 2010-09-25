@@ -5,7 +5,7 @@
 {% block main_content %}
 <div class="left_column">
     <h2>{% trans 'Edit Your Profile' %} <a href="{% url profiles:profile user_info %}">({% trans 'View profile' %})</a></h2>
-    <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}">
+    <img class="thumbnail_medium" src="{{ user_info.avatar }}">
     <p>
         {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
     </p>
@@ -53,7 +53,7 @@
             </p>
             {{ form.picture.errors }}
             <p>
-                <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}"/>
+                <img class="thumbnail_medium" src="{{ user_info.avatar }}"/>
             </p>
             <div style="float: left; clear: both; margin-bottom: 30px;">
                 <input type="file" id="id_picture" name="picture" size="6"/>

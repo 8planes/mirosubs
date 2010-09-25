@@ -21,6 +21,8 @@ from auth.models import CustomUser as User, UserLanguage
 from django.core.mail import EmailMessage
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
+from utils.validators import MaxFileSizeValidator
+from django.conf import settings
 
 UserLanguageFormset = inlineformset_factory(User, UserLanguage, extra=1)
 
@@ -65,7 +67,8 @@ class EditUserForm(forms.ModelForm):
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
                                           required=False,
                                           label=_(u'Confirm new password:'))
-
+    picture = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)])
+    
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
         self.fields['email'].required = True
@@ -85,16 +88,6 @@ class EditUserForm(forms.ModelForm):
         if 'picture' in self.cleaned_data and not self.cleaned_data.get('picture'):
             del self.cleaned_data['picture']
         return self.cleaned_data
-    
-    def clean_email(self):
-        value = self.cleaned_data['email']
-        if value:
-            try:
-                User.objects.exclude(pk=self.instance.pk).get(email=value)
-                raise forms.ValidationError(_(u'This email is used already.'))
-            except User.DoesNotExist:
-                pass
-        return value
     
     def save(self, commit=True):
         password = self.cleaned_data.get('new_password')

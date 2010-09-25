@@ -27,11 +27,11 @@ from django.db import models
 from django.conf.global_settings import LANGUAGES
 from django.db.models.signals import post_save
 from django.conf import settings
-import sha
+import hashlib
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
-from utils.files_storages import default_image_storage
 from django.core.exceptions import MultipleObjectsReturned
+from utils.amazon import S3EnabledImageField
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -49,8 +49,7 @@ class CustomUser(BaseUser):
     homepage = models.URLField(verify_exists=False, blank=True)
     preferred_language = models.CharField(
         max_length=16, choices=SORTED_LANGUAGES, blank=True)
-    picture = models.ImageField(
-        blank=True, storage=default_image_storage, upload_to='pictures/')
+    picture = S3EnabledImageField(blank=True, upload_to='pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
@@ -71,6 +70,9 @@ class CustomUser(BaseUser):
                 return self.first_name
         return self.username
     
+    def avatar(self):
+        return self.picture.thumb_url(128, 128)
+    
     @models.permalink
     def get_absolute_url(self):
         return ('profiles:profile', [urlquote_plus(self.username)])
@@ -84,7 +86,7 @@ class CustomUser(BaseUser):
         return ('profiles:profile', [self.pk])
     
     def hash_for_video(self, video_id):
-        return sha.new(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
+        return hashlib.sha224(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
     
     @classmethod
     def get_youtube_anonymous(cls):

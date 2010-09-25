@@ -11,12 +11,10 @@ class Migration(SchemaMigration):
     )    
     
     def forwards(self, orm):
-        db.delete_column('videos_action', 'language')        
-        db.add_column('videos_action', 'language', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.SubtitleLanguage'], null=True, blank=True))
-   
+        db.add_column('videos_action', 'language_fk', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.SubtitleLanguage'], null=True, blank=True))
+                
     def backwards(self, orm):
-        db.delete_column('videos_action', 'language_id')
-        db.add_column('videos_action', 'language', self.gf('django.db.models.fields.CharField')(default='', max_length=16, blank=True))
+        db.delete_column('videos_action', 'language_fk_id')
            
     models = {
         'auth.customuser': {

@@ -250,7 +250,7 @@ def history(request, video_id, lang=None):
     context['site'] = Site.objects.get_current()
     context['translations'] = video.subtitlelanguage_set.filter(is_original=False) \
         .filter(was_complete=True)
-    context['last_version'] = language.latest_version()
+    context['last_version'] = language.latest_finished_version()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang or '')
     context['language'] = language
     _add_share_panel_context_for_history(context, video)

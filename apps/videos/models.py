@@ -517,7 +517,9 @@ class SubtitleLanguage(models.Model):
             return ('videos:translation_history', [self.video.video_id, self.language])
     
     def language_display(self):
-        return 'Original' if self.is_original else self.get_language_display()
+        if self.is_original and not self.language:
+            return 'Original'
+        return self.get_language_display()
 
     @property
     def writelock_owner_name(self):
@@ -564,14 +566,15 @@ class SubtitleLanguage(models.Model):
     
     def latest_version(self):
         try:
-            return self.subtitleversion_set.all()[:1].get()
+            return self.subtitleversion_set.exclude(time_change=0, text_change=0)[:1].get()
         except models.ObjectDoesNotExist:
             pass        
     
     def latest_finished_version(self):
         """Returns latest SubtitleVersion, or None if none found"""
         try:
-            return self.subtitleversion_set.filter(finished=True)[:1].get()
+            return self.subtitleversion_set.exclude(time_change=0, text_change=0) \
+                .filter(finished=True)[:1].get()
         except models.ObjectDoesNotExist:
             pass
 

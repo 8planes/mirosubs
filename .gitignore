@@ -9,6 +9,7 @@ deploy/src/*
 closure-library
 jsunit
 media/profile_images
+media/pictures
 settings_local.py
 commit.py
 media/js/widgetizer/widgetizerconfig.js
