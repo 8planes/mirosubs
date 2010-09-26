@@ -387,71 +387,160 @@ msgid ""
 "    </p>\n"
 "    "
 msgstr ""
+"\n"
+" <h2>Tri ĉefaj manieroj helpi</h2>\n"
+" <p>\n"
+" \"Universal Subtitles\" estas malfermitkoda kaj neprofitcela porojekto. Ni estas projekto bazita sur volontuloj kaj ŝategus vian helpon!\n"
+" </p>\n"
+" <p>\n"
+" Jen tri manieroj partopreni:\n"
+" </p>\n"
+" <ul>\n"
+" <li>\n"
+" Vi volas kontroli betan softvaron?<a href=\"http://groups.google.com/group/universal-subtitles-testing/?utm_source=MailingList&utm_medium=email&utm_campaign=Welcome+Drumbeat\">Aliĝi la kontrolulan liston</a>!\n"
+" </li>\n"
+" <li>\n"
+" Se vi estas programisto, ek al <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">la konstruejo</a>\n"
+" kaj komenci per malgrandaj taskoj tie listigitaj.\n"
+" </li>\n"
+" <li>\n"
+" Helpi novajn uzantoj, rigardu al <a href=\"/videos/\">listo de videoj</a>\n"
+" kaj doni amikan helpan konsilon.\n"
+" </li>\n"
+" </ul>\n"
+" <br/>\n"
+" <br/>\n"
+" <h2>Kiu kiuas en la projekto?</h2>\n"
+" <p>\n"
+" <a href=\"http://www.pculture.org\">Participatory Culture Foundation</a>\n"
+" estas neprofitcela organizo konstruanta senpagajn malfermajn ilojn por malcentralizita medio. Inter aliaj niaj projektoj estas <a href=\"http://www.getmiro.com\">Miro</a>, <a href=\"http://www.mirovideoconverter.com\">Miro Video-Konvertilo</a>, <a href=\"http://www.mirocommunity.org\">Miro Komunumo</a>, kaj <a href=\"http://www.openvideoalliance.org\">Open Video Alliance</a>.\n"
+" </p>\n"
+" <p>\n"
+" Universal Subtitles estas reliefigita projekto de <a href=\"http://www.drumbeat.org/\">Mozilla Drumbeat</a>, kiu alttakse subtenis nin.\n"
+" </p>\n"
+" <p>\n"
+" Softvara konstruo por Universal Subtitles estas en partnereco kun <a href=\"http://www.8planes.com\">8 Planes</a>.\n"
+" </p>\n"
+" <br/>\n"
+" <br/>\n"
+" <h2>Kio venas?</h2>\n"
+" <p>\n"
+" Ni nun estas je alfa nivelo de ĉi tiu retejo kaj subtekstigilo - do ni nur ekkomencas! Sed ni jam estas malferma por kontroliĝo kaj frua prikomentiĝo de vi.\n"
+" </p>\n"
+" <p>\n"
+" Multaj gravegaj eroj mankas. Jen kion ni prilaboros dum la proksimaj monatoj:\n"
+" </p>\n"
+" <ul>\n"
+" <li>\n"
+" Eblecon ligi multajn retadresojn al video\n"
+" </li>\n"
+" <li>\n"
+" Diskutejoj ĉe ĉiu video kaj traduko\n"
+" </li>\n"
+" <li>\n"
+" Subteno por ĉiuj modernaj kroziloj\n"
+" </li>\n"
+" <li>\n"
+" Subteksta konvertado kaj opcioj\n"
+" </li>\n"
+" <li>\n"
+" Subteno de Unikodon ktp\n"
+" </li>\n"
+" <li>\n"
+" Maŝintraduko de transskriboj\n"
+" </li>\n"
+" <li>\n"
+" Klavara alirebleco por la retejo kaj ilo\n"
+" </li>\n"
+" <li>\n"
+" Subteno por la traduko de la interfaco de la retejo kaj subtekstigilo\n"
+" </li>\n"
+" <li>\n"
+" Taksiloj kaj avertflagoj por la subtekstoj\n"
+" </li>\n"
+" <li>\n"
+" Mesaĝado inter uzantoj de Universal Subtitles\n"
+" </li>\n"
+" <li>\n"
+" HTML5-a enkorpigado kun opcioj por retropaŝo al Flash\n"
+" </li>\n"
+" <li>\n"
+" Kongruo kun eknova normo por subtekstoj (TTML)\n"
+" </li>\n"
+" <li>\n"
+" Importado/Eksportado de aliaj subtekstaj formatoj\n"
+" </li>\n"
+" </ul>\n"
+" <p>\n"
+" Ĉu aliaj aferoj kiujn vi volus, aferoj gravaj en ĉi tiu frua etapo?  Plaĉus al ni viaj komentoj, retpoŝtu al ni ĉe: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>\n"
+" </p>\n"
+" "
 
 #: .\templates\base.html.py:18
 msgid "Free and open tools for creating captions, subtitles, and translations for video."
-msgstr ""
+msgstr "Senpagaj kaj malfermaj iloj por multlingvaj subtekstoj en video."
 
 #: .\templates\base.html.py:37
 msgid "Universal Subtitles does not support your browser. Upgrade your browser or <a href=\"http://getfirefox.com\">Try Firefox</a>."
-msgstr ""
+msgstr "Universal Subtitles ne subtenas vian krozilon.  Ĝisdatigu vian krozilon, aŭ <a href=\"http://getfirefox.com\">provu Fajrovulpon</a>."
 
 #: .\templates\base.html.py:59
 msgid "a project of the participatory culture foundation"
-msgstr ""
+msgstr "projekto de Participatory Culture Foundation"
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
-msgstr ""
+msgstr "Subtekstigi videon"
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr ""
+msgstr "Videoj"
 
 #: .\templates\base.html.py:74
+#, fuzzy
 msgid "Volunteer"
-msgstr ""
+msgstr "Volontuli"
 
 #: .\templates\base.html.py:79
 msgid "Blog"
-msgstr ""
+msgstr "Blogo"
 
 #: .\templates\base.html.py:80
 msgid "FAQ"
-msgstr ""
+msgstr "Oftdemandaro"
 
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
-msgstr ""
+msgstr "Pri"
 
 #: .\templates\base.html.py:83
 msgid "Logout"
-msgstr ""
+msgstr "Elsaluti"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
-msgstr ""
+msgstr "Administro"
 
 #: .\templates\base.html.py:88
 msgid "Login"
-msgstr ""
+msgstr "Ensaluti"
 
 #: .\templates\base.html.py:106
 msgid "Universal Subtitles is a project of <a href=\"http://participatoryculture.org/\">PCF</a>."
-msgstr ""
+msgstr "Universal Subtitles estas projekto de <a href=\"http://participatoryculture.org/\">PCF</a>."
 
 #: .\templates\base.html.py:112
 msgid "Contact Us"
-msgstr ""
+msgstr "Kontakti nin"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Privateca politiko"
 
 #: .\templates\demo.html.py:19
 msgid "Welcome to our alpha demo!"
-msgstr ""
+msgstr "Bonvenon al nia alfa provoversio!"
 
 #: .\templates\demo.html.py:21
 msgid ""
