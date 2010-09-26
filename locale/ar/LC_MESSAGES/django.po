@@ -174,7 +174,6 @@ msgid "Just launch our feedback form and try captioning a video"
 msgstr "أطلق نموذج ردود الفعل وجرّب ترجمة فيديو واحد"
 
 #: .\templates\_testing_widget.html.py:7
-#, fuzzy
 msgid "Test the Widget"
 msgstr "اختبر القطعة"
 
@@ -505,7 +504,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
-msgstr ""
+msgstr "ترجمة الفيديو منجم ذهب ذو إمكانات كبيرة غير مستغلة."
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
@@ -513,7 +512,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
-msgstr ""
+msgstr "الترجمة تمكّن لنا جميعاً مشاهدة وفهم الفيديو الذي فيه لغة أو لغات لا نتكلمها أو نجيدها"
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
