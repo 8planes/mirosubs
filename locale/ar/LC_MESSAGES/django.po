@@ -26,7 +26,7 @@ msgstr "اسم المستخدم"
 
 #: .\apps\auth\admin.py:11
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
-msgstr ""
+msgstr "المطلوب. 30 حرفاً أو أقل. المسموح حروف أبجدية فقط (الحروف والأرقام والتسطير)."
 
 #: .\apps\auth\admin.py:12
 msgid "This value must contain only letters, numbers and underscores."
