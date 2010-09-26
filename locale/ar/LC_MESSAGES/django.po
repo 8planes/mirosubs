@@ -608,7 +608,7 @@ msgstr "المشكلة"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
-msgstr ""
+msgstr "الفيديو على شبكة الإنترنت هو منافس للتلفزيون ، ولكن ليس هناك مورداً مفتوحاً جيداً للترجمة."
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
@@ -616,7 +616,7 @@ msgstr "مهمتنا"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
-msgstr ""
+msgstr "نحن نحاول جعل ترجمة الفيديو متاحة للجمهور بطريقة حرة ومفتوحة ، تماما مثل الشبكة."
 
 #: .\templates\index.html.py:46
 msgid "Learn More"
@@ -628,27 +628,30 @@ msgstr "في الوقت الحالي"
 
 #: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
-msgstr ""
+msgstr "نحن في مراحل أولية ، نبني ونختبر. يمكنك المساعدة!"
 
 #: .\templates\index.html.py:50
 msgid "Try our demo"
-msgstr ""
+msgstr "جرّب الإستعراض"
 
 #: .\templates\index.html.py:50
+#, fuzzy
 msgid "Become a tester"
-msgstr ""
+msgstr "كن مختبراً"
 
 #: .\templates\index.html.py:56
+#, fuzzy
 msgid "Subtitle Widget"
-msgstr ""
+msgstr "قطعة الترجمة"
 
 #: .\templates\index.html.py:57
 msgid "A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos)."
 msgstr ""
 
 #: .\templates\index.html.py:60
+#, fuzzy
 msgid "Community Site"
-msgstr ""
+msgstr "موقع المجتمع"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
@@ -656,7 +659,7 @@ msgstr ""
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "بروتوكول بحث الترجمة"
 
 #: .\templates\index.html.py:65
 msgid "An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video."
