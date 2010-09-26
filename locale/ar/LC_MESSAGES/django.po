@@ -664,48 +664,50 @@ msgstr ""
 
 #: .\templates\index.html.py:75
 msgid "Get updates and find out first when we launch"
-msgstr ""
+msgstr "الحصول على التحديثات ومعرفة عندما ننطلق رسمياً"
 
 #: .\templates\index.html.py:80
 msgid "Get Updates!"
-msgstr ""
+msgstr "الحصول على التحديثات!"
 
 #: .\templates\index.html.py:85
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "الرجاء إدخال عنوان بريد إلكتروني صالح"
 
 #: .\templates\index.html.py:118
 msgid "Please enter your email address."
-msgstr ""
+msgstr "الرجاء إدخال عنوان البريد الإلكتروني الخاص بك."
 
 #: .\templates\index.html.py:137
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "سوف تضاعف موزيلا تبرّعك!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "نحن مشروع موزيلا درام بيت بارز!"
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
-msgstr ""
+msgstr "تبرّع الآن"
 
 #: .\templates\index.html.py:146
+#, fuzzy
 msgid "Check out the widget"
-msgstr ""
+msgstr "جرّب القطعة"
 
 #: .\templates\index.html.py:147
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "اختبر قطعة ترجمة الفيديو"
 
 #: .\templates\index.html.py:147
+#, fuzzy
 msgid "Try the Demo"
-msgstr ""
+msgstr "جرّب الإستعراض"
 
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
 msgid "Open Subtitles Design Summit"
-msgstr ""
+msgstr "مؤتمر قمة تصميم الترجمة المفتوحة"
 
 #: .\templates\opensubtitles2010.html.py:28
 msgid "The Open Subtitles Design Summit will bring together global stakeholders in the subtitling space for a tightly focused / goal oriented meeting in NYC. The event is being organized by The Participatory Culture Foundation, developers of the Universal Subtitles project. We expect roughly 40 participants."
@@ -713,7 +715,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:34
 msgid "Meeting Goals"
-msgstr ""
+msgstr "تحقيق الأهداف"
 
 #: .\templates\opensubtitles2010.html.py:37
 msgid "<strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus."
@@ -729,7 +731,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
-msgstr ""
+msgstr "المشاركون"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
@@ -737,27 +739,28 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:57
 msgid "Attendees are selected by invitation; however, if you or your organization would like to participate, please contact:"
-msgstr ""
+msgstr "ويتم اختيار الحضور بناء على دعوة ، ولكن إذا كنت أنت أو مؤسستك ترغب في المشاركة ، يرجى الاتصال ب :"
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "متى"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "أيلول 29 و 30 ، الساعة التاسعة لكِلا اليومين"
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "أين"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
 msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:73
+#, fuzzy
 msgid "Why"
-msgstr ""
+msgstr "لماذا"
 
 #: .\templates\opensubtitles2010.html.py:75
 msgid ""
@@ -774,11 +777,11 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:91
 msgid "Organizers, Facilitators, Sponsors"
-msgstr ""
+msgstr "المنظمين ، الميسّرين ، الرّعاة"
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
-msgstr ""
+msgstr "المنظمون"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
@@ -786,7 +789,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:99
 msgid "Facilitators"
-msgstr ""
+msgstr "الميسّرين"
 
 #: .\templates\opensubtitles2010.html.py:100
 msgid "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate."
@@ -794,7 +797,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
-msgstr ""
+msgstr "الرّعاة"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
@@ -806,19 +809,19 @@ msgstr ""
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "السابق"
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "التالي"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr ""
+msgstr "سياسة الخصوصية للترجمة العالمية"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
-msgstr ""
+msgstr "آخر تحديث : 10 آب 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
@@ -968,8 +971,9 @@ msgid "You have the ability to accept or decline cookies. PCF visitors who do no
 msgstr ""
 
 #: .\templates\privacy.html.py:108
+#, fuzzy
 msgid "Opt-out Procedures"
-msgstr ""
+msgstr "إجراءات التخلّي"
 
 #: .\templates\privacy.html.py:110
 msgid "If you do not want to allow your session visitation information on PCF web sites to be aggregated and analyzed by PCF (or its third-party analytics providers) you may utilize the following opt-out mechanisms listed here. Additionally, if you signed up to receive but no longer wish to receive electronic marketing communications from PCF, you can opt-out from receiving these communications by following the тАЬunsubscribeтАЭ instructions in any such communication you receive."
