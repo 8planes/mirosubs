@@ -556,6 +556,14 @@ msgid ""
 "  </p>\n"
 "  "
 msgstr ""
+"\n"
+" <p><strong>Kio estas?</strong> La suba video estas \n"
+" nur por pruvaj celoj &mdash; klaku butonon \"Subtekstigi min\"!</p> \n"
+" <p>Ni ĵus komenciĝis, do onte, estos \n"
+" suteno por pli da kroziloj (Fajrovuplo plej bonas nun), pli da videaj specoj, pli da retejoj. Ni bonvenigas komentojn, vidu paĝpiede. \n"
+" <em>Rimarkendas ke viaj subtekstoj ne estos konstante registritaj (eĉ se vi estas ensalutita).</em>\n"
+" </p>\n"
+" "
 
 #: .\templates\demo.html.py:41
 msgid ""
@@ -567,70 +575,77 @@ msgid ""
 "    collaboration on subtitles and translations. Stay tuned!</p>\n"
 "  "
 msgstr ""
+"\n"
+" <p style=\"clear: both\"><strong>Volas prikomenti?</strong> Uzu la formularon paĝpiede \n"
+" por viaj komentoj, cim-trovoj, opinioj.</p>\n"
+" <p><strong>Kio venas?</strong> Ni prilaboras pri alfa \n"
+" versio de nia komunuma retejo kiu ebligos bazan \n"
+" kunlaboron pri (multlingvaj) subtekstoj. Rigardadu plu!</p>\n"
+" "
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Oftdemandaro"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Kio estas Universal Subtitles?"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Kiel uzi Universal Subtitles?"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "Kiuj estas la avantaĝoj de subtekstoj?"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
-msgstr ""
+msgstr "Kiu estas Participatory Culture Foundation, kaj kial ili kreas Universal Subtitles?"
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
-msgstr ""
+msgstr "Ĉu Universal Subtitles subtenos subtekstojn por neaŭdantoj?"
 
 #: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
-msgstr ""
+msgstr "Ĉu subtekstoj estos en mia lingvo, en mia literaro?"
 
 #: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
-msgstr ""
+msgstr "Kiam la iloj, kaj ĉi tiu retejo, estas en mia lingvo?"
 
 #: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
-msgstr ""
+msgstr "Kiel mi povas aldoni subtekstojn al mia video?"
 
 #: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
-msgstr ""
+msgstr "Kiun malfermitkodan permesilon vi uzas?"
 
 #: .\templates\faq.html.py:28 .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
-msgstr ""
+msgstr "Mi estas programisto, kiel mi povas helpi?"
 
 #: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
-msgstr ""
+msgstr "Ĉu ne-teknikaj uloj povas partopreni la projekton?"
 
 #: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
-msgstr ""
+msgstr "Ĉu vi akceptas donacojn, ĉu ili estas imposto-dekalkulebla?"
 
 #: .\templates\faq.html.py:31 .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
-msgstr ""
+msgstr "Kio estas la interrilato kun Mozilla Drumbeat?"
 
 #: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr ""
+msgstr "Kie mi povas deŝuti .SRT kaj aliajn specojn?"
 
 #: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
-msgstr ""
+msgstr "Kial mi ne povas retempigi tradukatajn subtekstojn?"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
