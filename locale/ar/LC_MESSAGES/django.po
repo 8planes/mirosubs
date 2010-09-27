@@ -596,7 +596,7 @@ msgstr "أفضل"
 
 #: .\templates\feedback_response.html.py:16
 msgid "PS. We do our best to respond to all questions, but please be patient -- we get a lot of email"
-msgstr ""
+msgstr "ملاحظة. نحن نبذل قصارى جهدنا للرد على جميع الأسئلة ، ولكن يرجى الإتنظار لأننا نحصل على الكثير من الرسائل"
 
 #: .\templates\index.html.py:41
 msgid "Subtitles and Captions for Every Video on the Web"
