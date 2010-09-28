@@ -645,7 +645,7 @@ class SubtitleVersion(SubtitleCollection):
         return self.language.video.latest_finished_version()
 
     def ordered_subtitles(self):
-        return sorted(self.subtitles(), key=lambda item: item.subtitle_order)
+        return sorted(self.subtitle_set.all(), key=lambda item: item.subtitle_order)
 
     def prev_version(self):
         cls = self.__class__
@@ -671,7 +671,7 @@ class SubtitleVersion(SubtitleCollection):
         new_version = cls(language=self.language, version_no=new_version_no, \
             datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
-        for item in self.subtitles():
+        for item in self.subtitle_set.all():
             item.duplicate_for(new_version).save()
         return new_version
 
