@@ -34,11 +34,10 @@ def render_comment_form(context, obj):
 
 @register.inclusion_tag('comments/list.html', takes_context=True)
 def render_comment_list(context, obj):
-    return {
-        'qs': Comment.get_for_object(obj),
-        'content_type': ContentType.objects.get_for_model(obj),
-        'obj': obj
-    }
+    context['qs'] =  Comment.get_for_object(obj)
+    context['content_type'] = ContentType.objects.get_for_model(obj)
+    context['obj'] = obj
+    return context
     
 @register.simple_tag    
 def get_comment_count(obj):
