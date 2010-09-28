@@ -32,6 +32,7 @@
 <li><a href="#q-download">{% trans 'Where can I download subtitles in .SRT or other formats?' %}</a></li>
 <li><a href="#q-locked">{% blocktrans %}It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?{% endblocktrans %}</a></li>
 <li><a href="#q-change-timing">{% trans "Why can't I change the timing on a translation?" %}</a></li>
+<li><a href="#q-revisions">{% trans "How do old revisions work? What if somebody makes a change to my work that I don't approve of?" %}</a></li>
 </ul>
 
 <ol class="questions">
@@ -124,5 +125,21 @@
         {% endblocktrans %}
     </p>
   </li>
+  <li id="q-revisions">
+    <h3>{% trans "How do old revisions work? What if somebody makes a change to my work that I don't approve of?" %}</h3>
+    <p>
+        {% blocktrans %}
+        Each set of subtitles or translation has a full revision history. Just click on
+        the tab on the subtitle page in you will see a list of revisions. You can use
+        the checkboxes on the left and the "compare revisions" button to see the
+        difference between two revisions. Or you can click on any one revision, and
+        edit based on that revision or roll back to that revision.
+        <br/><br/>
+        If the current version is blank, but there are older revisions, it make sense
+        to check those older revisions before starting from scratch, because there
+        could be useful work in an older revision.
+        {% endblocktrans %}
+    </p>
+  </li>  
 </ol>
 {% endblock %}
