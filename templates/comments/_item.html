@@ -1,7 +1,7 @@
 {% load thumbnail %}
     <li class="comment" comment_id="{{ item.id }}">
         <div class="user_deets">
-            <span class="user_thumb"><img src="{% thumbnail item.user.picture 100x100 %}" /></span>
+            <span class="user_thumb"><img src="{{ item.user.avatar }}" /></span>
             <a href="{{ item.user.profile_url }}">{{ item.user }}</a>
             <span class="comment_date">{{ item.submit_date|timesince }} ago</span>
         </div>

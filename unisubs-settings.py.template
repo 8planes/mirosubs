@@ -57,6 +57,11 @@ PRODUCTION_MEDIA_URL = 'http://s3.www.universalsubtitles.org/'
 # should be one of the three above variables, depending on env.
 MEDIA_URL = INSERT_SITE_MEDIA_URL
 
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+DEFAULT_BUCKET = ''
+USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
+
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:

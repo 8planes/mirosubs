@@ -14,10 +14,8 @@ class Migration(SchemaMigration):
                 print 'Migrate action %s...' % item.pk 
                 if item.comment:
                     item.action_type = Action.COMMENT
-                elif item.language:
-                    item.action_type = Action.ADD_VERSION
                 else:
-                    item.action_type = Action.ADD_VIDEO
+                    item.action_type = Action.ADD_VERSION
                 if item.video and item.language:
                     try:
                         language = orm.SubtitleLanguage.objects.get(video=item.video, language=item.language)

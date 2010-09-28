@@ -507,7 +507,7 @@ class SubtitleLanguage(models.Model):
         unique_together = (('video', 'language'),)
     
     def __unicode__(self):
-        return '%s(%s)' % (self.video, self.language_display())
+        return u'%s(%s)' % (self.video, self.language_display())
     
     @models.permalink
     def get_absolute_url(self):
@@ -626,7 +626,7 @@ class SubtitleVersion(models.Model):
         unique_together = (('language', 'version_no'),)
     
     def __unicode__(self):
-        return '%s #%s' % (self.language, self.version_no)
+        return u'%s #%s' % (self.language, self.version_no)
     
     @models.permalink
     def get_absolute_url(self):
@@ -1392,11 +1392,7 @@ class Action(models.Model):
     @classmethod
     def create_video_handler(cls, sender, instance, created, **kwargs):
         if created:
-            video = instance
-            # FIXME marking user as None is a temporary fix. We need to 
-            # either get rid of
-            # this action or just report it on first subtitling.
-            obj = cls(user=None, video=video)
+            obj = cls(video=instance)
             obj.action_type = cls.ADD_VIDEO
             obj.created = datetime.now()
             obj.save()
