@@ -66,7 +66,6 @@ mirosubs.widget.SubtitleController.prototype.openSubtitleDialog =
     function() 
 {
     var subtitleState = this.playController_.getSubtitleState();
-    console.log(subtitleState.VERSION);
     if (subtitleState != null && 
         !subtitleState.IS_LATEST && 
         !mirosubs.returnURL) {

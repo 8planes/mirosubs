@@ -247,8 +247,8 @@ mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
 };
 
 mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
-    console.log(langCode);
-    this.dispatchEvent(new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
+    this.dispatchEvent(
+        new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
 };
 
 mirosubs.widget.DropDown.Selection = {

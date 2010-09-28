@@ -48,6 +48,7 @@ class Rpc(BaseRpc):
 
         version = self._get_version_for_editing(
             request.user, language, base_version_no, fork)
+
         subtitles = self._subtitles_dict(version)
 
         return_dict = { "can_edit" : True,
@@ -150,14 +151,11 @@ class Rpc(BaseRpc):
             new_version_no = language.latest_finished_version().version_no + 1
 
         new_version = None
-        print(version_to_copy)
         if version_to_copy is None or new_version_no > version_to_copy.version_no:
             new_version = models.SubtitleVersion(
                 language=language,
                 version_no=new_version_no,
                 datetime_started=datetime.now())
-            print(fork)
-            print(version_to_copy.is_forked)
             if fork or (version_to_copy is not None and 
                         version_to_copy.is_forked):
                 new_version.is_forked = True
