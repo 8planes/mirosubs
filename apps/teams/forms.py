@@ -40,7 +40,7 @@ class CreateTeamForm(forms.ModelForm):
         return team
     
 class EditTeamForm(forms.ModelForm):
-    logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)])
+    logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
     
     class Meta:
         model = Team
