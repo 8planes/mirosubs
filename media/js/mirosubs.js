@@ -56,6 +56,37 @@ mirosubs.embedVersion = null;
  */
 mirosubs.videoURL = null;
 
+/**
+ * Set when widget gets initial state from server. All available languages.
+ * Each member is a two-element array, with language code first then 
+ * language name.
+ * @type {Array.<Array>}
+ */
+mirosubs.languages = null;
+
+/**
+ * Set when widget gets initial state from server. All available languages.
+ * Each member is a two-element array, with language code first then 
+ * language name.
+ * @type {Array.<Array>}
+ */
+mirosubs.metadataLanguages = null;
+
+mirosubs.languageMap_ = null;
+
+mirosubs.languageNameForCode = function(code) {
+    if (mirosubs.languageMap_ == null) {
+        mirosubs.languageMap_ = {};
+        for (var i = 0; i < mirosubs.languages.length; i++)
+            mirosubs.languageMap_[mirosubs.languages[i][0]] = 
+                mirosubs.languages[i][1];
+        for (var i = 0; i < mirosubs.metadataLanguages.length; i++)
+            mirosubs.languageMap_[mirosubs.metadataLanguages[i][0]] =
+                mirosubs.metadataLanguages[i][1];
+    }
+    return mirosubs.languageMap_[code];
+};
+
 mirosubs.embedCode = function() {
     return [
         '<sc',

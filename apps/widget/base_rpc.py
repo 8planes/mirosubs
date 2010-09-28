@@ -35,7 +35,9 @@ class BaseRpc:
         return_value = {
             'video_id' : video.video_id,
             'writelock_expiration' : models.WRITELOCK_EXPIRATION,
-            'embed_version': settings.EMBED_JS_VERSION
+            'embed_version': settings.EMBED_JS_VERSION,
+            'languages': LANGUAGES,
+            'metadata_languages': settings.METADATA_LANGUAGES
             }
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
@@ -59,9 +61,9 @@ class BaseRpc:
             if is_remote:
                 autoplay_language = _find_remote_autoplay_language(request)
                 if autoplay_language is not None:
-                    return_value['subtitles'] = self._autoplay_subtitles(
+                    subtitles = self._autoplay_subtitles(
                         request.user, video, autoplay_language, None)
-                    return_value['subtitles_language'] = autoplay_language
+                    return_value['subtitles'] = subtitles
             return_value['subtitle_count'] = self._subtitle_count(
                 request.user, video)
         return return_value

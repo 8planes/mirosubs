@@ -18,6 +18,9 @@
 
 goog.provide('mirosubs.widget.VideoTab');
 
+/**
+ * @constructor
+ */
 mirosubs.widget.VideoTab = function() {
     goog.ui.Component.call(this);
     this.anchorElem_ = null;
@@ -34,11 +37,6 @@ mirosubs.widget.VideoTab = function() {
     this.imageLoader_.start();
 };
 goog.inherits(mirosubs.widget.VideoTab, goog.ui.Component);
-
-mirosubs.widget.VideoTab.InitialState = {
-    SUBTITLE_ME: 0,
-    CHOOSE_LANGUAGE: 1
-};
 
 mirosubs.widget.VideoTab.Messages = {
     SUBTITLE_ME: 'Subtitle me',
@@ -73,11 +71,6 @@ mirosubs.widget.VideoTab.prototype.showLoading = function(loading) {
 
 mirosubs.widget.VideoTab.prototype.setText = function(text) {
     goog.dom.setTextContent(this.spanElem_, text);
-    this.noSubtitles_ = 
-        text == mirosubs.widget.VideoTab.Messages.SUBTITLE_ME;
-};
-mirosubs.widget.VideoTab.prototype.hasNoSubtitles = function() {
-    return this.noSubtitles_;
 };
 mirosubs.widget.VideoTab.prototype.getAnchorElem = function() {
     return this.anchorElem_;

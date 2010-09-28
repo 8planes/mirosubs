@@ -74,8 +74,8 @@ mirosubs.widget.DropDown.prototype.updateTranslationLanguages_ = function() {
     this.getDomHelper().removeChildren(this.languageList_);
     
     this.languageList_.appendChild(
-        $d('li', {'className': 'mirosubs-hintTranslate'},
-           $d('span', {'className': 'mirosubs-asterisk'}, '*'),
+        $d('li', 'mirosubs-hintTranslate',
+           $d('span', 'mirosubs-asterisk', '*'),
            ' = Missing sections translated by Google Translate'));
     this.languageList_.appendChild(this.subtitlesOff_);
     this.languageList_.appendChild(this.originalLanguage_);
@@ -122,28 +122,27 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.settingsActions_ = $d('ul', null);
     
     this.unisubsLink_ = 
-        $d('h5', {'className': 'mirosubs-uniLogo'}, 
-           'Universal Subtitles');
+        $d('h5', 'mirosubs-uniLogo', 'Universal Subtitles');
     this.addTranslationLink_ = 
-        $d('li', {'className': 'mirosubs-addTranslation'},
+        $d('li', 'mirosubs-addTranslation',
            $d('a', {'href': '#'}, 'Add New Translation'));
     this.improveSubtitlesLink_ = 
-        $d('li', {'className': 'mirosubs-improveSubtitles'},
+        $d('li', 'mirosubs-improveSubtitles',
            $d('a', {'href': '#'}, 'Improve These Subtitles'));
     this.subtitleHomepageLink_ = 
-        $d('li', {'className': 'mirosubs-subtitleHomepage'},
+        $d('li', 'mirosubs-subtitleHomepage',
            $d('a', {'href': this.createSubtitleHomepageURL_()},
               'Subtitle Homepage'));
     this.downloadSubtitlesLink_ = 
-        $d('li', {'className': 'mirosubs-downloadSubtitles'},
+        $d('li', 'mirosubs-downloadSubtitles',
            $d('a', {'href': this.createDownloadSRTURL_()},
               'Download Subtitles'));
     
     this.createAccountLink_ = 
-        $d('li', {'className': 'mirosubs-createAccount'},
+        $d('li', 'mirosubs-createAccount',
            $d('a', {'href': '#'}, 'Login or Create Account'));
     this.languagePreferencesLink_ = 
-        $d('li', {'className': 'mirosubs-languagePreferences'},
+        $d('li', 'mirosubs-languagePreferences',
            $d('a', {'href': '#'}, 'Language Preferences'));
     this.usernameLink_ = 
         $d('li', null,

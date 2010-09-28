@@ -18,21 +18,33 @@
 
 goog.provide('mirosubs.widget.SubtitleState');
 
-mirosubs.widget.SubtitleState = function(widget, videoID, baseState) {
-    mirosubs.widget.WidgetState.call(this, widget);
-    this.videoID_ = videoID;
-    this.baseState_ = baseState;
+/**
+ * @constructor
+ */
+mirosubs.widget.SubtitleState = function(language, version, subtitles, forked) {
+    /**
+     * Language code. Null if and only if original language.
+     * @type {?string}
+     */
+    this.LANGUAGE = language;
+    /**
+     * @type {number}
+     */
+    this.VERSION = version;
+    this.SUBTITLES = subtitles;
+    this.FORKED = forked;
 };
-goog.inherits(mirosubs.widget.SubtitleState, mirosubs.widget.WidgetState);
 
-mirosubs.widget.SubtitleState.prototype.initialize = function(callback) {
-    mirosubs.Rpc.call(
-        "start_editing",
-        { "video_id": this.videoID_,
-          "base_version_no": this.baseState_.REVISION},
-        callback);
+mirosubs.widget.SubtitleState.fromJSON = function(json) {
+    if (json)
+        return new mirosubs.widget.SubtitleState(
+            json['language'], json['version'],
+            json['subtitles'], json['forked']);
+    else
+        return null;
 };
 
-mirosubs.widget.SubtitleState.prototype.getVideoTabText = function() {
-    return "Currently Subtitling";
+mirosubs.widget.SubtitleState.prototype.baseParams = function() {
+    return mirosubs.widget.BaseState.createParams(
+        this.LANGUAGE, this.VERSION);
 };

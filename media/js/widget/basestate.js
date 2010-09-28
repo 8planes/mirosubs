@@ -30,24 +30,24 @@ goog.provide('mirosubs.widget.BaseState');
  * @param {Object} baseStateParam parameter from the embed code on the page.
  */
 mirosubs.widget.BaseState = function(baseStateParam) {
-    this.NOT_NULL = !!baseStateParam;
-    if (this.NOT_NULL) {
-        this.LANGUAGE = baseStateParam['language'];
-        if (typeof(this.LANGUAGE) == 'undefined')
-            this.LANGUAGE = null;
-        this.REVISION = baseStateParam['revision'];
-        if (typeof(this.REVISION) == 'undefined')
-            this.REVISION = null;
-        this.START_PLAYING = !!baseStateParam['start_playing'];
-        this.ORIGINAL_PARAM = baseStateParam;
-    }
+    this.LANGUAGE = baseStateParam['language'];
+    if (typeof(this.LANGUAGE) == 'undefined')
+        this.LANGUAGE = null;
+    this.REVISION = baseStateParam['revision'];
+    if (typeof(this.REVISION) == 'undefined')
+        this.REVISION = null;
+    this.START_PLAYING = !!baseStateParam['start_playing'];
+    this.ORIGINAL_PARAM = baseStateParam;
 };
 
-/**
- * Whether or not base state was provided.
- * @type {boolean}
- */
-mirosubs.widget.BaseState.prototype.NOT_NULL = true;
+mirosubs.widget.BaseState.createParams = function(opt_language, opt_revision) {
+    var params = {};
+    if (opt_language != null)
+        params['language'] = language;
+    if (opt_revision != null)
+        params['revision'] = opt_revision;
+    return params;
+};
 
 /**
  * Either language code, or null for native language.
