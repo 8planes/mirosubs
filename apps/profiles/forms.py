@@ -67,7 +67,7 @@ class EditUserForm(forms.ModelForm):
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
                                           required=False,
                                           label=_(u'Confirm new password:'))
-    picture = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)])
+    picture = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
     
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
