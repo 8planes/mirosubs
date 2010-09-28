@@ -82,12 +82,13 @@ class S3ImageFieldFile(FieldFile):
     delete.alters_data = True
 
 class S3EnabledImageField(models.ImageField):
-    
+
     attr_class = S3ImageFieldFile
     
     def __init__(self, bucket=settings.DEFAULT_BUCKET, thumb_sizes=THUMB_SIZES, thumb_options=dict(crop='smart'), verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
         self.thumb_sizes = thumb_sizes
         self.thumb_options = thumb_options
+        self.burcket_name = bucket
         
         if settings.USE_AMAZON_S3:
             from utils.amazon import S3Storage
@@ -100,7 +101,10 @@ class S3EnabledImageField(models.ImageField):
         super(S3EnabledImageField, self).__init__(verbose_name, name, width_field, height_field, **kwargs)
     
 class S3EnabledFileField(models.FileField):
+    
     def __init__(self, bucket=settings.DEFAULT_BUCKET, verbose_name=None, name=None, upload_to='', storage=None, **kwargs):
+        self.burcket_name = bucket
+        
         if settings.USE_AMAZON_S3:
             from utils.amazon import S3Storage
             
@@ -111,3 +115,26 @@ class S3EnabledFileField(models.FileField):
             storage = S3Storage(self.bucket)
             upload_to=''
         super(S3EnabledFileField, self).__init__(verbose_name, name, upload_to, storage, **kwargs)    
+
+from south.modelsinspector import add_introspection_rules
+
+add_introspection_rules([
+    (
+        [S3EnabledImageField, S3EnabledFileField], 
+        [],
+        {   
+            "bucket": ["burcket_name", {"default": settings.DEFAULT_BUCKET}]
+        },
+    ),
+], ["^utils\.amazon\.fields"])
+
+add_introspection_rules([
+    (
+        [S3EnabledImageField], 
+        [],
+        {   
+            "thumb_sizes": ["thumb_sizes", {"default": THUMB_SIZES}],
+            "thumb_options": ["thumb_options", {"default": dict(crop='smart')}]
+        },
+    ),
+], ["^utils\.amazon\.fields"])
