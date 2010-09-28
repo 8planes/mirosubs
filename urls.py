@@ -76,6 +76,8 @@ urlpatterns = patterns(
      {'template': 'dmca.html'}, 'dmca_page'),     
 		(r'^faq$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'faq.html'}, 'faq_page'),
+        (r'^terms$',  'django.views.generic.simple.direct_to_template', 
+     {'template': 'terms.html'}, 'terms_page'),     
 		(r'^opensubtitles2010$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'opensubtitles2010.html'}, 'opensubtitles2010_page'),
 		(r'^revision$',  'django.views.generic.simple.direct_to_template', 
