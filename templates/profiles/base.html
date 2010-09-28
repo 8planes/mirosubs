@@ -7,10 +7,12 @@
     <div class="clearboth">&nbsp;</div>
     <br/>
     {% block activity %}
+        {% if user_info.action_set.exists %}
         <div class="full_width">
             <br/>
             <h2>{{ user_info }}'s activity</h2>
             {% recent_activity user_info %}
         </div>
+        {% endif %}
     {% endblock %}
 {% endblock %}
