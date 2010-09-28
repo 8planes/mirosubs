@@ -109,21 +109,19 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
         this.setVideoSource_(new mirosubs.video.FlvVideoSource(
             result['flv_url']));
 
-    var videoID = result['video_id'];
-    var translationLanguages = result['translation_languages']
-    var subtitleCount = result['subtitle_count'];
+    var dropDownContents = mirosubs.widget.DropDownContents.fromJSON(
+        result['drop_down_contents']);
     var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
         result['subtitles']);
 
-    var popupMenu = new mirosubs.widget.DropDown(
-        this.videoID_, subtitleCount, 
-        translationLanguages);
+    var popupMenu = new mirosubs.widget.DropDown(dropDownContents);
 
     this.addChild(popupMenu, true);
-    goog.style.showElement(popupMenu, false);
+    goog.style.showElement(popupMenu.getElement(), false);
 
     var playController = new mirosubs.widget.PlayController(
-        this.videoPlayer_, this.videoTab_, popupMenu, subtitleState);
+        this.videoSource_, this.videoPlayer_, this.videoTab_, 
+        popupMenu, subtitleState);
 
     var subtitleController = new mirosubs.widget.SubtitleController(
         playController, this.videoTab_, popupMenu);
@@ -141,11 +139,17 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
 mirosubs.widget.Widget.prototype.makeGeneralSettings_ = function(result) {
     if (result['username'])
         mirosubs.currentUsername = result['username'];
+    mirosubs.videoID = result['video_id'];
     mirosubs.embedVersion = result['embed_version'];
     mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
         result["writelock_expiration"];
     mirosubs.languages = result['languages'];
     mirosubs.metadataLanguages = result['metadata_languages'];
+    var sortFn = function(a, b) { 
+        return a[1] > b[1] ? 1 : a[1] < b[1] ? -1 : 0
+    };
+    goog.array.sort(mirosubs.languages, sortFn);
+    goog.array.sort(mirosubs.metadataLanguages, sortFn);
 };
 
 

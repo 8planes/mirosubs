@@ -46,8 +46,9 @@ class Rpc(BaseRpc):
             return { "can_edit": False, 
                      "locked_by" : language.writelock_owner_name }
 
-        subtitles = self._subtitles_dict(self._get_version_for_editing(
-            request.user, language, base_version_no, fork))
+        version = self._get_version_for_editing(
+            request.user, language, base_version_no, fork)
+        subtitles = self._subtitles_dict(version)
 
         return_dict = { "can_edit" : True,
                         "subtitles" : subtitles }
@@ -89,8 +90,8 @@ class Rpc(BaseRpc):
 
     def finished_subtitles(self, request, video_id, deleted, inserted, 
                            updated, language_code=None):
-        language = models.Video.objects.get(
-            video_id=video_id).subtitle_language(language_code)
+        video = models.Video.objects.get(video_id=video_id)
+        language = video.subtitle_language(language_code)
         if not language.can_writelock(request):
             return { "response" : "unlockable" }
         self._save_subtitles_impl(
@@ -102,18 +103,15 @@ class Rpc(BaseRpc):
         language = models.SubtitleLanguage.objects.get(pk=language.pk)
         language.release_writelock()
         language.save()
-        return_dict = { "response" : "ok" }
-        if language_code is not None:
-            return_dict["available_languages"] = \
-                [widget.language_to_map(code, LANGUAGES_MAP[code]) for
-                 code in language.video.translation_language_codes()]
-        return return_dict
+        return { "response" : "ok",
+                 "drop_down_contents" : 
+                     self._drop_down_contents(request.user, video) }
 
     def fetch_subtitles(self, request, video_id, language_code=None):
         video = models.Video.objects.get(video_id=video_id)
         video.subtitles_fetched_count += 1
         video.save()
-        return self._subtitles_dict(video.version(language_code=language_code)
+        return self._subtitles_dict(video.version(language_code=language_code))
 
     def fetch_subtitles_and_open_languages(self, request, video_id):
         return { 'captions': self.fetch_subtitles(request, video_id),
@@ -220,7 +218,7 @@ class Rpc(BaseRpc):
 
     def _subtitles_dict(self, version):
         language = version.language
-        return_value = {
+        return {
             'subtitles': [s.__dict__ for s in version.subtitles()],
             'language': None if language.is_original else language.language,
             'version': version.version_no,

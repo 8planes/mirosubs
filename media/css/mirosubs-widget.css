@@ -2217,19 +2217,22 @@ cursor:
     margin: -7px -3px 0 0 !important;
 }
 
-.mirosubs-modal-login {
+.mirosubs-modal-login, .mirosubs-modal-lang {
    border: 3px solid !important;
    position: absolute !important;
    z-index: 2147483641;
    padding: 15px 0 !important;
-font-family: Arial, hhelvetica, sans-serif;
-   width: 650px !important;
-   height: 200px !important;
+   font-family: Arial, hhelvetica, sans-serif;
    background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
    -moz-border-radius: 5px !important;
    -webkit-border-radius: 5px !important;
    -moz-box-shadow: 0px 5px 50px rgba(0,0,0,01) !important;
    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,01) !important;
+}
+
+.mirosubs-modal-login {
+   width: 650px !important;
+   height: 200px !important;
 }
 
 .mirosubs-modal-login-content h4 {

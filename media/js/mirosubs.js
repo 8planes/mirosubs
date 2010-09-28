@@ -56,6 +56,8 @@ mirosubs.embedVersion = null;
  */
 mirosubs.videoURL = null;
 
+mirosubs.videoID = null;
+
 /**
  * Set when widget gets initial state from server. All available languages.
  * Each member is a two-element array, with language code first then 

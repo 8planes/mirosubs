@@ -23,9 +23,10 @@ goog.provide('mirosubs.widget.PlayController');
  * 
  */
 mirosubs.widget.PlayController = function(
-    videoPlayer, videoTab, dropDown, opt_subtitleState) 
+    videoSource, videoPlayer, videoTab, dropDown, opt_subtitleState) 
 {
     goog.Disposable.call(this);
+    this.videoSource_ = videoSource;
     this.videoPlayer_ = videoPlayer;
     this.videoTab_ = videoTab;
     this.dropDown_ = dropDown;
@@ -34,8 +35,18 @@ mirosubs.widget.PlayController = function(
 };
 goog.inherits(mirosubs.widget.PlayController, goog.Disposable);
 
-mirosubs.widget.PlayController.prototype.stop = function() {
-    
+mirosubs.widget.PlayController.prototype.stopForDialog = function() {
+    this.videoPlayer_.stopLoading();
+    this.turnOffSubs_();
+};
+
+mirosubs.widget.PlayController.prototype.turnOffSubs_ = function() {
+    this.dropDown_.setShowingSubs(false);
+    this.dropDown_.hide();
+    this.videoTab_.showNudge(false);
+    this.disposeComponents_();
+    this.subtitleState_ = null;
+    // TODO: set the video tab text here also.
 };
 
 /**
@@ -44,6 +55,10 @@ mirosubs.widget.PlayController.prototype.stop = function() {
  */
 mirosubs.widget.PlayController.prototype.getSubtitleState = function() {
     return this.subtitleState_;
+};
+
+mirosubs.widget.PlayController.prototype.getVideoSource = function() {
+    return this.videoSource_;
 };
 
 mirosubs.widget.PlayController.prototype.setUpSubs_ = 

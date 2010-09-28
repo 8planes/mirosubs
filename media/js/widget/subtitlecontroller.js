@@ -32,7 +32,7 @@ mirosubs.widget.SubtitleController = function(
         this.videoTab_.setText(
             this.dropDown_.getSubtitleCount() > 0 ? 
                 m.CHOOSE_LANGUAGE : m.SUBTITLE_ME);
-    this.handler_ = new mirosubs.events.EventHandler(this);
+    this.handler_ = new goog.events.EventHandler(this);
     var s = mirosubs.widget.DropDown.Selection;
     this.handler_.
         listen(
@@ -191,7 +191,7 @@ mirosubs.widget.SubtitleController.prototype.openSubtitlingDialog_ =
             mirosubs.videoID, subtitleState.LANGUAGE),
         subtitleState.SUBTITLES);
     subDialog.setVisible(true);
-    this.getHandler().listenOnce(
+    goog.events.listenOnce(
         subDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
         this.subtitleDialogClosed_);
 };
@@ -203,6 +203,5 @@ mirosubs.widget.SubtitleController.prototype.openDependentTranslationDialog_ =
 };
 
 mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {
-    // TODO: tell playController_ it's okay to resume.
-    // load menu contents from server.
+    
 };

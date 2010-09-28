@@ -106,7 +106,7 @@ mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ =
         if (!mirosubs.IS_NULL)
             mirosubs.Rpc.call("update_lock", 
                               { 'video_id': this.videoID_,
-                                'language_code', this.language_});
+                                'language_code': this.language_});
         if (mirosubs.isLoginAttemptInProgress())
             return;
         if (opt_forceLogin) {

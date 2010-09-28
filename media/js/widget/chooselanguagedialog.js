@@ -22,9 +22,12 @@ goog.provide('mirosubs.widget.ChooseLanguageDialog');
  * @constructor
  */
 mirosubs.widget.ChooseLanguageDialog = function(
-    selectOriginal, selectLanguage, selectForked) 
+    callback, selectOriginal, selectLanguage, selectForked) 
 {
     goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
+    this.setButtonSet(null);
+    this.setDisposeOnHide(true);
+    this.callback_ = callback;
     this.selectOriginal_ = selectOriginal;
     this.selectLanguage_ = selectLanguage;
     this.selectForked_ = selectForked;
@@ -46,7 +49,7 @@ mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
     if (this.selectLanguage_) {
         this.languageRadioButtons_ = [];
         if (this.selectOriginal_)
-            this.addLanguageSelector_($d, lt.ORIGINAL, "Original");
+            this.addLanguageSelector_($d, lt.ORIGINAL, "Original Language");
         this.originalDropdown_ = this.makeDropdown_(
             $d, mirosubs.languages);
         this.metadataDropdown_ = this.makeDropdown_(
@@ -55,6 +58,7 @@ mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
             $d, lt.LANGUAGE, "Language: ", this.originalDropdown_);
         this.addLanguageSelector_(
             $d, lt.METADATA, "Metadata: ", this.metadataDropdown_);
+        this.languageRadioButtons_[0].checked = true;
     }
     if (this.selectForked_) {
         this.forkedCheckbox_ = 
@@ -62,6 +66,32 @@ mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
         this.getElement().appendChild(
             $d('div', null, this.forkedCheckbox_, "Forked"));               
     }
+    this.okButton_ = $d('a', {'href':'#'}, 'OK');
+    this.cancelButton_ = $d('a', {'href':'#'}, 'Cancel');
+    this.getElement().appendChild(
+        $d('div', null, this.okButton_, " ", this.cancelButton_));
+};
+
+mirosubs.widget.ChooseLanguageDialog.prototype.enterDocument = function() {
+    mirosubs.widget.ChooseLanguageDialog.superClass_.enterDocument.call(this);
+    this.getHandler().
+        listen(this.okButton_,
+               'click',
+               this.okClicked_).
+        listen(this.cancelButton_,
+               'click',
+               this.cancelClicked_);
+};
+
+mirosubs.widget.ChooseLanguageDialog.prototype.okClicked_ = function(e) {
+    e.preventDefault();
+    this.setVisible(false);
+    this.callback_(this.getSelectedLanguage(), this.isForkedSelected());
+};
+
+mirosubs.widget.ChooseLanguageDialog.prototype.cancelClicked_ = function(e) {
+    e.preventDefault();
+    this.setVisible(false);
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.makeDropdown_ = 
@@ -83,7 +113,8 @@ mirosubs.widget.ChooseLanguageDialog.prototype.addLanguageSelector_ =
     this.languageRadioButtons_.push(radioButton);
     var divCreator = goog.partial(
         $d, 'div', null, radioButton);
-    this.getElement().appendChild(divCreator.apply(arguments.slice(2)));
+    this.getElement().appendChild(divCreator.apply(
+        null, Array.prototype.slice.call(arguments, 2)));
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.getSelectedLanguage = 
@@ -92,9 +123,9 @@ mirosubs.widget.ChooseLanguageDialog.prototype.getSelectedLanguage =
     var lt = mirosubs.widget.ChooseLanguageDialog.LanguageType;
     var selectedRadio = this.selectedLanguageRadioButton_();
     if (selectedRadio != null) {
-        if (selectedRadio.name == lt.ORIGINAL)
+        if (selectedRadio.value == lt.ORIGINAL)
             return null;
-        else if (selectedRadio.name == lt.LANGUAGE)
+        else if (selectedRadio.value == lt.LANGUAGE)
             return this.originalDropdown_.value;
         else
             return this.metadataDropdown_.value;
@@ -122,11 +153,6 @@ mirosubs.widget.ChooseLanguageDialog.show =
     function(selectOriginal, selectLanguage, selectForked, callback)
 {
     var dialog = new mirosubs.widget.ChooseLanguageDialog(
-        selectOriginal, selectLanguage, selectForked);
+        callback, selectOriginal, selectLanguage, selectForked);
     dialog.setVisible(true);
-    goog.events.listenOnce(
-        dialog, goog.ui.Dialog.EventType.AFTER_HIDE,
-        function(e) {
-            callback(dialog.getSelectedLanguage(), dialog.isForkedSelected());
-        });
 };

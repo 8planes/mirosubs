@@ -44,11 +44,8 @@ class BaseRpc:
 
         if video.video_type == models.VIDEO_TYPE_BLIPTV:
             return_value['flv_url'] = video.bliptv_flv_url
-        translation_languages = \
-            self._initial_languages(request.user, video)
-        return_value['translation_languages'] = \
-            [widget.language_to_map(t[0], LANGUAGES_MAP[t[0]], percent_done=t[1]) for 
-             t in translation_languages]
+        return_value['drop_down_contents'] = \
+            self._drop_down_contents(request.user, video)
 
         if base_state is not None:
             subtitles = self._autoplay_subtitles(
@@ -56,17 +53,20 @@ class BaseRpc:
                 base_state.get('language', None),
                 base_state.get('revision', None))
             return_value['subtitles'] = subtitles
-            return_value['subtitle_count'] = len(subtitles)
         else:
             if is_remote:
-                autoplay_language = _find_remote_autoplay_language(request)
+                autoplay_language = self._find_remote_autoplay_language(request)
                 if autoplay_language is not None:
                     subtitles = self._autoplay_subtitles(
                         request.user, video, autoplay_language, None)
                     return_value['subtitles'] = subtitles
-            return_value['subtitle_count'] = self._subtitle_count(
-                request.user, video)
         return return_value
+
+    def _drop_down_contents(self, user, video):
+        return {
+            'translations': self._initial_languages(user, video),
+            'subtitle_count': self._subtitle_count(user, video)
+            }
 
     def _find_remote_autoplay_language(self, request):
         language = None
