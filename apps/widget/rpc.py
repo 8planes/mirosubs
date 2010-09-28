@@ -135,7 +135,8 @@ class Rpc(BaseRpc):
         current_version.save()
 
     def _get_version_for_editing(self, user, language, 
-                                 base_version_no=None, fork=False):
+                                 base_version_no=None, 
+                                 fork=False):
         subtitle_versions = list(language.subtitleversion_set.order_by('-version_no'))
 
         if base_version_no is None:
@@ -149,11 +150,14 @@ class Rpc(BaseRpc):
             new_version_no = language.latest_finished_version().version_no + 1
 
         new_version = None
+        print(version_to_copy)
         if version_to_copy is None or new_version_no > version_to_copy.version_no:
             new_version = models.SubtitleVersion(
                 language=language,
                 version_no=new_version_no,
                 datetime_started=datetime.now())
+            print(fork)
+            print(version_to_copy.is_forked)
             if fork or (version_to_copy is not None and 
                         version_to_copy.is_forked):
                 new_version.is_forked = True
@@ -218,13 +222,17 @@ class Rpc(BaseRpc):
 
     def _subtitles_dict(self, version):
         language = version.language
+        is_latest = False
+        latest_version = language.latest_finished_version()
+        if latest_version is None or version.version_no >= latest_version.version_no:
+            is_latest = True
         return {
             'subtitles': [s.__dict__ for s in version.subtitles()],
             'language': None if language.is_original else language.language,
             'version': version.version_no,
+            'is_latest': is_latest,
             'forked': version.is_forked
             }
-        
 
     def _subtitle_count(self, user, video):
         version = video.latest_finished_version()

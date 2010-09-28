@@ -85,17 +85,20 @@ mirosubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
            ' = Missing sections translated by Google Translate'));
     this.languageList_.appendChild(this.subtitlesOff_);
     this.languageList_.appendChild(this.originalLanguage_);
+
+    this.translationLinks_ = [];
         
     for (var i = 0; i < this.translationLanguages_.length; i++) {
-        if (!this.translationLanguages_[i].elt)
-            this.translationLanguages_[i].elt = 
-                $d('li', null,
-                   $d('a', {'href': '#'}, 
-                      $d('span', 'mirosubs-languageTitle', 
-                         mirosubs.languageNameForCode(this.translationLanguages_[i][0])),
-                      $d('span', 'mirosubs-languageStatus',
-                         this.translationLanguages_[i][1] + '%')));
-        this.languageList_.appendChild(this.translationLanguages_[i].elt);
+        var link = 
+            $d('a', {'href': '#'}, 
+               $d('span', 'mirosubs-languageTitle', 
+                  mirosubs.languageNameForCode(
+                      this.translationLanguages_[i][0])),
+               $d('span', 'mirosubs-languageStatus',
+                  this.translationLanguages_[i][1] + '%'));
+        this.translationLinks_.push(
+            { link: link, lang: this.translationLanguages_[i] });
+        this.languageList_.appendChild($d('li', null, link));
     }
 };
 
@@ -209,10 +212,10 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
                goog.bind(this.menuItemClicked_, this, s.LOGOUT));
     
     var that = this;
-    goog.array.forEach(this.translationLanguages_,
-        function(e) {
-            that.getHandler().listen(e.elt, 'click',
-                goog.bind(that.languageSelected_, that, e.code));
+    goog.array.forEach(this.translationLinks_,
+        function(tLink) {
+            that.getHandler().listen(tLink.link, 'click',
+                goog.bind(that.languageSelected_, that, tLink.lang[0]));
         });
 };
 
@@ -232,14 +235,20 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         window.location.replace(goog.dom.getFirstElementChild(this.subtitleHomepageLink_).href);
     else if (type == s.DOWNLOAD_SUBTITLES)
         window.open(goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href);
+    else if (type == s.ADD_TRANSLATION || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
+        this.dispatchEvent(type);
     else
-        this.widget_.selectMenuItem(type, this.currentLanguageCode_);
+        this.dispatchLanguageSelection_(null);
 };
 
-mirosubs.widget.DropDown.prototype.languageSelected_ = function(languageCode, e) {
+mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
     e.preventDefault();
-    this.widget_.selectMenuItem(mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED,
-                                languageCode);
+    this.dispatchLanguageSelection_(langCode);
+};
+
+mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
+    console.log(langCode);
+    this.dispatchEvent(new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
 };
 
 mirosubs.widget.DropDown.Selection = {
@@ -307,31 +316,12 @@ mirosubs.widget.DropDown.prototype.loginStatusChanged = function() {
     this.updateActions_();
 };
 
-mirosubs.widget.DropDown.prototype.onActionTaken_ = function(event) {
-    var selectedValue = event.target.getModel();
-    var mv = mirosubs.MainMenu.MenuValues_;
-    var et = mirosubs.MainMenu.Selection;
-    if (selectedValue == mv.ADD_SUBTITLES)
-        this.dispatchEvent(et.ADD_SUBTITLES);
-    else if (selectedValue == mv.EDIT_SUBTITLES)
-        this.dispatchEvent(et.EDIT_SUBTITLES);
-    else if (selectedValue == mv.ORIGINAL_LANG)
-        this.dispatchEvent(
-            new mirosubs.MainMenu
-                .LanguageSelectedEvent());
-    else if (selectedValue == mv.NEW_LANG)
-        this.dispatchEvent(et.ADD_NEW_LANGUAGE);
-    else if (selectedValue == mv.LOGIN)
-        mirosubs.login();
-    else if (selectedValue == mv.CREATE_ACCOUNT)
-        mirosubs.createAccount();
-    else if (selectedValue == mv.LOGOUT)
-        mirosubs.logout();
-    else if (selectedValue == mv.TURNOFFSUBS)
-        this.dispatchEvent(et.TURN_OFF_SUBS);
-    else
-        this.dispatchEvent(
-            new mirosubs.MainMenu
-                .LanguageSelectedEvent(selectedValue));
+mirosubs.widget.DropDown.LanguageSelectedEvent = function(opt_languageCode) {
+    this.type = mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED;
+    /**
+     * The language code selected, or null to signify original
+     * language.
+     * @type {?string}
+     */
+    this.languageCode = opt_languageCode;
 };
-

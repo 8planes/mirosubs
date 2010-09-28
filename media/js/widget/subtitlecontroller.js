@@ -66,8 +66,9 @@ mirosubs.widget.SubtitleController.prototype.openSubtitleDialog =
     function() 
 {
     var subtitleState = this.playController_.getSubtitleState();
+    console.log(subtitleState.VERSION);
     if (subtitleState != null && 
-        subtitleState.VERSION != null && 
+        !subtitleState.IS_LATEST && 
         !mirosubs.returnURL) {
         var msg =
             ["You're about to edit revision ", 

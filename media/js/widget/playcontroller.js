@@ -32,6 +32,14 @@ mirosubs.widget.PlayController = function(
     this.dropDown_ = dropDown;
     if (opt_subtitleState)
         this.setUpSubs_(opt_subtitleState);
+    this.menuEventHandler_ = new goog.events.EventHandler(this);
+    this.menuEventHandler_.
+        listen(this.dropDown_,
+               mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED,
+               this.languageSelected_).
+        listen(this.dropDown_,
+               mirosubs.widget.DropDown.Selection.SUBTITLES_OFF,
+               this.turnOffSubs_);
 };
 goog.inherits(mirosubs.widget.PlayController, goog.Disposable);
 
@@ -70,8 +78,8 @@ mirosubs.widget.PlayController.prototype.setUpSubs_ =
         subtitleState.SUBTITLES);
     this.captionManager_ = 
         new mirosubs.CaptionManager(this.videoPlayer_, captionSet);
-    this.handler_ = new goog.events.EventHandler(this);
-    this.handler_.
+    this.playEventHandler_ = new goog.events.EventHandler(this);
+    this.playEventHandler_.
         listen(this.captionManager_,
                mirosubs.CaptionManager.CAPTION,
                this.captionReached_).
@@ -87,7 +95,21 @@ mirosubs.widget.PlayController.prototype.setUpSubs_ =
             "Original Language");
 };
 
-mirosubs.widget.PlayController.prototype.captionReached_ = function() {
+mirosubs.widget.PlayController.prototype.languageSelected_ = function(e) {
+    var that = this;
+    this.videoTab_.showLoading(true);
+    mirosubs.Rpc.call(
+        'fetch_subtitles',
+        { 'video_id': mirosubs.videoID,
+          'language_code': e.languageCode },
+        function(subState) {
+            that.videoTab_.showLoading(false);
+            that.turnOffSubs_();
+            that.setUpSubs_(mirosubs.widget.SubtitleState.fromJSON(subState));
+        });
+};
+
+mirosubs.widget.PlayController.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.videoPlayer_.showCaptionText(c ? c.getText() : '');
 };
@@ -101,9 +123,9 @@ mirosubs.widget.PlayController.prototype.disposeComponents_ = function() {
         this.captionManager_.dispose();
         this.captionManager_ = null;
     }
-    if (this.handler_) {
-        this.handler_.dispose();
-        this.handler_ = null;
+    if (this.playEventHandler_) {
+        this.playEventHandler_.dispose();
+        this.playEventHandler_ = null;
     }
 };
 
