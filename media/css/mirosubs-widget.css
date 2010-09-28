@@ -2599,16 +2599,23 @@ background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
 
 
 
-
 .mirosubs-dropdown {
     position: absolute !important;
     z-index: 500;
     /*top: 415px !important; */
     left: 0 !important;
-border: 1px solid;
+border: 1px solid #000;
+border-top: 0;
 width: 100%;
+min-width: 500px;
 background: #000;
+
+  -moz-box-shadow: 0 3px 14px #333;
+  -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
+  box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
+  
 }
+
 
 .mirosubs-dropdown .mirosubs-languageList ul{
     padding: 0 !important;

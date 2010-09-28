@@ -49,6 +49,12 @@ h2.main-title span{
   
 .bull{ padding: 0 10px !important;}
 
+.bold{font-weight: bold;}
+
+.larger{
+font-size: 22px;
+}
+
 
 /*//////////   ~  Block Type  ~   //////////*/
 
