@@ -26,11 +26,11 @@ msgstr "వాడుకరిపేరు"
 
 #: .\apps\auth\admin.py:11
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
-msgstr ""
+msgstr "తప్పనిసరి. 30 లేదా అంతకంటే తక్కువ అక్షరాలు. అక్షరాలు మరియు అంకెలు మాత్రమే (వర్ణాలు, అంకెలు మరియు అండర్‌స్కోరులు)"
 
 #: .\apps\auth\admin.py:12
 msgid "This value must contain only letters, numbers and underscores."
-msgstr ""
+msgstr "ఈ విలువలో కేవలం వర్ణాలు, అంకెలు మరియు అండర్‌స్కోరులు మాత్రమే ఉండాలి."
 
 #: .\apps\auth\admin.py:13
 msgid "Password"
@@ -83,7 +83,7 @@ msgstr ""
 
 #: .\apps\profiles\forms.py:67
 msgid "Confirm new password:"
-msgstr ""
+msgstr "కొత్త సంకేతపదం నిర్ధారణ:"
 
 #: .\apps\profiles\forms.py:82
 msgid "Invalid password."
@@ -152,11 +152,11 @@ msgstr ""
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
-msgstr ""
+msgstr "ట్విట్టర్లో ప్రచురించండి"
 
 #: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
-msgstr ""
+msgstr "స్నేహితులకి ఈమెయిలు పంపించండి"
 
 #: .\templates\_share_widget.html.py:15
 msgid "Embed Code"
@@ -449,7 +449,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "ఉపశీర్షికల వల్ల ప్రయోజనాలు ఏమిటి?"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
@@ -616,7 +616,7 @@ msgstr ""
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
-msgstr ""
+msgstr "మా ఆశయం"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
@@ -692,7 +692,7 @@ msgstr ""
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
-msgstr ""
+msgstr "ఇప్పుడే విరాళమివ్వండి"
 
 #: .\templates\index.html.py:146
 msgid "Check out the widget"
@@ -810,19 +810,19 @@ msgstr ""
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "గత"
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "తదుపరి"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr ""
+msgstr "యూనివర్సల్ సబ్‌టైటిల్స్ గోప్యతా విధానం"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
-msgstr ""
+msgstr "చివరి మార్పు: ఆగస్టు 10, 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
@@ -1068,7 +1068,7 @@ msgstr ""
 #: .\templates\profiles\view_profile.html.py:86
 #: .\templates\profiles\view_profile.html.py:116
 msgid "Send a Message"
-msgstr ""
+msgstr "ఒక సందేశాన్ని పంపించండి"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
@@ -1122,7 +1122,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "ప్రవేశించండి"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
@@ -1130,7 +1130,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
-msgstr ""
+msgstr "కొత్త సంకేతపదాన్ని ఇవ్వండి"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
@@ -1176,7 +1176,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "దయచేసి ఈ పుటకి వెళ్ళి కొత్త సంకేతపదాన్ని ఎంచుకోండి:"
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
@@ -1184,12 +1184,12 @@ msgstr "మీ వాడుకరి పేరు, ఒకవేళ మీరు 
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "మా సైటుని ఉపయోగించినందుకు ధన్యవాదాలు!"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "%(site_name)s జట్టు"
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
@@ -1235,11 +1235,11 @@ msgstr ""
 
 #: .\templates\videos\_feedback_form.html.py:28
 msgid "What did you think about the site?"
-msgstr ""
+msgstr "ఈ సైటు గురించి మీరు ఏమనుకుంటున్నారు?"
 
 #: .\templates\videos\_feedback_form.html.py:32
 msgid "Please let us know if you have any comments, questions, or suggestions!"
-msgstr ""
+msgstr "మీ సూచనలనూ, సలహాలనూ, లేదా సందేహాలనూ దయచేసి మాకు తెలియజేయండి!"
 
 #: .\templates\videos\_feedback_form.html.py:37
 msgid "Your email:"
@@ -1255,7 +1255,7 @@ msgstr ""
 
 #: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
-msgstr ""
+msgstr "మీ ప్రతిస్పందనకు ధన్యవాదాలు."
 
 #: .\templates\videos\_feedback_form.html.py:55
 msgid "If you would like to perform some additional testing"
@@ -1287,7 +1287,7 @@ msgstr ""
 
 #: .\templates\videos\_recent_activity.html.py:3
 msgid "View all"
-msgstr ""
+msgstr "అన్నీ చూడండి"
 
 #: .\templates\videos\_upload_subtitles.html.py:4
 #: .\templates\videos\_upload_subtitles.html.py:9
@@ -1348,7 +1348,7 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
-msgstr ""
+msgstr "అసలు ఉపశీర్షికలు"
 
 #: .\templates\videos\_video_activity.html.py:46
 msgid "translation"
@@ -1436,7 +1436,7 @@ msgstr ""
 #: .\templates\videos\history.html.py:185
 #: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
-msgstr ""
+msgstr "ఉపశీర్షికలు"
 
 #: .\templates\videos\diffing.html.py:98
 #: .\templates\videos\revision.html.py:75
@@ -1476,17 +1476,17 @@ msgstr ""
 
 #: .\templates\videos\email_friend.html.py:6
 msgid "Email this to a friend"
-msgstr ""
+msgstr "దీన్ని మీ మిత్రులకి ఈమెయిలు చెయ్యండి"
 
 #: .\templates\videos\email_friend.html.py:10
 msgid "Send to Friend!"
-msgstr ""
+msgstr "స్నేహితులకి పంపండి!"
 
 #: .\templates\videos\email_notification.html.py:3
 #: .\templates\videos\email_start_notification.html.py:3
 #: .\templates\videos\email_title_changed.html.py:3
 msgid "Dear"
-msgstr ""
+msgstr "ప్రియమైన"
 
 #: .\templates\videos\email_notification.html.py:4
 #, python-format
@@ -1517,13 +1517,13 @@ msgstr ""
 #: .\templates\videos\email_start_notification.html.py:14
 #: .\templates\videos\email_title_changed.html.py:10
 msgid "Sincerely"
-msgstr ""
+msgstr "మీ విధేయులు"
 
 #: .\templates\videos\email_notification.html.py:17
 #: .\templates\videos\email_start_notification.html.py:15
 #: .\templates\videos\email_title_changed.html.py:12
 msgid "The Universal Subtitles Community"
-msgstr ""
+msgstr "యూనివర్సల్ సబ్‌టైటిల్స్ సమాజం"
 
 #: .\templates\videos\email_notification.html.py:24
 #: .\templates\videos\email_start_notification.html.py:23
@@ -1533,7 +1533,7 @@ msgstr ""
 
 #: .\templates\videos\email_notification.html.py:27
 msgid "SUMMARY OF CHANGES"
-msgstr ""
+msgstr "మార్పుల యొక్క సంగ్రహం"
 
 #: .\templates\videos\email_notification.html.py:28
 #, python-format
@@ -1553,17 +1553,17 @@ msgstr ""
 
 #: .\templates\videos\email_notification.html.py:37
 msgid "Here is a list of text changes:"
-msgstr ""
+msgstr "పాఠ్య మార్పుల జాబితా ఇదిగో:"
 
 #: .\templates\videos\email_notification.html.py:41
 #: .\templates\videos\email_title_changed.html.py:19
 msgid "NEW"
-msgstr ""
+msgstr "కొత్తది"
 
 #: .\templates\videos\email_notification.html.py:42
 #: .\templates\videos\email_title_changed.html.py:23
 msgid "OLD"
-msgstr ""
+msgstr "పాదతి"
 
 #: .\templates\videos\email_notification.html.py:49
 msgid "To view the current and previous versions side by side, follow this"
@@ -1571,7 +1571,7 @@ msgstr ""
 
 #: .\templates\videos\email_notification.html.py:50
 msgid "link"
-msgstr ""
+msgstr "లంకె"
 
 #: .\templates\videos\email_start_notification.html.py:4
 #, python-format
@@ -1596,7 +1596,7 @@ msgstr ""
 #: .\templates\videos\email_start_notification.html.py:20
 #: .\templates\videos\email_title_changed.html.py:16
 msgid "My profile / preferences"
-msgstr ""
+msgstr "నా ప్రవర / అభిరుచులు"
 
 #: .\templates\videos\email_title_changed.html.py:4
 #, python-format
@@ -1612,7 +1612,7 @@ msgstr ""
 #: .\templates\videos\email_title_changed.html.py:21
 #: .\templates\videos\email_title_changed.html.py:25
 msgid "TITLE"
-msgstr ""
+msgstr "శీర్షిక"
 
 #: .\templates\videos\history.html.py:73
 msgid "Select two revisions for compare, please"
@@ -1668,7 +1668,7 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:213
 msgid "Note"
-msgstr ""
+msgstr "గమనిక"
 
 #: .\templates\videos\history.html.py:216
 msgid "Time"
@@ -1697,7 +1697,7 @@ msgstr ""
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
 msgid "Revision"
-msgstr ""
+msgstr "కూర్పు"
 
 #: .\templates\videos\revision.html.py:83
 #, python-format
@@ -1765,7 +1765,7 @@ msgstr "మీ ఈమెయిలు"
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
-msgstr ""
+msgstr "పని 1"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "Try creating subtitles on the following"
@@ -1784,7 +1784,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:29
 msgid "Task 2"
-msgstr ""
+msgstr "పని 2"
 
 #: .\templates\videos\test_form_page.html.py:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
@@ -1792,7 +1792,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:35
 msgid "Task 3"
-msgstr ""
+msgstr "పని 3"
 
 #: .\templates\videos\test_form_page.html.py:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
@@ -1844,7 +1844,7 @@ msgstr "అసలు"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
-msgstr ""
+msgstr "ఉపశీర్షికలు లేవు"
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"

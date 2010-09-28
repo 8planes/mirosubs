@@ -306,6 +306,11 @@ AWS_SECRET_ACCESS_KEY = ''
 DEFAULT_BUCKET = ''
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 
+AVATAR_MAX_SIZE = 1024*1024
+THUMBNAILS_SIZE = (
+    (128, 128),
+)
+
 try:
     from settings_local import *
 except ImportError:

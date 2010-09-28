@@ -25,6 +25,8 @@
 from django import forms
 from teams.models import Team, TeamMember
 from django.utils.translation import ugettext_lazy as _
+from utils.validators import MaxFileSizeValidator
+from django.conf import settings
 
 class CreateTeamForm(forms.ModelForm):
     
@@ -38,6 +40,7 @@ class CreateTeamForm(forms.ModelForm):
         return team
     
 class EditTeamForm(forms.ModelForm):
+    logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)])
     
     class Meta:
         model = Team

@@ -66,9 +66,11 @@
         <div class="user_panel">
           <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" /> 
           <a href="{% url profiles:my_profile %}">{{ user }}</a>
-          <a href="#">Managers Controls &amp; Settings</a>
+          {% comment %}
+          <a href="#">{% trans 'Team manager options' %}</a>
           <span class="points"><strong>{% trans 'Points' %}</strong> 3,999</span>
           <span class="awards"><strong>{% trans 'Awards' %}</strong> 3,999</span>
+          {% endcomment %}
         </div>
         {% endif %}
         

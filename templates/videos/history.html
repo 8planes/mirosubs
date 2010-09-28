@@ -148,7 +148,7 @@
   <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
         {% if video.subtitle_language %}
-            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{% trans 'Original' %}</a></li>
+            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{{ video.subtitle_language.get_language_display }}</a></li>
         {% endif %}
         <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if translations %} 
@@ -168,7 +168,7 @@
       <ul class="inline_tabs">
           <li class="active">
               <a href="#transcripts-tab">
-                {% if language.is_original %}
+                {% if language.is_original and not language.language %}
                     {% trans 'Original Language Subtitles' %}
                 {% else %}
                     {{ language.get_language_display }} {% trans 'Subtitles' %}

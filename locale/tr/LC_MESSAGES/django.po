@@ -995,84 +995,84 @@ msgstr ""
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
 msgid "Sign in with your OpenID"
-msgstr ""
+msgstr "OpenID ile giriş"
 
 #: .\templates\openid_consumer\signin.html.py:18
 msgid "Sign in"
-msgstr ""
+msgstr "Giriş Yap"
 
 #: .\templates\profiles\edit_profile.html.py:7
 #: .\templates\profiles\edit_profile.html.py:28
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "Profilini düzenle"
 
 #: .\templates\profiles\edit_profile.html.py:7
 msgid "View profile"
-msgstr ""
+msgstr "Profili görüntüle"
 
 #: .\templates\profiles\edit_profile.html.py:10
 #: .\templates\profiles\view_profile.html.py:83
 msgid "Preferred Language"
-msgstr ""
+msgstr "Tercih edilen dil"
 
 #: .\templates\profiles\edit_profile.html.py:13
 #: .\templates\profiles\view_profile.html.py:84
 msgid "Homepage"
-msgstr ""
+msgstr "Anasayfa"
 
 #: .\templates\profiles\edit_profile.html.py:30
 msgid "Save Edits to Profile"
-msgstr ""
+msgstr "Düzenlemeleri profile kaydet"
 
 #: .\templates\profiles\edit_profile.html.py:35
 msgid "Personal Info"
-msgstr ""
+msgstr "Kişisel Bilgi"
 
 #: .\templates\profiles\edit_profile.html.py:57
 msgid "Upload picture"
-msgstr ""
+msgstr "Resim Yükle"
 
 #: .\templates\profiles\edit_profile.html.py:83
 msgid "Email me when something I've edited gets changed"
-msgstr ""
+msgstr "Düzenlediğim bir parça değişirse bana eposta gönder"
 
 #: .\templates\profiles\edit_profile.html.py:93
 msgid "Language Info"
-msgstr ""
+msgstr "Dil bilgisi"
 
 #: .\templates\profiles\edit_profile.html.py:106
 msgid "Languages I Know"
-msgstr ""
+msgstr "Bildiğim Diller"
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
 msgid "Remove Language"
-msgstr ""
+msgstr "Dili Kaldır"
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
-msgstr ""
+msgstr "Dil ekle"
 
 #: .\templates\profiles\view_profile.html.py:43
 msgid "Email sent"
-msgstr ""
+msgstr "Eposta gönderildi"
 
 #: .\templates\profiles\view_profile.html.py:62
 msgid "Enter message please."
-msgstr ""
+msgstr "Lütfen mesajınızı girin"
 
 #: .\templates\profiles\view_profile.html.py:66
 msgid "Enter email please."
-msgstr ""
+msgstr "Lütfen eposta adresini girin"
 
 #: .\templates\profiles\view_profile.html.py:86
 #: .\templates\profiles\view_profile.html.py:116
 msgid "Send a Message"
-msgstr ""
+msgstr "Mesaj gönder"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
-msgstr ""
+msgstr "<i>Kullanıcı biyografi girmemiş.</i>"
 
 #: .\templates\profiles\view_profile.html.py:103
 #, python-format
@@ -1081,26 +1081,26 @@ msgstr ""
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
-msgstr ""
+msgstr "Bu kişiden"
 
 #: .\templates\profiles\view_profile.html.py:111
 msgid "Message"
-msgstr ""
+msgstr "Mesaj"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "HTML Yok"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
-msgstr ""
+msgstr "Not: Mesaj gönderdiğinizde alıcı eposta adresınızı görüp size doğrudan mesaj gönderebilir."
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:4
 #: .\templates\registration\password_reset_done.html.py:4
 #: .\templates\registration\password_reset_form.html.py:4
 msgid "Home"
-msgstr ""
+msgstr "Ana Sayfa"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:6
@@ -1109,65 +1109,65 @@ msgstr ""
 #: .\templates\registration\password_reset_form.html.py:6
 #: .\templates\registration\password_reset_form.html.py:10
 msgid "Password reset"
-msgstr ""
+msgstr "Şifre sıfırla"
 
 #: .\templates\registration\password_reset_complete.html.py:6
 #: .\templates\registration\password_reset_complete.html.py:10
 msgid "Password reset complete"
-msgstr ""
+msgstr "şifre sıfırlama tamamlandı"
 
 #: .\templates\registration\password_reset_complete.html.py:12
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "Şifreniz konuldu. şimdi devam edip giriş yapabilirsiniz."
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "Giriş"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
-msgstr ""
+msgstr "Şifre sıfırlama onayı"
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
-msgstr ""
+msgstr "Yeni şifre girin"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Lütfen yenni şifrenizi iki kez girin, böylece doğru yazdığınızdan emin olabiliriz."
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr ""
+msgstr "Yeni Şifre:"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr ""
+msgstr "Şifreyi doğrula:"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr ""
+msgstr "Şifremi değiştir"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr ""
+msgstr "Şifre sıfırlma başarısız"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr ""
+msgstr "Şifre sıfırlama bağlantısı geçersizdi, muhtemeleen bu bağlantı daha önce kullanıldı. Lütfen yeni bir şifre sıfırlama bağlantısı talep edin."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr ""
+msgstr "Şifre sıfırlama başarılı"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr ""
+msgstr "Belirttiğiniz eposta adresine şifrenizi sıfırlama talimatlarını gönderdik. Bu eposta kısa zamanda size ulaşacaktır."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
+msgstr "Şifrenizi sıfırlamayı talep ettiğiniz için bu mesajı gönderdik."
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
@@ -1176,15 +1176,15 @@ msgstr ""
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Yeni bir şifre seçmek için lütfen bir sonraki sayfaya gidin."
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Kullanıcı adınız, her ihtimale karşı"
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Sitemizi kullandığınız için teşekkürler!"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
@@ -1193,28 +1193,28 @@ msgstr ""
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
-msgstr ""
+msgstr "Şifrenizi mi unuttunuz? Eposta adresinizi aşağıya girin, yeni bir şifre oluşturma talimatlarını size eposta gönderelim."
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
-msgstr ""
+msgstr "Eposta adresi:"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Şifremi sıfırla"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
 msgid "Anonymous"
-msgstr ""
+msgstr "Belirsiz"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
-msgstr ""
+msgstr "yorum yaptı"
 
 #: .\templates\videos\_activities.html.py:19
 msgid "commented on this video"
-msgstr ""
+msgstr "bu vıdeoya yorum yaptı"
 
 #: .\templates\videos\_activities.html.py:23
 #, python-format
@@ -1223,47 +1223,47 @@ msgstr ""
 
 #: .\templates\videos\_activities.html.py:25
 msgid "edited subtitles for"
-msgstr ""
+msgstr "için altyazıları düzenledi"
 
 #: .\templates\videos\_error_feedback_form.html.py:7
 msgid "Please let us know what you were doing when you encountered this error."
-msgstr ""
+msgstr "Lütfen bu hatayla karşılaştığınızda ne yapmakta olduğunuzu bize bildirin."
 
 #: .\templates\videos\_error_feedback_form.html.py:9
 msgid "Sorry, the page you requested was not found."
-msgstr ""
+msgstr "Üzgünüz, aradığınız sayfa bulunamadı."
 
 #: .\templates\videos\_feedback_form.html.py:28
 msgid "What did you think about the site?"
-msgstr ""
+msgstr "Site hakkında ne düşünüyordunuz?"
 
 #: .\templates\videos\_feedback_form.html.py:32
 msgid "Please let us know if you have any comments, questions, or suggestions!"
-msgstr ""
+msgstr "Yorumlarınız, sorualrınız ya da önerileriniz varsa lütfen bize bildirin."
 
 #: .\templates\videos\_feedback_form.html.py:37
 msgid "Your email:"
-msgstr ""
+msgstr "Eposta adresiniz:"
 
 #: .\templates\videos\_feedback_form.html.py:44
 msgid "Your Feedback"
-msgstr ""
+msgstr "Geribildiriminiz"
 
 #: .\templates\videos\_feedback_form.html.py:48
 msgid "Send Feedback"
-msgstr ""
+msgstr "Geribildirim Gönder"
 
 #: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
-msgstr ""
+msgstr "Geribildiriminiz için teşekkürler."
 
 #: .\templates\videos\_feedback_form.html.py:55
 msgid "If you would like to perform some additional testing"
-msgstr ""
+msgstr "Eğer ekstra denelemer yapmak istiyorsanız"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "please go to our"
-msgstr ""
+msgstr "lütfen şuraya gidin:"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "Litmus regression tests"
@@ -1271,28 +1271,28 @@ msgstr ""
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "For new testers, we have"
-msgstr ""
+msgstr "Yeni deneyiciler için, "
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "a getting started guide"
-msgstr ""
+msgstr "bir başlangıç klavuzumuz var"
 
 #: .\templates\videos\_feedback_form.html.py:59
 msgid "Send more feedback."
-msgstr ""
+msgstr "Daha fazla geribildirim gönder."
 
 #: .\templates\videos\_feedback_form.html.py:64
 msgid "Enter feedback please."
-msgstr ""
+msgstr "Lütfen geribildirim girin."
 
 #: .\templates\videos\_recent_activity.html.py:3
 msgid "View all"
-msgstr ""
+msgstr "Tümünü gör"
 
 #: .\templates\videos\_upload_subtitles.html.py:4
 #: .\templates\videos\_upload_subtitles.html.py:9
 msgid "Upload Subtitles"
-msgstr ""
+msgstr "Altyazı yükle"
 
 #: .\templates\videos\_upload_subtitles.html.py:14
 msgid ""
@@ -1304,7 +1304,7 @@ msgstr ""
 
 #: .\templates\videos\_upload_subtitles.html.py:29
 msgid "Login to upload subtitles"
-msgstr ""
+msgstr "Altyazı yüklmek için giriş yapın"
 
 #: .\templates\videos\_upload_subtitles.html.py:38
 msgid "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
@@ -1312,15 +1312,15 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:4
 msgid "Activity"
-msgstr ""
+msgstr "Etkinlik"
 
 #: .\templates\videos\_video_activity.html.py:7
 msgid "Happened"
-msgstr ""
+msgstr "Oldu"
 
 #: .\templates\videos\_video_activity.html.py:21
 msgid "submited this video."
-msgstr ""
+msgstr "bu video yüklendi."
 
 #: .\templates\videos\_video_activity.html.py:25
 #, python-format
@@ -1340,48 +1340,48 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:36
 msgid "commented on this video."
-msgstr ""
+msgstr "bu videoya yorum yaptı."
 
 #: .\templates\videos\_video_activity.html.py:41
 msgid "edited"
-msgstr ""
+msgstr "düzenledi."
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
-msgstr ""
+msgstr "orijinal altyazılar"
 
 #: .\templates\videos\_video_activity.html.py:46
 msgid "translation"
-msgstr ""
+msgstr "çeviri"
 
 #: .\templates\videos\_video_activity.html.py:48
 msgid "for"
-msgstr ""
+msgstr "için "
 
 #: .\templates\videos\_video_activity.html.py:53
 msgid "ago"
-msgstr ""
+msgstr "önce"
 
 #: .\templates\videos\actions_list.html.py:8
 msgid "All activities"
-msgstr ""
+msgstr "Tüm etkinlikler"
 
 #: .\templates\videos\actions_list.html.py:12
 #: .\templates\videos\history.html.py:210
 msgid "User"
-msgstr ""
+msgstr "Kullanıcı"
 
 #: .\templates\videos\actions_list.html.py:13
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 #: .\templates\videos\actions_list.html.py:14
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: .\templates\videos\actions_list.html.py:24
 msgid "There are no activities."
-msgstr ""
+msgstr "Hiç bir etkinlik yok"
 
 #: .\templates\videos\create.html.py:9
 msgid ""
@@ -1396,7 +1396,7 @@ msgstr ""
 
 #: .\templates\videos\create.html.py:23
 msgid "Begin"
-msgstr ""
+msgstr "Başla"
 
 #: .\templates\videos\create.html.py:25
 msgid ""
@@ -1413,7 +1413,7 @@ msgstr ""
 
 #: .\templates\videos\diffing.html.py:43
 msgid "You need to log in to do that."
-msgstr ""
+msgstr "Bu işlemi yapmak için giriş yapmalısınız."
 
 #: .\templates\videos\diffing.html.py:75
 #, python-format
@@ -1436,16 +1436,16 @@ msgstr ""
 #: .\templates\videos\history.html.py:185
 #: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
-msgstr ""
+msgstr "Altyazılar"
 
 #: .\templates\videos\diffing.html.py:98
 #: .\templates\videos\revision.html.py:75
 msgid "Revision History"
-msgstr ""
+msgstr "Gözden geçirme özeti"
 
 #: .\templates\videos\diffing.html.py:102
 msgid "Comparing Revision"
-msgstr ""
+msgstr "Gözden geçirmeleri karşılaştır"
 
 #: .\templates\videos\diffing.html.py:110
 #: .\templates\videos\diffing.html.py:162
@@ -1460,27 +1460,27 @@ msgstr ""
 #: .\templates\videos\diffing.html.py:177
 #: .\templates\videos\revision.html.py:134
 msgid "Submit a new edit based on this version"
-msgstr ""
+msgstr "Bu sürüme dayalı yeni bir düzenleme gönder"
 
 #: .\templates\videos\diffing.html.py:127
 #: .\templates\videos\diffing.html.py:181
 #: .\templates\videos\revision.html.py:138
 msgid "Roll back to version"
-msgstr ""
+msgstr "Sürüme geri dön"
 
 #: .\templates\videos\diffing.html.py:150
 #: .\templates\videos\diffing.html.py:205
 #: .\templates\videos\history.html.py:282
 msgid "Not Synced"
-msgstr ""
+msgstr "Sekronıze edilmemiş"
 
 #: .\templates\videos\email_friend.html.py:6
 msgid "Email this to a friend"
-msgstr ""
+msgstr "Bunu arkadaşa eposta gönder"
 
 #: .\templates\videos\email_friend.html.py:10
 msgid "Send to Friend!"
-msgstr ""
+msgstr "Arkadaşına gönder!"
 
 #: .\templates\videos\email_notification.html.py:3
 #: .\templates\videos\email_start_notification.html.py:3

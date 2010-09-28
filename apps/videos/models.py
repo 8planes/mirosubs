@@ -434,7 +434,9 @@ class SubtitleLanguage(models.Model):
             return ('videos:translation_history', [self.video.video_id, self.language])
     
     def language_display(self):
-        return 'Original' if self.is_original else self.get_language_display()
+        if self.is_original and not self.language:
+            return 'Original'
+        return self.get_language_display()
 
     @property
     def writelock_owner_name(self):
@@ -835,11 +837,7 @@ class Action(models.Model):
     @classmethod
     def create_video_handler(cls, sender, instance, created, **kwargs):
         if created:
-            video = instance
-            # FIXME marking user as None is a temporary fix. We need to 
-            # either get rid of
-            # this action or just report it on first subtitling.
-            obj = cls(user=None, video=video)
+            obj = cls(video=instance)
             obj.action_type = cls.ADD_VIDEO
             obj.created = datetime.now()
             obj.save()

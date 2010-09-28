@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-07 14:26+0300\n"
-"PO-Revision-Date: 2010-09-21 22:37+0100\n"
+"PO-Revision-Date: 2010-09-23 21:34+0100\n"
 "Last-Translator: guillaume <guill.vidal@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -581,6 +581,13 @@ msgid ""
 "    collaboration on subtitles and translations. Stay tuned!</p>\n"
 "  "
 msgstr ""
+"\n"
+"  <p style=\"clear: both\"><strong>Feedback</strong> Utilisez le formulaire en bas de \n"
+"    cette page pour nous donner vos retours ou rapporter des bugs.</p>\n"
+"  <p><strong>A venir</strong> Nous travaillons sur une \n"
+"    version alpha de notre site communautaire qui permettra \n"
+"    de collaborer sur les sous-titres et les tranductions. Restez connectés.</p>\n"
+" "
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
@@ -652,7 +659,7 @@ msgstr "Notre but avec Universal Subtitles est de rendre aisé pour quiconque d'
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
-msgstr ""
+msgstr "Nous vous invitons à essayer notre technologie de sous-titrage avec notre <a href=\"/demo/\">demonstration alpha</a>. Cette démo ne permettra pas encore de sauvegarder les sous-titres, mais cela sera inclut au lancement de la version alpha communautaire (Prévue pour Juillet 2010)."
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
@@ -668,15 +675,15 @@ msgstr "Les sous-titres traduits nous permettent à tous de regarder des vidéos
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr ""
+msgstr "En tant qu'éducateur, conteur, scientifique, ou quiconque qui ait un message, la taille de votre auditoire potentiel augmente exponentiellement si vous disposez de sous-titres et de traductions"
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
-msgstr ""
+msgstr "La Participatory Culture Foundation est une organisation à but non lucratif dont la mission est de contruire un espace médiatique plus ouvert, plus démocratique et plus juste. La PCF a vu une place sur le marché pour des outils de sous-titrage plus ouvert et plus collaboratif; Universal Subtitles est une tentative pour remplir ce besoin."
 
 #: .\templates\faq.html.py:61
 msgid "Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations."
-msgstr ""
+msgstr "Oui, nous travaillons à une solution pour faire des sous-titres sourds et malentendants, incluant des informations sur les sons et la musique"
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
@@ -684,31 +691,31 @@ msgstr "Nous travaillons afin de supporter autant de langues / jeu de caractère
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
-msgstr ""
+msgstr "Nous travaillons pour rendre le widget de sous-titrage et le site communautaire entièrement traduisible, pour rendre les interfaces utilisables dans la langue natale de chaque utilisateur."
 
 #: .\templates\faq.html.py:73
 msgid "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible."
-msgstr ""
+msgstr "Inscrivez vous sur notre liste de diffusion (sur la page principale) et nous vous avertiront dès que ce sera possible."
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "Notre widget de sous-titrage et notre site sont sous la licence <a href=\"http://fr.wikipedia.org/wiki/AGPL\">AGPL</a>."
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
-msgstr ""
+msgstr "Avec plaisir! Si vous êtes intéressé par le code et developpement, veuillez visitez notre <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">center de développement</a>."
 
 #: .\templates\faq.html.py:85
 msgid "If you're interested in general involvement, please see our <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details)."
-msgstr ""
+msgstr "Si vous êtes interessé pour vous impliquer de façon générale, veuillez visiter notre <a href=\"https://www.drumbeat.org/project/universal-subtitles\">page Mozilla Drumbeat </a>. Si vous avez une idée en particulier, veuillez nous contacter: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>. Et en tant qu'organisation à but non lucratif, nous acceptons les donations (Voir la question suivante pour les détails)."
 
 #: .\templates\faq.html.py:89
 msgid "Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donate here</a>."
-msgstr ""
+msgstr "Oui et encore oui! En ce moment, la fondation Mozilla doublera votre contribution, jusqu'a 25000$! Vous pouvez <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donner ici</a>."
 
 #: .\templates\faq.html.py:93
 msgid "The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!"
-msgstr ""
+msgstr "La fondation Mozilla à fourni à Universal Subtitles du financement, un support communautaire, et de l'aide pour lever des fonds avec <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat est un mouvement destiné à garder le web ouvert pour les 100 prochaines années, et Universal Subtitles est un de ses projets principaux."
 
 #: .\templates\faq.html.py:98
 msgid ""
@@ -718,6 +725,11 @@ msgid ""
 "        Click the links in the lower right under the green \"Edit Subtitles\" button.\n"
 "        "
 msgstr ""
+"\n"
+"        Quand des sous-titres exisent, vous pouvez les télécharger au format .SRT, .SSA et TTML sur \n"
+"        la page pour cette langue (<a href=\"http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/\">exemple</a>). \n"
+"       Cliquez sur les liens dans le coin bas droit sous le bouton vert \"Editer Sous-titres\" \n"
+" \t\t "
 
 #: .\templates\faq.html.py:108
 msgid ""
@@ -728,6 +740,12 @@ msgid ""
 "        or--potentially--a totally different number of subtitles.\n"
 "        "
 msgstr ""
+"\n"
+"        Pour le moment, les informations de timing d'une traduction sont reliées au timing \n"
+"        de la transcription originale. Bientot, nous permettrons aux utilisateurs de \"séparer\"\n"
+"        les timings des traductions, créeant de nouvelles versions ayant des timings differents\n"
+"        ou--potentiellement--un nombre de sous-titres differents.\n"
+"        "
 
 #: .\templates\feedback_response.html.py:3
 msgid "Thanks for getting in touch! We love hearing your ideas, bugs, feedback, opinions and such."
@@ -759,7 +777,7 @@ msgstr "Le problème"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
-msgstr ""
+msgstr "La vidéo sur le web commence à rivaliser avec la télévision, mais il n'y à pas de bonne ressource pour le sous-titrage ouvert."
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
@@ -767,7 +785,7 @@ msgstr "Notre Mission"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
-msgstr ""
+msgstr "Nous voulons rendre le sous-titrage et la traduction de vidéo publiquement accessible, aussi gratuits et ouverts que le Web lui même. "
 
 #: .\templates\index.html.py:46
 msgid "Learn More"
@@ -791,11 +809,11 @@ msgstr "Devenez testeur"
 
 #: .\templates\index.html.py:56
 msgid "Subtitle Widget"
-msgstr ""
+msgstr "Widget de Sous-titrage"
 
 #: .\templates\index.html.py:57
 msgid "A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos)."
-msgstr ""
+msgstr "Une façon simple de créer des sous-titres pour presque toute les vidéos du web (sans avoir à les transcoder ou les re-uploader)."
 
 #: .\templates\index.html.py:60
 msgid "Community Site"
@@ -803,7 +821,7 @@ msgstr "Site communautaire"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
-msgstr ""
+msgstr "Une communauté en ligne destinée au sous-titrage et à la traduction de toutes les vidéos du monde (une sorte de Wikipédia des sous-titres)."
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
@@ -958,11 +976,11 @@ msgstr "Sponsors"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
-msgstr ""
+msgstr "Le sommet a été généreusement financé par le <a href=\"http://www.soros.org/\">Open Society Institute</a>."
 
 #: .\templates\opensubtitles2010.html.py:113
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
-msgstr ""
+msgstr "Un grand merci à <a href=\"http://openplans.org/\">Open Plans</a> de nous avoir fourni un espace de rencontre !"
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
@@ -982,7 +1000,7 @@ msgstr "Dernière mise à jour: 10 août 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
-msgstr ""
+msgstr "Cette politique de confidentialité s'applique à tous les sites web et services web gérés par la Participatory Culture Foundation (ci-après nommée тАЬPCFтАЭ) sauf si le site web ou service web possède une politique de confidentialité différente."
 
 #: .\templates\privacy.html.py:14
 msgid "Except as described below, PCF does not collect or require visitors to its web sites to furnish personally identifying information such as names, email addresses, and phone numbers. Like most web site operators, PCF does collect non-personally identifying information of the sort that web browsers and servers typically make available, such as the browser type, operating system, language preference, referring site and date and time of each visitor request. PCF also collects potentially-personally identifying information like Internet Protocol (IP) addresses, which are non-personally identifying in and of themselves but could be used in conjunction with other information to personally identify users."
@@ -1054,7 +1072,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:61
 msgid "Protection of Certain Personally-Identifying Information"
-msgstr ""
+msgstr "Protection de Certaines Informations D'identification Personnelle"
 
 #: .\templates\privacy.html.py:64
 msgid "Where PCF has collected personally identifying information subject to one of the four exceptions described in the Community Members section, above, it discloses that information only to those of its employees, contractors, service providers, and subsidiaries and related organizations that need to know that information in order to process it on PCF's behalf and that have agreed not to disclose it to others. Some of these employees, contractors, service providers, and subsidiaries and related organizations may be located outside of your home country; by using PCF's web sites, you consent to the transfer of your information to them, which may involve the transfer of your information to countries that may provide a lesser level of data protection than your country of residence. PCF does not rent or sell such information to anyone. PCF may be required to disclose information to the government or others. This may happen if we receive a valid search warrant, subpoena, court order, or other legal mandate. For example, the DMCA framework (specifically Section 512(h)) contains an expedited subpoena process for copyright holders to request and receive information service providers have regarding the identity of alleged copyright infringers. In certain other limited situations, PCF may disclose personally identifying or other information, such as when necessary to protect our websites and operations (e.g., against attacks); to protect the rights, privacy, safety, or property of PCF or its users; to enforce our terms of service; and to pursue available legal remedies. Additionally, PCF may need to transfer personally identifying information to an affiliate or successor in the event of a change of our corporate structure or status, such as in the event of a restructuring, sale, or bankruptcy. We will retain any personally identifying information for the period necessary to fulfill the purposes outlined in this privacy policy."
@@ -1078,43 +1096,43 @@ msgstr ""
 
 #: .\templates\privacy.html.py:77
 msgid "Cookies and Clear GIFs"
-msgstr ""
+msgstr "Cookies et GIFS Transparents"
 
 #: .\templates\privacy.html.py:79
 msgid "What Are Cookies? A cookie is a string of information that a web site stores on a visitor's computer, and that the visitor's browser provides to the web site each time the visitor returns. Most major web sites use cookies. Because the browser provides this cookie information to the web site at each visit, cookies serve as a sort of label that allows a web site to \"recognize\" a browser when it returns to the site. The domain name in PCF cookies will clearly identify their affiliation with PCF and, where applicable, its third-party service provider."
-msgstr ""
+msgstr "Qu'est ce qu'un Cookie? Un cookie est une chaine d'information qu'un site internet stocke sur l'ordinateur d'un visiteur, et que le navigateur de ce visteur fournit au site lorsque le visiteur revient. La plupart des sites internets utilisent des cookies. Grace au navigateur qui transmet les informations du cookie à chaque visite, les cookies servent comme une sorte d'étiquette qui perment à un site de  \"recognize\" un navigateur quand il revient. Les cookies de PCF sont clairement identifiable grace à leur nom de domaine, et, selon les cas, au prestataire de service de PCF."
 
 #: .\templates\privacy.html.py:82
 msgid "What Are Clear GIFs?"
-msgstr ""
+msgstr "Que sont les GIFs Transparents?"
 
 #: .\templates\privacy.html.py:84
 msgid "Clear gifs (also known as web beacons) are used in combination with cookies to help web site operators understand how visitors interact with their web sites. A clear gif is typically a transparent graphic image (usually 1 pixel x 1 pixel) that is placed on a site. The use of a clear gif allows the site to measure the actions of the visitor opening the page that contains the clear gif. It makes it easer to follow and record the activities of a recognized browser, such as the path of pages visited at a web site."
-msgstr ""
+msgstr "Les gifs transparent (ou pixel espion) sont utilisés avec les cookie pour aider les gestionnaires de site internet à comprendre comment les visiteurs naviguent au sein de leur sites. Un gif transparent est typiquement une image transparent (en général d'un pixel sur un pixel) placé sur un site. L'utilisation du gif transparent permet au site de mesurer les actions du visiteur sur la page qui le contient. Il permet de suivre facilement et d'enregistrer les actions d'un navigateur, telles que le chemins des pages visitées sur le site."
 
 #: .\templates\privacy.html.py:87
 msgid "How We Use Cookies and Clear GIFs."
-msgstr ""
+msgstr "Comment nous utilisons les Cookies et GIFs Transparents."
 
 #: .\templates\privacy.html.py:89
 msgid "PCF's web sites use cookies to help PCF identify and track visitors, their usage of PCF web sites, and their web site access preferences across multiple requests and visits to PCF's web sites. Our web sites, and advertisements that PCF may run occasionally on thirdparty advertising networks, also may use clear gifs for these purposes. The basic idea is to gather aggregate data about how people use PCF web sites. The term usually used to describe this is \"web analytics\" and the cookies and clear gifs are the tools by which a website owner collects this web analytics data."
-msgstr ""
+msgstr "Les sites de PCF utilisent les cookies pour aider PCF à identifier et suivre les visiteurs, leur utilisation des sites PCF, et leurs préférences d'acces entre les visite. Nos sites web, ainsi que les pubs qui peuvent occasionnellement être diffusées sur des réseaux de diffusion tiers, utilisent également les gifs transparents dans ce but. Le but de base est de réunir des données sur l'utilisation des sites PCF. Le terme utilisé pour cette pratique est \"analyse de traffic\", et les cookies et gifs transparents sont les outils de collecte de ces données."
 
 #: .\templates\privacy.html.py:92
 msgid "PCF will use the web analytics data only to determine aggregate usage patterns for our web sites as described above. PCF web sites do this by using either our own internal analytics software or by sending this information to a third-party service provider to help PCF analyze this data. PCF web sites using third-party web analytics tools are listed here. PCF has agreements with its third-party service providers that they will not share this information with others or use the information for purposes other than to maintain the services they provide to PCF. It is possible to link cookies and clear gifs to personally identifying information, thereby permitting web site operators, including our third-party analytics providers, to track the online movements of particular individuals. PCF does not do so and its third-party service providers are not allowed to correlate PCF data with any other data."
-msgstr ""
+msgstr "PCF utilisera les mesures de traffic uniquement déterminer des tendances d'usage agrégés pour nos sites. Les sites PCF utilisent pour cela soit notre outil d'analyse interne ou en envoyant ces informations à un prestataire tiers qui aide PCF à analyser ces données. Les sites PCF utilisant des outils tiers d'analyse sont listés ici. PCF possède des accords avec des prestataires garantissant qu'ils ne partageront pas ces informations et ne les utiliseront pas pour d'autres but que le maintien des services qu'ils fournissent à PCF. Il est possible de relier les cookies et les gifs transparents à des informations personnelles, permettant ainsi à des opérateurs de sites de suivre les mouvements en ligne d'individus en particulier. PCF ne le fait pas et ses prestataires ne sont pas autorisés à corréler les données de PCF avec d'autres données quelles qu'elles soient."
 
 #: .\templates\privacy.html.py:95
 msgid "PCF uses the information provided by cookies and clear gifs to develop a better understanding of how PCF's visitors use PCF's web sites, and to facilitate those visitors' interactions with PCF's web sites. PCF may make the aggregate data obtained from web analytics (including from our third-party analytics providers, if applicable) publicly available. If this data is made available, none of the information will be personally identifying information or potentially-personally identifying information"
-msgstr ""
+msgstr "PCF utilise les informations fournies par les cookies et les gifs transparents pour une meilleur comprehension de l'utilisation des sites PCF par les visiteurs et faciliter leurs futures visites. PCF peut rendre publiques les données obtenues par l'analyse de traffic (incluant celle de nos prestataires tiers). Si ces données sont rendues disponible, les informations ne permettront pas d'identifier formellement ou potentiellement quiconque."
 
 #: .\templates\privacy.html.py:98
 msgid "Other Third Party Cookies."
-msgstr ""
+msgstr "Autres Cookies Tiers."
 
 #: .\templates\privacy.html.py:100
 msgid "Content from other sources that is hosted on PCF web sites may sometimes contain cookies that send information to those third parties. In certain cases, often associated with embedded content such as YouTube videos and other site linking buttons, a third party cookie may be set by the 3rd party content or provider. In these cases, the privacy policy of the 3rd party governs with respect to information that may be collected by and sent to the respective 3rd party. If you are concerned about these third party cookies, please see the information below on how to decline cookies."
-msgstr ""
+msgstr "Le contenu d'autres sources hébergés sur les sites PCF peut contenir des cookies qui envoient des informations à ces tiers. Dans certains cas, en particulier ceux des vidéos intégrées aux pages comme les vidéos YouTube ou des boutons de partage vers d'autres sites, un cookie tiers peut être établi par ce tier. Dans ce cas, la politique de confidentialité du tiers détermine les conditions de traitement des informations qui peuvent être collectées et envoyées aux tiers. Si vous êtes inquiet à propos de ces cookie tiers, veuillez voir en dessous pour comment les désactiver."
 
 #: .\templates\privacy.html.py:103
 msgid "How to Control the Use of Cookies."
@@ -1122,23 +1140,23 @@ msgstr "Comment contrôler l'usage des Cookies"
 
 #: .\templates\privacy.html.py:105
 msgid "You have the ability to accept or decline cookies. PCF visitors who do not wish to have cookies placed on their computers by PCF, its contractors, or third-party service providers should set their browsers to refuse cookies before linking to PCF's web sites. Certain features of PCF's web sites may not function properly without the aid of cookies."
-msgstr ""
+msgstr "Vous avez la possibilité d'accepter ou de refuser les cookie. Les visiteurs de PCF qui ne veulent pas de cookies sur leur ordinateur de la part de PCF, ses partenaires, ou de services tiers doivent regler leur navigateur pour refuser les cookie avant de visiter les sites PCF. Certaines possibilités des sites PCF peuvent ne pas fonctionner sans cookies."
 
 #: .\templates\privacy.html.py:108
 msgid "Opt-out Procedures"
-msgstr ""
+msgstr "Procédures de retrait"
 
 #: .\templates\privacy.html.py:110
 msgid "If you do not want to allow your session visitation information on PCF web sites to be aggregated and analyzed by PCF (or its third-party analytics providers) you may utilize the following opt-out mechanisms listed here. Additionally, if you signed up to receive but no longer wish to receive electronic marketing communications from PCF, you can opt-out from receiving these communications by following the тАЬunsubscribeтАЭ instructions in any such communication you receive."
-msgstr ""
+msgstr "Si vous ne voulez pas permettre que vous informations de visites sur les sites PCF soient aggrégées et analysées par PCF (ou ses prestataires de services), vous pouvez utilisez les procédures de désengagement notées ici. De plus, si vous vous êtes inscrit pour recevoir des nouvelles de PCF mais que vous ne souhaitez plus les recevoir, vous pouvez vous en désengager en suivant les instructions тАЬdésinscriptionтАЭ sur chacun des mails que vous recevez."
 
 #: .\templates\privacy.html.py:113
 msgid "Privacy Policy Changes"
-msgstr ""
+msgstr "Changement de Politique de Confidentialité"
 
 #: .\templates\privacy.html.py:115
 msgid "By using the web sites, you agree to the terms and conditions of this privacy policy. If you do not agree to the terms and conditions of this privacy policy, please do not use the web sites. PCF may change its Privacy Policy from time to time. Any and all changes will be reflected on this page. Substantive changes will also be announced through the standard mechanisms through which PCF communicates with the PCF community, including PCF's тАЬannounceтАЭ mailing list and newsgroup."
-msgstr ""
+msgstr "En utilisant ces sites web, vous acceptez les conditions de ce politique de confidentialité. Si nous n'acceptez pas les conditions de ce politique, veuillez ne pas utilisez nos sites. PCF peut changer sa politique de confidentialité occasionnellement. Tout les changements seronts inscrits sur cette page. Les changements substanciels seront annoncées par les moyens usuels de communication entre PCF et la communauté PCF, y compris la liste тАЬannounceтАЭ et les groupes de discussion."
 
 #: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
@@ -1290,74 +1308,74 @@ msgstr "Saisissez le nouveau mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr "Veuillez entrer votre nouveau mot de passe deux fois."
+msgstr "Merci d'entrer votre nouveau mot de passe deux fois afin de vérifier qu'il a été tapé correctement."
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr "Nouveau mot de passe"
+msgstr "Nouveau mot de passe :"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr "Confirmer le mot de passe:"
+msgstr "Confirmer mot de passe :"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr "Changer mon mot de passe"
+msgstr "Modifier mon mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr "Réinitialisation du mot de passe échoué"
+msgstr "Erreur de changement du mot de passe"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr "Le lien de réinitialisation du mot de passe est invalide, possiblement parce qu'il à déja été utilisé. Veuillez demander une nouvelle réinitialisation."
+msgstr "Le lien utilisé pour le changement du mot de passe est invalide, peut-être parce qu'il a déjà été utilisé. Merci de demander un nouveau changement de votre mot de passe."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr "Réinitialisation du mot de passe réussie"
+msgstr "Changement du mot de passe réussi"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr "Nous avons envoyé des instructions pour choisir un mot de passe à l'adresse que vous avez fourni. Vous devez les recevoir sous peu."
+msgstr "Nous avons envoyé à votre adresse e-mail des instructions  pour régler votre mot de passe. Vous devriez bientôt le recevoir."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr "Vous recevez cet email parce que vous avez demandé une réinitialisation de mot de passe"
+msgstr "Vous recevez cet email parce que vous avez demandé un changement de mot de passe"
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr "pour votre compte utilisateur sur %(site_name)s"
+msgstr "pour votre compte sur %(site_name)s"
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr "Veuillez aller à la page suivante et choisir un nouveau mot de passe: "
+msgstr "Veuillez cliquer sur le lien suivant et choisir un nouveau mot de passe :"
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
-msgstr "Votre nom d'utilisateur, au cas où vous l'auriez oublié:"
+msgstr "Votre nom d'utilisateur, si vous l'avez oublié :"
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr "Merci d'utiliser notre site!"
+msgstr "Merci d'utiliser notre site !"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr "L'équipe de  %(site_name)s"
+msgstr "L'équipe %(site_name)s"
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
-msgstr "Mot de passe oublié? Entrez votre adresse email ci-dessous, et nous vous enverrons des instructions pour en choisir un nouveau"
+msgstr "Vous avez oublié votre mot de passe ? Entrez votre adresse email ci-dessous, et nous vous enverrons des instructions pour le changer."
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
-msgstr "Adresse mail:"
+msgstr "Adresse email :"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr "Réinitialiser mon mot de passe"
+msgstr "Changer mon mot de passe"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
@@ -1366,11 +1384,11 @@ msgstr "Anonyme"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
-msgstr "à commenté"
+msgstr "a commenté"
 
 #: .\templates\videos\_activities.html.py:19
 msgid "commented on this video"
-msgstr "à commenté cette vidéo"
+msgstr "a commenté cette vidéo"
 
 #: .\templates\videos\_activities.html.py:23
 #, python-format
