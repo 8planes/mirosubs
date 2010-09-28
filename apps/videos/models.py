@@ -571,6 +571,9 @@ class SubtitleVersion(SubtitleCollection):
     def __unicode__(self):
         return u'%s #%s' % (self.language, self.version_no)
     
+    def has_subtitles(self):
+        return self.subtitle_set.exists()
+    
     @models.permalink
     def get_absolute_url(self):
         return ('videos:revision', [self.pk])
@@ -645,7 +648,9 @@ class SubtitleVersion(SubtitleCollection):
         return self.language.video.latest_finished_version()
 
     def ordered_subtitles(self):
-        return sorted(self.subtitle_set.all(), key=lambda item: item.subtitle_order)
+        subtitles = self.subtitles()
+        subtitles.sort(key=lambda item: item.sub_order)
+        return subtitles
 
     def prev_version(self):
         cls = self.__class__

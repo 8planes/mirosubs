@@ -209,7 +209,7 @@
           </div>
 
          <table cellpadding="0" cellspacing="0">
-            {% if last_version.subtitles %}
+            {% if last_version.has_subtitles %}
                 {% for item in last_version.ordered_subtitles %}
                   <tr class="even">      
                     <td class="last">
@@ -227,7 +227,7 @@
                       {% else %}  
                           <span class="time-span"><span class="badgy no-sync">{% trans 'Not Synced' %}</span></span> 
                       {% endif %}
-                      {{ item.subtitle_text|linebreaksbr }}
+                      {{ item.text|linebreaksbr }}
                     </td>
                   </tr>
                 {% endfor %}

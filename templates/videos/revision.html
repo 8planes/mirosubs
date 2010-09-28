@@ -147,7 +147,7 @@
     </a>
     
     <ul class="revision_list">
-      {% for item in version.subtitles %}
+      {% for item in version.ordered_subtitles %}
         <li {% cycle 'class="even"' '' %}>
           {% if item.display_time or item.display_end_time %}
             <span class="time-span time_link">
@@ -160,7 +160,7 @@
                     <span class="badgy end"><span class="stamp_text">{{ item.display_end_time }}</span></span> 
                 {% endif %}
             </span>          
-          {% endif %} &gt; {{ item.subtitle_text|linebreaksbr }}
+          {% endif %} &gt; {{ item.text|linebreaksbr }}
         </li>
       {% endfor %}
     </ul>

@@ -320,7 +320,7 @@ def diffing(request, first_pk, second_pk):
             changed = dict(text=True, time=True)
         else:
             changed = {
-                'text': (not caption.subtitle_text == scaption.subtitle_text), 
+                'text': (not caption.text == scaption.text), 
                 'time': (not caption.start_time == scaption.start_time),
                 'end_time': (not caption.end_time == scaption.end_time)
             }
