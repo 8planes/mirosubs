@@ -262,7 +262,7 @@ function testSpacebarHold() {
 }
 
 function testSpacebarHoldForFirst() {
-    var T0 = 1.8, T1 = 5.6, T2 = 9.2;
+    var T0 = 1.8, T1 = 5.6, T2 = 8.2;
     var set = createSet([
         captionJSON(T0, T1, 1, 1),
         captionJSON(T1, T2, 2, 2), 
