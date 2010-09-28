@@ -78,7 +78,7 @@
             {{ user_info }}
             {% if can_edit %}<a href="{% url profiles:my_profile %}">(Edit profile)</a>{% endif %}
         </h2>
-        <img class="thumbnail_medium" src="{% thumbnail user_info.picture 128x128 %}">
+        <img class="thumbnail_medium" src="{{ user_info.avatar }}">
         <p>{% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
         <p>{% trans 'Homepage' %}: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
         {% if user.is_authenticated and not user == user_info and user_info.email %}
