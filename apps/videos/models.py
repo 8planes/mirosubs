@@ -424,7 +424,7 @@ class SubtitleLanguage(models.Model):
         unique_together = (('video', 'language'),)
     
     def __unicode__(self):
-        return '%s(%s)' % (self.video, self.language_display())
+        return u'%s(%s)' % (self.video, self.language_display())
     
     @models.permalink
     def get_absolute_url(self):
@@ -569,7 +569,10 @@ class SubtitleVersion(SubtitleCollection):
         unique_together = (('language', 'version_no'),)
     
     def __unicode__(self):
-        return '%s #%s' % (self.language, self.version_no)
+        return u'%s #%s' % (self.language, self.version_no)
+    
+    def has_subtitles(self):
+        return self.subtitle_set.exists()
     
     @models.permalink
     def get_absolute_url(self):
@@ -645,7 +648,9 @@ class SubtitleVersion(SubtitleCollection):
         return self.language.video.latest_finished_version()
 
     def ordered_subtitles(self):
-        return sorted(self.subtitles(), key=lambda item: item.subtitle_order)
+        subtitles = self.subtitles()
+        subtitles.sort(key=lambda item: item.sub_order)
+        return subtitles
 
     def prev_version(self):
         cls = self.__class__
@@ -671,7 +676,7 @@ class SubtitleVersion(SubtitleCollection):
         new_version = cls(language=self.language, version_no=new_version_no, \
             datetime_started=datetime.now(), user=user, note=note, finished=True)
         new_version.save()
-        for item in self.subtitles():
+        for item in self.subtitle_set.all():
             item.duplicate_for(new_version).save()
         return new_version
 

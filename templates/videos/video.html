@@ -129,7 +129,7 @@
   <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
         {% if video.subtitle_language %}
-            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{{ video.subtitle_language.get_language_display }}</a></li>
+            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{{ video.subtitle_language.language_display }}</a></li>
         {% endif %}
         <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if translations %} 
@@ -147,10 +147,10 @@
       <h4 class="inline">{% trans 'Video Info' %}</h4>      
 
       <ul class="inline_tabs">
-        <li><a href="#comments-tab">{% trans 'Comments' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+        <li><a href="#comments-tab">{% trans 'Comments' %}<span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
         {% comment %}
-        <li><a href="#comments-tab">{% trans 'Video URLS' %} <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+        <li><a href="#comments-tab">{% trans 'Video URLS' %}<span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
         <li class="bull">&bull;</li>
         {% endcomment %}
         <li class="active"><a href="#activity-tab">{% trans 'Activity Stream' %}</a></li>

@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from models import CustomUser
+from models import CustomUser, Announcement
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.db import models
+from django.contrib.admin import widgets
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.RegexField(label=_("Username"), max_length=30, regex=r'^\w+$',
@@ -27,5 +29,22 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2')}
         ),
     )
+
+class AnnouncementAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.CharField: {'widget': widgets.AdminTextareaWidget}
+    }
+    list_display = ('content', 'created', 'visible')
+    actions = ['make_hidden']
+    
+    def visible(self, obj):
+        return not obj.hidden
+    visible.boolean = True
+
+    def make_hidden(self, request, queryset):
+        queryset.update(hidden=True)
+    make_hidden.short_description = _(u'Hide')
+    
+admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.unregister(User)    
 admin.site.register(CustomUser, CustomUserAdmin)

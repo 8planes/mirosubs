@@ -3,28 +3,43 @@
 <ul class="big_list">
 {% for item in events %}
     <li>
-        {% if item.user %}
-            {% if item.uprofile.picture %}
-                <img src="{% thumbnail item.uprofile.picture 32x32 %}" />
-            {% endif %}
-            {{ item.time }} - <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>
-        {% else %}
-            <span class="username anon">{% trans 'Anonymous' %}</span>
-        {% endif %}
-        
-        {% if item.comment %}
-            {% if item.comment.get_language %}
-                {% trans 'commented on' %} {{ item.comment.get_language }}.
+        {{ item.created|date:"DATETIME_FORMAT" }}
+        {% if item.is_add_video %}
+            {% trans 'Video was created.' %}
+        {% else %}          
+            {% if item.user %}
+                <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>
             {% else %}
-                {% trans 'commented on this video' %}.
+                <span class="username anon">{% trans 'Anonymous' %}</span>
             {% endif %}
-        {% else %}
-            {% if item.language %}
-                {% blocktrans with item.get_language_display as lang %} edited {{ lang }} translations for {% endblocktrans %}
-            {% else %}
-                {% trans 'edited subtitles for' %}
+            
+            {% if item.is_change_title %}
+                {% blocktrans with item.new_video_title as title %}
+                changed title to "{{ title }}"
+                {% endblocktrans %}
             {% endif %}
-            <a class="url" href="{% url videos:video item.video.video_id %}">{{ item.video }}</a> 
+            
+            {% if item.is_comment %}
+                {% if item.language %}
+                    {% blocktrans with item.language.language_display as language %}
+                    commented on {{ language }}.
+                    {% endblocktrans %}            
+                {% else %}
+                    {% trans 'commented on ' %}<a href="{{ item.video.get_absolute_url }}">{{ item.video }}</a>.
+                {% endif %}
+            {% endif %}
+            
+            {% if item.is_add_version %}
+                {% trans 'edited' %} 
+                <a href="{{ item.language.get_absolute_url }}">
+                    {% if not item.language or item.language.is_original %}
+                        {% trans 'original subtitles' %}
+                    {% else %}
+                        {{ item.language.get_language_display }} {% trans 'translation' %}
+                    {% endif %}
+                </a> {% trans 'for' %} 
+                <a class="url" href="{{ item.video.get_absolute_url }}">{{ item.video }}</a> 
+            {% endif %}
         {% endif %}
     </li>
 {% endfor %}

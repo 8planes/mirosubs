@@ -31,3 +31,10 @@ def send_message(context):
     return {
         'user': context['user']
     }
+
+@register.inclusion_tag('profiles/_user_avatar.html', takes_context=True)    
+def user_avatar(context, user_obj):
+    return {
+        'user': context['user'],
+        'user_obj':user_obj
+    }

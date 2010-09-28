@@ -320,7 +320,7 @@ def diffing(request, first_pk, second_pk):
             changed = dict(text=True, time=True)
         else:
             changed = {
-                'text': (not caption.subtitle_text == scaption.subtitle_text), 
+                'text': (not caption.text == scaption.text), 
                 'time': (not caption.start_time == scaption.start_time),
                 'end_time': (not caption.end_time == scaption.end_time)
             }
@@ -422,6 +422,8 @@ def info(request):
         'all_videos': Video.objects.count(),
         'all_users': User.objects.count(),
         'translations_count': SubtitleLanguage.objects.filter(is_original=False).count(),
+        'fineshed_translations': SubtitleLanguage.objects.filter(is_original=False, was_complete=True).count(),
+        'unfineshed_translations': SubtitleLanguage.objects.filter(is_original=False, was_complete=False).count(),
         'all_comments': Comment.objects.count()
     }
     return render_to_response('info.html', context, context_instance=RequestContext(request))

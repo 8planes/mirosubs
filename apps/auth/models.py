@@ -32,6 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.http import urlquote_plus
 from django.core.exceptions import MultipleObjectsReturned
 from utils.amazon import S3EnabledImageField
+from datetime import datetime
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
@@ -71,7 +72,7 @@ class CustomUser(BaseUser):
         return self.username
     
     def avatar(self):
-        return self.picture.thumb_url(128, 128)
+        return self.picture.thumb_url(100, 100)
     
     @models.permalink
     def get_absolute_url(self):
@@ -181,3 +182,19 @@ class UserLanguage(models.Model):
     
     class Meta:
         unique_together = ['user', 'language']
+
+class Announcement(models.Model):
+    content = models.CharField(max_length=500)
+    created = models.DateTimeField()
+    hidden = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-created']
+    
+    @classmethod
+    def last(cls):
+        try:
+            return cls.objects.filter(created__lte=datetime.now()) \
+                .filter(hidden=False)[0:1].get()
+        except cls.DoesNotExist:
+            return

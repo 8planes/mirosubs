@@ -1,4 +1,4 @@
-{% load feedback thumbnail i18n %}
+{% load feedback thumbnail i18n announcement_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -50,6 +50,7 @@
   <div class="note"><strong>{% trans 'Universal Subtitles does not support your browser. Upgrade your browser or <a href="http://getfirefox.com">Try Firefox</a>.' %}</strong></div>
 <![endif]-->
 {% endcomment %}
+    {% announcement %}
     <div class="cloud">
     <div class="watercolor">
 
@@ -125,6 +126,7 @@
             <a href="http://twitter.com/universalsubs">Twitter</a>
             <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
             <a href="/w3c/privacy.html">{% trans 'Privacy Policy' %}</a>
+            <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
         </div>      
     </div> 
     <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>

@@ -1409,7 +1409,7 @@ msgstr ""
 
 #: .\templates\videos\diffing.html.py:37
 msgid "Subtitles will be rolled back to a previous version"
-msgstr ""
+msgstr "Altyazılar önceki sürüme döndürülecek"
 
 #: .\templates\videos\diffing.html.py:43
 msgid "You need to log in to do that."
@@ -1486,7 +1486,7 @@ msgstr "Arkadaşına gönder!"
 #: .\templates\videos\email_start_notification.html.py:3
 #: .\templates\videos\email_title_changed.html.py:3
 msgid "Dear"
-msgstr ""
+msgstr "Sevgili"
 
 #: .\templates\videos\email_notification.html.py:4
 #, python-format
@@ -1499,15 +1499,15 @@ msgstr ""
 
 #: .\templates\videos\email_notification.html.py:8
 msgid "It would be great if you could review their changes for quality."
-msgstr ""
+msgstr "Yaptığınız değişiklikleri kalite açısından gözdenn geçirmeniz çok faydalı olacaktır."
 
 #: .\templates\videos\email_notification.html.py:9
 msgid "Click here to see the latest version side by side with the previous version:"
-msgstr ""
+msgstr "Son sürümü önceki sürümlerle yan yana görmek için buraya tıklayın:"
 
 #: .\templates\videos\email_notification.html.py:10
 msgid "Compare versions side-by-side"
-msgstr ""
+msgstr "Sürümleri yan yana karşılaştırın"
 
 #: .\templates\videos\email_notification.html.py:13
 msgid "We've also included a rough summary of the changes below. Thanks so much!"

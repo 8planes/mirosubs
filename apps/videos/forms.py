@@ -117,7 +117,7 @@ class SubtitlesUploadForm(forms.Form):
             caption = Subtitle(**item)
             caption.version = version
             caption.subtitle_id = str(id)
-            caption.sub_order = i+1
+            caption.subtitle_order = i+1
             caption.save()
         
         version.finished = True

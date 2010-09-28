@@ -17,28 +17,13 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import template
-from apps.comments.forms import CommentForm
-from apps.comments.models import Comment
-from django.contrib.contenttypes.models import ContentType
+from auth.models import Announcement
 
 register = template.Library()
 
-@register.inclusion_tag('comments/form.html', takes_context=True)
-def render_comment_form(context, obj):
-    form = CommentForm(obj, auto_id='id_comment_form_%s')
-    return {
-        'form': form,
-        'is_authnticated': context['user'].is_authenticated(),
-        'next_page': context['request'].get_full_path()
-    }
+@register.inclusion_tag('auth/_announcement.html')
+def announcement():
 
-@register.inclusion_tag('comments/list.html', takes_context=True)
-def render_comment_list(context, obj):
-    context['qs'] =  Comment.get_for_object(obj)
-    context['content_type'] = ContentType.objects.get_for_model(obj)
-    context['obj'] = obj
-    return context
-    
-@register.simple_tag    
-def get_comment_count(obj):
-    return Comment.get_for_object(obj).count()
+    return {
+        'obj': Announcement.last()
+    }
