@@ -209,7 +209,10 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
         listen(this.usernameLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.USERNAME)).
         listen(this.logoutLink_, 'click',
-               goog.bind(this.menuItemClicked_, this, s.LOGOUT));
+               goog.bind(this.menuItemClicked_, this, s.LOGOUT)).
+        listen(mirosubs.userEventTarget,
+               goog.object.getValues(mirosubs.EventType).
+               this.loginStatusChanged);
     
     var that = this;
     goog.array.forEach(this.translationLinks_,

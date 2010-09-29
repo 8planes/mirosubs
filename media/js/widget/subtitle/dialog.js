@@ -178,6 +178,7 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
 
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
+        // TODO: make video player stop loading here?
         videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
     }
@@ -248,20 +249,22 @@ mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     this.doneButtonEnabled_ = false;
     this.getRightPanelInternal().showLoading(true);
     var that = this;
-    this.serverModel_.finish(function() {
-        that.saved_ = true;
-        if (closeAfterSave)
-            that.setVisible(false);
-        else {
+    this.serverModel_.finish(
+        function(dropDownContents) {
+            that.saved_ = true;
+            that.setDropDownContentsInternal(dropDownContents);
+            if (closeAfterSave)
+                that.setVisible(false);
+            else {
+                that.doneButtonEnabled_ = true;
+                that.getRightPanelInternal().showLoading(false);
+                that.setFinishedState_();
+            }
+        },
+        function() {
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);
-            that.setFinishedState_();
-        }
-    },
-    function() {
-        that.doneButtonEnabled_ = true;
-        that.getRightPanelInternal().showLoading(false);
-    });
+        });
 };
 
 mirosubs.subtitle.Dialog.prototype.enterState_ = function(state) {

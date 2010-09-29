@@ -53,8 +53,13 @@ class NullRpc(BaseRpc):
 
     def finished_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
         # there is no concept of "finished" for null subs
-        return self.save_subtitles(
+        response = self.save_subtitles(
             request, video_id, deleted, inserted, updated, language_code)
+        if response['response'] == 'ok':
+            video = models.Video.objects.get(video_id=video_id)
+            response['drop_down_contents'] = \
+                self._drop_down_contents(request.user, video)
+        return response
 
     def fetch_subtitles(self, request, video_id, language_code=None):
         if request.user.is_anonymous():
