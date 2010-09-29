@@ -20,26 +20,29 @@ goog.provide('mirosubs.widget.DropDown');
 
 /**
  * @constructor
- * @param {string} videoID
- * @param subtitleCount the number of subtitles in the original language
- * @param translationLanguages an array of json languages,
- *     where each language has a code, a name, and a percentage
- *     indicating how much of the translation process has been completed.
+ * @param {mirosubs.widget.DropDownContents} dropDownContents
  */
-mirosubs.widget.DropDown = function(widget, videoID, subtitleCount, translationLanguages) {
+mirosubs.widget.DropDown = function(dropDownContents) {
     goog.ui.Component.call(this);
 
-    this.widget_ = widget;
-    this.videoID_ = videoID;
-    this.subtitleCount_ = subtitleCount;
-    this.translationLanguages_ = translationLanguages || [];
-
+    this.setStats_(dropDownContents);
     this.currentLanguageCode_ = null;
     this.shown = false;
 };
 
 goog.inherits(mirosubs.widget.DropDown, goog.ui.Component);
 
+mirosubs.widget.DropDown.prototype.getSubtitleCount = function() {
+    return this.subtitleCount_;
+};
+mirosubs.widget.DropDown.prototype.setStats_ = function(dropDownContents) {
+    this.subtitleCount_ = dropDownContents.SUBTITLE_COUNT;
+    this.translationLanguages_ = dropDownContents.TRANSLATIONS;;    
+};
+mirosubs.widget.DropDown.prototype.updateContents = function(dropDownContents) {
+    this.setStats_(dropDownContents);
+    this.updateSubtitleStats_();
+};
 mirosubs.widget.DropDown.prototype.createDom = function() {
     mirosubs.widget.DropDown.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
@@ -48,7 +51,7 @@ mirosubs.widget.DropDown.prototype.createDom = function() {
     var languageListContainer = this.createLanguageList_($d);
     this.createActionList_($d);
 
-    this.updateTranslationLanguages_();
+    this.updateSubtitleStats_();
     this.updateActions_();
     
     this.getElement().appendChild(languageListContainer);
@@ -60,35 +63,42 @@ mirosubs.widget.DropDown.prototype.createLanguageList_ = function($d) {
     container.appendChild(this.languageList_ = $d('ul', null));
     
     this.subtitlesOff_ = $d('li', null, $d('a', {'href': '#'}, 'Subtitles Off'));
+    this.subCountSpan_ = $d('span', 'mirosubs-languageStatus');
     this.originalLanguage_ =
         $d('li', {'className': 'mirosubs-activeLanguage'},
            $d('a', {'href': '#'},
               $d('span', 'mirosubs-languageTitle', 'Original Language'),
-              $d('span', 'mirosubs-languageStatus',
-                 "(" + this.subtitleCount_ + " lines)")));
+              this.subCountSpan_));
     return container;
 };
 
-mirosubs.widget.DropDown.prototype.updateTranslationLanguages_ = function() {
+mirosubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getDomHelper().removeChildren(this.languageList_);
+
+    goog.dom.setTextContent(
+        this.subCountSpan_, '(' + this.subtitleCount_ + ' lines)');
     
     this.languageList_.appendChild(
-        $d('li', {'className': 'mirosubs-hintTranslate'},
-           $d('span', {'className': 'mirosubs-asterisk'}, '*'),
+        $d('li', 'mirosubs-hintTranslate',
+           $d('span', 'mirosubs-asterisk', '*'),
            ' = Missing sections translated by Google Translate'));
     this.languageList_.appendChild(this.subtitlesOff_);
     this.languageList_.appendChild(this.originalLanguage_);
+
+    this.translationLinks_ = [];
         
     for (var i = 0; i < this.translationLanguages_.length; i++) {
-        if (!this.translationLanguages_[i].elt)
-            this.translationLanguages_[i].elt = 
-                $d('li', null,
-                   $d('a', {'href': '#'}, 
-                      $d('span', 'mirosubs-languageTitle', this.translationLanguages_[i].name),
-                      $d('span', 'mirosubs-languageStatus',
-                         this.translationLanguages_[i]['percent_done'] + '%')));
-        this.languageList_.appendChild(this.translationLanguages_[i].elt);
+        var link = 
+            $d('a', {'href': '#'}, 
+               $d('span', 'mirosubs-languageTitle', 
+                  mirosubs.languageNameForCode(
+                      this.translationLanguages_[i][0])),
+               $d('span', 'mirosubs-languageStatus',
+                  this.translationLanguages_[i][1] + '%'));
+        this.translationLinks_.push(
+            { link: link, lang: this.translationLanguages_[i] });
+        this.languageList_.appendChild($d('li', null, link));
     }
 };
 
@@ -103,7 +113,7 @@ mirosubs.widget.DropDown.prototype.createActionList_ = function($d) {
 };
 
 mirosubs.widget.DropDown.prototype.createSubtitleHomepageURL_ = function() {
-    return [mirosubs.siteURL(), "/videos/", this.videoID_].join('');
+    return [mirosubs.siteURL(), "/videos/", mirosubs.videoID].join('');
 };
 
 mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function() {
@@ -111,7 +121,7 @@ mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function() {
                "/widget/download_",
                (mirosubs.IS_NULL ? "null_" : ""),
                "srt/?video_id=",
-               '' + this.videoID_].join('');
+               mirosubs.videoID].join('');
     if (this.currentLanguageCode_)
         url += ['&lang_code=', this.currentLangCode_].join('');
     return url;
@@ -122,28 +132,27 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.settingsActions_ = $d('ul', null);
     
     this.unisubsLink_ = 
-        $d('h5', {'className': 'mirosubs-uniLogo'}, 
-           'Universal Subtitles');
+        $d('h5', 'mirosubs-uniLogo', 'Universal Subtitles');
     this.addTranslationLink_ = 
-        $d('li', {'className': 'mirosubs-addTranslation'},
+        $d('li', 'mirosubs-addTranslation',
            $d('a', {'href': '#'}, 'Add New Translation'));
     this.improveSubtitlesLink_ = 
-        $d('li', {'className': 'mirosubs-improveSubtitles'},
+        $d('li', 'mirosubs-improveSubtitles',
            $d('a', {'href': '#'}, 'Improve These Subtitles'));
     this.subtitleHomepageLink_ = 
-        $d('li', {'className': 'mirosubs-subtitleHomepage'},
+        $d('li', 'mirosubs-subtitleHomepage',
            $d('a', {'href': this.createSubtitleHomepageURL_()},
               'Subtitle Homepage'));
     this.downloadSubtitlesLink_ = 
-        $d('li', {'className': 'mirosubs-downloadSubtitles'},
+        $d('li', 'mirosubs-downloadSubtitles',
            $d('a', {'href': this.createDownloadSRTURL_()},
               'Download Subtitles'));
     
     this.createAccountLink_ = 
-        $d('li', {'className': 'mirosubs-createAccount'},
+        $d('li', 'mirosubs-createAccount',
            $d('a', {'href': '#'}, 'Login or Create Account'));
     this.languagePreferencesLink_ = 
-        $d('li', {'className': 'mirosubs-languagePreferences'},
+        $d('li', 'mirosubs-languagePreferences',
            $d('a', {'href': '#'}, 'Language Preferences'));
     this.usernameLink_ = 
         $d('li', null,
@@ -203,10 +212,10 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
                goog.bind(this.menuItemClicked_, this, s.LOGOUT));
     
     var that = this;
-    goog.array.forEach(this.translationLanguages_,
-        function(e) {
-            that.getHandler().listen(e.elt, 'click',
-                goog.bind(that.languageSelected_, that, e.code));
+    goog.array.forEach(this.translationLinks_,
+        function(tLink) {
+            that.getHandler().listen(tLink.link, 'click',
+                goog.bind(that.languageSelected_, that, tLink.lang[0]));
         });
 };
 
@@ -226,14 +235,20 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         window.location.replace(goog.dom.getFirstElementChild(this.subtitleHomepageLink_).href);
     else if (type == s.DOWNLOAD_SUBTITLES)
         window.open(goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href);
+    else if (type == s.ADD_TRANSLATION || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
+        this.dispatchEvent(type);
     else
-        this.widget_.selectMenuItem(type, this.currentLanguageCode_);
+        this.dispatchLanguageSelection_(null);
 };
 
-mirosubs.widget.DropDown.prototype.languageSelected_ = function(languageCode, e) {
+mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
     e.preventDefault();
-    this.widget_.selectMenuItem(mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED,
-                                languageCode);
+    this.dispatchLanguageSelection_(langCode);
+};
+
+mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
+    this.dispatchEvent(
+        new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
 };
 
 mirosubs.widget.DropDown.Selection = {
@@ -301,31 +316,12 @@ mirosubs.widget.DropDown.prototype.loginStatusChanged = function() {
     this.updateActions_();
 };
 
-mirosubs.widget.DropDown.prototype.onActionTaken_ = function(event) {
-    var selectedValue = event.target.getModel();
-    var mv = mirosubs.MainMenu.MenuValues_;
-    var et = mirosubs.MainMenu.Selection;
-    if (selectedValue == mv.ADD_SUBTITLES)
-        this.dispatchEvent(et.ADD_SUBTITLES);
-    else if (selectedValue == mv.EDIT_SUBTITLES)
-        this.dispatchEvent(et.EDIT_SUBTITLES);
-    else if (selectedValue == mv.ORIGINAL_LANG)
-        this.dispatchEvent(
-            new mirosubs.MainMenu
-                .LanguageSelectedEvent());
-    else if (selectedValue == mv.NEW_LANG)
-        this.dispatchEvent(et.ADD_NEW_LANGUAGE);
-    else if (selectedValue == mv.LOGIN)
-        mirosubs.login();
-    else if (selectedValue == mv.CREATE_ACCOUNT)
-        mirosubs.createAccount();
-    else if (selectedValue == mv.LOGOUT)
-        mirosubs.logout();
-    else if (selectedValue == mv.TURNOFFSUBS)
-        this.dispatchEvent(et.TURN_OFF_SUBS);
-    else
-        this.dispatchEvent(
-            new mirosubs.MainMenu
-                .LanguageSelectedEvent(selectedValue));
+mirosubs.widget.DropDown.LanguageSelectedEvent = function(opt_languageCode) {
+    this.type = mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED;
+    /**
+     * The language code selected, or null to signify original
+     * language.
+     * @type {?string}
+     */
+    this.languageCode = opt_languageCode;
 };
-

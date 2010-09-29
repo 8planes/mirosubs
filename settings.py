@@ -35,6 +35,10 @@ METADATA_LANGUAGES = (
     ('meta-wiki', 'Metadata: Wikipedia'),
 )
 
+ALL_LANGUAGES = list(global_settings.LANGUAGES)
+ALL_LANGUAGES.extend(METADATA_LANGUAGES)
+ALL_LANGUAGES = tuple(ALL_LANGUAGES)
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -99,13 +103,12 @@ JS_CORE = ['mirosubs.js',
            'widget/mainmenu.js',
            'widget/rightpanel.js',
            'widget/basestate.js',
-           'widget/unsavedwarning.js',
-           'widget/widgetstate.js',
-           'widget/initialstate.js',
-           'widget/viewstate.js',
            'widget/subtitlestate.js',
-           'widget/newtranslationstate.js',
-           'widget/edittranslationstate.js',
+           'widget/dropdowncontents.js',
+           'widget/playcontroller.js',
+           'widget/subtitlecontroller.js',
+           'widget/chooselanguagedialog.js',
+           'widget/unsavedwarning.js',
            'widget/dropdown.js',
            'widget/subtitle/dialog.js',
            'widget/subtitle/msservermodel.js',

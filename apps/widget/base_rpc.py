@@ -34,45 +34,47 @@ class BaseRpc:
 
         return_value = {
             'video_id' : video.video_id,
-            'writelock_expiration' : models.WRITELOCK_EXPIRATION 
+            'writelock_expiration' : models.WRITELOCK_EXPIRATION,
+            'embed_version': settings.EMBED_JS_VERSION,
+            'languages': LANGUAGES,
+            'metadata_languages': settings.METADATA_LANGUAGES
             }
+        if request.user.is_authenticated():
+            return_value['username'] = request.user.username
+
         if video.video_type == models.VIDEO_TYPE_BLIPTV:
             return_value['flv_url'] = video.bliptv_flv_url
-        return_value['initial_tab'] = \
-            self._initial_video_tab(request.user, video)
-        translation_languages = \
-            self._initial_languages(request.user, video)
-        return_value['translation_languages'] = \
-            [widget.language_to_map(t[0], LANGUAGES_MAP[t[0]], percent_done=t[1]) for 
-             t in translation_languages]
+        return_value['drop_down_contents'] = \
+            self._drop_down_contents(request.user, video)
+
         if base_state is not None:
-            return_value['subtitles'] = self._autoplay_subtitles(
+            subtitles = self._autoplay_subtitles(
                 request.user, video, 
                 base_state.get('language', None),
                 base_state.get('revision', None))
+            return_value['subtitles'] = subtitles
         else:
             if is_remote:
-                self._maybe_add_autoplay_subtitles(
-                    request, video, return_value)
-            return_value['subtitle_count'] = self._subtitle_count(
-                request.user, video)
-        if request.user.is_authenticated():
-            return_value['username'] = request.user.username
-        return_value['embed_version'] = settings.EMBED_JS_VERSION
+                autoplay_language = self._find_remote_autoplay_language(request)
+                if autoplay_language is not None:
+                    subtitles = self._autoplay_subtitles(
+                        request.user, video, autoplay_language, None)
+                    return_value['subtitles'] = subtitles
         return return_value
 
-    def _maybe_add_autoplay_subtitles(self, request, video, return_value):
+    def _drop_down_contents(self, user, video):
+        return {
+            'translations': self._initial_languages(user, video),
+            'subtitle_count': self._subtitle_count(user, video)
+            }
+
+    def _find_remote_autoplay_language(self, request):
         language = None
         if request.user.is_anonymous() or request.user.preferred_language == '':
             language = translation.get_language_from_request(request)
         else:
             language = request.user.preferred_language
-
-        if language is not None and language != '':
-            subs = self._autoplay_subtitles(request.user, video, language, None)
-            if subs is not None:
-                return_value['subtitles'] = subs
-                return_value['subtitles_language'] = language
+        return language if language != '' else None
 
     def get_my_user_info(self, request):
         if request.user.is_authenticated():

@@ -18,24 +18,40 @@
 
 goog.provide('mirosubs.play.Manager');
 
-mirosubs.play.Manager = function(videoPlayer, captions, finishedCallback) {
-    goog.Disposable.call(this);
+mirosubs.play.Manager = function(videoPlayer, baseState, captions) {
+    goog.events.EventTarget.call(this);
     this.videoPlayer_ = videoPlayer;
+    this.baseState_ = baseState;
     var captionSet = 
         new mirosubs.subtitle.EditableCaptionSet(captions);
     this.captionManager_ = 
         new mirosubs.CaptionManager(videoPlayer, captionSet);
-    goog.events.listen(this.captionManager_,
-                       mirosubs.CaptionManager.CAPTION,
-                       this.captionReached_);
-    goog.events.listen(this.captionManager_,
-                       mirosubs.CaptionManager.CAPTIONS_FINISHED,
-                       finishedCallback);
-    goog.events.listen(this.videoPlayer_,
-                       mirosubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
-                       finishedCallback);
+    this.handler_ = new goog.events.EventHandler(this);
+    this.handler_.
+        listen(this.captionManager_,
+               mirosubs.CaptionManager.CAPTION,
+               this.captionReached_).
+        listen(this.captionManager_,
+               mirosubs.CaptionManager.CAPTIONS_FINISHED,
+               this.finished_).
+        listen(this.videoPlayer_,
+               mirosubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
+               this.finished_);
+    this.finished_ = false;
 };
-goog.inherits(mirosubs.play.Manager, goog.Disposable);
+goog.inherits(mirosubs.play.Manager, goog.events.EventTarget);
+
+mirosubs.play.Manager.FINISHED = 'finished';
+
+mirosubs.play.Manager.prototype.getBaseState = function() {
+    return this.baseState_;
+};
+mirosubs.play.Manager.prototype.finished_ = function(event) {
+    if (!this.finished_) {
+        this.dispatchEvent(mirosubs.play.Manager.FINISHED);
+        this.finished_ = true;
+    }
+};
 mirosubs.play.Manager.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.videoPlayer_.showCaptionText(c ? c.getText() : '');
@@ -43,4 +59,5 @@ mirosubs.play.Manager.prototype.captionReached_ = function(event) {
 mirosubs.play.Manager.prototype.disposeInternal = function() {
     mirosubs.play.Manager.superClass_.disposeInternal.call(this);
     this.captionManager_.dispose();
+    this.handler_.dispose();
 };

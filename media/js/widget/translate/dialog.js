@@ -19,30 +19,23 @@
 goog.provide('mirosubs.translate.Dialog');
 
 mirosubs.translate.Dialog = function(videoSource, 
-                                     videoID,
-                                     subtitles, 
-                                     allLanguages) {
+                                     subtitleState, 
+                                     standardSubState) {
     mirosubs.Dialog.call(this, videoSource);
-    this.videoID_ = videoID;
-    this.subtitles_ = subtitles;
-    this.languages_ = allLanguages;
+    this.subtitleState_ = subtitleState;
+    this.standardSubState_ = standardSubState;
     this.unitOfWork_ = new mirosubs.UnitOfWork();
-    this.serverModel_ = new mirosubs.translate.ServerModel(
-        videoID, this.unitOfWork_,
-        goog.bind(this.showLoginNag_, this));
-    /**
-     * Null unless "Done" gets clicked and translations get saved.
-     * @type {?Array.<{'code':string, 'name':string}>}
-     */
-    this.availableLanguages_ = null;
+    this.serverModel_ = new mirosubs.subtitle.MSServerModel(
+        mirosubs.videoID, subtitleState.LANGUAGE);
+    this.serverModel_.init(this.unitOfWork_);
     this.saved_ = false;
 };
 goog.inherits(mirosubs.translate.Dialog, mirosubs.Dialog);
 mirosubs.translate.Dialog.prototype.createDom = function() {
     mirosubs.translate.Dialog.superClass_.createDom.call(this);
     var translationPanel = new mirosubs.translate.TranslationPanel(
-        this.subtitles_, this.languages_,
-        this.unitOfWork_, this.serverModel_)
+        this.subtitleState_, this.standardSubState_,
+        this.unitOfWork_)
     this.getCaptioningAreaInternal().addChild(translationPanel, true);
     var rightPanel = this.createRightPanel_();
     this.setRightPanelInternal(rightPanel);
@@ -53,6 +46,8 @@ mirosubs.translate.Dialog.prototype.createDom = function() {
                          'mirosubs-modal-widget-translate');
 };
 mirosubs.translate.Dialog.prototype.createRightPanel_ = function() {
+    var title = this.subtitleState_.VERSION > 0 ? 
+        "Editing Translation" : "Adding a New Translation";
     var helpContents = new mirosubs.RightPanel.HelpContents(
         "Adding a New Translation",
         [["Thanks for volunteering to translate! As soon as you submit ",
@@ -92,9 +87,6 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
 };
 mirosubs.translate.Dialog.prototype.getAvailableLanguages = function() {
     return this.availableLanguages_;
-};
-mirosubs.translate.Dialog.prototype.showLoginNag_ = function() {
-    // maybe implement this later, but we're leaving it out for now.
 };
 mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     mirosubs.translate.Dialog.superClass_.disposeInternal.call(this);

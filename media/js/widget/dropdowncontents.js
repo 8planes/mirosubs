@@ -16,34 +16,25 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SubtitleState');
+goog.provide('mirosubs.widget.DropDownContents');
 
 /**
  * @constructor
  */
-mirosubs.widget.SubtitleState = function(json) {
+mirosubs.widget.DropDownContents = function(translations, subtitleCount) {
     /**
-     * Language code. Null if and only if original language.
-     * @type {?string}
+     * Array of [language code, percent done] pairs.
+     * @type {Array.<Array>}
      */
-    this.LANGUAGE = json['language'];
+    this.TRANSLATIONS = translations;
     /**
-     * @type {number}
+     * Number of subtitles for this video.
+     * @type {Number}
      */
-    this.VERSION = json['version'];
-    this.SUBTITLES = json['subtitles'];
-    this.FORKED = json['forked'];
-    this.IS_LATEST = json['is_latest']
+    this.SUBTITLE_COUNT = subtitleCount;
 };
 
-mirosubs.widget.SubtitleState.fromJSON = function(json) {
-    if (json)
-        return new mirosubs.widget.SubtitleState(json);
-    else
-        return null;
-};
-
-mirosubs.widget.SubtitleState.prototype.baseParams = function() {
-    return mirosubs.widget.BaseState.createParams(
-        this.LANGUAGE, this.VERSION);
+mirosubs.widget.DropDownContents.fromJSON = function(json) {
+    return new mirosubs.widget.DropDownContents(
+        json['translations'], json['subtitle_count']);
 };

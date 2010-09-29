@@ -19,41 +19,50 @@
 goog.provide('mirosubs.widget.BaseState');
 
 /**
- * @fileoverview Provides a strongly-typed version of params passed in from page
+ * @fileoverview Provides a strongly-typed version of base state params 
+ *     passed in from page
  *
  */
+
 
 /**
  * @constructor
  * @param {Object} baseStateParam parameter from the embed code on the page.
  */
 mirosubs.widget.BaseState = function(baseStateParam) {
-    /** 
-     * @type {boolean}
-     */
-    this.NOT_NULL = !!baseStateParam;
-    if (this.NOT_NULL) {
-        /**
-         * @type {string?} Either foreign language, or null means native lang.
-         */
-        this.LANGUAGE = baseStateParam['language'];
-        if (typeof(this.LANGUAGE) == 'undefined')
-            this.LANGUAGE = null;
-        /**
-         * @type {number?}
-         */
-        this.REVISION = baseStateParam['revision'];
-        if (typeof(this.REVISION) == 'undefined')
-            this.REVISION = null;
-        /**
-         * @type {boolean}
-         */
-        this.START_PLAYING = !!baseStateParam['start_playing'];
-        this.ORIGINAL_PARAM = baseStateParam;
-    }
-    else {
-        this.ORIGINAL_PARAM = null;
-        this.REVISION = null;
+    this.LANGUAGE = baseStateParam['language'];
+    if (typeof(this.LANGUAGE) == 'undefined')
         this.LANGUAGE = null;
-    }
+    this.REVISION = baseStateParam['revision'];
+    if (typeof(this.REVISION) == 'undefined')
+        this.REVISION = null;
+    this.START_PLAYING = !!baseStateParam['start_playing'];
+    this.ORIGINAL_PARAM = baseStateParam;
 };
+
+mirosubs.widget.BaseState.createParams = function(opt_language, opt_revision) {
+    var params = {};
+    if (opt_language != null)
+        params['language'] = language;
+    if (opt_revision != null)
+        params['revision'] = opt_revision;
+    return params;
+};
+
+/**
+ * Either language code, or null for native language.
+ * @type {?string}
+ */
+mirosubs.widget.BaseState.prototype.LANGUAGE = null;
+
+/**
+ * Either the revision number, or null for most recent revision.
+ * @type {?number}
+ */
+mirosubs.widget.BaseState.prototype.REVISION = null;
+
+/**
+ * The original parameter object from javascript on page.
+ * @type {?object}
+ */
+mirosubs.widget.BaseState.prototype.ORIGINAL_PARAM = null;

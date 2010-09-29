@@ -58,13 +58,6 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
                        });
 };
 
-mirosubs.translate.TranslationList.prototype.setEnabled = function(enabled) {
-    goog.array.forEach(this.translationWidgets_,
-                       function(widget) {
-                           widget.setEnabled(enabled);
-                       });
-};
-
 /**
  * This class will mutate the array as translations are added.
  * @param {Array.<mirosubs.translate.EditableTranslation>} translations

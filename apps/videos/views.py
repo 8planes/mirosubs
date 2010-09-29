@@ -164,6 +164,20 @@ def actions_list(request):
                        template_object_name='action',
                        extra_context=extra_context)    
 
+def api_subtitles(request):
+    return HttpResponse(json.dumps(_api_subtitles_json(request)), 
+                        'application/json')
+
+def _api_subtitles_json(request):
+    video_url = request.GET.get('video_url', None)
+    language = request.GET.get('language', None)
+    revision = request.GET.get('revision', None)
+    if video_url is None:
+        return {'is_error': True, 'message': 'video_url not specified' }
+    video, created = Video.get_or_create_for_url(video_url)
+    return [s.__dict__ for s in video.subtitles(
+            version_no=revision, language_code = language)]
+
 @login_required
 def upload_subtitles(request):
     output = dict(success=False)

@@ -21,7 +21,6 @@ import string
 import random
 import re
 from urlparse import urlparse, parse_qs
-from django.conf.global_settings import LANGUAGES
 from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
@@ -35,6 +34,7 @@ import urllib
 from videos.utils import YoutubeSubtitleParser
 from django.db.models.signals import post_save
 from videos import EffectiveSubtitle
+from django.conf import settings
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -412,7 +412,7 @@ models.signals.pre_save.connect(create_video_id, sender=Video)
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
     is_original = models.BooleanField()
-    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    language = models.CharField(max_length=16, choices=settings.ALL_LANGUAGES, blank=True)
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255, blank=True)
     writelock_owner = models.ForeignKey(User, null=True)
@@ -497,7 +497,7 @@ class SubtitleLanguage(models.Model):
 
     @property
     def percent_done(self):
-        if not self.is_original:
+        if not self.is_original and not self.is_forked:
             # FIXME: this calculation is incorrect. where are the unit tests?
             # for example, subtitles can be deleted, so it's quite easy 
             # for this to come up with a number greater than 100%
@@ -514,7 +514,7 @@ class SubtitleLanguage(models.Model):
             except ZeroDivisionError:
                 return 0 
         else:
-            return 0
+            return 100
 
     def notification_list(self, exclude=None):
         qs = self.subtitleversion_set.all()
@@ -719,7 +719,7 @@ class NullSubtitles(SubtitleCollection):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
     is_original = models.BooleanField()
-    language = models.CharField(max_length=16, choices=LANGUAGES, blank=True)
+    language = models.CharField(max_length=16, choices=settings.ALL_LANGUAGES, blank=True)
 
     class Meta:
         unique_together = (('video', 'user', 'language'),)

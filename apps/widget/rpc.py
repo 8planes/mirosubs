@@ -32,7 +32,7 @@ LANGUAGES_MAP = dict(LANGUAGES)
 
 class Rpc(BaseRpc):
     def start_editing(self, request, video_id, language_code=None, 
-                      base_version_no=None, fork=False, editing=False):
+                      base_version_no=None, fork=False):
         """Called by subtitling widget when subtitling or translation 
         is to commence or recommence on a video.
         """
@@ -49,17 +49,14 @@ class Rpc(BaseRpc):
         version = self._get_version_for_editing(
             request.user, language, base_version_no, fork)
 
-        existing_subtitles = [s.__dict__ for s in version.subtitles()]
+        subtitles = self._subtitles_dict(version)
 
         return_dict = { "can_edit" : True,
-                        "version" : version.version_no,
-                        "existing" : existing_subtitles }
-        if editing and language_code is not None:
-            return_dict['existing_captions'] = \
-                self.fetch_subtitles(request, video_id)
-            return_dict['languages'] = \
-                [widget.language_to_map(lang[0], lang[1]) 
-                 for lang in LANGUAGES]
+                        "subtitles" : subtitles }
+        if version.is_dependent():
+            video = models.Video.objects.get(video_id=video_id)
+            return_dict['original_subtitles'] = \
+                self._subtitles_dict(video.latest_finished_version())
         return return_dict
 
     def update_lock(self, request, video_id, language_code=None):
@@ -94,8 +91,8 @@ class Rpc(BaseRpc):
 
     def finished_subtitles(self, request, video_id, deleted, inserted, 
                            updated, language_code=None):
-        language = models.Video.objects.get(
-            video_id=video_id).subtitle_language(language_code)
+        video = models.Video.objects.get(video_id=video_id)
+        language = video.subtitle_language(language_code)
         if not language.can_writelock(request):
             return { "response" : "unlockable" }
         self._save_subtitles_impl(
@@ -107,19 +104,15 @@ class Rpc(BaseRpc):
         language = models.SubtitleLanguage.objects.get(pk=language.pk)
         language.release_writelock()
         language.save()
-        return_dict = { "response" : "ok" }
-        if language_code is not None:
-            return_dict["available_languages"] = \
-                [widget.language_to_map(code, LANGUAGES_MAP[code]) for
-                 code in language.video.translation_language_codes()]
-        return return_dict
+        return { "response" : "ok",
+                 "drop_down_contents" : 
+                     self._drop_down_contents(request.user, video) }
 
     def fetch_subtitles(self, request, video_id, language_code=None):
         video = models.Video.objects.get(video_id=video_id)
         video.subtitles_fetched_count += 1
         video.save()
-        return [s.__dict__ for s in video.latest_finished_subtitles(
-                language_code=language_code)]
+        return self._subtitles_dict(video.version(language_code=language_code))
 
     def fetch_subtitles_and_open_languages(self, request, video_id):
         return { 'captions': self.fetch_subtitles(request, video_id),
@@ -143,7 +136,8 @@ class Rpc(BaseRpc):
         current_version.save()
 
     def _get_version_for_editing(self, user, language, 
-                                 base_version_no=None, fork=False):
+                                 base_version_no=None, 
+                                 fork=False):
         subtitle_versions = list(language.subtitleversion_set.order_by('-version_no'))
 
         if base_version_no is None:
@@ -220,8 +214,23 @@ class Rpc(BaseRpc):
             return None
         video.subtitles_fetched_count += 1
         video.save()
-        return [s.__dict__ for s in video.subtitles(
-                version_no=version_no, language_code=language_code)]
+        version = video.version(version_no, language_code)
+        if version:
+            return self._subtitles_dict(version)
+
+    def _subtitles_dict(self, version):
+        language = version.language
+        is_latest = False
+        latest_version = language.latest_finished_version()
+        if latest_version is None or version.version_no >= latest_version.version_no:
+            is_latest = True
+        return {
+            'subtitles': [s.__dict__ for s in version.subtitles()],
+            'language': None if language.is_original else language.language,
+            'version': version.version_no,
+            'is_latest': is_latest,
+            'forked': version.is_forked
+            }
 
     def _subtitle_count(self, user, video):
         version = video.latest_finished_version()

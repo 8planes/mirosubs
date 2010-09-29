@@ -93,10 +93,8 @@ class NullRpc(BaseRpc):
 
     def _autoplay_subtitles(self, user, video, language_code, revision_no):
         null_subs = video.null_subtitles(user, language_code)
-        if null_subs is None:
-            return None
-        else:
-            return [s.__dict__ for s in null_subs.subtitles()]
+        if null_subs:
+            return [s.__dict__ for s in null_subs.subtitles()], null_subs.is_forked
 
     def _subtitle_count(self, user, video):
         null_subs = video.null_subtitles(user)

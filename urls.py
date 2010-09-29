@@ -63,6 +63,7 @@ urlpatterns = patterns(
                        app_name='auth')),
     url(r'^search/$', 'videos.views.search', name="search"),
     url(r'^counter/$', 'videos.views.counter', name="counter"),
+    url(r'^api/subtitles/$', 'videos.views.api_subtitles'),
     url(r'^w3c/p3p.xml$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'p3p.xml'}),
     url(r'^w3c/Policies.xml$', 'django.views.generic.simple.direct_to_template', 
