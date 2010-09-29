@@ -126,9 +126,8 @@ msgid "Enter valid e-mail addresses separated by commas."
 msgstr "Enigi validajn retpoŝtajn adresojn, apartigitajn per komoj."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
-#, fuzzy
 msgid "Share your subtitles"
-msgstr "Disdoni viajn subtekstojn"
+msgstr "Disdoni viajn subtitolojn"
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
@@ -648,8 +647,11 @@ msgid "Why can't I change the timing on a translation?"
 msgstr "Kial mi ne povas retempigi tradukatajn subtekstojn?"
 
 #: .\templates\faq.html.py:40
+#, fuzzy
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
 msgstr ""
+"Nia celo kun Universal Subtitles estas faciligi al cxiuj aldoni subtitoloj aux traduki perskaux ajna video en la reto. \r\n"
+"Cetere, ni estas konstruanta en kunlaboraj iloj, kaj esperas allogi grandan korpon de kontribuantoj por helpi en la subtitoliganta klopodo. La softvaro kiu ni estas konstruanta estas kaj povas esti uzata kaj plibonigita de iu ajn."
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
@@ -665,7 +667,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
-msgstr ""
+msgstr "Tradukitaj subtitolojn ebligas por ni ĉiuj spekti videon en lingvoj kiu ni ne parolas"
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
