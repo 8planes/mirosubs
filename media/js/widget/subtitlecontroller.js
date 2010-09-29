@@ -87,6 +87,12 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog =
 {
     if (this.dropDown_.getSubtitleCount() == 0)
         throw new Error();
+    this.possiblyRedirect_(true, this.openNewTranslationDialog_);
+};
+
+mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
+    function()
+{
     var that = this;
     mirosubs.widget.ChooseLanguageDialog.show(
         false, true, true,
@@ -106,13 +112,15 @@ mirosubs.widget.SubtitleController.prototype.possiblyRedirect_ =
         if (mirosubs.IS_NULL)
             uri.setParameterValue('null_widget', 'true');
         if (addNewTranslation)
-            uri.setParameter('translate_immediately', 'true');
+            uri.setParameterValue('translate_immediately', 'true');
         else
-            uri.setParameter('subtitle_immediately', 'true');
+            uri.setParameterValue('subtitle_immediately', 'true');
         var subState = this.playController_.getSubtitleState();
         if (subState)
-            uri.setParameter('base_state', subState.baseParams());
-        uri.setParameter('return_url', window.location.href);
+            uri.setParameterValue(
+                'base_state', 
+                goog.json.serialize(subState.baseParams()));
+        uri.setParameterValue('return_url', window.location.href);
         window.location.assign(uri.toString());
     }
 };

@@ -43,7 +43,7 @@ mirosubs.widget.BaseState = function(baseStateParam) {
 mirosubs.widget.BaseState.createParams = function(opt_language, opt_revision) {
     var params = {};
     if (opt_language != null)
-        params['language'] = language;
+        params['language'] = opt_language;
     if (opt_revision != null)
         params['revision'] = opt_revision;
     return params;
