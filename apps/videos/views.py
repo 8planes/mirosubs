@@ -37,6 +37,7 @@ from videos.utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
+from django.db.models import Sum
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -413,7 +414,6 @@ def stop_notification(request, video_id):
                               context_instance=RequestContext(request))
 
 def info(request):
-    from django.db.models import Sum
     from comments.models import Comment
     context = {
         'subtitles_fetched_count': Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c'],
@@ -427,3 +427,7 @@ def info(request):
         'all_comments': Comment.objects.count()
     }
     return render_to_response('info.html', context, context_instance=RequestContext(request))
+
+def counter(request):
+    count = Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c']
+    return HttpResponse('draw_unisub_counter({videos_count: %s})' % count)
