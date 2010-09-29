@@ -21,13 +21,11 @@ goog.provide('mirosubs.translate.ServerModel');
 // Currently this class has a lot in common with mirosubs.subtitle.MSServerModel.
 // TODO: fix the duplication, probably by turning the two classes into one.
 
-mirosubs.translate.ServerModel = function(videoID, unitOfWork, loginNagFn) {
+mirosubs.translate.ServerModel = function(videoID, unitOfWork) {
     goog.Disposable.call(this);
     this.videoID_ = videoID;
     this.unitOfWork_ = unitOfWork;
     this.translating_ = false;
-    this.loginNagFn_ = loginNagFn;
-    this.loginPesterFreq_ = 1000 * 60 * (mirosubs.IS_NULL ? 10 : 1);
 };
 goog.inherits(mirosubs.translate.ServerModel, goog.Disposable);
 

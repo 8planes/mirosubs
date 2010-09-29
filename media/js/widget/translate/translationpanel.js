@@ -21,121 +21,44 @@ goog.provide('mirosubs.translate.TranslationPanel');
 /**
  *
  *
- *
+ * @constructor
  */
-mirosubs.translate.TranslationPanel = function(subtitles, allLanguages,
-                                               unitOfWork, serverModel,
-                                               opt_initialLanguageCode,
-                                               opt_initialTranslations) {
+mirosubs.translate.TranslationPanel = function(subtitleState,
+                                               standardSubState,
+                                               unitOfWork) {
     goog.ui.Component.call(this);
-    this.subtitles_ = subtitles;
-    this.languages_ = allLanguages;
+    this.subtitleState_ = subtitleState;
+    this.standardSubState_ = standardSubState;
     this.unitOfWork_ = unitOfWork;
-    this.serverModel_ = serverModel;
     this.contentElem_ = null;
-    this.initialLanguageCode_ = opt_initialLanguageCode;
-    this.initialTranslations_ = opt_initialTranslations;
 };
 goog.inherits(mirosubs.translate.TranslationPanel, goog.ui.Component);
 
-mirosubs.translate.TranslationPanel.NO_LANGUAGE = 'NONE';
-
 mirosubs.translate.TranslationPanel.prototype.getContentElement = function() {
     return this.contentElem_;
-};
-mirosubs.translate.TranslationPanel.prototype.createLanguageSelect_ =
-    function($d)
-{
-    var selectOptions = [ $d('option', 
-                             {'value': mirosubs.translate.TranslationPanel.NO_LANGUAGE},
-                             'Select Language...') ];
-    var initialSelectedIndex = -1;
-    var i;
-    
-    var languageMap = {};
-    var languageNames = [];
-    for (i = 0; i < this.languages_.length; i++) {
-        languageMap[this.languages_[i]['name']] = this.languages_[i]['code'];
-        languageNames.push(this.languages_[i]['name']);
-    }
-    languageNames.sort();
-    
-    for (i = 0; i < languageNames.length; i++) {
-        var code = languageMap[languageNames[i]];
-        selectOptions.push(
-            $d('option',
-               {'value': code},
-               languageNames[i]));
-        if (this.initialLanguageCode_ && code == this.initialLanguageCode_)
-            initialSelectedIndex = i + 1;
-    }
-    var languageSelect = $d('select', null, selectOptions);
-    if (this.initialLanguageCode_)
-        languageSelect.selectedIndex = initialSelectedIndex;
-    return languageSelect;
 };
 mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     mirosubs.translate.TranslationPanel.superClass_.createDom.call(this);
     var el = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     
-    if (!this.initialLanguageCode_) {
-        this.languageSelect_ = this.createLanguageSelect_($d);
-        el.appendChild($d('div', 'mirosubs-langDrop',
-                          goog.dom.createTextNode('To begin translating: '),
-                          this.languageSelect_));
-    }
-    
     el.appendChild(this.contentElem_ = $d('div'));
     this.translationList_ =
         new mirosubs.translate.TranslationList(
-            this.subtitles_, this.unitOfWork_);
+            this.standardSubState_.SUBTITLES, this.unitOfWork_);
+    console.log('adding trans list');
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className =
         "mirosubs-titlesList";
-    if (this.initialTranslations_)
-        this.startEditing_(this.initialTranslations_);
-    else
-        this.translationList_.setEnabled(false);
-};
-mirosubs.translate.TranslationPanel.prototype.enterDocument = function() {
-    mirosubs.translate.TranslationPanel.superClass_.enterDocument.call(this);
-    if (this.languageSelect_)
-        this.getHandler().listen(
-            this.languageSelect_, goog.events.EventType.CHANGE,
-            this.languageSelected_);
-};
-mirosubs.translate.TranslationPanel.prototype.languageSelected_ =
-    function(event)
-{
-    var languageCode = this.languageSelect_.value;
-    if (languageCode == mirosubs.translate.TranslationPanel.NO_LANGUAGE) {
-        this.serverModel_.stopTranslating();
-        this.translationList_.setEnabled(false);
-        return;
-    }
-    var that = this;
-    // TODO: show loading animation
-    this.translationList_.setEnabled(false);
-    this.serverModel_.startTranslating(languageCode,
-        function(success, result) {
-            if (!success)
-                alert(result);
-            else
-                that.startEditing_(result);
-        });
-};
-mirosubs.translate.TranslationPanel.prototype.startEditing_ =
-    function(existingTranslations)
-{
     var uw = this.unitOfWork_;
     var editableTranslations =
         goog.array.map(
-            existingTranslations,
+            this.subtitleState_.SUBTITLES,
             function(transJson) {
                 return new mirosubs.translate.EditableTranslation(
                     uw, transJson['subtitle_id'], transJson);
             });
+    console.log('setting trans');
     this.translationList_.setTranslations(editableTranslations);
-    this.translationList_.setEnabled(true);
+    console.log('trans set');
 };

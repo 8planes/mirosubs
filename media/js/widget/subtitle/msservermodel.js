@@ -54,12 +54,11 @@ mirosubs.subtitle.MSServerModel.logger_ =
 // updated by values from server when widgets load.
 mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 0;
 
-mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork, loginNagFn) {
+mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
     goog.asserts.assert(!this.initialized_);
     mirosubs.subtitle.MSServerModel.logger_.info(
         'init for ' + mirosubs.currentUsername);
     this.unitOfWork_ = unitOfWork;
-    this.loginNagFn_ = loginNagFn;
     this.initialized_ = true;
     this.timerRunning_ = true;
     var that = this;
@@ -142,7 +141,7 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
     this.unitOfWork_.clear();
     var toJsonCaptions = function(arr) {
         return goog.array.map(arr, function(editableCaption) {
-                return editableCaption.jsonCaption;
+                return editableCaption.json;
             });
     };
     return {
@@ -168,7 +167,6 @@ mirosubs.subtitle.MSServerModel.prototype.stopTimer_ = function() {
 
 mirosubs.subtitle.MSServerModel.prototype.disposeInternal = function() {
     this.stopTimer_();
-    this.loginNagFn_ = null;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.currentUsername = function() {

@@ -202,81 +202,8 @@ mirosubs.widget.Widget.prototype.loginStatusChanged_ = function() {
         this.dialog_.updateLoginState();
     this.popupMenu_.loginStatusChanged();
 };
-mirosubs.widget.Widget.prototype.subtitle_ = function() {
-    if (this.baseState_.REVISION != null) {
-        var msg = 
-            ["You're about to edit revision ", 
-             this.baseState_.REVISION, ", an old revision. ",
-             "Changes may have been made since this revision, and your edits ",
-             "will override those changes. Are you sure you want to do this?"].
-            join('');
-        if (confirm(msg))
-            this.subtitleImpl_();
-        else if (mirosubs.returnURL)
-            window.location.replace(mirosubs.returnURL);
-    }
-    else
-        this.subtitleImpl_();
-};
-mirosubs.widget.Widget.prototype.subtitleImpl_ = function() {
-    this.videoTab_.showLoading(true);
-    var that = this;
-    this.state_ = new mirosubs.widget.SubtitleState(this, this.videoID_, this.baseState_);
-    this.state_.initialize(
-        function(result) {
-            that.videoTab_.showLoading(false);
-            if (result["can_edit"]) {
-                var version = result["version"];
-                var existingSubs = result["existing"];
-                if (version == 0)
-                    that.startSubtitling_(existingSubs);
-                else
-                    that.editSubtitlesImpl_(version, existingSubs);
-            }
-            else {
-                if (result["owned_by"])
-                    alert("Sorry, this video is owned by " + 
-                          result["owned_by"]);
-                else {
-                    var username = 
-                        (result['locked_by'] == 'anonymous' ?
-                         'Someone else' : ('The user ' + result['locked_by']));
-                    alert(username + ' is currently editing these subtitles. Please wait and try again later.');
-                }
-            }
-        });
-};
-mirosubs.widget.Widget.prototype.getState = function() {
-    return self.state_;
-};
-mirosubs.widget.Widget.prototype.editSubtitles_ = function() {
-    if (this.languageCodePlaying_ == null) {
-        // original language
-        if (!this.possiblyRedirectToOnsiteWidget_(true))
-            this.subtitle_();
-    }
-    else {
-        // foreign language
-        if (!this.possiblyRedirectToOnsiteWidget_(false))
-            this.editTranslationImpl_();
-    }
-};
-mirosubs.widget.Widget.prototype.editTranslationImpl_ = function() {
-    if (this.baseState_.REVISION != null) {
-        var msg =
-            ["You're about to edit revision ", 
-             this.baseState_.REVISION, ", an old revision. ",
-             "Changes may have been made since this revision, and your edits ",
-             "will override those changes. Are you sure you want to do this?"].
-            join('');
-        if (confirm(msg))
-            this.editTranslationConfirmed_();
-        else if (mirosubs.returnURL)
-            window.location.replace(mirosubs.returnURL);
-    }
-    else
-        this.editTranslationConfirmed_();
-};
+
+
 mirosubs.widget.Widget.prototype.editTranslationConfirmed_ = function() {
     var languageCode = this.baseState_.LANGUAGE ? 
         this.baseState_.LANGUAGE : this.languageCodePlaying_;
@@ -284,41 +211,6 @@ mirosubs.widget.Widget.prototype.editTranslationConfirmed_ = function() {
         languageCode, this.baseState_);
     this.videoTab_.showLoading(true);
     this.state_.initialize(goog.bind(this.editTranslations_, this));
-};
-/**
- * @param {boolean} forSubtitling true for subs, false for translations
- */
-mirosubs.widget.Widget.prototype.possiblyRedirectToOnsiteWidget_ =
-    function(forSubtitling) 
-{
-    if (mirosubs.DEBUG || !goog.userAgent.GECKO)
-        return false;
-    else {
-        var url = mirosubs.siteURL() + '/onsite_widget/?';
-        var queryData = new goog.Uri.QueryData();
-        var newBaseState = {};
-        queryData.set('video_url', this.videoURL_);
-        if (mirosubs.IS_NULL)
-            queryData.set('null_widget', 'true');
-        if (mirosubs.DEBUG)
-            queryData.set('debug_js', 'true');
-
-        if (this.baseState_.NOT_NULL)
-            newBaseState = this.baseState_.ORIGINAL_PARAM;
-
-        if (forSubtitling)
-            queryData.set('subtitle_immediately', 'true');
-        else {
-            queryData.set('translate_immediately', 'true');
-            newBaseState['language'] = this.languageCodePlaying_;
-        }
-
-        if (this.baseState_.NOT_NULL || !forSubtitling)
-            queryData.set('base_state', goog.json.serialize(newBaseState));
-        queryData.set('return_url', window.location.href);
-        window.location.assign(url + queryData.toString());
-        return true;
-    }
 };
 mirosubs.widget.Widget.prototype.editTranslations_ = function(result) {
     // TODO: check result['can_edit']

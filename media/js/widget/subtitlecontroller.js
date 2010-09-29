@@ -199,7 +199,14 @@ mirosubs.widget.SubtitleController.prototype.openSubtitlingDialog_ =
 mirosubs.widget.SubtitleController.prototype.openDependentTranslationDialog_ = 
     function(subtitleState, originalSubtitleState)
 {
-    
+    this.playController_.stopForDialog();
+    var transDialog = new mirosubs.translate.Dialog(
+        this.playController_.getVideoSource(),
+        subtitleState.LANGUAGE, originalSubtitleState);
+    transDialog.setVisible(true);
+    goog.events.listenOnce(
+        subDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
+        this.subtitleDialogClosed_);
 };
 
 mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {

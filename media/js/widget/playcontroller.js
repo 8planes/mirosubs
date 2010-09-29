@@ -55,6 +55,7 @@ mirosubs.widget.PlayController.prototype.turnOffSubs_ = function() {
     this.disposeComponents_();
     this.subtitleState_ = null;
     // TODO: set the video tab text here also.
+    
 };
 
 /**
