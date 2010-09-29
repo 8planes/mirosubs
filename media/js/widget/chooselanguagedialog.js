@@ -22,11 +22,12 @@ goog.provide('mirosubs.widget.ChooseLanguageDialog');
  * @constructor
  */
 mirosubs.widget.ChooseLanguageDialog = function(
-    callback, selectOriginal, selectLanguage, selectForked) 
+    header, callback, selectOriginal, selectLanguage, selectForked) 
 {
     goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
+    this.header_ = header;
     this.callback_ = callback;
     this.selectOriginal_ = selectOriginal;
     this.selectLanguage_ = selectLanguage;
@@ -46,6 +47,7 @@ mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
     mirosubs.widget.ChooseLanguageDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var lt = mirosubs.widget.ChooseLanguageDialog.LanguageType;
+    this.getElement().appendChild($d('h3', null, this.header_));
     if (this.selectLanguage_) {
         this.languageRadioButtons_ = [];
         if (this.selectOriginal_)
@@ -64,12 +66,15 @@ mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
         this.forkedCheckbox_ = 
             $d('input', {'type': 'checkbox'});
         this.getElement().appendChild(
-            $d('div', null, this.forkedCheckbox_, "Forked"));               
+            $d('p', null, this.forkedCheckbox_, "Fork timing"));               
     }
-    this.okButton_ = $d('a', {'href':'#'}, 'OK');
-    this.cancelButton_ = $d('a', {'href':'#'}, 'Cancel');
+    this.okButton_ = 
+        $d('a', 
+           {'href':'#', 
+            'className': "mirosubs-green-button mirosubs-big"}, 
+           'OK');
     this.getElement().appendChild(
-        $d('div', null, this.okButton_, " ", this.cancelButton_));
+        $d('p', null, this.okButton_));
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.enterDocument = function() {
@@ -77,21 +82,13 @@ mirosubs.widget.ChooseLanguageDialog.prototype.enterDocument = function() {
     this.getHandler().
         listen(this.okButton_,
                'click',
-               this.okClicked_).
-        listen(this.cancelButton_,
-               'click',
-               this.cancelClicked_);
+               this.okClicked_);
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     this.setVisible(false);
     this.callback_(this.getSelectedLanguage(), this.isForkedSelected());
-};
-
-mirosubs.widget.ChooseLanguageDialog.prototype.cancelClicked_ = function(e) {
-    e.preventDefault();
-    this.setVisible(false);
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.makeDropdown_ = 
@@ -112,7 +109,7 @@ mirosubs.widget.ChooseLanguageDialog.prototype.addLanguageSelector_ =
                                    'value': value})
     this.languageRadioButtons_.push(radioButton);
     var divCreator = goog.partial(
-        $d, 'div', null, radioButton);
+        $d, 'p', null, radioButton);
     this.getElement().appendChild(divCreator.apply(
         null, Array.prototype.slice.call(arguments, 2)));
 };
@@ -150,9 +147,10 @@ mirosubs.widget.ChooseLanguageDialog.prototype.isForkedSelected =
 };
 
 mirosubs.widget.ChooseLanguageDialog.show = 
-    function(selectOriginal, selectLanguage, selectForked, callback)
+    function(header, selectOriginal, selectLanguage, selectForked, callback)
 {
     var dialog = new mirosubs.widget.ChooseLanguageDialog(
-        callback, selectOriginal, selectLanguage, selectForked);
+        header, callback, selectOriginal, 
+        selectLanguage, selectForked);
     dialog.setVisible(true);
 };

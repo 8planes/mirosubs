@@ -117,7 +117,7 @@ text-shadow:
 -2px -1px 0px red !important;
 }
 
-.mirosubs-modal-login-title-close, .mirosubs-modal-widget-title-close {
+.mirosubs-modal-login-title-close, .mirosubs-modal-widget-title-close, .mirosubs-modal-lang-title-close {
   background: url("../images/sprite.png") 0 -256px no-repeat !important;
   position: absolute !important;
   top: 9px !important;
@@ -749,6 +749,61 @@ bottom: 47px !important;
   height: 41px;
   padding-top: 12px;
   }
+
+/* FIXME: pretty bad duplication */
+
+.mirosubs-green-button {
+   -moz-border-radius: 3px;
+   -webkit-border-radius: 3px;
+   border-radius:3px;
+   text-decoration: none !important;
+   font-weight: bold;
+   text-transform: uppercase;
+   float: left;
+}
+
+
+.mirosubs-green-button.mirosubs-big {
+   font-size: 14px;
+   padding: 8px 16px;
+}
+
+
+/*---- Green Button ----*/
+
+.mirosubs-green-button {
+   color: #485a0c !important;
+   
+   text-shadow: 0 1px 0px #aed011;
+   
+   border: 1px solid #728e00;
+   border-top: 1px solid #95ac00;
+   border-bottom: 1px solid #546e00;
+   
+   -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
+   -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
+   box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
+   
+   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b2c800', endColorstr='#85ac00'); /* for IE */
+   background: -webkit-gradient(linear, left top, left bottom, from(#b2c800), to(#85ac00)); /* for webkit browsers */
+   background: -moz-linear-gradient(top,  #b2c800,  #85ac00); /* for firefox 3.6+ */
+}
+
+
+.mirosubs-green-button:hover{
+   color: #485a0c !important;
+   
+   text-shadow: 0 1px 0px #ebff6b;
+   
+   -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #daea62;
+   -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #daea62;
+   box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #daea62;
+   
+   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d8f136', endColorstr='#99cc00'); /* for IE */
+   background: -webkit-gradient(linear, left top, left bottom, from(#d8f136), to(#99cc00)); /* for webkit browsers */
+   background: -moz-linear-gradient(top,  #d8f136,  #99cc00); /* for firefox 3.6+ */
+}
+
   
 
 .mirosubs-skip:hover{
@@ -2220,9 +2275,7 @@ cursor:
    border: 3px solid !important;
    position: absolute !important;
    z-index: 2147483641;
-   padding: 15px 0 !important;
    font-family: Arial, hhelvetica, sans-serif;
-   background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
    -moz-border-radius: 5px !important;
    -webkit-border-radius: 5px !important;
    -moz-box-shadow: 0px 5px 50px rgba(0,0,0,01) !important;
@@ -2232,6 +2285,32 @@ cursor:
 .mirosubs-modal-login {
    width: 650px !important;
    height: 200px !important;
+   padding: 15px 0 !important;
+   background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
+}
+
+.mirosubs-modal-lang h3 {
+   -moz-border-radius-topleft:5px;
+   -moz-border-radius-topright:5px;
+   background:url("../images/gradient.png") repeat-x scroll 0 0 #FFFFFF !important;
+   font-size:14px;
+   margin: 0;
+   padding:15px;
+   border-bottom: 1 px solid #FFFFFF;
+   padding-bottom: 20px;
+   text-shadow: 1px 1px 1px #FFFFFF;
+   color: #777777;
+}
+
+.mirosubs-modal-lang p {
+   background:url("../images/big_grad.png") repeat-x scroll 0 0 #FFFFFF !important;
+   border-bottom: 1px solid #999999;
+   margin:0 !important;
+   padding:20px;
+   color: #666666;
+   font-size: 15px;
+   line-height: 15px;
+   min-width: 300px;
 }
 
 .mirosubs-modal-login-content h4 {

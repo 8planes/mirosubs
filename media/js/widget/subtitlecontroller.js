@@ -95,6 +95,7 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
 {
     var that = this;
     mirosubs.widget.ChooseLanguageDialog.show(
+        "Choose translation parameters",
         false, true, true,
         function(language, forked) {
             that.startEditing_(null, language, forked);
@@ -129,6 +130,7 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function() {
     var that = this;
     if (this.dropDown_.getSubtitleCount() == 0)
         mirosubs.widget.ChooseLanguageDialog.show(
+            "Choose subtitle type",
             true, true, false,
             function(language, forked) {
                 that.startEditing_(null, language, true);
@@ -142,6 +144,7 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function() {
                 subState.VERSION, subState.LANGUAGE, true);
         else
             mirosubs.widget.ChooseLanguageDialog.show(
+                "Fork translation timing?",
                 false, false, true,
                 function(language, forked) {
                     that.startEditing_(
