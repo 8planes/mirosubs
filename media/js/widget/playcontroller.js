@@ -58,6 +58,10 @@ mirosubs.widget.PlayController.prototype.stopForDialog = function() {
     this.turnOffSubs();
 };
 
+mirosubs.widget.PlayController.prototype.dialogClosed = function() {
+    this.videoPlayer_.resumeLoading();
+};
+
 mirosubs.widget.PlayController.prototype.turnOffSubs = function() {
     this.dropDown_.setShowingSubs(false);
     this.dropDown_.hide();
@@ -111,10 +115,10 @@ mirosubs.widget.PlayController.prototype.languageSelected = function(languageCod
           'language_code': languageCode },
         function(subStateJSON) {
             that.turnOffSubs();
-            var subState = mirosubs.widget.SubtitleState.fromJSON(subState);
+            var subState = mirosubs.widget.SubtitleState.fromJSON(subStateJSON);
             that.setUpSubs_(subState);
             that.videoTab_.showContent(
-                this.dropDown_.getSubtitleCount(), subState);
+                that.dropDown_.getSubtitleCount(), subState);
         });
 };
 
@@ -126,12 +130,11 @@ mirosubs.widget.PlayController.prototype.captionReached_ = function(event) {
 mirosubs.widget.PlayController.prototype.finished_ = function() {
     var message = !!this.subtitleState_.LANGUAGE ?
         "Improve this Translation" : "Improve these Subtitles";
-    if (!this.subtitleState_.LANGUAGE) {
-        this.videoTab_.updateNudge(
-            message, 
-            goog.bind(this.subtitleController_.openSubtitleDialog,
-                      this.subtitleController_));
-    }
+    this.videoTab_.updateNudge(
+        message, 
+        goog.bind(this.subtitleController_.openSubtitleDialog,
+                  this.subtitleController_));
+    this.videoTab_.showNudge(true);
 };
 
 mirosubs.widget.PlayController.prototype.disposeComponents_ = function() {

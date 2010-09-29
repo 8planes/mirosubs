@@ -125,16 +125,16 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
         popupMenu, subtitleState);
 
     this.subtitleController_ = new mirosubs.widget.SubtitleController(
-        playController, this.videoTab_, popupMenu);
+        this.playController_, this.videoTab_, popupMenu);
 
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(
-            goog.bind(subtitleController.openSubtitleDialog, 
-                      subtitleController));
+            goog.bind(this.subtitleController_.openSubtitleDialog, 
+                      this.subtitleController_));
     else if (this.translateImmediately_)
         goog.Timer.callOnce(
-            goog.bind(subtitleController.openNewTranslationDialog,
-                      subtitleController));
+            goog.bind(this.subtitleController_.openNewTranslationDialog,
+                      this.subtitleController_));
 };
 
 mirosubs.widget.Widget.prototype.makeGeneralSettings_ = function(result) {

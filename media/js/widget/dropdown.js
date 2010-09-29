@@ -28,6 +28,7 @@ mirosubs.widget.DropDown = function(dropDownContents) {
     this.setStats_(dropDownContents);
     this.currentLanguageCode_ = null;
     this.shown = false;
+    this.languageClickHandler_ = new goog.events.EventHandler(this);
 };
 
 goog.inherits(mirosubs.widget.DropDown, goog.ui.Component);
@@ -40,8 +41,9 @@ mirosubs.widget.DropDown.prototype.setStats_ = function(dropDownContents) {
     this.translationLanguages_ = dropDownContents.TRANSLATIONS;;    
 };
 mirosubs.widget.DropDown.prototype.updateContents = function(dropDownContents) {
-    this.setStats_(dropDownContents);
+    this.setStats_(dropDownContents);    
     this.updateSubtitleStats_();
+    this.addTranslationLinkListeners_();
 };
 mirosubs.widget.DropDown.prototype.createDom = function() {
     mirosubs.widget.DropDown.superClass_.createDom.call(this);
@@ -211,13 +213,18 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
         listen(this.logoutLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.LOGOUT)).
         listen(mirosubs.userEventTarget,
-               goog.object.getValues(mirosubs.EventType).
+               goog.object.getValues(mirosubs.EventType),
                this.loginStatusChanged);
     
+    this.addTranslationLinkListeners_();
+};
+
+mirosubs.widget.DropDown.prototype.addTranslationLinkListeners_ = function() {
+    this.languageClickHandler_.removeAll();
     var that = this;
     goog.array.forEach(this.translationLinks_,
         function(tLink) {
-            that.getHandler().listen(tLink.link, 'click',
+            that.languageClickHandler_.listen(tLink.link, 'click',
                 goog.bind(that.languageSelected_, that, tLink.lang[0]));
         });
 };
@@ -242,6 +249,8 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         this.dispatchEvent(type);
     else
         this.dispatchLanguageSelection_(null);
+
+    this.hide();
 };
 
 mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
@@ -317,6 +326,11 @@ mirosubs.widget.DropDown.prototype.show = function() {
 
 mirosubs.widget.DropDown.prototype.loginStatusChanged = function() {
     this.updateActions_();
+};
+
+mirosubs.widget.DropDown.prototype.disposeInternal = function() {
+    mirosubs.widget.DropDown.superClass_.disposeInternal.call(this);
+    this.languageClickHandler_.dispose();
 };
 
 mirosubs.widget.DropDown.LanguageSelectedEvent = function(opt_languageCode) {

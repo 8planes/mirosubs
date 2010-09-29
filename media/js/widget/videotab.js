@@ -91,7 +91,7 @@ mirosubs.widget.VideoTab.prototype.showContent = function(subCount, opt_playSubS
             mirosubs.languageNameForCode(opt_playSubState.LANGUAGE) :
             "Original Language";
     else
-        text = subCount == 0 ? "Add Subtitles" : "Subtitle Me";
+        text = subCount == 0 ? "Subtitle Me" : "Select Language";
     this.text_ = text;
     goog.dom.setTextContent(this.spanElem_, text);
 };
