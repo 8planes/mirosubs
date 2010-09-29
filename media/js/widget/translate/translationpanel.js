@@ -46,7 +46,6 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     this.translationList_ =
         new mirosubs.translate.TranslationList(
             this.standardSubState_.SUBTITLES, this.unitOfWork_);
-    console.log('adding trans list');
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className =
         "mirosubs-titlesList";
@@ -58,7 +57,5 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
                 return new mirosubs.translate.EditableTranslation(
                     uw, transJson['subtitle_id'], transJson);
             });
-    console.log('setting trans');
     this.translationList_.setTranslations(editableTranslations);
-    console.log('trans set');
 };

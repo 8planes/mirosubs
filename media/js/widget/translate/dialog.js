@@ -33,16 +33,12 @@ mirosubs.translate.Dialog = function(videoSource,
 goog.inherits(mirosubs.translate.Dialog, mirosubs.Dialog);
 mirosubs.translate.Dialog.prototype.createDom = function() {
     mirosubs.translate.Dialog.superClass_.createDom.call(this);
-    console.log('creating dom');
     var translationPanel = new mirosubs.translate.TranslationPanel(
         this.subtitleState_, this.standardSubState_,
         this.unitOfWork_)
-    console.log('created trans panel');
     this.getCaptioningAreaInternal().addChild(translationPanel, true);
-    console.log('added child');
     var rightPanel = this.createRightPanel_();
     this.setRightPanelInternal(rightPanel);
-    console.log('right panel internal set');
     this.getHandler().listen(
         rightPanel, mirosubs.RightPanel.EventType.DONE,
         this.handleDoneKeyPress_);

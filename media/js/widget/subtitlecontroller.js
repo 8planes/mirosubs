@@ -202,10 +202,10 @@ mirosubs.widget.SubtitleController.prototype.openDependentTranslationDialog_ =
     this.playController_.stopForDialog();
     var transDialog = new mirosubs.translate.Dialog(
         this.playController_.getVideoSource(),
-        subtitleState.LANGUAGE, originalSubtitleState);
+        subtitleState, originalSubtitleState);
     transDialog.setVisible(true);
     goog.events.listenOnce(
-        subDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
+        transDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
         this.subtitleDialogClosed_);
 };
 
