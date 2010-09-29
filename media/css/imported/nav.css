@@ -216,7 +216,7 @@
   color: #333;
   }
 
-.inline_tabs li a:hover{
+.inline_tabs li a:hover span.inline_text{
   text-decoration: underline;
   }
 

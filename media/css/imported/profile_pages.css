@@ -91,7 +91,7 @@
   padding: 0;
   }
 
-.language_list li{
+.language_list li.user_language{
   margin: 0;
   padding: 0;
   list-style: none;
@@ -102,8 +102,4 @@
 
 
 
-
-#profile .edit_profile_shell .left_column{
-  width: 200px;
-  }
 
