@@ -62,6 +62,15 @@ class BaseRpc:
                     return_value['subtitles'] = subtitles
         return return_value
 
+    def _make_subtitles_dict(self, subtitles, language, version, is_latest, is_forked):
+        return {
+            'subtitles': subtitles,
+            'language': language,
+            'version': version,
+            'is_latest': is_latest,
+            'forked': is_forked
+            }
+
     def _drop_down_contents(self, user, video):
         return {
             'translations': self._initial_languages(user, video),

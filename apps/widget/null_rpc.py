@@ -23,25 +23,22 @@ import widget
 
 class NullRpc(BaseRpc):
     def start_editing(self, request, video_id, language_code=None, 
-                      base_version_no=None, fork=False, editing=False):
+                      base_version_no=None, fork=False):
         version_no = 0
         if not request.user.is_authenticated():
-            subtitles = []
+            subtitles = self._make_subtitles_dict(
+                [], language_code, 0, True, fork)
         else:
             video = models.Video.objects.get(video_id=video_id)
             null_subtitles, created = self._get_null_subtitles_for_editing(
                 request.user, video, language_code, fork)
-            subtitles = [s.__dict__ for s in null_subtitles.subtitles()]
-            version_no = 0 if created else 1
+            subtitles = self._subtitles_dict(
+                null_subtitles, 0 if created else 1)
         return_dict = { 'can_edit': True,
-                        'version': version_no,
-                        'existing': subtitles }
-        if editing and language_code is not None:
-            return_dict['existing_captions'] = \
+                        'subtitles': subtitles }
+        if null_subtitles and null_subtitles.is_dependent():
+            return_dict['original_subtitles'] = \
                 self.fetch_subtitles(request, video_id)
-            return_dict['languages'] = \
-                [widget.language_to_map(lang[0], lang[1])
-                 for lang in LANGUAGES]
         return return_dict
 
     def save_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
@@ -49,8 +46,9 @@ class NullRpc(BaseRpc):
             return { "response" : "not_logged_in" }
         video = models.Video.objects.get(video_id=video_id)
         null_subtitles, created = self._get_null_subtitles_for_editing(
-            request.user, video, language_code)
-        self._save_subtitles_impl(request, null_subtitles, deleted, inserted, updated)
+            request.user, video, language_code, False)
+        self._save_subtitles_impl(request, null_subtitles, 
+                                  deleted, inserted, updated)
         return {'response':'ok'}
 
     def finished_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
@@ -63,13 +61,7 @@ class NullRpc(BaseRpc):
             return []
         video = models.Video.objects.get(video_id=video_id)
         null_subs = video.null_subtitles(request.user, language_code)
-        return [] if not null_subs \
-            else [s.__dict__ for s in null_subs.subtitles()]
-
-    def fetch_subtitles_and_open_languages(self, request, video_id):
-        return { 'captions': self.fetch_subtitles(request, video_id),
-                 'languages': [widget.language_to_map(lang[0], lang[1]) 
-                               for lang in LANGUAGES]}
+        return self._subtitles_dict(null_subs, 0)
 
     def _get_null_subtitles_for_editing(self, user, video, language_code, fork=False):
         null_subtitles = video.null_subtitles(user, language_code)
@@ -94,17 +86,11 @@ class NullRpc(BaseRpc):
     def _autoplay_subtitles(self, user, video, language_code, revision_no):
         null_subs = video.null_subtitles(user, language_code)
         if null_subs:
-            return [s.__dict__ for s in null_subs.subtitles()], null_subs.is_forked
+            return self._subtitles_dict(null_subs)
 
     def _subtitle_count(self, user, video):
         null_subs = video.null_subtitles(user)
         return 0 if null_subs is None else null_subs.subtitle_set.count()
-
-    def _initial_video_tab(self, user, video):
-        null_subtitles = None
-        if user.is_authenticated:
-            null_subtitles = video.null_subtitles(user)
-        return 0 if null_subtitles is None else 1
 
     def _initial_languages(self, user, video):
         if user.is_authenticated:
@@ -114,3 +100,10 @@ class NullRpc(BaseRpc):
         else:
             return []
 
+    def _subtitles_dict(self, null_subtitles, version):
+        return self._make_subtitles_dict(
+            [s.__dict__ for s in null_subtitles.subtitles()],
+            None if null_subtitles.is_original else null_subtitles.language,
+            version,
+            True,
+            null_subtitles.is_forked)
