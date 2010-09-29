@@ -186,15 +186,7 @@
           <li class="active">
               <a href="#transcripts-tab">
                 <span class="inline_text">
-                {% if language.is_original %}
-
-
-
-
                 {% if language.is_original and not language.language %}
-
-
-
                     {% trans 'Original Language Subtitles' %}
                 {% else %}
                     {{ language.get_language_display }} {% trans 'Subtitles' %}
