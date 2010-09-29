@@ -9,7 +9,12 @@
             ct: '{{ content_type.pk }}',
             last_comment_id: jQuery('.comment:first').attr('comment_id') || '',
             obj_id: '{{ obj.pk }}'
-        }, function(data){
+        }, function(data, status, response){
+            var comments_count_inc = response.getResponseHeader('comments-count');
+            if (comments_count_inc){
+                var $cc = $('.comments-count');
+                $cc.html($cc.html()-0+(comments_count_inc-0));           
+            }
             jQuery('.comments').prepend(data)
         }, 'html')
     }    

@@ -94,7 +94,6 @@ def begin(request, redirect_to=None, on_failure=None, user_url=None, template_na
         return on_failure(request, _('i-names are not supported'))
     
     consumer = Consumer(request.session, DjangoOpenIDStore())
-
     try:
         auth_request = consumer.begin(user_url)
     except DiscoveryFailure:
@@ -149,7 +148,7 @@ def complete(request, on_success=None, on_failure=None, failure_template='openid
     # JanRain library raises a warning if passed unicode objects as the keys, 
     # so we convert to bytestrings before passing to the library
     query_dict = dict([
-        (k.encode('utf8'), v.encode('utf8')) for k, v in request.GET.items()
+        (k.encode('utf8'), v) for k, v in request.GET.items()
     ])
 
     url = get_url_host(request) + request.path

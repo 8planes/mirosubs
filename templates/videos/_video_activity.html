@@ -13,7 +13,7 @@
     <tr class="{{ item.type }}">
       <td class="grid_9 table_activity">
         {% if item.is_add_video %}
-            {% trans 'Video was created.' %}
+            {% trans 'Video was submitted.' %}
         {% else %}          
             {% if item.user %}
                 <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>

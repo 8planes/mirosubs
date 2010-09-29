@@ -829,7 +829,7 @@ class Action(models.Model):
     
     @classmethod
     def create_caption_handler(cls, sender, instance, created, **kwargs):
-        if created:
+        if instance.finished:
             user = instance.user
             video = instance.language.video
             language = instance.language
