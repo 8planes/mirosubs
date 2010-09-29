@@ -26,6 +26,7 @@
 from django import template
 from django.template import RequestContext
 from apps.widget.views import base_widget_params
+from django.contrib.sites.models import Site
 
 register = template.Library()
 
@@ -34,4 +35,11 @@ def widget(widget_params, div_id='widget_div'):
     return {
         'div_id': div_id,
         'widget_params': widget_params
+    }
+
+@register.inclusion_tag('videos/_get_counter.html')    
+def get_counter():
+    domain = Site.objects.get_current().domain
+    return {
+        'domain': domain
     }
