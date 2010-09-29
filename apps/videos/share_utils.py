@@ -58,7 +58,7 @@ def _add_share_panel_context_for_video(context, video):
         _make_email_url(email_message),
         home_page_url)
 
-def _add_share_panel_context_for_history(context, video):
+def _add_share_panel_context_for_history(context, video, language=None):
     page_url = "http://{0}{1}".format(
         Site.objects.get_current().domain,
         reverse('videos:history', args=[video.video_id]))
@@ -67,11 +67,17 @@ def _add_share_panel_context_for_history(context, video):
     email_message = \
         u"Hey-- just found a version of this video {0}with captions: {1}".format(
         _share_video_title(video), page_url)
+    
+    if language:
+        base_state = {'language': language}
+    else:
+        base_state = {}
+    
     _add_share_panel_context(
         context,
         _make_facebook_url(page_url, twitter_fb_message),
         _make_twitter_url(twitter_fb_message),
-        { 'video_url': video.get_video_url(), 'base_state': {} },
+        { 'video_url': video.get_video_url(), 'base_state': base_state },
         _make_email_url(email_message),
         page_url)
 
