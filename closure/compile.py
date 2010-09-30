@@ -89,3 +89,9 @@ extension_js_files.append('widgetizer/widgetizerconfig.js')
 extension_js_files.append('widgetizer/widgetizer.js')
 extension_js_files.append('widgetizer/extension.js')
 compile('mirosubs-extension.js', extension_js_files)
+
+statwidget_js_files = list(settings.JS_OFFSITE)
+# assumes that some other process has generated statwidget/statwidgetconfig.js
+statwidget_js_files.append('statwidget/statwidgetconfig.js')
+statwidget_js_files.append('statwidget/statwidget.js')
+compile('mirosubs-statwidget.js', statwidget_js_files)
