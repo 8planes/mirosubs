@@ -115,7 +115,7 @@ class SRTSubtitles(BaseSubtitles):
                 output.append(u'%s --> %s' % (start, end))
                 output.append(item['text'])
                 output.append(u'')
-                i =+ 1
+                i += 1
         
         return u'\n'.join(output)
 

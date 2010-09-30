@@ -122,9 +122,9 @@ def download_subtitles(request, handler=SSASubtitles):
     
     for item in version.subtitles():
         subtitles.append({
-            'text': item.subtitle_text,
-            'start': item.get_start_time(),
-            'end': item.get_end_time()
+            'text': item.text,
+            'start': item.start_time,
+            'end': item.end_time
         })
     
     h = handler(subtitles, video)
