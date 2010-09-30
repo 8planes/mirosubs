@@ -4,7 +4,7 @@
 
 {% block main_content %}
 <div class="left_column">
-    <h2>{% trans 'Edit Your Profile' %} <a href="{% url profiles:profile user_info %}">({% trans 'View profile' %})</a></h2>
+    <h2>{% trans 'Edit Your Profile' %} <a href="{{ user_info.get_absolute_url }}">({% trans 'View profile' %})</a></h2>
     <img class="thumbnail_medium" src="{{ user_info.avatar }}">
     <p>
         {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
