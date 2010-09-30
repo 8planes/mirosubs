@@ -95,10 +95,8 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
 {
     var that = this;
     mirosubs.widget.ChooseLanguageDialog.show(
-        "Choose translation parameters",
-        false, true, true,
-        function(language, forked) {
-            that.startEditing_(null, language, forked);
+        true, function(subLanguage, originalLanguage, forked) {
+            that.startEditing_(null, subLanguage, null, forked);
         });
 };
 
@@ -130,37 +128,32 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function() {
     var that = this;
     if (this.dropDown_.getSubtitleCount() == 0)
         mirosubs.widget.ChooseLanguageDialog.show(
-            "Choose subtitle type",
-            true, true, false,
-            function(language, forked) {
-                that.startEditing_(null, language, true);
+            false,
+            function(subLanguage, originalLanguage, forked) {
+                that.startEditing_(null, subLanguage, originalLanguage, true);
             });
     else {
         var subState = this.playController_.getSubtitleState();
         if (!subState || !subState.LANGUAGE)
-            this.startEditing_(null, null, false);
+            this.startEditing_(null, null, null, false);
         else if (subState && subState.FORKED)
             this.startEditing_(
-                subState.VERSION, subState.LANGUAGE, true);
+                subState.VERSION, subState.LANGUAGE, null, true);
         else
-            mirosubs.widget.ChooseLanguageDialog.show(
-                "Fork translation timing?",
-                false, false, true,
-                function(language, forked) {
-                    that.startEditing_(
-                        subState.VERSION, subState.LANGUAGE, forked);
-                });
+            this.startEditing_(
+                subState.VERSION, subState.LANGUAGE, null, false);
     }
 };
 
 mirosubs.widget.SubtitleController.prototype.startEditing_ = 
-        function(baseVersionNo, languageCode, fork) 
+    function(baseVersionNo, subLanguageCode, originalLanguageCode, fork) 
 {
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'start_editing', 
         {'video_id': mirosubs.videoID,
-         'language_code': languageCode,
+         'language_code': subLanguageCode,
+         'original_language_code': originalLanguageCode,
          'base_version_no': baseVersionNo,
          'fork': fork},
         goog.bind(this.startEditingResponseHandler_, this));

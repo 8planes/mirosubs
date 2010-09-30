@@ -165,8 +165,13 @@ def actions_list(request):
                        extra_context=extra_context)    
 
 def api_subtitles(request):
-    return HttpResponse(json.dumps(_api_subtitles_json(request)), 
-                        'application/json')
+    callback = request.GET.get('callback', None)
+    result_json = json.dumps(_api_subtitles_json(request))
+    if callback:
+        return HttpResponse('{0}({1});'.format(callback, result_json),
+                            'text/javascript')
+    else:
+        return HttpResponse(result_json, 'application/json')
 
 def _api_subtitles_json(request):
     video_url = request.GET.get('video_url', None)

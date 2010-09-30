@@ -23,6 +23,7 @@ import widget
 
 class NullRpc(BaseRpc):
     def start_editing(self, request, video_id, language_code=None, 
+                      original_language_code=None,
                       base_version_no=None, fork=False):
         version_no = 0
         if not request.user.is_authenticated():
@@ -91,7 +92,7 @@ class NullRpc(BaseRpc):
     def _autoplay_subtitles(self, user, video, language_code, revision_no):
         null_subs = video.null_subtitles(user, language_code)
         if null_subs:
-            return self._subtitles_dict(null_subs)
+            return self._subtitles_dict(null_subs, user)
 
     def _subtitle_count(self, user, video):
         null_subs = video.null_subtitles(user)
