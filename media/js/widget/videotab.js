@@ -38,11 +38,6 @@ mirosubs.widget.VideoTab = function() {
 };
 goog.inherits(mirosubs.widget.VideoTab, goog.ui.Component);
 
-mirosubs.widget.VideoTab.Messages = {
-    SUBTITLE_ME: 'Subtitle me',
-    CHOOSE_LANGUAGE : 'Choose language'
-};
-
 mirosubs.widget.VideoTab.prototype.createDom = function() {
     mirosubs.widget.VideoTab.superClass_.createDom.call(this);
     this.getElement().className = 'mirosubs-videoTab';
@@ -65,11 +60,39 @@ mirosubs.widget.VideoTab.prototype.enterDocument = function() {
         listen(this.nudgeElem_, 'click', this.nudgeClicked_);
 };
 
-mirosubs.widget.VideoTab.prototype.showLoading = function(loading) {
-    this.imageElem_.src = loading ? this.spinnerGifURL_ : this.logoURL_;
+mirosubs.widget.VideoTab.prototype.showLoading = function() {
+    this.imageElem_.src = this.spinnerGifURL_;
+    goog.dom.setTextContent(this.spanElem_, "Loading");
 };
 
-mirosubs.widget.VideoTab.prototype.setText = function(text) {
+/**
+ * Just stops loading. If state has changed, stop loading by
+ * calling showContent instead.
+ *
+ */
+mirosubs.widget.VideoTab.prototype.stopLoading = function() {
+    this.imageElem_.src = this.logoURL_;
+    if (this.text_)
+        goog.dom.setTextContent(this.spanElem_, this.text_);
+};
+
+/**
+ * Stops loading, and shows text appropriate for content.
+ * @param {number} subCount Number of subs that currently 
+ *     exist for this video.
+ * @param {mirosubs.widget.SubtitleState=} opt_playSubState Subtitles 
+ *     that are currently loaded to play in widget.
+ */
+mirosubs.widget.VideoTab.prototype.showContent = function(subCount, opt_playSubState) {
+    this.imageElem_.src = this.logoURL_;
+    var text;
+    if (opt_playSubState)
+        text = opt_playSubState.LANGUAGE ? 
+            mirosubs.languageNameForCode(opt_playSubState.LANGUAGE) :
+            "Original Language";
+    else
+        text = subCount == 0 ? "Subtitle Me" : "Select Language";
+    this.text_ = text;
     goog.dom.setTextContent(this.spanElem_, text);
 };
 mirosubs.widget.VideoTab.prototype.getAnchorElem = function() {

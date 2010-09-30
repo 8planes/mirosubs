@@ -49,6 +49,12 @@ h2.main-title span{
   
 .bull{ padding: 0 10px !important;}
 
+.bold{font-weight: bold;}
+
+.larger{
+font-size: 22px;
+}
+
 
 /*//////////   ~  Block Type  ~   //////////*/
 
@@ -245,6 +251,8 @@ h2.main-title span{
 
   margin-bottom: 50px;
   
+  min-height: 500px;
+
   -moz-box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
   -webkit-box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
   box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;

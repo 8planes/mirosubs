@@ -27,11 +27,7 @@ mirosubs.widget.SubtitleController = function(
     this.videoTab_ = videoTab;
     this.dropDown_ = dropDown;
     this.playController_ = playController;
-    var m = mirosubs.widget.VideoTab.Messages;
-    if (playController.getSubtitleState() == null)
-        this.videoTab_.setText(
-            this.dropDown_.getSubtitleCount() > 0 ? 
-                m.CHOOSE_LANGUAGE : m.SUBTITLE_ME);
+    this.playController_.setSubtitleController(this);
     this.handler_ = new goog.events.EventHandler(this);
     var s = mirosubs.widget.DropDown.Selection;
     this.handler_.
@@ -91,8 +87,15 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog =
 {
     if (this.dropDown_.getSubtitleCount() == 0)
         throw new Error();
+    this.possiblyRedirect_(true, this.openNewTranslationDialog_);
+};
+
+mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
+    function()
+{
     var that = this;
     mirosubs.widget.ChooseLanguageDialog.show(
+        "Choose translation parameters",
         false, true, true,
         function(language, forked) {
             that.startEditing_(null, language, forked);
@@ -110,13 +113,15 @@ mirosubs.widget.SubtitleController.prototype.possiblyRedirect_ =
         if (mirosubs.IS_NULL)
             uri.setParameterValue('null_widget', 'true');
         if (addNewTranslation)
-            uri.setParameter('translate_immediately', 'true');
+            uri.setParameterValue('translate_immediately', 'true');
         else
-            uri.setParameter('subtitle_immediately', 'true');
+            uri.setParameterValue('subtitle_immediately', 'true');
         var subState = this.playController_.getSubtitleState();
         if (subState)
-            uri.setParameter('base_state', subState.baseParams());
-        uri.setParameter('return_url', window.location.href);
+            uri.setParameterValue(
+                'base_state', 
+                goog.json.serialize(subState.baseParams()));
+        uri.setParameterValue('return_url', window.location.href);
         window.location.assign(uri.toString());
     }
 };
@@ -125,6 +130,7 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function() {
     var that = this;
     if (this.dropDown_.getSubtitleCount() == 0)
         mirosubs.widget.ChooseLanguageDialog.show(
+            "Choose subtitle type",
             true, true, false,
             function(language, forked) {
                 that.startEditing_(null, language, true);
@@ -138,6 +144,7 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function() {
                 subState.VERSION, subState.LANGUAGE, true);
         else
             mirosubs.widget.ChooseLanguageDialog.show(
+                "Fork translation timing?",
                 false, false, true,
                 function(language, forked) {
                     that.startEditing_(
@@ -149,7 +156,7 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function() {
 mirosubs.widget.SubtitleController.prototype.startEditing_ = 
         function(baseVersionNo, languageCode, fork) 
 {
-    this.videoTab_.showLoading(true);
+    this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'start_editing', 
         {'video_id': mirosubs.videoID,
@@ -162,7 +169,7 @@ mirosubs.widget.SubtitleController.prototype.startEditing_ =
 mirosubs.widget.SubtitleController.prototype.startEditingResponseHandler_ =
     function(result)
 {
-    this.videoTab_.showLoading(false);
+    this.videoTab_.stopLoading();
     if (result['can_edit']) {
         subtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['subtitles']);
@@ -191,7 +198,7 @@ mirosubs.widget.SubtitleController.prototype.openSubtitlingDialog_ =
             mirosubs.videoID, subtitleState.LANGUAGE),
         subtitleState.SUBTITLES);
     subDialog.setVisible(true);
-    goog.events.listenOnce(
+    this.handler_.listenOnce(
         subDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
         this.subtitleDialogClosed_);
 };
@@ -204,11 +211,19 @@ mirosubs.widget.SubtitleController.prototype.openDependentTranslationDialog_ =
         this.playController_.getVideoSource(),
         subtitleState, originalSubtitleState);
     transDialog.setVisible(true);
-    goog.events.listenOnce(
-        transDialog, goog.ui.Dialog.EventType.AFTER_HIDE,
+    this.handler_.listenOnce(
+        transDialog,
+        goog.ui.Dialog.EventType.AFTER_HIDE,
         this.subtitleDialogClosed_);
 };
 
 mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {
-    
+    var dropDownContents = e.target.getDropDownContents();
+    this.playController_.dialogClosed();
+    if (dropDownContents != null) {
+        this.dropDown_.updateContents(dropDownContents);
+        this.videoTab_.showContent(
+            this.dropDown_.getSubtitleCount(),
+            this.playController_.getSubtitleState());
+    }
 };

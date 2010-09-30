@@ -79,14 +79,11 @@ mirosubs.translate.Dialog.prototype.isWorkSaved = function() {
 };
 mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
-    this.serverModel_.finish(function(availableLanguages) {
+    this.serverModel_.finish(function(dropDownContents) {
+        that.setDropDownContentsInternal(dropDownContents);
         that.saved_ = true;
-        that.availableLanguages_ = availableLanguages;
         that.setVisible(false);
     });
-};
-mirosubs.translate.Dialog.prototype.getAvailableLanguages = function() {
-    return this.availableLanguages_;
 };
 mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     mirosubs.translate.Dialog.superClass_.disposeInternal.call(this);

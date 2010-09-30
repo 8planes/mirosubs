@@ -114,11 +114,6 @@ class Rpc(BaseRpc):
         video.save()
         return self._subtitles_dict(video.version(language_code=language_code))
 
-    def fetch_subtitles_and_open_languages(self, request, video_id):
-        return { 'captions': self.fetch_subtitles(request, video_id),
-                 'languages': [widget.language_to_map(lang[0], lang[1]) 
-                               for lang in LANGUAGES]}
-    
     def get_widget_info(self, request):
         return {
             'all_videos': models.Video.objects.count(),
@@ -224,20 +219,16 @@ class Rpc(BaseRpc):
         latest_version = language.latest_finished_version()
         if latest_version is None or version.version_no >= latest_version.version_no:
             is_latest = True
-        return {
-            'subtitles': [s.__dict__ for s in version.subtitles()],
-            'language': None if language.is_original else language.language,
-            'version': version.version_no,
-            'is_latest': is_latest,
-            'forked': version.is_forked
-            }
+        return self._make_subtitles_dict(
+            [s.__dict__ for s in version.subtitles()],
+            None if language.is_original else language.language,
+            version.version_no,
+            is_latest,
+            version.is_forked)
 
     def _subtitle_count(self, user, video):
         version = video.latest_finished_version()
         return 0 if version is None else version.subtitle_set.count()
-
-    def _initial_video_tab(self, user, video):
-        return 0 if video.subtitle_state == models.NO_SUBTITLES else 1
 
     def _initial_languages(self, user, video):
         translated_languages = video.subtitlelanguage_set.filter(

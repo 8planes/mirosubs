@@ -6,12 +6,96 @@
 
 
 h2.centered{
-font-size: 38px;
+font-size: 33px;
 text-align: center;
-margin: 0;
-padding: 10px 0 0px;
+margin: 0 0 30px;
+padding: 0px;
 text-shadow: #fff 1px 1px 1px;
+line-height: 2.5em;
 }
+
+
+
+.get_it{
+width: 462px;
+line-height: 7.5em;
+text-align: center;
+text-decoration: none !important;
+display: block;
+margin-top: 80px;
+font-size: 16px;
+border: none !important;
+font-weight: bold;
+color: #333 !important;
+background: url(../../images/bub.png) 0px 0px no-repeat;
+}
+
+.small_sub_now {
+position: relative;
+padding: 30px 0 0;
+
+}
+
+
+
+.small_sub_now input{
+width: 340px;
+padding: 12px 0 8px 10px;
+
+}
+
+
+
+.small_sub_now label{
+font-weight: bold;
+}
+
+
+
+.small_sub_now button{
+position: absolute;
+right: 30px;
+top: 59px;
+}
+
+
+.enable{
+margin-top: 140px;
+font-size: 18px;
+}
+
+
+
+.seal{
+position: absolute;
+top: 175px;
+right: 5px;
+z-index: 99999999999;
+width: 133px;
+height: 133px;
+background: url(../../images/seal.png) 0px 0px no-repeat;
+overflow: hidden;
+-webkit-transform:rotate(25deg);
+}
+
+
+
+.seal div{
+text-align: center;
+margin: 45px 0 200px;
+font-size: 15px;
+font-weight: bold;
+color: #fff9d9;
+  text-shadow: 0 1px 0px #a89838;
+
+}
+
+
+
+
+
+
+
 
 .problem, .mission{
 padding: 0px 80px;

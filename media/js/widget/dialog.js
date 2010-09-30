@@ -24,6 +24,12 @@ mirosubs.Dialog = function(videoSource) {
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.setEscapeToCancel(false);
+    /**
+     * This only becomes non-null on finish, when the server sends back 
+     * new contents for the drop-down menu.
+     * @type {mirosubs.widget.DropDownContents}
+     */
+    this.dropDownContents_ = null;
     this.controlledVideoPlayer_ = videoSource.createControlledPlayer();
     this.videoPlayer_ = this.controlledVideoPlayer_.getPlayer();
     this.timelinePanel_ = null;
@@ -52,9 +58,13 @@ mirosubs.Dialog.prototype.createDom = function() {
 };
 mirosubs.Dialog.prototype.enterDocument = function() {
     mirosubs.Dialog.superClass_.enterDocument.call(this);
-    this.getHandler().listen(mirosubs.ClosingWindow.getInstance(),
-                             mirosubs.ClosingWindow.BEFORE_UNLOAD,
-                             this.onWindowUnload_);
+    this.getHandler().
+        listen(mirosubs.ClosingWindow.getInstance(),
+               mirosubs.ClosingWindow.BEFORE_UNLOAD,
+               this.onWindowUnload_).
+        listen(mirosubs.userEventTarget,
+               mirosubs.EventType.LOGIN,
+               this.updateLoginState);
 };
 /**
  * Used to display a temporary overlay, for example the instructional
@@ -136,6 +146,16 @@ mirosubs.Dialog.prototype.setVisible = function(visible) {
             this.showSaveWorkDialog_();
         }
     }
+};
+/**
+ * @protected
+ * @param {mirosubs.widget.DropDownContents} dropDownContents
+ */
+mirosubs.Dialog.prototype.setDropDownContentsInternal = function(dropDownContents) {
+    this.dropDownContents_ = dropDownContents;
+};
+mirosubs.Dialog.prototype.getDropDownContents = function() {
+    return this.dropDownContents_;
 };
 mirosubs.Dialog.prototype.showSaveWorkDialog_ = function() {
     var that = this;

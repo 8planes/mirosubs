@@ -86,7 +86,8 @@ mirosubs.subtitle.MSServerModel.prototype.finish = function(successCallback, opt
                     alert('Problem saving subtitles. Response: ' +
                           result["response"]);
                 this.finished_ = true;
-                successCallback();
+                successCallback(mirosubs.widget.DropDownContents.fromJSON(
+                    result['drop_down_contents']));
             });
     }, opt_cancelCallback, true);
 };

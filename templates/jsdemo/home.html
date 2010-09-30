@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block body_attrs %}id="index"{% endblock %}
+
+
+
+{% block main_content %}
+
+
+<div class="seal">
+
+  <div>52,432</div>
+  
+  <span>Subtitle-Enabled Videos</span>
+  
+</div>
+
+
+  <h2 class="centered">The easiest way to caption and subtitle almost any video.</h2>
+
+  <div class="grid_6 alpha">
+
+    <p class="bold larger">When you enable subtitles on your videos, you reach more viewers. With universal Subtitles, anyone who watches can add captions and translations (like a wiki for subtitles). Plus, it's free and open-source.</p>
+    
+    <form class="small_sub_now">
+     <p>
+      <label>Try it! Subtitle a Video Now</label>
+
+      <input class="field" type="text" />
+    </p> 
+      <button class="green_button big">GO</button>
+
+      <span class="small">Enter Youtube, Blip, Vimeo, or HTML5 URL</span>
+
+
+    </form>
+
+      <p class="enable">You can also enable subtitles for every video on your site. Your viewers can help you add captions and translate. <a href="#" class="learn_how">Learn How</a></p>
+
+
+
+  </div>
+
+  <div class="grid_6 omega">
+
+    <script type="text/javascript" src="http://dev.universalsubtitles.org/embed.js">
+      ({
+"video_url": "http://www.youtube.com/watch?v=MJRF8xGzvj4"
+      })
+    </script>
+
+
+  <a href="#" class="get_it">Get this subtitle button for your site!</a>
+
+  </div>
+
+
+
+{% endblock %}

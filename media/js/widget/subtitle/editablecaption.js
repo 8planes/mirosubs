@@ -55,7 +55,7 @@ mirosubs.subtitle.EditableCaption.CHANGE = 'captionchanged';
 /**
  * Minimum subtitle length, in seconds.
  */
-mirosubs.subtitle.EditableCaption.MIN_LENGTH = 1;
+mirosubs.subtitle.EditableCaption.MIN_LENGTH = 0.5;
 
 /**
  * @param {mirosubs.subtitle.EditableCaption} caption Previous caption in list.
