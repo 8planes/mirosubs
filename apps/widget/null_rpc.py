@@ -26,6 +26,7 @@ class NullRpc(BaseRpc):
                       original_language_code=None,
                       base_version_no=None, fork=False):
         version_no = 0
+        null_subtitles = None
         if not request.user.is_authenticated():
             subtitles = self._make_subtitles_dict(
                 [], language_code, 0, True, fork)
@@ -67,7 +68,11 @@ class NullRpc(BaseRpc):
             return []
         video = models.Video.objects.get(video_id=video_id)
         null_subs = video.null_subtitles(request.user, language_code)
-        return self._subtitles_dict(null_subs, 0)
+        if null_subs:
+            return self._subtitles_dict(null_subs, 0)
+        else:
+            return self._make_subtitles_dict(
+                [], language_code, 0, True, True)
 
     def _get_null_subtitles_for_editing(self, user, video, language_code, fork=False):
         null_subtitles = video.null_subtitles(user, language_code)
@@ -95,11 +100,14 @@ class NullRpc(BaseRpc):
             return self._subtitles_dict(null_subs, user)
 
     def _subtitle_count(self, user, video):
-        null_subs = video.null_subtitles(user)
-        return 0 if null_subs is None else null_subs.subtitle_set.count()
+        if user.is_authenticated():
+            null_subs = video.null_subtitles(user)
+            return 0 if null_subs is None else null_subs.subtitle_set.count()
+        else:
+            return 0
 
     def _initial_languages(self, user, video):
-        if user.is_authenticated:
+        if user.is_authenticated():
             # we don't calculate percent done for null translations, 
             # so use the answer to everything, 42
             return [(code, 42) for code in video.null_translation_language_codes(user)]
