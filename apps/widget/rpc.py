@@ -31,8 +31,7 @@ from django.db.models import Sum
 LANGUAGES_MAP = dict(LANGUAGES)
 
 class Rpc(BaseRpc):
-    def start_editing(self, request, video_id, 
-                      language_code=None, 
+    def start_editing(self, request, video_id, language_code, 
                       original_language_code=None,
                       base_version_no=None, fork=False):
         """Called by subtitling widget when subtitling or translation 
@@ -40,11 +39,11 @@ class Rpc(BaseRpc):
         """
         self._maybe_add_video_session(request)
 
-        language, can_writelock = self._get_language_for_editing(
-            request, video_id, language_code, original_language_code)
-
         if original_language_code:
             self._save_original_language(video_id, original_language_code)
+
+        language, can_writelock = self._get_language_for_editing(
+            request, video_id, language_code)
 
         if not can_writelock:
             return { "can_edit": False, 
@@ -192,40 +191,31 @@ class Rpc(BaseRpc):
                     subtitle_versions[0].delete()
         return version_to_copy, new_version_no
 
-    def _get_language_for_editing(self, request, video_id, 
-                                  language_code, original_language_code):
+    def _get_language_for_editing(self, request, video_id, language_code):
         video = models.Video.objects.get(video_id=video_id)
-        defaults = {
+        language, created = models.SubtitleLanguage.objects.get_or_create(
+            video=video,
+            language=language_code,
+            defaults={
                 'language': ('' if language_code is None else language_code),
                 'writelock_session_key': ''
-            }
-        if language_code == original_language_code:
-            language, created = models.SubtitleLanguage.objects.get_or_create(
-                video=video, 
-                is_original=True,
-                defaults=defaults)
-        else:
-            language, created = models.SubtitleLanguage.objects.get_or_create(
-                video=video,
-                language=language_code,
-                defaults=defaults)
-            language = video.subtitle_language(language_code)
+            })
         if not language.can_writelock(request):
             return language, False
         language.writelock(request)
         language.save()
         return language, True
 
-    def _save_original_language(self, video_id, original_language_code):
+    def _save_original_language(self, video_id, language_code):
         video = models.Video.objects.get(video_id=video_id)
         original_language, created = \
             models.SubtitleLanguage.objects.get_or_create(
                 video=video,
                 is_original=True,
-                defaults={'language': original_language_code,
+                defaults={'language': language_code,
                           'writelock_session_key': ''})
-        if not created:
-            original_language.langauge = original_language_code
+        if not created and original_language.language != language_code:
+            original_language.language = language_code
             original_language.save()
 
     def _autoplay_subtitles(self, user, video, language_code, version_no):

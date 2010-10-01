@@ -58,7 +58,7 @@ class TestNullRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', 
             False)
         video_id = return_value['video_id']
-        return_value = null_rpc.start_editing(request, video_id)
+        return_value = null_rpc.start_editing(request, video_id, 'en', 'en')
         self.assertEqual(True, return_value['can_edit'])
         self.assertEqual(0, return_value['subtitles']['version'])
 
@@ -69,7 +69,7 @@ class TestNullRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', 
             False)
         video_id = return_value['video_id']
-        return_value = null_rpc.start_editing(request, video_id)
+        return_value = null_rpc.start_editing(request, video_id, 'en', 'en')
         self.assertEqual(True, return_value['can_edit'])
         self.assertEqual(0, return_value['subtitles']['version'])
         inserted = [{'subtitle_id': u'sfdsfsdf',
@@ -90,7 +90,7 @@ class TestNullRpc(TestCase):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_subtitle(request)
         null_rpc.finished_subtitles(request, video.video_id, [], [], [])
-        response = null_rpc.start_editing(request, video.video_id, language_code='es')
+        response = null_rpc.start_editing(request, video.video_id, 'es')
         self.assertEquals(True, response['can_edit'])
         inserted = [{'subtitle_id': u'sfdsfsdf', 'text': 'asdfdsf'}]
         null_rpc.save_subtitles(request, video.video_id, [], inserted, [], language_code='es')
@@ -105,7 +105,7 @@ class TestNullRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv', 
             False)
         video_id = return_value['video_id']
-        null_rpc.start_editing(request, video_id)
+        null_rpc.start_editing(request, video_id, 'en', 'en')
         inserted = [{'subtitle_id': u'sfdsfsdf',
                      'text': 'hey!',
                      'start_time': 2.3,
@@ -139,7 +139,7 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        return_value = rpc.start_editing(request, video_id)
+        return_value = rpc.start_editing(request, video_id, 'en', 'en')
         self.assertEqual(True, return_value['can_edit'])
         subs = return_value['subtitles']
         self.assertEqual(0, subs['version'])
@@ -164,7 +164,7 @@ class TestRpc(TestCase):
             request,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        return_value = rpc.start_editing(request, video.video_id)
+        return_value = rpc.start_editing(request, video.video_id, 'en')
         # make sure we are getting back the unfinished draft.
         self.assertEqual(True, return_value['can_edit'])
         subs = return_value['subtitles']
@@ -178,7 +178,7 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en', 'en')
         inserted = [{'subtitle_id': 'sfdsfsdf',
                      'text': 'hey!',
                      'start_time': 2.3,
@@ -192,7 +192,7 @@ class TestRpc(TestCase):
             request_1,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        return_value = rpc.start_editing(request_1, video_id)
+        return_value = rpc.start_editing(request_1, video_id, 'en')
         # make sure we are not getting back the unfinished draft.
         self.assertEqual(True, return_value['can_edit'])
         subs = return_value['subtitles']
@@ -227,13 +227,13 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en', 'en')
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        return_value = rpc.start_editing(request_1, video_id)
+        return_value = rpc.start_editing(request_1, video_id, 'en')
         self.assertEqual(False, return_value['can_edit'])
         self.assertEqual(self.user_0.__unicode__(), 
                          return_value['locked_by'])
@@ -245,7 +245,7 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en', 'en')
         inserted = [{'subtitle_id': 'sfdsfsdf',
                      'text': 'hey!',
                      'start_time': 2.3,
@@ -259,7 +259,7 @@ class TestRpc(TestCase):
             request_1,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        return_value = rpc.start_editing(request_1, video_id)
+        return_value = rpc.start_editing(request_1, video_id, 'en')
         # make sure we are getting back finished subs.
         self.assertEqual(True, return_value['can_edit'])
         subs = return_value['subtitles']
@@ -273,7 +273,7 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en', 'en')
         inserted = [{'subtitle_id': 'sfdsfsdf',
                      'text': 'hey!',
                      'start_time': 2.3,
@@ -291,7 +291,7 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en', 'en')
         request_0.user = self.user_0
         inserted = [{'subtitle_id': 'sfdsfsdf',
                      'text': 'hey!',
@@ -312,14 +312,14 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en', 'en')
         rpc.release_lock(request_0, video_id)
         request_1 = RequestMockup(self.user_1)
         rpc.show_widget(
             request_1,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        return_value = rpc.start_editing(request_1, video_id)
+        return_value = rpc.start_editing(request_1, video_id, 'en')
         self.assertEqual(True, return_value['can_edit'])
         subs = return_value['subtitles']
         self.assertEqual(0, subs['version'])
@@ -332,7 +332,7 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en', 'en')
         inserted = [{'subtitle_id': 'sfdsfsdf',
                      'text': 'hey!',
                      'start_time': 2.3,
@@ -341,7 +341,7 @@ class TestRpc(TestCase):
         rpc.save_subtitles(request_0, video_id, [], inserted, [])
         rpc.finished_subtitles(request_0, video_id, [], [], [])
         # user 0 opens dialog again and makes an edit.
-        rpc.start_editing(request_0, video_id)
+        rpc.start_editing(request_0, video_id, 'en')
         inserted = [{'subtitle_id': 'sfdsdsdsdfsdf',
                      'text': 'hey!',
                      'start_time': 3.5,
@@ -356,7 +356,7 @@ class TestRpc(TestCase):
             request_1,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        return_value = rpc.start_editing(request_1, video_id)
+        return_value = rpc.start_editing(request_1, video_id, 'en')
         # make sure we are not getting back the draft.
         self.assertEqual(True, return_value['can_edit'])
         subs = return_value['subtitles']
@@ -375,7 +375,7 @@ class TestRpc(TestCase):
             request_1,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        rpc.start_editing(request_1, video.video_id)
+        rpc.start_editing(request_1, video.video_id, 'en')
         # user_1 updates the solitary caption to have blank text.
         updated = [{'subtitle_id': 'sfdsfsdf',
                      'text': '',
@@ -416,7 +416,7 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, video.video_id, [], [], [])
         rpc.release_lock(request, video.video_id)
         # open translation dialog.
-        response = rpc.start_editing(request, video.video_id, language_code='es')
+        response = rpc.start_editing(request, video.video_id, 'es')
         self.assertEquals(True, response['can_edit'])
         subs = response['subtitles']
         self.assertEquals(0, subs['version'])
@@ -438,7 +438,7 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, video.video_id, [], [], [])
         rpc.release_lock(request, video.video_id)
         # open translation dialog.
-        response = rpc.start_editing(request, video.video_id, language_code='es')
+        response = rpc.start_editing(request, video.video_id, 'es')
         inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
         rpc.save_subtitles(request, video.video_id, [],
                               inserted, [], language_code='es')
@@ -460,7 +460,7 @@ class TestRpc(TestCase):
             request_1, 
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        response = rpc.start_editing(request_1, video.video_id, language_code='es')
+        response = rpc.start_editing(request_1, video.video_id, 'es')
         self.assertEquals(True, response['can_edit'])
         subs = response['subtitles']
         self.assertEquals(1, subs['version'])
@@ -493,7 +493,7 @@ class TestRpc(TestCase):
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
         video_id = return_value['video_id']
-        rpc.start_editing(request, video_id)
+        rpc.start_editing(request, video_id, 'en', 'en')
 
         inserted = [{'subtitle_id': u'sfdsfsdf',
                      'text': 'hey!',
@@ -508,7 +508,7 @@ class TestRpc(TestCase):
         video = self._create_video_with_one_caption_set(request)
         rpc.finished_subtitles(request, video.video_id, [], [], [])
         rpc.release_lock(request, video.video_id)
-        response = rpc.start_editing(request, video.video_id, language_code='es')
+        response = rpc.start_editing(request, video.video_id, 'es')
         inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
         rpc.save_subtitles(request, video.video_id, [],
                            inserted, [], language_code='es')
