@@ -360,7 +360,7 @@ msgstr ""
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr ""
+msgstr "Videók"
 
 #: .\templates\base.html.py:74
 msgid "Volunteer"
@@ -368,11 +368,11 @@ msgstr ""
 
 #: .\templates\base.html.py:79
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: .\templates\base.html.py:80
 msgid "FAQ"
-msgstr ""
+msgstr "GYIK"
 
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
@@ -381,15 +381,15 @@ msgstr ""
 
 #: .\templates\base.html.py:83
 msgid "Logout"
-msgstr ""
+msgstr "Kijelenktkezés"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: .\templates\base.html.py:88
 msgid "Login"
-msgstr ""
+msgstr "Bejelentkezés"
 
 #: .\templates\base.html.py:106
 msgid "Universal Subtitles is a project of <a href=\"http://participatoryculture.org/\">PCF</a>."
@@ -397,7 +397,7 @@ msgstr ""
 
 #: .\templates\base.html.py:112
 msgid "Contact Us"
-msgstr ""
+msgstr "Kapcsolat"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"

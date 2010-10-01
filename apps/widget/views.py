@@ -83,6 +83,19 @@ def widgetize_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
+def statwidget_demo(request):
+    js_files = ['http://{0}/widget/statwidgetconfig.js'.format(
+            Site.objects.get_current().domain)]
+    js_files.append('{0}js/statwidget/statwidget.js'.format(
+            settings.MEDIA_URL))
+    context = widget.add_js_files({}, settings.JS_USE_COMPILED,
+                               settings.JS_OFFSITE,
+                               'mirosubs-statwidget.js',
+                               full_path_js_files=js_files)
+    return render_to_response('widget/statwidget_demo.html',
+                              context,
+                              context_instance=RequestContext(request))
+
 def base_widget_params(request, extra_params={}):
     params = {}
     params['video_url'] = request.GET.get('video_url')

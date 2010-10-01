@@ -2289,6 +2289,10 @@ cursor:
    background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
 }
 
+.mirosubs-modal-lang {
+   background-color: #fff;
+}
+
 .mirosubs-modal-lang h3 {
    -moz-border-radius-topleft:5px;
    -moz-border-radius-topright:5px;
@@ -2296,21 +2300,28 @@ cursor:
    font-size:14px;
    margin: 0;
    padding:15px;
-   border-bottom: 1 px solid #FFFFFF;
+   border-bottom: 1 px solid #FFF;
    padding-bottom: 20px;
-   text-shadow: 1px 1px 1px #FFFFFF;
-   color: #777777;
+   text-shadow: 1px 1px 1px #FFF;
+   color: #777;
 }
 
 .mirosubs-modal-lang p {
-   background:url("../images/big_grad.png") repeat-x scroll 0 0 #FFFFFF !important;
-   border-bottom: 1px solid #999999;
    margin:0 !important;
-   padding:20px;
-   color: #666666;
+   padding:12px;
+   color: #666;
    font-size: 15px;
    line-height: 15px;
    min-width: 300px;
+}
+
+.mirosubs-modal-lang p div {
+   margin-bottom: 8px;
+}
+
+.mirosubs-modal-lang .mirosubs-green-button {
+   float: right;
+   margin-right: 20px;
 }
 
 .mirosubs-modal-login-content h4 {

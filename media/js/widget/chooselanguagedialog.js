@@ -22,59 +22,62 @@ goog.provide('mirosubs.widget.ChooseLanguageDialog');
  * @constructor
  */
 mirosubs.widget.ChooseLanguageDialog = function(
-    header, callback, selectOriginal, selectLanguage, selectForked) 
+    forAddTranslation, callback) 
 {
     goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
-    this.header_ = header;
+    this.forAddTranslation_ = forAddTranslation;
     this.callback_ = callback;
-    this.selectOriginal_ = selectOriginal;
-    this.selectLanguage_ = selectLanguage;
-    this.selectForked_ = selectForked;
+    this.selectedOriginal_ = null;
     this.selectedLanguage_ = null;
     this.isForkedSelected_ = false;
 };
 goog.inherits(mirosubs.widget.ChooseLanguageDialog, goog.ui.Dialog);
 
-mirosubs.widget.ChooseLanguageDialog.LanguageType = {
-    ORIGINAL: "original",
-    LANGUAGE: "language",
-    METADATA: "metadata"
-};
-
 mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
     mirosubs.widget.ChooseLanguageDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var lt = mirosubs.widget.ChooseLanguageDialog.LanguageType;
-    this.getElement().appendChild($d('h3', null, this.header_));
-    if (this.selectLanguage_) {
-        this.languageRadioButtons_ = [];
-        if (this.selectOriginal_)
-            this.addLanguageSelector_($d, lt.ORIGINAL, "Original Language");
-        this.originalDropdown_ = this.makeDropdown_(
+    this.getElement().appendChild(
+        $d('h3', null, 
+           this.forAddTranslation_ ? "Add a new translation" : "Add subtitles"));
+    var allLanguages = goog.array.concat(
+        mirosubs.languages, mirosubs.metadataLanguages);
+    this.subLangDropdown_ = this.makeDropdown_(
+        $d, allLanguages);
+    if (!this.forAddTranslation_) {
+        this.originalLangDropdown_ = this.makeDropdown_(
             $d, mirosubs.languages);
-        this.metadataDropdown_ = this.makeDropdown_(
-            $d, mirosubs.metadataLanguages);
-        this.addLanguageSelector_(
-            $d, lt.LANGUAGE, "Language: ", this.originalDropdown_);
-        this.addLanguageSelector_(
-            $d, lt.METADATA, "Metadata: ", this.metadataDropdown_);
-        this.languageRadioButtons_[0].checked = true;
+        this.getElement().appendChild(
+            $d('div', null,
+               $d('p', null,
+                  $d('div', null, 'This video is in:'),
+                  this.originalLangDropdown_),
+               $d('p', null,
+                  $d('div', null, 'I am subtitling in:'),
+                  this.subLangDropdown_)));
     }
-    if (this.selectForked_) {
+    else {
         this.forkedCheckbox_ = 
             $d('input', {'type': 'checkbox'});
         this.getElement().appendChild(
-            $d('p', null, this.forkedCheckbox_, "Fork timing"));               
+            $d('div', null,
+               $d('p', null,
+                  $d('div', null, 'I am subtitling in:'),
+                  this.subLangDropdown_),
+               $d('p', null,
+                  this.forkedCheckbox_,
+                  'Use original subtitle timing')));
     }
     this.okButton_ = 
         $d('a', 
            {'href':'#', 
             'className': "mirosubs-green-button mirosubs-big"}, 
-           'OK');
-    this.getElement().appendChild(
-        $d('p', null, this.okButton_));
+           'Continue');
+    this.getElement().appendChild(this.okButton_);
+    var clearDiv = $d('div', {'style': 'clear: both'});
+    clearDiv.innerHTML = "&nbsp;";
+    this.getElement().appendChild(clearDiv);
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.enterDocument = function() {
@@ -83,12 +86,25 @@ mirosubs.widget.ChooseLanguageDialog.prototype.enterDocument = function() {
         listen(this.okButton_,
                'click',
                this.okClicked_);
+    if (this.originalLangDropdown_) {
+        this.getHandler().listen(
+            this.originalLangDropdown_,
+            'change',
+            this.originalLanguageChanged_);
+    }
+};
+
+mirosubs.widget.ChooseLanguageDialog.prototype.originalLanguageChanged_ = function() {
+    this.subLangDropdown_.value = this.originalLangDropdown_.value;
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     this.setVisible(false);
-    this.callback_(this.getSelectedLanguage(), this.isForkedSelected());
+    this.callback_(
+        this.subLangDropdown_.value, 
+        this.originalLangDropdown_ ? this.originalLangDropdown_.value : null, 
+        this.forkedCheckbox_ ? !this.forkedCheckbox_.checked : false);
 };
 
 mirosubs.widget.ChooseLanguageDialog.prototype.makeDropdown_ = 
@@ -101,45 +117,6 @@ mirosubs.widget.ChooseLanguageDialog.prototype.makeDropdown_ =
     return $d('select', null, options);
 };
 
-mirosubs.widget.ChooseLanguageDialog.prototype.addLanguageSelector_ =
-    function($d, value, var_children)
-{
-    var radioButton = $d('input', {'type': 'radio', 
-                                   'name': 'langtype',
-                                   'value': value})
-    this.languageRadioButtons_.push(radioButton);
-    var divCreator = goog.partial(
-        $d, 'p', null, radioButton);
-    this.getElement().appendChild(divCreator.apply(
-        null, Array.prototype.slice.call(arguments, 2)));
-};
-
-mirosubs.widget.ChooseLanguageDialog.prototype.getSelectedLanguage = 
-    function() 
-{
-    var lt = mirosubs.widget.ChooseLanguageDialog.LanguageType;
-    var selectedRadio = this.selectedLanguageRadioButton_();
-    if (selectedRadio != null) {
-        if (selectedRadio.value == lt.ORIGINAL)
-            return null;
-        else if (selectedRadio.value == lt.LANGUAGE)
-            return this.originalDropdown_.value;
-        else
-            return this.metadataDropdown_.value;
-    }
-    return null;
-};
-
-mirosubs.widget.ChooseLanguageDialog.prototype.selectedLanguageRadioButton_ =
-    function() 
-{
-    if (this.languageRadioButtons_)
-        for (var i = 0; i < this.languageRadioButtons_.length; i++)
-            if (this.languageRadioButtons_[i].checked)
-                return this.languageRadioButtons_[i];
-    return null;
-};
-
 mirosubs.widget.ChooseLanguageDialog.prototype.isForkedSelected =
     function() 
 {
@@ -147,10 +124,9 @@ mirosubs.widget.ChooseLanguageDialog.prototype.isForkedSelected =
 };
 
 mirosubs.widget.ChooseLanguageDialog.show = 
-    function(header, selectOriginal, selectLanguage, selectForked, callback)
+    function(forAddTranslation, callback)
 {
     var dialog = new mirosubs.widget.ChooseLanguageDialog(
-        header, callback, selectOriginal, 
-        selectLanguage, selectForked);
+        forAddTranslation, callback);
     dialog.setVisible(true);
 };
