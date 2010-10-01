@@ -37,121 +37,63 @@
 {% block logo %}<span class="logo">Miro Subs Alpha</span>{% endblock %}
 
 {% block main_content %}
-<div class="watercolor2"> 
-<h2 class="centered">{% trans 'Subtitles and Captions for Every Video on the Web' %}</h2>
-
-<p class="pitch">
-<span class="problem"><strong>{% trans 'The Problem' %}</strong> <span>{% trans "Web video is beginning to rival television, but there isn't a good open resource for subtitling." %}</span></span> 
-
-<span class="mission"><strong>{% trans 'Our Mission' %}</strong> <span>{% trans "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web." %}</span> <a href="/about">{% trans 'Learn More' %}</a></span>
 
 
-<span class="right_now"><strong>{% trans 'Right now' %}</strong> {% trans "we're in an alpha stage, building and testing. You can help!" %}<br/>
-<a href="{% url demo %}">{% trans 'Try our demo' %}</a> - <a href="/videos/create/">Subtitle a video</a> - <a href="http://pcf-qa.github.com/universal-subtitles/">{% trans 'Become a tester' %}</a></span>
 
-</p>											
 
-<div class="three_column">
-	<div class="col1">
-		<h3 class="alpha">{% trans 'Subtitle Widget' %}</h3>
-		<p>{% trans 'A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos).' %}</p>
-	</div>
-	<div class="col3">
-		<h3 class="alpha">{% trans 'Community Site' %}</h3> 
-		<p>{% trans "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)." %}</p>
-	</div>
-	<div class="col2">
-		<h3>{% trans 'Subtitle Lookup Protocol' %}</h3>
-		<p>{% trans 'An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video.' %}</p>
-	</div>
-</div>
 
-<div class="clear">&nbsp;</div>
+<div class="seal">
 
-</div>
-
-<div class="get_updates">
-
-	<p class="update_text">{% trans 'Get updates and find out first when we launch' %}</p>
-	<form method="post" action="http://pcf8.pculture.org/interspire/form.php?form=3" id="frmSS3" onsubmit="return CheckForm3(this);">
-	    {% csrf_token %}
-		<p><input type="text" name="email" /></p>
-		<input type="hidden" name="format" value="h" />
-		<button class="green_button big" type="submit" />{% trans 'Get Updates!' %}</button>
-	</form>
-
-	<script type="text/javascript">
-	// <![CDATA[
-                var email_source = '{% trans "Please enter a valid email address" %}';
-                $('.get_updates input[name=email]')
-                    .val(email_source)
-                    .focus(function(){
-                        if ($(this).val() === email_source){
-                            $(this).val('');
-                        }
-                    })
-                    .blur(function(){
-                        if ($(this).val() === ''){
-                            $(this).val(email_source);
-                        }
-                    });
-                
-				function CheckMultiple1(frm, name) {
-					for (var i=0; i < frm.length; i++)
-					{
-						fldObj = frm.elements[i];
-						fldId = fldObj.id;
-						if (fldId) {
-							var fieldnamecheck=fldObj.id.indexOf(name);
-							if (fieldnamecheck != -1) {
-								if (fldObj.checked) {
-									return true;
-								}
-							}
-						}
-					}
-					return false;
-				}
-			function CheckForm1(f) {
-				var email_re = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
-				if (!email_re.test(f.email.value)) {
-					alert("{% trans 'Please enter your email address.' %}");
-					f.email.focus();
-					return false;
-				}
-		
-					return true;
-				}
-		
-	// ]]>
-	</script>
-</div>
-
-<div class="right_column">	
-
-  <div class="box">
-
-  <div class="drumbeat">
-        </div>
+  <div>52,432</div>
   
-<h3>{% trans 'Mozilla will double your donation!' %}</h3>
-    <p>{% trans "We're a featured Mozilla Drumbeat project!" %}<a href="http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/">{% trans 'Donate Now' %}</a></p>
+  <span>Subtitle-Enabled Videos</span>
+  
 </div>
 
 
-  <div class="box">
-    
-      <img src="{{ MEDIA_URL }}images/widg_button.png" class="floatleft" border="0" />
+  <h2 class="centered">The easiest way to caption and subtitle almost any video.</h2>
 
-  <h3>{% trans 'Check out the widget' %}</h3>
-      <p>{% trans 'Test our subtitling widget' %} <a href="/demo">{% trans 'Try the Demo' %}</a></p>
+  <div class="grid_6 alpha">
+
+
+    <p class="larger">With Universal Subtitles, anyone who watches can<br /> add captions and translations (like a wiki for subtitles). </p>
+
+    <p class="larger">When you enable subtitles, you reach more viewers. 
+
+
+    <p class="larger">Plus, it's free and open-source.</p>
+    
+    <form class="small_sub_now">
+     <p>
+      <label>Try it! Subtitle a Video Now</label>
+
+      <input class="field" type="text" value="Enter video's URL" />
+    </p> 
+      <button class="green_button big">GO!</button>
+
+      <span class="small">Youtube, Blip, Vimeo, or HTML5 URL</span>
+
+
+    </form>
+
+
+  <div class="share"> <a href="#" class="beat">Mozilla Drumbeat</a> <div><h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a></div></div>
+
+
+<div class="enable">
+
+<span>You can also enable subtitles for every video on your site.</span> 
+<div>Your viewers can help you add captions and translate.</div> 
+<a href="#" class="learn_how">Learn How</a>
+</div>
+
+
+
   </div>
 
- </div>
+  <div class="grid_6 omega">
 
-<div class="left_column">
-  
-  <a href="#how-to-video-flash" class="how-to-video-image">
+ <a href="#how-to-video-flash" class="how-to-video-image">
       <img src="{{ MEDIA_URL }}images/play_vid.png" border="0" />
   </a>
   
@@ -180,8 +122,117 @@
        </object>
      </div>
   </div>
-  
-  <div class="clear">&nbsp;</div>
+
+
+  <a href="#" class="get_it">Get this subtitle button<br /> for your site!</a>
+
+  </div>
+
+
+
+
+<h2 class="arrows">With Universal Subtitles, you can</h2>
+
+
+
+<div class="grid_4 alpha one">
+  <div>
+    <h4>Add subtitles</h4>
+    <p>We've built the easiest way to subtitle videos. Add our subtitling widget to your video (or your site) and click the "subtitle me" button. The rest is simple! Totally free, and no software to download.</p>
+  </div>
 </div>
+  
+<div class="grid_4 two">
+  <div>
+    <h4>Add translations</h4>
+    <p>Once subtitles exist, any viewer can add a translation in any language. We also use Google Translate for instant machine translation between dozens of languages. Reach an international audience!</p>
+  </div>
+</div>
+  
+<div class="grid_4 omega three">
+  <div>
+    <h4>Get volunteer help</h4>
+    <p>
+      Your viewers (and members of our 
+      subtitling community) can add translations and make improvements. That way 
+      subtitles are constantly improving - like wikipedia. We organize your international audience to make your videos
+      more accessible.
+    </p>
+  </div>
+</div>
+  
+<div class="space">&nbsp;</div>
+  
+<div class="grid_7 alpha">
+  <h3>It’s free with no software to download</h3>
+  <p><strong>Add our embed code to your videos.</strong> Submit your video, and get an embed code
+  to post in your site. When the page loads, our subtitle tools will display underneath your video (as a small, simple button)</p>
+  
+  
+  <p>
+    <strong>Subtitling tools open in your page.</strong> When someone clicks the “subtitle me” button, 
+    a subtitling interface appears on your page (most users never leave your site). 
+    Subtitles they create are then visible to other users, on your site.
+  </p>
+
+</div>
+
+
+
+<div class="grid_5 omega">
+  <h3>How it works</h3>
+  <p>A community of volunteers improving your subtitles Each video gets its own collaboration space on our site (like a wikipedia article) where users can make improvements, track changes, and give each other feedback.</p>
+</div>
+
+
+
+<div class="space">&nbsp;</div>
+
+
+
+<div class="grid_6 alpha">
+  <h3>Why Universal Subtitles is different</h3>
+  
+  <ul>
+    <li>It's built by a 501(c)3 nonprofit working with a community
+    of volunteers (find out how to volunteer).</li>
+    
+    <li>The code is free and open source (get the source code)</li>
+    
+    <li>It's built using Javascript and HTML5 instead of
+    proprietary software like Flash</li>
+    
+    <li>It's 100% web-based, there’s no software to download.</li>
+    
+    <li>You don't have to host your video with us, and you're not
+    dependent on any one video host, platform, or format.</li>
+    
+    <li>People are free to add subtitles to any video</li>
+  </ul>
+</div>
+
+
+<div class="grid_6 omega">
+ <div class="box">
+    <div class="drumbeat"></div>
+    <h3>Mozilla will double your donation!</h3>
+    <p>We're a featured Mozilla Drumbeat project!<a href="http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/">Donate Now</a></p>
+  </div>
+</div>
+
+
+<div class="space">&nbsp;</div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}

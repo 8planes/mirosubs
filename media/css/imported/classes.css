@@ -35,7 +35,19 @@
 
 
 
+
+.space{
+clear: both;
+height: 50px !important;
+}
+
+
 /*//////////   ~  Inline Type  ~   //////////*/
+
+
+h2.main-title{
+  margin: 0;
+  }
 
 
 h2.main-title span{
@@ -52,7 +64,7 @@ h2.main-title span{
 .bold{font-weight: bold;}
 
 .larger{
-font-size: 22px;
+font-size: 16px;
 }
 
 
