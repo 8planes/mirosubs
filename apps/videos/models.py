@@ -632,7 +632,7 @@ class SubtitleVersion(SubtitleCollection):
             for subtitle in new_subtitles:
                 try:
                     old_subtitle = old_subtitles[subtitle.subtitle_id]
-                    if not old_subtitle.subtitle_text == subtitle.subtitle_text:
+                    if not old_subtitle.text == subtitle.text:
                         text_count_changed += 1
                     if not old_subtitle.start_time == subtitle.start_time or \
                             not old_subtitle.end_time == subtitle.end_time:
@@ -656,7 +656,8 @@ class SubtitleVersion(SubtitleCollection):
         cls = self.__class__
         try:
             return cls.objects.filter(version_no__lt=self.version_no) \
-                      .filter(language=self.language, finished=True)[:1].get()
+                      .filter(language=self.language, finished=True) \
+                      .exclude(text_change=0, time_change=0)[:1].get()
         except models.ObjectDoesNotExist:
             pass
         
@@ -664,7 +665,9 @@ class SubtitleVersion(SubtitleCollection):
         cls = self.__class__
         try:
             return cls.objects.filter(version_no__gt=self.version_no) \
-                      .filter(language=self.language, finished=True).order_by('version_no')[:1].get()
+                      .filter(language=self.language, finished=True) \
+                      .exclude(text_change=0, time_change=0) \
+                      .order_by('version_no')[:1].get()
         except models.ObjectDoesNotExist:
             pass
 

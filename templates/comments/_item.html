@@ -15,8 +15,8 @@
             <a href="#comments-{{ item.id }}" class="floatright" style="margin-right: 5px">Link</a>
             {% if item.reply_to %}
                 <a href="#comments-{{ item.reply_to.id }}">{% trans 'replied to comment from' %} {{ item.reply_to.user }}</a>
-                <div class="replied">{{ item.reply_to.content }}</div>
+                <div class="replied">{{ item.reply_to.content|escape }}</div>
             {% endif %}
-            <p>{{ item.content }}</p>
+            <p>{{ item.content|escape }}</p>
         </div>
     </li>

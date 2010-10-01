@@ -34,7 +34,7 @@ class Command(BaseCommand):
             url = 'http://ajax.googleapis.com/ajax/services/language/detect?v=1.0&q=%s'
             text = ''
             for item in version.subtitles():
-                text += ' %s' % item.subtitle_text
+                text += ' %s' % item.text
                 if len(text) >= 300:
                     break
             r = json.loads(urllib.urlopen(url % urlquote_plus(text)).read())
@@ -94,7 +94,7 @@ class Command(BaseCommand):
                         scaption = None
                         changed = True
                     else:
-                        changed = not caption.subtitle_text == scaption.subtitle_text
+                        changed = not caption.text == scaption.text
                     data = [caption, scaption, changed]
                     captions.append(data)
                 context['captions'] = captions
