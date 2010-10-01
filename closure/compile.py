@@ -22,7 +22,9 @@ def call_command(command):
                                stderr=subprocess.PIPE)
     return process.communicate()
 
-def compile(output_file_name, js_file_list):
+def compile(output_file_name, js_file_list, 
+            closure_dep_file='closure-dependencies.js',
+            include_flash_deps=True):
     logging.info("Starting {0}".format(output_file_name))
 
     deps = [" --js %s " % os.path.join(JS_LIB, file) for file in js_file_list]
@@ -32,9 +34,9 @@ def compile(output_file_name, js_file_list):
 
     logging.info("Calculating closure dependencies")
 
-    output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/closure-dependencies.js " +
+    output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/%s " +
                              "-p %s/ -o script") % 
-                            (CLOSURE_LIB, JS_LIB, CLOSURE_LIB))
+                            (CLOSURE_LIB, JS_LIB, closure_dep_file, CLOSURE_LIB))
 
     # This is to reduce the number of warnings in the code.
     # The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
@@ -59,10 +61,11 @@ def compile(output_file_name, js_file_list):
         compiled_js_text = compiled_js_file.read()
         
     with open(compiled_js, 'w') as compiled_js_file:
-        with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
-            compiled_js_file.write(swfobject_file.read())
-        with open(FLOWPLAYER_JS, 'r') as flowplayerjs_file:
-            compiled_js_file.write(flowplayerjs_file.read())
+        if include_flash_deps:
+            with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
+                compiled_js_file.write(swfobject_file.read())
+            with open(FLOWPLAYER_JS, 'r') as flowplayerjs_file:
+                compiled_js_file.write(flowplayerjs_file.read())
         compiled_js_file.write(compiled_js_text)
 
     if len(output) > 0:
@@ -90,8 +93,13 @@ extension_js_files.append('widgetizer/widgetizer.js')
 extension_js_files.append('widgetizer/extension.js')
 compile('mirosubs-extension.js', extension_js_files)
 
-statwidget_js_files = list(settings.JS_OFFSITE)
+statwidget_js_files = [
+    'mirosubs.js',
+    'rpc.js',
+    'loadingdom.js',
+    'statwidget/statwidgetconfig.js',
+    'statwidget/statwidget.js']
 # assumes that some other process has generated statwidget/statwidgetconfig.js
-statwidget_js_files.append('statwidget/statwidgetconfig.js')
-statwidget_js_files.append('statwidget/statwidget.js')
-compile('mirosubs-statwidget.js', statwidget_js_files)
+compile('mirosubs-statwidget.js', statwidget_js_files, 
+        closure_dep_file='closure-stat-dependencies.js',
+        include_flash_deps=False)
