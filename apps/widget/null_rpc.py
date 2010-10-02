@@ -22,7 +22,7 @@ from django.conf.global_settings import LANGUAGES
 import widget
 
 class NullRpc(BaseRpc):
-    def start_editing(self, request, video_id, language_code=None, 
+    def start_editing(self, request, video_id, language_code, 
                       original_language_code=None,
                       base_version_no=None, fork=False):
         version_no = 0
@@ -33,7 +33,8 @@ class NullRpc(BaseRpc):
         else:
             video = models.Video.objects.get(video_id=video_id)
             null_subtitles, created = self._get_null_subtitles_for_editing(
-                request.user, video, language_code, fork)
+                request.user, video, language_code, 
+                original_language_code, fork)
             subtitles = self._subtitles_dict(
                 null_subtitles, 0 if created else 1)
         return_dict = { 'can_edit': True,
@@ -43,12 +44,12 @@ class NullRpc(BaseRpc):
                 self.fetch_subtitles(request, video_id)
         return return_dict
 
-    def save_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
+    def save_subtitles(self, request, video_id, deleted, inserted, updated, language_code=''):
         if not request.user.is_authenticated():
             return { "response" : "not_logged_in" }
         video = models.Video.objects.get(video_id=video_id)
         null_subtitles, created = self._get_null_subtitles_for_editing(
-            request.user, video, language_code, False)
+            request.user, video, language_code, None, False)
         self._save_subtitles_impl(request, null_subtitles, 
                                   deleted, inserted, updated)
         return {'response':'ok'}
@@ -74,14 +75,25 @@ class NullRpc(BaseRpc):
             return self._make_subtitles_dict(
                 [], language_code, 0, True, True)
 
-    def _get_null_subtitles_for_editing(self, user, video, language_code, fork=False):
+    def _get_null_subtitles_for_editing(self, user, video, language_code, original_language_code=None, fork=False):
+        orig_created = False
+        if original_language_code is not None:
+            orig_null_subs, orig_created = \
+                models.NullSubtitles.objects.get_or_create(
+                    video=video,
+                    user=user,
+                    is_original=True,
+                    defaults={ 'language': original_language_code })
+            if not orig_created and orig_null_subs.language != original_language_code:
+                orig_null_subs.language = original_language_code
+                orig_null_subs.save()
         null_subtitles = video.null_subtitles(user, language_code)
-        created = False
+        created = orig_created and language_code == original_language_code
         if null_subtitles is None:
             null_subtitles = models.NullSubtitles(
                 video=video,
-                language=('' if language_code is None else language_code),
-                is_original=(language_code is None),                
+                language=language_code,
+                is_original=False,
                 user=user)
             if fork:
                 null_subtitles.is_forked = True

@@ -38,22 +38,16 @@ class Rpc(BaseRpc):
         is to commence or recommence on a video.
         """
         self._maybe_add_video_session(request)
-
         if original_language_code:
             self._save_original_language(video_id, original_language_code)
-
         language, can_writelock = self._get_language_for_editing(
             request, video_id, language_code)
-
         if not can_writelock:
             return { "can_edit": False, 
                      "locked_by" : language.writelock_owner_name }
-
         version = self._get_version_for_editing(
             request.user, language, base_version_no, fork)
-
         subtitles = self._subtitles_dict(version)
-
         return_dict = { "can_edit" : True,
                         "subtitles" : subtitles }
         if version.is_dependent():
