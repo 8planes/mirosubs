@@ -968,7 +968,7 @@ msgstr "Animateurs"
 
 #: .\templates\opensubtitles2010.html.py:100
 msgid "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate."
-msgstr ""
+msgstr "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> fournit des facilitées et des conceptions d'agenda. Aspiration pense que les rencontres en face-à-face représente la plus puissante façon de faciliter l'interaction, construire des réseaux et collaborer."
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
@@ -1004,11 +1004,11 @@ msgstr "Cette politique de confidentialité s'applique à tous les sites web et 
 
 #: .\templates\privacy.html.py:14
 msgid "Except as described below, PCF does not collect or require visitors to its web sites to furnish personally identifying information such as names, email addresses, and phone numbers. Like most web site operators, PCF does collect non-personally identifying information of the sort that web browsers and servers typically make available, such as the browser type, operating system, language preference, referring site and date and time of each visitor request. PCF also collects potentially-personally identifying information like Internet Protocol (IP) addresses, which are non-personally identifying in and of themselves but could be used in conjunction with other information to personally identify users."
-msgstr ""
+msgstr "Sauf dans les cas décrits ci-dessous, PCF ne perçoit ou n'exige des visiteurs de ses sites Web de fournir des informations d'identification personnelle telles que des noms, des adresses email et des numéros de téléphone. Comme la plupart des opérateurs de site web, PCF recueille des informations d'identification personnelle que les navigateurs Web et les serveurs mettent en général à disposition, tels que le type de navigateur, le système d'exploitation, la langue de préférence, le site référent et la date et l'heure de chaque requête des visiteurs. PCF recueille également des informations d'identification potentiellement personnelle, comme l'adresse IP, qui ne permettent pas une identification personnelle en eux-même, mais pourraient être utilisées en conjonction avec d'autres informations pour identifier personnellement les utilisateurs."
 
 #: .\templates\privacy.html.py:17
 msgid "PCF's purpose in collecting this information is to better understand how PCF's visitors use its web sites. To that end, PCF may share potentially-personally identifying information with its employees, contractors, service providers, and subsidiaries and related organizations. PCF may also release its results of such analyses of non-personally identifying information about visitors by publishing a report on web site usage trends. Otherwise, PCF will not publicly release potentially-personally identifying information except under the same circumstances as PCF releases personally identifying information. Those circumstances are explained below."
-msgstr ""
+msgstr "Le but de PCF dans la collecte de ces informations est de mieux comprendre comment les visiteurs PCF utilisent ses sites Web. À cette fin, PCF peut partager des informations d'identification potentiellement personnelle avec ses employés, entrepreneurs, fournisseurs de services, et des filiales et des organisations connexes. PCF peut aussi publier ses résultats d'analyses d'informations sans identifications personnelles sur les visiteurs en publiant un rapport sur les tendances de l'utilisation du site web. Autrement, PCF ne communiquera pas au public d'informations d'identification potentiellement personnelle, sauf dans les mêmes circonstances où PCF communique des informations d'identification personnelle. Ces circonstances sont expliquées ci-dessous."
 
 #: .\templates\privacy.html.py:21
 msgid "Community Members"
@@ -1016,15 +1016,15 @@ msgstr "Membres de la communauté"
 
 #: .\templates\privacy.html.py:23
 msgid "Certain members of the PCF community (contributors, customers, etc.) choose to interact with PCF in ways that require PCF and others to know more about them. The amount and type of information that PCF gathers from those members depends on the nature of the interaction. For example, members who wish to post content to certain portions of PCF's web sites or participate in live chat session(s) are asked to provide usernames that are used to identify content as having been posted by a particular member (who is identified by the username)."
-msgstr ""
+msgstr "Certains membres de la communauté PCF (contributeurs, clients, etc) choisissent d'interagir avec PCF d'une façon qui nécessite que PCF et d'autres en sachent plus sur eux. La quantité et le type d'informations que PCF rassemble sur ces membres dépend de la nature de l'interaction. Par exemple, les membres qui souhaitent publier du contenu sur certaines parties de sites web PCF ou participer à une plusieurs sessions de chat en direct sont invités à fournir des noms d'utilisateur qui sont utilisés pour identifier le contenu comme ayant été posté par un membre particulier (qui est identifié par le nom d'utilisateur)."
 
 #: .\templates\privacy.html.py:26
 msgid "Developers, by comparison, are asked to provide contact information, up to and sometimes including telephone or fax numbers, so that they can be contacted as necessary. Typically, developers will be contacted by email, IRC (internet relay chat), or IM (instant messaging services). However, in the event of a time-sensitive question relating to the work the developer is doing in connection with PCF and where other means of contact have failed, a developerтАЩs phone number or fax number may be used to contact the developer. This information is available to PCF employees, contractors, subsidiaries, and potentially to other members of the community. A developer can choose not to provide a phone number or fax number. On occasion, developers and other community members are contacted by email and asked for a physical address or geographic location so that they may be sent PCF-related t-shirts and other schwag or invited to a meetup or other PCF-related gathering. In such cases, the purpose for which their physical address is sought will be made explicit."
-msgstr ""
+msgstr "Les développeurs, par comparaison, sont invités à fournir des informations de contact, jusqu'à et incluant parfois des numéros de téléphone ou de fax, de sorte qu'ils puissent être contactés si nécessaire. En règle générale, les développeurs seront contactés par e-mail, IRC (Internet Relay Chat), ou IM (services de messagerie instantanée). Toutefois, dans le cas d'une question urgente en rapport avec les travaux que le développeur effectue en rapport avec PCF et où d'autres moyens de contact ont échoué, un numéro de téléphone ou de fax du développeur peut être utilisé pour contacter le développeur. Cette information est disponible aux employés PCF, aux entrepreneurs, aux filiales, et potentiellement à d'autres membres de la communauté. Un développeur peut choisir de ne pas fournir un numéro de téléphone ou de fax. À l'occasion, les développeurs et autres membres de la communauté sont contactés par e-mail et sont invités à fournir une adresse physique, ou un emplacement géographique, de sorte de leur envoyer des t-shirts PCF ou d'autres cadeaux, ou de les inviter à une rencontre ou une autre réunion en rapport avec PCF. Dans de tels cas, la raison pour laquelle leur adresse physique est demandée sera explicitée."
 
 #: .\templates\privacy.html.py:29
 msgid "Customers of PCF stores (which sell merchandise and services on behalf of PCF) are asked to provide even more information, including billing and shipping addresses and credit card or similar information to third party vendors so that their transactions can be processed and fulfilled by PCF or a third-party fulfillment vendor."
-msgstr ""
+msgstr "Les clients des magasins PCF (qui vendent des marchandises et des services au nom de PCF) sont invités à fournir encore davantage d'informations, y compris des adresses de facturation et de livraison et de carte de crédit ou des renseignements semblables à des fournisseurs tiers de sorte que leurs transactions puissent être traitées et satisfaites par PCF ou un vendeur tiers."
 
 #: .\templates\privacy.html.py:32
 msgid "We also permit community members to provide their name and email addresses so that they can have a more direct engagement with PCF and so that PCF can send them information related to PCF, such as educational material, promotional and cross-promotional material, surveys to be completed, messages about PCF, events information, and other such information and materials. These are opt-in interactions where community members affirmatively sign-up for inclusion in a direct communication with PCF (and with an ability to unsubscribe/opt-out on any email received). These campaigns may be conducted with the help of a third-party customer relationship manager to help us manage the database of information and its analysis and use, in each case such third partyтАЩs involvement with all the data collected will be solely on PCFтАЩs behalf. As part of these marketing campaigns, we might also ask you to provide demographic information such as gender, age, job or role, country, geographic location, and areas of interest. If we ask you for this information, we will use it to customize our communication with you and to better understand those interested in PCF and its products. As part of these marketing campaigns, we may collect a campaign source ID, marketing campaign ID, and a campaign referrer ID. These types of information are used so that we may better understand your interests and the effectiveness of particular marketing campaigns. We may also use this information to customize our communications with you. For example, if a community member plans to host a PCF-themed party to promote a product launch or other event and would like to receive PCF promotional items like t-shirts, buttons, and stickers for her guests (which we call тАЬschwagтАЭ), the community member may submit her name, mailing address, and details about the event (such as date and number of anticipated guests) through Bugzilla so that we (or our service providers) can process this request. In each case, PCF collects personally identifying information only insofar as is necessary to fulfill the purpose of the community member's interaction with PCF. And in the case of a schwag request, those bugs allow you to select restricted access so that only PCF contractors and employees and the individuals listed in the bug can access your information via Bugzilla itself."
@@ -1040,23 +1040,23 @@ msgstr ""
 
 #: .\templates\privacy.html.py:41
 msgid "PCF does not publicly release information gathered in connection with commercial transactions (i.e., transactions involving money), including transactions conducted through PCF Store or donations to PCF."
-msgstr ""
+msgstr "PCF ne diffuse pas publiquement des informations recueillies dans le cadre de transactions commerciales (par exemple, les transactions impliquant des fonds), y compris les transactions effectuées par le PCF Store ou les dons à PCF."
 
 #: .\templates\privacy.html.py:43
 msgid "PCF does not publicly release personally identifying information collected in connection with an application for employment with PCF."
-msgstr ""
+msgstr "PCF ne diffuse pas publiquement des informations personnelles d'identification recueillies dans le cadre d'une demande d'emploi à PCF."
 
 #: .\templates\privacy.html.py:45
 msgid "PCF does not make publicly available information that is used to authenticate users the publication of which would compromise the security of PCF's web sites (e.g., passwords)."
-msgstr ""
+msgstr "PCF ne rend pas accessibles au public des informations qui sont utilisées pour authentifier les utilisateurs, publication qui compromettrait la sécurité des sites web PCF (par exemple, des mots de passe)."
 
 #: .\templates\privacy.html.py:47
 msgid "PCF does not make publicly available information that it specifically promises at the time of collection to maintain in confidence."
-msgstr ""
+msgstr "PCF ne rend pas accessibles au public des informations qu'elle promet spécifiquement de garder confidentielles au moment de la collecte."
 
 #: .\templates\privacy.html.py:50
 msgid "Outside those four contexts, users should assume that personally identifying information provided through PCF's web sites may be made available to the public."
-msgstr ""
+msgstr "En dehors de ces quatre contextes, les utilisateurs doivent supposer que des informations personnelles identifiables fournies sur des sites web PCF peut être mis à la disposition du public."
 
 #: .\templates\privacy.html.py:53
 msgid "Interactive Product Features"
@@ -1088,7 +1088,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:72
 msgid "Updating of Personally-Identifying Information"
-msgstr ""
+msgstr "Mise à jour des informations d'identification personnelle"
 
 #: .\templates\privacy.html.py:74
 msgid "You may request access, correction, or deletion of your personally identifiable information or potentially personally identifiable information, as permitted by law. PCF will seek to comply with such requests, provided that we have sufficient information to identify the personally identifiable information or potentially personally identifiable information related to you. To do so, users should look for links or contact information available on whichever PCF web sites store the relevant information (e.g., Bugzilla users should go to Account Settings) or contact PCF by using one of the email addresses listed below."
