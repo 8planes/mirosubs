@@ -76,6 +76,16 @@ mirosubs.metadataLanguages = null;
 
 mirosubs.languageMap_ = null;
 
+/**
+ * some languages, like metadata languages, are forked by default.
+ *
+ */
+mirosubs.isForkedLanguage = function(languageCode) {
+    return null != goog.array.find(
+        mirosubs.metadataLanguages,
+        function(lang) { return lang[0] == languageCode; });
+};
+
 mirosubs.languageNameForCode = function(code) {
     if (mirosubs.languageMap_ == null) {
         mirosubs.languageMap_ = {};

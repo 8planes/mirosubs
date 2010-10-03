@@ -63,13 +63,12 @@ mirosubs.widget.PlayController.prototype.dialogClosed = function() {
 };
 
 mirosubs.widget.PlayController.prototype.turnOffSubs = function() {
-    this.dropDown_.setShowingSubs(false);
+    this.dropDown_.setCurrentSubtitleState(null);
     this.dropDown_.hide();
     this.videoTab_.showNudge(false);
     this.disposeComponents_();
     this.subtitleState_ = null;
-    // TODO: set the video tab text here also.
-    
+    this.videoTab_.showContent(this.dropDown_.hasSubtitles());
 };
 
 /**
@@ -118,7 +117,8 @@ mirosubs.widget.PlayController.prototype.languageSelected = function(languageCod
             var subState = mirosubs.widget.SubtitleState.fromJSON(subStateJSON);
             that.setUpSubs_(subState);
             that.videoTab_.showContent(
-                that.dropDown_.getSubtitleCount(), subState);
+                that.dropDown_.hasSubtitles(), subState);
+            that.dropDown_.setCurrentSubtitleState(subState);
         });
 };
 

@@ -112,13 +112,15 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
         result['subtitles']);
 
-    this.videoTab_.showContent(dropDownContents.SUBTITLE_COUNT,
-                               subtitleState);
-
     var popupMenu = new mirosubs.widget.DropDown(dropDownContents);
+
+    this.videoTab_.showContent(popupMenu.hasSubtitles(),
+                               subtitleState);
 
     this.addChild(popupMenu, true);
     goog.style.showElement(popupMenu.getElement(), false);
+
+    popupMenu.setCurrentSubtitleState(subtitleState);
 
     this.playController_ = new mirosubs.widget.PlayController(
         this.videoSource_, this.videoPlayer_, this.videoTab_, 

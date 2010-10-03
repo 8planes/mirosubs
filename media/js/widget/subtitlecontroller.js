@@ -34,7 +34,7 @@ mirosubs.widget.SubtitleController = function(
         listen(
             dropDown,
             s.ADD_TRANSLATION,
-            this.openNewTranslationDialog).
+            this.openNewLanguageDialog).
         listen(
             dropDown,
             s.IMPROVE_SUBTITLES,
@@ -48,7 +48,7 @@ mirosubs.widget.SubtitleController = function(
 mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ = 
     function(e) 
 {
-    if (this.dropDown_.getSubtitleCount() == 0)
+    if (!this.dropDown_.hasSubtitles())
         this.openSubtitleDialog();
     else
         this.dropDown_.toggleShow();
@@ -61,6 +61,7 @@ mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
 mirosubs.widget.SubtitleController.prototype.openSubtitleDialog = 
     function() 
 {
+    var forNewSubs = !this.dropDown_.hasSubtitles();
     var subtitleState = this.playController_.getSubtitleState();
     if (subtitleState != null && 
         !subtitleState.IS_LATEST && 
@@ -72,22 +73,25 @@ mirosubs.widget.SubtitleController.prototype.openSubtitleDialog =
              "will override those changes. Are you sure you want to do this?"].
             join('');
         if (confirm(msg))
-            this.possiblyRedirect_(false, this.subtitle_);
+            this.possiblyRedirect_(false, goog.bind(this.subtitle_, this, forNewSubs));
     }
     else
-        this.possiblyRedirect_(false, this.subtitle_);
+        this.possiblyRedirect_(false, goog.bind(this.subtitle_, this, forNewSubs));
 };
 
 /**
- * Correponds to "Add new translation" in menu. Don't call this if there 
+ * Correponds to "Add new subtitles" in menu. Don't call this if there 
  * are no subtitles yet.
  */
-mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog = 
+mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
     function() 
 {
-    if (this.dropDown_.getSubtitleCount() == 0)
+    if (!this.dropDown_.hasSubtitles())
         throw new Error();
-    this.possiblyRedirect_(true, this.openNewTranslationDialog_);
+    if (this.dropDown_.getSubtitleCount() > 0)
+        this.possiblyRedirect_(true, goog.bind(this.openNewTranslationDialog_, this));
+    else
+        this.possiblyRedirect_(false, goog.bind(this.subtitle_, this, true));
 };
 
 mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
@@ -96,7 +100,8 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
     var that = this;
     mirosubs.widget.ChooseLanguageDialog.show(
         true, function(subLanguage, originalLanguage, forked) {
-            that.startEditing_(null, subLanguage, null, forked);
+            that.startEditing_(null, subLanguage, null, 
+                               mirosubs.isForkedLanguage(subLanguage));
         });
 };
 
@@ -104,7 +109,7 @@ mirosubs.widget.SubtitleController.prototype.possiblyRedirect_ =
     function(addNewTranslation, callback)
 {
     if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
-        goog.bind(callback, this)();
+        callback();
     else {
         var uri = new goog.Uri(mirosubs.siteURL() + '/onsite_widget/');
         uri.setParameterValue('video_url', mirosubs.videoURL);
@@ -124,9 +129,13 @@ mirosubs.widget.SubtitleController.prototype.possiblyRedirect_ =
     }
 };
 
-mirosubs.widget.SubtitleController.prototype.subtitle_ = function() {
+/**
+ *
+ * @param {boolean} newLanguage
+ */
+mirosubs.widget.SubtitleController.prototype.subtitle_ = function(newLanguage) {
     var that = this;
-    if (this.dropDown_.getSubtitleCount() == 0)
+    if (newLanguage)
         mirosubs.widget.ChooseLanguageDialog.show(
             false,
             function(subLanguage, originalLanguage, forked) {
@@ -213,10 +222,13 @@ mirosubs.widget.SubtitleController.prototype.openDependentTranslationDialog_ =
 mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {
     var dropDownContents = e.target.getDropDownContents();
     this.playController_.dialogClosed();
+    this.videoTab_.showContent(
+        this.dropDown_.hasSubtitles(),
+        this.playController_.getSubtitleState());
+    this.dropDown_.setCurrentSubtitleState(
+        this.playController_.getSubtitleState());
     if (dropDownContents != null) {
         this.dropDown_.updateContents(dropDownContents);
-        this.videoTab_.showContent(
-            this.dropDown_.getSubtitleCount(),
-            this.playController_.getSubtitleState());
     }
+
 };

@@ -78,12 +78,13 @@ mirosubs.widget.VideoTab.prototype.stopLoading = function() {
 
 /**
  * Stops loading, and shows text appropriate for content.
- * @param {number} subCount Number of subs that currently 
- *     exist for this video.
+ * @param {boolean} hasSubtitles Do subs currently exist for this video?
  * @param {mirosubs.widget.SubtitleState=} opt_playSubState Subtitles 
  *     that are currently loaded to play in widget.
  */
-mirosubs.widget.VideoTab.prototype.showContent = function(subCount, opt_playSubState) {
+mirosubs.widget.VideoTab.prototype.showContent = function(
+    hasSubtitles, opt_playSubState) 
+{
     this.imageElem_.src = this.logoURL_;
     var text;
     if (opt_playSubState)
@@ -91,7 +92,7 @@ mirosubs.widget.VideoTab.prototype.showContent = function(subCount, opt_playSubS
             mirosubs.languageNameForCode(opt_playSubState.LANGUAGE) :
             "Original Language";
     else
-        text = subCount == 0 ? "Subtitle Me" : "Select Language";
+        text = hasSubtitles ? "Select Language" : "Subtitle Me";
     this.text_ = text;
     goog.dom.setTextContent(this.spanElem_, text);
 };
