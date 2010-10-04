@@ -122,6 +122,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
 {
     if (playerAPIID == this.playerAPIID_) {
         this.player_ = goog.dom.$(this.playerElemID_);
+        goog.style.setSize(this.player_, this.width_, this.height_);
         if (this.chromeless_)
             this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());
         goog.array.forEach(this.commands_, function(cmd) { cmd(); });
