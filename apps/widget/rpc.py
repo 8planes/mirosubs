@@ -189,9 +189,8 @@ class Rpc(BaseRpc):
         video = models.Video.objects.get(video_id=video_id)
         language, created = models.SubtitleLanguage.objects.get_or_create(
             video=video,
-            language=language_code,
+            language=('' if language_code is None else language_code),
             defaults={
-                'language': ('' if language_code is None else language_code),
                 'writelock_session_key': ''
             })
         if not language.can_writelock(request):
