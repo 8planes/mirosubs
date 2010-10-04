@@ -487,6 +487,23 @@ class TestRpc(TestCase):
         self.assertEquals(False, language.was_complete)
         self.assertEquals(False, language.is_complete)
 
+    def test_edit_existing_original(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
+        rpc.release_lock(request, video.video_id)
+        language = video.subtitle_language()
+        # making the language blank to imitate existing vids in system
+        language.language = ''
+        language.save()
+        return_value = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        return_value = rpc.start_editing(request, video.video_id, None, None)
+        self.assertEquals(1, len(return_value['subtitles']['subtitles']))
+        self.assertEquals(False, 'original_subtitles' in return_value)
+
     def _create_video_with_one_caption_set(self, request):
         return_value = rpc.show_widget(
             request,
