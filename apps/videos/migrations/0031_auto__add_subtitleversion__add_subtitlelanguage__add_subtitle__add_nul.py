@@ -66,6 +66,8 @@ class Migration(SchemaMigration):
         if not db.dry_run:
             self._migrate_videos(orm)
 
+        db.create_unique('videos_subtitlelanguage', ['video_id', 'language'])
+
     def _migrate_videos(self, orm):
         count = orm.Video.objects.count()
         cur_video = 1
