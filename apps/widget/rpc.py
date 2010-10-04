@@ -187,12 +187,21 @@ class Rpc(BaseRpc):
 
     def _get_language_for_editing(self, request, video_id, language_code):
         video = models.Video.objects.get(video_id=video_id)
-        language, created = models.SubtitleLanguage.objects.get_or_create(
-            video=video,
-            language=('' if language_code is None else language_code),
-            defaults={
-                'writelock_session_key': ''
-            })
+        if language_code is None:
+            language, created = models.SubtitleLanguage.objects.get_or_create(
+                video=video,
+                is_original=True,
+                defaults = {
+                    'writelock_session_key': '',
+                    'language': ''
+                    })
+        else:
+            language, created = models.SubtitleLanguage.objects.get_or_create(
+                video=video,
+                language=language_code,
+                defaults={
+                    'writelock_session_key': ''
+                    })
         if not language.can_writelock(request):
             return language, False
         language.writelock(request)
