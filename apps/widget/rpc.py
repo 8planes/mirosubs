@@ -210,15 +210,18 @@ class Rpc(BaseRpc):
 
     def _save_original_language(self, video_id, language_code):
         video = models.Video.objects.get(video_id=video_id)
-        original_language, created = \
+        existing_language, created = \
             models.SubtitleLanguage.objects.get_or_create(
                 video=video,
-                is_original=True,
-                defaults={'language': language_code,
-                          'writelock_session_key': ''})
-        if not created and original_language.language != language_code:
-            original_language.language = language_code
-            original_language.save()
+                language=language_code,
+                defaults={'writelock_session_key': ''})
+        if not existing_language.is_original:
+            original_language = video.subtitle_language()
+            if original_language is not None:
+                original_language.is_original = False
+                original_language.save()
+            existing_language.is_original = True
+            existing_language.save()
 
     def _autoplay_subtitles(self, user, video, language_code, version_no):
         if video.subtitle_language(language_code) is None:
