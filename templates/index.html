@@ -57,17 +57,22 @@
 
   <div class="box">
 
-    <form class="small_sub_now">
+    <form class="small_sub_now" action="{% url videos:create %}" method="POST">
+     {% csrf_token %}
      <p>
         <label>{% trans 'Try it! Subtitle a Video Now' %}</label>
 
-        <input class="field" type="text" value="Enter video's URL" />
+        <input class="field" name="video_url" type="text" value="{% trans "Enter video's URL" %}" />
       </p> 
       <button class="green_button big">{% trans 'GO!' %}</button>
 
       <span class="small">Youtube, Blip, Vimeo, or HTML5 URL</span>
     </form>
-
+    <script type="text/javascript">
+        jQuery('input[name=video_url]').one('click', function(){
+            $(this).val('');
+        })
+    </script>
 </div>
 
 <a href="{% url get_code_page %}" class="green_button huge">
