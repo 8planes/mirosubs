@@ -21,7 +21,7 @@ msgstr "Spanjollishte Argjentinase"
 
 #: .\apps\auth\admin.py:10
 msgid "Username"
-msgstr ""
+msgstr "Emri i përdoruesit"
 
 #: .\apps\auth\admin.py:11
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
