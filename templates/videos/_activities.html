@@ -32,10 +32,10 @@
             {% if item.is_add_version %}
                 {% trans 'edited' %} 
                 <a href="{{ item.language.get_absolute_url }}">
-                    {% if not item.language or item.language.is_original %}
+                    {% if not item.language %}
                         {% trans 'original subtitles' %}
                     {% else %}
-                        {{ item.language.get_language_display }} {% trans 'translation' %}
+                        {{ item.language.language_display }} {% trans 'subtitles' %}
                     {% endif %}
                 </a> {% trans 'for' %} 
                 <a class="url" href="{{ item.video.get_absolute_url }}">{{ item.video }}</a> 
