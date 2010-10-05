@@ -45,35 +45,35 @@ msgstr "Email"
 
 #: .\apps\auth\models.py:83
 msgid "Add comment"
-msgstr ""
+msgstr "Shto koment"
 
 #: .\apps\auth\models.py:84
 msgid "Start subtitles"
-msgstr ""
+msgstr "Nis titrat"
 
 #: .\apps\auth\models.py:85
 msgid "Start translation"
-msgstr ""
+msgstr "Nis përkthimin"
 
 #: .\apps\auth\models.py:86
 msgid "Edit subtitles"
-msgstr ""
+msgstr "Edito titrat"
 
 #: .\apps\auth\models.py:87
 msgid "Edit translation"
-msgstr ""
+msgstr "Edito përkthimin"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
-msgstr ""
+msgstr "Ju mund të përgjigjeni vetëm ndaj komenteve për të njëjtin objekt"
 
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
-msgstr ""
+msgstr "Ky përdorues nuk ka email"
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
-msgstr ""
+msgstr "Ju nuk jeni vërtetuar."
 
 #: .\apps\profiles\forms.py:51
 #, python-format
