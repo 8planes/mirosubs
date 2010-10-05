@@ -27,7 +27,7 @@ mirosubs.widget.DropDown = function(dropDownContents) {
 
     this.setStats_(dropDownContents);
     this.subtitleState_ = null;
-    this.shown = false;
+    this.shown_ = false;
     this.languageClickHandler_ = new goog.events.EventHandler(this);
 };
 
@@ -249,7 +249,20 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
                goog.bind(this.menuItemClicked_, this, s.LOGOUT)).
         listen(mirosubs.userEventTarget,
                goog.object.getValues(mirosubs.EventType),
-               this.loginStatusChanged);
+               this.loginStatusChanged).
+        listen(this.getDomHelper().getDocument(),
+               goog.events.EventType.MOUSEDOWN, 
+               this.onDocClick_, true);
+
+    // Webkit doesn't fire a mousedown event when opening the context menu,
+    // but we need one to update menu visibility properly. So in Safari handle
+    // contextmenu mouse events like mousedown.
+    // {@link http://bugs.webkit.org/show_bug.cgi?id=6595}
+    if (goog.userAgent.WEBKIT)
+        this.getHandler().listen(
+            this.getDomHelper().getDocument(),
+            goog.events.EventType.CONTEXTMENU, 
+            this.onDocClick_, true);
     
     this.addTranslationLinkListeners_();
 };
@@ -262,6 +275,12 @@ mirosubs.widget.DropDown.prototype.addTranslationLinkListeners_ = function() {
             that.languageClickHandler_.listen(tLink.link, 'click',
                 goog.bind(that.languageSelected_, that, tLink.lang[0]));
         });
+};
+
+mirosubs.widget.DropDown.prototype.onDocClick_ = function(e) {
+    if (this.shown_ &&
+        !goog.dom.contains(this.getElement(), e.target))
+        this.hide();
 };
 
 mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
@@ -321,7 +340,7 @@ mirosubs.widget.DropDown.prototype.setTranslationLanguages =
 };
 
 mirosubs.widget.DropDown.prototype.toggleShow = function() {
-    if (this.shown)
+    if (this.shown_)
         this.hide();
     else
         this.show();
@@ -329,12 +348,12 @@ mirosubs.widget.DropDown.prototype.toggleShow = function() {
 
 mirosubs.widget.DropDown.prototype.hide = function() {
     goog.style.showElement(this.getElement(), false);
-    this.shown = false;
+    this.shown_ = false;
 };
 
 mirosubs.widget.DropDown.prototype.show = function() {
     goog.style.showElement(this.getElement(), true);
-    this.shown = true;
+    this.shown_ = true;
 };
 
 mirosubs.widget.DropDown.prototype.loginStatusChanged = function() {
