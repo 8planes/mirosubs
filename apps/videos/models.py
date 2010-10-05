@@ -95,18 +95,6 @@ class Video(models.Model):
     
     def __unicode__(self):
         return self.title_display()
-        if self.title:
-            return self.title
-        if self.video_type == VIDEO_TYPE_HTML5:
-            return self.video_url
-        elif self.video_type == VIDEO_TYPE_YOUTUBE:
-            return self.youtube_videoid
-        elif self.video_type == VIDEO_TYPE_BLIPTV:
-            return self.bliptv_fileid
-        elif self.video_type == VIDEO_TYPE_VIMEO:
-            return self.get_video_url()
-        elif self.video_type == VIDEO_TYPE_DAILYMOTION:
-            return self.get_video_url()
     
     def is_html5(self):
         return self.video_type == VIDEO_TYPE_HTML5
@@ -270,18 +258,14 @@ class Video(models.Model):
     
     @property
     def filename(self):
-        if self.video_type == VIDEO_TYPE_HTML5:
-            return '{0}'.format(self.video_url.split('/')[-1])
-        elif self.video_type == VIDEO_TYPE_YOUTUBE:
-            return 'youtube_{0}'.format(self.youtube_videoid)
-        else:
-            return 'bliptv_{0}'.format(self.bliptv_fileid)
+        from django.utils.text import get_valid_filename
+        
+        return get_valid_filename(self.__unicode__())
             
-    def lang_filename(self, lang):
+    def lang_filename(self, language):
         name = self.filename
-        if lang:
-            return '%s.%s' % (name[:-4], lang)
-        return name
+        lang = language.language or u'original'
+        return u'%s.%s' % (name, lang)
     
     @property
     def subtitle_state(self):

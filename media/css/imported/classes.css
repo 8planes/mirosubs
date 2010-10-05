@@ -1,4 +1,11 @@
 
+video, embed, object{
+width: 470px !important;
+}
+
+
+
+
 /*/////////////////////////////////////////////
 
 ~ Classes
@@ -41,6 +48,22 @@ clear: both;
 height: 50px !important;
 }
 
+
+.red{
+color: red;
+}
+
+
+.yellow{
+background: #fff7a0;
+padding: 30px;
+
+  -moz-border-radius: 5px;
+  -webkit-border-radius: px;
+  border-radius:5px;
+margin-bottom: 30px;
+font-size: 14px;
+}
 
 /*//////////   ~  Inline Type  ~   //////////*/
 
@@ -336,5 +359,25 @@ font-size: 16px;
 
 
 
+.bookmarklet{
+height: 120px;
+padding: 80px 50px 0 0px;
+text-align: center;
+text-decoration: none !important;
+display: block;
+clear: both;
+line-height: 1.2em;
+margin:0px;
+font-style: italic;
+font-size: 20px;
+text-shadow: 1px 1px 1px #fff;
+font-weight: bold;
+color: #4395aa !important;
+background: url(../../images/bookmarklet.png) left 0px no-repeat;
+}
 
 
+
+.embedder{
+width: 400px;
+}

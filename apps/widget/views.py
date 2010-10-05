@@ -29,6 +29,7 @@ import widget
 from django.shortcuts import get_object_or_404
 from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
+from django.utils.encoding import iri_to_uri, DjangoUnicodeDecodeError
 
 rpc_views = Rpc()
 null_rpc_views = NullRpc()
@@ -142,8 +143,24 @@ def download_subtitles(request, handler=SSASubtitles):
     
     h = handler(subtitles, video)
     response = HttpResponse(unicode(h), mimetype="text/plain")
-    response['Content-Disposition'] = \
-        'attachment; filename=%s.%s' % (video.lang_filename(lang_code), h.file_type)
+    original_filename = '%s.%s' % (video.lang_filename(language), h.file_type)
+    
+    if u'WebKit' in request.META['HTTP_USER_AGENT']:
+        # Safari 3.0 and Chrome 2.0 accepts UTF-8 encoded string directly.
+        filename_header = 'filename=%s' % original_filename.encode('utf-8')
+    elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+        # IE does not support internationalized filename at all.
+        # It can only recognize internationalized URL, so we do the trick via routing rules.
+        try:
+            original_filename.encode('ascii')
+            filename_header = 'filename=%s' % original_filename.encode('utf-8')
+        except UnicodeEncodeError:
+            filename_header = ''
+    else:
+        # For others like Firefox, we follow RFC2231 (encoding extension in HTTP headers).
+        filename_header = 'filename*=UTF-8\'\'%s' % iri_to_uri(original_filename.encode('utf-8'))
+    
+    response['Content-Disposition'] = 'attachment; ' + filename_header
     return response    
 
 def null_srt(request):
