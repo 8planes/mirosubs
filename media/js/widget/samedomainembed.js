@@ -62,6 +62,6 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
     var s = mirosubs.widget.DropDown.Selection;
     s['IMPROVE_SUBTITLES'] = s.IMPROVE_SUBTITLES;
     s['LANGUAGE_SELECTED'] = s.LANGUAGE_SELECTED;
-    s['ADD_TRANSLATION'] = s.ADD_TRANSLATION;
+    s['ADD_LANGUAGE'] = s.ADD_LANGUAGE;
     s['SUBTITLES_OFF'] = s.SUBTITLES_OFF;
 })();

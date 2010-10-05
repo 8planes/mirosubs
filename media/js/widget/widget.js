@@ -135,7 +135,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
                       this.subtitleController_));
     else if (this.translateImmediately_)
         goog.Timer.callOnce(
-            goog.bind(this.subtitleController_.openNewTranslationDialog,
+            goog.bind(this.subtitleController_.openNewLanguageDialog,
                       this.subtitleController_));
 };
 
@@ -184,8 +184,8 @@ mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
  */
 mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_languageCode) {
     var s = mirosubs.widget.DropDown.Selection;
-    if (selection == s.ADD_TRANSLATION)
-        this.subtitleController_.openNewTranslationDialog();
+    if (selection == s.ADD_LANGUAGE)
+        this.subtitleController_.openNewLanguageDialog();
     else if (selection == s.IMPROVE_SUBTITLES)
         this.subtitleController_.openSubtitleDialog();
     else if (selection == s.SUBTITLE_HOMEPAGE)

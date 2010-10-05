@@ -55,6 +55,8 @@ mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
                $d('p', null,
                   $d('div', null, 'I am subtitling in:'),
                   this.subLangDropdown_)));
+        this.originalLangDropdown_.value = 'en';
+        this.subLangDropdown_.value = 'en';
     }
     else {
         this.getElement().appendChild(

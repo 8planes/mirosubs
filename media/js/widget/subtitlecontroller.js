@@ -33,7 +33,7 @@ mirosubs.widget.SubtitleController = function(
     this.handler_.
         listen(
             dropDown,
-            s.ADD_TRANSLATION,
+            s.ADD_LANGUAGE,
             this.openNewLanguageDialog).
         listen(
             dropDown,
