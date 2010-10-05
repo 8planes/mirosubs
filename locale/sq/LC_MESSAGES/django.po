@@ -29,19 +29,19 @@ msgstr "Kërkohen. 30 karaktere apo më pak. Vetëm karaktere alfanumerike (shkr
 
 #: .\apps\auth\admin.py:12
 msgid "This value must contain only letters, numbers and underscores."
-msgstr ""
+msgstr "Kjo vlerë duhet të ketë vetëm numra, shkronja dhe nënviza"
 
 #: .\apps\auth\admin.py:13
 msgid "Password"
-msgstr ""
+msgstr "Fjalëkalimi"
 
 #: .\apps\auth\admin.py:14
 msgid "Password confirmation"
-msgstr ""
+msgstr "Konfrimimi i fjalëkalimit"
 
 #: .\apps\auth\admin.py:15
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: .\apps\auth\models.py:83
 msgid "Add comment"
