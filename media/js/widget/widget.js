@@ -93,7 +93,7 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
     this.videoTab_.showLoading();
     var args = {
         'video_url': this.videoURL_,
-        'is_remote': mirosubs.isEmbeddedInDifferentDomain()
+        'is_remote': mirosubs.isFromDifferentDomain()
     };
     if (this.baseState_)
         args['base_state'] = this.baseState_.ORIGINAL_PARAM;

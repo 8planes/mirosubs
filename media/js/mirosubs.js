@@ -279,6 +279,20 @@ mirosubs.isEmbeddedInDifferentDomain = function() {
     return mirosubs.siteConfig != null;
 };
 
+mirosubs.isReturnURLInDifferentDomain = function() {
+    if (!mirosubs.returnURL)
+        return false;
+    var uri = new goog.Uri(mirosubs.returnURL);
+    var myURI = new goog.Uri(window.location);
+    return uri.getDomain().toLowerCase() != 
+        myURI.getDomain().toLowerCase();
+};
+
+mirosubs.isFromDifferentDomain = function() {
+    return mirosubs.isEmbeddedInDifferentDomain() || 
+        mirosubs.isReturnURLInDifferentDomain();
+};
+
 mirosubs.LoginEvent = function(username) {
     this.type = mirosubs.EventType.LOGIN;
     this.username = username;
