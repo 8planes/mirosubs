@@ -25,7 +25,7 @@ msgstr "Emri i përdoruesit"
 
 #: .\apps\auth\admin.py:11
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
-msgstr ""
+msgstr "Kërkohen. 30 karaktere apo më pak. Vetëm karaktere alfanumerike (shkronja, numra dhe nënviza)"
 
 #: .\apps\auth\admin.py:12
 msgid "This value must contain only letters, numbers and underscores."
