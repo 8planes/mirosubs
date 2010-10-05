@@ -33,6 +33,7 @@
 <li><a href="#q-locked">{% blocktrans %}It says "Someone else is currently editing these subtitles" and I can't do anything.  How long will this last for?  Why does it happen?{% endblocktrans %}</a></li>
 <li><a href="#q-change-timing">{% trans "Why can't I change the timing on a translation?" %}</a></li>
 <li><a href="#q-revisions">{% trans "How do old revisions work? What if somebody makes a change to my work that I don't approve of?" %}</a></li>
+<li><a href="#q-adding">{% trans "How do I add the Universal Subtitles &quot;embed all videos&quot; code to my site?" %}</a></li>
 </ul>
 
 <ol class="questions">
@@ -140,6 +141,21 @@
         could be useful work in an older revision.
         {% endblocktrans %}
     </p>
-  </li>  
+  </li> 
+  <li id="q-adding">
+    <h3>{% trans "How do I add the Universal Subtitles &quot;embed all videos&quot; code to my site?" %}</h3>
+    <p>
+        {% blocktrans %}
+          Go to <a href="http://universalsubtitles.org/get-code/">this page</a> and double click on the code in the white box to select it all.  Go to Edit > Copy in your browser's menu to copy the code to your clipboard.  Then start editing the headers in your site or blog theme, and paste the script somewhere between the &lt;head&gt; and &lt;/head&gt; tags in your blog theme.  
+        {% endblocktrans %}
+    </p>
+  </li> 
+
+
+
+
+
+
+ 
 </ol>
 {% endblock %}

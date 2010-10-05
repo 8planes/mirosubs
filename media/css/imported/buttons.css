@@ -30,6 +30,15 @@
   }
 
 
+.green_button.huge,
+.blue_button.huge,
+.silver_button.huge{
+  font-size: 16px;
+  padding: 16px 32px;
+  }
+
+
+
 .green_button.big,
 .blue_button.big,
 .silver_button.big{
