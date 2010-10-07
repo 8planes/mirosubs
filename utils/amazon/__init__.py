@@ -86,7 +86,7 @@ class S3Storage(FileSystemStorage):
 
     def url(self, name):
         name = name.replace('\\', '/')
-        return 'https://%s.%s/%s' % (self.bucket.name, DEFAULT_HOST, name)
+        return 'http://%s.%s/%s' % (self.bucket.name, DEFAULT_HOST, name)
         #return Key(self.bucket, name).generate_url(100000)
     
     def get_available_name(self, name):
