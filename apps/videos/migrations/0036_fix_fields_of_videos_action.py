@@ -8,7 +8,8 @@ class Migration(SchemaMigration):
     
     def forwards(self, orm):
         db.delete_column('videos_action', 'language')
-        db.delete_foreign_key('videos_action', 'language_fk_id')
+        if not db.backend_name == 'sqlite3':
+            db.delete_foreign_key('videos_action', 'language_fk_id')
         db.rename_column('videos_action', 'language_fk_id', 'language_id')
         db.alter_column('videos_action', 'language_id', models.ForeignKey(orm['videos.SubtitleLanguage'], blank=True, null=True))
                 
