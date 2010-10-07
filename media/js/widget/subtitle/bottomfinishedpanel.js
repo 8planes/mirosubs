@@ -30,8 +30,24 @@ goog.inherits(mirosubs.subtitle.BottomFinishedPanel, goog.ui.Component);
 
 mirosubs.subtitle.BottomFinishedPanel.prototype.createDom = function() {
     mirosubs.subtitle.BottomFinishedPanel.superClass_.createDom.call(this);
-    this.getElement().className = 'mirosubs-translating';
+    var elem = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+
+    var transBox = $d('div', 'mirosubs-translating');
+
+    if (mirosubs.isFromDifferentDomain()) {
+        this.closeLink_ = 
+            $d('a', 
+               {'className': 'mirosubs-closeandreturn', 'href':'#'}, 
+               "Close and return to site");
+        elem.appendChild(this.closeLink_);
+        elem.appendChild(
+            $d('a',
+               {'className': 'mirosubs-videohome',
+                'href': this.permalink_},
+               "Go to Universal Subtitles video homepage"));
+    }
+    elem.appendChild(transBox);
     this.addTranslationLink_ = 
         $d('a', 
            {'className':'mirosubs-done', 'href':'#'}, 
@@ -41,17 +57,17 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.createDom = function() {
            {'className':'mirosubs-done', 
             'href':'#'},
            'Ask a Friend to Translate');
-    this.getElement().appendChild(
+    transBox.appendChild(
         $d('div', 'mirosubs-buttons',
            this.addTranslationLink_,
            this.askAFriendLink_));
-    this.getElement().appendChild(
+    transBox.appendChild(
         $d('p', null,
            ['Your subtitles are now ready to be translated -- by you ',
             'and by others.  The best way to get translation help is ',
             'to reach out to your friends or people in your community ',
             'or orgnization.'].join('')));
-    this.getElement().appendChild(
+    transBox.appendChild(
         $d('p', null,
            ["Do you know someone who speaks a language that you’d like ",
             "to translate into?"].join('')));
@@ -63,12 +79,22 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.enterDocument = function() {
                this.addTranslationClicked_).
         listen(this.askAFriendLink_, 'click',
                this.askAFriendClicked_);
+    if (this.closeLink_)
+        this.getHandler().listen(
+            this.closeLink_, 'click',
+            this.closeClicked_);
+};
+mirosubs.subtitle.BottomFinishedPanel.prototype.closeClicked_ = 
+    function(event) 
+{
+    event.preventDefault();
+    this.dialog_.setVisible(false);
 };
 mirosubs.subtitle.BottomFinishedPanel.prototype.addTranslationClicked_ =
     function(event)
 {
-    this.dialog_.addTranslationsAndClose();
     event.preventDefault();
+    this.dialog_.addTranslationsAndClose();
 };
 
 mirosubs.subtitle.BottomFinishedPanel.prototype.askAFriendClicked_ = function(e) {

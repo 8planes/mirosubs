@@ -504,6 +504,46 @@ class TestRpc(TestCase):
         self.assertEquals(1, len(return_value['subtitles']['subtitles']))
         self.assertEquals(False, 'original_subtitles' in return_value)
 
+    def test_change_original_language(self):
+        request = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        video_id = return_value['video_id']
+        # first claim that the original video language is english
+        # and subs are in spanish.
+        rpc.start_editing(request, video_id, 'es', 'en', fork=True)
+
+        inserted = [{'subtitle_id': u'sfdsfsdf',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(request, video_id, 
+                           [], inserted, [], 
+                           language_code='es')
+        rpc.finished_subtitles(request, video_id, [], [], [], language_code='es')
+        rpc.release_lock(request, video_id)
+        rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        # now claim that spanish is the original language
+        return_value = rpc.start_editing(request, video_id, 'es', 'es')
+        inserted = [{'subtitle_id': u'sddfdsfsdf',
+                     'text': 'hey!',
+                     'start_time': 3.5,
+                     'end_time': 6.4,
+                     'sub_order': 2.0}]
+        rpc.save_subtitles(request, video_id,
+                           [], inserted, [],
+                           language_code='es')
+        rpc.finished_subtitles(request, video_id, [], [], [], language_code='es')
+        rpc.release_lock(request, video_id)
+        video = Video.objects.get(video_id=video_id)
+        self.assertEquals('es', video.subtitle_language().language)
+
     def _create_video_with_one_caption_set(self, request):
         return_value = rpc.show_widget(
             request,

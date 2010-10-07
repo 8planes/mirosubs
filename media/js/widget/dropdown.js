@@ -27,11 +27,24 @@ mirosubs.widget.DropDown = function(dropDownContents) {
 
     this.setStats_(dropDownContents);
     this.subtitleState_ = null;
-    this.shown = false;
+    this.shown_ = false;
     this.languageClickHandler_ = new goog.events.EventHandler(this);
 };
 
 goog.inherits(mirosubs.widget.DropDown, goog.ui.Component);
+
+mirosubs.widget.DropDown.Selection = {
+    ADD_LANGUAGE: "add_language",
+    IMPROVE_SUBTITLES: "improve_subtitles",
+    SUBTITLE_HOMEPAGE: "subtitle_homepage",
+    DOWNLOAD_SUBTITLES: "download_subtitles",
+    CREATE_ACCOUNT: "create_account",
+    LANGUAGE_PREFERENCES: "language_preferences",
+    SUBTITLES_OFF: "subtitles_off",
+    LANGUAGE_SELECTED: "language_selected",
+    USERNAME: "username",
+    LOGOUT: "logout"
+};
 
 mirosubs.widget.DropDown.prototype.getSubtitleCount = function() {
     return this.subtitleCount_;
@@ -215,7 +228,7 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
         listen(this.unisubsLink_, 'click',
             function(e) { window.open('http://www.universalsubtitles.org'); }).
         listen(this.addTranslationLink_, 'click',
-               goog.bind(this.menuItemClicked_, this, s.ADD_TRANSLATION)).
+               goog.bind(this.menuItemClicked_, this, s.ADD_LANGUAGE)).
         listen(this.improveSubtitlesLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.IMPROVE_SUBTITLES)).
         listen(this.subtitleHomepageLink_, 'click',
@@ -236,7 +249,20 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
                goog.bind(this.menuItemClicked_, this, s.LOGOUT)).
         listen(mirosubs.userEventTarget,
                goog.object.getValues(mirosubs.EventType),
-               this.loginStatusChanged);
+               this.loginStatusChanged).
+        listen(this.getDomHelper().getDocument(),
+               goog.events.EventType.MOUSEDOWN, 
+               this.onDocClick_, true);
+
+    // Webkit doesn't fire a mousedown event when opening the context menu,
+    // but we need one to update menu visibility properly. So in Safari handle
+    // contextmenu mouse events like mousedown.
+    // {@link http://bugs.webkit.org/show_bug.cgi?id=6595}
+    if (goog.userAgent.WEBKIT)
+        this.getHandler().listen(
+            this.getDomHelper().getDocument(),
+            goog.events.EventType.CONTEXTMENU, 
+            this.onDocClick_, true);
     
     this.addTranslationLinkListeners_();
 };
@@ -249,6 +275,12 @@ mirosubs.widget.DropDown.prototype.addTranslationLinkListeners_ = function() {
             that.languageClickHandler_.listen(tLink.link, 'click',
                 goog.bind(that.languageSelected_, that, tLink.lang[0]));
         });
+};
+
+mirosubs.widget.DropDown.prototype.onDocClick_ = function(e) {
+    if (this.shown_ &&
+        !goog.dom.contains(this.getElement(), e.target))
+        this.hide();
 };
 
 mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
@@ -267,7 +299,7 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         window.location.replace(goog.dom.getFirstElementChild(this.subtitleHomepageLink_).href);
     else if (type == s.DOWNLOAD_SUBTITLES)
         window.open(goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href);
-    else if (type == s.ADD_TRANSLATION || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
+    else if (type == s.ADD_LANGUAGE || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
         this.dispatchEvent(type);
     else
         this.dispatchLanguageSelection_(null);
@@ -283,19 +315,6 @@ mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
 mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
     this.dispatchEvent(
         new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
-};
-
-mirosubs.widget.DropDown.Selection = {
-    ADD_TRANSLATION: "add_translation",
-    IMPROVE_SUBTITLES: "improve_subtitles",
-    SUBTITLE_HOMEPAGE: "subtitle_homepage",
-    DOWNLOAD_SUBTITLES: "download_subtitles",
-    CREATE_ACCOUNT: "create_account",
-    LANGUAGE_PREFERENCES: "language_preferences",
-    SUBTITLES_OFF: "subtitles_off",
-    LANGUAGE_SELECTED: "language_selected",
-    USERNAME: "username",
-    LOGOUT: "logout"
 };
 
 mirosubs.widget.DropDown.prototype.setCurrentLangClassName_ = function(className) {
@@ -321,7 +340,7 @@ mirosubs.widget.DropDown.prototype.setTranslationLanguages =
 };
 
 mirosubs.widget.DropDown.prototype.toggleShow = function() {
-    if (this.shown)
+    if (this.shown_)
         this.hide();
     else
         this.show();
@@ -329,12 +348,12 @@ mirosubs.widget.DropDown.prototype.toggleShow = function() {
 
 mirosubs.widget.DropDown.prototype.hide = function() {
     goog.style.showElement(this.getElement(), false);
-    this.shown = false;
+    this.shown_ = false;
 };
 
 mirosubs.widget.DropDown.prototype.show = function() {
     goog.style.showElement(this.getElement(), true);
-    this.shown = true;
+    this.shown_ = true;
 };
 
 mirosubs.widget.DropDown.prototype.loginStatusChanged = function() {
