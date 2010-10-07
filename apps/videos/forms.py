@@ -158,8 +158,6 @@ class VideoForm(forms.ModelForm):
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
         if not blip.BLIP_REGEX.match(video_url) and \
-            #not google_video.GOOGLE_VIDEO_REGEX.match(video_url) and \
-            #not ustream.USTREAM_REGEX.match(video_url) and \
             not vimeo.VIMEO_REGEX.match(video_url) and \
             not DAILYMOTION_REGEX.match(video_url) and \
             not ('youtube.com' in video_url and get_video_id(video_url)) and \
