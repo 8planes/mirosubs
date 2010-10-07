@@ -168,6 +168,7 @@ class Video(models.Model):
         version.finished = True
         version.save()
         
+        language.was_complete = True
         language.is_complete = True
         language.save()
 
@@ -478,7 +479,13 @@ class SubtitleLanguage(models.Model):
                 .filter(finished=True)[:1].get()
         except models.ObjectDoesNotExist:
             pass
-
+    
+    def latest_finished_subtitles(self):
+        version = self.latest_finished_version()
+        if version:
+            return version.subtitles()
+        return []
+        
     @property
     def percent_done(self):
         if not self.is_original and not self.is_forked:
@@ -487,12 +494,16 @@ class SubtitleLanguage(models.Model):
             # for this to come up with a number greater than 100%
             try:
                 translation_count = 0
-                for item in self.latest_finished_version().subtitles():
-                    if item.subtitle_text:
+                for item in self.latest_finished_subtitles():
+                    if item.text:
                         translation_count += 1
             except AttributeError:
                 translation_count = 0
-            subtitles_count = self.video.version().subtitle_set.count()
+            last_version = self.video.latest_finished_version()
+            if last_version:
+                subtitles_count = last_version.subtitle_set.count()
+            else:
+                subtitles_count = 0
             try:
                 return int(translation_count / 1. / subtitles_count * 100)
             except ZeroDivisionError:
