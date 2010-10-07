@@ -22,10 +22,11 @@ goog.provide('mirosubs.widget.DropDown');
  * @constructor
  * @param {mirosubs.widget.DropDownContents} dropDownContents
  */
-mirosubs.widget.DropDown = function(dropDownContents) {
+mirosubs.widget.DropDown = function(dropDownContents, videoTab) {
     goog.ui.Component.call(this);
 
     this.setStats_(dropDownContents);
+    this.videoTab_ = videoTab;
     this.subtitleState_ = null;
     this.shown_ = false;
     this.languageClickHandler_ = new goog.events.EventHandler(this);
@@ -279,7 +280,8 @@ mirosubs.widget.DropDown.prototype.addTranslationLinkListeners_ = function() {
 
 mirosubs.widget.DropDown.prototype.onDocClick_ = function(e) {
     if (this.shown_ &&
-        !goog.dom.contains(this.getElement(), e.target))
+        !goog.dom.contains(this.getElement(), e.target) &&
+        !goog.dom.contains(this.videoTab_.getElement(), e.target))
         this.hide();
 };
 

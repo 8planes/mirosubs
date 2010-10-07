@@ -112,7 +112,8 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
         result['subtitles']);
 
-    var popupMenu = new mirosubs.widget.DropDown(dropDownContents);
+    var popupMenu = new mirosubs.widget.DropDown(
+        dropDownContents, this.videoTab_);
 
     this.videoTab_.showContent(popupMenu.hasSubtitles(),
                                subtitleState);
