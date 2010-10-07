@@ -74,13 +74,14 @@ mirosubs.subtitle.Dialog.prototype.createDom = function() {
 };
 mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
     mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
+    var doc = this.getDomHelper().getDocument();
     this.getHandler().
         listen(
-            document,
+            doc,
             goog.events.EventType.KEYDOWN,
-            this.handleKeyDown_).
+            this.handleKeyDown_, true).
         listen(
-            document,
+            doc,
             goog.events.EventType.KEYUP,
             this.handleKeyUp_).
         listen(
