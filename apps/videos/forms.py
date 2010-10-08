@@ -36,6 +36,7 @@ from dailymotion import DAILYMOTION_REGEX
 from django.utils.safestring import mark_safe
 
 class SubtitlesUploadForm(forms.Form):
+    language = forms.ChoiceField(choices=settings.ALL_LANGUAGES, initial='en')
     video = forms.ModelChoiceField(Video.objects)
     subtitles = forms.FileField()
     
@@ -91,7 +92,9 @@ class SubtitlesUploadForm(forms.Form):
         
         if not language:
             language = SubtitleLanguage(video=video, is_original=True, is_complete=True)
-            language.save()
+        
+        language.language = self.cleaned_data['language']
+        language.save()
             
         latest_captions = language.latest_version()
         if latest_captions is None:
