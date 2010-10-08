@@ -144,13 +144,11 @@ JS_CORE = ['mirosubs.js',
            'widget/controls/volumecontrol.js',
            'widget/controls/volumeslider.js',
            'widget/translate/dialog.js',
-           'widget/translate/editdialog.js',
            'widget/translate/translationpanel.js',
            'widget/translate/translationlist.js',
            'widget/translate/translationwidget.js',
            'widget/translate/translationrightpanel.js',
            'widget/translate/editabletranslation.js',
-           'widget/translate/servermodel.js',
            'widget/play/manager.js',
            'widget/widget.js']
 
