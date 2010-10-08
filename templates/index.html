@@ -34,21 +34,21 @@
 {% block logo %}<span class="logo">Miro Subs Alpha</span>{% endblock %}
 
 {% block main_content %}
-  <h2 class="centered">{% trans 'The best and easiest way to subtitle video' %}</h2>
+  <h2 class="centered">{% trans 'Subtitle and caption your videos, with help from your viewers' %}</h2>
   <div class="grid_6 alpha">
-    <p>
+
+  <div class="box">
+
+    <p class="index_intro">
         {% blocktrans %}
-        With Universal Subtitles, anyone who watches can
-        add captions and translations (like a wiki for subtitles). 
-        By enabling subtitles, you reach more viewers!  
-        Plus, it's 100% free and open-source.
+Reach an international audience, make your videos accessible, and get more traffic by adding viewer-created subtitles to your site.  It's free, open source, and built to change the world
         {% endblocktrans %}  
     </p>
 
     <p class="larger center bold">
         3,223 {% trans 'videos use Universal Subititles' %}
     </p>
-
+</div>
 
  <div class="beat">
    <p><span>{% trans 'Proud to be a' %}</span> {% trans 'Featured Mozilla Drumbeat Project' %}</p>
@@ -62,7 +62,7 @@
      <p>
         <label>{% trans 'Try it! Subtitle a Video Now' %}</label>
 
-        <input class="field" name="video_url" type="text" value="{% trans "Enter video's URL" %}" />
+        <input class="field" name="video_url" type="text" value="{% trans 'Enter a video URL' %}" />
       </p> 
       <button class="green_button big">{% trans 'GO!' %}</button>
 
@@ -75,7 +75,7 @@
     </script>
 </div>
 
-<a href="{% url get_code_page %}" class="green_button huge">
+<a href="{% url get_code_page %}" class="green_button huge none">
     {% trans 'Add this button to every video on your site' %}
     <br />{% trans 'Get the code' %} &rang;&rang;&rang;
 </a>

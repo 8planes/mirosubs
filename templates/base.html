@@ -75,9 +75,11 @@
         {% endif %}
         
         <ul class="nav">
-          <li class="first create_link"><a href="/videos/create/"><span>{% trans 'Subtitle a Video' %}</span></a></li>
-          <li class="videos_link"><a href="/videos/"><span>{% trans 'Videos' %}</span></a></li>
-          <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li>
+          <li class="first create_link"><a href="/videos/create/"><span>{% trans 'Subtitle' %}</span> {% trans 'a video now' %}</a></li>
+          <li class="videos_link"><a href="/videos/"><span>{% trans 'Watch' %}</span> {% trans 'subbed videos' %}</a></li>
+         <!-- <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li> -->
+
+          <!--<li class="search"><form><input type="text" class="field" /><button class="green_button big">{% trans 'GO!' %}</button></form></li> -->
         </ul>
 
   <div class="share"><div><h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a></div></div>
@@ -86,8 +88,12 @@
 
         <ul class="sub_nav">
           <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>{% trans 'Blog' %}</span></a></li>
-          <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
-          <li class="last about_link last_nav"><a href="/about"><span>{% trans 'About' %}</span></a></li>
+          <li class="about_link"><a href="/about" class="about"><span>{% trans 'About' %}</span></a>
+            <ul>
+              <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
+              <!-- <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'Contact' %}</span></a></li> -->
+            </ul>
+          </li>
           {% if user.is_authenticated %}
               <li class="login_link"><a href="{% url logout %}?next={{ request.path_info}}"><span>{% trans 'Logout' %}</span></a></li>
               {% if user.is_staff %}

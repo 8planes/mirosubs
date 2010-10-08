@@ -6,7 +6,7 @@
 
 
 #index .content{
-background: url(../../images/watercolor2.png) center 780px no-repeat;
+background: url(../../images/watercolor2.png) center 530px no-repeat;
 
 }
 
@@ -76,7 +76,7 @@ font-weight: bold;
 .share{
 margin-top: 33px;
 padding-top: 10px;
-
+display: none;
 }
 
 
@@ -147,16 +147,21 @@ font-size: 12px;
 }
 
 
-
+p.index_intro{
+font-size: 17px;
+margin: 5px 0 10px;
+}
 
 
 
 h2.centered{
-font-size: 33px;
+font-size: 32px;
 margin: 0 0 30px;
 padding: 0px;
 text-shadow: #fff 1px 1px 1px;
 line-height: 2.5em;
+text-align: center;
+border-bottom: 0 !important;
 }
 
 
@@ -218,8 +223,9 @@ font-weight: bold;
 
 .small_sub_now button{
 position: absolute;
-right: 30px;
-top: 29px;
+right: 0px;
+top: 30px;
+-moz-border-radius-top-left: 0 !important;
 }
 
 
@@ -350,11 +356,7 @@ background: url(../../images/alpha.png) 130px 0px no-repeat;
 
 
 .project{
-font-weight: normal;
-padding-left: 53px;
-position: absolute;
-top: 45px;
-font-size: 11px;
+display: none;
 }
 
 .bigger{
@@ -370,10 +372,11 @@ clear: both;
 padding: 20px 30px 20px 30px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
-margin:15px 0 5px;
+margin:0px 0 25px;
 background: url(../../images/1x1.png);
-
 }
+
+
 
 .box h3{
 font-size: 18px;
