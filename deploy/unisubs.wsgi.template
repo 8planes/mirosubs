@@ -18,3 +18,14 @@ sys.path[:0] = new_sys_path
 import django.core.handlers.wsgi
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs-settings'
 application = django.core.handlers.wsgi.WSGIHandler()
+
+handler = django.core.handlers.wsgi.WSGIHandler()
+off_tpl_path = join(base_site_dir, 'templates', 'off_template.html')
+disabled_file_path = join(base_site_dir, 'disabled')
+
+def application(environ, start_response):
+    if os.path.exists(disabled_file_path):
+        start_response('200 OK', [('Content-type', 'text/html')])
+        return open(off_tpl_path).read()        
+    else:    
+        return handler(environ, start_response)
