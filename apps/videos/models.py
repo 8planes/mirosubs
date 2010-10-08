@@ -149,6 +149,7 @@ class Video(models.Model):
         
         language = SubtitleLanguage(video=self)
         language.is_original = False
+        language.is_forked = True
         language.language = parser.language
         language.save()
         
