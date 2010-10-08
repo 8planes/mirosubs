@@ -13,22 +13,6 @@
 {% block scripts %}
     {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
-    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function(){
-            $.nyroModalSettings({
-                minWidth: 570,
-                minHeight: 420,
-                endShowContent: function(){
-                    widget_widget_div.playAt(0);                    
-                }
-            }); 
-            if (mirosubs.video.supportsOgg()) {
-                $('a.how-to-video-image').attr('href', '#how-to-video-ogg');
-            };
-            $('.how-to-video-image').nyroModal();
-        });
-    </script>
 {% endblock %}
 
 {% block logo %}<span class="logo">Miro Subs Alpha</span>{% endblock %}
@@ -98,6 +82,13 @@ Reach an international audience, make your videos accessible, and get more traff
          document.getElementById('widget_div'), 
          { "base_state": {}, 
            "video_url": "http://subtesting.com/video/Usubs-IntroVideo.theora.ogg" });
+  }else{
+     $('#widget_div').append($('<object width="480" height="385">'+
+         '<param name="movie" value="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1"></param>'+
+         '<param name="allowFullScreen" value="true"></param>'+
+         '<param name="allowscriptaccess" value="always"></param>'+
+         '<embed src="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed>'+
+       '</object>'));
   }
 </script>
   </div>
