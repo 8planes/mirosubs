@@ -109,6 +109,9 @@ mirosubs.subtitle.EditableCaptionSet.prototype.count = function() {
 mirosubs.subtitle.EditableCaptionSet.prototype.caption = function(index) {
     return this.captions_[index];
 };
+mirosubs.subtitle.EditableCaptionSet.prototype.makeJsonSubs = function() {
+    return goog.array.map(this.captions_, function(c) { return c.json; });
+};
 /**
  *
  * @param {Number} nextSubOrder The next subtitle's subOrder 

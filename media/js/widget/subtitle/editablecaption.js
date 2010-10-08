@@ -22,6 +22,7 @@ goog.provide('mirosubs.subtitle.EditableCaption');
  * Don't call this constructor directly. Instead call the factory method in 
  * mirosubs.subtitle.EditableCaptionSet.
  *
+ * @constructor
  * @param {mirosubs.UnitOfWork=} opt_unitOfWork
  * @param {Number=} opt_subOrder Order in which this sub appears. Provide 
  *    this parameter iff the caption doesn't exist in the MiroSubs 

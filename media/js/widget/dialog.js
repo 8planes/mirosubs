@@ -18,6 +18,10 @@
 
 goog.provide('mirosubs.Dialog');
 
+/**
+ * @constructor
+ *
+ */
 mirosubs.Dialog = function(videoSource) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-widget', true);
     this.setBackgroundElementOpacity(0.8);

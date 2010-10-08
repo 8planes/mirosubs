@@ -18,6 +18,10 @@
 
 goog.provide('mirosubs.translate.Dialog');
 
+/**
+ * @constructor
+ * 
+ */
 mirosubs.translate.Dialog = function(videoSource, 
                                      subtitleState, 
                                      standardSubState) {
@@ -33,10 +37,11 @@ mirosubs.translate.Dialog = function(videoSource,
 goog.inherits(mirosubs.translate.Dialog, mirosubs.Dialog);
 mirosubs.translate.Dialog.prototype.createDom = function() {
     mirosubs.translate.Dialog.superClass_.createDom.call(this);
-    var translationPanel = new mirosubs.translate.TranslationPanel(
+    this.translationPanel_ = new mirosubs.translate.TranslationPanel(
         this.subtitleState_, this.standardSubState_,
-        this.unitOfWork_)
-    this.getCaptioningAreaInternal().addChild(translationPanel, true);
+        this.unitOfWork_);
+    this.getCaptioningAreaInternal().addChild(
+        this.translationPanel_, true);
     var rightPanel = this.createRightPanel_();
     this.setRightPanelInternal(rightPanel);
     this.getHandler().listen(
@@ -79,11 +84,13 @@ mirosubs.translate.Dialog.prototype.isWorkSaved = function() {
 };
 mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
-    this.serverModel_.finish(function(dropDownContents) {
-        that.setDropDownContentsInternal(dropDownContents);
-        that.saved_ = true;
-        that.setVisible(false);
-    });
+    this.serverModel_.finish(
+        this.translationPanel_.makeJsonSubs(),
+        function(dropDownContents) {
+            that.setDropDownContentsInternal(dropDownContents);
+            that.saved_ = true;
+            that.setVisible(false);
+        });
 };
 mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     mirosubs.translate.Dialog.superClass_.disposeInternal.call(this);

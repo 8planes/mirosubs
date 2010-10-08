@@ -35,9 +35,8 @@ mirosubs.subtitle.ServerModel = function() {};
  * proceeds to save periodically (or not) using the work recorded by the 
  * UnitOfWork. This method can only be called once.
  * @param {mirosubs.UnitOfWork} unitOfWork
- * @param {function()} loginNagFn Function which, when called, displays login nag.
  */
-mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork, loginNagFn) {};
+mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork) {};
 
 /**
  * Announces to the server that subtitling is finished. Also frees timers, 
@@ -45,7 +44,8 @@ mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork, loginNagFn) 
  * once.
  * @param {function()} callback
  */
-mirosubs.subtitle.ServerModel.prototype.finish = function(callback) {};
+mirosubs.subtitle.ServerModel.prototype.finish = function(
+    jsonSubs, callback, opt_cancelCallback) {};
 
 /**
  * Instances implementing this interface must extend goog.Disposable
@@ -57,7 +57,5 @@ mirosubs.subtitle.ServerModel.prototype.getEmbedCode = function() {};
 mirosubs.subtitle.ServerModel.prototype.currentUsername = function() {};
 
 mirosubs.subtitle.ServerModel.prototype.logIn = function() {};
-
-mirosubs.subtitle.ServerModel.prototype.logOut = function() {};
 
 mirosubs.subtitle.ServerModel.prototype.getPermalink = function() {};

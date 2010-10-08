@@ -18,6 +18,10 @@
 
 goog.provide('mirosubs.translate.TranslationPanel');
 
+// FIXME: I think that since the latest translation changes, this class no 
+//     longer really does anything. Probably just go straight to TranslationList
+//     instead of using this as an intermediary.
+
 /**
  *
  *
@@ -31,6 +35,12 @@ mirosubs.translate.TranslationPanel = function(subtitleState,
     this.standardSubState_ = standardSubState;
     this.unitOfWork_ = unitOfWork;
     this.contentElem_ = null;
+    this.editableTranslations_ = goog.array.map(
+        this.subtitleState_.SUBTITLES,
+        function(transJson) {
+            return new mirosubs.translate.EditableTranslation(
+                uw, transJson['subtitle_id'], transJson);
+        });
 };
 goog.inherits(mirosubs.translate.TranslationPanel, goog.ui.Component);
 
@@ -50,12 +60,9 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     this.translationList_.getElement().className =
         "mirosubs-titlesList";
     var uw = this.unitOfWork_;
-    var editableTranslations =
-        goog.array.map(
-            this.subtitleState_.SUBTITLES,
-            function(transJson) {
-                return new mirosubs.translate.EditableTranslation(
-                    uw, transJson['subtitle_id'], transJson);
-            });
-    this.translationList_.setTranslations(editableTranslations);
+    this.translationList_.setTranslations(this.editableTranslations_);
+};
+mirosubs.translate.TranslationPanel.prototype.makeJsonSubs = function() {
+    return goog.array.map(
+        this.editableTranslations_, function(t) { return t.json; });
 };

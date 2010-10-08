@@ -69,7 +69,9 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
         (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
 };
 
-mirosubs.subtitle.MSServerModel.prototype.finish = function(successCallback, opt_cancelCallback) {
+mirosubs.subtitle.MSServerModel.prototype.finish = 
+    function(jsonSubs, successCallback, opt_cancelCallback) 
+{
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
     this.stopTimer_();
@@ -176,10 +178,6 @@ mirosubs.subtitle.MSServerModel.prototype.currentUsername = function() {
 
 mirosubs.subtitle.MSServerModel.prototype.logIn = function() {
     mirosubs.login();
-};
-
-mirosubs.subtitle.MSServerModel.prototype.logOut = function() {
-    mirosubs.logout();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
