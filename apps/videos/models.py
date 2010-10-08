@@ -826,16 +826,15 @@ class Action(models.Model):
             obj.save()
     
     @classmethod
-    def create_caption_handler(cls, sender, instance, created, **kwargs):
-        if instance.finished:
-            user = instance.user
-            video = instance.language.video
-            language = instance.language
-            
-            obj = cls(user=user, video=video, language=language)
-            obj.action_type = cls.ADD_VERSION
-            obj.created = instance.datetime_started
-            obj.save()            
+    def create_caption_handler(cls, instance):
+        user = instance.user
+        video = instance.language.video
+        language = instance.language
+        
+        obj = cls(user=user, video=video, language=language)
+        obj.action_type = cls.ADD_VERSION
+        obj.created = instance.datetime_started
+        obj.save()            
     
     @classmethod
     def create_video_handler(cls, sender, instance, created, **kwargs):
@@ -846,7 +845,6 @@ class Action(models.Model):
             obj.save()
                 
 post_save.connect(Action.create_comment_handler, Comment)        
-post_save.connect(Action.create_caption_handler, SubtitleVersion)
 post_save.connect(Action.create_video_handler, Video)
 
 class UserTestResult(models.Model):
