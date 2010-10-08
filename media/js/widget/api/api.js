@@ -70,3 +70,13 @@ mirosubs.api.writeSrtTime_ = function(seconds, stringBuffer) {
         append(',').
         append(p(Math.floor(seconds * 1000) % 1000, 3));
 };
+
+mirosubs.siteConfig = mirosubs.Config.siteConfig;
+
+goog.exportSymbol(
+    'mirosubs.api.openDialog',
+    mirosubs.api.openDialog);
+
+goog.exportSymbol(
+    'mirosubs.api.toSRT',
+    mirosubs.api.toSRT);

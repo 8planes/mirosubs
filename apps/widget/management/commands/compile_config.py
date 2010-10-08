@@ -8,10 +8,10 @@ import widget
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         media_dir = args[0]
-        file_name = join(media_dir, 'js/widgetizer/widgetizerconfig.js')
+        file_name = join(media_dir, 'js/config.js')
         context = {'current_site': Site.objects.get_current(),
                    'MEDIA_URL': settings.MEDIA_URL}
         rendered = render_to_string(
-            'widget/widgetizerconfig.js', context)
+            'widget/config.js', context)
         with open(file_name, 'w') as f:
             f.write(rendered)

@@ -18,11 +18,11 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.WidgetizerConfig');
+goog.provide('mirosubs.Config');
 
-mirosubs.WidgetizerConfig.siteConfig = {
+mirosubs.Config.siteConfig = {
     'siteURL': 'http://{{current_site.domain}}',
     'mediaURL': '{{MEDIA_URL}}'
 };
 
-mirosubs.WidgetizerConfig.innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';
+mirosubs.Config.innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';

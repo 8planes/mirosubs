@@ -103,7 +103,7 @@ mirosubs.Widgetizer.prototype.addHeadCss = function() {
         var css = document.createElement('link');
         css.type = 'text/css';
         css.rel = 'stylesheet';
-        css.href = mirosubs.WidgetizerConfig.siteConfig['mediaURL'] + 
+        css.href = mirosubs.Config.siteConfig['mediaURL'] + 
             'css/mirosubs-widget.css';
         css.media = 'screen';
         head.appendChild(css);
@@ -167,7 +167,7 @@ mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
     mirosubs.Widgetizer.logger_.info('widgetizeElem_ called for ' + videoURL);
     var containingElement = document.createElement('div');
     var styleElement = document.createElement('style');
-    var innerStyle = mirosubs.WidgetizerConfig.innerStyle;
+    var innerStyle = mirosubs.Config.innerStyle;
     if ('textContent' in styleElement)
         styleElement.textContent = innerStyle;
     else {
@@ -185,5 +185,5 @@ mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
     parentElem.removeChild(elem);
     var widgetConfig = { 'video_url': videoURL };
     mirosubs.widget.CrossDomainEmbed.embed(
-        widgetDiv, widgetConfig, mirosubs.WidgetizerConfig.siteConfig);
+        widgetDiv, widgetConfig, mirosubs.Config.siteConfig);
 };

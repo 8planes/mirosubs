@@ -158,7 +158,6 @@ JS_OFFSITE.append('widget/crossdomainembed.js')
 JS_ONSITE = list(JS_CORE)
 JS_ONSITE.append('widget/samedomainembed.js')
 
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.

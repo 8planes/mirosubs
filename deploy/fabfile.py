@@ -89,7 +89,7 @@ def update():
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
-        run('{0} manage.py compile_widgetizerconfig {1} --settings=unisubs-settings'.format(
+        run('{0} manage.py compile_config {1} --settings=unisubs-settings'.format(
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs-settings'.format(
                 python_exe, media_dir))
