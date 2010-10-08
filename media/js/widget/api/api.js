@@ -27,6 +27,7 @@ mirosubs.api.openDialog = function(config) {
     var serverModel = new mirosubs.api.ServerModel(config);
     var subDialog = new mirosubs.subtitle.Dialog(
         videoSource, serverModel, subtitles);
+    mirosubs.currentUsername = config['username'];
     subDialog.setVisible(true);
     goog.events.listenOnce(
         subDialog,
@@ -39,6 +40,10 @@ mirosubs.api.toSRT = function(jsonSubs) {
     for (var i = 0; i < jsonSubs.length; i++)
         mirosubs.api.subToSrt_(jsonSubs[i], i, stringBuffer);
     return stringBuffer.toString();
+};
+
+mirosubs.api.loggedIn = function(username) {
+    mirosubs.loggedIn(username);
 };
 
 mirosubs.api.subToSrt_ = function(sub, index, stringBuffer) {
@@ -80,3 +85,7 @@ goog.exportSymbol(
 goog.exportSymbol(
     'mirosubs.api.toSRT',
     mirosubs.api.toSRT);
+
+goog.exportSymbol(
+    'mirosubs.api.loggedIn',
+    mirosubs.api.loggedIn);

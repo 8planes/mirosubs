@@ -33,7 +33,7 @@ mirosubs.api.ServerModel = function(config) {
      */
     this.permalink_ = config['permalink'];
     /**
-     * @type {function} Login function should set config.username on success.
+     * @type {function} Login function
      */
     this.login_ = config['login'];
     /**
@@ -63,7 +63,7 @@ mirosubs.subtitle.ServerModel.prototype.getEmbedCode = function() {
 };
 
 mirosubs.subtitle.ServerModel.prototype.currentUsername = function() {
-    return this.config_['username'];
+    return mirosubs.currentUsername;
 };
 
 mirosubs.subtitle.ServerModel.prototype.logIn = function() {

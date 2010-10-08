@@ -212,14 +212,17 @@ mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
         'get_my_user_info', {},
         function(result) {
             mirosubs.loginAttemptInProgress_ = false;
-            if (result['logged_in']) {
-                mirosubs.currentUsername = result['username'];
-                mirosubs.userEventTarget.dispatchEvent(
-                    new mirosubs.LoginEvent(mirosubs.currentUsername));
-            }
+            if (result['logged_in'])
+                mirosubs.loggedIn(result['username']);
             if (opt_finishFn)
                 opt_finishFn(result['logged_in']);
         });
+};
+
+mirosubs.loggedIn = function(username) {
+    mirosubs.currentUsername = username;
+    mirosubs.userEventTarget.dispatchEvent(
+        new mirosubs.LoginEvent(mirosubs.currentUsername));
 };
 
 mirosubs.isLoginAttemptInProgress = function() {
