@@ -25,7 +25,6 @@
   border-radius:3px;
   text-decoration: none !important;
   font-weight: bold;
-  text-transform: uppercase;
   float: left;
   }
 
@@ -62,21 +61,21 @@
 /*---- Green Button ----*/
 
 .green_button{
-  color: #485a0c !important;
+  color: #23441e !important;
 
-  text-shadow: 0 1px 0px #aed011;
+  text-shadow: 0 1px 0px #aedbaa;
    
-  border: 1px solid #728e00;
-  border-top: 1px solid #95ac00;
-  border-bottom: 1px solid #546e00;
+  border: 1px solid #578e57;
+  border-top: 1px solid #5ba05b;
+  border-bottom: 1px solid #447d43;
   
-  -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
-  -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
-  box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f;
+  -moz-box-shadow: 0 1px 0px #9cabae, inset 0 1px 0px #b7e4ac;
+  -webkit-box-shadow: 0 1px 0px #9cabae, inset 0 1px 0px #b7e4ac;
+  box-shadow: 0 1px 0px #9cabae, inset 0 1px 0px #b7e4ac;
   
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b2c800', endColorstr='#85ac00'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#b2c800), to(#85ac00)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #b2c800,  #85ac00); /* for firefox 3.6+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#98d98a', endColorstr='#6bba6a'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#98d98a), to(#6bba6a)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #98d98a,  #6bba6a); /* for firefox 3.6+ */
   }
 
 

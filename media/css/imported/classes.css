@@ -339,14 +339,13 @@ font-size: 16px;
   }
 
 
-
 .no_subs{
   clear: both;
   padding: 30px;
   background: #fff;
-  border: 1px solid #aaa;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
   }
-
 
 
 .sub_actions{ float: right;}
