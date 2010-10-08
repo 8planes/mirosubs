@@ -40,3 +40,4 @@ goog.require('goog.fx.Dragger.EventType');
 goog.require('goog.fx.dom.SlideFrom');
 goog.require('goog.style.cursor');
 goog.require('goog.net.cookies');
+goog.require('goog.string.StringBuffer');

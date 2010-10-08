@@ -67,14 +67,30 @@ mirosubs.api.writeSrtTime_ = function(seconds, stringBuffer) {
     var secondsInt = Math.floor(seconds);
     var p = goog.string.padNumber;
     stringBuffer.
-        append(p((secondsInt / 3600) % 60, 2)).
+        append(p(Math.floor(secondsInt / 3600) % 60, 2)).
         append(':').
-        append(p((secondsInt / 60) % 60, 2)).
+        append(p(Math.floor(secondsInt / 60) % 60, 2)).
         append(':').
         append(p(secondsInt % 60, 2)).
         append(',').
         append(p(Math.floor(seconds * 1000) % 1000, 3));
 };
+
+if (!window['MiroCSSLoading']) {
+    window['MiroCSSLoading'] = true;
+    var css = goog.dom.createDom(
+        'link',
+        {
+            'type': 'text/css',
+            'rel': 'stylesheet',
+            'href': mirosubs.Config.siteConfig['mediaURL'] + 
+                'css/mirosubs-widget.css',
+            'media': 'screen'
+        }
+    );
+    goog.dom.getDocument().getElementsByTagName('head')[0].appendChild(css);
+}
+
 
 mirosubs.siteConfig = mirosubs.Config.siteConfig;
 

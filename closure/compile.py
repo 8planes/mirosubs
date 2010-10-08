@@ -88,17 +88,10 @@ compile('mirosubs-widgetizer.js', widgetizer_js_files)
 
 extension_js_files = list(settings.JS_OFFSITE)
 # assumes that some other process has generated config.js
-extension_js_files.append('widgetizer/config.js')
+extension_js_files.append('config.js')
 extension_js_files.append('widgetizer/widgetizer.js')
 extension_js_files.append('widgetizer/extension.js')
 compile('mirosubs-extension.js', extension_js_files)
-
-api_js_files = list(setings.JS_CORE)
-# assumes that some other process has generated config.js
-api_js_files.append('config.js')
-api_js_files.append('widget/api/servermodel.js')
-api_js_files.append('widget/api/api.js')
-compile('mirosubs-api.js', api_js_files)
 
 statwidget_js_files = [
     'mirosubs.js',
@@ -110,3 +103,10 @@ statwidget_js_files = [
 compile('mirosubs-statwidget.js', statwidget_js_files, 
         closure_dep_file='closure-stat-dependencies.js',
         include_flash_deps=False)
+
+api_js_files = list(settings.JS_CORE)
+# assumes that some other process has generated config.js
+api_js_files.append('config.js')
+api_js_files.append('widget/api/servermodel.js')
+api_js_files.append('widget/api/api.js')
+compile('mirosubs-api.js', api_js_files)

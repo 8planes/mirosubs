@@ -97,6 +97,21 @@ def statwidget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
+def api_demo(request):
+    js_files = ['http://{0}/widget/config.js'.format(
+            Site.objects.get_current().domain)]
+    js_files.append('{0}js/widget/api/servermodel.js'.format(
+            settings.MEDIA_URL))
+    js_files.append('{0}js/widget/api/api.js'.format(
+            settings.MEDIA_URL))
+    context = widget.add_js_files({}, settings.JS_USE_COMPILED,
+                                  settings.JS_CORE,
+                                  'mirosubs-api.js',
+                                  full_path_js_files=js_files)
+    return render_to_response('widget/api_demo.html',
+                              context,
+                              context_instance=RequestContext(request))
+
 def base_widget_params(request, extra_params={}):
     params = {}
     params['video_url'] = request.GET.get('video_url')

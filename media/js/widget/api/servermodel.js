@@ -42,34 +42,34 @@ mirosubs.api.ServerModel = function(config) {
     this.embedCode_ = config['embedCode'];
 };
 
-mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork) {
+mirosubs.api.ServerModel.prototype.init = function(unitOfWork) {
     // no-op
 };
 
-mirosubs.subtitle.ServerModel.prototype.finish = function(
+mirosubs.api.ServerModel.prototype.finish = function(
     jsonSubs, callback, opt_cancelCallback) {
-    this.save_(jsonSubs);
+    this.save_(jsonSubs, callback, opt_cancelCallback);
 };
 
 /**
  * Instances implementing this interface must extend goog.Disposable
  */
-mirosubs.subtitle.ServerModel.prototype.dispose = function() {
+mirosubs.api.ServerModel.prototype.dispose = function() {
     // no-op
 };
 
-mirosubs.subtitle.ServerModel.prototype.getEmbedCode = function() {
+mirosubs.api.ServerModel.prototype.getEmbedCode = function() {
     return this.embedCode_;
 };
 
-mirosubs.subtitle.ServerModel.prototype.currentUsername = function() {
+mirosubs.api.ServerModel.prototype.currentUsername = function() {
     return mirosubs.currentUsername;
 };
 
-mirosubs.subtitle.ServerModel.prototype.logIn = function() {
+mirosubs.api.ServerModel.prototype.logIn = function() {
     this.login_();
 };
 
-mirosubs.subtitle.ServerModel.prototype.getPermalink = function() {
+mirosubs.api.ServerModel.prototype.getPermalink = function() {
     return this.permalink_;
 };
