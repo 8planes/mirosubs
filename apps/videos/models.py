@@ -96,6 +96,18 @@ class Video(models.Model):
     def __unicode__(self):
         return self.title_display()
     
+    def video_link(self):
+        if self.subtitle_language():
+            return self.subtitle_language().get_absolute_url()
+        try:
+            tr = self.subtitlelanguage_set.filter(was_complete=True) \
+                .filter(is_original=False)[:1].get()
+            if tr.language:
+                return tr.get_absolute_url()
+        except models.ObjectDoesNotExist:
+            pass
+        return self.get_absolute_url()
+        
     def is_html5(self):
         return self.video_type == VIDEO_TYPE_HTML5
     
@@ -149,6 +161,7 @@ class Video(models.Model):
         
         language = SubtitleLanguage(video=self)
         language.is_original = False
+        language.is_forked = True
         language.language = parser.language
         language.save()
         
