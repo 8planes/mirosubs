@@ -65,9 +65,9 @@ mirosubs.widget.DropDown.prototype.updateContents = function(dropDownContents) {
 };
 
 mirosubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleState) {
-    this.setCurrentLangClassName_('');
+    this.clearCurrentLang_();
     this.subtitleState_ = subtitleState;
-    this.setCurrentLangClassName_('mirosubs-activeLanguage');
+    this.setCurrentLangClassName_();
     goog.style.showElement(
         this.improveSubtitlesLink_,
         subtitleState != null);
@@ -95,7 +95,7 @@ mirosubs.widget.DropDown.prototype.createLanguageList_ = function($d) {
     this.subtitlesOff_ = $d('li', null, $d('a', {'href': '#'}, 'Subtitles Off'));
     this.subCountSpan_ = $d('span', 'mirosubs-languageStatus');
     this.originalLanguage_ =
-        $d('li', {'className': 'mirosubs-activeLanguage'},
+        $d('li', null,
            $d('a', {'href': '#'},
               $d('span', 'mirosubs-languageTitle', 'Original Language'),
               this.subCountSpan_));
@@ -319,7 +319,16 @@ mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCod
         new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
 };
 
-mirosubs.widget.DropDown.prototype.setCurrentLangClassName_ = function(className) {
+mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {
+    this.subtitlesOff_.className = '';
+    if (this.originalLanguage_)
+        this.originalLanguage_.className = '';
+    for (var i = 0; i < this.translationLinks_.length; i++)
+        this.translationLinks_[i].linkLi.className = '';
+};
+
+mirosubs.widget.DropDown.prototype.setCurrentLangClassName_ = function() {
+    var className = 'mirosubs-activeLanguage';
     var that = this;
     if (this.subtitleState_ == null)
         this.subtitlesOff_.className = className;
