@@ -26,6 +26,7 @@ goog.provide('mirosubs.LoginDialog');
  */
 mirosubs.LoginDialog = function(opt_finishFn, opt_message) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-login', true);
+    this.setBackgroundElementOpacity(0);
     this.finishFn_ = opt_finishFn;
     this.message_ = opt_message;
     this.loggedIn_ = mirosubs.currentUsername != null;

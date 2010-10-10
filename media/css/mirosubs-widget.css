@@ -39,7 +39,7 @@
   top: 0px !important;
   border: 1px solid #000;
   border-top: 0;
-  z-index: 2147483640;
+  z-index: 2147483639;
   }
 
 .mirosubs-modal-widget-content {
@@ -1042,8 +1042,9 @@ ul.mirosubs-titlesList.sync {
 }
 
 .mirosubs-modal-widget-bg {
+  z-index: 2147483638;
   position: absolute !important;
-    background: #000 !important;
+  background: #000 !important;
   top: 0 !important;
   left: 0 !important;
 }
@@ -2287,6 +2288,13 @@ cursor:
    height: 200px !important;
    padding: 15px 0 !important;
    background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
+}
+
+.mirosubs-modal-login-bg {
+   position: absolute;
+   top: 0;
+   left: 0;
+   z-index: 2147483640;
 }
 
 .mirosubs-modal-lang {
