@@ -45,7 +45,7 @@ mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
  * for more info.
  *
  */
-mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
+mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
     if (mirosubs.video.VideoSource.isYoutube(videoURL)) {
         var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
         if (videoIDExtract)
@@ -86,7 +86,8 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL) {
         else if (/\.webm$/.test(videoURL))
             videoType = vt.WEBM;
         if (videoType != null)
-            return new mirosubs.video.Html5VideoSource(videoURL, videoType);
+            return new mirosubs.video.Html5VideoSource(
+                videoURL, videoType, opt_videoConfig);
     }
     
     throw new Error("Unrecognized video url " + videoURL);

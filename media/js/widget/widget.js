@@ -29,6 +29,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
      * @type {string}
      */
     this.videoURL_ = widgetConfig['video_url'];
+    this.videoConfig_ = widgetConfig['video_config'];
     mirosubs.videoURL = this.videoURL_;
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
@@ -75,7 +76,7 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
     var videoSource = null;
     try {
         videoSource = mirosubs.video.VideoSource.videoSourceForURL(
-            this.videoURL_);
+            this.videoURL_, this.videoConfig_);
     }
     catch (err) {
         // TODO: format this more.
