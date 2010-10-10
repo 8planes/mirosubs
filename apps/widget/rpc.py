@@ -88,6 +88,8 @@ class Rpc(BaseRpc):
 
     def finished_subtitles(self, request, video_id, deleted, inserted, 
                            updated, language_code=None):
+        from videos.models import Action
+        
         video = models.Video.objects.get(video_id=video_id)
         language = video.subtitle_language(language_code)
         if not language.can_writelock(request):
@@ -101,6 +103,8 @@ class Rpc(BaseRpc):
         language = models.SubtitleLanguage.objects.get(pk=language.pk)
         language.release_writelock()
         language.save()
+        
+        Action.create_caption_handler(last_version)
         return { "response" : "ok",
                  "drop_down_contents" : 
                      self._drop_down_contents(request.user, video) }
