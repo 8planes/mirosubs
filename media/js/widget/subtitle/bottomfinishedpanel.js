@@ -36,14 +36,18 @@ mirosubs.subtitle.BottomFinishedPanel.prototype.createDom = function() {
     var transBox = $d('div', 'mirosubs-translating');
 
     if (mirosubs.isFromDifferentDomain()) {
+        var otherDiv = $d('div', 'mirosubs-otherButtons');
         this.closeLink_ = 
             $d('a', 
-               {'className': 'mirosubs-closeandreturn', 'href':'#'}, 
+               {'className': 'mirosubs-otherClose', 'href':'#'}, 
+               $d('span'),
                "Close and return to site");
         elem.appendChild(this.closeLink_);
         elem.appendChild(
+            this.getDomHelper().createTextNode("|"));
+        elem.appendChild(
             $d('a',
-               {'className': 'mirosubs-videohome',
+               {'className': 'mirosubs-goBack',
                 'href': this.permalink_},
                "Go to Universal Subtitles video homepage"));
     }
