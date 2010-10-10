@@ -23,9 +23,10 @@ goog.provide('mirosubs.video.Html5VideoSource');
  * @param {string} videoURL
  * @param {mirosubs.video.Html5VideoType} videoType
  */
-mirosubs.video.Html5VideoSource = function(videoURL, videoType) {
+mirosubs.video.Html5VideoSource = function(videoURL, videoType, opt_videoConfig) {
     this.videoURL_ = videoURL;
     this.videoType_ = videoType;
+    this.videoConfig_ = opt_videoConfig;
 };
 
 mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
@@ -45,7 +46,7 @@ mirosubs.video.Html5VideoSource.prototype.createPlayer_ =
     return new mirosubs.video.Html5VideoPlayer(
         new mirosubs.video.Html5VideoSource(
             this.videoURL_, this.videoType_), 
-        forSubDialog);
+        forSubDialog, this.videoConfig_);
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {

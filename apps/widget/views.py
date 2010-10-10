@@ -110,6 +110,8 @@ def base_widget_params(request, extra_params={}):
         params['translate_immediately'] = True    
     if request.GET.get('base_state') is not None:
         params['base_state'] = json.loads(request.GET['base_state'])
+    if request.GET.get('video_config') is not None:
+        params['video_config'] = json.loads(request.GET['video_config'])
     params.update(extra_params)
     return json.dumps(params)[1:-1]
 

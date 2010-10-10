@@ -23,11 +23,12 @@ goog.provide('mirosubs.video.Html5VideoPlayer');
  * @param {mirosubs.video.Html5VideoSource} videoSource
  * @param {boolean=} opt_excludeControls;
  */
-mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls) {
+mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls, opt_videoConfig) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
 
     this.videoSource_ = videoSource;
     this.videoElem_ = null;
+    this.videoConfig_ = opt_videoConfig;
 
     // only used in FF, since they don't support W3 buffered spec yet.
     this.videoLoaded_ = 0;
@@ -60,6 +61,11 @@ mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     if (mirosubs.video.supportsOgg() ||
         mirosubs.video.supportsH264()) {
         var params = { 'autobuffer': 'true' };
+        if (this.videoConfig_) {
+            // user can't set controls
+            goog.object.remove(this.videoConfig_, 'controls');
+            goog.object.extend(params, this.videoConfig_);
+        }
         if (this.includeControls_)
             params['controls'] = 'true';
         el.appendChild(
