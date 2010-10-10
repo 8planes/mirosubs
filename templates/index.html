@@ -81,13 +81,21 @@ Reach an international audience, make your videos accessible, and get more traff
      var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
          document.getElementById('widget_div'), 
          { "base_state": {}, 
-           "video_url": "http://subtesting.com/video/Usubs-IntroVideo.theora.ogg" });
-  }else{
+           "video_url": "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv" });
+  }
+  else if (mirosubs.video.supportsH264()) {
+     $('#widget_div').append($(
+         '<video controls src="http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4" width="470" height="353"></video>'
+     ));
+  }
+  else {
      $('#widget_div').append($('<object width="480" height="385">'+
-         '<param name="movie" value="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1"></param>'+
+         '<param name="movie" value="http://www.youtube.com/watch?v=Y2IJb1YnAmQ"></param>'+
          '<param name="allowFullScreen" value="true"></param>'+
          '<param name="allowscriptaccess" value="always"></param>'+
-         '<embed src="http://www.youtube.com/v/sr0Ha2aQm_o&amp;hl=en_US&amp;fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed>'+
+         '<embed src="http://www.youtube.com/watch?v=Y2IJb1YnAmQ" 
+                 type="application/x-shockwave-flash" allowscriptaccess="always" 
+                 allowfullscreen="true" width="480" height="385"></embed>'+
        '</object>'));
   }
 </script>
