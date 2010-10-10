@@ -306,8 +306,9 @@ form.message button{
 
 
 #messages #closeBut{
-right: 10px;
-top: 10px;
+right: -6px;
+top: -6px !important;
+position: absolute;
   -moz-border-radius: 30px;  
   -webkit-border-radius: 5px;
   border-radius: 5px;
