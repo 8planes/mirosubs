@@ -131,9 +131,9 @@ class TtmlSubtitleParser(SubtitleParser):
             yield self._get_data(item)
         
 class SrtSubtitleParser(SubtitleParser):
+    _clean_pattern = re.compile(r'\{.*?\}', re.DOTALL)
     
     def __init__(self, subtitles):
-        self._clean_pattern = re.compile(r'\{.*?\}', re.DOTALL)
         pattern = r'\d+\n'
         pattern += r'(?P<s_hour>\d{2}):(?P<s_min>\d{2}):(?P<s_sec>\d{2}),(?P<s_secfr>\d+)'
         pattern += r' --> '
@@ -158,7 +158,6 @@ class SrtSubtitleParser(SubtitleParser):
 class SbvSubtitleParser(SrtSubtitleParser):
 
     def __init__(self, subtitles):
-        self._clean_pattern = re.compile(r'\{.*?\}', re.DOTALL)
         pattern = r'(?P<s_hour>\d{1}):(?P<s_min>\d{2}):(?P<s_sec>\d{2})\.(?P<s_secfr>\d{3})'
         pattern += r','
         pattern += r'(?P<e_hour>\d{1}):(?P<e_min>\d{2}):(?P<e_sec>\d{2})\.(?P<e_secfr>\d{3})'
