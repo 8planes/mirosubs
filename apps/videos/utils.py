@@ -3,6 +3,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils import simplejson as json
 import re
+import htmllib
 
 def get_pager(objects, on_page=15, page='1', orphans=0):
     from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -96,6 +97,12 @@ class TtmlSubtitleParser(SubtitleParser):
         except ExpatError:
             raise SubtitleParserError('Incorrect format of TTML subtitles')
         self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
+
+    def unescape(self, s):
+        p = htmllib.HTMLParser(None)
+        p.save_bgn()
+        p.feed(s)
+        return p.save_end() 
         
     def __len__(self):
         return len(self.nodes)
@@ -120,7 +127,7 @@ class TtmlSubtitleParser(SubtitleParser):
         
     def _get_data(self, node):
         output = {
-            'subtitle_text': strip_tags(node.toxml())
+            'subtitle_text': self.unescape(strip_tags(node.toxml()))
         }        
         output['start_time'], output['end_time'] = \
             self._get_time(node.getAttribute('begin'), node.getAttribute('dur'))
