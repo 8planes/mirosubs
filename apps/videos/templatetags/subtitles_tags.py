@@ -27,5 +27,6 @@ def upload_subtitles(context, video, has_translations):
         'video': video,
         'form': SubtitlesUploadForm(context['user']),
         'has_translations': has_translations,
-        'user': context['user']
+        'user': context['user'],
+        'request': context['request']
     }
