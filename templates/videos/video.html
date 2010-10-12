@@ -128,10 +128,10 @@
 
   <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
+        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if video.subtitle_language %}
             <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{{ video.subtitle_language.language_display }}</a></li>
         {% endif %}
-        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% if translations %} 
           {% for item in translations %}  
              <li {% if language == item %}class="active"{% endif %}><a href="{{ item.get_absolute_url }}">{{ item.get_language_display }}</a></li>
