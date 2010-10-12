@@ -22,7 +22,6 @@ mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
     this.endOfPPlayheadTime_ = null;
-    this.playMode_ = mirosubs.subtitle.TranscribePanel.PlayMode.AUTOPAUSE;
 
     this.wasPlaying_ = false;
     this.continuouslyTyping_ = false;
