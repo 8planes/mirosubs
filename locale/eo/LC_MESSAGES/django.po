@@ -655,15 +655,15 @@ msgstr ""
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
-msgstr ""
+msgstr "Bonvolu provi la subtekstan teknologion de nia <a href=\"/demo/\">alfa versio</a>.   Tie ankoraŭ ne eblas registri subtekstojn, sed tio estos en la alfa komunuma lanĉo (planata por julio 2010)."
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
-msgstr ""
+msgstr "Videaj subtekstoj estas kiel orminejo de neĉerpita potencialo. "
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
-msgstr ""
+msgstr "Per subtekstoj videoj estos pli alirebla por (duon)surduloj."
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
@@ -671,47 +671,47 @@ msgstr "Tradukitaj subtitolojn ebligas por ni ĉiuj spekti videon en lingvoj kiu
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr ""
+msgstr "Kiel edukanto, rakontanto, scientisto, aŭ iu ajn kun mesaĝo, la potenciala spektantaro multoble pliiĝas kiam estas subtekstoj kaj tradukoj."
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
-msgstr ""
+msgstr "La Participatory Culture Foundation estas 501c3 neprofitocela organizaĵo kies misio, tra softvaro kaj lobiado, estas konstruadi pli justan, pli malferman, kaj pli demokratan amaskomunikilaron. PCF vidis mankon en la vendoplaco por pli malferma kaj kunlabora subtekstigado - Universalaj Subtitoloj estas provo solvi tion. "
 
 #: .\templates\faq.html.py:61
 msgid "Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations."
-msgstr ""
+msgstr "Jes, ni laboras pri solvo fari subtekstojn (inkluzive de informoj pri sonoj kaj muziko)."
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
-msgstr ""
+msgstr "Ni laboros subteni la plej multajn lingvojn/literarojn."
 
 #: .\templates\faq.html.py:69
 msgid "We're working towards having the subtitling widget and community website fully translatable, so the interfaces can be available in the user's native language."
-msgstr ""
+msgstr "Ni laboras cele al subtekstigilo kaj komunuma retejo plene tradukitaj en diversaj lingvoj."
 
 #: .\templates\faq.html.py:73
 msgid "Please add yourself to our announcement list (on the front page) and we'll let you know as soon as this is possible."
-msgstr ""
+msgstr "Bonvole aldonu vin al nia anonclisto (unuapaĝe) kaj ni sciigos al vi tuj kiam eblas."
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "Por niaj subtekstigilo kaj komunuma retejo, ni uzas <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
-msgstr ""
+msgstr "Bonvole ja!  Se vi interesiĝas pri programado, vizitu nian <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">programista retejo</a>."
 
 #: .\templates\faq.html.py:85
 msgid "If you're interested in general involvement, please see our <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details)."
-msgstr ""
+msgstr "Se vi interesiĝas pri ĝenerala partopreno, vizitu nian <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat paĝon</a>.  Se vi havas specifan ideon, retpoŝtu al <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>.  Rimarku ke, kiel 501c3 neprofitocela organizaĵo, ni akceptas donacojn (vd. venontan paĝon por detaloj)."
 
 #: .\templates\faq.html.py:89
 msgid "Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donate here</a>."
-msgstr ""
+msgstr "Jes kaj jes!  Tuj nun, la Mozilla Foundation egal-donacos ĝis entute USD 25.000.  Vi povas <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donaci ĉi tie</a>."
 
 #: .\templates\faq.html.py:93
 msgid "The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!"
-msgstr ""
+msgstr "La Mozilla Foundation provizis al Universal Subtitles semo-financojn, komunuman subtenon, kaj monkolektadan subtenon tra < href=\"http://www.drumbeat.org/about\">Drumbeat</a>.  Drumbeat estas movado por teni la TTT malferma dum la sekvontaj 100 jaroj, kaj Universal Subtitles estas ĉefrola projekto! "
 
 #: .\templates\faq.html.py:98
 msgid ""
@@ -721,6 +721,10 @@ msgid ""
 "        Click the links in the lower right under the green \"Edit Subtitles\" button.\n"
 "        "
 msgstr ""
+"\n"
+" Kiam subtekstoj ekzistas, vi povas ilin elŝuti en .SRT, .SSA, kaj TTML (<a href=\"http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/\">ekzemplo</a>). \n"
+" Klaki ligojn malsupre dektre sur verdan butonon \"Redakti Subtekstojn\".\n"
+" "
 
 #: .\templates\faq.html.py:108
 msgid ""
