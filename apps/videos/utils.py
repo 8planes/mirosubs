@@ -93,7 +93,7 @@ class TtmlSubtitleParser(SubtitleParser):
     
     def __init__(self, subtitles):
         try:
-            dom = parseString(subtitles)
+            dom = parseString(subtitles.encode('utf8'))
         except ExpatError:
             raise SubtitleParserError('Incorrect format of TTML subtitles')
         self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
