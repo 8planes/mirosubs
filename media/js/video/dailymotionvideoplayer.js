@@ -58,6 +58,10 @@ mirosubs.video.DailymotionVideoPlayer = function(videoSource, opt_chromeless) {
 };
 goog.inherits(mirosubs.video.DailymotionVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
+mirosubs.video.DailymotionVideoPlayer.logger_ =
+    goog.debug.Logger.getLogger(
+        'mirosubs.video.DailymotionVideoPlayer')
+
 mirosubs.video.DailymotionVideoPlayer.WIDTH = 400;
 mirosubs.video.DailymotionVideoPlayer.HEIGHT = 350;
 
@@ -145,6 +149,7 @@ mirosubs.video.DailymotionVideoPlayer.prototype.setVolume = function(volume) {
 
 mirosubs.video.DailymotionVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     if (this.player_) {
+        mirosubs.video.DailymotionVideoPlayer.logger_.info('seeking to ' + playheadTime);
         this.player_['seekTo'](playheadTime);
         this.sendTimeUpdateInternal();
     }
