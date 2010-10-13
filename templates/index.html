@@ -18,7 +18,7 @@
 {% block logo %}<span class="logo">Miro Subs Alpha</span>{% endblock %}
 
 {% block main_content %}
-  <h2 class="centered">{% trans 'Subtitle and caption your videos, with help from your viewers' %}</h2>
+  <h2 class="centered" style="font-size: 25px;">{% trans 'Subtitle and caption your videos, with help from your viewers' %}</h2>
   <div class="grid_6 alpha">
 
   <div class="box">
@@ -30,7 +30,7 @@ Reach an international audience, make your videos accessible, and get more traff
     </p>
 
     <p class="larger center bold">
-        3,223 {% trans 'videos use Universal Subititles' %}
+        {{ all_videos }} {% trans 'videos use Universal Subititles' %}
     </p>
 </div>
 
@@ -52,8 +52,9 @@ Reach an international audience, make your videos accessible, and get more traff
 
       <span class="small">
           {% trans 'Works with Ogg, WebM, FLV, Youtube, Blip or Dailymotion.' %}  
+          <a href="{% url demo %}" style="position: static;">{% trans 'Or try the demo' %}</a>
       </span>
-      <a href="{% url demo %}" style="position: static;">{% trans 'Or try the demo' %}</a>
+      
     </form>
     <script type="text/javascript">
         jQuery('input[name=video_url]').one('click', function(){
@@ -83,7 +84,8 @@ Reach an international audience, make your videos accessible, and get more traff
   if (mirosubs.video.supportsOgg()) {
      var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
          document.getElementById('widget_div'), 
-         { "base_state": {}, 
+         { "base_state": {},
+           "poster":"{{ MEDIA_URL }}images/cfef80b0d1332cb66934819f75a31ad0.png",
            "video_url": "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv" });
   }
   else if (mirosubs.video.supportsH264()) {
