@@ -25,9 +25,9 @@ http://www.gnu.org/licenses/agpl-3.0.html.
 <script type="text/javascript">
   var currentDirectory = location.href.substring(0, location.href.lastIndexOf('/'));
   var echo = [];
-  echo[mirosubs.xdRequestID] = '{{request_id|escapejs}}';
-  echo[mirosubs.xdDummyURI] = '{{dummy_uri|escapejs}}';
-  mirosubs.xdSendResponse(
+  echo[unisubs.xdRequestID] = '{{request_id|escapejs}}';
+  echo[unisubs.xdDummyURI] = '{{dummy_uri|escapejs}}';
+  unisubs.xdSendResponse(
     '{{response_json|escapejs}}',
     true, // is JSON
     echo,

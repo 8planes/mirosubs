@@ -44,11 +44,14 @@ mirosubs.widget.CrossDomainEmbed.Type = {
 
 (function() {
     goog.exportSymbol(
-        'mirosubs.widget.CrossDomainEmbed.embed',
+        'unisubs.CrossDomainEmbed.embed',
         mirosubs.widget.CrossDomainEmbed.embed);
-    mirosubs["xdSendResponse"] = goog.net.CrossDomainRpc.sendResponse;
-    mirosubs["xdRequestID"] = goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID;
-    mirosubs["xdDummyURI"] = goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI;
+    var exports =
+        [["xdSendResponse", goog.net.CrossDomainRpc.sendResponse],
+         ["xdRequestID", goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID],
+         ["xdDummyURI", goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI]];
+    for (var i = 0; i < exports.length; i++)
+        goog.exportSymbol('unisubs.' + exports[i][0], exports[i][1]);
 
     var m = window["MiroSubsToEmbed"];
     if (typeof(m) != 'undefined')
