@@ -22,8 +22,10 @@ goog.provide('mirosubs.widget.SubtitleController');
  * @constructor
  */
 mirosubs.widget.SubtitleController = function(
-    playController, videoTab, dropDown) 
+    videoID, videoURL, playController, videoTab, dropDown) 
 {
+    this.videoID_ = videoID;
+    this.videoURL_ = videoURL;
     this.videoTab_ = videoTab;
     this.dropDown_ = dropDown;
     this.playController_ = playController;
@@ -112,7 +114,7 @@ mirosubs.widget.SubtitleController.prototype.possiblyRedirect_ =
         callback();
     else {
         var uri = new goog.Uri(mirosubs.siteURL() + '/onsite_widget/');
-        uri.setParameterValue('video_url', mirosubs.videoURL);
+        uri.setParameterValue('video_url', this.videoURL_);
         if (mirosubs.IS_NULL)
             uri.setParameterValue('null_widget', 'true');
         if (addNewTranslation)
@@ -160,7 +162,7 @@ mirosubs.widget.SubtitleController.prototype.startEditing_ =
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'start_editing', 
-        {'video_id': mirosubs.videoID,
+        {'video_id': this.videoID_,
          'language_code': subLanguageCode,
          'original_language_code': originalLanguageCode,
          'base_version_no': baseVersionNo,
@@ -197,7 +199,8 @@ mirosubs.widget.SubtitleController.prototype.openSubtitlingDialog_ =
     var subDialog = new mirosubs.subtitle.Dialog(
         this.playController_.getVideoSource(),
         new mirosubs.subtitle.MSServerModel(
-            mirosubs.videoID, subtitleState.LANGUAGE),
+            this.videoID_, this.videoURL_, 
+            subtitleState.LANGUAGE),
         subtitleState.SUBTITLES);
     subDialog.setVisible(true);
     this.handler_.listenOnce(
@@ -210,6 +213,8 @@ mirosubs.widget.SubtitleController.prototype.openDependentTranslationDialog_ =
 {
     this.playController_.stopForDialog();
     var transDialog = new mirosubs.translate.Dialog(
+        new mirosubs.subtitle.MSServerModel(
+            this.videoID_, this.videoURL_, subtitleState.LANGUAGE),
         this.playController_.getVideoSource(),
         subtitleState, originalSubtitleState);
     transDialog.setVisible(true);

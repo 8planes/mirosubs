@@ -18,15 +18,15 @@
 
 goog.provide('mirosubs.translate.Dialog');
 
-mirosubs.translate.Dialog = function(videoSource, 
+mirosubs.translate.Dialog = function(serverModel,
+                                     videoSource, 
                                      subtitleState, 
                                      standardSubState) {
     mirosubs.Dialog.call(this, videoSource);
     this.subtitleState_ = subtitleState;
     this.standardSubState_ = standardSubState;
     this.unitOfWork_ = new mirosubs.UnitOfWork();
-    this.serverModel_ = new mirosubs.subtitle.MSServerModel(
-        mirosubs.videoID, subtitleState.LANGUAGE);
+    this.serverModel_ = serverModel;
     this.serverModel_.init(this.unitOfWork_);
     this.saved_ = false;
 };

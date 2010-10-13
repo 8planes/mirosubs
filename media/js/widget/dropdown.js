@@ -22,9 +22,10 @@ goog.provide('mirosubs.widget.DropDown');
  * @constructor
  * @param {mirosubs.widget.DropDownContents} dropDownContents
  */
-mirosubs.widget.DropDown = function(dropDownContents, videoTab) {
+mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab) {
     goog.ui.Component.call(this);
 
+    this.videoID_ = videoID;
     this.setStats_(dropDownContents);
     this.videoTab_ = videoTab;
     this.subtitleState_ = null;
@@ -150,7 +151,7 @@ mirosubs.widget.DropDown.prototype.createActionList_ = function($d) {
 };
 
 mirosubs.widget.DropDown.prototype.createSubtitleHomepageURL_ = function() {
-    return [mirosubs.siteURL(), "/videos/", mirosubs.videoID].join('');
+    return [mirosubs.siteURL(), "/videos/", this.videoID_].join('');
 };
 
 mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function() {
@@ -158,7 +159,7 @@ mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function() {
                "/widget/download_",
                (mirosubs.IS_NULL ? "null_" : ""),
                "srt/?video_id=",
-               mirosubs.videoID].join('');
+               this.videoID_].join('');
     if (this.subtitleState_ && this.subtitleState_.LANGUAGE)
         url += ['&lang_code=', this.subtitleState_.LANGUAGE].join('');
     return url;
