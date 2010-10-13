@@ -85,7 +85,9 @@ Reach an international audience, make your videos accessible, and get more traff
      var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
          document.getElementById('widget_div'), 
          { "base_state": {},
-           "poster":"{{ MEDIA_URL }}images/cfef80b0d1332cb66934819f75a31ad0.png",
+           "video_config": {
+               "poster":"{{ MEDIA_URL }}images/about-poster.png",
+           },
            "video_url": "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv" });
   }
   else if (mirosubs.video.supportsH264()) {

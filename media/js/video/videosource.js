@@ -69,7 +69,10 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
             if (/\.flv$/.test(videoURL))
                 return new mirosubs.video.FlvVideoSource(videoURL);
             else 
-                return new mirosubs.video.Html5VideoSource(videoURL);
+                return new mirosubs.video.Html5VideoSource(
+                    videoURL,
+                    mirosubs.video.Html5VideoType.OGG,
+                    opt_videoConfig);
         }
         return null;
     }
