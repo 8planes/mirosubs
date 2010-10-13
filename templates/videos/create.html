@@ -22,10 +22,8 @@
   <input type="text" name="video_url" class="main_video_form_field" />
   <button class="green_button big marginleft" type="submit" value="Begin">{% trans 'Begin' %}</button>
   <p>
-      {% blocktrans %}
-      To enable collaborative subtitles, enter the URL to any video in the<br />
-      following formats: Ogg, WebM, FLV, Youtube, Blip or Vimeo
-      {% endblocktrans %}
+      {% trans 'Works with Ogg, WebM, FLV, Youtube, Blip or Dailymotion.' %}  
+      <a href="{% url demo %}">{% trans 'Or try the demo' %}</a>
   </p>
 </form>
 
