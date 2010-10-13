@@ -74,7 +74,6 @@ Hide these tags: {\some_letters_or_numbers_or_chars}
         self.assertEqual(result[4]['end_time'], 58.5)
         self.assertEqual(result[4]['subtitle_text'], u'Hide these tags: ')
 
-        
 class YoutubeModuleTest(TestCase):
     
     def setUp(self):
