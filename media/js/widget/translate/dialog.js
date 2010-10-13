@@ -54,7 +54,7 @@ mirosubs.translate.Dialog.prototype.createRightPanel_ = function() {
     var title = this.subtitleState_.VERSION > 0 ? 
         "Editing Translation" : "Adding a New Translation";
     var helpContents = new mirosubs.RightPanel.HelpContents(
-        "Adding a New Translation",
+        title,
         [["Thanks for volunteering to translate! As soon as you submit ",
           "your translation, it will be available to everyone watching the ",
           "video in our widget."].join(''),

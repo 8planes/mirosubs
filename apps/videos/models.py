@@ -28,6 +28,7 @@ from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
 from vidscraper.sites import blip, google_video, fora, ustream, vimeo
+from videos import blip as videos_blip
 from youtube import get_video_id
 import dailymotion
 import urllib
@@ -207,11 +208,11 @@ class Video(models.Model):
             bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
             video, created = Video.objects.get_or_create(
                 bliptv_fileid=bliptv_fileid,
-                defaults={'video_type': VIDEO_TYPE_HTML5, 
+                defaults={'video_type': VIDEO_TYPE_BLIPTV, 
                           'allow_community_edits': True})
             if created:
                 video.title = blip.scrape_title(video_url)
-                video.bliptv_flv_url = blip.scrape_file_url(video_url)
+                video.bliptv_flv_url = videos_blip.scrape_best_file_url(video_url)
                 video.video_url = video.bliptv_flv_url
                 video.thumbnail = blip.get_thumbnail_url(video_url)
                 video.save()
