@@ -2731,7 +2731,7 @@ overflow-y: auto;
 .mirosubs-dropdown .mirosubs-languageList ul li {
     list-style: none !important;
     border-bottom: 1px solid #ddd !important;
-
+   margin: 0 !important;
 }
 
 .mirosubs-dropdown .mirosubs-languageList ul li:hover {
