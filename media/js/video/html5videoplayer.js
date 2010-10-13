@@ -43,6 +43,7 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls, opt
         this.sendTimeUpdateInternal,
         mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL,
         this);
+    this.playedOnce_ = false;
 };
 goog.inherits(mirosubs.video.Html5VideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
@@ -87,10 +88,13 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'pause', this.videoPaused_).
         listen(this.videoElem_, 'progress', this.videoProgressListener_).
         listen(this.videoElem_, 'loadedmetadata', this.setDimensionsKnownInternal).
-        listen(this.videoElem_, 'timeupdate',
-               this.timeUpdateThrottle_.fire,
-               false, this.timeUpdateThrottle_).
+        listen(this.videoElem_, 'timeupdate', this.sendTimeUpdate_).
         listen(this.videoElem_, 'ended', this.dispatchEndedEvent);
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.sendTimeUpdate_ = function() {
+    if (this.playedOnce_)
+        this.timeUpdateThrottle_.fire();
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {
@@ -98,6 +102,7 @@ mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height)
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
+    this.playedOnce_ = true;
     this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
 };
 
