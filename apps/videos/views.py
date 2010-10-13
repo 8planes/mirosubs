@@ -42,6 +42,7 @@ from django.db.models import Sum
 def index(request):
     context = widget.add_onsite_js_files({})
     context['widget_params'] = _widget_params(request, 'http://subtesting.com/video/Usubs-IntroVideo.theora.ogg', None, '')
+    context['all_videos'] = Video.objects.count()
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
 
