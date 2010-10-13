@@ -32,9 +32,10 @@ goog.provide('mirosubs.subtitle.MSServerModel');
  * @param {string} videoID MiroSubs videoid
  * @param {string=} language language code
  */
-mirosubs.subtitle.MSServerModel = function(videoID, language) {
+mirosubs.subtitle.MSServerModel = function(videoID, videoURL, language) {
     goog.Disposable.call(this);
     this.videoID_ = videoID;
+    this.videoURL_ = videoURL;
     this.language_ = language;
     this.initialized_ = false;
     this.finished_ = false;
@@ -157,8 +158,16 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {
-    return [mirosubs.subtitle.MSServerModel.EMBED_JS_URL, 
-            "?video_id=", this.videoID_].join('');
+    return [
+        '<sc',
+        'ript type="text/javascript" src="',
+        mirosubs.mediaURL(),
+        'embed', mirosubs.embedVersion, '.js',
+        '">\n',
+        '({\n',
+        '   video_url: "', this.videoURL_, '"\n',
+        '})\n',
+        '</script>'].join('');
 };
 
 mirosubs.subtitle.MSServerModel.prototype.stopTimer_ = function() {

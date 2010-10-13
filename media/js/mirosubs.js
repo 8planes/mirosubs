@@ -51,14 +51,6 @@ mirosubs.returnURL = null;
 mirosubs.embedVersion = null;
 
 /**
- * @type {string}
- * Set in widget constructor.
- */
-mirosubs.videoURL = null;
-
-mirosubs.videoID = null;
-
-/**
  * Set when widget gets initial state from server. All available languages.
  * Each member is a two-element array, with language code first then 
  * language name.
@@ -97,19 +89,6 @@ mirosubs.languageNameForCode = function(code) {
                 mirosubs.metadataLanguages[i][1];
     }
     return mirosubs.languageMap_[code];
-};
-
-mirosubs.embedCode = function() {
-    return [
-        '<sc',
-        'ript type="text/javascript" src="',
-        mirosubs.mediaURL(),
-        'embed', mirosubs.embedVersion, '.js',
-        '">\n',
-        '({\n',
-        '   video_url: "', mirosubs.videoURL, '"\n',
-        '})\n',
-        '</script>'].join('');
 };
 
 /**

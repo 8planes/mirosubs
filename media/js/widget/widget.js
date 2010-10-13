@@ -30,7 +30,6 @@ mirosubs.widget.Widget = function(widgetConfig) {
      */
     this.videoURL_ = widgetConfig['video_url'];
     this.videoConfig_ = widgetConfig['video_config'];
-    mirosubs.videoURL = this.videoURL_;
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
      * if base state is null, or equivalent of clicking on "Improve 
@@ -104,6 +103,9 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
 
 mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.makeGeneralSettings_(result);
+
+    var videoID = result['video_id'];
+
     if (result['flv_url'] && !this.videoSource_)
         this.setVideoSource_(new mirosubs.video.FlvVideoSource(
             result['flv_url']));
@@ -114,7 +116,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
         result['subtitles']);
 
     var popupMenu = new mirosubs.widget.DropDown(
-        dropDownContents, this.videoTab_);
+        videoID, dropDownContents, this.videoTab_);
 
     this.videoTab_.showContent(popupMenu.hasSubtitles(),
                                subtitleState);
@@ -125,10 +127,11 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     popupMenu.setCurrentSubtitleState(subtitleState);
 
     this.playController_ = new mirosubs.widget.PlayController(
-        this.videoSource_, this.videoPlayer_, this.videoTab_, 
-        popupMenu, subtitleState);
+        videoID, this.videoSource_, this.videoPlayer_, 
+        this.videoTab_, popupMenu, subtitleState);
 
     this.subtitleController_ = new mirosubs.widget.SubtitleController(
+        videoID, this.videoURL_, 
         this.playController_, this.videoTab_, popupMenu);
 
     if (this.subtitleImmediately_)
@@ -144,7 +147,6 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
 mirosubs.widget.Widget.prototype.makeGeneralSettings_ = function(result) {
     if (result['username'])
         mirosubs.currentUsername = result['username'];
-    mirosubs.videoID = result['video_id'];
     mirosubs.embedVersion = result['embed_version'];
     mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
         result["writelock_expiration"];
