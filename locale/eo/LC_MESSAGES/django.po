@@ -647,7 +647,6 @@ msgid "Why can't I change the timing on a translation?"
 msgstr "Kial mi ne povas retempigi tradukatajn subtekstojn?"
 
 #: .\templates\faq.html.py:40
-#, fuzzy
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
 msgstr ""
 "Nia celo kun Universal Subtitles estas faciligi al cxiuj aldoni subtitoloj aux traduki perskaux ajna video en la reto. \r\n"
@@ -735,82 +734,88 @@ msgid ""
 "        or--potentially--a totally different number of subtitles.\n"
 "        "
 msgstr ""
+"\n"
+" Nun, la tempo-informoj pri tradukaĵo ligiĝas rekte al la tempo-informoj de la originalo.\n"
+" Baldaŭ eblos disforkiĝi la tempojn por tradukoj,\n"
+" kreante novajn versiojn kun malsamaj tempoj\n"
+" aŭ eĉ malsama nombro da subtekstoj.\n"
+"        "
 
 #: .\templates\feedback_response.html.py:3
 msgid "Thanks for getting in touch! We love hearing your ideas, bugs, feedback, opinions and such."
-msgstr ""
+msgstr "Dankon pro nin kontakti!  Plaĉegas al ni viajn ideojn, cim-raportojn, opiniojn, ktp."
 
 #: .\templates\feedback_response.html.py:6
 msgid "Stay tuned as the project evolves!"
-msgstr ""
+msgstr "Plu rigardadu nin, la projekto evoluas!"
 
 #: .\templates\feedback_response.html.py:9
 msgid "Announcement Signup"
-msgstr ""
+msgstr "Aboni anonocojn"
 
 #: .\templates\feedback_response.html.py:12
 msgid "Best"
-msgstr ""
+msgstr "Plej bona"
 
 #: .\templates\feedback_response.html.py:16
 msgid "PS. We do our best to respond to all questions, but please be patient -- we get a lot of email"
-msgstr ""
+msgstr "Postskribe, ni plejeble klopodas respondi ĉiujn demandojn, sed bonvole paciencu, ni ricevas multajn retpoŝtojn."
 
 #: .\templates\index.html.py:41
 msgid "Subtitles and Captions for Every Video on the Web"
-msgstr ""
+msgstr "Subtekstoj por ĉiu video en la interreto"
 
 #: .\templates\index.html.py:44
 msgid "The Problem"
-msgstr ""
+msgstr "La problemo"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
-msgstr ""
+msgstr "Reta video ekkonkuras kontraŭ tradicia televido, sed mankas bona malferma risurco por subtekstigado."
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
-msgstr ""
+msgstr "Nia misio"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
-msgstr ""
+msgstr "Ni provas fari la multlingvan subtekstigadon publike senpage malferme alirebla, do kiel la reto mem."
 
 #: .\templates\index.html.py:46
 msgid "Learn More"
-msgstr ""
+msgstr "Lerni pli"
 
 #: .\templates\index.html.py:49
 msgid "Right now"
-msgstr ""
+msgstr "Tuj nun"
 
 #: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
-msgstr ""
+msgstr "ni estas je alfa nivelo, konstruante, kontrolante.  Vi povas helpi!"
 
 #: .\templates\index.html.py:50
 msgid "Try our demo"
-msgstr ""
+msgstr "Sperti nian provoversion"
 
 #: .\templates\index.html.py:50
 msgid "Become a tester"
-msgstr ""
+msgstr "Iĝi kontrolanto"
 
 #: .\templates\index.html.py:56
 msgid "Subtitle Widget"
-msgstr ""
+msgstr "Subtekstigilo"
 
 #: .\templates\index.html.py:57
 msgid "A simple way to create and add captions to almost any video on the web (without having to transcode or re-upload videos)."
-msgstr ""
+msgstr "Simpla maniero krei kaj aldoni subtekstojn al preskaŭ iu ajn video en la interreto (sen bezono transkodi nek realŝuti)."
 
 #: .\templates\index.html.py:60
 msgid "Community Site"
-msgstr ""
+msgstr "Komunuma retejo"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
-msgstr ""
+msgstr "Interreta komunumo por kunlabora subtekstigado de videoj tra la mondo (kvazaŭ Vikipedio por subtekstoj)."
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
