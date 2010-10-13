@@ -20,7 +20,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs-settings'
 application = django.core.handlers.wsgi.WSGIHandler()
 
 handler = django.core.handlers.wsgi.WSGIHandler()
-off_tpl_path = join(base_site_dir, 'mirosubs, 'templates', 'off_template.html')
+off_tpl_path = join(base_site_dir, 'mirosubs', 'templates', 'off_template.html')
 disabled_file_path = join(base_site_dir, 'mirosubs', 'disabled')
 
 def application(environ, start_response):
