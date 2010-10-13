@@ -34,7 +34,7 @@ urlpatterns = patterns(
     url(r'^rollback/(?P<pk>\d+)/$', 'rollback', name='rollback'),
     url(r'^diffing/(?P<first_pk>\d+)/(?P<second_pk>\d+)/$', 'diffing', name='diffing'),
     url(r'^test/$', 'test_form_page', name='test_form_page'),
-    url(r'^(?P<video_id>(\w|-)+)/original/$', 'history', name='history'),
+    url(r'^(?P<video_id>(\w|-)+)/$', 'history', name='history'),
+    url(r'(?P<video_id>(\w|-)+)/info/$', 'video', name='video'),
     url(r'^(?P<video_id>(\w|-)+)/(?P<lang>[\w\-]+)/$', 'history', name='translation_history'),
-    url(r'(?P<video_id>(\w|-)+)/$', 'video', name='video'),
 )
