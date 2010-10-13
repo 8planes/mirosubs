@@ -121,7 +121,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     this.videoTab_.showContent(popupMenu.hasSubtitles(),
                                subtitleState);
 
-    this.addChild(popupMenu, true);
+    popupMenu.render(this.getDomHelper().getDocument().body);
     goog.style.showElement(popupMenu.getElement(), false);
 
     popupMenu.setCurrentSubtitleState(subtitleState);

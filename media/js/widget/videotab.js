@@ -60,6 +60,10 @@ mirosubs.widget.VideoTab.prototype.enterDocument = function() {
         listen(this.nudgeElem_, 'click', this.nudgeClicked_);
 };
 
+mirosubs.widget.VideoTab.prototype.getMenuAnchor = function() {
+    return this.anchorElem_;
+};
+
 mirosubs.widget.VideoTab.prototype.showLoading = function() {
     this.imageElem_.src = this.spinnerGifURL_;
     goog.dom.setTextContent(this.spanElem_, "Loading");
