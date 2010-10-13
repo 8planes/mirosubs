@@ -18,19 +18,19 @@
 {% block logo %}<span class="logo">Miro Subs Alpha</span>{% endblock %}
 
 {% block main_content %}
-  <h2 class="centered">{% trans 'Subtitle and caption your videos, with help from your viewers' %}</h2>
+  <h2 class="centered" style="font-size: 25px;">{% trans 'Subtitle and caption your videos, with help from your viewers' %}</h2>
   <div class="grid_6 alpha">
 
   <div class="box">
 
     <p class="index_intro">
         {% blocktrans %}
-Reach an international audience, make your videos accessible, and get more traffic by adding viewer-created subtitles to your site.  It's free, open source, and built to change the world
+Reach an international audience, make your videos accessible, and get more traffic by adding viewer-created subtitles to your site.  It's free, open source, and built to change the world.
         {% endblocktrans %}  
     </p>
 
     <p class="larger center bold">
-        3,223 {% trans 'videos use Universal Subititles' %}
+        {{ all_videos }} {% trans 'videos use Universal Subititles' %}
     </p>
 </div>
 
@@ -50,7 +50,11 @@ Reach an international audience, make your videos accessible, and get more traff
       </p> 
       <button class="green_button big">{% trans 'GO!' %}</button>
 
-      <span class="small">Ogg, WebM, FLV, Youtube, Blip or Vimeo</span>
+      <span class="small">
+          {% trans 'Works with Ogg, WebM, FLV, Youtube, Blip or Dailymotion.' %}  
+          <a href="{% url demo %}" style="position: static;">{% trans 'Or try the demo' %}</a>
+      </span>
+      
     </form>
     <script type="text/javascript">
         jQuery('input[name=video_url]').one('click', function(){
@@ -80,7 +84,8 @@ Reach an international audience, make your videos accessible, and get more traff
   if (mirosubs.video.supportsOgg()) {
      var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
          document.getElementById('widget_div'), 
-         { "base_state": {}, 
+         { "base_state": {},
+           "poster":"{{ MEDIA_URL }}images/cfef80b0d1332cb66934819f75a31ad0.png",
            "video_url": "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv" });
   }
   else if (mirosubs.video.supportsH264()) {
@@ -99,17 +104,16 @@ Reach an international audience, make your videos accessible, and get more traff
 </script>
   </div>
 
-<h2 class="arrows">{% trans 'With Universal Subtitles, you can' %}</h2>
+<h2 class="arrows">{% trans 'With Universal Subtitles, you can:' %}</h2>
 
 <div class="grid_4 alpha one">
   <div>
     <h4>{% trans 'Add subtitles' %}</h4>
     <p>
         {% blocktrans %}
-        We've built the easiest way to subtitle videos. 
-        Add our subtitling widget to your video (or your site) and 
-        click the "subtitle me" button. The rest is simple! 
-        Totally free, and no software to download.
+        We've built the easiest way to subtitle videos. Add our subtitling widget to
+        your video (or your site) and click the "subtitle me" button. The rest is
+        simple! Totally free, and no software to download.
         {% endblocktrans %}
         </p>
   </div>
@@ -120,9 +124,10 @@ Reach an international audience, make your videos accessible, and get more traff
     <h4>{% trans 'Add translations' %}</h4>
     <p>
         {% blocktrans %}
-        Once subtitles exist, any viewer can add a translation in any language. 
-        We also use Google Translate for instant machine translation between dozens of languages. 
-        Reach an international audience!
+        Once subtitles exist, any viewer can add a translation in any language.  No
+        need for robotic machine translations that confuse viewers.  Universal
+        Subtitles lets you collect high-quality translations from your viewer
+        community.
         {% endblocktrans %}
     </p>
   </div>
@@ -133,10 +138,10 @@ Reach an international audience, make your videos accessible, and get more traff
     <h4>{% trans 'Get volunteer help' %}</h4>
     <p>
       {% blocktrans %}
-      Your viewers (and members of our 
-      subtitling community) can add translations and make improvements. That way 
-      subtitles are constantly improving - like wikipedia. We organize your international audience to make your videos
-      more accessible.
+        Your viewers (and members of our subtitling community) can improve any
+        subtitles or translation. That way subtitles are constantly getting better -
+        like an article on wikipedia. We mobilize your international audience to make
+        your videos more accessible.
       {% endblocktrans %}
     </p>
   </div>
@@ -170,11 +175,13 @@ Reach an international audience, make your videos accessible, and get more traff
   <h3>{% trans 'How it works' %}</h3>
   <p>
   {% blocktrans %}
-  A community of volunteers improving your subtitles 
-  Each video gets its own collaboration space on our site 
-  (like a wikipedia article) where users can make improvements, 
-  track changes, and give each other feedback.
+    You add our widget to your videos.  Then you and your viewers can add
+    subtitles, which anyone can watch.  We save the subtitles on our site (but you
+    can download them).  And each video has its own collaboration space on our site
+    (like a wikipedia article) where people can make improvements, track changes,
+    and give feedback.
   {% endblocktrans %}
+  <br /><a href="{% url demo %}">{% trans 'Try the demo' %}</a>.
   </p>
 </div>
 
@@ -185,9 +192,14 @@ Reach an international audience, make your videos accessible, and get more traff
   
   <ul>
     <li>
-        {% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers (find out how to volunteer)." %}</li>
+        {% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers" %}
+        (<a href="{% url about_page %}">{% trans 'find out how to volunteer' %}</a>).
+    </li>
     
-    <li>{% trans 'The code is free and open source (get the source code)' %}</li>
+    <li>
+        {% trans 'The code is free and open source' %}
+         (<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)
+    </li>
     
     <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>
     
