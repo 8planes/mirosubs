@@ -99,7 +99,7 @@
     containingElement.appendChild(widgetDiv);
 
     var head = document.getElementsByTagName('head')[0];
-    if (typeof(unisubs) == 'undefined' && !window.MiroSubsLoading) {
+    if (typeof(mirosubs) == 'undefined' && !window.MiroSubsLoading) {
         window.MiroSubsLoading = true;
         for (var i = 0; i < scriptsToLoad.length; i++) {
             var curScript = $c('script');
@@ -127,9 +127,10 @@
             return;
         insertCalled = true;
         script.parentNode.insertBefore(containingElement, script);
-        if (typeof(unisubs) != 'undefined' &&
-            typeof(unisubs.CrossDomainEmbed) != 'undefined')
-            unisubs.CrossDomainEmbed.embed(widgetDiv, widgetConfig, siteConfig);
+        if (typeof(mirosubs) != 'undefined' &&
+            typeof(mirosubs.widget) != 'undefined' &&
+            typeof(mirosubs.widget.CrossDomainEmbed) != 'undefined')
+            mirosubs.widget.CrossDomainEmbed.embed(widgetDiv, widgetConfig, siteConfig);
         else {
             if (typeof(MiroSubsToEmbed) == 'undefined')
                 window.MiroSubsToEmbed = [];
