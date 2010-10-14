@@ -65,7 +65,9 @@ goog.require('goog.json');
           'save': save,
           'permalink': 'http://myvideopermalink.com',
           'login': login,
-          'embedCode':'some code to embed'
+          'embedCode': 'some code to embed',
+          'mediaURL': '{{MEDIA_URL}}',
+          'skipFinished': true
       };
 
       function openDialog() {
@@ -75,7 +77,9 @@ goog.require('goog.json');
 
           goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
 
-          mirosubs.api.openDialog(config);
+          var callbackAPI = mirosubs.api.openDialog(config);
+
+          // can now call callbackAPI.close() to close dialog
       }
   </script>
 </body>

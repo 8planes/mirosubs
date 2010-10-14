@@ -19,6 +19,8 @@
 goog.provide('mirosubs.api');
 
 mirosubs.api.openDialog = function(config) {
+    if (config['mediaURL'])
+        mirosubs.Config.siteConfig['mediaURL'] = config['mediaURL'];
     var subtitles = config['subtitles'];
     var closeListener = config['closeListener'];
     var videoURL = config['videoURL'];
@@ -26,13 +28,17 @@ mirosubs.api.openDialog = function(config) {
         videoURL, mirosubs.video.Html5VideoType.OGG);
     var serverModel = new mirosubs.api.ServerModel(config);
     var subDialog = new mirosubs.subtitle.Dialog(
-        videoSource, serverModel, subtitles);
+        videoSource, serverModel, subtitles, 
+        config['skipFinished']);
     mirosubs.currentUsername = config['username'];
     subDialog.setVisible(true);
     goog.events.listenOnce(
         subDialog,
         goog.ui.Dialog.EventType.AFTER_HIDE,
         closeListener);
+    return {
+        "close": function() { subDialog.setVisible(false); }
+    };
 };
 
 mirosubs.api.toSRT = function(jsonSubs) {

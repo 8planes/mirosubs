@@ -25,9 +25,10 @@ goog.provide('mirosubs.subtitle.Dialog');
  *     json object format.
  */
 mirosubs.subtitle.Dialog = function(videoSource, serverModel,
-                                    existingCaptions) {
+                                    existingCaptions, opt_skipFinished) {
     mirosubs.Dialog.call(this, videoSource);
     this.serverModel_ = serverModel;
+    this.skipFinished_ = !!opt_skipFinished;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.captionSet_ =
         new mirosubs.subtitle.EditableCaptionSet(existingCaptions, uw);
@@ -161,6 +162,8 @@ mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
         this.currentSubtitlePanel_.suspendKeyEvents(suspended);
 };
 mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
+    if (this.skipFinished_)
+        this.setVisible(false);
     if (!mirosubs.isFromDifferentDomain()) {
         window.location.assign(this.serverModel_.getPermalink() + '?saved=true');
         return;
