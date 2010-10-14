@@ -25,7 +25,7 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase
 from auth.models import CustomUser
-from videos.models import Video
+from videos.models import Video, Action
 from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
 
@@ -122,6 +122,14 @@ class TestRpc(TestCase):
         self.user_0 = CustomUser.objects.get(pk=3)
         self.user_1 = CustomUser.objects.get(pk=4)
         self.video_pk = 12
+
+    def test_actions_for_subtitle_edit(self):
+        request = RequestMockup(self.user_0)
+        action_ids = [i.id for i in Action.objects.all()]
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
+        qs = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)
+        self.assertEqual(qs.count(), 1)
 
     def test_fetch_subtitles(self):
         request = RequestMockup(self.user_0)
