@@ -78,7 +78,7 @@
             
             var CHANGE_TITLE_LINK = '{% url videos:ajax_change_video_title %}';
             var VIDEO_ID = '{{ video.video_id }}';
-            
+
             $('.edit-title').click(function(){
                 var title = prompt('{% trans "Enter new title" %}', $('.main-title').html());
                 if (title){
@@ -90,6 +90,7 @@
                 }
                 return false;
             });
+
         });
     </script>  
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -101,9 +102,9 @@
 
 {% block main_content %}
     {% if not video.title or video.is_html5 %}
-        <a class="floatright" href="#" class="edit-title">{% trans 'edit title' %}</a>   
+        <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
     {% endif %}
-    <h2 class="main-title">{{ video.title_display }}</h2>
+    <h2 class="main-title">{{ video }}</h2>
 
 
 
