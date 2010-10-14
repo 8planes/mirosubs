@@ -34,6 +34,7 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls, opt
     this.videoLoaded_ = 0;
     this.videoTotal_ = 0;
     this.includeControls_ = !opt_excludeControls;
+    this.playToClick_ = false;
 
     this.progressThrottle_ = new goog.Throttle(
         this.videoProgress_,
@@ -63,6 +64,10 @@ mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
         mirosubs.video.supportsH264()) {
         var params = { 'autobuffer': 'true' };
         if (this.videoConfig_) {
+            if (this.videoConfig_['play_to_click']) {
+                this.playToClick_ = true;
+                goog.object.remove(this.videoConfig_, 'play_to_click');
+            }
             // user can't set controls
             goog.object.remove(this.videoConfig_, 'controls');
             goog.object.extend(params, this.videoConfig_);
@@ -89,7 +94,15 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'progress', this.videoProgressListener_).
         listen(this.videoElem_, 'loadedmetadata', this.setDimensionsKnownInternal).
         listen(this.videoElem_, 'timeupdate', this.sendTimeUpdate_).
-        listen(this.videoElem_, 'ended', this.dispatchEndedEvent);
+        listen(this.videoElem_, 'ended', this.dispatchEndedEvent).
+        listenOnce(this.videoElem_, 'click', this.playerClicked_);
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.playerClicked_ = function(e) {
+    if (this.playToClick_ && !this.playedOnce_) {
+        e.preventDefault();
+        this.play();
+    }
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.sendTimeUpdate_ = function() {
