@@ -205,6 +205,7 @@ class ViewsTest(TestCase):
         self._login()
         
         data = {
+            'language': 'en',
             'video': self.video.id,
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
         }
@@ -217,7 +218,7 @@ class ViewsTest(TestCase):
         language = self.video.subtitle_language()
         version = language.latest_version()
         self.assertEqual(version.version_no, last_version.version_no+1)
-        self.assertEqual(version.subtitles().count(), 32)
+        self.assertEqual(len(version.subtitles()), 32)
     
     def test_email_friend(self):
         self._simple_test('videos:email_friend')
