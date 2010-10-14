@@ -34,6 +34,7 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls, opt
     this.videoLoaded_ = 0;
     this.videoTotal_ = 0;
     this.includeControls_ = !opt_excludeControls;
+    this.playToClick_ = false;
 
     this.progressThrottle_ = new goog.Throttle(
         this.videoProgress_,
@@ -43,6 +44,7 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls, opt
         this.sendTimeUpdateInternal,
         mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL,
         this);
+    this.playedOnce_ = false;
 };
 goog.inherits(mirosubs.video.Html5VideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
@@ -62,6 +64,10 @@ mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
         mirosubs.video.supportsH264()) {
         var params = { 'autobuffer': 'true' };
         if (this.videoConfig_) {
+            if (this.videoConfig_['play_to_click']) {
+                this.playToClick_ = true;
+                goog.object.remove(this.videoConfig_, 'play_to_click');
+            }
             // user can't set controls
             goog.object.remove(this.videoConfig_, 'controls');
             goog.object.extend(params, this.videoConfig_);
@@ -87,10 +93,21 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'pause', this.videoPaused_).
         listen(this.videoElem_, 'progress', this.videoProgressListener_).
         listen(this.videoElem_, 'loadedmetadata', this.setDimensionsKnownInternal).
-        listen(this.videoElem_, 'timeupdate',
-               this.timeUpdateThrottle_.fire,
-               false, this.timeUpdateThrottle_).
-        listen(this.videoElem_, 'ended', this.dispatchEndedEvent);
+        listen(this.videoElem_, 'timeupdate', this.sendTimeUpdate_).
+        listen(this.videoElem_, 'ended', this.dispatchEndedEvent).
+        listenOnce(this.videoElem_, 'click', this.playerClicked_);
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.playerClicked_ = function(e) {
+    if (this.playToClick_ && !this.playedOnce_) {
+        e.preventDefault();
+        this.play();
+    }
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.sendTimeUpdate_ = function() {
+    if (this.playedOnce_)
+        this.timeUpdateThrottle_.fire();
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {
@@ -98,6 +115,7 @@ mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height)
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
+    this.playedOnce_ = true;
     this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
 };
 

@@ -23,9 +23,10 @@ goog.provide('mirosubs.widget.PlayController');
  * 
  */
 mirosubs.widget.PlayController = function(
-    videoSource, videoPlayer, videoTab, dropDown, opt_subtitleState) 
+    videoID, videoSource, videoPlayer, videoTab, dropDown, opt_subtitleState) 
 {
     goog.Disposable.call(this);
+    this.videoID_ = videoID;
     this.videoSource_ = videoSource;
     this.videoPlayer_ = videoPlayer;
     this.videoTab_ = videoTab;
@@ -110,7 +111,7 @@ mirosubs.widget.PlayController.prototype.languageSelected = function(languageCod
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'fetch_subtitles',
-        { 'video_id': mirosubs.videoID,
+        { 'video_id': this.videoID_,
           'language_code': languageCode },
         function(subStateJSON) {
             that.turnOffSubs();

@@ -61,7 +61,7 @@ mirosubs.subtitle.SharePanel.prototype.createShareList_ = function($d, $t) {
 mirosubs.subtitle.SharePanel.prototype.createEmbedSection_ = function($d, $t) {
     this.embedCodeInput_ = $d('input', {'type':'text'});
 
-    var embedCode = mirosubs.embedCode();
+    var embedCode = this.serverModel_.getEmbedCode();
     this.embedCodeInput_['value'] = embedCode;
 
     var flashSpan = $d('span');

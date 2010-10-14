@@ -149,6 +149,8 @@ mirosubs.video.DailymotionVideoPlayer.prototype.setVolume = function(volume) {
 
 mirosubs.video.DailymotionVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     if (this.player_) {
+        // FIXME: temp workaround for http://bugzilla.pculture.org/show_bug.cgi?id=14834
+        playheadTime = Math.max(playheadTime, 1);
         mirosubs.video.DailymotionVideoPlayer.logger_.info('seeking to ' + playheadTime);
         this.player_['seekTo'](playheadTime);
         this.sendTimeUpdateInternal();
