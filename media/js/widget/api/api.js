@@ -82,22 +82,6 @@ mirosubs.api.writeSrtTime_ = function(seconds, stringBuffer) {
         append(p(Math.floor(seconds * 1000) % 1000, 3));
 };
 
-if (!window['MiroCSSLoading']) {
-    window['MiroCSSLoading'] = true;
-    var css = goog.dom.createDom(
-        'link',
-        {
-            'type': 'text/css',
-            'rel': 'stylesheet',
-            'href': mirosubs.Config.siteConfig['mediaURL'] + 
-                'css/mirosubs-widget.css',
-            'media': 'screen'
-        }
-    );
-    goog.dom.getDocument().getElementsByTagName('head')[0].appendChild(css);
-}
-
-
 mirosubs.siteConfig = mirosubs.Config.siteConfig;
 
 goog.exportSymbol(
