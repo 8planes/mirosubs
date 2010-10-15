@@ -23,6 +23,7 @@ from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
+from utils.forms import AjaxForm
 
 UserLanguageFormset = inlineformset_factory(User, UserLanguage, extra=1)
 
@@ -60,6 +61,18 @@ class SendMessageForm(forms.Form):
         for key, value in self.errors.items():
             output[key] = '/n'.join([force_unicode(i) for i in value])
         return output
+
+class EditAvatarForm(forms.ModelForm, AjaxForm):
+    picture = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
+
+    class Meta:
+        model = User
+        fields = ('picture',)
+
+    def clean(self):
+        if 'picture' in self.cleaned_data and not self.cleaned_data.get('picture'):
+            del self.cleaned_data['picture']
+        return self.cleaned_data
                          
 class EditUserForm(forms.ModelForm):
     current_password = forms.CharField(widget=forms.PasswordInput, required=False)
@@ -67,7 +80,6 @@ class EditUserForm(forms.ModelForm):
     new_password_verify = forms.CharField(widget=forms.PasswordInput,
                                           required=False,
                                           label=_(u'Confirm new password:'))
-    picture = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
     
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
@@ -75,7 +87,7 @@ class EditUserForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'homepage', 'preferred_language', 'picture', 
+        fields = ('first_name', 'last_name', 'email', 'homepage', 'preferred_language', 
                   'changes_notification', 'biography')
         
     def clean(self):
@@ -85,8 +97,6 @@ class EditUserForm(forms.ModelForm):
             raise forms.ValidationError(_(u'Invalid password.'))
         if new and new != verify:
             raise forms.ValidationError(_(u'The two passwords did not match.'))
-        if 'picture' in self.cleaned_data and not self.cleaned_data.get('picture'):
-            del self.cleaned_data['picture']
         return self.cleaned_data
     
     def save(self, commit=True):
