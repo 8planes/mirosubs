@@ -485,7 +485,7 @@ class SubtitleLanguage(models.Model):
             return self.subtitleversion_set.exclude(time_change=0, text_change=0)[:1].get()
         except models.ObjectDoesNotExist:
             pass        
-    
+
     def latest_finished_version(self):
         """Returns latest SubtitleVersion, or None if none found"""
         try:
@@ -493,7 +493,7 @@ class SubtitleLanguage(models.Model):
                 order_by("-version_no").filter(finished=True)[:1].get()
         except models.ObjectDoesNotExist:
             pass
-    
+
     def latest_finished_subtitles(self):
         version = self.latest_finished_version()
         if version:

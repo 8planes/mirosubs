@@ -11,23 +11,38 @@ class Migration(DataMigration):
         # aribtrarily keeping the version with highest id
         for language in orm.SubtitleLanguage.objects.all():
             version_dict = {}
+            language_has_dupes = False
             for version in language.subtitleversion_set.all():
                 version_dict.setdefault(version.version_no, []).append(version)
             for k, v in version_dict.items():
                 if len(v) > 1:
+                    language_has_dupes = True
                     versions_to_remove = self._versions_to_remove(v)
                     for version in versions_to_remove:
-                        language.subtitleversion_set.remove(version)
                         version.delete()
+            if language_has_dupes:
+                print("Altering langauges for video {0}".format(language.video.video_id))
+                if language.subtitleversion_set.filter(finished=True).count() > 0:
+                    language.is_complete = True
+                    language.was_complete = True
+                    language.save()
+                else:
+                    language.is_complete = False
+                    language.was_complete = False
+                    language.save()
         db.create_unique('videos_subtitleversion', ['language_id', 'version_no'])
     
     def backwards(self, orm):
         db.delete_unique('videos_subtitleversion', ['language_id', 'version_no'])
 
     def _versions_to_remove(self, versions):
-        max_id = max([v.id for v in versions])
-        return [v for v in versions if v.id != max_id]
-    
+        finished_version_ids = [v.id for v in versions if v.finished]
+        if len(finished_version_ids) == 0:
+            return versions
+        else:
+            max_id = max(finished_version_ids)
+            return [v for v in versions if v.id != max_id]
+
     models = {
         'auth.customuser': {
             'Meta': {'object_name': 'CustomUser', '_ormbases': ['auth.User']},
