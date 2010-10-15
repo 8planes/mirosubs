@@ -23,6 +23,10 @@ class Migration(DataMigration):
     
     def backwards(self, orm):
         db.delete_unique('videos_subtitleversion', ['language_id', 'version_no'])
+
+    def _versions_to_remove(self, versions):
+        max_id = max([v.id for v in versions])
+        return [v for v in versions if v.id != max_id]
     
     models = {
         'auth.customuser': {
