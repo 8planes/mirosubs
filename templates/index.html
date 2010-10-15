@@ -80,6 +80,14 @@ Reach an international audience, make your videos accessible, and get more traff
   </div>
   <div class="grid_6 omega">
     <div id="widget_div" class="mirosubs-widget"></div>
+    <p id="widget-note-div" style="display: none">
+        <em>
+            Note: for captions/subtitles on this video, use a 
+            <a href="http://www.mozilla.com/firefox/">browser</a> that supports open
+            formats
+        </em>
+    </p>
+
 <script type="text/javascript">
   if (mirosubs.video.supportsOgg()) {
      var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
@@ -103,6 +111,9 @@ Reach an international audience, make your videos accessible, and get more traff
          '<param name="allowscriptaccess" value="always"></param>'+
          '<embed src="http://www.youtube.com/watch?v=Y2IJb1YnAmQ" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed>'+
        '</object>'));
+  }
+  if ( ! mirosubs.video.supportsOgg()) {
+      $('#widget-note-div').show();
   }
 </script>
   </div>
