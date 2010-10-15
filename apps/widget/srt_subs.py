@@ -177,6 +177,9 @@ class SSASubtitles(BaseSubtitles):
         seconds = int(time % 60)
         fr_seconds = int(time % 1 * 100)
         return u'%i:%02i:%02i.%02i' % (hours, minutes, seconds, fr_seconds)
+    
+    def _clean_text(self, text):
+        return text.replace('\n', ' ')
         
     def _content(self):
         output = []
@@ -186,7 +189,8 @@ class SSASubtitles(BaseSubtitles):
         for item in self.subtitles:
             start = self.format_time(item['start'])
             end = self.format_time(item['end'])
-            output.append(tpl % (start, end, item['text']))
+            text = self._clean_text(item['text'])
+            output.append(tpl % (start, end, text))
         return ''.join(output)
 
 from lxml import etree
