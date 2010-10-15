@@ -155,6 +155,8 @@
         <li class="bull">&bull;</li>
         {% endcomment %}
         <li class="active"><a href="#activity-tab"><span class="inline_text">{% trans 'Activity Stream' %}</span></a></li>
+        <li class="bull">&bull;</li>
+        <li><a href="#urls-tab"><span class="inline_text">{% trans 'Video URLs' %}</span> <span class="badgy_out"><span class="badgy">0</span></span></a></li>
       </ul>
 
       <div class="action_buttons grid_9 alpha omega">
@@ -181,6 +183,40 @@
           {% video_activity video %}
           </div>
       </div>
+      
+      <div id="urls-tab">
+        <table cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>
+                {% ordered_column "url" _("Title/URL") #urls %}
+            </th>
+            <th>
+                {% ordered_column "type" _("Format/Host") #urls %}
+            </th>
+            <th>
+                {% ordered_column "created" _("Added") #urls %}
+            </th>
+            <th class="last">
+                {% trans 'Actions' %}
+            </th>
+          </tr> 
+        </thead>
+        <tbody>
+            {% for item in video_urls %}
+                <tr>
+                    <td>{{ item }} {% if item.primary %}[{% trans 'PRIMARY' %}]{% endif %}</td>
+                    <td>{{ item.get_type_display }}</td>
+                    <td>{{ item.created|timesince }}</td>
+                    <td>
+                        <a href="#" class="delete-url-link">{% trans 'remove' %}</a> |
+                        <a href="#" class="make-primary-url-link">{% trans 'make primary' %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+      </div>      
   </div>  
 
 {% endblock %}
