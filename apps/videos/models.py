@@ -872,3 +872,13 @@ class UserTestResult(models.Model):
 class StopNotification(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
+
+class VideoUrl(models.Model):
+    video = models.ForeignKey(Video)
+    type = models.CharField(max_length=1, choices=VIDEO_TYPE)
+    url = models.URLField(max_length=2048)
+    primary = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    def __unicode__(self):
+        return self.url
