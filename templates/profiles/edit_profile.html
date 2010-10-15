@@ -2,10 +2,36 @@
 
 {% load thumbnail i18n %}
 
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(function($){
+            $('#id_picture').val('')
+            $('#id_picture').change(function(){
+                $('.edit_profile').ajaxSubmit({
+                    url: '{% url profiles:edit_avatar %}',
+                    dataType: 'json',
+                    success: function(response){
+                        if (response.error){
+                            $('#picture-errors').html('<ul class="errorlist"><li>'+response.error.picture+'</li></ul>');
+                        }else{
+                            $('#picture-errors').html('');  
+                            $('.user-avatar').attr('src', response.url);
+                        }
+                    },
+                    beforeSubmit: function(arr, $form, options) { 
+                        $('#picture-errors').html('Saving...');            
+                    }                    
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block main_content %}
 <div class="left_column">
     <h2>{% trans 'Edit Your Profile' %} <a href="{{ user_info.get_absolute_url }}">({% trans 'View profile' %})</a></h2>
-    <img class="thumbnail_medium" src="{{ user_info.avatar }}">
+    <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}">
     <p>
         {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
     </p>
@@ -51,9 +77,11 @@
                 {{ form.homepage.label_tag }}
                 {{ form.homepage }}
             </p>
+            <p class="error_list" id="picture-errors">
             {{ form.picture.errors }}
-            <p>
-                <img class="thumbnail_medium" src="{{ user_info.avatar }}"/>
+            </p>
+            <p class="avatar-container">
+                <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}"/>
             </p>
             <div style="float: left; clear: both; margin-bottom: 30px;">
                 <input type="file" id="id_picture" name="picture" size="6"/>

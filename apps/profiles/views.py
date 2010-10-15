@@ -21,9 +21,20 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from profiles.forms import EditUserForm, SendMessageForm, UserLanguageFormset
+from profiles.forms import EditUserForm, SendMessageForm, UserLanguageFormset, EditAvatarForm
 from django.contrib import messages
 from django.utils import simplejson as json
+
+@login_required
+def edit_avatar(request):
+    output = {}
+    form = EditAvatarForm(request.POST, instance=request.user, files=request.FILES)
+    if form.is_valid():
+        user = form.save()
+        output['url'] =  str(user.avatar())
+    else:
+        output['error'] = form.get_errors()
+    return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
 @login_required
 def my_profile(request):
