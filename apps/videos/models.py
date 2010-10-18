@@ -115,8 +115,9 @@ class Video(models.Model):
     def title_display(self):
         if self.title:
             return self.title
-
-        url = self.video_url
+        
+        url = self.video_url or self.get_video_url()
+        
         url = url.strip('/')
 
         if url.startswith('http://'):
