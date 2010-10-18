@@ -881,6 +881,7 @@ class VideoUrl(models.Model):
     primary = models.BooleanField(default=False)
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    added_by = models.ForeignKey(User, null=True, blank=True)
     
     class Meta:
         unique_together = (('video', 'original'),)

@@ -113,7 +113,7 @@
                  return false;
             });
             
-            $('.delete-url-link').click(function(){
+            $('.delete-url-link, .add-video-url-button').click(function(){
                 alert('Sorry, we are going to do this soon.')
                 return false;
             })
@@ -216,13 +216,16 @@
       </div>
       
       <div id="urls-tab" style="display: none">
-        <div>
+        <div style="padding: 10px">
             {% blocktrans %}
             A single video is often hosted in different places online and same
             subtitles will work. 
             {% endblocktrans %}
             <a href="#">{% trans 'Learn more' %}</a>
         </div>
+        <a href="#" class="add-video-url-button green_button small">
+            {% trans 'Add new link' %}
+        </a>          
         <table cellpadding="0" cellspacing="0">
         <thead>
           <tr>
@@ -234,6 +237,9 @@
             </th>
             <th>
                 {% ordered_column "created" _("Added") #urls %}
+            </th>
+            <th>
+                {% ordered_column "added_by" _("Added by") #urls %}
             </th>
             <th class="last">
                 {% trans 'Actions' %}
