@@ -8,23 +8,14 @@ class Migration(SchemaMigration):
     
     def forwards(self, orm):
         
-        # Adding model 'VideoUrl'
-        db.create_table('videos_videourl', (
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=2048)),
-            ('primary', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-            ('video', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.Video'])),
-            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('original', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-        ))
-        db.send_create_signal('videos', ['VideoUrl'])
+        # Adding unique constraint on 'VideoUrl', fields ['video', 'original']
+        db.create_unique('videos_videourl', ['video_id', 'original'])
     
     
     def backwards(self, orm):
         
-        # Deleting model 'VideoUrl'
-        db.delete_table('videos_videourl')
+        # Removing unique constraint on 'VideoUrl', fields ['video', 'original']
+        db.delete_unique('videos_videourl', ['video_id', 'original'])
     
     
     models = {
@@ -185,11 +176,11 @@ class Migration(SchemaMigration):
             'youtube_videoid': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'})
         },
         'videos.videourl': {
-            'Meta': {'object_name': 'VideoUrl'},
+            'Meta': {'unique_together': "(['video', 'original'],)", 'object_name': 'VideoUrl'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'original': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '2048'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})

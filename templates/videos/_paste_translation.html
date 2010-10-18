@@ -1,0 +1,54 @@
+{% load i18n %}
+<script type="text/javascript">
+    jQuery(function($){
+        $('.upload-transcript-button').nyroModal({
+            //minWidth: 460,
+            //minHeight: 500,
+            bgColor: '#fff',
+            cssOpt: {
+                wrapper: {
+                   backgroundColor: '#fff'
+                }                    
+            },
+            endRemove: function(){
+                $('#clippy').show();
+            },
+            processHandler: function(){
+                $('#clippy').hide();
+            }
+        });
+        
+        var $error = $('#upload-transcript .error')
+        
+        $('#upload-transcript-textarea').keyup(function(){
+            var rows = $(this).val().split('\n\n');
+            for (var i=rows.length; i; i--){
+                if (rows[i-1].length > 100){
+                    $error.show();
+                    break;
+                }
+                $error.hide();
+            }
+        })
+    });
+</script>
+<div id="upload-transcript" style="display: none">
+    <h3>{% trans 'Upload a Transcript' %}</h3>
+    
+    <div class="padding">
+        <p>
+            {% blocktrans %}
+            You can submit any transcript in plain text format. However, subtitles:<br/>
+            1) must be separated by two line breaks;<br/> 
+            2) should not occupy more than two lines in the box below.
+            {% endblocktrans %}
+        </p>
+        <p style="color: #ff8080; display: none" class="error">
+            {% blocktrans %}
+            Some of your subtitles take up more than two lines and will not display correctly.
+            Please divide them.
+            {% endblocktrans %}
+        </p>
+        <textarea rows="18" cols="48" id="upload-transcript-textarea"></textarea>
+    </div>
+</div>

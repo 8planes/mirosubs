@@ -16,6 +16,7 @@ class Migration(DataMigration):
                     obj.type = video.video_type
                     obj.url = url
                     obj.primary = True
+                    obj.original = True
                     obj.video = video
                     obj.save()
     
@@ -200,6 +201,7 @@ class Migration(DataMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'original': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '2048'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
