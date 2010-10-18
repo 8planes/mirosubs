@@ -257,7 +257,8 @@ class ViewsTest(TestCase):
     def test_diffing(self):
         version = self.video.version(0)
         last_version = self.video.version()
-        self._simple_test('videos:diffing', [version.id, last_version.id])
+        response = self._simple_test('videos:diffing', [version.id, last_version.id])
+        self.assertEqual(len(response.context['captions']), 5)
         
     def test_test_form_page(self):
         self._simple_test('videos:test_form_page')
