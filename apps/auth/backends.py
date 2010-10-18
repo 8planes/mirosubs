@@ -45,11 +45,11 @@ class OpenIdBackend:
                 email = request.openid.sreg.get('email')
                 nickname = request.openid.sreg.get('nickname')
             elif request.openid and request.openid.ax:
-                if provider == 'Google':
+                if provider in ('Google', 'Yahoo'):
                     email = request.openid.ax.get('http://axschema.org/contact/email')
                     email = email.pop()
                 else:
-                    email = request.openid.ax.get('email')
+                    email = request.openid.ax.get('email')                      
                     nickname = request.openid.ax.get('nickname')
 
             if nickname is None :
