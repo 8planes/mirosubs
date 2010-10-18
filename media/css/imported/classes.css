@@ -40,6 +40,10 @@ width: 470px !important;
   }
 
 
+.edit-title{
+margin-top: 32px;
+}
+
 
 
 
@@ -307,6 +311,7 @@ font-size: 16px;
 .action_buttons{ border-top: 1px solid #fff;}
 
 .action_buttons .blue_button,
+.action_buttons .green_button,
 .action_buttons .sort_button{
   margin: 10px; 
   float: right;

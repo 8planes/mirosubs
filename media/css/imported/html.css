@@ -79,13 +79,7 @@ h4.inline{
 hr{
   clear: both !important;
   border: none;
-  border-bottom: 1px solid #e1f2f5 !important;
-  display: block !important;
-  height: 1px;
-  margin: 10px 0;
-  float: left;
-  width: 100%;
-  border-top: 1px solid #d4e8eb;
+
   }
 
 

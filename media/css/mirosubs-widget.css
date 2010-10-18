@@ -163,11 +163,17 @@ text-shadow:
   width: 440px !important;
   padding: 0px 0px !important;
   float: left !important;
-  height: 664px;
+  height: 771px;
   color: #fff;
   background: url("../images/widget_right_bg.gif") 0 0 repeat-y !important;
   border: 0;	
   }
+
+.mirosubs-modal-widget-sync .mirosubs-right,
+.mirosubs-modal-widget-review .mirosubs-right{
+  height: 802px;
+  }
+
 
 
 .mirosubs-modal-widget-translate .mirosubs-right{
@@ -2630,6 +2636,8 @@ margin-right: 10px;
     height: 17px !important
     width: 17px !important;
     margin: 7px 7px 0 7px !important;
+background: none !important;
+padding: 0 !important;
 }
 
 
