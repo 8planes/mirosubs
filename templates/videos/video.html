@@ -90,7 +90,33 @@
                 }
                 return false;
             });
-
+            
+            
+            /* Video URL */
+            var make_primary_url = '{% url videos:video_url_make_primary %}'
+            $('.make-primary-url-link').click(function(){
+                var $this = $(this);
+                $.get(make_primary_url, {id: $this.attr('video_url_id')},
+                    function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error);
+                        }else{
+                            var $primary_span = $('#urls-tab .primary');
+                            var $span = $primary_span.clone();
+                            $primary_span.remove();
+                            $('#urls-tab .make-primary-url-link').show();
+                            var $tr = $this.parents('tr');
+                            $tr.find('.url-td').append($span);
+                            $tr.find('.make-primary-url-link').hide();
+                        }
+                    }, 'json');
+                 return false;
+            });
+            
+            $('.delete-url-link').click(function(){
+                alert('Sorry, we are going to do this soon.')
+                return false;
+            })
         });
     </script>  
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -205,12 +231,12 @@
         <tbody>
             {% for item in video_urls %}
                 <tr>
-                    <td>{{ item }} {% if item.primary %}[{% trans 'PRIMARY' %}]{% endif %}</td>
+                    <td class="url-td"><a href="{{ item.url }}">{{ item }}</a> {% if item.primary %}<span class="primary">[{% trans 'PRIMARY' %}]</span>{% endif %}</td>
                     <td>{{ item.get_type_display }}</td>
                     <td>{{ item.created|timesince }}</td>
                     <td>
-                        <a href="#" class="delete-url-link">{% trans 'remove' %}</a> |
-                        <a href="#" class="make-primary-url-link">{% trans 'make primary' %}</a>
+                        <a href="#" class="delete-url-link">{% trans 'remove' %}</a><br/>
+                        <a {% if item.primary %}style="display:none"{% endif %} href="#" video_url_id="{{ item.pk }}" class="make-primary-url-link">{% trans 'make primary' %}</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -10,7 +10,7 @@ jQuery.msg = {};
  */
 jQuery.extend(jQuery.msg, {
     id: 'messages',
-    container: 'div.top_bar',
+    container: 'div.content',
     delayTime: 3000,
     timer: null,
     get: function(){

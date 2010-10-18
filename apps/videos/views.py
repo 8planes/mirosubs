@@ -21,7 +21,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion
+from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
 import widget
 from django.contrib.sites.models import Site
@@ -38,6 +38,7 @@ from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
 from django.db.models import Sum
+from django.utils.translation import ugettext
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -472,3 +473,17 @@ def info(request):
 def counter(request):
     count = Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c']
     return HttpResponse('draw_unisub_counter({videos_count: %s})' % count)
+
+def video_url_make_primary(request):
+    output = {}
+    
+    id = request.GET.get('id')
+    if id:
+        try:
+            obj = VideoUrl.objects.get(id=id)
+            VideoUrl.objects.filter(video=obj.video).update(primary=False)
+            obj.primary = True
+            obj.save()
+        except VideoUrl.DoesNotExist:
+            output['error'] = ugettext('Object does not exist')
+    return HttpResponse(json.dumps(output))
