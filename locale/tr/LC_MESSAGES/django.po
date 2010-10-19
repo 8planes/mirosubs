@@ -745,15 +745,15 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "Ne zaman"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "29 ve 30 Eylülde, saat sabah 9'da"
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "Nerde"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
@@ -761,7 +761,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
-msgstr ""
+msgstr "Neden"
 
 #: .\templates\opensubtitles2010.html.py:75
 msgid ""
@@ -782,7 +782,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
-msgstr ""
+msgstr "Düzenleyenler"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
@@ -798,7 +798,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsorlar"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
@@ -810,19 +810,19 @@ msgstr ""
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "önceki"
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "sonraki"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr ""
+msgstr "Universal Subtitles Gizlilik Politikası"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
-msgstr ""
+msgstr "Son güncelleme: 10 Ağustos 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
@@ -914,7 +914,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:72
 msgid "Updating of Personally-Identifying Information"
-msgstr ""
+msgstr "Kişisel tanımlayıcı bilginin güncellenmesi"
 
 #: .\templates\privacy.html.py:74
 msgid "You may request access, correction, or deletion of your personally identifiable information or potentially personally identifiable information, as permitted by law. PCF will seek to comply with such requests, provided that we have sufficient information to identify the personally identifiable information or potentially personally identifiable information related to you. To do so, users should look for links or contact information available on whichever PCF web sites store the relevant information (e.g., Bugzilla users should go to Account Settings) or contact PCF by using one of the email addresses listed below."
@@ -922,7 +922,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:77
 msgid "Cookies and Clear GIFs"
-msgstr ""
+msgstr "Çerezler ve temiz GIF dosyaları"
 
 #: .\templates\privacy.html.py:79
 msgid "What Are Cookies? A cookie is a string of information that a web site stores on a visitor's computer, and that the visitor's browser provides to the web site each time the visitor returns. Most major web sites use cookies. Because the browser provides this cookie information to the web site at each visit, cookies serve as a sort of label that allows a web site to \"recognize\" a browser when it returns to the site. The domain name in PCF cookies will clearly identify their affiliation with PCF and, where applicable, its third-party service provider."
@@ -930,7 +930,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:82
 msgid "What Are Clear GIFs?"
-msgstr ""
+msgstr "Temiz GIF dosyaları nedir?"
 
 #: .\templates\privacy.html.py:84
 msgid "Clear gifs (also known as web beacons) are used in combination with cookies to help web site operators understand how visitors interact with their web sites. A clear gif is typically a transparent graphic image (usually 1 pixel x 1 pixel) that is placed on a site. The use of a clear gif allows the site to measure the actions of the visitor opening the page that contains the clear gif. It makes it easer to follow and record the activities of a recognized browser, such as the path of pages visited at a web site."
@@ -954,7 +954,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:98
 msgid "Other Third Party Cookies."
-msgstr ""
+msgstr "Üçüncü şahıslara ait diğer çerezler."
 
 #: .\templates\privacy.html.py:100
 msgid "Content from other sources that is hosted on PCF web sites may sometimes contain cookies that send information to those third parties. In certain cases, often associated with embedded content such as YouTube videos and other site linking buttons, a third party cookie may be set by the 3rd party content or provider. In these cases, the privacy policy of the 3rd party governs with respect to information that may be collected by and sent to the respective 3rd party. If you are concerned about these third party cookies, please see the information below on how to decline cookies."
@@ -962,7 +962,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:103
 msgid "How to Control the Use of Cookies."
-msgstr ""
+msgstr "Çerezlerin kullanımı nasıl kontrol edilir."
 
 #: .\templates\privacy.html.py:105
 msgid "You have the ability to accept or decline cookies. PCF visitors who do not wish to have cookies placed on their computers by PCF, its contractors, or third-party service providers should set their browsers to refuse cookies before linking to PCF's web sites. Certain features of PCF's web sites may not function properly without the aid of cookies."
@@ -978,7 +978,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:113
 msgid "Privacy Policy Changes"
-msgstr ""
+msgstr "Gizlilik Politikası Değişiklikleri"
 
 #: .\templates\privacy.html.py:115
 msgid "By using the web sites, you agree to the terms and conditions of this privacy policy. If you do not agree to the terms and conditions of this privacy policy, please do not use the web sites. PCF may change its Privacy Policy from time to time. Any and all changes will be reflected on this page. Substantive changes will also be announced through the standard mechanisms through which PCF communicates with the PCF community, including PCF's тАЬannounceтАЭ mailing list and newsgroup."
@@ -986,11 +986,11 @@ msgstr ""
 
 #: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
-msgstr ""
+msgstr "Universal Subtitles"
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
-msgstr ""
+msgstr "Siteyi görüntüle"
 
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
@@ -1517,23 +1517,23 @@ msgstr ""
 #: .\templates\videos\email_start_notification.html.py:14
 #: .\templates\videos\email_title_changed.html.py:10
 msgid "Sincerely"
-msgstr ""
+msgstr "İçtenlikle"
 
 #: .\templates\videos\email_notification.html.py:17
 #: .\templates\videos\email_start_notification.html.py:15
 #: .\templates\videos\email_title_changed.html.py:12
 msgid "The Universal Subtitles Community"
-msgstr ""
+msgstr "Universal Subtitles Topluluğu"
 
 #: .\templates\videos\email_notification.html.py:24
 #: .\templates\videos\email_start_notification.html.py:23
 #: .\templates\videos\email_title_changed.html.py:28
 msgid "Don't send any more emails about this particular video."
-msgstr ""
+msgstr "Bu video ile ilgili tekrar mesaj gönderme"
 
 #: .\templates\videos\email_notification.html.py:27
 msgid "SUMMARY OF CHANGES"
-msgstr ""
+msgstr "DEĞİŞİKLİKLERİN ÖZETİ"
 
 #: .\templates\videos\email_notification.html.py:28
 #, python-format
@@ -1781,71 +1781,71 @@ msgstr ""
 #: .\templates\videos\test_form_page.html.py:37
 #: .\templates\videos\test_form_page.html.py:57
 msgid "how was it? were the instructions clear? what would improve it?"
-msgstr ""
+msgstr "nasılsı? talimatlar açık mıydı? nasıl geliştirebiliriz?"
 
 #: .\templates\videos\test_form_page.html.py:29
 msgid "Task 2"
-msgstr ""
+msgstr "Görev 2"
 
 #: .\templates\videos\test_form_page.html.py:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
-msgstr ""
+msgstr "Videodaki hataları düzeltmeye çalışın ( ya da geri dönüp düzenleme yapın)"
 
 #: .\templates\videos\test_form_page.html.py:35
 msgid "Task 3"
-msgstr ""
+msgstr "Görev 3"
 
 #: .\templates\videos\test_form_page.html.py:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
-msgstr ""
+msgstr "Videoyu çevirin ( eğer yabancı dil bilmiyorsanız taklit edin!)"
 
 #: .\templates\videos\test_form_page.html.py:42
 msgid "optional: get updates about Universal Subtitles"
-msgstr ""
+msgstr "isteğe bağlı: Universal Subtitles ile ilgili güncelleştirmeleri alın"
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr ""
+msgstr "Gönder!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Basit Talimatlar"
 
 #: .\templates\videos\test_form_page.html.py:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
-msgstr ""
+msgstr "2 & 3 içindeki tüm görevler isteğe bağlı (ancak yapmanızı tavsiye ederiz.)"
 
 #: .\templates\videos\test_form_page.html.py:74
 msgid "That’s it!"
-msgstr ""
+msgstr "Hepsi bu!"
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr ""
+msgstr "Yeni bir başlık girin"
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr ""
+msgstr "başlığı düzenleyin"
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr ""
+msgstr "Diller"
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
-msgstr ""
+msgstr "Etkinlik akışı"
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr ""
+msgstr "% yapıldı"
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
-msgstr ""
+msgstr "Orijinal"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
-msgstr ""
+msgstr "Altyazı yok"
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
