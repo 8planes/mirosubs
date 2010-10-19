@@ -60,7 +60,7 @@ class Team(models.Model):
     
     name = models.CharField(_(u'name'), max_length=250, unique=True)
     description = models.TextField(_(u'description'), blank=True)
-    logo = S3EnabledImageField(verbose_name=_(u'logo'), blank=True, upload_to='teams/logo/')
+    logo = S3EnabledImageField(verbose_name=_(u'logo'), thumb_sizes=((100, 100), (50, 50)), blank=True, upload_to='teams/logo/')
     membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES, default=OPEN)
     video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES, default=MEMBER_REMOVE)
     is_visible = models.BooleanField(_(u'is public visible?'), default=True)
@@ -70,6 +70,7 @@ class Team(models.Model):
     applicants = models.ManyToManyField(User, through='Application', related_name='applicated_teams', verbose_name=_('applicants'))
     invited = models.ManyToManyField(User, through='Invite', verbose_name=_('invited'))
     created = models.DateTimeField(auto_now_add=True)
+    highlight = models.BooleanField(default=False)
     
     objects = TeamManager()
     
@@ -84,6 +85,10 @@ class Team(models.Model):
     def logo_thumbnail(self):
         if self.logo:
             return self.logo.thumb_url(100, 100)
+
+    def small_logo_thumbnail(self):
+        if self.logo:
+            return self.logo.thumb_url(50, 50)
     
     @models.permalink
     def get_absolute_url(self):

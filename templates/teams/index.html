@@ -76,7 +76,7 @@
                     <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
                 {% endif %}                
                 <span class="small_sub">
-                    {% blocktrans with team.count_members as count %}
+                    {% blocktrans with team.member_count as count %}
                     Team with {{ count }} Members
                     {% endblocktrans %}
                 </span>
@@ -85,6 +85,15 @@
                     {{ team.description }}
                 </p>
                 {% endif %}
+                {% if user.is_staff and perms.teams.change_team %}
+                    <div>
+                    {% if team.highlight %}
+                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Unfeature this team' %}</a>
+                    {% else %}
+                        <a href="{% url teams:highlight team.pk %}">{% trans 'Feature this team' %}</a>
+                    {% endif %}
+                    </div>
+                {% endif %}
             </div>
         </li>
         {% endfor %}
@@ -92,28 +101,39 @@
     {% if is_paginated %}{% search_ordered_paginator query %}{% endif %}
 </div>
 <div class="grid_4 omega">
-    <h3>Highlighted Teams</h3>
+    <h3>{% trans 'Highlighted Teams' %}</h3>
     <ul class="small_list">
+        {% for team in highlighted_qs %}
         <li>
-            <a href="#" class="thumbnail_small"></a>
+            <a href="{{ team.get_absolute_url }}" class="thumbnail_small">
+                {% if team.logo %}<img src="{{ team.logo_thumbnail }}"/>{% endif %}
+            </a>
             <div class="info">
-                <h4><a href="teams_profile">Democracy Now!</a></h4>
-                <span class="small_sub">Team with 23 Members</span>
+                <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
+                <span class="small_sub">
+                    {% blocktrans with team.member_count as count %}
+                    Team with {{ count }} Members
+                    {% endblocktrans %}                    
+                </span>
+                
+                {% if team.description %}
                 <p>
-                    Lorem ipsum dalor sit amet lorem ipsulor sit amet lorem ipsum dor sit amet, Lorem ipsum dalor sit amet lorm dalor sit amet lorem ipsum dalor it amet, rem um dalor sit ametoripsum daloremipsum dalor sit amet lorem ipsum dalor sit amet lorem ipsum dalor sit amet.
-                </p>
+                    {{ team.description }}
+                </p>              
+                {% endif %}
+                
+                {% if user.is_staff and perms.teams.change_team %}
+                    <div>
+                    {% if team.highlight %}
+                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Unfeature this team' %}</a>
+                    {% else %}
+                        <a href="{% url teams:highlight team.pk %}">{% trans 'Feature this team' %}</a>
+                    {% endif %}
+                    </div>
+                {% endif %}                
             </div>
         </li>
-        <li>
-            <a href="#" class="thumbnail_small"></a>
-            <div class="info">
-                <h4><a href="teams_profile">Democracy Now!</a></h4>
-                <span class="small_sub">Team with 23 Members</span>
-                <p>
-                    Lorem ipsum dalor sit amet lorem ipsulor sit amet lorem ipsum dor sit amet, Lorem ipsum dalor sit amet lorm dalor sit amet lorem ipsum dalor it amet, rem um dalor sit ametoripsum daloremipsum dalor sit amet lorem ipsum dalor sit amet lorem ipsum dalor sit amet.
-                </p>
-            </div>
-        </li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}

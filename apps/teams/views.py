@@ -35,8 +35,11 @@ from django.views.generic.list_detail import object_list
 from videos.models import Video
 from auth.models import CustomUser as User
 from django.db.models import Q, Count
+from django.contrib.auth.decorators import permission_required
+import random
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
+HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
 MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
 APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
@@ -44,7 +47,7 @@ APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 def index(request):
     q = request.REQUEST.get('q')
 
-    qs = Team.objects.for_user(request.user).annotate(count_members=Count('id'))
+    qs = Team.objects.for_user(request.user).annotate(_member_count=Count('members__pk'))
 
     
     if q:
@@ -64,11 +67,17 @@ def index(request):
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
     
+    highlighted_ids = list(Team.objects.filter(highlight=True).values_list('id', flat=True))
+    random.shuffle(highlighted_ids)
+    highlighted_qs = Team.objects.filter(pk__in=highlighted_ids[:HIGHTLIGHTED_TEAMS_ON_PAGE]) \
+        .annotate(_member_count=Count('members__pk'))
+    
     extra_context = {
         'query': q,
         'ordering': ordering,
         'order_type': order_type,
-        'order_name': order_fields_name[ordering]
+        'order_name': order_fields_name[ordering],
+        'highlighted_qs': highlighted_qs
     }
     return object_list(request, queryset=qs,
                        paginate_by=TEAMS_ON_PAGE,
@@ -339,12 +348,19 @@ def invite(request):
     return {}
 
 @login_required
-def accept_invite(request, id, accept=True):
-    invite = get_object_or_404(Invite, pk=id, user=request.user)
+def accept_invite(request, pk, accept=True):
+    invite = get_object_or_404(Invite, pk=pk, user=request.user)
     
     if accept:
         invite.accept()
     else:
         invite.deny()
         
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@permission_required('teams.change_team')
+def highlight(request, pk, highlight=True):
+    item = get_object_or_404(Team, pk=pk)
+    item.highlight = highlight
+    item.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
