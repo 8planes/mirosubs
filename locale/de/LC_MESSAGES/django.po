@@ -819,8 +819,9 @@ msgid "<strong>Identify ways</strong> to solve stakeholder subtitling needs and 
 msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:44
+#, fuzzy
 msgid "<strong>Move towards</strong> standardizing solutions and pushing forward the state of the art in open subtiting."
-msgstr ""
+msgstr "<strong>Lösungs-Standardisierung</strong> und den Stand der Technik beim offenen Untertiteln vorantreiben."
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
@@ -832,7 +833,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:57
 msgid "Attendees are selected by invitation; however, if you or your organization would like to participate, please contact:"
-msgstr ""
+msgstr "Die Teilnehmer werden durch Einladung ausgewählt; aber wenn Sie oder Ihre Organisation gerne teilnehmen würden, kontaktieren Sie bitte:"
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
@@ -877,15 +878,16 @@ msgstr "Organisatoren"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
-msgstr ""
+msgstr "Die <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> organisiert den Gipfel. Ihr jüngstes Projekt, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, macht Open Source und kollaborative Untertitelung und Übersetzung einfach."
 
 #: .\templates\opensubtitles2010.html.py:99
 msgid "Facilitators"
 msgstr "Moderatoren"
 
 #: .\templates\opensubtitles2010.html.py:100
+#, fuzzy
 msgid "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate."
-msgstr ""
+msgstr "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> bietet Erleichterung und Agenda-Design. Aspiration ist der Auffassung, dass Face-to-Face-Veranstaltungen der beste Weg ist um Interaktion zu erleichtern, Netzwerke aufzubauen und zusammenzuarbeiten."
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
@@ -893,11 +895,12 @@ msgstr "Sponsoren"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
-msgstr ""
+msgstr "Der Gipfel wurde großzügig gefördert durch das <a href=\"http://www.soros.org/\">Open Society Institute</a> ."
 
 #: .\templates\opensubtitles2010.html.py:113
+#, fuzzy
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
-msgstr ""
+msgstr "Speziellen Dank an <a href=\"http://openplans.org/\">Open Plans</a> für das Bereitstellen von Versammlungsraum."
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"

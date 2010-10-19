@@ -6,6 +6,9 @@ width: 470px !important;
 
 
 
+
+
+
 /*/////////////////////////////////////////////
 
 ~ Classes
@@ -380,3 +383,90 @@ background: url(../../images/bookmarklet.png) left 0px no-repeat;
 .embedder{
 width: 400px;
 }
+
+
+/*//////////   ~  Percent Done Indicators  ~   //////////*/
+
+
+
+
+
+
+.done_indicator{
+padding: 11px 11px 0 0;
+border: 1px solid;
+-moz-border-radius: 15px;
+float: left;
+margin-right: 8px;
+}
+
+
+.done_percentage{
+color: #777;
+font-weight: normal;
+font-size: 11px;
+line-height: 1em;
+}
+
+
+
+.full .done_indicator{
+background: #0086b8;
+border: 1px solid #005a7b;
+}
+
+
+.eighty .done_indicator{
+background: #10c661;
+border: 1px solid #008039
+}
+
+
+.sixty .done_indicator{
+background: #dce63c;
+border: 1px solid #a9b21e;
+}
+
+
+.fourty .done_indicator{
+background: #e8732d;
+border: 1px solid #a24108;
+}
+
+
+.twenty .done_indicator{
+background: #e82d2d;
+border: 1px solid #aa1313;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -917,22 +917,23 @@ bottom: 47px !important;
 
 }
 
-.mirosubs-left .mirosubs-videoDiv {
-  width: 400px;
-  height: 300px;
-  
-  }
-
-.mirosubs-left .mirosubs-videoDiv video,
-.mirosubs-left .mirosubs-videoDiv object{
+.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv {
   width: 400px;
   height: 300px;
   }
 
+.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv video,
+.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv object,
+.mirosubs-modal-widget .mirosubs-videoDiv embed{
+  width: 400px;
+  height: 300px;
+  }
 
-.mirosubs-videoDiv video,
-.mirosubs-videoDiv video *,
-.mirosubs-videoDiv object{
+
+.mirosubs-modal-widget .mirosubs-videoDiv video,
+.mirosubs-modal-widget .mirosubs-videoDiv video *,
+.mirosubs-modal-widget .mirosubs-videoDiv object,
+.mirosubs-modal-widget .mirosubs-videoDiv embed{
   width: 440px ;
   display: block;
   
@@ -2273,14 +2274,15 @@ cursor:
 }
 
 .mirosubs-modal-login, .mirosubs-modal-lang {
-   border: 3px solid !important;
-   position: absolute !important;
-   z-index: 2147483641;
-   font-family: Arial, hhelvetica, sans-serif;
-   -moz-border-radius: 5px !important;
-   -webkit-border-radius: 5px !important;
-   -moz-box-shadow: 0px 5px 50px rgba(0,0,0,01) !important;
-   -webkit-box-shadow: 0 3px 5px rgba(0,0,0,01) !important;
+  border: 3px solid !important;
+  position: absolute !important;
+  z-index: 2147483641;
+  font-family: Arial, hhelvetica, sans-serif;
+  -moz-border-radius: 5px !important;
+  -webkit-border-radius: 5px !important;
+  -moz-box-shadow: 0px 5px 50px rgba(0,0,0,01) !important;
+  -webkit-box-shadow: 0 3px 5px rgba(0,0,0,01) !important;
+  outline: none !important;
 }
 
 .mirosubs-modal-login {
