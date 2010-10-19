@@ -15,7 +15,6 @@
     {% endblocktrans %}
 {% endif %}
 <form action="{% url videos:create %}" method="POST" class="main_video_form">
-  {% csrf_token %}
   <h2 class="main_heading">{% trans 'Subtitle a Video' %}</h2>
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
   {{ video_form.video_url.errors }}
