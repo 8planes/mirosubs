@@ -322,6 +322,7 @@ def rollback(request, pk):
     else:
         messages.success(request, message=u'Rollback successful')
         version = version.rollback(request.user)
+        return redirect(version.language.get_absolute_url()+'#revisions')
     return redirect(version)
 
 def diffing(request, first_pk, second_pk):
