@@ -745,15 +745,15 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "Ne zaman"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "29 ve 30 Eylülde, saat sabah 9'da"
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "Nerde"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
@@ -761,7 +761,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
-msgstr ""
+msgstr "Neden"
 
 #: .\templates\opensubtitles2010.html.py:75
 msgid ""
@@ -782,7 +782,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
-msgstr ""
+msgstr "Düzenleyenler"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
@@ -798,7 +798,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsorlar"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
@@ -810,19 +810,19 @@ msgstr ""
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "önceki"
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "sonraki"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr ""
+msgstr "Universal Subtitles Gizlilik Politikası"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
-msgstr ""
+msgstr "Son güncelleme: 10 Ağustos 2010"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
