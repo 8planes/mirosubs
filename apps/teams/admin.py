@@ -24,12 +24,23 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib import admin
 from teams.models import Team, TeamMember
+from django.utils.translation import ugettext_lazy as _
 
 class TeamMemberInline(admin.TabularInline):
     model = TeamMember
     
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'membership_policy', 'video_policy', 'is_visible')
+    list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight')
+    list_filter = ('highlight',)
     inlines = [TeamMemberInline]
+    actions = ['highlight', 'unhighlight']
+    
+    def highlight(self, request, queryset):
+        queryset.update(highlight=True)
+    highlight.short_description = _('Feature teams')
+    
+    def unhighlight(self, request, queryset):
+        queryset.update(highlight=False)
+    unhighlight.short_description = _('Unfeature teams')
     
 admin.site.register(Team, TeamAdmin)
