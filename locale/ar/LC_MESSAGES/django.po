@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
@@ -80,7 +80,7 @@ msgstr "أنت لست موثّق."
 #: .\apps\profiles\forms.py:51
 #, python-format
 msgid "Personal message from %(sender)s on universalsubtitles.org"
-msgstr ""
+msgstr "رسالة شخصية من %(sender)s على universalsubtitles.org"
 
 #: .\apps\profiles\forms.py:67
 msgid "Confirm new password:"
@@ -130,33 +130,27 @@ msgstr "رابط الفيديو غير صحيح"
 msgid "Enter valid e-mail addresses separated by commas."
 msgstr "أدخل عنوان بريد إلكتروني صالح مفصول بفاصلة."
 
-#: .\templates\_share_widget.html.py:4
-#: .\templates\_sharing_widget.html.py:11
+#: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
 msgstr "شارك الآخرين بترجمتك"
 
-#: .\templates\_share_widget.html.py:6
-#: .\templates\_sharing_widget.html.py:13
+#: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
 msgstr "الآن يمكن للجميع مشاهدة الفيديو مع ترجمة -- اختبرها بنفسك!"
 
-#: .\templates\_share_widget.html.py:7
-#: .\templates\_sharing_widget.html.py:14
+#: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
 msgstr "ثم انشر الخبر للعالم ، وادعُ أصدقائك للمساعدة في الترجمة :"
 
-#: .\templates\_share_widget.html.py:10
-#: .\templates\_sharing_widget.html.py:16
+#: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
 msgstr "ضع هذا على موقع الفيس بوك"
 
-#: .\templates\_share_widget.html.py:11
-#: .\templates\_sharing_widget.html.py:17
+#: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
 msgstr "ضع هذا على موقع تويتر"
 
-#: .\templates\_share_widget.html.py:12
-#: .\templates\_sharing_widget.html.py:18
+#: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
 msgstr "إبعث هذا لأصدقائك عبر البريد الإلكتروني "
 
@@ -164,8 +158,7 @@ msgstr "إبعث هذا لأصدقائك عبر البريد الإلكترون�
 msgid "Embed Code"
 msgstr "كود للوضع"
 
-#: .\templates\_share_widget.html.py:25
-#: .\templates\_sharing_widget.html.py:48
+#: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
 msgid "Permalink"
 msgstr "الرابط الثابت"
 
@@ -359,8 +352,7 @@ msgstr ""
 msgid "a project of the participatory culture foundation"
 msgstr "مشروع مؤسسة الثقافة التشاركية"
 
-#: .\templates\base.html.py:72
-#: .\templates\videos\create.html.py:19
+#: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
 msgstr "ترجم فيديو"
 
@@ -380,8 +372,7 @@ msgstr "مدوّنة"
 msgid "FAQ"
 msgstr "أسئلة وأجوبة"
 
-#: .\templates\base.html.py:81
-#: .\templates\profiles\edit_profile.html.py:19
+#: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
 msgstr "من نحنُ"
@@ -444,78 +435,63 @@ msgstr ""
 msgid "Frequently Asked Questions"
 msgstr "أسئلة وأجوبة"
 
-#: .\templates\faq.html.py:19
-#: .\templates\faq.html.py:39
+#: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
 msgstr "ما هي الترجمة العالمية؟"
 
-#: .\templates\faq.html.py:20
-#: .\templates\faq.html.py:43
+#: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
 msgstr "كيف يمكنني استخدام الترجمة العالمية؟"
 
-#: .\templates\faq.html.py:21
-#: .\templates\faq.html.py:47
+#: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
 msgstr "ما هي فوائد الترجمة؟"
 
-#: .\templates\faq.html.py:22
-#: .\templates\faq.html.py:56
+#: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
 msgstr "ما هي مؤسسة الثقافة التشاركية ، ولماذا يعملون على الترجمة العالمي؟"
 
-#: .\templates\faq.html.py:23
-#: .\templates\faq.html.py:60
+#: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
 msgstr "هل ستوفّر الترجمة العالمية التعليق على الصوت بصيغة الكلمات للصُمّ وضعاف السّمع؟"
 
-#: .\templates\faq.html.py:24
-#: .\templates\faq.html.py:64
+#: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
 msgstr "هل ستكون الترجمة متاحة بلغتي؟"
 
-#: .\templates\faq.html.py:25
-#: .\templates\faq.html.py:68
+#: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
 msgstr "متى ستكون الأدوات ، بما في ذلك هذا الموقع ، متاحة في لغتي؟"
 
-#: .\templates\faq.html.py:26
-#: .\templates\faq.html.py:72
+#: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
 msgstr "كيف يمكنني إضافة الترجمة إلى الفيديو الخاص بي؟"
 
-#: .\templates\faq.html.py:27
-#: .\templates\faq.html.py:76
+#: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
 msgstr "ما هي الرخصة مفتوحة المصدر التي تستخدمونها؟"
 
-#: .\templates\faq.html.py:28
-#: .\templates\faq.html.py:80
+#: .\templates\faq.html.py:28 .\templates\faq.html.py:80
 msgid "I'm a developer, can I help out?"
 msgstr "أنا مطوّر ، هل يمكنني أن أساعد؟"
 
-#: .\templates\faq.html.py:29
-#: .\templates\faq.html.py:84
+#: .\templates\faq.html.py:29 .\templates\faq.html.py:84
 msgid "Can non-technical people get involved with the project?"
 msgstr "هل يمكن لأشخاص غير فنيّين الإنظمام للمشروع؟"
 
-#: .\templates\faq.html.py:30
-#: .\templates\faq.html.py:88
+#: .\templates\faq.html.py:30 .\templates\faq.html.py:88
 msgid "Do you accept donations? Are they tax deductible?"
 msgstr "هل تقبلون التبرّعات؟ هل الضرائب مستقطعة؟"
 
-#: .\templates\faq.html.py:31
-#: .\templates\faq.html.py:92
+#: .\templates\faq.html.py:31 .\templates\faq.html.py:92
 msgid "What is your relationship with Mozilla Drumbeat?"
 msgstr "ما هي علاقتكم مع موزيلا درام بِيت؟"
 
-#: .\templates\faq.html.py:32
-#: .\templates\faq.html.py:96
+#: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
 msgstr "أين يمكنني تنزيل الترجمة في صيغة اس آر تي أو غيرها من الصّيغ؟ "
 
-#: .\templates\faq.html.py:33
-#: .\templates\faq.html.py:106
+#: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
 msgstr "لماذا لا يمكنني تغيير توقيت الترجمة؟"
 
@@ -834,13 +810,11 @@ msgstr ""
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
 msgstr ""
 
-#: .\templates\ordered_paginator.html.py:4
-#: .\templates\paginator.html.py:4
+#: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
 msgstr "السابق"
 
-#: .\templates\ordered_paginator.html.py:25
-#: .\templates\paginator.html.py:25
+#: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
 msgstr "التالي"
 
@@ -1016,8 +990,7 @@ msgstr "تغييرات سياسة الخصوصية"
 msgid "By using the web sites, you agree to the terms and conditions of this privacy policy. If you do not agree to the terms and conditions of this privacy policy, please do not use the web sites. PCF may change its Privacy Policy from time to time. Any and all changes will be reflected on this page. Substantive changes will also be announced through the standard mechanisms through which PCF communicates with the PCF community, including PCF's тАЬannounceтАЭ mailing list and newsgroup."
 msgstr ""
 
-#: .\templates\admin\base_site.html.py:4
-#: .\templates\admin\base_site.html.py:7
+#: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
 msgstr "الترجمة العالمية"
 
@@ -1467,8 +1440,7 @@ msgstr ""
 #: .\templates\videos\diffing.html.py:93
 #: .\templates\videos\history.html.py:144
 #: .\templates\videos\history.html.py:185
-#: .\templates\videos\revision.html.py:72
-#: .\templates\videos\video.html.py:158
+#: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
 msgstr "الترجمة"
 
@@ -1672,8 +1644,7 @@ msgstr ""
 msgid "Edit Subtitles"
 msgstr "تحرير الترجمة"
 
-#: .\templates\videos\history.html.py:159
-#: .\templates\videos\video.html.py:122
+#: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
 msgid "Add Translation"
 msgstr "إضافة ترجمة"
 
@@ -1685,8 +1656,7 @@ msgstr "تحميل ترجمة"
 msgid "Original Language Subtitles"
 msgstr "ترجمة اللغة الأصلية"
 
-#: .\templates\videos\history.html.py:189
-#: .\templates\videos\video.html.py:134
+#: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
 msgstr "تعليقات"
 
@@ -1722,13 +1692,11 @@ msgstr "لا توجد ترجمة لهذه اللغة."
 msgid "Either no subtitles have been entered, or they were deleted."
 msgstr "إمّا أن لم يتم إدخال أية ترجمة ، أو قد تم حذفها."
 
-#: .\templates\videos\history.html.py:289
-#: .\templates\videos\video.html.py:183
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
 msgstr "لا توجد ترجمة حالياً."
 
-#: .\templates\videos\history.html.py:289
-#: .\templates\videos\video.html.py:183
+#: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "Make some!"
 msgstr "ترجم قليلاً!"
 
@@ -1784,8 +1752,7 @@ msgstr "بحث"
 msgid "URL/title"
 msgstr "عنوان الموقع / عنوان"
 
-#: .\templates\videos\search.html.py:19
-#: .\templates\videos\video.html.py:143
+#: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
 msgstr "لغة"
 
@@ -1917,4 +1884,3 @@ msgstr "تاريخ"
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
 msgstr "لا توجد أفلام."
-
