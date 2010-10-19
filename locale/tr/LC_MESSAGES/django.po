@@ -1781,71 +1781,71 @@ msgstr ""
 #: .\templates\videos\test_form_page.html.py:37
 #: .\templates\videos\test_form_page.html.py:57
 msgid "how was it? were the instructions clear? what would improve it?"
-msgstr ""
+msgstr "nasılsı? talimatlar açık mıydı? nasıl geliştirebiliriz?"
 
 #: .\templates\videos\test_form_page.html.py:29
 msgid "Task 2"
-msgstr ""
+msgstr "Görev 2"
 
 #: .\templates\videos\test_form_page.html.py:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
-msgstr ""
+msgstr "Videodaki hataları düzeltmeye çalışın ( ya da geri dönüp düzenleme yapın)"
 
 #: .\templates\videos\test_form_page.html.py:35
 msgid "Task 3"
-msgstr ""
+msgstr "Görev 3"
 
 #: .\templates\videos\test_form_page.html.py:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
-msgstr ""
+msgstr "Videoyu çevirin ( eğer yabancı dil bilmiyorsanız taklit edin!)"
 
 #: .\templates\videos\test_form_page.html.py:42
 msgid "optional: get updates about Universal Subtitles"
-msgstr ""
+msgstr "isteğe bağlı: Universal Subtitles ile ilgili güncelleştirmeleri alın"
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr ""
+msgstr "Gönder!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Basit Talimatlar"
 
 #: .\templates\videos\test_form_page.html.py:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
-msgstr ""
+msgstr "2 & 3 içindeki tüm görevler isteğe bağlı (ancak yapmanızı tavsiye ederiz.)"
 
 #: .\templates\videos\test_form_page.html.py:74
 msgid "That’s it!"
-msgstr ""
+msgstr "Hepsi bu!"
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr ""
+msgstr "Yeni bir başlık girin"
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr ""
+msgstr "başlığı düzenleyin"
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr ""
+msgstr "Diller"
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
-msgstr ""
+msgstr "Etkinlik akışı"
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr ""
+msgstr "% yapıldı"
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
-msgstr ""
+msgstr "Orijinal"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
-msgstr ""
+msgstr "Altyazı yok"
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
