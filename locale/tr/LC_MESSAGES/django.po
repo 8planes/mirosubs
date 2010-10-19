@@ -1517,23 +1517,23 @@ msgstr ""
 #: .\templates\videos\email_start_notification.html.py:14
 #: .\templates\videos\email_title_changed.html.py:10
 msgid "Sincerely"
-msgstr ""
+msgstr "İçtenlikle"
 
 #: .\templates\videos\email_notification.html.py:17
 #: .\templates\videos\email_start_notification.html.py:15
 #: .\templates\videos\email_title_changed.html.py:12
 msgid "The Universal Subtitles Community"
-msgstr ""
+msgstr "Universal Subtitles Topluluğu"
 
 #: .\templates\videos\email_notification.html.py:24
 #: .\templates\videos\email_start_notification.html.py:23
 #: .\templates\videos\email_title_changed.html.py:28
 msgid "Don't send any more emails about this particular video."
-msgstr ""
+msgstr "Bu video ile ilgili tekrar mesaj gönderme"
 
 #: .\templates\videos\email_notification.html.py:27
 msgid "SUMMARY OF CHANGES"
-msgstr ""
+msgstr "DEĞİŞİKLİKLERİN ÖZETİ"
 
 #: .\templates\videos\email_notification.html.py:28
 #, python-format
