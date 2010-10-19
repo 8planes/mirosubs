@@ -104,6 +104,8 @@ improve subtitles, click the button below the video''')
     return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
 
+create.csrf_exempt = True
+
 def video(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     video.view_count += 1
