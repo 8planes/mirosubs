@@ -45,7 +45,7 @@ def _best_by_height(media_contents, type_fn):
     best_height = None
     HEIGHT = 360
     for content in media_contents:
-        height = int(content.getAttribute('height'))
+        height = int(content.getAttribute('height') or 0)
         height_is_best = True if best is None else \
             abs(HEIGHT - height) < abs(HEIGHT - best_height)
         if type_fn(content) and height_is_best:
