@@ -49,7 +49,7 @@
             </div>
             <div class="inline_search">
                 <form action=".">
-                    <input type="text" name="q" value="{{ query }}"/>
+                    <input type="text" name="q" value="{{ query|default:'' }}"/>
                     <button class="search_button">
                         <span>{% trans 'Search' %}</span>
                     </button>

@@ -168,7 +168,7 @@ class Application(models.Model):
 class Invite(models.Model):
     team = models.ForeignKey(Team, related_name='invitations')
     user = models.ForeignKey(User, related_name='team_invitations')
-    note = models.TextField(blank=True)
+    note = models.TextField(blank=True, max_length=200)
 
     class Meta:
         unique_together = (('team', 'user'),)

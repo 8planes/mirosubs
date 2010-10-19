@@ -23,7 +23,7 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
-from teams.models import Team
+from teams.models import Team, Invite
 
 register = template.Library()
 
@@ -57,5 +57,16 @@ def team_select(context, team):
     qs = Team.objects.exclude(pk=team.pk).filter(users=user)
     return {
         'team': team,
+        'objects': qs
+    }
+
+@register.inclusion_tag('teams/_team_invitations.html', takes_context=True)    
+def team_invitations(context):
+    user = context['user']
+    if user.is_authenticated():
+        qs = Invite.objects.filter(user=user)
+    else:
+        qs = Invite.objects.none()
+    return {
         'objects': qs
     }

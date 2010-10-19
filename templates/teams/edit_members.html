@@ -21,7 +21,7 @@
             var INVITE_URL = '{% url teams:invite %}';
             
             $('.invite-user').nyroModal({
-                minHeight: 160,
+                minHeight: 260,
                 minWidth: 400,
             });
 
@@ -34,15 +34,15 @@
                         note: $('.user-invite-note').val()
                     }, function(response){
                         if (response.error){
-                            $.msg.clean().add(response.error);
+                            $('.invite-user-error').html(response.error).show();
                         }else{
-                            $.msg.clean().add('{% trans "User invited success." %}');
+                            $('.invite-user-error').html('').hide();
                             $.nyroModalRemove();
                             $('.username-invite-field, .user-invite-note').val('');
                         }
                     }, 'json');
                 }else{
-                    $.msg.clean().add('{% trans "Enter username." %}');
+                    $('.invite-user-error').html('{% trans "Enter username." %}').show();
                 }
             });
             
@@ -163,6 +163,7 @@
 {% if team|can_invite_to_team:user %}
 <div id="invite-user" style="display: none">
     <h3>{% trans 'Invite user' %}</h3>
+    <p class="invite-user-error" style="display: none; color: #ff8080;"></p>
     <label>{% trans 'Username' %}</label>
     <input type="text" style="margin: 10px;" class="username-invite-field"/>
     <br/>

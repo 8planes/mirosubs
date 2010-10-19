@@ -43,7 +43,7 @@ APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 
 def index(request):
     q = request.REQUEST.get('q')
-    
+
     qs = Team.objects.for_user(request.user).annotate(count_members=Count('id'))
 
     
@@ -329,6 +329,11 @@ def invite(request):
         return {
             'error': ugettext(u'This user is member of team already.')
         }
+    
+    if len(note) > Invite._meta.get_field('note').max_length:
+        return {
+            'error': ugettext(u'Note is too long.')
+        }        
         
     Invite.objects.get_or_create(team=team, user=user, defaults={'note': note})
     return {}
