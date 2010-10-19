@@ -3,8 +3,8 @@
 <div class="note">
     {% trans 'You have been invited to a new team' %}: 
     <a href="{{ invite.team.get_absolute_url }}">{{ invite.team }}</a>
-    <a href="#">{% trans 'Join' %}</a>
-    <a href="#">{% trans 'Deny' %}</a>
+    <a href="{% url teams:accept_invite invite.pk %}">{% trans 'Join' %}</a>
+    <a href="{% url teams:deny_invite invite.pk %}">{% trans 'Deny' %}</a>
     {% if invite.note %}
     <p>
         {{ invite.note }}

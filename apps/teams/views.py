@@ -337,3 +337,14 @@ def invite(request):
         
     Invite.objects.get_or_create(team=team, user=user, defaults={'note': note})
     return {}
+
+@login_required
+def accept_invite(request, id, accept=True):
+    invite = get_object_or_404(Invite, pk=id, user=request.user)
+    
+    if accept:
+        invite.accept()
+    else:
+        invite.deny()
+        
+    return redirect(request.META.get('HTTP_REFERER', '/'))
