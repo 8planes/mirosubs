@@ -22,11 +22,10 @@ from videos.forms import SubtitlesUploadForm
 register = template.Library()
 
 @register.inclusion_tag('videos/_upload_subtitles.html', takes_context=True)
-def upload_subtitles(context, video, has_translations):
+def upload_subtitles(context, video):
     return {
         'video': video,
         'form': SubtitlesUploadForm(context['user']),
-        'has_translations': has_translations,
         'user': context['user'],
         'request': context['request']
     }

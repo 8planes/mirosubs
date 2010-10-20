@@ -1,5 +1,4 @@
 {% load i18n %}
-{% if not has_translations %}
         <a href="#upload_subs-div" id="upload-subtitles-link" class="upload-button blue_button small">
             {% trans 'Upload Subtitles' %}
         </a>
@@ -47,7 +46,7 @@
                 dataType: 'json',
                 success: function(data, status, xhr, $form){
                     if (data.success){
-                        document.location = LANGUAGE_PAGE_URL;
+                        document.location = data.next || LANGUAGE_PAGE_URL;
                     } else {
                         $form.prepend('<p class="error_list">'+MSG+'</p>');
                         for (key in data.errors) {
@@ -83,4 +82,3 @@
             $('.upload-button').nyroModal();
           });
     </script>    
-{% endif %}

@@ -48,9 +48,6 @@ class SubtitlesUploadForm(forms.Form):
         video = self.cleaned_data['video']
         if video.is_writelocked:
             raise forms.ValidationError(_(u'Somebody is subtitling this video right now. Try later.'))
-        if video.subtitlelanguage_set.filter(is_complete=True) \
-                .filter(is_original=False).exists():
-            raise forms.ValidationError(_(u'This video has translations.'))
         return video
     
     def clean_subtitles(self):
@@ -88,10 +85,10 @@ class SubtitlesUploadForm(forms.Form):
         video._make_writelock(self.user, key)
         video.save()
         
-        language = video.subtitle_language()
+        language = video.subtitle_language(self.cleaned_data['language'])
         
         if not language:
-            language = SubtitleLanguage(video=video, is_original=True, is_complete=True)
+            language = SubtitleLanguage(video=video, is_original=False, is_forked=True)
         
         language.language = self.cleaned_data['language']
         language.save()
@@ -105,7 +102,7 @@ class SubtitlesUploadForm(forms.Form):
         version = SubtitleVersion(
             language=language, version_no=version_no,
             datetime_started=datetime.now(), user=self.user,
-            note=u'Uploaded')
+            note=u'Uploaded', is_forked=True)
         version.save()
 
         text = subtitles.read()
@@ -122,12 +119,17 @@ class SubtitlesUploadForm(forms.Form):
             caption.subtitle_id = str(id)
             caption.subtitle_order = i+1
             caption.save()
-        
+  
         version.finished = True
         version.save()
         
+        language.was_complete = True
+        language.is_complete = True
+        language.save()
+        
         video.release_writelock()
         video.save()
+        return language
         
     def get_errors(self):
         output = {}

@@ -221,13 +221,8 @@
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
 
-    
-            <a href="#" class="blue_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
-            {% if language.is_original %}
-                {% with translations|length as has_translations %}
-                   {% upload_subtitles video has_translations %}
-                {% endwith %}
-            {% endif %}
+            <a href="#" class="green_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
+            {% upload_subtitles video %}
             <div class="clear">&nbsp;</div>
           </div>
 

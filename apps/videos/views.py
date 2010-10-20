@@ -191,8 +191,9 @@ def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
     if form.is_valid():
-        form.save()
+        language = form.save()
         output['success'] = True
+        output['next'] = language.get_absolute_url()
     else:
         output['errors'] = form.get_errors()
     return HttpResponse(json.dumps(output), "text/javascript")
