@@ -51,7 +51,7 @@ msgstr "أضف تعليقك"
 
 #: .\apps\auth\models.py:84
 msgid "Start subtitles"
-msgstr "بدء الترجمة"
+msgstr "بدء الترجمة المرئية"
 
 #: .\apps\auth\models.py:85
 msgid "Start translation"
@@ -59,7 +59,7 @@ msgstr "بدء الترجمة"
 
 #: .\apps\auth\models.py:86
 msgid "Edit subtitles"
-msgstr "تحرير الترجمة"
+msgstr "تحرير الترجمة المرئية"
 
 #: .\apps\auth\models.py:87
 msgid "Edit translation"
@@ -136,7 +136,7 @@ msgstr "شارك الآخرين بترجمتك"
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr "الآن يمكن للجميع مشاهدة الفيديو مع ترجمة -- اختبرها بنفسك!"
+msgstr "الآن يمكن للجميع مشاهدة الفيديو مع الترجمة المرئية -- اختبرها بنفسك!"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
@@ -184,7 +184,7 @@ msgstr "تحذير : لا تضع هذه الأفلام على الموقع  -- �
 
 #: .\templates\_testing_widget.html.py:16
 msgid "Warning #2: These subtitles are non-permanent and should not be relied on -- someone could change them."
-msgstr "تحذير رقم 2 : هذه الترجمة غير دائمة ويجب عدم الاعتماد عليها -- أي شخص يمكنه تغييرها."
+msgstr "تحذير رقم 2 : هذه الترجمة المرئية غير دائمة ويجب عدم الاعتماد عليها -- أي شخص يمكنه تغييرها."
 
 #: .\templates\_testing_widget.html.py:17
 msgid "This alpha site is for purely testing purposes."
@@ -342,7 +342,7 @@ msgstr ""
 
 #: .\templates\base.html.py:18
 msgid "Free and open tools for creating captions, subtitles, and translations for video."
-msgstr "أدوات مجانية ومفتوحة لترجمة الفيديو."
+msgstr "أدوات مجانية ومفتوحة للترجمة المرئية للفيديو ."
 
 #: .\templates\base.html.py:37
 msgid "Universal Subtitles does not support your browser. Upgrade your browser or <a href=\"http://getfirefox.com\">Try Firefox</a>."
@@ -354,7 +354,7 @@ msgstr "مشروع مؤسسة الثقافة التشاركية"
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
-msgstr "ترجم فيديو"
+msgstr "ترجم فيديو مرئياً"
 
 #: .\templates\base.html.py:73
 msgid "Videos"
@@ -437,27 +437,27 @@ msgstr "أسئلة وأجوبة"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr "ما هي الترجمة العالمية؟"
+msgstr "ما هي الترجمة المرئية العالمية؟"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
-msgstr "كيف يمكنني استخدام الترجمة العالمية؟"
+msgstr "كيف يمكنني استخدام الترجمة المرئية العالمية؟"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
-msgstr "ما هي فوائد الترجمة؟"
+msgstr "ما هي فوائد الترجمة المرئية؟"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
-msgstr "ما هي مؤسسة الثقافة التشاركية ، ولماذا يعملون على الترجمة العالمي؟"
+msgstr "ما هي مؤسسة الثقافة التشاركية ، ولماذا يعملون على الترجمة المرئية العالمي؟"
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
-msgstr "هل ستوفّر الترجمة العالمية التعليق على الصوت بصيغة الكلمات للصُمّ وضعاف السّمع؟"
+msgstr "هل ستوفّر الترجمة المرئية العالمية التعليق على الصوت بصيغة الكلمات للصُمّ وضعاف السّمع؟"
 
 #: .\templates\faq.html.py:24 .\templates\faq.html.py:64
 msgid "Will your subtitles support my language or characterset?"
-msgstr "هل ستكون الترجمة متاحة بلغتي؟"
+msgstr "هل ستكون الترجمة المرئية متاحة بلغتي؟"
 
 #: .\templates\faq.html.py:25 .\templates\faq.html.py:68
 msgid "When will the tools, including this site, be available in my language?"
@@ -465,7 +465,7 @@ msgstr "متى ستكون الأدوات ، بما في ذلك هذا الموق
 
 #: .\templates\faq.html.py:26 .\templates\faq.html.py:72
 msgid "How can I add subtitles to my video?"
-msgstr "كيف يمكنني إضافة الترجمة إلى الفيديو الخاص بي؟"
+msgstr "كيف يمكنني إضافة الترجمة المرئية إلى الفيديو الخاص بي؟"
 
 #: .\templates\faq.html.py:27 .\templates\faq.html.py:76
 msgid "What open source license do you use?"
@@ -489,7 +489,7 @@ msgstr "ما هي علاقتكم مع موزيلا درام بِيت؟"
 
 #: .\templates\faq.html.py:32 .\templates\faq.html.py:96
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr "أين يمكنني تنزيل الترجمة في صيغة اس آر تي أو غيرها من الصّيغ؟ "
+msgstr "أين يمكنني تنزيل الترجمة المرئية في صيغة اس آر تي أو غيرها من الصّيغ؟ "
 
 #: .\templates\faq.html.py:33 .\templates\faq.html.py:106
 msgid "Why can't I change the timing on a translation?"
@@ -497,7 +497,7 @@ msgstr "لماذا لا يمكنني تغيير توقيت الترجمة؟"
 
 #: .\templates\faq.html.py:40
 msgid "Our goal with Universal Subtitles is to make it easy for anyone to add subtitles, captions, or translate nearly any video on the web. Furthermore, we're building in collaborative tools, and hope to attract a large body of contributors to assist in the subtitling effort. The software we're building is free and open source and can be used and improved upon by anyone."
-msgstr "هدفنا في الترجمة العالمية هو  أن نجعل من السهل على أي شخص إضافة ترجمة على أي فيديو على شبكة الإنترنت. علاوةً على ذلك ، نحن نبني الأدوات التعاونية ، ونأمل في جذب مجموعة كبيرة من المساهمين للمساعدة في جهود الترجمة. البرنامج الذي نبنيه حر ومفتوح المصدر ، ويمكن لأي شخص أن يستخدمه ويبني ويحسّن عليه."
+msgstr "هدفنا في الترجمة المرئية العالمية هو  أن نجعل من السهل على أي شخص إضافة ترجمة مرئية على أي فيديو موجود على شبكة الإنترنت. علاوةً على ذلك ، نحن نبني الأدوات التعاونية ، ونأمل في جذب مجموعة كبيرة من المساهمين للمساعدة في جهود الترجمة المرئية. البرنامج الذي نبنيه حر ومفتوح المصدر ، ويمكن لأي شخص أن يستخدمه ويبني ويحسّن عليه"
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
@@ -505,7 +505,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
-msgstr "ترجمة الفيديو منجم ذهب ذو إمكانات كبيرة غير مستغلة."
+msgstr "الترجمة المرئية للفيديو منجم ذهب ذو إمكانات كبيرة غير مستغلة."
 
 #: .\templates\faq.html.py:50
 msgid "Captions make video more accessible for people with hearing disabilities"
@@ -513,11 +513,11 @@ msgstr "الترجمة الكتابية تجعل فهم الفيديو أكثر 
 
 #: .\templates\faq.html.py:51
 msgid "Translated subtitles make it possible for all of us to watch video in languages that we don't speak"
-msgstr "الترجمة تمكّن لنا جميعاً مشاهدة وفهم الفيديو الذي فيه لغة أو لغات لا نتكلمها أو نجيدها"
+msgstr "الترجمة المرئية تمكّن لنا جميعاً مشاهدة وفهم الفيديو الذي فيه لغة أو لغات لا نتكلمها أو نجيدها"
 
 #: .\templates\faq.html.py:52
 msgid "As an educator, storyteller, scientist, or anyone with a message, the potential size of your audience increases exponentially when you have subtitles and translations"
-msgstr "سواءً كنت معلماً ، راوي ، عالم ، أو لديك رسالة تريد نشرها ، حجم جمهورك سيزيد أضعافا مضاعفة عندما تكون رسالتك متوفرة بلغات عديدة"
+msgstr "سواءً كنت معلماً ، راوي ، عالم ، أو لديك رسالة تريد نشرها ، حجم جمهورك سيزيد أضعافا مضاعفة عندما تكون رسالتك متوفرة بلغات عديدة بالإضافة الى الترجمة المرئية"
 
 #: .\templates\faq.html.py:57
 msgid "The Participatory Culture Foundation is a 501c3 non-profit organization whose mission, through software and advocacy, is to build a fairer, more open, and more democratic media space. PCF saw a gap in the marketplace for more open and collaborative subtitling -- Universal Subtitles is an attempt to fill that need."
