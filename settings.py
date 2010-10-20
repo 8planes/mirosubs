@@ -30,6 +30,10 @@ from django.conf import global_settings
 lang_dict = dict(global_settings.LANGUAGES)
 lang_dict['es-ar'] = gettext_noop('Argentinian Spanish')
 lang_dict['eo'] = gettext_noop('Esperanto')
+lang_dict['iu'] = gettext_noop('Inuktitut')
+lang_dict['moh'] = gettext_noop('Mohawk')
+lang_dict['oji'] = gettext_noop('Anishinaabe')
+lang_dict['cr'] = gettext_noop('Cree')
 global_settings.LANGUAGES = tuple(i for i in lang_dict.items())
 
 METADATA_LANGUAGES = (
