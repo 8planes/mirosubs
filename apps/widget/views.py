@@ -166,13 +166,12 @@ def download_subtitles(request, handler=SSASubtitles):
         # Safari 3.0 and Chrome 2.0 accepts UTF-8 encoded string directly.
         filename_header = 'filename=%s' % original_filename.encode('utf-8')
     elif u'MSIE' in request.META['HTTP_USER_AGENT']:
-        # IE does not support internationalized filename at all.
-        # It can only recognize internationalized URL, so we do the trick via routing rules.
         try:
             original_filename.encode('ascii')
-            filename_header = 'filename=%s' % original_filename.encode('utf-8')
         except UnicodeEncodeError:
-            filename_header = ''
+            original_filename = 'subtitles.' + h.file_type
+            
+        filename_header = 'filename=%s' % original_filename
     else:
         # For others like Firefox, we follow RFC2231 (encoding extension in HTTP headers).
         filename_header = 'filename*=UTF-8\'\'%s' % iri_to_uri(original_filename.encode('utf-8'))
