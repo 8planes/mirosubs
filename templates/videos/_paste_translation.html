@@ -1,5 +1,140 @@
 {% load i18n %}
 <script type="text/javascript">
+    (function($){
+        $.countLines = function(textarea, o){
+        // The textarea
+        var ta;
+    
+        if (typeof textarea == "string")
+            ta = $(textarea);
+        else if (typeof textarea == "object")
+            ta = textarea;
+    
+        if (ta.size() != 1)
+            return;
+    
+        // Get the textarea value
+        var value = ta.val();
+    
+        var options = $.extend({
+            recalculateCharWidth : false,
+            chars : "",
+            charsMode : "random",
+            fontAttrs : ["font-family", "font-size", "text-decoration", "font-style", "font-weight"]
+        }, o);
+        var masterCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        var counter;
+        switch (options.charsMode){
+            case "random":
+            // Build a random collection of characters
+            options.chars = "";
+            masterCharacters += ".,?!-+;:'\"";
+            for (counter = 1; counter <= 12; counter++)
+                options.chars += masterCharacters[(Math.floor(Math.random() * masterCharacters.length))];
+            break;
+            case "alpha":
+            options.chars = masterCharacters;
+            break;
+            case "alpha_extended":
+            options.chars = masterCharacters + ".,?!-+;:'\"";
+            break;
+            case "from_ta":
+            // Build a random collection of characters from the textarea
+            if (value.length < 15)
+                options.chars = masterCharacters;
+            else
+                for (counter = 1; counter <= 15; counter++)
+                options.chars += value[(Math.floor(Math.random() * value.length))];
+            break;
+               case "custom":
+                    // Already defined in options.chars
+                    break;
+        }
+    
+        // Decode chars
+        if (!$.isArray(options.chars))
+            options.chars = options.chars.split("");
+    
+        // Generate a span after the textarea with a random ID
+        var id = "";
+        for (counter = 1; counter <= 10; counter++)
+            id += (Math.floor(Math.random() * 10) + 1);
+    
+        ta.after("<span id='s" + id + "'></span>");
+        var span = $("#s" + id);
+    
+        // Hide the span
+        span.hide();
+    
+        // Apply the font properties of the textarea to the span class
+        $.each(options.fontAttrs, function(i, v){
+            span.css(v, ta.css(v));
+        });
+    
+        // Get the number of lines
+        var lines = value.split("\n");
+        var linesLen = lines.length;
+    
+        var averageWidth;
+    
+        // Check if the textarea has a cached version of the average character width
+        if (options.recalculateCharWidth || ta.data("average_char") == null) {
+            // Get a pretty good estimation of the width of a character in the textarea. To get a better average, add more characters and symbols to this list
+            var chars = options.chars;
+    
+            var charLen = chars.length;
+            var totalWidth = 0;
+    
+            $.each(chars, function(i, v){
+            span.text(v);
+            totalWidth += span.width();
+            });
+    
+            // Store average width on textarea
+            ta.data("average_char", Math.ceil(totalWidth / charLen));
+        }
+    
+        averageWidth = ta.data("average_char");
+    
+        // We are done with the span, so kill it
+        span.remove();
+    
+        // Determine missing width (from padding, margins, borders, etc); this is what we will add to each line width
+        var missingWidth = (ta.outerWidth() - ta.width()) * 2;
+    
+        // Calculate the number of lines that occupy more than one line
+        var lineWidth;
+    
+        var wrappingLines = 0;
+        var wrappingCount = 0;
+        var blankLines = 0;
+    
+        $.each(lines, function(i, v){
+            // Calculate width of line
+            lineWidth = ((v.length + 1) * averageWidth) + missingWidth;
+            // Check if the line is wrapped
+            if (lineWidth >= ta.outerWidth()){
+            // Calculate number of times the line wraps
+            var wrapCount = Math.floor(lineWidth / ta.outerWidth());
+            wrappingCount += wrapCount;
+            wrappingLines++;
+            }
+    
+            if ($.trim(value) == "")
+            blankLines++;
+        });
+    
+        var ret = {};
+        ret["actual"] = linesLen;
+        ret["wrapped"] = wrappingLines;
+        ret["wraps"] = wrappingCount;
+        ret["visual"] = linesLen + wrappingCount;
+        ret["blank"] = blankLines;
+    
+        return ret;
+        };
+    })(jQuery);  
+  
     jQuery(function($){
         $('.upload-transcript-button').nyroModal({
             //minWidth: 460,
@@ -20,19 +155,23 @@
         
         var $error = $('#upload-transcript .error')
         
-        $('#upload-transcript-textarea').keyup(function(){
-            var rows = $(this).val().split('\n\n');
-            for (var i=rows.length; i; i--){
-                if (rows[i-1].length > 100){
-                    $error.show();
-                    break;
-                }
+        $('#upload-transcript .save-button').click(function(){
+            var $textarea = $('.upload-transcript-textarea')
+            $textarea.val($textarea.val().replace(/\n{2,}/g, '\n\n').replace(/[\n]+$/g, ''))
+            r = $.countLines($textarea);
+            var rows = $textarea.val().split('\n\n');
+            var required_rows_count = rows.length*2+rows.length-1;
+            console.log(r)
+            if (required_rows_count !== r.visual){
+                $error.show();
+            }else{
                 $error.hide();
             }
-        })
+            return false;
+        });
     });
 </script>
-<div id="upload-transcript" style="display: none">
+<div id="upload-transcript" style="display1: none">
     <h3>{% trans 'Upload a Transcript' %}</h3>
     
     <div class="padding">
@@ -49,6 +188,8 @@
             Please divide them.
             {% endblocktrans %}
         </p>
-        <textarea rows="18" cols="48" id="upload-transcript-textarea"></textarea>
+        <textarea rows="15" cols="48" class="upload-transcript-textarea"></textarea>
+        <button class="save-button">{% trans 'Save' %}</button>
+        <div class="upload-transcript-check-div" style="display1: none; width: 403px; text-justify: "></div>
     </div>
 </div>
