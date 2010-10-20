@@ -221,8 +221,10 @@
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
 
-    
-            <a href="#" class="green_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
+            {% if revision_list|length > 1 %}
+                <a href="#" class="green_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
+            {% endif %}
+            
             {% upload_subtitles video %}
             <div class="clear">&nbsp;</div>
           </div>
