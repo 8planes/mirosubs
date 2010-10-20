@@ -1,7 +1,6 @@
 {% load i18n %}
-{% for invite in objects %}
-<div class="note">
-    {% trans 'You have been invited to a new team' %}: 
+<div>
+    <h2>{% trans 'You have been invited to a new team' %}:</h2> 
     <a href="{{ invite.team.get_absolute_url }}">{{ invite.team }}</a>
     <a href="{% url teams:accept_invite invite.pk %}">{% trans 'Join' %}</a>
     <a href="{% url teams:deny_invite invite.pk %}">{% trans 'Deny' %}</a>
@@ -11,4 +10,3 @@
     </p>
     {% endif %}
 </div>
-{% endfor %}

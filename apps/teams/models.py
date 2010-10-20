@@ -28,6 +28,9 @@ from videos.models import Video
 from auth.models import CustomUser as User
 from sorl.thumbnail.main import DjangoThumbnail
 from utils.amazon import S3EnabledImageField
+from messages.models import Message
+from django.db.models.signals import post_save
+from django.template.loader import render_to_string
 
 class TeamManager(models.Manager):
     
@@ -184,3 +187,16 @@ class Invite(models.Model):
         
     def deny(self):
         self.delete()
+    
+    def render_message(self):
+        return render_to_string('teams/_invite_message.html', {'invite': self})
+    
+def invite_send_message(sender, instance, created, **kwargs):
+    if created:
+        msg = Message()
+        msg.user = instance.user
+        msg.object = instance
+        msg.save()
+    
+post_save.connect(invite_send_message, Invite)
+        

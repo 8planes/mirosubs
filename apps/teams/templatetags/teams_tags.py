@@ -59,14 +59,3 @@ def team_select(context, team):
         'team': team,
         'objects': qs
     }
-
-@register.inclusion_tag('teams/_team_invitations.html', takes_context=True)    
-def team_invitations(context):
-    user = context['user']
-    if user.is_authenticated():
-        qs = Invite.objects.filter(user=user)
-    else:
-        qs = Invite.objects.none()
-    return {
-        'objects': qs
-    }

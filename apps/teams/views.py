@@ -47,7 +47,7 @@ APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 def index(request):
     q = request.REQUEST.get('q')
 
-    qs = Team.objects.for_user(request.user).annotate(_member_count=Count('members__pk'))
+    qs = Team.objects.for_user(request.user).annotate(_member_count=Count('users__pk'))
 
     
     if q:
@@ -70,7 +70,7 @@ def index(request):
     highlighted_ids = list(Team.objects.filter(highlight=True).values_list('id', flat=True))
     random.shuffle(highlighted_ids)
     highlighted_qs = Team.objects.filter(pk__in=highlighted_ids[:HIGHTLIGHTED_TEAMS_ON_PAGE]) \
-        .annotate(_member_count=Count('members__pk'))
+        .annotate(_member_count=Count('users__pk'))
     
     extra_context = {
         'query': q,
@@ -252,6 +252,7 @@ def edit_members(request, pk):
         'ordering': ordering,
         'order_type': order_type
     }
+
     return object_list(request, queryset=qs,
                        paginate_by=MEMBERS_ON_PAGE,
                        template_name='teams/edit_members.html',
