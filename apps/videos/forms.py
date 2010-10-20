@@ -189,10 +189,13 @@ class FeedbackForm(MathCaptchaForm):
         message = '%s\n\n%s\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version, commit)
         if error in ['404', '500']:
             message += '\nIt was sent from '+error+' error page.'
+            feedback_email = settings.FEEDBACK_ERROR_EMAIL
+        else:
+            feedback_email = settings.FEEDBACK_EMAIL
         headers = {'Reply-To': email} if email else None
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
-                     [settings.FEEDBACK_EMAIL], headers=headers).send()
+                     [feedback_email ], headers=headers).send()
         
         if email:
             headers = {'Reply-To': settings.FEEDBACK_RESPONSE_EMAIL}
