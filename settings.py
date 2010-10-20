@@ -250,6 +250,7 @@ INSTALLED_APPS = (
     'south',
     'haystack',
     'comments',
+    'messages',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 

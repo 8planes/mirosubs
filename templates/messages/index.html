@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load paginator i18n %}
+
+{% block title %}
+    {% trans 'Messages' %} | Universal Subtitles
+{% endblock %}
+
+{% block main_content %}
+<h2>{% trans 'Messages' %}</h2>
+
+<div class="grid_8 alpha">
+    {% if is_paginated %}{% paginator %}{% endif %}
+    <ul class="big_list">
+        {% for msg in message_list %}
+        <li>
+            {% if msg.object %}
+                {{ msg.object.render_message }}
+            {% else %}
+                {% if msg.author %}
+                    <h4>{% trans 'Message from' %} <a href="{{ msg.author.get_absolute_url }}">{{ msg.author }}</a></h2>
+                {% endif %}
+                {% if msg.subject %}<p>{% trans 'Subject' %}:{{ msg.subject }}</p>{% endif %}
+                <p>{{ msg.content }}</p>
+            {% endif %}
+            <p>{{ msg.created|timesince }} {% trans 'ago' %}</p>            
+        </li>
+        {% empty %}
+            <li>{% trans 'You have not messages.' %}</li>
+        {% endfor %}
+    </ul>
+    {% if is_paginated %}{% paginator %}{% endif %}
+</div>
+{% endblock %}
