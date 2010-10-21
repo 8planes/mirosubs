@@ -39,6 +39,8 @@ mirosubs.subtitle.MSServerModel = function(videoID, videoURL, language) {
     this.language_ = language;
     this.initialized_ = false;
     this.finished_ = false;
+    this.unsavedPackets_ = [];
+    this.packetNo_ = 1;
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
@@ -137,23 +139,34 @@ mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
                 // this should never happen.
                 alert('Problem saving subtitles. Response: ' + 
                       result['response']);
+            else
+                this.registerSavedPackets_(result['last_saved_packet']);
         });
+};
+
+mirosubs.subtitle.MSServerModel.prototype.registerSavedPackets_ = function(lastSavedPacketNo) {
+    var saved = goog.array.filter(
+        this.unsavedPackets_,
+        function(p) { return p['packet_no'] < lastSavedPacketNo; });
+    for (var i = 0; i < saved.length; i++)
+        goog.array.remove(unsavedPackets_, saved[i]);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
     var work = this.unitOfWork_.getWork();
     this.unitOfWork_.clear();
-    var toJsonCaptions = function(arr) {
-        return goog.array.map(arr, function(editableCaption) {
-                return editableCaption.json;
-            });
-    };
-    return {
-        'video_id': this.videoID_,
-        'language_code': this.language_,
+    var packet = {
+        'packet_no': this.packetNo_,
         'deleted': toJsonCaptions(work.deleted),
         'inserted': toJsonCaptions(work.neu),
         'updated': toJsonCaptions(work.updated)
+    };
+    this.packetNo_++;
+    this.unsavedPackets_.push(packet);
+    return {
+        'video_id': this.videoID_,
+        'language_code': this.language_,
+        'packets': this.unsavedPackets_
     };
 };
 

@@ -111,6 +111,7 @@ class Rpc(BaseRpc):
 
         Action.create_caption_handler(last_version)
         return { "response" : "ok",
+                 "last_saved_packet": last_version.last_saved_packet,
                  "drop_down_contents" : 
                      self._drop_down_contents(request.user, video) }
 
