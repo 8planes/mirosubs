@@ -541,6 +541,7 @@ class SubtitleLanguage(models.Model):
 
 class SubtitleCollection(models.Model):
     is_forked=models.BooleanField(default=False)
+    last_saved_packet = models.PositiveIntegerField(default=0)
 
     class Meta:
         abstract = True

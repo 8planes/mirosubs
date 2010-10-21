@@ -44,20 +44,20 @@ class NullRpc(BaseRpc):
                 self.fetch_subtitles(request, video_id)
         return return_dict
 
-    def save_subtitles(self, request, video_id, deleted, inserted, updated, language_code=''):
+    def save_subtitles(self, request, video_id, packets, language_code=''):
         if not request.user.is_authenticated():
             return { "response" : "not_logged_in" }
         video = models.Video.objects.get(video_id=video_id)
         null_subtitles, created = self._get_null_subtitles_for_editing(
             request.user, video, language_code, None, False)
-        self._save_subtitles_impl(request, null_subtitles, 
-                                  deleted, inserted, updated)
-        return {'response':'ok'}
+        self._save_packets(null_subtitles, packets)
+        return {'response':'ok',
+                'last_saved_packet': null_subtitles.last_saved_packet}
 
-    def finished_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
+    def finished_subtitles(self, request, video_id, packets, language_code=None):
         # there is no concept of "finished" for null subs
         response = self.save_subtitles(
-            request, video_id, deleted, inserted, updated, language_code)
+            request, video_id, packets, language_code)
         if response['response'] == 'ok':
             video = models.Video.objects.get(video_id=video_id)
             response['drop_down_contents'] = \
@@ -99,6 +99,7 @@ class NullRpc(BaseRpc):
                 null_subtitles.is_forked = True
             null_subtitles.save()
             created = True
+        null_subtitles.last_saved_packet = 0
         return null_subtitles, created
 
     def _save_subtitles_impl(self, request, null_subtitles, deleted, inserted, updated):
