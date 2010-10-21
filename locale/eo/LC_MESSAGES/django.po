@@ -819,68 +819,68 @@ msgstr "Interreta komunumo por kunlabora subtekstigado de videoj tra la mondo (k
 
 #: .\templates\index.html.py:64
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "Subteksto-serĉa protokolo"
 
 #: .\templates\index.html.py:65
 msgid "An open standard to let Firefox extensions, desktop video players, websites, browsers--any client--find and retrieve subtitles for any video."
-msgstr ""
+msgstr "Publika normo ebligi Fajrovulpajn aldonojn, video-ludilojn, retejojn, retumilojn, iun ajn programon, trovi kaj ŝuti subtekstojn por iu ajn video."
 
 #: .\templates\index.html.py:75
 msgid "Get updates and find out first when we launch"
-msgstr ""
+msgstr "Akiri ĝisdatigojn kaj scii tuj kiam ni lanĉas"
 
 #: .\templates\index.html.py:80
 msgid "Get Updates!"
-msgstr ""
+msgstr "Akiri ĝisdatigojn!"
 
 #: .\templates\index.html.py:85
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "Bonvole enigu validan retpoŝtadreson"
 
 #: .\templates\index.html.py:118
 msgid "Please enter your email address."
-msgstr ""
+msgstr "Bonvole enigu vian retpoŝtadreson."
 
 #: .\templates\index.html.py:137
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "Mozilla duobligos vian donacon!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "Ni estas reliefa projekto de Mozilla!"
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
-msgstr ""
+msgstr "Donacu nun"
 
 #: .\templates\index.html.py:146
 msgid "Check out the widget"
-msgstr ""
+msgstr "Ek al la subtekstigilo"
 
 #: .\templates\index.html.py:147
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "Provu nian subtekstigilon"
 
 #: .\templates\index.html.py:147
 msgid "Try the Demo"
-msgstr ""
+msgstr "Provu la provoversio"
 
 #: .\templates\opensubtitles2010.html.py:8
 #: .\templates\opensubtitles2010.html.py:26
 msgid "Open Subtitles Design Summit"
-msgstr ""
+msgstr "Pintkunveno pri dizajno de malfermitaj subtekstoj"
 
 #: .\templates\opensubtitles2010.html.py:28
 msgid "The Open Subtitles Design Summit will bring together global stakeholders in the subtitling space for a tightly focused / goal oriented meeting in NYC. The event is being organized by The Participatory Culture Foundation, developers of the Universal Subtitles project. We expect roughly 40 participants."
-msgstr ""
+msgstr "La Pintkunveno pri dizajno de malfermitaj subtekstoj kunigos mondajn koncernatojn pri subtekstoj en celfokusita renkontiĝo en Novjorko.  La evento estas organizita de la Participatory Culture Foundation, projektantoj de Universal Subtitles.  Ni antaŭvidas ĉ. 40 partoprenantojn."
 
 #: .\templates\opensubtitles2010.html.py:34
 msgid "Meeting Goals"
-msgstr ""
+msgstr "Renkontaj Celoj"
 
 #: .\templates\opensubtitles2010.html.py:37
 msgid "<strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus."
-msgstr ""
+msgstr "<strong>Konektigi</strong> ĉefajn koncernatojn de projektoj, organizoj, movadoj, kiuj havas bezonojn/fokusojn pri malfermita subtekstigado."
 
 #: .\templates\opensubtitles2010.html.py:41
 msgid "<strong>Identify ways</strong> to solve stakeholder subtitling needs and be aware of existing technology that can be leveraged. Find logical places for collaboration/cooperation."
@@ -888,39 +888,39 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:44
 msgid "<strong>Move towards</strong> standardizing solutions and pushing forward the state of the art in open subtiting."
-msgstr ""
+msgstr "<strong>Ekprogresi</strong> al norma kaj altkvalita subtekstigado."
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
-msgstr ""
+msgstr "Partoprenantoj"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
-msgstr ""
+msgstr "Inter la partoprenantoj estos: videaj kreantoj, uzantoj, gastigantoj, normistoj, alireblistoj, malfermaj programistoj, edukestroj, kaj aliaj individuoj kaj organizoj kun intereso pri subtekstigado.  Pli da detaloj kiam la evento baldaŭas."
 
 #: .\templates\opensubtitles2010.html.py:57
 msgid "Attendees are selected by invitation; however, if you or your organization would like to participate, please contact:"
-msgstr ""
+msgstr "Partoprenantoj estos laŭ invito, tamen se vi aŭ via organizo interesiĝas, bonvole kontakti al:"
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "Kiam"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "Septembro 29a kaj 30a, ekde 09:00 ambaŭ tagoj."
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "Kie"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
-msgstr ""
+msgstr "La kunveno estos en la bela Open Plans Penthouse en Soho, 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">mapo</a>)"
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
-msgstr ""
+msgstr "Kial"
 
 #: .\templates\opensubtitles2010.html.py:75
 msgid ""
@@ -934,70 +934,79 @@ msgid ""
 "            and make sense of the ever growing sea of online video.\n"
 "           "
 msgstr ""
+"\n"
+"            La fokuso de la pintkunveno estos pliigi haveblecon kaj alireblecon de subtekstoj, \n"
+"            nuntempe vere mankantaj. Temas pri grava tempo nun ĉar \n"
+"            en la interreto oni multege pli kaj pli uzas videojn &mdash; riskas ke homoj kiuj dependas de subtekstoj postlasiĝos. \n"
+"            Novaj uzantoj de ĉiuj kulturoj, multe da ili, komencas uzi la interreton; \n"
+"            normigo kaj ĉieigado de la teknologio grandegigos la multkulturan uzantaron. \n"
+"            Pli da subtekstoj faciligos aŭtomatan komprenon de interrataj informoj. \n"
+"            \n"
+"           "
 
 #: .\templates\opensubtitles2010.html.py:91
 msgid "Organizers, Facilitators, Sponsors"
-msgstr ""
+msgstr "Organizantoj, Helpgvidantoj, Sponsoroj"
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
-msgstr ""
+msgstr "Organizantoj"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
-msgstr ""
+msgstr "La <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> organizas la pintkunvenon.  Ilia plej lasta projekto, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, faciligas malferman kunlaboran subtekstigadon."
 
 #: .\templates\opensubtitles2010.html.py:99
 msgid "Facilitators"
-msgstr ""
+msgstr "Helpgvidantoj"
 
 #: .\templates\opensubtitles2010.html.py:100
 msgid "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing facilitation and agenda design. Aspiration believes that face-to-face events are the most powerful way to facilitate interaction, build networks, and collaborate."
-msgstr ""
+msgstr "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> provizas efektivigon kaj tagordan dizajnon. Aspiration kredas ke vizaĝalvizaĝaj eventoj estas la plej potenca metodo por faciligi interrilat(ad)on, konstruadi retojn, kaj kunlabori."
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsoroj"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
-msgstr ""
+msgstr "La pintokunveno estas malavare financita de la <a href=\"http://www.soros.org/\">Open Society Institute</a>."
 
 #: .\templates\opensubtitles2010.html.py:113
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
-msgstr ""
+msgstr "Dankegon al  <a href=\"http://openplans.org/\">Open Plans</a> por la renkontejo!"
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "antaŭ"
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "sekva"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr ""
+msgstr "Privatecopolitiko de Universal Subtitle"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
-msgstr ""
+msgstr "Lasta ĝisdatiĝo: 2010-08-10"
 
 #: .\templates\privacy.html.py:11
 msgid "This privacy policy applies to all web sites and web services operated by the Participatory Culture Foundation (refered to as тАЬPCFтАЭ in this policy) unless the web site or service has a separate privacy policy."
-msgstr ""
+msgstr "Ĉi tiu privatecopolitiko kovras ĉiujn retejojn kaj retejajn servojn de Participatory Culture Foundation (nome тАЬPCFтАЭ ĉi tie) krom se la retejo aŭ reteja servo havas apartan politiko."
 
 #: .\templates\privacy.html.py:14
 msgid "Except as described below, PCF does not collect or require visitors to its web sites to furnish personally identifying information such as names, email addresses, and phone numbers. Like most web site operators, PCF does collect non-personally identifying information of the sort that web browsers and servers typically make available, such as the browser type, operating system, language preference, referring site and date and time of each visitor request. PCF also collects potentially-personally identifying information like Internet Protocol (IP) addresses, which are non-personally identifying in and of themselves but could be used in conjunction with other information to personally identify users."
-msgstr ""
+msgstr "Krom kiam priparolita sube, PCF ne kolektas aŭ postulas vizitantojn al siaj retejoj garni propre identigantajn informojn kiel nomoj, retpoŝtaj adresoj, kaj telefonnumeroj. Kiel la plej multaj retejo-operaciantoj, PCF ja kolektas nepropre identigantajn informojn tiajn, kiajn retumiloj kaj serviloj tipe disponigas, kiel la retumila tipo, operaciuma versio, lingva prefero, plugvida retejo, kaj dato kaj tempo de ĉiu vizitanta peto. PCF ankaŭ kolektas potenciale propre identigantajn informojn kiel Interreto Protokolo (IP) adresojn, kiuj estas nepropre identigantaj per si mem sed povus esti uzita kune kun aliaj informoj por propre identigi uzantojn."
 
 #: .\templates\privacy.html.py:17
 msgid "PCF's purpose in collecting this information is to better understand how PCF's visitors use its web sites. To that end, PCF may share potentially-personally identifying information with its employees, contractors, service providers, and subsidiaries and related organizations. PCF may also release its results of such analyses of non-personally identifying information about visitors by publishing a report on web site usage trends. Otherwise, PCF will not publicly release potentially-personally identifying information except under the same circumstances as PCF releases personally identifying information. Those circumstances are explained below."
-msgstr ""
+msgstr "La celo de PCF en la kolekto de ĉi tiuj informoj estas pli bone kompreni kiel PCF-aj vizitantoj uzas siajn retejojn. Tiucele, PCF rajtas interŝanĝi potenciale propre identigantajn informojn kun siaj dungitoj, kontraktistoj, provizantoj de servoj, kaj filioj kaj rilataj organizaĵoj. PCF povas ankaŭ publikigi siajn rezultojn de tiaj analizoj de nepropre identigantaj informoj pri vizitantoj pere de eldonado de raporto pri retejaj uzad-tendencoj. Alie, PCF ne publikigos potenciale propre identigantajn informojn krom sub la samaj cirkonstancoj kiel PCF publikigas propre identigantajn informojn. Tiuj cirkonstancoj estas klarigitaj sube."
 
 #: .\templates\privacy.html.py:21
 msgid "Community Members"
-msgstr ""
+msgstr "Komunumanoj"
 
 #: .\templates\privacy.html.py:23
 msgid "Certain members of the PCF community (contributors, customers, etc.) choose to interact with PCF in ways that require PCF and others to know more about them. The amount and type of information that PCF gathers from those members depends on the nature of the interaction. For example, members who wish to post content to certain portions of PCF's web sites or participate in live chat session(s) are asked to provide usernames that are used to identify content as having been posted by a particular member (who is identified by the username)."
@@ -2023,16 +2032,16 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:22
 msgid "Translations"
-msgstr ""
+msgstr "Tradukoj"
 
 #: .\templates\videos\video_list.html.py:25
 msgid "Subtitled?"
-msgstr ""
+msgstr "Subtekstigita?"
 
 #: .\templates\videos\video_list.html.py:39
 msgid "history"
-msgstr ""
+msgstr "historio"
 
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
-msgstr ""
+msgstr "Estas neniuj videoj."
