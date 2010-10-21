@@ -106,9 +106,9 @@ class BaseRpc:
         for packet in sorted(packets, key=lambda p : p['packet_no']):
             if packet['packet_no'] > sub_collection.last_saved_packet:
                 self._apply_subtitle_changes(
-                    sub_collection, subtitle_set, packets)
+                    sub_collection, subtitle_set, packet)
                 sub_collection.last_saved_packet = packet['packet_no']
-        sub_collection.save()
+                sub_collection.save()
 
     def _apply_subtitle_changes(self, sub_collection, subtitle_set, packet):
         deleted = packet['deleted']

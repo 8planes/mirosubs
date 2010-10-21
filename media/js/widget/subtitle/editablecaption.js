@@ -192,9 +192,11 @@ mirosubs.subtitle.EditableCaption.prototype.changed_ =
             timesFirstAssigned));
 };
 mirosubs.subtitle.EditableCaption.toJsonArray = function(editableCaptions) {
-    return goog.array.map(arr, function(editableCaption) {
-        return editableCaption.json;
-    });
+    return goog.array.map(
+        editableCaptions, 
+        function(editableCaption) {
+            return editableCaption.json;
+        });
 };
 
 /**
