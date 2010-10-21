@@ -141,8 +141,10 @@ mirosubs.Dialog.prototype.onWindowUnload_ = function(event) {
         event.message = "You have unsaved work.";
 };
 mirosubs.Dialog.prototype.setVisible = function(visible) {
-    if (visible)
+    if (visible) {
         mirosubs.Dialog.superClass_.setVisible.call(this, true);
+        goog.dom.getDocumentScrollElement().scrollTop = 0;
+    }
     else {
         if (this.isWorkSaved())
             this.hideDialogImpl_();
