@@ -228,6 +228,36 @@ class TestRpc(TestCase):
         video = Video.objects.get(pk=video.pk)
         self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
 
+    def test_insert_then_update_same_call(self):
+        request = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        video_id = return_value['video_id']
+        rpc.start_editing(request, video_id, 'en', 'en')
+
+        inserted = [{'subtitle_id': u'sfdsfsdf',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        packet_0 = _make_packet(inserted=inserted)
+        updated = [{'subtitle_id': 'sfdsfsdf',
+                    'text': 'hey you!',
+                    'start_time': 2.3,
+                    'end_time': 3.4,
+                    'sub_order': 1.0}]
+        packet_1 = _make_packet(updated=updated, packet_no=2)
+        # including both packets in same call, and in reverse order.
+        rpc.save_subtitles(request, video_id, 
+                           [packet_1, packet_0])
+        rpc.finished_subtitles(request, video_id, [])
+        video = Video.objects.get(video_id=video_id)
+        self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
+        subs = rpc.fetch_subtitles(request, video_id)
+        self.assertEquals('hey you!', subs['subtitles'][0]['text'])
+
     def test_finish(self):
         request = RequestMockup(self.user_0)
         video = self._create_video_with_one_caption_set(request)
