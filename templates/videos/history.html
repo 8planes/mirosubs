@@ -226,6 +226,11 @@
             {% endif %}
             
             {% upload_subtitles video %}
+            
+            <a href="#upload-transcript" class="upload-transcript-button green_button small">
+                {% trans 'Paste a Transcript' %}
+            </a>
+            {% paste_transcription %}            
             <div class="clear">&nbsp;</div>
           </div>
 

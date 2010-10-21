@@ -194,12 +194,12 @@
                 {% trans 'Add Subtitles' %}
             </a>          
           {% endif %}
-           {% upload_subtitles video %}
-          {% comment %}
+          {% upload_subtitles video %}
+
           <a href="#upload-transcript" class="upload-transcript-button green_button small">
-              {% trans 'Upload a Transcript' %}
+              {% trans 'Paste a Transcript' %}
           </a>
-          {% endcomment %}      
+          {% paste_transcription %}
       </div>
       
       <div id="comments-tab" style="display: none">
@@ -264,7 +264,4 @@
         </table>
       </div>      
   </div>  
-    {% comment %}
-        {% include 'videos/_paste_translation.html' %}
-    {% endcomment %}
 {% endblock %}

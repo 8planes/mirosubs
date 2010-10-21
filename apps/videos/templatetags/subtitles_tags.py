@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import template
-from videos.forms import SubtitlesUploadForm
+from videos.forms import SubtitlesUploadForm, PasteTranscriptionForm
 
 register = template.Library()
 
@@ -29,3 +29,12 @@ def upload_subtitles(context, video):
         'user': context['user'],
         'request': context['request']
     }
+
+@register.inclusion_tag('videos/_paste_transcription.html', takes_context=True)    
+def paste_transcription(context):
+    initial = {}
+    if 'language' in context:
+        initial['language'] = context['language'].language
+
+    context['form'] = PasteTranscriptionForm(context['user'], initial=initial)
+    return context

@@ -22,7 +22,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
-from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm
+from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm, PasteTranscriptionForm
 import widget
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -192,6 +192,18 @@ def _api_subtitles_json(request):
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
+    if form.is_valid():
+        language = form.save()
+        output['success'] = True
+        output['next'] = language.get_absolute_url()
+    else:
+        output['errors'] = form.get_errors()
+    return HttpResponse(json.dumps(output), "text/javascript")
+
+@login_required
+def paste_transcription(request):
+    output = dict(success=False)
+    form = PasteTranscriptionForm(request.user, request.POST)
     if form.is_valid():
         language = form.save()
         output['success'] = True

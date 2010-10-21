@@ -23,6 +23,7 @@ urlpatterns = patterns(
     url(r'^$', 'video_list', name='list'),
     url(r'^feedback/$', 'feedback', name='feedback'),
     url(r'^upload_subtitles/$', 'upload_subtitles', name='upload_subtitles'),
+    url(r'^paste_transcription/$', 'paste_transcription', name='paste_transcription'),    
     url(r'^create/$', 'create', name='create'),
     url(r'^site_feedback/$', 'site_feedback', name='site_feedback'),
     url(r'^email_friend/$', 'email_friend', name='email_friend'),

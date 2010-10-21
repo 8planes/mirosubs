@@ -56,6 +56,25 @@ class SubtitleParser(object):
         return self._pattern.finditer(self.subtitles)
     _matches = property(_get_matches)
 
+class TxtSubtitleParser(SubtitleParser):
+    
+    def __init__(self, subtitles, linebreaks='\n\n'):
+        self.subtitles = subtitles.split(linebreaks)
+        
+    def __len__(self):
+        return len(self.subtitles)
+    
+    def __nonzero__(self):
+        return bool(self.subtitles)      
+    
+    def _result_iter(self):
+        for item in self.subtitles:
+            output = {}
+            output['start_time'] = None
+            output['end_time'] = None
+            output['subtitle_text'] = item      
+            yield output  
+
 class YoutubeSubtitleParser(SubtitleParser):
     
     def __init__(self, data):

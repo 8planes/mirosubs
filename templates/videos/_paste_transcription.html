@@ -1,0 +1,144 @@
+{% load i18n %}
+<script type="text/javascript">
+    jQuery(function($){
+        var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
+        
+        $('#upload-transcript-form').ajaxForm({
+            dataType: 'json',
+            success: function(data, status, xhr, $form){
+                if (data.success){
+                    document.location = data.next || LANGUAGE_PAGE_URL;
+                } else {
+                    for (key in data.errors) {
+                        var error = '<p class="error_list">' + data.errors[key] + '</p>';
+                        $form.prepend(error);
+                    }
+                }
+            },
+            beforeSubmit: function(formData, $Form, options) {
+                $('p.error_list', $Form).remove();
+            }
+        });
+        
+        var $textarea = $('.upload-transcript-textarea');
+        
+        var averageWidth = (function(){
+            $textarea.after("<span id='upload-transcript-span'></span>");
+            var $span = $("#upload-transcript-span");
+            $span.hide();
+    
+            $.each(["font-family", "font-size", "text-decoration", "font-style", "font-weight"], function(i, v){
+                $span.css(v, $textarea.css(v));
+            });
+            
+            var chars = "";
+            var masterCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            var counter;            
+            masterCharacters += ".,?!-+;:'\"";
+            for (counter = 1; counter <= 24; counter++)
+                chars += masterCharacters[(Math.floor(Math.random() * masterCharacters.length))];
+                
+            var charLen = chars.length;
+            var totalWidth = 0;
+    
+            $.each(chars, function(i, v){
+                $span.text(v);
+                totalWidth += $span.width();
+            });
+            $span.remove();
+            return Math.ceil(totalWidth / charLen);
+        })();                
+        
+        var missingWidth = ($textarea.outerWidth() - $textarea.width()) * 2;
+        var outerWidth = $textarea.outerWidth();
+
+        var check_line = function(line){
+
+            lineWidth = (line.length * averageWidth) + missingWidth;
+
+            if (lineWidth >= outerWidth){
+                var wrapCount = lineWidth / outerWidth;
+            }else{
+                var wrapCount = 1;
+            }
+            return (wrapCount <= 2);
+        };
+        
+        var $error = $('#upload-transcript .error')
+        $('#upload-transcript .save-button').click(function(){
+            var value = $textarea.val().replace(/\n{2,}/g, '\n\n').replace(/[\n]+$/g, '')
+            $textarea.val(value);
+            var rows = value.split('\n\n');
+            var valid = true
+            for (var i=0, len=rows.length; i<len; i++){
+                if ( ! check_line(rows[i])){
+                    valid = false;
+                    break
+                }
+            }
+
+            if (valid){
+                $error.hide();
+            }else{
+                $error.find('span').html(i+1);
+                $error.show();                
+            }
+            
+            return valid;
+        });
+        
+        $('.upload-transcript-button').nyroModal({
+            //minWidth: 460,
+            minHeight: 500,
+            bgColor: '#fff',
+            cssOpt: {
+                wrapper: {
+                   backgroundColor: '#fff'
+                }                    
+            },
+            endRemove: function(){
+                $('#clippy').show();
+            },
+            processHandler: function(){
+                $('#clippy').hide();
+            }
+        });        
+    });
+</script>
+<div id="upload-transcript" style="display1: none; position: fixed; top: -10000px;">
+    <h3>{% trans 'Upload a Transcript' %}</h3>
+    <div class="padding">
+        {% if user.is_authenticated %}
+        <p style="margin-top: -15px;">
+            {% blocktrans %}
+            You can submit any transcript in plain text format. However, subtitles:<br/>
+            1) must be separated by two line breaks;<br/> 
+            2) should not occupy more than two lines in the box below.
+            {% endblocktrans %}
+        </p>
+        <p style="color: #ff8080; display: none" class="error">
+            {% blocktrans %}
+            Some of your subtitles take up more than two lines and will not display correctly.
+            Please divide them. Error is in <span></span> subtitle.
+            {% endblocktrans %}
+        </p>
+        <form method="post" action="{% url videos:paste_transcription %}" id="upload-transcript-form">
+            {% csrf_token %}
+            <p>
+                <input type="hidden" name="video" value="{{ video.id }}" />
+                <label>{% trans 'Language' %}</label>{{ form.language }}
+            </p> 
+            <p>           
+                <textarea rows="14" cols="48" name="subtitles" class="upload-transcript-textarea"></textarea>
+            </p> 
+            <p>  
+                <button class="save-button">{% trans 'Save' %}</button>
+            </p> 
+        </form>
+        {% else %}
+            <a href="{% url auth:login %}?next={{ request.path_info }}">
+                {% trans 'Login to upload subtitles' %}
+            </a>
+        {% endif %}          
+    </div>
+</div>
