@@ -59,7 +59,10 @@ class SubtitlesUploadForm(forms.Form):
             raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)'))
         try:
             text = subtitles.read()
-            if not self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding'])):
+            encoding = chardet.detect(text)['encoding']
+            if not encoding:
+                raise forms.ValidationError(_(u'Can not detect file encoding'))
+            if not self._get_parser(subtitles.name)(force_unicode(text, encoding)):
                 raise forms.ValidationError(_(u'Incorrect subtitles format'))
         except SubtitleParserError, e:
             raise forms.ValidationError(e)
