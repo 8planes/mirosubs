@@ -228,7 +228,7 @@ class EmailListField(forms.RegexField):
             value = value and value.endswith(',') and value or value+','
         return super(EmailListField, self).clean(value)
     
-class EmailFriendForm(forms.Form):
+class EmailFriendForm(MathCaptchaForm):
     from_email = forms.EmailField(label='From')
     to_emails = EmailListField(label='To')
     subject = forms.CharField()
