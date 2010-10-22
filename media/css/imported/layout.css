@@ -32,6 +32,15 @@
 
 
 
+.mirosubs-videoDiv video,
+.mirosubs-videoDiv video *,
+.mirosubs-videoDiv object,
+.mirosubs-videoDiv embed{
+  display: block;
+  width: 470px ;
+  }
+
+
 
 /*/////////////////////////////////////////////
 
@@ -41,7 +50,6 @@
 
 
 .header{
-  border-bottom: 1px solid #fff;
   min-height: 130px;
   width: 100%;
   }

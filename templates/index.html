@@ -18,7 +18,7 @@
 {% block logo %}<span class="logo">Miro Subs Alpha</span>{% endblock %}
 
 {% block main_content %}
-  <h2 class="centered" style="font-size: 25px;">{% trans 'Subtitle and caption your videos, with help from your viewers' %}</h2>
+  <h2 class="centered">{% trans 'Easily translate and caption your videos, with help from your viewers' %}</h2>
   <div class="grid_6 alpha">
 
   <div class="box">
@@ -39,7 +39,7 @@ Reach an international audience, make your videos accessible, and get more traff
     <a href="#">Mozilla Drumbeat</a> 
  </div>
 
-  <div class="box">
+  <div class="box small_sub">
 
     <form class="small_sub_now" action="{% url videos:create %}" method="POST">
      {% csrf_token %}
@@ -48,7 +48,7 @@ Reach an international audience, make your videos accessible, and get more traff
 
         <input class="field" name="video_url" type="text" value="{% trans 'Enter a video URL' %}" />
       </p> 
-      <button class="green_button big">{% trans 'GO!' %}</button>
+      <button class="green_button big">{% trans 'Go' %}</button>
 
       <span class="small">
           {% trans 'Works with Ogg, WebM, FLV, Youtube, Blip or Dailymotion.' %}  
@@ -62,6 +62,37 @@ Reach an international audience, make your videos accessible, and get more traff
         })
     </script>
 </div>
+
+
+<div class="clear"></div>
+
+
+<div class="callout grid_12 alpha">
+
+<span class="arrow_up"></span>
+
+  <div class="grid_7">
+    <h3>Add Universal Subtitles to every video on your site with one line of code</h3>
+    
+    <textarea class="widg_code"><script></script></textarea>
+    
+    Just copy this code into your site's header or your blog's theme, between the <head> and </head> tags. <a href="#">Learn More</a>
+  </div>
+
+  <div class="grid_3">
+   
+
+    <form>
+      <p><label>Get Updates on our progress</label>
+      <input class="field" type="text" /></p>
+      <button class="green_button big">Go</button>
+      <span>We will not spam you, or sell your info.</span>
+    </form>
+
+  </div>
+
+</div>
+
 
 <a href="{% url get_code_page %}" class="green_button huge none">
     {% trans 'Add this button to every video on your site' %}
