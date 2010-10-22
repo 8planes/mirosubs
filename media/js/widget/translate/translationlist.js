@@ -20,7 +20,7 @@ goog.provide('mirosubs.translate.TranslationList');
 
 /**
  *
- * @param {array<object<string, *>>} subtitles Array of json captions.
+ * @param {array.<object.<string, *>>} subtitles Array of json captions.
  * @param {mirosubs.UnitOfWork} unitOfWork Used to instantiate new EditableTranslations.
  */
 mirosubs.translate.TranslationList = function(subtitles,
