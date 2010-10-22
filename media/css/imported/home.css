@@ -4,10 +4,122 @@
 
 /////////////////////////////////////////////*/
 
+.callout{
+background: #a7c9c4;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius:5px;
+padding-left: 10px;
+position: relative;
+margin-top: 0px;
+}
+
+.callout .arrow_up{
+background: url(../../images/arrow_up.gif) 0px 0px no-repeat;
+position: absolute;
+top: -11px;
+left: 483px;
+width: 23px;
+height: 11px;
+}
+
+
+.callout .grid_7{
+padding: 25px 10px;
+font-size: 11px;
+}
+
+
+.callout h3{
+font-size: 14px;
+text-shadow: none;
+}
+
+
+.callout .grid_3{
+  background: #86aba5;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  height: 140px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius:5px;
+  width: 330px;
+  padding-left: 10px
+  }
+
+.callout .grid_3 span{
+clear: both;
+float: left;
+padding: 0 0 0 20px;
+font-size: 11px;
+margin: 2px 0 0 0;
+color: #fff;
+}
+
+.callout .grid_3 label{
+padding: 17px 0 6px 20px;
+float: left;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+text-shadow: none;
+}
+
+
+.callout .grid_3 input{
+margin: 0 0 0 20px;
+width: 212px;
+float: left;
+padding: 12px 0 8px 10px;
+
+}
+
+
+.callout .grid_3 p{
+width: 200px;
+float: left;
+}
+
+
+.callout .grid_3 button{
+float: right;
+clear: none;
+margin: 54px 20px 0 0;
+}
+
+
+.callout textarea{
+font-size: 12px;
+width: 530px;
+padding: 10px;
+height: 13px;
+-moz-border-radius: 4px;
+-webkit-border-radius: 4px;
+border-radius: 4px;
+display: block;
+
+  text-shadow: 0 1px 0px #fff;
+  
+  border: 3px solid #4e7179;
+
+  
+  -moz-box-shadow: 0 0px 2px #cbeeea, inset 0 0px 2px #fff;
+  -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #fff;
+  box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #fff;
+  
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ecf9fc', endColorstr='#d6e8eb'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#ecf9fc), to(#d6e8eb)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #cde2e5,  #ecf9fc); /* for firefox 3.6+ */
+  margin-bottom: 10px;
+}
+
+
 
 #index .content{
-background: url(../../images/watercolor2.png) center 530px no-repeat;
-
+background: url(../../images/watercolor2.png) center 690px no-repeat;
 }
 
 
@@ -155,7 +267,7 @@ margin: 5px 0 10px;
 
 
 h2.centered{
-font-size: 32px;
+font-size: 28px;
 margin: 0 0 30px;
 padding: 0px;
 text-shadow: #fff 1px 1px 1px;
@@ -197,6 +309,11 @@ border: none !important;
 
 }
 
+.small_sub{
+padding-top: 30px !important;
+padding-bottom: 30px !important;
+
+}
 
 
 .small_sub_now {
@@ -208,7 +325,7 @@ padding: 0px 0 0;
 
 
 .small_sub_now input{
-width: 340px;
+width: 300px;
 padding: 12px 0 8px 10px;
 
 }
@@ -217,6 +334,10 @@ padding: 12px 0 8px 10px;
 
 .small_sub_now label{
 font-weight: bold;
+font-size: 18px;
+margin-bottom: 15px;
+display: block;
+width: 400px;
 }
 
 
@@ -224,7 +345,7 @@ font-weight: bold;
 .small_sub_now button{
 position: absolute;
 right: 0px;
-top: 30px;
+top: 44px;
 -moz-border-radius-top-left: 0 !important;
 }
 
@@ -373,7 +494,8 @@ padding: 20px 30px 20px 30px;
 -moz-border-radius: 5px;  
 -webkit-border-radius: 5px;
 margin:0px 0 25px;
-background: url(../../images/1x1.png);
+  background: url(../../images/1x1.png);
+
 }
 
 

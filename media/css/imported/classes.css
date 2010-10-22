@@ -1,11 +1,7 @@
-
+2
 video, embed, object{
 width: 470px !important;
 }
-
-
-
-
 
 
 
@@ -111,7 +107,7 @@ font-size: 16px;
 
 .points{
   background: url("../../images/points.png") 0 1px no-repeat !important;
-  padding-left: 15px;
+  padding-left: 15px;1
   float: left;
   margin-top: 2px;
   margin-left: 0px;
@@ -270,7 +266,7 @@ font-size: 16px;
 
 /*/////////////////////////////////////////////
 
-~ Middle Wrap
+  ~ Middle Wrap
 
 /////////////////////////////////////////////*/
 
@@ -279,18 +275,14 @@ font-size: 16px;
   
   -moz-border-radius-topleft: 3px;
   -moz-border-radius-topright: 3px;
-  
   -webkit-border-radius-top-left: 3px;
   -webkit-border-radius-top-right: 3px;
-  
   border-radius:5px;
-
+/*
   background: #ecf9fc;
-
+*/
   margin-bottom: 50px;
-  
   min-height: 500px;
-
   -moz-box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
   -webkit-box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
   box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;

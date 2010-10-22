@@ -361,7 +361,7 @@ height: 713px;
 
 
 .mirosubs-modal-widget-content.finished .mirosubs-videoDiv{
-  margin-left: 0px !important;
+  margin: 0px !important;
 }
   
 
@@ -936,9 +936,7 @@ bottom: 47px !important;
 .mirosubs-modal-widget .mirosubs-videoDiv embed{
   width: 440px ;
   display: block;
-  
   }
-
 
 .mirosubs-captioningArea {
   position: relative !important;
