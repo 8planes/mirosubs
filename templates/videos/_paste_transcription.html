@@ -6,6 +6,8 @@
         $('#upload-transcript-form').ajaxForm({
             dataType: 'json',
             success: function(data, status, xhr, $form){
+                $('.save-button', $form).show();
+                $('.save-indicator', $form).hide();                
                 if (data.success){
                     document.location = data.next || LANGUAGE_PAGE_URL;
                 } else {
@@ -17,6 +19,8 @@
             },
             beforeSubmit: function(formData, $Form, options) {
                 $('p.error_list', $Form).remove();
+                $('.save-button', $Form).hide();
+                $('.save-indicator', $Form).show();
             }
         });
         
@@ -133,6 +137,7 @@
             </p> 
             <p>  
                 <button class="save-button">{% trans 'Save' %}</button>
+                <span class="save-indicator" style="display: none">{% trans 'Saving...' %}</span>
             </p> 
         </form>
         {% else %}
