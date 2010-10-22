@@ -17,7 +17,7 @@ function MS_captionListener(event) {
 function captionJSON(startTime, endTime, captionID, subOrder) {
     return {'start_time' : startTime,
 	    'end_time': endTime,
-	    'caption_id': captionID,
+	    'subtitle_id': captionID,
             'sub_order': subOrder};
 }
 function sendEvents(playheadTime) {
