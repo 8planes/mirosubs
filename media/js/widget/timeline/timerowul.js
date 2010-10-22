@@ -1,25 +1,26 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.timeline.TimeRowUL');
 
 /**
- *
+ * @constructor
+ * @extends goog.ui.Component
  * @param {number} spacing Spacing between major ticks, in seconds.
  * @param {number} first time for this timerow ul, in seconds.
  */
@@ -41,7 +42,7 @@ mirosubs.timeline.TimeRowUL.prototype.createDom = function() {
         (mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
          mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
     el.style.left =
-        (this.firstTime_ / this.spacing_ * 
+        (this.firstTime_ / this.spacing_ *
          mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
     this.majorTicks_ = [];
     var i;
@@ -55,27 +56,27 @@ mirosubs.timeline.TimeRowUL.prototype.createDom = function() {
 mirosubs.timeline.TimeRowUL.prototype.enterDocument = function() {
     mirosubs.timeline.TimeRowUL.superClass_.enterDocument.call(this);
     this.getHandler().listen(
-        this.getElement(), 
+        this.getElement(),
         goog.events.EventType.DBLCLICK,
         this.doubleClicked_);
 };
 mirosubs.timeline.TimeRowUL.prototype.doubleClicked_ = function(e) {
     this.dispatchEvent(
         new mirosubs.timeline.TimeRowUL.DoubleClickEvent(
-            this.firstTime_ + e.offsetX * this.spacing_ / 
+            this.firstTime_ + e.offsetX * this.spacing_ /
                 mirosubs.timeline.TimeRowUL.PX_PER_TICK));
 };
 mirosubs.timeline.TimeRowUL.prototype.setFirstTime = function(time) {
     time = Math.max(0, time);
     time = Math.floor(time / this.spacing_) * this.spacing_;
     this.firstTime_ = time;
-    this.lastTime_ = time + this.spacing_ * 
+    this.lastTime_ = time + this.spacing_ *
         mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS;
     var i, seconds;
     for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS; i++) {
         seconds = this.firstTime_ + i * this.spacing_;
         goog.dom.setTextContent(
-            this.majorTicks_[i], 
+            this.majorTicks_[i],
             mirosubs.formatTime(seconds >= 0 ? ('' + seconds) : '', true));
     }
 };
@@ -85,6 +86,10 @@ mirosubs.timeline.TimeRowUL.prototype.getFirstTime = function() {
 mirosubs.timeline.TimeRowUL.prototype.getLastTime = function() {
     return this.lastTime_;
 };
+
+/**
+* @constructor
+*/
 mirosubs.timeline.TimeRowUL.DoubleClickEvent = function(time) {
     this.type = mirosubs.timeline.TimeRowUL.DOUBLECLICK;
     this.time = time;

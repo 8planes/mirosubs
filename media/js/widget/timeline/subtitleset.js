@@ -1,23 +1,27 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.timeline.SubtitleSet');
-
+/**
+* @constructor
+* @param {mirosubs.subtitle.EditableCaptionSet} editableCaptionSet
+* @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
+*/
 mirosubs.timeline.SubtitleSet = function(editableCaptionSet, videoPlayer) {
     goog.events.EventTarget.call(this);
     this.eventHandler_ = new goog.events.EventHandler(this);
@@ -58,7 +62,7 @@ mirosubs.timeline.SubtitleSet.prototype.createSubsToDisplay_ = function() {
     var i;
     for (i = 0; i < this.subsToDisplay_.length - 1; i++)
         this.subsToDisplay_[i].setNextSubtitle(
-            this.subsToDisplay_[i + 1]);    
+            this.subsToDisplay_[i + 1]);
 };
 
 mirosubs.timeline.SubtitleSet.prototype.subsEdited_ = function(e) {
@@ -82,10 +86,10 @@ mirosubs.timeline.SubtitleSet.prototype.deleteCaption_ = function(caption) {
         function(x, sub) { return subOrder - sub.getEditableCaption().getSubOrder(); });
     if (index >= 0) {
         var sub = this.subsToDisplay_[index];
-        var previousSub = index > 0 ? 
+        var previousSub = index > 0 ?
             this.subsToDisplay_[index - 1] : null;
         var nextIsNew = false;
-        var nextSub = index < this.subsToDisplay_.length - 1 ? 
+        var nextSub = index < this.subsToDisplay_.length - 1 ?
             this.subsToDisplay_[index + 1] : null;
         goog.array.removeAt(this.subsToDisplay_, index);
         this.dispatchEvent(new mirosubs.timeline.SubtitleSet.RemoveEvent(sub));
@@ -114,12 +118,12 @@ mirosubs.timeline.SubtitleSet.prototype.insertCaption_ = function(caption) {
     var newSub = new mirosubs.timeline.Subtitle(
         caption, this.videoPlayer_);
     var index = goog.array.binarySearch(
-        this.subsToDisplay_, newSub, 
+        this.subsToDisplay_, newSub,
         mirosubs.timeline.Subtitle.orderCompare);
     var insertionPoint = -index - 1;
-    var previousSub = insertionPoint > 0 ? 
+    var previousSub = insertionPoint > 0 ?
         this.subsToDisplay_[insertionPoint - 1] : null;
-    var nextSub = insertionPoint < this.subsToDisplay_.length ? 
+    var nextSub = insertionPoint < this.subsToDisplay_.length ?
         this.subsToDisplay_[insertionPoint] : null;
     if (previousSub != null)
         previousSub.setNextSubtitle(newSub);
@@ -164,7 +168,7 @@ mirosubs.timeline.SubtitleSet.prototype.getEditableCaptionSet = function() {
 };
 
 mirosubs.timeline.SubtitleSet.prototype.disposeSubsToDisplay_ = function() {
-    goog.array.forEach(this.subsToDisplay_, function(s) { s.dispose(); });    
+    goog.array.forEach(this.subsToDisplay_, function(s) { s.dispose(); });
 };
 
 mirosubs.timeline.SubtitleSet.prototype.disposeInternal = function() {
@@ -173,11 +177,19 @@ mirosubs.timeline.SubtitleSet.prototype.disposeInternal = function() {
     this.disposeSubsToDisplay_();
 };
 
+/**
+* @constructor
+*
+*/
 mirosubs.timeline.SubtitleSet.DisplayNewEvent = function(subtitle) {
     this.type = mirosubs.timeline.SubtitleSet.DISPLAY_NEW;
     this.subtitle = subtitle;
 };
 
+/**
+* @constructor
+*
+*/
 mirosubs.timeline.SubtitleSet.RemoveEvent = function(subtitle) {
     this.type = mirosubs.timeline.SubtitleSet.REMOVE;
     this.subtitle = subtitle;

@@ -17,7 +17,10 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.timeline.TimeRow');
-
+/**
+* @constructor
+* @extends goog.ui.Component
+*/
 mirosubs.timeline.TimeRow = function(timelineInner, spacing) {
     goog.ui.Component.call(this);
     this.timelineInner_ = timelineInner;
