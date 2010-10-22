@@ -47,6 +47,8 @@ class Rpc(BaseRpc):
                      "locked_by" : language.writelock_owner_name }
         version = self._get_version_for_editing(
             request.user, language, base_version_no, fork)
+        version.last_saved_packet = 0
+        version.save()
         subtitles = self._subtitles_dict(version)
         return_dict = { "can_edit" : True,
                         "subtitles" : subtitles }
@@ -74,7 +76,7 @@ class Rpc(BaseRpc):
             language.save()
         return { "response": "ok" }
 
-    def save_subtitles(self, request, video_id, deleted, inserted, updated, language_code=None):
+    def save_subtitles(self, request, video_id, packets, language_code=None):
         if not request.user.is_authenticated():
             return { "response" : "not_logged_in" }
 
@@ -83,29 +85,33 @@ class Rpc(BaseRpc):
         if not language.can_writelock(request):
             return { "response" : "unlockable" }
         language.writelock(request)
-        self._save_subtitles_impl(request, language, deleted, inserted, updated)
-        return {"response" : "ok"}
+        subtitle_version = language.latest_version()
+        self._save_packets(subtitle_version, packets)
+        return {"response" : "ok", 
+                "last_saved_packet": subtitle_version.last_saved_packet}
 
-    def finished_subtitles(self, request, video_id, deleted, inserted, 
-                           updated, language_code=None):
+    def finished_subtitles(self, request, video_id, packets, language_code=None):
+        if not request.user.is_authenticated():
+            return { 'response': 'not_logged_in' }
+
         from videos.models import Action
         
         video = models.Video.objects.get(video_id=video_id)
         language = video.subtitle_language(language_code)
         if not language.can_writelock(request):
             return { "response" : "unlockable" }
-        self._save_subtitles_impl(
-            request, language, deleted, inserted, updated)
         last_version = language.latest_version()
+        self._save_packets(last_version, packets)
         last_version.finished = True
         last_version.user = request.user
         last_version.save()
         language = models.SubtitleLanguage.objects.get(pk=language.pk)
         language.release_writelock()
         language.save()
-        
+
         Action.create_caption_handler(last_version)
         return { "response" : "ok",
+                 "last_saved_packet": last_version.last_saved_packet,
                  "drop_down_contents" : 
                      self._drop_down_contents(request.user, video) }
 

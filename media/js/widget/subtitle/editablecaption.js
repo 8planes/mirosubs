@@ -191,6 +191,17 @@ mirosubs.subtitle.EditableCaption.prototype.changed_ =
         new mirosubs.subtitle.EditableCaption.ChangeEvent(
             timesFirstAssigned));
 };
+mirosubs.subtitle.EditableCaption.toJsonArray = function(editableCaptions) {
+    return goog.array.map(
+        editableCaptions, 
+        function(editableCaption) {
+            return editableCaption.json;
+        });
+};
+
+/**
+ * @constructor
+ */
 mirosubs.subtitle.EditableCaption.ChangeEvent = function(timesFirstAssigned) {
     this.type = mirosubs.subtitle.EditableCaption.CHANGE;
     this.timesFirstAssigned = timesFirstAssigned;

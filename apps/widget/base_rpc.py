@@ -101,8 +101,21 @@ class BaseRpc:
         if VIDEO_SESSION_KEY not in request.session:
             request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
 
-    def _apply_subtitle_changes(self, sub_collection, deleted, inserted, updated):
-        subtitle_set = sub_collection.subtitle_set
+    def _save_packets(self, sub_collection, packets):
+        subtitle_set = sub_collection.subtitle_set        
+        for packet in sorted(packets, key=lambda p : p['packet_no']):
+            if packet['packet_no'] > sub_collection.last_saved_packet:
+                self._apply_subtitle_changes(
+                    sub_collection, subtitle_set, packet)
+                sub_collection.last_saved_packet = packet['packet_no']
+                sub_collection.save()
+
+    def _apply_subtitle_changes(self, sub_collection, subtitle_set, packet):
+        deleted = packet['deleted']
+        updated = packet['updated']
+        inserted = packet['inserted']
+        if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
+            return
         for d in deleted:
             subtitle_set.remove(subtitle_set.get(subtitle_id=d['subtitle_id']))
         for u in updated:

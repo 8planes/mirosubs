@@ -39,6 +39,8 @@ mirosubs.subtitle.MSServerModel = function(videoID, videoURL, language) {
     this.language_ = language;
     this.initialized_ = false;
     this.finished_ = false;
+    this.unsavedPackets_ = [];
+    this.packetNo_ = 1;
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
@@ -129,6 +131,7 @@ mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
     // TODO: at some point in future, account for possibly failed save.
     var $e = goog.json.serialize;
     var saveArgs = this.makeSaveArgs_();
+    var that = this;
     mirosubs.Rpc.call(
         'save_subtitles',
         saveArgs, 
@@ -137,23 +140,37 @@ mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
                 // this should never happen.
                 alert('Problem saving subtitles. Response: ' + 
                       result['response']);
+            else
+                that.registerSavedPackets_(result['last_saved_packet']);
         });
+};
+
+mirosubs.subtitle.MSServerModel.prototype.registerSavedPackets_ = 
+    function(lastSavedPacketNo) 
+{
+    var saved = goog.array.filter(
+        this.unsavedPackets_,
+        function(p) { return p['packet_no'] <= lastSavedPacketNo; });
+    for (var i = 0; i < saved.length; i++)
+        goog.array.remove(this.unsavedPackets_, saved[i]);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
     var work = this.unitOfWork_.getWork();
     this.unitOfWork_.clear();
-    var toJsonCaptions = function(arr) {
-        return goog.array.map(arr, function(editableCaption) {
-                return editableCaption.json;
-            });
+    var toJson = mirosubs.subtitle.EditableCaption.toJsonArray;
+    var packet = {
+        'packet_no': this.packetNo_,
+        'deleted': toJson(work.deleted),
+        'inserted': toJson(work.neu),
+        'updated': toJson(work.updated)
     };
+    this.packetNo_++;
+    this.unsavedPackets_.push(packet);
     return {
         'video_id': this.videoID_,
         'language_code': this.language_,
-        'deleted': toJsonCaptions(work.deleted),
-        'inserted': toJsonCaptions(work.neu),
-        'updated': toJsonCaptions(work.updated)
+        'packets': this.unsavedPackets_
     };
 };
 
