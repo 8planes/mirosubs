@@ -17,7 +17,10 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.ReviewPanel');
-
+/**
+* @constructor
+* @extends mirosubs.subtitle.SyncPanel
+*/
 mirosubs.subtitle.ReviewPanel = function(subtitles, videoPlayer,
                                          serverModel, captionManager) {
     mirosubs.subtitle.SyncPanel.call(this, subtitles, videoPlayer,
@@ -33,11 +36,11 @@ mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal =
     var helpContents = new mirosubs.RightPanel.HelpContents(
         "Review and make corrections",
         null, 3, 2);
-    helpContents.html = 
+    helpContents.html =
         "<p>Watch the video one more time and correct any mistakes in text or timing. Tips for making high quality subtitles:</p>" +
         "<ul>" +
         "<li>Include text that appears in the video (signs, etc.)</li>" +
-        "<li>Include important sounds in [brackets]</li>" +  
+        "<li>Include important sounds in [brackets]</li>" +
         "<li>It's best to split subtitles at the end of a sentence or a long phrase.</li>" +
         "</ul>";
     return new mirosubs.subtitle.ReviewRightPanel(

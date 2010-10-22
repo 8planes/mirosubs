@@ -17,7 +17,10 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.TranscribeEntry');
-
+/**
+* @constructor
+* @extends goog.ui.Component
+*/
 mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
@@ -141,8 +144,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.playStopTimerTick_ = function() {
     this.videoPlayer_.pause();
 };
 /**
- * 
- * @param {mirosubs.subtitle.TranscribePanel.PlayMode} mode 
+ *
+ * @param {mirosubs.subtitle.TranscribePanel.PlayMode} mode
  */
 mirosubs.subtitle.TranscribeEntry.prototype.setPlayMode = function(mode) {
     mirosubs.subtitle.TranscribeEntry.logger_.info("mode set to " + mode);
@@ -168,8 +171,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.addNewTitle_ = function() {
     this.dispatchEvent(new mirosubs.subtitle.TranscribeEntry
                        .NewTitleEvent(value));
 };
-mirosubs.subtitle.TranscribeEntry.prototype.issueLengthWarning_ = 
-    function(breakable) 
+mirosubs.subtitle.TranscribeEntry.prototype.issueLengthWarning_ =
+    function(breakable)
 {
     var MAX_CHARS = 100;
     var length = this.labelInput_.getValue().length;
@@ -194,8 +197,8 @@ mirosubs.subtitle.TranscribeEntry.prototype.hex_ = function(num) {
     return goog.math.clamp(Math.floor(num), 0, 15).toString(16);
 };
 
-mirosubs.subtitle.TranscribeEntry.prototype.insertsBreakableChar_ = 
-    function(key) 
+mirosubs.subtitle.TranscribeEntry.prototype.insertsBreakableChar_ =
+    function(key)
 {
     return key == goog.events.KeyCodes.SPACE;
 };
@@ -209,6 +212,9 @@ mirosubs.subtitle.TranscribeEntry.prototype.disposeInternal = function() {
 
 mirosubs.subtitle.TranscribeEntry.NEWTITLE = 'newtitle';
 
+/**
+* @constructor
+*/
 mirosubs.subtitle.TranscribeEntry.NewTitleEvent = function(title) {
     this.type = mirosubs.subtitle.TranscribeEntry.NEWTITLE;
     this.title = title;

@@ -1,28 +1,30 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.RightPanel');
 
 /**
+ * @constructor
+ * @extends goog.ui.Component
  *
  * @param {mirosubs.ServerModel} serverModel
  * @param {mirosubs.RightPanel.HelpContents} helpContents
- * @param {Array.<string>} extraHelp paragraphs to display in extra bubble. 
+ * @param {Array.<string>} extraHelp paragraphs to display in extra bubble.
  *     0-length array will not display bubble.
  * @param {Array.<mirosubs.RightPanel.KeySpec>} legendKeySpecs
  * @param {boolean} showRestart
@@ -138,7 +140,7 @@ mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
     this.appendLegendClearInternal($d, legendDiv);
 };
 mirosubs.RightPanel.prototype.findSpec_ = function(keyCode, modifiers) {
-    return goog.array.find(this.legendKeySpecs_, 
+    return goog.array.find(this.legendKeySpecs_,
                            function(s) { return s.keyCode == keyCode && s.modifiers == modifiers; });
 };
 mirosubs.RightPanel.prototype.setKeyDown = function(keyCode, modifiers, active) {
@@ -182,10 +184,10 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
         spec.div = key;
         spec.textSpan = textSpan;
         this.getHandler().listen(
-            key, et.CLICK, goog.bind(this.legendKeyClicked_, 
+            key, et.CLICK, goog.bind(this.legendKeyClicked_,
                                      this, spec.keyCode, spec.modifiers));
         this.getHandler().listen(
-            key, et.MOUSEDOWN, goog.bind(this.legendKeyMousedown_, 
+            key, et.MOUSEDOWN, goog.bind(this.legendKeyMousedown_,
                                          this, spec.keyCode, spec.modifiers));
         var mouseupFn = goog.bind(this.legendKeyMouseup_, this, spec.keyCode, spec.modifiers);
         this.getHandler().listen(key, et.MOUSEUP, mouseupFn);
@@ -193,14 +195,14 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
     }
 };
 mirosubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv) {
-    legendDiv.appendChild($d('div', 'mirosubs-clear'));    
+    legendDiv.appendChild($d('div', 'mirosubs-clear'));
 };
 mirosubs.RightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
     // dear subclasses, override me if you want. love, rightpanel.
 };
 mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.loginDiv_ = $d('div');
-    this.loadingGif_ = $d('img', 
+    this.loadingGif_ = $d('img',
                           {'src': mirosubs.imageAssetURL('spinner.gif') });
     this.showLoading(false);
     this.doneAnchor_ = $d('a', {'className':'mirosubs-done', 'href':'#'},
@@ -211,16 +213,16 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
                              goog.dom.createTextNode(this.doneText_)));
     var stepsDiv = $d('div', 'mirosubs-steps', this.loginDiv_);
 
-    this.backAnchor_ = 
-        $d('a', {'className':'mirosubs-backTo mirosubs-greybutton', 'href':'#'}, 
+    this.backAnchor_ =
+        $d('a', {'className':'mirosubs-backTo mirosubs-greybutton', 'href':'#'},
            'Return to Typing');
     this.getHandler().listen(this.backAnchor_, 'click', this.backClickedInternal);
     this.backAnchor_.style.display = 'none';
     stepsDiv.appendChild(this.backAnchor_);
 
     if (this.showRestart_) {
-        var restartAnchor = 
-            $d('a', {'className': 'mirosubs-restart','href':'#'}, 
+        var restartAnchor =
+            $d('a', {'className': 'mirosubs-restart','href':'#'},
                'Restart this Step');
         this.getHandler().listen(
             restartAnchor, 'click', this.restartClicked_);
@@ -228,7 +230,7 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     }
 
     stepsDiv.appendChild(this.doneAnchor_);
-    
+
     el.appendChild(stepsDiv);
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
     this.updateLoginState();
@@ -300,9 +302,11 @@ mirosubs.RightPanel.HelpContents = function(header, paragraphs, opt_numSteps, op
     // set html to override paragraphs with custom html.
     this.html = null;
 };
-
-mirosubs.RightPanel.KeySpec = function(divClass, spanClass, 
-                                       keyText, legendText, 
+/**
+* @constructor
+*/
+mirosubs.RightPanel.KeySpec = function(divClass, spanClass,
+                                       keyText, legendText,
                                        keyCode, modifiers) {
     this.divClass = divClass;
     this.spanClass = spanClass;
@@ -318,12 +322,18 @@ mirosubs.RightPanel.KeySpec.Modifier = {
     CTRL: 4
 };
 
+/**
+* @constructor
+*/
 mirosubs.RightPanel.LegendKeyEvent = function(keyCode, modifiers, eventType) {
     this.type = mirosubs.RightPanel.EventType.LEGENDKEY;
     this.keyCode = keyCode;
     this.modifiers = modifiers;
     this.keyEventType = eventType;
 };
+/**
+* @constructor
+*/
 mirosubs.RightPanel.GoToStepEvent = function(stepNo) {
     this.type = mirosubs.RightPanel.EventType.GOTOSTEP;
     this.stepNo = stepNo;

@@ -17,10 +17,13 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.AddSubtitleWidget');
-
+/**
+* @constructor
+* @extends goog.ui.Component
+*/
 mirosubs.subtitle.AddSubtitleWidget = function() {
     goog.ui.Component.call(this);
-    
+
 };
 goog.inherits(mirosubs.subtitle.AddSubtitleWidget, goog.ui.Component);
 
@@ -28,10 +31,10 @@ mirosubs.subtitle.AddSubtitleWidget.ADD = 'addsub';
 
 mirosubs.subtitle.AddSubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.addSubLink_ = 
+    this.addSubLink_ =
         $d('a',
-           {'href':'#', 
-            'className':'mirosubs-append-sub-link'}, 
+           {'href':'#',
+            'className':'mirosubs-append-sub-link'},
            'Add subtitle');
     this.setElementInternal($d('li', null, this.addSubLink_));
     this.getElement().className = 'mirosubs-append-sub-button';

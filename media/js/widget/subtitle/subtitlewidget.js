@@ -19,15 +19,17 @@
 goog.provide('mirosubs.subtitle.SubtitleWidget');
 
 /**
+ * @constructor
+ * @extends goog.ui.Component
  *
  * @param {mirosubs.subtitle.EditableCaption} subtitle
  * @param {mirosubs.subtitle.EditableCaptionSet} subtitleSet
- * 
+ *
  *
  */
-mirosubs.subtitle.SubtitleWidget = function(subtitle, 
-                                            subtitleSet, 
-                                            editingFn, 
+mirosubs.subtitle.SubtitleWidget = function(subtitle,
+                                            subtitleSet,
+                                            editingFn,
                                             displayTimes) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
@@ -147,7 +149,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.mouseOverOut_ = function(e) {
         this.showInsertDeleteButtons_(false);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.showInsertDeleteButtons_ =
-    function(show) 
+    function(show)
 {
     if (show == this.insertDeleteButtonsShowing_)
         return;
@@ -189,7 +191,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToEditMode = function() {
     this.getHandler().listen(this.keyHandler_,
                              goog.events.KeyHandler.EventType.KEY,
                              this.handleKey_, false, this);
-    
+
 };
 mirosubs.subtitle.SubtitleWidget.prototype.handleKey_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.ENTER) {

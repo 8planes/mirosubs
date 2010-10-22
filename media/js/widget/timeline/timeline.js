@@ -21,6 +21,8 @@ goog.require('goog.fx.Dragger');
 goog.require('goog.style.cursor');
 
 /**
+ * @constructor
+ * @extends goog.ui.Component
  *
  * @param {number} spacing The space, in seconds, between two
  *     major ticks.
@@ -104,7 +106,7 @@ mirosubs.timeline.Timeline.prototype.ensureWidth_ = function() {
 mirosubs.timeline.Timeline.prototype.setTime_ = function(time) {
     this.ensureWidth_();
     this.timelineInner_.setTime(
-        time, this.width_ / 2, 
+        time, this.width_ / 2,
         this.videoPlayer_.getDuration());
 };
 mirosubs.timeline.Timeline.prototype.getTime_ = function() {

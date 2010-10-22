@@ -17,7 +17,10 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.controls.ProgressSlider');
-
+/**
+* @constructor
+* @extends mirosubs.SliderBase
+*/
 mirosubs.controls.ProgressSlider = function(opt_domHelper) {
     mirosubs.SliderBase.call(this, opt_domHelper);
     this.setClickToMove(false);
@@ -40,7 +43,7 @@ mirosubs.controls.ProgressSlider.prototype.getCssClass = function(orient) {
 mirosubs.controls.ProgressSlider.prototype.createThumb = function() {
     var element = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var thumb = 
+    var thumb =
         $d('div', mirosubs.controls.ProgressSlider.THUMB_CSS_CLASS,
            $d('span'));
     goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
