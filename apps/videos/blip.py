@@ -51,7 +51,7 @@ def _best_by_height(media_contents, type_fn):
         if type_fn(content) and height_is_best:
             best = content
             best_height = height
-    return best.getAttribute('url')
+    return best and best.getAttribute('url')
 
 def _is_mp4(media_content):
     return media_content.getAttribute('type') in ['video/x-m4v', 'video/mp4']
