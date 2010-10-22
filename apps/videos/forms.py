@@ -34,6 +34,7 @@ from math_captcha.forms import MathCaptchaForm
 from vidscraper.sites import blip, google_video, ustream, vimeo
 from dailymotion import DAILYMOTION_REGEX
 from django.utils.safestring import mark_safe
+from django.db.models import ObjectDoesNotExist
 
 class SubtitlesUploadBaseForm(forms.Form):
     language = forms.ChoiceField(choices=settings.ALL_LANGUAGES, initial='en')
@@ -53,6 +54,7 @@ class SubtitlesUploadBaseForm(forms.Form):
         video = self.cleaned_data['video']
         
         key = str(uuid4()).replace('-', '')
+
         video._make_writelock(self.user, key)
         video.save()
         
@@ -63,12 +65,11 @@ class SubtitlesUploadBaseForm(forms.Form):
         
         language.language = self.cleaned_data['language']
         language.save()
-            
-        latest_captions = language.latest_version()
-        if latest_captions is None:
+        
+        try:    
+            version_no = language.subtitleversion_set.all()[:1].get().version_no + 1
+        except ObjectDoesNotExist:
             version_no = 0
-        else:
-            version_no = latest_captions.version_no + 1
             
         version = SubtitleVersion(
             language=language, version_no=version_no,
