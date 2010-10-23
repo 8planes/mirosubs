@@ -1,23 +1,26 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.controls.ProgressBar');
-
+/**
+* @constructor
+* @extends goog.ui.Component
+*/
 mirosubs.controls.ProgressBar = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
@@ -45,7 +48,7 @@ mirosubs.controls.ProgressBar.prototype.enterDocument = function() {
         listen(
             this.videoPlayer_, et.TIMEUPDATE, this.videoTimeUpdate_).
         listen(
-            this.progressSlider_, 
+            this.progressSlider_,
             goog.ui.Component.EventType.CHANGE,
             this.progressSliderUpdate_).
         listen(
@@ -54,8 +57,8 @@ mirosubs.controls.ProgressBar.prototype.enterDocument = function() {
             this.progressSliderInteracting_);
 };
 
-mirosubs.controls.ProgressBar.prototype.progressSliderInteracting_ = 
-    function(event) 
+mirosubs.controls.ProgressBar.prototype.progressSliderInteracting_ =
+    function(event)
 {
     var et = mirosubs.SliderBase.EventType;
     if (event.type == et.START) {
@@ -68,20 +71,20 @@ mirosubs.controls.ProgressBar.prototype.progressSliderInteracting_ =
         this.setVideoPlayheadTime_(event.value);
 };
 
-mirosubs.controls.ProgressBar.prototype.progressSliderUpdate_ = 
-    function(event) 
+mirosubs.controls.ProgressBar.prototype.progressSliderUpdate_ =
+    function(event)
 {
     this.setVideoPlayheadTime_(this.progressSlider_.getValue());
     this.updatePlayedBar_(this.progressSlider_.getValue() / 100);
 };
 
-mirosubs.controls.ProgressBar.prototype.setVideoPlayheadTime_ = 
-    function(progValue) 
+mirosubs.controls.ProgressBar.prototype.setVideoPlayheadTime_ =
+    function(progValue)
 {
     if (!this.hasDuration_())
         return;
     this.videoPlayer_.setPlayheadTime(
-        this.videoDuration_ * progValue / 100);    
+        this.videoDuration_ * progValue / 100);
 };
 
 mirosubs.controls.ProgressBar.prototype.videoTimeUpdate_ = function(event) {
@@ -89,7 +92,7 @@ mirosubs.controls.ProgressBar.prototype.videoTimeUpdate_ = function(event) {
         return;
     if (!this.progressSlider_.isCurrentlyInteracting()) {
         this.progressSlider_.setValue(
-            100 * this.videoPlayer_.getPlayheadTime() / this.videoDuration_, 
+            100 * this.videoPlayer_.getPlayheadTime() / this.videoDuration_,
             true);
         this.updatePlayedBar_(
             this.videoPlayer_.getPlayheadTime() / this.videoDuration_);
@@ -109,7 +112,7 @@ mirosubs.controls.ProgressBar.prototype.updatePlayedBar_ = function(ratio) {
         this.barWidth_ = barSize.width;
     }
     if (this.barWidth_) {
-        this.played_.getElement().style.width = 
+        this.played_.getElement().style.width =
             (this.barWidth_ * ratio) + 'px';
     }
 };

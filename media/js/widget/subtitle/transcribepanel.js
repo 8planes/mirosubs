@@ -1,28 +1,31 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.TranscribePanel');
 
 /**
+ * @constructor
+ * @extends goog.ui.Component
+ *
  * @param {mirosubs.subtitle.EditableCaptionSet} captions
- * @param {mirosubs.VideoPlayer} videoPlayer Used to update subtitle 
+ * @param {mirosubs.VideoPlayer} videoPlayer Used to update subtitle
  *     preview on top of the video
- * @param {mirosubs.ServerModel} serverModel Used to create RightPanel, which 
+ * @param {mirosubs.ServerModel} serverModel Used to create RightPanel, which
  *     needs access to server to login.
  */
 mirosubs.subtitle.TranscribePanel = function(captionSet, videoPlayer, serverModel) {
@@ -77,8 +80,8 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
 mirosubs.subtitle.TranscribePanel.prototype.suspendKeyEvents = function(suspended) {
     this.keyEventsSuspended_ = suspended;
 };
-mirosubs.subtitle.TranscribePanel.prototype.getRightPanel = 
-    function(serverModel) 
+mirosubs.subtitle.TranscribePanel.prototype.getRightPanel =
+    function(serverModel)
 {
     if (!this.rightPanel_) {
         this.rightPanel_ = this.createRightPanel_();
@@ -97,18 +100,18 @@ mirosubs.subtitle.TranscribePanel.prototype.listenToRightPanel_ = function() {
             mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED,
             function(event) {
                 that.setPlayMode(event.mode);
-            });        
+            });
     }
 };
 mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
     var helpContents = new mirosubs.RightPanel.HelpContents(
         "Typing",
-        [["Thanks for making subtitles!! It's easy to learn ", 
+        [["Thanks for making subtitles!! It's easy to learn ",
           "and actually fun to do."].join(''),
          ["While you watch the video, type everything people ",
           "say and all important text that appears ",
           "on-screen."].join(''),
-         ["Use the key controls below to pause and jump back, ", 
+         ["Use the key controls below to pause and jump back, ",
           "which will help you keep up."].join('')],
          3, 0);
     var extraHelp = [
@@ -121,12 +124,12 @@ mirosubs.subtitle.TranscribePanel.prototype.createRightPanel_ = function() {
         new mirosubs.RightPanel.KeySpec(
             'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB, 0),
         new mirosubs.RightPanel.KeySpec(
-            'mirosubs-skip', 'mirosubs-control', 'shift\n+\ntab', 
+            'mirosubs-skip', 'mirosubs-control', 'shift\n+\ntab',
             'Skip Back 8 Seconds', KC.TAB,
             mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
     ];
     return new mirosubs.subtitle.TranscribeRightPanel(
-        this.serverModel_, helpContents, extraHelp, keySpecs, 
+        this.serverModel_, helpContents, extraHelp, keySpecs,
         true, "Done?", "Next Step: Syncing");
 };
 mirosubs.subtitle.TranscribePanel.prototype.enterDocument = function() {

@@ -19,7 +19,7 @@
 goog.provide('mirosubs.CaptionManager');
 
 /**
- * Constructor.
+ * @constructor
  *
  * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
  * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
@@ -184,6 +184,9 @@ mirosubs.CaptionManager.prototype.disableCaptionEvents = function(disabled) {
     this.eventsDisabled_ = disabled;
 };
 
+/**
+* @constructor
+*/
 mirosubs.CaptionManager.CaptionEvent = function(editableCaption) {
     this.type = mirosubs.CaptionManager.CAPTION;
     this.caption = editableCaption;

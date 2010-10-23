@@ -1,24 +1,27 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.UnitOfWork');
 goog.provide('mirosubs.UnitOfWork.EventType');
-
+/**
+* @constructor
+* @extends goog.events.EventTarget
+*/
 mirosubs.UnitOfWork = function() {
     goog.events.EventTarget.call(this);
     this.instantiateLists_();
@@ -49,7 +52,7 @@ mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
 mirosubs.UnitOfWork.prototype.registerUpdated = function(obj) {
     if (goog.array.contains(this.deleted, obj))
         throw new "registerUpdated failed";
-    if (!goog.array.contains(this.neu, obj) && 
+    if (!goog.array.contains(this.neu, obj) &&
         !goog.array.contains(this.updated, obj)) {
         this.everContainedWork_ = true;
         this.updated.push(obj);
@@ -74,8 +77,8 @@ mirosubs.UnitOfWork.prototype.everContainedWork = function() {
 };
 
 mirosubs.UnitOfWork.prototype.containsWork = function() {
-    return this.updated.length > 0 || 
-        this.deleted.length > 0 || 
+    return this.updated.length > 0 ||
+        this.deleted.length > 0 ||
         this.neu.length > 0;
 };
 
@@ -91,6 +94,6 @@ mirosubs.UnitOfWork.prototype.getWork = function() {
     return {
         neu: goog.array.clone(this.neu),
         updated: goog.array.clone(this.updated),
-        deleted: goog.array.clone(this.deleted) 
+        deleted: goog.array.clone(this.deleted)
     };
 };

@@ -20,6 +20,8 @@ goog.provide('mirosubs.timeline.TimelineInner');
 
 
 /**
+ * @constructor
+ * @extends goog.ui.Component
  *
  * @param {Timeline} timeline The timeline containing this object.
  * @param {number} spacing The space, in seconds, between two

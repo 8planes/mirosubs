@@ -1,29 +1,31 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.Spinner');
 
 /**
- * 
+ * @constructor
+ * @extends goog.ui.Component
+ *
  * @param {number} value
- * @param {function():number} minFn A function that returns the 
+ * @param {function():number} minFn A function that returns the
  *     min value for this spinner.
- * @param {function():number} maxFn A function that returns the 
+ * @param {function():number} maxFn A function that returns the
  *     max value for this spinner.
  * @param {function(number):string} valueExpression
  */
@@ -55,7 +57,7 @@ mirosubs.Spinner.EventType = {
      */
     ARROW_PRESSED: "arrowPressed",
     /**
-     * Dispatched when arrow button is let go of, either by 
+     * Dispatched when arrow button is let go of, either by
      * mouseup or mouseout
      */
     VALUE_CHANGED: "valueChanged"
@@ -64,9 +66,9 @@ mirosubs.Spinner.INITIAL_SPEED = 4;
 mirosubs.Spinner.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.valueSpan_ = $d('span', 'mirosubs-timestamp-time');
-    this.upAnchor_ = 
+    this.upAnchor_ =
         $d('a', {'className': 'mirosubs-up', 'href':'#'}, "Up");
-    this.downAnchor_ = 
+    this.downAnchor_ =
         $d('a', {'className': 'mirosubs-down', 'href':'#'}, "Down");
     this.setElementInternal(
         $d('span', null,
@@ -92,7 +94,7 @@ mirosubs.Spinner.prototype.addAnchorEventHandlers_ = function(elem) {
         listen(elem, et.MOUSEOUT, this.mouseOut_);
 };
 mirosubs.Spinner.prototype.updateText_ = function() {
-    goog.dom.setTextContent(this.valueSpan_, 
+    goog.dom.setTextContent(this.valueSpan_,
                             this.valueExpression_(this.value_));
 };
 mirosubs.Spinner.prototype.cancelTimer_ = function() {
@@ -139,7 +141,7 @@ mirosubs.Spinner.prototype.mouseUp_ = function(event) {
 };
 mirosubs.Spinner.prototype.mouseOut_ = function(event) {
     if (this.activated_)
-        this.cancelTimer_();    
+        this.cancelTimer_();
 };
 mirosubs.Spinner.prototype.setValue = function(value) {
     this.value_ = value;
@@ -166,6 +168,9 @@ mirosubs.Spinner.prototype.disposeInternal = function() {
     this.timer_.dispose();
     this.valueExpression_ = null;
 };
+/**
+* @constructor
+*/
 mirosubs.Spinner.ValueChangedEvent = function(value) {
     this.type = mirosubs.Spinner.EventType.VALUE_CHANGED;
     this.value = value;

@@ -1,23 +1,26 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.timeline.TimelineSubs');
-
+/**
+* @constructor
+* @extends goog.ui.Component
+*/
 mirosubs.timeline.TimelineSubs = function(subtitleSet, pixelsPerSecond) {
     goog.ui.Component.call(this);
     this.subtitleSet_ = subtitleSet;
@@ -41,7 +44,7 @@ mirosubs.timeline.TimelineSubs.prototype.enterDocument = function() {
     var ss = mirosubs.timeline.SubtitleSet;
     this.getHandler().
         listen(
-            this.subtitleSet_, 
+            this.subtitleSet_,
             ss.DISPLAY_NEW,
             this.displayNewListener_).
         listen(
@@ -50,8 +53,8 @@ mirosubs.timeline.TimelineSubs.prototype.enterDocument = function() {
             this.removeListener_);
     // TODO: listen to CLEAR_ALL also (after you write it and unit test :))
 };
-mirosubs.timeline.TimelineSubs.prototype.displayNewListener_ = 
-    function(event) 
+mirosubs.timeline.TimelineSubs.prototype.displayNewListener_ =
+    function(event)
 {
     this.addSub_(event.subtitle);
 };

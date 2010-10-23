@@ -89,7 +89,7 @@
                 $('p.error_list', $Form).remove();
                 var form = $Form[0];
                 if (!form.message.value){
-                    $(form.message).before('<dp class="error_list">'+ERROR_MSG+'</p>');
+                    $(form.message).before('<p class="error_list">'+ERROR_MSG+'</p>');
                     return false;
                 }
             }

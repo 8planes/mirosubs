@@ -17,7 +17,10 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.controls.VolumeSlider');
-
+/**
+* @constructor
+* @extends mirosubs.SliderBase
+*/
 mirosubs.controls.VolumeSlider = function(opt_domHelper) {
     mirosubs.SliderBase.call(this, opt_domHelper);
     this.setOrientation(mirosubs.SliderBase.Orientation.VERTICAL);

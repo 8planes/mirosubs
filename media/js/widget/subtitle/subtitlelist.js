@@ -17,8 +17,10 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.subtitle.SubtitleList');
-
-/**
+ /**
+ * @constructor
+ * @extends goog.ui.Component
+ *
  * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
  */
 mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
@@ -37,7 +39,7 @@ mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
     this.showingBeginMessage_ = false;
     /**
      * The last subtitle displayed.
-     * @type {?mirosubs.subtitle.SubtitleWidget} 
+     * @type {?mirosubs.subtitle.SubtitleWidget}
      */
     this.lastSub_ = null;
     this.lastSubMouseHandler_ = new goog.events.EventHandler(this);
@@ -122,7 +124,7 @@ mirosubs.subtitle.SubtitleList.prototype.captionTimesCleared_ = function(e) {
     var subtitleWidgets = goog.object.getValues(this.subtitleMap_);
     goog.array.forEach(subtitleWidgets, function(w) { w.clearTimes(); });
 };
-mirosubs.subtitle.SubtitleList.prototype.createNewSubWidget_ = 
+mirosubs.subtitle.SubtitleList.prototype.createNewSubWidget_ =
     function(editableCaption)
 {
     return new mirosubs.subtitle.SubtitleWidget(
@@ -178,8 +180,8 @@ mirosubs.subtitle.SubtitleList.prototype.setLastSub_ = function() {
     if (subWidget != null) {
         var et = goog.events.EventType;
         this.lastSubMouseHandler_.
-            listen(subWidget.getElement(), 
-                   et.MOUSEOVER, 
+            listen(subWidget.getElement(),
+                   et.MOUSEOVER,
                    this.onAddSubMouseover_).
             listen(subWidget.getElement(),
                    et.MOUSEOUT,
@@ -196,10 +198,10 @@ mirosubs.subtitle.SubtitleList.prototype.onAddSubMouseout_ = function(e) {
 mirosubs.subtitle.SubtitleList.prototype.isAddSubMouseout_ = function(relatedTarget) {
     if (!relatedTarget)
         return false;
-    return ((this.lastSub_ == null || 
-             !goog.dom.contains(this.lastSub_.getElement(), 
+    return ((this.lastSub_ == null ||
+             !goog.dom.contains(this.lastSub_.getElement(),
                                 relatedTarget)) &&
-            !goog.dom.contains(this.addSubtitleButton_.getElement(), 
+            !goog.dom.contains(this.addSubtitleButton_.getElement(),
                                relatedTarget));
 };
 mirosubs.subtitle.SubtitleList.prototype.addSubtitleClicked_ = function(e) {

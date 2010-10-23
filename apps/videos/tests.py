@@ -24,6 +24,9 @@ from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParse
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm
+import math_captcha
+
+math_captcha.forms.math_clean = lambda form: None
 
 class SubtitleParserTest(TestCase):
     
@@ -138,7 +141,9 @@ class ViewsTest(TestCase):
     def test_feedback(self):
         data = {
             'email': 'test@test.com',
-            'message': 'Test'
+            'message': 'Test',
+            'math_captcha_field': 100500,
+            'math_captcha_question': 'test'
         }
         response = self.client.post(reverse('videos:feedback'), data)
         self.assertEqual(response.status_code, 200)
@@ -197,6 +202,25 @@ class ViewsTest(TestCase):
         
     def test_actions_list(self):
         self._simple_test('videos:actions_list')
+
+    def test_paste_transcription(self):
+        self._login()
+        
+        data = {
+            "video": u"1",
+            "subtitles": u"""#1
+
+#2""",
+            "language": u"el"
+        }
+        language = self.video.subtitle_language(data['language'])
+        self.assertEquals(language, None)        
+        response = self.client.post(reverse("videos:paste_transcription"), data)
+        self.failUnlessEqual(response.status_code, 200)
+
+        language = self.video.subtitle_language(data['language'])
+        version = language.latest_version()
+        self.assertEqual(len(version.subtitles()), 2)
         
     def test_upload_subtitles(self):
         import os.path
@@ -209,15 +233,13 @@ class ViewsTest(TestCase):
             'video': self.video.id,
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
         }
-        language = self.video.subtitle_language()
-        last_version = language.latest_version()
+        language = self.video.subtitle_language(data['language'])
+        self.assertEquals(language, None)
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
         
-        self.video = Video.objects.get(id=self.video.id)
-        language = self.video.subtitle_language()
+        language = self.video.subtitle_language(data['language'])
         version = language.latest_version()
-        self.assertEqual(version.version_no, last_version.version_no+1)
         self.assertEqual(len(version.subtitles()), 32)
     
     def test_email_friend(self):
@@ -227,7 +249,9 @@ class ViewsTest(TestCase):
             'from_email': 'test@test.com',
             'to_emails': 'test1@test.com,test@test.com',
             'subject': 'test',
-            'message': 'test'
+            'message': 'test',
+            'math_captcha_field': 100500,
+            'math_captcha_question': 'test'            
         }
         response = self.client.post(reverse('videos:email_friend'), data)
         self.assertEqual(response.status_code, 302)

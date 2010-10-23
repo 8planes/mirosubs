@@ -18,6 +18,11 @@
 
 goog.provide('mirosubs.timeline.Subtitle');
 
+/**
+* @constructor
+* @param {mirosubs.subtitle.EditableCaption} editableCaption
+* @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
+*/
 mirosubs.timeline.Subtitle = function(editableCaption, videoPlayer) {
     goog.events.EventTarget.call(this);
     this.editableCaption_ = editableCaption;
@@ -38,7 +43,7 @@ mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH = 2.0;
 mirosubs.timeline.Subtitle.UNASSIGNED_SPACING = 0.5;
 
 mirosubs.timeline.Subtitle.orderCompare = function(a, b) {
-    return a.getEditableCaption().getSubOrder() - 
+    return a.getEditableCaption().getSubOrder() -
         b.getEditableCaption().getSubOrder();
 };
 
