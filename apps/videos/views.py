@@ -89,7 +89,14 @@ def create(request):
     if request.method == 'POST':
         video_form = VideoForm(request.POST, label_suffix="")
         if video_form.is_valid():
-            video_url = video_form.cleaned_data['video_url']
+            video_url_string = video_form.cleaned_data['video_url']
+            video_type = VideoTypeRegistrar.video_type_for_url(video_url_string)
+            if video_type is not None:
+                video_url, created = VideoUrl.get_or_create(
+                    video_type.video_url_kwargs())
+
+
+                
             try:
                 video, created = Video.get_or_create_for_url(video_url)
             except (VidscraperError, RequestError):
