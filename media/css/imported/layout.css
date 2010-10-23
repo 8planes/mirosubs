@@ -87,6 +87,10 @@
   }
 
 
+.content h1 {
+line-height: 1.1em;
+}
+
 
 /*//////////   ~  Top User Panel  ~   //////////*/
 
@@ -223,8 +227,8 @@
   font-size: 1.3em;
   }
 
-.big_list li span,
-.small_list li span{
+.big_list li div span,
+.small_list li div span{
   margin: 0px;
   color: #888;
   padding: 0;
@@ -232,12 +236,63 @@
   }
   
 
+.big_list li div div{
+margin-top: 5px;
+line-height: 1.8em;
+float: left;
+  }
+  
+
+.big_list li div div a,
+.small_list li div div a{
+  font-size: .9em;
+  }
+  
+
+
 .big_list li p,
 .small_list li p{
-  margin: 0;
+  margin: 5px 0 0 0;
   padding: 0;
   color: #444;
+float: left;
   }
+
+.small_list li p{
+
+float: none;
+  }
+
+.small_list li p{
+  margin: 0px 0 0 0;
+  }
+
+
+.need_help span{
+  background: url(../../images/ribbons.png) left 0 no-repeat;
+float: left;
+padding: 0px 15px 0px 20px !important; 
+color: #fff !important;
+margin-right: 10px !important;
+line-height: 2em;
+width: 123px;
+}
+
+
+
+.completed_in span{
+  background: url(../../images/ribbons.png) left -34px no-repeat;
+float: left;
+padding: 0px 15px 0px 20px !important; 
+color: #fff !important;
+margin-right: 10px !important;
+line-height: 2em;
+width: 123px;
+}
+
+
+
+
 
 
 
@@ -288,6 +343,68 @@
 
 
 .footer .floatright a{ padding-left: 20px;}
+
+
+
+.boxx{
+background: #fff;
+  -moz-border-radius: 5px;  
+  -webkit-border-radius: 5px;
+  -moz-border-radius-topleft: 0px;  
+  -webkit-border-radius-top-left: 0px;
+text-shadow: 0 1px 0px #fff;
+
+border: 1px solid #a7c3c9;
+border-top: 1px solid #c6d9de;
+border-bottom: 1px solid #88afb6;
+
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ddddd'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ */
+
+
+
+position: relative;
+cursor: pointer;
+}
+
+
+
+.sort_button:hover{
+-moz-border-radius-bottomright: 0px;
+-moz-border-radius-bottomleft: 0px;
+-webkit-border-radius: 3px;
+border-radius:3px;
+
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ddddd'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
+
+
+}
+
+.boxx .sort_button{
+margin: 3px 2px !important;
+}
+
+bigg
+.boxx .sort_button ul li{
+padding: 0 !important;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
