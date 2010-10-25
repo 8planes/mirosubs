@@ -21,4 +21,53 @@ function testYoutubeFormats() {
     }
 }
 
+function assertForHtml5Video_(startURL, endURL, videoType) {
+    var vs = mirosubs.video.VideoSource.videoSourceForURL(startURL);
+    assertTrue(vs instanceof mirosubs.video.Html5VideoSource);
+    assertEquals(endURL, vs.getVideoURL());
+    assertEquals(videoType, vs.getVideoType());
+}
+
+function testOgg() {
+    assertForHtml5Video_(
+        'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+        'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+        mirosubs.video.Html5VideoType.OGG);
+}
+
+function testBlipOggFormat() {
+    assertForHtml5Video_(
+        'http://a59.video2.blip.tv/8410006747301/Miropcf-AboutUniversalSubtitles847.ogv',
+        'http://a59.video2.blip.tv/8410006747301/Miropcf-AboutUniversalSubtitles847.ogv',
+        mirosubs.video.Html5VideoType.OGG);
+}
+
+function testBlipOggWithQueryString() {
+    assertForHtml5Video_(
+        'http://a59.video2.blip.tv/8410006747301/Miropcf-AboutUniversalSubtitles847.ogv?bri=1.4&brs=1317',
+        'http://a59.video2.blip.tv/8410006747301/Miropcf-AboutUniversalSubtitles847.ogv',
+        mirosubs.video.Html5VideoType.OGG);
+}
+
+function testMP4() {
+    assertForHtml5Video_(
+        'http://videos.mozilla.org/firefox/3.5/switch/switch.mp4',
+        'http://videos.mozilla.org/firefox/3.5/switch/switch.mp4',
+        mirosubs.video.Html5VideoType.H264);
+}
+
+function testBlipMP4WithFileGet() {
+    assertForHtml5Video_(
+        'http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.mp4',
+        'http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.mp4',
+        mirosubs.video.Html5VideoType.H264);
+}
+
+function testBlipMP4WithQueryString() {
+    assertForHtml5Video_(
+        'http://a59.video2.blip.tv/8410006747301/Miropcf-AboutUniversalSubtitles847.mp4?bri=1.4&brs=1317',
+        'http://a59.video2.blip.tv/8410006747301/Miropcf-AboutUniversalSubtitles847.mp4',
+        mirosubs.video.Html5VideoType.H264);
+}
+
 {% endblock %}
