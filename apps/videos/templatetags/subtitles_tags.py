@@ -24,15 +24,13 @@ register = template.Library()
 
 @register.inclusion_tag('videos/_upload_subtitles.html', takes_context=True)
 def upload_subtitles(context, video):
-    return {
-        'video': video,
-        'form': SubtitlesUploadForm(context['user']),
-        'user': context['user'],
-        'request': context['request']
-    }
+    context['video'] = video
+    context['form'] = SubtitlesUploadForm(context['user'])
+    return context
 
 @register.inclusion_tag('videos/_paste_transcription.html', takes_context=True)    
 def paste_transcription(context):
+    #It is just template of pop-up, you should add link with 'upload-transcript-button' class
     initial = {}
     if 'language' in context:
         initial['language'] = context['language'].language

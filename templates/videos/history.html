@@ -214,15 +214,11 @@
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
 
-            {% if revision_list|length > 1 %}
+            {% if revision_list|length >= 1 %}
                 <a href="#" class="green_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
             {% endif %}
             
             {% upload_subtitles video %}
-            
-            <a href="#upload-transcript" class="upload-transcript-button green_button small">
-                {% trans 'Paste a Transcript' %}
-            </a>
             {% paste_transcription %}            
             <div class="clear">&nbsp;</div>
           </div>

@@ -2,14 +2,25 @@
 <script type="text/javascript">
     jQuery(function($){
         var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
-        
+
         $('#upload-transcript-form').ajaxForm({
             dataType: 'json',
             success: function(data, status, xhr, $form){
                 $('.save-button', $form).show();
                 $('.save-indicator', $form).hide();                
                 if (data.success){
-                    document.location = data.next || LANGUAGE_PAGE_URL;
+                    var content = $($('#success-upload-transcript-dialog').html());
+                    $.nyroModalManual({
+                        content: content
+                    });
+                    $('.yes-button', content).click(function(){
+                        alert('TODO')
+                        return false;
+                    })                    
+                    $('.no-button', content).click(function(){
+                        document.location = data.next || LANGUAGE_PAGE_URL;
+                        return false;
+                    })
                 } else {
                     for (key in data.errors) {
                         var error = '<p class="error_list">' + data.errors[key] + '</p>';
@@ -84,7 +95,6 @@
             if (valid){
                 $error.hide();
             }else{
-                $error.find('span').html(i+1);
                 $error.show();                
             }
             
@@ -92,7 +102,7 @@
         });
         
         $('.upload-transcript-button').nyroModal({
-            //minWidth: 460,
+            minWidth: 400,
             minHeight: 500,
             bgColor: '#fff',
             cssOpt: {
@@ -109,21 +119,30 @@
         });        
     });
 </script>
-<div id="upload-transcript" style="display1: none; position: fixed; top: -10000px;">
-    <h3>{% trans 'Upload a Transcript' %}</h3>
+<div id="success-upload-transcript-dialog" style="display: none">
+    <p>
+        {% trans 'Would you like to sync your transcript now?  Users will not be able to watch it as subtitles until you do this.' %}
+    </p>
+    <p class="success-upload-transcript-buttons">
+        <a href='#' class="yes-button">{% trans 'Yes, Sync Now' %}</a> / 
+        <a href="#" class="no-button">{% trans "No. Don't sync" %}</a>
+    </p>
+</div>
+<div id="upload-transcript" style="position: fixed; top: -10000px;">
+    <h3>{% trans 'Submit a Transcript' %}</h3>
     <div class="padding">
         {% if user.is_authenticated %}
         <p style="margin-top: -15px;">
             {% blocktrans %}
-            You can submit any transcript in plain text format. However, subtitles:<br/>
-            1) must be separated by two line breaks;<br/> 
-            2) should not occupy more than two lines in the box below.
+            Paste a transcript into the space below.  How you enter subtitles here 
+            determines how they display on the screen.<br/>
+            1) Hit enter twice to separate each subtitle;<br/> 
+            2) You cannot submit subtitles longer than 3 lines (2 is best).
             {% endblocktrans %}
         </p>
         <p style="color: #ff8080; display: none" class="error">
             {% blocktrans %}
             Some of your subtitles take up more than two lines and will not display correctly.
-            Please divide them. Error is in <span></span> subtitle.
             {% endblocktrans %}
         </p>
         <form method="post" action="{% url videos:paste_transcription %}" id="upload-transcript-form">
@@ -133,10 +152,10 @@
                 <label>{% trans 'Language' %}</label>{{ form.language }}
             </p> 
             <p>           
-                <textarea rows="14" cols="48" name="subtitles" class="upload-transcript-textarea"></textarea>
+                <textarea rows="14" style="width: 355px" name="subtitles" class="upload-transcript-textarea"></textarea>
             </p> 
             <p>  
-                <button class="save-button">{% trans 'Save' %}</button>
+                <button class="save-button">{% trans 'Submit Transcript' %}</button>
                 <span class="save-indicator" style="display: none">{% trans 'Saving...' %}</span>
             </p> 
         </form>

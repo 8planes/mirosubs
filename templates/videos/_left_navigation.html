@@ -10,7 +10,7 @@
     {% endif %}
     {% if translations %} 
       {% for item in translations %}  
-         <li class="{% complete_color language %}{% if language == item %} active{% endif %}">
+         <li class="{% complete_color item %}{% if language == item %} active{% endif %}">
              <a href="{{ item.get_absolute_url }}">
                  <span class="done_indicator"></span>
                  {{ item.get_language_display }}
