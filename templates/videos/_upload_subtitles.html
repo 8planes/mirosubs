@@ -12,8 +12,11 @@
                 <p>
                     {% blocktrans %}
                     Our site accepts SRT, SSA, SBV and TTML format. Only files ending in .srt, .ssa, .sbv
-                    or .xml (for TTML) are accepted.
+                    or .xml (for TTML) are accepted. Or you can
                     {% endblocktrans %}
+                      <a href="#upload-transcript" class="upload-transcript-button">
+                          {% trans 'paste in a transcript' %}
+                      </a>
                 </p>
                 <br />
                 <div id="upload-subtitles-div">
