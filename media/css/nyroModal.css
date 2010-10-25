@@ -57,6 +57,13 @@ a#closeBut {
 
 
 div#nyroModalContent {
+background: #fff;
+-moz-border-radius:4px;
+-webkit-border-radius: 4px;
+border-radius: 4px;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f7fbfb'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f7fbfb)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #fff, #eee); /* for firefox 3.6+ */
 }
 
 div.wrapper div#nyroModalContent {

@@ -16,13 +16,13 @@
        <span>{% trans 'No HTML' %}</span>
        <span>{% trans 'Note: when you send a message the recipient can see your email and reply directly' %}</span>
      </p>
-     <button type="submit"><span>{% trans 'Send a Message' %}</span></button>
+     <button type="submit" class="green_button big">{% trans 'Send a Message' %}</button>
   </form>
 </div>
 <script type="text/javascript">
 $(function(){
     $('.send_message').nyroModal({
-        minWidth: 460,
+        minWidth: 400,
         minHeight: 380              
     });
     
