@@ -61,7 +61,7 @@ goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.AbstractVideoPla
 
 mirosubs.video.YoutubeVideoPlayer.REGULAR_HEIGHT = 360;
 mirosubs.video.YoutubeVideoPlayer.REGULAR_WIDTH = 480;
-mirosubs.video.YoutubeVideoPlayer.SMALL_HEIGHT = 350;
+mirosubs.video.YoutubeVideoPlayer.SMALL_HEIGHT = 300;
 mirosubs.video.YoutubeVideoPlayer.SMALL_WIDTH = 400;
 
 

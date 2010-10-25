@@ -63,7 +63,7 @@ mirosubs.video.DailymotionVideoPlayer.logger_ =
         'mirosubs.video.DailymotionVideoPlayer')
 
 mirosubs.video.DailymotionVideoPlayer.WIDTH = 400;
-mirosubs.video.DailymotionVideoPlayer.HEIGHT = 350;
+mirosubs.video.DailymotionVideoPlayer.HEIGHT = 300;
 
 mirosubs.video.DailymotionVideoPlayer.prototype.enterDocument = function() {
     mirosubs.video.DailymotionVideoPlayer.superClass_.enterDocument.call(this);
