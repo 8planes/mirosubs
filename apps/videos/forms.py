@@ -36,14 +36,17 @@ from dailymotion import DAILYMOTION_REGEX
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
 
+ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
+
 class SubtitlesUploadBaseForm(forms.Form):
-    language = forms.ChoiceField(choices=settings.ALL_LANGUAGES, initial='en')
+    language = forms.ChoiceField(choices=ALL_LANGUAGES, initial='en')
     video = forms.ModelChoiceField(Video.objects)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(SubtitlesUploadBaseForm, self).__init__(*args, **kwargs)
-    
+        self.fields['language'].choices.sort(key=lambda item: item[1])
+        
     def clean_video(self):
         video = self.cleaned_data['video']
         if video.is_writelocked:
