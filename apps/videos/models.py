@@ -200,7 +200,8 @@ class Video(models.Model):
             if created:
                 entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
                 video.title = entry.media.title.text
-                video.duration = entry.media.duration.seconds
+                if entry.media.duration:
+                    video.duration = entry.media.duration.seconds
                 if entry.media.thumbnail:
                     video.thumbnail = entry.media.thumbnail[-1].url
                 video.save()
