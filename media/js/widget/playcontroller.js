@@ -68,6 +68,7 @@ mirosubs.widget.PlayController.prototype.turnOffSubs = function() {
     this.dropDown_.hide();
     this.videoTab_.showNudge(false);
     this.disposeComponents_();
+    this.videoPlayer_.showCaptionText('');
     this.subtitleState_ = null;
     this.videoTab_.showContent(this.dropDown_.hasSubtitles());
 };
