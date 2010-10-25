@@ -166,14 +166,7 @@
   <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
         <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
-        {% if video.subtitle_language %}
-            <li {% if language.is_original %}class="active"{% endif %}><a href="{{ video.subtitle_language.get_absolute_url }}">{{ video.subtitle_language.language_display }}</a></li>
-        {% endif %}
-        {% if translations %} 
-          {% for item in translations %}  
-             <li {% if language == item %}class="active"{% endif %}><a href="{{ item.get_absolute_url }}">{{ item.get_language_display }}</a></li>
-          {% endfor %} 
-        {% endif %}
+        {% include 'videos/_left_navigation.html' %}
     </ul>
     {% if video.latest_finished_version %}
     <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
@@ -221,15 +214,11 @@
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
 
-            {% if revision_list|length > 1 %}
+            {% if revision_list|length >= 1 %}
                 <a href="#" class="green_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
             {% endif %}
             
             {% upload_subtitles video %}
-            
-            <a href="#upload-transcript" class="upload-transcript-button green_button small">
-                {% trans 'Paste a Transcript' %}
-            </a>
             {% paste_transcription %}            
             <div class="clear">&nbsp;</div>
           </div>

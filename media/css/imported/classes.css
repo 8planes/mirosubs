@@ -434,7 +434,13 @@ border: 1px solid #aa1313;
 
 
 
+#send_message{
+width: 463px !important; 
+}
 
+#send_message button{
+margin: 0 !important;
+}
 
 
 

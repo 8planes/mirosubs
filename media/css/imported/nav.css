@@ -12,7 +12,7 @@
   margin: 40px 0 0 290px;
   padding: 0;
   float: left;
-width: 480px;
+width: 450px;
   }
 
 
@@ -114,7 +114,7 @@ margin-right: 20px;
 
 
 */
-/*//////////   ~  Sub Nav  ~   //////////*/
+/*//////////   ~  Sub Nav  ~   //////////
 
 .about_link a.about{
 padding-right: 15px !important;
@@ -126,6 +126,8 @@ background: url(../../images/sub_nav_arrows.png) 46px 7px no-repeat;
 padding-right: 15px !important;
 background: url(../../images/sub_nav_arrows.png) 46px -28px no-repeat;
 }
+*/
+
 
 .sub_nav{
   float: right;
@@ -291,18 +293,18 @@ left: -4px;
   font-size: 12px;
   -moz-border-radius: 5px;  
   -webkit-border-radius: 5px;
-  margin: 0 15px 0px 15px;
+  margin: 0 15px 0px 25px;
   line-height: 15px;
-  padding: 12px 0 8px 13px;
+  padding: 12px 0 8px 28px;
   float: left;
-  width: 160px;;
+  width: 170px;;
   font-family: Arial, Helvetica, sans-serif;
   
   box-shadow:inset 0px 1px 2px #555;
   -moz-box-shadow:inset 0px 1px 1px #555;
   -webkit-box-shadow:inset 0px 1px 2px #555;
   
-  background: -moz-linear-gradient(top,  #eee,  #fff);
+background: url(../../images/search.png) 10px center no-repeat;
 
 }
 

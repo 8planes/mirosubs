@@ -35,15 +35,19 @@ from vidscraper.sites import blip, google_video, ustream, vimeo
 from dailymotion import DAILYMOTION_REGEX
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
+from urlparse import urlparse
+
+ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class SubtitlesUploadBaseForm(forms.Form):
-    language = forms.ChoiceField(choices=settings.ALL_LANGUAGES, initial='en')
+    language = forms.ChoiceField(choices=ALL_LANGUAGES, initial='en')
     video = forms.ModelChoiceField(Video.objects)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(SubtitlesUploadBaseForm, self).__init__(*args, **kwargs)
-    
+        self.fields['language'].choices.sort(key=lambda item: item[1])
+        
     def clean_video(self):
         video = self.cleaned_data['video']
         if video.is_writelocked:
@@ -152,7 +156,10 @@ class PasteTranscriptionForm(SubtitlesUploadBaseForm):
     def save(self):
         subtitles = self.cleaned_data['subtitles']
         parser = TxtSubtitleParser(subtitles)       
-        return self.save_subtitles(parser)
+        language = self.save_subtitles(parser)
+        if language.is_original:
+            language.video.subtitlelanguage_set.exclude(pk=language.pk).update(is_forked=True)
+        return language
     
 class UserTestResultForm(forms.ModelForm):
     
@@ -182,9 +189,11 @@ class VideoForm(forms.ModelForm):
         if not blip.BLIP_REGEX.match(video_url) and \
             not vimeo.VIMEO_REGEX.match(video_url) and \
             not DAILYMOTION_REGEX.match(video_url) and \
-            not ('youtube.com' in video_url and get_video_id(video_url)) and \
-            not self.URL_REGEX.match(video_url):
-            raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
+            not ('youtube.com' in video_url and get_video_id(video_url)):
+                url = urlparse(video_url)
+                video_url = '%s://%s%s' % (url.scheme or 'http', url.netloc, url.path)
+                if not self.URL_REGEX.match(video_url):
+                    raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
 If you'd like to us to add support for a new site or format, or if you
 think there's been some mistake, <a
 href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL)) 
