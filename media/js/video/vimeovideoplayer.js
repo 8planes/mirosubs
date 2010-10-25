@@ -93,7 +93,7 @@ mirosubs.video.VimeoVideoPlayer.prototype.exitDocument = function() {
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.getPlayheadTimeInternal = function() {
-    return this.swfLoaded_ ? this.player_.api_getCurrentTime() : 0;
+    return this.swfLoaded_ ? this.player_['api_getCurrentTime']() : 0;
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.timeUpdateTick_ = function(e) {
@@ -102,7 +102,7 @@ mirosubs.video.VimeoVideoPlayer.prototype.timeUpdateTick_ = function(e) {
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.getDuration = function() {
-    return this.player_.api_getDuration();
+    return this.player_['api_getDuration']();
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.getBufferedLength = function() {
@@ -122,7 +122,7 @@ mirosubs.video.VimeoVideoPlayer.prototype.getVolume = function() {
 };
 mirosubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
     if (this.player_) {
-        this.player_.api_setVolume(100 * volume);
+        this.player_['api_setVolume'](100 * volume);
         this.currentVolume_ = volume;
     }
     else
@@ -131,7 +131,7 @@ mirosubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
 
 mirosubs.video.VimeoVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     if (this.player_) {
-        this.player_.api_seekTo(playheadTime);
+        this.player_['api_seekTo'](playheadTime);
         this.sendTimeUpdateInternal();
     }
     else
@@ -153,20 +153,14 @@ mirosubs.video.VimeoVideoPlayer.prototype.videoEndedInternal = function() {
     return this.getPlayheadTime() == this.getDuration();
 };
 mirosubs.video.VimeoVideoPlayer.prototype.playInternal = function() {
-    if (this.swfLoaded_) {
-        this.player_.api_play();
-        this.isPlaying_ = true;
-        this.timeUpdateTimer_.start();
-    }
+    if (this.swfLoaded_)
+        this.player_['api_play']();
     else
         this.commands_.push(goog.bind(this.playInternal, this));
 };
 mirosubs.video.VimeoVideoPlayer.prototype.pauseInternal = function() {
-    if (this.swfLoaded_) {
-        this.player_.api_pause();
-        this.isPlaying_ = false;
-        this.timeUpdateTimer_.stop();
-    }
+    if (this.swfLoaded_)
+        this.player_['api_pause']();
     else
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
@@ -178,7 +172,12 @@ mirosubs.video.VimeoVideoPlayer.prototype.resumeLoadingInternal = function(playh
     this.play();
 };
 
+
+
 mirosubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) {
+    if (swf_id != this.playerAPIID_)
+        return;
+
     this.player_ = goog.dom.$(this.playerElemID_);
     this.setVolume(0.5);
     this.swfLoaded_ = true;
@@ -187,18 +186,34 @@ mirosubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id)
     
     var that = this;
 
-    var onLoadingFn = "onVimeoLoa" + mirosubs.randomString();
+    var randomString = mirosubs.randomString();
+
+    var onLoadingFn = "onVimeoLoa" + randomString;
     window[onLoadingFn] = function(data, swf_id) {
         that.loadedFraction_ = data;
         that.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
     };
-    this.player_.api_addEventListener('onLoading', onLoadingFn);
+    this.player_['api_addEventListener']('onLoading', onLoadingFn);
 
-    var onFinishFn = "onVimeoFin" + mirosubs.randomString();
+    var onFinishFn = "onVimeoFin" + randomString;
     window[onFinishFn] = function(data, swf_id) {
         that.dispatchEndedEvent();
     };
-    this.player_.api_addEventListener('onFinish', onFinishFn);
+    this.player_['api_addEventListener']('onFinish', onFinishFn);
+
+    var onPlayFn = "onVimeoPla" + randomString;
+    window[onPlayFn] = function(swfID) {
+        that.isPlaying_ = true;
+        that.timeUpdateTimer_.start();
+    };
+    this.player_['api_addEventListener']('onPlay', onPlayFn);
+
+    var onPauseFn = "onVimeoPau" + randomString;
+    window[onPauseFn] = function(swfID) {
+        that.isPlaying_ = false;
+        that.timeUpdatetimer_.stop();
+    };
+    this.player_['api_addEventListener']('onPause', onPauseFn);
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.disposeInternal = function() {
