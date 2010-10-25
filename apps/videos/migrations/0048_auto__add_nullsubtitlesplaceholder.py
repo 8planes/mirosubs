@@ -17,7 +17,7 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('videos', ['NullSubtitlesPlaceholder'])
 
-        db.create_unique('videos_nullsubitlesplaceholder', ['video_id', 'video_session'])
+        db.create_unique('videos_nullsubtitlesplaceholder', ['video_id', 'video_session'])
     
     def backwards(self, orm):
         
