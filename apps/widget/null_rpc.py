@@ -32,7 +32,7 @@ class NullRpc(BaseRpc):
             subtitles = self._make_subtitles_dict(
                 [], language_code, 0, True, fork)
             null_placeholder, created = \
-                models.NullSubtitlesPlaceholder.get_or_create(
+                models.NullSubtitlesPlaceholder.objects.get_or_create(
                 video=video,
                 video_session=self._video_session_key(request),
                 defaults={'original_language': original_language_code})
@@ -41,7 +41,7 @@ class NullRpc(BaseRpc):
                 null_placeholder.save()
         else:
             null_subtitles, created = self._get_null_subtitles_for_editing(
-                request, video, language_code, 
+                request.user, video, language_code, 
                 original_language_code, fork)
             subtitles = self._subtitles_dict(
                 null_subtitles, 0 if created else 1)
@@ -57,13 +57,14 @@ class NullRpc(BaseRpc):
             return { "response" : "not_logged_in" }
         video = models.Video.objects.get(video_id=video_id)
         original_language_code = None
+
         if video.null_subtitles(request.user, language_code) is None:
-            null_placeholder = models.NullSubtitlesPlaceholder.get(
+            null_placeholder = models.NullSubtitlesPlaceholder.objects.get(
                 video=video, 
                 video_session=self._video_session_key(request))
             original_language_code = null_placeholder.original_language
         null_subtitles, created = self._get_null_subtitles_for_editing(
-            request, video, language_code, 
+            request.user, video, language_code, 
             original_language_code, False)
         self._save_packets(null_subtitles, packets)
         return {'response':'ok',
@@ -125,7 +126,7 @@ class NullRpc(BaseRpc):
     def _autoplay_subtitles(self, user, video, language_code, revision_no):
         null_subs = video.null_subtitles(user, language_code)
         if null_subs:
-            return self._subtitles_dict(null_subs, user)
+            return self._subtitles_dict(null_subs, 1)
 
     def _subtitle_count(self, user, video):
         if user.is_authenticated():

@@ -336,10 +336,12 @@ class Video(models.Model):
     def null_subtitles(self, user, language_code=None):
         """Returns NullSubtitles for user, or None if none exist."""
         try:
-            return self.nullsubtitles_set.filter(
-                user__id__exact=user.id).filter(
-                language=('' if language_code is None 
-                          else language_code))[:1].get()
+            base_query = self.nullsubtitles_set.filter(
+                user__id__exact=user.id)
+            if language_code is None:
+                return base_query.filter(is_original=True)[:1].get()
+            else:
+                return base_query.filter(language=language_code)[:1].get()
         except models.ObjectDoesNotExist:
             pass
 
@@ -733,7 +735,7 @@ def update_language_complete_state(sender, instance, created, **kwargs):
 
 post_save.connect(update_language_complete_state, SubtitleVersion)
 
-class NullSubtitlesPlaceholder():
+class NullSubtitlesPlaceholder(models.Model):
     video = models.ForeignKey(Video)
     video_session = models.CharField(max_length=128, blank=False)
     original_language = models.CharField(

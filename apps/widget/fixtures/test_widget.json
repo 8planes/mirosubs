@@ -22,7 +22,7 @@
         "model": "auth.customuser",
         "fields": {
             "picture": "profile_images/10/06/920az4_3.jpg",
-            "preferred_language": "en-gb",
+            "preferred_language": "en",
             "valid_email": false,
             "user_permissions": [],
             "groups": [],
@@ -55,7 +55,7 @@
         "model": "auth.customuser",
         "fields": {
             "picture": "profile_images/10/06/920az4_5.jpg",
-            "preferred_language": "en-gb",
+            "preferred_language": "en",
             "valid_email": false,
             "user_permissions": [],
             "groups": [],
