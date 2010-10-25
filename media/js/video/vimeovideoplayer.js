@@ -19,7 +19,7 @@
 goog.provide('mirosubs.video.VimeoVideoPlayer');
 
 /**
- *
+ * @constructor
  * @param {mirosubs.video.VimeoVideoSource} videoSource
  * @param {boolean=} opt_chromeless
  */
@@ -75,7 +75,8 @@ mirosubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
         var queryString =
             ['?js_api=1&width=', mirosubs.video.VimeoVideoPlayer.WIDTH,
              '&height=', mirosubs.video.VimeoVideoPlayer.HEIGHT,
-             '&clip_id=', this.videoSource_.getVideoId()].join('');
+             '&clip_id=', this.videoSource_.getVideoId(),
+             '&js_swf_id=', this.playerAPIID_].join('');
         this.setDimensionsKnownInternal();
         window["swfobject"]["embedSWF"](
             [baseURL, queryString].join(''),
