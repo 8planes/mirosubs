@@ -37,7 +37,7 @@ from videos.utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.utils.translation import ugettext
 
 def index(request):
@@ -127,7 +127,8 @@ def video(request, video_id):
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    qs = Video.objects.exclude(subtitlelanguage=None).extra(select={'translation_count': 'SELECT COUNT(id) '+
+    qs = Video.objects.exclude(Q(subtitlelanguage=None)|Q(subtitlelanguage__subtitleversion=None)|Q(subtitlelanguage__subtitleversion__subtitle=None)) \
+        .distinct().extra(select={'translation_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
         'videos_subtitlelanguage.was_complete AND '+
@@ -141,6 +142,8 @@ def video_list(request):
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
         extra_context['order_type'] = order_type
+    else:
+        qs = qs.order_by('-widget_views_count')
     return object_list(request, queryset=qs,
                        paginate_by=50,
                        template_name='videos/video_list.html',
