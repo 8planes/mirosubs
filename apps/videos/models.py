@@ -729,6 +729,15 @@ def update_language_complete_state(sender, instance, created, **kwargs):
 
 post_save.connect(update_language_complete_state, SubtitleVersion)
 
+class NullSubtitlesPlaceholder():
+    video = models.ForeignKey(Video)
+    video_session = models.CharField(max_length=128, blank=False)
+    original_language = models.CharField(
+        max_length=16, choices=settings.ALL_LANGUAGES, 
+        blank=True, default='')
+    class Meta:
+        unique_together = (('video', 'video_session'),)
+
 class NullSubtitles(SubtitleCollection):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)

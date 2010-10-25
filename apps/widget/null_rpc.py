@@ -27,13 +27,21 @@ class NullRpc(BaseRpc):
                       base_version_no=None, fork=False):
         version_no = 0
         null_subtitles = None
+        video = models.Video.objects.get(video_id=video_id)
         if not request.user.is_authenticated():
             subtitles = self._make_subtitles_dict(
                 [], language_code, 0, True, fork)
+            null_placeholder, created = \
+                models.NullSubtitlesPlaceholder.get_or_create(
+                video=video,
+                video_session=self._video_session_key(request),
+                defaults={'original_language': original_language_code})
+            if not created:
+                null_placeholder.original_language = original_language_code
+                null_placeholder.save()
         else:
-            video = models.Video.objects.get(video_id=video_id)
             null_subtitles, created = self._get_null_subtitles_for_editing(
-                request.user, video, language_code, 
+                request, video, language_code, 
                 original_language_code, fork)
             subtitles = self._subtitles_dict(
                 null_subtitles, 0 if created else 1)
@@ -44,12 +52,19 @@ class NullRpc(BaseRpc):
                 self.fetch_subtitles(request, video_id)
         return return_dict
 
-    def save_subtitles(self, request, video_id, packets, language_code=''):
+    def save_subtitles(self, request, video_id, packets, language_code=None):
         if not request.user.is_authenticated():
             return { "response" : "not_logged_in" }
         video = models.Video.objects.get(video_id=video_id)
+        original_language_code = None
+        if video.null_subtitles(request.user, language_code) is None:
+            null_placeholder = models.NullSubtitlesPlaceholder.get(
+                video=video, 
+                video_session=self._video_session_key(request))
+            original_language_code = null_placeholder.original_language
         null_subtitles, created = self._get_null_subtitles_for_editing(
-            request.user, video, language_code, None, False)
+            request, video, language_code, 
+            original_language_code, False)
         self._save_packets(null_subtitles, packets)
         return {'response':'ok',
                 'last_saved_packet': null_subtitles.last_saved_packet}
