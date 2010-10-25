@@ -18,6 +18,7 @@
 
 from django import template
 from videos.forms import SubtitlesUploadForm, PasteTranscriptionForm
+from django.utils.translation import ugettext_lazy as _
 
 register = template.Library()
 
@@ -38,3 +39,24 @@ def paste_transcription(context):
 
     context['form'] = PasteTranscriptionForm(context['user'], initial=initial)
     return context
+
+@register.simple_tag
+def complete_indicator(language):
+    if language.is_original or language.is_forked:
+        return _('%(count)s Lines') % {'count': language.version().subtitle_set.count()}
+    return '%i %%' % language.percent_done
+
+@register.simple_tag
+def complete_color(language):
+    if language.is_original or language.is_forked:
+        return 'full'
+    
+    val = language.percent_done
+    if val >= 95:
+        return 'eighty'
+    elif val >= 80:
+        return 'sixty'
+    elif val >= 30:
+        return 'fourty'
+    else:
+        return 'twenty'

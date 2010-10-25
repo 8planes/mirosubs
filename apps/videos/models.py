@@ -520,7 +520,8 @@ class SubtitleLanguage(models.Model):
             else:
                 subtitles_count = 0
             try:
-                return int(translation_count / 1. / subtitles_count * 100)
+                val = int(translation_count / 1. / subtitles_count * 100)
+                return val <= 100 and val or 100
             except ZeroDivisionError:
                 return 0 
         else:

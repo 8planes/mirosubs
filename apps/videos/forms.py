@@ -152,7 +152,10 @@ class PasteTranscriptionForm(SubtitlesUploadBaseForm):
     def save(self):
         subtitles = self.cleaned_data['subtitles']
         parser = TxtSubtitleParser(subtitles)       
-        return self.save_subtitles(parser)
+        language = self.save_subtitles(parser)
+        if language.is_original:
+            language.video.subtitlelanguage_set.exclude(pk=language.pk).update(is_forked=True)
+        return language
     
 class UserTestResultForm(forms.ModelForm):
     
