@@ -35,6 +35,7 @@ from vidscraper.sites import blip, google_video, ustream, vimeo
 from dailymotion import DAILYMOTION_REGEX
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
+from urlparse import urlparse
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -184,7 +185,8 @@ class VideoForm(forms.ModelForm):
         self.fields['video_url'].required = True
     
     def clean_video_url(self):
-        video_url = self.cleaned_data['video_url']
+        url = urlparse(self.cleaned_data['video_url'])
+        video_url = '%s://%s%s' % (url.scheme or 'http', url.netloc, url.path)
         if not blip.BLIP_REGEX.match(video_url) and \
             not vimeo.VIMEO_REGEX.match(video_url) and \
             not DAILYMOTION_REGEX.match(video_url) and \
