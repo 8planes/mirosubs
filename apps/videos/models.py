@@ -33,9 +33,9 @@ from youtube import get_video_id
 import dailymotion
 import urllib
 from videos.utils import YoutubeSubtitleParser
-from django.db.models.signals import post_save
 from videos import EffectiveSubtitle
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -64,6 +64,8 @@ VIDEO_TYPE = (
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
 FLV_REGEX = re.compile(r"\.flv$")
+
+ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class Video(models.Model):
     """Central object in the system"""
@@ -413,7 +415,7 @@ models.signals.pre_save.connect(create_video_id, sender=Video)
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
     is_original = models.BooleanField()
-    language = models.CharField(max_length=16, choices=settings.ALL_LANGUAGES, blank=True)
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255, blank=True)
     writelock_owner = models.ForeignKey(User, null=True)
