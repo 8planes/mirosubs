@@ -36,9 +36,11 @@ class UserUUIDMiddleware(object):
             request.META["UUID_COOKIE"] = _get_new_csrf_key()
 
     def process_response(self, request, response):
-        response.set_cookie(UUID_COOKIE_NAME,
-                request.META["UUID_COOKIE"], max_age = 60 * 60 * 24 * 7 * 52 * 10,
-                domain=UUID_COOKIE_DOMAIN)
+        response.set_cookie(
+            UUID_COOKIE_NAME,
+            request.META["UUID_COOKIE"], 
+            max_age=60 * 60 * 24 * 7 * 52 * 10,
+            domain=UUID_COOKIE_DOMAIN)
         # Content varies with the CSRF cookie, so set the Vary header.
         patch_vary_headers(response, ('Cookie',))
         return response            

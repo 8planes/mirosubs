@@ -28,10 +28,7 @@ import math_captcha
 
 math_captcha.forms.math_clean = lambda form: None
 
-class SubtitleParserTest(TestCase):
-    
-    def test_srt(self):
-        text = u'''1
+SRT_TEXT = u'''1
 00:00:00,000 --> 00:00:00,000
 Don't show this text it may be used to insert hidden data
 
@@ -54,7 +51,11 @@ This should be an E with an accent: È
 00:00:55,501 --> 00:00:58,500
 Hide these tags: {\some_letters_or_numbers_or_chars}
 '''
-        parser = SrtSubtitleParser(text)
+
+class SubtitleParserTest(TestCase):
+    
+    def test_srt(self):
+        parser = SrtSubtitleParser(SRT_TEXT)
         result = list(parser)
         
         self.assertEqual(result[0]['start_time'], 0.0)
@@ -77,6 +78,67 @@ Hide these tags: {\some_letters_or_numbers_or_chars}
         self.assertEqual(result[4]['end_time'], 58.5)
         self.assertEqual(result[4]['subtitle_text'], u'Hide these tags: ')
 
+class WebUseTest(TestCase):
+    def _make_objects(self):
+        self.auth = dict(username='admin', password='admin')
+        self.user = User.objects.get(username=self.auth['username'])
+        self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
+
+    def _simple_test(self, url_name, args=None, kwargs=None, status=200):
+        response = self.client.get(reverse(url_name, args=args, kwargs=kwargs))
+        self.assertEqual(response.status_code, status) 
+        return response
+
+    def _login(self):
+        self.client.login(**self.auth)
+
+class UploadSubtitlesTest(WebUseTest):
+
+    fixtures = ['test.json']
+
+    def _make_data(self):
+        import os
+        return {
+            'language': 'en',
+            'video': self.video.id,
+            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
+            }
+
+    def setUp(self):
+        self._make_objects()
+
+    def test_upload_subtitles(self):
+        import os.path
+        self._simple_test('videos:upload_subtitles', status=302)
+        
+        self._login()
+        
+        data = self._make_data()
+
+        language = self.video.subtitle_language(data['language'])
+        self.assertEquals(language, None)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        
+        language = self.video.subtitle_language(data['language'])
+        version = language.latest_version()
+        self.assertEqual(len(version.subtitles()), 32)
+
+    def upload_twice(self):
+        self._login()
+        data = self._make_data()
+        self.client.post(reverse('videos:upload_subtitles'), data)
+        language = self.video.subtitle_language(data['language'])
+        version_no = language.latest_version().version_no
+        self.assertEquals(1, language.subtitleversion_set.count())
+        # now post the same file.
+        self.client.post(reverse('videos:upload_subtitles'), data)
+        self._make_objects()
+        language = self.video.subtitle_language(data['language'])
+        self.assertEquals(1, language.subtitleversion_set.count())
+        self.assertEquals(version_no, language.latest_version().version_no)
+
+
 class YoutubeModuleTest(TestCase):
     
     def setUp(self):
@@ -92,7 +154,6 @@ class YoutubeModuleTest(TestCase):
         },{
             'url': 'http://www.youtube.com/watch?v=woobL2yAxD4&amp;playnext=1&amp;videos=9ikUhlPnCT0&amp;feature=featured',
             'video_id': 'woobL2yAxD4'
-
         }]
     
     def test_get_video_id(self):
@@ -155,22 +216,12 @@ class VideoTest(TestCase):
         self.failIf(created)
         self.failUnlessEqual(video, more_video)        
     
-class ViewsTest(TestCase):
+class ViewsTest(WebUseTest):
     
     fixtures = ['test.json']
     
     def setUp(self):
-        self.auth = dict(username='admin', password='admin')
-        self.user = User.objects.get(username=self.auth['username'])
-        self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
-
-    def _simple_test(self, url_name, args=None, kwargs=None, status=200):
-        response = self.client.get(reverse(url_name, args=args, kwargs=kwargs))
-        self.assertEqual(response.status_code, status) 
-        return response
-    
-    def _login(self):
-        self.client.login(**self.auth)
+        self._make_objects()
     
     def test_index(self):
         self._simple_test('videos.views.index')
@@ -259,26 +310,6 @@ class ViewsTest(TestCase):
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 2)
         
-    def test_upload_subtitles(self):
-        import os.path
-        self._simple_test('videos:upload_subtitles', status=302)
-        
-        self._login()
-        
-        data = {
-            'language': 'en',
-            'video': self.video.id,
-            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
-        }
-        language = self.video.subtitle_language(data['language'])
-        self.assertEquals(language, None)
-        response = self.client.post(reverse('videos:upload_subtitles'), data)
-        self.assertEqual(response.status_code, 200)
-        
-        language = self.video.subtitle_language(data['language'])
-        version = language.latest_version()
-        self.assertEqual(len(version.subtitles()), 32)
-    
     def test_email_friend(self):
         self._simple_test('videos:email_friend')
         
