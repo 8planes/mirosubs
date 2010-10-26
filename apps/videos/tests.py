@@ -124,7 +124,7 @@ class UploadSubtitlesTest(WebUseTest):
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 32)
 
-    def upload_twice(self):
+    def test_upload_twice(self):
         self._login()
         data = self._make_data()
         self.client.post(reverse('videos:upload_subtitles'), data)
@@ -132,6 +132,7 @@ class UploadSubtitlesTest(WebUseTest):
         version_no = language.latest_version().version_no
         self.assertEquals(1, language.subtitleversion_set.count())
         # now post the same file.
+        data = self._make_data()
         self.client.post(reverse('videos:upload_subtitles'), data)
         self._make_objects()
         language = self.video.subtitle_language(data['language'])
