@@ -41,7 +41,8 @@ def paste_transcription(context):
 @register.simple_tag
 def complete_indicator(language):
     if language.is_original or language.is_forked:
-        return _('%(count)s Lines') % {'count': language.version().subtitle_set.count()}
+        v = language.version()
+        return _('%(count)s Lines') % {'count': v and v.subtitle_set.count() or 0}
     return '%i %%' % language.percent_done
 
 @register.simple_tag
