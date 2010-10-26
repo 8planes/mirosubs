@@ -28,7 +28,6 @@ from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
 from vidscraper.sites import blip, google_video, fora, ustream, vimeo
-from videos import blip as videos_blip
 from youtube import get_video_id
 import dailymotion
 import urllib
@@ -152,43 +151,6 @@ class Video(models.Model):
         else:
             return self.video_url
 
-    def _get_subtitles_from_youtube(self):
-        if not self.youtube_videoid:
-            return 
-
-        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.youtube_videoid
-        d = urllib.urlopen(url)
-        parser = YoutubeSubtitleParser(d.read())
-        
-        if not parser:
-            return
-        
-        language = SubtitleLanguage(video=self)
-        language.is_original = False
-        language.is_forked = True
-        language.language = parser.language
-        language.save()
-        
-        version = SubtitleVersion(language=language)
-        version.datetime_started = datetime.now()
-        version.user = User.get_youtube_anonymous()
-        version.note = u'From youtube'
-        version.save()
-        
-        for i, item in enumerate(parser):
-            subtitle = Subtitle(**item)
-            subtitle.version = version
-            subtitle.subtitle_id = int(random.random()*10e12)
-            subtitle.sub_order = i+1
-            subtitle.save()
-        
-        version.finished = True
-        version.save()
-        
-        language.was_complete = True
-        language.is_complete = True
-        language.save()
-
     @classmethod
     def get_or_create_for_url(cls, video_url):
         parsed_url = urlparse(video_url)
@@ -216,7 +178,7 @@ class Video(models.Model):
                           'allow_community_edits': True})
             if created:
                 video.title = blip.scrape_title(video_url)
-                video.bliptv_flv_url = videos_blip.scrape_best_file_url(video_url)
+                #video.bliptv_flv_url = videos_blip.scrape_best_file_url(video_url)
                 video.video_url = video.bliptv_flv_url
                 video.thumbnail = blip.get_thumbnail_url(video_url)
                 video.save()

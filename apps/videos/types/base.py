@@ -17,48 +17,41 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 class VideoType(object):
-    def video_type_pair(self):
-        return (self.abbreviation, self.name)
+    
+    def __init__(self):
+        self.abbreviation = None
+        self.name = None        
+    
+    def matches_video_url(self, url):
+        raise Exception('Not implemented')
+    
+    def video_url(self, obj):
+        raise Exception('Not implemented')
+    
+    @property
+    def defaults(self):
+        return {
+            'video_type': self.abbreviation,
+            'allow_community_edits': True
+        }
+    
+    def create_kwars(self):
+        raise Exception('Not implented')
+    
+    def set_values(self, video_obj, video_url):
+        return video_obj
+    
+class VideoTypeRegistrar(dict):
+    
+    def __init__(self, *args, **kwargs):
+        super(VideoTypeRegistrar, self).__init__(*args, **kwargs)
+        self.choices = []
+        
+    def register(self, video_type):
+        self[video_type.abbreviation] = video_type
+        self.choices.append((video_type.abbreviation, video_type.name))
 
-    def video_url_kwargs(self, video_url):
-        args = { 'type': self.abbreviation }.update(self._video_url_kwargs(video_url))
-
-    def _video_url_kwargs(self, video_url):
-        return {}
-
-class VideoTypeRegistrar(object):
-    _video_types = []
-    _video_type_pairs = None
-    _video_type_dict = None
-
-    @classmethod
-    def register(cls, video_type_class):
-        VideoType.register(video_type_class)
-        cls._video_types.append(video_type_class())
-
-    @classmethod
-    def video_type_pairs(cls):
-        if cls._video_type_pairs is None:
-            cls._video_type_pairs = \
-                tuple([(t.abbreviation, t.name) for t in cls._video_types])
-        return cls._video_type_pairs
-
-    @classmethod
-    def video_type_dict(cls):
-        if cls._video_type_dict is None:
-            cls._video_type_dict = dict(
-                [(t.abbreviation, t) for t in cls._video_types])
-        return cls._video_type_dict
-
-    @classmethod
-    def video_type_for_abbreviation(cls, abbreviation):
-        return cls.video_type_dict()[abbreviation]
-
-    @classmethod
-    def video_type_for_url(cls, url):
-        for video_type in cls._video_types:
+    def video_type_for_url(self, url):
+        for video_type in self.values():
             if video_type.matches_video_url(url):
                 return video_type
-        return None
-
-registrar = VideoTypeRegistrar()

@@ -27,7 +27,7 @@ def _get_new_csrf_key():
 
 class UserUUIDMiddleware(object):
     
-    def process_view(self, request, callback, callback_args, callback_kwargs):
+    def process_request(self, request):
         try:
             request.META["UUID_COOKIE"] = request.COOKIES[UUID_COOKIE_NAME]
         except KeyError:

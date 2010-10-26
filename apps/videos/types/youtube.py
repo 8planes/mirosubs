@@ -17,37 +17,83 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from gdata.youtube.service import YouTubeService
-from videos.types.base import registrar, VideoType
 import re
+import urllib
+from videos.utils import YoutubeSubtitleParser
+from base import VideoType
+from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
+from auth.models import CustomUser as User
+from datetime import datetime
+import random
 
 yt_service = YouTubeService()
 yt_service.ssl = False
 
 class YoutubeVideoType(VideoType):
-    abbreviation = "Y"
-    name = "Youtube"
+
     _url_pattern = re.compile(
         r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)')
 
-    def video_url(self, video_url_model):
+    def __init__(self):
+        self.abbreviation = 'Y'
+        self.name = 'Youtube'   
+    
+    def video_url(self, obj):
         return 'http://www.youtube.com/watch?v={0}'.format(
-            video_url_model.youtube_videoid)
+            obj.youtube_videoid)
 
-    def matches_video_url(self, parsed_url):
-        return 'youtube.com' in parsed_url.netloc
+    def matches_video_url(self, url):
+        return 'youtube.com' in url and self._get_video_id(url)
 
-    def set_values(self, video_model, video_url):
+    def create_kwars(self, video_url):
+        return {'youtube_videoid': self._get_video_id(video_url)}
+
+    def set_values(self, video_obj, video_url):
         video_id = self._get_video_id(video_url)
-        entry = yt_service.GetYouTubeVideoEntry(video_id=video_model.youtube_videoid)
-        video_model.title = entry.media.title.text
-        video_model.duration = entry.media.duration.seconds
+        video_obj.youtube_videoid = video_id
+        entry = yt_service.GetYouTubeVideoEntry(video_id=video_obj.youtube_videoid)
+        video_obj.title = entry.media.title.text
+        if entry.media.duration:
+            video_obj.duration = entry.media.duration.seconds
         if entry.media.thumbnail:
-            video_model.thumbnail = entry.media.thumbnail[-1].url
-
+            video_obj.thumbnail = entry.media.thumbnail[-1].url
+        video_obj.save()
+        self._get_subtitles_from_youtube(video_obj)
+        return video_obj
+        
     def _get_video_id(self, video_url):
         return self._url_pattern.search(video_url).group('video_id')
 
-    def _video_url_kwargs(self, video_url):
-        return { 'youtube_videoid': self._get_video_id(video_url) }
-
-registrar.register(YoutubeVideoType)
+    def _get_subtitles_from_youtube(self, video_obj):
+        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
+        d = urllib.urlopen(url)
+        parser = YoutubeSubtitleParser(d.read())
+        
+        if not parser:
+            return
+        
+        language = SubtitleLanguage(video=video_obj)
+        language.is_original = False
+        language.is_forked = True
+        language.language = parser.language
+        language.save()
+        
+        version = SubtitleVersion(language=language)
+        version.datetime_started = datetime.now()
+        version.user = User.get_youtube_anonymous()
+        version.note = u'From youtube'
+        version.save()
+        
+        for i, item in enumerate(parser):
+            subtitle = Subtitle(**item)
+            subtitle.version = version
+            subtitle.subtitle_id = int(random.random()*10e12)
+            subtitle.sub_order = i+1
+            subtitle.save()
+        
+        version.finished = True
+        version.save()
+        
+        language.was_complete = True
+        language.is_complete = True
+        language.save()

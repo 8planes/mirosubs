@@ -16,28 +16,29 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from videos.types.base import registrar, VideoType
+from videos.types.base import VideoType
+import re
+from urlparse import urlparse
+
+URL_REGEX = re.compile('^http://.+\.(ogv|ogg|mp4|m4v|flv|webm)$', re.I)
 
 class HtmlFiveVideoType(VideoType):
-    abbreviation = 'H'
-    name = 'HTML5'
-    _ogg_pattern = r"\.ogv$|\.ogg$"
-    _mp4_pattern = r"\.mp4$"
-    _webm_pattern = r"\.webm$"
 
-    def video_url(self, video_url_model):
-        return video_url_model.video_url
+    def __init__(self):
+        self.abbreviation = 'H'
+        self.name = 'HTML5'   
 
-    def matches_video_url(self, parsed_url):
-        for pattern in [_ogg_pattern, _mp4_pattern, _webm_pattern]:
-            if re.search(pattern, parsed_url.path, re.I) is not None:
-                return True
-        return False
+    def video_url(self, obj):
+        return obj.video_url
 
-    def set_values(self, video_model, video_url):
-        pass
+    def matches_video_url(self, url):
+        url = self.format_url(url)
+        return bool(URL_REGEX.match(url))        
 
-    def _video_url_kwargs(self, video_url):
-        return { 'html5_video_url': video_url }
-
-registrar.register(HtmlFiveVideoType)
+    def create_kwars(self, video_url):
+        return { 'video_url': self.format_url(video_url) }
+    
+    def format_url(self, url):
+        parsed_url = urlparse(url)
+        return '%s://%s%s' % (parsed_url.scheme or 'http', parsed_url.netloc, parsed_url.path)
+    
