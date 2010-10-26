@@ -15,18 +15,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from base import VideoTypeRegistrar
-from youtube import YoutubeVideoType
-from bliptv import BlipTvVideoType
-from htmlfive import HtmlFiveVideoType
-from dailymotion import DailymotionVideoType
-from vimeo import VimeoVideoType
-from flv import FLVVideoType
 
-video_type_registrar = VideoTypeRegistrar()
-video_type_registrar.register(YoutubeVideoType())
-video_type_registrar.register(BlipTvVideoType())
-video_type_registrar.register(HtmlFiveVideoType())
-video_type_registrar.register(DailymotionVideoType())
-video_type_registrar.register(VimeoVideoType())
-video_type_registrar.register(FLVVideoType())
+from videos.types.base import VideoType
+import re
+
+URL_REGEX = re.compile('^http://.+\.flv$', re.I)
+
+class FLVVideoType(VideoType):
+
+    def __init__(self):
+        self.abbreviation = 'L'
+        self.name = 'FLV'   
+
+    def video_url(self, obj):
+        return obj.video_url
+
+    def matches_video_url(self, url):
+        url = self.format_url(url)
+        return bool(URL_REGEX.match(url))        
+
+    def create_kwars(self, video_url):
+        return { 'video_url': self.format_url(video_url) }    

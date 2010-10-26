@@ -18,9 +18,8 @@
 
 from videos.types.base import VideoType
 import re
-from urlparse import urlparse
 
-URL_REGEX = re.compile('^http://.+\.(ogv|ogg|mp4|m4v|flv|webm)$', re.I)
+URL_REGEX = re.compile('^http://.+\.(ogv|ogg|mp4|m4v|webm)$', re.I)
 
 class HtmlFiveVideoType(VideoType):
 
@@ -36,9 +35,4 @@ class HtmlFiveVideoType(VideoType):
         return bool(URL_REGEX.match(url))        
 
     def create_kwars(self, video_url):
-        return { 'video_url': self.format_url(video_url) }
-    
-    def format_url(self, url):
-        parsed_url = urlparse(url)
-        return '%s://%s%s' % (parsed_url.scheme or 'http', parsed_url.netloc, parsed_url.path)
-    
+        return { 'video_url': self.format_url(video_url) }    

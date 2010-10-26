@@ -21,7 +21,6 @@ import re
 import urllib
 from videos.utils import YoutubeSubtitleParser
 from base import VideoType
-from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
 from auth.models import CustomUser as User
 from datetime import datetime
 import random
@@ -39,8 +38,7 @@ class YoutubeVideoType(VideoType):
         self.name = 'Youtube'   
     
     def video_url(self, obj):
-        return 'http://www.youtube.com/watch?v={0}'.format(
-            obj.youtube_videoid)
+        return 'http://www.youtube.com/watch?v=%s' % obj.youtube_videoid
 
     def matches_video_url(self, url):
         return 'youtube.com' in url and self._get_video_id(url)
@@ -65,6 +63,8 @@ class YoutubeVideoType(VideoType):
         return self._url_pattern.search(video_url).group('video_id')
 
     def _get_subtitles_from_youtube(self, video_obj):
+        from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
+        
         url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
         d = urllib.urlopen(url)
         parser = YoutubeSubtitleParser(d.read())

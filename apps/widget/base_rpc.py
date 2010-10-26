@@ -28,7 +28,7 @@ LANGUAGES_MAP = dict(LANGUAGES)
 
 class BaseRpc:
     def show_widget(self, request, video_url, is_remote, base_state=None):
-        video, created = models.Video.get_or_create_for_url(video_url)
+        video = models.Video.get_or_create_for_url(video_url)
         video.widget_views_count += 1
         video.save()
 

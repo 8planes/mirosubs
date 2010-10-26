@@ -15,18 +15,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from base import VideoTypeRegistrar
-from youtube import YoutubeVideoType
-from bliptv import BlipTvVideoType
-from htmlfive import HtmlFiveVideoType
-from dailymotion import DailymotionVideoType
-from vimeo import VimeoVideoType
-from flv import FLVVideoType
 
-video_type_registrar = VideoTypeRegistrar()
-video_type_registrar.register(YoutubeVideoType())
-video_type_registrar.register(BlipTvVideoType())
-video_type_registrar.register(HtmlFiveVideoType())
-video_type_registrar.register(DailymotionVideoType())
-video_type_registrar.register(VimeoVideoType())
-video_type_registrar.register(FLVVideoType())
+from vidscraper.sites import vimeo
+from base import VideoType
+
+class VimeoVideoType(VideoType):
+
+    def __init__(self):
+        self.abbreviation = 'V'
+        self.name = 'Vimeo.com'   
+    
+    def video_url(self, obj):
+        return 'http://vimeo.com/%s' % obj.vimeo_videoid
+
+    def matches_video_url(self, url):
+        return bool(vimeo.VIMEO_REGEX.match(url))
+
+    def create_kwars(self, video_url):
+        return { 'vimeo_videoid': self._get_vimeo_id(video_url) }
+    
+    def _get_vimeo_id(self, video_url):
+        return vimeo.VIMEO_REGEX.match(video_url).group(2) 

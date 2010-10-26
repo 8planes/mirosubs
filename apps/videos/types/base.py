@@ -16,6 +16,8 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from urlparse import urlparse
+
 class VideoType(object):
     
     def __init__(self):
@@ -40,6 +42,10 @@ class VideoType(object):
     
     def set_values(self, video_obj, video_url):
         return video_obj
+
+    def format_url(self, url):
+        parsed_url = urlparse(url)
+        return '%s://%s%s' % (parsed_url.scheme or 'http', parsed_url.netloc, parsed_url.path)    
     
 class VideoTypeRegistrar(dict):
     
@@ -54,4 +60,4 @@ class VideoTypeRegistrar(dict):
     def video_type_for_url(self, url):
         for video_type in self.values():
             if video_type.matches_video_url(url):
-                return video_type
+                return video_type      
