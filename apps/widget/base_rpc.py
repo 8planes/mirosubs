@@ -32,6 +32,8 @@ class BaseRpc:
         video.widget_views_count += 1
         video.save()
 
+        self._maybe_add_video_session(request)
+
         return_value = {
             'video_id' : video.video_id,
             'writelock_expiration' : models.WRITELOCK_EXPIRATION,
@@ -100,6 +102,9 @@ class BaseRpc:
     def _maybe_add_video_session(self, request):
         if VIDEO_SESSION_KEY not in request.session:
             request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
+
+    def _video_session_key(self, request):
+        return request.session[VIDEO_SESSION_KEY]
 
     def _save_packets(self, sub_collection, packets):
         subtitle_set = sub_collection.subtitle_set        

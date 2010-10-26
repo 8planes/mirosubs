@@ -46,6 +46,7 @@ mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
  *
  */
 mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
+    var blipFileGetRegex = /^\s*https?:\/\/([^\.]+\.)*blip\.tv\/file\/get\//;
     if (mirosubs.video.VideoSource.isYoutube(videoURL)) {
         var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
         if (videoIDExtract)
@@ -62,24 +63,17 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
         if (videoIDExtract)
             return new mirosubs.video.DailymotionVideoSource(videoIDExtract[1]);
     }
-    else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL)) {
-        // file/get/ paths from blip.tv are direct file accesses,
-        // so give them an Html5VideoSource
-        if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv\/file\/get\//.test(videoURL)) {
-            if (/\.flv$/.test(videoURL))
-                return new mirosubs.video.FlvVideoSource(videoURL);
-            else 
-                return new mirosubs.video.Html5VideoSource(
-                    videoURL,
-                    mirosubs.video.Html5VideoType.OGG,
-                    opt_videoConfig);
-        }
+    else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL) &&
+             !blipFileGetRegex.test(videoURL)) {
         return null;
     }
     else if (/\.flv$/.test(videoURL)) {
         return new mirosubs.video.FlvVideoSource(videoURL);
     }
     else {
+        var queryStringIndex = videoURL.indexOf('?');
+        if (queryStringIndex > -1)
+            videoURL = videoURL.substring(0, queryStringIndex);
         var vt = mirosubs.video.Html5VideoType;
         var videoType = null;
         if (/\.ogv$|\.ogg$/.test(videoURL))

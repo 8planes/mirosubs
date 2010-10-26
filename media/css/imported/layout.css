@@ -268,6 +268,8 @@ float: none;
   }
 
 
+/*
+
 .need_help span{
   background: url(../../images/ribbons.png) left 0 no-repeat;
 float: left;
@@ -291,8 +293,33 @@ width: 123px;
 }
 
 
+*/
+
+.need_help {
+display: block;
+clear: both;
+
+}
+
+.need_help *,
+.completed_in *{
+color: #000 !important;
+font-weight: bold;
+}
 
 
+.need_help a,
+.completed_in a{
+text-decoration: underline !important;
+}
+
+
+
+.completed_in {
+clear: both;
+display: block;
+margin: 0px !important;
+}
 
 
 

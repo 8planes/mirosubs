@@ -104,24 +104,6 @@ mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
         playheadTime < this.captions_[0].getStartTime())
         return;
 
-    // we may need to update the current caption index if we have shown at least
-    // one caption before AND the slider has been dragged backwards
-
-    if (this.currentCaptionIndex_ > -1) {
-        var backedUp = false;
-        while (this.currentCaptionIndex_ > -1 &&
-               playheadTime < this.captions_[this.currentCaptionIndex_].getStartTime()) {
-            backedUp = true;
-            this.currentCaptionIndex_--;
-        }
-
-        // If we backed up and changed the current caption, display that one instead.
-        if (backedUp && this.currentCaptionIndex_ > -1) {
-            this.dispatchCaptionEvent_(this.captions_[this.currentCaptionIndex_]);
-            return;
-        }
-    }
-
     var curCaption = this.currentCaptionIndex_ > -1 ?
         this.captions_[this.currentCaptionIndex_] : null;
     if (this.currentCaptionIndex_ > -1 &&
