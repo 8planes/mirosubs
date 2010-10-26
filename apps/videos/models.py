@@ -19,23 +19,16 @@
 from django.db import models
 import string
 import random
-import re
-from urlparse import urlparse, parse_qs
 from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
-from vidscraper.sites import blip, google_video, fora, ustream, vimeo
-from videos import blip as videos_blip
-from youtube import get_video_id
-import dailymotion
-import urllib
-from videos.utils import YoutubeSubtitleParser
 from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from videos.types import video_type_registrar
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -63,7 +56,6 @@ VIDEO_TYPE = (
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 VIDEO_SESSION_KEY = 'video_session'
-FLV_REGEX = re.compile(r"\.flv$")
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -139,6 +131,12 @@ class Video(models.Model):
         return ('videos:video', [self.video_id])
 
     def get_video_url(self):
+        try:
+            return video_type_registrar[self.video_type].video_url(self)
+        except KeyError:
+            pass
+        
+        #Deprecated
         if self.video_type == VIDEO_TYPE_HTML5:
             return self.video_url
         elif self.video_type == VIDEO_TYPE_YOUTUBE:
@@ -151,129 +149,18 @@ class Video(models.Model):
             return 'http://dailymotion.com/video/{0}'.format(self.dailymotion_videoid)
         else:
             return self.video_url
-
-    def _get_subtitles_from_youtube(self):
-        if not self.youtube_videoid:
-            return 
-
-        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.youtube_videoid
-        d = urllib.urlopen(url)
-        parser = YoutubeSubtitleParser(d.read())
-        
-        if not parser:
+    
+    @classmethod
+    def get_or_create_for_url(cls, video_url, vt=None):
+        vt = vt or video_type_registrar.video_type_for_url(video_url)
+        if not vt:
             return
         
-        language = SubtitleLanguage(video=self)
-        language.is_original = False
-        language.is_forked = True
-        language.language = parser.language
-        language.save()
-        
-        version = SubtitleVersion(language=language)
-        version.datetime_started = datetime.now()
-        version.user = User.get_youtube_anonymous()
-        version.note = u'From youtube'
-        version.save()
-        
-        for i, item in enumerate(parser):
-            subtitle = Subtitle(**item)
-            subtitle.version = version
-            subtitle.subtitle_id = int(random.random()*10e12)
-            subtitle.sub_order = i+1
-            subtitle.save()
-        
-        version.finished = True
-        version.save()
-        
-        language.was_complete = True
-        language.is_complete = True
-        language.save()
-
-    @classmethod
-    def get_or_create_for_url(cls, video_url):
-        parsed_url = urlparse(video_url)
-        if 'youtube.com' in parsed_url.netloc:
-            yt_video_id = get_video_id(video_url)
-            video, created = Video.objects.get_or_create(
-                youtube_videoid=yt_video_id,
-                defaults={'video_type': VIDEO_TYPE_YOUTUBE, 
-                          'allow_community_edits': True})
-         
-            if created:
-                entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
-                video.title = entry.media.title.text
-                if entry.media.duration:
-                    video.duration = entry.media.duration.seconds
-                if entry.media.thumbnail:
-                    video.thumbnail = entry.media.thumbnail[-1].url
-                video.save()
-                video._get_subtitles_from_youtube()
-        elif 'blip.tv' in parsed_url.netloc and blip.BLIP_REGEX.match(video_url):
-            bliptv_fileid = blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
-            video, created = Video.objects.get_or_create(
-                bliptv_fileid=bliptv_fileid,
-                defaults={'video_type': VIDEO_TYPE_BLIPTV, 
-                          'allow_community_edits': True})
-            if created:
-                video.title = blip.scrape_title(video_url)
-                video.bliptv_flv_url = videos_blip.scrape_best_file_url(video_url)
-                video.video_url = video.bliptv_flv_url
-                video.thumbnail = blip.get_thumbnail_url(video_url)
-                video.save()
-        elif 'video.google.com' in parsed_url.netloc and google_video.GOOGLE_VIDEO_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=video_url,
-                defaults={'video_type': VIDEO_TYPE_GOOGLE,
-                          'allow_community_edits': True})
-            if created:
-                video.title = google_video.scrape_title(video_url)
-                video.save()           
-        elif 'ustream.tv' in parsed_url.netloc and ustream.USTREAM_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=ustream.get_flash_enclosure_url(video_url),
-                defaults={'video_type': VIDEO_TYPE_USTREAM,
-                          'allow_community_edits': True})
-            if created:
-                video.title = ustream.get_title(video_url)
-                video.thumbnail = ustream.get_thumbnail_url(video_url)
-                video.save()  
-        elif 'vimeo.com' in parsed_url.netloc and vimeo.VIMEO_REGEX.match(video_url):
-            vimeo_videoid = vimeo.VIMEO_REGEX.match(video_url).group(2)
-            video, created = Video.objects.get_or_create(
-                vimeo_videoid = vimeo_videoid,
-                defaults={'video_type': VIDEO_TYPE_VIMEO,
-                          'allow_community_edits': True})
-            # TODO: title and thumbnail -- we can't get them without
-            # an application oauth key/secret
-        elif 'dailymotion.com' in parsed_url.netloc and dailymotion.DAILYMOTION_REGEX.match(video_url):
-            metadata = dailymotion.get_metadata(video_url)
-
-            stream_flv_mini_url = metadata.get('stream_flv_mini_url', '')
-            if stream_flv_mini_url and stream_flv_mini_url != '':
-                dailymotion_videoid = dailymotion.get_video_id(video_url)
-                video, created = Video.objects.get_or_create(
-                    dailymotion_videoid = dailymotion_videoid,
-                    defaults={'video_type': VIDEO_TYPE_DAILYMOTION,
-                              'allow_community_edits': True})
-                if created:
-                    video.title = metadata.get('title') or dailymotion_videoid
-                    video.thumbnail = metadata.get('thumbnail_url') or ''
-                    video.save()
-            else:
-                # not hosted by dailymotion and uses a different player
-                # TODO: error message / specific exception type?
-                raise Exception("dailymotion video actually hosted by partner -- we can't handle this")
-        elif FLV_REGEX.match(video_url):
-            video, created = Video.objects.get_or_create(
-                video_url=video_url,
-                defaults={'video_type': VIDEO_TYPE_FLV,
-                          'allow_community_edits': True})
-        else:
-            video, created = Video.objects.get_or_create(
-                video_url=video_url,
-                defaults={'video_type': VIDEO_TYPE_HTML5,
-                          'allow_community_edits': True})
-        return video, created
+        obj, create = Video.objects.get_or_create(defaults=vt.defaults, **vt.create_kwars(video_url))
+        if create: 
+            obj = vt.set_values(obj, video_url)
+            obj.save()
+        return obj, create
     
     @property
     def filename(self):

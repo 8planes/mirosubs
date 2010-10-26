@@ -34,19 +34,19 @@ msgstr ""
 
 #: .\apps\auth\admin.py:13
 msgid "Password"
-msgstr ""
+msgstr "Šifra"
 
 #: .\apps\auth\admin.py:14
 msgid "Password confirmation"
-msgstr ""
+msgstr "Potvda šifre"
 
 #: .\apps\auth\admin.py:15
 msgid "Email"
-msgstr ""
+msgstr "Mail"
 
 #: .\apps\auth\models.py:83
 msgid "Add comment"
-msgstr ""
+msgstr "Komentiraj"
 
 #: .\apps\auth\models.py:84
 msgid "Start subtitles"

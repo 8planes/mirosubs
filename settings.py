@@ -209,6 +209,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
     'middleware.P3PHeaderMiddleware',
+    'middleware.UserUUIDMiddleware',
 )
 
 ROOT_URLCONF = 'mirosubs.urls'
