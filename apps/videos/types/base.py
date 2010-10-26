@@ -16,18 +16,15 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from abc import ABCMeta, abstractmethod
-
-class VideoType(metaclass=ABCMeta):
+class VideoType(object):
     def video_type_pair(self):
         return (self.abbreviation, self.name)
 
     def video_url_kwargs(self, video_url):
         args = { 'type': self.abbreviation }.update(self._video_url_kwargs(video_url))
 
-    @abstractmethod
     def _video_url_kwargs(self, video_url):
-        pass
+        return {}
 
 class VideoTypeRegistrar(object):
     _video_types = []

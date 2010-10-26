@@ -18,6 +18,7 @@
 
 from gdata.youtube.service import YouTubeService
 from videos.types.base import registrar, VideoType
+import re
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -37,14 +38,14 @@ class YoutubeVideoType(VideoType):
 
     def set_values(self, video_model, video_url):
         video_id = self._get_video_id(video_url)
-        entry = yt_service.GetYouTubeVideoEntry(video_id=video.youtube_videoid)
+        entry = yt_service.GetYouTubeVideoEntry(video_id=video_model.youtube_videoid)
         video_model.title = entry.media.title.text
         video_model.duration = entry.media.duration.seconds
         if entry.media.thumbnail:
             video_model.thumbnail = entry.media.thumbnail[-1].url
 
     def _get_video_id(self, video_url):
-        return _url_pattern.search(video_url).group('video_id')
+        return self._url_pattern.search(video_url).group('video_id')
 
     def _video_url_kwargs(self, video_url):
         return { 'youtube_videoid': self._get_video_id(video_url) }
