@@ -160,7 +160,7 @@ class Video(models.Model):
         if create: 
             obj = vt.set_values(obj, video_url)
             obj.save()
-        return obj
+        return obj, create
     
     @property
     def filename(self):

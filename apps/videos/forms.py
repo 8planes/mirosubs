@@ -195,7 +195,8 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
     
     def save(self):
         video_url = self.cleaned_data['video_url']
-        return Video.get_or_create_for_url(video_url, self._video_type)
+        obj, create = Video.get_or_create_for_url(video_url, self._video_type)
+        return obj
     
 class FeedbackForm(MathCaptchaForm):
     email = forms.EmailField(required=False)
