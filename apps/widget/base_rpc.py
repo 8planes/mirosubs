@@ -107,7 +107,7 @@ class BaseRpc:
         return request.session[VIDEO_SESSION_KEY]
 
     def _save_packets(self, sub_collection, packets):
-        subtitle_set = sub_collection.subtitle_set        
+        subtitle_set = sub_collection.subtitle_set
         for packet in sorted(packets, key=lambda p : p['packet_no']):
             if packet['packet_no'] > sub_collection.last_saved_packet:
                 self._apply_subtitle_changes(

@@ -293,6 +293,15 @@ class Video(models.Model):
         else:
             return []
 
+    def update_complete_state(self):
+        language = self.subtitle_language()
+        if not language.is_complete:
+            self.is_subtitled = False
+        else:
+            self.is_subtitled = True
+            self.was_subtitled = True
+
+
 def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
         return
@@ -317,6 +326,14 @@ class SubtitleLanguage(models.Model):
     
     def __unicode__(self):
         return u'%s(%s)' % (self.video, self.language_display())
+
+    def update_complete_state(self):
+        version = self.latest_version()
+        if version.subtitle_set.count() == 0:
+            self.is_complete = False
+        else:
+            self.is_complete = True
+            self.was_complete = True
     
     @models.permalink
     def get_absolute_url(self):
@@ -430,10 +447,11 @@ class SubtitleCollection(models.Model):
     class Meta:
         abstract = True
 
-    def subtitles(self):
+    def subtitles(self, subtitles_to_use=None):
+        subtitles = subtitles_to_use or self.subtitle_set.all()
         if not self.is_dependent():
             return [EffectiveSubtitle.for_subtitle(s)
-                    for s in self.subtitle_set.all()]
+                    for s in subtitles]
         else:
             standard_collection = self._get_standard_collection()
             if not standard_collection:
@@ -441,7 +459,7 @@ class SubtitleCollection(models.Model):
             else:
                 t_dict = \
                     dict([(s.subtitle_id, s) for s
-                          in self.subtitle_set.all()])
+                          in subtitles])
                 subs = [s for s in standard_collection.subtitle_set.all()
                         if s.subtitle_id in t_dict]
                 return [EffectiveSubtitle.for_dependent_translation(
@@ -505,17 +523,22 @@ class SubtitleVersion(SubtitleCollection):
     def video(self):
         return self.language.video;
 
-    def set_changes(self, old_version):
-        new_subtitles = self.subtitles()
+    def set_changes(self, new_subtitles, old_version):
+        new_subtitles = self.subtitles(new_subtitles)
         subtitles_length = len(new_subtitles)
 
         if not old_version:
             #if it's first version set changes to 100
             self.time_change = 1
             self.text_change = 1          
-        elif not subtitles_length:
-            self.time_change = 0
-            self.text_change = 0
+        elif subtitles_length == 0:
+            old_subtitles_length = old_version.subtitle_set.count()
+            if old_subtitles_length == 0:
+                self.time_change = 0
+                self.text_change = 0
+            else:
+                self.time_change = 1
+                self.text_Change = 1
         else:
             old_subtitles = dict([(item.subtitle_id, item) 
                                   for item in old_version.subtitles()])
@@ -593,7 +616,8 @@ class SubtitleDraft(SubtitleCollection):
 
     @property
     def version_no(self):
-        return 0 if self.parent_version is None else self.parent_version + 1
+        return 0 if self.parent_version is None else \
+            self.parent_version.version_no + 1
 
     @property
     def video(self):
@@ -606,7 +630,8 @@ class SubtitleDraft(SubtitleCollection):
         return not self.language.is_original and not self.is_forked
 
     def matches_request(self, request):
-        if request.is_authenticated() and self.user.pk == request.user.pk:
+        if request.is_authenticated() and self.user and \
+                self.user.pk == request.user.pk:
             return True
         else:
             return request.browser_id == self.browser_id
@@ -659,6 +684,22 @@ class Subtitle(models.Model):
                         subtitle_text=self.subtitle_text,
                         start_time=self.start_time,
                         end_time=self.end_time)
+
+    @classmethod
+    def trim_list(cls, subtitles):
+        first_nonblank_index = -1
+        last_nonblank_index = -1
+        index = -1
+        for subtitle in subtitles:
+            index += 1
+            if subtitle.subtitle_text.strip() != '':
+                if first_nonblank_index == -1:
+                    first_nonblank_index = index
+                last_nonblank_index = index
+        if first_nonblank_index != -1:
+            return subtitles[first_nonblank_index:last_nonblank_index + 1]
+        else:
+            return []
 
     def update_from(self, caption_dict, is_dependent_translation=False):
         self.subtitle_text = caption_dict['text']

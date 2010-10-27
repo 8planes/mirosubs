@@ -51,6 +51,16 @@ class EffectiveSubtitle:
             subtitle.end_time,
             subtitle.subtitle_order)
 
+    def duplicate_for(self, draft):
+        from videos.models import Subtitle
+        return Subtitle(
+            draft=draft,
+            subtitle_id=self.subtitle_id,
+            subtitle_order=self.sub_order,
+            subtitle_text=self.text,
+            start_time=self.start_time,
+            end_time=self.end_time)
+
     def display_time(self):
         t = self.start_time
         return '' if t < 0 else format_time(t)

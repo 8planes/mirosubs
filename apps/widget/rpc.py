@@ -86,16 +86,23 @@ class Rpc(BaseRpc):
 
         self._save_packets(draft, packets)
 
-        new_version = self._create_version_from_draft(draft, request.user)
-        if new_version.time_change > 0 and new_version.text_change > 0:
+        new_version, new_subs = self._create_version_from_draft(draft, request.user)
+        if len(new_subs) == 0 and draft.language.latest_version() is None:
+            should_save = False
+        else:
+            should_save = new_version.time_change > 0 or new_version.text_change > 0
+        if should_save:
             new_version.save()
-            new_version.language.is_forked = new_version.is_forked
-            new_version.language.release_writelock()
-            new_version.language.save()
-
-            for subtitle in models.Subtitle.objects.all():
-                print "%s,%s" % (subtitle.version, subtitle.draft)
-
+            for subtitle in new_subs:
+                subtitle.version = new_version
+                subtitle.save()
+            language = new_version.language
+            language.update_complete_state()
+            language.is_forked = new_version.is_forked
+            language.release_writelock()
+            language.save()
+            if language.is_original:
+                language.video.update_complete_state()
             from videos.models import Action
             Action.create_caption_handler(new_version)
 
@@ -112,12 +119,10 @@ class Rpc(BaseRpc):
             is_forked=draft.is_forked,
             datetime_started=draft.datetime_started,
             user=user)
-        for subtitle in draft.subtitle_set.all():
-            version.subtitle_set.add(subtitle.duplicate_for(version=version))
-        print("subtitle_set count: %s" % version.subtitle_set.count())
-        version.set_changes(draft.parent_version)
-        print("2 subtitle_set count: %s" % version.subtitle_set.count())
-        return version
+        subtitles = models.Subtitle.trim_list(
+            [s.duplicate_for() for s in draft.subtitle_set.all()])
+        version.set_changes(subtitles, draft.parent_version)
+        return version, subtitles
 
     def fetch_subtitles(self, request, video_id, language_code=None):
         video = models.Video.objects.get(video_id=video_id)
@@ -133,14 +138,6 @@ class Rpc(BaseRpc):
             'translations_count': models.SubtitleLanguage.objects.filter(is_original=False).count()
         }
     
-    def _save_subtitles_impl(self, request, language, deleted, inserted, updated):
-        if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
-            return
-        current_version = language.latest_version()
-        self._apply_subtitle_changes(
-            current_version, deleted, inserted, updated)
-        current_version.save()
-
     def _get_draft_for_editing(self, request, language, 
                                base_version_no=None, 
                                fork=False):
@@ -167,7 +164,11 @@ class Rpc(BaseRpc):
         draft.save()
 
         if version_to_copy is not None:
-            for subtitle in version_to_copy.subtitle_set.all():
+            if not version_to_copy.is_forked and fork:
+                subs_to_copy = version_to_copy.subtitles()
+            else:
+                subs_to_copy = version_to_copy.subtitle_set.all()
+            for subtitle in subs_to_copy:
                 draft.subtitle_set.add(subtitle.duplicate_for(draft=draft))
         return draft
 
