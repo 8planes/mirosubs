@@ -77,9 +77,9 @@ msgid "You are not authenticated."
 msgstr "Niste ovlašteni."
 
 #: .\apps\profiles\forms.py:51
-#, python-format
+#, python-format, fuzzy
 msgid "Personal message from %(sender)s on universalsubtitles.org"
-msgstr ""
+msgstr "Privatna poruka od %(sender)s na universalsubtitles.org-u"
 
 #: .\apps\profiles\forms.py:67
 msgid "Confirm new password:"
