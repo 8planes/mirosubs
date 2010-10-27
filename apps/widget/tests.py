@@ -675,6 +675,31 @@ class TestRpc(TestCase):
         video = Video.objects.get(video_id=video_id)
         self.assertEquals('es', video.subtitle_language().language)
 
+    def test_insert_duplicate_revision(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_subtitles(request, video.video_id, [])
+        rpc.release_lock(request, video.video_id)
+        # different user opens dialog for video
+        request_1 = RequestMockup(self.user_1)
+        rpc.show_widget(
+            request_1,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        rpc.start_editing(request_1, video.video_id, 'en')
+        # user_1 inserts a new sub, then deletes it
+        inserted = [{'subtitle_id': 'abc',
+                     'text': '',
+                     'start_time': 4.8,
+                     'end_time': 9.2,
+                     'sub_order': 2.0}]
+        rpc.save_subtitles(request_1, video.video_id, [_make_packet(inserted=inserted)])
+        rpc.save_subtitles(request_1, video.video_id, [_make_packet(deleted=inserted)])
+        rpc.finished_subtitles(request_1, video.video_id, [])
+        video = Video.objects.get(pk=video.pk)
+        language = video.subtitle_language()
+        self.assertEqual(1, language.subtitleversion_set.count())
+
     def _create_video_with_one_caption_set(self, request):
         return_value = rpc.show_widget(
             request,

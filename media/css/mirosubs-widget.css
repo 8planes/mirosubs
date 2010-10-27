@@ -134,9 +134,10 @@ text-shadow:
 .mirosubs-langDrop {
   background: #999 !important;
   padding: 15px 0 !important;
-  text-align: center !important;
+  text-align: left !important;
   border-bottom: 1px solid #333 !important;
   border-top: 1px solid #333 !important;
+
   }
 
 .mirosubs-langDrop select{
