@@ -1831,23 +1831,24 @@ msgstr ""
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr ""
+msgstr "% završeno"
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
-msgstr ""
+msgstr "Orginal"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
-msgstr ""
+msgstr "Nema titlova"
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "Svi titlovani videi"
 
 #: .\templates\videos\video_list.html.py:12
+#, fuzzy
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: .\templates\videos\video_list.html.py:14
 msgid "Pageloads"
@@ -1859,16 +1860,16 @@ msgstr ""
 
 #: .\templates\videos\video_list.html.py:22
 msgid "Translations"
-msgstr ""
+msgstr "Prevodi"
 
 #: .\templates\videos\video_list.html.py:25
 msgid "Subtitled?"
-msgstr ""
+msgstr "Titlovano?"
 
 #: .\templates\videos\video_list.html.py:39
 msgid "history"
-msgstr ""
+msgstr "historija"
 
 #: .\templates\videos\video_list.html.py:52
 msgid "There are no videos."
-msgstr ""
+msgstr "Nema videa."
