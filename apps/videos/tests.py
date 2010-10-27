@@ -84,8 +84,8 @@ class WebUseTest(TestCase):
         self.user = User.objects.get(username=self.auth['username'])
         self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
 
-    def _simple_test(self, url_name, args=None, kwargs=None, status=200):
-        response = self.client.get(reverse(url_name, args=args, kwargs=kwargs))
+    def _simple_test(self, url_name, args=None, kwargs=None, status=200, data={}):
+        response = self.client.get(reverse(url_name, args=args, kwargs=kwargs), data)
         self.assertEqual(response.status_code, status) 
         return response
 
@@ -224,6 +224,37 @@ class ViewsTest(WebUseTest):
     def setUp(self):
         self._make_objects()
     
+    def test_video_url_make_primary(self):
+        self._simple_test("videos:video_url_make_primary")
+    
+    def test_site_feedback(self):
+        self._simple_test("videos:site_feedback")
+
+    def test_api_subtitles(self):
+        youtube_id = 'uYT84jZDPE0'
+        
+        try:
+            Video.objects.get(youtube_videoid=youtube_id)
+            self.fail()
+        except Video.DoesNotExist:
+            pass       
+        
+        url = 'http://www.youtube.com/watch?v=%s' % youtube_id
+        self._simple_test("api_subtitles", data={'video_url': url})
+        
+        try:
+            Video.objects.get(youtube_videoid=youtube_id)
+        except Video.DoesNotExist:
+            self.fail()
+    
+        self._simple_test("api_subtitles", data={'video_url': url})       
+        
+        from django.utils import simplejson as json
+        
+        response = self._simple_test("api_subtitles")
+        data = json.loads(response.content)
+        self.assertTrue(data['is_error'])
+        
     def test_index(self):
         self._simple_test('videos.views.index')
         
@@ -288,9 +319,11 @@ class ViewsTest(WebUseTest):
         
     def test_video_list(self):
         self._simple_test('videos:list')
+        self._simple_test('videos:list', data={'o': 'translation_count', 'ot': 'desc'})
         
     def test_actions_list(self):
         self._simple_test('videos:actions_list')
+        self._simple_test('videos:actions_list', data={'o': 'created', 'ot': 'desc'})
 
     def test_paste_transcription(self):
         self._login()
@@ -331,7 +364,8 @@ class ViewsTest(WebUseTest):
         
     def test_history(self):
         self._simple_test('videos:history', [self.video.video_id])
-    
+        self._simple_test('videos:history', [self.video.video_id], data={'o': 'user', 'ot': 'asc'})
+        
     def test_revision(self):
         version = self.video.version()
         self._simple_test('videos:revision', [version.id])
@@ -372,6 +406,10 @@ class ViewsTest(WebUseTest):
             
     def test_search(self):
         self._simple_test('search')
+        self._simple_test('search', data={'o': 'title', 'ot': 'desc'})
+    
+    def test_counter(self):
+        self._simple_test('counter')
         
     def test_stop_notification(self):
         self._login()

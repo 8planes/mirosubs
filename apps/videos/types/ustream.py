@@ -16,21 +16,25 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-import re
-import httplib
-import json
+from base import VideoType
+from vidscraper.sites import ustream
 
-DAILYMOTION_REGEX = re.compile(r'https?://(?:[^/]+[.])?dailymotion.com/video/(?P<video_id>[-0-9a-zA-Z]+)(?:_.*)?')
+class UstreamVideoType(VideoType):
 
-def get_video_id(video_url):
-    return DAILYMOTION_REGEX.match(video_url).group(1)
-
-def get_metadata(video_url):
-    video_id = get_video_id(video_url)
+    def __init__(self):
+        self.abbreviation = 'U'
+        self.name = 'Ustream.tv'   
     
-    conn = httplib.HTTPConnection("www.dailymotion.com")
-    conn.request("GET", "/json/video/" + video_id)
-    response = conn.getresponse()
-    body = response.read()
+    def video_url(self, obj):
+        return obj.video_url
 
-    return json.loads(body)
+    def matches_video_url(self, url):
+        return bool(ustream.USTREAM_REGEX.match(url))
+
+    def create_kwars(self, video_url):
+        return { 'video_url': ustream.get_flash_enclosure_url(video_url) }
+    
+    def set_values(self, video_obj, video_url):
+        video_obj.title = ustream.get_title(video_url)
+        video_obj.thumbnail = ustream.get_thumbnail_url(video_url)
+        return video_obj   
