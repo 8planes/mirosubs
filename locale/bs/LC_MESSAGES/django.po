@@ -1179,7 +1179,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Hvala što koristite naš sajt!"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
@@ -1192,16 +1192,16 @@ msgstr ""
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
-msgstr ""
+msgstr "Email adrese:"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Restartuj šifru"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
 msgid "Anonymous"
-msgstr ""
+msgstr "Anoniman"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
@@ -1238,7 +1238,7 @@ msgstr ""
 
 #: .\templates\videos\_feedback_form.html.py:37
 msgid "Your email:"
-msgstr ""
+msgstr "Vaš email:"
 
 #: .\templates\videos\_feedback_form.html.py:44
 msgid "Your Feedback"
@@ -1282,7 +1282,7 @@ msgstr ""
 
 #: .\templates\videos\_recent_activity.html.py:3
 msgid "View all"
-msgstr ""
+msgstr "Vidi sve"
 
 #: .\templates\videos\_upload_subtitles.html.py:4
 #: .\templates\videos\_upload_subtitles.html.py:9
@@ -1307,7 +1307,7 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:4
 msgid "Activity"
-msgstr ""
+msgstr "Aktivnost"
 
 #: .\templates\videos\_video_activity.html.py:7
 msgid "Happened"
@@ -1339,7 +1339,7 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:41
 msgid "edited"
-msgstr ""
+msgstr "izmjenjeno"
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
@@ -1351,11 +1351,11 @@ msgstr ""
 
 #: .\templates\videos\_video_activity.html.py:48
 msgid "for"
-msgstr ""
+msgstr "za"
 
 #: .\templates\videos\_video_activity.html.py:53
 msgid "ago"
-msgstr ""
+msgstr "prije"
 
 #: .\templates\videos\actions_list.html.py:8
 msgid "All activities"
@@ -1364,15 +1364,15 @@ msgstr ""
 #: .\templates\videos\actions_list.html.py:12
 #: .\templates\videos\history.html.py:210
 msgid "User"
-msgstr ""
+msgstr "Korisnik"
 
 #: .\templates\videos\actions_list.html.py:13
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: .\templates\videos\actions_list.html.py:14
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: .\templates\videos\actions_list.html.py:24
 msgid "There are no activities."
@@ -1391,7 +1391,7 @@ msgstr ""
 
 #: .\templates\videos\create.html.py:23
 msgid "Begin"
-msgstr ""
+msgstr "Početak"
 
 #: .\templates\videos\create.html.py:25
 msgid ""
