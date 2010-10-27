@@ -1647,11 +1647,11 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
-msgstr ""
+msgstr "Komentari"
 
 #: .\templates\videos\history.html.py:190
 msgid "History"
-msgstr ""
+msgstr "Historija"
 
 #: .\templates\videos\history.html.py:197
 msgid "Compare Revisions"
@@ -1663,15 +1663,15 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:213
 msgid "Note"
-msgstr ""
+msgstr "Bilješke"
 
 #: .\templates\videos\history.html.py:216
 msgid "Time"
-msgstr ""
+msgstr "Vrijeme"
 
 #: .\templates\videos\history.html.py:219
 msgid "Text"
-msgstr ""
+msgstr "Sljedeće"
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
@@ -1683,11 +1683,11 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
-msgstr ""
+msgstr "Još uvijek nema titlova."
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "Make some!"
-msgstr ""
+msgstr "Napravi jedan!"
 
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
@@ -1735,11 +1735,11 @@ msgstr ""
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
-msgstr ""
+msgstr "Traži"
 
 #: .\templates\videos\search.html.py:16
 msgid "URL/title"
-msgstr ""
+msgstr "URL/naslov"
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
