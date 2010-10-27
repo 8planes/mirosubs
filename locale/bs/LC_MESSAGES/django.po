@@ -18,7 +18,7 @@ msgstr ""
 
 #: .\settings.py:29
 msgid "Argentinian Spanish"
-msgstr ""
+msgstr "Argentinian Spanish"
 
 #: .\apps\auth\admin.py:10
 msgid "Username"
@@ -26,11 +26,11 @@ msgstr "Korisničko ime"
 
 #: .\apps\auth\admin.py:11
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
-msgstr ""
+msgstr "Potrebno sa maksimalno 30 karaktera može zadržati slova brojeve i donje crte."
 
 #: .\apps\auth\admin.py:12
 msgid "This value must contain only letters, numbers and underscores."
-msgstr ""
+msgstr "Vrijednost može sadržati samo slova, brojeve i donje crte."
 
 #: .\apps\auth\admin.py:13
 msgid "Password"
@@ -50,19 +50,19 @@ msgstr "Komentiraj"
 
 #: .\apps\auth\models.py:84
 msgid "Start subtitles"
-msgstr ""
+msgstr "Započni titl"
 
 #: .\apps\auth\models.py:85
 msgid "Start translation"
-msgstr ""
+msgstr "Započni prevod"
 
 #: .\apps\auth\models.py:86
 msgid "Edit subtitles"
-msgstr ""
+msgstr "Izmjeni titl"
 
 #: .\apps\auth\models.py:87
 msgid "Edit translation"
-msgstr ""
+msgstr "Izmjeni prevod"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
