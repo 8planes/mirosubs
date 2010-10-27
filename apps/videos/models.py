@@ -160,6 +160,13 @@ class Video(models.Model):
         if create: 
             obj = vt.set_values(obj, video_url)
             obj.save()
+            
+            #Save video url
+            video_url = VideoUrl()
+            video_url.url = vt.video_url(obj)
+            video_url.type = vt.abbreviation
+            video_url.video = obj
+            video_url.save()
         return obj, create
     
     @property
@@ -777,17 +784,31 @@ class StopNotification(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
 
+class VideoUrlManager(models.Manager):
+    
+    def get_query_set(self):
+        return super(VideoUrlManager, self).get_query_set().filter(deleted=False)
+
 class VideoUrl(models.Model):
     video = models.ForeignKey(Video)
     type = models.CharField(max_length=1, choices=VIDEO_TYPE)
-    url = models.URLField(max_length=2048)
+    url = models.URLField(max_length=2048, unique=True)
     primary = models.BooleanField(default=False)
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
+    deleted = models.BooleanField(default=False)
     
     class Meta:
         unique_together = (('video', 'original'),)
     
+    objects = VideoUrlManager()
+    all = models.Manager()
+    
     def __unicode__(self):
         return self.url
+
+    def unique_error_message(self, model_class, unique_check):
+        if unique_check[0] == 'url':
+            return _('This URL already exists.')
+        return super(VideoUrl, self).unique_error_message(model_class, unique_check)

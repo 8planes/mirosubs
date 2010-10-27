@@ -27,6 +27,9 @@ class BlipTvVideoType(VideoType):
         self.abbreviation = 'B'
         self.name = 'Blip.tv'   
 
+    def convert_to_video_url(self, url):
+        return self.scrape_best_file_url(self._get_file_id(url))
+
     def video_url(self, obj):
         return obj.video_url
 

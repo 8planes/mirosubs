@@ -29,6 +29,10 @@ class DailymotionVideoType(VideoType):
     def __init__(self):
         self.abbreviation = 'D'
         self.name = 'dailymotion.com'   
+
+    def convert_to_video_url(self, url):
+        id = self.get_video_id(url)
+        return 'http://dailymotion.com/video/%s' % id
     
     def video_url(self, obj):
         return 'http://dailymotion.com/video/%s' % obj.dailymotion_videoid

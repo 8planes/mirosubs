@@ -24,6 +24,9 @@ class VideoType(object):
         self.abbreviation = None
         self.name = None        
     
+    def convert_to_video_url(self, url):
+        return self.url
+    
     def matches_video_url(self, url):
         raise Exception('Not implemented')
     

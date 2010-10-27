@@ -24,6 +24,9 @@ class UstreamVideoType(VideoType):
     def __init__(self):
         self.abbreviation = 'U'
         self.name = 'Ustream.tv'   
+
+    def convert_to_video_url(self, url):
+        return ustream.get_flash_enclosure_url(url)
     
     def video_url(self, obj):
         return obj.video_url

@@ -1,0 +1,122 @@
+{% load i18n %}
+<div style="padding: 10px">
+    {% blocktrans %}
+    A single video is often hosted in different places online and same
+    subtitles will work. 
+    {% endblocktrans %}
+    <a href="#">{% trans 'Learn more' %}</a>
+</div>
+<a href="#add-video-url" class="add-video-url-button green_button small">
+    {% trans 'Add new link' %}
+</a>          
+<table cellpadding="0" cellspacing="0" id="video-url-table">
+<thead>
+  <tr>
+    <th>
+        <a href="#">{% trans 'Title/URL' %}</a>
+    </th>
+    <th>
+        <a href="#">{% trans 'Format/Host' %}</a>
+    </th>
+    <th>
+        <a href="#">{% trans 'Added' %}</a>
+    </th>
+    <th>
+        <a href="#">{% trans 'added_by' %}</a>
+    </th>
+    <th class="last">
+        <a href="#">{% trans 'Actions' %}</a>
+    </th>
+  </tr> 
+</thead>
+<tbody>
+    {% for item in video_urls %}
+        <tr>
+            <td class="url-td"><a href="{{ item.url }}">{{ item }}</a> {% if item.primary %}<span class="primary">[{% trans 'PRIMARY' %}]</span>{% endif %}</td>
+            <td>{{ item.get_type_display }}</td>
+            <td>{{ item.created|timesince }} {% trans 'ago' %}</td>
+            <td>{{ item.added_by|default:'' }}</td>
+            <td>
+                <a href="#" class="delete-url-link">{% trans 'remove' %}</a><br/>
+                <a {% if item.primary %}style="display:none"{% endif %} href="#" video_url_id="{{ item.pk }}" class="make-primary-url-link">{% trans 'make primary' %}</a>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
+<div id="add-video-url" style="display: none">
+    <form method="post" action="{% url videos:video_url_create %}">
+        <div class="global-errors"></div>
+        {{ form.as_p }}
+        <p>
+            <button class="green_button small">{% trans 'Add' %}</button>
+        </p>
+    </form>
+</div>
+<script type="text/javascript">
+jQuery(function($){
+    var make_primary_url = '{% url videos:video_url_make_primary %}'
+    $('.make-primary-url-link').click(function(){
+        var $this = $(this);
+        $.get(make_primary_url, {id: $this.attr('video_url_id')},
+            function(response){
+                if (response.error){
+                    $.msg.clean().add(response.error);
+                }else{
+                    var $primary_span = $('#urls-tab .primary');
+                    var $span = $primary_span.clone();
+                    $primary_span.remove();
+                    $('#urls-tab .make-primary-url-link').show();
+                    var $tr = $this.parents('tr');
+                    $tr.find('.url-td').append($span);
+                    $tr.find('.make-primary-url-link').hide();
+                }
+            }, 'json');
+         return false;
+    });
+
+    $('#add-video-url form').ajaxForm({
+        dataType: 'json',
+        success: function(data, status, xhr, $form){
+            if (data.errors){
+                for (key in data.errors){
+                    var $field = $('input[name="'+key+'"]', $form);
+                    var error = '<p class="error_list">'+data.errors[key]+'</p>';
+                    if ($field.length){
+                        $field.prev().before(error);
+                    }else{
+                        $('.global-errors', $form).prepend(error);
+                    }
+                };
+            }else{
+                location.reload();
+            }
+        },
+        beforeSubmit: function(formData, $Form, options){
+            $('p.error_list', $Form).remove();
+        }
+    });
+
+    $('.add-video-url-button').nyroModal({
+        bgColor: '#fff',
+        cssOpt: {
+            wrapper: {
+               backgroundColor: '#fff'
+            }                    
+        },
+        endRemove: function(){
+            $('#clippy').show();
+        },
+        processHandler: function(){
+            $('#clippy').hide();
+        }
+    });   
+    
+    $('.delete-url-link').click(function(){
+        alert('Sorry, we are going to do this soon.')
+        return false;
+    })
+    
+    $("#video-url-table").tablesorter();
+});             
+</script>

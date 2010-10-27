@@ -33,9 +33,43 @@ from math_captcha.forms import MathCaptchaForm
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
 from videos.types import video_type_registrar
+from videos.models import VideoUrl
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
+class CreateVideoUrlForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(CreateVideoUrlForm, self).__init__(*args, **kwargs)
+        self.fields['video'].widget = forms.HiddenInput()
+    
+    class Meta:
+        model = VideoUrl
+        fields = ('url', 'video')
+        
+    def clean_url(self):
+        url = self.cleaned_data['url']
+        video_type = video_type_registrar.video_type_for_url(url)
+        if not video_type:
+            raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
+If you'd like to us to add support for a new site or format, or if you
+think there's been some mistake, <a
+href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL)) 
+        self._video_type = video_type            
+        return video_type.convert_to_video_url(url)
+    
+    def save(self, commit=True):
+        obj = super(CreateVideoUrlForm, self).save(False)
+        obj.type = self._video_type.abbreviation
+        commit and obj.save()
+        return obj
+    
+    def get_errors(self):
+        output = {}
+        for key, value in self.errors.items():
+            output[key] = '/n'.join([force_unicode(i) for i in value])
+        return output
+    
 class SubtitlesUploadBaseForm(forms.Form):
     language = forms.ChoiceField(choices=ALL_LANGUAGES, initial='en')
     video = forms.ModelChoiceField(Video.objects)

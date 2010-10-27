@@ -37,6 +37,10 @@ class YoutubeVideoType(VideoType):
         self.abbreviation = 'Y'
         self.name = 'Youtube'   
     
+    def convert_to_video_url(self, url):
+        id = self._get_video_id(url)
+        return 'http://www.youtube.com/watch?v=%s' % id    
+    
     def video_url(self, obj):
         return 'http://www.youtube.com/watch?v=%s' % obj.youtube_videoid
 

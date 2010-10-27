@@ -24,6 +24,9 @@ class GoogleVideoType(VideoType):
     def __init__(self):
         self.abbreviation = 'G'
         self.name = 'video.google.com'   
+
+    def convert_to_video_url(self, url):
+        return self.create_kwars(url)['video_url']
     
     def video_url(self, obj):
         return obj.video_url

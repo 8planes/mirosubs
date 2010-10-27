@@ -24,6 +24,10 @@ class VimeoVideoType(VideoType):
     def __init__(self):
         self.abbreviation = 'V'
         self.name = 'Vimeo.com'   
+
+    def convert_to_video_url(self, url):
+        id = self._get_vimeo_id(url)
+        return 'http://vimeo.com/%s' % id
     
     def video_url(self, obj):
         return 'http://vimeo.com/%s' % obj.vimeo_videoid

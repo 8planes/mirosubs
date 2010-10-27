@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import template
-from videos.forms import SubtitlesUploadForm, PasteTranscriptionForm
+from videos.forms import SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm
 from django.utils.translation import ugettext_lazy as _
 
 register = template.Library()
@@ -62,3 +62,14 @@ def complete_color(language):
         return 'fourty'
     else:
         return 'twenty'
+
+@register.inclusion_tag('videos/_video_url_panel.html', takes_context=True)
+def video_url_panel(context):
+    video = context['video']
+    context['form'] = CreateVideoUrlForm(initial={'video': video.pk})
+    context['video_urls'] = video.videourl_set.all()
+    return context
+
+@register.simple_tag
+def video_url_count(video):
+    return video.videourl_set.count()

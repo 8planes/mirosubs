@@ -22,7 +22,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
-from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm, PasteTranscriptionForm
+from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm
 import widget
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -121,7 +121,6 @@ def video(request, video_id):
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(is_complete=True).count()
     context['original'] = video.subtitle_language()
-    context['video_urls'] = video.videourl_set.all()
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
@@ -492,6 +491,7 @@ def counter(request):
     count = Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c']
     return HttpResponse('draw_unisub_counter({videos_count: %s})' % count)
 
+@login_required
 def video_url_make_primary(request):
     output = {}
     
@@ -505,3 +505,18 @@ def video_url_make_primary(request):
         except VideoUrl.DoesNotExist:
             output['error'] = ugettext('Object does not exist')
     return HttpResponse(json.dumps(output))
+
+@login_required
+def video_url_create(request):
+    output = {}
+    
+    form = CreateVideoUrlForm(request.POST)
+    if form.is_valid():
+        obj = form.save(False)
+        obj.added_by = request.user
+        obj.save()
+    else:
+        output['errors'] = form.get_errors()
+    
+    return HttpResponse(json.dumps(output))
+    
