@@ -1565,7 +1565,6 @@ msgid "To view the current and previous versions side by side, follow this"
 msgstr ""
 
 #: .\templates\videos\email_notification.html.py:50
-#, fuzzy
 msgid "link"
 msgstr "link"
 
