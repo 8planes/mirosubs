@@ -19,7 +19,6 @@
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, StopNotification
 from apps.auth.models import CustomUser as User
-from youtube import get_video_id
 from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser
 from django.core.urlresolvers import reverse
 from django.core import mail
@@ -138,28 +137,6 @@ class UploadSubtitlesTest(WebUseTest):
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(1, language.subtitleversion_set.count())
         self.assertEquals(version_no, language.latest_version().version_no)
-
-
-class YoutubeModuleTest(TestCase):
-    
-    def setUp(self):
-        self.data = [{
-            'url': 'http://www.youtube.com/watch#!v=UOtJUmiUZ08&feature=featured&videos=Qf8YDn9mbGs',
-            'video_id': 'UOtJUmiUZ08'
-        },{
-            'url': 'http://www.youtube.com/v/6Z5msRdai-Q',
-            'video_id': '6Z5msRdai-Q'
-        },{
-            'url': 'http://www.youtube.com/watch?v=woobL2yAxD4',
-            'video_id': 'woobL2yAxD4'
-        },{
-            'url': 'http://www.youtube.com/watch?v=woobL2yAxD4&amp;playnext=1&amp;videos=9ikUhlPnCT0&amp;feature=featured',
-            'video_id': 'woobL2yAxD4'
-        }]
-    
-    def test_get_video_id(self):
-        for item in self.data:
-            self.failUnlessEqual(item['video_id'], get_video_id(item['url']))
 
 class Html5ParseTest(TestCase):
     def _assert(self, start_url, end_url):
@@ -454,3 +431,28 @@ class ViewsTest(WebUseTest):
         
     def test_policy_page(self):
         self._simple_test('policy_page')
+
+#Testings VideoType classes
+from videos.types.youtube import YoutubeVideoType
+
+class YoutubeModuleTest(TestCase):
+    
+    def setUp(self):
+        self.video_type = YoutubeVideoType()
+        self.data = [{
+            'url': 'http://www.youtube.com/watch#!v=UOtJUmiUZ08&feature=featured&videos=Qf8YDn9mbGs',
+            'video_id': 'UOtJUmiUZ08'
+        },{
+            'url': 'http://www.youtube.com/v/6Z5msRdai-Q',
+            'video_id': '6Z5msRdai-Q'
+        },{
+            'url': 'http://www.youtube.com/watch?v=woobL2yAxD4',
+            'video_id': 'woobL2yAxD4'
+        },{
+            'url': 'http://www.youtube.com/watch?v=woobL2yAxD4&amp;playnext=1&amp;videos=9ikUhlPnCT0&amp;feature=featured',
+            'video_id': 'woobL2yAxD4'
+        }]
+    
+    def test_get_video_id(self):
+        for item in self.data:
+            self.failUnlessEqual(item['video_id'], self.video_type._get_video_id(item['url']))

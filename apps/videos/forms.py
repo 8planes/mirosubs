@@ -50,6 +50,23 @@ class SubtitlesUploadBaseForm(forms.Form):
         if video.is_writelocked:
             raise forms.ValidationError(_(u'Somebody is subtitling this video right now. Try later.'))
         return video
+    
+    def is_version_same(self, version, parser):
+        if not version:
+            return False
+        
+        subtitles = list(parser)
+        
+        if version.subtitle_set.count() != len(subtitles):
+            return False
+        
+        for item in zip(subtitles, version.subtitle_set.all()):
+            if item[0]['subtitle_text'] != item[1].subtitle_text or \
+                item[0]['start_time'] != item[1].start_time or \
+                item[0]['end_time'] != item[1].end_time:
+                    return False
+                
+        return True
         
     def save_subtitles(self, parser):
         video = self.cleaned_data['video']
@@ -67,36 +84,40 @@ class SubtitlesUploadBaseForm(forms.Form):
         language.language = self.cleaned_data['language']
         language.save()
         
-        try:    
-            version_no = language.subtitleversion_set.all()[:1].get().version_no + 1
+        try:
+            old_version = language.subtitleversion_set.all()[:1].get()    
+            version_no = old_version.version_no + 1
         except ObjectDoesNotExist:
+            old_version = None
             version_no = 0
-            
-        version = SubtitleVersion(
-            language=language, version_no=version_no,
-            datetime_started=datetime.now(), user=self.user,
-            note=u'Uploaded', is_forked=True)
-        version.save()
-
-        ids = []
-
-        for i, item in enumerate(parser):
-            id = int(random.random()*10e12)
-            while id in ids:
-                id = int(random.random()*10e12)
-            ids.append(id)
-            caption = Subtitle(**item)
-            caption.version = version
-            caption.subtitle_id = str(id)
-            caption.subtitle_order = i+1
-            caption.save()
-  
-        version.finished = True
-        version.save()
         
-        language.was_complete = True
-        language.is_complete = True
-        language.save()
+        if not self.is_version_same(old_version, parser):
+            
+            version = SubtitleVersion(
+                language=language, version_no=version_no,
+                datetime_started=datetime.now(), user=self.user,
+                note=u'Uploaded', is_forked=True)
+            version.save()
+    
+            ids = []
+    
+            for i, item in enumerate(parser):
+                id = int(random.random()*10e12)
+                while id in ids:
+                    id = int(random.random()*10e12)
+                ids.append(id)
+                caption = Subtitle(**item)
+                caption.version = version
+                caption.subtitle_id = str(id)
+                caption.subtitle_order = i+1
+                caption.save()
+      
+            version.finished = True
+            version.save()
+            
+            language.was_complete = True
+            language.is_complete = True
+            language.save()
         
         video.release_writelock()
         video.save()
