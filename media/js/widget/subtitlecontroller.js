@@ -147,12 +147,12 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function(newLanguage) {
         var subState = this.playController_.getSubtitleState();
         if (!subState || !subState.LANGUAGE)
             this.startEditing_(null, null, null, false);
-        else if (subState && subState.FORKED)
+        else {
+            version = subState.IS_LATEST ? null : subState.VERSION
             this.startEditing_(
-                subState.VERSION, subState.LANGUAGE, null, true);
-        else
-            this.startEditing_(
-                subState.VERSION, subState.LANGUAGE, null, false);
+                version, subState.LANGUAGE, null,
+                subState.FORKED)
+        }
     }
 };
 
