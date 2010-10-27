@@ -374,19 +374,19 @@ msgstr "ČPP"
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
-msgstr ""
+msgstr "O"
 
 #: .\templates\base.html.py:83
 msgid "Logout"
-msgstr ""
+msgstr "Odjava"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: .\templates\base.html.py:88
 msgid "Login"
-msgstr ""
+msgstr "Prijava"
 
 #: .\templates\base.html.py:106
 msgid "Universal Subtitles is a project of <a href=\"http://participatoryculture.org/\">PCF</a>."
@@ -394,7 +394,7 @@ msgstr ""
 
 #: .\templates\base.html.py:112
 msgid "Contact Us"
-msgstr ""
+msgstr "Kontaktirajte nas"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"
@@ -402,7 +402,7 @@ msgstr ""
 
 #: .\templates\demo.html.py:19
 msgid "Welcome to our alpha demo!"
-msgstr ""
+msgstr "Dobro došli na demonstracionu alphu!"
 
 #: .\templates\demo.html.py:21
 msgid ""
@@ -432,7 +432,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Često Postavljena Pitanja"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
