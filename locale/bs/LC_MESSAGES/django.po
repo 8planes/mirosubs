@@ -70,11 +70,11 @@ msgstr ""
 
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
-msgstr ""
+msgstr "Ovaj korisnik nema email."
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
-msgstr ""
+msgstr "Niste ovlašteni."
 
 #: .\apps\profiles\forms.py:51
 #, python-format
