@@ -19,7 +19,7 @@
 from videos.types.base import VideoType
 import re
 
-URL_REGEX = re.compile('^http://.+\.flv$', re.I)
+URL_REGEX = re.compile('^http://.+/.+\.flv$', re.I)
 
 class FLVVideoType(VideoType):
 

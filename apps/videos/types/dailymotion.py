@@ -52,7 +52,8 @@ class DailymotionVideoType(VideoType):
         return video_obj
     
     def get_video_id(self, video_url):
-        return DAILYMOTION_REGEX.match(video_url).group(1)
+        match = DAILYMOTION_REGEX.match(video_url)
+        return match and match.group(1)
     
     def get_metadata(self, video_url):
         #FIXME: get_metadata is called twice: in matches_video_url and set_values

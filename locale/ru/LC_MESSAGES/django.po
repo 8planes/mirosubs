@@ -141,7 +141,7 @@ msgstr "Введите действующие адреса электронно�
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
-msgstr "поделитесь своими субтитлами"
+msgstr "поделитесь своими субтитрами"
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"

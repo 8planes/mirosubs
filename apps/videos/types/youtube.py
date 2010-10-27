@@ -52,7 +52,7 @@ class YoutubeVideoType(VideoType):
         entry = yt_service.GetYouTubeVideoEntry(video_id=video_obj.youtube_videoid)
         video_obj.title = entry.media.title.text
         if entry.media.duration:
-            video_obj.duration = entry.media.duration.seconds
+            video_obj.duration = int(entry.media.duration.seconds)
         if entry.media.thumbnail:
             video_obj.thumbnail = entry.media.thumbnail[-1].url
         video_obj.save()
@@ -60,7 +60,8 @@ class YoutubeVideoType(VideoType):
         return video_obj
         
     def _get_video_id(self, video_url):
-        return self._url_pattern.search(video_url).group('video_id')
+        match = self._url_pattern.search(video_url)
+        return match and match.group('video_id')
 
     def _get_subtitles_from_youtube(self, video_obj):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
@@ -68,7 +69,7 @@ class YoutubeVideoType(VideoType):
         url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
         d = urllib.urlopen(url)
         parser = YoutubeSubtitleParser(d.read())
-        
+
         if not parser:
             return
         
@@ -82,18 +83,18 @@ class YoutubeVideoType(VideoType):
         version.datetime_started = datetime.now()
         version.user = User.get_youtube_anonymous()
         version.note = u'From youtube'
+        version.is_forked = True
         version.save()
-        
+
         for i, item in enumerate(parser):
             subtitle = Subtitle(**item)
             subtitle.version = version
             subtitle.subtitle_id = int(random.random()*10e12)
             subtitle.sub_order = i+1
             subtitle.save()
-        
         version.finished = True
         version.save()
-        
+
         language.was_complete = True
         language.is_complete = True
         language.save()

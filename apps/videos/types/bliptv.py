@@ -27,8 +27,8 @@ class BlipTvVideoType(VideoType):
         self.abbreviation = 'B'
         self.name = 'Blip.tv'   
 
-    def video_url(self, video_url_model):
-        return video_url_model.video_url
+    def video_url(self, obj):
+        return obj.video_url
 
     def matches_video_url(self, url):
         return blip.BLIP_REGEX.match(url)
@@ -41,7 +41,6 @@ class BlipTvVideoType(VideoType):
         video_obj.thumbnail = blip.get_thumbnail_url(video_url)
         video_obj.bliptv_flv_url = self.scrape_best_file_url(video_obj.bliptv_fileid)
         video_obj.video_url = video_obj.bliptv_flv_url
-        video_obj.thumbnail = blip.get_thumbnail_url(video_url)
         return video_obj
         
     def video_url_kwargs(self, video_url):
