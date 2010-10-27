@@ -19,8 +19,9 @@ msgstr ""
 "X-Poedit-Country: NETHERLANDS\n"
 
 #: .\settings.py:29
+#, fuzzy
 msgid "Argentinian Spanish"
-msgstr "Argentijns Spaans "
+msgstr "Argetijns Spaans"
 
 #: .\apps\auth\admin.py:10
 msgid "Username"
@@ -76,7 +77,7 @@ msgstr ""
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
-msgstr "Je bent niet ingelogd."
+msgstr "Je bent niet aangemeld."
 
 #: .\apps\profiles\forms.py:51
 #, python-format
@@ -155,11 +156,11 @@ msgstr "Vertel het de wereld en vraag je vrienden of ze je willen helpen met ver
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
-msgstr "Op Facebook posten"
+msgstr "Delen via Facebook"
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
-msgstr "Op Twitter posten"
+msgstr "Delen via Twitter"
 
 #: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
@@ -354,23 +355,23 @@ msgstr ""
 
 #: .\templates\base.html.py:18
 msgid "Free and open tools for creating captions, subtitles, and translations for video."
-msgstr ""
+msgstr "Vrij, gratis gereedschap voor het maken van ondertitels en videovertalingen."
 
 #: .\templates\base.html.py:37
 msgid "Universal Subtitles does not support your browser. Upgrade your browser or <a href=\"http://getfirefox.com\">Try Firefox</a>."
-msgstr "Universal Subtitles ondersteunt uw browser niet. Upgrade u browser naar de nieuwste versie of <a href=\"http://getfirefox.com\">Probeer Firefox</a>."
+msgstr "Universal Subtitles heeft geen ondersteuning voor je browser. Werk je browser bij of <a href=\"http://getfirefox.com\">probeer Firefox</a>."
 
 #: .\templates\base.html.py:59
 msgid "a project of the participatory culture foundation"
-msgstr ""
+msgstr "een project van de Participatory Cultrue Foundation"
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
-msgstr "Ondertitel een video"
+msgstr ""
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr "Videos"
+msgstr "Video's"
 
 #: .\templates\base.html.py:74
 msgid "Volunteer"
@@ -411,7 +412,7 @@ msgstr "Contact opnemen"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Privacybeleid"
 
 #: .\templates\demo.html.py:19
 msgid "Welcome to our alpha demo!"
