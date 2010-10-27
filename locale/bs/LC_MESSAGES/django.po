@@ -87,7 +87,7 @@ msgstr ""
 
 #: .\apps\profiles\forms.py:82
 msgid "Invalid password."
-msgstr ""
+msgstr "Netačna šifra."
 
 #: .\apps\profiles\forms.py:84
 msgid "The two passwords did not match."
