@@ -591,7 +591,7 @@ msgstr ""
 
 #: .\templates\feedback_response.html.py:12
 msgid "Best"
-msgstr ""
+msgstr "Najbolje"
 
 #: .\templates\feedback_response.html.py:16
 msgid "PS. We do our best to respond to all questions, but please be patient -- we get a lot of email"
@@ -603,7 +603,7 @@ msgstr ""
 
 #: .\templates\index.html.py:44
 msgid "The Problem"
-msgstr ""
+msgstr "Problem"
 
 #: .\templates\index.html.py:44
 msgid "Web video is beginning to rival television, but there isn't a good open resource for subtitling."
@@ -611,7 +611,7 @@ msgstr ""
 
 #: .\templates\index.html.py:46
 msgid "Our Mission"
-msgstr ""
+msgstr "Naša misija"
 
 #: .\templates\index.html.py:46
 msgid "We're trying to make captioning, subtitling, and translating video publicly accessible in a way that's free and open, just like the Web."
@@ -619,11 +619,11 @@ msgstr ""
 
 #: .\templates\index.html.py:46
 msgid "Learn More"
-msgstr ""
+msgstr "Saznaj više"
 
 #: .\templates\index.html.py:49
 msgid "Right now"
-msgstr ""
+msgstr "Upravo sada"
 
 #: .\templates\index.html.py:49
 msgid "we're in an alpha stage, building and testing. You can help!"
@@ -647,7 +647,7 @@ msgstr ""
 
 #: .\templates\index.html.py:60
 msgid "Community Site"
-msgstr ""
+msgstr "Sajt zajednice"
 
 #: .\templates\index.html.py:61
 msgid "An online community for collaboratively subtitling and translating the world's videos (like a Wikipedia for subtitles)."
@@ -687,7 +687,7 @@ msgstr ""
 
 #: .\templates\index.html.py:138
 msgid "Donate Now"
-msgstr ""
+msgstr "Doniraj sada"
 
 #: .\templates\index.html.py:146
 msgid "Check out the widget"
@@ -712,7 +712,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:34
 msgid "Meeting Goals"
-msgstr ""
+msgstr "Ciljevi meetinga"
 
 #: .\templates\opensubtitles2010.html.py:37
 msgid "<strong>Connect</strong> major stakeholders from projects, organizations, and movements that have open subtitling needs or focus."
@@ -728,7 +728,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
-msgstr ""
+msgstr "Učesnici"
 
 #: .\templates\opensubtitles2010.html.py:55
 msgid "Participants will include: video creators and producers, end-users, representatives from major video hosting services, standards engineers, accessibility advocates, open source developers, educational leaders, and other individuals and organizations with a stake in the subtitling world. We'll make a roster available when the event draws closer."
@@ -740,7 +740,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:62
 msgid "When"
-msgstr ""
+msgstr "Kada"
 
 #: .\templates\opensubtitles2010.html.py:63
 msgid "September 29th and 30th, beginning at 9am on both days."
@@ -748,7 +748,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:67
 msgid "Where"
-msgstr ""
+msgstr "Gdje"
 
 #: .\templates\opensubtitles2010.html.py:68
 msgid "The summit will be held at the beautiful Open Plans penthouse in Soho, which is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
@@ -756,7 +756,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:73
 msgid "Why"
-msgstr ""
+msgstr "Zašto"
 
 #: .\templates\opensubtitles2010.html.py:75
 msgid ""
@@ -777,7 +777,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:94
 msgid "Organizers"
-msgstr ""
+msgstr "Organizatori"
 
 #: .\templates\opensubtitles2010.html.py:95
 msgid "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture Foundation</a> is organizing the summit. Their most recent project, <a href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open source and collaborative subtitling and translation easy."
@@ -793,7 +793,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:103
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponzori"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
@@ -805,11 +805,11 @@ msgstr ""
 
 #: .\templates\ordered_paginator.html.py:4 .\templates\paginator.html.py:4
 msgid "prev"
-msgstr ""
+msgstr "predhodno"
 
 #: .\templates\ordered_paginator.html.py:25 .\templates\paginator.html.py:25
 msgid "next"
-msgstr ""
+msgstr "sljedeće"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
@@ -833,7 +833,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:21
 msgid "Community Members"
-msgstr ""
+msgstr "Članovi zajednice"
 
 #: .\templates\privacy.html.py:23
 msgid "Certain members of the PCF community (contributors, customers, etc.) choose to interact with PCF in ways that require PCF and others to know more about them. The amount and type of information that PCF gathers from those members depends on the nature of the interaction. For example, members who wish to post content to certain portions of PCF's web sites or participate in live chat session(s) are asked to provide usernames that are used to identify content as having been posted by a particular member (who is identified by the username)."
@@ -901,7 +901,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:67
 msgid "Security"
-msgstr ""
+msgstr "Sigurnost"
 
 #: .\templates\privacy.html.py:69
 msgid "PCF undertakes a range of security measures including physical access restraints, technical security monitoring, and internal security reviews of the environment to help to protect your personal information from unauthorized access, alteration, disclosure, or destruction. We also have policies in place to prohibit employees from viewing personal information without business justification."
@@ -985,16 +985,16 @@ msgstr ""
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
-msgstr ""
+msgstr "Pogledaj sajt"
 
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
 msgid "Sign in with your OpenID"
-msgstr ""
+msgstr "Prijavi se preko OpenID-a"
 
 #: .\templates\openid_consumer\signin.html.py:18
 msgid "Sign in"
-msgstr ""
+msgstr "Prijavi se"
 
 #: .\templates\profiles\edit_profile.html.py:7
 #: .\templates\profiles\edit_profile.html.py:28
@@ -1013,7 +1013,7 @@ msgstr ""
 #: .\templates\profiles\edit_profile.html.py:13
 #: .\templates\profiles\view_profile.html.py:84
 msgid "Homepage"
-msgstr ""
+msgstr "Naslovna"
 
 #: .\templates\profiles\edit_profile.html.py:30
 msgid "Save Edits to Profile"
@@ -1033,37 +1033,37 @@ msgstr ""
 
 #: .\templates\profiles\edit_profile.html.py:93
 msgid "Language Info"
-msgstr ""
+msgstr "Info jezika"
 
 #: .\templates\profiles\edit_profile.html.py:106
 msgid "Languages I Know"
-msgstr ""
+msgstr "Jezici koje poznajem"
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
 msgid "Remove Language"
-msgstr ""
+msgstr "Ukloni jezik"
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
-msgstr ""
+msgstr "Dodaj jezik"
 
 #: .\templates\profiles\view_profile.html.py:43
 msgid "Email sent"
-msgstr ""
+msgstr "Email je poslan"
 
 #: .\templates\profiles\view_profile.html.py:62
 msgid "Enter message please."
-msgstr ""
+msgstr "Unesite poruku."
 
 #: .\templates\profiles\view_profile.html.py:66
 msgid "Enter email please."
-msgstr ""
+msgstr "Unesite email."
 
 #: .\templates\profiles\view_profile.html.py:86
 #: .\templates\profiles\view_profile.html.py:116
 msgid "Send a Message"
-msgstr ""
+msgstr "Pošaljite poruku"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
@@ -1076,15 +1076,15 @@ msgstr ""
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
-msgstr ""
+msgstr "Od"
 
 #: .\templates\profiles\view_profile.html.py:111
 msgid "Message"
-msgstr ""
+msgstr "Poruka"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "Bez HTML-a"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
@@ -1095,7 +1095,7 @@ msgstr ""
 #: .\templates\registration\password_reset_done.html.py:4
 #: .\templates\registration\password_reset_form.html.py:4
 msgid "Home"
-msgstr ""
+msgstr "Naslovna"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:6
@@ -1117,7 +1117,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "Prijava"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
@@ -1125,7 +1125,7 @@ msgstr ""
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
-msgstr ""
+msgstr "Unesite novu šifru"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
@@ -1133,15 +1133,15 @@ msgstr ""
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr ""
+msgstr "Nova šifra:"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr ""
+msgstr "Potvrdi šifru:"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr ""
+msgstr "Promjeni moju šifru"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
