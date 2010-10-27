@@ -1743,7 +1743,7 @@ msgstr ""
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: .\templates\videos\search.html.py:22
 msgid "Does"
@@ -1756,7 +1756,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:18
 msgid "Your Email"
-msgstr ""
+msgstr "Vaš email"
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
@@ -1768,7 +1768,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "video"
-msgstr ""
+msgstr "video"
 
 #: .\templates\videos\test_form_page.html.py:25
 #: .\templates\videos\test_form_page.html.py:31
@@ -1799,7 +1799,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr ""
+msgstr "Pošalji!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
@@ -1811,19 +1811,19 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:74
 msgid "That’s it!"
-msgstr ""
+msgstr "To je to!"
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr ""
+msgstr "Upišite novi titl"
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr ""
+msgstr "izmjeni titl"
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr ""
+msgstr "Jezici"
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
