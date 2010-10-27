@@ -1553,20 +1553,21 @@ msgstr ""
 #: .\templates\videos\email_notification.html.py:41
 #: .\templates\videos\email_title_changed.html.py:19
 msgid "NEW"
-msgstr ""
+msgstr "NOVO"
 
 #: .\templates\videos\email_notification.html.py:42
 #: .\templates\videos\email_title_changed.html.py:23
 msgid "OLD"
-msgstr ""
+msgstr "STARO"
 
 #: .\templates\videos\email_notification.html.py:49
 msgid "To view the current and previous versions side by side, follow this"
 msgstr ""
 
 #: .\templates\videos\email_notification.html.py:50
+#, fuzzy
 msgid "link"
-msgstr ""
+msgstr "link"
 
 #: .\templates\videos\email_start_notification.html.py:4
 #, python-format
@@ -1607,7 +1608,7 @@ msgstr ""
 #: .\templates\videos\email_title_changed.html.py:21
 #: .\templates\videos\email_title_changed.html.py:25
 msgid "TITLE"
-msgstr ""
+msgstr "NASLOV"
 
 #: .\templates\videos\history.html.py:73
 msgid "Select two revisions for compare, please"
@@ -1631,15 +1632,15 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:158
 msgid "Edit Subtitles"
-msgstr ""
+msgstr "Izmjeni titl"
 
 #: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
 msgid "Add Translation"
-msgstr ""
+msgstr "Dodaj prevod"
 
 #: .\templates\videos\history.html.py:169
 msgid "Download Subtitles"
-msgstr ""
+msgstr "Skini titl"
 
 #: .\templates\videos\history.html.py:183
 msgid "Original Language Subtitles"
