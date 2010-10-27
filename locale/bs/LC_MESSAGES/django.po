@@ -139,7 +139,7 @@ msgstr "Sada svi mogu gledati video s titlom --- Isprobaj sada!"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
-msgstr ""
+msgstr "Razglasi svima i pozovi prijatelje da ti pomognu u prevodu:"
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
@@ -159,15 +159,15 @@ msgstr "Kod"
 
 #: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
 msgid "Permalink"
-msgstr ""
+msgstr "Direktan link"
 
 #: .\templates\_sharing_widget.html.py:20
 msgid "Embed this video in your site"
-msgstr ""
+msgstr "Zalijep ovaj video na svoj sajt"
 
 #: .\templates\_testing_widget.html.py:3
 msgid "We&#8217;d like help testing our subtitling widget"
-msgstr ""
+msgstr "Zatražili bi smo pomoć u testiranju dodatka za titlovanje"
 
 #: .\templates\_testing_widget.html.py:5
 msgid "Just launch our feedback form and try captioning a video"
@@ -175,7 +175,7 @@ msgstr ""
 
 #: .\templates\_testing_widget.html.py:7
 msgid "Test the Widget"
-msgstr ""
+msgstr "Testiraj dodatak"
 
 #: .\templates\_testing_widget.html.py:12
 msgid "Warning: These videos should not be embeded--there is a good possibility they will break at some point!"
@@ -187,7 +187,7 @@ msgstr ""
 
 #: .\templates\_testing_widget.html.py:17
 msgid "This alpha site is for purely testing purposes."
-msgstr ""
+msgstr "Ovaj alpha sajt je isključivo namjenjen za testiranje."
 
 #: .\templates\about.html.py:22
 msgid ""
@@ -353,23 +353,23 @@ msgstr ""
 
 #: .\templates\base.html.py:72 .\templates\videos\create.html.py:19
 msgid "Subtitle a Video"
-msgstr ""
+msgstr "Titluj video"
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr ""
+msgstr "Videi"
 
 #: .\templates\base.html.py:74
 msgid "Volunteer"
-msgstr ""
+msgstr "Volonter"
 
 #: .\templates\base.html.py:79
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: .\templates\base.html.py:80
 msgid "FAQ"
-msgstr ""
+msgstr "ČPP"
 
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
