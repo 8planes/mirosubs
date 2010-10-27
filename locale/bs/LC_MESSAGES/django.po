@@ -436,11 +436,11 @@ msgstr "Često Postavljena Pitanja"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Šta je Universal Subtitles?"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Kako mogu koristiti Universal Subtitles?"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
