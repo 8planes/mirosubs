@@ -20,133 +20,53 @@ from widget.base_rpc import BaseRpc
 from videos import models
 from django.conf.global_settings import LANGUAGES
 import widget
+from videos.types import video_type_registrar
 
 class NullRpc(BaseRpc):
+    def show_widget(self, request, video_url, is_remote, base_state=None):
+        return_value = {
+            'video_id' : 'abc',
+            'writelock_expiration' : models.WRITELOCK_EXPIRATION,
+            'embed_version': settings.EMBED_JS_VERSION,
+            'languages': LANGUAGES,
+            'metadata_languages': settings.METADATA_LANGUAGES
+            }
+        video_type = video_type_registrar.video_type_for_url(video_url)
+        if isinstance(video_type, BlipTvVideoType):
+            return_value['flv_url'] = video_type.flv_file_url(video_url)
+        return_value['drop_down_contents'] = \
+            self._drop_down_contents(None, None)
+        return return_value
+
     def start_editing(self, request, video_id, language_code, 
                       original_language_code=None,
                       base_version_no=None, fork=False):
-        version_no = 0
-        null_subtitles = None
-        video = models.Video.objects.get(video_id=video_id)
-        if not request.user.is_authenticated():
-            subtitles = self._make_subtitles_dict(
-                [], language_code, 0, True, fork)
-            null_placeholder, created = \
-                models.NullSubtitlesPlaceholder.objects.get_or_create(
-                video=video,
-                video_session=self._video_session_key(request),
-                defaults={'original_language': original_language_code})
-            if not created:
-                null_placeholder.original_language = original_language_code
-                null_placeholder.save()
-        else:
-            null_subtitles, created = self._get_null_subtitles_for_editing(
-                request.user, video, language_code, 
-                original_language_code, fork)
-            subtitles = self._subtitles_dict(
-                null_subtitles, 0 if created else 1)
-        return_dict = { 'can_edit': True,
-                        'subtitles': subtitles }
-        if null_subtitles and null_subtitles.is_dependent():
-            return_dict['original_subtitles'] = \
-                self.fetch_subtitles(request, video_id)
-        return return_dict
+        return {
+            "can_edit": True,
+            "draft_pk": 1,
+            "subtitles": self._subtitles_dict() }
 
-    def save_subtitles(self, request, video_id, packets, language_code=None):
-        if not request.user.is_authenticated():
-            return { "response" : "not_logged_in" }
-        video = models.Video.objects.get(video_id=video_id)
-        original_language_code = None
-
-        if video.null_subtitles(request.user, language_code) is None:
-            null_placeholder = models.NullSubtitlesPlaceholder.objects.get(
-                video=video, 
-                video_session=self._video_session_key(request))
-            original_language_code = null_placeholder.original_language
-        null_subtitles, created = self._get_null_subtitles_for_editing(
-            request.user, video, language_code, 
-            original_language_code, False)
-        self._save_packets(null_subtitles, packets)
+    def save_subtitles(self, request, draft_pk, packets):
+        max_packet_no = max([p['packet_no'] for p in packets])
         return {'response':'ok',
-                'last_saved_packet': null_subtitles.last_saved_packet}
+                'last_saved_packet': max_packet_no}
 
-    def finished_subtitles(self, request, video_id, packets, language_code=None):
-        # there is no concept of "finished" for null subs
+    def finished_subtitles(self, request, draft_pk, packets):
         response = self.save_subtitles(
-            request, video_id, packets, language_code)
+            request, draft_pk, packets)
         if response['response'] == 'ok':
-            video = models.Video.objects.get(video_id=video_id)
             response['drop_down_contents'] = \
-                self._drop_down_contents(request.user, video)
+                self._drop_down_contents(None, None)
         return response
 
     def fetch_subtitles(self, request, video_id, language_code=None):
-        if request.user.is_anonymous():
-            return []
-        video = models.Video.objects.get(video_id=video_id)
-        null_subs = video.null_subtitles(request.user, language_code)
-        if null_subs:
-            return self._subtitles_dict(null_subs, 0)
-        else:
-            return self._make_subtitles_dict(
-                [], language_code, 0, True, True)
-
-    def _get_null_subtitles_for_editing(self, user, video, language_code, original_language_code=None, fork=False):
-        orig_created = False
-        if original_language_code is not None:
-            orig_null_subs, orig_created = \
-                models.NullSubtitles.objects.get_or_create(
-                    video=video,
-                    user=user,
-                    is_original=True,
-                    defaults={ 'language': original_language_code })
-            if not orig_created and orig_null_subs.language != original_language_code:
-                orig_null_subs.language = original_language_code
-                orig_null_subs.save()
-        null_subtitles = video.null_subtitles(user, language_code)
-        created = orig_created and language_code == original_language_code
-        if null_subtitles is None:
-            null_subtitles = models.NullSubtitles(
-                video=video,
-                language=language_code,
-                is_original=False,
-                user=user)
-            if fork:
-                null_subtitles.is_forked = True
-            null_subtitles.save()
-            created = True
-        null_subtitles.last_saved_packet = 0
-        return null_subtitles, created
-
-    def _save_subtitles_impl(self, request, null_subtitles, deleted, inserted, updated):
-        self._apply_subtitle_changes(
-            null_subtitles, deleted, inserted, updated)
-        null_subtitles.save()
-
-    def _autoplay_subtitles(self, user, video, language_code, revision_no):
-        null_subs = video.null_subtitles(user, language_code)
-        if null_subs:
-            return self._subtitles_dict(null_subs, 1)
+        return self._subtitles_dict()
 
     def _subtitle_count(self, user, video):
-        if user.is_authenticated():
-            null_subs = video.null_subtitles(user)
-            return 0 if null_subs is None else null_subs.subtitle_set.count()
-        else:
-            return 0
+        return 0
 
     def _initial_languages(self, user, video):
-        if user.is_authenticated():
-            # we don't calculate percent done for null translations, 
-            # so use the answer to everything, 42
-            return [(code, 42) for code in video.null_translation_language_codes(user)]
-        else:
-            return []
+        return []
 
-    def _subtitles_dict(self, null_subtitles, version):
-        return self._make_subtitles_dict(
-            [s.__dict__ for s in null_subtitles.subtitles()],
-            None if null_subtitles.is_original else null_subtitles.language,
-            version,
-            True,
-            null_subtitles.is_forked)
+    def _subtitles_dict(self):
+        return self._make_subtitles_dict([], None, 1, True, True)

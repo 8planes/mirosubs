@@ -39,7 +39,7 @@ def _add_share_panel_context_for_video(context, video):
     home_page_url = "http://{0}{1}".format(
         Site.objects.get_current().domain, 
         reverse('videos:video', kwargs={'video_id':video.video_id}))
-    if video.latest_finished_version() is not None:
+    if video.latest_version() is not None:
         twitter_fb_message = \
             u"Just found a version of this video with captions: {0}".format(
             home_page_url)

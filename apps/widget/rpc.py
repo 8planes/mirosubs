@@ -31,6 +31,43 @@ from django.db.models import Sum
 LANGUAGES_MAP = dict(LANGUAGES)
 
 class Rpc(BaseRpc):
+    def show_widget(self, request, video_url, is_remote, base_state=None):
+        video, create = models.Video.get_or_create_for_url(video_url)
+        video.widget_views_count += 1
+        video.save()
+
+        self._maybe_add_video_session(request)
+
+        return_value = {
+            'video_id' : video.video_id,
+            'writelock_expiration' : models.WRITELOCK_EXPIRATION,
+            'embed_version': settings.EMBED_JS_VERSION,
+            'languages': LANGUAGES,
+            'metadata_languages': settings.METADATA_LANGUAGES
+            }
+        if request.user.is_authenticated():
+            return_value['username'] = request.user.username
+
+        if video.video_type == models.VIDEO_TYPE_BLIPTV:
+            return_value['flv_url'] = video.bliptv_flv_url
+        return_value['drop_down_contents'] = \
+            self._drop_down_contents(request.user, video)
+
+        if base_state is not None:
+            subtitles = self._autoplay_subtitles(
+                request.user, video, 
+                base_state.get('language', None),
+                base_state.get('revision', None))
+            return_value['subtitles'] = subtitles
+        else:
+            if is_remote:
+                autoplay_language = self._find_remote_autoplay_language(request)
+                if autoplay_language is not None:
+                    subtitles = self._autoplay_subtitles(
+                        request.user, video, autoplay_language, None)
+                    return_value['subtitles'] = subtitles
+        return return_value
+
     def start_editing(self, request, video_id, language_code, 
                       original_language_code=None,
                       base_version_no=None, fork=False):

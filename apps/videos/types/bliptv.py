@@ -52,6 +52,9 @@ class BlipTvVideoType(VideoType):
     def _get_file_id(self, video_url):
         return blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
 
+    def flv_file_url(self, video_url):
+        return self.scrape_best_file_url(self._get_file_id(video_url))
+
     def scrape_best_file_url(self, file_id):
         rss_path = '/file/%s?skin=rss' % file_id
         conn = httplib.HTTPConnection("blip.tv")

@@ -60,4 +60,4 @@ class VideoTypeRegistrar(dict):
     def video_type_for_url(self, url):
         for video_type in self.values():
             if video_type.matches_video_url(url):
-                return video_type      
+                return video_type

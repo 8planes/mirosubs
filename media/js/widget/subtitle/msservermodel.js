@@ -29,14 +29,15 @@ goog.provide('mirosubs.subtitle.MSServerModel');
  * @constructor
  * @implements {mirosubs.subtitle.ServerModel}
  * @extends {goog.Disposable}
- * @param {string} videoID MiroSubs videoid
- * @param {string=} language language code
+ * @param {string} draftPK Universal Subtitles draft primary key
+ * @param {string} videoID Universal Subtitles video id
+ * @param {string} videoURL url for the video
  */
-mirosubs.subtitle.MSServerModel = function(videoID, videoURL, language) {
+mirosubs.subtitle.MSServerModel = function(draftPK, videoID, videoURL) {
     goog.Disposable.call(this);
+    this.draftPK_ = draftPK;
     this.videoID_ = videoID;
     this.videoURL_ = videoURL;
-    this.language_ = language;
     this.initialized_ = false;
     this.finished_ = false;
     this.unsavedPackets_ = [];
@@ -77,59 +78,33 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
 {
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
+    if (mirosubs.currentUsername == null) {
+        if (!mirosubs.isLoginAttemptInProgress())
+            mirosubs.login(
+                function(loggedIn) {}, 
+                "In order to finish and save your work, you need to log in.");
+        if (opt_cancelCallback)
+            opt_cancelCallback();
+        return;
+    }
     this.stopTimer_();
     var that = this;
-    this.loginThenAction_(function() {
-        var $e = goog.json.serialize;
-        var saveArgs = that.makeSaveArgs_();
-        mirosubs.Rpc.call(
-            'finished_subtitles', 
-            saveArgs,
-            function(result) {
-                if (result['response'] != 'ok')
-                    // this should never happen.
-                    alert('Problem saving subtitles. Response: ' +
-                          result["response"]);
-                this.finished_ = true;
-                successCallback(mirosubs.widget.DropDownContents.fromJSON(
-                    result['drop_down_contents']));
-            });
-    }, opt_cancelCallback, true);
+    var saveArgs = this.makeSaveArgs_();
+    mirosubs.Rpc.call(
+        'finished_subtitles', 
+        saveArgs,
+        function(result) {
+            if (result['response'] != 'ok')
+                // this should never happen.
+                alert('Problem saving subtitles. Response: ' +
+                      result["response"]);
+            that.finished_ = true;
+            successCallback(mirosubs.widget.DropDownContents.fromJSON(
+                result['drop_down_contents']));
+        });
 };
 
 mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
-    this.loginThenAction_(goog.bind(this.saveImpl_, this));
-};
-
-mirosubs.subtitle.MSServerModel.prototype.loginThenAction_ = 
-    function(successAction, opt_cancelAction, opt_forceLogin) {
-
-    mirosubs.subtitle.MSServerModel.logger_.info(
-        "loginThenAction_ for " + mirosubs.currentUsername);
-    if (mirosubs.currentUsername == null) {
-        // first update lock anyway.
-        if (!mirosubs.IS_NULL)
-            mirosubs.Rpc.call("update_lock", 
-                              { 'video_id': this.videoID_,
-                                'language_code': this.language_});
-        if (mirosubs.isLoginAttemptInProgress())
-            return;
-        if (opt_forceLogin) {
-            mirosubs.login(function(loggedIn) {
-                if (loggedIn)
-                    successAction();
-                else if (opt_cancelAction)
-                    opt_cancelAction();
-            }, "In order to finish and save your work, you need to log in.");
-        }
-    }
-    else
-        successAction();
-};
-
-mirosubs.subtitle.MSServerModel.prototype.saveImpl_ = function() {
-    // TODO: at some point in future, account for possibly failed save.
-    var $e = goog.json.serialize;
     var saveArgs = this.makeSaveArgs_();
     var that = this;
     mirosubs.Rpc.call(
@@ -168,8 +143,7 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
     this.packetNo_++;
     this.unsavedPackets_.push(packet);
     return {
-        'video_id': this.videoID_,
-        'language_code': this.language_,
+        'draft_pk': this.draftPK_,
         'packets': this.unsavedPackets_
     };
 };

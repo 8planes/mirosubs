@@ -220,29 +220,11 @@ class Video(models.Model):
         version = self.latest_version(language_code)
         return [] if version is None else version.subtitles()
 
-    def null_subtitles(self, user, language_code=None):
-        """Returns NullSubtitles for user, or None if none exist."""
-        try:
-            base_query = self.nullsubtitles_set.filter(
-                user__id__exact=user.id)
-            if language_code is None:
-                return base_query.filter(is_original=True)[:1].get()
-            else:
-                return base_query.filter(language=language_code)[:1].get()
-        except models.ObjectDoesNotExist:
-            pass
-
     def translation_language_codes(self):
         """All iso language codes with finished translations."""
         return set([sl.language for sl 
                     in self.subtitlelanguage_set.filter(
                     is_complete=True).filter(is_original=False)])
-
-    def null_translation_language_codes(self, user):
-        null_translations = self.nullsubtitles_set.filter(
-            user__id__exact=user.id).filter(
-            is_original=False)
-        return set([trans.language for trans in null_translations])
 
     @property
     def writelock_owner_name(self):
@@ -570,7 +552,7 @@ class SubtitleVersion(SubtitleCollection):
         cls = self.__class__
         try:
             return cls.objects.filter(version_no__lt=self.version_no) \
-                      .filter(language=self.language, finished=True) \
+                      .filter(language=self.language) \
                       .exclude(text_change=0, time_change=0)[:1].get()
         except models.ObjectDoesNotExist:
             pass
@@ -579,7 +561,7 @@ class SubtitleVersion(SubtitleCollection):
         cls = self.__class__
         try:
             return cls.objects.filter(version_no__gt=self.version_no) \
-                      .filter(language=self.language, finished=True) \
+                      .filter(language=self.language) \
                       .exclude(text_change=0, time_change=0) \
                       .order_by('version_no')[:1].get()
         except models.ObjectDoesNotExist:
@@ -591,7 +573,7 @@ class SubtitleVersion(SubtitleCollection):
         new_version_no = latest_subtitles.version_no + 1
         note = u'rollback to version #%s' % self.version_no
         new_version = cls(language=self.language, version_no=new_version_no, \
-            datetime_started=datetime.now(), user=user, note=note, finished=True)
+            datetime_started=datetime.now(), user=user, note=note)
         new_version.save()
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
@@ -630,41 +612,15 @@ class SubtitleDraft(SubtitleCollection):
         return not self.language.is_original and not self.is_forked
 
     def matches_request(self, request):
-        if request.is_authenticated() and self.user and \
+        if request.user.is_authenticated() and self.user and \
                 self.user.pk == request.user.pk:
             return True
         else:
             return request.browser_id == self.browser_id
 
-class NullSubtitlesPlaceholder(models.Model):
-    video = models.ForeignKey(Video)
-    video_session = models.CharField(max_length=128, blank=False)
-    original_language = models.CharField(
-        max_length=16, choices=settings.ALL_LANGUAGES, 
-        blank=True, default='')
-    class Meta:
-        unique_together = (('video', 'video_session'),)
-
-class NullSubtitles(SubtitleCollection):
-    video = models.ForeignKey(Video)
-    user = models.ForeignKey(User)
-    is_original = models.BooleanField()
-    language = models.CharField(max_length=16, choices=settings.ALL_LANGUAGES, blank=True)
-    last_saved_packet = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        unique_together = (('video', 'user', 'language'),)
-
-    def is_dependent(self):
-        return not self.is_original and not self.is_forked
-
-    def _get_standard_collection(self):
-        return self.video.null_subtitles(self.user, self.language)
-
 class Subtitle(models.Model):
     version = models.ForeignKey(SubtitleVersion, null=True)
     draft = models.ForeignKey(SubtitleDraft, null=True)
-    null_subtitles = models.ForeignKey(NullSubtitles, null=True)
     subtitle_id = models.CharField(max_length=32, blank=True)
     subtitle_order = models.FloatField(null=True)
     subtitle_text = models.CharField(max_length=1024, blank=True)
