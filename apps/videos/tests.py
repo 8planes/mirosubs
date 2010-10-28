@@ -160,7 +160,22 @@ class ViewsTest(TestCase):
                                action_type=Action.CHANGE_TITLE)
         except Action.DoesNotExist:
             self.fail()
-            
+
+    def test_youtube_subs_response(self):
+        import os
+        video = Video(
+            youtube_videoid='GcjgWov7mTM',
+            video_type=VIDEO_TYPE_YOUTUBE,
+            allow_community_edits=True)
+        video.save()
+        with open(os.path.join(
+                os.path.dirname(__file__), 
+                'fixtures/youtube_subs_response.json'), 'r') as f:
+            response_stub = f.read()
+        video._get_subtitles_from_youtube(response_stub)
+        video = Video.objects.get(pk=video.pk)
+        self.assertTrue(video.version(language_code='en') is not None)
+
     def test_create(self):
         self._login()
         url = reverse('videos:create')
