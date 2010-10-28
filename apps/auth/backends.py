@@ -20,7 +20,7 @@ class CustomUserBackend(ModelBackend):
     
     def authenticate(self, username=None, password=None):
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(username=username, is_active=True)
             if user.check_password(password):
                 return user
         except User.DoesNotExist:
@@ -36,7 +36,10 @@ class OpenIdBackend:
     def authenticate(self, openid_key, request, provider):
         try:
             assoc = UserAssociation.objects.get(openid_key = openid_key)
-            return assoc.user
+            if assoc.user.is_active:
+                return assoc.user
+            else:
+                return
         except UserAssociation.DoesNotExist:
             #fetch if openid provider provides any simple registration fields
             nickname = None
@@ -117,8 +120,10 @@ class TwitterBackend:
         
         try:
             user_profile = TwitterUserProfile.objects.get(screen_name = screen_name)
-            user = user_profile.user
-            return user
+            if user_profile.user.is_active:
+                return user_profile.user
+            else:
+                return        
         except TwitterUserProfile.DoesNotExist:
             #Create new user
             same_name_count = User.objects.filter(username__startswith = screen_name).count()
@@ -177,8 +182,11 @@ class FacebookBackend:
                 user_info_response  = get_user_info(API_KEY, API_SECRET, cookies)
                 username = user_info_response[0]['first_name']
                 try:
-                    profile = FacebookUserProfile.objects.get(facebook_uid = user_info_response[0]['uid'])
-                    return profile.user
+                    user_profile = FacebookUserProfile.objects.get(user__is_active=True, facebook_uid = user_info_response[0]['uid'])
+                    if user_profile.user.is_active:
+                        return user_profile.user
+                    else:
+                        return   
                 except FacebookUserProfile.DoesNotExist:
                     fb_data = user_info_response[0]
                     name_count = User.objects.filter(username__istartswith = username).count()

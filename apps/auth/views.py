@@ -22,8 +22,12 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout, login as auth_login
 from auth.forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic.simple import direct_to_template
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
@@ -41,6 +45,16 @@ def create_user(request):
         return HttpResponseRedirect(redirect_to)
     else:
         return render_login(request, form, AuthenticationForm(label_suffix=""), redirect_to)
+
+@login_required
+def delete_user(request):
+    if request.POST.get('delete'):
+        request.user.is_active = False
+        request.user.save()
+        logout(request)
+        messages.success(request, _(u'Your account was deleted.'))
+        return HttpResponseRedirect('/')
+    return direct_to_template(request, 'auth/delete_user.html')
 
 def login_post(request):
     redirect_to = make_redirect_to(request)

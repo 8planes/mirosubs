@@ -436,7 +436,7 @@ class SubtitleLanguage(models.Model):
         for_check = [item.user for item in qs]
         users = []
         for user in for_check:
-            if user and user.changes_notification \
+            if user and user.is_active and user.changes_notification \
                 and not user in users and not user.id in not_send \
                 and not exclude == user:
                 users.append(user)

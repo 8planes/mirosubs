@@ -31,6 +31,9 @@
 {% block main_content %}
 <div class="left_column">
     <h2>{% trans 'Edit Your Profile' %} <a href="{{ user_info.get_absolute_url }}">({% trans 'View profile' %})</a></h2>
+    <a class="small" href="{% url auth:delete_user %}">
+        <span>{% trans 'Delete Profile' %}</span>
+    </a>  
     <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}">
     <p>
         {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
@@ -54,7 +57,7 @@
             {% trans 'Edit Your Profile' %}
             <button class="green_button small" type="submit" value="Save">
                 <span>{% trans 'Save Edits to Profile' %}</span>
-            </button>
+            </button>          
         </h2>
         
         <div class="left_column">

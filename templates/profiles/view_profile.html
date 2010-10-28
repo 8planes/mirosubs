@@ -73,6 +73,7 @@
 {% endblock %}
 
 {% block main_content %}
+    {% if user_info.is_active %}
     <div class="left_column">
         <h2>
             {{ user_info }}
@@ -117,5 +118,10 @@
          <button type="submit" class="green_button big">{% trans 'Send a Message' %}</button>
       </form>
     </div>
+    {% endif %}
+    {% else %}
+    <div class="left_column">
+        <h2>{% trans 'User deleted his profile' %}</h2?
+    </div>        
     {% endif %}
 {% endblock %}

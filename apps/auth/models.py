@@ -28,7 +28,7 @@ from django.conf.global_settings import LANGUAGES
 from django.db.models.signals import post_save
 from django.conf import settings
 import hashlib
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.http import urlquote_plus
 from django.core.exceptions import MultipleObjectsReturned
 from utils.amazon import S3EnabledImageField
@@ -64,6 +64,9 @@ class CustomUser(BaseUser):
         verbose_name = 'User'
         
     def __unicode__(self):
+        if not self.is_active:
+            return ugettext('Anonymous')
+            
         if self.first_name:
             if self.last_name:
                 return self.get_full_name()
