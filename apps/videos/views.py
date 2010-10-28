@@ -507,6 +507,22 @@ def video_url_make_primary(request):
     return HttpResponse(json.dumps(output))
 
 @login_required
+def video_url_remove(request):
+    output = {}
+    id = request.GET.get('id')
+    if id:
+        try:
+            obj = VideoUrl.objects.get(id=id)
+            if obj.original:
+                output['error'] = ugettext('You cann\'t remove original URL')
+            else:
+                obj.deleted = True
+                obj.save()  
+        except VideoUrl.DoesNotExist:
+            output['error'] = ugettext('Object does not exist')    
+    return HttpResponse(json.dumps(output))
+
+@login_required
 def video_url_create(request):
     output = {}
     
