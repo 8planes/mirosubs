@@ -151,7 +151,6 @@ class SubtitlesUploadBaseForm(forms.Form):
                 caption.subtitle_order = i+1
                 caption.save()
       
-            version.finished = True
             version.save()
             
             language.was_complete = True

@@ -103,8 +103,7 @@
             "subtitle_text": "test",
             "subtitle_order": 1.0,
             "version": 1,
-            "end_time": 6.0170000000000003,
-            "null_subtitles": null
+            "end_time": 6.0170000000000003
         }
     },
     {
@@ -116,8 +115,7 @@
             "subtitle_text": "test123",
             "subtitle_order": 10.0,
             "version": 1,
-            "end_time": 101,
-            "null_subtitles": null
+            "end_time": 101
         }
     },    
     {
@@ -129,8 +127,7 @@
             "subtitle_text": "",
             "subtitle_order": 0.5,
             "version": null,
-            "end_time": 4.7635000000000005,
-            "null_subtitles": null
+            "end_time": 4.7635000000000005
         }
     },
     {
@@ -142,8 +139,7 @@
             "subtitle_text": "test",
             "subtitle_order": 1.0,
             "version": 2,
-            "end_time": 6.0170000000000003,
-            "null_subtitles": null
+            "end_time": 6.0170000000000003
         }
     },
     {
@@ -155,8 +151,7 @@
             "subtitle_text": "test1",
             "subtitle_order": 2.0,
             "version": 1,
-            "end_time": 10.228,
-            "null_subtitles": null
+            "end_time": 10.228
         }
     },
     {
@@ -168,8 +163,7 @@
             "subtitle_text": "test1",
             "subtitle_order": 2.0,
             "version": 2,
-            "end_time": 10.228,
-            "null_subtitles": null
+            "end_time": 10.228
         }
     },
     {
@@ -181,8 +175,7 @@
             "subtitle_text": "test2",
             "subtitle_order": 3.0,
             "version": 1,
-            "end_time": 13.714,
-            "null_subtitles": null
+            "end_time": 13.714
         }
     },
     {
@@ -194,8 +187,7 @@
             "subtitle_text": "test3",
             "subtitle_order": 2.5,
             "version": 2,
-            "end_time": 11.971,
-            "null_subtitles": null
+            "end_time": 11.971
         }
     },
     {
@@ -207,8 +199,7 @@
             "subtitle_text": "test2",
             "subtitle_order": 3.0,
             "version": 2,
-            "end_time": 13.714,
-            "null_subtitles": null
+            "end_time": 13.714
         }
     },
     {
@@ -219,7 +210,6 @@
             "notification_sent": false,
             "language": 1,
             "version_no": 1,
-            "finished": true,
             "datetime_started": "2010-08-27 10:00:36",
             "time_change": null,
             "text_change": null,
@@ -234,7 +224,6 @@
             "notification_sent": false,
             "language": 1,
             "version_no": 0,
-            "finished": true,
             "datetime_started": "2010-08-27 09:34:05",
             "time_change": null,
             "text_change": null,

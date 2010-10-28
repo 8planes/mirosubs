@@ -270,9 +270,8 @@ def history(request, video_id, lang=None):
     
     if not language:
         raise Http404
-        
-    qs = language.subtitleversion_set.filter(finished=True)   \
-        .exclude(time_change=0, text_change=0)
+
+    qs = language.subtitleversion_set.all()
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
         'date': 'datetime_started', 
@@ -289,7 +288,7 @@ def history(request, video_id, lang=None):
     context['site'] = Site.objects.get_current()
     context['translations'] = video.subtitlelanguage_set.filter(is_original=False) \
         .filter(was_complete=True)
-    context['last_version'] = language.latest_finished_version()
+    context['last_version'] = language.latest_version()
     context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang or '')
     context['language'] = language
     _add_share_panel_context_for_history(context, video, lang)
@@ -322,7 +321,7 @@ def revision(request, pk):
     context['language'] = language
     context['widget_params'] = _widget_params(request, \
             language.video.get_video_url(), version.version_no, language.language)
-    context['latest_version'] = language.latest_finished_version()
+    context['latest_version'] = language.latest_version()
     return render_to_response('videos/revision.html', context,
                               context_instance=RequestContext(request))     
     
@@ -393,7 +392,7 @@ def diffing(request, first_pk, second_pk):
     context['language'] = language
     context['first_version'] = first_version
     context['second_version'] = second_version
-    context['latest_version'] = language.latest_finished_version()
+    context['latest_version'] = language.latest_version()
     context['widget0_params'] = \
         _widget_params(request, video.get_video_url(), 
                        first_version.version_no)

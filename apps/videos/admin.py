@@ -28,8 +28,8 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
     list_filter = ['is_original', 'is_complete']
 
 class SubtitleVersionAdmin(admin.ModelAdmin):
-    list_display = ['language', 'version_no', 'note', 'time_change', 'text_change', 'finished']
-    list_filter = ['finished']
+    list_display = ['language', 'version_no', 'note', 'time_change', 'text_change']
+    list_filter = []
 
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']
