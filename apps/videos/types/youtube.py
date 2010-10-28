@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from gdata.youtube.service import YouTubeService
+from gdata.service import RequestError
 import re
 import urllib
 from videos.utils import YoutubeSubtitleParser
@@ -24,18 +25,27 @@ from base import VideoType
 from auth.models import CustomUser as User
 from datetime import datetime
 import random
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 yt_service = YouTubeService()
 yt_service.ssl = False
 
-class YoutubeVideoType(VideoType):
+_('Private video')
 
+class YoutubeVideoType(VideoType):
+    
+    error = _('Youtube error: %(error)s')
     _url_pattern = re.compile(
         r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)')
 
     def __init__(self):
         self.abbreviation = 'Y'
         self.name = 'Youtube'   
+    
+    def validate(self, url):
+        video_id = self._get_video_id(url)
+        self._get_entry(video_id)
     
     def convert_to_video_url(self, url):
         id = self._get_video_id(url)
@@ -53,7 +63,7 @@ class YoutubeVideoType(VideoType):
     def set_values(self, video_obj, video_url):
         video_id = self._get_video_id(video_url)
         video_obj.youtube_videoid = video_id
-        entry = yt_service.GetYouTubeVideoEntry(video_id=video_obj.youtube_videoid)
+        entry = self._get_entry(video_id)
         video_obj.title = entry.media.title.text
         if entry.media.duration:
             video_obj.duration = int(entry.media.duration.seconds)
@@ -62,6 +72,13 @@ class YoutubeVideoType(VideoType):
         video_obj.save()
         self._get_subtitles_from_youtube(video_obj)
         return video_obj
+    
+    def _get_entry(self, video_id):
+        try:
+            return yt_service.GetYouTubeVideoEntry(video_id=video_id)
+        except RequestError, e:
+            err = _(e[0].get('body', _('Undefined error')))
+            raise ValidationError(self.error % {'error': err})           
         
     def _get_video_id(self, video_url):
         match = self._url_pattern.search(video_url)

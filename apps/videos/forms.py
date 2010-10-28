@@ -244,6 +244,7 @@ If you'd like to us to add support for a new site or format, or if you
 think there's been some mistake, <a
 href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))             
         else:
+            video_type.validate(video_url)
             setattr(self, '_video_type', video_type)
             
         return video_url
