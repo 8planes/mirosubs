@@ -103,6 +103,14 @@ class UploadSubtitlesTest(WebUseTest):
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
             }
 
+    def _make_altered_data(self):
+        import os
+        return {
+            'language': 'en',
+            'video': self.video.id,
+            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test_altered.srt'))
+            }
+
     def setUp(self):
         self._make_objects()
 
@@ -118,10 +126,15 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEquals(language, None)
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
-        
-        language = self.video.subtitle_language(data['language'])
+
+        video = Video.objects.get(pk=self.video.pk)
+        language = video.subtitle_language(data['language'])
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 32)
+        self.assertTrue(language.is_complete)
+        self.assertTrue(language.was_complete)
+        self.assertFalse(video.is_subtitled)
+        self.assertFalse(video.was_subtitled)
 
     def test_upload_twice(self):
         self._login()
@@ -137,6 +150,18 @@ class UploadSubtitlesTest(WebUseTest):
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(1, language.subtitleversion_set.count())
         self.assertEquals(version_no, language.latest_version().version_no)
+
+    def test_upload_altered(self):
+        self._login()
+        data = self._make_data()
+        altered_data = self._make_altered_data()
+        self.client.post(reverse('videos:upload_subtitles'), data)
+        self.client.post(reverse('videos:upload_subtitles'), altered_data)
+        language = self.video.subtitle_language(data['language'])
+        self.assertEquals(2, language.subtitleversion_set.count())
+        version = language.latest_version()
+        self.assertTrue(version.time_change > 0)
+        self.assertTrue(version.text_change > 0)
 
 class Html5ParseTest(TestCase):
     def _assert(self, start_url, end_url):
@@ -470,11 +495,10 @@ class YoutubeVideoTypeTest(TestCase):
         self.assertEqual(video.duration, 79)
         self.assertTrue(video.thumbnail)
         language = video.subtitlelanguage_set.all()[0]
-        version = language.latest_finished_version()
+        version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 26)
-        
         self.assertEqual(self.vt.video_url(video), youtbe_url)
-        
+
     def test_matches_video_url(self):
         for item in self.data:
             self.assertTrue(self.vt.matches_video_url(item['url']))
