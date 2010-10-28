@@ -79,7 +79,7 @@ class Command(BaseCommand):
             .values_list('user_id', flat=True)         
         users = []
         for item in qs:
-            if item.user and not caption_version.user == item.user and item.user.changes_notification \
+            if item.user and item.user.is_active and not caption_version.user == item.user and item.user.changes_notification \
                 and not item.user in users and not item.user.id in not_send:
                 users.append(item.user)
                 context['user'] = item.user
