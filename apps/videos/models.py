@@ -29,6 +29,7 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
+import time
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -814,3 +815,7 @@ class VideoUrl(models.Model):
         if unique_check[0] == 'url':
             return _('This URL already exists.')
         return super(VideoUrl, self).unique_error_message(model_class, unique_check)
+    
+    def created_as_time(self):
+        #for sorting in js
+        return time.mktime(self.created.timetuple())

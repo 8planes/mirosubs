@@ -21,12 +21,20 @@ thead th{
   float: none !important;
   }
 
-th a{
+th a, th.header{
   margin-right: 15px;
   padding-right: 25px;
   text-decoration: none !important;
   background: url(../../images/sort_arrows.gif) right 11px no-repeat;
   }
+
+th.headerSortDown{
+    background: url(../../images/sort_arrows.gif) right -62px no-repeat;
+}
+
+th.headerSortUp{
+    background: url(../../images/sort_arrows.gif) right -25px no-repeat;
+}
 
 tr{ display: table-row;}
 
@@ -44,6 +52,9 @@ th span, th a{
   text-shadow: 1px 1px 0px #fff;
   }
 
+th span {
+    cursor: pointer;
+}
 
 td{
   text-align: left;

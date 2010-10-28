@@ -13,19 +13,19 @@
 <thead>
   <tr>
     <th>
-        <a href="#">{% trans 'Title/URL' %}</a>
+        <span>{% trans 'Title/URL' %}</span>
     </th>
     <th>
-        <a href="#">{% trans 'Format/Host' %}</a>
+        <span>{% trans 'Format/Host' %}</span>
     </th>
     <th>
-        <a href="#">{% trans 'Added' %}</a>
+        <span>{% trans 'Added' %}</span>
     </th>
     <th>
-        <a href="#">{% trans 'added_by' %}</a>
+        <span>{% trans 'added_by' %}</span>
     </th>
     <th class="last">
-        <a href="#">{% trans 'Actions' %}</a>
+        <span>{% trans 'Actions' %}</span>
     </th>
   </tr> 
 </thead>
@@ -42,7 +42,7 @@
                 {% endif %}
             </td>
             <td>{{ item.get_type_display }}</td>
-            <td>{{ item.created|timesince }} {% trans 'ago' %}</td>
+            <td time="{{ item.created_as_time }}">{{ item.created|timesince }} {% trans 'ago' %}</td>
             <td>{{ item.added_by|default:'' }}</td>
             <td>
                 {% if not item.original %}
@@ -163,6 +163,26 @@ jQuery(function($){
         }
     });
     
-    $("#video-url-table").tablesorter();
+    $.tablesorter.addParser({
+        id: 'since-time',
+        is: function(s) { 
+            return false; 
+        },
+        format: function(s, table, td) { 
+            return $(td).attr('time') - 0;
+        }, 
+        type: 'numeric'         
+    });
+    
+    $("#video-url-table").tablesorter({
+        headers: {
+            2: {
+                sorter: 'since-time'
+            },
+            4: {
+                sorter: false 
+            }
+        }
+    });
 });             
 </script>

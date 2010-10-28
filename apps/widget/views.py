@@ -162,7 +162,7 @@ def download_subtitles(request, handler=SSASubtitles):
     response = HttpResponse(unicode(h), mimetype="text/plain")
     original_filename = '%s.%s' % (video.lang_filename(language), h.file_type)
     
-    if u'WebKit' in request.META['HTTP_USER_AGENT']:
+    if not 'HTTP_USER_AGENT' in request.META or u'WebKit' in request.META['HTTP_USER_AGENT']:
         # Safari 3.0 and Chrome 2.0 accepts UTF-8 encoded string directly.
         filename_header = 'filename=%s' % original_filename.encode('utf-8')
     elif u'MSIE' in request.META['HTTP_USER_AGENT']:
