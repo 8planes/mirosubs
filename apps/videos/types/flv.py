@@ -19,20 +19,14 @@
 from videos.types.base import VideoType
 import re
 
-URL_REGEX = re.compile('^http://.+\.flv$', re.I)
+URL_REGEX = re.compile('^http://.+/.+\.flv$', re.I)
 
 class FLVVideoType(VideoType):
 
-    def __init__(self):
-        self.abbreviation = 'L'
-        self.name = 'FLV'   
-
-    def video_url(self, obj):
-        return obj.video_url
-
-    def matches_video_url(self, url):
-        url = self.format_url(url)
-        return bool(URL_REGEX.match(url))        
-
-    def create_kwars(self, video_url):
-        return { 'video_url': self.format_url(video_url) }    
+    abbreviation = 'L'
+    name = 'FLV'   
+    
+    @classmethod
+    def matches_video_url(cls, url):
+        url = cls.format_url(url)
+        return bool(URL_REGEX.match(url))         

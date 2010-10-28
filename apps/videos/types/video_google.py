@@ -21,19 +21,19 @@ from vidscraper.sites import google_video
 
 class GoogleVideoType(VideoType):
 
-    def __init__(self):
-        self.abbreviation = 'G'
-        self.name = 'video.google.com'   
-    
-    def video_url(self, obj):
-        return obj.video_url
+    abbreviation = 'G'
+    name = 'video.google.com'   
 
-    def matches_video_url(self, url):
+    def convert_to_video_url(self):
+        return self.format_url(self.url)
+    
+    @classmethod
+    def matches_video_url(cls, url):
         return bool(google_video.GOOGLE_VIDEO_REGEX.match(url))
 
-    def create_kwars(self, video_url):
-        return { 'video_url': self.format_url(video_url) }
+    def create_kwars(self):
+        return { 'video_url': self.format_url(self.url) }
     
-    def set_values(self, video_obj, video_url):
-        video_obj.title = google_video.scrape_title(video_url)
+    def set_values(self, video_obj):
+        video_obj.title = google_video.scrape_title(self.url)
         return video_obj    

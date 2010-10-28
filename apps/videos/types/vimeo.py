@@ -21,18 +21,26 @@ from base import VideoType
 
 class VimeoVideoType(VideoType):
 
-    def __init__(self):
-        self.abbreviation = 'V'
-        self.name = 'Vimeo.com'   
+    abbreviation = 'V'
+    name = 'Vimeo.com'   
     
-    def video_url(self, obj):
-        return 'http://vimeo.com/%s' % obj.vimeo_videoid
+    def __init__(self, url):
+        self.url = url
+        self.id = self._get_vimeo_id(url)
+    
+    def convert_to_video_url(self):
+        return 'http://vimeo.com/%s' % self.id
 
-    def matches_video_url(self, url):
+    @classmethod    
+    def video_url(cls, obj):
+        return 'http://vimeo.com/%s' % obj.vimeo_videoid
+    
+    @classmethod
+    def matches_video_url(cls, url):
         return bool(vimeo.VIMEO_REGEX.match(url))
 
-    def create_kwars(self, video_url):
-        return { 'vimeo_videoid': self._get_vimeo_id(video_url) }
+    def create_kwars(self):
+        return { 'vimeo_videoid': self.id }
     
     def _get_vimeo_id(self, video_url):
         return vimeo.VIMEO_REGEX.match(video_url).group(2) 

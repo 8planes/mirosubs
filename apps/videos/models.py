@@ -29,6 +29,7 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
+import time
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -156,10 +157,19 @@ class Video(models.Model):
         if not vt:
             return
         
-        obj, create = Video.objects.get_or_create(defaults=vt.defaults, **vt.create_kwars(video_url))
+        obj, create = Video.objects.get_or_create(defaults=vt.defaults, **vt.create_kwars())
         if create: 
-            obj = vt.set_values(obj, video_url)
+            obj = vt.set_values(obj)
             obj.save()
+            
+            #Save video url
+            video_url = VideoUrl()
+            video_url.url = vt.video_url(obj)
+            video_url.type = vt.abbreviation
+            video_url.original = True
+            video_url.primary = True
+            video_url.video = obj
+            video_url.save()
         return obj, create
     
     @property
@@ -766,17 +776,35 @@ class StopNotification(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
 
+class VideoUrlManager(models.Manager):
+    
+    def get_query_set(self):
+        return super(VideoUrlManager, self).get_query_set().filter(deleted=False)
+
 class VideoUrl(models.Model):
     video = models.ForeignKey(Video)
     type = models.CharField(max_length=1, choices=VIDEO_TYPE)
-    url = models.URLField(max_length=2048)
+    url = models.URLField(max_length=2048, unique=True)
     primary = models.BooleanField(default=False)
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
+    deleted = models.BooleanField(default=False)
     
     class Meta:
         unique_together = (('video', 'original'),)
     
+    objects = VideoUrlManager()
+    all = models.Manager()
+    
     def __unicode__(self):
         return self.url
+
+    def unique_error_message(self, model_class, unique_check):
+        if unique_check[0] == 'url':
+            return _('This URL already exists.')
+        return super(VideoUrl, self).unique_error_message(model_class, unique_check)
+    
+    def created_as_time(self):
+        #for sorting in js
+        return time.mktime(self.created.timetuple())

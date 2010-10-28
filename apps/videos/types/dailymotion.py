@@ -26,38 +26,48 @@ DAILYMOTION_REGEX = re.compile(r'https?://(?:[^/]+[.])?dailymotion.com/video/(?P
 
 class DailymotionVideoType(VideoType):
 
-    def __init__(self):
-        self.abbreviation = 'D'
-        self.name = 'dailymotion.com'   
-    
-    def video_url(self, obj):
-        return 'http://dailymotion.com/video/%s' % obj.dailymotion_videoid
+    abbreviation = 'D'
+    name = 'dailymotion.com'   
 
-    def matches_video_url(self, url):
-        if DAILYMOTION_REGEX.match(url):
-            metadata = self.get_metadata(url)
+    def __init__(self, url):
+        self.url = url
+        self.video_id = self.get_video_id(url)
+        
+    def convert_to_video_url(self):
+        return 'http://dailymotion.com/video/%s' % self.video_id
+
+    @classmethod    
+    def video_url(cls, obj):
+        return 'http://dailymotion.com/video/%s' % obj.dailymotion_videoid
+    
+    @classmethod
+    def matches_video_url(cls, url):
+        video_id = cls.get_video_id(url)
+        if video_id:
+            metadata = cls.get_metadata(video_id)
             stream_flv_mini_url = metadata.get('stream_flv_mini_url', '')
             return bool(stream_flv_mini_url)
             
         return False
 
-    def create_kwars(self, video_url):
-        return {'dailymotion_videoid': self.get_video_id(video_url)}
+    def create_kwars(self):
+        return {'dailymotion_videoid': self.video_id}
 
-    def set_values(self, video_obj, video_url):
-        metadata = self.get_metadata(video_url)
+    def set_values(self, video_obj):
+        metadata = self.get_metadata(self.video_id)
         video_obj.title = metadata.get('title', '')
-        video_obj.video_url = video_url
+        video_obj.video_url = self.url
         video_obj.thumbnail = metadata.get('thumbnail_url') or ''        
         return video_obj
     
-    def get_video_id(self, video_url):
-        return DAILYMOTION_REGEX.match(video_url).group(1)
+    @classmethod
+    def get_video_id(cls, video_url):
+        match = DAILYMOTION_REGEX.match(video_url)
+        return match and match.group(1)
     
-    def get_metadata(self, video_url):
+    @classmethod
+    def get_metadata(cls, video_id):
         #FIXME: get_metadata is called twice: in matches_video_url and set_values
-        video_id = self.get_video_id(video_url)
-        
         conn = httplib.HTTPConnection("www.dailymotion.com")
         conn.request("GET", "/json/video/" + video_id)
         response = conn.getresponse()

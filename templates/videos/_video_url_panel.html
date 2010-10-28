@@ -1,0 +1,188 @@
+{% load i18n %}
+<div style="padding: 10px">
+    {% blocktrans %}
+    A single video is often hosted in different places online and same
+    subtitles will work. 
+    {% endblocktrans %}
+    <a href="#">{% trans 'Learn more' %}</a>
+</div>
+<a href="#add-video-url" class="add-video-url-button green_button small">
+    {% trans 'Add new link' %}
+</a>          
+<table cellpadding="0" cellspacing="0" id="video-url-table">
+<thead>
+  <tr>
+    <th>
+        <span>{% trans 'Title/URL' %}</span>
+    </th>
+    <th>
+        <span>{% trans 'Format/Host' %}</span>
+    </th>
+    <th>
+        <span>{% trans 'Added' %}</span>
+    </th>
+    <th>
+        <span>{% trans 'added_by' %}</span>
+    </th>
+    <th class="last">
+        <span>{% trans 'Actions' %}</span>
+    </th>
+  </tr> 
+</thead>
+<tbody>
+    {% for item in video_urls %}
+        <tr>
+            <td class="url-td">
+                <a href="{{ item.url }}">{{ item }}</a> 
+                {% if item.primary %}
+                    <span class="primary">[{% trans 'PRIMARY' %}]</span>
+                {% endif %}
+                {% if item.original %}
+                    <span>[{% trans 'ORIGINAL' %}]</span>
+                {% endif %}
+            </td>
+            <td>{{ item.get_type_display }}</td>
+            <td time="{{ item.created_as_time }}">{{ item.created|timesince }} {% trans 'ago' %}</td>
+            <td>{{ item.added_by|default:'' }}</td>
+            <td>
+                {% if not item.original %}
+                    <a href="#" class="delete-url-link" video_url_id="{{ item.pk }}">{% trans 'remove' %}</a><br/>
+                {% endif %}
+                <a {% if item.primary %}style="display:none"{% endif %} href="#" video_url_id="{{ item.pk }}" class="make-primary-url-link">{% trans 'make primary' %}</a>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
+<div id="add-video-url" style="display: none">
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url videos:video_url_create %}">
+        <div class="global-errors"></div>
+        {{ form.as_p }}
+        <p class="button-container">
+            <button class="green_button small">{% trans 'Add' %}</button>
+        </p>
+        <p class="saving-container" style="display: none">
+            {% trans 'Saving...' %}
+        </p>
+    </form>
+    {% else %}
+    <p>
+        <a href="{% url auth:login %}?next={{ request.path_info }}">
+            {% trans 'Login to add new URL' %}
+        </a>        
+    </p>
+    {% endif %}
+</div>
+<script type="text/javascript">
+jQuery(function($){
+    var IS_AUTHENTICATED = '{{ user.is_authenticated }}' === 'True';
+    var make_primary_url = '{% url videos:video_url_make_primary %}';
+    $('.make-primary-url-link').click(function(){
+        if (IS_AUTHENTICATED){
+            var $this = $(this);
+            $.get(make_primary_url, {id: $this.attr('video_url_id')},
+                function(response){
+                    if (response.error){
+                        $.msg.clean().add(response.error);
+                    }else{
+                        var $primary_span = $('#urls-tab .primary');
+                        var $span = $primary_span.clone();
+                        
+                        $primary_span.remove();
+                        $('#urls-tab .make-primary-url-link').show();
+                        var $tr = $this.parents('tr');
+                        $tr.find('.url-td').append($span);
+                        $tr.find('.make-primary-url-link').hide();
+                    }
+                }, 'json');
+         }else{
+             alert('{% trans "You are not authenticated" %}');
+         }
+         return false;
+    });
+    
+    var remove_url = '{% url videos:video_url_remove %}';
+    $('.delete-url-link').click(function(){
+        var $url = $(this);
+        if (IS_AUTHENTICATED){
+            if (confirm('{% trans "Delete this URL?" %}')){
+                $.get(remove_url, {id: $url.attr('video_url_id')},
+                    function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error);
+                        }else{
+                            $url.parents('tr').remove();
+                        }
+                    }, 'json')                
+            }
+        }else{
+            alert('{% trans "You are not authenticated" %}');
+        }
+        return false;
+    }); 
+    
+    $('#add-video-url form').ajaxForm({
+        dataType: 'json',
+        success: function(data, status, xhr, $form){
+            $('.button-container', $form).show();
+            $('.saving-container', $form).hide();            
+            if (data.errors){
+                for (key in data.errors){
+                    var $field = $('input[name="'+key+'"]', $form);
+                    var error = '<p class="error_list">'+data.errors[key]+'</p>';
+                    if ($field.length){
+                        $field.prev().before(error);
+                    }else{
+                        $('.global-errors', $form).prepend(error);
+                    }
+                };
+            }else{
+                location.reload();
+            }
+        },
+        beforeSubmit: function(formData, $form, options){
+            $('p.error_list', $form).remove();
+            $('.button-container', $form).hide();
+            $('.saving-container', $form).show();
+        }
+    });
+    
+    $('.add-video-url-button').nyroModal({
+        bgColor: '#fff',
+        cssOpt: {
+            wrapper: {
+               backgroundColor: '#fff'
+            }                    
+        },
+        endRemove: function(){
+            $('#clippy').show();
+        },
+        processHandler: function(){
+            $('#clippy').hide();
+        }
+    });
+    
+    $.tablesorter.addParser({
+        id: 'since-time',
+        is: function(s) { 
+            return false; 
+        },
+        format: function(s, table, td) { 
+            return $(td).attr('time') - 0;
+        }, 
+        type: 'numeric'         
+    });
+    
+    $("#video-url-table").tablesorter({
+        headers: {
+            2: {
+                sorter: 'since-time'
+            },
+            4: {
+                sorter: false 
+            }
+        }
+    });
+});             
+</script>

@@ -17,50 +17,71 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from gdata.youtube.service import YouTubeService
+from gdata.service import RequestError
 import re
 import urllib
 from videos.utils import YoutubeSubtitleParser
-from base import VideoType
+from base import VideoType, VideoTypeError
 from auth.models import CustomUser as User
 from datetime import datetime
 import random
+from django.utils.translation import ugettext_lazy as _
 
 yt_service = YouTubeService()
 yt_service.ssl = False
 
-class YoutubeVideoType(VideoType):
+_('Private video')
 
+class YoutubeVideoType(VideoType):
+    
+    error = _('Youtube error: %(error)s')
     _url_pattern = re.compile(
         r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)')
 
-    def __init__(self):
-        self.abbreviation = 'Y'
-        self.name = 'Youtube'   
+    abbreviation = 'Y'
+    name = 'Youtube' 
+
+    def __init__(self, url):
+        self.url = url
+        self.video_id = self._get_video_id(self.url)
+        self.entry = self._get_entry(self.video_id)
     
-    def video_url(self, obj):
+    def convert_to_video_url(self):
+        return 'http://www.youtube.com/watch?v=%s' % self.video_id   
+
+    @classmethod    
+    def video_url(cls, obj):
         return 'http://www.youtube.com/watch?v=%s' % obj.youtube_videoid
+    
+    @classmethod
+    def matches_video_url(cls, url):
+        return 'youtube.com' in url and cls._get_video_id(url)
 
-    def matches_video_url(self, url):
-        return 'youtube.com' in url and self._get_video_id(url)
+    def create_kwars(self):
+        return {'youtube_videoid': self.video_id}
 
-    def create_kwars(self, video_url):
-        return {'youtube_videoid': self._get_video_id(video_url)}
-
-    def set_values(self, video_obj, video_url):
-        video_id = self._get_video_id(video_url)
-        video_obj.youtube_videoid = video_id
-        entry = yt_service.GetYouTubeVideoEntry(video_id=video_obj.youtube_videoid)
-        video_obj.title = entry.media.title.text
-        if entry.media.duration:
-            video_obj.duration = entry.media.duration.seconds
-        if entry.media.thumbnail:
-            video_obj.thumbnail = entry.media.thumbnail[-1].url
+    def set_values(self, video_obj):
+        video_obj.youtube_videoid = self.video_id
+        video_obj.title = self.entry.media.title.text
+        if self.entry.media.duration:
+            video_obj.duration = int(self.entry.media.duration.seconds)
+        if self.entry.media.thumbnail:
+            video_obj.thumbnail = self.entry.media.thumbnail[-1].url
         video_obj.save()
         self._get_subtitles_from_youtube(video_obj)
         return video_obj
-        
-    def _get_video_id(self, video_url):
-        return self._url_pattern.search(video_url).group('video_id')
+    
+    def _get_entry(self, video_id):
+        try:
+            return yt_service.GetYouTubeVideoEntry(video_id=video_id)
+        except RequestError, e:
+            err = _(e[0].get('body', _('Undefined error')))
+            raise VideoTypeError(self.error % {'error': err})        
+    
+    @classmethod    
+    def _get_video_id(cls, video_url):
+        match = cls._url_pattern.search(video_url)
+        return match and match.group('video_id')
 
     def _get_subtitles_from_youtube(self, video_obj):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
@@ -68,7 +89,7 @@ class YoutubeVideoType(VideoType):
         url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
         d = urllib.urlopen(url)
         parser = YoutubeSubtitleParser(d.read())
-        
+
         if not parser:
             return
         
@@ -82,18 +103,18 @@ class YoutubeVideoType(VideoType):
         version.datetime_started = datetime.now()
         version.user = User.get_youtube_anonymous()
         version.note = u'From youtube'
+        version.is_forked = True
         version.save()
-        
+
         for i, item in enumerate(parser):
             subtitle = Subtitle(**item)
             subtitle.version = version
             subtitle.subtitle_id = int(random.random()*10e12)
             subtitle.sub_order = i+1
             subtitle.save()
-        
         version.finished = True
         version.save()
-        
+
         language.was_complete = True
         language.is_complete = True
         language.save()
