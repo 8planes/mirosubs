@@ -482,7 +482,7 @@ class SubtitleLanguage(models.Model):
     
     def latest_version(self):
         try:
-            return self.subtitleversion_set.exclude(time_change=0, text_change=0)[:1].get()
+            return self.subtitleversion_set.exclude()[:1].get()
         except models.ObjectDoesNotExist:
             pass        
 

@@ -504,6 +504,22 @@ class TestRpc(TestCase):
         self.assertEquals(1, len(return_value['subtitles']['subtitles']))
         self.assertEquals(False, 'original_subtitles' in return_value)
 
+    def test_no_changes_then_edit(self):
+        request = RequestMockup(self.user_0)
+        video = self._create_video_with_one_caption_set(request)
+        rpc.finished_subtitles(request, video.video_id, [], [], [])
+        # now start an edit but with zero changes
+        rpc.start_editing(request, video.video_id, 'en')
+        # user exits from dialog right away, creating a zero-change non-finished version.
+        rpc.release_lock(request, video.video_id)
+        # the cron job runs, updating the change information
+        video = Video.objects.get(video_id=video.video_id)
+        v = video.subtitle_language().subtitleversion_set.all()[0]
+        v.update_changes()
+        # now start editing version 0. The test passes if this doesn't throw an error.
+        rpc.start_editing(request, video.video_id, 'en', base_version_no=0)
+
+
     def test_change_original_language(self):
         request = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
