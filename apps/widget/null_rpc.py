@@ -18,9 +18,11 @@
 
 from widget.base_rpc import BaseRpc
 from videos import models
+from django.conf import settings
 from django.conf.global_settings import LANGUAGES
 import widget
 from videos.types import video_type_registrar
+from videos.types.bliptv import BlipTvVideoType
 
 class NullRpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None):
@@ -31,9 +33,11 @@ class NullRpc(BaseRpc):
             'languages': LANGUAGES,
             'metadata_languages': settings.METADATA_LANGUAGES
             }
+        if request.user.is_authenticated():
+            return_value['username'] = request.user.username
         video_type = video_type_registrar.video_type_for_url(video_url)
         if isinstance(video_type, BlipTvVideoType):
-            return_value['flv_url'] = video_type.flv_file_url(video_url)
+            return_value['flv_url'] = video_type.scrape_best_file_url()
         return_value['drop_down_contents'] = \
             self._drop_down_contents(None, None)
         return return_value
