@@ -21,23 +21,24 @@ from vidscraper.sites import ustream
 
 class UstreamVideoType(VideoType):
 
-    def __init__(self):
-        self.abbreviation = 'U'
-        self.name = 'Ustream.tv'   
-
-    def convert_to_video_url(self, url):
-        return ustream.get_flash_enclosure_url(url)
+    abbreviation = 'U'
+    name = 'Ustream.tv'   
     
-    def video_url(self, obj):
-        return obj.video_url
-
-    def matches_video_url(self, url):
+    def __init__(self, url):
+        self.url = url
+        self.video_url = ustream.get_flash_enclosure_url(url)
+    
+    def convert_to_video_url(self):
+        return self.video_url
+    
+    @classmethod
+    def matches_video_url(cls, url):
         return bool(ustream.USTREAM_REGEX.match(url))
 
-    def create_kwars(self, video_url):
-        return { 'video_url': ustream.get_flash_enclosure_url(video_url) }
+    def create_kwars(self):
+        return { 'video_url': self.video_url }
     
-    def set_values(self, video_obj, video_url):
-        video_obj.title = ustream.get_title(video_url)
-        video_obj.thumbnail = ustream.get_thumbnail_url(video_url)
+    def set_values(self, video_obj):
+        video_obj.title = ustream.get_title(self.url)
+        video_obj.thumbnail = ustream.get_thumbnail_url(self.url)
         return video_obj   

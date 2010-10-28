@@ -23,16 +23,10 @@ URL_REGEX = re.compile('^http://.+/.+\.(ogv|ogg|mp4|m4v|webm)$', re.I)
 
 class HtmlFiveVideoType(VideoType):
 
-    def __init__(self):
-        self.abbreviation = 'H'
-        self.name = 'HTML5'   
-
-    def video_url(self, obj):
-        return obj.video_url
-
-    def matches_video_url(self, url):
-        url = self.format_url(url)
+    abbreviation = 'H'
+    name = 'HTML5'   
+    
+    @classmethod
+    def matches_video_url(cls, url):
+        url = cls.format_url(url)
         return bool(URL_REGEX.match(url))        
-
-    def create_kwars(self, video_url):
-        return { 'video_url': self.format_url(video_url) }    

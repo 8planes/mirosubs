@@ -202,6 +202,7 @@ class ViewsTest(WebUseTest):
         self._make_objects()
     
     def test_video_url_make_primary(self):
+        self._login()
         self._simple_test("videos:video_url_make_primary")
     
     def test_site_feedback(self):
@@ -438,7 +439,7 @@ from videos.types.youtube import YoutubeVideoType
 class YoutubeVideoTypeTest(TestCase):
     
     def setUp(self):
-        self.vt = YoutubeVideoType()
+        self.vt = YoutubeVideoType
         self.data = [{
             'url': 'http://www.youtube.com/watch#!v=UOtJUmiUZ08&feature=featured&videos=Qf8YDn9mbGs',
             'video_id': 'UOtJUmiUZ08'
@@ -454,14 +455,16 @@ class YoutubeVideoTypeTest(TestCase):
         }]
     
     def test_create_kwars(self):
-        kwargs = self.vt.create_kwars('http://www.youtube.com/watch?v=woobL2yAxD4')
+        vt = self.vt('http://www.youtube.com/watch?v=woobL2yAxD4')
+        kwargs = vt.create_kwars()
         self.assertEqual(kwargs, {'youtube_videoid': 'woobL2yAxD4'})
     
     def test_set_values(self):
         youtbe_url = 'http://www.youtube.com/watch?v=_ShmidkrcY0'
-        video = Video(video_id='100500', video_type=self.vt.abbreviation, **self.vt.create_kwars(youtbe_url))
+        vt = self.vt(youtbe_url)
+        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
         video.save()
-        self.vt.set_values(video, youtbe_url)
+        vt.set_values(video)
         self.assertEqual(video.youtube_videoid, '_ShmidkrcY0')
         self.assertTrue(video.title)
         self.assertEqual(video.duration, 79)
@@ -489,12 +492,13 @@ from videos.types.htmlfive import HtmlFiveVideoType
 class HtmlFiveVideoTypeTest(TestCase):
     
     def setUp(self):
-        self.vt = HtmlFiveVideoType()
+        self.vt = HtmlFiveVideoType
         
     def test_type(self):
         url = 'http://someurl.com/video.ogv?val=should&val1=be#removed'
         clean_url = 'http://someurl.com/video.ogv'
-        video = Video(video_id='100500', video_type=self.vt.abbreviation, **self.vt.create_kwars(url))
+        vt = self.vt(url)
+        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
         video.save()        
         self.assertEqual(video.video_url, clean_url)
         self.assertEqual(self.vt.video_url(video), video.video_url)
@@ -516,13 +520,14 @@ from videos.types.bliptv import BlipTvVideoType
 class BlipTvVideoTypeTest(TestCase):
     
     def setUp(self):
-        self.vt = BlipTvVideoType() 
+        self.vt = BlipTvVideoType 
         
     def test_type(self):
         url = 'http://blip.tv/file/4297824?utm_source=featured_ep&utm_medium=featured_ep'
-        video = Video(video_id='100500', video_type=self.vt.abbreviation, **self.vt.create_kwars(url))
+        vt = self.vt(url)
+        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
         video.save()
-        self.vt.set_values(video, url)
+        vt.set_values(video)
         self.assertEqual(video.bliptv_fileid, '4297824')
         self.assertTrue(video.title)
         self.assertTrue(video.thumbnail)
@@ -539,13 +544,14 @@ from videos.types.dailymotion import DailymotionVideoType
 class DailymotionVideoTypeTest(TestCase):
     
     def setUp(self):
-        self.vt = DailymotionVideoType()
+        self.vt = DailymotionVideoType
         
     def test_type(self):
         url = 'http://www.dailymotion.com/video/x7u2ww_juliette-drums_lifestyle#hp-b-l'
-        video = Video(video_id='100500', video_type=self.vt.abbreviation, **self.vt.create_kwars(url))
+        vt = self.vt(url)
+        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
         video.save()
-        self.vt.set_values(video, url)
+        vt.set_values(video)
         self.assertEqual(video.dailymotion_videoid, 'x7u2ww')
         self.assertTrue(video.title)
         self.assertTrue(video.thumbnail)
@@ -561,12 +567,13 @@ from videos.types.flv import FLVVideoType
 class FLVVideoTypeTest(TestCase):
     
     def setUp(self):
-        self.vt = FLVVideoType()
+        self.vt = FLVVideoType
         
     def test_type(self):
         url = 'http://someurl.com/video.flv?val=should&val1=be#removed'
         clean_url = 'http://someurl.com/video.flv'
-        video = Video(video_id='100500', video_type=self.vt.abbreviation, **self.vt.create_kwars(url))
+        vt = self.vt(url)
+        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
         video.save()        
         self.assertEqual(video.video_url, clean_url)
         self.assertEqual(self.vt.video_url(video), video.video_url)
@@ -582,11 +589,12 @@ from videos.types.vimeo import VimeoVideoType
 class VimeoVideoTypeTest(TestCase):
     
     def setUp(self):
-        self.vt = VimeoVideoType()
+        self.vt = VimeoVideoType
         
     def test_type(self):
         url = 'http://vimeo.com/15786066?some_param=111'
-        video = Video(video_id='100500', video_type=self.vt.abbreviation, **self.vt.create_kwars(url))
+        vt = self.vt(url)
+        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
         video.save()        
         self.assertEqual(video.vimeo_videoid, '15786066')
         self.assertTrue(self.vt.video_url(video))
@@ -597,23 +605,24 @@ class VimeoVideoTypeTest(TestCase):
         self.assertFalse(self.vt.matches_video_url(''))
         
 from videos.types.base import VideoType, VideoTypeRegistrar
-from videos.types import video_type_registrar
+from videos.types import video_type_registrar, VideoTypeError
 
 class VideoTypeRegistrarTest(TestCase):
     
     def test_base(self):
         registrar = VideoTypeRegistrar()
         
-        mockup = VideoType()
-        mockup.abbreviation = 'mockup'
-        mockup.name = 'MockUp'
+        class MockupVideoType(VideoType):
+            abbreviation = 'mockup'
+            name = 'MockUp'            
         
-        registrar.register(mockup)
-        self.assertEqual(registrar[mockup.abbreviation], mockup)
-        self.assertEqual(registrar.choices[-1], (mockup.abbreviation, mockup.name))
+        registrar.register(MockupVideoType)
+        self.assertEqual(registrar[MockupVideoType.abbreviation], MockupVideoType)
+        self.assertEqual(registrar.choices[-1], (MockupVideoType.abbreviation, MockupVideoType.name))
         
     def test_video_type_for_url(self):
         type = video_type_registrar.video_type_for_url('some url')
         self.assertEqual(type, None)
-        type = video_type_registrar.video_type_for_url('http://youtube.com/v=100500')
+        type = video_type_registrar.video_type_for_url('http://youtube.com/v=UOtJUmiUZ08')
         self.assertTrue(isinstance(type, YoutubeVideoType))
+        self.assertRaises(VideoTypeError, video_type_registrar.video_type_for_url, 'http://youtube.com/v=100500')

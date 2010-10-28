@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from base import VideoTypeRegistrar
+from base import VideoTypeRegistrar, VideoTypeError
 from youtube import YoutubeVideoType
 from bliptv import BlipTvVideoType
 from htmlfive import HtmlFiveVideoType
@@ -24,9 +24,11 @@ from vimeo import VimeoVideoType
 from flv import FLVVideoType
 
 video_type_registrar = VideoTypeRegistrar()
-video_type_registrar.register(YoutubeVideoType())
-video_type_registrar.register(BlipTvVideoType())
-video_type_registrar.register(HtmlFiveVideoType())
-video_type_registrar.register(DailymotionVideoType())
-video_type_registrar.register(VimeoVideoType())
-video_type_registrar.register(FLVVideoType())
+video_type_registrar.register(YoutubeVideoType)
+video_type_registrar.register(BlipTvVideoType)
+video_type_registrar.register(HtmlFiveVideoType)
+video_type_registrar.register(DailymotionVideoType)
+video_type_registrar.register(VimeoVideoType)
+video_type_registrar.register(FLVVideoType)
+
+__all__ = ['VideoTypeError', 'video_type_registrar']

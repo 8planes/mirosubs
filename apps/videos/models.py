@@ -29,7 +29,6 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
-from django.core.exceptions import ValidationError
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -155,13 +154,11 @@ class Video(models.Model):
     def get_or_create_for_url(cls, video_url, vt=None):
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
-            raise ValidationError, _('Undefined video type')
+            return
         
-        vt.validate(video_url)
-        
-        obj, create = Video.objects.get_or_create(defaults=vt.defaults, **vt.create_kwars(video_url))
+        obj, create = Video.objects.get_or_create(defaults=vt.defaults, **vt.create_kwars())
         if create: 
-            obj = vt.set_values(obj, video_url)
+            obj = vt.set_values(obj)
             obj.save()
             
             #Save video url

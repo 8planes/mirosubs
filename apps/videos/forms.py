@@ -32,7 +32,7 @@ from uuid import uuid4
 from math_captcha.forms import MathCaptchaForm
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
-from videos.types import video_type_registrar
+from videos.types import video_type_registrar, VideoTypeError
 from videos.models import VideoUrl
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
@@ -49,14 +49,19 @@ class CreateVideoUrlForm(forms.ModelForm):
         
     def clean_url(self):
         url = self.cleaned_data['url']
-        video_type = video_type_registrar.video_type_for_url(url)
+        
+        try:
+            video_type = video_type_registrar.video_type_for_url(url)
+        except VideoTypeError, e:
+            raise forms.ValidationError(e)
+        
         if not video_type:
             raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
 If you'd like to us to add support for a new site or format, or if you
 think there's been some mistake, <a
 href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL)) 
         self._video_type = video_type            
-        return video_type.convert_to_video_url(url)
+        return video_type.convert_to_video_url()
     
     def save(self, commit=True):
         obj = super(CreateVideoUrlForm, self).save(False)
@@ -237,15 +242,17 @@ class VideoForm(forms.ModelForm):
     
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
-        video_type = video_type_registrar.video_type_for_url(video_url)
+        try:
+            video_type = video_type_registrar.video_type_for_url(video_url)
+        except VideoTypeError, e:
+            raise forms.ValidationError(e)
         if not video_type:
             raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
 If you'd like to us to add support for a new site or format, or if you
 think there's been some mistake, <a
 href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))             
         else:
-            video_type.validate(video_url)
-            setattr(self, '_video_type', video_type)
+            self._video_type = video_type
             
         return video_url
     
