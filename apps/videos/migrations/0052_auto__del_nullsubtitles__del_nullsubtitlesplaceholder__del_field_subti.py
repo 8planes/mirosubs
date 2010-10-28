@@ -212,6 +212,7 @@ class Migration(SchemaMigration):
             'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '2048'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
         }
     }
