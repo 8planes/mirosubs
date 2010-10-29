@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-07 14:03+0300\n"
-"PO-Revision-Date: 2010-10-30 03:51+0800\n"
+"PO-Revision-Date: 2010-10-30 05:22+0800\n"
 "Last-Translator: aboodilankaboot\n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -452,7 +452,7 @@ msgstr "دخول"
 
 #: .\templates\base.html.py:106
 msgid "Universal Subtitles is a project of <a href=\"http://participatoryculture.org/\">PCF</a>."
-msgstr ""
+msgstr "الترجمة المرئية العالمية هي مشروع <a href=\"http://participatoryculture.org/\">PCF</a>."
 
 #: .\templates\base.html.py:112
 msgid "Contact Us"
@@ -491,6 +491,13 @@ msgid ""
 "    collaboration on subtitles and translations. Stay tuned!</p>\n"
 "  "
 msgstr ""
+"\n"
+"  <p style=\"clear: both\"><strong>هل لديك اقتراحات؟</strong> استخدم النموذج أسفل \n"
+"    هذه الصفحة لتعطينا تعليقاتك ، والباغز ، والآراء.</p>\n"
+"  <p><strong>ما هي الخطوة التالية؟</strong> نحن نعمل على إصدار ألفا \n"
+"    على موقعنا الجماعي الذي سيمكّن \n"
+"    العمل التعاوني على الترجمة المرئية والترجمة اللغوية. تابعونا للمزيد!</p>\n"
+"  "
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
@@ -577,7 +584,7 @@ msgstr "هدفنا في الترجمة المرئية العالمية هو  أ�
 
 #: .\templates\faq.html.py:44
 msgid "You're welcome to try the subtitling technology in our <a href=\"/demo/\">alpha demonstration</a>. This demo doesn't yet allow you to save subtitles, but that feature will be included in the alpha community launch (targeted for July 2010)."
-msgstr ""
+msgstr "نحن نرحب بكم لتجربة تكنولوجية الترجمة المرئية للأفلام في <a href=\"/demo/\">alpha demonstration</a>. هذا العرض التجريبي لا يسمح لك بحفظ الترجمة المرئية على الموقع ، ولكن سيتم تضمين هذه الميزة عند إطلاق إصدار ألفا (متستهدفة بيوليو 2010)."
 
 #: .\templates\faq.html.py:48
 msgid "Video subtitles are a gold mine of untapped potential."
@@ -601,7 +608,7 @@ msgstr ""
 
 #: .\templates\faq.html.py:61
 msgid "Yes, we are working on a solution for making closed captions [including information about sounds and music], as well as subtitles/translations."
-msgstr ""
+msgstr "نعم ، نحن نعمل على إيجاد حل للتعليق على الفيديو [بما في ذلك المعلومات حول الأصوات والموسيقى] ، وأيضاً الترجمة المرئية والترجمة اللغوية."
 
 #: .\templates\faq.html.py:65
 msgid "We will be working to support as many languages/charactersets as possible."
@@ -617,19 +624,19 @@ msgstr "الرجاء إضافة نفسك إلى قائمة الإعلان لدي
 
 #: .\templates\faq.html.py:77
 msgid "For our subtitling widget and community website, we're using the <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
-msgstr ""
+msgstr "لقطعة الترجمة وموقع المجتمع ، نحن نستخدم <a href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
 
 #: .\templates\faq.html.py:81
 msgid "Please do! If you're interested in coding and development, please visit our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
-msgstr ""
+msgstr "رجاءً تفضل بذللك! إذا كنت مهتماً في الترميز والتنمية ، يرجى زيارة <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer center</a>."
 
 #: .\templates\faq.html.py:85
 msgid "If you're interested in general involvement, please see our <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. If you have a specific idea, please get in touch: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> And as a 501c3 non-profit org, we do accept donations (see the next question for details)."
-msgstr ""
+msgstr "إذا كنت ترغب في المشاركة العامة ، يرجى الاطلاع على <a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. إذا كانت لديك فكرة محددة ، يرجى التواصل معنا: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> بما أنها 501c3 منظمة غير هادفة للربح  ، نحن نقبل التبرعات (انظر السؤال التالي للحصول على التفاصيل)."
 
 #: .\templates\faq.html.py:89
 msgid "Yes and yes! Right now, the Mozilla Foundation will match all contributions, up to a cumulative $25,000! You can <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donate here</a>."
-msgstr ""
+msgstr "نعم ونعم! والآن ، فإن مؤسسة موزيلا ستجمع جميع المساهمات ، وتصل تراكمياً إلى 25000 ألف دولار! يمكنك <a href=\"http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/\">donate here</a>."
 
 #: .\templates\faq.html.py:93
 msgid "The Mozilla Foundation has provided Universal Subtitles with seed funding, community support, and fundraising support through <a href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web open for the next 100 years, and Universal Subtitles is a featured project!"
@@ -806,7 +813,7 @@ msgstr ""
 
 #: .\templates\opensubtitles2010.html.py:44
 msgid "<strong>Move towards</strong> standardizing solutions and pushing forward the state of the art in open subtiting."
-msgstr ""
+msgstr "<strong>التحرك نحو</strong>  توحيد الحلول ودفع فنّ التكنلوجيا في الترجمة المرئية المفتوحة المصدر للفيديو."
 
 #: .\templates\opensubtitles2010.html.py:53
 msgid "Participants"
@@ -880,11 +887,11 @@ msgstr "الرّعاة"
 
 #: .\templates\opensubtitles2010.html.py:104
 msgid "The summit has been generously funded by the <a href=\"http://www.soros.org/\">Open Society Institute</a>."
-msgstr ""
+msgstr "مؤتمر القمة موّلته بسخاء <a href=\"http://www.soros.org/\">Open Society Institute</a>."
 
 #: .\templates\opensubtitles2010.html.py:113
 msgid "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for providing meeting space!"
-msgstr ""
+msgstr "شكر خاص ل <a href=\"http://openplans.org/\">Open Plans</a> لتوفير مساحة للاجتماع!"
 
 #: .\templates\ordered_paginator.html.py:4
 #: .\templates\paginator.html.py:4
@@ -1393,7 +1400,7 @@ msgstr "الرجاء تسجيل الدخول لتحميل الترجمة"
 
 #: .\templates\videos\_upload_subtitles.html.py:38
 msgid "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
-msgstr ""
+msgstr "إذا كنت تعتقد أن ملف الترجمة المرئية متوافق، <a href='mailto:feedback@universalsubtitles.org'>أرسله لنا</a>"
 
 #: .\templates\videos\_video_activity.html.py:4
 msgid "Activity"
