@@ -19,11 +19,12 @@
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, StopNotification
 from apps.auth.models import CustomUser as User
-from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser
+from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm
 import math_captcha
+import os
 
 math_captcha.forms.math_clean = lambda form: None
 
@@ -76,7 +77,14 @@ class SubtitleParserTest(TestCase):
         self.assertEqual(result[4]['start_time'], 55.501)
         self.assertEqual(result[4]['end_time'], 58.5)
         self.assertEqual(result[4]['subtitle_text'], u'Hide these tags: ')
-
+    
+    def test_youtube(self):
+        path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
+        parser = YoutubeSubtitleParser(open(path).read())
+        subs = list(parser)
+        self.assertEqual(subs[0]['start_time'], 0.81999999999999995)
+        self.assertEqual(subs[0]['end_time'], 6.8499999999999996)
+    
 class WebUseTest(TestCase):
     def _make_objects(self):
         self.auth = dict(username='admin', password='admin')
