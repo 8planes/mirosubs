@@ -221,6 +221,11 @@ class ViewsTest(TestCase):
         video._get_subtitles_from_youtube(response_stub)
         video = Video.objects.get(pk=video.pk)
         self.assertTrue(video.version(language_code='en') is not None)
+        version = video.version(language_code='en')
+        subs = version.subtitles()
+        subs.sort(key=lambda s: s.start_time)
+        for i in range(1, len(subs)):
+            self.assertTrue(subs[i].sub_order > subs[i - 1].sub_order)
 
     def test_create(self):
         self._login()
