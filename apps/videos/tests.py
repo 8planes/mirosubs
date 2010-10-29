@@ -81,6 +81,12 @@ Hide these tags: {\some_letters_or_numbers_or_chars}
         subs = list(parser)
         self.assertAlmostEqual(subs[0]['start_time'], 0.82)
         self.assertAlmostEqual(subs[0]['end_time'], 6.85)
+
+    def test_youtube_subtitles_sort(self):
+        data = '[{"language": "en", "plaintext_list": [{"start_ms": 200},{"start_ms": 100}]}]'
+        parser = YoutubeSubtitleParser(data)
+        self.assertEqual(parser.subtitles[0]['start_ms'], 100)
+        self.assertEqual(parser.subtitles[1]['start_ms'], 200)
     
 class WebUseTest(TestCase):
     def _make_objects(self):
