@@ -63,6 +63,7 @@ class YoutubeSubtitleParser(SubtitleParser):
         if data:
             data = data[0]
             self.subtitles = data['plaintext_list']
+            self.subtitles.sort(key=lambda i: i['start_ms'])
             self.language = data['language']
         else:
             self.subtitles = []
