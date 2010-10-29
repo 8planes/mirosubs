@@ -1655,7 +1655,7 @@ msgstr "Historija"
 
 #: .\templates\videos\history.html.py:197
 msgid "Compare Revisions"
-msgstr ""
+msgstr "Usporedi revizije"
 
 #: .\templates\videos\history.html.py:207
 msgid "Most Recent"
@@ -1675,7 +1675,7 @@ msgstr "Sljedeće"
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
-msgstr ""
+msgstr "Nema titlova za ovaj jezik"
 
 #: .\templates\videos\history.html.py:253
 msgid "Either no subtitles have been entered, or they were deleted."
@@ -1692,7 +1692,7 @@ msgstr "Napravi jedan!"
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
 msgid "Revision"
-msgstr ""
+msgstr "Revizija"
 
 #: .\templates\videos\revision.html.py:83
 #, python-format
@@ -1712,6 +1712,9 @@ msgid ""
 "                    Compare #%(version_no)s to #%(prev_version_no)s\n"
 "                    "
 msgstr ""
+"\n"
+" Uporedi #%(version_no)s sa #%(prev_version_no)s\n"
+" "
 
 #: .\templates\videos\revision.html.py:108
 #, python-format
@@ -1720,6 +1723,9 @@ msgid ""
 "                    Compare #%(version_no)s to #%(next_version_no)s\n"
 "                    "
 msgstr ""
+"\n"
+" Uporedi #%(version_no)s sa #%(next_version_no)s\n"
+" "
 
 #: .\templates\videos\revision.html.py:118
 #, python-format
@@ -1731,7 +1737,7 @@ msgstr ""
 
 #: .\templates\videos\revision.html.py:144
 msgid "See full revision history"
-msgstr ""
+msgstr "Vidi punu historiju revizija"
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
@@ -1795,7 +1801,7 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:42
 msgid "optional: get updates about Universal Subtitles"
-msgstr ""
+msgstr "opciono: prijavite se za novosti o Universal Subtitles"
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
@@ -1803,7 +1809,7 @@ msgstr "Pošalji!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Osnovne upute"
 
 #: .\templates\videos\test_form_page.html.py:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
@@ -1846,7 +1852,6 @@ msgid "All Submitted Videos"
 msgstr "Svi titlovani videi"
 
 #: .\templates\videos\video_list.html.py:12
-#, fuzzy
 msgid "URL"
 msgstr "URL"
 
