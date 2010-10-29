@@ -118,6 +118,8 @@ class VideoTest(TestCase):
         path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
         parser = YoutubeSubtitleParser(open(path).read())
         subs = list(parser)
+        for i in range(1, len(subs)):
+            self.assertTrue(subs[i]['start_time'] > subs[i - 1]['start_time'])
         self.assertAlmostEqual(subs[0]['start_time'], 0.82, 2)
         self.assertAlmostEqual(subs[0]['end_time'], 6.85, 2)
         
@@ -189,6 +191,11 @@ class ViewsTest(TestCase):
         video._get_subtitles_from_youtube(response_stub)
         video = Video.objects.get(pk=video.pk)
         self.assertTrue(video.version(language_code='en') is not None)
+        version = video.version(language_code='en')
+        subs = version.subtitles()
+        subs.sort(key=lambda s: s.start_time)
+        for i in range(1, len(subs)):
+            self.assertTrue(subs[i].sub_order > subs[i - 1].sub_order)
 
     def test_create(self):
         self._login()
