@@ -81,8 +81,8 @@ class YoutubeSubtitleParser(SubtitleParser):
 
     def _get_data(self, item):
         output = {}
-        output['start_time'] = item['start_ms'] / 1000
-        output['end_time'] = output['start_time'] + item['dur_ms'] / 1000
+        output['start_time'] = item['start_ms'] / 1000.
+        output['end_time'] = (item['start_ms'] + item['dur_ms']) / 1000.
         output['subtitle_text'] = item['text']
         return output
  
