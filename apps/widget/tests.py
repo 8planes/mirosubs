@@ -196,10 +196,10 @@ class TestRpc(TestCase):
 
     def test_change_set(self):
         request = RequestMockup(self.user_0)
-        draft = self._create_basic_draft(request, True)
+        draft = self._create_two_sub_draft(request)
         return_value = rpc.start_editing(request, draft.video.video_id, 'en')
         draft_pk = return_value['draft_pk']
-        updated = [{'subtitle_id': 'sfdsfsdf',
+        updated = [{'subtitle_id': 'a',
                      'text': 'hey you!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -212,7 +212,8 @@ class TestRpc(TestCase):
         language = video.subtitle_language()
         self.assertEqual(2, language.subtitleversion_set.count())
         version = language.latest_version()
-        self.assertTrue(version.text_change > 0)
+        self.assertTrue(version.text_change > 0 and version.text_change < 1)
+        self.assertTrue(version.time_change == 0)
 
     def test_cant_edit_because_locked(self):
         request_0 = RequestMockup(self.user_0)
@@ -523,6 +524,26 @@ class TestRpc(TestCase):
             request, draft.video.video_id, None, None)
         self.assertEquals(1, len(return_value['subtitles']['subtitles']))
         self.assertEquals(False, 'original_subtitles' in return_value)
+
+    def test_fork_then_edit(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_two_sub_dependent_draft(request)
+        # now fork subtitles
+        response = rpc.start_editing(request, draft.video.video_id, 'es', fork=True)
+        draft_pk = response['draft_pk']
+        updated = [{'subtitle_id': 'a',
+                     'text': 'a_esd',
+                     'start_time': 2.3,
+                     'end_time': 3.2,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(updated=updated)])
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+        video = Video.objects.get(pk=draft.video.pk)
+        version = video.subtitle_language('es').version()
+        self.assertTrue(version.text_change > 0 and version.text_change < 1)
+        self.assertTrue(version.time_change > 0 and version.time_change < 1)
 
     def test_fork(self):
         request = RequestMockup(self.user_0)
