@@ -103,6 +103,15 @@ class Video(models.Model):
         except models.ObjectDoesNotExist:
             pass
         return self.get_absolute_url()
+    
+    def thumbnail_link(self):
+        if not self.thumbnail:
+            return ''
+
+        if self.thumbnail.startswith('http://'):
+            return self.thumbnail
+        
+        return settings.MEDIA_URL+self.thumbnail
         
     def is_html5(self):
         return self.video_type == VIDEO_TYPE_HTML5

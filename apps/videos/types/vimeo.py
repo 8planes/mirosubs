@@ -42,5 +42,9 @@ class VimeoVideoType(VideoType):
     def create_kwars(self):
         return { 'vimeo_videoid': self.id }
     
+    #def set_values(self, video_obj):
+    #    video_obj.thumbnail = vimeo.get_thumbnail_url(self.url)
+    #    video_obj.save()
+    
     def _get_vimeo_id(self, video_url):
         return vimeo.VIMEO_REGEX.match(video_url).group(2) 
