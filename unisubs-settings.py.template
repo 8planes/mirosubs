@@ -22,6 +22,8 @@ from settings import *
 
 JS_USE_COMPILED = True
 
+DEV = False
+
 DEBUG = False
 ADMINS = (
   ('Adam Duston', 'adam@8planes.com'),

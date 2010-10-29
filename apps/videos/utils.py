@@ -21,8 +21,10 @@ def send_templated_email(to, subject, body_template, body_dict,
     if not from_email: from_email = settings.DEFAULT_FROM_EMAIL
 
     message = render_to_string(body_template, body_dict)
-
-    email = EmailMessage(subject, message, from_email, to)
+    bcc = []
+    if settings.DEV:
+        bcc.append('hwilson@gmail.com')
+    email = EmailMessage(subject, message, from_email, to, bcc=bcc)
     email.content_subtype = ct
     email.send(fail_silently)
 

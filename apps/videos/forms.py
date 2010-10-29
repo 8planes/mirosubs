@@ -281,15 +281,18 @@ class FeedbackForm(MathCaptchaForm):
         else:
             feedback_email = settings.FEEDBACK_EMAIL
         headers = {'Reply-To': email} if email else None
+        bcc = []
+        if settings.DEV:
+            bcc.append('alerion.um@gmail.com')
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
-                     [feedback_email ], headers=headers).send()
+                     [feedback_email ], headers=headers, bcc=bcc).send()
         
         if email:
             headers = {'Reply-To': settings.FEEDBACK_RESPONSE_EMAIL}
             body = render_to_string(settings.FEEDBACK_RESPONSE_TEMPLATE, {})
             email = EmailMessage(settings.FEEDBACK_RESPONSE_SUBJECT, body, \
-                         settings.FEEDBACK_RESPONSE_EMAIL, [email], headers=headers)
+                         settings.FEEDBACK_RESPONSE_EMAIL, [email], headers=headers, bcc=bcc)
             email.content_subtype = 'html'
             email.send()
                      
