@@ -74,7 +74,13 @@ Hide these tags: {\some_letters_or_numbers_or_chars}
         self.assertEqual(result[4]['start_time'], 55.501)
         self.assertEqual(result[4]['end_time'], 58.5)
         self.assertEqual(result[4]['subtitle_text'], u'Hide these tags: ')
-
+    
+    def test_youtube_subtitles_sort(self):
+        data = '[{"language": "en", "plaintext_list": [{"start_ms": 200},{"start_ms": 100}]}]'
+        parser = YoutubeSubtitleParser(data)
+        self.assertEqual(parser.subtitles[0]['start_ms'], 100)
+        self.assertEqual(parser.subtitles[1]['start_ms'], 200)
+        
 class YoutubeModuleTest(TestCase):
     
     def setUp(self):
