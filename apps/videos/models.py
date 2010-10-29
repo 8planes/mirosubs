@@ -149,13 +149,18 @@ class Video(models.Model):
         else:
             return self.video_url
 
-    def _get_subtitles_from_youtube(self):
+    def _get_subtitles_from_youtube(self, youtube_response_stub=None):
         if not self.youtube_videoid:
             return 
 
-        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.youtube_videoid
-        d = urllib.urlopen(url)
-        parser = YoutubeSubtitleParser(d.read())
+        if not youtube_response_stub:
+            url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.youtube_videoid
+            d = urllib.urlopen(url)
+            youtube_response = d.read()
+        else:
+            youtube_response = youtube_response_stub
+
+        parser = YoutubeSubtitleParser(youtube_response)
         
         if not parser:
             return
@@ -170,6 +175,7 @@ class Video(models.Model):
         version.datetime_started = datetime.now()
         version.user = User.get_youtube_anonymous()
         version.note = u'From youtube'
+        version.is_forked = True
         version.save()
         
         for i, item in enumerate(parser):
@@ -178,10 +184,10 @@ class Video(models.Model):
             subtitle.subtitle_id = int(random.random()*10e12)
             subtitle.sub_order = i+1
             subtitle.save()
-        
+
         version.finished = True
         version.save()
-        
+
         language.was_complete = True
         language.is_complete = True
         language.save()
@@ -482,7 +488,7 @@ class SubtitleLanguage(models.Model):
     
     def latest_version(self):
         try:
-            return self.subtitleversion_set.exclude(time_change=0, text_change=0)[:1].get()
+            return self.subtitleversion_set.exclude()[:1].get()
         except models.ObjectDoesNotExist:
             pass        
 
