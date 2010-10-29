@@ -218,7 +218,31 @@ class VideoTest(TestCase):
         more_video, created = Video.get_or_create_for_url(video_url)
         self.failIf(created)
         self.failUnlessEqual(video, more_video)        
-    
+
+    def test_youtube_subs_response(self):
+        import os
+        from videos.types.youtube import YoutubeVideoType
+        import urllib
+        
+        def urlopen_mockup(url, *args, **kwargs):
+            path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
+            return open(path)
+        
+        urllib.urlopen = urlopen_mockup
+        
+        vt = YoutubeVideoType('http://www.youtube.com/watch?v=GcjgWov7mTM')
+        video = Video(
+            youtube_videoid='GcjgWov7mTM',
+            video_type=VIDEO_TYPE_YOUTUBE,
+            allow_community_edits=True)
+        video.save()
+        vt._get_subtitles_from_youtube(video)
+        video = Video.objects.get(pk=video.pk)
+        version = video.version(language_code='en')
+        self.assertFalse(version is None)
+        self.assertTrue(len(version.subtitles()))
+        self.assertEqual(version.subtitles()[0].text, 'I think what is probably the most misunderstood\nconcept in all of science and as we all know')
+        
 class ViewsTest(WebUseTest):
     
     fixtures = ['test.json']
