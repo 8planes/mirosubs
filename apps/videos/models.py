@@ -149,7 +149,7 @@ class Video(models.Model):
         else:
             return self.video_url
 
-    def _get_subtitles_from_youtube(self, youtube_response_stub=None):
+    def _get_subtitles_from_youtube(self, youtube_response_stub=None, language=None):
         if not self.youtube_videoid:
             return 
 
@@ -165,12 +165,13 @@ class Video(models.Model):
         if not parser:
             return
         
-        language = SubtitleLanguage(video=self)
-        language.is_original = False
-        language.is_forked = True
-        language.language = parser.language
-        language.save()
-        
+        if not language:
+            language = SubtitleLanguage(video=self)
+            language.is_original = False
+            language.is_forked = True
+            language.language = parser.language
+            language.save()
+            
         version = SubtitleVersion(language=language)
         version.datetime_started = datetime.now()
         version.user = User.get_youtube_anonymous()
