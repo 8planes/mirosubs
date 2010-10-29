@@ -528,7 +528,7 @@ class SubtitleVersion(SubtitleCollection):
         new_subtitles = self.subtitles(new_subtitles)
         subtitles_length = len(new_subtitles)
 
-        if not old_version or self.is_forked:
+        if not old_version:
             #if it's first version set changes to 100
             #or it is forked subtitles version
             self.time_change = 1

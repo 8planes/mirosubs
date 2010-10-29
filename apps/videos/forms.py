@@ -134,7 +134,7 @@ class SubtitlesUploadBaseForm(forms.Form):
             version = SubtitleVersion(
                 language=language, version_no=version_no,
                 datetime_started=datetime.now(), user=self.user,
-                note=u'Uploaded', is_forked=True)
+                note=u'Uploaded', is_forked=True, time_change=1, text_change=1)
             version.save()
     
             ids = []
@@ -150,7 +150,6 @@ class SubtitlesUploadBaseForm(forms.Form):
                 caption.subtitle_order = i+1
                 caption.save()
 
-            version.set_changes(old_version)
             version.save()
              
             language.was_complete = True
