@@ -1,9 +1,9 @@
 1
-00:00:00,000 --> 00:00:00,000
+00:00:00,000 --> 00:00:01,000
 Don't show this text it may be used to insert hidden asdfasdfasdfasdfasdf
 
 2
-00:00:03,000 --> 00:00:04,500
+00:00:02,000 --> 00:00:04,500
 SubRipasdf
 This text should be black
 If you see this with the normal font, the player don't support font face

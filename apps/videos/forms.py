@@ -129,7 +129,6 @@ class SubtitlesUploadBaseForm(forms.Form):
         except ObjectDoesNotExist:
             old_version = None
             version_no = 0
-        
         if not self.is_version_same(old_version, parser):
             
             version = SubtitleVersion(
@@ -150,15 +149,17 @@ class SubtitlesUploadBaseForm(forms.Form):
                 caption.subtitle_id = str(id)
                 caption.subtitle_order = i+1
                 caption.save()
-      
+
+            version.set_changes(old_version)
             version.save()
-            
+             
             language.was_complete = True
             language.is_complete = True
             language.save()
         
         video.release_writelock()
         video.save()
+        
         return language
 
     def get_errors(self):

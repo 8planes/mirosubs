@@ -515,12 +515,13 @@ class SubtitleVersion(SubtitleCollection):
     def video(self):
         return self.language.video;
 
-    def set_changes(self, new_subtitles, old_version):
+    def set_changes(self, old_version, new_subtitles=None):
         new_subtitles = self.subtitles(new_subtitles)
         subtitles_length = len(new_subtitles)
 
-        if not old_version:
+        if not old_version or self.is_forked:
             #if it's first version set changes to 100
+            #or it is forked subtitles version
             self.time_change = 1
             self.text_change = 1          
         elif subtitles_length == 0:

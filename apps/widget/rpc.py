@@ -158,7 +158,7 @@ class Rpc(BaseRpc):
             user=user)
         subtitles = models.Subtitle.trim_list(
             [s.duplicate_for() for s in draft.subtitle_set.all()])
-        version.set_changes(subtitles, draft.parent_version)
+        version.set_changes(draft.parent_version, subtitles)
         return version, subtitles
 
     def fetch_subtitles(self, request, video_id, language_code=None):

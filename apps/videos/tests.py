@@ -228,6 +228,7 @@ class VideoTest(TestCase):
             path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
             return open(path)
         
+        _urlopen = urllib.urlopen
         urllib.urlopen = urlopen_mockup
         
         vt = YoutubeVideoType('http://www.youtube.com/watch?v=GcjgWov7mTM')
@@ -242,6 +243,8 @@ class VideoTest(TestCase):
         self.assertFalse(version is None)
         self.assertTrue(len(version.subtitles()))
         self.assertEqual(version.subtitles()[0].text, 'I think what is probably the most misunderstood\nconcept in all of science and as we all know')
+        
+        urllib.urlopen = _urlopen
         
 class ViewsTest(WebUseTest):
     
