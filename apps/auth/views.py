@@ -28,6 +28,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
+from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
@@ -49,8 +50,15 @@ def create_user(request):
 @login_required
 def delete_user(request):
     if request.POST.get('delete'):
-        request.user.is_active = False
-        request.user.save()
+        user = request.user
+        
+        AuthMeta.objects.filter(user=user).delete()
+        OpenidProfile.objects.filter(user=user).delete()
+        TwitterUserProfile.objects.filter(user=user).delete()
+        FacebookUserProfile.objects.filter(user=user).delete()
+        
+        user.is_active = False
+        user.save()
         logout(request)
         messages.success(request, _(u'Your account was deleted.'))
         return HttpResponseRedirect('/')
