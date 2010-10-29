@@ -20,10 +20,11 @@ from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, StopNotification
 from apps.auth.models import CustomUser as User
 from youtube import get_video_id
-from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser
+from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm
+import os
 
 class SubtitleParserTest(TestCase):
     
@@ -106,6 +107,13 @@ class VideoTest(TestCase):
     def test_video_create(self):
         self._create_video(self.youtube_video)
         self._create_video(self.html5_video)
+
+    def test_youtube(self):
+        path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
+        parser = YoutubeSubtitleParser(open(path).read())
+        subs = list(parser)
+        self.assertAlmostEqual(subs[0]['start_time'], 0.82, 2)
+        self.assertAlmostEqual(subs[0]['end_time'], 6.85, 2)
         
     def _create_video(self, video_url):
         video, created = Video.get_or_create_for_url(video_url)
