@@ -1154,121 +1154,121 @@ msgstr ""
 
 #: .\templates\admin\base_site.html.py:4 .\templates\admin\base_site.html.py:7
 msgid "Universal Subtitles"
-msgstr ""
+msgstr "Universalaj Subtekstoj"
 
 #: .\templates\admin\base_site.html.py:12
 msgid "View site"
-msgstr ""
+msgstr "Vidi retejon"
 
 #: .\templates\openid_consumer\signin.html.py:12
 #: .\templates\openid_consumer\signin.html.py:31
 msgid "Sign in with your OpenID"
-msgstr ""
+msgstr "Ensaluti per via OpenID"
 
 #: .\templates\openid_consumer\signin.html.py:18
 msgid "Sign in"
-msgstr ""
+msgstr "Ensaluti"
 
 #: .\templates\profiles\edit_profile.html.py:7
 #: .\templates\profiles\edit_profile.html.py:28
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "Redakti vian agordaron"
 
 #: .\templates\profiles\edit_profile.html.py:7
 msgid "View profile"
-msgstr ""
+msgstr "Vidi agordaron"
 
 #: .\templates\profiles\edit_profile.html.py:10
 #: .\templates\profiles\view_profile.html.py:83
 msgid "Preferred Language"
-msgstr ""
+msgstr "Preferata lingvo"
 
 #: .\templates\profiles\edit_profile.html.py:13
 #: .\templates\profiles\view_profile.html.py:84
 msgid "Homepage"
-msgstr ""
+msgstr "Hejmpaĝo"
 
 #: .\templates\profiles\edit_profile.html.py:30
 msgid "Save Edits to Profile"
-msgstr ""
+msgstr "Registri redaktojn en agordaron"
 
 #: .\templates\profiles\edit_profile.html.py:35
 msgid "Personal Info"
-msgstr ""
+msgstr "Personaj informoj"
 
 #: .\templates\profiles\edit_profile.html.py:57
 msgid "Upload picture"
-msgstr ""
+msgstr "Alŝuti bildon"
 
 #: .\templates\profiles\edit_profile.html.py:83
 msgid "Email me when something I've edited gets changed"
-msgstr ""
+msgstr "Retpoŝtu al mi kiam io, kion mi redaktis, ŝanĝiĝas"
 
 #: .\templates\profiles\edit_profile.html.py:93
 msgid "Language Info"
-msgstr ""
+msgstr "Lingvaj informoj"
 
 #: .\templates\profiles\edit_profile.html.py:106
 msgid "Languages I Know"
-msgstr ""
+msgstr "Lingvoj kiujn mi scipovas"
 
 #: .\templates\profiles\edit_profile.html.py:109
 #: .\templates\profiles\edit_profile.html.py:124
 msgid "Remove Language"
-msgstr ""
+msgstr "Forigi lingvon"
 
 #: .\templates\profiles\edit_profile.html.py:136
 msgid "Add Language"
-msgstr ""
+msgstr "Aldoni lingvon"
 
 #: .\templates\profiles\view_profile.html.py:43
 msgid "Email sent"
-msgstr ""
+msgstr "Retpoŝto sendita"
 
 #: .\templates\profiles\view_profile.html.py:62
 msgid "Enter message please."
-msgstr ""
+msgstr "Bonvole enigu mesaĝon"
 
 #: .\templates\profiles\view_profile.html.py:66
 msgid "Enter email please."
-msgstr ""
+msgstr "Bonvole enigu retpoŝtadreson"
 
 #: .\templates\profiles\view_profile.html.py:86
 #: .\templates\profiles\view_profile.html.py:116
 msgid "Send a Message"
-msgstr ""
+msgstr "Sendi mesaĝon"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
-msgstr ""
+msgstr "<i>Uzulo ne enigis sian biografion.</i>"
 
 #: .\templates\profiles\view_profile.html.py:103
 #, python-format
 msgid "Send %(user_info)s a Message"
-msgstr ""
+msgstr "Sendi mesaĝon al %(user_info)s"
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
-msgstr ""
+msgstr "De"
 
 #: .\templates\profiles\view_profile.html.py:111
 msgid "Message"
-msgstr ""
+msgstr "Mesaĝo"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "Neniu HTML"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
-msgstr ""
+msgstr "Rimarku ke kiam vi sendas mesaĝon, tiam la ricevanto povas scii vian retpoŝtadreson kaj rekte respondi"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:4
 #: .\templates\registration\password_reset_done.html.py:4
 #: .\templates\registration\password_reset_form.html.py:4
 msgid "Home"
-msgstr ""
+msgstr "Hejmo"
 
 #: .\templates\registration\password_reset_complete.html.py:4
 #: .\templates\registration\password_reset_confirm.html.py:6
@@ -1277,149 +1277,149 @@ msgstr ""
 #: .\templates\registration\password_reset_form.html.py:6
 #: .\templates\registration\password_reset_form.html.py:10
 msgid "Password reset"
-msgstr ""
+msgstr "Pasvorto novigita"
 
 #: .\templates\registration\password_reset_complete.html.py:6
 #: .\templates\registration\password_reset_complete.html.py:10
 msgid "Password reset complete"
-msgstr ""
+msgstr "Pasvorta novigado kompletas"
 
 #: .\templates\registration\password_reset_complete.html.py:12
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "Via pasvorto pretas, vi nun povas ensaluti."
 
 #: .\templates\registration\password_reset_complete.html.py:14
 msgid "Log in"
-msgstr ""
+msgstr "Ensaluti"
 
 #: .\templates\registration\password_reset_confirm.html.py:4
 msgid "Password reset confirmation"
-msgstr ""
+msgstr "Konfirmo pri pasvorta novigado"
 
 #: .\templates\registration\password_reset_confirm.html.py:12
 msgid "Enter new password"
-msgstr ""
+msgstr "Enigu novan pasvorton"
 
 #: .\templates\registration\password_reset_confirm.html.py:14
 msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr ""
+msgstr "Por kontrolo, enigu vian novan pasvorton denove"
 
 #: .\templates\registration\password_reset_confirm.html.py:19
 msgid "New password:"
-msgstr ""
+msgstr "Nova pasvorto:"
 
 #: .\templates\registration\password_reset_confirm.html.py:21
 msgid "Confirm password:"
-msgstr ""
+msgstr "Konfirmu pasvorton:"
 
 #: .\templates\registration\password_reset_confirm.html.py:22
 msgid "Change my password"
-msgstr ""
+msgstr "Ŝanĝi mian pasvorton"
 
 #: .\templates\registration\password_reset_confirm.html.py:31
 msgid "Password reset unsuccessful"
-msgstr ""
+msgstr "Pasvorta novigado malsukcesis"
 
 #: .\templates\registration\password_reset_confirm.html.py:33
 msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
-msgstr ""
+msgstr "Ligilo por pasvorta novigado ne validas, eble ĉar jam uzita.  Bonvole petu denove pasvortan novigadon."
 
 #: .\templates\registration\password_reset_done.html.py:6
 #: .\templates\registration\password_reset_done.html.py:10
 msgid "Password reset successful"
-msgstr ""
+msgstr "Pasvorta novigado sukcesis"
 
 #: .\templates\registration\password_reset_done.html.py:12
 msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
-msgstr ""
+msgstr "Ni retpoŝtis al vi klarigojn pri agordo de pasvorto.  Vi devus ricevi ĝin baldaŭ."
 
 #: .\templates\registration\password_reset_email.html.py:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
+msgstr "Vi ricevas ĉi tiun retpoŝton ĉar vi petis pasvortan novigadon"
 
 #: .\templates\registration\password_reset_email.html.py:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr ""
+msgstr "por via uzula konto ĉe %(site_name)s"
 
 #: .\templates\registration\password_reset_email.html.py:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Bonvole iru al la jena paĝo kaj ŝanĝu pasvorton:"
 
 #: .\templates\registration\password_reset_email.html.py:9
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Via salutnomo (eble vi ĝin forgesis):"
 
 #: .\templates\registration\password_reset_email.html.py:11
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Dankon pro uzo de nia retejo!"
 
 #: .\templates\registration\password_reset_email.html.py:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "La teamo %(site_name)s"
 
 #: .\templates\registration\password_reset_form.html.py:12
 msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
-msgstr ""
+msgstr "Forgesis vian pasvorton?  Enigu vian retpoŝtadreson, kaj ni retpoŝtos al vi klarigojn pri pasvorta ŝanĝo."
 
 #: .\templates\registration\password_reset_form.html.py:17
 msgid "E-mail address:"
-msgstr ""
+msgstr "Retpoŝtadreso:"
 
 #: .\templates\registration\password_reset_form.html.py:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Novigi mian pasvorton"
 
 #: .\templates\videos\_activities.html.py:12
 #: .\templates\videos\_video_activity.html.py:17
 msgid "Anonymous"
-msgstr ""
+msgstr "Sennoma"
 
 #: .\templates\videos\_activities.html.py:17
 msgid "commented on"
-msgstr ""
+msgstr "komentis pri"
 
 #: .\templates\videos\_activities.html.py:19
 msgid "commented on this video"
-msgstr ""
+msgstr "komentis pri ĉi tiu video"
 
 #: .\templates\videos\_activities.html.py:23
 #, python-format
 msgid " edited %(lang)s translations for "
-msgstr ""
+msgstr "redaktis %(lang)s tradukojn por"
 
 #: .\templates\videos\_activities.html.py:25
 msgid "edited subtitles for"
-msgstr ""
+msgstr "redaktis subtekstojn por"
 
 #: .\templates\videos\_error_feedback_form.html.py:7
 msgid "Please let us know what you were doing when you encountered this error."
-msgstr ""
+msgstr "Kion vi faris kiam ĉi tiu eraro okazis?"
 
 #: .\templates\videos\_error_feedback_form.html.py:9
 msgid "Sorry, the page you requested was not found."
-msgstr ""
+msgstr "Pardonon, paĝo ne troveblas."
 
 #: .\templates\videos\_feedback_form.html.py:28
 msgid "What did you think about the site?"
-msgstr ""
+msgstr "Kiel vi taksas la retejon?"
 
 #: .\templates\videos\_feedback_form.html.py:32
 msgid "Please let us know if you have any comments, questions, or suggestions!"
-msgstr ""
+msgstr "Bonvole sendi komentojn, demandojn, proponojn!"
 
 #: .\templates\videos\_feedback_form.html.py:37
 msgid "Your email:"
-msgstr ""
+msgstr "Via retpoŝtadreso:"
 
 #: .\templates\videos\_feedback_form.html.py:44
 msgid "Your Feedback"
-msgstr ""
+msgstr "Via komento"
 
 #: .\templates\videos\_feedback_form.html.py:48
 msgid "Send Feedback"
-msgstr ""
+msgstr "Sendi komentojn"
 
 #: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
