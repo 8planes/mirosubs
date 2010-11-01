@@ -106,8 +106,10 @@ improve subtitles, click the button below the video''')
 
 create.csrf_exempt = True
 
-def video(request, video_id):
+def video(request, video_id, video_url=None):
     video = get_object_or_404(Video, video_id=video_id)
+    if video_url:
+        video_url = get_object_or_404(VideoUrl, pk=video_url)
     video.view_count += 1
     video.save()
     # TODO: make this more pythonic, prob using kwargs
@@ -117,7 +119,8 @@ def video(request, video_id):
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.subtitlelanguage_set.filter(was_complete=True) \
         .filter(is_original=False)
-    context['widget_params'] = _widget_params(request, video.get_video_url(), None, '')
+    video_link = video_url and video_url.url or video.get_video_url()
+    context['widget_params'] = _widget_params(request, video_link, None, '')
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(is_complete=True).count()
     context['original'] = video.subtitle_language()
@@ -530,6 +533,21 @@ def video_url_create(request):
         obj = form.save(False)
         obj.added_by = request.user
         obj.save()
+        video = form.cleaned_data['video']
+        users = video.notification_list_all(request.user)
+        for user in users:
+            subject = u'New video %(url)s added by %(username)s to "%(video_title)s" on universalsubtitles.org'
+            subject = subject % {'url': obj.url, 'username': obj.added_by, 'video_title': video}
+            context = {
+                'video': video,
+                'video_url': obj,
+                'user': user,
+                'hash': user.hash_for_video(video.video_id)
+            }
+            send_templated_email(user.email, subject, 
+                                 'videos/email_vide_url_add.html',
+                                 context, 'feedback@universalsubtitles.org',
+                                 fail_silently=not settings.DEBUG)          
     else:
         output['errors'] = form.get_errors()
     

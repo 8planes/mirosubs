@@ -40,5 +40,6 @@ urlpatterns = patterns(
     url(r'^video_url_remove/$', 'video_url_remove', name='video_url_remove'),    
     url(r'^(?P<video_id>(\w|-)+)/$', 'history', name='history'),
     url(r'(?P<video_id>(\w|-)+)/info/$', 'video', name='video'),
+    url(r'(?P<video_id>(\w|-)+)/url/(?P<video_url>\d+)/$', 'video', name='video_url'),
     url(r'^(?P<video_id>(\w|-)+)/(?P<lang>[\w\-]+)/$', 'history', name='translation_history'),
 )

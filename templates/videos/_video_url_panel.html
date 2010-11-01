@@ -33,7 +33,7 @@
     {% for item in video_urls %}
         <tr>
             <td class="url-td">
-                <a href="{{ item.url }}">{{ item }}</a> 
+                <a href="{{ item.get_absolute_url }}">{{ item }}</a> 
                 {% if item.primary %}
                     <span class="primary">[{% trans 'PRIMARY' %}]</span>
                 {% endif %}
@@ -41,7 +41,9 @@
                     <span>[{% trans 'ORIGINAL' %}]</span>
                 {% endif %}
             </td>
-            <td>{{ item.get_type_display }}</td>
+            <td>
+                <a href="{{ item.url }}">{{ item.get_type_display }}</a>
+            </td>
             <td time="{{ item.created_as_time }}">{{ item.created|timesince }} {% trans 'ago' %}</td>
             <td>{{ item.added_by|default:'' }}</td>
             <td>
@@ -87,6 +89,9 @@ jQuery(function($){
                         $.msg.clean().add(response.error);
                     }else{
                         var $primary_span = $('#urls-tab .primary');
+                        if ( ! $primary_span.length){
+                            $primary_span = $("<span class='primary'>[{% trans 'PRIMARY' %}]</span>");
+                        };
                         var $span = $primary_span.clone();
                         
                         $primary_span.remove();
