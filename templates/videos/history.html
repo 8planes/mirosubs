@@ -306,7 +306,9 @@
                           <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/><a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}}</a> ({{ item.revision_time }})
                       </td>
                       <td>
+                          {% if item.user %}
                           <a href="{% url profiles:profile item.user.pk %}">{{ item.user }}</a>
+                          {% endif %}
                       </td>
                       <td>
                           {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}

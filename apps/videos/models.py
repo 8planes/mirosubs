@@ -293,7 +293,15 @@ class Video(models.Model):
             return self.subtitle_language().notification_list(exclude)
         else:
             return []
-
+    
+    def notification_list_all(self, exclude=None):
+        users = []
+        for language in self.subtitlelanguage_set.all():
+            for u in language.notification_list(exclude):
+                if not u in users:
+                    users.append(u) 
+        return users
+        
     def update_complete_state(self):
         language = self.subtitle_language()
         if not language.is_complete:
@@ -794,7 +802,7 @@ class VideoUrlManager(models.Manager):
 class VideoUrl(models.Model):
     video = models.ForeignKey(Video)
     type = models.CharField(max_length=1, choices=VIDEO_TYPE)
-    url = models.URLField(max_length=2048, unique=True)
+    url = models.URLField(max_length=255, unique=True)
     primary = models.BooleanField(default=False)
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -809,7 +817,11 @@ class VideoUrl(models.Model):
     
     def __unicode__(self):
         return self.url
-
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('videos:video_url', [self.video.video_id, self.pk])
+    
     def unique_error_message(self, model_class, unique_check):
         if unique_check[0] == 'url':
             return _('This URL already exists.')
