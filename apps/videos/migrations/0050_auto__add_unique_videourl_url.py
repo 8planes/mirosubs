@@ -1,15 +1,20 @@
 # encoding: utf-8
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
+from django.db.models import Count
 
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
         
         # Adding unique constraint on 'VideoUrl', fields ['url']
-        db.alter_column('videos_videourl', 'url', self.gf('django.db.models.fields.URLField')(max_length=255))        
+        db.alter_column('videos_videourl', 'url', self.gf('django.db.models.fields.URLField')(max_length=255))
+        urls = []
+        if not db.dry_run:
+            for item in orm.VideoUrl.objects.all():
+                if item.url in urls:
+                    item.delete()
+                urls.append(item.url)
         db.create_unique('videos_videourl', ['url'])
     
     
