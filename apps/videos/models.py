@@ -802,7 +802,7 @@ class VideoUrlManager(models.Manager):
 class VideoUrl(models.Model):
     video = models.ForeignKey(Video)
     type = models.CharField(max_length=1, choices=VIDEO_TYPE)
-    url = models.URLField(max_length=2048, unique=True)
+    url = models.URLField(max_length=255, unique=True)
     primary = models.BooleanField(default=False)
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)

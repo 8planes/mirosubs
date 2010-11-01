@@ -9,6 +9,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding unique constraint on 'VideoUrl', fields ['url']
+        db.alter_column('videos_videourl', 'url', self.gf('django.db.models.fields.URLField')(max_length=255))        
         db.create_unique('videos_videourl', ['url'])
     
     
@@ -16,7 +17,7 @@ class Migration(SchemaMigration):
         
         # Removing unique constraint on 'VideoUrl', fields ['url']
         db.delete_unique('videos_videourl', ['url'])
-    
+        db.alter_column('videos_videourl', 'url', self.gf('django.db.models.fields.URLField')(max_length=2024))    
     
     models = {
         'auth.customuser': {
