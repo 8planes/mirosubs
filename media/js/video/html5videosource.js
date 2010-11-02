@@ -22,11 +22,51 @@ goog.provide('mirosubs.video.Html5VideoSource');
  * @constructor
  * @param {string} videoURL
  * @param {mirosubs.video.Html5VideoType} videoType
+ * @private
  */
-mirosubs.video.Html5VideoSource = function(videoURL, videoType, opt_videoConfig) {
+mirosubs.video.Html5VideoSource = function(videoURL, videoType) {
     this.videoURL_ = videoURL;
     this.videoType_ = videoType;
-    this.videoConfig_ = opt_videoConfig;
+};
+
+/**
+ * Attributes to use for video element.
+ * @type {?Object.<string, string>}
+ * @private
+ */
+mirosubs.video.Html5VideoSource.prototype.videoConfig_ = null;
+
+/**
+ * Video element to use for player (not controlled player)
+ * @type {Element}
+ * @private
+ */
+mirosubs.video.Html5VideoSource.prototype.videoElem_ = null;
+
+/**
+ * Static factory method for creating an HTML 5 Video Source without using an existing video element.
+ * @param {string} videoURL
+ * @param {mirosubs.video.Html5VideoType} videoType
+ * @param {Object.<string, string>=} opt_videoConfig Attributes to use for video element
+ * @return {mirosubs.video.Html5VideoSource}
+ */
+mirosubs.video.Html5VideoSource.create = function(videoURL, videoType, opt_videoConfig) {
+    var source = new mirosubs.video.Html5VideoSource(videoURL, videoType);
+    source.videoConfig_ = opt_videoConfig || null;
+    return source;
+};
+
+/**
+ * Static factory method for creating an HTML 5 Video Source using an existing video element.
+ * @param {Element} videoElem video element
+ * @param {string} videoURL
+ * @param {mirosubs.video.Html5VideoType} videoType
+ * @return {mirosubs.video.Html5VideoSource}
+ */
+mirosubs.video.Html5VideoSource.createForElement = function(videoElem, videoURL, videoType) {
+    var source = new mirosubs.video.Html5VideoSource(videoUTL, videoType);
+    source.videoElem_ = videoElem;
+    return source;
 };
 
 mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
@@ -43,10 +83,7 @@ mirosubs.video.Html5VideoSource.prototype.createControlledPlayer =
 mirosubs.video.Html5VideoSource.prototype.createPlayer_ = 
     function(forSubDialog) 
 {
-    return new mirosubs.video.Html5VideoPlayer(
-        new mirosubs.video.Html5VideoSource(
-            this.videoURL_, this.videoType_), 
-        forSubDialog, this.videoConfig_);
+    return new mirosubs.video.Html5VideoPlayer(this, forSubDialog);
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
@@ -55,4 +92,12 @@ mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
 
 mirosubs.video.Html5VideoSource.prototype.getVideoType = function() {
     return this.videoType_;
+};
+
+mirosubs.video.Html5VideoSource.prototype.getVideoConfig = function() {
+    return this.videoConfig_;
+};
+
+mirosubs.video.Html5VideoSource.prototype.getVideoElement = function() {
+    return this.videoElem_;
 };

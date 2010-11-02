@@ -83,7 +83,7 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
         else if (/\.webm$/.test(videoURL))
             videoType = vt.WEBM;
         if (videoType != null)
-            return new mirosubs.video.Html5VideoSource(
+            return mirosubs.video.Html5VideoSource.create(
                 videoURL, videoType, opt_videoConfig);
     }
     

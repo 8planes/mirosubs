@@ -24,7 +24,7 @@ mirosubs.api.openDialog = function(config) {
     var subtitles = config['subtitles'];
     var closeListener = config['closeListener'];
     var videoURL = config['videoURL'];
-    var videoSource = new mirosubs.video.Html5VideoSource(
+    var videoSource = mirosubs.video.Html5VideoSource.create(
         videoURL, mirosubs.video.Html5VideoType.OGG);
     var serverModel = new mirosubs.api.ServerModel(config);
     var subDialog = new mirosubs.subtitle.Dialog(
