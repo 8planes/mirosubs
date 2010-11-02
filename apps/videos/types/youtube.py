@@ -20,7 +20,7 @@ from gdata.youtube.service import YouTubeService
 from gdata.service import RequestError
 import re
 import urllib
-from videos.utils import YoutubeSubtitleParser
+from utils import YoutubeSubtitleParser
 from base import VideoType, VideoTypeError
 from auth.models import CustomUser as User
 from datetime import datetime

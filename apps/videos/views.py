@@ -33,7 +33,7 @@ from haystack.query import SearchQuerySet
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
 from datetime import datetime
-from videos.utils import send_templated_email
+from utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
