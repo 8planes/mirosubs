@@ -38,10 +38,10 @@ mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer =
     return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(chromeless) {
+mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(forDialog) {
     return new mirosubs.video.YoutubeVideoPlayer(
         new mirosubs.video.YoutubeVideoSource(
-            this.youtubeVideoID_), chromeless);
+            this.youtubeVideoID_), forDialog);
 };
 
 mirosubs.video.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {

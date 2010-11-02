@@ -48,13 +48,16 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, forDialog) {
 goog.inherits(mirosubs.video.Html5VideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
 
+/**
+ * @override
+ */
 mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    if (this.videoSource_.getVideoElement() && !this.forDialog_)
-        this.setElementInternal(this.videoSource_.getVideoElement());
-    else if (mirosubs.video.supportsVideoType(
-        this.videoSource_.getVideoType())) 
-        this.setElementInternal(this.createVideoElement_($d));
+    if (mirosubs.video.supportsVideoType(
+        this.videoSource_.getVideoType())) {
+        this.videoElem_ = this.createVideoElement_($d);
+        this.setElementInternal(this.videoElem_);
+    }
     else {
         var el = $d('div');
         this.setElementInternal(el);
@@ -65,8 +68,21 @@ mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
             "<a href='http://getfirefox.com'>Get Firefox</a>.";       
     }
 };
+
+/**
+ * @override
+ * @param {Element} element Video element to decorate.
+ */
+mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(element) {
+    mirosubs.video.Html5VideoPlayer.superClass_.decorateInternal.call(
+        this, element);
+    if (element.nodeName != 'VIDEO')
+        throw Error(goog.ui.Component.Error.DECORATE_INVALID);
+    this.videoElem_ = element;
+};
+
 mirosubs.video.Html5VideoPlayer.prototype.createVideoElement_ = 
-    function() 
+    function($d) 
 {
     var params = { 'autobuffer': 'true' };
     if (!this.forDialog_) {
@@ -93,6 +109,9 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'timeupdate', this.sendTimeUpdate_).
         listen(this.videoElem_, 'ended', this.dispatchEndedEvent).
         listenOnce(this.videoElem_, 'click', this.playerClicked_);
+    if (this.videoElem_['readyState'] >= this.videoElem_['HAVE_METADATA'])
+        // for decorated video elements.
+        this.setDimensionsKnownInternal();
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.playerClicked_ = function(e) {

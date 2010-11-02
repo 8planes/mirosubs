@@ -21,16 +21,16 @@ goog.provide('mirosubs.video.YoutubeVideoPlayer');
 /**
  *
  * @param {mirosubs.video.YoutubeVideoSource} videoSource
- * @param {boolean=} opt_chromeless
+ * @param {boolean=} opt_forDialog
  */
-mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_chromeless) {
+mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
     this.playerAPIID_ = [videoSource.getUUID(),
                          '' + new Date().getTime()].join('');
     this.playerElemID_ = videoSource.getUUID() + "_ytplayer";
     this.eventFunction_ = 'event' + videoSource.getUUID();
-    this.chromeless_ = !!opt_chromeless;
+    this.forDialog_ = !!opt_forDialog;
     this.width_ = mirosubs.video.YoutubeVideoPlayer.REGULAR_WIDTH;
     this.height_ = mirosubs.video.YoutubeVideoPlayer.REGULAR_HEIGHT;
 
@@ -64,6 +64,16 @@ mirosubs.video.YoutubeVideoPlayer.REGULAR_WIDTH = 480;
 mirosubs.video.YoutubeVideoPlayer.SMALL_HEIGHT = 300;
 mirosubs.video.YoutubeVideoPlayer.SMALL_WIDTH = 400;
 
+/**
+ * @override
+ * @param {Element} element Either object or embed for yt video. Must 
+ *     have enablejsapi=1.
+ */
+mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element) {
+    mirosubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(
+        this, element);
+    
+};
 
 mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
     mirosubs.video.YoutubeVideoPlayer.superClass_.enterDocument.call(this);
@@ -75,7 +85,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
         var atts = { 'id': this.playerElemID_ };
         var baseURL;
-        if (this.chromeless_)
+        if (this.forDialog_)
             baseURL = 'http://www.youtube.com/apiplayer';
         else
             baseURL = ['http://www.youtube.com/v/',
@@ -84,11 +94,11 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
             ['?enablejsapi=1&version=3&disablekb=1&playerapiid=',
              this.playerAPIID_].join('');
         this.width_ = 
-            (this.chromeless_ ? 
+            (this.forDialog_ ? 
              mirosubs.video.YoutubeVideoPlayer.SMALL_WIDTH : 
              mirosubs.video.YoutubeVideoPlayer.REGULAR_WIDTH);
         this.height_ = 
-            (this.chromeless_ ? 
+            (this.forDialog_ ? 
              mirosubs.video.YoutubeVideoPlayer.SMALL_HEIGHT : 
              mirosubs.video.YoutubeVideoPlayer.REGULAR_HEIGHT);
         goog.style.setSize(this.getElement(), this.width_, this.height_);
@@ -123,7 +133,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     if (playerAPIID == this.playerAPIID_) {
         this.player_ = goog.dom.$(this.playerElemID_);
         goog.style.setSize(this.player_, this.width_, this.height_);
-        if (this.chromeless_)
+        if (this.forDialog_)
             this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());
         goog.array.forEach(this.commands_, function(cmd) { cmd(); });
         this.commands_ = [];
