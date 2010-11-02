@@ -834,7 +834,7 @@ margin-left: -19px;
 
 
 .video_tabs{
-margin: 0;
+margin: 18px 0 0;
 padding: 0;
 height: 41px;
 width: 100%;
@@ -955,7 +955,10 @@ margin-left: 4px;
 
 
 
-
+#add_translation,
+#add_subtitles{
+margin-bottom: 10px;
+}
 
 
 
