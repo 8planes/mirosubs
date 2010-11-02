@@ -92,6 +92,15 @@ class Video(models.Model):
     def __unicode__(self):
         return self.title_display()
     
+    def get_thumbnail(self):
+        if not self.thumbnail:
+            return ''
+        
+        if self.thumbnail.startswith('http://') or self.thumbnail.startswith('https://'):
+            return self.thumbnail
+        
+        return settings.MEDIA_URL+self.thumbnail
+    
     def video_link(self):
         if self.subtitle_language():
             return self.subtitle_language().get_absolute_url()

@@ -43,27 +43,10 @@
     {% include "widget/_js_onsite_dependencies.html" %}
     {{ block.super }}
     <script src="{{ MEDIA_URL }}js/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function($){
-            //******** Tabs ********//
-            var $last_active_tab = $($('.inline_tabs li.active a').attr('href'));
-            $('.inline_tabs a, a.link_to_tab').click(function(){
-                var href = $(this).attr('href')
-                $last_active_tab.hide();
-                $last_active_tab = $(href).show();
-                $('.inline_tabs li').removeClass('active');
-                $('.inline_tabs a[href='+href+']').parent('li').addClass('active');
-                document.location.hash = href.split('-')[0];
-                return false;
-            });
-                        
-            if (document.location.hash){
-                var tab_name = document.location.hash.split('-', 1)
-                if (tab_name){
-                    $('a[href='+tab_name+'-tab]').click();
-                    document.location.href = document.location.href;
-                }
-            }
+            $('.inline_tabs').tabs();
 
             $('#add_subtitles').click(function() {
                 widget_widget_div.selectMenuItem(
@@ -105,8 +88,6 @@
         <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
     {% endif %}
     <h2 class="main-title">{{ video }}</h2>
-
-
 
     {% if saved %}
         <div id="messages">

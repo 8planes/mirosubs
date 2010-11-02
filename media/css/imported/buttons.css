@@ -827,7 +827,7 @@ cursor: pointer;
 }
 
 
-.video_tabs li a.active{
+.video_tabs li a.active, .video_tabs li.active a{
 position: relative;
 text-decoration: none;
 display: block;
