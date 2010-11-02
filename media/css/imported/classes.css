@@ -39,6 +39,10 @@ width: 470px !important;
   }
 
 
+.edit-title{
+margin-top: 32px;
+}
+
 
 
 
@@ -278,9 +282,7 @@ font-size: 16px;
   -webkit-border-radius-top-left: 3px;
   -webkit-border-radius-top-right: 3px;
   border-radius:5px;
-/*
-  background: #ecf9fc;
-*/
+  background: #ecf8fa;
   margin-bottom: 50px;
   min-height: 500px;
   -moz-box-shadow:inset 0px 2px 0px #fff, 3px 3px 0px #a4c3ca, -3px 3px 0px #a4c3ca, -3px -3px 0px #a4c3ca, 3px -3px 0px #a4c3ca;
@@ -302,6 +304,7 @@ font-size: 16px;
 .action_buttons{ border-top: 1px solid #fff;}
 
 .action_buttons .blue_button,
+.action_buttons .green_button,
 .action_buttons .sort_button{
   margin: 10px; 
   float: right;
@@ -445,7 +448,9 @@ margin: 0 !important;
 
 
 
-
+.team_logo{
+margin-bottom: 20px;
+}
 
 
 

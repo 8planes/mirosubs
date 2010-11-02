@@ -60,13 +60,13 @@
 
 /*---- Green Button ----*/
 
-.green_button{
+.green_button, .blue_button{
   color: #23441e !important;
 
   text-shadow: 0 1px 0px #aedbaa;
    
   border: 1px solid #578e57;
-  border-top: 1px solid #5ba05b;
+  border-top: 1px solid #7eba7c;
   border-bottom: 1px solid #447d43;
   
   -moz-box-shadow: 0 1px 0px #9cabae, inset 0 1px 0px #b7e4ac;
@@ -79,18 +79,18 @@
   }
 
 
-.green_button:hover{
+.green_button:hover, .blue_button:hover{
   color: #485a0c !important;
 
-  text-shadow: 0 1px 0px #ebff6b;
+  text-shadow: 0 1px 0px #c2e3c1;
    
-  -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #daea62;
-  -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #daea62;
-  box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #daea62;
+  -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #ccebc7;
+  -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #ccebc7;
+  box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #ccebc7;
   
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d8f136', endColorstr='#99cc00'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#d8f136), to(#99cc00)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #d8f136,  #99cc00); /* for firefox 3.6+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b7e3b0', endColorstr='#9ace9b'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#b7e3b0), to(#9ace9b)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #b7e3b0,  #9ace9b); /* for firefox 3.6+ */
   }
 
 
@@ -98,37 +98,6 @@
 
 /*---- Blue Button ----*/
 
-.blue_button{
-  text-shadow: 0 1px 0px #fff;
-  
-  border: 1px solid #a7c3c9;
-  border-top: 1px solid #c6d9de;
-  border-bottom: 1px solid #4e7179;
-  
-  -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #fff;
-  -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #fff;
-  box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #fff;
-  
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ecf9fc', endColorstr='#d6e8eb'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#ecf9fc), to(#d6e8eb)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ */
-  }
-
-
-.blue_button:hover{
-  border: 1px solid #a7c3c9;
-  border-top: 1px solid #c6d9de;
-  border-bottom: 1px solid #4e7179;
-  
-  -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #fff;
-  -webkit-box-shadow: 0 1px 0px #dbdbdb, inset 0 1px 0px #fff;
-  box-shadow: 0 1px 0px #dbdbdb, inset 0 1px 0px #fff;
-  
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ecf9fc'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ecf9fc)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
-  }
-  
 
 
 
@@ -416,28 +385,8 @@ margin: 0 10px 0 0;
 
 
 .sort_button{
-text-shadow: 0 1px 0px #fff;
 
--moz-border-radius: 3px;
--webkit-border-radius: 3px;
-border-radius:3px;
-
-
-border: 1px solid #a7c3c9;
-border-top: 1px solid #c6d9de;
-border-bottom: 1px solid #4e7179;
-
-
--moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #fff;
--webkit-box-shadow: 0 1px 0px #dbdbdb, inset 0 1px 0px #fff;
-box-shadow: 0 1px 0px #dbdbdb, inset 0 1px 0px #fff;
-
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ddddd'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ */
-
-
-
+padding-top: 2px;
 position: relative;
 cursor: pointer;
 }
@@ -445,25 +394,13 @@ cursor: pointer;
 
 
 .sort_button:hover{
--moz-border-radius-bottomright: 0px;
--moz-border-radius-bottomleft: 0px;
--webkit-border-radius: 3px;
-border-radius:3px;
-
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffff', endColorstr='#ddddd'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
-
-
-
-
 }
 
 
 
 .sort_button{
 float: left;
-width: 200px;
+width: 150px;
 margin: 10px 10px 0 0;
 }
 
@@ -479,7 +416,7 @@ width: 300px;
 .sort_button .sort_label{
   font-size: 11px;
   padding: 5px 10px;
-  text-transform: uppercase;
+font-weight: normal !important;
   text-shadow: 0 1px 0px #fff;
 display: block;
 color: #506a70;
@@ -491,7 +428,7 @@ color: #506a70;
 .sort_button .arrow{
 float: right;
 height: 26px;
-border-left: 1px solid #c4d9de;
+
 width: 28px;
 background: url(../../images/sort_arrows.gif) 10px -129px no-repeat;
 
@@ -505,7 +442,7 @@ background: url(../../images/sort_arrows.gif) 10px -129px no-repeat;
 -webkit-border-radius-bottom-left: 3px;
 border-radius-bottomleft:3px;
 
-background: #d5e9ec url(../../images/sort_arrows.gif) 10px -129px no-repeat;
+background: url(../../images/sort_arrows.gif) 10px -129px no-repeat;
 }
 
 
@@ -553,6 +490,8 @@ background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ *
 
 
 .sort_button ul li{
+margin: 0 !important;
+padding: 0 !important;
 list-style: none;
 padding: 0;
 }
@@ -834,7 +773,7 @@ margin-left: -19px;
 
 
 .video_tabs{
-margin: 0;
+margin: 18px 0 0;
 padding: 0;
 height: 41px;
 width: 100%;
@@ -955,7 +894,10 @@ margin-left: 4px;
 
 
 
-
+#add_translation,
+#add_subtitles{
+margin-bottom: 10px;
+}
 
 
 
