@@ -31,6 +31,9 @@ from utils.amazon import S3EnabledImageField
 from messages.models import Message
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
+from django.conf import settings
+
+ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class TeamManager(models.Manager):
     
@@ -40,7 +43,7 @@ class TeamManager(models.Manager):
                                         models.Q(members__user=user)).distinct()
         else:
             return self.get_query_set().filter(is_visible=True)
-    
+
 class Team(models.Model):
     APPLICATION = 1
     INVITATION_BY_MANAGER = 2
@@ -56,9 +59,9 @@ class Team(models.Model):
     MANAGER_REMOVE = 2
     MEMBER_ADD = 3
     VIDEO_POLICY_CHOICES = (
-        (MEMBER_REMOVE, _(u'Members add/remove')),
-        (MANAGER_REMOVE, _(u'Managers add/remove')),
-        (MEMBER_ADD, _(u'Members add videos'))
+        (MEMBER_REMOVE, _(u'Members add/remove')),  #any member can add/delete video
+        (MANAGER_REMOVE, _(u'Managers add/remove')),    #only managers can add/remove video
+        (MEMBER_ADD, _(u'Members add videos'))  #members can only add video
     )
     
     name = models.CharField(_(u'name'), max_length=250, unique=True)
@@ -67,7 +70,7 @@ class Team(models.Model):
     membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES, default=OPEN)
     video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES, default=MEMBER_REMOVE)
     is_visible = models.BooleanField(_(u'is public visible?'), default=True)
-    videos = models.ManyToManyField(Video, blank=True, verbose_name=_('videos'))
+    videos = models.ManyToManyField(Video, through='TeamVideo',  verbose_name=_('videos'))
     users = models.ManyToManyField(User, through='TeamMember', related_name='teams', verbose_name=_('users'))
     points = models.IntegerField(default=0, editable=False)
     applicants = models.ManyToManyField(User, through='Application', related_name='applicated_teams', verbose_name=_('applicants'))
@@ -118,6 +121,9 @@ class Team(models.Model):
             return True
         return False
     
+    def can_edit_video(self, user):
+        return self.can_add_video(user)
+    
     def can_add_video(self, user):
         if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
             return True
@@ -149,6 +155,28 @@ class Team(models.Model):
         if not hasattr(self, '_applications_count'):
             setattr(self, '_applications_count', self.applications.count())
         return self._applications_count            
+
+class TeamVideo(models.Model):
+    team = models.ForeignKey(Team)
+    video = models.ForeignKey(Video)
+    title = models.CharField(max_length=2048, blank=True)
+    description = models.TextField(blank=True)
+    thumbnail = models.FileField(upload_to='teams/video_thumbnails/', null=True, blank=True)
+    
+    class Meta:
+        unique_together = (('team', 'video'),)
+    
+    def __unicode__(self):
+        return self.video.__unicode__()
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('teams:team_video', [self.pk])
+    
+class TeamVideoLanguage(models.Model):
+    team_video = models.ForeignKey(TeamVideo, related_name='languages')
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
+    completed = models.BooleanField(default=False, verbose_name=_(u'Complited'))
     
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')

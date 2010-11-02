@@ -12,11 +12,11 @@
 
 {% team_select team %}
 
-<h2>Manage Settings & Teams</h2>
+<h2>{% trans 'Manage Settings & Teams' %}</h2>
 <div class="grid_3 left_nav_wrapper alpha">
     <ul class="left_nav">
         <li class="active">
-            <a href="#">Your Teams</a>
+            <a href="#">{% trans 'Your Teams' %}</a>
         </li>
     </ul>
 </div>
@@ -42,14 +42,17 @@
     {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
     <table>
         <tbody>
-            {% for video in videos_list %}
+            {% for team_video in videos_list %}
             <tr class="video-container">
                 <td>
-                    <a href="{{ video.get_absolute_url }}"><strong>{{ video }}</strong></a>
+                    <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video.video }}</strong></a>
                     <div class="small grey">
-                        <a href="{{ video.get_absolute_url }}">{% trans 'View' %}</a>
+                        <a href="{{ team_video.video.get_absolute_url }}">{% trans 'View' %}</a>
                         {% if can_remove_video %}
-                        | <a href="{% url teams:remove_video team.pk video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
+                        | <a href="{% url teams:remove_video team_video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
+                        {% endif %}
+                        {% if can_edit_video %}
+                        | <a href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
                         {% endif %}
                     </div>
                 </td>

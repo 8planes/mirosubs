@@ -23,16 +23,19 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import forms
-from teams.models import Team, TeamMember
+from teams.models import Team, TeamMember, TeamVideo, TeamVideoLanguage
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
+from django.forms.models import inlineformset_factory
+
+TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
 
 class CreateTeamForm(forms.ModelForm):
     
     class Meta:
         model = Team
-        exclude = ('videos', 'users', 'applicants', 'invited')
+        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 'is_visible')
     
     def save(self, user):
         team = super(CreateTeamForm, self).save()
@@ -44,7 +47,7 @@ class EditTeamForm(forms.ModelForm):
     
     class Meta:
         model = Team
-        exclude = ('videos', 'users', 'applicants', 'invited') 
+        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 'is_visible')
         
     def clean(self):
         if 'logo' in self.cleaned_data and not self.cleaned_data.get('logo'):

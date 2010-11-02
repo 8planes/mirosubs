@@ -23,8 +23,8 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
-from teams.forms import CreateTeamForm, EditTeamForm
-from teams.models import Team, TeamMember, Invite, Application
+from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset
+from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguage
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -84,7 +84,7 @@ def index(request):
                        template_name='teams/index.html',
                        template_object_name='teams',
                        extra_context=extra_context)
-
+    
 @render_to('teams/detail.html')
 def detail(request, pk):
     team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
@@ -134,35 +134,56 @@ def edit(request, pk):
     }
 
 @login_required
-def edit_video(request, pk):
+def edit_videos(request, pk):
     team = get_object_or_404(Team, pk=pk)
 
     if not team.is_member(request.user):
         raise Http404
     
-    qs = team.videos.all()
+    qs = team.teamvideo_set.all()
     
     extra_context = {
         'team': team,
-        'can_remove_video': team.can_remove_video(request.user)
+        'can_remove_video': team.can_remove_video(request.user),
+        'can_edit_video': team.can_edit_video(request.user)
     }
     return object_list(request, queryset=qs,
                        paginate_by=VIDEOS_ON_PAGE,
-                       template_name='teams/edit_video.html',
+                       template_name='teams/edit_videos.html',
                        template_object_name='videos',
                        extra_context=extra_context)
 
-@render_to_json
-@login_required    
-def remove_video(request, pk, video_pk):
-    team = get_object_or_404(Team, pk=pk)
-
-    if not team.is_member(request.user):
+@login_required
+@render_to('teams/team_video.html')
+def team_video(request, pk):
+    team_video = get_object_or_404(TeamVideo, pk=pk)
+    
+    if not team_video.team.can_edit_video(request.user):
         raise Http404
     
-    if team.can_remove_video(request.user):
-        video = get_object_or_404(Video, pk=video_pk)
-        team.videos.remove(video)
+    formset = TeamVideoLanguageFormset(request.POST or None, instance=team_video)
+    
+    if formset.is_valid():
+        formset.save()
+        messages.success(request, _('Video has been updated.'))
+        return redirect(team_video)
+        
+    return {
+        'team': team_video.team,
+        'team_video': team_video,
+        'formset': formset
+    }
+
+@render_to_json
+@login_required    
+def remove_video(request, pk):
+    team_video = get_object_or_404(TeamVideo, pk=pk)
+
+    if not team_video.team.is_member(request.user):
+        raise Http404
+    
+    if team_video.team.can_remove_video(request.user):
+        team_video.delete()
         return {
             'success': True
         }        
