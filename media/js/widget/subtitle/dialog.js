@@ -374,10 +374,11 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
 };
 mirosubs.subtitle.Dialog.prototype.setVisible = function(visible) {
     if (this.addingTranslations_) {
+        var that = this;
         goog.Timer.callOnce(function() {
             window.location = window.location.href.replace("subtitle_immediately", "translate_immediately");
             mirosubs.returnURL = null;
-            mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
+            mirosubs.subtitle.Dialog.superClass_.setVisible.call(that, visible);
         });
     }
     else {
