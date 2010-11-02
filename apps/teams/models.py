@@ -172,11 +172,25 @@ class TeamVideo(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('teams:team_video', [self.pk])
+
+class TeamVideoLanguageManager(models.Manager):
+    use_for_related_fields = True
+    
+    def complete(self):
+        return self.get_query_set().filter(completed=True)
+
+    def incomplete(self):
+        return self.get_query_set().filter(completed=False)
     
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
     completed = models.BooleanField(default=False, verbose_name=_(u'Complited'))
+    
+    objects = TeamVideoLanguageManager()
+    
+    def __unicode__(self):
+        return self.get_language_display()
     
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')
