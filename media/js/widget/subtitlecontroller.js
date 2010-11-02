@@ -181,7 +181,7 @@ mirosubs.widget.SubtitleController.prototype.startEditingResponseHandler_ =
         originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['original_subtitles']);
         var serverModel = new mirosubs.subtitle.MSServerModel(
-            draftPK, this.videoURL_);
+            draftPK, this.videoID_, this.videoURL_);
         if (!subtitles.LANGUAGE || subtitles.FORKED)
             this.openSubtitlingDialog_(serverModel, subtitles);
         else
