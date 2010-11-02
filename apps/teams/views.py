@@ -37,6 +37,8 @@ from auth.models import CustomUser as User
 from django.db.models import Q, Count
 from django.contrib.auth.decorators import permission_required
 import random
+from widget.views import base_widget_params
+import widget
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -167,12 +169,16 @@ def team_video(request, pk):
         formset.save()
         messages.success(request, _('Video has been updated.'))
         return redirect(team_video)
-        
-    return {
+
+    context = widget.add_onsite_js_files({})
+    
+    context.update({
         'team': team_video.team,
         'team_video': team_video,
-        'formset': formset
-    }
+        'formset': formset,
+        'widget_params': base_widget_params(request, {'video_url': team_video.video.get_video_url(), 'base_state': {}})
+    })
+    return context
 
 @render_to_json
 @login_required    

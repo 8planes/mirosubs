@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags %}
+{% load i18n teams_tags widget %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
@@ -8,8 +8,14 @@
     {% trans 'Team video' %} | Universal Subtitles
 {% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
+
 {% block scripts %}
     {{ block.super }}
+    {% include "widget/_js_onsite_dependencies.html" %}
     <script type="text/javascript">
         jQuery(function($){
             var form_count = {{ formset.total_form_count }};
@@ -70,6 +76,7 @@
     <div class="boxx">
         <div class="padding">
             <h3>{% trans 'Languages of video:' %} {{ team_video }}</h3>
+            {% widget widget_params %}
             <form method='post' action="." enctype="multipart/form-data">
             <div class="grid_9">
                 {% csrf_token %}
