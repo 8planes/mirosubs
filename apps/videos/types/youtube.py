@@ -110,7 +110,7 @@ class YoutubeVideoType(VideoType):
             subtitle = Subtitle(**item)
             subtitle.version = version
             subtitle.subtitle_id = int(random.random()*10e12)
-            subtitle.sub_order = i+1
+            subtitle.subtitle_order = i+1
             subtitle.save()
         version.finished = True
         version.save()
