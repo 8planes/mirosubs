@@ -28,6 +28,14 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.functional import update_wrapper
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.utils import simplejson as json
+import re
+import htmllib
+from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, YoutubeSubtitleParser, \
+    TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser
 
 def render_to(template):
     """
@@ -68,4 +76,27 @@ def get_page(request):
             page = int(page)
         except (ValueError, TypeError, KeyError):
             page = 1
-    return page    
+    return page
+
+def get_pager(objects, on_page=15, page='1', orphans=0):
+    from django.core.paginator import Paginator, InvalidPage, EmptyPage
+    
+    paginator = Paginator(objects, on_page, orphans=orphans)
+    try:
+        page = paginator.page(int(page))
+    except (EmptyPage, InvalidPage):
+        page = paginator.page(paginator.num_pages)
+    return page
+
+def send_templated_email(to, subject, body_template, body_dict, 
+                         from_email=None, ct="html", fail_silently=False):
+    if not isinstance(to, list): to = [to]
+    if not from_email: from_email = settings.DEFAULT_FROM_EMAIL
+
+    message = render_to_string(body_template, body_dict)
+    bcc = []
+    if settings.DEV:
+        bcc.append('hwilson@gmail.com')
+    email = EmailMessage(subject, message, from_email, to, bcc=bcc)
+    email.content_subtype = ct
+    email.send(fail_silently)    

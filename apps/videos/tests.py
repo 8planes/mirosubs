@@ -19,7 +19,7 @@
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, StopNotification
 from apps.auth.models import CustomUser as User
-from videos.utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser
+from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm

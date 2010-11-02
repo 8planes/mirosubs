@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from videos.models import SubtitleVersion, StopNotification, SubtitleLanguage
 from django.conf import settings
 from datetime import datetime, timedelta
-from videos.utils import send_templated_email
+from utils import send_templated_email
 from django.contrib.sites.models import Site
 from django.db.models import Q
 import urllib

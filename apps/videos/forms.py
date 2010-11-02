@@ -269,20 +269,22 @@ class FeedbackForm(MathCaptchaForm):
         email = self.cleaned_data['email']
         message = self.cleaned_data['message']
         error = self.cleaned_data['error']
-        user_agent_data = 'User agent: %s' % request.META.get('HTTP_USER_AGENT')
-        timestamp = 'Time: %s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        version = 'Version: %s' % settings.PROJECT_VERSION
-        commit = 'Commit: %s' % settings.LAST_COMMIT_GUID
-        message = '%s\n\n%s\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version, commit)
+        user_agent_data = u'User agent: %s' % request.META.get('HTTP_USER_AGENT')
+        timestamp = u'Time: %s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        version = u'Version: %s' % settings.PROJECT_VERSION
+        commit = u'Commit: %s' % settings.LAST_COMMIT_GUID
+        url = u'URL: %s' % request.path_info
+        user = u'Logged in: %s' % (request.user.is_authenticated() and request.user or u'not logged in')
+        message = u'%s\n\n%s\n%s\n%s\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version, commit, url, user)
         if error in ['404', '500']:
-            message += '\nIt was sent from '+error+' error page.'
+            message += u'\nPage type: %s' % error
             feedback_email = settings.FEEDBACK_ERROR_EMAIL
         else:
             feedback_email = settings.FEEDBACK_EMAIL
         headers = {'Reply-To': email} if email else None
         bcc = []
         if settings.DEV:
-            bcc.append('alerion.um@gmail.com')
+            bcc.append('hwilson@gmail.com')
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
                      [feedback_email ], headers=headers, bcc=bcc).send()
