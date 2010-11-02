@@ -373,7 +373,7 @@ margin: 0px !important;
 
 
 
-.boxx{
+=.boxx{
 background: #fff;
   -moz-border-radius: 5px;  
   -webkit-border-radius: 5px;
@@ -424,14 +424,9 @@ padding: 0 !important;
 
 
 
-
-
-
-
-
-
-
-
+.sub_content{
+padding-left: 130px;
+}
 
 
 
