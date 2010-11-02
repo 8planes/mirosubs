@@ -142,7 +142,7 @@
             {% endcomment %}
             <h4>{% trans 'Languages I Know' %}</h4>
             <div class="empty-form" style="display: none">
-                <li>
+                <li class="user_language">
                     <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
                     {{ formset.empty_form.id }}
                     {{ formset.empty_form.language }}
@@ -196,7 +196,7 @@
     $('.add-language').click(function(){
         form_count++;
         $form_count_field.val(form_count);
-        var form = empty_form.replace(/__prefix__/g, form_count);
+        var form = empty_form.replace(/__prefix__/g, (form_count-1));
         $('.language_list li:last').after(form);
         return false;
     });

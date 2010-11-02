@@ -24,6 +24,7 @@ from django.template import RequestContext
 from profiles.forms import EditUserForm, SendMessageForm, UserLanguageFormset, EditAvatarForm
 from django.contrib import messages
 from django.utils import simplejson as json
+from django.utils.translation import ugettext_lazy as _
 
 @login_required
 def edit_avatar(request):
@@ -51,7 +52,7 @@ def my_profile(request):
         formset = UserLanguageFormset(request.POST, instance=request.user)
         if formset.is_valid() and form_validated:
             formset.save()
-            messages.success(request, 'Your profile has been updated.')
+            messages.success(request, _('Your profile has been updated.'))
             return redirect('profiles:my_profile')
     else:
         form = EditUserForm(instance=request.user, label_suffix="")
