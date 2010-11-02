@@ -168,9 +168,7 @@
         <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% include 'videos/_left_navigation.html' %}
     </ul>
-    {% if video.latest_finished_version %}
     <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
-    {% endif %}    
   </div>
 
   <div class="wrap grid_9 omega">  
