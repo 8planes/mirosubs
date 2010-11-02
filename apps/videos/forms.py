@@ -284,7 +284,7 @@ class FeedbackForm(MathCaptchaForm):
         headers = {'Reply-To': email} if email else None
         bcc = []
         if settings.DEV:
-            bcc.append('alerion.um@gmail.com')
+            bcc.append('hwilson@gmail.com')
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
                      [feedback_email ], headers=headers, bcc=bcc).send()
