@@ -45,7 +45,10 @@ mirosubs.video.Html5VideoSource.prototype.createControlledPlayer =
 mirosubs.video.Html5VideoSource.prototype.createPlayer_ = 
     function(forSubDialog) 
 {
-    return new mirosubs.video.Html5VideoPlayer(this, forSubDialog);
+    return new mirosubs.video.Html5VideoPlayer(
+        new mirosubs.video.Html5VideoSource(
+            this.videoURL_, this.videoType_, this.videoConfig_), 
+        forSubDialog);
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {

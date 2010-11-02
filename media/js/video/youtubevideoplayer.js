@@ -59,12 +59,16 @@ mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
 };
 goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
+mirosubs.video.YoutubeVideoPlayer.logger_ =
+    goog.debug.Logger.getLogger('YoutubeVideoPlayer');
+
 mirosubs.video.YoutubeVideoPlayer.REGULAR_HEIGHT = 360;
 mirosubs.video.YoutubeVideoPlayer.REGULAR_WIDTH = 480;
 mirosubs.video.YoutubeVideoPlayer.SMALL_HEIGHT = 300;
 mirosubs.video.YoutubeVideoPlayer.SMALL_WIDTH = 400;
 
 /**
+ * For FF, this decorates an Embed element.
  * @override
  * @param {Element} element Either object or embed for yt video. Must 
  *     have enablejsapi=1.
@@ -72,7 +76,31 @@ mirosubs.video.YoutubeVideoPlayer.SMALL_WIDTH = 400;
 mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element) {
     mirosubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(
         this, element);
-    
+    this.swfEmbedded_ = true;
+    this.player_ = element;
+    var playerSize = goog.style.getSize(element);
+    this.width_ = playerSize.width;
+    this.height_ = playerSize.height;
+    mirosubs.video.YoutubeVideoPlayer.logger_.info(
+        ["height, width of ", this.height_, ", ", this.width_].join(''));
+    this.setDimensionsKnownInternal();
+    // FIXME: petit duplication
+    window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
+    var timer = new goog.Timer(200);
+    var that = this;
+    this.getHandler().listen(
+        timer,
+        goog.Timer.TICK,
+        function(e) {
+            if (that.player_['playVideo']) {
+                mirosubs.video.YoutubeVideoPlayer.logger_.info(
+                    'playVideo is present');
+                that.player_.addEventListener(
+                    'onStateChange', that.eventFunction_);
+                timer.stop();
+            }
+        });
+    timer.start();
 };
 
 mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
@@ -176,7 +204,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.getBytesTotal_ = function() {
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getDuration = function() {
     if (!this.duration_)
-        this.duration_ = this.player_ ? this.player_['getDuration']() : 0;
+        this.duration_ = 
+            (this.player_ && this.player_['getDuration']) ? 
+                this.player_['getDuration']() : 0;
     return this.duration_;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getVolume = function() {

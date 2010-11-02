@@ -48,6 +48,9 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, forDialog) {
 goog.inherits(mirosubs.video.Html5VideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
 
+mirosubs.video.Html5VideoPlayer.logger_ =
+    goog.debug.Logger.getLogger('Html5VideoPlayer');
+
 /**
  * @override
  */
@@ -110,7 +113,6 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'ended', this.dispatchEndedEvent).
         listenOnce(this.videoElem_, 'click', this.playerClicked_);
     if (this.videoElem_['readyState'] >= this.videoElem_['HAVE_METADATA'])
-        // for decorated video elements.
         this.setDimensionsKnownInternal();
 };
 

@@ -46,10 +46,6 @@ mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
 };
-mirosubs.video.AbstractVideoPlayer.prototype.createDom = function() {
-    mirosubs.video.AbstractVideoPlayer.superClass_.createDom.call(this);
-    this.getElement().className = 'mirosubs-videoDiv';
-};
 mirosubs.video.AbstractVideoPlayer.prototype.isPaused = function() {
     if (this.isLoadingStopped_)
 	throw new "can't check if paused, loading is stopped";
