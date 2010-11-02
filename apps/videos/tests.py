@@ -251,9 +251,13 @@ class VideoTest(TestCase):
         self.assertFalse(version is None)
         self.assertTrue(len(version.subtitles()))
         self.assertEqual(version.subtitles()[0].text, 'I think what is probably the most misunderstood\nconcept in all of science and as we all know')
-        
+        subs = version.subtitles()
+        subs.sort(key=lambda s: s.start_time)
+        for i in range(1, len(subs)):
+            self.assertTrue(subs[i].sub_order > subs[i - 1].sub_order)
+
         urllib.urlopen = _urlopen
-        
+
 class ViewsTest(WebUseTest):
     
     fixtures = ['test.json']
