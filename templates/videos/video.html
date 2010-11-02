@@ -135,6 +135,17 @@
     {% if video.latest_finished_version %}
     <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
     {% endif %}   
+
+          {% if not video.subtitle_language %}
+            <a href="#" id="add_subtitles" class="green_button small">
+                {% trans 'Add Subtitles' %}
+            </a>          
+          {% endif %}
+
+          {% upload_subtitles video %}
+            
+          {% paste_transcription %}
+
   </div>
 
   <div class="wrap grid_9 omega">  
@@ -152,16 +163,6 @@
         <li><a href="#urls-tab"><span class="inline_text">{% trans 'Video URLs' %}</span> <span class="badgy_out"><span class="badgy">{% video_url_count video %}</span></span></a></li>
       </ul>
 
-      <div class="action_buttons grid_9 alpha omega">
-          {% if not video.subtitle_language %}
-            <a href="#" id="add_subtitles" class="green_button small">
-                {% trans 'Add Subtitles' %}
-            </a>          
-          {% endif %}
-          {% upload_subtitles video %}
-            
-          {% paste_transcription %}
-      </div>
       
       <div id="comments-tab" style="display: none">
           <div class="grid_9 alpha omega">
