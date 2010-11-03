@@ -231,7 +231,7 @@ mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.TAB &&
         event.keyEventType == goog.events.EventType.CLICK) {
         if (event.modifiers == mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
-            this.skipBack_();            
+            this.skipBack_();
         else
             this.togglePause_();
     }
@@ -376,9 +376,13 @@ mirosubs.subtitle.Dialog.prototype.setVisible = function(visible) {
     if (this.addingTranslations_) {
         var that = this;
         goog.Timer.callOnce(function() {
-            window.location = window.location.href.replace("subtitle_immediately", "translate_immediately");
-            mirosubs.returnURL = null;
-            mirosubs.subtitle.Dialog.superClass_.setVisible.call(that, visible);
+          //This should be less hacky, perhaps a url tokenizer to rebuild the url
+          //most likely this exists in closure already.
+          var location = window.location.href.replace("&subtitle_immediately=true", "");
+          //In some cases there is no 'subtitle_translate' in the url,
+          //but we need to strip it if there is
+          window.location = location + "&translate_immediately=true";            mirosubs.returnURL = null;
+          mirosubs.subtitle.Dialog.superClass_.setVisible.call(that, visible);
         });
     }
     else {
