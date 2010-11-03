@@ -116,7 +116,9 @@ mirosubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
     goog.dom.setTextContent(this.nudgeSpanElem_, text);
     this.nudgeClickCallback_ = fn;
 };
-
+mirosubs.widget.VideoTab.prototype.show = function(shown) {
+    goog.style.showElement(this.getElement(), shown);
+};
 mirosubs.widget.VideoTab.prototype.disposeInternal = function() {
     mirosubs.widget.VideoTab.superClass_.disposeInternal.call(this);
     this.imageLoader_.dispose();

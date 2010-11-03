@@ -255,6 +255,24 @@ mirosubs.randomString = function() {
 };
 
 /**
+ *
+ * @param {Element} topElem
+ * @param {Element} bottomElem should have display: hidden when 
+ *     this is called.
+ */
+mirosubs.attachToLowerLeft = function(topElem, bottomElem) {
+    // This is a little hacky so that we can position with minimal
+    // flicker.
+    bottomElem.style.visibility = 'hidden';
+    goog.style.showElement(bottomElem, true);
+    var c = goog.positioning.Corner;
+    goog.positioning.positionAtAnchor(
+        topElem, c.BOTTOM_LEFT,
+        bottomElem, c.TOP_LEFT);
+    bottomElem.style.visibility = 'visible';
+};
+
+/**
  * Checks whether we are embedded in a non-PCF domain.
  */
 mirosubs.isEmbeddedInDifferentDomain = function() {

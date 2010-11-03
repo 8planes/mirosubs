@@ -20,89 +20,48 @@ goog.provide('mirosubs.widget.Widget');
 
 /**
  * @constructor
- * @private
+ * @param {Object} widgetConfig parameter documentation is currenty in embed.js.
  */
-mirosubs.widget.Widget = function() {};
+mirosubs.widget.Widget = function(widgetConfig) {
+    goog.ui.Component.call(this);
 
-mirosubs.widget.Widget.logger_ = 
-    goog.debug.Logger.getLogger('mirosubs.widget.Widget');
-
-/**
- * @type {!string}
- */
-mirosubs.widget.Widget.prototype.videoURL_ = undefined;
-/**
- * @type {Object.<string, *>}
- */
-mirosubs.widget.Widget.prototype.videoConfig_ = null;
-
-/**
- * If true, this is the equivalent of clicking on "Add subtitles" 
- * if base state is null, or equivalent of clicking on "Improve 
- * these subtitles" if base state is not null.
- * @type {boolean}
- */
-mirosubs.widget.Widget.prototype.subtitleImmediately_ = false;
-
-/**
- * If true, this is the equivalent of clicking on 
- * "Add New Translation"
- * @type {boolean}
- */
-mirosubs.widget.Widget.prototype.translateImmediately_ = false;
-
-/**
- * 
- * @type {mirosubs.widget.BaseState}
- */
-mirosubs.widget.Widget.prototype.baseState_ = null;
-
-/**
- *
- * @type {mirosubs.video.AbstractVideoPlayer}
- */
-mirosubs.widget.Widget.prototype.videoPlayer_ = null;
-
-/**
- * Container in which video player should be placed.
- * @type {?Element}
- */
-mirosubs.widget.Widget.prototype.container_ = null;
-
-/**
- * Called to create a video player with tab and add it to the page.
- * @param {Element} element Empty element to decorate, probably div.
- * @param {Object.<string, *>} widgetConfig widget params
- *
- */
-mirosubs.widget.Widget.decorateContainer = function(element, widgetConfig) {
-    var widget = new mirosubs.widget.Widget();
-    widget.videoURL_ = widgetConfig['video_url'];
-    widget.videoConfig_ = widgetConfig['video_config'];
-    widget.subtitleImmediately_ =
+    /**
+     * @type {string}
+     */
+    this.videoURL_ = widgetConfig['video_url'];
+    this.videoConfig_ = widgetConfig['video_config'];
+    /**
+     * If true, this is the equivalent of clicking on "Add subtitles" 
+     * if base state is null, or equivalent of clicking on "Improve 
+     * these subtitles" if base state is not null.
+     * @type {boolean}
+     */
+    this.subtitleImmediately_ = 
         !!widgetConfig['subtitle_immediately'];
-    widget.translateImmediately_ =
+    /**
+     * If true, this is the equivalent of clicking on 
+     * "Add New Translation"
+     * @type {boolean}
+     */
+    this.translateImmediately_ =
         !!widgetConfig['translate_immediately'];
     var baseState = widgetConfig['base_state'];
     if (baseState)
-        widget.baseState_ = new mirosubs.widget.BaseState(baseState);
-    return widget;
+        this.baseState_ = new mirosubs.widget.BaseState(baseState);
+};
+goog.inherits(mirosubs.widget.Widget, goog.ui.Component);
+
+mirosubs.widget.Widget.prototype.createDom = function() {
+    mirosubs.widget.Widget.superClass_.createDom.call(this);
+    this.addWidget_(this.getElement());
 };
 
 /**
- * Called to decorate a video player that's already on the page. 
- * The video player must meet the proper criteria (e.g. js api 
- * enabled for youtube)
- * @param {mirosubs.video.AbstractVideoPlayer} player This player
- *     should already be in the page, probably by calling decorate.
- * @return {mirosubs.widget.Widget}
+ * @param {HTMLDivElement} el Just a blank div with class mirosubs-widget.
  */
-mirosubs.widget.Widget.decoratePlayer = function(player) {
-    var widget = new mirosubs.widget.Widget();
-    widget.videoURL_ = player.getVideoSource().getVideoURL();
-    mirosubs.widget.Widget.logger_.info('video url is ' + widget.videoURL);
-    widget.videoPlayer_ = player;
-    return widget;
+mirosubs.widget.Widget.prototype.decorateInternal = function(el) {
+    mirosubs.widget.Widget.superClass_.decorateInternal.call(this, el);
+    this.addWidget_(el);
 };
 
 mirosubs.widget.Widget.prototype.setVideoSource_ = function(videoSource) {
@@ -142,63 +101,24 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
 };
 
 mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
-    this.makeGeneralSettings_(result);
-
-    var videoID = result['video_id'];
-
     if (result['flv_url'] && !this.videoSource_)
         this.setVideoSource_(new mirosubs.video.FlvVideoSource(
             result['flv_url']));
 
-    var dropDownContents = mirosubs.widget.DropDownContents.fromJSON(
-        result['drop_down_contents']);
-    var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
-        result['subtitles']);
+    this.controller_ = new mirosubs.widget.WidgetController(
+        this.videoURL_, this.videoPlayer_, this.videoTab_);
+    this.controller_.initializeState(result);
 
-    var popupMenu = new mirosubs.widget.DropDown(
-        videoID, dropDownContents, this.videoTab_);
-
-    this.videoTab_.showContent(popupMenu.hasSubtitles(),
-                               subtitleState);
-
-    popupMenu.render(this.getDomHelper().getDocument().body);
-    goog.style.showElement(popupMenu.getElement(), false);
-
-    popupMenu.setCurrentSubtitleState(subtitleState);
-
-    this.playController_ = new mirosubs.widget.PlayController(
-        videoID, this.videoSource_, this.videoPlayer_, 
-        this.videoTab_, popupMenu, subtitleState);
-
-    this.subtitleController_ = new mirosubs.widget.SubtitleController(
-        videoID, this.videoURL_, 
-        this.playController_, this.videoTab_, popupMenu);
+    var subController = this.controller_.getSubtitleController();
 
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(
-            goog.bind(this.subtitleController_.openSubtitleDialog, 
-                      this.subtitleController_));
+            goog.bind(subController.openSubtitleDialog, subController));
     else if (this.translateImmediately_)
         goog.Timer.callOnce(
-            goog.bind(this.subtitleController_.openNewLanguageDialog,
-                      this.subtitleController_));
+            goog.bind(subController_.openNewLanguageDialog, 
+                      subController_));
 };
-
-mirosubs.widget.Widget.prototype.makeGeneralSettings_ = function(result) {
-    if (result['username'])
-        mirosubs.currentUsername = result['username'];
-    mirosubs.embedVersion = result['embed_version'];
-    mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
-        result["writelock_expiration"];
-    mirosubs.languages = result['languages'];
-    mirosubs.metadataLanguages = result['metadata_languages'];
-    var sortFn = function(a, b) { 
-        return a[1] > b[1] ? 1 : a[1] < b[1] ? -1 : 0
-    };
-    goog.array.sort(mirosubs.languages, sortFn);
-    goog.array.sort(mirosubs.metadataLanguages, sortFn);
-};
-
 
 mirosubs.widget.Widget.prototype.enterDocument = function() {
     mirosubs.widget.Widget.superClass_.enterDocument.call(this);
@@ -228,16 +148,18 @@ mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
  */
 mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_languageCode) {
     var s = mirosubs.widget.DropDown.Selection;
+    var subController = this.controller_.getSubtitleController();
+    var playController = this.controller_.getPlayController();
     if (selection == s.ADD_LANGUAGE)
-        this.subtitleController_.openNewLanguageDialog();
+        subController.openNewLanguageDialog();
     else if (selection == s.IMPROVE_SUBTITLES)
-        this.subtitleController_.openSubtitleDialog();
+        subController.openSubtitleDialog();
     else if (selection == s.SUBTITLE_HOMEPAGE)
         alert('subtitle homepage');
     else if (selection == s.SUBTITLES_OFF)
-        this.playController_.turnOffSubs();
+        playController.turnOffSubs();
     else if (selection == s.LANGUAGE_SELECTED)
-        this.playController_.languageSelected(opt_languageCode);
+        playController.languageSelected(opt_languageCode);
 };
 mirosubs.widget.Widget.prototype.playAt = function(time) {
     this.videoPlayer_.setPlayheadTime(time);
