@@ -43,6 +43,9 @@ goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
 mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
+mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE = new goog.math.Size(480, 360);
+
+
 mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
 };
