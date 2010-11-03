@@ -3,15 +3,19 @@
 <div id="videodiv">
 </div>
 <div>
-  <input type="text" id="seconds" value="50"/>
-  <a href="#" onclick="seek(); return false;">seek</a>
+ <a href="#" onclick="seek(goog.dom.$('seconds').value); return false;">seek to</a> <input type="text" id="seconds" value="50"/>
+  &nbsp;
+  <a href="#" onclick="seek(0); return false;"> seek to 0</a>
+  &nbsp;
+  <a href="#" onclick="seek(1); return false;"> seek to 1</a>
+
 </div>
  <!-- Event log. -->
  <fieldset class="goog-debug-panel">
    <legend>Event Log</legend>
    <div id="log" style="height: 300px; overflow-y: auto"></div>
  </fieldset>
- <div id="perf"></div>  
+ <div id="perf"></div>
 <script type="text/javascript">
   goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
   var logger = goog.debug.Logger.getLogger('dailymotion');
@@ -27,7 +31,7 @@
       goog.events.listen(timer, goog.Timer.TICK,
           function() {
               logger.info('current time: ' + player.getCurrentTime());
-              var startBytesTime = player.getDuration() * 
+              var startBytesTime = player.getDuration() *
                   (player.getVideoStartBytes() / player.getVideoBytesTotal());
               logger.info('start bytes time: ' + startBytesTime);
           });
@@ -41,11 +45,11 @@
 
   var atts = { 'id': 'videodiv' };
 
-  swfobject.embedSWF('http://www.dailymotion.com/swf?chromeless=1&enableApi=1&playerapiid=abc',
+  swfobject.embedSWF('http://preprod.dailymotion.com/swf?chromeless=1&enableApi=1&playerapiid=abc',
       'videodiv', 400, 350, "8", null, null, params, atts);
 
-  function seek() {
-      var seconds = parseInt(goog.dom.$('seconds').value);
+  function seek(s) {
+      var seconds = parseInt(s);
       logger.info('seeking to ' + seconds);
       var player = goog.dom.$('videodiv');
       player.seekTo(seconds);
