@@ -20,53 +20,93 @@ goog.provide('mirosubs.widget.Widget');
 
 /**
  * @constructor
- * @param {Object} widgetConfig parameter documentation is currenty in embed.js.
+ * @private
  */
-mirosubs.widget.Widget = function(widgetConfig) {
-    goog.ui.Component.call(this);
+mirosubs.widget.Widget = function() {};
 
-    /**
-     * @type {string}
-     */
-    this.videoURL_ = widgetConfig['video_url'];
-    this.videoConfig_ = widgetConfig['video_config'];
-    /**
-     * If true, this is the equivalent of clicking on "Add subtitles" 
-     * if base state is null, or equivalent of clicking on "Improve 
-     * these subtitles" if base state is not null.
-     * @type {boolean}
-     */
-    this.subtitleImmediately_ = 
+mirosubs.widget.Widget.logger_ = 
+    goog.debug.Logger.getLogger('mirosubs.widget.Widget');
+
+/**
+ * @type {!string}
+ */
+mirosubs.widget.Widget.prototype.videoURL_ = undefined;
+/**
+ * @type {Object.<string, *>}
+ */
+mirosubs.widget.Widget.prototype.videoConfig_ = null;
+
+/**
+ * If true, this is the equivalent of clicking on "Add subtitles" 
+ * if base state is null, or equivalent of clicking on "Improve 
+ * these subtitles" if base state is not null.
+ * @type {boolean}
+ */
+mirosubs.widget.Widget.prototype.subtitleImmediately_ = false;
+
+/**
+ * If true, this is the equivalent of clicking on 
+ * "Add New Translation"
+ * @type {boolean}
+ */
+mirosubs.widget.Widget.prototype.translateImmediately_ = false;
+
+/**
+ * 
+ * @type {mirosubs.widget.BaseState}
+ */
+mirosubs.widget.Widget.prototype.baseState_ = null;
+
+/**
+ *
+ * @type {mirosubs.video.AbstractVideoPlayer}
+ */
+mirosubs.widget.Widget.prototype.videoPlayer_ = null;
+
+/**
+ * Container in which video player should be placed.
+ * @type {?Element}
+ */
+mirosubs.widget.Widget.prototype.container_ = null;
+
+/**
+ * Called to create a video player with tab and add it to the page.
+ * @param {Element} element Empty element to decorate, probably div.
+ * @param {Object.<string, *>} widgetConfig widget params
+ *
+ */
+mirosubs.widget.Widget.decorateContainer = function(element, widgetConfig) {
+    var widget = new mirosubs.widget.Widget();
+    widget.videoURL_ = widgetConfig['video_url'];
+    widget.videoConfig_ = widgetConfig['video_config'];
+    widget.subtitleImmediately_ =
         !!widgetConfig['subtitle_immediately'];
-    /**
-     * If true, this is the equivalent of clicking on 
-     * "Add New Translation"
-     * @type {boolean}
-     */
-    this.translateImmediately_ =
+    widget.translateImmediately_ =
         !!widgetConfig['translate_immediately'];
     var baseState = widgetConfig['base_state'];
     if (baseState)
-        this.baseState_ = new mirosubs.widget.BaseState(baseState);
-};
-goog.inherits(mirosubs.widget.Widget, goog.ui.Component);
-
-mirosubs.widget.Widget.prototype.createDom = function() {
-    mirosubs.widget.Widget.superClass_.createDom.call(this);
-    this.addWidget_(this.getElement());
+        widget.baseState_ = new mirosubs.widget.BaseState(baseState);
+    return widget;
 };
 
 /**
- * @param {HTMLDivElement} el Just a blank div with class mirosubs-widget.
+ * Called to decorate a video player that's already on the page. 
+ * The video player must meet the proper criteria (e.g. js api 
+ * enabled for youtube)
+ * @param {mirosubs.video.AbstractVideoPlayer} player This player
+ *     should already be in the page, probably by calling decorate.
+ * @return {mirosubs.widget.Widget}
  */
-mirosubs.widget.Widget.prototype.decorateInternal = function(el) {
-    mirosubs.widget.Widget.superClass_.decorateInternal.call(this, el);
-    this.addWidget_(el);
+mirosubs.widget.Widget.decoratePlayer = function(player) {
+    var widget = new mirosubs.widget.Widget();
+    widget.videoURL_ = player.getVideoSource().getVideoURL();
+    mirosubs.widget.Widget.logger_.info('video url is ' + widget.videoURL);
+    widget.videoPlayer_ = player;
+    return widget;
 };
 
 mirosubs.widget.Widget.prototype.setVideoSource_ = function(videoSource) {
-    this.videoSource_ = videoSource;
-    this.videoPlayer_ = this.videoSource_.createPlayer();
+    this.videoPlayer_ = videoSource.createPlayer();
     this.addChildAt(this.videoPlayer_, 0, true);
     this.setVideoDimensions_();
 };
