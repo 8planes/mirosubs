@@ -23,7 +23,8 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib import admin
-from teams.models import Team, TeamMember
+from teams.models import Team, TeamMember, TeamVideo
+from videos.models import Video
 from django.utils.translation import ugettext_lazy as _
 
 class TeamMemberInline(admin.TabularInline):
@@ -42,5 +43,15 @@ class TeamAdmin(admin.ModelAdmin):
     def unhighlight(self, request, queryset):
         queryset.update(highlight=False)
     unhighlight.short_description = _('Unfeature teams')
-    
+
+class TeamInline(admin.TabularInline):
+    model = Team
+
+class VideoInline(admin.TabularInline):
+    model = Video
+
+class TeamVideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
+
 admin.site.register(Team, TeamAdmin)
+admin.site.register(TeamVideo, TeamVideoAdmin)
