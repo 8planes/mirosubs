@@ -25,10 +25,11 @@ goog.inherits(mirosubs.widgetizer.Youtube,
               mirosubs.widgetizer.VideoPlayerMaker);
 
 mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
-    
+    return this.unwidgetizedElements_().length > 0;
 };
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
+    var elements = this.unwidgetizedElements_();
     
 };
 
