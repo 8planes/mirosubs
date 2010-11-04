@@ -76,6 +76,9 @@ class CustomUser(BaseUser):
     
     def avatar(self):
         return self.picture.thumb_url(100, 100)
+
+    def small_avatar(self):
+        return self.picture.thumb_url(50, 50)
     
     @models.permalink
     def get_absolute_url(self):

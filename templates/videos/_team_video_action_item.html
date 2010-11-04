@@ -1,0 +1,50 @@
+{% load i18n %}
+
+<a href="{{ item.video.get_absolute_url }}" class="thumbnail_{% if medium_thumb %}medium{% else %}small{% endif %}">
+    {% if item.video.thumbnail %}
+    <img height="{% if medium_thumb %}100{% else %}50{% endif %}" src="{{ item.video.get_thumbnail }}">
+    {% endif %}
+</a>
+
+<div class="info">
+    <p>
+        <h4>
+            {% if item.user %}
+                <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>
+            {% else %}
+                {% trans 'Anonymous' %}
+            {% endif %}
+        </h4>     
+           
+        {% if item.is_change_title %}
+            {% blocktrans with item.new_video_title as title %}
+            changed title to "{{ title }}"
+            {% endblocktrans %}
+        {% endif %}
+        
+        {% if item.is_comment %}
+            {% if item.language %}
+                {% blocktrans with item.language.language_display as language %}
+                commented on {{ language }}.
+                {% endblocktrans %}            
+            {% else %}
+                {% trans 'commented on ' %}<a href="{{ item.video.get_absolute_url }}">{{ item.video }}</a>.
+            {% endif %}
+        {% endif %}
+        
+        {% if item.is_add_version %}
+            {% trans 'edited' %} 
+            <a href="{{ item.language.get_absolute_url }}">
+                {% if not item.language %}
+                    {% trans 'original subtitles' %}
+                {% else %}
+                    {{ item.language.language_display }} {% trans 'subtitles' %}
+                {% endif %}
+            </a> {% trans 'for' %} 
+            <a class="url" href="{{ item.video.get_absolute_url }}">{{ item.video }}</a> 
+        {% endif %}        
+    </p>
+    <div>
+        <span>{{ item.created|date:"DATETIME_FORMAT" }}</span>
+    </div>    
+</div>

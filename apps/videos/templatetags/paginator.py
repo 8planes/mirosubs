@@ -95,7 +95,8 @@ def ordered_paginator(context, adjacent_pages=3, anchor='', **kwargs):
              extra_link += '&ot=%s' % order_type
     
     for key, value in kwargs.items():
-        extra_link += '&%s=%s' % (key, value)
+        if not value is None:
+            extra_link += '&%s=%s' % (key, value)
     
     extra_link += anchor
                 
@@ -122,6 +123,12 @@ def teams_ordered_paginator(context, adjacent_pages=3, anchor='', **kwargs):
     return ordered_paginator(context, adjacent_pages, anchor, **kwargs)
 
 register.inclusion_tag('_teams_ordered_paginator.html', takes_context=True)(teams_ordered_paginator)
+
+def teams_search_ordered_paginator(context, query, adjacent_pages=3):
+    return ordered_paginator(context, adjacent_pages, q=query)
+
+register.inclusion_tag('_teams_ordered_paginator.html', takes_context=True)(teams_search_ordered_paginator)
+
 
 @register.tag
 def ordered_column(parser, token):

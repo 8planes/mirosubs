@@ -24,6 +24,10 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
 from teams.models import Team, Invite
+from videos.models import Action
+from django.conf import settings
+
+ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 15)
 
 register = template.Library()
 
@@ -59,3 +63,13 @@ def team_select(context, team):
         'team': team,
         'objects': qs
     }
+
+@register.inclusion_tag('teams/_team_activity.html', takes_context=True)    
+def team_activity(context, team):
+    user_ids = team.members.values_list('user__id', flat=True)
+    context['membres_actions'] = Action.objects.filter(user__pk__in=user_ids)[:ACTIONS_ON_PAGE]
+    
+    videos_ids = team.teamvideo_set.values_list('video__id', flat=True)
+    context['videos_actions'] = Action.objects.filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
+    
+    return context

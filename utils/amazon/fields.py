@@ -10,22 +10,30 @@ from hashlib import sha1
 from time import time
 from uuid import uuid4
 from thread import start_new_thread
+from django.core.files.storage import FileSystemStorage
 
 THUMB_SIZES = getattr(settings, 'THUMBNAILS_SIZE', ())
 USE_THREADED_THUMBNAIL_CREATING = getattr(settings, 'USE_THREADED_THUMBNAIL_CREATING', False)
 
-def create_thumbnails(obj, content):
-    for size in obj.field.thumb_sizes:
+def create_thumbnails(obj, content, size=None, thumb_name=None):
+    sizes = size and [size] or obj.field.thumb_sizes
+    
+    for size in sizes:
         img = StringIO()
         content.seek(0)
         Thumbnail(StringIO(content.read(content.size)), size, dest=img, opts=obj.field.thumb_options)
-        thumb_name = obj.build_thumbnail_name(obj.name, size)
+        thumb_name = thumb_name or obj.build_thumbnail_name(obj.name, size)
         obj.storage.save(thumb_name, ContentFile(img.read()))
 
 class S3ImageFieldFile(FieldFile):
     
     def thumb_url(self, w, h):
+        if not self.name:
+            return ''
+        
         name = self.build_thumbnail_name(self.name, (w, h))
+        if not settings.USE_AMAZON_S3 and not self.storage.exists(name):
+            create_thumbnails(self, self.storage.open(self.name), (w, h), name)
         return self.storage.url(name)
     
     def generate_file_name(self):
@@ -58,7 +66,6 @@ class S3ImageFieldFile(FieldFile):
     def delete(self, save=True):
         # Only close the file if it's already open, which we know by the
         # presence of self._file
-        print 'deleting'
         if hasattr(self, '_file'):
             self.close()
             del self.file

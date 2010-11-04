@@ -827,7 +827,7 @@ cursor: pointer;
 }
 
 
-.video_tabs li a.active, .video_tabs li.active a{
+.video_tabs li a.active, .video_tabs li.active a, .video_tabs li.active span.tab-item{
 position: relative;
 text-decoration: none;
 display: block;
@@ -859,7 +859,6 @@ background: -moz-linear-gradient(top,  #f8fdff,  #eaf8fc); /* for firefox 3.6+ *
 
 
 position: relative;
-cursor: pointer;
 }
 
 
@@ -880,7 +879,7 @@ background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
 
 
 
-.video_tabs li a .badgy{
+.video_tabs li a .badgy, .video_tabs li span.tab-item .badgy{
 
 padding: 4px 5px 1px;
 background: #fff;

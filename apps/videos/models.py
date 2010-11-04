@@ -93,6 +93,8 @@ class Video(models.Model):
         return self.title_display()
     
     def get_thumbnail(self):
+        #TODO: should consider size of thumbnail
+        #Is used in teams application now
         if not self.thumbnail:
             return ''
         

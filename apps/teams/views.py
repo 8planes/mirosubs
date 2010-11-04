@@ -39,12 +39,14 @@ from django.contrib.auth.decorators import permission_required
 import random
 from widget.views import base_widget_params
 import widget
+from videos.models import Action
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
 MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
 APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
+ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 20)
 
 def index(request):
     q = request.REQUEST.get('q')
@@ -87,12 +89,74 @@ def index(request):
                        template_object_name='teams',
                        extra_context=extra_context)
     
-@render_to('teams/detail.html')
 def detail(request, pk):
+    q = request.REQUEST.get('q')
     team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
-    return {
-        'team': team
+    
+    qs = team.teamvideo_set.order_by('-video__title')
+    if q:
+        qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q) \
+                      |Q(video__title__icontains=q))
+        
+    extra_context = {
+        'team': team,
+        'query': q
     }
+    return object_list(request, queryset=qs, 
+                       paginate_by=VIDEOS_ON_PAGE, 
+                       template_name='teams/detail.html', 
+                       extra_context=extra_context, 
+                       template_object_name='teamvideo')
+
+def detail_members(request, pk):
+    #just other tab of detail view
+    q = request.REQUEST.get('q')
+    team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
+    
+    qs = team.members.all()
+    if q:
+        qs = qs.filter(Q(user__first_name__icontains=q)|Q(user__last_name__icontains=q) \
+                       |Q(user__username__icontains=q)|Q(user__biography__icontains=q))
+
+    extra_context = {
+        'team': team,
+        'query': q
+    }    
+    return object_list(request, queryset=qs, 
+                       paginate_by=MEMBERS_ON_PAGE, 
+                       template_name='teams/detail_members.html', 
+                       extra_context=extra_context, 
+                       template_object_name='team_member')
+
+def videos_actions(request, pk):
+    team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
+    videos_ids = team.teamvideo_set.values_list('video__id', flat=True)
+    
+    qs = Action.objects.filter(video__pk__in=videos_ids)
+    
+    extra_context = {
+        'team': team
+    }   
+    return object_list(request, queryset=qs, 
+                       paginate_by=ACTIONS_ON_PAGE, 
+                       template_name='teams/videos_actions.html', 
+                       extra_context=extra_context, 
+                       template_object_name='videos_action')
+
+def members_actions(request, pk):
+    team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
+    user_ids = team.members.values_list('user__id', flat=True)
+    
+    qs = Action.objects.filter(user__pk__in=user_ids)
+    
+    extra_context = {
+        'team': team
+    }   
+    return object_list(request, queryset=qs, 
+                       paginate_by=ACTIONS_ON_PAGE, 
+                       template_name='teams/videos_actions.html', 
+                       extra_context=extra_context, 
+                       template_object_name='videos_action')
 
 @render_to('teams/create.html')
 @login_required    

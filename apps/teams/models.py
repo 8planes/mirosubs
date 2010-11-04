@@ -167,12 +167,12 @@ class TeamVideo(models.Model):
         unique_together = (('team', 'video'),)
     
     def __unicode__(self):
-        return self.video.__unicode__()
+        return self.title or self.video.__unicode__()
     
     @models.permalink
     def get_absolute_url(self):
         return ('teams:team_video', [self.pk])
-
+    
 class TeamVideoLanguageManager(models.Manager):
     use_for_related_fields = True
     
