@@ -141,7 +141,7 @@ def videos_actions(request, pk):
                        paginate_by=ACTIONS_ON_PAGE, 
                        template_name='teams/videos_actions.html', 
                        extra_context=extra_context, 
-                       template_object_name='videos_action')
+                       template_object_name='action')
 
 def members_actions(request, pk):
     team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
@@ -154,9 +154,9 @@ def members_actions(request, pk):
     }   
     return object_list(request, queryset=qs, 
                        paginate_by=ACTIONS_ON_PAGE, 
-                       template_name='teams/videos_actions.html', 
+                       template_name='teams/members_actions.html', 
                        extra_context=extra_context, 
-                       template_object_name='videos_action')
+                       template_object_name='action')
 
 @render_to('teams/create.html')
 @login_required    

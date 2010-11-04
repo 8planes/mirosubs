@@ -44,8 +44,9 @@ urlpatterns = patterns('teams.views',
     url('^demote/members/(?P<pk>\d+)/(?P<user_pk>\d+)/$', 'demote_member', name='demote_member'),
     url('^promote/members/(?P<pk>\d+)/(?P<user_pk>\d+)/$', 'promote_member', name='promote_member'),
     url('^(?P<pk>\d+)/$', 'detail', name='detail'),
+    url('^(?P<pk>\d+)/members/$', 'detail_members', name='detail_members'),
     url('^(?P<pk>\d+)/videos_actions/$', 'videos_actions', name='videos_actions'),
-    url('^(?P<pk>\d+)/members/$', 'detail_members', name='detail_members'),    
+    url('^(?P<pk>\d+)/members_actions/$', 'members_actions', name='members_actions'),
 )
 
 urlpatterns += patterns('',

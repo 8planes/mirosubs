@@ -1,8 +1,8 @@
 {% load i18n %}
 
 {% if item.user %}
-<a href="{{ item.user.get_absolute_url }}" class="thumbnail_small">
-    <img src="{{ item.user.small_avatar }}"/>
+<a href="{{ item.user.get_absolute_url }}" class="thumbnail_{% if medium_thumb %}medium{% else %}small{% endif %}">
+    <img src="{% if medium_thumb %}{{ item.user.avatar }}{% else %}{{ item.user.small_avatar }}{% endif %}"/>
 </a>
 {% else %}
 <span class="thumbnail_small"></span>

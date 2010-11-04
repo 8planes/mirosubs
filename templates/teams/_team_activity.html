@@ -33,7 +33,7 @@
             <li>{% include 'videos/_team_member_action_item.html' %}</li>
         {% endfor %}
         <li>
-            <a href="#" class="blue_button small margin-top floatright">{% trans 'Sea All Activity' %}</a>
+            <a href="{% url teams:members_actions team.pk %}" class="blue_button small margin-top floatright">{% trans 'Sea All Activity' %}</a>
         </li>
     </ul>    
 </div>

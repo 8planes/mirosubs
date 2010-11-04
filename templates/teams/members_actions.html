@@ -11,7 +11,7 @@
 {% block main_content %}
 <div class="grid_8 alpha">
     <h2>
-        <a href="{{ team.get_absolute_url }}">{{ team }}</a>    
+        <a href="{{ team.get_absolute_url }}">{{ team }}</a>
         {% if team|is_team_manager:user %}
             (<a href="{{ team.get_edit_url }}">{% trans 'Edit Team' %}</a>)
         {% endif %}   
@@ -30,7 +30,7 @@
         <ul class="big_list">
             {% with 1 as medium_thumb %}
             {% for item in action_list %}
-                <li>{% include 'videos/_team_video_action_item.html' %}</li>
+                <li>{% include 'videos/_team_member_action_item.html' %}</li>
             {% endfor %}
             {% endwith %}
         </ul>
