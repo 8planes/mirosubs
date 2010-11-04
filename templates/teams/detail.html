@@ -10,12 +10,7 @@
 
 {% block main_content %}
 <div class="grid_8 alpha">
-    <h2>
-        {{ team }}    
-        {% if team|is_team_manager:user %}
-            (<a href="{{ team.get_edit_url }}">{% trans 'Edit Team' %}</a>)
-        {% endif %}   
-    </h2>
+    <h2>{{ team }}</h2>
 </div>
 <div class="grid_4 omega">
     <div class="team_logo">
@@ -23,6 +18,24 @@
         <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
         {% endif %}
     </div>
+    {% if team.description %}
+    <p>
+        <b>{% trans 'Team Description' %}:</b> {{ team.description }}
+    </p>
+    {% endif %}
+    <p>
+        <b>{% trans 'Team Managers' %}:</b>
+        {% for item in team.members.managers %}
+            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </p>
+    <p>
+        <b>{% trans 'Video Policy' %}:</b>
+        {{ team.get_video_policy_display }}
+    </p>
+    {% if team|is_team_manager:user %}
+        <p><a href="{{ team.get_edit_url }}">{% trans "Manager's Settings & Controls" %}</a></p>
+    {% endif %}       
 </div>
 <div class="grid_8 alpha">
     <ul class="video_tabs">
@@ -72,12 +85,14 @@
                         {{ team_video.description }}
                     </p>
                     {% endif %}
+                    {% if team_video.languages.incomplete.exists %}
                     <div class="need_help">
                         <span>{% trans 'We need your help with' %}</span>
                         {% for lang in team_video.languages.incomplete %}
                             <a href="#">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </div>
+                    {% endif %}
                     <div class="completed_in">
                         {% if team_video.languages.complete.exists %}
                             <span>{% trans 'Subtitles completed in' %}</span>
