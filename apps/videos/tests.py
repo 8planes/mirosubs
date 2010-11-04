@@ -296,6 +296,16 @@ class ViewsTest(WebUseTest):
         response = self._simple_test("api_subtitles")
         data = json.loads(response.content)
         self.assertTrue(data['is_error'])
+
+    def test_api_subtitles_for_jsonp(self):
+        youtube_id = 'uYT84jZDPE0'
+        
+        url = 'http://www.youtube.com/watch?v=%s' % youtube_id
+        response = self._simple_test(
+            "api_subtitles", 
+            data={'video_url': url, 'callback': 'fn'})
+        self.assertEquals('fn([])', response.content)
+        self.assertEquals('text/javascript', response.mimetype)
         
     def test_index(self):
         self._simple_test('videos.views.index')
