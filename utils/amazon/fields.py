@@ -32,7 +32,7 @@ class S3ImageFieldFile(FieldFile):
             return ''
         
         name = self.build_thumbnail_name(self.name, (w, h))
-        if not settings.USE_AMAZON_S3 and not self.storage.exists(name):
+        if not settings.USE_AMAZON_S3 and not self.storage.exists(name) and self.storage.exists(self.name):
             create_thumbnails(self, self.storage.open(self.name), (w, h), name)
         return self.storage.url(name)
     
