@@ -191,12 +191,20 @@ class TeamVideoLanguage(models.Model):
     
     def __unicode__(self):
         return self.get_language_display()
+
+class TeamMemderManager(models.Manager):
+    use_for_related_fields = True
+    
+    def managers(self):
+        return self.get_query_set().filter(is_manager=True)
     
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')
     user = models.ForeignKey(User)
     is_manager = models.BooleanField(default=False)
-
+    
+    objects = TeamMemderManager()
+    
     class Meta:
         unique_together = (('team', 'user'),)
     

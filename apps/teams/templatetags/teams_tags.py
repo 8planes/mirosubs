@@ -27,7 +27,7 @@ from teams.models import Team, Invite
 from videos.models import Action
 from django.conf import settings
 
-ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 15)
+ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
 
 register = template.Library()
 

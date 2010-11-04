@@ -22,18 +22,26 @@
         <li>
         {% for item in videos_actions %}
             <li>{% include 'videos/_team_video_action_item.html' %}</li>
+        {% empty %}
+            <li>{% trans 'No Video Activity' %}</li>
         {% endfor %}
         </li>
+        {% if videos_actions %}
         <li>
             <a href="{% url teams:videos_actions team.pk %}" class="blue_button small margin-top floatright">{% trans 'Sea All Activity' %}</a>
-        </li>        
+        </li>
+        {% endif %}        
     </ul>
     <ul class="small_list" id="team-member-activity" style="display: none">
         {% for item in membres_actions %}
             <li>{% include 'videos/_team_member_action_item.html' %}</li>
+        {% empty %}
+            <li>{% trans 'No Member Activity' %}</li>            
         {% endfor %}
+        {% if membres_actions %}
         <li>
             <a href="{% url teams:members_actions team.pk %}" class="blue_button small margin-top floatright">{% trans 'Sea All Activity' %}</a>
         </li>
+        {% endif %}
     </ul>    
 </div>
