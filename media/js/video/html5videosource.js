@@ -31,6 +31,25 @@ mirosubs.video.Html5VideoSource = function(videoURL, videoType, opt_videoConfig)
     this.videoConfig_ = opt_videoConfig;
 };
 
+mirosubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
+    var queryStringIndex = videoURL.indexOf('?');
+    if (queryStringIndex > -1)
+        videoURL = videoURL.substring(0, queryStringIndex);
+    var vt = mirosubs.video.Html5VideoType;
+    var videoType = null;
+    if (/\.ogv$|\.ogg$/.test(videoURL))
+        videoType = vt.OGG;
+    else if (/\.mp4$/.test(videoURL))
+        videoType = vt.H264;
+    else if (/\.webm$/.test(videoURL))
+        videoType = vt.WEBM;
+    if (videoType != null)
+        return new mirosubs.video.Html5VideoSource(
+            videoURL, videoType, opt_videoConfig);
+    else
+        return null;
+};
+
 mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };

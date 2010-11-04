@@ -72,28 +72,15 @@ mirosubs.Widgetizer.prototype.onLoaded_ = function() {
 mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = 
     function(opt_findOnly) 
 {
-    // including some heuristics here for some of the bigger sites.
-    if (window.location.hostname.match(/youtube\.com$/) != null) {
-        var videoElem = goog.dom.getElement('movie_player');
-        if (videoElem) {
-            if (!opt_findOnly)
-                this.widgetizeElem_(videoElem, window.location.href);
-            return true;
-        }
-        else
-            return false;
-    }
-    else {
-        var unwidgetizedVideos = this.filterUnwidgetized_(
-            document.getElementsByTagName('video'));
-        if (!opt_findOnly)
-            this.widgetizeVideoElements_(unwidgetizedVideos);
-        var objectsFound = this.widgetizeObjectElements_(
-            this.filterUnwidgetized_(
-                document.getElementsByTagName('object')), 
-            opt_findOnly);
-        return unwidgetizedVideos.length > 0 || objectsFound;
-    }
+    var unwidgetizedVideos = this.filterUnwidgetized_(
+        document.getElementsByTagName('video'));
+    if (!opt_findOnly)
+        this.widgetizeVideoElements_(unwidgetizedVideos);
+    var objectsFound = this.widgetizeObjectElements_(
+        this.filterUnwidgetized_(
+            document.getElementsByTagName('object')), 
+        opt_findOnly);
+    return unwidgetizedVideos.length > 0 || objectsFound;
 };
 
 mirosubs.Widgetizer.prototype.addHeadCss = function() {

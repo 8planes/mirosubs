@@ -38,12 +38,24 @@ mirosubs.video.AbstractVideoPlayer = function(videoSource) {
      * @type{number}
      */
     this.storedPlayheadTime_ = 0;
+    mirosubs.video.AbstractVideoPlayer.players.push(this);
 };
 goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
 mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
+mirosubs.video.AbstractVideoPlayer.players = [];
+
+/**
+ *
+ * Used for flash-based video players that don't have a size specified.
+ */
 mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE = new goog.math.Size(480, 360);
+/**
+ *
+ * Used for all video players in the dialog.
+ */
+mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE = new.math.Size(400, 300);
 
 
 mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
@@ -199,9 +211,15 @@ mirosubs.video.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
     goog.abstractMethod();
 };
 /**
- * @returns {number} 0.0 to 1.0
+ * @return {number} 0.0 to 1.0
  */
 mirosubs.video.AbstractVideoPlayer.prototype.getVolume = goog.abstractMethod;
+/**
+ * @return {Element} The video element. Used to check to see if a video on the 
+ *     page has been wrapped in a player yet or not.
+ */
+mirosubs.video.AbstractVideoPlayer.prototype.getVideoElement = goog.abstractMethod;
+
 /**
  * 
  * @param {number} volume A number between 0.0 and 1.0
