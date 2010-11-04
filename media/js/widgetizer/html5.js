@@ -18,7 +18,11 @@
 
 goog.provide('mirosubs.widgetizer.HTML5');
 
-mirosubs.widgetizer.HTML5 = function() {};
+mirosubs.widgetizer.HTML5 = function() {
+    mirosubs.widgetizer.HTML5.superClass_.call(this);
+};
+goog.inherits(mirosubs.widgetizer.HTML5, 
+              mirosubs.widgetizer.VideoPlayerMaker);
 
 mirosubs.widgetizer.HTML5.prototype.videosExist = function() {
     return this.unwidgetizedVideos_().length > 0;
@@ -29,7 +33,7 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
     var videoPlayers = [];
     for (var i = 0; i < videoElements.length; i++) {
         var videoSource = this.makeVideoSource_(videoElements[i]);
-        var videoPlayer = new mirosubs.video.Html5VideoPlayer(videoSource, false);
+        var videoPlayer = videoSource.createPlayer();
         videoPlayer.decorate(videoElements[i]);
         videoPlayers.push(videoPlayer);
     }
@@ -37,34 +41,19 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
 };
 
 mirosubs.widgetizer.HTML5.prototype.unwidgetizedVideos_ = function() {
-    return this.filterUnwidgetized_(
+    return this.filterUnwidgetized(
         document.getElementsByTagName('video'));
 };
 
 mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ = 
     function(videoElement) 
 {
-    var fullURL = 
+    var uri;
     if (videoElement.src)
-        return mirosubs.video.Html5VideoSource.forURL(videoElement.src);
+        uri = new goog.Uri(videoElement.src);
     else
-        
-};
-
-mirosubs.widgetizer.HTML5.prototype.filterUnwidgetized_ = 
-    function(videoElements) 
-{
-    var unwidgetized = [];
-    for (var i = 0; i < videoElements.length; i++)
-        if (this.isUnwidgetized_(videoElements[i]))
-            unwidgetized.push(videoElements[i]);
-    return unwidgetized;
-};
-
-mirosubs.widgetizer.HTML5.prototype.isUnwidgetized_ = function(element) {
-    var players = mirosubs.video.AbstractVideoPlayer.players;
-    for (var i = 0; i < players.length; i++)
-        if (players[i].getVideoElement() == element)
-            return false;
-    return true;
+        uri = new goog.Uri(videoElement.getElementsByTagName('source')[0].src);
+    if (!uri.hasDomain())
+        uri = new goog.Uri(window.location).resolve(uri);
+    return mirosubs.video.Html5VideoSource.forUrl(uri.toString());
 };

@@ -1,6 +1,7 @@
 {% extends "jstesting/base_test.html" %}
 {% block testcontrols %}
 <span id="syncpanel"></span>
+<span id="rightpanel"></span>
 {% endblock %}
 {% block testscript %}
 
@@ -55,6 +56,8 @@ function setUpSubs(opt_subs) {
                                                    null,
                                                    MS_captionManager);
     MS_syncPanel.render(goog.dom.$('syncpanel'));
+    rightPanel = MS_syncPanel.getRightPanel();
+    rightPanel.render(goog.dom.$('rightpanel'));
     MS_videoPlayer.play();
 }
 

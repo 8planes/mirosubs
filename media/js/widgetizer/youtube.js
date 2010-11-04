@@ -18,7 +18,11 @@
 
 goog.provide('mirosubs.widgetizer.Youtube');
 
-mirosubs.widgetizer.Youtube = function() {};
+mirosubs.widgetizer.Youtube = function() {
+    mirosubs.widgetizer.Youtube.superClass_.call(this);
+};
+goog.inherits(mirosubs.widgetizer.Youtube,
+              mirosubs.widgetizer.VideoPlayerMaker);
 
 mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
     
@@ -26,4 +30,20 @@ mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
     
+};
+
+mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
+    if (window.location.hostname.match(/youtube\.com$/) != null)
+        return this.filterUnwidgetized(
+            [goog.dom.getElement('movie_player')]);
+    else {
+        var unwidgetizedElements = [];
+        // no idea if this is best way. might want to look at object also, or both.
+        var embeds = document.getElementsByTagName('embed');
+        for (var i = 0; i < embeds.length; i++) {
+            if (this.isYoutubeEmbed_(embeds[i]) && this.isUnwidgetized(embeds[i]))
+                unwidgetizedElements.push(embeds[i]);
+        }
+        return unwidgetizedElements;
+    }
 };

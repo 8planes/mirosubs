@@ -55,7 +55,7 @@ mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE = new goog.math.Size(480, 360);
  *
  * Used for all video players in the dialog.
  */
-mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE = new.math.Size(400, 300);
+mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE = new goog.math.Size(400, 300);
 
 
 mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
