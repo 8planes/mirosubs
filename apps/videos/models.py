@@ -175,7 +175,7 @@ class Video(models.Model):
     def get_or_create_for_url(cls, video_url, vt=None):
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
-            return
+            return None, False
         
         obj, create = Video.objects.get_or_create(defaults=vt.defaults, **vt.create_kwars())
         if create: 

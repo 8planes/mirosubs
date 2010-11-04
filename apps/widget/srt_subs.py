@@ -100,6 +100,13 @@ class BaseSubtitles(object):
     def __unicode__(self):
         raise Exception('Should return subtitles')
 
+class GenerateSubtitlesHandlerClass(dict):
+    
+    def register(self, handler, type=None):
+        self[type or handler.file_type] = handler
+
+GenerateSubtitlesHandler = GenerateSubtitlesHandlerClass()
+    
 class SRTSubtitles(BaseSubtitles):
     file_type = 'srt'
 
@@ -126,6 +133,8 @@ class SRTSubtitles(BaseSubtitles):
         fr_seconds = int(time % 1 * 100)
         return u'%02i:%02i:%02i,%02i' % (hours, minutes, seconds, fr_seconds)
 
+GenerateSubtitlesHandler.register(SRTSubtitles)
+
 class SBVSubtitles(BaseSubtitles):
     file_type = 'sbv'
 
@@ -149,6 +158,8 @@ class SBVSubtitles(BaseSubtitles):
         fr_seconds = int(time % 1 * 1000)
         return u'%01i:%02i:%02i.%03i' % (hours, minutes, seconds, fr_seconds)
 
+GenerateSubtitlesHandler.register(SBVSubtitles)
+
 class TXTSubtitles(BaseSubtitles):
     file_type = 'txt'
     
@@ -157,6 +168,8 @@ class TXTSubtitles(BaseSubtitles):
         for item in self.subtitles:
             item['text'] and output.append(item['text'])
         return u'\n\n'.join(output)
+
+GenerateSubtitlesHandler.register(TXTSubtitles)
     
 class SSASubtitles(BaseSubtitles):
     file_type = 'ssa'
@@ -193,6 +206,8 @@ class SSASubtitles(BaseSubtitles):
             output.append(tpl % (start, end, text))
         return ''.join(output)
 
+GenerateSubtitlesHandler.register(SSASubtitles)
+
 from lxml import etree
     
 class TTMLSubtitles(BaseSubtitles):
@@ -221,4 +236,6 @@ class TTMLSubtitles(BaseSubtitles):
         minutes = int(floor(time % 3600 / 60))
         seconds = int(time % 60)
         fr_seconds = int(time % 1 * 100)
-        return u'%02i:%02i:%02i.%02i' % (hours, minutes, seconds, fr_seconds)    
+        return u'%02i:%02i:%02i.%02i' % (hours, minutes, seconds, fr_seconds)
+    
+GenerateSubtitlesHandler.register(TTMLSubtitles, 'ttml')    

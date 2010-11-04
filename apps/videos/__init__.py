@@ -32,7 +32,23 @@ class EffectiveSubtitle:
         self.start_time = start_time
         self.end_time = end_time
         self.sub_order = sub_order
-
+    
+    def for_json(self):
+        return {
+            'subtitle_id': self.subtitle_id,
+            'text': self.text,
+            'start_time': self.start_time,
+            'end_time': self.end_time,
+            'sub_order': self.sub_order 
+        }
+    
+    def for_generator(self):
+        return {
+            'text': self.text,
+            'start': self.start_time,
+            'end': self.end_time
+        }
+    
     @classmethod
     def for_subtitle(cls, subtitle):
         return EffectiveSubtitle(

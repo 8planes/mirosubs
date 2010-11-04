@@ -33,12 +33,13 @@ from haystack.query import SearchQuerySet
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
 from datetime import datetime
-from utils import send_templated_email
+from utils import send_templated_email, render_to_json
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
 from django.db.models import Sum, Q
 from django.utils.translation import ugettext
+from widget.srt_subs import GenerateSubtitlesHandler
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -173,25 +174,41 @@ def actions_list(request):
                        template_object_name='action',
                        extra_context=extra_context)    
 
+@render_to_json
 def api_subtitles(request):
     callback = request.GET.get('callback', None)
-    result_json = json.dumps(_api_subtitles_json(request))
-    if callback:
-        return HttpResponse('{0}({1});'.format(callback, result_json),
-                            'text/javascript')
-    else:
-        return HttpResponse(result_json, 'application/json')
-
-def _api_subtitles_json(request):
     video_url = request.GET.get('video_url', None)
     language = request.GET.get('language', None)
     revision = request.GET.get('revision', None)
+    format = request.GET.get('format', 'json')
+    
     if video_url is None:
         return {'is_error': True, 'message': 'video_url not specified' }
+    
     video, created = Video.get_or_create_for_url(video_url)
-    return [s.__dict__ for s in video.subtitles(
-            version_no=revision, language_code = language)]
+    
+    if not video:
+        return {'is_error': True, 'message': 'unsuported video url' }
+    
+    if format == 'json':
+        output = [s.for_json() for s in video.subtitles(version_no=revision, language_code = language)]
 
+        if callback:
+            result = json.dumps(output)
+            return HttpResponse('%s(%s);' % (callback, result), 'text/javascript')
+        else:
+            return output
+    else:    
+        handler = GenerateSubtitlesHandler.get(format)
+        
+        if not handler:
+            return {'is_error': True, 'message': 'undefined format' }
+        
+        subtitles = [s.for_generator() for s in video.subtitles(version_no=revision, language_code = language)]
+
+        h = handler(subtitles, video)
+        return HttpResponse(unicode(h))      
+        
 @login_required
 def upload_subtitles(request):
     output = dict(success=False)

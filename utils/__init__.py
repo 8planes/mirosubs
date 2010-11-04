@@ -65,6 +65,10 @@ def render_to(template):
 def render_to_json(func):
     def wrapper(request, *args, **kwargs):
         result = func(request, *args, **kwargs)
+        
+        if isinstance(result, HttpResponse):
+            return result
+        
         json = simplejson.dumps(result, cls=DjangoJSONEncoder)
         return HttpResponse(json, mimetype="application/json")
     return update_wrapper(wrapper, func)

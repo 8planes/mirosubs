@@ -131,6 +131,7 @@ def base_widget_params(request, extra_params={}):
     return json.dumps(params)[1:-1]
 
 def download_subtitles(request, handler=SSASubtitles):
+    #FIXME: use GenerateSubtitlesHandler
     video_id = request.GET.get('video_id')
     lang_code = request.GET.get('lang_code')
     
@@ -152,11 +153,7 @@ def download_subtitles(request, handler=SSASubtitles):
         raise Http404    
     
     for item in version.subtitles():
-        subtitles.append({
-            'text': item.text,
-            'start': item.start_time,
-            'end': item.end_time
-        })
+        subtitles.append(item.for_generator())
     
     h = handler(subtitles, video)
     response = HttpResponse(unicode(h), mimetype="text/plain")
