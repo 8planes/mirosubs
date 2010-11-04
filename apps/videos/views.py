@@ -33,7 +33,7 @@ from haystack.query import SearchQuerySet
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
 from datetime import datetime
-from utils import send_templated_email, render_to_json
+from utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
@@ -174,7 +174,6 @@ def actions_list(request):
                        template_object_name='action',
                        extra_context=extra_context)    
 
-@render_to_json
 def api_subtitles(request):
     callback = request.GET.get('callback', None)
     video_url = request.GET.get('video_url', None)
