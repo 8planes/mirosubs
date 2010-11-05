@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator %}
+{% load i18n teams_tags paginator widget %}
 
 {% block title %}
     {{ team }} | Universal Subtitles
@@ -8,36 +8,24 @@
 
 {% block body_attrs %}id="teams"{% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    {% include "widget/_js_onsite_dependencies.html" %}
+{% endblock %}
+
 {% block main_content %}
 <div class="grid_8 alpha">
     <h2>{{ team }}</h2>
-</div>
-<div class="grid_4 omega">
-    <div class="team_logo">
-        {% if team.logo %}
-        <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
-        {% endif %}
-    </div>
-    {% if team.description %}
-    <p>
-        <b>{% trans 'Team Description' %}:</b> {{ team.description }}
-    </p>
-    {% endif %}
-    <p>
-        <b>{% trans 'Team Managers' %}:</b>
-        {% for item in team.members.managers %}
-            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </p>
-    <p>
-        <b>{% trans 'Video Policy' %}:</b>
-        {{ team.get_video_policy_display }}
-    </p>
-    {% if team|is_team_manager:user %}
-        <p><a href="{{ team.get_edit_url }}">{% trans "Manager's Settings & Controls" %}</a></p>
-    {% endif %}     
-</div>
-<div class="grid_8 alpha">
+    
+    {% if team.video %}
+        {% widget widget_params %}
+    {% endif %}    
+    
     <ul class="video_tabs">
         <li>
             <a href="{% url teams:detail team.pk %}">
@@ -92,6 +80,34 @@
     </div>
 </div>
 
-{% team_activity team %}
+<div class="grid_4 omega">
+    {% if not team.video %}
+    <div class="team_logo">
+        {% if team.logo %}
+        <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if team.description %}
+    <p>
+        <b>{% trans 'Team Description' %}:</b> {{ team.description|urlize }}
+    </p>
+    {% endif %}
+    <p>
+        <b>{% trans 'Team Managers' %}:</b>
+        {% for item in team.members.managers %}
+            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </p>
+    <p>
+        <b>{% trans 'Video Policy' %}:</b>
+        {{ team.get_video_policy_display }}
+    </p>
+    {% if team|is_team_manager:user %}
+        <p><a href="{{ team.get_edit_url }}">{% trans "Manager's Settings & Controls" %}</a></p>
+    {% endif %}       
+
+    {% team_activity team %}
+</div>
 
 {% endblock %}

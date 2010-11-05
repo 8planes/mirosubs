@@ -63,6 +63,15 @@
                         {{ form.logo.errors }}
                         {{ form.logo }}
                      </p>
+                     <h3>{% trans 'Team Intro Video' %}</h3>
+                     <p>
+                        {% if team.video %}
+                            {% trans 'Current video' %}: <a href="{{ team.video.get_absolute_url }}">{{ team.video }}</a>
+                        {% endif %}
+                        {{ form.video_url.errors }}
+                        {{ form.video_url }} 
+                        {{ form.video_url.help_text }}                        
+                     </p>                                                        
                 </div>
                 <div class="grid_4 omega">
                     <h3>{% trans 'Team Member Settings' %}</h3>
@@ -89,7 +98,7 @@
                 </div>
             </div>
             <p>
-                <input type="submit" value="{% trans 'Save' %}"/>
+                <button class="green_button small"><span>{% trans 'Save' %}</span></button>
             </p>
             </form>
             <div class="clearfix"></div>

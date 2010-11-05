@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator profiles_tags %}
+{% load i18n teams_tags paginator profiles_tags widget %}
 
 {% block title %}
     {{ team }} | Universal Subtitles
@@ -8,14 +8,24 @@
 
 {% block body_attrs %}id="teams"{% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    {% include "widget/_js_onsite_dependencies.html" %}
+{% endblock %}
+
 {% block main_content %}
 <div class="grid_8 alpha">
     <h2>{{ team }}</h2>
-
-<img src="/site_media/images/mock_vid.png" />
-
-
-
+    
+    {% if team.video %}
+        {% widget widget_params %}
+    {% endif %}
+    
     <ul class="video_tabs">
         <li class="active">
             <span class="tab-item">
@@ -58,7 +68,7 @@
                     <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
                     {% if team_video.description %}
                     <p>
-                        {{ team_video.description }}
+                        {{ team_video.description|urlize }}
                     </p>
                     {% endif %}
                     {% if team_video.languages.incomplete.exists %}
@@ -94,14 +104,16 @@
 
 
 <div class="grid_4 omega">
+    {% if not team.video %}
     <div class="team_logo">
         {% if team.logo %}
         <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
         {% endif %}
     </div>
+    {% endif %}
     {% if team.description %}
     <p>
-        <b>{% trans 'Team Description' %}:</b> {{ team.description }}
+        <b>{% trans 'Team Description' %}:</b> {{ team.description|urlize }}
     </p>
     {% endif %}
     <p>
@@ -120,9 +132,5 @@
 
     {% team_activity team %}
 </div>
-
-
-
-
 
 {% endblock %}

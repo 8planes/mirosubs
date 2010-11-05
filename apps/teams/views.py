@@ -97,11 +97,18 @@ def detail(request, pk):
     if q:
         qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q) \
                       |Q(video__title__icontains=q))
-        
-    extra_context = {
+    
+    extra_context = widget.add_onsite_js_files({})    
+    extra_context.update({
         'team': team,
         'query': q
-    }
+    })
+
+    if team.video:
+        extra_context['widget_params'] = base_widget_params(request, {
+            'video_url': team.video.get_video_url(), 
+            'base_state': {}
+        })
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
@@ -118,10 +125,18 @@ def detail_members(request, pk):
         qs = qs.filter(Q(user__first_name__icontains=q)|Q(user__last_name__icontains=q) \
                        |Q(user__username__icontains=q)|Q(user__biography__icontains=q))
 
-    extra_context = {
+    extra_context = widget.add_onsite_js_files({})  
+
+    extra_context.update({
         'team': team,
         'query': q
-    }    
+    })
+    
+    if team.video:
+        extra_context['widget_params'] = base_widget_params(request, {
+            'video_url': team.video.get_video_url(), 
+            'base_state': {}
+        })    
     return object_list(request, queryset=qs, 
                        paginate_by=MEMBERS_ON_PAGE, 
                        template_name='teams/detail_members.html', 
