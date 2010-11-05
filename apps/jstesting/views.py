@@ -28,7 +28,11 @@ def js_dependencies():
     return js_files
 
 def jstest(request, file_name):
+    if file_name == 'alltests':
+        template = 'jstesting/alltests.html'
+    else:
+        template = 'jstesting/{0}.js'.format(file_name)
     return render_to_response(
-        'jstesting/{0}.js'.format(file_name), 
+        template,
         widget.add_js_files({}, False, js_dependencies()),
         context_instance=RequestContext(request))

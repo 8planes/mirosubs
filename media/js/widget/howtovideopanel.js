@@ -25,11 +25,15 @@ goog.provide('mirosubs.HowToVideoPanel');
 mirosubs.HowToVideoPanel = function(videoChoice) {
     goog.ui.Component.call(this);
     if (mirosubs.video.supportsOgg())
-        this.videoPlayer_ = (new mirosubs.video.Html5VideoSource(
-            videoChoice.videos.ogg)).createPlayer();
+        this.videoPlayer_ = 
+            (new mirosubs.video.Html5VideoSource(
+                videoChoice.videos.ogg, 
+                mirosubs.video.Html5VideoType.OGG)).createPlayer();
     else if (mirosubs.video.supportsH264())
-        this.videoPlayer_ = (new mirosubs.video.Html5VideoSource(
-            videoChoice.videos.h264)).createPlayer();
+        this.videoPlayer_ = 
+            (new mirosubs.video.Html5VideoSource(
+                videoChoice.videos.h264, 
+                mirosubs.video.Html5VideoType.H264)).createPlayer();
     else
         this.videoPlayer_ = (new mirosubs.video.YoutubeVideoSource(
             videoChoice.videos.yt)).createPlayer();

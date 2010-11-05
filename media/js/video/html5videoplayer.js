@@ -21,19 +21,18 @@ goog.provide('mirosubs.video.Html5VideoPlayer');
 /**
  *
  * @param {mirosubs.video.Html5VideoSource} videoSource
- * @param {boolean=} opt_excludeControls;
+ * @param {boolean} forDialog
  */
-mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls, opt_videoConfig) {
+mirosubs.video.Html5VideoPlayer = function(videoSource, forDialog) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
 
     this.videoSource_ = videoSource;
     this.videoElem_ = null;
-    this.videoConfig_ = opt_videoConfig;
 
     // only used in FF, since they don't support W3 buffered spec yet.
     this.videoLoaded_ = 0;
     this.videoTotal_ = 0;
-    this.includeControls_ = !opt_excludeControls;
+    this.forDialog_ = forDialog;
     this.playToClick_ = false;
 
     this.progressThrottle_ = new goog.Throttle(
@@ -49,42 +48,63 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, opt_excludeControls, opt
 goog.inherits(mirosubs.video.Html5VideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
 
+mirosubs.video.Html5VideoPlayer.logger_ =
+    goog.debug.Logger.getLogger('Html5VideoPlayer');
+
+/**
+ * @override
+ */
 mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
-    mirosubs.video.Html5VideoPlayer.superClass_.createDom.call(this);
-    this.getElement().style.height = mirosubs.video.Html5VideoPlayer.HEIGHT + 'px';
-    this.addVideoElement_(this.getElement());
-};
-mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(el) {
-    mirosubs.video.Html5VideoPlayer.superClass_.decorateInternal.call(this, el);
-    this.addVideoElement_(el);
-};
-mirosubs.video.Html5VideoPlayer.prototype.addVideoElement_ = function(el) {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    if (mirosubs.video.supportsOgg() ||
-        mirosubs.video.supportsH264()) {
-        var params = { 'autobuffer': 'true' };
-        if (this.videoConfig_) {
-            if (this.videoConfig_['play_to_click']) {
-                this.playToClick_ = true;
-                goog.object.remove(this.videoConfig_, 'play_to_click');
-            }
-            // user can't set controls
-            goog.object.remove(this.videoConfig_, 'controls');
-            goog.object.extend(params, this.videoConfig_);
-        }
-        if (this.includeControls_)
-            params['controls'] = 'true';
-        el.appendChild(
-            this.videoElem_ =
-                $d('video', params,
-                   $d('source', {'src': this.videoSource_.getVideoURL()})));
+    if (mirosubs.video.supportsVideoType(
+        this.videoSource_.getVideoType())) {
+        this.videoElem_ = this.createVideoElement_($d);
+        this.setElementInternal(this.videoElem_);
+        if (this.forDialog_)
+            goog.style.setSize(
+                this.videoElem_,
+                mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE);
     }
     else {
+        var el = $d('div');
+        this.setElementInternal(el);
         goog.style.setSize(el, 400, 300);
         el.style.lineHeight = '300px';
-        el.innerHTML = "Sorry, your browser can't play HTML5/Ogg video. " +
-            "<a href='http://getfirefox.com'>Get Firefox</a>.";
+        el.innerHTML = 
+            "Sorry, your browser can't play HTML5/Ogg video. " +
+            "<a href='http://getfirefox.com'>Get Firefox</a>.";       
     }
+};
+
+/**
+ * @override
+ * @param {Element} element Video element to decorate.
+ */
+mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(element) {
+    mirosubs.video.Html5VideoPlayer.superClass_.decorateInternal.call(
+        this, element);
+    if (element.nodeName != 'VIDEO')
+        throw Error(goog.ui.Component.Error.DECORATE_INVALID);
+    this.videoElem_ = element;
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.createVideoElement_ = 
+    function($d) 
+{
+    var params = { 'autobuffer': 'true' };
+    if (!this.forDialog_) {
+        if (this.videoSource_.getVideoConfig()) {
+            var config = this.videoSource_.getVideoConfig();
+            if (this.videoConfig_['play_to_click']) {
+                this.playToClick_ = true;
+                goog.object.remove(config, 'play_to_click');
+            }
+            goog.object.extend(params, config);
+        }
+        params['controls'] = 'true';
+    }
+    return $d('video', params,
+              $d('source', {'src': this.videoSource_.getVideoURL()}));
 };
 mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
     mirosubs.video.Html5VideoPlayer.superClass_.enterDocument.call(this);
@@ -96,6 +116,8 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'timeupdate', this.sendTimeUpdate_).
         listen(this.videoElem_, 'ended', this.dispatchEndedEvent).
         listenOnce(this.videoElem_, 'click', this.playerClicked_);
+    if (this.videoElem_['readyState'] >= this.videoElem_['HAVE_METADATA'])
+        this.setDimensionsKnownInternal();
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.playerClicked_ = function(e) {
@@ -216,6 +238,10 @@ mirosubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTim
 
 mirosubs.video.Html5VideoPlayer.prototype.getVideoSize = function() {
     return goog.style.getSize(this.videoElem_);
+};
+
+mirosubs.video.Html5VideoPlayer.prototype.getVideoElement = function() {
+    return this.videoElem_;
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.getReadyState_ = function() {

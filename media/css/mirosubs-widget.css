@@ -2591,21 +2591,21 @@ overflow: hidden;
     display: none !important;
 }
 
+.mirosubs-videoTab-static {
+   width: 100%;
+}
 
-
-
-.mirosubs-videoTab{
-width: 100%;
+.mirosubs-videoTab-anchoring {
+   position: absolute;
 }
 
 .mirosubs-videoTab a {
-font-size: 13px;
-background: #333 url("../images/gradient_light.png") 0 0px repeat-x !important;
-text-decoration: none;
-display: block;
-color: #fff !important;
-float: left;
-
+   font-size: 13px;
+   background: #333 url("../images/gradient_light.png") 0 0px repeat-x !important;
+   text-decoration: none;
+   display: block;
+   color: #fff !important;
+   float: left;
 }
 
 

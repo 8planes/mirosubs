@@ -52,7 +52,7 @@ function MS_clearListener(event) {
 function captionJSON(start_time, end_time, caption_id, sub_order) {
     return {'start_time' : start_time, 
             'end_time': end_time, 
-            'caption_id': caption_id,
+            'subtitle_id': caption_id,
             'sub_order': sub_order};
 }
 
