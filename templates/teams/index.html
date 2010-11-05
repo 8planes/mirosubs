@@ -75,7 +75,7 @@
                 {% if team|is_team_manager:user %}
                     <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
                 {% endif %}                
-                <span class="small_sub">
+                <span>
                     {% blocktrans with team.member_count as count %}
                     Team with {{ count }} Members
                     {% endblocktrans %}
@@ -85,16 +85,16 @@
                     {{ team.description }}
                 </p>
                 {% endif %}
-                {% if user.is_staff and perms.teams.change_team %}
-                    <div>
-                    {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Unfeature this team' %}</a>
-                    {% else %}
-                        <a href="{% url teams:highlight team.pk %}">{% trans 'Feature this team' %}</a>
-                    {% endif %}
-                    </div>
-                {% endif %}
             </div>
+            {% if user.is_staff and perms.teams.change_team %}
+                <div class="info">
+                {% if team.highlight %}
+                    <a href="{% url teams:unhighlight team.pk %}">{% trans 'Unfeature this team' %}</a>
+                {% else %}
+                    <a href="{% url teams:highlight team.pk %}">{% trans 'Feature this team' %}</a>
+                {% endif %}
+                </div>
+            {% endif %}            
         </li>
         {% endfor %}
     </ul>
