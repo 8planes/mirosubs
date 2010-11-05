@@ -11,33 +11,11 @@
 {% block main_content %}
 <div class="grid_8 alpha">
     <h2>{{ team }}</h2>
-</div>
-<div class="grid_4 omega">
-    <div class="team_logo">
-        {% if team.logo %}
-        <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
-        {% endif %}
-    </div>
-    {% if team.description %}
-    <p>
-        <b>{% trans 'Team Description' %}:</b> {{ team.description }}
-    </p>
-    {% endif %}
-    <p>
-        <b>{% trans 'Team Managers' %}:</b>
-        {% for item in team.members.managers %}
-            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </p>
-    <p>
-        <b>{% trans 'Video Policy' %}:</b>
-        {{ team.get_video_policy_display }}
-    </p>
-    {% if team|is_team_manager:user %}
-        <p><a href="{{ team.get_edit_url }}">{% trans "Manager's Settings & Controls" %}</a></p>
-    {% endif %}       
-</div>
-<div class="grid_8 alpha">
+
+<img src="/site_media/images/mock_vid.png" />
+
+
+
     <ul class="video_tabs">
         <li class="active">
             <span class="tab-item">
@@ -112,6 +90,37 @@
     </div>
 </div>
 
-{% team_activity team %}
+
+<div class="grid_4 omega">
+    <div class="team_logo">
+        {% if team.logo %}
+        <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
+        {% endif %}
+    </div>
+    {% if team.description %}
+    <p>
+        <b>{% trans 'Team Description' %}:</b> {{ team.description }}
+    </p>
+    {% endif %}
+    <p>
+        <b>{% trans 'Team Managers' %}:</b>
+        {% for item in team.members.managers %}
+            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </p>
+    <p>
+        <b>{% trans 'Video Policy' %}:</b>
+        {{ team.get_video_policy_display }}
+    </p>
+    {% if team|is_team_manager:user %}
+        <p><a href="{{ team.get_edit_url }}">{% trans "Manager's Settings & Controls" %}</a></p>
+    {% endif %}       
+
+    {% team_activity team %}
+</div>
+
+
+
+
 
 {% endblock %}

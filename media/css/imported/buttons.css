@@ -785,11 +785,12 @@ margin: 0;
 padding: 0;
 list-style: none;
 float: left;
+margin: 0 10px 0 0 !important;
 }
 
 
 .video_tabs li a{
-margin: 0 10px 0 0;
+
 padding: 0;
 position: relative;
 text-decoration: none;
@@ -881,7 +882,7 @@ background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
 
 .video_tabs li a .badgy, .video_tabs li span.tab-item .badgy{
 
-padding: 4px 5px 1px;
+padding: 2px 5px 1px;
 background: #fff;
   -moz-border-radius: 5px;  
   -webkit-border-radius: 5px;

@@ -201,7 +201,7 @@ line-height: 1.1em;
 .small_list li a{
   margin: 0;
   padding: 0;
-  overflow: auto;
+  overflow: hidden;
   text-decoration: none;
   }
 
@@ -373,7 +373,7 @@ margin: 0px !important;
 
 
 
-=.boxx{
+.boxx{
 background: #fff;
   -moz-border-radius: 5px;  
   -webkit-border-radius: 5px;
@@ -392,7 +392,6 @@ background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ *
 
 
 position: relative;
-cursor: pointer;
 }
 
 
@@ -414,7 +413,7 @@ background: -moz-linear-gradient(top,  #fff,  #ecf9fc); /* for firefox 3.6+ */
 margin: 3px 2px !important;
 }
 
-bigg
+
 .boxx .sort_button ul li{
 padding: 0 !important;
 
