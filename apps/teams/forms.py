@@ -42,8 +42,12 @@ class EditTeamVideoForm(forms.ModelForm):
     
     class Meta:
         model = TeamVideo
-        fields = ('title', 'description', 'thumbnail')
-
+        fields = ('title', 'description', 'thumbnail', 'all_languages')
+    
+    def __init__(self, *args, **kwargs):
+        super(EditTeamVideoForm, self).__init__(*args, **kwargs)
+        self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
+    
 class AddTeamVideoForm(forms.ModelForm):
     video_url = UniSubURLField(verify_exists=True, help_text=_("Enter the URL of any compatible video or any video on our site.  You can also browse the site and use the 'Add Video to Team' menu on the left sidebar."))
     

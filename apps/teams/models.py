@@ -164,6 +164,8 @@ class TeamVideo(models.Model):
         help_text=_(u'Use this space to explain why you or your team need to caption or subtitle this video. Adding a note makes volunteers more likely to help out!'))
     thumbnail = S3EnabledImageField(upload_to='teams/video_thumbnails/', null=True, blank=True, 
         help_text=_(u'We automatically grab thumbnails for certain sites, e.g. Youtube'))
+    all_languages = models.BooleanField(_('Need help with all languages'), default=False, 
+        help_text=_('If you check this, other languages will not be displayed.'))
     
     class Meta:
         unique_together = (('team', 'video'),)
