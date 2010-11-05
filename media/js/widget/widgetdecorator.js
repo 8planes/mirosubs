@@ -36,7 +36,7 @@ mirosubs.widget.WidgetDecorator = function(videoPlayer) {
         this.handler_.listen(
             this.videoPlayer_,
             mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
-            this.videoDimensionsKnown_());
+            this.videoDimensionsKnown_);
     var args = {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
         'is_remote': mirosubs.isFromDifferentDomain()

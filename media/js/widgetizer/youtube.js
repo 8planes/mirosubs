@@ -23,7 +23,7 @@ goog.provide('mirosubs.widgetizer.Youtube');
  *
  */
 mirosubs.widgetizer.Youtube = function() {
-    mirosubs.widgetizer.Youtube.superClass_.call(this);
+    mirosubs.widgetizer.VideoPlayerMaker.call(this);
     this.ON_YT_SITE = 
         window.location.hostname.match(/youtube\.com$/) != null;
 };
@@ -48,6 +48,7 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
         else
             this.replaceVideoElement_(videoPlayer, elements[i]);
     }
+    return videoPlayers;
 };
 
 mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {

@@ -27,10 +27,10 @@ mirosubs.widgetizer.VideoPlayerMaker = function() {
 };
 
 mirosubs.widgetizer.VideoPlayerMaker.prototype.videosExist = 
-    goog.abstractMethod();
+    goog.abstractMethod;
 
 mirosubs.widgetizer.VideoPlayerMaker.prototype.makeVideoPlayers =
-    goog.abstractMethod();
+    goog.abstractMethod;
 
 /**
  * @protected

@@ -133,7 +133,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.addQueryString_ = function(uri) {
     var config = this.videoSource_.getVideoConfig();
-    if (!forDialog && config) {
+    if (!this.forDialog_ && config) {
         for (var prop in config)
             if (prop != 'width' && prop != 'height')
                 uri.setParameterValue(prop, config[prop])
@@ -293,6 +293,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.disposeInternal = function() {
     mirosubs.video.YoutubeVideoPlayer.superClass_.disposeInternal.call(this);
     this.progressTimer_.dispose();
     this.timeUpdateTimer_.dispose();
+};
+mirosubs.video.YoutubeVideoPlayer.prototype.getVideoElement = function() {
+    return this.player_;
 };
 /**
  * http://code.google.com/apis/youtube/js_api_reference.html#getPlayerState

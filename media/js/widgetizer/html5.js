@@ -23,7 +23,7 @@ goog.provide('mirosubs.widgetizer.HTML5');
  *
  */
 mirosubs.widgetizer.HTML5 = function() {
-    mirosubs.widgetizer.HTML5.superClass_.call(this);
+    mirosubs.widgetizer.VideoPlayerMaker.call(this);
 };
 goog.inherits(mirosubs.widgetizer.HTML5, 
               mirosubs.widgetizer.VideoPlayerMaker);
@@ -59,5 +59,5 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ =
         uri = new goog.Uri(videoElement.getElementsByTagName('source')[0].src);
     if (!uri.hasDomain())
         uri = new goog.Uri(window.location).resolve(uri);
-    return mirosubs.video.Html5VideoSource.forUrl(uri.toString());
+    return mirosubs.video.Html5VideoSource.forURL(uri.toString());
 };

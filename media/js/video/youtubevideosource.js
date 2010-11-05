@@ -74,3 +74,7 @@ mirosubs.video.YoutubeVideoSource.prototype.getUUID = function() {
 mirosubs.video.YoutubeVideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
+
+mirosubs.video.YoutubeVideoSource.prototype.getVideoURL = function() {
+    return "www.youtube.com/watch?v=" + this.youtubeVideoID_;
+};
