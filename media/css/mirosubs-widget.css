@@ -1135,11 +1135,11 @@ ul.mirosubs-titlesList.sync {
       -2px -1px 1px #000,
       -1px -3px 1px #000,
       -3px -2px 1px #000 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
    font-size: 14px !important;
    text-align: center !important;
    color: white !important;
    font-weight: normal !important;
-   margin: 0 40px;
     background: url("../images/caption_bg.png") !important;
    -moz-border-radius: 5px !important;
    -webkit-border-radius: 5px !important;
@@ -1149,7 +1149,6 @@ ul.mirosubs-titlesList.sync {
 iframe.mirosubs-captionDivBg { 
     position: absolute !important; 
     border: none !important; 
-    top: 220px !important;
 } 
 
 

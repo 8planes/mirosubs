@@ -241,54 +241,58 @@ mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playhead
  * @param {String} text Caption text to display in video. null for blank.
  */
 mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
-    // TODO: shorten this method and use the google closure library!
     mirosubs.video.AbstractVideoPlayer.logger_.info(
         'showing sub: ' + text);
     if (text == null || text == "") {
         if (this.captionElem_ != null) {
-            this.getElement().removeChild(this.captionElem_);
+            goog.dom.removeNode(this.captionElem_);
             this.captionElem_ = null;
             if (this.captionBgElem_ != null) {
-                this.getElement().removeChild(this.captionBgElem_);
+                goog.dom.removeNode(this.captionBgElem_);
                 this.captionBgElem_ = null;
             }
         }
     }
-    else {
-        var needsIFrame = this.needsIFrame();
-        text = goog.string.newLineToBr(goog.string.htmlEscape(text));
-        var videoSize = this.getVideoSize();
-        if (this.captionElem_ == null) {
-            this.captionElem_ = document.createElement("div");
-            this.captionElem_.setAttribute("class", "mirosubs-captionDiv");
-            this.captionElem_.style.top = (videoSize.height - 100) + "px";
-            this.captionElem_.style.width = (videoSize.width - 80) + "px";
-            if (needsIFrame)
-                this.captionElem_.style.visibility = 'hidden';
-            this.getElement().appendChild(this.captionElem_);
+    else
+        this.setCaption_(
+            goog.string.newLineToBr(goog.string.htmlEscape(text)),
+            this.needsIFrame());
+};
+
+mirosubs.video.AbstractVideoPlayer.prototype.setCaption_ = 
+    function(htmlText, needsIFrame) 
+{
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    var $s = goog.style;
+    var videoOffsetParent = $s.getOffsetParent(this.getElement());
+    var offsetPosition = $s.getPosition(this.getElement());
+    var size = $s.getSize(this.getElement());
+    if (!this.captionElem_) {
+        this.captionElem_ = $d('div', 'mirosubs-captionDiv');
+        if (needsIFrame)
+            mirosubs.setVisibility(this.captionElem_, false);
+        goog.dom.appendChild(videoOffsetParent, this.captionElem_);
+    }
+    this.captionElem_.innerHTML = htmlText;
+    var captionSize = goog.style.getSize(this.captionElem_);
+    var captionPosition = new goog.math.Coordinate(
+        offsetPosition.x + (size.width - captionSize.width) / 2,
+        offsetPosition.y + size.height - captionSize.height - 40);
+    goog.style.setPosition(this.captionElem_, captionPosition);
+    if (needsIFrame) {
+        if (!this.captionBgElem_) {
+            this.captionBgElem_ = $d('iframe', 'mirosubs-captionDivBg');
+            mirosubs.setVisibility(this.captionBgElem_, false);
+            this.getDomHelper().insertSiblingBefore(
+                this.captionBgElem_, this.captionElem_);
         }
-        this.captionElem_.innerHTML = text;
-        this.captionElem_.style.top = (videoSize.height - this.captionElem_.offsetHeight - 40) + "px";
-        if (needsIFrame) {
-            var $d = goog.dom;
-            var $s = goog.style;
-            if (this.captionBgElem_ == null) {
-                this.captionBgElem_ = document.createElement('iframe');
-                this.captionBgElem_.setAttribute("class", "mirosubs-captionDivBg");
-                this.captionBgElem_.style.visibility = 'hidden';
-                this.captionBgElem_.style.top = this.captionElem_.style.top;
-                // FIXME: get rid of hardcoded value
-                this.captionBgElem_.style.left = "10px";
-                $d.insertSiblingBefore(this.captionBgElem_, 
-                                       this.captionElem_);
-            }
-            var size = $s.getSize(this.captionElem_);
-            $s.setSize(this.captionBgElem_, size.width, size.height);
-            this.captionBgElem_.style.visibility = 'visible';
-            this.captionElem_.style.visibility = 'visible';
-        }
+        $s.setPosition(this.captionBgElem_, captionPosition);
+        $s.setSize(this.captionBgElem_, captionSize);
+        mirosubs.setVisibility(this.captionBgElem_, true);
+        mirosubs.setVisibility(this.captionElem_, true);
     }
 };
+
 /**
  * Override for video players that need to show an iframe behind captions for 
  * certain browsers (e.g. flash on linux/ff)

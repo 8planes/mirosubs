@@ -263,10 +263,14 @@ mirosubs.randomString = function() {
 mirosubs.attachToLowerLeft = function(topElem, bottomElem) {
     // This is a little hacky so that we can position with minimal
     // flicker.
-    bottomElem.style.visibility = 'hidden';
+    mirosubs.setVisibility(bottomElem, false);
     goog.style.showElement(bottomElem, true);
     mirosubs.repositionToLowerLeft(topElem, bottomElem);
-    bottomElem.style.visibility = 'visible';
+    mirosubs.setVisibility(bottomElem, true);
+};
+
+mirosubs.setVisibility = function(element, visible) {
+    element.style.visibility = visible ? 'visible' : 'hidden';
 };
 
 mirosubs.repositionToLowerLeft = function(anchorElement, movableElement) {

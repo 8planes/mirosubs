@@ -29,7 +29,7 @@ mirosubs.video.supportsVideo = function() {
 };
 
 mirosubs.video.supportsVideoType = function(html5VideoType) {
-    var vt = v.Html5VideoType;
+    var vt = mirosubs.video.Html5VideoType;
     switch (html5VideoType) {
     case vt.H264:
         return mirosubs.video.supportsH264();

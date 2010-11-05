@@ -24,6 +24,9 @@ goog.provide('mirosubs.widgetizer.Youtube');
  */
 mirosubs.widgetizer.Youtube = function() {
     mirosubs.widgetizer.VideoPlayerMaker.call(this);
+    /**
+     * @const
+     */
     this.ON_YT_SITE = 
         window.location.hostname.match(/youtube\.com$/) != null;
 };
@@ -77,8 +80,9 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ =
         config['width'] = element['width'];
         config['height'] = element['height'];
     }
+    var youtubePageURL = this.ON_YT_SITE ? window.location.href : url;
     return mirosubs.video.YoutubeVideoSource.forURL(
-        url, config);
+        youtubePageURL, config);
 };
 
 mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ = 

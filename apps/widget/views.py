@@ -78,9 +78,9 @@ def widget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
-def widgetize_demo(request):
+def widgetize_demo(request, page_name):
     context = widget.add_widgetize_js_files({})
-    return render_to_response('widget/widgetize_demo.html',
+    return render_to_response('widget/widgetize_demo/{0}.html'.format(page_name),
                               context,
                               context_instance=RequestContext(request))
 

@@ -1,0 +1,15 @@
+{% extends "widget/widgetize_demo/base_widgetize_demo.html" %}
+
+{% block contents %}
+
+<h1>Using src attribute</h1>
+
+  <video autobuffer="" controls="" tabindex="0" 
+         src="http://subtesting.com/video/Usubs-IntroVideo.theora.ogg">
+  </video>
+
+
+<h1>Using source element</h1>
+
+  <video autobuffer="" controls="" tabindex="0"><source src="http://subtesting.com/video/Usubs-IntroVideo.theora.ogg"></source></video>
+{% endblock %}
