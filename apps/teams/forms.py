@@ -47,23 +47,21 @@ class EditTeamVideoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
+
+class BaseVideoBoundForm(forms.ModelForm):
+    video_url = UniSubURLField(label=_('Video URL'), verify_exists=True, 
+        help_text=_("Enter the URL of any compatible video or any video on our site. You can also browse the site and use the 'Add Video to Team' menu."))
     
-class AddTeamVideoForm(forms.ModelForm):
-    video_url = UniSubURLField(verify_exists=True, help_text=_("Enter the URL of any compatible video or any video on our site.  You can also browse the site and use the 'Add Video to Team' menu on the left sidebar."))
-    
-    class Meta:
-        model = TeamVideo
-        fields = ('video_url', 'title', 'description', 'thumbnail')
-        
-    def __init__(self, team, *args, **kwargs):
-        self.team = team
-        self.host = Site.objects.get_current().domain
-        super(AddTeamVideoForm, self).__init__(*args, **kwargs)
-        
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
         
-        url_start = 'http://'+self.host
+        if not video_url:
+            self.video = None
+            return video_url
+
+        host = Site.objects.get_current().domain
+        url_start = 'http://'+host
+        
         if video_url.startswith(url_start):
             #UniSub URL
             try:
@@ -92,14 +90,29 @@ If you'd like to us to add support for a new site or format, or if you
 think there's been some mistake, <a
 href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
              
+        return video_url
+    
+class AddTeamVideoForm(BaseVideoBoundForm):
+    
+    class Meta:
+        model = TeamVideo
+        fields = ('video_url', 'title', 'description', 'thumbnail')
+        
+    def __init__(self, team, *args, **kwargs):
+        self.team = team
+        super(AddTeamVideoForm, self).__init__(*args, **kwargs)
+    
+    def clean_video_url(self):
+        video_url = super(AddTeamVideoForm, self).clean_video_url()
+        
         try:
             tv = TeamVideo.objects.get(team=self.team, video=self.video)
             raise forms.ValidationError(mark_safe(u'Team has this <a href="%s">video</a>' % tv.get_absolute_url()))
         except TeamVideo.DoesNotExist:
-            pass 
+            pass
         
-        return video_url
-
+        return video_url     
+    
     def save(self, commit=True):
         obj = super(AddTeamVideoForm, self).save(False)
         obj.video = self.video
@@ -107,25 +120,41 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         commit and obj.save()
         return obj
     
-class CreateTeamForm(forms.ModelForm):
-    
-    class Meta:
-        model = Team
-        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 'is_visible')
-    
-    def save(self, user):
-        team = super(CreateTeamForm, self).save()
-        TeamMember(team=team, user=user, is_manager=True).save()
-        return team
-    
-class EditTeamForm(forms.ModelForm):
+class CreateTeamForm(BaseVideoBoundForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
     
     class Meta:
         model = Team
-        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 'is_visible')
+        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 
+                  'is_visible', 'video_url')
+    
+    def __init__(self, *args, **kwargs):
+        super(CreateTeamForm, self).__init__(*args, **kwargs)
+        self.fields['video_url'].label = _(u'Team intro video URL')
+        self.fields['video_url'].required = False
+        self.fields['video_url'].help_text = _(u'''You can put an optional video 
+on your team homepage that explains what your team is about, to attract volunteers. 
+Enter a link to any compatible video, or to any video page on our site.''')
+        self.fields['is_visible'].widget.attrs['class'] = 'checkbox'
+    
+    def save(self, user):
+        team = super(CreateTeamForm, self).save(False)
+        if self.video:
+            team.video = self.video
+        team.save()
+        TeamMember(team=team, user=user, is_manager=True).save()
+        return team
+    
+class EditTeamForm(CreateTeamForm):
         
     def clean(self):
         if 'logo' in self.cleaned_data and not self.cleaned_data.get('logo'):
             del self.cleaned_data['logo']
-        return self.cleaned_data           
+        return self.cleaned_data
+    
+    def save(self):
+        team = super(CreateTeamForm, self).save(False)
+        if self.video:
+            team.video = self.video
+        team.save()
+        return team    

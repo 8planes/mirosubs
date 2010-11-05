@@ -125,6 +125,12 @@ form p input, form p textarea, #feedback_form p input{
   background: -moz-linear-gradient(top,  #eee,  #fff);
   }
 
+form p input.checkbox {
+    width: auto;
+    display: inline;
+    margin-left: 10px;
+}
+
 form p textarea{
 
 }

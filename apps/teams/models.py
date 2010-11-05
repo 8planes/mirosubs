@@ -77,6 +77,7 @@ class Team(models.Model):
     invited = models.ManyToManyField(User, through='Invite', verbose_name=_('invited'))
     created = models.DateTimeField(auto_now_add=True)
     highlight = models.BooleanField(default=False)
+    video = models.ForeignKey(Video, null=True, blank=True, related_name='intro_for_teams', verbose_name=_(u'Intro Video'))
     
     objects = TeamManager()
     

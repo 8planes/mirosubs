@@ -9,14 +9,15 @@
 {% block main_content %}
     <h2 class="main-title">{% trans 'Create team' %}</h2>
     
-    <form method='post' action="." enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-            {{ form }}
-            <tr>
-                <td></td>
-                <td><input type="submit" value="{% trans 'Create' %}"/></td>
-            </tr>
-        </table>
-    </form>
+    <div class="wrap grid_9 omega">  
+        <div class="padding">      
+            <form method='post' action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <p>
+                    <button class="green_button small"><span>{% trans 'Create' %}</span></button>
+                </p>
+            </form>
+        </div>
+    </div>
 {% endblock %}
