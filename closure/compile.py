@@ -101,7 +101,7 @@ compile('mirosubs-statwidget.js', statwidget_js_files,
         include_flash_deps=False)
 
 api_js_files = list(settings.JS_CORE)
-assumes that some other process has generated config.js
+# assumes that some other process has generated config.js
 api_js_files.append('config.js')
 api_js_files.append('widget/api/servermodel.js')
 api_js_files.append('widget/api/api.js')
