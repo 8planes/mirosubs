@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-07 14:59+0300\n"
-"PO-Revision-Date: 2010-11-05 19:06+0800\n"
+"PO-Revision-Date: 2010-11-05 19:22+0800\n"
 "Last-Translator: aboodilankaboot\n"
 "Language-Team: Norwegian Bokmål\n"
 "MIME-Version: 1.0\n"
@@ -18,8 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\\n\n"
 
 #: .\settings.py:29
+#, fuzzy
 msgid "Argentinian Spanish"
-msgstr "Argentinske Spansk"
+msgstr "Argentinian Spanish"
 
 #: .\apps\auth\admin.py:10
 msgid "Username"
