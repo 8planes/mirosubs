@@ -160,9 +160,10 @@ class TeamVideo(models.Model):
     team = models.ForeignKey(Team)
     video = models.ForeignKey(Video)
     title = models.CharField(max_length=2048, blank=True)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True,
+        help_text=_(u'Use this space to explain why you or your team need to caption or subtitle this video. Adding a note makes volunteers more likely to help out!'))
     thumbnail = S3EnabledImageField(upload_to='teams/video_thumbnails/', null=True, blank=True, 
-                                 help_text=_(u'We automatically grab thumbnails for certain sites, e.g. Youtube'))
+        help_text=_(u'We automatically grab thumbnails for certain sites, e.g. Youtube'))
     
     class Meta:
         unique_together = (('team', 'video'),)

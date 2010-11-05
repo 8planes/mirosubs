@@ -8,7 +8,11 @@
       </span>
       <ul>
         {% for team in teams %}
-            <li><a href="{% url teams:add_video team.pk %}?url={{ request.build_absolute_uri|urlencode }}">{{ team }}</a></li>
+            <li>
+                <a href="{% url teams:add_video team.pk %}?url={{ request.build_absolute_uri|urlencode }}{% if video.title %}&title={{ video.title|urlencode }}{% endif %}">
+                    {{ team }}
+                </a>
+            </li>
         {% endfor %}
       </ul>
     </div>

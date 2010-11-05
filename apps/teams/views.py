@@ -214,7 +214,8 @@ def add_video(request, pk):
         }
     
     initial = {
-        'video_url': request.GET.get('url', '')
+        'video_url': request.GET.get('url', ''),
+        'title': request.GET.get('title', '')
     }
     
     form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
