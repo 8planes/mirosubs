@@ -18,8 +18,14 @@
 
 goog.provide('mirosubs.widgetizer.Youtube');
 
+/**
+ * @constructor
+ *
+ */
 mirosubs.widgetizer.Youtube = function() {
     mirosubs.widgetizer.Youtube.superClass_.call(this);
+    this.ON_YT_SITE = 
+        window.location.hostname.match(/youtube\.com$/) != null;
 };
 goog.inherits(mirosubs.widgetizer.Youtube,
               mirosubs.widgetizer.VideoPlayerMaker);
@@ -30,16 +36,76 @@ mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
     var elements = this.unwidgetizedElements_();
-    
+    var videoPlayers = [];
+    for (var i = 0; i < elements.length; i++) {
+        var decoratable = this.isDecoratable_(elements[i]);
+        var videoSource = this.makeVideoSource_(
+            elements[i], !decoratable);
+        var videoPlayer = videoSource.createPlayer();
+        videoPlayers.push(videoPlayer);
+        if (decoratable)
+            videoPlayer.decorate(elements[i]);
+        else
+            this.replaceVideoElement_(videoPlayer, elements[i]);
+    }
+};
+
+mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
+    if (this.ON_YT_SITE)
+        return true;
+    // assuming that element is an embed.    
+    return element['allowscriptaccess'] == 'always' &&
+        element.src.match(/enablejsapi=1/i) != null;
+};
+
+mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
+    function(element, includeConfig) 
+{
+    // assuming that element is an embed.
+    var url = element['src'];
+    var config = null;
+    if (includeConfig) {
+        config = {};
+        var uri = new goog.Uri(url, true);
+        var params = uri.getQueryData().getKeys();
+        for (var i = 0; i < params.length; i++)
+            config[params[i]] = uri.getParameterValue(params[i]);
+        config['width'] = element['width'];
+        config['height'] = element['height'];
+    }
+    return mirosubs.video.YoutubeVideoSource.forURL(
+        url, config);
+};
+
+mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ = 
+    function(player, element) 
+{
+    // this might get extracted to superclass as soon as we include 
+    // players other than youtube.
+    var nextNode = goog.dom.getNextNode(element);
+    var parent = element.parentNode;
+    goog.dom.removeNode(element);
+    if (nextNode)
+        player.renderBefore(nextNode);
+    else
+        player.render(parent);
+};
+
+mirosubs.widgetizer.Youtube.prototype.isYoutubeEmbed_ = function(element) {
+    // assuming embed element
+    var url = element['src'];
+    return mirosubs.video.YoutubeVideoSource.isYoutube(url);
 };
 
 mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
-    if (window.location.hostname.match(/youtube\.com$/) != null)
-        return this.filterUnwidgetized(
-            [goog.dom.getElement('movie_player')]);
+    if (this.ON_YT_SITE) {
+        var moviePlayer = goog.dom.getElement('movie_player');
+        var elements = moviePlayer ? [moviePlayer] : [];
+        return this.filterUnwidgetized(elements);
+    }
     else {
         var unwidgetizedElements = [];
-        // no idea if this is best way. might want to look at object also, or both.
+        // most likely this will not catch all youtube players on the page
         var embeds = document.getElementsByTagName('embed');
         for (var i = 0; i < embeds.length; i++) {
             if (this.isYoutubeEmbed_(embeds[i]) && this.isUnwidgetized(embeds[i]))

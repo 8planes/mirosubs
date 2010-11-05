@@ -47,11 +47,11 @@ mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
  */
 mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
     var blipFileGetRegex = /^\s*https?:\/\/([^\.]+\.)*blip\.tv\/file\/get\//;
-    if (mirosubs.video.VideoSource.isYoutube(videoURL)) {
-        var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
-        if (videoIDExtract)
-            return new mirosubs.video.YoutubeVideoSource(
-                videoIDExtract[1]);
+    if (mirosubs.video.YoutubeVideoSource.isYoutube(videoURL)) {
+        var videoSource =
+            mirosubs.video.YoutubeVideoSource.forURL(videoURL, opt_videoConfig);
+        if (videoSource != null)
+            return videoSource;
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?vimeo/.test(videoURL)) {
         var videoIDExtract = /vimeo.com\/([0-9]+)/i.exec(videoURL);
@@ -72,7 +72,7 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     }
     else {
         var videoSource = 
-            mirosubs.video.Html5VideoSource.forURL(videoURL);
+            mirosubs.video.Html5VideoSource.forURL(videoURL, opt_videoConfig);
         if (videoSource != null)
             return videoSource;
     }
@@ -80,6 +80,9 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     throw new Error("Unrecognized video url " + videoURL);
 };
 
+/**
+ * @deprecated Use mirosubs.video.YoutubeVideoSource.isYoutube
+ */
 mirosubs.video.VideoSource.isYoutube = function(videoURL) {
-    return /^\s*https?:\/\/([^\.]+\.)?youtube/i.test(videoURL);
+    return mirosubs.video.YoutubeVideoSource.isYoutube(videoURL);
 };

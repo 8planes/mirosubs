@@ -32,6 +32,10 @@ mirosubs.Widgetizer = function() {
         debugWindow.init();
         mirosubs.DEBUG = true;
     }
+    this.makers_ = [
+        new mirosubs.widgetizer.Youtube(),
+        new mirosubs.widgetizer.HTML5()
+    ];
 };
 goog.addSingletonGetter(mirosubs.Widgetizer);
 
@@ -60,7 +64,10 @@ mirosubs.Widgetizer.prototype.widgetize = function() {
 };
 
 mirosubs.Widgetizer.prototype.videosExist = function() {
-    return this.findAndWidgetizeElements_(true);
+    for (var i = 0; i < this.makers_.length; i++)
+        if (this.makers_.videosExist())
+            return true;
+    return false;
 }
 
 mirosubs.Widgetizer.prototype.onLoaded_ = function() {
@@ -69,18 +76,13 @@ mirosubs.Widgetizer.prototype.onLoaded_ = function() {
     this.findAndWidgetizeElements_();
 };
 
-mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = 
-    function(opt_findOnly) 
-{
-    var unwidgetizedVideos = this.filterUnwidgetized_(
-        document.getElementsByTagName('video'));
-    if (!opt_findOnly)
-        this.widgetizeVideoElements_(unwidgetizedVideos);
-    var objectsFound = this.widgetizeObjectElements_(
-        this.filterUnwidgetized_(
-            document.getElementsByTagName('object')), 
-        opt_findOnly);
-    return unwidgetizedVideos.length > 0 || objectsFound;
+mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
+    var videoPlayers = [];
+    for (var i = 0; i < this.makers_.length; i++)
+        goog.array.extend(videoPlayers, 
+                          this.makers_[i].makeVideoPlayers());
+    for (var i = 0; i < videoPlayers.length; i++)
+        mirosubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
 };
 
 mirosubs.Widgetizer.prototype.addHeadCss = function() {
@@ -95,59 +97,6 @@ mirosubs.Widgetizer.prototype.addHeadCss = function() {
         css.media = 'screen';
         head.appendChild(css);
     }
-};
-
-mirosubs.Widgetizer.prototype.filterUnwidgetized_ = function(elementArray) {
-    var that = this;
-    return goog.array.filter(
-        elementArray,
-        function(elem) {
-            return !that.alreadyWidgetized_(elem);
-        });
-};
-
-mirosubs.Widgetizer.prototype.alreadyWidgetized_ = function(elem) {
-    // we consider it to be widgetized if it's contained in a widget div or
-    // it's contained in the subtitling dialog.
-    return goog.dom.getAncestorByTagNameAndClass(
-        elem, 'div', 'mirosubs-widget') != null ||
-        goog.dom.getAncestorByTagNameAndClass(
-            elem, 'div', 'mirosubs-modal-widget') != null;
-};
-
-mirosubs.Widgetizer.prototype.widgetizeVideoElements_ = function(videoElems) {
-    for (var i = 0; i < videoElems.length; i++)
-        this.widgetizeElem_(videoElems[i], this.findHtml5URL_(videoElems[i]));
-};
-
-mirosubs.Widgetizer.prototype.widgetizeObjectElements_ = 
-    function(objectElems, findOnly) 
-{
-    var found = false;
-    for (var i = 0; i < objectElems.length; i++) {
-        var youtubeURL = this.findYoutubeURL_(objectElems[i]);
-        if (youtubeURL != null) {
-            found = true;
-            if (!findOnly)
-                this.widgetizeElem_(objectElems[i], youtubeURL);
-        }
-    }
-    return found;
-};
-
-mirosubs.Widgetizer.prototype.findHtml5URL_ = function(videoElem) {
-    return videoElem.getElementsByTagName('source')[0].src;
-};
-
-mirosubs.Widgetizer.prototype.findYoutubeURL_ = function(objectElem) {
-    var paramElems = objectElem.getElementsByTagName('param');
-    for (var i = 0; i < paramElems.length; i++) {
-        if (paramElems[i]["name"] == "movie" &&
-            paramElems[i]["value"] != null &&
-            mirosubs.video.VideoSource.isYoutube(paramElems[i]["value"]))
-            return paramElems[i]["value"];
-    }
-    return null;
 };
 
 mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {

@@ -18,6 +18,10 @@
 
 goog.provide('mirosubs.widgetizer.HTML5');
 
+/**
+ * @constructor
+ *
+ */
 mirosubs.widgetizer.HTML5 = function() {
     mirosubs.widgetizer.HTML5.superClass_.call(this);
 };

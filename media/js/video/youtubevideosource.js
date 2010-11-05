@@ -31,6 +31,21 @@ mirosubs.video.YoutubeVideoSource = function(youtubeVideoID, opt_videoConfig) {
     this.videoConfig_ = opt_videoConfig;
 };
 
+mirosubs.video.YoutubeVideoSource.forURL = 
+    function(videoURL, opt_videoConfig) 
+{
+    var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
+    if (videoIDExtract)
+        return new mirosubs.video.YoutubeVideoSource(
+            videoIDExtract[1], opt_videoConfig);
+    else
+        return null;
+};
+
+mirosubs.video.YoutubeVideoSource.isYoutube = function(videoURL) {
+    return /^\s*https?:\/\/([^\.]+\.)?youtube/i.test(videoURL);
+};
+
 mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
