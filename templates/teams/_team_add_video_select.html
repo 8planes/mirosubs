@@ -1,0 +1,15 @@
+{% load i18n %}
+
+{% if user.is_authenticated and teams %}
+    <div class="sort_button floatright">
+      <div class='arrow'></div>
+      <span class="sort_label">
+        <strong>{% trans 'Add video to team' %}</strong>
+      </span>
+      <ul>
+        {% for team in teams %}
+            <li><a href="{% url teams:add_video team.pk %}?url={{ request.build_absolute_uri|urlencode }}">{{ team }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+{% endif %}

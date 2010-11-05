@@ -213,7 +213,11 @@ def add_video(request, pk):
             'team': team
         }
     
-    form = AddTeamVideoForm(team, request.POST or None, request.FILES or None)
+    initial = {
+        'video_url': request.GET.get('url', '')
+    }
+    
+    form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
     if form.is_valid():
         obj = form.save()
         messages.success(request, _(u'Video added success.'))

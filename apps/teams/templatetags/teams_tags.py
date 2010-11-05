@@ -44,6 +44,12 @@ def can_invite_to_team(team, user):
     return team.can_invite(user)
 
 @register.filter
+def can_add_video_to_team(team, user):
+    if not user.is_authenticated():
+        return False
+    return team.can_add_video(user)    
+
+@register.filter
 def is_team_manager(team, user):
     if not user.is_authenticated():
         return False
@@ -73,3 +79,10 @@ def team_activity(context, team):
     context['videos_actions'] = Action.objects.filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
     
     return context
+
+@register.inclusion_tag('teams/_team_add_video_select.html', takes_context=True)    
+def team_add_video_select(context):
+    user = context['user']
+    qs = Team.objects.filter(users=user)
+    context['teams'] = [item for item in qs if item.can_add_video(user)]
+    return context 

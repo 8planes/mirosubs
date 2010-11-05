@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video_profile"{% endblock %}
 
-{% load escapejs widget comments recent_activity paginator i18n subtitles_tags %}
+{% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags %}
 
 {% block css %}
     {{ block.super }}
@@ -127,7 +127,9 @@
 
   </div>
 
-  <div class="wrap grid_9 omega">  
+  <div class="wrap grid_9 omega">
+      {% team_add_video_select %}
+        
       <h4 class="inline">{% trans 'Video Info' %}</h4>      
 
       <ul class="inline_tabs">
