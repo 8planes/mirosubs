@@ -166,13 +166,19 @@ JS_OFFSITE.append('widget/crossdomainembed.js')
 JS_ONSITE = list(JS_CORE)
 JS_ONSITE.append('widget/samedomainembed.js')
 
-JS_WIDGETIZER = [
+JS_WIDGETIZER_CORE = list(JS_CORE)
+JS_WIDGETIZER_CORE.extend([
     "widget/widgetdecorator.js",
     "widgetizer/videoplayermaker.js",
     "widgetizer/widgetizer.js",
     "widgetizer/youtube.js",
-    "widgetizer/html5.js",
-    "widgetizer/dowidgetize.js"]
+    "widgetizer/html5.js"])
+
+JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
+JS_WIDGETIZER.append('widgetizer/dowidgetize.js')
+
+JS_EXTENSION = list(JS_WIDGETIZER_CORE)
+JS_EXTENSION.append('widgetizer/extension.js')
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

@@ -39,12 +39,14 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
     goog.exportSymbol("mirosubs.widget.SameDomainEmbed.embed", 
                       mirosubs.widget.SameDomainEmbed.embed);
 
-    goog.exportSymbol("mirosubs.video", mirosubs.video);
-    var v = mirosubs.video;
-    v["supportsVideo"] = v.supportsVideo;
-    v["supportsH264"] = v.supportsH264;
-    v["supportsOgg"] = v.supportsOgg;
-    v["supportsWebM"] = v.supportsWebM;
+    goog.exportSymbol(
+        "mirosubs.video.supportsVideo", mirosubs.video.supportsVideo);
+    goog.exportSymbol(
+        "mirosubs.video.supportsH264", mirosubs.video.supportsH264);
+    goog.exportSymbol(
+        "mirosubs.video.supportsOgg", mirosubs.video.supportsOgg);
+    goog.exportSymbol(
+        "mirosubs.video.supportsWebM", mirosubs.video.supportsWebM);
 
     goog.exportProperty(
         mirosubs.widget.Widget.prototype,

@@ -19,7 +19,7 @@
 goog.provide('mirosubs.video.DailymotionVideoPlayer');
 
 /**
- *
+ * @constructor
  * @param {mirosubs.video.DailymotionVideoSource} videoSource
  * @param {boolean=} opt_chromeless
  */

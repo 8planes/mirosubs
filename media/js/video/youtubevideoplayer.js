@@ -19,7 +19,7 @@
 goog.provide('mirosubs.video.YoutubeVideoPlayer');
 
 /**
- *
+ * @constructor
  * @param {mirosubs.video.YoutubeVideoSource} videoSource
  * @param {boolean=} opt_forDialog
  */
@@ -184,6 +184,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     }
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
+    mirosubs.video.YoutubeVideoPlayer.logger_.info('playerStateChange');
     var s = mirosubs.video.YoutubeVideoPlayer.State_;
     var et = mirosubs.video.AbstractVideoPlayer.EventType;
     if (newState == s.PLAYING) {
@@ -217,10 +218,13 @@ mirosubs.video.YoutubeVideoPlayer.prototype.getBytesTotal_ = function() {
     return this.player_ ? this.player_['getVideoBytesTotal']() : 0;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getDuration = function() {
-    if (!this.duration_)
+    if (!this.duration_) {
         this.duration_ = 
             (this.player_ && this.player_['getDuration']) ? 
                 this.player_['getDuration']() : 0;
+        if (this.duration_ <= 0)
+            this.duration_ = 0;
+    }
     return this.duration_;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getVolume = function() {

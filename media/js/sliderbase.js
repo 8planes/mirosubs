@@ -29,6 +29,9 @@
 
 goog.provide('mirosubs.SliderBase');
 
+/**
+ * @constructor
+ */
 mirosubs.SliderBase = function(opt_domHelper) {
     goog.ui.Component.call(this, opt_domHelper);
 };
@@ -428,6 +431,9 @@ mirosubs.SliderBase.prototype.updateAriaStates = function() {
     }
 };
 
+/**
+ * @constructor
+ */
 mirosubs.SliderBase.TrackClickEvent = function(value) {
     this.type = mirosubs.SliderBase.EventType.TRACK_CLICKED;
     this.value = value;

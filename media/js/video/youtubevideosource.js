@@ -76,5 +76,5 @@ mirosubs.video.YoutubeVideoSource.prototype.getVideoConfig = function() {
 };
 
 mirosubs.video.YoutubeVideoSource.prototype.getVideoURL = function() {
-    return "www.youtube.com/watch?v=" + this.youtubeVideoID_;
+    return "http://www.youtube.com/watch?v=" + this.youtubeVideoID_;
 };

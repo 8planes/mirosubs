@@ -338,6 +338,9 @@ mirosubs.isFromDifferentDomain = function() {
         mirosubs.isReturnURLInDifferentDomain();
 };
 
+/**
+ * @constructor
+ */
 mirosubs.LoginEvent = function(username) {
     this.type = mirosubs.EventType.LOGIN;
     this.username = username;

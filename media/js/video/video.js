@@ -29,15 +29,14 @@ mirosubs.video.supportsVideo = function() {
 };
 
 mirosubs.video.supportsVideoType = function(html5VideoType) {
-    var v = mirosubs.video;
     var vt = v.Html5VideoType;
     switch (html5VideoType) {
     case vt.H264:
-        return v.supportsH264();
+        return mirosubs.video.supportsH264();
     case vt.OGG:
-        return v.supportsOgg();
+        return mirosubs.video.supportsOgg();
     case vt.WEBM:
-        return v.supportsWebM();
+        return mirosubs.video.supportsWebM();
     default:
         throw "unknown type";
     }

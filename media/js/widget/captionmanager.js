@@ -35,6 +35,7 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     };
     this.videoPlayer_ = videoPlayer;
     this.eventHandler_ = new goog.events.EventHandler(this);
+
     this.eventHandler_.listen(
 	videoPlayer,
 	mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,

@@ -18,6 +18,9 @@
 
 goog.provide('mirosubs.video.FlvVideoPlayer');
 
+/**
+ * @constructor
+ */
 mirosubs.video.FlvVideoPlayer = function(videoSource, opt_chromeless) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
 

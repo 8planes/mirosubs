@@ -43,13 +43,14 @@ def add_onsite_js_files(context):
 def add_widgetize_js_files(context):
     js_files = []
     if settings.JS_USE_COMPILED:
-        js_files.append([full_path('mirosubs-widgetizer.js')])
+        js_files.append(full_path('mirosubs-widgetizer.js'))
     else:
         js_files.append('http://{0}/widget/config.js'.format(
                 Site.objects.get_current().domain))
-        js_files.extend([full_path(js_file) for js_file in settings.JS_CORE])
-        js_files.extend([full_path(js_file) for js_file in settings.JS_WIDGETIZER])
-        
+        js_files.extend(
+            [full_path(js_file) for js_file 
+             in settings.JS_WIDGETIZER])
+
     context['js_use_compiled'] = settings.JS_USE_COMPILED
     context['js_dependencies'] = js_files
     context['site'] = Site.objects.get_current()

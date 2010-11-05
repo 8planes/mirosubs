@@ -44,6 +44,9 @@ goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
 mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
+mirosubs.video.AbstractVideoPlayer.logger_ = 
+    goog.debug.Logger.getLogger('AbstractVideoPlayer');
+
 mirosubs.video.AbstractVideoPlayer.players = [];
 
 /**
@@ -239,6 +242,8 @@ mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playhead
  */
 mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
     // TODO: shorten this method and use the google closure library!
+    mirosubs.video.AbstractVideoPlayer.logger_.info(
+        'showing sub: ' + text);
     if (text == null || text == "") {
         if (this.captionElem_ != null) {
             this.getElement().removeChild(this.captionElem_);

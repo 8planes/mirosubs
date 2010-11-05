@@ -19,7 +19,7 @@
 goog.provide('mirosubs.video.Html5VideoPlayer');
 
 /**
- *
+ * @constructor
  * @param {mirosubs.video.Html5VideoSource} videoSource
  * @param {boolean} forDialog
  */

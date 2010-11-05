@@ -33,7 +33,7 @@ mirosubs.api.ServerModel = function(config) {
      */
     this.permalink_ = config['permalink'];
     /**
-     * @type {function} Login function
+     * @type {function()} Login function
      */
     this.login_ = config['login'];
     /**

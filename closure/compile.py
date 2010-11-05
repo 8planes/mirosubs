@@ -79,18 +79,14 @@ def compile(output_file_name, js_file_list,
 compile('mirosubs-offsite-compiled.js', settings.JS_OFFSITE)
 compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
 
-widgetizer_js_files = list(settings.JS_OFFSITE)
 # assumes that some other process has generated config.js
-widgetizer_js_files.append('config.js')
-widgetizer_js_files.append('widgetizer/widgetizer.js')
-widgetizer_js_files.append('widgetizer/dowidgetize.js')
+widgetizer_js_files = ['config.js']
+widgetizer_js_files.extend(settings.JS_WIDGETIZER)
 compile('mirosubs-widgetizer.js', widgetizer_js_files)
 
-extension_js_files = list(settings.JS_OFFSITE)
 # assumes that some other process has generated config.js
-extension_js_files.append('config.js')
-extension_js_files.append('widgetizer/widgetizer.js')
-extension_js_files.append('widgetizer/extension.js')
+extension_js_files = ['config.js']
+extension_js_files.extend(settings.JS_EXTENSION)
 compile('mirosubs-extension.js', extension_js_files)
 
 statwidget_js_files = [
