@@ -161,7 +161,8 @@ class TeamVideo(models.Model):
     video = models.ForeignKey(Video)
     title = models.CharField(max_length=2048, blank=True)
     description = models.TextField(blank=True)
-    thumbnail = models.FileField(upload_to='teams/video_thumbnails/', null=True, blank=True)
+    thumbnail = models.FileField(upload_to='teams/video_thumbnails/', null=True, blank=True, 
+                                 help_text=_(u'We automatically grab thumbnails for certain sites, e.g. Youtube'))
     
     class Meta:
         unique_together = (('team', 'video'),)

@@ -75,7 +75,7 @@
     </ul>
     <div class="boxx">
         <div class="padding">
-            <h3>{% trans 'Languages of video:' %} {{ team_video }}</h3>
+            <h3>{% trans 'Languages needed' %}</h3>
             {% widget widget_params %}
             <form method='post' action="." enctype="multipart/form-data">
             <div class="grid_9">
@@ -117,7 +117,7 @@
                 </div>                
             </div>
             <p>
-                <input type="submit" value="{% trans 'Save' %}"/>
+                <button class="green_button small"><span>{% trans 'Save' %}</span></button>
             </p>
             </form>
             <div class="clearfix"></div>        

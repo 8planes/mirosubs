@@ -23,7 +23,7 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
-from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset
+from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset, AddTeamVideoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguage
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -194,6 +194,31 @@ def edit(request, pk):
             return redirect(team.get_edit_url())
     else:
         form = EditTeamForm(instance=team)
+    return {
+        'form': form,
+        'team': team
+    }
+
+@render_to('teams/add_video.html')
+@login_required
+def add_video(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+
+    if not team.is_member(request.user):
+        raise Http404
+    
+    if not team.can_add_video(request.user):
+        messages.error(request, _(u'You can\'t add video.'))
+        return {
+            'team': team
+        }
+    
+    form = AddTeamVideoForm(team, request.POST or None, request.FILES or None)
+    if form.is_valid():
+        obj = form.save()
+        messages.success(request, _(u'Video added success.'))
+        return redirect('teams:team_video', obj.pk)
+        
     return {
         'form': form,
         'team': team

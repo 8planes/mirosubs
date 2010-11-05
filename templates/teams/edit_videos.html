@@ -39,6 +39,9 @@
             <a href="{% url teams:applications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
         </li>
     </ul>
+    <div>
+        <a href="{% url teams:add_video team.pk %}" class="green_button small">{% trans 'Add video' %}</a>
+    </div>
     {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
     <table>
         <tbody>

@@ -28,9 +28,75 @@ from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
 from django.forms.models import inlineformset_factory
+from videos.types import video_type_registrar, VideoTypeError
+from django.core.urlresolvers import resolve
+from django.http import Http404
+from django.contrib.sites.models import Site
+from utils.forms import UniSubURLField
+from videos.models import Video
+from django.utils.safestring import mark_safe
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
 
+class AddTeamVideoForm(forms.ModelForm):
+    video_url = UniSubURLField(verify_exists=True, help_text=_("Enter the URL of any compatible video or any video on our site.  You can also browse the site and use the 'Add Video to Team' menu on the left sidebar."))
+    
+    class Meta:
+        model = TeamVideo
+        fields = ('video_url', 'title', 'description', 'thumbnail')
+        
+    def __init__(self, team, *args, **kwargs):
+        self.team = team
+        self.host = Site.objects.get_current().domain
+        super(AddTeamVideoForm, self).__init__(*args, **kwargs)
+        
+    def clean_video_url(self):
+        video_url = self.cleaned_data['video_url']
+        
+        url_start = 'http://'+self.host
+        if video_url.startswith(url_start):
+            #UniSub URL
+            try:
+                func, args, kwargs = resolve(video_url.replace(url_start, ''))
+                
+                if not 'video_id' in kwargs:
+                    raise forms.ValidationError(_('This URL does not contain video id.'))
+                
+                try:
+                    self.video = Video.objects.get(video_id=kwargs['video_id'])
+                except Video.DoesNotExist:
+                    raise forms.ValidationError(_('Videos does not exist.'))
+                
+            except Http404:
+                raise forms.ValidationError(_('Incorrect URL.'))
+        else:
+            #URL from other site
+            try:
+                self.video, created = Video.get_or_create_for_url(video_url)
+            except VideoTypeError, e:
+                raise forms.ValidationError(e)
+            
+            if not self.video:
+                raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
+If you'd like to us to add support for a new site or format, or if you
+think there's been some mistake, <a
+href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
+             
+        try:
+            tv = TeamVideo.objects.get(team=self.team, video=self.video)
+            raise forms.ValidationError(mark_safe(u'Team has this <a href="%s">video</a>' % tv.get_absolute_url()))
+        except TeamVideo.DoesNotExist:
+            pass 
+        
+        return video_url
+
+    def save(self, commit=True):
+        obj = super(AddTeamVideoForm, self).save(False)
+        obj.video = self.video
+        obj.team = self.team
+        commit and obj.save()
+        return obj
+    
 class CreateTeamForm(forms.ModelForm):
     
     class Meta:

@@ -455,6 +455,10 @@ input#email_friend_id_subject, input#email_friend_id_math_captcha_field {
   
   }
 
+.errorlist li a {
+    color: #c0c0c0;
+    text-shadow: none;
+}
 
 .open-id{
   background: url(../../images/social_login.png) 0 0px no-repeat;
