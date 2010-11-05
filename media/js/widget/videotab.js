@@ -20,8 +20,10 @@ goog.provide('mirosubs.widget.VideoTab');
 
 /**
  * @constructor
+ * @param {boolean=} opt_forAnchoring If true, will add a style that gives 
+ *     the tab absolute position.
  */
-mirosubs.widget.VideoTab = function() {
+mirosubs.widget.VideoTab = function(opt_forAnchoring) {
     goog.ui.Component.call(this);
     this.anchorElem_ = null;
     this.imageElem_ = null;
@@ -29,6 +31,7 @@ mirosubs.widget.VideoTab = function() {
     this.nudgeElem_ = null;
     this.nudgeSpanElem_ = null;
     this.nudgeClickCallback_ = null;
+    this.forAnchoring_ = !!opt_forAnchoring;
     this.spinnerGifURL_ = mirosubs.imageAssetURL('spinner.gif');
     this.logoURL_ = mirosubs.imageAssetURL('small_logo.png');
     this.imageLoader_ = new goog.net.ImageLoader();
@@ -40,7 +43,8 @@ goog.inherits(mirosubs.widget.VideoTab, goog.ui.Component);
 
 mirosubs.widget.VideoTab.prototype.createDom = function() {
     mirosubs.widget.VideoTab.superClass_.createDom.call(this);
-    this.getElement().className = 'mirosubs-videoTab';
+    this.getElement().className = 'mirosubs-videoTab mirosubs-videoTab-' + 
+        (this.forAnchoring_ ? 'anchoring' : 'static');
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.imageElem_ = $d('img', {'alt': 'small logo'});
     this.spanElem_ = $d('span', 'mirosubs-tabTextchoose');

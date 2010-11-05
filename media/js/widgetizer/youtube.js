@@ -34,6 +34,9 @@ mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
     return this.unwidgetizedElements_().length > 0;
 };
 
+mirosubs.widgetizer.Youtube.logger_ =
+    goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
+
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
     var elements = this.unwidgetizedElements_();
     var videoPlayers = [];
@@ -54,9 +57,9 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
 mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
     if (this.ON_YT_SITE)
         return true;
-    // assuming that element is an embed.    
-    return element['allowscriptaccess'] == 'always' &&
-        element.src.match(/enablejsapi=1/i) != null;
+    // assuming that element is an embed.
+    return element.getAttribute('allowscriptaccess') == 'always' &&
+        element.src.match(/enablejsapi=1/i);
 };
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 

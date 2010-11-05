@@ -265,11 +265,56 @@ mirosubs.attachToLowerLeft = function(topElem, bottomElem) {
     // flicker.
     bottomElem.style.visibility = 'hidden';
     goog.style.showElement(bottomElem, true);
-    var c = goog.positioning.Corner;
-    goog.positioning.positionAtAnchor(
-        topElem, c.BOTTOM_LEFT,
-        bottomElem, c.TOP_LEFT);
+    mirosubs.repositionToLowerLeft(topElem, bottomElem);
     bottomElem.style.visibility = 'visible';
+};
+
+mirosubs.repositionToLowerLeft = function(anchorElement, movableElement) {
+    // a lot of this code is from goog.positioning.positionAtAnchor.
+    
+    // Ignore offset for the BODY element unless its position is non-static.
+    // For cases where the offset parent is HTML rather than the BODY (such as in
+    // IE strict mode) there's no need to get the position of the BODY as it
+    // doesn't affect the page offset.
+    var moveableParentTopLeft;
+    var parent = movableElement.offsetParent;
+    if (parent) {
+        var isBody = parent.tagName == goog.dom.TagName.HTML ||
+            parent.tagName == goog.dom.TagName.BODY;
+        if (!isBody ||
+            goog.style.getComputedPosition(parent) != 'static') {
+            // Get the top-left corner of the parent, in page coordinates.
+            moveableParentTopLeft = goog.style.getPageOffset(parent);
+
+            if (!isBody) {
+                moveableParentTopLeft = goog.math.Coordinate.difference(
+                    moveableParentTopLeft,
+                    new goog.math.Coordinate(
+                        parent.scrollLeft, parent.scrollTop));
+            }
+        }
+    }
+
+    // here is where this significantly differs from goog.positioning.atAnchor.
+    var anchorRect = goog.style.getBounds(anchorElement);
+
+    // Translate anchorRect to be relative to movableElement's page.
+    goog.style.translateRectForAnotherFrame(
+        anchorRect,
+        goog.dom.getDomHelper(anchorElement),
+        goog.dom.getDomHelper(movableElement));
+
+    var absolutePos = new goog.math.Coordinate(
+        anchorRect.left, anchorRect.top + anchorRect.height);
+
+    // Translate absolutePos to be relative to the offsetParent.
+    if (moveableParentTopLeft) {
+        absolutePos =
+            goog.math.Coordinate.difference(absolutePos, moveableParentTopLeft);
+    }
+
+    return goog.positioning.positionAtCoordinate(
+        absolutePos, movableElement, goog.positioning.Corner.TOP_LEFT);
 };
 
 /**

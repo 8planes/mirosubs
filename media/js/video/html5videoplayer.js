@@ -60,6 +60,10 @@ mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
         this.videoSource_.getVideoType())) {
         this.videoElem_ = this.createVideoElement_($d);
         this.setElementInternal(this.videoElem_);
+        if (this.forDialog_)
+            goog.style.setSize(
+                this.videoElem_,
+                mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE);
     }
     else {
         var el = $d('div');

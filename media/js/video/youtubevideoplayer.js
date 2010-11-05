@@ -73,7 +73,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
     this.player_ = element;
     this.playerSize_ = goog.style.getSize(element);
     mirosubs.video.YoutubeVideoPlayer.logger_.info(
-        ["height, width of ", this.playerSize_height, ", ", 
+        ["height, width of ", this.playerSize_.height, ", ", 
          this.playerSize_.width].join(''));
     this.setDimensionsKnownInternal();
     // FIXME: petit duplication
@@ -118,8 +118,11 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
             this.playerSize_ = this.forDialog_ ?
                 mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
                 mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
-        goog.style.setSize(this.getElement(), this.playerSize_);
-        this.setDimensionsKnownInternal();
+        mirosubs.video.YoutubeVideoPlayer.logger_.info(
+            'setting size to ' + this.playerSize_.width + 
+                ", " + this.playerSize_.height);
+        goog.style.setSize(
+            this.getElement(), this.playerSize_);
         window["swfobject"]["embedSWF"](
             uri.toString(), videoDiv.id, 
             this.playerSize_.width + '', 
@@ -147,7 +150,8 @@ mirosubs.video.YoutubeVideoPlayer.prototype.addQueryString_ = function(uri) {
 mirosubs.video.YoutubeVideoPlayer.prototype.sizeFromConfig_ = function() {
     var config = this.videoSource_.getVideoConfig();
     if (config && config['width'] && config['height'])
-        return new goog.math.Size(config['width'], config['height']);
+        return new goog.math.Size(
+            parseInt(config['width']), parseInt(config['height']));
     else
         return null;
 };
@@ -169,6 +173,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     function(playerAPIID)
 {
     if (playerAPIID == this.playerAPIID_) {
+        this.setDimensionsKnownInternal();
         this.player_ = goog.dom.$(this.playerElemID_);
         if (this.forDialog_)
             this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());

@@ -25,7 +25,7 @@ goog.provide('mirosubs.widget.WidgetDecorator');
  */
 mirosubs.widget.WidgetDecorator = function(videoPlayer) {
     this.videoPlayer_ = videoPlayer;
-    this.videoTab_ = new mirosubs.widget.VideoTab();
+    this.videoTab_ = new mirosubs.widget.VideoTab(true);
     this.videoTab_.render();
     this.videoTab_.show(false);
     this.videoTab_.showLoading();
@@ -64,4 +64,21 @@ mirosubs.widget.WidgetDecorator.prototype.videoDimensionsKnown_ = function() {
     mirosubs.attachToLowerLeft(
         this.videoPlayer_.getElement(),
         this.videoTab_.getElement());
+    // we're doing this because there might be several videos on the page
+    // that are pushing things down on the page as they load
+    // right now the start line is commented out. Maybe uncomment in future.
+    this.dimensionsTimer_ = new goog.Timer(500);
+    this.handler_.listen(this.dimensionsTimer_,
+                         goog.Timer.TICK,
+                         this.reposition_);
+    this.repositionCount_ = 0;
+//    this.dimensionsTimer_.start();
+};
+mirosubs.widget.WidgetDecorator.prototype.reposition_ = function(event) {
+    mirosubs.repositionToLowerLeft(
+        this.videoPlayer_.getElement(),
+        this.videoTab_.getElement());
+    this.repositionCount_++;
+    if (this.repositionCount_ > 80) // 40 seconds
+        this.dimensionsTimer_.stop();
 };

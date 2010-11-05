@@ -23,6 +23,7 @@ goog.provide('mirosubs.Widgetizer');
  * This is a singleton, so don't call this method directly.
  */
 mirosubs.Widgetizer = function() {
+    mirosubs.siteConfig = mirosubs.Config.siteConfig;
     var myURI = new goog.Uri(window.location);
     var DEBUG_WIN_NAME = 'mirosubsdebuggingmain';
     if (myURI.getParameterValue('debug_mirosubs_js') == 'true' &&
