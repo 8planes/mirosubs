@@ -75,48 +75,48 @@
     </ul>
     <div class="boxx">
         <div class="padding">
-            <h3>{% trans 'Languages needed' %}</h3>
             {% widget widget_params %}
             <form method='post' action="." enctype="multipart/form-data">
-            <div class="grid_9">
-                {% csrf_token %}
-                <ul class="language_list">
-                    {{ formset.management_form }}
-                    {{ formset.non_field_errors }}
-                    {% for form in formset.forms %}
-                        <li class="user_language">
-                            {{ form.non_field_errors }}
-                            <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
-                            {{ form.id }}
-                            {{ form.language.errors }}
-                            {{ form.language }}
-                            {{ form.completed.errors }}
-                            {{ form.completed }}
-                            {{ form.completed.label }}
-                            <div style="display: none" class="delete-checkbox">
-                                {{ form.DELETE }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <button class="green_button small add-language">
-                    <span><span class="plus"></span>{% trans 'Add Language' %}</span>
-                </button>
-                
-                <div class="empty-form" style="display: none">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <h3>{% trans 'Languages needed' %}</h3>
+            <ul class="language_list">
+                {{ formset.management_form }}
+                {{ formset.non_field_errors }}
+                {% for form in formset.forms %}
                     <li class="user_language">
+                        {{ form.non_field_errors }}
                         <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
-                        {{ formset.empty_form.id }}
-                        {{ formset.empty_form.language }}
-                        {{ formset.empty_form.completed }}
-                        {{ formset.empty_form.completed.label }}
+                        {{ form.id }}
+                        {{ form.language.errors }}
+                        {{ form.language }}
+                        {{ form.completed.errors }}
+                        {{ form.completed }}
+                        {{ form.completed.label }}
                         <div style="display: none" class="delete-checkbox">
                             {{ form.DELETE }}
-                        </div>                
+                        </div>
                     </li>
-                </div>                
-            </div>
+                {% endfor %}
+            </ul>
+            <button class="green_button small add-language">
+                <span><span class="plus"></span>{% trans 'Add Language' %}</span>
+            </button>
+            
+            <div class="empty-form" style="display: none">
+                <li class="user_language">
+                    <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
+                    {{ formset.empty_form.id }}
+                    {{ formset.empty_form.language }}
+                    {{ formset.empty_form.completed }}
+                    {{ formset.empty_form.completed.label }}
+                    <div style="display: none" class="delete-checkbox">
+                        {{ form.DELETE }}
+                    </div>                
+                </li>
+            </div>                
             <p>
+                <br/>
                 <button class="green_button small"><span>{% trans 'Save' %}</span></button>
             </p>
             </form>

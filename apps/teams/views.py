@@ -23,7 +23,7 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
-from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset, AddTeamVideoForm
+from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset, AddTeamVideoForm, EditTeamVideoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguage
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -252,9 +252,17 @@ def team_video(request, pk):
     if not team_video.team.can_edit_video(request.user):
         raise Http404
     
+    form = EditTeamVideoForm(request.POST or None, request.FILES or None, instance=team_video)
+
+    if form.is_valid():
+        form.save()
+        form_validated = True
+    else:
+        form_validated = False
+    
     formset = TeamVideoLanguageFormset(request.POST or None, instance=team_video)
     
-    if formset.is_valid():
+    if formset.is_valid() and form_validated:
         formset.save()
         messages.success(request, _('Video has been updated.'))
         return redirect(team_video)
@@ -264,6 +272,7 @@ def team_video(request, pk):
     context.update({
         'team': team_video.team,
         'team_video': team_video,
+        'form': form,
         'formset': formset,
         'widget_params': base_widget_params(request, {'video_url': team_video.video.get_video_url(), 'base_state': {}})
     })

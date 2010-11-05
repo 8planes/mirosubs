@@ -52,9 +52,7 @@
             {% for team_video in teamvideo_list %}
             <li>
                 <a href="{{ team_video.video.get_absolute_url }}" class="thumbnail_medium">
-                    {% if team_video.video.thumbnail %}
-                    <img height="100" src="{{ team_video.video.get_thumbnail }}">
-                    {% endif %}
+                    <img height="100" src="{{ team_video.get_thumbnail }}">
                 </a>
                 <div class="info">
                     <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>

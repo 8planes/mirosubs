@@ -161,7 +161,7 @@ class TeamVideo(models.Model):
     video = models.ForeignKey(Video)
     title = models.CharField(max_length=2048, blank=True)
     description = models.TextField(blank=True)
-    thumbnail = models.FileField(upload_to='teams/video_thumbnails/', null=True, blank=True, 
+    thumbnail = S3EnabledImageField(upload_to='teams/video_thumbnails/', null=True, blank=True, 
                                  help_text=_(u'We automatically grab thumbnails for certain sites, e.g. Youtube'))
     
     class Meta:
@@ -173,6 +173,12 @@ class TeamVideo(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('teams:team_video', [self.pk])
+    
+    def get_thumbnail(self):
+        if self.thumbnail:
+            return self.thumbnail.thumb_url(100, 100)
+        
+        return self.video.get_thumbnail()
     
 class TeamVideoLanguageManager(models.Manager):
     use_for_related_fields = True

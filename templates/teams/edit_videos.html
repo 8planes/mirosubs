@@ -48,7 +48,7 @@
             {% for team_video in videos_list %}
             <tr class="video-container">
                 <td>
-                    <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video.video }}</strong></a>
+                    <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video }}</strong></a>
                     <div class="need_help">
                         <span>{% trans 'Need help' %}:</span> {{ team_video.languages.incomplete|join:', ' }}
                     </div>

@@ -38,6 +38,12 @@ from django.utils.safestring import mark_safe
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
 
+class EditTeamVideoForm(forms.ModelForm):
+    
+    class Meta:
+        model = TeamVideo
+        fields = ('title', 'description', 'thumbnail')
+
 class AddTeamVideoForm(forms.ModelForm):
     video_url = UniSubURLField(verify_exists=True, help_text=_("Enter the URL of any compatible video or any video on our site.  You can also browse the site and use the 'Add Video to Team' menu on the left sidebar."))
     
