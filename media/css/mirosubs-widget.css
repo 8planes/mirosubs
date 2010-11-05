@@ -2596,6 +2596,7 @@ overflow: hidden;
 
 .mirosubs-videoTab-anchoring {
    position: absolute;
+   z-index: 2147483630;
 }
 
 .mirosubs-videoTab a {
