@@ -364,22 +364,8 @@ mirosubs.widget.DropDown.prototype.hide = function() {
 };
 
 mirosubs.widget.DropDown.prototype.show = function() {
-    var anchor = this.videoTab_.getMenuAnchor();
-    // This is a little hacky so that we can position the menu with minimal
-    // flicker.
-
-    // On IE, setting visibility = 'hidden' on a visible menu
-    // will cause a blur, forcing the menu to close immediately.
-    this.getElement().style.visibility = 'hidden';
-
-    goog.style.showElement(this.getElement(), true);
-
-    var c = goog.positioning.Corner;
-    goog.positioning.positionAtAnchor(
-        anchor, c.BOTTOM_LEFT,
-        this.getElement(), c.TOP_LEFT);
-
-    this.getElement().style.visibility = 'visible';
+    mirosubs.attachToLowerLeft(this.videoTab_.getMenuAnchor(),
+                               this.getElement());
     this.shown_ = true;
 };
 

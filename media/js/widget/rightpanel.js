@@ -269,7 +269,7 @@ mirosubs.RightPanel.prototype.getDoneAnchor = function() {
 mirosubs.RightPanel.prototype.updateLoginState = function() {
     goog.dom.removeChildren(this.loginDiv_);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    if (this.serverModel_.currentUsername() == null) {
+    if (this.serverModel_ && this.serverModel_.currentUsername() == null) {
         var loginLink = $d('a', {'href':'#'}, "LOGIN");
         this.loginDiv_.appendChild(
             $d('div', 'mirosubs-needLogin',

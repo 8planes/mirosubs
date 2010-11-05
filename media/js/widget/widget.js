@@ -65,8 +65,7 @@ mirosubs.widget.Widget.prototype.decorateInternal = function(el) {
 };
 
 mirosubs.widget.Widget.prototype.setVideoSource_ = function(videoSource) {
-    this.videoSource_ = videoSource;
-    this.videoPlayer_ = this.videoSource_.createPlayer();
+    this.videoPlayer_ = videoSource.createPlayer();
     this.addChildAt(this.videoPlayer_, 0, true);
     this.setVideoDimensions_();
 };
@@ -102,63 +101,24 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
 };
 
 mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
-    this.makeGeneralSettings_(result);
-
-    var videoID = result['video_id'];
-
     if (result['flv_url'] && !this.videoSource_)
         this.setVideoSource_(new mirosubs.video.FlvVideoSource(
             result['flv_url']));
 
-    var dropDownContents = mirosubs.widget.DropDownContents.fromJSON(
-        result['drop_down_contents']);
-    var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
-        result['subtitles']);
+    this.controller_ = new mirosubs.widget.WidgetController(
+        this.videoURL_, this.videoPlayer_, this.videoTab_);
+    this.controller_.initializeState(result);
 
-    var popupMenu = new mirosubs.widget.DropDown(
-        videoID, dropDownContents, this.videoTab_);
-
-    this.videoTab_.showContent(popupMenu.hasSubtitles(),
-                               subtitleState);
-
-    popupMenu.render(this.getDomHelper().getDocument().body);
-    goog.style.showElement(popupMenu.getElement(), false);
-
-    popupMenu.setCurrentSubtitleState(subtitleState);
-
-    this.playController_ = new mirosubs.widget.PlayController(
-        videoID, this.videoSource_, this.videoPlayer_, 
-        this.videoTab_, popupMenu, subtitleState);
-
-    this.subtitleController_ = new mirosubs.widget.SubtitleController(
-        videoID, this.videoURL_, 
-        this.playController_, this.videoTab_, popupMenu);
+    var subController = this.controller_.getSubtitleController();
 
     if (this.subtitleImmediately_)
         goog.Timer.callOnce(
-            goog.bind(this.subtitleController_.openSubtitleDialog, 
-                      this.subtitleController_));
+            goog.bind(subController.openSubtitleDialog, subController));
     else if (this.translateImmediately_)
         goog.Timer.callOnce(
-            goog.bind(this.subtitleController_.openNewLanguageDialog,
-                      this.subtitleController_));
+            goog.bind(subController_.openNewLanguageDialog, 
+                      subController_));
 };
-
-mirosubs.widget.Widget.prototype.makeGeneralSettings_ = function(result) {
-    if (result['username'])
-        mirosubs.currentUsername = result['username'];
-    mirosubs.embedVersion = result['embed_version'];
-    mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
-        result["writelock_expiration"];
-    mirosubs.languages = result['languages'];
-    mirosubs.metadataLanguages = result['metadata_languages'];
-    var sortFn = function(a, b) { 
-        return a[1] > b[1] ? 1 : a[1] < b[1] ? -1 : 0
-    };
-    goog.array.sort(mirosubs.languages, sortFn);
-    goog.array.sort(mirosubs.metadataLanguages, sortFn);
-};
-
 
 mirosubs.widget.Widget.prototype.enterDocument = function() {
     mirosubs.widget.Widget.superClass_.enterDocument.call(this);
@@ -188,16 +148,18 @@ mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
  */
 mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_languageCode) {
     var s = mirosubs.widget.DropDown.Selection;
+    var subController = this.controller_.getSubtitleController();
+    var playController = this.controller_.getPlayController();
     if (selection == s.ADD_LANGUAGE)
-        this.subtitleController_.openNewLanguageDialog();
+        subController.openNewLanguageDialog();
     else if (selection == s.IMPROVE_SUBTITLES)
-        this.subtitleController_.openSubtitleDialog();
+        subController.openSubtitleDialog();
     else if (selection == s.SUBTITLE_HOMEPAGE)
         alert('subtitle homepage');
     else if (selection == s.SUBTITLES_OFF)
-        this.playController_.turnOffSubs();
+        playController.turnOffSubs();
     else if (selection == s.LANGUAGE_SELECTED)
-        this.playController_.languageSelected(opt_languageCode);
+        playController.languageSelected(opt_languageCode);
 };
 mirosubs.widget.Widget.prototype.playAt = function(time) {
     this.videoPlayer_.setPlayheadTime(time);

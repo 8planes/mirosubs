@@ -157,6 +157,7 @@ JS_CORE = ['mirosubs.js',
            'widget/translate/translationrightpanel.js',
            'widget/translate/editabletranslation.js',
            'widget/play/manager.js',
+           'widget/widgetcontroller.js',
            'widget/widget.js']
 
 JS_OFFSITE = list(JS_CORE)
@@ -164,6 +165,14 @@ JS_OFFSITE.append('widget/crossdomainembed.js')
 
 JS_ONSITE = list(JS_CORE)
 JS_ONSITE.append('widget/samedomainembed.js')
+
+JS_WIDGETIZER = [
+    "widget/widgetdecorator.js",
+    "widgetizer/videoplayermaker.js",
+    "widgetizer/widgetizer.js",
+    "widgetizer/youtube.js",
+    "widgetizer/html5.js",
+    "widgetizer/dowidgetize.js"]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

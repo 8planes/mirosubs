@@ -22,11 +22,32 @@ goog.provide('mirosubs.video.Html5VideoSource');
  * @constructor
  * @param {string} videoURL
  * @param {mirosubs.video.Html5VideoType} videoType
+ * @param {Object.<string, string>=} opt_videoConfig Attributes to use for 
+ *     video element, plus optional 'click_to_play' parameter
  */
 mirosubs.video.Html5VideoSource = function(videoURL, videoType, opt_videoConfig) {
     this.videoURL_ = videoURL;
     this.videoType_ = videoType;
     this.videoConfig_ = opt_videoConfig;
+};
+
+mirosubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
+    var queryStringIndex = videoURL.indexOf('?');
+    if (queryStringIndex > -1)
+        videoURL = videoURL.substring(0, queryStringIndex);
+    var vt = mirosubs.video.Html5VideoType;
+    var videoType = null;
+    if (/\.ogv$|\.ogg$/.test(videoURL))
+        videoType = vt.OGG;
+    else if (/\.mp4$/.test(videoURL))
+        videoType = vt.H264;
+    else if (/\.webm$/.test(videoURL))
+        videoType = vt.WEBM;
+    if (videoType != null)
+        return new mirosubs.video.Html5VideoSource(
+            videoURL, videoType, opt_videoConfig);
+    else
+        return null;
 };
 
 mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
@@ -45,8 +66,8 @@ mirosubs.video.Html5VideoSource.prototype.createPlayer_ =
 {
     return new mirosubs.video.Html5VideoPlayer(
         new mirosubs.video.Html5VideoSource(
-            this.videoURL_, this.videoType_), 
-        forSubDialog, this.videoConfig_);
+            this.videoURL_, this.videoType_, this.videoConfig_), 
+        forSubDialog);
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
@@ -55,4 +76,8 @@ mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
 
 mirosubs.video.Html5VideoSource.prototype.getVideoType = function() {
     return this.videoType_;
+};
+
+mirosubs.video.Html5VideoSource.prototype.getVideoConfig = function() {
+    return this.videoConfig_;
 };
