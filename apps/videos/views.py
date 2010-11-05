@@ -40,6 +40,7 @@ from gdata.service import RequestError
 from django.db.models import Sum, Q
 from django.utils.translation import ugettext
 from widget.srt_subs import GenerateSubtitlesHandler
+from utils import render_to_json
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -174,6 +175,7 @@ def actions_list(request):
                        template_object_name='action',
                        extra_context=extra_context)    
 
+@render_to_json
 def api_subtitles(request):
     callback = request.GET.get('callback', None)
     video_url = request.GET.get('video_url', None)

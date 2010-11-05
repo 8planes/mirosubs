@@ -304,8 +304,8 @@ class ViewsTest(WebUseTest):
         response = self._simple_test(
             "api_subtitles", 
             data={'video_url': url, 'callback': 'fn'})
-        self.assertEquals('fn([])', response.content)
-        self.assertEquals('text/javascript', response.mimetype)
+        self.assertEquals('fn([]);', response.content)
+        self.assertEquals('text/javascript', response['content-type'])
         
     def test_index(self):
         self._simple_test('videos.views.index')
