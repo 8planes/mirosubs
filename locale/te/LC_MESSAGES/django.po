@@ -70,7 +70,7 @@ msgstr ""
 
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
-msgstr ""
+msgstr "ఈ వాడుకరికి ఈమెయిలు లేదు"
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
@@ -684,7 +684,7 @@ msgstr "దయచేసి మీ ఈమెయిలు చిరునామా
 
 #: .\templates\index.html.py:137
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "మీ విరాళాకి రెట్టింపు మొత్తాన్ని మొజిల్లా  ఇస్తుంది!"
 
 #: .\templates\index.html.py:138
 msgid "We're a featured Mozilla Drumbeat project!"
@@ -1072,12 +1072,12 @@ msgstr "ఒక సందేశాన్ని పంపించండి"
 
 #: .\templates\profiles\view_profile.html.py:94
 msgid "<i>User has not submitted a bio.</i>"
-msgstr ""
+msgstr "<i>వాడుకరి స్వపరిచయాన్ని ఇవ్వలేదు.</i>"
 
 #: .\templates\profiles\view_profile.html.py:103
 #, python-format
 msgid "Send %(user_info)s a Message"
-msgstr ""
+msgstr "%(user_info)sకి ఒక సందేశాన్ని పంపించండి"
 
 #: .\templates\profiles\view_profile.html.py:107
 msgid "From"
@@ -1089,7 +1089,7 @@ msgstr "సందేశం"
 
 #: .\templates\profiles\view_profile.html.py:113
 msgid "No HTML"
-msgstr ""
+msgstr "HTML వద్దు"
 
 #: .\templates\profiles\view_profile.html.py:114
 msgid "Note: when you send a message the recipient can see your email and reply directly"
@@ -1542,6 +1542,9 @@ msgid ""
 "        %(change_percent)s of the text was changed.\n"
 "    "
 msgstr ""
+"\n"
+" %(change_percent)s పాఠ్యం మారింది.\n"
+"    "
 
 #: .\templates\videos\email_notification.html.py:31
 #, python-format
@@ -1680,7 +1683,7 @@ msgstr "పాఠ్యం"
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
-msgstr ""
+msgstr "ఈ భాషలో ఉపశీర్షికలు లేవు."
 
 #: .\templates\videos\history.html.py:253
 msgid "Either no subtitles have been entered, or they were deleted."
