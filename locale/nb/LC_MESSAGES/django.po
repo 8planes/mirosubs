@@ -7,11 +7,11 @@ msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-07 14:59+0300\n"
-"PO-Revision-Date: 2010-11-05 20:12+0800\n"
+"PO-Revision-Date: 2010-11-06 02:47+0100\n"
 "Last-Translator: aboodilankaboot\n"
 "Language-Team: Norwegian Bokmål\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Norwegian Bokmal\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: .\apps\auth\admin.py:15
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: .\apps\auth\models.py:83
 msgid "Add comment"
@@ -59,11 +59,11 @@ msgstr ""
 
 #: .\apps\auth\models.py:86
 msgid "Edit subtitles"
-msgstr ""
+msgstr "Rediger undertekster"
 
 #: .\apps\auth\models.py:87
 msgid "Edit translation"
-msgstr ""
+msgstr "Rediger oversettelse"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
