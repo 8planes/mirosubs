@@ -46,15 +46,15 @@ msgstr "E-post"
 
 #: .\apps\auth\models.py:83
 msgid "Add comment"
-msgstr ""
+msgstr "Legg til kommentar"
 
 #: .\apps\auth\models.py:84
 msgid "Start subtitles"
-msgstr ""
+msgstr "Start oversettelser"
 
 #: .\apps\auth\models.py:85
 msgid "Start translation"
-msgstr ""
+msgstr "Start oversetting"
 
 #: .\apps\auth\models.py:86
 msgid "Edit subtitles"
@@ -66,15 +66,15 @@ msgstr "Rediger oversettelse"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
-msgstr ""
+msgstr "Du kan bare svare på kommentarer for samme objekt"
 
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
-msgstr ""
+msgstr "Denne brukeren har ikke epost"
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
-msgstr ""
+msgstr "Du er ikke autentisert."
 
 #: .\apps\profiles\forms.py:51
 #, python-format
@@ -83,35 +83,35 @@ msgstr ""
 
 #: .\apps\profiles\forms.py:67
 msgid "Confirm new password:"
-msgstr ""
+msgstr "Godkjenn nytt passord:"
 
 #: .\apps\profiles\forms.py:82
 msgid "Invalid password."
-msgstr ""
+msgstr "Ugyldig passord."
 
 #: .\apps\profiles\forms.py:84
 msgid "The two passwords did not match."
-msgstr ""
+msgstr "De to passordene var ikke like."
 
 #: .\apps\profiles\forms.py:94
 msgid "This email is used already."
-msgstr ""
+msgstr "Denne eposten er allerede i bruk."
 
 #: .\apps\videos\forms.py:49
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr ""
+msgstr "Det er noen som legger til undertekster på denne videoen akkurat nå. Prøv igjen senere."
 
 #: .\apps\videos\forms.py:53
 msgid "You can't edit this video."
-msgstr ""
+msgstr "Du kan ikke redigere denne videoen."
 
 #: .\apps\videos\forms.py:56
 msgid "This video has translations."
-msgstr ""
+msgstr "Denne videoen har oversettelser."
 
 #: .\apps\videos\forms.py:62
 msgid "File size should be less 1Mb"
-msgstr ""
+msgstr "Filstørrelse burde være mindre enn 1Mb"
 
 #: .\apps\videos\forms.py:65
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
