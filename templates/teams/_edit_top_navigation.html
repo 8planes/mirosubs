@@ -1,0 +1,22 @@
+{% load i18n %}
+<ul class="inline_tabs">
+    <li {% if active == "settings" %} class="active"{% endif %}>
+        <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
+    </li>
+    <li class="bull">&bull;</li>
+    <li {% if active == "members" %} class="active"{% endif %}>
+        <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
+    </li>
+    <li class="bull">&bull;</li>
+    <li {% if active == "videos" %} class="active"{% endif %}>
+        <a href="{% url teams:edit_videos team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+    </li>
+    <li class="bull">&bull;</li>
+    <li {% if active == "application" %} class="active"{% endif %}>
+        <a href="{% url teams:applications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+    </li>
+    <li class="bull">&bull;</li>   
+    <li>
+        <a href="{{ team.get_absolute_url }}">{% trans 'View Team' %}</a>
+    </li>          
+</ul>

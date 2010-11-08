@@ -90,8 +90,10 @@
                                 <a href="#">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         {% else %}
-                            <span>{% trans 'No subtitles yet --' %}</span>
-                            <a href="#">{% trans 'get started' %}</a>
+                            {% if not team_video.languages.incomplete.exists %}
+                                <span>{% trans 'No subtitles yet --' %}</span>
+                                <a href="#">{% trans 'get started' %}</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
