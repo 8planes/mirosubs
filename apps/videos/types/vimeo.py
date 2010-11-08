@@ -18,6 +18,10 @@
 
 from vidscraper.sites import vimeo
 from base import VideoType
+from django.conf import settings
+
+vimeo.VIMEO_API_KEY = getattr(settings, 'VIMEO_API_KEY')
+vimeo.VIMEO_API_SECRET = getattr(settings, 'VIMEO_API_SECRET')
 
 class VimeoVideoType(VideoType):
 
@@ -42,9 +46,12 @@ class VimeoVideoType(VideoType):
     def create_kwars(self):
         return { 'vimeo_videoid': self.id }
     
-    #def set_values(self, video_obj):
-    #    video_obj.thumbnail = vimeo.get_thumbnail_url(self.url)
-    #    video_obj.save()
+    def set_values(self, video_obj):
+        if vimeo.VIMEO_API_KEY and vimeo.VIMEO_API_SECRET:
+            video_obj.thumbnail = vimeo.get_thumbnail_url(self.url)
+            video_obj.title = vimeo.scrape_title(self.url)
+            video_obj.save()
+        return video_obj
     
     def _get_vimeo_id(self, video_url):
         return vimeo.VIMEO_REGEX.match(video_url).group(2) 

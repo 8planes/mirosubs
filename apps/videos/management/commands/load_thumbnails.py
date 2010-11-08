@@ -1,10 +1,9 @@
-from django.core.management.base import BaseCommand, CommandError
+from utils.commands import ErrorHandlingCommand
 from django.conf import settings
 from utils.amazon import default_s3_store
 from videos.models import Video, VIDEO_TYPE_FLV, VIDEO_TYPE_HTML5
 import urllib
 import os
-from django.core.mail import mail_admins
 import commands
 import sys
 from django.core.exceptions import ImproperlyConfigured
@@ -17,7 +16,7 @@ VIDEO_THUMBNAILS_FOLDER = getattr(settings, 'VIDEO_THUMBNAILS_PATH', 'videos/thu
 
 THUMBNAILS_PATH = os.path.join(settings.MEDIA_ROOT, VIDEO_THUMBNAILS_FOLDER) 
 
-class Command(BaseCommand):
+class Command(ErrorHandlingCommand):
     
     def handle(self, *args, **options):
         self.verbosity = int(options.get('verbosity', 1))
@@ -81,19 +80,9 @@ class Command(BaseCommand):
     
     def handle_error(self, video, command_msg, exc_info):
         subject = u'Error during thumbnail grabing for video: %s' % video.video_id
-        message = "%s\n\n%s" % (self._get_traceback(exc_info),command_msg)
-        mail_admins(subject, message, fail_silently=False)
-
-    def _get_traceback(self, exc_info=None):
-        "Helper function to return the traceback as a string"
-        import traceback
-        return '\n'.join(traceback.format_exception(*(exc_info or sys.exc_info())))            
+        self._handle_error(subject, command_msg, exc_info)      
         
     def get_file_path(self, video):
         type = video.video_url.split('.')[-1]
         name = '%s.%s' % (video.video_id, type)
         return os.path.join(VIDEO_UPLOAD_PATH, name)
-    
-    def print_to_console(self, msg, min_verbosity=1):
-        if self.verbosity >= min_verbosity:
-            print msg

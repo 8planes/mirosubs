@@ -288,6 +288,9 @@ OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "requ
 FACEBOOK_API_KEY = ''
 FACEBOOK_API_SECRET = ''
 
+VIMEO_API_KEY = None
+VIMEO_API_SECRET = None
+
 AUTHENTICATION_BACKENDS = (
    'auth.backends.CustomUserBackend',
    'auth.backends.OpenIdBackend',
