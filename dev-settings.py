@@ -28,10 +28,10 @@ TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 
 MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)
 
+# Uncomment following line when you want to work with compiled JS.
+JS_USE_COMPILED = True
+
 try:
     from settings_local import *
 except ImportError:
     pass
-
-# Uncomment following line when you want to work with compiled JS.
-JS_USE_COMPILED = True
