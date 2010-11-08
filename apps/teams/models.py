@@ -59,9 +59,9 @@ class Team(models.Model):
     MANAGER_REMOVE = 2
     MEMBER_ADD = 3
     VIDEO_POLICY_CHOICES = (
-        (MEMBER_REMOVE, _(u'Members add/remove')),  #any member can add/delete video
-        (MANAGER_REMOVE, _(u'Managers add/remove')),    #only managers can add/remove video
-        (MEMBER_ADD, _(u'Members add videos'))  #members can only add video
+        (MEMBER_REMOVE, _(u'Members can add and remove video')),  #any member can add/delete video
+        (MANAGER_REMOVE, _(u'Managers can add and remove video')),    #only managers can add/remove video
+        (MEMBER_ADD, _(u'Members can only add videos'))  #members can only add video
     )
     
     name = models.CharField(_(u'name'), max_length=250, unique=True)

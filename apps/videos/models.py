@@ -105,17 +105,9 @@ class Video(models.Model):
 
         return ''
     
+    @models.permalink
     def video_link(self):
-        if self.subtitle_language():
-            return self.subtitle_language().get_absolute_url()
-        try:
-            tr = self.subtitlelanguage_set.filter(was_complete=True) \
-                .filter(is_original=False)[:1].get()
-            if tr.language:
-                return tr.get_absolute_url()
-        except models.ObjectDoesNotExist:
-            pass
-        return self.get_absolute_url()
+        return ('videos:history', [self.video_id])
     
     def thumbnail_link(self):
         if not self.thumbnail:

@@ -59,8 +59,8 @@ class BlipTvVideoType(VideoType):
             body = response.read()
             xmldoc = minidom.parseString(body)
             media_content_elements = xmldoc.getElementsByTagName('media:content')
-            best_file = self._best_mp4(media_content_elements) or \
-                self._best_flv(media_content_elements) or \
+            best_file = self._best_flv(media_content_elements) or \
+                self._best_mp4(media_content_elements) or \
                 self._best_any(media_content_elements)
             self._file_url = best_file
         return self._file_url

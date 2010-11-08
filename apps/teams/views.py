@@ -57,11 +57,11 @@ def index(request):
     if q:
         qs = qs.filter(Q(name__icontains=q)|Q(description__icontains=q))
     
-    ordering, order_type = request.GET.get('o', 'name'), request.GET.get('ot', 'asc')
+    ordering, order_type = request.GET.get('o', 'name'), request.GET.get('ot', 'desc')
     order_fields = {
         'name': 'name',
         'date': 'created',
-        'members': 'count_members'
+        'members': '_member_count'
     }
     order_fields_name = {
         'name': _(u'Name'),

@@ -15,7 +15,11 @@
                 {% trans 'Anonymous' %}
             {% endif %}
         </h4>     
-           
+        
+        {% if item.is_add_video %}
+            {% trans 'added video' %}
+        {% endif %}
+         
         {% if item.is_change_title %}
             {% blocktrans with item.new_video_title as title %}
             changed title to "{{ title }}"
@@ -28,7 +32,7 @@
                 commented on {{ language }}.
                 {% endblocktrans %}            
             {% else %}
-                {% trans 'commented on ' %}<a href="{{ item.video.get_absolute_url }}">{{ item.video }}</a>.
+                {% trans 'commented on ' %}<a href="{{ item.video.video_link }}">{{ item.video }}</a>.
             {% endif %}
         {% endif %}
         

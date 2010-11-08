@@ -113,12 +113,13 @@
         <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% include 'videos/_left_navigation.html' %}
     </ul>      
-    <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
 
       {% if not video.subtitle_language %}
         <a href="#" id="add_subtitles" class="green_button small">
             {% trans 'Add Subtitles' %}
-        </a>          
+        </a>
+      {% else %}  
+         <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>     
       {% endif %}
 
       {% upload_subtitles video %}

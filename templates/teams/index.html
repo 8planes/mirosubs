@@ -68,7 +68,7 @@
         {% for team in teams_list %}
         <li>
             <a href="{{ team.get_absolute_url }}" class="thumbnail_medium">
-                {% if team.logo %}<img src="{{ team.logo_thumbnail }}" width="100" height="100" alt="{{ team }}" title="{{ team }}"/>{% endif %}
+                {% if team.logo %}<img src="{{ team.logo_thumbnail }}" width="100" height="100"/>{% endif %}
             </a>
             <div class="info">
                 <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %}({% trans 'your team' %}){% endif %}</a></h4>
@@ -82,7 +82,7 @@
                 </span>
                 {% if team.description %}
                 <p>
-                    {{ team.description }}
+                    {{ team.description|urlize }}
                 </p>
                 {% endif %}
             </div>

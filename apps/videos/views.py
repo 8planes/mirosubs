@@ -131,16 +131,15 @@ def video(request, video_id, video_url=None):
 
 def video_list(request):
     qs = Video.objects.exclude(Q(subtitlelanguage=None)|Q(subtitlelanguage__subtitleversion=None)|Q(subtitlelanguage__subtitleversion__subtitle=None)) \
-        .distinct().extra(select={'translation_count': 'SELECT COUNT(id) '+
+        .distinct().extra(select={'languages_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
-        'videos_subtitlelanguage.was_complete AND '+
-        'NOT videos_subtitlelanguage.is_original'})
+        'videos_subtitlelanguage.was_complete'})
 
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
-    order_fields = ['translation_count', 'widget_views_count', 'subtitles_fetched_count', 'was_subtitled']
+    order_fields = ['languages_count', 'widget_views_count', 'subtitles_fetched_count', 'was_subtitled']
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
         extra_context['ordering'] = ordering
