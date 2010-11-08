@@ -34,4 +34,4 @@ except ImportError:
     pass
 
 # Uncomment following line when you want to work with compiled JS.
-JS_USE_COMPILED = True
+# JS_USE_COMPILED = True

@@ -95,7 +95,7 @@ mirosubs.video.Html5VideoPlayer.prototype.createVideoElement_ =
     if (!this.forDialog_) {
         if (this.videoSource_.getVideoConfig()) {
             var config = this.videoSource_.getVideoConfig();
-            if (this.videoConfig_['play_to_click']) {
+            if (config['play_to_click']) {
                 this.playToClick_ = true;
                 goog.object.remove(config, 'play_to_click');
             }
