@@ -519,9 +519,12 @@ def video_url_make_primary(request):
     if id:
         try:
             obj = VideoUrl.objects.get(id=id)
-            VideoUrl.objects.filter(video=obj.video).update(primary=False)
-            obj.primary = True
-            obj.save()
+            if not obj.video.allow_video_urls_edit and not request.user.has_perm('videos.change_videourl'):
+                output['error'] = ugettext('You have not permission change this URL')
+            else:            
+                VideoUrl.objects.filter(video=obj.video).update(primary=False)
+                obj.primary = True
+                obj.save()
         except VideoUrl.DoesNotExist:
             output['error'] = ugettext('Object does not exist')
     return HttpResponse(json.dumps(output))
@@ -530,14 +533,19 @@ def video_url_make_primary(request):
 def video_url_remove(request):
     output = {}
     id = request.GET.get('id')
+    
     if id:
         try:
             obj = VideoUrl.objects.get(id=id)
-            if obj.original:
-                output['error'] = ugettext('You cann\'t remove original URL')
+            
+            if not obj.video.allow_video_urls_edit and not request.user.has_perm('videos.delete_videourl'):
+                output['error'] = ugettext('You have not permission delete this URL')             
             else:
-                obj.deleted = True
-                obj.save()  
+                if obj.original:
+                    output['error'] = ugettext('You cann\'t remove original URL')
+                else:
+                    obj.deleted = True
+                    obj.save()  
         except VideoUrl.DoesNotExist:
             output['error'] = ugettext('Object does not exist')    
     return HttpResponse(json.dumps(output))
@@ -546,11 +554,9 @@ def video_url_remove(request):
 def video_url_create(request):
     output = {}
     
-    form = CreateVideoUrlForm(request.POST)
+    form = CreateVideoUrlForm(request.user, request.POST)
     if form.is_valid():
-        obj = form.save(False)
-        obj.added_by = request.user
-        obj.save()
+        obj = form.save()
         video = form.cleaned_data['video']
         users = video.notification_list_all(request.user)
         for user in users:

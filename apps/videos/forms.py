@@ -39,7 +39,8 @@ ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class CreateVideoUrlForm(forms.ModelForm):
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
         super(CreateVideoUrlForm, self).__init__(*args, **kwargs)
         self.fields['video'].widget = forms.HiddenInput()
     
@@ -63,9 +64,17 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         self._video_type = video_type            
         return video_type.convert_to_video_url()
     
+    def clean(self):
+        video = self.cleaned_data['video']
+        if video and not video.allow_video_urls_edit and not self.user.has_perm('videos.add_videourl'):
+            raise forms.ValidationError(_('You have not permission add video URL for this video'))
+        
+        return self.cleaned_data
+        
     def save(self, commit=True):
         obj = super(CreateVideoUrlForm, self).save(False)
         obj.type = self._video_type.abbreviation
+        obj.added_by = self.user
         commit and obj.save()
         return obj
     

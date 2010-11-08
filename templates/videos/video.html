@@ -124,7 +124,13 @@
       {% upload_subtitles video %}
         
       {% paste_transcription %}
-
+      
+        {% if user.is_staff and perms.videos.edit_video %}
+            <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank">
+                {% trans 'Edit in Admin Interface' %}
+            </a>
+        {% endif %}
+        
   </div>
 
   <div class="wrap grid_9 omega">

@@ -95,7 +95,7 @@ class S3EnabledImageField(models.ImageField):
     def __init__(self, bucket=settings.DEFAULT_BUCKET, thumb_sizes=THUMB_SIZES, thumb_options=dict(crop='smart'), verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
         self.thumb_sizes = thumb_sizes
         self.thumb_options = thumb_options
-        self.burcket_name = bucket
+        self.bucket_name = bucket
         
         if settings.USE_AMAZON_S3:
             from utils.amazon import S3Storage

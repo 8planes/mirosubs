@@ -67,7 +67,7 @@ def complete_color(language):
 @register.inclusion_tag('videos/_video_url_panel.html', takes_context=True)
 def video_url_panel(context):
     video = context['video']
-    context['form'] = CreateVideoUrlForm(initial={'video': video.pk})
+    context['form'] = CreateVideoUrlForm(context['user'], initial={'video': video.pk})
     context['video_urls'] = video.videourl_set.all()
     return context
 

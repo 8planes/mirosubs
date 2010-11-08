@@ -80,9 +80,10 @@ class Video(models.Model):
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
     allow_community_edits = models.BooleanField()
-    writelock_time = models.DateTimeField(null=True)
-    writelock_session_key = models.CharField(max_length=255)
-    writelock_owner = models.ForeignKey(User, null=True, 
+    allow_video_urls_edit = models.BooleanField(default=True)
+    writelock_time = models.DateTimeField(null=True, editable=False)
+    writelock_session_key = models.CharField(max_length=255, editable=False)
+    writelock_owner = models.ForeignKey(User, null=True, editable=False,
                                         related_name="writelock_owners")
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)

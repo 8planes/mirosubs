@@ -4,11 +4,18 @@
     A single video is often hosted in different places online and same
     subtitles will work. 
     {% endblocktrans %}
-    <a href="#">{% trans 'Learn more' %}</a>
+    <a href="#">{% trans 'Learn more' %}</a><br/>
+    {% if not video.allow_video_urls_edit %}
+        {% blocktrans %}
+        Only manager can edit URLs for this video.
+        {% endblocktrans %}    
+    {% endif %}
 </div>
+{% if video.allow_video_urls_edit or perms.videos_videourl_add %}
 <a href="#add-video-url" class="add-video-url-button green_button small">
     {% trans 'Add new link' %}
-</a>          
+</a>
+{% endif %}
 <table cellpadding="0" cellspacing="0" id="video-url-table">
 <thead>
   <tr>
@@ -47,10 +54,14 @@
             <td time="{{ item.created_as_time }}">{{ item.created|timesince }} {% trans 'ago' %}</td>
             <td>{{ item.added_by|default:'' }}</td>
             <td>
-                {% if not item.original %}
-                    <a href="#" class="delete-url-link" video_url_id="{{ item.pk }}">{% trans 'remove' %}</a><br/>
+                {% if video.allow_video_urls_edit or perms.videos_videourl_delete %}
+                    {% if not item.original%}
+                        <a href="#" class="delete-url-link" video_url_id="{{ item.pk }}">{% trans 'remove' %}</a><br/>
+                    {% endif %}
                 {% endif %}
+                {% if video.allow_video_urls_edit or perms.videos_videourl_change %}
                 <a {% if item.primary %}style="display:none"{% endif %} href="#" video_url_id="{{ item.pk }}" class="make-primary-url-link">{% trans 'make primary' %}</a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}
