@@ -110,7 +110,7 @@ class S3EnabledImageField(models.ImageField):
 class S3EnabledFileField(models.FileField):
     
     def __init__(self, bucket=settings.DEFAULT_BUCKET, verbose_name=None, name=None, upload_to='', storage=None, **kwargs):
-        self.burcket_name = bucket
+        self.bucket_name = bucket
         
         if settings.USE_AMAZON_S3:
             from utils.amazon import S3Storage
@@ -130,7 +130,7 @@ add_introspection_rules([
         [S3EnabledImageField, S3EnabledFileField], 
         [],
         {   
-            "bucket": ["burcket_name", {"default": settings.DEFAULT_BUCKET}]
+            "bucket": ["bucket_name", {"default": settings.DEFAULT_BUCKET}]
         },
     ),
 ], ["^utils\.amazon\.fields"])

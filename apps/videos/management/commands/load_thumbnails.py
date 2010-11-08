@@ -1,11 +1,14 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
+from utils.amazon import default_s3_store
 from videos.models import Video, VIDEO_TYPE_FLV, VIDEO_TYPE_HTML5
 import urllib
 import os
 from django.core.mail import mail_admins
 import commands
 import sys
+from django.core.exceptions import ImproperlyConfigured
+from django.core.files.base import ContentFile
 
 VIDEO_UPLOAD_PATH = getattr(settings, 'VIDEO_UPLOAD_PATH', \
                             os.path.join(settings.MEDIA_ROOT, 'videos'))
@@ -18,6 +21,7 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         self.verbosity = int(options.get('verbosity', 1))
+        self.s3_store = self.init_s3()
         
         if not os.path.exists(VIDEO_UPLOAD_PATH):
             os.makedirs(VIDEO_UPLOAD_PATH)
@@ -42,6 +46,11 @@ class Command(BaseCommand):
                 
             self.print_to_console(u'-----------------')
     
+    def init_s3(self):
+        if not default_s3_store:
+            raise ImproperlyConfigured('Have not settings for thumbnails uploading to S3 Store.')
+        return default_s3_store
+        
     def get_thumbnail(self, video, path):
         self.print_to_console(u'Get thumbnail...')
         
@@ -53,10 +62,17 @@ class Command(BaseCommand):
         grab_result = 'Command is not runned yet'
         try:
             grab_result = commands.getoutput(grabimage % (path, 10, thumbnailpath))
+            if not os.path.exists(thumbnailpath):
+                raise Exception('Error in converting')
             if not os.path.getsize(thumbnailpath):
                 grab_result = commands.getoutput(grabimage % (path, 5, thumbnailpath))
+                
+            self.print_to_console(u'Saving in S3 Store...')
+            self.s3_store.save(VIDEO_THUMBNAILS_FOLDER+thumbnailfilename, ContentFile(open(thumbnailpath, 'rb').read()))
+            
             video.thumbnail = VIDEO_THUMBNAILS_FOLDER+thumbnailfilename
             video.save()
+            os.remove(thumbnailpath)
             os.remove(path)
         except:
             if settings.DEBUG:

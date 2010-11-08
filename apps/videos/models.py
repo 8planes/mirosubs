@@ -29,6 +29,7 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
+from utils.amazon import default_s3_store
 import time
 
 yt_service = YouTubeService()
@@ -95,13 +96,13 @@ class Video(models.Model):
     def get_thumbnail(self):
         #TODO: should consider size of thumbnail
         #Is used in teams application now
-        if not self.thumbnail:
-            return ''
-        
         if self.thumbnail.startswith('http://') or self.thumbnail.startswith('https://'):
             return self.thumbnail
         
-        return settings.MEDIA_URL+self.thumbnail
+        if default_s3_store and self.thumbnail:
+            return default_s3_store.url(self.thumbnail)
+
+        return ''
     
     def video_link(self):
         if self.subtitle_language():

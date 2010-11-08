@@ -83,7 +83,7 @@ class S3Storage(FileSystemStorage):
 
     def size(self, name):
         return self.bucket.get_key(name).size
-
+    
     def url(self, name):
         name = name.replace('\\', '/')
         return 'http://%s.%s/%s' % (self.bucket.name, DEFAULT_HOST, name)
@@ -91,4 +91,15 @@ class S3Storage(FileSystemStorage):
     
     def get_available_name(self, name):
         return name
+    
+    @classmethod
+    def create_default_storage(cls):
+        if settings.USE_AMAZON_S3 and settings.AWS_ACCESS_KEY_ID and \
+                settings.AWS_SECRET_ACCESS_KEY and settings.DEFAULT_BUCKET:
+            connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+            if not connection.lookup(settings.DEFAULT_BUCKET):
+                connection.create_bucket(settings.DEFAULT_BUCKET)
+            bucket = connection.get_bucket(settings.DEFAULT_BUCKET)
+            return S3Storage(bucket)
 
+default_s3_store = S3Storage.create_default_storage()
