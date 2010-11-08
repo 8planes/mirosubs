@@ -186,7 +186,7 @@ class Video(models.Model):
             
             #Save video url
             video_url = VideoUrl()
-            video_url.url = vt.video_url(obj)
+            video_url.url = vt.convert_to_video_url()
             video_url.type = vt.abbreviation
             video_url.original = True
             video_url.primary = True
