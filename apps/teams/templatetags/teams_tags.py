@@ -83,6 +83,7 @@ def team_activity(context, team):
 @register.inclusion_tag('teams/_team_add_video_select.html', takes_context=True)    
 def team_add_video_select(context):
     user = context['user']
-    qs = Team.objects.filter(users=user)
-    context['teams'] = [item for item in qs if item.can_add_video(user)]
+    if user.is_authenticated():
+        qs = Team.objects.filter(users=user)
+        context['teams'] = [item for item in qs if item.can_add_video(user)]
     return context 
