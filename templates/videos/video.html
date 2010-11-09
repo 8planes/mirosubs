@@ -84,10 +84,12 @@
 {% endblock %}
 
 {% block main_content %}
-    {% if not video.title or video.is_html5 %}
-        <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
-    {% endif %}
-    <h2 class="main-title">{{ video }}</h2>
+    <h2 class="main-title">
+        {{ video }}
+        {% if not video.title or video.is_html5 %}
+            <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
+        {% endif %}        
+    </h2>
 
     {% if saved %}
         <div id="messages">
