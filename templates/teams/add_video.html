@@ -27,23 +27,9 @@
 </div>
 <div class="wrap grid_9 omega">
     <h4 class="inline">{{ team }}</h4>
-    <ul class="inline_tabs">
-        <li class="active">
-            <span class="tab-item">{% trans 'Team Settings' %}</span>
-        </li>
-        <li class="bull">&bull;</li>        
-        <li>
-            <a href="{% url teams:edit_members team.pk %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
-        </li>
-        <li class="bull">&bull;</li>        
-        <li>
-            <a href="{% url teams:edit_videos team.pk %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
-        </li>
-        <li class="bull">&bull;</li>        
-        <li>
-            <a href="{% url teams:applications team.pk %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
-        </li>
-    </ul>
+    {% with "videos" as active %}
+        {% include 'teams/_edit_top_navigation.html' %}
+    {% endwith %}
     <div class="boxx">
         <div class="padding">
             <h3>{% trans 'Add video' %}</h3>
