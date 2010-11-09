@@ -19,7 +19,8 @@
 
 .green_button,
 .blue_button,
-.silver_button{
+.silver_button,
+.red_button{
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius:3px;
@@ -31,7 +32,8 @@
 
 .green_button.huge,
 .blue_button.huge,
-.silver_button.huge{
+.silver_button.huge,
+.red_button.huge{
   font-size: 16px;
   padding: 16px 32px;
   }
@@ -40,7 +42,8 @@
 
 .green_button.big,
 .blue_button.big,
-.silver_button.big{
+.silver_button.big,
+.red_button.big{
   font-size: 14px;
   padding: 8px 16px;
   }
@@ -48,7 +51,8 @@
 
 .green_button.small,
 .blue_button.small,
-.silver_button.small{
+.silver_button.small,
+.red_button.small{
   font-size: 11px;
   padding: 5px 15px;
   -moz-border-radius: 30px;
@@ -62,6 +66,7 @@
 
 .green_button, .blue_button{
   color: #23441e !important;
+text-decoration: none;
 
   text-shadow: 0 1px 0px #aedbaa;
    
@@ -95,6 +100,27 @@
 
 
 
+.red_button{
+  color: #412625 !important;
+text-decoration: none !important;
+
+  text-shadow: 0 1px 0px #f17265;
+   
+  border: 1px solid #96312e;
+  border-top: 1px solid #c44d4a;
+  border-bottom: 1px solid #412625;
+  
+  -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #f17065;
+  -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #f17065;
+  box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #f17065;
+  
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#98d98a', endColorstr='#6bba6a'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#98d98a), to(#6bba6a)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #dd443f,  #c51917); /* for firefox 3.6+ */
+  }
+
+
+
 
 /*---- Blue Button ----*/
 
@@ -106,7 +132,8 @@
 
 .silver_button{
   text-shadow: 0 1px 0px #fff;
-  
+  text-decoration: none;
+
   border: 1px solid #a7c3c9;
   border-top: 1px solid #c6d9de;
   border-bottom: 1px solid #4e7179;

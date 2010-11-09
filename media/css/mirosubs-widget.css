@@ -934,6 +934,7 @@ bottom: 47px !important;
 .mirosubs-modal-widget .mirosubs-videoDiv embed{
   width: 400px;
   height: 300px;
+display: block;
   }
 
 
@@ -949,6 +950,13 @@ bottom: 47px !important;
   position: relative !important;
   background: #fff url("../images/big_grad.png") 0 bottom repeat-x !important;
   }
+
+.mirosubs-widget video{
+display: block;
+}
+
+
+
 
 ul.mirosubs-titlesList {
   margin: 0 !important;
