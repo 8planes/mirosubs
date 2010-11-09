@@ -1,28 +1,16 @@
-{% load i18n %}
-<p>
-    {% trans 'Dear' %} {{ user }}, <br/>
-    {% blocktrans %}A title of video you contributed to 
-    has been edited by {{ editor }}.{% endblocktrans %} <br/>
-</p>
-<p>
-    {% trans "We've also included a rough summary of the changes below.  Thanks so much!" %}<br/>
+{% extends 'videos/email_base.html' %}
 
-    {% trans 'Sincerely' %},<br/><br/>
-    
-    {% trans 'The Universal Subtitles Community' %}<br/><br/>
-    
-    {% trans 'To stop receiving these emails, go to your preferences page and uncheck "receive notifications":' %}<br/><br/>
-    <a href="http://{{ domain }}{% url profiles:my_profile %}">{% trans 'My profile / preferences' %}</a>
+{% load i18n %}
+
+{% block content %}
+<p style="font-size: 12px;">
+    {% trans 'Dear' %} {{ user }}, <br/>
+    {% blocktrans %}A title of video you contributed to has been edited by {% endblocktrans %}
+    <a href="{{ editor.get_absolute_url }}">{{ editor }}</a>. <br/>
 </p>
-<p>
-    {% trans 'NEW' %}: 
+<p style="font-size: 12px;">
+    {% trans 'NEW' %}:  {{ video.title }}
     <br/><br/>
-    {% trans 'TITLE' %}: {{ video.title }}
-    <br/><br/>
-    {% trans 'OLD' %}:
-    <br/><br/>
-    {% trans 'TITLE' %}: {{ old_title }}
+    {% trans 'OLD' %}: {{ old_title }}
 </p>
-<p>
-    <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">{% trans "Don't send any more emails about this particular video." %}</a>
-</p>
+{% endblock %}

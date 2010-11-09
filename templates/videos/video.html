@@ -64,9 +64,9 @@
             var VIDEO_ID = '{{ video.video_id }}';
 
             $('.edit-title').click(function(){
-                var title = prompt('{% trans "Enter new title" %}', $('.main-title').html());
+                var title = prompt('{% trans "Enter new title" %}', $('.title-container').html());
                 if (title){
-                    $('.main-title').html(title);
+                    $('.title-container').html(title);
                     $.post(CHANGE_TITLE_LINK, {
                         video_id: VIDEO_ID,
                         title: title
@@ -85,7 +85,7 @@
 
 {% block main_content %}
     <h2 class="main-title">
-        {{ video }}
+        <span class="title-container" style="float: none;">{{ video }}</span>
         {% if not video.title or video.is_html5 %}
             <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
         {% endif %}        

@@ -568,7 +568,7 @@ def video_url_create(request):
                 'hash': user.hash_for_video(video.video_id)
             }
             send_templated_email(user.email, subject, 
-                                 'videos/email_vide_url_add.html',
+                                 'videos/email_video_url_add.html',
                                  context, 'feedback@universalsubtitles.org',
                                  fail_silently=not settings.DEBUG)          
     else:
