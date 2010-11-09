@@ -28,7 +28,12 @@ gettext_noop = lambda s: s
 
 from django.conf import global_settings
 lang_dict = dict(global_settings.LANGUAGES)
-lang_dict['es-ar'] = gettext_noop('Argentinian Spanish')
+lang_dict['es-ar'] = gettext_noop('Spanish (Argentinian)')
+lang_dict['en-gb'] = gettext_noop('English (British)')
+lang_dict['pt-br'] = gettext_noop('Portuguese (Brazilian)')
+lang_dict['sr-latn'] = gettext_noop('Latin (Serbian)')
+lang_dict['zh-cn'] = gettext_noop('Chinese (Simplified)')
+lang_dict['zh-tw'] = gettext_noop('Chinese (Traditional)')
 lang_dict['eo'] = gettext_noop('Esperanto')
 lang_dict['iu'] = gettext_noop('Inuktitut')
 lang_dict['moh'] = gettext_noop('Mohawk')
