@@ -57,7 +57,8 @@ def index(request):
     if q:
         qs = qs.filter(Q(name__icontains=q)|Q(description__icontains=q))
     
-    ordering, order_type = request.GET.get('o', 'name'), request.GET.get('ot', 'desc')
+    ordering = request.GET.get('o', 'name')
+    
     order_fields = {
         'name': 'name',
         'date': 'created',
@@ -68,6 +69,13 @@ def index(request):
         'date': _(u'Newest'),
         'members': _(u'Most Members')
     }
+    order_fields_type = {
+        'name': 'asc',
+        'date': 'desc',
+        'members': 'desc'
+    }    
+    order_type = request.GET.get('ot', order_fields_type.get(ordering, 'desc'))
+
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
     
@@ -80,7 +88,7 @@ def index(request):
         'query': q,
         'ordering': ordering,
         'order_type': order_type,
-        'order_name': order_fields_name[ordering],
+        'order_name': order_fields_name.get(ordering, 'name'),
         'highlighted_qs': highlighted_qs
     }
     return object_list(request, queryset=qs,
