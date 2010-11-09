@@ -119,7 +119,7 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
              !blipFileGetRegex.test(videoURL)) {
         return new mirosubs.video.BlipTVPlaceholder(videoURL);
     }
-    else if (/\.flv$/.test(videoURL)) {
+    else if (/\.flv$|\.mov$/.test(videoURL)) {
         return new mirosubs.video.FlvVideoSource(videoURL);
     }
     else {
