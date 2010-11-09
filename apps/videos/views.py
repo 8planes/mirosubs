@@ -100,7 +100,7 @@ def create(request):
             messages.info(request, message=u'''Here is the subtitle workspace for your video.  You can
 share the video with friends, or get an embed code for your site.  To add or
 improve subtitles, click the button below the video''')
-            return redirect(video)
+            return redirect(video.video_link())
     else:
         video_form = VideoForm(label_suffix="")
     return render_to_response('videos/create.html', locals(),

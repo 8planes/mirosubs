@@ -175,7 +175,7 @@ class Video(models.Model):
         if create: 
             obj = vt.set_values(obj)
             obj.save()
-            
+            SubtitleLanguage(video=obj, is_original=True).save()
             #Save video url
             video_url = VideoUrl()
             video_url.url = vt.convert_to_video_url()
