@@ -40,7 +40,6 @@ lang_dict['moh'] = gettext_noop('Mohawk')
 lang_dict['oji'] = gettext_noop('Anishinaabe')
 lang_dict['cr'] = gettext_noop('Cree')
 lang_dict['hai'] = gettext_noop('Haida')
-del lang_dict['no']
 global_settings.LANGUAGES = tuple(i for i in lang_dict.items())
 
 METADATA_LANGUAGES = (
