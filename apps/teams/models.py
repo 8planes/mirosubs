@@ -32,6 +32,7 @@ from messages.models import Message
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 from django.conf import settings
+from messages.models import Message
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -251,6 +252,8 @@ class Invite(models.Model):
     
     def render_message(self):
         return render_to_string('teams/_invite_message.html', {'invite': self})
+
+models.signals.pre_delete.connect(Message.on_delete, Invite)
     
 def invite_send_message(sender, instance, created, **kwargs):
     if created:

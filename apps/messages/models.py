@@ -55,3 +55,8 @@ class Message(models.Model):
         
         if not self.subject or not self.content or not self.object:
             raise ValidationError(_(u'You should enter subject or message.'))
+    
+    @classmethod
+    def on_delete(cls, sender, instance, **kwargs):
+        ct = ContentType.objects.get_for_model(sender)
+        cls.objects.filter(content_type__pk=ct.pk, object_pk=instance.pk).delete()

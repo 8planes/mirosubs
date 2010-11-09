@@ -31,7 +31,7 @@ register = template.Library()
 def messages(context):
     user = context['user']
     if user.is_authenticated():
-        qs = Message.objects.filter(user=user)
+        qs = Message.objects.filter(user=user, read=False)
     else:
         qs = Message.objects.none()
     return {
