@@ -1,9 +1,9 @@
 {% load i18n %}
 
 {% if user.is_authenticated and teams %}
-    <div class="sort_button floatright">
+    <div class="sort_button">
       <div class='arrow'></div>
-      <span class="sort_label">
+      <span class="sort_label" style="border-bottom: 1px solid #A7C3C9; border-top:1px solid #FFFFFF;">
         <strong>{% trans 'Add video to team' %}</strong>
       </span>
       <ul>

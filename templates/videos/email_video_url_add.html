@@ -1,0 +1,28 @@
+{% extends 'videos/email_base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+    <p style="font-size: 12px;">
+        {% blocktrans %}Dear {{ user }}{% endblocktrans %},
+        <br/><br/>
+        {% blocktrans with video_url.added_by as added_by %}
+        The Universal Subtitles user {{ added_by }} has added a new video url 
+        {{ video_url }} to "{{ video }}", a video you contributed to.  
+        Please check to make sure that the new URL features the exact same video, 
+        and that the subtitles display correctly:
+        {% endblocktrans %}
+        <br/><br/>
+        {{ video_url.get_absolute_url }}
+    </p>
+
+    <p style="font-size: 12px;">
+        {% blocktrans %}
+        If this video does not match the video at the following URL, you should leave a
+        comment or (if it's spam) just remove it by clicking on the "remove" button
+        next to its URL in the "Video URLs" tab.
+        {% endblocktrans %}
+        <br/><br/>
+        {{ video.get_absolute_url }}#urls
+    </p>
+{% endblock %}

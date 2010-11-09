@@ -20,6 +20,10 @@
             {% else %}
                 <span class="username anon">{% trans 'Anonymous' %}</span>
             {% endif %}
+
+            {% if item.is_add_video_url %}
+                {% trans 'added new URL' %}.
+            {% endif %}
             
             {% if item.is_change_title %}
                 {% blocktrans with item.new_video_title as title %}

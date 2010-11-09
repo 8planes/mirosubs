@@ -175,7 +175,7 @@ class Video(models.Model):
         if create: 
             obj = vt.set_values(obj)
             obj.save()
-            
+            SubtitleLanguage(video=obj, is_original=True).save()
             #Save video url
             video_url = VideoUrl()
             video_url.url = vt.convert_to_video_url()
@@ -702,11 +702,13 @@ class Action(models.Model):
     CHANGE_TITLE = 2
     COMMENT = 3
     ADD_VERSION = 4
+    ADD_VIDEO_URL = 5
     TYPES = (
         (ADD_VIDEO, u'add video'),
         (CHANGE_TITLE, u'change title'),
         (COMMENT, u'comment'),
-        (ADD_VERSION, u'add version')
+        (ADD_VERSION, u'add version'),
+        (ADD_VIDEO_URL, u'add video url')
     )
     user = models.ForeignKey(User, null=True, blank=True)
     video = models.ForeignKey(Video)
@@ -719,6 +721,9 @@ class Action(models.Model):
     class Meta:
         ordering = ['-created']
         get_latest_by = 'created'
+    
+    def is_add_video_url(self):
+        return self.action_type == self.ADD_VIDEO_URL
     
     def is_add_version(self):
         return self.action_type == self.ADD_VERSION
@@ -783,6 +788,15 @@ class Action(models.Model):
             obj.action_type = cls.ADD_VIDEO
             obj.created = datetime.now()
             obj.save()
+     
+    @classmethod
+    def create_video_url_handler(cls, sender, instance, created, **kwargs):
+        if created:
+            obj = cls(video=instance.video)
+            obj.user = instance.added_by
+            obj.action_type = cls.ADD_VIDEO_URL
+            obj.created = instance.created
+            obj.save()
                 
 post_save.connect(Action.create_comment_handler, Comment)        
 post_save.connect(Action.create_video_handler, Video)
@@ -835,3 +849,5 @@ class VideoUrl(models.Model):
     def created_as_time(self):
         #for sorting in js
         return time.mktime(self.created.timetuple())
+
+post_save.connect(Action.create_video_url_handler, VideoUrl)   

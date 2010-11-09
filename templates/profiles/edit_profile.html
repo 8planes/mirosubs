@@ -31,9 +31,7 @@
 {% block main_content %}
 <div class="left_column">
     <h2>{% trans 'Edit Your Profile' %} <a href="{{ user_info.get_absolute_url }}">({% trans 'View profile' %})</a></h2>
-    <a class="small" href="{% url auth:delete_user %}">
-        <span>{% trans 'Delete Profile' %}</span>
-    </a>  
+
     <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}">
     <p>
         {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
@@ -177,7 +175,16 @@
         <div class="clearboth">
             &nbsp;
         </div>
+
+
+
     </div>
+
+    <a class="small" href="{% url auth:delete_user %}">
+        <span>{% trans 'Permanently Delete Your Profile' %}</span>
+    </a>  
+
+
 </form>
 <script type="text/javascript">
     var form_count = {{ formset.total_form_count }};

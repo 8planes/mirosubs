@@ -33,6 +33,7 @@ MESSAGES_ON_PAGE = getattr(settings, 'MESSAGES_ON_PAGE', 30)
 @login_required
 def index(request):
     qs = Message.objects.filter(user=request.user)
+    qs.update(read=True)
     extra_context = {}
     return object_list(request, queryset=qs,
                        paginate_by=MESSAGES_ON_PAGE,

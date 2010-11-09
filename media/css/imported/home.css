@@ -93,14 +93,15 @@ margin: 54px 20px 0 0;
 
 .callout textarea{
 font-size: 12px;
-width: 530px;
+width: 304px;
 padding: 10px;
 height: 13px;
+float: left;
 -moz-border-radius: 4px;
 -webkit-border-radius: 4px;
 border-radius: 4px;
 display: block;
-
+overflow: hidden;
   text-shadow: 0 1px 0px #fff;
   
   border: 3px solid #4e7179;
@@ -114,6 +115,29 @@ display: block;
   background: -webkit-gradient(linear, left top, left bottom, from(#ecf9fc), to(#d6e8eb)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  #cde2e5,  #ecf9fc); /* for firefox 3.6+ */
   margin-bottom: 10px;
+}
+
+
+
+.callout object#clippy{
+display: block;
+float: left;
+height: 42px;
+width: 190px !important;
+margin-bottom: 8px;
+overflow: hidden;
+padding-top: 14px;
+padding-left: 20px;
+}
+
+
+.callout object#clippy embed{
+width: 100px !important;
+height: 142px;
+}
+
+.callout object#clippy object{
+border: 1px solid !important;
 }
 
 

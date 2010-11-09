@@ -12,11 +12,16 @@
             {% else %}
                 <span class="username anon">{% trans 'Anonymous' %}</span>
             {% endif %}
-            
+
+            {% if item.is_add_video_url %}
+                {% trans 'added new URL for ' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>.
+            {% endif %}
+                
             {% if item.is_change_title %}
                 {% blocktrans with item.new_video_title as title %}
-                changed title to "{{ title }}"
+                changed title to "{{ title }}" for 
                 {% endblocktrans %}
+                <a href="{{ item.video.video_link }}">{{ item.video }}</a>
             {% endif %}
             
             {% if item.is_comment %}

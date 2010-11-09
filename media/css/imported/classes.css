@@ -457,19 +457,47 @@ margin-bottom: 20px;
 
 
 
+#video_profile #nyroModalWrapper p{
+padding: 20px;
+}
+
+#video_profile #nyroModalWrapper p.button-container{
+padding: 0 20px;
+width: 420px;
+}
+
+#video_profile #nyroModalWrapper p.button-container button{
+float: right;
+
+}
+
+
+
+#video_profile #nyroModalWrapper label{
+
+}
+
+
+
+#video_profile #nyroModalWrapper input#id_url{
+width: 410px;
+}
 
 
 
 
 
+.add_to_team{
+margin-top: 10px;
+}
 
 
 
 
 
-
-
-
+#login .red_button{
+margin-left: 30px;
+}
 
 
 

@@ -100,7 +100,7 @@ def create(request):
             messages.info(request, message=u'''Here is the subtitle workspace for your video.  You can
 share the video with friends, or get an embed code for your site.  To add or
 improve subtitles, click the button below the video''')
-            return redirect(video)
+            return redirect(video.video_link())
     else:
         video_form = VideoForm(label_suffix="")
     return render_to_response('videos/create.html', locals(),
@@ -568,7 +568,7 @@ def video_url_create(request):
                 'hash': user.hash_for_video(video.video_id)
             }
             send_templated_email(user.email, subject, 
-                                 'videos/email_vide_url_add.html',
+                                 'videos/email_video_url_add.html',
                                  context, 'feedback@universalsubtitles.org',
                                  fail_silently=not settings.DEBUG)          
     else:

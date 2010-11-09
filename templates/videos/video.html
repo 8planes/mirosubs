@@ -64,9 +64,9 @@
             var VIDEO_ID = '{{ video.video_id }}';
 
             $('.edit-title').click(function(){
-                var title = prompt('{% trans "Enter new title" %}', $('.main-title').html());
+                var title = prompt('{% trans "Enter new title" %}', $('.title-container').html());
                 if (title){
-                    $('.main-title').html(title);
+                    $('.title-container').html(title);
                     $.post(CHANGE_TITLE_LINK, {
                         video_id: VIDEO_ID,
                         title: title
@@ -84,10 +84,12 @@
 {% endblock %}
 
 {% block main_content %}
-    {% if not video.title or video.is_html5 %}
-        <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
-    {% endif %}
-    <h2 class="main-title">{{ video }}</h2>
+    <h2 class="main-title">
+        <span class="title-container" style="float: none;">{{ video }}</span>
+        {% if not video.title or video.is_html5 %}
+            <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
+        {% endif %}        
+    </h2>
 
     {% if saved %}
         <div id="messages">
@@ -132,11 +134,10 @@
             </a>
         {% endif %}
         
+        {% team_add_video_select %}
   </div>
 
   <div class="wrap grid_9 omega">
-      {% team_add_video_select %}
-        
       <h4 class="inline">{% trans 'Video Info' %}</h4>      
 
       <ul class="inline_tabs">

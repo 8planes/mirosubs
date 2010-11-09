@@ -1,5 +1,9 @@
+{% extends 'videos/email_base.html' %}
+
 {% load i18n %}
-<p>
+
+{% block content %}
+<p style="font-size: 12px;">
     {% trans 'Dear' %} {{ user }}, <br/><br/>
     {% blocktrans with version.user as u %}
     A transcription or translation you contributed to 
@@ -9,20 +13,10 @@
     {% trans 'Click here to see the latest version side by side with the previous version:' %}<br/><br/>
     <a href="http://{{ domain }}{% url videos:diffing version.pk old_version.pk %}">{% trans 'Compare versions side-by-side' %}</a>.
 </p>
-<p>
-    {% trans "We've also included a rough summary of the changes below. Thanks so much!" %}<br/>
-
-    {% trans 'Sincerely' %},<br/><br/>
-    
-    {% trans 'The Universal Subtitles Community' %}<br/><br/>
-    
-    {% trans 'To stop receiving these emails, go to your preferences page and uncheck "receive notifications":' %}<br/><br/>
-    <a href="http://{{ domain }}{% url profiles:my_profile %}">My profile / preferences</a>
-</p>
-<p>
+<p style="font-size: 12px;">
     <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">{% trans "Don't send any more emails about this particular video." %}</a>
 </p>
-<p>
+<p style="font-size: 12px;">
     ##{% trans 'SUMMARY OF CHANGES' %}##<br/>
     {% blocktrans with version.text_change_display as change_percent %}
         {{ change_percent }} of the text was changed.
@@ -34,17 +28,38 @@
 {% if version.text_change %}
     <div>
         {% trans 'Here is a list of text changes:' %}<br/>
+      <table style="width: 585px; background: #fff; border: 1px solid #aaa; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; -webkit-border-radius-top-right: 5px; -webkit-border-radius-top-right: 5px; border-bottom: 0;" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="80" style="color: #888; font-size: 12px; padding: 8px;">
+            {% trans 'Old Text' %}
+          </td>
+          <td width="245" style="color: #333; font-weight: bold; font-size: 12px; padding: 8px; text-align: center;">
+            {% trans 'Changes to Subtitle Text' %}
+          </td>
+          <td align="right" width="80" style="color: #888; font-size: 12px; padding: 8px;">
+            {% trans 'New Text' %}
+          </td>
+        </tr>
+      </table>    
+      
+      <table style="width: 585px; background: #fff; border: 1px solid #aaa; -moz-border-radius-bottomleft: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-radius-bottom-right: 5px; -webkit-border-radius-bottom-right: 5px;" cellpadding="0" cellspacing="0">
         {% for item in captions %}
             {% if item.2 %}
-                <p>
-                    {% trans 'NEW' %}: {{ item.0.subtitle_text }}<br/>
-                    {% trans 'OLD' %}: {{ item.1.subtitle_text }}
-                </p>
+                <tr>
+                  <td width="210" style="padding: 8px; font-size: 12px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">
+                    {{ item.1.subtitle_text }}
+                  </td>
+                  <td width="210" style="padding: 8px; font-size: 12px; border-bottom: 1px solid #ddd;">
+                    {{ item.0.subtitle_text }}
+                  </td>
+                </tr>
             {% endif %}
         {% endfor %}
+      </table>
     </div>
 {% endif %}
-<p>
+<p style="font-size: 12px;">
     {% trans 'To view the current and previous versions side by side, follow this' %} 
     <a href="http://{{ domain }}{% url profiles:my_profile %}">{% trans 'link' %}</a>.
 </p>
+{% endblock %}

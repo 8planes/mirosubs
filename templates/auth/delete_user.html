@@ -5,12 +5,13 @@
 {% block body_attrs %}id="login"{% endblock %}
 
 {% block main_content %}
-<div class="left_column">
-<h2>{% trans 'Delete you profile?' %}</h2>
+<div class="grid_12">
+<h2>{% trans 'Are you sure that you want to permanently delete your profile?' %}</h2>
+<p>This can't be undone!</p>
   <form action="." method="post">
     {% csrf_token %}
-    <button type="submit" class="green_button big" name="delete" value="delete">{% trans 'Delete' %}</button>
-    <a href="{% url profiles:my_profile %}">{% trans 'Cancel' %}</a>
+    <button type="submit" class="green_button huge" name="delete" value="delete">{% trans 'Delete' %}</button>
+    <a class="red_button small" href="{% url profiles:my_profile %}">{% trans 'Cancel' %}</a>
   </form>
 <div/>
 {% endblock %}

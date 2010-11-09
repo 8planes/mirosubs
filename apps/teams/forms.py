@@ -35,6 +35,7 @@ from django.contrib.sites.models import Site
 from utils.forms import UniSubURLField
 from videos.models import Video
 from django.utils.safestring import mark_safe
+from urlparse import urlparse
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
 
@@ -51,6 +52,10 @@ class EditTeamVideoForm(forms.ModelForm):
 class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubURLField(label=_('Video URL'), verify_exists=True, 
         help_text=_("Enter the URL of any compatible video or any video on our site. You can also browse the site and use the 'Add Video to Team' menu."))
+
+    def format_url(self, url):
+        parsed_url = urlparse(url)
+        return '%s://%s%s' % (parsed_url.scheme or 'http', parsed_url.netloc, parsed_url.path)  
     
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
@@ -65,6 +70,7 @@ class BaseVideoBoundForm(forms.ModelForm):
         if video_url.startswith(url_start):
             #UniSub URL
             try:
+                video_url = self.format_url(video_url)
                 func, args, kwargs = resolve(video_url.replace(url_start, ''))
                 
                 if not 'video_id' in kwargs:
