@@ -29,7 +29,7 @@
         <span>{% trans 'Added' %}</span>
     </th>
     <th>
-        <span>{% trans 'added_by' %}</span>
+        <span>{% trans 'Added by' %}</span>
     </th>
     <th class="last">
         <span>{% trans 'Actions' %}</span>
@@ -68,6 +68,11 @@
 </tbody>
 </table>
 <div id="add-video-url" style="display: none">
+    <h2 style="text-align: center;">{% trans 'Added another URL for this video' %}</h2>
+    <div>
+        {% trans "Add a URL for another version of the exact same video." %}<br/>
+        {% trans "This is useful in cases where many versions of the same video exist, or when there are versions in different formats (like HTML5)" %}
+    </div>
     {% if user.is_authenticated %}
     <form method="post" action="{% url videos:video_url_create %}">
         <div class="global-errors"></div>
@@ -122,7 +127,7 @@ jQuery(function($){
     $('.delete-url-link').click(function(){
         var $url = $(this);
         if (IS_AUTHENTICATED){
-            if (confirm('{% trans "Delete this URL?" %}')){
+            if (confirm('{% trans "Delete this URL?  Warning: this cannot be undone. Only delete URLs for non-matching videos or videos where subtitles fail to display correctly." %}')){
                 $.get(remove_url, {id: $url.attr('video_url_id')},
                     function(response){
                         if (response.error){
