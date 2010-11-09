@@ -153,6 +153,7 @@
         {% include 'videos/_left_navigation.html' %}
     </ul>
     <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+    {% team_add_video_select %}
   </div>
 
   <div class="wrap grid_9 omega">  
@@ -174,8 +175,6 @@
         </div>
         {% endif %}
         
-        {% team_add_video_select %}
-            
       <h4 class="inline">{{ language.get_language_display }}</h4> 
       <ul class="inline_tabs">
           <li class="active">
