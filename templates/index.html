@@ -30,7 +30,7 @@ Reach an international audience, make your videos accessible, and get more traff
     </p>
 
     <p class="larger center bold">
-        {{ all_videos }} {% trans 'videos use Universal Subititles' %}
+        {{ all_videos }} {% trans 'videos use Universal Subtitles' %}
     </p>
 </div>
 
@@ -137,16 +137,7 @@ Reach an international audience, make your videos accessible, and get more traff
   </div>
   <div class="grid_6 omega">
     <div id="widget_div" class="mirosubs-widget"></div>
-    <p id="widget-note-div" style="display: none">
-        <em>
-            Note: for captions/subtitles on this video, use a 
-            <a href="http://www.mozilla.com/firefox/">browser</a> that supports open
-            formats
-        </em>
-    </p>
-
-<script type="text/javascript">
-  if (mirosubs.video.supportsOgg()) {
+    <script type="text/javascript">
      var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
          document.getElementById('widget_div'), 
          { "base_state": {},
@@ -154,25 +145,11 @@ Reach an international audience, make your videos accessible, and get more traff
                "poster": "{{ MEDIA_URL }}images/about-poster.png",
                "play_to_click": true
            },
-           "video_url": "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv" });
-  }
-  else if (mirosubs.video.supportsH264()) {
-     $('#widget_div').append($(
-         '<video controls src="http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4" width="470" height="353"></video>'
-     ));
-  }
-  else {
-     $('#widget_div').append($('<object width="480" height="385">'+
-         '<param name="movie" value="http://www.youtube.com/watch?v=Y2IJb1YnAmQ"></param>'+
-         '<param name="allowFullScreen" value="true"></param>'+
-         '<param name="allowscriptaccess" value="always"></param>'+
-         '<embed src="http://www.youtube.com/watch?v=Y2IJb1YnAmQ" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed>'+
-       '</object>'));
-  }
-  if ( ! mirosubs.video.supportsOgg()) {
-      $('#widget-note-div').show();
-  }
-</script>
+           "video_url": "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv",
+           "alternate_video_urls": 
+               ["http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4", 
+                "http://www.youtube.com/watch?v=Y2IJb1YnAmQ"]});
+    </script>
   </div>
 
 <h2 class="arrows">{% trans 'With Universal Subtitles, you can:' %}</h2>

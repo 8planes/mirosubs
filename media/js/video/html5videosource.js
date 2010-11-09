@@ -39,7 +39,7 @@ mirosubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
     var videoType = null;
     if (/\.ogv$|\.ogg$/.test(videoURL))
         videoType = vt.OGG;
-    else if (/\.mp4$/.test(videoURL))
+    else if (/\.mp4$|\.m4v$/.test(videoURL))
         videoType = vt.H264;
     else if (/\.webm$/.test(videoURL))
         videoType = vt.WEBM;
@@ -48,6 +48,13 @@ mirosubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
             videoURL, videoType, opt_videoConfig);
     else
         return null;
+};
+
+mirosubs.video.Html5VideoSource.prototype.isBestVideoSource = function() {
+    if (this.videoType_ == mirosubs.video.Html5VideoType.H264 && 
+        (mirosubs.video.supportsOgg() || mirosubs.video.supportsWebM()))
+        return false;
+    return mirosubs.video.supportsVideoType(this.videoType_);
 };
 
 mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
@@ -80,4 +87,8 @@ mirosubs.video.Html5VideoSource.prototype.getVideoType = function() {
 
 mirosubs.video.Html5VideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
+};
+
+mirosubs.video.Html5VideoSource.prototype.setVideoConfig = function(config) {
+    this.videoConfig_ = config;
 };

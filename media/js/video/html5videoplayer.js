@@ -71,7 +71,8 @@ mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
         goog.style.setSize(el, 400, 300);
         el.style.lineHeight = '300px';
         el.innerHTML = 
-            "Sorry, your browser can't play HTML5/Ogg video. " +
+            "Sorry, your browser can't play HTML5/" + 
+            this.videoSource_.getVideoType() + " video. " +
             "<a href='http://getfirefox.com'>Get Firefox</a>.";       
     }
 };
@@ -108,6 +109,8 @@ mirosubs.video.Html5VideoPlayer.prototype.createVideoElement_ =
 };
 mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
     mirosubs.video.Html5VideoPlayer.superClass_.enterDocument.call(this);
+    if (!this.videoElem_)
+        return;
     this.getHandler().
         listen(this.videoElem_, 'play', this.videoPlaying_).
         listen(this.videoElem_, 'pause', this.videoPaused_).

@@ -48,8 +48,12 @@ class Rpc(BaseRpc):
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
 
+        # TODO: in near future, use alternate video urls to fill these in.
         if video.video_type == models.VIDEO_TYPE_BLIPTV:
-            return_value['flv_url'] = video.bliptv_flv_url
+            video_urls = [video.bliptv_flv_url]
+        else:
+            video_urls = [video_url]
+        return_value['video_urls'] = video_urls
         return_value['drop_down_contents'] = \
             self._drop_down_contents(request.user, video)
 

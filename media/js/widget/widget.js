@@ -29,6 +29,8 @@ mirosubs.widget.Widget = function(widgetConfig) {
      * @type {string}
      */
     this.videoURL_ = widgetConfig['video_url'];
+    this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'] || [];
+    this.forceFormat_ = !!widgetConfig['force_format'];
     this.videoConfig_ = widgetConfig['video_config'];
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
@@ -70,19 +72,56 @@ mirosubs.widget.Widget.prototype.setVideoSource_ = function(videoSource) {
     this.setVideoDimensions_();
 };
 
-mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
-    var videoSource = null;
-    try {
-        videoSource = mirosubs.video.VideoSource.videoSourceForURL(
+mirosubs.widget.Widget.prototype.findVideoSource_ = function() {
+    if (this.alternateVideoURLs_.length > 0) {
+        var mainVideoSpec = this.videoURL_;
+        if (this.videoConfig_)
+            mainVideoSpec = { 'url': this.videoURL_, 
+                              'config': this.videoConfig_ };
+        return mirosubs.video.VideoSource.bestVideoSource(
+            goog.array.concat(mainVideoSpec, this.alternateVideoURLs_));
+    }
+    else
+        return mirosubs.video.VideoSource.videoSourceForURL(
             this.videoURL_, this.videoConfig_);
+};
+
+mirosubs.widget.Widget.prototype.isVideoSourceImmediatelyUsable_ = 
+    function() 
+{
+    if (this.videoSource_ instanceof mirosubs.video.BlipTVPlaceholder)
+        return false;
+    if (this.forceFormat_ || this.alternateVideoURLs_.length > 0)
+        return true;
+    else {
+        if (this.videoSource_ instanceof mirosubs.video.Html5VideoSource)
+            return this.videoSource_.isBestVideoSource();
+        else
+            return !mirosubs.video.supportsVideo();
+    }
+};
+
+mirosubs.widget.Widget.prototype.addVideoLoadingPlaceholder_ = 
+    function(el) 
+{
+    this.videoPlaceholder_ = this.getDomHelper().createDom(
+        'div', 'mirosubs-videoLoading', 'Loading...');
+    goog.dom.appendChild(el, this.videoPlaceholder_);
+};
+
+mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
+    try {
+        this.videoSource_ = this.findVideoSource_();
     }
     catch (err) {
         // TODO: format this more.
         el.innerHTML = err.message;
         return;
     }
-    if (videoSource != null)
-        this.setVideoSource_(videoSource);
+    if (this.isVideoSourceImmediatelyUsable_())
+        this.setVideoSource_(this.videoSource_);
+    else
+        this.addVideoLoadingPlaceholder_(el);
     this.videoTab_ = new mirosubs.widget.VideoTab();
     var videoTabContainer = new goog.ui.Component();
     this.addChild(videoTabContainer, true);
@@ -101,9 +140,16 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
 };
 
 mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
-    if (result['flv_url'] && !this.videoSource_)
-        this.setVideoSource_(new mirosubs.video.FlvVideoSource(
-            result['flv_url']));
+    if (!this.isVideoSourceImmediatelyUsable_()) {
+        goog.dom.removeNode(this.videoPlaceholder_);
+        var videoSource = mirosubs.video.VideoSource.bestVideoSource(
+            result['video_urls']);
+        if (goog.typeOf(videoSource) == goog.typeOf(this.videoSource_) &&
+            this.videoConfig_)
+            videoSource.setVideoConfig(this.videoConfig_);
+        this.videoSource_ = videoSource;
+        this.setVideoSource_(this.videoSource_);
+    }
 
     this.controller_ = new mirosubs.widget.WidgetController(
         this.videoURL_, this.videoPlayer_, this.videoTab_);

@@ -41,6 +41,58 @@ mirosubs.video.VideoSource.prototype.createPlayer = function() {};
 mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
 
 /**
+ *
+ * @param {Array} videoSpecs This is an array with each element either 
+ *   a string (for a url) or an object with properties "url" and "config".
+ * @return {?mirosubs.video.VideoSource} video source, or null if none found.
+ */
+mirosubs.video.VideoSource.bestVideoSource = function(videoSpecs) {
+    var videoSources = goog.array.map(videoSpecs, function(spec) {
+        return mirosubs.video.VideoSource.videoSourceForSpec_(spec);
+    });
+    var vt = mirosubs.video.Html5VideoType;
+    var preferenceOrdering = [vt.OGG, vt.WEBM, vt.H264];
+    for (var i = 0; i < preferenceOrdering.length; i++) {
+        if (mirosubs.video.supportsVideoType(preferenceOrdering[i])) {
+            var videoSource = mirosubs.video.VideoSource.html5VideoSource_(
+                videoSources, preferenceOrdering[i]);
+            if (videoSource != null)
+                return videoSource;
+        }
+    }
+    // browser does not support any available html5 formats. Return a flash format.
+    var videoSource = goog.array.find(
+        videoSources,
+        function(v) { return !(v instanceof mirosubs.video.Html5VideoSource); });
+    if (videoSource != null)
+        return videoSource;
+    // if we got this far, first return mp4 for player fallback. then return anything.
+    var videoSource = mirosubs.video.VideoSource.html5VideoSource_(
+        videoSources, vt.H264);
+    if (videoSource != null)
+        return videoSource;
+    return videoSources.length > 0 ? videoSources[0] : null;
+};
+
+mirosubs.video.VideoSource.videoSourceForSpec_ = function(videoSpec) {
+    if (goog.isString(videoSpec))
+        return mirosubs.video.VideoSource.videoSourceForURL(
+            videoSpec);
+    else
+        return mirosubs.video.VideoSource.videoSourceForURL(
+            videoSpec['url'], videoSpec['config']);
+};
+
+mirosubs.video.VideoSource.html5VideoSource_ = function(videoSources, videoType) {
+    return goog.array.find(
+        videoSources, 
+        function(v) { 
+            return (v instanceof mirosubs.video.Html5VideoSource) && 
+                v.getVideoType() == videoType; 
+        });
+};
+
+/**
  * Returns null if we can't get VideoSource without asking the server
  * for more info.
  *
@@ -65,7 +117,7 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL) &&
              !blipFileGetRegex.test(videoURL)) {
-        return null;
+        return new mirosubs.video.BlipTVPlaceholder(videoURL);
     }
     else if (/\.flv$/.test(videoURL)) {
         return new mirosubs.video.FlvVideoSource(videoURL);

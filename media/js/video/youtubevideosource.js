@@ -20,6 +20,7 @@ goog.provide('mirosubs.video.YoutubeVideoSource');
 
 /**
  * @constructor
+ * @implements {mirosubs.video.VideoSource}
  * @param {string} youtubeVideoID Youtube video id
  * @param {Object.<string, *>=} opt_videoConfig Params to use for 
  *     youtube query string, plus optional 'width' and 'height' 
@@ -74,6 +75,11 @@ mirosubs.video.YoutubeVideoSource.prototype.getUUID = function() {
 mirosubs.video.YoutubeVideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
+
+mirosubs.video.YoutubeVideoSource.prototype.setVideoConfig = function(config) {
+    this.videoConfig_ = config;
+};
+
 
 mirosubs.video.YoutubeVideoSource.prototype.getVideoURL = function() {
     return "http://www.youtube.com/watch?v=" + this.youtubeVideoID_;

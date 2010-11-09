@@ -37,7 +37,10 @@ class NullRpc(BaseRpc):
             return_value['username'] = request.user.username
         video_type = video_type_registrar.video_type_for_url(video_url)
         if isinstance(video_type, BlipTvVideoType):
-            return_value['flv_url'] = video_type.scrape_best_file_url()
+            video_urls = video_type.scrape_best_file_url()
+        else:
+            video_urls = [video_url]
+        return_value['video_urls'] = video_urls
         return_value['drop_down_contents'] = \
             self._drop_down_contents(None, None)
         return return_value

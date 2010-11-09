@@ -19,9 +19,9 @@
 goog.provide('mirosubs.video');
 
 mirosubs.video.Html5VideoType = {
-    H264: 1,
-    OGG: 2,
-    WEBM: 3
+    H264: 'H264',
+    OGG: 'Ogg',
+    WEBM: 'WebM'
 };
 
 mirosubs.video.supportsVideo = function() {
