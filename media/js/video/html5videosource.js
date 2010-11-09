@@ -71,10 +71,20 @@ mirosubs.video.Html5VideoSource.prototype.createControlledPlayer =
 mirosubs.video.Html5VideoSource.prototype.createPlayer_ = 
     function(forSubDialog) 
 {
-    return new mirosubs.video.Html5VideoPlayer(
-        new mirosubs.video.Html5VideoSource(
-            this.videoURL_, this.videoType_, this.videoConfig_), 
-        forSubDialog);
+    if (this.videoType_ == mirosubs.video.Html5VideoType.H264 && 
+        !mirosubs.video.supportsH264())
+        return new mirosubs.video.FlvVideoPlayer(this, forSubDialog);
+    else
+        return new mirosubs.video.Html5VideoPlayer(
+            new mirosubs.video.Html5VideoSource(
+                this.videoURL_, this.videoType_, this.videoConfig_), 
+            forSubDialog);
+};
+
+mirosubs.video.Html5VideoSource.prototype.getFlvURL = function() {
+    if (this.videoType_ != mirosubs.video.Html5VideoType.H264)
+        throw new Error();
+    return this.videoURL_;
 };
 
 mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
