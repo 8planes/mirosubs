@@ -8,6 +8,31 @@
     {% trans 'Team settings' %} | Universal Subtitles
 {% endblock %}
 
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(function($){
+            $('#id_logo').change(function(){
+                $('.edit-team').ajaxSubmit({
+                    url: '{% url teams:edit_logo team.pk %}',
+                    dataType: 'json',
+                    success: function(response){
+                        if (response.error){
+                            $('#logo-errors').html('<ul class="errorlist"><li>'+response.error.logo+'</li></ul>');
+                        }else{
+                            $('#logo-errors').html('');  
+                            $('.team-logo').attr('src', response.url);
+                        }
+                    },
+                    beforeSubmit: function(arr, $form, options) { 
+                        $('#logo-errors').html('Saving...');            
+                    }                    
+                });
+            });            
+        });
+    </script>
+{% endblock %}
+
 {% block main_content %}
 
 {% team_select team %}
@@ -21,14 +46,13 @@
     </ul>
 </div>
 <div class="wrap grid_9 omega">
-    <h4 class="inline"> <!-- {{ team }} --></h4>
     {% with "settings" as active %}
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}
     <div class="boxx">
         <div class="padding">
             {% if form %}
-            <form method='post' action="." enctype="multipart/form-data">
+            <form method='post' action="." class="edit-team" enctype="multipart/form-data">
             <div class="grid_9">
                 {% csrf_token %}
                 <div class="grid_5 alpha">
@@ -44,11 +68,18 @@
                             {{ form.description }}
                         </p>
                     <h3>{% trans 'Upload Team Logo' %}</h3>
-                    <p class="small">
-                        {% if team.logo %}<img src="{{ team.logo_thumbnail }}" />{% endif %}
+                    <p class="error_list" id="logo-errors">
                         {{ form.logo.errors }}
-                        {{ form.logo }}
-                     </p>
+                    </p>
+                    <p class="avatar-container">
+                        <img class="thumbnail_medium team-logo" src="{{ team.logo_thumbnail }}"/>
+                    </p>
+                    <p style="float: left; clear: both; margin-bottom: 30px;">
+                        <input type="file" id="id_logo" name="logo" size="6"/>
+                        <button  class="green_button small upload-picture" style="z-index: 1; padding-left: 10px;">
+                            <span><span class="plus"></span>{% trans 'Upload logo' %}</span>
+                        </button>
+                    </p>                         
                      <h3>{% trans 'Team Intro Video' %}</h3>
                      <p>
                         {% if team.video %}
@@ -63,14 +94,14 @@
                     <h3>{% trans 'Team Member Settings' %}</h3>
                         <p>
                             <label>
-                                {% trans 'Who can Join this Team?' %}
+                                {% trans 'Who can join this team?' %}
                             </label>
                             {{ form.membership_policy.errors }}
                             {{ form.membership_policy }}  
                         </p>
                         <p>
                             <label>
-                                {% trans 'Who can Add Videos to this Team?' %}
+                                {% trans 'Who can add videos to this team?' %}
                             </label>
                             {{ form.video_policy.errors }}
                             {{ form.video_policy }}  

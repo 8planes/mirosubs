@@ -90,12 +90,10 @@
 
 
         <ul class="sub_nav">
+          <li class="blog_link"><a href="{% url teams:index %}"><span>{% trans 'Teams' %}</span></a></li>
           <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>{% trans 'Blog' %}</span></a></li>
           <li class="about_link"><a href="/about" class="about"><span>{% trans 'About' %}</span></a></li>
-   
-              <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
-
-
+          <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
           {% if user.is_authenticated %}
               <li class="login_link"><a href="{% url logout %}?next={{ request.path_info|urlencode }}"><span>{% trans 'Logout' %}</span></a></li>
               {% if user.is_staff %}

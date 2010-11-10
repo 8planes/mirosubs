@@ -6,7 +6,6 @@
     {{ block.super }}
     <script type="text/javascript">
         jQuery(function($){
-            $('#id_picture').val('')
             $('#id_picture').change(function(){
                 $('.edit_profile').ajaxSubmit({
                     url: '{% url profiles:edit_avatar %}',

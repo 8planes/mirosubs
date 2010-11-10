@@ -36,8 +36,22 @@ from utils.forms import UniSubURLField
 from videos.models import Video
 from django.utils.safestring import mark_safe
 from urlparse import urlparse
+from utils.forms import AjaxForm
+import re
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
+
+class EditLogoForm(forms.ModelForm, AjaxForm):
+    logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
+
+    class Meta:
+        model = Team
+        fields = ('logo',)
+
+    def clean(self):
+        if 'logo' in self.cleaned_data and not self.cleaned_data.get('logo'):
+            del self.cleaned_data['logo']
+        return self.cleaned_data
 
 class EditTeamVideoForm(forms.ModelForm):
     
@@ -131,7 +145,7 @@ class CreateTeamForm(BaseVideoBoundForm):
     
     class Meta:
         model = Team
-        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 
+        fields = ('name', 'slug', 'description', 'logo', 'membership_policy', 'video_policy', 
                   'is_visible', 'video_url')
     
     def __init__(self, *args, **kwargs):
@@ -142,7 +156,14 @@ class CreateTeamForm(BaseVideoBoundForm):
 on your team homepage that explains what your team is about, to attract volunteers. 
 Enter a link to any compatible video, or to any video page on our site.''')
         self.fields['is_visible'].widget.attrs['class'] = 'checkbox'
+        self.fields['slug'].label = _(u'Team URL: http://universalsubtitles.org/teams/')
     
+    def clean_slug(self):
+        slug = self.cleaned_data['slug']
+        if re.match('^\d+$', slug):
+            raise forms.ValidationError('Field can\'t contains only numbers')
+        return slug
+            
     def save(self, user):
         team = super(CreateTeamForm, self).save(False)
         if self.video:
@@ -154,7 +175,8 @@ Enter a link to any compatible video, or to any video page on our site.''')
 class EditTeamForm(CreateTeamForm):
         
     def clean(self):
-        if 'logo' in self.cleaned_data and not self.cleaned_data.get('logo'):
+        if 'logo' in self.cleaned_data:
+            #It is saved with edit_logo view
             del self.cleaned_data['logo']
         return self.cleaned_data
     

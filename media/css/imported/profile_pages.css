@@ -71,14 +71,14 @@
   
 
 
-.edit_profile_shell #id_picture{
+.edit_profile_shell #id_picture, .edit-team #id_logo{
     position: absolute;
     margin-top: 3px;
     opacity: 0;
     z-index: 2;
   }
 
-.edit_profile_shell .upload-picture {
+.upload-picture {
     position: absolute;
   }
 

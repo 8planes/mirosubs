@@ -1,4 +1,5 @@
 {% load i18n %}
+<h4 class="inline"></h4>
 <ul class="inline_tabs">
     <li {% if active == "settings" %} class="active"{% endif %}>
         <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>

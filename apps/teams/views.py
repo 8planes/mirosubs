@@ -23,11 +23,11 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from utils import render_to, render_to_json
-from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset, AddTeamVideoForm, EditTeamVideoForm
+from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguage
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.conf import settings
@@ -40,6 +40,7 @@ import random
 from widget.views import base_widget_params
 import widget
 from videos.models import Action
+from django.utils import simplejson as json
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -97,9 +98,13 @@ def index(request):
                        template_object_name='teams',
                        extra_context=extra_context)
     
-def detail(request, pk):
+def detail(request, slug):
     q = request.REQUEST.get('q')
-    team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
+    
+    team = Team.get(slug, request.user)
+    
+    if not team:
+        raise Http404
     
     qs = team.teamvideo_set.order_by('-video__title')
     if q:
@@ -188,7 +193,7 @@ def create(request):
         form = CreateTeamForm(request.POST, request.FILES)
         if form.is_valid():
             team = form.save(request.user)
-            messages.success(request, _('Team created success'))
+            messages.success(request, _('Your team has been created. Review or edit its information below.'))
             return redirect(team.get_edit_url())
     else:
         form = CreateTeamForm()
@@ -198,8 +203,11 @@ def create(request):
 
 @render_to('teams/edit.html')
 @login_required
-def edit(request, pk):
-    team = get_object_or_404(Team, pk=pk)
+def edit(request, slug):
+    team = Team.get(slug)
+    
+    if not team:
+        raise Http404
     
     if not team.is_member(request.user):
         raise Http404
@@ -221,6 +229,22 @@ def edit(request, pk):
         'form': form,
         'team': team
     }
+
+@login_required
+def edit_logo(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    
+    if not team.is_member(request.user):
+        raise Http404
+    
+    output = {}
+    form = EditLogoForm(request.POST, instance=team, files=request.FILES)
+    if form.is_valid():
+        user = form.save()
+        output['url'] =  str(team.logo_thumbnail())
+    else:
+        output['error'] = form.get_errors()
+    return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
 @render_to('teams/add_video.html')
 @login_required

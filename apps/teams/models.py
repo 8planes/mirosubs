@@ -66,11 +66,12 @@ class Team(models.Model):
     )
     
     name = models.CharField(_(u'name'), max_length=250, unique=True)
+    slug = models.SlugField(_(u'slug'), unique=True)
     description = models.TextField(_(u'description'), blank=True)
     logo = S3EnabledImageField(verbose_name=_(u'logo'), thumb_sizes=((100, 100), (50, 50)), blank=True, upload_to='teams/logo/')
     membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES, default=OPEN)
     video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES, default=MEMBER_REMOVE)
-    is_visible = models.BooleanField(_(u'is public visible?'), default=True)
+    is_visible = models.BooleanField(_(u'publicly Visible?'), default=True)
     videos = models.ManyToManyField(Video, through='TeamVideo',  verbose_name=_('videos'))
     users = models.ManyToManyField(User, through='TeamMember', related_name='teams', verbose_name=_('users'))
     points = models.IntegerField(default=0, editable=False)
@@ -90,6 +91,20 @@ class Team(models.Model):
     def __unicode__(self):
         return self.name
     
+    @classmethod
+    def get(cls, slug, user=None):
+        if user:
+            qs = cls.objects.for_user(user)
+        else:
+            qs = cls.objects.all()
+        try:
+            return qs.get(slug=slug)
+        except cls.DoesNotExist:
+            try:
+                return qs.get(pk=slug)
+            except cls.DoesNotExist:
+                pass       
+    
     def logo_thumbnail(self):
         if self.logo:
             return self.logo.thumb_url(100, 100)
@@ -100,11 +115,11 @@ class Team(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('teams:detail', [self.pk])
+        return ('teams:detail', [self.slug])
     
     @models.permalink
     def get_edit_url(self):
-        return ('teams:edit', [self.pk])
+        return ('teams:edit', [self.slug])
     
     def is_manager(self, user):
         if not user.is_authenticated():
