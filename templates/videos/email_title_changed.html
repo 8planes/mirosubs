@@ -7,6 +7,7 @@
     {% trans 'Dear' %} {{ user }}, <br/>
     {% blocktrans %}A title of video you contributed to has been edited by {% endblocktrans %}
     <a href="{{ editor.get_absolute_url }}">{{ editor }}</a>. <br/>
+    {% trans "Video page" %}: <a href="{{ video.get_absolute_url }}">{{ video }}</a> 
 </p>
 <p style="font-size: 12px;">
     {% trans 'NEW' %}:  {{ video.title }}
