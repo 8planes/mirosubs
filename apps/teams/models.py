@@ -67,7 +67,7 @@ class Team(models.Model):
     
     name = models.CharField(_(u'name'), max_length=250, unique=True)
     slug = models.SlugField(_(u'slug'), unique=True)
-    description = models.TextField(_(u'description'), blank=True)
+    description = models.TextField(_(u'description'), blank=True, help_text=_('All urls will be converted to links.'))
     logo = S3EnabledImageField(verbose_name=_(u'logo'), thumb_sizes=((100, 100), (50, 50)), blank=True, upload_to='teams/logo/')
     membership_policy = models.IntegerField(_(u'membership policy'), choices=MEMBERSHIP_POLICY_CHOICES, default=OPEN)
     video_policy = models.IntegerField(_(u'video policy'), choices=VIDEO_POLICY_CHOICES, default=MEMBER_REMOVE)
@@ -90,6 +90,9 @@ class Team(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+    def is_open(self):
+        return self.membership_policy == self.OPEN
     
     @classmethod
     def get(cls, slug, user=None):

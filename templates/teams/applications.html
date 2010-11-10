@@ -46,6 +46,12 @@
                     {% endif %}
                 </td>
             </tr>
+            {% empty %}
+            <tr>
+                <td>
+                    {% trans 'There are no applicants at this time.' %}
+                </td>
+            </tr>                
             {% endfor %}
         </tbody>
     </table>

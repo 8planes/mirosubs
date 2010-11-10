@@ -51,14 +51,18 @@ ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 20)
 
 def index(request):
     q = request.REQUEST.get('q')
-
-    qs = Team.objects.for_user(request.user).annotate(_member_count=Count('users__pk'))
-
+    
+    ordering = request.GET.get('o', 'name')
+    
+    if ordering == 'my' and request.user.is_authenticated():
+        qs = Team.objects.filter(members__user=request.user)
+    else:
+        qs = Team.objects.for_user(request.user).annotate(_member_count=Count('users__pk'))
     
     if q:
         qs = qs.filter(Q(name__icontains=q)|Q(description__icontains=q))
     
-    ordering = request.GET.get('o', 'name')
+    
     
     order_fields = {
         'name': 'name',

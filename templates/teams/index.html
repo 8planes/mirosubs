@@ -43,8 +43,13 @@
                         <a href="?o=date{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true">{% trans 'Newest' %}</a>
                     </li>
                     <li>
-                        <a href="?o=name{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true" class="last">{% trans 'Name' %}</a>
+                        <a href="?o=name{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true">{% trans 'Name' %}</a>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a href="?o=my{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true" class="last">{% trans 'My teams' %}</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
             <div class="inline_search">
@@ -71,7 +76,7 @@
                 {% if team.logo %}<img src="{{ team.logo_thumbnail }}" width="100" height="100"/>{% endif %}
             </a>
             <div class="info">
-                <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %}({% trans 'your team' %}){% endif %}</a></h4>
+                <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} ({% trans 'your team' %}){% endif %}</a></h4>
                 {% if team|is_team_manager:user %}
                     <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
                 {% endif %}                
@@ -89,9 +94,9 @@
             {% if user.is_staff and perms.teams.change_team %}
                 <div class="info">
                 {% if team.highlight %}
-                    <a href="{% url teams:unhighlight team.pk %}">{% trans 'Unfeature this team' %}</a>
+                    <a href="{% url teams:unhighlight team.pk %}">{% trans 'Un-highlight this team' %}</a>
                 {% else %}
-                    <a href="{% url teams:highlight team.pk %}">{% trans 'Feature this team' %}</a>
+                    <a href="{% url teams:highlight team.pk %}">{% trans 'Highlight this team' %}</a>
                 {% endif %}
                 </div>
             {% endif %}            
@@ -125,9 +130,9 @@
                 {% if user.is_staff and perms.teams.change_team %}
                     <div>
                     {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Unfeature this team' %}</a>
+                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Un-highlight this team' %}</a>
                     {% else %}
-                        <a href="{% url teams:highlight team.pk %}">{% trans 'Feature this team' %}</a>
+                        <a href="{% url teams:highlight team.pk %}">{% trans 'Highlight this team' %}</a>
                     {% endif %}
                     </div>
                 {% endif %}                

@@ -2,7 +2,7 @@
 <h4 class="inline"></h4>
 <ul class="inline_tabs">
     <li {% if active == "settings" %} class="active"{% endif %}>
-        <a href="{% url teams:edit team.pk %}">{% trans 'Team Settings' %}</a>
+        <a href="{{ team.get_edit_url }}">{% trans 'Team Settings' %}</a>
     </li>
     <li class="bull">&bull;</li>
     <li {% if active == "members" %} class="active"{% endif %}>

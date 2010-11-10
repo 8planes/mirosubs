@@ -172,7 +172,22 @@ Enter a link to any compatible video, or to any video page on our site.''')
         TeamMember(team=team, user=user, is_manager=True).save()
         return team
     
-class EditTeamForm(CreateTeamForm):
+class EditTeamForm(BaseVideoBoundForm):
+    logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
+
+    class Meta:
+        model = Team
+        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 
+                  'is_visible', 'video_url')
+
+    def __init__(self, *args, **kwargs):
+        super(EditTeamForm, self).__init__(*args, **kwargs)
+        self.fields['video_url'].label = _(u'Team intro video URL')
+        self.fields['video_url'].required = False
+        self.fields['video_url'].help_text = _(u'''You can put an optional video 
+on your team homepage that explains what your team is about, to attract volunteers. 
+Enter a link to any compatible video, or to any video page on our site.''')
+        self.fields['is_visible'].widget.attrs['class'] = 'checkbox'
         
     def clean(self):
         if 'logo' in self.cleaned_data:
@@ -181,8 +196,12 @@ class EditTeamForm(CreateTeamForm):
         return self.cleaned_data
     
     def save(self):
-        team = super(CreateTeamForm, self).save(False)
+        team = super(EditTeamForm, self).save(False)
         if self.video:
             team.video = self.video
         team.save()
+
+        if team.is_open():
+            for item in team.applications.all():
+                item.approve()
         return team    
