@@ -238,15 +238,12 @@ class UserTestResultForm(forms.ModelForm):
         obj.save()
         return obj
 
-class VideoForm(forms.ModelForm):
-
-    class Meta:
-        model = Video
-        fields = ('video_url',)
+class VideoForm(forms.Form):
+    video_url = forms.URLField(verify_exists=True)
     
     def __init__(self, *args, **kwargs):
         super(VideoForm, self).__init__(*args, **kwargs)
-        self.fields['video_url'].required = True
+        self.fields['video_url'].widget.attrs['class'] = 'main_video_form_field'
     
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
@@ -292,7 +289,7 @@ class FeedbackForm(MathCaptchaForm):
             feedback_email = settings.FEEDBACK_EMAIL
         headers = {'Reply-To': email} if email else None
         bcc = []
-        if settings.DEV:
+        if getattr(settings, 'DEV', False):
             bcc.append('hwilson@gmail.com')
         
         EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \

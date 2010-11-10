@@ -15,10 +15,11 @@
     {% endblocktrans %}
 {% endif %}
 <form action="{% url videos:create %}" method="POST" class="main_video_form">
+  {{ video_form.non_field_errors }}
   <h2 class="main_heading">{% trans 'Subtitle a Video' %}</h2>
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
   {{ video_form.video_url.errors }}
-  <input type="text" name="video_url" class="main_video_form_field" />
+  {{ video_form.video_url }}
   <button class="green_button big marginleft" type="submit" value="Begin">{% trans 'Begin' %}</button>
   <p>
       {% trans 'Works with Ogg, WebM, FLV, Youtube, Blip or Dailymotion.' %}  

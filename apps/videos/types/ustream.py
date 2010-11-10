@@ -36,7 +36,7 @@ class UstreamVideoType(VideoType):
         return bool(ustream.USTREAM_REGEX.match(url))
 
     def create_kwars(self):
-        return { 'video_url': self.video_url }
+        return { 'url': self.video_url }
     
     def set_values(self, video_obj):
         video_obj.title = ustream.get_title(self.url)

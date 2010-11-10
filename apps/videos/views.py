@@ -57,7 +57,7 @@ def ajax_change_video_title(request):
     try:
         video = Video.objects.get(video_id=video_id)
         if title and not video.title or video.is_html5():
-            old_title = video.title or video.video_url
+            old_title = video.title_display()
             video.title = title
             video.save()
             action = Action(new_video_title=video.title, video=video)
@@ -89,7 +89,7 @@ def ajax_change_video_title(request):
 
 def create(request):
     if request.method == 'POST':
-        video_form = VideoForm(request.POST, label_suffix="")
+        video_form = VideoForm(request.POST)
         if video_form.is_valid():
             try:
                 video = video_form.save()
@@ -102,7 +102,7 @@ share the video with friends, or get an embed code for your site.  To add or
 improve subtitles, click the button below the video''')
             return redirect(video.video_link())
     else:
-        video_form = VideoForm(label_suffix="")
+        video_form = VideoForm()
     return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
 

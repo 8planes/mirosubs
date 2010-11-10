@@ -20,8 +20,7 @@ from django.contrib import admin
 from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__', 'video_id', 'video_type']
-    list_filter = ['video_type']
+    list_display = ['__unicode__', 'title']
 
 class SubtitleLanguageAdmin(admin.ModelAdmin):
     list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete']

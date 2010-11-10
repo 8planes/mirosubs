@@ -31,14 +31,18 @@ class DailymotionVideoType(VideoType):
 
     def __init__(self, url):
         self.url = url
-        self.video_id = self.get_video_id(url)
+        self.videoid = self.get_video_id(url)
+
+    @property
+    def video_id(self):
+        return self.videoid
         
     def convert_to_video_url(self):
         return 'http://dailymotion.com/video/%s' % self.video_id
 
     @classmethod    
     def video_url(cls, obj):
-        return 'http://dailymotion.com/video/%s' % obj.dailymotion_videoid
+        return 'http://dailymotion.com/video/%s' % obj.videoid
     
     @classmethod
     def matches_video_url(cls, url):
@@ -51,12 +55,11 @@ class DailymotionVideoType(VideoType):
         return False
 
     def create_kwars(self):
-        return {'dailymotion_videoid': self.video_id}
+        return {'videoid': self.video_id}
 
     def set_values(self, video_obj):
         metadata = self.get_metadata(self.video_id)
         video_obj.title = metadata.get('title', '')
-        video_obj.video_url = self.url
         video_obj.thumbnail = metadata.get('thumbnail_url') or ''        
         return video_obj
     

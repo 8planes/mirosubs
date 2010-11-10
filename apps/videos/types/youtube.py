@@ -43,22 +43,26 @@ class YoutubeVideoType(VideoType):
 
     def __init__(self, url):
         self.url = url
-        self.video_id = self._get_video_id(self.url)
+        self.videoid = self._get_video_id(self.url)
         self.entry = self._get_entry(self.video_id)
+
+    @property
+    def video_id(self):
+        return self.videoid
     
     def convert_to_video_url(self):
         return 'http://www.youtube.com/watch?v=%s' % self.video_id   
 
     @classmethod    
     def video_url(cls, obj):
-        return 'http://www.youtube.com/watch?v=%s' % obj.youtube_videoid
+        return 'http://www.youtube.com/watch?v=%s' % obj.videoid
     
     @classmethod
     def matches_video_url(cls, url):
         return 'youtube.com' in url and cls._get_video_id(url)
 
     def create_kwars(self):
-        return {'youtube_videoid': self.video_id}
+        return {'videoid': self.video_id}
 
     def set_values(self, video_obj):
         video_obj.youtube_videoid = self.video_id
@@ -93,13 +97,19 @@ class YoutubeVideoType(VideoType):
         if not parser:
             return
         
-        language = SubtitleLanguage(video=video_obj)
+        language, create = SubtitleLanguage.objects.get_or_create(video=video_obj, language = parser.language)
         language.is_original = False
         language.is_forked = True
-        language.language = parser.language
         language.save()
         
+        try:
+            version_no = language.subtitleversion_set.order_by('-version_no')[:1] \
+                .get().version_no + 1
+        except SubtitleVersion.DoesNotExist:
+            version_no = 0
+            
         version = SubtitleVersion(language=language)
+        version.version_no = version_no
         version.datetime_started = datetime.now()
         version.user = User.get_youtube_anonymous()
         version.note = u'From youtube'

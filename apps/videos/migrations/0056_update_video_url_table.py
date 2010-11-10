@@ -7,12 +7,36 @@ from django.db import models
 class Migration(DataMigration):
     
     def forwards(self, orm):
-        "This migration is useless for production. 0056 should be used."
-        pass
+        if not db.dry_run:
+            for video in orm.Video.objects.all():
+                url = self.get_video_url(video)
+                if url:
+                    print 'Update video: %s' % video.id
+                    obj = orm.VideoUrl()
+                    obj.type = video.video_type
+                    obj.url = url
+                    obj.primary = True
+                    obj.original = True
+                    obj.video = video
+                    obj.videoid = self.get_video_id(video)
+                    obj.save()                
     
     def backwards(self, orm):
         "Write your backwards methods here."
-
+    
+    def get_video_id(self, video):
+        from videos.models import VIDEO_TYPE_HTML5, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_BLIPTV, VIDEO_TYPE_VIMEO, VIDEO_TYPE_DAILYMOTION
+        if video.video_type == VIDEO_TYPE_YOUTUBE:
+            return video.youtube_videoid
+        elif video.video_type == VIDEO_TYPE_BLIPTV:
+            return video.bliptv_fileid
+        elif video.video_type == VIDEO_TYPE_VIMEO:
+            return video.vimeo_videoid
+        elif video.video_type == VIDEO_TYPE_DAILYMOTION:
+            return video.dailymotion_videoid
+        else:
+            return ''
+    
     def get_video_url(self, video):
         from videos.models import VIDEO_TYPE_HTML5, VIDEO_TYPE_YOUTUBE, VIDEO_TYPE_BLIPTV, VIDEO_TYPE_VIMEO, VIDEO_TYPE_DAILYMOTION
         if video.video_type == VIDEO_TYPE_HTML5:
@@ -20,7 +44,7 @@ class Migration(DataMigration):
         elif video.video_type == VIDEO_TYPE_YOUTUBE:
             return 'http://www.youtube.com/watch?v={0}'.format(video.youtube_videoid)
         elif video.video_type == VIDEO_TYPE_BLIPTV:
-            return 'http://blip.tv/file/{0}/'.format(video.bliptv_fileid)
+            return video.bliptv_flv_url or video.video_url
         elif video.video_type == VIDEO_TYPE_VIMEO:
             return 'http://vimeo.com/{0}'.format(video.vimeo_videoid)
         elif video.video_type == VIDEO_TYPE_DAILYMOTION:
@@ -98,15 +122,6 @@ class Migration(DataMigration):
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
         },
-        'videos.nullsubtitles': {
-            'Meta': {'unique_together': "(('video', 'user', 'language'),)", 'object_name': 'NullSubtitles'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_forked': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'is_original': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']"}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
-        },
         'videos.stopnotification': {
             'Meta': {'object_name': 'StopNotification'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -115,14 +130,25 @@ class Migration(DataMigration):
         },
         'videos.subtitle': {
             'Meta': {'unique_together': "(('version', 'subtitle_id'),)", 'object_name': 'Subtitle'},
+            'draft': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleDraft']", 'null': 'True'}),
             'end_time': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'null_subtitles': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.NullSubtitles']", 'null': 'True'}),
             'start_time': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'subtitle_id': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
             'subtitle_order': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'subtitle_text': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'blank': 'True'}),
             'version': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleVersion']", 'null': 'True'})
+        },
+        'videos.subtitledraft': {
+            'Meta': {'object_name': 'SubtitleDraft'},
+            'browser_id': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
+            'datetime_started': ('django.db.models.fields.DateTimeField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_forked': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']"}),
+            'last_saved_packet': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'parent_version': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleVersion']", 'null': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True'})
         },
         'videos.subtitlelanguage': {
             'Meta': {'unique_together': "(('video', 'language'),)", 'object_name': 'SubtitleLanguage'},
@@ -140,7 +166,6 @@ class Migration(DataMigration):
         'videos.subtitleversion': {
             'Meta': {'unique_together': "(('language', 'version_no'),)", 'object_name': 'SubtitleVersion'},
             'datetime_started': ('django.db.models.fields.DateTimeField', [], {}),
-            'finished': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_forked': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']"}),
@@ -164,6 +189,7 @@ class Migration(DataMigration):
         'videos.video': {
             'Meta': {'object_name': 'Video'},
             'allow_community_edits': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'allow_video_urls_edit': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'bliptv_fileid': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
             'bliptv_flv_url': ('django.db.models.fields.CharField', [], {'max_length': '256', 'blank': 'True'}),
             'dailymotion_videoid': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
@@ -186,14 +212,17 @@ class Migration(DataMigration):
             'youtube_videoid': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'})
         },
         'videos.videourl': {
-            'Meta': {'object_name': 'VideoUrl'},
+            'Meta': {'unique_together': "(('video', 'original'),)", 'object_name': 'VideoUrl'},
+            'added_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'original': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '2048'}),
+            'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
+            'url': ('django.db.models.fields.URLField', [], {'unique': 'True', 'max_length': '255'}),
+            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"}),
+            'videoid': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'})
         }
     }
     

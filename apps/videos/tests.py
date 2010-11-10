@@ -175,8 +175,9 @@ class Html5ParseTest(TestCase):
     def _assert(self, start_url, end_url):
         from videos.models import VIDEO_TYPE_HTML5
         video, created = Video.get_or_create_for_url(start_url)
-        self.assertEquals(VIDEO_TYPE_HTML5, video.video_type)
-        self.assertEquals(end_url, video.video_url)
+        vu = video.videourl_set.all()[:1].get()
+        self.assertEquals(VIDEO_TYPE_HTML5, vu.type)
+        self.assertEquals(end_url, vu.url)
 
     def test_ogg(self):
         self._assert(
@@ -240,11 +241,7 @@ class VideoTest(TestCase):
         urllib.urlopen = urlopen_mockup
         
         vt = YoutubeVideoType('http://www.youtube.com/watch?v=GcjgWov7mTM')
-        video = Video(
-            youtube_videoid='GcjgWov7mTM',
-            video_type=VIDEO_TYPE_YOUTUBE,
-            allow_community_edits=True)
-        video.save()
+        video, create = Video.get_or_create_for_url('http://www.youtube.com/watch?v=GcjgWov7mTM', vt)
         vt._get_subtitles_from_youtube(video)
         video = Video.objects.get(pk=video.pk)
         version = video.version(language_code='en')
@@ -276,7 +273,7 @@ class ViewsTest(WebUseTest):
         youtube_id = 'uYT84jZDPE0'
         
         try:
-            Video.objects.get(youtube_videoid=youtube_id)
+            Video.objects.get(videourl__videoid=youtube_id, videourl__type=VIDEO_TYPE_YOUTUBE)
             self.fail()
         except Video.DoesNotExist:
             pass
@@ -285,7 +282,7 @@ class ViewsTest(WebUseTest):
         self._simple_test("api_subtitles", data={'video_url': url})
         
         try:
-            Video.objects.get(youtube_videoid=youtube_id)
+            Video.objects.get(videourl__videoid=youtube_id, videourl__type=VIDEO_TYPE_YOUTUBE)
         except Video.DoesNotExist:
             self.fail()
     
@@ -351,20 +348,20 @@ class ViewsTest(WebUseTest):
         self.assertEqual(response.status_code, 302)
         
         try:
-            video = Video.objects.get(youtube_videoid='osexbB_hX4g', video_type=VIDEO_TYPE_YOUTUBE)
+            video = Video.objects.get(videourl__videoid='osexbB_hX4g', videourl__type=VIDEO_TYPE_YOUTUBE)
         except Video.DoesNotExist:
             self.fail()
         
-        self.assertEqual(response['Location'], 'http://testserver'+video.get_absolute_url())
+        self.assertEqual(response['Location'], 'http://testserver'+video.video_link())
         
         len_before = Video.objects.count()
         data = {
-            'video_url': 'http://www.youtube.com/watch?v='+self.video.youtube_videoid
+            'video_url': 'http://www.youtube.com/watch?v=osexbB_hX4g'
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len_before, Video.objects.count())
-        self.assertEqual(response['Location'], 'http://testserver'+self.video.get_absolute_url())
+        self.assertEqual(response['Location'], 'http://testserver'+video.video_link())
         
     def test_video(self):
         self._simple_test('videos:video', [self.video.video_id])
@@ -531,22 +528,23 @@ class YoutubeVideoTypeTest(TestCase):
     def test_create_kwars(self):
         vt = self.vt('http://www.youtube.com/watch?v=woobL2yAxD4')
         kwargs = vt.create_kwars()
-        self.assertEqual(kwargs, {'youtube_videoid': 'woobL2yAxD4'})
+        self.assertEqual(kwargs, {'videoid': 'woobL2yAxD4'})
     
     def test_set_values(self):
         youtbe_url = 'http://www.youtube.com/watch?v=_ShmidkrcY0'
         vt = self.vt(youtbe_url)
-        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
-        video.save()
-        vt.set_values(video)
-        self.assertEqual(video.youtube_videoid, '_ShmidkrcY0')
+        
+        video, created = Video.get_or_create_for_url(youtbe_url)
+        vu = video.videourl_set.all()[:1].get()
+        
+        self.assertEqual(vu.videoid, '_ShmidkrcY0')
         self.assertTrue(video.title)
         self.assertEqual(video.duration, 79)
         self.assertTrue(video.thumbnail)
         language = video.subtitlelanguage_set.all()[0]
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 26)
-        self.assertEqual(self.vt.video_url(video), youtbe_url)
+        self.assertEqual(self.vt.video_url(vu), youtbe_url)
 
     def test_matches_video_url(self):
         for item in self.data:
@@ -570,11 +568,12 @@ class HtmlFiveVideoTypeTest(TestCase):
     def test_type(self):
         url = 'http://someurl.com/video.ogv?val=should&val1=be#removed'
         clean_url = 'http://someurl.com/video.ogv'
-        vt = self.vt(url)
-        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
-        video.save()
-        self.assertEqual(video.video_url, clean_url)
-        self.assertEqual(self.vt.video_url(video), video.video_url)
+
+        video, created = Video.get_or_create_for_url(url)
+        vu = video.videourl_set.all()[:1].get()
+
+        self.assertEqual(vu.url, clean_url)
+        self.assertEqual(self.vt.video_url(vu), vu.url)
         
         self.assertTrue(self.vt.matches_video_url(url))
         self.assertTrue(self.vt.matches_video_url('http://someurl.com/video.ogg'))
@@ -597,15 +596,13 @@ class BlipTvVideoTypeTest(TestCase):
         
     def test_type(self):
         url = 'http://blip.tv/file/4297824?utm_source=featured_ep&utm_medium=featured_ep'
-        vt = self.vt(url)
-        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
-        video.save()
-        vt.set_values(video)
-        self.assertEqual(video.bliptv_fileid, '4297824')
+        video, created = Video.get_or_create_for_url(url)
+        vu = video.videourl_set.all()[:1].get()
+        
+        self.assertEqual(vu.videoid, '4297824')
         self.assertTrue(video.title)
         self.assertTrue(video.thumbnail)
-        self.assertTrue(video.bliptv_flv_url)
-        self.assertEqual(video.bliptv_flv_url, video.video_url)
+        self.assertTrue(vu.url)
         
         self.assertTrue(self.vt.matches_video_url(url))
         self.assertTrue(self.vt.matches_video_url('http://blip.tv/file/4297824'))
@@ -622,14 +619,15 @@ class DailymotionVideoTypeTest(TestCase):
     def test_type(self):
         url = 'http://www.dailymotion.com/video/x7u2ww_juliette-drums_lifestyle#hp-b-l'
         vt = self.vt(url)
-        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
-        video.save()
-        vt.set_values(video)
-        self.assertEqual(video.dailymotion_videoid, 'x7u2ww')
+
+        video, created = Video.get_or_create_for_url(url)
+        vu = video.videourl_set.all()[:1].get()
+
+        self.assertEqual(vu.videoid, 'x7u2ww')
         self.assertTrue(video.title)
         self.assertTrue(video.thumbnail)
-        self.assertEqual(video.video_url, url)
-        self.assertTrue(self.vt.video_url(video))
+        self.assertEqual(vu.url, 'http://dailymotion.com/video/x7u2ww')
+        self.assertTrue(self.vt.video_url(vu))
         
         self.assertTrue(self.vt.matches_video_url(url))
         self.assertFalse(self.vt.matches_video_url(''))
@@ -645,11 +643,12 @@ class FLVVideoTypeTest(TestCase):
     def test_type(self):
         url = 'http://someurl.com/video.flv?val=should&val1=be#removed'
         clean_url = 'http://someurl.com/video.flv'
-        vt = self.vt(url)
-        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
-        video.save()
-        self.assertEqual(video.video_url, clean_url)
-        self.assertEqual(self.vt.video_url(video), video.video_url)
+
+        video, created = Video.get_or_create_for_url(url)
+        vu = video.videourl_set.all()[:1].get()
+
+        self.assertEqual(vu.url, clean_url)
+        self.assertEqual(self.vt.video_url(vu), vu.url)
         
         self.assertTrue(self.vt.matches_video_url(url))
         
@@ -666,11 +665,12 @@ class VimeoVideoTypeTest(TestCase):
         
     def test_type(self):
         url = 'http://vimeo.com/15786066?some_param=111'
-        vt = self.vt(url)
-        video = Video(video_id='100500', video_type=vt.abbreviation, **vt.create_kwars())
-        video.save()
-        self.assertEqual(video.vimeo_videoid, '15786066')
-        self.assertTrue(self.vt.video_url(video))
+
+        video, created = Video.get_or_create_for_url(url)
+        vu = video.videourl_set.all()[:1].get()
+
+        self.assertEqual(vu.videoid, '15786066')
+        self.assertTrue(self.vt.video_url(vu))
         
         self.assertTrue(self.vt.matches_video_url(url))
         

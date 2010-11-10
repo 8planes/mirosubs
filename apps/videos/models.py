@@ -64,18 +64,6 @@ ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 class Video(models.Model):
     """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
-    video_type = models.CharField(max_length=1, choices=VIDEO_TYPE)
-    # only nonzero length for HTML5 videos
-    video_url = models.URLField(max_length=2048, blank=True)
-    # only nonzero length for Youtube videos
-    youtube_videoid = models.CharField(max_length=32, blank=True)
-    # only nonzero length for Blip.tv videos
-    bliptv_fileid = models.CharField(max_length=32, blank=True)
-    bliptv_flv_url = models.CharField(max_length=256, blank=True)
-    # only nonzero length for Vimeo videos
-    vimeo_videoid = models.CharField(max_length=32, blank=True)
-    # only nonzero length for Dailymotion videos
-    dailymotion_videoid = models.CharField(max_length=32, blank=True)
     title = models.CharField(max_length=2048, blank=True)
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
@@ -125,7 +113,12 @@ class Video(models.Model):
         if self.title:
             return self.title
         
-        url = self.video_url or self.get_video_url()
+        try:
+            url = self.videourl_set.all()[:1].get().url
+            if not url:
+                return 'No title'
+        except models.ObjectDoesNotExist:
+            return 'No title'
         
         url = url.strip('/')
 
@@ -146,24 +139,7 @@ class Video(models.Model):
         return ('videos:video', [self.video_id])
 
     def get_video_url(self):
-        try:
-            return video_type_registrar[self.video_type].video_url(self)
-        except KeyError:
-            pass
-        
-        #Deprecated
-        if self.video_type == VIDEO_TYPE_HTML5:
-            return self.video_url
-        elif self.video_type == VIDEO_TYPE_YOUTUBE:
-            return 'http://www.youtube.com/watch?v={0}'.format(self.youtube_videoid)
-        elif self.video_type == VIDEO_TYPE_BLIPTV:
-            return 'http://blip.tv/file/{0}/'.format(self.bliptv_fileid)
-        elif self.video_type == VIDEO_TYPE_VIMEO:
-            return 'http://vimeo.com/{0}'.format(self.vimeo_videoid)
-        elif self.video_type == VIDEO_TYPE_DAILYMOTION:
-            return 'http://dailymotion.com/video/{0}'.format(self.dailymotion_videoid)
-        else:
-            return self.video_url
+        return ''
     
     @classmethod
     def get_or_create_for_url(cls, video_url, vt=None):
@@ -171,20 +147,27 @@ class Video(models.Model):
         if not vt:
             return None, False
         
-        obj, create = Video.objects.get_or_create(defaults=vt.defaults, **vt.create_kwars())
-        if create: 
+        try:
+            video_url_obj = VideoUrl.objects.get(type=vt.abbreviation, **vt.create_kwars())
+            return video_url_obj.video, False
+        except models.ObjectDoesNotExist:
+            obj = Video()
             obj = vt.set_values(obj)
             obj.save()
+            
             SubtitleLanguage(video=obj, is_original=True).save()
             #Save video url
             video_url = VideoUrl()
+            if vt.video_id:
+                video_url.videoid = vt.video_id
             video_url.url = vt.convert_to_video_url()
             video_url.type = vt.abbreviation
             video_url.original = True
             video_url.primary = True
             video_url.video = obj
             video_url.save()
-        return obj, create
+            
+            return obj, True
     
     @property
     def filename(self):
@@ -822,6 +805,7 @@ class VideoUrl(models.Model):
     video = models.ForeignKey(Video)
     type = models.CharField(max_length=1, choices=VIDEO_TYPE)
     url = models.URLField(max_length=255, unique=True)
+    videoid = models.CharField(max_length=50, blank=True)
     primary = models.BooleanField(default=False)
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)

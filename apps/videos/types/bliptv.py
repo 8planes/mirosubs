@@ -30,6 +30,10 @@ class BlipTvVideoType(VideoType):
         self.url = url
         self.file_id = self._get_file_id(url)
     
+    @property
+    def video_id(self):
+        return self.file_id
+    
     def convert_to_video_url(self):
         return self.scrape_best_file_url()
 
@@ -38,13 +42,13 @@ class BlipTvVideoType(VideoType):
         return blip.BLIP_REGEX.match(url)
 
     def create_kwars(self):
-        return {'bliptv_fileid': self.file_id}
+        return {
+            'videoid': self.file_id
+        }
 
     def set_values(self, video_obj):
         video_obj.title = blip.scrape_title(self.url)
         video_obj.thumbnail = blip.get_thumbnail_url(self.url)
-        video_obj.bliptv_flv_url = self.scrape_best_file_url()
-        video_obj.video_url = video_obj.bliptv_flv_url
         return video_obj
     
     def _get_file_id(self, video_url):

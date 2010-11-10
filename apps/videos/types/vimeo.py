@@ -31,20 +31,24 @@ class VimeoVideoType(VideoType):
     def __init__(self, url):
         self.url = url
         self.id = self._get_vimeo_id(url)
+
+    @property
+    def video_id(self):
+        return self.id
     
     def convert_to_video_url(self):
         return 'http://vimeo.com/%s' % self.id
 
     @classmethod    
     def video_url(cls, obj):
-        return 'http://vimeo.com/%s' % obj.vimeo_videoid
+        return 'http://vimeo.com/%s' % obj.videoid
     
     @classmethod
     def matches_video_url(cls, url):
         return bool(vimeo.VIMEO_REGEX.match(url))
 
     def create_kwars(self):
-        return { 'vimeo_videoid': self.id }
+        return { 'videoid': self.id }
     
     def set_values(self, video_obj):
         if vimeo.VIMEO_API_KEY and vimeo.VIMEO_API_SECRET:

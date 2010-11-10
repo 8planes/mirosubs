@@ -38,17 +38,12 @@
         "fields": {
             "view_count": 1,
             "writelock_owner": null,
-            "video_url": "",
             "title": "Hax",
             "writelock_session_key": "",
-            "bliptv_fileid": "",
             "video_id": "iGzkk7nwWX8F",
             "is_subtitled": false,
             "writelock_time": null,
-            "video_type": "Y",
             "thumbnail": "http://i.ytimg.com/vi/D-JTf870Oo8/0.jpg",
-            "bliptv_flv_url": "",
-            "youtube_videoid": "D-JTf870Oo8",
             "duration": 115,
             "allow_community_edits": true,
             "was_subtitled": false,
@@ -62,17 +57,12 @@
         "fields": {
             "view_count": 1,
             "writelock_owner": null,
-            "video_url": "http://flv.bigmir.net/52/152852.flv?m=902ee66862c421eff91186f94e88c216",
             "title": "",
             "writelock_session_key": "",
-            "bliptv_fileid": "",
             "video_id": "S7HMxzLmS9gw",
             "is_subtitled": false,
             "writelock_time": null,
-            "video_type": "H",
             "thumbnail": "",
-            "bliptv_flv_url": "",
-            "youtube_videoid": "",
             "duration": null,
             "allow_community_edits": true,
             "was_subtitled": false,
@@ -229,5 +219,13 @@
             "text_change": null,
             "user": 3
         }
-    }           
+    },
+    {
+        "pk": 15,
+        "model": "sites.site",
+        "fields": {
+            "domain": "universalsubtitles.org",
+            "name": "unisubs"
+        }
+    }               
 ]
