@@ -75,10 +75,10 @@
                     <div class="need_help">
                         <span>{% trans 'We need your help with' %}</span>
                         {% if team_video.all_languages %}
-                            <a href="#">{% trans 'All Languages' %}</a>
+                            <a href="{{ team_video.link_to_page }}">{% trans 'All Languages' %}</a>
                         {% else %} 
                             {% for lang in team_video.languages.incomplete %}
-                                <a href="#">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
+                                <a href="{{ lang.get_absolute_url }}">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         {% endif %}
                     </div>
@@ -87,12 +87,12 @@
                         {% if team_video.languages.complete.exists %}
                             <span>{% trans 'Subtitles completed in' %}</span>
                             {% for lang in team_video.languages.complete %}
-                                <a href="#">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
+                                <a href="{{ lang.get_absolute_url }}">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         {% else %}
                             {% if not team_video.languages.incomplete.exists %}
                                 <span>{% trans 'No subtitles yet --' %}</span>
-                                <a href="#">{% trans 'get started' %}</a>
+                                <a href="{{ team_video.link_to_page }}">{% trans 'get started' %}</a>
                             {% endif %}
                         {% endif %}
                     </div>

@@ -175,6 +175,11 @@ class TeamVideo(models.Model):
     def __unicode__(self):
         return self.title or self.video.__unicode__()
     
+    def link_to_page(self):
+        if self.all_languages:
+            return self.video.get_absolute_url()
+        return self.video.video_link()
+        
     @models.permalink
     def get_absolute_url(self):
         return ('teams:team_video', [self.pk])
@@ -203,7 +208,12 @@ class TeamVideoLanguage(models.Model):
     
     def __unicode__(self):
         return self.get_language_display()
-
+    
+    def get_absolute_url(self):
+        video = self.team_video.video
+        lang = video.subtitle_language(self.language)
+        return lang and lang.get_absolute_url() or video.get_absolute_url()
+    
 class TeamMemderManager(models.Manager):
     use_for_related_fields = True
     
