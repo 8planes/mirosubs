@@ -52,10 +52,6 @@ th span, th a{
   text-shadow: 1px 1px 0px #fff;
   }
 
-th span {
-    cursor: pointer;
-}
-
 td{
   text-align: left;
   border-bottom: 1px solid #ddd;

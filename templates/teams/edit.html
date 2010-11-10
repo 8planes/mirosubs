@@ -76,7 +76,7 @@
                         {{ form.logo.errors }}
                     </p>
                     <p class="avatar-container">
-                        <img class="thumbnail_medium team-logo" src="{{ team.logo_thumbnail }}"/>
+                        <img class="thumbnail_medium team-logo" src="{{ team.logo_thumbnail|default:'' }}"/>
                     </p>
                     <p style="float: left; clear: both; margin-bottom: 30px;">
                         <input type="file" id="id_logo" name="logo" size="6"/>
