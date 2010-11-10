@@ -20,6 +20,7 @@ goog.provide('mirosubs.widget.ChooseLanguageDialog');
 
 /**
  * @constructor
+ * @private
  */
 mirosubs.widget.ChooseLanguageDialog = function(
     forAddTranslation, callback) 
@@ -112,6 +113,13 @@ mirosubs.widget.ChooseLanguageDialog.prototype.makeDropdown_ =
     return $d('select', null, options);
 };
 
+/**
+ * @param {boolean} forAddTranslation Will show original language 
+ *     selection iff false.
+ * param {function(string, string=)} callback Will be called with 
+ *     subtitle language as first argument, and maybe original 
+ *     language if forAddTranslation arg was false.
+ */
 mirosubs.widget.ChooseLanguageDialog.show = 
     function(forAddTranslation, callback)
 {

@@ -41,6 +41,11 @@ mirosubs.video.VideoSource.prototype.createPlayer = function() {};
 mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
 
 /**
+ * @return {string}
+ */
+mirosubs.video.VideoSource.prototype.getVideoURL = function() {};
+
+/**
  *
  * @param {Array} videoSpecs This is an array with each element either 
  *   a string (for a url) or an object with properties "url" and "config".
@@ -108,12 +113,13 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     else if (/^\s*https?:\/\/([^\.]+\.)?vimeo/.test(videoURL)) {
         var videoIDExtract = /vimeo.com\/([0-9]+)/i.exec(videoURL);
         if (videoIDExtract)
-            return new mirosubs.video.VimeoVideoSource(videoIDExtract[1]);
+            return new mirosubs.video.VimeoVideoSource(videoIDExtract[1], videoURL);
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?dailymotion/.test(videoURL)) {
         var videoIDExtract = /dailymotion.com\/video\/([0-9a-z]+)/i.exec(videoURL);
         if (videoIDExtract)
-            return new mirosubs.video.DailymotionVideoSource(videoIDExtract[1]);
+            return new mirosubs.video.DailymotionVideoSource(
+                videoIDExtract[1], videoURL);
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL) &&
              !blipFileGetRegex.test(videoURL)) {

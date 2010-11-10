@@ -20,9 +20,11 @@ goog.provide('mirosubs.video.VimeoVideoSource');
 
 /**
  * @constructor
+ * @implements {mirosubs.video.VideoSource}
  */
-mirosubs.video.VimeoVideoSource = function(videoID) {
+mirosubs.video.VimeoVideoSource = function(videoID, videoURL) {
     this.videoID_ = videoID;
+    this.videoURL_ = videoURL;
     this.uuid_ = mirosubs.randomString();
 };
 
@@ -41,4 +43,8 @@ mirosubs.video.VimeoVideoSource.prototype.getVideoId = function() {
 
 mirosubs.video.VimeoVideoSource.prototype.getUUID = function() {
     return this.uuid_;
+};
+
+mirosubs.video.VimeoVideoSource.prototype.getVideoURL = function() {
+    return this.videoURL_;
 };
