@@ -1415,7 +1415,7 @@ msgstr "Via retpoŝtadreso:"
 
 #: .\templates\videos\_feedback_form.html.py:44
 msgid "Your Feedback"
-msgstr "Via komento"
+msgstr "Viaj reagoj"
 
 #: .\templates\videos\_feedback_form.html.py:48
 msgid "Send Feedback"
@@ -1423,44 +1423,44 @@ msgstr "Sendi komentojn"
 
 #: .\templates\videos\_feedback_form.html.py:54
 msgid "Thank you for your feedback."
-msgstr ""
+msgstr "Dankon pro viaj komentoj."
 
 #: .\templates\videos\_feedback_form.html.py:55
 msgid "If you would like to perform some additional testing"
-msgstr ""
+msgstr "Se vi emas pli testi"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "please go to our"
-msgstr ""
+msgstr "bonvole iru al nia"
 
 #: .\templates\videos\_feedback_form.html.py:56
 msgid "Litmus regression tests"
-msgstr ""
+msgstr "Litmus regresa testaro."
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "For new testers, we have"
-msgstr ""
+msgstr "Por novaj testistoj, ni havas"
 
 #: .\templates\videos\_feedback_form.html.py:57
 msgid "a getting started guide"
-msgstr ""
+msgstr "komencan gvidon."
 
 #: .\templates\videos\_feedback_form.html.py:59
 msgid "Send more feedback."
-msgstr ""
+msgstr "Sendi pli da komentoj."
 
 #: .\templates\videos\_feedback_form.html.py:64
 msgid "Enter feedback please."
-msgstr ""
+msgstr "Bonvole enigu komenton."
 
 #: .\templates\videos\_recent_activity.html.py:3
 msgid "View all"
-msgstr ""
+msgstr "Montri ĉiujn"
 
 #: .\templates\videos\_upload_subtitles.html.py:4
 #: .\templates\videos\_upload_subtitles.html.py:9
 msgid "Upload Subtitles"
-msgstr ""
+msgstr "Alŝuti subtekstojn"
 
 #: .\templates\videos\_upload_subtitles.html.py:14
 msgid ""
@@ -1469,26 +1469,30 @@ msgid ""
 "                    or .xml (for TTML) are accepted.\n"
 "                    "
 msgstr ""
+"\n"
+"                    Nia retejo akceptas SRT, SSA, kaj TTML. Nur dosieroj finantaj per .srt, .ssa, \n"
+"                    aŭ .xml (por TTML) estos akceptitaj.\n"
+"                    "
 
 #: .\templates\videos\_upload_subtitles.html.py:29
 msgid "Login to upload subtitles"
-msgstr ""
+msgstr "Ensaluti por alŝuti subtekstojn"
 
 #: .\templates\videos\_upload_subtitles.html.py:38
 msgid "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
-msgstr ""
+msgstr "Se vi opinias vian subtekstan dosieron kongrua, <a href='mailto:feedback@universalsubtitles.org'>retpoŝtu nin</a>"
 
 #: .\templates\videos\_video_activity.html.py:4
 msgid "Activity"
-msgstr ""
+msgstr "Aktiveco"
 
 #: .\templates\videos\_video_activity.html.py:7
 msgid "Happened"
-msgstr ""
+msgstr "Okazis"
 
 #: .\templates\videos\_video_activity.html.py:21
 msgid "submited this video."
-msgstr ""
+msgstr "sendis tiun ĉi videon."
 
 #: .\templates\videos\_video_activity.html.py:25
 #, python-format
@@ -1497,6 +1501,9 @@ msgid ""
 "            changed title to \"%(title)s\"\n"
 "            "
 msgstr ""
+"\n"
+"            ŝanĝis titolon al \"%(title)s\"\n"
+"            "
 
 #: .\templates\videos\_video_activity.html.py:32
 #, python-format
@@ -1505,51 +1512,54 @@ msgid ""
 "                commented on %(language)s.\n"
 "                "
 msgstr ""
+"\n"
+"                komentis pri %(language)s.\n"
+"                "
 
 #: .\templates\videos\_video_activity.html.py:36
 msgid "commented on this video."
-msgstr ""
+msgstr "komentis pri tiun ĉi videon."
 
 #: .\templates\videos\_video_activity.html.py:41
 msgid "edited"
-msgstr ""
+msgstr "redaktita"
 
 #: .\templates\videos\_video_activity.html.py:44
 msgid "original subtitles"
-msgstr ""
+msgstr "originalaj subtekstoj"
 
 #: .\templates\videos\_video_activity.html.py:46
 msgid "translation"
-msgstr ""
+msgstr "traduko"
 
 #: .\templates\videos\_video_activity.html.py:48
 msgid "for"
-msgstr ""
+msgstr "por"
 
 #: .\templates\videos\_video_activity.html.py:53
 msgid "ago"
-msgstr ""
+msgstr "antaŭe"
 
 #: .\templates\videos\actions_list.html.py:8
 msgid "All activities"
-msgstr ""
+msgstr "Ĉiuj agadoj"
 
 #: .\templates\videos\actions_list.html.py:12
 #: .\templates\videos\history.html.py:210
 msgid "User"
-msgstr ""
+msgstr "Uzanto"
 
 #: .\templates\videos\actions_list.html.py:13
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #: .\templates\videos\actions_list.html.py:14
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: .\templates\videos\actions_list.html.py:24
 msgid "There are no activities."
-msgstr ""
+msgstr "Estas neniuj agadoj."
 
 #: .\templates\videos\create.html.py:9
 msgid ""
@@ -1561,10 +1571,17 @@ msgid ""
 "    <a href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!\"\n"
 "    "
 msgstr ""
+"\n"
+"    \"Pardonon, ni ne povis identigi la videon ĉe la ligilo kiun vi sendis.  Eble\n"
+"    temas pri ligilo kiun ni ne rekonas, aŭ eble estas ligilo al paĝo\n"
+"    kun pluraj videoj.  Enigu malsaman ligilon al la video\n"
+"    kiun vi volas proponi.  Se vi plu opinias ke io eraras,\n"
+"    <a href=\"mailto:feedback@universalsubtitles.org\">bonvole kontaktu nin</a>!\"\n"
+"    "
 
 #: .\templates\videos\create.html.py:23
 msgid "Begin"
-msgstr ""
+msgstr "Komenci"
 
 #: .\templates\videos\create.html.py:25
 msgid ""
@@ -1574,14 +1591,19 @@ msgid ""
 "      Ustream.tv\n"
 "      "
 msgstr ""
+"\n"
+"      Por ebligi kunlaborecan subtekstigadon, enigu retadreson al iu video en la jenaj specoj:<br />\n"
+"      Ogg, WebM, FLV, Youtube, Blip.TV, video.google.com, Fora.tv,\n"
+"      Ustream.tv\n"
+"      "
 
 #: .\templates\videos\diffing.html.py:37
 msgid "Subtitles will be rolled back to a previous version"
-msgstr ""
+msgstr "Subtekstoj estos ŝanĝomalfaritaj al pli frua versio"
 
 #: .\templates\videos\diffing.html.py:43
 msgid "You need to log in to do that."
-msgstr ""
+msgstr "Vi devas ensaluti por fari tion."
 
 #: .\templates\videos\diffing.html.py:75
 #, python-format
@@ -1590,6 +1612,9 @@ msgid ""
 "            Comparing older revision (#%(second_version_no)s) to revision (#%(version_no)s)\n"
 "            "
 msgstr ""
+"\n"
+"            Komparante pli malnovan version (#%(second_version_no)s) kun version (#%(version_no)s)\n"
+"            "
 
 #: .\templates\videos\diffing.html.py:79
 #, python-format
@@ -1598,29 +1623,32 @@ msgid ""
 "            Comparing older revision (#%(second_version_no)s) to current revision (#%(version_no)s)\n"
 "            "
 msgstr ""
+"\n"
+"            Komparante pli malnovan version (#%(second_version_no)s) kun nuna versio (#%(version_no)s)\n"
+"            "
 
 #: .\templates\videos\diffing.html.py:93
 #: .\templates\videos\history.html.py:144
 #: .\templates\videos\history.html.py:185
 #: .\templates\videos\revision.html.py:72 .\templates\videos\video.html.py:158
 msgid "Subtitles"
-msgstr ""
+msgstr "Subtekstoj"
 
 #: .\templates\videos\diffing.html.py:98
 #: .\templates\videos\revision.html.py:75
 msgid "Revision History"
-msgstr ""
+msgstr "Versia historio"
 
 #: .\templates\videos\diffing.html.py:102
 msgid "Comparing Revision"
-msgstr ""
+msgstr "Komparante versio"
 
 #: .\templates\videos\diffing.html.py:110
 #: .\templates\videos\diffing.html.py:162
 #, python-format
 msgid ""
 "\n"
-"            Revision #%(version_no)s by %(user)s\n"
+"            Versio #%(version_no)s de %(user)s\n"
 "            "
 msgstr ""
 
@@ -1628,33 +1656,33 @@ msgstr ""
 #: .\templates\videos\diffing.html.py:177
 #: .\templates\videos\revision.html.py:134
 msgid "Submit a new edit based on this version"
-msgstr ""
+msgstr "Sendi novan redakton bazitan sur ĉi tiu versio"
 
 #: .\templates\videos\diffing.html.py:127
 #: .\templates\videos\diffing.html.py:181
 #: .\templates\videos\revision.html.py:138
 msgid "Roll back to version"
-msgstr ""
+msgstr "Ŝanĝomalfari al versio"
 
 #: .\templates\videos\diffing.html.py:150
 #: .\templates\videos\diffing.html.py:205
 #: .\templates\videos\history.html.py:282
 msgid "Not Synced"
-msgstr ""
+msgstr "Ne sinkronigita"
 
 #: .\templates\videos\email_friend.html.py:6
 msgid "Email this to a friend"
-msgstr ""
+msgstr "Retpoŝti ĉi tion al amiko"
 
 #: .\templates\videos\email_friend.html.py:10
 msgid "Send to Friend!"
-msgstr ""
+msgstr "Sendi al amiko!"
 
 #: .\templates\videos\email_notification.html.py:3
 #: .\templates\videos\email_start_notification.html.py:3
 #: .\templates\videos\email_title_changed.html.py:3
 msgid "Dear"
-msgstr ""
+msgstr "Kara"
 
 #: .\templates\videos\email_notification.html.py:4
 #, python-format
@@ -1664,44 +1692,48 @@ msgid ""
 "    has been edited by %(u)s. \n"
 "    "
 msgstr ""
+"\n"
+"    Transskribo aŭ traduko, al kiu vi kontribuis,\n"
+"    estis redaktita de %(u)s. \n"
+"    "
 
 #: .\templates\videos\email_notification.html.py:8
 msgid "It would be great if you could review their changes for quality."
-msgstr ""
+msgstr "Bonegus se vi povus revizii iliajn ŝanĝojn por kvalito."
 
 #: .\templates\videos\email_notification.html.py:9
 msgid "Click here to see the latest version side by side with the previous version:"
-msgstr ""
+msgstr "Klaki ĉi tie por vidi la plej lastan version flankalflanke kun antaŭa versio:"
 
 #: .\templates\videos\email_notification.html.py:10
 msgid "Compare versions side-by-side"
-msgstr ""
+msgstr "Kompari versiojn flankalflanke"
 
 #: .\templates\videos\email_notification.html.py:13
 msgid "We've also included a rough summary of the changes below. Thanks so much!"
-msgstr ""
+msgstr "Jen sube, baza resumo de la ŝanĝoj.  Dankegon!"
 
 #: .\templates\videos\email_notification.html.py:15
 #: .\templates\videos\email_start_notification.html.py:14
 #: .\templates\videos\email_title_changed.html.py:10
 msgid "Sincerely"
-msgstr ""
+msgstr "Sincere"
 
 #: .\templates\videos\email_notification.html.py:17
 #: .\templates\videos\email_start_notification.html.py:15
 #: .\templates\videos\email_title_changed.html.py:12
 msgid "The Universal Subtitles Community"
-msgstr ""
+msgstr "La komunumo Universalaj Subtekstoj"
 
 #: .\templates\videos\email_notification.html.py:24
 #: .\templates\videos\email_start_notification.html.py:23
 #: .\templates\videos\email_title_changed.html.py:28
 msgid "Don't send any more emails about this particular video."
-msgstr ""
+msgstr "Ne plu retpoŝtu pri ĉi tiu video."
 
 #: .\templates\videos\email_notification.html.py:27
 msgid "SUMMARY OF CHANGES"
-msgstr ""
+msgstr "RESUMO DE ŜANĜOJ"
 
 #: .\templates\videos\email_notification.html.py:28
 #, python-format
@@ -1710,6 +1742,9 @@ msgid ""
 "        %(change_percent)s of the text was changed.\n"
 "    "
 msgstr ""
+"\n"
+"        %(change_percent)s de la teksto ŝanĝiĝis.\n"
+"    "
 
 #: .\templates\videos\email_notification.html.py:31
 #, python-format
@@ -1718,28 +1753,31 @@ msgid ""
 "        %(change_percent)s of the timing was changed.\n"
 "    "
 msgstr ""
+"  \n"
+"        %(change_percent)s de la tempo-informoj ŝanĝiĝis.\n"
+"    "
 
 #: .\templates\videos\email_notification.html.py:37
 msgid "Here is a list of text changes:"
-msgstr ""
+msgstr "Jen listo de teksto-ŝanĝoj:"
 
 #: .\templates\videos\email_notification.html.py:41
 #: .\templates\videos\email_title_changed.html.py:19
 msgid "NEW"
-msgstr ""
+msgstr "NOVA"
 
 #: .\templates\videos\email_notification.html.py:42
 #: .\templates\videos\email_title_changed.html.py:23
 msgid "OLD"
-msgstr ""
+msgstr "MALNOVA"
 
 #: .\templates\videos\email_notification.html.py:49
 msgid "To view the current and previous versions side by side, follow this"
-msgstr ""
+msgstr "Por vidi la aktualan version flankalflanke kun la antaŭa versio, sekvu:"
 
 #: .\templates\videos\email_notification.html.py:50
 msgid "link"
-msgstr ""
+msgstr "ligon"
 
 #: .\templates\videos\email_start_notification.html.py:4
 #, python-format
