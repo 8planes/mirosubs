@@ -20,6 +20,7 @@ goog.provide('mirosubs.video.Html5VideoSource');
 
 /**
  * @constructor
+ * @implements {mirosubs.video.VideoSource}
  * @param {string} videoURL
  * @param {mirosubs.video.Html5VideoType} videoType
  * @param {Object.<string, string>=} opt_videoConfig Attributes to use for 

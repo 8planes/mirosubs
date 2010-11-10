@@ -20,6 +20,7 @@ goog.provide('mirosubs.video.FlvVideoSource');
 
 /**
  * @constructor
+ * @implements {mirosubs.video.VideoSource}
  */
 mirosubs.video.FlvVideoSource = function(flvURL) {
     this.flvURL_ = flvURL;
@@ -39,4 +40,8 @@ mirosubs.video.FlvVideoSource.prototype.createPlayer_ = function(chromeless) {
 
 mirosubs.video.FlvVideoSource.prototype.getFlvURL = function() {
     return this.flvURL_;
+};
+
+mirosubs.video.FlvVideoSource.prototype.getVideoURL = function() {
+    return this.getFlvURL();
 };

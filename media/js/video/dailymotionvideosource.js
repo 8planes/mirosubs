@@ -20,9 +20,11 @@ goog.provide('mirosubs.video.DailymotionVideoSource');
 
 /**
  * @constructor
+ * @implements {mirosubs.video.VideoSource}
  */
-mirosubs.video.DailymotionVideoSource = function(videoID) {
+mirosubs.video.DailymotionVideoSource = function(videoID, videoURL) {
     this.videoID_ = videoID;
+    this.videoURL_ = videoURL;
     this.uuid_ = mirosubs.randomString();
 };
 
@@ -45,4 +47,8 @@ mirosubs.video.DailymotionVideoSource.prototype.getVideoId = function() {
 
 mirosubs.video.DailymotionVideoSource.prototype.getUUID = function() {
     return this.uuid_;
+};
+
+mirosubs.video.DailymotionVideoSource.prototype.getVideoURL = function() {
+    return this.videoURL_;
 };
