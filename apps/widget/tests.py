@@ -599,6 +599,25 @@ class TestRpc(TestCase):
         self.assertEquals(3.4, subtitles[1]['start_time'])
         self.assertEquals(5.8, subtitles[1]['end_time'])
 
+    def test_fork_mid_edit(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_two_sub_draft(request)
+        response = rpc.start_editing(request, draft.video.video_id, 'es')
+        draft_pk = response['draft_pk']
+        inserted = [{'subtitle_id': 'a', 'text': 'a_es'}, 
+                    {'subtitle_id': 'b', 'text': 'b_es'}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        # now fork.
+        response = rpc.fork(request, draft_pk)
+        subtitles = response['subtitles']
+        self.assertTrue(response['forked'])
+        self.assertEquals('es', response['language'])
+        self.assertEquals(2, len(subtitles))
+        for sub in subtitles:
+            self.assertTrue(sub[u'start_time'] > 0)
+            self.assertTrue(sub[u'end_time'] > sub['start_time'])
 
     def test_change_original_language(self):
         request = RequestMockup(self.user_0)

@@ -109,6 +109,32 @@ class Rpc(BaseRpc):
             language.save()
         return { "response": "ok" }
 
+    def fork(self, request, draft_pk):
+        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+        if not draft.language.can_writelock(request):
+            return { "response" : "unlockable" }
+        if not draft.matches_request(request):
+            return { "response" : "does not match request" }
+        draft.language.writelock(request)
+        draft.is_forked = True
+        draft.save()
+        latest_version = draft.video.latest_version()
+        sub_dict = dict([(s.subtitle_id, s) for s 
+                         in latest_version.subtitle_set.all()])
+        to_delete = []
+        for sub in draft.subtitle_set.all():
+            if sub.subtitle_id in sub_dict:
+                standard_sub = sub_dict[sub.subtitle_id]
+                sub.start_time = standard_sub.start_time
+                sub.end_time = standard_sub.end_time
+                sub.save()
+            else:
+                to_delete.add(sub)
+        for sub in to_delete:
+            sub.delete()
+        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+        return self._subtitles_dict(draft)
+
     def save_subtitles(self, request, draft_pk, packets):
         draft = models.SubtitleDraft.objects.get(pk=draft_pk)
         if not draft.language.can_writelock(request):

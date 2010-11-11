@@ -60,6 +60,20 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
         goog.bind(this.startEditingResponseHandler_, this));
 };
 
+/**
+ * @param {number} draftPK The draft saved with this primary key should 
+ *     already be in forked state on the server.
+ * @param {mirosubs.widget.SubtitleState} subtitles The subtitles should 
+ *     include current timing information.
+ */
+mirosubs.widget.SubtitleDialogOpener.prototype.openForkedTranslationDialog = 
+    function(draftPK, subtitles)
+{
+    var serverModel = new mirosubs.subtitle.MSServerModel(
+        draftPK, this.videoID_, this.videoURL_);
+    this.openSubtitlingDialog_(serverModel, subtitles);
+};
+
 mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ = 
     function(result)
 {
