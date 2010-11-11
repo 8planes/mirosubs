@@ -78,6 +78,7 @@ class Video(models.Model):
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False)
     thumbnail = models.CharField(max_length=500, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
     
     def __unicode__(self):
         return self.title_display()
