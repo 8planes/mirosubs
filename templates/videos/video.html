@@ -4,6 +4,12 @@
 {% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags %}
 
 {% block css %}
+    {% if video.thumbnail %}
+        <meta property="og:image" content="{{ video.get_thumbnail }}" />
+    {% else %}
+        <meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
+    {% endif %}
+    
     {{ block.super }}
     <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
     <style>
