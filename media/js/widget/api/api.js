@@ -30,6 +30,7 @@ mirosubs.api.openDialog = function(config) {
     var serverModel = new mirosubs.api.ServerModel(config);
     var subDialog = new mirosubs.subtitle.Dialog(
         videoSource, serverModel, subtitles, 
+        null,
         config['skipFinished']);
     mirosubs.currentUsername = config['username'];
     subDialog.setVisible(true);

@@ -25,9 +25,11 @@ goog.provide('mirosubs.subtitle.Dialog');
  *     json object format.
  */
 mirosubs.subtitle.Dialog = function(videoSource, serverModel,
-                                    existingCaptions, opt_skipFinished) {
+                                    existingCaptions, opt_opener,
+                                    opt_skipFinished) {
     mirosubs.Dialog.call(this, videoSource);
     this.serverModel_ = serverModel;
+    this.opener_ = opt_opener;
     this.skipFinished_ = !!opt_skipFinished;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.captionSet_ =
@@ -49,7 +51,6 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.currentSubtitlePanel_ = null;
     this.rightPanelListener_ = new goog.events.EventHandler(this);
     this.doneButtonEnabled_ = true;
-    this.addingTranslations_ = false;
 
     this.keyEventsSuspended_ = false;
 };
@@ -372,27 +373,18 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
     this.rightPanelListener_.dispose();
     this.captionSet_.dispose();
 };
-mirosubs.subtitle.Dialog.prototype.setVisible = function(visible) {
-    if (this.addingTranslations_) {
-        var that = this;
-        goog.Timer.callOnce(function() {
-          //This should be less hacky, perhaps a url tokenizer to rebuild the url
-          //most likely this exists in closure already.
-          var location = window.location.href.replace("&subtitle_immediately=true", "");
-          //In some cases there is no 'subtitle_translate' in the url,
-          //but we need to strip it if there is
-          window.location = location + "&translate_immediately=true";            mirosubs.returnURL = null;
-          mirosubs.subtitle.Dialog.superClass_.setVisible.call(that, visible);
-        });
-    }
-    else {
-        mirosubs.subtitle.Dialog.superClass_.setVisible.call(this, visible);
-    }
-};
 mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
-    this.addingTranslations_ = true;
+    var oldReturnURL = mirosubs.returnURL;
+    mirosubs.returnURL = null;
     this.setVisible(false);
-};
-mirosubs.subtitle.Dialog.prototype.isAddingTranslations = function() {
-    return this.addingTranslations_;
+    mirosubs.returnURL = oldReturnURL;
+    var that = this;
+    if (this.opener_)
+        mirosubs.widget.ChooseLanguageDialog.show(
+            true,
+            function(subLanguage, originalLanguage, forked) {
+                that.opener_.openDialog(
+                    null, subLanguage, null, 
+                    mirosubs.isForkedLanguage(subLanguage));
+            });
 };
