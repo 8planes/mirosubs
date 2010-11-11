@@ -33,6 +33,11 @@
             {% for team_video in videos_list %}
             <tr class="video-container">
                 <td>
+                    <a href="{{ team_video.video.get_absolute_url }}" class="thumbnail_small">
+                        {% if team_video.video.thumbnail %}
+                        <img height="50" src="{{ team_video.video.get_thumbnail }}">
+                        {% endif %}
+                    </a>                    
                     <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video }}</strong></a>
                    
                     <div class="need_help">

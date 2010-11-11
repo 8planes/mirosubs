@@ -86,20 +86,20 @@
                     {% endblocktrans %}
                 </span>
                 {% if team.description %}
-                <p>
+                <p style="float: none;">
                     {{ team.description|urlize }}
                 </p>
                 {% endif %}
-            </div>
-            {% if user.is_staff and perms.teams.change_team %}
-                <div class="info">
-                {% if team.highlight %}
-                    <a href="{% url teams:unhighlight team.pk %}">{% trans 'Un-highlight this team' %}</a>
-                {% else %}
-                    <a href="{% url teams:highlight team.pk %}">{% trans 'Highlight this team' %}</a>
-                {% endif %}
-                </div>
-            {% endif %}            
+                {% if user.is_staff and perms.teams.change_team %}
+                <p style="float: none;">
+                    {% if team.highlight %}
+                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Un-highlight this team' %}</a>
+                    {% else %}
+                        <a href="{% url teams:highlight team.pk %}">{% trans 'Highlight this team' %}</a>
+                    {% endif %}                    
+                </p>
+                {% endif %}         
+            </div>         
         </li>
         {% endfor %}
     </ul>
