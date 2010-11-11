@@ -35,11 +35,6 @@ lang_dict['sr-latn'] = gettext_noop('Latin (Serbian)')
 lang_dict['zh-cn'] = gettext_noop('Chinese (Simplified)')
 lang_dict['zh-tw'] = gettext_noop('Chinese (Traditional)')
 lang_dict['eo'] = gettext_noop('Esperanto')
-lang_dict['iu'] = gettext_noop('Inuktitut')
-lang_dict['moh'] = gettext_noop('Mohawk')
-lang_dict['oji'] = gettext_noop('Anishinaabe')
-lang_dict['cr'] = gettext_noop('Cree')
-lang_dict['hai'] = gettext_noop('Haida')
 global_settings.LANGUAGES = tuple(i for i in lang_dict.items())
 
 METADATA_LANGUAGES = (
@@ -51,6 +46,12 @@ METADATA_LANGUAGES = (
 ALL_LANGUAGES = list(global_settings.LANGUAGES)
 ALL_LANGUAGES.extend(METADATA_LANGUAGES)
 ALL_LANGUAGES = dict(ALL_LANGUAGES)
+ALL_LANGUAGES['iu'] = gettext_noop('Inuktitut')
+ALL_LANGUAGES['moh'] = gettext_noop('Mohawk')
+ALL_LANGUAGES['oji'] = gettext_noop('Anishinaabe')
+ALL_LANGUAGES['cr'] = gettext_noop('Cree')
+ALL_LANGUAGES['hai'] = gettext_noop('Haida')
+ALL_LANGUAGES['ase'] = gettext_noop('American Sign Language')
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
 
