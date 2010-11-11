@@ -44,7 +44,8 @@ class S3ImageFieldFile(FieldFile):
         return build_thumbnail_name(name, size, options)
     
     def save(self, name, content, save=True):
-        name = self.generate_file_name()
+        ext = name.split('.')[-1]
+        name = '%s.%s' % (self.generate_file_name(), ext)
         name = self.field.generate_filename(self.instance, name)
         self.name = self.storage.save(name, content)
         setattr(self.instance, self.field.name, self.name)

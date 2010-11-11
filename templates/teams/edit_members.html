@@ -107,6 +107,9 @@
             {% for member in members_list %}
             <tr class="user-container">
                 <td>
+                    <a href="{{ member.user.get_absolute_url }}" class="thumbnail_small">
+                        <img src="{{ member.user.small_avatar }}"/>
+                    </a>
                     <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
                     <div class="small grey">
                         <a href="{{ member.user.get_absolute_url }}">{% trans 'View' %}</a>
