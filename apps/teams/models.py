@@ -205,8 +205,16 @@ class TeamVideo(models.Model):
     def get_thumbnail(self):
         if self.thumbnail:
             return self.thumbnail.thumb_url(100, 100)
+
+        if self.video.thumbnail:
+            th = self.video.get_thumbnail()
+            if th:
+                return th
         
-        return self.video.get_thumbnail()
+        if self.team.logo:
+            return self.team.logo_thumbnail()
+        
+        return ''
     
 class TeamVideoLanguageManager(models.Manager):
     use_for_related_fields = True
