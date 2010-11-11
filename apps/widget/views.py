@@ -27,6 +27,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import widget
 from django.shortcuts import get_object_or_404
+from widget.rpc import add_general_settings
 from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
 from django.utils.encoding import iri_to_uri, DjangoUnicodeDecodeError
@@ -50,10 +51,12 @@ def onsite_widget(request):
     """Used for onsite subtitling
 
     Temporary kludge for http://bugzilla.pculture.org/show_bug.cgi?id=13694"""
-    context = widget.add_onsite_js_files({})
-    spaces = ' ' * 9
-    params = base_widget_params(request, extra_params={'returnURL': request.GET['return_url']})
-    context['widget_params'] = params
+    context = widget.add_config_based_js_files(
+        {}, settings.JS_API, 'mirosubs-api.js')
+    context['widget_params'] = request.GET['config']
+    general_settings = {}
+    add_general_settings(request, general_settings)
+    context['general_settings'] = json.dumps(general_settings)
     return render_to_response('widget/onsite_widget.html',
                               context,
                               context_instance=RequestContext(request))
@@ -79,7 +82,8 @@ def widget_demo(request):
                               context_instance=RequestContext(request))
 
 def widgetize_demo(request, page_name):
-    context = widget.add_widgetize_js_files({})
+    context = widget.add_config_based_js_files(
+        {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
     return render_to_response('widget/widgetize_demo/{0}.html'.format(page_name),
                               context,
                               context_instance=RequestContext(request))
@@ -98,16 +102,8 @@ def statwidget_demo(request):
                               context_instance=RequestContext(request))
 
 def api_demo(request):
-    js_files = ['http://{0}/widget/config.js'.format(
-            Site.objects.get_current().domain)]
-    js_files.append('{0}js/widget/api/servermodel.js'.format(
-            settings.MEDIA_URL))
-    js_files.append('{0}js/widget/api/api.js'.format(
-            settings.MEDIA_URL))
-    context = widget.add_js_files({}, settings.JS_USE_COMPILED,
-                                  settings.JS_CORE,
-                                  'mirosubs-api.js',
-                                  full_path_js_files=js_files)
+    context = widget.add_config_based_js_files(
+        {}, settings.JS_API, 'mirosubs-api.js')
     return render_to_response('widget/api_demo.html',
                               context,
                               context_instance=RequestContext(request))

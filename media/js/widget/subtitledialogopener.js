@@ -72,7 +72,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
             result['original_subtitles']);
         var serverModel = new mirosubs.subtitle.MSServerModel(
             draftPK, this.videoID_, this.videoURL_);
-        if (!subtitles.LANGUAGE || subtitles.FORKED)
+        if (subtitles.IS_ORIGINAL || subtitles.FORKED)
             this.openSubtitlingDialog_(serverModel, subtitles);
         else
             this.openDependentTranslationDialog_(
@@ -86,7 +86,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
     }
 };
 
-mirosubs.widget.SubtitleController.prototype.openSubtitlingDialog_ = 
+mirosubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog_ = 
     function(serverModel, subtitleState) 
 {
     if (this.subOpenFn_)
@@ -98,7 +98,7 @@ mirosubs.widget.SubtitleController.prototype.openSubtitlingDialog_ =
     subDialog.setVisible(true);
 };
 
-mirosubs.widget.SubtitleController.prototype.openDependentTranslationDialog_ = 
+mirosubs.widget.SubtitleDialogOpener.prototype.openDependentTranslationDialog_ = 
     function(serverModel, subtitleState, originalSubtitleState)
 {
     if (this.subOpenFn_)

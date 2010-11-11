@@ -60,7 +60,20 @@ class TestRpc(TestCase):
         action_ids = [i.id for i in Action.objects.all()]
         draft = self._create_basic_draft(request, True)
         qs = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)
-        self.assertEqual(qs.count(), 1)
+        self.assertEqual(qs.count(), 2)
+
+    def test_no_user_for_video_creation(self):
+        request = RequestMockup(self.user_0)
+        action_ids = [i.id for i in Action.objects.all()]
+        return_value = rpc.show_widget(
+            request, 
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        add_url_action = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)[0]
+        self.assertEquals(models.Action.ADD_VIDEO_URL, add_url_action.action_type)
+        # we can't record the user who opened the widget because of the privacy
+        # policy for using the firefox extension.
+        self.assertEquals(None, add_url_action.user)
 
     def test_fetch_subtitles(self):
         request = RequestMockup(self.user_0)
@@ -650,6 +663,25 @@ class TestRpc(TestCase):
         video = Video.objects.get(pk=draft.video.pk)
         language = video.subtitle_language()
         self.assertEqual(1, language.subtitleversion_set.count())
+
+    def test_only_one_version(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_basic_draft(request, True)
+        self.assertEquals(1, draft.video.subtitlelanguage_set.count())
+
+    def test_only_one_video_url(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_basic_draft(request, True)
+        self.assertEquals(1, draft.video.videourl_set.count())
+
+    def test_only_one_yt_video_url(self):
+        request = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request,
+            'http://www.youtube.com/watch?v=MJRF8xGzvj4',
+            False)
+        video = models.Video.objects.get(video_id=return_value['video_id'])
+        self.assertEquals(1, video.videourl_set.count())
 
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(

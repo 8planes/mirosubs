@@ -19,6 +19,7 @@
 goog.provide('mirosubs.api');
 
 mirosubs.api.openDialog = function(config) {
+    mirosubs.siteConfig = mirosubs.Config.siteConfig;
     if (config['mediaURL'])
         mirosubs.Config.siteConfig['mediaURL'] = config['mediaURL'];
     var subtitles = config['subtitles'];
@@ -45,7 +46,8 @@ mirosubs.api.openDialog = function(config) {
  * @param {boolean} askLanguage Should we ask the user for the language first?
  *
  */ 
-mirosubs.api.openUnisubsDialog = function(askLanguage, config) {
+mirosubs.api.openUnisubsDialog = function(askLanguage, config, generalSettings) {
+    mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
         mirosubs.returnURL = config['returnURL'];
     mirosubs.IS_NULL = !!config['nullWidget'];
@@ -56,7 +58,7 @@ mirosubs.api.openUnisubsDialog = function(askLanguage, config) {
         config['videoID'], config['videoURL'], videoSource);
     if (!askLanguage)
         opener.openDialog(
-            config['baseVersionNo'], config['subLanguageCode'],
+            config['baseVersionNo'], config['languageCode'],
             config['originalLanguageCode'], config['fork']);
 };
 
@@ -100,8 +102,6 @@ mirosubs.api.writeSrtTime_ = function(seconds, stringBuffer) {
         append(',').
         append(p(Math.floor(seconds * 1000) % 1000, 3));
 };
-
-mirosubs.siteConfig = mirosubs.Config.siteConfig;
 
 goog.exportSymbol(
     'mirosubs.api.openDialog',

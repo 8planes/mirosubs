@@ -333,7 +333,7 @@ mirosubs.widget.DropDown.prototype.setCurrentLangClassName_ = function() {
     var that = this;
     if (this.subtitleState_ == null)
         this.subtitlesOff_.className = className;
-    else if (!this.subtitleState_.LANGUAGE)
+    else if (this.subtitleState_.IS_ORIGINAL)
         this.originalLanguage_.className = className;
     else {
         goog.array.find(this.translationLinks_, function(elt) {

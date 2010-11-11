@@ -27,6 +27,7 @@ mirosubs.widget.SubtitleState = function(json) {
      * @type {?string}
      */
     this.LANGUAGE = json['language'];
+    this.IS_ORIGINAL = json['is_original'];
     /**
      * @type {number}
      */

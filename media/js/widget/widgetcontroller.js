@@ -34,7 +34,7 @@ mirosubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
  * Widget calls this when show_widget rpc call returns.
  */
 mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
-    this.makeGeneralSettings_(result);
+    mirosubs.widget.WidgetController.makeGeneralSettings(result);
 
     var videoID = result['video_id'];
 
@@ -63,7 +63,7 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
         this.playController_, this.videoTab_, popupMenu);
 };
 
-mirosubs.widget.WidgetController.prototype.makeGeneralSettings_ = function(result) {
+mirosubs.widget.WidgetController.makeGeneralSettings = function(result) {
     if (result['username'])
         mirosubs.currentUsername = result['username'];
     mirosubs.embedVersion = result['embed_version'];

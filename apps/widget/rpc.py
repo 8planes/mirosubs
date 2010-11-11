@@ -30,6 +30,16 @@ from django.db.models import Sum
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
+def add_general_settings(request, dict):
+    dict.update({
+            'writelock_expiration' : models.WRITELOCK_EXPIRATION,
+            'embed_version': settings.EMBED_JS_VERSION,
+            'languages': LANGUAGES,
+            'metadata_languages': settings.METADATA_LANGUAGES
+            })
+    if request.user.is_authenticated():
+        dict['username'] = request.user.username
+
 class Rpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None):
         video, create = models.Video.get_or_create_for_url(video_url)
@@ -39,21 +49,15 @@ class Rpc(BaseRpc):
         self._maybe_add_video_session(request)
 
         return_value = {
-            'video_id' : video.video_id,
-            'writelock_expiration' : models.WRITELOCK_EXPIRATION,
-            'embed_version': settings.EMBED_JS_VERSION,
-            'languages': LANGUAGES,
-            'metadata_languages': settings.METADATA_LANGUAGES
+            'video_id' : video.video_id,            
             }
+        add_general_settings(request, return_value)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
 
-        # TODO: in near future, use alternate video urls to fill these in.
-        if video.video_type == models.VIDEO_TYPE_BLIPTV:
-            video_urls = [video.bliptv_flv_url]
-        else:
-            video_urls = [video_url]
-        return_value['video_urls'] = video_urls
+        return_value['video_urls'] = \
+            [vu.effective_url for vu in video.videourl_set.all()]
+
         return_value['drop_down_contents'] = \
             self._drop_down_contents(request.user, video)
 
@@ -289,7 +293,8 @@ class Rpc(BaseRpc):
             is_latest = True
         return self._make_subtitles_dict(
             [s.__dict__ for s in version.subtitles()],
-            None if language.is_original else language.language,
+            language.language,
+            language.is_original,
             version.version_no,
             is_latest,
             version.is_forked)

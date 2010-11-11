@@ -39,7 +39,7 @@ mirosubs.translate.TranslationPanel = function(subtitleState,
         this.subtitleState_.SUBTITLES,
         function(transJson) {
             return new mirosubs.translate.EditableTranslation(
-                uw, transJson['subtitle_id'], transJson);
+                unitOfWork, transJson['subtitle_id'], transJson);
         });
 };
 goog.inherits(mirosubs.translate.TranslationPanel, goog.ui.Component);

@@ -6,11 +6,8 @@
 <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
 </head>
 <body>
-  <div id="widget_div" class="mirosubs-widget" style="width: 520px; margin: auto"></div>
-  <script language="JavaScript" type="text/javascript">
-      mirosubs.widget.SameDomainEmbed.embed(
-          document.getElementById('widget_div'),
-          { {{widget_params|safe}} });
-  </script>
 </body>
+  <script language="JavaScript" type="text/javascript">
+    mirosubs.api.openUnisubsDialog(false, {{widget_params|safe}}, {{general_settings|safe}});
+  </script>
 </html>

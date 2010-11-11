@@ -19,7 +19,7 @@
 from videos.types.base import VideoType
 import re
 
-URL_REGEX = re.compile('^http://.+/.+\.(ogv|ogg|mp4|m4v|webm)$', re.I)
+URL_REGEX = re.compile('^https?://.+/.+\.(ogv|ogg|mp4|m4v|webm)$', re.I)
 
 class HtmlFiveVideoType(VideoType):
 
@@ -29,4 +29,4 @@ class HtmlFiveVideoType(VideoType):
     @classmethod
     def matches_video_url(cls, url):
         url = cls.format_url(url)
-        return bool(URL_REGEX.match(url))        
+        return bool(URL_REGEX.match(url))

@@ -835,4 +835,8 @@ class VideoUrl(models.Model):
         #for sorting in js
         return time.mktime(self.created.timetuple())
 
+    @property
+    def effective_url(self):
+        return video_type_registrar[self.type].video_url(self)
+
 post_save.connect(Action.create_video_url_handler, VideoUrl)   

@@ -158,7 +158,7 @@ mirosubs.widget.SubtitleController.prototype.startEditing_ =
             'videoID': this.videoID_,
             'baseVersionNo': baseVersionNo,
             'videoURL': this.videoURL_,
-            'effectiveVideoUrl': 
+            'effectiveVideoURL': 
                 this.playController_.getVideoSource().getVideoURL(),
             'languageCode': subLanguageCode,
             'originalLanguageCode': originalLanguageCode,
