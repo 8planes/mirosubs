@@ -66,6 +66,9 @@
                 </a>
                 <div class="info">
                     <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
+                    {% if can_edit_video %}
+                        <a href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
+                    {% endif %}
                     {% if team_video.description %}
                     <p>
                         {{ team_video.description|urlize }}

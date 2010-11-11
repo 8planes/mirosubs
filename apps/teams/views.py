@@ -118,7 +118,8 @@ def detail(request, slug):
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team,
-        'query': q
+        'query': q,
+        'can_edit_video': team.can_edit_video(request.user)
     })
 
     if team.video:
