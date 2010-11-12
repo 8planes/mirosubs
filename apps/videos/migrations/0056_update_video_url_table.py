@@ -13,7 +13,9 @@ class Migration(DataMigration):
                 if url:
                     print 'Update video: %s' % video.id
                     if video.videourl_set.filter(url=url).exists():
-                        video.videourl_set.get(url=url).delete()
+                        video_url = video.videourl_set.filter(url=url)
+                        print("deleting {0}".format(video_url))
+                        video_url.delete()
                         video = orm.Video.objects.get(id=video.id)
                     if video.videourl_set.filter(original=True).exists():
                         obj = video.videourl_set.get(original=True)
