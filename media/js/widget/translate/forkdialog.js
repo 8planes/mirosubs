@@ -51,6 +51,9 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
            $d('p', null,
               'If you continue, you should finish all translations first ' +
               '(the original text will not be visible on the next screen).')));
+    this.loadingNotice_ = $('p', null, 'Please wait. Heavy forking action occurring...');
+    goog.style.showElement(this.loadingNotice_, false);
+    this.getElement().appendChild(this.loadingNotice_);
     this.okButton_ =
         $d('a',
            {'href':'#',
@@ -72,6 +75,7 @@ mirosubs.translate.ForkDialog.prototype.enterDocument = function() {
 
 mirosubs.translate.ForkDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
+    goog.style.showElement(this.loadingNotice_, true);
     mirosubs.Rpc.call(
         'fork',
         {'draft_pk': this.draftPK_},
