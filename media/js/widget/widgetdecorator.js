@@ -57,6 +57,9 @@ mirosubs.widget.WidgetDecorator = function(videoPlayer) {
  *     be attached to page.
  */
 mirosubs.widget.WidgetDecorator.decorate = function(videoPlayer) {
+    goog.dom.classes.add(
+        videoPlayer.getElement(), 
+        'mirosubs-video-decorated');
     return new mirosubs.widget.WidgetDecorator(videoPlayer);
 };
 

@@ -920,6 +920,11 @@ bottom: 47px !important;
 
 }
 
+.mirosubs-video-decorated {
+   display: block;
+   margin-bottom: 30px;
+}
+
 .mirosubs-videoDiv {
 
 }
