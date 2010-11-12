@@ -39,8 +39,6 @@ from videos.share_utils import _add_share_panel_context_for_video, _add_share_pa
 from gdata.service import RequestError
 from django.db.models import Sum, Q
 from django.utils.translation import ugettext
-from widget.srt_subs import GenerateSubtitlesHandler
-from utils import render_to_json
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -172,42 +170,7 @@ def actions_list(request):
                        paginate_by=settings.ACTIVITIES_ONPAGE, page=page,
                        template_name='videos/actions_list.html',
                        template_object_name='action',
-                       extra_context=extra_context)    
-
-@render_to_json
-def api_subtitles(request):
-    callback = request.GET.get('callback', None)
-    video_url = request.GET.get('video_url', None)
-    language = request.GET.get('language', None)
-    revision = request.GET.get('revision', None)
-    format = request.GET.get('format', 'json')
-    
-    if video_url is None:
-        return {'is_error': True, 'message': 'video_url not specified' }
-    
-    video, created = Video.get_or_create_for_url(video_url)
-    
-    if not video:
-        return {'is_error': True, 'message': 'unsuported video url' }
-    
-    if format == 'json':
-        output = [s.for_json() for s in video.subtitles(version_no=revision, language_code = language)]
-
-        if callback:
-            result = json.dumps(output)
-            return HttpResponse('%s(%s);' % (callback, result), 'text/javascript')
-        else:
-            return output
-    else:    
-        handler = GenerateSubtitlesHandler.get(format)
-        
-        if not handler:
-            return {'is_error': True, 'message': 'undefined format' }
-        
-        subtitles = [s.for_generator() for s in video.subtitles(version_no=revision, language_code = language)]
-
-        h = handler(subtitles, video)
-        return HttpResponse(unicode(h))      
+                       extra_context=extra_context)      
         
 @login_required
 def upload_subtitles(request):
