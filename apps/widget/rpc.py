@@ -16,6 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from django.db.models import ObjectDoesNotExist
 from django.conf.global_settings import LANGUAGES
 from videos import models
 from datetime import datetime
@@ -289,6 +290,17 @@ class Rpc(BaseRpc):
 
     def _save_original_language(self, video_id, language_code):
         video = models.Video.objects.get(video_id=video_id)
+        try:
+            # special case where an original SubtitleLanguage is saved with 
+            # blank language.
+            original_language = \
+                models.SubtitleLanguage.objects.get(
+                is_original=True, language='')
+            original_language.language = language_code
+            original_language.save()
+            return
+        except ObjectDoesNotExist:
+            pass
         existing_language, created = \
             models.SubtitleLanguage.objects.get_or_create(
                 video=video,
