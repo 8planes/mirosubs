@@ -22,11 +22,13 @@ goog.provide('mirosubs.translate.Dialog');
  * @constructor
  * 
  */
-mirosubs.translate.Dialog = function(serverModel,
+mirosubs.translate.Dialog = function(opener, 
+                                     serverModel,
                                      videoSource, 
                                      subtitleState, 
                                      standardSubState) {
     mirosubs.Dialog.call(this, videoSource);
+    this.opener_ = opener;
     this.subtitleState_ = subtitleState;
     this.standardSubState_ = standardSubState;
     this.unitOfWork_ = new mirosubs.UnitOfWork();
@@ -72,6 +74,7 @@ mirosubs.translate.Dialog.prototype.createRightPanel_ = function() {
          "https://addons.mozilla.org/en-US/firefox/browse/type:3"]
     ];
     return new mirosubs.translate.TranslationRightPanel(
+        this,
         this.serverModel_, helpContents, extraHelp, [], false, "Done?", 
         "Submit final translation", "Resources for Translators");
 };
@@ -96,4 +99,26 @@ mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     mirosubs.translate.Dialog.superClass_.disposeInternal.call(this);
     this.unitOfWork_.dispose();
     this.serverModel_.dispose();
+};
+mirosubs.translate.Dialog.prototype.forkAndClose = function() {
+    this.serverModel_.forceSave(
+        goog.bind(this.offerForking_, this));
+};
+mirosubs.translate.Dialog.prototype.offerForking_ = function() {
+    var dialog = new mirosubs.translate.ForkDialog(
+        this.serverModel_.getDraftPK(),
+        this.subtitleState_.LANGUAGE,
+        goog.bind(this.forkImpl_, this));
+    dialog.setVisible(true);
+};
+mirosubs.translate.Dialog.prototype.forkImpl_ = function(subtitleState) {
+    var oldReturnURL = mirosubs.returnURL;
+    mirosubs.returnURL = null;
+    this.saved_ = true;
+    this.setVisible(false);
+    mirosubs.returnURL = oldReturnURL;
+    var that = this;
+    this.opener_.openForkedTranslationDialog(
+        this.serverModel_.getDraftPK(),
+        subtitleState);
 };

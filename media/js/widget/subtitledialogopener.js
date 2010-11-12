@@ -119,6 +119,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDependentTranslationDialog_ =
     if (this.subOpenFn_)
         this.subOpenFn_();
     var transDialog = new mirosubs.translate.Dialog(
+        this,
         serverModel,
         this.videoSource_,
         subtitleState, originalSubtitleState);

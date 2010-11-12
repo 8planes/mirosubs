@@ -39,7 +39,7 @@
   top: 0px !important;
   border: 1px solid #000;
   border-top: 0;
-  z-index: 2147483639;
+  z-index: 2147483631;
   }
 
 .mirosubs-modal-widget-content {
@@ -117,7 +117,7 @@ text-shadow:
 -2px -1px 0px red !important;
 }
 
-.mirosubs-modal-login-title-close, .mirosubs-modal-widget-title-close, .mirosubs-modal-lang-title-close {
+.mirosubs-modal-login-title-close, .mirosubs-modal-widget-title-close, .mirosubs-modal-lang-title-close, .mirosubs-forkdialog-title-close {
   background: url("../images/sprite.png") 0 -256px no-repeat !important;
   position: absolute !important;
   top: 9px !important;
@@ -1056,11 +1056,27 @@ ul.mirosubs-titlesList.sync {
 }
 
 .mirosubs-modal-widget-bg {
-  z-index: 2147483638;
+  z-index: 2147483630;
   position: absolute !important;
   background: #000 !important;
   top: 0 !important;
   left: 0 !important;
+}
+
+.mirosubs-forkdialog-bg {
+  z-index: 2147483631;
+  position: absolute;
+  background: #FFF;
+  top: 0;
+  left: 0;
+}
+
+.mirosubs-modal-lang-bg {
+  z-index: 2147483631;
+  position: absolute;
+  background: #FFF;
+  top: 0;
+  left: 0;
 }
 
 .mirosubs-modal-dialog {
@@ -1645,7 +1661,7 @@ li.mirosubs-transcribeHelp ol li {
     -webkit-border-bottom-left-radius: 5px !important; 
     -webkit-border-bottom-rught-radius: 5px !important; 
     position: absolute !important;
-   z-index: 2147483639;
+   z-index: 2147483631;
 }
 
 .mirosubs-langmenuitem {
@@ -2285,16 +2301,20 @@ cursor:
     margin: -7px -3px 0 0 !important;
 }
 
-.mirosubs-modal-login, .mirosubs-modal-lang {
+.mirosubs-modal-login, .mirosubs-modal-lang, .mirosubs-forkdialog {
   border: 3px solid !important;
   position: absolute !important;
-  z-index: 2147483641;
+  z-index: 2147483633;
   font-family: Arial, hhelvetica, sans-serif;
   -moz-border-radius: 5px !important;
   -webkit-border-radius: 5px !important;
   -moz-box-shadow: 0px 5px 50px rgba(0,0,0,01) !important;
   -webkit-box-shadow: 0 3px 5px rgba(0,0,0,01) !important;
   outline: none !important;
+}
+
+.mirosubs-forkdialog {
+   width: 400px;
 }
 
 .mirosubs-modal-login {
@@ -2308,10 +2328,10 @@ cursor:
    position: absolute;
    top: 0;
    left: 0;
-   z-index: 2147483640;
+   z-index: 2147483632;
 }
 
-.mirosubs-modal-lang {
+.mirosubs-modal-lang, .mirosubs-forkdialog {
    background-color: #fff;
 }
 
@@ -2328,7 +2348,7 @@ cursor:
    color: #777;
 }
 
-.mirosubs-modal-lang p {
+.mirosubs-modal-lang p, .mirosubs-forkdialog p {
    margin:0 !important;
    padding:12px;
    color: #666;
@@ -2341,7 +2361,7 @@ cursor:
    margin-bottom: 8px;
 }
 
-.mirosubs-modal-lang .mirosubs-green-button {
+.mirosubs-modal-lang .mirosubs-green-button, .mirosubs-forkdialog .mirosubs-green-button {
    float: right;
    margin-right: 20px;
 }
@@ -2452,7 +2472,7 @@ a.mirosubs-openid span{
    font-size: 1.2em;
    font-weight: bold;
    line-height: 150%;
-   z-index: 2147483647;
+   z-index: 2147483639;
 }
 
 .mirosubs-warning .mirosubs-label {
@@ -2604,7 +2624,7 @@ overflow: hidden;
 
 .mirosubs-videoTab-anchoring {
    position: absolute;
-   z-index: 2147483630;
+   z-index: 2147483622;
 }
 
 .mirosubs-videoTab a {

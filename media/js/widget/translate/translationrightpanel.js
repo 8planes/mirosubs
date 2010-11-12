@@ -22,7 +22,8 @@ goog.provide('mirosubs.translate.TranslationRightPanel');
 * @extends mirosubs.RightPanel
 */
 
-mirosubs.translate.TranslationRightPanel = function(serverModel,
+mirosubs.translate.TranslationRightPanel = function(dialog,
+                                                    serverModel,
                                                     helpContents,
                                                     extraHelp,
                                                     legendKeySpecs,
@@ -30,10 +31,11 @@ mirosubs.translate.TranslationRightPanel = function(serverModel,
                                                     doneStrongText,
                                                     doneText,
                                                     extraHelpHeader) {
-    this.extraHelpHeader_ = extraHelpHeader;
     mirosubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
                              legendKeySpecs,
                              showRestart, doneStrongText, doneText);
+    this.extraHelpHeader_ = extraHelpHeader;
+    this.dialog_ = dialog;
 };
 goog.inherits(mirosubs.translate.TranslationRightPanel, mirosubs.RightPanel);
 
@@ -54,4 +56,28 @@ mirosubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
     }
     extraDiv.appendChild(lst);
     el.appendChild(extraDiv);
+    this.autoTranslateLink_ = 
+        $d('a', {'href':'#'}, 'Auto-translate empty fields');
+    this.changeTimingLink_ =
+        $d('a', {'href':'#'}, 'Change subtitle timing');
+    el.appendChild(
+        $d('ul', 'mirosubs-translationOptions',
+           $d('li', 'mirosubs-autoTranslate',
+              this.autoTranslateLink_,
+              $d('span', null, '(using google)')),
+           $d('li', 'mirosubs-changeTiming',
+              this.changeTimingLink_,
+              $d('span', null, '(advanced users)'))));
+};
+
+mirosubs.translate.TranslationRightPanel.prototype.enterDocument = function() {
+    mirosubs.translate.TranslationRightPanel.superClass_.enterDocument.call(this);
+    var that = this;
+    this.getHandler().listen(
+        this.changeTimingLink_,
+        'click',
+        function(e) {
+            e.preventDefault();
+            that.dialog_.forkAndClose();
+        });
 };

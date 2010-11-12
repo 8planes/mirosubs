@@ -105,6 +105,10 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
 };
 
 mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
+    this.forceSave();
+};
+
+mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback) {
     var saveArgs = this.makeSaveArgs_();
     var that = this;
     mirosubs.Rpc.call(
@@ -115,8 +119,11 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
                 // this should never happen.
                 alert('Problem saving subtitles. Response: ' + 
                       result['response']);
-            else
+            else {
                 that.registerSavedPackets_(result['last_saved_packet']);
+                if (opt_callback)
+                    opt_callback();
+            }
         });
 };
 
@@ -182,4 +189,8 @@ mirosubs.subtitle.MSServerModel.prototype.logIn = function() {
 
 mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
     return [mirosubs.siteURL(), "/videos/", this.videoID_, "/"].join('');
+};
+
+mirosubs.subtitle.MSServerModel.prototype.getDraftPK = function() {
+    return this.draftPK_;
 };
