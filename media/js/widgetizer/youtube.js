@@ -62,7 +62,7 @@ mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
     return element.getAttribute('allowscriptaccess') == 'always' &&
         element.src.match(/enablejsapi=1/i) &&
         goog.array.contains(['transparent', 'opaque'], 
-                            element.getAttribute('wmode');
+                            element.getAttribute('wmode'));
 };
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
