@@ -269,31 +269,6 @@ class ViewsTest(WebUseTest):
     def test_site_feedback(self):
         self._simple_test("videos:site_feedback")
 
-    def test_api_subtitles(self):
-        youtube_id = 'uYT84jZDPE0'
-        
-        try:
-            Video.objects.get(videourl__videoid=youtube_id, videourl__type=VIDEO_TYPE_YOUTUBE)
-            self.fail()
-        except Video.DoesNotExist:
-            pass
-        
-        url = 'http://www.youtube.com/watch?v=%s' % youtube_id
-        self._simple_test("api_subtitles", data={'video_url': url})
-        
-        try:
-            Video.objects.get(videourl__videoid=youtube_id, videourl__type=VIDEO_TYPE_YOUTUBE)
-        except Video.DoesNotExist:
-            self.fail()
-    
-        self._simple_test("api_subtitles", data={'video_url': url})
-        
-        from django.utils import simplejson as json
-        
-        response = self._simple_test("api_subtitles")
-        data = json.loads(response.content)
-        self.assertTrue(data['is_error'])
-
     def test_api_subtitles_for_jsonp(self):
         youtube_id = 'uYT84jZDPE0'
         
