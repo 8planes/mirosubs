@@ -12,7 +12,10 @@ class Migration(DataMigration):
                 url = self.get_video_url(video)
                 if url:
                     print 'Update video: %s' % video.id
-                    obj = orm.VideoUrl()
+                    if video.videourl_set.filter(original=True).exists():
+                        obj = video.videourl_set.get(original=True)
+                    else:
+                        obj = orm.VideoUrl()
                     obj.type = video.video_type
                     obj.url = url
                     obj.primary = True
