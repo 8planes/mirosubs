@@ -58,11 +58,11 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
 };
 
 mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
-    if (this.ON_YT_SITE)
-        return true;
     // assuming that element is an embed.
     return element.getAttribute('allowscriptaccess') == 'always' &&
-        element.src.match(/enablejsapi=1/i);
+        element.src.match(/enablejsapi=1/i) &&
+        goog.array.contains(['transparent', 'opaque'], 
+                            element.getAttribute('wmode');
 };
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
