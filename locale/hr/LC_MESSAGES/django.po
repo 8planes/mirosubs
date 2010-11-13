@@ -100,27 +100,27 @@ msgstr "Ovaj e-mail se koristi već."
 
 #: .\apps\videos\forms.py:48
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr ""
+msgstr "Netko je titluje ovaj video upravo sada. Pokušajte kasnije."
 
 #: .\apps\videos\forms.py:52
 msgid "You can't edit this video."
-msgstr ""
+msgstr "Ne možete uređivati ovaj video."
 
 #: .\apps\videos\forms.py:55
 msgid "This video has translations."
-msgstr ""
+msgstr "Ovaj video ima prijevode."
 
 #: .\apps\videos\forms.py:61
 msgid "File size should be less 1Mb"
-msgstr ""
+msgstr "Veličina datoteke bi trebala biti manja 1MB"
 
 #: .\apps\videos\forms.py:64
 msgid "Incorrect format. Upload .srt, .ssa, or .xml (TTML  format)"
-msgstr ""
+msgstr "Neispravan format. Učitajte (uploadujte) srt,. ssa, ili. XML (TTML format)"
 
 #: .\apps\videos\forms.py:67
 msgid "Incorrect subtitles format"
-msgstr ""
+msgstr "Neispravan format titlova"
 
 #: .\apps\videos\forms.py:167
 msgid ""
@@ -129,50 +129,53 @@ msgid ""
 "think there's been some mistake, <a\n"
 "href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!"
 msgstr ""
+"Univerzalni titlovi ne podržava tu web stranicu ili video format. \n"
+"Ako želite da dodamo podršku za novi site ili format, ili ako \\ nmislite da je dogodila se pogreška, <a\n"
+"href=\"mailto:feedback@universalsubtitles.org\"> kontaktirajte nas!"
 
 #: .\apps\videos\forms.py:214
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr ""
+msgstr "Unesite valjane adrese e-pošte odvojene zarezima."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
-msgstr ""
+msgstr "Podijelite svoje titlove"
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr ""
+msgstr "Sada svatko može gledati video sa titlovima - probajte!"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
-msgstr ""
+msgstr "Zatim recite svima i pozovite svoje prijatelje kako bi pomogli prevesti:"
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
 msgid "Post to Facebook"
-msgstr ""
+msgstr "Objavite na Facebook"
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
 msgid "Post to Twitter"
-msgstr ""
+msgstr "Objavite na Twitter"
 
 #: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
-msgstr ""
+msgstr "Pošaljite e-mail prijatelje"
 
 #: .\templates\_share_widget.html.py:15
 msgid "Embed Code"
-msgstr ""
+msgstr "Položite kod (embed)"
 
 #: .\templates\_share_widget.html.py:25 .\templates\_sharing_widget.html.py:48
 msgid "Permalink"
-msgstr ""
+msgstr "Trajni link (permalink)"
 
 #: .\templates\_sharing_widget.html.py:20
 msgid "Embed this video in your site"
-msgstr ""
+msgstr "Ugradite (embed) ovaj video u svoju web stranicu"
 
 #: .\templates\_testing_widget.html.py:3
 msgid "We&#8217;d like help testing our subtitling widget"
-msgstr ""
+msgstr "Trebamo pomoć u testiranju našeg widgeta za titlove"
 
 #: .\templates\_testing_widget.html.py:5
 msgid "Just launch our feedback form and try captioning a video"
