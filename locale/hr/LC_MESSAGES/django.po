@@ -17,20 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
 #: .\settings.py:29
+#, fuzzy
 msgid "Argentinian Spanish"
-msgstr ""
+msgstr "Argentinac španjolski"
 
 #: .\apps\auth\admin.py:10
+#, fuzzy
 msgid "Username"
-msgstr ""
+msgstr "Korisničko ime"
 
 #: .\apps\auth\admin.py:11
+#, fuzzy
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
-msgstr ""
+msgstr "Obavezno. 30 znakova ili manje. Samo alfanumeričke znakove (slova, brojevi i povlaka)."
 
 #: .\apps\auth\admin.py:12
+#, fuzzy
 msgid "This value must contain only letters, numbers and underscores."
-msgstr ""
+msgstr "Ova vrijednost može sadržavati samo slova, brojeve i donje crte."
 
 #: .\apps\auth\admin.py:13
 #, fuzzy
