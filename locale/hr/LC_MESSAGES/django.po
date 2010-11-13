@@ -17,90 +17,86 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
 #: .\settings.py:29
-#, fuzzy
 msgid "Argentinian Spanish"
-msgstr "Argentinac španjolski"
+msgstr "Argentinski španjolski"
 
 #: .\apps\auth\admin.py:10
-#, fuzzy
 msgid "Username"
 msgstr "Korisničko ime"
 
 #: .\apps\auth\admin.py:11
-#, fuzzy
 msgid "Required. 30 characters or fewer. Alphanumeric characters only (letters, digits and underscores)."
 msgstr "Obavezno. 30 znakova ili manje. Samo alfanumeričke znakove (slova, brojevi i povlaka)."
 
 #: .\apps\auth\admin.py:12
-#, fuzzy
 msgid "This value must contain only letters, numbers and underscores."
 msgstr "Ova vrijednost može sadržavati samo slova, brojeve i donje crte."
 
 #: .\apps\auth\admin.py:13
-#, fuzzy
 msgid "Password"
 msgstr "Lozinka"
 
 #: .\apps\auth\admin.py:14
 msgid "Password confirmation"
-msgstr ""
+msgstr "Potvrda lozinke"
 
 #: .\apps\auth\admin.py:15
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: .\apps\auth\models.py:83
 msgid "Add comment"
-msgstr ""
+msgstr "Dodaj komentar"
 
 #: .\apps\auth\models.py:84
 msgid "Start subtitles"
-msgstr ""
+msgstr "Započnite titlove"
 
 #: .\apps\auth\models.py:85
 msgid "Start translation"
-msgstr ""
+msgstr "Započnite prijevod"
 
 #: .\apps\auth\models.py:86
 msgid "Edit subtitles"
-msgstr ""
+msgstr "Uredite titlove"
 
 #: .\apps\auth\models.py:87
 msgid "Edit translation"
-msgstr ""
+msgstr "Uredite prijevod"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
-msgstr ""
+msgstr "Možete odgovoriti samo komentare za isti objekt"
 
 #: .\apps\profiles\forms.py:39
+#, fuzzy
 msgid "This user has not email"
-msgstr ""
+msgstr "Ovaj korisnik nema poruku e-pošte"
 
 #: .\apps\profiles\forms.py:44
 msgid "You are not authenticated."
-msgstr ""
+msgstr "Niste autentificirani."
 
 #: .\apps\profiles\forms.py:51
-#, python-format
+#, python-format, fuzzy
 msgid "Personal message from %(sender)s on universalsubtitles.org"
-msgstr ""
+msgstr "Osobna poruka od %(pošiljatelja)s  na universalsubtitles.org"
 
 #: .\apps\profiles\forms.py:67
 msgid "Confirm new password:"
-msgstr ""
+msgstr "Potvrdite novu lozinku:"
 
 #: .\apps\profiles\forms.py:82
 msgid "Invalid password."
-msgstr ""
+msgstr "Neispravna lozinka."
 
 #: .\apps\profiles\forms.py:84
 msgid "The two passwords did not match."
-msgstr ""
+msgstr "Lozinke nisu iste."
 
 #: .\apps\profiles\forms.py:94
 msgid "This email is used already."
-msgstr ""
+msgstr "Ovaj e-mail se koristi već."
 
 #: .\apps\videos\forms.py:48
 msgid "Somebody is subtitling this video right now. Try later."
