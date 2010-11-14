@@ -1667,44 +1667,46 @@ msgstr ""
 
 #: .\templates\videos\history.html.py:197
 msgid "Compare Revisions"
-msgstr ""
+msgstr "Usporedite revizije"
 
 #: .\templates\videos\history.html.py:207
 msgid "Most Recent"
-msgstr ""
+msgstr "Najnovije"
 
 #: .\templates\videos\history.html.py:213
 msgid "Note"
-msgstr ""
+msgstr "Napomena"
 
 #: .\templates\videos\history.html.py:216
 msgid "Time"
-msgstr ""
+msgstr "Vrijeme"
 
 #: .\templates\videos\history.html.py:219
 msgid "Text"
-msgstr ""
+msgstr "Tekst"
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
-msgstr ""
+msgstr "Nema titlova za ovaj jezik."
 
 #: .\templates\videos\history.html.py:253
 msgid "Either no subtitles have been entered, or they were deleted."
-msgstr ""
+msgstr "Ili titlovi još nisu unešeni ili su pobrisani."
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
-msgstr ""
+msgstr "Nema titlova još."
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
+#, fuzzy
 msgid "Make some!"
-msgstr ""
+msgstr "Provjerite neke!"
 
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
+#, fuzzy
 msgid "Revision"
-msgstr ""
+msgstr "Revizija"
 
 #: .\templates\videos\revision.html.py:83
 #, python-format
@@ -1718,44 +1720,44 @@ msgid ""
 msgstr ""
 
 #: .\templates\videos\revision.html.py:98
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "\n"
 "                    Compare #%(version_no)s to #%(prev_version_no)s\n"
 "                    "
-msgstr ""
+msgstr "\\ N Usporedite # %(version_no)s  s # %(prev_version_no)s  \\ n"
 
 #: .\templates\videos\revision.html.py:108
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "\n"
 "                    Compare #%(version_no)s to #%(next_version_no)s\n"
 "                    "
-msgstr ""
+msgstr "\\ N Usporedite # %(version_no)s  s # %(next_version_no)s  \\ n"
 
 #: .\templates\videos\revision.html.py:118
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "\n"
 "               Compare #%(version_no)s to #%(latest_version_no)s(current)\n"
 "               "
-msgstr ""
+msgstr "\\ N Usporedite # %(version_no)s  s # %(latest_version_no)s  (tekuće) \\ n"
 
 #: .\templates\videos\revision.html.py:144
 msgid "See full revision history"
-msgstr ""
+msgstr "Pogledajte cijelu povijest revizija"
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
-msgstr ""
+msgstr "Traži"
 
 #: .\templates\videos\search.html.py:16
 msgid "URL/title"
-msgstr ""
+msgstr "URL / naslov"
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: .\templates\videos\search.html.py:22
 msgid "Does"
