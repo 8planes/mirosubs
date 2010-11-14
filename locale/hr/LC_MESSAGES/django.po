@@ -1768,86 +1768,86 @@ msgstr ""
 
 #: .\templates\videos\test_form_page.html.py:18
 msgid "Your Email"
-msgstr ""
+msgstr "Vaš e-mail"
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
-msgstr ""
+msgstr "Zadatak 1"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "Try creating subtitles on the following"
-msgstr ""
+msgstr "Pokušajte stvoriti titlove na sljedećem"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "video"
-msgstr ""
+msgstr "videu"
 
 #: .\templates\videos\test_form_page.html.py:25
 #: .\templates\videos\test_form_page.html.py:31
 #: .\templates\videos\test_form_page.html.py:37
 #: .\templates\videos\test_form_page.html.py:57
 msgid "how was it? were the instructions clear? what would improve it?"
-msgstr ""
+msgstr "kako je bilo? da li su upute jasne? što bi poboljšalo upute?"
 
 #: .\templates\videos\test_form_page.html.py:29
 msgid "Task 2"
-msgstr ""
+msgstr "Zadatak 2"
 
 #: .\templates\videos\test_form_page.html.py:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
-msgstr ""
+msgstr "Pokušajte popraviti greške na videu (ili se vratite natrag i uredite)"
 
 #: .\templates\videos\test_form_page.html.py:35
 msgid "Task 3"
-msgstr ""
+msgstr "Zadatak 3"
 
 #: .\templates\videos\test_form_page.html.py:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
-msgstr ""
+msgstr "Prevedite video (odglumite ako niste dvojezični!)"
 
 #: .\templates\videos\test_form_page.html.py:42
 msgid "optional: get updates about Universal Subtitles"
-msgstr ""
+msgstr "opcionalno: primite novosti o Universal Subtitles"
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr ""
+msgstr "Pošaljite!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Jednostavne upute"
 
 #: .\templates\videos\test_form_page.html.py:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
-msgstr ""
+msgstr "Svi zadaci 2 i 3 su dodatni (ali preporučujemo da ih isprobate sve)."
 
 #: .\templates\videos\test_form_page.html.py:74
 msgid "That’s it!"
-msgstr ""
+msgstr "To je to!"
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr ""
+msgstr "Unesite novi naslov"
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr ""
+msgstr "uredite naslov"
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr ""
+msgstr "Jezici"
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
-msgstr ""
+msgstr "Stream aktivnosti"
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr ""
+msgstr "% gotovo"
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
-msgstr ""
+msgstr "Izvornik"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
