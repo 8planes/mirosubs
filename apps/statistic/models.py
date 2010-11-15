@@ -41,4 +41,4 @@ class FBShareStatistic(BaseShareStatistic):
 class SubtitleFetchStatistic(models.Model):
     video = models.ForeignKey('videos.Video')
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
-    created = models.DateTimeField(auto_now_add=True)    
+    created = models.DateTimeField(auto_now_add=True)

@@ -29,7 +29,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
      * @type {string}
      */
     this.videoURL_ = widgetConfig['video_url'];
-    this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'] || [];
+    this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'];
     this.forceFormat_ = !!widgetConfig['force_format'];
     this.videoConfig_ = widgetConfig['video_config'];
     /**
@@ -73,7 +73,7 @@ mirosubs.widget.Widget.prototype.setVideoSource_ = function(videoSource) {
 };
 
 mirosubs.widget.Widget.prototype.findVideoSource_ = function() {
-    if (this.alternateVideoURLs_.length > 0) {
+    if (this.alternateVideoURLs_ && this.alternateVideoURLs_.length > 0) {
         var mainVideoSpec = this.videoURL_;
         if (this.videoConfig_)
             mainVideoSpec = { 'url': this.videoURL_, 
@@ -91,7 +91,7 @@ mirosubs.widget.Widget.prototype.isVideoSourceImmediatelyUsable_ =
 {
     if (this.videoSource_ instanceof mirosubs.video.BlipTVPlaceholder)
         return false;
-    if (this.forceFormat_ || this.alternateVideoURLs_.length > 0)
+    if (this.forceFormat_ || goog.isDefAndNotNull(this.alternateVideoURLs_))
         return true;
     else {
         if (this.videoSource_ instanceof mirosubs.video.Html5VideoSource)

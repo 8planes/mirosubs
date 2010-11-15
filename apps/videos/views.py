@@ -43,7 +43,6 @@ from statistic.models import EmailShareStatistic
 
 def index(request):
     context = widget.add_onsite_js_files({})
-    context['widget_params'] = _widget_params(request, 'http://subtesting.com/video/Usubs-IntroVideo.theora.ogg', None, '')
     context['all_videos'] = Video.objects.count()
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
@@ -121,8 +120,7 @@ def video(request, video_id, video_url=None):
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     context['translations'] = video.subtitlelanguage_set.filter(was_complete=True) \
         .filter(is_original=False)
-    video_link = video_url and video_url.url or video.get_video_url()
-    context['widget_params'] = _widget_params(request, video_link, None, '')
+    context['widget_params'] = _widget_params(request, video, None, '')
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(is_complete=True).count()
     context['original'] = video.subtitle_language()
@@ -280,7 +278,7 @@ def history(request, video_id, lang=None):
     context['translations'] = video.subtitlelanguage_set.filter(is_original=False) \
         .filter(was_complete=True)
     context['last_version'] = language.latest_version()
-    context['widget_params'] = _widget_params(request, video.get_video_url(), None, lang or '')
+    context['widget_params'] = _widget_params(request, video, None, lang or '')
     context['language'] = language
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
@@ -290,9 +288,15 @@ def history(request, video_id, lang=None):
                        template_object_name='revision',
                        extra_context=context)
 
-def _widget_params(request, video_url, version_no=None, language_code=None):
-    params = {'video_url': video_url, 'base_state': {}}
-    
+def _widget_params(request, video, version_no=None, language_code=None):
+    primary_url = video.get_video_url()
+    alternate_urls = [vu.effective_url for vu in video.videourl_set.all() 
+                      if vu.effective_url != primary_url]
+
+    params = {'video_url': primary_url, 
+              'alternate_video_urls': alternate_urls, 
+              'base_state': {}}
+
     if version_no:
         params['base_state']['revision'] = version_no
         
@@ -311,7 +315,7 @@ def revision(request, pk):
     language = version.language
     context['language'] = language
     context['widget_params'] = _widget_params(request, \
-            language.video.get_video_url(), version.version_no, language.language)
+            language.video, version.version_no, language.language)
     context['latest_version'] = language.latest_version()
     return render_to_response('videos/revision.html', context,
                               context_instance=RequestContext(request))     
@@ -385,10 +389,10 @@ def diffing(request, first_pk, second_pk):
     context['second_version'] = second_version
     context['latest_version'] = language.latest_version()
     context['widget0_params'] = \
-        _widget_params(request, video.get_video_url(), 
+        _widget_params(request, video, 
                        first_version.version_no)
     context['widget1_params'] = \
-        _widget_params(request, video.get_video_url(),
+        _widget_params(request, video,
                        second_version.version_no)
     return render_to_response('videos/diffing.html', context,
                               context_instance=RequestContext(request)) 

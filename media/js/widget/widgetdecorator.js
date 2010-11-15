@@ -69,7 +69,6 @@ mirosubs.widget.WidgetDecorator.prototype.videoDimensionsKnown_ = function() {
         this.videoTab_.getElement());
     // we're doing this because there might be several videos on the page
     // that are pushing things down on the page as they load
-    // right now the start line is commented out. Maybe uncomment in future.
     this.dimensionsTimer_ = new goog.Timer(500);
     this.handler_.listen(this.dimensionsTimer_,
                          goog.Timer.TICK,
