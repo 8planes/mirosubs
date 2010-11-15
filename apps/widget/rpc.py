@@ -198,7 +198,7 @@ class Rpc(BaseRpc):
 
     def fetch_subtitles(self, request, video_id, language_code=None):
         video = models.Video.objects.get(video_id=video_id)
-        video.update_subtitles_fetched()
+        video.update_subtitles_fetched(language_code)
         return self._subtitles_dict(video.version(language_code=language_code))
 
     def get_widget_info(self, request):
@@ -316,7 +316,7 @@ class Rpc(BaseRpc):
     def _autoplay_subtitles(self, user, video, language_code, version_no):
         if video.subtitle_language(language_code) is None:
             return None
-        video.update_subtitles_fetched()
+        video.update_subtitles_fetched(language_code)
         version = video.version(version_no, language_code)
         if version:
             return self._subtitles_dict(version)

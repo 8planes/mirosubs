@@ -21,6 +21,9 @@ from statistic.models import TweeterShareStatistic as TwSt, FBShareStatistic as 
 urlpatterns = patterns('statistic.views',
     url('^$', 'index', name='index'),
     url('^users_statistic/$', 'users_statistic', name='users_statistic'),
+    url('^videos_statistic/$', 'videos_statistic', name='videos_statistic'),
+    url('^languages_statistic/$', 'languages_statistic', name='languages_statistic'),
+    url('^language_statistic/(?P<lang>[\-\w]+)/$', 'language_statistic', name='language_statistic'),
     url('^fb_st/$', 'update_share_statistic', {'cls': FbSt}, 'fb_update_share_statistic'),
     url('^tweeter_st/$', 'update_share_statistic', {'cls': TwSt}, 'tw_update_share_statistic'),
 )

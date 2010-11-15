@@ -17,12 +17,13 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from utils import render_to, render_to_json
 from datetime import datetime, timedelta
-from videos.models import Video, SubtitleLanguage
+from videos.models import Video, SubtitleLanguage, ALL_LANGUAGES
 from statistic.models import EmailShareStatistic, TweeterShareStatistic, FBShareStatistic
 from auth.models import CustomUser as User
 from django.views.generic.list_detail import object_list
 from comments.models import Comment
-from django.db.models import Sum
+from django.db.models import Sum, Count
+from django.http import Http404
 
 @render_to('statistic/index.html')
 def index(request):
@@ -81,13 +82,105 @@ def update_share_statistic(request, cls):
     st.save()
     return {}
 
+@render_to('statistic/languages_statistic.html')
+def languages_statistic(request):
+    today = datetime.today()
+    month_ago = today - timedelta(days=31)
+    week_ago = today - timedelta(weeks=1)
+    day_ago = today - timedelta(days=1)
+
+    total_langs = SubtitleLanguage.objects.values('language').annotate(lc=Count('language'))
+    month_langs = SubtitleLanguage.objects.filter(created__range=(month_ago, today)).values('language').annotate(lc=Count('language'))
+    week_langs = SubtitleLanguage.objects.filter(created__range=(week_ago, today)).values('language').annotate(lc=Count('language'))
+    day_langs = SubtitleLanguage.objects.filter(created__range=(day_ago, today)).values('language').annotate(lc=Count('language'))
+    
+    lang_names = dict(ALL_LANGUAGES)
+    lang_names[u''] = 'No name'
+    langs = dict((i['language'], {'name': lang_names[i['language']], 'total': i['lc'], 'month': 0, 'week': 0, 'day': 0}) for i in total_langs)
+    for item in month_langs:
+        langs[item['language']]['month'] = item['lc']
+    for item in week_langs:
+        langs[item['language']]['week'] = item['lc']
+    for item in day_langs:
+        langs[item['language']]['day'] = item['lc']
+                        
+    return {
+        'langs': langs
+    }
+
+@render_to('statistic/language_statistic.html')
+def language_statistic(request, lang):
+    lang_names = dict(ALL_LANGUAGES)
+    lang_names[u''] = 'No name'
+            
+    if lang == 'undefined':
+        lang = u''
+        
+    if not lang in lang_names:
+        raise Http404
+            
+    today = datetime.today()
+    month_ago = today - timedelta(days=31)
+    week_ago = today - timedelta(weeks=1)
+    day_ago = today - timedelta(days=1)
+    
+    videos_count = {}
+    videos_count['total'] = SubtitleLanguage.objects.filter(language=lang).count()
+    videos_count['month'] = SubtitleLanguage.objects.filter(created__range=(month_ago, today)).filter(language=lang).count()
+    videos_count['week'] = SubtitleLanguage.objects.filter(created__range=(week_ago, today)).filter(language=lang).count()
+    videos_count['day'] = SubtitleLanguage.objects.filter(created__range=(day_ago, today)).filter(language=lang).count()
+    
+    subtitles_view_count = {}
+    subtitles_view_count['total'] = SubtitleLanguage.objects.filter(language=lang) \
+        .aggregate(Sum('subtitles_fetched_count'))['subtitles_fetched_count__sum']
+    
+    return {
+        'video_count': videos_count,
+        'lang_name': lang_names[lang]
+    }
+
+def videos_statistic(request):
+    today = datetime.today()
+    month_ago = today - timedelta(days=31)
+    week_ago = today - timedelta(weeks=1)
+    day_ago = today - timedelta(days=1)
+    
+    tn = 'statistic_subtitlefetchstatistic'
+        
+    qs = Video.objects.distinct().extra(select={
+        'month_activity': ('SELECT COUNT(id) FROM %s WHERE %s.video_id = videos_video.id '+
+        'AND %s.created BETWEEN "%s" and "%s"') % (tn, tn, tn, month_ago, today),                                          
+        'week_activity': ('SELECT COUNT(id) FROM %s WHERE %s.video_id = videos_video.id '+
+        'AND %s.created BETWEEN "%s" and "%s"') % (tn, tn, tn, week_ago, today),
+        'day_activity': ('SELECT COUNT(id) FROM %s WHERE %s.video_id = videos_video.id '+
+        'AND %s.created BETWEEN "%s" and "%s"') % (tn, tn, tn, day_ago, today)
+    })
+
+    ordering = request.GET.get('o')
+    order_type = request.GET.get('ot')
+    
+    extra_context = {}
+    order_fields = ['title', 'subtitles_fetched_count', 'month_activity', 'week_activity', 'day_activity']
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
+        extra_context['ordering'] = ordering
+        extra_context['order_type'] = order_type
+    else:
+        qs = qs.order_by('-subtitles_fetched_count') 
+              
+    return object_list(request, queryset=qs,
+                       paginate_by=30,
+                       template_name='statistic/videos_statistic.html',
+                       template_object_name='video',
+                       extra_context=extra_context)
+
 def users_statistic(request):
     today = datetime.today()
     month_ago = today - timedelta(days=31)
     week_ago = today - timedelta(weeks=1)
     day_ago = today - timedelta(days=1)
         
-    qs = User.objects.all().extra(select={
+    qs = User.objects.distinct().extra(select={
         'total_activity': 'SELECT COUNT(id) FROM videos_action WHERE videos_action.user_id = auth_user.id',                                          
         'month_activity': 'SELECT COUNT(id) FROM videos_action WHERE videos_action.user_id = auth_user.id '+
         'AND videos_action.created BETWEEN "%s" and "%s"' % (month_ago, today),                                          
