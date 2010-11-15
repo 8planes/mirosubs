@@ -19,7 +19,7 @@
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, StopNotification
 from apps.auth.models import CustomUser as User
-from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser
+from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser, TxtSubtitleParser
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm
@@ -50,6 +50,14 @@ This should be an E with an accent: È
 5
 00:00:55,501 --> 00:00:58,500
 Hide these tags: {\some_letters_or_numbers_or_chars}
+'''
+
+TXT_TEXT = u'''
+Here is sub 1.
+
+Here is sub 2.
+
+And, sub 3.
 '''
 
 class SubtitleParserTest(TestCase):
@@ -84,6 +92,20 @@ class SubtitleParserTest(TestCase):
         subs = list(parser)
         self.assertAlmostEqual(subs[0]['start_time'], 0.82)
         self.assertAlmostEqual(subs[0]['end_time'], 6.85)
+
+    def test_txt(self):
+        parser = TxtSubtitleParser(TXT_TEXT)
+        result = list(parser)
+
+        self.assertEqual(3, len(result))
+
+        self.assertEqual(-1, result[0]['start_time'])
+        self.assertEqual(-1, result[0]['end_time'])
+        self.assertEqual('Here is sub 1.', result[0]['subtitle_text'])
+
+        self.assertEqual(-1, result[1]['start_time'])
+        self.assertEqual(-1, result[1]['end_time'])
+        self.assertEqual('Here is sub 2.', result[1]['subtitle_text'])
     
 class WebUseTest(TestCase):
     def _make_objects(self):

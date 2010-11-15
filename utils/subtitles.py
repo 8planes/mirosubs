@@ -70,8 +70,8 @@ class TxtSubtitleParser(SubtitleParser):
     def _result_iter(self):
         for item in self.subtitles:
             output = {}
-            output['start_time'] = None
-            output['end_time'] = None
+            output['start_time'] = -1
+            output['end_time'] = -1
             output['subtitle_text'] = item      
             yield output  
 
