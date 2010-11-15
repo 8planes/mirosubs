@@ -39,6 +39,7 @@ from videos.share_utils import _add_share_panel_context_for_video, _add_share_pa
 from gdata.service import RequestError
 from django.db.models import Sum, Q
 from django.utils.translation import ugettext
+from statistic.models import EmailShareStatistic
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -229,6 +230,12 @@ def email_friend(request):
     if request.method == 'POST':
         form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s", label_suffix="")
         if form.is_valid():
+            
+            email_st = EmailShareStatistic()
+            if request.user.is_authenticated():
+                email_st.user = request.user
+            email_st.save()
+            
             form.send()
             messages.info(request, 'Email Sent!')
             return redirect('videos:email_friend')

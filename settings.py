@@ -284,6 +284,7 @@ INSTALLED_APPS = (
     'haystack',
     'comments',
     'messages',
+    'statistic',
     'api',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )

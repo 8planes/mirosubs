@@ -318,7 +318,8 @@ class SubtitleLanguage(models.Model):
     is_complete = models.BooleanField(default=False)
     was_complete = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
-
+    created = models.DateTimeField(auto_now_add=True)
+    
     class Meta:
         unique_together = (('video', 'language'),)
     

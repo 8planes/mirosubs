@@ -1,6 +1,7 @@
 {% load i18n %}
 <script type="text/javascript">
   function share_on_facebook(event) {
+      jQuery.get('{% url statistic:fb_update_share_statistic %}');
       window.open('{{share_panel_facebook_url}}',
                   'post_to_fb', 'status=0,width=560,height=320');
       return false;
@@ -48,3 +49,8 @@
   <h3>{% trans 'Permalink' %}</h3>
   <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
 </div>
+<script type="text/javascript">
+    jQuery('.mirosubs-share .mirosubs-twitter-share').click(function(){
+        jQuery.get('{% url statistic:tw_update_share_statistic %}');
+    });
+</script>

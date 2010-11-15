@@ -62,6 +62,7 @@ urlpatterns = patterns(
                             app_name='profiles')),
     (r'auth/', include('auth.urls', namespace='auth',
                        app_name='auth')),
+    (r'statistic/', include('statistic.urls', namespace='statistic')),                       
     url(r'^search/$', 'videos.views.search', name="search"),
     url(r'^counter/$', 'videos.views.counter', name="counter"),
     url(r'^api/', include('api.urls', 'api')),

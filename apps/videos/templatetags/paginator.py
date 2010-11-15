@@ -129,7 +129,6 @@ def teams_search_ordered_paginator(context, query, adjacent_pages=3):
 
 register.inclusion_tag('_teams_ordered_paginator.html', takes_context=True)(teams_search_ordered_paginator)
 
-
 @register.tag
 def ordered_column(parser, token):
     try:
@@ -181,11 +180,12 @@ class OrderedColumnNode(template.Node):
         field_name = self.field_name.resolve(context, True)
         
         ot = (ordering == field_name and order_type == 'desc') and 'asc' or 'desc'
+        cls = (ordering == field_name) and order_type or ''
         if page:
             link = '?o=%s&ot=%s&page=%s%s' % (field_name, ot, page, extra_params)
         else:
             link = '?o=%s&ot=%s%s' % (field_name, ot, extra_params)
-        return '<a href="%s" class="%s">%s</a>' % (link, ot, self.title.resolve(context, True))
+        return '<a href="%s" class="%s">%s</a>' % (link, cls, self.title.resolve(context, True))
 
 @register.simple_tag   
 def progress_color(value):

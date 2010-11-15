@@ -32,7 +32,6 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.conf import settings
 from django.views.generic.list_detail import object_list
-from videos.models import Video
 from auth.models import CustomUser as User
 from django.db.models import Q, Count
 from django.contrib.auth.decorators import permission_required
