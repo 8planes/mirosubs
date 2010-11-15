@@ -17,10 +17,12 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from utils import render_to, render_to_json
 from datetime import datetime, timedelta
-from videos.models import Video
+from videos.models import Video, SubtitleLanguage
 from statistic.models import EmailShareStatistic, TweeterShareStatistic, FBShareStatistic
 from auth.models import CustomUser as User
 from django.views.generic.list_detail import object_list
+from comments.models import Comment
+from django.db.models import Sum
 
 @render_to('statistic/index.html')
 def index(request):
@@ -52,13 +54,24 @@ def index(request):
     email_st['month'] = EmailShareStatistic.objects.filter(created__range=(month_ago, today)).count()
     email_st['week'] = EmailShareStatistic.objects.filter(created__range=(week_ago, today)).count()
     email_st['day'] = EmailShareStatistic.objects.filter(created__range=(day_ago, today)).count()
-           
-    return {
+
+    context = {
+        'subtitles_fetched_count': Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c'],
+        'view_count': Video.objects.aggregate(c=Sum('view_count'))['c'],
+        'videos_with_captions': Video.objects.exclude(subtitlelanguage=None).count(),
+        'all_videos': Video.objects.count(),
+        'all_users': User.objects.count(),
+        'translations_count': SubtitleLanguage.objects.filter(is_original=False).count(),
+        'fineshed_translations': SubtitleLanguage.objects.filter(is_original=False, was_complete=True).count(),
+        'unfineshed_translations': SubtitleLanguage.objects.filter(is_original=False, was_complete=False).count(),
+        'all_comments': Comment.objects.count(),
         'videos_st': videos_st,
         'tweet_st': tweet_st,
         'fb_st': fb_st,
-        'email_st': email_st
+        'email_st': email_st        
     }
+           
+    return context
 
 @render_to_json    
 def update_share_statistic(request, cls):

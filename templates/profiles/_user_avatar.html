@@ -1,5 +1,7 @@
 {% load i18n %}
+{% if user_obj.picture %}
 <img src="{{ user_obj.avatar }}" />
+{% endif %}
 {% if not user_obj.picture and user_obj == user %}
     <a href="{% url profiles:my_profile %}">{% trans 'Edit profile' %}</a>
 {% endif %}

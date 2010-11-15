@@ -95,7 +95,6 @@ urlpatterns = patterns(
      {'template': 'alpha-test01-ogg.htm'}, 'test-ogg-page'),   
         (r'^test-mp4$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'alpha-test01-mp4.htm'}, 'test-mp4-page'),  
-     ('^really_super_secret_url/$', 'videos.views.info'),      
 )
 
 if settings.DEBUG:

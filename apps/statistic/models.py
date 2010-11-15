@@ -33,3 +33,7 @@ class TweeterShareStatistic(BaseShareStatistic):
 
 class FBShareStatistic(BaseShareStatistic):
     pass
+
+class SubtitleFetchStatistic(models.Model):
+    video = models.ForeignKey('videos.Video')
+    created = models.DateTimeField(auto_now_add=True)    

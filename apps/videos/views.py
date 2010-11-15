@@ -37,7 +37,7 @@ from utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, F
 from django.utils.translation import ugettext
 from statistic.models import EmailShareStatistic
 
@@ -109,10 +109,12 @@ create.csrf_exempt = True
 
 def video(request, video_id, video_url=None):
     video = get_object_or_404(Video, video_id=video_id)
+
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
-    video.view_count += 1
-    video.save()
+        
+    Video.objects.filter(pk=video.pk).update(view_count=F('view_count')+1)
+
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
@@ -460,21 +462,6 @@ def stop_notification(request, video_id):
         context['error'] = u'Incorrect secret hash'
     return render_to_response('videos/stop_notification.html', context,
                               context_instance=RequestContext(request))
-
-def info(request):
-    from comments.models import Comment
-    context = {
-        'subtitles_fetched_count': Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c'],
-        'view_count': Video.objects.aggregate(c=Sum('view_count'))['c'],
-        'videos_with_captions': Video.objects.exclude(subtitlelanguage=None).count(),
-        'all_videos': Video.objects.count(),
-        'all_users': User.objects.count(),
-        'translations_count': SubtitleLanguage.objects.filter(is_original=False).count(),
-        'fineshed_translations': SubtitleLanguage.objects.filter(is_original=False, was_complete=True).count(),
-        'unfineshed_translations': SubtitleLanguage.objects.filter(is_original=False, was_complete=False).count(),
-        'all_comments': Comment.objects.count()
-    }
-    return render_to_response('info.html', context, context_instance=RequestContext(request))
 
 def counter(request):
     count = Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c']

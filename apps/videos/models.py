@@ -30,6 +30,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
 from utils.amazon import default_s3_store
+from statistic.models import SubtitleFetchStatistic
 import time
 
 yt_service = YouTubeService()
@@ -83,6 +84,10 @@ class Video(models.Model):
     def __unicode__(self):
         return self.title_display()
     
+    def update_subtitles_fetched(self):
+        Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
+        SubtitleFetchStatistic(video=self).save()
+        
     def get_thumbnail(self):
         #TODO: should consider size of thumbnail
         #Is used in teams application now
