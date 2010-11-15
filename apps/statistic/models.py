@@ -17,6 +17,10 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from django.db import models
 from auth.models import CustomUser as User
+from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+
+ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class BaseShareStatistic(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
@@ -36,4 +40,5 @@ class FBShareStatistic(BaseShareStatistic):
 
 class SubtitleFetchStatistic(models.Model):
     video = models.ForeignKey('videos.Video')
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
     created = models.DateTimeField(auto_now_add=True)    

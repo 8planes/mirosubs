@@ -109,7 +109,6 @@ create.csrf_exempt = True
 
 def video(request, video_id, video_url=None):
     video = get_object_or_404(Video, video_id=video_id)
-
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
         
@@ -259,7 +258,7 @@ def history(request, video_id, lang=None):
     context = widget.add_onsite_js_files({})
     
     language = video.subtitle_language(lang)
-    
+
     if not language:
         raise Http404
 

@@ -84,9 +84,14 @@ class Video(models.Model):
     def __unicode__(self):
         return self.title_display()
     
-    def update_subtitles_fetched(self):
+    def update_subtitles_fetched(self, lang=None):
         Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
-        SubtitleFetchStatistic(video=self).save()
+        st_obj = SubtitleFetchStatistic(video=self)
+        sub_lang = self.subtitle_language(lang)
+        if sub_lang:
+            st_obj.language = lang
+            SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
+        st_obj.save()
         
     def get_thumbnail(self):
         #TODO: should consider size of thumbnail
@@ -324,6 +329,7 @@ class SubtitleLanguage(models.Model):
     was_complete = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    subtitles_fetched_count = models.IntegerField(default=0)
     
     class Meta:
         unique_together = (('video', 'language'),)
