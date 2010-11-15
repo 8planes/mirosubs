@@ -12,22 +12,15 @@ class Migration(DataMigration):
                 url = self.get_video_url(video)
                 if url:
                     print 'Update video: %s' % video.id
-                    if video.videourl_set.filter(url=url).exists():
-                        video_url = video.videourl_set.filter(url=url)
-                        print("deleting {0}".format(video_url))
-                        video_url.delete()
-                        video = orm.Video.objects.get(id=video.id)
-                    if video.videourl_set.filter(original=True).exists():
-                        obj = video.videourl_set.get(original=True)
-                    else:
+                    if not orm.VideoUrl.objects.filter(url=url).exists():
                         obj = orm.VideoUrl()
-                    obj.type = video.video_type
-                    obj.url = url
-                    obj.primary = True
-                    obj.original = True
-                    obj.video = video
-                    obj.videoid = self.get_video_id(video)
-                    obj.save()                
+                        obj.type = video.video_type
+                        obj.url = url
+                        obj.primary = True
+                        obj.original = True
+                        obj.video = video
+                        obj.videoid = self.get_video_id(video)
+                        obj.save()                
     
     def backwards(self, orm):
         "Write your backwards methods here."
