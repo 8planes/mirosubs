@@ -78,17 +78,23 @@ def update_environment():
         run('export PIP_REQUIRE_VIRTUALENV=true')
         run('{0}/env/bin/pip install -r requirements.txt'.format(env.base_dir))
 
-def update():
-    """
-    Put the latest version of the code on the server and reload the app.
-    """
+def update_web():
     with cd('{0}/mirosubs'.format(env.base_dir)):
-        media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
-        python_exe = '{0}/env/bin/python'.format(env.base_dir)
         run('git pull')
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
+        if env.s3_bucket is not None:
+            run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
+                    media_dir, env.s3_bucket))
+        run('{0} deploy/create_commit_file.py'.format(python_exe))
+        run('touch deploy/unisubs.wsgi')
+
+def update_js():
+    with cd('{0}/mirosubs'.format(env.base_dir)):
+        media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
+        python_exe = '{0}/env/bin/python'.format(env.base_dir)
+        run('git pull')
         run('{0} manage.py compile_config {1} --settings=unisubs-settings'.format(
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs-settings'.format(
@@ -99,5 +105,8 @@ def update():
         if env.s3_bucket is not None:
             run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
                     media_dir, env.s3_bucket))
-        run('{0} deploy/create_commit_file.py'.format(python_exe))
-        run('touch deploy/unisubs.wsgi')
+        
+
+def update():
+    update_js()
+    update_web()

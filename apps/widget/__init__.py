@@ -43,7 +43,7 @@ def add_onsite_js_files(context):
 def add_config_based_js_files(context, files, compiled_file_name):
     js_files = []
     if settings.JS_USE_COMPILED:
-        js_files.append(full_path('mirosubs-widgetizer.js'))
+        js_files.append(full_path(compiled_file_name))
     else:
         js_files.append('http://{0}/widget/config.js'.format(
                 Site.objects.get_current().domain))
