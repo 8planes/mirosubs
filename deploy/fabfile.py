@@ -80,6 +80,8 @@ def update_environment():
 
 def update_web():
     with cd('{0}/mirosubs'.format(env.base_dir)):
+        media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
+        python_exe = '{0}/env/bin/python'.format(env.base_dir)
         run('git pull')
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
