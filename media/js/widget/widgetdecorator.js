@@ -73,15 +73,25 @@ mirosubs.widget.WidgetDecorator.prototype.videoDimensionsKnown_ = function() {
     this.dimensionsTimer_ = new goog.Timer(500);
     this.handler_.listen(this.dimensionsTimer_,
                          goog.Timer.TICK,
-                         this.reposition_);
+                         this.repositionTimerTick_);
     this.repositionCount_ = 0;
-//    this.dimensionsTimer_.start();
+    this.dimensionsTimer_.start();
+    // also listen for page resize.
+    var vsm = new goog.dom.ViewportSizeMonitor();
+    this.handler_.listen(
+        vsm, goog.events.EventType.RESIZE,
+        this.reposition_);
 };
-mirosubs.widget.WidgetDecorator.prototype.reposition_ = function(event) {
-    mirosubs.repositionToLowerLeft(
-        this.videoPlayer_.getElement(),
-        this.videoTab_.getElement());
+mirosubs.widget.WidgetDecorator.prototype.repositionTimerTick_ =
+    function(event) 
+{
+    this.reposition_();
     this.repositionCount_++;
     if (this.repositionCount_ > 80) // 40 seconds
         this.dimensionsTimer_.stop();
+};
+mirosubs.widget.WidgetDecorator.prototype.reposition_ = function() {
+    mirosubs.repositionToLowerLeft(
+        this.videoPlayer_.getElement(),
+        this.videoTab_.getElement());
 };
