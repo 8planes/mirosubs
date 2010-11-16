@@ -25,16 +25,16 @@ from base import VideoType, VideoTypeError
 from auth.models import CustomUser as User
 from datetime import datetime
 import random
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 yt_service = YouTubeService()
 yt_service.ssl = False
 
 _('Private video')
+_('Undefined error')
 
 class YoutubeVideoType(VideoType):
     
-    error = _('Youtube error: %(error)s')
     _url_pattern = re.compile(
         r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)')
 
@@ -79,8 +79,8 @@ class YoutubeVideoType(VideoType):
         try:
             return yt_service.GetYouTubeVideoEntry(video_id=video_id)
         except RequestError, e:
-            err = _(e[0].get('body', _('Undefined error')))
-            raise VideoTypeError(self.error % {'error': err})        
+            err = e[0].get('body', 'Undefined error')
+            raise VideoTypeError('Youtube error: %s' % err)        
     
     @classmethod    
     def _get_video_id(cls, video_url):
