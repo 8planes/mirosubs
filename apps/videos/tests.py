@@ -52,8 +52,7 @@ This should be an E with an accent: È
 Hide these tags: {\some_letters_or_numbers_or_chars}
 '''
 
-TXT_TEXT = u'''
-Here is sub 1.
+TXT_TEXT = u'''Here is sub 1.
 
 Here is sub 2.
 
@@ -290,16 +289,6 @@ class ViewsTest(WebUseTest):
     
     def test_site_feedback(self):
         self._simple_test("videos:site_feedback")
-
-    def test_api_subtitles_for_jsonp(self):
-        youtube_id = 'uYT84jZDPE0'
-        
-        url = 'http://www.youtube.com/watch?v=%s' % youtube_id
-        response = self._simple_test(
-            "api_subtitles", 
-            data={'video_url': url, 'callback': 'fn'})
-        self.assertEquals('fn([]);', response.content)
-        self.assertEquals('text/javascript', response['content-type'])
         
     def test_index(self):
         self._simple_test('videos.views.index')

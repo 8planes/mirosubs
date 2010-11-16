@@ -89,8 +89,7 @@ class Video(models.Model):
         st_obj = SubtitleFetchStatistic(video=self)
         sub_lang = self.subtitle_language(lang)
         if sub_lang:
-            # FIXME
-            st_obj.language = 'en'
+            st_obj.language = lang or ''
             SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj.save()
         
@@ -151,7 +150,10 @@ class Video(models.Model):
         return ('videos:video', [self.video_id])
 
     def get_video_url(self):
-        return self.videourl_set.filter(primary=True).all()[0].effective_url
+        try:
+            return self.videourl_set.filter(primary=True).all()[:1].get().effective_url
+        except models.ObjectDoesNotExist:
+            pass
 
     @classmethod
     def get_or_create_for_url(cls, video_url, vt=None):

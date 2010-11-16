@@ -61,6 +61,12 @@ class ViewsTest(WebUseTest):
         response = self._simple_test("api:subtitles")
         data = json.loads(response.content)
         self.assertTrue(data['is_error'])
+
+        response = self._simple_test(
+            "api_subtitles", 
+            data={'video_url': url, 'callback': 'fn'})
+        self.assertEquals('fn([]);', response.content)
+        self.assertEquals('text/javascript', response['content-type'])
         
     def test_subtitle_existence(self):
         youtube_id = 'uYT84jZDPE0'
