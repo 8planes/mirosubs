@@ -1786,23 +1786,26 @@ msgid ""
 "    Great news! %(user)s has just started a %(language)s \n"
 "    translation of your video"
 msgstr ""
+"\n"
+"    Bonega novaĵo! %(user)s ĵus ektradukas en lingvon %(language)s \n"
+"    vian videon"
 
 #: .\templates\videos\email_start_notification.html.py:8
 msgid "You can review the translation and thank them for their contribution on this page:"
-msgstr ""
+msgstr "Vi rajtas revizii la tradukaĵon kaj danki ilin pro ilia kontribuaĵo sur la jena paĝo:"
 
 #: .\templates\videos\email_start_notification.html.py:9
 msgid "Translation homepage"
-msgstr ""
+msgstr "Traduka hejmpaĝo"
 
 #: .\templates\videos\email_start_notification.html.py:12
 msgid "Thanks for your great work,"
-msgstr ""
+msgstr "Dankon pro via bonega laboro,"
 
 #: .\templates\videos\email_start_notification.html.py:20
 #: .\templates\videos\email_title_changed.html.py:16
 msgid "My profile / preferences"
-msgstr ""
+msgstr "Mia agordaro"
 
 #: .\templates\videos\email_title_changed.html.py:4
 #, python-format
@@ -1810,19 +1813,21 @@ msgid ""
 "A title of video you contributed to \n"
 "    has been edited by %(editor)s."
 msgstr ""
+"Titolo de video, al kiu vi kontribuis, \n"
+"    redaktiĝis de %(editor)s."
 
 #: .\templates\videos\email_title_changed.html.py:8
 msgid "We've also included a rough summary of the changes below.  Thanks so much!"
-msgstr ""
+msgstr "Jen sube resumo de ŝanĝoj.  Dankegon!"
 
 #: .\templates\videos\email_title_changed.html.py:21
 #: .\templates\videos\email_title_changed.html.py:25
 msgid "TITLE"
-msgstr ""
+msgstr "TITOLO"
 
 #: .\templates\videos\history.html.py:73
 msgid "Select two revisions for compare, please"
-msgstr ""
+msgstr "Bonvole elektu du versiojn komparotajn,"
 
 #: .\templates\videos\history.html.py:130
 #, python-format
@@ -1831,6 +1836,9 @@ msgid ""
 "            %(title)s with subtitles | Universal Subtitles\n"
 "        "
 msgstr ""
+"\n"
+"            %(title)s kun subtekstoj | Universal Subtitles\n"
+"        "
 
 #: .\templates\videos\history.html.py:134
 #, python-format
@@ -1839,71 +1847,74 @@ msgid ""
 "            %(title)s with %(language)s subtitles | Universal Subtitles\n"
 "        "
 msgstr ""
+"\n"
+"            %(title)s kun subtekstoj en %(language)s | Universal Subtitles\n"
+"        "
 
 #: .\templates\videos\history.html.py:158
 msgid "Edit Subtitles"
-msgstr ""
+msgstr "Redakti subtekstojn"
 
 #: .\templates\videos\history.html.py:159 .\templates\videos\video.html.py:122
 msgid "Add Translation"
-msgstr ""
+msgstr "Aldoni tradukaĵon"
 
 #: .\templates\videos\history.html.py:169
 msgid "Download Subtitles"
-msgstr ""
+msgstr "Deŝuti subtekstojn"
 
 #: .\templates\videos\history.html.py:183
 msgid "Original Language Subtitles"
-msgstr ""
+msgstr "Subtekstoj en la originala lingvo"
 
 #: .\templates\videos\history.html.py:189 .\templates\videos\video.html.py:134
 msgid "Comments"
-msgstr ""
+msgstr "Komentoj"
 
 #: .\templates\videos\history.html.py:190
 msgid "History"
-msgstr ""
+msgstr "Historio"
 
 #: .\templates\videos\history.html.py:197
 msgid "Compare Revisions"
-msgstr ""
+msgstr "Kompari versiojn"
 
 #: .\templates\videos\history.html.py:207
 msgid "Most Recent"
-msgstr ""
+msgstr "Plej lasta"
 
 #: .\templates\videos\history.html.py:213
 msgid "Note"
-msgstr ""
+msgstr "Rimarko"
 
 #: .\templates\videos\history.html.py:216
 msgid "Time"
-msgstr ""
+msgstr "Tempo"
 
 #: .\templates\videos\history.html.py:219
 msgid "Text"
-msgstr ""
+msgstr "Teksto"
 
 #: .\templates\videos\history.html.py:252
 msgid "No subtitles for this language."
-msgstr ""
+msgstr "Neniuj subtekstoj por ĉi tiu lingvo."
 
 #: .\templates\videos\history.html.py:253
 msgid "Either no subtitles have been entered, or they were deleted."
-msgstr ""
+msgstr "Aŭ la subtekstoj neniam enigitaj, aŭ la subtekstoj forviŝitaj."
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "No subtitles yet."
-msgstr ""
+msgstr "Ankoraŭ neniuj subtekstoj"
 
 #: .\templates\videos\history.html.py:289 .\templates\videos\video.html.py:183
 msgid "Make some!"
-msgstr ""
+msgstr "Kreu iom!"
 
 #: .\templates\videos\revision.html.py:68
 #: .\templates\videos\revision.html.py:78
 msgid "Revision"
-msgstr ""
+msgstr "Versio"
 
 #: .\templates\videos\revision.html.py:83
 #, python-format
@@ -1915,6 +1926,12 @@ msgid ""
 "            differ significantly from the current revision.\n"
 "            "
 msgstr ""
+"\n"
+"            Ĉi tiu estas malnova versio por lingvo %(lang)s\n"
+"            por video \"%(video)s\", \n"
+"            kiel redaktita de %(user)s je %(date)s.  Povas esti\n"
+"            malsamegoj kompare kun la aktuala versio.\n"
+"            "
 
 #: .\templates\videos\revision.html.py:98
 #, python-format
@@ -1923,6 +1940,9 @@ msgid ""
 "                    Compare #%(version_no)s to #%(prev_version_no)s\n"
 "                    "
 msgstr ""
+"\n"
+"                    Kompari #%(version_no)s al #%(prev_version_no)s\n"
+"                    "
 
 #: .\templates\videos\revision.html.py:108
 #, python-format
@@ -1931,6 +1951,9 @@ msgid ""
 "                    Compare #%(version_no)s to #%(next_version_no)s\n"
 "                    "
 msgstr ""
+"\n"
+"                    Kompari #%(version_no)s al #%(next_version_no)s\n"
+"                    "
 
 #: .\templates\videos\revision.html.py:118
 #, python-format
@@ -1939,26 +1962,29 @@ msgid ""
 "               Compare #%(version_no)s to #%(latest_version_no)s(current)\n"
 "               "
 msgstr ""
+"\n"
+"               Kompari #%(version_no)s al #%(latest_version_no)s(current)\n"
+"               "
 
 #: .\templates\videos\revision.html.py:144
 msgid "See full revision history"
-msgstr ""
+msgstr "Vidi plenan versio-historion"
 
 #: .\templates\videos\search.html.py:6
 msgid "Search"
-msgstr ""
+msgstr "Serĉi"
 
 #: .\templates\videos\search.html.py:16
 msgid "URL/title"
-msgstr ""
+msgstr "Retadreso/titolo"
 
 #: .\templates\videos\search.html.py:19 .\templates\videos\video.html.py:143
 msgid "Language"
-msgstr ""
+msgstr "Lingvo"
 
 #: .\templates\videos\search.html.py:22
 msgid "Does"
-msgstr ""
+msgstr "Faras"
 
 #: .\templates\videos\stop_notification.html.py:9
 #, python-format
