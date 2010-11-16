@@ -18,13 +18,15 @@
 from utils import render_to, render_to_json
 from datetime import datetime, timedelta
 from videos.models import Video, SubtitleLanguage, ALL_LANGUAGES
-from statistic.models import EmailShareStatistic, TweeterShareStatistic, FBShareStatistic
+from statistic.models import EmailShareStatistic, TweeterShareStatistic, FBShareStatistic, SubtitleFetchStatistic
 from auth.models import CustomUser as User
 from django.views.generic.list_detail import object_list
 from comments.models import Comment
 from django.db.models import Sum, Count
 from django.http import Http404
+from django.views.decorators.cache import cache_page
 
+@cache_page(60 * 60 * 24)
 @render_to('statistic/index.html')
 def index(request):
     today = datetime.today()
@@ -74,6 +76,7 @@ def index(request):
            
     return context
 
+@cache_page(60 * 60 * 24)
 @render_to_json    
 def update_share_statistic(request, cls):
     st = cls()
@@ -82,6 +85,7 @@ def update_share_statistic(request, cls):
     st.save()
     return {}
 
+@cache_page(60 * 60 * 24)
 @render_to('statistic/languages_statistic.html')
 def languages_statistic(request):
     today = datetime.today()
@@ -108,6 +112,7 @@ def languages_statistic(request):
         'langs': langs
     }
 
+@cache_page(60 * 60 * 24)
 @render_to('statistic/language_statistic.html')
 def language_statistic(request, lang):
     lang_names = dict(ALL_LANGUAGES)
@@ -133,12 +138,24 @@ def language_statistic(request, lang):
     subtitles_view_count = {}
     subtitles_view_count['total'] = SubtitleLanguage.objects.filter(language=lang) \
         .aggregate(Sum('subtitles_fetched_count'))['subtitles_fetched_count__sum']
+    subtitles_view_count['month'] = SubtitleFetchStatistic.objects.filter(language=lang) \
+        .filter(created__range=(month_ago, today)).count()
+    subtitles_view_count['week'] = SubtitleFetchStatistic.objects.filter(language=lang) \
+        .filter(created__range=(week_ago, today)).count()    
+    subtitles_view_count['day'] = SubtitleFetchStatistic.objects.filter(language=lang) \
+        .filter(created__range=(day_ago, today)).count()
     
+    videos_views_count = Video.objects.filter(subtitlelanguage__language=lang) \
+        .aggregate(Sum('widget_views_count'))['widget_views_count__sum']
+            
     return {
         'video_count': videos_count,
-        'lang_name': lang_names[lang]
+        'lang_name': lang_names[lang],
+        'subtitles_view_count': subtitles_view_count,
+        'videos_views_count': videos_views_count
     }
 
+@cache_page(60 * 60 * 24)
 def videos_statistic(request):
     today = datetime.today()
     month_ago = today - timedelta(days=31)
@@ -174,6 +191,7 @@ def videos_statistic(request):
                        template_object_name='video',
                        extra_context=extra_context)
 
+@cache_page(60 * 60 * 24)
 def users_statistic(request):
     today = datetime.today()
     month_ago = today - timedelta(days=31)

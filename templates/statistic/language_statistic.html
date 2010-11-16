@@ -44,6 +44,20 @@
             <td> {{ video_count.month }} </td>
             <td> {{ video_count.total }} </td>
         </tr>
+        <tr> 
+            <td>{% trans 'Subtitles views count' %}</td> 
+            <td> {{ subtitles_view_count.day }} </td>
+            <td> {{ subtitles_view_count.week }} </td>
+            <td> {{ subtitles_view_count.month }} </td>
+            <td> {{ subtitles_view_count.total }} </td>
+        </tr>
+        <tr>
+            <td>{% trans 'Videos views count' %}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> {{ videos_views_count }} </td>
+        </tr>                  
     </tbody>
 </table>
 
