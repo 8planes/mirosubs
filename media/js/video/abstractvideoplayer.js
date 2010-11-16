@@ -264,7 +264,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.setCaption_ =
 {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var $s = goog.style;
-    var videoOffsetParent = $s.getOffsetParent(this.getElement());
+    var videoOffsetParent = this.getElement().offsetParent;
     if (!videoOffsetParent)
         videoOffsetParent = goog.dom.getOwnerDocument(this.getElement()).body;
     var offsetPosition = $s.getPosition(this.getElement());
