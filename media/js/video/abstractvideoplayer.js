@@ -269,18 +269,20 @@ mirosubs.video.AbstractVideoPlayer.prototype.setCaption_ =
         videoOffsetParent = goog.dom.getOwnerDocument(this.getElement()).body;
     var offsetPosition = $s.getPosition(this.getElement());
     var size = $s.getSize(this.getElement());
+    var captionWidth = Math.min(400, size - 20);
     if (!this.captionElem_) {
         this.captionElem_ = $d('div', 'mirosubs-captionDiv');
         if (needsIFrame)
             mirosubs.setVisibility(this.captionElem_, false);
         goog.dom.appendChild(videoOffsetParent, this.captionElem_);
+        goog.style.setWidth(this.captionElem_, captionWidth);
+        this.captionElem_.style['left'] = 
+            (offsetPosition.x + (size.width - captionWidth) / 2) + 'px';
     }
     this.captionElem_.innerHTML = htmlText;
     var captionSize = goog.style.getSize(this.captionElem_);
-    var captionPosition = new goog.math.Coordinate(
-        offsetPosition.x + (size.width - captionSize.width) / 2,
-        offsetPosition.y + size.height - captionSize.height - 40);
-    goog.style.setPosition(this.captionElem_, captionPosition);
+    this.captionElem_.style['top'] = 
+        (offsetPosition.y + size.height - captionSize.height - 40) + 'px';
     if (needsIFrame) {
         if (!this.captionBgElem_) {
             this.captionBgElem_ = $d('iframe', 'mirosubs-captionDivBg');
