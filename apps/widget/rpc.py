@@ -293,8 +293,8 @@ class Rpc(BaseRpc):
             # special case where an original SubtitleLanguage is saved with 
             # blank language.
             original_language = \
-                models.SubtitleLanguage.objects.get(
-                is_original=True, language='')
+                models.SubtitleLanguage.objects.get(video__video_id=video_id, 
+                                                    is_original=True, language='')
             original_language.language = language_code
             original_language.save()
             return
