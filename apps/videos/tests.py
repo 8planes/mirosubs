@@ -143,6 +143,7 @@ class UploadSubtitlesTest(WebUseTest):
     def setUp(self):
         self._make_objects()
 
+
     def test_upload_subtitles(self):
         import os.path
         self._simple_test('videos:upload_subtitles', status=302)
@@ -359,6 +360,16 @@ class ViewsTest(WebUseTest):
     def test_actions_list(self):
         self._simple_test('videos:actions_list')
         self._simple_test('videos:actions_list', data={'o': 'created', 'ot': 'desc'})
+
+    def test_bliptv_twice(self):
+        VIDEO_FILE = 'http://blip.tv/file/get/Kipkay-AirDusterOfficeWeaponry223.m4v'
+        from videos.types import bliptvutils
+        old_video_file_url = bliptvutils.video_file_url
+        bliptvutils.video_file_url = lambda x: VIDEO_FILE
+        Video.get_or_create_for_url('http://blip.tv/file/4395490')
+        bliptvutils.video_file_url = old_video_file_url
+        # this test passes if the following line executes without throwing an error.
+        Video.get_or_create_for_url(VIDEO_FILE)
 
     def test_paste_transcription(self):
         self._login()
