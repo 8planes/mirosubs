@@ -66,7 +66,7 @@ mirosubs.widget.Widget.prototype.decorateInternal = function(el) {
     this.addWidget_(el);
 };
 
-mirosubs.widget.Widget.prototype.setVideoSource_ = function(videoSource) {
+mirosubs.widget.Widget.prototype.createVideoPlayer_ = function(videoSource) {
     this.videoPlayer_ = videoSource.createPlayer();
     this.addChildAt(this.videoPlayer_, 0, true);
     this.setVideoDimensions_();
@@ -119,7 +119,7 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
         return;
     }
     if (this.isVideoSourceImmediatelyUsable_())
-        this.setVideoSource_(this.videoSource_);
+        this.createVideoPlayer_(this.videoSource_);
     else
         this.addVideoLoadingPlaceholder_(el);
     this.videoTab_ = new mirosubs.widget.VideoTab();
@@ -136,7 +136,24 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
     if (this.baseState_)
         args['base_state'] = this.baseState_.ORIGINAL_PARAM;
     mirosubs.Rpc.call(
-        'show_widget', args, goog.bind(this.initializeState_, this));
+        'show_widget', args, 
+        goog.bind(this.initializeState_, this),
+        goog.bind(this.showWidgetError_, this));
+};
+
+mirosubs.widget.Widget.prototype.showWidgetError_ = function() {
+    // call to show_widget timed out.
+    if (!this.isVideoSourceImmediatelyUsable_()) {
+        // waiting for video source from server.
+        if (this.videoSource_ instanceof mirosubs.video.BlipTVPlaceholder) {
+            // out of luck.
+            
+        }
+        else {
+            this.createVideoPlayer_(this.videoSource_);            
+        }
+    }
+    this.videoTab_.showError();
 };
 
 mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
@@ -148,7 +165,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
             this.videoConfig_)
             videoSource.setVideoConfig(this.videoConfig_);
         this.videoSource_ = videoSource;
-        this.setVideoSource_(this.videoSource_);
+        this.createVideoPlayer_(this.videoSource_);
     }
 
     this.controller_ = new mirosubs.widget.WidgetController(

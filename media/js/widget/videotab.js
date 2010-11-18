@@ -73,6 +73,11 @@ mirosubs.widget.VideoTab.prototype.showLoading = function() {
     goog.dom.setTextContent(this.spanElem_, "Loading");
 };
 
+mirosubs.widget.VideoTab.prototype.showError = function() {
+    this.imageElem_.src = this.logoURL_;
+    goog.dom.setTextContent(this.spanElem_, "Subs Unavailable");
+};
+
 /**
  * Just stops loading. If state has changed, stop loading by
  * calling showContent instead.
