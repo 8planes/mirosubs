@@ -38,7 +38,8 @@ mirosubs.video.DailymotionVideoSource.prototype.createControlledPlayer = functio
 
 mirosubs.video.DailymotionVideoSource.prototype.createPlayer_ = function(chromeless) {
     return new mirosubs.video.DailymotionVideoPlayer(
-        new mirosubs.video.DailymotionVideoSource(this.videoID_), chromeless);
+        new mirosubs.video.DailymotionVideoSource(this.videoID_, this.videoURL_), 
+        chromeless);
 };
 
 mirosubs.video.DailymotionVideoSource.prototype.getVideoId = function() {
