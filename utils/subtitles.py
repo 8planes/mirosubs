@@ -114,9 +114,9 @@ class TtmlSubtitleParser(SubtitleParser):
     def __init__(self, subtitles):
         try:
             dom = parseString(subtitles.encode('utf8'))
-        except ExpatError:
+            self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
+        except (ExpatError, IndexError):
             raise SubtitleParserError('Incorrect format of TTML subtitles')
-        self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
 
     def unescape(self, s):
         p = htmllib.HTMLParser(None)
