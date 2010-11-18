@@ -160,9 +160,17 @@ class Video(models.Model):
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
             return None, False
+
+        try:
+            video_url_obj = VideoUrl.objects.get(
+                url=vt.convert_to_video_url())
+            return video_url_obj.video, False
+        except models.ObjectDoesNotExist:
+            pass
         
         try:
-            video_url_obj = VideoUrl.objects.get(type=vt.abbreviation, **vt.create_kwars())
+            video_url_obj = VideoUrl.objects.get(
+                type=vt.abbreviation, **vt.create_kwars())
             return video_url_obj.video, False
         except models.ObjectDoesNotExist:
             obj = Video()
