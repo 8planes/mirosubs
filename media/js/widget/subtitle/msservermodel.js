@@ -188,7 +188,7 @@ mirosubs.subtitle.MSServerModel.prototype.logIn = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
-    return [mirosubs.siteURL(), "/videos/", this.videoID_, "/"].join('');
+    return [mirosubs.siteURL(), "/videos/", this.videoID_, "/info/"].join('');
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getDraftPK = function() {
