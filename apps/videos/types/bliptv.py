@@ -18,8 +18,7 @@
 
 from videos.types.base import VideoType
 from vidscraper.sites import blip
-import httplib
-from xml.dom import minidom
+from videos.types import bliptvutils
 
 class BlipTvVideoType(VideoType):
 
@@ -50,46 +49,12 @@ class BlipTvVideoType(VideoType):
         video_obj.title = blip.scrape_title(self.url)
         video_obj.thumbnail = blip.get_thumbnail_url(self.url)
         return video_obj
-    
+
     def _get_file_id(self, video_url):
         return blip.BLIP_REGEX.match(video_url).groupdict()['file_id']
 
     def scrape_best_file_url(self):
         if not hasattr(self, '_file_url'):
-            rss_path = '/file/%s?skin=rss' % self.file_id
-            conn = httplib.HTTPConnection("blip.tv")
-            conn.request("GET", rss_path)
-            response = conn.getresponse()
-            body = response.read()
-            xmldoc = minidom.parseString(body)
-            media_content_elements = xmldoc.getElementsByTagName('media:content')
-            best_file = self._best_flv(media_content_elements) or \
-                self._best_mp4(media_content_elements) or \
-                self._best_any(media_content_elements)
-            self._file_url = best_file
+            self._file_url = bliptvutils.video_file_url(self.file_id)
         return self._file_url
 
-    def _best_any(self, media_contents):
-        f = lambda c: True
-        return self._best_by_height(media_contents, f)
-    
-    def _best_mp4(self, media_contents):
-        f = lambda c: c.getAttribute('type') in ['video/x-m4v', 'video/mp4']
-        return self._best_by_height(media_contents, f)
-    
-    def _best_flv(self, media_contents):
-        f = lambda c: c.getAttribute('type') == 'video/x-flv'
-        return self._best_by_height(media_contents, f)
-    
-    def _best_by_height(self, media_contents, type_fn):
-        best = None
-        best_height = None
-        HEIGHT = 360
-        for content in media_contents:
-            height = int(content.getAttribute('height') or 0)
-            height_is_best = True if best is None else \
-                abs(HEIGHT - height) < abs(HEIGHT - best_height)
-            if type_fn(content) and height_is_best:
-                best = content
-                best_height = height
-        return best and best.getAttribute('url')

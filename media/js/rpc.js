@@ -19,6 +19,12 @@
 
 goog.provide('mirosubs.Rpc');
 
+/**
+ * In milliseconds
+ * @type {number}
+ */
+mirosubs.Rpc.TIMEOUT_ = 15000;
+
 mirosubs.Rpc.logger_ =
     goog.debug.Logger.getLogger('mirosubs.Rpc');
 
@@ -29,29 +35,36 @@ mirosubs.Rpc.baseURL = function() {
             'rpc/'].join('');
 };
 
-mirosubs.Rpc.callCrossDomain_ = function(methodName, serializedArgs, opt_callback) {
-    var p = goog.json.parse;
+mirosubs.Rpc.callCrossDomain_ = function(methodName, serializedArgs, opt_callback, opt_errorCallback) {
     goog.net.CrossDomainRpc.
         send([mirosubs.Rpc.baseURL(), 'xd/', methodName].join(''),
              function(event) {
                  var responseText = event["target"]["responseText"];
                  mirosubs.Rpc.logResponse_(methodName, responseText);
                  if (opt_callback)
-                     opt_callback(p(responseText));
+                     opt_callback(goog.json.parse(responseText));
              }, "POST", serializedArgs);
 };
 
-mirosubs.Rpc.callXhr_ = function(methodName, serializedArgs, opt_callback) {
+mirosubs.Rpc.callXhr_ = function(methodName, serializedArgs, opt_callback, opt_errorCallback) {
     goog.net.XhrIo.send(
         [mirosubs.Rpc.baseURL(), 'xhr/', methodName].join(''),
         function(event) {
-            mirosubs.Rpc.logResponse_(
-                methodName, 
-                event.target.getResponseText());
-            if (opt_callback)
-                opt_callback(event.target.getResponseJson());
+            if (!event.target.isSuccess()) {
+                if (opt_errorCallback)
+                    opt_errorCallback();
+            }
+            else {
+                mirosubs.Rpc.logResponse_(
+                    methodName, 
+                    event.target.getResponseText());
+                if (opt_callback)
+                    opt_callback(event.target.getResponseJson());
+            }
         },
-        "POST", mirosubs.Rpc.encodeKeyValuePairs_(serializedArgs));
+        "POST", 
+        mirosubs.Rpc.encodeKeyValuePairs_(serializedArgs),
+        null, mirosubs.Rpc.TIMEOUT_);
 };
 
 mirosubs.Rpc.encodeKeyValuePairs_ = function(serializedArgs) {
@@ -61,17 +74,23 @@ mirosubs.Rpc.encodeKeyValuePairs_ = function(serializedArgs) {
     return queryData.toString();
 };
 
-mirosubs.Rpc.callWithJsonp_ = function(methodName, serializedArgs, opt_callback) {
+mirosubs.Rpc.callWithJsonp_ = function(methodName, serializedArgs, opt_callback, opt_errorCallback) {
     var jsonp = new goog.net.Jsonp(
         [mirosubs.Rpc.baseURL(), 'jsonp/', methodName].join(''));
-    jsonp.send(serializedArgs,
-               function(result) {
-                   if (mirosubs.DEBUG)
-                       mirosubs.Rpc.logResponse_(
-                           methodName, goog.json.serialize(result));
-                   if (opt_callback)
-                       opt_callback(result);
-               });
+    jsonp.setRequestTimeout(mirosubs.Rpc.TIMEOUT_);
+    jsonp.send(
+        serializedArgs,
+        function(result) {
+            if (mirosubs.DEBUG)
+                mirosubs.Rpc.logResponse_(
+                    methodName, goog.json.serialize(result));
+            if (opt_callback)
+                opt_callback(result);
+        },
+        function(errorPayload) {
+            if (opt_errorCallback)
+                opt_errorCallback();
+        });
 };
 
 mirosubs.Rpc.logCall_ = function(methodName, args, channel) {
@@ -87,7 +106,9 @@ mirosubs.Rpc.logResponse_ = function(methodName, response) {
             [methodName, ' response: ', response].join(''));
 };
 
-mirosubs.Rpc.call = function(methodName, args, opt_callback) {
+mirosubs.Rpc.call = 
+    function(methodName, args, opt_callback, opt_errorCallback) 
+{
     var s = goog.json.serialize;
     var serializedArgs = {};
     var arg;
@@ -102,17 +123,20 @@ mirosubs.Rpc.call = function(methodName, args, opt_callback) {
         if (totalSize < 2000) {
             callType = 'jsonp';
             mirosubs.Rpc.callWithJsonp_(
-                methodName, serializedArgs, opt_callback);
+                methodName, serializedArgs, 
+                opt_callback, opt_errorCallback);
         }
         else {
             callType = 'xd-rpc';
             mirosubs.Rpc.callCrossDomain_(
-                methodName, serializedArgs, opt_callback);
+                methodName, serializedArgs, 
+                opt_callback, opt_errorCallback);
         }
     } else {
         callType = 'xhr';
         mirosubs.Rpc.callXhr_(
-            methodName, serializedArgs, opt_callback);
+            methodName, serializedArgs, 
+            opt_callback, opt_errorCallback);
     }
     mirosubs.Rpc.logCall_(methodName, args, callType);
 };

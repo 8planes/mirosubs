@@ -30,7 +30,7 @@ mirosubs.video.VimeoVideoSource = function(videoID, videoURL) {
 
 mirosubs.video.VimeoVideoSource.prototype.createPlayer = function() {
     return new mirosubs.video.VimeoVideoPlayer(
-        new mirosubs.video.VimeoVideoSource(this.videoID_));
+        new mirosubs.video.VimeoVideoSource(this.videoID_, this.videoURL_));
 };
 
 mirosubs.video.VimeoVideoSource.prototype.createControlledPlayer = function() {
