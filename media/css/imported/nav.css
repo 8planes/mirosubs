@@ -308,19 +308,9 @@ background: url(../../images/search.png) 10px center no-repeat;
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+a.active {
+   text-decoration: none;
+}
 
 
 
