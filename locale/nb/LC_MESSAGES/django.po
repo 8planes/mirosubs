@@ -136,23 +136,26 @@ msgstr ""
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
-msgstr ""
+msgstr "Del dine undertekster"
 
 #: .\templates\_share_widget.html.py:6 .\templates\_sharing_widget.html.py:13
+#, fuzzy
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr ""
+msgstr "Nå kan alle se på videoen med undertekster -- Prøv det!"
 
 #: .\templates\_share_widget.html.py:7 .\templates\_sharing_widget.html.py:14
 msgid "Then tell the world and invite your friends to help translate:"
 msgstr ""
 
 #: .\templates\_share_widget.html.py:10 .\templates\_sharing_widget.html.py:16
+#, fuzzy
 msgid "Post to Facebook"
-msgstr ""
+msgstr "Post til Facebook"
 
 #: .\templates\_share_widget.html.py:11 .\templates\_sharing_widget.html.py:17
+#, fuzzy
 msgid "Post to Twitter"
-msgstr ""
+msgstr "Post til Twitter"
 
 #: .\templates\_share_widget.html.py:12 .\templates\_sharing_widget.html.py:18
 msgid "Email to friends"
@@ -362,15 +365,15 @@ msgstr ""
 
 #: .\templates\base.html.py:73
 msgid "Videos"
-msgstr ""
+msgstr "Videoer"
 
 #: .\templates\base.html.py:74
 msgid "Volunteer"
-msgstr ""
+msgstr "Frivillig"
 
 #: .\templates\base.html.py:79
 msgid "Blog"
-msgstr ""
+msgstr "Blogg"
 
 #: .\templates\base.html.py:80
 msgid "FAQ"
@@ -379,19 +382,19 @@ msgstr ""
 #: .\templates\base.html.py:81 .\templates\profiles\edit_profile.html.py:19
 #: .\templates\profiles\view_profile.html.py:92
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #: .\templates\base.html.py:83
 msgid "Logout"
-msgstr ""
+msgstr "Logg ut"
 
 #: .\templates\base.html.py:85
 msgid "Admin"
-msgstr ""
+msgstr "Administrator"
 
 #: .\templates\base.html.py:88
 msgid "Login"
-msgstr ""
+msgstr "Logg innn"
 
 #: .\templates\base.html.py:106
 msgid "Universal Subtitles is a project of <a href=\"http://participatoryculture.org/\">PCF</a>."
@@ -399,7 +402,7 @@ msgstr ""
 
 #: .\templates\base.html.py:112
 msgid "Contact Us"
-msgstr ""
+msgstr "Kontakt oss"
 
 #: .\templates\base.html.py:113
 msgid "Privacy Policy"
@@ -407,7 +410,7 @@ msgstr ""
 
 #: .\templates\demo.html.py:19
 msgid "Welcome to our alpha demo!"
-msgstr ""
+msgstr "Velkommen til vår alfa-demo!"
 
 #: .\templates\demo.html.py:21
 msgid ""
@@ -437,23 +440,23 @@ msgstr ""
 
 #: .\templates\faq.html.py:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Ofte Spurte Spørsmål"
 
 #: .\templates\faq.html.py:19 .\templates\faq.html.py:39
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Hva er Universal Subtitles?"
 
 #: .\templates\faq.html.py:20 .\templates\faq.html.py:43
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Hvordan kan jeg bruke Universal Subtitles?"
 
 #: .\templates\faq.html.py:21 .\templates\faq.html.py:47
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "Hva er fordelene med undertekster?"
 
 #: .\templates\faq.html.py:22 .\templates\faq.html.py:56
 msgid "Who is the Participatory Culture Foundation and why are they making Universal Subtitles?"
-msgstr ""
+msgstr "Hvem er Participatory Culture Foundation og hvorfor lager de Universal Subtitles?"
 
 #: .\templates\faq.html.py:23 .\templates\faq.html.py:60
 msgid "Will Universal Subtitles support closed captions for the deaf and hard of hearing?"
