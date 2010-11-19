@@ -986,7 +986,7 @@ msgstr "sekva"
 
 #: .\templates\privacy.html.py:6
 msgid "Universal Subtitles Privacy Policy"
-msgstr "Privatecopolitiko de Universal Subtitle"
+msgstr "Privateca politiko de Universal Subtitle"
 
 #: .\templates\privacy.html.py:8
 msgid "Last Updated: August 10, 2010"
@@ -1014,11 +1014,11 @@ msgstr ""
 
 #: .\templates\privacy.html.py:26
 msgid "Developers, by comparison, are asked to provide contact information, up to and sometimes including telephone or fax numbers, so that they can be contacted as necessary. Typically, developers will be contacted by email, IRC (internet relay chat), or IM (instant messaging services). However, in the event of a time-sensitive question relating to the work the developer is doing in connection with PCF and where other means of contact have failed, a developerтАЩs phone number or fax number may be used to contact the developer. This information is available to PCF employees, contractors, subsidiaries, and potentially to other members of the community. A developer can choose not to provide a phone number or fax number. On occasion, developers and other community members are contacted by email and asked for a physical address or geographic location so that they may be sent PCF-related t-shirts and other schwag or invited to a meetup or other PCF-related gathering. In such cases, the purpose for which their physical address is sought will be made explicit."
-msgstr ""
+msgstr "Ellaborantoj, kompare, estas petataj provizii kontaktajn informojn, eĉ ĝis telefona aŭ telefaksa numero, tiel, ke ili povas esti kontaktitaj laŭ neceso. Tipe, ellaborantoj estos kontaktitaj per retpoŝto, IRC (interreto transsenda babilo), aŭ IM (tujmesaĝado). Tamen, okaze de temposentema demando pri la laboro kiun la ellaboranto faras rilate al PCF kaj kie aliaj kontaktaj rimedoj ne sukcesis, tiam la telefonnumero aŭ telefaksnumero de la ellaboranto povus esti uzata por kontakti la ellaboranton. Ĉi tiuj informoj estas haveblaj al PCF dungitoj, kontraktistoj, filioj, kaj potenciale al aliaj membroj de la komunumo.  Ellaboranto povas decidi ne provizi telefonnumeron aŭ telefaksnumeron.  Foje, ellaborantoj kaj aliaj komunumanoj estas kontaktitaj retpoŝte kaj petitaj por sia geografia loko, tiel, ke ili povus esti senditaj PCF-ajn t-ĉemizojn kaj aliajn umojn aŭ invititaj al PCF-a renkontiĝo. En tiaj okazoj, la kialo por peto de fizika loko estos eksplicigita."
 
 #: .\templates\privacy.html.py:29
 msgid "Customers of PCF stores (which sell merchandise and services on behalf of PCF) are asked to provide even more information, including billing and shipping addresses and credit card or similar information to third party vendors so that their transactions can be processed and fulfilled by PCF or a third-party fulfillment vendor."
-msgstr ""
+msgstr "Klientoj ĉe PCF-aj vendejoj (kiuj vendas varojn kaj servojn nome de PCF) petiĝas provizi eĉ pli da informoj, interalie faktura kaj ekspeda adresoj kaj kreditkartaj aŭ similaj informoj al triapartiaj vendistoj tiel, ke iliaj transakcioj povas esti prilaboritaj kaj plenumigitaj de PCF aŭ triapartia plenuma vendisto. "
 
 #: .\templates\privacy.html.py:32
 msgid "We also permit community members to provide their name and email addresses so that they can have a more direct engagement with PCF and so that PCF can send them information related to PCF, such as educational material, promotional and cross-promotional material, surveys to be completed, messages about PCF, events information, and other such information and materials. These are opt-in interactions where community members affirmatively sign-up for inclusion in a direct communication with PCF (and with an ability to unsubscribe/opt-out on any email received). These campaigns may be conducted with the help of a third-party customer relationship manager to help us manage the database of information and its analysis and use, in each case such third partyтАЩs involvement with all the data collected will be solely on PCFтАЩs behalf. As part of these marketing campaigns, we might also ask you to provide demographic information such as gender, age, job or role, country, geographic location, and areas of interest. If we ask you for this information, we will use it to customize our communication with you and to better understand those interested in PCF and its products. As part of these marketing campaigns, we may collect a campaign source ID, marketing campaign ID, and a campaign referrer ID. These types of information are used so that we may better understand your interests and the effectiveness of particular marketing campaigns. We may also use this information to customize our communications with you. For example, if a community member plans to host a PCF-themed party to promote a product launch or other event and would like to receive PCF promotional items like t-shirts, buttons, and stickers for her guests (which we call тАЬschwagтАЭ), the community member may submit her name, mailing address, and details about the event (such as date and number of anticipated guests) through Bugzilla so that we (or our service providers) can process this request. In each case, PCF collects personally identifying information only insofar as is necessary to fulfill the purpose of the community member's interaction with PCF. And in the case of a schwag request, those bugs allow you to select restricted access so that only PCF contractors and employees and the individuals listed in the bug can access your information via Bugzilla itself."
@@ -1146,7 +1146,7 @@ msgstr ""
 
 #: .\templates\privacy.html.py:113
 msgid "Privacy Policy Changes"
-msgstr ""
+msgstr "Ŝanĝoj en privateca politiko"
 
 #: .\templates\privacy.html.py:115
 msgid "By using the web sites, you agree to the terms and conditions of this privacy policy. If you do not agree to the terms and conditions of this privacy policy, please do not use the web sites. PCF may change its Privacy Policy from time to time. Any and all changes will be reflected on this page. Substantive changes will also be announced through the standard mechanisms through which PCF communicates with the PCF community, including PCF's тАЬannounceтАЭ mailing list and newsgroup."
@@ -1989,110 +1989,110 @@ msgstr "Faras"
 #: .\templates\videos\stop_notification.html.py:9
 #, python-format
 msgid "Notifications to %(u)s stopped for %(video)s."
-msgstr ""
+msgstr "Sciigoj pri %(video)s al %(u)s haltigitaj."
 
 #: .\templates\videos\test_form_page.html.py:18
 msgid "Your Email"
-msgstr ""
+msgstr "Via retpoŝto"
 
 #: .\templates\videos\test_form_page.html.py:23
 msgid "Task 1"
-msgstr ""
+msgstr "Tasko 1"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "Try creating subtitles on the following"
-msgstr ""
+msgstr "Provu krei subtekstojn por la jena"
 
 #: .\templates\videos\test_form_page.html.py:24
 msgid "video"
-msgstr ""
+msgstr "video"
 
 #: .\templates\videos\test_form_page.html.py:25
 #: .\templates\videos\test_form_page.html.py:31
 #: .\templates\videos\test_form_page.html.py:37
 #: .\templates\videos\test_form_page.html.py:57
 msgid "how was it? were the instructions clear? what would improve it?"
-msgstr ""
+msgstr "Ĉu bona trasperto?  Ĉu la klarigoj estis klaraj?  Kiel ni povus plibonigi?"
 
 #: .\templates\videos\test_form_page.html.py:29
 msgid "Task 2"
-msgstr ""
+msgstr "Tasko 2"
 
 #: .\templates\videos\test_form_page.html.py:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
-msgstr ""
+msgstr "Provu senerarigi la videon (aŭ simple reiri kaj redakti)"
 
 #: .\templates\videos\test_form_page.html.py:35
 msgid "Task 3"
-msgstr ""
+msgstr "Tasko 3"
 
 #: .\templates\videos\test_form_page.html.py:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
-msgstr ""
+msgstr "Traduku la videon (en iun ajn lingvon!)"
 
 #: .\templates\videos\test_form_page.html.py:42
 msgid "optional: get updates about Universal Subtitles"
-msgstr ""
+msgstr "Nedevige: peti ĝisdatigojn pri Universal Subtitles"
 
 #: .\templates\videos\test_form_page.html.py:45
 msgid "Submit!"
-msgstr ""
+msgstr "Sendi!"
 
 #: .\templates\videos\test_form_page.html.py:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Simplaj klarigoj"
 
 #: .\templates\videos\test_form_page.html.py:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
-msgstr ""
+msgstr "Ĉiuj taskoj 2 kaj 3 estas nedevigaj, sed rekomendindaj."
 
 #: .\templates\videos\test_form_page.html.py:74
 msgid "That’s it!"
-msgstr ""
+msgstr "Jen finite!"
 
 #: .\templates\videos\video.html.py:83
 msgid "Enter new title"
-msgstr ""
+msgstr "Enigi titolon"
 
 #: .\templates\videos\video.html.py:107
 msgid "edit title"
-msgstr ""
+msgstr "redakti titolon"
 
 #: .\templates\videos\video.html.py:133
 msgid "Languages"
-msgstr ""
+msgstr "Lingvoj"
 
 #: .\templates\videos\video.html.py:135
 msgid "Activity stream"
-msgstr ""
+msgstr "Aktivujo"
 
 #: .\templates\videos\video.html.py:144
 msgid "% Done"
-msgstr ""
+msgstr "% farita"
 
 #: .\templates\videos\video.html.py:153
 msgid "Original"
-msgstr ""
+msgstr "Originala"
 
 #: .\templates\videos\video.html.py:160
 msgid "No Subtitles"
-msgstr ""
+msgstr "Neniuj subtekstoj"
 
 #: .\templates\videos\video_list.html.py:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "Ĉiuj transsenditaj videoj"
 
 #: .\templates\videos\video_list.html.py:12
 msgid "URL"
-msgstr ""
+msgstr "Retadreso"
 
 #: .\templates\videos\video_list.html.py:14
 msgid "Pageloads"
-msgstr ""
+msgstr "Paĝoŝargoj"
 
 #: .\templates\videos\video_list.html.py:18
 msgid "Subtitles Fetched"
-msgstr ""
+msgstr "Subtekstoj venigitaj"
 
 #: .\templates\videos\video_list.html.py:22
 msgid "Translations"
