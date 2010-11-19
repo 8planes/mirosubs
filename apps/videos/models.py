@@ -118,7 +118,10 @@ class Video(models.Model):
         return settings.MEDIA_URL+self.thumbnail
         
     def is_html5(self):
-        return self.video_type == VIDEO_TYPE_HTML5
+        try:
+            return self.videourl_set.filter(original=True)[:1].get().is_html5()
+        except models.ObjectDoesNotExist:
+            return False
     
     def title_display(self):
         if self.title:
@@ -844,6 +847,9 @@ class VideoUrl(models.Model):
     
     def __unicode__(self):
         return self.url
+    
+    def is_html5(self):
+        return self.type == VIDEO_TYPE_HTML5
     
     @models.permalink
     def get_absolute_url(self):
