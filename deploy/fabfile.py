@@ -78,11 +78,16 @@ def update_environment():
         run('export PIP_REQUIRE_VIRTUALENV=true')
         run('{0}/env/bin/pip install -r requirements.txt'.format(env.base_dir))
 
+def _git_pull():
+    run('git pull')
+    sudo('chgrp pcf-web -R .git 2> /dev/null')
+    sudo('chmod g+w -R .git 2> /dev/null')
+
 def update_web():
     with cd('{0}/mirosubs'.format(env.base_dir)):
         media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
         python_exe = '{0}/env/bin/python'.format(env.base_dir)
-        run('git pull')
+        _git_pull()
         env.warn_only = True
         run("find . -name '*.pyc' -print0 | xargs -0 rm")
         env.warn_only = False
@@ -96,7 +101,7 @@ def update_js():
     with cd('{0}/mirosubs'.format(env.base_dir)):
         media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
         python_exe = '{0}/env/bin/python'.format(env.base_dir)
-        run('git pull')
+        _git_pull()
         run('{0} manage.py compile_config {1} --settings=unisubs-settings'.format(
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs-settings'.format(
