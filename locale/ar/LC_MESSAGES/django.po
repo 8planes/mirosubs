@@ -561,6 +561,11 @@ msgid ""
 "  </p>\n"
 "  "
 msgstr ""
+"\n"
+"  <pte: Your subtitles will not be permanently saved \n"
+"      (even if you log in).</em>\n"
+"  </p>\n"
+"  "
 
 #: .\templates\demo.html.py:41
 msgid ""
