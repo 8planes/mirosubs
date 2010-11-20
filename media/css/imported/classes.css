@@ -4,6 +4,18 @@ video {
 }
 
 
+.mirosubs-standalone_spinner{
+height: 110px;
+width: 110px;
+border: 1px solid;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+
+  border-radius:10px;
+  background:  #000 url(../../images/modal_spinner.gif) center no-repeat !important;
+}
+
+
 
 /*/////////////////////////////////////////////
 
@@ -40,10 +52,16 @@ video {
 
 
 .edit-title{
-margin-top: 32px;
+display: none;
 }
 
 
+
+
+.title-container:hover .edit-title{
+display: inline;
+
+}
 
 
 .space{
@@ -458,33 +476,6 @@ margin-bottom: 20px;
 
 
 
-#video_profile #nyroModalWrapper p{
-padding: 20px;
-}
-
-#video_profile #nyroModalWrapper p.button-container{
-padding: 0 20px;
-width: 420px;
-}
-
-#video_profile #nyroModalWrapper p.button-container button{
-float: right;
-
-}
-
-
-
-#video_profile #nyroModalWrapper label{
-
-}
-
-
-
-#video_profile #nyroModalWrapper input#id_url{
-width: 410px;
-}
-
-
 
 
 .add_to_team{
@@ -502,6 +493,10 @@ margin-left: 30px;
 .left_nav_wrapper .green_button{
 clear: both !important;;
 }
+
+
+
+
 
 
 
