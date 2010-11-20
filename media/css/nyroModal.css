@@ -1,6 +1,7 @@
 div#nyroModalFull {
 	font-size: 12px;
-	color: #777;
+	color: #444;
+
 }
 
 
@@ -34,10 +35,16 @@ div#nyroModalLoading.error {
 
 div#nyroModalWrapper {
 	background: #000;
--moz-border-radius: 11px;
-padding: 5px;
--webkit-border-radius: 11px;
-border: 1px solid #444;
+
+border: 10px solid #999;
+-moz-border-radius:8px;
+-webkit-border-radius: 8px;
+border-radius: 8px;
+  
+  -moz-box-shadow: 0 1px 300px #fff;
+  -webkit-box-shadow: 0 1px 300px #fff;
+  box-shadow: 0 1px 300px #fff;
+  
 }
 
 
@@ -48,7 +55,7 @@ a#closeBut {
 	top: 8px;
 	width:27px;
 	height:28px;
-	right: -32px;
+	right: -27px;
 	text-indent: -9999em;
     background: url("../images/sprite.png") 0 -256px no-repeat !important;
 	outline: 0;
@@ -58,14 +65,60 @@ a#closeBut {
 
 div#nyroModalContent {
 background: #fff;
--moz-border-radius:4px;
--webkit-border-radius: 4px;
-border-radius: 4px;
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f7fbfb'); /* for IE */
 background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f7fbfb)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #fff, #eee); /* for firefox 3.6+ */
+background: -moz-linear-gradient(top,  #fff, #f9f9f9); /* for firefox 3.6+ */
 }
 
 div.wrapper div#nyroModalContent {
 
 }
+
+
+.upload-transcript-textarea{
+width: 588px !important;
+}
+
+
+#upload-transcript-form p label{
+padding-right: 20px;
+}
+
+
+#video_profile #nyroModalWrapper p{
+
+}
+
+#video_profile #nyroModalWrapper p.button-container{
+
+}
+
+#video_profile #nyroModalWrapper p.button-container button{
+
+
+}
+
+
+
+#video_profile #nyroModalWrapper label{
+
+}
+
+
+
+#video_profile #nyroModalWrapper input#id_url{
+width: 410px;
+}
+
+
+
+div#nyroModalWrapper h3{
+  padding: 15px;
+  font-size: 14px;
+border-bottom: 1px solid #ccc;
+  margin: 0 0 0px;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f7fbfb'); /* for IE */
+background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f7fbfb)); /* for webkit browsers */
+background: -moz-linear-gradient(top,  #fff, #eee); /* for firefox 3.6+ */
+  }
+
