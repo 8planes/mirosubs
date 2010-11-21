@@ -6,7 +6,7 @@
         $('#upload-transcript-form').ajaxForm({
             dataType: 'json',
             success: function(data, status, xhr, $form){
-                $('.save-button', $form).show();
+                $('.green_button', $form).show();
                 $('.save-indicator', $form).hide();                
                 if (data.success){
                     var content = $($('#success-upload-transcript-dialog').html());
@@ -30,7 +30,7 @@
             },
             beforeSubmit: function(formData, $Form, options) {
                 $('p.error_list', $Form).remove();
-                $('.save-button', $Form).hide();
+                $('.green_button', $Form).hide();
                 $('.save-indicator', $Form).show();
             }
         });
@@ -155,7 +155,7 @@
                 <textarea rows="14" style="width: 355px" name="subtitles" class="upload-transcript-textarea"></textarea>
             </p> 
             <p>  
-                <button class="save-button">{% trans 'Submit Transcript' %}</button>
+                <button class="green_button big floatright">{% trans 'Submit Transcript' %}</button>
                 <span class="save-indicator" style="display: none">{% trans 'Saving...' %}</span>
             </p> 
         </form>
