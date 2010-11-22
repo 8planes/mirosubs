@@ -27,6 +27,13 @@ from django.utils import simplejson as json
 from django.utils.translation import ugettext_lazy as _
 
 @login_required
+def remove_avatar(request):
+    if request.POST.get('remove'):
+        request.user.picture = ''
+        request.user.save()
+    return HttpResponse(json.dumps({}), "text/javascript")
+
+@login_required
 def edit_avatar(request):
     output = {}
     form = EditAvatarForm(request.POST, instance=request.user, files=request.FILES)

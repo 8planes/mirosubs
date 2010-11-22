@@ -6,6 +6,15 @@
     {{ block.super }}
     <script type="text/javascript">
         jQuery(function($){
+            $('.remove-avatar').click(function(){
+                if (confirm('{% trans "Do you really want delete picture?" %}')){
+                    $.post('{% url profiles:remove_avatar %}', {remove: true}, function(response){
+                        response.errors || $('.user-avatar').attr('src', '');
+                    }, 'json');
+                }
+                return false;
+            });
+            
             $('#id_picture').change(function(){
                 $('.edit_profile').ajaxSubmit({
                     url: '{% url profiles:edit_avatar %}',
@@ -81,7 +90,10 @@
             {{ form.picture.errors }}
             </p>
             <p class="avatar-container">
-                <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}"/>
+                <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}" style="margin-right: 5px"/>
+                {% if user_info.picture %}
+                    <a class="remove-avatar" href="#">{% trans 'remove picture' %}</a>
+                {% endif %}
             </p>
             <div style="float: left; clear: both; margin-bottom: 30px;">
                 <input type="file" id="id_picture" name="picture" size="6"/>
