@@ -143,6 +143,7 @@ class Rpc(BaseRpc):
         if not draft.matches_request(request):
             return { "response" : "does not match request" }
         draft.language.writelock(request)
+        draft.language.save()
         self._save_packets(draft, packets)
         return {"response" : "ok", 
                 "last_saved_packet": draft.last_saved_packet}

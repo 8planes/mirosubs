@@ -80,8 +80,8 @@ def update_environment():
 
 def _git_pull():
     run('git pull')
-    run('chgrp pcf-web -R .git 2> /dev/null')
-    run('chmod g+w -R .git 2> /dev/null')
+    sudo('chgrp pcf-web -R .git 2> /dev/null')
+    sudo('chmod g+w -R .git 2> /dev/null')
 
 def update_web():
     with cd('{0}/mirosubs'.format(env.base_dir)):
