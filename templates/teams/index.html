@@ -77,7 +77,7 @@
             </a>
             <div class="info">
                 <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} ({% trans 'your team' %}){% endif %}</a></h4>
-                {% if team|is_team_manager:user %}
+                {% if team|is_team_member:user %}
                     <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
                 {% endif %}                
                 <span>
