@@ -112,7 +112,6 @@
                     </a>
                     <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
                     <div class="small grey">
-                        <a href="{{ member.user.get_absolute_url }}">{% trans 'View' %}</a>
                         {% if team|is_team_manager:user and not member.user == user %}
                             | <a href="{% url teams:remove_member team.pk member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
                             {% if member.is_manager %}
