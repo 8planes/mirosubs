@@ -70,7 +70,8 @@
             var VIDEO_ID = '{{ video.video_id }}';
 
             $('.edit-title').click(function(){
-                var title = prompt('{% trans "Enter new title" %}', $('.title-container').html());
+                var msg = '{% trasn "Enter new title.  Note: this is for editing the original video title, not translating the title." %}'
+                var title = prompt(msg, $('.title-container').html());
                 if (title){
                     $('.title-container').html(title);
                     $.post(CHANGE_TITLE_LINK, {
