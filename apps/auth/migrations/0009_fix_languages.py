@@ -10,9 +10,20 @@ class Migration(DataMigration):
         if not db.dry_run:
             qs = orm.UserLanguage.objects.filter(language='no')
             for item in qs:
-                print 'Fixing...'
-                item.language = 'nn'
-                item.save()
+                try:
+                    orm.UserLanguage.objects.get(language='nn', user=item.user)
+                    try:
+                        orm.UserLanguage.objects.get(language='nb', user=item.user)
+                        print 'Deleting...'
+                        item.delete()
+                    except models.ObjectDoesNotExist:
+                        print 'Fixing...'
+                        item.language = 'nb'
+                        item.save()                    
+                except models.ObjectDoesNotExist:
+                    print 'Fixing...'
+                    item.language = 'nn'
+                    item.save()                
     
     def backwards(self, orm):
         "Write your backwards methods here."
