@@ -314,7 +314,8 @@ class Rpc(BaseRpc):
             existing_language.save()
 
     def _autoplay_subtitles(self, user, video, language_code, version_no):
-        if video.subtitle_language(language_code) is None:
+        subtitle_language = video.subtitle_language(language_code)
+        if subtitle_language is None or not subtitle_language.is_complete:
             return None
         video.update_subtitles_fetched(language_code)
         version = video.version(version_no, language_code)

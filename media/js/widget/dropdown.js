@@ -135,7 +135,9 @@ mirosubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
                   this.translationLanguages_[i][1] + '%'));
         var linkLi = $d('li', null, link);
         this.translationLinks_.push(
-            { link: link, linkLi: linkLi, lang: this.translationLanguages_[i] });
+            { link: link, 
+              linkLi: linkLi, 
+              lang: this.translationLanguages_[i] });
         this.languageList_.appendChild(linkLi);
     }
 };
