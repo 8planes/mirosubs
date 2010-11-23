@@ -104,8 +104,8 @@ class Team(models.Model):
             return qs.get(slug=slug)
         except cls.DoesNotExist:
             try:
-                return qs.get(pk=slug)
-            except cls.DoesNotExist:
+                return qs.get(pk=int(slug))
+            except (cls.DoesNotExist, ValueError):
                 pass       
     
     def logo_thumbnail(self):
