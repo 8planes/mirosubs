@@ -82,7 +82,10 @@ class Video(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     
     def __unicode__(self):
-        return self.title_display()
+        title = self.title_display()
+        if len(title) > 70:
+            title = title[:70]+'...'
+        return title
     
     def update_subtitles_fetched(self, lang=None):
         Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
