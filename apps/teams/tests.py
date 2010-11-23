@@ -81,3 +81,8 @@ class TeamsTest(TestCase):
         url = reverse("teams:detail", kwargs={"slug": team.pk})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)        
+
+    def test_fixes(self):
+        url = reverse("teams:detail", kwargs={"slug": 'slug-does-not-exist'})
+        response = self.client.get(url)
+        self.failUnlessEqual(response.status_code, 404)
