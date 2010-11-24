@@ -134,17 +134,27 @@ class Team(models.Model):
             return False        
         return self.members.filter(user=user).exists()
     
-    def can_remove_video(self, user):
+    def can_remove_video(self, user, team_video):
+        if not user.is_authenticated():
+            return False        
+        if team_video.added_by == user:
+            return True        
         if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
             return True
         if self.video_policy == self.MEMBER_REMOVE and self.is_member(user):
             return True
         return False
     
-    def can_edit_video(self, user):
+    def can_edit_video(self, user, team_video):
+        if not user.is_authenticated():
+            return False
+        if team_video.added_by == user:
+            return True
         return self.can_add_video(user)
     
     def can_add_video(self, user):
+        if not user.is_authenticated():
+            return False        
         if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
             return True
         return self.is_member(user)
@@ -186,12 +196,19 @@ class TeamVideo(models.Model):
         help_text=_(u'We automatically grab thumbnails for certain sites, e.g. Youtube'))
     all_languages = models.BooleanField(_('Need help with all languages'), default=False, 
         help_text=_('If you check this, other languages will not be displayed.'))
+    added_by = models.ForeignKey(User)
     
     class Meta:
         unique_together = (('team', 'video'),)
     
     def __unicode__(self):
         return self.title or self.video.__unicode__()
+
+    def can_remove(self, user):
+        return self.team.can_remove_video(user, self)
+    
+    def can_edit(self, user):
+        return self.team.can_edit_video(user, self)
     
     def link_to_page(self):
         if self.all_languages:

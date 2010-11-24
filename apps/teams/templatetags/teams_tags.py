@@ -45,9 +45,15 @@ def can_invite_to_team(team, user):
 
 @register.filter
 def can_add_video_to_team(team, user):
-    if not user.is_authenticated():
-        return False
     return team.can_add_video(user)    
+
+@register.filter
+def can_edit_video(tv, user):
+    return tv.can_edit(user) 
+
+@register.filter
+def can_remove_video(tv, user):
+    return tv.can_remove(user) 
 
 @register.filter
 def is_team_manager(team, user):
