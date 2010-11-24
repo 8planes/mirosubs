@@ -21,7 +21,7 @@ class Comment(models.Model):
         ordering = ('-submit_date',)
         
     def __unicode__(self):
-        return "%s: %s..." % (self.user.__unicode__(), self.comment[:50])
+        return "%s: %s..." % (self.user.__unicode__(), self.content[:50])
     
     @classmethod
     def get_for_object(self, obj):

@@ -735,6 +735,10 @@ class Action(models.Model):
         ordering = ['-created']
         get_latest_by = 'created'
     
+    def __unicode__(self):
+        u = self.user and self.user.__unicode__() or 'Anonymous'
+        return u'%s: %s(%s)' % (u, self.get_action_type_display(), self.created)
+    
     def is_add_video_url(self):
         return self.action_type == self.ADD_VIDEO_URL
     
