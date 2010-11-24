@@ -117,8 +117,7 @@ def detail(request, slug):
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team,
-        'query': q,
-        'can_edit_video': team.can_edit_video(request.user)
+        'query': q
     })
 
     if team.video:
@@ -271,7 +270,9 @@ def add_video(request, pk):
     
     form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
     if form.is_valid():
-        obj = form.save()
+        obj = form.save(False)
+        obj.added_by = request.user
+        obj.save()
         messages.success(request, _(u'Video added success.'))
         return redirect('teams:team_video', obj.pk)
         
@@ -291,8 +292,6 @@ def edit_videos(request, pk):
     
     extra_context = {
         'team': team,
-        'can_remove_video': team.can_remove_video(request.user),
-        'can_edit_video': team.can_edit_video(request.user)
     }
     return object_list(request, queryset=qs,
                        paginate_by=VIDEOS_ON_PAGE,
@@ -305,7 +304,7 @@ def edit_videos(request, pk):
 def team_video(request, pk):
     team_video = get_object_or_404(TeamVideo, pk=pk)
     
-    if not team_video.team.can_edit_video(request.user):
+    if not team_video.can_edit(request.user):
         raise Http404
     
     form = EditTeamVideoForm(request.POST or None, request.FILES or None, instance=team_video)
@@ -342,7 +341,7 @@ def remove_video(request, pk):
     if not team_video.team.is_member(request.user):
         raise Http404
     
-    if team_video.team.can_remove_video(request.user):
+    if team_video.can_remove(request.user):
         team_video.delete()
         return {
             'success': True

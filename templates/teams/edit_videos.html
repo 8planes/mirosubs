@@ -53,10 +53,10 @@
                     </div>
                     <div class="small grey">
                         <a href="{{ team_video.video.get_absolute_url }}">{% trans 'View' %}</a>
-                        {% if can_remove_video %}
+                        {% if team_video|can_remove_video:user %}
                         | <a href="{% url teams:remove_video team_video.pk %}" class="remove-video">{% trans 'Remove' %}</a>
                         {% endif %}
-                        {% if can_edit_video %}
+                        {% if team_video|can_edit_video:user %}
                         | <a href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
                         {% endif %}
                     </div>
