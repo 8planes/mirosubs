@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Universal Subtitles, universalsubtitles.org
 # 
 # Copyright (C) 2010 Participatory Culture Foundation
@@ -30,6 +31,7 @@ from videos import models
 from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
 from videos.models import VIDEO_SESSION_KEY
+from django.core.urlresolvers import reverse
 
 class RequestMockup(object):
     def __init__(self, user, browser_id="a"):
@@ -46,6 +48,27 @@ class NotAuthenticatedUser:
         return True
 
 rpc = Rpc()
+
+class TestRpcView(TestCase):
+    
+    def test_views(self):
+        #UnicodeEncodeError: 500 status
+        data = {
+            'русский': '{}'
+        }
+        response = self.client.post(reverse('widget:rpc', args=['show_widget']), data)        
+        #broken json: 500 status
+        data = {
+            'param': '{broken - json "'
+        }
+        response = self.client.post(reverse('widget:rpc', args=['show_widget']), data)
+        #call private method
+        response = self.client.get(reverse('widget:rpc', args=['_maybe_add_video_session']))
+        #500, because method does not exists: 500 status
+        response = self.client.get(reverse('widget:rpc', args=['undefined_method']))
+        #incorect arguments number: 500 status
+        response = self.client.get(reverse('widget:rpc', args=['show_widget']))
+        print response.status_code
 
 class TestRpc(TestCase):
     fixtures = ['test_widget.json']
