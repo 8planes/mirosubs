@@ -71,13 +71,13 @@
 
 {% block main_content %}
     <h2 class="main-title">
-        {% if first_version.next_version %}
+        {% if second_version.next_version %}
             {% blocktrans with first_version.version_no as version_no and second_version.version_no as second_version_no %}
-            Comparing older revision (#{{ second_version_no }}) to revision (#{{ version_no }})
+            Comparing revision (#{{ second_version_no }}) to revision (#{{ version_no }})
             {% endblocktrans %}
         {% else %}
             {% blocktrans with first_version.version_no as version_no and second_version.version_no as second_version_no %}
-            Comparing older revision (#{{ second_version_no }}) to current revision (#{{ version_no }})
+            Comparing revision (#{{ second_version_no }}) to current revision (#{{ version_no }})
             {% endblocktrans %}        
         {% endif %}
     </h2>
