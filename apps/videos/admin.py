@@ -21,6 +21,7 @@ from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'title']
+    search_fields = ['video_id', 'title', 'videourl__url']
 
 class SubtitleLanguageAdmin(admin.ModelAdmin):
     list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete']
