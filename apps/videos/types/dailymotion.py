@@ -73,7 +73,10 @@ class DailymotionVideoType(VideoType):
         #FIXME: get_metadata is called twice: in matches_video_url and set_values
         conn = httplib.HTTPConnection("www.dailymotion.com")
         conn.request("GET", "/json/video/" + video_id)
-        response = conn.getresponse()
-        body = response.read()
-    
-        return json.loads(body)    
+        try:
+            response = conn.getresponse()
+            body = response.read()
+        
+            return json.loads(body)
+        except httplib.BadStatusLine:
+            return {}
