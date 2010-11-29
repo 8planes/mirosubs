@@ -20,9 +20,13 @@ from django.contrib import admin
 from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__', 'title']
+    list_display = ['__unicode__', 'title', 'languages']
     search_fields = ['video_id', 'title', 'videourl__url']
-
+    
+    def languages(self, obj):
+        lang_qs = obj.subtitlelanguage_set.all()
+        return ', '.join([item.get_language_display() or '[undefined]' for item in lang_qs])
+    
 class SubtitleLanguageAdmin(admin.ModelAdmin):
     list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete']
     list_filter = ['is_original', 'is_complete']
