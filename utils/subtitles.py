@@ -78,7 +78,10 @@ class TxtSubtitleParser(SubtitleParser):
 class YoutubeSubtitleParser(SubtitleParser):
     
     def __init__(self, data):
-        data = json.loads(data)
+        try:
+            data = json.loads(data)
+        except json.decoder.JSONDecodeError:
+            data = None
         if data:
             data = data[0]
             self.subtitles = data['plaintext_list']
