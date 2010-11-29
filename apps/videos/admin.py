@@ -18,6 +18,7 @@
 
 from django.contrib import admin
 from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
+from django.core.urlresolvers import reverse
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'title', 'languages']
@@ -25,7 +26,14 @@ class VideoAdmin(admin.ModelAdmin):
     
     def languages(self, obj):
         lang_qs = obj.subtitlelanguage_set.all()
-        return ', '.join([item.get_language_display() or '[undefined]' for item in lang_qs])
+        link_tpl = '<a href="%s">%s</a>'
+        links = []
+        for item in lang_qs:
+            url = reverse('admin:videos_subtitlelanguage_change', args=[item.pk])
+            links.append(link_tpl % (url, item.get_language_display() or '[undefined]'))
+        return ', '.join(links)
+    
+    languages.allow_tags = True
     
 class SubtitleLanguageAdmin(admin.ModelAdmin):
     list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete']
