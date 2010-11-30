@@ -141,6 +141,7 @@
         {% include 'videos/_left_navigation.html' %}
     </ul>
     <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+    {% upload_subtitles video %}
     {% team_add_video_select %}
   </div>
 
@@ -185,7 +186,6 @@
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
             <a href="#" class="blue_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
-            {% upload_subtitles video %}
             {% paste_transcription %}            
             <div class="clear">&nbsp;</div>
           </div>
