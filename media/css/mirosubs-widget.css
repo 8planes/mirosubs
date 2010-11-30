@@ -164,7 +164,7 @@ text-shadow:
   width: 440px !important;
   padding: 0px 0px !important;
   float: left !important;
-  height: 771px;
+  height: 721px;
   color: #fff;
   background: url("../images/widget_right_bg.gif") 0 0 repeat-y !important;
   border: 0;	
@@ -172,7 +172,7 @@ text-shadow:
 
 .mirosubs-modal-widget-sync .mirosubs-right,
 .mirosubs-modal-widget-review .mirosubs-right{
-  height: 802px;
+  height: 751px;
   }
 
 
@@ -936,8 +936,9 @@ bottom: 47px !important;
 
 .mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv video,
 .mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv object,
+.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv embed,
 .mirosubs-modal-widget .mirosubs-videoDiv embed{
-  width: 400px;
+  width: 400px !important;
   height: 300px;
 display: block;
   }
@@ -947,7 +948,8 @@ display: block;
 .mirosubs-modal-widget .mirosubs-videoDiv video *,
 .mirosubs-modal-widget .mirosubs-videoDiv object,
 .mirosubs-modal-widget .mirosubs-videoDiv embed{
-  width: 440px ;
+  width: 440px !important;
+margin: 0 !important
   display: block;
   }
 
