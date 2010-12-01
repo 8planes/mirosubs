@@ -86,6 +86,7 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
     
 class SubtitlesUploadBaseForm(forms.Form):
     language = forms.ChoiceField(choices=ALL_LANGUAGES, initial='en')
+    video_language = forms.ChoiceField(choices=ALL_LANGUAGES, initial='en')
     video = forms.ModelChoiceField(Video.objects)
 
     def __init__(self, user, *args, **kwargs):
@@ -124,6 +125,33 @@ class SubtitlesUploadBaseForm(forms.Form):
         video._make_writelock(self.user, key)
         video.save()
         
+        original_language = video.subtitle_language()
+        video_language = self.cleaned_data['video_language']
+        
+        if original_language:
+            try:
+                language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
+                    .get(language=video_language)
+                original_language.is_original = False
+                original_language.save()
+                language_exists.is_original = True
+                language_exists.save()
+            except ObjectDoesNotExist:
+                original_language.language = video_language
+                original_language.save()
+        else:
+            #original_language always exists, but...
+            try:
+                language_exists = video.subtitlelanguage_set.get(language=video_language)
+                language_exists.is_original = True
+                language_exists.save()
+            except ObjectDoesNotExist:
+                original_language = SubtitleLanguage()
+                original_language.language = video_language
+                original_language.is_original = True
+                original_language.video = video
+                original_language.save()
+            
         language = video.subtitle_language(self.cleaned_data['language'])
         
         if not language:
