@@ -36,9 +36,20 @@ class VideoAdmin(admin.ModelAdmin):
     languages.allow_tags = True
     
 class SubtitleLanguageAdmin(admin.ModelAdmin):
-    list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete']
+    list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete', 'versions']
     list_filter = ['is_original', 'is_complete']
+    
+    def versions(self, obj):
+        version_qs = obj.subtitleversion_set.all()
+        link_tpl = '<a href="%s">#%s</a>'
+        links = []
+        for item in version_qs:
+            url = reverse('admin:videos_subtitleversion_change', args=[item.pk])
+            links.append(link_tpl % (url, item.version_no))
+        return ', '.join(links)        
 
+    versions.allow_tags = True
+    
 class SubtitleVersionAdmin(admin.ModelAdmin):
     list_display = ['language', 'version_no', 'note', 'time_change', 'text_change']
     list_filter = []
@@ -46,7 +57,7 @@ class SubtitleVersionAdmin(admin.ModelAdmin):
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']
 
-admin.site.register(Subtitle, SubtitleAdmin)
+#admin.site.register(Subtitle, SubtitleAdmin)
 admin.site.register(SubtitleVersion, SubtitleVersionAdmin)    
 admin.site.register(Video, VideoAdmin)
 admin.site.register(SubtitleLanguage, SubtitleLanguageAdmin)
