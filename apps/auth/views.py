@@ -112,7 +112,11 @@ def twitter_login(request, next=None):
              reverse("auth:twitter_login_done"), 
              urllib.quote(next))
     twitter = oauthtwitter.TwitterOAuthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
-    request_token = twitter.fetch_request_token(callback_url)
+    try: 
+        request_token = twitter.fetch_request_token(callback_url)
+    except URLError:
+        messages.error(request, 'Problem with connect to Twitter. Try again.')
+        return redirect('auth:login')        
     request.session['request_token'] = request_token.to_string()
     signin_url = twitter.authorize_token_url(request_token)
     return HttpResponseRedirect(signin_url)

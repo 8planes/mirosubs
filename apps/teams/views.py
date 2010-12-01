@@ -47,6 +47,7 @@ VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
 MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
 APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 20)
+DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 
 def index(request):
     q = request.REQUEST.get('q')
@@ -60,8 +61,6 @@ def index(request):
     
     if q:
         qs = qs.filter(Q(name__icontains=q)|Q(description__icontains=q))
-    
-    
     
     order_fields = {
         'name': 'name',
@@ -93,7 +92,8 @@ def index(request):
         'ordering': ordering,
         'order_type': order_type,
         'order_name': order_fields_name.get(ordering, 'name'),
-        'highlighted_qs': highlighted_qs
+        'highlighted_qs': highlighted_qs,
+        'can_create_team': DEV_OR_STAGING or (request.user.is_superuser and request.user.is_active)
     }
     return object_list(request, queryset=qs,
                        paginate_by=TEAMS_ON_PAGE,
@@ -117,8 +117,7 @@ def detail(request, slug):
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team,
-        'query': q,
-        'can_edit_video': team.can_edit_video(request.user)
+        'query': q
     })
 
     if team.video:
@@ -160,21 +159,6 @@ def detail_members(request, pk):
                        extra_context=extra_context, 
                        template_object_name='team_member')
 
-def videos_actions(request, pk):
-    team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
-    videos_ids = team.teamvideo_set.values_list('video__id', flat=True)
-    
-    qs = Action.objects.filter(video__pk__in=videos_ids)
-    
-    extra_context = {
-        'team': team
-    }   
-    return object_list(request, queryset=qs, 
-                       paginate_by=ACTIONS_ON_PAGE, 
-                       template_name='teams/videos_actions.html', 
-                       extra_context=extra_context, 
-                       template_object_name='action')
-
 def members_actions(request, pk):
     team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
     user_ids = team.members.values_list('user__id', flat=True)
@@ -193,10 +177,15 @@ def members_actions(request, pk):
 @render_to('teams/create.html')
 @login_required    
 def create(request):
+    user = request.user
+    
+    if not DEV_OR_STAGING and not (user.is_superuser and user.is_active):
+        raise Http404 
+    
     if request.method == 'POST':
         form = CreateTeamForm(request.POST, request.FILES)
         if form.is_valid():
-            team = form.save(request.user)
+            team = form.save(user)
             messages.success(request, _('Your team has been created. Review or edit its information below.'))
             return redirect(team.get_edit_url())
     else:
@@ -271,7 +260,9 @@ def add_video(request, pk):
     
     form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
     if form.is_valid():
-        obj = form.save()
+        obj = form.save(False)
+        obj.added_by = request.user
+        obj.save()
         messages.success(request, _(u'Video added success.'))
         return redirect('teams:team_video', obj.pk)
         
@@ -291,8 +282,6 @@ def edit_videos(request, pk):
     
     extra_context = {
         'team': team,
-        'can_remove_video': team.can_remove_video(request.user),
-        'can_edit_video': team.can_edit_video(request.user)
     }
     return object_list(request, queryset=qs,
                        paginate_by=VIDEOS_ON_PAGE,
@@ -305,7 +294,7 @@ def edit_videos(request, pk):
 def team_video(request, pk):
     team_video = get_object_or_404(TeamVideo, pk=pk)
     
-    if not team_video.team.can_edit_video(request.user):
+    if not team_video.can_edit(request.user):
         raise Http404
     
     form = EditTeamVideoForm(request.POST or None, request.FILES or None, instance=team_video)
@@ -342,7 +331,7 @@ def remove_video(request, pk):
     if not team_video.team.is_member(request.user):
         raise Http404
     
-    if team_video.team.can_remove_video(request.user):
+    if team_video.can_remove(request.user):
         team_video.delete()
         return {
             'success': True

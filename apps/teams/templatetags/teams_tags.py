@@ -27,6 +27,7 @@ from teams.models import Team, Invite
 from videos.models import Action
 from django.conf import settings
 
+DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
 
 register = template.Library()
@@ -45,9 +46,15 @@ def can_invite_to_team(team, user):
 
 @register.filter
 def can_add_video_to_team(team, user):
-    if not user.is_authenticated():
-        return False
     return team.can_add_video(user)    
+
+@register.filter
+def can_edit_video(tv, user):
+    return tv.can_edit(user) 
+
+@register.filter
+def can_remove_video(tv, user):
+    return tv.can_remove(user) 
 
 @register.filter
 def is_team_manager(team, user):
@@ -67,7 +74,8 @@ def team_select(context, team):
     qs = Team.objects.exclude(pk=team.pk).filter(users=user)
     return {
         'team': team,
-        'objects': qs
+        'objects': qs,
+        'can_create_team': DEV_OR_STAGING or (user.is_superuser and user.is_active)
     }
 
 @register.inclusion_tag('teams/_team_activity.html', takes_context=True)    

@@ -9,14 +9,17 @@
 {% endblock %}
 
 {% block main_content %}
-{% if user.is_authenticated %}
-    <a href="{% url teams:create %}" class="green_button big start_team">
-        <span>{% trans 'Start a Team' %}</span>
-    </a>
-{% else %}
-    <a href="{% url auth:login %}?next={{ request.path_info }}" class="green_button big start_team">
-        <span>{% trans 'Login to start a team' %}</span>
-    </a>
+
+{% if can_create_team %}
+    {% if user.is_authenticated %}
+        <a href="{% url teams:create %}" class="green_button big start_team">
+            <span>{% trans 'Start a Team' %}</span>
+        </a>
+    {% else %}
+        <a href="{% url auth:login %}?next={{ request.path_info }}" class="green_button big start_team">
+            <span>{% trans 'Login to start a team' %}</span>
+        </a>
+    {% endif %}
 {% endif %}
 
 <h2>{% trans 'Team Directory' %}</h2>
@@ -77,7 +80,7 @@
             </a>
             <div class="info">
                 <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} ({% trans 'your team' %}){% endif %}</a></h4>
-                {% if team|is_team_manager:user %}
+                {% if team|is_team_member:user %}
                     <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
                 {% endif %}                
                 <span>

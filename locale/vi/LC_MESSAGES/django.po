@@ -21,7 +21,7 @@ msgstr ""
 
 #: .\settings.py:29
 msgid "Argentinian Spanish"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha Argentina"
 
 #: .\apps\auth\admin.py:10
 msgid "Username"
@@ -69,7 +69,7 @@ msgstr "Chỉnh sửa bản dịch"
 
 #: .\apps\comments\forms.py:35
 msgid "You car reply only comments for same object"
-msgstr ""
+msgstr "Bạn chỉ có thể hồi đáp các bình luận về cùng một đối tượng"
 
 #: .\apps\profiles\forms.py:39
 msgid "This user has not email"
@@ -132,10 +132,12 @@ msgid ""
 "think there's been some mistake, <a\n"
 "href=\"mailto:%s\">contact us</a>!"
 msgstr ""
+"Universal Subtitles không hỗ trợ trang web hay định dạng video đó. Nếu bạn muốn chúng tôi hỗ trợ cho một trang hay một định dạng mới, hoặc bạn nghĩ rằng có một vài lỗi, <a\n"
+"href=\"mailto:%s\">Hãy liên hệ với chúng tôi</a>!"
 
 #: .\apps\videos\forms.py:216
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr ""
+msgstr "Nhập các địa chỉ email hợp lệ, ngăn cách với nhau bằng dấu phẩy."
 
 #: .\templates\_share_widget.html.py:4 .\templates\_sharing_widget.html.py:11
 msgid "Share your subtitles"
@@ -183,7 +185,7 @@ msgstr ""
 
 #: .\templates\_testing_widget.html.py:7
 msgid "Test the Widget"
-msgstr ""
+msgstr "Thử nghiệm Widget"
 
 #: .\templates\_testing_widget.html.py:12
 msgid "Warning: These videos should not be embeded--there is a good possibility they will break at some point!"

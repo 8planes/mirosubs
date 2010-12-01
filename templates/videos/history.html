@@ -104,21 +104,6 @@
                     $(this).find('.data').text()));
                 return false;
             });
-
-            var CHANGE_TITLE_LINK = '{% url videos:ajax_change_video_title %}';
-            var VIDEO_ID = '{{ video.video_id }}';
-
-            $('.edit-title').click(function(){
-                var title = prompt('{% trans "Enter new title" %}', $('.main-title a').html());
-                if (title){
-                    $('.main-title a').html(title);
-                    $.post(CHANGE_TITLE_LINK, {
-                        video_id: VIDEO_ID,
-                        title: title
-                    });
-                }
-                return false;
-            });
         });
     </script>
   <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -138,9 +123,6 @@
 
 {% block main_content %}
     <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
-    {% if not video.title or video.is_html5 %}
-        <a class="floatright edit-title" href="#">{% trans 'edit title' %}</a>
-    {% endif %}
 
     <div class="left_column">
         {% widget widget_params %}
@@ -159,6 +141,7 @@
         {% include 'videos/_left_navigation.html' %}
     </ul>
     <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+    {% upload_subtitles video %}
     {% team_add_video_select %}
   </div>
 
@@ -203,7 +186,6 @@
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
             <a href="#" class="blue_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
-            {% upload_subtitles video %}
             {% paste_transcription %}            
             <div class="clear">&nbsp;</div>
           </div>

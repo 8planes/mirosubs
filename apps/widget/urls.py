@@ -23,7 +23,7 @@ urlpatterns = patterns(
     'widget.views',
     url(r'^rpc/xd/(\w+)$', 'xd_rpc'),
     url(r'^null_rpc/xd/(\w+)$', 'xd_rpc', kwargs={'null':True}),
-    url(r'^rpc/xhr/(\w+)$', 'rpc'),
+    url(r'^rpc/xhr/(\w+)$', 'rpc', name='rpc'),
     url(r'^null_rpc/xhr/(\w+)$', 'rpc', kwargs={'null':True}),
     url(r'^rpc/jsonp/(\w+)$', 'jsonp'),
     url(r'^null_rpc/jsonp/(\w+)$', 'jsonp', kwargs={'null':True}),

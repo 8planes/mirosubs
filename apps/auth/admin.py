@@ -23,6 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser')
+    search_fields = ('username', 'first_name', 'last_name', 'email', 'id')
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

@@ -19,6 +19,7 @@
 from django import template
 from videos.forms import SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm
 from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils import translation
 
 register = template.Library()
 
@@ -26,8 +27,15 @@ register = template.Library()
 def upload_subtitles(context, video):
     context['video'] = video
     initial = {}
-    if 'language' in context:
-        initial['language'] = context['language'].language    
+    if context.get('language') and context['language'].language:
+        initial['language'] = context['language'].language
+    else:
+        initial['language'] = translation.get_language()
+        
+    original_language = video.subtitle_language()
+    if original_language and original_language.language:
+        initial['video_language'] = original_language.language
+    
     context['form'] = SubtitlesUploadForm(context['user'], initial=initial)
     return context
 
@@ -35,9 +43,15 @@ def upload_subtitles(context, video):
 def paste_transcription(context):
     #It is just template of pop-up, you should add link with 'upload-transcript-button' class
     initial = {}
-    if 'language' in context:
+    if context.get('language') and context['language'].language:
         initial['language'] = context['language'].language
-
+    else:
+        initial['language'] = translation.get_language()
+        
+    original_language = context['video'].subtitle_language()
+    if original_language and original_language.language:
+        initial['video_language'] = original_language.language
+                
     context['form'] = PasteTranscriptionForm(context['user'], initial=initial)
     return context
 
