@@ -31,6 +31,11 @@ def upload_subtitles(context, video):
         initial['language'] = context['language'].language
     else:
         initial['language'] = translation.get_language()
+        
+    original_language = video.subtitle_language()
+    if original_language and original_language.language:
+        initial['video_language'] = original_language.language
+    
     context['form'] = SubtitlesUploadForm(context['user'], initial=initial)
     return context
 
@@ -42,6 +47,11 @@ def paste_transcription(context):
         initial['language'] = context['language'].language
     else:
         initial['language'] = translation.get_language()
+        
+    original_language = context['video'].subtitle_language()
+    if original_language and original_language.language:
+        initial['video_language'] = original_language.language
+                
     context['form'] = PasteTranscriptionForm(context['user'], initial=initial)
     return context
 
