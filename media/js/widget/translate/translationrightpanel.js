@@ -60,24 +60,44 @@ mirosubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
         $d('a', {'href':'#'}, 'Auto-translate empty fields');
     this.changeTimingLink_ =
         $d('a', {'href':'#'}, 'Change subtitle timing');
+    this.spinnerImg_ = 
+        $d('img', 
+           {'alt': 'spinner', 
+            'src': mirosubs.imageAssetURL('spinner.gif') });
+    goog.style.showElement(this.spinnerImg_, false);
     el.appendChild(
         $d('ul', 'mirosubs-translationOptions',
            $d('li', 'mirosubs-autoTranslate',
               this.autoTranslateLink_,
-              $d('span', null, '(using google)')),
+              $d('span', null, ' (using google)')),
            $d('li', 'mirosubs-changeTiming',
               this.changeTimingLink_,
-              $d('span', null, '(advanced users)'))));
+              $d('span', null, ' (advanced users)'),
+              this.spinnerImg_)));
 };
 
 mirosubs.translate.TranslationRightPanel.prototype.enterDocument = function() {
     mirosubs.translate.TranslationRightPanel.superClass_.enterDocument.call(this);
-    var that = this;
     this.getHandler().listen(
         this.changeTimingLink_,
         'click',
-        function(e) {
-            e.preventDefault();
-            that.dialog_.forkAndClose();
-        });
+        this.changeTimingClicked_);
+};
+
+mirosubs.translate.TranslationRightPanel.prototype.changeTimingClicked_ = 
+    function(e) 
+{
+    if (this.forking_)
+        return;
+    this.forking_ = true;
+    goog.style.showElement(this.spinnerImg_, true);
+    e.preventDefault();
+    this.dialog_.forkAndClose(goog.bind(this.changeTimingSaveFinished_, this));
+};
+
+mirosubs.translate.TranslationRightPanel.prototype.changeTimingSaveFinished_ =
+    function() 
+{
+    this.forking_ = false;
+    goog.style.showElement(this.spinnerImg_, false);
 };
