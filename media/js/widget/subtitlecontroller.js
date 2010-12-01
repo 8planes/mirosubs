@@ -94,15 +94,9 @@ mirosubs.widget.SubtitleController.prototype.openSubtitleDialog =
         this.subtitle_(forNewSubs);
 };
 
-/**
- * Correponds to "Add new subtitles" in menu. Don't call this if there 
- * are no subtitles yet.
- */
 mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
     function() 
 {
-    if (!this.dropDown_.hasSubtitles())
-        throw new Error();
     if (this.dropDown_.getSubtitleCount() > 0)
         this.openNewTranslationDialog_();
     else
