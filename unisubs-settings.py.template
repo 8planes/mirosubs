@@ -22,12 +22,16 @@ from settings import *
 
 JS_USE_COMPILED = True
 
+# Set this to True for the dev server
 DEV = False
+# Set this to True for the staging server
+STAGING = False
 
 DEBUG = False
 ADMINS = (
   ('Adam Duston', 'adam@8planes.com'),
   ('Dmitriy', 'alerion.um@gmail.com'),
+  ('Holmes Wilson', 'hwilson@gmail.com'),
   ('usubs-errors', 'usubs-errors@pculture.org')
 )
 
