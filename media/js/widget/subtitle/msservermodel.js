@@ -108,7 +108,7 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
     this.forceSave();
 };
 
-mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback) {
+mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback, opt_errorCallback) {
     var saveArgs = this.makeSaveArgs_();
     var that = this;
     mirosubs.Rpc.call(
@@ -124,7 +124,8 @@ mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback) {
                 if (opt_callback)
                     opt_callback();
             }
-        });
+        },
+        opt_errorCallback);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.registerSavedPackets_ = 

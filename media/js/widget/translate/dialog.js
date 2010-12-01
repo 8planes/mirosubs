@@ -100,11 +100,16 @@ mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     this.unitOfWork_.dispose();
     this.serverModel_.dispose();
 };
-mirosubs.translate.Dialog.prototype.forkAndClose = function() {
+/**
+ * @param {function()} saveCompleted
+ */
+mirosubs.translate.Dialog.prototype.forkAndClose = function(saveCompleted) {
     this.serverModel_.forceSave(
-        goog.bind(this.offerForking_, this));
+        goog.bind(this.offerForking_, this, saveCompleted),
+        saveCompleted);
 };
-mirosubs.translate.Dialog.prototype.offerForking_ = function() {
+mirosubs.translate.Dialog.prototype.offerForking_ = function(saveCompleted) {
+    saveCompleted();
     var dialog = new mirosubs.translate.ForkDialog(
         this.serverModel_.getDraftPK(),
         this.subtitleState_.LANGUAGE,
