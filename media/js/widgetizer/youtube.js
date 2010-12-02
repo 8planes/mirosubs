@@ -33,12 +33,12 @@ mirosubs.widgetizer.Youtube = function() {
 goog.inherits(mirosubs.widgetizer.Youtube,
               mirosubs.widgetizer.VideoPlayerMaker);
 
+mirosubs.widgetizer.Youtube.logger_ =
+    goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
+
 mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
     return this.unwidgetizedElements_().length > 0;
 };
-
-mirosubs.widgetizer.Youtube.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
     var elements = this.unwidgetizedElements_();
@@ -90,7 +90,9 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
 {
     // this might get extracted to superclass as soon as we include 
     // players other than youtube.
-    var nextNode = goog.dom.getNextNode(element);
+    if (element.nodeName == "EMBED" && element.parentNode.nodeName == "OBJECT")
+        element = element.parentNode;
+    var nextNode = element.nextSibling;
     var parent = element.parentNode;
     goog.dom.removeNode(element);
     if (nextNode)
