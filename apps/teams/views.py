@@ -48,7 +48,8 @@ VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
 MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
 APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 20)
-DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
+DEV = getattr(settings, 'DEV', False)
+DEV_OR_STAGING = DEV or getattr(settings, 'STAGING', False)
 
 def index(request):
     q = request.REQUEST.get('q')
@@ -94,7 +95,7 @@ def index(request):
         'order_type': order_type,
         'order_name': order_fields_name.get(ordering, 'name'),
         'highlighted_qs': highlighted_qs,
-        'can_create_team': DEV_OR_STAGING or (request.user.is_superuser and request.user.is_active)
+        'can_create_team': DEV or (request.user.is_superuser and request.user.is_active)
     }
     return object_list(request, queryset=qs,
                        paginate_by=TEAMS_ON_PAGE,
@@ -180,7 +181,7 @@ def members_actions(request, pk):
 def create(request):
     user = request.user
     
-    if not DEV_OR_STAGING and not (user.is_superuser and user.is_active):
+    if not DEV and not (user.is_superuser and user.is_active):
         raise Http404 
     
     if request.method == 'POST':
