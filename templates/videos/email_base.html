@@ -87,9 +87,11 @@
                                 <tr style="margin-top: 0; padding-top: 0;">
                                     <td style="margin-top: 0; padding-top: 0; font-size: 14px; color: #323738; line-height: 150%; font-family: Tahoma, Geneva, sans-serif; border-left: 1px solid #b7bdbc; border-right: 1px solid #b7bdbc;" bgcolor="#ecf6f6">
                                         {% block content %}{% endblock %}
-                                        <p style="font-size: 12px;">
+                                        {% block dont_send %}
+                                          <p style="font-size: 12px;">
                                             <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">{% trans "Don't send any more emails about this particular video." %}</a>
-                                        </p>
+                                          </p>
+                                        {% endblock %}
                                     </td>
                                 </tr>
                                 <tr>
