@@ -118,8 +118,10 @@ def video(request, video_id, video_url=None):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
-    context['translations'] = video.subtitlelanguage_set.filter(was_complete=True) \
-        .filter(is_original=False)
+    translations = list(video.subtitlelanguage_set.filter(was_complete=True) \
+        .filter(is_original=False))
+    translations.sort(key=lambda f: f.get_language_display())
+    context['translations'] = translations
     context['widget_params'] = _widget_params(request, video, None, '')
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(is_complete=True).count()
@@ -275,8 +277,10 @@ def history(request, video_id, lang=None):
 
     context['video'] = video
     context['site'] = Site.objects.get_current()
-    context['translations'] = video.subtitlelanguage_set.filter(is_original=False) \
-        .filter(was_complete=True)
+    translations = list(video.subtitlelanguage_set.filter(is_original=False) \
+        .filter(was_complete=True))
+    translations.sort(key=lambda f: f.get_language_display())
+    context['translations'] = translations    
     context['last_version'] = language.latest_version()
     context['widget_params'] = _widget_params(request, video, None, lang or '')
     context['language'] = language
