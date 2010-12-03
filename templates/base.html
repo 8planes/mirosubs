@@ -40,6 +40,14 @@
             $('#messages').remove();
             return false;
         });
+        $('li.search input').keypress(function(e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                $('li.search form').submit();
+                return false;
+            }
+            else
+                return true;
+        });
     });
 </script>
 </head>
@@ -82,7 +90,13 @@
           <li class="videos_link"><a href="/videos/"><span>{% trans 'Watch' %}</span> {% trans 'subbed videos' %}</a></li>
          <!-- <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li> -->
 
-          <li class="search"><form><input type="text" class="field" /></form></li>
+{% if test_search %}
+          <li class="search">
+            <form method="get" action={% url search %}>
+              <input type="text" class="field" name="q" />
+            </form>
+          </li>
+{% endif %}
         </ul>
 
   <div class="share"><div><h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a></div></div>
