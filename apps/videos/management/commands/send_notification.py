@@ -8,6 +8,7 @@ from django.db.models import Q
 import urllib
 from django.utils import simplejson as json
 from django.utils.http import urlquote_plus
+from django.core.urlresolvers import reverse
 
 class Command(BaseCommand):
     domain = Site.objects.get_current().domain
@@ -53,6 +54,8 @@ class Command(BaseCommand):
             context = {
                 'version': translation_version,
                 'domain': self.domain,
+                'video_url': 'http://{0}{1}'.format(
+                    self.domain, reverse('videos:video', [video.id])),
                 'user': user,
                 'language': language,
                 'video': video,
@@ -64,44 +67,54 @@ class Command(BaseCommand):
                                  'videos/email_start_notification.html',
                                  context, 'feedback@universalsubtitles.org', 
                                  fail_silently=not settings.DEBUG)
-            
+
+    def _make_caption_data(self, new_version, old_version):
+        second_captions = dict([(c.subtitle_id, c) for c in old_version.subtitles()])
+        captions = []
+        for caption in new_version.subtitles():
+            try:
+                scaption = second_captions[caption.subtitle_id]
+            except KeyError:
+                scaption = None
+                changed = True
+            else:
+                changed = not caption.text == scaption.text
+            data = [caption, scaption, changed]
+            captions.append(data)
+        return captions
+
     def send_letter_caption(self, caption_version):
         language = caption_version.language
         qs = SubtitleVersion.objects.filter(language=language) \
             .filter(version_no__lt=caption_version.version_no).order_by('-version_no')
+        if qs.count() == 0:
+            return
+        most_recent_version = qs[0]
+        captions = self._make_caption_data(caption_version, most_recent_version)
         context = {
             'version': caption_version,
             'domain': self.domain,
             'translation': not language.is_original,
             'video': caption_version.video,
-            'language': language
+            'language': language,
+            'last_version': most_recent_version,
+            'captions': captions
         }
+        subject = 'New edits to "%s" by %s on Universal Subtitles' % \
+            (language.video.__unicode__(), caption_version.user.__unicode__())
+
         not_send = StopNotification.objects.filter(video=language.video) \
             .values_list('user_id', flat=True)         
         users = []
         for item in qs:
-            if item.user and item.user.is_active and not caption_version.user == item.user and item.user.changes_notification \
-                and not item.user in users and not item.user.id in not_send:
+            if item.user and item.user.is_active and \
+                    caption_version.user.pk != item.user.pk and \
+                    item.user.changes_notification and \
+                    not item.user in users and not item.user.id in not_send:
                 users.append(item.user)
+                context['your_version'] = item
                 context['user'] = item.user
-                context['old_version'] = item
-                
-                second_captions = dict([(c.subtitle_id, c) for c in item.subtitles()])
-                captions = []
-                for caption in caption_version.subtitles():
-                    try:
-                        scaption = second_captions[caption.subtitle_id]
-                    except KeyError:
-                        scaption = None
-                        changed = True
-                    else:
-                        changed = not caption.text == scaption.text
-                    data = [caption, scaption, changed]
-                    captions.append(data)
-                context['captions'] = captions
                 context['hash'] = item.user.hash_for_video(context['video'].video_id)
-                subject = 'New edits to "%s" by %s on Universal Subtitles' % \
-                    (language.video.__unicode__(), item.user.__unicode__())
                 send_templated_email(item.user.email, subject, 
                                      'videos/email_notification.html',
                                      context, 'feedback@universalsubtitles.org',
