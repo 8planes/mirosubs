@@ -4,18 +4,10 @@
 
 {% block content %}
 <p style="font-size: 12px;">
-    {% blocktrans with version.user as u and video as v and video_url as url %}
-    Subtitles you contributed to <b><a href="{{url}}">{{v}}</a></b> were changed by <b>{{ u }}</b>.
+    {% blocktrans with version.user as u and video as v and video_url as url and version.time_change_display as change_percent %}
+    Subtitles you contributed to <b><a href="{{url}}">{{v}}</a></b> were changed by <b>{{ u }}</b>. 
+    {{ change_percent }} of the timing was changed.
     {% endblocktrans %}<br/>
-</p>
-<p style="font-size: 12px;">
-    ##{% trans 'SUMMARY OF CHANGES' %}##<br/>
-    {% blocktrans with version.text_change_display as change_percent %}
-        {{ change_percent }} of the text was changed.
-    {% endblocktrans %}<br/>
-    {% blocktrans with version.time_change_display as change_percent %}  
-        {{ change_percent }} of the timing was changed.
-    {% endblocktrans %} 
 </p>
 <ul>
   <li><a href="http://{{ domain }}{% url videos:diffing version.pk last_version.pk %}">{% trans 'Compare the new version to the last version' %}</a>.</li>
