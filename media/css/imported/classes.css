@@ -412,6 +412,7 @@ border: 1px solid;
 -webkit-border-radius: 15px;
 float: left;
 margin-right: 8px;
+height: 0;
 }
 
 
@@ -493,7 +494,9 @@ margin-left: 30px;
 
 
 
-
+.left_nav_wrapper .green_button{
+clear: both !important;;
+}
 
 
 
