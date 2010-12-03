@@ -4,16 +4,9 @@
 
 {% block content %}
 <p style="font-size: 12px;">
-    {% blocktrans with version.user as u %}
-    A transcription or translation you contributed to 
-    has been edited by <b>{{ u }}</b>. 
+    {% blocktrans with version.user as u and video as v and video_url as url %}
+    Subtitles you contributed to <b><a href="{{url}}">{{v}}</a></b> were changed by <b>{{ u }}</b>.
     {% endblocktrans %}<br/>
-    {% trans 'It would be great if you could review their changes for quality.' %} <br/>
-    {% trans 'Click here to see the latest version side by side with the previous version:' %}<br/><br/>
-    <a href="http://{{ domain }}{% url videos:diffing version.pk old_version.pk %}">{% trans 'Compare versions side-by-side' %}</a>.
-</p>
-<p style="font-size: 12px;">
-    <a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">{% trans "Don't send any more emails about this particular video." %}</a>
 </p>
 <p style="font-size: 12px;">
     ##{% trans 'SUMMARY OF CHANGES' %}##<br/>
@@ -24,6 +17,11 @@
         {{ change_percent }} of the timing was changed.
     {% endblocktrans %} 
 </p>
+<ul>
+  <li><a href="http://{{ domain }}{% url videos:diffing version.pk last_version.pk %}">{% trans 'Compare the new version to the last version' %}</a>.</li>
+  <li><a href="http://{{ domain }}{% url videos:diffing version.pk your_version.pk %}">{% trans 'Compare your work to the new version' %}</a>.</li>
+  <li><a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">{% trans "Stop watching for changes on this video" %}</a></li>
+</ul>
 {% if version.text_change %}
     <div>
       <table style="width: 585px; background: #fff; border: 1px solid #aaa; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; -webkit-border-radius-top-right: 5px; -webkit-border-radius-top-right: 5px; border-bottom: 0;" cellpadding="0" cellspacing="0">
