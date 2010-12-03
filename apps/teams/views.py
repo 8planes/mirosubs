@@ -40,6 +40,7 @@ from widget.views import base_widget_params
 import widget
 from videos.models import Action
 from django.utils import simplejson as json
+from utils.amazon import S3StorageError
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -233,8 +234,11 @@ def edit_logo(request, pk):
     output = {}
     form = EditLogoForm(request.POST, instance=team, files=request.FILES)
     if form.is_valid():
-        user = form.save()
-        output['url'] =  str(team.logo_thumbnail())
+        try:
+            form.save()
+            output['url'] =  str(team.logo_thumbnail())
+        except S3StorageError:
+            output['error'] = {'logo': ugettext(u'File server unavailable. Try later. You can edit some other information without any problem.')}
     else:
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))

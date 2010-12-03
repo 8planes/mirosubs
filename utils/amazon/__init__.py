@@ -14,14 +14,19 @@ from django.db import models
 from django.conf import settings
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
+from boto.exception import BotoClientError, BotoServerError
 from django.core.files.storage import FileSystemStorage
 from django.core.files import File
 from fields import S3EnabledImageField, S3EnabledFileField
+from django.core.mail import mail_admins
 import os
 
 __all__ = ['S3EnabledImageField', 'S3EnabledFileField', 'S3Storage']
 
 DEFAULT_HOST = 's3.amazonaws.com'
+
+class S3StorageError(Exception):
+    pass
 
 class S3Storage(FileSystemStorage):
     def __init__(self, bucket=None, location=None, base_url=None):
@@ -59,14 +64,23 @@ class S3Storage(FileSystemStorage):
     def _save(self, name, content):
         name = name.replace('\\', '/')
         key = Key(self.bucket, name)
-        if hasattr(content, 'temporary_file_path'):
-            key.set_contents_from_filename(content.temporary_file_path())
-        elif isinstance(content, File):
-            key.set_contents_from_file(content)
-        else:
-            key.set_contents_from_string(content)
-        key.make_public()
-        return name
+        try:
+            if hasattr(content, 'temporary_file_path'):
+                key.set_contents_from_filename(content.temporary_file_path())
+            elif isinstance(content, File):
+                key.set_contents_from_file(content)
+            else:
+                key.set_contents_from_string(content)
+            key.make_public()
+            return name
+        except (BotoClientError, BotoServerError), e:
+            settings.DEBUG or mail_admins('Amazon S3 Store error', self._get_traceback())
+            raise S3StorageError(*e.args)
+
+    def _get_traceback(self):
+        "Helper function to return the traceback as a string"
+        import traceback, sys
+        return '\n'.join(traceback.format_exception(*sys.exc_info()))
 
     def delete(self, name):
         if name and self.exists(name):

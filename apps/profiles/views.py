@@ -24,7 +24,8 @@ from django.template import RequestContext
 from profiles.forms import EditUserForm, SendMessageForm, UserLanguageFormset, EditAvatarForm
 from django.contrib import messages
 from django.utils import simplejson as json
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
+from utils.amazon import S3StorageError
 
 @login_required
 def remove_avatar(request):
@@ -38,8 +39,12 @@ def edit_avatar(request):
     output = {}
     form = EditAvatarForm(request.POST, instance=request.user, files=request.FILES)
     if form.is_valid():
-        user = form.save()
-        output['url'] =  str(user.avatar())
+        try:        
+            user = form.save()
+            output['url'] =  str(user.avatar())
+        except S3StorageError:
+            output['error'] = {'picture': ugettext(u'File server unavailable. Try later. You can edit some other information without any problem.')}
+        
     else:
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
