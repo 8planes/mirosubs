@@ -305,6 +305,7 @@ left: -4px;
   -webkit-box-shadow:inset 0px 1px 2px #555;
   
 background: url(../../images/search.png) 10px center no-repeat;
+.border: 1px solid #999;
 
 }
 
