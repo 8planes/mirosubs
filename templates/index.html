@@ -118,14 +118,15 @@ Reach an international audience, make your videos accessible, and get more traff
     <script type="text/javascript">
      var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
          document.getElementById('widget_div'), 
-         { "base_state": {},
-           "video_config": {
-               "poster": "{{ MEDIA_URL }}images/about-poster.png",
-               "play_to_click": true
+         { base_state: {},
+           video_config: {
+               poster: "{{ MEDIA_URL }}images/about-poster.png",
+               play_to_click: true
            },
-           "video_url": "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv",
-           "alternate_video_urls": 
-               ["http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4", 
+           video_url: "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv",
+           alternate_video_urls: 
+               [{ url: "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4", 
+                  config: {poster: "{{ MEDIA_URL }}images/about-poster.png"}}, 
                 "http://www.youtube.com/watch?v=Y2IJb1YnAmQ"]});
     </script>
   </div>
