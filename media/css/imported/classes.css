@@ -394,6 +394,7 @@ border: 1px solid;
 -webkit-border-radius: 15px;
 float: left;
 margin-right: 8px;
+height: 0;
 }
 
 
@@ -486,7 +487,6 @@ width: 410px;
 
 
 
-
 .add_to_team{
 margin-top: 10px;
 }
@@ -499,6 +499,9 @@ margin-top: 10px;
 margin-left: 30px;
 }
 
+.left_nav_wrapper .green_button{
+clear: both !important;;
+}
 
 
 
