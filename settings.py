@@ -366,6 +366,8 @@ THUMBNAILS_SIZE = (
     (50, 50)
 )
 
+EMAIL_BCC_LIST = []
+
 try:
     from settings_local import *
 except ImportError:
