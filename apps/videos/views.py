@@ -44,6 +44,7 @@ from statistic.models import EmailShareStatistic
 def index(request):
     context = widget.add_onsite_js_files({})
     context['all_videos'] = Video.objects.count()
+    context['test_search'] = ('test_search' in request.GET)    
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
 
