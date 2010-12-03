@@ -4,10 +4,9 @@
 
 {% block content %}
 <p style="font-size: 12px;">
-    {% trans 'Dear' %} {{ user }}, <br/><br/>
     {% blocktrans with version.user as u %}
     A transcription or translation you contributed to 
-    has been edited by {{ u }}. 
+    has been edited by <b>{{ u }}</b>. 
     {% endblocktrans %}<br/>
     {% trans 'It would be great if you could review their changes for quality.' %} <br/>
     {% trans 'Click here to see the latest version side by side with the previous version:' %}<br/><br/>
@@ -27,7 +26,6 @@
 </p>
 {% if version.text_change %}
     <div>
-        {% trans 'Here is a list of text changes:' %}<br/>
       <table style="width: 585px; background: #fff; border: 1px solid #aaa; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; -webkit-border-radius-top-right: 5px; -webkit-border-radius-top-right: 5px; border-bottom: 0;" cellpadding="0" cellspacing="0">
         <tr>
           <td width="80" style="color: #888; font-size: 12px; padding: 8px;">
@@ -47,10 +45,10 @@
             {% if item.2 %}
                 <tr>
                   <td width="210" style="padding: 8px; font-size: 12px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">
-                    {{ item.1.subtitle_text }}
+                    {{ item.1.text }}
                   </td>
                   <td width="210" style="padding: 8px; font-size: 12px; border-bottom: 1px solid #ddd;">
-                    {{ item.0.subtitle_text }}
+                    {{ item.0.text }}
                   </td>
                 </tr>
             {% endif %}
@@ -58,8 +56,5 @@
       </table>
     </div>
 {% endif %}
-<p style="font-size: 12px;">
-    {% trans 'To view the current and previous versions side by side, follow this' %} 
-    <a href="http://{{ domain }}{% url profiles:my_profile %}">{% trans 'link' %}</a>.
-</p>
 {% endblock %}
+{% block dont_send %}{% endblock %}
