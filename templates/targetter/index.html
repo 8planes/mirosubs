@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    </head>
+    <body>
+        <h1>PCF QUICK TARGETTER</h1>
+        <div>
+            <div id="message"></div>
+            
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <label>Code to show</label><br/>
+                        <textarea>
+                            
+                        </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Show to</label><br/>
+                        <select multiple>
+                            <option>Linux users</option>
+                            <option>Windows</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label>And show to refferers</label><br/>
+                        <select multiple>
+                            <option>google.com</option>
+                            <option>yahoo.com</option>
+                        </select>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label>Enbeding code</label><br/>
+                        <textarea>
+                            
+                        </textarea>
+                    </td>                    
+                </tr>
+            </table>
+            
+        </div>
+    </body>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/targetter/targetter.js"></script>
+    <script type="text/javascript">
+        PcfTargetter.init({
+            elementID: 'message',
+            text: 'TEST',
+            //userAgents: ['Gecko3', 'Chrome'],
+            refferers: ['127.0.0.1:8000']
+        })
+    </script>
+</html>

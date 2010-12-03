@@ -36,6 +36,7 @@ urlpatterns = patterns(
     (r'^$', 'videos.views.index'),
     (r'^comments/', include('comments.urls', namespace='comments')),
     (r'^messages/', include('messages.urls', namespace='messages')),
+    (r'^pcf-targetter/', include('targetter.urls', namespace='targetter')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
     url(r'^admin/password_reset/$', 
         'django.contrib.auth.views.password_reset', 
