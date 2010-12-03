@@ -2993,3 +2993,18 @@ margin-right: 28px;
 .mirosubs-extension-enabled {
    background-color: #99FF99;
 }
+
+
+
+.mirosubs-standalone_spinner{
+height: 110px;
+width: 110px;
+border: 1px solid;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+
+  border-radius:10px;
+  background:  #000 url(../../images/modal_spinner.gif) center no-repeat !important;
+}
+
+
