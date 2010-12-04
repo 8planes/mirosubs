@@ -3007,4 +3007,6 @@ border: 1px solid;
   background:  #000 url(../../images/modal_spinner.gif) center no-repeat !important;
 }
 
-
+.mirosubs-autoTranslate {
+   display: none;
+}
