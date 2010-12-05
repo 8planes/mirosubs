@@ -57,9 +57,10 @@ class SubtitleParser(object):
     _matches = property(_get_matches)
 
 class TxtSubtitleParser(SubtitleParser):
-    
-    def __init__(self, subtitles, linebreaks='\n\n'):
-        self.subtitles = subtitles.split(linebreaks)
+    _linebreak_re = re.compile(r"\n\n|\r\n\r\n|\r\r")
+
+    def __init__(self, subtitles, linebreak_re=_linebreak_re):
+        self.subtitles = linebreak_re.split(subtitles)
         
     def __len__(self):
         return len(self.subtitles)
