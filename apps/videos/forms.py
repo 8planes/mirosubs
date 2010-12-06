@@ -26,7 +26,7 @@ from django.utils.translation import ugettext_lazy as _
 import re
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, SubtitleParserError, SbvSubtitleParser, TxtSubtitleParser
 import random
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 import chardet
 from uuid import uuid4
 from math_captcha.forms import MathCaptchaForm
@@ -34,8 +34,52 @@ from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
 from videos.types import video_type_registrar, VideoTypeError
 from videos.models import VideoUrl
+from utils.forms import AjaxForm
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
+
+class TranscriptionFileForm(forms.Form, AjaxForm):
+    txtfile = forms.FileField()
+    
+    def clean_txtfile(self):
+        f = self.cleaned_data['txtfile']
+        
+        if f.name.split('.')[-1] != 'txt':
+            raise forms.ValidationError(_('File should have txt format'))
+        
+        if f.size > 256*1024:
+            raise forms.ValidationError(_(u'File size should be less 256 kb'))
+
+        text = f.read()
+        encoding = chardet.detect(text)['encoding']
+        if not encoding:
+            raise forms.ValidationError(_(u'Can not detect file encoding'))
+        try:
+            self.file_text = force_unicode(text, encoding)
+        except DjangoUnicodeDecodeError:
+            raise forms.ValidationError(_(u'Can\'t encode file. It should have utf8 encoding.'))
+        f.seek(0)
+                
+        return f
+
+    def clean_subtitles(self):
+        subtitles = self.cleaned_data['subtitles']
+        if subtitles.size > 256*1024:
+            raise forms.ValidationError(_(u'File size should be less 256 kb'))
+        parts = subtitles.name.split('.')
+        if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml', 'sbv']:
+            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)'))
+        try:
+            text = subtitles.read()
+            encoding = chardet.detect(text)['encoding']
+            if not encoding:
+                raise forms.ValidationError(_(u'Can not detect file encoding'))
+            if not self._get_parser(subtitles.name)(force_unicode(text, encoding)):
+                raise forms.ValidationError(_(u'Incorrect subtitles format'))
+        except SubtitleParserError, e:
+            raise forms.ValidationError(e)
+        subtitles.seek(0)
+        return subtitles
 
 class CreateVideoUrlForm(forms.ModelForm):
     

@@ -25,6 +25,7 @@ urlpatterns = patterns(
     url(r'^feedback/$', 'feedback', name='feedback'),
     url(r'^upload_subtitles/$', 'upload_subtitles', name='upload_subtitles'),
     url(r'^paste_transcription/$', 'paste_transcription', name='paste_transcription'),    
+    url(r'^upload_transcription_file/$', 'upload_transcription_file', name='upload_transcription_file'),
     url(r'^create/$', 'create', name='create'),
     url(r'^site_feedback/$', 'site_feedback', name='site_feedback'),
     url(r'^email_friend/$', 'email_friend', name='email_friend'),

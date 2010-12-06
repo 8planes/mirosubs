@@ -22,7 +22,8 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
-from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm
+from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
+    SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm, TranscriptionFileForm
 import widget
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -198,6 +199,17 @@ def paste_transcription(request):
     else:
         output['errors'] = form.get_errors()
     return HttpResponse(json.dumps(output), "text/javascript")
+
+@login_required
+def upload_transcription_file(request):
+    from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
+    output = {}
+    form = TranscriptionFileForm(request.POST, request.FILES)
+    if form.is_valid():
+        output['text'] = getattr(form, 'file_text', '')
+    else:
+        output['errors'] = form.get_errors()
+    return HttpResponse(u'<textarea>%s</textarea>'  % json.dumps(output))
 
 def feedback(request):
     output = dict(success=False)
