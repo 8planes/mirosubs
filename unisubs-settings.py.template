@@ -35,7 +35,8 @@ ADMINS = (
   ('usubs-errors', 'usubs-errors@pculture.org')
 )
 
-HAYSTACK_SOLR_URL = 'INSERT SOLR URL'
+HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
+SOLR_ROOT = "/usr/local/apache-solr-1.3.0/example"
 
 SITE_ID = INSERT_SITE_ID_AS_NUMBER
 SITE_NAME = 'INSERT SITE NAME'
