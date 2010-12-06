@@ -21,6 +21,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns(
     'videos.views',
     url(r'^$', 'video_list', name='list'),
+    url(r'^subscribe_to_updates/$', 'subscribe_to_updates', name='subscribe_to_updates'),
     url(r'^feedback/$', 'feedback', name='feedback'),
     url(r'^upload_subtitles/$', 'upload_subtitles', name='upload_subtitles'),
     url(r'^paste_transcription/$', 'paste_transcription', name='paste_transcription'),    
