@@ -373,22 +373,41 @@ class ViewsTest(WebUseTest):
 
     def test_paste_transcription(self):
         self._login()
+
+        language_code = u"el"
         
         data = {
             "video": u"1",
             "subtitles": u"""#1
 
 #2""",
-            "language": u"el"
+            "language": language_code,
+            "video_language": u"en"
         }
-        language = self.video.subtitle_language(data['language'])
+        language = self.video.subtitle_language(language_code)
         self.assertEquals(language, None)
         response = self.client.post(reverse("videos:paste_transcription"), data)
         self.failUnlessEqual(response.status_code, 200)
 
-        language = self.video.subtitle_language(data['language'])
+        language = self.video.subtitle_language(language_code)
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 2)
+
+    def test_paste_transcription_windows(self):
+        self._login()
+
+        language_code = u"el"
+        
+        data = {
+            "video": u"1",
+            "subtitles": u"#1\r\n\r\n#2",
+            "language": language_code,
+            "video_language": u"en"
+        }
+        response = self.client.post(reverse("videos:paste_transcription"), data)
+        language = self.video.subtitle_language(language_code)
+        version = language.latest_version()
+        self.assertEqual(len(version.subtitles()), 2)        
         
     def test_email_friend(self):
         self._simple_test('videos:email_friend')

@@ -73,6 +73,8 @@ AWS_SECRET_ACCESS_KEY = ''
 DEFAULT_BUCKET = ''
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 
+EMAIL_BCC_LIST = ['hwilson+notifications@gmail.com']
+
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
