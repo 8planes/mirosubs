@@ -12,7 +12,7 @@
   margin: 40px 0 0 290px;
   padding: 0;
   float: left;
-width: 450px;
+width: 390px;
   }
 
 
@@ -293,11 +293,11 @@ left: -4px;
   font-size: 12px;
   -moz-border-radius: 5px;  
   -webkit-border-radius: 5px;
-  margin: 0 15px 0px 25px;
+  margin: 0 0px 0px 25px;
   line-height: 15px;
   padding: 12px 0 8px 28px;
   float: left;
-  width: 170px;;
+  width: 120px;;
   font-family: Arial, Helvetica, sans-serif;
   
   box-shadow:inset 0px 1px 2px #555;
@@ -305,6 +305,7 @@ left: -4px;
   -webkit-box-shadow:inset 0px 1px 2px #555;
   
 background: url(../../images/search.png) 10px center no-repeat;
+.border: 1px solid #999;
 
 }
 

@@ -52,9 +52,7 @@ class SendMessageForm(forms.Form):
         email = self.cleaned_data.get('email')
         headers = {'Reply-To': email}
         subject = _('Personal message from %(sender)s on universalsubtitles.org') % {'sender': self.sender.username}
-        bcc = []
-        if getattr(settings, 'DEV', False):
-            bcc.append('hwilson@gmail.com')
+        bcc = settings.EMAIL_BCC_LIST
         EmailMessage(subject, self.cleaned_data.get('message'), email, \
                      [user.email], headers=headers, bcc=bcc).send()
 

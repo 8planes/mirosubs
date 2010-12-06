@@ -44,9 +44,8 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
            $d('p', null, 'Are you sure you want to edit timing?'),
            $d('p', null, 
               'Advanced users only!  Most subtitles should keep original ' +
-              'timing. You can edit this timing on the ' + language + 
-              ' subtitle page. (Where ' + language + 
-              ' is the language of original subtitles). ' +
+              'timing. You can edit this timing on the original language ' +
+              'subtitle page. ' +
               'If unsure, click cancel now.'),
            $d('p', null,
               'If you continue, you should finish all translations first ' +
@@ -55,11 +54,17 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
         $d('p', null, 'Please wait. Heavy forking action occurring...');
     goog.style.showElement(this.loadingNotice_, false);
     this.getElement().appendChild(this.loadingNotice_);
+    this.cancelButton_ =
+        $d('a',
+           {'href':'#',
+            'className': 'mirosubs-green-button mirosubs-big'},
+           'Cancel');
     this.okButton_ =
         $d('a',
            {'href':'#',
             'className': 'mirosubs-green-button mirosubs-big'},
            'Continue');
+    this.getElement().appendChild(this.cancelButton_);
     this.getElement().appendChild(this.okButton_);
     var clearDiv = $d('div', {'style': 'clear: both'});
     clearDiv.innerHTML = "&nbsp;";
@@ -71,11 +76,24 @@ mirosubs.translate.ForkDialog.prototype.enterDocument = function() {
     this.getHandler().
         listen(this.okButton_,
                'click',
-               this.okClicked_);
+               this.okClicked_).
+        listen(this.cancelButton_,
+               'click',
+               this.cancelClicked_);
+};
+
+mirosubs.translate.ForkDialog.prototype.cancelClicked_ = function(e) {
+    e.preventDefault();
+    if (this.loading_)
+        return;
+    this.setVisible(false);
 };
 
 mirosubs.translate.ForkDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
+    if (this.loading_)
+        return;
+    this.loading_ = true;
     goog.style.showElement(this.loadingNotice_, true);
     mirosubs.Rpc.call(
         'fork',
@@ -84,6 +102,7 @@ mirosubs.translate.ForkDialog.prototype.okClicked_ = function(e) {
 };
 
 mirosubs.translate.ForkDialog.prototype.okResponse_ = function(result) {
+    this.loading_ = false;
     this.setVisible(false);
     this.finishedCallback_(mirosubs.widget.SubtitleState.fromJSON(result));
 };
