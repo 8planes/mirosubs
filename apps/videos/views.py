@@ -40,6 +40,7 @@ from gdata.service import RequestError
 from django.db.models import Sum, Q, F
 from django.utils.translation import ugettext
 from statistic.models import EmailShareStatistic
+import urllib, urllib2
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -540,3 +541,10 @@ def video_url_create(request):
     
     return HttpResponse(json.dumps(output))
     
+def subscribe_to_updates(request):
+    email_address = request.POST['email_address']
+    data = urllib.urlencode({'email': email_address})
+    req = urllib2.Request(
+        'http://pcf8.pculture.org/interspire/form.php?form=3', data)
+    response = urllib2.urlopen(req)
+    return HttpResponse('ok', 'text/plain')

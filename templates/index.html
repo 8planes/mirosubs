@@ -80,19 +80,50 @@ Reach an international audience, make your videos accessible, and get more traff
             $(this).delay(1).get(0).select();
         });
     </script>    
-    Just copy this code into your site's header or your blog's theme, between the <head> and </head> tags. <a href="#">Learn More</a>
+    Just copy this code into your site's header or your blog's theme, between the <code>&lt;head&gt;</code> and <code>&lt;/head&gt;</code> tags. <a href="https://github.com/8planes/mirosubs/wiki/Widgetizer-script-usage-guide" target="learn_widgetizer">Learn More</a>
   </div>
 
   <div class="grid_3">
    
 
-    <form>
-      <p><label>Get Updates on our progress</label>
-      <input class="field" type="text" /></p>
-      <button class="green_button big">Go</button>
+    <form action="{% url videos:subscribe_to_updates %}" method="post" class="updates_subscribe">
+      <div id="updates_subscribe_controls">
+        <p>
+          <label>Get Updates on our progress</label>
+          <input class="field" type="text" name="email_address" />
+        </p>
+        <button class="green_button big">Go</button>
+      </div>
       <span>We will not spam you, or sell your info.</span>
     </form>
 
+    <script type="text/javascript">
+      $('form.updates_subscribe').ajaxForm({
+          beforeSubmit: function(arr, $form, options) {
+              var email_re = /[a-z0-9!#$%&amp;'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+              if (!email_re.test($('input', $form).val())) {
+                  alert("Please enter your email address.");
+                  $('input', $form).focus();
+                  return false;
+              }
+              else
+                  return true;
+          },
+          success: function() {
+              $('form.updates_subscribe input').hide();
+              $('#updates_subscribe_controls').empty();
+              $('#updates_subscribe_controls').append('<h2>Success!</h2>');
+          }
+      });
+      $('form.updates_subscribe input').keypress(function(e) {
+          if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+              $('form.updates_subscribe').submit();
+              return false;
+          }
+          else
+              return true;
+      });
+    </script>
   </div>
 
 </div>
