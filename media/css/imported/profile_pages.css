@@ -71,7 +71,7 @@
   
 
 
-.edit_profile_shell #id_picture, .edit-team #id_logo{
+.edit_profile_shell #id_picture, .edit-team #id_logo, .ajax-file-upload-field{
     position: absolute;
     margin-top: 3px;
     opacity: 0;

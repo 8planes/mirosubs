@@ -120,7 +120,24 @@
             processHandler: function(){
                 $('#clippy').hide();
             }
-        });        
+        });
+        
+        $('#id_txtfile').change(function(){
+            $('#id_txtfile_form').ajaxSubmit({
+                dataType: 'json',
+                success: function(response){
+                    if (response.errors){
+                        $('#txtfile-errors').html('<ul class="errorlist"><li>'+response.errors.txtfile+'</li></ul>');
+                    }else{
+                        $('#txtfile-errors').html('');
+                        $('.upload-transcript-textarea').val(response.text);
+                    }
+                },
+                beforeSubmit: function(arr, $form, options) { 
+                    $('#txtfile-errors').html('{% trans "Saving..." %}');            
+                }                  
+            });
+        });      
     });
 </script>
 <div id="success-upload-transcript-dialog" style="display: none">
@@ -149,6 +166,17 @@
             Some of your subtitles take up more than two lines and will not display correctly.
             {% endblocktrans %}
         </p>
+        <form id="id_txtfile_form" action="{% url videos:upload_transcription_file %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p id="txtfile-errors">
+            </p>
+            <p>
+                <button class="green_button small" type="submit" value="Save">
+                    <span>{% trans 'Upload TXT file' %}</span>
+                </button>                     
+                <input class="ajax-file-upload-field" type="file" name="txtfile" id="id_txtfile"/>
+            </p>
+        </form>
         <form method="post" action="{% url videos:paste_transcription %}" id="upload-transcript-form">
             {% csrf_token %}
             <p>
