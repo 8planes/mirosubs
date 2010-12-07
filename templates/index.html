@@ -80,7 +80,7 @@ Reach an international audience, make your videos accessible, and get more traff
             $(this).delay(1).get(0).select();
         });
     </script>    
-    Just copy this code into your site's header or your blog's theme, between the <code>&lt;head&gt;</code> and <code>&lt;/head&gt;</code> tags. <a href="https://github.com/8planes/mirosubs/wiki/Widgetizer-script-usage-guide" target="learn_widgetizer">Learn More</a>
+    Copy this code into your site header or blog theme, between the <code>&lt;head&gt;</code> and <code>&lt;/head&gt;</code> tags. <a href="https://github.com/8planes/mirosubs/wiki/Widgetizer-script-usage-guide" target="learn_widgetizer">Learn More</a>
   </div>
 
   <div class="grid_3">
@@ -110,9 +110,7 @@ Reach an international audience, make your videos accessible, and get more traff
                   return true;
           },
           success: function() {
-              $('form.updates_subscribe input').hide();
-              $('#updates_subscribe_controls').empty();
-              $('#updates_subscribe_controls').append('<h2>Success!</h2>');
+              $('form.updates_subscribe input').val("Success!");
           }
       });
       $('form.updates_subscribe input').keypress(function(e) {
