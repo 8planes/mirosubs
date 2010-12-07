@@ -92,9 +92,9 @@
 
 {% block main_content %}
     <h2 class="main-title">
-        <span class="title-container" style="float: none;">{{ video }}
+        <span class="title-container" style="float: none;">{{ video }}</span>
         {% if not video.title or video.is_html5 %}
-            <a class="edit-title" href="#">{% trans 'edit title' %}</a></span>
+            <a class="edit-title" href="#">{% trans 'edit title' %}</a>
         {% endif %}        
     </h2>
 
