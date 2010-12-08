@@ -137,6 +137,7 @@ class SubtitlesUploadBaseForm(forms.Form):
         self.user = user
         super(SubtitlesUploadBaseForm, self).__init__(*args, **kwargs)
         self.fields['language'].choices.sort(key=lambda item: item[1])
+        self.fields['video_language'].choices.sort(key=lambda item: item[1])
         
     def clean_video(self):
         video = self.cleaned_data['video']
