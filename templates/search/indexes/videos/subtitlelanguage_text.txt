@@ -1,4 +1,4 @@
 {{ object.language_display }}
-{% for item in object.latest_finished_version.subtitles %}
-    {{ item.subtitle_text }}
+{% for item in object.latest_subtitles %}
+    {{ item.text }}
 {% endfor %}
