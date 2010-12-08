@@ -69,17 +69,42 @@ class Command(BaseCommand):
                                  fail_silently=not settings.DEBUG)
 
     def _make_caption_data(self, new_version, old_version):
-        second_captions = dict([(c.subtitle_id, c) for c in old_version.subtitles()])
+        second_captions = dict([(item.subtitle_id, item) for item in old_version.ordered_subtitles()])
+        first_captions = dict([(item.subtitle_id, item) for item in new_version.ordered_subtitles()])
+    
+        subtitles = {}
+    
+        for id, item in first_captions.items():
+            if not id in subtitles:
+                subtitles[id] = item.start_time
+    
+        for id, item in second_captions.items():
+            if not id in subtitles:
+                subtitles[id] = item.start_time
+    
+        subtitles = [item for item in subtitles.items()]
+        subtitles.sort(key=lambda item: item[1])
+    
         captions = []
-        for caption in new_version.subtitles():
+        for subtitle_id, t in subtitles:
             try:
-                scaption = second_captions[caption.subtitle_id]
+                scaption = second_captions[subtitle_id]
             except KeyError:
                 scaption = None
-                changed = True
+            try:
+                fcaption = first_captions[subtitle_id]
+            except KeyError:
+                fcaption = None
+    
+            if fcaption is None or scaption is None:
+                changed = dict(text=True, time=True)
             else:
-                changed = not caption.text == scaption.text
-            data = [caption, scaption, changed]
+                changed = {
+                    'text': (not fcaption.text == scaption.text),
+                    'time': (not fcaption.start_time == scaption.start_time),
+                    'end_time': (not fcaption.end_time == scaption.end_time)
+                }
+            data = [fcaption, scaption, changed]
             captions.append(data)
         return captions
 
