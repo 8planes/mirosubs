@@ -58,9 +58,8 @@ display: none;
 
 
 
-.title-container:hover .edit-title{
+.main-title:hover .edit-title{
 display: inline;
-
 }
 
 
