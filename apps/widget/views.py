@@ -214,7 +214,12 @@ def xd_rpc(request, method_name, null=False):
                               widget.add_offsite_js_files(params), 
                               context_instance = RequestContext(request))
 
+import re
+boingboing_regex = re.compile('boingboing.net')
+
 def jsonp(request, method_name, null=False):
+    if boingboing_regex.match(request.META.get('HTTP_REFERER', '')):
+        return HttpResponse('boingboing!', 'text/plain')
     callback = request.GET['callback']
     args = { 'request' : request }
     for k, v in request.GET.items():
