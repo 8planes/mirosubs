@@ -554,7 +554,7 @@ def video_url_create(request):
     return HttpResponse(json.dumps(output))
     
 def subscribe_to_updates(request):
-    email_address = request.POST['email_address']
+    email_address = request.POST.get('email_address', '')
     data = urllib.urlencode({'email': email_address})
     req = urllib2.Request(
         'http://pcf8.pculture.org/interspire/form.php?form=3', data)
