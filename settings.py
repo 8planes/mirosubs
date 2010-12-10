@@ -370,7 +370,7 @@ THUMBNAILS_SIZE = (
 
 EMAIL_BCC_LIST = []
 
-CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
+CACHE_BACKEND = 'locmem://'
 
 try:
     from settings_local import *
