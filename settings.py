@@ -246,6 +246,8 @@ MIDDLEWARE_CLASSES = (
     'middleware.UserUUIDMiddleware',
 )
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 ROOT_URLCONF = 'mirosubs.urls'
 
 TEMPLATE_DIRS = (
@@ -367,6 +369,8 @@ THUMBNAILS_SIZE = (
 )
 
 EMAIL_BCC_LIST = []
+
+CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 try:
     from settings_local import *
