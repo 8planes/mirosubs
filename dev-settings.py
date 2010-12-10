@@ -30,8 +30,6 @@ MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)
 
 MIDDLEWARE_CLASSES += ('middleware.SqlPrintingMiddleware',)
 
-CACHE_BACKEND = 'locmem://'
-
 # Uncomment following line when you want to work with compiled JS.
 # JS_USE_COMPILED = True
 
