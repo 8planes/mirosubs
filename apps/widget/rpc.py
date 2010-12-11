@@ -28,6 +28,7 @@ from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
 from django.conf import settings
 from django.db.models import Sum
+from django.core.cache import cache
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
@@ -43,9 +44,14 @@ def add_general_settings(request, dict):
 
 class Rpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None):
-        video, create = models.Video.get_or_create_for_url(video_url)
-        video.widget_views_count += 1
-        video.save()
+        cache_key = 'show_widget_video_{0}'.format(video_url)
+        if cache.get(cache_key) is not None:
+            video = cache.get(cache_key)
+        else:
+            video, create = models.Video.get_or_create_for_url(video_url)
+            cache.set(cache_key, video, 15 * 60)
+
+        # TODO: increment video viewed count in cache-friendly way.
 
         self._maybe_add_video_session(request)
 
@@ -56,8 +62,13 @@ class Rpc(BaseRpc):
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
 
-        return_value['video_urls'] = \
-            [vu.effective_url for vu in video.videourl_set.all()]
+        cache_key = 'show_widget_video_urls_{0}'.format(video_url)
+        if cache.get(cache_key) is not None:
+            video_urls = cache.get(cache_key)
+        else:
+            video_urls = [vu.effective_url for vu in video.videourl_set.all()]
+            cache.set(cache_key, video_urls, 15 * 60)
+        return_value['video_urls'] = video_urls            
 
         return_value['drop_down_contents'] = \
             self._drop_down_contents(request.user, video)
@@ -198,9 +209,15 @@ class Rpc(BaseRpc):
         return version, subtitles
 
     def fetch_subtitles(self, request, video_id, language_code=None):
-        video = models.Video.objects.get(video_id=video_id)
-        video.update_subtitles_fetched(language_code)
-        return self._subtitles_dict(video.version(language_code=language_code))
+        cache_key = 'fetch_subtitles_{0}{1}'.format(video_id, language_code)
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+        else:
+            video = models.Video.objects.get(video_id=video_id)
+            video.update_subtitles_fetched(language_code)
+            return_value = self._subtitles_dict(video.version(language_code=language_code))
+            cache.set(cache_key, return_value, 15 * 60)
+            return return_value
 
     def get_widget_info(self, request):
         return {
@@ -315,13 +332,19 @@ class Rpc(BaseRpc):
             existing_language.save()
 
     def _autoplay_subtitles(self, user, video, language_code, version_no):
-        subtitle_language = video.subtitle_language(language_code)
-        if subtitle_language is None or not subtitle_language.is_complete:
-            return None
-        video.update_subtitles_fetched(language_code)
-        version = video.version(version_no, language_code)
-        if version:
-            return self._subtitles_dict(version)
+        cache_key = '{0}{1}{2}'.format(video.id, language_code, version_no)
+        if cache.get(cache_key) is not None:
+            cached_value = cache.get(cache_key)
+        else:
+            subtitle_language = video.subtitle_language(language_code)
+            if subtitle_language is None or not subtitle_language.is_complete:
+                cached_value = 0
+            video.update_subtitles_fetched(language_code)
+            version = video.version(version_no, language_code)
+            if version:
+                cached_value = self._subtitles_dict(version)
+            cache.set(cache_key, cached_value, 15 * 60)
+        return None if cached_value == 0 else cached_value
 
     def _subtitles_dict(self, version):
         language = version.language
@@ -338,10 +361,22 @@ class Rpc(BaseRpc):
             version.is_forked)
 
     def _subtitle_count(self, user, video):
-        version = video.latest_version()
-        return 0 if version is None else version.subtitle_set.count()
+        cache_key = "_subtitle_count_{0}".format(video.id)
+        if cache.get(cache_key) is not None:
+            return cache.get(cache_key)
+        else:
+            version = video.latest_version()
+            return_value = 0 if version is None else version.subtitle_set.count()
+            cache.set(cache_key, return_value, 15 * 60)
+            return cache.get(cache_key)
 
     def _initial_languages(self, user, video):
-        translated_languages = video.subtitlelanguage_set.filter(
-            is_complete=True).filter(is_original=False)
-        return [(t.language, t.percent_done) for t in translated_languages]
+        cache_key = '_initial_languages_{0}'.format(video.id)
+        if cache.get(cache_key) is not None:
+            return cache.get(cache_key)
+        else:
+            translated_languages = video.subtitlelanguage_set.filter(
+                is_complete=True).filter(is_original=False)
+            return_value = [(t.language, t.percent_done) for t in translated_languages]
+            cache.set(cache_key, return_value, 15 * 60)
+            return return_value
