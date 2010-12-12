@@ -16,7 +16,7 @@ pycrypto==2.1.0
 vendor/python-openid-2.2.5.tar.gz
 vendor/python-yadis-1.1.0.tar.gz
 simplejson==2.1.1
--e hg+http://sorl-thumbnail.googlecode.com/hg/@caf69b5206329d89282b4b8246a72e5aa77cb578#egg=sorl_thumbnail-tip
+-e git://github.com/sorl/sorl-thumbnail.git#egg=sorl_thumbnail-tip
 django-haystack==1.0.1-final
 pysolr==2.0.12
 vendor/gdata-2.0.10.tar.gz
