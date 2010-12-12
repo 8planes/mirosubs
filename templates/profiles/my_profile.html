@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% load i18n teams_tags paginator profiles_tags widget %}
+
+{% block title %}
+    {% trans 'Your profile' %} | Universal Subtitles
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+{% endblock %}
+
+{% block main_content %}
+<div class="grid_8 alpha">
+    <h2>{% trans 'My videos' %}</h2>
+    
+    <ul class="video_tabs">
+        <li class="active">
+            <span class="tab-item">
+                {% trans 'My Videos' %}
+            </span>
+        </li>
+        <li>
+            <a href="#">
+                {% trans 'Messages' %}<span class="badgy_out"><span class="badgy">0</span></span>
+            </a>
+        </li>
+    </ul>
+    <div id="videos-tab">
+        <div class="boxx">
+            <div class="padding_small">
+                <div class="inline_search">
+                    <form>
+                        <input type="text" name="q" value="{{ query|default:'' }}">
+                        <button class="green_button big">
+                            {% trans 'Search' %}
+                        </button>
+                    </form>
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+        </div>
+        <div class="grid_8 clearfix">
+            <br/>
+            <br/>
+        </div>
+        
+        {% if is_paginated %}{% teams_search_ordered_paginator query %}{% endif %}
+        <ul class="big_list">
+            {% for video in user_video_list %}
+            <li>
+
+            </li>
+            {% endfor %}
+        </ul>
+        {% if is_paginated %}{% teams_search_ordered_paginator query %}{% endif %}
+    </div>
+</div>
+
+<div class="grid_4 omega">
+    <div class="team_logo">
+        {% if user.picture %}
+        <img src="{{ user.avatar }}"/>
+        {% endif %}
+    </div>
+    {% if user.biography %}
+    <p>
+        <b>{% trans 'Bio' %}:</b> {{ user.biography }}
+    </p>
+    {% endif %}
+    <p><a href="{% url profiles:edit %}">{% trans "Edit profile" %}</a></p>
+</div>
+
+{% endblock %}

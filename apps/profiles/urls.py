@@ -20,6 +20,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('profiles.views',
     url(r'^mine/$', 'my_profile', name='my_profile'),
+    url(r'^edit/$', 'edit_profile', name='edit'),
     url(r'^send_message/$', 'send_message', name='send_message'),
     url(r'^edit_avatar/$', 'edit_avatar', name='edit_avatar'),
     url(r'^remove_avatar/$', 'remove_avatar', name='remove_avatar'),
