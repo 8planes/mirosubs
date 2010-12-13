@@ -19,6 +19,7 @@
 from vidscraper.sites import vimeo
 from base import VideoType
 from django.conf import settings
+from django.utils.html import strip_tags
 
 vimeo.VIMEO_API_KEY = getattr(settings, 'VIMEO_API_KEY')
 vimeo.VIMEO_API_SECRET = getattr(settings, 'VIMEO_API_SECRET')
@@ -54,6 +55,7 @@ class VimeoVideoType(VideoType):
         if vimeo.VIMEO_API_KEY and vimeo.VIMEO_API_SECRET:
             video_obj.thumbnail = vimeo.get_thumbnail_url(self.url)
             video_obj.title = vimeo.scrape_title(self.url)
+            video_obj.description = strip_tags(vimeo.scrape_description(self.url))
             video_obj.save()
         return video_obj
     
