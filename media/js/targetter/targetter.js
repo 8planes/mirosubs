@@ -53,7 +53,7 @@ PcfTargetter = (function(){
             os: [],
             refferers: [],
             text: '',
-            elementID: '',
+            elementID: 'pcf-targetter-message',
             callback: function(){
                 if (this.elementID){
                     var el = document.getElementById(this.elementID);

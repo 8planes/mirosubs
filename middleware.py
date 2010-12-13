@@ -75,6 +75,8 @@ def _terminal_width():
         width = 80
     return width
 
+DISABLE_SQL_PRINTING = getattr(settings, 'DISABLE_SQL_PRINTING', False)
+
 class SqlPrintingMiddleware(object):
     """
     Middleware which prints out a list of all SQL queries done
@@ -82,7 +84,7 @@ class SqlPrintingMiddleware(object):
     """
     def process_response(self, request, response):
         indentation = 2
-        if len(connection.queries) > 0 and settings.DEBUG:
+        if len(connection.queries) > 0 and settings.DEBUG and not DISABLE_SQL_PRINTING:
             width = _terminal_width()
             total_time = 0.0
             for query in connection.queries:

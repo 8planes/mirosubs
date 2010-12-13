@@ -27,7 +27,7 @@ from django import template
 
 register = template.Library()
 
-def paginator(context, adjacent_pages=3):
+def paginator(context, anchor='', adjacent_pages=3):
     """
     To be used in conjunction with the object_list generic view.
 
@@ -36,6 +36,9 @@ def paginator(context, adjacent_pages=3):
     view.
 
     """
+    if isinstance(anchor, int):
+        adjacent_pages = anchor
+        anchor = ''
     startPage = max(context['page'] - adjacent_pages, 1)
     if startPage <= 3: startPage = 1
     endPage = context['page'] + adjacent_pages + 1
@@ -44,6 +47,14 @@ def paginator(context, adjacent_pages=3):
             if n > 0 and n <= context['pages']]
     page_obj = context['page_obj']
     paginator = context['paginator']
+    
+    getvars = ''
+    if 'request' in context:
+        GET_vars = context['request'].GET.copy()
+        if 'page' in GET_vars:
+            del GET_vars['page']
+        if len(GET_vars.keys()) > 0:
+            getvars = "&%s" % GET_vars.urlencode()
 
     return {
         'page_obj': page_obj,
@@ -58,76 +69,12 @@ def paginator(context, adjacent_pages=3):
         'has_next': context['has_next'],
         'has_previous': context['has_previous'],
         'show_first': 1 not in page_numbers,
+        'getvars': getvars,
         'show_last': context['pages'] not in page_numbers,
+        'anchor': anchor
     }
 
 register.inclusion_tag('_paginator.html', takes_context=True)(paginator)
-
-def search_ordered_paginator(context, query, adjacent_pages=3):
-    return ordered_paginator(context, adjacent_pages, q=query)
-register.inclusion_tag('_ordered_paginator.html', takes_context=True)(search_ordered_paginator)
-
-def ordered_paginator(context, adjacent_pages=3, anchor='', **kwargs):
-    """
-    To be used in conjunction with the object_list generic view.
-
-    Adds pagination context variables for use in displaying first, adjacent and
-    last page links in addition to those created by the object_list generic
-    view.
-
-    """
-    startPage = max(context['page'] - adjacent_pages, 1)
-    if startPage <= 3: startPage = 1
-    endPage = context['page'] + adjacent_pages + 1
-    if endPage >= context['pages'] - 1: endPage = context['pages'] + 1
-    page_numbers = [n for n in range(startPage, endPage) \
-            if n > 0 and n <= context['pages']]
-    page_obj = context['page_obj']
-    paginator = context['paginator']
-    
-    ordering = context.has_key('ordering') and context['ordering']
-    order_type = context.has_key('order_type') and context['order_type']
-    
-    extra_link = ''
-    if ordering:
-         extra_link = '&o=%s' % ordering
-         if order_type:
-             extra_link += '&ot=%s' % order_type
-    
-    for key, value in kwargs.items():
-        if not value is None:
-            extra_link += '&%s=%s' % (key, value)
-    
-    extra_link += anchor
-                
-    return {
-        'page_obj': page_obj,
-        'paginator': paginator,
-        'hits': context['hits'],
-        'results_per_page': context['results_per_page'],
-        'page': context['page'],
-        'pages': context['pages'],
-        'page_numbers': page_numbers,
-        'next': context['next'],
-        'previous': context['previous'],
-        'has_next': context['has_next'],
-        'has_previous': context['has_previous'],
-        'show_first': 1 not in page_numbers,
-        'show_last': context['pages'] not in page_numbers,
-        'extra_link': extra_link
-    }
-
-register.inclusion_tag('_ordered_paginator.html', takes_context=True)(ordered_paginator)
-
-def teams_ordered_paginator(context, adjacent_pages=3, anchor='', **kwargs):
-    return ordered_paginator(context, adjacent_pages, anchor, **kwargs)
-
-register.inclusion_tag('_teams_ordered_paginator.html', takes_context=True)(teams_ordered_paginator)
-
-def teams_search_ordered_paginator(context, query, adjacent_pages=3):
-    return ordered_paginator(context, adjacent_pages, q=query)
-
-register.inclusion_tag('_teams_ordered_paginator.html', takes_context=True)(teams_search_ordered_paginator)
 
 @register.tag
 def ordered_column(parser, token):

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load escapejs paginator widget i18n %}
+
+{% block main_content %}
+    <h2>{% trans 'Search' %}</h2>
+    <form method="get" action=".">
+        <input type="text" name="q" />
+        <input type="submit" value="Search"/>
+    </form>
+    <div class="left_column">
+        {% if is_paginated %}{% paginator %}{% endif %}
+            {% for item in result_list %}
+                {% with item.object as object %}
+                    {% include 'search/_video_item.html' %}
+                {% endwith %}
+            {% endfor %}            
+                
+        <div style="clear: both"></div>
+        {% if is_paginated %}{% paginator %}{% endif %}
+    </div>
+        
+{% endblock %}

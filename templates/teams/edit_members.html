@@ -91,7 +91,7 @@
         <a href="#invite-user" class="blue_button small invite-user">{% trans 'Invite User' %}</a>
     </div>
     {% endif %}    
-    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    {% if is_paginated %}{% paginator %}{% endif %}
     <table>
         <thead>
             <tr>

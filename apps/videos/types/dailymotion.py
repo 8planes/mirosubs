@@ -59,13 +59,14 @@ class DailymotionVideoType(VideoType):
 
     def set_values(self, video_obj):
         metadata = self.get_metadata(self.video_id)
+        video_obj.description = metadata.get('description', u'')
         video_obj.title = metadata.get('title', '')
-        video_obj.thumbnail = metadata.get('thumbnail_url') or ''        
+        video_obj.thumbnail = metadata.get('thumbnail_url') or ''
         return video_obj
     
     @classmethod
     def get_video_id(cls, video_url):
-        match = DAILYMOTION_REGEX.match(video_url)
+        match = DAILYMOTION_REGEX.match(cls.format_url(video_url))
         return match and match.group(1)
     
     @classmethod

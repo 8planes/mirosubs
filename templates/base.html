@@ -91,7 +91,7 @@
          <!-- <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li> -->
 
           <li class="search">
-            <form method="get" action={% url search %}>
+            <form method="get" action="{% url search:index %}">
               <input type="text" class="field" name="q" />
             </form>
           </li>

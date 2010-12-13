@@ -26,6 +26,12 @@ from django.contrib import messages
 from django.utils import simplejson as json
 from django.utils.translation import ugettext_lazy as _, ugettext
 from utils.amazon import S3StorageError
+from django.views.generic.simple import direct_to_template
+from django.views.generic.list_detail import object_list
+from videos.models import Video
+from django.conf import settings
+
+VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
 
 @login_required
 def remove_avatar(request):
@@ -51,6 +57,16 @@ def edit_avatar(request):
 
 @login_required
 def my_profile(request):
+    qs = Video.objects.none()
+    context = {}
+    return object_list(request, queryset=qs, 
+                       paginate_by=VIDEOS_ON_PAGE, 
+                       template_name='profiles/my_profile.html', 
+                       extra_context=context, 
+                       template_object_name='user_video')    
+
+@login_required
+def edit_profile(request):
     if request.method == 'POST':
         form = EditUserForm(request.POST,
                             instance=request.user,

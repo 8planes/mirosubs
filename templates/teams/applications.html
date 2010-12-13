@@ -24,7 +24,7 @@
     {% with "application" as active %}
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}
-    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    {% if is_paginated %}{% paginator %}{% endif %}
     <table>
         <tbody>
             {% for item in applications_list %}

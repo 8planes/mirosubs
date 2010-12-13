@@ -67,6 +67,8 @@ class YoutubeVideoType(VideoType):
     def set_values(self, video_obj):
         video_obj.youtube_videoid = self.video_id
         video_obj.title = self.entry.media.title.text
+        if self.entry.media.description:
+            video_obj.description = self.entry.media.description.text
         if self.entry.media.duration:
             video_obj.duration = int(self.entry.media.duration.seconds)
         if self.entry.media.thumbnail:

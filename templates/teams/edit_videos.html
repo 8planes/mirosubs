@@ -27,7 +27,7 @@
     <div>
         <a href="{% url teams:add_video team.pk %}" class="green_button small">{% trans 'Add video' %}</a>
     </div>
-    {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+    {% if is_paginated %}{% paginator %}{% endif %}
     <table>
         <tbody>
             {% for team_video in videos_list %}
