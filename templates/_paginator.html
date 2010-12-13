@@ -1,28 +1,32 @@
 {% load i18n %}
 <div class="pagination">
    {% if has_previous %}
-      <span class="page">
-      <a href="?page={{ previous }}">&laquo; {% trans 'prev' %}</a>
-      </span>
-   {% endif %}
+        <a class="previous_page" href="?page={{ previous }}{{ getvars }}{{ anchor }}" rel="next">&#8592; {% trans 'Previous' %}</a>
+   {% else %}
+        <span class="previous_page disabled">&#8592; {% trans 'Previous' %}</span>
+   {% endif %}    
 
    {% if show_first %}
-      <span class="page"><a href="?page=1">1</a></span>
-      <span class="ellipsis">...</span>
+      <a rel="next" href="?page=1{{ getvars }}{{ anchor }}">1</a>
+      <em>...</em>
    {% endif %}
+
    {% for linkpage in page_numbers %}
       {% ifequal linkpage page %}
-         <span class="current_page">{{ page }}</span>
+         <em>{{ page }}</em>
       {% else %}
-         <span class="page"><a href="?page={{ linkpage }}"
-               >{{ linkpage }}</a></span>
+         <a rel="next" href="?page={{ linkpage }}{{ getvars }}{{ anchor }}">{{ linkpage }}</a>
       {% endifequal %}
    {% endfor %}
+
    {% if show_last %}
-      <span class="ellipsis">...</span>
-      <span class="page"><a href="?page=last">{{ pages }}</a></span>
+      <em>...</em>
+      <a rel="next" href="?page=last{{ getvars }}{{ anchor }}">{{ pages }}</a>
    {% endif %}
+    
    {% if has_next %}
-      <span class="page"><a href="?page={{ next }}">{% trans 'next' %} &raquo;</a></span>
-   {% endif %}
+        <a class="next_page" href="?page={{ next }}{{ getvars }}{{ anchor }}" rel="next">{% trans 'Next' %} &#8594;</a>
+   {% else %}
+        <span class="next_page disabled">{% trans 'Next' %} &#8594;</span>
+   {% endif %}     
 </div>

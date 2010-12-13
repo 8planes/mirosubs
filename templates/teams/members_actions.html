@@ -26,7 +26,7 @@
 </div>
 <div class="grid_8 alpha">
     <div id="videos-tab">
-        {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+        {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% with 1 as medium_thumb %}
             {% for item in action_list %}
@@ -34,7 +34,7 @@
             {% endfor %}
             {% endwith %}
         </ul>
-        {% if is_paginated %}{% teams_ordered_paginator %}{% endif %}
+        {% if is_paginated %}{% paginator %}{% endif %}
     </div>
 </div>
 

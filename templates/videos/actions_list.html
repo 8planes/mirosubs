@@ -18,7 +18,7 @@
             {% include 'videos/_activities.html' %}
         {% endwith %}
             
-        {% if is_paginated %}{% ordered_paginator 3 %}{% endif %}
+        {% if is_paginated %}{% paginator %}{% endif %}
          
     {% else %}
         <p>{% trans 'There are no activities.' %}</p>

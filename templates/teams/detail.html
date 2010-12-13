@@ -57,7 +57,7 @@
             <br/>
             <br/>
         </div>
-        {% if is_paginated %}{% teams_search_ordered_paginator query %}{% endif %}
+        {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% for team_video in teamvideo_list %}
             <li>
@@ -103,7 +103,7 @@
             </li>
             {% endfor %}
         </ul>
-        {% if is_paginated %}{% teams_search_ordered_paginator query %}{% endif %}
+        {% if is_paginated %}{% paginator %}{% endif %}
     </div>
 </div>
 
