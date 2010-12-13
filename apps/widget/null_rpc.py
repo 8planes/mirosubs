@@ -42,7 +42,7 @@ class NullRpc(BaseRpc):
             video_urls = [video_url]
         return_value['video_urls'] = video_urls
         return_value['drop_down_contents'] = \
-            self._drop_down_contents(None, None)
+            self._drop_down_contents(None)
         return return_value
 
     def start_editing(self, request, video_id, language_code, 
@@ -63,16 +63,16 @@ class NullRpc(BaseRpc):
             request, draft_pk, packets)
         if response['response'] == 'ok':
             response['drop_down_contents'] = \
-                self._drop_down_contents(None, None)
+                self._drop_down_contents(None)
         return response
 
     def fetch_subtitles(self, request, video_id, language_code=None):
         return self._subtitles_dict()
 
-    def _subtitle_count(self, user, video):
+    def _subtitle_count(self, video_id):
         return 0
 
-    def _initial_languages(self, user, video):
+    def _initial_languages(self, video_id):
         return []
 
     def _subtitles_dict(self):

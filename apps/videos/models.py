@@ -31,6 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
 from utils.amazon import default_s3_store
 from statistic.models import SubtitleFetchStatistic
+from widget import video_cache
 import time
 
 yt_service = YouTubeService()
@@ -468,6 +469,8 @@ class SubtitleLanguage(models.Model):
                 users.append(user)
         return users
 
+post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
+
 class SubtitleCollection(models.Model):
     is_forked=models.BooleanField(default=False)
 
@@ -632,6 +635,8 @@ class SubtitleVersion(SubtitleCollection):
         return True
 
 post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
+post_save.connect(video_cache.on_subtitle_version_save, SubtitleVersion)
+
 
 class SubtitleDraft(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
@@ -876,3 +881,4 @@ class VideoUrl(models.Model):
         return video_type_registrar[self.type].video_url(self)
 
 post_save.connect(Action.create_video_url_handler, VideoUrl)   
+post_save.connect(video_cache.on_video_url_save, VideoUrl)
