@@ -36,5 +36,6 @@ class GoogleVideoType(VideoType):
     
     def set_values(self, video_obj):
         video_obj.title = google_video.scrape_title(self.url)
+        video_obj.description = google_video.scrape_description(self.url)
         raise Warning('GoogleVideoType does not support thumbnail loading')
         return video_obj    

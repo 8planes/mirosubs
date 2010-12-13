@@ -241,8 +241,7 @@
                 </button>
             {% endif %}        
             {% if revision_list %}
-               {% if is_paginated %}{% ordered_paginator 3 '#revisions' %}{% endif %} 
-    
+                {% if is_paginated %}{% paginator '#revisions' %}{% endif %} 
                 <table cellpadding="0" cellspacing="0">
                 <thead>
                   <tr>

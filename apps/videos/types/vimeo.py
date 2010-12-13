@@ -17,8 +17,10 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from vidscraper.sites import vimeo
-from base import VideoType
+from vidscraper.errors import Error as VidscraperError
+from base import VideoType, VideoTypeError
 from django.conf import settings
+from django.utils.html import strip_tags
 
 vimeo.VIMEO_API_KEY = getattr(settings, 'VIMEO_API_KEY')
 vimeo.VIMEO_API_SECRET = getattr(settings, 'VIMEO_API_SECRET')
@@ -31,7 +33,11 @@ class VimeoVideoType(VideoType):
     def __init__(self, url):
         self.url = url
         self.id = self._get_vimeo_id(url)
-
+        try:
+            self.shortmem = vimeo.get_shortmem(url)
+        except VidscraperError, e:
+            raise VideoTypeError(e[0])   
+        
     @property
     def video_id(self):
         return self.id
@@ -52,8 +58,9 @@ class VimeoVideoType(VideoType):
     
     def set_values(self, video_obj):
         if vimeo.VIMEO_API_KEY and vimeo.VIMEO_API_SECRET:
-            video_obj.thumbnail = vimeo.get_thumbnail_url(self.url)
-            video_obj.title = vimeo.scrape_title(self.url)
+            video_obj.thumbnail = vimeo.get_thumbnail_url(self.url, self.shortmem)
+            video_obj.title = vimeo.scrape_title(self.url, self.shortmem)
+            video_obj.description = strip_tags(vimeo.scrape_description(self.url, self.shortmem))
             video_obj.save()
         return video_obj
     

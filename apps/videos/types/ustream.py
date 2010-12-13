@@ -40,5 +40,6 @@ class UstreamVideoType(VideoType):
     
     def set_values(self, video_obj):
         video_obj.title = ustream.get_title(self.url)
+        video_obj.description = ustream.get_description(self.url)
         video_obj.thumbnail = ustream.get_thumbnail_url(self.url)
         return video_obj   

@@ -172,7 +172,7 @@ class SubtitlesUploadBaseForm(forms.Form):
         
         original_language = video.subtitle_language()
         video_language = self.cleaned_data['video_language']
-        
+
         if original_language:
             try:
                 language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
@@ -196,7 +196,7 @@ class SubtitlesUploadBaseForm(forms.Form):
                 original_language.is_original = True
                 original_language.video = video
                 original_language.save()
-            
+  
         language = video.subtitle_language(self.cleaned_data['language'])
         
         if not language:
@@ -212,7 +212,6 @@ class SubtitlesUploadBaseForm(forms.Form):
             old_version = None
             version_no = 0
         if not self.is_version_same(old_version, parser):
-            
             version = SubtitleVersion(
                 language=language, version_no=version_no,
                 datetime_started=datetime.now(), user=self.user,

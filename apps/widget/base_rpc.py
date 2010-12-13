@@ -37,10 +37,10 @@ class BaseRpc:
             'forked': is_forked
             }
 
-    def _drop_down_contents(self, user, video):
+    def _drop_down_contents(self, video_id):
         return {
-            'translations': self._initial_languages(user, video),
-            'subtitle_count': self._subtitle_count(user, video)
+            'translations': self._initial_languages(video_id),
+            'subtitle_count': self._subtitle_count(video_id)
             }
 
     def _find_remote_autoplay_language(self, request):
