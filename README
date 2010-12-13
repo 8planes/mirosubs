@@ -2,9 +2,9 @@ To run the development version:
 
 1. Git clone the repository:
 
-       git clone git://github.com/8planes/mirosubs.git unisubs
+       git clone git://github.com/8planes/mirosubs.git mirosubs
 
-   Now the entire project will be in the unisubs directory.
+   Now the entire project will be in the mirosubs directory.
 
 2. Install virtualenv http://pypi.python.org/pypi/virtualenv
 
@@ -13,15 +13,15 @@ To run the development version:
 
 4. Create a virtual environment and activate it. Here is how to do it 
    *without* the virtualenv wrapper. Run these commands from the parent 
-   of the unisubs directory created in #1:
+   of the mirosubs directory created in #1:
 
-   $ virtualenv unisubs-env
-   $ source unisubs-env/bin/activate
+   $ virtualenv mirosubs-env
+   $ source mirosubs-env/bin/activate
 
    If you're using the virtualenv wrapper (run from any directory):
 
-   $ mkvirtualenv unisubs
-   $ workon unisubs
+   $ mkvirtualenv mirosubs
+   $ workon mirosubs
 
 5. run:
    $ easy_install -U setuptools
@@ -40,11 +40,11 @@ To run the development version:
 8. From the unisubs directory created in step 1, use the dev-settings file when 
    running manage.py. First create the database with
 
-       ./manage.py syncdb --settings=dev-settings
+       python manage.py syncdb
 
    Then update the database with
 
-       ./manage.py migrate --settings=dev-settings
+       python manage.py migrate
 
    SQLLite warnings are okay. Then run the site with:
 
