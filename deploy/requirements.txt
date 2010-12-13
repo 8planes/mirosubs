@@ -25,3 +25,4 @@ chardet==1.0.1
 vendor/django-math-captcha-0.1.tar.gz
 boto==2.0b3
 python-memcached
+feedparser
