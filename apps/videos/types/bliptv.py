@@ -19,6 +19,7 @@
 from videos.types.base import VideoType
 from vidscraper.sites import blip
 from videos.types import bliptvutils
+from django.utils.html import strip_tags
 
 class BlipTvVideoType(VideoType):
 
@@ -48,6 +49,7 @@ class BlipTvVideoType(VideoType):
     def set_values(self, video_obj):
         video_obj.title = blip.scrape_title(self.url)
         video_obj.thumbnail = blip.get_thumbnail_url(self.url)
+        video_obj.description = strip_tags(blip.scrape_description(self.url))
         return video_obj
 
     def _get_file_id(self, video_url):

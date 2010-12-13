@@ -10,7 +10,6 @@ class VideoIndex(SearchIndex):
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         self.prepared_data['title'] = obj.__unicode__()
-        self.prepared_data['language'] = 'Original'
         return self.prepared_data
         
 class SubtitleLanguageIndex(SearchIndex):

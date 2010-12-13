@@ -66,6 +66,7 @@ class Video(models.Model):
     """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
+    description = models.TextField(blank=True)
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
     allow_community_edits = models.BooleanField()

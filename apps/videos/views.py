@@ -30,7 +30,6 @@ from django.conf import settings
 import simplejson as json
 from django.contrib import messages
 from widget.views import base_widget_params
-from haystack.query import SearchQuerySet
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
 from datetime import datetime
@@ -428,39 +427,6 @@ def test_form_page(request):
     }
     return render_to_response('videos/test_form_page.html', context,
                               context_instance=RequestContext(request))
-
-def search(request):
-    q = request.REQUEST.get('q')
-
-    page = request.GET.get('page')
-    if not page == 'last':
-        try:
-            page = int(page)
-        except (ValueError, TypeError, KeyError):
-            page = 1
-          
-    if q:
-        qs = SearchQuerySet().auto_query(q).highlight()
-    else:
-        qs = SubtitleLanguage.objects.none()
-        
-    context = {
-        'query': q
-    }
-    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
-    order_fields = {
-        'title': 'title',
-        'language': 'language'
-    }
-    if ordering in order_fields and order_type in ['asc', 'desc']:
-        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
-        context['ordering'], context['order_type'] = ordering, order_type
-        
-    return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=30, page=page,
-                       template_name='videos/search.html',
-                       template_object_name='result',
-                       extra_context=context)   
 
 @login_required
 def stop_notification(request, video_id):
