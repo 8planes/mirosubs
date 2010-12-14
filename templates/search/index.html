@@ -15,10 +15,8 @@
     </form>
     <div class="left_column">
         {% if is_paginated %}{% paginator %}{% endif %}
-            {% for item in result_list %}
-                {% with item.object as object %}
-                    {% include 'search/_video_item.html' %}
-                {% endwith %}
+            {% for object in result_list %}
+                {% include 'search/_video_item.html' %}
             {% empty %}
                 {% if query %}
                     {% blocktrans %}No results for "{{ query }}".{% endblocktrans %}

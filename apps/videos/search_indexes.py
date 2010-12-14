@@ -6,8 +6,9 @@ from auth.models import CustomUser as User
 
 class VideoIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
-    title = CharField(model_attr='title_display')
-    languages = MultiValueField()
+    #remember that it is not __unicode__, so it should not be used for display
+    title = CharField(model_attr='title_display') 
+    languages = MultiValueField(indexed=False, stored=True)
     created = DateTimeField(model_attr='created')
     subtitles_fetched_count = IntegerField(model_attr='subtitles_fetched_count')
     widget_views_count = IntegerField(model_attr='widget_views_count')
@@ -19,7 +20,6 @@ class VideoIndex(SearchIndex):
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         self.prepared_data['languages'] = [lang.language for lang in obj.subtitlelanguage_set.exclude(language=u'')]
-        print self.prepared_data['languages']
         self.prepared_data['comments_count'] = Comment.get_for_object(obj).count()
         self.prepared_data['languages_count'] = obj.subtitlelanguage_set.count()
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()

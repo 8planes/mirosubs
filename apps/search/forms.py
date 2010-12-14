@@ -63,8 +63,8 @@ class SearchForm(forms.Form):
             if type == 'full_text':
                 qs = qs.auto_query(q).highlight()
             else:
-                qs = qs.filter(title=q).highlight()
-        print qs.count()
+                qs = qs.filter(title=qs.query.clean(q))
+        
         if langs:
             if 'my_langs' in langs and self.user.is_authenticated():
                 del langs[langs.index('my_langs')]
@@ -73,7 +73,7 @@ class SearchForm(forms.Form):
                         langs.append(l)
                 
             qs = qs.filter(languages__in=langs)
-        print qs.count()
+
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
             
         return qs
