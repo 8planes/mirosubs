@@ -18,25 +18,22 @@
 from haystack.query import SearchQuerySet
 from django.views.generic.list_detail import object_list
 from videos.models import Video, SubtitleLanguage
+from search.forms import SearchForm
 
 def index(request):
-    q = request.REQUEST.get('q')
+    if 'q' in request.REQUEST:
+        form = SearchForm(request.user, request.REQUEST)
+    else:
+        form = SearchForm(request.user)
     
-    qs = SearchQuerySet().models(Video)
-          
-    if q:
-        qs = qs.auto_query(q).highlight()
+    qs = SearchQuerySet().none()
+    if form.is_valid():
+        qs = form.search_qs(SearchQuerySet().models(Video))
         
     context = {
-        'query': q
+        'query': request.REQUEST.get('q', ''),
+        'form': form
     }
-    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
-    order_fields = {
-        'title': 'title',
-    }
-    if ordering in order_fields and order_type in ['asc', 'desc']:
-        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
-        context['ordering'], context['order_type'] = ordering, order_type
         
     return object_list(request, queryset=qs,
                        paginate_by=30,
