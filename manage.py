@@ -21,7 +21,7 @@ from django.core.management import execute_manager
 
 # put apps dir in python path, like pinax
 import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'apps'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'apps')) 
 
 try:
     import settings # Assumed to be in the same directory.

@@ -32,6 +32,7 @@ from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
 from videos.models import VIDEO_SESSION_KEY
 from django.core.urlresolvers import reverse
+from widget import video_cache
 
 class RequestMockup(object):
     def __init__(self, user, browser_id="a"):
@@ -77,6 +78,8 @@ class TestRpc(TestCase):
         self.user_0 = CustomUser.objects.get(pk=3)
         self.user_1 = CustomUser.objects.get(pk=4)
         self.video_pk = 12
+        video_cache.invalidate_video_id(
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
 
     def test_actions_for_subtitle_edit(self):
         request = RequestMockup(self.user_0)

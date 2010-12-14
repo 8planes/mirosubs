@@ -127,7 +127,8 @@ class UploadSubtitlesTest(WebUseTest):
     def _make_data(self):
         import os
         return {
-            'language': 'en',
+            'language': 'ru',
+            'video_language': 'en',
             'video': self.video.id,
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
             }
@@ -135,8 +136,9 @@ class UploadSubtitlesTest(WebUseTest):
     def _make_altered_data(self):
         import os
         return {
-            'language': 'en',
+            'language': 'ru',
             'video': self.video.id,
+            'video_language': 'en',
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test_altered.srt'))
             }
 
@@ -154,10 +156,16 @@ class UploadSubtitlesTest(WebUseTest):
 
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(language, None)
+        original_language = self.video.subtitle_language()
+        self.assertFalse(original_language.language)
+        
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
 
         video = Video.objects.get(pk=self.video.pk)
+        original_language = video.subtitle_language()
+        self.assertEqual(original_language.language, data['video_language'])        
+        
         language = video.subtitle_language(data['language'])
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 32)
@@ -185,7 +193,13 @@ class UploadSubtitlesTest(WebUseTest):
         self._login()
         data = self._make_data()
         altered_data = self._make_altered_data()
+        language = self.video.subtitle_language(data['language'])
+        self.assertEqual(language, None)
+        
         self.client.post(reverse('videos:upload_subtitles'), data)
+        language = self.video.subtitle_language(data['language'])
+        self.assertEquals(1, language.subtitleversion_set.count())
+        
         self.client.post(reverse('videos:upload_subtitles'), altered_data)
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(2, language.subtitleversion_set.count())
@@ -470,8 +484,8 @@ class ViewsTest(WebUseTest):
             self.fail()
             
     def test_search(self):
-        self._simple_test('search')
-        self._simple_test('search', data={'o': 'title', 'ot': 'desc'})
+        self._simple_test('search:index')
+        self._simple_test('search:index', data={'o': 'title', 'ot': 'desc'})
     
     def test_counter(self):
         self._simple_test('counter')
