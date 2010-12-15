@@ -4,6 +4,16 @@
 
 /////////////////////////////////////////////*/
 
+.translation-party {
+  background: url(../../images/translation-party.png) no-repeat;
+  /* display: block; */
+  display: none;
+  text-indent: -9999px;
+  height: 122px;
+  width: 953px !important;
+  margin-top: 15px;
+}
+
 .callout{
 background: #a7c9c4;
 -moz-border-radius: 5px;
