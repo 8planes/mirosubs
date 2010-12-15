@@ -23,8 +23,28 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
+from videos.models import Action
+from django.conf import settings
+from videos.models import Video
+from auth.models import CustomUser as User
 
 register = template.Library()
+
+ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
+
+@register.inclusion_tag('profiles/_user_videos_activity.html', takes_context=True)
+def user_videos_activity(context, user=None):
+    user = user or context['user']
+    
+    if user.is_authenticated():
+        videos_ids = Video.objects.filter(subtitlelanguage__subtitleversion__user=user).distinct() \
+            .values_list('id', flat=True)
+        context['users_actions'] = Action.objects.filter(video__pk__in=videos_ids) \
+            .exclude(action_type=Action.ADD_VIDEO).exclude(user=user) \
+            .exclude(user=User.get_youtube_anonymous())[:ACTIONS_ON_PAGE]
+    else:
+        context['users_actions'] = Action.objects.none()
+    return context
 
 @register.inclusion_tag('profiles/_send_message.html', takes_context=True)
 def send_message(context):

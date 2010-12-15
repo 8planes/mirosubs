@@ -5,14 +5,13 @@
     <img src="{% if medium_thumb %}{{ item.user.avatar }}{% else %}{{ item.user.small_avatar }}{% endif %}"/>
 </a>
 {% else %}
-<span class="thumbnail_small"></span>
+<span class="thumbnail_small" style="margin: 0px"></span>
 {% endif %}
 
 <div class="info">
-    <p>
-        <h4>
+        <h4 style="font-size: 1.3em">
             {% if item.user %}
-                <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>
+                <a style="font-size: 1em" href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>
             {% else %}
                 {% trans 'Anonymous' %}
             {% endif %}
@@ -50,7 +49,6 @@
             </a> {% trans 'for' %} 
             <a class="url" href="{{ item.video.get_absolute_url }}">{{ item.video }}</a> 
         {% endif %}        
-    </p>
     <div>
         <span>{{ item.created|date:"DATETIME_FORMAT" }}</span>
     </div>    
