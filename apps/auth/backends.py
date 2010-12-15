@@ -52,9 +52,16 @@ class OpenIdBackend:
                     email = request.openid.ax.get('http://axschema.org/contact/email')
                     email = email.pop()
                 else:
-                    email = request.openid.ax.get('email')                      
-                    nickname = request.openid.ax.get('nickname')
-
+                    try:
+                        email = request.openid.ax.get('email')
+                    except KeyError:
+                        pass
+                    
+                    try:                      
+                        nickname = request.openid.ax.get('nickname')
+                    except KeyError:
+                        pass
+                    
             if nickname is None :
                 if email:
                     nickname = email.split('@')[0]
