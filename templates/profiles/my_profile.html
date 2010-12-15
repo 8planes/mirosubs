@@ -50,15 +50,20 @@
             <br/>
         </div>
         
-        {% if is_paginated %}{% paginator query %}{% endif %}
+        {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% for video in user_video_list %}
             <li>
-
+                <a href="{{ video.video_link }}">{{ video }}</a>
+                {% if video.description %}
+                <p>
+                    {{ video.description }}
+                </p>
+                {% endif %}
             </li>
             {% endfor %}
         </ul>
-        {% if is_paginated %}{% paginator query %}{% endif %}
+        {% if is_paginated %}{% paginator %}{% endif %}
     </div>
 </div>
 

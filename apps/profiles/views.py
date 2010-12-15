@@ -30,6 +30,7 @@ from django.views.generic.simple import direct_to_template
 from django.views.generic.list_detail import object_list
 from videos.models import Video
 from django.conf import settings
+from django.db.models import Q
 
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
 
@@ -57,8 +58,14 @@ def edit_avatar(request):
 
 @login_required
 def my_profile(request):
-    qs = Video.objects.none()
-    context = {}
+    qs = Video.objects.filter(subtitlelanguage__subtitleversion__user=request.user).distinct()
+    
+    q = request.GET.get('q')
+    if q:
+        qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q))
+    
+    context = {
+    }
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='profiles/my_profile.html', 
