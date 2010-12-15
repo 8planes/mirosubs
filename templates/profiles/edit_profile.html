@@ -56,7 +56,7 @@
         {{ user_info.biography }}
     </p>
 </div>
-<form class="edit_profile" action="{% url profiles:my_profile %}" method="post" enctype="multipart/form-data">
+<form class="edit_profile" action="." method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="edit_profile_shell">
         <h2>

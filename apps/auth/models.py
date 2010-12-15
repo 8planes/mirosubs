@@ -24,7 +24,6 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib.auth.models import UserManager, User as BaseUser
 from django.db import models
-from django.conf.global_settings import LANGUAGES
 from django.db.models.signals import post_save
 from django.conf import settings
 import hashlib
@@ -34,8 +33,7 @@ from django.core.exceptions import MultipleObjectsReturned
 from utils.amazon import S3EnabledImageField
 from datetime import datetime
 
-SORTED_LANGUAGES = list(LANGUAGES)
-SORTED_LANGUAGES.sort(key=lambda item: item[1])
+ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class CustomUser(BaseUser):
     AUTOPLAY_ON_BROWSER = 1
@@ -49,7 +47,7 @@ class CustomUser(BaseUser):
     )
     homepage = models.URLField(verify_exists=False, blank=True)
     preferred_language = models.CharField(
-        max_length=16, choices=SORTED_LANGUAGES, blank=True)
+        max_length=16, choices=ALL_LANGUAGES, blank=True)
     picture = S3EnabledImageField(blank=True, upload_to='pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
@@ -178,12 +176,12 @@ class Awards(models.Model):
     
 class UserLanguage(models.Model):
     PROFICIENCY_CHOICES = (
-        (1, 'understand enough'),
-        (2, 'understand 99%'),
-        (3, 'write like a native'),
+        (1, _('understand enough')),
+        (2, _('understand 99%')),
+        (3, _('write like a native')),
     )
     user = models.ForeignKey(CustomUser)
-    language = models.CharField(max_length=16, choices=SORTED_LANGUAGES, verbose_name='languages')
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, verbose_name='languages')
     proficiency = models.IntegerField(choices=PROFICIENCY_CHOICES)
     
     class Meta:
