@@ -1,3 +1,10 @@
 <div>
-    <a href="#">{{ object }}</a>
+    <a href="{{ object.object.get_absolute_url }}">{{ object.title }}</a>
+    <br/>
+    Comments count: {{ object.comments_count }}
+    <p>
+        {% for item in object.languages %}
+            {{ item }}</br>
+        {% endfor %}
+    </p>
 </div>

@@ -17,7 +17,6 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from uuid import uuid4
-from videos import models as video_models
 from django.conf import settings
 from django.conf.global_settings import LANGUAGES
 from django.contrib.sites.models import Site
