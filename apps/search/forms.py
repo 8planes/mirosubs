@@ -43,11 +43,11 @@ class SearchForm(forms.Form):
             )
         
     def search_qs(self, qs):
-        q = self.cleaned_data.get('q', '')
-        ordering = self.cleaned_data.get('sort', 'page_loads')
-        order_type = self.cleaned_data.get('st', 'asc')
+        q = self.cleaned_data.get('q')
+        ordering = self.cleaned_data.get('sort') or 'page_loads'
+        order_type = self.cleaned_data.get('st') or 'asc'
         langs = self.cleaned_data.get('langs')
-        type = self.cleaned_data.get('type', 'full_text')
+        type = self.cleaned_data.get('type') or 'full_text'
         
         order_fields = {
             'date': 'created',
