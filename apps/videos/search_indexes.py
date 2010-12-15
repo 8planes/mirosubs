@@ -10,6 +10,7 @@ class VideoIndex(SearchIndex):
     title = CharField(model_attr='title_display') 
     languages = MultiValueField(indexed=False, stored=True)
     created = DateTimeField(model_attr='created')
+    edited = DateTimeField(model_attr='edited')
     subtitles_fetched_count = IntegerField(model_attr='subtitles_fetched_count')
     widget_views_count = IntegerField(model_attr='widget_views_count')
     comments_count = IntegerField()

@@ -32,6 +32,7 @@ from videos.types import video_type_registrar
 from utils.amazon import default_s3_store
 from statistic.models import SubtitleFetchStatistic
 from widget import video_cache
+from datetime import datetime
 import time
 
 yt_service = YouTubeService()
@@ -81,6 +82,7 @@ class Video(models.Model):
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False)
     thumbnail = models.CharField(max_length=500, blank=True)
+    edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     
     def __unicode__(self):
@@ -330,6 +332,7 @@ class Video(models.Model):
 
 
 def create_video_id(sender, instance, **kwargs):
+    instance.edited = datetime.now()
     if not instance or instance.video_id:
         return
     alphanum = string.letters+string.digits
@@ -638,6 +641,10 @@ class SubtitleVersion(SubtitleCollection):
 post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
 post_save.connect(video_cache.on_subtitle_version_save, SubtitleVersion)
 
+def update_video_edited_field(sender, instance, **kwargs):
+    video = instance.language.video
+    video.edited = datetime.now()
+    video.save()
 
 class SubtitleDraft(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)

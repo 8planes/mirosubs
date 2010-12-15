@@ -19,7 +19,7 @@ class SearchForm(forms.Form):
         ('page_loads', _(u'Page loads')),
         ('comments', _(u'Comments')),
         ('languages', _(u'Most languages')),
-        #('last_edited', _(u'Last edited')),
+        ('edited', _(u'Last edited')),
         ('contributors', _(u'Contributors')),
         ('activity', _(u'Activity'))
     )
@@ -56,7 +56,8 @@ class SearchForm(forms.Form):
             'comments': 'comments_count',
             'languages': 'languages_count',
             'contributors': 'contributors_count',
-            'activity': 'activity_count'
+            'activity': 'activity_count',
+            'edited': 'edited'
         }
         
         if q:
