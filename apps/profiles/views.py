@@ -60,11 +60,12 @@ def edit_avatar(request):
 def my_profile(request):
     qs = Video.objects.filter(subtitlelanguage__subtitleversion__user=request.user).distinct()
     
-    q = request.GET.get('q')
+    q = request.REQUEST.get('q')
     if q:
         qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q))
     
     context = {
+        'query': q
     }
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 

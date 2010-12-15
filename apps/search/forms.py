@@ -35,12 +35,15 @@ class SearchForm(forms.Form):
     
     def __init__(self, user, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
-        self.fields['langs'].choices.sort(key=lambda item: item[1])
-        self.user = user
+        choices = list(ALL_LANGUAGES)
+        choices.sort(key=lambda item: item[1])
         if user.is_authenticated():
-            self.fields['langs'].choices[:0] = (
-                ('my_langs', _(u'My Languages')),
-            )
+            choices[:0] = (
+                ('my_langs', _(u'My languages')),
+            )        
+        self.fields['langs'].choices = choices
+        self.user = user
+
         
     def search_qs(self, qs):
         q = self.cleaned_data.get('q')
