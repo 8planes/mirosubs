@@ -6,8 +6,7 @@
 
 .translation-party {
   background: url(../../images/translation-party.png) no-repeat;
-  /* display: block; */
-  display: none;
+  display: block;
   text-indent: -9999px;
   height: 122px;
   width: 953px !important;
