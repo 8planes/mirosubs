@@ -33,6 +33,7 @@ from utils.amazon import default_s3_store
 from statistic.models import SubtitleFetchStatistic
 from widget import video_cache
 from datetime import datetime
+from utils.redis_utils import RedisSimpleField
 import time
 
 yt_service = YouTubeService()
@@ -84,7 +85,9 @@ class Video(models.Model):
     thumbnail = models.CharField(max_length=500, blank=True)
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
-    
+    subtitles_fetchec_counter = RedisSimpleField()
+    widget_views_counter = RedisSimpleField()
+
     def __unicode__(self):
         title = self.title_display()
         if len(title) > 70:
@@ -92,6 +95,7 @@ class Video(models.Model):
         return title
     
     def update_subtitles_fetched(self, lang=None):
+        self.subtitles_fetchec_counter.incr()
         Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj = SubtitleFetchStatistic(video=self)
         sub_lang = self.subtitle_language(lang)

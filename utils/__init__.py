@@ -32,10 +32,13 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils import simplejson as json
+from django.core.mail import mail_admins
+from django.conf import settings
 import re
 import htmllib
 from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, YoutubeSubtitleParser, \
     TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser
+import traceback, sys
 
 def render_to(template):
     """
@@ -101,4 +104,13 @@ def send_templated_email(to, subject, body_template, body_dict,
     bcc = settings.EMAIL_BCC_LIST
     email = EmailMessage(subject, message, from_email, to, bcc=bcc)
     email.content_subtype = ct
-    email.send(fail_silently)    
+    email.send(fail_silently)
+
+def catch_exception(func, exceptions, subject="", default=None):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except exceptions:
+            settings.DEBUG or mail_admins(subject, '\n'.join(traceback.format_exception(*sys.exc_info())))
+            return default
+    return wrapper
