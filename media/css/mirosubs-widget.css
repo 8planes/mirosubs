@@ -548,25 +548,73 @@ bottom: 47px !important;
   text-align: center !important;
   }
 
-.mirosubs-done {
-  color: #333;
+.mirosubs-done, .mirosubs-done-save {
+  color: #333 !important;
   font-size: 16px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  padding: 15px 3px 13px 8px;
-  clear: both;
-  margin: 15px 20px 20px;
+  padding: 15px 0px;
+  margin: 15px 0px 20px 25px;
   position: relative;
+width: 185px;
   text-align: center;
   text-decoration: none !important;
   text-shadow: #ddd 1px 1px 0px;
-  display: block;
-  width: 388px;
+float: left;
   border: 1px solid #ddd;
   border-bottom: 1px solid #999;
   border-top: 1px solid #fff;
   background: #fff url("../images/gradient.png") right -2px repeat-x;
   }
+
+
+.mirosubs-done-save {
+  margin: 15px 0px 0px 20px;
+
+  }
+
+
+.mirosubs-silver-button {
+  color: #333 !important;
+  font-size: 12px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding: 7px 20px 6px;
+  position: relative;
+  text-align: center;
+  text-decoration: none !important;
+  text-shadow: #ddd 1px 1px 0px;
+float: left;
+  border: 1px solid #ddd;
+  border-bottom: 1px solid #999;
+  border-top: 1px solid #fff;
+  background: #fff url("../images/gradient.png") right -2px repeat-x;
+  }
+
+
+
+.mirosubs-red{
+color: red !important;
+}
+
+
+.mirosubs-green{
+color: green !important;
+}
+
+
+.mirosubs-status{
+position: absolute;
+top: -60px;
+left: 20px;
+}
+
+
+.mirosubs-status a{
+margin-right: 20px;
+}
+
+
 
 .mirosubs-done img {
    border: 0;
@@ -577,7 +625,6 @@ bottom: 47px !important;
 .mirosubs-done span {
    text-decoration: none !important;
    color: #333 !important;
-   padding-right: 40px;
    background: url("../images/sprite.png") right -236px no-repeat;
 }
 
@@ -3006,5 +3053,4 @@ border: 1px solid;
   border-radius:10px;
   background:  #000 url(../../images/modal_spinner.gif) center no-repeat !important;
 }
-
 

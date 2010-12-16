@@ -11,6 +11,7 @@
 .container_12,
 .container_16 {
 	width: 960px;
+padding: 0 10px;
 }
 
 /* `Grid >> Global
