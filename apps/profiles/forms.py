@@ -25,7 +25,16 @@ from utils.validators import MaxFileSizeValidator
 from django.conf import settings
 from utils.forms import AjaxForm
 
-UserLanguageFormset = inlineformset_factory(User, UserLanguage, extra=1)
+class UserLanguageForm(forms.ModelForm):
+    
+    class Meta:
+        model = UserLanguage
+        
+    def __init__(self, *args, **kwrags):
+        super(UserLanguageForm, self).__init__(*args, **kwrags)
+        self.fields['language'].choices.sort(key=lambda item: item[1])
+
+UserLanguageFormset = inlineformset_factory(User, UserLanguage, UserLanguageForm, extra=1)
 
 class SendMessageForm(forms.Form):
     email = forms.EmailField()

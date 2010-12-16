@@ -13,6 +13,30 @@
 {% block scripts %}
     {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
+    
+    <script type="text/javascript" charset="utf-8">
+      $(function(){
+        if ($.browser.webkit) {
+          var widgetDiv = $('#widget_div')
+          var video = widgetDiv.find('video')
+
+          var img = $('<img />', {
+            src: video.attr('poster')
+          , css: {
+              position: 'absolute'
+            , 'z-index': 9999
+            }
+          })
+
+          img.click(function(){
+            img.hide()
+            video[0].play()
+          })
+
+          widgetDiv.prepend(img)
+        };
+      })
+    </script>
 {% endblock %}
 
 {% block logo %}<span class="logo">Miro Subs Alpha</span>{% endblock %}
@@ -32,12 +56,12 @@ Reach an international audience, make your videos accessible, and get more traff
     <p class="larger center bold">
         {{ all_videos }} {% trans 'videos use Universal Subtitles' %}
     </p>
-</div>
+  </div>
 
- <div class="beat">
-   <p><span>{% trans 'Proud to be a' %}</span> {% trans 'Featured Mozilla Drumbeat Project' %}</p>
+  <div class="beat">
+    <p><span>{% trans 'Proud to be a' %}</span> {% trans 'Featured Mozilla Drumbeat Project' %}</p>
     <a href="#">Mozilla Drumbeat</a> 
- </div>
+  </div>
 
   <div class="box small_sub">
 
@@ -160,122 +184,126 @@ Reach an international audience, make your videos accessible, and get more traff
     </script>
   </div>
 
-<h2 class="arrows">{% trans 'With Universal Subtitles, you can:' %}</h2>
+  <a class="translation-party grid_12 alpha omega" href="http://blog.universalsubtitles.org/translation-party-ok-go/">
+    Translation Party
+  </a>
 
-<div class="grid_4 alpha one">
-  <div>
-    <h4>{% trans 'Add subtitles' %}</h4>
-    <p>
-        {% blocktrans %}
-        We've built the easiest way to subtitle videos. Add our subtitling widget to
-        your video (or your site) and click the "subtitle me" button. The rest is
-        simple! Totally free, and no software to download.
-        {% endblocktrans %}
-        </p>
+  <h2 class="arrows">{% trans 'With Universal Subtitles, you can:' %}</h2>
+
+  <div class="grid_4 alpha one">
+    <div>
+      <h4>{% trans 'Add subtitles' %}</h4>
+      <p>
+          {% blocktrans %}
+          We've built the easiest way to subtitle videos. Add our subtitling widget to
+          your video (or your site) and click the "subtitle me" button. The rest is
+          simple! Totally free, and no software to download.
+          {% endblocktrans %}
+          </p>
+    </div>
   </div>
-</div>
   
-<div class="grid_4 two">
-  <div>
-    <h4>{% trans 'Add translations' %}</h4>
-    <p>
+  <div class="grid_4 two">
+    <div>
+      <h4>{% trans 'Add translations' %}</h4>
+      <p>
+          {% blocktrans %}
+          Once subtitles exist, any viewer can add a translation in any language.  No
+          need for robotic machine translations that confuse viewers.  Universal
+          Subtitles lets you collect high-quality translations from your viewer
+          community.
+          {% endblocktrans %}
+      </p>
+    </div>
+  </div>
+  
+  <div class="grid_4 omega three">
+    <div>
+      <h4>{% trans 'Get volunteer help' %}</h4>
+      <p>
         {% blocktrans %}
-        Once subtitles exist, any viewer can add a translation in any language.  No
-        need for robotic machine translations that confuse viewers.  Universal
-        Subtitles lets you collect high-quality translations from your viewer
-        community.
+          Your viewers (and members of our subtitling community) can improve any
+          subtitles or translation. That way subtitles are constantly getting better -
+          like an article on wikipedia. We mobilize your international audience to make
+          your videos more accessible.
         {% endblocktrans %}
+      </p>
+    </div>
+  </div>
+  
+  <div class="space">&nbsp;</div>
+  
+  <div class="grid_7 alpha">
+    <h3>{% trans 'It’s free with no software to download' %}</h3>
+    <p><strong>{% trans 'Add our embed code to your videos.' %}</strong> 
+    {% blocktrans %}
+    Submit your video, and get an embed code to post in your site. 
+    When the page loads, our subtitle tools will display underneath your video 
+    (as a small, simple button)
+    {% endblocktrans %}
     </p>
-  </div>
-</div>
   
-<div class="grid_4 omega three">
-  <div>
-    <h4>{% trans 'Get volunteer help' %}</h4>
+  
     <p>
+      <strong>{% trans 'Subtitling tools open in your page.' %}</strong> 
       {% blocktrans %}
-        Your viewers (and members of our subtitling community) can improve any
-        subtitles or translation. That way subtitles are constantly getting better -
-        like an article on wikipedia. We mobilize your international audience to make
-        your videos more accessible.
+      When someone clicks the “subtitle me” button, 
+      a subtitling interface appears on your page (most users never leave your site). 
+      Subtitles they create are then visible to other users, on your site.
       {% endblocktrans %}
     </p>
+
   </div>
-</div>
-  
-<div class="space">&nbsp;</div>
-  
-<div class="grid_7 alpha">
-  <h3>{% trans 'It’s free with no software to download' %}</h3>
-  <p><strong>{% trans 'Add our embed code to your videos.' %}</strong> 
-  {% blocktrans %}
-  Submit your video, and get an embed code to post in your site. 
-  When the page loads, our subtitle tools will display underneath your video 
-  (as a small, simple button)
-  {% endblocktrans %}
-  </p>
-  
-  
-  <p>
-    <strong>{% trans 'Subtitling tools open in your page.' %}</strong> 
+
+  <div class="grid_5 omega">
+    <h3>{% trans 'How it works' %}</h3>
+    <p>
     {% blocktrans %}
-    When someone clicks the “subtitle me” button, 
-    a subtitling interface appears on your page (most users never leave your site). 
-    Subtitles they create are then visible to other users, on your site.
+      You add our widget to your videos.  Then you and your viewers can add
+      subtitles, which anyone can watch.  We save the subtitles on our site (but you
+      can download them).  And each video has its own collaboration space on our site
+      (like a wikipedia article) where people can make improvements, track changes,
+      and give feedback.
     {% endblocktrans %}
-  </p>
-
-</div>
-
-<div class="grid_5 omega">
-  <h3>{% trans 'How it works' %}</h3>
-  <p>
-  {% blocktrans %}
-    You add our widget to your videos.  Then you and your viewers can add
-    subtitles, which anyone can watch.  We save the subtitles on our site (but you
-    can download them).  And each video has its own collaboration space on our site
-    (like a wikipedia article) where people can make improvements, track changes,
-    and give feedback.
-  {% endblocktrans %}
-  <br /><a href="{% url demo %}">{% trans 'Try the demo' %}</a>.
-  </p>
-</div>
-
-<div class="space">&nbsp;</div>
-
-<div class="grid_6 alpha">
-  <h3>{% trans 'Why Universal Subtitles is different' %}</h3>
-  
-  <ul>
-    <li>
-        {% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers" %}
-        (<a href="{% url about_page %}">{% trans 'find out how to volunteer' %}</a>).
-    </li>
-    
-    <li>
-        {% trans 'The code is free and open source' %}
-         (<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)
-    </li>
-    
-    <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>
-    
-    <li>{% trans "It's 100% web-based, there’s no software to download." %}</li>
-    
-    <li>{% trans "You don't have to host your video with us, and you're not dependent on any one video host, platform, or format." %}</li>
-    
-    <li>{% trans 'People are free to add subtitles to any video' %}</li>
-  </ul>
-</div>
-
-<div class="grid_6 omega">
- <div class="box">
-    <div class="drumbeat"></div>
-    <h3>{% trans 'Mozilla will double your donation!' %}</h3>
-    <p>{% trans "We're a featured Mozilla Drumbeat project!" %}
-        <a href="http://blog.universalsubtitles.org/2010/04/30/mozilla-drumbeat-is-doubling-donations-to-universal-subtitles/">{% trans 'Donate Now' %}</a>
+    <br /><a href="{% url demo %}">{% trans 'Try the demo' %}</a>.
     </p>
   </div>
-</div>
 
-<div class="space">&nbsp;</div>
+  <div class="space">&nbsp;</div>
+
+  <div class="grid_6 alpha">
+    <h3>{% trans 'Why Universal Subtitles is different' %}</h3>
+  
+    <ul>
+      <li>
+          {% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers" %}
+          (<a href="{% url about_page %}">{% trans 'find out how to volunteer' %}</a>).
+      </li>
+    
+      <li>
+          {% trans 'The code is free and open source' %}
+           (<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)
+      </li>
+    
+      <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>
+    
+      <li>{% trans "It's 100% web-based, there’s no software to download." %}</li>
+    
+      <li>{% trans "You don't have to host your video with us, and you're not dependent on any one video host, platform, or format." %}</li>
+    
+      <li>{% trans 'People are free to add subtitles to any video' %}</li>
+    </ul>
+  </div>
+
+  <div class="grid_6 omega">
+   <div class="box">
+      <div class="drumbeat"></div>
+      <h3>{% trans 'Mozilla will double your donation!' %}</h3>
+      <p>{% trans "We're a featured Mozilla Drumbeat project!" %}
+          <a href="https://donate.mozilla.org/page/contribute/universalsubtitles">{% trans 'Donate Now' %}</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="space">&nbsp;</div>
 {% endblock %}

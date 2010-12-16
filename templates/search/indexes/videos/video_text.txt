@@ -1,4 +1,8 @@
 {{ object }}
+{{ object.description }}
+{% for item in object.videourl_set.all %}
+    {{ item.url }}
+{% endfor %}
 {% for lang in object.subtitlelanguage_set.all %}
     {{ lang.language_display }}
     {% for item in lang.latest_subtitles %}

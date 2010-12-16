@@ -361,7 +361,11 @@ class FeedbackForm(MathCaptchaForm):
             feedback_email = settings.FEEDBACK_EMAIL
         headers = {'Reply-To': email} if email else None
         bcc = settings.EMAIL_BCC_LIST
-        EmailMessage(settings.FEEDBACK_SUBJECT, message, email, \
+        if email:
+            subject = '%s (from %s)' % (settings.FEEDBACK_SUBJECT, email)
+        else:
+            subject = settings.FEEDBACK_SUBJECT
+        EmailMessage(subject, message, email, \
                      [feedback_email ], headers=headers, bcc=bcc).send()
         
         if email:

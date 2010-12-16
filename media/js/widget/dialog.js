@@ -128,6 +128,14 @@ mirosubs.Dialog.prototype.isWorkSaved = goog.abstractMethod;
  * @param {boolean} closeAfterSave
  */
 mirosubs.Dialog.prototype.saveWork = function(closeAfterSave) {
+    if (mirosubs.demo_) {
+        var message = "Congratulations, you have completed a demo. There is a web full of videos waiting for your translations, enjoy!";
+        //This should likely have a nicer modal
+        alert(message);
+        this.setVisible(false);
+        return;
+    }
+
     if (mirosubs.currentUsername == null && !mirosubs.isLoginAttemptInProgress())
         mirosubs.login()
     else

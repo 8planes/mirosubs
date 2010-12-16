@@ -28,6 +28,7 @@
  *     video_url : "http://url/for/video" | video_element: [video element] (currently unsupported),
  *     null_widget: true,
  *     debug_js: false,
+ *     demo: false, //whether to run as demo without saving.
  *     subtitle_immediately: false,
  *     translate_immediately: false,
  *     base_state: { // omit this param altogether to not load subs at the beginning.

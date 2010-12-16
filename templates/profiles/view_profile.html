@@ -77,7 +77,7 @@
     <div class="left_column">
         <h2>
             {{ user_info }}
-            {% if can_edit %}<a href="{% url profiles:my_profile %}">(Edit profile)</a>{% endif %}
+            {% if can_edit %}<a href="{% url profiles:edit %}">(Edit profile)</a>{% endif %}
         </h2>
         <img class="thumbnail_medium" src="{{ user_info.avatar }}">
         <p>{% trans 'Member since' %}: {{ user_info.date_joined|date:"DATETIME_FORMAT" }}</p>

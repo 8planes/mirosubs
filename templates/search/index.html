@@ -5,15 +5,22 @@
 {% block main_content %}
     <h2>{% trans 'Search' %}</h2>
     <form method="get" action=".">
-        <input type="text" name="q" />
-        <input type="submit" value="Search"/>
+        <table>
+            {{ form }}
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Search"/></td>
+            </tr>
+        </table>
     </form>
     <div class="left_column">
         {% if is_paginated %}{% paginator %}{% endif %}
-            {% for item in result_list %}
-                {% with item.object as object %}
-                    {% include 'search/_video_item.html' %}
-                {% endwith %}
+            {% for object in result_list %}
+                {% include 'search/_video_item.html' %}
+            {% empty %}
+                {% if query %}
+                    {% blocktrans %}No results for "{{ query }}".{% endblocktrans %}
+                {% endif %}
             {% endfor %}            
                 
         <div style="clear: both"></div>
