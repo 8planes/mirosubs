@@ -106,11 +106,20 @@ def send_templated_email(to, subject, body_template, body_dict,
     email.content_subtype = ct
     email.send(fail_silently)
 
-def catch_exception(func, exceptions, subject="", default=None):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except exceptions:
-            settings.DEBUG or mail_admins(subject, '\n'.join(traceback.format_exception(*sys.exc_info())))
-            return default
-    return wrapper
+def catch_exception(exceptions, subject="", default=None):
+    if not isinstance(exceptions, (list, tuple)):
+        exceptions = (exceptions,)
+
+    def catch_exception_func(func):
+        def wrapper(*args, **kwargs):
+            print exceptions
+            try:
+                return func(*args, **kwargs)
+            except exceptions, e:
+                if settings.DEBUG:
+                    print 'Redis error %s' % e
+                else:
+                    mail_admins(subject, '\n'.join(traceback.format_exception(*sys.exc_info())))
+                return default
+        return update_wrapper(wrapper, func)
+    return catch_exception_func

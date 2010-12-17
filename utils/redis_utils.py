@@ -1,11 +1,15 @@
 from redis import Redis
 from django.conf import settings
+from utils import catch_exception
+from redis.exceptions import RedisError
 
 REDIS_HOST = getattr(settings, 'REDIS_HOST', 'localhost')
 REDIS_PORT = getattr(settings, 'REDIS_PORT', 6379)
 REDIS_DB = getattr(settings, 'REDIS_DB', 0)
 
 default_connection = Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
+
+catch_exception_dec = catch_exception(RedisError, u'Redis error', '')
 
 class RedisCounterField(Exception):
     pass
@@ -28,17 +32,21 @@ class RedisKey(object):
     def __str__(self):
         return "%s -> %s" % (self.redis_key, self.val)
 
+    @catch_exception_dec
     def set_val(self, val):
         return self.r.set(self.redis_key, val)
 
+    @catch_exception_dec
     def get_val(self):
         return self.r.get(self.redis_key)
 
     val = property(get_val, set_val)
 
+    @catch_exception_dec
     def incr(self):
         return self.r.incr(self.redis_key)
 
+    @catch_exception_dec
     def decr(self):
         return self.r.decr(self.redis_key)
 
