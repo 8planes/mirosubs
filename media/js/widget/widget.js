@@ -32,13 +32,6 @@ mirosubs.widget.Widget = function(widgetConfig) {
     this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'];
     this.forceFormat_ = !!widgetConfig['force_format'];
     this.videoConfig_ = widgetConfig['video_config'];
-    
-    /**
-    *  Run in demo mode without saving?
-    * @type {boolean}
-    */
-    mirosubs.demo_ = !!widgetConfig['demo'];
-    
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
      * if base state is null, or equivalent of clicking on "Improve 
