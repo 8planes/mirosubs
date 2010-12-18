@@ -112,7 +112,6 @@ def catch_exception(exceptions, subject="", default=None):
 
     def catch_exception_func(func):
         def wrapper(*args, **kwargs):
-            print exceptions
             try:
                 return func(*args, **kwargs)
             except exceptions, e:

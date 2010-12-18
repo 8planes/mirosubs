@@ -22,9 +22,9 @@ class RedisCounterFieldNoSettings(RedisCounterField):
 
 class RedisKey(object):
 
-    def __init__(self, key, r):
+    def __init__(self, key, r=None):
         self.redis_key = key
-        self.r = r
+        self.r = r or default_connection
 
     def __repr__(self):
         return "<%s>: %s -> %s" % (self.__class__.__name__, self.redis_key, self.val)
@@ -83,8 +83,17 @@ class RedisSimpleField(object):
             instance_id = obj.pk
         return u"%s:%s:%s" % (self.class_name, self.field_name, instance_id)
 
+    def get_key(self, video_id):
+        print 11
+
     def __set__(self, obj, val):
         RedisKey(self.redis_key(obj), self.r).val = val
 
     def __get__(self, obj, cls=None):
+        if not obj:
+            return self
         return RedisKey(self.redis_key(obj), self.r)
+
+    def __call__(self, instance_id):
+        key = u"%s:%s:%s" % (self.class_name, self.field_name, instance_id)
+        return RedisKey(key, self.r)

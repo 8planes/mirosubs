@@ -85,8 +85,8 @@ class Video(models.Model):
     thumbnail = models.CharField(max_length=500, blank=True)
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
-    subtitles_fetchec_counter = RedisSimpleField()
-    widget_views_counter = RedisSimpleField()
+    subtitles_fetchec_counter = RedisSimpleField('video_id')
+    widget_views_counter = RedisSimpleField('video_id')
 
     def __unicode__(self):
         title = self.title_display()

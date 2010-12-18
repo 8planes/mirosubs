@@ -45,8 +45,7 @@ def add_general_settings(request, dict):
 class Rpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None):
         video_id = video_cache.get_video_id(video_url)
-
-        # TODO: increment video viewed count in cache-friendly way.
+        models.Video.widget_views_counter(video_id).incr()
 
         self._maybe_add_video_session(request)
 
