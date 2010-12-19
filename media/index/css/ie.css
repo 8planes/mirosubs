@@ -1,0 +1,41 @@
+
+@charset "utf-8";
+/* CSS Document */
+
+/*=================== IE - 6 for Hover ============================*/
+/**html .askAboutDovorce dd .input01{
+	background:fixed url(../images/bg_input_rightColumn.gif) no-repeat;
+}
+
+
+*html #navigation{
+	bg:expression(
+	this.firstChild.firstChild.onmouseover=new Function ("this.style.backgroundPosition='left bottom';"),
+	this.firstChild.firstChild.onmouseout=new Function ("this.style.backgroundPosition='left -200px';"),
+	
+	this.lastChild.firstChild.onmouseover=new Function ("this.style.backgroundPosition='right bottom';"),
+	this.lastChild.firstChild.onmouseout=new Function ("this.style.backgroundPosition='left -200px';")
+	);
+}
+
+
+
+*html #navigation{
+	bogus: expression(function(e){
+        e.firstChild.runtimeStyle.backgroundImage = 'none';
+		e.firstChild.runtimeStyle.paddingLeft = '0';
+		e.firstChild.getElementsByTagName("a")[0].runtimeStyle.padding = '0 32px 0 28px';
+    }(this));
+
+*/
+
+
+
+
+/*=======================================ROUND CORNER NAVIGATION combination of li and a==================================================*/
+/**html #navigation ul li{
+bg:expression(
+this.onmouseover=new Function ("this.style.backgroundPosition='left top'; this.firstChild.style.backgroundPosition='right top';"),
+this.onmouseout=new Function  ("this.style.backgroundPosition='left -500px'; this.firstChild.style.backgroundPosition='right -500px';")
+);
+}*/
