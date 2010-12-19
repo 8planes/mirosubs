@@ -4,14 +4,13 @@
 
 {% block content %}
 <p style="font-size: 12px;">
-    {% trans 'Dear' %} {{ user }}, <br/>
-    {% blocktrans %}A title of video you contributed to has been edited by {% endblocktrans %}
-    <a href="{{ editor.get_absolute_url }}">{{ editor }}</a>. <br/>
-    {% trans "Video page" %}: <a href="{{ video.get_absolute_url }}">{{ video }}</a> 
-</p>
-<p style="font-size: 12px;">
-    {% trans 'NEW' %}:  {{ video.title }}
-    <br/><br/>
-    {% trans 'OLD' %}: {{ old_title }}
-</p>
+    {% trans "The title of the video" %} <a href="{{ video.get_absolute_url }}">{{ old_title }}</a> 
+    {% trans "has been changed by" %}
+    <a href="{{ editor.get_absolute_url }}">{{ editor }}</a>.
+    
+    {% trans "The new title is" %} <a href="{{ video.get_absolute_url }}">{{ video.title }}</a>. 
+    
+    {% trans "If this is incorrect, mouseover the title on" %} 
+    <a href="{{ video.get_absolute_url }}">{% trans "this page" %}</a> {% trans 'and click "edit title"' %}.
+
 {% endblock %}
