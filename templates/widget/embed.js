@@ -26,9 +26,8 @@
  * &lt;script type="text/javascript" src="http://url/for/embed.js"&gt;
  * ({
  *     video_url : "http://url/for/video" | video_element: [video element] (currently unsupported),
- *     null_widget: true,
+ *     null_widget: true, // if true, runs in demo mode that does not save work.
  *     debug_js: false,
- *     demo: false, //whether to run as demo without saving.
  *     subtitle_immediately: false,
  *     translate_immediately: false,
  *     base_state: { // omit this param altogether to not load subs at the beginning.
