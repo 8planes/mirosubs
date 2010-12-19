@@ -5,7 +5,11 @@
     <li>
         {{ item.created|date:"DATETIME_FORMAT" }}
         {% if item.is_add_video %}
-            {% trans 'Video was submitted.' %}
+            {% if item.user %}
+                {% trans 'Video was submitted by' %} <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>.
+            {% else %}
+                {% trans 'Video was submitted.' %}
+            {% endif %}
         {% else %}          
             {% if item.user %}
                 <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>

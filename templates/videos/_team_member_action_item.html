@@ -16,7 +16,11 @@
                 {% trans 'Anonymous' %}
             {% endif %}
         </h4>     
-
+        
+        {% if item.is_add_video %}
+            {% trans 'submitted' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>.
+        {% endif %}     
+        
         {% if item.is_add_video_url %}
             {% trans 'added new URL for ' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>.
         {% endif %}

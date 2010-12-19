@@ -40,7 +40,7 @@ def user_videos_activity(context, user=None):
         videos_ids = Video.objects.filter(subtitlelanguage__subtitleversion__user=user).distinct() \
             .values_list('id', flat=True)
         context['users_actions'] = Action.objects.filter(video__pk__in=videos_ids) \
-            .exclude(action_type=Action.ADD_VIDEO).exclude(user=user) \
+            .exclude(user=user) \
             .exclude(user=User.get_youtube_anonymous())[:ACTIONS_ON_PAGE]
     else:
         context['users_actions'] = Action.objects.none()

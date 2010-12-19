@@ -88,7 +88,7 @@ def ajax_change_video_title(request):
 
 def create(request):
     if request.method == 'POST':
-        video_form = VideoForm(request.POST)
+        video_form = VideoForm(request.user, request.POST)
         if video_form.is_valid():
             try:
                 video = video_form.save()
@@ -101,7 +101,7 @@ share the video with friends, or get an embed code for your site.  To add or
 improve subtitles, click the button below the video''')
             return redirect(video.video_link())
     else:
-        video_form = VideoForm()
+        video_form = VideoForm(user=request.user)
     return render_to_response('videos/create.html', locals(),
                               context_instance=RequestContext(request))
 

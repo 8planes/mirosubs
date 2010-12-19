@@ -87,7 +87,8 @@ class Video(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     subtitles_fetchec_counter = RedisSimpleField('video_id')
     widget_views_counter = RedisSimpleField('video_id')
-
+    user = models.ForeignKey(User, null=True, blank=True)
+    
     def __unicode__(self):
         title = self.title_display()
         if len(title) > 70:
@@ -170,7 +171,7 @@ class Video(models.Model):
             pass
 
     @classmethod
-    def get_or_create_for_url(cls, video_url, vt=None):
+    def get_or_create_for_url(cls, video_url, vt=None, user=None):
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
             return None, False
@@ -185,11 +186,16 @@ class Video(models.Model):
         try:
             video_url_obj = VideoUrl.objects.get(
                 type=vt.abbreviation, **vt.create_kwars())
+            if user:
+                Action.create_video_handler(video_url_obj.video, user)
             return video_url_obj.video, False
         except models.ObjectDoesNotExist:
             obj = Video()
             obj = vt.set_values(obj)
+            obj.user = user
             obj.save()
+            
+            Action.create_video_handler(obj, user)
             
             SubtitleLanguage(video=obj, is_original=True).save()
             #Save video url
@@ -816,12 +822,12 @@ class Action(models.Model):
         obj.save()            
     
     @classmethod
-    def create_video_handler(cls, sender, instance, created, **kwargs):
-        if created:
-            obj = cls(video=instance)
-            obj.action_type = cls.ADD_VIDEO
-            obj.created = datetime.now()
-            obj.save()
+    def create_video_handler(cls, video, user=None):
+        obj = cls(video=video)
+        obj.action_type = cls.ADD_VIDEO
+        obj.user = user
+        obj.created = datetime.now()
+        obj.save()
      
     @classmethod
     def create_video_url_handler(cls, sender, instance, created, **kwargs):
@@ -833,7 +839,6 @@ class Action(models.Model):
             obj.save()
                 
 post_save.connect(Action.create_comment_handler, Comment)        
-post_save.connect(Action.create_video_handler, Video)
 
 class UserTestResult(models.Model):
     email = models.EmailField()

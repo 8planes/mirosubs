@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from videos.models import Video, UserTestResult, SubtitleVersion, Subtitle, SubtitleLanguage
+from videos.models import Video, UserTestResult, SubtitleVersion, Subtitle, SubtitleLanguage, Action
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from datetime import datetime
@@ -313,7 +313,10 @@ class UserTestResultForm(forms.ModelForm):
 class VideoForm(forms.Form):
     video_url = forms.URLField(verify_exists=True)
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
+        if user and not user.is_authenticated():
+            user = None
+        self.user = user
         super(VideoForm, self).__init__(*args, **kwargs)
         self.fields['video_url'].widget.attrs['class'] = 'main_video_form_field'
     
@@ -335,7 +338,7 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
     
     def save(self):
         video_url = self.cleaned_data['video_url']
-        obj, create = Video.get_or_create_for_url(video_url, self._video_type)
+        obj, create = Video.get_or_create_for_url(video_url, self._video_type, self.user)
         return obj
     
 class FeedbackForm(MathCaptchaForm):
