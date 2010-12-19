@@ -92,11 +92,6 @@
                             {% for lang in team_video.languages.complete %}
                                 <a href="{{ lang.get_absolute_url }}">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
                             {% endfor %}
-                        {% else %}
-                            {% if not team_video.languages.incomplete.exists %}
-                                <span>{% trans 'No subtitles yet --' %}</span>
-                                <a href="{{ team_video.link_to_page }}">{% trans 'get started' %}</a>
-                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
