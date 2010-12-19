@@ -245,7 +245,7 @@ class TeamVideoLanguageManager(models.Manager):
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
-    completed = models.BooleanField(default=False, verbose_name=_(u'Complited'))
+    completed = models.BooleanField(default=False, verbose_name=_(u'Completed'))
     
     objects = TeamVideoLanguageManager()
     
