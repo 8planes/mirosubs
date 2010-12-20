@@ -85,9 +85,10 @@ class Video(models.Model):
     thumbnail = models.CharField(max_length=500, blank=True)
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, null=True, blank=True)
+
     subtitles_fetchec_counter = RedisSimpleField('video_id')
     widget_views_counter = RedisSimpleField('video_id')
-    user = models.ForeignKey(User, null=True, blank=True)
     
     def __unicode__(self):
         title = self.title_display()
@@ -97,12 +98,13 @@ class Video(models.Model):
     
     def update_subtitles_fetched(self, lang=None):
         self.subtitles_fetchec_counter.incr()
-        Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
+        #Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj = SubtitleFetchStatistic(video=self)
         sub_lang = self.subtitle_language(lang)
         if sub_lang:
             st_obj.language = lang or ''
-            SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
+            SubtitleLanguage.subtitles_fetched_counter(sub_lang.pk).incr()
+            #SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj.save()
         
     def get_thumbnail(self):
@@ -363,6 +365,8 @@ class SubtitleLanguage(models.Model):
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     subtitles_fetched_count = models.IntegerField(default=0)
+    
+    subtitles_fetched_counter = RedisSimpleField()
     
     class Meta:
         unique_together = (('video', 'language'),)
