@@ -113,13 +113,13 @@
                     <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
                     <div class="small grey">
                         {% if team|is_team_manager:user and not member.user == user %}
-                            | <a href="{% url teams:remove_member team.pk member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
+                            | <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
                             {% if member.is_manager %}
-                                | <a href="{% url teams:demote_member team.pk member.user.pk %}" class="demote-user">
+                                | <a href="{% url teams:demote_member team.slug member.user.pk %}" class="demote-user">
                                     {% trans 'Demote to Member' %}
                                   </a>
                             {% else %}
-                                | <a href="{% url teams:promote_member team.pk member.user.pk %}" class="promote-user">
+                                | <a href="{% url teams:promote_member team.slug member.user.pk %}" class="promote-user">
                                     {% trans 'Promote to Manager' %}
                                   </a>
                             {% endif %}

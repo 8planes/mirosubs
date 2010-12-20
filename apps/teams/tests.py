@@ -65,7 +65,7 @@ class TeamsTest(TestCase):
         data = {
             "logo": open(path.join(settings.MEDIA_ROOT, "test/71600102.jpg"), "rb")
         }
-        url = reverse("teams:edit_logo", kwargs={"pk": team.pk})
+        url = reverse("teams:edit_logo", kwargs={"slug": team.slug})
         response = self.client.post(url, data)
         self.failUnlessEqual(response.status_code, 200)
         team = Team.objects.get(pk=team.pk)
@@ -87,12 +87,12 @@ class TeamsTest(TestCase):
         self.assertEqual(team.video, video)
         
         #-------------- edit members ---------------
-        url = reverse("teams:edit_members", kwargs={"pk": team.pk})
+        url = reverse("teams:edit_members", kwargs={"slug": team.slug})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)
         
         #-------------- edit videos -----------------
-        url = reverse("teams:edit_videos", kwargs={"pk": team.pk})
+        url = reverse("teams:edit_videos", kwargs={"slug": team.slug})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)
 
@@ -108,7 +108,7 @@ class TeamsTest(TestCase):
         
         self.client.login(**self.auth)
         #-------------- applications ----------------
-        url = reverse("teams:applications", kwargs={"pk": team.pk})
+        url = reverse("teams:applications", kwargs={"slug": team.slug})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)
         
@@ -135,16 +135,16 @@ class TeamsTest(TestCase):
         
         #------------ detail members -------------
         
-        url = reverse("teams:detail_members", kwargs={"pk": team.pk})
+        url = reverse("teams:detail_members", kwargs={"slug": team.slug})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)
         
-        url = reverse("teams:detail_members", kwargs={"pk": team.pk})
+        url = reverse("teams:detail_members", kwargs={"slug": team.slug})
         response = self.client.get(url, {'q': 'test'})
         self.failUnlessEqual(response.status_code, 200)
 
         #-------------members activity ---------------
-        url = reverse("teams:members_actions", kwargs={"pk": team.pk})
+        url = reverse("teams:members_actions", kwargs={"slug": team.slug})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)        
         
@@ -156,10 +156,10 @@ class TeamsTest(TestCase):
             "title": u""
         }
         tv_len = team.teamvideo_set.count()
-        url = reverse("teams:add_video", kwargs={"pk": team.pk})
+        url = reverse("teams:add_video", kwargs={"slug": team.slug})
         response = self.client.post(url, data)
         self.assertEqual(tv_len+1, team.teamvideo_set.count())
-        self.assertRedirects(response, reverse("teams:team_video", kwargs={"pk": "3"}))
+        self.assertRedirects(response, reverse("teams:team_video", kwargs={"team_video_pk": 3}))
 
         #-------edit team video -----------------
         team = Team.objects.get(pk=1)
@@ -178,15 +178,15 @@ class TeamsTest(TestCase):
             "thumbnail": u"",
             "description": u"and description"
         }
-        url = reverse("teams:team_video", kwargs={"pk": team.pk})
+        url = reverse("teams:team_video", kwargs={"team_video_pk": tv.pk})
         response = self.client.post(url, data)
-        self.assertRedirects(response, reverse("teams:team_video", kwargs={"pk": tv.pk}))        
+        self.assertRedirects(response, reverse("teams:team_video", kwargs={"team_video_pk": tv.pk}))        
         tv = team.teamvideo_set.get(pk=1)
         self.assertEqual(tv.title, u"change title")
         self.assertEqual(tv.description, u"and description")
         
         #-----------delete video -------------
-        url = reverse("teams:remove_video", kwargs={"pk": tv.pk})
+        url = reverse("teams:remove_video", kwargs={"team_video_pk": tv.pk})
         response = self.client.post(url)
         self.failUnlessEqual(response.status_code, 200)
         try:
@@ -212,14 +212,14 @@ class TeamsTest(TestCase):
         members_count = team.members.count()
         
         self.client.login(username = user2.username, password ='alerion')
-        url = reverse("teams:accept_invite", kwargs={"pk": invite.pk})
+        url = reverse("teams:accept_invite", kwargs={"invite_pk": invite.pk})
         response = self.client.get(url)
         
         self.assertEqual(members_count+1, team.members.count())
         
         self.client.login(**self.auth)
 
-        url = reverse("teams:edit_members", kwargs={"pk": team.pk})
+        url = reverse("teams:edit_members", kwargs={"slug": team.slug})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)
  
@@ -228,25 +228,25 @@ class TeamsTest(TestCase):
             "page": u"1",
             "o": u"username"
         }
-        url = reverse("teams:edit_members", kwargs={"pk": team.pk})
+        url = reverse("teams:edit_members", kwargs={"slug": team.slug})
         response = self.client.get(url, data)
         self.failUnlessEqual(response.status_code, 200) 
         
         self.assertFalse(team.is_manager(user2))
         
-        url = reverse("teams:promote_member", kwargs={"user_pk": user2.pk, "pk": team.pk})
+        url = reverse("teams:promote_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
         response = self.client.get(url)
-        self.assertRedirects(response, reverse("teams:edit_members", kwargs={"pk": team.pk}))
+        self.assertRedirects(response, reverse("teams:edit_members", kwargs={"slug": team.slug}))
         
         self.assertTrue(team.is_manager(user2))
         
-        url = reverse("teams:demote_member", kwargs={"user_pk": user2.pk, "pk": team.pk})
+        url = reverse("teams:demote_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
         response = self.client.get(url)
-        self.assertRedirects(response, reverse("teams:edit_members", kwargs={"pk": team.pk}))
+        self.assertRedirects(response, reverse("teams:edit_members", kwargs={"slug": team.slug}))
         
         self.assertFalse(team.is_manager(user2))
         
-        url = reverse("teams:remove_member", kwargs={"user_pk": user2.pk, "pk": team.pk})
+        url = reverse("teams:remove_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
         response = self.client.post(url)
         self.failUnlessEqual(response.status_code, 200)
         

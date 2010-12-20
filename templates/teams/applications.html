@@ -40,8 +40,8 @@
                     {% endif %}
                     {% if team|can_approve_application:user %}
                     <div class="small grey">
-                        <a href="{% url teams:approve_application team.pk item.user.pk %}">{% trans 'Approve' %}</a>
-                        | <a href="{% url teams:deny_application team.pk item.user.pk %}">{% trans 'Deny' %}</a>
+                        <a href="{% url teams:approve_application team.slug item.user.pk %}">{% trans 'Approve' %}</a>
+                        | <a href="{% url teams:deny_application team.slug item.user.pk %}">{% trans 'Deny' %}</a>
                     </div>
                     {% endif %}
                 </td>

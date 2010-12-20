@@ -96,9 +96,9 @@
                 {% if user.is_staff and perms.teams.change_team %}
                 <p style="float: none;">
                     {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Un-highlight this team' %}</a>
+                        <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
                     {% else %}
-                        <a href="{% url teams:highlight team.pk %}">{% trans 'Highlight this team' %}</a>
+                        <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
                     {% endif %}                    
                 </p>
                 {% endif %}         
@@ -133,9 +133,9 @@
                 {% if user.is_staff and perms.teams.change_team %}
                     <div>
                     {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.pk %}">{% trans 'Un-highlight this team' %}</a>
+                        <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
                     {% else %}
-                        <a href="{% url teams:highlight team.pk %}">{% trans 'Highlight this team' %}</a>
+                        <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
                     {% endif %}
                     </div>
                 {% endif %}                

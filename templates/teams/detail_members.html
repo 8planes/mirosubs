@@ -28,7 +28,7 @@
     
     <ul class="video_tabs">
         <li>
-            <a href="{% url teams:detail team.pk %}">
+            <a href="{{ team.get_absolute_url }}">
                 {% trans 'Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span>
             </a>
         </li>

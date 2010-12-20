@@ -108,9 +108,6 @@ def detail(request, slug):
     
     team = Team.get(slug, request.user)
     
-    if not team:
-        raise Http404
-    
     qs = team.teamvideo_set.order_by('-video__title')
     if q:
         qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q) \
@@ -133,10 +130,11 @@ def detail(request, slug):
                        extra_context=extra_context, 
                        template_object_name='teamvideo')
 
-def detail_members(request, pk):
+def detail_members(request, slug):
     #just other tab of detail view
     q = request.REQUEST.get('q')
-    team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
+    
+    team = Team.get(slug, request.user)
     
     qs = team.members.all()
     if q:
@@ -161,8 +159,9 @@ def detail_members(request, pk):
                        extra_context=extra_context, 
                        template_object_name='team_member')
 
-def members_actions(request, pk):
-    team = get_object_or_404(Team.objects.for_user(request.user), pk=pk)
+def members_actions(request, slug):
+    team = Team.get(slug, request.user)   
+    
     user_ids = team.members.values_list('user__id', flat=True)
     
     qs = Action.objects.filter(user__pk__in=user_ids)
@@ -201,9 +200,6 @@ def create(request):
 def edit(request, slug):
     team = Team.get(slug)
     
-    if not team:
-        raise Http404
-    
     if not team.is_member(request.user):
         raise Http404
     
@@ -226,8 +222,8 @@ def edit(request, slug):
     }
 
 @login_required
-def edit_logo(request, pk):
-    team = get_object_or_404(Team, pk=pk)
+def edit_logo(request, slug):
+    team = Team.get(slug)
     
     if not team.is_member(request.user):
         raise Http404
@@ -246,9 +242,9 @@ def edit_logo(request, pk):
 
 @render_to('teams/add_video.html')
 @login_required
-def add_video(request, pk):
-    team = get_object_or_404(Team, pk=pk)
-
+def add_video(request, slug):
+    team = Team.get(slug)
+    
     if not team.is_member(request.user):
         raise Http404
     
@@ -277,9 +273,9 @@ def add_video(request, pk):
     }
 
 @login_required
-def edit_videos(request, pk):
-    team = get_object_or_404(Team, pk=pk)
-
+def edit_videos(request, slug):
+    team = Team.get(slug)
+    
     if not team.is_member(request.user):
         raise Http404
     
@@ -296,8 +292,8 @@ def edit_videos(request, pk):
 
 @login_required
 @render_to('teams/team_video.html')
-def team_video(request, pk):
-    team_video = get_object_or_404(TeamVideo, pk=pk)
+def team_video(request, team_video_pk):
+    team_video = get_object_or_404(TeamVideo, pk=team_video_pk)
     
     if not team_video.can_edit(request.user):
         raise Http404
@@ -330,8 +326,8 @@ def team_video(request, pk):
 
 @render_to_json
 @login_required    
-def remove_video(request, pk):
-    team_video = get_object_or_404(TeamVideo, pk=pk)
+def remove_video(request, team_video_pk):
+    team_video = get_object_or_404(TeamVideo, pk=team_video_pk)
 
     if not team_video.team.is_member(request.user):
         raise Http404
@@ -349,8 +345,8 @@ def remove_video(request, pk):
         
 @render_to_json
 @login_required
-def remove_member(request, pk, user_pk):
-    team = get_object_or_404(Team, pk=pk)
+def remove_member(request, slug, user_pk):
+    team = Team.get(slug)
 
     if not team.is_member(request.user):
         raise Http404
@@ -374,8 +370,8 @@ def remove_member(request, pk, user_pk):
         }        
 
 @login_required
-def demote_member(request, pk, user_pk):
-    team = get_object_or_404(Team, pk=pk)
+def demote_member(request, slug, user_pk):
+    team = Team.get(slug, request.user)
 
     if not team.is_member(request.user):
         raise Http404
@@ -388,11 +384,11 @@ def demote_member(request, pk, user_pk):
             messages.error(request, _('You can\'t demote to member yorself'))
     else:
         messages.error(request, _('You can\'t demote to member'))          
-    return redirect('teams:edit_members', team.pk)
+    return redirect('teams:edit_members', team.slug)
 
 @login_required
-def promote_member(request, pk, user_pk):
-    team = get_object_or_404(Team, pk=pk)
+def promote_member(request, slug, user_pk):
+    team = Team.get(slug)
 
     if not team.is_member(request.user):
         raise Http404
@@ -403,11 +399,11 @@ def promote_member(request, pk, user_pk):
             TeamMember.objects.filter(team=team, user=user).update(is_manager=True)
     else:
         messages.error(request, _('You can\'t promote to manager'))
-    return redirect('teams:edit_members', team.pk)
+    return redirect('teams:edit_members', team.slug)
 
 @login_required        
-def edit_members(request, pk):
-    team = get_object_or_404(Team, pk=pk)
+def edit_members(request, slug):
+    team = Team.get(slug)
     
     if not team.is_member(request.user):
         raise Http404
@@ -435,8 +431,8 @@ def edit_members(request, pk):
                        extra_context=extra_context)    
 
 @login_required
-def applications(request, pk):
-    team = get_object_or_404(Team, pk=pk)
+def applications(request, slug):
+    team = Team.get(slug)
     
     if not team.is_member(request.user):
         raise Http404
@@ -453,8 +449,8 @@ def applications(request, pk):
                        extra_context=extra_context) 
 
 @login_required
-def approve_application(request, pk, user_pk):
-    team = get_object_or_404(Team, pk=pk)
+def approve_application(request, slug, user_pk):
+    team = Team.get(slug)
 
     if not team.is_member(request.user):
         raise Http404
@@ -470,8 +466,8 @@ def approve_application(request, pk, user_pk):
     return redirect('teams:applications', team.pk)
 
 @login_required
-def deny_application(request, pk, user_pk):
-    team = get_object_or_404(Team, pk=pk)
+def deny_application(request, slug, user_pk):
+    team = Team.get(slug)
 
     if not team.is_member(request.user):
         raise Http404
@@ -524,8 +520,8 @@ def invite(request):
     return {}
 
 @login_required
-def accept_invite(request, pk, accept=True):
-    invite = get_object_or_404(Invite, pk=pk, user=request.user)
+def accept_invite(request, invite_pk, accept=True):
+    invite = get_object_or_404(Invite, pk=invite_pk, user=request.user)
     
     if accept:
         invite.accept()
@@ -535,8 +531,8 @@ def accept_invite(request, pk, accept=True):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @permission_required('teams.change_team')
-def highlight(request, pk, highlight=True):
-    item = get_object_or_404(Team, pk=pk)
+def highlight(request, slug, highlight=True):
+    item = Team.get(slug)
     item.highlight = highlight
     item.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))

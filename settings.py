@@ -289,6 +289,7 @@ INSTALLED_APPS = (
     'comments',
     'messages',
     'statistic',
+    'search',
     'api',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )

@@ -14,7 +14,7 @@
         jQuery(function($){
             $('#id_logo').change(function(){
                 $('.edit-team').ajaxSubmit({
-                    url: '{% url teams:edit_logo team.pk %}',
+                    url: '{% url teams:edit_logo team.slug %}',
                     dataType: 'json',
                     success: function(response){
                         if (response.error){

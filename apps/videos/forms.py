@@ -29,7 +29,7 @@ import random
 from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 import chardet
 from uuid import uuid4
-from math_captcha.forms import MathCaptchaForm
+from math_captcha.forms import MathCaptchaForm, math_clean
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
 from videos.types import video_type_registrar, VideoTypeError

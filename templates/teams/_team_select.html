@@ -7,7 +7,7 @@
     <ul>
         {% for item in objects %}
         <li>
-            <a href="{% url teams:edit item.pk %}" class="first">{{ item }}</a>
+            <a href="{{ item.get_edit_url }}" class="first">{{ item }}</a>
         </li>
         {% endfor %}
         {% if can_create_team %}

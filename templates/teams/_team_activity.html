@@ -30,7 +30,7 @@
         {% endfor %}
         {% if videos_actions %}
         <li>
-            <a href="{% url teams:videos_actions team.pk %}" class="blue_button small margin-top floatright">
+            <a href="{% url teams:videos_actions team.slug %}" class="blue_button small margin-top floatright">
                 {% trans 'See All Activity' %}
             </a>
         </li>
@@ -45,7 +45,7 @@
         {% endfor %}
         {% if membres_actions %}
         <li>
-            <a href="{% url teams:members_actions team.pk %}" class="blue_button small margin-top floatright">
+            <a href="{% url teams:members_actions team.slug %}" class="blue_button small margin-top floatright">
                 {% trans 'See All Activity' %}
             </a>
         </li>

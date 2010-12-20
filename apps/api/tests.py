@@ -63,7 +63,7 @@ class ViewsTest(WebUseTest):
         self.assertTrue(data['is_error'])
 
         response = self._simple_test(
-            "api_subtitles", 
+            "api:subtitles", 
             data={'video_url': url, 'callback': 'fn'})
         self.assertEquals('fn([]);', response.content)
         self.assertEquals('text/javascript', response['content-type'])

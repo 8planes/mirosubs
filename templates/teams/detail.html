@@ -33,7 +33,7 @@
             </span>
         </li>
         <li>
-            <a href="{% url teams:detail_members team.pk %}">
+            <a href="{% url teams:detail_members team.slug %}">
                 {% trans 'Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span>
             </a>
         </li>

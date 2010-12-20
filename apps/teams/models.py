@@ -33,6 +33,7 @@ from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 from django.conf import settings
 from messages.models import Message
+from django.http import Http404
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -95,7 +96,7 @@ class Team(models.Model):
         return self.membership_policy == self.OPEN
     
     @classmethod
-    def get(cls, slug, user=None):
+    def get(cls, slug, user=None, raise404=True):
         if user:
             qs = cls.objects.for_user(user)
         else:
@@ -106,7 +107,10 @@ class Team(models.Model):
             try:
                 return qs.get(pk=int(slug))
             except (cls.DoesNotExist, ValueError):
-                pass       
+                pass
+            
+        if raise404:
+            raise Http404       
     
     def logo_thumbnail(self):
         if self.logo:

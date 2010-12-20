@@ -246,7 +246,6 @@ def email_friend(request):
     if request.method == 'POST':
         form = EmailFriendForm(request.POST, auto_id="email_friend_id_%s", label_suffix="")
         if form.is_valid():
-            
             email_st = EmailShareStatistic()
             if request.user.is_authenticated():
                 email_st.user = request.user
