@@ -30,7 +30,7 @@ class SearchForm(forms.Form):
     st = forms.ChoiceField(choices=SORT_TYPE_CHOICES, required=False, initial='desc', 
                            label=_(u'sort order'), widget=forms.RadioSelect)
     sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='sub_fetch', label=_(u'sort type'))
-    langs = forms.MultipleChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'languages'),
+    langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'languages'),
                                       help_text=_(u'Left blank for any language'))
     
     def __init__(self, user, *args, **kwargs):
@@ -40,7 +40,10 @@ class SearchForm(forms.Form):
         if user.is_authenticated():
             choices[:0] = (
                 ('my_langs', _(u'My languages')),
-            )        
+            )
+        choices[:0] = (
+            ('', _(u'Any')),
+        )            
         self.fields['langs'].choices = choices
         self.user = user
 
@@ -70,6 +73,7 @@ class SearchForm(forms.Form):
                 qs = qs.filter(title=qs.query.clean(q))
         
         if langs:
+            langs = [langs]
             if 'my_langs' in langs and self.user.is_authenticated():
                 del langs[langs.index('my_langs')]
                 for l in self.user.userlanguage_set.values_list('language', flat=True):

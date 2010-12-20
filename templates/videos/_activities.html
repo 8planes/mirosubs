@@ -1,55 +1,9 @@
 {% load thumbnail i18n %}
 
-<ul class="big_list">
-{% for item in events %}
+<ul class="small_list">
+    {% for item in events %}
     <li>
-        {{ item.created|date:"DATETIME_FORMAT" }}
-        {% if item.is_add_video %}
-            {% if item.user %}
-                {% trans 'Video was submitted by' %} <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>.
-            {% else %}
-                {% trans 'Video was submitted.' %}
-            {% endif %}
-        {% else %}          
-            {% if item.user %}
-                <a class="username" href="{{ item.user.profile_url }}">{{ item.user }}</a>
-            {% else %}
-                <span class="username anon">{% trans 'Anonymous' %}</span>
-            {% endif %}
-
-            {% if item.is_add_video_url %}
-                {% trans 'added new URL for ' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>.
-            {% endif %}
-                
-            {% if item.is_change_title %}
-                {% blocktrans with item.new_video_title as title %}
-                changed title to "{{ title }}" for 
-                {% endblocktrans %}
-                <a href="{{ item.video.video_link }}">{{ item.video }}</a>
-            {% endif %}
-            
-            {% if item.is_comment %}
-                {% if item.language %}
-                    {% blocktrans with item.language.language_display as language %}
-                    commented on {{ language }}.
-                    {% endblocktrans %}            
-                {% else %}
-                    {% trans 'commented on ' %}<a href="{{ item.video.get_absolute_url }}">{{ item.video }}</a>.
-                {% endif %}
-            {% endif %}
-            
-            {% if item.is_add_version %}
-                {% trans 'edited' %} 
-                <a href="{{ item.language.get_absolute_url }}">
-                    {% if not item.language %}
-                        {% trans 'original subtitles' %}
-                    {% else %}
-                        {{ item.language.language_display }} {% trans 'subtitles' %}
-                    {% endif %}
-                </a> {% trans 'for' %} 
-                <a class="url" href="{{ item.video.get_absolute_url }}">{{ item.video }}</a> 
-            {% endif %}
-        {% endif %}
+        {% include "videos/_team_video_action_item.html" %}
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>

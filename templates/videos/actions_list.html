@@ -9,10 +9,12 @@
         
         <p>
             Order by:
-            {% ordered_column "user__username" _("User") %}
+            {% ordered_column "username" _("User") %}
             {% ordered_column "created" _("Date") %}
-            {% ordered_column "video__video_id" _("Video") %}
+            {% ordered_column "video" _("Video") %}
         </p>
+        
+        {% if is_paginated %}{% paginator %}{% endif %}
         
         {% with action_list as events %}
             {% include 'videos/_activities.html' %}

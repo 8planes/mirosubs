@@ -79,7 +79,7 @@ class YoutubeVideoType(VideoType):
     
     def _get_entry(self, video_id):
         try:
-            return yt_service.GetYouTubeVideoEntry(video_id=video_id)
+            return yt_service.GetYouTubeVideoEntry(video_id=str(video_id))
         except RequestError, e:
             err = e[0].get('body', 'Undefined error')
             raise VideoTypeError('Youtube error: %s' % err)        

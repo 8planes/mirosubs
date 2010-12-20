@@ -1,30 +1,88 @@
 {% extends "base.html" %}
 
-{% load escapejs paginator widget i18n %}
+{% load escapejs paginator widget i18n recent_activity %}
 
 {% block main_content %}
-    <h2>{% trans 'Search' %}</h2>
-    <form method="get" action=".">
-        <table>
-            {{ form }}
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Search"/></td>
-            </tr>
-        </table>
-    </form>
-    <div class="left_column">
+    <div class="grid_8 alpha">
+        <form method="get" action=".">
+          <ul class="video_tabs">
+            <li><a class="active" href="#">{% trans "Videos" %}</a></li>
+            <li><a href="#">{% trans "Members" %}</a></li>
+          </ul>
+          
+          <div class="boxx">
+            <div class="padding_small">
+              
+              <div class="inline_search large">
+                <form>
+                  {{ form.q }}
+                  <button class="green_button big">{% trans "Search" %}</button>
+                </form>
+              </div>
+              
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        
+        <div class="grid_8 alpha">
+          <br />
+    
+          <div class="sort_button blue_button" style="width: auto">
+            {{ form.sort }}
+          </div>
+    
+          <div class="sort_button blue_button" style="width: auto">
+            {{ form.langs }}
+          </div>
+    
+          <div class="search_toggles">
+            <div style="display: none">{{ form.type }}</div>
+            <a href="#id_type_0" class="toggle search_title"><span></span>{% trans "Search Title Only" %}</a>
+            <a href="#id_type_1" class="toggle on search_full"><span></span>{% trans "Search Full Text" %}</a>
+          </div>
+          <script type="text/javascript">
+              jQuery(function($){
+                  var $search_toggles = $('.search_toggles');
+                  $('a', $search_toggles).live('click', function(){
+                      $this = $(this);
+                      if ( ! $this.hasClass('on')){
+                          $('a', $search_toggles).toggleClass('on');
+                          $('input', $search_toggles).attr('checked', '');
+                          $($this.attr('href')).attr('checked', 'checked');
+                      }
+                      return false;
+                  });
+              });
+          </script>
+        </div>        
+        </form>
+        
+        <div class="grid_8 clearfix"><br /></div>
+        
         {% if is_paginated %}{% paginator %}{% endif %}
+        <ul class="big_list">
             {% for object in result_list %}
-                {% include 'search/_video_item.html' %}
+                {% if object.object %}
+                    {% with object.object as video %}
+                        {% include 'search/_video_item.html' %}
+                    {% endwith %}
+                {% else %}
+                    {% with object as video %}
+                        {% include 'search/_video_item.html' %}
+                    {% endwith %}                
+                {% endif %}
             {% empty %}
                 {% if query %}
                     {% blocktrans %}No results for "{{ query }}".{% endblocktrans %}
                 {% endif %}
             {% endfor %}            
-                
-        <div style="clear: both"></div>
+        </ul>
         {% if is_paginated %}{% paginator %}{% endif %}
     </div>
-        
+
+      <div class="grid_4 omega">
+        <h3>{% trans "Recent activity" %}</h3>
+          
+        {% recent_activity %}
+      </div>        
 {% endblock %}

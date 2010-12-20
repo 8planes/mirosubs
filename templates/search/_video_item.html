@@ -1,5 +1,26 @@
-<div>
-    <a href="{{ object.object.get_absolute_url }}">{{ object.title }}</a>
-    <br/>
-    Comments count: {{ object.comments_count }}
-</div>
+{% load i18n %}
+<li>
+  <a href="{{ video.get_absolute_url }}" class="thumbnail_medium">
+      {% if video.thumbnail %}<img src="{{ video.get_thumbnail }}"></img>{% endif %}
+  </a>
+  <div class="info">
+    <h4><a href="{{ video.get_absolute_url }}">{{ video }}</a></h4>
+    <p>{{ video.description|striptags|truncatewords:50|linebreaksbr|urlize }}</p>  
+    <div>
+        <span class="started">{% trans "Started" %} {{ video.created|timesince }} {% trans "ago" %}</span>
+        <span class="last_worked">{% trans "Last Worked on" %} {{ video.edited|timesince }} {% trans "ago" %}</span>
+    </div>
+    <div>
+        <span class="page_loads">{{ video.widget_views_counter.val|default:0 }} {% trans "Views" %}</span>
+        <span class="fetched">{{ video.subtitles_fetchec_counter.val|default:0 }} {% trans "Subtitles Fetched" %}</span>
+    </div>
+    <div>
+        <span class="langs_available">
+            {{ video.subtitlelanguage_set.count }} {% trans "Languages Available" %} -
+            {% for lang in video.subtitlelanguage_set.all %} 
+                <a href="{{ lang.get_absolute_url }}">{{ lang.language_display }} <span>{{ lang.latest_subtitles|length }} {% trans "lines" %}</span></a>
+            {% endfor %}
+        </span>
+    </div>
+  </div>
+</li>

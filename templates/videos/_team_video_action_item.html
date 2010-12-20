@@ -17,7 +17,7 @@
         </h4>     
 
         {% if item.is_add_video_url %}
-            {% trans 'added new URL for ' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>.
+            {% trans 'added new URL for ' %} <a href="{{ item.video.get_absolute_url }}">{{ item.video }}</a>.
         {% endif %}
         
         {% if item.is_add_video %}

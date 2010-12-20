@@ -19,6 +19,7 @@ from haystack.query import SearchQuerySet
 from django.views.generic.list_detail import object_list
 from videos.models import Video, SubtitleLanguage
 from search.forms import SearchForm
+from django.conf import settings
 
 def index(request):
     if 'q' in request.REQUEST:
@@ -29,7 +30,11 @@ def index(request):
     qs = SearchQuerySet().none()
     if form.is_valid():
         qs = form.search_qs(SearchQuerySet().models(Video))
-        
+    
+    if settings.HAYSTACK_SEARCH_ENGINE == 'dummy' and settings.DEBUG:
+        q = request.REQUEST.get('q', '')
+        qs = Video.objects.filter(title__icontains=q)
+    
     context = {
         'query': request.REQUEST.get('q', ''),
         'form': form

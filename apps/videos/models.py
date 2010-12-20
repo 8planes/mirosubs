@@ -206,6 +206,7 @@ class Video(models.Model):
             video_url.type = vt.abbreviation
             video_url.original = True
             video_url.primary = True
+            video_url.added_by = user
             video_url.video = obj
             video_url.save()
             

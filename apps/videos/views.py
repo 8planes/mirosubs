@@ -136,7 +136,6 @@ def video_list(request):
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
         'videos_subtitlelanguage.was_complete'})
-
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
@@ -163,9 +162,13 @@ def actions_list(request):
     extra_context = {}
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')    
-    order_fields = ['user__username', 'created', 'video__video_id']
+    order_fields = {
+        'username': 'user__username', 
+        'created': 'created', 
+        'video': 'video__video_id'
+    }
     if ordering in order_fields and order_type in ['asc', 'desc']:
-        qs = qs.order_by(('-' if order_type == 'desc' else '')+ordering)
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
         extra_context['ordering'] = ordering
         extra_context['order_type'] = order_type
             

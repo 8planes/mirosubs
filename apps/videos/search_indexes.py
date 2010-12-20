@@ -38,4 +38,4 @@ class SubtitleLanguageIndex(SearchIndex):
         return self.prepared_data
     
 site.register(Video, VideoIndex)
-site.register(SubtitleLanguage, SubtitleLanguageIndex)
+#site.register(SubtitleLanguage, SubtitleLanguageIndex)
