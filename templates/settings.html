@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load thumbnail i18n %}
+
+{% block main_content %}
+<div class="settings_nav">
+  <ul>
+    <li class="active"><a href="{% url profiles:edit %}">Edit Profile</a></li>
+    <li><a href="#">My Videos</a></li>
+    <li><a href="{% url teams:index %}?o=my">My Teams</a></li>
+    <li><a href="#">Messages <span class="message_count">12</span></a></li>
+  </ul>
+  <h4>Team Management</h4>
+  <ul class="teams">
+    <li><a href="#">Team Name I</a></li>
+    <li><a href="#">Team Name II</a></li>
+    <li><a href="#">Team Name III</a></li>
+  </ul>
+</div>
+
+<div class="settings_main">
+  {% block settings_content %}{% endblock %}
+  {{ block.super }}
+</div>
+{% endblock %}

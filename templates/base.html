@@ -75,8 +75,30 @@
         
         {% if user.is_authenticated %}
         <div class="user_panel">
-          <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" /> 
-          <a href="{% url profiles:my_profile %}">{{ user }}</a>
+          <ul>
+            <li>
+              <div class="user">
+                <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" />
+                <a href="{% url profiles:my_profile %}">{{ user }}</a>
+              </div>
+
+              <div class="dropdown">
+                <ul>
+                  <li><a href="#">My Videos</a></li>
+                  <li><a href="#">My Messages</a></li>
+                  <li><a href="{% url teams:index %}?o=my">My Teams</a></li>
+                  <li><a href="{% url profiles:edit %}">Edit Profile</a></li>
+                </ul>
+                <div class="teams_menu">
+                  <h4>Team Management</h4>
+                  <ul>
+                    <li><a href="#">Team I</a></li>
+                    <li><a href="#">Team II</a></li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+          </ul>
           {% comment %}
           <a href="#">{% trans 'Team manager options' %}</a>
           <span class="points"><strong>{% trans 'Points' %}</strong> 3,999</span>
