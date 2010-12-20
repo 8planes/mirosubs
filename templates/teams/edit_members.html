@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "settings.html" %}
 
 {% load i18n teams_tags paginator profiles_tags %}
 
@@ -70,22 +70,12 @@
     </script>
 {% endblock %}
 
-{% block main_content %}
-
-{% team_select team %}
-
-<h2>{% trans 'Manage Settings & Teams' %}</h2>
-<div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-        <li class="active">
-            <a href="#">{% trans 'Your Teams' %}</a>
-        </li>
-    </ul>
-</div>
-<div class="wrap grid_9 omega">
-    {% with "members" as active %}
-        {% include 'teams/_edit_top_navigation.html' %}
-    {% endwith %}
+{% block settings_content %}
+  <h2>{{ team.name }}</h2>
+  {% with "members" as active %}
+      {% include 'teams/_edit_top_navigation.html' %}
+  {% endwith %}
+  
     {% if team|can_invite_to_team:user %}
     <div class="action_buttons">     
         <a href="#invite-user" class="blue_button small invite-user">{% trans 'Invite User' %}</a>
@@ -143,7 +133,6 @@
     </table>
     </div>
     <div class="clearfix"></div>
-</div>
 
 {% send_message %}
 

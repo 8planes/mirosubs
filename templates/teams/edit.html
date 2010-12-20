@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "settings.html" %}
 
 {% load i18n teams_tags %}
 
@@ -33,106 +33,91 @@
     </script>
 {% endblock %}
 
-{% block main_content %}
-
-{% team_select team %}
-
-<h2>{% trans 'Manage Settings & Teams' %}</h2>
-<div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-        <li class="active">
-            <a href="#">{% trans 'Your Teams' %}</a>
-        </li>
-    </ul>
-</div>
-<div class="wrap grid_9 omega">
-    {% with "settings" as active %}
-        {% include 'teams/_edit_top_navigation.html' %}
-    {% endwith %}
-    <div class="boxx">
-        <div class="padding">
-            {% if form %}
-            <form method='post' action="." class="edit-team" enctype="multipart/form-data">
-            <div class="grid_9">
-                {% csrf_token %}
-                <div class="grid_5 alpha">
-                    <h3>{% trans 'Details About Your Team' %}</h3>
-                        <p>
-                            {{ form.non_field_errors }}
-                        </p>
-                        <p>
-                            {{ form.name.errors }}
-                            {{ form.name.label_tag }}
-                            {{ form.name }}
-                        </p>
-                        <p>
-                            {{ form.description.errors }}
-                            {{ form.description.label_tag }}
-                            {{ form.description }}
-                            {{ form.description.help_text }}
-                        </p>
-                    <h3>{% trans 'Upload Team Logo' %}</h3>
-                    <p class="error_list" id="logo-errors">
-                        {{ form.logo.errors }}
-                    </p>
-                    <p class="avatar-container">
-                        <img class="thumbnail_medium team-logo" src="{{ team.logo_thumbnail|default:'' }}"/>
-                    </p>
-                    <p style="float: left; clear: both; margin-bottom: 30px;">
-                        <input type="file" id="id_logo" name="logo" size="6"/>
-                        <button  class="green_button small upload-picture" style="z-index: 1; padding-left: 10px;">
-                            <span><span class="plus"></span>{% trans 'Upload logo' %}</span>
-                        </button>
-                    </p>                         
-                     <h3>{% trans 'Team Intro Video' %}</h3>
-                     <p>
-                        {% if team.video %}
-                            {% trans 'Current video' %}: <a href="{{ team.video.get_absolute_url }}">{{ team.video }}</a>
-                        {% endif %}
-                        {{ form.video_url.errors }}
-                        {{ form.video_url }} 
-                        {{ form.video_url.help_text }}                        
-                     </p>                                                        
-                </div>
-                <div class="grid_4 omega">
-                    <h3>{% trans 'Team Member Settings' %}</h3>
-                        <p>
-                            <label>
-                                {% trans 'Who can join this team?' %}
-                            </label>
-                            {{ form.membership_policy.errors }}
-                            {{ form.membership_policy }}  
-                        </p>
-                        <p>
-                            <label>
-                                {% trans 'Who can add videos to this team?' %}
-                            </label>
-                            {{ form.video_policy.errors }}
-                            {{ form.video_policy }}  
-                        </p>
-                        <h3>{% trans 'Team Privacy Settings' %}</h3>
-                        <p class="checkbox">
-                            {{ form.is_visible.errors }}
-                            {{ form.is_visible }}
-                            {{ form.is_visible.label_tag }}
-                        </p>
-                </div>
-            </div>
-            <p>
-                <button class="green_button small"><span>{% trans 'Save' %}</span></button>
-            </p>
-            </form>
-            <div class="clearfix"></div>
-            {% else %}
-               {% trans 'You are not a manager of this team.' %}
-               <br/>
-               <br/>
-               <br/>
-               <br/> 
-            {% endif %}            
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="clearfix"></div>
-</div>
+{% block settings_content %}
+  <h2>{{ team.name }}</h2>
+  {% with "settings" as active %}
+      {% include 'teams/_edit_top_navigation.html' %}
+  {% endwith %}
+  <div class="padding">
+      {% if form %}
+      <form method='post' action="." class="edit-team" enctype="multipart/form-data">
+      <div class="grid_9">
+          {% csrf_token %}
+          <div class="grid_5 alpha">
+              <h3>{% trans 'Details About Your Team' %}</h3>
+                  <p>
+                      {{ form.non_field_errors }}
+                  </p>
+                  <p>
+                      {{ form.name.errors }}
+                      {{ form.name.label_tag }}
+                      {{ form.name }}
+                  </p>
+                  <p>
+                      {{ form.description.errors }}
+                      {{ form.description.label_tag }}
+                      {{ form.description }}
+                      {{ form.description.help_text }}
+                  </p>
+              <h3>{% trans 'Upload Team Logo' %}</h3>
+              <p class="error_list" id="logo-errors">
+                  {{ form.logo.errors }}
+              </p>
+              <p class="avatar-container">
+                  <img class="thumbnail_medium team-logo" src="{{ team.logo_thumbnail|default:'' }}"/>
+              </p>
+              <p style="float: left; clear: both; margin-bottom: 30px;">
+                  <input type="file" id="id_logo" name="logo" size="6"/>
+                  <button  class="green_button small upload-picture" style="z-index: 1; padding-left: 10px;">
+                      <span><span class="plus"></span>{% trans 'Upload logo' %}</span>
+                  </button>
+              </p>                         
+               <h3>{% trans 'Team Intro Video' %}</h3>
+               <p>
+                  {% if team.video %}
+                      {% trans 'Current video' %}: <a href="{{ team.video.get_absolute_url }}">{{ team.video }}</a>
+                  {% endif %}
+                  {{ form.video_url.errors }}
+                  {{ form.video_url }} 
+                  {{ form.video_url.help_text }}                        
+               </p>                                                        
+          </div>
+          <div class="grid_4 omega">
+              <h3>{% trans 'Team Member Settings' %}</h3>
+                  <p>
+                      <label>
+                          {% trans 'Who can join this team?' %}
+                      </label>
+                      {{ form.membership_policy.errors }}
+                      {{ form.membership_policy }}  
+                  </p>
+                  <p>
+                      <label>
+                          {% trans 'Who can add videos to this team?' %}
+                      </label>
+                      {{ form.video_policy.errors }}
+                      {{ form.video_policy }}  
+                  </p>
+                  <h3>{% trans 'Team Privacy Settings' %}</h3>
+                  <p class="checkbox">
+                      {{ form.is_visible.errors }}
+                      {{ form.is_visible }}
+                      {{ form.is_visible.label_tag }}
+                  </p>
+          </div>
+      </div>
+      <p>
+          <button class="green_button small"><span>{% trans 'Save' %}</span></button>
+      </p>
+      </form>
+      <div class="clearfix"></div>
+      {% else %}
+         {% trans 'You are not a manager of this team.' %}
+         <br/>
+         <br/>
+         <br/>
+         <br/> 
+      {% endif %}            
+  </div>
+  <div class="clearfix"></div>
 {% endblock %}
