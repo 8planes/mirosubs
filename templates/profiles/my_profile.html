@@ -21,7 +21,7 @@
     <ul class="video_tabs">
         <li class="active">
             <span class="tab-item">
-                {% trans 'My Videos' %}
+                {% trans 'My Videos' %}<span class="badgy_out"><span class="badgy">{{ total_video_count }}</span></span>
             </span>
         </li>
         <li>
@@ -54,14 +54,7 @@
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% for video in user_video_list %}
-            <li>
-                <a href="{{ video.video_link }}">{{ video }}</a>
-                {% if video.description %}
-                <p>
-                    {{ video.description }}
-                </p>
-                {% endif %}
-            </li>
+                {% include 'search/_video_item.html' %}
             {% endfor %}
         </ul>
         {% if is_paginated %}{% paginator %}{% endif %}
