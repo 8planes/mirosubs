@@ -29,6 +29,7 @@ class BlipTvVideoType(VideoType):
     def __init__(self, url):
         self.url = url
         self.file_id = self._get_file_id(url)
+        self.shortmem = blip.get_shortmem(url)
     
     @property
     def video_id(self):
@@ -47,9 +48,9 @@ class BlipTvVideoType(VideoType):
         }
 
     def set_values(self, video_obj):
-        video_obj.title = blip.scrape_title(self.url)
-        video_obj.thumbnail = blip.get_thumbnail_url(self.url)
-        video_obj.description = strip_tags(blip.scrape_description(self.url))
+        video_obj.title = blip.scrape_title(self.url, self.shortmem)
+        video_obj.thumbnail = blip.get_thumbnail_url(self.url, self.shortmem)
+        video_obj.description = strip_tags(blip.scrape_description(self.url, self.shortmem))
         return video_obj
 
     def _get_file_id(self, video_url):
@@ -57,6 +58,7 @@ class BlipTvVideoType(VideoType):
 
     def scrape_best_file_url(self):
         if not hasattr(self, '_file_url'):
+            #blip.video_file_url(self.url, self.shortmem)
             self._file_url = bliptvutils.video_file_url(self.file_id)
         return self._file_url
 

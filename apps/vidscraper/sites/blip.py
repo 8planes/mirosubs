@@ -43,22 +43,22 @@ EMBED = EMaker.embed
 EMBED_WIDTH = 425
 EMBED_HEIGHT = 344
 
+def get_shortmem(url):
+    shortmem = {}
+    file_id = BLIP_REGEX.match(url).groupdict()['file_id']
+    rss_url = 'http://blip.tv/file/%s?skin=rss' % file_id
+    parsed = feedparser.parse(rss_url)
+    if 'entries' not in parsed or not parsed.entries:
+        shortmem['feed_item'] = None
+    else:
+        shortmem['feed_item'] = parsed['entries'][0]
+    return shortmem
 
-def parse_feed(scraper_func):
-    def new_scraper_func(url, shortmem=None, *args, **kwargs):
-        if not shortmem.get('feed_item'):
-            file_id = BLIP_REGEX.match(url).groupdict()['file_id']
-            rss_url = 'http://blip.tv/file/%s?skin=rss' % file_id
-            parsed = feedparser.parse(rss_url)
-            if 'entries' not in parsed or not parsed.entries:
-                shortmem['feed_item'] = None
-            else:
-                shortmem['feed_item'] = parsed['entries'][0]
-        if shortmem['feed_item'] is None:
-            return None
-        else:
-            return scraper_func(url, shortmem=shortmem, *args, **kwargs)
-
+def parse_feed(scraper_func, shortmem=None):
+    def new_scraper_func(url, shortmem={}, *args, **kwargs):
+        if not shortmem:
+            shortmem = get_shortmem(url)
+        return scraper_func(url, shortmem=shortmem, *args, **kwargs)
     return new_scraper_func
 
 def _fp_get(shortmem, key):
@@ -70,10 +70,9 @@ def _fp_get(shortmem, key):
     return fp.get('blip_%s' % key,
                   fp.get(key))
 
-@provide_shortmem
 @parse_feed
 @returns_unicode
-def get_thumbnail_url(url, shortmem=None):
+def get_thumbnail_url(url, shortmem={}):
     if _fp_get(shortmem, 'thumbnail_src'):
         return 'http://a.images.blip.tv/%s' % (
             _fp_get(shortmem, 'thumbnail_src'),)
@@ -83,26 +82,23 @@ def get_thumbnail_url(url, shortmem=None):
         return _fp_get(shortmem, 'picture')
 
 
-@provide_shortmem
 @parse_feed
 @returns_unicode
-def get_link(url, shortmem=None):
+def get_link(url, shortmem={}):
     return shortmem['feed_item'].link
 
-@provide_shortmem
 @parse_feed
 @returns_unicode
-def scrape_title(url, shortmem=None):
+def scrape_title(url, shortmem={}):
     try:
         return shortmem['feed_item']['title']
     except KeyError:
         raise errors.FieldNotFound('Could not find the title field')
 
 
-@provide_shortmem
 @parse_feed
 @returns_unicode
-def scrape_description(url, shortmem=None):
+def scrape_description(url, shortmem={}):
     if 'summary' in shortmem['feed_item']:
         description = shortmem['feed_item'].summary
     else:
@@ -114,10 +110,9 @@ def scrape_description(url, shortmem=None):
         return u''
 
 
-@provide_shortmem
 @parse_feed
 @returns_unicode
-def scrape_file_url(url, shortmem=None):
+def scrape_file_url(url, shortmem={}):
     try:
         video_enclosure = miroguide_util.get_first_video_enclosure(
             shortmem['feed_item'])
@@ -127,18 +122,16 @@ def scrape_file_url(url, shortmem=None):
         raise errors.FieldNotFound('Could not find the feed_item field')
 
 
-@provide_shortmem
 @parse_feed
 @returns_struct_time
-def scrape_publish_date(url, shortmem=None):
+def scrape_publish_date(url, shortmem={}):
     # sure it's not exactly the publish date, but it's close
     try:
         return shortmem['feed_item'].updated_parsed
     except KeyError:
         raise errors.FieldNotFound('Could not find the publish_date field')
 
-@provide_shortmem
-def get_embed(url, shortmem=None, width=EMBED_WIDTH, height=EMBED_HEIGHT):
+def get_embed(url, shortmem={}, width=EMBED_WIDTH, height=EMBED_HEIGHT):
     file_id = BLIP_REGEX.match(url).groupdict()['file_id']
     oembed_get_dict = {
             'url': 'http://blip.tv/file/%s' % file_id,
@@ -173,26 +166,26 @@ def get_embed(url, shortmem=None, width=EMBED_WIDTH, height=EMBED_HEIGHT):
 
     return embed_code
 
-
-@provide_shortmem
 @parse_feed
-def get_tags(url, shortmem=None):
+def get_tags(url, shortmem={}):
     return [tag['term'] for tag in shortmem['feed_item'].tags]
 
-@provide_shortmem
 @parse_feed
-def get_user(url, shortmem=None):
+def get_user(url, shortmem={}):
     return _fp_get(shortmem, 'user')
 
-@provide_shortmem
 @parse_feed
-def get_user_url(url, shortmem=None):
+def get_user_url(url, shortmem={}):
     url = _fp_get(shortmem, 'showpage')
     if url.startswith('http://') or url.startswith('https://'):
         return url
     else:
         return 'http://%s' % (url,)
 
+@parse_feed
+def video_file_url(url, shortmem={}):
+    print shortmem
+    return ''
 
 BLIP_REGEX = re.compile(
     r'^https?://(?P<subsite>[a-zA-Z]+\.)?blip.tv/file/(?P<file_id>\d+)')
