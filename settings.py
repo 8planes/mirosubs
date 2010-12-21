@@ -238,6 +238,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -272,6 +273,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 INSTALLED_APPS = (
     'auth',
     'django.contrib.auth',
+    'localeurl',
     'socialauth',
     'openid_consumer',
     'django.contrib.contenttypes',
@@ -292,6 +294,11 @@ INSTALLED_APPS = (
     'search',
     'api',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
+)
+
+import re
+LOCALE_INDEPENDENT_PATHS = (
+    re.compile('^/widget'),
 )
 
 #Haystack configuration
