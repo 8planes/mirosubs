@@ -27,5 +27,15 @@
   </p>
 </form>
 
+<form action="{% url videos:create_youtube %}" method="POST">
+    <table>
+        {{ youtube_form }}
+        <tr>
+            <td></td>
+            <td><button>{% trans "Submit" %}</button></td>
+        </tr>
+    </table>
+</form>
+
 
 {% endblock %}

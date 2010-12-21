@@ -32,9 +32,13 @@ from uuid import uuid4
 from math_captcha.forms import MathCaptchaForm, math_clean
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
-from videos.types import video_type_registrar, VideoTypeError
+from videos.types import video_type_registrar, VideoTypeError, YoutubeVideoType
 from videos.models import VideoUrl
-from utils.forms import AjaxForm
+from utils.forms import AjaxForm, EmailListField, UsernameListField
+from gdata.youtube.service import YouTubeService
+from gdata.service import Error as GdataError
+from socket import gaierror
+from django.utils.encoding import smart_unicode
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -341,6 +345,50 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         video_url = self.cleaned_data['video_url']
         obj, create = Video.get_or_create_for_url(video_url, self._video_type, self.user)
         return obj
+
+class AddFromFeedForm(forms.Form, AjaxForm):
+    usernames = UsernameListField(required=False)
+    
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(AddFromFeedForm, self).__init__(*args, **kwargs)
+        
+        self.yt_service = YouTubeService()
+        self.video_types = [] 
+    
+    def clean_usernames(self):
+        usernames = self.cleaned_data.get('usernames', [])
+        for username in usernames:
+            try:
+                user_feed = self.yt_service.GetYouTubeUserFeed(username=str(username))
+            except (GdataError, gaierror), e:
+                if isinstance(e, gaierror):
+                    raise forms.ValidationError(_(u'Youtube is unavailable now.'))
+                try:
+                    error = smart_unicode(e[0]['body'])
+                except (IndexError, KeyError):
+                    error = e
+                error = _(u'Yotube error for %(username)s: %(error)s') % {
+                    'error': error,
+                    'username': username
+                }                
+                raise forms.ValidationError(error)
+            for entry in user_feed.entry:
+                self.add_from_youtube_entry(entry)
+        return usernames
+    
+    def clean(self):
+        data = self.cleaned_data
+        return data
+    
+    def add_from_youtube_entry(self, entry):
+        if not entry.media.private and entry.media.player:
+            self.video_types.append(YoutubeVideoType(entry.media.player.url))
+                            
+    def save(self):
+        for vt in self.video_types:
+            Video.get_or_create_for_url(vt=vt, user=self.user)
+        return len(self.video_types)
     
 class FeedbackForm(MathCaptchaForm):
     email = forms.EmailField(required=False)
@@ -386,22 +434,6 @@ class FeedbackForm(MathCaptchaForm):
         for key, value in self.errors.items():
             output[key] = '/n'.join([force_unicode(i) for i in value])
         return output
-
-email_list_re = re.compile(
-    r"""^(([-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*")@(?:[A-Z0-9]+(?:-*[A-Z0-9]+)*\.)+[A-Z]{2,6},)+$""", re.IGNORECASE)
-
-class EmailListField(forms.RegexField):
-    default_error_messages = {
-        'invalid': _(u'Enter valid e-mail addresses separated by commas.')
-    }
-    
-    def __init__(self, max_length=None, min_length=None, *args, **kwargs):
-        super(EmailListField, self).__init__(email_list_re, max_length, min_length, *args, **kwargs)
-    
-    def clean(self, value):
-        if value:
-            value = value and value.endswith(',') and value or value+','
-        return super(EmailListField, self).clean(value)
     
 class EmailFriendForm(MathCaptchaForm):
     from_email = forms.EmailField(label='From')
@@ -413,5 +445,5 @@ class EmailFriendForm(MathCaptchaForm):
         subject = self.cleaned_data['subject']
         message = self.cleaned_data['message']
         from_email = self.cleaned_data['from_email']
-        to_emails = self.cleaned_data['to_emails'].strip(',').split(',')
+        to_emails = self.cleaned_data['to_emails']
         send_mail(subject, message, from_email, to_emails)

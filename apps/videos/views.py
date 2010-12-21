@@ -23,7 +23,8 @@ from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
-    SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm, TranscriptionFileForm
+    SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm, TranscriptionFileForm, \
+    AddFromFeedForm
 import widget
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -42,6 +43,7 @@ from django.utils.translation import ugettext
 from statistic.models import EmailShareStatistic
 import urllib, urllib2
 from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext_lazy as _
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -89,25 +91,41 @@ def ajax_change_video_title(request):
     return HttpResponse('')
 
 def create(request):
-    if request.method == 'POST':
-        video_form = VideoForm(request.user, request.POST)
-        if video_form.is_valid():
-            try:
-                video = video_form.save()
-            except (VidscraperError, RequestError):
-                vidscraper_error = True
-                return render_to_response('videos/create.html', locals(),
-                              context_instance=RequestContext(request))
-            messages.info(request, message=u'''Here is the subtitle workspace for your video.  You can
+    video_form = VideoForm(request.user, request.POST or None)
+    context = {
+        'video_form': video_form,
+        'youtube_form': AddFromFeedForm(request.user)
+    }    
+    if video_form.is_valid():
+        try:
+            video = video_form.save()
+        except (VidscraperError, RequestError):
+            context['vidscraper_error'] = True
+            return render_to_response('videos/create.html', context,
+                          context_instance=RequestContext(request))
+        messages.info(request, message=_(u'''Here is the subtitle workspace for your video.  You can
 share the video with friends, or get an embed code for your site.  To add or
-improve subtitles, click the button below the video''')
-            return redirect(video.video_link())
-    else:
-        video_form = VideoForm(user=request.user)
-    return render_to_response('videos/create.html', locals(),
+improve subtitles, click the button below the video'''))
+        return redirect(video.video_link())
+    return render_to_response('videos/create.html', context,
                               context_instance=RequestContext(request))
 
 create.csrf_exempt = True
+
+def create_youtube(request):
+    form = AddFromFeedForm(request.user, request.POST or None)
+    if form.is_valid():
+        count = form.save()
+        messages.success(request, _(u"%(count)s videos added") % {'count': count})
+        return redirect('videos:create')
+    context = {
+        'video_form': VideoForm(),
+        'youtube_form': form               
+    }
+    return render_to_response('videos/create.html', context,
+                              context_instance=RequestContext(request))
+
+create_youtube.csrf_exempt = True
 
 def video(request, video_id, video_url=None):
     video = get_object_or_404(Video, video_id=video_id)

@@ -175,7 +175,7 @@ class Video(models.Model):
             pass
 
     @classmethod
-    def get_or_create_for_url(cls, video_url, vt=None, user=None):
+    def get_or_create_for_url(cls, video_url=None, vt=None, user=None):
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
             return None, False
@@ -205,16 +205,16 @@ class Video(models.Model):
             
             SubtitleLanguage(video=obj, is_original=True).save()
             #Save video url
-            video_url = VideoUrl()
+            video_url_obj = VideoUrl()
             if vt.video_id:
-                video_url.videoid = vt.video_id
-            video_url.url = vt.convert_to_video_url()
-            video_url.type = vt.abbreviation
-            video_url.original = True
-            video_url.primary = True
-            video_url.added_by = user
-            video_url.video = obj
-            video_url.save()
+                video_url_obj.videoid = vt.video_id
+            video_url_obj.url = vt.convert_to_video_url()
+            video_url_obj.type = vt.abbreviation
+            video_url_obj.original = True
+            video_url_obj.primary = True
+            video_url_obj.added_by = user
+            video_url_obj.video = obj
+            video_url_obj.save()
             
             return obj, True
     
