@@ -18,7 +18,6 @@
 
 from videos.types.base import VideoType
 from vidscraper.sites import blip
-from videos.types import bliptvutils
 from django.utils.html import strip_tags
 
 class BlipTvVideoType(VideoType):
@@ -58,7 +57,6 @@ class BlipTvVideoType(VideoType):
 
     def scrape_best_file_url(self):
         if not hasattr(self, '_file_url'):
-            #blip.video_file_url(self.url, self.shortmem)
-            self._file_url = bliptvutils.video_file_url(self.file_id)
+            self._file_url = blip.video_file_url(self.file_id)
         return self._file_url
 

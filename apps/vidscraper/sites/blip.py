@@ -182,10 +182,45 @@ def get_user_url(url, shortmem={}):
     else:
         return 'http://%s' % (url,)
 
-@parse_feed
-def video_file_url(url, shortmem={}):
-    print shortmem
-    return ''
+import httplib
+from xml.dom import minidom
+
+def video_file_url(file_id):
+    rss_path = '/file/%s?skin=rss' % file_id
+    conn = httplib.HTTPConnection("blip.tv")
+    conn.request("GET", rss_path)
+    response = conn.getresponse()
+    body = response.read()
+    xmldoc = minidom.parseString(body)
+    media_content_elements = xmldoc.getElementsByTagName('media:content')
+    return _best_flv(media_content_elements) or \
+        _best_mp4(media_content_elements) or \
+        _best_any(media_content_elements)
+
+def _best_any(media_contents):
+    f = lambda c: True
+    return _best_by_height(media_contents, f)
+
+def _best_mp4(media_contents):
+    f = lambda c: c.getAttribute('type') in ['video/x-m4v', 'video/mp4']
+    return _best_by_height(media_contents, f)
+
+def _best_flv(media_contents):
+    f = lambda c: c.getAttribute('type') == 'video/x-flv'
+    return _best_by_height(media_contents, f)
+
+def _best_by_height(media_contents, type_fn):
+    best = None
+    best_height = None
+    HEIGHT = 360
+    for content in media_contents:
+        height = int(content.getAttribute('height') or 0)
+        height_is_best = True if best is None else \
+            abs(HEIGHT - height) < abs(HEIGHT - best_height)
+        if type_fn(content) and height_is_best:
+            best = content
+            best_height = height
+    return best and best.getAttribute('url')
 
 BLIP_REGEX = re.compile(
     r'^https?://(?P<subsite>[a-zA-Z]+\.)?blip.tv/file/(?P<file_id>\d+)')
