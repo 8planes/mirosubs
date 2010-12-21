@@ -39,6 +39,7 @@ from gdata.youtube.service import YouTubeService
 from gdata.service import Error as GdataError
 from socket import gaierror
 from django.utils.encoding import smart_unicode
+import feedparser
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -346,8 +347,12 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         obj, create = Video.get_or_create_for_url(video_url, self._video_type, self.user)
         return obj
 
+youtube_user_url_re = re.compile(r'^(http://)?(www.)?youtube.com/user/(?P<username>[a-zA-Z0-9]+)/?$')
+
 class AddFromFeedForm(forms.Form, AjaxForm):
-    usernames = UsernameListField(required=False)
+    usernames = UsernameListField(required=False, label=_(u'Youtube usernames'), help_text=_(u'Enter usernames separated by comma.'))
+    youtube_user_url = forms.RegexField(youtube_user_url_re, required=False, label=_(u'Youtube user\'s page link'))
+    feed_url = forms.URLField(required=False, help_text=_(u'Enter RSS link from Youtube, Vimeo, Blip or Dailymotion. Video will be added only for supported sites.'))
     
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -356,31 +361,53 @@ class AddFromFeedForm(forms.Form, AjaxForm):
         self.yt_service = YouTubeService()
         self.video_types = [] 
     
+    def clean_feed_url(self):
+        url = self.cleaned_data.get('feed_url')
+        if url:
+            feed = feedparser.parse(url)
+            for item in feed['entries']:
+                try:
+                    video_type = video_type_registrar.video_type_for_url(item['link'])
+                except VideoTypeError, e:
+                    raise forms.ValidationError(e)
+                self.video_types.append(video_type)
+        return url
+    
+    def clean_youtube_user_url(self):
+        url = self.cleaned_data.get('youtube_user_url')
+        if url:
+            username = youtube_user_url_re.match(url).groupdict()['username']
+            self.add_for_youtube_user(username)
+        return url
+        
     def clean_usernames(self):
         usernames = self.cleaned_data.get('usernames', [])
         for username in usernames:
-            try:
-                user_feed = self.yt_service.GetYouTubeUserFeed(username=str(username))
-            except (GdataError, gaierror), e:
-                if isinstance(e, gaierror):
-                    raise forms.ValidationError(_(u'Youtube is unavailable now.'))
-                try:
-                    error = smart_unicode(e[0]['body'])
-                except (IndexError, KeyError):
-                    error = e
-                error = _(u'Yotube error for %(username)s: %(error)s') % {
-                    'error': error,
-                    'username': username
-                }                
-                raise forms.ValidationError(error)
-            for entry in user_feed.entry:
-                self.add_from_youtube_entry(entry)
+            self.add_for_youtube_user(username)
         return usernames
     
     def clean(self):
         data = self.cleaned_data
         return data
     
+    def add_for_youtube_user(self, username):
+        try:
+            user_feed = self.yt_service.GetYouTubeUserFeed(username=str(username))
+        except (GdataError, gaierror), e:
+            if isinstance(e, gaierror):
+                raise forms.ValidationError(_(u'Youtube is unavailable now.'))
+            try:
+                error = smart_unicode(e[0]['body'])
+            except (IndexError, KeyError):
+                error = e
+            error = _(u'Yotube error for %(username)s: %(error)s') % {
+                'error': error,
+                'username': username
+            }                
+            raise forms.ValidationError(error)
+        for entry in user_feed.entry:
+            self.add_from_youtube_entry(entry)
+                    
     def add_from_youtube_entry(self, entry):
         if not entry.media.private and entry.media.player:
             self.video_types.append(YoutubeVideoType(entry.media.player.url))

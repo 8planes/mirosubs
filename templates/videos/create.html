@@ -27,12 +27,11 @@
   </p>
 </form>
 
-<form action="{% url videos:create_youtube %}" method="POST">
+<form action="{% url videos:create_from_feed %}" method="POST">
     <table>
         {{ youtube_form }}
         <tr>
-            <td></td>
-            <td><button>{% trans "Submit" %}</button></td>
+            <td colspan="2"><button>{% trans "Submit" %}</button></td>
         </tr>
     </table>
 </form>

@@ -22,7 +22,7 @@ from django.core.urlresolvers import reverse
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'title', 'languages']
-    search_fields = ['video_id', 'title', 'videourl__url']
+    search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
     
     def languages(self, obj):
         lang_qs = obj.subtitlelanguage_set.all()

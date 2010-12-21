@@ -69,7 +69,7 @@ class YoutubeVideoType(VideoType):
 
     def set_values(self, video_obj):
         video_obj.youtube_videoid = self.video_id
-        video_obj.title = self.entry.media.title.text
+        video_obj.title = self.entry.media.title.text or ''
         if self.entry.media.description:
             video_obj.description = self.entry.media.description.text or ''
         if self.entry.media.duration:

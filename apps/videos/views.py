@@ -112,7 +112,7 @@ improve subtitles, click the button below the video'''))
 
 create.csrf_exempt = True
 
-def create_youtube(request):
+def create_from_feed(request):
     form = AddFromFeedForm(request.user, request.POST or None)
     if form.is_valid():
         count = form.save()
@@ -125,7 +125,7 @@ def create_youtube(request):
     return render_to_response('videos/create.html', context,
                               context_instance=RequestContext(request))
 
-create_youtube.csrf_exempt = True
+create_from_feed.csrf_exempt = True
 
 def video(request, video_id, video_url=None):
     video = get_object_or_404(Video, video_id=video_id)

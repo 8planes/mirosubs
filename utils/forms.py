@@ -29,8 +29,9 @@ class ListField(forms.RegexField):
     def clean(self, value):
         if value:
             value = value and value.endswith(',') and value or value+','
+            value = value.replace(' ', '')
         value = super(ListField, self).clean(value)
-        return value.strip(',').split(',')
+        return [item for item in value.strip(',').split(',') if item]
         
 email_list_re = re.compile(
     r"""^(([-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*")@(?:[A-Z0-9]+(?:-*[A-Z0-9]+)*\.)+[A-Z]{2,6},)+$""", re.IGNORECASE)
@@ -45,7 +46,7 @@ username_list_re = re.compile(r'^([A-Z0-9]+,)+$', re.IGNORECASE)
 
 class UsernameListField(ListField):
     default_error_messages = {
-        'invalid': _(u'Enter valid usernames separated by commas(without space). Username can contain only a-z, A-Z and 0-9.')
+        'invalid': _(u'Enter valid usernames separated by commas. Username can contain only a-z, A-Z and 0-9.')
     }
     pattern = username_list_re
     
