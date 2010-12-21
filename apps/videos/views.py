@@ -41,6 +41,7 @@ from django.db.models import Sum, Q, F
 from django.utils.translation import ugettext
 from statistic.models import EmailShareStatistic
 import urllib, urllib2
+from django.template.defaultfilters import slugify
 
 def index(request):
     context = widget.add_onsite_js_files({})
@@ -58,6 +59,7 @@ def ajax_change_video_title(request):
         if title and not video.title or video.is_html5():
             old_title = video.title_display()
             video.title = title
+            video.slug = slugify(video.title)
             video.save()
             action = Action(new_video_title=video.title, video=video)
             action.user = user.is_authenticated() and user or None
@@ -270,7 +272,6 @@ def demo(request):
 def history(request, video_id, lang=None):
     video = get_object_or_404(Video, video_id=video_id)
     context = widget.add_onsite_js_files({})
-    
     language = video.subtitle_language(lang)
 
     if not language:

@@ -34,6 +34,7 @@ from statistic.models import SubtitleFetchStatistic
 from widget import video_cache
 from datetime import datetime
 from utils.redis_utils import RedisSimpleField
+from django.template.defaultfilters import slugify
 import time
 
 yt_service = YouTubeService()
@@ -69,6 +70,7 @@ class Video(models.Model):
     """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
+    slug = models.SlugField(blank=True)
     description = models.TextField(blank=True)
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
@@ -194,6 +196,8 @@ class Video(models.Model):
         except models.ObjectDoesNotExist:
             obj = Video()
             obj = vt.set_values(obj)
+            if obj.title:
+                obj.slug = slugify(obj.title)
             obj.user = user
             obj.save()
             
