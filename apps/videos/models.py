@@ -873,9 +873,6 @@ class VideoUrl(models.Model):
     added_by = models.ForeignKey(User, null=True, blank=True)
     deleted = models.BooleanField(default=False)
     
-    class Meta:
-        unique_together = (('video', 'original'),)
-    
     objects = VideoUrlManager()
     all = models.Manager()
     

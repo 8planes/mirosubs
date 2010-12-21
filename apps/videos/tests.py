@@ -25,6 +25,7 @@ from django.core import mail
 from videos.forms import SubtitlesUploadForm
 import math_captcha
 import os
+from django.db.models import ObjectDoesNotExist 
 
 math_captcha.forms.math_clean = lambda form: None
 
@@ -363,6 +364,21 @@ class ViewsTest(WebUseTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len_before, Video.objects.count())
         self.assertEqual(response['Location'], 'http://testserver'+video.video_link())
+    
+    def test_video_url_create(self):
+        self._login()
+        v = Video.objects.all()[:1].get()
+        data = {
+            'url': u'http://www.youtube.com/watch?v=po0jY4WvCIc&feature=grec_index',
+            'video': v.pk 
+        }
+        url = reverse('videos:video_url_create')
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        try:
+            v.videourl_set.get(videoid='po0jY4WvCIc')
+        except ObjectDoesNotExist:
+            self.fail()
         
     def test_video(self):
         self._simple_test('videos:video', [self.video.video_id])

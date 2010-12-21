@@ -55,7 +55,10 @@ class YoutubeVideoType(VideoType):
 
     @classmethod    
     def video_url(cls, obj):
-        return 'http://www.youtube.com/watch?v=%s' % obj.videoid
+        if obj.videoid:
+            return 'http://www.youtube.com/watch?v=%s' % obj.videoid
+        else:
+            return obj.url
     
     @classmethod
     def matches_video_url(cls, url):

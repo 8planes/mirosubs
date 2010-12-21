@@ -310,7 +310,6 @@ def _widget_params(request, video, version_no=None, language_code=None):
     primary_url = video.get_video_url()
     alternate_urls = [vu.effective_url for vu in video.videourl_set.all() 
                       if vu.effective_url != primary_url]
-
     params = {'video_url': primary_url, 
               'alternate_video_urls': alternate_urls, 
               'base_state': {}}
