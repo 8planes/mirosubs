@@ -1,4 +1,4 @@
-{% load feedback thumbnail i18n announcement_tags messages_tags %}
+{% load feedback thumbnail i18n announcement_tags messages_tags profiles_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -72,39 +72,7 @@
           <span class="project">{% trans 'a project of the participatory culture foundation' %}</span>
         </h1>
 
-        {% if user.is_authenticated %}
-        <div class="user_panel">
-          <ul>
-            <li>
-              <div class="user">
-                <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" />
-                <a href="{% url profiles:my_profile %}">{{ user }}</a>
-              </div>
-
-              <div class="dropdown">
-                <ul>
-                  <li><a href="#">My Videos</a></li>
-                  <li><a href="#">My Messages</a></li>
-                  <li><a href="{% url teams:index %}?o=my">My Teams</a></li>
-                  <li><a href="{% url profiles:edit %}">Edit Profile</a></li>
-                </ul>
-                <div class="teams_menu">
-                  <h4>Team Management</h4>
-                  <ul>
-                    <li><a href="#">Team I</a></li>
-                    <li><a href="#">Team II</a></li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-          </ul>
-          {% comment %}
-          <a href="#">{% trans 'Team manager options' %}</a>
-          <span class="points"><strong>{% trans 'Points' %}</strong> 3,999</span>
-          <span class="awards"><strong>{% trans 'Awards' %}</strong> 3,999</span>
-          {% endcomment %}
-        </div>
-        {% endif %}
+        {% top_user_panel %}
         
         <ul class="nav">
           <li class="first create_link"><a href="{% url videos:create %}"><span>{% trans 'Subtitle' %}</span> {% trans 'a video now' %}</a></li>

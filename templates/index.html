@@ -1,4 +1,4 @@
-{% load recent_activity widget i18n announcement_tags messages_tags %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load recent_activity widget i18n announcement_tags messages_tags profiles_tags %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -88,12 +88,7 @@
         </ul>
    </div>
 
-    {% if user.is_authenticated %}
-    <div class="user_panel">
-      <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" /> 
-      <a href="{% url profiles:my_profile %}">{{ user }}</a>
-    </div>
-    {% endif %}
+    {% top_user_panel %}
    
    <div class="alphaNav">
       <ul>

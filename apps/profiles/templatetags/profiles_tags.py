@@ -60,3 +60,7 @@ def user_avatar(context, user_obj):
         'user': context['user'],
         'user_obj':user_obj
     }
+
+@register.inclusion_tag('profiles/_top_user_panel.html', takes_context=True)
+def top_user_panel(context):
+    return context
