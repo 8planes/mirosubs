@@ -522,12 +522,13 @@ def video_url_create(request):
         video = form.cleaned_data['video']
         users = video.notification_list_all(request.user)
         for user in users:
-            subject = u'New video %(url)s added by %(username)s to "%(video_title)s" on universalsubtitles.org'
+            subject = u'New video URL added by %(username)s to "%(video_title)s" on universalsubtitles.org'
             subject = subject % {'url': obj.url, 'username': obj.added_by, 'video_title': video}
             context = {
                 'video': video,
                 'video_url': obj,
                 'user': user,
+                'domain': Site.objects.get_current().domain,
                 'hash': user.hash_for_video(video.video_id)
             }
             send_templated_email(user.email, subject, 
