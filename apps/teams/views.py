@@ -102,6 +102,44 @@ def index(request):
                        template_name='teams/index.html',
                        template_object_name='teams',
                        extra_context=extra_context)
+
+@login_required 
+def leave(request, slug):
+    team = Team.get(slug)
+    user = request.user
+
+    try:
+        tm = TeamMember.objects.get(team=team, user=user)
+        if team.members.exclude(pk=tm.pk).exists():
+            tm.delete()
+            messages.success(request, _(u'You are not member of team now.'))
+        else:
+            messages.error(request, _(u'You are last member of this team.'))
+            return redirect(team)
+    except TeamMember.DoesNotExist:
+        messages.info(request, _(u'You are not member of this team.'))
+    
+    return redirect('teams:index')
+
+@login_required 
+def join(request, slug):
+    team = Team.get(slug)
+    user = request.user
+    
+    try:
+        TeamMember.objects.get(team=team, user=user)
+        messages.info(request, _(u'You are already member of this team.'))
+        return redirect(team)
+    except TeamMember.DoesNotExist:
+        pass
+    
+    if not team.is_open():
+        messages.error(request, _(u'This team is not open.'))
+        return redirect('teams:index')
+    else:
+        TeamMember(team=team, user=user).save()
+        messages.success(request, _(u'You are now member of this team.'))
+        return redirect(team)
     
 def detail(request, slug):
     q = request.REQUEST.get('q')
