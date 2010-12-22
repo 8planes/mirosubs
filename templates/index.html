@@ -184,6 +184,22 @@
         </div>
     </div><!-- End: section_secondary_bottom -->
 </div><!-- End: section_secondary -->
+
+    <div class="footer">
+        <div class="floatleft">
+            {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
+        </div>   
+    
+        <div class="floatright">
+            <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
+            <a href="http://twitter.com/universalsubs">Twitter</a>
+            <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
+            <a href="/w3c/privacy.html">{% trans 'Privacy Policy' %}</a>
+            <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
+        </div>      
+    </div> 
+    <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
+
 </body>
 </html>
                  
