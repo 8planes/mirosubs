@@ -746,3 +746,13 @@ class VideoTypeRegistrarTest(TestCase):
         self.assertTrue(isinstance(type, YoutubeVideoType))
         self.assertRaises(VideoTypeError, video_type_registrar.video_type_for_url, 'http://youtube.com/v=100500')
 
+class TestFeedsSubmit(TestCase):
+    
+    def test_video_feed_submit(self):
+        old_count = Video.objects.count()
+        data = {
+            'feed_url': u'http://vimeo.com/channels/beeple/videos/rss'
+        }
+        response = self.client.post(reverse('videos:create_from_feed'), data)
+        self.assertRedirects(response, reverse('videos:create'))
+        self.assertNotEqual(old_count, Video.objects.count())

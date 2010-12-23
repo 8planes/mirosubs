@@ -355,6 +355,8 @@ class AddFromFeedForm(forms.Form, AjaxForm):
     feed_url = forms.URLField(required=False, help_text=_(u'Enter RSS link from Youtube, Vimeo, Blip or Dailymotion. Video will be added only for supported sites.'))
     
     def __init__(self, user, *args, **kwargs):
+        if not user.is_authenticated():
+            user = None
         self.user = user
         super(AddFromFeedForm, self).__init__(*args, **kwargs)
         
@@ -370,7 +372,8 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                     video_type = video_type_registrar.video_type_for_url(item['link'])
                 except VideoTypeError, e:
                     raise forms.ValidationError(e)
-                self.video_types.append(video_type)
+                if video_type:
+                    self.video_types.append(video_type)
         return url
     
     def clean_youtube_user_url(self):
