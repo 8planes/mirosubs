@@ -16,13 +16,17 @@
         </a>
     </li>
   </ul>
-  <h4>{% trans "Team Management" %}</h4>
-  <ul class="teams">
-    {% for t in user.teams.all %}
-        <li {% if team == t %}class="active"{% endif %}>
-            <a href="{{ t.get_edit_url }}">{{ t }}</a>
-        </li>
-    {% endfor %}
+  {% with user.teams.all as user_teams %}
+      {% if user_teams %}  
+          <h4>{% trans "Team Management" %}</h4>
+          <ul class="teams">
+            {% for t in user_teams %}
+                <li {% if team == t %}class="active"{% endif %}>
+                    <a href="{{ t.get_edit_url }}">{{ t }}</a>
+                </li>
+            {% endfor %}
+      {% endif %}
+  {% endwith %}
   </ul>
 </div>
 

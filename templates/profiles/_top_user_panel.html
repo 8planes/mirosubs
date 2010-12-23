@@ -15,7 +15,9 @@
               <a href="{% url messages:index %}">{% trans "My Messages" %}</a> 
               <span class="message_count">{{ user.received_messages.unread.count }}</span>
           </li>
+          {% if user.teams.exists %}
           <li><a href="{% url teams:index %}?o=my">{% trans "My Teams" %}</a></li>
+          {% endif %}
           <li><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
         </ul>
         {% with user.teams.all as user_teams %}
