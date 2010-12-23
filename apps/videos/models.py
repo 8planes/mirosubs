@@ -88,6 +88,7 @@ class Video(models.Model):
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, null=True, blank=True)
+    followers = models.ManyToManyField(User, blank=True, related_name='followed_videos')
 
     subtitles_fetchec_counter = RedisSimpleField('video_id')
     widget_views_counter = RedisSimpleField('video_id')
@@ -327,9 +328,13 @@ class Video(models.Model):
 
     def notification_list(self, exclude=None):
         if self.subtitle_language():
-            return self.subtitle_language().notification_list(exclude)
+            nl = self.subtitle_language().notification_list(exclude)
         else:
-            return []
+            nl = []
+        for user in self.followers.all():
+            if not user in nl: 
+                nl.append(user)
+        return nl
     
     def notification_list_all(self, exclude=None):
         users = []
@@ -337,6 +342,9 @@ class Video(models.Model):
             for u in language.notification_list(exclude):
                 if not u in users:
                     users.append(u) 
+        for user in self.followers.all():
+            if not user in users: 
+                users.append(user)                    
         return users
         
     def update_complete_state(self):
@@ -369,6 +377,7 @@ class SubtitleLanguage(models.Model):
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     subtitles_fetched_count = models.IntegerField(default=0)
+    followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
     
     subtitles_fetched_counter = RedisSimpleField()
     
@@ -489,6 +498,9 @@ class SubtitleLanguage(models.Model):
             if user and user.is_active and user.changes_notification \
                 and not user in users and not user.id in not_send \
                 and not exclude == user:
+                users.append(user)
+        for user in self.followers.all():
+            if not user in users:
                 users.append(user)
         return users
 

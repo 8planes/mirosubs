@@ -58,7 +58,8 @@ def edit_avatar(request):
 
 @login_required
 def my_profile(request):
-    qs = Video.objects.filter(subtitlelanguage__subtitleversion__user=request.user).distinct()
+    qs = Video.objects.filter(Q(subtitlelanguage__subtitleversion__user=request.user)| \
+                              Q(followers=request.user)).distinct()
     
     q = request.REQUEST.get('q')
     total_video_count = qs.count()
