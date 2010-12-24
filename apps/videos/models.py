@@ -35,6 +35,7 @@ from widget import video_cache
 from datetime import datetime
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
+from utils.amazon import S3EnabledImageField
 import time
 
 yt_service = YouTubeService()
@@ -85,6 +86,7 @@ class Video(models.Model):
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False)
     thumbnail = models.CharField(max_length=500, blank=True)
+    s3_thumbnail = S3EnabledImageField(blank=True, upload_to='video/thumbnail/')
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, null=True, blank=True)
@@ -111,15 +113,19 @@ class Video(models.Model):
         st_obj.save()
         
     def get_thumbnail(self):
-        #TODO: should consider size of thumbnail
-        #Is used in teams application now
-        if self.thumbnail.startswith('http://') or self.thumbnail.startswith('https://'):
+        if self.s3_thumbnail:
+            return self.s3_thumbnail.thumb_url(100, 100)
+        
+        if self.thumbnail:
             return self.thumbnail
         
-        if default_s3_store and self.thumbnail:
-            return default_s3_store.url(self.thumbnail)
-
         return ''
+    
+    def get_small_thumbnail(self):
+        if self.s3_thumbnail:
+            return self.s3_thumbnail.thumb_url(50, 50)
+        
+        return ''        
     
     @models.permalink
     def video_link(self):
