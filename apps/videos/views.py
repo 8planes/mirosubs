@@ -150,8 +150,8 @@ def video(request, video_id, video_url=None, title=None):
     if not video.title == title:
         return redirect(video)
     
-    Video.objects.filter(pk=video.pk).update(view_count=F('view_count')+1)
-
+    video.update_view_counter()
+    
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
@@ -307,6 +307,8 @@ def demo(request):
 
 def history(request, video_id, lang=None):
     video = get_object_or_404(Video, video_id=video_id)
+    video.update_view_counter()
+    
     context = widget.add_onsite_js_files({})
     language = video.subtitle_language(lang)
 

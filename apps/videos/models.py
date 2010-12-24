@@ -31,6 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
 from utils.amazon import default_s3_store
 from statistic.models import SubtitleFetchStatistic
+from statistic import update_subtitles_fetch_counter, video_view_counter, widget_views_total_counter
 from widget import video_cache
 from datetime import datetime
 from utils.redis_utils import RedisSimpleField
@@ -72,7 +73,6 @@ class Video(models.Model):
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
     description = models.TextField(blank=True)
-    view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
     allow_community_edits = models.BooleanField()
     allow_video_urls_edit = models.BooleanField(default=True)
@@ -80,8 +80,6 @@ class Video(models.Model):
     writelock_session_key = models.CharField(max_length=255, editable=False)
     writelock_owner = models.ForeignKey(User, null=True, editable=False,
                                         related_name="writelock_owners")
-    subtitles_fetched_count = models.IntegerField(default=0)
-    widget_views_count = models.IntegerField(default=0)
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False)
     thumbnail = models.CharField(max_length=500, blank=True)
@@ -90,9 +88,14 @@ class Video(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, null=True, blank=True)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_videos')
-
+    
+    subtitles_fetched_count = models.IntegerField(default=0)
+    widget_views_count = models.IntegerField(default=0)
+    view_count = models.PositiveIntegerField(default=0)
+    
     subtitles_fetchec_counter = RedisSimpleField('video_id')
     widget_views_counter = RedisSimpleField('video_id')
+    view_counter = RedisSimpleField('video_id')
     
     def __unicode__(self):
         title = self.title_display()
@@ -100,14 +103,19 @@ class Video(models.Model):
             title = title[:70]+'...'
         return title
     
+    def update_view_counter(self):
+        self.view_counter.incr()
+        video_view_counter.incr()
+    
     def update_subtitles_fetched(self, lang=None):
         self.subtitles_fetchec_counter.incr()
         #Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj = SubtitleFetchStatistic(video=self)
         sub_lang = self.subtitle_language(lang)
+        update_subtitles_fetch_counter(self, sub_lang)
         if sub_lang:
             st_obj.language = lang or ''
-            SubtitleLanguage.subtitles_fetched_counter(sub_lang.pk).incr()
+            sub_lang.subtitles_fetched_counter.incr()
             #SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj.save()
         
