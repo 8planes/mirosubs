@@ -568,6 +568,15 @@ float: left;
   }
 
 
+  .mirosubs-steps .mirosubs-done {
+  	display: block;
+  	width: auto;
+  	text-align: center;
+  	float: none !important;
+  	clear: both;
+  }
+
+
 .mirosubs-done-save {
   margin: 15px 0px 0px 20px;
 
@@ -622,16 +631,17 @@ margin-right: 20px;
    left: 30px;
 }
 
-.mirosubs-done span {
+.mirosubs-done span {  
+    padding-right: 40px;
    text-decoration: none !important;
    color: #333 !important;
-   background: url("../images/sprite.png") right -236px no-repeat;
+   background: url("../images/sprite.png") right -234px no-repeat;
 }
 
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 .mirosubs-done span {
-   background: url("../images/sprite.png") right -235px no-repeat;
+   background: url("../images/sprite.png") right -234px no-repeat;
 }
 }
 
@@ -2555,6 +2565,8 @@ a.mirosubs-openid span{
 }
 
 .mirosubs-howtopanel .mirosubs-done {
+  float: none;
+  display: block;
    width: 180px;
    margin: 10px auto;
 }
