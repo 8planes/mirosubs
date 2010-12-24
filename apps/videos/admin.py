@@ -28,6 +28,7 @@ class VideoAdmin(admin.ModelAdmin):
         return '<img width="50" height="50" src="%s"/>' % obj.get_small_thumbnail() 
     
     video_thumbnail.allow_tags = True
+    video_thumbnail.short_description = 'Thumbnail'
     
     def languages(self, obj):
         lang_qs = obj.subtitlelanguage_set.all()
