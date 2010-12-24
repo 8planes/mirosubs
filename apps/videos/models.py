@@ -71,7 +71,6 @@ class Video(models.Model):
     """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
-    slug = models.SlugField(blank=True)
     description = models.TextField(blank=True)
     view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
@@ -173,6 +172,8 @@ class Video(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
+        if self.title:
+            return ('videos:video_with_title', [self.video_id, self.title])
         return ('videos:video', [self.video_id])
 
     def get_video_url(self):
