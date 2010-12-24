@@ -3,11 +3,11 @@
 {% load paginator i18n %}
 
 {% block title %}
-    {% trans 'Messages' %} | Universal Subtitles
+    {% trans 'My Messages' %} | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
-<h2>{% trans 'Messages' %}</h2>
+<h2>{% trans 'My Messages' %}</h2>
 
 <div class="grid_8 alpha">
     {% if is_paginated %}{% paginator %}{% endif %}
