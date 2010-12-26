@@ -15,34 +15,32 @@
     <script type="text/javascript">
         jQuery(function($){
             $('.join-team', $('ul.big_list')).live('click', function(){
-                var $this = $(this);
-                TeamsApi.join($this.attr('team_id'), function(response){
-                    if (response.error){
-                        $.msg.clean().add(response.error, 'error');
-                    }else{
-                        $.msg.clean().add(response.msg);
-                        $this.html('{% trans "Leave" %}').removeClass('join-team')
-                            .addClass('leave-team');
-                    }
-                });
+                if (confirm('{% trans "Do you really wish join this team?" %}')){
+                    var $this = $(this);
+                    TeamsApi.join($this.attr('team_id'), function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error, 'error');
+                        }else{
+                            $.msg.clean().add(response.msg);
+                            $this.remove();
+                        }
+                    });
+                }
                 return false;
             });
             $('.leave-team', $('ul.big_list')).live('click', function(){
-                var $this = $(this);
-                TeamsApi.leave($this.attr('team_id'), function(response){
-                    if (response.error){
-                        $.msg.clean().add(response.error, 'error');
-                    }else{
-                        $.msg.clean().add(response.msg);
-                        $this.parents('.info').find('.your-team').remove();
-                        if (response.is_open){
-                            $this.html('{% trans "Join" %}').removeClass('leave-team')
-                                .addClass('join-team');
+                if (confirm('{% trans "Do you really wish leave this team?" %}')){
+                    var $this = $(this);
+                    TeamsApi.leave($this.attr('team_id'), function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error, 'error');
                         }else{
+                            $.msg.clean().add(response.msg);
+                            $this.parents('.info').find('.your-team').remove();
                             $this.remove();
                         }
-                    }
-                });
+                    });
+                }
                 return false;
             });            
         });

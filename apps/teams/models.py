@@ -95,6 +95,9 @@ class Team(models.Model):
     def is_open(self):
         return self.membership_policy == self.OPEN
     
+    def is_by_application(self):
+        return self.membership_policy == self.APPLICATION
+    
     @classmethod
     def get(cls, slug, user=None, raise404=True):
         if user:

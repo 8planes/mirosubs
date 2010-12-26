@@ -1,37 +1,53 @@
 {% load i18n teams_tags %}
 <script type="text/javascript">
     jQuery(function($){
-        $('.join-team', $('.team-detail')).live('click', function(){
-            var $this = $(this);
-            TeamsApi.join($this.attr('team_id'), function(response){
-                if (response.error){
-                    $.msg.clean().add(response.error, 'error');
-                }else{
-                    $.msg.clean().add(response.msg);
-                    $this.html('{% trans "Leave" %}').removeClass('join-team')
-                        .addClass('leave-team');
-                }
-            });
-            return false;
-        });
-        $('.leave-team', $('.team-detail')).live('click', function(){
-            var $this = $(this);
-            TeamsApi.leave($this.attr('team_id'), function(response){
-                if (response.error){
-                    $.msg.clean().add(response.error, 'error');
-                }else{
-                    $.msg.clean().add(response.msg);
-                    $this.parents('.team-detail').find('.your-team').remove();
-                    if (response.is_open){
-                        $this.html('{% trans "Join" %}').removeClass('leave-team')
-                            .addClass('join-team');
+        $('a.join-team').click(function(){
+            if (confirm('{% trans "Do you really wish join this team?" %}')){
+                var $this = $(this);
+                TeamsApi.join($this.attr('team_id'), function(response){
+                    if (response.error){
+                        $.msg.clean().add(response.error, 'error');
                     }else{
+                        $.msg.clean().add(response.msg);
                         $this.remove();
                     }
-                }
+                });
+            };
+            return false;
+        });
+        $('a.leave-team').click(function(){
+            if (confirm('{% trans "Do you really wish leave this team?" %}')){
+                var $this = $(this);
+                TeamsApi.leave($this.attr('team_id'), function(response){
+                    if (response.error){
+                        $.msg.clean().add(response.error, 'error');
+                    }else{
+                        $.msg.clean().add(response.msg);
+                        $this.parents('.team-detail').find('.your-team').remove();
+                        $this.remove();
+                    }
+                });
+            }
+            return false;
+        });
+        $apptxt = $('div.application-textarea')  
+        $('a.join-team-by-application').click(function(){
+            $apptxt.show();
+            $(this).remove();
+            return false;
+        });
+        $('button', $apptxt).click(function(){
+            var $t = $('textarea', $apptxt);
+            TeamsApi.create_application($(this).attr('team_id'), $t.val(), function(response){
+                if (response.error){
+                    $.msg.clean().add(response.error, 'error');
+                }else{
+                    $.msg.clean().add(response.msg);
+                    $apptxt.remove();
+                }                
             });
             return false;
-        });            
+        });          
     });
 </script>   
     
@@ -68,10 +84,21 @@
             <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a>   
         </p>
     {% else %}
-        {% if team.is_open and user.is_authenticated %}
-        <p>
-           <a class="join-team" team_id="{{ team.pk }}" href="#">{% trans "Join" %}</a> 
-        </p>
+        {% if user.is_authenticated %}
+            {% if team.is_open %}
+            <p>
+               <a class="join-team" team_id="{{ team.pk }}" href="#">{% trans "Join" %}</a> 
+            </p>
+            {% endif %}
+            {% if team.is_by_application %}
+            <p>
+                <a class="join-team-by-application" team_id="{{ team.pk }}" href="#">{% trans "Send application" %}</a>
+                <div style="display: none" class="application-textarea">
+                    <textarea></textarea>
+                    <button team_id="{{ team.pk }}">{% trans "Send" %}</button>
+                </div>
+            </p>
+            {% endif %}
         {% endif %}
     {% endif %} 
 </div>
