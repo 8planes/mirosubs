@@ -38,18 +38,18 @@ class TeamsApiClass(object):
         
         try:
             tm = TeamMember.objects.get(team=team, user=user)
-            return {'error':  _(u'You are already member of this team.')}
+            return {'error':  _(u'You are already a member of this team.')}
         except TeamMember.DoesNotExist:
             pass
         
         if team.is_open():
             TeamMember(team=team, user=user).save()
-            return {'msg': _(u'You are now member of this team because it is open.')}
+            return {'msg': _(u'You are now a member of this team because it is open.')}
         elif team.is_by_application():
             application, created = Application.objects.get_or_create(team=team, user=user)
             application.note = msg
             application.save()
-            return {'msg': _(u'Application sent success. Wait for answer form team.')}
+            return {'msg': _(u'Application sent success. Wait for answer from team.')}
         else:
             return {'error':  _(u'You can\'t join this team by application.')}
         
@@ -66,11 +66,11 @@ class TeamsApiClass(object):
             tm = TeamMember.objects.get(team=team, user=user)
             if team.members.exclude(pk=tm.pk).exists():
                 tm.delete()
-                return {'msg': _(u'You are not member of team now.'), 'is_open': team.is_open()}
+                return {'msg': _(u'You are not a member of team now.'), 'is_open': team.is_open()}
             else:
                 return {'error': _(u'You are last member of this team.')}
         except TeamMember.DoesNotExist:
-            return {'error':  _(u'You are not member of this team.')}
+            return {'error':  _(u'You are not a member of this team.')}
     
     def join(self, team_id, user):
         if not user.is_authenticated():
@@ -83,7 +83,7 @@ class TeamsApiClass(object):
         
         try:
             TeamMember.objects.get(team=team, user=user)
-            return {'error':  _(u'You are already member of this team.')}
+            return {'error':  _(u'You are already a member of this team.')}
         except TeamMember.DoesNotExist:
             pass
         
@@ -91,4 +91,4 @@ class TeamsApiClass(object):
             return {'error':  _(u'This team is not open.')}
         else:
             TeamMember(team=team, user=user).save()
-            return {'msg': _(u'You are now member of this team.')}
+            return {'msg': _(u'You are now a member of this team.')}
