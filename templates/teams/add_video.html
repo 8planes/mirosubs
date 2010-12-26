@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "settings.html" %}
 
 {% load i18n teams_tags widget %}
 
@@ -13,20 +13,8 @@
     <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
 {% endblock %}
 
-{% block main_content %}
-
-{% team_select team %}
-
-<h2>{% trans 'Manage Settings & Teams' %}</h2>
-<div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-        <li class="active">
-            <a href="#">{% trans 'Your Teams' %}</a>
-        </li>
-    </ul>
-</div>
-<div class="wrap grid_9 omega">
-    <h4 class="inline">{{ team }}</h4>
+{% block settings_content %}
+    <h2>{% trans 'Manage Settings & Teams' %}</h2>
     {% with "videos" as active %}
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}
@@ -44,6 +32,4 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="clearfix"></div>
-</div>
 {% endblock %}
