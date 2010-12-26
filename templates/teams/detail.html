@@ -16,6 +16,8 @@
 {% block scripts %}
     {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
+    <script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>   
 {% endblock %}
 
 {% block main_content %}
@@ -104,44 +106,7 @@
 
 
 <div class="grid_4 omega">
-    {% if not team.video %}
-    <div class="team_logo">
-        {% if team.logo %}
-        <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
-        {% endif %}
-    </div>
-    {% endif %}
-    {% if team.description %}
-    <p>
-        <b>{% trans 'Team Description' %}:</b> {{ team.description|urlize }}
-    </p>
-    {% endif %}
-    <p>
-        <b>{% trans 'Team Managers' %}:</b>
-        {% for item in team.members.managers %}
-            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </p>
-    <p>
-        <b>{% trans 'Video Policy' %}:</b>
-        {{ team.get_video_policy_display }}
-    </p>
-    <p>
-        <b>{% trans 'Membership Policy' %}:</b>
-        {{ team.get_membership_policy_display }}
-    </p>    
-    {% if team|is_team_member:user %}
-        <p>
-            <a href="{{ team.get_edit_url }}">{% trans "Manager's Settings & Controls" %}</a> /
-            <a href="{% url teams:leave team.slug %}">{% trans "Leave" %}</a>    
-        </p>
-    {% else %}
-        {% if team.is_open and user.is_authenticated %}
-        <p>
-           <a href="{% url teams:join team.slug %}">{% trans "Join" %}</a> 
-        </p>
-        {% endif %}
-    {% endif %}       
+    {% include "teams/_team_detail.html" %}     
 
     {% team_activity team %}
 </div>

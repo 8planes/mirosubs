@@ -22,7 +22,47 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
+from teams.models import Team, TeamMember
+from django.utils.translation import ugettext as _
+
 class TeamsApiClass(object):
     
-    def hello(self, user):
-        return {'msg': 111}
+    def leave(self, team_id, user):
+        if not user.is_authenticated():
+            return {'error': _('You should be authenticated.')}
+            
+        try:
+            team = Team.objects.get(pk=team_id)
+        except Team.DoesNotExist:
+            return {'error': _('Team does not exist')}
+            
+        try:
+            tm = TeamMember.objects.get(team=team, user=user)
+            if team.members.exclude(pk=tm.pk).exists():
+                tm.delete()
+                return {'msg': _(u'You are not member of team now.'), 'is_open': team.is_open()}
+            else:
+                return {'error': _(u'You are last member of this team.')}
+        except TeamMember.DoesNotExist:
+            return {'error':  _(u'You are not member of this team.')}
+    
+    def join(self, team_id, user):
+        if not user.is_authenticated():
+            return {'error': _('You should be authenticated.')}
+            
+        try:
+            team = Team.objects.get(pk=team_id)
+        except Team.DoesNotExist:
+            return {'error': _('Team does not exist')}
+        
+        try:
+            TeamMember.objects.get(team=team, user=user)
+            return {'error':  _(u'You are already member of this team.')}
+        except TeamMember.DoesNotExist:
+            pass
+        
+        if not team.is_open():
+            return {'error':  _(u'This team is not open.')}
+        else:
+            TeamMember(team=team, user=user).save()
+            return {'msg': _(u'You are now member of this team.')}

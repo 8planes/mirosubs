@@ -1,0 +1,77 @@
+{% load i18n teams_tags %}
+<script type="text/javascript">
+    jQuery(function($){
+        $('.join-team', $('.team-detail')).live('click', function(){
+            var $this = $(this);
+            TeamsApi.join($this.attr('team_id'), function(response){
+                if (response.error){
+                    $.msg.clean().add(response.error, 'error');
+                }else{
+                    $.msg.clean().add(response.msg);
+                    $this.html('{% trans "Leave" %}').removeClass('join-team')
+                        .addClass('leave-team');
+                }
+            });
+            return false;
+        });
+        $('.leave-team', $('.team-detail')).live('click', function(){
+            var $this = $(this);
+            TeamsApi.leave($this.attr('team_id'), function(response){
+                if (response.error){
+                    $.msg.clean().add(response.error, 'error');
+                }else{
+                    $.msg.clean().add(response.msg);
+                    $this.parents('.team-detail').find('.your-team').remove();
+                    if (response.is_open){
+                        $this.html('{% trans "Join" %}').removeClass('leave-team')
+                            .addClass('join-team');
+                    }else{
+                        $this.remove();
+                    }
+                }
+            });
+            return false;
+        });            
+    });
+</script>   
+    
+<div class="team-detail">
+    {% if not team.video %}
+    <div class="team_logo">
+        {% if team.logo %}
+        <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if team.description %}
+    <p>
+        <b>{% trans 'Team Description' %}:</b> {{ team.description|urlize }}
+    </p>
+    {% endif %}
+    <p>
+        <b>{% trans 'Team Managers' %}:</b>
+        {% for item in team.members.managers %}
+            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </p>
+    <p>
+        <b>{% trans 'Video Policy' %}:</b>
+        {{ team.get_video_policy_display }}
+    </p>
+    <p>
+        <b>{% trans 'Membership Policy' %}:</b>
+        {{ team.get_membership_policy_display }}
+    </p>        
+    {% if team|is_team_member:user %}
+        <p>
+            <a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a><br/>
+            <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a>   
+        </p>
+    {% else %}
+        {% if team.is_open and user.is_authenticated %}
+        <p>
+           <a class="join-team" team_id="{{ team.pk }}" href="#">{% trans "Join" %}</a> 
+        </p>
+        {% endif %}
+    {% endif %} 
+</div>

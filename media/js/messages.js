@@ -22,10 +22,11 @@ jQuery.extend(jQuery.msg, {
         $messages.show();
         return $messages;
     },
-    add: function(text){
+    add: function(text, cls){
         var $ = jQuery;
+        var cls = cls || '';
         var $messages = this.get();
-        $messages.append('<p>'+text+'</p>');
+        $messages.append('<p class="'+cls+'">'+text+'</p>');
         this.timer && clearTimeout(this.timer);
         this.timer = setTimeout(function(){
             $messages.hide();
