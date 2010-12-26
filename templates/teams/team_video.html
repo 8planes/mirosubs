@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "settings.html" %}
 
 {% load i18n teams_tags widget %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
-    {% trans 'Team video' %} | Universal Subtitles
+    {% trans 'Edit team video' %} | Universal Subtitles
 {% endblock %}
 
 {% block css %}
@@ -42,37 +42,11 @@
     </script>
 {% endblock %}
 
-{% block main_content %}
-
-{% team_select team %}
-
-<h2>{% trans 'Manage Settings & Teams' %}</h2>
-<div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-        <li class="active">
-            <a href="#">{% trans 'Your Teams' %}</a>
-        </li>
-    </ul>
-</div>
-<div class="wrap grid_9 omega">
-    <h4 class="inline">{{ team }}</h4>
-    <ul class="inline_tabs">
-        <li class="active">
-            <span class="tab-item">{% trans 'Team Settings' %}</span>
-        </li>
-        <li class="bull">&bull;</li>        
-        <li>
-            <a href="{% url teams:edit_members team.slug %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
-        </li>
-        <li class="bull">&bull;</li>        
-        <li>
-            <a href="{% url teams:edit_videos team.slug %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
-        </li>
-        <li class="bull">&bull;</li>        
-        <li>
-            <a href="{% url teams:applications team.slug %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
-        </li>
-    </ul>
+{% block settings_content %}
+    <h2>{{ team }}</h2>
+    {% with "videos" as active %}
+        {% include 'teams/_edit_top_navigation.html' %}
+    {% endwith %}
     <div class="boxx">
         <div class="padding">
             {% widget widget_params %}
@@ -124,6 +98,4 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="clearfix"></div>
-</div>
 {% endblock %}

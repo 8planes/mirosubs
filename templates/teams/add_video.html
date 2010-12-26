@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block settings_content %}
-    <h2>{% trans 'Manage Settings & Teams' %}</h2>
+    <h2>{{ team }}</h2>
     {% with "videos" as active %}
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}

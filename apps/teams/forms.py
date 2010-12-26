@@ -37,6 +37,7 @@ from videos.models import Video
 from django.utils.safestring import mark_safe
 from urlparse import urlparse
 from utils.forms import AjaxForm
+from localeurl.utils import strip_path
 import re
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
@@ -83,6 +84,9 @@ class BaseVideoBoundForm(forms.ModelForm):
         
         if video_url.startswith(url_start):
             #UniSub URL
+            locale, path = strip_path(video_url[len(url_start):])
+            print locale, path
+            video_url = url_start+path
             try:
                 video_url = self.format_url(video_url)
                 func, args, kwargs = resolve(video_url.replace(url_start, ''))
