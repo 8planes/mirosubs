@@ -23,11 +23,14 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.conf.urls.defaults import *
+from teams.views import rpc_router
 
 urlpatterns = patterns('teams.views',
     url('^$', 'index', name='index'),
     url('^create/$', 'create', name='create'),
     url('^invite/$', 'invite', name='invite'),
+    url(r'^router/$', rpc_router, name='rpc_router'),
+    url(r'^router/api/$', rpc_router.api, name='rpc_api'),    
     url('^invite/accept/(?P<invite_pk>\d+)/$', 'accept_invite', name='accept_invite'),
     url('^invite/deny/(?P<invite_pk>\d+)/$', 'accept_invite', {'accept': False}, name='deny_invite'),
     url('^edit/(?P<slug>[-\w]+)/$', 'edit', name='edit'),

@@ -131,10 +131,18 @@ $.fn.ajaxSubmit = function(options) {
 	else if (options.success)
 		callbacks.push(options.success);
 
-	options.success = function(data, status, xhr) { // jQuery 1.4+ passes xhr as 3rd arg
-		for (var i=0, max=callbacks.length; i < max; i++)
-			callbacks[i].apply(options, [data, status, xhr || $form, $form]);
-	};
+    /* Changed for RPC */    
+    if (options.type === 'RPC') {
+        options.success = function(data, event) {
+            for (var i=0, max=callbacks.length; i < max; i++)
+                callbacks[i].apply(this, [data, event, $form]);
+        };        
+    }else{
+        options.success = function(data, status, xhr) { // jQuery 1.4+ passes xhr as 3rd arg
+            for (var i=0, max=callbacks.length; i < max; i++)
+                callbacks[i].apply(options, [data, status, xhr || $form, $form]);
+        };        
+    }
 
 	// are there files to upload?
 	var files = $('input:file', this).fieldValue();
@@ -158,7 +166,16 @@ $.fn.ajaxSubmit = function(options) {
 		   fileUpload();
 	   }
    else
-	   $.ajax(options);
+       /* Changed for RPC */
+       if (options.type === 'RPC'){
+           var rpc_data = {}
+           for (var i=0,len=a.length; i<len; i++){
+               rpc_data[a[i].name] = a[i].value
+           } 
+           options.api.submit(rpc_data, options.success, options.scope || options)
+       }else{
+           $.ajax(options);
+       }
 
 	// fire 'notify' event
 	this.trigger('form-submit-notify', [this, options]);

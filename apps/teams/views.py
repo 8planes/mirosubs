@@ -41,6 +41,12 @@ import widget
 from videos.models import Action
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
+from teams.rpc import TeamsApiClass
+from utils.rpc import RpcRouter
+
+rpc_router = RpcRouter('teams:rpc_router', {
+    'TeamsApi': TeamsApiClass()
+})
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
