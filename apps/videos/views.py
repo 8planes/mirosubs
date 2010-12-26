@@ -51,6 +51,21 @@ def index(request):
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
 
+@login_required
+def follow_video(request, video_id):
+    #move this on rpc
+    video = get_object_or_404(Video, video_id=video_id)
+    video.followers.add(request.user)
+    StopNotification.objects.filter(user=request.user, video=video).delete()
+    messages.success(request, _(u'You are following %(video)s now') % {'video': video})
+    return redirect(video)
+
+@login_required
+def follow_language(request, language_id):
+    #move this on rpc
+    language = get_object_or_404(SubtitleLanguage, language_id=language_id)
+    return redirect()
+
 def ajax_change_video_title(request):
     video_id = request.POST.get('video_id')
     title = request.POST.get('title')
@@ -127,13 +142,16 @@ def create_from_feed(request):
 
 create_from_feed.csrf_exempt = True
 
-def video(request, video_id, video_url=None):
+def video(request, video_id, video_url=None, title=None):
     video = get_object_or_404(Video, video_id=video_id)
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
-        
-    Video.objects.filter(pk=video.pk).update(view_count=F('view_count')+1)
-
+    
+    if not video.title == title:
+        return redirect(video)
+    
+    video.update_view_counter()
+    
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
@@ -289,6 +307,8 @@ def demo(request):
 
 def history(request, video_id, lang=None):
     video = get_object_or_404(Video, video_id=video_id)
+    video.update_view_counter()
+    
     context = widget.add_onsite_js_files({})
     language = video.subtitle_language(lang)
 

@@ -1,22 +1,21 @@
 {% extends 'videos/email_base.html' %}
 
-{% load i18n %}
+{% load i18n localeurl_tags %}
 
 {% block content %}
     <p style="font-size: 12px;">
         {% trans "A new video URL for" %}
-        <b><a href="http://{{ domain }}{{ video.get_absolute_url }}">{{ video }}</a></b> 
+        <b><a href="http://{{ domain }}{{ video.get_absolute_url|rmlocale }}">{{ video }}</a></b> 
         {% trans "was submitted by" %}
-        <b><a href="http://{{ domain }}{{ video_url.added_by.get_absolute_url }}">{{ video_url.video_url }}</a></b>.  
+        <b><a href="http://{{ domain }}{{ video_url.added_by.get_absolute_url|rmlocale }}">{{ video_url.video_url }}</a></b>.  
         {% trans "Please check to make sure the new URL features the exact same video, and that subtitle timing is correct:" %}  
         <br/><br/>
     </p>
 
     <p style="font-size: 12px;">
         <ul>
-            <li><a href="http://{{ domain }}{{ video_url.get_absolute_url }}">{% trans "View the new video URL" %}</a></li> 
-            <li><a href="http://{{ domain }}{{ video.get_absolute_url }}#urls">{% trans "View the original video URL" %}</a></li>
-            <li><a href="http://{{ domain }}{% url videos:stop_notification video.video_id %}?u={{ user.id }}&h={{ hash }}">{% trans "Stop watching for changes on this video" %}</a></li>    
+            <li><a href="http://{{ domain }}{{ video_url.get_absolute_url|rmlocale }}">{% trans "View the new video URL" %}</a></li> 
+            <li><a href="http://{{ domain }}{{ video.get_absolute_url|rmlocale }}#urls">{% trans "View the original video URL" %}</a></li>
         </ul>
     </p>
 {% endblock %}

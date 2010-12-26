@@ -2,6 +2,8 @@ from redis import Redis
 from django.conf import settings
 from utils import catch_exception
 from redis.exceptions import RedisError
+from inspect import ismethod
+from django.utils.functional import update_wrapper
 
 REDIS_HOST = getattr(settings, 'REDIS_HOST', 'localhost')
 REDIS_PORT = getattr(settings, 'REDIS_PORT', 6379)
@@ -20,6 +22,11 @@ class RedisCounterFieldNotUnique(RedisCounterField):
 class RedisCounterFieldNoSettings(RedisCounterField):
     pass
 
+def redis_key_wrapper(func, key):
+    def wrapper(*args, **kwargs):
+        return func(key, *args, **kwargs)
+    return update_wrapper(wrapper, func)
+
 class RedisKey(object):
 
     def __init__(self, key, r=None):
@@ -31,9 +38,17 @@ class RedisKey(object):
 
     def __str__(self):
         return "%s -> %s" % (self.redis_key, self.val)
-
+    
+    def __getattr__(self, name):
+        if hasattr(self.r, name):
+            method = getattr(self.r, name)
+            if ismethod(method):
+                return catch_exception_dec(redis_key_wrapper(method, self.redis_key))
+        raise AttributeError
+    
     @catch_exception_dec
     def set_val(self, val):
+        #get rid from this: user get, set
         return self.r.set(self.redis_key, val)
 
     @catch_exception_dec
@@ -41,14 +56,6 @@ class RedisKey(object):
         return self.r.get(self.redis_key)
 
     val = property(get_val, set_val)
-
-    @catch_exception_dec
-    def incr(self):
-        return self.r.incr(self.redis_key)
-
-    @catch_exception_dec
-    def decr(self):
-        return self.r.decr(self.redis_key)
 
 class RedisSimpleField(object):
     """

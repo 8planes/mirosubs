@@ -18,6 +18,17 @@ a{
 	text-decoration:none;
 	outline:none
 }
+
+/*//////////   ~  Linkage  ~   //////////*/
+
+
+
+a{}
+a:visited {color: #506a70;}
+a:active {}
+a:link {color: #3196ad;text-decoration: underline;} 
+a:hover,a:focus {color: #;text-decoration: none; outline: none !important; -moz-outline: none !important;}
+
 /*==============================
 				Module
 ==============================*/
@@ -109,6 +120,7 @@ div.alphaNav ul li a:hover{
 	height:45px;
 	margin:0 auto;
 	text-align:left;
+	position: relative;
 	}
 	
 /*========================================
@@ -285,3 +297,34 @@ span.indication{
 	height:100%;
 	float:right;
 }
+
+/*/////////////////////////////////////////////
+
+~ Footer
+
+/////////////////////////////////////////////*/
+
+
+.footer{
+  padding: 20px 30px 16px;
+  margin: 50px 0 80px;
+  color: #333;
+  clear: both;
+  width: 920px;
+  margin: 60px auto;
+  font-weight: bold;
+  font-size: 13px;
+  background: url(../images/1x1.png);
+  -moz-border-radius: 5px;  
+  -webkit-border-radius: 5px;
+  height: 1.6em;
+  }
+
+
+.footer a{ color: #333;}
+
+
+.footer .floatright a{ padding-left: 20px;}
+
+.floatleft { float: left; }
+.floatright { float: right; }

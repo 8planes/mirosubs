@@ -5,7 +5,7 @@
 {% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
-    {% trans 'Teams' %} | Universal Subtitles
+    {% trans 'Teams' %}| Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
@@ -82,7 +82,9 @@
                 <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} ({% trans 'your team' %}){% endif %}</a></h4>
                 {% if team|is_team_member:user %}
                     <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
-                {% endif %}                
+                {% else %}
+                    {% if team.is_open and user.is_authenticated %}<a href="{% url teams:join team.slug %}">{% trans "Join" %}</a><br/>{% endif %}
+                {% endif %}      
                 <span>
                     {% blocktrans with team.member_count as count %}
                     Team with {{ count }} Members

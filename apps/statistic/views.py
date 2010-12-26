@@ -25,6 +25,7 @@ from comments.models import Comment
 from django.db.models import Sum, Count
 from django.http import Http404
 from django.views.decorators.cache import cache_page
+from statistic import widget_views_total_counter, sub_fetch_total_counter
 
 @cache_page(60 * 60 * 24)
 @render_to('statistic/index.html')
@@ -59,8 +60,8 @@ def index(request):
     email_st['day'] = EmailShareStatistic.objects.filter(created__range=(day_ago, today)).count()
 
     context = {
-        'subtitles_fetched_count': Video.objects.aggregate(c=Sum('subtitles_fetched_count'))['c'],
-        'view_count': Video.objects.aggregate(c=Sum('view_count'))['c'],
+        'subtitles_fetched_count': sub_fetch_total_counter.get(),
+        'view_count': widget_views_total_counter.get(),
         'videos_with_captions': Video.objects.exclude(subtitlelanguage=None).count(),
         'all_videos': Video.objects.count(),
         'all_users': User.objects.count(),
@@ -76,7 +77,6 @@ def index(request):
            
     return context
 
-@cache_page(60 * 60 * 24)
 @render_to_json    
 def update_share_statistic(request, cls):
     st = cls()

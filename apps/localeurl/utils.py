@@ -8,8 +8,8 @@ import localeurl.settings
 
 SUPPORTED_LOCALES = dict(settings.LANGUAGES)
 LOCALES_RE = '|'.join(SUPPORTED_LOCALES)
-PATH_RE = re.compile(r'^/(?P<locale>%s)(?P<path>.*)$' % LOCALES_RE)
-DOMAIN_RE = re.compile(r'^(?P<locale>%s)\.(?P<domain>.*)$' % LOCALES_RE)
+PATH_RE = re.compile(r'^/(?P<locale>%s)(?=/)(?P<path>.*)$' % LOCALES_RE)
+DOMAIN_RE = re.compile(r'^(?P<locale>%s)(?=/)\.(?P<domain>.*)$' % LOCALES_RE)
 DOMAIN_MAP = dict(localeurl.settings.DOMAINS)
 
 def is_locale_independent(path):
@@ -82,6 +82,7 @@ def locale_path(path, locale=''):
     Generate the localeurl-enabled path from a path without locale prefix. If
     the locale is empty settings.LANGUAGE_CODE is used.
     """
+    locale = supported_language(locale)
     if localeurl.settings.URL_TYPE != 'path_prefix':
         return path
     if not locale:

@@ -22,8 +22,8 @@ def create_thumbnails(obj, content, size=None, thumb_name=None):
         img = StringIO()
         content.seek(0)
         Thumbnail(StringIO(content.read(content.size)), size, dest=img, opts=obj.field.thumb_options)
-        thumb_name = thumb_name or obj.build_thumbnail_name(obj.name, size)
-        obj.storage.save(thumb_name, ContentFile(img.read()))
+        th_name = thumb_name or obj.build_thumbnail_name(obj.name, size)
+        obj.storage.save(th_name, ContentFile(img.read()))
 
 class S3ImageFieldFile(FieldFile):
     

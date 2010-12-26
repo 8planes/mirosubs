@@ -2,6 +2,8 @@
 
 {% load thumbnail i18n %}
 
+{% block title %}{{ user_info }} | Universal Subtitles{% endblock %}
+
 {% block css %}
     {{ block.super }}
     <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />

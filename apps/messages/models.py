@@ -31,6 +31,12 @@ from django.conf import settings
 
 MESSAGE_MAX_LENGTH = getattr(settings,'MESSAGE_MAX_LENGTH', 1000)
 
+class MessageManager(models.Manager):
+    use_for_related_fields = True
+    
+    def unread(self):
+        return self.get_query_set().filter(read=False)
+
 class Message(models.Model):
     user = models.ForeignKey(User, related_name='received_messages')
     subject = models.CharField(max_length=255, blank=True)
@@ -43,6 +49,8 @@ class Message(models.Model):
             related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField('object ID', blank=True, null=True)
     object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
+
+    objects = MessageManager()
 
     class Meta:
         ordering = ['-created']

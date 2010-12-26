@@ -28,7 +28,7 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from utils.amazon import S3StorageError
 from django.views.generic.simple import direct_to_template
 from django.views.generic.list_detail import object_list
-from videos.models import Video
+from videos.models import Video, Action
 from django.conf import settings
 from django.db.models import Q
 
@@ -58,7 +58,11 @@ def edit_avatar(request):
 
 @login_required
 def my_profile(request):
-    qs = Video.objects.filter(subtitlelanguage__subtitleversion__user=request.user).distinct()
+    user = request.user
+    qs = Video.objects.filter(Q(subtitlelanguage__subtitleversion__user=user) | \
+              Q(followers=request.user) | \
+              Q(action__action_type=Action.ADD_VIDEO, action__user=user)) \
+              .distinct()
     
     q = request.REQUEST.get('q')
     total_video_count = qs.count()

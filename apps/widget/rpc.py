@@ -29,6 +29,7 @@ from urlparse import urlparse, parse_qs
 from django.conf import settings
 from django.db.models import Sum
 from widget import video_cache
+from statistic import widget_views_total_counter
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
@@ -46,7 +47,8 @@ class Rpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None):
         video_id = video_cache.get_video_id(video_url)
         models.Video.widget_views_counter(video_id).incr()
-
+        widget_views_total_counter.incr()
+        
         self._maybe_add_video_session(request)
 
         return_value = {

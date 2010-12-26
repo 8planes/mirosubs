@@ -39,7 +39,7 @@ class LocaleURLMiddleware(object):
 
     def process_request(self, request):
         locale, path = self.split_locale_from_request(request)
-        locale_path = utils.locale_path(path, locale or translation.get_language())
+        locale_path = utils.locale_path(path, locale or 'en-us' or translation.get_language())
         if locale_path != request.path_info:
             if request.META.get("QUERY_STRING", ""):
                 locale_path = "%s?%s" % (locale_path, 

@@ -3,7 +3,7 @@
 {% load i18n teams_tags paginator profiles_tags widget %}
 
 {% block title %}
-    {% trans 'Your profile' %} | Universal Subtitles
+    {% trans 'My videos' %} | Universal Subtitles
 {% endblock %}
 
 {% block css %}
@@ -25,7 +25,7 @@
             </span>
         </li>
         <li>
-            <a href="#">
+            <a href="{% url messages:index %}">
                 {% trans 'Messages' %}<span class="badgy_out"><span class="badgy">0</span></span>
             </a>
         </li>

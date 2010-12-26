@@ -65,4 +65,4 @@ class VimeoVideoType(VideoType):
         return video_obj
     
     def _get_vimeo_id(self, video_url):
-        return vimeo.VIMEO_REGEX.match(video_url).group(2) 
+        return vimeo.VIMEO_REGEX.match(video_url).groupdict().get('video_id') 

@@ -31,10 +31,12 @@ from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
 from utils.amazon import default_s3_store
 from statistic.models import SubtitleFetchStatistic
+from statistic import update_subtitles_fetch_counter, video_view_counter, widget_views_total_counter
 from widget import video_cache
 from datetime import datetime
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
+from utils.amazon import S3EnabledImageField
 import time
 
 yt_service = YouTubeService()
@@ -70,9 +72,7 @@ class Video(models.Model):
     """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
-    slug = models.SlugField(blank=True)
     description = models.TextField(blank=True)
-    view_count = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(null=True, blank=True)
     allow_community_edits = models.BooleanField()
     allow_video_urls_edit = models.BooleanField(default=True)
@@ -80,17 +80,22 @@ class Video(models.Model):
     writelock_session_key = models.CharField(max_length=255, editable=False)
     writelock_owner = models.ForeignKey(User, null=True, editable=False,
                                         related_name="writelock_owners")
-    subtitles_fetched_count = models.IntegerField(default=0)
-    widget_views_count = models.IntegerField(default=0)
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False)
     thumbnail = models.CharField(max_length=500, blank=True)
+    s3_thumbnail = S3EnabledImageField(blank=True, upload_to='video/thumbnail/')
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, null=True, blank=True)
-
+    followers = models.ManyToManyField(User, blank=True, related_name='followed_videos')
+    
+    subtitles_fetched_count = models.IntegerField(default=0)
+    widget_views_count = models.IntegerField(default=0)
+    view_count = models.PositiveIntegerField(default=0)
+    
     subtitles_fetchec_counter = RedisSimpleField('video_id')
     widget_views_counter = RedisSimpleField('video_id')
+    view_counter = RedisSimpleField('video_id')
     
     def __unicode__(self):
         title = self.title_display()
@@ -98,27 +103,36 @@ class Video(models.Model):
             title = title[:70]+'...'
         return title
     
+    def update_view_counter(self):
+        self.view_counter.incr()
+        video_view_counter.incr()
+    
     def update_subtitles_fetched(self, lang=None):
         self.subtitles_fetchec_counter.incr()
         #Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj = SubtitleFetchStatistic(video=self)
         sub_lang = self.subtitle_language(lang)
+        update_subtitles_fetch_counter(self, sub_lang)
         if sub_lang:
             st_obj.language = lang or ''
-            SubtitleLanguage.subtitles_fetched_counter(sub_lang.pk).incr()
+            sub_lang.subtitles_fetched_counter.incr()
             #SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         st_obj.save()
         
     def get_thumbnail(self):
-        #TODO: should consider size of thumbnail
-        #Is used in teams application now
-        if self.thumbnail.startswith('http://') or self.thumbnail.startswith('https://'):
+        if self.s3_thumbnail:
+            return self.s3_thumbnail.thumb_url(100, 100)
+        
+        if self.thumbnail:
             return self.thumbnail
         
-        if default_s3_store and self.thumbnail:
-            return default_s3_store.url(self.thumbnail)
-
         return ''
+    
+    def get_small_thumbnail(self):
+        if self.s3_thumbnail:
+            return self.s3_thumbnail.thumb_url(50, 50)
+        
+        return ''        
     
     @models.permalink
     def video_link(self):
@@ -166,6 +180,8 @@ class Video(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
+        if self.title:
+            return ('videos:video_with_title', [self.video_id, self.title])
         return ('videos:video', [self.video_id])
 
     def get_video_url(self):
@@ -327,9 +343,13 @@ class Video(models.Model):
 
     def notification_list(self, exclude=None):
         if self.subtitle_language():
-            return self.subtitle_language().notification_list(exclude)
+            nl = self.subtitle_language().notification_list(exclude)
         else:
-            return []
+            nl = []
+        for user in self.followers.all():
+            if not user in nl: 
+                nl.append(user)
+        return nl
     
     def notification_list_all(self, exclude=None):
         users = []
@@ -337,6 +357,9 @@ class Video(models.Model):
             for u in language.notification_list(exclude):
                 if not u in users:
                     users.append(u) 
+        for user in self.followers.all():
+            if not user in users: 
+                users.append(user)                    
         return users
         
     def update_complete_state(self):
@@ -369,6 +392,7 @@ class SubtitleLanguage(models.Model):
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     subtitles_fetched_count = models.IntegerField(default=0)
+    followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
     
     subtitles_fetched_counter = RedisSimpleField()
     
@@ -489,6 +513,9 @@ class SubtitleLanguage(models.Model):
             if user and user.is_active and user.changes_notification \
                 and not user in users and not user.id in not_send \
                 and not exclude == user:
+                users.append(user)
+        for user in self.followers.all():
+            if not user in users:
                 users.append(user)
         return users
 

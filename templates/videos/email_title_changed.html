@@ -1,16 +1,16 @@
 {% extends 'videos/email_base.html' %}
 
-{% load i18n %}
+{% load i18n localeurl_tags %}
 
 {% block content %}
 <p style="font-size: 12px;">
-    {% trans "The title of the video" %} <a href="{{ video.get_absolute_url }}">{{ old_title }}</a> 
+    {% trans "The title of the video" %} <a href="{{ video.get_absolute_url|rmlocale }}">{{ old_title }}</a> 
     {% trans "has been changed by" %}
-    <a href="{{ editor.get_absolute_url }}">{{ editor }}</a>.
+    <a href="{{ editor.get_absolute_url|rmlocale }}">{{ editor }}</a>.
     
-    {% trans "The new title is" %} <a href="{{ video.get_absolute_url }}">{{ video.title }}</a>. 
+    {% trans "The new title is" %} <a href="{{ video.get_absolute_url|rmlocale }}">{{ video.title }}</a>. 
     
     {% trans "If this is incorrect, mouseover the title on" %} 
-    <a href="{{ video.get_absolute_url }}">{% trans "this page" %}</a> {% trans 'and click "edit title"' %}.
-
+    <a href="{{ video.get_absolute_url|rmlocale }}">{% trans "this page" %}</a> {% trans 'and click "edit title"' %}.
+</p>
 {% endblock %}

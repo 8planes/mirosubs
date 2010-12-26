@@ -21,8 +21,14 @@ from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
 from django.core.urlresolvers import reverse
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__', 'title', 'languages']
+    list_display = ['__unicode__', 'title', 'languages', 'video_thumbnail']
     search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
+    
+    def video_thumbnail(self, obj):
+        return '<img width="50" height="50" src="%s"/>' % obj.get_small_thumbnail() 
+    
+    video_thumbnail.allow_tags = True
+    video_thumbnail.short_description = 'Thumbnail'
     
     def languages(self, obj):
         lang_qs = obj.subtitlelanguage_set.all()

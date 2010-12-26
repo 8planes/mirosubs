@@ -1,20 +1,32 @@
 {% extends "base.html" %}
 
-{% load thumbnail i18n %}
+{% load i18n %}
 
 {% block main_content %}
 <div class="settings_nav">
   <ul>
-    <li class="active"><a href="{% url profiles:edit %}">Edit Profile</a></li>
-    <li><a href="#">My Videos</a></li>
-    <li><a href="{% url teams:index %}?o=my">My Teams</a></li>
-    <li><a href="#">Messages <span class="message_count">12</span></a></li>
+    <li><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
+    <li><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
+    <li><a href="{% url teams:index %}?o=my">{% trans "My Teams" %}</a></li>
+    <li>
+        <a href="{% url messages:index %}">{% trans "Messages" %}
+        {% with user.received_messages.unread.count as messages_count %}
+            {% if messages_count %}<span class="message_count">{{ messages_count }}</span>{% endif %}
+        {% endwith %}
+        </a>
+    </li>
   </ul>
-  <h4>Team Management</h4>
-  <ul class="teams">
-    <li><a href="#">Team Name I</a></li>
-    <li><a href="#">Team Name II</a></li>
-    <li><a href="#">Team Name III</a></li>
+  {% with user.teams.all as user_teams %}
+      {% if user_teams %}  
+          <h4>{% trans "Team Management" %}</h4>
+          <ul class="teams">
+            {% for t in user_teams %}
+                <li {% if team == t %}class="active"{% endif %}>
+                    <a href="{{ t.get_edit_url }}">{{ t }}</a>
+                </li>
+            {% endfor %}
+      {% endif %}
+  {% endwith %}
   </ul>
 </div>
 

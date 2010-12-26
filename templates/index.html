@@ -1,4 +1,4 @@
-{% load recent_activity widget i18n announcement_tags messages_tags %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load recent_activity widget i18n announcement_tags messages_tags profiles_tags %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -21,7 +21,8 @@
     <!--[if IE]><link href="{{ MEDIA_URL }}index/css/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
     <!--[if IE 6]><script src="{{ MEDIA_URL }}index/js/ie6PngFix.js"></script><![endif]--> 
     <link href="{{ MEDIA_URL }}index/style.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />    
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" /> 
+    <link href="{{ MEDIA_URL }}css/imported/top_user_panel.css" media="all" type="text/css" rel="stylesheet" /> 
     <script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>    
@@ -52,7 +53,7 @@
             src: video.attr('poster')
           , css: {
               position: 'absolute'
-            , 'z-index': 9999
+            , 'z-index': 1000
             }
           })
 
@@ -88,12 +89,7 @@
         </ul>
    </div>
 
-    {% if user.is_authenticated %}
-    <div class="user_panel">
-      <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" /> 
-      <a href="{% url profiles:my_profile %}">{{ user }}</a>
-    </div>
-    {% endif %}
+    {% top_user_panel %}
    
    <div class="alphaNav">
       <ul>
@@ -118,15 +114,15 @@
 
     <ul class="user_vervice_menu">
     
-      <li class="service_00"><a href="#">{% trans "Increase video views by reaching global audiences and being accessible to the deaf and hard-of-hearing." %}</a></li>
+      <li class="service_00">{% trans "Increase video views by reaching global audiences and being accessible to the deaf and hard-of-hearing." %}</li>
 
-        <li class="service_01"><a href="#">{% trans "It's powered by viewers and other volunteers: it's collaborative editing and translation, like a wiki." %}"</a></li>
+        <li class="service_01">{% trans "It's powered by viewers and other volunteers: it's collaborative editing and translation, like a wiki." %}</li>
 
-        <li class="service_02"><a href="#">{% trans "It's the world's easiest subtitle creator - type and tap." %}</a></li>
+        <li class="service_02">{% trans "It's the world's easiest subtitle creator - type and tap." %}</li>
         
-        <li class="service_03"><a href="#">{% trans "The fastest way to add subtitle functionality to a single video or a whole site. Super easy to integrate with no software to install." %}</a></li>
+        <li class="service_03">{% trans "The fastest way to add subtitle functionality to a single video or a whole site. Super easy to integrate with no software to install." %}</li>
 
-        <li class="service_04"><a href="#">{% trans "Free, open-source, and non-profit!" %}</a></li>
+        <li class="service_04">{% trans "Free, open-source, and non-profit!" %}</li>
     </ul>
     </div><!-- End: section_primary_left -->
     <div class="section_primary_right">
@@ -167,7 +163,7 @@
         <div class="section_secondary_top_right">
           <h4>{% trans "For every video on a page or site" %}</h4>
             <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/mirosubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
-            <span class="indication">{% trans "paste this single like of code into your page header and every video will be subtitle enabled" %}</span>
+            <span class="indication">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
             
         </div><!-- End: section_secondary_top_right -->
     </div><!-- End: section_secondary_top -->
@@ -176,11 +172,11 @@
   <div class="section_secondary_bottom_left">
           <h5>{% trans "Universal Subtitles works with these video sites and formats:" %}</h5>
             <div class="video_site_box">
-            <a href="#"><img src="{{ MEDIA_URL }}index/images/video_site/video_00.jpg" width="91" height="40" alt="utube" /></a>
-            <a href="#"><img src="{{ MEDIA_URL }}index/images/video_site/video_01.jpg" width="91" height="40" alt="utube" /></a>
-            <a href="#"><img src="{{ MEDIA_URL }}index/images/video_site/video_02.jpg" width="91" height="40" alt="utube" /></a>
-            <a href="#"><img src="{{ MEDIA_URL }}index/images/video_site/video_03.jpg" width="91" height="40" alt="utube" /></a>
-            <a href="#"><img src="{{ MEDIA_URL }}index/images/video_site/video_04.jpg" width="91" height="40" alt="utube" /></a>
+            <img src="{{ MEDIA_URL }}index/images/video_site/video_00.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ MEDIA_URL }}index/images/video_site/video_01.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ MEDIA_URL }}index/images/video_site/video_02.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ MEDIA_URL }}index/images/video_site/video_03.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ MEDIA_URL }}index/images/video_site/video_04.jpg" width="91" height="40" alt="utube" />
       </div>
         </div><!-- End: section_secondary_bottom_left -->
         
@@ -189,6 +185,22 @@
         </div>
     </div><!-- End: section_secondary_bottom -->
 </div><!-- End: section_secondary -->
+
+    <div class="footer">
+        <div class="floatleft">
+            {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
+        </div>   
+    
+        <div class="floatright">
+            <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
+            <a href="http://twitter.com/universalsubs">Twitter</a>
+            <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
+            <a href="/w3c/privacy.html">{% trans 'Privacy Policy' %}</a>
+            <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
+        </div>      
+    </div> 
+    <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
+
 </body>
 </html>
                  
