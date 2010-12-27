@@ -44,9 +44,6 @@
       <div class="edit_profile_shell">
           <h2>
               {% trans 'Edit Your Profile' %}
-              <button class="green_button small" type="submit" value="Save">
-                  <span>{% trans 'Save Edits to Profile' %}</span>
-              </button>          
           </h2>
 
           <div class="left_column">
@@ -169,7 +166,9 @@
           <div class="clearboth">
               &nbsp;
           </div>
-
+          <button class="green_button small" type="submit" value="Save">
+               <span>{% trans 'Save Edits to Profile' %}</span>
+          </button> 
       </div>
 
       <a class="small" href="{% url auth:delete_user %}">
