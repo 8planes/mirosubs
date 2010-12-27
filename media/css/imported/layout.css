@@ -28,6 +28,7 @@
   clear: both;
   line-height: 15px;
   font-size: 12px;
+  margin-bottom: 50px;
   }
 
 
@@ -513,7 +514,4 @@ width: 140px;
 .langs_available{
   background: url(../../images/tiny_icons.png) 0 -54px no-repeat;
 }
-
-
-
 
