@@ -45,6 +45,13 @@ import urllib, urllib2
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
+from videos.rpc import VideosApiClass
+from utils.rpc import RpcRouter
+
+rpc_router = RpcRouter('videos:rpc_router', {
+    'VideosApi': VideosApiClass()
+})
+
 def index(request):
     context = widget.add_onsite_js_files({})
     context['all_videos'] = Video.objects.count()

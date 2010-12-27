@@ -15,24 +15,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-
 from django import template
-from django.template import RequestContext
-from apps.widget.views import base_widget_params
-from django.contrib.sites.models import Site
 
 register = template.Library()
 
-@register.inclusion_tag('videos/_widget.html')
-def widget(widget_params, div_id='widget_div'):
-    return {
-        'div_id': div_id,
-        'widget_params': widget_params
-    }
-
-@register.inclusion_tag('videos/_get_counter.html')    
-def get_counter():
-    domain = Site.objects.get_current().domain
-    return {
-        'domain': domain
-    }
+@register.filter
+def is_follower(video, user):
+    if not user.is_authenticated():
+        return False
+    return video.followers.filter(pk=user.pk).exists()
