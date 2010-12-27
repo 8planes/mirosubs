@@ -57,12 +57,12 @@ ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 20)
 DEV = getattr(settings, 'DEV', False)
 DEV_OR_STAGING = DEV or getattr(settings, 'STAGING', False)
 
-def index(request):
+def index(request, my_teams=False):
     q = request.REQUEST.get('q')
     
     ordering = request.GET.get('o', 'name')
-    
-    if ordering == 'my' and request.user.is_authenticated():
+
+    if my_teams and request.user.is_authenticated():
         qs = Team.objects.filter(members__user=request.user)
     else:
         qs = Team.objects.for_user(request.user).annotate(_member_count=Count('users__pk'))
@@ -96,6 +96,7 @@ def index(request):
         .annotate(_member_count=Count('users__pk'))
     
     extra_context = {
+        'my_teams': my_teams,
         'query': q,
         'ordering': ordering,
         'order_type': order_type,

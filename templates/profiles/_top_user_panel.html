@@ -16,7 +16,7 @@
               <span class="message_count">{{ user.received_messages.unread.count }}</span>
           </li>
           {% if user.teams.exists %}
-          <li><a href="{% url teams:index %}?o=my">{% trans "My Teams" %}</a></li>
+          <li><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
           {% endif %}
           <li><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
         </ul>

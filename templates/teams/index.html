@@ -5,7 +5,7 @@
 {% block body_attrs %}id="teams"{% endblock %}
 
 {% block title %}
-    {% trans 'Teams' %}| Universal Subtitles
+    {% if my_teams %}{% trans 'My Teams' %}{% else %}{% trans 'Teams' %}{% endif %}| Universal Subtitles
 {% endblock %}
 
 {% block scripts %}
@@ -79,17 +79,17 @@
                 <span class="sort_label">{% trans 'Sort by' %} <strong>{{ order_name }}</strong></span>
                 <ul>
                     <li>
-                        <a href="?o=members{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true" class="first">{% trans 'Most Members' %}</a>
+                        <a href="{% url teams:index %}?o=members{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true" class="first">{% trans 'Most Members' %}</a>
                     </li>
                     <li>
-                        <a href="?o=date{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true">{% trans 'Newest' %}</a>
+                        <a href="{% url teams:index %}?o=date{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true">{% trans 'Newest' %}</a>
                     </li>
                     <li>
-                        <a href="?o=name{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true">{% trans 'Name' %}</a>
+                        <a href="{% url teams:index %}?o=name{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true">{% trans 'Name' %}</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li>
-                        <a href="?o=my{% if query %}&q={{ query|urlencode }}{% endif %}" data-remote="true" class="last">{% trans 'My teams' %}</a>
+                        <a href="{% url teams:user_teams %}" data-remote="true" class="last">{% trans 'My teams' %}</a>
                     </li>
                     {% endif %}
                 </ul>

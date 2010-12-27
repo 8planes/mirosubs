@@ -27,6 +27,7 @@ from teams.views import rpc_router
 
 urlpatterns = patterns('teams.views',
     url('^$', 'index', name='index'),
+    url('^my/$', 'index', {'my_teams': True}, name='user_teams'),
     url('^create/$', 'create', name='create'),
     url('^invite/$', 'invite', name='invite'),
     url(r'^router/$', rpc_router, name='rpc_router'),

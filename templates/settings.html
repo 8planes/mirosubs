@@ -7,7 +7,7 @@
   <ul>
     <li><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
     <li><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
-    <li><a href="{% url teams:index %}?o=my">{% trans "My Teams" %}</a></li>
+    <li><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
     <li>
         <a href="{% url messages:index %}">{% trans "Messages" %}
         {% with user.received_messages.unread.count as messages_count %}
