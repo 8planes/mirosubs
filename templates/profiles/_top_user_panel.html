@@ -21,6 +21,9 @@
           <li><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
           {% endif %}
           <li><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
+          {% endif %}          
         </ul>
         {% with user.teams.all as user_teams %}
             {% if user_teams %}
