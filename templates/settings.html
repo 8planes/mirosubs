@@ -5,7 +5,7 @@
 {% block main_content %}
 <div class="settings_nav">
   <ul>
-    <li><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
+    <li {% if edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
     <li><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
     <li><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
     <li>

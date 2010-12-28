@@ -63,12 +63,10 @@ def my_profile(request):
               Q(followers=request.user) | \
               Q(action__action_type=Action.ADD_VIDEO, action__user=user)) \
               .distinct()
-    
     q = request.REQUEST.get('q')
     total_video_count = qs.count()
     if q:
         qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q))
-    
     context = {
         'query': q,
         'total_video_count': total_video_count
@@ -102,10 +100,10 @@ def edit_profile(request):
     context = {
         'form': form,
         'user_info': request.user,
-        'formset': formset
+        'formset': formset,
+        'edit_profile_page': True
     }
-    return render_to_response('profiles/edit_profile.html', context,
-                              context_instance=RequestContext(request))
+    return direct_to_template(request, 'profiles/edit_profile.html', context)
 
 def profile(request, user_id=None):
     if user_id:
@@ -122,8 +120,7 @@ def profile(request, user_id=None):
         'user_info': user,
         'can_edit': user == request.user
     }
-    return render_to_response('profiles/view_profile.html', context,
-                                  context_instance=RequestContext(request))            
+    return direct_to_template(request, 'profiles/view_profile.html', context)            
 
 @login_required
 def send_message(request):
