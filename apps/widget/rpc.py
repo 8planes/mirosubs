@@ -17,7 +17,6 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.db.models import ObjectDoesNotExist
-from django.conf.global_settings import LANGUAGES
 from videos import models
 from datetime import datetime
 import re
@@ -30,14 +29,16 @@ from django.conf import settings
 from django.db.models import Sum
 from widget import video_cache
 from statistic import widget_views_total_counter
+from django.utils.translation import ugettext as _
 
-LANGUAGES_MAP = dict(LANGUAGES)
+ALL_LANGUAGES = settings.ALL_LANGUAGES
+LANGUAGES_MAP = dict(ALL_LANGUAGES)
 
 def add_general_settings(request, dict):
     dict.update({
             'writelock_expiration' : models.WRITELOCK_EXPIRATION,
             'embed_version': settings.EMBED_JS_VERSION,
-            'languages': LANGUAGES,
+            'languages': ALL_LANGUAGES,
             'metadata_languages': settings.METADATA_LANGUAGES
             })
     if request.user.is_authenticated():
