@@ -76,6 +76,8 @@ USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 
 EMAIL_BCC_LIST = ['hwilson+notifications@gmail.com']
 
+# INCLUDE THIS FOR PRODUCTION ONLY. Including in other installations on 
+# same machine will cause problems.
 CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 try:

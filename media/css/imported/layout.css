@@ -28,6 +28,7 @@
   clear: both;
   line-height: 15px;
   font-size: 12px;
+  margin-bottom: 50px;
   }
 
 
@@ -462,15 +463,13 @@ float: left;
 
 
 .search_title{
-  -moz-border-radius-topleft: 35px !important;  
-  -moz-border-radius-bottomleft: 35px !important;  
+  -moz-border-radius: 35px !important;  
   -webkit-border-radius: 35px;
 padding: 8px 13px 5px 16px;
 }
 
 .search_full{
-  -moz-border-radius-topright: 35px !important;  
-  -moz-border-radius-bottomright: 35px !important;  
+  -moz-border-radius: 35px !important;  
   -webkit-border-radius: 35px;
 padding: 8px 16px 5px 13px;
 }
@@ -515,7 +514,4 @@ width: 140px;
 .langs_available{
   background: url(../../images/tiny_icons.png) 0 -54px no-repeat;
 }
-
-
-
 
