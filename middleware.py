@@ -34,20 +34,25 @@ class UserUUIDMiddleware(object):
         try:
             request.browser_id = request.COOKIES[UUID_COOKIE_NAME]
         except KeyError:
-            # No cookie, so create one.  This will be sent with the next
-            # response.
-            request.browser_id = _get_new_csrf_key()
+            pass
+        else:
+            # No cookie or it is empty, so create one.  This will be sent with the next
+            # response.            
+            if not getattr(request, 'browser_id'):
+                request.browser_id = _get_new_csrf_key()
 
     def process_response(self, request, response):
         if hasattr(request, 'browser_id'):
             browser_id = request.browser_id
         else:
             browser_id = _get_new_csrf_key()
-        response.set_cookie(
-            UUID_COOKIE_NAME,
-            browser_id, 
-            max_age=60 * 60 * 24 * 7 * 52 * 10,
-            domain=UUID_COOKIE_DOMAIN)
+
+        if request.COOKIES.get(UUID_COOKIE_NAME) != browser_id:
+            response.set_cookie(
+                UUID_COOKIE_NAME,
+                browser_id, 
+                max_age=60 * 60 * 24 * 7 * 52 * 10,
+                domain=UUID_COOKIE_DOMAIN)
         # Content varies with the CSRF cookie, so set the Vary header.
         patch_vary_headers(response, ('Cookie',))
         return response            

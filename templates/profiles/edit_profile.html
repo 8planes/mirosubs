@@ -166,12 +166,13 @@
           <div class="clearboth">
               &nbsp;
           </div>
-          <button class="green_button small" type="submit" value="Save">
-               <span>{% trans 'Save Edits to Profile' %}</span>
-          </button> 
       </div>
 
-      <a class="small" href="{% url auth:delete_user %}">
+      <button style="margin: 10px;" class="green_button small" type="submit" value="Save">
+          <span>{% trans 'Save Edits to Profile' %}</span>
+      </button>
+          
+      <a class="small" style="margin: 10px;" href="{% url auth:delete_user %}">
           <span>{% trans 'Permanently Delete Your Profile' %}</span>
       </a>  
   </form>

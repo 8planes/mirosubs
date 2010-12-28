@@ -85,7 +85,6 @@ class BaseVideoBoundForm(forms.ModelForm):
         if video_url.startswith(url_start):
             #UniSub URL
             locale, path = strip_path(video_url[len(url_start):])
-            print locale, path
             video_url = url_start+path
             try:
                 video_url = self.format_url(video_url)

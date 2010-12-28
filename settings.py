@@ -55,6 +55,7 @@ ALL_LANGUAGES['ase'] = gettext_noop('American Sign Language')
 ALL_LANGUAGES['wol'] = gettext_noop('Wolof')
 ALL_LANGUAGES['que'] = gettext_noop('Quechua')
 ALL_LANGUAGES['swa'] = gettext_noop('Swahili')
+ALL_LANGUAGES['urd'] = gettext_noop('Urdu')
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
 

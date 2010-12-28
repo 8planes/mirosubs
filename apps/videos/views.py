@@ -155,7 +155,7 @@ def video(request, video_id, video_url=None, title=None):
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     
     if not video.title == title:
-        return redirect(video)
+        return redirect(video, permanent=True)
     
     video.update_view_counter()
     

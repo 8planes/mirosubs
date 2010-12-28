@@ -8,6 +8,7 @@ from django.utils.functional import update_wrapper
 REDIS_HOST = getattr(settings, 'REDIS_HOST', 'localhost')
 REDIS_PORT = getattr(settings, 'REDIS_PORT', 6379)
 REDIS_DB = getattr(settings, 'REDIS_DB', 0)
+IGNORE_REDIS = getattr(settings, 'IGNORE_REDIS', False) and settings.DEBUG
 
 default_connection = Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
@@ -24,6 +25,8 @@ class RedisCounterFieldNoSettings(RedisCounterField):
 
 def redis_key_wrapper(func, key):
     def wrapper(*args, **kwargs):
+        if IGNORE_REDIS:
+            return
         return func(key, *args, **kwargs)
     return update_wrapper(wrapper, func)
 
@@ -39,7 +42,7 @@ class RedisKey(object):
     def __str__(self):
         return "%s -> %s" % (self.redis_key, self.val)
     
-    def __getattr__(self, name):
+    def __getattr__(self, name):     
         if hasattr(self.r, name):
             method = getattr(self.r, name)
             if ismethod(method):
@@ -48,11 +51,15 @@ class RedisKey(object):
     
     @catch_exception_dec
     def set_val(self, val):
+        if IGNORE_REDIS:
+            return
         #get rid from this: user get, set
         return self.r.set(self.redis_key, val)
 
     @catch_exception_dec
     def get_val(self):
+        if IGNORE_REDIS:
+            return        
         return self.r.get(self.redis_key)
 
     val = property(get_val, set_val)

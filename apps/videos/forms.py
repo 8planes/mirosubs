@@ -368,14 +368,24 @@ class AddFromFeedForm(forms.Form, AjaxForm):
         if url:
             feed = feedparser.parse(url)
             for item in feed['entries']:
-                try:
-                    video_type = video_type_registrar.video_type_for_url(item['link'])
-                except VideoTypeError, e:
-                    raise forms.ValidationError(e)
-                if video_type:
-                    self.video_types.append(video_type)
+                vt = self.try_get_video_type(item['link'])
+                if not vt:
+                    for obj in item.get('enclosures', []):
+                        type = obj.get('type', '')
+                        href = obj.get('href', '')
+                        if href and type.startswith('video'):
+                            self.try_get_video_type(href)
         return url
     
+    def try_get_video_type(self, link):
+        try:
+            video_type = video_type_registrar.video_type_for_url(link)
+        except VideoTypeError, e:
+            raise forms.ValidationError(e)
+        if video_type:
+            self.video_types.append(video_type)
+        return video_type
+                        
     def clean_youtube_user_url(self):
         url = self.cleaned_data.get('youtube_user_url')
         if url:

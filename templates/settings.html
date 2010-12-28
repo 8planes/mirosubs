@@ -5,9 +5,13 @@
 {% block main_content %}
 <div class="settings_nav">
   <ul>
-    <li><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
+    <li {% if edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
+    {% endif %}
     <li><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
     <li><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
+    {% comment %}
     <li>
         <a href="{% url messages:index %}">{% trans "Messages" %}
         {% with user.received_messages.unread.count as messages_count %}
@@ -15,6 +19,7 @@
         {% endwith %}
         </a>
     </li>
+    {% endcomment %}
   </ul>
   {% with user.teams.all as user_teams %}
       {% if user_teams %}  
