@@ -489,7 +489,7 @@ line-height: 1.8em;
 
 .started{
 padding-right: 20px !important;
-width: 140px;
+width: 200px;
 
   background: url(../../images/tiny_icons.png) 0 3px no-repeat;
 }
@@ -502,7 +502,7 @@ width: 140px;
 
 .page_loads{
 padding-right: 20px !important;
-width: 140px;
+width: 200px;
 
   background: url(../../images/tiny_icons.png) 0 -25px no-repeat;
 }
