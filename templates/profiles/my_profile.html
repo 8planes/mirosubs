@@ -24,11 +24,13 @@
                 {% trans 'My Videos' %}<span class="badgy_out"><span class="badgy">{{ total_video_count }}</span></span>
             </span>
         </li>
+        {% comment %}
         <li>
             <a href="{% url messages:index %}">
                 {% trans 'Messages' %}<span class="badgy_out"><span class="badgy">0</span></span>
             </a>
         </li>
+        {% endcomment %}
     </ul>
     <div id="videos-tab">
         <div class="boxx">

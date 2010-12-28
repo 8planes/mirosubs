@@ -11,10 +11,12 @@
       <div class="dropdown">
         <ul>
           <li><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
+          {% comment %}
           <li>
               <a href="{% url messages:index %}">{% trans "My Messages" %}</a> 
               <span class="message_count">{{ user.received_messages.unread.count }}</span>
           </li>
+          {% endcomment %}
           {% if user.teams.exists %}
           <li><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
           {% endif %}
