@@ -5,7 +5,7 @@
 //    <a href="{fallback_url}" data-modal="{ID_of_modal}">Hey! Listen!</a>
 jQuery.fn.mod = function(){
   var modal = $(this)
-  
+
   // Create overlay mask
   var overlay = jQuery('<div>', {
     'class': 'overlay',
@@ -33,7 +33,7 @@ jQuery.fn.mod = function(){
     e.preventDefault()
     close()
   })
-  
+
   // Position modal
   modal.css({
     'position': 'fixed',
@@ -43,18 +43,19 @@ jQuery.fn.mod = function(){
     'margin-top': -Math.floor(modal.height() / 2),
     'z-index': 1001
   })
-  
+
   // Let there be light
   jQuery(document.body).append(overlay)
-  
-  if(!jQuery.contains(document.body, modal)){
-   jQuery(document.body).append(modal)  
-   modal.bind('close', function(){
-     modal.remove()
-   })
-  }
-  
-  modal.show()
+  try {
+      if (!jQuery.contains(document.body, modal)) {
+          jQuery(document.body).append(modal);
+          modal.bind('close', function(){
+              modal.remove()
+          })
+      }
+  }catch(e){};
+
+  modal.show();
 }
 
 jQuery.mod = function(){

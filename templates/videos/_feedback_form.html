@@ -1,42 +1,42 @@
 {% load i18n %}
    
-    <div>
-        <form method="post" action="{% url videos:feedback %}" id="feedback_form">
-        {% csrf_token %}
-            <h2>
-                {% block form_title %}
-                    {% trans 'How are you using Universal Subtitles?  What would make it better?' %}
-                {% endblock %}
-            </h2>
-            {% block hidden_fields %}{% endblock %}
-            <p>{% trans 'Please let us know if you have any comments, questions, or suggestions!' %}</p>
-            <div class="global-errors">
-                
-            </div>
-            <p>
-                <label for="feedback_email">{% trans 'Your email:' %} </label>{{ form.email }}
-            </p>
-            <p>
-                {{ form.math_captcha_field|safe }}
-                {{ form.math_captcha_question|safe }}
-            </p>
-            <p>
-                <label>{% trans 'Your Feedback' %}</label>
-                {{ form.message }}
-            </p>
-
+    <div style="display: none" class="feedback-form-container">
+        <div>
+            <form method="post" action="{% url videos:feedback %}" id="feedback_form">
+            {% csrf_token %}
+                <h2>
+                    {% block form_title %}
+                        {% trans 'How are you using Universal Subtitles?  What would make it better?' %}
+                    {% endblock %}
+                </h2>
+                {% block hidden_fields %}{% endblock %}
+                <p>{% trans 'Please let us know if you have any comments, questions, or suggestions!' %}</p>
+                <div class="global-errors">
+                    
+                </div>
+                <p>
+                    <label for="feedback_email">{% trans 'Your email:' %} </label>{{ form.email }}
+                </p>
+                <p>
+                    {{ form.math_captcha_field|safe }}
+                    {{ form.math_captcha_question|safe }}
+                </p>
+                <p>
+                    <label>{% trans 'Your Feedback' %}</label>
+                    {{ form.message }}
+                </p>
                 <button type="submit" value="Send feedback" class="green_button big">{% trans 'Send Feedback' %}</button>
-
-        </form>
-    </div>
+            </form>
+        </div>
    
-    <div style="display: none" class="wrapper" id="feedback_success">
-        {% trans 'Thank you for your feedback.' %}<br/>
-        {% trans 'If you would like to perform some additional testing' %}
-        {% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a><br/>
-        {% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
-        <br/>
-        <a href="#" id="send_more_feedback">{% trans 'Send more feedback.' %}</a>
+        <div style="display: none" class="wrapper" id="feedback_success">
+            {% trans 'Thank you for your feedback.' %}<br/>
+            {% trans 'If you would like to perform some additional testing' %}
+            {% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a><br/>
+            {% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
+            <br/>
+            <a href="#" id="send_more_feedback">{% trans 'Send more feedback.' %}</a>
+        </div>        
     </div>
     
 <script type="text/javascript">
@@ -53,6 +53,7 @@
                 if (data.success){
                     $form.resetForm();
                     $form.parent().hide().next().show();
+                    console.log($form.parent().hide().next())
                 } else {
                     for (key in data.errors){
                         var $field = $('input[name="'+key+'"]', $form);
@@ -73,6 +74,11 @@
                     return false;
                 }
             }
+        });
+        
+        $('.feedback_tab').click(function(){
+            $('.feedback-form-container').mod();
+            return false; 
         });
     });
 </script>
