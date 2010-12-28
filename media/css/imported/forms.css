@@ -341,18 +341,26 @@ border: 1px solid #7e1504;
 
 /////////////////////////////////////////////*/
 
+#feedback_container { 
+  border-radius: 7px;
+  border: 5px solid rgba(0,0,0,0.3);
+  width: 900px;
+  -webkit-background-clip: padding-box;
+   }
+
+#feedback_bg {
+  background: #D3E9ED url(../../images/cloud.png) center top no-repeat;
+  border-radius: 7px;
+  -webkit-background-clip: padding-box;
+}
 
 #feedback_form{
-  border-top: 1px solid #bed3d7;
-  border-bottom: 1px solid #ebfcff;
+  background: url(../../images/watercolor3.png) center 0px repeat-x;
+  border-radius: 7px;
   padding: 60px 0;
-  margin: 60px 0;
   clear: both;
-  width: 100%;
   float: left;
   text-align: center;
-  
-  background: url(../../images/1x1.png);
   }
 
 
@@ -365,7 +373,7 @@ border: 1px solid #7e1504;
 float: none;
   margin: 0 auto !important;
   font-size: 15px;
-width: 980px;
+  width: 900px;
   }
 
 

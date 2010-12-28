@@ -25,7 +25,6 @@ jQuery.fn.mod = function(){
   var close = function(){
     overlay.remove()
     modal.hide()
-    modal.trigger('close')
   }
   
   overlay.click(close)
@@ -49,9 +48,6 @@ jQuery.fn.mod = function(){
   try {
       if (!jQuery.contains(document.body, modal)) {
           jQuery(document.body).append(modal);
-          modal.bind('close', function(){
-              modal.remove()
-          })
       }
   }catch(e){};
 

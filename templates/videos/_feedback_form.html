@@ -1,7 +1,7 @@
 {% load i18n %}
    
-    <div style="display: none" class="feedback-form-container">
-        <div>
+    <div style="display: none" class="feedback-form-container" id="feedback_container">
+        <div id="feedback_bg">
             <form method="post" action="{% url videos:feedback %}" id="feedback_form">
             {% csrf_token %}
                 <h2>
@@ -26,7 +26,10 @@
                     {{ form.message }}
                 </p>
                 <button type="submit" value="Send feedback" class="green_button big">{% trans 'Send Feedback' %}</button>
+                <p><a href="#close" class="">Cancel</a></p>
             </form>
+
+            <div class="clear"></div>
         </div>
    
         <div style="display: none" class="wrapper" id="feedback_success">
@@ -74,11 +77,6 @@
                     return false;
                 }
             }
-        });
-        
-        $('.feedback_tab').click(function(){
-            $('.feedback-form-container').mod();
-            return false; 
         });
     });
 </script>
