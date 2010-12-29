@@ -348,7 +348,7 @@ border: 1px solid #7e1504;
   -webkit-background-clip: padding-box;
    }
 
-#feedback_bg {
+.feedback_bg {
   background: #D3E9ED url(../../images/cloud.png) center top no-repeat;
   border-radius: 7px;
   -webkit-background-clip: padding-box;

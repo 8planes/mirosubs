@@ -23,8 +23,9 @@ jQuery.fn.mod = function(){
 
   // Close modal when overlay or close link is clicked    
   var close = function(){
-    overlay.remove()
-    modal.hide()
+      overlay.remove();
+      modal.hide();
+      modal.trigger('close-modal');
   }
   
   overlay.click(close)
