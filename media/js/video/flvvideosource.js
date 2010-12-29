@@ -21,9 +21,14 @@ goog.provide('mirosubs.video.FlvVideoSource');
 /**
  * @constructor
  * @implements {mirosubs.video.VideoSource}
+ * @param {string} flvURL
+ * @param {Object=} opt_videoConfig Plugins to use for FlowPlayer 
+ *     (see http://flowplayer.org/documentation/configuration/plugins.html)
+ *     plus optional 'width' and 'height' parameters.
  */
-mirosubs.video.FlvVideoSource = function(flvURL) {
+mirosubs.video.FlvVideoSource = function(flvURL, opt_videoConfig) {
     this.flvURL_ = flvURL;
+    this.videoConfig_ = opt_videoConfig;
 };
 
 mirosubs.video.FlvVideoSource.prototype.createPlayer = function() {
@@ -44,4 +49,12 @@ mirosubs.video.FlvVideoSource.prototype.getFlvURL = function() {
 
 mirosubs.video.FlvVideoSource.prototype.getVideoURL = function() {
     return this.getFlvURL();
+};
+
+mirosubs.video.FlvVideoSource.prototype.getVideoConfig = function() {
+    return this.videoConfig_;
+};
+
+mirosubs.video.FlvVideoSource.prototype.setVideoConfig = function(config) {
+    this.videoConfig_ = config;
 };

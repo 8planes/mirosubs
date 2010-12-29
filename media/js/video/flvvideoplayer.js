@@ -21,13 +21,15 @@ goog.provide('mirosubs.video.FlvVideoPlayer');
 /**
  * @constructor
  */
-mirosubs.video.FlvVideoPlayer = function(videoSource, opt_chromeless) {
+mirosubs.video.FlvVideoPlayer = function(videoSource, opt_forDialog) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
 
-    this.chromeless_ = !!opt_chromeless;
+    this.forDialog_ = !!opt_forDialog;
     this.videoSource_ = videoSource;
     this.swfEmbedded_ = false;
     this.swfLoaded_ = false;
+    this.playerSize_ = null;
+    this.player_ = null;
     /**
      * 
      */
@@ -40,11 +42,16 @@ mirosubs.video.FlvVideoPlayer = function(videoSource, opt_chromeless) {
 goog.inherits(mirosubs.video.FlvVideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
 
-// FIXME: these are duplicated in youtubevideoplayer.js
-mirosubs.video.FlvVideoPlayer.REGULAR_HEIGHT = 360;
-mirosubs.video.FlvVideoPlayer.REGULAR_WIDTH = 480;
-mirosubs.video.FlvVideoPlayer.SMALL_HEIGHT = 350;
-mirosubs.video.FlvVideoPlayer.SMALL_WIDTH = 400;
+mirosubs.video.FlvVideoPlayer.prototype.createDom = function() {
+    mirosubs.video.FlvVideoPlayer.superClass_.createDom.call(this);
+    var sizeFromConfig = this.sizeFromConfig_();
+    if (!this.forDialog_ && sizeFromConfig)
+        this.playerSize_ = sizeFromConfig;
+    else
+        this.playerSize_ = this.forDialog_ ?
+        mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
+        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+};
 
 mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
     mirosubs.video.FlvVideoPlayer.superClass_.enterDocument.call(this);
@@ -53,19 +60,11 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
         var videoDiv = this.getDomHelper().createDom('div');
         videoDiv.id = mirosubs.randomString();
         this.getElement().appendChild(videoDiv);
-        this.width_ = 
-            (this.chromeless_ ?
-             mirosubs.video.FlvVideoPlayer.SMALL_WIDTH :
-             mirosubs.video.FlvVideoPlayer.REGULAR_WIDTH);
-        this.height_ =
-            (this.chromeless_ ?
-             mirosubs.video.FlvVideoPlayer.SMALL_HEIGHT :
-             mirosubs.video.FlvVideoPlayer.REGULAR_HEIGHT);
         this.setDimensionsKnownInternal();
         var flashEmbedParams = {
             'src': mirosubs.mediaURL() + 'flowplayer/flowplayer-3.2.2.swf',
-            'width': this.width_,
-            'height': this.height_,
+            'width': this.playerSize_.width + '',
+            'height': this.playerSize_.height + '',
             'wmode': 'opaque'
         };
         var that = this;
@@ -78,8 +77,7 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
                 that.swfFinishedLoading_();
             }
         };
-        if (this.chromeless_)
-            config['plugins'] = { 'controls': null };
+        this.addPlugins_(config);
         this.player_ = $f(
             videoDiv.id, flashEmbedParams, config);
     }
@@ -87,6 +85,35 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
         listen(this.progressTimer_, goog.Timer.TICK, this.progressTick_).
         listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
     this.progressTimer_.start();
+};
+
+mirosubs.video.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
+    var plugins;
+    if (this.forDialog_)
+        plugins = { 'controls' : null };
+    else {
+        var config = this.videoSource_.getVideoConfig();
+        if (config) {
+            plugins = {};
+            goog.object.filter(
+                config, 
+                function(val, key, obj) {
+                    return key != 'width' && key != 'height';
+                }, 
+                plugins);
+        }
+    }
+    if (plugins)
+        playerConfig['plugins'] = plugins;
+};
+
+mirosubs.video.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
+    var config = this.videoSource_.getVideoConfig();
+    if (config && config['width'] && config['height'])
+        return new goog.math.Size(
+            parseInt(config['width']), parseInt(config['height']));
+    else
+        return null;
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
@@ -249,7 +276,7 @@ mirosubs.video.FlvVideoPlayer.prototype.needsIFrame = function() {
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.getVideoSize = function() {
-    return new goog.math.Size(this.width_, this.height_);
+    return this.playerSize_;
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.disposeInternal = function() {
