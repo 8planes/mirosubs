@@ -1,7 +1,10 @@
+import time
+
 from django.conf import settings
 import random
 from django.utils.hashcompat import sha_constructor
 from django.utils.cache import patch_vary_headers
+from django.utils.http import cookie_date
 import os
 from django.db import connection
 
@@ -34,25 +37,22 @@ class UserUUIDMiddleware(object):
         try:
             request.browser_id = request.COOKIES[UUID_COOKIE_NAME]
         except KeyError:
-            pass
-        else:
             # No cookie or it is empty, so create one.  This will be sent with the next
             # response.            
-            if not getattr(request, 'browser_id'):
+            if not hasattr(request, 'browser_id'):
                 request.browser_id = _get_new_csrf_key()
 
     def process_response(self, request, response):
         if hasattr(request, 'browser_id'):
             browser_id = request.browser_id
-        else:
-            browser_id = _get_new_csrf_key()
-
-        if request.COOKIES.get(UUID_COOKIE_NAME) != browser_id:
-            response.set_cookie(
-                UUID_COOKIE_NAME,
-                browser_id, 
-                max_age=60 * 60 * 24 * 7 * 52 * 10,
-                domain=UUID_COOKIE_DOMAIN)
+            if request.COOKIES.get(UUID_COOKIE_NAME) != browser_id:
+                max_age = 60 * 60 * 24 * 365
+                response.set_cookie(
+                    UUID_COOKIE_NAME,
+                    browser_id, 
+                    max_age=max_age,
+                    expires=cookie_date(time.time() + max_age),
+                    domain=UUID_COOKIE_DOMAIN)
         # Content varies with the CSRF cookie, so set the Vary header.
         patch_vary_headers(response, ('Cookie',))
         return response            
