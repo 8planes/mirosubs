@@ -400,7 +400,7 @@ class SubtitleLanguage(models.Model):
         unique_together = (('video', 'language'),)
     
     def __unicode__(self):
-        return u'%s(%s)' % (self.video, self.language_display())
+        return self.language_display()
 
     def update_complete_state(self):
         version = self.latest_version()

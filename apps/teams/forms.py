@@ -33,7 +33,7 @@ from django.core.urlresolvers import resolve
 from django.http import Http404
 from django.contrib.sites.models import Site
 from utils.forms import UniSubURLField
-from videos.models import Video
+from videos.models import Video, SubtitleLanguage
 from django.utils.safestring import mark_safe
 from urlparse import urlparse
 from utils.forms import AjaxForm
@@ -58,11 +58,16 @@ class EditTeamVideoForm(forms.ModelForm):
     
     class Meta:
         model = TeamVideo
-        fields = ('title', 'description', 'thumbnail', 'all_languages')
+        fields = ('title', 'description', 'thumbnail', 'all_languages', 'completed_languages')
     
     def __init__(self, *args, **kwargs):
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
+        self.fields['completed_languages'].widget = forms.CheckboxSelectMultiple()
+        if self.instance:
+            self.fields['completed_languages'].queryset = self.instance.video.subtitlelanguage_set.all()
+        else:
+            self.fields['completed_languages'].queryset = SubtitleLanguage.objects.none()
 
 class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubURLField(label=_('Video URL'), verify_exists=True, 

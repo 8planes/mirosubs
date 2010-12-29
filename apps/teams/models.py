@@ -24,7 +24,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from videos.models import Video
+from videos.models import Video, SubtitleLanguage
 from auth.models import CustomUser as User
 from sorl.thumbnail.main import DjangoThumbnail
 from utils.amazon import S3EnabledImageField
@@ -204,6 +204,7 @@ class TeamVideo(models.Model):
     all_languages = models.BooleanField(_('Need help with all languages'), default=False, 
         help_text=_('If you check this, other languages will not be displayed.'))
     added_by = models.ForeignKey(User)
+    completed_languages = models.ManyToManyField(SubtitleLanguage, blank=True)
     
     class Meta:
         unique_together = (('team', 'video'),)
@@ -240,21 +241,9 @@ class TeamVideo(models.Model):
         
         return ''
     
-class TeamVideoLanguageManager(models.Manager):
-    use_for_related_fields = True
-    
-    def complete(self):
-        return self.get_query_set().filter(completed=True)
-
-    def incomplete(self):
-        return self.get_query_set().filter(completed=False)
-    
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
-    completed = models.BooleanField(default=False, verbose_name=_(u'Completed'))
-    
-    objects = TeamVideoLanguageManager()
     
     def __unicode__(self):
         return self.get_language_display()

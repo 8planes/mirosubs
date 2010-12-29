@@ -13,6 +13,29 @@
     <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
 {% endblock %}
 
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(function($){
+            var form_count = {{ formset.total_form_count }};
+            var empty_form = $('.empty-form').html();
+            var $form_count_field = $('#id_languages-TOTAL_FORMS')
+            
+            //fix saving value by browser after refresh
+            $('.delete-checkbox input').attr('checked', false); 
+            $form_count_field.val(form_count);
+            
+            $('.add-language').click(function(){
+                form_count++;
+                $form_count_field.val(form_count);
+                var form = empty_form.replace(/__prefix__/g, (form_count-1));
+                $('.language_list li:last').after(form);
+                return false;
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block settings_content %}
     <h2>{{ team }}</h2>
     {% with "videos" as active %}
@@ -24,6 +47,42 @@
             <form method='post' action="." enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+            
+            <h3>{% trans 'Languages needed' %}</h3>
+            <ul class="language_list">
+                {{ formset.management_form }}
+                {{ formset.non_field_errors }}
+                {% for form in formset.forms %}
+                    <li class="user_language">
+                        {{ form.non_field_errors }}
+                        {{ form.id }}
+                        {{ form.language.errors }}
+                        {{ form.language }}
+                        {{ form.completed.errors }}
+                        {{ form.completed }}
+                        {{ form.completed.label }}
+                        <div style="display: none" class="delete-checkbox">
+                            {{ form.DELETE }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button class="green_button small add-language">
+                <span><span class="plus"></span>{% trans 'Add Language' %}</span>
+            </button>
+            
+            <div class="empty-form" style="display: none">
+                <li class="user_language">
+                    {{ formset.empty_form.id }}
+                    {{ formset.empty_form.language }}
+                    {{ formset.empty_form.completed }}
+                    {{ formset.empty_form.completed.label }}
+                    <div style="display: none" class="delete-checkbox">
+                        {{ form.DELETE }}
+                    </div>                
+                </li>
+            </div>                
+                        
             <p>
                 <button class="green_button small"><span>{% trans 'Save' %}</span></button>
             </p>
