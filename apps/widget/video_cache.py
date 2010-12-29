@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.core.cache import cache
+from videos.types.base import VideoTypeError
 
 def get_video_id(video_url):
     cache_key = _video_id_key(video_url)
@@ -25,7 +26,10 @@ def get_video_id(video_url):
         return value
     else:
         from videos.models import Video
-        video, create = Video.get_or_create_for_url(video_url)
+        try:
+            video, create = Video.get_or_create_for_url(video_url)
+        except VideoTypeError:
+            return None
         video_id = video.video_id
         cache.set(cache_key, video_id)
         return video_id

@@ -105,7 +105,8 @@ class TestRpc(TestCase):
         request = RequestMockup(self.user_0)
         draft = self._create_basic_draft(request, True)
         subtitles_fetched_count = draft.video.subtitles_fetched_count
-        rpc.fetch_subtitles(request, draft.video.video_id)
+        subs = rpc.fetch_subtitles(request, draft.video.video_id)
+        self.assertEqual(1, len(subs['subtitles']))
         video1 = Video.objects.get(pk=draft.video.id)
         self.assertEqual(subtitles_fetched_count + 1, video1.subtitles_fetched_count)
 

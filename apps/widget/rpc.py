@@ -47,6 +47,9 @@ def add_general_settings(request, dict):
 class Rpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None):
         video_id = video_cache.get_video_id(video_url)
+        if video_id is None: # for example, private youtube video.
+            return None
+
         models.Video.widget_views_counter(video_id).incr()
         widget_views_total_counter.incr()
         
