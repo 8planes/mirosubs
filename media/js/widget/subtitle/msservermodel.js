@@ -141,6 +141,13 @@ mirosubs.subtitle.MSServerModel.prototype.registerSavedPackets_ =
 mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
     var work = this.unitOfWork_.getWork();
     this.unitOfWork_.clear();
+    this.unsavedPackets_ = goog.array.filter(
+        this.unsavedPackets_,
+        function(p) {
+            return p['deleted'].length > 0 ||
+                p['inserted'].length > 0 ||
+                p['updated'].length > 0;
+        });
     var toJson = mirosubs.subtitle.EditableCaption.toJsonArray;
     var packet = {
         'packet_no': this.packetNo_,
