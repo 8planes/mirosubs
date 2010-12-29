@@ -155,6 +155,11 @@ mirosubs.widget.Widget.prototype.showWidgetError_ = function() {
 };
 
 mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
+    if (!result) {
+        // this happens, for example, for private youtube videos.
+        this.videoTab_.showError();
+        return;
+    }
     if (!this.isVideoSourceImmediatelyUsable_()) {
         goog.dom.removeNode(this.videoPlaceholder_);
         var videoSource = mirosubs.video.VideoSource.bestVideoSource(
