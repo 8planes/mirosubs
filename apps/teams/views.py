@@ -327,6 +327,7 @@ def team_video(request, team_video_pk):
     
     if formset.is_valid() and form_validated:
         formset.save()
+        team_video.clean_languages()
         messages.success(request, _('Video has been updated.'))
         return redirect(team_video)
 

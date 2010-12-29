@@ -211,7 +211,15 @@ class TeamVideo(models.Model):
     
     def __unicode__(self):
         return self.title or self.video.__unicode__()
-
+    
+    def clean_languages(self):
+        langs = [item.language for item in self.completed_languages.all()]
+        self.languages.filter(language__in=langs).delete()
+            
+    def save(self, *args, **kwargs):
+        super(TeamVideo, self).save(*args, **kwargs)
+        self.clean_languages()
+    
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)
     
@@ -240,6 +248,7 @@ class TeamVideo(models.Model):
             return self.team.logo_thumbnail()
         
         return ''
+
     
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')

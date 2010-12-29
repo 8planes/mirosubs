@@ -40,7 +40,16 @@ from utils.forms import AjaxForm
 from localeurl.utils import strip_path
 import re
 
-TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
+class TeamVideoLanguageForm(forms.ModelForm):
+    
+    class Meta:
+        model = TeamVideoLanguage
+        
+    def __init__(self, *args, **kwargs):
+        super(TeamVideoLanguageForm, self).__init__(*args, **kwargs)
+        self.fields['language'].choices.sort(key=lambda item: item[1])    
+
+TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, TeamVideoLanguageForm ,extra=1)
 
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
@@ -63,6 +72,7 @@ class EditTeamVideoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
+        self.fields['completed_languages'].help_text = None
         self.fields['completed_languages'].widget = forms.CheckboxSelectMultiple()
         if self.instance:
             self.fields['completed_languages'].queryset = self.instance.video.subtitlelanguage_set.all()
