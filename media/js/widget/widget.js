@@ -94,10 +94,8 @@ mirosubs.widget.Widget.prototype.isVideoSourceImmediatelyUsable_ =
     if (this.forceFormat_ || goog.isDefAndNotNull(this.alternateVideoURLs_))
         return true;
     else {
-        if (this.videoSource_ instanceof mirosubs.video.Html5VideoSource)
-            return this.videoSource_.isBestVideoSource();
-        else
-            return !mirosubs.video.supportsVideo();
+        return !(this.videoSource_ instanceof mirosubs.video.Html5VideoSource)
+                || mirosubs.video.supportsVideo();
     }
 };
 
