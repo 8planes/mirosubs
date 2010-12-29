@@ -94,6 +94,10 @@
   margin-right: 5px;
   }
 
+.user_panel li.active {
+    background-color: #AAC6CD;
+}
+
 /* New Homepage overrides */
 
 #header .user_panel {

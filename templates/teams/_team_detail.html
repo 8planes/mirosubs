@@ -30,24 +30,6 @@
             }
             return false;
         });
-        $apptxt = $('div.application-textarea')  
-        $('a.join-team-by-application').click(function(){
-            $apptxt.show();
-            $(this).remove();
-            return false;
-        });
-        $('button', $apptxt).click(function(){
-            var $t = $('textarea', $apptxt);
-            TeamsApi.create_application($(this).attr('team_id'), $t.val(), function(response){
-                if (response.error){
-                    $.msg.clean().add(response.error, 'error');
-                }else{
-                    $.msg.clean().add(response.msg);
-                    $apptxt.remove();
-                }                
-            });
-            return false;
-        });          
     });
 </script>   
     
@@ -91,13 +73,7 @@
             </p>
             {% endif %}
             {% if team.is_by_application %}
-            <p>
-                <a class="join-team-by-application" team_id="{{ team.pk }}" href="#">{% trans "Send application" %}</a>
-                <div style="display: none" class="application-textarea">
-                    <textarea></textarea>
-                    <button team_id="{{ team.pk }}">{% trans "Send" %}</button>
-                </div>
-            </p>
+                {% include "teams/_application_form.html" %}
             {% endif %}
         {% endif %}
     {% endif %} 

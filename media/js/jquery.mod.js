@@ -17,14 +17,15 @@ jQuery.fn.mod = function(){
       'height': '100%',
       'top': 0,
       'left': 0,
-      'z-index': 1000
+      'z-index': 3500
     }
   })
 
   // Close modal when overlay or close link is clicked    
   var close = function(){
-    overlay.remove()
-    modal.hide()
+      overlay.remove();
+      modal.hide();
+      modal.trigger('close-modal');
   }
   
   overlay.click(close)
@@ -40,7 +41,7 @@ jQuery.fn.mod = function(){
     'left': '50%',
     'margin-left': -Math.floor(modal.width() / 2),
     'margin-top': -Math.floor(modal.height() / 2),
-    'z-index': 1001
+    'z-index': 3501
   })
 
   // Let there be light
@@ -50,8 +51,14 @@ jQuery.fn.mod = function(){
           jQuery(document.body).append(modal);
       }
   }catch(e){};
-
+  
   modal.show();
+}
+
+jQuery.fn.modClose = function(){
+  $('div.overlay').remove();
+  $(this).hide();
+  $(this).trigger('close-modal');    
 }
 
 jQuery.mod = function(){

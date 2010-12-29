@@ -68,6 +68,7 @@ def my_profile(request):
     if q:
         qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q))
     context = {
+        'my_videos': True,
         'query': q,
         'total_video_count': total_video_count
     }

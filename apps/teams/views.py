@@ -267,16 +267,26 @@ def add_video(request, slug):
     }
     
     form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
+    
     if form.is_valid():
         obj = form.save(False)
+        form_validated = True        
+    else:
+        form_validated = False
+        obj = TeamVideo()
+           
+    formset = TeamVideoLanguageFormset(request.POST or None, instance=obj)
+    
+    if formset.is_valid() and form_validated:
         obj.added_by = request.user
         obj.save()
-        messages.success(request, _(u'Video added success.'))
-        return redirect('teams:team_video', obj.pk)
+        formset.save()
+        return redirect(obj)
         
     return {
         'form': form,
-        'team': team
+        'team': team,
+        'formset': formset
     }
 
 @login_required
@@ -317,6 +327,7 @@ def team_video(request, team_video_pk):
     
     if formset.is_valid() and form_validated:
         formset.save()
+        team_video.clean_languages()
         messages.success(request, _('Video has been updated.'))
         return redirect(team_video)
 

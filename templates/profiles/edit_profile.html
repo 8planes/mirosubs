@@ -50,6 +50,13 @@
               <h3>{% trans 'Personal Info' %}</h3>
               {{ form.non_field_errors }}
               <p>
+                  {{ form.username.errors }}
+                  {{ form.username.label_tag }}
+                  {{ form.username }}
+                  {{ form.username.help_text }}
+                  <span>{% trans 'will display publicly' %}</span>
+              </p>              
+              <p>
                   {{ form.first_name.errors }}
                   {{ form.first_name.label_tag }}
                   {{ form.first_name }}

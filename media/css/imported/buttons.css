@@ -873,7 +873,7 @@ a.previous_page{
   text-decoration: none;
   display: block;
   padding: 14px 20px 10px;
-  z-index: 33333;
+  z-index: 3333;
   
   
   -moz-border-radius-topright: 5px;  
@@ -910,7 +910,7 @@ position: relative;
 text-decoration: none;
 display: block;
 padding: 13px 20px 12px 20px;
-z-index: 33333;
+z-index: 3333;
 
 
   -moz-border-radius-topright: 5px;  

@@ -33,14 +33,23 @@ from django.core.urlresolvers import resolve
 from django.http import Http404
 from django.contrib.sites.models import Site
 from utils.forms import UniSubURLField
-from videos.models import Video
+from videos.models import Video, SubtitleLanguage
 from django.utils.safestring import mark_safe
 from urlparse import urlparse
 from utils.forms import AjaxForm
 from localeurl.utils import strip_path
 import re
 
-TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, extra=1)
+class TeamVideoLanguageForm(forms.ModelForm):
+    
+    class Meta:
+        model = TeamVideoLanguage
+        
+    def __init__(self, *args, **kwargs):
+        super(TeamVideoLanguageForm, self).__init__(*args, **kwargs)
+        self.fields['language'].choices.sort(key=lambda item: item[1])    
+
+TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, TeamVideoLanguageForm ,extra=1)
 
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
@@ -58,11 +67,17 @@ class EditTeamVideoForm(forms.ModelForm):
     
     class Meta:
         model = TeamVideo
-        fields = ('title', 'description', 'thumbnail', 'all_languages')
+        fields = ('title', 'description', 'thumbnail', 'all_languages', 'completed_languages')
     
     def __init__(self, *args, **kwargs):
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
+        self.fields['completed_languages'].help_text = None
+        self.fields['completed_languages'].widget = forms.CheckboxSelectMultiple()
+        if self.instance:
+            self.fields['completed_languages'].queryset = self.instance.video.subtitlelanguage_set.all()
+        else:
+            self.fields['completed_languages'].queryset = SubtitleLanguage.objects.none()
 
 class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubURLField(label=_('Video URL'), verify_exists=True, 
@@ -181,7 +196,7 @@ class EditTeamForm(BaseVideoBoundForm):
     class Meta:
         model = Team
         fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 
-                  'is_visible', 'video_url')
+                  'is_visible', 'video_url', 'application_text')
 
     def __init__(self, *args, **kwargs):
         super(EditTeamForm, self).__init__(*args, **kwargs)
