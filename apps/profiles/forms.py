@@ -97,7 +97,7 @@ class EditUserForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'homepage', 'preferred_language', 
+        fields = ('username', 'first_name', 'last_name', 'email', 'homepage', 'preferred_language', 
                   'changes_notification', 'biography')
         
     def clean(self):
