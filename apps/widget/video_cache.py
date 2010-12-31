@@ -19,6 +19,8 @@
 from django.core.cache import cache
 from videos.types.base import VideoTypeError
 
+TIMEOUT = 60 * 60 * 24 * 5 # 5 days
+
 def get_video_id(video_url):
     cache_key = _video_id_key(video_url)
     value = cache.get(cache_key)
@@ -31,7 +33,7 @@ def get_video_id(video_url):
         except VideoTypeError:
             return None
         video_id = video.video_id
-        cache.set(cache_key, video_id)
+        cache.set(cache_key, video_id, TIMEOUT)
         return video_id
 
 def _invalidate_cache(video_id, language_code=None):
@@ -80,7 +82,7 @@ def get_video_urls(video_id):
         video_urls = \
             [vu.effective_url for vu 
              in Video.objects.get(video_id=video_id).videourl_set.all()]
-        cache.set(cache_key, video_urls)
+        cache.set(cache_key, video_urls, TIMEOUT)
         return video_urls
 
 def get_subtitles_dict(
@@ -98,7 +100,7 @@ def get_subtitles_dict(
             cached_value = subtitles_dict_fn(version)
         else:
             cached_value = 0
-        cache.set(cache_key, cached_value)
+        cache.set(cache_key, cached_value, TIMEOUT)
     return None if cached_value == 0 else cached_value
 
 def get_subtitle_count(video_id):
@@ -111,7 +113,7 @@ def get_subtitle_count(video_id):
         video = Video.objects.get(video_id=video_id)
         version = video.latest_version()
         return_value = 0 if version is None else version.subtitle_set.count()
-        cache.set(cache_key, return_value)
+        cache.set(cache_key, return_value, TIMEOUT)
         return cache.get(cache_key)
 
 def get_video_languages(video_id):
@@ -125,6 +127,6 @@ def get_video_languages(video_id):
         translated_languages = video.subtitlelanguage_set.filter(
             is_complete=True).filter(is_original=False)
         return_value = [(t.language, t.percent_done) for t in translated_languages]
-        cache.set(cache_key, return_value)
+        cache.set(cache_key, return_value, TIMEOUT)
         return return_value
 
