@@ -37,6 +37,7 @@ def get_video_id(video_url):
 def _invalidate_cache(video_id, language_code=None):
     cache.delete(_video_urls_key(video_id))
     cache.delete(_subtitles_dict_key(video_id, language_code))
+    cache.delete(_subtitles_dict_key(video_id, None))
     cache.delete(_subtitles_count_key(video_id))
     cache.delete(_video_languages_key(video_id))
 

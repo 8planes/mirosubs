@@ -711,9 +711,12 @@ class TestRpc(TestCase):
         return_value = rpc.show_widget(
             request,
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
-            False)
+            False,
+            base_state={})
         video_id = return_value['video_id']
-        response = rpc.start_editing(request, video_id, 'en', 'en')
+        response = rpc.start_editing(
+            request, video_id, 'en', 'en',
+            base_version_no=None, fork=True)
         draft_pk = response['draft_pk']
         inserted = [{'subtitle_id': u'sfdsfsdf',
                      'text': 'hey!',
