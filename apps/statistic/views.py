@@ -18,7 +18,8 @@
 from utils import render_to, render_to_json
 from datetime import datetime, timedelta
 from videos.models import Video, SubtitleLanguage, ALL_LANGUAGES
-from statistic.models import EmailShareStatistic, TweeterShareStatistic, FBShareStatistic, SubtitleFetchStatistic
+from statistic.models import EmailShareStatistic, TweeterShareStatistic, \
+    FBShareStatistic, SubtitleFetchStatistic, SubtitleFetchCounters
 from auth.models import CustomUser as User
 from django.views.generic.list_detail import object_list
 from comments.models import Comment
@@ -136,17 +137,18 @@ def language_statistic(request, lang):
     videos_count['day'] = SubtitleLanguage.objects.filter(created__range=(day_ago, today)).filter(language=lang).count()
     
     subtitles_view_count = {}
-    subtitles_view_count['total'] = SubtitleLanguage.objects.filter(language=lang) \
-        .aggregate(Sum('subtitles_fetched_count'))['subtitles_fetched_count__sum']
-    subtitles_view_count['month'] = SubtitleFetchStatistic.objects.filter(language=lang) \
-        .filter(created__range=(month_ago, today)).count()
-    subtitles_view_count['week'] = SubtitleFetchStatistic.objects.filter(language=lang) \
-        .filter(created__range=(week_ago, today)).count()    
-    subtitles_view_count['day'] = SubtitleFetchStatistic.objects.filter(language=lang) \
-        .filter(created__range=(day_ago, today)).count()
+    subtitles_view_count['total'] = SubtitleFetchCounters.objects.filter(language=lang) \
+        .aggregate(Sum('count'))['count__sum']
+    subtitles_view_count['month'] = SubtitleFetchCounters.objects.filter(language=lang) \
+        .filter(date__range=(month_ago, today)).aggregate(Sum('count'))['count__sum']
+    subtitles_view_count['week'] = SubtitleFetchCounters.objects.filter(language=lang) \
+        .filter(date__range=(week_ago, today)).aggregate(Sum('count'))['count__sum']   
+    subtitles_view_count['day'] = SubtitleFetchCounters.objects.filter(language=lang) \
+        .filter(date__range=(day_ago, today)).aggregate(Sum('count'))['count__sum']
     
-    videos_views_count = Video.objects.filter(subtitlelanguage__language=lang) \
-        .aggregate(Sum('widget_views_count'))['widget_views_count__sum']
+    videos_views_count = 0
+    for video in Video.objects.filter(subtitlelanguage__language=lang):
+        videos_views_count += video.widget_views_counter.get()
             
     return {
         'video_count': videos_count,
@@ -162,15 +164,15 @@ def videos_statistic(request):
     week_ago = today - timedelta(weeks=1)
     day_ago = today - timedelta(days=1)
     
-    tn = 'statistic_subtitlefetchstatistic'
+    tn = 'statistic_subtitlefetchcounters'
         
     qs = Video.objects.distinct().extra(select={
-        'month_activity': ('SELECT COUNT(id) FROM %s WHERE %s.video_id = videos_video.id '+
-        'AND %s.created BETWEEN "%s" and "%s"') % (tn, tn, tn, month_ago, today),                                          
-        'week_activity': ('SELECT COUNT(id) FROM %s WHERE %s.video_id = videos_video.id '+
-        'AND %s.created BETWEEN "%s" and "%s"') % (tn, tn, tn, week_ago, today),
-        'day_activity': ('SELECT COUNT(id) FROM %s WHERE %s.video_id = videos_video.id '+
-        'AND %s.created BETWEEN "%s" and "%s"') % (tn, tn, tn, day_ago, today)
+        'month_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_id = videos_video.id '+
+        'AND %s.date BETWEEN "%s" and "%s"') % (tn, tn, tn, month_ago, today),                                          
+        'week_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_id = videos_video.id '+
+        'AND %s.date BETWEEN "%s" and "%s"') % (tn, tn, tn, week_ago, today),
+        'day_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_id = videos_video.id '+
+        'AND %s.date BETWEEN "%s" and "%s"') % (tn, tn, tn, day_ago, today)
     })
 
     ordering = request.GET.get('o')

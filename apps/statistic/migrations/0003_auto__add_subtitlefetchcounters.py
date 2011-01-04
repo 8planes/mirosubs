@@ -1,41 +1,29 @@
 # encoding: utf-8
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
-from django.conf import settings
-from redis.exceptions import ConnectionError
-from statistic import sub_fetch_keys_set
 
-class Migration(DataMigration):
+class Migration(SchemaMigration):
     
     def forwards(self, orm):
-        try:
-            from utils.redis_utils import default_connection
-            from statistic import get_fetch_subtitles_key
-        except ImportError:
-            if settings.DEBUG:
-                return
-            raise Exception('Some redis utilits is unavailable, maybe this migration was not updated after refactoring. You can ignore this migration with: python manage.py migrate statistic 0002 --fake, but all statistic data will be lost.')
-
-        try:
-            default_connection.ping()
-        except ConnectionError:
-            if settings.DEBUG:
-                return
-            raise Exception('Redis server is unavailable. You can ignore this migration with: python manage.py migrate statistic 0002 --fake, but all statistic data will be lost.')
         
-        keys = []
-        for item in orm.SubtitleFetchStatistic.objects.all():
-            key = get_fetch_subtitles_key(item.video, item.language, item.created)
-            if not key in keys:
-                default_connection.delete(key)
-                keys.append(key)
-                sub_fetch_keys_set.sadd(key)
-            default_connection.incr(key)
+        # Adding model 'SubtitleFetchCounters'
+        db.create_table('statistic_subtitlefetchcounters', (
+            ('date', self.gf('django.db.models.fields.DateField')()),
+            ('count', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+            ('video', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.Video'])),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('language', self.gf('django.db.models.fields.CharField')(max_length=16, blank=True)),
+        ))
+        db.send_create_signal('statistic', ['SubtitleFetchCounters'])
+    
     
     def backwards(self, orm):
-        "Write your backwards methods here."
+        
+        # Deleting model 'SubtitleFetchCounters'
+        db.delete_table('statistic_subtitlefetchcounters')
+    
     
     models = {
         'auth.customuser': {
@@ -97,6 +85,14 @@ class Migration(DataMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'})
+        },
+        'statistic.subtitlefetchcounters': {
+            'Meta': {'object_name': 'SubtitleFetchCounters'},
+            'count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'date': ('django.db.models.fields.DateField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
+            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
         },
         'statistic.subtitlefetchstatistic': {
             'Meta': {'object_name': 'SubtitleFetchStatistic'},

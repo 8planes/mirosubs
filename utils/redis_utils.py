@@ -68,10 +68,10 @@ class RedisSimpleField(object):
     """
     Redis incremental field
     """
-    def __init__(self, uniq_attr=None):
+    def __init__(self, uniq_attr=None, changed_set=None):
         self.uniq_attr = uniq_attr
         self.r = default_connection
-
+        self.changed_set = changed_set
         # use object method for generating unique id
         #if uniq_attr and hasattr(self.obj, self.uniq_attr):
         #    self.instance_id = getattr(self.obj, self.uniq_attr)
@@ -95,11 +95,13 @@ class RedisSimpleField(object):
             instance_id = getattr(obj, self.uniq_attr)
         else:
             instance_id = obj.pk
+        self.add_to_changed_set(instance_id)
         return u"%s:%s:%s" % (self.class_name, self.field_name, instance_id)
-
-    def get_key(self, video_id):
-        print 11
-
+    
+    def add_to_changed_set(self, instance_id):
+        if self.changed_set:
+            self.changed_set.sadd(instance_id)
+        
     def __set__(self, obj, val):
         RedisKey(self.redis_key(obj), self.r).val = val
 
@@ -108,6 +110,8 @@ class RedisSimpleField(object):
             return self
         return RedisKey(self.redis_key(obj), self.r)
 
-    def __call__(self, instance_id):
+    def __call__(self, instance_id, skip_mark_as_changed=False):
+        if not skip_mark_as_changed:
+            self.add_to_changed_set(instance_id)
         key = u"%s:%s:%s" % (self.class_name, self.field_name, instance_id)
         return RedisKey(key, self.r)

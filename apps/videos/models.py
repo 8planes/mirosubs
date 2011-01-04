@@ -31,7 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
 from utils.amazon import default_s3_store
 from statistic.models import SubtitleFetchStatistic
-from statistic import update_subtitles_fetch_counter, video_view_counter, widget_views_total_counter
+from statistic import update_subtitles_fetch_counter, video_view_counter, changed_video_set 
 from widget import video_cache
 from datetime import datetime
 from utils.redis_utils import RedisSimpleField
@@ -93,9 +93,9 @@ class Video(models.Model):
     widget_views_count = models.IntegerField(default=0)
     view_count = models.PositiveIntegerField(default=0)
     
-    subtitles_fetchec_counter = RedisSimpleField('video_id')
-    widget_views_counter = RedisSimpleField('video_id')
-    view_counter = RedisSimpleField('video_id')
+    subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
+    widget_views_counter = RedisSimpleField('video_id', changed_video_set)
+    view_counter = RedisSimpleField('video_id', changed_video_set)
     
     def __unicode__(self):
         title = self.title_display()
@@ -108,16 +108,13 @@ class Video(models.Model):
         video_view_counter.incr()
     
     def update_subtitles_fetched(self, lang=None):
-        self.subtitles_fetchec_counter.incr()
+        self.subtitles_fetched_counter.incr()
         #Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
-        st_obj = SubtitleFetchStatistic(video=self)
         sub_lang = self.subtitle_language(lang)
         update_subtitles_fetch_counter(self, sub_lang)
         if sub_lang:
-            st_obj.language = lang or ''
             sub_lang.subtitles_fetched_counter.incr()
             #SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
-        st_obj.save()
         
     def get_thumbnail(self):
         if self.s3_thumbnail:
@@ -391,7 +388,7 @@ class SubtitleLanguage(models.Model):
     was_complete = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    subtitles_fetched_count = models.IntegerField(default=0)
+    #subtitles_fetched_count = models.IntegerField(default=0)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
     
     subtitles_fetched_counter = RedisSimpleField()
