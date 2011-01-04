@@ -33,17 +33,15 @@ class SearchForm(forms.Form):
     langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'languages'),
                                       help_text=_(u'Left blank for any language'))
     
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, user, default_langs, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         choices = list(ALL_LANGUAGES)
         choices.sort(key=lambda item: item[1])
-        if user.is_authenticated():
-            choices[:0] = (
-                ('my_langs', _(u'My languages')),
-            )
+        self.default_langs = default_langs
         choices[:0] = (
+            ('my_langs', _(u'My languages')),
             ('', _(u'Any')),
-        )            
+        )
         self.fields['langs'].choices = choices
         self.user = user
 
@@ -74,12 +72,17 @@ class SearchForm(forms.Form):
         
         if langs:
             langs = [langs]
-            if 'my_langs' in langs and self.user.is_authenticated():
+            if 'my_langs' in langs:
                 del langs[langs.index('my_langs')]
-                for l in self.user.userlanguage_set.values_list('language', flat=True):
-                    if not l in langs:
-                        langs.append(l)
-                
+                if self.user.is_authenticated():
+                    for l in self.user.userlanguage_set.values_list('language', flat=True):
+                        if not l in langs:
+                            langs.append(l)
+                else:
+                    for l in self.default_langs:
+                        if not l in langs:
+                            langs.append(l)
+
             qs = qs.filter(languages__in=langs)
 
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
