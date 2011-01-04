@@ -4,11 +4,13 @@ from os.path import join
 prev_sys_path = list(sys.path)
 
 site.addsitedir('/var/www/INSERT_SITE_DIRECTORY/env/lib/python2.6/site-packages')
-
 base_site_dir = '/var/www/INSERT_SITE_DIRECTORY'
+
 sys.path.append(base_site_dir)
 sys.path.append(join(base_site_dir, 'mirosubs'))
 sys.path.append(join(base_site_dir, 'mirosubs', 'apps'))
+
+sys.stdout = sys.stderr
 
 new_sys_path = [p for p in sys.path if p not in prev_sys_path]
 for item in new_sys_path:
