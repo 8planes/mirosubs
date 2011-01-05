@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from utils.translation import get_languages_list
 
 ALL_LANGUAGES = tuple((val, _(name))for val, name in settings.ALL_LANGUAGES)
 
@@ -35,8 +36,7 @@ class SearchForm(forms.Form):
     
     def __init__(self, user, default_langs, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
-        choices = list(ALL_LANGUAGES)
-        choices.sort(key=lambda item: item[1])
+        choices = list(get_languages_list())
         self.default_langs = default_langs
         choices[:0] = (
             ('my_langs', _(u'My languages')),

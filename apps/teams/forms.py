@@ -39,6 +39,7 @@ from urlparse import urlparse
 from utils.forms import AjaxForm
 from localeurl.utils import strip_path
 import re
+from utils.translation import get_languages_list
 
 class TeamVideoLanguageForm(forms.ModelForm):
     
@@ -47,7 +48,7 @@ class TeamVideoLanguageForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super(TeamVideoLanguageForm, self).__init__(*args, **kwargs)
-        self.fields['language'].choices.sort(key=lambda item: item[1])    
+        self.fields['language'].choices = get_languages_list()
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, TeamVideoLanguageForm ,extra=1)
 

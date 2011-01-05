@@ -40,6 +40,7 @@ from gdata.service import Error as GdataError
 from socket import gaierror
 from django.utils.encoding import smart_unicode
 import feedparser
+from utils.translation import get_languages_list
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -142,8 +143,8 @@ class SubtitlesUploadBaseForm(forms.Form):
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(SubtitlesUploadBaseForm, self).__init__(*args, **kwargs)
-        self.fields['language'].choices.sort(key=lambda item: item[1])
-        self.fields['video_language'].choices.sort(key=lambda item: item[1])
+        self.fields['language'].choices = get_languages_list()
+        self.fields['video_language'].choices = get_languages_list()
         
     def clean_video(self):
         video = self.cleaned_data['video']

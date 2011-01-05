@@ -24,6 +24,7 @@ from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
 from utils.forms import AjaxForm
+from utils.translation import get_languages_list
 
 class UserLanguageForm(forms.ModelForm):
     
@@ -32,7 +33,7 @@ class UserLanguageForm(forms.ModelForm):
         
     def __init__(self, *args, **kwrags):
         super(UserLanguageForm, self).__init__(*args, **kwrags)
-        self.fields['language'].choices.sort(key=lambda item: item[1])
+        self.fields['language'].choices = get_languages_list()
 
 UserLanguageFormset = inlineformset_factory(User, UserLanguage, UserLanguageForm, extra=1)
 

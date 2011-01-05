@@ -7,7 +7,7 @@
   <ul>
     <li {% if edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
     {% if user.is_authenticated %}
-    <li {% if user_info == user %}class="active"{% endif %}><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
+    <li {% if user_info == user and not edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
     {% endif %}
     <li {% if my_videos %}class="active"{% endif %}><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
     {% if user.teams.exists %}
