@@ -444,7 +444,7 @@ class FeedbackForm(MathCaptchaForm):
         timestamp = u'Time: %s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         version = u'Version: %s' % settings.PROJECT_VERSION
         commit = u'Commit: %s' % settings.LAST_COMMIT_GUID
-        url = u'URL: %s' % request.path_info
+        url = u'URL: %s' % request.META.get('HTTP_REFERER', '')
         user = u'Logged in: %s' % (request.user.is_authenticated() and request.user or u'not logged in')
         message = u'%s\n\n%s\n%s\n%s\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version, commit, url, user)
         if error in ['404', '500']:
