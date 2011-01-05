@@ -247,6 +247,7 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
     'middleware.P3PHeaderMiddleware',
     'middleware.UserUUIDMiddleware',
+    'middleware.SaveUserIp'
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'

@@ -55,6 +55,7 @@ class CustomUser(BaseUser):
     autoplay_preferences = models.IntegerField(
         choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
     award_points = models.IntegerField(default=0)
+    last_ip = models.IPAddressField(blank=True, null=True)
     
     objects = UserManager()
     

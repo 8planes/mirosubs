@@ -7,8 +7,22 @@ from django.utils.cache import patch_vary_headers
 from django.utils.http import cookie_date
 import os
 from django.db import connection
+from django.core.validators import validate_ipv4_address
+from django.core.exceptions import ValidationError
 
+class SaveUserIp(object):
 
+    def process_request(self, request):
+        if request.user.is_authenticated():
+            ip = request.META.get('REMOTE_ADDR', '')
+            try:
+                validate_ipv4_address(ip)
+                if request.user.last_ip != ip:
+                    request.user.last_ip = ip
+                    request.user.save()
+            except ValidationError:
+                pass
+        
 class P3PHeaderMiddleware(object):
     def process_response(self, request, response):
         response['P3P'] = settings.P3P_COMPACT
