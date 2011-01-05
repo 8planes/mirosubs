@@ -207,7 +207,7 @@ class FacebookBackend:
                     location = str(fb_data['current_location'])
                     fb_profile = FacebookUserProfile(facebook_uid = fb_data['uid'], user = user, profile_image_url = fb_data['pic_small'], location=location)
                     fb_profile.save()
-                    auth_meta = AuthMeta(user=user, provider='Facebook').save()
+                    AuthMeta(user=user, provider='Facebook').save()
                     return user
             else:
                 return None
