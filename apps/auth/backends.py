@@ -72,8 +72,8 @@ class OpenIdBackend:
                 email =  None #'%s@example.openid.com'%(nickname)
             else:
                 valid_username = True
-            name_count = User.objects.filter(username__startswith = nickname).count()
-                
+            name_count = AuthUser.objects.filter(username__startswith = nickname).count()
+
             if name_count:
                 username = '%s%s'%(nickname, name_count + 1)
                 user = User.objects.create_user(username,email or '')
@@ -140,7 +140,7 @@ class TwitterBackend:
                 username = screen_name
             username = '@'+username
             
-            name_count = User.objects.filter(username__startswith = username).count()
+            name_count = AuthUser.objects.filter(username__startswith = username).count()
                 
             if name_count:
                 username = '%s%s'%(username, name_count + 1)
@@ -196,7 +196,7 @@ class FacebookBackend:
                         return   
                 except FacebookUserProfile.DoesNotExist:
                     fb_data = user_info_response[0]
-                    name_count = User.objects.filter(username__istartswith = username).count()
+                    name_count = AuthUser.objects.filter(username__istartswith = username).count()
                     if name_count:
                         username = '%s%s' % (username, name_count + 1)
                     #user_email = '%s@facebookuser.%s.com'%(user_info_response[0]['first_name'], settings.SITE_NAME)
