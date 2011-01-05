@@ -38,7 +38,7 @@ class Migration(DataMigration):
             video_counter.set(obj.view_count)
             video_view_counter.incr(obj.view_count)
             sub_fetch_total_counter.incr(obj.subtitles_fetched_count)
-            widget_views_total_counter.incr(obj.widget_views_counter)
+            widget_views_total_counter.incr(Video.widget_views_counter(obj.video_id).get())
         
     def backwards(self, orm):
         "Write your backwards methods here."
