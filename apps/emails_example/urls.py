@@ -20,5 +20,8 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('emails_example.views',
     url('^$', 'index', name='index'),
+    url('^send_email/$', 'send_email', name='send_email'),
     url('^email_title_changed/$', 'email_title_changed', name='email_title_changed'),
+    url('^email_video_url_add/$', 'email_video_url_add', name='email_video_url_add'),
+    url('^email_start_notification/$', 'email_start_notification', name='email_start_notification'),
 )
