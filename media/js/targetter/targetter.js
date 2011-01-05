@@ -64,18 +64,31 @@ PcfTargetter = (function(){
         
         init: function(options){
             options = this.apply({}, options, this.defaults);
-            if (this.checkUserAgent(options) && this.checkOs(options) && this.checkRefferer(options)){
+            if (this.checkUserAgent(options) && this.checkOs(options) && this.checkRefferer(options) 
+                && this.checkLocation(options)){
+                    
                 options.callback.call(options)
             }
         },
+        checkLocation: function(options){
+            var url = "http://www.geoplugin.net/json.gp?jsoncallback=?&callback=?";
+
+            jQuery.getJSON(url, function(data){
+                console.log(data)
+            })
+            return true;
+        },
         checkRefferer: function(options){
             var pattern = /https?:\/\/([^\/]+)\//g;
-            var result = pattern.exec(document.referrer)[1];
+            var match = pattern.exec(document.referrer);
             var referrers = options.refferers;
-            for (var i=0,l=referrers.length; i<l; i++){
-                if (referrers[i] === result){
-                    return true;
-                }
+            if (match){
+                var result = match[1];
+                for (var i=0,l=referrers.length; i<l; i++){
+                    if (referrers[i] === result){
+                        return true;
+                    }
+                }                
             }
             return !referrers.length;
         },
@@ -117,5 +130,6 @@ PcfTargetter = (function(){
         isFunction : function(v){
             return Object.prototype.toString.apply(v) === '[object Function]';
         }
+        
     }
 })();
