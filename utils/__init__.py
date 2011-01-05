@@ -39,6 +39,12 @@ import htmllib
 from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, YoutubeSubtitleParser, \
     TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser
 import traceback, sys
+from django.contrib.auth.decorators import user_passes_test
+
+def is_staff(user):
+    return user.is_authenticated() and user.is_staff and user.is_active
+
+check_is_staff = user_passes_test(is_staff)
 
 def render_to(template):
     """

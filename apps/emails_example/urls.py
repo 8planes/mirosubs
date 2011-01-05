@@ -19,5 +19,6 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('emails_example.views',
-    url('$', 'index', name='index'),
+    url('^$', 'index', name='index'),
+    url('^email_title_changed/$', 'email_title_changed', name='email_title_changed'),
 )
