@@ -66,15 +66,13 @@
             <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a>   
         </p>
     {% else %}
-        {% if user.is_authenticated %}
-            {% if team.is_open %}
-            <p>
-               <a class="join-team" team_id="{{ team.pk }}" href="#">{% trans "Join" %}</a> 
-            </p>
-            {% endif %}
-            {% if team.is_by_application %}
-                {% include "teams/_application_form.html" %}
-            {% endif %}
+        {% if team.is_open %}
+        <p>
+           <a class="join-team" team_id="{{ team.pk }}" href="#">{% trans "Join" %}</a> 
+        </p>
+        {% endif %}
+        {% if user.is_authenticated and team.is_by_application %}
+            {% include "teams/_application_form.html" %}
         {% endif %}
     {% endif %} 
 </div>
