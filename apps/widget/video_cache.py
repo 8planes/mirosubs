@@ -18,6 +18,7 @@
 
 from django.core.cache import cache
 from videos.types.base import VideoTypeError
+from django.conf import settings
 
 TIMEOUT = 60 * 60 * 24 * 5 # 5 days
 
@@ -38,7 +39,8 @@ def get_video_id(video_url):
 
 def _invalidate_cache(video_id, language_code=None):
     cache.delete(_video_urls_key(video_id))
-    cache.delete(_subtitles_dict_key(video_id, language_code))
+    for l in settings.ALL_LANGUAGES:
+        cache.delete(_subtitles_dict_key(video_id, l[0]))
     cache.delete(_subtitles_dict_key(video_id, None))
     cache.delete(_subtitles_count_key(video_id))
     cache.delete(_video_languages_key(video_id))
