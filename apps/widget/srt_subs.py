@@ -120,7 +120,7 @@ class SRTSubtitles(BaseSubtitles):
                 start = self.format_time(item['start'])
                 end = self.format_time(item['end'])
                 output.append(u'%s --> %s' % (start, end))
-                output.append(item['text'])
+                output.append(item['text'].strip())
                 output.append(u'')
                 i += 1
         
@@ -128,6 +128,8 @@ class SRTSubtitles(BaseSubtitles):
 
     def format_time(self, time):
         hours = int(floor(time / 3600))
+        if hours < 0:
+            hours = 99
         minutes = int(floor(time % 3600 / 60))
         seconds = int(time % 60)
         fr_seconds = int(time % 1 * 100)
@@ -146,13 +148,15 @@ class SBVSubtitles(BaseSubtitles):
                 start = self.format_time(item['start'])
                 end = self.format_time(item['end'])
                 output.append(u'%s,%s' % (start, end))
-                output.append(item['text'])
+                output.append(item['text'].strip())
                 output.append(u'')
         
         return u'\n'.join(output)
 
     def format_time(self, time):
         hours = int(floor(time / 3600))
+        if hours < 0:
+            hours = 9        
         minutes = int(floor(time % 3600 / 60))
         seconds = int(time % 60)
         fr_seconds = int(time % 1 * 1000)
@@ -166,7 +170,7 @@ class TXTSubtitles(BaseSubtitles):
     def __unicode__(self):
         output = []
         for item in self.subtitles:
-            item['text'] and output.append(item['text'])
+            item['text'] and output.append(item['text'].strip())
         return u'\n\n'.join(output)
 
 GenerateSubtitlesHandler.register(TXTSubtitles)
@@ -186,6 +190,8 @@ class SSASubtitles(BaseSubtitles):
     
     def format_time(self, time):
         hours = int(floor(time / 3600))
+        if hours < 0:
+            hours = 9
         minutes = int(floor(time % 3600 / 60))
         seconds = int(time % 60)
         fr_seconds = int(time % 1 * 100)
@@ -202,7 +208,7 @@ class SSASubtitles(BaseSubtitles):
         for item in self.subtitles:
             start = self.format_time(item['start'])
             end = self.format_time(item['end'])
-            text = self._clean_text(item['text'])
+            text = self._clean_text(item['text'].strip())
             output.append(tpl % (start, end, text))
         return ''.join(output)
 
@@ -228,11 +234,13 @@ class TTMLSubtitles(BaseSubtitles):
                 attrib['begin'] = self.format_time(item['start'])
                 attrib['dur'] = self.format_time(item['end']-item['start'])
                 p = etree.SubElement(div, 'p', attrib=attrib)
-                p.text = item['text']
+                p.text = item['text'].strip()
         return tt
     
     def format_time(self, time):
         hours = int(floor(time / 3600))
+        if hours < 0:
+            hours = 99
         minutes = int(floor(time % 3600 / 60))
         seconds = int(time % 60)
         fr_seconds = int(time % 1 * 100)

@@ -62,9 +62,8 @@ class SendMessageForm(forms.Form):
         email = self.cleaned_data.get('email')
         headers = {'Reply-To': email}
         subject = _('Personal message from %(sender)s on universalsubtitles.org') % {'sender': self.sender.username}
-        bcc = settings.EMAIL_BCC_LIST
         EmailMessage(subject, self.cleaned_data.get('message'), email, \
-                     [user.email], headers=headers, bcc=bcc).send()
+                     [user.email], headers=headers).send()
 
     def get_errors(self):
         from django.utils.encoding import force_unicode        

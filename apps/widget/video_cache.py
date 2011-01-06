@@ -106,6 +106,7 @@ def get_subtitles_dict(
 def get_subtitle_count(video_id):
     cache_key = _subtitles_count_key(video_id)
     value = cache.get(cache_key)
+    print value
     if value is not None:
         return value
     else:
@@ -114,7 +115,7 @@ def get_subtitle_count(video_id):
         version = video.latest_version()
         return_value = 0 if version is None else version.subtitle_set.count()
         cache.set(cache_key, return_value, TIMEOUT)
-        return cache.get(cache_key)
+        return return_value
 
 def get_video_languages(video_id):
     cache_key = _video_languages_key(video_id)
