@@ -125,7 +125,7 @@
                     <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a><br/>
                     {% endif %}
                 {% else %}
-                    {% if team.is_open and user.is_authenticated %}<a href="#" class="join-team" team_id="{{ team.pk }}">{% trans "Join" %}</a><br/>{% endif %}
+                    {% if team.is_open %}<a href="#" class="join-team" team_id="{{ team.pk }}">{% trans "Join" %}</a><br/>{% endif %}
                 {% endif %}      
                 <span>
                     {% blocktrans with team.member_count as count %}
