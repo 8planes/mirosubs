@@ -19,7 +19,8 @@ goog.require('goog.json');
 {% endfor %}
 </head>
 <body>
-  <a href="#" onclick="openDialog(); return false;">Open dialog</a>
+  <a href="#" onclick="openDialog(); return false;">Open dialog (wikipedia)</a>
+  <a href="#" onclick="openUnisubsDialog(); return false;">Open unisubs dialog (jwplayer)</a>
   <script>
       var logger = goog.debug.Logger.getLogger('api');
 
@@ -71,16 +72,25 @@ goog.require('goog.json');
           'skipFinished': true
       };
 
-      function openDialog() {
+      function setUpLogging() {
           var debugWindow = new goog.debug.FancyWindow('main');
           debugWindow.setEnabled(true);
           debugWindow.init();
 
           goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+      }
+
+      function openDialog() {
+          setUpLogging();
 
           var callbackAPI = mirosubs.api.openDialog(config);
 
           // can now call callbackAPI.close() to close dialog
+      }
+
+      function openUnisubsDialog() {
+          setUpLogging();
+          mirosubs.api.openUnisubsDialog('http://www.youtube.com/watch?v=uTysXITBCmk');
       }
   </script>
 </body>

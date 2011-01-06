@@ -21,7 +21,8 @@ goog.provide('mirosubs.widget.SubtitleDialogOpener');
 /**
  * @constructor
  * @param {string} videoID
- * @param {string} videoURL
+ * @param {string} videoURL This is used for creating the embed code 
+ *     that appears in the widget.
  * @param {mirosubs.video.VideoSource} videoSource
  * @param {function(boolean)=} opt_loadingFn
  * @param {function()=} opt_subOpenFn

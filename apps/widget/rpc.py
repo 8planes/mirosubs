@@ -82,6 +82,16 @@ class Rpc(BaseRpc):
                     return_value['subtitles'] = subtitles
         return return_value
 
+    def fetch_video_id_and_settings(self, request, video_url):
+        video_id = video_cache.get_video_id(video_url)
+        is_original_language_subtitled = self._subtitle_count(video_id) > 0
+        general_settings = {}
+        add_general_settings(request, general_settings)
+        return {
+            'video_id': video_id,
+            'is_original_language_subtitled': is_original_language_subtitled,
+            'general_settings': general_settings }
+
     def start_editing(self, request, video_id, language_code, 
                       original_language_code=None,
                       base_version_no=None, fork=False):
