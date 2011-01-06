@@ -388,7 +388,7 @@ class SubtitleLanguage(models.Model):
     was_complete = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    #subtitles_fetched_count = models.IntegerField(default=0)
+    subtitles_fetched_count = models.IntegerField(default=0)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
     
     subtitles_fetched_counter = RedisSimpleField()
