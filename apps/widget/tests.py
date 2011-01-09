@@ -33,6 +33,14 @@ from widget.null_rpc import NullRpc
 from videos.models import VIDEO_SESSION_KEY
 from django.core.urlresolvers import reverse
 from widget import video_cache
+from datetime import datetime, timedelta
+
+class FakeDatetime(object):
+    def __init__(self, now):
+        self.now_date = now
+
+    def now(self):
+        return self.now_date
 
 class RequestMockup(object):
     def __init__(self, user, browser_id="a"):
@@ -69,7 +77,7 @@ class TestRpcView(TestCase):
         response = self.client.get(reverse('widget:rpc', args=['undefined_method']))
         #incorect arguments number: 500 status
         response = self.client.get(reverse('widget:rpc', args=['show_widget']))
-        print response.status_code
+
 
 class TestRpc(TestCase):
     fixtures = ['test_widget.json']
@@ -728,6 +736,35 @@ class TestRpc(TestCase):
             False)
         video = models.Video.objects.get(video_id=return_value['video_id'])
         self.assertEquals(1, video.videourl_set.count())
+
+    def test_autoplay_for_non_finished(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_basic_draft(request)
+        # request widget with English subtitles preloaded. The widget
+        # expected null subtitles in response when the language only
+        # has a draft.
+        return_value = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False,
+            base_state = { 'language': 'en' })
+        self.assertEquals(None, return_value['subtitles'])
+
+    def ensure_language_locked_on_draft_save(self):
+        request = RequestMockup(self.user_0)        
+        draft = self._create_basic_draft(request)
+        now = datetime.now() + timedelta(seconds=20)
+        models.datetime = FakeDatetime(now)
+        inserted = [{'subtitle_id': u'sfddsfsdf',
+                     'text': 'heyyo!',
+                     'start_time': 4.3,
+                     'end_time': 6.4,
+                     'sub_order': 2.0}]
+        rpc.save_subtitles(request, draft.pk, [_make_packet(inserted=inserted)])
+        video = models.Video.objects.get(pk=draft.video.pk)
+        language = video.subtitle_language()
+        self.assertEquals(now, language.writelock_time)
+        models.datetime = datetime
 
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(

@@ -108,7 +108,7 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
 {
     var that = this;
     mirosubs.widget.ChooseLanguageDialog.show(
-        true, function(subLanguage, originalLanguage, forked) {
+        true, function(subLanguage, originalLanguage) {
             that.startEditing_(null, subLanguage, null, 
                                mirosubs.isForkedLanguage(subLanguage));
         });

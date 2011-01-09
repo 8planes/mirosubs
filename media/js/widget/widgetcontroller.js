@@ -63,14 +63,19 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
         this.playController_, this.videoTab_, popupMenu);
 };
 
-mirosubs.widget.WidgetController.makeGeneralSettings = function(result) {
-    if (result['username'])
-        mirosubs.currentUsername = result['username'];
-    mirosubs.embedVersion = result['embed_version'];
+/**
+ * Sets parameters that the widget needs to function: username, 
+ * embed version, writelock expiration, languages, and metadata languages.
+ * @param {Object} settings
+ */
+mirosubs.widget.WidgetController.makeGeneralSettings = function(settings) {
+    if (settings['username'])
+        mirosubs.currentUsername = settings['username'];
+    mirosubs.embedVersion = settings['embed_version'];
     mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
-        result["writelock_expiration"];
-    mirosubs.languages = result['languages'];
-    mirosubs.metadataLanguages = result['metadata_languages'];
+        settings["writelock_expiration"];
+    mirosubs.languages = settings['languages'];
+    mirosubs.metadataLanguages = settings['metadata_languages'];
     var sortFn = function(a, b) { 
         return a[1] > b[1] ? 1 : a[1] < b[1] ? -1 : 0
     };
