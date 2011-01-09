@@ -76,9 +76,33 @@ mirosubs.translate.TranslationList.prototype.setTranslations = function(translat
     }
 };
 
+mirosubs.translate.TranslationList.prototype._translateCallback = function(translations, widgets, error){
+    if (error){
+        //TODO: show pretty error. Pay attention: callback can be called few times 
+        //and have same error. For example, incorrect language - be incorrect for all
+        //requests to google translator
+    }else{
+        goog.array.forEach(translations, function(text, i){
+            //TODO: I am sure that should be used setTranslation, but don't know
+            //how create proper arguments from text
+            //widgets[i].setTranslation(text);
+            widgets[i].translateInput_.value = text;
+        });
+    }
+};
+
 mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(){
+    var need_tarnslating = [];
     goog.array.forEach(this.translationWidgets_, function(w){
-        w.isEmpty()
+        if (w.isEmpty()){
+            need_tarnslating.push(w);
+        }
     });
-    mirosubs.translate.GoogleTranslator.translate();
-}
+    
+    var translate_widgets = mirosubs.translate.GoogleTranslator.translate_widgets;
+    //TODO: show loading indicator
+    //TODO: can't find where is original and translating languages
+    need_tarnslating.length && translate_widgets(need_tarnslating, 'en', 'ru', 
+        this._translateCallback);
+    //TODO: hide indicator
+};
