@@ -75,3 +75,10 @@ mirosubs.translate.TranslationList.prototype.setTranslations = function(translat
         this.translationWidgets_[i].setTranslation(translation ? translation : null);
     }
 };
+
+mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(){
+    goog.array.forEach(this.translationWidgets_, function(w){
+        w.isEmpty()
+    });
+    mirosubs.translate.GoogleTranslator.translate();
+}

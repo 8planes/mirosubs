@@ -100,6 +100,11 @@ mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     this.unitOfWork_.dispose();
     this.serverModel_.dispose();
 };
+mirosubs.translate.Dialog.prototype.translateViaGoogle = function(){
+    //I don't know how better call this. I think it should be incapsulated in translationList_,
+    //but have chain of function calls can confuse.
+    this.translationPanel_.translationList_.translateViaGoogle();
+};
 /**
  * @param {function()} saveCompleted
  */

@@ -71,3 +71,7 @@ mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {
 mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
     return this.subtitle_['subtitle_id'];
 };
+
+mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
+    
+}
