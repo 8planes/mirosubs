@@ -82,6 +82,7 @@ class Team(models.Model):
     highlight = models.BooleanField(default=False)
     video = models.ForeignKey(Video, null=True, blank=True, related_name='intro_for_teams', verbose_name=_(u'Intro Video'))
     application_text = models.TextField(blank=True)
+    is_moderated = models.BooleanField(default=False)
     
     objects = TeamManager()
     

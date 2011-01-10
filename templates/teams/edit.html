@@ -99,6 +99,13 @@
                   </p>
                   <p>
                       <label>
+                          {% trans 'Is modearted?' %}
+                      </label>
+                      {{ form.is_moderated.errors }}
+                      {{ form.is_moderated }}  
+                  </p>                  
+                  <p>
+                      <label>
                           {% trans 'Who can add videos to this team?' %}
                       </label>
                       {{ form.video_policy.errors }}
