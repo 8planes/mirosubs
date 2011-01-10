@@ -18,34 +18,34 @@
 
 goog.provide('mirosubs.translate.GoogleTranslator');
 
-mirosubs.translate.GoogleTranslator.baseUri = new goog.Uri("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0");
+mirosubs.translate.GoogleTranslator.baseUri_ = new goog.Uri("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0");
 
-mirosubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(mirosubs.translate.GoogleTranslator.baseUri);
+mirosubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(mirosubs.translate.GoogleTranslator.baseUri_);
 
 mirosubs.translate.GoogleTranslator.queryMaxLen = 4000;
 
 mirosubs.translate.GoogleTranslator.delimiter = '<dlmt>';
 
-mirosubs.translate.GoogleTranslator.cleanString = function(str){
+mirosubs.translate.GoogleTranslator.cleanString = function(str) {
     return str.replace('<dlmt>', '');
 };
 
-mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback){
+mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback) {
     fromLang = fromLang || '';
     mirosubs.translate.GoogleTranslator.jsonp.send({
         q: text,
         langpair: fromLang+'|'+toLang
-    }, callback, function(){
+    }, callback, function() {
         //TODO: show pretty error
-        alert('Translating servise is unavailable. Try later.')
+        alert('Translating servise is unavailable. Try later.');
     });
 };
 
-mirosubs.translate.GoogleTranslator.get_translate_widgets_callback = function(widgets, callback){
+mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widgets, callback) {
     var d = mirosubs.translate.GoogleTranslator.delimiter;
     
-    return function(response){
-        if (response.responseStatus == 200){
+    return function(response) {
+        if (response.responseStatus == 200) {
             var translations = response.responseData.translatedText.split(d);
             callback(translations, widgets);
         }else{
@@ -54,37 +54,37 @@ mirosubs.translate.GoogleTranslator.get_translate_widgets_callback = function(wi
     }
 };
 
-mirosubs.translate.GoogleTranslator.translate_widgets = 
-function(need_tarnslating, fromLang, toLang, callback){
+mirosubs.translate.GoogleTranslator.translateWidgets = 
+function(need_tarnslating, fromLang, toLang, callback) {
     var ml = mirosubs.translate.GoogleTranslator.queryMaxLen;
     var d = mirosubs.translate.GoogleTranslator.delimiter;
-    var clean_str = mirosubs.translate.GoogleTranslator.cleanString;
+    var cleanStr = mirosubs.translate.GoogleTranslator.cleanString;
     var translate = mirosubs.translate.GoogleTranslator.translate;
-    var get_callback = mirosubs.translate.GoogleTranslator.get_translate_widgets_callback;
+    var getCallback = mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback;
     
     //ml = 250; for debuging multiple requests
 
-    var to_translate = [];
-    var widgets_to_translate = [];
+    var ToTranslate = [];
+    var widgetsToTranslate = [];
     
-    goog.array.forEach(need_tarnslating, function(w){
-        var t = clean_str(w.getSubtitle().text);
+    goog.array.forEach(need_tarnslating, function(w) {
+        var t = cleanStr(w.getSubtitle().text);
         
-        to_translate.push(t), widgets_to_translate.push(w);
+        ToTranslate.push(t), widgetsToTranslate.push(w);
         
-        if (to_translate.join(d).length >= ml){
-            to_translate.pop(), widgets_to_translate.pop();
+        if (ToTranslate.join(d).length >= ml) {
+            ToTranslate.pop(), widgetsToTranslate.pop();
             
-            translate(to_translate.join(d), fromLang, toLang, get_callback(widgets_to_translate, callback))
+            translate(ToTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback))
             
-            if (t.length > ml){
-                to_translate, widgets_to_translate = [];
-            }else{
-                to_translate = [t], widgets_to_translate = [w];
+            if (t.length > ml) {
+                ToTranslate, widgetsToTranslate = [];
+            } else {
+                ToTranslate = [t], widgetsToTranslate = [w];
             }
         };
     });
-    if (to_translate.length){
-        translate(to_translate.join(d), fromLang, toLang, get_callback(widgets_to_translate, callback));
+    if (ToTranslate.length) {
+        translate(ToTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback));
     };
 };

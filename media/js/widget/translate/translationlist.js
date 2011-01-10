@@ -76,13 +76,13 @@ mirosubs.translate.TranslationList.prototype.setTranslations = function(translat
     }
 };
 
-mirosubs.translate.TranslationList.prototype._translateCallback = function(translations, widgets, error){
-    if (error){
+mirosubs.translate.TranslationList.prototype.translateCallback_ = function(translations, widgets, error) {
+    if (error) {
         //TODO: show pretty error. Pay attention: callback can be called few times 
         //and have same error. For example, incorrect language - be incorrect for all
         //requests to google translator
-    }else{
-        goog.array.forEach(translations, function(text, i){
+    } else {
+        goog.array.forEach(translations, function(text, i) {
             //TODO: I am sure that should be used setTranslation, but don't know
             //how create proper arguments from text
             //widgets[i].setTranslation(text);
@@ -91,18 +91,18 @@ mirosubs.translate.TranslationList.prototype._translateCallback = function(trans
     }
 };
 
-mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(){
-    var need_tarnslating = [];
-    goog.array.forEach(this.translationWidgets_, function(w){
-        if (w.isEmpty()){
-            need_tarnslating.push(w);
+mirosubs.translate.TranslationList.prototype.translateViaGoogle = function() {
+    var needTranslating = [];
+    goog.array.forEach(this.translationWidgets_, function(w) {
+        if (w.isEmpty()) {
+            needTranslating.push(w);
         }
     });
     
-    var translate_widgets = mirosubs.translate.GoogleTranslator.translate_widgets;
+    var translateWidgets = mirosubs.translate.GoogleTranslator.translateWidgets;
     //TODO: show loading indicator
     //TODO: can't find where is original and translating languages
-    need_tarnslating.length && translate_widgets(need_tarnslating, 'en', 'ru', 
-        this._translateCallback);
+    needTranslating.length && translateWidgets(needTranslating, 'en', 'ru', 
+        this.translateCallback_);
     //TODO: hide indicator
 };
