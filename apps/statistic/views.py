@@ -101,7 +101,7 @@ def languages_statistic(request):
     
     lang_names = dict(ALL_LANGUAGES)
     lang_names[u''] = 'No name'
-    langs = dict((i['language'], {'name': lang_names[i['language']], 'total': i['lc'], 'month': 0, 'week': 0, 'day': 0}) for i in total_langs)
+    langs = dict((i['language'], {'name': lang_names.get(i['language'], ['language']), 'total': i['lc'], 'month': 0, 'week': 0, 'day': 0}) for i in total_langs)
     for item in month_langs:
         langs[item['language']]['month'] = item['lc']
     for item in week_langs:
