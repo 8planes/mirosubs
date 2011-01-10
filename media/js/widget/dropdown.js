@@ -201,6 +201,9 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.logoutLink_ =
         $d('li', null,
            $d('a', {'href': '#'}, 'Logout'));
+    this.getEmbedCodeLink_ = 
+        $d('li', null,
+           $d('a', {'href': mirosubs.siteURL()}, 'Get Embed Code'));
 };
 
 mirosubs.widget.DropDown.prototype.updateActions_ = function() {
@@ -212,7 +215,7 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
     this.videoActions_.appendChild(this.downloadSubtitlesLink_);
-
+    
     if (mirosubs.currentUsername == null)
         this.settingsActions_.appendChild(this.createAccountLink_);
     else {
@@ -223,6 +226,7 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
         this.settingsActions_.appendChild(this.logoutLink_);
     }
     this.settingsActions_.appendChild(this.languagePreferencesLink_);
+    this.settingsActions_.appendChild(this.getEmbedCodeLink_);
 };
 
 mirosubs.widget.DropDown.prototype.enterDocument = function() {
