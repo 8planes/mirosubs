@@ -18,18 +18,46 @@
 
 goog.provide('mirosubs.translate.GoogleTranslator');
 
+/**
+ * Uri for jsonp handler
+ * @type {goog.Uri}
+ */
 mirosubs.translate.GoogleTranslator.baseUri_ = new goog.Uri("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0");
 
+/**
+ * Jsonp handler for Gogle Translator API
+ * @type {goog.net.Jsonp}
+ */
 mirosubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(mirosubs.translate.GoogleTranslator.baseUri_);
 
+/**
+ * Maximum length of text to translate
+ * @type {number}
+ */
 mirosubs.translate.GoogleTranslator.queryMaxLen = 4000;
 
+/**
+ * Delimiter for stings to translate
+ * @type {string}
+ */
 mirosubs.translate.GoogleTranslator.delimiter = '<dlmt>';
 
+/**
+ * Remove delimiter from string
+ * @param {string} stirng that should be claned
+ * @return {string}
+ */
 mirosubs.translate.GoogleTranslator.cleanString = function(str) {
     return str.replace('<dlmt>', '');
 };
 
+/**
+ * Send request to Google Translating API
+ * @param {string} Text to translate
+ * @param {?string} Language code of text to translate, left empty for auto-detection
+ * @param {string} Language code for language of result
+ * @param {function({Object})} Callback
+ */
 mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback) {
     fromLang = fromLang || '';
     mirosubs.translate.GoogleTranslator.jsonp.send({
@@ -41,7 +69,17 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
     });
 };
 
+/**
+ * Return decorated callback for GoogleTranslator
+ * @param {Array.<mirosubs.translate.TranslationWidget>}
+ * @param {Function} Callback
+ * @return {function({Object})}
+ */
 mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widgets, callback) {
+    /**
+     * shortcut
+     * @type {string}
+     */
     var d = mirosubs.translate.GoogleTranslator.delimiter;
     
     return function(response) {
@@ -54,8 +92,15 @@ mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widge
     }
 };
 
+/**
+ * Transalte subtitles from widgets with GoogleTranslator.translate
+ * @param {Array.<mirosubs.translate.TranslationWidget>}
+ * @param {?string} Language code of text to translate, left empty for auto-detection
+ * @param {string} Language code for language of result
+ * @param {function(Array.<string>, Array.<mirosubs.translate.TranslationWidget>, ?string)} Callback
+ */
 mirosubs.translate.GoogleTranslator.translateWidgets = 
-function(need_tarnslating, fromLang, toLang, callback) {
+function(needTranslating, fromLang, toLang, callback) {
     var ml = mirosubs.translate.GoogleTranslator.queryMaxLen;
     var d = mirosubs.translate.GoogleTranslator.delimiter;
     var cleanStr = mirosubs.translate.GoogleTranslator.cleanString;
@@ -63,28 +108,39 @@ function(need_tarnslating, fromLang, toLang, callback) {
     var getCallback = mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback;
     
     //ml = 250; for debuging multiple requests
-
-    var ToTranslate = [];
+    
+    /**
+     * Array of subtitles to translate in one request(max length < GoogleTranslator.queryMaxLen)
+     * @type {Array.<string>}
+     */
+    var toTranslate = [];
+    /**
+     * Widgets with subtitles to translate in one request
+     * @type {Array.<mirosubs.translate.TranslationWidget>}
+     */    
     var widgetsToTranslate = [];
     
-    goog.array.forEach(need_tarnslating, function(w) {
+    goog.array.forEach(needTranslating, function(w) {
+        /**
+         * @type {string}
+         */
         var t = cleanStr(w.getSubtitle().text);
         
-        ToTranslate.push(t), widgetsToTranslate.push(w);
+        toTranslate.push(t), widgetsToTranslate.push(w);
         
-        if (ToTranslate.join(d).length >= ml) {
-            ToTranslate.pop(), widgetsToTranslate.pop();
+        if (toTranslate.join(d).length >= ml) {
+            toTranslate.pop(), widgetsToTranslate.pop();
             
-            translate(ToTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback))
+            translate(toTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback))
             
             if (t.length > ml) {
-                ToTranslate, widgetsToTranslate = [];
+                toTranslate, widgetsToTranslate = [];
             } else {
-                ToTranslate = [t], widgetsToTranslate = [w];
+                toTranslate = [t], widgetsToTranslate = [w];
             }
         };
     });
-    if (ToTranslate.length) {
-        translate(ToTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback));
+    if (toTranslate.length) {
+        translate(toTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback));
     };
 };

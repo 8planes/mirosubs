@@ -76,6 +76,12 @@ mirosubs.translate.TranslationList.prototype.setTranslations = function(translat
     }
 };
 
+/**
+ * Callback that is called by aut-translator
+ * @param {Array.<string>} Array of translations
+ * @param {Array.<mirosubs.translate.TranslationWidget>} widgets that were translated
+ * @param {?string} error happened while translating
+ */
 mirosubs.translate.TranslationList.prototype.translateCallback_ = function(translations, widgets, error) {
     if (error) {
         //TODO: show pretty error. Pay attention: callback can be called few times 
@@ -91,7 +97,14 @@ mirosubs.translate.TranslationList.prototype.translateCallback_ = function(trans
     }
 };
 
+/**
+ * Find widgets for all not translated subtitles and translate them with GoogleTranslator
+ */
 mirosubs.translate.TranslationList.prototype.translateViaGoogle = function() {
+    /**
+     * Translation widgets that does not contain any user's translation
+     * @type {Array.<mirosubs.translate.TranslationWidget>}
+     */
     var needTranslating = [];
     goog.array.forEach(this.translationWidgets_, function(w) {
         if (w.isEmpty()) {
@@ -99,6 +112,9 @@ mirosubs.translate.TranslationList.prototype.translateViaGoogle = function() {
         }
     });
     
+    /**
+     * @type {mirosubs.translate.GoogleTranslator.translateWidgets}
+     */
     var translateWidgets = mirosubs.translate.GoogleTranslator.translateWidgets;
     //TODO: show loading indicator
     //TODO: can't find where is original and translating languages

@@ -76,6 +76,10 @@ mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
     return this.subtitle_['subtitle_id'];
 };
 
+/**
+ * Return if translate input has some value
+ * @return {boolean}
+ */
 mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
     return ! this.translateInput_.value;
 }
