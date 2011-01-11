@@ -154,7 +154,7 @@ def video(request, video_id, video_url=None, title=None):
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     
-    if (video.title and not video.title == title) or (not video.title and title):
+    if (video.title and not video.title_for_url() == title) or (not video.title and title):
         return redirect(video, permanent=True)
     
     video.update_view_counter()
