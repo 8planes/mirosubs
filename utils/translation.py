@@ -185,7 +185,7 @@ LANGUAGE_NAMES = (
 
 ORIGINAL_LANGUAGE_NAMES = dict((item[0], item[2]) for item in LANGUAGE_NAMES)
 
-def get_languages_list():
+def get_languages_list(with_empty=False):
     cache_key = 'langs-cache-%s' % get_language() 
     
     languages = cache.get(cache_key)
@@ -194,7 +194,6 @@ def get_languages_list():
         languages = []
         
         for val, name in settings.ALL_LANGUAGES:
-            print val
             if val in ORIGINAL_LANGUAGE_NAMES:
                 name = u'%s (%s)' % (_(name), ORIGINAL_LANGUAGE_NAMES[val])
             else:
@@ -202,5 +201,6 @@ def get_languages_list():
             languages.append((val, name))
         languages.sort(key=lambda item: item[1])
         cache.set(cache_key, languages, 60*60)
-        
+    if with_empty:
+        languages = [('', '---------')]+languages
     return languages
