@@ -126,7 +126,7 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         obj = super(CreateVideoUrlForm, self).save(False)
         obj.type = self._video_type.abbreviation
         obj.added_by = self.user
-        obj.videoid = self._video_type.video_id
+        obj.videoid = self._video_type.video_id or ''
         commit and obj.save()
         return obj
     
