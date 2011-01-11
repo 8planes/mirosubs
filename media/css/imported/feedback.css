@@ -1,10 +1,12 @@
 .feedback_tab { 
-  background: #7aa800 url(../../images/feedback.png) 7px 12px no-repeat;
-  -webkit-border-top-right-radius: 2px;
-  -webkit-border-bottom-right-radius: 2px;
+  background: #327895 url(../../images/feedback.png) 7px 12px no-repeat;
+  -webkit-border-top-left-radius: 2px;
+  -moz-border-top-left-radius: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  -moz-border-bottom-left-radius: 2px;
   position: fixed;
   top: 150px;
-  left: 0;
+  right: 0;
   height: 88px;
   width: 27px;
   text-indent: -9999px; }

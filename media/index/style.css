@@ -19,6 +19,8 @@ a{
 	outline:none
 }
 
+.clear { 
+  clear: both; }
 /*//////////   ~  Linkage  ~   //////////*/
 
 
