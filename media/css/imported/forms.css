@@ -348,6 +348,10 @@ border: 1px solid #7e1504;
   width: 900px;
   -webkit-background-clip: padding-box;
    }
+   
+#feedback_container { 
+  padding: 0;
+  border-radius: 9px; }
 
 .feedback_bg, .modal-window-bg {
   background: #D3E9ED url(../../images/cloud.png) center top no-repeat;
