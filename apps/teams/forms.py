@@ -48,7 +48,7 @@ class TeamVideoLanguageForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super(TeamVideoLanguageForm, self).__init__(*args, **kwargs)
-        self.fields['language'].choices = get_languages_list()
+        self.fields['language'].choices = get_languages_list(True)
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, TeamVideoLanguageForm ,extra=1)
 
