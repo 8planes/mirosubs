@@ -115,7 +115,8 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         return video_type.convert_to_video_url()
     
     def clean(self):
-        video = self.cleaned_data.get('video')
+        data = super(CreateVideoUrlForm, self).clean()
+        video = data.get('video')
         if video and not video.allow_video_urls_edit and not self.user.has_perm('videos.add_videourl'):
             raise forms.ValidationError(_('You have not permission add video URL for this video'))
         
