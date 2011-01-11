@@ -174,11 +174,14 @@ class Video(models.Model):
 
     def search_page_url(self):
         return self.get_absolute_url()
-
+    
+    def title_for_url(self):
+        return self.title.replace('/', '-')
+    
     @models.permalink
     def get_absolute_url(self):
         if self.title:
-            return ('videos:video_with_title', [self.video_id, self.title])
+            return ('videos:video_with_title', [self.video_id, self.title_for_url()])
         return ('videos:video', [self.video_id])
 
     def get_video_url(self):
