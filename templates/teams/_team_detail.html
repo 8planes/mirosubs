@@ -2,16 +2,22 @@
 <script type="text/javascript">
     jQuery(function($){
         $('a.join-team').click(function(){
-            if (confirm('{% trans "Do you really wish join this team?" %}')){
-                var $this = $(this);
-                TeamsApi.join($this.attr('team_id'), function(response){
-                    if (response.error){
-                        $.msg.clean().add(response.error, 'error');
-                    }else{
-                        $.msg.clean().add(response.msg);
-                        $this.remove();
-                    }
-                });
+            var IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
+            
+            if ( ! IS_AUTHENTICATED){
+                document.location = '{% url auth:login %}?next={{ request.path_info|urlencode }}';
+            }else{            
+                if (confirm('{% trans "Do you really wish join this team?" %}')){
+                    var $this = $(this);
+                    TeamsApi.join($this.attr('team_id'), function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error, 'error');
+                        }else{
+                            $.msg.clean().add(response.msg);
+                            $this.remove();
+                        }
+                    });
+                };
             };
             return false;
         });
