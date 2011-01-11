@@ -33,6 +33,10 @@ def get_video_id(video_url):
             video, create = Video.get_or_create_for_url(video_url)
         except VideoTypeError:
             return None
+        
+        if not video:
+            return None
+        
         video_id = video.video_id
         cache.set(cache_key, video_id, TIMEOUT)
         return video_id
