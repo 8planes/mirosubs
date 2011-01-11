@@ -17,8 +17,8 @@ PcfTargetter = (function(){
         isGecko = !isWebKit && check(/gecko/),
         isGecko2 = isGecko && check(/rv:1\.8/),
         isGecko3 = isGecko && check(/rv:1\.9/),
-        isWindows = check(/windows|win32/),
         
+        isWindows = check(/windows|win32/),
         isOsMac = check(/macintosh|mac os x/),
         isOsAir = check(/adobeair/),
         isOsLinux = check(/linux/),
@@ -61,7 +61,6 @@ PcfTargetter = (function(){
                 }
             }
         },
-        
         init: function(options){
             options = this.apply({}, options, this.defaults);
             if (this.checkUserAgent(options) && this.checkOs(options) && this.checkRefferer(options) 
@@ -69,6 +68,14 @@ PcfTargetter = (function(){
                     
                 options.callback.call(options)
             }
+        },
+        load: function(url, id){
+            var that = this;
+            jQuery.getJSON(url, {id: id}, function(data){
+                if ( ! data.error){
+                    that.init(data);
+                }
+            })            
         },
         checkLocation: function(options){
             var url = "http://www.geoplugin.net/json.gp?jsoncallback=?&callback=?";
