@@ -181,14 +181,39 @@ class SubtitlesUploadBaseForm(forms.Form):
         video_language = self.cleaned_data['video_language']
 
         if original_language:
-            try:
-                language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
-                    .get(language=video_language)
-                original_language.is_original = False
-                original_language.save()
-                language_exists.is_original = True
-                language_exists.save()
-            except ObjectDoesNotExist:
+            if original_language.language:
+                try:
+                    language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
+                        .get(language=video_language)
+                    original_language.is_original = False
+                    original_language.save()
+                    language_exists.is_original = True
+                    language_exists.save()
+                except ObjectDoesNotExist:
+                    original_language.language = video_language
+                    original_language.save()
+            else:
+                try:
+                    language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
+                        .get(language=video_language)
+                    
+                    latest_version = original_language.latest_version() 
+                    
+                    if latest_version:
+                        last_no = latest_version.version_no
+                    else:
+                        last_no = 0
+                        
+                    for version in language_exists.subtitleversion_set.all():
+                        version.language = original_language
+                        last_no += 1
+                        version.version_no = last_no
+                        version.save()
+
+                    language_exists.delete()
+                except ObjectDoesNotExist:
+                    pass
+                
                 original_language.language = video_language
                 original_language.save()
         else:
