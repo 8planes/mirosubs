@@ -1,0 +1,46 @@
+.msg_header { 
+  margin-bottom: 0; }
+  
+table.messages thead {
+  color: #728286;
+  border-bottom: 1px solid #d1dee0; } 
+
+table.messages th { 
+  padding: 0 10px;
+  background-color: #f1f8f9;
+  font-weight: normal;
+  border: 0;
+  line-height: 26px;
+  font-size: 11px; }
+  
+table.messages td { 
+  border: 0;
+  color: #717171;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #e3e3e3;
+  white-space: nowrap; }
+
+table.messages .msg_avatar { 
+  padding-right: 0; }
+
+table.messages .msg_from {
+  font-weight: bold; 
+  color: #4c4c4c;
+  padding-right: 20px; }
+  
+table.messages .msg_body { 
+  width: 60%;
+  white-space: normal; }
+
+table.messages tr.unread { 
+  background-color: #f1f8f9; }
+
+.no_messages { 
+  font-size: 18px;
+  text-align: center;
+  line-height: 100px; }
+  
+.msg_nav { 
+  position: relative; 
+  float: right; }
