@@ -15,23 +15,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
+from django.contrib.auth import authenticate, login
+from piston.utils import rc
 
-from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
-from handlers import VideoHandler
-from piston.resource import Resource
-from piston.doc import documentation_view
-from api.authentication import ModelAuthentication
-
-auth = ModelAuthentication()
-ad = { 'authentication': auth }
-
-video_handler = Resource(VideoHandler, **ad)
-
-handlers = [video_handler]
-
-urlpatterns = patterns('',
-    url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="video_handler"),
-    url('^video/$', video_handler),
-    url('^documentation/$', documentation_view, name='documentation')
-)
+class ModelAuthentication(object):
+    
+    def is_authenticated(self, request):
+        username = request.GET.get('username')
+        password = request.GET.get('password')
+        
+        user = authenticate(username=username, password=password)
+        
+        if user:
+            login(request, user)
+            return True
+        else:
+            return False
+        
+    def challenge(self):
+        response = rc.FORBIDDEN
+        response.write(u'Require authentication.')
+        return response

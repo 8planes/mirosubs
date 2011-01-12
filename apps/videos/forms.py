@@ -355,23 +355,26 @@ class VideoForm(forms.Form):
     
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
-        try:
-            video_type = video_type_registrar.video_type_for_url(video_url)
-        except VideoTypeError, e:
-            raise forms.ValidationError(e)
-        if not video_type:
-            raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
-If you'd like to us to add support for a new site or format, or if you
-think there's been some mistake, <a
-href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))             
-        else:
-            self._video_type = video_type
+        
+        if video_url:
+            try:
+                video_type = video_type_registrar.video_type_for_url(video_url)
+            except VideoTypeError, e:
+                raise forms.ValidationError(e)
+            if not video_type:
+                raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
+    If you'd like to us to add support for a new site or format, or if you
+    think there's been some mistake, <a
+    href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))             
+            else:
+                self._video_type = video_type
             
         return video_url
     
     def save(self):
         video_url = self.cleaned_data['video_url']
-        obj, create = Video.get_or_create_for_url(video_url, self._video_type, self.user)
+        obj, created = Video.get_or_create_for_url(video_url, self._video_type, self.user)
+        self.created = created
         return obj
 
 youtube_user_url_re = re.compile(r'^(http://)?(www.)?youtube.com/user/(?P<username>[a-zA-Z0-9]+)/?$')
