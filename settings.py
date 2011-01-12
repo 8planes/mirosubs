@@ -64,6 +64,9 @@ ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+PISTON_EMAIL_ERRORS = True
+PISTON_DISPLAY_ERRORS = False
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -306,6 +309,7 @@ INSTALLED_APPS = (
 import re
 LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/widget'),
+    re.compile('^/api')
 )
 
 #Haystack configuration

@@ -15,11 +15,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('api.views',
-    url(r'^1.0/', include('api.1_0.urls')),
-    url(r'^subtitles/$', 'subtitles', name='subtitles'),
-    url(r'^subtitle_existence/$', 'subtitle_existence', name='subtitle_existence'),
+from handlers import VideoHandler
+from piston.resource import Resource
+
+video_handler = Resource(VideoHandler)
+
+urlpatterns = patterns('',
+    url('^video/(?P<video_id>[\w-]+)/$', video_handler),
+    url('^video/$', video_handler),
 )
