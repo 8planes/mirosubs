@@ -102,6 +102,33 @@ class Video(models.Model):
         if len(title) > 70:
             title = title[:70]+'...'
         return title
+
+    def title_display(self):
+        if self.title:
+            return self.title
+        
+        try:
+            url = self.videourl_set.all()[:1].get().url
+            if not url:
+                return 'No title'
+        except models.ObjectDoesNotExist:
+            return 'No title'
+        
+        url = url.strip('/')
+
+        if url.startswith('http://'):
+            url = url[7:]
+
+        parts = url.split('/')
+        if len(parts) > 1:
+            title = '%s/.../%s' % (parts[0], parts[-1])
+        else:
+            title = url
+
+        if title > 35:
+            title = title[:35]+'...'
+            
+        return title
     
     def update_view_counter(self):
         self.view_counter.incr()
@@ -150,28 +177,6 @@ class Video(models.Model):
         except models.ObjectDoesNotExist:
             return False
     
-    def title_display(self):
-        if self.title:
-            return self.title
-        
-        try:
-            url = self.videourl_set.all()[:1].get().url
-            if not url:
-                return 'No title'
-        except models.ObjectDoesNotExist:
-            return 'No title'
-        
-        url = url.strip('/')
-
-        if url.startswith('http://'):
-            url = url[7:]
-
-        parts = url.split('/')
-        if len(parts) > 1:
-            return '%s/.../%s' % (parts[0], parts[-1])
-        else:
-            return url
-
     def search_page_url(self):
         return self.get_absolute_url()
     
