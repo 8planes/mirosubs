@@ -44,3 +44,72 @@ table.messages tr.unread {
 .msg_nav { 
   position: relative; 
   float: right; }
+  
+/* Modal */
+
+.msg_modal_wrap { 
+  display: none;
+  width: 450px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 4px solid rgba(0,0,0,0.2); }
+
+.msg_modal {
+  background-color: #fff; 
+  font-size: 13px;
+  -moz-border-radius: 4px;
+  border-radius: 4px; }
+
+.msg_modal_wrap .close {
+  background: url(../../images/sprite.png) no-repeat 0px -256px !important;
+  display: block;
+  text-indent: -9999px;
+  height: 27px;
+  width: 30px;
+  float: right;
+  position: relative;
+  left: 30px;
+  top: 10px; }
+
+.msg_modal img { 
+  vertical-align: middle;
+  height: 20px; }
+
+.msg_modal h3 { 
+  background-color: #d9e9ec;
+  font-size: 14px;
+  line-height: 50px;
+  padding: 0;
+  font-weight: normal;
+  text-indent: 10px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;e3edef
+  background: -moz-linear-gradient(top, #f0f5f6, #e3edef);
+  background: -webkit-gradient(linear, left top, left bottom, from(#f0f5f6), to(#e3edef));}
+
+.msg_modal h3 span {
+  font-weight: bold; }
+
+.msg_modal dl { 
+  margin: 0;
+  clear: both;
+  padding: 18px;
+  border-bottom: 1px solid #f2f2f2; }
+  
+.msg_modal dt { 
+  font-weight: bold;
+  width: 100px;
+  float: left; }
+
+.msg_modal dd { 
+  width: 310px;
+  float: right;
+  margin: 0;
+  line-height: 18px; }
+  
+.msg_modal dl p {
+  margin-top: 0; }
+
+.msg_modal textarea { 
+  width: 300px;
+  height: 80px; }
