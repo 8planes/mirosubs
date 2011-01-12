@@ -15,3 +15,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
+from piston.utils import decorator, FormValidationError
+
+def validate(v_form, operation='POST'):
+    @decorator
+    def wrap(f, self, request, *a, **kwa):
+        if hasattr(v_form, 'get_form_instance'):
+            form = v_form.get_form_instance(request, getattr(request, operation))
+        else:
+            form = v_form(getattr(request, operation))
+    
+        if form.is_valid():
+            setattr(request, 'form', form)
+            return f(self, request, *a, **kwa)
+        else:
+            raise FormValidationError(form)
+    return wrap

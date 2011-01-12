@@ -17,8 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
-from handlers import VideoHandler
+from handlers import VideoHandler, SubtitleHandler
 from piston.resource import Resource
 from piston.doc import documentation_view
 from api.authentication import ModelAuthentication
@@ -27,11 +26,11 @@ auth = ModelAuthentication()
 ad = { 'authentication': auth }
 
 video_handler = Resource(VideoHandler, **ad)
-
-handlers = [video_handler]
+subtitle_handler = Resource(SubtitleHandler, **ad)
 
 urlpatterns = patterns('',
     url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="video_handler"),
     url('^video/$', video_handler),
+    url('^subtitles/$', subtitle_handler),
     url('^documentation/$', documentation_view, name='documentation')
 )

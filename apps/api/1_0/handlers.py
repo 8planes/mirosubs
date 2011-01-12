@@ -18,9 +18,10 @@
 
 from videos.models import Video, SubtitleVersion
 from piston.handler import BaseHandler, AnonymousBaseHandler
-from piston.utils import rc, validate
+from piston.utils import rc
+from api import validate
 from django.contrib.sites.models import Site
-from forms import GetVideoForm
+from forms import GetVideoForm, AddSubtitlesForm
 
 class VideoHandler(BaseHandler):
     """
@@ -93,3 +94,15 @@ class VideoHandler(BaseHandler):
 
 class AnonymousVideoHandler(VideoHandler, AnonymousBaseHandler):
     pass
+
+class SubtitleHandler(BaseHandler):
+    
+    allowed_methods = ('POST',)
+    
+    @validate(AddSubtitlesForm)
+    def create(self, request):
+        """
+        curl "http://127.0.0.1:8000/api/1.0/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=en' -d 'format=srt' -d 'subtitles=1\n00:00:01,46 --> 00:00:03,05\ntest'
+        """
+        request.form.save()
+        return rc.ALL_OK
