@@ -173,7 +173,7 @@ class SrtSubtitleParser(SubtitleParser):
         subtitles = strip_tags(subtitles)
         super(SrtSubtitleParser, self).__init__(subtitles, pattern, [re.DOTALL])
         #replace \r\n to \n and fix end of last subtitle
-        self.subtitles = self.subtitles.replace('\r\n', '\n')+'\n\n'
+        self.subtitles = self.subtitles.replace('\r\n', '\n')+u'\n\n'
     
     def _get_time(self, hour, min, sec, secfr):
         return int(hour)*60*60+int(min)*60+int(sec)+float('.'+secfr)
@@ -196,7 +196,7 @@ class SbvSubtitleParser(SrtSubtitleParser):
         subtitles = strip_tags(subtitles)
         super(SrtSubtitleParser, self).__init__(subtitles, pattern, [re.DOTALL])
         #replace \r\n to \n and fix end of last subtitle
-        self.subtitles = self.subtitles.replace('\r\n', '\n')+'\n\n'
+        self.subtitles = self.subtitles.replace('\r\n', '\n')+u'\n\n'
         
 class SsaSubtitleParser(SrtSubtitleParser):
     def __init__(self, file):
@@ -210,4 +210,4 @@ class SsaSubtitleParser(SrtSubtitleParser):
         pattern += r'(?:\{.*?\})?(?P<text>.+?)\n' #[{<Override control codes>}]<Text> 
         super(SrtSubtitleParser, self).__init__(file, pattern, [re.DOTALL])
         #replace \r\n to \n and fix end of last subtitle
-        self.subtitles = self.subtitles.replace('\r\n', '\n')+'\n'
+        self.subtitles = self.subtitles.replace('\r\n', '\n')+u'\n'

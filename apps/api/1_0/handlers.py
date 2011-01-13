@@ -51,16 +51,16 @@ class VideoHandler(BaseHandler):
     def read(self, request, video_id=None):
         """
         Get video by video_id(JVoMAa3kaWzq)
-        curl "http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/"
+        <em>curl "http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/"</em>
         
         Get video by url. It will be created if does not exist.
         Authentication is not required. If video does not exist and you are 
         authenticated - you will be saved as creator for this video.
-        curl "http://127.0.0.1:8000/api/1.0/video/?username=admin&password=admin" -d 'video_url=http://www.youtube.com/watch?v=oOOve811tMY' -G
+        <em>curl "http://127.0.0.1:8000/api/1.0/video/?username=admin&password=admin" -d 'video_url=http://www.youtube.com/watch?v=oOOve811tMY' -G</em>
         
-        Response format is JSON by default. You can set format with "format"
-        parameter in URL, like 'http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/?format=xml'
-        or 'http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/?format=yaml'        
+        Response format is JSON by default. You can set format with <b>"format"</b>
+        parameter in URL, like <em>'http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/?format=xml'</em>
+        or <em>'http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/?format=yaml'</em>        
         """
         video = None
         
@@ -82,7 +82,7 @@ class VideoHandler(BaseHandler):
     
     def test_update(self, request, video_id):
         """
-        curl "http://127.0.0.1:8000/api/1.0/video/0zaZ2GPv3o9m/?username=admin&password=admin" -F 'title=new-title' -X 'PUT'
+        <em>curl "http://127.0.0.1:8000/api/1.0/video/0zaZ2GPv3o9m/?username=admin&password=admin" -F 'title=new-title' -X 'PUT'</em>
         """
         
         try:
@@ -102,7 +102,16 @@ class SubtitleHandler(BaseHandler):
     @validate(AddSubtitlesForm)
     def create(self, request):
         """
-        curl "http://127.0.0.1:8000/api/1.0/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=en' -d 'format=srt' -d 'subtitles=1\n00:00:01,46 --> 00:00:03,05\ntest'
+        Add subtitles for video.
+        
+        Send in request:
+        <b>video:</b> video_id
+        <b>video_language:</b> language of video
+        <b>language:</b> language of subtitles
+        <b>format</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
+        <b>subtitles</b>: subtitles(max size 256kB. Can be less, not tested with big content)
+        
+        <em>curl "http://127.0.0.1:8000/api/1/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=ru' -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atest'</em>
         """
         request.form.save()
         return rc.ALL_OK
