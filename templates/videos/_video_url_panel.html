@@ -4,7 +4,7 @@
     A single video is often hosted in different places online and same
     subtitles will work. 
     {% endblocktrans %}
-    <a href="#">{% trans 'Learn more' %}</a><br/>
+    <a href="#learn-more-urls" class="learn-more">{% trans 'Learn more' %}</a><br/>
     {% if not video.allow_video_urls_edit %}
         {% blocktrans %}
         Only manager can edit URLs for this video.
@@ -67,6 +67,17 @@
     {% endfor %}
 </tbody>
 </table>
+<div id="learn-more-urls" style="display:none; width: 500px;">
+  <div style="padding: 20px">
+    <p>{% trans "Multiple video URLs let you link multiple videos to a single set of subtitles. Some example uses:" %}</p>
+    <ul>
+      <li>{% trans "Two versions of the same video exist on Youtube.  You don't want subtitle volunteers to duplicate their work, so you add both versions to the multiple URLs pane." %}</li>
+      <li>{% trans "You put your video on Youtube, Vimeo, Blip, and Dailymotion and you want the subtitles you make to work on all of those versions." %}</li>
+      <li>{% trans "You want to provide different versions of a video to different browsers (HTML5/Ogg for free software users, or HTML5/h264 to iPad users).  If you add these URLs, our embed code will automatically fall back to whatever format is necessary for the browser." %}</li>
+    </ul>
+    <p>{% trans "Tip: double check that there are no timing problems." %}</p>
+  </div>
+</div>
 <div id="add-video-url" style="display: none">
     <h2 style="text-align: center;">{% trans 'Added another URL for this video' %}</h2>
     <div>
@@ -166,6 +177,21 @@ jQuery(function($){
             $('p.error_list', $form).remove();
             $('.button-container', $form).hide();
             $('.saving-container', $form).show();
+        }
+    });
+
+    $('.learn-more').nyroModal({
+        bgColor: '#fff',
+        cssOpt: {
+            wrapper: {
+               backgroundColor: '#fff'
+            }                    
+        },
+        endRemove: function(){
+            $('#clippy').show();
+        },
+        processHandler: function(){
+            $('#clippy').hide();
         }
     });
     
