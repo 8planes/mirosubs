@@ -33,7 +33,7 @@ class Migration(DataMigration):
         keys = []
         for item in orm.SubtitleFetchStatistic.objects.order_by('id'):
             
-            if not item.pk % 50:
+            if not item.pk % 1000:
                 print item.pk
                 
             key = get_fetch_subtitles_key(item.video, item.language, item.created)
