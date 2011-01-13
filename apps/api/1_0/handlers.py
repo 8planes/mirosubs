@@ -102,7 +102,7 @@ class SubtitleHandler(BaseHandler):
     @validate(AddSubtitlesForm)
     def create(self, request):
         """
-        curl "http://127.0.0.1:8000/api/1.0/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=en' -d 'format=srt' -d 'subtitles=1\n00:00:01,46 --> 00:00:03,05\ntest'
+        curl "http://127.0.0.1:8000/api/1/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=ru' -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atest'
         """
         request.form.save()
         return rc.ALL_OK
