@@ -25,7 +25,7 @@ class Migration(DataMigration):
             raise Exception('Redis server is unavailable. You can ignore this migration with: python manage.py migrate videos 0068 --fake, but all statistic data will be lost.')
         
         for obj in orm.Video.objects.all():
-            Video.subtitles_fetchec_counter(obj.video_id).val = obj.subtitles_fetched_count
+            Video.subtitles_fetched_counter(obj.video_id).val = obj.subtitles_fetched_count
             Video.widget_views_counter(obj.video_id).val = obj.widget_views_count
             
         for obj in orm.SubtitleLanguage.objects.all():
