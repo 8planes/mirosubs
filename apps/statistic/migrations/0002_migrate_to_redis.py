@@ -28,8 +28,14 @@ class Migration(DataMigration):
                 return
             raise Exception('Redis server is unavailable. You can ignore this migration with: python manage.py migrate statistic 0002 --fake, but all statistic data will be lost.')
         
+        print 'Total count of rows: ', orm.SubtitleFetchStatistic.objects.count()
+        
         keys = []
-        for item in orm.SubtitleFetchStatistic.objects.all():
+        for item in orm.SubtitleFetchStatistic.objects.order_by('id'):
+            
+            if not item.pk % 50:
+                print item.pk
+                
             key = get_fetch_subtitles_key(item.video, item.language, item.created)
             if not key in keys:
                 default_connection.delete(key)
