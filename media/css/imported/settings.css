@@ -85,5 +85,9 @@
   border-top: 1px solid #e9f2f4;
   border-bottom: 1px solid #d1dee0; }
 
+.settings_main .pagination {
+    margin-right: 20px;
+}
+
 #teams .settings_main h2 { 
   margin-bottom: 0; }

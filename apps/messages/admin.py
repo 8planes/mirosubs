@@ -15,19 +15,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from messages.models import Message
-from django.contrib.auth.decorators import login_required
+
+#  Based on: http://www.djangosnippets.org/snippets/73/
+#
+#  Modified by Sean Reifschneider to be smarter about surrounding page
+#  link context.  For usage documentation see:
+#
+#     http://www.tummy.com/Community/Articles/django-pagination/
+
+from django.contrib import admin
 from django.conf import settings
-from django.views.generic.list_detail import object_list
+from messages.models import Message
 
-MESSAGES_ON_PAGE = getattr(settings, 'MESSAGES_ON_PAGE', 30)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('user', 'subject', 'author', 'read', 'created')
 
-@login_required
-def index(request):
-    qs = Message.objects.filter(user=request.user)
-    extra_context = {}
-    return object_list(request, queryset=qs,
-                       paginate_by=MESSAGES_ON_PAGE,
-                       template_name='messages/index.html',
-                       template_object_name='message',
-                       extra_context=extra_context)
+if settings.DEBUG:
+    admin.site.register(Message, MessageAdmin)

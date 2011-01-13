@@ -65,6 +65,7 @@ jQuery.mod = function(){
   jQuery('[data-modal]').click(function(e){
     e.preventDefault()
     var modal = jQuery('#' + jQuery(this).attr('data-modal'))
-    modal.mod()
+    modal.trigger('before-show-modal', [this]);
+    modal.mod();
   })
 }

@@ -24,10 +24,11 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.db import models
 from auth.models import CustomUser as User
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.conf import settings
+from django.utils import simplejson as json
 
 MESSAGE_MAX_LENGTH = getattr(settings,'MESSAGE_MAX_LENGTH', 1000)
 
@@ -39,7 +40,7 @@ class MessageManager(models.Manager):
 
 class Message(models.Model):
     user = models.ForeignKey(User, related_name='received_messages')
-    subject = models.CharField(max_length=255, blank=True)
+    subject = models.CharField(max_length=100, blank=True)
     content = models.TextField(blank=True, max_length=MESSAGE_MAX_LENGTH)
     author = models.ForeignKey(User, blank=True, null=True, related_name='sent_messages')
     read = models.BooleanField(default=False)    
@@ -56,12 +57,23 @@ class Message(models.Model):
         ordering = ['-created']
     
     def __unicode__(self):
-        return self.subject or _('<no subject>')
+        if self.subject and not u' ' in self.subject:
+            return self.subject[:40]+u'...'
+        return self.subject or ugettext('<no subject>')
+    
+    def json_data(self):
+        data = {
+            'author-avatar': self.author and self.author.small_avatar() or '',
+            'author-username': self.author and unicode(self.author) or '',
+            'message-content': self.content,
+            'message-subject': self.subject
+        }
+        return json.dumps(data)
     
     def clean(self):
         from django.core.exceptions import ValidationError
         
-        if not self.subject or not self.content or not self.object:
+        if not self.subject and not self.content and not self.object:
             raise ValidationError(_(u'You should enter subject or message.'))
     
     @classmethod

@@ -36,6 +36,10 @@ table.messages .msg_body {
 table.messages tr.unread { 
   background-color: #f1f8f9; }
 
+table.messages .delete {
+    cursor: pointer;
+}
+
 .no_messages { 
   font-size: 18px;
   text-align: center;
