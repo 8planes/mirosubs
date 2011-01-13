@@ -10,6 +10,9 @@ from statistic import sub_fetch_keys_set
 class Migration(DataMigration):
     
     def forwards(self, orm):
+        if db.dry_run:
+            return        
+        
         try:
             from utils.redis_utils import default_connection
             from statistic import get_fetch_subtitles_key
