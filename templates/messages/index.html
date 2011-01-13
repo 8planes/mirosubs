@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "settings.html" %}
 
 {% load paginator i18n %}
 
@@ -6,8 +6,78 @@
     {% trans 'My Messages' %} | Universal Subtitles
 {% endblock %}
 
-{% block main_content %}
-<h2>{% trans 'My Messages' %}</h2>
+{% block settings_content %}
+
+<div class="msg_modal_wrap" id="msg_modal">
+  <a href="#close" class="close">Close</a>
+  <div class="msg_modal">
+    <h3>Message from <span><img src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="Han Solo's Avatar"/> Han Solo</span></h3>
+    <dl class="clearfix">
+      <dt>Message</dt>
+      <dd>
+        <p>Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus.</p>
+      </dd>
+    </dl>
+
+    <dl class="clearfix">
+      <dt>Reply</dt>
+      <dd>
+        <form action="" method="get" accept-charset="utf-8">
+          <p><textarea name="body" rows="8" cols="30"></textarea></p>
+          <p><button type="submit" class="green_button small">Send Message</button></p>
+        </form>
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<h2 class="msg_header">
+  {% trans 'My Messages' %} 
+  <select>
+    <option>Recieved</option>
+    <option>Sent</option>
+  </select>
+</h2>
+
+<table border="0" class="messages">
+  <thead>
+    <tr>
+      <th></th>
+      <th>From</th>
+      <th>Message</th>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <tr>
+      <td class="msg_avatar"><img src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="Han Solo's Avatar"/></td>
+      <td class="msg_from">Han Solo</td>
+      <td class="msg_body"><a href="#" data-modal="msg_modal">Lorem ipsum sit amet dolor consectetur...</a></td>
+      <td class="msg_date">23 minutes ago</td>
+      <td class="msg_delete">&#x2326;</td>
+    </tr>
+    <tr>
+      <td class="msg_avatar"><img src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="Han Solo's Avatar"/></td>
+      <td class="msg_from">Han Solo</td>
+      <td class="msg_body"><a href="#" data-modal="msg_modal">Lorem ipsum sit amet dolor consectetur...</a></td>
+      <td class="msg_date">23 minutes ago</td>
+      <td class="msg_delete">&#x2326;</td>
+    </tr>
+    <tr class="unread">
+      <td class="msg_avatar"><img src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="Han Solo's Avatar"/></td>
+      <td class="msg_from">Han Solo</td>
+      <td class="msg_body"><a href="#" data-modal="msg_modal">Lorem ipsum sit amet dolor consectetur...</a></td>
+      <td class="msg_date">23 minutes ago</td>
+      <td class="msg_delete">&#x2326;</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="no_messages">
+  {% trans 'You have no messages.' %}
+</p>
 
 <div class="grid_8 alpha">
     {% if is_paginated %}{% paginator %}{% endif %}

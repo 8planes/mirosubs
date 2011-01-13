@@ -13,7 +13,6 @@
     {% if user.teams.exists %}
     <li {% if my_teams%}class="active"{% endif %}><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
     {% endif %}
-    {% comment %}
     <li>
         <a href="{% url messages:index %}">{% trans "Messages" %}
         {% with user.received_messages.unread.count as messages_count %}
@@ -21,7 +20,6 @@
         {% endwith %}
         </a>
     </li>
-    {% endcomment %}
   </ul>
   {% with user.teams.all as user_teams %}
       {% if user_teams %}  
