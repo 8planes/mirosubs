@@ -19,6 +19,7 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('api.views',
+    url(r'^1.0/', include('api.1_0.urls', '0.1')),
     url(r'^subtitles/$', 'subtitles', name='subtitles'),
     url(r'^subtitle_existence/$', 'subtitle_existence', name='subtitle_existence'),
 )

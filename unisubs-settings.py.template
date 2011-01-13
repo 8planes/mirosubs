@@ -69,6 +69,8 @@ PRODUCTION_MEDIA_URL = 'http://s3.www.universalsubtitles.org/'
 # should be one of the three above variables, depending on env.
 MEDIA_URL = INSERT_SITE_MEDIA_URL
 
+REDIS_DB = INSERT_REDIS_DB_HERE
+
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 DEFAULT_BUCKET = ''

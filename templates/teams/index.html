@@ -14,17 +14,23 @@
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(function($){
+            var IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
+             
             $('.join-team', $('ul.big_list')).live('click', function(){
-                if (confirm('{% trans "Do you really wish join this team?" %}')){
-                    var $this = $(this);
-                    TeamsApi.join($this.attr('team_id'), function(response){
-                        if (response.error){
-                            $.msg.clean().add(response.error, 'error');
-                        }else{
-                            $.msg.clean().add(response.msg);
-                            $this.remove();
-                        }
-                    });
+                if ( ! IS_AUTHENTICATED){
+                    document.location = '{% url auth:login %}?next={{ request.path_info|urlencode }}';
+                }else{
+                    if (confirm('{% trans "Do you really wish join this team?" %}')){
+                        var $this = $(this);
+                        TeamsApi.join($this.attr('team_id'), function(response){
+                            if (response.error){
+                                $.msg.clean().add(response.error, 'error');
+                            }else{
+                                $.msg.clean().add(response.msg);
+                                $this.remove();
+                            }
+                        });
+                    }
                 }
                 return false;
             });
@@ -125,7 +131,7 @@
                     <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a><br/>
                     {% endif %}
                 {% else %}
-                    {% if team.is_open and user.is_authenticated %}<a href="#" class="join-team" team_id="{{ team.pk }}">{% trans "Join" %}</a><br/>{% endif %}
+                    {% if team.is_open %}<a href="#" class="join-team" team_id="{{ team.pk }}">{% trans "Join" %}</a><br/>{% endif %}
                 {% endif %}      
                 <span>
                     {% blocktrans with team.member_count as count %}

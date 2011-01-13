@@ -39,6 +39,7 @@ from urlparse import urlparse
 from utils.forms import AjaxForm
 from localeurl.utils import strip_path
 import re
+from utils.translation import get_languages_list
 
 class TeamVideoLanguageForm(forms.ModelForm):
     
@@ -47,7 +48,7 @@ class TeamVideoLanguageForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super(TeamVideoLanguageForm, self).__init__(*args, **kwargs)
-        self.fields['language'].choices.sort(key=lambda item: item[1])    
+        self.fields['language'].choices = get_languages_list(True)
 
 TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, TeamVideoLanguageForm ,extra=1)
 
@@ -163,7 +164,7 @@ class CreateTeamForm(BaseVideoBoundForm):
     
     class Meta:
         model = Team
-        fields = ('name', 'slug', 'description', 'logo', 'membership_policy', 'video_policy', 
+        fields = ('name', 'slug', 'description', 'logo', 'membership_policy', 'is_moderated', 'video_policy', 
                   'is_visible', 'video_url')
     
     def __init__(self, *args, **kwargs):
@@ -174,6 +175,7 @@ class CreateTeamForm(BaseVideoBoundForm):
 on your team homepage that explains what your team is about, to attract volunteers. 
 Enter a link to any compatible video, or to any video page on our site.''')
         self.fields['is_visible'].widget.attrs['class'] = 'checkbox'
+        self.fields['is_moderated'].widget.attrs['class'] = 'checkbox'
         self.fields['slug'].label = _(u'Team URL: http://universalsubtitles.org/teams/')
     
     def clean_slug(self):
@@ -195,7 +197,7 @@ class EditTeamForm(BaseVideoBoundForm):
 
     class Meta:
         model = Team
-        fields = ('name', 'description', 'logo', 'membership_policy', 'video_policy', 
+        fields = ('name', 'description', 'logo', 'membership_policy', 'is_moderated', 'video_policy', 
                   'is_visible', 'video_url', 'application_text')
 
     def __init__(self, *args, **kwargs):
@@ -206,6 +208,7 @@ class EditTeamForm(BaseVideoBoundForm):
 on your team homepage that explains what your team is about, to attract volunteers. 
 Enter a link to any compatible video, or to any video page on our site.''')
         self.fields['is_visible'].widget.attrs['class'] = 'checkbox'
+        self.fields['is_moderated'].widget.attrs['class'] = 'checkbox'
         
     def clean(self):
         if 'logo' in self.cleaned_data:

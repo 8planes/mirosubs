@@ -5,9 +5,9 @@
 {% block content %}
 <p style="font-size: 12px;">
     {% trans 'Dear' %} {{ user }},<br/><br/>
-    {% blocktrans with version.user as user and language.language_display as language and video.video_link as video_url %}
+    {% blocktrans with version.user as user and language.language_display as language and video.video_link|rmlocale as video_url %}
     Great news! {{ user }} has just started a {{ language }} 
-    translation of your video <a href="http://{{ domain }}{{ video_url|rmlocale }}">{{ video }}</a>{% endblocktrans %}.
+    translation of your video <a href="http://{{ domain }}{{ video_url }}">{{ video }}</a>{% endblocktrans %}.
     <br/>
     {% trans 'You can review the translation and thank them for their contribution on this page:' %} <br/>
     <a href="http://{{ domain }}{{ language.get_absolute_url|rmlocale }}">{% trans 'Translation homepage' %}</a> 

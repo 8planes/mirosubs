@@ -42,3 +42,9 @@ class SubtitleFetchStatistic(models.Model):
     video = models.ForeignKey('videos.Video')
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    
+class SubtitleFetchCounters(models.Model):
+    video = models.ForeignKey('videos.Video')
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
+    date = models.DateField()
+    count = models.PositiveIntegerField(default=0)

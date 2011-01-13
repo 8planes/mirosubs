@@ -31,6 +31,10 @@ mirosubs.translate.TranslationWidget = function(subtitle,
 };
 goog.inherits(mirosubs.translate.TranslationWidget, goog.ui.Component);
 
+mirosubs.translate.TranslationWidget.prototype.getSubtitle = function(){
+    return this.subtitle_;
+};
+
 mirosubs.translate.TranslationWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.setElementInternal(
@@ -71,3 +75,11 @@ mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {
 mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
     return this.subtitle_['subtitle_id'];
 };
+
+/**
+ * Return if translate input has some value
+ * @return {boolean}
+ */
+mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
+    return ! this.translateInput_.value;
+}

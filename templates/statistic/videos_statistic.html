@@ -21,9 +21,9 @@
         {% for v in video_list %}
         <tr> 
             <td><a href="{{ v.get_absolute_url }}">{{ v }}</a></td> 
-            <td> {{ v.day_activity }} </td>
-            <td> {{ v.week_activity }} </td>
-            <td> {{ v.month_activity }} </td>
+            <td> {{ v.day_activity|default:0 }} </td>
+            <td> {{ v.week_activity|default:0 }} </td>
+            <td> {{ v.month_activity|default:0 }} </td>
             <td> {{ v.subtitles_fetched_count }} </td>
         </tr>
         {% endfor %}

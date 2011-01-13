@@ -23,6 +23,9 @@ SUBTITLES_FETCH_PREFIX = 'StSubFetch'
 video_view_counter = RedisKey('StVideoView')
 sub_fetch_total_counter = RedisKey('StSubFetchTotal')
 widget_views_total_counter = RedisKey('StWidgetViewsTotal')
+sub_fetch_keys_set = RedisKey('StSubFetchKeys')
+
+changed_video_set = RedisKey('StChangedVideos')
 
 def get_fetch_subtitles_key(video, lang=None, date=None):
     if not date:
@@ -42,5 +45,6 @@ def update_subtitles_fetch_counter(video, sub_lang=None, date=None):
     else:
         lang = None
     key = get_fetch_subtitles_key(video, lang, date)
+    sub_fetch_keys_set.sadd(key)
     RedisKey(key).incr()
     sub_fetch_total_counter.incr()

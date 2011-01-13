@@ -56,11 +56,16 @@ ALL_LANGUAGES['wol'] = gettext_noop('Wolof')
 ALL_LANGUAGES['que'] = gettext_noop('Quechua')
 ALL_LANGUAGES['swa'] = gettext_noop('Swahili')
 ALL_LANGUAGES['urd'] = gettext_noop('Urdu')
+ALL_LANGUAGES['pan'] = gettext_noop('Punjabi')
+ALL_LANGUAGES['br'] = gettext_noop('Breton')
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+PISTON_EMAIL_ERRORS = True
+PISTON_DISPLAY_ERRORS = False
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -164,6 +169,7 @@ JS_CORE = ['mirosubs.js',
            'widget/controls/videocontrols.js',
            'widget/controls/volumecontrol.js',
            'widget/controls/volumeslider.js',
+           'widget/translate/googletranslator.js',
            'widget/translate/dialog.js',
            'widget/translate/translationpanel.js',
            'widget/translate/translationlist.js',
@@ -247,6 +253,7 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
     'middleware.P3PHeaderMiddleware',
     'middleware.UserUUIDMiddleware',
+    'middleware.SaveUserIp'
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
@@ -295,12 +302,14 @@ INSTALLED_APPS = (
     'statistic',
     'search',
     'api',
+    'targetter',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 
 import re
 LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/widget'),
+    re.compile('^/api')
 )
 
 #Haystack configuration

@@ -78,11 +78,21 @@ mirosubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
 
 mirosubs.translate.TranslationRightPanel.prototype.enterDocument = function() {
     mirosubs.translate.TranslationRightPanel.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
+    
+    var handler = this.getHandler();
+    
+    handler.listen(
         this.changeTimingLink_,
         'click',
         this.changeTimingClicked_);
+    
+    handler.listen(this.autoTranslateLink_, 'click', this.autoTranslateClicked_)
 };
+
+mirosubs.translate.TranslationRightPanel.prototype.autoTranslateClicked_ = function(e){
+    e.preventDefault();
+    this.dialog_.translateViaGoogle();
+}
 
 mirosubs.translate.TranslationRightPanel.prototype.changeTimingClicked_ = 
     function(e) 

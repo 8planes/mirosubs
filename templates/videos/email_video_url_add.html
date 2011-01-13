@@ -7,7 +7,11 @@
         {% trans "A new video URL for" %}
         <b><a href="http://{{ domain }}{{ video.get_absolute_url|rmlocale }}">{{ video }}</a></b> 
         {% trans "was submitted by" %}
-        <b><a href="http://{{ domain }}{{ video_url.added_by.get_absolute_url|rmlocale }}">{{ video_url.video_url }}</a></b>.  
+        {% if video_url.added_by %}
+            <b><a href="http://{{ domain }}{{ video_url.added_by.get_absolute_url|rmlocale }}">{{ video_url.added_by }}</a></b>.
+        {% else %}
+            {% trans 'Anonymous' %}.
+        {% endif %}  
         {% trans "Please check to make sure the new URL features the exact same video, and that subtitle timing is correct:" %}  
         <br/><br/>
     </p>

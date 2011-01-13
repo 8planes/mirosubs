@@ -18,6 +18,11 @@
 
 goog.provide('mirosubs.api');
 
+/**
+ * Opens the subtitling dialog for clients which provide their 
+ * own server model, e.g. Wikimedia.
+ * @param {Object} config Defined in the API documentation.
+ */
 mirosubs.api.openDialog = function(config) {
     mirosubs.siteConfig = mirosubs.Config.siteConfig;
     if (config['mediaURL'])
@@ -44,10 +49,19 @@ mirosubs.api.openDialog = function(config) {
 };
 
 /**
+ * Used to open the dialog from the on-site widget page for Firefox bug. In this
+ * case, general settings can be passed in from the page, so we don't bother
+ * asking the server for them.
+ * In near future, will also use this to open dialog for team actions.
  * @param {boolean} askLanguage Should we ask the user for the language first?
- *
+ * @param {Object} config Arguments for the dialog: videoURL to be used 
+ *     in embed code, video url for the video player, version no, language 
+ *     code, original language code if set, and fork. These are currently 
+ *     set in SubtitleController#startEditing_.
+ * @param {Object} generalSettings See WidgetController.makeGeneralSettings
+ *     for more info.
  */ 
-mirosubs.api.openUnisubsDialog = function(askLanguage, config, generalSettings) {
+mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, generalSettings) {
     mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
         mirosubs.returnURL = config['returnURL'];
@@ -61,6 +75,38 @@ mirosubs.api.openUnisubsDialog = function(askLanguage, config, generalSettings) 
         opener.openDialog(
             config['baseVersionNo'], config['languageCode'],
             config['originalLanguageCode'], config['fork']);
+    else {
+        mirosubs.widget.ChooseLanguageDialog.show(
+            config['originalLanguageSubtitled'],
+            function(subLanguage, originalLanguage) {
+                opener.openDialog(
+                    config['baseVersionNo'],
+                    subLanguage, originalLanguage, 
+                    mirosubs.isForkedLanguage(subLanguage));
+            });
+    }
+};
+
+/**
+ * For JWPlayer API.
+ */
+mirosubs.api.openUnisubsDialog = function(videoURL) {
+    // TODO: you might want to be getting an array of videourls back from
+    // the server and then choosing the best one for effectiveVideoURL.
+    mirosubs.Rpc.call(
+        'fetch_video_id_and_settings',
+        { 'video_url': videoURL },
+        function(response) {
+            mirosubs.api.openUnisubsDialogWithSettings(
+                true,
+                {'videoURL': videoURL,
+                 'effectiveVideoURL': videoURL,
+                 'videoID': response['video_id'],
+                 'originalLanguageSubtitled': 
+                     response['is_original_language_subtitled'],
+                 'baseVersionNo': null },
+                response['general_settings']);
+        });
 };
 
 mirosubs.api.toSRT = function(jsonSubs) {
@@ -107,6 +153,10 @@ mirosubs.api.writeSrtTime_ = function(seconds, stringBuffer) {
 goog.exportSymbol(
     'mirosubs.api.openDialog',
     mirosubs.api.openDialog);
+
+goog.exportSymbol(
+    'mirosubs.api.openUnisubsDialogWithSettings',
+    mirosubs.api.openUnisubsDialogWithSettings);
 
 goog.exportSymbol(
     'mirosubs.api.openUnisubsDialog',

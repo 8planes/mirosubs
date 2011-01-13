@@ -40,6 +40,7 @@ from gdata.service import Error as GdataError
 from socket import gaierror
 from django.utils.encoding import smart_unicode
 import feedparser
+from utils.translation import get_languages_list
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -114,7 +115,8 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         return video_type.convert_to_video_url()
     
     def clean(self):
-        video = self.cleaned_data.get('video')
+        data = super(CreateVideoUrlForm, self).clean()
+        video = data.get('video')
         if video and not video.allow_video_urls_edit and not self.user.has_perm('videos.add_videourl'):
             raise forms.ValidationError(_('You have not permission add video URL for this video'))
         
@@ -124,7 +126,7 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         obj = super(CreateVideoUrlForm, self).save(False)
         obj.type = self._video_type.abbreviation
         obj.added_by = self.user
-        obj.videoid = self._video_type.video_id
+        obj.videoid = self._video_type.video_id or ''
         commit and obj.save()
         return obj
     
@@ -142,8 +144,8 @@ class SubtitlesUploadBaseForm(forms.Form):
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(SubtitlesUploadBaseForm, self).__init__(*args, **kwargs)
-        self.fields['language'].choices.sort(key=lambda item: item[1])
-        self.fields['video_language'].choices.sort(key=lambda item: item[1])
+        self.fields['language'].choices = get_languages_list()
+        self.fields['video_language'].choices = get_languages_list()
         
     def clean_video(self):
         video = self.cleaned_data['video']
@@ -180,14 +182,39 @@ class SubtitlesUploadBaseForm(forms.Form):
         video_language = self.cleaned_data['video_language']
 
         if original_language:
-            try:
-                language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
-                    .get(language=video_language)
-                original_language.is_original = False
-                original_language.save()
-                language_exists.is_original = True
-                language_exists.save()
-            except ObjectDoesNotExist:
+            if original_language.language:
+                try:
+                    language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
+                        .get(language=video_language)
+                    original_language.is_original = False
+                    original_language.save()
+                    language_exists.is_original = True
+                    language_exists.save()
+                except ObjectDoesNotExist:
+                    original_language.language = video_language
+                    original_language.save()
+            else:
+                try:
+                    language_exists = video.subtitlelanguage_set.exclude(pk=original_language.pk) \
+                        .get(language=video_language)
+                    
+                    latest_version = original_language.latest_version() 
+                    
+                    if latest_version:
+                        last_no = latest_version.version_no
+                    else:
+                        last_no = 0
+                        
+                    for version in language_exists.subtitleversion_set.all():
+                        version.language = original_language
+                        last_no += 1
+                        version.version_no = last_no
+                        version.save()
+
+                    language_exists.delete()
+                except ObjectDoesNotExist:
+                    pass
+                
                 original_language.language = video_language
                 original_language.save()
         else:
@@ -328,23 +355,26 @@ class VideoForm(forms.Form):
     
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
-        try:
-            video_type = video_type_registrar.video_type_for_url(video_url)
-        except VideoTypeError, e:
-            raise forms.ValidationError(e)
-        if not video_type:
-            raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
-If you'd like to us to add support for a new site or format, or if you
-think there's been some mistake, <a
-href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))             
-        else:
-            self._video_type = video_type
+        
+        if video_url:
+            try:
+                video_type = video_type_registrar.video_type_for_url(video_url)
+            except VideoTypeError, e:
+                raise forms.ValidationError(e)
+            if not video_type:
+                raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
+    If you'd like to us to add support for a new site or format, or if you
+    think there's been some mistake, <a
+    href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))             
+            else:
+                self._video_type = video_type
             
         return video_url
     
     def save(self):
         video_url = self.cleaned_data['video_url']
-        obj, create = Video.get_or_create_for_url(video_url, self._video_type, self.user)
+        obj, created = Video.get_or_create_for_url(video_url, self._video_type, self.user)
+        self.created = created
         return obj
 
 youtube_user_url_re = re.compile(r'^(http://)?(www.)?youtube.com/user/(?P<username>[a-zA-Z0-9]+)/?$')
@@ -443,7 +473,7 @@ class FeedbackForm(MathCaptchaForm):
         timestamp = u'Time: %s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         version = u'Version: %s' % settings.PROJECT_VERSION
         commit = u'Commit: %s' % settings.LAST_COMMIT_GUID
-        url = u'URL: %s' % request.path_info
+        url = u'URL: %s' % request.META.get('HTTP_REFERER', '')
         user = u'Logged in: %s' % (request.user.is_authenticated() and request.user or u'not logged in')
         message = u'%s\n\n%s\n%s\n%s\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version, commit, url, user)
         if error in ['404', '500']:

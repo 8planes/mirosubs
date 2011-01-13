@@ -1,14 +1,20 @@
 import sys, site, os
 from os.path import join
 
+PROJECT_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '..')
+
+def rel(*x):
+    return os.path.join(PROJECT_ROOT, *x)
+
 prev_sys_path = list(sys.path)
 
-site.addsitedir('/var/www/INSERT_SITE_DIRECTORY/env/lib/python2.6/site-packages')
+site.addsitedir(rel('env/lib/python2.6/site-packages'))
 
-base_site_dir = '/var/www/INSERT_SITE_DIRECTORY'
-sys.path.append(base_site_dir)
-sys.path.append(join(base_site_dir, 'mirosubs'))
-sys.path.append(join(base_site_dir, 'mirosubs', 'apps'))
+sys.path.append(PROJECT_ROOT)
+sys.path.append(rel('mirosubs'))
+sys.path.append(rel('mirosubs', 'apps'))
+
+sys.stdout = sys.stderr
 
 new_sys_path = [p for p in sys.path if p not in prev_sys_path]
 for item in new_sys_path:
@@ -20,8 +26,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs-settings'
 application = django.core.handlers.wsgi.WSGIHandler()
 
 handler = django.core.handlers.wsgi.WSGIHandler()
-off_tpl_path = join(base_site_dir, 'mirosubs', 'templates', 'off_template.html')
-disabled_file_path = join(base_site_dir, 'mirosubs', 'disabled')
+off_tpl_path = rel('mirosubs', 'templates', 'off_template.html')
+disabled_file_path = rel('mirosubs', 'disabled')
 
 def application(environ, start_response):
     if os.path.exists(disabled_file_path):

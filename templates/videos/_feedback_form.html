@@ -1,6 +1,6 @@
 {% load i18n %}
    
-    <div style="display: none" class="feedback-form-container" id="feedback_container">
+    <div style="{% if not error %}display: none{% endif %}" class="feedback-form-container" id="feedback_container">
         <div class="feedback_bg">
             <form method="post" action="{% url videos:feedback %}" id="feedback_form">
             {% csrf_token %}
@@ -26,7 +26,9 @@
                     {{ form.message }}
                 </p>
                 <button type="submit" value="{% trans 'Send feedback' %}" class="green_button big">{% trans 'Send Feedback' %}</button>
-                <p><a href="#close" class="">{% trans "Cancel" %}</a></p>
+                {% if not error %}
+                    <p><a href="#close" class="">{% trans "Cancel" %}</a></p>
+                {% endif %}
             </form>
 
             <div class="clear"></div>
@@ -39,7 +41,9 @@
             {% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
             <br/>
             <a href="#" id="send_more_feedback">{% trans 'Send more feedback.' %}</a>
+            {% if not error %}
             <p><a href="#close" class="">{% trans "Cancel" %}</a></p>
+            {% endif %}
         </div>        
     </div>
     

@@ -72,8 +72,8 @@ class OpenIdBackend:
                 email =  None #'%s@example.openid.com'%(nickname)
             else:
                 valid_username = True
-            name_count = User.objects.filter(username__startswith = nickname).count()
-                
+            name_count = AuthUser.objects.filter(username__startswith = nickname).count()
+
             if name_count:
                 username = '%s%s'%(nickname, name_count + 1)
                 user = User.objects.create_user(username,email or '')
@@ -140,7 +140,7 @@ class TwitterBackend:
                 username = screen_name
             username = '@'+username
             
-            name_count = User.objects.filter(username__startswith = username).count()
+            name_count = AuthUser.objects.filter(username__startswith = username).count()
                 
             if name_count:
                 username = '%s%s'%(username, name_count + 1)
@@ -196,7 +196,7 @@ class FacebookBackend:
                         return   
                 except FacebookUserProfile.DoesNotExist:
                     fb_data = user_info_response[0]
-                    name_count = User.objects.filter(username__istartswith = username).count()
+                    name_count = AuthUser.objects.filter(username__istartswith = username).count()
                     if name_count:
                         username = '%s%s' % (username, name_count + 1)
                     #user_email = '%s@facebookuser.%s.com'%(user_info_response[0]['first_name'], settings.SITE_NAME)
@@ -207,7 +207,7 @@ class FacebookBackend:
                     location = str(fb_data['current_location'])
                     fb_profile = FacebookUserProfile(facebook_uid = fb_data['uid'], user = user, profile_image_url = fb_data['pic_small'], location=location)
                     fb_profile.save()
-                    auth_meta = AuthMeta(user=user, provider='Facebook').save()
+                    AuthMeta(user=user, provider='Facebook').save()
                     return user
             else:
                 return None

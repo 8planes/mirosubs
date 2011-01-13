@@ -123,6 +123,7 @@ form p input, form p textarea, #feedback_form p input{
   -webkit-box-shadow:inset 0px 1px 2px #555;
   
   background: -moz-linear-gradient(top,  #eee,  #fff);
+  background: -webkit-gradient(linear, left top, left bottom,  from(#eee),  to(#fff));
   }
 
 form p input.checkbox {
@@ -348,6 +349,10 @@ border: 1px solid #7e1504;
   width: 900px;
   -webkit-background-clip: padding-box;
    }
+   
+#feedback_container { 
+  padding: 0;
+  border-radius: 9px; }
 
 .feedback_bg, .modal-window-bg {
   background: #D3E9ED url(../../images/cloud.png) center top no-repeat;

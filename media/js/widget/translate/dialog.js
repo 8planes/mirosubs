@@ -101,6 +101,14 @@ mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
 };
 /**
+ * Tries translate subtitles with GoogleTranslator
+ */
+mirosubs.translate.Dialog.prototype.translateViaGoogle = function(){
+    //I don't know how better call this. I think it should be incapsulated in translationList_,
+    //but have chain of function calls can confuse.
+    this.translationPanel_.translationList_.translateViaGoogle();
+};
+/**
  * @param {function()} saveCompleted
  */
 mirosubs.translate.Dialog.prototype.forkAndClose = function(saveCompleted) {

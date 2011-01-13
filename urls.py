@@ -65,6 +65,7 @@ urlpatterns = patterns(
                        app_name='auth')),
     (r'statistic/', include('statistic.urls', namespace='statistic')),                       
     url(r'^search/', include('search.urls', 'search')),
+    url(r'^email-testing/', include('emails_example.urls', 'emails_example')),    
     url(r'^counter/$', 'videos.views.counter', name="counter"),
     url(r'^api/', include('api.urls', 'api')),
     url(r'^w3c/p3p.xml$', 'django.views.generic.simple.direct_to_template', 

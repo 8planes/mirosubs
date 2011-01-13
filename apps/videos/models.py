@@ -31,7 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
 from utils.amazon import default_s3_store
 from statistic.models import SubtitleFetchStatistic
-from statistic import update_subtitles_fetch_counter, video_view_counter, widget_views_total_counter
+from statistic import update_subtitles_fetch_counter, video_view_counter, changed_video_set 
 from widget import video_cache
 from datetime import datetime
 from utils.redis_utils import RedisSimpleField
@@ -93,14 +93,41 @@ class Video(models.Model):
     widget_views_count = models.IntegerField(default=0)
     view_count = models.PositiveIntegerField(default=0)
     
-    subtitles_fetchec_counter = RedisSimpleField('video_id')
-    widget_views_counter = RedisSimpleField('video_id')
-    view_counter = RedisSimpleField('video_id')
+    subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
+    widget_views_counter = RedisSimpleField('video_id', changed_video_set)
+    view_counter = RedisSimpleField('video_id', changed_video_set)
     
     def __unicode__(self):
         title = self.title_display()
         if len(title) > 70:
             title = title[:70]+'...'
+        return title
+
+    def title_display(self):
+        if self.title:
+            return self.title
+        
+        try:
+            url = self.videourl_set.all()[:1].get().url
+            if not url:
+                return 'No title'
+        except models.ObjectDoesNotExist:
+            return 'No title'
+        
+        url = url.strip('/')
+
+        if url.startswith('http://'):
+            url = url[7:]
+
+        parts = url.split('/')
+        if len(parts) > 1:
+            title = '%s/.../%s' % (parts[0], parts[-1])
+        else:
+            title = url
+
+        if title > 35:
+            title = title[:35]+'...'
+            
         return title
     
     def update_view_counter(self):
@@ -108,16 +135,13 @@ class Video(models.Model):
         video_view_counter.incr()
     
     def update_subtitles_fetched(self, lang=None):
-        self.subtitles_fetchec_counter.incr()
+        self.subtitles_fetched_counter.incr()
         #Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
-        st_obj = SubtitleFetchStatistic(video=self)
         sub_lang = self.subtitle_language(lang)
         update_subtitles_fetch_counter(self, sub_lang)
         if sub_lang:
-            st_obj.language = lang or ''
             sub_lang.subtitles_fetched_counter.incr()
             #SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
-        st_obj.save()
         
     def get_thumbnail(self):
         if self.s3_thumbnail:
@@ -153,35 +177,16 @@ class Video(models.Model):
         except models.ObjectDoesNotExist:
             return False
     
-    def title_display(self):
-        if self.title:
-            return self.title
-        
-        try:
-            url = self.videourl_set.all()[:1].get().url
-            if not url:
-                return 'No title'
-        except models.ObjectDoesNotExist:
-            return 'No title'
-        
-        url = url.strip('/')
-
-        if url.startswith('http://'):
-            url = url[7:]
-
-        parts = url.split('/')
-        if len(parts) > 1:
-            return '%s/.../%s' % (parts[0], parts[-1])
-        else:
-            return url
-
     def search_page_url(self):
         return self.get_absolute_url()
-
+    
+    def title_for_url(self):
+        return self.title.replace('/', '-')
+    
     @models.permalink
     def get_absolute_url(self):
         if self.title:
-            return ('videos:video_with_title', [self.video_id, self.title])
+            return ('videos:video_with_title', [self.video_id, self.title_for_url()])
         return ('videos:video', [self.video_id])
 
     def get_video_url(self):

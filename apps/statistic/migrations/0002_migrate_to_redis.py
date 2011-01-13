@@ -5,6 +5,7 @@ from south.v2 import DataMigration
 from django.db import models
 from django.conf import settings
 from redis.exceptions import ConnectionError
+from statistic import sub_fetch_keys_set
 
 class Migration(DataMigration):
     
@@ -30,6 +31,7 @@ class Migration(DataMigration):
             if not key in keys:
                 default_connection.delete(key)
                 keys.append(key)
+                sub_fetch_keys_set.sadd(key)
             default_connection.incr(key)
     
     def backwards(self, orm):
