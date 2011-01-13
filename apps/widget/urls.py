@@ -29,6 +29,7 @@ urlpatterns = patterns(
     url(r'^null_rpc/jsonp/(\w+)$', 'jsonp', kwargs={'null':True}),
     url(r'^widgetize_demo/(\w+)$', 'widgetize_demo'),
     url(r'^statwidget_demo.html$', 'statwidget_demo'),
+    url(r'^flv_demo.html$', 'flv_demo'),
     url(r'^api_demo.html$', 'api_demo'),
     url(r'^download_srt/$', 'download_subtitles', 
         {'handler': SRTSubtitles}, name='download_srt'),

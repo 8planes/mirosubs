@@ -81,6 +81,18 @@ def widget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
+def flv_demo(request):
+    context = widget.add_config_based_js_files(
+        {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
+    context['embed_js_url'] = \
+        "http://{0}/embed{1}.js".format(
+        Site.objects.get_current().domain,
+        settings.EMBED_JS_VERSION)
+    return render_to_response(
+        'widget/flv_demo.html', 
+        context,
+        context_instance=RequestContext(request))
+
 def widgetize_demo(request, page_name):
     context = widget.add_config_based_js_files(
         {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')

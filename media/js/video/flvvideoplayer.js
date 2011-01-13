@@ -94,13 +94,11 @@ mirosubs.video.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
     else {
         var config = this.videoSource_.getVideoConfig();
         if (config) {
-            plugins = {};
-            goog.object.filter(
+            plugins = goog.object.filter(
                 config, 
                 function(val, key, obj) {
                     return key != 'width' && key != 'height';
-                }, 
-                plugins);
+                });
         }
     }
     if (plugins)
