@@ -158,8 +158,8 @@ line-height: 1.1em;
   }
 
 
-.big_list li:hover a,
-.small_list li:hover a{
+.big_list li a:hover,
+.small_list li a:hover{
   text-decoration: underline;
   }
 
