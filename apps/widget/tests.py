@@ -654,7 +654,7 @@ class TestRpc(TestCase):
             self.assertTrue(sub[u'start_time'] > 0)
             self.assertTrue(sub[u'end_time'] > sub['start_time'])
 
-    def test_change_original_language(self):
+    def test_change_original_language_legal(self):
         request = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
             request,
@@ -693,6 +693,48 @@ class TestRpc(TestCase):
             request, draft_pk, [])
         video = Video.objects.get(video_id=video_id)
         self.assertEquals('es', video.subtitle_language().language)
+
+    def test_change_original_language_illegal(self):
+        request = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        video_id = return_value['video_id']
+        # first claim that the original video language is english
+        # and subs are in english.
+        return_value = rpc.start_editing(request, video_id, 'en', 'en', fork=True)
+        draft_pk = return_value['draft_pk']
+
+        inserted = [{'subtitle_id': u'sfdsfsdf',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(request, draft_pk, 
+                           [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, [])
+        rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        # now claim that spanish is the original language
+        return_value = rpc.start_editing(request, video_id, 'es', 'es')
+        draft_pk = return_value['draft_pk']
+        inserted = [{'subtitle_id': u'sddfdsfsdf',
+                     'text': 'hey!',
+                     'start_time': 3.5,
+                     'end_time': 6.4,
+                     'sub_order': 2.0}]
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(
+            request, draft_pk, [])
+        video = Video.objects.get(video_id=video_id)
+        # original language should still be English.
+        self.assertEquals('en', video.subtitle_language().language)
+
 
     def test_insert_duplicate_revision(self):
         request = RequestMockup(self.user_0)
