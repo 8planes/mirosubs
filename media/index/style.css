@@ -345,3 +345,153 @@ span.indication{
 
 .floatleft { float: left; }
 .floatright { float: right; }
+
+/*/////////////////////////////////////////////
+
+~ one, two, three
+
+/////////////////////////////////////////////*/
+.wrap { 
+  width: 940px;
+  margin: 0 auto;
+  text-align: left;
+  line-height: 20px; }
+
+.wrap h3 {
+  font-size: 16px;
+  margin-bottom: 5px; }
+
+.arrows{
+font-size: 14px;
+border: 0 !important;
+padding: 35px 0 0px;
+margin-bottom: 10px;
+}
+
+.one, .two, .three { 
+  float: left;
+  width: 300px;
+  margin-right: 20px;
+  margin-bottom: 40px; }
+
+.three { 
+  margin-right: 0; }
+
+.one div, .two div, .three div{
+padding-left: 50px;
+background: url(../images/numbers.png) 0 0px no-repeat;
+}
+
+.two div{
+background: url(../images/numbers.png) -318px 0px no-repeat;
+}
+
+.three div{
+background: url(../images/numbers.png) -635px 3px no-repeat;
+}
+
+
+.one h4, .two h4, .three h4{
+font-size: 18px;
+margin: 0;
+padding: 2px 0 0;
+line-height: 1.4em;
+}
+
+/*/////////////////////////////////////////////
+
+~ drumbeat
+
+/////////////////////////////////////////////*/
+.box{
+width: 380px;
+float: left;
+position: relative;
+padding: 20px 30px 20px 30px;
+-moz-border-radius: 5px;  
+-webkit-border-radius: 5px;
+background: #dceef2;
+}
+
+
+
+.box h3{
+font-size: 18px;
+margin: 0px 0 0;
+padding: 10px 0 0;
+}
+
+.box a{
+position: absolute;
+bottom: 20px;
+right: 20px;
+}
+
+.box img{
+margin-right: 20px;
+margin-top: 4px;
+}
+
+.its-free, .how { 
+  margin-bottom: 40px;}
+
+.its-free p, .how p { 
+  margin-bottom: 10px; }
+
+.its-free { 
+  width: 580px;
+  margin-right: 40px;
+  float: left; }
+/*//////////   ~  Drumbeat stuff  ~   //////////*/
+
+
+.drumbeat{
+background: url(../images/drum.png) 0px 7px no-repeat;
+clear: both;
+width: 440px;
+height: 130px;
+margin-left: -7px;
+}
+
+.box h3{
+border-bottom: 0 !important;
+}
+
+
+.drumbeat .button{
+margin: 17px 40px 20px 0;
+}
+
+
+.drumbeat div{
+float: left;
+width: 500px;
+}
+
+
+.drumbeat div p{
+margin: 0 0 10px;
+}
+
+
+.drumbeat div p a{
+padding-left: 40px;
+}
+
+  
+.how { 
+  width: 320px;
+  float: left; }
+  
+.different { 
+  float: left;
+  width: 450px;
+  margin-right: 40px; }
+
+.different ul { 
+  line-height: 18px;
+  padding-left: 14px;
+  list-style-position: outside;}
+  
+.different ul li { 
+  margin-bottom: 10px; }
