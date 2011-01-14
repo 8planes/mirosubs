@@ -63,10 +63,13 @@ class Message(models.Model):
     
     def json_data(self):
         data = {
+            'id': self.pk,
             'author-avatar': self.author and self.author.small_avatar() or '',
             'author-username': self.author and unicode(self.author) or '',
+            'author-id': self.author and self.author.pk or '',
             'message-content': self.content,
-            'message-subject': self.subject
+            'message-subject': self.subject,
+            'is-read': self.read
         }
         return json.dumps(data)
     

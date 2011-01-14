@@ -8,14 +8,40 @@
 
 {% block scripts %}
     {{ block.super }}
+    <script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
+    <script src="{% url messages:rpc_api %}" type="text/javascript"></script>       
     <script src="{{ MEDIA_URL }}js/jquery.metadata.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(function($){
             var DEFAULT_AVATAR_URL = '{{ MEDIA_URL }}/images/default_thumb_small.png';
             $.metadata.setType("attr", "data");
+
+            $('#send-message-form').ajaxForm({
+                type: 'RPC',
+                api: {
+                    submit: MessagesApi.send
+                },
+                success: function(){
+                    console.log(arguments)
+                }
+            });    
+            
             $('#msg_modal').bind('before-show-modal', function(event, link){
-                var data = $(link).metadata();
+                $link = $(link);
+                var data = $link.metadata();
                 var $modal = $(this);
+                
+                if ( ! data['is-read']){
+                    MessagesApi.mark_as_read(data['id'], function(response){
+                        if (response.error){
+                            $.msg.clean().add(response.error, 'error');
+                        }else{
+                            $link.parents('tr').removeClass('unread');
+                            data['is-read'] = true;
+                            $link.set_metadata(data);
+                        }
+                    });
+                };
                 
                 if (data['author-avatar']){
                     $('.author-avatar', $modal).attr('src', data['author-avatar']);
@@ -23,12 +49,13 @@
                     $('.author-avatar', $modal).attr('src', DEFAULT_AVATAR_URL);
                 }
                 
+                
+                $('#message_form_id_user').val(data['author-id']);
                 $('.author-username', $modal).html(data['author-username']);
                 $('.message-content', $modal).html(data['message-content']);
                 $('.message-subject').html(data['message-subject']);
                 
                 
-                console.log($modal, $('.reply-container', $modal))
                 if (data['author-username']){
                     $('.reply-container', $modal).show();
                     $('.reply-container textarea', $modal).val('');
@@ -119,11 +146,11 @@
     </dl>
 
     <dl class="clearfix reply-container">
-      <dt>{% trans "Reply" %}"</dt>
+      <dt>{% trans "Reply" %}</dt>
       
       <dd>
-        <form action="" method="get" accept-charset="utf-8">
-          <p><textarea name="body" rows="8" cols="30"></textarea></p>
+        <form action="" method="post" accept-charset="utf-8" id="send-message-form">
+          {{ send_message_form.as_p }}
           <p><button type="submit" class="green_button small">{% trans "Send Message" %}</button></p>
         </form>
       </dd>

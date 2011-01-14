@@ -74,6 +74,11 @@ $.extend({
       this.defaults.type = type;
       this.defaults.name = name;
     },
+    fillCache: function(elem, data, opts){
+        opts = opts || {};
+        var settings = $.extend({}, this.defaults, opts);
+        $.data( elem, settings.single, data );
+    },
     get: function( elem, opts ){
       var settings = $.extend({},this.defaults,opts);
       // check for empty string in single property
@@ -125,8 +130,7 @@ $.extend({
         }
         object = getObject(data.indexOf("{") < 0 ? "{" + data + "}" : data);
       }
-      
-      $.data( elem, settings.single, object );
+      $.metadata.fillCache( elem, object, opts );
       return object;
     }
   }
@@ -143,6 +147,9 @@ $.extend({
  */
 $.fn.metadata = function( opts ){
   return $.metadata.get( this[0], opts );
+};
+$.fn.set_metadata = function( data ){
+  return $.metadata.fillCache( this[0], data );
 };
 
 })(jQuery);
