@@ -19,13 +19,23 @@ from messages.models import Message
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.views.generic.list_detail import object_list
+from messages.rpc import MessagesApiClass
+from utils.rpc import RpcRouter
+from messages.forms import SendMessageForm
+
+
+rpc_router = RpcRouter('messages:rpc_router', {
+    'MessagesApi': MessagesApiClass()
+})
 
 MESSAGES_ON_PAGE = getattr(settings, 'MESSAGES_ON_PAGE', 30)
 
 @login_required
 def index(request):
     qs = Message.objects.filter(user=request.user)
-    extra_context = {}
+    extra_context = {
+        'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s')
+    }
     return object_list(request, queryset=qs,
                        paginate_by=MESSAGES_ON_PAGE,
                        template_name='messages/index.html',

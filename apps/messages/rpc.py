@@ -22,11 +22,34 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from django.conf.urls.defaults import *
-from messages.views import rpc_router
 
-urlpatterns = patterns('messages.views',
-    url('^$', 'index', name='index'),
-    url(r'^router/$', rpc_router, name='rpc_router'),
-    url(r'^router/api/$', rpc_router.api, name='rpc_api'),    
-)
+from messages.models import Message
+from auth.models import CustomUser as User
+from django.utils.translation import ugettext as _
+from messages.forms import SendMessageForm
+
+class MessagesApiClass(object):
+    
+    def mark_as_read(self, message_id, user):
+        if not user.is_authenticated():
+            return {'error': _('You should be authenticated.')}
+        
+        Message.objects.filter(pk=message_id, user=user).update(read=True)
+        
+        return {}
+    
+    def send(self, rdata, user):
+        if not user.is_authenticated():
+            return {'error': _('You should be authenticated.')}
+        
+        form = SendMessageForm(user, rdata)
+        if form.is_valid():
+            form.save()
+            return {}
+        else:
+            return {
+                'errors': form.get_errors()
+            }
+        
+        return {}
+        

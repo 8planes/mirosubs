@@ -22,11 +22,26 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from django.conf.urls.defaults import *
-from messages.views import rpc_router
 
-urlpatterns = patterns('messages.views',
-    url('^$', 'index', name='index'),
-    url(r'^router/$', rpc_router, name='rpc_router'),
-    url(r'^router/api/$', rpc_router.api, name='rpc_api'),    
-)
+from django import forms
+from messages.models import Message
+from auth.models import CustomUser as User
+from utils.forms import AjaxForm
+
+class SendMessageForm(forms.ModelForm, AjaxForm):
+    
+    class Meta:
+        model = Message
+        fields = ('user', 'subject', 'content')
+        
+    def __init__(self, author, *args, **kwargs):
+        self.author = author
+        super(SendMessageForm, self).__init__(*args, **kwargs)
+        self.fields['user'].widget = forms.HiddenInput()
+        self.fields['user'].queryset = User.objects.exclude(pk=author.pk)
+        
+    def save(self, commit=True):
+        obj = super(SendMessageForm, self).save(False)
+        obj.author = self.author
+        commit and obj.save()
+        return obj
