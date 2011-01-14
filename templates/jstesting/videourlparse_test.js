@@ -21,6 +21,12 @@ function testYoutubeFormats() {
     }
 }
 
+function testBlipFlv() {
+    var vs = mirosubs.video.VideoSource.videoSourceForURL(
+        'http://blip.tv/file/get/Coldguy-SpineBreakersLiveAWizardOfEarthsea210.FLV');
+    assertTrue(vs instanceof mirosubs.video.FlvVideoSource);
+}
+
 function assertForHtml5Video_(startURL, endURL, videoType) {
     var vs = mirosubs.video.VideoSource.videoSourceForURL(startURL);
     assertTrue(vs instanceof mirosubs.video.Html5VideoSource);

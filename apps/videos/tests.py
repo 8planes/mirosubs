@@ -701,7 +701,13 @@ class FLVVideoTypeTest(TestCase):
         self.assertFalse(self.vt.matches_video_url('http://someurl.flv'))
         self.assertFalse(self.vt.matches_video_url(''))
         self.assertFalse(self.vt.matches_video_url('http://someurl.com/flv.video'))
-        
+
+    def test_blip_type(self):
+        url = 'http://blip.tv/file/get/Coldguy-SpineBreakersLiveAWizardOfEarthsea210.FLV'
+        video, created = Video.get_or_create_for_url(url)
+        video_url = video.videourl_set.all()[0]
+        self.assertEqual(self.vt.abbreviation, video_url.type)
+
 from videos.types.vimeo import VimeoVideoType
 
 class VimeoVideoTypeTest(TestCase):
