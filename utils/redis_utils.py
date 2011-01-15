@@ -8,7 +8,7 @@ from django.utils.functional import update_wrapper
 REDIS_HOST = getattr(settings, 'REDIS_HOST', 'localhost')
 REDIS_PORT = getattr(settings, 'REDIS_PORT', 6379)
 REDIS_DB = getattr(settings, 'REDIS_DB', 0)
-IGNORE_REDIS = getattr(settings, 'IGNORE_REDIS', False) and settings.DEBUG
+IGNORE_REDIS = getattr(settings, 'IGNORE_REDIS', False)
 
 default_connection = Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 

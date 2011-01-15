@@ -40,6 +40,9 @@ def get_fetch_subtitles_key(video, lang=None, date=None):
     return key
     
 def update_subtitles_fetch_counter(video, sub_lang=None, date=None):
+    # temporary to turn off redis
+    return
+
     if sub_lang:
         lang = sub_lang.language
     else:
