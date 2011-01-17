@@ -12,8 +12,10 @@ django-extensions==0.4.1
 -e git://github.com/aduston/Django-Socialauth.git@709d344226471b658250f01c714a0dd9559a88e5#egg=django_socialauth-0.1.5-py2.6-dev
 ipython==0.10
 oauth==1.0.1
+oauth2==1.2.0
 pyOpenSSL==0.9
 pycrypto==2.1.0
+redis==2.2.2
 vendor/python-openid-2.2.5.tar.gz
 vendor/python-yadis-1.1.0.tar.gz
 simplejson==2.1.1
