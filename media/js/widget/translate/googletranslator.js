@@ -75,14 +75,26 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
  * @param {Function} Callback
  * @return {function({Object})}
  */
-mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widgets, callback) {
+mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widgets, callback, addLoadingInticator) {
     /**
      * shortcut
      * @type {string}
      */
     var d = mirosubs.translate.GoogleTranslator.delimiter;
+    addLoadingInticator = addLoadingInticator || true;
+    
+    if (widgets.length && widgets[0]['showLoadingInticator']) {
+        goog.array.forEach(widgets, function(w){
+            w.showLoadingInticator();
+        });      
+    }
     
     return function(response) {
+        if (widgets.length && widgets[0]['hideLoadingInticator']) {
+            goog.array.forEach(widgets, function(w){
+                w.hideLoadingInticator();
+            });      
+        };
         if (response.responseStatus == 200) {
             var translations = response.responseData.translatedText.split(d);
             callback(translations, widgets);

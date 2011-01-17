@@ -37,13 +37,18 @@ mirosubs.translate.TranslationWidget.prototype.getSubtitle = function(){
 
 mirosubs.translate.TranslationWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+
     this.setElementInternal(
         $d('li', null,
            $d('div', null,
-              $d('span', 'mirosubs-title mirosubs-title-notime',
-                 this.subtitle_['text'])),
-           this.translateInput_ =
-           $d('textarea', 'mirosubs-translateField')));
+              $d('span', 'mirosubs-title mirosubs-title-notime', this.subtitle_['text']),
+              this.loadingInticator_ = $d('span', {'style': 'display: none; color: #999'}, 
+                'loading...')
+           ),
+           this.translateInput_ = $d('textarea', 'mirosubs-translateField')
+        )
+    );
+
     this.getHandler().listen(
         this.translateInput_, goog.events.EventType.BLUR,
         this.inputLostFocus_);
@@ -66,6 +71,10 @@ mirosubs.translate.TranslationWidget.prototype.setTranslation = function(transla
     this.translateInput_.value = translation ? translation.getText() : '';
 };
 
+mirosubs.translate.TranslationWidget.prototype.setTranslationContent = function(value){
+    this.translateInput_.value = value;
+};
+
 mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {
     this.translateInput_.disabled = !enabled;
     if (!enabled)
@@ -82,4 +91,12 @@ mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
  */
 mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
     return ! this.translateInput_.value;
-}
+};
+
+mirosubs.translate.TranslationWidget.prototype.showLoadingInticator = function(){
+    this.loadingInticator_.style.display = "block";
+};
+
+mirosubs.translate.TranslationWidget.prototype.hideLoadingInticator = function(){
+    this.loadingInticator_.style.display = "none";
+};

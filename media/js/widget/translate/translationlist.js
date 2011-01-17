@@ -89,10 +89,7 @@ mirosubs.translate.TranslationList.prototype.translateCallback_ = function(trans
         //requests to google translator
     } else {
         goog.array.forEach(translations, function(text, i) {
-            //TODO: I am sure that should be used setTranslation, but don't know
-            //how create proper arguments from text
-            //widgets[i].setTranslation(text);
-            widgets[i].translateInput_.value = text;
+            widgets[i].setTranslationContent(text);
         });
     }
 };
@@ -116,9 +113,7 @@ mirosubs.translate.TranslationList.prototype.translateViaGoogle = function() {
      * @type {mirosubs.translate.GoogleTranslator.translateWidgets}
      */
     var translateWidgets = mirosubs.translate.GoogleTranslator.translateWidgets;
-    //TODO: show loading indicator
-    //TODO: can't find where is original and translating languages
+
     needTranslating.length && translateWidgets(needTranslating, 'en', 'ru', 
         this.translateCallback_);
-    //TODO: hide indicator
 };
