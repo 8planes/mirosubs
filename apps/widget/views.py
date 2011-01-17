@@ -206,7 +206,10 @@ def rpc(request, method_name, null=False):
         args[k.encode('ascii')] = json.loads(v)
     rpc_module = null_rpc_views if null else rpc_views
     func = getattr(rpc_module, method_name)
-    result = func(**args)
+    try:
+        result = func(**args)
+    except TypeError:
+        result = {'error': 'Incorrect arguments number'}
     return HttpResponse(json.dumps(result), "application/json")
 
 @csrf_exempt
