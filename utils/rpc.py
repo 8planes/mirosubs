@@ -45,7 +45,7 @@ class RpcRouter(object):
         else:
             try:
                 requests = simplejson.loads(request.POST.keys()[0])
-            except ValueError:
+            except (ValueError, KeyError):
                 requests = []
             
         if not isinstance(requests, list):
