@@ -24,8 +24,10 @@
                         {% csrf_token %}
                         <input type="hidden" name="video" value="{{ video.id }}" />
                         <label>{% trans 'Language' %}</label>{{ form.language }}
-                        <br/><br/>
-                        <label>{% trans 'Video Language' %}</label>{{ form.video_language }}
+                        {% if not video.has_original_language %}
+                          <br/><br/>
+                          <label>{% trans 'Video Language' %}</label>{{ form.video_language }}
+                        {% endif %}
                         <br/><br/>                        
                         <input type="file" name="subtitles" id="subtitles-file-field" />
                     </form>

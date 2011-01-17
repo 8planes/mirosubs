@@ -137,7 +137,7 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
     
 class SubtitlesUploadBaseForm(forms.Form):
     language = forms.ChoiceField(choices=ALL_LANGUAGES, initial='en')
-    video_language = forms.ChoiceField(choices=ALL_LANGUAGES, initial='en')
+    video_language = forms.ChoiceField(required=False, choices=ALL_LANGUAGES, initial='en')
     video = forms.ModelChoiceField(Video.objects)
 
     def __init__(self, user, *args, **kwargs):
@@ -168,17 +168,9 @@ class SubtitlesUploadBaseForm(forms.Form):
                     return False
                 
         return True
-        
-    def save_subtitles(self, parser):
-        video = self.cleaned_data['video']
-        
-        key = str(uuid4()).replace('-', '')
 
-        video._make_writelock(self.user, key)
-        video.save()
-        
+    def _save_original_language(self, video, video_language):
         original_language = video.subtitle_language()
-        video_language = self.cleaned_data['video_language']
 
         if original_language:
             if original_language.language:
@@ -228,6 +220,18 @@ class SubtitlesUploadBaseForm(forms.Form):
                 original_language.is_original = True
                 original_language.video = video
                 original_language.save()
+
+    def save_subtitles(self, parser):
+        video = self.cleaned_data['video']
+        
+        key = str(uuid4()).replace('-', '')
+
+        video._make_writelock(self.user, key)
+        video.save()
+
+        if not video.has_original_language():
+            self._save_original_language(
+                video, self.cleaned_data['video_language'])
   
         language = video.subtitle_language(self.cleaned_data['language'])
         
