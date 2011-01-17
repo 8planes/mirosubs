@@ -4,8 +4,9 @@
 
 {% block content %}
     <p style="font-size: 12px;">
-        {% blocktrans with version.user as u and video as v and video_url as url and version.time_change_display as change_percent %}
-        Subtitles you contributed to <b><a href="{{ url|rmlocale }}">{{ v }}</a></b> were changed by <b>{{ u }}</b>. 
+        {% blocktrans with version.user as u and version.user.get_absolute_url as user_url and video as v and video_url as url and version.time_change_display as change_percent %}
+        Subtitles you contributed to <b><a href="http://{{ domain }}{{ url|rmlocale }}">{{ v }}</a></b> 
+        were changed by <b><a href="http://{{ domain }}{{ user_url|rmlocale }}">{{ u }}</a></b>. 
         These changes went live immediately. {{ change_percent }} of the timing was changed.
         {% endblocktrans %}<br/>
     </p>
