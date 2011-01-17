@@ -71,7 +71,7 @@
     </div>
     {% if user.biography %}
     <p>
-        <b>{% trans 'Bio' %}:</b> {{ user.biography }}
+        <b>{% trans 'Bio' %}:</b> {{ user.biography|linebreaksbr|urlize }}
     </p>
     {% endif %}
     {% with user.userlanguage_set.all as user_languages %}

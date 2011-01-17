@@ -94,7 +94,7 @@
         <br />
         <h3>{% trans 'About' %}</h3>
         <p class="user_bio">
-            {{ user_info.biography|default:_('<i>User has not submitted a bio.</i>') }}
+            {{ user_info.biography|urlize|default:_('<i>User has not submitted a bio.</i>')|linebreaksbr }}
         </p>
     </div>
     

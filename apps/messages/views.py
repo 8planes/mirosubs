@@ -34,7 +34,8 @@ MESSAGES_ON_PAGE = getattr(settings, 'MESSAGES_ON_PAGE', 30)
 def index(request):
     qs = Message.objects.for_user(request.user).filter(user=request.user)
     extra_context = {
-        'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s')
+        'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s'),
+        'messages_display': True
     }
     return object_list(request, queryset=qs,
                        paginate_by=MESSAGES_ON_PAGE,
@@ -46,7 +47,8 @@ def index(request):
 def sent(request):
     qs = Message.objects.for_user(request.user).filter(author=request.user)
     extra_context = {
-        'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s')
+        'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s'),
+        'messages_display': True        
     }
     return object_list(request, queryset=qs,
                        paginate_by=MESSAGES_ON_PAGE,
