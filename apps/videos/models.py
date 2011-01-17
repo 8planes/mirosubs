@@ -266,7 +266,12 @@ class Video(models.Model):
 
             setattr(self, '_original_subtitle', original)
 
-        return getattr(self, '_original_subtitle')       
+        return getattr(self, '_original_subtitle')
+
+    def has_original_language(self):
+        original_language = self._original_subtitle_language()
+        if original_language:
+            return original_language.language != ''
 
     def subtitle_language(self, language_code=None):
         try:
