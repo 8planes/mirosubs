@@ -24,6 +24,7 @@ class BlipTvVideoType(VideoType):
 
     abbreviation = 'B'
     name = 'Blip.tv'  
+    site = 'blip.tv'
     
     def __init__(self, url):
         self.url = url

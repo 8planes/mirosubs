@@ -29,6 +29,7 @@ class VimeoVideoType(VideoType):
 
     abbreviation = 'V'
     name = 'Vimeo.com'   
+    site = 'vimeo.com'
     
     def __init__(self, url):
         self.url = url

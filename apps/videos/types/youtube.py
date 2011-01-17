@@ -40,7 +40,8 @@ class YoutubeVideoType(VideoType):
 
     abbreviation = 'Y'
     name = 'Youtube' 
-
+    site = 'youtube.com'
+    
     def __init__(self, url):
         self.url = url
         self.videoid = self._get_video_id(self.url)

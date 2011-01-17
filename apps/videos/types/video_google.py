@@ -23,7 +23,8 @@ class GoogleVideoType(VideoType):
 
     abbreviation = 'G'
     name = 'video.google.com'   
-
+    site = 'video.google.com'
+    
     def convert_to_video_url(self):
         return self.format_url(self.url)
     

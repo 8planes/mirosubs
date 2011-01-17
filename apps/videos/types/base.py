@@ -61,6 +61,8 @@ class VideoType(object):
     
 class VideoTypeRegistrar(dict):
     
+    domains = []
+    
     def __init__(self, *args, **kwargs):
         super(VideoTypeRegistrar, self).__init__(*args, **kwargs)
         self.choices = []
@@ -68,7 +70,9 @@ class VideoTypeRegistrar(dict):
     def register(self, video_type):
         self[video_type.abbreviation] = video_type
         self.choices.append((video_type.abbreviation, video_type.name))
-
+        domain = getattr(video_type, 'site', None)
+        domain and self.domains.append(domain)
+        
     def video_type_for_url(self, url):
         for video_type in self.values():
             if video_type.matches_video_url(url):

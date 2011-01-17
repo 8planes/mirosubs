@@ -362,10 +362,15 @@ class VideoForm(forms.Form):
             except VideoTypeError, e:
                 raise forms.ValidationError(e)
             if not video_type:
-                raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
-    If you'd like to us to add support for a new site or format, or if you
-    think there's been some mistake, <a
-    href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))             
+                for d in video_type_registrar.domains:
+                    if d in video_url:
+                        raise forms.ValidationError(mark_safe(_(u"""Please try again with a link to a video page. 
+                        <a href="mailto:%s">Contact us</a> if there's a problem.""") % settings.FEEDBACK_EMAIL))
+                    
+                raise forms.ValidationError(mark_safe(_(u"""You must link to a video on a compatible site (like YouTube) or directly to a
+                    video file that works with HTML5 browsers. For example: http://mysite.com/myvideo.ogg or http://mysite.com/myipadvideo.m4v
+                    <a href="mailto:%s">Contact us</a> if there's a problem.""") % settings.FEEDBACK_EMAIL))
+                             
             else:
                 self._video_type = video_type
             

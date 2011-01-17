@@ -23,6 +23,7 @@ class UstreamVideoType(VideoType):
 
     abbreviation = 'U'
     name = 'Ustream.tv'   
+    site = 'ustream.tv'
     
     def __init__(self, url):
         self.url = url

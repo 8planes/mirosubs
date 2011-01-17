@@ -28,7 +28,8 @@ class DailymotionVideoType(VideoType):
 
     abbreviation = 'D'
     name = 'dailymotion.com'   
-
+    site = 'dailymotion.com'
+    
     def __init__(self, url):
         self.url = url
         self.videoid = self.get_video_id(url)
