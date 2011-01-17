@@ -97,7 +97,7 @@ table.messages .delete {
 .msg_modal dl { 
   margin: 0;
   clear: both;
-  padding: 18px;
+  padding: 5px;
   border-bottom: 1px solid #f2f2f2; }
   
 .msg_modal dt { 

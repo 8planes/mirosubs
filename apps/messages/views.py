@@ -41,3 +41,15 @@ def index(request):
                        template_name='messages/index.html',
                        template_object_name='message',
                        extra_context=extra_context)
+
+@login_required    
+def sent(request):
+    qs = Message.objects.filter(author=request.user)
+    extra_context = {
+        'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s')
+    }
+    return object_list(request, queryset=qs,
+                       paginate_by=MESSAGES_ON_PAGE,
+                       template_name='messages/sent.html',
+                       template_object_name='message',
+                       extra_context=extra_context)    

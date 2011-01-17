@@ -3,7 +3,7 @@
 {% load paginator i18n %}
 
 {% block title %}
-    {% trans 'My Messages' %} | Universal Subtitles
+    {% trans 'Sent Messages' %} | Universal Subtitles
 {% endblock %}
 
 {% block scripts %}
@@ -15,20 +15,7 @@
         jQuery(function($){
             var DEFAULT_AVATAR_URL = '{{ MEDIA_URL }}/images/default_thumb_small.png';
             $.metadata.setType("attr", "data");
-            
-            $('.messages .delete').click(function(){
-                if (confirm("Do you really wish delete this message?")){
-                    var $this = $(this);
-                    MessagesApi.remove($this.attr('message_id'), function(response){
-                        if (response.error){
-                            $.jGrowl.error(response.error);
-                        } else {
-                            $this.parents('tr').remove();
-                        };
-                    });
-                }
-            });
-            
+
             $('#send-message-form').ajaxForm({
                 type: 'RPC',
                 api: {
@@ -60,37 +47,16 @@
                 var data = $link.metadata();
                 var $modal = $(this);
                 
-                if ( ! data['is-read']){
-                    MessagesApi.mark_as_read(data['id'], function(response){
-                        if (response.error){
-                            $.msg.clean().add(response.error, 'error');
-                        }else{
-                            $link.parents('tr').removeClass('unread');
-                            data['is-read'] = true;
-                            $link.set_metadata(data);
-                        }
-                    });
-                };
-                
-                if (data['author-avatar']){
-                    $('.author-avatar', $modal).attr('src', data['author-avatar']);
+                if (data['user-avatar']){
+                    $('.user-avatar', $modal).attr('src', data['user-avatar']);
                 }else{
-                    $('.author-avatar', $modal).attr('src', DEFAULT_AVATAR_URL);
+                    $('.user-avatar', $modal).attr('src', DEFAULT_AVATAR_URL);
                 }
                 
-                
-                $('#message_form_id_user').val(data['author-id']);
-                $('.author-username', $modal).html(data['author-username']);
+                $('#message_form_id_user').val(data['user-id']);
+                $('.author-user', $modal).html(data['user-username']);
                 $('.message-content', $modal).html(data['message-content']);
                 $('.message-subject').html(data['message-subject-display']);
-                
-                
-                if (data['author-username']){
-                    $('.reply-container', $modal).show();
-                    $('.reply-container textarea', $modal).val('');
-                }else{
-                    $('.reply-container', $modal).hide();
-                }
             });
         });
     </script>
@@ -99,7 +65,7 @@
 {% block settings_content %}
 
 <h2 class="msg_header">
-  {% trans 'My Messages' %} / <a href="{% url messages:sent %}">{% trans "Sent Messages" %}</a>
+  {% trans 'Sent Messages' %} /  <a href="{% url messages:index %}">{% trans 'My Messages' %}</a>
 </h2>
 
 {% if message_list %}
@@ -109,10 +75,9 @@
       <thead>
         <tr>
           <th></th>
-          <th>{% trans "From" %}</th>
+          <th>{% trans "To" %}</th>
           <th>{% trans "Message" %}</th>
           <th>{% trans "Date" %}</th>
-          <th></th>
         </tr>
       </thead>
       
@@ -120,20 +85,20 @@
         {% for msg in message_list %}
         <tr {% if not msg.read %} class="unread"{% endif %}>
           <td class="msg_avatar">
-            {% with msg.author.small_avatar as author_avatar_url %}
-                {% if author_avatar_url %}
-                    <img src="{{ author_avatar_url }}" width="30" height="30" alt="{% trans 'Avatar' %}"/>
+            {% with msg.user.small_avatar as user_avatar_url %}
+                {% if user_avatar_url %}
+                    <img src="{{ user_avatar_url }}" width="30" height="30" alt="{% trans 'Avatar' %}"/>
                 {% else %}
                     <img src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="{% trans 'Avatar' %}"/>
                 {% endif %}
             {% endwith %}
           </td>
-          <td class="msg_from">{{ msg.author|default:'' }}</td>
+          <td class="msg_from">{{ msg.user|default:'' }}</td>
           <td class="msg_body">
               <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}">{{ msg }}</a>
           </td>
           <td class="msg_date">{{ msg.created|timesince }} {% trans 'ago' %}</td>
-          <td class="msg_delete"><span class="delete" message_id="{{ msg.pk }}">&#x2326;</span></td>
+          {# <td class="msg_delete"><span class="delete" message_id="{{ msg.pk }}">&#x2326;</span></td> #}
         </tr>
         {% endfor %}
       </tbody>

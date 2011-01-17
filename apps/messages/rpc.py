@@ -30,6 +30,18 @@ from messages.forms import SendMessageForm
 
 class MessagesApiClass(object):
     
+    def remove(self, message_id, user):
+        if not user.is_authenticated():
+            return {'error': _('You should be authenticated.')}
+        
+        try:
+            msg = Message.objects.get(pk=message_id, user=user)
+            msg.delete()
+        except Message.DoesNotExist:
+            return {'error': _('Message does not exist.')}
+        
+        return {}
+    
     def mark_as_read(self, message_id, user):
         if not user.is_authenticated():
             return {'error': _('You should be authenticated.')}
