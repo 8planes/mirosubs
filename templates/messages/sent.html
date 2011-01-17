@@ -15,7 +15,20 @@
         jQuery(function($){
             var DEFAULT_AVATAR_URL = '{{ MEDIA_URL }}/images/default_thumb_small.png';
             $.metadata.setType("attr", "data");
-
+            
+            $('.messages .delete').click(function(){
+                if (confirm("Do you really wish delete this message?")){
+                    var $this = $(this);
+                    MessagesApi.remove($this.attr('message_id'), function(response){
+                        if (response.error){
+                            $.jGrowl.error(response.error);
+                        } else {
+                            $this.parents('tr').remove();
+                        };
+                    });
+                }
+            });
+            
             $('#send-message-form').ajaxForm({
                 type: 'RPC',
                 api: {
@@ -78,6 +91,7 @@
           <th>{% trans "To" %}</th>
           <th>{% trans "Message" %}</th>
           <th>{% trans "Date" %}</th>
+          <th></th>
         </tr>
       </thead>
       
@@ -98,7 +112,7 @@
               <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}">{{ msg }}</a>
           </td>
           <td class="msg_date">{{ msg.created|timesince }} {% trans 'ago' %}</td>
-          {# <td class="msg_delete"><span class="delete" message_id="{{ msg.pk }}">&#x2326;</span></td> #}
+          <td class="msg_delete"><span class="delete" message_id="{{ msg.pk }}">&#x2326;</span></td>
         </tr>
         {% endfor %}
       </tbody>

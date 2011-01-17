@@ -35,6 +35,10 @@ MESSAGE_MAX_LENGTH = getattr(settings,'MESSAGE_MAX_LENGTH', 1000)
 class MessageManager(models.Manager):
     use_for_related_fields = True
     
+    def for_user(self, user):
+        return self.get_query_set().filter(models.Q(user=user) | models.Q(author=user)) \
+            .exclude(models.Q(deleted_for_user=True) | models.Q(deleted_for_author=True))
+    
     def unread(self):
         return self.get_query_set().filter(read=False)
 
@@ -45,7 +49,9 @@ class Message(models.Model):
     author = models.ForeignKey(User, blank=True, null=True, related_name='sent_messages')
     read = models.BooleanField(default=False)    
     created = models.DateTimeField(auto_now_add=True)
-
+    deleted_for_user = models.BooleanField(default=False)
+    deleted_for_author = models.BooleanField(default=False)
+    
     content_type = models.ForeignKey(ContentType, blank=True, null=True,
             related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField('object ID', blank=True, null=True)
@@ -60,6 +66,14 @@ class Message(models.Model):
         if self.subject and not u' ' in self.subject:
             return self.subject[:40]+u'...'
         return self.subject or ugettext('<no subject>')
+    
+    def delete_for_user(self, user):
+        if self.user == user:
+            self.deleted_for_user = True
+            self.save()
+        elif self.author == user:
+            self.deleted_for_author = True
+            self.save()
     
     def json_data(self):
         data = {

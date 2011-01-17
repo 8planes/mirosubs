@@ -35,8 +35,8 @@ class MessagesApiClass(object):
             return {'error': _('You should be authenticated.')}
         
         try:
-            msg = Message.objects.get(pk=message_id, user=user)
-            msg.delete()
+            msg = Message.objects.for_user(user).get(pk=message_id)
+            msg.delete_for_user(user)
         except Message.DoesNotExist:
             return {'error': _('Message does not exist.')}
         
