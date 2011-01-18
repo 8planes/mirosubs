@@ -19,6 +19,11 @@
 from django.contrib import admin
 from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
+from utils.livesettings_values import EmailListValue
+from livesettings import BASE_GROUP, config_register
+
+config_register(EmailListValue(BASE_GROUP, 'alert_emails', description=_(u'Email for alert')))
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'title', 'languages', 'video_thumbnail']
