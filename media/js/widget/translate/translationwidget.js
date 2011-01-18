@@ -42,8 +42,7 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
         $d('li', null,
            $d('div', null,
               $d('span', 'mirosubs-title mirosubs-title-notime', this.subtitle_['text']),
-              this.loadingInticator_ = $d('span', {'style': 'display: none; color: #999'}, 
-                'loading...')
+              this.loadingInticator_ = $d('span', 'mirosubs-loading-indicator', 'loading...')
            ),
            this.translateInput_ = $d('textarea', 'mirosubs-translateField')
         )
@@ -93,10 +92,10 @@ mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
     return ! this.translateInput_.value;
 };
 
-mirosubs.translate.TranslationWidget.prototype.showLoadingInticator = function(){
+mirosubs.translate.TranslationWidget.prototype.showLoadingIndicator = function(){
     this.loadingInticator_.style.display = "block";
 };
 
-mirosubs.translate.TranslationWidget.prototype.hideLoadingInticator = function(){
+mirosubs.translate.TranslationWidget.prototype.hideLoadingIndicator = function(){
     this.loadingInticator_.style.display = "none";
 };
