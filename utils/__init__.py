@@ -124,7 +124,8 @@ def catch_exception(exceptions, subject="", default=None):
                 if settings.DEBUG:
                     print 'Redis error %s' % e
                 else:
-                    mail_admins(subject, '\n'.join(traceback.format_exception(*sys.exc_info())))
+                    body = '\n'.join(traceback.format_exception(*sys.exc_info()))
+                    mail_admins(subject, body, fail_silently=True)
                 return default
         return update_wrapper(wrapper, func)
     return catch_exception_func
