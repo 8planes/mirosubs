@@ -83,7 +83,7 @@
                 $('.author-username', $modal).html(data['author-username']);
                 $('.message-content', $modal).html(data['message-content']);
                 $('.message-subject').html(data['message-subject-display']);
-                
+                $('#message_form_id_subject').val('Re: '+data['message-subject']);
                 
                 if (data['author-username']){
                     $('.reply-container', $modal).show();
@@ -128,7 +128,11 @@
                 {% endif %}
             {% endwith %}
           </td>
-          <td class="msg_from">{{ msg.author|default:'' }}</td>
+          <td class="msg_from">
+              {% if msg.author %}
+                <a href="{{ msg.author.get_absolute_url }}">{{ msg.author }}</a>
+              {% endif %}
+          </td>
           <td class="msg_body">
               <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}">{{ msg }}</a>
           </td>
