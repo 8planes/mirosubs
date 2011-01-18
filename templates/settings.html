@@ -5,14 +5,15 @@
 {% block main_content %}
 <div class="settings_nav">
   <ul>
-    <li {% if edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
-    {% if user.is_authenticated %}
-    <li {% if user_info == user and not edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
-    {% endif %}
     <li {% if my_videos %}class="active"{% endif %}><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
     {% if user.teams.exists %}
     <li {% if my_teams%}class="active"{% endif %}><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
+    {% endif %}    
+    {% if user.is_authenticated %}
+    <li {% if user_info == user and not edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
     {% endif %}
+    <li {% if edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>
+
     <li {% if messages_display %}class="active"{% endif %}>
         <a href="{% url messages:index %}">{% trans "Messages" %}
         {% with user.received_messages.unread.count as messages_count %}
