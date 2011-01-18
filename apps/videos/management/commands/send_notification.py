@@ -21,7 +21,7 @@ class Command(BaseCommand):
             .filter(Q(language__writelock_time__isnull=True)|Q(language__writelock_time__lte=max_save_time))
         for version in qs:
             self._update_language(version)
-            version.notification_sent = True
+            #version.notification_sent = True
             version.save()
             #version.update_changes()  #item is saved in update_changes            
             if version.version_no == 0 and not version.language.is_original:
@@ -123,7 +123,8 @@ class Command(BaseCommand):
             'video': caption_version.video,
             'language': language,
             'last_version': most_recent_version,
-            'captions': captions
+            'captions': captions,
+            'video_url': language.get_absolute_url()
         }
         subject = 'New edits to "%s" by %s on Universal Subtitles' % \
             (language.video.__unicode__(), caption_version.user.__unicode__())
@@ -131,6 +132,7 @@ class Command(BaseCommand):
         not_send = StopNotification.objects.filter(video=language.video) \
             .values_list('user_id', flat=True)         
         users = []
+
         for item in qs:
             if item.user and item.user.is_active and \
                     caption_version.user.pk != item.user.pk and \

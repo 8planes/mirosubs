@@ -47,6 +47,7 @@ urlpatterns = patterns(
      'django.contrib.auth.views.password_reset_confirm'),
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
     (r'socialauth/', include('socialauth.urls')),
+    (r'^admin/settings/', include('livesettings.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^embed(\d*).js$', 'widget.views.embed'),
     (r'^widget_demo/$', 'widget.views.widget_demo'),

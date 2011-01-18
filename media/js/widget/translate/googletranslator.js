@@ -83,16 +83,16 @@ mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widge
     var d = mirosubs.translate.GoogleTranslator.delimiter;
     addLoadingInticator = addLoadingInticator || true;
     
-    if (widgets.length && widgets[0]['showLoadingInticator']) {
+    if (widgets.length && widgets[0]['showLoadingIndicator']) {
         goog.array.forEach(widgets, function(w){
-            w.showLoadingInticator();
+            w.showLoadingIndicator();
         });      
     }
     
     return function(response) {
-        if (widgets.length && widgets[0]['hideLoadingInticator']) {
+        if (widgets.length && widgets[0]['hideLoadingIndicator']) {
             goog.array.forEach(widgets, function(w){
-                w.hideLoadingInticator();
+                w.hideLoadingIndicator();
             });      
         };
         if (response.responseStatus == 200) {

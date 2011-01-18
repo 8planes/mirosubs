@@ -65,7 +65,7 @@ class Message(models.Model):
     def __unicode__(self):
         if self.subject and not u' ' in self.subject:
             return self.subject[:40]+u'...'
-        return self.subject or ugettext('<no subject>')
+        return self.subject or ugettext('[no subject]')
     
     def delete_for_user(self, user):
         if self.user == user:
@@ -86,7 +86,7 @@ class Message(models.Model):
             'user-id': self.user and self.user.pk or '',            
             'message-content': self.content,
             'message-subject': self.subject,
-            'message-subject-display': unicode(self.subject),
+            'message-subject-display': unicode(self),
             'is-read': self.read
         }
         return json.dumps(data)

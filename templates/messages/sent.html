@@ -70,6 +70,7 @@
                 $('.author-user', $modal).html(data['user-username']);
                 $('.message-content', $modal).html(data['message-content']);
                 $('.message-subject').html(data['message-subject-display']);
+                $('#message_form_id_subject').val('Re: '+data['message-subject']);
             });
         });
     </script>
@@ -107,7 +108,11 @@
                 {% endif %}
             {% endwith %}
           </td>
-          <td class="msg_from">{{ msg.user|default:'' }}</td>
+          <td class="msg_from">
+              {% if msg.user %}
+                <a href="{{ msg.user.get_absolute_url }}">{{ msg.user }}</a>
+              {% endif %}              
+          </td>
           <td class="msg_body">
               <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}">{{ msg }}</a>
           </td>
