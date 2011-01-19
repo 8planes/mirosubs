@@ -109,12 +109,6 @@
   margin-right: 5px;
   }
 
-.user_panel li.active {
-    background-color: #CDE4E7;
-    margin: auto -20px;
-    padding: 0 20px;
-}
-
 /* New Homepage overrides */
 
 #header .user_panel {
