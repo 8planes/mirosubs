@@ -40,9 +40,12 @@
    float: right;
    background-color: #f0f9fb;
    position: relative;
-   z-index: 1001; }
+   z-index: 1001;
+   -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.3); 
+   -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.3); }
 
 .user_panel a {
+  color: #528898;
   text-decoration: none; }
 
 .user_panel .user { 
@@ -51,7 +54,18 @@
   padding: 0 10px;
   border-top-left-radius:     4px;
   border-top-right-radius:    4px; }
-  
+
+.user_panel .message_count { 
+  display: inline-block;
+  background-color: #aec2c8;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  font-size: 11px;
+  line-height: 15px;
+  width: 20px;
+  border-radius: 10px; }
+
 .user_panel .dropdown { 
   display: none;
   background-color: #f0f9fb;
@@ -66,8 +80,9 @@
   border-top-left-radius:     4px;
   border-bottom-left-radius:  4px;
   border-bottom-right-radius: 4px;
-  -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.3); 
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.3); 
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  z-index: 9000; }
 
 .user_panel .teams_menu { 
   background-color: #eaf6f9;
@@ -95,7 +110,9 @@
   }
 
 .user_panel li.active {
-    background-color: #AAC6CD;
+    background-color: #CDE4E7;
+    margin: auto -20px;
+    padding: 0 20px;
 }
 
 /* New Homepage overrides */
