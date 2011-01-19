@@ -19,6 +19,7 @@
 from django.core.cache import cache
 from videos.types.base import VideoTypeError
 from django.conf import settings
+from django.utils.hashcompat import sha_constructor
 
 TIMEOUT = 60 * 60 * 24 * 5 # 5 days
 
@@ -64,7 +65,7 @@ def on_video_url_save(sender, instance, **kwargs):
     _invalidate_cache(instance.video.video_id)
 
 def _video_id_key(video_url):
-    return 'video_id_{0}'.format(video_url)
+    return 'video_id_{0}'.format(sha_constructor(video_url).hexdigest())
 
 def _video_urls_key(video_id):
     return 'widget_video_urls_{0}'.format(video_id)
