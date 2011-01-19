@@ -20,7 +20,7 @@ from django.db import models
 import string
 import random
 from auth.models import CustomUser as User, Awards
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
@@ -29,11 +29,8 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
-from utils.amazon import default_s3_store
-from statistic.models import SubtitleFetchStatistic
 from statistic import update_subtitles_fetch_counter, video_view_counter, changed_video_set 
 from widget import video_cache
-from datetime import datetime
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
 from utils.amazon import S3EnabledImageField
@@ -181,7 +178,7 @@ class Video(models.Model):
         return self.get_absolute_url()
     
     def title_for_url(self):
-        return self.title.replace('/', '-')
+        return self.title.replace('/', '-').replace('#', '')
     
     @models.permalink
     def get_absolute_url(self):
