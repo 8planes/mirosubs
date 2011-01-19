@@ -20,7 +20,7 @@ from django.db import models
 import string
 import random
 from auth.models import CustomUser as User, Awards
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
