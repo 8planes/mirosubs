@@ -33,7 +33,7 @@
     RewriteCond %{HTTP_HOST} ^universalsubtitles.com [NC]
     RewriteRule ^(.*)$ http://universalsubtitles.org$1 [R=301,L]
 
-    WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web threads=2
+    WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web processes=8 threads=25
     WSGIProcessGroup unisubs-INSERT_SITE_NAME
 
     WSGIScriptAlias / /var/www/INSERT_SITE_DIRECTORY/mirosubs/deploy/unisubs.wsgi
