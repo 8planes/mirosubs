@@ -327,10 +327,10 @@ margin: 0px !important;
 
 .boxx{
 background: #fff;
-  -moz-border-radius: 5px;  
-  -webkit-border-radius: 5px;
-  -moz-border-radius-topleft: 0px;  
-  -webkit-border-radius-top-left: 0px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  -moz-border-radius-bottomright: 5px;
 text-shadow: 0 1px 0px #fff;
 
 border: 1px solid #a7c3c9;

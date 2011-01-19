@@ -316,6 +316,10 @@ font-size: 16px;
   margin: 0;
   color: #fff;  
   clear: both;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
   }
 
 .action_buttons{ border-top: 1px solid #fff;}
