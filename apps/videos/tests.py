@@ -762,3 +762,65 @@ class TestFeedsSubmit(TestCase):
         response = self.client.post(reverse('videos:create_from_feed'), data)
         self.assertRedirects(response, reverse('videos:create'))
         self.assertNotEqual(old_count, Video.objects.count())
+
+from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
+from datetime import datetime
+
+class TestPercentComplete(TestCase):
+    
+    fixtures = ['test.json']
+    
+    def setUp(self):
+        self.video = Video.objects.all()[:1].get()
+        self.original_language = self.video.subtitle_language()
+        latest_version = self.original_language.latest_version()
+        
+        translation = SubtitleLanguage()
+        translation.video = self.video
+        translation.language = 'uk'
+        translation.is_original = False
+        translation.is_forked = False
+        translation.save()
+
+        self.translation = translation
+        
+        v = SubtitleVersion()
+        v.language = translation
+        v.datetime_started = datetime.now()
+        v.save()
+        
+        self.translation_version = v
+        
+        for s in latest_version.subtitle_set.all():
+            s.duplicate_for(v).save()
+        
+    def test_percent_done(self):
+        self.assertEqual(self.translation.percent_done, 100)
+    
+    def test_delete_from_original(self):
+        latest_version = self.original_language.latest_version()
+        latest_version.subtitle_set.all()[:1].get().delete()
+        self.assertEqual(self.translation.percent_done, 100)
+            
+    def test_adding_to_original(self):
+        latest_version = self.original_language.latest_version()
+        s = Subtitle()
+        s.version = latest_version
+        s.subtitle_id = 'asdasdsadasdasdasd'
+        s.subtitle_order = 5
+        s.subtitle_text = 'new subtitle'
+        s.start_time = 50
+        s.end_time = 51
+        s.save()
+        
+        self.assertEqual(self.translation.percent_done, 4/5.*100)
+        
+    def test_delete_all(self):
+        for s in self.translation_version.subtitle_set.all():
+            s.delete()
+
+        self.assertEqual(self.translation.percent_done, 0)
+    
+    def test_delete_from_translation(self):
+        self.translation_version.subtitle_set.all()[:1].get().delete()
+        self.assertEqual(self.translation.percent_done, 75)

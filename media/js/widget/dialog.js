@@ -187,7 +187,11 @@ mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
         goog.Timer.callOnce(function() {
             window.location.replace(mirosubs.returnURL);
         });
-    }    
+    } else if ( ! mirosubs.isFromDifferentDomain()) {
+        goog.Timer.callOnce(function() {
+            window.location.reload();
+        });        
+    }
 };
 mirosubs.Dialog.prototype.disposeInternal = function() {
     mirosubs.Dialog.superClass_.disposeInternal.call(this);

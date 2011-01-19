@@ -29,11 +29,8 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
-from utils.amazon import default_s3_store
-from statistic.models import SubtitleFetchStatistic
 from statistic import update_subtitles_fetch_counter, video_view_counter, changed_video_set 
 from widget import video_cache
-from datetime import datetime
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
 from utils.amazon import S3EnabledImageField
@@ -181,7 +178,7 @@ class Video(models.Model):
         return self.get_absolute_url()
     
     def title_for_url(self):
-        return self.title.replace('/', '-')
+        return self.title.replace('/', '-').replace('#', '')
     
     @models.permalink
     def get_absolute_url(self):
@@ -500,11 +497,16 @@ class SubtitleLanguage(models.Model):
                         translation_count += 1
             except AttributeError:
                 translation_count = 0
+                
+            if translation_count == 0:
+                return 0
+            
             last_version = self.video.latest_version()
             if last_version:
                 subtitles_count = last_version.subtitle_set.count()
             else:
                 subtitles_count = 0
+
             try:
                 val = int(translation_count / 1. / subtitles_count * 100)
                 return val <= 100 and val or 100

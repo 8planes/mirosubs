@@ -17,9 +17,9 @@
                     <b>Name</b>: {{ method.name }}({{ method.http_name }})<br/>
                     <b>Signature</b>: 
                     {% if method.signature %}{{ method.signature }}{% else %}no parameters{% endif %}<br/>
-                    <p class="doc">
+                    <div class="doc">
                     {{ method.doc|safe|linebreaksbr|urlize}}
-                    </p>
+                    </div>
                 </div>
             {% endfor %}
         </div>

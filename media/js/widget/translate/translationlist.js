@@ -97,7 +97,7 @@ mirosubs.translate.TranslationList.prototype.translateCallback_ = function(trans
 /**
  * Find widgets for all not translated subtitles and translate them with GoogleTranslator
  */
-mirosubs.translate.TranslationList.prototype.translateViaGoogle = function() {
+mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(fromLang, toLang) {
     /**
      * Translation widgets that does not contain any user's translation
      * @type {Array.<mirosubs.translate.TranslationWidget>}
@@ -114,6 +114,6 @@ mirosubs.translate.TranslationList.prototype.translateViaGoogle = function() {
      */
     var translateWidgets = mirosubs.translate.GoogleTranslator.translateWidgets;
 
-    needTranslating.length && translateWidgets(needTranslating, 'en', 'ru', 
+    needTranslating.length && translateWidgets(needTranslating, fromLang, toLang, 
         this.translateCallback_);
 };

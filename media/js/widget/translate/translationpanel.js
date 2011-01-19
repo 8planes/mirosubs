@@ -66,3 +66,6 @@ mirosubs.translate.TranslationPanel.prototype.makeJsonSubs = function() {
     return goog.array.map(
         this.editableTranslations_, function(t) { return t.json; });
 };
+mirosubs.translate.TranslationPanel.prototype.getTranslationList = function(){
+    return this.translationList_;
+};

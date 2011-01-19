@@ -106,7 +106,8 @@ mirosubs.translate.Dialog.prototype.disposeInternal = function() {
 mirosubs.translate.Dialog.prototype.translateViaGoogle = function(){
     //I don't know how better call this. I think it should be incapsulated in translationList_,
     //but have chain of function calls can confuse.
-    this.translationPanel_.translationList_.translateViaGoogle();
+    this.translationPanel_.getTranslationList().translateViaGoogle(
+        this.standardSubState_.LANGUAGE, this.subtitleState_.LANGUAGE);
 };
 /**
  * @param {function()} saveCompleted
