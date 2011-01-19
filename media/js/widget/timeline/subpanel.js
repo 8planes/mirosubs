@@ -34,8 +34,8 @@ mirosubs.timeline.SubPanel.prototype.createDom = function() {
     var el = this.getElement();
     for (i = 0; i < 1000; i++) {
         div = document.createElement('div');
-        div.style.left = (i * this.pixelsPerSecond_ * 5) + 'px';
-        div.style.width = (this.pixelsPerSecond_ * 2.5) + 'px';
+        mirosubs.style.setPosition(div, i * this.pixelsPerSecond_ * 5, null);
+        mirosubs.style.setWidth(this.pixelsPerSecond_ * 2.5);
         div.innerHTML = '' + i;
         el.appendChild(div);
     }

@@ -65,7 +65,7 @@ mirosubs.timeline.TimelineInner.prototype.setLeft = function(left, offset, maxTi
     var newTime = -left / this.pixelsPerSecond_;
     this.left_ = left;
     this.time_ = newTime;
-    this.getElement().style.left = (left + offset) + 'px';
+    mirosubs.style.setPosition(this.getElement(), left + offset, null);
     this.ensureVisible(newTime);
 };
 mirosubs.timeline.TimelineInner.prototype.getTime = function() {
@@ -79,7 +79,7 @@ mirosubs.timeline.TimelineInner.prototype.setTime = function(time, offset, maxTi
     var newLeft = -time * this.pixelsPerSecond_;
     this.left_ = newLeft;
     this.time_ = time;
-    this.getElement().style.left = (newLeft + offset) + 'px';
+    mirosubs.style.setPosition(this.getElement(), newLeft + offset, null);
     this.ensureVisible(time);
 };
 mirosubs.timeline.TimelineInner.prototype.beforeDrag = function(e) {

@@ -80,14 +80,17 @@ mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
 	    this.getElement().removeChild(this.bufferedRangeDivs_.pop());
     }
     for (var i = 0; i < this.bufferedRangeDivs_.length; i++) {
-	this.bufferedRangeDivs_[i].style.left =
-	    (this.width_ *
-	     this.videoPlayer_.getBufferedStart(i) /
-	     this.videoDuration_) + 'px';
-	this.bufferedRangeDivs_[i].style.width =
-	    (this.width_ *
-	     (this.videoPlayer_.getBufferedEnd(i) -
-	      this.videoPlayer_.getBufferedStart(i)) /
-	     this.videoDuration_) + 'px';
+        mirosubs.style.setPosition(
+            this.bufferedRangeDivs_[i],
+	    this.width_ *
+	        this.videoPlayer_.getBufferedStart(i) /
+	        this.videoDuration_, 
+            null);
+        mirosubs.style.setWidth(
+	    this.bufferedRangeDivs_[i],
+	    this.width_ *
+	        (this.videoPlayer_.getBufferedEnd(i) -
+	         this.videoPlayer_.getBufferedStart(i)) /
+	        this.videoDuration_);
     }
 };

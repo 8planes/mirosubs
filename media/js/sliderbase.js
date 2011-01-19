@@ -281,9 +281,9 @@ mirosubs.SliderBase.prototype.updateUi_ = function() {
         var coord = this.getThumbCoordinateForValue_(this.value_);
 
         if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
-            this.thumb.style.top = coord.y + 'px';
+            mirosubs.style.setPosition(this.thumb, coord.x, null);
         } else {
-            this.thumb.style.left = coord.x + 'px';
+            mirosubs.style.setPosition(this.thumb, null, coord.y);
         }
     }
 };
@@ -382,7 +382,8 @@ mirosubs.SliderBase.prototype.setOrientation = function(orient) {
         if (this.getElement()) {
             goog.dom.classes.swap(this.getElement(), oldCss, newCss);
             // we need to reset the left and top
-            this.thumb.style.left = this.thumb.style.top = '';
+            mirosubs.style.setProperty(this.thumb, 'left', null);
+            mirosubs.style.setProperty(this.thumb, 'top', null);
             this.updateUi_();
         }
     }

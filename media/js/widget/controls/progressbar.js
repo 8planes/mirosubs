@@ -112,7 +112,7 @@ mirosubs.controls.ProgressBar.prototype.updatePlayedBar_ = function(ratio) {
         this.barWidth_ = barSize.width;
     }
     if (this.barWidth_) {
-        this.played_.getElement().style.width =
-            (this.barWidth_ * ratio) + 'px';
+        mirosubs.style.setWidth(this.played_.getElement(),
+                                this.barWidth_ * ratio);
     }
 };

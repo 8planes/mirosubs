@@ -64,7 +64,7 @@ mirosubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
         $d('img', 
            {'alt': 'spinner', 
             'src': mirosubs.imageAssetURL('spinner.gif') });
-    goog.style.showElement(this.spinnerImg_, false);
+    mirosubs.style.showElement(this.spinnerImg_, false);
     el.appendChild(
         $d('ul', 'mirosubs-translationOptions',
            $d('li', 'mirosubs-autoTranslate',
@@ -100,7 +100,7 @@ mirosubs.translate.TranslationRightPanel.prototype.changeTimingClicked_ =
     if (this.forking_)
         return;
     this.forking_ = true;
-    goog.style.showElement(this.spinnerImg_, true);
+    mirosubs.style.showElement(this.spinnerImg_, true);
     e.preventDefault();
     this.dialog_.forkAndClose(goog.bind(this.changeTimingSaveFinished_, this));
 };
@@ -109,5 +109,5 @@ mirosubs.translate.TranslationRightPanel.prototype.changeTimingSaveFinished_ =
     function() 
 {
     this.forking_ = false;
-    goog.style.showElement(this.spinnerImg_, false);
+    mirosubs.style.showElement(this.spinnerImg_, false);
 };

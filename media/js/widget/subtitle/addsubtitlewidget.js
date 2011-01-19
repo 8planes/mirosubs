@@ -53,5 +53,5 @@ mirosubs.subtitle.AddSubtitleWidget.prototype.addClicked_ = function(e) {
 };
 
 mirosubs.subtitle.AddSubtitleWidget.prototype.showLink = function(display) {
-    goog.style.showElement(this.addSubLink_, display);
+    mirosubs.style.showElement(this.addSubLink_, display);
 };

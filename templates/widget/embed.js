@@ -70,6 +70,8 @@
     var $c = function(tag) { return document.createElement(tag); };
     var containingElement = $c('div');
 
+//    containingElement.className = 'cleanslate';
+
     if (/MSIE 6/i.test(navigator.userAgent)) {
         containingElement.innerHTML = 
             "Sorry, <a href='http://universalsubtitles.org'>Universal " +

@@ -49,8 +49,8 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.deleteButton_ = this.createDeleteButton_($d);
     this.insertButton_ = this.createInsertButton_($d);
-    goog.style.showElement(this.deleteButton_, false);
-    goog.style.showElement(this.insertButton_, false);
+    mirosubs.style.showElement(this.deleteButton_, false);
+    mirosubs.style.showElement(this.insertButton_, false);
     this.contentElement_ = $d('span', 'mirosubs-timestamp');
     this.setElementInternal(
         $d('li', null,
@@ -63,7 +63,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
            this.insertButton_));
     if (!this.displayTimes_) {
         goog.dom.classes.add(this.titleElem_, 'mirosubs-title-notime');
-        this.contentElement_.style.display = 'none';
+        mirosubs.style.showElement(this.contentElement_, false);
     }
     else {
         this.timeSpinner_ = new mirosubs.Spinner(
@@ -154,8 +154,8 @@ mirosubs.subtitle.SubtitleWidget.prototype.showInsertDeleteButtons_ =
     if (show == this.insertDeleteButtonsShowing_)
         return;
     this.insertDeleteButtonsShowing_ = show;
-    goog.style.showElement(this.deleteButton_, show);
-    goog.style.showElement(this.insertButton_, show);
+    mirosubs.style.showElement(this.deleteButton_, show);
+    mirosubs.style.showElement(this.insertButton_, show);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
     if (this.showingTextarea_)
@@ -213,7 +213,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToView_ = function() {
     this.setEditing_(false, false);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.clearTimes = function() {
-    this.contentElement_.style.visibility = 'hidden';
+    mirosubs.style.setVisibility(this.contentElement_, false);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.updateValues_ = function() {
     if (this.editing_)

@@ -69,7 +69,7 @@ mirosubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSt
     this.clearCurrentLang_();
     this.subtitleState_ = subtitleState;
     this.setCurrentLangClassName_();
-    goog.style.showElement(
+    mirosubs.style.showElement(
         this.improveSubtitlesLink_,
         subtitleState != null);
 };
@@ -365,7 +365,7 @@ mirosubs.widget.DropDown.prototype.toggleShow = function() {
 };
 
 mirosubs.widget.DropDown.prototype.hide = function() {
-    goog.style.showElement(this.getElement(), false);
+    mirosubs.style.showElement(this.getElement(), false);
     this.shown_ = false;
 };
 

@@ -50,7 +50,7 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
                                subtitleState);
 
     popupMenu.render();
-    goog.style.showElement(popupMenu.getElement(), false);
+    mirosubs.style.showElement(popupMenu.getElement(), false);
 
     popupMenu.setCurrentSubtitleState(subtitleState);
 

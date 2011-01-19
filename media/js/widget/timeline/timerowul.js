@@ -38,12 +38,14 @@ mirosubs.timeline.TimeRowUL.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.setElementInternal($d('ul', 'mirosubs-timeline-time'));
     var el = this.getElement();
-    el.style.width =
-        (mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
-         mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
-    el.style.left =
-        (this.firstTime_ / this.spacing_ *
-         mirosubs.timeline.TimeRowUL.PX_PER_TICK) + 'px';
+    mirosubs.style.setWidth(
+        el,
+        mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
+            mirosubs.timeline.TimeRowUL.PX_PER_TICK);
+    mirosubs.style.setPosition(
+        el, this.firstTime_ / this.spacing_ *
+            mirosubs.timeline.TimeRowUL.PX_PER_TICK,
+        null);
     this.majorTicks_ = [];
     var i;
     for (i = 0; i < mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS; i++) {

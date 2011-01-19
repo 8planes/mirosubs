@@ -122,8 +122,8 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     }
     else
         videoSize = this.videoPlayer_.getVideoSize();
-    goog.style.setSize(vidPlayer.getElement(), videoSize.width, videoSize.height);
-    goog.style.setSize(this.howToImage_, videoSize.width, videoSize.height);
+    mirosubs.style.setSize(vidPlayer.getElement(), videoSize.width, videoSize.height);
+    mirosubs.style.setSize(this.howToImage_, videoSize.width, videoSize.height);
 };
 
 mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
