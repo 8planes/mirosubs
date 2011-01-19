@@ -497,11 +497,16 @@ class SubtitleLanguage(models.Model):
                         translation_count += 1
             except AttributeError:
                 translation_count = 0
+                
+            if translation_count == 0:
+                return 0
+            
             last_version = self.video.latest_version()
             if last_version:
                 subtitles_count = last_version.subtitle_set.count()
             else:
                 subtitles_count = 0
+
             try:
                 val = int(translation_count / 1. / subtitles_count * 100)
                 return val <= 100 and val or 100
