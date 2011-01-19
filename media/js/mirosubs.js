@@ -349,3 +349,7 @@ mirosubs.LoginEvent = function(username) {
     this.type = mirosubs.EventType.LOGIN;
     this.username = username;
 };
+
+mirosubs.getSubtitleHomepageURL = function(videoID) {
+    return [mirosubs.siteURL(), "/videos/", videoID].join('');
+};

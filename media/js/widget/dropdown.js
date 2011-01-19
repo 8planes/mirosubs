@@ -153,7 +153,7 @@ mirosubs.widget.DropDown.prototype.createActionList_ = function($d) {
 };
 
 mirosubs.widget.DropDown.prototype.createSubtitleHomepageURL_ = function() {
-    return [mirosubs.siteURL(), "/videos/", this.videoID_].join('');
+    return mirosubs.getSubtitleHomepageURL(this.videoID_);
 };
 
 mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function() {
@@ -203,7 +203,7 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
            $d('a', {'href': '#'}, 'Logout'));
     this.getEmbedCodeLink_ = 
         $d('li', null,
-           $d('a', {'href': mirosubs.siteURL()}, 'Get Embed Code'));
+           $d('a', {'href': mirosubs.getSubtitleHomepageURL(this.videoID_)}, 'Get Embed Code'));
 };
 
 mirosubs.widget.DropDown.prototype.updateActions_ = function() {
@@ -214,6 +214,7 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
     this.videoActions_.appendChild(this.addTranslationLink_);
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
+    this.videoActions_.appendChild(this.getEmbedCodeLink_);    
     this.videoActions_.appendChild(this.downloadSubtitlesLink_);
     
     if (mirosubs.currentUsername == null)
@@ -226,7 +227,6 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
         this.settingsActions_.appendChild(this.logoutLink_);
     }
     this.settingsActions_.appendChild(this.languagePreferencesLink_);
-    this.settingsActions_.appendChild(this.getEmbedCodeLink_);
 };
 
 mirosubs.widget.DropDown.prototype.enterDocument = function() {
