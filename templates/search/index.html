@@ -5,10 +5,12 @@
 {% block main_content %}
     <div class="grid_8 alpha">
         <form method="get" action=".">
+          {% comment %}
           <ul class="video_tabs">
             <li><a class="active" href="#">{% trans "Videos" %}</a></li>
-            {#<li><a href="#">{% trans "Members" %}</a></li>#}
+            <li><a href="#">{% trans "Members" %}</a></li>#}
           </ul>
+          {% endcomment %}
           
           <div class="boxx">
             <div class="padding_small">
@@ -25,8 +27,43 @@
           </div>
         
         <div class="grid_8 alpha">
-          <br />
-    
+          <div class="search_filters clearfix">
+            <p>
+              Search for 
+              <select>
+                <option>title</option>
+                <option>full text</option>
+                <option>title &amp; full text</option>
+              </select>
+              for videos in
+              <select>
+                <option>English</option>
+                <option>French</option>
+                <option>Esperanto</option>
+              </select>
+              subtitled into
+              <select>
+                <option>Not French</option>
+                <option>French</option>
+                <option>Esperanto</option>
+              </select>
+            </p>
+
+            <p class="last">
+              Display 
+              <select>
+                <option>thumbnails</option>
+                <option>details</option>
+              </select>
+              and sort by
+              <select>
+                <option>date, ascending</option>
+                <option>date, descending</option>
+              </select>
+            </p>
+          </div>
+          
+          {% comment %}
           <div class="sort_button" style="width: auto">
             {{ form.sort }}
           </div>
@@ -40,6 +77,7 @@
             <a href="#id_type_0" class="toggle search_title"><span></span>{% trans "Search Title Only" %}</a>
             <a href="#id_type_1" class="toggle on search_full"><span></span>{% trans "Search Full Text" %}</a>
           </div>
+          {% endcomment %}
           <script type="text/javascript">
               jQuery(function($){
                   var $search_toggles = $('.search_toggles');
