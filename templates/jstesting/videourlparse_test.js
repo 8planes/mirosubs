@@ -60,6 +60,10 @@ function testMP4() {
         'http://videos.mozilla.org/firefox/3.5/switch/switch.mp4',
         'http://videos.mozilla.org/firefox/3.5/switch/switch.mp4',
         mirosubs.video.Html5VideoType.H264);
+    assertForHtml5Video_(
+        'http://blip.tv/file/get/Judocan-GS_MOSCOW_2010_78KG_UILENHOED_Carola_NED_PUGLIA_Aline_BRA730.MP4',
+        'http://blip.tv/file/get/Judocan-GS_MOSCOW_2010_78KG_UILENHOED_Carola_NED_PUGLIA_Aline_BRA730.MP4',
+        mirosubs.video.Html5VideoType.H264);
 }
 
 function testBlipMP4WithFileGet() {
