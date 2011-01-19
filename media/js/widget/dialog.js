@@ -189,7 +189,7 @@ mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
         });
     } else if ( ! mirosubs.isFromDifferentDomain()) {
         goog.Timer.callOnce(function() {
-            window.location.replace(window.location);
+            window.location.reload();
         });        
     }
 };
