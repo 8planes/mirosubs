@@ -24,5 +24,5 @@ class PlainEmitter(Emitter):
     def render(self, request):
         return self.construct()
 
-Emitter.register('txt', PlainEmitter, 'text/plain; charset=utf-8')
+Emitter.register('plain', PlainEmitter, 'text/plain; charset=utf-8')
 Mimer.register(lambda *a: None, ('text/plain',))

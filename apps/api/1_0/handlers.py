@@ -113,8 +113,8 @@ class SubtitleHandler(BaseHandler):
         <b>revision:</b> revision of subtitles
         <b>sformat</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
         
-        By default format of response is 'txt', so you get raw subtitles content in response.
-        If 'sformat' exists in request - format will be 'txt'. 
+        By default format of response is 'plain', so you get raw subtitles content in response.
+        If 'sformat' exists in request - format will be 'plain'. 
         If 'callback' exists in request - format will be 'json'.
         
         curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -G
@@ -173,7 +173,60 @@ class SubtitleHandler(BaseHandler):
         """
         request.form.save()
         return rc.ALL_OK
-    
+  
 class AnonymousSubtitleHandler(AnonymousBaseHandler, SubtitleHandler):
+    pass
+    
+class SubtitleLanguagesHandler(BaseHandler):
     
     allowed_methods = ('GET',)
+    anonymous = 'AnonymousSubtitleLanguages'
+    
+    def read(self, request):
+        """
+        Return inforamiton about avilable subtitles languages.
+        
+        Send in request:
+        <b>video url:</b> video_url
+        <b>video id:</b> video_id
+        
+        curl http://127.0.0.1:8000/api/1.0/subtitles/languages/ -d 'video_id=7Myc2QAeBco9' -G
+        <pre>[
+            {
+                "code": "it", 
+                "name": "Italian", 
+                "is_original": true
+            }
+        ]</pre>
+        """
+        
+        video_url = request.GET.get('video_url')
+        video_id = request.GET.get('video_id')
+        
+        if not video_url and not video_id:
+            return rc.BAD_REQUEST
+        
+        if video_id:
+            try:
+                video = Video.objects.get(video_id=video_id)
+            except Video.DoesNotExist:
+                return rc.NOT_FOUND
+        else:
+            video, created = Video.get_or_create_for_url(video_url)
+            
+            if not video:
+                return rc.NOT_FOUND
+        
+        output = []
+        
+        for item in video.subtitlelanguage_set.all():
+            output.append({
+                'code': item.language,
+                'name': item.get_language_display(),
+                'is_original': item.is_original
+            })
+            
+        return output
+    
+class AnonymousSubtitleLanguages(AnonymousBaseHandler, SubtitleLanguagesHandler):
+    pass
