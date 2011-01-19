@@ -15,24 +15,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-
-from django.conf.urls.defaults import *
-from handlers import VideoHandler, SubtitleHandler
 from piston.resource import Resource
-from piston.doc import documentation_view
-from api.authentication import ModelAuthentication
-from api.resource import SubtitlesResource
-from api import emitters
 
-auth = ModelAuthentication()
-ad = { 'authentication': auth }
+class SubtitlesResource(Resource):
+    
+    def determine_emitter(self, request, *args, **kwargs):
+        em = kwargs.pop('emitter_format', None)
 
-video_handler = Resource(VideoHandler, **ad)
-subtitle_handler = SubtitlesResource(SubtitleHandler, **ad)
+        if not em:
+            if request.GET.get('sformat'):
+                em = 'txt'            
+            elif request.GET.get('callback'):
+                em = 'json'
+            else:
+                em = request.GET.get('format', 'txt')
 
-urlpatterns = patterns('',
-    url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="video_handler"),
-    url('^video/$', video_handler),
-    url('^subtitles/$', subtitle_handler),
-    url('^documentation/$', documentation_view, name='documentation')
-)
+        return em
+    

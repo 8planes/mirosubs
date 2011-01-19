@@ -22,6 +22,8 @@ from piston.utils import rc
 from api import validate
 from django.contrib.sites.models import Site
 from forms import GetVideoForm, AddSubtitlesForm
+from django.utils import simplejson as json
+from widget.srt_subs import GenerateSubtitlesHandler
 
 class VideoHandler(BaseHandler):
     """
@@ -74,7 +76,7 @@ class VideoHandler(BaseHandler):
             if request.form.created and request.user.is_authenticated():
                 video.user = request.user
                 video.save()
-        print video.user
+
         if not video:
             return rc.NOT_FOUND
         else:
@@ -97,7 +99,63 @@ class AnonymousVideoHandler(VideoHandler, AnonymousBaseHandler):
 
 class SubtitleHandler(BaseHandler):
     
-    allowed_methods = ('POST',)
+    allowed_methods = ('POST', 'GET')
+    anonymous = 'AnonymousSubtitleHandler'
+    
+    def read(self, request):
+        """
+        Return subtitles for video.
+        
+        Send in request:
+        <b>video url:</b> video_url
+        <b>video id:</b> video_id
+        <b>language:</b> language of video
+        <b>revision:</b> revision of subtitles
+        <b>sformat</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
+        
+        By default format of response is 'txt', so you get raw subtitles content in response.
+        If 'sformat' exists in request - format will be 'txt'. 
+        If 'callback' exists in request - format will be 'json'.
+        
+        curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -G
+        curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -d 'callback=callback' -G
+        curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -d 'sformat=srt' -G
+        curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -d 'sformat=srt' -G
+        curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_id=7Myc2QAeBco9' -G 
+        """
+        video_url = request.GET.get('video_url')
+        language = request.GET.get('language')
+        revision = request.GET.get('revision')
+        sformat = request.GET.get('sformat')
+        video_id = request.GET.get('video_id')
+
+        if not video_url and not video_id:
+            return rc.BAD_REQUEST
+        
+        if video_id:
+            try:
+                video = Video.objects.get(video_id=video_id)
+            except Video.DoesNotExist:
+                return rc.NOT_FOUND
+        else:
+            video, created = Video.get_or_create_for_url(video_url)
+            
+            if not video:
+                return rc.NOT_FOUND
+        
+        if not sformat:
+            output = [s.for_json() for s in video.subtitles(version_no=revision, language_code = language)]
+            return output
+        else:    
+            handler = GenerateSubtitlesHandler.get(sformat)
+            
+            if not handler:
+                return rc.BAD_REQUEST
+            
+            subtitles = [s.for_generator() for s in video.subtitles(version_no=revision, language_code = language)]
+    
+            h = handler(subtitles, video)
+            return unicode(h)
     
     @validate(AddSubtitlesForm)
     def create(self, request):
@@ -111,7 +169,11 @@ class SubtitleHandler(BaseHandler):
         <b>format</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
         <b>subtitles</b>: subtitles(max size 256kB. Can be less, not tested with big content)
         
-        <em>curl "http://127.0.0.1:8000/api/1/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=ru' -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atest'</em>
+        <em>curl "http://127.0.0.1:8000/api/1.0/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=ru' -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atest'</em>
         """
         request.form.save()
         return rc.ALL_OK
+    
+class AnonymousSubtitleHandler(AnonymousBaseHandler, SubtitleHandler):
+    
+    allowed_methods = ('GET',)
