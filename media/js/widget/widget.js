@@ -204,8 +204,9 @@ mirosubs.widget.Widget.prototype.setVideoDimensions_ = function() {
 };
 
 mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
-    this.getElement().style.width = 
-        Math.round(this.videoPlayer_.getVideoSize().width) + 'px';
+    mirosubs.style.setWidth(
+        this.getElement(),
+        Math.round(this.videoPlayer_.getVideoSize().width));
 };
 
 /**

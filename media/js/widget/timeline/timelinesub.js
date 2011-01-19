@@ -59,7 +59,7 @@ mirosubs.timeline.TimelineSub.prototype.createDom = function() {
         this.rightGrabber_ =
             $d('span', 'mirosubs-grabber mirosubs-rightGrabber',
                $d('strong')));
-    el.style.cursor = "pointer";
+    mirosubs.style.setProperty(el, 'cursor', 'pointer');
     this.updateValues_();
 };
 mirosubs.timeline.TimelineSub.prototype.enterDocument = function() {
@@ -153,16 +153,19 @@ mirosubs.timeline.TimelineSub.prototype.updateValues_ = function() {
     }
     if (this.subtitle_.getEndTime() != this.existingSubEnd_ ||
         this.subtitle_.getStartTime() != this.existingSubStart_) {
-        this.getElement().style.width =
-            ((this.subtitle_.getEndTime() - this.subtitle_.getStartTime()) *
-             this.pixelsPerSecond_) + 'px';
+        mirosubs.style.setWidth(
+            this.getElement(),
+            (this.subtitle_.getEndTime() - this.subtitle_.getStartTime()) *
+                this.pixelsPerSecond_);
         this.existingSubEnd_ = this.subtitle_.getEndTime();
     }
     if (this.subtitle_.getStartTime() != this.existingSubStart_) {
-        this.getElement().style.left =
-            (this.subtitle_.getStartTime() *
-             this.pixelsPerSecond_ -
-             this.pixelOffset_) + 'px';
+        mirosubs.style.setPosition(
+            this.getElement(),
+            this.subtitle_.getStartTime() *
+                this.pixelsPerSecond_ -
+                this.pixelOffset_,
+            null);
         this.existingSubStart_ = this.subtitle_.getStartTime();
     }
     if (this.subtitle_.isNextToBeSynced() != this.existingSubNextToSync_) {
@@ -170,11 +173,11 @@ mirosubs.timeline.TimelineSub.prototype.updateValues_ = function() {
         var unsyncedclass = 'mirosubs-timeline-sub-unsynced';
         if (this.subtitle_.isNextToBeSynced()) {
             c.add(this.getElement(), unsyncedclass);
-            this.rightGrabber_.style.display = 'none';
+            mirosubs.style.showElement(this.rightGrabber_, false);
         }
         else {
             c.remove(this.getElement(), unsyncedclass);
-            this.rightGrabber_.style.display = '';
+            mirosubs.style.showElement(this.rightGrabber_, true);
         }
         this.existingSubNextToSync_ = this.subtitle_.isNextToBeSynced();
     }

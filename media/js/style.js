@@ -37,7 +37,7 @@ mirosubs.style.findCssProperty_ = function(css, property) {
  * @param {string} property
  * @param {?string} value or null (to unset)
  */
-mirosubs.style.setProperty_ = function(elem, property, value) {
+mirosubs.style.setProperty = function(elem, property, value) {
     var s = elem.style;
     var oldDeclaration = mirosubs.style.findCssProperty_(
         s.cssText, property);
@@ -82,7 +82,7 @@ mirosubs.style.setSize = function(element, w, opt_h) {
 mirosubs.style.setPixelStyleProperty_ = function(property, round, element, value) {
     if (goog.isNumber(value))
         value = (round ? Math.round(value) : value) + 'px';
-    mirosubs.style.setProperty_(element, property, /** @type {string} */(value));
+    mirosubs.style.setProperty(element, property, /** @type {string} */(value));
 };
 
 mirosubs.style.setHeight = goog.partial(
@@ -117,10 +117,10 @@ mirosubs.style.setPosition = function(el, opt_arg1, opt_arg2) {
 };
 
 mirosubs.style.showElement = function(el, display) {
-    mirosubs.style.setProperty_(el, 'display', display ? null : 'none');
+    mirosubs.style.setProperty(el, 'display', display ? null : 'none');
 };
 
 mirosubs.style.setVisibility = function(el, visible) {
-    mirosubs.style.setProperty_(
+    mirosubs.style.setProperty(
         el, 'visibility', visible ? 'visible' : 'hidden');
 };

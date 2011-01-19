@@ -42,7 +42,7 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
         $d('li', null,
            $d('div', null,
               $d('span', 'mirosubs-title mirosubs-title-notime', this.subtitle_['text']),
-              this.loadingInticator_ = $d('span', 'mirosubs-loading-indicator', 'loading...')
+              this.loadingIndicator_ = $d('span', 'mirosubs-loading-indicator', 'loading...')
            ),
            this.translateInput_ = $d('textarea', 'mirosubs-translateField')
         )
@@ -93,9 +93,9 @@ mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
 };
 
 mirosubs.translate.TranslationWidget.prototype.showLoadingIndicator = function(){
-    this.loadingInticator_.style.display = "block";
+    mirosubs.style.showElement(this.loadingIndicator_, true);
 };
 
 mirosubs.translate.TranslationWidget.prototype.hideLoadingIndicator = function(){
-    this.loadingInticator_.style.display = "none";
+    mirosubs.style.showElement(this.loadingIndicator_, false);
 };

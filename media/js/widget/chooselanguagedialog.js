@@ -72,7 +72,8 @@ mirosubs.widget.ChooseLanguageDialog.prototype.createDom = function() {
             'className': "mirosubs-green-button mirosubs-big"}, 
            'Continue');
     this.getElement().appendChild(this.okButton_);
-    var clearDiv = $d('div', {'style': 'clear: both'});
+    var clearDiv = $d('div');
+    mirosubs.style.setProperty(clearDiv, 'clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.getElement().appendChild(clearDiv);
 };

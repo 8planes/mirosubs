@@ -52,7 +52,7 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
               '(the original text will not be visible on the next screen).')));
     this.loadingNotice_ = 
         $d('p', null, 'Please wait. Heavy forking action occurring...');
-    goog.style.showElement(this.loadingNotice_, false);
+    mirosubs.style.showElement(this.loadingNotice_, false);
     this.getElement().appendChild(this.loadingNotice_);
     this.cancelButton_ =
         $d('a',
@@ -66,7 +66,8 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
            'Continue');
     this.getElement().appendChild(this.cancelButton_);
     this.getElement().appendChild(this.okButton_);
-    var clearDiv = $d('div', {'style': 'clear: both'});
+    var clearDiv = $d('div');
+    mirosubs.style.setProperty('clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.getElement().appendChild(clearDiv);
 };
@@ -94,7 +95,7 @@ mirosubs.translate.ForkDialog.prototype.okClicked_ = function(e) {
     if (this.loading_)
         return;
     this.loading_ = true;
-    goog.style.showElement(this.loadingNotice_, true);
+    mirosubs.style.showElement(this.loadingNotice_, true);
     mirosubs.Rpc.call(
         'fork',
         {'draft_pk': this.draftPK_},

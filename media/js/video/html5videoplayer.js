@@ -61,15 +61,15 @@ mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
         this.videoElem_ = this.createVideoElement_($d);
         this.setElementInternal(this.videoElem_);
         if (this.forDialog_)
-            goog.style.setSize(
+            mirosubs.style.setSize(
                 this.videoElem_,
                 mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE);
     }
     else {
         var el = $d('div');
         this.setElementInternal(el);
-        goog.style.setSize(el, 400, 300);
-        el.style.lineHeight = '300px';
+        mirosubs.style.setSize(el, 400, 300);
+        mirosubs.style.setProperty(el, 'line-height', '300px');
         el.innerHTML = 
             "Sorry, your browser can't play HTML5/" + 
             this.videoSource_.getVideoType() + " video. " +
@@ -136,7 +136,7 @@ mirosubs.video.Html5VideoPlayer.prototype.sendTimeUpdate_ = function() {
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {
-    goog.style.setSize(this.videoElem_, width, height);
+    mirosubs.style.setSize(this.videoElem_, width, height);
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {

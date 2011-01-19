@@ -179,7 +179,9 @@ mirosubs.subtitle.TranscribeEntry.prototype.issueLengthWarning_ =
     if (breakable && length > MAX_CHARS)
         this.addNewTitle_();
     else
-        this.getElement().style.background = this.warningColor_(length, 50, MAX_CHARS);
+        mirosubs.style.setProperty(
+            this.getElement(), 'background',
+            this.warningColor_(length, 50, MAX_CHARS));
 };
 mirosubs.subtitle.TranscribeEntry.prototype.warningColor_ =
     function(length, firstChars, maxChars) {

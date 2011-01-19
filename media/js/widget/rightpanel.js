@@ -83,10 +83,10 @@ mirosubs.RightPanel.prototype.createDom = function() {
     this.appendStepsContents_($d, el);
 };
 mirosubs.RightPanel.prototype.showLoading = function(show) {
-    this.loadingGif_.style.display = (show ? '' : 'none');
+    mirosubs.style.showElement(this.loadingGif_, show);
 };
 mirosubs.RightPanel.prototype.showBackLink = function(linkText) {
-    this.backAnchor_.style.display = '';
+    mirosubs.style.showElement(this.linkText, true);
     goog.dom.setTextContent(this.backAnchor_, linkText);
 };
 mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
@@ -217,7 +217,7 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
         $d('a', {'className':'mirosubs-backTo mirosubs-greybutton', 'href':'#'},
            'Return to Typing');
     this.getHandler().listen(this.backAnchor_, 'click', this.backClickedInternal);
-    this.backAnchor_.style.display = 'none';
+    mirosubs.style.showElment(this.backAnchor_, false);
     stepsDiv.appendChild(this.backAnchor_);
 
     if (this.showRestart_) {
