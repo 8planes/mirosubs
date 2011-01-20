@@ -389,6 +389,7 @@ models.signals.pre_save.connect(create_video_id, sender=Video)
 
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
+    title = models.CharField(max_length=2048, blank=True)
     is_original = models.BooleanField()
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
     writelock_time = models.DateTimeField(null=True)
