@@ -142,18 +142,19 @@
         {% block widget_container %}
         <div id="widget_div" class="mirosubs-widget"></div>
         <script type="text/javascript">
-         var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
-             document.getElementById('widget_div'), 
-             { base_state: {},
-               video_config: {
-                   poster: "{{ MEDIA_URL }}images/about-poster.png",
-                   play_to_click: true
-               },
-               video_url: "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv",
-               alternate_video_urls: 
-                   [{ url: "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4", 
-                      config: {poster: "{{ MEDIA_URL }}images/about-poster.png"}}, 
-                    "http://www.youtube.com/watch?v=Y2IJb1YnAmQ"]});
+         mirosubs.api.openUnisubsDialogWithSettings(false, 
+             { 
+                 base_state: {},
+                 video_config: {
+                     poster: "{{ MEDIA_URL }}images/about-poster.png",
+                     play_to_click: true
+                 },
+                 effectiveVideoURL: "{{ video_url_obj.effective_url }}",
+                 video_url: "{{ video_url_obj.url }}",
+                 videoID: "{{ video_url_obj.video.video_id }}",
+                 languageCode:"en",
+                 originalLanguageCode:"en"
+             }, {{general_settings|safe}})
         </script>
         {% endblock %}
     </div>

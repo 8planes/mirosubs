@@ -34,6 +34,7 @@ urlpatterns = patterns(
     '',
     url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_i18n_catalog'),
     (r'^$', 'videos.views.index'),
+    (r'^ff-bug/$', 'videos.views.bug'),
     (r'^comments/', include('comments.urls', namespace='comments')),
     (r'^messages/', include('messages.urls', namespace='messages')),
     (r'^pcf-targetter/', include('targetter.urls', namespace='targetter')),

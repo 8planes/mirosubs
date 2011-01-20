@@ -21,7 +21,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
     SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm, TranscriptionFileForm, \
     AddFromFeedForm
@@ -56,6 +56,20 @@ def index(request):
     context = widget.add_onsite_js_files({})
     context['all_videos'] = Video.objects.count()
     return render_to_response('index.html', context,
+                              context_instance=RequestContext(request))
+
+def bug(request):
+    from widget.rpc import add_general_settings
+    context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
+    context['all_videos'] = Video.objects.count()
+    try:
+        context['video_url_obj'] = VideoUrl.objects.filter(type=VIDEO_TYPE_YOUTUBE)[:1].get()
+    except VideoUrl.DoesNotExist:
+        raise Http404
+    general_settings = {}
+    add_general_settings(request, general_settings)
+    context['general_settings'] = json.dumps(general_settings)    
+    return render_to_response('bug.html', context,
                               context_instance=RequestContext(request))
 
 @login_required
