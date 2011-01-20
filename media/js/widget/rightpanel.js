@@ -217,7 +217,7 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
         $d('a', {'className':'mirosubs-backTo mirosubs-greybutton', 'href':'#'},
            'Return to Typing');
     this.getHandler().listen(this.backAnchor_, 'click', this.backClickedInternal);
-    mirosubs.style.showElment(this.backAnchor_, false);
+    mirosubs.style.showElement(this.backAnchor_, false);
     stepsDiv.appendChild(this.backAnchor_);
 
     if (this.showRestart_) {
