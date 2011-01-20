@@ -29,8 +29,9 @@ goog.provide('mirosubs.translate.TranslationPanel');
  */
 mirosubs.translate.TranslationPanel = function(subtitleState,
                                                standardSubState,
-                                               unitOfWork) {
+                                               unitOfWork, videoTitle) {
     goog.ui.Component.call(this);
+    this.videoTitle_ = videoTitle;
     this.subtitleState_ = subtitleState;
     this.standardSubState_ = standardSubState;
     this.unitOfWork_ = unitOfWork;
@@ -55,7 +56,7 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     el.appendChild(this.contentElem_ = $d('div'));
     this.translationList_ =
         new mirosubs.translate.TranslationList(
-            this.standardSubState_.SUBTITLES, this.unitOfWork_);
+            this.standardSubState_.SUBTITLES, this.unitOfWork_, this.videoTitle_);
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className =
         "mirosubs-titlesList";

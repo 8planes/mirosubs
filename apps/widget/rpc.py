@@ -114,6 +114,7 @@ class Rpc(BaseRpc):
                         "subtitles" : subtitles }
         if draft.is_dependent():
             video = models.Video.objects.get(video_id=video_id)
+            return_dict['title'] = video.title
             return_dict['original_subtitles'] = \
                 self._subtitles_dict(video.latest_version())
         return return_dict

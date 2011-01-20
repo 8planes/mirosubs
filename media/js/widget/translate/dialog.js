@@ -26,8 +26,11 @@ mirosubs.translate.Dialog = function(opener,
                                      serverModel,
                                      videoSource, 
                                      subtitleState, 
-                                     standardSubState) {
+                                     standardSubState,
+                                     videoTitle) {
     mirosubs.Dialog.call(this, videoSource);
+    videoTitle = videoTitle || '';
+    this.videoTitle_ = videoTitle;
     this.opener_ = opener;
     this.subtitleState_ = subtitleState;
     this.standardSubState_ = standardSubState;
@@ -41,7 +44,7 @@ mirosubs.translate.Dialog.prototype.createDom = function() {
     mirosubs.translate.Dialog.superClass_.createDom.call(this);
     this.translationPanel_ = new mirosubs.translate.TranslationPanel(
         this.subtitleState_, this.standardSubState_,
-        this.unitOfWork_);
+        this.unitOfWork_, this.videoTitle_);
     this.getCaptioningAreaInternal().addChild(
         this.translationPanel_, true);
     var rightPanel = this.createRightPanel_();

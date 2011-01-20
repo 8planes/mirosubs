@@ -91,7 +91,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
             this.openSubtitlingDialog_(serverModel, subtitles);
         else
             this.openDependentTranslationDialog_(
-                serverModel, subtitles, originalSubtitles);
+                serverModel, subtitles, originalSubtitles, result['title']);
     }
     else {
         var username = 
@@ -115,7 +115,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog_ =
 };
 
 mirosubs.widget.SubtitleDialogOpener.prototype.openDependentTranslationDialog_ = 
-    function(serverModel, subtitleState, originalSubtitleState)
+    function(serverModel, subtitleState, originalSubtitleState, videoTitle)
 {
     if (this.subOpenFn_)
         this.subOpenFn_();
@@ -123,7 +123,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDependentTranslationDialog_ =
         this,
         serverModel,
         this.videoSource_,
-        subtitleState, originalSubtitleState);
+        subtitleState, originalSubtitleState, videoTitle);
     transDialog.setParentEventTarget(this);
     transDialog.setVisible(true);
 };
