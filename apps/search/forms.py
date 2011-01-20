@@ -66,7 +66,7 @@ class SearchForm(forms.Form):
         
         if q:
             if type == 'full_text':
-                qs = qs.auto_query(q).highlight()
+                qs = qs.auto_query(q)
             else:
                 qs = qs.filter(title=qs.query.clean(q))
         
