@@ -199,14 +199,14 @@ class Video(models.Model):
             return None, False
 
         try:
-            video_url_obj = VideoUrl.objects.get(
+            video_url_obj = VideoUrl.all.get(
                 url=vt.convert_to_video_url())
             return video_url_obj.video, False
         except models.ObjectDoesNotExist:
             pass
         
         try:
-            video_url_obj = VideoUrl.objects.get(
+            video_url_obj = VideoUrl.all.get(
                 type=vt.abbreviation, **vt.create_kwars())
             if user:
                 Action.create_video_handler(video_url_obj.video, user)
