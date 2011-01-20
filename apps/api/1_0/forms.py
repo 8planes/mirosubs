@@ -86,6 +86,7 @@ class GetVideoForm(VideoForm):
         
     def save(self):
         video_url = self.cleaned_data.get('video_url')
+        self.created = False
         
         if not video_url:
             return
