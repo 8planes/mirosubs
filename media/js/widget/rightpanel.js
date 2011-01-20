@@ -86,7 +86,7 @@ mirosubs.RightPanel.prototype.showLoading = function(show) {
     mirosubs.style.showElement(this.loadingGif_, show);
 };
 mirosubs.RightPanel.prototype.showBackLink = function(linkText) {
-    mirosubs.style.showElement(this.linkText, true);
+    mirosubs.style.showElement(this.backAnchor_, true);
     goog.dom.setTextContent(this.backAnchor_, linkText);
 };
 mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {

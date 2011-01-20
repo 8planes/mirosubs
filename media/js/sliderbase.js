@@ -281,9 +281,9 @@ mirosubs.SliderBase.prototype.updateUi_ = function() {
         var coord = this.getThumbCoordinateForValue_(this.value_);
 
         if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
-            mirosubs.style.setPosition(this.thumb, coord.x, null);
-        } else {
             mirosubs.style.setPosition(this.thumb, null, coord.y);
+        } else {
+            mirosubs.style.setPosition(this.thumb, coord.x, null);
         }
     }
 };

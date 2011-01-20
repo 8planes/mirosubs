@@ -114,7 +114,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         videoDiv.id = mirosubs.randomString();
         this.getElement().appendChild(videoDiv);
         var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
-        var atts = { 'id': this.playerElemID_ };
+        var atts = { 'id': this.playerElemID_, 
+                     'style': mirosubs.style.setSizeInString(
+                         '', this.playerSize_) };
         var uri;
         if (this.forDialog_)
             uri = new goog.Uri('http://www.youtube.com/apiplayer');
@@ -122,11 +124,6 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
             uri = new goog.Uri('http://www.youtube.com/v/' +
                                this.videoSource_.getYoutubeVideoID());
         this.addQueryString_(uri);
-        mirosubs.video.YoutubeVideoPlayer.logger_.info(
-            'setting size to ' + this.playerSize_.width + 
-                ", " + this.playerSize_.height);
-        mirosubs.style.setSize(
-            this.getElement(), this.playerSize_);
         window["swfobject"]["embedSWF"](
             uri.toString(), videoDiv.id, 
             this.playerSize_.width + '', 
