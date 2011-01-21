@@ -84,7 +84,7 @@ class BaseRpc:
         deleted = packet['deleted']
         updated = packet['updated']
         inserted = packet['inserted']
-        sub_collection.title = packet['title']
+        sub_collection.title = packet['title'] or ''
         if len(deleted) == 0 and len(inserted) == 0 and len(updated) == 0:
             return
         for d in deleted:

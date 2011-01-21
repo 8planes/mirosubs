@@ -35,6 +35,10 @@ mirosubs.translate.TranslationWidget.prototype.getSubtitle = function(){
     return this.subtitle_;
 };
 
+mirosubs.translate.TranslationWidget.prototype.getOriginalValue = function(){
+    return this.subtitle_.text;
+};
+
 mirosubs.translate.TranslationWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 

@@ -136,7 +136,7 @@ function(needTranslating, fromLang, toLang, callback) {
         /**
          * @type {string}
          */
-        var t = cleanStr(w.getSubtitle().text);
+        var t = cleanStr(w.getOriginalValue());
         
         toTranslate.push(t), widgetsToTranslate.push(w);
         

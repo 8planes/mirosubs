@@ -116,6 +116,11 @@ mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(fromL
      * @type {Array.<mirosubs.translate.TranslationWidget>}
      */
     var needTranslating = [];
+    
+    if (this.titleTranslationWidget && this.titleTranslationWidget.isEmpty()) {
+        needTranslating.push(this.titleTranslationWidget);
+    };
+    
     goog.array.forEach(this.translationWidgets_, function(w) {
         if (w.isEmpty()) {
             needTranslating.push(w);

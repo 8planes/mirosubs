@@ -203,7 +203,7 @@ class Rpc(BaseRpc):
     def _create_version_from_draft(self, draft, user):
         version = models.SubtitleVersion(
             language=draft.language,
-            title=draft.title,
+            title=draft.title or '',
             version_no=draft.version_no,
             is_forked=draft.is_forked,
             datetime_started=draft.datetime_started,

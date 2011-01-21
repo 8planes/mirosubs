@@ -44,10 +44,29 @@ mirosubs.translate.TitleTranslationWidget.prototype.createDom = function() {
         this.inputLostFocus_);
 };
 
+mirosubs.translate.TitleTranslationWidget.prototype.showLoadingIndicator = function(){
+    mirosubs.style.showElement(this.loadingIndicator_, true);
+};
+
+mirosubs.translate.TitleTranslationWidget.prototype.hideLoadingIndicator = function(){
+    mirosubs.style.showElement(this.loadingIndicator_, false);
+};
+
+mirosubs.translate.TitleTranslationWidget.prototype.getOriginalValue = function(){
+    return this.originalVideoTitle_;
+};
+
+mirosubs.translate.TitleTranslationWidget.prototype.isEmpty = function(){
+    return ! this.translateInput_.value;
+};
+
 mirosubs.translate.TitleTranslationWidget.prototype.setTranslation = function(value){
     this.translateInput_.value = value;
-    this.unitOfWork_.setTitle(this.value);    
+    this.unitOfWork_.setTitle(value);    
 };
+
+mirosubs.translate.TitleTranslationWidget.prototype.setTranslationContent = 
+    mirosubs.translate.TitleTranslationWidget.prototype.setTranslation;
 
 mirosubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
     this.unitOfWork_.setTitle(this.translateInput_.value);
