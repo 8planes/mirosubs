@@ -178,7 +178,7 @@ class Video(models.Model):
         return self.get_absolute_url()
     
     def title_for_url(self):
-        return self.title.replace('/', '-').replace('#', '')
+        return self.title.replace('/', '-').replace('#', '').replace('?', '')
     
     @models.permalink
     def get_absolute_url(self):
