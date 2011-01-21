@@ -146,7 +146,7 @@ function(needTranslating, fromLang, toLang, callback) {
             translate(toTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback))
             
             if (t.length > ml) {
-                toTranslate, widgetsToTranslate = [];
+                toTranslate = widgetsToTranslate = [];
             } else {
                 toTranslate = [t], widgetsToTranslate = [w];
             }
