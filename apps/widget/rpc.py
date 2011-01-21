@@ -175,6 +175,7 @@ class Rpc(BaseRpc):
         self._save_packets(draft, packets)
 
         new_version, new_subs = self._create_version_from_draft(draft, request.user)
+        #what do if title is changed? The we will have version with time_change == 0 and text_change == 0
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False
         else:
@@ -202,6 +203,7 @@ class Rpc(BaseRpc):
     def _create_version_from_draft(self, draft, user):
         version = models.SubtitleVersion(
             language=draft.language,
+            title=draft.title,
             version_no=draft.version_no,
             is_forked=draft.is_forked,
             datetime_started=draft.datetime_started,

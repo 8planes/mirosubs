@@ -72,6 +72,7 @@ mirosubs.translate.TranslationWidget.prototype.setTranslation = function(transla
 
 mirosubs.translate.TranslationWidget.prototype.setTranslationContent = function(value){
     this.translateInput_.value = value;
+    this.inputLostFocus_();
 };
 
 mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {

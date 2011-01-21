@@ -32,7 +32,7 @@ mirosubs.translate.TranslationList = function(subtitles,
      * Array of subtitles in json format
      */
     this.subtitles_ = subtitles;
-    this.videoTitle_ = videoTitle;
+    this.videoTitle_ = videoTitle || '';
     goog.array.sort(
         this.subtitles_,
         function(a, b) {

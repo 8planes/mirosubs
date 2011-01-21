@@ -21,9 +21,9 @@ goog.provide('mirosubs.translate.TitleTranslation');
 mirosubs.translate.TitleTranslationWidget = function(videoTitle,
                                                 unitOfWork) {
     goog.ui.Component.call(this);
-    this.videoTitle_ = videoTitle;
+    this.originalVideoTitle_ = videoTitle || '';
     this.unitOfWork_ = unitOfWork;
-    this.translation_ = null;
+    this.translatedVideoTitle_ = null;
 };
 goog.inherits(mirosubs.translate.TitleTranslationWidget, goog.ui.Component);
 
@@ -33,7 +33,7 @@ mirosubs.translate.TitleTranslationWidget.prototype.createDom = function() {
     this.setElementInternal(
         $d('li', null,
            $d('div', null,
-              $d('span', 'mirosubs-title mirosubs-title-notime', 'TITLE: '+this.videoTitle_),
+              $d('span', 'mirosubs-title mirosubs-title-notime', 'TITLE: '+this.originalVideoTitle_),
               this.loadingIndicator_ = $d('span', 'mirosubs-loading-indicator', 'loading...')
            ),
            this.translateInput_ = $d('textarea', 'mirosubs-translateField')
@@ -45,6 +45,7 @@ mirosubs.translate.TitleTranslationWidget.prototype.createDom = function() {
         this.inputLostFocus_);
 };
 
-mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(event) {
-    this.translation_ = this.translateInput_.value;
+mirosubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
+    this.translatedVideoTitle_ = this.translateInput_.value;
+    this.unitOfWork_.setTitle(this.translatedVideoTitle_);
 };

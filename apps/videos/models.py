@@ -389,7 +389,6 @@ models.signals.pre_save.connect(create_video_id, sender=Video)
 
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
-    title = models.CharField(max_length=2048, blank=True)
     is_original = models.BooleanField()
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
     writelock_time = models.DateTimeField(null=True)
@@ -413,7 +412,16 @@ class SubtitleLanguage(models.Model):
     def get_title(self):
         if self.is_original:
             return self.video.title
-        return self.title
+        
+        latest_version = self.latest_version()
+        
+        if latest_version:
+            return latest_version.title
+        
+        return ''
+    
+    def get_title_display(self):
+        return self.get_title() or self.video.title
     
     def update_complete_state(self):
         version = self.latest_version()
@@ -565,6 +573,7 @@ class SubtitleCollection(models.Model):
 
 class SubtitleVersion(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
+    title = models.CharField(max_length=2048, blank=True)
     version_no = models.PositiveIntegerField(default=0)
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User, null=True)
@@ -717,6 +726,7 @@ class SubtitleDraft(SubtitleCollection):
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User, null=True)
     browser_id = models.CharField(max_length=128, blank=True)
+    title = models.CharField(max_length=2048, blank=True)
     last_saved_packet = models.PositiveIntegerField(default=0)
 
     @property

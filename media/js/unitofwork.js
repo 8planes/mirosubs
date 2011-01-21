@@ -37,6 +37,11 @@ mirosubs.UnitOfWork.prototype.instantiateLists_ = function() {
     this.updated = [];
     this.deleted = [];
     this.neu = [];
+    this.title = '';
+};
+
+mirosubs.UnitOfWork.prototype.setTitle = function(title){
+    this.title = title;
 };
 
 mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
@@ -94,6 +99,7 @@ mirosubs.UnitOfWork.prototype.getWork = function() {
     return {
         neu: goog.array.clone(this.neu),
         updated: goog.array.clone(this.updated),
-        deleted: goog.array.clone(this.deleted)
+        deleted: goog.array.clone(this.deleted),
+        title: this.title
     };
 };

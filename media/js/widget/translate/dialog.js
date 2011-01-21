@@ -88,6 +88,7 @@ mirosubs.translate.Dialog.prototype.isWorkSaved = function() {
 };
 mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
+
     this.serverModel_.finish(
         this.translationPanel_.makeJsonSubs(),
         function(dropDownContents) {

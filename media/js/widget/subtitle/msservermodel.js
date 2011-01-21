@@ -111,6 +111,7 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
 mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback, opt_errorCallback) {
     var saveArgs = this.makeSaveArgs_();
     var that = this;
+
     mirosubs.Rpc.call(
         'save_subtitles',
         saveArgs, 
@@ -153,7 +154,8 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
         'packet_no': this.packetNo_,
         'deleted': toJson(work.deleted),
         'inserted': toJson(work.neu),
-        'updated': toJson(work.updated)
+        'updated': toJson(work.updated),
+        'title': work.title
     };
     this.packetNo_++;
     this.unsavedPackets_.push(packet);
