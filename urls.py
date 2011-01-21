@@ -76,8 +76,6 @@ urlpatterns = patterns(
         {'template': 'p3p.xml'}),
     url(r'^w3c/Policies.xml$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'Policies.xml'}, 'policy_page'),
-    url(r'^w3c/privacy.html$', 'django.views.generic.simple.direct_to_template', 
-        {'template': 'privacy.html'}, 'privacy_page'),
     url(r'^demo/$', 'videos.views.demo', name="demo"),
     (r'^about$',  'django.views.generic.simple.direct_to_template', 
         {'template': 'about.html'}, 'about_page'),
