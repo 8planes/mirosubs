@@ -26,12 +26,13 @@ goog.provide('mirosubs.translate.TranslationList');
  * @constructor
  */
 mirosubs.translate.TranslationList = function(subtitles,
-                                              unitOfWork) {
+                                              unitOfWork, videoTitle) {
     goog.ui.Component.call(this);
     /**
      * Array of subtitles in json format
      */
     this.subtitles_ = subtitles;
+    this.videoTitle_ = videoTitle;
     goog.array.sort(
         this.subtitles_,
         function(a, b) {
@@ -42,6 +43,7 @@ mirosubs.translate.TranslationList = function(subtitles,
      */
     this.translationWidgets_ = [];
     this.translations_ = [];
+    this.titleTranslationWidget;
     this.unitOfWork_ = unitOfWork;
 };
 goog.inherits(mirosubs.translate.TranslationList, goog.ui.Component);
@@ -51,6 +53,13 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
                             .createDom('ul'));
     var that = this;
     var w;
+    
+    if (this.videoTitle_){
+        this.titleTranslationWidget = 
+            new mirosubs.translate.TitleTranslationWidget(this.videoTitle_, this.unitOfWork_);
+        this.addChild(this.titleTranslationWidget, true);
+    }
+    
     goog.array.forEach(this.subtitles_,
                        function(subtitle) {
                            w = new mirosubs.translate.TranslationWidget(

@@ -31,6 +31,7 @@ mirosubs.translate.Dialog = function(opener,
     this.opener_ = opener;
     this.subtitleState_ = subtitleState;
     this.standardSubState_ = standardSubState;
+
     this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.serverModel_ = serverModel;
     this.serverModel_.init(this.unitOfWork_);

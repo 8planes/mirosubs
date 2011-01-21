@@ -409,7 +409,12 @@ class SubtitleLanguage(models.Model):
     
     def __unicode__(self):
         return self.language_display()
-
+    
+    def get_title(self):
+        if self.is_original:
+            return self.video.title
+        return self.title
+    
     def update_complete_state(self):
         version = self.latest_version()
         if version.subtitle_set.count() == 0:

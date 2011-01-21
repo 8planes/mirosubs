@@ -348,7 +348,8 @@ class Rpc(BaseRpc):
             language.is_original,
             version.version_no,
             is_latest,
-            version.is_forked)
+            version.is_forked,
+            language.get_title())
 
     def _subtitle_count(self, video_id):
         return video_cache.get_subtitle_count(video_id)

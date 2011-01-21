@@ -178,6 +178,7 @@ JS_CORE = ['mirosubs.js',
            'widget/translate/translationrightpanel.js',
            'widget/translate/editabletranslation.js',
            'widget/translate/forkdialog.js',
+           'widget/translate/titletranslationwidget.js',
            'widget/play/manager.js',
            'widget/widgetcontroller.js',
            'widget/widget.js']

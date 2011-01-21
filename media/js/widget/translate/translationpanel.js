@@ -55,7 +55,7 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     el.appendChild(this.contentElem_ = $d('div'));
     this.translationList_ =
         new mirosubs.translate.TranslationList(
-            this.standardSubState_.SUBTITLES, this.unitOfWork_);
+            this.standardSubState_.SUBTITLES, this.unitOfWork_, this.standardSubState_.TITLE);
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className =
         "mirosubs-titlesList";
