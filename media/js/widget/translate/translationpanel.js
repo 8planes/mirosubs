@@ -61,6 +61,7 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
         "mirosubs-titlesList";
     var uw = this.unitOfWork_;
     this.translationList_.setTranslations(this.editableTranslations_);
+    this.translationList_.setTitleTranslation(this.subtitleState_.TITLE);
 };
 mirosubs.translate.TranslationPanel.prototype.makeJsonSubs = function() {
     return goog.array.map(

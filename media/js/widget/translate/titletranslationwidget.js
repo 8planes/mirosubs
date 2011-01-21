@@ -23,7 +23,6 @@ mirosubs.translate.TitleTranslationWidget = function(videoTitle,
     goog.ui.Component.call(this);
     this.originalVideoTitle_ = videoTitle || '';
     this.unitOfWork_ = unitOfWork;
-    this.translatedVideoTitle_ = null;
 };
 goog.inherits(mirosubs.translate.TitleTranslationWidget, goog.ui.Component);
 
@@ -45,7 +44,11 @@ mirosubs.translate.TitleTranslationWidget.prototype.createDom = function() {
         this.inputLostFocus_);
 };
 
+mirosubs.translate.TitleTranslationWidget.prototype.setTranslation = function(value){
+    this.translateInput_.value = value;
+    this.unitOfWork_.setTitle(this.value);    
+};
+
 mirosubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
-    this.translatedVideoTitle_ = this.translateInput_.value;
-    this.unitOfWork_.setTitle(this.translatedVideoTitle_);
+    this.unitOfWork_.setTitle(this.translateInput_.value);
 };

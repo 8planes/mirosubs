@@ -69,6 +69,10 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
                        });
 };
 
+mirosubs.translate.TranslationList.prototype.setTitleTranslation = function(value){
+    this.titleTranslationWidget && this.titleTranslationWidget.setTranslation(value);
+};
+
 /**
  * This class will mutate the array as translations are added.
  * @param {Array.<mirosubs.translate.EditableTranslation>} translations
