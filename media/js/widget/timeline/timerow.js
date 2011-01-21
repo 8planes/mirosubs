@@ -43,7 +43,7 @@ mirosubs.timeline.TimeRow.prototype.createDom = function() {
     el.className = 'mirosubs-timerow';
     this.ensureVisible(0);
 
-    mirosubs.setProperty(el, 'cursor', this.openHandStyle_);
+    mirosubs.style.setProperty(el, 'cursor', this.openHandStyle_);
 
     // Dragger has a default action that cannot be overridden.  Kind of pointless
     // to subclass just to override that, so instead the variable is being

@@ -38,16 +38,20 @@ mirosubs.style.findCssProperty_ = function(css, property) {
  * @param {?string} value or null (to unset)
  */
 mirosubs.style.setProperty = function(elem, property, value) {
-    var s = elem.style;
+    elem.style.cssText = mirosubs.style.setPropertyInString(
+        elem.style.cssText, property, value);
+};
+
+mirosubs.style.setPropertyInString = function(cssString, property, value) {
     var oldDeclaration = mirosubs.style.findCssProperty_(
-        s.cssText, property);
+        cssString, property);
     var newDeclaration = 
         goog.isNull(value) ? 
             '' : [property, ':', value, ' !important;'].join('');
     if (oldDeclaration)
-        s.cssText = s.cssText.replace(oldDeclaration[0], newDeclaration);
+        return cssString.replace(oldDeclaration[0], newDeclaration);
     else
-        s.cssText += newDeclaration;
+        return cssString + newDeclaration;
 };
 
 /**
@@ -64,6 +68,20 @@ mirosubs.style.setProperty = function(elem, property, value) {
  *     size object.
  */
 mirosubs.style.setSize = function(element, w, opt_h) {
+    var wh = mirosubs.style.processWidthHeightArgs_(w, opt_h);
+    mirosubs.style.setWidth(element, /** @type {string|number} */ (wh[0]));
+    mirosubs.style.setHeight(element, /** @type {string|number} */ (wh[1]));
+};
+
+mirosubs.style.setSizeInString = function(cssString, w, opt_h) {
+    var wh = mirosubs.style.processWidthHeightArgs_(w, opt_h);
+    cssString = mirosubs.style.setPropertyInString(
+        cssString, 'width', mirosubs.style.getPixelStyleValue_(wh[0]));
+    return mirosubs.style.setPropertyInString(
+        cssString, 'height', mirosubs.style.getPixelStyleValue_(wh[1]));
+};
+
+mirosubs.style.processWidthHeightArgs_ = function(w, opt_h) {
     var h;
     if (w instanceof goog.math.Size) {
         h = w.height;
@@ -74,15 +92,18 @@ mirosubs.style.setSize = function(element, w, opt_h) {
         }
         h = opt_h;
     }
+    return [w, h];
+};
 
-    mirosubs.style.setWidth(element, /** @type {string|number} */ (w));
-    mirosubs.style.setHeight(element, /** @type {string|number} */ (h));
+mirosubs.style.getPixelStyleValue_ = function(value, round) {
+    return goog.isNumber(value) ? 
+        ((round ? Math.round(value) : value) + 'px') : value;
 };
 
 mirosubs.style.setPixelStyleProperty_ = function(property, round, element, value) {
-    if (goog.isNumber(value))
-        value = (round ? Math.round(value) : value) + 'px';
-    mirosubs.style.setProperty(element, property, /** @type {string} */(value));
+    mirosubs.style.setProperty(
+        element, property, 
+        /** @type {string} */(mirosubs.style.getPixelStyleValue_(value)));
 };
 
 mirosubs.style.setHeight = goog.partial(

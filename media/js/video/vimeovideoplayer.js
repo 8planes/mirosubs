@@ -70,7 +70,9 @@ mirosubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
         videoDiv.id = mirosubs.randomString();
         this.getElement().appendChild(videoDiv);
         var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
-        var atts = { 'id': this.playerElemID_ };
+        var atts = { 'id': this.playerElemID_,
+                     'style': mirosubs.style.setSizeInString(
+                         '', this.getVideoSize()) };
         var baseURL = 'http://vimeo.com/moogaloop.swf';
         var queryString =
             ['?js_api=1&width=', mirosubs.video.VimeoVideoPlayer.WIDTH,

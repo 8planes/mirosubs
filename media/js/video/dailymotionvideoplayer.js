@@ -73,7 +73,9 @@ mirosubs.video.DailymotionVideoPlayer.prototype.enterDocument = function() {
         videoDiv.id = mirosubs.randomString();
         this.getElement().appendChild(videoDiv);
         var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
-        var atts = { 'id': this.playerElemID_ };
+        var atts = { 'id': this.playerElemID_,
+                     'style': mirosubs.style.setSizeInString(
+                         '', this.getVideoSize()) };
         var baseURL = 'http://www.dailymotion.com/swf';
         var queryString =
             ['?chromeless=', this.chromeless_ ? 1 : 0,
