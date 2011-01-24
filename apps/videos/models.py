@@ -237,6 +237,13 @@ class Video(models.Model):
             return obj, True
     
     @property
+    def language(self):
+        ol = self._original_subtitle_language()
+
+        if ol and ol.language:
+            return ol.language
+    
+    @property
     def filename(self):
         from django.utils.text import get_valid_filename
         

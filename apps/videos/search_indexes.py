@@ -8,6 +8,7 @@ class VideoIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
     title = CharField(model_attr='title_display') 
     languages = MultiValueField()
+    video_language = CharField() 
     created = DateTimeField(model_attr='created')
     edited = DateTimeField(model_attr='edited')
     subtitles_fetched_count = IntegerField(model_attr='subtitles_fetched_count')
@@ -20,6 +21,7 @@ class VideoIndex(SearchIndex):
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         langs = obj.subtitlelanguage_set.exclude(language=u'')
+        self.prepared_data['video_language'] = obj.language and '%s ++++++++++' % obj.language or ''
         self.prepared_data['languages'] = ['%s ++++++++++' % lang.language for lang in langs if lang.latest_subtitles()]
         self.prepared_data['comments_count'] = Comment.get_for_object(obj).count()
         self.prepared_data['languages_count'] = obj.subtitlelanguage_set.count()

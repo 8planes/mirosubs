@@ -45,10 +45,10 @@ class SearchForm(forms.Form):
     display = forms.ChoiceField(choices=DISPLAY_CHOICES, required=False, initial='all')
     
     
-    def __init__(self, user, default_langs, *args, **kwargs):
+    def __init__(self, user, user_langs, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         choices = list(get_languages_list())
-        self.default_langs = default_langs
+        self.user_langs = user_langs
         choices[:0] = (
             ('my_langs', _(u'My languages')),
             ('', _(u'Any')),
@@ -66,6 +66,7 @@ class SearchForm(forms.Form):
         langs = self.cleaned_data.get('langs')
         type = self.cleaned_data.get('type') or 'full_text'
         excluded_langs = self.cleaned_data.get('excluded_langs')
+        video_language = self.cleaned_data.get('video_lang')
         
         order_fields = {
             'date': 'created',
@@ -84,18 +85,19 @@ class SearchForm(forms.Form):
             else:
                 qs = qs.filter(title=qs.query.clean(q))
         
+        if video_language:
+            if video_language == 'my_langs':
+                qs = qs.filter(video_language__in=self.user_langs)
+            else:
+                qs = qs.filter(video_language=video_language)
+        
         if langs:
             langs = [langs]
             if 'my_langs' in langs:
                 del langs[langs.index('my_langs')]
-                if self.user.is_authenticated():
-                    for l in self.user.userlanguage_set.values_list('language', flat=True):
-                        if not l in langs:
-                            langs.append(l)
-                else:
-                    for l in self.default_langs:
-                        if not l in langs:
-                            langs.append(l)
+                for l in self.user_langs:
+                    if not l in langs:
+                        langs.append(l)
 
             qs = qs.filter(languages__in=langs)
         
@@ -104,5 +106,5 @@ class SearchForm(forms.Form):
             qs = qs.exclude(languages__in=excluded_langs)
         
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
-            
+
         return qs

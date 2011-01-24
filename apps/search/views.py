@@ -20,16 +20,16 @@ from django.views.generic.list_detail import object_list
 from videos.models import Video, SubtitleLanguage
 from search.forms import SearchForm
 from django.conf import settings
-from django.utils.translation.trans_real import parse_accept_lang_header
+from utils.translation import get_user_languages_from_request
 
 def index(request):
     accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
-    default_langs = [item[0] for item in parse_accept_lang_header(accept)]
+    user_langs = get_user_languages_from_request(request)
     
     if 'q' in request.REQUEST:
-        form = SearchForm(request.user, default_langs, request.REQUEST)
+        form = SearchForm(request.user, user_langs, request.REQUEST)
     else:
-        form = SearchForm(request.user, default_langs)
+        form = SearchForm(request.user, user_langs)
     
     qs = SearchQuerySet().none()
     
