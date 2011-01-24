@@ -132,6 +132,8 @@ href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
         return video_url
     
 class AddTeamVideoForm(BaseVideoBoundForm):
+    language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
+                                 help_text=_(u'It will be saved only if video does not exist in our database.'))
     
     class Meta:
         model = TeamVideo
@@ -140,6 +142,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     def __init__(self, team, *args, **kwargs):
         self.team = team
         super(AddTeamVideoForm, self).__init__(*args, **kwargs)
+        self.fields['language'].choices = get_languages_list()
     
     def clean_video_url(self):
         video_url = super(AddTeamVideoForm, self).clean_video_url()
@@ -153,6 +156,13 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         return video_url     
     
     def save(self, commit=True):
+        video_language = self.cleaned_data['language']
+        if video_language:
+            original_language = self.video.subtitle_language()
+            if original_language and not original_language.language:
+                original_language.language = video_language
+                original_language.save()
+            
         obj = super(AddTeamVideoForm, self).save(False)
         obj.video = self.video
         obj.team = self.team
