@@ -16,12 +16,13 @@
 <br />
 <br />
 <div class="actions-panel">
-    <h3>{% trans 'Member Activity Stream' %}</h3>
+    <h3>{% trans 'Team Activity Stream' %}</h3>
     
     {% comment %}
     <a href="#team-video-activity" class="nav-link active">{% trans 'Team Video Activity' %}</a>
     | <a href="#team-member-activity" class="nav-link">{% trans 'Member Activity' %}</a>
-    
+     {% endcomment %}
+     
     <ul class="small_list" id="team-video-activity">
         {% for item in videos_actions %}
             <li>{% include 'videos/_team_video_action_item.html' %}</li>
@@ -36,7 +37,8 @@
         </li>
         {% endif %}         
     </ul>
-    {% endcomment %}
+   
+    {% comment %}
     <ul class="small_list" id="team-member-activity">
         {% for item in membres_actions %}
             <li>{% include 'videos/_team_member_action_item.html' %}</li>
@@ -51,5 +53,5 @@
         </li>
         {% endif %}
     </ul>    
-
+     {% endcomment %}
 </div>

@@ -166,6 +166,19 @@ def detail_members(request, slug):
                        extra_context=extra_context, 
                        template_object_name='team_member')
 
+def videos_actions(request, slug):
+    team = Team.get(slug, request.user)  
+    videos_ids = team.teamvideo_set.values_list('video__id', flat=True)
+    qs = Action.objects.filter(video__pk__in=videos_ids)
+    extra_context = {
+        'team': team
+    }   
+    return object_list(request, queryset=qs, 
+                       paginate_by=ACTIONS_ON_PAGE, 
+                       template_name='teams/videos_actions.html', 
+                       extra_context=extra_context, 
+                       template_object_name='videos_action')
+
 def members_actions(request, slug):
     team = Team.get(slug, request.user)   
     
