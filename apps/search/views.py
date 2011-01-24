@@ -32,16 +32,21 @@ def index(request):
         form = SearchForm(request.user, default_langs)
     
     qs = SearchQuerySet().none()
+    
+    display_mode = 'all'
+    
     if form.is_valid():
         qs = form.search_qs(SearchQuerySet().models(Video))
-    
+        display_mode = form.cleaned_data.get('display', 'all')
+        
     if settings.HAYSTACK_SEARCH_ENGINE == 'dummy' and settings.DEBUG:
         q = request.REQUEST.get('q', '')
         qs = Video.objects.filter(title__icontains=q)
     
     context = {
         'query': request.REQUEST.get('q', ''),
-        'form': form
+        'form': form,
+        'display_mode': display_mode
     }
         
     return object_list(request, queryset=qs,

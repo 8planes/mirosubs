@@ -16,10 +16,8 @@
             <div class="padding_small">
               
               <div class="inline_search large">
-                <form>
                   {{ form.q }}
                   <button class="green_button big">{% trans "Search" %}</button>
-                </form>
               </div>
               
               <div class="clearfix"></div>
@@ -29,37 +27,20 @@
         <div class="grid_8 alpha">
           <div class="search_filters clearfix">
             <p>
-              Search for 
-              <select>
-                <option>title</option>
-                <option>full text</option>
-                <option>title &amp; full text</option>
-              </select>
-              for videos in
-              <select>
-                <option>English</option>
-                <option>French</option>
-                <option>Esperanto</option>
-              </select>
-              subtitled into
-              <select>
-                <option>Not French</option>
-                <option>French</option>
-                <option>Esperanto</option>
-              </select>
+              {% trans "Search for" %} 
+              {{ form.type }}
+              {% trans "for videos in" %}
+              {{ form.video_lang }}          
+              {% trans "subtitled into" %}
+              {{ form.langs }} {% trans "and without" %}
+              {{ form.excluded_langs }}
             </p>
 
             <p class="last">
-              Display 
-              <select>
-                <option>thumbnails</option>
-                <option>details</option>
-              </select>
-              and sort by
-              <select>
-                <option>date, ascending</option>
-                <option>date, descending</option>
-              </select>
+              {% trans "Display" %}  
+              {{ form.display }}
+              {% trans "and sort by" %}
+              {{ form.sort }} {{ form.st }}
             </p>
           </div>
           
