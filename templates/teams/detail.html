@@ -22,81 +22,18 @@
 
 {% block main_content %}
 <div class="grid_8 alpha">
-    <h2>{{ team }}</h2>
+    <h2>{{ team }} {% trans "Videos" %}</h2>
     
     {% if team.video %}
         {% widget widget_params %}
     {% endif %}
     
-    <ul class="video_tabs">
-        <li class="active">
-            <span class="tab-item">
-                {% trans 'Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span>
-            </span>
-        </li>
-        <li>
-            <a href="{% url teams:detail_members team.slug %}">
-                {% trans 'Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span>
-            </a>
-        </li>
-    </ul>
     <div id="videos-tab">
-        <div class="boxx">
-            <div class="padding_small">
-                <div class="inline_search">
-                    <form>
-                        <input type="text" name="q" value="{{ query|default:'' }}">
-                        <button class="green_button big">
-                            {% trans 'Search' %}
-                        </button>
-                    </form>
-                </div>
-                <div class="clearfix">
-                </div>
-            </div>
-        </div>
-        <div class="grid_8 clearfix">
-            <br/>
-            <br/>
-        </div>
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% for team_video in teamvideo_list %}
             <li>
-                <a href="{{ team_video.video.get_absolute_url }}" class="thumbnail_medium">
-                    <img height="100" src="{{ team_video.get_thumbnail }}">
-                </a>
-                <div class="info">
-                    <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
-                    {% if team_video|can_edit_video:user %}
-                        <a href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
-                    {% endif %}
-                    {% if team_video.description %}
-                    <p>
-                        {{ team_video.description|urlize }}
-                    </p>
-                    {% endif %}
-                    {% if team_video.languages.exists or team_video.all_languages %}
-                    <div class="need_help">
-                        <span>{% trans 'We need your help with' %}</span>
-                        {% if team_video.all_languages %}
-                            <a href="{{ team_video.link_to_page }}">{% trans 'All Languages' %}</a>
-                        {% else %} 
-                            {% for lang in team_video.languages.all %}
-                                <a href="{{ lang.get_absolute_url }}">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                    <div class="completed_in">
-                        {% if team_video.completed_languages.exists %}
-                            <span>{% trans 'Subtitles completed in' %}</span>
-                            {% for lang in team_video.completed_languages.all %}
-                                <a href="{{ lang.get_absolute_url }}">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
+                {% team_video_detail team_video %}
             </li>
             {% endfor %}
         </ul>

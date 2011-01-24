@@ -53,6 +53,9 @@
     </p>
     {% endif %}
     <p>
+        <a href="{% url teams:detail_members team.slug %}">{% trans "Show Members" %} ({{ team.member_count }})</a>
+    </p> 
+    <p>
         <b>{% trans 'Team Managers' %}:</b>
         {% for item in team.members.managers %}
             <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}

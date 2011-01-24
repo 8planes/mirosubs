@@ -22,44 +22,16 @@
 
 {% block main_content %}
 <div class="grid_8 alpha">
-    <h2>{{ team }}</h2>
+    <h2>
+        <a href="{{ team.get_absolute_url }}">{{ team }}</a> 
+        {% trans "Members" %}
+    </h2>
     
     {% if team.video %}
         {% widget widget_params %}
     {% endif %}    
     
-    <ul class="video_tabs">
-        <li>
-            <a href="{{ team.get_absolute_url }}">
-                {% trans 'Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span>
-            </a>
-        </li>
-        <li class="active">
-            <span class="tab-item">
-                {% trans 'Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span>
-            </span>
-        </li>
-    </ul>
-    
     <div id="members-tab">
-        <div class="boxx">
-            <div class="padding_small">
-                <div class="inline_search">
-                    <form>
-                        <input type="text" name="q" value="{{ query|default:'' }}">
-                        <button class="green_button big">
-                            {% trans 'Search' %}
-                        </button>
-                    </form>
-                </div>
-                <div class="clearfix">
-                </div>
-            </div>
-        </div>
-        <div class="grid_8 clearfix">
-            <br/>
-            <br/>
-        </div>
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% for member in team_member_list %}

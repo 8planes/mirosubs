@@ -26,9 +26,12 @@ from django import template
 from teams.models import Team, Invite
 from videos.models import Action
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
+
+ALL_LANGUAGES_DICT = dict([(val, _(name)) for val, name in settings.ALL_LANGUAGES])
 
 register = template.Library()
 
@@ -95,3 +98,17 @@ def team_add_video_select(context):
         qs = Team.objects.filter(users=user)
         context['teams'] = [item for item in qs if item.can_add_video(user)]
     return context 
+
+@register.inclusion_tag('teams/_team_video_detail.html', takes_context=True)  
+def team_video_detail(context, team_video):
+    languages_to_add = []
+    
+    video_languages = [l.language for l in team_video.video.subtitlelanguage_set.all() if l.language]
+    
+    for lang in context['USER_LANGUAGES']:
+        if not lang in video_languages and lang in ALL_LANGUAGES_DICT:
+            languages_to_add.append((lang, ALL_LANGUAGES_DICT[lang]))
+
+    context['languages_to_add'] = languages_to_add
+    
+    return context

@@ -18,6 +18,7 @@
 
 from django.contrib.sites.models import Site
 from django.conf import settings
+from utils.translation import get_user_languages_from_request
 
 def current_site(request):
     try:
@@ -32,4 +33,9 @@ def custom(request):
     return {
         'GOOGLE_ANALYTICS_NUMBER': settings.GOOGLE_ANALYTICS_NUMBER,
         'DEBUG': settings.DEBUG
+    }
+
+def user_languages(request):
+    return {
+        'USER_LANGUAGES': get_user_languages_from_request(request)
     }

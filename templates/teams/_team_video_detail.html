@@ -1,0 +1,58 @@
+{% load i18n teams_tags %}
+<a href="{{ team_video.video.get_absolute_url }}" class="thumbnail_medium">
+    <img height="100" src="{{ team_video.get_thumbnail }}">
+</a>
+<div class="info">
+    <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
+    {% if team_video|can_edit_video:user %}
+        <a href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
+    {% endif %}
+    {% if team_video.description %}
+    <p>
+        {{ team_video.description|urlize }}
+    </p>
+    {% endif %}
+    {% if team_video.languages.exists or team_video.all_languages %}
+    <div class="need_help">
+        <span>{% trans 'We need your help with' %}</span>
+        {% if team_video.all_languages %}
+            <a href="{{ team_video.link_to_page }}">{% trans 'All Languages' %}</a>
+        {% else %} 
+            {% for lang in team_video.languages.all %}
+                <a href="{{ lang.get_absolute_url }}">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+    <div>
+        {% for lang in team_video.video.subtitlelanguage_set.all %}
+            {% if lang.language in USER_LANGUAGES %}
+                {% if lang.is_original or lang.is_forked %}
+                    <a href="{{ lang.get_absolute_url }}">{% trans "Review" %} {{ lang.language_display }} {% trans "Captions" %}</a>
+                {% else %}
+                    {% if lang.percent_done == 0 %}
+                        <a href="{{ lang.get_absolute_url }}">
+                            {% trans "Translate into" %} {{ lang.language_display }}
+                        </a>
+                    {% endif %}
+                    {% if lang.percent_done == 100 %}
+                        <a href="{{ lang.get_absolute_url }}">
+                            {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
+                        </a>                        
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% for lang in languages_to_add %}
+            <a href="#">{% trans "Create" %} {{ lang.1 }} {% trans "Captions" %}</a>
+        {% endfor %}
+    </div>
+    <div class="completed_in">
+        {% if team_video.completed_languages.exists %}
+            <span>{% trans 'Subtitles completed in' %}</span>
+            {% for lang in team_video.completed_languages.all %}
+                <a href="{{ lang.get_absolute_url }}">{{ lang }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

@@ -42,7 +42,7 @@ from django.utils.encoding import smart_unicode
 import feedparser
 from utils.translation import get_languages_list
 
-ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
+ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
 
 class TranscriptionFileForm(forms.Form, AjaxForm):
     txtfile = forms.FileField()

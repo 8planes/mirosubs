@@ -204,3 +204,33 @@ def get_languages_list(with_empty=False):
     if with_empty:
         languages = [('', '---------')]+languages
     return languages
+
+from django.utils.translation.trans_real import parse_accept_lang_header
+from django.utils import translation
+
+def get_user_languages_from_request(request):
+    if request.user.is_authenticated():
+        languages = [l.language for l in request.user.userlanguage_set.all()]    
+        if languages:
+            return languages
+        
+    languages = []
+    
+    trans_lang = translation.get_language()
+    if not trans_lang in languages:
+        languages.append(trans_lang)
+    
+    if hasattr(request, 'session'):
+        lang_code = request.session.get('django_language', None)
+        if lang_code is not None and not lang_code in languages:
+            languages.append(lang_code)
+            
+    cookie_lang_code = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
+    if cookie_lang_code and not cookie_lang_code in languages:
+        languages.append(cookie_lang_code)
+        
+    accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')        
+    for lang, val in parse_accept_lang_header(accept):
+        if lang and lang != '*' and not lang in languages:
+            languages.append(lang)
+    return languages
