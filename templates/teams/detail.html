@@ -21,6 +21,20 @@
 {% endblock %}
 
 {% block main_content %}
+<div id="language_modal" class="language_modal clearfix">
+  We really need your help!
+  <h2>What languages do you speak?</h2>
+  <form action="#" method="get" accept-charset="utf-8">
+    <div>
+      <select><option>Select Language</option></select>
+      <select><option>Select Language</option></select>
+      <select><option>Select Language</option></select>
+    </div>
+
+    <button type="submit" class="green_button small">Submit</button>
+  </form>
+</div>
+
 <div class="grid_8 alpha">
     <h2>{{ team }} {% trans "Videos" %}</h2>
     
