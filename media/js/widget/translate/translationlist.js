@@ -43,7 +43,7 @@ mirosubs.translate.TranslationList = function(subtitles,
      */
     this.translationWidgets_ = [];
     this.translations_ = [];
-    this.titleTranslationWidget;
+    this.titleTranslationWidget = null;
     this.unitOfWork_ = unitOfWork;
 };
 goog.inherits(mirosubs.translate.TranslationList, goog.ui.Component);

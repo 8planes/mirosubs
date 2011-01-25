@@ -44,7 +44,7 @@ mirosubs.translate.GoogleTranslator.delimiter = '<dlmt>';
 
 /**
  * Remove delimiter from string
- * @param {string} stirng that should be claned
+ * @param {string} string that should be claned
  * @return {string}
  */
 mirosubs.translate.GoogleTranslator.cleanString = function(str) {
@@ -55,7 +55,7 @@ mirosubs.translate.GoogleTranslator.cleanString = function(str) {
  * Send request to Google Translating API
  * @param {string} Text to translate
  * @param {?string} Language code of text to translate, left empty for auto-detection
- * @param {string} Language code for language of result
+ * @param {string} language code for language of result
  * @param {function({Object})} Callback
  */
 mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback) {
@@ -71,9 +71,10 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
 
 /**
  * Return decorated callback for GoogleTranslator
- * @param {Array.<mirosubs.translate.TranslationWidget>}
+ * @param {Array.<mirosubs.translate.TranslationWidget>} widgets containing subtitles for translation
  * @param {Function} Callback
- * @return {function({Object})}
+ * @param {boolean} show loading indicator or not
+ * @return {function({Object})} 
  */
 mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widgets, callback, addLoadingInticator) {
     /**

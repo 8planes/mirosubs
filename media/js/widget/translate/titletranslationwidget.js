@@ -18,6 +18,11 @@
 
 goog.provide('mirosubs.translate.TitleTranslation');
 
+/**
+ * @constructor
+ * @param {string} video title
+ * @param {mirosubs.UnitOfWork} unitOfWork
+ */
 mirosubs.translate.TitleTranslationWidget = function(videoTitle,
                                                 unitOfWork) {
     goog.ui.Component.call(this);
