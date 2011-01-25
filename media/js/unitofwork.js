@@ -99,7 +99,6 @@ mirosubs.UnitOfWork.prototype.getWork = function() {
     return {
         neu: goog.array.clone(this.neu),
         updated: goog.array.clone(this.updated),
-        deleted: goog.array.clone(this.deleted),
-        title: this.title
+        deleted: goog.array.clone(this.deleted)
     };
 };

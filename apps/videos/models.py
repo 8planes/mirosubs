@@ -407,7 +407,8 @@ class SubtitleLanguage(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     subtitles_fetched_count = models.IntegerField(default=0)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
-    
+    title = models.CharField(max_length=2048, blank=True)
+        
     subtitles_fetched_counter = RedisSimpleField()
     
     class Meta:
@@ -420,15 +421,7 @@ class SubtitleLanguage(models.Model):
         if self.is_original:
             return self.video.title
         
-        latest_version = self.latest_version()
-        
-        if latest_version:
-            return latest_version.title
-        
-        return ''
-    
-    def get_title_display(self):
-        return self.get_title() or self.video.title
+        return self.title
     
     def update_complete_state(self):
         version = self.latest_version()
@@ -580,7 +573,6 @@ class SubtitleCollection(models.Model):
 
 class SubtitleVersion(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
-    title = models.CharField(max_length=2048, blank=True)
     version_no = models.PositiveIntegerField(default=0)
     datetime_started = models.DateTimeField()
     user = models.ForeignKey(User, null=True)

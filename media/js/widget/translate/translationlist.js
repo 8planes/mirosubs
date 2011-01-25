@@ -97,9 +97,7 @@ mirosubs.translate.TranslationList.prototype.setTranslations = function(translat
  */
 mirosubs.translate.TranslationList.prototype.translateCallback_ = function(translations, widgets, error) {
     if (error) {
-        //TODO: show pretty error. Pay attention: callback can be called few times 
-        //and have same error. For example, incorrect language - be incorrect for all
-        //requests to google translator
+        
     } else {
         goog.array.forEach(translations, function(text, i) {
             widgets[i].setTranslationContent(text);
@@ -116,7 +114,7 @@ mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(fromL
      * @type {Array.<mirosubs.translate.TranslationWidget>}
      */
     var needTranslating = [];
-    
+
     if (this.titleTranslationWidget && this.titleTranslationWidget.isEmpty()) {
         needTranslating.push(this.titleTranslationWidget);
     };

@@ -82,7 +82,7 @@ mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widge
      */
     var d = mirosubs.translate.GoogleTranslator.delimiter;
     addLoadingInticator = addLoadingInticator || true;
-    
+
     if (widgets.length && widgets[0]['showLoadingIndicator']) {
         goog.array.forEach(widgets, function(w){
             w.showLoadingIndicator();
@@ -99,6 +99,7 @@ mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widge
             var translations = response.responseData.translatedText.split(d);
             callback(translations, widgets);
         }else{
+            alert(response.responseDetails+' This language can be unsupprted by Google Translator.')
             callback([], widgets, response.responseDetails);
         };
     }

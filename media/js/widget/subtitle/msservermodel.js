@@ -76,6 +76,12 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
 mirosubs.subtitle.MSServerModel.prototype.finish = 
     function(jsonSubs, successCallback, opt_cancelCallback) 
 {
+    mirosubs.Rpc.call(
+        'set_title', {
+            draft_pk: this.draftPK_,
+            value: this.unitOfWork_.title
+        }
+    );    
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
     if (mirosubs.currentUsername == null) {
@@ -109,9 +115,9 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback, opt_errorCallback) {
-    var saveArgs = this.makeSaveArgs_();
     var that = this;
-
+    var saveArgs = this.makeSaveArgs_();
+    
     mirosubs.Rpc.call(
         'save_subtitles',
         saveArgs, 
@@ -154,8 +160,7 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
         'packet_no': this.packetNo_,
         'deleted': toJson(work.deleted),
         'inserted': toJson(work.neu),
-        'updated': toJson(work.updated),
-        'title': work.title
+        'updated': toJson(work.updated)
     };
     this.packetNo_++;
     this.unsavedPackets_.push(packet);

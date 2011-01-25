@@ -150,9 +150,26 @@ class Rpc(BaseRpc):
             sub.delete()
         draft = models.SubtitleDraft.objects.get(pk=draft_pk)
         return self._subtitles_dict(draft)
-
+    
+    def set_title(self, request, draft_pk, value):
+        try:
+            draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+        except models.SubtitleDraft.DoesNotExist:
+            return {"response": "draft does not exist"}
+        if not draft.language.can_writelock(request):
+            return { "response" : "unlockable" }
+        if not draft.matches_request(request):
+            return { "response" : "does not match request" }
+        draft.language.writelock(request)
+        draft.language.save()
+        models.SubtitleLanguage.objects.filter(pk=draft.language.pk).update(title=value)
+        return {"response" : "ok"}
+                    
     def save_subtitles(self, request, draft_pk, packets):
-        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+        try:
+            draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+        except models.SubtitleDraft.DoesNotExist:
+            return {"response": "draft does not exist"}
         if not draft.language.can_writelock(request):
             return { "response" : "unlockable" }
         if not draft.matches_request(request):
@@ -203,7 +220,6 @@ class Rpc(BaseRpc):
     def _create_version_from_draft(self, draft, user):
         version = models.SubtitleVersion(
             language=draft.language,
-            title=draft.title or '',
             version_no=draft.version_no,
             is_forked=draft.is_forked,
             datetime_started=draft.datetime_started,
