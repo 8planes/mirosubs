@@ -210,7 +210,7 @@ def rpc(request, method_name, null=False):
     try:
         result = func(**args)
     except TypeError:
-        result = {'error': 'Incorrect arguments number'}
+        result = {'error': 'Incorrect number of arguments'}
     return HttpResponse(json.dumps(result), "application/json")
 
 @csrf_exempt
