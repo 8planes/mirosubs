@@ -61,7 +61,7 @@ mirosubs.video.YoutubeVideoPlayer.logger_ =
     goog.debug.Logger.getLogger('YoutubeVideoPlayer');
 
 /**
- * For FF, this decorates an Embed element.
+ * This decorates an Embed element.
  * @override
  * @param {Element} element Either object or embed for yt video. Must 
  *     have enablejsapi=1.

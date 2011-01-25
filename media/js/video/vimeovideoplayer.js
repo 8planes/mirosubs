@@ -21,11 +21,12 @@ goog.provide('mirosubs.video.VimeoVideoPlayer');
 /**
  * @constructor
  * @param {mirosubs.video.VimeoVideoSource} videoSource
- * @param {boolean=} opt_chromeless
+ * @param {boolean=} opt_forDialog
  */
-mirosubs.video.VimeoVideoPlayer = function(videoSource) {
+mirosubs.video.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
+    this.forDialog_ = !!opt_forDialog;
 
     this.player_ = null;
     this.playerAPIID_ = [videoSource.getUUID(),
@@ -48,6 +49,7 @@ mirosubs.video.VimeoVideoPlayer = function(videoSource) {
     else
         window[vpReady] = readyFunc;
 
+    this.playerSize_ = null;
     this.player_ = null;
     /**
      * Array of functions to execute once player is ready.
@@ -59,39 +61,71 @@ mirosubs.video.VimeoVideoPlayer = function(videoSource) {
 };
 goog.inherits(mirosubs.video.VimeoVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
-mirosubs.video.VimeoVideoPlayer.WIDTH = 400;
-mirosubs.video.VimeoVideoPlayer.HEIGHT = 300;
+mirosubs.video.VimeoVideoPlayer.prototype.createDom = function() {
+    // FIXME: this is copied directly from youtube video player.
+    this.setElementInternal(this.getDomHelper().createElement('span'));
+    var sizeFromConfig = this.sizeFromConfig_();
+    if (!this.forDialog_ && sizeFromConfig)
+        this.playerSize_ = sizeFromConfig;
+    else
+        this.playerSize_ = this.forDialog_ ?
+        mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
+        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+};
 
 mirosubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
     mirosubs.video.VimeoVideoPlayer.superClass_.enterDocument.call(this);
     if (!this.swfEmbedded_) {
         this.swfEmbedded_ = true;
-        var videoDiv = this.getDomHelper().createDom('div');
-        videoDiv.id = mirosubs.randomString();
-        this.getElement().appendChild(videoDiv);
+        var videoSpan = this.getDomHelper().createDom('span');
+        videoSpan.id = mirosubs.randomString();
+        this.getElement().appendChild(videoSpan);
         var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
         var atts = { 'id': this.playerElemID_,
                      'style': mirosubs.style.setSizeInString(
-                         '', this.getVideoSize()) };
-        var baseURL = 'http://vimeo.com/moogaloop.swf';
-        var queryString =
-            ['?js_api=1&width=', mirosubs.video.VimeoVideoPlayer.WIDTH,
-             '&height=', mirosubs.video.VimeoVideoPlayer.HEIGHT,
-             '&clip_id=', this.videoSource_.getVideoId(),
-             '&js_swf_id=', this.playerAPIID_].join('');
+                         '', this.playerSize_) };
         this.setDimensionsKnownInternal();
+        var swfURL = this.createSWFURL_();
         window["swfobject"]["embedSWF"](
-            [baseURL, queryString].join(''),
-            videoDiv.id, mirosubs.video.VimeoVideoPlayer.WIDTH,
-            mirosubs.video.VimeoVideoPlayer.HEIGHT, "8",
+            this.createSWFURL_(),
+            videoSpan.id, this.playerSize_.width + '',
+            this.playerSize_.height + '', "8",
             null, null, params, atts);
     }
     this.getHandler().
         listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
 };
+
+mirosubs.video.VimeoVideoPlayer.prototype.createSWFURL_ = function() {
+    var baseQuery = {};
+    var config = this.videoSource_.getVideoConfig();
+    if (!this.forDialog_ && config)
+        baseQuery = config;
+    goog.object.extend(
+        baseQuery, {
+            'js_api': '1',
+            'width': this.playerSize_.width,
+            'height': this.playerSize_.height,
+            'clip_id': this.videoSource_.getVideoId(),
+            'js_swf_id': this.playerAPIID_
+        });
+    return 'http://vimeo.com/moogaloop.swf?' +
+        goog.Uri.QueryData.createFromMap(baseQuery).toString();
+};
+
 mirosubs.video.VimeoVideoPlayer.prototype.exitDocument = function() {
     mirosubs.video.VimeoVideoPlayer.superClass_.exitDocument.call(this);
     this.timeUpdateTimer_.stop();
+};
+
+mirosubs.video.VimeoVideoPlayer.prototype.sizeFromConfig_ = function() {
+    // FIXME: duplicates same method in youtube player
+    var config = this.videoSource_.getVideoConfig();
+    if (config && config['width'] && config['height'])
+        return new goog.math.Size(
+            parseInt(config['width']), parseInt(config['height']));
+    else
+        return null;
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.getPlayheadTimeInternal = function() {
@@ -216,6 +250,10 @@ mirosubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id)
         that.timeUpdatetimer_.stop();
     };
     this.player_['api_addEventListener']('onPause', onPauseFn);
+};
+
+mirosubs.video.VimeoVideoPlayer.prototype.getVideoSize = function() {
+    return this.playerSize_;
 };
 
 mirosubs.video.VimeoVideoPlayer.prototype.disposeInternal = function() {
