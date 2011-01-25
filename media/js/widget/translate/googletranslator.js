@@ -53,10 +53,10 @@ mirosubs.translate.GoogleTranslator.cleanString = function(str) {
 
 /**
  * Send request to Google Translating API
- * @param {string} Text to translate
- * @param {?string} Language code of text to translate, left empty for auto-detection
- * @param {string} language code for language of result
- * @param {function({Object})} Callback
+ * @param {string} text Text to translate
+ * @param {string=} fromLang Language code of text to translate, left empty for auto-detection
+ * @param {string} toLang Language code for language of result
+ * @param {function({Object})} callback Callback
  */
 mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback) {
     fromLang = fromLang || '';
@@ -72,8 +72,8 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
 /**
  * Return decorated callback for GoogleTranslator
  * @param {Array.<mirosubs.translate.TranslationWidget>} widgets containing subtitles for translation
- * @param {Function} Callback
- * @param {boolean} show loading indicator or not
+ * @param {Function} callback
+ * @param {boolean} addLoadingInticator Show loading indicator or not
  * @return {function({Object})} 
  */
 mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widgets, callback, addLoadingInticator) {
@@ -108,10 +108,10 @@ mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widge
 
 /**
  * Transalte subtitles from widgets with GoogleTranslator.translate
- * @param {Array.<mirosubs.translate.TranslationWidget>}
- * @param {?string} Language code of text to translate, left empty for auto-detection
- * @param {string} Language code for language of result
- * @param {function(Array.<string>, Array.<mirosubs.translate.TranslationWidget>, ?string)} Callback
+ * @param {Array.<mirosubs.translate.TranslationWidget>} needTranslating
+ * @param {?string} fromLang Language code of text to translate, left empty for auto-detection
+ * @param {string} toLang Language code for language of result
+ * @param {function(Array.<string>, Array.<mirosubs.translate.TranslationWidget>, ?string)} callback
  */
 mirosubs.translate.GoogleTranslator.translateWidgets = 
 function(needTranslating, fromLang, toLang, callback) {
