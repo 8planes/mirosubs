@@ -65,7 +65,7 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
         langpair: fromLang+'|'+toLang
     }, callback, function() {
         //TODO: show pretty error
-        alert('Translating servise is unavailable. Try later.');
+        alert('Translating service is unavailable. Try later.');
     });
 };
 
