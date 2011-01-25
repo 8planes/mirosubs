@@ -537,3 +537,36 @@ width: 200px;
 .search_filters p.last {
   border-bottom: 0;
 }
+
+/* Language Modal
+------------------------------------------------*/
+
+.language_modal { 
+  background-color: #fff;
+  width: 500px;
+  color: #818b8f;
+  padding: 20px;
+  -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  -moz-border-radius: 3px; }
+
+.language_modal p { 
+  font-size: 14px;
+  line-height: 24px; }
+  
+.language_modal h2 { 
+  font-size: 22px;
+  margin: 0;
+  color: #000; }
+  
+.language_modal div { 
+  display: none;
+  background-color: #ebf1f2;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  text-align: center; }
+  
+.language_modal select { 
+  margin-right: 20px; }
