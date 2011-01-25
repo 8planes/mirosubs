@@ -542,6 +542,7 @@ width: 200px;
 ------------------------------------------------*/
 
 .language_modal { 
+  display: none;
   background-color: #fff;
   width: 500px;
   color: #818b8f;
