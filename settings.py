@@ -28,13 +28,13 @@ gettext_noop = lambda s: s
 
 from django.conf import global_settings
 lang_dict = dict(global_settings.LANGUAGES)
-lang_dict['es-ar'] = gettext_noop('Spanish, Argentinian')
-lang_dict['en-gb'] = gettext_noop('English, British')
-lang_dict['pt-br'] = gettext_noop('Portuguese, Brazilian')
-lang_dict['sr-latn'] = gettext_noop('Latin, Serbian')
-lang_dict['zh-cn'] = gettext_noop('Chinese, Simplified')
-lang_dict['zh-tw'] = gettext_noop('Chinese, Traditional')
-lang_dict['eo'] = gettext_noop('Esperanto')
+lang_dict['es-ar'] = gettext_noop(u'Spanish, Argentinian')
+lang_dict['en-gb'] = gettext_noop(u'English, British')
+lang_dict['pt-br'] = gettext_noop(u'Portuguese, Brazilian')
+lang_dict['sr-latn'] = gettext_noop(u'Latin, Serbian')
+lang_dict['zh-cn'] = gettext_noop(u'Chinese, Simplified')
+lang_dict['zh-tw'] = gettext_noop(u'Chinese, Traditional')
+lang_dict['eo'] = gettext_noop(u'Esperanto')
 global_settings.LANGUAGES = tuple(i for i in lang_dict.items())
 
 METADATA_LANGUAGES = (
@@ -46,18 +46,19 @@ METADATA_LANGUAGES = (
 ALL_LANGUAGES = list(global_settings.LANGUAGES)
 ALL_LANGUAGES.extend(METADATA_LANGUAGES)
 ALL_LANGUAGES = dict(ALL_LANGUAGES)
-ALL_LANGUAGES['iu'] = gettext_noop('Inuktitut')
-ALL_LANGUAGES['moh'] = gettext_noop('Mohawk')
-ALL_LANGUAGES['oji'] = gettext_noop('Anishinaabe')
-ALL_LANGUAGES['cr'] = gettext_noop('Cree')
-ALL_LANGUAGES['hai'] = gettext_noop('Haida')
-ALL_LANGUAGES['ase'] = gettext_noop('American Sign Language')
-ALL_LANGUAGES['wol'] = gettext_noop('Wolof')
-ALL_LANGUAGES['que'] = gettext_noop('Quechua')
-ALL_LANGUAGES['swa'] = gettext_noop('Swahili')
-ALL_LANGUAGES['urd'] = gettext_noop('Urdu')
-ALL_LANGUAGES['pan'] = gettext_noop('Punjabi')
-ALL_LANGUAGES['br'] = gettext_noop('Breton')
+ALL_LANGUAGES['iu'] = gettext_noop(u'Inuktitut')
+ALL_LANGUAGES['moh'] = gettext_noop(u'Mohawk')
+ALL_LANGUAGES['oji'] = gettext_noop(u'Anishinaabe')
+ALL_LANGUAGES['cr'] = gettext_noop(u'Cree')
+ALL_LANGUAGES['hai'] = gettext_noop(u'Haida')
+ALL_LANGUAGES['ase'] = gettext_noop(u'American Sign Language')
+ALL_LANGUAGES['wol'] = gettext_noop(u'Wolof')
+ALL_LANGUAGES['que'] = gettext_noop(u'Quechua')
+ALL_LANGUAGES['swa'] = gettext_noop(u'Swahili')
+ALL_LANGUAGES['urd'] = gettext_noop(u'Urdu')
+ALL_LANGUAGES['pan'] = gettext_noop(u'Punjabi')
+ALL_LANGUAGES['br'] = gettext_noop(u'Breton')
+ALL_LANGUAGES['be'] = gettext_noop(u'Belarusian')
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
 
@@ -307,8 +308,17 @@ INSTALLED_APPS = (
     'api',
     'targetter',
     'livesettings',
+    'djcelery',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
+
+# Celery settings
+
+import djcelery
+djcelery.setup_loader()
+
+
+#################
 
 import re
 LOCALE_INDEPENDENT_PATHS = (
