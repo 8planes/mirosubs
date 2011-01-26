@@ -133,7 +133,7 @@ class SRTSubtitles(BaseSubtitles):
         minutes = int(floor(time % 3600 / 60))
         seconds = int(time % 60)
         fr_seconds = int(time % 1 * 100)
-        return u'%02i:%02i:%02i,%02i' % (hours, minutes, seconds, fr_seconds)
+        return u'%02i:%02i:%02i,%03i' % (hours, minutes, seconds, fr_seconds)
 
 GenerateSubtitlesHandler.register(SRTSubtitles)
 
