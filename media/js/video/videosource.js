@@ -113,7 +113,8 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     else if (/^\s*https?:\/\/([^\.]+\.)?vimeo/.test(videoURL)) {
         var videoIDExtract = /vimeo.com\/([0-9]+)/i.exec(videoURL);
         if (videoIDExtract)
-            return new mirosubs.video.VimeoVideoSource(videoIDExtract[1], videoURL);
+            return new mirosubs.video.VimeoVideoSource(
+                videoIDExtract[1], videoURL, opt_videoConfig);
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?dailymotion/.test(videoURL)) {
         var videoIDExtract = /dailymotion.com\/video\/([0-9a-z]+)/i.exec(videoURL);

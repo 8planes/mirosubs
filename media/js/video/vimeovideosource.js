@@ -21,20 +21,30 @@ goog.provide('mirosubs.video.VimeoVideoSource');
 /**
  * @constructor
  * @implements {mirosubs.video.VideoSource}
+ * @param {string} videoID Vimeo video id (unrelated to unisubs video id)
+ * @param {string} videoURL URL of Vimeo page
+ * @param {Object.<string, *>=} opt_videoConfig Params to use for moogaloop player.
  */
-mirosubs.video.VimeoVideoSource = function(videoID, videoURL) {
+mirosubs.video.VimeoVideoSource = function(videoID, videoURL, opt_videoConfig) {
     this.videoID_ = videoID;
     this.videoURL_ = videoURL;
     this.uuid_ = mirosubs.randomString();
+    this.videoConfig_ = opt_videoConfig;
 };
 
 mirosubs.video.VimeoVideoSource.prototype.createPlayer = function() {
-    return new mirosubs.video.VimeoVideoPlayer(
-        new mirosubs.video.VimeoVideoSource(this.videoID_, this.videoURL_));
+    return this.createPlayer_(false);
 };
 
 mirosubs.video.VimeoVideoSource.prototype.createControlledPlayer = function() {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer());
+    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+};
+
+mirosubs.video.VimeoVideoSource.prototype.createPlayer_ = function(forDialog) {
+    return new mirosubs.video.VimeoVideoPlayer(
+        new mirosubs.video.VimeoVideoSource(
+            this.videoID_, this.videoURL_, this.videoConfig_),
+        forDialog);
 };
 
 mirosubs.video.VimeoVideoSource.prototype.getVideoId = function() {
@@ -43,6 +53,10 @@ mirosubs.video.VimeoVideoSource.prototype.getVideoId = function() {
 
 mirosubs.video.VimeoVideoSource.prototype.getUUID = function() {
     return this.uuid_;
+};
+
+mirosubs.video.VimeoVideoSource.prototype.getVideoConfig = function() {
+    return this.videoConfig_;
 };
 
 mirosubs.video.VimeoVideoSource.prototype.getVideoURL = function() {
