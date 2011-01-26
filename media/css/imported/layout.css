@@ -542,6 +542,7 @@ width: 200px;
 ------------------------------------------------*/
 
 .language_modal { 
+  display: none;
   background-color: #fff;
   width: 500px;
   color: #818b8f;
@@ -560,7 +561,6 @@ width: 200px;
   color: #000; }
   
 .language_modal div { 
-  display: none;
   background-color: #ebf1f2;
   margin-bottom: 20px;
   padding: 15px 20px;

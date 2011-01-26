@@ -44,9 +44,10 @@ from statistic.models import EmailShareStatistic
 import urllib, urllib2
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
-
+from django.core.urlresolvers import reverse
 from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
+from django.utils.http import urlquote_plus
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -329,12 +330,19 @@ def demo(request):
 def history(request, video_id, lang=None):
     video = get_object_or_404(Video, video_id=video_id)
     video.update_view_counter()
-    
+
     context = widget.add_onsite_js_files({})
     language = video.subtitle_language(lang)
 
     if not language:
-        raise Http404
+        if lang in dict(settings.ALL_LANGUAGES):
+            config = {}
+            config["videoID"] = video.video_id
+            config["languageCode"] = lang
+            url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
+            return redirect(url)
+        else:
+            raise Http404
 
     qs = language.subtitleversion_set.all()
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')

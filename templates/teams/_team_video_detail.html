@@ -44,7 +44,7 @@
             {% endif %}
         {% endfor %}
         {% for lang in languages_to_add %}
-            <a href="#">{% trans "Create" %} {{ lang.1 }} {% trans "Captions" %}</a>
+            <a href="{% url videos:translation_history team_video.video.video_id lang.0 %}">{% trans "Create" %} {{ lang.1 }} {% trans "Captions" %}</a>
         {% endfor %}
     </div>
     <div class="completed_in">
