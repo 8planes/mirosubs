@@ -308,14 +308,14 @@ INSTALLED_APPS = (
     'api',
     'targetter',
     'livesettings',
-    'djcelery',
+    #'djcelery',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 
 # Celery settings
 
-import djcelery
-djcelery.setup_loader()
+# import djcelery
+# djcelery.setup_loader()
 
 
 #################
