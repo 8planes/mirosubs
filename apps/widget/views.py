@@ -53,7 +53,27 @@ def onsite_widget(request):
     Temporary kludge for http://bugzilla.pculture.org/show_bug.cgi?id=13694"""
     context = widget.add_config_based_js_files(
         {}, settings.JS_API, 'mirosubs-api.js')
-    context['widget_params'] = request.GET['config']
+    config = request.GET.get('config', '{}')
+
+    try:
+        config = json.loads(config)
+    except (ValueError, KeyError):
+        raise Http404
+
+    video_id = config.get('videoID')
+    
+    if not video_id:
+        raise Http404
+
+    video = get_object_or_404(models.Video, video_id=video_id)
+
+    if not 'returnURL' in config:
+        config['returnURL'] = video.get_absolute_url()
+    
+    if not 'effectiveVideoURL' in config:
+        config['effectiveVideoURL'] = video.get_video_url()
+    
+    context['widget_params'] = json.dumps(config)
     general_settings = {}
     add_general_settings(request, general_settings)
     context['general_settings'] = json.dumps(general_settings)
