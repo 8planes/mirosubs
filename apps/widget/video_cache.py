@@ -42,7 +42,7 @@ def get_video_id(video_url):
         cache.set(cache_key, video_id, TIMEOUT)
         return video_id
 
-def _invalidate_cache(video_id, language_code=None):
+def invalidate_cache(video_id, language_code=None):
     cache.delete(_video_urls_key(video_id))
     for l in settings.ALL_LANGUAGES:
         cache.delete(_subtitles_dict_key(video_id, l[0]))
@@ -55,14 +55,14 @@ def invalidate_video_id(video_url):
     cache.delete(_video_id_key(video_url))
 
 def on_subtitle_language_save(sender, instance, **kwargs):
-    _invalidate_cache(instance.video.video_id, instance.language)
+    invalidate_cache(instance.video.video_id, instance.language)
 
 def on_subtitle_version_save(sender, instance, **kwargs):
-    _invalidate_cache(instance.language.video.video_id,
+    invalidate_cache(instance.language.video.video_id,
                       instance.language.language)
 
 def on_video_url_save(sender, instance, **kwargs):
-    _invalidate_cache(instance.video.video_id)
+    invalidate_cache(instance.video.video_id)
 
 def _video_id_key(video_url):
     return 'video_id_{0}'.format(sha_constructor(video_url).hexdigest())
