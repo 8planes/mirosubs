@@ -507,7 +507,7 @@ class SubtitleLanguage(models.Model):
                 subtitles_count = 0
             try:
                 val = int(translation_count / 1. / subtitles_count * 100)
-                return val <= 100 and val or 100
+                return max(0, min(val, 100))
             except ZeroDivisionError:
                 return 0 
         else:
