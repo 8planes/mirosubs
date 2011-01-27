@@ -208,7 +208,7 @@ class EditTeamForm(BaseVideoBoundForm):
     class Meta:
         model = Team
         fields = ('name', 'description', 'logo', 'membership_policy', 'is_moderated', 'video_policy', 
-                  'is_visible', 'video_url', 'application_text')
+                  'is_visible', 'video_url', 'application_text', 'page_content')
 
     def __init__(self, *args, **kwargs):
         super(EditTeamForm, self).__init__(*args, **kwargs)

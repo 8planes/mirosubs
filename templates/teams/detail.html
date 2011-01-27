@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator profiles_tags widget %}
+{% load i18n teams_tags paginator profiles_tags widget markup %}
 
 {% block title %}
     {{ team }} | Universal Subtitles
@@ -25,18 +25,14 @@
 
 {% select_language_dialog %}
 
-{% comment %}
-<div class="team_html clearfix">
-  <iframe title="YouTube video player" class="youtube-player" type="text/html" width="340" height="230" src="http://www.youtube.com/embed/0dJFRDqjzss" frameborder="0" allowFullScreen></iframe>
-  <h1>These videos need to be captioned and translated!</h1>
-  <p><a href="#">Donec viverra</a> auctor lobortis. Pellentesque eu est a nulla placerat dignissim.</p>
-</div>
-{% endcomment %}
+{% if team.page_content %}
+    <div class="team_html clearfix">{{ team.page_content|escape|markdown }}</div>    
+{% endif %}
 
 <div class="grid_8 alpha">
     <h2>{{ team }} {% trans "Videos" %}</h2>
     
-    {% if team.video %}
+    {% if not team.page_content and team.video %}
         {% widget widget_params %}
     {% endif %}
     
