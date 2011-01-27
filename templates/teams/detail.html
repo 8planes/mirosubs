@@ -17,31 +17,21 @@
     {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
     <script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
-    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>   
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
+    <script src="{% url profiles:rpc_api %}" type="text/javascript"></script>    
 {% endblock %}
 
 {% block main_content %}
-<div id="language_modal" class="language_modal clearfix">
-  We really need your help!
-  <h2>What languages do you speak?</h2>
-  <form action="#" method="get" accept-charset="utf-8">
-    <div>
-      <select><option>Select Language</option></select>
-      <select><option>Select Language</option></select>
-      <select><option>Select Language</option></select>
-    </div>
 
-    <button type="submit" class="green_button small">Submit</button>
-  </form>
-</div>
+{% select_language_dialog %}
 
+{% comment %}
 <div class="team_html clearfix">
   <iframe title="YouTube video player" class="youtube-player" type="text/html" width="340" height="230" src="http://www.youtube.com/embed/0dJFRDqjzss" frameborder="0" allowFullScreen></iframe>
   <h1>These videos need to be captioned and translated!</h1>
-  <p>In condimentum facilisis porta. Sed nec diam eu diam mattis viverra. Nulla fringilla, orci ac euismod semper, magna diam porttitor mauris, quis sollicitudin sapien justo in libero. Vestibulum mollis mauris enim. Morbi euismod magna ac lorem rutrum elementum. Donec viverra auctor lobortis. Pellentesque eu est a nulla placerat dignissim.</p>
-
   <p><a href="#">Donec viverra</a> auctor lobortis. Pellentesque eu est a nulla placerat dignissim.</p>
 </div>
+{% endcomment %}
 
 <div class="grid_8 alpha">
     <h2>{{ team }} {% trans "Videos" %}</h2>

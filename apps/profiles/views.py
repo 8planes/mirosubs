@@ -31,6 +31,12 @@ from django.views.generic.list_detail import object_list
 from videos.models import Video, Action
 from django.conf import settings
 from django.db.models import Q
+from profiles.rpc import ProfileApiClass
+from utils.rpc import RpcRouter
+
+rpc_router = RpcRouter('profiles:rpc_router', {
+    'ProfileApi': ProfileApiClass()
+})
 
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
 

@@ -2,6 +2,7 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from inspect import getargspec
+from Cookie import SimpleCookie
 
 class RpcExceptionEvent(Exception):
     """
@@ -9,6 +10,30 @@ class RpcExceptionEvent(Exception):
     So we can handle it in client and show pretty message for user.
     """
     pass
+
+class RpcHttpResponse(dict):
+    """
+    This is vrapper for method's reponse, which allow save some modification of HTTP response.
+    For example set COOKIES. This should be flexible and useful for in future.
+    """
+    
+    def __init__(self, *args, **kwargs):
+        super(RpcHttpResponse, self).__init__(*args, **kwargs)
+        self.cookies = SimpleCookie()
+
+    def set_cookie(self, key, value='', max_age=None, expires=None, path='/',
+                   domain=None, secure=False):
+        self.cookies[key] = value
+        if max_age is not None:
+            self.cookies[key]['max-age'] = max_age
+        if expires is not None:
+            self.cookies[key]['expires'] = expires
+        if path is not None:
+            self.cookies[key]['path'] = path
+        if domain is not None:
+            self.cookies[key]['domain'] = domain
+        if secure:
+            self.cookies[key]['secure'] = True
 
 #for jQuery.Rpc
 class RpcRouter(object):
@@ -50,10 +75,26 @@ class RpcRouter(object):
             
         if not isinstance(requests, list):
                 requests = [requests]
+        
+        response = HttpResponse('', mimetype="application/json")
             
-        output = [self.call_action(rd, request, *args, **kwargs) for rd in requests]
+        output = []
+        
+        for rd in requests:
+            mr = self.call_action(rd, request, *args, **kwargs)
             
-        return HttpResponse(simplejson.dumps(output), mimetype="application/json")    
+            #This looks like a little ugly
+            if 'result' in mr and isinstance(mr['result'], RpcHttpResponse):
+                for key, val in mr['result'].cookies.items():
+                    response.set_cookie(key, val.value, val['max-age'], val['expires'], val['path'],
+                                        val['domain'], val['secure'])
+                mr['result'] = dict(mr['result'])
+                
+            output.append(mr)
+        
+        response.content = simplejson.dumps(output)
+            
+        return response 
     
     def action_extra_kwargs(self, action, request, *args, **kwargs):
         """
@@ -89,14 +130,14 @@ class RpcRouter(object):
         exception event for Ext.Direct.
         """        
         method = rd['method']
-        
+
         if not rd['action'] in self.actions:
             return {
                 'tid': rd['tid'],
                 'type': 'exception',
                 'action': rd['action'],
                 'method': method,
-                'message': 'Incorrect arguments number'
+                'message': 'Undefined action'
             }
         
         action = self.actions[rd['action']]

@@ -16,16 +16,23 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.conf.urls.defaults import *
-from profiles.views import rpc_router
+#  Based on: http://www.djangosnippets.org/snippets/73/
+#
+#  Modified by Sean Reifschneider to be smarter about surrounding page
+#  link context.  For usage documentation see:
+#
+#     http://www.tummy.com/Community/Articles/django-pagination/
+from profiles.forms import SelectLanguageForm
+from utils.rpc import RpcHttpResponse
 
-urlpatterns = patterns('profiles.views',
-    url(r'^mine/$', 'my_profile', name='my_profile'),
-    url(r'^edit/$', 'edit_profile', name='edit'),
-    url(r'^router/$', rpc_router, name='rpc_router'),
-    url(r'^router/api/$', rpc_router.api, name='rpc_api'),    
-    url(r'^send_message/$', 'send_message', name='send_message'),
-    url(r'^edit_avatar/$', 'edit_avatar', name='edit_avatar'),
-    url(r'^remove_avatar/$', 'remove_avatar', name='remove_avatar'),
-    url(r'^(?P<user_id>.+)/$', 'profile', name='profile'),
-)
+class ProfileApiClass(object):
+    
+    def select_languages(self, rdata, user):
+        form = SelectLanguageForm(rdata)
+        
+        response = RpcHttpResponse()
+        
+        if form.is_valid():
+            form.save(user, response)
+            
+        return response

@@ -24,8 +24,40 @@ from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
 from utils.forms import AjaxForm
-from utils.translation import get_languages_list
+from utils.translation import get_languages_list, get_simple_languages_list
+from django.utils import simplejson as json
+from utils.translation import set_user_languages_to_cookie
 
+class SelectLanguageForm(forms.Form):
+    language1 = forms.ChoiceField(choices=(), required=False)
+    language2 = forms.ChoiceField(choices=(), required=False)
+    language3 = forms.ChoiceField(choices=(), required=False)
+
+    def __init__(self, *args, **kwrags):
+        super(SelectLanguageForm, self).__init__(*args, **kwrags)
+        lc = get_simple_languages_list(True)
+        self.fields['language1'].choices = lc
+        self.fields['language2'].choices = lc
+        self.fields['language3'].choices = lc
+    
+    def save(self, user, response=None):
+        data = self.cleaned_data
+        
+        languages = []
+        
+        if data.get('language1'): languages.append(data.get('language1'))
+        if data.get('language2'): languages.append(data.get('language2'))
+        if data.get('language3'): languages.append(data.get('language3'))
+        
+        if user.is_authenticated():
+            for l in languages:
+                UserLanguage.objects.get_or_create(user=user, language=l)
+        else:
+            if not response is None:
+                set_user_languages_to_cookie(response, languages)
+            else:
+                return languages
+    
 class UserLanguageForm(forms.ModelForm):
     
     class Meta:

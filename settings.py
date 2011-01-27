@@ -95,6 +95,8 @@ PREVIOUS_EMBED_JS_VERSIONS = []
 
 JS_USE_COMPILED = False
 
+USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
+
 # paths provided relative to media/js
 JS_CORE = ['mirosubs.js', 
            'rpc.js',

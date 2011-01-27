@@ -28,10 +28,34 @@ from django.conf import settings
 from videos.models import Video
 from auth.models import CustomUser as User
 from django.db.models import Q
+from profiles.forms import SelectLanguageForm
+from utils.translation import languages_from_request, get_user_languages_from_cookie
 
 register = template.Library()
 
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
+
+@register.inclusion_tag('profiles/_select_language_dialog.html', takes_context=True)
+def select_language_dialog(context):
+    form = None
+    user = context['user']
+    
+    langs_from_cookie = get_user_languages_from_cookie(context['request'])
+    
+    if (not user.is_authenticated() or not user.userlanguage_set.exists()) \
+                                                        and not langs_from_cookie:
+        user_langs = languages_from_request(context['request'])
+    
+        initial_data = {}
+        
+        for i, l in enumerate(user_langs[:3]):
+            initial_data['language%s' % (i+1)] = l
+            
+        form = SelectLanguageForm(initial=initial_data)
+        
+    return {
+        'form': form
+    }
 
 @register.inclusion_tag('profiles/_user_videos_activity.html', takes_context=True)
 def user_videos_activity(context, user=None):

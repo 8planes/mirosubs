@@ -1,0 +1,63 @@
+{% load i18n %}
+
+{% if form %}
+<script type="text/javascript">
+    //require ProfileApi
+    jQuery(function($){
+        function are_cookies_enabled()
+        {
+            var cookieEnabled = (navigator.cookieEnabled) ? true : false;
+        
+            if (typeof navigator.cookieEnabled == "undefined" && !cookieEnabled)
+            { 
+                document.cookie="testcookie";
+                cookieEnabled = (document.cookie.indexOf("testcookie") != -1) ? true : false;
+            }
+            return (cookieEnabled);
+        }
+        
+        if (are_cookies_enabled()){        
+            var $w = $('#language_modal');
+            
+            $w.mod({
+                closeable: false
+            });
+            
+            $w.find('button').click(function(){
+                var values = {};
+                var has_value = false;
+                
+                $('select', $w).each(function(i, item){
+                    var $item = $(item);
+                    values[$item.attr('name')] = $item.val();
+                    
+                    if ( ! has_value && $item.val()){
+                        has_value = true;
+                    }
+                });
+
+                if ( ! has_value){
+                    $.jGrowl.error('{% trans "Select at least one language." %}');
+                }else{
+                    ProfileApi.select_languages(values, function(){});
+                    //$w.modClose();
+                }
+
+                return false;
+            });
+        };
+    });
+</script>
+
+<div id="language_modal" class="language_modal clearfix">
+  {% trans "We really need your help!" %}
+  <h2>{% trans "What languages do you speak?" %}</h2>
+    <div>
+      {{ form.language1 }}
+      {{ form.language2 }}
+      {{ form.language3 }}
+    </div>
+
+    <button type="submit" class="green_button small">{% trans "Submit" %}</button>
+</div>
+{% endif %}
