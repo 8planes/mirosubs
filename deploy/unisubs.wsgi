@@ -12,6 +12,7 @@ site.addsitedir(rel('env/lib/python2.6/site-packages'))
 
 sys.path.append(PROJECT_ROOT)
 sys.path.append(rel('mirosubs'))
+sys.path.append(rel('mirosubs', 'libs'))
 sys.path.append(rel('mirosubs', 'apps'))
 
 sys.stdout = sys.stderr
