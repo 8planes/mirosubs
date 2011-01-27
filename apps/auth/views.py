@@ -29,6 +29,8 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
+from utils.translation import get_user_languages_from_cookie
+from auth.models import UserLanguage
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
@@ -42,6 +44,9 @@ def create_user(request):
         new_user = form.save()
         user = authenticate(username=new_user.username,
                             password=form.cleaned_data['password1'])
+        langs = get_user_languages_from_cookie(request)
+        for l in langs:
+            UserLanguage.objects.get_or_create(user=user, language=l)        
         auth_login(request, user)
         return HttpResponseRedirect(redirect_to)
     else:

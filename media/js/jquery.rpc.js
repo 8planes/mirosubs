@@ -806,14 +806,19 @@ jQuery.util.DelayedTask = function(fn, scope, args){
     
         doCall : function(c, m, args){
             var data = null, hs, scope, len = 0;
+
             $.each(args, function(i, val){
-                if (! hs && $.isFunction(val)){
-                    hs = val;
+                if (! hs && $.isFunction(val) || (i+1 == args.length)){
+                    if ( ! $.isFunction(val) && (i+1 == args.length)){
+                        hs = $.noop;
+                    }else{
+                        hs = val;
+                    }
                     scope = args[i+1];
-                    len = i;
+                    len = i+1;
                 };
             });
-    
+
             if(len !== 0){
                 data = args.slice(0, len);
             }

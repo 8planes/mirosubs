@@ -39,8 +39,8 @@
                 if ( ! has_value){
                     $.jGrowl.error('{% trans "Select at least one language." %}');
                 }else{
-                    ProfileApi.select_languages(values, function(){});
-                    //$w.modClose();
+                    ProfileApi.select_languages(values);
+                    $w.modClose();
                 }
 
                 return false;

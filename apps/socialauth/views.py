@@ -33,6 +33,8 @@ import random
 from datetime import datetime
 from cgi import parse_qs
 import urllib
+from utils.translation import get_user_languages_from_cookie
+from auth.models import UserLanguage
 
 def get_url_host(request):
 # FIXME: Duplication
@@ -88,6 +90,10 @@ def twitter_login_done(request):
     
     # if user is authenticated then login user
     if user:
+        if not user.userlanguage_set.exists():
+            langs = get_user_languages_from_cookie(request)
+            for l in langs:
+                UserLanguage.objects.get_or_create(user=user, language=l)        
         login(request, user)
     else:
         # We were not able to authenticate user
@@ -143,6 +149,11 @@ def openid_done(request, provider=None):
         #authenticate and login
         user = authenticate(openid_key=openid_key, request=request, provider = provider)
         if user:
+            if not user.userlanguage_set.exists():
+                langs = get_user_languages_from_cookie(request)
+                for l in langs:
+                    UserLanguage.objects.get_or_create(user=user, language=l)
+                    
             login(request, user)
             next = None
             if 'openid_next' in request.session:

@@ -6,6 +6,8 @@ import time
 from django.utils.http import cookie_date
 from translation_names import LANGUAGE_NAMES, ORIGINAL_LANGUAGE_NAMES
 
+SUPPORTED_LANGUAGES_DICT = dict(settings.ALL_LANGUAGES)
+
 def get_simple_languages_list(with_empty=False):
     cache_key = 'simple-langs-cache-%s' % get_language() 
     languages = cache.get(cache_key)   
@@ -52,14 +54,13 @@ def get_user_languages_from_request(request, only_supported=False):
         languages = languages_from_request(request)
             
     if only_supported:
-        supported_langs = dict(settings.ALL_LANGUGES).keys()
         for item in languages:
-            if not item in supported_langs:
+            if not item in SUPPORTED_LANGUAGES_DICT:
                 languages.remove(item)
     return languages
 
 def set_user_languages_to_cookie(response, languages):
-    max_age = 60*60*24*7
+    max_age = 60*60*24
     response.set_cookie(
         settings.USER_LANGUAGES_COOKIE_NAME,
         json.dumps(languages), 
@@ -68,7 +69,11 @@ def set_user_languages_to_cookie(response, languages):
 
 def get_user_languages_from_cookie(request):
     try:
-        return json.loads(request.COOKIES.get(settings.USER_LANGUAGES_COOKIE_NAME, '[]'))
+        langs = json.loads(request.COOKIES.get(settings.USER_LANGUAGES_COOKIE_NAME, '[]'))
+        for l in langs:
+            if not l in SUPPORTED_LANGUAGES_DICT:
+                langs.remove(l)
+        return langs
     except (TypeError, ValueError):
         return []
 
@@ -98,9 +103,8 @@ def languages_from_request(request, only_supported=False):
             languages.append(lang)
             
     if only_supported:
-        supported_langs = dict(settings.ALL_LANGUGES).keys()
         for item in languages:
-            if not item in supported_langs:
+            if not item in SUPPORTED_LANGUAGES_DICT:
                 languages.remove(item)
                 
     return languages
