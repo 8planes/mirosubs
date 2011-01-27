@@ -392,7 +392,12 @@ def create_video_id(sender, instance, **kwargs):
     alphanum = string.letters+string.digits
     instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
                                                            for i in xrange(12)])
+    
+def video_delete_handler(sender, instance, **kwargs):
+    video_cache.invalidate_cache(instance.video_id)
+
 models.signals.pre_save.connect(create_video_id, sender=Video)
+models.signals.pre_delete.connect(video_delete_handler, sender=Video)
 
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
@@ -544,8 +549,12 @@ class SubtitleLanguage(models.Model):
             if not user in users:
                 users.append(user)
         return users
+    
+def subtile_language_delete_handler(sender, instance, **kwargs):
+    video_cache.invalidate_cache(instance.video.video_id)
 
 post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
+models.signals.pre_delete.connect(subtile_language_delete_handler, SubtitleLanguage)
 
 class SubtitleCollection(models.Model):
     is_forked=models.BooleanField(default=False)

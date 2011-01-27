@@ -26,6 +26,7 @@ from livesettings import BASE_GROUP, config_register
 config_register(EmailListValue(BASE_GROUP, 'alert_emails', description=_(u'Email for alert')))
 
 class VideoAdmin(admin.ModelAdmin):
+    actions = None
     list_display = ['__unicode__', 'title', 'languages', 'video_thumbnail']
     search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
     
@@ -47,6 +48,7 @@ class VideoAdmin(admin.ModelAdmin):
     languages.allow_tags = True
     
 class SubtitleLanguageAdmin(admin.ModelAdmin):
+    actions = None
     list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete', 'versions']
     list_filter = ['is_original', 'is_complete']
     
