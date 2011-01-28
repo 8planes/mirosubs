@@ -91,7 +91,8 @@
                <p>
                    {{ form.page_content.errors }}
                    {{ form.page_content }}
-                   {{ form.page_content.help_text }}
+                   {% trans "You can use" %} <a target="blank" href="">{% trans "murkdown" %}</a>. 
+                   {% trans "This will replace Description. " %}
                </p>                                                        
           </div>
           <div class="grid_4 omega">
