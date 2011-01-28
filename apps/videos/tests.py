@@ -824,3 +824,16 @@ class TestPercentComplete(TestCase):
     def test_delete_from_translation(self):
         self.translation_version.subtitle_set.all()[:1].get().delete()
         self.assertEqual(self.translation.percent_done, 75)
+
+    def test_many_subtitles(self):
+        latest_version = self.original_language.latest_version()
+        for i in range(5, 450):
+            s = Subtitle()
+            s.version = latest_version
+            s.subtitle_id = 'sadfdasf%s' % i
+            s.subtitle_order = i
+            s.start_time = 50 + i
+            s.end_time = 51 + i
+            s.save()
+        
+        self.assertEqual(self.translation.percent_done, 0)
