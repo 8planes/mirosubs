@@ -61,7 +61,6 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_FLV, 'FLV')
 )
 WRITELOCK_EXPIRATION = 30 # 30 seconds
-VIDEO_SESSION_KEY = 'video_session'
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -331,15 +330,13 @@ class Video(models.Model):
 
     def can_writelock(self, request):
         """Can I place a writelock on this video for subtitling?"""
-        if VIDEO_SESSION_KEY not in request.session:
-            return False
         return self.writelock_session_key == \
-            request.session[VIDEO_SESSION_KEY] or \
+            request.browser_id or \
             not self.is_writelocked
 
     def writelock(self, request):
         """Writelock this video for subtitling."""
-        self._make_writelock(request.user, request.session[VIDEO_SESSION_KEY])
+        self._make_writelock(request.user, request.browser_id)
     
     def _make_writelock(self, user, key):
         if user.is_authenticated():
@@ -464,10 +461,8 @@ class SubtitleLanguage(models.Model):
         return seconds < WRITELOCK_EXPIRATION
     
     def can_writelock(self, request):
-        if VIDEO_SESSION_KEY not in request.session:
-            return False
         return self.writelock_session_key == \
-            request.session[VIDEO_SESSION_KEY] or \
+            request.browser_id or \
             not self.is_writelocked
 
     def writelock(self, request):
@@ -475,7 +470,7 @@ class SubtitleLanguage(models.Model):
             self.writelock_owner = request.user
         else:
             self.writelock_owner = None
-        self.writelock_session_key = request.session[VIDEO_SESSION_KEY]
+        self.writelock_session_key = request.browser_id
         self.writelock_time = datetime.now()
 
     def release_writelock(self):

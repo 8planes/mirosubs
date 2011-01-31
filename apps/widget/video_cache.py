@@ -113,7 +113,6 @@ def get_subtitles_dict(
 def get_subtitle_count(video_id):
     cache_key = _subtitles_count_key(video_id)
     value = cache.get(cache_key)
-    print value
     if value is not None:
         return value
     else:

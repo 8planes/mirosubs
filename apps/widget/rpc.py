@@ -23,7 +23,6 @@ import re
 import simplejson as json
 import widget
 from widget.base_rpc import BaseRpc
-from videos.models import VIDEO_SESSION_KEY
 from urlparse import urlparse, parse_qs
 from django.conf import settings
 from django.db.models import Sum
@@ -53,8 +52,6 @@ class Rpc(BaseRpc):
         models.Video.widget_views_counter(video_id).incr()
         widget_views_total_counter.incr()
         
-        self._maybe_add_video_session(request)
-
         return_value = {
             'video_id' : video_id,
             }
@@ -98,7 +95,6 @@ class Rpc(BaseRpc):
         """Called by subtitling widget when subtitling or translation 
         is to commence or recommence on a video.
         """
-        self._maybe_add_video_session(request)
         if original_language_code:
             self._save_original_language(video_id, original_language_code)
         language, can_writelock = self._get_language_for_editing(

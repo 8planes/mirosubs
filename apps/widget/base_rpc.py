@@ -20,7 +20,6 @@ from django.conf.global_settings import LANGUAGES
 from django.utils import translation
 from videos import models
 from django.conf import settings
-from videos.models import VIDEO_SESSION_KEY
 from uuid import uuid4
 import widget
 
@@ -63,13 +62,6 @@ class BaseRpc:
         from django.contrib.auth import logout
         logout(request)
         return {"respones" : "ok"}
-
-    def _maybe_add_video_session(self, request):
-        if VIDEO_SESSION_KEY not in request.session:
-            request.session[VIDEO_SESSION_KEY] = str(uuid4()).replace('-', '')
-
-    def _video_session_key(self, request):
-        return request.session[VIDEO_SESSION_KEY]
 
     def _save_packets(self, sub_collection, packets):
         subtitle_set = sub_collection.subtitle_set

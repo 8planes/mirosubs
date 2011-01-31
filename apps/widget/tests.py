@@ -30,7 +30,6 @@ from videos.models import Video, Action
 from videos import models
 from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
-from videos.models import VIDEO_SESSION_KEY
 from django.core.urlresolvers import reverse
 from widget import video_cache
 from datetime import datetime, timedelta
@@ -201,6 +200,26 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, draft.pk, [])
         video = Video.objects.get(pk=draft.video.pk)
         self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
+
+    def test_update_after_clearing_session(self):
+        request = RequestMockup(self.user_1)
+        draft = self._create_basic_draft(request)
+        # this will fail if locking is dependent on anything in session,
+        # which can get cleared after login.
+        request.session = {}
+        updated = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey you!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        response = rpc.save_subtitles(
+            request, draft.pk, 
+            [_make_packet(updated=updated)])
+        self.assertEquals('ok', response['response'])
+        rpc.finished_subtitles(request, draft.pk, [])
+        video = Video.objects.get(pk=draft.video.pk)
+        self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
+
 
     def test_insert_then_update_same_call(self):
         request = RequestMockup(self.user_0)
