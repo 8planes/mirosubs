@@ -570,3 +570,28 @@ width: 200px;
   
 .language_modal select { 
   margin-right: 20px; }
+
+
+/* Language Bar
+------------------------------------------------*/
+
+.language_bar { 
+  background-color: rgba(119, 143, 161, 0.6);
+  line-height: 30px;
+  font-size: 12px;
+  text-align: right;
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  color: #1e3d43; }
+
+.language_bar .green_button { 
+  line-height: 12px;
+  float: none;
+  display: inline-block;
+  border: 0;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  margin-left: 5px; }
+
+.language_bar span { 
+  margin-left: 5px;
+  text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.2); }
