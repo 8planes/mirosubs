@@ -42,8 +42,8 @@ def select_language_dialog(context):
     
     langs_from_cookie = get_user_languages_from_cookie(context['request'])
     
-    if (not user.is_authenticated() or not user.userlanguage_set.exists()) \
-                                                        and not langs_from_cookie:
+    if (not user.is_authenticated() and not langs_from_cookie) \
+                                or not user.userlanguage_set.exists():
         user_langs = languages_from_request(context['request'])
     
         initial_data = {}

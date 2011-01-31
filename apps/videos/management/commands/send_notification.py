@@ -21,9 +21,9 @@ class Command(BaseCommand):
             .filter(Q(language__writelock_time__isnull=True)|Q(language__writelock_time__lte=max_save_time))
         for version in qs:
             self._update_language(version)
-            #version.notification_sent = True
+            version.notification_sent = True
             version.save()
-            #version.update_changes()  #item is saved in update_changes            
+            version.update_changes()  #item is saved in update_changes            
             if version.version_no == 0 and not version.language.is_original:
                 self.send_letter_translation_start(version)
             else:

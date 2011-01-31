@@ -26,7 +26,7 @@
 {% select_language_dialog %}
 
 {% if team.page_content %}
-    <div class="team_html clearfix">{{ team.page_content|escape|markdown }}</div>    
+    <div class="team_html clearfix">{{ team.page_content|force_escape|markdown }}</div>    
 {% endif %}
 
 <div class="grid_8 alpha">
