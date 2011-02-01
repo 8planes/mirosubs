@@ -43,6 +43,7 @@ import feedparser
 from utils.translation import get_languages_list
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
+KB_SIZELIMIT = 512
 
 class TranscriptionFileForm(forms.Form, AjaxForm):
     txtfile = forms.FileField()
@@ -53,8 +54,9 @@ class TranscriptionFileForm(forms.Form, AjaxForm):
         if f.name.split('.')[-1] != 'txt':
             raise forms.ValidationError(_('File should have txt format'))
         
-        if f.size > 256*1024:
-            raise forms.ValidationError(_(u'File size should be less 256 kb'))
+        if f.size > KB_SIZELIMIT * 1024:
+            raise forms.ValidationError(_(
+                    u'File size should be less {0} kb'.format(KB_SIZELIMIT)))
 
         text = f.read()
         encoding = chardet.detect(text)['encoding']
@@ -70,8 +72,9 @@ class TranscriptionFileForm(forms.Form, AjaxForm):
 
     def clean_subtitles(self):
         subtitles = self.cleaned_data['subtitles']
-        if subtitles.size > 256*1024:
-            raise forms.ValidationError(_(u'File size should be less 256 kb'))
+        if subtitles.size > KB_SIZELIMIT * 1024:
+            raise forms.ValidationError(_(
+                    u'File size should be less {0} kb'.format(KB_SIZELIMIT)))
         parts = subtitles.name.split('.')
         if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml', 'sbv']:
             raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)'))
@@ -290,8 +293,9 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
     
     def clean_subtitles(self):
         subtitles = self.cleaned_data['subtitles']
-        if subtitles.size > 256*1024:
-            raise forms.ValidationError(_(u'File size should be less 256 kb'))
+        if subtitles.size > KB_SIZELIMIT * 1024:
+            raise forms.ValidationError(_(
+                    u'File size should be less {0} kb'.format(KB_SIZELIMIT)))
         parts = subtitles.name.split('.')
         if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml', 'sbv']:
             raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)'))
