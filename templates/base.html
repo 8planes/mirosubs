@@ -62,6 +62,7 @@
 {% block feedback-button %}
   <a href="#" class="feedback_tab" data-modal="feedback_container">{% trans "Feedback" %}</a>
 {% endblock %}
+
 {% comment %}
 <!--[if lte IE 6]>
   <div class="note"><strong>{% trans 'Universal Subtitles does not support your browser. Upgrade your browser or <a href="http://getfirefox.com">Try Firefox</a>.' %}</strong></div>
@@ -73,6 +74,15 @@
     {% endif %}
     <div class="cloud">
     <div class="watercolor">
+
+    <div class="language_bar">
+      <div class="wrapper container_12">
+        <span>English</span>,
+        <span>French</span>,
+        <span>Spanish</span>
+        <a href="#" class="green_button small">Select your Languages</a>
+      </div>
+    </div>
 
     <div class="wrapper container_12">
       {% block extra_body %}{% endblock %}
