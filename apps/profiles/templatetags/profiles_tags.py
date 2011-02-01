@@ -38,12 +38,8 @@ ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
 @register.inclusion_tag('profiles/_select_language_dialog.html', takes_context=True)
 def select_language_dialog(context):
     form = None
-    user = context['user']
-    
-    langs_from_cookie = get_user_languages_from_cookie(context['request'])
-    
-    if (not user.is_authenticated() and not langs_from_cookie) \
-                                or not user.userlanguage_set.exists():
+
+    if _user_needs_languages(context):
         user_langs = languages_from_request(context['request'])
     
         initial_data = {}
@@ -56,6 +52,13 @@ def select_language_dialog(context):
     return {
         'form': form
     }
+
+def _user_needs_languages(context):
+    user = context['user']
+    if user.is_authenticated():
+        return not user.userlanguage_set.exists()
+    else:
+        return not get_user_languages_from_cookie(context['request'])
 
 @register.inclusion_tag('profiles/_user_videos_activity.html', takes_context=True)
 def user_videos_activity(context, user=None):
