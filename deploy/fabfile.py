@@ -21,7 +21,7 @@ from fabric.api import run, put, sudo, env, cd, local
 import os
 
 def _create_env(username, s3_bucket, installation_dir):
-    env.hosts = ['universalsubtitles.org:2191']
+    env.hosts = ['pcf10.pculture.org:2191']
     env.user = username
     env.s3_bucket = s3_bucket
     env.base_dir = '/var/www/{0}'.format(installation_dir)

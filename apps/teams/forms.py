@@ -207,7 +207,7 @@ class EditTeamForm(BaseVideoBoundForm):
 
     class Meta:
         model = Team
-        fields = ('name', 'header_html_text', 'description', 'logo', 
+        fields = ('name', 'description', 'logo', 
                   'membership_policy', 'is_moderated', 'video_policy', 
                   'is_visible', 'video_url', 'application_text', 
                   'page_content')
@@ -238,3 +238,13 @@ Enter a link to any compatible video, or to any video page on our site.''')
             for item in team.applications.all():
                 item.approve()
         return team    
+
+class EditTeamFormAdmin(EditTeamForm):
+    logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
+
+    class Meta:
+        model = Team
+        fields = ('name', 'header_html_text', 'description', 'logo', 
+                  'membership_policy', 'is_moderated', 'video_policy', 
+                  'is_visible', 'video_url', 'application_text', 
+                  'page_content')

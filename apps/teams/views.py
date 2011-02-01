@@ -25,7 +25,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
 from utils import render_to, render_to_json
-from teams.forms import CreateTeamForm, EditTeamForm, TeamVideoLanguageFormset, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
+from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, TeamVideoLanguageFormset, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguage
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -231,13 +231,19 @@ def edit(request, slug):
         }
     
     if request.method == 'POST':
-        form = EditTeamForm(request.POST, request.FILES, instance=team)
+        if request.user.is_staff:
+            form = EditTeamFormAdmin(request.POST, request.FILES, instance=team)
+        else:
+            form = EditTeamForm(request.POST, request.FILES, instance=team)
         if form.is_valid():
             form.save()
             messages.success(request, _('Team edited success'))
             return redirect(team.get_edit_url())
     else:
-        form = EditTeamForm(instance=team)
+        if request.user.is_staff:
+            form = EditTeamFormAdmin(instance=team)
+        else:
+            form = EditTeamForm(instance=team)
     return {
         'form': form,
         'team': team
