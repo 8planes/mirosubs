@@ -53,6 +53,14 @@
                       {{ form.name.label_tag }}
                       {{ form.name }}
                   </p>
+               {% if request.user.is_staff %}
+                  <p>
+                      {{ form.header_html_text.errors }}
+                      {{ form.header_html_text.label_tag }}
+                      {{ form.header_html_text }}
+                      {{ form.header_html_text.help_text }}
+                  </p>
+               {% endif %}
                   <p>
                       {{ form.description.errors }}
                       {{ form.description.label_tag }}

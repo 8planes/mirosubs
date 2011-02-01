@@ -85,6 +85,7 @@ class Team(models.Model):
     application_text = models.TextField(blank=True)
     page_content = models.TextField(_(u'Page content'), blank=True, help_text=_(u'You can use murkdown. This will replace Description.'))
     is_moderated = models.BooleanField(default=False)
+    header_html_text = models.TextField(blank=True, default='', help_text=_(u"HTML that appears at the top of the teams page."))
     
     objects = TeamManager()
     
