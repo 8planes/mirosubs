@@ -21,7 +21,10 @@
           <li>
               <a href="{% url messages:index %}">{% trans "My Messages" %}</a> 
               <span class="message_count">{{ user.received_messages.unread.count }}</span>
-          </li>         
+          </li>
+          <li class="active">
+            <a href="{% url logout %}?next={{ request.path_info|urlencode }}">{% trans 'Logout' %}</a>
+          </li>
         </ul>
         {% with user.teams.all as user_teams %}
             {% if user_teams %}

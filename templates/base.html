@@ -92,7 +92,7 @@
           <span class="project">{% trans 'a project of the participatory culture foundation' %}</span>
         </h1>
 
-        {% top_user_panel %}
+        {% top_user_panel %}        
         
         <ul class="nav">
           <li class="first create_link"><a href="{% url videos:create %}"><span>{% trans 'Subtitle' %}</span> {% trans 'a video now' %}</a></li>
@@ -108,8 +108,7 @@
 
   <div class="share"><div><h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a></div></div>
 
-
-
+  
         <ul class="sub_nav">
           {% comment %}
           FIXME: only commented out temporarily.
@@ -119,7 +118,6 @@
           <li class="about_link"><a href="/about" class="about"><span>{% trans 'About' %}</span></a></li>
           <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
           {% if user.is_authenticated %}
-              <li class="login_link"><a href="{% url logout %}?next={{ request.path_info|urlencode }}"><span>{% trans 'Logout' %}</span></a></li>
               {% if user.is_staff %}
                 <li class="login_link"><a href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a></li>
               {% endif %}
