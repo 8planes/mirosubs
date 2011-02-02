@@ -29,14 +29,25 @@
     <div class="team_html clearfix">{{ team.page_content|force_escape|markdown }}</div>    
 {% endif %}
 
-<div class="alpha">
-    <h2>{{ team }} {% trans "Videos" %}</h2>
-    
+<h2>{{ team }} {% trans "Videos" %}</h2>
+
+{% if team.header_html_text %}
+<div>
+  {{team.header_html_text|safe}}
+</div>
+{% endif %}
+
+
+<div class="grid_8 alpha">
+
     {% if not team.page_content and team.video %}
         {% widget widget_params %}
     {% endif %}
     
     <div id="videos-tab">
+        {% if not teamvideo_list %}
+        This team has no videos.
+        {% endif %}
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% for team_video in teamvideo_list %}
@@ -48,13 +59,6 @@
         {% if is_paginated %}{% paginator %}{% endif %}
     </div>
 </div>
-
-{% if team.header_html_text %}
-<div>
-  {{team.header_html_text|safe}}
-</div>
-{% endif %}
-
 
 <div class="grid_4 omega">
     {% include "teams/_team_detail.html" %}     
