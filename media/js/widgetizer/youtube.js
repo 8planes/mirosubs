@@ -116,7 +116,7 @@ mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
     else {
         var unwidgetizedElements = [];
         // most likely this will not catch all youtube players on the page
-        var embeds = document.getElementsByTagName('embed');
+        var embeds = goog.dom.getElementsByTagAndClassName('embed');
         for (var i = 0; i < embeds.length; i++) {
             if (this.isYoutubeEmbed_(embeds[i]) && this.isUnwidgetized(embeds[i]))
                 unwidgetizedElements.push(embeds[i]);
