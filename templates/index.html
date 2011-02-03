@@ -97,18 +97,18 @@
         </ul>
    </div>
 
-    {% top_user_panel %}
+    
    
    <div class="alphaNav">
-      <ul>
+      <ul id="subnav">
           <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
           <li><a href="/about">{% trans 'about' %}</a></li>
           <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
           {% if user.is_authenticated %}
-              <li><a href="{% url logout %}?next={{ request.path_info|urlencode }}"><span>{% trans 'logout' %}</span></a></li>
               {% if user.is_staff %}
                 <li><a href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
               {% endif %}
+              <li id="subnav_menu">{% top_user_panel %}</li>
           {% else %}
               <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
           {% endif %}
