@@ -66,7 +66,7 @@ mirosubs.Widgetizer.prototype.widgetize = function() {
 
 mirosubs.Widgetizer.prototype.videosExist = function() {
     for (var i = 0; i < this.makers_.length; i++)
-        if (this.makers_.videosExist())
+        if (this.makers_[i].videosExist())
             return true;
     return false;
 }
