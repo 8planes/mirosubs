@@ -68,8 +68,11 @@ mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
 mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
     function(element, includeConfig) 
 {
-    // assuming that element is an embed.
-    var url = element['src'];
+    var url;
+    if (element.nodeName == "EMBED")
+        url = element['src'];
+    else
+        url = element['data'];
     var config = null;
     if (includeConfig) {
         config = {};
@@ -77,8 +80,14 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ =
         var params = uri.getQueryData().getKeys();
         for (var i = 0; i < params.length; i++)
             config[params[i]] = uri.getParameterValue(params[i]);
-        config['width'] = element['width'];
-        config['height'] = element['height'];
+        if (element['width'] && element['height']) {
+            config['width'] = element['width'];
+            config['height'] = element['height'];
+        }
+        else if (element.style.width && element.style.height) {
+            config['width'] = parseInt(element.style['width']) + '';
+            config['height'] = parseInt(element.style['height']) + '';
+        }
     }
     var youtubePageURL = this.ON_YT_SITE ? window.location.href : url;
     return mirosubs.video.YoutubeVideoSource.forURL(
@@ -102,9 +111,23 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
 };
 
 mirosubs.widgetizer.Youtube.prototype.isYoutubeEmbed_ = function(element) {
-    // assuming embed element
     var url = element['src'];
     return mirosubs.video.YoutubeVideoSource.isYoutube(url);
+};
+
+mirosubs.widgetizer.Youtube.prototype.isYoutubeObject_ = function(element) {
+    var url = element['data'];
+    return mirosubs.video.YoutubeVideoSource.isYoutube(url);
+};
+
+mirosubs.widgetizer.Youtube.prototype.objectContainsEmbed_ = 
+    function(element) 
+{
+    return !!goog.dom.findNode(
+        element,
+        function(node) {
+            return node.nodeName == "EMBED";
+        });
 };
 
 mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
@@ -121,6 +144,12 @@ mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
             if (this.isYoutubeEmbed_(embeds[i]) && this.isUnwidgetized(embeds[i]))
                 unwidgetizedElements.push(embeds[i]);
         }
+        var objects = document.getElementsByTagName('object');
+        for (var i = 0; i < objects.length; i++)
+            if (!this.objectContainsEmbed_(objects[i]) &&
+                this.isYoutubeObject_(objects[i]) && 
+                this.isUnwidgetized(objects[i]))
+                unwidgetizedElements.push(objects[i]);
         return unwidgetizedElements;
     }
 };
