@@ -102,7 +102,7 @@
    <div class="alphaNav">
       <ul id="subnav">
           <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
-          <li><a href="/about">{% trans 'about' %}</a></li>
+          <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
           <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
           {% if user.is_authenticated %}
               {% if user.is_staff %}
@@ -325,6 +325,7 @@
         </div>   
     
         <div class="floatright">
+            <a href="/about">{% trans 'About' %}</a>
             <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
             <a href="http://twitter.com/universalsubs">Twitter</a>
             <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
