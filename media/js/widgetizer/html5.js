@@ -52,11 +52,21 @@ mirosubs.widgetizer.HTML5.prototype.unwidgetizedVideos_ = function() {
 mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ = 
     function(videoElement) 
 {
-    var uri;
+    var sources = [];
     if (videoElement.src)
-        uri = new goog.Uri(videoElement.src);
-    else
-        uri = new goog.Uri(videoElement.getElementsByTagName('source')[0].src);
+        sources.push(this.makeVideoSourceForURL_(videoElement.src));
+    else {
+        var sourceElements = videoElement.getElementsByTagName('source');
+        for (var i = 0; i < sourceElements.length; i++)
+            sources.push(this.makeVideoSourceForURL_(sourceElements[i].src));
+    }
+    for (var i = 0; i < sources.length; i++)
+        if (mirosubs.video.supportsVideoType(sources[i].getVideoType()))
+            return sources[i];
+};
+
+mirosubs.widgetizer.HTML5.prototype.makeVideoSourceForURL_ = function(urlString) {
+    var uri = new goog.Uri(urlString);
     if (!uri.hasDomain())
         uri = new goog.Uri(window.location).resolve(uri);
     return mirosubs.video.Html5VideoSource.forURL(uri.toString());

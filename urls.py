@@ -71,7 +71,7 @@ urlpatterns = patterns(
     url(r'^counter/$', 'videos.views.counter', name="counter"),
     url(r'^api/', include('api.urls', 'api')),
     url(r'^services/$', 'django.views.generic.simple.direct_to_template', 
-        {'template': 'services.html'}),    
+        {'template': 'services.html'}, 'services_page'),    
     url(r'^w3c/p3p.xml$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'p3p.xml'}),
     url(r'^w3c/Policies.xml$', 'django.views.generic.simple.direct_to_template', 

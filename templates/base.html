@@ -107,15 +107,14 @@
         </ul>
 
   <div class="share"><div><h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a></div></div>
-
+  
         <div class="alphaNav">
         <ul id="subnav">
           {% comment %}
           FIXME: only commented out temporarily.
           <li class="blog_link"><a href="{% url teams:index %}"><span>{% trans 'Teams' %}</span></a></li>
           {% endcomment %}
-          <li class="blog_link"><a href="http://blog.universalsubtitles.org"><span>{% trans 'Blog' %}</span></a></li>
-          <li class="about_link"><a href="/about" class="about"><span>{% trans 'About' %}</span></a></li>
+          <li><a href="{% url services_page %}"><span>{% trans "Professional Services" %}</span></a></li>
           <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
           {% if user.is_authenticated %}
               {% if user.is_staff %}
@@ -155,6 +154,7 @@
         </div>   
     
         <div class="floatright">
+            <a href="/about">{% trans 'About' %}</a>
             <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
             <a href="http://twitter.com/universalsubs">Twitter</a>
             <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
