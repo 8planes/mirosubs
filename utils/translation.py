@@ -45,7 +45,7 @@ def get_languages_list(with_empty=False):
 from django.utils.translation.trans_real import parse_accept_lang_header
 from django.utils import translation
 
-def get_user_languages_from_request(request, only_supported=False):
+def get_user_languages_from_request(request, only_supported=False, with_names=False):
     languages = []
     if request.user.is_authenticated():
         languages = [l.language for l in request.user.userlanguage_set.all()]    
@@ -57,7 +57,8 @@ def get_user_languages_from_request(request, only_supported=False):
         for item in languages:
             if not item in SUPPORTED_LANGUAGES_DICT:
                 languages.remove(item)
-    return languages
+    
+    return with_names and languages_with_names(languages) or languages
 
 def set_user_languages_to_cookie(response, languages):
     max_age = 60*60*24
@@ -77,7 +78,7 @@ def get_user_languages_from_cookie(request):
     except (TypeError, ValueError):
         return []
 
-def languages_from_request(request, only_supported=False):
+def languages_from_request(request, only_supported=False, with_names=False):
     languages = []
     
     for l in get_user_languages_from_cookie(request):
@@ -106,5 +107,15 @@ def languages_from_request(request, only_supported=False):
         for item in languages:
             if not item in SUPPORTED_LANGUAGES_DICT:
                 languages.remove(item)
-                
-    return languages
+    
+    return with_names and languages_with_names(languages) or languages
+
+def languages_with_names(langs):
+    SUPPORTED_LANGUAGES_DICT
+    output = {}
+    for l in langs:
+        try:
+            output[l] = _(SUPPORTED_LANGUAGES_DICT[l])
+        except KeyError:
+            pass
+    return output

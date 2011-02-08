@@ -4,9 +4,13 @@
 //    $.mod()
 //    <a href="{fallback_url}" data-modal="{ID_of_modal}">Hey! Listen!</a>
 jQuery.fn.mod = function(options){
+  var modal = jQuery(this);
+
   options = jQuery.extend({}, jQuery.mod.defaults, options);
-    
-  var modal = $(this);
+  
+  if (jQuery.fn.metadata){
+  	  options = jQuery.extend(options, modal.metadata() || {});
+  };
 
   // Create overlay mask
   var overlay = jQuery('<div>', {
@@ -57,7 +61,7 @@ jQuery.fn.mod = function(options){
       }
   }catch(e){};
   
-  modal.show();
+  options.autoShow && modal.show();
 };
 
 jQuery.fn.modClose = function(){
@@ -76,5 +80,6 @@ jQuery.mod = function(){
 };
 
 jQuery.mod.defaults = {
-    closeable: true
+    closeable: true,
+	autoShow: true
 };

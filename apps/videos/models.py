@@ -34,6 +34,9 @@ from widget import video_cache
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
 from utils.amazon import S3EnabledImageField
+from django.utils.http import urlquote_plus
+from django.utils import simplejson as json
+from django.core.urlresolvers import reverse
 import time
 
 yt_service = YouTubeService()
@@ -432,6 +435,12 @@ class SubtitleLanguage(models.Model):
         else:
             self.is_complete = True
             self.was_complete = True
+    
+    def get_widget_url(self):
+        config = {}
+        config["videoID"] = self.video.video_id
+        config["languageCode"] = self.language
+        return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))       
     
     @models.permalink
     def get_absolute_url(self):

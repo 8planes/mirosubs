@@ -1,9 +1,28 @@
 {% load i18n %}
 
-{% if form %}
+<div class="language_bar">
+    <div class="wrapper container_12">
+        <a href="#" data-modal="language_modal" class="green_button small">{% trans "Select your Languages" %}</a>
+    </div>
+</div>
+
 <script type="text/javascript">
     //require ProfileApi
     jQuery(function($){
+		var update_language_display = function(){
+			ProfileApi.get_user_languages(function(r){
+				$('.language_bar p').remove();
+				var h = '';
+				for (l in r){
+					h += '<span>'+r[l]+'</span>,'
+				};
+				
+				$('.language_bar a').before('<p>'+h.slice(0,-1)+'</p>');
+			});			
+		};
+		update_language_display();
+		var force_ask = {% if force_ask %}true{% else %}false{% endif %};
+
         function are_cookies_enabled()
         {
             var cookieEnabled = (navigator.cookieEnabled) ? true : false;
@@ -18,10 +37,6 @@
         
         if (are_cookies_enabled()){        
             var $w = $('#language_modal');
-            
-            $w.mod({
-                closeable: false
-            });
             
             $w.find('button').click(function(){
                 var values = {};
@@ -39,17 +54,23 @@
                 if ( ! has_value){
                     $.jGrowl.error('{% trans "Select at least one language." %}');
                 }else{
-                    ProfileApi.select_languages(values);
+                    ProfileApi.select_languages(values, function(){
+						update_language_display();
+					});
                     $w.modClose();
                 }
 
                 return false;
             });
+			
+			if (force_ask){
+	            $w.mod();
+			};
         };
     });
 </script>
 
-<div id="language_modal" class="language_modal clearfix">
+<div id="language_modal" data="{closeable: false}" style="display: none" class="language_modal clearfix">
   {% trans "We really need your help!" %}
   <h2>{% trans "What languages do you speak?" %}</h2>
     <div>
@@ -60,4 +81,3 @@
 
     <button type="submit" class="green_button small">{% trans "Submit" %}</button>
 </div>
-{% endif %}

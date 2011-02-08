@@ -68,7 +68,8 @@
         (new Function('return ' + script.innerHTML.replace(/\n|\r/g, '')))();
 
     var $c = function(tag) { return document.createElement(tag); };
-    var containingElement = $c('div');
+    var containingElement = $c('span');
+    containingElement.style.cssText = "display: block !important;";
 
     containingElement.className = 'cleanslate';
 
@@ -96,9 +97,10 @@
     }
     containingElement.appendChild(styleElement);
 
-    var widgetDiv = $c('div');
-    widgetDiv.className = 'mirosubs-widget';
-    containingElement.appendChild(widgetDiv);
+    var widgetSpan = $c('span');
+    widgetSpan.className = 'mirosubs-widget';
+    widgetSpan.style.cssText = "display: block !important;";
+    containingElement.appendChild(widgetSpan);
 
     var head = document.getElementsByTagName('head')[0];
     if (typeof(mirosubs) == 'undefined' && !window.MiroSubsLoading) {
@@ -132,11 +134,11 @@
         if (typeof(mirosubs) != 'undefined' &&
             typeof(mirosubs.widget) != 'undefined' &&
             typeof(mirosubs.widget.CrossDomainEmbed) != 'undefined')
-            mirosubs.widget.CrossDomainEmbed.embed(widgetDiv, widgetConfig, siteConfig);
+            mirosubs.widget.CrossDomainEmbed.embed(widgetSpan, widgetConfig, siteConfig);
         else {
             if (typeof(MiroSubsToEmbed) == 'undefined')
                 window.MiroSubsToEmbed = [];
-            window.MiroSubsToEmbed.push([widgetDiv, widgetConfig, siteConfig]);
+            window.MiroSubsToEmbed.push([widgetSpan, widgetConfig, siteConfig]);
         }
     }
 

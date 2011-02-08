@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from inspect import getargspec
 from Cookie import SimpleCookie
+from django.utils.functional import update_wrapper
 
 class RpcExceptionEvent(Exception):
     """
@@ -99,11 +100,19 @@ class RpcRouter(object):
     def action_extra_kwargs(self, action, request, *args, **kwargs):
         """
         Check maybe this action get some extra arguments from request
-        """        
+        """  
         if hasattr(action, '_extra_kwargs'):
             return action._extra_kwargs(request, *args, **kwargs)
         return {}
     
+    def method_extra_kwargs(self, method, request, *args, **kwargs):
+        """
+        Check maybe this method get some extra arguments from request
+        """  
+        if hasattr(method, '_extra_kwargs'):
+            return method._extra_kwargs(request, *args, **kwargs)
+        return {}
+        
     def extra_kwargs(self, request, *args, **kwargs):
         """
         For all method in ALL actions we add request.user to arguments. 
@@ -146,6 +155,7 @@ class RpcRouter(object):
 
         extra_kwargs = self.extra_kwargs(request, *args, **kwargs)
         extra_kwargs.update(self.action_extra_kwargs(action, request, *args, **kwargs))
+        extra_kwargs.update(self.method_extra_kwargs(func, request, *args, **kwargs))
         
         func_args, varargs, varkw, func_defaults = getargspec(func)
         func_args.remove('self') #TODO: or cls for classmethod
@@ -211,3 +221,10 @@ class RpcRouterJSONEncoder(simplejson.JSONEncoder):
             return output
         else:
             return super(RpcRouterJSONEncoder, self).default(o)
+
+def add_request_to_kwargs(func):
+    def extra_kwargs_func(request, *args, **kwargs):
+        return dict(request=request)
+    
+    func._extra_kwargs = extra_kwargs_func
+    return func

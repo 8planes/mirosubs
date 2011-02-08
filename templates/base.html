@@ -20,7 +20,10 @@
 <script src="{{ MEDIA_URL }}js/jgrowl/jquery.jgrowl.js" type="text/javascript"></script>
 <script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
 <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/jquery.metadata.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.mod.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
+<script src="{% url profiles:rpc_api %}" type="text/javascript"></script>  
 {% block scripts %}{% endblock %}
 <link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.ico" type="image/x-icon">
 <title>
@@ -41,8 +44,9 @@
 {% endif %}
 <script type="text/javascript">
     jQuery(function($){
-        $.mod()
-      
+        $.mod();
+      	$.metadata.setType("attr", "data");
+		
         $('#closeBut').click(function(){
             $('#messages').remove();
             return false;
@@ -72,22 +76,17 @@
     {% if user.is_authenticated %}
         {% messages %}
     {% endif %}
-{% comment %}
-    <div class="language_bar">
-      <div class="wrapper">
-        <span>English</span>,
-        <span>French</span>,
-        <span>Spanish</span>
-        <a href="#" class="green_button small">Select your Languages</a>
-      </div>
-    </div><!-- // language_bar -->
+    
+	  {% block select_language_dialog %}
+	  	{% select_language_dialog %}
+	  {% endblock %}
+	
     <div class="search">
       <form method="get" action="{% url search:index %}">
         <input type="text" class="field" name="q" />
       </form>
     </div><!-- // search -->
-{% endcomment %}
-  {% block extra_body %}{% endblock %}
+    
   <div id="header">
     <h1 class="logo"><a href="/">Universal Subtitles</a></h1>
     <div id="main_nav">
@@ -102,21 +101,19 @@
         </li>
       </ul>
     </div><!-- // mainNav -->
-
-
-       <ul id="subnav">
-         <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
-         <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
-         <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
-         {% if user.is_authenticated %}
-         {% if user.is_staff %}
-         <li><a href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
-         {% endif %}
-         <li id="subnav_menu">{% top_user_panel %}</li>
-         {% else %}
-         <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
-         {% endif %}
-       </ul><!-- // subnav -->
+    <ul id="subnav">
+      <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
+      <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
+      <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
+      {% if user.is_authenticated %}
+      {% if user.is_staff %}
+      <li><a href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
+      {% endif %}
+      <li id="subnav_menu">{% top_user_panel %}</li>
+      {% else %}
+      <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
+      {% endif %}
+    </ul><!-- // subnav -->
   </div><!-- // header -->
 
   <div class="content">
