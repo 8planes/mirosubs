@@ -23,7 +23,8 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from profiles.forms import SelectLanguageForm
-from utils.rpc import RpcHttpResponse
+from utils.rpc import RpcHttpResponse, add_request_to_kwargs
+from utils.translation import get_user_languages_from_request
 
 class ProfileApiClass(object):
     
@@ -36,3 +37,8 @@ class ProfileApiClass(object):
             form.save(user, response)
             
         return response
+    
+    @add_request_to_kwargs
+    def get_user_languages(self, user, request):
+        return get_user_languages_from_request(request, with_names=True)
+    

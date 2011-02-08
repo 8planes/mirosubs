@@ -29,28 +29,26 @@ from videos.models import Video
 from auth.models import CustomUser as User
 from django.db.models import Q
 from profiles.forms import SelectLanguageForm
-from utils.translation import languages_from_request, get_user_languages_from_cookie
+from utils.translation import languages_from_request, get_user_languages_from_request, get_user_languages_from_cookie
 
 register = template.Library()
 
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
 
 @register.inclusion_tag('profiles/_select_language_dialog.html', takes_context=True)
-def select_language_dialog(context):
-    form = None
+def select_language_dialog(context, option=None):
+    user_langs = get_user_languages_from_request(context['request'])
 
-    if _user_needs_languages(context):
-        user_langs = languages_from_request(context['request'])
+    initial_data = {}
     
-        initial_data = {}
+    for i, l in enumerate(user_langs[:3]):
+        initial_data['language%s' % (i+1)] = l
         
-        for i, l in enumerate(user_langs[:3]):
-            initial_data['language%s' % (i+1)] = l
-            
-        form = SelectLanguageForm(initial=initial_data)
-        
+    form = SelectLanguageForm(initial=initial_data)
+
     return {
-        'form': form
+        'form': form,
+        'force_ask': option == 'force' and _user_needs_languages(context)
     }
 
 def _user_needs_languages(context):
@@ -58,6 +56,7 @@ def _user_needs_languages(context):
     if user.is_authenticated():
         return not user.userlanguage_set.exists()
     else:
+        print get_user_languages_from_cookie(context['request'])
         return not get_user_languages_from_cookie(context['request'])
 
 @register.inclusion_tag('profiles/_user_videos_activity.html', takes_context=True)

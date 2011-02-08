@@ -20,7 +20,10 @@
 <script src="{{ MEDIA_URL }}js/jgrowl/jquery.jgrowl.js" type="text/javascript"></script>
 <script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
 <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/jquery.metadata.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.mod.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
+<script src="{% url profiles:rpc_api %}" type="text/javascript"></script>  
 {% block scripts %}{% endblock %}
 <link rel="shortcut icon" href="{{ MEDIA_URL }}images/favicon.ico" type="image/x-icon">
 <title>
@@ -41,8 +44,9 @@
 {% endif %}
 <script type="text/javascript">
     jQuery(function($){
-        $.mod()
-      
+        $.mod();
+      	$.metadata.setType("attr", "data");
+		
         $('#closeBut').click(function(){
             $('#messages').remove();
             return false;
@@ -75,15 +79,10 @@
     <div class="cloud">
     <div class="watercolor">
 
-    <div class="language_bar">
-      <div class="wrapper container_12">
-        <span>English</span>,
-        <span>French</span>,
-        <span>Spanish</span>
-        <a href="#" class="green_button small">Select your Languages</a>
-      </div>
-    </div>
-
+	{% block select_language_dialog %}
+		{% select_language_dialog %}
+	{% endblock %}
+	
     <div class="wrapper container_12">
       {% block extra_body %}{% endblock %}
       <div class="header grid_12">

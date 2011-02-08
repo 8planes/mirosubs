@@ -16,14 +16,14 @@
 {% block scripts %}
     {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
-    <script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
-    <script src="{% url profiles:rpc_api %}" type="text/javascript"></script>    
+{% endblock %}
+
+{% block select_language_dialog %}
+	{% select_language_dialog 'force' %}
 {% endblock %}
 
 {% block main_content %}
-
-{% select_language_dialog %}
 
 {% if team.page_content %}
     <div class="team_html clearfix">{{ team.page_content|force_escape|markdown }}</div>    
