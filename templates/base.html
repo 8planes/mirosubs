@@ -77,16 +77,20 @@
         {% messages %}
     {% endif %}
     
-	  {% block select_language_dialog %}
-	  	{% select_language_dialog %}
-	  {% endblock %}
-	
-    <div class="search">
-      <form method="get" action="{% url search:index %}">
-        <input type="text" class="field" name="q" />
-      </form>
-    </div><!-- // search -->
-    
+    <div id="topbar">
+      <div class="wrapper">
+      <div class="search">
+        <form method="get" action="{% url search:index %}">
+          <input type="text" class="field" name="q" />
+        </form>
+      </div><!-- // search -->
+       {% block select_language_dialog %}
+    	  	{% select_language_dialog %}
+    	  {% endblock %}
+    	</div><!-- wrapper -->
+    </div><!-- topbar -->
+	 
+<div class="wrapper">
   <div id="header">
     <h1 class="logo"><a href="/">Universal Subtitles</a></h1>
     <div id="main_nav">
@@ -107,7 +111,7 @@
       <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
       {% if user.is_authenticated %}
       {% if user.is_staff %}
-      <li><a href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
+      <li><a target="_blank" href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
       {% endif %}
       <li id="subnav_menu">{% top_user_panel %}</li>
       {% else %}
@@ -116,7 +120,7 @@
     </ul><!-- // subnav -->
   </div><!-- // header -->
 
-  <div class="content">
+  <div class="content wrapper">
     {% if messages %}
     <div id="messages">
       {% for message in messages %}
@@ -126,6 +130,7 @@
       <br style="clear: both"/>                
     </div>
     {% endif %}
+    
     {% block main_content %}
     {% endblock %}
   </div><!-- // content -->
@@ -142,6 +147,7 @@
       <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
     </div><!-- // float_right -->
   </div><!-- // footer -->
+</div><!-- // wrapper -->
   <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
 </body>
 </html>
