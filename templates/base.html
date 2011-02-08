@@ -72,7 +72,7 @@
     {% if user.is_authenticated %}
         {% messages %}
     {% endif %}
-
+{% comment %}
     <div class="language_bar">
       <div class="wrapper">
         <span>English</span>,
@@ -81,45 +81,42 @@
         <a href="#" class="green_button small">Select your Languages</a>
       </div>
     </div><!-- // language_bar -->
-    
     <div class="search">
       <form method="get" action="{% url search:index %}">
         <input type="text" class="field" name="q" />
       </form>
     </div><!-- // search -->
-
+{% endcomment %}
   {% block extra_body %}{% endblock %}
-  <div class="wrapper">
-  <div class="header">
-    <h1>{% block logo %}<a href="/">Universal Subtitles</a>{% endblock %}</h1>
-    <ul class="nav">
-      <li class="first create_link"><a href="{% url videos:create %}"><span>{% trans 'Subtitle' %}</span> {% trans 'a video now' %}</a></li>
-      <li class="last videos_link"><a href="{% url videos:list %}"><span>{% trans 'Watch' %}</span> {% trans 'subbed videos' %}</a></li>
-      <!-- <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li> -->
-    </ul>
-
-    <div class="share">
-      <h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a>
-    </div><!-- // share -->
-
-    <div class="alphaNav">
-      <ul id="subnav">
-        {% comment %}
-        FIXME: only commented out temporarily.
-        <li class="blog_link"><a href="{% url teams:index %}"><span>{% trans 'Teams' %}</span></a></li>
-        {% endcomment %}
-        <li><a href="{% url services_page %}"><span>{% trans "Professional Services" %}</span></a></li>
-        <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
-        {% if user.is_authenticated %}
-        {% if user.is_staff %}
-        <li class="login_link"><a href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a></li>
-        {% endif %}
-        <li id="subnav_menu">{% top_user_panel %}</li>
-        {% else %}
-        <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'Login' %}</span></a></li>
-        {% endif %}
+  <div id="header">
+    <h1 class="logo"><a href="/">Universal Subtitles</a></h1>
+    <div id="main_nav">
+      <ul>
+        <li id="nobdr">
+          <a href="{% url videos:create %}">{% trans 'Subtitle' %}
+            <em>{% trans 'a video now' %}</em></a>
+        </li>  
+        <li>
+          <a href="{% url videos:list %}">{% trans 'Watch' %}
+            <em>{% trans 'subbed videos' %}</em></a>
+        </li>
       </ul>
-    </div><!-- // alphaNav -->
+    </div><!-- // mainNav -->
+
+
+       <ul id="subnav">
+         <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
+         <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
+         <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
+         {% if user.is_authenticated %}
+         {% if user.is_staff %}
+         <li><a href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
+         {% endif %}
+         <li id="subnav_menu">{% top_user_panel %}</li>
+         {% else %}
+         <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
+         {% endif %}
+       </ul><!-- // subnav -->
   </div><!-- // header -->
 
   <div class="content">
@@ -149,6 +146,5 @@
     </div><!-- // float_right -->
   </div><!-- // footer -->
   <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
-  </div><!-- // wrapper -->
 </body>
 </html>

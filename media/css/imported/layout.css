@@ -38,18 +38,17 @@
 /////////////////////////////////////////////*/
 
 
-.header{
+.header {
   min-height: 130px;
   width: 100%;
-  }
+}
 
-.header .top_bar{
+.header .top_bar {
   font-size: 12px;
   float: left;
   width: 100%;
   line-height: 3em;
-  }
-
+}
 
 .header h1 {
   float: left;
@@ -57,9 +56,8 @@
   font-size: 12px;
   position: absolute;
   top: 20px;
-left: 0;
-  }
-
+  left: 0;
+}
 
 .header h1 a, .header h1 span.logo {
   background: url(../../images/logo.png) 0 10px no-repeat;
@@ -69,16 +67,14 @@ left: 0;
   height: 0;
   width: 290px;
   display: block;
-  }
-
+}
 
 .header h1 a:hover{
   background: url(../../images/logo.png) 0 -59px no-repeat;
-  }
-
+}
 
 .content h1 {
-line-height: 1.1em;
+  line-height: 1.1em;
 }
 
 
