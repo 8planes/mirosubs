@@ -69,13 +69,24 @@
 </script>
 
 <div id="language_modal" data="{closeable: false}" style="display: none" class="language_modal clearfix">
-  {% trans "We really need your help!" %}
+  <h3>{% trans "We really need your help!" %}</h3>
   <h2>{% trans "What languages do you speak?" %}</h2>
-    <div>
-      {{ form.language1 }}
-      {{ form.language2 }}
-      {{ form.language3 }}
-    </div>
-
+    <div id="language_picker" class="clearfix">
+    <ul>
+      <li>{{ form.language1 }}</li>
+      <li>{{ form.language2 }}</li>
+      <li>{{ form.language3 }}</li>
+    </ul>
+    <ul>
+      <li>{{ form.language1 }}</li>
+      <li>{{ form.language2 }}</li>
+      <li>{{ form.language3 }}</li>
+    </ul>
+    <ul id="last">
+      <li>{{ form.language1 }}</li>
+      <li>{{ form.language2 }}</li>
+      <li>{{ form.language3 }}</li>
+    </ul>
+    </div><!-- // clearfix -->
     <button type="submit" class="green_button small">{% trans "Submit" %}</button>
-</div>
+</div><!-- // language_modal -->

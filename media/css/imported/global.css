@@ -130,15 +130,15 @@ ul#subnav li#subnav_menu {
 .language_modal { 
   display: none;
   background-color: #fff;
-  width: 500px;
+  width: 560px;
   color: #818b8f;
   padding: 20px;
   -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  -moz-border-radius: 3px;
+  -moz-border-radius:    3px;
+  -webkit-border-radius: 3px;
 }
 
-.language_modal p { 
+.language_modal p {
   font-size: 14px;
   line-height: 24px; 
 }
@@ -148,18 +148,31 @@ ul#subnav li#subnav_menu {
   margin: 0;
   color: #000;
 }
-  
-.language_modal div { 
-  background-color: #ebf1f2;
-  margin-bottom: 20px;
-  padding: 15px 20px;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  text-align: center;
+
+.language_modal #language_picker {
+  margin: 0;
+  position: relative;
+  left: 0;
 }
   
-.language_modal select { 
-  margin-right: 20px;
+.language_modal ul { 
+  list-style-type: none;
+  width: 150px;
+  float: left;
+  margin: 0 10px 0 10px;
+  padding: 0 10px 0 10px;
+  border-right: 1px #DDD solid;
+  text-indent: -18px;
+}
+
+.language_modal ul#last {
+  border: 0;
+  margin: 0 0 0 10px;
+  padding: 0 0 0 10px;
+}
+  
+.language_modal ul li {
+  margin: 5px 0 5px 0;
 }
 
 
