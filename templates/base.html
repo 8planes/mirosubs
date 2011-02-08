@@ -72,8 +72,6 @@
     {% if user.is_authenticated %}
         {% messages %}
     {% endif %}
-    <div class="cloud">
-    <div class="watercolor">
 
     <div class="language_bar">
       <div class="wrapper container_12">
@@ -82,31 +80,27 @@
         <span>Spanish</span>
         <a href="#" class="green_button small">Select your Languages</a>
       </div>
-    </div>
-
-    <div class="wrapper container_12">
+    </div><!-- // language_bar -->
+    
+    <div class="search">
+      <form method="get" action="{% url search:index %}">
+        <input type="text" class="field" name="q" />
+      </form>
+    </div><!-- // search -->
+    
+    <div class="wrapper">
       {% block extra_body %}{% endblock %}
-      <div class="header grid_12">
-        <h1>
-          {% block logo %}<a href="/">Universal Subtitles</a>{% endblock %}
-          <span class="project">{% trans 'a project of the participatory culture foundation' %}</span>
-        </h1>
-
-                
-        
-        <ul class="nav">
+      <div class="header">
+        <h1>{% block logo %}<a href="/">Universal Subtitles</a>{% endblock %}</h1>
+        <ul class="mainNav">
           <li class="first create_link"><a href="{% url videos:create %}"><span>{% trans 'Subtitle' %}</span> {% trans 'a video now' %}</a></li>
-          <li class="videos_link"><a href="{% url videos:list %}"><span>{% trans 'Watch' %}</span> {% trans 'subbed videos' %}</a></li>
+          <li class="last videos_link"><a href="{% url videos:list %}"><span>{% trans 'Watch' %}</span> {% trans 'subbed videos' %}</a></li>
          <!-- <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li> -->
-
-          <li class="search">
-            <form method="get" action="{% url search:index %}">
-              <input type="text" class="field" name="q" />
-            </form>
-          </li>
         </ul>
 
-  <div class="share"><div><h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a></div></div>
+        <div class="share">
+          <h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a>
+        </div><!-- // share -->
   
         <div class="alphaNav">
         <ul id="subnav">
@@ -126,7 +120,7 @@
           {% endif %}
         </ul>
         </div><!-- // alphaNav -->
-      </div>
+      </div><!-- // header -->
 
       <div class="content grid_12">
           
@@ -143,8 +137,7 @@
       {% block main_content %}
       
       {% endblock %}
-      </div>
-      </div>
+      </div><!-- // content -->
       {% block feedback_form %}
         {% feedback_form %}
       {% endblock %}
@@ -163,7 +156,6 @@
         </div>      
     </div> 
     <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
- </div>
-  </div>
+</div><!-- // wrapper -->
 </body>
 </html>

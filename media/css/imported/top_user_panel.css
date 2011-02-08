@@ -23,7 +23,8 @@ div.alphaNav ul#subnav li.u_login {
 
 div.alphaNav ul#subnav li a {
   color:#319ac5;
-  text-decoration:underline;
+  text-decoration: underline;
+  font-size: 12px;
 }
 
 div.alphaNav ul#subnav li a:hover {
