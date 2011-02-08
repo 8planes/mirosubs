@@ -31,12 +31,12 @@
                     <a href="{{ lang.get_absolute_url }}">{% trans "Review" %} {{ lang.language_display }} {% trans "Captions" %}</a>
                 {% else %}
                     {% if lang.percent_done == 0 %}
-                        <a href="{{ lang.get_absolute_url }}">
+                        <a href="{{ lang.get_widget_url }}">
                             {% trans "Translate into" %} {{ lang.language_display }}
                         </a>
                     {% endif %}
                     {% if lang.percent_done == 100 %}
-                        <a href="{{ lang.get_absolute_url }}">
+                        <a href="{{ lang.get_widget_url }}">
                             {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
                         </a>                        
                     {% endif %}
