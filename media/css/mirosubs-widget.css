@@ -1224,7 +1224,8 @@ ul.mirosubs-titlesList.sync {
     background-color: #fbb !important;
 }
 
-.mirosubs-captionDiv {
+.mirosubs-captionSpan {
+   display: block !important;
    position: absolute !important;
    letter-spacing: .06em !important;
    line-height: 1.4em !important;
@@ -1252,7 +1253,7 @@ ul.mirosubs-titlesList.sync {
    padding: 10px 3px !important;
 }
 
-iframe.mirosubs-captionDivBg { 
+iframe.mirosubs-captionSpanBg { 
     position: absolute !important; 
     border: none !important; 
 } 
