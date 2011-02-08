@@ -31,7 +31,8 @@
 
 
 
-div.mirosubs-widget {
+span.mirosubs-widget {
+  display: block !important;
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 12px !important;
   color: #000 !important;
