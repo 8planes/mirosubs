@@ -54,7 +54,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
 goog.inherits(mirosubs.widget.Widget, goog.ui.Component);
 
 mirosubs.widget.Widget.prototype.createDom = function() {
-    mirosubs.widget.Widget.superClass_.createDom.call(this);
+    this.setElementInternal(this.getDomHelper().createElement('span'));
     this.addWidget_(this.getElement());
 };
 
