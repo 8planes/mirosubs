@@ -1,0 +1,118 @@
+#header {
+  width: 940px;
+  height: 45px;
+  margin: 0 auto;
+}
+
+#header .top_bar {
+  font-size: 12px;
+  float: left;
+  width: 100%;
+  line-height: 3em;
+}
+
+#header h1 {
+  float: left;
+  margin: 10px 0 0 0px;
+  font-size: 12px;
+  float: left;
+}
+
+#header h1 a, #header h1 span.logo {
+  background: url(../../images/logo.png) 0 10px no-repeat;
+  margin: 0;
+  overflow: hidden;
+  padding: 50px 0 0;
+  height: 0;
+  width: 290px;
+  display: block;
+}
+
+#header h1 a:hover{
+  background: url(../../images/logo.png) 0 -59px no-repeat;
+}
+
+div#main_nav {
+  float: left;
+}
+
+div#main_nav ul {
+  margin: 18px 0 0 0;
+}
+
+div#main_nav ul li {
+  float: left;
+  list-style: none;
+}
+
+div#main_nav ul li a {
+  text-decoration: none;
+  color: #000;
+  padding: 0 12px 5px 20px;
+  font-size: 18px;
+  display: block;
+  line-height: 30px;
+  text-align: center;
+}
+
+div#main_nav ul li a:hover {
+  color: #3196ad;
+}
+
+div#main_nav ul li#nobdr a {
+  padding: 0px 18px 5px 0;
+}
+
+div#main_nav ul li#nobdr {
+  border-right: 1px #FFF solid;
+}
+
+div#main_nav ul li a em {
+  font-size: 12px;
+  line-height: 0px;
+  text-align: center;
+  display: block;
+  font-style: normal;
+}
+
+/*
+alphaNav
+*/
+
+ul#subnav {
+  margin: 35px 0 0 0;
+  float: right;
+}
+
+ul#subnav li {
+  float: left;
+  line-height: 12px;
+  list-style: none;
+  margin: 0 10px;
+  text-transform: capitalize;
+}
+
+ul#subnav li.u_login {
+  padding-left: 15px;
+  background: url(images/interface/bullet_login.gif) no-repeat left center; 
+}
+
+ul#subnav li a {
+  color:#319ac5;
+  text-decoration: underline;
+  font-size: 12px;
+}
+
+ul#subnav li a:hover {
+  text-decoration:none;
+}
+
+ul#subnav li#subnav_menu {
+  position: relative;
+  top: -10px;
+  right: 8px;
+}
+
+.content h1 {
+  line-height: 1.1em;
+}
