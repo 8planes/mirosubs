@@ -1,37 +1,25 @@
-/*/////////////////////////////////////////////
-
-~ Layout
-
-/////////////////////////////////////////////*/
-
-
-.wrapper{
+.wrapper {
   margin: 0 auto;
   position: relative;
-  }
+}
 
-
-.right_column{
+.right_column {
   width: 440px;
   float: right;
-  }
+}
 
-
-.left_column{
+.left_column {
   width: 440px;
   float: left;
-  }
+}
 
-
-.content{
+.content {
   min-height: 300px;
   clear: both;
   line-height: 15px;
   font-size: 12px;
   margin-bottom: 50px;
-  }
-
-
+}
 
 .mirosubs-videoDiv video,
 .mirosubs-videoDiv video *,
@@ -39,7 +27,7 @@
 .mirosubs-videoDiv embed{
   display: block;
   width: 470px ;
-  }
+}
 
 
 

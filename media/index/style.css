@@ -3,23 +3,27 @@
                 Creator: Jewel Rana
                 DATE:2010-12-14
 =======================================*/
-body{
-    text-align:center;
-    font-family:Arial, sans-serif;
-    font-size:12px;
-    background:#d1e9ee url(images/interface/bg_body.jpg) no-repeat center top;
-    padding-top:35px;
-    padding-bottom:50px;
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  background: #d1e9ee url(images/interface/bg_body.jpg) no-repeat center top;
+  padding-top: 35px;
+  padding-bottom: 50px;
 }
-/*===========@Global Styles(Reset Base)============*/
+
+/*
+Global Styles(Reset Base
+*/
+
 * {
   margin: 0;
   padding: 0;
   outline: none
 }
 
-img,fieldset{
-  border:0
+img, fieldset {
+  border: 0
 }
 
 a {
