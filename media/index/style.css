@@ -86,44 +86,6 @@ div.mainNav ul li a small{
     display:block
     }
 
-/*alphaNav*/
-
-div.alphaNav {
-  float: right;
-}
-
-div.alphaNav ul#subnav {
-  float:left;
-}
-
-div.alphaNav ul#subnav li {
-  float: left;
-  line-height: 45px;
-  list-style: none;
-  margin: 0 10px;
-  text-transform: capitalize;
-}
-
-div.alphaNav ul#subnav li.u_login {
-  padding-left:15px;
-  background:url(images/interface/bullet_login.gif) no-repeat left center; 
-}
-
-div.alphaNav ul#subnav li a {
-  color:#319ac5;
-  text-decoration:underline;
-}
-
-div.alphaNav ul#subnav li a:hover {
-  text-decoration:none;
-}
-
-#subnav_menu {
-  position: relative;
-  top: 6px;
-  right: 8px;
-}
-
 /*Start--------------------------------------------Page Layout*/
 
 /*========================================
