@@ -63,9 +63,9 @@
 </script>
 </head>
 <body {% block body_attrs %}{% endblock %}>
-{% block feedback-button %}
+  {% block feedback-button %}
   <a href="#" class="feedback_tab" data-modal="feedback_container">{% trans "Feedback" %}</a>
-{% endblock %}
+  {% endblock %}
 
 {% comment %}
 <!--[if lte IE 6]>
@@ -76,93 +76,78 @@
     {% if user.is_authenticated %}
         {% messages %}
     {% endif %}
-    <div class="cloud">
-    <div class="watercolor">
-
-	{% block select_language_dialog %}
-		{% select_language_dialog %}
-	{% endblock %}
-	
-    <div class="wrapper container_12">
-      {% block extra_body %}{% endblock %}
-      <div class="header grid_12">
-        <h1>
-          {% block logo %}<a href="/">Universal Subtitles</a>{% endblock %}
-          <span class="project">{% trans 'a project of the participatory culture foundation' %}</span>
-        </h1>
-
-                
-        
-        <ul class="nav">
-          <li class="first create_link"><a href="{% url videos:create %}"><span>{% trans 'Subtitle' %}</span> {% trans 'a video now' %}</a></li>
-          <li class="videos_link"><a href="{% url videos:list %}"><span>{% trans 'Watch' %}</span> {% trans 'subbed videos' %}</a></li>
-         <!-- <li class="last about_link last_nav"><a href="/about"><span>{% trans 'Volunteer' %}</span></a></li> -->
-
-          <li class="search">
-            <form method="get" action="{% url search:index %}">
-              <input type="text" class="field" name="q" />
-            </form>
-          </li>
-        </ul>
-
-  <div class="share"><div><h4>Share on</h4><a href="#" class="twitter">Twitter</a> <a href="#" class="facebook">Facebook</a></div></div>
-  
-        <div class="alphaNav">
-        <ul id="subnav">
-          {% comment %}
-          FIXME: only commented out temporarily.
-          <li class="blog_link"><a href="{% url teams:index %}"><span>{% trans 'Teams' %}</span></a></li>
-          {% endcomment %}
-          <li><a href="{% url services_page %}"><span>{% trans "Professional Services" %}</span></a></li>
-          <li class="faq_link"><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
-          {% if user.is_authenticated %}
-              {% if user.is_staff %}
-                <li class="login_link"><a href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a></li>
-              {% endif %}
-              <li id="subnav_menu">{% top_user_panel %}</li>
-          {% else %}
-              <li class="login_link"><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'Login' %}</span></a></li>
-          {% endif %}
-        </ul>
-        </div><!-- // alphaNav -->
-      </div>
-
-      <div class="content grid_12">
-          
-        {% if messages %}
-          <div id="messages">
-            {% for message in messages %}
-              <h2 class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</h2>
-            {% endfor %}
-            <a href="#" id="closeBut" style="display: block; float: right;">&nbsp;</a>
-            <br style="clear: both"/>                
-          </div>
-        {% endif %}
-                      
-      {% block main_content %}
-      
-      {% endblock %}
-      </div>
-      </div>
-      {% block feedback_form %}
-        {% feedback_form %}
-      {% endblock %}
-    <div class="footer">
-        <div class="floatleft">
-            {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
-        </div>   
     
-        <div class="floatright">
-            <a href="/about">{% trans 'About' %}</a>
-            <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
-            <a href="http://twitter.com/universalsubs">Twitter</a>
-            <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
-            <a href="http://www.pculture.org/pcf/websites-privacy/">{% trans 'Privacy Policy' %}</a>
-            <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
-        </div>      
-    </div> 
-    <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
- </div>
-  </div>
+    <div id="topbar">
+      <div class="wrapper">
+      <div class="search">
+        <form method="get" action="{% url search:index %}">
+          <input type="text" class="field" name="q" />
+        </form>
+      </div><!-- // search -->
+       {% block select_language_dialog %}
+    	  	{% select_language_dialog %}
+    	  {% endblock %}
+    	</div><!-- wrapper -->
+    </div><!-- topbar -->
+	 
+<div class="wrapper">
+  <div id="header">
+    <h1 class="logo"><a href="/">Universal Subtitles</a></h1>
+    <div id="main_nav">
+      <ul>
+        <li id="nobdr">
+          <a href="{% url videos:create %}">{% trans 'Subtitle' %}
+            <em>{% trans 'a video now' %}</em></a>
+        </li>  
+        <li>
+          <a href="{% url videos:list %}">{% trans 'Watch' %}
+            <em>{% trans 'subbed videos' %}</em></a>
+        </li>
+      </ul>
+    </div><!-- // mainNav -->
+    <ul id="subnav">
+      <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
+      <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
+      <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
+      {% if user.is_authenticated %}
+      {% if user.is_staff %}
+      <li><a target="_blank" href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
+      {% endif %}
+      <li id="subnav_menu">{% top_user_panel %}</li>
+      {% else %}
+      <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
+      {% endif %}
+    </ul><!-- // subnav -->
+  </div><!-- // header -->
+
+  <div class="content wrapper">
+    {% if messages %}
+    <div id="messages">
+      {% for message in messages %}
+      <h2 class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</h2>
+      {% endfor %}
+      <a href="#" id="closeBut" style="display: block; float: right;">&nbsp;</a>
+      <br style="clear: both"/>                
+    </div>
+    {% endif %}
+    
+    {% block main_content %}
+    {% endblock %}
+  </div><!-- // content -->
+  <div class="footer">
+    <div class="floatleft">
+    {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
+    </div>
+    <div class="floatright">
+      <a href="/about">{% trans 'About' %}</a>
+      <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
+      <a href="http://twitter.com/universalsubs">Twitter</a>
+      <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
+      <a href="http://www.pculture.org/pcf/websites-privacy/">{% trans 'Privacy Policy' %}</a>
+      <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
+    </div><!-- // float_right -->
+  </div><!-- // footer -->
+</div><!-- // wrapper -->
+  <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
 </body>
 </html>

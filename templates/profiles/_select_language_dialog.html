@@ -1,10 +1,8 @@
 {% load i18n %}
 
 <div class="language_bar">
-    <div class="wrapper container_12">
-        <a href="#" data-modal="language_modal" class="green_button small">{% trans "Select your Languages" %}</a>
-    </div>
-</div>
+  <a href="#" data-modal="language_modal" class="green_button small">{% trans "Select your Languages" %}</a>
+</div><!-- // language_bar -->
 
 <script type="text/javascript">
     //require ProfileApi
@@ -17,7 +15,7 @@
 					h += '<span>'+r[l]+'</span>,'
 				};
 				
-				$('.language_bar a').before('<p>'+h.slice(0,-1)+'</p>');
+				$('.language_bar a').before('<span class="selected_language">'+h.slice(0,-1)+'</span>');
 			});			
 		};
 		update_language_display();
@@ -71,13 +69,24 @@
 </script>
 
 <div id="language_modal" data="{closeable: false}" style="display: none" class="language_modal clearfix">
-  {% trans "We really need your help!" %}
+  <h3>{% trans "We really need your help!" %}</h3>
   <h2>{% trans "What languages do you speak?" %}</h2>
-    <div>
-      {{ form.language1 }}
-      {{ form.language2 }}
-      {{ form.language3 }}
-    </div>
-
+    <div id="language_picker" class="clearfix">
+    <ul>
+      <li>{{ form.language1 }}</li>
+      <li>{{ form.language2 }}</li>
+      <li>{{ form.language3 }}</li>
+    </ul>
+    <ul>
+      <li>{{ form.language1 }}</li>
+      <li>{{ form.language2 }}</li>
+      <li>{{ form.language3 }}</li>
+    </ul>
+    <ul id="last">
+      <li>{{ form.language1 }}</li>
+      <li>{{ form.language2 }}</li>
+      <li>{{ form.language3 }}</li>
+    </ul>
+    </div><!-- // clearfix -->
     <button type="submit" class="green_button small">{% trans "Submit" %}</button>
-</div>
+</div><!-- // language_modal -->

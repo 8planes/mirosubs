@@ -286,23 +286,7 @@ left: -4px;
 }
 
 
-.search input{
-  display: block;
-  border: 0;
-  font-size: 12px;
-  -moz-border-radius: 5px;  
-  -webkit-border-radius: 5px;
-  margin: 0 0px 0px 25px;
-  line-height: 15px;
-  padding: 12px 0 8px 28px;
-  float: left;
-  width: 120px;;
-  font-family: Arial, Helvetica, sans-serif;
-  box-shadow:inset 0px 1px 2px #555;
-  -moz-box-shadow:inset 0px 1px 1px #555;
-  -webkit-box-shadow:inset 0px 1px 2px #555;
-  background: url(../../images/search.png) 10px center no-repeat;
-}
+
 
 a.active {
    text-decoration: none;
