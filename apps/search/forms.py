@@ -27,7 +27,7 @@ class SearchForm(forms.Form):
     DISPLAY_CHOICES = (
         ('all', _(u'all')),
         ('thumbnails', _(u'thumbnails')),
-        ('details', _(u'details')),
+        #('details', _(u'details')),
     )
     q = forms.CharField(required=False, label=_(u'query'))
     type = forms.ChoiceField(choices=TYPE_CHOICES, required=False, initial='full_text', 
