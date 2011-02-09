@@ -60,18 +60,19 @@ def onsite_widget(request):
     except (ValueError, KeyError):
         raise Http404
 
-    video_id = config.get('videoID')
-    
-    if not video_id:
-        raise Http404
+    if not config.get('nullWidget'): 
+        video_id = config.get('videoID')
 
-    video = get_object_or_404(models.Video, video_id=video_id)
+        if not video_id:
+            raise Http404
 
-    if not 'returnURL' in config:
-        config['returnURL'] = video.get_absolute_url()
-    
-    if not 'effectiveVideoURL' in config:
-        config['effectiveVideoURL'] = video.get_video_url()
+        video = get_object_or_404(models.Video, video_id=video_id)
+
+        if not 'returnURL' in config:
+            config['returnURL'] = video.get_absolute_url()
+
+        if not 'effectiveVideoURL' in config:
+            config['effectiveVideoURL'] = video.get_video_url()
     
     context['widget_params'] = json.dumps(config)
     general_settings = {}
