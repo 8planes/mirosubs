@@ -356,14 +356,12 @@ class Video(models.Model):
         self.writelock_time = None
 
     def notification_list(self, exclude=None):
-        if self.subtitle_language():
-            nl = self.subtitle_language().notification_list(exclude)
-        else:
-            nl = []
-        for user in self.followers.all():
-            if not user in nl: 
-                nl.append(user)
-        return nl
+        qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
+        if exclude:
+            if not isinstance(exclude, (list, tuple)):
+                exclude = [exclude]
+            qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
+        return qs    
     
     def notification_list_all(self, exclude=None):
         users = []
@@ -371,7 +369,7 @@ class Video(models.Model):
             for u in language.notification_list(exclude):
                 if not u in users:
                     users.append(u) 
-        for user in self.followers.all():
+        for user in self.notification_list(exclude):
             if not user in users: 
                 users.append(user)                    
         return users
@@ -539,20 +537,12 @@ class SubtitleLanguage(models.Model):
             return 100
 
     def notification_list(self, exclude=None):
-        qs = self.subtitleversion_set.all()
-        not_send = StopNotification.objects.filter(video=self.video) \
-            .values_list('user_id', flat=True)
-        for_check = [item.user for item in qs]
-        users = []
-        for user in for_check:
-            if user and user.is_active and user.changes_notification \
-                and not user in users and not user.id in not_send \
-                and not exclude == user:
-                users.append(user)
-        for user in self.followers.all():
-            if not user in users:
-                users.append(user)
-        return users
+        qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
+        if exclude:
+            if not isinstance(exclude, (list, tuple)):
+                exclude = [exclude]            
+            qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
+        return qs
     
 def subtile_language_delete_handler(sender, instance, **kwargs):
     video_cache.invalidate_cache(instance.video.video_id)
@@ -723,8 +713,19 @@ class SubtitleVersion(SubtitleCollection):
                 return False
         return True
 
+def update_followers(sender, instance, created, **kwargs):
+    user = instance.user
+    lang = instance.language
+    if created and user and user.changes_notification:
+        if not SubtitleVersion.objects.filter(user=user).exists():
+            #If user edited before it should be in followers, or removed yourself, 
+            #so we should not add again
+            lang.followers.add(instance.user)
+            lang.video.followers.add(instance.user)
+        
 post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
 post_save.connect(video_cache.on_subtitle_version_save, SubtitleVersion)
+post_save.connect(update_followers, SubtitleVersion)
 
 def update_video_edited_field(sender, instance, **kwargs):
     video = instance.language.video
@@ -923,10 +924,6 @@ class UserTestResult(models.Model):
     task2 = models.TextField(blank=True)
     task3 = models.TextField(blank=True)
     get_updates = models.BooleanField(default=False)
-
-class StopNotification(models.Model):
-    video = models.ForeignKey(Video)
-    user = models.ForeignKey(User)
 
 class VideoUrlManager(models.Manager):
     

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from videos.models import SubtitleVersion, StopNotification, SubtitleLanguage
+from videos.models import SubtitleVersion, SubtitleLanguage
 from django.conf import settings
 from datetime import datetime, timedelta
 from utils import send_templated_email
@@ -50,7 +50,7 @@ class Command(BaseCommand):
     def send_letter_translation_start(self, translation_version):
         video = translation_version.language.video
         language = translation_version.language
-        for user in language.notification_list(translation_version.user):
+        for user in video.notification_list(translation_version.user):
             context = {
                 'version': translation_version,
                 'domain': self.domain,
@@ -110,6 +110,7 @@ class Command(BaseCommand):
 
     def send_letter_caption(self, caption_version):
         language = caption_version.language
+        video = language.video
         qs = SubtitleVersion.objects.filter(language=language) \
             .filter(version_no__lt=caption_version.version_no).order_by('-version_no')
         if qs.count() == 0:
@@ -128,17 +129,14 @@ class Command(BaseCommand):
         }
         subject = 'New edits to "%s" by %s on Universal Subtitles' % \
             (language.video.__unicode__(), caption_version.user.__unicode__())
-
-        not_send = StopNotification.objects.filter(video=language.video) \
-            .values_list('user_id', flat=True)         
+ 
         users = []
-
+        
+        video_followers = video.notification_list([caption_version.user])
+        
         for item in qs:
-            if item.user and item.user.is_active and \
-                    caption_version.user.pk != item.user.pk and \
-                    item.user.changes_notification and \
-                    not item.user in users and not item.user.id in not_send:
-                users.append(item.user)
+            users.append(item.user)
+            if item.user and not item.user in users and item.user in video_followers:
                 context['your_version'] = item
                 context['user'] = item.user
                 context['hash'] = item.user.hash_for_video(context['video'].video_id)

@@ -21,7 +21,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, StopNotification, SubtitleLanguage, SubtitleVersion, VideoUrl
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, SubtitleLanguage, SubtitleVersion, VideoUrl
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
     SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm, TranscriptionFileForm, \
     AddFromFeedForm
@@ -78,7 +78,6 @@ def follow_video(request, video_id):
     #move this on rpc
     video = get_object_or_404(Video, video_id=video_id)
     video.followers.add(request.user)
-    StopNotification.objects.filter(user=request.user, video=video).delete()
     messages.success(request, _(u'You are following %(video)s now') % {'video': video})
     return redirect(video)
 
@@ -510,7 +509,9 @@ def stop_notification(request, video_id):
     context = dict(video=video, u=user)
 
     if hash and user.hash_for_video(video_id) == hash:
-        StopNotification.objects.get_or_create(user=user, video=video)
+        video.followers.remove(user)
+        for l in video.subtitlelanguage_set.all():
+            l.followers.remove(user)
         if request.user.is_authenticated() and not request.user == user:
             logout(request)
     else:

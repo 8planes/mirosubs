@@ -22,7 +22,7 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from videos.models import Video
+from videos.models import Video, SubtitleLanguage
 from django.utils.translation import ugettext as _
 
 class VideosApiClass(object):
@@ -38,6 +38,9 @@ class VideosApiClass(object):
         
         video.followers.add(user)
         
+        for l in video.subtitlelanguage_set.all():
+            l.followers.add(user)   
+        
         return dict(msg=_(u'You are following this video now.'))
     
     def unfollow(self, video_id, user):
@@ -51,4 +54,33 @@ class VideosApiClass(object):
         
         video.followers.remove(user)
         
-        return dict(msg=_(u'You stopped following this video now.'))    
+        for l in video.subtitlelanguage_set.all():
+            l.followers.remove(user)        
+        
+        return dict(msg=_(u'You stopped following this video now.'))
+    
+    def follow_language(self, language_id, user):
+        if not user.is_authenticated():
+            return dict(error=_(u'You should be authenticated.'))
+        
+        try:
+            language = SubtitleLanguage.objects.get(pk=language_id)
+        except SubtitleLanguage.DoesNotExist:
+            return dict(error=_(u'Subtitles does not exist.'))
+        
+        language.followers.add(user)
+        
+        return dict(msg=_(u'You are following this subtitles now.'))
+    
+    def unfollow_language(self, language_id, user):
+        if not user.is_authenticated():
+            return dict(error=_(u'You should be authenticated.'))
+        
+        try:
+            language = SubtitleLanguage.objects.get(pk=language_id)
+        except SubtitleLanguage.DoesNotExist:
+            return dict(error=_(u'Subtitles does not exist.'))
+        
+        language.followers.remove(user)
+        
+        return dict(msg=_(u'You stopped following this subtitles now.'))

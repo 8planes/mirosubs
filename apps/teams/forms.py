@@ -142,7 +142,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     def __init__(self, team, *args, **kwargs):
         self.team = team
         super(AddTeamVideoForm, self).__init__(*args, **kwargs)
-        self.fields['language'].choices = get_languages_list()
+        self.fields['language'].choices = get_languages_list(True)
     
     def clean_video_url(self):
         video_url = super(AddTeamVideoForm, self).clean_video_url()

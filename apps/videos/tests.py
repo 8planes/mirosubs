@@ -17,7 +17,7 @@
 # along with this program. If not, see
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from django.test import TestCase
-from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, StopNotification
+from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult
 from apps.auth.models import CustomUser as User
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser, TxtSubtitleParser
 from django.core.urlresolvers import reverse
@@ -505,26 +505,6 @@ class ViewsTest(WebUseTest):
     
     def test_counter(self):
         self._simple_test('counter')
-        
-    def test_stop_notification(self):
-        self._login()
-
-        try:
-            StopNotification.objects.get(video=self.video, user=self.user).delete()
-        except StopNotification.DoesNotExist:
-            pass
-        
-        data = {
-            'u': self.user.id,
-            'h': self.user.hash_for_video(self.video.video_id)
-        }
-        response = self.client.get(reverse('videos:stop_notification', args=[self.video.video_id]), data)
-        self.assertEqual(response.status_code, 200)
-        
-        try:
-            StopNotification.objects.get(video=self.video, user=self.user)
-        except StopNotification.DoesNotExist:
-            self.fail()
     
     def test_test_mp4_page(self):
         self._simple_test('test-mp4-page')

@@ -20,7 +20,8 @@ from django import template
 register = template.Library()
 
 @register.filter
-def is_follower(video, user):
+def is_follower(obj, user):
+    #obj is Video or SubtitleLanguage
     if not user.is_authenticated():
         return False
-    return video.followers.filter(pk=user.pk).exists()
+    return obj.followers.filter(pk=user.pk).exists()
