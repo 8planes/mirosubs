@@ -41,7 +41,7 @@ def select_language_dialog(context, option=None):
 
     initial_data = {}
     
-    for i, l in enumerate(user_langs[:3]):
+    for i, l in enumerate(user_langs):
         initial_data['language%s' % (i+1)] = l
         
     form = SelectLanguageForm(initial=initial_data)

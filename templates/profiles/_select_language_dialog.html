@@ -9,12 +9,11 @@
     jQuery(function($){
 		var update_language_display = function(){
 			ProfileApi.get_user_languages(function(r){
-				$('.language_bar p').remove();
+				$('.language_bar span').remove();
 				var h = '';
 				for (l in r){
 					h += '<span>'+r[l]+'</span>,'
 				};
-				
 				$('.language_bar a').before('<span class="selected_language">'+h.slice(0,-1)+'</span>');
 			});			
 		};
@@ -78,14 +77,14 @@
       <li>{{ form.language3 }}</li>
     </ul>
     <ul>
-      <li>{{ form.language1 }}</li>
-      <li>{{ form.language2 }}</li>
-      <li>{{ form.language3 }}</li>
+      <li>{{ form.language4 }}</li>
+      <li>{{ form.language5 }}</li>
+      <li>{{ form.language6 }}</li>
     </ul>
     <ul id="last">
-      <li>{{ form.language1 }}</li>
-      <li>{{ form.language2 }}</li>
-      <li>{{ form.language3 }}</li>
+      <li>{{ form.language7 }}</li>
+      <li>{{ form.language8 }}</li>
+      <li>{{ form.language9 }}</li>
     </ul>
     </div><!-- // clearfix -->
     <button type="submit" class="green_button small">{% trans "Submit" %}</button>

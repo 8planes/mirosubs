@@ -32,22 +32,27 @@ class SelectLanguageForm(forms.Form):
     language1 = forms.ChoiceField(choices=(), required=False)
     language2 = forms.ChoiceField(choices=(), required=False)
     language3 = forms.ChoiceField(choices=(), required=False)
+    language4 = forms.ChoiceField(choices=(), required=False)
+    language5 = forms.ChoiceField(choices=(), required=False)
+    language6 = forms.ChoiceField(choices=(), required=False)
+    language7 = forms.ChoiceField(choices=(), required=False)
+    language8 = forms.ChoiceField(choices=(), required=False)
+    language9 = forms.ChoiceField(choices=(), required=False)
 
     def __init__(self, *args, **kwrags):
         super(SelectLanguageForm, self).__init__(*args, **kwrags)
         lc = get_simple_languages_list(True)
-        self.fields['language1'].choices = lc
-        self.fields['language2'].choices = lc
-        self.fields['language3'].choices = lc
+        
+        for i in xrange(1, 10):
+            self.fields['language%s' % i].choices = lc
     
     def save(self, user, response=None):
         data = self.cleaned_data
         
         languages = []
         
-        if data.get('language1'): languages.append(data.get('language1'))
-        if data.get('language2'): languages.append(data.get('language2'))
-        if data.get('language3'): languages.append(data.get('language3'))
+        for i in xrange(1, 10):
+            if data.get('language%s' % i): languages.append(data.get('language%s' % i))
         
         if user.is_authenticated():
             for l in languages:
