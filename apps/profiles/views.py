@@ -68,7 +68,7 @@ def my_profile(request):
     qs = Video.objects.filter(Q(subtitlelanguage__subtitleversion__user=user) | \
               Q(followers=request.user) | \
               Q(action__action_type=Action.ADD_VIDEO, action__user=user)) \
-              .distinct()
+              .distinct().order_by('-edited')
     q = request.REQUEST.get('q')
     total_video_count = qs.count()
     if q:
