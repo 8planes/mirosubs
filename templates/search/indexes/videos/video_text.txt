@@ -1,4 +1,7 @@
 {{ object }}
+{{ object }}
+{{ object }}
+{{ object }}
 {{ object.description }}
 {% for item in object.videourl_set.all %}
     {{ item.url }}

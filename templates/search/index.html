@@ -27,52 +27,47 @@
         <div class="grid_8 alpha">
           <div class="search_filters clearfix">
             <p>
-              {% trans "Search for" %} 
-              {{ form.type }}
-              {% trans "for videos in" %}
+              {% trans "Search for videos in" %}
               {{ form.video_lang }}          
               {% trans "subtitled into" %}
-              {{ form.langs }} {% trans "and without" %}
-              {{ form.excluded_langs }}
+              {{ form.langs }}
             </p>
+			<script type="text/javascript">
+				(function($){
+					var vl = $('#id_video_lang option[value=not_selected]');
+					var sl = $('#id_langs option[value=not_selected]');
+					
+					var callback = function(event){
+						var el = event.data.el;
+						var o = $('option:selected', $(this));
+						
+						if (o.attr('value') == ''){
+							if (el.attr('selected')){
+								el.parent().val('my_langs').trigger('change');
+							};
+							el.hide();
+							el.attr('selected', false);
+						}else{
+							el.html('not '+o.html())
+							el.show();
+						}
+					}
+					
+					$('#id_video_lang').bind('change', {'el': sl}, callback).trigger('change');
 
+					$('#id_langs').bind('change', {'el': vl}, callback).trigger('change');
+					
+				})(jQuery);
+			</script>
             <p class="last">
+            {% comment %}
               {% trans "Display" %}  
               {{ form.display }}
-              {% trans "and sort by" %}
-              {{ form.sort }} {{ form.st }}
+			{% endcomment %}
+              {% trans "Sort by" %}
+              {{ form.sort }}
             </p>
           </div>
-          
-          {% comment %}
-          <div class="sort_button" style="width: auto">
-            {{ form.sort }}
-          </div>
-    
-          <div class="sort_button" style="width: auto">
-            {{ form.langs }}
-          </div>
-    
-          <div class="search_toggles">
-            <div style="display: none">{{ form.type }}</div>
-            <a href="#id_type_0" class="toggle search_title"><span></span>{% trans "Search Title Only" %}</a>
-            <a href="#id_type_1" class="toggle on search_full"><span></span>{% trans "Search Full Text" %}</a>
-          </div>
-          {% endcomment %}
-          <script type="text/javascript">
-              jQuery(function($){
-                  var $search_toggles = $('.search_toggles');
-                  $('a', $search_toggles).live('click', function(){
-                      $this = $(this);
-                      if ( ! $this.hasClass('on')){
-                          $('a', $search_toggles).toggleClass('on');
-                          $('input', $search_toggles).attr('checked', '');
-                          $($this.attr('href')).attr('checked', 'checked');
-                      }
-                      return false;
-                  });
-              });
-          </script>
         </div>        
         </form>
         
