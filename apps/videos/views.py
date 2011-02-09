@@ -94,7 +94,7 @@ def ajax_change_video_title(request):
     
     try:
         video = Video.objects.get(video_id=video_id)
-        if title and not video.title or video.is_html5():
+        if title and not video.title or video.is_html5() or user.is_superuser:
             old_title = video.title_display()
             video.title = title
             video.slug = slugify(video.title)
