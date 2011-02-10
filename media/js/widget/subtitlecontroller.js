@@ -148,7 +148,6 @@ mirosubs.widget.SubtitleController.prototype.startEditing_ =
             originalLanguageCode, fork);
     else {
         var config = {
-            'returnURL': window.location.href,
             'videoID': this.videoID_,
             'baseVersionNo': baseVersionNo,
             'videoURL': this.videoURL_,

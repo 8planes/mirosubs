@@ -261,6 +261,14 @@ class TestRpc(TestCase):
         self.assertTrue(language.was_complete)
         self.assertTrue(language.is_complete)
 
+    def test_get_widget_url(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_basic_draft(request)
+        rpc.finished_subtitles(request, draft.pk, [])
+        language = Video.objects.get(
+            video_id=draft.video.video_id).subtitle_language()
+        # succeeds if no error.
+
     def test_change_set(self):
         request = RequestMockup(self.user_0)
         draft = self._create_two_sub_draft(request)
