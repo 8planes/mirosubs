@@ -60,6 +60,9 @@ def onsite_widget(request):
     except (ValueError, KeyError):
         raise Http404
 
+    if 'HTTP_REFERER' in request.META:
+        config['returnURL'] = request.META['HTTP_REFERER']
+
     if not config.get('nullWidget'): 
         video_id = config.get('videoID')
 
