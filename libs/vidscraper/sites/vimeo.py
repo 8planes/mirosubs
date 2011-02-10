@@ -38,12 +38,10 @@ import simplejson
 from vidscraper.decorators import provide_shortmem, parse_url, returns_unicode
 from vidscraper import util
 from vidscraper.errors import Error
+from django.conf import settings
 
 class VimeoError(Error):
     pass
-
-VIMEO_API_KEY = None # set these elsewhere
-VIMEO_API_SECRET = None
 
 VIMEO_API_URL = 'http://vimeo.com/api/rest/v2/'
 
@@ -61,7 +59,7 @@ def get_shortmem(url):
                 'method': 'vimeo.videos.getInfo',
                 'format': 'json',
                 'video_id': video_id}))
-    consumer = oauth2.Consumer(VIMEO_API_KEY, VIMEO_API_SECRET)
+    consumer = oauth2.Consumer(settings.VIMEO_API_KEY, settings.VIMEO_API_SECRET)
     client = oauth2.Client(consumer)
     backoff = util.random_exponential_backoff(2)
     for i in range(5):

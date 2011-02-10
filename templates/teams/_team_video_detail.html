@@ -5,7 +5,7 @@
 <div class="info">
     <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
     {% if team_video|can_edit_video:user %}
-        <a href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
+        <a class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
     {% endif %}
     {% if team_video.description %}
     <p>
@@ -13,7 +13,7 @@
     </p>
     {% endif %}
     {% if team_video.languages.exists or team_video.all_languages %}
-    <div class="need_help">
+    <div style="float: none !important;" class="need_help">
         <span>{% trans 'We need your help with' %}</span>
         {% if team_video.all_languages %}
             <a href="{{ team_video.link_to_page }}">{% trans 'All Languages' %}</a>
@@ -24,29 +24,42 @@
         {% endif %}
     </div>
     {% endif %}
-    <div>
-        {% for lang in team_video.video.subtitlelanguage_set.all %}
-            {% if lang.language in USER_LANGUAGES %}
-                {% if lang.is_original or lang.is_forked %}
-                    <a href="{{ lang.get_absolute_url }}">{% trans "Review" %} {{ lang.language_display }} {% trans "Captions" %}</a>
-                {% else %}
-                    {% if lang.percent_done == 0 %}
-                        <a href="{{ lang.get_widget_url }}">
-                            {% trans "Translate into" %} {{ lang.language_display }}
-                        </a>
-                    {% endif %}
-                    {% if lang.percent_done == 100 %}
-                        <a href="{{ lang.get_widget_url }}">
-                            {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
-                        </a>                        
-                    {% endif %}
+      {% for lang in team_video.video.subtitlelanguage_set.all %}
+      
+        {% if lang.language in USER_LANGUAGES %}
+          {% if lang.is_original or lang.is_forked %}
+            <div style="margin: 5px 5px 0 0;">
+            <a class="blue_button small" href="{{ lang.get_absolute_url }}">{% trans "Review" %} {{ lang.language_display }} {% trans "Captions" %}</a>
+            </div>
+              {% else %}
+                {% if lang.percent_done == 0 %}
+                  <div style="margin: 5px 5px 0 0;">
+                  <a href="{{ lang.get_widget_url }}">
+                    {% trans "Translate into" %} {{ lang.language_display }}
+                  </a>
+                  </div>
                 {% endif %}
+                {% if lang.percent_done == 100 %}
+                  <div style="margin: 5px 5px 0 0;">
+                  <a href="{{ lang.get_widget_url }}">
+                    {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
+                  </a>    
+                  </div>                    
+                {% endif %}
+              {% endif %}
             {% endif %}
+        
         {% endfor %}
+        
         {% for lang in languages_to_add %}
-            <a href="{% url videos:translation_history team_video.video.video_id lang.0 %}">{% trans "Create" %} {{ lang.1 }} {% trans "Captions" %}</a>
+            <div style="margin: 5px 5px 0 0;">
+            <a class="blue_button small" href="{% url videos:translation_history team_video.video.video_id lang.0 %}">
+              {% trans "Create" %} {{ lang.1 }} {% trans "Captions" %}
+            </a>
+            </div>
         {% endfor %}
-    </div>
+        
+    
     <div class="completed_in">
         {% if team_video.completed_languages.exists %}
             <span>{% trans 'Subtitles completed in' %}</span>

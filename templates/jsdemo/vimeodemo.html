@@ -1,5 +1,15 @@
-{% extends "jsdemo/base_demo.html" %}
-{% block body%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="{{MEDIA_URL}}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+    <script>
+      goog.require('goog.debug.Logger');
+      goog.require('goog.debug.DivConsole');
+    </script>
+  </head>
+  <body>
 <div id="videodiv">
 </div>
 <div>
@@ -48,4 +58,6 @@
   }
 
 </script>
-{% endblock %}
+  </body>
+</html>
+
