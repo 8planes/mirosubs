@@ -37,16 +37,17 @@
    
         <div style="display: none;" class="feedback_bg" id="feedback_success">
             <h4 style="font-size: 25px; font-weight: bold; margin: 0 0 10px 0;">{% trans 'Thank you for your feedback.' %}</h4>
-            <p>{% trans 'If you would like to perform some additional testing' %}</p>
-            <p>{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
-            <p>{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
+            <p style="font-size: 15px; line-height: 22px;">{% trans 'If you would like to perform some additional testing' %}</p>
+            <p style="font-size: 15px; line-height: 22px;">{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
+            <p style="font-size: 15px; line-height: 22px;">{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
             </p>
-            <div class="clearfix">
-            <a class="green_button big" href="#" id="send_more_feedback">{% trans 'Send more feedback.' %}</a>
+            
+            <div style="width: 250px; margin: 0 auto;"><a style="margin: 0 5px 0 0;" class="green_button small" href="#" id="send_more_feedback">{% trans 'Send more feedback.' %}</a>
             {% if not error %}
             <a  class="red_button small" href="#close" class="">{% trans "Close" %}</a>
             {% endif %}
-          </div><!-- // clearfix -->
+            </div><!-- // blahblah -->
+          <div style="clear:both;"></div><!-- // clearfix -->
         </div>        
     </div>
     
