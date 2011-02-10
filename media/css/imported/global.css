@@ -130,7 +130,7 @@ ul#subnav li#subnav_menu {
 .language_modal { 
   display: none;
   background-color: #fff;
-  width: 560px;
+  width: 375px;
   color: #818b8f;
   padding: 20px;
   -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
@@ -179,13 +179,10 @@ ul#subnav li#subnav_menu {
 /* Language Bar
 ------------------------------------------------*/
 
-#topbar { 
-  background-color: rgba(119, 143, 161, 0.6);
+#topbar {
   line-height: 30px;
   font-size: 12px;
   text-align: right;
-  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow:    0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   font-weight: bold;
   color: #1e3d43;
   padding: 5px 0 5px 0;
@@ -197,11 +194,11 @@ ul#subnav li#subnav_menu {
   font-size: 12px;
   -moz-border-radius:    5px;  
   -webkit-border-radius: 5px;
-  margin: 0 0px 0px 25px;
+  margin: 0 0 0 5px;
   line-height: 15px;
   padding: 8px 0 4px 28px;
   float: left;
-  width: 120px;;
+  width: 120px;
   font-family: Arial, Helvetica, sans-serif;
   -moz-box-shadow:    inset 0px 1px 1px #555;
   -webkit-box-shadow: inset 0px 1px 2px #555;
@@ -215,10 +212,9 @@ ul#subnav li#subnav_menu {
   border: 0;
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   -moz-box-shadow:    0 1px 2px rgba(0, 0, 0, 0.5);
-  margin-left: 5px;
+  margin-left: 15px;
 }
 
-.language_bar span { 
-  margin-left: 5px;
+.language_bar span {
   text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.2);
 }

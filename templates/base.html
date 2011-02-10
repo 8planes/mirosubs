@@ -78,7 +78,6 @@
     {% if user.is_authenticated %}
         {% messages %}
     {% endif %}
-    
     <div id="topbar">
       <div class="wrapper">
       <div class="search">
@@ -95,7 +94,7 @@
 <div class="wrapper">
   <div id="header">
     <h1 class="logo"><a href="/">Universal Subtitles</a></h1>
-    <div id="main_nav">
+    <div id="main_nav" class="clearfix">
       <ul>
         <li id="nobdr">
           <a href="{% url videos:create %}">{% trans 'Subtitle' %}
@@ -107,7 +106,7 @@
         </li>
       </ul>
     </div><!-- // mainNav -->
-    <ul id="subnav">
+    <ul id="subnav" class="clearfix">
       <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
       <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
       <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
@@ -149,6 +148,7 @@
       <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
     </div><!-- // float_right -->
   </div><!-- // footer -->
+  
 </div><!-- // wrapper -->
   <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
 </body>
