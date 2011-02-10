@@ -84,13 +84,23 @@ class Message(models.Model):
             'user-avatar': self.user and self.user.small_avatar() or '',
             'user-username': self.user and unicode(self.user) or '',
             'user-id': self.user and self.user.pk or '',            
-            'message-content': self.content,
+            'message-content': self.get_content(),
             'message-subject': self.subject,
             'message-subject-display': unicode(self),
             'is-read': self.read
         }
         return json.dumps(data)
     
+    def get_content(self):
+        content = []
+        self.content and content.append(self.content) and content.append('\n')
+        
+        if self.object:
+            added_content = self.object.render_message()
+            content.append(added_content)
+            
+        return ''.join(content)
+            
     def clean(self):
         from django.core.exceptions import ValidationError
         

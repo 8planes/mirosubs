@@ -108,7 +108,7 @@ class Team(models.Model):
         if user:
             qs = cls.objects.for_user(user)
         else:
-            qs = cls.objects.all()
+            qs = cls.objects.filter(is_visible=True)
         try:
             return qs.get(slug=slug)
         except cls.DoesNotExist:

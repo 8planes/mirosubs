@@ -43,15 +43,14 @@
                             {% trans 'Search' %}
                         </button>
                     </form>
-                </div>
-                <div class="clearfix">
-                </div>
-            </div>
-        </div>
+                </div><!-- // inline_search -->
+                <div class="clearfix"></div>
+            </div><!-- // padding_small -->
+        </div><!-- // boxx -->
         <div class="grid_8 clearfix">
             <br/>
             <br/>
-        </div>
+        </div><!-- // grid_8 -->
         
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
@@ -60,8 +59,8 @@
             {% endfor %}
         </ul>
         {% if is_paginated %}{% paginator %}{% endif %}
-    </div>
-</div>
+    </div><!-- // video-tab -->
+</div><!-- // grid_8 alpha -->
 
 <div class="grid_4 omega">
     <div class="team_logo">
@@ -87,6 +86,6 @@
     <p><a href="{% url profiles:edit %}">{% trans "Edit profile" %}</a></p>
     
     {% user_videos_activity %}
-</div>
+</div><!-- // grid_4 omega -->
 
 {% endblock %}

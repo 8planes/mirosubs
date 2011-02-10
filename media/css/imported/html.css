@@ -1,8 +1,6 @@
 body {
-  background: #d3e9ed url(../../images/main_bg.gif) repeat-x;
+  background: #d1e9ee url(../../images/bg_body.jpg) no-repeat center top;
   margin: 0 auto;
-  position: relative;
-  background-attachment:fixed;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -81,7 +79,7 @@ ul li {
   padding-bottom: 10px;
 }
 
-#faq h2 {
+#faq h2.main-title {
   margin: 60px 0 10px 0;
   clear: left;
   line-height: 22px;
