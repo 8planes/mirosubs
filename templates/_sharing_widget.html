@@ -7,20 +7,20 @@
       return false;
   }
 </script>
-<div style="position: relative; top: -50px;">
+<div id="video_follow">
 	{# This should be refactored in future #}
 	{% if language %}
     {% if language|is_follower:user %}
-        <button class="follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-        <button class="unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+        <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
+        <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
     {% else %}
-        <button class="follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
-        <button class="unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
+        <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
+        <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
     {% endif %}
 {% else %}
     {% if video|is_follower:user %}
-        <button class="follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-        <button class="unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+        <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
+        <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
     {% else %}
         <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
         <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
