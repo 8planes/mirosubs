@@ -30,9 +30,7 @@ goog.inherits(mirosubs.subtitle.FinishedPanel, goog.ui.Component);
 mirosubs.subtitle.FinishedPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.embedCodeInput = $d('input', {'type':'text'});
-    var embedCode = ['<sc', 'ript type="text/javascript" src="',
-                     this.serverModel_.getEmbedCode(),
-                     '"></script>'].join('');
+    var embedCode = this.serverModel_.getEmbedCode();
     this.embedCodeInput['value'] = embedCode;
     var flashSpan;
     var helpLi = $d('li', null, 
