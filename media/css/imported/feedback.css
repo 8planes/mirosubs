@@ -9,22 +9,28 @@
   right: 0;
   height: 88px;
   width: 27px;
-  text-indent: -9999px; }
+  text-indent: -9999px;
+}
 
 #feedback_email {
   width: 300px;
-  margin: 2px; }
+  margin: 2px;
+}
     
 #feedback_message {
   width: 368px;
-  height: 150px; }
+  height: 150px;
+}
     
 #feedback_form div {
-  margin: 2px; }
+  margin: 2px;
+}
     
 #feedback_form p.error_list {
   color: #ff0000;
-  margin: -1px; }
+  margin: -1px;
+}
     
 #feedback_success {
-  padding: 10px 0px; }
+  padding: 10px 0px;
+}
