@@ -35,6 +35,10 @@ register = template.Library()
 
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
 
+@register.inclusion_tag('profiles/_require_email_dialog.html', takes_context=True)
+def require_email_dialog(context):
+    return context
+
 @register.inclusion_tag('profiles/_select_language_dialog.html', takes_context=True)
 def select_language_dialog(context, option=None):
     user_langs = get_user_languages_from_request(context['request'])

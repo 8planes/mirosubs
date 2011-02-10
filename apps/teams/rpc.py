@@ -24,71 +24,72 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from teams.models import Team, TeamMember, Application
 from django.utils.translation import ugettext as _
+from utils.rpc import Error, Msg
 
 class TeamsApiClass(object):
     
     def create_application(self, team_id, msg, user):
         if not user.is_authenticated():
-            return {'error': _('You should be authenticated.')}
+            return Error(_('You should be authenticated.'))
             
         try:
             team = Team.objects.get(pk=team_id)
         except Team.DoesNotExist:
-            return {'error': _('Team does not exist')}
+            return Error(_('Team does not exist'))
         
         try:
             tm = TeamMember.objects.get(team=team, user=user)
-            return {'error':  _(u'You are already a member of this team.')}
+            return Error(_(u'You are already a member of this team.'))
         except TeamMember.DoesNotExist:
             pass
         
         if team.is_open():
             TeamMember(team=team, user=user).save()
-            return {'msg': _(u'You are now a member of this team because it is open.')}
+            return Msg(_(u'You are now a member of this team because it is open.'))
         elif team.is_by_application():
             application, created = Application.objects.get_or_create(team=team, user=user)
             application.note = msg
             application.save()
-            return {'msg': _(u'Application sent success. Wait for answer from team.')}
+            return Msg(_(u'Application sent success. Wait for answer from team.'))
         else:
-            return {'error':  _(u'You can\'t join this team by application.')}
+            return Error(_(u'You can\'t join this team by application.'))
         
     def leave(self, team_id, user):
         if not user.is_authenticated():
-            return {'error': _('You should be authenticated.')}
+            return Error(_('You should be authenticated.'))
             
         try:
             team = Team.objects.get(pk=team_id)
         except Team.DoesNotExist:
-            return {'error': _('Team does not exist')}
+            return Error(_('Team does not exist'))
             
         try:
             tm = TeamMember.objects.get(team=team, user=user)
             if team.members.exclude(pk=tm.pk).exists():
                 tm.delete()
-                return {'msg': _(u'You are not a member of team now.'), 'is_open': team.is_open()}
+                return Msg(_(u'You are not a member of team now.'), is_open=team.is_open())
             else:
-                return {'error': _(u'You are last member of this team.')}
+                return Error(_(u'You are last member of this team.'))
         except TeamMember.DoesNotExist:
-            return {'error':  _(u'You are not a member of this team.')}
+            return Error(_(u'You are not a member of this team.'))
     
     def join(self, team_id, user):
         if not user.is_authenticated():
-            return {'error': _('You should be authenticated.')}
+            return Error(_('You should be authenticated.'))
             
         try:
             team = Team.objects.get(pk=team_id)
         except Team.DoesNotExist:
-            return {'error': _('Team does not exist')}
+            return Error(_('Team does not exist'))
         
         try:
             TeamMember.objects.get(team=team, user=user)
-            return {'error':  _(u'You are already a member of this team.')}
+            return Error(_(u'You are already a member of this team.'))
         except TeamMember.DoesNotExist:
             pass
         
         if not team.is_open():
-            return {'error':  _(u'This team is not open.')}
+            return Error(_(u'This team is not open.'))
         else:
             TeamMember(team=team, user=user).save()
-            return {'msg': _(u'You are now a member of this team.')}
+            return Msg(_(u'You are now a member of this team.'))

@@ -22,9 +22,10 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from profiles.forms import SelectLanguageForm
-from utils.rpc import RpcHttpResponse, add_request_to_kwargs
+from profiles.forms import SelectLanguageForm, EditUserEmailForm
+from utils.rpc import RpcHttpResponse, add_request_to_kwargs, Error, Msg
 from utils.translation import get_user_languages_from_request
+from django.utils.translation import ugettext as _
 
 class ProfileApiClass(object):
     
@@ -42,3 +43,13 @@ class ProfileApiClass(object):
     def get_user_languages(self, user, request):
         return get_user_languages_from_request(request, with_names=True)
     
+    def set_email(self, email, user):
+        if not user.is_authenticated():
+            return Error(_(u'You should be authenticated.'))
+        
+        form = EditUserEmailForm(dict(email=email), instance=user)
+        if form.is_valid():
+            form.save()
+            return Msg(_(u'Your email was updated.'))
+        else:
+            return Error(form.errors['email'])
