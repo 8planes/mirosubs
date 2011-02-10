@@ -120,6 +120,16 @@ class EditAvatarForm(forms.ModelForm, AjaxForm):
         if 'picture' in self.cleaned_data and not self.cleaned_data.get('picture'):
             del self.cleaned_data['picture']
         return self.cleaned_data
+
+class EditUserEmailForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(EditUserEmailForm, self).__init__(*args, **kwargs)
+        self.fields['email'].required = True
+    
+    class Meta:
+        model = User
+        fields = ('email',)    
                          
 class EditUserForm(forms.ModelForm):
     current_password = forms.CharField(widget=forms.PasswordInput, required=False)

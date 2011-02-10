@@ -12,7 +12,24 @@ class RpcExceptionEvent(Exception):
     """
     pass
 
-class RpcHttpResponse(dict):
+class RpcResponse(dict):
+    pass
+
+class Error(RpcResponse):
+    """
+    Simple responses. Just for pretty code and some kind of "protocol"
+    """
+    def __init__(self, text, **kwargs):
+        super(Error, self).__init__(error=text, **kwargs)
+
+class Msg(RpcResponse):
+    """
+    Simple responses. Just for pretty code and some kind of "protocol"
+    """
+    def __init__(self, text, **kwargs):
+        super(Msg, self).__init__(msg=text, **kwargs)
+
+class RpcHttpResponse(RpcResponse):
     """
     This is vrapper for method's reponse, which allow save some modification of HTTP response.
     For example set COOKIES. This should be flexible and useful for in future.
