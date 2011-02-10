@@ -139,8 +139,9 @@
 /* New Homepage overrides */
 
 #header .user_panel {
-  top: -19px;
+  top: 0px;
   padding-right: 0;
+  position: relative;
 }
 
 
