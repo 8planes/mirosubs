@@ -41,10 +41,12 @@
             <p>{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
             <p>{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
             </p>
-            <p><a class="green_button big" href="#" id="send_more_feedback">{% trans 'Send more feedback.' %}</a></p>
+            <div class="clearfix">
+            <a class="green_button big" href="#" id="send_more_feedback">{% trans 'Send more feedback.' %}</a>
             {% if not error %}
-            <p><a  class="red_button small" href="#close" class="">{% trans "Close" %}</a></p>
+            <a  class="red_button small" href="#close" class="">{% trans "Close" %}</a>
             {% endif %}
+          </div><!-- // clearfix -->
         </div>        
     </div>
     
