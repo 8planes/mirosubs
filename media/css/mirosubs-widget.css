@@ -1830,43 +1830,43 @@ padding: 0 !important;
 }
 
 
-.mirosubs-share ul li{
-list-style: none !important;
-padding: 0 0 0 28px !important;
-margin-bottom: 5px
-
+.mirosubs-share ul li {
+  list-style: none !important;
+  margin-bottom: 5px
 }
 
 
-.mirosubs-share ul li a{
-list-style: none !important;
-line-height: 1.8em !important;
-padding: 0 !important;
-margin-bottom: 5px
-display: block !important;
-color: #333 !important;
-font-weight: bold !important;
+.mirosubs-share ul li a {
+  list-style: none !important;
+  line-height: 1.8em !important;
+  padding: 0 !important;
+  margin-bottom: 5px
+  display: block !important;
+  color: #333 !important;
+  font-weight: bold !important;
 }
 
-
-.mirosubs-twitter{
-    background: url("../images/share_icons.png") 0 -37px no-repeat !important;
-text-decoration: underline !important;
+.mirosubs-twitter-share {
+  background: url("../images/share_icons.png") 0 -37px no-repeat !important;
+  text-decoration: underline !important;
+  padding: 0 0 0 28px !important;
 }
 
-
-.mirosubs-facebook{
-    background: url("../images/share_icons.png") 0 0px no-repeat !important;
-text-decoration: underline !important;
+.mirosubs-facebook {
+  background: url("../images/share_icons.png") 0 0px no-repeat !important;
+  text-decoration: underline !important;
+  padding: 0 0 0 28px !important;
 }
 
-
-.mirosubs-friends{
-    background: url("../images/share_icons.png") 0 -73px no-repeat !important;
-text-decoration: underline !important;
+.mirosubs-friends {
+  background: url("../images/share_icons.png") 0 -73px no-repeat !important;
+  text-decoration: underline !important;
+  padding: 0 0 0 28px !important;
 }
 
-
+.mirosubs-facebook-like {
+  margin: -5px 0 -5px 0 !important;
+}
 
 .mirosubs-translating{
 padding: 5px !important;
@@ -3091,6 +3091,6 @@ border: 1px solid !important;
 }
 
 #video_follow {
-  margin: 0 0 50px 0;
+  margin: -10px 0 45px 0;
 }
 

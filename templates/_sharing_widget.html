@@ -7,33 +7,34 @@
       return false;
   }
 </script>
-<div id="video_follow">
-	{# This should be refactored in future #}
-	{% if language %}
-    {% if language|is_follower:user %}
-        <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-        <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
-    {% else %}
-        <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
-        <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
-    {% endif %}
-{% else %}
-    {% if video|is_follower:user %}
-        <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-        <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
-    {% else %}
-        <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
-        <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
-    {% endif %}	
-{% endif %}
-</div>
 <div style="margin: 0 0 15px 0;" class="mirosubs-share">
+  <div id="video_follow">
+  	{# This should be refactored in future #}
+  	{% if language %}
+      {% if language|is_follower:user %}
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+      {% else %}
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
+      {% endif %}
+  {% else %}
+      {% if video|is_follower:user %}
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+      {% else %}
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
+      {% endif %}	
+  {% endif %}
+  </div>
   <img src="{{MEDIA_URL}}images/blue_triangle.png" class="mirosubs-blueTriangle" />
   <h2>{% trans 'Share your subtitles' %}</h2>
   
   <p>{% trans 'Now everyone can watch the video with subtitles-- try it!' %}<br />
     {% trans 'Then tell the world and invite your friends to help translate:' %}</p>
   <ul>
+    <li class="mirosubs-facebook-like"><iframe src="http://www.facebook.com/plugins/like.php?href={{ share_panel_permalink|urlencode }}&layout=standard&show_faces=false&width=450&action=like&colorscheme=light&height=25" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:25px;" allowTransparency="true"></iframe></li>
     <li class="mirosubs-facebook"><a href="#" onclick="return share_on_facebook(event);">{% trans 'Post to Facebook' %}</a></li>
     <li class="mirosubs-twitter-share"><a href="{{share_panel_twitter_url}}" target="post_to_twitter">{% trans 'Post to Twitter' %}</a></li>
     <li class="mirosubs-friends"><a href="{{share_panel_email_url}}" target="email_friends">{% trans 'Email to friends' %}</a></li>
@@ -70,7 +71,6 @@
   </p>
   <h3>{% trans 'Permalink' %}</h3>
   <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
-  <iframe src="http://www.facebook.com/plugins/like.php?href={{ share_panel_permalink|urlencode }}&layout=button_count&show_faces=false&width=450&action=like&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>
 </div>
 <script type="text/javascript">
     jQuery(function($){

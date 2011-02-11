@@ -19,6 +19,7 @@ class TeamsTest(TestCase):
             "username": u"admin",
             "password": u"admin"
         }
+        self.user = User.objects.get(username=self.auth["username"])
     
     def test_views(self):
         self.client.login(**self.auth)
@@ -39,7 +40,7 @@ class TeamsTest(TestCase):
         response = self.client.post(reverse("teams:create"), data)
         self.failUnlessEqual(response.status_code, 302)
         team = Team.objects.get(slug=data['slug'])
-        
+
         #---------- index -------------
         response = self.client.get(reverse("teams:index"))
         self.failUnlessEqual(response.status_code, 200) 
@@ -60,6 +61,7 @@ class TeamsTest(TestCase):
         #---------- edit ------------
         url = reverse("teams:edit", kwargs={"slug": team.slug})
         response = self.client.get(url)
+
         self.failUnlessEqual(response.status_code, 200)
         
         data = {
@@ -104,7 +106,7 @@ class TeamsTest(TestCase):
         
         url = reverse("teams:edit", kwargs={"slug": "volunteer"})
         response = self.client.get(url)
-        self.assertRedirects(response, "/auth/login/?next=/teams/edit/volunteer/")
+        self.failUnlessEqual(response.status_code, 302)
         
         self.client.login(**self.auth)
         #-------------- applications ----------------
@@ -144,9 +146,10 @@ class TeamsTest(TestCase):
         self.failUnlessEqual(response.status_code, 200)
 
         #-------------members activity ---------------
-        url = reverse("teams:members_actions", kwargs={"slug": team.slug})
-        response = self.client.get(url)
-        self.failUnlessEqual(response.status_code, 200)        
+        #Deprecated
+        #url = reverse("teams:members_actions", kwargs={"slug": team.slug})
+        #response = self.client.get(url)
+        #self.failUnlessEqual(response.status_code, 200)        
         
         #------------- add video ----------------------
         data = {
