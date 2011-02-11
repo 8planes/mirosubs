@@ -17,7 +17,7 @@
 }
 
 .no-padding-top {
-padding-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 .team_html { 
@@ -52,28 +52,36 @@ padding-top: 0 !important;
 .team_html h4 { font-size: 20px; }
 .team_html h5 { font-size: 18px; }
 
-#team_header_html #maincol {
+#custom_volunteer #maincol {
   float: left;
-  width: 540px;
+  width: 580px;
 }
 
-#team_header_html #subcol {
+#custom_volunteer #subcol {
   float: left;
-  width: 315px;
+  width: 275px;
   margin: 0 0 0 40px;
-  background: #c1dee5;
-  padding: 15px;
+  border-left: 1px #c1dee5 solid;
+  padding: 15px 15px 15px 25px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
 }
 
-#team_header_html h3 {
-  margin: 0;
+#custom_volunteer h3 {
+  margin: 15px 0 -5px 0;
   padding: 0;
   text-shadow: 0 0 0;
+  
 }
 
-#team_header_html p {
+#custom_volunteer h3 em#volunteer_begin {
+  color: #6a9200;
+  font-style: normal;
+  background: transparent url(../../images/icon_custom_volunteer_arrow.png) right center no-repeat;
+  padding: 0 20px 0 5px;
+}
+
+#custom_volunteer p {
   font-size: 14px;
   line-height: 24px;
   margin: 10px 0 0 0;
