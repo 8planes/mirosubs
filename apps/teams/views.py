@@ -220,8 +220,8 @@ def create(request):
 @render_to('teams/edit.html')
 @login_required
 def edit(request, slug):
-    team = Team.get(slug)
-    
+    team = Team.get(slug, request.user)
+
     if not team.is_member(request.user):
         raise Http404
     
@@ -251,7 +251,7 @@ def edit(request, slug):
 
 @login_required
 def edit_logo(request, slug):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
     
     if not team.is_member(request.user):
         raise Http404
@@ -271,7 +271,7 @@ def edit_logo(request, slug):
 @render_to('teams/add_video.html')
 @login_required
 def add_video(request, slug):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
     
     if not team.is_member(request.user):
         raise Http404
@@ -312,7 +312,7 @@ def add_video(request, slug):
 
 @login_required
 def edit_videos(request, slug):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
     
     if not team.is_member(request.user):
         raise Http404
@@ -385,7 +385,7 @@ def remove_video(request, team_video_pk):
 @render_to_json
 @login_required
 def remove_member(request, slug, user_pk):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
 
     if not team.is_member(request.user):
         raise Http404
@@ -427,7 +427,7 @@ def demote_member(request, slug, user_pk):
 
 @login_required
 def promote_member(request, slug, user_pk):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
 
     if not team.is_member(request.user):
         raise Http404
@@ -442,7 +442,7 @@ def promote_member(request, slug, user_pk):
 
 @login_required        
 def edit_members(request, slug):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
     
     if not team.is_member(request.user):
         raise Http404
@@ -471,7 +471,7 @@ def edit_members(request, slug):
 
 @login_required
 def applications(request, slug):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
     
     if not team.is_member(request.user):
         raise Http404
@@ -489,7 +489,7 @@ def applications(request, slug):
 
 @login_required
 def approve_application(request, slug, user_pk):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
 
     if not team.is_member(request.user):
         raise Http404
@@ -506,7 +506,7 @@ def approve_application(request, slug, user_pk):
 
 @login_required
 def deny_application(request, slug, user_pk):
-    team = Team.get(slug)
+    team = Team.get(slug, request.user)
 
     if not team.is_member(request.user):
         raise Http404
@@ -571,7 +571,7 @@ def accept_invite(request, invite_pk, accept=True):
 
 @permission_required('teams.change_team')
 def highlight(request, slug, highlight=True):
-    item = Team.get(slug)
+    item = get_object_or_404(Team, slug=slug)
     item.highlight = highlight
     item.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))

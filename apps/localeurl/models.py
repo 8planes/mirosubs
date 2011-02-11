@@ -10,6 +10,7 @@ from localeurl import utils
 
 if localeurl.settings.URL_TYPE == 'path_prefix' and settings.USE_I18N:
     def reverse(viewname, urlconf=None, args=[], kwargs={}, prefix=None, current_app=None):
+        kwargs = kwargs or {}
         locale = utils.supported_language(kwargs.pop('locale',
                 translation.get_language()))
         path = django_reverse(viewname, urlconf, args, kwargs, prefix, current_app)
