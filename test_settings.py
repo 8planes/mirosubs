@@ -10,4 +10,6 @@ DATABASES = {
 }
 
 INSTALLED_APPS += ('django_nose', )
+INSTALLED_APPS = list(INSTALLED_APPS)
+INSTALLED_APPS.remove('mirosubs')
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
