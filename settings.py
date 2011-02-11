@@ -348,7 +348,8 @@ RECENT_ACTIVITIES_ONPAGE = 10
 ACTIVITIES_ONPAGE = 20
 REVISIONS_ONPAGE = 20
 
-FEEDBACK_EMAIL = 'universalsubtitles@pculture.org'
+FEEDBACK_EMAIL = 'socmedia@pculture.org'
+FEEDBACK_EMAILS = [FEEDBACK_EMAIL, 'hwilson@gmail.com']
 FEEDBACK_ERROR_EMAIL = 'universalsubtitles-errors@pculture.org'
 FEEDBACK_SUBJECT = 'Universal Subtitles Feedback'
 FEEDBACK_RESPONSE_SUBJECT = 'Thanks for trying Universal Subtitles'

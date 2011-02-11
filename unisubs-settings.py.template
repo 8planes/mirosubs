@@ -41,6 +41,9 @@ SOLR_ROOT = "/usr/local/apache-solr-1.3.0/example"
 SITE_ID = INSERT_SITE_ID_AS_NUMBER
 SITE_NAME = 'INSERT SITE NAME'
 
+if DEV:
+   FEEDBACK_EMAILS.append('aduston@gmail.com')
+
 EMAIL_SUBJECT_PREFIX = '[{0}]'.format(SITE_NAME)
 
 TWITTER_CONSUMER_KEY = 'INSERT TWITTER CONSUMER KEY'

@@ -478,9 +478,9 @@ class FeedbackForm(MathCaptchaForm):
         message = u'%s\n\n%s\n%s\n%s\n%s\n%s\n%s' % (message, user_agent_data, timestamp, version, commit, url, user)
         if error in ['404', '500']:
             message += u'\nPage type: %s' % error
-            feedback_email = settings.FEEDBACK_ERROR_EMAIL
+            feedback_emails = [settings.FEEDBACK_ERROR_EMAIL]
         else:
-            feedback_email = settings.FEEDBACK_EMAIL
+            feedback_emails = settings.FEEDBACK_EMAILS
         headers = {'Reply-To': email} if email else None
         bcc = settings.EMAIL_BCC_LIST
         if email:
@@ -488,7 +488,7 @@ class FeedbackForm(MathCaptchaForm):
         else:
             subject = settings.FEEDBACK_SUBJECT
         EmailMessage(subject, message, email, \
-                     [feedback_email ], headers=headers, bcc=bcc).send()
+                         feedback_emails, headers=headers, bcc=bcc).send()
         
         if email:
             headers = {'Reply-To': settings.FEEDBACK_RESPONSE_EMAIL}
