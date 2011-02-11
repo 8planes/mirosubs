@@ -1,0 +1,33 @@
+Django==1.2.1
+Fabric==0.9.1
+PIL==1.1.7
+PyRSS2Gen==1.0.0
+PyYAML==3.09
+South==0.7
+Werkzeug==0.6.1
+django-debug-toolbar==0.8.3
+django-extensions==0.4.1
+-e hg+http://bitbucket.org/ubernostrum/django-registration/@d36a38202ee3d09d342b000f4ff634296f90df49#egg=django_registration-tip
+-e hg+https://bitbucket.org/jespern/django-piston/@c4b2d21db51a#egg=django-piston-0.2.2
+-e git://github.com/aduston/Django-Socialauth.git#egg=django_socialauth-0.1.5-py2.6-dev
+-e hg+https://bitbucket.org/bkroeze/django-livesettings/@32a38a60367a#egg=django-livesettings
+-e hg+https://bitbucket.org/bkroeze/django-keyedcache/@4be18235b372#egg=django-keyedcache
+django-celery==2.1.4
+ipython==0.10
+oauth==1.0.1
+oauth2==1.2.0
+pyOpenSSL==0.9
+pycrypto==2.1.0
+redis==2.2.2
+vendor/python-openid-2.2.5.tar.gz
+vendor/python-yadis-1.1.0.tar.gz
+simplejson==2.1.1
+vendor/sorl-thumbnail-3.2.5.tar.gz
+django-haystack==1.0.1-final
+pysolr==2.0.12
+vendor/gdata-2.0.10.tar.gz
+chardet==1.0.1
+vendor/django-math-captcha-0.1.tar.gz
+boto==2.0b3
+python-memcached
+feedparser
