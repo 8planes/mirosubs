@@ -9,7 +9,6 @@ django-debug-toolbar==0.8.3
 django-extensions==0.4.1
 -e hg+http://bitbucket.org/ubernostrum/django-registration/@d36a38202ee3d09d342b000f4ff634296f90df49#egg=django_registration-tip
 -e hg+https://bitbucket.org/jespern/django-piston/@c4b2d21db51a#egg=django-piston-0.2.2
--e git://github.com/aduston/Django-Socialauth.git#egg=django_socialauth-0.1.5-py2.6-dev
 -e hg+https://bitbucket.org/bkroeze/django-livesettings/@32a38a60367a#egg=django-livesettings
 -e hg+https://bitbucket.org/bkroeze/django-keyedcache/@4be18235b372#egg=django-keyedcache
 django-celery==2.1.4
