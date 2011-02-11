@@ -443,7 +443,7 @@ class SubtitleLanguage(models.Model):
             "effectiveVideoURL": self.video.get_video_url(),
             "languageCode": self.language,
             "originalLanguageCode": self.video.language,
-            "fork": self.is_forked }
+            "fork": False }
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
     
     @models.permalink

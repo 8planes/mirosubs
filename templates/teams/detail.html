@@ -25,21 +25,21 @@
 
 {% block main_content %}
 
-{% if team.page_content %}
-    <div class="team_html clearfix">{{ team.page_content|force_escape|markdown }}</div>    
-{% endif %}
-
-<h2>{{ team }} {% trans "Videos" %}</h2>
-
 {% if team.header_html_text %}
-<div>
+<div id="team_header_html" class="clearfix">
   {{team.header_html_text|safe}}
-</div>
+</div><!-- // team_header_html -->
 {% endif %}
 
+<h2 id="team_title">{{ team }} {% trans "Videos" %}</h2>
 
-<div class="grid_8 alpha">
+{% if team.page_content %}
+  <div class="team_html clearfix">
+    {{ team.page_content|force_escape|markdown }}
+  </div>    
+{% endif %}
 
+<div style="margin-top: 6px;" class="grid_8 alpha">
     {% if not team.page_content and team.video %}
         {% widget widget_params %}
     {% endif %}
@@ -61,8 +61,9 @@
 </div>
 
 <div class="grid_4 omega">
-    {% include "teams/_team_detail.html" %}     
-
+    <div id="sidebar_team_detail">
+    {% include "teams/_team_detail.html" %}
+    </div>
     {% team_activity team %}
 </div>
 
