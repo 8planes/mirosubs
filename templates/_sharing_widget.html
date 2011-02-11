@@ -34,6 +34,7 @@
   <p>{% trans 'Now everyone can watch the video with subtitles-- try it!' %}<br />
     {% trans 'Then tell the world and invite your friends to help translate:' %}</p>
   <ul>
+    <li class="mirosubs-facebook-like"><iframe src="http://www.facebook.com/plugins/like.php?href={{ share_panel_permalink|urlencode }}&layout=standard&show_faces=false&width=450&action=like&colorscheme=light&height=25" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:25px;" allowTransparency="true"></iframe></li>
     <li class="mirosubs-facebook"><a href="#" onclick="return share_on_facebook(event);">{% trans 'Post to Facebook' %}</a></li>
     <li class="mirosubs-twitter-share"><a href="{{share_panel_twitter_url}}" target="post_to_twitter">{% trans 'Post to Twitter' %}</a></li>
     <li class="mirosubs-friends"><a href="{{share_panel_email_url}}" target="email_friends">{% trans 'Email to friends' %}</a></li>
@@ -70,7 +71,6 @@
   </p>
   <h3>{% trans 'Permalink' %}</h3>
   <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
-  <iframe src="http://www.facebook.com/plugins/like.php?href={{ share_panel_permalink|urlencode }}&layout=button_count&show_faces=false&width=450&action=like&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>
 </div>
 <script type="text/javascript">
     jQuery(function($){
