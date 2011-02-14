@@ -118,6 +118,36 @@ class TestRpc(TestCase):
         self.assertEqual(
             subtitles_fetched_count + 1, video1.subtitles_fetched_count)
 
+    def test_add_alternate_urls(self):
+        url_0 = 'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv'
+        url_1 = 'http://ia700406.us.archive.org/16/items/PeopleOfHtml5-BruceLawsonmp4Version/PeopleOfHtml5-BruceLawson.mp4'
+        request = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request, url_0,
+            False, additional_video_urls=[url_1])
+        video_id = return_value['video_id']
+        return_value = rpc.start_editing(request, video_id, 'en', 'en')
+        draft_pk = return_value['draft_pk']
+        inserted = [{'subtitle_id': 'sfdsfsdf',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, []);
+        return_value = rpc.show_widget(
+            request, url_1,
+            False, additional_video_urls=[url_0])
+        self.assertEqual(video_id, return_value['video_id'])
+        subs = rpc.fetch_subtitles(request, video_id)
+        self.assertEquals(1, len(subs['subtitles']))
+        return_value = rpc.show_widget(
+            request, url_1, False)
+        self.assertEqual(video_id, return_value['video_id'])
+
+
     def test_keep_subtitling_dialog_open(self):
         request = RequestMockup(self.user_0)
         return_value = rpc.show_widget(

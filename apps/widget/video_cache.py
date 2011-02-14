@@ -20,6 +20,7 @@ from django.core.cache import cache
 from videos.types.base import VideoTypeError
 from django.conf import settings
 from django.utils.hashcompat import sha_constructor
+from videos.types import video_type_registrar
 
 TIMEOUT = 60 * 60 * 24 * 5 # 5 days
 
@@ -46,12 +47,13 @@ def associate_extra_url(video_url, video_id):
     cache_key = _video_id_key(video_url)
     value = cache.get(cache_key)
     if value is None:
+        from videos.models import VideoUrl, Video
         vt = video_type_registrar.video_type_for_url(video_url)
-        video_url, created = models.VideoUrl.objects.get_or_create(
+        video_url, created = VideoUrl.objects.get_or_create(
             url=vt.convert_to_video_url(),
             defaults={
-                'video': models.Video.objects.get(video_id=video_id),
-                'type': '',
+                'video': Video.objects.get(video_id=video_id),
+                'type': vt.abbreviation,
                 'videoid': video_id })
         cache.set(cache_key, video_url.videoid, TIMEOUT)
 
