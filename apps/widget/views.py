@@ -16,13 +16,14 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseServerError
 from django.shortcuts import render_to_response
 from django.contrib.sites.models import Site
 from django.template import RequestContext
 from videos import models
 from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt, SSASubtitles
 import simplejson as json
+from simplejson.decoder import JSONDecodeError
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import widget
@@ -226,11 +227,21 @@ def null_srt(request):
 
 @csrf_exempt
 def rpc(request, method_name, null=False):
+    if method_name[:1] == '_':
+        return HttpResponseServerError('cant call private method')
     args = { 'request': request }
-    for k, v in request.POST.items():
-        args[k.encode('ascii')] = json.loads(v)
+    try:
+        for k, v in request.POST.items():
+            args[k.encode('ascii')] = json.loads(v)
+    except UnicodeEncodeError:
+        return HttpResponseServerError('non-ascii chars received')
+    except JSONDecodeError:
+        return HttpResponseServerError('invalid json')
     rpc_module = null_rpc_views if null else rpc_views
-    func = getattr(rpc_module, method_name)
+    try:
+        func = getattr(rpc_module, method_name)
+    except AttributeError:
+        return HttpResponseServerError('no method named ' + method_name)
 
     try:
         result = func(**args)

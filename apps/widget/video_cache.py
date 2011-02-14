@@ -42,6 +42,19 @@ def get_video_id(video_url):
         cache.set(cache_key, video_id, TIMEOUT)
         return video_id
 
+def associate_extra_url(video_url, video_id):
+    cache_key = _video_id_key(video_url)
+    value = cache.get(cache_key)
+    if value is None:
+        vt = video_type_registrar.video_type_for_url(video_url)
+        video_url, created = models.VideoUrl.objects.get_or_create(
+            url=vt.convert_to_video_url(),
+            defaults={
+                'video': models.Video.objects.get(video_id=video_id),
+                'type': '',
+                'videoid': video_id })
+        cache.set(cache_key, video_url.videoid, TIMEOUT)
+
 def invalidate_cache(video_id, language_code=None):
     cache.delete(_video_urls_key(video_id))
     for l in settings.ALL_LANGUAGES:

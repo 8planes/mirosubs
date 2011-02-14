@@ -64,19 +64,19 @@ class TestRpcView(TestCase):
         data = {
             'русский': '{}'
         }
-        response = self.client.post(reverse('widget:rpc', args=['show_widget']), data)        
+        response = self.client.post(reverse('widget:rpc', args=['show_widget']), data)
+        print(response)
         #broken json: 500 status
         data = {
             'param': '{broken - json "'
         }
         response = self.client.post(reverse('widget:rpc', args=['show_widget']), data)
         #call private method
-        response = self.client.get(reverse('widget:rpc', args=['_maybe_add_video_session']))
+        response = self.client.get(reverse('widget:rpc', args=['_subtitle_count']))
         #500, because method does not exists: 500 status
         response = self.client.get(reverse('widget:rpc', args=['undefined_method']))
         #incorect arguments number: 500 status
         response = self.client.get(reverse('widget:rpc', args=['show_widget']))
-
 
 class TestRpc(TestCase):
     fixtures = ['test_widget.json']
@@ -115,7 +115,8 @@ class TestRpc(TestCase):
         subs = rpc.fetch_subtitles(request, draft.video.video_id)
         self.assertEqual(1, len(subs['subtitles']))
         video1 = Video.objects.get(pk=draft.video.id)
-        self.assertEqual(subtitles_fetched_count + 1, video1.subtitles_fetched_count)
+        self.assertEqual(
+            subtitles_fetched_count + 1, video1.subtitles_fetched_count)
 
     def test_keep_subtitling_dialog_open(self):
         request = RequestMockup(self.user_0)
