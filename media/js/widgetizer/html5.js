@@ -63,8 +63,14 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ =
             sources.push(this.makeVideoSourceForURL_(sourceElements[i].src));
     }
     for (var i = 0; i < sources.length; i++)
-        if (mirosubs.video.supportsVideoType(sources[i].getVideoType()))
+        if (mirosubs.video.supportsVideoType(sources[i].getVideoType())) {
+            var alternateSources = [];
+            for (var j = 0; j < sources.length; j++)
+                if (j != i)
+                    alternateSources.push(sources[j]);
+            sources[i].setAlternateSources(alternateSources);
             return sources[i];
+        }
     return null;
 };
 
