@@ -37,9 +37,11 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
     var videoPlayers = [];
     for (var i = 0; i < videoElements.length; i++) {
         var videoSource = this.makeVideoSource_(videoElements[i]);
-        var videoPlayer = videoSource.createPlayer();
-        videoPlayer.decorate(videoElements[i]);
-        videoPlayers.push(videoPlayer);
+        if (videoSource) {
+            var videoPlayer = videoSource.createPlayer();
+            videoPlayer.decorate(videoElements[i]);
+            videoPlayers.push(videoPlayer);
+        }
     }
     return videoPlayers;
 };
@@ -63,6 +65,7 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ =
     for (var i = 0; i < sources.length; i++)
         if (mirosubs.video.supportsVideoType(sources[i].getVideoType()))
             return sources[i];
+    return null;
 };
 
 mirosubs.widgetizer.HTML5.prototype.makeVideoSourceForURL_ = function(urlString) {

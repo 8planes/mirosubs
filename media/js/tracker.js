@@ -45,8 +45,10 @@ mirosubs.Tracker.prototype.call_ = function(method, args) {
 
 mirosubs.Tracker.prototype.checkMixpanel_ = function() {
     if (window['MixpanelLib']) {
-        this.mpmetrics_ = new window['MixpanelLib'](
-            '44205f56e929f08b602ccc9b4605edc3');
+        var mpname = 'mpmetricsunisubs';
+        this.mpmetrics_ = window[mpname] = 
+            new window['MixpanelLib'](
+                '44205f56e929f08b602ccc9b4605edc3', mpname);
         for (var i = 0; i < this.toCallOnLoad_.length; i++)
             this.call_(this.toCallOnLoad_[i][0], this.toCallOnLoad_[i][1]);
         this.toCallOnLoad_ = [];
