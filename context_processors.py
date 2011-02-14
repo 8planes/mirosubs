@@ -32,6 +32,7 @@ def current_commit(request):
 def custom(request):
     return {
         'GOOGLE_ANALYTICS_NUMBER': settings.GOOGLE_ANALYTICS_NUMBER,
+        'MIXPANEL_TOKEN': settings.MIXPANEL_TOKEN,
         'DEBUG': settings.DEBUG
     }
 
