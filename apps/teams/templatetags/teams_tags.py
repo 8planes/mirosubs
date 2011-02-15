@@ -108,7 +108,12 @@ def team_video_detail(context, team_video):
     for lang in context['USER_LANGUAGES']:
         if not lang in video_languages and lang in ALL_LANGUAGES_DICT:
             languages_to_add.append((lang, ALL_LANGUAGES_DICT[lang]))
-
-    context['languages_to_add'] = languages_to_add
+    
+    ol = team_video.video.subtitle_language()
+    
+    if ol and ol.latest_subtitles():
+        context['languages_to_add'] = languages_to_add
+    else:
+        context['languages_to_add'] = []
     
     return context
