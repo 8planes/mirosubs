@@ -65,15 +65,24 @@ mirosubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
            {'alt': 'spinner', 
             'src': mirosubs.imageAssetURL('spinner.gif') });
     mirosubs.style.showElement(this.spinnerImg_, false);
-    el.appendChild(
-        $d('ul', 'mirosubs-translationOptions',
-           $d('li', 'mirosubs-autoTranslate',
-              this.autoTranslateLink_,
-              $d('span', null, ' (using google)')),
-           $d('li', 'mirosubs-changeTiming',
+    
+    var isGoogleTranslateable = mirosubs.translate.GoogleTranslator.isTranslateable(
+        this.dialog_.getStandartLanguage(),
+        this.dialog_.getSubtitleLanguage());
+    
+    var ul =  $d('ul', 'mirosubs-translationOptions');
+    
+    if (isGoogleTranslateable) {
+        ul.appendChild($d('li', 'mirosubs-autoTranslate', this.autoTranslateLink_, 
+            $d('span', null, ' (using google)')));
+    }
+    
+    ul.appendChild($d('li', 'mirosubs-changeTiming',
               this.changeTimingLink_,
               $d('span', null, ' (advanced users)'),
-              this.spinnerImg_)));
+              this.spinnerImg_));
+    
+    el.appendChild(ul);
 };
 
 mirosubs.translate.TranslationRightPanel.prototype.enterDocument = function() {

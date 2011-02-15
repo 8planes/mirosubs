@@ -158,3 +158,19 @@ function(needTranslating, fromLang, toLang, callback) {
         translate(toTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback));
     };
 };
+
+mirosubs.translate.GoogleTranslator.Languages = ['af','sq','am','ar','hy','az',
+'eu','be','bn','bh','br','bg','my','ca','chr','zh','zh-cn','zh-tw','co','hr','cs',
+'da','dv','nl','en','eo','et','fo','tl','fi','fr','fy','gl','ka','de','el','gu',
+'ht','iw','hi','hu','is','id','iu','ga','it','ja','jw','kn','kk','km','ko','ku',
+'ky','lo','la','lv','lt','lb','mk','ms','ml','mt','mi','mr','mn','ne','no','oc',
+'or','ps','fa','pl','pt','pt-pt','pa','qu','ro','ru','sa','gd','sr','sd','si',
+'sk','sl','es','su','sw','sv','syr','tg','ta','tt','te','th','bo','to','tr','uk',
+'ur','uz','ug','vi','cy','yi','yo',''];
+
+mirosubs.translate.GoogleTranslator.isTranslateable = function(){
+    console.log(arguments)
+    return goog.array.every(arguments, function(l){
+        return mirosubs.translate.GoogleTranslator.Languages.indexOf(l) != -1;
+    });
+}

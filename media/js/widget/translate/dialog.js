@@ -111,6 +111,15 @@ mirosubs.translate.Dialog.prototype.translateViaGoogle = function(){
     this.translationPanel_.getTranslationList().translateViaGoogle(
         this.standardSubState_.LANGUAGE, this.subtitleState_.LANGUAGE);
 };
+
+mirosubs.translate.Dialog.prototype.getStandartLanguage = function(){
+    return this.standardSubState_.LANGUAGE;
+};
+
+mirosubs.translate.Dialog.prototype.getSubtitleLanguage = function(){
+    return this.subtitleState_.LANGUAGE;
+};
+
 /**
  * @param {function()} saveCompleted
  */
