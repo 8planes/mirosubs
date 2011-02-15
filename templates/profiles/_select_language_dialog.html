@@ -52,7 +52,8 @@
                     $.jGrowl.error('{% trans "Select at least one language." %}');
                 }else{
                     ProfileApi.select_languages(values, function(){
-						update_language_display();
+						//update_language_display();
+                        window.location.replace(window.location);
 					});
                     $w.modClose();
                 }
