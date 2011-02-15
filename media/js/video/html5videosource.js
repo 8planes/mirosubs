@@ -30,6 +30,7 @@ mirosubs.video.Html5VideoSource = function(videoURL, videoType, opt_videoConfig)
     this.videoURL_ = videoURL;
     this.videoType_ = videoType;
     this.videoConfig_ = opt_videoConfig;
+    this.alternateSources_ = [];
 };
 
 mirosubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
@@ -75,11 +76,13 @@ mirosubs.video.Html5VideoSource.prototype.createPlayer_ =
     if (this.videoType_ == mirosubs.video.Html5VideoType.H264 && 
         !mirosubs.video.supportsH264())
         return new mirosubs.video.FlvVideoPlayer(this, forSubDialog);
-    else
+    else {
+        var newSource = new mirosubs.video.Html5VideoSource(
+            this.videoURL_, this.videoType_, this.videoConfig_);
+        newSource.setAlternateSources(this.alternateSources_);
         return new mirosubs.video.Html5VideoPlayer(
-            new mirosubs.video.Html5VideoSource(
-                this.videoURL_, this.videoType_, this.videoConfig_), 
-            forSubDialog);
+            newSource, forSubDialog);
+    }
 };
 
 mirosubs.video.Html5VideoSource.prototype.getFlvURL = function() {
@@ -102,4 +105,17 @@ mirosubs.video.Html5VideoSource.prototype.getVideoConfig = function() {
 
 mirosubs.video.Html5VideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
+};
+
+mirosubs.video.Html5VideoSource.prototype.getAlternateURLs = function() {
+    if (this.alternateSources_)
+        return goog.array.map(
+            this.alternateSources_, 
+            function(source) { return source.getVideoURL(); });
+    else
+        return [];
+};
+
+mirosubs.video.Html5VideoSource.prototype.setAlternateSources = function(sources) {
+    this.alternateSources_ = sources;
 };

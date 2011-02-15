@@ -41,6 +41,10 @@ mirosubs.widget.WidgetDecorator = function(videoPlayer) {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
         'is_remote': mirosubs.isFromDifferentDomain()
     };
+    if (this.videoPlayer_.getVideoSource() instanceof 
+        mirosubs.video.Html5VideoSource)
+        args['additional_video_urls'] = 
+            this.videoPlayer_.getVideoSource().getAlternateURLs();
     this.controller_ = new mirosubs.widget.WidgetController(
         this.videoPlayer_.getVideoSource().getVideoURL(),
         this.videoPlayer_,
