@@ -21,14 +21,14 @@
           {% else %}
             {% if lang.percent_done == 0 %}
               <div style="margin: 5px 5px 0 0;">
-              <a href="{{ lang.get_widget_url }}">
+              <a class="blue_button small" href="{{ lang.get_widget_url }}">
                 {% trans "Translate into" %} {{ lang.language_display }}
               </a>
               </div>
             {% endif %}
             {% if lang.percent_done == 100 %}
               <div style="margin: 5px 5px 0 0;">
-              <a href="{{ lang.get_widget_url }}">
+              <a class="blue_button small" href="{{ lang.get_widget_url }}">
                 {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
               </a>    
               </div>                    
