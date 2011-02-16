@@ -67,7 +67,7 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
     this.getElement().appendChild(this.cancelButton_);
     this.getElement().appendChild(this.okButton_);
     var clearDiv = $d('div');
-    mirosubs.style.setProperty('clear', 'both');
+    mirosubs.style.setProperty(clearDiv, 'clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.getElement().appendChild(clearDiv);
 };

@@ -169,7 +169,6 @@ mirosubs.translate.GoogleTranslator.Languages = ['af','sq','am','ar','hy','az',
 'ur','uz','ug','vi','cy','yi','yo',''];
 
 mirosubs.translate.GoogleTranslator.isTranslateable = function(){
-    console.log(arguments)
     return goog.array.every(arguments, function(l){
         return mirosubs.translate.GoogleTranslator.Languages.indexOf(l) != -1;
     });
