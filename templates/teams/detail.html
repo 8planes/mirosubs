@@ -50,9 +50,9 @@
         {% endif %}
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
-            {% for team_video in teamvideo_list %}
+            {% for team_video_lang in team_video_lang_list %}
             <li>
-                {% team_video_detail team_video %}
+                {% team_video_lang_detail team_video_lang team %}
             </li>
             {% endfor %}
         </ul>

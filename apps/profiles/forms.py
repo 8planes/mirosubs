@@ -55,6 +55,7 @@ class SelectLanguageForm(forms.Form):
             if data.get('language%s' % i): languages.append(data.get('language%s' % i))
         
         if user.is_authenticated():
+            UserLanguage.objects.filter(user=user).delete()
             for l in languages:
                 UserLanguage.objects.get_or_create(user=user, language=l)
         else:

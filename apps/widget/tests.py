@@ -65,7 +65,7 @@ class TestRpcView(TestCase):
             'русский': '{}'
         }
         response = self.client.post(reverse('widget:rpc', args=['show_widget']), data)
-        print(response)
+
         #broken json: 500 status
         data = {
             'param': '{broken - json "'

@@ -47,14 +47,15 @@
                         has_value = true;
                     }
                 });
-
+                
                 if ( ! has_value){
                     $.jGrowl.error('{% trans "Select at least one language." %}');
                 }else{
+                    $w.html('{% trans "Saving..." %}');
                     ProfileApi.select_languages(values, function(){
-						update_language_display();
+						//update_language_display();
+                        window.location.replace(window.location);
 					});
-                    $w.modClose();
                 }
 
                 return false;

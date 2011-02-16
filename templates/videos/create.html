@@ -27,9 +27,16 @@
   </p>
 </form>
 
+<script type="text/javascript">
+    jQuery('#id_video_url').input_replacement({
+        text: '{% trans "for example" %}: http://www.youtube.com/watch?v=h4ce747',
+        prefocus_class: 'prefocus'
+    });
+</script>
+
 <form action="{% url videos:create_from_feed %}" method="POST" id="bulk_create">
     <table>
-        <h3>Automatically submit videos</h3>
+        <h3>{% trans "Automatically submit videos" %}</h3>
         {{ youtube_form }}
         <tr class="last">
             <th></th>
