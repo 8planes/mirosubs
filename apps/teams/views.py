@@ -40,11 +40,12 @@ from django.contrib.auth.decorators import permission_required
 import random
 from widget.views import base_widget_params
 import widget
-from videos.models import Action
+from videos.models import Action, SubtitleLanguage
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from teams.rpc import TeamsApiClass
 from utils.rpc import RpcRouter
+from utils.translation import get_user_languages_from_request
 
 rpc_router = RpcRouter('teams:rpc_router', {
     'TeamsApi': TeamsApiClass()
@@ -113,19 +114,17 @@ def index(request, my_teams=False):
                        extra_context=extra_context)
     
 def detail(request, slug):
-    q = request.REQUEST.get('q')
-    
     team = Team.get(slug, request.user)
     
-    qs = team.teamvideo_set.order_by('-video__title')
-    if q:
-        qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q) \
-                      |Q(video__title__icontains=q))
+    languages = get_user_languages_from_request(request)
+    languages.append('')
+    video_ids = team.teamvideo_set.values_list('video_id', flat=True)
+    qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
+        .annotate(subtitleversion_count=Count('subtitleversion')).order_by('subtitleversion_count', '-is_original')
     
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
-        'team': team,
-        'query': q
+        'team': team
     })
 
     if team.video:
@@ -137,7 +136,7 @@ def detail(request, slug):
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
                        extra_context=extra_context, 
-                       template_object_name='teamvideo')
+                       template_object_name='team_video_lang')
 
 def detail_members(request, slug):
     #just other tab of detail view

@@ -117,3 +117,9 @@ def team_video_detail(context, team_video):
         context['languages_to_add'] = []
     
     return context
+
+@register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  
+def team_video_lang_detail(context, lang, team):
+    context['team_video'] = team.teamvideo_set.get(video__id=lang.video_id)
+    context['lang'] = lang
+    return context
