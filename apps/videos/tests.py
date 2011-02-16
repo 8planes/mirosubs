@@ -381,7 +381,15 @@ class ViewsTest(WebUseTest):
             self.fail()
         
     def test_video(self):
-        self._simple_test('videos:video', [self.video.video_id])
+        self.video.title = 'title'
+        self.video.save()
+        response = self.client.get('/en'+self.video.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        self.video.title = ''
+        self.video.save()
+        response = self.client.get('/en'+self.video.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
         
     def test_video_list(self):
         self._simple_test('videos:list')
@@ -393,11 +401,11 @@ class ViewsTest(WebUseTest):
 
     def test_bliptv_twice(self):
         VIDEO_FILE = 'http://blip.tv/file/get/Kipkay-AirDusterOfficeWeaponry223.m4v'
-        from videos.types import bliptvutils
-        old_video_file_url = bliptvutils.video_file_url
-        bliptvutils.video_file_url = lambda x: VIDEO_FILE
+        from vidscraper.sites import blip
+        old_video_file_url = blip.video_file_url
+        blip.video_file_url = lambda x: VIDEO_FILE
         Video.get_or_create_for_url('http://blip.tv/file/4395490')
-        bliptvutils.video_file_url = old_video_file_url
+        blip.video_file_url = old_video_file_url
         # this test passes if the following line executes without throwing an error.
         Video.get_or_create_for_url(VIDEO_FILE)
 
@@ -523,9 +531,6 @@ class ViewsTest(WebUseTest):
         
     def test_demo_page(self):
         self._simple_test('demo')
-        
-    def test_privacy_page(self):
-        self._simple_test('privacy_page')
         
     def test_policy_page(self):
         self._simple_test('policy_page')

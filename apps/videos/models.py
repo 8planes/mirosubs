@@ -360,7 +360,7 @@ class Video(models.Model):
         if exclude:
             if not isinstance(exclude, (list, tuple)):
                 exclude = [exclude]
-            qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
+            qs = qs.exclude(pk__in=[u.pk for u in exclude if u and u.is_authenticated()])
         return qs    
     
     def notification_list_all(self, exclude=None):
