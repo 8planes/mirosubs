@@ -805,23 +805,21 @@ jQuery.util.DelayedTask = function(fn, scope, args){
         },
     
         doCall : function(c, m, args){
-            var data = null, hs, scope, len = 0;
+            var data = null, cb, scope, len = 0;
 
             $.each(args, function(i, val){
-                if (! hs && $.isFunction(val) || (i+1 == args.length)){
-                    if ( ! $.isFunction(val) && (i+1 == args.length)){
-                        hs = $.noop;
-                    }else{
-                        hs = val;
-                    }
-                    scope = args[i+1];
-                    len = i+1;
-                };
+                if ($.isFunction(val)){
+                    return false;
+                }
+                len = i+1;
             });
 
             if(len !== 0){
                 data = args.slice(0, len);
             }
+            
+            scope = args[len+1];
+            cb = args[len] || $.noop;
             
             var t = new $.Rpc.Transaction({
                 provider: this,
@@ -829,7 +827,7 @@ jQuery.util.DelayedTask = function(fn, scope, args){
                 action: c,
                 method: m.name,
                 data: data,
-                cb: scope && $.isFunction(hs) ? hs.createDelegate(scope) : hs
+                cb: scope && $.isFunction(cb) ? cb.createDelegate(scope) : cb
             });
     
             if(this.fireEvent('beforecall', this, t) !== false){
