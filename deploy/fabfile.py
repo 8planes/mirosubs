@@ -20,24 +20,27 @@ from __future__ import with_statement
 from fabric.api import run, put, sudo, env, cd, local
 import os
 
-def _create_env(username, s3_bucket, installation_dir):
-    env.hosts = ['pcf10.pculture.org:2191']
+def _create_env(username, host_prefix, s3_bucket, installation_dir):
+    env.hosts = ['{0}universalsubtitles.org:2191'.format(host_prefix)]
     env.user = username
     env.s3_bucket = s3_bucket
     env.base_dir = '/var/www/{0}'.format(installation_dir)
 
 def staging(username):
     _create_env(username, 
+                'staging.',
                 's3.staging.universalsubtitles.org',
                 'universalsubtitles.staging')
 
 def dev(username):
     _create_env(username,
+                'dev.',
                 None,
                 'universalsubtitles.dev')
 
 def unisubs(username):
     _create_env(username,
+                '',
                 's3.www.universalsubtitles.org',
                 'universalsubtitles')
 
