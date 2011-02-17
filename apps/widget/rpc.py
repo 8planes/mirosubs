@@ -192,7 +192,7 @@ class Rpc(BaseRpc):
         self._save_packets(draft, packets)
 
         new_version, new_subs = self._create_version_from_draft(draft, request.user)
-        #what do if title is changed? The we will have version with time_change == 0 and text_change == 0
+
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False
         else:

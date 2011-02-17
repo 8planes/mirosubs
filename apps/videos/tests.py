@@ -26,6 +26,7 @@ from videos.forms import SubtitlesUploadForm
 import math_captcha
 import os
 from django.db.models import ObjectDoesNotExist 
+from django.core.management import call_command
 
 math_captcha.forms.math_clean = lambda form: None
 
@@ -822,3 +823,86 @@ class TestPercentComplete(TestCase):
             s.save()
         
         self.assertEqual(self.translation.percent_done, 0)
+
+class TestCommands(TestCase):
+    
+    fixtures = ['test.json']
+    
+    def test_send_notification(self):
+        call_command('send_notification')
+
+from videos import alarms
+from django.conf import settings
+
+class TestAlert(TestCase):
+
+    fixtures = ['test.json']
+    
+    def setUp(self):
+        self.video = Video.objects.all()[:1].get()
+        self.original_language = self.video.subtitle_language()
+        self.latest_version = self.original_language.latest_version()
+        settings.ALERT_EMAIL = 'test@test.com'
+    
+    def _new_version(self, lang=None):
+        v = SubtitleVersion()
+        v.language = lang or self.original_language
+        v.datetime_started = datetime.now()
+        v.version_no = v.language.latest_version().version_no+1
+        v.save()
+        return v       
+    
+    def test_lose_alert(self):
+        v = self._new_version()
+        
+        s = self.latest_version.subtitle_set.all()[0]
+        s.duplicate_for(v).save()
+        
+        alarms.check_subtitle_version(v)
+        
+        self.assertEquals(len(mail.outbox), 2)
+    
+    def test_other_languages_changes(self):
+        v = self._new_version()
+        l = SubtitleLanguage(video=self.video, language='ru', is_original=False)
+        l.save()
+        self._new_version(l)
+        alarms.check_other_languages_changes(v, ignore_statistic=True)
+        self.assertEquals(len(mail.outbox), 1)
+
+    def test_check_language_name_success(self):
+        self.original_language.language = 'en'
+        self.original_language.save()
+        
+        v = self._new_version()
+        
+        Subtitle(version=v, subtitle_id=u'AaAaAaAaAa', subtitle_text='Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design.').save()
+        Subtitle(version=v, subtitle_id=u'BaBaBaBaBa', subtitle_text='Developed four years ago by a fast-moving online-news operation').save()
+        
+        alarms.check_language_name(v, ignore_statistic=True)
+        
+        self.assertEquals(len(mail.outbox), 0)
+        
+    def test_check_language_name_fail(self):
+        self.original_language.language = 'en'
+        self.original_language.save()
+        
+        v = self._new_version()
+        
+        #this is reliable Ukrainian language
+        Subtitle(version=v, subtitle_id=u'AaAaAaAaAa1', subtitle_text=u'Якась не зрозумiла мова.').save()
+        Subtitle(version=v, subtitle_id=u'BaBaBaBaBa1', subtitle_text='Якась не зрозумiла мова.').save()
+        
+        alarms.check_language_name(v, ignore_statistic=True)
+        
+        self.assertEquals(len(mail.outbox), 1)        
+        
+        v = self._new_version()
+        
+        #this one is unreliable
+        Subtitle(version=v, subtitle_id=u'AaAaAaAaAa2', subtitle_text=u'Яsdasdзроasdзумiddаsda.').save()
+        Subtitle(version=v, subtitle_id=u'BaBaBaBaBa2', subtitle_text='Якasdсьadsdе sdзрdмiлasdва.').save()
+        
+        alarms.check_language_name(v, ignore_statistic=True)
+        
+        self.assertEquals(len(mail.outbox), 2)             

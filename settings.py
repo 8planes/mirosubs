@@ -105,6 +105,7 @@ ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
+ALARM_EMAIL = None
 MANAGERS = ADMINS
 
 P3P_COMPACT = 'CP="CURa ADMa DEVa OUR IND DSP CAO COR"'

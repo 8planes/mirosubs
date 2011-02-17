@@ -660,7 +660,9 @@ class SubtitleVersion(SubtitleCollection):
                                   for item in old_version.subtitles()])
             time_count_changed, text_count_changed = 0, 0
             #compare subtitless one by one and count changes in time and text
+            new_subtitles_ids = []
             for subtitle in new_subtitles:
+                new_subtitles_ids.append(subtitle.subtitle_id)
                 try:
                     old_subtitle = old_subtitles[subtitle.subtitle_id]
                     if not old_subtitle.text == subtitle.text:
@@ -671,6 +673,12 @@ class SubtitleVersion(SubtitleCollection):
                 except KeyError:
                     time_count_changed += 1
                     text_count_changed += 1
+         
+            for subtitle_id in old_subtitles.keys():
+                if subtitle_id not in new_subtitles_ids:
+                    text_count_changed += 1
+                    time_count_changed += 1
+                    
             self.time_change = time_count_changed / 1. / subtitles_length
             self.text_change = text_count_changed / 1. / subtitles_length
 
