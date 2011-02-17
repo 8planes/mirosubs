@@ -192,7 +192,7 @@ class Rpc(BaseRpc):
         self._save_packets(draft, packets)
 
         new_version, new_subs = self._create_version_from_draft(draft, request.user)
-        print new_version.time_change, new_version.text_change
+
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False
         else:
