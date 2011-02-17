@@ -61,8 +61,8 @@ mirosubs.translate.GoogleTranslator.cleanString = function(str) {
 mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback) {
     fromLang = fromLang || '';
     mirosubs.translate.GoogleTranslator.jsonp.send({
-        q: text,
-        langpair: fromLang+'|'+toLang
+        'q': text,
+        'langpair': fromLang+'|'+toLang
     }, callback, function() {
         //TODO: show pretty error
         alert('Translating service is unavailable. Try later.');
@@ -84,24 +84,24 @@ mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widge
     var d = mirosubs.translate.GoogleTranslator.delimiter;
     addLoadingInticator = addLoadingInticator || true;
 
-    if (widgets.length && widgets[0]['showLoadingIndicator']) {
+    if (widgets.length && widgets[0].showLoadingIndicator) {
         goog.array.forEach(widgets, function(w){
             w.showLoadingIndicator();
         });      
     }
     
     return function(response) {
-        if (widgets.length && widgets[0]['hideLoadingIndicator']) {
+        if (widgets.length && widgets[0].hideLoadingIndicator) {
             goog.array.forEach(widgets, function(w){
                 w.hideLoadingIndicator();
             });      
         };
-        if (response.responseStatus == 200) {
-            var translations = response.responseData.translatedText.split(d);
+        if (response['responseStatus'] == 200) {
+            var translations = response['responseData']['translatedText'].split(d);
             callback(translations, widgets);
         }else{
-            alert(response.responseDetails+' This language can be unsupprted by Google Translator.')
-            callback([], widgets, response.responseDetails);
+            alert(response['responseDetails']+' This language can be unsupprted by Google Translator.')
+            callback([], widgets, response['responseDetails']);
         };
     }
 };
