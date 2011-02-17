@@ -8,6 +8,10 @@
     {% if my_teams %}{% trans 'My Teams' %}{% else %}{% trans 'Teams' %}{% endif %}| Universal Subtitles
 {% endblock %}
 
+{% block analytics %}
+mpq.push(['track', 'teamsPage']);
+{% endblock %}
+
 {% block scripts %}
     {{ block.super }}
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>

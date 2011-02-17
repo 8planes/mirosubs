@@ -18,6 +18,9 @@
 
 goog.provide('mirosubs.Tracker');
 
+/**
+ * @constructor
+ */
 mirosubs.Tracker = function() {
     this.loadingMixpanel_ = false;
     this.mpmetrics_ = null;
@@ -26,8 +29,10 @@ mirosubs.Tracker = function() {
 
 goog.addSingletonGetter(mirosubs.Tracker);
 
-mirosubs.Tracker.prototype.track = function(event) {
-    this.callOrLoad_('track', [event]);
+mirosubs.Tracker.prototype.track = function(event, opt_props) {
+    var props = opt_props || {};
+    props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
+    this.callOrLoad_('track', [event, props]);
 };
 
 mirosubs.Tracker.prototype.callOrLoad_ = function(method, args) {
