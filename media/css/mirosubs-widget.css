@@ -75,6 +75,9 @@ span.mirosubs-widget {
   color: #fff !important;
   }
 
+.mirosubs-right div ul {
+  margin: 0 0 0 30px;
+}
 
 .mirosubs-modal-widget-content h1{
   color: #fff !important;
@@ -2598,7 +2601,7 @@ a.mirosubs-openid span{
 .mirosubs-howto-image {
    position: absolute !important;
    top: 0 !important;
-   left: 0 !important;
+   left: 0px !important;
    cursor: pointer !important;
    cursor: hand !important;
 }
