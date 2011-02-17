@@ -32,13 +32,17 @@ To run the development version:
 
 6. Check out google closure into directory of your choice: svn checkout 
    http://closure-library.googlecode.com/svn/trunk/ <directory>. Then 
-   symlink media/js/closure-library to the checkout location.
+   symlink media/js/closure-library to the checkout location. From the 
+   mirosubs directory in step 1:
+
+   $ cd media/js
+   $ ln -s <google closure checkout directory> closure-library
 
 7. Add mirosubs.example.com to your hosts file, pointing at 127.0.0.1. 
    This is necessary for Twitter oauth to work correctly.
 
-8. From the unisubs directory created in step 1, use the dev-settings file when 
-   running manage.py. First create the database with
+8. From the mirosubs directory created in step 1, first create the 
+   database with
 
        python manage.py syncdb
 
