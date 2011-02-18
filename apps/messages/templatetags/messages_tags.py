@@ -24,6 +24,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
 from messages.models import Message
+from messages.forms import SendMessageForm
 
 register = template.Library()
 
@@ -37,3 +38,9 @@ def messages(context):
     return {
         'msg_count': qs.count()
     }
+
+@register.inclusion_tag('messages/_send_message_form.html', takes_context=True)    
+def send_message_form(context, receiver):
+    context['send_message_form'] = SendMessageForm(context['user'], initial={'user': receiver.pk})
+    context['receiver'] = receiver
+    return context

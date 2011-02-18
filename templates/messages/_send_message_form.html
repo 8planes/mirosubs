@@ -1,0 +1,55 @@
+{% load i18n %}
+
+<button class="green_button big" data-modal="send-message-form-{{ receiver.pk }}">
+    <span>{% trans 'Send a Message' %}</span>
+</button>
+
+<div class="msg_modal_wrap" id="send-message-form-{{ receiver.pk }}">
+  <a href="#close" class="close">{% trans "Close" %}</a>
+  <div class="msg_modal">
+    <h3>{% trans "Send message to" %}
+        <span>
+            {% if receiver.picture %}
+                <img class="author-avatar" src="{{ receiver.small_avatar }}" alt="{% trans 'avatar' %}"/>
+            {% else %}
+                <img class="author-avatar" src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="{% trans 'avatar' %}"/>
+            {% endif %} 
+            <span class="author-username">{{ receiver }}</span>
+        </span>
+    </h3>
+
+    <form action="" method="post" accept-charset="utf-8">
+      <div class="global-errors"></div>
+      {{ send_message_form.as_p }}
+      <p><button type="submit" class="green_button small">{% trans "Send Message" %}</button></p>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $('#send-message-form-{{ receiver.pk }} form').ajaxForm({
+        type: 'RPC',
+        api: {
+            submit: MessagesApi.send
+        },
+        success: function(data, status, $form){
+            if (data.errors) {
+                for (key in data.errors){
+                    var $field = $('input[name="'+key+'"]', $form);
+                    var error = '<p class="error_list">'+data.errors[key]+'</p>';
+                    if ($field.length){
+                        $field.before(error);
+                    }else{
+                        $('.global-errors', $form).prepend(error);
+                    }
+                };//for
+            } else {
+                $.jGrowl('{% trans "Message sent success." %}');
+                $form.clearForm();
+            };
+        },
+        beforeSubmit: function(formData, $form, options){
+            $('p.error_list', $form).remove();
+        }                
+    });        
+</script>
