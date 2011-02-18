@@ -25,7 +25,7 @@
               <div style="margin: 5px 5px 0 0;">
               <a class="blue_button small" 
                  href="javascript:void(0);"
-               onclick="if (mpq) mpq.push(['track', 'widgetFromTeam', null, function() { window.location = '{{ lang.get_widget_url }}' }]) else window.location = '{{ lang.get_widget_url }}'">
+                 onclick="trackAndNavigate('widgetFromTeam', '{{ lang.get_widget_url }}')">
                 {% trans "Translate into" %} {{ lang.language_display }}
               </a>
               </div>
@@ -33,7 +33,7 @@
               <div style="margin: 5px 5px 0 0;">
               <a class="blue_button small" 
                  href="javascript:void(0);"
-                 onclick="if (mpq) mpq.push(['track', 'widgetFromTeam', null, function() { window.location = '{{ lang.get_widget_url }}' }]) else window.location = '{{ lang.get_widget_url }}'">
+                 onclick="trackAndNavigate('widgetFromTeam', '{{ lang.get_widget_url }}')">
                 {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
               </a>    
               </div>
