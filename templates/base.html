@@ -40,6 +40,8 @@
 
     var mpq = [];
     mpq.push(['init', '{{ MIXPANEL_TOKEN }}']);
+
+    {% block analytics %}{% endblock %}
     
     (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -49,7 +51,8 @@
         var mp = document.createElement("script"); mp.type = "text/javascript"; mp.async = true;
         mp.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + "//api.mixpanel.com/site_media/js/api/mixpanel.js";
         s.parentNode.insertBefore(mp, s);
-    })();      
+    })();
+
 </script>
 {% endif %}
 <script type="text/javascript">

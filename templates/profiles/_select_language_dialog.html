@@ -37,6 +37,8 @@
             var $w = $('#language_modal');
             
             $w.find('button').click(function(){
+                mpq.push(['track', 'languageSubmitClicked']);
+
                 var values = {};
                 var has_value = false;
                 
