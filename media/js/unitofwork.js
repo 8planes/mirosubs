@@ -37,11 +37,6 @@ mirosubs.UnitOfWork.prototype.instantiateLists_ = function() {
     this.updated = [];
     this.deleted = [];
     this.neu = [];
-    this.title = '';
-};
-
-mirosubs.UnitOfWork.prototype.setTitle = function(title){
-    this.title = title;
 };
 
 mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
