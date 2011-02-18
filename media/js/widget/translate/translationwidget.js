@@ -31,6 +31,33 @@ mirosubs.translate.TranslationWidget = function(subtitle,
 };
 goog.inherits(mirosubs.translate.TranslationWidget, goog.ui.Component);
 
+mirosubs.translate.TranslationWidget.edited_ = {};
+mirosubs.translate.TranslationWidget.numEdited_ = 0;
+mirosubs.translate.TranslationWidget.numAdded_ = 0;
+
+mirosubs.translate.TranslationWidget.register_ = function(captionID, added) {
+    if (added) {
+        mirosubs.translate.TranslationWidget.numAdded_++;
+        var added = mirosubs.translate.TranslationWidget.numAdded_;
+        if (added == 1 || (added % 5) == 0)
+            mirosubs.Tracker.getInstance().track(
+                'transAdded' + added);
+    }
+    else {
+        // FIXME: this is duplicated in mirosubs.subtitle.EditableCaption.
+        if (!goog.object.containsKey(
+            mirosubs.translate.TranslationWidget.edited_, captionID)) {
+            mirosubs.translate.TranslationWidget.edited_[captionID] = true;
+            mirosubs.translate.TranslationWidget.numEdited_++;
+            var numEdited = mirosubs.translate.TranslationWidget.numEdited_;
+            if (numEdited == 1 || (numEdited % 5) == 0)
+                mirosubs.Tracker.getInstance().track(
+                    'transEdited' + numEdited);
+        }
+    }
+        
+};
+
 mirosubs.translate.TranslationWidget.prototype.getSubtitle = function(){
     return this.subtitle_;
 };
@@ -58,10 +85,17 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
 };
 
 mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(event) {
-    if (!this.translation_)
+    if (!this.translation_) {
+        mirosubs.translate.TranslationWidget.register_(
+            this.getCaptionID(), true);
         this.translation_ =
             new mirosubs.translate
             .EditableTranslation(this.unitOfWork_, this.getCaptionID());
+    }
+    else {
+        mirosubs.translate.TranslationWidget.register_(
+            this.getCaptionID(), false);
+    }
     this.translation_.setText(this.translateInput_.value);
 };
 

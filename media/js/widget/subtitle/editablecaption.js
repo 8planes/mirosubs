@@ -47,6 +47,21 @@ mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_subOrder, opt_j
 };
 goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
 
+mirosubs.subtitle.EditableCaption.editedSubs_ = {};
+mirosubs.subtitle.EditableCaption.numSubsEdited_ = 0;
+
+mirosubs.subtitle.EditableCaption.registerEdited_ = function(captionID) {
+    if (!goog.object.containsKey(
+        mirosubs.subtitle.EditableCaption.editedSubs_, captionID)) {
+        mirosubs.subtitle.EditableCaption.editedSubs_[captionID] = true;
+        mirosubs.subtitle.EditableCaption.numSubsEdited_++;
+        var numEdited = mirosubs.subtitle.EditableCaption.numSubsEdited_;
+        if (numEdited == 1 || (numEdited % 5) == 0)
+            mirosubs.Tracker.getInstance().track(
+                'subsEdited' + numEdited);
+    }
+};
+
 mirosubs.subtitle.EditableCaption.orderCompare = function(a, b) {
     return a.getSubOrder() - b.getSubOrder();
 };
@@ -185,6 +200,8 @@ mirosubs.subtitle.EditableCaption.prototype.hasStartTimeOnly = function() {
 mirosubs.subtitle.EditableCaption.prototype.changed_ =
     function(timesFirstAssigned)
 {
+    mirosubs.subtitle.EditableCaption.registerEdited_(
+        this.getCaptionID());
     if (this.unitOfWork_)
         this.unitOfWork_.registerUpdated(this);
     this.dispatchEvent(
