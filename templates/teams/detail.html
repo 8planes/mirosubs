@@ -45,8 +45,8 @@
     {% endif %}
     
     <div id="videos-tab">
-        {% if not teamvideo_list %}
-        This team has no videos.
+        {% if team_video_lang_list %}
+            {% trans "This team has no videos." %}
         {% endif %}
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
