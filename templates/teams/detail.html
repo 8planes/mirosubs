@@ -45,18 +45,19 @@
     {% endif %}
     
     <div id="videos-tab">
-        {% if team_video_lang_list %}
+        {% if not team_video_lang_list %}
             {% trans "This team has no videos." %}
+        {% else %}
+            {% if is_paginated %}{% paginator %}{% endif %}
+            <ul class="big_list">
+                {% for team_video_lang in team_video_lang_list %}
+                <li>
+                    {% team_video_lang_detail team_video_lang team %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% if is_paginated %}{% paginator %}{% endif %}
         {% endif %}
-        {% if is_paginated %}{% paginator %}{% endif %}
-        <ul class="big_list">
-            {% for team_video_lang in team_video_lang_list %}
-            <li>
-                {% team_video_lang_detail team_video_lang team %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% if is_paginated %}{% paginator %}{% endif %}
     </div>
 </div>
 
