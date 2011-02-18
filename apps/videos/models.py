@@ -433,8 +433,8 @@ class SubtitleLanguage(models.Model):
         else:
             self.is_complete = True
             self.was_complete = True
-    
-    def get_widget_url(self):
+
+    def widget_url(self, additional_params=None):
         # this duplicates mirosubs.widget.SubtitleController.prototype.startEditing_ in js
         config = {
             "videoID": self.video.video_id,
@@ -444,8 +444,17 @@ class SubtitleLanguage(models.Model):
             "languageCode": self.language,
             "originalLanguageCode": self.video.language,
             "fork": False }
+        if additional_params is not None:
+            config.update(additional_params)
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
+        
     
+    def get_widget_url(self):
+        return self.widget_url()
+
+    def get_team_widget_url(self):
+        return self.widget_url({'from_teams_page': 'true'})
+
     @models.permalink
     def get_absolute_url(self):
         if self.is_original:

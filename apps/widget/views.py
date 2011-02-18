@@ -77,7 +77,9 @@ def onsite_widget(request):
 
         if not 'effectiveVideoURL' in config:
             config['effectiveVideoURL'] = video.get_video_url()
-    
+
+    if request.GET.get('from_teams_page', None) == 'true':
+        context['from_teams_page'] = True
     context['widget_params'] = json.dumps(config)
     general_settings = {}
     add_general_settings(request, general_settings)

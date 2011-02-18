@@ -154,8 +154,10 @@ mirosubs.Dialog.prototype.setVisible = function(visible) {
         goog.dom.getDocumentScrollElement().scrollTop = 0;
     }
     else {
-        if (this.isWorkSaved())
+        if (this.isWorkSaved()) {
+            mirosubs.Tracker.getInstance().track('workSaved');
             this.hideDialogImpl_();
+        }
         else {
             this.showSaveWorkDialog_();
         }
