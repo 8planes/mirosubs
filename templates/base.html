@@ -57,7 +57,7 @@
 {% endif %}
 <script type="text/javascript">
     function trackAndNavigate(event, url) {
-        if (mpq)
+        if (typeof mpq !== 'undefined')
            mpq.push(['track', event, null, function() { window.location = url; }]);
         else
            window.location = url;
