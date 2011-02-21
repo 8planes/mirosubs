@@ -28,7 +28,7 @@ from comments.models import Comment
 from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from videos.types import video_type_registrar
+from videos.types import video_type_registrar, VideoTypeError
 from statistic import update_subtitles_fetch_counter, video_view_counter, changed_video_set 
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
@@ -202,14 +202,14 @@ class Video(models.Model):
             return None, False
 
         try:
-            video_url_obj = VideoUrl.all.get(
+            video_url_obj = VideoUrl.objects.get(
                 url=vt.convert_to_video_url())
             return video_url_obj.video, False
         except models.ObjectDoesNotExist:
             pass
         
         try:
-            video_url_obj = VideoUrl.all.get(
+            video_url_obj = VideoUrl.objects.get(
                 type=vt.abbreviation, **vt.create_kwars())
             if user:
                 Action.create_video_handler(video_url_obj.video, user)
@@ -976,3 +976,51 @@ class VideoUrl(models.Model):
 
 post_save.connect(Action.create_video_url_handler, VideoUrl)   
 post_save.connect(video_cache.on_video_url_save, VideoUrl)
+
+class VideoFeed(models.Model):
+    url = models.URLField()
+    last_link = models.URLField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, blank=True, null=True)
+
+    def update(self):
+        import feedparser
+        
+        feed = feedparser.parse(self.url)
+        
+        checked_entries = 0
+        last_link = self.last_link
+        
+        try:
+            self.last_link = feed.entries[0]['link']
+            self.save()
+        except (IndexError, KeyError):
+            pass        
+        
+        for item in feed.entries:
+            
+            if item.link == last_link:
+                break
+            
+            if not self.try_save_link(item['link']):
+                for obj in item.get('enclosures', []):
+                    type = obj.get('type', '')
+                    href = obj.get('href', '')
+                    if href and type.startswith('video'):
+                        self.try_save_link(href)
+            
+            checked_entries += 1
+        
+        return checked_entries
+                        
+    def try_save_link(self, link):
+        try:
+            video_type = video_type_registrar.video_type_for_url(link)
+            if video_type:
+                Video.get_or_create_for_url(vt=video_type, user=self.user)
+                return True
+        except VideoTypeError, e:
+            pass
+        
+        return False
+        
