@@ -556,8 +556,7 @@ def video_url_remove(request):
                 if obj.original:
                     output['error'] = ugettext('You cann\'t remove original URL')
                 else:
-                    obj.deleted = True
-                    obj.save()  
+                    obj.delete()  
         except VideoUrl.DoesNotExist:
             output['error'] = ugettext('Object does not exist')    
     return HttpResponse(json.dumps(output))

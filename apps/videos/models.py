@@ -38,6 +38,7 @@ from django.utils.http import urlquote_plus
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 import time
+from django.utils.safestring import mark_safe
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -939,11 +940,6 @@ class UserTestResult(models.Model):
     task3 = models.TextField(blank=True)
     get_updates = models.BooleanField(default=False)
 
-class VideoUrlManager(models.Manager):
-    
-    def get_query_set(self):
-        return super(VideoUrlManager, self).get_query_set().filter(deleted=False)
-
 class VideoUrl(models.Model):
     video = models.ForeignKey(Video)
     type = models.CharField(max_length=1, choices=VIDEO_TYPE)
@@ -953,10 +949,6 @@ class VideoUrl(models.Model):
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
-    deleted = models.BooleanField(default=False)
-    
-    objects = VideoUrlManager()
-    all = models.Manager()
     
     def __unicode__(self):
         return self.url
@@ -970,7 +962,8 @@ class VideoUrl(models.Model):
     
     def unique_error_message(self, model_class, unique_check):
         if unique_check[0] == 'url':
-            return _('This URL already exists.')
+            vu_obj = VideoUrl.objects.get(url=self.url)
+            return mark_safe(_('<a href="%(url)s">This URL already exists.</a>') % {'url': vu_obj.get_absolute_url()})
         return super(VideoUrl, self).unique_error_message(model_class, unique_check)
     
     def created_as_time(self):
