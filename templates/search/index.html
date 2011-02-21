@@ -38,24 +38,24 @@
 					var sl = $('#id_langs option[value=not_selected]');
 					
 					var callback = function(event){
-						var el = event.data.el;
+						var nel = event.data.nel;
 						var o = $('option:selected', $(this));
 						
-						if (o.attr('value') == ''){
-							if (el.attr('selected')){
-								el.parent().val('my_langs').trigger('change');
+						if ((o.attr('value') == '') || (o.attr('value') == 'not_selected')){
+							if (nel.attr('selected')){
+								nel.parent().val('my_langs').trigger('change');
 							};
-							el.hide();
-							el.attr('selected', false);
+							nel.hide();
+							nel.attr('selected', false);
 						}else{
-							el.html('not '+o.html())
-							el.show();
+							nel.html('not '+o.html())
+							nel.show();
 						}
 					}
 					
-					$('#id_video_lang').bind('change', {'el': sl}, callback).trigger('change');
+					$('#id_video_lang').bind('change', {'nel': sl}, callback).trigger('change');
 
-					$('#id_langs').bind('change', {'el': vl}, callback).trigger('change');
+					$('#id_langs').bind('change', {'nel': vl}, callback).trigger('change');
 					
 				})(jQuery);
 			</script>
