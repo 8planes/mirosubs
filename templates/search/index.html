@@ -26,12 +26,19 @@
         
         <div class="grid_8 alpha">
           <div class="search_filters clearfix">
-            <p>
-              {% trans "Search for videos in" %}
-              {{ form.video_lang }}          
-              {% trans "subtitled into" %}
+            <div id="sort_filter">
+              {% comment %}
+                {% trans "Display" %}  
+                {{ form.display }}
+  			{% endcomment %}
+                {% trans "Sort by" %}
+                {{ form.sort }}
+            </div><!-- // sort_filter -->
+            <h3>{% trans "Search for videos in:" %}</h3>
+              {{ form.video_lang }}
+              <p>{% trans "subtitled into" %}</p>
               {{ form.langs }}
-            </p>
+              
 			<script type="text/javascript">
 				(function($){
 					var vl = $('#id_video_lang option[value=not_selected]');
@@ -59,14 +66,6 @@
 					
 				})(jQuery);
 			</script>
-            <p class="last">
-            {% comment %}
-              {% trans "Display" %}  
-              {{ form.display }}
-			{% endcomment %}
-              {% trans "Sort by" %}
-              {{ form.sort }}
-            </p>
           </div>
         </div>        
         </form>
