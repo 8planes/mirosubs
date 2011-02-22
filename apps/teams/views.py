@@ -134,8 +134,8 @@ def detail(request, slug):
     qs2 = qs.filter(is_forked=False, is_original=False).filter(percent_done=0)
     qs3 = qs.filter(is_original=True).filter(subtitleversion__isnull=True)
     qs4 = qs.filter(is_forked=False, is_original=False).filter(percent_done=100)
-    qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False) \
-    
+    qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False)
+       
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team
