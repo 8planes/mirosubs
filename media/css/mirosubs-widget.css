@@ -2253,19 +2253,22 @@ border-bottom: 1px solid #000 !important;
 .mirosubs-timeline ul {
     margin: 0 !important;
     padding: 0 !important;
-    line-height: 16px !important;
+    line-height: 16px !important
 }
 
 .mirosubs-timeline ul.mirosubs-timeline-time {
+	width: 975px !important;
+	left: 0px !important;
 }
 
 .mirosubs-timeline ul.mirosubs-timeline-time li {
     margin: 0 !important;
     list-style: none !important;
     font-size: 10px !important;
+		display: block !important;
     float: left !important;
     width: 65px !important;
-color: #fff !important;
+		color: #fff !important;
     padding: 3px 0px 3px 0px !important;
     background: url("../images/ticks.gif") 15px 8px no-repeat !important;
 }
