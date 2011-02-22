@@ -47,21 +47,6 @@ mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_subOrder, opt_j
 };
 goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
 
-mirosubs.subtitle.EditableCaption.editedSubs_ = {};
-mirosubs.subtitle.EditableCaption.numSubsEdited_ = 0;
-
-mirosubs.subtitle.EditableCaption.registerEdited_ = function(captionID) {
-    if (!goog.object.containsKey(
-        mirosubs.subtitle.EditableCaption.editedSubs_, captionID)) {
-        mirosubs.subtitle.EditableCaption.editedSubs_[captionID] = true;
-        mirosubs.subtitle.EditableCaption.numSubsEdited_++;
-        var numEdited = mirosubs.subtitle.EditableCaption.numSubsEdited_;
-        if (numEdited == 1 || (numEdited % 5) == 0)
-            mirosubs.Tracker.getInstance().track(
-                'subsEdited' + numEdited);
-    }
-};
-
 mirosubs.subtitle.EditableCaption.orderCompare = function(a, b) {
     return a.getSubOrder() - b.getSubOrder();
 };
@@ -100,9 +85,9 @@ mirosubs.subtitle.EditableCaption.prototype.getNextCaption = function() {
 mirosubs.subtitle.EditableCaption.prototype.getSubOrder = function() {
     return this.json['sub_order'];
 };
-mirosubs.subtitle.EditableCaption.prototype.setText = function(text) {
+mirosubs.subtitle.EditableCaption.prototype.setText = function(text, opt_dontTrack) {
     this.json['text'] = text;
-    this.changed_(false);
+    this.changed_(false, opt_dontTrack);
 };
 mirosubs.subtitle.EditableCaption.prototype.getText = function() {
     return this.json['text'];
@@ -198,10 +183,10 @@ mirosubs.subtitle.EditableCaption.prototype.hasStartTimeOnly = function() {
         this.getEndTime() == -1;
 };
 mirosubs.subtitle.EditableCaption.prototype.changed_ =
-    function(timesFirstAssigned)
+    function(timesFirstAssigned, opt_dontTrack)
 {
-    mirosubs.subtitle.EditableCaption.registerEdited_(
-        this.getCaptionID());
+    if (!opt_dontTrack)
+        mirosubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
     if (this.unitOfWork_)
         this.unitOfWork_.registerUpdated(this);
     this.dispatchEvent(

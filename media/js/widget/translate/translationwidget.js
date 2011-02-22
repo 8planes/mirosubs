@@ -31,33 +31,6 @@ mirosubs.translate.TranslationWidget = function(subtitle,
 };
 goog.inherits(mirosubs.translate.TranslationWidget, goog.ui.Component);
 
-mirosubs.translate.TranslationWidget.edited_ = {};
-mirosubs.translate.TranslationWidget.numEdited_ = 0;
-mirosubs.translate.TranslationWidget.numAdded_ = 0;
-
-mirosubs.translate.TranslationWidget.register_ = function(captionID, added) {
-    if (added) {
-        mirosubs.translate.TranslationWidget.numAdded_++;
-        var added = mirosubs.translate.TranslationWidget.numAdded_;
-        if (added == 1 || (added % 5) == 0)
-            mirosubs.Tracker.getInstance().track(
-                'transAdded' + added);
-    }
-    else {
-        // FIXME: this is duplicated in mirosubs.subtitle.EditableCaption.
-        if (!goog.object.containsKey(
-            mirosubs.translate.TranslationWidget.edited_, captionID)) {
-            mirosubs.translate.TranslationWidget.edited_[captionID] = true;
-            mirosubs.translate.TranslationWidget.numEdited_++;
-            var numEdited = mirosubs.translate.TranslationWidget.numEdited_;
-            if (numEdited == 1 || (numEdited % 5) == 0)
-                mirosubs.Tracker.getInstance().track(
-                    'transEdited' + numEdited);
-        }
-    }
-        
-};
-
 mirosubs.translate.TranslationWidget.prototype.getSubtitle = function(){
     return this.subtitle_;
 };
@@ -79,22 +52,31 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
         )
     );
 
-    this.getHandler().listen(
-        this.translateInput_, goog.events.EventType.BLUR,
-        this.inputLostFocus_);
+    this.getHandler()
+        .listen(
+            this.translateInput_, goog.events.EventType.BLUR,
+            goog.bind(this.inputLostFocus_, this, true))
+        .listen(
+            this.translateInput_, goog.events.EventType.FOCUS,
+            this.inputGainedFocus_);
 };
 
-mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(event) {
+mirosubs.translate.TranslationWidget.prototype.inputGainedFocus_ = function(event) {
+    this.onFocusText_ = this.translateInput_.value;
+};
+
+mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(track) {
     if (!this.translation_) {
-        mirosubs.translate.TranslationWidget.register_(
-            this.getCaptionID(), true);
+        if (track)
+            mirosubs.SubTracker.getInstance().trackAdd(this.getCaptionID());
         this.translation_ =
             new mirosubs.translate
             .EditableTranslation(this.unitOfWork_, this.getCaptionID());
     }
     else {
-        mirosubs.translate.TranslationWidget.register_(
-            this.getCaptionID(), false);
+        var edited = this.translateInput_.value != this.onFocusText_;
+        if (track && edited)
+            mirosubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
     }
     this.translation_.setText(this.translateInput_.value);
 };
@@ -110,7 +92,7 @@ mirosubs.translate.TranslationWidget.prototype.setTranslation = function(transla
 
 mirosubs.translate.TranslationWidget.prototype.setTranslationContent = function(value){
     this.translateInput_.value = value;
-    this.inputLostFocus_();
+    this.inputLostFocus_(false);
 };
 
 mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {

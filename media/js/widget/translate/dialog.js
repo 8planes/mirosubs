@@ -28,6 +28,7 @@ mirosubs.translate.Dialog = function(opener,
                                      subtitleState, 
                                      standardSubState) {
     mirosubs.Dialog.call(this, videoSource);
+    mirosubs.SubTracker.getInstance().start(true);
     this.opener_ = opener;
     this.subtitleState_ = subtitleState;
     this.standardSubState_ = standardSubState;

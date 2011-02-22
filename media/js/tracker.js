@@ -25,11 +25,13 @@ mirosubs.Tracker = function() {
     this.loadingMixpanel_ = false;
     this.mpmetrics_ = null;
     this.toCallOnLoad_ = [];
+    this.logger_ = goog.debug.Logger.getLogger('mirosubs.Tracker');
 };
 
 goog.addSingletonGetter(mirosubs.Tracker);
 
 mirosubs.Tracker.prototype.track = function(event, opt_props) {
+    this.logger_.info(event);
     var props = opt_props || {};
     props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
     this.callOrLoad_('track', [event, props]);

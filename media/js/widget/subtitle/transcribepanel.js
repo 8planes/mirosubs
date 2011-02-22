@@ -148,7 +148,7 @@ mirosubs.subtitle.TranscribePanel.prototype.videoPlaying_ = function(event) {
 mirosubs.subtitle.TranscribePanel.prototype.newTitle_ = function(event) {
     var newEditableCaption = this.captionSet_.addNewCaption();
     this.subtitleList_.addSubtitle(newEditableCaption, true);
-    newEditableCaption.setText(event.title);
+    newEditableCaption.setText(event.title, true);
 };
 /**
  *

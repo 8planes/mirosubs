@@ -53,7 +53,6 @@ mirosubs.subtitle.EditableCaptionSet = function(
         this.captions_[i - 1].setNextCaption(this.captions_[i]);
         this.captions_[i].setPreviousCaption(this.captions_[i - 1]);
     }
-    this.numSubsAdded_ = 0;
 };
 goog.inherits(mirosubs.subtitle.EditableCaptionSet, goog.events.EventTarget);
 
@@ -62,14 +61,6 @@ mirosubs.subtitle.EditableCaptionSet.EventType = {
     CLEAR_TIMES: 'cleartimes',
     ADD: 'addsub',
     DELETE: 'deletesub'
-};
-
-
-mirosubs.subtitle.EditableCaptionSet.prototype.incSubsAdded_ = function() {
-    this.numSubsAdded_++;
-    if (this.numSubsAdded_ == 1 || (this.numSubsAdded_ % 5) == 0)
-        mirosubs.Tracker.getInstance().track(
-            'subsAdded' + this.numSubsAdded_);
 };
 
 /**
@@ -129,7 +120,6 @@ mirosubs.subtitle.EditableCaptionSet.prototype.makeJsonSubs = function() {
 mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption =
     function(nextSubOrder)
 {
-    this.incSubsAdded_();
     var index = this.findSubIndex_(nextSubOrder);
     var nextSub = this.captions_[index];
     prevSub = nextSub.getPreviousCaption();
@@ -137,6 +127,7 @@ mirosubs.subtitle.EditableCaptionSet.prototype.insertCaption =
                  nextSub.getSubOrder()) / 2.0;
     var c = new mirosubs.subtitle.EditableCaption(
         this.unitOfWork_, order);
+    mirosubs.SubTracker.getInstance().trackAdd(c.getCaptionID());
     this.unitOfWork_.registerNew(c);
     goog.array.insertAt(this.captions_, c, index);
     if (prevSub) {
@@ -198,12 +189,12 @@ mirosubs.subtitle.EditableCaptionSet.prototype.findSubIndex_ = function(order) {
         });
 };
 mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function(opt_dispatchEvent) {
-    this.incSubsAdded_();
     var lastSubOrder = 0.0;
     if (this.captions_.length > 0)
         lastSubOrder = this.captions_[this.captions_.length - 1].getSubOrder();
     var c = new mirosubs.subtitle.EditableCaption(
         this.unitOfWork_, lastSubOrder + 1.0);
+    mirosubs.SubTracker.getInstance().trackAdd(c.getCaptionID());    
     c.setParentEventTarget(this);
     this.captions_.push(c);
     if (this.captions_.length > 1) {

@@ -28,6 +28,7 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
                                     existingCaptions, opt_opener,
                                     opt_skipFinished) {
     mirosubs.Dialog.call(this, videoSource);
+    mirosubs.SubTracker.getInstance().start(false);
     this.serverModel_ = serverModel;
     this.opener_ = opt_opener;
     this.skipFinished_ = !!opt_skipFinished;
