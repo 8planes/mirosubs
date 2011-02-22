@@ -973,7 +973,7 @@ class VideoUrl(models.Model):
     def unique_error_message(self, model_class, unique_check):
         if unique_check[0] == 'url':
             vu_obj = VideoUrl.objects.get(url=self.url)
-            return mark_safe(_('<a href="%(url)s">This URL already exists.</a>') % {'url': vu_obj.get_absolute_url()})
+            return mark_safe(_('This URL already <a href="%(url)s">exists</a> as its own video in our system. You can\'t add it as a secondary URL.') % {'url': vu_obj.get_absolute_url()})
         return super(VideoUrl, self).unique_error_message(model_class, unique_check)
     
     def created_as_time(self):
