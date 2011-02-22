@@ -109,7 +109,7 @@ mirosubs.widget.PlayController.prototype.setUpSubs_ =
 
 mirosubs.widget.PlayController.prototype.languageSelected = function(languageCode) {
     var that = this;
-    mirosubs.Tracker.getInstance().track('languageSelected');
+    mirosubs.Tracker.getInstance().track('Selects_language_from_widget_dropdown');
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'fetch_subtitles',
