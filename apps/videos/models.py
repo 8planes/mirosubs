@@ -412,6 +412,7 @@ class SubtitleLanguage(models.Model):
     subtitles_fetched_count = models.IntegerField(default=0)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
     title = models.CharField(max_length=2048, blank=True)
+    percent_done = models.IntegerField(default=0)
         
     subtitles_fetched_counter = RedisSimpleField()
     
@@ -512,8 +513,7 @@ class SubtitleLanguage(models.Model):
             return version.subtitles()
         return []
         
-    @property
-    def percent_done(self):
+    def update_percent_done(self):
         if not self.is_original and not self.is_forked:
             # FIXME: this calculation is incorrect. where are the unit tests?
             # for example, subtitles can be deleted, so it's quite easy 
@@ -527,7 +527,7 @@ class SubtitleLanguage(models.Model):
                 translation_count = 0
                 
             if translation_count == 0:
-                return 0
+                self.percent_done = 0
             
             last_version = self.video.latest_version()
             if last_version:
@@ -537,11 +537,13 @@ class SubtitleLanguage(models.Model):
 
             try:
                 val = int(translation_count / 1. / subtitles_count * 100)
-                return max(0, min(val, 100))
+                self.percent_done = max(0, min(val, 100))
             except ZeroDivisionError:
-                return 0 
+                self.percent_done = 0 
         else:
-            return 100
+            self.percent_done = 100
+            
+        self.save()
 
     def notification_list(self, exclude=None):
         qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
@@ -597,6 +599,14 @@ class SubtitleVersion(SubtitleCollection):
     
     def __unicode__(self):
         return u'%s #%s' % (self.language, self.version_no)
+    
+    def save(self, *args, **kwargs):
+        super(SubtitleVersion, self).save(*args, **kwargs)
+        self.language.update_percent_done()
+    
+    def delete(self, *args, **kwargs):
+        super(SubtitleVersion, self).delete(*args, **kwargs)
+        self.language.update_percent_done()
     
     def has_subtitles(self):
         return self.subtitle_set.exists()
