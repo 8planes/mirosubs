@@ -23,6 +23,10 @@
 	{% select_language_dialog 'force' %}
 {% endblock %}
 
+{% block analytics %}
+mpq.push(['track', 'teamsPage']);
+{% endblock %}
+
 {% block main_content %}
 
 {% if team.header_html_text %}
