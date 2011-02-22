@@ -53,6 +53,7 @@ PcfTargetter = (function(){
             os: [],
             refferers: [],
             text: '',
+            geoData: null,
             elementID: 'pcf-targetter-message',
             callback: function(){
                 if (this.elementID){
@@ -63,11 +64,23 @@ PcfTargetter = (function(){
         },
         init: function(options){
             options = this.apply({}, options, this.defaults);
-            if (this.checkUserAgent(options) && this.checkOs(options) && this.checkRefferer(options) 
-                && this.checkLocation(options)){
-                    
-                options.callback.call(options)
+            
+            if (options.top_longitude && options.top_latitude && options.side_length){
+                var url = "http://www.geoplugin.net/json.gp?jsoncallback=?&callback=?";
+                var that = this;
+                options.bottom_longitude = options.top_longitude + options.side_length;
+                options.bottom_latitude = options.top_latitude + options.side_length;
+                jQuery.getJSON(url, function(data){
+                    options.geoData = data;
+                    that.makeChecks(options) && options.callback.call(options);
+                });                
+            }else{
+                this.makeChecks(options) && options.callback.call(options);
             }
+        },
+        makeChecks: function(options){
+            return this.checkUserAgent(options) && this.checkOs(options) && this.checkRefferer(options) 
+                && this.checkLocation(options);
         },
         load: function(url, id){
             var that = this;
@@ -78,11 +91,19 @@ PcfTargetter = (function(){
             })            
         },
         checkLocation: function(options){
-            var url = "http://www.geoplugin.net/json.gp?jsoncallback=?&callback=?";
+            if (options.geoData){
+                var lt = options.geoData.geoplugin_latitude - 0;
+                var lg = options.geoData.geoplugin_longitude - 0;
+                console.log(lt, lg, options)
+                return ((lt <= options.top_latitude && lt >= options.bottom_latitude) &&
+                    (lg <= options.top_longitude && lg >= options.bottom_longitude));
+            }
+            return true
+            
+            if (options.top_longitude && options.top_latitude && options.side_length){
+                
+            }
 
-            jQuery.getJSON(url, function(data){
-                console.log(data)
-            })
             return true;
         },
         checkRefferer: function(options){

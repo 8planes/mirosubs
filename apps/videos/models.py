@@ -28,7 +28,7 @@ from comments.models import Comment
 from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from videos.types import video_type_registrar
+from videos.types import video_type_registrar, VideoTypeError
 from statistic import update_subtitles_fetch_counter, video_view_counter, changed_video_set 
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
@@ -38,6 +38,7 @@ from django.utils.http import urlquote_plus
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 import time
+from django.utils.safestring import mark_safe
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -201,14 +202,14 @@ class Video(models.Model):
             return None, False
 
         try:
-            video_url_obj = VideoUrl.all.get(
+            video_url_obj = VideoUrl.objects.get(
                 url=vt.convert_to_video_url())
             return video_url_obj.video, False
         except models.ObjectDoesNotExist:
             pass
         
         try:
-            video_url_obj = VideoUrl.all.get(
+            video_url_obj = VideoUrl.objects.get(
                 type=vt.abbreviation, **vt.create_kwars())
             if user:
                 Action.create_video_handler(video_url_obj.video, user)
@@ -411,6 +412,7 @@ class SubtitleLanguage(models.Model):
     subtitles_fetched_count = models.IntegerField(default=0)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
     title = models.CharField(max_length=2048, blank=True)
+    percent_done = models.IntegerField(default=0)
         
     subtitles_fetched_counter = RedisSimpleField()
     
@@ -511,8 +513,7 @@ class SubtitleLanguage(models.Model):
             return version.subtitles()
         return []
         
-    @property
-    def percent_done(self):
+    def update_percent_done(self):
         if not self.is_original and not self.is_forked:
             # FIXME: this calculation is incorrect. where are the unit tests?
             # for example, subtitles can be deleted, so it's quite easy 
@@ -526,7 +527,7 @@ class SubtitleLanguage(models.Model):
                 translation_count = 0
                 
             if translation_count == 0:
-                return 0
+                self.percent_done = 0
             
             last_version = self.video.latest_version()
             if last_version:
@@ -536,11 +537,13 @@ class SubtitleLanguage(models.Model):
 
             try:
                 val = int(translation_count / 1. / subtitles_count * 100)
-                return max(0, min(val, 100))
+                self.percent_done = max(0, min(val, 100))
             except ZeroDivisionError:
-                return 0 
+                self.percent_done = 0 
         else:
-            return 100
+            self.percent_done = 100
+            
+        self.save()
 
     def notification_list(self, exclude=None):
         qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
@@ -596,6 +599,14 @@ class SubtitleVersion(SubtitleCollection):
     
     def __unicode__(self):
         return u'%s #%s' % (self.language, self.version_no)
+    
+    def save(self, *args, **kwargs):
+        super(SubtitleVersion, self).save(*args, **kwargs)
+        self.language.update_percent_done()
+    
+    def delete(self, *args, **kwargs):
+        super(SubtitleVersion, self).delete(*args, **kwargs)
+        self.language.update_percent_done()
     
     def has_subtitles(self):
         return self.subtitle_set.exists()
@@ -939,11 +950,6 @@ class UserTestResult(models.Model):
     task3 = models.TextField(blank=True)
     get_updates = models.BooleanField(default=False)
 
-class VideoUrlManager(models.Manager):
-    
-    def get_query_set(self):
-        return super(VideoUrlManager, self).get_query_set().filter(deleted=False)
-
 class VideoUrl(models.Model):
     video = models.ForeignKey(Video)
     type = models.CharField(max_length=1, choices=VIDEO_TYPE)
@@ -953,10 +959,6 @@ class VideoUrl(models.Model):
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
-    deleted = models.BooleanField(default=False)
-    
-    objects = VideoUrlManager()
-    all = models.Manager()
     
     def __unicode__(self):
         return self.url
@@ -970,7 +972,8 @@ class VideoUrl(models.Model):
     
     def unique_error_message(self, model_class, unique_check):
         if unique_check[0] == 'url':
-            return _('This URL already exists.')
+            vu_obj = VideoUrl.objects.get(url=self.url)
+            return mark_safe(_('This URL already <a href="%(url)s">exists</a> as its own video in our system. You can\'t add it as a secondary URL.') % {'url': vu_obj.get_absolute_url()})
         return super(VideoUrl, self).unique_error_message(model_class, unique_check)
     
     def created_as_time(self):
@@ -983,3 +986,51 @@ class VideoUrl(models.Model):
 
 post_save.connect(Action.create_video_url_handler, VideoUrl)   
 post_save.connect(video_cache.on_video_url_save, VideoUrl)
+
+class VideoFeed(models.Model):
+    url = models.URLField()
+    last_link = models.URLField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, blank=True, null=True)
+
+    def update(self):
+        import feedparser
+        
+        feed = feedparser.parse(self.url)
+        
+        checked_entries = 0
+        last_link = self.last_link
+        
+        try:
+            self.last_link = feed.entries[0]['link']
+            self.save()
+        except (IndexError, KeyError):
+            pass        
+        
+        for item in feed.entries:
+            
+            if item.link == last_link:
+                break
+            
+            if not self.try_save_link(item['link']):
+                for obj in item.get('enclosures', []):
+                    type = obj.get('type', '')
+                    href = obj.get('href', '')
+                    if href and type.startswith('video'):
+                        self.try_save_link(href)
+            
+            checked_entries += 1
+        
+        return checked_entries
+                        
+    def try_save_link(self, link):
+        try:
+            video_type = video_type_registrar.video_type_for_url(link)
+            if video_type:
+                Video.get_or_create_for_url(vt=video_type, user=self.user)
+                return True
+        except VideoTypeError, e:
+            pass
+        
+        return False
+        

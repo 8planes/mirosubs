@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from videos.models import Video, UserTestResult, SubtitleVersion, Subtitle, SubtitleLanguage, Action
+from videos.models import Video, UserTestResult, SubtitleVersion, Subtitle, SubtitleLanguage, VideoFeed
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from datetime import datetime
@@ -396,6 +396,7 @@ class AddFromFeedForm(forms.Form, AjaxForm):
     usernames = UsernameListField(required=False, label=_(u'Youtube usernames'), help_text=_(u'Enter usernames separated by comma.'))
     youtube_user_url = forms.RegexField(youtube_user_url_re, required=False, label=_(u'Youtube user\'s page link'))
     feed_url = forms.URLField(required=False, help_text=_(u'Enter RSS link from Youtube, Vimeo, Blip or Dailymotion. Video will be added only for supported sites.'))
+    save_feed = forms.BooleanField(required=False, label=_(u'Save feed'), help_text=_(u'Chose this if you wish we add videos from this feed in future. Only valid RSS-feed will be saved.'))
     
     def __init__(self, user, *args, **kwargs):
         if not user.is_authenticated():
@@ -404,7 +405,8 @@ class AddFromFeedForm(forms.Form, AjaxForm):
         super(AddFromFeedForm, self).__init__(*args, **kwargs)
         
         self.yt_service = YouTubeService()
-        self.video_types = [] 
+        self.video_types = []
+        self.feed_urls = []
     
     def clean_feed_url(self):
         url = self.cleaned_data.get('feed_url')
@@ -418,17 +420,12 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                         href = obj.get('href', '')
                         if href and type.startswith('video'):
                             self.try_get_video_type(href)
+                            
+            if feed.version:
+                self.feed_urls.append(url)
+                
         return url
     
-    def try_get_video_type(self, link):
-        try:
-            video_type = video_type_registrar.video_type_for_url(link)
-        except VideoTypeError, e:
-            raise forms.ValidationError(e)
-        if video_type:
-            self.video_types.append(video_type)
-        return video_type
-                        
     def clean_youtube_user_url(self):
         url = self.cleaned_data.get('youtube_user_url')
         if url:
@@ -445,6 +442,15 @@ class AddFromFeedForm(forms.Form, AjaxForm):
     def clean(self):
         data = self.cleaned_data
         return data
+ 
+    def try_get_video_type(self, link):
+        try:
+            video_type = video_type_registrar.video_type_for_url(link)
+        except VideoTypeError, e:
+            raise forms.ValidationError(e)
+        if video_type:
+            self.video_types.append(video_type)
+        return video_type
     
     def add_for_youtube_user(self, username):
         try:
@@ -461,14 +467,36 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                 'username': username
             }                
             raise forms.ValidationError(error)
+        
+        self.feed_urls.append(user_feed.GetFeedLink().href)
+        
         for entry in user_feed.entry:
             self.add_from_youtube_entry(entry)
                     
     def add_from_youtube_entry(self, entry):
         if not entry.media.private and entry.media.player:
             self.video_types.append(YoutubeVideoType(entry.media.player.url))
-                            
+    
+    def save_feed_url(self, feed_url):
+        try:
+            VideoFeed.objects.get(url=feed_url)
+        except VideoFeed.DoesNotExist:
+            vf = VideoFeed(url=feed_url)
+            vf.user = self.user
+            
+            feed = feedparser.parse(feed_url)
+            try:
+                vf.last_link = feed['entries'][0]['link']
+            except (IndexError, KeyError):
+                pass
+            
+            vf.save()
+                                                
     def save(self):
+        if self.cleaned_data.get('save_feed'):
+            for feed_url in self.feed_urls:
+                self.save_feed_url(feed_url)
+            
         for vt in self.video_types:
             Video.get_or_create_for_url(vt=vt, user=self.user)
         return len(self.video_types)
