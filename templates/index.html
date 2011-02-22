@@ -4,20 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Universal Subtitles - {% trans 'Make subtitles, translations, and captions for almost any video.' %}</title>
-
-    {% if not DEBUG %}
-    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', '{{ GOOGLE_ANALYTICS_NUMBER }}']);
-        _gaq.push(['_trackPageview']);
-        
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();      
-    </script>
-    {% endif %}
     
     <!--[if IE]><link href="{{ MEDIA_URL }}index/css/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
     <!--[if IE 6]><script src="{{ MEDIA_URL }}index/js/ie6PngFix.js"></script><![endif]--> 
@@ -327,5 +313,18 @@
   </div><!-- footer -->
     <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
     {% feedback_form %}
+    {% if not DEBUG %}
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', '{{ GOOGLE_ANALYTICS_NUMBER }}']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();      
+    </script>
+    {% endif %}
 </body>
 </html>
