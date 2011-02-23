@@ -596,3 +596,8 @@ def subscribe_to_updates(request):
         'http://pcf8.pculture.org/interspire/form.php?form=3', data)
     response = urllib2.urlopen(req)
     return HttpResponse('ok', 'text/plain')
+
+def test_celery(request):
+    from videos.tasks import add
+    add.delay(1, 2)
+    return HttpResponse('Hello, from Amazon SQS backend for Celery!')
