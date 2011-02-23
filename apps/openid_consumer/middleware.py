@@ -6,8 +6,9 @@ class OpenIDMiddleware(object):
     """
     def process_request(self, request):
         request.openids = request.session.get('openids', [])
-        print("OpenIDMiddleware sessionid: {0}".format(
-                request.COOKIES['sessionid']))
+        if 'sessionid' in request.COOKIES:
+            print("OpenIDMiddleware sessionid: {0}".format(
+                    request.COOKIES['sessionid']))
         print("OpenIDMiddleware request.path: {0}".format(request.path))
         print("OpenIDMiddleware request.openids: {0}".format(request.openids))
         if request.openids:
