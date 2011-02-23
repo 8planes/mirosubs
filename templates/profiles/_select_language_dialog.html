@@ -55,7 +55,7 @@
                 if ( ! has_value){
                     $.jGrowl.error('{% trans "Select at least one language." %}');
                 }else{
-                    $w.html('{% trans "Saving..." %}');
+                    $w.html('{% trans "Saving your language settings..." %}');
                     ProfileApi.select_languages(values, function(){
                         //update_language_display();
                         window.location.replace(window.location);
