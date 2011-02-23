@@ -152,6 +152,8 @@ class TeamsTest(TestCase):
         #self.failUnlessEqual(response.status_code, 200)        
         
         #------------- add video ----------------------
+        self.client.login(**self.auth)
+        
         data = {
             "languages-MAX_NUM_FORMS": u"",
             "description": u"",

@@ -298,7 +298,7 @@ def add_video(request, slug):
     form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
     
     if form.is_valid():
-        obj =  form.save()
+        obj =  form.save(False)
         obj.added_by = request.user
         obj.save()  
         return redirect(obj)

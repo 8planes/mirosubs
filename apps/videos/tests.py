@@ -781,11 +781,13 @@ class TestPercentComplete(TestCase):
             s.duplicate_for(v).save()
         
     def test_percent_done(self):
+        self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 100)
     
     def test_delete_from_original(self):
         latest_version = self.original_language.latest_version()
         latest_version.subtitle_set.all()[:1].get().delete()
+        self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 100)
             
     def test_adding_to_original(self):
@@ -798,7 +800,7 @@ class TestPercentComplete(TestCase):
         s.start_time = 50
         s.end_time = 51
         s.save()
-        
+        self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 4/5.*100)
         
     def test_delete_all(self):
@@ -809,6 +811,7 @@ class TestPercentComplete(TestCase):
     
     def test_delete_from_translation(self):
         self.translation_version.subtitle_set.all()[:1].get().delete()
+        self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 75)
 
     def test_many_subtitles(self):
@@ -821,7 +824,8 @@ class TestPercentComplete(TestCase):
             s.start_time = 50 + i
             s.end_time = 51 + i
             s.save()
-        
+            
+        self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 0)
 
 class TestCommands(TestCase):
@@ -848,7 +852,8 @@ class TestAlert(TestCase):
         v = SubtitleVersion()
         v.language = lang or self.original_language
         v.datetime_started = datetime.now()
-        v.version_no = v.language.latest_version().version_no+1
+        lv = v.language.latest_version()
+        v.version_no = lv and lv.version_no+1 or 1
         v.save()
         return v       
     
