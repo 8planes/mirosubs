@@ -1,4 +1,5 @@
 from settings import *
+__import__('dev-settings', globals(), locals(), ['*'], -1)
 
 ROOT_URLCONF = 'urls'
 
