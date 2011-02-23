@@ -199,6 +199,7 @@ def default_on_failure(request, message, template_name='openid_consumer/failure.
     }, 		RequestContext(request))
 
 def signout(request):
+    print("signout: assigning 0-length array to openids")
     request.session['openids'] = []
     next = request.GET.get('next', '/')
     if not is_valid_next_url(next):
