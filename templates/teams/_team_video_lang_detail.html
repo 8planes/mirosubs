@@ -25,26 +25,23 @@
         </div>
         {% else %}
         <div style="margin: 5px 5px 0 0;">
-            <a class="blue_button small" 
-                href="javascript:void(0);"
-                onclick="trackAndNavigate('Clicks_button_on_teams_page_to_help_out', '{{ lang.get_widget_url }}')">
+            <a class="blue_button small" mpq-event="Clicks_button_on_teams_page_to_help_out"
+                href="{{ lang.get_widget_url }}">
                 {% trans "Create" %} {{ lang.language_display }} {% trans "Captions" %}</a>
         </div>        
         {% endif %}
       {% else %}
             {% if lang.percent_done == 0 %}
               <div style="margin: 5px 5px 0 0;">
-              <a class="blue_button small" 
-                 href="javascript:void(0);"
-                 onclick="trackAndNavigate('Clicks_button_on_teams_page_to_help_out', '{{ lang.get_widget_url }}')">
+              <a class="blue_button small" mpq-event="Clicks_button_on_teams_page_to_help_out"
+                 href="{{ lang.get_widget_url }}">
                 {% trans "Translate into" %} {{ lang.language_display }}
               </a>
               </div>
             {% else %}
               <div style="margin: 5px 5px 0 0;">
-              <a class="blue_button small" 
-                 href="javascript:void(0);"
-                 onclick="trackAndNavigate('Clicks_button_on_teams_page_to_help_out', '{{ lang.get_widget_url }}')">
+              <a class="blue_button small" mpq-event="Clicks_button_on_teams_page_to_help_out"
+                 href="{{ lang.get_widget_url }}">
                 {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
               </a>    
               </div>

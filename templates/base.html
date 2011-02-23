@@ -56,17 +56,18 @@
 </script>
 {% endif %}
 <script type="text/javascript">
-    function trackAndNavigate(event, url) {
-        if (typeof mpq !== 'undefined')
-           mpq.push(['track', event, null, function() { window.location = url; }]);
-        else
-           window.location = url;
-    }
-
     jQuery(function($){
         $.mod();
       	$.metadata.setType("attr", "data");
 		
+        $('a[mpq-event]').click(function(){
+            if (typeof mpq !== 'undefined'){
+                mpq.push(['track', $(this).attr('mpq-event'), null, function() {}]);
+                sleep(100); //I'm not sure it is required, but maybe mpq need some time before page reloading
+            }
+            return true;
+        });
+        
         $('#closeBut').click(function(){
             $('#messages').remove();
             return false;
