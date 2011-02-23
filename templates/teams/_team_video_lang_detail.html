@@ -14,8 +14,6 @@
     </p>
     {% endif %}
       
-    {% if lang.language in USER_LANGUAGES or lang.is_original %}
-    
       {% if lang.is_original or lang.is_forked %}
         {% if lang.subtitles %}
         <div style="margin: 5px 5px 0 0;">
@@ -48,6 +46,4 @@
             {% endif %}                    
       {% endif %}
       
-    {% endif %}
-
 </div>
