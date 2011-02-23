@@ -155,7 +155,7 @@ def complete(request, on_success=None, on_failure=None, failure_template='openid
     openid_response = consumer.complete(query_dict, url)
 
     print("openid_consumer.views.complete openid_response.status: {0}".format(
-            openid_response_status))
+            openid_response.status))
 
     if openid_response.status == SUCCESS:
         return on_success(request, openid_response.identity_url, openid_response)
