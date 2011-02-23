@@ -98,6 +98,8 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
             (result['locked_by'] == 
              'anonymous' ? 'Someone else' : ('The user ' + result['locked_by']));
         alert(username + ' is currently editing these subtitles. Please wait and try again later.');
+        if (mirosubs.returnURL != null)
+            window.location.replace(mirosubs.returnURL);
     }
 };
 

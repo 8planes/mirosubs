@@ -60,12 +60,15 @@
         $.mod();
       	$.metadata.setType("attr", "data");
 		
-        $('a[mpq-event]').click(function(){
-            if (typeof mpq !== 'undefined'){
-                mpq.push(['track', $(this).attr('mpq-event'), null, function() {}]);
-                sleep(100); //I'm not sure it is required, but maybe mpq need some time before page reloading
+        $('a[mpq-event]').click(function(e) {
+            if (typeof mpq !== 'undefined') {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                mpq.push(['track', $(this).attr('mpq-event'), null, function() { window.location = url; }]);
+                return false;
             }
-            return true;
+            else
+                return true;
         });
         
         $('#closeBut').click(function(){
