@@ -46,7 +46,7 @@ from utils.amazon import S3StorageError
 from teams.rpc import TeamsApiClass
 from utils.rpc import RpcRouter
 from utils.translation import get_user_languages_from_request
-from utils.multy_query_set import TeamsMultyQuerySet
+from utils.multy_query_set import MultyQuerySet
 
 rpc_router = RpcRouter('teams:rpc_router', {
     'TeamsApi': TeamsApiClass()
@@ -122,12 +122,7 @@ def detail(request, slug):
     video_ids = team.teamvideo_set.values_list('video_id', flat=True)
     
     qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
-        .extra(select={
-                    'has_original_subtitle': 'SELECT COUNT(vs.id) FROM videos_subtitleversion AS vs INNER JOIN videos_subtitlelanguage AS vsl ON (vsl.id = vs.language_id) '+ \
-                        'WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id'
-                },
-                select_params=(True,)) \
-        .extra(where=['NOT (has_original_subtitle <= 0 AND videos_subtitlelanguage.is_original=%s)'], params=(False,)) \
+        .extra(where=['NOT ((SELECT COUNT(vs.id) FROM videos_subtitleversion AS vs INNER JOIN videos_subtitlelanguage AS vsl ON (vsl.id = vs.language_id) WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) <= 0 AND videos_subtitlelanguage.is_original=%s)'], params=(True, False,)) \
         .distinct()
 
     qs1 = qs.filter(is_forked=False, is_original=False).filter(percent_done__lt=100, percent_done__gt=0)
@@ -146,7 +141,7 @@ def detail(request, slug):
             'video_url': team.video.get_video_url(), 
             'base_state': {}
         })
-    return object_list(request, queryset=TeamsMultyQuerySet(qs1, qs2, qs3, qs4, qs5), 
+    return object_list(request, queryset=MultyQuerySet(qs1, qs2, qs3, qs4, qs5), 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
                        extra_context=extra_context, 
@@ -303,24 +298,14 @@ def add_video(request, slug):
     form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
     
     if form.is_valid():
-        obj = form.save(False)
-        form_validated = True        
-    else:
-        form_validated = False
-        obj = TeamVideo()
-           
-    formset = TeamVideoLanguageFormset(request.POST or None, instance=obj)
-    
-    if formset.is_valid() and form_validated:
+        obj =  form.save()
         obj.added_by = request.user
-        obj.save()
-        formset.save()
+        obj.save()  
         return redirect(obj)
         
     return {
         'form': form,
-        'team': team,
-        'formset': formset
+        'team': team
     }
 
 @login_required
@@ -353,15 +338,6 @@ def team_video(request, team_video_pk):
 
     if form.is_valid():
         form.save()
-        form_validated = True
-    else:
-        form_validated = False
-    
-    formset = TeamVideoLanguageFormset(request.POST or None, instance=team_video)
-    
-    if formset.is_valid() and form_validated:
-        formset.save()
-        team_video.clean_languages()
         messages.success(request, _('Video has been updated.'))
         return redirect(team_video)
 
@@ -371,7 +347,6 @@ def team_video(request, team_video_pk):
         'team': team_video.team,
         'team_video': team_video,
         'form': form,
-        'formset': formset,
         'widget_params': base_widget_params(request, {'video_url': team_video.video.get_video_url(), 'base_state': {}})
     })
     return context

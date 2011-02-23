@@ -53,15 +53,3 @@ class MultyQuerySet(object):
     def _clone(self):
         return self
     
-class TeamsMultyQuerySet(MultyQuerySet):
-    
-    def __init__(self, *args):
-        self.lists = args
-        self.model = self.lists[0].model
-        
-        self._obj_ids = []
-        self._cache = {}
-        
-        for l in self.lists:
-            self._obj_ids.extend(id for id, hos in l.values_list('pk', 'has_original_subtitle'))
-    
