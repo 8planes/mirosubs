@@ -104,7 +104,7 @@
       <div class="wrapper">
       <div class="search">
         <form method="get" action="{% url search:index %}">
-          <input type="text" class="field" name="q" />
+          {# <input type="text" class="field" name="q" /> #}
         </form>
       </div><!-- // search -->
        {% block select_language_dialog %}
@@ -157,6 +157,9 @@
     {% block main_content %}
     {% endblock %}
   </div><!-- // content -->
+      {% block feedback_form %}
+        {% feedback_form %}
+      {% endblock %}
   <div class="footer">
     <div class="floatleft">
     {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
