@@ -39,7 +39,7 @@
     });
 </script>
 
-<div id="submit_multiple_videos">
+<div id="submit_multiple_videos" style="display: none;">
   <form action="{% url videos:create_from_feed %}" method="POST" id="bulk_create" class="clearfix">
     <table>
       <h3>{% trans "Automatically submit videos" %}</h3>
@@ -54,6 +54,19 @@
 
 </div><!-- // submit_video_form -->
 <div id="submit_multiple_toggle">
-  <a id="btn_submit_multiple_toggle" href="">Or Submit Multiple Videos</a>
+  <a id="btn_submit_multiple_toggle" class="toogle-create-form" href="#">{% trans "Or Submit Multiple Videos" %}</a>
 </div><!-- // submit_multiple_toggle -->
+<script type="text/javascript">
+    jQuery('.toogle-create-form').click(function(){
+        var $link = $(this);
+        $('#submit_multiple_videos').toggle(0, function(){
+            if ($(this).is(':visible')){
+                $link.html('{% trans "Hide" %}');
+            }else{
+                $link.html('{% trans "Or Submit Multiple Videos" %}');
+            }
+        });
+        return false;
+    });
+</script>
 {% endblock %}
