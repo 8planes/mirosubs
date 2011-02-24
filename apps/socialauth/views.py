@@ -141,16 +141,13 @@ def openid_done(request, provider=None):
     If we are, we will create a new Django user for this Openid, else login the
     existing openid.
     """
-    print("openid done")
     if not provider:
         provider = request.session.get('openid_provider', '')
-    print("request.openid: {0}".format(request.openid))
     if  request.openid:
         #check for already existing associations
         openid_key = str(request.openid)
         #authenticate and login
         user = authenticate(openid_key=openid_key, request=request, provider = provider)
-        print("user: {0}".format(user))
         if user:
             if not user.userlanguage_set.exists():
                 langs = get_user_languages_from_cookie(request)
