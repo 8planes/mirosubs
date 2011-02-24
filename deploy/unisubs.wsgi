@@ -24,7 +24,7 @@ for item in new_sys_path:
 sys.path[:0] = new_sys_path
 
 import django.core.handlers.wsgi
-os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs-settings'
 application = django.core.handlers.wsgi.WSGIHandler()
 
 handler = django.core.handlers.wsgi.WSGIHandler()
