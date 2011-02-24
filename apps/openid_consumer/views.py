@@ -153,10 +153,6 @@ def complete(request, on_success=None, on_failure=None, failure_template='openid
 
     url = get_url_host(request) + request.path
     openid_response = consumer.complete(query_dict, url)
-
-    print("openid_consumer.views.complete openid_response.status: {0}".format(
-            openid_response.status))
-
     if openid_response.status == SUCCESS:
         return on_success(request, openid_response.identity_url, openid_response)
     elif openid_response.status == CANCEL:
@@ -177,9 +173,6 @@ def default_on_success(request, identity_url, openid_response):
         o for o in request.session['openids'] if o.openid != identity_url
     ]
     request.session['openids'].append(from_openid_response(openid_response))
-
-    print("openid_consumer.views.default_on_success openids: {0}".format(
-            request.session['openids']))
     
     # Set up request.openids and request.openid, reusing middleware logic
     OpenIDMiddleware().process_request(request)
@@ -199,7 +192,6 @@ def default_on_failure(request, message, template_name='openid_consumer/failure.
     }, 		RequestContext(request))
 
 def signout(request):
-    print("signout: assigning 0-length array to openids")
     request.session['openids'] = []
     next = request.GET.get('next', '/')
     if not is_valid_next_url(next):
