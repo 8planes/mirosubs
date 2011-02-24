@@ -201,7 +201,7 @@ form p textarea{
   width: 466px;
   background: url(../../images/form.png) left top no-repeat;
 	margin: 0;
-	display: none;
+	
 }
 
 .main_video_form input#submit_video_field {
@@ -222,7 +222,7 @@ form p textarea{
   -moz-box-shadow: 0 1px 0 #FFF, inset 0 2px 0 #DDD;
   background: -webkit-gradient(linear, left top, left bottom, from(#e3e3e3), to(#FFF));
   background: -moz-linear-gradient(top,  #e3e3e3,  #FFF) no-repeat;
-	
+	display: none;
 }
 
 .main_video_form input#submit_video_field:focus {
