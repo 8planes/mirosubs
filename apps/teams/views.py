@@ -40,13 +40,14 @@ from django.contrib.auth.decorators import permission_required
 import random
 from widget.views import base_widget_params
 import widget
-from videos.models import Action, SubtitleLanguage
+from videos.models import Action, SubtitleLanguage, WRITELOCK_EXPIRATION
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from teams.rpc import TeamsApiClass
 from utils.rpc import RpcRouter
 from utils.translation import get_user_languages_from_request
 from utils.multy_query_set import MultyQuerySet
+import datetime
 
 rpc_router = RpcRouter('teams:rpc_router', {
     'TeamsApi': TeamsApiClass()
@@ -122,6 +123,7 @@ def detail(request, slug):
     video_ids = team.teamvideo_set.values_list('video_id', flat=True)
     
     qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
+        .exclude(Q(writelock_time__gte=datetime.datetime.now()-datetime.timedelta(seconds=WRITELOCK_EXPIRATION))) \
         .extra(where=['NOT ((SELECT COUNT(vs.id) FROM videos_subtitleversion AS vs INNER JOIN videos_subtitlelanguage AS vsl ON (vsl.id = vs.language_id) WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) <= 0 AND videos_subtitlelanguage.is_original=%s)'], params=(True, False,)) \
         .distinct()
 
