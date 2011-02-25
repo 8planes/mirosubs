@@ -2,9 +2,7 @@
 body {
   font-family: Arial, sans-serif;
   font-size: 12px;
-  background: #d1e9ee url(images/interface/bg_body.jpg) no-repeat center top;
-  padding-top: 35px;
-  padding-bottom: 50px;
+  background: #d1e9ee url(images/interface/bg_body.jpg) no-repeat center 45px;
 }
 
 /*

@@ -10,6 +10,7 @@
 {% block css %}
 
 <link href="{{ MEDIA_URL }}css/mirosubs-mainsite.css" media="all" type="text/css" rel="stylesheet" />
+<link href="{{ MEDIA_URL }}index/style.css" rel="stylesheet" type="text/css"/>
 <!--[if gte IE 8]>
 <link href="{{ MEDIA_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
 <![endif]-->
@@ -52,112 +53,90 @@
     })();      
 </script>
 {% endif %}
-<script type="text/javascript">
-    jQuery(function($){
-        $.mod();
-      	$.metadata.setType("attr", "data");
-		
-        $('#closeBut').click(function(){
-            $('#messages').remove();
-            return false;
-        });
-        $('li.search input').keypress(function(e) {
-            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-                $('li.search form').submit();
-                return false;
-            }
-            else
-                return true;
-        });
-    });
-</script>
+
 </head>
 <body {% block body_attrs %}{% endblock %}>
-  {% block feedback-button %}
+  
+{% block feedback-button %}
   <a href="#" class="feedback_tab" data-modal="feedback_container">{% trans "Feedback" %}</a>
-  {% endblock %}
+{% endblock %}
 
 {% comment %}
 <!--[if lte IE 6]>
   <div class="note"><strong>{% trans 'Universal Subtitles does not support your browser. Upgrade your browser or <a href="http://getfirefox.com">Try Firefox</a>.' %}</strong></div>
 <![endif]-->
 {% endcomment %}
-    {% announcement %}
-    {% if user.is_authenticated %}
-        {% messages %}
-    {% endif %}
-    <div id="topbar">
-      <div class="wrapper">
-      <div class="search">
-        <form method="get" action="{% url search:index %}">
-          <input type="text" class="field" name="q" />
-        </form>
-      </div><!-- // search -->
-       {% block select_language_dialog %}
-    	  	{% select_language_dialog %}
-    	  {% endblock %}
-    	</div><!-- wrapper -->
-    </div><!-- topbar -->
-	 {% require_email_dialog %}
-<div class="wrapper">
-  <div id="header">
-    <h1 class="logo"><a href="/">Universal Subtitles</a></h1>
-    <div id="main_nav" class="clearfix">
-      <ul>
-        <li id="nobdr">
-          <a href="{% url videos:create %}">{% trans 'Subtitle' %}
-            <em>{% trans 'a video now' %}</em></a>
-        </li>  
-        <li>
-          <a href="{% url videos:list %}">{% trans 'Watch' %}
-            <em>{% trans 'subbed videos' %}</em></a>
-        </li>
-      </ul>
-    </div><!-- // mainNav -->
-    <ul id="subnav" class="clearfix">
-      <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
-      <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
-      <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
-      {% if user.is_authenticated %}
-      {% if user.is_staff %}
-      <li><a target="_blank" href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
-      {% endif %}
-      <li id="subnav_menu">{% top_user_panel %}</li>
-      {% else %}
-      <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
-      {% endif %}
-    </ul><!-- // subnav -->
-  </div><!-- // header -->
 
-  <div class="content container_12 wrapper clearfix">
-    {% if messages %}
-    <div id="messages">
-      {% for message in messages %}
+{% announcement %}
+{% if user.is_authenticated %}
+    {% messages %}
+{% endif %}
+{% require_email_dialog %}
+
+<div id="main_bar">
+  <div id="bar_wrap" class="clearfix">
+  <h1><a href="/">Universal Subtitles</a></h1>
+  
+  <div id="bar_right">
+  <div id="bar_search">
+    <form method="get" action="{% url search:index %}">
+      <input type="text" name="q" />
+    </form>
+  </div><!-- // bar_search -->
+  <ul id="bar_menu" class="clearfix">
+    <li id="nav_submit"><a href="{% url videos:create %}"><em class="icon"></em> {% trans 'Subtitle a video' %}</a></li>
+    <li><a href="{% url videos:list %}">{% trans 'Videos' %}</a></li>
+    <li><a href="http://blog.universalsubtitles.org">{% trans 'Blog' %}</a></li>
+    <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
+    <li><a href="{% url faq_page %}">{% trans 'FAQ' %}</a></li>
+    {% if user.is_authenticated %}
+      {% if user.is_staff %}
+        <li id="nav_admin"><a target="_blank" href="{% url admin:index %}">{% trans 'Admin' %}</a></li>
+      {% endif %}
+        <li style="display: none;" id="sub_nav">{% top_user_panel %}</li>
+      {% else %}
+        <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}">% trans 'Sign In' %}</a></li>
+    {% endif %}
+  </ul><!-- // bar_menu -->
+  </div><!-- // bar_right -->
+</div><!-- // main_bar -->
+
+<div id="lang_bar">
+  {% block select_language_dialog %}
+    {% select_language_dialog %}
+  {% endblock %}
+</div><!-- // lang_bar -->
+
+
+<div class="content container_12 wrapper clearfix">
+  {% if messages %}
+  <div id="messages">
+    {% for message in messages %}
       <h2 class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</h2>
-      {% endfor %}
-      <a href="#" id="closeBut" style="display: block; float: right;">&nbsp;</a>
-      <br style="clear: both"/>                
-    </div>
+    {% endfor %}
+    <a href="#" id="closeBut" style="display: block; float: right;">&nbsp;</a>
+    <br style="clear: both"/>                
+  </div><!-- // messages -->
     {% endif %}
     
     {% block main_content %}
     {% endblock %}
-  </div><!-- // content -->
-  <div class="footer">
-    <div class="floatleft">
+    
+</div><!-- // content -->
+<div class="footer">
+  <div class="floatleft">
     {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
-    </div>
-    <div class="floatright">
-      <a href="/about">{% trans 'About' %}</a>
-      <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
-      <a href="http://twitter.com/universalsubs">Twitter</a>
-      <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
-      <a href="http://www.pculture.org/pcf/websites-privacy/">{% trans 'Privacy Policy' %}</a>
-      <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
-    </div><!-- // float_right -->
-  </div><!-- // footer -->
-  
+  </div><!-- // floatleft -->
+  <div class="floatright">
+  <a href="/about">{% trans 'About' %}</a>
+  <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
+  <a href="http://twitter.com/universalsubs">Twitter</a>
+  <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
+  <a href="http://www.pculture.org/pcf/websites-privacy/">{% trans 'Privacy Policy' %}</a>
+  <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
+  </div><!-- // float_right -->
+</div><!-- // footer -->
 </div><!-- // wrapper -->
-  <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
+<div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
 </body>
 </html>
