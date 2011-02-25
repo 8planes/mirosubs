@@ -15,6 +15,7 @@ class Command(BaseCommand):
     domain = Site.objects.get_current().domain
     
     def handle(self, *args, **kwargs):
+        print 'Run send_notification command'
         max_save_time = datetime.now() - timedelta(seconds=settings.EDIT_END_THRESHOLD)
         
         qs = SubtitleVersion.objects \

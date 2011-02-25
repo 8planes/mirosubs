@@ -4,6 +4,7 @@ from videos.models import VideoFeed
 class Command(BaseCommand):
     
     def handle(self, *args, **kwargs):
+        print 'Run update_from_feed command'
         
         for feed in VideoFeed.objects.all():
             print '-------------------------'
