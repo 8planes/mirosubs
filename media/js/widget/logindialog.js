@@ -63,6 +63,8 @@ mirosubs.LoginDialog.prototype.createDom = function() {
         goog.dom.appendChild(el,
             $d('h4', {'className': 'mirosubs-login-message'},
                this.message_));
+    // FIXME: update these to use goog.dom.append as soon as we upgrade
+    // to new version of closure.
     goog.dom.appendChild(
         el, $d('h4', null, 'Login using any of these options'));
     goog.dom.appendChild(el, this.loginLink_);
@@ -76,7 +78,7 @@ mirosubs.LoginDialog.prototype.createDom = function() {
 };
 
 mirosubs.LoginDialog.prototype.showLoading_ = function() {
-    goog.dom.removeChildren(this.getElement());
+    goog.dom.removeChildren(this.getContentElement());
     this.getElement().appendChild(
         this.getDomHelper().createDom(
             'img', {
@@ -99,7 +101,7 @@ mirosubs.LoginDialog.prototype.enterDocument = function() {
 
 mirosubs.LoginDialog.prototype.siteLoginClicked_ = function(e) {
     this.showLoading_();
-    mirosubs.openLoginPopup(
+    this.loginWin_ = mirosubs.openLoginPopup(
         mirosubs.LoginPopupType.NATIVE,
         goog.bind(this.processCompleted_, this));
     e.preventDefault();
@@ -116,12 +118,13 @@ mirosubs.LoginDialog.prototype.clicked_ = function(e) {
         type = mirosubs.LoginPopupType.OPENID;
     else
         type = mirosubs.LoginPopupType.GOOGLE;
-    mirosubs.openLoginPopup(
+    this.loginWin_ = mirosubs.openLoginPopup(
         type, goog.bind(this.processCompleted_, this));
     e.preventDefault();
 };
 
 mirosubs.LoginDialog.prototype.processCompleted_ = function(loggedIn) {
+    this.loginWin_ = null;
     this.loggedIn_ = loggedIn;
     this.setVisible(false);
 };
@@ -129,6 +132,16 @@ mirosubs.LoginDialog.prototype.processCompleted_ = function(loggedIn) {
 mirosubs.LoginDialog.prototype.setVisible = function(visible) {
     mirosubs.LoginDialog.superClass_.setVisible.call(this, visible);
     mirosubs.LoginDialog.currentDialog_ = visible ? this : null;
+    if (!visible) {
+        if (goog.isDefAndNotNull(this.loginWin_) && !this.loginWin_['closed']) {
+            try {
+                this.loginWin_['close']();
+            }
+            catch (e) {
+                // do nothing
+            }
+        }
+    }
     if (!visible && this.finishFn_)
         this.finishFn_(this.loggedIn_);
 };
