@@ -207,6 +207,7 @@ class Rpc(BaseRpc):
             language.is_forked = new_version.is_forked
             language.release_writelock()
             language.save()
+            new_version.update_percent_done()
             if language.is_original:
                 language.video.update_complete_state()
             from videos.models import Action

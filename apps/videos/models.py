@@ -600,14 +600,13 @@ class SubtitleVersion(SubtitleCollection):
     def __unicode__(self):
         return u'%s #%s' % (self.language, self.version_no)
     
-    def save(self, *args, **kwargs):
-        super(SubtitleVersion, self).save(*args, **kwargs)
+    def update_percent_done(self):
         if self.language.is_original:
             for l in self.language.video.subtitlelanguage_set.exclude(pk=self.language.pk):
                 l.update_percent_done()
         else:
-            self.language.update_percent_done()
-    
+            self.language.update_percent_done()        
+        
     def delete(self, *args, **kwargs):
         super(SubtitleVersion, self).delete(*args, **kwargs)
         self.language.update_percent_done()

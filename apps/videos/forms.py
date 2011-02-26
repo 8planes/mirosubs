@@ -272,7 +272,8 @@ class SubtitlesUploadBaseForm(forms.Form):
                 caption.save()
 
             version.save()
-             
+            version.update_percent_done()
+            
             language.was_complete = True
             language.is_complete = True
             language.save()
