@@ -23,13 +23,14 @@ import os
 
 DEV_HOST = 'dev.universalsubtitles.org:2191'
 
-def _create_env(username, hosts, s3_bucket, installation_dir, static_dir):
+def _create_env(username, hosts, s3_bucket, installation_dir, static_dir, name):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
     env.s3_bucket = s3_bucket
     env.web_dir = '/var/www/{0}'.format(installation_dir)
     env.static_dir = '/var/static/{0}'.format(static_dir)
+    env.installation_name = name
 
 def staging(username):
     _create_env(username, 
@@ -37,14 +38,14 @@ def staging(username):
                  'pcf-us-staging2.pculture.org:2191'],
                 's3.staging.universalsubtitles.org',
                 'universalsubtitles.staging',
-                'staging')
+                'staging', 'staging')
 
 def dev(username):
     _create_env(username,
                 ['dev.universalsubtitles.org:2191'],
                 None,
                 'universalsubtitles.dev',
-                'dev')
+                'dev', 'dev')
 
 def unisubs(username):
     _create_env(username,
@@ -52,7 +53,8 @@ def unisubs(username):
                  'pcf-us-cluster2.pculture.org:2191'],
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
-                'production')
+                'production', None)
+
 
 def syncdb():
     env.host_string = DEV_HOST
@@ -62,7 +64,8 @@ def syncdb():
 def migrate(app_name=''):
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
-        run('{0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(env.static_dir, app_name))
+        run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(
+                env.static_dir, app_name))
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
@@ -73,7 +76,12 @@ def migrate_fake(app_name):
     """
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
-        run('{0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs-settings'.format(env.static_dir, app_name))
+        run('yes no | {0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs-settings'.format(env.static_dir, app_name))
+
+def refresh_db():
+    env.host_string = DEV_HOST
+    sudo('/scripts/univsubs_reset_db.sh {0}'.format(env.installation_name))
+    sudo('/scripts/univsubs_refresh_db.sh {0}'.format(env.installation_name))
 
 def update_closure():
     # this happens so rarely, it's not really worth putting it here.
@@ -112,8 +120,8 @@ def update_environment():
     _update_environment(env.static_dir)
 
 def _clear_permissions(dir):
-    sudo('chgrp pcf-web -R {0} 2> /dev/null; /bin/true'.format(dir))
-    run('chmod g+w -R {0} 2> /dev/null; /bin/true'.format(dir))
+    sudo('chgrp pcf-web -R {0}'.format(dir))
+    sudo('chmod g+w -R {0}'.format(dir))
 
 def clear_environment_permissions():
     for host in env.web_hosts:
@@ -126,6 +134,16 @@ def _git_pull():
     run('git pull')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
+
+def add_disabled():
+    for host in env.web_hosts:
+        env.host_string = host
+        run('touch {0}/mirosubs/disabled'.format(env.web_dir))
+
+def remove_disabled():
+    for host in env.web_hosts:
+        env.host_string = host
+        run('rm {0}/mirosubs/disabled'.format(env.web_dir))
 
 def update_web():
     for host in env.web_hosts:
@@ -156,7 +174,7 @@ def update_static():
     env.host_string = DEV_HOST
     if env.s3_bucket is not None:
         _update_static(env.static_dir)
-        media_dir = '{0}/mirosubs/media/'.format(dir)
+        media_dir = '{0}/mirosubs/media/'.format(env.static_dir)
         run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
                 media_dir, env.s3_bucket))
     else:
