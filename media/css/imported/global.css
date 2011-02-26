@@ -114,6 +114,10 @@ ul#subnav li#subnav_menu {
   right: 8px;
 }
 
+.feedback_tab {
+	z-index: 100;
+}
+
 .content h1 {
   line-height: 1.1em;
 }

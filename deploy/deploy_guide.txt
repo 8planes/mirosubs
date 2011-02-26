@@ -1,0 +1,25 @@
+* update unisubs-settings.py if necessary *
+
+fab <server> add_disabled
+fab <server> switch_branch:<branch_name>
+fab <server> update_environment
+fab <server> syncdb
+fab <server> migrate_fake:<app_name>
+fab <server> migrate
+fab <server> update
+fab <server> remove_disabled
+
+
+for staging:
+
+fab staging:<username> refresh_db
+fab staging:<username> switch_branch:<branch_name>
+fab staging:<username> clear_environment_permissions
+fab staging:<username> update_environment
+fab staging:<username> syncdb
+fab <server> migrate_fake:<app_name>
+fab <server> migrate
+fab <server> update
+
+
+for 092volunteer: migrate_fake messages and targetter
