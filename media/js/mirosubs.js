@@ -185,6 +185,7 @@ mirosubs.openLoginPopup = function(loginPopupType, opt_finishFn) {
             }
         });
     timer.start();
+    return loginWin;
 };
 mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
     mirosubs.Rpc.call(

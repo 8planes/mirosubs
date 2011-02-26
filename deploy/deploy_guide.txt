@@ -1,0 +1,6 @@
+a fab <server> switch_branch:<branch_name>
+a fab <server> update_environment
+s fab <server> syncdb
+s fab <server> migrate_fake:<app_name>
+s fab <server> migrate
+s,w fab <server> update

@@ -18,50 +18,51 @@
 
 from __future__ import with_statement
 from fabric.api import run, put, sudo, env, cd, local
+from fabric.context_managers import settings
 import os
 
-def _create_env(username, host_prefix, s3_bucket, installation_dir):
-    env.hosts = ['{0}universalsubtitles.org:2191'.format(host_prefix)]
+DEV_HOST = 'dev.universalsubtitles.org:2191'
+
+def _create_env(username, hosts, s3_bucket, installation_dir, static_dir):
     env.user = username
+    env.web_hosts = hosts
+    env.hosts = []
     env.s3_bucket = s3_bucket
-    env.base_dir = '/var/www/{0}'.format(installation_dir)
+    env.web_dir = '/var/www/{0}'.format(installation_dir)
+    env.static_dir = '/var/static/{0}'.format(static_dir)
 
 def staging(username):
     _create_env(username, 
-                'staging.',
+                ['pcf-us-staging1.pculture.org:2191', 
+                 'pcf-us-staging2.pculture.org:2191'],
                 's3.staging.universalsubtitles.org',
-                'universalsubtitles.staging')
+                'universalsubtitles.staging',
+                'staging')
 
 def dev(username):
     _create_env(username,
-                'dev.',
+                ['dev.universalsubtitles.org:2191'],
                 None,
-                'universalsubtitles.dev')
+                'universalsubtitles.dev',
+                'dev')
 
 def unisubs(username):
     _create_env(username,
-                '',
+                ['pcf10.pculture.org', 
+                 'pcf-us-cluster2.pculture.org:2191'],
                 's3.www.universalsubtitles.org',
-                'universalsubtitles')
-
-def set_permissions(home='/home/mirosubs'):
-    """
-    Make sure the web server has permission to write files into the
-    upload directories.
-    """
-    # Note that 'fab staging set_permissions' won't work, because you need
-    # to log in as a user with permission to use sudo. the mirosubs user does
-    # not have that permission
-    with cd(home):
-        sudo('chgrp www-data -R mirosubs/media/')
+                'universalsubtitles',
+                'production')
 
 def syncdb():
-    with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('{0}/env/bin/python manage.py syncdb --settings=unisubs-settings'.format(env.base_dir))
+    env.host_string = DEV_HOST
+    with cd(os.path.join(env.static_dir, 'mirosubs')):
+        run('{0}/env/bin/python manage.py syncdb --settings=unisubs-settings'.format(env.static_dir))
 
 def migrate(app_name=''):
-    with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('{0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(env.base_dir, app_name))
+    env.host_string = DEV_HOST
+    with cd(os.path.join(env.static_dir, 'mirosubs')):
+        run('{0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(env.static_dir, app_name))
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
@@ -70,16 +71,56 @@ def migrate_fake(app_name):
     http://south.aeracode.org/ticket/430 for more details. Perhaps this will be changed 
     in a subsequent version, but now we're stuck with this solution.
     """
-    with cd('{0}/mirosubs'.format(env.base_dir)):
-        run('{0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs-settings'.format(env.base_dir, app_name))
+    env.host_string = DEV_HOST
+    with cd(os.path.join(env.static_dir, 'mirosubs')):
+        run('{0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs-settings'.format(env.static_dir, app_name))
 
 def update_closure():
+    # this happens so rarely, it's not really worth putting it here.
     pass
 
-def update_environment():
-    with cd('{0}/mirosubs/deploy'.format(env.base_dir)):
+def _switch_branch(dir, branch_name):
+    with cd(os.path.join(dir, 'mirosubs')):
+        _git_pull()
+        run('git fetch')
+        # the following command will harmlessly fail if branch already exists.
+        # don't be intimidated by the one-line message.
+        env.warn_only = True
+        run('git branch --track {0} origin/{0}'.format(branch_name))
+        run('git checkout {0}'.format(branch_name))
+        env.warn_only = False
+
+def switch_branch(branch_name):
+    for host in env.web_hosts:
+        env.host_string = host
+        _switch_branch(env.web_dir, branch_name)
+    env.host_string = DEV_HOST
+    _switch_branch(env.static_dir, branch_name)
+
+def _update_environment(base_dir):
+    with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
+        _git_pull()
         run('export PIP_REQUIRE_VIRTUALENV=true')
-        run('{0}/env/bin/pip install -r requirements.txt'.format(env.base_dir))
+        # see http://lincolnloop.com/blog/2010/jul/1/automated-no-prompt-deployment-pip/
+        run('yes i | {0}/env/bin/pip install -E {0}/env/ -r requirements.txt'.format(base_dir), pty=True)
+
+def update_environment():
+    for host in env.web_hosts:
+        env.host_string = host
+        _update_environment(env.web_dir)
+    env.host_string = DEV_HOST
+    _update_environment(env.static_dir)
+
+def _clear_permissions(dir):
+    sudo('chgrp pcf-web -R {0} 2> /dev/null; /bin/true'.format(dir))
+    run('chmod g+w -R {0} 2> /dev/null; /bin/true'.format(dir))
+
+def clear_environment_permissions():
+    for host in env.web_hosts:
+        env.host_string = host
+        _clear_permissions(os.path.join(env.web_dir, 'env'))
+    env.host_string = DEV_HOST
+    _clear_permissions(os.path.join(env.static_dir, 'env'))
 
 def _git_pull():
     run('git pull')
@@ -87,23 +128,21 @@ def _git_pull():
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
 
 def update_web():
-    with cd('{0}/mirosubs'.format(env.base_dir)):
-        media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
-        python_exe = '{0}/env/bin/python'.format(env.base_dir)
-        _git_pull()
-        env.warn_only = True
-        run("find . -name '*.pyc' -print0 | xargs -0 rm")
-        env.warn_only = False
-        if env.s3_bucket is not None:
-            run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
-                    media_dir, env.s3_bucket))
-        run('{0} deploy/create_commit_file.py'.format(python_exe))
-        run('touch deploy/unisubs.wsgi')
+    for host in env.web_hosts:
+        env.host_string = host
+        with cd('{0}/mirosubs'.format(env.web_dir)):
+            python_exe = '{0}/env/bin/python'.format(env.web_dir)
+            _git_pull()
+            env.warn_only = True
+            run("find . -name '*.pyc' -print0 | xargs -0 rm")
+            env.warn_only = False
+            run('{0} deploy/create_commit_file.py'.format(python_exe))
+            run('touch deploy/unisubs.wsgi')
 
-def update_js():
-    with cd('{0}/mirosubs'.format(env.base_dir)):
-        media_dir = '{0}/mirosubs/media/'.format(env.base_dir)
-        python_exe = '{0}/env/bin/python'.format(env.base_dir)
+def _update_static(dir):
+    with cd(os.path.join(dir, 'mirosubs')):
+        media_dir = '{0}/mirosubs/media/'.format(dir)
+        python_exe = '{0}/env/bin/python'.format(dir)
         _git_pull()
         run('{0} manage.py compile_config {1} --settings=unisubs-settings'.format(
                 python_exe, media_dir))
@@ -112,11 +151,18 @@ def update_js():
         run('{0} closure/compile.py'.format(python_exe))
         run('{0} manage.py compile_embed {1} --settings=unisubs-settings'.format(
                 python_exe, media_dir))
-        if env.s3_bucket is not None:
-            run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
-                    media_dir, env.s3_bucket))
-        
+
+def update_static():
+    env.host_string = DEV_HOST
+    if env.s3_bucket is not None:
+        _update_static(env.static_dir)
+        media_dir = '{0}/mirosubs/media/'.format(dir)
+        run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
+                media_dir, env.s3_bucket))
+    else:
+        _update_static(env.web_dir)
+    
 
 def update():
-    update_js()
     update_web()
+    update_static()
