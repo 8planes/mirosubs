@@ -51,6 +51,7 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
     actions = None
     list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete', 'versions']
     list_filter = ['is_original', 'is_complete']
+    search_fields = ['video__title', 'video__video_id']
     
     def versions(self, obj):
         version_qs = obj.subtitleversion_set.all()
@@ -66,7 +67,10 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
 class SubtitleVersionAdmin(admin.ModelAdmin):
     list_display = ['language', 'version_no', 'note', 'time_change', 'text_change']
     list_filter = []
-
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']
 
