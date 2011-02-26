@@ -7,6 +7,9 @@ fab <server> syncdb
 fab <server> migrate_fake:<app_name>
 fab <server> migrate
 fab <server> update
+
+* clear memcached *
+
 fab <server> remove_disabled
 
 
