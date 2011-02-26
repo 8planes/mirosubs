@@ -602,7 +602,11 @@ class SubtitleVersion(SubtitleCollection):
     
     def save(self, *args, **kwargs):
         super(SubtitleVersion, self).save(*args, **kwargs)
-        self.language.update_percent_done()
+        if self.language.is_original:
+            for l in self.language.video.subtitlelanguage_set.exclude(pk=self.language.pk):
+                l.update_percent_done()
+        else:
+            self.language.update_percent_done()
     
     def delete(self, *args, **kwargs):
         super(SubtitleVersion, self).delete(*args, **kwargs)
