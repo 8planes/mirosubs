@@ -121,6 +121,9 @@ mirosubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
 };
 
 mirosubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
+    mirosubs.style.setSize(
+        goog.dom.getFirstElementChild(this.player_['getParent']()), 
+        this.playerSize_)
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(c) { c(); });
     this.commands_ = [];
