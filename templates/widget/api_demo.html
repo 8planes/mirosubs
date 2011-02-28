@@ -21,6 +21,8 @@ goog.require('goog.json');
 <body>
   <a href="#" onclick="openDialog(); return false;">Open dialog (wikipedia)</a>
   <a href="#" onclick="openUnisubsDialog(); return false;">Open unisubs dialog (jwplayer)</a>
+  <a href="#" onclick="embedWidget(); return false;">Embed widget</a>
+  <div id="forWidget"></div>
   <script>
       var logger = goog.debug.Logger.getLogger('api');
 
@@ -40,6 +42,15 @@ goog.require('goog.json');
               'sub_order': 2
           }
       ];
+
+      function embedWidget() {
+          setUpLogging();
+          mirosubs.api.embed(
+              'forWidget',
+              {
+                  video_url: 'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv'
+              });
+      }
 
       function closeListener() {
           logger.info('closed');
