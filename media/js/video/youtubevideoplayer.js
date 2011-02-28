@@ -113,7 +113,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         var videoSpan = this.getDomHelper().createDom('span');
         videoSpan.id = mirosubs.randomString();
         this.getElement().appendChild(videoSpan);
-        var params = { 'allowScriptAccess': 'always', 'wmode' : 'opaque' };
+        var params = { 'allowScriptAccess': 'always', 
+                       'wmode' : 'opaque', 
+                       'allowFullScreen': 'true' };
         var atts = { 'id': this.playerElemID_, 
                      'style': mirosubs.style.setSizeInString(
                          '', this.playerSize_) };
