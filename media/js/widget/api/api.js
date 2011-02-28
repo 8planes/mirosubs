@@ -150,6 +150,12 @@ mirosubs.api.writeSrtTime_ = function(seconds, stringBuffer) {
         append(p(Math.floor(seconds * 1000) % 1000, 3));
 };
 
+mirosubs.api.embed = function(elementID, widgetConfig) {
+    mirosubs.siteConfig = mirosubs.Config.siteConfig;
+    var widget = new mirosubs.widget.Widget(widgetConfig);
+    widget.decorate(goog.dom.getElement(elementID));
+};
+
 goog.exportSymbol(
     'mirosubs.api.openDialog',
     mirosubs.api.openDialog);
@@ -169,3 +175,7 @@ goog.exportSymbol(
 goog.exportSymbol(
     'mirosubs.api.loggedIn',
     mirosubs.api.loggedIn);
+
+goog.exportSymbol(
+    'mirosubs.api.embed',
+    mirosubs.api.embed);
