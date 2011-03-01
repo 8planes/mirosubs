@@ -3,7 +3,8 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from os import path
 from django.conf import settings
-from teams.models import Team, Invite
+from teams.models import Team, Invite, TeamVideo
+from teams import views
 from messages.models import Message
 from videos.models import Video, VIDEO_TYPE_YOUTUBE
 from django.db.models import ObjectDoesNotExist
@@ -20,7 +21,49 @@ class TeamsTest(TestCase):
             "password": u"admin"
         }
         self.user = User.objects.get(username=self.auth["username"])
-    
+
+    def test_detail_contents(self):
+        self.client.login(**self.auth)
+        
+        response = self.client.get(reverse("teams:create"))
+        
+        data = {
+            "description": u"",
+            "video_url": u"",
+            "membership_policy": u"4",
+            "video_policy": u"1",
+            "logo": u"",
+            "slug": u"new-team",
+            "name": u"New team"
+        }
+        response = self.client.post(reverse("teams:create"), data)
+        team = Team.objects.get(slug=data['slug'])
+
+        from videos import models
+
+        data = {
+            "languages-MAX_NUM_FORMS": u"",
+            "description": u"",
+            "language": u"en",
+            "title": u"",
+            "languages-0-language": u"en",
+            "languages-0-id": u"",
+            "languages-TOTAL_FORMS": u"1",
+            "video_url": u"http://www.youtube.com/watch?v=Hhgfz0zPmH4&feature=grec_index",
+            "thumbnail": u"",
+            "languages-INITIAL_FORMS": u"0"
+        }
+        url = reverse("teams:add_video", kwargs={"slug": team.slug})
+        self.client.post(url, data)
+
+        new_team_video = TeamVideo.objects.order_by('-id')[0]
+        self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
+
+        url = reverse("teams:detail", kwargs={"slug": team.slug})
+        response = self.client.get(url)
+        # There should be at least one video in the list.
+        self.assertTrue(len(response.context['team_video_lang_list']) > 1)
+
     def test_views(self):
         self.client.login(**self.auth)
         
