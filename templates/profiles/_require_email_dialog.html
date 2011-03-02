@@ -4,7 +4,8 @@
 	jQuery(function($){
 		var email_patternt = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-		$.jPrompt('Set your email, please.', '', 'Your email', function(button, value){
+		$.jPrompt('{% trans "It looks like you logged in without submitting an email. We need an email address to notify you (for example, when others edit your work)." %}', 
+            '', '{% trans "Please enter a valid e-mail address" %}', function(button, value){
 			if ( ! value ||  email_patternt.test(value) === false){
 				$.jGrowl.error('{% trans "Enter valid email please." %}');
 			}else{
