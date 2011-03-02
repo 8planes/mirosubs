@@ -122,7 +122,7 @@ class BaseVideoBoundForm(forms.ModelForm):
                 self.video, created = Video.get_or_create_for_url(video_url)
             except VideoTypeError, e:
                 raise forms.ValidationError(e)
-            
+
             if not self.video:
                 raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
 If you'd like to us to add support for a new site or format, or if you

@@ -22,7 +22,7 @@ class TeamsTest(TestCase):
         }
         self.user = User.objects.get(username=self.auth["username"])
 
-    def test_detail_contents(self):
+    def _create_new_team_video(self):
         self.client.login(**self.auth)
         
         response = self.client.get(reverse("teams:create"))
@@ -49,20 +49,43 @@ class TeamsTest(TestCase):
             "languages-0-language": u"en",
             "languages-0-id": u"",
             "languages-TOTAL_FORMS": u"1",
-            "video_url": u"http://www.youtube.com/watch?v=Hhgfz0zPmH4&feature=grec_index",
+            "video_url": u"http://videos.mozilla.org/firefox/3.5/switch/switch.ogv",
             "thumbnail": u"",
             "languages-INITIAL_FORMS": u"0"
         }
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
         self.client.post(url, data)
 
-        new_team_video = TeamVideo.objects.order_by('-id')[0]
+        return team, TeamVideo.objects.order_by('-id')[0]
+
+    def _make_data(self, video_id, lang):
+        import os
+        return {
+            'language': lang,
+            'video': video_id,
+            'subtitles': open(os.path.join(os.path.dirname(__file__), '../videos/fixtures/test.srt'))
+            }
+
+    def test_detail_contents(self):
+        team, new_team_video = self._create_new_team_video()
         self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
 
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
         # There should be at least one video in the list.
-        self.assertTrue(len(response.context['team_video_lang_list']) > 1)
+        self.assertTrue(len(response.context['team_video_lang_list']) > 0)
+
+    def test_detail_contents_original_subs(self):
+        team, new_team_video = self._create_new_team_video()
+
+        # upload some subs to the new video. make sure it still appears.
+        data = self._make_data(new_team_video.video.id, 'en')
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+
+        url = reverse("teams:detail", kwargs={"slug": team.slug})
+        response = self.client.get(url)
+        # There should be at least one video in the list.
+        self.assertTrue(len(response.context['team_video_lang_list']) > 0)
 
     def test_views(self):
         self.client.login(**self.auth)
