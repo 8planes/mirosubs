@@ -20,6 +20,7 @@ THUMBNAILS_PATH = os.path.join(settings.MEDIA_ROOT, VIDEO_THUMBNAILS_FOLDER)
 class Command(ErrorHandlingCommand):
     
     def handle(self, *args, **options):
+        print 'Run load thumbnail command'
         self.verbosity = int(options.get('verbosity', 1))
         self.s3_store = self.init_s3()
         
