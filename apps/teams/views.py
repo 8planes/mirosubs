@@ -119,11 +119,12 @@ def detail(request, slug):
     team = Team.get(slug, request.user)
     
     languages = get_user_languages_from_request(request)
+    languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
     languages.append('')
     video_ids = team.teamvideo_set.values_list('video_id', flat=True)
-    
+
     qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
-        .exclude(Q(writelock_time__gte=datetime.datetime.now()-datetime.timedelta(seconds=WRITELOCK_EXPIRATION))) \
+        .exclude(writelock_time__gte=datetime.datetime.now()-datetime.timedelta(seconds=WRITELOCK_EXPIRATION)) \
         .extra(where=['NOT ((SELECT COUNT(vs.id) FROM videos_subtitleversion AS vs INNER JOIN videos_subtitlelanguage AS vsl ON (vsl.id = vs.language_id) WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) <= 0 AND videos_subtitlelanguage.is_original=%s)'], params=(True, False,)) \
         .distinct()
 
@@ -132,7 +133,7 @@ def detail(request, slug):
     qs3 = qs.filter(is_original=True).filter(subtitleversion__isnull=True)
     qs4 = qs.filter(is_forked=False, is_original=False).filter(percent_done=100)
     qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False)
-       
+
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team
@@ -143,6 +144,7 @@ def detail(request, slug):
             'video_url': team.video.get_video_url(), 
             'base_state': {}
         })
+
     return object_list(request, queryset=MultyQuerySet(qs1, qs2, qs3, qs4, qs5), 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
