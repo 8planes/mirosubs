@@ -34,6 +34,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from messages.models import Message
 from django.http import Http404
+from django.contrib.sites.models import Site
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -131,6 +132,9 @@ class Team(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('teams:detail', [self.slug])
+    
+    def get_site_url(self):
+        return 'http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
     
     @models.permalink
     def get_edit_url(self):

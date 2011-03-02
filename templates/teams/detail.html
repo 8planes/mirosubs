@@ -49,19 +49,20 @@ mpq.push(['track', 'Arrives_at_teams_page']);
     {% endif %}
     
     <div id="videos-tab">
-        {% if not team_video_lang_list %}
-            {% trans "This team has no videos." %}
-        {% else %}
-            {% if is_paginated %}{% paginator %}{% endif %}
-            <ul class="big_list">
-                {% for team_video_lang in team_video_lang_list %}
-                <li>
-                    {% team_video_lang_detail team_video_lang team %}
-                </li>
-                {% endfor %}
-            </ul>
-            {% if is_paginated %}{% paginator %}{% endif %}
+        
+        {% if allow_noone_language %}
+            {% invite_friends_to_team team %}
         {% endif %}
+        
+        {% if is_paginated %}{% paginator %}{% endif %}
+        <ul class="big_list">
+            {% for team_video_lang in team_video_lang_list %}
+            <li>
+                {% team_video_lang_detail team_video_lang team %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% if is_paginated %}{% paginator %}{% endif %}
     </div>
 </div>
 

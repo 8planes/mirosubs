@@ -133,11 +133,17 @@ def detail(request, slug):
     qs3 = qs.filter(is_original=True).filter(subtitleversion__isnull=True)
     qs4 = qs.filter(is_forked=False, is_original=False).filter(percent_done=100)
     qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False)
-
+    
+    mqs = MultyQuerySet(qs1, qs2, qs3, qs4, qs5)
+    
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team
     })
+
+    if not len(mqs):
+        mqs = SubtitleLanguage.objects.filter(video__in=video_ids)
+        extra_context['allow_noone_language'] = True
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
@@ -145,7 +151,7 @@ def detail(request, slug):
             'base_state': {}
         })
 
-    return object_list(request, queryset=MultyQuerySet(qs1, qs2, qs3, qs4, qs5), 
+    return object_list(request, queryset=mqs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
                        extra_context=extra_context, 

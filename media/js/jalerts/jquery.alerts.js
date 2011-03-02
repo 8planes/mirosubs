@@ -30,15 +30,18 @@
 			draggable: true,    // make the dialogs draggable (requires UI Draggables plugin)
 			extraButtons: [],
 			preventClose: false,
+            contentClass: '',
 			okButton: {
 				name: '&nbsp;OK&nbsp;',
 				id: 'popup_ok',
-				type: 'OK'
+				type: 'OK',
+                cls: ''
 			},
 			cancelButton: {
 				name: '&nbsp;Cancel&nbsp;',
 				id: 'popup_cancel',
-				type: 'CANCEL'
+				type: 'CANCEL',
+                cls: ''
 			},
 			dialogClass: null	// if specified, this class will be applied to all dialogs
 		},
@@ -66,7 +69,7 @@
 		_initButtons: function(buttons, callback, options){
 			for (var i=0,len=buttons.length; i<len; i++){
 				var bo= buttons[i];
-				$('#popup_panel').append('<input type="button" buttonType="'+bo.type+'" value="'+bo.name+'" id="'+bo.id+'" />');
+				$('#popup_panel').append('<input type="button" class="'+bo.cls+'" buttonType="'+bo.type+'" value="'+bo.name+'" id="'+bo.id+'" />');
 				$("#"+bo.id).click(function(){
 					var $prompt_input = $("#popup_prompt");
 					
@@ -107,7 +110,7 @@
 			});
 			
 			$("#popup_title").text(title);
-			$("#popup_content").addClass(type);
+			$("#popup_content").addClass(options.contentClass || type);
 			$("#popup_message").text(msg);
 			$("#popup_message").html( $("#popup_message").text().replace(/\n/g, '<br />') );
 			
