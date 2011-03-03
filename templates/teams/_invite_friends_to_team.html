@@ -1,17 +1,14 @@
 {% load i18n %}
 
-<div class="share-team-buttons">
-    <p>
-        {% trans "You speak" %} {{ user_languages|join:", " }}, 
-        {% trans "but to translate these videos we need volunteers who speak Arabic. Know anyone who does? Spread the word using:" %}
-    </p>
-    <p>{% trans "Help us find volunteers!" %}</p>
-    <p>
-        <button class="facebook">Facebook</button>
-        <button class="twitter">Twitter</button>
-        <button class="email">Email</button>
-    </p>
-</div>
+<div id="share_team_buttons">
+  <p>{% trans "You speak" %} {{ user_languages|join:", " }}, {% trans "but to translate these videos we need volunteers who speak Arabic. Know anyone who does? Spread the word using:" %}</p>
+  <p>{% trans "Help us find volunteers!" %}</p>
+  <div id="share_buttons">
+    <a id="facebook" class="share_btn" href="">Facebook</a>
+    <a id="twitter" class="share_btn" href="">Twitter</a>
+    <a id="email" class="share_btn" href="">Email</a>
+  </div><!-- // share_buttons -->
+</div><!-- // share-team-buttons -->
 <script type="text/javascript">
     jQuery(function($){
         var FACEBOOK_SHARE_URL = 'http://www.facebook.com/sharer.php?u={{ team.get_site_url|urlencode }}&t={{ invite_message|urlencode }}';

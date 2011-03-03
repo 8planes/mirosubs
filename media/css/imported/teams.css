@@ -87,3 +87,13 @@
   margin: 10px 0 0 0;
   padding: 0;
 }
+
+#share_team_buttons p {
+	font-size: 16px;
+	line-height: 27px;
+	width: 500px;
+}
+
+#share_team_buttons a.share_btn {
+	margin: 0 5px 0 0;
+}
