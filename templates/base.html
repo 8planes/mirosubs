@@ -93,7 +93,7 @@
       {% if user.is_staff %}
         <li id="nav_admin"><a target="_blank" href="{% url admin:index %}">{% trans 'Admin' %}</a></li>
       {% endif %}
-        <li style="display: none;" id="sub_nav">{% top_user_panel %}</li>
+        <li id="sub_nav">{% top_user_panel %}</li>
       {% else %}
         <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}">% trans 'Sign In' %}</a></li>
     {% endif %}
