@@ -292,6 +292,7 @@ class TestRpc(TestCase):
             video_id=draft.video.video_id).subtitle_language()
         self.assertTrue(language.was_complete)
         self.assertTrue(language.is_complete)
+        self.assertTrue(language.video.is_subtitled)
 
     def test_get_widget_url(self):
         request = RequestMockup(self.user_0)
