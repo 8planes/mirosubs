@@ -131,8 +131,7 @@ def invite_friends_to_team(context, team):
     request = context['request']
     
     context['user_languages'] = get_user_languages_from_request(request, with_names=True).values()
-    context['invite_message'] = _(u'Help me %(name)s team with subtitles %(url)s') % {
-            'url': team.get_site_url(),
-            'name': unicode(team)
+    context['invite_message'] = _(u'Can somebody help me subtitle these videos? %(url)s') % {
+            'url': team.get_site_url()
         }
     return context
