@@ -14,7 +14,6 @@ To run the development version:
 3. (optional) download and download the virtualenv wrapper bash
    functions http://www.doughellmann.com/projects/virtualenvwrapper/
 
-
 4. Create a virtual environment and activate it. Here is how to do it 
    *without* the virtualenv wrapper. Run these commands from the parent 
    of the mirosubs directory created in #1:
@@ -31,6 +30,7 @@ To run the development version:
    $ easy_install -U setuptools
    $ easy_install pip
    $ cd deploy
+   # this is the mirosubs directory you cloned from git, not the parent you created the virtualenv in.
    $ pip install -r requirements.txt
        note: you'll need mercurial installed to make this last command work.
 
