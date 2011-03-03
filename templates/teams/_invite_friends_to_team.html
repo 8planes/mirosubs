@@ -1,30 +1,27 @@
 {% load i18n %}
 
-<div id="share_team_buttons">
-  <p>{% trans "You speak" %} {{ user_languages|join:", " }}, {% trans "but to translate these videos we need volunteers who speak Arabic. Know anyone who does? Spread the word using:" %}</p>
-  <p>{% trans "Help us find volunteers!" %}</p>
-  <div id="share_buttons">
-    <a id="facebook" class="share_btn" href="">Facebook</a>
-    <a id="twitter" class="share_btn" href="">Twitter</a>
-    <a id="email" class="share_btn" href="">Email</a>
+<div>
+  <p>{% trans "According to your" %} <a data-modal="language_modal" href="#">{% trans "language choices" %}</a>, {% trans "there don't appear to be videos you can translate." %}</p>
+  <p>{% trans "But check back soon! There may soon be translations for you to review." %}</p>
+  <p>{% trans "You can also invite friends who speak other languages to help out." %}</p>
+  <div class="share-team-buttons">
+    <a class="share_btn facebook" href="#">Facebook</a>
+    <a class="share_btn twitter" href="http://twitter.com/home/?status={{ invite_message|urlencode }}">Twitter</a>
+    <a class="share_btn email" href="{% url videos:email_friend %}?text={{ invite_message|urlencode }}">Email</a>
   </div><!-- // share_buttons -->
 </div><!-- // share-team-buttons -->
 <script type="text/javascript">
     jQuery(function($){
         var FACEBOOK_SHARE_URL = 'http://www.facebook.com/sharer.php?u={{ team.get_site_url|urlencode }}&t={{ invite_message|urlencode }}';
         var TWITTER_SHARE_URL = 'http://twitter.com/home/?status={{ invite_message|urlencode }}';
-        var EMAIL_SHARE_URL = '{% url videos:email_friend %}?text={{ invite_message|urlencode }}';
         
-        $('.share-team-buttons button').click(function(){
-            var button = $(this).attr('class');
-            if (button == 'facebook'){
+        $('.share-team-buttons .share_btn').click(function(){
+            var $this = $(this);
+            if ($this.hasClass('facebook')){
                 window.open(FACEBOOK_SHARE_URL,
                     'post_to_fb', 'status=0,width=560,height=320');                    
-            }else if (button == 'twitter'){
-                window.location.replace(TWITTER_SHARE_URL);
-            }else if (button == 'email'){
-                window.location.replace(EMAIL_SHARE_URL);
-            }            
+            };
+            return false;            
         })
     });
 </script>
