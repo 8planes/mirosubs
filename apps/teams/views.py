@@ -125,7 +125,7 @@ def detail(request, slug):
 
     qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
         .exclude(writelock_time__gte=datetime.datetime.now()-datetime.timedelta(seconds=WRITELOCK_EXPIRATION)) \
-        .extra(where=['NOT ((SELECT COUNT(vs.id) FROM videos_subtitleversion AS vs INNER JOIN videos_subtitlelanguage AS vsl ON (vsl.id = vs.language_id) WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) <= 0 AND videos_subtitlelanguage.is_original=%s)'], params=(True, False,)) \
+        .extra(where=['NOT ((SELECT vsl.is_complete FROM videos_subtitlelanguage AS vsl WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) == %s AND videos_subtitlelanguage.is_original=%s)'], params=(True, False, False,)) \
         .distinct()
 
     qs1 = qs.filter(is_forked=False, is_original=False).filter(percent_done__lt=100, percent_done__gt=0)
