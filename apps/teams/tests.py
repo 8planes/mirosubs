@@ -31,7 +31,18 @@ class TeamsTest(TestCase):
             "thumbnail": u"",
         }
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
-        self.client.post(url, data)        
+        self.client.post(url, data)
+
+    def _set_my_languages(self, *args):
+        from auth.models import UserLanguage
+        for ul in self.user.userlanguage_set.all():
+            ul.delete()
+        for lang in args:
+            ul = UserLanguage(
+                user=self.user,
+                language=lang)
+            ul.save()
+        self.user = User.objects.get(id=self.user.id)
 
     def _create_new_team_video(self):
         self.client.login(**self.auth)
@@ -81,8 +92,15 @@ class TeamsTest(TestCase):
         data = self._make_data(new_team_video.video.id, 'en')
         response = self.client.post(reverse('videos:upload_subtitles'), data)
 
+        url = reverse("teams:detail", kwargs={"slug": team.slug})
+        response = self.client.get(url)
+
         # The video should be in the list.
-        self.assertEqual(1, len(self._video_lang_list(team)))
+        self.assertEqual(1, len(response.context['team_video_lang_list']))
+
+        # but we should see no "no work" message
+        self.assertTrue('allow_noone_language' not in response.context or \
+                            not response.context['allow_noone_language'])
 
     def test_detail_contents_unrelated_video(self):
         team, new_team_video = self._create_new_team_video()
@@ -102,6 +120,14 @@ class TeamsTest(TestCase):
         # but the one with russian subs should be second.
         video_langs = self._video_lang_list(team)
         self.assertEqual('ru', video_langs[1].language)
+
+    def test_no_work_message(self):
+        team, new_team_video = self._create_new_team_video()
+        self._set_my_languages('ko')
+        url = reverse("teams:detail", kwargs={"slug": team.slug})
+        response = self.client.get(url)
+        self.assertEqual(1, len(response.context['team_video_lang_list']))
+        self.assertTrue(response.context['allow_noone_language'])
 
     def test_views(self):
         self.client.login(**self.auth)

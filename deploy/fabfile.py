@@ -49,7 +49,7 @@ def dev(username):
 
 def unisubs(username):
     _create_env(username,
-                ['pcf10.pculture.org', 
+                ['pcf10.pculture.org:2191', 
                  'pcf-us-cluster2.pculture.org:2191'],
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
