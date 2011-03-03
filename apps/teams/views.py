@@ -123,10 +123,16 @@ def detail(request, slug):
     languages.append('')
     video_ids = team.teamvideo_set.values_list('video_id', flat=True)
 
+    writelock_cutoff = datetime.datetime.now() - datetime.timedelta(seconds=WRITELOCK_EXPIRATION)
+
     qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
-        .exclude(writelock_time__gte=datetime.datetime.now()-datetime.timedelta(seconds=WRITELOCK_EXPIRATION)) \
+        .exclude(writelock_time__gte=writelock_cutoff) \
         .extra(where=['NOT ((SELECT vsl.is_complete FROM videos_subtitlelanguage AS vsl WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) == %s AND videos_subtitlelanguage.is_original=%s)'], params=(True, False, False,)) \
         .distinct()
+
+    # all videos not in the list
+    video_ids = [id for id in video_ids if id not in [sl.video.id for sl in qs.all()]]
+    qs_complement = SubtitleLanguage.objects.filter(video__in=video_ids).filter(is_original=True)
 
     qs1 = qs.filter(is_forked=False, is_original=False).filter(percent_done__lt=100, percent_done__gt=0)
     qs2 = qs.filter(is_forked=False, is_original=False).filter(percent_done=0)
@@ -134,7 +140,7 @@ def detail(request, slug):
     qs4 = qs.filter(is_forked=False, is_original=False).filter(percent_done=100)
     qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False)
     
-    mqs = MultyQuerySet(qs1, qs2, qs3, qs4, qs5)
+    mqs = MultyQuerySet(qs1, qs2, qs3, qs4, qs5, qs_complement)
     
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
