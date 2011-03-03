@@ -25,6 +25,7 @@ sys.path[:0] = new_sys_path
 
 import django.core.handlers.wsgi
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs-settings'
+os.environ["CELERY_LOADER"] = "django"
 application = django.core.handlers.wsgi.WSGIHandler()
 
 handler = django.core.handlers.wsgi.WSGIHandler()

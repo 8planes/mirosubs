@@ -19,8 +19,31 @@ DEBUG = False
 class Channel(virtual.Channel):
     Client = SQSConnection
     
-    def __init__(self, *args, **kwargs):
-        super(Channel, self).__init__(*args, **kwargs)
+    DOT_REPLECEMENT = '___'
+    supports_fanout = False
+
+    def _lookup(self, exchange, routing_key, default="ae.undeliver"):
+        """Find all queues matching `routing_key` for the given `exchange`.
+
+        Returns `default` if no queues matched.
+
+        """
+        DEBUG and pr('_lookup: %s, %s' % (exchange, routing_key))
+        queues = []
+        
+        #this is a hack for event sending
+        #I just send it to all queues  with celeryev
+        #In redis backend it looks like same way, but all queues are saved in set
+        #but they are saved in _queue_bind witch is called only if supports_fanout == True
+        if exchange == 'celeryev':
+            for q in self.client.get_all_queues():
+                if q.name.split(self.DOT_REPLECEMENT)[0] == 'celeryev':
+                    queues.append(q.name)
+        
+        if queues:
+            return queues
+        
+        return super(Channel, self)._lookup(exchange, routing_key, default)
     
     def _get(self, queue, timeout=None):
         """Get next message from `queue`."""
@@ -83,7 +106,7 @@ class Channel(virtual.Channel):
     
     def _get_queue(self, queue):
         # "." is not valid symbol in queue name for SQS. Maybe this should be more pretty.
-        q = self.client.create_queue(queue.replace('.', '_'))
+        q = self.client.create_queue(queue.replace('.', self.DOT_REPLECEMENT))
         return q
     
     def _poll(self, cycle, timeout=None):
