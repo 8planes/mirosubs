@@ -15,6 +15,7 @@ def pr(s):
     cprint(s, 'green')        
 
 DEBUG = False
+EVENT_QUEUE_NAME = 'celeryev'
 
 class Channel(virtual.Channel):
     Client = SQSConnection
@@ -39,10 +40,10 @@ class Channel(virtual.Channel):
         #I just send it to all queues  with celeryev
         #In redis backend it looks like same way, but all queues are saved in set
         #but they are saved in _queue_bind witch is called only if supports_fanout == True
-        if exchange == 'celeryev':
+        if exchange == EVENT_QUEUE_NAME:
             for q in self.client.get_all_queues():
                 parts = q.name.split(self.DOT_REPLECEMENT)
-                if parts[0] == self.queue_prefix and parts[1] == 'celeryev':
+                if parts[0] == self.queue_prefix and parts[1] == EVENT_QUEUE_NAME:
                     queues.append(self.DOT_REPLECEMENT.join(parts[1:]))
         
         if queues:
@@ -85,7 +86,6 @@ class Channel(virtual.Channel):
 
         """
         DEBUG and pr('>>> Channel._delete: %s' % queue)
-        print pr('>>> Channel._delete: %s' % queue)
         self._purge(queue)
         self._get_queue(queue).delete()
 
@@ -112,6 +112,8 @@ class Channel(virtual.Channel):
     
     def _get_queue(self, queue):
         # "." is not valid symbol in queue name for SQS. Maybe this should be more pretty.
+        if queue.split('.')[0] == EVENT_QUEUE_NAME:
+            queue = EVENT_QUEUE_NAME
         queue = self.queue_prefix+'.'+queue
         q = self.client.create_queue(queue.replace('.', self.DOT_REPLECEMENT))
         return q

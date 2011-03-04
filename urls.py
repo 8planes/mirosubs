@@ -21,6 +21,9 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
 from localeurl import models
+import djcelery
+
+djcelery.setup_loader()
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin

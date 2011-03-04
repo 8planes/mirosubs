@@ -31,3 +31,5 @@ boto==2.0b3
 python-memcached
 feedparser
 lxml
+kombu==1.0.0rc4
+celery==2.2.4
