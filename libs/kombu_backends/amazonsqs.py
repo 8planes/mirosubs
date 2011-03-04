@@ -22,6 +22,10 @@ class Channel(virtual.Channel):
     DOT_REPLECEMENT = '___'
     supports_fanout = False
 
+    def __init__(self, connection, **kwargs):
+        self.queue_prefix = connection.client.virtual_host or ''
+        super(Channel, self).__init__(connection, **kwargs)
+
     def _lookup(self, exchange, routing_key, default="ae.undeliver"):
         """Find all queues matching `routing_key` for the given `exchange`.
 
@@ -37,8 +41,9 @@ class Channel(virtual.Channel):
         #but they are saved in _queue_bind witch is called only if supports_fanout == True
         if exchange == 'celeryev':
             for q in self.client.get_all_queues():
-                if q.name.split(self.DOT_REPLECEMENT)[0] == 'celeryev':
-                    queues.append(q.name)
+                parts = q.name.split(self.DOT_REPLECEMENT)
+                if parts[0] == self.queue_prefix and parts[1] == 'celeryev':
+                    queues.append(self.DOT_REPLECEMENT.join(parts[1:]))
         
         if queues:
             return queues
@@ -80,6 +85,7 @@ class Channel(virtual.Channel):
 
         """
         DEBUG and pr('>>> Channel._delete: %s' % queue)
+        print pr('>>> Channel._delete: %s' % queue)
         self._purge(queue)
         self._get_queue(queue).delete()
 
@@ -106,6 +112,7 @@ class Channel(virtual.Channel):
     
     def _get_queue(self, queue):
         # "." is not valid symbol in queue name for SQS. Maybe this should be more pretty.
+        queue = self.queue_prefix+'.'+queue
         q = self.client.create_queue(queue.replace('.', self.DOT_REPLECEMENT))
         return q
     
