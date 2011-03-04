@@ -129,6 +129,23 @@ class TeamsTest(TestCase):
         self.assertEqual(1, len(response.context['team_video_lang_list']))
         self.assertTrue(response.context['allow_noone_language'])
 
+    def test_no_dupes_without_buttons(self):
+        team, new_team_video = self._create_new_team_video()
+        self._set_my_languages('ko')
+
+        self.client.post(
+            reverse('videos:upload_subtitles'), 
+            self._make_data(new_team_video.video.id, 'en'))
+
+        self.client.post(
+            reverse('videos:upload_subtitles'), 
+            self._make_data(new_team_video.video.id, 'es'))
+
+        url = reverse("teams:detail", kwargs={"slug": team.slug})
+        response = self.client.get(url)
+        self.assertEqual(1, len(response.context['team_video_lang_list']))
+        self.assertTrue(response.context['allow_noone_language'])
+
     def test_views(self):
         self.client.login(**self.auth)
         
