@@ -5,8 +5,14 @@
 {% if not js_use_compiled %}
 {% include "widget/_js_base_dependencies.html" %}
 {% endif %}
+<style>
+body {
+  text-shadow: 0 1px 0 #FFF !important;
+}
+</style>
 </head>
 <body>
+  
   {% if help_mode %}
     <h2>Things you can add to query string:</h2>
     <table>
