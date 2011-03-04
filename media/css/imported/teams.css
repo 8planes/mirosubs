@@ -88,12 +88,29 @@
   padding: 0;
 }
 
-#share_team_buttons p {
-	font-size: 16px;
-	line-height: 27px;
-	width: 500px;
+.share_team_buttons {
+	margin: 20px 0 0 0;
+	width: 440px;
+	padding: 10px 20px 20px 20px;
+  border-radius:      5px;
+  -moz-border-radius: 5px;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow:    0 1px 3px rgba(0,0,0,0.3);
+  background: -webkit-gradient(linear, 0% 100%, 0% 70%, from(#edf6f8), to(#fff)); /* for webkit browsers */
+  background: -moz-linear-gradient(0% 75% 270deg, #fff, #edf6f8); /* for firefox 3.6+ */
 }
 
-#share_team_buttons a.share_btn {
+.share_team_buttons p {
+	font-size: 14px;
+	line-height: 27px;
+	margin: 0;
+	color: #444;
+}
+
+.share_buttons {
+	margin: 10px 0 0 0;
+}
+
+.share_team_buttons a.share_btn {
 	margin: 0 5px 0 0;
 }
