@@ -67,11 +67,11 @@ table.messages .delete {
   -moz-border-radius: 4px;
   border-radius: 4px;
   border: 4px solid rgba(0,0,0,0.2);
-	background: #FFF; 
+	background: #E7EFF1; 
 }
 
 .msg_modal {
-  background: #FFF; 
+  background: #E7EFF1; 
   font-size: 13px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -96,16 +96,16 @@ table.messages .delete {
 }
 
 .msg_modal h3 { 
-  background-color: #d9e9ec;
+  background-color: #E7EFF1;
   font-size: 14px;
   line-height: 50px;
   padding: 0;
   font-weight: normal;
-  text-indent: 10px;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;e3edef
+  //text-indent: 10px;
+  /*border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
   background: -moz-linear-gradient(top, #f0f5f6, #e3edef);
-  background: -webkit-gradient(linear, left top, left bottom, from(#f0f5f6), to(#e3edef));
+  background: -webkit-gradient(linear, left top, left bottom, from(#f0f5f6), to(#e3edef));*/
 }
 
 .msg_modal h3 span {
