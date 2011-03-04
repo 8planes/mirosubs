@@ -413,6 +413,7 @@ class SubtitleLanguage(models.Model):
     followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
     title = models.CharField(max_length=2048, blank=True)
     percent_done = models.IntegerField(default=0)
+    standard_language = models.ForeignKey('self', null=True, blank=True)
         
     subtitles_fetched_counter = RedisSimpleField()
     
