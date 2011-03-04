@@ -33,4 +33,4 @@ feedparser
 lxml
 kombu==1.0.0rc4
 celery==2.2.4
-sentry==1.6.4
+django-sentry==1.6.4
