@@ -1,10 +1,8 @@
 {% load i18n %}
 
-<div>
-  <p>{% trans "According to your" %} <a data-modal="language_modal" href="#">{% trans "language choices" %}</a>, {% trans "there don't appear to be videos you can translate." %}</p>
-  <p>{% trans "But check back soon! There may soon be translations for you to review." %}</p>
-  <p>{% trans "You can also invite friends who speak other languages to help out." %}</p>
-  <div class="share-team-buttons">
+<div class="share_team_buttons">
+  <p>{% trans "According to your" %} <a data-modal="language_modal" href="#">{% trans "language choices" %}</a>, {% trans "there don't appear to be videos you can translate." %} {% trans "But check back soon! There may soon be translations for you to review." %} {% trans "You can also invite friends who speak other languages to help out." %}</p>
+  <div class="share_buttons">
     <strong>Share</strong>
     <a class="share_btn facebook" href="javascript:void();">Facebook</a>
     <a class="share_btn twitter-link" target="twitter" href="http://twitter.com/home/?status={{ invite_message|urlencode }}">Twitter</a>
