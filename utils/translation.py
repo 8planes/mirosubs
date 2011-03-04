@@ -86,23 +86,24 @@ def languages_from_request(request, only_supported=False, with_names=False):
         if not l in languages:
             languages.append(l)
     
-    trans_lang = translation.get_language()
-    if not trans_lang in languages:
-        languages.append(trans_lang)
-    
-    if hasattr(request, 'session'):
-        lang_code = request.session.get('django_language', None)
-        if lang_code is not None and not lang_code in languages:
-            languages.append(lang_code)
-            
-    cookie_lang_code = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
-    if cookie_lang_code and not cookie_lang_code in languages:
-        languages.append(cookie_lang_code)
+    if not languages:
+        trans_lang = translation.get_language()
+        if not trans_lang in languages:
+            languages.append(trans_lang)
         
-    accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')        
-    for lang, val in parse_accept_lang_header(accept):
-        if lang and lang != '*' and not lang in languages:
-            languages.append(lang)
+        if hasattr(request, 'session'):
+            lang_code = request.session.get('django_language', None)
+            if lang_code is not None and not lang_code in languages:
+                languages.append(lang_code)
+                
+        cookie_lang_code = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
+        if cookie_lang_code and not cookie_lang_code in languages:
+            languages.append(cookie_lang_code)
+            
+        accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')        
+        for lang, val in parse_accept_lang_header(accept):
+            if lang and lang != '*' and not lang in languages:
+                languages.append(lang)
             
     if only_supported:
         for item in languages:
