@@ -137,6 +137,20 @@ form p textarea{
 
 }
 
+input#id_changes_notification {
+	float: left;
+	width: 24px;
+	position: relative;
+	top: 5px;
+}
+
+p#changes_email label {
+	position: relative;
+	top: -5px;
+	width: 600px;
+	display: block;
+}
+
 #submit_video_form {
 	margin: 0 auto 15px auto;
 	padding: 30px 20px 20px 20px;

@@ -210,6 +210,7 @@ class Rpc(BaseRpc):
             new_version.update_percent_done()
             if language.is_original:
                 language.video.update_complete_state()
+                language.video.save()
             from videos.models import Action
             Action.create_caption_handler(new_version)
 

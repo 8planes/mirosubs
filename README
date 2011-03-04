@@ -30,6 +30,7 @@ To run the development version:
    $ easy_install -U setuptools
    $ easy_install pip
    $ cd deploy
+   # this is the mirosubs directory you cloned from git, not the parent you created the virtualenv in.
    $ pip install -r requirements.txt
        note: you'll need mercurial installed to make this last command work.
 

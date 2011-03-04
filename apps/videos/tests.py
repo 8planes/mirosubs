@@ -126,10 +126,10 @@ class UploadSubtitlesTest(WebUseTest):
 
     fixtures = ['test.json']
 
-    def _make_data(self):
+    def _make_data(self, lang='ru'):
         import os
         return {
-            'language': 'ru',
+            'language': lang,
             'video_language': 'en',
             'video': self.video.id,
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
@@ -146,7 +146,6 @@ class UploadSubtitlesTest(WebUseTest):
 
     def setUp(self):
         self._make_objects()
-
 
     def test_upload_subtitles(self):
         import os.path
@@ -175,6 +174,20 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertTrue(language.was_complete)
         self.assertFalse(video.is_subtitled)
         self.assertFalse(video.was_subtitled)
+
+    def test_upload_original_subtitles(self):
+        self._login()
+        data = self._make_data(lang='en')
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        
+        video = Video.objects.get(pk=self.video.pk)
+        self.assertEqual(1, video.subtitlelanguage_set.count())
+        language = video.subtitle_language()
+        self.assertEqual('en', language.language)
+        self.assertTrue(language.is_original)
+        self.assertTrue(language.is_complete)
+        self.assertTrue(video.is_subtitled)
 
     def test_upload_twice(self):
         self._login()
