@@ -1,9 +1,11 @@
 .msg_header { 
-  margin-bottom: 0; }
+  margin-bottom: 0;
+}
   
 table.messages thead {
   color: #728286;
-  border-bottom: 1px solid #d1dee0; } 
+  border-bottom: 1px solid #d1dee0;
+} 
 
 table.messages th { 
   padding: 0 10px;
@@ -11,7 +13,8 @@ table.messages th {
   font-weight: normal;
   border: 0;
   line-height: 26px;
-  font-size: 11px; }
+  font-size: 11px;
+}
   
 table.messages td { 
   border: 0;
@@ -19,22 +22,27 @@ table.messages td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #e3e3e3;
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 
 table.messages .msg_avatar { 
-  padding-right: 0; }
+  padding-right: 0;
+}
 
 table.messages .msg_from {
   font-weight: bold; 
   color: #4c4c4c;
-  padding-right: 20px; }
+  padding-right: 20px;
+}
   
 table.messages .msg_body { 
   width: 60%;
-  white-space: normal; }
+  white-space: normal;
+}
 
 table.messages tr.unread { 
-  background-color: #f1f8f9; }
+  background-color: #f1f8f9;
+}
 
 table.messages .delete {
     cursor: pointer;
@@ -43,11 +51,13 @@ table.messages .delete {
 .no_messages { 
   font-size: 18px;
   text-align: center;
-  line-height: 100px; }
+  line-height: 100px;
+}
   
 .msg_nav { 
   position: relative; 
-  float: right; }
+  float: right;
+}
   
 /* Modal */
 
@@ -65,7 +75,7 @@ table.messages .delete {
   font-size: 13px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-	padding: 10px;
+	padding: 10px 20px 10px 10px;
 }
 
 .msg_modal_wrap .close {
@@ -77,11 +87,13 @@ table.messages .delete {
   float: right;
   position: relative;
   left: 30px;
-  top: 10px; }
+  top: 10px;
+}
 
 .msg_modal img { 
   vertical-align: middle;
-  height: 20px; }
+  height: 20px;
+}
 
 .msg_modal h3 { 
   background-color: #d9e9ec;
@@ -93,7 +105,8 @@ table.messages .delete {
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;e3edef
   background: -moz-linear-gradient(top, #f0f5f6, #e3edef);
-  background: -webkit-gradient(linear, left top, left bottom, from(#f0f5f6), to(#e3edef));}
+  background: -webkit-gradient(linear, left top, left bottom, from(#f0f5f6), to(#e3edef));
+}
 
 .msg_modal h3 span {
   font-weight: bold; }
@@ -102,25 +115,31 @@ table.messages .delete {
   margin: 0;
   clear: both;
   padding: 18px;
-  border-bottom: 1px solid #f2f2f2; }
+  border-bottom: 1px solid #f2f2f2;
+}
   
 .msg_modal dt { 
   font-weight: bold;
   width: 100px;
-  float: left; }
+  float: left;
+}
 
 .msg_modal dd { 
   width: 360px;
   float: right;
   margin: 0;
-  line-height: 18px; }
+  line-height: 18px;
+}
   
 .msg_modal dl p {
-  margin-top: 0; }
+  margin-top: 0;
+}
 
 .msg_modal textarea { 
-  width: 300px;
-  height: 80px; }
+  width: 100%;
+  height: 80px;
+}
   
 .message-subject { 
-  margin: 0; }
+  margin: 0;
+}
