@@ -148,7 +148,7 @@ def detail(request, slug):
     })
 
     if qs1.count() + qs2.count() + qs3.count() + qs4.count() + qs5.count() == 0:
-        mqs = SubtitleLanguage.objects.filter(video__in=video_ids)
+        mqs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(is_original=True)
         extra_context['allow_noone_language'] = True
 
     if team.video:
