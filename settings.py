@@ -347,7 +347,7 @@ INSTALLED_APPS = (
     'api',
     'targetter',
     'livesettings',
-    'djcelery',
+    #'djcelery',
     
     #Sentry
     'indexer',
