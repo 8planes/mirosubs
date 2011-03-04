@@ -41,14 +41,10 @@
 
 <div id="submit_multiple_videos" style="display: none;">
   <form action="{% url videos:create_from_feed %}" method="POST" id="bulk_create" class="clearfix">
-    <table>
+      
       <h3>{% trans "Automatically submit videos" %}</h3>
-      {{ youtube_form }}
-      <tr class="last">
-        <th></th>
-        <td colspan="2"><button class="green_button small">{% trans "Submit" %}</button></td>
-      </tr>
-    </table>
+      {{ youtube_form.as_p }}
+      <p<button class="green_button small">{% trans "Submit" %}</button></p>
   </form>
 </div><!-- // submit_multiple_videos -->
 
