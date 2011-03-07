@@ -58,7 +58,7 @@
                     $w.html('{% trans "Saving your language settings..." %}');
                     ProfileApi.select_languages(values, function(){
                         //update_language_display();
-                        window.location.replace(window.location);
+                        window.location.reload(true);
                     });
                 }
 
