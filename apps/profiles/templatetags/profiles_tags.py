@@ -52,7 +52,7 @@ def select_language_dialog(context, option=None):
 
     return {
         'form': form,
-        'force_ask': option == 'force' and _user_needs_languages(context)
+        'force_ask': (option == 'force') and _user_needs_languages(context)
     }
 
 def _user_needs_languages(context):
@@ -60,8 +60,7 @@ def _user_needs_languages(context):
     if user.is_authenticated():
         return not user.userlanguage_set.exists()
     else:
-        print get_user_languages_from_cookie(context['request'])
-        return not get_user_languages_from_cookie(context['request'])
+        return not bool(get_user_languages_from_cookie(context['request']))
 
 @register.inclusion_tag('profiles/_user_videos_activity.html', takes_context=True)
 def user_videos_activity(context, user=None):

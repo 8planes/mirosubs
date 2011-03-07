@@ -91,6 +91,12 @@ ALL_LANGUAGES['kau'] = gettext_noop(u'Kanuri')
 ALL_LANGUAGES['umb'] = gettext_noop(u'Umbundu')
 ALL_LANGUAGES['nso'] = gettext_noop(u'Northern Sotho')
 ALL_LANGUAGES['mnk'] = gettext_noop(u'Mandinka')
+ALL_LANGUAGES['ky'] = gettext_noop(u'Kyrgyz')
+ALL_LANGUAGES['mr'] = gettext_noop(u'Marathi')
+ALL_LANGUAGES['ml'] = gettext_noop(u'Malayalam')
+ALL_LANGUAGES['or'] = gettext_noop(u'Oriya')
+ALL_LANGUAGES['gu'] = gettext_noop(u'Gujarati')
+ALL_LANGUAGES['as'] = gettext_noop(u'Assamese')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -458,7 +464,7 @@ AWS_SECRET_ACCESS_KEY = ''
 DEFAULT_BUCKET = ''
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 
-AVATAR_MAX_SIZE = 200*1024
+AVATAR_MAX_SIZE = 500*1024
 THUMBNAILS_SIZE = (
     (100, 100),
     (50, 50)
