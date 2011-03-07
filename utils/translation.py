@@ -52,12 +52,13 @@ def get_user_languages_from_request(request, only_supported=False, with_names=Fa
         
     if not languages:
         languages = languages_from_request(request)
-            
+
     if only_supported:
         for item in languages:
-            if not item in SUPPORTED_LANGUAGES_DICT:
-                languages.remove(item)
-    
+            if not item in SUPPORTED_LANGUAGES_DICT and \
+                not item.split('-')[0] in SUPPORTED_LANGUAGES_DICT:
+                    languages.remove(item)
+
     return with_names and languages_with_names(languages) or languages
 
 def set_user_languages_to_cookie(response, languages):
@@ -111,11 +112,14 @@ def languages_from_request(request, only_supported=False, with_names=False):
     return with_names and languages_with_names(languages) or languages
 
 def languages_with_names(langs):
-    SUPPORTED_LANGUAGES_DICT
     output = {}
     for l in langs:
         try:
             output[l] = _(SUPPORTED_LANGUAGES_DICT[l])
         except KeyError:
-            pass
+            try:
+                l = l.split('-')[0]
+                output[l] = _(SUPPORTED_LANGUAGES_DICT[l])
+            except KeyError:
+                pass
     return output
