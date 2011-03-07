@@ -78,15 +78,22 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
     this.setDimensionsKnownInternal();
     // FIXME: petit duplication
     window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
-    var timer = new goog.Timer(200);
+    var timer = new goog.Timer(250);
     var that = this;
+    mirosubs.video.YoutubeVideoPlayer.logger_.info(
+        'starting to check for playVideo');
+    var count = 0;
     this.getHandler().listen(
         timer,
         goog.Timer.TICK,
         function(e) {
+            count++;
+            if ((count % 25) == 0)
+                mirosubs.video.YoutubeVideoPlayer.logger_.info(
+                    'checked for playVideo ' + count + ' times');
             if (that.player_['playVideo']) {
                 mirosubs.video.YoutubeVideoPlayer.logger_.info(
-                    'playVideo is present');
+                    'playVideo is present on count ' + count);
                 that.player_.addEventListener(
                     'onStateChange', that.eventFunction_);
                 timer.stop();
