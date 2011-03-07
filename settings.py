@@ -91,6 +91,12 @@ ALL_LANGUAGES['kau'] = gettext_noop(u'Kanuri')
 ALL_LANGUAGES['umb'] = gettext_noop(u'Umbundu')
 ALL_LANGUAGES['nso'] = gettext_noop(u'Northern Sotho')
 ALL_LANGUAGES['mnk'] = gettext_noop(u'Mandinka')
+ALL_LANGUAGES['ky'] = gettext_noop(u'Kyrgyz')
+ALL_LANGUAGES['mr'] = gettext_noop(u'Marathi')
+ALL_LANGUAGES['ml'] = gettext_noop(u'Malayalam')
+ALL_LANGUAGES['or'] = gettext_noop(u'Oriya')
+ALL_LANGUAGES['gu'] = gettext_noop(u'Gujarati')
+ALL_LANGUAGES['as'] = gettext_noop(u'Assamese')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
