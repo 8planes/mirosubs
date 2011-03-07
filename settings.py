@@ -353,14 +353,6 @@ INSTALLED_APPS = (
     'api',
     'targetter',
     'livesettings',
-    #'djcelery',
-    
-    #Sentry
-    'indexer',
-    'paging',
-    'sentry',
-    'sentry.client',
-    
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 
