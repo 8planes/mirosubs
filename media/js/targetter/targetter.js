@@ -65,7 +65,7 @@ PcfTargetter = (function(){
         init: function(options){
             options = this.apply({}, options, this.defaults);
             
-            if (options.top_longitude && options.top_latitude && options.side_length){
+            if (options.center_longitude && options.center_latitude && options.radius){
                 var url = "http://www.geoplugin.net/json.gp?jsoncallback=?&callback=?";
                 var that = this;
                 options.bottom_longitude = options.top_longitude + options.side_length;
@@ -92,19 +92,15 @@ PcfTargetter = (function(){
         },
         checkLocation: function(options){
             if (options.geoData){
-                var lt = options.geoData.geoplugin_latitude - 0;
-                var lg = options.geoData.geoplugin_longitude - 0;
-                console.log(lt, lg, options)
-                return ((lt <= options.top_latitude && lt >= options.bottom_latitude) &&
-                    (lg <= options.top_longitude && lg >= options.bottom_longitude));
+                var lt = (options.geoData.geoplugin_latitude - 0)*Math.PI/180;
+                var lg = (options.geoData.geoplugin_longitude - 0)*Math.PI/180;
+                var lt1 = (options.center_latitude - 0)*Math.PI/180;
+                var lg1 = (options.center_longitude - 0)*Math.PI/180;
+                var R = 6371 / 1.6;
+                D = R*Math.acos(Math.sin(lt)*Math.sin(lt1)+Math.cos(lt)*Math.cos(lt1)*Math.cos(lg-lg1));
+                return D <= options.radius;
             }
             return true
-            
-            if (options.top_longitude && options.top_latitude && options.side_length){
-                
-            }
-
-            return true;
         },
         checkRefferer: function(options){
             var pattern = /https?:\/\/([^\/]+)\//g;
