@@ -59,11 +59,13 @@ def unisubs(username):
 def syncdb():
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
+        _git_pull()
         run('{0}/env/bin/python manage.py syncdb --settings=unisubs-settings'.format(env.static_dir))
 
 def migrate(app_name=''):
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
+        _git_pull()
         run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(
                 env.static_dir, app_name))
 
