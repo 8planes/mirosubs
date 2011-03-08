@@ -353,6 +353,7 @@ INSTALLED_APPS = (
     'api',
     'targetter',
     'livesettings',
+      
     #'djcelery',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
