@@ -164,16 +164,14 @@ class Team(models.Model):
     def can_edit_video(self, user, team_video):
         if not user.is_authenticated():
             return False
-        if team_video.added_by == user:
-            return True
         return self.can_add_video(user)
     
     def can_add_video(self, user):
         if not user.is_authenticated():
-            return False        
-        if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
+            return False
+        if self.video_policy == self.MEMBER_REMOVE and self.is_member(user):
             return True
-        return self.is_member(user)
+        return self.is_manager(user)
 
     def can_invite(self, user):
         if self.membership_policy == self.INVITATION_BY_MANAGER:

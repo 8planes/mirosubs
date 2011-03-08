@@ -125,12 +125,14 @@
             <div class="info">
                 <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} <span class="your-team">({% trans 'your team' %})</span>{% endif %}</a></h4>
                 {% if team|is_team_member:user %}
-                    <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
+                    {% if team|is_team_manager:user %}
+                        <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
+                    {% endif %}
                     {% if team.member_count > 1 %}
                     <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a><br/>
                     {% endif %}
                 {% else %}
-                    {% if team.is_open %}<a href="#" class="join-team" team_id="{{ team.pk }}">{% trans "Join" %}</a><br/>{% endif %}
+                    {% if team.is_open %}<a href="{% url teams:join_team team.slug %}" class="join-team" team_id="{{ team.pk }}">{% trans "Join" %}</a><br/>{% endif %}
                 {% endif %}      
                 <span>
                     {% blocktrans with team.member_count as count %}
