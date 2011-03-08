@@ -116,8 +116,12 @@ class Rpc(BaseRpc):
                         "subtitles" : subtitles }
         if draft.is_dependent():
             video = models.Video.objects.get(video_id=video_id)
+            if language.standard_language and base_language_code:
+                standard_version = video.latest_version(base_language_code)
+            else:
+                standard_version = video.latest_version()
             return_dict['original_subtitles'] = \
-                self._subtitles_dict(video.latest_version())
+                self._subtitles_dict(standard_version)
         return return_dict
 
     def release_lock(self, request, draft_pk):
@@ -307,7 +311,6 @@ class Rpc(BaseRpc):
         if base_language:
             if base_language.is_original or base_language.is_forked:
                 subtitle_language.standard_language = base_language
-                
             else:
                 if base_language.standard_language:
                     subtitle_language.standard_language = \
@@ -315,8 +318,6 @@ class Rpc(BaseRpc):
                 else:
                     subtitle_language.standard_language = \
                         video.subtitle_language()
-        if subtitle_language.standard_language:
-            subtitle_language.save()
 
     def _get_language_for_editing(self, request, video_id, language_code, base_language_code):
         video = models.Video.objects.get(video_id=video_id)
