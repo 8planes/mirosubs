@@ -73,6 +73,9 @@ class CustomUser(BaseUser):
                 return self.first_name
         return self.username
     
+    def managed_teams(self):
+        return self.teams.filter(members__is_manager=True)
+    
     def avatar(self):
         return self.picture.thumb_url(100, 100)
 
