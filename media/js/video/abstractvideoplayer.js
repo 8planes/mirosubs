@@ -268,7 +268,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.setCaption_ =
     if (!videoOffsetParent)
         videoOffsetParent = goog.dom.getOwnerDocument(this.getElement()).body;
     var offsetPosition = $s.getPosition(this.getElement());
-    var size = $s.getSize(this.getElement());
+    var size = this.getVideoSize();
     var captionWidth = Math.min(400, size.width - 20);
     if (!this.captionElem_) {
         this.captionElem_ = $d('span', 'mirosubs-captionSpan');
