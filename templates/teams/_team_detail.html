@@ -77,7 +77,7 @@
     {% else %}
         {% if team.is_open %}
         <p>
-           <a class="join-team" team_id="{{ team.pk }}" href="#">{% trans "Join" %}</a> 
+           <a class="join-team" team_id="{{ team.pk }}" href="{% url teams:join_team team.slug %}">{% trans "Join" %}</a> 
         </p>
         {% endif %}
         {% if user.is_authenticated and team.is_by_application %}

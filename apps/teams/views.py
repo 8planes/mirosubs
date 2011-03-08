@@ -43,15 +43,10 @@ import widget
 from videos.models import Action, SubtitleLanguage, WRITELOCK_EXPIRATION
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
-from teams.rpc import TeamsApiClass
-from utils.rpc import RpcRouter
 from utils.translation import get_user_languages_from_request
 from utils.multy_query_set import MultyQuerySet
+from teams.rpc import TeamsApi
 import datetime
-
-rpc_router = RpcRouter('teams:rpc_router', {
-    'TeamsApi': TeamsApiClass()
-})
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -579,3 +574,16 @@ def highlight(request, slug, highlight=True):
     item.highlight = highlight
     item.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required
+def join_team(request, slug):
+    team = get_object_or_404(Team, slug=slug)
+    response = TeamsApi.join(team.pk, request.user)
+    
+    if response.get('error'):
+        messages.error(request, response.get('error'))
+        
+    if response.get('msg'):
+        messages.success(request, response.get('msg'))
+    
+    return redirect(team)
