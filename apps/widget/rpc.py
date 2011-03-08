@@ -103,7 +103,8 @@ class Rpc(BaseRpc):
         if original_language_code:
             self._save_original_language(video_id, original_language_code)
         language, can_writelock = self._get_language_for_editing(
-            request, video_id, language_code)
+            request, video_id, language_code, 
+            None if fork else base_language_code)
         if not can_writelock:
             return { "can_edit": False, 
                      "locked_by" : language.writelock_owner_name }
@@ -300,7 +301,24 @@ class Rpc(BaseRpc):
                 pass
         return draft
 
-    def _get_language_for_editing(self, request, video_id, language_code):
+    def _add_base_language(self, subtitle_language, base_language_code):
+        video = subtitle_language.video
+        base_language = video.subtitle_language(base_language_code)
+        if base_language:
+            if base_language.is_original or base_language.is_forked:
+                subtitle_language.standard_language = base_language
+                
+            else:
+                if base_language.standard_language:
+                    subtitle_language.standard_language = \
+                        base_language.standard_language
+                else:
+                    subtitle_language.standard_language = \
+                        video.subtitle_language()
+        if subtitle_language.standard_language:
+            subtitle_language.save()
+
+    def _get_language_for_editing(self, request, video_id, language_code, base_language_code):
         video = models.Video.objects.get(video_id=video_id)
         if language_code is None:
             language, created = models.SubtitleLanguage.objects.get_or_create(
@@ -317,6 +335,8 @@ class Rpc(BaseRpc):
                 defaults={
                     'writelock_session_key': ''
                     })
+            if created and base_language_code:
+                self._add_base_language(language, base_language_code)
         if not language.can_writelock(request):
             return language, False
         language.writelock(request)
