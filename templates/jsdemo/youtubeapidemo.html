@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="{{MEDIA_URL}}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+    <script>
+      goog.require('goog.debug.Logger');
+      goog.require('goog.debug.DivConsole');
+    </script>
+  </head>
+  <body>
+    <object id="idOVideo" name="idOVideo" width="800" height="480"> 
+      <param name="movie" value="http://www.youtube.com/v/yEAxG_D1HDw&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
+      <param name="allowFullScreen" value="true"> 
+      <param name="allowScriptAccess" value="always"> 
+      <param name="wmode" value="transparent"> 
+      <embed id="idPlayer" name="idPlayer" wmode="transparent" src="http://www.youtube.com/v/yEAxG_D1HDw&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" type="application/x-shockwave-flash" allowScriptAccess="always" allowfullscreen="true" width="800" height="480"> 
+    </object> 
+ <!-- Event log. -->
+ <fieldset class="goog-debug-panel">
+   <legend>Event Log</legend>
+   <div id="log" style="height: 300px; overflow-y: auto"></div>
+ </fieldset>
+ <div id="perf"></div>  
+<script type="text/javascript">
+  goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+  var logger = goog.debug.Logger.getLogger('yt');
+  var logConsole = new goog.debug.DivConsole(goog.dom.$('log'));
+
+  logConsole.setCapturing(true);
+
+  var player = document.getElementsByTagName('embed')[0];
+  logger.info('testing for presence of playVideo method');
+
+  var count = 0;
+  var intervalID = null;
+
+  function tryPlayVideo() {
+    if (player.playVideo) {
+      logger.info('found playVideo method!');
+      window.clearInterval(intervalID);
+    }
+    count++;
+    if ((count % 25) == 0)
+      logger.info('checked for playVideo method ' + count + ' times.');
+  }
+
+  intervalID = window.setInterval(tryPlayVideo, 250);
+
+</script>
+  </body>
+</html>
+
