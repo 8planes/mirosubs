@@ -25,6 +25,7 @@
 from teams.models import Team, TeamMember, Application
 from django.utils.translation import ugettext as _
 from utils.rpc import Error, Msg
+from utils.rpc import RpcRouter
 
 class TeamsApiClass(object):
     
@@ -93,3 +94,9 @@ class TeamsApiClass(object):
         else:
             TeamMember(team=team, user=user).save()
             return Msg(_(u'You are now a member of this team.'))
+
+TeamsApi = TeamsApiClass()
+
+rpc_router = RpcRouter('teams:rpc_router', {
+    'TeamsApi': TeamsApi
+})        
