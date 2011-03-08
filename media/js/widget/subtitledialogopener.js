@@ -47,17 +47,33 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showLoading_ =
         this.loadingFn_(loading);
 };
 
+/**
+ * Calls start_editing on server and then, if successful, opens the dialog.
+ * @param {?int} baseVersionNo The subtitle version no on which edits should be
+ *     based, or null to use most recent version.
+ * @param {string} subLanguageCode The iso language code for subtitles.
+ * @param {?string} originalLanguageCode The iso language code for the video's
+ *     original language. Should be null iff the video's original language is
+ *     already set.
+ * @param {boolean} fork Should the subs be forked?
+ * @param {string=} opt_baseLanguageCode Should only be provided if fork is 
+ *     false. If fork is false and the argument is not provided, we assume 
+ *     the subs are based on original language subs.
+ */
 mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
-    baseVersionNo, subLanguageCode, originalLanguageCode, fork)
+    baseVersionNo, subLanguageCode, originalLanguageCode, fork, opt_baseLanguageCode)
 {
     this.showLoading_(true);
+    var args = {
+        'video_id': this.videoID_,
+        'language_code': subLanguageCode,
+        'original_language_code': originalLanguageCode,
+        'base_version_no': baseVersionNo,
+        'fork': fork }
+    if (opt_baseLanguageCode)
+        args['base_language_code'] = opt_baseLanguageCode
     mirosubs.Rpc.call(
-        'start_editing', 
-        {'video_id': this.videoID_,
-         'language_code': subLanguageCode,
-         'original_language_code': originalLanguageCode,
-         'base_version_no': baseVersionNo,
-         'fork': fork},
+        'start_editing', args,
         goog.bind(this.startEditingResponseHandler_, this));
 };
 

@@ -95,7 +95,8 @@ class Rpc(BaseRpc):
 
     def start_editing(self, request, video_id, language_code, 
                       original_language_code=None,
-                      base_version_no=None, fork=False):
+                      base_version_no=None, fork=False, 
+                      base_language_code=None):
         """Called by subtitling widget when subtitling or translation 
         is to commence or recommence on a video.
         """
