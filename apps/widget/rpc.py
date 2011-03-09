@@ -336,7 +336,9 @@ class Rpc(BaseRpc):
                 defaults={
                     'writelock_session_key': ''
                     })
-            if created and base_language_code:
+            if created:
+                if not base_language_code:
+                    base_language_code = video.subtitle_language().language
                 self._add_base_language(language, base_language_code)
         if not language.can_writelock(request):
             return language, False
