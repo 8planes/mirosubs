@@ -45,7 +45,7 @@ class Comment(models.Model):
     def get_for_object(self, obj):
         if obj.pk:
             ct = ContentType.objects.get_for_model(obj)
-            return self.objects.filter(content_type=ct, object_pk=obj.pk)
+            return self.objects.filter(content_type=ct, object_pk=obj.pk).select_related('user')
         else:
             return self.objects.none()
         
