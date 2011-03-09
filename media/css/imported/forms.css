@@ -12,6 +12,11 @@ Forms with <div>, not <p>
 <p> can't contain block tags
 ***********************************************/
 
+input:focus, textarea:focus {
+	border: 1px #63ad0c solid !important;
+	outline: none !important;
+}
+
 form.div-based-form div{
   clear: both;
   font-size: 11px;
@@ -39,7 +44,7 @@ form.div-based-form div span{
   }
 
 
-form.div-based-form div input, form.div-based-form div textarea{
+form.div-based-form div input, form.div-based-form div textarea {
   display: block;
   border-top: 1px solid #bed3d7;
   border-bottom: 1px solid #ebfcff;
@@ -54,7 +59,12 @@ form.div-based-form div input, form.div-based-form div textarea{
   width: 380px;
   line-height: 15px;
   font-family: Arial, Helvetica, sans-serif;
-  }
+}
+
+form.div-based-form div input:focus, form.div-based-form div textarea:focus {
+	border: 1px #63ad0c solid !important;
+	outline: none !important;
+}
 
 form.div-based-form div textarea{
   background: #fff;
@@ -70,6 +80,63 @@ form.div-based-form div.checkbox input{
   
 
 
+/*/////////////////////////////////////////////
+
+~ NEW Standard Form
+
+/////////////////////////////////////////////*/
+
+form ul li {
+	list-style-type: none;
+	margin: 0;
+	text-indent: 0;
+	padding: 0;
+}
+
+form ul li label {
+	display: block;
+	float: left;
+	width: 200px;
+	margin: 17px 15px 0 0;
+	font-size: 16px;
+	line-height: 16px;
+	color: #888;
+}
+
+form ul li input {
+	margin: 2px 10px 0 0;
+	width: 300px;
+	border: 0;
+	border: 1px #d8d8d8 solid !important;
+	border-top: 1px #a3a3a3 solid !important;
+	background: #FFF;
+	color: #777 !important;
+	font-size: 14px !important;
+	padding: 8px 10px 8px 10px !important;
+	line-height: 16px !important;
+	-moz-border-radius:    5px;
+	-webkit-border-radius: 5px;
+  -webkit-box-shadow: 0 1px 0 #FFF, inset 0 2px 0 #DDD;
+  -moz-box-shadow: 0 1px 0 #FFF, inset 0 2px 0 #DDD;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e3e3e3), to(#FFF));
+  background: -moz-linear-gradient(top,  #e3e3e3,  #FFF) no-repeat;
+}
+
+form ul li span.hint {
+	color: #888;
+}
+
+form ul li input#id_save_feed {
+	width: 25px;
+	margin: 13px 0 0 0;
+}
+
+form ul li span.checkbox_hint {
+	position: relative;
+	top: -5px;
+}
+
+form ul li {}
 
 
 /*/////////////////////////////////////////////
@@ -209,7 +276,7 @@ p#changes_email label {
 
 .main_video_form .main_video_form_field {
   float: left;
-  border: none;
+  border: 0 !important;
   padding: 12px;
   font-size: 20px;
   width: 466px;

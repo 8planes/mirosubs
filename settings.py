@@ -351,6 +351,7 @@ INSTALLED_APPS = (
     'statistic',
     'search',
     'api',
+    'utils',
     'targetter',
     'livesettings',
     'indexer',

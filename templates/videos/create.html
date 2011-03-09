@@ -43,8 +43,10 @@
   <form action="{% url videos:create_from_feed %}" method="POST" id="bulk_create" class="clearfix">
       
       <h3>{% trans "Automatically submit videos" %}</h3>
-      {{ youtube_form.as_p }}
-      <p<button class="green_button small">{% trans "Submit" %}</button></p>
+      <ul>
+      {{ youtube_form.as_ul }}
+      </ul>
+      <button class="green_button big">{% trans "Let's Go!" %}</button>
   </form>
 </div><!-- // submit_multiple_videos -->
 
@@ -52,6 +54,7 @@
 <div id="submit_multiple_toggle">
   <a id="btn_submit_multiple_toggle" class="toogle-create-form" href="#">{% trans "Or Submit Multiple Videos" %}</a>
 </div><!-- // submit_multiple_toggle -->
+
 <script type="text/javascript">
     jQuery('.toogle-create-form').click(function(){
         var $link = $(this);

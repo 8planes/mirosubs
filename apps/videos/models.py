@@ -439,13 +439,15 @@ class SubtitleLanguage(models.Model):
 
     def get_widget_url(self):
         # this duplicates mirosubs.widget.SubtitleController.prototype.startEditing_ in js
+        video = self.video
+        video_url = video.get_video_url()
         config = {
-            "videoID": self.video.video_id,
+            "videoID": video.video_id,
             "baseVersionNo": None,
-            "videoURL": self.video.get_video_url(),
-            "effectiveVideoURL": self.video.get_video_url(),
+            "videoURL": video_url,
+            "effectiveVideoURL": video_url,
             "languageCode": self.language,
-            "originalLanguageCode": self.video.language,
+            "originalLanguageCode": video.language,
             "fork": False }
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
 

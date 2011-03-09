@@ -44,7 +44,7 @@ from videos.models import Action, SubtitleLanguage, WRITELOCK_EXPIRATION
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from utils.multy_query_set import MultyQuerySet
+from utils.multy_query_set import MultyQuerySet, TeamMultyQuerySet
 from teams.rpc import TeamsApi
 import datetime
 
@@ -111,6 +111,8 @@ def index(request, my_teams=False):
                        extra_context=extra_context)
     
 def detail(request, slug):
+    from utils.templatetags.optimization import print_query_count
+    
     team = Team.get(slug, request.user)
     
     languages = get_user_languages_from_request(request)
@@ -124,24 +126,26 @@ def detail(request, slug):
         .exclude(writelock_time__gte=writelock_cutoff) \
         .extra(where=['NOT ((SELECT vsl.is_complete FROM videos_subtitlelanguage AS vsl WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) = %s AND videos_subtitlelanguage.is_original=%s)'], params=(True, False, False,)) \
         .distinct()
-
+        
     # all videos not in the list
-    video_ids = [id for id in video_ids if id not in [sl.video.id for sl in qs.all()]]
-    qs_complement = SubtitleLanguage.objects.filter(video__in=video_ids).filter(is_original=True)
-
+    _sl_videos_ids = qs.values_list('video_id', flat=True)
+    complement_video_ids = [id for id in video_ids if id not in _sl_videos_ids]
+    qs_complement = SubtitleLanguage.objects.filter(video__in=complement_video_ids).filter(is_original=True)
+    
     qs1 = qs.filter(is_forked=False, is_original=False).filter(percent_done__lt=100, percent_done__gt=0)
     qs2 = qs.filter(is_forked=False, is_original=False).filter(percent_done=0)
     qs3 = qs.filter(is_original=True).filter(subtitleversion__isnull=True)
     qs4 = qs.filter(is_forked=False, is_original=False).filter(percent_done=100)
     qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False)
     
-    mqs = MultyQuerySet(qs1, qs2, qs3, qs4, qs5, qs_complement)
+    mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4, qs5, qs_complement)
     
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
-        'team': team
+        'team': team,
+        'can_edit_video': team.can_edit_video(request.user)
     })
-
+    
     if qs1.count() + qs2.count() + qs3.count() + qs4.count() + qs5.count() == 0:
         mqs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(is_original=True)
         extra_context['allow_noone_language'] = True
@@ -151,7 +155,7 @@ def detail(request, slug):
             'video_url': team.video.get_video_url(), 
             'base_state': {}
         })
-
+        
     return object_list(request, queryset=mqs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 

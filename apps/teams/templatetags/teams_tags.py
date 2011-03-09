@@ -83,11 +83,15 @@ def team_select(context, team):
 
 @register.inclusion_tag('teams/_team_activity.html', takes_context=True)    
 def team_activity(context, team):
-    user_ids = team.members.values_list('user__id', flat=True)
-    context['membres_actions'] = Action.objects.filter(user__pk__in=user_ids)[:ACTIONS_ON_PAGE]
+    #user_ids = team.members.values_list('user__id', flat=True)
+    #context['membres_actions'] = Action.objects.filter(user__pk__in=user_ids)[:ACTIONS_ON_PAGE]
+    from utils.orm import load_related_fk
     
     videos_ids = team.teamvideo_set.values_list('video__id', flat=True)
-    context['videos_actions'] = Action.objects.filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
+    action_qs = Action.objects.select_related('video').filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
+    load_related_fk(action_qs, 'user')
+    load_related_fk(action_qs, 'language', select_related=['video'])
+    context['videos_actions'] = action_qs
     
     return context
 
@@ -120,7 +124,9 @@ def team_video_detail(context, team_video):
 
 @register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  
 def team_video_lang_detail(context, lang, team):
-    context['team_video'] = team.teamvideo_set.get(video__id=lang.video_id)
+    #from utils.orm import load_related_fk
+    
+    context['team_video'] = team.teamvideo_set.select_related('video').get(video__id=lang.video_id)
     context['lang'] = lang
     return context
 

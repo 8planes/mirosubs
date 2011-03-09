@@ -41,7 +41,7 @@ class MultyQuerySet(object):
                 pass
         else:
             ids = self._obj_ids[k]
-            qs = self.model._default_manager.filter(pk__in=ids)
+            qs = self.get_objects_qs(ids)
             result = dict((obj.pk, obj) for obj in qs)
             val = []
             for id in ids:
@@ -53,3 +53,12 @@ class MultyQuerySet(object):
     def _clone(self):
         return self
     
+    def get_objects_qs(self, ids):
+        return self.model._default_manager.filter(pk__in=ids)
+
+class TeamMultyQuerySet(MultyQuerySet):
+    
+    def get_objects_qs(self, ids):
+        qs = super(TeamMultyQuerySet, self).get_objects_qs(ids)
+        qs = qs.select_related('video')
+        return qs

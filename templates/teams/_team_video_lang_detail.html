@@ -1,13 +1,15 @@
 {% load i18n teams_tags %}
+
 <a href="{{ team_video.video.get_absolute_url }}" class="thumbnail_medium">
     <img height="100" src="{{ team_video.get_thumbnail }}">
 </a>
 <div class="info">
     <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
 
-    {% if team_video|can_edit_video:user %}
+    {% if can_edit_video %}
         <a class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
     {% endif %}
+     
     {% if team_video.description %}
     <p>
         {{ team_video.description|urlize }}
@@ -15,7 +17,9 @@
     {% endif %}
       
       {% if not allow_noone_language %}
+      
           {% if lang.is_original or lang.is_forked %}
+
             {% if lang.subtitles %}
             <div style="margin: 5px 5px 0 0;">
                 <a class="blue_button small" 
@@ -23,6 +27,7 @@
                     {% trans "Review" %} {{ lang.language_display }} {% trans "Captions" %}</a>
             </div>
             {% else %}
+
             <div style="margin: 5px 5px 0 0;">
                 <a class="blue_button small" mpq-event="Clicks_button_on_teams_page_to_help_out"
                     href="{{ lang.get_widget_url }}">
@@ -44,7 +49,7 @@
                     {% trans "Review" %} {{ lang.language_display }} {% trans "Translation" %}
                   </a>    
                   </div>
-                {% endif %}                    
+                {% endif %}  
           {% endif %}
       {% endif %}
 </div>
