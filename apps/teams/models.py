@@ -150,18 +150,16 @@ class Team(models.Model):
             return False        
         return self.members.filter(user=user).exists()
     
-    def can_remove_video(self, user, team_video):
+    def can_remove_video(self, user, team_video=None):
         if not user.is_authenticated():
-            return False        
-        if team_video.added_by == user:
-            return True        
+            return False          
         if self.video_policy == self.MANAGER_REMOVE and self.is_manager(user):
             return True
         if self.video_policy == self.MEMBER_REMOVE and self.is_member(user):
             return True
         return False
     
-    def can_edit_video(self, user, team_video):
+    def can_edit_video(self, user, team_video=None):
         if not user.is_authenticated():
             return False
         return self.can_add_video(user)

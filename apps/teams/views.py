@@ -44,7 +44,7 @@ from videos.models import Action, SubtitleLanguage, WRITELOCK_EXPIRATION
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from utils.multy_query_set import MultyQuerySet
+from utils.multy_query_set import MultyQuerySet, TeamMultyQuerySet
 from teams.rpc import TeamsApi
 import datetime
 
@@ -138,11 +138,12 @@ def detail(request, slug):
     qs4 = qs.filter(is_forked=False, is_original=False).filter(percent_done=100)
     qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False)
     
-    mqs = MultyQuerySet(qs1, qs2, qs3, qs4, qs5, qs_complement)
+    mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4, qs5, qs_complement)
     
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
-        'team': team
+        'team': team,
+        'can_edit_video': team.can_edit_video(request.user)
     })
     
     if qs1.count() + qs2.count() + qs3.count() + qs4.count() + qs5.count() == 0:
