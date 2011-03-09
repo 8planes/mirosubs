@@ -174,7 +174,10 @@ section_secondary
   line-height: 23px;
   font-size: 12px;
   padding: 5px;
-  border: 0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px #4a7d78 solid;
   background: url(images/interface/bg_video_upload.jpg) no-repeat;
 }
 
@@ -219,8 +222,11 @@ span.caption {
   line-height: 23px;
   font-size: 12px;
   padding: 5px;
-  border: 0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
   background: url(images/interface/bg_video_upload.jpg) no-repeat;
+	border: 1px #4a7d78 solid;
 }
 
 span.indication {

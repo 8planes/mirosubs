@@ -12,6 +12,11 @@ Forms with <div>, not <p>
 <p> can't contain block tags
 ***********************************************/
 
+input:focus, textarea:focus {
+	border: 1px #63ad0c solid !important;
+	outline: none !important;
+}
+
 form.div-based-form div{
   clear: both;
   font-size: 11px;
@@ -39,7 +44,7 @@ form.div-based-form div span{
   }
 
 
-form.div-based-form div input, form.div-based-form div textarea{
+form.div-based-form div input, form.div-based-form div textarea {
   display: block;
   border-top: 1px solid #bed3d7;
   border-bottom: 1px solid #ebfcff;
@@ -54,7 +59,12 @@ form.div-based-form div input, form.div-based-form div textarea{
   width: 380px;
   line-height: 15px;
   font-family: Arial, Helvetica, sans-serif;
-  }
+}
+
+form.div-based-form div input:focus, form.div-based-form div textarea:focus {
+	border: 1px #63ad0c solid !important;
+	outline: none !important;
+}
 
 form.div-based-form div textarea{
   background: #fff;
@@ -110,11 +120,6 @@ form ul li input {
   -moz-box-shadow: 0 1px 0 #FFF, inset 0 2px 0 #DDD;
   background: -webkit-gradient(linear, left top, left bottom, from(#e3e3e3), to(#FFF));
   background: -moz-linear-gradient(top,  #e3e3e3,  #FFF) no-repeat;
-}
-
-form ul li input:focus {
-	border: 1px #63ad0c solid !important;
-	outline: none;
 }
 
 form ul li span.hint {
@@ -271,7 +276,7 @@ p#changes_email label {
 
 .main_video_form .main_video_form_field {
   float: left;
-  border: none;
+  border: 0 !important;
   padding: 12px;
   font-size: 20px;
   width: 466px;

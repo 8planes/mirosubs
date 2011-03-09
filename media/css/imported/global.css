@@ -144,13 +144,19 @@ ul#subnav li#subnav_menu {
 
 .language_modal p {
   font-size: 14px;
-  line-height: 24px; 
+  line-height: 14px;
+	text-align: left;
 }
   
 .language_modal h2 { 
   font-size: 22px;
   margin: 0;
   color: #000;
+	text-align: left;
+}
+
+.language_modal h3 { 
+	text-align: left;
 }
 
 .language_modal #language_picker {
@@ -177,6 +183,10 @@ ul#subnav li#subnav_menu {
   
 .language_modal ul li {
   margin: 5px 0 5px 0;
+}
+
+.language_modal ul li select {
+	width: 150px !important;
 }
 
 
