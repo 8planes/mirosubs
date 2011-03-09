@@ -64,24 +64,23 @@
 
 /*---- Green Button ----*/
 
-.green_button{
+.green_button {
   color: #23441e !important;
   text-decoration: none;
-
   text-shadow: 0 1px 0px #aedbaa;
-   
   border: 1px solid #578e57;
   border-top: 1px solid #7eba7c;
   border-bottom: 1px solid #447d43;
-  
   -moz-box-shadow: 0 1px 0px #9cabae, inset 0 1px 0px #b7e4ac;
   -webkit-box-shadow: 0 1px 0px #9cabae, inset 0 1px 0px #b7e4ac;
   box-shadow: 0 1px 0px #9cabae, inset 0 1px 0px #b7e4ac;
-  
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#98d98a', endColorstr='#6bba6a'); /* for IE */
   background: -webkit-gradient(linear, left top, left bottom, from(#98d98a), to(#6bba6a)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  #98d98a,  #6bba6a); /* for firefox 3.6+ */
-  }
+	-webkit-border-radius: 5px !important;
+	border-radius: 5px !important;
+	-moz-border-radius: 5px !important;
+}
 
 
 .green_button:hover{

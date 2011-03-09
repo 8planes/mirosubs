@@ -108,16 +108,14 @@ class TestRpc(TestCase):
         # policy for using the firefox extension.
         self.assertEquals(None, add_url_action.user)
 
-    def _test_fetch_subtitles(self):
-        #this test can't be success because counters are counted with Redis and
+    def test_fetch_subtitles(self):
         #moved to MySQL in crone
         request = RequestMockup(self.user_0)
         draft = self._create_basic_draft(request, True)
         subtitles_fetched_count = draft.video.subtitles_fetched_count
         subs = rpc.fetch_subtitles(request, draft.video.video_id)
         self.assertEqual(1, len(subs['subtitles']))
-        video1 = Video.objects.get(pk=draft.video.id)
-        self.assertEqual(subtitles_fetched_count + 1, video1.subtitles_fetched_count)
+        # can't test counters here because of redis/mysql setup (?)
 
     def test_add_alternate_urls(self):
         url_0 = 'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv'
@@ -635,20 +633,7 @@ class TestRpc(TestCase):
 
     def test_fork_then_edit(self):
         request = RequestMockup(self.user_0)
-        draft = self._create_two_sub_dependent_draft(request)
-        # now fork subtitles
-        response = rpc.start_editing(request, draft.video.video_id, 'es', fork=True)
-        draft_pk = response['draft_pk']
-        updated = [{'subtitle_id': 'a',
-                     'text': 'a_esd',
-                     'start_time': 2.3,
-                     'end_time': 3.2,
-                     'sub_order': 1.0}]
-        rpc.save_subtitles(
-            request, draft_pk,
-            [_make_packet(updated=updated)])
-        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
-        video = Video.objects.get(pk=draft.video.pk)
+        video = self._create_two_sub_forked_subs(request)
         version = video.subtitle_language('es').version()
         self.assertTrue(version.text_change > 0 and version.text_change < 1)
         self.assertTrue(version.time_change > 0 and version.time_change < 1)
@@ -852,7 +837,7 @@ class TestRpc(TestCase):
             base_state = { 'language': 'en' })
         self.assertEquals(None, return_value['subtitles'])
 
-    def ensure_language_locked_on_draft_save(self):
+    def test_ensure_language_locked_on_draft_save(self):
         request = RequestMockup(self.user_0)        
         draft = self._create_basic_draft(request)
         now = datetime.now() + timedelta(seconds=20)
@@ -867,6 +852,56 @@ class TestRpc(TestCase):
         language = video.subtitle_language()
         self.assertEquals(now, language.writelock_time)
         models.datetime = datetime
+
+    def test_create_translation_dependent_on_dependent(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_two_sub_dependent_draft(request)
+        response = rpc.start_editing(
+            request, draft.video.video_id, 'fr', base_language_code='es')
+        draft_pk = response['draft_pk']
+        orig_subs = response['original_subtitles']['subtitles']
+        self.assertEqual(2, len(orig_subs))
+        self.assertEqual('a_es', orig_subs[0]['text'])
+        inserted = [{'subtitle_id': 'a', 'text':'frenchtext'}]
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, [])
+        subs = rpc.fetch_subtitles(request, draft.video.video_id, 
+                                   language_code='fr')
+        subs = subs['subtitles']
+        self.assertEqual(1, len(subs))
+        self.assertEqual('frenchtext', subs[0]['text'])
+        self.assertEqual(2.3, subs[0]['start_time'])
+        self.assertEqual(3.4, subs[0]['end_time'])
+        video = models.Video.objects.get(id=draft.video.id)
+        self.assertEqual(50, video.subtitle_language('fr').percent_done)
+
+    def _create_two_sub_forked_subs(self, request):
+        draft = self._create_two_sub_dependent_draft(request)
+        # now fork subtitles
+        response = rpc.start_editing(request, draft.video.video_id, 'es', fork=True)
+        draft_pk = response['draft_pk']
+        updated = [{'subtitle_id': 'a',
+                     'text': 'a_esd',
+                     'start_time': 2.3,
+                     'end_time': 3.2,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(updated=updated)])
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+        return Video.objects.get(pk=draft.video.pk)
+
+    def test_create_translation_dependent_on_forked(self):
+        # TODO: test percent done here!
+        # Alter forked (std) lang and check percent done again!
+        request = RequestMockup(self.user_0)
+        video = self._create_two_sub_forked_subs(request)
+        
+
+    def test_fork_translation_dependent_on_forked(self):
+        pass
 
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(

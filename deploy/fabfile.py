@@ -29,7 +29,7 @@ def _create_env(username, hosts, s3_bucket, installation_dir, static_dir, name):
     env.hosts = []
     env.s3_bucket = s3_bucket
     env.web_dir = '/var/www/{0}'.format(installation_dir)
-    env.static_dir = '/var/static/{0}'.format(static_dir)
+    env.static_dir = '/var/{0}'.format(static_dir)
     env.installation_name = name
 
 def staging(username):
@@ -38,14 +38,14 @@ def staging(username):
                  'pcf-us-staging2.pculture.org:2191'],
                 's3.staging.universalsubtitles.org',
                 'universalsubtitles.staging',
-                'staging', 'staging')
+                'static/staging', 'staging')
 
 def dev(username):
     _create_env(username,
                 ['dev.universalsubtitles.org:2191'],
                 None,
                 'universalsubtitles.dev',
-                'dev', 'dev')
+                'www/universalsubtitles.dev', 'dev')
 
 def unisubs(username):
     _create_env(username,
@@ -53,17 +53,19 @@ def unisubs(username):
                  'pcf-us-cluster2.pculture.org:2191'],
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
-                'production', None)
+                'static/production', None)
 
 
 def syncdb():
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
+        _git_pull()
         run('{0}/env/bin/python manage.py syncdb --settings=unisubs-settings'.format(env.static_dir))
 
 def migrate(app_name=''):
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
+        _git_pull()
         run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs-settings'.format(
                 env.static_dir, app_name))
 

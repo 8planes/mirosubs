@@ -700,7 +700,10 @@ class SubtitleVersion(SubtitleCollection):
             self.text_change = text_count_changed / 1. / subtitles_length
 
     def _get_standard_collection(self):
-        return self.language.video.latest_version()
+        if self.language.standard_language:
+            return self.language.standard_language.latest_version()
+        else:
+            return self.language.video.latest_version()
 
     def ordered_subtitles(self):
         subtitles = self.subtitles()
@@ -783,7 +786,10 @@ class SubtitleDraft(SubtitleCollection):
         return self.language.video
 
     def _get_standard_collection(self):
-        return self.language.video.latest_version()
+        if self.language.standard_language:
+            return self.language.standard_language.latest_version()
+        else:
+            return self.language.video.latest_version()
 
     def is_dependent(self):
         return not self.language.is_original and not self.is_forked
