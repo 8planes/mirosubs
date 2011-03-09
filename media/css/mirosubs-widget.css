@@ -2929,6 +2929,7 @@ padding: 5px 0 5px !important;
 margin: 0 !important;
 padding: 0 !important;
 list-style: none !important;
+text-shadow: 0 0 0 !important;
 }
 
 
@@ -2937,6 +2938,7 @@ color: #fff !important;
 text-decoration: none !important;
 padding: 5px 4px 5px 40px !important;
 display: block !important;
+text-shadow: 0 0 0 !important;
 }
 
 
