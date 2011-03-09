@@ -395,10 +395,10 @@ class VideoForm(forms.Form):
 youtube_user_url_re = re.compile(r'^(http://)?(www.)?youtube.com/user/(?P<username>[a-zA-Z0-9]+)/?$')
 
 class AddFromFeedForm(forms.Form, AjaxForm):
-    usernames = UsernameListField(required=False, label=_(u'Youtube usernames'), help_text=_(u'Enter usernames separated by comma.'))
-    youtube_user_url = forms.RegexField(youtube_user_url_re, required=False, label=_(u'Youtube user\'s page link'))
-    feed_url = forms.URLField(required=False, help_text=_(u'Enter RSS link from Youtube, Vimeo, Blip or Dailymotion. Video will be added only for supported sites.'))
-    save_feed = forms.BooleanField(required=False, label=_(u'Save feed'), help_text=_(u'Chose this if you wish we add videos from this feed in future. Only valid RSS-feed will be saved.'))
+    usernames = UsernameListField(required=False, label=_(u'Youtube usernames'), help_text=_(u'<span class="hint">Enter usernames separated by comma.</span>'))
+    youtube_user_url = forms.RegexField(youtube_user_url_re, required=False, label=_(u'Youtube page link.'))
+    feed_url = forms.URLField(required=False, help_text=_(u'<span class="hint">Supported: Youtube, Vimeo, Blip or Dailymotion. Only supported sites added.</span>'))
+    save_feed = forms.BooleanField(required=False, label=_(u'Save feed'), help_text=_(u'<span class="hint checkbox_hint">Choose this if you wish to add videos from this feed in the future. Only valid RSS feeds will be saved.</span>'))
     
     def __init__(self, user, *args, **kwargs):
         if not user.is_authenticated():
