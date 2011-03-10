@@ -170,7 +170,7 @@ class UploadSubtitlesTest(WebUseTest):
         language = video.subtitle_language(data['language'])
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 32)
-        self.assertTrue(language.is_complete)
+        self.assertTrue(language.has_version)
         self.assertTrue(language.was_complete)
         self.assertFalse(video.is_subtitled)
         self.assertFalse(video.was_subtitled)
@@ -186,7 +186,7 @@ class UploadSubtitlesTest(WebUseTest):
         language = video.subtitle_language()
         self.assertEqual('en', language.language)
         self.assertTrue(language.is_original)
-        self.assertTrue(language.is_complete)
+        self.assertTrue(language.has_version)
         self.assertTrue(video.is_subtitled)
 
     def test_upload_twice(self):
