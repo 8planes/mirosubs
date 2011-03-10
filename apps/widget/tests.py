@@ -289,7 +289,7 @@ class TestRpc(TestCase):
         language = Video.objects.get(
             video_id=draft.video.video_id).subtitle_language()
         self.assertTrue(language.was_complete)
-        self.assertTrue(language.is_complete)
+        self.assertTrue(language.has_version)
         self.assertTrue(language.video.is_subtitled)
 
     def test_get_widget_url(self):
@@ -509,7 +509,7 @@ class TestRpc(TestCase):
         self.assertEqual(
             0, language.latest_version().subtitle_set.count())
         self.assertEquals(True, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_zero_out_version_0(self):
         request_0 = RequestMockup(self.user_0)
@@ -529,7 +529,7 @@ class TestRpc(TestCase):
         self.assertEquals(0, language.subtitleversion_set.count())
         self.assertEquals(None, language.latest_version())
         self.assertEquals(False, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_start_translating(self):
         request = RequestMockup(self.user_0)
@@ -599,7 +599,7 @@ class TestRpc(TestCase):
         self.assertEquals(2, language.subtitleversion_set.count())
         self.assertEquals(0, language.latest_version().subtitle_set.count())
         self.assertEquals(True, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_zero_out_trans_version_0(self):
         request = RequestMockup(self.user_0)
@@ -613,7 +613,7 @@ class TestRpc(TestCase):
         self.assertEquals(0, language.subtitleversion_set.count())
         self.assertEquals(None, language.video.latest_version('es'))
         self.assertEquals(False, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_edit_existing_original(self):
         request = RequestMockup(self.user_0)

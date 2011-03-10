@@ -179,10 +179,6 @@ text-shadow:
 	float: left !important;
 }
 
-.mirosubs-left div span {
-	display: block !important;
-}
-
 .mirosubs-modal-widget-transcribe .mirosubs-right{
   width: 440px !important;
   padding: 0px 0px !important;

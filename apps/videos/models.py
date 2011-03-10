@@ -377,7 +377,7 @@ class Video(models.Model):
         
     def update_complete_state(self):
         language = self.subtitle_language()
-        if not language.is_complete:
+        if not language.has_version:
             self.is_subtitled = False
         else:
             self.is_subtitled = True
@@ -406,6 +406,7 @@ class SubtitleLanguage(models.Model):
     writelock_session_key = models.CharField(max_length=255, blank=True)
     writelock_owner = models.ForeignKey(User, null=True, blank=True)
     is_complete = models.BooleanField(default=False)
+    has_version = models.BooleanField(default=False)
     was_complete = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -432,9 +433,9 @@ class SubtitleLanguage(models.Model):
     def update_complete_state(self):
         version = self.latest_version()
         if version.subtitle_set.count() == 0:
-            self.is_complete = False
+            self.has_version = False
         else:
-            self.is_complete = True
+            self.has_version = True
             self.was_complete = True
 
     def get_widget_url(self):
