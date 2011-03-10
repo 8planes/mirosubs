@@ -405,7 +405,7 @@ class SubtitleLanguage(models.Model):
     writelock_time = models.DateTimeField(null=True)
     writelock_session_key = models.CharField(max_length=255, blank=True)
     writelock_owner = models.ForeignKey(User, null=True, blank=True)
-    is_version = models.BooleanField(default=False)
+    is_complete = models.BooleanField(default=False)
     has_version = models.BooleanField(default=False)
     was_complete = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
