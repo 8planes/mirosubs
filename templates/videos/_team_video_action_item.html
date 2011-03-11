@@ -69,7 +69,7 @@
             {% if item.is_comment %}
                 {% if item.language %}
                     {% blocktrans with item.language.language_display as language %}
-                    Comment added for {{ language }}.
+                    {% trans 'Comment added for' %} {{ language }}.
                     {% endblocktrans %}            
                 {% else %}
                     {% trans 'Comment added for' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>.
