@@ -124,7 +124,7 @@
       <li id="team_manage_settings"><a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a></li>
       {% endif %}
       {% if team|is_team_member:user %}
-      <li id="team_leave_button" class="clearfix"><a class="leave-team blue_button small" team_id="{{ team.pk }}" href="#">{% trans "Leave this team" %}</a></li>
+      <li id="team_leave_button" class="clearfix"><a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave this team" %}</a></li>
       {% else %}
       <li>
         {% if user.is_authenticated and team.is_by_application %}
