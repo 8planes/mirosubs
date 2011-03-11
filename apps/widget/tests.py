@@ -90,7 +90,7 @@ class TestRpc(TestCase):
 
     def test_actions_for_subtitle_edit(self):
         request = RequestMockup(self.user_0)
-        action_ids = Action.objects.values_list('id', flat=True)
+        action_ids = [a.id for a in Action.objects.all()]
         draft = self._create_basic_draft(request, True)
         qs = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)
         self.assertEqual(qs.count(), 1)
