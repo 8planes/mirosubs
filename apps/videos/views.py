@@ -190,7 +190,7 @@ def video(request, video_id, video_url=None, title=None):
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    qs = Video.objects.exclude(Q(subtitlelanguage=None)|Q(subtitlelanguage__subtitleversion=None)|Q(subtitlelanguage__subtitleversion__subtitle=None)) \
+    qs = Video.objects.exclude(Q(subtitlelanguage__subtitleversion__subtitle=None)) \
         .distinct().extra(select={'languages_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+
