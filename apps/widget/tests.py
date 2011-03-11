@@ -90,10 +90,10 @@ class TestRpc(TestCase):
 
     def test_actions_for_subtitle_edit(self):
         request = RequestMockup(self.user_0)
-        action_ids = [i.id for i in Action.objects.all()]
+        action_ids = [a.id for a in Action.objects.all()]
         draft = self._create_basic_draft(request, True)
         qs = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)
-        self.assertEqual(qs.count(), 2)
+        self.assertEqual(qs.count(), 1)
 
     def test_no_user_for_video_creation(self):
         request = RequestMockup(self.user_0)
@@ -102,11 +102,6 @@ class TestRpc(TestCase):
             request, 
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        add_url_action = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)[0]
-        self.assertEquals(models.Action.ADD_VIDEO_URL, add_url_action.action_type)
-        # we can't record the user who opened the widget because of the privacy
-        # policy for using the firefox extension.
-        self.assertEquals(None, add_url_action.user)
 
     def test_fetch_subtitles(self):
         #moved to MySQL in crone
@@ -289,7 +284,7 @@ class TestRpc(TestCase):
         language = Video.objects.get(
             video_id=draft.video.video_id).subtitle_language()
         self.assertTrue(language.was_complete)
-        self.assertTrue(language.is_complete)
+        self.assertTrue(language.has_version)
         self.assertTrue(language.video.is_subtitled)
 
     def test_get_widget_url(self):
@@ -509,7 +504,7 @@ class TestRpc(TestCase):
         self.assertEqual(
             0, language.latest_version().subtitle_set.count())
         self.assertEquals(True, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_zero_out_version_0(self):
         request_0 = RequestMockup(self.user_0)
@@ -529,7 +524,7 @@ class TestRpc(TestCase):
         self.assertEquals(0, language.subtitleversion_set.count())
         self.assertEquals(None, language.latest_version())
         self.assertEquals(False, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_start_translating(self):
         request = RequestMockup(self.user_0)
@@ -599,7 +594,7 @@ class TestRpc(TestCase):
         self.assertEquals(2, language.subtitleversion_set.count())
         self.assertEquals(0, language.latest_version().subtitle_set.count())
         self.assertEquals(True, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_zero_out_trans_version_0(self):
         request = RequestMockup(self.user_0)
@@ -613,7 +608,7 @@ class TestRpc(TestCase):
         self.assertEquals(0, language.subtitleversion_set.count())
         self.assertEquals(None, language.video.latest_version('es'))
         self.assertEquals(False, language.was_complete)
-        self.assertEquals(False, language.is_complete)
+        self.assertEquals(False, language.has_version)
 
     def test_edit_existing_original(self):
         request = RequestMockup(self.user_0)

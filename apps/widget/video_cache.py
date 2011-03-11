@@ -146,8 +146,8 @@ def get_video_languages(video_id):
     else:
         from videos.models import Video
         video = Video.objects.get(video_id=video_id)
-        translated_languages = video.subtitlelanguage_set.filter(
-            is_complete=True).filter(is_original=False)
+        translated_languages = video.subtitlelanguage_set.filter(has_version=True) \
+            .filter(is_original=False)
         return_value = [(t.language, t.percent_done) for t in translated_languages]
         cache.set(cache_key, return_value, TIMEOUT)
         return return_value

@@ -175,7 +175,7 @@
             "writelock_time": null, 
             "was_complete": false, 
             "video": 1, 
-            "is_complete": false
+            "has_version": false
         }
     }, 
     {
@@ -190,7 +190,7 @@
             "writelock_time": null, 
             "was_complete": false, 
             "video": 2, 
-            "is_complete": false
+            "has_version": false
         }
     }, 
     {
@@ -205,7 +205,7 @@
             "writelock_time": null, 
             "was_complete": true, 
             "video": 2, 
-            "is_complete": true
+            "has_version": true
         }
     }, 
     {
@@ -220,7 +220,7 @@
             "writelock_time": null, 
             "was_complete": true, 
             "video": 3, 
-            "is_complete": true
+            "has_version": true
         }
     }, 
     {
@@ -235,7 +235,7 @@
             "writelock_time": null, 
             "was_complete": false, 
             "video": 3, 
-            "is_complete": false
+            "has_version": false
         }
     }, 
     {
@@ -250,7 +250,7 @@
             "writelock_time": null, 
             "was_complete": false, 
             "video": 4, 
-            "is_complete": false
+            "has_version": false
         }
     }, 
     {
@@ -265,7 +265,7 @@
             "writelock_time": null, 
             "was_complete": true, 
             "video": 4, 
-            "is_complete": true
+            "has_version": true
         }
     },  
     {
@@ -281,7 +281,7 @@
             "writelock_time": null, 
             "was_complete": false, 
             "video": 5, 
-            "is_complete": false, 
+            "has_version": false, 
             "subtitles_fetched_count": 0
         }
     },      

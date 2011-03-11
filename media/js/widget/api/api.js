@@ -71,19 +71,14 @@ mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, gener
             config['effectiveVideoURL']);
     var opener = new mirosubs.widget.SubtitleDialogOpener(
         config['videoID'], config['videoURL'], videoSource);
-    if (!askLanguage)
-        opener.openDialog(
-            config['baseVersionNo'], config['languageCode'],
-            config['originalLanguageCode'], config['fork']);
+    if (!askLanguage) {
+        opener.openDialog(config['baseVersionNo'], config['languageCode'], config['originalLanguageCode'], 
+            config['fork'], config['baseLanguageCode']);
+    }
     else {
-        mirosubs.widget.ChooseLanguageDialog.show(
-            config['originalLanguageSubtitled'],
-            function(subLanguage, originalLanguage) {
-                opener.openDialog(
-                    config['baseVersionNo'],
-                    subLanguage, originalLanguage, 
-                    mirosubs.isForkedLanguage(subLanguage));
-            });
+        mirosubs.widget.ChooseLanguageDialog.show(config['originalLanguageSubtitled'], function(subLanguage, originalLanguage){
+            opener.openDialog(config['baseVersionNo'], subLanguage, originalLanguage, mirosubs.isForkedLanguage(subLanguage));
+        });
     }
 };
 

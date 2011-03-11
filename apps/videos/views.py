@@ -184,13 +184,13 @@ def video(request, video_id, video_url=None, title=None):
     context['translations'] = translations
     context['widget_params'] = _widget_params(request, video, None, '')
     _add_share_panel_context_for_video(context, video)
-    context['lang_count'] = video.subtitlelanguage_set.filter(is_complete=True).count()
+    context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    qs = Video.objects.exclude(Q(subtitlelanguage=None)|Q(subtitlelanguage__subtitleversion=None)|Q(subtitlelanguage__subtitleversion__subtitle=None)) \
+    qs = Video.objects.exclude(Q(subtitlelanguage__subtitleversion__subtitle=None)) \
         .distinct().extra(select={'languages_count': 'SELECT COUNT(id) '+
         'FROM videos_subtitlelanguage WHERE '+
         'videos_subtitlelanguage.video_id = videos_video.id AND '+

@@ -124,7 +124,7 @@ def detail(request, slug):
 
     qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
         .exclude(writelock_time__gte=writelock_cutoff) \
-        .extra(where=['NOT ((SELECT vsl.is_complete FROM videos_subtitlelanguage AS vsl WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) = %s AND videos_subtitlelanguage.is_original=%s)'], params=(True, False, False,)) \
+        .filter(video__subtitlelanguage__language__in=languages) \
         .distinct()
         
     # all videos not in the list

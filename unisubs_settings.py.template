@@ -30,7 +30,6 @@ STAGING = False
 DEBUG = False
 ADMINS = (
   ('Adam Duston', 'adam@8planes.com'),
-  ('Dmitriy', 'alerion.um@gmail.com'),
   ('Holmes Wilson', 'hwilson@gmail.com'),
   ('usubs-errors', 'usubs-errors@pculture.org')
 )
