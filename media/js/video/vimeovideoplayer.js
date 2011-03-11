@@ -63,7 +63,7 @@ goog.inherits(mirosubs.video.VimeoVideoPlayer, mirosubs.video.AbstractVideoPlaye
 
 mirosubs.video.VimeoVideoPlayer.prototype.createDom = function() {
     // FIXME: this is copied directly from youtube video player.
-    this.setElementInternal(this.getDomHelper().createElement('span'));
+    mirosubs.video.VimeoVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.sizeFromConfig_();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;

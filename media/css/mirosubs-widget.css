@@ -999,6 +999,10 @@ margin-right: 20px !important;
    margin-bottom: 30px !important;
 }
 
+span.mirosubs-videoplayer {
+   display: block !important;
+}
+
 .mirosubs-videoDiv {
 
 }

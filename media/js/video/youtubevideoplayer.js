@@ -103,7 +103,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
 };
 
 mirosubs.video.YoutubeVideoPlayer.prototype.createDom = function() {
-    this.setElementInternal(this.getDomHelper().createElement('span'));
+    mirosubs.video.YoutubeVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.sizeFromConfig_();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
