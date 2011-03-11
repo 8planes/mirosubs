@@ -36,7 +36,7 @@
             {% for member in team_member_list %}
             <li>
                 <span class="user_thumb">
-                    <img src="{{ user_obj.avatar }}" />
+                    <img src="{{ member.user.avatar }}" />
                 </span>
                 <div class="info">
                     <h4><a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a></h4>
