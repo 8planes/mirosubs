@@ -946,7 +946,7 @@ class Action(models.Model):
      
     @classmethod
     def create_video_url_handler(cls, sender, instance, created, **kwargs):
-        if created:
+        if created and sender.objects.filter(video=instance.video).count() > 1:
             obj = cls(video=instance.video)
             obj.user = instance.added_by
             obj.action_type = cls.ADD_VIDEO_URL
