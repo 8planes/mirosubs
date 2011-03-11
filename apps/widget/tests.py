@@ -90,10 +90,10 @@ class TestRpc(TestCase):
 
     def test_actions_for_subtitle_edit(self):
         request = RequestMockup(self.user_0)
-        action_ids = [i.id for i in Action.objects.all()]
+        action_ids = Action.objects.values_list('id', flat=True)
         draft = self._create_basic_draft(request, True)
         qs = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)
-        self.assertEqual(qs.count(), 2)
+        self.assertEqual(qs.count(), 1)
 
     def test_no_user_for_video_creation(self):
         request = RequestMockup(self.user_0)
@@ -102,11 +102,6 @@ class TestRpc(TestCase):
             request, 
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
             False)
-        add_url_action = Action.objects.exclude(id__in=action_ids).exclude(action_type=Action.ADD_VIDEO)[0]
-        self.assertEquals(models.Action.ADD_VIDEO_URL, add_url_action.action_type)
-        # we can't record the user who opened the widget because of the privacy
-        # policy for using the firefox extension.
-        self.assertEquals(None, add_url_action.user)
 
     def test_fetch_subtitles(self):
         #moved to MySQL in crone
