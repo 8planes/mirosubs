@@ -357,15 +357,28 @@ INSTALLED_APPS = (
     'indexer',
     'paging',
     'sentry',
-    'sentry.client',    
+    'sentry.client',
+    #'djcelery',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 
 # Celery settings
 
-# import djcelery
-# djcelery.setup_loader()
+#import djcelery
+#djcelery.setup_loader()
 
+# For running worker use: python manage.py celeryd -E -l info -n worker1.localhost
+# Run event cather for monitoring workers: python manage.py celerycam
+# This allow know are workers online or not: python manage.py celerybeat
+
+CELERY_IGNORE_RESULT = True
+CELERY_DISABLE_RATE_LIMITS = True
+CELERY_SEND_EVENTS = True
+
+BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
+BROKER_USER = AWS_ACCESS_KEY_ID = ""
+BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY = ""
+BROKER_VHOST = AWS_QUEUE_PREFIX = 'UNISUB' #Prefix for queues, should be DEV or STAGING 
 
 #################
 
@@ -381,21 +394,6 @@ HAYSTACK_SEARCH_ENGINE = 'solr'
 HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 SOLR_ROOT = rel('..', 'buildout', 'parts', 'solr', 'example')
-
-#Celery settings
-
-# For running worker use: python manage.py celeryd -E -l info -n worker1.localhost
-# Run event cather for monitoring workers: python manage.py celerycam
-# This allow know are workers online or not: python manage.py celerybeat
-
-CELERY_IGNORE_RESULT = True
-CELERY_DISABLE_RATE_LIMITS = True
-CELERY_SEND_EVENTS = True
-
-BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
-BROKER_USER = AWS_ACCESS_KEY_ID = ""
-BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY = ""
-BROKER_VHOST = AWS_QUEUE_PREFIX = 'UNISUB' #Prefix for queues, should be DEV or STAGING 
 
 # socialauth-related
 OPENID_REDIRECT_NEXT = '/socialauth/openid/done/'
