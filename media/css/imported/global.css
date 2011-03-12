@@ -9,14 +9,18 @@ New Header Styles
   background: -moz-linear-gradient(top,                            #FFF,     #e8e8e8) no-repeat;
 	height: 45px;
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0, 0.2);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0, 0.2);
 	border-bottom: 1px #EEE solid;
 	position: relative;
 	z-index: 2;
+	margin: 0;
+	padding: 0;
 }
 
 #main_bar #bar_wrap {
 	width: 960px;
 	margin: 0 auto;
+	padding: 0;
 }
 
 #main_bar h1 a {
@@ -40,9 +44,10 @@ New Header Styles
 #main_bar #bar_search {
 	float: left;
 	margin: 0 -7px 0 0;
-	padding: 7px 10px 7px 0;
+	padding: 6px 10px 6px 0;
 	border-right: 1px #DDD solid;
 	-webkit-box-shadow: inset -1px 0 0 #FFF;
+	-moz-box-shadow: inset -1px 0 0 #FFF;
 }
 
 #main_bar #bar_search input {
@@ -51,8 +56,10 @@ New Header Styles
   background: -moz-linear-gradient(top,                            #e8e8e8,     #FFF) no-repeat;
 	border: 1px #d3d3d3 solid;
 	-webkit-box-shadow: 0 1px 0 #FFF;
-	padding: 7px 5px 7px 25px;
+	-moz-box-shadow: 0 1px 0 #FFF;
 	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 7px 5px 7px 25px;
 	font-size: 12px;
 	color: #555;
 	font-family: Helvetica, Arial, sans-serif;
@@ -76,7 +83,7 @@ New Header Styles
 	font-size: 14px;
 	text-decoration: none;
 	display: block;
-	padding: 15px 13px 12px 13px;
+	padding: 18px 13px 14px 13px;
 }
 
 #main_bar ul#bar_menu li#nav_submit {
@@ -96,7 +103,7 @@ New Header Styles
 #main_bar ul#bar_menu li#nav_submit a {
 	font-weight: bold;
 	color: #777;
-	padding: 7px 13px 12px 13px;
+	padding: 9px 13px 14px 13px;
 }
 
 #main_bar ul#bar_menu li a:hover {
@@ -118,17 +125,64 @@ New Header Styles
   background: -moz-linear-gradient(top,                            #73a40b,     #8eb50d) no-repeat;
 	border-bottom: 1px #82ab4c solid;
 	-webkit-box-shadow: inset 0 -1px 0 #abc910;
+	-moz-box-shadow: inset 0 -1px 0 #abc910;
 	width: 100%;
 	position: relative;
 	z-index: 1;
 }
 
 #lang_bar .language_bar {
-	width: 960px;
+	width: 50%;
 	margin: 0 auto;
+	position: relative;
+	padding: 5px 0 5px 0;
 }
 
-#lang_bar .language_bar a {
+#lang_bar .language_bar a#lang_select_btn {
+	background: #FFF;
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#e8e8e8)) no-repeat;
+  background: -moz-linear-gradient(top,                            #FFF,     #e8e8e8) no-repeat;
+	-webkit-box-shadow: inset 0 -1px 0 #FFF, inset 0 8px 3px rgba(0,0,0, 0.2);
+	-moz-box-shadow: inset 0 -1px 0 #FFF, inset 0 8px 3px rgba(0,0,0, 0.2);
+	text-shadow: 0 1px 0 #FFF;
+	display: block;
+	font-size: 13px;
+	padding: 14px 10px 8px 10px;
+	color: #628800;
+	float: right;
+	text-decoration: none;
+	position: absolute;
+	top: -7px;
+	right: 0;
+	border: 1px rgba(0,0,0, 0.1) solid;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius:  5px;
+	-moz-border-radius-bottomright:     5px;
+	-moz-border-radius-bottomleft:      5px;
+}
+
+#lang_bar .language_bar a:hover#lang_select_btn {
+	background: #FFF;
+	background: -webkit-gradient(linear, left bottom, left top, from(#FFF), to(#e8e8e8)) no-repeat;
+  background: -moz-linear-gradient(bottom,                            #FFF,     #e8e8e8) no-repeat;
+	color: #888;
+}
+
+#lang_bar .language_bar a:active#lang_select_btn {
+	top: -5px;
+	-webkit-box-shadow: inset 0 -1px 0 #FFF, inset 0 6px 3px rgba(0,0,0, 0.2);
+	-moz-box-shadow: inset 0 -1px 0 #FFF, inset 0 6px 3px rgba(0,0,0, 0.2);
+}
+
+#lang_bar .language_bar .selected_language {
+	color: #FFF;
+	text-shadow: 0 1px 0 #176801;
+	text-align: right;
+	display: block;
+	float: right;
+	position: relative;
+	right: 160px;
+	font-size: 14px;
 }
 
 
