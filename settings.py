@@ -356,7 +356,7 @@ INSTALLED_APPS = (
     'paging',
     'sentry',
     'sentry.client',
-#    'djcelery',
+    'djcelery',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 

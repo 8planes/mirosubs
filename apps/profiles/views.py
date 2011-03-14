@@ -28,7 +28,7 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from utils.amazon import S3StorageError
 from django.views.generic.simple import direct_to_template
 from django.views.generic.list_detail import object_list
-from videos.models import Video, Action
+from videos.models import Video, Action, SubtitleLanguage
 from django.conf import settings
 from django.db.models import Q
 from profiles.rpc import ProfileApiClass
@@ -78,6 +78,27 @@ def my_profile(request):
         'query': q,
         'total_video_count': total_video_count
     }
+    
+    from django.db.models.query import QuerySet
+    
+    #TODO: make this multipurpose, to use with any model
+    class OptimizedQuerySet(QuerySet):
+        
+        def _fill_cache(self, num=None):
+            super(OptimizedQuerySet, self)._fill_cache(num)
+            
+            videos = dict((v.id, v) for v in self._result_cache if not hasattr(v, 'langs_cache'))
+            
+            for v in videos.values():
+                v.langs_cache = []
+                
+            langs_qs = SubtitleLanguage.objects.filter(video__id__in=videos.keys())
+            
+            for l in langs_qs:
+                videos[l.video_id].langs_cache.append(l)
+    
+    qs = qs._clone(OptimizedQuerySet)
+    
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='profiles/my_profile.html', 
