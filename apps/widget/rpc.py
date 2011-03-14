@@ -120,8 +120,11 @@ class Rpc(BaseRpc):
                 standard_version = video.latest_version(base_language_code)
             else:
                 standard_version = video.latest_version()
-            return_dict['original_subtitles'] = \
-                self._subtitles_dict(standard_version)
+            if standard_version:
+                return_dict['original_subtitles'] = \
+                    self._subtitles_dict(standard_version)
+            else:
+                return_dict['original_subtitles'] = {}            
         return return_dict
 
     def release_lock(self, request, draft_pk):
