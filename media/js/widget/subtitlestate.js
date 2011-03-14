@@ -28,6 +28,7 @@ mirosubs.widget.SubtitleState = function(json) {
      */
     this.LANGUAGE = json['language'];
     this.IS_ORIGINAL = json['is_original'];
+    this.IS_COMPLETE = json['is_complete'];
     /**
      * @type {number}
      */
@@ -43,6 +44,10 @@ mirosubs.widget.SubtitleState.fromJSON = function(json) {
         return new mirosubs.widget.SubtitleState(json);
     else
         return null;
+};
+
+mirosubs.widget.SubtitleState.fromJSONSubs = function(subs) {
+    this.SUBTITLES = subs;
 };
 
 mirosubs.widget.SubtitleState.prototype.baseParams = function() {

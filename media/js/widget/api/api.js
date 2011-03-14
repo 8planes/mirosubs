@@ -34,7 +34,8 @@ mirosubs.api.openDialog = function(config) {
         videoURL, mirosubs.video.Html5VideoType.OGG);
     var serverModel = new mirosubs.api.ServerModel(config);
     var subDialog = new mirosubs.subtitle.Dialog(
-        videoSource, serverModel, subtitles, 
+        videoSource, serverModel, 
+        mirosubs.widget.SubtitleState.fromJSONSubs(subtitles), 
         null,
         config['skipFinished']);
     mirosubs.currentUsername = config['username'];

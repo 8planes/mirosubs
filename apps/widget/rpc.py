@@ -186,7 +186,7 @@ class Rpc(BaseRpc):
         return {"response" : "ok", 
                 "last_saved_packet": draft.last_saved_packet}
 
-    def finished_subtitles(self, request, draft_pk, packets):
+    def finished_subtitles(self, request, draft_pk, packets, completed=None):
         draft = models.SubtitleDraft.objects.get(pk=draft_pk)
         if not request.user.is_authenticated():
             return { 'response': 'not_logged_in' }
@@ -212,6 +212,8 @@ class Rpc(BaseRpc):
             language.update_complete_state()
             language.is_forked = new_version.is_forked
             language.release_writelock()
+            if not draft.is_dependent() and completed is not None:
+                language.is_complete = completed
             language.save()
             new_version.update_percent_done()
             if language.is_original:
@@ -390,6 +392,7 @@ class Rpc(BaseRpc):
             [s.__dict__ for s in version.subtitles()],
             language.language,
             language.is_original,
+            language.is_complete,
             version.version_no,
             is_latest,
             version.is_forked,
