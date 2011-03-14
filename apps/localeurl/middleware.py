@@ -1,11 +1,8 @@
 # Copyright (c) 2008 Joost Cassee
 # Licensed under the terms of the MIT License (see LICENSE.txt)
 
-import re
-from django import http
 from django.conf import settings
 import django.core.exceptions
-from django.core import urlresolvers
 from django.http import HttpResponseRedirect
 from django.utils import translation
 import localeurl
@@ -39,7 +36,9 @@ class LocaleURLMiddleware(object):
 
     def process_request(self, request):
         locale, path = self.split_locale_from_request(request)
-        locale_path = utils.locale_path(path, locale or 'en-us' or translation.get_language())
+        locale_path = utils.locale_path(path, locale or translation.get_language_from_request(request) \
+                                        or translation.get_language())
+
         if locale_path != request.path_info:
             if request.META.get("QUERY_STRING", ""):
                 locale_path = "%s?%s" % (locale_path, 
