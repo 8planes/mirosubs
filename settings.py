@@ -303,8 +303,6 @@ MIDDLEWARE_CLASSES = (
     'middleware.SaveUserIp'
 )
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-
 ROOT_URLCONF = 'mirosubs.urls'
 
 TEMPLATE_DIRS = (
