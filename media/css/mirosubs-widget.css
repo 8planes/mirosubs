@@ -2804,10 +2804,11 @@ min-width: 160px !important;
 
 span.mirosubs-tabTextchoose,
 span.mirosubs-tabText,
-span.mirosubs-tabTextfinish{
-display: block !important;
-padding: 8px 12px 8px 5px !important;
-background: url("../images/white_arrows.png") right -12px no-repeat !important;
+span.mirosubs-tabTextfinish {
+	display: block !important;
+	padding: 8px 12px 8px 5px !important;
+	background: url("../images/white_arrows.png") right -12px no-repeat !important;
+	font-family: Helvetica Arial, sans-serif !important;
 }
 
 span.mirosubs-tabTextfinish {
