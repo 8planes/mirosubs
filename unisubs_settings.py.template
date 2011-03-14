@@ -91,6 +91,9 @@ if DEV or STAGING:
 else:
    CACHE_BACKEND = 'memcached://ip-10-124-229-117.ec2.internal:11211/'
 
+if not DEV:
+   SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
