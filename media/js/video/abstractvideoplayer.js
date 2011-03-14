@@ -61,6 +61,11 @@ mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE = new goog.math.Size(480, 360);
 mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE = new goog.math.Size(400, 300);
 
 
+mirosubs.video.AbstractVideoPlayer.prototype.createDom = function() {
+    this.setElementInternal(this.getDomHelper().createElement('span'));
+    goog.dom.classes.add(this.getElement(), 'mirosubs-videoplayer');
+};
+
 mirosubs.video.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
 };

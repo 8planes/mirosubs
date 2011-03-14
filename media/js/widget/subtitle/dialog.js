@@ -21,11 +21,10 @@ goog.provide('mirosubs.subtitle.Dialog');
 /**
  * @constructor
  * @param {mirosubs.subtitle.ServerModel} serverModel
- * @param {Array.<Object.<string, *>>} existingCaptions existing captions in
- *     json object format.
+ * @param {mirosubs.widget.SubtitleState} subtitles existing subtitles
  */
 mirosubs.subtitle.Dialog = function(videoSource, serverModel,
-                                    existingCaptions, opt_opener,
+                                    subtitles, opt_opener,
                                     opt_skipFinished) {
     mirosubs.Dialog.call(this, videoSource);
     mirosubs.SubTracker.getInstance().start(false);
@@ -34,7 +33,7 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.skipFinished_ = !!opt_skipFinished;
     var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.captionSet_ =
-        new mirosubs.subtitle.EditableCaptionSet(existingCaptions, uw);
+        new mirosubs.subtitle.EditableCaptionSet(subtitles.SUBTITLES, uw);
     this.captionManager_ =
         new mirosubs.CaptionManager(
             this.getVideoPlayerInternal(), this.captionSet_);
@@ -52,6 +51,11 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.currentSubtitlePanel_ = null;
     this.rightPanelListener_ = new goog.events.EventHandler(this);
     this.doneButtonEnabled_ = true;
+
+    /**
+     * @type {mirosubs.widget.SubtitleState}
+     */
+    this.subtitles_ = subtitles;
 
     this.keyEventsSuspended_ = false;
 };
@@ -252,6 +256,13 @@ mirosubs.subtitle.Dialog.prototype.isWorkSaved = function() {
 };
 
 mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
+    mirosubs.subtitle.CompletedDialog.show(
+        !!this.subtitles_.IS_COMPLETE,
+        goog.bind(this.saveWorkImpl_, this, 
+                  closeAfterSave));
+};
+
+mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isComplete) {
     this.doneButtonEnabled_ = false;
     this.getRightPanelInternal().showLoading(true);
     var that = this;
@@ -271,7 +282,8 @@ mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
         function() {
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);
-        });
+        },
+        isComplete);
 };
 
 mirosubs.subtitle.Dialog.prototype.enterState_ = function(state) {

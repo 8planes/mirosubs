@@ -43,9 +43,11 @@ mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork) {};
  * etc. This method can only be called after init, and can only be called 
  * once.
  * @param {function()} callback
+ * @param {function()=} opt_cancelCallback
+ * @param {boolean=} opt_completed
  */
 mirosubs.subtitle.ServerModel.prototype.finish = function(
-    jsonSubs, callback, opt_cancelCallback) {};
+    jsonSubs, callback, opt_cancelCallback, opt_completed) {};
 
 /**
  * Instances implementing this interface must extend goog.Disposable

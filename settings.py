@@ -196,6 +196,7 @@ JS_CORE = ['mirosubs.js',
            'widget/subtitle/reviewpanel.js',
            'widget/subtitle/reviewrightpanel.js',
            'widget/subtitle/sharepanel.js',
+           'widget/subtitle/completeddialog.js',
            'widget/subtitle/editpanel.js',
            'widget/subtitle/editrightpanel.js',
            'widget/subtitle/bottomfinishedpanel.js',
@@ -358,14 +359,14 @@ INSTALLED_APPS = (
     'paging',
     'sentry',
     'sentry.client',
-    'djcelery',
+#    'djcelery',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
 )
 
 # Celery settings
 
-import djcelery
-djcelery.setup_loader()
+# import djcelery
+# djcelery.setup_loader()
 
 # For running worker use: python manage.py celeryd -E -l info -n worker1.localhost
 # Run event cather for monitoring workers: python manage.py celerycam

@@ -114,3 +114,28 @@
 .share_team_buttons a.share_btn {
 	margin: 0 5px 0 0;
 }
+
+#team_volunteer_detail {
+	display: none;
+}
+
+#team_volunteer_detail #team_join_button {
+	margin: 25px 0 15px 0;
+}
+
+#team_volunteer_detail #team_info img {
+	float: left;
+	margin: 0 10px 0 0;
+}
+
+#team_volunteer_detail ul#team_detail_actions {
+	margin: 0 0 25px 0;
+	padding: 0;
+}
+
+#team_volunteer_detail ul#team_detail_actions li {
+	list-style-type: none;
+	margin: 10px 0 10px 0;
+	text-indent: 0;
+	padding: 0;
+}

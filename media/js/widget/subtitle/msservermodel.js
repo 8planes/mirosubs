@@ -74,7 +74,7 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.finish = 
-    function(jsonSubs, successCallback, opt_cancelCallback) 
+    function(jsonSubs, successCallback, opt_cancelCallback, opt_completed) 
 {
     mirosubs.Rpc.call(
         'set_title', {
@@ -96,6 +96,8 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
     this.stopTimer_();
     var that = this;
     var saveArgs = this.makeSaveArgs_();
+    if (goog.isDefAndNotNull(opt_completed))
+        saveArgs['completed'] = opt_completed;
     mirosubs.Rpc.call(
         'finished_subtitles', 
         saveArgs,

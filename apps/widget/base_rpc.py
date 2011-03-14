@@ -26,11 +26,12 @@ import widget
 LANGUAGES_MAP = dict(LANGUAGES)
 
 class BaseRpc:
-    def _make_subtitles_dict(self, subtitles, language, is_original, version, is_latest, is_forked, title):
+    def _make_subtitles_dict(self, subtitles, language, is_original, is_complete, version, is_latest, is_forked, title):
         return {
             'subtitles': subtitles,
             'language': language,
             'is_original': is_original,
+            'is_complete': is_complete,
             'version': version,
             'is_latest': is_latest,
             'forked': is_forked,

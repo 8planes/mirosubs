@@ -126,7 +126,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog_ =
         this.subOpenFn_();
     var subDialog = new mirosubs.subtitle.Dialog(
         this.videoSource_,
-        serverModel, subtitleState.SUBTITLES,
+        serverModel, subtitleState,
         this);
     subDialog.setParentEventTarget(this);
     subDialog.setVisible(true);

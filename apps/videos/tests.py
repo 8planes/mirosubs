@@ -54,6 +54,20 @@ This should be an E with an accent: È
 Hide these tags: {\some_letters_or_numbers_or_chars}
 '''
 
+SRT_TEXT_WITH_BLANK = u'''1
+00:00:13,34 --> 00:00:24,655
+sure I get all the colors
+nice-- is equal to 17.
+
+2
+00:00:24,655 --> 00:00:27,43
+
+3
+00:00:27,43 --> 00:00:29,79
+So what's different about this
+than what we saw in the last
+'''
+
 TXT_TEXT = u'''Here is sub 1.
 
 Here is sub 2.
@@ -62,30 +76,45 @@ And, sub 3.
 '''
 
 class SubtitleParserTest(TestCase):
+
+    def _assert_sub(self, sub, start_time, end_time, sub_text):
+        self.assertEqual(sub['start_time'], start_time)
+        self.assertEqual(sub['end_time'], end_time)
+        self.assertEqual(sub['subtitle_text'], sub_text)
     
     def test_srt(self):
         parser = SrtSubtitleParser(SRT_TEXT)
         result = list(parser)
-        
-        self.assertEqual(result[0]['start_time'], 0.0)
-        self.assertEqual(result[0]['end_time'], 0.0)
-        self.assertEqual(result[0]['subtitle_text'], u'Don\'t show this text it may be used to insert hidden data')
-        
-        self.assertEqual(result[1]['start_time'], 1.5)
-        self.assertEqual(result[1]['end_time'], 4.5)
-        self.assertEqual(result[1]['subtitle_text'], u'SubRip subtitles capability tester 1.2p by ale5000\nUse Media Player Classic as reference\nThis text should be blue')
 
-        self.assertEqual(result[2]['start_time'], 4.5)
-        self.assertEqual(result[2]['end_time'], 4.5)
-        self.assertEqual(result[2]['subtitle_text'], u'Hidden')
-        
-        self.assertEqual(result[3]['start_time'], 7.501)
-        self.assertEqual(result[3]['end_time'], 11.5)
-        self.assertEqual(result[3]['subtitle_text'], u'This should be an E with an accent: \xc8\n\u65e5\u672c\u8a9e')
+        self._assert_sub(
+            result[0], 0.0, 0.0, 
+            u'Don\'t show this text it may be used to insert hidden data')
+        self._assert_sub(
+            result[1], 1.5, 4.5,
+            u'SubRip subtitles capability tester 1.2p by ale5000\nUse Media Player Classic as reference\nThis text should be blue')
+        self._assert_sub(
+            result[2], 4.5, 4.5,
+            u'Hidden')
+        self._assert_sub(
+            result[3], 7.501, 11.5,
+            u'This should be an E with an accent: \xc8\n\u65e5\u672c\u8a9e')
+        self._assert_sub(
+            result[4], 55.501, 58.5,
+            u'Hide these tags: ')
 
-        self.assertEqual(result[4]['start_time'], 55.501)
-        self.assertEqual(result[4]['end_time'], 58.5)
-        self.assertEqual(result[4]['subtitle_text'], u'Hide these tags: ')
+    def test_srt_with_blank(self):
+        parser = SrtSubtitleParser(SRT_TEXT_WITH_BLANK)
+        result = list(parser)
+
+        self._assert_sub(
+            result[0], 13.34, 24.655,
+            u'sure I get all the colors\nnice-- is equal to 17.')
+        self._assert_sub(
+            result[1], 24.655, 27.43,
+            u'')
+        self._assert_sub(
+            result[2], 27.43, 29.79,
+            u'So what\'s different about this\nthan what we saw in the last')
     
     def test_youtube(self):
         path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')

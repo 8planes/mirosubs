@@ -132,6 +132,11 @@ def clear_environment_permissions():
     env.host_string = DEV_HOST
     _clear_permissions(os.path.join(env.static_dir, 'env'))
 
+def clear_permissions():
+    for host in env.web_hosts:
+        env.host_string = host
+        _clear_permissions('{0}/mirosubs'.format(env.web_dir))    
+
 def _git_pull():
     run('git pull')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')

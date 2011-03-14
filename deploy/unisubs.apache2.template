@@ -1,5 +1,5 @@
 <VirtualHost *:8080>
-    ServerAdmin aduston@gmail.com
+    ServerAdmin admin@pculture.org
 
     # FIXME For production
     #ServerName   universalsubtitles.org
@@ -21,17 +21,18 @@
     CustomLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/access.log" combined
     ErrorLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/error.log"
 
+    # Retired since we have converted to ELB 3/11/11 RAC
     # Redirect aliased domains to the preferred domain to avoid SEO dilution
     # See http://www.google.com/support/webmasters/bin/answer.py?answer=44231
-    RewriteEngine on
+    #RewriteEngine on
     # RewriteLog /var/log/apache2/www.getmiro.com/rewrite.log
     # RewriteLogLevel 7
-    RewriteCond %{HTTP_HOST} ^www\.universalsubtitles.org [NC]
-    RewriteRule ^(.*)$ http://universalsubtitles.org$1 [R=301,L]
-    RewriteCond %{HTTP_HOST} ^www\.universalsubtitles.com [NC]
-    RewriteRule ^(.*)$ http://universalsubtitles.org$1 [R=301,L]
-    RewriteCond %{HTTP_HOST} ^universalsubtitles.com [NC]
-    RewriteRule ^(.*)$ http://universalsubtitles.org$1 [R=301,L]
+    #RewriteCond %{HTTP_HOST} ^www\.universalsubtitles.org [NC]
+    #RewriteRule ^(.*)$ http://universalsubtitles.org$1 [R=301,L]
+    #RewriteCond %{HTTP_HOST} ^www\.universalsubtitles.com [NC]
+    #RewriteRule ^(.*)$ http://universalsubtitles.org$1 [R=301,L]
+    #RewriteCond %{HTTP_HOST} ^universalsubtitles.com [NC]
+    #RewriteRule ^(.*)$ http://universalsubtitles.org$1 [R=301,L]
 
     WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web processes=8 threads=25
     WSGIProcessGroup unisubs-INSERT_SITE_NAME

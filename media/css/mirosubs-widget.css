@@ -999,6 +999,10 @@ margin-right: 20px !important;
    margin-bottom: 30px !important;
 }
 
+span.mirosubs-videoplayer {
+   display: block !important;
+}
+
 .mirosubs-videoDiv {
 
 }
@@ -1152,7 +1156,7 @@ ul.mirosubs-titlesList.sync {
   left: 0 !important;
 }
 
-.mirosubs-modal-lang-bg {
+.mirosubs-modal-lang-bg, .mirosubs-modal-completed-bg {
   z-index: 2147483631 !important;
   position: absolute !important;
   background: #FFF !important;
@@ -2386,7 +2390,7 @@ cursor:
     margin: -7px -3px 0 0 !important;
 }
 
-.mirosubs-modal-login, .mirosubs-modal-lang, .mirosubs-forkdialog {
+.mirosubs-modal-login, .mirosubs-modal-lang, .mirosubs-forkdialog, .mirosubs-modal-completed {
   border: 3px solid !important;
   position: absolute !important;
   z-index: 2147483633 !important;
@@ -2416,11 +2420,11 @@ cursor:
    z-index: 2147483632 !important;
 }
 
-.mirosubs-modal-lang, .mirosubs-forkdialog {
+.mirosubs-modal-lang, .mirosubs-forkdialog, .mirosubs-modal-completed {
    background-color: #fff !important;
 }
 
-.mirosubs-modal-lang h3 {
+.mirosubs-modal-lang h3, .mirosubs-modal-completed h3 {
    -moz-border-radius-topleft:5px !important;
    -moz-border-radius-topright:5px !important;
    background:url("../images/gradient.png") repeat-x scroll 0 0 #FFFFFF !important;
@@ -2433,7 +2437,7 @@ cursor:
    color: #777 !important;
 }
 
-.mirosubs-modal-lang p, .mirosubs-forkdialog p {
+.mirosubs-modal-lang p, .mirosubs-forkdialog p, .mirosubs-modal-completed p {
    margin:0 !important;
    padding:12px !important;
    color: #666 !important;
@@ -2442,11 +2446,11 @@ cursor:
    min-width: 300px !important;
 }
 
-.mirosubs-modal-lang p div {
+.mirosubs-modal-lang p div, .mirosubs-modal-completed p div {
    margin-bottom: 8px !important;
 }
 
-.mirosubs-modal-lang .mirosubs-green-button, .mirosubs-forkdialog .mirosubs-green-button {
+.mirosubs-modal-lang .mirosubs-green-button, .mirosubs-forkdialog .mirosubs-green-button, .mirosubs-modal-completed .mirosubs-green-button {
    float: right !important;
    margin-right: 20px !important;
 }
