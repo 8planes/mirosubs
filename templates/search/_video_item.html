@@ -1,4 +1,5 @@
 {% load i18n %}
+
 <li>
   {% if not display_mode or display_mode == 'all' or display_mode == 'thumbnails' %}
   <a href="{{ video.get_absolute_url }}" class="thumbnail_medium">
@@ -20,8 +21,12 @@
     <div>
         <span class="langs_available">
             {{ video.subtitlelanguage_set.count }} {% trans "Languages Available" %} -
-            {% for lang in video.subtitlelanguage_set.all %} 
-                <a href="{{ lang.get_absolute_url }}">{{ lang.language_display }} <span>{{ lang.latest_subtitles|length }} {% trans "lines" %}</span></a>
+            {#{% for lang in video.subtitlelanguage_set.select_related %}#}
+            {% for lang in video.langs_cache %}  
+                <a href="{{ lang.get_absolute_url }}">
+                    {{ lang.language_display }}
+                    <span>{{ lang.latest_version.subtitle_set.count|default:0 }} {% trans "lines" %}</span>
+                </a>
             {% endfor %}
         </span>
     </div>
