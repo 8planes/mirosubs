@@ -122,15 +122,13 @@
       <li id="team_completed_subtitles"><a href="">{% trans 'Completed Subtitles' %}</a></li>
       {% if team|is_team_manager:user %}
       <li id="team_manage_settings"><a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a></li>
-      {% endif %}
-      {% if team|is_team_member:user %}
-      <li id="team_leave_button" class="clearfix"><a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave this team" %}</a></li>
       {% else %}
+      <li id="team_leave_button" class="clearfix"><a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave this team" %}</a></li>
+      {% if user.is_authenticated and team.is_by_application %}
       <li>
-        {% if user.is_authenticated and team.is_by_application %}
-          {% include "teams/_application_form.html" %}
-        {% endif %}
+        {% include "teams/_application_form.html" %}
       </li>
+      {% endif %}
       {% endif %}<!-- // if team|is_team_member:user -->
       <li id="team_video_policy"><strong>{% trans 'Video Policy' %}:</strong> {{ team.get_video_policy_display }}</li>
       <li id="team_member_policy"><strong>{% trans 'Membership Policy' %}:</strong> {{ team.get_membership_policy_display }}</li>
