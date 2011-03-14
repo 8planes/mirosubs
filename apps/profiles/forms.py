@@ -142,7 +142,8 @@ class EditUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
         self.fields['email'].required = True
-    
+        self.fields['preferred_language'].choices = get_languages_list(True)
+        
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'homepage', 'preferred_language', 
