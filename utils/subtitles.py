@@ -169,7 +169,7 @@ class SrtSubtitleParser(SubtitleParser):
         pattern += r'(?P<s_hour>\d{2}):(?P<s_min>\d{2}):(?P<s_sec>\d{2}),(?P<s_secfr>\d+)'
         pattern += r' --> '
         pattern += r'(?P<e_hour>\d{2}):(?P<e_min>\d{2}):(?P<e_sec>\d{2}),(?P<e_secfr>\d+)'
-        pattern += r'\n(?P<text>.+?)\n\n'
+        pattern += r'\n(\n|(?P<text>.+?)\n\n)'
         subtitles = strip_tags(subtitles)
         super(SrtSubtitleParser, self).__init__(subtitles, pattern, [re.DOTALL])
         #replace \r\n to \n and fix end of last subtitle
@@ -183,7 +183,8 @@ class SrtSubtitleParser(SubtitleParser):
         output = {}
         output['start_time'] = self._get_time(r['s_hour'], r['s_min'], r['s_sec'], r['s_secfr'])
         output['end_time'] = self._get_time(r['e_hour'], r['e_min'], r['e_sec'], r['e_secfr'])
-        output['subtitle_text'] = self._clean_pattern.sub('', r['text'])
+        output['subtitle_text'] = '' if r['text'] is None else \
+            self._clean_pattern.sub('', r['text'])
         return output
 
 class SbvSubtitleParser(SrtSubtitleParser):
