@@ -19,7 +19,8 @@
 from django import forms
 from auth.models import CustomUser as User, UserLanguage
 from django.core.mail import EmailMessage
-from django.forms.models import inlineformset_factory
+from django.forms.models import inlineformset_factory, BaseInlineFormSet, BaseModelFormSet
+from django.forms.formsets import BaseFormSet
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
@@ -73,7 +74,15 @@ class UserLanguageForm(forms.ModelForm):
         super(UserLanguageForm, self).__init__(*args, **kwrags)
         self.fields['language'].choices = get_languages_list(True)
 
-UserLanguageFormset = inlineformset_factory(User, UserLanguage, UserLanguageForm, extra=1)
+class UserLanguagelineFormSet(BaseInlineFormSet):
+
+    def _construct_form(self, i, **kwargs):
+        try:
+            return super(UserLanguagelineFormSet, self). _construct_form(i, **kwargs)
+        except (IndexError, ValueError):
+            return BaseFormSet._construct_form(self, i, **kwargs)
+
+UserLanguageFormset = inlineformset_factory(User, UserLanguage, UserLanguageForm, UserLanguagelineFormSet, extra=1)
 
 class SendMessageForm(forms.Form):
     email = forms.EmailField()
