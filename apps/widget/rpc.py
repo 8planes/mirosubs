@@ -160,7 +160,7 @@ class Rpc(BaseRpc):
         draft = models.SubtitleDraft.objects.get(pk=draft_pk)
         return self._subtitles_dict(draft)
     
-    def set_title(self, request, draft_pk, value):
+    def set_title(self, request, draft_pk, value, **kwargs):
         try:
             draft = models.SubtitleDraft.objects.get(pk=draft_pk)
         except models.SubtitleDraft.DoesNotExist:
