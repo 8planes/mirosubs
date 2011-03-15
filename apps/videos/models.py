@@ -438,6 +438,27 @@ class SubtitleLanguage(models.Model):
             self.has_version = True
             self.was_complete = True
 
+    def is_dependent(self):
+        return not self.is_original and not self.is_forked
+
+    def real_standard_language(self):
+        if self.standard_language:
+            return self.standard_language
+        elif self.is_dependent():
+            # This should only be needed temporarily until data is more cleaned up.
+            # in other words, self.standard_language should never be None for a dependent SL
+            self.standard_language = self.video.subtitle_language()
+            self.save()
+            return self.standard_language
+        return None
+
+    def is_dependable(self):
+        if self.is_dependent():
+            dep_lang = self.real_standard_language()
+            return dep_lang and dep_lang.is_complete and self.percent_done > 10
+        else:
+            return self.is_complete
+
     def get_widget_url(self):
         # this duplicates mirosubs.widget.SubtitleController.prototype.startEditing_ in js
         video = self.video
@@ -623,8 +644,8 @@ class SubtitleVersion(SubtitleCollection):
         return ('videos:revision', [self.pk])
 
     def is_dependent(self):
-        return not self.language.is_original and not self.is_forked
-    
+        return self.language.is_dependent()
+
     def revision_time(self):
         today = date.today()
         yesterday = today - timedelta(days=1)
@@ -793,7 +814,7 @@ class SubtitleDraft(SubtitleCollection):
             return self.language.video.latest_version()
 
     def is_dependent(self):
-        return not self.language.is_original and not self.is_forked
+        return self.language.is_dependent()
 
     def matches_request(self, request):
         if request.user.is_authenticated() and self.user and \
