@@ -28,6 +28,7 @@ from django.conf import settings
 from django.db.models import Sum
 from widget import video_cache
 from statistic import widget_views_total_counter
+from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
 
 ALL_LANGUAGES = settings.ALL_LANGUAGES
@@ -82,6 +83,33 @@ class Rpc(BaseRpc):
                         request.user, video_id, autoplay_language, None)
                     return_value['subtitles'] = subtitles
         return return_value
+
+    def _language_summary(self, language):
+        summary = {
+            'language': language.language,
+            'forked': language.is_forked or language.is_original,
+            'is_complete': language.is_complete,
+            'percent_done': language.percent_done }
+        if not language.is_forked and not language.is_original:
+            if language.standard_language:
+                summary['standard'] = language.standard_language.language
+            elif language.video.subtitle_language():
+                summary['standard'] = language.video.subtitle_language().language
+        return summary
+
+    def fetch_start_dialog_contents(self, request, video_id):
+        my_languages = get_user_languages_from_request(request)
+        my_languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
+        video = models.Video.objects.get(video_id=video_id)
+        video_languages = [self._language_summary(l) for l 
+                           in video.subtitlelanguage_set.all()]
+        original_language = None
+        if video.subtitle_language():
+            original_language = video.subtitle_language().language
+        return {
+            'my_languages': my_languages,
+            'video_languages': video_languages,
+            'original_language': original_language }
 
     def fetch_video_id_and_settings(self, request, video_url):
         video_id = video_cache.get_video_id(video_url)
