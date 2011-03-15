@@ -14,44 +14,44 @@ class Migration(DataMigration):
         for tv in orm.TeamVideo.objects.all():
             print 'Update %s' % tv.pk
             
+            langs = dict((l.language, l) for l in tv.video.subtitlelanguage_set.all())
+            
             for lang0 in (item[0] for item in settings.ALL_LANGUAGES):
+                
+                sl0 = langs.get(lang0)
+                                        
                 for lang1 in (item[0] for item in settings.ALL_LANGUAGES):
                     if lang0 == lang1:
                         continue
                     
-                    self.create_pair(orm, tv, lang0, lang1)
+                    sl1 = langs.get(lang1)
+                    sl1_subtitle_count = 0
+                    
+                    if sl1:
+                        try:
+                            last_version = sl1.subtitleversion_set.order_by('-version_no')[:1].get()
+                            sl1_subtitle_count = last_version.subtitle_set.count()
+                        except models.ObjectDoesNotExist:
+                            pass
+                    
+                    if not sl1 and not sl0:
+                        continue
+                    
+                    if not sl1 or not sl1.has_version or sl1_subtitle_count == 0:
+                        if sl0 and (((sl0.is_original or sl0.is_forked) and sl0.is_complete) or (not (sl0.is_original or sl0.is_forked) and sl0.percent_done > 10)):
+                            tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
+                            tvlp.save()    
+                    elif sl1 and not (sl1.is_original or sl1.is_forked) and sl1.percent_done > 0:
+                        if sl0 and sl1.standard_language == sl0 and sl0.is_complete:
+                            tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
+                            tvlp.percent_complete = sl1.percent_done
+                            tvlp.save()
+                        elif sl0 and sl0.standard_language and sl0.standard_language == sl1.standard_language:
+                            if sl0.standard_language.is_complete == True and sl0.percent_done > 10:
+                                tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
+                                tvlp.percent_complete = sl1.percent_done
+                                tvlp.save()  
             
-    def create_pair(self, orm, tv, lang0, lang1):
-        try:
-            sl0 = tv.video.subtitlelanguage_set.get(language=lang0)
-        except models.ObjectDoesNotExist:
-            sl0 = None
-
-        try:
-            sl1 = tv.video.subtitlelanguage_set.get(language=lang1)
-            try:
-                last_version = sl1.subtitleversion_set.order_by('-version_no')[:1].get()
-                sl1._subtitle_count = last_version.subtitle_set.count()
-            except models.ObjectDoesNotExist:
-                sl1._subtitle_count = 0
-        except models.ObjectDoesNotExist:
-            sl1 = None
-        
-        if not sl1 or not sl1.has_version or sl1._subtitle_count == 0:
-            if sl0 and (((sl0.is_original or sl0.is_forked) and sl0.is_complete) or (not (sl0.is_original or sl0.is_forked) and sl0.percent_done > 10)):
-                tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
-                tvlp.save()    
-        elif sl1 and not (sl1.is_original or sl1.is_forked) and sl1.percent_done > 0:
-            if sl0 and sl1.standard_language == sl0 and sl0.is_complete:
-                tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
-                tvlp.percent_complete = sl1.percent_done
-                tvlp.save()
-            elif sl0 and sl0.standard_language and sl0.standard_language == sl1.standard_language:
-                if sl0.standard_language.is_complete == True and sl0.percent_done > 10:
-                    tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
-                    tvlp.percent_complete = sl1.percent_done
-                    tvlp.save()                    
-
     def get_pair_obj(self, orm, tv, lang0, lang1):
         tvlp = orm.TeamVideoLanguagePair()
         tvlp.team_video = tv
