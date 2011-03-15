@@ -139,3 +139,14 @@
 	text-indent: 0;
 	padding: 0;
 }
+
+.completed_translations {
+	float: none !important;
+	margin: 5px 0 5px 0 !important;
+	display: block !important;
+	line-height: 0 !important;
+}
+
+.completed_translations span {
+	color: #333 !important;
+}
