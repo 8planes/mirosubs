@@ -28,14 +28,17 @@ def check_subtitle_version(version):
         return
     
     prev_version = version.prev_version()
-    
+
     if not prev_version:
         return
     
     ###########################
     cur_ver_len = version.subtitle_set.count()
     prev_ver_len = prev_version.subtitle_set.count()
-    
+
+    if prev_ver_len == 0:
+        return 
+     
     if (float(cur_ver_len) / prev_ver_len) <= 0.7:
         send_alarm_email(version, u'A translation loses more than 30% of its lines')
     
@@ -44,6 +47,9 @@ def check_subtitle_version(version):
                                                Q(end_time__isnull=False)).count()
     prev_ver_len = prev_version.subtitle_set.filter(Q(start_time__isnull=False), \
                                                Q(end_time__isnull=False)).count()    
+    
+    if prev_ver_len == 0:
+        return
     
     if (float(cur_ver_len) / prev_ver_len) <= 0.7:
         send_alarm_email(version, u'A translation loses more than 30% of its syncing information')

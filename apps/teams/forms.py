@@ -23,12 +23,11 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import forms
-from teams.models import Team, TeamMember, TeamVideo, TeamVideoLanguage
+from teams.models import Team, TeamMember, TeamVideo
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
-from django.forms.models import inlineformset_factory
-from videos.types import video_type_registrar, VideoTypeError
+from videos.types import VideoTypeError
 from django.core.urlresolvers import resolve
 from django.http import Http404
 from django.contrib.sites.models import Site
@@ -40,17 +39,6 @@ from utils.forms import AjaxForm
 from localeurl.utils import strip_path
 import re
 from utils.translation import get_languages_list
-
-class TeamVideoLanguageForm(forms.ModelForm):
-    
-    class Meta:
-        model = TeamVideoLanguage
-        
-    def __init__(self, *args, **kwargs):
-        super(TeamVideoLanguageForm, self).__init__(*args, **kwargs)
-        self.fields['language'].choices = get_languages_list(True)
-
-TeamVideoLanguageFormset = inlineformset_factory(TeamVideo, TeamVideoLanguage, TeamVideoLanguageForm ,extra=1)
 
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)

@@ -25,8 +25,8 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
 from utils import render_to, render_to_json
-from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, TeamVideoLanguageFormset, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
-from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguage
+from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
+from teams.models import Team, TeamMember, Invite, Application, TeamVideo
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse

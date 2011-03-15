@@ -26,13 +26,11 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from videos.models import Video, SubtitleLanguage
 from auth.models import CustomUser as User
-from sorl.thumbnail.main import DjangoThumbnail
 from utils.amazon import S3EnabledImageField
-from messages.models import Message
 from django.db.models.signals import post_save
+from messages.models import Message
 from django.template.loader import render_to_string
 from django.conf import settings
-from messages.models import Message
 from django.http import Http404
 from django.contrib.sites.models import Site
 
@@ -253,20 +251,60 @@ class TeamVideo(models.Model):
             return self.team.logo_thumbnail()
         
         return ''
-
-    
+   
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
+    video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
+    team = models.ForeignKey(Team)
+    is_original = models.BooleanField(default=False, db_index=True)
+    forked = models.BooleanField(default=True, db_index=True)
+    is_complete = models.BooleanField(default=False, db_index=True)
+    percent_done = models.IntegerField(default=0)
     
+    class Meta:
+        unique_together = (('team_video', 'language'),)
+        
     def __unicode__(self):
         return self.get_language_display()
     
-    def get_absolute_url(self):
-        video = self.team_video.video
-        lang = video.subtitle_language(self.language)
-        return lang and lang.get_absolute_url() or video.get_absolute_url()
+    @classmethod
+    def update(cls, tv, l, sl=None):
+        if not sl:
+            try:
+                sl = tv.video.subtitlelanguage_set.get(language=l)
+            except models.ObjectDoesNotExist:
+                pass
+            
+        tvl, created = cls.objects.get_or_create(team_video=tv, language=l, defaults={
+            'team': tv.team,
+            'video': tv.video                                                                             
+        })
+        
+        if sl:
+            tvl.is_original = sl.is_original
+            tvl.forked = sl.is_forked
+            
+            if sl.is_original or sl.is_forked:
+                tvl.is_complete = sl.is_complete
+                
+            tvl.percent_done = sl.percent_done
+        
+        tvl.save()
     
+    @classmethod
+    def team_video_save_handler(cls, sender, instance, created, **kwargs):
+        for l, lang_name in settings.ALL_LANGUAGES:
+            cls.update(instance, l)
+
+    @classmethod
+    def subtitle_language_save_handler(cls, sender, instance, created, **kwargs):
+        for tv in TeamVideo.objects.all():
+            cls.update(tv, instance.language, instance)
+
+post_save.connect(TeamVideoLanguage.subtitle_language_save_handler, SubtitleLanguage)        
+post_save.connect(TeamVideoLanguage.team_video_save_handler, TeamVideo)
+
 class TeamMemderManager(models.Manager):
     use_for_related_fields = True
     
@@ -326,4 +364,3 @@ def invite_send_message(sender, instance, created, **kwargs):
         msg.save()
     
 post_save.connect(invite_send_message, Invite)
-        
