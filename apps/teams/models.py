@@ -305,6 +305,15 @@ class TeamVideoLanguage(models.Model):
 post_save.connect(TeamVideoLanguage.subtitle_language_save_handler, SubtitleLanguage)        
 post_save.connect(TeamVideoLanguage.team_video_save_handler, TeamVideo)
 
+class TeamVideoLanguagePair(models.Model):
+    team_video = models.ForeignKey(TeamVideo)
+    team = models.ForeignKey(Team)
+    video = models.ForeignKey(Video)
+    language_0 = models.CharField(max_length=16, choices=ALL_LANGUAGES, db_index=True)
+    language_1 = models.CharField(max_length=16, choices=ALL_LANGUAGES, db_index=True)
+    language_pair = models.CharField(db_index=True, max_length=16)
+    percent_complete = models.IntegerField(db_index=True, default=0)
+
 class TeamMemderManager(models.Manager):
     use_for_related_fields = True
     
