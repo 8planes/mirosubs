@@ -6,62 +6,90 @@ from django.db import models
 from django.conf import settings
 
 class Migration(DataMigration):
-    
+
+    def _is_dependent(self, sl):
+        return not sl.is_original and not sl.is_forked
+
+    def _standard_language(self, sl, original_sl):
+        return sl.standard_language or original_sl            
+
+    def _is_dependable(self, sl, original_sl):
+        if not self._is_dependent(sl):
+            return sl.is_complete
+        else:
+            dep_lang = self.standard_language(sl, original_sl)
+            return dep_lang and dep_lang.is_complete and sl.percent_done > 10
+
+    def _calculate_percent_complete(self, sl0, sl1, original_sl):
+        if not sl0 or not self._is_dependable(sl0, original_sl):
+            return -1
+        if not sl1:
+            return 0
+        if self._is_dependent(sl1):
+            if sl1.percent_done == 0:
+                return 0
+            elif not _is_dependent(sl0):
+                l_dep1 = self._standard_language(sl1)
+                return sl1.percent_done if l_dep1 and \
+                    l_dep1.id == sl0.id else -1
+            else:
+                l_dep0 = self._standard_language(sl0)
+                l_dep1 = self._standard_language(sl1)
+                if l_dep0 and l_dep1 and l_dep0.id == l_dep1.id:
+                    return sl1.percent_done
+                else:
+                    return -1
+        else:
+            sl1_subtitle_count = 0
+            try:
+                last_version = sl1.subtitleversion_set.order_by('-version_no')[:1].get()
+                sl1_subtitle_count = last_version.subtitle_set.count()
+            except models.ObjectDoesNotExist:
+                pass
+            return 0 if sl1_subtitle_count == 0 else -1
+
+    def _original_language(self, lang_dict):
+        for lang, sl in lang_dict.items():
+            if sl.is_original:
+                return sl
+        return None
+
+    def _add_pairs_for_team_video(self, tv, lang_list):
+        langs = dict([(l.language, l) for l in tv.video.subtitlelanguage_set.all() if l.language])
+        original_lang = self._original_language(langs)
+        for lang0, sl0 in langs.items():
+            for lang1 in lang_list:
+                if lang0 == lang1:
+                    continue
+                if lang1 in langs:
+                    sl1 = langs.get(lang1)
+                else:
+                    sl1 = None
+                percent_complete = self._calculate_percent_complete(sl0, sl1, original_lang)
+                if percent_complete != -1:
+                    tvlp = orm.TeamVideoLanguagePair(
+                        team_video=tv,
+                        team=tv.team,
+                        video=tv.video,
+                        language_0=lang0,
+                        language_1=lang1,
+                        language_pair='{0}_{1}'.format(lang0, lang1),
+                        percent_complete=percent_complete)
+                    tvlp.save()
+
     def forwards(self, orm):
         if db.dry_run:
             return
-        
+
+        total_count = orm.TeamVideo.objects.count()        
+        cur_tv = 0
+        lang_list = [item[0] for item in settings.ALL_LANGUAGES]
         for tv in orm.TeamVideo.objects.all():
-            print 'Update %s' % tv.pk
+            cur_tv += 1
+            if (cur_tv % 100) == 0:
+                print('{0} out of {1}'.format(cur_tv, total_count))
+                self._add_pairs_for_team_video(tv, lang_list)
             
-            langs = dict((l.language, l) for l in tv.video.subtitlelanguage_set.all())
-            
-            for lang0 in (item[0] for item in settings.ALL_LANGUAGES):
-                
-                sl0 = langs.get(lang0)
-                                        
-                for lang1 in (item[0] for item in settings.ALL_LANGUAGES):
-                    if lang0 == lang1:
-                        continue
-                    
-                    sl1 = langs.get(lang1)
-                    sl1_subtitle_count = 0
-                    
-                    if sl1:
-                        try:
-                            last_version = sl1.subtitleversion_set.order_by('-version_no')[:1].get()
-                            sl1_subtitle_count = last_version.subtitle_set.count()
-                        except models.ObjectDoesNotExist:
-                            pass
-                    
-                    if not sl1 and not sl0:
-                        continue
-                    
-                    if not sl1 or not sl1.has_version or sl1_subtitle_count == 0:
-                        if sl0 and (((sl0.is_original or sl0.is_forked) and sl0.is_complete) or (not (sl0.is_original or sl0.is_forked) and sl0.percent_done > 10)):
-                            tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
-                            tvlp.save()    
-                    elif sl1 and not (sl1.is_original or sl1.is_forked) and sl1.percent_done > 0:
-                        if sl0 and sl1.standard_language == sl0 and sl0.is_complete:
-                            tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
-                            tvlp.percent_complete = sl1.percent_done
-                            tvlp.save()
-                        elif sl0 and sl0.standard_language and sl0.standard_language == sl1.standard_language:
-                            if sl0.standard_language.is_complete == True and sl0.percent_done > 10:
-                                tvlp = self.get_pair_obj(orm, tv, lang0, lang1)
-                                tvlp.percent_complete = sl1.percent_done
-                                tvlp.save()  
-            
-    def get_pair_obj(self, orm, tv, lang0, lang1):
-        tvlp = orm.TeamVideoLanguagePair()
-        tvlp.team_video = tv
-        tvlp.team = tv.team
-        tvlp.video = tv.video
-        tvlp.language_0 = lang0
-        tvlp.language_1 = lang1
-        tvlp.language_pair = '%s_%s' % (lang0, lang1)
-        return tvlp
-    
     def backwards(self, orm):
         orm.TeamVideoLanguagePair.objects.all().delete()
     
