@@ -384,7 +384,6 @@ class Video(models.Model):
             self.is_subtitled = True
             self.was_subtitled = True
 
-
 def create_video_id(sender, instance, **kwargs):
     instance.edited = datetime.now()
     if not instance or instance.video_id:
@@ -425,6 +424,37 @@ class SubtitleLanguage(models.Model):
     def __unicode__(self):
         return self.language_display()
     
+    def __init__(self, *args, **kwargs):
+        super(SubtitleLanguage, self).__init__(*args, **kwargs)
+        self.save_initial_values()
+    
+    def save(self, *args, **kwargs):
+        super(SubtitleLanguage, self).save(*args, **kwargs)
+        self.check_initial_values()
+        self.save_initial_values()
+    
+    def delete(self, *args, **kwargs):
+        video_id = self.video_id
+        super(SubtitleLanguage, self).delete(*args, **kwargs)
+        #asynchronous call
+        update_team_video.delay(video_id)
+        
+    def save_initial_values(self):
+        self._initial_values = {
+            'is_complete': self.is_complete,
+            'is_original': self.is_original,
+            'percent_done': self.percent_done,
+            'is_forked': self.is_forked
+        }
+            
+    def check_initial_values(self):
+        iv = self._initial_values
+        
+        if iv['is_complete'] != self.is_complete or iv['is_original'] != self.is_original \
+            or iv['percent_done'] != self.percent_done or iv['is_forked'] != self.is_forked:
+                #asynchronous call
+                update_team_video_for_sl.delay(self.id)
+        
     def get_title(self):
         if self.is_original:
             return self.video.title
@@ -570,9 +600,6 @@ class SubtitleLanguage(models.Model):
             self.percent_done = 100
             
         self.save()
-
-        #asynchronous call
-        update_team_video_for_sl.delay(self)
         
     def notification_list(self, exclude=None):
         qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)

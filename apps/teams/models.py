@@ -33,7 +33,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
-from teams.tasks import update_team_video
+from teams.tasks import update_team_video, update_one_team_video
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -217,9 +217,11 @@ class TeamVideo(models.Model):
         return self.title or self.video.__unicode__()
 
     def save(self, *args, **kwargs):
+        created = bool(not self.pk)
         super(TeamVideo, self).save(*args, **kwargs)
         #asynchronous call
-        update_team_video.delay(self)
+        if created:
+            update_one_team_video.delay(self.id)
     
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)
@@ -310,8 +312,7 @@ class TeamVideo(models.Model):
                 if lang0 == lang1:
                     continue
                 sl1 = langs.get(lang1)
-                self._update_team_video_language_pair(
-                    lang0, sl0, lang1, sl1)
+                self._update_team_video_language_pair(lang0, sl0, lang1, sl1)
                 
     def update_team_video_language_pairs_for_sl(self, sl, lang_code_list=None):
         if lang_code_list is None:
@@ -324,7 +325,8 @@ class TeamVideo(models.Model):
             if sl.language == lang1:
                 continue
             
-            self._update_team_video_language_pair(sl.language, sl, lang1, langs.get(lang1))        
+            self._update_team_video_language_pair(
+                sl.language, sl, lang1, langs.get(lang1))        
         
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')

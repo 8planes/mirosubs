@@ -36,6 +36,16 @@ JS_USE_COMPILED = True
 VIMEO_API_KEY = 'e1a46f832f8dfa99652781ee0b39df12'
 VIMEO_API_SECRET = 'bdaeb531298eeee1'
 
+# Celery
+BROKER_BACKEND = 'redis'
+BROKER_HOST = "localhost"
+BROKER_VHOST = "/"
+
+# 1. Run Redis 
+# 2. >>> python manage.py celeryd -E --concurrency=10 -n worker1.localhost
+# 3. >>> ./dev-runserver
+# 4. >>> python manage.py celerycam #this is optional. It allow see in admin-interface tasks running
+
 try:
     from settings_local import *
 except ImportError:
