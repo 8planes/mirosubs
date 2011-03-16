@@ -28,7 +28,10 @@
                         {% endif %}
                     </a>                    
                     <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video }}</strong></a>
-                   
+                    <div class="test-me">
+                      {% team_video_lang_list team_video.video 6 %}
+
+                    </div>
                     <div class="need_help">
                         <span>{% trans 'Need help' %}:</span>
                         {% if team_video.all_languages %}
