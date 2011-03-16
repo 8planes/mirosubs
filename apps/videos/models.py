@@ -572,7 +572,7 @@ class SubtitleLanguage(models.Model):
         self.save()
 
         #asynchronous call
-        update_team_video_for_sl.delay(self)
+        update_team_video_for_sl.delay(self.id)
         
     def notification_list(self, exclude=None):
         qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)

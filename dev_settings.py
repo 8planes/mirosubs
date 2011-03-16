@@ -44,6 +44,7 @@ BROKER_VHOST = "/"
 # 1. Run Redis 
 # 2. >>> python manage.py celeryd -E --concurrency=10 -n worker1.localhost
 # 3. >>> ./dev-runserver
+# 4. >>> python manage.py celerycam #this is optional. It allow see in admin-interface tasks running
 
 try:
     from settings_local import *
