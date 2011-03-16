@@ -87,14 +87,14 @@ class Rpc(BaseRpc):
     def _language_summary(self, language):
         summary = {
             'language': language.language,
-            'forked': language.is_forked or language.is_original,
-            'is_complete': language.is_complete,
-            'percent_done': language.percent_done }
-        if not language.is_forked and not language.is_original:
-            if language.standard_language:
-                summary['standard'] = language.standard_language.language
-            elif language.video.subtitle_language():
-                summary['standard'] = language.video.subtitle_language().language
+            'dependent': language.is_dependent() }
+        if language.is_dependent():
+            summary['percent_done'] = language.percent_done
+            if language.real_standard_language():
+                summary['standard'] = \
+                    language.real_standard_language().language
+        else:
+            summary['is_complete'] = language.is_complete
         return summary
 
     def fetch_start_dialog_contents(self, request, video_id):

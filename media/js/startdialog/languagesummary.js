@@ -23,8 +23,32 @@ goog.provide('mirosubs.startdialog.LanguageSummary');
  */
 mirosubs.startdialog.LanguageSummary = function(json) {
     this.LANGUAGE = json['language'];
-    this.FORKED = json['forked'];
+    this.DEPENDENT = json['dependent'];
     this.IS_COMPLETE = json['is_complete'];
     this.PERCENT_DONE = json['percent_done'];
     this.STANDARD = json['standard'];
+};
+
+mirosubs.startdialog.LanguageSummary.prototype.setAll = function(all) {
+    this.allLangs_ = all;
+    if (this.STANDARD)
+        this.standardLang_ = goog.array.find(
+            this.allLangs_, 
+            function(lang) { return lang.LANGUAGE == this.STANDARD; },
+            this);
+};
+
+mirosubs.startdialog.LanguageSummary.prototype.getStandardLang = function() {
+    return this.standardLang_;
+};
+
+mirosubs.startdialog.LanguageSummary.prototype.isDependent = function(partial) {
+    if (partial)
+        return this.DEPENDENT && this.PERCENT_DONE > 0 && this.PERCENT_DONE < 100;
+    else
+        return this.DEPENDENT && this.PERCENT_DONE == 100;
+};
+
+mirosubs.startdialog.LanguageSummary.prototype.isEmpty = function() {
+    return this.DEPENDENT && this.PERCENT_DONE == 0;
 };
