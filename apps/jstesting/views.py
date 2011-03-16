@@ -20,6 +20,8 @@ from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 import widget
+import simplejson as json
+
 
 def js_dependencies():
     js_files = list(settings.JS_ONSITE)
@@ -32,7 +34,9 @@ def jstest(request, file_name):
         template = 'jstesting/alltests.html'
     else:
         template = 'jstesting/{0}.js'.format(file_name)
+    context = {
+        'languages': json.dumps(settings.ALL_LANGUAGES) }
     return render_to_response(
         template,
-        widget.add_js_files({}, False, js_dependencies()),
+        widget.add_js_files(context, False, js_dependencies()),
         context_instance=RequestContext(request))

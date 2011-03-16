@@ -42,7 +42,7 @@ mirosubs.startdialog.LanguageSummary.prototype.getStandardLang = function() {
     return this.standardLang_;
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.isDependent = function(partial) {
+mirosubs.startdialog.LanguageSummary.prototype.isDependentAndNonempty = function(partial) {
     if (partial)
         return this.DEPENDENT && this.PERCENT_DONE > 0 && this.PERCENT_DONE < 100;
     else
@@ -51,4 +51,22 @@ mirosubs.startdialog.LanguageSummary.prototype.isDependent = function(partial) {
 
 mirosubs.startdialog.LanguageSummary.prototype.isEmpty = function() {
     return this.DEPENDENT && this.PERCENT_DONE == 0;
+};
+
+mirosubs.startdialog.LanguageSummary.prototype.isDependable = function() {
+    if (this.DEPENDENT)
+        return this.getStandardLang() && this.getStandardLang().IS_COMPLETE && this.PERCENT_DONE > 10;
+    else
+        return this.IS_COMPLETE;
+};
+
+mirosubs.startdialog.LanguageSummary.prototype.canBenefitFromTranslation = 
+    function(languageSummary) 
+{
+    if (!this.DEPENDENT)
+        return false;
+    if (languageSummary.DEPENDENT)
+        return this.STANDARD = languageSummary.STANDARD;
+    else
+        return this.STANDARD = languageSummary;
 };
