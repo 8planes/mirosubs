@@ -25,6 +25,7 @@
 from django import template
 from teams.models import Team, Invite
 from videos.models import Action
+from apps.widget import video_cache
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
@@ -136,3 +137,13 @@ def invite_friends_to_team(context, team):
             'url': team.get_site_url()
         }
     return context
+
+@register.inclusion_tag('teams/_team_video_lang_list.html', takes_context=True)  
+def team_video_lang_list(context, video, max_items=6):
+    """
+    max_items: if there are more items than max_items, they will be truncated to X more.
+    """
+    return  {
+        'sub_statuses': video_cache.get_video_languages_verbose(video.video_id, max_items)
+        }
+

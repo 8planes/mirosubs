@@ -1,0 +1,17 @@
+{% load i18n %}
+<ul class="languages">
+{% for status in sub_statuses.items %}
+<li class="language-detail">
+  {% if status.percent_done or status.is_complete %}<a href="{{status.language_url}}">{%endif%}{{ status.language_display}}{% if status.percent_done or status.is_complete %}</a> {% endif %}
+  ({% if status.percent_done %}{{status.percent_done}}%{% else %}{% if status.is_complete %}{% trans "Complete"  %}{% endif %}{% endif %}){% if not forloop.last %},{% endif %}
+</li>
+{% endfor %}
+ {% if sub_statuses.total %}<li> 
+{% blocktrans count sub_statuses.total as total %}
+and {{ total }} other.
+{% plural %}
+and  {{total}}  others.
+{% endblocktrans %}
+ {% endif %}
+</ul>
+
