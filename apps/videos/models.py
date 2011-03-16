@@ -407,7 +407,7 @@ class SubtitleLanguage(models.Model):
     writelock_owner = models.ForeignKey(User, null=True, blank=True)
     is_complete = models.BooleanField(default=False)
     has_version = models.BooleanField(default=False)
-    was_complete = models.BooleanField(default=False)
+    had_version = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     subtitles_fetched_count = models.IntegerField(default=0)
@@ -467,7 +467,7 @@ class SubtitleLanguage(models.Model):
             self.has_version = False
         else:
             self.has_version = True
-            self.was_complete = True
+            self.had_version = True
 
     def is_dependent(self):
         return not self.is_original and not self.is_forked

@@ -283,7 +283,7 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, draft.pk, [])
         language = Video.objects.get(
             video_id=draft.video.video_id).subtitle_language()
-        self.assertTrue(language.was_complete)
+        self.assertTrue(language.had_version)
         self.assertTrue(language.has_version)
         self.assertTrue(language.video.is_subtitled)
 
@@ -503,7 +503,7 @@ class TestRpc(TestCase):
         self.assertEqual(2, language.subtitleversion_set.count())
         self.assertEqual(
             0, language.latest_version().subtitle_set.count())
-        self.assertEquals(True, language.was_complete)
+        self.assertEquals(True, language.had_version)
         self.assertEquals(False, language.has_version)
 
     def test_zero_out_version_0(self):
@@ -523,7 +523,7 @@ class TestRpc(TestCase):
         language = video.subtitle_language()
         self.assertEquals(0, language.subtitleversion_set.count())
         self.assertEquals(None, language.latest_version())
-        self.assertEquals(False, language.was_complete)
+        self.assertEquals(False, language.had_version)
         self.assertEquals(False, language.has_version)
 
     def test_start_translating(self):
@@ -593,7 +593,7 @@ class TestRpc(TestCase):
         language = Video.objects.get(pk=draft.video.pk).subtitle_language('es')
         self.assertEquals(2, language.subtitleversion_set.count())
         self.assertEquals(0, language.latest_version().subtitle_set.count())
-        self.assertEquals(True, language.was_complete)
+        self.assertEquals(True, language.had_version)
         self.assertEquals(False, language.has_version)
 
     def test_zero_out_trans_version_0(self):
@@ -607,7 +607,7 @@ class TestRpc(TestCase):
         language = Video.objects.get(pk=draft.video.pk).subtitle_language('es')
         self.assertEquals(0, language.subtitleversion_set.count())
         self.assertEquals(None, language.video.latest_version('es'))
-        self.assertEquals(False, language.was_complete)
+        self.assertEquals(False, language.had_version)
         self.assertEquals(False, language.has_version)
 
     def test_edit_existing_original(self):
