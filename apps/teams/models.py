@@ -306,7 +306,7 @@ class TeamVideo(models.Model):
         if lang_code_list is None:
             lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
         langs = dict([(l.language, l) for l in 
-                      tv.video.subtitlelanguage_set.all() if l.language])
+                      self.video.subtitlelanguage_set.all() if l.language])
         for lang0, sl0 in langs.items():
             for lang1 in lang_code_list:
                 if lang0 == lang1:
