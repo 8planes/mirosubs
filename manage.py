@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # Universal Subtitles, universalsubtitles.org
 # 
 # Copyright (C) 2010 Participatory Culture Foundation
@@ -16,7 +17,6 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-#!/usr/bin/python
 from django.core.management import execute_manager
 
 # put apps dir in python path, like pinax

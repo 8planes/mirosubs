@@ -33,6 +33,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
+from teams.tasks import update_team_video
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -214,14 +215,11 @@ class TeamVideo(models.Model):
     
     def __unicode__(self):
         return self.title or self.video.__unicode__()
-    
-    def clean_languages(self):
-        langs = [item.language for item in self.completed_languages.all()]
-        self.languages.filter(language__in=langs).delete()
-            
+
     def save(self, *args, **kwargs):
         super(TeamVideo, self).save(*args, **kwargs)
-        self.clean_languages()
+        #asynchronous call
+        update_team_video.delay(self)
     
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)
@@ -311,13 +309,23 @@ class TeamVideo(models.Model):
             for lang1 in lang_code_list:
                 if lang0 == lang1:
                     continue
-                if lang1 in langs:
-                    sl1 = langs.get(lang1)
-                else:
-                    sl1 = None
+                sl1 = langs.get(lang1)
                 self._update_team_video_language_pair(
                     lang0, sl0, lang1, sl1)
-
+                
+    def update_team_video_language_pairs_for_sl(self, sl, lang_code_list=None):
+        if lang_code_list is None:
+            lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
+            
+        langs = dict([(l.language, l) for l in 
+                      self.video.subtitlelanguage_set.all() if l.language])  
+                          
+        for lang1 in lang_code_list:
+            if sl.language == lang1:
+                continue
+            
+            self._update_team_video_language_pair(sl.language, sl, lang1, langs.get(lang1))        
+        
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     video = models.ForeignKey(Video)

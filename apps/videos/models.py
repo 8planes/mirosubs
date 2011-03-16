@@ -39,6 +39,7 @@ from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 import time
 from django.utils.safestring import mark_safe
+from teams.tasks import update_team_video, update_team_video_for_sl
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -570,6 +571,9 @@ class SubtitleLanguage(models.Model):
             
         self.save()
 
+        #asynchronous call
+        update_team_video_for_sl.delay(self)
+        
     def notification_list(self, exclude=None):
         qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
         if exclude:

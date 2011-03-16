@@ -1,0 +1,9 @@
+# cp ./init.d/* /etc/init.d/
+# cp ./config/celeryd  /etc/default/
+
+Edit /etc/default/celeryd
+
+# cd /etc/init.d/
+# update-rc.d celeryd defaults 99
+# update-rc.d celerybeat defaults 99
+# update-rc.d celeryevcam defaults 99

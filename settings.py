@@ -365,13 +365,14 @@ INSTALLED_APPS = (
 # import djcelery
 # djcelery.setup_loader()
 
-# For running worker use: python manage.py celeryd -E -l info -n worker1.localhost
-# Run event cather for monitoring workers: python manage.py celerycam
+# For running worker use: python manage.py celeryd -E --concurrency=10 -n worker1.localhost
+# Run event cather for monitoring workers: python manage.py celerycam --frequency=5.0
 # This allow know are workers online or not: python manage.py celerybeat
 
 CELERY_IGNORE_RESULT = True
 CELERY_DISABLE_RATE_LIMITS = True
 CELERY_SEND_EVENTS = True
+CELERY_SEND_TASK_ERROR_EMAILS = True
 
 BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
 BROKER_USER = AWS_ACCESS_KEY_ID = ""
