@@ -8,16 +8,16 @@ VIRTUALENV="<ENV_PATH>"
 # Name of the projects settings module.
 export DJANGO_SETTINGS_MODULE="settings"
 
-CELERYD="<PROJECT_ROOT>/manage.py"
-CELERYEV="<PROJECT_ROOT>/manage.py"
-CELERYBEAT="<PROJECT_ROOT>/manage.py"
+CELERYD="<ENV_PATH>/bin/python <PROJECT_ROOT>/manage.py"
+CELERYEV="<ENV_PATH>/bin/python <PROJECT_ROOT>/manage.py"
+CELERYBEAT="<ENV_PATH>/bin/python <PROJECT_ROOT>/manage.py"
 
 #celeryd options
-CELERYD_OPTS="celeryd -E --concurrency=10 -n worker1.dev"
+CELERYD_OPTS="celeryd -E --concurrency=10 -n worker1.dev --settings=unisubs_settings"
 
 #celeryevcam options
-CELERYEV_OPTS="celeryev --frequency=5.0"
+CELERYEV_OPTS="celeryev --frequency=5.0 --settings=unisubs_settings"
 CELERYEV_CAM="djcelery.snapshot.Camera"
 
 #celerybeat options
-CELERYBEAT_OPTS="celerybeat"
+CELERYBEAT_OPTS="celerybeat --settings=unisubs_settings"
