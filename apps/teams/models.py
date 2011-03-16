@@ -251,7 +251,73 @@ class TeamVideo(models.Model):
             return self.team.logo_thumbnail()
         
         return ''
-   
+
+    def _calculate_percent_complete(self, sl0, sl1):
+        # maybe move this to Video model in future.
+        if not sl0 or not sl0.is_dependable():
+            return -1
+        if not sl1:
+            return 0
+        if sl1.is_dependent():
+            if sl1.percent_done == 0:
+                return 0
+            elif sl0.is_dependent():
+                l_dep0 = sl0.real_standard_language()
+                l_dep1 = sl1.real_standard_language()
+                if l_dep0 and l_dep1 and l_dep0.id == l_dep1.id:
+                    return sl1.percent_done
+                else:
+                    return -1
+            else:
+                l_dep1 = sl1.real_standard_language()
+                return sl1.percent_done if \
+                    l_dep1 and l_dep1.id == sl0.id else -1
+        else:
+            sl1_subtitle_count = 0
+            latest_version = sl1.latest_version()
+            if latest_version:
+                sl1_subtitle_count = latest_version.subtitle_set.count()
+            return 0 if sl1_subtitle_count == 0 else -1
+
+    def _update_team_video_language_pair(self, lang0, sl0, lang1, sl1):
+        percent_complete = self._calculate_percent_complete(sl0, sl1)
+        tvlps = TeamVideoLanguagePair.objects.filter(
+            team_video=self,
+            language_0=lang0,
+            language_1=lang1)
+        tvlp = None if len(tvlps) == 0 else tvlps[0]
+        if not tvlp and percent_complete != -1:
+            tvlp = TeamVideoLanguagePair(
+                team_video=self,
+                team=self.team,
+                video=self.video,
+                language_0=lang0,
+                language_1=lang1,
+                language_pair='{0}_{1}'.format(lang0, lang1),
+                percent_complete=percent_complete)
+            tvlp.save()
+        elif tvlp and percent_complete != -1:
+            tvlp.percent_complete = percent_complete
+            tvlp.save()
+        elif tvlp and percent_complete == -1:
+            tvlp.remove()
+
+    def update_team_video_language_pairs(self, lang_code_list=None):
+        if lang_code_list is None:
+            lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
+        langs = dict([(l.language, l) for l in 
+                      tv.video.subtitlelanguage_set.all() if l.language])
+        for lang0, sl0 in langs.items():
+            for lang1 in lang_code_list:
+                if lang0 == lang1:
+                    continue
+                if lang1 in langs:
+                    sl1 = langs.get(lang1)
+                else:
+                    sl1 = None
+                self._update_team_video_language_pair(
+                    lang0, sl0, lang1, sl1)
+
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     video = models.ForeignKey(Video)
