@@ -94,6 +94,8 @@ else:
 if not DEV:
    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
+# INSERT TRACELYZER INSTRUMENTATION HERE (OPTIONAL)
+
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
