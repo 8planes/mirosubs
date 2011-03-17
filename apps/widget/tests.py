@@ -892,32 +892,45 @@ class TestRpc(TestCase):
         request = RequestMockup(self.user_0)
         video = self._create_two_sub_forked_subs(request)
 
-        # create a forked fr
+        # create a dependent french translation fr
         response = rpc.start_editing(request, video.video_id, 'fr',
                                      base_language_code='es', fork=False)
-        forked_lang =  video.subtitlelanguage_set.get(language='es')
-
-        # fork lang should start at 100%
-        self.assertEqual(forked_lang.percent_done, 100 )
-        # now add to the original es
-        response = rpc.start_editing(request, video.video_id, 'es')
-
-        inserted = [{'subtitle_id': 'c',
-                     'text': 'c_en',
-                     'start_time': 3.3,
-                     'end_time': 4.2,
-                     'sub_order': 1.0}]
         draft_pk = response['draft_pk']
+
+        # add a subtitle to the french translation
+        inserted = [{'subtitle_id': 'a', 'text':'frenchtext'}]
         rpc.save_subtitles(
-            request, draft_pk, 
+            request, draft_pk,
+            [_make_packet(inserted=inserted)])
+
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+        translated_lang =  video.subtitlelanguage_set.get(language='fr')
+        # translation  should start 50%
+        self.assertEqual(translated_lang.percent_done, 50 )
+
+
+
+        response = rpc.start_editing(request, video.video_id, 'es')
+        draft_pk = response['draft_pk']
+
+        # add a subtitle to the spanish one
+        inserted = [{'subtitle_id': 'e', 
+                      'text': 'd_es',
+                     'start_time': 4.3,
+                     'end_time': 5.2,
+                     'sub_order': 1.0}]
+        
+        rpc.save_subtitles(
+            request, draft_pk,
             [_make_packet(inserted=inserted)])
 
         rpc.finished_subtitles(request, draft_pk, [_make_packet()])
 
-        # now check that forked has less than 100 %
-        dependent_lang = video.subtitlelanguage_set.get(language='fr')
-        self.assertTrue( dependent_lang.percent_done < 100)
-        self.assertTrue( dependent_lang.percent_done > 0)
+        # # now check that forked has less than 100 %
+        translated_lang = video.subtitlelanguage_set.get(language='fr')
+        percent_done = translated_lang.percent_done
+ 
+        self.assertEqual( percent_done , 33)
 
         
 
