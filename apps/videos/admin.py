@@ -49,7 +49,7 @@ class VideoAdmin(admin.ModelAdmin):
     
 class SubtitleLanguageAdmin(admin.ModelAdmin):
     actions = None
-    list_display = ['video', 'is_original', 'language', 'is_complete', 'was_complete', 'versions']
+    list_display = ['video', 'is_original', 'language', 'is_complete', 'had_version', 'versions']
     list_filter = ['is_original', 'is_complete']
     search_fields = ['video__title', 'video__video_id']
     
