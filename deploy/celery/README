@@ -6,3 +6,6 @@ Edit settings, see ./config/example
 # update-rc.d celeryd defaults 99
 # update-rc.d celerybeat defaults 99
 # update-rc.d celeryevcam defaults 99
+
+For removing:
+# update-rc.d -f celeryd remove
