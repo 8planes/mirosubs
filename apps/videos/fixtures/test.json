@@ -79,7 +79,7 @@
             "writelock_session_key": "",
             "is_original": true,
             "writelock_time": null,
-            "was_complete": true,
+            "had_version": true,
             "video": 1,
             "has_version": true
         }

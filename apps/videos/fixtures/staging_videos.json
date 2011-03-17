@@ -173,7 +173,7 @@
             "is_original": true, 
             "is_forked": false, 
             "writelock_time": null, 
-            "was_complete": false, 
+            "had_version": false, 
             "video": 1, 
             "has_version": false
         }
@@ -188,7 +188,7 @@
             "is_original": true, 
             "is_forked": false, 
             "writelock_time": null, 
-            "was_complete": false, 
+            "had_version": false, 
             "video": 2, 
             "has_version": false
         }
@@ -203,7 +203,7 @@
             "is_original": false, 
             "is_forked": true, 
             "writelock_time": null, 
-            "was_complete": true, 
+            "had_version": true, 
             "video": 2, 
             "has_version": true
         }
@@ -218,7 +218,7 @@
             "is_original": false, 
             "is_forked": true, 
             "writelock_time": null, 
-            "was_complete": true, 
+            "had_version": true, 
             "video": 3, 
             "has_version": true
         }
@@ -233,7 +233,7 @@
             "is_original": true, 
             "is_forked": false, 
             "writelock_time": null, 
-            "was_complete": false, 
+            "had_version": false, 
             "video": 3, 
             "has_version": false
         }
@@ -248,7 +248,7 @@
             "is_original": true, 
             "is_forked": false, 
             "writelock_time": null, 
-            "was_complete": false, 
+            "had_version": false, 
             "video": 4, 
             "has_version": false
         }
@@ -263,7 +263,7 @@
             "is_original": false, 
             "is_forked": true, 
             "writelock_time": null, 
-            "was_complete": true, 
+            "had_version": true, 
             "video": 4, 
             "has_version": true
         }
@@ -279,7 +279,7 @@
             "is_original": true, 
             "is_forked": false, 
             "writelock_time": null, 
-            "was_complete": false, 
+            "had_version": false, 
             "video": 5, 
             "has_version": false, 
             "subtitles_fetched_count": 0

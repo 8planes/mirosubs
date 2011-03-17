@@ -178,7 +178,7 @@ def video(request, video_id, video_url=None, title=None):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
-    translations = list(video.subtitlelanguage_set.filter(was_complete=True) \
+    translations = list(video.subtitlelanguage_set.filter(had_version=True) \
         .filter(is_original=False))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations
@@ -191,10 +191,7 @@ def video(request, video_id, video_url=None, title=None):
 
 def video_list(request):
     qs = Video.objects.exclude(Q(subtitlelanguage__subtitleversion__subtitle=None)) \
-        .distinct().extra(select={'languages_count': 'SELECT COUNT(id) '+
-        'FROM videos_subtitlelanguage WHERE '+
-        'videos_subtitlelanguage.video_id = videos_video.id AND '+
-        'videos_subtitlelanguage.was_complete'})
+        .distinct()
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
@@ -359,7 +356,7 @@ def history(request, video_id, lang=None):
     context['video'] = video
     context['site'] = Site.objects.get_current()
     translations = list(video.subtitlelanguage_set.filter(is_original=False) \
-        .filter(was_complete=True))
+        .filter(had_version=True))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
     context['last_version'] = language.latest_version()

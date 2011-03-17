@@ -131,6 +131,6 @@ class YoutubeVideoType(VideoType):
         version.finished = True
         version.save()
 
-        language.was_complete = True
+        language.had_version = True
         language.is_complete = True
         language.save()

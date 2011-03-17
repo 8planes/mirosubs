@@ -97,6 +97,10 @@ class Video(models.Model):
     subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
     widget_views_counter = RedisSimpleField('video_id', changed_video_set)
     view_counter = RedisSimpleField('video_id', changed_video_set)
+
+    # Denormalizing the subtitles(had_version) count, in order to get faster joins
+    # updated from update_languages_count()
+    languages_count = models.PositiveIntegerField(default=0, db_index=True)
     
     def __unicode__(self):
         title = self.title_display()
@@ -306,6 +310,9 @@ class Video(models.Model):
         else:
             return Subtitle.objects.none()
 
+    def update_languages_count(self):
+        self.languages_count = self.subtitlelanguage_set.filter(had_version=True).count()
+        
     def latest_subtitles(self, language_code=None):
         version = self.latest_version(language_code)
         return [] if version is None else version.subtitles()
@@ -407,7 +414,7 @@ class SubtitleLanguage(models.Model):
     writelock_owner = models.ForeignKey(User, null=True, blank=True)
     is_complete = models.BooleanField(default=False)
     has_version = models.BooleanField(default=False)
-    was_complete = models.BooleanField(default=False)
+    had_version = models.BooleanField(default=False)
     is_forked = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     subtitles_fetched_count = models.IntegerField(default=0)
@@ -467,7 +474,7 @@ class SubtitleLanguage(models.Model):
             self.has_version = False
         else:
             self.has_version = True
-            self.was_complete = True
+            self.had_version = True
 
     def is_dependent(self):
         return not self.is_original and not self.is_forked
