@@ -99,7 +99,7 @@ class Rpc(BaseRpc):
 
     def fetch_start_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)
-        my_languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
+        my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
         video = models.Video.objects.get(video_id=video_id)
         video_languages = [self._language_summary(l) for l 
                            in video.subtitlelanguage_set.all()]
