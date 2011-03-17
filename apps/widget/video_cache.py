@@ -187,6 +187,7 @@ def get_video_languages_verbose(video_id, max_items=6):
                 data["items"].insert(0, {
                     'language_display': lang.language_display(),
                     'is_complete': lang.is_complete,
+                    'language_url': lang.get_absolute_url(),
                 })
         cache.set(cache_key, data, TIMEOUT)
         return data
