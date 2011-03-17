@@ -386,7 +386,8 @@ BROKER_VHOST = AWS_QUEUE_PREFIX = 'UNISUB' #Prefix for queues, should be DEV or 
 import re
 LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/widget'),
-    re.compile('^/api')
+    re.compile('^/api'),
+    re.compile('^/jstest')
 )
 
 #Haystack configuration

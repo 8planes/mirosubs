@@ -46,6 +46,11 @@ function createSet(existingCaptions) {
     return captionSet;
 };
 
+function setUp() {
+    mirosubs.Tracker.getInstance().dontReport();
+    mirosubs.SubTracker.getInstance().start(false);
+}
+
 function tearDown() {
     MS_eventHandler.removeAll();
     MS_updatedCaptions = [];

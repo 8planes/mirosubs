@@ -62,6 +62,10 @@ function setUpSubs(opt_subs) {
 }
 
 // the tests
+function setUp() {
+    mirosubs.Tracker.getInstance().dontReport();
+    mirosubs.SubTracker.getInstance().start(false);
+}
 
 function tearDown() {
     MS_syncPanel.dispose();
