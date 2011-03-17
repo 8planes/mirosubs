@@ -97,6 +97,8 @@ class Video(models.Model):
     subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
     widget_views_counter = RedisSimpleField('video_id', changed_video_set)
     view_counter = RedisSimpleField('video_id', changed_video_set)
+
+    languages_count = models.PositiveIntegerField(default=0, db_index=True)
     
     def __unicode__(self):
         title = self.title_display()
