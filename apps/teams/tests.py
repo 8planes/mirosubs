@@ -76,7 +76,7 @@ class TeamsTest(TestCase):
     def _video_lang_list(self, team):
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
-        return response.context['team_video_lang_list']
+        return response.context['team_video_md_list']
 
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
