@@ -96,7 +96,7 @@ class TeamsTest(TestCase):
         response = self.client.get(url)
 
         # The video should be in the list.
-        self.assertEqual(1, len(response.context['team_video_lang_list']))
+        self.assertEqual(1, len(response.context['team_video_md_list']))
 
         # but we should see no "no work" message
         self.assertTrue('allow_noone_language' not in response.context or \
@@ -126,8 +126,7 @@ class TeamsTest(TestCase):
         self._set_my_languages('ko')
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
-        self.assertEqual(1, len(response.context['team_video_lang_list']))
-        self.assertTrue(response.context['allow_noone_language'])
+        self.assertEqual(1, len(response.context['team_video_md_list']))
 
     def test_no_dupes_without_buttons(self):
         team, new_team_video = self._create_new_team_video()
@@ -143,8 +142,7 @@ class TeamsTest(TestCase):
 
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
-        self.assertEqual(1, len(response.context['team_video_lang_list']))
-        self.assertTrue(response.context['allow_noone_language'])
+        self.assertEqual(1, len(response.context['team_video_md_list']))
 
     def test_views(self):
         self.client.login(**self.auth)

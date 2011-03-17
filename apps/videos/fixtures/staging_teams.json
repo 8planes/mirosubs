@@ -50,5 +50,18 @@
             "thumbnail": "", 
             "added_by": 9998
         }
-    }        
+    },
+    {
+        "pk": 2, 
+        "model": "teams.teamvideo", 
+        "fields": {
+            "all_languages": false, 
+            "description": "", 
+            "title": "", 
+            "video": 6, 
+            "team": 1, 
+            "thumbnail": "", 
+            "added_by": 9998
+        }
+    }            
 ]

@@ -135,12 +135,16 @@ def detail(request, slug):
     qs4 = lqs.filter(is_original=False, forked=True, is_complete=True)
     
     mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
-    
+
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team,
         'can_edit_video': team.can_edit_video(request.user)
     })
+
+    if len(mqs) == 0:
+        mqs = TeamMultyQuerySet(TeamVideoLanguagePair.objects.filter(team=team) \
+                                .select_related('team_video', 'team_video__video'))
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
