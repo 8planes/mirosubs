@@ -889,10 +889,36 @@ class TestRpc(TestCase):
         return Video.objects.get(pk=draft.video.pk)
 
     def test_create_translation_dependent_on_forked(self):
-        # TODO: test percent done here!
-        # Alter forked (std) lang and check percent done again!
         request = RequestMockup(self.user_0)
         video = self._create_two_sub_forked_subs(request)
+
+        # create a forked fr
+        response = rpc.start_editing(request, video.video_id, 'fr',
+                                     base_language_code='es', fork=False)
+        forked_lang =  video.subtitlelanguage_set.get(language='es')
+
+        # fork lang should start at 100%
+        self.assertEqual(forked_lang.percent_done, 100 )
+        # now add to the original es
+        response = rpc.start_editing(request, video.video_id, 'es')
+
+        inserted = [{'subtitle_id': 'c',
+                     'text': 'c_en',
+                     'start_time': 3.3,
+                     'end_time': 4.2,
+                     'sub_order': 1.0}]
+        draft_pk = response['draft_pk']
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+
+        # now check that forked has less than 100 %
+        dependent_lang = video.subtitlelanguage_set.get(language='fr')
+        self.assertTrue( dependent_lang.percent_done < 100)
+        self.assertTrue( dependent_lang.percent_done > 0)
+
         
 
     def test_fork_translation_dependent_on_forked(self):
