@@ -37,9 +37,12 @@ VIMEO_API_KEY = 'e1a46f832f8dfa99652781ee0b39df12'
 VIMEO_API_SECRET = 'bdaeb531298eeee1'
 
 # Celery
-BROKER_BACKEND = 'redis'
-BROKER_HOST = "localhost"
-BROKER_VHOST = "/"
+CELERY_ALWAYS_EAGER = True
+
+# Or you can use redis as backend
+#BROKER_BACKEND = 'redis'
+#BROKER_HOST = "localhost"
+#BROKER_VHOST = "/"
 
 # 1. Run Redis 
 # 2. >>> python manage.py celeryd -E --concurrency=10 -n worker1.localhost
