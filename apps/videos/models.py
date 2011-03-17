@@ -687,7 +687,7 @@ class SubtitleVersion(SubtitleCollection):
         return ('videos:revision', [self.pk])
 
     def is_dependent(self):
-        return self.language.is_dependent()
+        return not self.language.is_original and not self.is_forked
 
     def revision_time(self):
         today = date.today()
