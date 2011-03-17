@@ -276,6 +276,12 @@ margin: 0px !important;
   border-bottom: 0 !important;;
   padding: 0 !important;
   }
+  
+.embed_options_link {
+	font-size: 10px;
+	position: relative;
+	bottom: 5px;
+}
 
 
 

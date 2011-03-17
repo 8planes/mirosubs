@@ -19,6 +19,7 @@
 from django.core.cache import cache
 from videos.types.base import VideoTypeError
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.utils.hashcompat import sha_constructor
 from videos.types import video_type_registrar
 
@@ -64,6 +65,7 @@ def invalidate_cache(video_id, language_code=None):
     cache.delete(_subtitles_dict_key(video_id, None))
     cache.delete(_subtitles_count_key(video_id))
     cache.delete(_video_languages_key(video_id))
+    cache.delete(_video_languages_verbose_key(video_id))
 
 # only used while testing.
 def invalidate_video_id(video_url):
@@ -93,6 +95,9 @@ def _subtitles_count_key(video_id):
 
 def _video_languages_key(video_id):
     return "widget_video_languages_{0}".format(video_id)
+
+def _video_languages_verbose_key(video_id):
+    return "widget_video_languages_verbose_{0}".format(video_id)
 
 def get_video_urls(video_id):
     cache_key = _video_urls_key(video_id)
@@ -151,4 +156,40 @@ def get_video_languages(video_id):
         return_value = [(t.language, t.percent_done) for t in translated_languages]
         cache.set(cache_key, return_value, TIMEOUT)
         return return_value
+
+def get_video_languages_verbose(video_id, max_items=6):
+    # FIXME: we should probably merge a better method with get_video_languages
+    # maybe accepting a 'verbose' param?
+    cache_key = _video_languages_verbose_key(video_id)
+    value = cache.get(cache_key)
+    if value is not None:
+        return value
+    else:
+        from videos.models import Video
+        video = Video.objects.get(video_id=video_id)
+        languages_with_version_total = video.subtitlelanguage_set.filter(has_version=True).order_by('-percent_done')
+        total_number = languages_with_version_total.count()
+        languages_with_version = languages_with_version_total[:max_items]
+        data = { "items":[]}
+        if total_number > max_items:
+            data["total"] = total_number - max_items
+        for lang in languages_with_version:
+            # show only with some translation
+            if lang.percent_done > 0.0 and lang.is_dependent():
+                data["items"].append({
+                    'language_display': lang.language_display(),
+                    'percent_done': lang.percent_done ,
+                    'language_url': lang.get_absolute_url(),
+                })
+            else:
+                # append to the beggininig of the list as
+                # the UI will show this first
+                data["items"].insert(0, {
+                    'language_display': lang.language_display(),
+                    'is_complete': lang.is_complete,
+                })
+        cache.set(cache_key, data, TIMEOUT)
+        return data
+
+
 
