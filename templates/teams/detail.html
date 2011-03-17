@@ -54,9 +54,9 @@ mpq.push(['track', 'Arrives_at_teams_page']);
         {% endif %}
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
-            {% for team_video_lang in team_video_lang_list %}
+            {% for md_obj in team_video_md_list %}
             <li>
-                {% team_video_lang_detail team_video_lang team %}
+                {% team_video_detail md_obj.team_video %}
             </li>
             {% endfor %}
         </ul>

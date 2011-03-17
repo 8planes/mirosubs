@@ -106,21 +106,7 @@ def team_add_video_select(context):
 
 @register.inclusion_tag('teams/_team_video_detail.html', takes_context=True)  
 def team_video_detail(context, team_video):
-    languages_to_add = []
-    
-    video_languages = [l.language for l in team_video.video.subtitlelanguage_set.all() if l.language]
-    
-    for lang in context['USER_LANGUAGES']:
-        if not lang in video_languages and lang in ALL_LANGUAGES_DICT:
-            languages_to_add.append((lang, ALL_LANGUAGES_DICT[lang]))
-    
-    ol = team_video.video.subtitle_language()
-    
-    if ol and ol.latest_subtitles():
-        context['languages_to_add'] = languages_to_add
-    else:
-        context['languages_to_add'] = []
-    
+    context['team_video'] = team_video
     return context
 
 @register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  

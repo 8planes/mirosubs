@@ -26,7 +26,7 @@
 
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
-from teams.models import Team, TeamMember, Invite, Application, TeamVideo
+from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguagePair, TeamVideoLanguage
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
@@ -117,39 +117,30 @@ def detail(request, slug):
     
     languages = get_user_languages_from_request(request)
     languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
-    languages.append('')
-    video_ids = team.teamvideo_set.values_list('video_id', flat=True)
-
-    writelock_cutoff = datetime.datetime.now() - datetime.timedelta(seconds=WRITELOCK_EXPIRATION)
-
-    qs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(language__in=languages) \
-        .exclude(writelock_time__gte=writelock_cutoff) \
-        .filter(video__subtitlelanguage__language__in=languages) \
-        .extra(where=['NOT ((SELECT vsl.has_version FROM videos_subtitlelanguage AS vsl WHERE vsl.is_original = %s AND vsl.video_id = videos_subtitlelanguage.video_id) = %s AND videos_subtitlelanguage.is_original=%s)'], params=(True, False, False,)) \
-        .distinct()
-        
-    # all videos not in the list
-    _sl_videos_ids = qs.values_list('video_id', flat=True)
-    complement_video_ids = [id for id in video_ids if id not in _sl_videos_ids]
-    qs_complement = SubtitleLanguage.objects.filter(video__in=complement_video_ids).filter(is_original=True)
     
-    qs1 = qs.filter(is_forked=False, is_original=False).filter(percent_done__lt=100, percent_done__gt=0)
-    qs2 = qs.filter(is_forked=False, is_original=False).filter(percent_done=0)
-    qs3 = qs.filter(is_original=True).filter(subtitleversion__isnull=True)
-    qs4 = qs.filter(is_forked=False, is_original=False).filter(percent_done=100)
-    qs5 = qs.filter(Q(is_forked=True)|Q(is_original=True)).filter(subtitleversion__isnull=False)
+    langs_pairs = []
     
-    mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4, qs5, qs_complement)
+    for l1 in languages:
+        for l0 in languages:
+            if not l1 == l0:
+                langs_pairs.append('%s_%s' % (l1, l0))
+    
+    qs = TeamVideoLanguagePair.objects.filter(language_pair__in=langs_pairs, team=team) \
+        .select_related('team_video', 'team_video__video')
+    lqs = TeamVideoLanguage.objects.filter(team=team).select_related('team_video', 'team_video__video')
+    
+    qs1 = qs.filter(percent_complete__gt=0,percent_complete__lt=100)
+    qs2 = qs.filter(percent_complete=0)
+    qs3 = lqs.filter(is_original=True, is_complete=False)
+    qs4 = lqs.filter(is_original=False, forked=True, is_complete=True)
+    
+    mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
     
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team,
         'can_edit_video': team.can_edit_video(request.user)
     })
-    
-    if qs1.count() + qs2.count() + qs3.count() + qs4.count() + qs5.count() == 0:
-        mqs = SubtitleLanguage.objects.filter(video__in=video_ids).filter(is_original=True)
-        extra_context['allow_noone_language'] = True
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
@@ -161,7 +152,7 @@ def detail(request, slug):
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
                        extra_context=extra_context, 
-                       template_object_name='team_video_lang')
+                       template_object_name='team_video_md')
 
 def detail_members(request, slug):
     #just other tab of detail view
