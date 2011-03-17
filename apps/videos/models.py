@@ -618,8 +618,13 @@ class SubtitleLanguage(models.Model):
     
 def subtile_language_delete_handler(sender, instance, **kwargs):
     video_cache.invalidate_cache(instance.video.video_id)
+    instance.video.update_languages_count()
 
+def subtitle_language_save_handler(sender, instance, **kwargs):
+    instance.video.update_languages_count()
+    
 post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
+post_save.connect(subtitle_language_save_handler, SubtitleLanguage)
 models.signals.pre_delete.connect(subtile_language_delete_handler, SubtitleLanguage)
 
 class SubtitleCollection(models.Model):
