@@ -857,7 +857,7 @@ class SubtitleDraft(SubtitleCollection):
             return self.language.video.latest_version()
 
     def is_dependent(self):
-        return self.language.is_dependent()
+        return not self.language.is_original and not self.is_forked
 
     def matches_request(self, request):
         if request.user.is_authenticated() and self.user and \
@@ -1036,7 +1036,7 @@ class VideoUrl(models.Model):
     original = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, null=True, blank=True)
-    
+
     def __unicode__(self):
         return self.url
     
