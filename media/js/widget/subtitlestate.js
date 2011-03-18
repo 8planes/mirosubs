@@ -21,7 +21,7 @@ goog.provide('mirosubs.widget.SubtitleState');
 /**
  * @constructor
  */
-mirosubs.widget.SubtitleState = function(json) {
+mirosubs.widget.SubtitleState = function(json, opt_subs) {
     /**
      * Language code. Null if and only if original language.
      * @type {?string}
@@ -33,7 +33,7 @@ mirosubs.widget.SubtitleState = function(json) {
      * @type {number}
      */
     this.VERSION = json['version'];
-    this.SUBTITLES = json['subtitles'];
+    this.SUBTITLES = json['subtitles'] || opt_subs;
     this.FORKED = json['forked'];
     this.IS_LATEST = json['is_latest']
     this.TITLE = json['title']
@@ -47,7 +47,7 @@ mirosubs.widget.SubtitleState.fromJSON = function(json) {
 };
 
 mirosubs.widget.SubtitleState.fromJSONSubs = function(subs) {
-    this.SUBTITLES = subs;
+    return new mirosubs.widget.SubtitleState({}, subs);
 };
 
 mirosubs.widget.SubtitleState.prototype.baseParams = function() {
