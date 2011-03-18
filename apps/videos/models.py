@@ -577,10 +577,8 @@ class SubtitleLanguage(models.Model):
         return []
         
     def update_percent_done(self):
+        original_value = self.percent_done
         if not self.is_original and not self.is_forked:
-            # FIXME: this calculation is incorrect. where are the unit tests?
-            # for example, subtitles can be deleted, so it's quite easy 
-            # for this to come up with a number greater than 100%
             try:
                 translation_count = 0
                 for item in self.latest_subtitles():
@@ -592,8 +590,6 @@ class SubtitleLanguage(models.Model):
             if translation_count == 0:
                 self.percent_done = 0
             
-            
-
             if self.standard_language and self.is_dependent():
                 last_version = self.standard_language.latest_version()
             else:    
@@ -611,8 +607,8 @@ class SubtitleLanguage(models.Model):
                 self.percent_done = 0 
         else:
             self.percent_done = 100
-            
-        self.save()
+        if original_value != self.percent_done:            
+            self.save()
         
     def notification_list(self, exclude=None):
         qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
