@@ -935,7 +935,83 @@ class TestRpc(TestCase):
         
 
     def test_fork_translation_dependent_on_forked(self):
-        pass
+        request = RequestMockup(self.user_0)
+        # create the english draft
+        draft = self._create_basic_draft(request, finished=True)
+        video = draft.video
+
+
+        # create spanish
+        
+
+        response = rpc.start_editing(request, video.video_id, 'es',
+                                     base_language_code='en', fork=False)
+        draft_pk = response['draft_pk']
+
+        inserted = [{'subtitle_id': 'e', 
+                      'text': 'd_fr',
+                     'start_time': 4.3,
+                     'end_time': 5.2,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(inserted=inserted)])
+        
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+        
+        # create a forked translation, FR
+        response = rpc.start_editing(request, video.video_id, 'fr',
+                                     base_language_code='en', fork=False)
+        draft_pk = response['draft_pk']
+
+        langs = video.subtitlelanguage_set.all()
+        self.assertEqual(len(langs), 3)
+
+        inserted = [{'subtitle_id': 'e', 
+                      'text': 'd_fr',
+                     'start_time': 4.3,
+                     'end_time': 5.2,
+                     'sub_order': 1.0}]
+        
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(inserted=inserted)])
+        
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+        
+        response = rpc.start_editing(request, video.video_id, 'es',
+                                     base_language_code='fr')
+        inserted = [{'subtitle_id': 'e', 
+                      'text': 'd_es_based_fr',
+                     'start_time': 4.3,
+                     'end_time': 5.2,
+                     'sub_order': 1.0}]
+        
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(inserted=inserted)])
+        
+        draft_pk = response['draft_pk']
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+        self.assertTrue(draft.is_dependent())
+        
+     
+        langs = video.subtitlelanguage_set.all()
+        self.assertEqual(len(langs), 4)
+
+        es_langs = langs.filter(language='es')
+        self.assertEqual(es_langs.count(), 2, "now assert we have two spanish")
+        
+        es_dependencies =  []
+        for lang in es_langs:
+            real_standard = lang.real_standard_language()
+            if real_standard:
+               es_dependencies.append(real_standard.language)
+
+        self.assertTrue("fr" in es_dependencies , "We need a spanish trans to depend on fr")
+        self.assertTrue("en" in es_dependencies , "We need a spanish trans to depend on english as well")
+
 
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(
