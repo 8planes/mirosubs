@@ -32,17 +32,18 @@ mirosubs.startdialog.Model = function(json, opt_initialLanguage) {
             return !!mirosubs.languageNameForCode(l); 
         });
     this.originalLanguage_ = json['original_language'];
-    var videoLanguages = goog.array.filter(
-        json['video_languages'], function(l) {
-            return !!mirosubs.languageNameForCode(l);
+    var videoLanguages = goog.array.map(
+        json['video_languages'],
+        function(vljson) {
+            return new mirosubs.startdialog.LanguageSummary(vljson);
         });
     /**
      * @type {Array.<mirosubs.startdialog.LanguageSummary>}
      */
-    this.videoLanguages_ = goog.array.map(
+    this.videoLanguages_ = goog.array.filter(
         videoLanguages,
-        function(vljson) {
-            return new mirosubs.startdialog.LanguageSummary(vljson);
+        function(l) {
+            return !!mirosubs.languageNameForCode(l.LANGUAGE);
         });
     goog.array.forEach(
         this.videoLanguages_,
