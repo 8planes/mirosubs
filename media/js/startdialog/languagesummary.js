@@ -31,8 +31,8 @@ mirosubs.startdialog.LanguageSummary = function(json) {
 
 mirosubs.startdialog.LanguageSummary.prototype.toString = function() {
     var name = mirosubs.languageNameForCode(this.LANGUAGE);
-    if (this.DEPENDENT)
-        return name + " (Complete)";
+    if (!this.DEPENDENT)
+        return name + (this.IS_COMPLETE ? " (Complete)" : " (Incomplete)");
     else
         return name + " (" + this.PERCENT_DONE + "%)";
 };

@@ -418,6 +418,9 @@ class Rpc(BaseRpc):
         latest_version = language.latest_version()
         if latest_version is None or version.version_no >= latest_version.version_no:
             is_latest = True
+        base_language = None
+        if language.is_dependent() and not version.is_forked:
+            base_language = language.real_standard_language().language
         return self._make_subtitles_dict(
             [s.__dict__ for s in version.subtitles()],
             language.language,
@@ -426,6 +429,7 @@ class Rpc(BaseRpc):
             version.version_no,
             is_latest,
             version.is_forked,
+            base_language,
             language.get_title())
 
     def _subtitle_count(self, video_id):
