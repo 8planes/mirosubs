@@ -16,6 +16,7 @@ function makeBaseJSON() {
 
 function setUp() {
     mirosubs.languages = {{languages|safe}};
+    mirosubs.metadataLanguages = [];
 }
 
 function testOriginalLanguageDisplay() {
@@ -97,6 +98,24 @@ function testFromLanguages0() {
     assertEquals('fr', fromLanguages[0].LANGUAGE);
 }
 
-
+function testGeneral0() {
+    var json = {
+        "my_languages": ["en-us", "en", "en"],
+        "original_language": "",
+        "video_languages": [{
+            "dependent": false,
+            "is_complete": true,
+            "language": ""
+        }]
+    }
+    var model = new mirosubs.startdialog.Model(json, null);
+    assertTrue(model.originalLanguageShown());
+    assertEquals(0, model.fromLanguages().length);
+    var toLanguages = model.toLanguages();
+    assertEquals("en", toLanguages[0].language);
+    assertEquals(mirosubs.languages.length, toLanguages.length);
+    for (var i = 0; i < toLanguages.length; i++)
+        assertTrue(!toLanguages[i].videoLanguage);
+}
 
 {% endblock %}

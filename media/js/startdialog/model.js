@@ -26,12 +26,21 @@ mirosubs.startdialog.Model = function(json, opt_initialLanguage) {
      * @type {Array.<string>} Array of langauge codes
      */
     this.myLanguages_ = json['my_languages'];
+    goog.array.removeDuplicates(this.myLanguages_);
+    this.myLanguages_ = goog.array.filter(
+        this.myLanguages_, function(l) { 
+            return !!mirosubs.languageNameForCode(l); 
+        });
     this.originalLanguage_ = json['original_language'];
+    var videoLanguages = goog.array.filter(
+        json['video_languages'], function(l) {
+            return !!mirosubs.languageNameForCode(l);
+        });
     /**
      * @type {Array.<mirosubs.startdialog.LanguageSummary>}
      */
     this.videoLanguages_ = goog.array.map(
-        json['video_languages'],
+        videoLanguages,
         function(vljson) {
             return new mirosubs.startdialog.LanguageSummary(vljson);
         });
@@ -123,19 +132,19 @@ mirosubs.startdialog.Model.prototype.createMyLanguageToLang_ = function(lang) {
     return this.createToLang_(10, videoLanguage, lang);
 };
 
-mirosubs.startdialog.Model.prototype.addMissingToLangs_ = function(languageMetas) {
+mirosubs.startdialog.Model.prototype.addMissingToLangs_ = function(languageToLangs) {
     var allLangCodes = goog.array.map(
         mirosubs.languages, 
         function(l) { return l[0]; });
     var existingLanguages = new goog.structs.Set(
-        goog.array.map(languageMetas, function(l) { return l.language; }));
+        goog.array.map(languageToLangs, function(l) { return l.language; }));
     var missingLangCodes = goog.array.filter(
         allLangCodes,
         function(code) { return !existingLanguages.contains(code); });
     goog.array.sort(missingLangCodes);
-    return goog.array.concat(languageMetas, goog.array.map(
+    return goog.array.concat(languageToLangs, goog.array.map(
         missingLangCodes, 
-        goog.bind(this.createToLang_, null), 
+        goog.bind(this.createToLang_, null, 11, null), 
         this));
 };
 

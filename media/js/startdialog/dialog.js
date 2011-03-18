@@ -96,7 +96,6 @@ mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
 
 mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
     var fromLanguages = this.model_.fromLanguages();
-    console.log(fromLanguages.length);
     goog.style.showElement(
         this.fromLanguageSection_, fromLanguages.length > 0);
     if (fromLanguages.length > 0) {
@@ -115,7 +114,6 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
 };
 
 mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
-    console.log(this.model_.toLanguages());
     var toLanguageContents = goog.array.map(
         this.model_.toLanguages(),
         function(l) {
