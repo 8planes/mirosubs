@@ -318,6 +318,20 @@ class Video(models.Model):
         version = self.latest_version(language_code)
         return [] if version is None else version.subtitles()
 
+    def _find_base_language(self, base_language_code):
+        base_language = self.subtitle_language(base_language_code)
+        if base_language:
+            if base_language.is_original or base_language.is_forked:
+                return  base_language
+            else:
+                if base_language.standard_language:
+                    return base_language.standard_language
+                else:
+                    return self.subtitle_language(base_language_code)
+        else:
+            return self.subtitlelanguage_set.find(language=base_language_code)
+        
+    
     def translation_language_codes(self):
         """All iso language codes with finished translations."""
         return set([sl.language for sl 

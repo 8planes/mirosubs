@@ -337,19 +337,6 @@ class Rpc(BaseRpc):
                 pass
         return draft
 
-    def _add_base_language(self, subtitle_language, base_language_code):
-        video = subtitle_language.video
-        base_language = video.subtitle_language(base_language_code)
-        if base_language:
-            if base_language.is_original or base_language.is_forked:
-                subtitle_language.standard_language = base_language
-            else:
-                if base_language.standard_language:
-                    subtitle_language.standard_language = \
-                        base_language.standard_language
-                else:
-                    subtitle_language.standard_language = \
-                        video.subtitle_language()
 
     def _get_language_for_editing(self, request, video_id, language_code, base_language_code):
         video = models.Video.objects.get(video_id=video_id)
@@ -372,12 +359,9 @@ class Rpc(BaseRpc):
                 }
             if base_language_code:
                 kwargs.update({
-                        'standard_language':video.subtitle_language(base_language_code)
+                        'standard_language':video._find_base_language( base_language_code)
                         })
             language, created = models.SubtitleLanguage.objects.get_or_create(**kwargs)
-            if created:
-                if not base_language_code:
-                    base_language_code = video.subtitle_language().language
         if not language.can_writelock(request):
             return language, False
         language.writelock(request)
