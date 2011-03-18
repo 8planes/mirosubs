@@ -423,18 +423,16 @@ class ViewsTest(WebUseTest):
         except ObjectDoesNotExist:
             self.fail()
 
-# FIXME: this is failing with Jenkins for unknown reasons.
-# I can't reproduce the failure locally.
-#    def test_video(self):
-#        self.video.title = 'title'
-#        self.video.save()
-#        response = self.client.get(self.video.get_absolute_url())
-#        self.assertEqual(response.status_code, 200)
-#
-#        self.video.title = ''
-#        self.video.save()
-#        response = self.client.get(self.video.get_absolute_url())
-#        self.assertEqual(response.status_code, 200)
+    def test_video(self):
+        self.video.title = 'title'
+        self.video.save()
+        response = self.client.get(self.video.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        self.video.title = ''
+        self.video.save()
+        response = self.client.get(self.video.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
         
     def test_video_list(self):
         self._simple_test('videos:list')
