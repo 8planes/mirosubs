@@ -427,7 +427,7 @@ class SubtitleLanguage(models.Model):
     subtitles_fetched_counter = RedisSimpleField()
     
     class Meta:
-        unique_together = (('video', 'language'),)
+        unique_together = (('video', 'language', 'standard_language'),)
     
     def __unicode__(self):
         return self.language_display()
