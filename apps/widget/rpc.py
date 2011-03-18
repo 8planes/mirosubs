@@ -362,16 +362,22 @@ class Rpc(BaseRpc):
                     'language': ''
                     })
         else:
-            language, created = models.SubtitleLanguage.objects.get_or_create(
-                video=video,
-                language=language_code,
-                defaults={
-                    'writelock_session_key': ''
-                    })
+
+            kwargs  = {
+                'video':video,
+                'language':language_code,
+                'defaults':{
+                     'writelock_session_key': ''
+                    }
+                }
+            if base_language_code:
+                kwargs.update({
+                        'standard_language':video.subtitle_language(base_language_code)
+                        })
+            language, created = models.SubtitleLanguage.objects.get_or_create(**kwargs)
             if created:
                 if not base_language_code:
                     base_language_code = video.subtitle_language().language
-                self._add_base_language(language, base_language_code)
         if not language.can_writelock(request):
             return language, False
         language.writelock(request)
