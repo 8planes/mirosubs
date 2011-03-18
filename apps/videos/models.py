@@ -592,7 +592,13 @@ class SubtitleLanguage(models.Model):
             if translation_count == 0:
                 self.percent_done = 0
             
-            last_version = self.video.latest_version()
+            
+
+            if self.standard_language and self.is_dependent():
+                last_version = self.standard_language.latest_version()
+            else:    
+                last_version = self.video.latest_version()
+                
             if last_version:
                 subtitles_count = last_version.subtitle_set.count()
             else:
@@ -669,7 +675,7 @@ class SubtitleVersion(SubtitleCollection):
         return u'%s #%s' % (self.language, self.version_no)
     
     def update_percent_done(self):
-        if self.language.is_original:
+        if self.language.is_original or self.is_forked:
             for l in self.language.video.subtitlelanguage_set.exclude(pk=self.language.pk):
                 l.update_percent_done()
         else:
