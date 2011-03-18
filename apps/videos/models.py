@@ -89,7 +89,8 @@ class Video(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, null=True, blank=True)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_videos')
-    
+    complete_date = models.DateTimeField(null=True, blank=True, editable=False)
+        
     subtitles_fetched_count = models.IntegerField(default=0)
     widget_views_count = models.IntegerField(default=0)
     view_count = models.PositiveIntegerField(default=0)
@@ -456,6 +457,9 @@ class SubtitleLanguage(models.Model):
             
     def check_initial_values(self):
         iv = self._initial_values
+
+        if not self._initial_values['is_complete'] and self.is_complete:
+            self.video.complete_date = datetime.now()
         
         if iv['is_complete'] != self.is_complete or iv['is_original'] != self.is_original \
             or iv['percent_done'] != self.percent_done or iv['is_forked'] != self.is_forked:

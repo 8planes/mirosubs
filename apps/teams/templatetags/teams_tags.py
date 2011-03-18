@@ -109,6 +109,11 @@ def team_video_detail(context, team_video):
     context['team_video'] = team_video
     return context
 
+@register.inclusion_tag('teams/_complete_team_video_detail.html', takes_context=True)  
+def complete_team_video_detail(context, team_video):
+    context['team_video'] = team_video
+    return context
+
 @register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  
 def team_video_lang_detail(context, lang, team):
     #from utils.orm import load_related_fk

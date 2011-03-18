@@ -46,6 +46,7 @@ from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
 from utils.multy_query_set import MultyQuerySet, TeamMultyQuerySet
 from teams.rpc import TeamsApi
+from django.db.models.query import QuerySet
 import datetime
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
@@ -111,8 +112,6 @@ def index(request, my_teams=False):
                        extra_context=extra_context)
     
 def detail(request, slug):
-    from utils.templatetags.optimization import print_query_count
-    
     team = Team.get(slug, request.user)
     
     languages = get_user_languages_from_request(request)
@@ -158,6 +157,54 @@ def detail(request, slug):
                        extra_context=extra_context, 
                        template_object_name='team_video_md')
 
+def completed_videos(request, slug):
+    team = Team.get(slug, request.user)
+    
+    qs = team.teamvideo_set.exclude(video__complete_date__isnull=True) \
+        .select_related('video').order_by('-video__complete_date')
+        
+    extra_context = widget.add_onsite_js_files({})    
+    extra_context.update({
+        'team': team
+    })
+    
+    if team.video:
+        extra_context['widget_params'] = base_widget_params(request, {
+            'video_url': team.video.get_video_url(), 
+            'base_state': {}
+        })
+
+    #TODO: same is in profile.views.my_profile maybe it is possible use one common class for this
+    class OptimizedQuerySet(QuerySet):
+        
+        def update_result_cache(self):
+            #get all videos from QuerySet cache that has no complete_langs_cache yet
+            videos = dict((v.video_id, v) for v in self._result_cache if not hasattr(v, 'complete_langs_cache'))
+            
+            if videos:
+                for v in videos.values():
+                    v.complete_langs_cache = []
+                
+                #select completed SubtitleLanguages for videos    
+                langs_qs = SubtitleLanguage.objects.select_related('video').filter(is_complete=True, video__id__in=videos.keys())
+    
+                #fill cache
+                for l in langs_qs:
+                    videos[l.video_id].complete_langs_cache.append(l)            
+        
+        def __iter__(self):
+            #move this to the place where _result_catche is set. if it is really good one
+            self.update_result_cache()
+            return super(OptimizedQuerySet, self).__iter__()
+    
+    qs = qs._clone(OptimizedQuerySet)
+
+    return object_list(request, queryset=qs, 
+                       paginate_by=VIDEOS_ON_PAGE, 
+                       template_name='teams/completed_videos.html', 
+                       extra_context=extra_context, 
+                       template_object_name='team_video')    
+    
 def detail_members(request, slug):
     #just other tab of detail view
     q = request.REQUEST.get('q')

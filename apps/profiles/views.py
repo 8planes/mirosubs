@@ -84,18 +84,22 @@ def my_profile(request):
     #TODO: make this multipurpose, to use with any model
     class OptimizedQuerySet(QuerySet):
         
-        def _fill_cache(self, num=None):
-            super(OptimizedQuerySet, self)._fill_cache(num)
-            
+        def update_result_cache(self):
             videos = dict((v.id, v) for v in self._result_cache if not hasattr(v, 'langs_cache'))
             
-            for v in videos.values():
-                v.langs_cache = []
+            if videos:
+                for v in videos.values():
+                    v.langs_cache = []
+                    
+                langs_qs = SubtitleLanguage.objects.filter(video__id__in=videos.keys())
                 
-            langs_qs = SubtitleLanguage.objects.filter(video__id__in=videos.keys())
-            
-            for l in langs_qs:
-                videos[l.video_id].langs_cache.append(l)
+                for l in langs_qs:
+                    videos[l.video_id].langs_cache.append(l)
+
+        def __iter__(self):
+            #move this to the place where _result_catche is set. if it is really good one
+            self.update_result_cache()
+            return super(OptimizedQuerySet, self).__iter__()
     
     qs = qs._clone(OptimizedQuerySet)
     
