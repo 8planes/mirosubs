@@ -108,11 +108,16 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
     function()
 {
     var that = this;
-    mirosubs.widget.ChooseLanguageDialog.show(
-        true, function(subLanguage, originalLanguage) {
-            that.startEditing_(null, subLanguage, null, 
-                               mirosubs.isForkedLanguage(subLanguage));
-        });
+    // TODO: use real callback.
+    var dialog = new mirosubs.startdialog.Dialog(
+        this.videoID_,
+        null, null);
+    dialog.setVisible(true);
+//    mirosubs.widget.ChooseLanguageDialog.show(
+//        true, function(subLanguage, originalLanguage) {
+//            that.startEditing_(null, subLanguage, null, 
+//                               mirosubs.isForkedLanguage(subLanguage));
+//        });
 };
 
 /**
@@ -121,23 +126,32 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
  */
 mirosubs.widget.SubtitleController.prototype.subtitle_ = function(newLanguage) {
     var that = this;
-    if (newLanguage)
-        mirosubs.widget.ChooseLanguageDialog.show(
-            false,
-            function(subLanguage, originalLanguage, forked) {
-                that.startEditing_(null, subLanguage, originalLanguage, true);
-            });
-    else {
+    var initialLanguage = null;
+    if (!newLanguage) {
         var subState = this.playController_.getSubtitleState();
-        if (!subState || !subState.LANGUAGE)
-            this.startEditing_(null, null, null, false);
-        else {
-            version = subState.IS_LATEST ? null : subState.VERSION
-            this.startEditing_(
-                version, subState.LANGUAGE, null,
-                subState.FORKED)
-        }
+        initialLanguage = (subState && subState.LANGUAGE) ? subState.LANGUAGE : null;
     }
+    // TODO: use real callback.
+    var dialog = new mirosubs.startdialog.Dialog(
+        this.videoID_, initialLanguage, null);
+    dialog.setVisible(true);
+//    if (newLanguage)
+//        mirosubs.widget.ChooseLanguageDialog.show(
+//            false,
+//            function(subLanguage, originalLanguage, forked) {
+//                that.startEditing_(null, subLanguage, originalLanguage, true);
+//            });
+//    else {
+//        var subState = this.playController_.getSubtitleState();
+//        if (!subState || !subState.LANGUAGE)
+//            this.startEditing_(null, null, null, false);
+//        else {
+//            version = subState.IS_LATEST ? null : subState.VERSION
+//            this.startEditing_(
+//                version, subState.LANGUAGE, null,
+//                subState.FORKED)
+//        }
+//    }
 };
 
 mirosubs.widget.SubtitleController.prototype.startEditing_ = 

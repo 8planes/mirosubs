@@ -29,6 +29,14 @@ mirosubs.startdialog.LanguageSummary = function(json) {
     this.STANDARD = json['standard'];
 };
 
+mirosubs.startdialog.LanguageSummary.prototype.toString = function() {
+    var name = mirosubs.languageNameForCode(this.LANGUAGE);
+    if (this.DEPENDENT)
+        return name + " (Complete)";
+    else
+        return name + " (" + this.PERCENT_DONE + "%)";
+};
+
 mirosubs.startdialog.LanguageSummary.prototype.setAll = function(all) {
     this.allLangs_ = all;
     if (this.STANDARD)
