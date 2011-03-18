@@ -6,7 +6,7 @@ from apps.videos.models import Video
 class Migration(DataMigration):
     
     def forwards(self, orm):
-        for v in Video.objects.all():
+        for v in orm.Video.objects.all():
             v.update_languages_count()
             v.save()
     
