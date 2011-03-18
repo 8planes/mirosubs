@@ -165,13 +165,16 @@ mirosubs.startdialog.Model.prototype.getSelectedLanguage = function() {
 };
 
 /**
- * @param {object} language Element from toLanguages to select
+ * @param {object} language Object from toLanguages to select
  */
 mirosubs.startdialog.Model.prototype.selectLanguage = function(language) {
     this.createToLanguages_();
     this.selectedLanguage_ = language;
 };
 
+/**
+ * @return {Array.<mirosubs.startdialog.LanguageSummary>}
+ */
 mirosubs.startdialog.Model.prototype.fromLanguages = function() {
     var selectedLanguage = this.getSelectedLanguage();
     var videoLanguage = this.findVideoLanguage_(selectedLanguage.language);

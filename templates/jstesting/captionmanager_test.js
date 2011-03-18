@@ -34,6 +34,11 @@ function addNewCaption(startTime, endTime) {
 
 /* the tests */
 
+function setUp() {
+    mirosubs.Tracker.getInstance().dontReport();
+    mirosubs.SubTracker.getInstance().start(false);
+}
+
 function setUpForInitialCaptions(captions) {
     var uw = new mirosubs.UnitOfWork();
     MS_editableCaptionSet =

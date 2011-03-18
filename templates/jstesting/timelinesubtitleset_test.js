@@ -107,6 +107,8 @@ function setUp() {
     MS_subtitleUpdateCount = 0;
     MS_addedSubtitles = [];
     MS_removedSubtitles = [];
+    mirosubs.Tracker.getInstance().dontReport();
+    mirosubs.SubTracker.getInstance().start(false);
 }
 
 function testSubsToDisplayLength() {

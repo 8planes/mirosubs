@@ -26,11 +26,21 @@ mirosubs.Tracker = function() {
     this.mpmetrics_ = null;
     this.toCallOnLoad_ = [];
     this.logger_ = goog.debug.Logger.getLogger('mirosubs.Tracker');
+    this.dontReport_ = false;
 };
 
 goog.addSingletonGetter(mirosubs.Tracker);
 
+/**
+ * Call before running unit tests or maybe selenium tests.
+ */
+mirosubs.Tracker.prototype.dontReport = function() {
+    this.dontReport_ = true;
+};
+
 mirosubs.Tracker.prototype.track = function(event, opt_props) {
+    if (this.dontReport_)
+        return;
     this.logger_.info(event);
     var props = opt_props || {};
     props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
