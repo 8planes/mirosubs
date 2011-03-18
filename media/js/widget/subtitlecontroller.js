@@ -108,11 +108,13 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
     function()
 {
     var that = this;
-    mirosubs.widget.ChooseLanguageDialog.show(
-        true, function(subLanguage, originalLanguage) {
-            that.startEditing_(null, subLanguage, null, 
-                               mirosubs.isForkedLanguage(subLanguage));
+    var dialog = new mirosubs.startdialog.Dialog(
+        this.videoID_, null, 
+        function(originalLanguage, subLanguage, baseLanguage) {
+            that.startEditing_(
+                null, subLanguage, originalLanguage, baseLanguage);
         });
+    dialog.setVisible(true);
 };
 
 /**
@@ -121,32 +123,39 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
  */
 mirosubs.widget.SubtitleController.prototype.subtitle_ = function(newLanguage) {
     var that = this;
-    if (newLanguage)
-        mirosubs.widget.ChooseLanguageDialog.show(
-            false,
-            function(subLanguage, originalLanguage, forked) {
-                that.startEditing_(null, subLanguage, originalLanguage, true);
-            });
-    else {
+    var initialLanguage = null;
+
+    if (!newLanguage) {
         var subState = this.playController_.getSubtitleState();
-        if (!subState || !subState.LANGUAGE)
-            this.startEditing_(null, null, null, false);
-        else {
-            version = subState.IS_LATEST ? null : subState.VERSION
+        initialLanguage = (subState && subState.LANGUAGE) ? subState.LANGUAGE : null;
+        if (subState && subState.LANGUAGE && !subState.IS_LATEST) {
+            // editing a historical version
             this.startEditing_(
-                version, subState.LANGUAGE, null,
-                subState.FORKED)
+                subState.VERSION, subState.LANGUAGE, null, 
+                (!subState.FORKED) ? subState.BASE_LANGUAGE : null);
+            return;
         }
     }
+
+    var dialog = new mirosubs.startdialog.Dialog(
+        this.videoID_, initialLanguage, 
+        function(originalLanguage, subLanguage, baseLanguage) {
+            that.startEditing_(
+                null, subLanguage, originalLanguage, baseLanguage);
+        });
+    dialog.setVisible(true);
 };
 
+/**
+ * @param {?string} baseLanguageCode null iff we are forking
+ */
 mirosubs.widget.SubtitleController.prototype.startEditing_ = 
-    function(baseVersionNo, subLanguageCode, originalLanguageCode, fork) 
+    function(baseVersionNo, subLanguageCode, originalLanguageCode, baseLanguageCode) 
 {
     if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
         this.dialogOpener_.openDialog(
             baseVersionNo, subLanguageCode, 
-            originalLanguageCode, fork);
+            originalLanguageCode, fork, opt_baseLanguageCode);
     else {
         var config = {
             'videoID': this.videoID_,
@@ -156,7 +165,8 @@ mirosubs.widget.SubtitleController.prototype.startEditing_ =
                 this.playController_.getVideoSource().getVideoURL(),
             'languageCode': subLanguageCode,
             'originalLanguageCode': originalLanguageCode,
-            'fork': fork
+            'fork': !baseLanguageCode,
+            'baseLanguageCode': baseLanguageCode
         };
         if (mirosubs.IS_NULL)
             config['nullWidget'] = true;

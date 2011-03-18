@@ -387,12 +387,14 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
     this.captionSet_.dispose();
 };
 mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
+    // Adam hypothesizes that this will get called 0 times except in testing
+    mirosubs.Tracker.getInstance().track('Adding_translations_on_close');
     var oldReturnURL = mirosubs.returnURL;
     mirosubs.returnURL = null;
     this.setVisible(false);
     mirosubs.returnURL = oldReturnURL;
     var that = this;
-    if (this.opener_)
+    if (this.opener_) {
         mirosubs.widget.ChooseLanguageDialog.show(
             true,
             function(subLanguage, originalLanguage, forked) {
@@ -400,4 +402,5 @@ mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
                     null, subLanguage, null, 
                     mirosubs.isForkedLanguage(subLanguage));
             });
+    }
 };

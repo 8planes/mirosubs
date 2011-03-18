@@ -77,9 +77,14 @@ mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, gener
             config['fork'], config['baseLanguageCode']);
     }
     else {
-        mirosubs.widget.ChooseLanguageDialog.show(config['originalLanguageSubtitled'], function(subLanguage, originalLanguage){
-            opener.openDialog(config['baseVersionNo'], subLanguage, originalLanguage, mirosubs.isForkedLanguage(subLanguage));
-        });
+        var dialog = new mirosubs.startdialog.Dialog(
+            config['videoID'], null, 
+            function(originalLang, subLang, baseLang) {
+                opener.openDialog(
+                    null, subLang, originalLang,
+                    !baseLang, baseLang);
+            });
+        dialog.setVisible(true);
     }
 };
 

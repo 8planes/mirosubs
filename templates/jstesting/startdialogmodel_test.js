@@ -16,6 +16,7 @@ function makeBaseJSON() {
 
 function setUp() {
     mirosubs.languages = {{languages|safe}};
+    mirosubs.metadataLanguages = [];
 }
 
 function testOriginalLanguageDisplay() {
@@ -35,9 +36,7 @@ function testToLanguages0() {
     var languages = model.toLanguages();
     assertEquals('fr', languages[0].language);
     assertEquals('en', languages[1].language);
-    assertEquals('fr', model.getSelectedLanguage().language);
-
-    model.selectLanguage(languages[1]);
+    assertEquals('fr', model.getSelectedLanguage());
 }
 
 function testToLanguages1() {
@@ -93,12 +92,30 @@ function testFromLanguages0() {
     var fromLanguages = model.fromLanguages();
     assertEquals(1, fromLanguages.length);
     assertEquals('en', fromLanguages[0].LANGUAGE);
-    model.selectLanguage(model.toLanguages()[1]);
+    model.selectLanguage('en');
     fromLanguages = model.fromLanguages();
     assertEquals(1, fromLanguages.length);
     assertEquals('fr', fromLanguages[0].LANGUAGE);
 }
 
-
+function testGeneral0() {
+    var json = {
+        "my_languages": ["en-us", "en", "en"],
+        "original_language": "",
+        "video_languages": [{
+            "dependent": false,
+            "is_complete": true,
+            "language": ""
+        }]
+    }
+    var model = new mirosubs.startdialog.Model(json, null);
+    assertTrue(model.originalLanguageShown());
+    assertEquals(0, model.fromLanguages().length);
+    var toLanguages = model.toLanguages();
+    assertEquals("en", toLanguages[0].language);
+    assertEquals(mirosubs.languages.length, toLanguages.length);
+    for (var i = 0; i < toLanguages.length; i++)
+        assertTrue(!toLanguages[i].videoLanguage);
+}
 
 {% endblock %}

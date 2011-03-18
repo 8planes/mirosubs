@@ -111,8 +111,7 @@ class Rpc(BaseRpc):
             'video_languages': video_languages,
             'original_language': original_language }
 
-    def fetch_video_id_and_settings(self, request, video_url):
-        video_id = video_cache.get_video_id(video_url)
+    def fetch_video_id_and_settings(self, request, video_id):
         is_original_language_subtitled = self._subtitle_count(video_id) > 0
         general_settings = {}
         add_general_settings(request, general_settings)
@@ -419,6 +418,9 @@ class Rpc(BaseRpc):
         latest_version = language.latest_version()
         if latest_version is None or version.version_no >= latest_version.version_no:
             is_latest = True
+        base_language = None
+        if language.is_dependent() and not version.is_forked:
+            base_language = language.real_standard_language().language
         return self._make_subtitles_dict(
             [s.__dict__ for s in version.subtitles()],
             language.language,
@@ -427,6 +429,7 @@ class Rpc(BaseRpc):
             version.version_no,
             is_latest,
             version.is_forked,
+            base_language,
             language.get_title())
 
     def _subtitle_count(self, video_id):
