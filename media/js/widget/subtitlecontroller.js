@@ -152,31 +152,10 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function(newLanguage) {
 mirosubs.widget.SubtitleController.prototype.startEditing_ = 
     function(baseVersionNo, subLanguageCode, originalLanguageCode, baseLanguageCode) 
 {
-    if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
-        this.dialogOpener_.openDialog(
-            baseVersionNo, subLanguageCode, 
-            originalLanguageCode, !baseLanguageCode, 
-            baseLanguageCode);
-    else {
-        var config = {
-            'videoID': this.videoID_,
-            'baseVersionNo': baseVersionNo,
-            'videoURL': this.videoURL_,
-            'effectiveVideoURL': 
-                this.playController_.getVideoSource().getVideoURL(),
-            'languageCode': subLanguageCode,
-            'originalLanguageCode': originalLanguageCode,
-            'fork': !baseLanguageCode,
-            'baseLanguageCode': baseLanguageCode
-        };
-        if (mirosubs.IS_NULL)
-            config['nullWidget'] = true;
-        var uri = new goog.Uri(mirosubs.siteURL() + '/onsite_widget/');
-        uri.setParameterValue(
-            'config',
-            goog.json.serialize(config));
-        window.location.assign(uri.toString());
-    }
+    this.dialogOpener_.openDialogOrRedirect(
+        baseVersionNo, subLanguageCode, 
+        originalLanguageCode, baseLanguageCode,
+        this.playController_.getVideoSource().getVideoURL());
 };
 
 mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {

@@ -77,6 +77,38 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
         goog.bind(this.startEditingResponseHandler_, this));
 };
 
+mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
+    function(baseVersionNo, subLanguageCode, 
+             originalLanguageCode, baseLanguageCode, 
+             opt_effectiveVideoURL)
+{
+    if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
+        this.openDialog(
+            baseVersionNo, subLanguageCode, 
+            originalLanguageCode, !baseLanguageCode, 
+            baseLanguageCode);
+    else {
+        var config = {
+            'videoID': this.videoID_,
+            'baseVersionNo': baseVersionNo,
+            'videoURL': this.videoURL_,
+            'effectiveVideoURL': opt_effectiveVideoURL || this.videoURL_,
+            'languageCode': subLanguageCode,
+            'originalLanguageCode': originalLanguageCode,
+            'fork': !baseLanguageCode,
+            'baseLanguageCode': baseLanguageCode
+        };
+        if (mirosubs.IS_NULL)
+            config['nullWidget'] = true;
+        var uri = new goog.Uri(mirosubs.siteURL() + '/onsite_widget/');
+        uri.setParameterValue(
+            'config',
+            goog.json.serialize(config));
+        window.location.assign(uri.toString());
+    }
+
+}
+
 /**
  * @param {number} draftPK The draft saved with this primary key should 
  *     already be in forked state on the server.
