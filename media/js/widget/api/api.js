@@ -73,7 +73,10 @@ mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, gener
     var opener = new mirosubs.widget.SubtitleDialogOpener(
         config['videoID'], config['videoURL'], videoSource);
     if (!askLanguage) {
-        opener.openDialog(config['baseVersionNo'], config['languageCode'], config['originalLanguageCode'], 
+        opener.openDialog(
+            config['baseVersionNo'], 
+            config['languageCode'], 
+            config['originalLanguageCode'], 
             config['fork'], config['baseLanguageCode']);
     }
     else {
@@ -86,6 +89,32 @@ mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, gener
             });
         dialog.setVisible(true);
     }
+};
+
+/**
+ * This is currently used to open the subtitle dialog 
+ * from the Team Detail page. Main difference with 
+ * mirosubs.api.openUnisubsDialogWithSettings is that 
+ * this one will redirect to onsite_widget page if on FF.
+ * @param {string} videoID
+ * @param {string} videoURL
+ * @param {Object} generalSettings See WidgetController.makeGeneralSettings
+ *     for more info
+ */
+mirosubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettings) {
+    mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);
+    var videoSource = mirosubs.video.VideoSource.videoSourceForURL(
+        videoURL);
+    var opener = new mirosubs.widget.SubtitleDialogOpener(
+        videoID, videoURL, videoSource);
+    var dialog = new mirosubs.startdialog.Dialog(
+        videoID, null, 
+        function(originalLang, subLang, baseLang) {
+            opener.openDialogOrRedirect(
+                null, subLang, originalLang, 
+                baseLang);
+        });
+    dialog.setVisible(true);
 };
 
 /**
@@ -168,6 +197,11 @@ goog.exportSymbol(
 goog.exportSymbol(
     'mirosubs.api.openUnisubsDialog',
     mirosubs.api.openUnisubsDialog);
+
+goog.exportSymbol(
+    'mirosubs.api.openUnisubsDialogOnsite',
+    mirosubs.api.openUnisubsDialogOnsite);
+
 
 goog.exportSymbol(
     'mirosubs.api.toSRT',
