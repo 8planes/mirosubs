@@ -360,7 +360,6 @@ class Rpc(BaseRpc):
                     'language': ''
                     })
         else:
-
             kwargs  = {
                 'video':video,
                 'language':language_code,
@@ -373,9 +372,6 @@ class Rpc(BaseRpc):
                     { 'standard_language': 
                           self._find_base_language(video, base_language_code) })
             language, created = models.SubtitleLanguage.objects.get_or_create(**kwargs)
-            if created:
-                if not base_language_code:
-                    base_language_code = video.subtitle_language().language
         if not language.can_writelock(request):
             return language, False
         language.writelock(request)

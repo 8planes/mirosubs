@@ -967,7 +967,7 @@ class TestRpc(TestCase):
         self.assertEquals(True, spanish_lang.is_forked)
         self.assertEquals(2.3, spanish_lang.latest_version().subtitles()[0].start_time)
 
-    def test_two_subtitle_langs(self):
+    def test_two_subtitle_langs_can_exist(self):
         request = RequestMockup(self.user_0)
 
         # create es dependent on en
@@ -986,10 +986,19 @@ class TestRpc(TestCase):
             [_make_packet(inserted=inserted)])
         rpc.finished_subtitles(request, draft_pk, [])
 
+        sub_langs = models.Video.objects.get(id=draft.video.id).subtitlelanguage_set.filter(language='fr')
+
         # now someone tries to edit es based on fr.
         response = rpc.start_editing(
             request, draft.video.video_id, 'es', base_language_code='fr')
-        # TODO: save some altered text
+        draft_pk = response['draft_pk']
+        inserted = [{'subtitle_id': 'a', 'text': 'a_es'}]
+        rpc.save_subtitles(request, draft_pk, [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, [])
+
+        # now we should have two SubtitleLanguages for es
+        sub_langs = models.Video.objects.get(id=draft.video.id).subtitlelanguage_set.filter(language='es')
+        self.assertEquals(2, sub_langs.count())
 
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(
