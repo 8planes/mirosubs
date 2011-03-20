@@ -236,7 +236,10 @@ JS_OFFSITE = list(JS_CORE)
 JS_OFFSITE.append('widget/crossdomainembed.js')
 
 JS_ONSITE = list(JS_CORE)
-JS_ONSITE.append('widget/samedomainembed.js')
+JS_ONSITE.extend(
+    ['widget/samedomainembed.js',
+     "widget/api/servermodel.js",
+     "widget/api/api.js"])
 
 JS_WIDGETIZER_CORE = list(JS_CORE)
 JS_WIDGETIZER_CORE.extend([
