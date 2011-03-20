@@ -155,7 +155,8 @@ mirosubs.widget.SubtitleController.prototype.startEditing_ =
     if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
         this.dialogOpener_.openDialog(
             baseVersionNo, subLanguageCode, 
-            originalLanguageCode, fork, opt_baseLanguageCode);
+            originalLanguageCode, !baseLanguageCode, 
+            baseLanguageCode);
     else {
         var config = {
             'videoID': this.videoID_,

@@ -208,5 +208,5 @@ mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
         this.toLanguageDropdown_.value,
         fromLanguage
     );
-    this.setVisibility(false);
+    this.setVisible(false);
 };
