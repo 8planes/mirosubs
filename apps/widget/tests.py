@@ -122,7 +122,7 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         return_value = rpc.start_editing(request, video_id, 'en', 'en')
         draft_pk = return_value['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf',
+        inserted = [{'subtitle_id': 'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -189,7 +189,7 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         return_value = rpc.start_editing(request_0, video_id, 'en', 'en')
         draft_pk = return_value['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf',
+        inserted = [{'subtitle_id': 'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -214,7 +214,7 @@ class TestRpc(TestCase):
     def test_insert_then_update(self):
         request = RequestMockup(self.user_1)
         draft = self._create_basic_draft(request)
-        updated = [{'subtitle_id': 'sfdsfsdf',
+        updated = [{'subtitle_id': 'aa',
                      'text': 'hey you!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -232,7 +232,7 @@ class TestRpc(TestCase):
         # this will fail if locking is dependent on anything in session,
         # which can get cleared after login.
         request.session = {}
-        updated = [{'subtitle_id': 'sfdsfsdf',
+        updated = [{'subtitle_id': 'aa',
                      'text': 'hey you!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -256,13 +256,13 @@ class TestRpc(TestCase):
         return_value = rpc.start_editing(request, video_id, 'en', 'en')
         draft_pk = return_value['draft_pk']
 
-        inserted = [{'subtitle_id': u'sfdsfsdf',
+        inserted = [{'subtitle_id': u'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
                      'sub_order': 1.0}]
         packet_0 = _make_packet(inserted=inserted)
-        updated = [{'subtitle_id': 'sfdsfsdf',
+        updated = [{'subtitle_id': 'aa',
                     'text': 'hey you!',
                     'start_time': 2.3,
                     'end_time': 3.4,
@@ -343,7 +343,7 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         return_value = rpc.start_editing(request_0, video_id, 'en', 'en')
         draft_pk = return_value['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf',
+        inserted = [{'subtitle_id': 'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -374,7 +374,7 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         return_value = rpc.start_editing(request_0, video_id, 'en', 'en')
         draft_pk = return_value['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf',
+        inserted = [{'subtitle_id': 'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -396,7 +396,7 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         return_value = rpc.start_editing(request_0, video_id, 'en', 'en')
         draft_pk = return_value['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf',
+        inserted = [{'subtitle_id': 'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -441,7 +441,7 @@ class TestRpc(TestCase):
         video_id = return_value['video_id']
         return_value = rpc.start_editing(request_0, video_id, 'en', 'en')
         draft_pk = return_value['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf',
+        inserted = [{'subtitle_id': 'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -491,7 +491,7 @@ class TestRpc(TestCase):
         return_value = rpc.start_editing(request_1, draft.video.video_id, 'en')
         draft_pk = return_value['draft_pk']
         # user_1 updates the solitary caption to have blank text.
-        updated = [{'subtitle_id': 'sfdsfsdf',
+        updated = [{'subtitle_id': 'aa',
                      'text': '',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -510,7 +510,7 @@ class TestRpc(TestCase):
         request_0 = RequestMockup(self.user_0)
         draft = self._create_basic_draft(request_0)
         # we update the text of the sole subtitle to be blank.
-        updated = [{'subtitle_id': u'sfdsfsdf',
+        updated = [{'subtitle_id': u'aa',
                     'text': '',
                     'start_time': 2.3,
                     'end_time': 3.4,
@@ -536,7 +536,7 @@ class TestRpc(TestCase):
         subs = response['subtitles']
         self.assertEquals(0, subs['version'])
         self.assertEquals(0, len(subs['subtitles']))
-        inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        inserted = [{'subtitle_id': 'aa', 'text': 'heyoes'}]
         rpc.save_subtitles(
             request, draft_pk,
             [_make_packet(inserted=inserted)])
@@ -555,11 +555,11 @@ class TestRpc(TestCase):
         # open translation dialog.
         response = rpc.start_editing(request, draft.video.video_id, 'es')
         draft_pk = response['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        inserted = [{'subtitle_id': 'aa', 'text': 'heyoes'}]
         rpc.save_subtitles(
             request, draft_pk, 
             [_make_packet(inserted=inserted)])
-        updated = [{'subtitle_id': 'sfdsfsdf', 'text': 'new text'}]
+        updated = [{'subtitle_id': 'aa', 'text': 'new text'}]
         rpc.save_subtitles(
             request, draft_pk, 
             [_make_packet(updated=updated, packet_no=2)])
@@ -585,7 +585,7 @@ class TestRpc(TestCase):
         self.assertEquals(1, subs['version'])
         self.assertEquals(1, len(subs['subtitles']))
         # user_1 updates solitary translation to have blank text.
-        updated = [{'subtitle_id': 'sfdsfsdf', 'text': ''}]
+        updated = [{'subtitle_id': 'aa', 'text': ''}]
         rpc.save_subtitles(
             request_1, draft_pk, 
             [_make_packet(updated=updated, packet_no=2)])
@@ -599,7 +599,7 @@ class TestRpc(TestCase):
     def test_zero_out_trans_version_0(self):
         request = RequestMockup(self.user_0)
         draft = self._create_basic_dependent_draft(request)
-        updated = [{'subtitle_id': 'sfdsfsdf', 'text': ''}]
+        updated = [{'subtitle_id': 'aa', 'text': ''}]
         rpc.save_subtitles(
             request, draft.pk, 
             [_make_packet(updated=updated, packet_no=2)])
@@ -706,7 +706,7 @@ class TestRpc(TestCase):
         return_value = rpc.start_editing(request, video_id, 'es', 'en', fork=True)
         draft_pk = return_value['draft_pk']
 
-        inserted = [{'subtitle_id': u'sfdsfsdf',
+        inserted = [{'subtitle_id': u'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -746,7 +746,7 @@ class TestRpc(TestCase):
         return_value = rpc.start_editing(request, video_id, 'en', 'en', fork=True)
         draft_pk = return_value['draft_pk']
 
-        inserted = [{'subtitle_id': u'sfdsfsdf',
+        inserted = [{'subtitle_id': u'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -967,6 +967,30 @@ class TestRpc(TestCase):
         self.assertEquals(True, spanish_lang.is_forked)
         self.assertEquals(2.3, spanish_lang.latest_version().subtitles()[0].start_time)
 
+    def test_two_subtitle_langs(self):
+        request = RequestMockup(self.user_0)
+
+        # create es dependent on en
+        draft = self._create_basic_dependent_draft(request, finished=True)
+
+        # create forked fr translations
+        response = rpc.start_editing(request, draft.video.video_id, 'fr', fork=True)
+        draft_pk = response['draft_pk']
+        inserted = [{'subtitle_id': 'a',
+                     'text': 'a_fr',
+                     'start_time': 1.3,
+                     'end_time': 2.5,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk,
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, [])
+
+        # now someone tries to edit es based on fr.
+        response = rpc.start_editing(
+            request, draft.video.video_id, 'es', base_language_code='fr')
+        # TODO: save some altered text
+
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(
             request,
@@ -978,7 +1002,7 @@ class TestRpc(TestCase):
             request, video_id, 'en', 'en',
             base_version_no=None, fork=True)
         draft_pk = response['draft_pk']
-        inserted = [{'subtitle_id': u'sfdsfsdf',
+        inserted = [{'subtitle_id': u'aa',
                      'text': 'hey!',
                      'start_time': 2.3,
                      'end_time': 3.4,
@@ -1016,7 +1040,7 @@ class TestRpc(TestCase):
         draft = self._create_basic_draft(request, True)
         response = rpc.start_editing(request, draft.video.video_id, 'es')
         draft_pk = response['draft_pk']
-        inserted = [{'subtitle_id': 'sfdsfsdf', 'text': 'heyoes'}]
+        inserted = [{'subtitle_id': 'aa', 'text': 'heyoes'}]
         rpc.save_subtitles(
             request, draft_pk, 
             [_make_packet(inserted=inserted)])
