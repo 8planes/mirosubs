@@ -16,7 +16,14 @@ class Migration(DataMigration):
         for lang in qs:
             if (i % 100) == 0:
                 print 'Updating languages %i ...' % i
-            original_lang = lang.video.subtitlelanguage_set.filter(is_original=True)[0]
+            try:
+                original_lang = lang.video.subtitlelanguage_set.filter(is_original=True)[:1].get()
+            except models.ObjectDoesNotExist:
+                original_lang = orm.SubtitleLanguage()
+                original_lang.video = lang.video
+                original_lang.is_original = True
+                original_lang.save()
+
             lang.standard_language = original_lang
             lang.save()
             i += 1
