@@ -19,8 +19,10 @@
 </div>
 <script type="text/javascript">
     $('a.team_video_{{ team_video.pk }}').click(function(){
-        var config = { {{ team_video_widget_params|safe }} };
-        mirosubs.api.openUnisubsDialogWithSettings(false, config, GLOBAL_WIDGET_SETTINGS);
+        mirosubs.api.openUnisubsDialogOnsite(
+            '{{team_video.video.video_id}}', 
+            '{{team_video.video.get_video_url}}', 
+            GLOBAL_WIDGET_SETTINGS);
         return false;
     });
 </script>
