@@ -128,7 +128,7 @@
         {% endfor %}
       </li>
       <li id="team_detail_members"><a href="{% url teams:detail_members team.slug %}">{% trans "Team Members" %} ({{ team.member_count }})</a></li>
-      <li id="team_completed_subtitles"><a href="">{% trans 'Completed Subtitles' %}</a></li>
+      <li id="team_completed_subtitles"><a href="{% url teams:completed_videos team.slug %}">{% trans 'Completed Subtitles' %}</a></li>
       {% if team|is_team_manager:user %}
       <li id="team_manage_settings"><a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a></li>
       {% else %}
