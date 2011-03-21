@@ -89,8 +89,10 @@ mirosubs.startdialog.Model.prototype.createNonEmptyDepToLang_ =
     if (videoLanguage && videoLanguage.isDependentAndNonempty(partial)) {
         var fromLanguages = [];
         for (var i = 0; i < this.myLanguages_.length; i++) {
-            var possiblyFromLanguage = this.findVideoLanguage_(this.myLanguages_[i]);
-            if (videoLanguage.canBenefitFromTranslation(possiblyFromLanguage))
+            var possiblyFromLanguage = 
+                this.findVideoLanguage_(this.myLanguages_[i]);
+            if (possiblyFromLanguage && 
+                videoLanguage.canBenefitFromTranslation(possiblyFromLanguage))
                 fromLanguages.push(possiblyFromLanguage);
         }
         if (fromLanguages.length > 0)

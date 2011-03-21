@@ -118,4 +118,18 @@ function testGeneral0() {
         assertTrue(!toLanguages[i].videoLanguage);
 }
 
+function testLanguageSummaryNullError() {
+    var json = {
+        'video_languages': [
+            {'dependent': false, 'is_complete': false, 'language': 'en'},
+            {'dependent': true, 'percent_done': 66, 'language': 'ru', 'standard': 'en'}
+        ],
+        'my_languages': ['ru', 'be'],
+        'original_language': 'en'
+    }
+    var model = new mirosubs.startdialog.Model(json, null);
+    // the tests passes if the following call does not throw an exception.
+    var langs = model.fromLanguages();
+}
+
 {% endblock %}
