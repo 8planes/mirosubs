@@ -42,6 +42,8 @@ mirosubs.startdialog.Dialog = function(videoID, initialLanguage, callback) {
 };
 goog.inherits(mirosubs.startdialog.Dialog, goog.ui.Dialog);
 
+mirosubs.startdialog.Dialog.FORK_VALUE = 'forkk';
+
 mirosubs.startdialog.Dialog.prototype.createDom = function() {
     mirosubs.startdialog.Dialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, 
@@ -112,6 +114,9 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
             function(l) {
                 return [l.LANGUAGE, l.toString()];
             });;
+        fromLanguageContents.push(
+            [mirosubs.startdialog.Dialog.FORK_VALUE,
+             "Direct from video (more work)"]);
         var $d = goog.bind(this.getDomHelper().createDom,
                            this.getDomHelper());
         this.fromLanguageDropdown_ = this.makeDropdown_(
@@ -141,15 +146,11 @@ mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
 
 mirosubs.startdialog.Dialog.prototype.addFromLanguageSection_ = function($d) {
     this.fromContainer_ = $d('span');
-    this.forkCheckbox_ = $d('input', {'type':'checkbox'});
     this.fromLanguageSection_ =
         $d('div', null,
            $d('p', null,
               $d('span', null, 'Translate from: '),
-              this.fromContainer_),
-           $d('p', null, 
-              this.forkCheckbox_, 
-              $d('span', null, ' Direct from video (more work)')));
+              this.fromContainer_));
     this.contentDiv_.appendChild(this.fromLanguageSection_);
 };
 
@@ -181,15 +182,7 @@ mirosubs.startdialog.Dialog.prototype.connectEvents_ = function() {
         listen(
             this.okButton_,
             goog.events.EventType.CLICK,
-            this.okClicked_).
-        listen(
-            this.forkCheckbox_,
-            goog.events.EventType.CHANGE,
-            this.forkCheckboxChange_);
-};
-
-mirosubs.startdialog.Dialog.prototype.forkCheckboxChange_ = function(e) {
-    this.fromLanguageDropdown_.disabled = this.forkCheckbox_.checked;
+            this.okClicked_);
 };
 
 mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
@@ -200,7 +193,9 @@ mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
 mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     var fromLanguage = null;
-    if (this.fromLanguageDropdown_ && !this.forkCheckbox_.checked)
+    if (this.fromLanguageDropdown_ && 
+        this.fromLanguageDropdown_.value != 
+            mirosubs.startdialog.Dialog.FORK_VALUE)
         fromLanguage = this.fromLanguageDropdown_.value;
     this.callback_(
         this.model_.originalLanguageShown() ? 
