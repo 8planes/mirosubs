@@ -1,5 +1,4 @@
 {% load i18n %}
-<strong>Completed Languages:</strong>
 {% for status in sub_statuses.items %}
 <span>
   {% if status.percent_done or status.is_complete %}<a href="{{status.language_url}}">{%endif%}{{ status.language_display}}{% if status.percent_done or status.is_complete %}</a> {% endif %}
