@@ -818,6 +818,10 @@ class SubtitleVersion(SubtitleCollection):
         new_version.save()
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
+        # we should update the last_version field on language, right?
+        # latest_subtitles.last_version = new_version
+        # latest_subtitles.save()
+        #    
         return new_version
 
     def is_all_blank(self):
