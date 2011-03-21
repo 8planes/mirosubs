@@ -28,6 +28,8 @@ from videos.models import Action
 from apps.widget import video_cache
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from widget.views import base_widget_params
+from django.utils import simplejson as json
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
@@ -107,6 +109,12 @@ def team_add_video_select(context):
 @register.inclusion_tag('teams/_team_video_detail.html', takes_context=True)  
 def team_video_detail(context, team_video):
     context['team_video'] = team_video
+    video_url = team_video.video.get_video_url()
+    context['team_video_widget_params'] = base_widget_params(context['request'], {
+        'video_url': video_url, 
+        'base_state': {},
+        'effectiveVideoURL': video_url
+    })
     return context
 
 @register.inclusion_tag('teams/_complete_team_video_detail.html', takes_context=True)  

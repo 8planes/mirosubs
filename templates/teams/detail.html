@@ -17,6 +17,9 @@
     {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var GLOBAL_WIDGET_SETTINGS = {{ general_settings|safe }};
+    </script>
 {% endblock %}
 
 {% block select_language_dialog %}

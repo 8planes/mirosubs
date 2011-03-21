@@ -47,6 +47,7 @@ from utils.translation import get_user_languages_from_request
 from utils.multy_query_set import MultyQuerySet, TeamMultyQuerySet
 from teams.rpc import TeamsApi
 from django.db.models.query import QuerySet
+from widget.rpc import add_general_settings
 import datetime
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
@@ -144,6 +145,10 @@ def detail(request, slug):
     if len(mqs) == 0:
         mqs = TeamMultyQuerySet(TeamVideoLanguagePair.objects.filter(team=team) \
                                 .select_related('team_video', 'team_video__video'))
+
+    general_settings = {}
+    add_general_settings(request, general_settings)
+    extra_context['general_settings'] = json.dumps(general_settings)
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
