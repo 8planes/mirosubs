@@ -23,7 +23,9 @@ import os
 
 DEV_HOST = 'dev.universalsubtitles.org:2191'
 
-def _create_env(username, hosts, s3_bucket, installation_dir, static_dir, name):
+def _create_env(username, hosts, s3_bucket, 
+                installation_dir, static_dir, name,
+                memcached_bounce_cmd):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -31,6 +33,7 @@ def _create_env(username, hosts, s3_bucket, installation_dir, static_dir, name):
     env.web_dir = '/var/www/{0}'.format(installation_dir)
     env.static_dir = '/var/{0}'.format(static_dir)
     env.installation_name = name
+    env.memcached_bounce_cmd = memcached_bounce_cmd
 
 def staging(username):
     _create_env(username, 
@@ -38,14 +41,15 @@ def staging(username):
                  'pcf-us-staging2.pculture.org:2191'],
                 's3.staging.universalsubtitles.org',
                 'universalsubtitles.staging',
-                'static/staging', 'staging')
+                'static/staging', 'staging',
+                '/etc/init.d/memcached-staging restart')
 
 def dev(username):
     _create_env(username,
                 ['dev.universalsubtitles.org:2191'],
                 None,
                 'universalsubtitles.dev',
-                'www/universalsubtitles.dev', 'dev')
+                'www/universalsubtitles.dev', 'dev', None)
 
 def unisubs(username):
     _create_env(username,
@@ -53,7 +57,8 @@ def unisubs(username):
                  'pcf-us-cluster2.pculture.org:2191'],
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
-                'static/production', None)
+                'static/production', None,
+                '/etc/init.d/memcached restart')
 
 
 def syncdb():
@@ -163,6 +168,11 @@ def update_web():
             env.warn_only = False
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
+
+def bounce_memcached():
+    if env.memcached_bounce_cmd:
+        env.host_string = 'pcf-us-admin.pculture.org:2191'
+        sudo(env.memcached_bounce_cmd)
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):
