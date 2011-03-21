@@ -391,7 +391,8 @@ import re
 LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/widget'),
     re.compile('^/api'),
-    re.compile('^/jstest')
+    re.compile('^/jstest'),
+    re.compile('^/profiles/router')
 )
 
 #Haystack configuration
