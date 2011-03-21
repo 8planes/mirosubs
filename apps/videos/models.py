@@ -423,6 +423,7 @@ class SubtitleLanguage(models.Model):
     title = models.CharField(max_length=2048, blank=True)
     percent_done = models.IntegerField(default=0)
     standard_language = models.ForeignKey('self', null=True, blank=True)
+    last_version = models.ForeignKey('SubtitleVersion', null=True, blank=True, editable=False)
         
     subtitles_fetched_counter = RedisSimpleField()
     
@@ -569,10 +570,8 @@ class SubtitleLanguage(models.Model):
             pass
     
     def latest_version(self):
-        try:
-            return self.subtitleversion_set.all()[:1].get()
-        except models.ObjectDoesNotExist:
-            pass        
+        #better get rid from this in future
+        return self.last_version     
     
     def latest_subtitles(self):
         version = self.latest_version()
@@ -673,6 +672,15 @@ class SubtitleVersion(SubtitleCollection):
     
     def __unicode__(self):
         return u'%s #%s' % (self.language, self.version_no)
+    
+    def save(self, *args, **kwargs):
+        created = not self.pk
+        super(SubtitleVersion, self).save(*args, **kwargs)
+        if created:
+            #better use SubtitleLanguage.objects.filter(pk=self.language_id).update(last_version=self)
+            #but some bug happen, I've no idea why
+            self.language.last_version = self
+            self.language.save()
     
     def update_percent_done(self):
         if self.language.is_original or self.is_forked:

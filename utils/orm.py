@@ -1,6 +1,25 @@
 from django.db.models.sql.constants import LOOKUP_SEP
 from django.db.models import sql
 from django.db import connection    
+from django.db.models.query import QuerySet
+
+class LoadRelatedQuerySet(QuerySet):
+    
+    def __len__(self):
+        val = super(LoadRelatedQuerySet, self).__len__()
+        self.update_result_cache()
+        return val
+        
+    def _fill_cache(self, num=None):
+        super(LoadRelatedQuerySet, self)._fill_cache(num)
+        self.update_result_cache()    
+
+    def update_result_cache(self):
+        """
+        In this method check objects in self._result_cache and add realted to
+        some attribute
+        """
+        raise Exception('Not implemented')
 
 def load_related_generic(object_list, field='content_object'):
     if not object_list:

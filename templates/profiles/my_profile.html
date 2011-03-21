@@ -17,20 +17,13 @@
 {% block main_content %}
 <div class="grid_8 alpha">
     <h2>{% trans 'My videos' %}</h2>
-    
+
     <ul class="video_tabs">
         <li class="active">
             <span class="tab-item">
                 {% trans 'My Videos' %}<span class="badgy_out"><span class="badgy">{{ total_video_count }}</span></span>
             </span>
         </li>
-        {% comment %}
-        <li>
-            <a href="{% url messages:index %}">
-                {% trans 'Messages' %}<span class="badgy_out"><span class="badgy">0</span></span>
-            </a>
-        </li>
-        {% endcomment %}
     </ul>
     <div id="videos-tab">
         <div class="boxx">
@@ -84,7 +77,7 @@
         {% endif %}
     {% endwith %}
     <p><a href="{% url profiles:edit %}">{% trans "Edit profile" %}</a></p>
-    
+
     {% user_videos_activity %}
 </div><!-- // grid_4 omega -->
 

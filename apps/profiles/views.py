@@ -19,8 +19,7 @@
 from auth.models import CustomUser as User
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from django.shortcuts import render_to_response, redirect
-from django.template import RequestContext
+from django.shortcuts import redirect
 from profiles.forms import EditUserForm, SendMessageForm, UserLanguageFormset, EditAvatarForm
 from django.contrib import messages
 from django.utils import simplejson as json
@@ -33,6 +32,7 @@ from django.conf import settings
 from django.db.models import Q
 from profiles.rpc import ProfileApiClass
 from utils.rpc import RpcRouter
+from utils.orm import LoadRelatedQuerySet
 
 rpc_router = RpcRouter('profiles:rpc_router', {
     'ProfileApi': ProfileApiClass()
@@ -62,6 +62,20 @@ def edit_avatar(request):
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
+class OptimizedQuerySet(LoadRelatedQuerySet):
+    
+    def update_result_cache(self):
+        videos = dict((v.id, v) for v in self._result_cache if not hasattr(v, 'langs_cache'))
+        
+        if videos:
+            for v in videos.values():
+                v.langs_cache = []
+                
+            langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
+            
+            for l in langs_qs:
+                videos[l.video_id].langs_cache.append(l)
+
 @login_required
 def my_profile(request):
     user = request.user
@@ -79,30 +93,8 @@ def my_profile(request):
         'total_video_count': total_video_count
     }
     
-    from django.db.models.query import QuerySet
-    
-    #TODO: make this multipurpose, to use with any model
-    class OptimizedQuerySet(QuerySet):
-        
-        def update_result_cache(self):
-            videos = dict((v.id, v) for v in self._result_cache if not hasattr(v, 'langs_cache'))
-            
-            if videos:
-                for v in videos.values():
-                    v.langs_cache = []
-                    
-                langs_qs = SubtitleLanguage.objects.filter(video__id__in=videos.keys())
-                
-                for l in langs_qs:
-                    videos[l.video_id].langs_cache.append(l)
-
-        def __iter__(self):
-            #move this to the place where _result_catche is set. if it is really good one
-            self.update_result_cache()
-            return super(OptimizedQuerySet, self).__iter__()
-    
     qs = qs._clone(OptimizedQuerySet)
-    
+
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='profiles/my_profile.html', 

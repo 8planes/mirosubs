@@ -40,15 +40,14 @@ from django.contrib.auth.decorators import permission_required
 import random
 from widget.views import base_widget_params
 import widget
-from videos.models import Action, SubtitleLanguage, WRITELOCK_EXPIRATION
+from videos.models import Action, SubtitleLanguage
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from utils.multy_query_set import MultyQuerySet, TeamMultyQuerySet
+from utils.multy_query_set import TeamMultyQuerySet
 from teams.rpc import TeamsApi
-from django.db.models.query import QuerySet
+from utils.orm import LoadRelatedQuerySet
 from widget.rpc import add_general_settings
-import datetime
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -162,6 +161,24 @@ def detail(request, slug):
                        extra_context=extra_context, 
                        template_object_name='team_video_md')
 
+
+class CompletedVideosQS(LoadRelatedQuerySet):
+
+    def update_result_cache(self):
+        #get all videos from QuerySet cache that has no complete_langs_cache yet
+        videos = dict((v.video_id, v) for v in self._result_cache if not hasattr(v, 'complete_langs_cache'))
+        
+        if videos:
+            for v in videos.values():
+                v.complete_langs_cache = []
+            
+            #select completed SubtitleLanguages for videos    
+            langs_qs = SubtitleLanguage.objects.select_related('video').filter(is_complete=True, video__id__in=videos.keys())
+
+            #fill cache
+            for l in langs_qs:
+                videos[l.video_id].complete_langs_cache.append(l)      
+
 def completed_videos(request, slug):
     team = Team.get(slug, request.user)
     
@@ -179,30 +196,7 @@ def completed_videos(request, slug):
             'base_state': {}
         })
 
-    #TODO: same is in profile.views.my_profile maybe it is possible use one common class for this
-    class OptimizedQuerySet(QuerySet):
-        
-        def update_result_cache(self):
-            #get all videos from QuerySet cache that has no complete_langs_cache yet
-            videos = dict((v.video_id, v) for v in self._result_cache if not hasattr(v, 'complete_langs_cache'))
-            
-            if videos:
-                for v in videos.values():
-                    v.complete_langs_cache = []
-                
-                #select completed SubtitleLanguages for videos    
-                langs_qs = SubtitleLanguage.objects.select_related('video').filter(is_complete=True, video__id__in=videos.keys())
-    
-                #fill cache
-                for l in langs_qs:
-                    videos[l.video_id].complete_langs_cache.append(l)            
-        
-        def __iter__(self):
-            #move this to the place where _result_catche is set. if it is really good one
-            self.update_result_cache()
-            return super(OptimizedQuerySet, self).__iter__()
-    
-    qs = qs._clone(OptimizedQuerySet)
+    qs = qs._clone(CompletedVideosQS)
 
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 
