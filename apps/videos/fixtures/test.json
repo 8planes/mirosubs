@@ -81,7 +81,8 @@
             "writelock_time": null,
             "had_version": true,
             "video": 1,
-            "has_version": true
+            "has_version": true,
+            "last_version": 2     
         }
     },
     {
