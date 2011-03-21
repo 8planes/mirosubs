@@ -15,7 +15,8 @@
     <a class="blue_button small team_video_{{ team_video.pk }}" href="#">
             {% trans 'Add Subtitles' %}
     </a>
-    {% team_video_lang_list team_video.video %}
+    <div class="clearfix"></div>
+        {% team_video_lang_list team_video.video %}
 </div>
 <script type="text/javascript">
     $('a.team_video_{{ team_video.pk }}').click(function(){
