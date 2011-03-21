@@ -5,7 +5,7 @@
 <div class="info">
     <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
     {% if can_edit_video %}
-        <a class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
+        <a style="margin-right: 5px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
     {% endif %}
     {% if team_video.description %}
     <p>
@@ -16,7 +16,7 @@
             {% trans 'Add Subtitles' %}
     </a>
     <div class="clearfix"></div>
-        {% team_video_lang_list team_video.video %}
+    <div class="completed_translations"><strong>{% trans "Completed Languages" %}:</strong> {% team_video_lang_list team_video.video %}</div>
 </div>
 <script type="text/javascript">
     $('a.team_video_{{ team_video.pk }}').click(function(){

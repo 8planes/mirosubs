@@ -149,4 +149,9 @@
 
 .completed_translations span {
 	color: #333 !important;
+	font-size: 13px;
+}
+
+.completed_translations a {
+	font-size: 13px;
 }
