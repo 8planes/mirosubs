@@ -95,4 +95,51 @@
             {% include "teams/_application_form.html" %}
         {% endif %}
     {% endif %} 
-</div>
+</div><!-- // team-detail -->
+
+<div id="team_volunteer_detail">
+      {% if team|is_team_member:user %}
+      
+      {% else %}
+      {% if team.is_open %}
+      <div id="team_join_button" class="clearfix">
+        <a class="join-team green_button huge" team_id="{{ team.pk }}" href="{% url teams:join_team team.slug %}">{% trans "Join this team now!" %}</a>
+      </div><!-- // team_join_button -->
+      {% endif %}<!-- // if team.is_open -->
+      {% endif %}<!-- // if team|is_team_member:user -->
+    {% if not team.video %}
+    <div id="team_info" class="clearfix">
+        {% if team.logo %}
+        <div id="team_logo">
+          <img alt="{{ team }}" title="{{ team }}" src="{{ team.logo_thumbnail }}"/>
+        </div><!-- // team_logo -->
+          {% if team.description %}
+            <p><strong>{% trans 'Team Description' %}</strong>: {{ team.description|urlize }}</p>
+          {% endif %}<!-- // if team.description -->
+        {% endif %}<!-- // if team.logo -->
+    </div><!-- // team_info -->
+    {% endif %}<!-- // if not team.video -->
+    
+    <ul id="team_detail_actions">
+      <li id="team_detail_managers">
+        <strong>{% trans 'Team Managers' %}:</strong>
+        {% for item in team.members.managers %}
+        <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      </li>
+      <li id="team_detail_members"><a href="{% url teams:detail_members team.slug %}">{% trans "Team Members" %} ({{ team.member_count }})</a></li>
+      <li id="team_completed_subtitles"><a href="">{% trans 'Completed Subtitles' %}</a></li>
+      {% if team|is_team_manager:user %}
+      <li id="team_manage_settings"><a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a></li>
+      {% else %}
+      <li id="team_leave_button" class="clearfix"><a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave this team" %}</a></li>
+      {% if user.is_authenticated and team.is_by_application %}
+      <li>
+        {% include "teams/_application_form.html" %}
+      </li>
+      {% endif %}
+      {% endif %}<!-- // if team|is_team_member:user -->
+      <li id="team_video_policy"><strong>{% trans 'Video Policy' %}:</strong> {{ team.get_video_policy_display }}</li>
+      <li id="team_member_policy"><strong>{% trans 'Membership Policy' %}:</strong> {{ team.get_membership_policy_display }}</li>
+    </ul>
+</div><!-- // team_volunteer_detail -->
