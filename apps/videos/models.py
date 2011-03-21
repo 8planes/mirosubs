@@ -91,9 +91,9 @@ class Video(models.Model):
     followers = models.ManyToManyField(User, blank=True, related_name='followed_videos')
     complete_date = models.DateTimeField(null=True, blank=True, editable=False)
         
-    subtitles_fetched_count = models.IntegerField(default=0)
-    widget_views_count = models.IntegerField(default=0)
-    view_count = models.PositiveIntegerField(default=0)
+    subtitles_fetched_count = models.IntegerField(default=0, db_index=True)
+    widget_views_count = models.IntegerField(default=0, db_index=True)
+    view_count = models.PositiveIntegerField(default=0, db_index=True)
     
     subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
     widget_views_counter = RedisSimpleField('video_id', changed_video_set)
