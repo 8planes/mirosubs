@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from os import path
 from django.conf import settings
-from teams.models import Team, Invite, TeamVideo
+from teams.models import Team, Invite, TeamVideo, Application, TeamMember
 from teams import views
 from messages.models import Message
 from videos.models import Video, VIDEO_TYPE_YOUTUBE
@@ -389,7 +389,103 @@ class TeamsTest(TestCase):
         
         self.assertFalse(team.is_member(user2))
         
+        url = reverse("teams:completed_videos", kwargs={"slug": team.slug})
+        response = self.client.post(url)
+        self.failUnlessEqual(response.status_code, 200)
+
+        url = reverse("teams:videos_actions", kwargs={"slug": team.slug})
+        response = self.client.post(url)
+        self.failUnlessEqual(response.status_code, 200)
+        
+        self.client.login()
+        TeamMember.objects.filter(user=self.user, team=team).delete()
+        self.assertFalse(team.is_member(self.user))
+        url = reverse("teams:join_team", kwargs={"slug": team.slug})
+        response = self.client.post(url)
+        self.failUnlessEqual(response.status_code, 302)
+        self.assertTrue(team.is_member(self.user))
+                
     def test_fixes(self):
         url = reverse("teams:detail", kwargs={"slug": 'slug-does-not-exist'})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 404)
+
+from teams.rpc import TeamsApiClass
+from utils.rpc import Error, Msg
+from django.contrib.auth.models import AnonymousUser
+
+class TestJqueryRpc(TestCase):
+    
+    def setUp(self):
+        self.team = Team(name='Test', slug='test')
+        self.team.save()
+        self.user = User.objects.all()[:1].get()
+        self.rpc = TeamsApiClass()
+        
+    def test_create_application(self):
+        response = self.rpc.create_application(self.team.pk, '', AnonymousUser())
+        if not isinstance(response, Error):
+            self.fail('User should be authenticated')
+        #---------------------------------------
+        response = self.rpc.create_application(None, '', self.user)
+        if not isinstance(response, Error):
+            self.fail('Undefined team')
+        #---------------------------------------    
+        self.team.membership_policy = Team.INVITATION_BY_MANAGER
+        self.team.save()
+        
+        response = self.rpc.create_application(self.team.pk, '', self.user)
+        if not isinstance(response, Error):
+            self.fail('Team is not opened')
+        #---------------------------------------
+        self.team.membership_policy = Team.OPEN
+        self.team.save()
+        
+        self.assertFalse(self.team.is_member(self.user))
+        
+        response = self.rpc.create_application(self.team.pk, '', self.user)
+        
+        if isinstance(response, Error):
+            self.fail(response)
+        
+        self.assertTrue(self.team.is_member(self.user))
+        #---------------------------------------
+        response = self.rpc.leave(self.team.pk, self.user)
+        
+        if not isinstance(response, Error):
+            self.fail('You are the only member of team')
+        
+        other_user = User.objects.exclude(pk=self.user)[:1].get()
+        self.rpc.join(self.team.pk, other_user)    
+        
+        response = self.rpc.leave(self.team.pk, self.user)
+        if isinstance(response, Error):
+            self.fail(response)
+                    
+        self.assertFalse(self.team.is_member(self.user))           
+        #---------------------------------------
+        self.team.membership_policy = Team.APPLICATION
+        self.team.save()
+        
+        self.assertFalse(Application.objects.filter(user=self.user, team=self.team).exists())  
+        response = self.rpc.create_application(self.team.pk, '', self.user)
+
+        if isinstance(response, Error):
+            self.fail(response)
+        
+        self.assertFalse(self.team.is_member(self.user))
+        self.assertTrue(Application.objects.filter(user=self.user, team=self.team).exists())
+        #---------------------------------------
+        
+    def test_join(self):
+        self.team.membership_policy = Team.OPEN
+        self.team.save()
+        
+        self.assertFalse(self.team.is_member(self.user))
+        
+        response = self.rpc.join(self.team.pk, self.user)
+        
+        if isinstance(response, Error):
+            self.fail(response)
+        
+        self.assertTrue(self.team.is_member(self.user))            

@@ -53,7 +53,6 @@ urlpatterns = patterns('teams.views',
     url('^promote/members/(?P<slug>[-\w]+)/(?P<user_pk>\d+)/$', 'promote_member', name='promote_member'),
     url('^(?P<slug>[-\w]+)/$', 'detail', name='detail'),
     url('^(?P<slug>[-\w]+)/members/$', 'detail_members', name='detail_members'),
-    #url('^(?P<slug>[-\w]+)/members_actions/$', 'members_actions', name='members_actions'),
     url('^(?P<slug>[-\w]+)/videos_actions/$', 'videos_actions', name='videos_actions'),
 )
 
