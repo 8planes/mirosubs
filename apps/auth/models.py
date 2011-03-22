@@ -33,6 +33,11 @@ from django.core.exceptions import MultipleObjectsReturned
 from utils.amazon import S3EnabledImageField
 from datetime import datetime
 
+#I'm not sure this is the best way do do this, but this models.py is executed
+#before all other and before url.py
+from localeurl import patch_reverse
+patch_reverse()
+
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class CustomUser(BaseUser):
