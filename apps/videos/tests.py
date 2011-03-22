@@ -1000,4 +1000,13 @@ class TestModelsSaving(TestCase):
         self.language.is_complete = False
         self.language.save()
         self.video = Video.objects.get(pk=self.video.pk)
-        self.assertEqual(self.video.complete_date, None)        
+        self.assertEqual(self.video.complete_date, None)
+        
+        l.is_complete = True
+        l.save()
+        self.language.delete()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertNotEqual(self.video.complete_date, None)
+        l.delete()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertEqual(self.video.complete_date, None)

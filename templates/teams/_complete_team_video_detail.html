@@ -7,7 +7,7 @@
     <div class="completed_translations">
        <strong>{% trans "Completed Languages" %}:</strong> 
        {% for sl in team_video.complete_langs_cache %}
-            <a href="{{ sl.get_absolute_url }}"><span>{{ sl.get_language_display }}</span></a>
+            <a href="{{ sl.get_absolute_url }}"><span>{{ sl.language_display }}</span></a>
             {% if not forloop.last %},{% endif %}
        {% endfor %}
     </div>
