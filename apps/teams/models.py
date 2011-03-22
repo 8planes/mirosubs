@@ -341,7 +341,7 @@ class TeamVideoLanguage(models.Model):
     percent_done = models.IntegerField(default=0)
     
     class Meta:
-        unique_together = (('team_video', 'language'),)
+        unique_together = (('team_video', 'language', 'subtitle_language'),)
         
     def __unicode__(self):
         return self.get_language_display()
