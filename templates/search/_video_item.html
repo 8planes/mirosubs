@@ -20,22 +20,20 @@
     </div>
     <div>
         <span class="langs_available">
-            {{ video.languages_count }} {% trans "Languages Available" %} -
-            {% if video.langs_cache %}
-                {% for lang in video.langs_cache %}  
+            {{ video.languages_count }} {% trans "Languages Available" %}
+            {% if video.languages_count %} - {% endif %}
+            
+            {% for lang in video.langs_cache %}
+                {% with lang.latest_version.subtitle_set.count|default:0 as lines_count %}
+                    {% if lines_count %}  
                     <a href="{{ lang.get_absolute_url }}">
                         {{ lang.language_display }}
-                        <span>{{ lang.latest_version.subtitle_set.count|default:0 }} {% trans "lines" %}</span>
+                        <span>{{ lines_count }} {% trans "lines" %}</span>
                     </a>
-                {% endfor %}
-            {% else %}
-                {% for lang in video.subtitlelanguage_set.select_related %}
-                    <a href="{{ lang.get_absolute_url }}">
-                        {{ lang.language_display }}
-                        <span>{{ lang.latest_version.subtitle_set.count|default:0 }} {% trans "lines" %}</span>
-                    </a>
-                {% endfor %}            
-            {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}         
+            
         </span>
     </div>
     {% endif %}

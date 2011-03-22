@@ -389,11 +389,6 @@ class TeamVideoLanguage(models.Model):
     def update(cls, tv, sl):
         langs = []
         
-        defaults = {
-            'team': tv.team,
-            'video': tv.video                                                                             
-        }
-        
         if isinstance(sl, SubtitleLanguage):
             langs = [sl]
         else:
@@ -408,8 +403,12 @@ class TeamVideoLanguage(models.Model):
                     tvl.subtitle_language=lang
                 except cls.DoesNotExist:
                     #else create new TeamVideoLanguage
-                    tvl, created = cls.objects.get_or_create(team_video=tv, language=lang.language, 
-                                                             subtitle_language=lang, defaults=defaults)
+                    tvl, created = cls.objects.get_or_create(team_video=tv,  
+                                                             subtitle_language=lang, defaults={
+                        'language': lang.language,
+                        'team': tv.team,
+                        'video': tv.video                                                                             
+                    })
                 
                 tvl.is_original = lang.is_original
                 tvl.forked = lang.is_forked
@@ -421,8 +420,6 @@ class TeamVideoLanguage(models.Model):
                 tvl.save()
         else:
             cls.objects.filter(team_video=tv, language=sl, subtitle_language__isnull=False).delete()
-            tvl, created = cls.objects.get_or_create(team_video=tv, language=sl, 
-                                    subtitle_language=None, defaults=defaults)
             
     @classmethod
     def team_video_save_handler(cls, sender, instance, created, **kwargs):

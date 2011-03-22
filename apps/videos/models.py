@@ -190,10 +190,13 @@ class Video(models.Model):
         return self.title.replace('/', '-').replace('#', '').replace('?', '')
     
     @models.permalink
-    def get_absolute_url(self):
+    def get_absolute_url(self, locale=None):
+        kwargs = {}
+        if locale:
+            kwargs['locale'] = locale 
         if self.title:
-            return ('videos:video_with_title', [self.video_id, self.title_for_url()])
-        return ('videos:video', [self.video_id])
+            return ('videos:video_with_title', [self.video_id, self.title_for_url()], kwargs)
+        return ('videos:video', [self.video_id], kwargs)
 
     def get_video_url(self):
         try:
