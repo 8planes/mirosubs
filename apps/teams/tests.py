@@ -58,7 +58,10 @@ class TeamsTest(TestCase):
             "slug": u"new-team",
             "name": u"New team"
         }
+
         response = self.client.post(reverse("teams:create"), data)
+        self.assertEqual(response.status_code, 302)
+
         team = Team.objects.get(slug=data['slug'])
 
         self._add_team_video(team, u'en', u"http://videos.mozilla.org/firefox/3.5/switch/switch.ogv")
