@@ -954,3 +954,50 @@ class TestAlert(TestCase):
         alarms.check_language_name(v, ignore_statistic=True)
         
         self.assertEquals(len(mail.outbox), 2)             
+
+class TestModelsSaving(TestCase):
+    
+    fixtures = ['test.json']
+    
+    def setUp(self):
+        self.video = Video.objects.all()[:1].get()
+        self.language = self.video.subtitle_language()
+        self.language.is_complete = False
+        self.language.save()
+        
+    def test_subtitle_language_save(self):
+        self.assertEqual(self.video.complete_date, None)
+        self.assertEqual(self.video.subtitlelanguage_set.count(), 1)
+
+        self.language.is_complete = True
+        self.language.save()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertNotEqual(self.video.complete_date, None)
+        
+        self.language.is_complete = False
+        self.language.save()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertEqual(self.video.complete_date, None)
+        
+        #add one more SubtitleLanguage
+        l = SubtitleLanguage(video=self.video)
+        l.is_original = False
+        l.is_complete = True
+        l.save()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertNotEqual(self.video.complete_date, None)
+        
+        self.language.is_complete = True
+        self.language.save()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertNotEqual(self.video.complete_date, None)
+
+        l.is_complete = False
+        l.save()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertNotEqual(self.video.complete_date, None)
+        
+        self.language.is_complete = False
+        self.language.save()
+        self.video = Video.objects.get(pk=self.video.pk)
+        self.assertEqual(self.video.complete_date, None)        

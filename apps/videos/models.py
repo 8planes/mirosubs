@@ -459,8 +459,13 @@ class SubtitleLanguage(models.Model):
     def check_initial_values(self):
         iv = self._initial_values
 
-        if not self._initial_values['is_complete'] and self.is_complete:
+        if not iv['is_complete'] and self.is_complete:
             self.video.complete_date = datetime.now()
+            self.video.save()
+        elif iv['is_complete'] and not self.is_complete:
+            if not self.video.subtitlelanguage_set.exclude(is_complete=False).exists():
+                self.video.complete_date = None
+                self.video.save()
         
         if iv['is_complete'] != self.is_complete or iv['is_original'] != self.is_original \
             or iv['percent_done'] != self.percent_done or iv['is_forked'] != self.is_forked:
