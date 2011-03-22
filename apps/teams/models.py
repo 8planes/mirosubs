@@ -34,6 +34,7 @@ from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
 from teams.tasks import update_team_video, update_one_team_video
+from apps.videos.models import SubtitleLanguage
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -332,6 +333,7 @@ class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
+    subtitle_language = models.ForeignKey(SubtitleLanguage, null=True, blank=True)
     team = models.ForeignKey(Team)
     is_original = models.BooleanField(default=False, db_index=True)
     forked = models.BooleanField(default=True, db_index=True)
@@ -345,29 +347,44 @@ class TeamVideoLanguage(models.Model):
         return self.get_language_display()
     
     @classmethod
-    def update(cls, tv, l, sl=None):
-        if not sl:
-            try:
-                sl = tv.video.subtitlelanguage_set.get(language=l)
-            except models.ObjectDoesNotExist:
-                pass
-            
-        tvl, created = cls.objects.get_or_create(team_video=tv, language=l, defaults={
+    def update(cls, tv, sl):
+        langs = []
+        
+        defaults = {
             'team': tv.team,
             'video': tv.video                                                                             
-        })
+        }
         
-        if sl:
-            tvl.is_original = sl.is_original
-            tvl.forked = sl.is_forked
-            
-            if sl.is_original or sl.is_forked:
-                tvl.is_complete = sl.is_complete
+        if isinstance(sl, SubtitleLanguage):
+            langs = [sl]
+        else:
+            langs = tv.video.subtitlelanguage_set.filter(language=sl)
+        
+        if langs:
+            for lang in langs:
+                try:
+                    #is SubtitleLanguage exists we should overwrite TeamVideoLanguage
+                    #that has no subtitle_language
+                    tvl = cls.objects.get(team_video=tv, language=sl, subtitle_language=None)
+                    tvl.subtitle_language=lang
+                except cls.DoesNotExist:
+                    #else create new TeamVideoLanguage
+                    tvl, created = cls.objects.get_or_create(team_video=tv, language=lang.language, 
+                                                             subtitle_language=lang, defaults=defaults)
                 
-            tvl.percent_done = sl.percent_done
-        
-        tvl.save()
-    
+                tvl.is_original = lang.is_original
+                tvl.forked = lang.is_forked
+                
+                if lang.is_original or lang.is_forked:
+                    tvl.is_complete = lang.is_complete
+                    
+                tvl.percent_done = lang.percent_done
+                tvl.save()
+        else:
+            cls.objects.filter(team_video=tv, language=sl, subtitle_language__isnull=False).delete()
+            tvl, created = cls.objects.get_or_create(team_video=tv, language=sl, 
+                                    subtitle_language=None, defaults=defaults)
+            
     @classmethod
     def team_video_save_handler(cls, sender, instance, created, **kwargs):
         for l, lang_name in settings.ALL_LANGUAGES:
@@ -376,7 +393,7 @@ class TeamVideoLanguage(models.Model):
     @classmethod
     def subtitle_language_save_handler(cls, sender, instance, created, **kwargs):
         for tv in TeamVideo.objects.all():
-            cls.update(tv, instance.language, instance)
+            cls.update(tv, instance)
 
 post_save.connect(TeamVideoLanguage.subtitle_language_save_handler, SubtitleLanguage)        
 post_save.connect(TeamVideoLanguage.team_video_save_handler, TeamVideo)
