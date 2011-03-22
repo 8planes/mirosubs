@@ -246,22 +246,6 @@ def videos_actions(request, slug):
                        extra_context=extra_context, 
                        template_object_name='videos_action')
 
-def members_actions(request, slug):
-    team = Team.get(slug, request.user)   
-    
-    user_ids = team.members.values_list('user__id', flat=True)
-    
-    qs = Action.objects.filter(user__pk__in=user_ids)
-    
-    extra_context = {
-        'team': team
-    }   
-    return object_list(request, queryset=qs, 
-                       paginate_by=ACTIONS_ON_PAGE, 
-                       template_name='teams/members_actions.html', 
-                       extra_context=extra_context, 
-                       template_object_name='action')
-
 @render_to('teams/create.html')
 @login_required    
 def create(request):
