@@ -25,7 +25,7 @@ DEV_HOST = 'dev.universalsubtitles.org:2191'
 
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
-                memcached_bounce_cmd):
+                memcached_bounce_cmd, celeryd_requires_sudo):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -34,6 +34,7 @@ def _create_env(username, hosts, s3_bucket,
     env.static_dir = '/var/{0}'.format(static_dir)
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
+    env.celeryd_requires_sudo = celeryd_requires_sudo
 
 def staging(username):
     _create_env(username, 
@@ -42,14 +43,15 @@ def staging(username):
                 's3.staging.universalsubtitles.org',
                 'universalsubtitles.staging',
                 'static/staging', 'staging',
-                '/etc/init.d/memcached-staging restart')
+                '/etc/init.d/memcached-staging restart',
+                True)
 
 def dev(username):
     _create_env(username,
                 ['dev.universalsubtitles.org:2191'],
                 None,
                 'universalsubtitles.dev',
-                'www/universalsubtitles.dev', 'dev', None)
+                'www/universalsubtitles.dev', 'dev', None, False)
 
 def unisubs(username):
     _create_env(username,
@@ -58,7 +60,7 @@ def unisubs(username):
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
                 'static/production', None,
-                '/etc/init.d/memcached restart')
+                '/etc/init.d/memcached restart', True)
 
 
 def syncdb():
@@ -168,11 +170,19 @@ def update_web():
             env.warn_only = False
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
+        _bounce_celeryd()
 
 def bounce_memcached():
     if env.memcached_bounce_cmd:
         env.host_string = 'pcf-us-admin.pculture.org:2191'
         sudo(env.memcached_bounce_cmd)
+
+def _bounce_celeryd():
+    cmd = '/etc/init.d/celeryd restart'
+    if env.celeryd_requires_sudo:
+        sudo(cmd)
+    else:
+        run(cmd)
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):
