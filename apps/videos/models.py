@@ -82,7 +82,7 @@ class Video(models.Model):
     writelock_owner = models.ForeignKey(User, null=True, editable=False,
                                         related_name="writelock_owners")
     is_subtitled = models.BooleanField(default=False)
-    was_subtitled = models.BooleanField(default=False)
+    was_subtitled = models.BooleanField(default=False, db_index=True)
     thumbnail = models.CharField(max_length=500, blank=True)
     s3_thumbnail = S3EnabledImageField(blank=True, upload_to='video/thumbnail/')
     edited = models.DateTimeField(null=True, editable=False)
