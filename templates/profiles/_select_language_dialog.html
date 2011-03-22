@@ -8,35 +8,32 @@
 <script type="text/javascript">
     //require ProfileApi
     jQuery(function($){
-		var update_language_display = function(){
-			ProfileApi.get_user_languages(function(r){
-				$('.language_bar span').remove();
-				var h = '';
-				for (l in r){
-					h += '<span>'+r[l]+'</span>, '
-				};
-				$('.language_bar a').after('<span class="selected_language">'+h.slice(0,-1)+'</span>');
-			});			
-		};
-		update_language_display();
-		var force_ask = {% if force_ask %}true{% else %}false{% endif %};
+        var update_language_display = function(){
+            ProfileApi.get_user_languages(function(r){
+                $('.language_bar span').remove();
+                var h = '';
+                for (l in r){
+                    h += '<span>'+r[l]+'</span>, '
+                };
+                $('.language_bar a').before('<span class="selected_language">'+h.slice(0,-2)+'</span>');
+            });			
+        };
+        update_language_display();
+        var force_ask = {% if force_ask %}true{% else %}false{% endif %};
 
         function are_cookies_enabled()
         {
-            var cookieEnabled = (navigator.cookieEnabled) ? true : false;
-        
-            if (typeof navigator.cookieEnabled == "undefined" && !cookieEnabled)
-            { 
-                document.cookie="testcookie";
-                cookieEnabled = (document.cookie.indexOf("testcookie") != -1) ? true : false;
-            }
-            return (cookieEnabled);
+            document.cookie="testcookie";
+            return (document.cookie.indexOf("testcookie") != -1) ? true : false;
         }
         
         if (are_cookies_enabled()){        
             var $w = $('#language_modal');
             
             $w.find('button').click(function(){
+                if (typeof mpq != 'undefined') {
+                    mpq.push(['track', 'Submits_languages_she_speaks']);
+                }
                 var values = {};
                 var has_value = false;
                 
@@ -52,19 +49,19 @@
                 if ( ! has_value){
                     $.jGrowl.error('{% trans "Select at least one language." %}');
                 }else{
-                    $w.html('{% trans "Saving..." %}');
+                    $w.html('{% trans "Saving your language settings..." %}');
                     ProfileApi.select_languages(values, function(){
-						//update_language_display();
-                        window.location.replace(window.location);
-					});
+                        //update_language_display();
+                        window.location.reload(true);
+                    });
                 }
 
                 return false;
             });
-			
-			if (force_ask){
-	            $w.mod();
-			};
+            
+            if (force_ask){
+                $w.mod();
+            };
         };
     });
 </script>
