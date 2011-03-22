@@ -441,7 +441,7 @@ class TeamVideoLanguagePair(models.Model):
     # language_0 and subtitle_language_0 are the potential standards.
     language_0 = models.CharField(max_length=16, choices=ALL_LANGUAGES, db_index=True)
     subtitle_language_0 = models.ForeignKey(
-        SubtitleLanguage, null=True, related_name="team_video_language_pairs_0")
+        SubtitleLanguage, null=False, related_name="team_video_language_pairs_0")
     language_1 = models.CharField(max_length=16, choices=ALL_LANGUAGES, db_index=True)
     subtitle_language_1 = models.ForeignKey(
         SubtitleLanguage, null=True, related_name="team_video_language_pairs_1")
