@@ -11,6 +11,9 @@ class Migration(DataMigration):
             return
         
         i = 0
+
+        tvls_to_delete = []
+
         for tvl in orm.TeamVideoLanguage.objects.select_related('video'):
             if i % 100 == 0:
                 print i
@@ -20,9 +23,14 @@ class Migration(DataMigration):
                 tvl.subtitle_language = lang
                 tvl.save()
             except models.ObjectDoesNotExist:
-                pass
+                tvls_to_delete.append(tvl)
             
             i += 1
+
+        print("Found {0} TeamVideoLanguages that don't match with languages. Was hoping to find 0.".format(len(tvls_to_delete)))
+
+        for tvl in tvls_to_delete:
+            tvl.delete()
     
     def backwards(self, orm):
         "Write your backwards methods here."

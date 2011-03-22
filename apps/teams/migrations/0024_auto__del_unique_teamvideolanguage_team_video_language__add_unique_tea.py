@@ -12,7 +12,7 @@ class Migration(SchemaMigration):
         db.delete_unique('teams_teamvideolanguage', ['team_video_id', 'language'])
 
         # Adding unique constraint on 'TeamVideoLanguage', fields ['team_video', 'subtitle_language', 'language']
-        db.create_unique('teams_teamvideolanguage', ['team_video_id', 'subtitle_language_id', 'language'])
+        db.create_unique('teams_teamvideolanguage', ['team_video_id', 'subtitle_language_id'])
     
     
     def backwards(self, orm):
@@ -21,7 +21,7 @@ class Migration(SchemaMigration):
         db.create_unique('teams_teamvideolanguage', ['team_video_id', 'language'])
 
         # Removing unique constraint on 'TeamVideoLanguage', fields ['team_video', 'subtitle_language', 'language']
-        db.delete_unique('teams_teamvideolanguage', ['team_video_id', 'subtitle_language_id', 'language'])
+        db.delete_unique('teams_teamvideolanguage', ['team_video_id', 'subtitle_language_id'])
     
     
     models = {
