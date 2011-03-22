@@ -410,19 +410,19 @@ class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
     is_original = models.BooleanField()
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
-    writelock_time = models.DateTimeField(null=True)
-    writelock_session_key = models.CharField(max_length=255, blank=True)
-    writelock_owner = models.ForeignKey(User, null=True, blank=True)
+    writelock_time = models.DateTimeField(null=True, editable=False)
+    writelock_session_key = models.CharField(max_length=255, blank=True, editable=False)
+    writelock_owner = models.ForeignKey(User, null=True, blank=True, editable=False)
     is_complete = models.BooleanField(default=False)
-    has_version = models.BooleanField(default=False)
-    had_version = models.BooleanField(default=False)
-    is_forked = models.BooleanField(default=False)
+    has_version = models.BooleanField(default=False, editable=False)
+    had_version = models.BooleanField(default=False, editable=False)
+    is_forked = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True)
-    subtitles_fetched_count = models.IntegerField(default=0)
-    followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
+    subtitles_fetched_count = models.IntegerField(default=0, editable=False)
+    followers = models.ManyToManyField(User, blank=True, related_name='followed_languages', editable=False)
     title = models.CharField(max_length=2048, blank=True)
-    percent_done = models.IntegerField(default=0)
-    standard_language = models.ForeignKey('self', null=True, blank=True)
+    percent_done = models.IntegerField(default=0, editable=False)
+    standard_language = models.ForeignKey('self', null=True, blank=True, editable=False)
     last_version = models.ForeignKey('SubtitleVersion', null=True, blank=True, editable=False)
         
     subtitles_fetched_counter = RedisSimpleField()
@@ -447,6 +447,10 @@ class SubtitleLanguage(models.Model):
         super(SubtitleLanguage, self).delete(*args, **kwargs)
         #asynchronous call
         update_team_video.delay(video_id)
+
+        if not self.video.subtitlelanguage_set.exclude(is_complete=False).exists():
+            self.video.complete_date = None
+            self.video.save()
         
     def save_initial_values(self):
         self._initial_values = {
