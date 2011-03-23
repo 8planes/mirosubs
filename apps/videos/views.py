@@ -327,7 +327,17 @@ def history(request, video_id, lang=None):
     video.update_view_counter()
 
     context = widget.add_onsite_js_files({})
-    language = video.subtitle_language(lang)
+    # since a video can have more than sublanguage with the same code
+    # (eg two 'es' trans), we might need to make each one unique
+    # in order to keep prettier urls and not brake anything you can have
+    # /videos/XXXX/es/ -> points to the first 'es' added
+    # /videos/XXXX/es/?lang_id=45 -> points to the specific lang id. Note
+    # that in this case we simply ignore the language code over the url
+    specific_lang = request.GET.get("lang_id", False)
+    if specific_lang:
+        language = video.subtitlelanguage_set.get(pk=specific_lang)
+    else:    
+        language = video.subtitle_language(lang)
 
     if not language:
         if lang in dict(settings.ALL_LANGUAGES):
