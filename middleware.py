@@ -117,3 +117,21 @@ class SqlPrintingMiddleware(object):
             replace_tuple = (" "*indentation, str(total_time))
             print "%s\033[1;32m[TOTAL TIME: %s seconds]\033[0m" % replace_tuple
         return response
+
+from debug_toolbar.middleware import DebugToolbarMiddleware
+import debug_toolbar
+
+class SupeuserDebugToolbarMiddleware(DebugToolbarMiddleware):
+    
+    def _show_toolbar(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
+        if x_forwarded_for:
+            remote_addr = x_forwarded_for.split(',')[0].strip()
+        else:
+            remote_addr = request.META.get('REMOTE_ADDR', None)
+        if (not remote_addr in settings.INTERNAL_IPS and not request.user.is_superuser) \
+            or (request.is_ajax() and \
+                not debug_toolbar.urls._PREFIX in request.path) \
+                    or not settings.DEBUG:
+            return False
+        return True
