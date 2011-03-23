@@ -1013,7 +1013,7 @@ class Action(models.Model):
             obj.created = instance.submit_date
             obj.action_type = cls.COMMENT
             if issubclass(model_class, Video):
-                obj.video_key = instance.object_pk
+                obj.video_id = instance.object_pk
             if issubclass(model_class, SubtitleLanguage):
                 obj.language_id = instance.object_pk
                 obj.video = instance.content_object.video

@@ -124,8 +124,8 @@ class TeamMultyQuerySet(object):
             val = []
             videos = []
             for obj in selected:
-                if obj.team_video_key not in videos:
-                    videos.append(obj.team_video_key)
+                if obj.team_video_id not in videos:
+                    videos.append(obj.team_video_id)
                     val.append(obj)
             
         self._cache[cache_key] = val
