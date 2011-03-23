@@ -190,7 +190,7 @@ def video(request, video_id, video_url=None, title=None):
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    qs = Video.objects.exclude(subtitlelanguage__has_version=False)
+    qs = Video.objects.filter(is_subtitled=True)
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
