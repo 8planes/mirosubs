@@ -129,6 +129,8 @@ class Rpc(BaseRpc):
         """
         if original_language_code:
             self._save_original_language(video_id, original_language_code)
+            if language_code == original_language_code:
+                base_language_code = None
         language, can_writelock = self._get_language_for_editing(
             request, video_id, language_code, 
             None if fork else base_language_code)
