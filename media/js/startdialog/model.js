@@ -222,8 +222,11 @@ mirosubs.startdialog.Model.prototype.fromLanguages = function() {
     var possibleFromLanguages = this.videoLanguages_;
     if (videoLanguage)
         possibleFromLanguages = goog.array.filter(
-            this.videoLanguages_,
+            possibleFromLanguages,
             function(vl) { return vl != videoLanguage; });
+    possibleFromLanguages = goog.array.filter(
+        possibleFromLanguages,
+        function(vl) { return !vl.DEPENDENT || vl.PERCENT_DONE > 0; });
     var myLanguages = new goog.structs.Set(this.myLanguages_);
     goog.array.sort(
         possibleFromLanguages,

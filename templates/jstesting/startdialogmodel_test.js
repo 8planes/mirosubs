@@ -102,6 +102,26 @@ function testFromLanguages0() {
     assertEquals(0, fromLanguages.length);
 }
 
+function testFromLanguagesWithZeroPercent() {
+    var json = makeBaseJSON();
+    json['video_languages'].push(
+        {'dependent': true, 'percent_done': 90, 
+         'language': 'ru', 'standard': 'en' });
+    var model = new mirosubs.startdialog.Model(json);
+    var fromLanguages = model.fromLanguages();
+    assertEquals(2, fromLanguages.length);
+
+
+    json = makeBaseJSON();
+    json['video_languages'].push(
+        {'dependent': true, 'percent_done': 0, 
+         'language': 'ru', 'standard': 'en' });
+    model = new mirosubs.startdialog.Model(json);
+    fromLanguages = model.fromLanguages();
+    assertEquals(1, fromLanguages.length);
+}
+
+
 function testGeneral0() {
     var json = {
         "my_languages": ["en-us", "en", "en"],
