@@ -36,7 +36,7 @@ class AddSubtitlesForm(SubtitlesUploadBaseForm):
     
     def __init__(self, *args, **kwargs):
         super(AddSubtitlesForm, self).__init__(*args, **kwargs)
-        self.fields['video'].to_field_name = 'video_id'
+        self.fields['video'].to_field_name = 'video_key'
     
     @classmethod
     def get_form_instance(cls, request, data):

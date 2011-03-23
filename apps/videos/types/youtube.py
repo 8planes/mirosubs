@@ -36,7 +36,7 @@ _('Undefined error')
 class YoutubeVideoType(VideoType):
     
     _url_pattern = re.compile(
-        r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)')
+        r'youtube.com/.*?v[/=](?P<video_key>[\w-]+)')
 
     abbreviation = 'Y'
     name = 'Youtube' 
@@ -44,15 +44,15 @@ class YoutubeVideoType(VideoType):
     
     def __init__(self, url):
         self.url = url
-        self.videoid = self._get_video_id(self.url)
-        self.entry = self._get_entry(self.video_id)
+        self.videoid = self._get_video_key(self.url)
+        self.entry = self._get_entry(self.video_key)
 
     @property
-    def video_id(self):
+    def video_key(self):
         return self.videoid
     
     def convert_to_video_url(self):
-        return 'http://www.youtube.com/watch?v=%s' % self.video_id   
+        return 'http://www.youtube.com/watch?v=%s' % self.video_key   
 
     @classmethod    
     def video_url(cls, obj):
@@ -63,13 +63,13 @@ class YoutubeVideoType(VideoType):
     
     @classmethod
     def matches_video_url(cls, url):
-        return 'youtube.com' in url and cls._get_video_id(url)
+        return 'youtube.com' in url and cls._get_video_key(url)
 
     def create_kwars(self):
-        return {'videoid': self.video_id}
+        return {'videoid': self.video_key}
 
     def set_values(self, video_obj):
-        video_obj.youtube_videoid = self.video_id
+        video_obj.youtube_videoid = self.video_key
         video_obj.title = self.entry.media.title.text or ''
         if self.entry.media.description:
             video_obj.description = self.entry.media.description.text or ''
@@ -81,17 +81,17 @@ class YoutubeVideoType(VideoType):
         self._get_subtitles_from_youtube(video_obj)
         return video_obj
     
-    def _get_entry(self, video_id):
+    def _get_entry(self, video_key):
         try:
-            return yt_service.GetYouTubeVideoEntry(video_id=str(video_id))
+            return yt_service.GetYouTubeVideoEntry(video_id=str(video_key))
         except RequestError, e:
             err = e[0].get('body', 'Undefined error')
             raise VideoTypeError('Youtube error: %s' % err)        
     
     @classmethod    
-    def _get_video_id(cls, video_url):
+    def _get_video_key(cls, video_url):
         match = cls._url_pattern.search(video_url)
-        return match and match.group('video_id')
+        return match and match.group('video_key')
 
     def _get_subtitles_from_youtube(self, video_obj):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle

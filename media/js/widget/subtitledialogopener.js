@@ -65,7 +65,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
 {
     this.showLoading_(true);
     var args = {
-        'video_id': this.videoID_,
+        'video_key': this.videoID_,
         'language_code': subLanguageCode,
         'original_language_code': originalLanguageCode,
         'base_version_no': baseVersionNo,

@@ -94,11 +94,11 @@ class BaseVideoBoundForm(forms.ModelForm):
                 video_url = self.format_url(video_url)
                 func, args, kwargs = resolve(video_url.replace(url_start, ''))
                 
-                if not 'video_id' in kwargs:
+                if not 'video_key' in kwargs:
                     raise forms.ValidationError(_('This URL does not contain video id.'))
                 
                 try:
-                    self.video = Video.objects.get(video_id=kwargs['video_id'])
+                    self.video = Video.objects.get(video_key=kwargs['video_key'])
                 except Video.DoesNotExist:
                     raise forms.ValidationError(_('Videos does not exist.'))
                 

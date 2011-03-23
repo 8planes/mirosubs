@@ -67,7 +67,7 @@ class Command(BaseCommand):
                 'user': user,
                 'language': language,
                 'video': video,
-                'hash': user.hash_for_video(video.video_id)
+                'hash': user.hash_for_video(video.video_key)
             }
             subject = 'New %s translation by %s of "%s"' % \
                 (language.language_display(), translation_version.user.__unicode__(), video.__unicode__())
@@ -147,7 +147,7 @@ class Command(BaseCommand):
             if item.user and not item.user in users and item.user in video_followers:
                 context['your_version'] = item
                 context['user'] = item.user
-                context['hash'] = item.user.hash_for_video(context['video'].video_id)
+                context['hash'] = item.user.hash_for_video(context['video'].video_key)
                 send_templated_email(item.user.email, subject, 
                                      'videos/email_notification.html',
                                      context, 'feedback@universalsubtitles.org',

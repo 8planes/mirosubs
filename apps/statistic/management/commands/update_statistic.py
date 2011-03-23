@@ -39,7 +39,7 @@ class Command(ErrorHandlingCommand):
                 lang = ''
             
             try:
-                video = Video.objects.get(video_id=parts[1])
+                video = Video.objects.get(video_key=parts[1])
             except Video.DoesNotExist:
                 print 'Video does not exist'
                 default_connection.delete(key)
@@ -54,17 +54,17 @@ class Command(ErrorHandlingCommand):
         while count:
             count -= 1
 
-            video_id = changed_video_set.spop()
+            video_key = changed_video_set.spop()
 
-            if not video_id:
+            if not video_key:
                 break
             
-            print 'Update statistic for video: %s' % video_id
+            print 'Update statistic for video: %s' % video_key
             
-            subtitles_fetched_counter = Video.subtitles_fetched_counter(video_id, True)
-            widget_views_counter = Video.widget_views_counter(video_id, True)
-            view_counter = Video.view_counter(video_id, True)
+            subtitles_fetched_counter = Video.subtitles_fetched_counter(video_key, True)
+            widget_views_counter = Video.widget_views_counter(video_key, True)
+            view_counter = Video.view_counter(video_key, True)
             
-            Video.objects.filter(video_id=video_id).update(view_count=F('view_count')+view_counter.getset(0))
+            Video.objects.filter(video_key=video_key).update(view_count=F('view_count')+view_counter.getset(0))
             Video.objects.update(widget_views_count=F('widget_views_count')+widget_views_counter.getset(0))
             Video.objects.update(subtitles_fetched_count=F('subtitles_fetched_count')+subtitles_fetched_counter.getset(0))

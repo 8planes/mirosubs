@@ -27,12 +27,12 @@ from django.utils.translation import ugettext as _
 
 class VideosApiClass(object):
     
-    def follow(self, video_id, user):
+    def follow(self, video_key, user):
         if not user.is_authenticated():
             return dict(error=_(u'You should be authenticated.'))
         
         try:
-            video = Video.objects.get(pk=video_id)
+            video = Video.objects.get(pk=video_key)
         except Video.DoesNotExist:
             return dict(error=_(u'Video does not exist.'))
         
@@ -43,12 +43,12 @@ class VideosApiClass(object):
         
         return dict(msg=_(u'You are following this video now.'))
     
-    def unfollow(self, video_id, user):
+    def unfollow(self, video_key, user):
         if not user.is_authenticated():
             return dict(error=_(u'You should be authenticated.'))
         
         try:
-            video = Video.objects.get(pk=video_id)
+            video = Video.objects.get(pk=video_key)
         except Video.DoesNotExist:
             return dict(error=_(u'Video does not exist.'))
         

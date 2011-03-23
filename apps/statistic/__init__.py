@@ -31,7 +31,7 @@ def get_fetch_subtitles_key(video, lang=None, date=None):
     if not date:
         date = datetime.today()
     
-    key = '%s:%s' % (SUBTITLES_FETCH_PREFIX, video.video_id)
+    key = '%s:%s' % (SUBTITLES_FETCH_PREFIX, video.video_key)
     
     if lang:
         key += ':%s' % lang

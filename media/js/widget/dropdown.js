@@ -160,7 +160,7 @@ mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function() {
     var url = [mirosubs.siteURL(),
                "/widget/download_",
                (mirosubs.IS_NULL ? "null_" : ""),
-               "srt/?video_id=",
+               "srt/?video_key=",
                this.videoID_].join('');
     if (this.subtitleState_ && this.subtitleState_.LANGUAGE)
         url += ['&lang_code=', this.subtitleState_.LANGUAGE].join('');

@@ -68,7 +68,7 @@
             });
             
             var CHANGE_TITLE_LINK = '{% url videos:ajax_change_video_title %}';
-            var VIDEO_ID = '{{ video.video_id }}';
+            var video_key = '{{ video.video_key }}';
 
             $('.edit-title').click(function(){
                 var msg = '{% trans "Enter new title.  Note: this is for editing the original video title, not translating the title." %}'
@@ -76,7 +76,7 @@
                 if (title){
                     $('.title-container').html(title);
                     $.post(CHANGE_TITLE_LINK, {
-                        video_id: VIDEO_ID,
+                        video_key: video_key,
                         title: title
                     });
                 }

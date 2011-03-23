@@ -54,13 +54,13 @@ def unfriendlysort_results(results, add_suite=True):
     """
     new_results = []
 
-    video_id = 0
+    video_key = 0
     for suite, this_results in results:
         for result in this_results:
             if add_suite:
                 result['suite'] = suite
-            result['id'] = video_id
-            video_id += 1
+            result['id'] = video_key
+            video_key += 1
 
         new_results.extend(this_results)
 
@@ -75,15 +75,15 @@ def intersperse_results(results, add_suite=True):
 
     len_biggest_list = max([len(r[1]) for r in results])
 
-    video_id = 0
+    video_key = 0
     for i in range(len_biggest_list):
         for suite, this_results in results:
-            if video_id < len(this_results):
+            if video_key < len(this_results):
                 result = this_results[i]
                 if add_suite:
                     result['suite'] = suite
-                result['id'] = video_id
-                video_id += 1
+                result['id'] = video_key
+                video_key += 1
                 new_results.append(result)
 
     return new_results

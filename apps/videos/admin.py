@@ -28,7 +28,7 @@ config_register(EmailListValue(BASE_GROUP, 'alert_emails', description=_(u'Email
 class VideoAdmin(admin.ModelAdmin):
     actions = None
     list_display = ['__unicode__', 'title', 'languages', 'video_thumbnail']
-    search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
+    search_fields = ['video_key', 'title', 'videourl__url', 'user__username']
     
     def video_thumbnail(self, obj):
         return '<img width="50" height="50" src="%s"/>' % obj.get_small_thumbnail() 
@@ -51,7 +51,7 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
     actions = None
     list_display = ['video', 'is_original', 'language', 'is_complete', 'had_version', 'versions']
     list_filter = ['is_original', 'is_complete']
-    search_fields = ['video__title', 'video__video_id']
+    search_fields = ['video__title', 'video__video_key']
     
     def versions(self, obj):
         version_qs = obj.subtitleversion_set.all()

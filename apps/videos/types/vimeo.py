@@ -40,7 +40,7 @@ class VimeoVideoType(VideoType):
             raise VideoTypeError(e[0])   
         
     @property
-    def video_id(self):
+    def video_key(self):
         return self.id
     
     def convert_to_video_url(self):

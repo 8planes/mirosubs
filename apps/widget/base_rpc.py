@@ -39,10 +39,10 @@ class BaseRpc:
             'title': title
             }
 
-    def _drop_down_contents(self, video_id):
+    def _drop_down_contents(self, video_key):
         return {
-            'translations': self._initial_languages(video_id),
-            'subtitle_count': self._subtitle_count(video_id)
+            'translations': self._initial_languages(video_key),
+            'subtitle_count': self._subtitle_count(video_key)
             }
 
     def _find_remote_autoplay_language(self, request):

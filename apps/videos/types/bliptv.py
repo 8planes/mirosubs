@@ -32,7 +32,7 @@ class BlipTvVideoType(VideoType):
         self.shortmem = blip.get_shortmem(url)
     
     @property
-    def video_id(self):
+    def video_key(self):
         return self.file_id
     
     def convert_to_video_url(self):

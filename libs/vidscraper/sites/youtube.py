@@ -68,8 +68,8 @@ def provide_api(func):
     """
     def wrapper(url, shortmem=None):
         if shortmem.get('parsed_entry') is None:
-            video_id = cgi.parse_qs(urlparse.urlsplit(url)[3])['v'][0]
-            api_url = 'http://gdata.youtube.com/feeds/api/videos/' + video_id
+            video_key = cgi.parse_qs(urlparse.urlsplit(url)[3])['v'][0]
+            api_url = 'http://gdata.youtube.com/feeds/api/videos/' + video_key
             feed = feedparser.parse(api_url)
             if len(feed.entries) == 0:
                 raise BaseUrlLoadFailure(feed.bozo_exception)
@@ -101,9 +101,9 @@ def scrape_description(url, shortmem=None):
 @provide_shortmem
 @returns_unicode
 def get_embed(url, shortmem=None, width=EMBED_WIDTH, height=EMBED_HEIGHT):
-    video_id = cgi.parse_qs(urlparse.urlsplit(url)[3])['v'][0]
+    video_key = cgi.parse_qs(urlparse.urlsplit(url)[3])['v'][0]
 
-    flash_url = 'http://www.youtube.com/v/%s&hl=en&fs=1' % video_id
+    flash_url = 'http://www.youtube.com/v/%s&hl=en&fs=1' % video_key
 
     object_children = (
         E.PARAM(name="movie", value=flash_url),
@@ -129,8 +129,8 @@ def get_flash_enclosure_url(url, shortmem=None):
 @provide_shortmem
 @returns_unicode
 def get_thumbnail_url(url, shortmem=None):
-    video_id = cgi.parse_qs(urlparse.urlsplit(url)[3])['v'][0]
-    return 'http://img.youtube.com/vi/%s/hqdefault.jpg' % video_id
+    video_key = cgi.parse_qs(urlparse.urlsplit(url)[3])['v'][0]
+    return 'http://img.youtube.com/vi/%s/hqdefault.jpg' % video_key
 
 
 @provide_shortmem

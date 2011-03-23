@@ -28,7 +28,7 @@ class VideoType(object):
         self.url = url
 
     @property
-    def video_id(self):
+    def video_key(self):
         return
     
     @classmethod 

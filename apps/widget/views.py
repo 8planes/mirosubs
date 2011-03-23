@@ -65,12 +65,12 @@ def onsite_widget(request):
         config['returnURL'] = request.META['HTTP_REFERER']
 
     if not config.get('nullWidget'): 
-        video_id = config.get('videoID')
+        video_key = config.get('videoID')
 
-        if not video_id:
+        if not video_key:
             raise Http404
 
-        video = get_object_or_404(models.Video, video_id=video_id)
+        video = get_object_or_404(models.Video, video_key=video_key)
 
         if not 'returnURL' in config:
             config['returnURL'] = video.get_absolute_url()
@@ -166,15 +166,15 @@ def base_widget_params(request, extra_params={}):
 
 def download_subtitles(request, handler=SSASubtitles):
     #FIXME: use GenerateSubtitlesHandler
-    video_id = request.GET.get('video_id')
+    video_key = request.GET.get('video_key')
     lang_code = request.GET.get('lang_code')
     
-    if not video_id:
-        #if video_id == None, Video.objects.get raise exception. Better show 404
-        #because video_id is required
+    if not video_key:
+        #if video_key == None, Video.objects.get raise exception. Better show 404
+        #because video_key is required
         raise Http404
     
-    video = get_object_or_404(models.Video, video_id=video_id)
+    video = get_object_or_404(models.Video, video_key=video_key)
     
     subtitles = []
     
@@ -212,7 +212,7 @@ def download_subtitles(request, handler=SSASubtitles):
 
 def null_srt(request):
     # FIXME: possibly note duplication with srt, and fix that.
-    video = models.Video.objects.get(video_id=request.GET['video_id'])
+    video = models.Video.objects.get(video_key=request.GET['video_key'])
     if 'lang_code' in request.GET:
         lang_code = request.GET['lang_code']
         response_text = captions_and_translations_to_srt(

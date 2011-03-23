@@ -167,11 +167,11 @@ def videos_statistic(request):
     tn = 'statistic_subtitlefetchcounters'
         
     qs = Video.objects.distinct().extra(select={
-        'month_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_id = videos_video.id '+
+        'month_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_key = videos_video.id '+
         'AND %s.date BETWEEN "%s" and "%s"') % (tn, tn, tn, month_ago, today),                                          
-        'week_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_id = videos_video.id '+
+        'week_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_key = videos_video.id '+
         'AND %s.date BETWEEN "%s" and "%s"') % (tn, tn, tn, week_ago, today),
-        'day_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_id = videos_video.id '+
+        'day_activity': ('SELECT SUM(count) FROM %s WHERE %s.video_key = videos_video.id '+
         'AND %s.date BETWEEN "%s" and "%s"') % (tn, tn, tn, day_ago, today)
     })
 

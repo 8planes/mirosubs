@@ -68,11 +68,11 @@ class TeamsTest(TestCase):
 
         return team, TeamVideo.objects.order_by('-id')[0]
 
-    def _make_data(self, video_id, lang):
+    def _make_data(self, video_key, lang):
         import os
         return {
             'language': lang,
-            'video': video_id,
+            'video': video_key,
             'subtitles': open(os.path.join(os.path.dirname(__file__), '../videos/fixtures/test.srt'))
             }
 

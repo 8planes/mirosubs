@@ -124,14 +124,14 @@ mirosubs.api.openUnisubsDialog = function(videoURL) {
     // TODO: you might want to be getting an array of videourls back from
     // the server and then choosing the best one for effectiveVideoURL.
     mirosubs.Rpc.call(
-        'fetch_video_id_and_settings',
+        'fetch_video_key_and_settings',
         { 'video_url': videoURL },
         function(response) {
             mirosubs.api.openUnisubsDialogWithSettings(
                 true,
                 {'videoURL': videoURL,
                  'effectiveVideoURL': videoURL,
-                 'videoID': response['video_id'],
+                 'videoID': response['video_key'],
                  'originalLanguageSubtitled': 
                      response['is_original_language_subtitled'],
                  'baseVersionNo': null },

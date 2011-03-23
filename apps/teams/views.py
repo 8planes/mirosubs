@@ -166,7 +166,7 @@ class CompletedVideosQS(LoadRelatedQuerySet):
 
     def update_result_cache(self):
         #get all videos from QuerySet cache that has no complete_langs_cache yet
-        videos = dict((v.video_id, v) for v in self._result_cache if not hasattr(v, 'complete_langs_cache'))
+        videos = dict((v.video_key, v) for v in self._result_cache if not hasattr(v, 'complete_langs_cache'))
         
         if videos:
             for v in videos.values():
@@ -177,7 +177,7 @@ class CompletedVideosQS(LoadRelatedQuerySet):
 
             #fill cache
             for l in langs_qs:
-                videos[l.video_id].complete_langs_cache.append(l)      
+                videos[l.video_key].complete_langs_cache.append(l)      
 
 def completed_videos(request, slug):
     team = Team.get(slug, request.user)

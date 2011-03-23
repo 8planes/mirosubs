@@ -32,13 +32,13 @@ class VideoHandler(BaseHandler):
     
     anonymous = 'AnonymousVideoHandler'
     allowed_methods = ('GET',)
-    fields = ('title', 'description', 'video_id', 'thumbnail', 'created', 
+    fields = ('title', 'description', 'video_key', 'thumbnail', 'created', 
               'allow_community_edits', 'allow_video_urls_edit', 'homepage')
     model = Video
 
     @classmethod
     def resource_uri(cls, video):
-        return ('api:0.1:video_handler', [video.video_id])
+        return ('api:0.1:video_handler', [video.video_key])
     
     @classmethod
     def thumbnail(self, obj):
@@ -50,9 +50,9 @@ class VideoHandler(BaseHandler):
         return 'http://%s%s' % (site.domain, obj.get_absolute_url())
     
     @validate(GetVideoForm, 'GET')    
-    def read(self, request, video_id=None):
+    def read(self, request, video_key=None):
         """
-        Get video by video_id(JVoMAa3kaWzq)
+        Get video by video_key(JVoMAa3kaWzq)
         <em>curl "http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/"</em>
         
         Get video by url. It will be created if does not exist.
@@ -66,9 +66,9 @@ class VideoHandler(BaseHandler):
         """
         video = None
         
-        if video_id:
+        if video_key:
             try:
-                video = self.queryset(request).get(video_id=video_id)
+                video = self.queryset(request).get(video_key=video_key)
             except Video.DoesNotExist:
                 pass
         else:
@@ -82,13 +82,13 @@ class VideoHandler(BaseHandler):
         else:
             return video
     
-    def test_update(self, request, video_id):
+    def test_update(self, request, video_key):
         """
         <em>curl "http://127.0.0.1:8000/api/1.0/video/0zaZ2GPv3o9m/?username=admin&password=admin" -F 'title=new-title' -X 'PUT'</em>
         """
         
         try:
-            video = self.queryset(request).get(video_id=video_id)
+            video = self.queryset(request).get(video_key=video_key)
         except Video.DoesNotExist:
             return rc.NOT_FOUND
         
@@ -108,7 +108,7 @@ class SubtitleHandler(BaseHandler):
         
         Send in request:
         <b>video url:</b> video_url
-        <b>video id:</b> video_id
+        <b>video id:</b> video_key
         <b>language:</b> language of video
         <b>revision:</b> revision of subtitles
         <b>sformat</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
@@ -121,20 +121,20 @@ class SubtitleHandler(BaseHandler):
         curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -d 'callback=callback' -G
         curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -d 'sformat=srt' -G
         curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -d 'sformat=srt' -G
-        curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_id=7Myc2QAeBco9' -G 
+        curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_key=7Myc2QAeBco9' -G 
         """
         video_url = request.GET.get('video_url')
         language = request.GET.get('language')
         revision = request.GET.get('revision')
         sformat = request.GET.get('sformat')
-        video_id = request.GET.get('video_id')
+        video_key = request.GET.get('video_key')
 
-        if not video_url and not video_id:
+        if not video_url and not video_key:
             return rc.BAD_REQUEST
         
-        if video_id:
+        if video_key:
             try:
-                video = Video.objects.get(video_id=video_id)
+                video = Video.objects.get(video_key=video_key)
             except Video.DoesNotExist:
                 return rc.NOT_FOUND
         else:
@@ -163,7 +163,7 @@ class SubtitleHandler(BaseHandler):
         Add subtitles for video.
         
         Send in request:
-        <b>video:</b> video_id
+        <b>video:</b> video_key
         <b>video_language:</b> language of video
         <b>language:</b> language of subtitles
         <b>format</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
@@ -188,9 +188,9 @@ class SubtitleLanguagesHandler(BaseHandler):
         
         Send in request:
         <b>video url:</b> video_url
-        <b>video id:</b> video_id
+        <b>video id:</b> video_key
         
-        curl http://127.0.0.1:8000/api/1.0/subtitles/languages/ -d 'video_id=7Myc2QAeBco9' -G
+        curl http://127.0.0.1:8000/api/1.0/subtitles/languages/ -d 'video_key=7Myc2QAeBco9' -G
         <pre>[
             {
                 "code": "it", 
@@ -201,14 +201,14 @@ class SubtitleLanguagesHandler(BaseHandler):
         """
         
         video_url = request.GET.get('video_url')
-        video_id = request.GET.get('video_id')
+        video_key = request.GET.get('video_key')
         
-        if not video_url and not video_id:
+        if not video_url and not video_key:
             return rc.BAD_REQUEST
         
-        if video_id:
+        if video_key:
             try:
-                video = Video.objects.get(video_id=video_id)
+                video = Video.objects.get(video_key=video_key)
             except Video.DoesNotExist:
                 return rc.NOT_FOUND
         else:

@@ -141,7 +141,7 @@ class WebUseTest(TestCase):
     def _make_objects(self):
         self.auth = dict(username='admin', password='admin')
         self.user = User.objects.get(username=self.auth['username'])
-        self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
+        self.video = Video.objects.get(video_key='iGzkk7nwWX8F')
 
     def _simple_test(self, url_name, args=None, kwargs=None, status=200, data={}):
         response = self.client.get(reverse(url_name, args=args, kwargs=kwargs), data)
@@ -364,10 +364,10 @@ class ViewsTest(WebUseTest):
         #self.assertEquals(len(mail.outbox), 2)
     
     def test_ajax_change_video_title(self):
-        video = Video.objects.get(video_id='S7HMxzLmS9gw')
+        video = Video.objects.get(video_key='S7HMxzLmS9gw')
 
         data = {
-            'video_id': video.video_id,
+            'video_key': video.video_key,
             'title': 'New title'
         }
         response = self.client.post(reverse('videos:ajax_change_video_title'), data)
@@ -509,8 +509,8 @@ class ViewsTest(WebUseTest):
         self._simple_test('videos:demo')
         
     def test_history(self):
-        self._simple_test('videos:history', [self.video.video_id])
-        self._simple_test('videos:history', [self.video.video_id], data={'o': 'user', 'ot': 'asc'})
+        self._simple_test('videos:history', [self.video.video_key])
+        self._simple_test('videos:history', [self.video.video_key], data={'o': 'user', 'ot': 'asc'})
         
     def test_revision(self):
         version = self.video.version()
@@ -588,16 +588,16 @@ class YoutubeVideoTypeTest(TestCase):
         self.vt = YoutubeVideoType
         self.data = [{
             'url': 'http://www.youtube.com/watch#!v=UOtJUmiUZ08&feature=featured&videos=Qf8YDn9mbGs',
-            'video_id': 'UOtJUmiUZ08'
+            'video_key': 'UOtJUmiUZ08'
         },{
             'url': 'http://www.youtube.com/v/6Z5msRdai-Q',
-            'video_id': '6Z5msRdai-Q'
+            'video_key': '6Z5msRdai-Q'
         },{
             'url': 'http://www.youtube.com/watch?v=woobL2yAxD4',
-            'video_id': 'woobL2yAxD4'
+            'video_key': 'woobL2yAxD4'
         },{
             'url': 'http://www.youtube.com/watch?v=woobL2yAxD4&amp;playnext=1&amp;videos=9ikUhlPnCT0&amp;feature=featured',
-            'video_id': 'woobL2yAxD4'
+            'video_key': 'woobL2yAxD4'
         }]
     
     def test_create_kwars(self):
@@ -629,9 +629,9 @@ class YoutubeVideoTypeTest(TestCase):
             self.assertFalse(self.vt.matches_video_url('http://youtube.com/'))
             self.assertFalse(self.vt.matches_video_url('http://youtube.com/some-video/'))
     
-    def test_get_video_id(self):
+    def test_get_video_key(self):
         for item in self.data:
-            self.failUnlessEqual(item['video_id'], self.vt._get_video_id(item['url']))
+            self.failUnlessEqual(item['video_key'], self.vt._get_video_key(item['url']))
     
 from videos.types.htmlfive import HtmlFiveVideoType
 

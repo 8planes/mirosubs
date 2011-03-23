@@ -156,11 +156,11 @@
             <strong>{% trans 'Download Subtitles' %}</strong>
           </span>
           <ul>
-            <li><a href="{% url widget:download_srt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a></li>
-            <li><a href="{% url widget:download_ssa %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a></li>
-            <li><a href="{% url widget:download_ttml %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a></li>
-            <li><a href="{% url widget:download_txt %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TXT</a></li>
-            <li><a href="{% url widget:download_sbv %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SBV</a></li>
+            <li><a href="{% url widget:download_srt %}?video_key={{ video.video_key }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SRT</a></li>
+            <li><a href="{% url widget:download_ssa %}?video_key={{ video.video_key }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SSA</a></li>
+            <li><a href="{% url widget:download_ttml %}?video_key={{ video.video_key }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TTML</a></li>
+            <li><a href="{% url widget:download_txt %}?video_key={{ video.video_key }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">TXT</a></li>
+            <li><a href="{% url widget:download_sbv %}?video_key={{ video.video_key }}{% if not language.is_original %}&lang_code={{ language.language }}{% endif %}">SBV</a></li>
           </ul>
         </div>
         {% endif %}

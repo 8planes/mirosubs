@@ -65,7 +65,7 @@ mirosubs.startdialog.Dialog.prototype.setVisible = function(visible) {
     if (visible)
         mirosubs.Rpc.call(
             'fetch_start_dialog_contents',
-            { 'video_id': this.videoID_ },
+            { 'video_key': this.videoID_ },
             goog.bind(this.responseReceived_, this));
 };
 

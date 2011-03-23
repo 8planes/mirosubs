@@ -42,7 +42,7 @@
 
   <script type="text/javascript">
         (function($) {
-            var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
+            var LANGUAGE_PAGE_URL = '{% url videos:history video.video_key %}';
             var MSG = "{% trans "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>" %}";
             
             $('#subtitles-file-field').change(function() {

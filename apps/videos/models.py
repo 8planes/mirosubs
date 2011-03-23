@@ -71,7 +71,7 @@ ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 class Video(models.Model):
     """Central object in the system"""
-    video_id = models.CharField(max_length=255, unique=True)
+    video_key = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
     description = models.TextField(blank=True)
     duration = models.PositiveIntegerField(null=True, blank=True)
@@ -95,9 +95,9 @@ class Video(models.Model):
     widget_views_count = models.IntegerField(default=0, db_index=True)
     view_count = models.PositiveIntegerField(default=0, db_index=True)
     
-    subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
-    widget_views_counter = RedisSimpleField('video_id', changed_video_set)
-    view_counter = RedisSimpleField('video_id', changed_video_set)
+    subtitles_fetched_counter = RedisSimpleField('video_key', changed_video_set)
+    widget_views_counter = RedisSimpleField('video_key', changed_video_set)
+    view_counter = RedisSimpleField('video_key', changed_video_set)
 
     # Denormalizing the subtitles(had_version) count, in order to get faster joins
     # updated from update_languages_count()
@@ -166,7 +166,7 @@ class Video(models.Model):
     
     @models.permalink
     def video_link(self):
-        return ('videos:history', [self.video_id])
+        return ('videos:history', [self.video_key])
     
     def thumbnail_link(self):
         if not self.thumbnail:
@@ -195,8 +195,8 @@ class Video(models.Model):
         if locale:
             kwargs['locale'] = locale 
         if self.title:
-            return ('videos:video_with_title', [self.video_id, self.title_for_url()], kwargs)
-        return ('videos:video', [self.video_id], kwargs)
+            return ('videos:video_with_title', [self.video_key, self.title_for_url()], kwargs)
+        return ('videos:video', [self.video_key], kwargs)
 
     def get_video_url(self):
         try:
@@ -236,8 +236,8 @@ class Video(models.Model):
             SubtitleLanguage(video=obj, is_original=True).save()
             #Save video url
             video_url_obj = VideoUrl()
-            if vt.video_id:
-                video_url_obj.videoid = vt.video_id
+            if vt.video_key:
+                video_url_obj.videoid = vt.video_key
             video_url_obj.url = vt.convert_to_video_url()
             video_url_obj.type = vt.abbreviation
             video_url_obj.original = True
@@ -395,18 +395,18 @@ class Video(models.Model):
             self.is_subtitled = True
             self.was_subtitled = True
 
-def create_video_id(sender, instance, **kwargs):
+def create_video_key(sender, instance, **kwargs):
     instance.edited = datetime.now()
-    if not instance or instance.video_id:
+    if not instance or instance.video_key:
         return
     alphanum = string.letters+string.digits
-    instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
+    instance.video_key = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
                                                            for i in xrange(12)])
     
 def video_delete_handler(sender, instance, **kwargs):
-    video_cache.invalidate_cache(instance.video_id)
+    video_cache.invalidate_cache(instance.video_key)
 
-models.signals.pre_save.connect(create_video_id, sender=Video)
+models.signals.pre_save.connect(create_video_key, sender=Video)
 models.signals.pre_delete.connect(video_delete_handler, sender=Video)
 
 class SubtitleLanguage(models.Model):
@@ -519,7 +519,7 @@ class SubtitleLanguage(models.Model):
         video = self.video
         video_url = video.get_video_url()
         config = {
-            "videoID": video.video_id,
+            "videoID": video.video_key,
             "baseVersionNo": None,
             "videoURL": video_url,
             "effectiveVideoURL": video_url,
@@ -531,9 +531,9 @@ class SubtitleLanguage(models.Model):
     @models.permalink
     def get_absolute_url(self):
         if self.is_original:
-            return ('videos:history', [self.video.video_id])
+            return ('videos:history', [self.video.video_key])
         else:
-            return ('videos:translation_history', [self.video.video_id, self.language])
+            return ('videos:translation_history', [self.video.video_key, self.language])
     
     def language_display(self):
         if self.is_original and not self.language:
@@ -634,7 +634,7 @@ class SubtitleLanguage(models.Model):
         return qs
     
 def subtile_language_delete_handler(sender, instance, **kwargs):
-    video_cache.invalidate_cache(instance.video.video_id)
+    video_cache.invalidate_cache(instance.video.video_key)
     instance.video.update_languages_count()
 
 def subtitle_language_save_handler(sender, instance, **kwargs):
@@ -1013,7 +1013,7 @@ class Action(models.Model):
             obj.created = instance.submit_date
             obj.action_type = cls.COMMENT
             if issubclass(model_class, Video):
-                obj.video_id = instance.object_pk
+                obj.video_key = instance.object_pk
             if issubclass(model_class, SubtitleLanguage):
                 obj.language_id = instance.object_pk
                 obj.video = instance.content_object.video
@@ -1075,7 +1075,7 @@ class VideoUrl(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('videos:video_url', [self.video.video_id, self.pk])
+        return ('videos:video_url', [self.video.video_key, self.pk])
     
     def unique_error_message(self, model_class, unique_check):
         if unique_check[0] == 'url':

@@ -62,7 +62,7 @@ class Command(ErrorHandlingCommand):
             
             name = video.thumbnail.strip('/').split('/')[-1]
             cf = ContentFile(urllib.urlopen(video.thumbnail).read())
-            video.s3_thumbnail.save('%s/%s' % (video.video_id, name), cf, True)
+            video.s3_thumbnail.save('%s/%s' % (video.video_key, name), cf, True)
         
     def init_s3(self):
         if not default_s3_store:
@@ -74,7 +74,7 @@ class Command(ErrorHandlingCommand):
         
         grabimage = "ffmpeg -y -i %s -vframes 1 -ss 00:00:%s -an -vcodec png -f rawvideo  %s"
         
-        thumbnailfilename = "%s.png" % video.video_id
+        thumbnailfilename = "%s.png" % video.video_key
         thumbnailpath = os.path.normpath(os.path.join(THUMBNAILS_PATH, thumbnailfilename))
         
         grab_result = 'Command is not runned yet'
@@ -98,11 +98,11 @@ class Command(ErrorHandlingCommand):
             self.handle_error(video, grab_result, sys.exc_info())         
     
     def handle_error(self, video, command_msg, exc_info):
-        subject = u'Error during thumbnail grabing for video: %s' % video.video_id
+        subject = u'Error during thumbnail grabing for video: %s' % video.video_key
         self._handle_error(subject, command_msg, exc_info)      
         
     def get_file_path(self, video, video_url):
         type = video_url.url.split('.')[-1]
-        name = '%s.%s' % (video.video_id, type)
+        name = '%s.%s' % (video.video_key, type)
         return os.path.join(VIDEO_UPLOAD_PATH, name)    
         

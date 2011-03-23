@@ -14,7 +14,7 @@
     <ul>
       <li><a href="http://{{ domain }}{% filter rmlocale %}{% url videos:diffing version.pk last_version.pk %}{% endfilter %}">{% trans 'Compare the new version to the last version' %}</a>.</li>
       <li><a href="http://{{ domain }}{% filter rmlocale %}{% url videos:diffing version.pk your_version.pk %}{% endfilter %}">{% trans 'Compare your work to the new version' %}</a>.</li>
-      <li><a href="http://{{ domain }}{% filter rmlocale %}{% url videos:stop_notification video.video_id %}{% endfilter %}?u={{ user.id }}&h={{ hash }}">{% trans "Stop watching for changes on this video" %}</a></li>
+      <li><a href="http://{{ domain }}{% filter rmlocale %}{% url videos:stop_notification video.video_key %}{% endfilter %}?u={{ user.id }}&h={{ hash }}">{% trans "Stop watching for changes on this video" %}</a></li>
     </ul>
     {% if version.text_change %}
         <div>

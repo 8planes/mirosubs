@@ -1,12 +1,12 @@
 from celery.decorators import task
 
 @task()
-def update_team_video(video_id):
+def update_team_video(video_key):
     from teams.models import TeamVideo
     from videos.models import Video
     
     try:
-        video = Video.objects.get(id=video_id)
+        video = Video.objects.get(id=video_key)
     except Video.DoesNotExist:
         #if language does not exist - ignore updating
         return

@@ -25,7 +25,7 @@ class WebUseTest(TestCase):
     def _make_objects(self):
         self.auth = dict(username='admin', password='admin')
         self.user = User.objects.get(username=self.auth['username'])
-        self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
+        self.video = Video.objects.get(video_key='iGzkk7nwWX8F')
 
     def _simple_test(self, url_name, args=None, kwargs=None, status=200, data={}):
         response = self.client.get(reverse(url_name, args=args, kwargs=kwargs), data)

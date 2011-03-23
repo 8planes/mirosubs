@@ -99,8 +99,8 @@ class CustomUser(BaseUser):
     def profile_url(self):
         return ('profiles:profile', [self.pk])
     
-    def hash_for_video(self, video_id):
-        return hashlib.sha224(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
+    def hash_for_video(self, video_key):
+        return hashlib.sha224(settings.SECRET_KEY+str(self.pk)+video_key).hexdigest()
     
     @classmethod
     def get_youtube_anonymous(cls):

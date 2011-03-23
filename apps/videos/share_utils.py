@@ -38,7 +38,7 @@ def _share_video_title(video):
 def _add_share_panel_context_for_video(context, video):
     home_page_url = "http://{0}{1}".format(
         Site.objects.get_current().domain, 
-        reverse('videos:video', kwargs={'video_id':video.video_id}))
+        reverse('videos:video', kwargs={'video_key':video.video_key}))
     if video.latest_version() is not None:
         twitter_fb_message = \
             u"Just found a version of this video with captions: {0}".format(
@@ -61,7 +61,7 @@ def _add_share_panel_context_for_video(context, video):
 def _add_share_panel_context_for_history(context, video, language=None):
     page_url = "http://{0}{1}".format(
         Site.objects.get_current().domain,
-        reverse('videos:history', args=[video.video_id]))
+        reverse('videos:history', args=[video.video_key]))
     twitter_fb_message = \
         u"Just found a version of this video with captions: {0}".format(page_url)
     email_message = \
@@ -85,7 +85,7 @@ def _add_share_panel_context_for_translation_history(context, video, language_co
     page_url = "http://{0}{1}".format(
         Site.objects.get_current().domain,
         reverse('videos:translation_history', 
-                args=[video.video_id, language_code]))
+                args=[video.video_key, language_code]))
     language_name = widget.LANGUAGES_MAP[language_code]
     twitter_fb_message = \
         u"Just found a version of this video with {0} subtitles: {1}".format(

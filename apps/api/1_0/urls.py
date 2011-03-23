@@ -32,7 +32,7 @@ subtitles_languages_handler = Resource(SubtitleLanguagesHandler, **ad)
 subtitle_handler = SubtitlesResource(SubtitleHandler, **ad)
 
 urlpatterns = patterns('',
-    url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="video_handler"),
+    url('^video/(?P<video_key>[\w-]+)/$', video_handler, name="video_handler"),
     url('^video/$', video_handler),
     url('^subtitles/languages/$', subtitles_languages_handler),
     url('^subtitles/$', subtitle_handler),

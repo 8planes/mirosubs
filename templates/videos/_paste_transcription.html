@@ -1,7 +1,7 @@
 {% load i18n %}
 <script type="text/javascript">
     jQuery(function($){
-        var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
+        var LANGUAGE_PAGE_URL = '{% url videos:history video.video_key %}';
 
         $('#upload-transcript-form').ajaxForm({
             dataType: 'json',

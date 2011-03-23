@@ -74,9 +74,9 @@ def bug(request):
                               context_instance=RequestContext(request))
 
 @login_required
-def follow_video(request, video_id):
+def follow_video(request, video_key):
     #move this on rpc
-    video = get_object_or_404(Video, video_id=video_id)
+    video = get_object_or_404(Video, video_key=video_key)
     video.followers.add(request.user)
     messages.success(request, _(u'You are following %(video)s now') % {'video': video})
     return redirect(video)
@@ -88,12 +88,12 @@ def follow_language(request, language_id):
     return redirect()
 
 def ajax_change_video_title(request):
-    video_id = request.POST.get('video_id')
+    video_key = request.POST.get('video_key')
     title = request.POST.get('title')
     user = request.user
     
     try:
-        video = Video.objects.get(video_id=video_id)
+        video = Video.objects.get(video_key=video_key)
         if title and not video.title or video.is_html5() or user.is_superuser:
             old_title = video.title_display()
             video.title = title
@@ -115,7 +115,7 @@ def ajax_change_video_title(request):
                     'video': video,
                     'editor': user,
                     'old_title': old_title,
-                    'hash': obj.hash_for_video(video.video_id)
+                    'hash': obj.hash_for_video(video.video_key)
                 }
                 send_templated_email(obj.email, subject, 
                                      'videos/email_title_changed.html',
@@ -163,8 +163,8 @@ def create_from_feed(request):
 
 create_from_feed.csrf_exempt = True
 
-def video(request, video_id, video_url=None, title=None):
-    video = get_object_or_404(Video, video_id=video_id)
+def video(request, video_key, video_url=None, title=None):
+    video = get_object_or_404(Video, video_key=video_key)
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     
@@ -220,7 +220,7 @@ def actions_list(request):
     order_fields = {
         'username': 'user__username', 
         'created': 'created', 
-        'video': 'video__video_id'
+        'video': 'video__video_key'
     }
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
@@ -322,8 +322,8 @@ def demo(request):
     return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
-def history(request, video_id, lang=None):
-    video = get_object_or_404(Video, video_id=video_id)
+def history(request, video_key, lang=None):
+    video = get_object_or_404(Video, video_key=video_key)
     video.update_view_counter()
 
     context = widget.add_onsite_js_files({})
@@ -332,7 +332,7 @@ def history(request, video_id, lang=None):
     if not language:
         if lang in dict(settings.ALL_LANGUAGES):
             config = {}
-            config["videoID"] = video.video_id
+            config["videoID"] = video.video_key
             config["languageCode"] = lang
             url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
             return redirect(url)
@@ -493,18 +493,18 @@ def test_form_page(request):
                               context_instance=RequestContext(request))
 
 @login_required
-def stop_notification(request, video_id):
+def stop_notification(request, video_key):
     user_id = request.GET.get('u')
     hash = request.GET.get('h')
 
     if not user_id or not hash:
         raise Http404
     
-    video = get_object_or_404(Video, video_id=video_id)
+    video = get_object_or_404(Video, video_key=video_key)
     user = get_object_or_404(User, id=user_id)
     context = dict(video=video, u=user)
 
-    if hash and user.hash_for_video(video_id) == hash:
+    if hash and user.hash_for_video(video_key) == hash:
         video.followers.remove(user)
         for l in video.subtitlelanguage_set.all():
             l.followers.remove(user)
@@ -574,7 +574,7 @@ def video_url_create(request):
                 'video_url': obj,
                 'user': user,
                 'domain': Site.objects.get_current().domain,
-                'hash': user.hash_for_video(video.video_id)
+                'hash': user.hash_for_video(video.video_key)
             }
             send_templated_email(user.email, subject, 
                                  'videos/email_video_url_add.html',

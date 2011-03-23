@@ -27,7 +27,7 @@ from videos.types.bliptv import BlipTvVideoType
 class NullRpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None):
         return_value = {
-            'video_id' : 'abc',
+            'video_key' : 'abc',
             'writelock_expiration' : models.WRITELOCK_EXPIRATION,
             'embed_version': settings.EMBED_JS_VERSION,
             'languages': LANGUAGES,
@@ -45,7 +45,7 @@ class NullRpc(BaseRpc):
             self._drop_down_contents(None)
         return return_value
 
-    def start_editing(self, request, video_id, language_code, 
+    def start_editing(self, request, video_key, language_code, 
                       original_language_code=None,
                       base_version_no=None, fork=False):
         return {
@@ -66,13 +66,13 @@ class NullRpc(BaseRpc):
                 self._drop_down_contents(None)
         return response
 
-    def fetch_subtitles(self, request, video_id, language_code=None):
+    def fetch_subtitles(self, request, video_key, language_code=None):
         return self._subtitles_dict()
 
-    def _subtitle_count(self, video_id):
+    def _subtitle_count(self, video_key):
         return 0
 
-    def _initial_languages(self, video_id):
+    def _initial_languages(self, video_key):
         return []
 
     def _subtitles_dict(self):

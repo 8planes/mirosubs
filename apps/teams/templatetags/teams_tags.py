@@ -126,7 +126,7 @@ def complete_team_video_detail(context, team_video):
 def team_video_lang_detail(context, lang, team):
     #from utils.orm import load_related_fk
     
-    context['team_video'] = team.teamvideo_set.select_related('video').get(video__id=lang.video_id)
+    context['team_video'] = team.teamvideo_set.select_related('video').get(video__id=lang.video_key)
     context['lang'] = lang
     return context
 
@@ -143,6 +143,6 @@ def team_video_lang_list(context, video, max_items=6):
     max_items: if there are more items than max_items, they will be truncated to X more.
     """
     return  {
-        'sub_statuses': video_cache.get_video_languages_verbose(video.video_id, max_items)
+        'sub_statuses': video_cache.get_video_languages_verbose(video.video_key, max_items)
         }
 

@@ -25,19 +25,19 @@
   	{# This should be refactored in future #}
   	{% if language %}
       {% if language|is_follower:user %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}">{% trans "Unfollow" %}</button>
       {% else %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
       {% endif %}
   {% else %}
       {% if video|is_follower:user %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}">{% trans "Unfollow" %}</button>
       {% else %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}">{% trans "Follow" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_key="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
       {% endif %}	
   {% endif %}
   </div><!-- // video_follow -->
@@ -79,8 +79,8 @@
         var authenticated = {% if user.is_authenticated %} true; {% else %} false; {% endif %};
 		var is_video_follower = {% if video|is_follower:user %}true;{% else %}false{% endif %};
 		
-		var unfoloow_all = function(video_id){
-            VideosApi.unfollow(video_id, function(response){
+		var unfoloow_all = function(video_key){
+            VideosApi.unfollow(video_key, function(response){
                 if (response.error){
                     $.jGrowl.error(response.error);
                 }else{
@@ -92,8 +92,8 @@
 			});			
 		};
 
-		var foloow_all = function(video_id){
-            VideosApi.follow(video_id, function(response){
+		var foloow_all = function(video_key){
+            VideosApi.follow(video_key, function(response){
                 if (response.error){
                     $.jGrowl.error(response.error);
                 }else{
@@ -127,7 +127,7 @@
 					"{% trans 'Stopped following ' %}"+$this.attr('language_name')+"{% trans ' subtitles' %}", 
 					function(button){
 						if (button == 'ALL'){
-							unfoloow_all($this.attr('video_id'));
+							unfoloow_all($this.attr('video_key'));
 						}else if (button == 'OK'){
 							VideosApi.unfollow_language($this.attr('language_id'), function(response){
 				                if (response.error){
@@ -143,7 +143,7 @@
 			}else{
 				$.jConfirm('{% trans "You will not receive any notification when subtitles in any language for this video are edited.  You can choose to follow again at any time." %}', 
 					"{% trans 'Stopped following all subtitles' %}", function(button){
-						(button === 'OK') && unfoloow_all($this.attr('video_id'));
+						(button === 'OK') && unfoloow_all($this.attr('video_key'));
 				});//$.jConfirm				
 			};//else
         });
@@ -174,7 +174,7 @@
 					"{% trans 'Now following ' %}"+$this.attr('language_name')+"{% trans ' subtitles' %}", 
 					function(button){
 						if (button == 'ALL'){
-							foloow_all($this.attr('video_id'));
+							foloow_all($this.attr('video_key'));
 						}else if (button == 'OK'){
 							VideosApi.follow_language($this.attr('language_id'), function(response){
 				                if (response.error){
@@ -191,7 +191,7 @@
 				$.jConfirm('{% trans "You will now receive an email when anyone edits any subtitles for this video. You can stop these emails at any time." %}',
 					"{% trans 'Now following all subtitles' %}", 
 					function(button){
-						(button === 'OK') && foloow_all($this.attr('video_id'));	
+						(button === 'OK') && foloow_all($this.attr('video_key'));	
 				});
 			};//else       
         });

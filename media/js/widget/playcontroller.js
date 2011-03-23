@@ -113,7 +113,7 @@ mirosubs.widget.PlayController.prototype.languageSelected = function(languageCod
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'fetch_subtitles',
-        { 'video_id': this.videoID_,
+        { 'video_key': this.videoID_,
           'language_code': languageCode },
         function(subStateJSON) {
             that.turnOffSubs();

@@ -74,7 +74,7 @@ class OptimizedQuerySet(LoadRelatedQuerySet):
             langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
             
             for l in langs_qs:
-                videos[l.video_id].langs_cache.append(l)
+                videos[l.video_key].langs_cache.append(l)
 
 @login_required
 def my_profile(request):

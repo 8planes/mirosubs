@@ -46,32 +46,32 @@ def add_general_settings(request, dict):
 
 class Rpc(BaseRpc):
     def show_widget(self, request, video_url, is_remote, base_state=None, additional_video_urls=None):
-        video_id = video_cache.get_video_id(video_url)
-        if video_id is None: # for example, private youtube video.
+        video_key = video_cache.get_video_key(video_url)
+        if video_key is None: # for example, private youtube video.
             return None
 
         if additional_video_urls is not None:
             for url in additional_video_urls:
-                video_cache.associate_extra_url(url, video_id)
+                video_cache.associate_extra_url(url, video_key)
 
-        models.Video.widget_views_counter(video_id).incr()
+        models.Video.widget_views_counter(video_key).incr()
         widget_views_total_counter.incr()
         
         return_value = {
-            'video_id' : video_id,
+            'video_key' : video_key,
             }
         add_general_settings(request, return_value)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
 
-        return_value['video_urls'] = video_cache.get_video_urls(video_id)
+        return_value['video_urls'] = video_cache.get_video_urls(video_key)
 
         return_value['drop_down_contents'] = \
-            self._drop_down_contents(video_id)
+            self._drop_down_contents(video_key)
 
         if base_state is not None:
             subtitles = self._autoplay_subtitles(
-                request.user, video_id, 
+                request.user, video_key, 
                 base_state.get('language', None),
                 base_state.get('revision', None))
             return_value['subtitles'] = subtitles
@@ -80,7 +80,7 @@ class Rpc(BaseRpc):
                 autoplay_language = self._find_remote_autoplay_language(request)
                 if autoplay_language is not None:
                     subtitles = self._autoplay_subtitles(
-                        request.user, video_id, autoplay_language, None)
+                        request.user, video_key, autoplay_language, None)
                     return_value['subtitles'] = subtitles
         return return_value
 
@@ -97,10 +97,10 @@ class Rpc(BaseRpc):
             summary['is_complete'] = language.is_complete
         return summary
 
-    def fetch_start_dialog_contents(self, request, video_id):
+    def fetch_start_dialog_contents(self, request, video_key):
         my_languages = get_user_languages_from_request(request)
         my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
-        video = models.Video.objects.get(video_id=video_id)
+        video = models.Video.objects.get(video_key=video_key)
         video_languages = [self._language_summary(l) for l 
                            in video.subtitlelanguage_set.all()]
         original_language = None
@@ -111,16 +111,16 @@ class Rpc(BaseRpc):
             'video_languages': video_languages,
             'original_language': original_language }
 
-    def fetch_video_id_and_settings(self, request, video_id):
-        is_original_language_subtitled = self._subtitle_count(video_id) > 0
+    def fetch_video_key_and_settings(self, request, video_key):
+        is_original_language_subtitled = self._subtitle_count(video_key) > 0
         general_settings = {}
         add_general_settings(request, general_settings)
         return {
-            'video_id': video_id,
+            'video_key': video_key,
             'is_original_language_subtitled': is_original_language_subtitled,
             'general_settings': general_settings }
 
-    def start_editing(self, request, video_id, language_code, 
+    def start_editing(self, request, video_key, language_code, 
                       original_language_code=None,
                       base_version_no=None, fork=False, 
                       base_language_code=None):
@@ -128,9 +128,9 @@ class Rpc(BaseRpc):
         is to commence or recommence on a video.
         """
         if original_language_code:
-            self._save_original_language(video_id, original_language_code)
+            self._save_original_language(video_key, original_language_code)
         language, can_writelock = self._get_language_for_editing(
-            request, video_id, language_code, 
+            request, video_key, language_code, 
             None if fork else base_language_code)
         if not can_writelock:
             return { "can_edit": False, 
@@ -142,7 +142,7 @@ class Rpc(BaseRpc):
                         "draft_pk" : draft.pk,
                         "subtitles" : subtitles }
         if draft.is_dependent():
-            video = models.Video.objects.get(video_id=video_id)
+            video = models.Video.objects.get(video_key=video_key)
             if language.standard_language and base_language_code:
                 standard_version = video.latest_version(base_language_code)
             else:
@@ -255,7 +255,7 @@ class Rpc(BaseRpc):
         return { "response" : "ok",
                  "last_saved_packet": draft.last_saved_packet,
                  "drop_down_contents" : 
-                     self._drop_down_contents(draft.video.video_id) }
+                     self._drop_down_contents(draft.video.video_key) }
 
     def _create_version_from_draft(self, draft, user):
         version = models.SubtitleVersion(
@@ -269,9 +269,9 @@ class Rpc(BaseRpc):
         version.set_changes(draft.parent_version, subtitles)
         return version, subtitles
 
-    def fetch_subtitles(self, request, video_id, language_code=None):
+    def fetch_subtitles(self, request, video_key, language_code=None):
         return video_cache.get_subtitles_dict(
-            video_id, language_code, None,
+            video_key, language_code, None,
             lambda version: self._subtitles_dict(version))
 
     def get_widget_info(self, request):
@@ -349,8 +349,8 @@ class Rpc(BaseRpc):
                     return video.subtitle_language()
         return None
 
-    def _get_language_for_editing(self, request, video_id, language_code, base_language_code):
-        video = models.Video.objects.get(video_id=video_id)
+    def _get_language_for_editing(self, request, video_key, language_code, base_language_code):
+        video = models.Video.objects.get(video_key=video_key)
         if language_code is None:
             language, created = models.SubtitleLanguage.objects.get_or_create(
                 video=video,
@@ -378,14 +378,14 @@ class Rpc(BaseRpc):
         language.save()
         return language, True
 
-    def _save_original_language(self, video_id, language_code):
-        video = models.Video.objects.get(video_id=video_id)
+    def _save_original_language(self, video_key, language_code):
+        video = models.Video.objects.get(video_key=video_key)
         try:
             # special case where an original SubtitleLanguage is saved with 
             # blank language.
             original_language = \
                 models.SubtitleLanguage.objects.get(
-                video__video_id=video_id, 
+                video__video_key=video_key, 
                 is_original=True, language='')
             original_language.language = language_code
             original_language.save()
@@ -407,9 +407,9 @@ class Rpc(BaseRpc):
             existing_language.is_original = True
             existing_language.save()
 
-    def _autoplay_subtitles(self, user, video_id, language_code, version_no):
+    def _autoplay_subtitles(self, user, video_key, language_code, version_no):
         return video_cache.get_subtitles_dict(
-            video_id, language_code, version_no, 
+            video_key, language_code, version_no, 
             lambda version: self._subtitles_dict(version))
 
     def _subtitles_dict(self, version):
@@ -432,8 +432,8 @@ class Rpc(BaseRpc):
             base_language,
             language.get_title())
 
-    def _subtitle_count(self, video_id):
-        return video_cache.get_subtitle_count(video_id)
+    def _subtitle_count(self, video_key):
+        return video_cache.get_subtitle_count(video_key)
 
-    def _initial_languages(self, video_id):
-        return video_cache.get_video_languages(video_id)
+    def _initial_languages(self, video_key):
+        return video_cache.get_video_languages(video_key)

@@ -23,7 +23,7 @@
 <script type="text/javascript">
     $('a.team_video_{{ team_video.pk }}').click(function(){
         mirosubs.api.openUnisubsDialogOnsite(
-            '{{team_video.video.video_id}}', 
+            '{{team_video.video.video_key}}', 
             '{{team_video.video.get_video_url}}', 
             GLOBAL_WIDGET_SETTINGS);
         return false;
