@@ -475,8 +475,3 @@ THUMBNAILS_SIZE = (
 EMAIL_BCC_LIST = []
 
 CACHE_BACKEND = 'locmem://'
-
-try:
-    from settings_local import *
-except ImportError:
-    pass
