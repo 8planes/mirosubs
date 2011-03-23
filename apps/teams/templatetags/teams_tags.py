@@ -86,12 +86,11 @@ def team_select(context, team):
 
 @register.inclusion_tag('teams/_team_activity.html', takes_context=True)    
 def team_activity(context, team):
-    #user_ids = team.members.values_list('user__id', flat=True)
-    #context['membres_actions'] = Action.objects.filter(user__pk__in=user_ids)[:ACTIONS_ON_PAGE]
     from utils.orm import load_related_fk
     
-    videos_ids = team.teamvideo_set.values_list('video__id', flat=True)
-    action_qs = Action.objects.select_related('video').filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
+    videos_ids = team.teamvideo_set.values_list('video_id', flat=True)
+    action_qs = Action.objects.filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
+    load_related_fk(action_qs, 'video')
     load_related_fk(action_qs, 'user')
     load_related_fk(action_qs, 'language', select_related=['video'])
     context['videos_actions'] = action_qs
