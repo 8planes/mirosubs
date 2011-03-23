@@ -185,13 +185,13 @@ mirosubs.startdialog.Dialog.prototype.connectEvents_ = function() {
             goog.events.EventType.CLICK,
             this.okClicked_);
     if (this.originalLangDropdown_)
-        this.getHandler.listen(
+        this.getHandler().listen(
             this.originalLangDropdown_,
             goog.events.EventType.CHANGE,
             this.originalLangChanged_);
 };
 
-mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
+mirosubs.startdialog.Dialog.prototype.originalLangChanged_ = function(e) {
     this.model_.selectOriginalLanguage(this.originalLangDropdown_.value);
     this.setFromContents_();
 };
