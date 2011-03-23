@@ -528,12 +528,12 @@ class SubtitleLanguage(models.Model):
             "fork": False }
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
 
-    @models.permalink
     def get_absolute_url(self):
         if self.is_original:
-            return ('videos:history', [self.video.video_id])
+            return  reverse('videos:history', args=[self.video.video_id])
         else:
-            return ('videos:translation_history', [self.video.video_id, self.language])
+            base = reverse('videos:translation_history', args=[self.video.video_id, self.language])
+        return "%s?lang_id=%s" % ( base, self.pk)
     
     def language_display(self):
         if self.is_original and not self.language:
