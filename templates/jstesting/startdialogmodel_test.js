@@ -51,6 +51,10 @@ function testToLanguages1() {
         languages, function(l) {
             return l.language == 'fr'
         }).length);
+    // assert the languages are sorted by language name.
+    for (var i = 2; i < languages.length - 1; i++)
+        assertTrue(goog.array.defaultCompare(
+            languages[i].languageName, languages[i+1].languageName) <= 0);
 }
 
 function testToLanguages2() {

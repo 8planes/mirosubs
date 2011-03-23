@@ -77,8 +77,11 @@ mirosubs.startdialog.Model.prototype.findVideoLanguage_ = function(lang) {
 mirosubs.startdialog.Model.prototype.createToLang_ = function(
     ranking, opt_videoLanguage, opt_language) 
 {
+    var languageCode = 
+        opt_videoLanguage ? opt_videoLanguage.LANGUAGE : opt_language;
     return {
-        language: opt_videoLanguage ? opt_videoLanguage.LANGUAGE : opt_language,
+        language: languageCode,
+        languageName: mirosubs.languageNameForCode(languageCode),
         ranking: ranking,
         videoLanguage: opt_videoLanguage
     };
@@ -145,11 +148,16 @@ mirosubs.startdialog.Model.prototype.addMissingToLangs_ = function(languageToLan
     var missingLangCodes = goog.array.filter(
         allLangCodes,
         function(code) { return !existingLanguages.contains(code); });
-    goog.array.sort(missingLangCodes);
-    return goog.array.concat(languageToLangs, goog.array.map(
+    var missingToLangs = goog.array.map(
         missingLangCodes, 
         goog.bind(this.createToLang_, null, 11, null), 
-        this));
+        this);
+    goog.array.sort(
+        missingToLangs,
+        function(a, b) { 
+            return goog.array.defaultCompare(a.languageName, b.languageName); 
+        });
+    return goog.array.concat(languageToLangs, missingToLangs);
 };
 
 mirosubs.startdialog.Model.prototype.createToLanguages_ = function() {

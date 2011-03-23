@@ -135,7 +135,7 @@ mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
             if (l.videoLanguage)
                 return [l.language, l.videoLanguage.toString()];
             else
-                return [l.language, mirosubs.languageNameForCode(l.language)];
+                return [l.language, l.languageName];
         });
     this.toLanguageDropdown_ = this.makeDropdown_($d, toLanguageContents);
     this.contentDiv_.appendChild(
