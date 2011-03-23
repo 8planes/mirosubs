@@ -52,6 +52,7 @@ mirosubs.startdialog.Model = function(json, opt_initialLanguage) {
     this.initialLanguage_ = opt_initialLanguage || null;
     this.toLanguages_ = null;
     this.selectedLanguage_ = null;
+    this.selectedOriginalLanguage_ = null;
 };
 
 mirosubs.startdialog.Model.prototype.getOriginalLanguage = function() {
@@ -192,10 +193,23 @@ mirosubs.startdialog.Model.prototype.selectLanguage = function(language) {
 };
 
 /**
+ * @param {string} language language code to select.
+ */
+mirosubs.startdialog.Model.prototype.selectOriginalLanguage = function(language) {
+    this.createToLanguages_();
+    this.selectedOriginalLanguage_ = language;
+};
+
+/**
  * @return {Array.<mirosubs.startdialog.LanguageSummary>}
  */
 mirosubs.startdialog.Model.prototype.fromLanguages = function() {
+    var originalLanguage = this.originalLanguage_;
+    if (!originalLanguage)
+        originalLanguage = this.selectedOriginalLanguage_;
     var selectedLanguage = this.getSelectedLanguage();
+    if (selectedLanguage == originalLanguage)
+        return [];
     var videoLanguage = this.findVideoLanguage_(selectedLanguage);
     var possibleFromLanguages = this.videoLanguages_;
     if (videoLanguage)

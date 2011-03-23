@@ -30,9 +30,6 @@ MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)
 
 # MIDDLEWARE_CLASSES += ('middleware.SqlPrintingMiddleware',)
 
-# Uncomment following line when you want to work with compiled JS.
-JS_USE_COMPILED = True
-
 VIMEO_API_KEY = 'e1a46f832f8dfa99652781ee0b39df12'
 VIMEO_API_SECRET = 'bdaeb531298eeee1'
 

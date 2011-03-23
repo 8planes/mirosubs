@@ -159,6 +159,7 @@ mirosubs.startdialog.Dialog.prototype.addOriginalLanguageSection_ = function($d)
         this.originalLangDropdown_ = this.makeDropdown_(
             $d, mirosubs.languages);
         this.originalLangDropdown_.value = 'en';
+        this.model_.selectOriginalLanguage('en');
         this.contentDiv_.appendChild(
             $d('p', null, 
                $d('span', null, 'This video is in: '), 
@@ -183,7 +184,18 @@ mirosubs.startdialog.Dialog.prototype.connectEvents_ = function() {
             this.okButton_,
             goog.events.EventType.CLICK,
             this.okClicked_);
+    if (this.originalLangDropdown_)
+        this.getHandler.listen(
+            this.originalLangDropdown_,
+            goog.events.EventType.CHANGE,
+            this.originalLangChanged_);
 };
+
+mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
+    this.model_.selectOriginalLanguage(this.originalLangDropdown_.value);
+    this.setFromContents_();
+};
+
 
 mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
     this.model_.selectLanguage(this.toLanguageDropdown_.value);

@@ -94,8 +94,8 @@ function testFromLanguages0() {
     assertEquals('en', fromLanguages[0].LANGUAGE);
     model.selectLanguage('en');
     fromLanguages = model.fromLanguages();
-    assertEquals(1, fromLanguages.length);
-    assertEquals('fr', fromLanguages[0].LANGUAGE);
+    // english is also the original video language.
+    assertEquals(0, fromLanguages.length);
 }
 
 function testGeneral0() {
@@ -131,5 +131,22 @@ function testLanguageSummaryNullError() {
     // the tests passes if the following call does not throw an exception.
     var langs = model.fromLanguages();
 }
+
+function testSetOriginalLanguage() {
+    var json = {
+        'video_languages': [
+            {'dependent': false, 'is_complete': false, 'language': 'ru'}
+        ],
+        'my_languages': ['ru', 'en'],
+        'original_language': ''
+    }
+    var model = new mirosubs.startdialog.Model(json, null);
+    model.selectOriginalLanguage('ru');
+    model.selectLanguage('en');
+    assertTrue(model.fromLanguages().length > 0);
+    model.selectOriginalLanguage('en');
+    assertEquals(0, model.fromLanguages().length);
+}
+
 
 {% endblock %}
