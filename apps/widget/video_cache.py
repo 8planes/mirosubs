@@ -175,7 +175,7 @@ def get_video_languages_verbose(video_id, max_items=6):
             data["total"] = total_number - max_items
         for lang in languages_with_version:
             # show only with some translation
-            if lang.percent_done > 0.0 and lang.is_dependent():
+            if lang.is_dependent():
                 data["items"].append({
                     'language_display': lang.language_display(),
                     'percent_done': lang.percent_done ,
