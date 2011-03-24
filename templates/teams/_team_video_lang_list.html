@@ -3,7 +3,7 @@
 {% for status in sub_statuses.items %}
     <span>
         {% if status.percent_done or status.is_complete %}
-            <a href="{{status.language_url}}">
+            <a href="{{ status.language_url }}">
         {% endif %}
         {{ status.language_display }}
         {% if status.percent_done or status.is_complete %}</a> {% endif %}
@@ -12,6 +12,8 @@
         {% else %}
             {% if status.is_complete %}
                 {% trans "Complete"  %}
+            {% else %}
+                {% trans "Uncomplete"  %}
             {% endif %}
         {% endif %}){% if not forloop.last %},{% endif %}
     </span>
