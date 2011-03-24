@@ -68,6 +68,28 @@ So what's different about this
 than what we saw in the last
 '''
 
+SRT_TEXT_WITH_TIMECODE_WITHOUT_DECIMAL = u'''1
+00:01:01,64 --> 00:01:05,7
+this, I guess we could say,
+equation or this inequality
+
+2
+00:01:05,7 --> 00:01:10
+by negative 1, I want to
+understand what happens.
+
+3
+00:01:10 --> 00:01:18,36
+So what's the relation between
+negative x and negative 5?
+
+4
+00:01:18,36 --> 00:01:21,5
+When I say what's the relation,
+is it greater than or is
+'''
+
+
 TXT_TEXT = u'''Here is sub 1.
 
 Here is sub 2.
@@ -115,6 +137,23 @@ class SubtitleParserTest(TestCase):
         self._assert_sub(
             result[2], 27.43, 29.79,
             u'So what\'s different about this\nthan what we saw in the last')
+    
+    def test_srt_with_timecode_without_decimal(self):
+        parser = SrtSubtitleParser(SRT_TEXT_WITH_TIMECODE_WITHOUT_DECIMAL)
+        result = list(parser)
+
+        self._assert_sub(
+            result[0], 61.64, 65.7,
+            u'this, I guess we could say,\nequation or this inequality')
+        self._assert_sub(
+            result[1], 65.7, 70,
+            u'by negative 1, I want to\nunderstand what happens.')
+        self._assert_sub(
+            result[2], 70, 78.36,
+            u'So what\'s the relation between\nnegative x and negative 5?')
+        self._assert_sub(
+            result[3], 78.36, 81.5,
+            u'When I say what\'s the relation,\nis it greater than or is')
     
     def test_youtube(self):
         path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
