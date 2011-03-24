@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
@@ -322,12 +322,37 @@ def demo(request):
     return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
-def history(request, video_id, lang=None):
+def legacy_history(request ,video_id, lang=None):
+    """
+    In the old days we allowed only one translation per video.
+    Therefore video urls looked like /vfjdh2/en/
+    Now that this constraint is removed we need to redirect old urls
+    to the new view, that needs 
+    """
+    video = get_object_or_404(Video, video_id=video_id)
+    try:
+         language = video.subtitle_language(lang)
+         if language is None:
+             raise SubtitleLanguage.DoesNotExist("No such language")
+    except SubtitleLanguage.DoesNotExist:
+        raise Http404()
+    
+    return HttpResponseRedirect(reverse("videos:translation_history", kwargs={
+            'video_id': video_id,
+            'lang_id': language.pk,
+            'lang': language.language,
+            }))
+    
+def history(request, video_id, lang=None, lang_id=None):
     video = get_object_or_404(Video, video_id=video_id)
     video.update_view_counter()
 
     context = widget.add_onsite_js_files({})
-    language = video.subtitle_language(lang)
+
+    if lang_id:
+        language = video.subtitlelanguage_set.get(pk=lang_id)
+    else:    
+        language = video.subtitle_language(lang)
 
     if not language:
         if lang in dict(settings.ALL_LANGUAGES):

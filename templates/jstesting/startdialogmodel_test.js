@@ -51,6 +51,10 @@ function testToLanguages1() {
         languages, function(l) {
             return l.language == 'fr'
         }).length);
+    // assert the languages are sorted by language name.
+    for (var i = 2; i < languages.length - 1; i++)
+        assertTrue(goog.array.defaultCompare(
+            languages[i].languageName, languages[i+1].languageName) <= 0);
 }
 
 function testToLanguages2() {
@@ -94,9 +98,29 @@ function testFromLanguages0() {
     assertEquals('en', fromLanguages[0].LANGUAGE);
     model.selectLanguage('en');
     fromLanguages = model.fromLanguages();
-    assertEquals(1, fromLanguages.length);
-    assertEquals('fr', fromLanguages[0].LANGUAGE);
+    // english is also the original video language.
+    assertEquals(0, fromLanguages.length);
 }
+
+function testFromLanguagesWithZeroPercent() {
+    var json = makeBaseJSON();
+    json['video_languages'].push(
+        {'dependent': true, 'percent_done': 90, 
+         'language': 'ru', 'standard': 'en' });
+    var model = new mirosubs.startdialog.Model(json);
+    var fromLanguages = model.fromLanguages();
+    assertEquals(2, fromLanguages.length);
+
+
+    json = makeBaseJSON();
+    json['video_languages'].push(
+        {'dependent': true, 'percent_done': 0, 
+         'language': 'ru', 'standard': 'en' });
+    model = new mirosubs.startdialog.Model(json);
+    fromLanguages = model.fromLanguages();
+    assertEquals(1, fromLanguages.length);
+}
+
 
 function testGeneral0() {
     var json = {
@@ -131,5 +155,22 @@ function testLanguageSummaryNullError() {
     // the tests passes if the following call does not throw an exception.
     var langs = model.fromLanguages();
 }
+
+function testSetOriginalLanguage() {
+    var json = {
+        'video_languages': [
+            {'dependent': false, 'is_complete': false, 'language': 'ru'}
+        ],
+        'my_languages': ['ru', 'en'],
+        'original_language': ''
+    }
+    var model = new mirosubs.startdialog.Model(json, null);
+    model.selectOriginalLanguage('ru');
+    model.selectLanguage('en');
+    assertTrue(model.fromLanguages().length > 0);
+    model.selectOriginalLanguage('en');
+    assertEquals(0, model.fromLanguages().length);
+}
+
 
 {% endblock %}
