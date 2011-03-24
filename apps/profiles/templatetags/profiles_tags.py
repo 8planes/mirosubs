@@ -69,7 +69,8 @@ def user_videos_activity(context, user=None):
     if user.is_authenticated():
         videos_ids = Video.objects.filter(subtitlelanguage__subtitleversion__user=user).distinct() \
             .values_list('id', flat=True)
-        context['users_actions'] = Action.objects.select_related('video').filter(Q(video__pk__in=videos_ids)| \
+            
+        context['users_actions'] = Action.objects.select_related('video', 'language', 'language__video', 'user').filter(Q(video__pk__in=videos_ids)| \
             Q(action_type=Action.ADD_VIDEO, user=user)) \
             .exclude(user=user) \
             .exclude(user=User.get_youtube_anonymous())[:ACTIONS_ON_PAGE]

@@ -988,7 +988,7 @@ class Action(models.Model):
         return self.action_type == self.ADD_VIDEO
     
     def type(self):
-        if self.comment:
+        if self.comment_id:
             return 'commented'
         return 'edited'
     

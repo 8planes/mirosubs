@@ -21,7 +21,7 @@
     <ul class="video_tabs">
         <li class="active">
             <span class="tab-item">
-                {% trans 'My Videos' %}<span class="badgy_out"><span class="badgy">{{ total_video_count }}</span></span>
+                {% trans 'My Videos' %}<span class="badgy_out"><span class="badgy">{{ hits }}</span></span>
             </span>
         </li>
     </ul>
@@ -66,7 +66,7 @@
         <b>{% trans 'Bio' %}:</b> {{ user.biography|linebreaksbr|urlize }}
     </p>
     {% endif %}
-    {% with user.userlanguage_set.all as user_languages %}
+    {% with user.get_languages as user_languages %}
         {% if user_languages %}
             <p>
             <b>{% trans "Languages I understand" %}:</b>

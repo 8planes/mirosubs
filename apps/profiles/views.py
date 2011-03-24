@@ -62,38 +62,21 @@ def edit_avatar(request):
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
-class OptimizedQuerySet(LoadRelatedQuerySet):
-    
-    def update_result_cache(self):
-        videos = dict((v.id, v) for v in self._result_cache if not hasattr(v, 'langs_cache'))
-        
-        if videos:
-            for v in videos.values():
-                v.langs_cache = []
-                
-            langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
-            
-            for l in langs_qs:
-                videos[l.video_id].langs_cache.append(l)
-
 @login_required
 def my_profile(request):
     user = request.user
     qs = Video.objects.filter(Q(subtitlelanguage__subtitleversion__user=user) | \
-              Q(followers=request.user) | \
+              Q(followers=request.user) | Q(subtitlelanguage__followers=request.user) | \
               Q(action__action_type=Action.ADD_VIDEO, action__user=user)) \
-              .distinct().order_by('-edited')
+              .distinct().order_by('-edited').select_related('subtitlelanguage')
     q = request.REQUEST.get('q')
-    total_video_count = qs.count()
+
     if q:
         qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q))
     context = {
         'my_videos': True,
-        'query': q,
-        'total_video_count': total_video_count
+        'query': q
     }
-    
-    qs = qs._clone(OptimizedQuerySet)
 
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 

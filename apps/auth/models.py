@@ -31,7 +31,8 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.http import urlquote_plus
 from django.core.exceptions import MultipleObjectsReturned
 from utils.amazon import S3EnabledImageField
-from datetime import datetime
+from datetime import datetime, date
+from django.core.cache import cache
 
 #I'm not sure this is the best way do do this, but this models.py is executed
 #before all other and before url.py
@@ -77,6 +78,18 @@ class CustomUser(BaseUser):
             else:
                 return self.first_name
         return self.username
+    
+    def get_languages(self):
+        """
+        Just to control this query
+        """
+        languages = cache.get('user_languages_%s' % self.pk)
+        
+        if languages is None:
+            languages = self.userlanguage_set.all()
+            cache.set('user_languages_%s' % self.pk, languages, 60*24*7)
+            
+        return languages 
     
     def managed_teams(self):
         return self.teams.filter(members__is_manager=True)
@@ -196,6 +209,14 @@ class UserLanguage(models.Model):
     class Meta:
         unique_together = ['user', 'language']
 
+    def save(self, *args, **kwargs):
+        super(UserLanguage, self).save(*args, **kwargs)
+        cache.delete('user_languages_%s' % self.user_id)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('user_languages_%s' % self.user_id)
+        return super(UserLanguage, self).delete(*args, **kwargs)
+
 class Announcement(models.Model):
     content = models.CharField(max_length=500)
     created = models.DateTimeField()
@@ -204,10 +225,24 @@ class Announcement(models.Model):
     class Meta:
         ordering = ['-created']
     
+    def save(self, *args, **kwargs):
+        super(Announcement, self).save(*args, **kwargs)
+        cache.delete('last_accouncement')
+
+    def delete(self, *args, **kwargs):
+        cache.delete('last_accouncement')
+        return super(Announcement, self).delete(*args, **kwargs)
+    
     @classmethod
     def last(cls):
-        try:
-            return cls.objects.filter(created__lte=datetime.now()) \
-                .filter(hidden=False)[0:1].get()
-        except cls.DoesNotExist:
-            return
+        last = cache.get('last_accouncement', '')
+
+        if last == '':
+            try:
+                last = cls.objects.filter(created__lte=datetime.today()).filter(hidden=False)[0:1].get()
+            except cls.DoesNotExist:
+                last = None
+            cache.set('last_accouncement', last, 60*24*7)
+
+        return last    
+        

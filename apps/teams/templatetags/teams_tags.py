@@ -89,10 +89,8 @@ def team_activity(context, team):
     from utils.orm import load_related_fk
     
     videos_ids = team.teamvideo_set.values_list('video_id', flat=True)
-    action_qs = Action.objects.filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
-    load_related_fk(action_qs, 'video')
-    load_related_fk(action_qs, 'user')
-    load_related_fk(action_qs, 'language', select_related=['video'])
+    action_qs = Action.objects.select_related('video', 'user', 'language', 'language__video').filter(video__pk__in=videos_ids)[:ACTIONS_ON_PAGE]
+
     context['videos_actions'] = action_qs
     
     return context
