@@ -180,6 +180,7 @@ def get_video_languages_verbose(video_id, max_items=6):
                     'language_display': lang.language_display(),
                     'percent_done': lang.percent_done ,
                     'language_url': lang.get_absolute_url(),
+                    'is_dependent': True,
                 })
             else:
                 # append to the beggininig of the list as

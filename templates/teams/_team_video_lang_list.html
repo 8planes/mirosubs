@@ -5,9 +5,9 @@
         {% if status.percent_done or status.is_complete %}
             <a href="{{ status.language_url }}">
         {% endif %}
-        {{ status.language_display }}
+        {{ status.language_display }} 
         {% if status.percent_done or status.is_complete %}</a> {% endif %}
-        ({% if status.percent_done %}
+        ({% if status.is_dependent %}
             {{ status.percent_done }}%
         {% else %}
             {% if status.is_complete %}
