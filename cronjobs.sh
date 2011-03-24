@@ -8,5 +8,5 @@ fi
 apphome="$1"
 
 . $apphome/env/bin/activate
-python $apphome/mirosubs/manage.py update_from_feed --settings=unisubs-settings
-python $apphome/mirosubs/manage.py send_notification --settings=unisubs-settings
+python $apphome/mirosubs/manage.py update_from_feed --settings=unisubs_settings
+python $apphome/mirosubs/manage.py send_notification --settings=unisubs_settings
