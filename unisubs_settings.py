@@ -19,13 +19,17 @@
 # Note that this file is kept in .gitignore since it contains password information.
 
 from settings import *
-
 from server_local_settings import *
 
 JS_USE_COMPILED = True
 
 DEBUG = False
 
+ADMINS = (
+    ('Adam Duston', 'adam@8planes.com'),
+    ('Holmes Wilson', 'hwilson@gmail.com'),
+    ('usubs-errors', 'usubs-errors@pculture.org')
+)
 
 if INSTALLATION == DEV:
     SITE_ID = 13
@@ -34,18 +38,12 @@ if INSTALLATION == DEV:
     REDIS_DB = "3"
     AWS_QUEUE_PREFIX = 'DEV'
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
-    ADMINS = (
-      ('Adam Duston', 'adam@8planes.com'),
-      ('Holmes Wilson', 'hwilson@gmail.com'),
-      ('usubs-errors', 'usubs-errors@pculture.org')
-    )
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'
     REDIS_DB = "2"
     AWS_QUEUE_PREFIX = 'STAGING'
-    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-    
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'    
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-apps
     try:
@@ -54,14 +52,7 @@ elif INSTALLATION == STAGING:
     except ImportError:
         import sys
         print >> sys.stderr, "[oboe] Unable to instrument app and middleware"
-        pass # gracefully disable tracing if Tracelytics oboeware not present
-        
     EMAIL_SUBJECT_PREFIX = '[usubs-staging]'
-    ADMINS = (
-      ('Adam Duston', 'adam@8planes.com'),
-      ('Holmes Wilson', 'hwilson@gmail.com'),
-      ('usubs-errors', 'usubs-errors@pculture.org')
-    )
 elif INSTALLATION == PRODUCTION:
     SITE_ID = 8
     SITE_NAME = 'unisubs'
@@ -70,7 +61,8 @@ elif INSTALLATION == PRODUCTION:
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     EMAIL_SUBJECT_PREFIX = '[usubs-production]'
     ADMINS = (
-      ('Adam Duston', 'adam@8planes.com')
+      ('Adam Duston', 'adam@8planes.com'),
+      ('usubs-errors', 'usubs-errors@pculture.org')
     )
 
 IGNORE_REDIS = True
