@@ -130,8 +130,8 @@ def detail(request, slug):
     
     qs1 = qs.filter(percent_complete__gt=0,percent_complete__lt=100)
     qs2 = qs.filter(percent_complete=0)
-    qs3 = lqs.filter(is_original=True, is_complete=False)
-    qs4 = lqs.filter(is_original=False, forked=True, is_complete=True)
+    qs3 = lqs.filter(is_original=True, is_complete=False, language__in=languages)
+    qs4 = lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
     
     mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
 
