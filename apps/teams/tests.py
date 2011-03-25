@@ -107,7 +107,7 @@ class TeamsTest(TestCase):
 
     def test_detail_contents_unrelated_video(self):
         team, new_team_video = self._create_new_team_video()
-
+        self._set_my_languages('en', 'ru')
         # now add a Russian video with no subtitles.
         self._add_team_video(
             team, u'ru',
@@ -129,11 +129,11 @@ class TeamsTest(TestCase):
         self._set_my_languages('ko')
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
-        self.assertEqual(1, len(response.context['team_video_md_list']))
+        self.assertEqual(0, len(response.context['team_video_md_list']))
 
     def test_no_dupes_without_buttons(self):
         team, new_team_video = self._create_new_team_video()
-        self._set_my_languages('ko')
+        self._set_my_languages('ko', 'en')
 
         self.client.post(
             reverse('videos:upload_subtitles'), 
