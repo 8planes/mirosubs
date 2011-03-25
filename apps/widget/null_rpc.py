@@ -23,8 +23,14 @@ from django.conf.global_settings import LANGUAGES
 import widget
 from videos.types import video_type_registrar
 from videos.types.bliptv import BlipTvVideoType
+from utils.translation import get_user_languages_from_request
+
+
 
 class NullRpc(BaseRpc):
+
+    STUB_VIDEO_LANG = [{"dependent": False, "is_complete": True, "language": "en"}, {"dependent": False, "is_complete": True, "language": "eu"}, {"dependent": False, "is_complete": True, "language": "gl"}, {"dependent": False, "is_complete": False, "language": "meta-tw"}]
+                       
     def show_widget(self, request, video_url, is_remote, base_state=None):
         return_value = {
             'video_id' : 'abc',
@@ -45,9 +51,23 @@ class NullRpc(BaseRpc):
             self._drop_down_contents(None)
         return return_value
 
+    def fetch_start_dialog_contents(self, request, video_id):
+        my_languages = get_user_languages_from_request(request)
+        my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
+        video_languages = NullRpc.STUB_VIDEO_LANG
+        original_language = "en"
+
+        video_languages =  []
+
+        return {
+            'my_languages': my_languages,
+            'video_languages': video_languages,
+            'original_language': original_language }
+
+    
     def start_editing(self, request, video_id, language_code, 
                       original_language_code=None,
-                      base_version_no=None, fork=False):
+                      base_version_no=None, fork=False, base_language_code=None):
         return {
             "can_edit": True,
             "draft_pk": 1,
