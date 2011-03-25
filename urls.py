@@ -57,7 +57,7 @@ urlpatterns = patterns(
     (r'^widget/', include('widget.urls', namespace='widget', app_name='widget')),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
-    url(r'^pagedemo/(\w+)', 'pagedemo.views.pagedemo', name="pagedemo"),
+    url(r'^pagedemo/(\w+)$', 'pagedemo.views.pagedemo', name="pagedemo"),
     (r'^videos/', include('videos.urls', namespace='videos', 
                           app_name='videos')),
     (r'^teams/', include('teams.urls', namespace='teams', 
