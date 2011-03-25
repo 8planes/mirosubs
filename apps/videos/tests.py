@@ -334,7 +334,7 @@ class VideoTest(TestCase):
         self.user = User.objects.all()[0]
         self.youtube_video = 'http://www.youtube.com/watch?v=pQ9qX8lcaBQ'
         self.html5_video = 'http://mirrorblender.top-ix.org/peach/bigbuckbunny_movies/big_buck_bunny_1080p_stereo.ogg'
-        
+    
     def test_video_create(self):
         self._create_video(self.youtube_video)
         self._create_video(self.html5_video)
@@ -381,6 +381,26 @@ class ViewsTest(WebUseTest):
     def setUp(self):
         self._make_objects()
     
+    def test_rollback(self):
+        video = Video.objects.all()[:1].get()
+        lang = video.subtitlelanguage_set.all()[:1].get()
+        v = lang.latest_version()
+        v.is_forked = True
+        v.save()
+        
+        new_v = SubtitleVersion(language=lang, version_no=v.version_no+1, datetime_started=datetime.now())
+        new_v.save()
+        lang = SubtitleLanguage.objects.get(id=lang.id)
+        
+        self._login()
+        
+        v.rollback(self.user)
+        lang = SubtitleLanguage.objects.get(id=lang.id)
+        last_v = lang.latest_version()
+        self.assertTrue(last_v.is_forked)
+        self.assertFalse(last_v.notification_sent)
+        self.assertEqual(last_v.version_no, new_v.version_no+1)
+        
     def test_video_url_make_primary(self):
         self._login()
         self._simple_test("videos:video_url_make_primary")

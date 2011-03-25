@@ -823,18 +823,17 @@ class SubtitleVersion(SubtitleCollection):
 
     def rollback(self, user):
         cls = self.__class__
-        latest_subtitles = self.language.latest_version()
+        #to be sure we have real data in instance, without cached values in attributes
+        lang = SubtitleLanguage.objects.get(id=self.language.id) 
+        latest_subtitles = lang.latest_version()
         new_version_no = latest_subtitles.version_no + 1
         note = u'rollback to version #%s' % self.version_no
-        new_version = cls(language=self.language, version_no=new_version_no, \
-            datetime_started=datetime.now(), user=user, note=note)
+        new_version = cls(language=lang, version_no=new_version_no, \
+            datetime_started=datetime.now(), user=user, note=note, is_forked=self.is_forked)
         new_version.save()
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
-        # we should update the last_version field on language, right?
-        # latest_subtitles.last_version = new_version
-        # latest_subtitles.save()
-        #    
+
         return new_version
 
     def is_all_blank(self):
