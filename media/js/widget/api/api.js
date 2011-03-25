@@ -82,10 +82,12 @@ mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, gener
     else {
         var dialog = new mirosubs.startdialog.Dialog(
             config['videoID'], null, 
-            function(originalLang, subLang, baseLang) {
+            function(originalLang, subLang, subLangID, baseLangID, closeCallback) {
+                closeCallback();
+                // FIXME
                 opener.openDialog(
                     null, subLang, originalLang,
-                    !baseLang, baseLang);
+                    !baseLangID, baseLangID);
             });
         dialog.setVisible(true);
     }

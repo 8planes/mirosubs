@@ -110,9 +110,11 @@ mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
     var that = this;
     var dialog = new mirosubs.startdialog.Dialog(
         this.videoID_, null, 
-        function(originalLanguage, subLanguage, baseLanguage) {
+        function(originalLanguage, subLanguage, subLanguageID, baseLanguageID, closeCallback) {
+            closeCallback();
+            // FIXME: temporary to prevent breaking
             that.startEditing_(
-                null, subLanguage, originalLanguage, baseLanguage);
+                null, subLanguage, originalLanguage, null);
         });
     dialog.setVisible(true);
 };
@@ -139,9 +141,11 @@ mirosubs.widget.SubtitleController.prototype.subtitle_ = function(newLanguage) {
 
     var dialog = new mirosubs.startdialog.Dialog(
         this.videoID_, initialLanguage, 
-        function(originalLanguage, subLanguage, baseLanguage) {
+        function(originalLanguage, subLanguage, subLanguageID, baseLanguageID, closeCallback) {
+            closeCallback();
+            // FIXME
             that.startEditing_(
-                null, subLanguage, originalLanguage, baseLanguage);
+                null, subLanguage, originalLanguage, null);
         });
     dialog.setVisible(true);
 };

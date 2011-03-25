@@ -86,6 +86,7 @@ class Rpc(BaseRpc):
 
     def _language_summary(self, language):
         summary = {
+            'pk': language.pk,
             'language': language.language,
             'dependent': language.is_dependent() }
         if language.is_dependent():
