@@ -371,13 +371,13 @@ class TeamVideo(models.Model):
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     video = models.ForeignKey(Video)
-    language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES,  null=False, blank=False, db_index=True)
     subtitle_language = models.ForeignKey(SubtitleLanguage, null=False, blank=False)
     team = models.ForeignKey(Team)
     is_original = models.BooleanField(default=False, db_index=True)
     forked = models.BooleanField(default=True, db_index=True)
     is_complete = models.BooleanField(default=False, db_index=True)
-    percent_done = models.IntegerField(default=0)
+    percent_done = models.IntegerField(default=0, db_index=True)
     
     class Meta:
         unique_together = (('team_video', 'subtitle_language'),)
