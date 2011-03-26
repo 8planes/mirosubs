@@ -3,10 +3,10 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from os import path
 from django.conf import settings
-from teams.models import Team, Invite, TeamVideo, Application, TeamMember
+from teams.models import Team, Invite, TeamVideo, Application, TeamMember, TeamVideoLanguage
 from teams import views
 from messages.models import Message
-from videos.models import Video, VIDEO_TYPE_YOUTUBE
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage
 from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
@@ -404,7 +404,18 @@ class TeamsTest(TestCase):
         response = self.client.post(url)
         self.failUnlessEqual(response.status_code, 302)
         self.assertTrue(team.is_member(self.user))
-                
+
+    def test_tvl_language_syncs(self):
+        team, new_team_video = self._create_new_team_video()
+        self._set_my_languages('en', 'ru')
+        # now add a Russian video with no subtitles.
+        self._add_team_video(
+            team, u'ru',
+            u'http://upload.wikimedia.org/wikipedia/commons/6/61/CollateralMurder.ogv')
+        tvl = TeamVideoLanguage.objects.get(team_video=new_team_video, subtitle_language__language='ru')
+        self.assertEqual(tvl.language,'ru')
+
+        
     def test_fixes(self):
         url = reverse("teams:detail", kwargs={"slug": 'slug-does-not-exist'})
         response = self.client.get(url)

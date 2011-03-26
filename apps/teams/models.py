@@ -381,10 +381,14 @@ class TeamVideoLanguage(models.Model):
     
     class Meta:
         unique_together = (('team_video', 'subtitle_language'),)
-        
+
+    def save(self, *args, **kwargs):
+        self.language = self.subtitle_language.language
+        super(TeamVideoLanguage, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.get_language_display()
-    
+
     @classmethod
     def update(cls, tv, sl):
         langs = []
