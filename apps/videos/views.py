@@ -176,7 +176,6 @@ def video(request, video_id, video_url=None, title=None):
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
-    context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     translations = list(video.subtitlelanguage_set.filter(had_version=True) \
         .filter(is_original=False).select_related('video'))
@@ -378,7 +377,6 @@ def history(request, video_id, lang=None, lang_id=None):
         context['ordering'], context['order_type'] = ordering, order_type
 
     context['video'] = video
-    context['site'] = Site.objects.get_current()
     translations = list(video.subtitlelanguage_set.filter(is_original=False) \
         .filter(had_version=True).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
