@@ -19,7 +19,8 @@ from utils import render_to, render_to_json
 from datetime import datetime, timedelta
 from videos.models import Video, SubtitleLanguage, ALL_LANGUAGES
 from statistic.models import EmailShareStatistic, TweeterShareStatistic, \
-    FBShareStatistic, SubtitleFetchStatistic, SubtitleFetchCounters
+    FBShareStatistic, SubtitleFetchStatistic, SubtitleFetchCounters, \
+    get_model_statistics
 from auth.models import CustomUser as User
 from django.views.generic.list_detail import object_list
 from comments.models import Comment
@@ -36,30 +37,14 @@ def index(request):
     week_ago = today - timedelta(weeks=1)
     day_ago = today - timedelta(days=1)
     
-    videos_st = {}
-    videos_st['total'] = Video.objects.count()
-    videos_st['month'] = Video.objects.filter(created__range=(month_ago, today)).count()
-    videos_st['week'] = Video.objects.filter(created__range=(week_ago, today)).count()
-    videos_st['day'] = Video.objects.filter(created__range=(day_ago, today)).count()
+    videos_st = get_model_statistics(Video, today, month_ago, week_ago, day_ago)
 
-    tweet_st = {}
-    tweet_st['total'] = TweeterShareStatistic.objects.count()
-    tweet_st['month'] = TweeterShareStatistic.objects.filter(created__range=(month_ago, today)).count()
-    tweet_st['week'] = TweeterShareStatistic.objects.filter(created__range=(week_ago, today)).count()
-    tweet_st['day'] = TweeterShareStatistic.objects.filter(created__range=(day_ago, today)).count()
+    tweet_st = get_model_statistics(TweeterShareStatistic, today, month_ago, week_ago, day_ago)
     
-    fb_st = {}
-    fb_st['total'] = FBShareStatistic.objects.count()
-    fb_st['month'] = FBShareStatistic.objects.filter(created__range=(month_ago, today)).count()
-    fb_st['week'] = FBShareStatistic.objects.filter(created__range=(week_ago, today)).count()
-    fb_st['day'] = FBShareStatistic.objects.filter(created__range=(day_ago, today)).count()
-    
-    email_st = {}
-    email_st['total'] = EmailShareStatistic.objects.count()
-    email_st['month'] = EmailShareStatistic.objects.filter(created__range=(month_ago, today)).count()
-    email_st['week'] = EmailShareStatistic.objects.filter(created__range=(week_ago, today)).count()
-    email_st['day'] = EmailShareStatistic.objects.filter(created__range=(day_ago, today)).count()
+    fb_st = get_model_statistics(FBShareStatistic, today, month_ago, week_ago, day_ago)
 
+    email_st = get_model_statistics(EmailShareStatistic, today, month_ago, week_ago, day_ago)
+    
     context = {
         'subtitles_fetched_count': sub_fetch_total_counter.get(),
         'view_count': widget_views_total_counter.get(),

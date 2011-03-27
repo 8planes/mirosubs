@@ -48,3 +48,14 @@ class SubtitleFetchCounters(models.Model):
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
     date = models.DateField()
     count = models.PositiveIntegerField(default=0)
+
+def get_model_statistics(model, today, month_ago, week_ago, day_ago):
+    '''
+    Gives the cronological statistics of models
+    '''
+    stats = {}
+    stats['total'] = model.objects.count()
+    stats['month'] = model.objects.filter(created__range=(month_ago, today)).count()
+    stats['week'] = model.objects.filter(created__range=(week_ago, today)).count()
+    stats['day'] = model.objects.filter(created__range=(day_ago, today)).count()
+    return stats
