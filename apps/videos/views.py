@@ -76,20 +76,6 @@ def bug(request):
     return render_to_response('bug.html', context,
                               context_instance=RequestContext(request))
 
-@login_required
-def follow_video(request, video_id):
-    #move this on rpc
-    video = get_object_or_404(Video, video_id=video_id)
-    video.followers.add(request.user)
-    messages.success(request, _(u'You are following %(video)s now') % {'video': video})
-    return redirect(video)
-
-@login_required
-def follow_language(request, language_id):
-    #move this on rpc
-    language = get_object_or_404(SubtitleLanguage, language_id=language_id)
-    return redirect()
-
 def ajax_change_video_title(request):
     video_id = request.POST.get('video_id')
     title = request.POST.get('title')
