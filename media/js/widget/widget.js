@@ -228,7 +228,97 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
     else if (selection == s.LANGUAGE_SELECTED)
         playController.languageSelected(opt_languageCode);
 };
+
 mirosubs.widget.Widget.prototype.playAt = function(time) {
     this.videoPlayer_.setPlayheadTime(time);
     this.videoPlayer_.play();
+};
+
+mirosubs.widget.Widget.prototype.play = function() {
+    this.videoPlayer_.play();
+};
+
+mirosubs.widget.Widget.prototype.pause = function() {
+    this.videoPlayer_.pause();
+};
+
+mirosubs.widget.Widget.exportJSSameDomain_ = function(){
+    goog.exportSymbol("mirosubs.widget.SameDomainEmbed.embed", 
+                      mirosubs.widget.SameDomainEmbed.embed);
+    
+    goog.exportSymbol(
+        "mirosubs.video.supportsVideo", mirosubs.video.supportsVideo);
+    goog.exportSymbol(
+        "mirosubs.video.supportsH264", mirosubs.video.supportsH264);
+    goog.exportSymbol(
+        "mirosubs.video.supportsOgg", mirosubs.video.supportsOgg);
+    goog.exportSymbol(
+        "mirosubs.video.supportsWebM", mirosubs.video.supportsWebM);
+};
+
+mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
+        mirosubs.widget.CrossDomainEmbed.Type = {
+            EMBED_SCRIPT : 1,
+            WIDGETIZER : 2,
+            BOOKMARKLET : 3,
+            EXTENSION : 4
+        };
+
+        goog.exportSymbol(
+            'mirosubs.widget.CrossDomainEmbed.embed',
+            mirosubs.widget.CrossDomainEmbed.embed);
+        goog.exportSymbol(
+            "mirosubs.xdSendResponse",
+            goog.net.CrossDomainRpc.sendResponse);
+        goog.exportSymbol(
+            "mirosubs.xdRequestID",
+            goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID);
+        goog.exportSymbol(
+            "mirosubs.xdDummyURI",
+            goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI);
+        var m = window["MiroSubsToEmbed"];
+        if (typeof(m) != 'undefined'){
+            for (var i = 0; i < m.length; i++){
+                mirosubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
+            }
+        }
+};
+
+/*
+ * @param {bool} isCrossDomain Is is a cross domain embed?
+ */
+mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
+
+    // these should be exported in all cases:
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "play",
+        mirosubs.widget.Widget.prototype.play );
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "pause",
+        mirosubs.widget.Widget.prototype.pause );
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "playAt",
+        mirosubs.widget.Widget.prototype.playAt );
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "selectMenuItem",
+        mirosubs.widget.Widget.prototype.selectMenuItem);
+    
+    goog.exportSymbol(
+        "mirosubs.widget.DropDown.Selection",
+        mirosubs.widget.DropDown.Selection);
+    var s = mirosubs.widget.DropDown.Selection;
+    s['IMPROVE_SUBTITLES'] = s.IMPROVE_SUBTITLES;
+    s['LANGUAGE_SELECTED'] = s.LANGUAGE_SELECTED;
+    s['ADD_LANGUAGE'] = s.ADD_LANGUAGE;
+    s['SUBTITLES_OFF'] = s.SUBTITLES_OFF;
+    
+    if (isCrossDomain){
+        mirosubs.widget.Widget.exportJSCrossDomain_();
+    }else{
+        mirosubs.widget.Widget.exportJSSameDomain_();
+    }
 };
