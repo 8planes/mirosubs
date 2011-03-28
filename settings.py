@@ -306,7 +306,8 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
     'middleware.P3PHeaderMiddleware',
     'middleware.UserUUIDMiddleware',
-    'middleware.SaveUserIp'
+    'middleware.SaveUserIp',
+    'middleware.InjectEnviron',
 )
 
 ROOT_URLCONF = 'mirosubs.urls'
@@ -363,7 +364,7 @@ INSTALLED_APPS = (
     'sentry',
     'sentry.client',
     'djcelery',
-    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
+    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
 # Celery settings
