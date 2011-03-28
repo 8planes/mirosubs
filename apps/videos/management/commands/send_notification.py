@@ -9,7 +9,6 @@ import urllib
 from django.utils import simplejson as json
 from django.utils.http import urlquote_plus
 from django.core.urlresolvers import reverse
-from videos import alarms
 
 class Command(BaseCommand):
     domain = Site.objects.get_current().domain
@@ -30,13 +29,6 @@ class Command(BaseCommand):
             else:
                 if version.text_change or version.time_change:
                     self.send_letter_caption(version)
-            
-            self._check_alarms(version)
-            
-    def _check_alarms(self, version):
-        alarms.check_subtitle_version(version)
-        alarms.check_other_languages_changes(version)
-        alarms.check_language_name(version)
     
     def _update_language(self, version):
         language = version.language

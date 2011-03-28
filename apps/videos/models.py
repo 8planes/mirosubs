@@ -40,6 +40,7 @@ from django.core.urlresolvers import reverse
 import time
 from django.utils.safestring import mark_safe
 from teams.tasks import update_team_video, update_team_video_for_sl
+from videos.tasks import check_alarm
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -701,6 +702,7 @@ class SubtitleVersion(SubtitleCollection):
                 l.update_percent_done()
         else:
             self.language.update_percent_done()        
+        check_alarm.delay(self.pk)
         
     def delete(self, *args, **kwargs):
         super(SubtitleVersion, self).delete(*args, **kwargs)
