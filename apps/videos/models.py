@@ -628,7 +628,8 @@ class SubtitleLanguage(models.Model):
             self.save()
         
     def notification_list(self, exclude=None):
-        qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
+        qs = self.followers.filter(changes_notification=True, is_active=True)
+
         if exclude:
             if not isinstance(exclude, (list, tuple)):
                 exclude = [exclude]            
@@ -697,6 +698,16 @@ class SubtitleVersion(SubtitleCollection):
             self.language.save()
     
     def update_percent_done(self):
+        if self.text_change is None or self.time_change is None:
+            try:
+                old_version = self.language.subtitleversion_set.exclude(pk=self.pk) \
+                    .order_by('-version_no')[:1].get()
+            except models.ObjectDoesNotExist:
+                old_version = None
+            
+            self.set_changes(old_version)
+            self.save()
+            
         if self.language.is_original or self.is_forked:
             for l in self.language.video.subtitlelanguage_set.exclude(pk=self.language.pk):
                 l.update_percent_done()
@@ -706,7 +717,7 @@ class SubtitleVersion(SubtitleCollection):
         
         if self.language.is_original and not self.language.language:
             detect_language.delay(self.pk)
-        
+
         send_notification.delay(self.pk)
         
     def delete(self, *args, **kwargs):

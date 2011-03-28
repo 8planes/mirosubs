@@ -131,7 +131,7 @@ def _make_caption_data(new_version, old_version):
 
 def _send_letter_caption(caption_version):
     from videos.models import SubtitleVersion
-    
+
     domain = Site.objects.get_current().domain
     
     language = caption_version.language
@@ -140,6 +140,7 @@ def _send_letter_caption(caption_version):
         .filter(version_no__lt=caption_version.version_no).order_by('-version_no')
     if qs.count() == 0:
         return
+
     most_recent_version = qs[0]
     captions = _make_caption_data(caption_version, most_recent_version)
     context = {
@@ -152,20 +153,23 @@ def _send_letter_caption(caption_version):
         'captions': captions,
         'video_url': language.get_absolute_url()
     }
-    subject = 'New edits to "%s" by %s on Universal Subtitles' % \
-        (language.video.__unicode__(), caption_version.user.__unicode__())
+    subject = u'New edits to "%s" by %s on Universal Subtitles' % (language.video, caption_version.user)
 
     users = []
-    
-    video_followers = video.notification_list([caption_version.user])
-    
+
+    video_followers = video.notification_list(caption_version.user)
+    language_followers = language.notification_list(caption_version.user)
+
     for item in qs:
-        users.append(item.user)
-        if item.user and not item.user in users and item.user in video_followers:
+        print item.user
+        if item.user and not item.user in users and (item.user in video_followers or \
+            item.user in language_followers):
             context['your_version'] = item
             context['user'] = item.user
             context['hash'] = item.user.hash_for_video(context['video'].video_id)
             send_templated_email(item.user.email, subject, 
                                  'videos/email_notification.html',
                                  context, 'feedback@universalsubtitles.org',
-                                 fail_silently=not settings.DEBUG)                  
+                                 fail_silently=not settings.DEBUG)
+
+        users.append(item.user)              
