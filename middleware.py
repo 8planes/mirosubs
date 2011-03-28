@@ -135,17 +135,3 @@ class SupeuserDebugToolbarMiddleware(DebugToolbarMiddleware):
                     or not settings.DEBUG:
             return False
         return True
-
-class InjectEnviron(object):
-
-    """
-    Sets a "ENV_IS_PRODUCTION" bool the request. This can be used in views and
-    templates as a way to make sure which environment wer are running at.
-    """
-    def process_request(self, request):
-        request.MIDDLE_YES = "arthur"
-        installation = getattr(settings, 'INSTALLATION', None)
-        if installation is not None:
-            if installation == settings.PRODUCTION:
-              request.ENV_IS_PRODUCTION = True
-        request.ENV_IS_PRODUCTION = False

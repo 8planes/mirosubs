@@ -307,7 +307,6 @@ MIDDLEWARE_CLASSES = (
     'middleware.P3PHeaderMiddleware',
     'middleware.UserUUIDMiddleware',
     'middleware.SaveUserIp',
-    'middleware.InjectEnviron',
 )
 
 ROOT_URLCONF = 'mirosubs.urls'
