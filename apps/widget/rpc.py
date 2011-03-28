@@ -121,33 +121,41 @@ class Rpc(BaseRpc):
             'is_original_language_subtitled': is_original_language_subtitled,
             'general_settings': general_settings }
 
-    def start_editing(self, request, video_id, language_code, 
-                      original_language_code=None,
-                      base_version_no=None, fork=False, 
-                      base_language_code=None):
+    def start_editing(self, request, video_id, 
+                      language_code, 
+                      subtitle_language_pk=None,
+                      base_language_pk=None,
+                      original_language_code=None):
         """Called by subtitling widget when subtitling or translation 
         is to commence or recommence on a video.
         """
-        if original_language_code:
-            self._save_original_language(video_id, original_language_code)
-            if language_code == original_language_code:
-                base_language_code = None
-        language, can_writelock = self._get_language_for_editing(
+        # TODO: remove whenever blank SubtitleLanguages become illegal.
+        self._fix_blank_original(video_id)
+        if language_code == original_language_code:
+            base_language_pk = None
+        base_language = None
+        if base_language_pk is not None:
+            base_language = models.SubtitleLanguage.objects.get(
+                pk=base_language_pk)
+
+        language, can_edit = self._get_language_for_editing(
             request, video_id, language_code, 
-            None if fork else base_language_code)
-        if not can_writelock:
+            subtitle_language_pk, base_language)
+
+        if not can_edit:
             return { "can_edit": False, 
                      "locked_by" : language.writelock_owner_name }
+
         draft = self._get_draft_for_editing(
-            request, language, base_version_no, fork)
+            request, language, base_language)
         subtitles = self._subtitles_dict(draft)
         return_dict = { "can_edit" : True,
                         "draft_pk" : draft.pk,
                         "subtitles" : subtitles }
         if draft.is_dependent():
             video = models.Video.objects.get(video_id=video_id)
-            if language.standard_language and base_language_code:
-                standard_version = video.latest_version(base_language_code)
+            if language.standard_language and base_language:
+                standard_version = base_language.latest_version()
             else:
                 standard_version = video.latest_version()
             if standard_version:
@@ -155,6 +163,9 @@ class Rpc(BaseRpc):
                     self._subtitles_dict(standard_version)
             else:
                 return_dict['original_subtitles'] = {}            
+        if original_language_code:
+            self._save_original_language(video_id, original_language_code)
+
         return return_dict
 
     def release_lock(self, request, draft_pk):
@@ -285,24 +296,20 @@ class Rpc(BaseRpc):
             'translations_count': models.SubtitleLanguage.objects.filter(is_original=False).count()
         }
     
-    def _get_draft_for_editing(self, request, language, 
-                               base_version_no=None, 
-                               fork=False):
-        if base_version_no is None:
-            draft = self._find_existing_draft_to_edit(
-                request, language)
-            if draft:
-                draft.last_saved_packet = 0
-                draft.save()
-                return draft
+    def _get_draft_for_editing(self, request, language, base_language=None):
+        draft = self._find_existing_draft_to_edit(request, language)
+        if draft:
+            draft.last_saved_packet = 0
+            draft.save()
+            return draft
 
-        version_to_copy = language.version(base_version_no)
+        version_to_copy = language.version()
         draft = models.SubtitleDraft(
             language=language,
             parent_version=version_to_copy,
             datetime_started=datetime.now())
-        if fork or (version_to_copy is not None and 
-                    version_to_copy.is_forked):
+
+        if base_language is None:
             draft.is_forked = True
         if request.user.is_authenticated():
             draft.user = request.user
@@ -311,7 +318,7 @@ class Rpc(BaseRpc):
         draft.save()
 
         if version_to_copy is not None:
-            if not version_to_copy.is_forked and fork:
+            if not version_to_copy.is_forked and draft.is_forked:
                 subs_to_copy = version_to_copy.subtitles()
             else:
                 subs_to_copy = version_to_copy.subtitle_set.all()
@@ -340,9 +347,9 @@ class Rpc(BaseRpc):
                 pass
         return draft
 
-    def _find_base_language(self, video, base_language_code):
-        base_language = video.subtitle_language(base_language_code)
+    def _find_base_language(self, base_language):
         if base_language:
+            video = base_language.video
             if base_language.is_original or base_language.is_forked:
                 return base_language
             else:
@@ -350,65 +357,88 @@ class Rpc(BaseRpc):
                     return base_language.standard_language
                 else:
                     return video.subtitle_language()
-        return None
+        else:
+            return None
 
-    def _get_language_for_editing(self, request, video_id, language_code, base_language_code):
+    def _needs_new_sub_language(self, language, base_language):
+        if language.standard_language and not base_language:
+            # forking existing
+            return False
+        else:
+            return language.standard_language != base_language
+
+    def _get_language_for_editing(
+        self, request, video_id, language_code, 
+        subtitle_language_pk=None, base_language=None):
+
         video = models.Video.objects.get(video_id=video_id)
-        if language_code is None:
+
+        editable = False
+        create_new = False
+
+        if subtitle_language_pk is not None:
+            language = models.SubtitleLanguage.objects.get(pk=subtitle_language_pk)
+            if self._needs_new_sub_language(language, base_language):
+                create_new = True
+            else:
+                editable = language.can_writelock(request)
+        else:
+            create_new = True
+        if create_new:
+            standard_language = self._find_base_language(base_language)
+            forked = standard_language is None
             language, created = models.SubtitleLanguage.objects.get_or_create(
                 video=video,
-                is_original=True,
-                defaults = {
-                    'writelock_session_key': '',
-                    'language': ''
-                    })
-        else:
-            kwargs  = {
-                'video':video,
-                'language':language_code,
-                'defaults':{
-                     'writelock_session_key': ''
-                    }
-                }
-            if base_language_code:
-                kwargs.update(
-                    { 'standard_language': 
-                          self._find_base_language(video, base_language_code) })
-            language, created = models.SubtitleLanguage.objects.get_or_create(**kwargs)
-        if not language.can_writelock(request):
-            return language, False
-        language.writelock(request)
-        language.save()
-        return language, True
+                language=language_code,
+                standard_language=standard_language,
+                defaults={
+                    'is_forked': forked,
+                    'writelock_session_key': '' })
+            editable = created or language.can_writelock(request)
+        if editable:
+            language.writelock(request)
+            language.save()
+        return language, editable
+
+    def _fix_blank_original(self, video_id):
+        # TODO: remove this method as soon as blank SubtitleLanguages
+        # become illegal
+        video = models.Video.objects.get(video_id=video_id)
+        originals = video.subtitlelanguage_set.filter(is_original=True, language='')
+        to_delete = []
+        if len(originals) > 0:
+            for original in originals:
+                if not original.latest_version():
+                    # result of weird practice of saving SL with is_original=True
+                    # and blank language code on Video creation.
+                    to_delete.append(original)
+                else:
+                    # decided to mark authentic blank originals as English.
+                    original.language = 'en'
+                    original.save()
+        for sl in to_delete:
+            sl.delete()
 
     def _save_original_language(self, video_id, language_code):
         video = models.Video.objects.get(video_id=video_id)
-        try:
-            # special case where an original SubtitleLanguage is saved with 
-            # blank language.
-            original_language = \
-                models.SubtitleLanguage.objects.get(
-                video__video_id=video_id, 
-                is_original=True, language='')
-            original_language.language = language_code
-            original_language.save()
-            return
-        except ObjectDoesNotExist:
-            pass
-        existing_language, created = \
-            models.SubtitleLanguage.objects.get_or_create(
+        has_original = False
+        for sl in video.subtitlelanguage_set.all():
+            if sl.is_original and sl.language != language_code:
+                sl.is_original = False
+                sl.save()
+            elif not sl.is_original and sl.language == language_code:
+                sl.is_original = True
+                sl.save()
+            if sl.is_original:
+                has_original = True
+        if not has_original:
+            sl = models.SubtitleLanguage(
                 video=video,
                 language=language_code,
-                defaults={'writelock_session_key': ''})
-        if not existing_language.is_original:
-            original_language = video.subtitle_language()
-            if len(original_language.latest_subtitles()) > 0:
-                return
-            if original_language is not None:
-                original_language.is_original = False
-                original_language.save()
-            existing_language.is_original = True
-            existing_language.save()
+                is_forked=True,
+                is_original=True,
+                writelock_session_key='')
+            sl.save()
 
     def _autoplay_subtitles(self, user, video_id, language_code, version_no):
         return video_cache.get_subtitles_dict(
