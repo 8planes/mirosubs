@@ -32,6 +32,7 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
         mirosubs.returnURL = widgetConfig['returnURL'];
     var widget = new mirosubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
-    mirosubs.widget.Widget.exportJSSymbols(false);
     return widget;
 };
+
+mirosubs.widget.Widget.exportJSSymbols(false);

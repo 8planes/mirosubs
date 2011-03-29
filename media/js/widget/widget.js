@@ -287,8 +287,10 @@ mirosubs.widget.Widget.prototype.pause = function() {
 };
 
 mirosubs.widget.Widget.exportJSSameDomain_ = function(){
-    goog.exportSymbol("mirosubs.widget.SameDomainEmbed.embed", 
-                      mirosubs.widget.SameDomainEmbed.embed);
+
+    goog.exportSymbol(
+        "mirosubs.widget.SameDomainEmbed.embed", 
+        mirosubs.widget.SameDomainEmbed.embed);
     
     goog.exportSymbol(
         "mirosubs.video.supportsVideo", mirosubs.video.supportsVideo);
@@ -320,12 +322,6 @@ mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
         goog.exportSymbol(
             "mirosubs.xdDummyURI",
             goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI);
-        var m = window["MiroSubsToEmbed"];
-        if (typeof(m) != 'undefined'){
-            for (var i = 0; i < m.length; i++){
-                mirosubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
-            }
-        }
 };
 
 /*
@@ -370,9 +366,9 @@ mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
     s['ADD_LANGUAGE'] = s.ADD_LANGUAGE;
     s['SUBTITLES_OFF'] = s.SUBTITLES_OFF;
     
-    if (isCrossDomain){
+    if (isCrossDomain) {
         mirosubs.widget.Widget.exportJSCrossDomain_();
-    }else{
+    } else {
         mirosubs.widget.Widget.exportJSSameDomain_();
     }
 };

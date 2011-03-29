@@ -33,5 +33,13 @@ mirosubs.widget.CrossDomainEmbed.embed =
     mirosubs.IS_NULL = !!widgetConfig['null_widget'];
     var widget = new mirosubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
-    mirosubs.widget.Widget.exportJSSymbols(true);
 };
+
+mirosubs.widget.Widget.exportJSSymbols(true);
+
+var m = window["MiroSubsToEmbed"];
+if (typeof(m) != 'undefined'){
+    for (var i = 0; i < m.length; i++){
+        mirosubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
+    }
+}
