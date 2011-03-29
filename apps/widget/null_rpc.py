@@ -65,9 +65,11 @@ class NullRpc(BaseRpc):
             'original_language': original_language }
 
     
-    def start_editing(self, request, video_id, language_code, 
-                      original_language_code=None,
-                      base_version_no=None, fork=False, base_language_code=None):
+    def start_editing(self, request, video_id, 
+                      language_code, 
+                      subtitle_language_pk=None,
+                      base_language_pk=None,
+                      original_language_code=None):
         return {
             "can_edit": True,
             "draft_pk": 1,
