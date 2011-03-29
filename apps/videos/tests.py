@@ -676,7 +676,7 @@ class YoutubeVideoTypeTest(TestCase):
         self.assertTrue(video.title)
         self.assertEqual(video.duration, 79)
         self.assertTrue(video.thumbnail)
-        language = video.subtitlelanguage_set.all()[0]
+        language = video.subtitlelanguage_set.get(language='ru')
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 26)
         self.assertEqual(self.vt.video_url(vu), youtbe_url)
