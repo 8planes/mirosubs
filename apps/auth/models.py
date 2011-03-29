@@ -95,22 +95,22 @@ class CustomUser(BaseUser):
     def managed_teams(self):
         return self.teams.filter(members__is_manager=True)
 
-    def _gravatar(self, size):
+    def _get_gravatar(self, size):
         url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest() + "?"
         url += urllib.urlencode({'d': 'mm', 's':str(size)})
         return url
+
+    def _get_avatar_by_size(self, size):
+        if self.picture:
+            return self.picture.thumb_url(size, size)
+        else:
+            return self._get_gravatar(size)        
     
     def avatar(self):
-        if self.picture:
-            return self.picture.thumb_url(100, 100)
-        else:
-            return self._gravatar(100)
+        return self._get_avatar_by_size(100)
 
     def small_avatar(self):
-        if self.picture:
-            return self.picture.thumb_url(50, 50)
-        else:
-            return self._gravatar(50)
+        return self._get_avatar_by_size(50)
     
     @models.permalink
     def get_absolute_url(self):
