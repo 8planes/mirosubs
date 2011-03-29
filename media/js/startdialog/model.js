@@ -20,6 +20,9 @@ goog.provide('mirosubs.startdialog.Model');
 
 /**
  * @constructor
+ * @param {Object} json from widget rpc
+ * @param {Number=} opt_initialLanguage PK of SubtitleLanguage to 
+ *     display initially.
  */
 mirosubs.startdialog.Model = function(json, opt_initialLanguage) {
     /**
@@ -32,26 +35,14 @@ mirosubs.startdialog.Model = function(json, opt_initialLanguage) {
             return !!mirosubs.languageNameForCode(l); 
         });
     this.originalLanguage_ = json['original_language'];
-    var videoLanguages = goog.array.map(
-        json['video_languages'],
-        function(vljson) {
-            return new mirosubs.startdialog.LanguageSummary(vljson);
-        });
+    this.videoLanguages_ = new mirosubs.startdialog.VideoLanguages(
+        json['video_languages']);
+    this.toLanguages_ = new mirosubs.startdialog.ToLanguages(
+        this.myLanguages_, this.videoLanguages_, 
+        opt_initialLanguage);
     /**
-     * @type {Array.<mirosubs.startdialog.LanguageSummary>}
+     * @type {?string}
      */
-    this.videoLanguages_ = goog.array.filter(
-        videoLanguages,
-        function(l) {
-            return !!mirosubs.languageNameForCode(l.LANGUAGE);
-        });
-    goog.array.forEach(
-        this.videoLanguages_,
-        function(vl) { vl.setAll(this.videoLanguages_); },
-        this);
-    this.initialLanguage_ = opt_initialLanguage || null;
-    this.toLanguages_ = null;
-    this.selectedLanguage_ = null;
     this.selectedOriginalLanguage_ = null;
 };
 
@@ -63,148 +54,33 @@ mirosubs.startdialog.Model.prototype.originalLanguageShown = function() {
     return !this.originalLanguage_;
 };
 
+/**
+ * @returns {Array.<mirosubs.startdialog.ToLanguage>}
+ */
 mirosubs.startdialog.Model.prototype.toLanguages = function() {
-    this.createToLanguages_();
-    return this.toLanguages_;
-};
-
-mirosubs.startdialog.Model.prototype.findVideoLanguage_ = function(lang) {
-    return goog.array.find(
-        this.videoLanguages_,
-        function(l) { return l.LANGUAGE == lang; });
-};
-
-mirosubs.startdialog.Model.prototype.createToLang_ = function(
-    ranking, opt_videoLanguage, opt_language) 
-{
-    var languageCode = 
-        opt_videoLanguage ? opt_videoLanguage.LANGUAGE : opt_language;
-    return {
-        language: languageCode,
-        languageName: mirosubs.languageNameForCode(languageCode),
-        ranking: ranking,
-        videoLanguage: opt_videoLanguage
-    };
-};
-
-mirosubs.startdialog.Model.prototype.createNonEmptyDepToLang_ = 
-    function(videoLanguage, partial, ranking) 
-{
-    if (videoLanguage && videoLanguage.isDependentAndNonempty(partial)) {
-        var fromLanguages = [];
-        for (var i = 0; i < this.myLanguages_.length; i++) {
-            var possiblyFromLanguage = 
-                this.findVideoLanguage_(this.myLanguages_[i]);
-            if (possiblyFromLanguage && 
-                videoLanguage.canBenefitFromTranslation(possiblyFromLanguage))
-                fromLanguages.push(possiblyFromLanguage);
-        }
-        if (fromLanguages.length > 0)
-            return this.createToLang_(ranking, videoLanguage);
-    }
-    return null;
-};
-
-mirosubs.startdialog.Model.prototype.createEmptyToLang_ = function(videoLanguage, lang) {
-    if (!videoLanguage || videoLanguage.isEmpty()) {
-        var fromLanguages = [];
-        for (var i = 0; i < this.myLanguages_.length; i++) {
-            var possiblyFromLanguage = this.findVideoLanguage_(this.myLanguages_[i]);
-            if (possiblyFromLanguage && possiblyFromLanguage.isDependable())
-                fromLanguages.push(possiblyFromLanguage);
-        }
-        if (fromLanguages.length > 0)
-            return this.createToLang_(2, videoLanguage, lang);
-    }
-    return null;
-};
-
-mirosubs.startdialog.Model.prototype.createIncompleteIndToLang_ = function(videoLanguage) {
-    if (videoLanguage && !videoLanguage.DEPENDENT && !videoLanguage.IS_COMPLETE)
-        return this.createToLang_(3, videoLanguage);
-    return null;
-}
-
-mirosubs.startdialog.Model.prototype.createMyLanguageToLang_ = function(lang) {
-    var videoLanguage = this.findVideoLanguage_(lang);
-    var fromLangMeta;
-    if (fromLangMeta = this.createNonEmptyDepToLang_(videoLanguage, true, 1))
-        return fromLangMeta;
-    if (fromLangMeta = this.createEmptyToLang_(videoLanguage, lang))
-        return fromLangMeta;
-    if (fromLangMeta = this.createIncompleteIndToLang_(videoLanguage))
-        return fromLangMeta;
-    if (fromLangMeta = this.createNonEmptyDepToLang_(videoLanguage, false, 4))
-        return fromLangMeta;
-    return this.createToLang_(10, videoLanguage, lang);
-};
-
-mirosubs.startdialog.Model.prototype.addMissingToLangs_ = function(languageToLangs) {
-    var allLangCodes = goog.array.map(
-        mirosubs.languages, 
-        function(l) { return l[0]; });
-    var existingLanguages = new goog.structs.Set(
-        goog.array.map(languageToLangs, function(l) { return l.language; }));
-    var missingLangCodes = goog.array.filter(
-        allLangCodes,
-        function(code) { return !existingLanguages.contains(code); });
-    var missingToLangs = goog.array.map(
-        missingLangCodes, 
-        goog.bind(this.createToLang_, null, 11, null), 
-        this);
-    goog.array.sort(
-        missingToLangs,
-        function(a, b) { 
-            return goog.array.defaultCompare(a.languageName, b.languageName); 
-        });
-    return goog.array.concat(languageToLangs, missingToLangs);
-};
-
-mirosubs.startdialog.Model.prototype.createToLanguages_ = function() {
-    if (goog.isDefAndNotNull(this.toLanguages_))
-        return;
-    var toLanguages = [];
-    if (this.initialLanguage_)
-        toLanguages.push(this.createMyLanguageToLang_(this.initialLanguage_));
-    var myLanguagesToLangs = [];
-    for (var i = 0; i < this.myLanguages_.length; i++) {
-        if (this.myLanguages_[i] != this.intialLanguage_)
-            myLanguagesToLangs.push(this.createMyLanguageToLang_(
-                this.myLanguages_[i]));
-    }
-    goog.array.sort(
-        myLanguagesToLangs,
-        function(l0, l1) {
-            return goog.array.defaultCompare(l0.ranking, l1.ranking);
-        });
-    toLanguages = goog.array.concat(
-        toLanguages, myLanguagesToLangs);
-    toLanguages = this.addMissingToLangs_(toLanguages);
-    this.toLanguages_ = toLanguages;
-    this.selectedLanguage_ = toLanguages[0].language;
+    return this.toLanguages_.getToLanguages();
 };
 
 /**
- * @returns {string}
+ * @returns {mirosubs.startdialog.ToLanguage}
  */
 mirosubs.startdialog.Model.prototype.getSelectedLanguage = function() {
-    this.createToLanguages_();
+    if (!this.selectedLanguage_)
+        this.selectedLanguage_ = this.toLanguages_.getToLanguages()[0];
     return this.selectedLanguage_;
 };
 
 /**
- * @param {string} language language code from toLanguages to select
+ * @param {string} key KEY from toLanguages to select
  */
-mirosubs.startdialog.Model.prototype.selectLanguage = function(language) {
-    this.createToLanguages_();
-    this.selectedLanguage_ = language;
+mirosubs.startdialog.Model.prototype.selectLanguage = function(key) {
+    this.selectedLanguage_ = this.toLanguages_.forKey(key);
 };
 
 /**
  * @param {string} language language code to select.
  */
 mirosubs.startdialog.Model.prototype.selectOriginalLanguage = function(language) {
-    this.createToLanguages_();
     this.selectedOriginalLanguage_ = language;
 };
 
@@ -216,14 +92,15 @@ mirosubs.startdialog.Model.prototype.fromLanguages = function() {
     if (!originalLanguage)
         originalLanguage = this.selectedOriginalLanguage_;
     var selectedLanguage = this.getSelectedLanguage();
-    if (selectedLanguage == originalLanguage)
+    if (selectedLanguage.LANGUAGE == originalLanguage)
         return [];
-    var videoLanguage = this.findVideoLanguage_(selectedLanguage);
-    var possibleFromLanguages = this.videoLanguages_;
-    if (videoLanguage)
-        possibleFromLanguages = goog.array.filter(
-            possibleFromLanguages,
-            function(vl) { return vl != videoLanguage; });
+    var videoLanguages = this.videoLanguages_.findForLanguage(
+        selectedLanguage.LANGUAGE);
+    var possibleFromLanguages = [];
+    this.videoLanguages_.forEach(function(vl) {
+        if (!goog.array.contains(videoLanguages, vl))
+            possibleFromLanguages.push(vl);
+    });
     possibleFromLanguages = goog.array.filter(
         possibleFromLanguages,
         function(vl) { return !vl.DEPENDENT || vl.PERCENT_DONE > 0; });
@@ -236,4 +113,8 @@ mirosubs.startdialog.Model.prototype.fromLanguages = function() {
                 myLanguages.contains(b.LANGUAGE) ? 0 : 1);
         });
     return possibleFromLanguages;
+};
+
+mirosubs.startdialog.Model.prototype.toLanguageForKey = function(key) {
+    return this.toLanguages_.forKey(key);
 };

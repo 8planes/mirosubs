@@ -16,12 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.startdialog.LanguageSummary');
+goog.provide('mirosubs.startdialog.VideoLanguage');
 
 /**
  * @constructor
  */
-mirosubs.startdialog.LanguageSummary = function(json) {
+mirosubs.startdialog.VideoLanguage = function(json) {
+    this.PK = json['pk'];
     this.LANGUAGE = json['language'];
     this.DEPENDENT = json['dependent'];
     this.IS_COMPLETE = json['is_complete'];
@@ -29,15 +30,15 @@ mirosubs.startdialog.LanguageSummary = function(json) {
     this.STANDARD = json['standard'];
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.toString = function() {
+mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
     var name = mirosubs.languageNameForCode(this.LANGUAGE);
     if (!this.DEPENDENT)
-        return name + (this.IS_COMPLETE ? " (Complete)" : " (Incomplete)");
+        return name + (this.IS_COMPLETE ? " (complete)" : " (incomplete)");
     else
         return name + " (" + this.PERCENT_DONE + "%)";
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.setAll = function(all) {
+mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
     this.allLangs_ = all;
     if (this.STANDARD)
         this.standardLang_ = goog.array.find(
@@ -46,29 +47,29 @@ mirosubs.startdialog.LanguageSummary.prototype.setAll = function(all) {
             this);
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.getStandardLang = function() {
+mirosubs.startdialog.VideoLanguage.prototype.getStandardLang = function() {
     return this.standardLang_;
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.isDependentAndNonempty = function(partial) {
+mirosubs.startdialog.VideoLanguage.prototype.isDependentAndNonempty = function(partial) {
     if (partial)
         return this.DEPENDENT && this.PERCENT_DONE > 0 && this.PERCENT_DONE < 100;
     else
         return this.DEPENDENT && this.PERCENT_DONE == 100;
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.isEmpty = function() {
+mirosubs.startdialog.VideoLanguage.prototype.isEmpty = function() {
     return this.DEPENDENT && this.PERCENT_DONE == 0;
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.isDependable = function() {
+mirosubs.startdialog.VideoLanguage.prototype.isDependable = function() {
     if (this.DEPENDENT)
         return this.getStandardLang() && this.getStandardLang().IS_COMPLETE && this.PERCENT_DONE > 10;
     else
         return this.IS_COMPLETE;
 };
 
-mirosubs.startdialog.LanguageSummary.prototype.canBenefitFromTranslation = 
+mirosubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation = 
     function(languageSummary) 
 {
     if (!this.DEPENDENT)

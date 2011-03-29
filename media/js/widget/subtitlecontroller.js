@@ -77,84 +77,13 @@ mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
 mirosubs.widget.SubtitleController.prototype.openSubtitleDialog = 
     function() 
 {
-    var forNewSubs = !this.dropDown_.hasSubtitles();
-    var subtitleState = this.playController_.getSubtitleState();
-    if (subtitleState != null && 
-        !subtitleState.IS_LATEST && 
-        !mirosubs.returnURL) {
-        var msg =
-            ["You're about to edit revision ", 
-             subtitleState.REVISION, ", an old revision. ",
-             "Changes may have been made since this revision, and your edits ",
-             "will override those changes. Are you sure you want to do this?"].
-            join('');
-        if (confirm(msg))
-            this.subtitle_(forNewSubs);
-    }
-    else
-        this.subtitle_(forNewSubs);
+    this.openNewLanguageDialog();
 };
 
 mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
     function() 
 {
-    if (this.dropDown_.getSubtitleCount() > 0)
-        this.openNewTranslationDialog_();
-    else
-        this.subtitle_(true);
-};
-
-mirosubs.widget.SubtitleController.prototype.openNewTranslationDialog_ =
-    function()
-{
-    var that = this;
-    var dialog = new mirosubs.startdialog.Dialog(
-        this.videoID_, null, 
-        function(originalLanguage, subLanguage, baseLanguage) {
-            that.startEditing_(
-                null, subLanguage, originalLanguage, baseLanguage);
-        });
-    dialog.setVisible(true);
-};
-
-/**
- *
- * @param {boolean} newLanguage
- */
-mirosubs.widget.SubtitleController.prototype.subtitle_ = function(newLanguage) {
-    var that = this;
-    var initialLanguage = null;
-
-    if (!newLanguage) {
-        var subState = this.playController_.getSubtitleState();
-        initialLanguage = (subState && subState.LANGUAGE) ? subState.LANGUAGE : null;
-        if (subState && subState.LANGUAGE && !subState.IS_LATEST) {
-            // editing a historical version
-            this.startEditing_(
-                subState.VERSION, subState.LANGUAGE, null, 
-                (!subState.FORKED) ? subState.BASE_LANGUAGE : null);
-            return;
-        }
-    }
-
-    var dialog = new mirosubs.startdialog.Dialog(
-        this.videoID_, initialLanguage, 
-        function(originalLanguage, subLanguage, baseLanguage) {
-            that.startEditing_(
-                null, subLanguage, originalLanguage, baseLanguage);
-        });
-    dialog.setVisible(true);
-};
-
-/**
- * @param {?string} baseLanguageCode null iff we are forking
- */
-mirosubs.widget.SubtitleController.prototype.startEditing_ = 
-    function(baseVersionNo, subLanguageCode, originalLanguageCode, baseLanguageCode) 
-{
-    this.dialogOpener_.openDialogOrRedirect(
-        baseVersionNo, subLanguageCode, 
-        originalLanguageCode, baseLanguageCode,
+    this.dialogOpener_.showStartDialog(
         this.playController_.getVideoSource().getVideoURL());
 };
 
