@@ -50,12 +50,56 @@ mirosubs.widget.Widget = function(widgetConfig) {
     var baseState = widgetConfig['base_state'];
     if (baseState)
         this.baseState_ = new mirosubs.widget.BaseState(baseState);
+
+    mirosubs.widget.Widget.widgetsCreated_.push(this);
 };
 goog.inherits(mirosubs.widget.Widget, goog.ui.Component);
 
 mirosubs.widget.Widget.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper().createElement('span'));
     this.addWidget_(this.getElement());
+};
+
+/*
+ * @Type {Array} All widget instances created on this page.
+ */
+mirosubs.widget.Widget.widgetsCreated_ = [];
+
+
+/* Gets all widgets created on this page.
+ * @return {Array} All widgets created on this page.
+ * The array is cloned, so end user code can loop, filter and otherwise 
+ * modify the array without compromising our global registry.
+ */
+mirosubs.widget.Widget.getAllWidgets = function(){
+    return mirosubs.widget.Widget.widgetsCreated_.slice(0);
+};
+
+/* Get the last widget on this page with the given video URL.
+ * @param {String} url The video url to find widgets for.
+ * Note that it will only contain the last widget with a given URL. 
+ * If a page contains X widgets with the same video url, 
+ * only the last one will be fetched from this call (even if their
+ * other configs differ). To get all widgets on the page, use 
+ * the mirosubs.widgets.Widget.getAllWidgetsByURL method.
+ * @return {mirosubs.widgets.Widget} The widget (or undefined if not found).
+ */
+mirosubs.widget.Widget.getWidgetByURL = function(url){
+    return mirosubs.widget.Widget.getAllWidgetsByURL(url)[0];
+};
+
+/* Get the last widget on this page with the given video URL.
+ * @param {String} url The video url to find widgets for.
+ * @return {Array} An array with zero or more widgets with the given URL. 
+ */
+mirosubs.widget.Widget.getAllWidgetsByURL = function(url){
+    if (!url){
+        return [];
+    }
+    var filtered =  goog.array.filter(mirosubs.widget.Widget.widgetsCreated_, function(x){
+        return x.videoURL_ == url;
+    });
+    return filtered;
 };
 
 /**
@@ -306,6 +350,16 @@ mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
         mirosubs.widget.Widget.prototype,
         "selectMenuItem",
         mirosubs.widget.Widget.prototype.selectMenuItem);
+
+    goog.exportProperty(
+        mirosubs.widget.Widget,
+        "getAllWidgets",
+        mirosubs.widget.Widget.getAllWidgets);
+
+    goog.exportProperty(
+        mirosubs.widget.Widget,
+        "getWidgetByURL",
+        mirosubs.widget.Widget.getWidgetByURL);
     
     goog.exportSymbol(
         "mirosubs.widget.DropDown.Selection",
