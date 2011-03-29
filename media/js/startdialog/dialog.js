@@ -83,8 +83,7 @@ mirosubs.startdialog.Dialog.prototype.makeDropdown_ =
 
 mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.fetchCompleted_ = true;
-    this.model_ = new mirosubs.startdialog.Model(
-        jsonResult, this.initialLanguage_);
+    this.model_ = new mirosubs.startdialog.Model(jsonResult);
     goog.dom.removeChildren(this.contentDiv_);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());

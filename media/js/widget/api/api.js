@@ -74,23 +74,13 @@ mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, gener
         config['videoID'], config['videoURL'], videoSource);
     if (!askLanguage) {
         opener.openDialog(
-            config['baseVersionNo'], 
             config['languageCode'], 
             config['originalLanguageCode'], 
-            config['fork'], config['baseLanguageCode']);
+            config['subLanguagePK'], 
+            config['baseLanguagePK']);
     }
-    else {
-        var dialog = new mirosubs.startdialog.Dialog(
-            config['videoID'], null, 
-            function(originalLang, subLang, subLangID, baseLangID, closeCallback) {
-                closeCallback();
-                // FIXME
-                opener.openDialog(
-                    null, subLang, originalLang,
-                    !baseLangID, baseLangID);
-            });
-        dialog.setVisible(true);
-    }
+    else
+        opener.showStartDialog();
 };
 
 /**
@@ -109,14 +99,7 @@ mirosubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettin
         videoURL);
     var opener = new mirosubs.widget.SubtitleDialogOpener(
         videoID, videoURL, videoSource);
-    var dialog = new mirosubs.startdialog.Dialog(
-        videoID, null, 
-        function(originalLang, subLang, baseLang) {
-            opener.openDialogOrRedirect(
-                null, subLang, originalLang, 
-                baseLang);
-        });
-    dialog.setVisible(true);
+    opener.showStartDialog();
 };
 
 /**
