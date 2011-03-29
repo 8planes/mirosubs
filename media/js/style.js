@@ -50,8 +50,12 @@ mirosubs.style.setPropertyInString = function(cssString, property, value) {
             '' : [property, ':', value, ' !important;'].join('');
     if (oldDeclaration)
         return cssString.replace(oldDeclaration[0], newDeclaration);
-    else
+    else {
+        cssString = goog.string.trim(cssString);
+        if (cssString.length > 0 && !goog.string.endsWith(cssString, ';'))
+            cssString += ';';
         return cssString + newDeclaration;
+    }
 };
 
 /**
