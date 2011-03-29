@@ -21,14 +21,16 @@ goog.provide('mirosubs.startdialog.Dialog');
 /**
  * @constructor
  * @param {string} videoID
- * @param {?string} initialLanguage
- * @param {function(?string, string, ?string)} callback When OK button is 
+ * @param {?int} initialLanguage PK for SubtitleLanguage to select at first.
+ * @param {function(?string, string, ?number, ?number, function())} 
+ * callback When OK button is 
  *     clicked, this will be called with: arg0: original language. This is
  *     non-null if and only if the user is presented with the original language
  *     dropdown in the dialog. arg1: to language: the code for the language 
- *     to which we are translating. arg2: from language: the code for the language
- *     to translate from. This will be null iff the user intends to make 
- *     forked/original.
+ *     to which we are translating. arg2: to language subtitle id, if they selected 
+ * an existing subtitlelanguage. arg3: from subtitle language id: the id for the 
+ * SubtitleLanguage to translate from. This will be null iff the user intends to make 
+ *     forked/original. arg4: function to close the dialog.
  */
 mirosubs.startdialog.Dialog = function(videoID, initialLanguage, callback) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
@@ -81,8 +83,7 @@ mirosubs.startdialog.Dialog.prototype.makeDropdown_ =
 
 mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.fetchCompleted_ = true;
-    this.model_ = new mirosubs.startdialog.Model(
-        jsonResult, this.initialLanguage_);
+    this.model_ = new mirosubs.startdialog.Model(jsonResult);
     goog.dom.removeChildren(this.contentDiv_);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
@@ -112,7 +113,7 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
         var fromLanguageContents = goog.array.map(
             this.model_.fromLanguages(),
             function(l) {
-                return [l.LANGUAGE, l.toString()];
+                return [l.PK + '', l.toString()];
             });;
         fromLanguageContents.push(
             [mirosubs.startdialog.Dialog.FORK_VALUE,
@@ -132,10 +133,7 @@ mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
     var toLanguageContents = goog.array.map(
         this.model_.toLanguages(),
         function(l) {
-            if (l.videoLanguage)
-                return [l.language, l.videoLanguage.toString()];
-            else
-                return [l.language, l.languageName];
+            return [l.KEY, l.toString()];
         });
     this.toLanguageDropdown_ = this.makeDropdown_($d, toLanguageContents);
     this.contentDiv_.appendChild(
@@ -204,16 +202,23 @@ mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
 
 mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
-    var fromLanguage = null;
+    var fromLanguageID = null;
     if (this.fromLanguageDropdown_ && 
         this.fromLanguageDropdown_.value != 
             mirosubs.startdialog.Dialog.FORK_VALUE)
-        fromLanguage = this.fromLanguageDropdown_.value;
+        fromLanguageID = parseInt(this.fromLanguageDropdown_.value);
+    var toLanguage = this.model_.toLanguageForKey(
+        this.toLanguageDropdown_.value);
+    var that = this;
     this.callback_(
         this.model_.originalLanguageShown() ? 
             this.originalLangDropdown_.value : null,
-        this.toLanguageDropdown_.value,
-        fromLanguage
+        toLanguage.LANGUAGE,
+        toLanguage.VIDEO_LANGUAGE ? toLanguage.VIDEO_LANGUAGE.PK : null,
+        fromLanguageID,
+        function() {
+            that.setVisible(false);
+        }
     );
-    this.setVisible(false);
+    // TODO: show loading
 };

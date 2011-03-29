@@ -166,7 +166,10 @@ JS_CORE = ['mirosubs.js',
            'video/dailymotionvideosource.js',
            'video/dailymotionvideoplayer.js',
            'startdialog/model.js',
-           'startdialog/languagesummary.js',
+           'startdialog/videolanguage.js',
+           'startdialog/videolanguages.js',
+           'startdialog/tolanguage.js',
+           'startdialog/tolanguages.js',
            'startdialog/dialog.js',
            'widget/usersettings.js',
            'widget/logindialog.js',
@@ -306,7 +309,7 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
     'middleware.P3PHeaderMiddleware',
     'middleware.UserUUIDMiddleware',
-    'middleware.SaveUserIp'
+    'middleware.SaveUserIp',
 )
 
 ROOT_URLCONF = 'mirosubs.urls'
@@ -363,7 +366,7 @@ INSTALLED_APPS = (
     'sentry',
     'sentry.client',
     'djcelery',
-    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
+    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
 # Celery settings

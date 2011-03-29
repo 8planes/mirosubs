@@ -16,23 +16,23 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SameDomainEmbed');
+goog.provide('mirosubs.startdialog.ToLanguage');
 
-mirosubs.widget.SameDomainEmbed = {};
-
-mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
-    if (widgetConfig['debug_js']) {
-        var debugWindow = new goog.debug.FancyWindow('main');
-        debugWindow.setEnabled(true);
-        debugWindow.init(); 
-        mirosubs.DEBUG = true;
-    }
-    mirosubs.IS_NULL = !!widgetConfig['null_widget'];
-    if (widgetConfig['returnURL'])
-        mirosubs.returnURL = widgetConfig['returnURL'];
-    var widget = new mirosubs.widget.Widget(widgetConfig);
-    widget.decorate(widgetDiv);
-    return widget;
+/**
+ * @constructor
+ */
+mirosubs.startdialog.ToLanguage = function(ranking, opt_videoLanguage, opt_language) {
+    var languageCode = opt_videoLanguage ? opt_videoLanguage.LANGUAGE : opt_language;
+    this.LANGUAGE = languageCode;
+    this.KEY = languageCode + (opt_videoLanguage ? ('' + opt_videoLanguage.PK) : '');
+    this.LANGUAGE_NAME = mirosubs.languageNameForCode(languageCode);
+    this.RANKING = ranking;
+    this.VIDEO_LANGUAGE = opt_videoLanguage;
 };
 
-mirosubs.widget.Widget.exportJSSymbols(false);
+mirosubs.startdialog.ToLanguage.prototype.toString = function() {
+    if (this.VIDEO_LANGUAGE)
+        return this.VIDEO_LANGUAGE.toString();
+    else
+        return this.LANGUAGE_NAME;
+};

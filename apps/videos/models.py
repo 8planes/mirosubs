@@ -40,6 +40,7 @@ from django.core.urlresolvers import reverse
 import time
 from django.utils.safestring import mark_safe
 from teams.tasks import update_team_video, update_team_video_for_sl
+from videos.tasks import check_alarm, detect_language, send_notification
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -298,6 +299,9 @@ class Video(models.Model):
                     language=language_code)[:1].get()
         except models.ObjectDoesNotExist:
             return None
+
+    def subtitle_languages(self, language_code):
+        return self.subtitlelanguage_set.filter(language=language_code)
 
     def version(self, version_no=None, language_code=None):
         language = self.subtitle_language(language_code)
@@ -627,7 +631,8 @@ class SubtitleLanguage(models.Model):
             self.save()
         
     def notification_list(self, exclude=None):
-        qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
+        qs = self.followers.filter(changes_notification=True, is_active=True)
+
         if exclude:
             if not isinstance(exclude, (list, tuple)):
                 exclude = [exclude]            
@@ -696,11 +701,27 @@ class SubtitleVersion(SubtitleCollection):
             self.language.save()
     
     def update_percent_done(self):
+        if self.text_change is None or self.time_change is None:
+            try:
+                old_version = self.language.subtitleversion_set.exclude(pk=self.pk) \
+                    .order_by('-version_no')[:1].get()
+            except models.ObjectDoesNotExist:
+                old_version = None
+            
+            self.set_changes(old_version)
+            self.save()
+            
         if self.language.is_original or self.is_forked:
             for l in self.language.video.subtitlelanguage_set.exclude(pk=self.language.pk):
                 l.update_percent_done()
         else:
             self.language.update_percent_done()        
+        check_alarm.delay(self.pk)
+        
+        if self.language.is_original and not self.language.language:
+            detect_language.delay(self.pk)
+
+        send_notification.delay(self.pk)
         
     def delete(self, *args, **kwargs):
         super(SubtitleVersion, self).delete(*args, **kwargs)

@@ -27,6 +27,7 @@ import math_captcha
 import os
 from django.db.models import ObjectDoesNotExist 
 from django.core.management import call_command
+from django.core import mail
 
 math_captcha.forms.math_clean = lambda form: None
 
@@ -675,7 +676,7 @@ class YoutubeVideoTypeTest(TestCase):
         self.assertTrue(video.title)
         self.assertEqual(video.duration, 79)
         self.assertTrue(video.thumbnail)
-        language = video.subtitlelanguage_set.all()[0]
+        language = video.subtitlelanguage_set.get(language='ru')
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 26)
         self.assertEqual(self.vt.video_url(vu), youtbe_url)
@@ -854,6 +855,56 @@ class TestFeedsSubmit(TestCase):
 from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
 from datetime import datetime
 
+class TestTasks(TestCase):
+    
+    fixtures = ['test.json']
+
+    def setUp(self):
+        self.video = Video.objects.all()[:1].get()
+        self.language = self.video.subtitle_language()
+        self.latest_version = self.language.latest_version()
+        
+        self.latest_version.user.changes_notification = True
+        self.latest_version.user.is_active = True
+        self.latest_version.user.save()
+        
+        self.language.followers.add(self.latest_version.user)
+    
+    def test_notification_sending(self):
+        from videos.tasks import send_notification, check_alarm, detect_language
+        
+        latest_version = self.language.latest_version()
+        
+        v = SubtitleVersion()
+        v.language = self.language
+        v.datetime_started = datetime.now()
+        v.version_no = latest_version.version_no+1
+        v.save()
+
+        for s in latest_version.subtitle_set.all():
+            s.duplicate_for(v).save()
+        
+        s = Subtitle()
+        s.version = v
+        s.subtitle_id = 'asdasdsadasdasdasd'
+        s.subtitle_order = 5
+        s.subtitle_text = 'new subtitle'
+        s.start_time = 50
+        s.end_time = 51
+        s.save()        
+
+        v.update_percent_done()
+        self.assertEqual(len(mail.outbox), 1)
+        
+        result = send_notification.delay(v.id)
+        self.assertTrue(result.successful())
+        
+        result = check_alarm.delay(v.id)
+        self.assertTrue(result.successful())
+        
+        result = detect_language.delay(v.id)
+        self.assertTrue(result.successful())
+        
 class TestPercentComplete(TestCase):
     
     fixtures = ['test.json']
@@ -874,6 +925,7 @@ class TestPercentComplete(TestCase):
         
         v = SubtitleVersion()
         v.language = translation
+        v.version_no = latest_version.version_no+1
         v.datetime_started = datetime.now()
         v.save()
         
@@ -929,14 +981,7 @@ class TestPercentComplete(TestCase):
             
         self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 0)
-
-class TestCommands(TestCase):
     
-    fixtures = ['test.json']
-    
-    def test_send_notification(self):
-        call_command('send_notification')
-
 from videos import alarms
 from django.conf import settings
 

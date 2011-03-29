@@ -50,12 +50,56 @@ mirosubs.widget.Widget = function(widgetConfig) {
     var baseState = widgetConfig['base_state'];
     if (baseState)
         this.baseState_ = new mirosubs.widget.BaseState(baseState);
+
+    mirosubs.widget.Widget.widgetsCreated_.push(this);
 };
 goog.inherits(mirosubs.widget.Widget, goog.ui.Component);
 
 mirosubs.widget.Widget.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper().createElement('span'));
     this.addWidget_(this.getElement());
+};
+
+/*
+ * @Type {Array} All widget instances created on this page.
+ */
+mirosubs.widget.Widget.widgetsCreated_ = [];
+
+
+/* Gets all widgets created on this page.
+ * @return {Array} All widgets created on this page.
+ * The array is cloned, so end user code can loop, filter and otherwise 
+ * modify the array without compromising our global registry.
+ */
+mirosubs.widget.Widget.getAllWidgets = function(){
+    return mirosubs.widget.Widget.widgetsCreated_.slice(0);
+};
+
+/* Get the last widget on this page with the given video URL.
+ * @param {String} url The video url to find widgets for.
+ * Note that it will only contain the last widget with a given URL. 
+ * If a page contains X widgets with the same video url, 
+ * only the last one will be fetched from this call (even if their
+ * other configs differ). To get all widgets on the page, use 
+ * the mirosubs.widgets.Widget.getAllWidgetsByURL method.
+ * @return {mirosubs.widgets.Widget} The widget (or undefined if not found).
+ */
+mirosubs.widget.Widget.getWidgetByURL = function(url){
+    return mirosubs.widget.Widget.getAllWidgetsByURL(url)[0];
+};
+
+/* Get the last widget on this page with the given video URL.
+ * @param {String} url The video url to find widgets for.
+ * @return {Array} An array with zero or more widgets with the given URL. 
+ */
+mirosubs.widget.Widget.getAllWidgetsByURL = function(url){
+    if (!url){
+        return [];
+    }
+    var filtered =  goog.array.filter(mirosubs.widget.Widget.widgetsCreated_, function(x){
+        return x.videoURL_ == url;
+    });
+    return filtered;
 };
 
 /**
@@ -228,7 +272,103 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
     else if (selection == s.LANGUAGE_SELECTED)
         playController.languageSelected(opt_languageCode);
 };
+
 mirosubs.widget.Widget.prototype.playAt = function(time) {
     this.videoPlayer_.setPlayheadTime(time);
     this.videoPlayer_.play();
+};
+
+mirosubs.widget.Widget.prototype.play = function() {
+    this.videoPlayer_.play();
+};
+
+mirosubs.widget.Widget.prototype.pause = function() {
+    this.videoPlayer_.pause();
+};
+
+mirosubs.widget.Widget.exportJSSameDomain_ = function(){
+
+    goog.exportSymbol(
+        "mirosubs.widget.SameDomainEmbed.embed", 
+        mirosubs.widget.SameDomainEmbed.embed);
+    
+    goog.exportSymbol(
+        "mirosubs.video.supportsVideo", mirosubs.video.supportsVideo);
+    goog.exportSymbol(
+        "mirosubs.video.supportsH264", mirosubs.video.supportsH264);
+    goog.exportSymbol(
+        "mirosubs.video.supportsOgg", mirosubs.video.supportsOgg);
+    goog.exportSymbol(
+        "mirosubs.video.supportsWebM", mirosubs.video.supportsWebM);
+};
+
+mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
+        mirosubs.widget.CrossDomainEmbed.Type = {
+            EMBED_SCRIPT : 1,
+            WIDGETIZER : 2,
+            BOOKMARKLET : 3,
+            EXTENSION : 4
+        };
+
+        goog.exportSymbol(
+            'mirosubs.widget.CrossDomainEmbed.embed',
+            mirosubs.widget.CrossDomainEmbed.embed);
+        goog.exportSymbol(
+            "mirosubs.xdSendResponse",
+            goog.net.CrossDomainRpc.sendResponse);
+        goog.exportSymbol(
+            "mirosubs.xdRequestID",
+            goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID);
+        goog.exportSymbol(
+            "mirosubs.xdDummyURI",
+            goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI);
+};
+
+/*
+ * @param {bool} isCrossDomain Is is a cross domain embed?
+ */
+mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
+
+    // these should be exported in all cases:
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "play",
+        mirosubs.widget.Widget.prototype.play );
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "pause",
+        mirosubs.widget.Widget.prototype.pause );
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "playAt",
+        mirosubs.widget.Widget.prototype.playAt );
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "selectMenuItem",
+        mirosubs.widget.Widget.prototype.selectMenuItem);
+
+    goog.exportProperty(
+        mirosubs.widget.Widget,
+        "getAllWidgets",
+        mirosubs.widget.Widget.getAllWidgets);
+
+    goog.exportProperty(
+        mirosubs.widget.Widget,
+        "getWidgetByURL",
+        mirosubs.widget.Widget.getWidgetByURL);
+    
+    goog.exportSymbol(
+        "mirosubs.widget.DropDown.Selection",
+        mirosubs.widget.DropDown.Selection);
+    var s = mirosubs.widget.DropDown.Selection;
+    s['IMPROVE_SUBTITLES'] = s.IMPROVE_SUBTITLES;
+    s['LANGUAGE_SELECTED'] = s.LANGUAGE_SELECTED;
+    s['ADD_LANGUAGE'] = s.ADD_LANGUAGE;
+    s['SUBTITLES_OFF'] = s.SUBTITLES_OFF;
+    
+    if (isCrossDomain) {
+        mirosubs.widget.Widget.exportJSCrossDomain_();
+    } else {
+        mirosubs.widget.Widget.exportJSSameDomain_();
+    }
 };

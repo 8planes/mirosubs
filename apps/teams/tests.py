@@ -11,6 +11,20 @@ from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
 
+class TestTasks(TestCase):
+    
+    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
+    
+    def setUp(self):
+        self.tv = TeamVideo.objects.all()[0]
+    
+    def test_update_team_video(self):
+        #TODO: improve this
+        from teams.tasks import update_team_video
+        
+        result = update_team_video.delay(self.tv.video_id)
+        self.assertTrue(result.successful())
+
 class TeamsTest(TestCase):
     
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
