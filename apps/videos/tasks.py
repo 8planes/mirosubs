@@ -151,8 +151,10 @@ def _send_letter_caption(caption_version):
         'language': language,
         'last_version': most_recent_version,
         'captions': captions,
-        'video_url': language.get_absolute_url()
+        'video_url': language.get_absolute_url(),
+        'user_url': caption_version.user and caption_version.user.get_absolute_url()
     }
+
     subject = u'New edits to "%s" by %s on Universal Subtitles' % (language.video, caption_version.user)
 
     users = []
@@ -161,7 +163,6 @@ def _send_letter_caption(caption_version):
     language_followers = language.notification_list(caption_version.user)
 
     for item in qs:
-        print item.user
         if item.user and not item.user in users and (item.user in video_followers or \
             item.user in language_followers):
             context['your_version'] = item

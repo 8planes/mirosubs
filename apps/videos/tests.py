@@ -869,10 +869,10 @@ class TestTasks(TestCase):
         self.latest_version.user.save()
         
         self.language.followers.add(self.latest_version.user)
-        print self.language.id
-        
+    
     def test_notification_sending(self):
-        from videos.tasks import send_notification
+        from videos.tasks import send_notification, check_alarm, detect_language
+        
         latest_version = self.language.latest_version()
         
         v = SubtitleVersion()
@@ -894,12 +894,16 @@ class TestTasks(TestCase):
         s.save()        
 
         v.update_percent_done()
-        #TODO: fix error in tasks.videos._send_letter_caption
-        mail.outbox
-        #result = send_notification.delay(v.id)
-        #print result.get()
-        #self.assertTrue(result.successful())
+        self.assertEqual(len(mail.outbox), 1)
         
+        result = send_notification.delay(v.id)
+        self.assertTrue(result.successful())
+        
+        result = check_alarm.delay(v.id)
+        self.assertTrue(result.successful())
+        
+        result = detect_language.delay(v.id)
+        self.assertTrue(result.successful())
         
 class TestPercentComplete(TestCase):
     
