@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
@@ -30,6 +30,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 import simplejson as json
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from widget.views import base_widget_params
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
@@ -47,7 +48,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
+from utils.decorators import never_in_prod
 from django.utils.http import urlquote_plus
+
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -622,3 +625,11 @@ def test_celery(request):
     from videos.tasks import add
     add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
+
+@never_in_prod
+@staff_member_required
+def video_staff_delete(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    video.delete()
+    return HttpResponse("ok")
+

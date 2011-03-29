@@ -32,38 +32,6 @@ mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
         mirosubs.returnURL = widgetConfig['returnURL'];
     var widget = new mirosubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
+    mirosubs.widget.Widget.exportJSSymbols(false);
     return widget;
 };
-
-(function() {
-    goog.exportSymbol("mirosubs.widget.SameDomainEmbed.embed", 
-                      mirosubs.widget.SameDomainEmbed.embed);
-
-    goog.exportSymbol(
-        "mirosubs.video.supportsVideo", mirosubs.video.supportsVideo);
-    goog.exportSymbol(
-        "mirosubs.video.supportsH264", mirosubs.video.supportsH264);
-    goog.exportSymbol(
-        "mirosubs.video.supportsOgg", mirosubs.video.supportsOgg);
-    goog.exportSymbol(
-        "mirosubs.video.supportsWebM", mirosubs.video.supportsWebM);
-
-    goog.exportProperty(
-        mirosubs.widget.Widget.prototype,
-        "selectMenuItem",
-        mirosubs.widget.Widget.prototype.selectMenuItem);
-
-    goog.exportProperty(
-        mirosubs.widget.Widget.prototype,
-        "playAt",
-        mirosubs.widget.Widget.prototype.playAt);
-
-    goog.exportSymbol(
-        "mirosubs.widget.DropDown.Selection",
-        mirosubs.widget.DropDown.Selection);
-    var s = mirosubs.widget.DropDown.Selection;
-    s['IMPROVE_SUBTITLES'] = s.IMPROVE_SUBTITLES;
-    s['LANGUAGE_SELECTED'] = s.LANGUAGE_SELECTED;
-    s['ADD_LANGUAGE'] = s.ADD_LANGUAGE;
-    s['SUBTITLES_OFF'] = s.SUBTITLES_OFF;
-})();
