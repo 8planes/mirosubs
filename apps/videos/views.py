@@ -50,7 +50,7 @@ from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
 from utils.decorators import never_in_prod
 from django.utils.http import urlquote_plus
-
+from videos.tasks import send_change_title_email
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -94,22 +94,7 @@ def ajax_change_video_title(request):
             action.action_type = Action.CHANGE_TITLE
             action.save()
             
-            users = video.notification_list(user)
-            
-            for obj in users:
-                subject = u'Video\'s title changed on Universal Subtitles'
-                context = {
-                    'user': obj,
-                    'domain': Site.objects.get_current().domain,
-                    'video': video,
-                    'editor': user,
-                    'old_title': old_title,
-                    'hash': obj.hash_for_video(video.video_id)
-                }
-                send_templated_email(obj.email, subject, 
-                                     'videos/email_title_changed.html',
-                                     context, 'feedback@universalsubtitles.org',
-                                     fail_silently=not settings.DEBUG)            
+            send_change_title_email.delay(video.id, user and user.id, old_title, video.title)          
     except Video.DoesNotExist:
         pass
     

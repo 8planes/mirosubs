@@ -869,7 +869,31 @@ class TestTasks(TestCase):
         self.latest_version.user.save()
         
         self.language.followers.add(self.latest_version.user)
-    
+        self.video.followers.add(self.latest_version.user)
+        
+    def test_send_change_title_email(self):
+        from videos.tasks import send_change_title_email
+        
+        user = User.objects.all()[:1].get()
+        
+        self.assertFalse(self.video.followers.count() == 1 \
+                         and self.video.followers.all()[:1].get() == user)
+        
+        old_title = self.video.title
+        new_title = u'New title'
+        self.video.title = new_title
+        self.video.save()
+        
+        result = send_change_title_email.delay(self.video.id, user.id, old_title, new_title)
+        self.assertTrue(result.successful())
+        self.assertEqual(len(mail.outbox), 1)
+        
+        #test anonymous editing
+        mail.outbox = []
+        result = send_change_title_email.delay(self.video.id, None, old_title, new_title)
+        self.assertTrue(result.successful())
+        self.assertEqual(len(mail.outbox), 1)
+        
     def test_notification_sending(self):
         from videos.tasks import send_notification, check_alarm, detect_language
         

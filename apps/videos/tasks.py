@@ -5,12 +5,44 @@ import urllib
 from utils import send_templated_email
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.db.models import ObjectDoesNotExist
 
 @task()
 def add(x, y):
     print 'TASK IS EXECUTED WITH ARGUMENTS %s AND %s' % (x, y)
     return x + y
 
+@task()
+def send_change_title_email(video_id, user_id, old_title, new_title):
+    from videos.models import Video
+    from auth.models import CustomUser as User
+    
+    domain = Site.objects.get_current().domain
+    
+    try:
+        video = Video.objects.get(id=video_id)
+        user = user_id and User.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        return
+    
+    users = video.notification_list(user)
+    
+    for obj in users:
+        subject = u'Video\'s title changed on Universal Subtitles'
+        context = {
+            'user': obj,
+            'domain': domain,
+            'video': video,
+            'editor': user,
+            'old_title': old_title,
+            'hash': obj.hash_for_video(video.video_id),
+            'new_title': new_title
+        }
+        send_templated_email(obj.email, subject, 
+                             'videos/email_title_changed.html',
+                             context, 'feedback@universalsubtitles.org',
+                             fail_silently=not settings.DEBUG)       
+    
 @task()
 def send_notification(version_id):
     from videos.models import SubtitleVersion
