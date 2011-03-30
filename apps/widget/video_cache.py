@@ -67,6 +67,14 @@ def invalidate_cache(video_id, language_code=None):
     cache.delete(_video_languages_key(video_id))
     cache.delete(_video_languages_verbose_key(video_id))
 
+    from videos.models import Video
+    try:
+        video = Video.objects.get(video_id=video_id)
+        for url in video.videourl_set.all():
+            cache.delete(_video_id_key(url.url))
+    except Video.DoesNotExist:
+        pass
+
 # only used while testing.
 def invalidate_video_id(video_url):
     cache.delete(_video_id_key(video_url))

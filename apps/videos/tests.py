@@ -23,6 +23,7 @@ from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, Yout
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm
+from apps.widget import video_cache
 import math_captcha
 import os
 from django.db.models import ObjectDoesNotExist 
@@ -374,6 +375,26 @@ class VideoTest(TestCase):
             self.assertTrue(subs[i].sub_order > subs[i - 1].sub_order)
 
         urllib.urlopen = _urlopen
+
+
+    def test_video_cache_busted_on_delete(self):
+        start_url = 'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv'
+        video, created = Video.get_or_create_for_url(start_url)
+        video_url = video.get_video_url()
+        video_pk = video.pk
+         # 
+        cache_id_1 = video_cache.get_video_id(video_url)
+        self.assertTrue(cache_id_1)
+        video.delete()
+        self.assertEqual(Video.objects.filter(pk=video_pk).count() , 0)
+        # when cache is not cleared this will return arn 
+        cache_id_2 = video_cache.get_video_id(video_url)
+        self.assertNotEqual(cache_id_1, cache_id_2)
+        # create a new video with the same url, has to have same# key
+        video2, created= Video.get_or_create_for_url(start_url)
+        video_url = video2.get_video_url()
+        cache_id_3 = video_cache.get_video_id(video_url)
+        self.assertEqual(cache_id_3, cache_id_2)
 
 class ViewsTest(WebUseTest):
     
