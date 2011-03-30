@@ -328,7 +328,6 @@ mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
  * @param {bool} isCrossDomain Is is a cross domain embed?
  */
 mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
-
     // these should be exported in all cases:
     goog.exportProperty(
         mirosubs.widget.Widget.prototype,
@@ -347,16 +346,13 @@ mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
         "selectMenuItem",
         mirosubs.widget.Widget.prototype.selectMenuItem);
 
-    goog.exportProperty(
-        mirosubs.widget.Widget,
-        "getAllWidgets",
+    goog.exportSymbol(
+        "mirosubs.widget.Widget.getWidgetByURL",
+        mirosubs.widget.Widget.getWidgetByURL);
+   goog.exportSymbol(
+        "mirosubs.widget.Widget.getAllWidgets",
         mirosubs.widget.Widget.getAllWidgets);
 
-    goog.exportProperty(
-        mirosubs.widget.Widget,
-        "getWidgetByURL",
-        mirosubs.widget.Widget.getWidgetByURL);
-    
     goog.exportSymbol(
         "mirosubs.widget.DropDown.Selection",
         mirosubs.widget.DropDown.Selection);
