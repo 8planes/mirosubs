@@ -560,7 +560,8 @@ def video_url_create(request):
     if form.is_valid():
         obj = form.save()
         video = form.cleaned_data['video']
-        users = video.notification_list_all(request.user)
+        users = video.notification_list(request.user)
+
         for user in users:
             subject = u'New video URL added by %(username)s to "%(video_title)s" on universalsubtitles.org'
             subject = subject % {'url': obj.url, 'username': obj.added_by, 'video_title': video}
