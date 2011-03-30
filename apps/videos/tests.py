@@ -592,7 +592,7 @@ class ViewsTest(WebUseTest):
         sl = self.video.subtitlelanguage_set.all()[:1].get()
         sl.language = 'en'
         sl.save()
-        self._simple_test('videos:history', [self.video.video_id, sl.language, sl.id])
+        self._simple_test('videos:translation_history', [self.video.video_id, sl.language, sl.id])
         
     def test_revision(self):
         version = self.video.version()
