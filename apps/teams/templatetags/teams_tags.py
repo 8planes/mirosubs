@@ -140,6 +140,7 @@ def team_video_lang_list(context, video, max_items=6):
     max_items: if there are more items than max_items, they will be truncated to X more.
     """
     return  {
-        'sub_statuses': video_cache.get_video_languages_verbose(video.video_id, max_items)
+        'sub_statuses': video_cache.get_video_languages_verbose(video.video_id, max_items),
+        'video': video
         }
 
