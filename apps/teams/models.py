@@ -320,22 +320,11 @@ class TeamVideo(models.Model):
             for sl1 in sl1_list:
                 self._update_team_video_language_pair(lang0, sl0, lang1, sl1)
 
-    def _subtitle_language_multivalue_dict(self):
-        langs = {}
-        for sl in self.video.subtitlelanguage_set.all():
-            if not sl.language:
-                continue
-            if sl.language in langs:
-                langs[sl.language].append(sl)
-            else:
-                langs[sl.language] = [sl]
-        return langs
-
     def update_team_video_language_pairs(self, lang_code_list=None):
         TeamVideoLanguagePair.objects.filter(team_video=self).delete()
         if lang_code_list is None:
             lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
-        langs = self._subtitle_language_multivalue_dict()
+        langs = self.video.subtitle_language_dict()
         for lang0, sl0_list in langs.items():
             for lang1 in lang_code_list:
                 if lang0 == lang1:
@@ -357,7 +346,7 @@ class TeamVideo(models.Model):
             subtitle_language_1__is_null=True, 
             language_1=sl.language).delete()
 
-        langs = self._subtitle_language_multivalue_dict()
+        langs = self.video.subtitle_language_dict()
 
         for lang in lang_code_list:
             sl1_list = langs[lang]
@@ -372,7 +361,7 @@ class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES,  null=False, blank=False, db_index=True)
-    subtitle_language = models.ForeignKey(SubtitleLanguage, null=False, blank=False)
+    subtitle_language = models.ForeignKey(SubtitleLanguage, null=True)
     team = models.ForeignKey(Team)
     is_original = models.BooleanField(default=False, db_index=True)
     forked = models.BooleanField(default=True, db_index=True)
@@ -382,60 +371,70 @@ class TeamVideoLanguage(models.Model):
     class Meta:
         unique_together = (('team_video', 'subtitle_language'),)
 
-    def save(self, *args, **kwargs):
-        self.language = self.subtitle_language.language
-        super(TeamVideoLanguage, self).save(*args, **kwargs)
-
     def __unicode__(self):
         return self.get_language_display()
 
     @classmethod
-    def update(cls, tv, sl):
-        langs = []
-        
-        if isinstance(sl, SubtitleLanguage):
-            langs = [sl]
+    def _save_tvl_for_sl(cls, tv, sl):
+        tvl = cls(
+            team_video=tv,
+            video=tv.video,
+            language=sl.language,
+            subtitle_language=sl,
+            team=tv.team,
+            is_original=sl.is_original,
+            forked=sl.is_forked,
+            is_complete=sl.is_complete,
+            percent_done=sl.percent_done)
+        tvl.save()
+
+    @classmethod
+    def _save_tvl_for_l(cls, tv, lang):
+        tvl = cls(
+            team_video=tv,
+            video=tv.video,
+            language=lang,
+            subtitle_language=None,
+            team=tv.team,
+            is_original=False,
+            forked=True,
+            is_complete=False,
+            percent_done=0)
+        tvl.save()
+
+    @classmethod
+    def _update_for_language(cls, tv, language, sublang_dict):
+        if language in sublang_dict:
+            sublangs = sublang_dict[language]
+            for sublang in sublangs:
+                    cls._save_tvl_for_sl(tv, sublang)
         else:
-            langs = tv.video.subtitlelanguage_set.filter(language=sl)
-        
-        if langs:
-            for lang in langs:
-                try:
-                    #is SubtitleLanguage exists we should overwrite TeamVideoLanguage
-                    #that has no subtitle_language
-                    tvl = cls.objects.get(team_video=tv, language=sl, subtitle_language=None)
-                    tvl.subtitle_language=lang
-                except cls.DoesNotExist:
-                    #else create new TeamVideoLanguage
-                    tvl, created = cls.objects.get_or_create(team_video=tv,  
-                                                             subtitle_language=lang, defaults={
-                        'language': lang.language,
-                        'team': tv.team,
-                        'video': tv.video                                                                             
-                    })
-                
-                tvl.is_original = lang.is_original
-                tvl.forked = lang.is_forked
-                
-                if lang.is_original or lang.is_forked:
-                    tvl.is_complete = lang.is_complete
-                    
-                tvl.percent_done = lang.percent_done
-                tvl.save()
-        else:
-            cls.objects.filter(team_video=tv, language=sl, subtitle_language__isnull=False).delete()
-            
+            cls._save_tvl_for_l(tv, language)
+
+    @classmethod
+    def update(cls, tv):
+        cls.objects.filter(team_video=tv).delete()
+
+        sublang_dict = tv.video.subtitle_language_dict()
+        for lang in settings.ALL_LANGUAGES:
+            cls._update_for_language(tv, lang[0], sublang_dict)
+
+    @classmethod
+    def update_for_language(cls, tv, language):
+        cls.objects.filter(team_video=tv, language=language).delete()
+        cls._update_for_language(
+            tv, language, tv.video.subtitle_language_dict())
+
     @classmethod
     def team_video_save_handler(cls, sender, instance, created, **kwargs):
-        for l, lang_name in settings.ALL_LANGUAGES:
-            cls.update(instance, l)
+        cls.update(instance)
 
     @classmethod
     def subtitle_language_save_handler(cls, sender, instance, created, **kwargs):
-        for tv in TeamVideo.objects.all():
-            cls.update(tv, instance)
+        for tv in instance.video.teamvideo_set.all():
+            cls.update_for_language(tv, instance.language)
 
-post_save.connect(TeamVideoLanguage.subtitle_language_save_handler, SubtitleLanguage)        
+post_save.connect(TeamVideoLanguage.subtitle_language_save_handler, SubtitleLanguage)
 post_save.connect(TeamVideoLanguage.team_video_save_handler, TeamVideo)
 
 class TeamVideoLanguagePair(models.Model):

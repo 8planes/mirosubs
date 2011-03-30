@@ -341,7 +341,7 @@ def add_video(request, slug):
     if form.is_valid():
         obj =  form.save(False)
         obj.added_by = request.user
-        obj.save()  
+        obj.save()
         return redirect(obj)
         
     return {

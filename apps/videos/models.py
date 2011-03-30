@@ -399,6 +399,17 @@ class Video(models.Model):
             self.is_subtitled = True
             self.was_subtitled = True
 
+    def subtitle_language_dict(self):
+        langs = {}
+        for sl in self.subtitlelanguage_set.all():
+            if not sl.language:
+                continue
+            if sl.language in langs:
+                langs[sl.language].append(sl)
+            else:
+                langs[sl.language] = [sl]
+        return langs
+
 def create_video_id(sender, instance, **kwargs):
     instance.edited = datetime.now()
     if not instance or instance.video_id:

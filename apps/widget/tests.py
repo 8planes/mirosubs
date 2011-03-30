@@ -1024,6 +1024,41 @@ class TestRpc(TestCase):
         sub_langs = models.Video.objects.get(id=draft.video.id).subtitlelanguage_set.filter(language='es')
         self.assertEquals(2, sub_langs.count())
 
+    def test_edit_zero_translation(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_two_sub_draft(request)
+        
+        # now create empty subs for a language. We can do this by 
+        # starting editing but not finishing. Should create a 0% language.
+        response = rpc.start_editing(
+            request, draft.video.video_id, 'es', 
+            base_language_pk=draft.video.subtitle_language('en').id)
+        draft_pk = response['draft_pk']
+        rpc.release_lock(request, draft_pk)
+
+        # now edit the language in earnest, calling finished_subtitles afterward.
+        video = models.Video.objects.get(id=draft.video.id)
+        sl_en = video.subtitle_language('en')
+        sl_es = video.subtitle_language('es')
+
+        self.assertEquals(0, sl_es.subtitleversion_set.count())
+
+        response = rpc.start_editing(
+            request, video.video_id, 'es',
+            subtitle_language_pk=sl_es.pk, 
+            base_language_pk=sl_en.pk)
+        draft_pk = response['draft_pk']
+        inserted = [{'subtitle_id': u'a',
+                     'text': 'heyes!'}]
+        response= rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        # test passes if the following command executes without throwing an exception.
+        response = rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+
+        sl_es = models.SubtitleLanguage.objects.get(id=sl_es.id)
+        self.assertEquals(1, sl_es.subtitleversion_set.count())
+
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(
             request,
