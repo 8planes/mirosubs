@@ -196,10 +196,6 @@ def video_list(request):
                        extra_context=extra_context)
 
 def actions_list(request):
-    try:
-        page = int(request.GET['page'])
-    except (ValueError, TypeError, KeyError):
-        page = 1    
     qs = Action.objects.all()
     
     extra_context = {}
@@ -214,9 +210,11 @@ def actions_list(request):
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
         extra_context['ordering'] = ordering
         extra_context['order_type'] = order_type
-            
+    else:
+        qs = qs.order_by('-created')
+                
     return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=settings.ACTIVITIES_ONPAGE, page=page,
+                       paginate_by=settings.ACTIVITIES_ONPAGE,
                        template_name='videos/actions_list.html',
                        template_object_name='action',
                        extra_context=extra_context)      
