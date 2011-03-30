@@ -38,6 +38,7 @@ if INSTALLATION == DEV:
     REDIS_DB = "3"
     AWS_QUEUE_PREFIX = 'DEV'
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
+    SENTRY_TESTING = True
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'
