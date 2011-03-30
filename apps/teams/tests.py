@@ -17,14 +17,22 @@ class TestTasks(TestCase):
     
     def setUp(self):
         self.tv = TeamVideo.objects.all()[0]
-    
-    def test_update_team_video(self):
+        self.sl = SubtitleLanguage.objects.all()[0]
+        self.team = Team.objects.all()[0]
+        
+    def test_tasks(self):
         #TODO: improve this
-        from teams.tasks import update_team_video
+        from teams.tasks import update_team_video, update_team_video_for_sl, update_one_team_video
         
         result = update_team_video.delay(self.tv.video_id)
         self.assertTrue(result.successful())
+        
+        result = update_team_video_for_sl.delay(self.sl.id)
+        self.assertTrue(result.successful())
 
+        result = update_one_team_video.delay(self.team.id)
+        self.assertTrue(result.successful())
+        
 class TeamsTest(TestCase):
     
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
