@@ -34,7 +34,7 @@ mirosubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(mirosubs.translat
  * Maximum length of text to translate
  * @type {number}
  */
-mirosubs.translate.GoogleTranslator.queryMaxLen = 4000;
+mirosubs.translate.GoogleTranslator.queryMaxLen = 1300;
 
 /**
  * Delimiter for stings to translate
