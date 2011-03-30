@@ -37,6 +37,14 @@ if INSTALLATION == DEV:
     FEEDBACK_EMAILS.append('aduston@gmail.com')
     REDIS_DB = "3"
     AWS_QUEUE_PREFIX = 'DEV'
+    # Tracelyzer instrumentation
+    # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-apps
+    try:
+        from oboeware.django import install_oboe_instrumentation
+        MIDDLEWARE_CLASSES = install_oboe_instrumentation(MIDDLEWARE_CLASSES)
+    except ImportError:
+        import sys
+        print >> sys.stderr, "[oboe] Unable to instrument app and middleware"
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
     SENTRY_TESTING = True
 elif INSTALLATION == STAGING:
