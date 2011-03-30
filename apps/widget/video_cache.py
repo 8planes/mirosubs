@@ -87,7 +87,8 @@ def on_subtitle_version_save(sender, instance, **kwargs):
                       instance.language.language)
 
 def on_video_url_save(sender, instance, **kwargs):
-    invalidate_cache(instance.video.video_id)
+    if instance.video_id:
+        invalidate_cache(instance.video.video_id)
 
 def _video_id_key(video_url):
     return 'video_id_{0}'.format(sha_constructor(video_url).hexdigest())
