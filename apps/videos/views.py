@@ -155,7 +155,7 @@ def video(request, video_id, video_url=None, title=None):
         .filter(is_original=False).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations
-    context['widget_params'] = _widget_params(request, video, language_code='', video_url=video_url and video_url.url)
+    context['widget_params'] = _widget_params(request, video, language_code='', video_url=video_url and video_url.effective_url)
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
