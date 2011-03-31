@@ -42,7 +42,7 @@ class SelectLanguageForm(forms.Form):
 
     def __init__(self, *args, **kwrags):
         super(SelectLanguageForm, self).__init__(*args, **kwrags)
-        lc = get_simple_languages_list(True)
+        lc = get_languages_list(True)
         
         for i in xrange(1, 10):
             self.fields['language%s' % i].choices = lc
