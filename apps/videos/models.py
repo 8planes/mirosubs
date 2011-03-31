@@ -232,7 +232,7 @@ class Video(models.Model):
             obj.user = user
             obj.save()
             
-            obj.followers.add(user)
+            user and obj.followers.add(user)
             
             Action.create_video_handler(obj, user)
             
