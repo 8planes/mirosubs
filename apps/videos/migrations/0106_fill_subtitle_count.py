@@ -1,22 +1,28 @@
 # encoding: utf-8
 import datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
 
-class Migration(SchemaMigration):
+class Migration(DataMigration):
     
     def forwards(self, orm):
-        
-        # Adding field 'SubtitleLanguage.subtitle_count'
-        db.add_column('videos_subtitlelanguage', 'subtitle_count', self.gf('django.db.models.fields.IntegerField')(default=0), keep_default=False)
+        count = orm.SubtitleLanguage.objects.count()
+        i = 0
+
+        for sl in orm.SubtitleLanguage.objects.all():
+            i += 1
+            if (i % 100) == 0:
+                print('{0}/{1}'.format(i, count))
+            if sl.last_version:
+                sl.subtitle_count = sl.last_version.subtitle_set.count()
+            else:
+                sl.subtitle_count = 0
+            sl.save()
     
     
     def backwards(self, orm):
-        
-        # Deleting field 'SubtitleLanguage.subtitle_count'
-        db.delete_column('videos_subtitlelanguage', 'subtitle_count')
-    
+        pass
     
     models = {
         'auth.customuser': {
