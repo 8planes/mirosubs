@@ -12,13 +12,13 @@
     </span>
 {% endfor %}
 
+{% if sub_statuses.total %}
 {% trans "and" %}
 <a href="{{ video.get_absolute_url }}">
-{% if sub_statuses.total %}
     {% blocktrans count sub_statuses.total as total %}
     {{ total }} other.
     {% plural %}
     {{ total }} others.
     {% endblocktrans %}
-{% endif %}
 </a>
+{% endif %}
