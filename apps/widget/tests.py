@@ -673,6 +673,29 @@ class TestRpc(TestCase):
         self.assertEquals(1, len(return_value['subtitles']['subtitles']))
         self.assertEquals(False, 'original_subtitles' in return_value)
 
+    def test_finish_twice(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_basic_draft(request, True)
+        language = models.SubtitleLanguage.objects.get(pk=draft.language.pk)
+        self.assertEquals(1, language.subtitle_count)
+        first_last_version = language.last_version
+        response = rpc.start_editing(
+            request, draft.video.video_id, 'en', subtitle_language_pk=draft.language.pk)
+        draft_pk = response['draft_pk']
+        inserted = [{'subtitle_id': 'cc',
+                     'text': 'hey!',
+                     'start_time': 5.3,
+                     'end_time': 8.4,
+                     'sub_order': 5.0}]
+        rpc.save_subtitles(
+            request, draft_pk, [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, [])
+        language = models.SubtitleLanguage.objects.get(pk=draft.language.pk)
+        second_last_version = language.last_version
+        self.assertTrue(second_last_version.version_no > first_last_version.version_no)
+        self.assertTrue(first_last_version.pk != second_last_version.pk)
+        self.assertEquals(2, language.subtitle_count)
+
     def test_fork_then_edit(self):
         request = RequestMockup(self.user_0)
         video = self._create_two_sub_forked_subs(request)

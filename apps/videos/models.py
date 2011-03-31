@@ -392,7 +392,7 @@ class Video(models.Model):
             if not user in users: 
                 users.append(user)                    
         return users
-        
+
     def update_complete_state(self):
         language = self.subtitle_language()
         if not language.has_version:
@@ -434,6 +434,7 @@ class SubtitleLanguage(models.Model):
     writelock_session_key = models.CharField(max_length=255, blank=True, editable=False)
     writelock_owner = models.ForeignKey(User, null=True, blank=True, editable=False)
     is_complete = models.BooleanField(default=False)
+    subtitle_count = models.IntegerField(default=0)
     has_version = models.BooleanField(default=False, editable=False)
     had_version = models.BooleanField(default=False, editable=False)
     is_forked = models.BooleanField(default=False, editable=False)
@@ -444,9 +445,9 @@ class SubtitleLanguage(models.Model):
     percent_done = models.IntegerField(default=0, editable=False)
     standard_language = models.ForeignKey('self', null=True, blank=True, editable=False)
     last_version = models.ForeignKey('SubtitleVersion', null=True, blank=True, editable=False)
-        
+
     subtitles_fetched_counter = RedisSimpleField()
-    
+
     class Meta:
         unique_together = (('video', 'language', 'standard_language'),)
     
@@ -503,6 +504,7 @@ class SubtitleLanguage(models.Model):
         return self.title
     
     def update_complete_state(self):
+        self._update_subtitle_count()
         version = self.latest_version()
         if version.subtitle_set.count() == 0:
             self.has_version = False
@@ -608,7 +610,14 @@ class SubtitleLanguage(models.Model):
         if version:
             return version.subtitles()
         return []
-        
+
+    def _update_subtitle_count(self):
+        original_value = self.subtitle_count
+        new_value = len(self.latest_subtitles())
+        if original_value != new_value:
+            self.subtitle_count = new_value
+            self.save()
+
     def update_percent_done(self):
         original_value = self.percent_done
         if not self.is_original and not self.is_forked:

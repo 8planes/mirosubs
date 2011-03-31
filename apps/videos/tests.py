@@ -244,6 +244,7 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertTrue(language.had_version)
         self.assertFalse(video.is_subtitled)
         self.assertFalse(video.was_subtitled)
+        self.assertEquals(32, language.subtitle_count)
 
     def test_upload_original_subtitles(self):
         self._login()
