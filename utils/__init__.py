@@ -112,6 +112,11 @@ def send_templated_email(to, subject, body_template, body_dict,
     email.content_subtype = ct
     email.send(fail_silently)
 
+import logging
+from sentry.client.handlers import SentryHandler
+logging.getLogger().addHandler(SentryHandler())
+logging.getLogger('sentry').addHandler(logging.StreamHandler())
+
 def catch_exception(exceptions, subject="", default=None):
     if not isinstance(exceptions, (list, tuple)):
         exceptions = (exceptions,)
@@ -121,11 +126,11 @@ def catch_exception(exceptions, subject="", default=None):
             try:
                 return func(*args, **kwargs)
             except exceptions, e:
-                if settings.DEBUG:
-                    print 'Redis error %s' % e
-                else:
-                    body = '\n'.join(traceback.format_exception(*sys.exc_info()))
-                    mail_admins(subject, body, fail_silently=True)
+                print e
+                logging.error('Catched exception', exc_info=sys.exc_info())
+
+                    #body = '\n'.join(traceback.format_exception(*sys.exc_info()))
+                    #mail_admins(subject, body, fail_silently=True)
                 return default
         return update_wrapper(wrapper, func)
     return catch_exception_func
