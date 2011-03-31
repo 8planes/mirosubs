@@ -142,9 +142,9 @@ def video(request, video_id, video_url=None, title=None):
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     
-    if (video.title and not video.title_for_url() == title) or (not video.title and title):
+    if not video_url and ((video.title and not video.title_for_url() == title) or (not video.title and title)):
         return redirect(video, permanent=True)
-    
+
     video.update_view_counter()
     
     # TODO: make this more pythonic, prob using kwargs
@@ -155,7 +155,7 @@ def video(request, video_id, video_url=None, title=None):
         .filter(is_original=False).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations
-    context['widget_params'] = _widget_params(request, video, None, '')
+    context['widget_params'] = _widget_params(request, video, language_code='', video_url=video_url.url)
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
@@ -364,8 +364,8 @@ def history(request, video_id, lang=None, lang_id=None):
                        template_object_name='revision',
                        extra_context=context)
 
-def _widget_params(request, video, version_no=None, language_code=None):
-    primary_url = video.get_video_url()
+def _widget_params(request, video, version_no=None, language_code=None, video_url=None):
+    primary_url = video_url or video.get_video_url()
     alternate_urls = [vu.effective_url for vu in video.videourl_set.all() 
                       if vu.effective_url != primary_url]
     params = {'video_url': primary_url, 
