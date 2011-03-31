@@ -949,13 +949,15 @@ class TestTasks(TestCase):
         self.video.save()
         
         result = send_change_title_email.delay(self.video.id, user.id, old_title, new_title)
-        self.assertTrue(result.successful())
+        if result.failed():
+            self.fail(result.traceback)
         self.assertEqual(len(mail.outbox), 1)
         
         #test anonymous editing
         mail.outbox = []
         result = send_change_title_email.delay(self.video.id, None, old_title, new_title)
-        self.assertTrue(result.successful())
+        if result.failed():
+            self.fail(result.traceback)
         self.assertEqual(len(mail.outbox), 1)
         
     def test_notification_sending(self):
@@ -985,13 +987,16 @@ class TestTasks(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         
         result = send_notification.delay(v.id)
-        self.assertTrue(result.successful())
+        if result.failed():
+            self.fail(result.traceback)
         
         result = check_alarm.delay(v.id)
-        self.assertTrue(result.successful())
+        if result.failed():
+            self.fail(result.traceback)
         
         result = detect_language.delay(v.id)
-        self.assertTrue(result.successful())
+        if result.failed():
+            self.fail(result.traceback)
         
 class TestPercentComplete(TestCase):
     

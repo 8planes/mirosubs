@@ -34,6 +34,8 @@ class TeamsApiClass(object):
             return Error(_('You should be authenticated.'))
             
         try:
+            if not team_id:
+                raise Team.DoesNotExist
             team = Team.objects.get(pk=team_id)
         except Team.DoesNotExist:
             return Error(_('Team does not exist'))
@@ -60,6 +62,8 @@ class TeamsApiClass(object):
             return Error(_('You should be authenticated.'))
             
         try:
+            if not team_id:
+                raise Team.DoesNotExist            
             team = Team.objects.get(pk=team_id)
         except Team.DoesNotExist:
             return Error(_('Team does not exist'))
@@ -79,6 +83,8 @@ class TeamsApiClass(object):
             return Error(_('You should be authenticated.'))
             
         try:
+            if not team_id:
+                raise Team.DoesNotExist            
             team = Team.objects.get(pk=team_id)
         except Team.DoesNotExist:
             return Error(_('Team does not exist'))

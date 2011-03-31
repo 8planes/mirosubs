@@ -41,6 +41,14 @@ from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, Yo
 import traceback, sys
 from django.contrib.auth.decorators import user_passes_test
 
+def print_last_exception():
+    """
+    this can be useful for asynchronous tasks debuging
+    """
+    import sys
+    import traceback
+    print '\n'.join(traceback.format_exception(*sys.exc_info()))
+
 def is_staff(user):
     return user.is_authenticated() and user.is_staff and user.is_active
 

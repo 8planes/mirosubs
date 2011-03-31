@@ -290,7 +290,7 @@ class TeamVideo(models.Model):
         else:
             tvlps = TeamVideoLanguagePair.objects.filter(
                 team_video=self,
-                subtitle_language_0=lang0,
+                subtitle_language_0__language=lang0,
                 language_1=lang1)
         tvlp = None if len(tvlps) == 0 else tvlps[0]
         if not tvlp and percent_complete != -1:
@@ -312,8 +312,8 @@ class TeamVideo(models.Model):
             tvlp.remove()
 
     def _update_tvlp_for_languages(self, lang0, lang1, langs):
-        sl0_list = langs[lang0]
-        sl1_list = langs[lang1]
+        sl0_list = langs.get(lang0, [])
+        sl1_list = langs.get(lang1, [])
         if len(sl1_list) == 0:
             sl1_list = [None]
         for sl0 in sl0_list:
