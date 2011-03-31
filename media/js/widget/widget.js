@@ -286,6 +286,10 @@ mirosubs.widget.Widget.prototype.pause = function() {
     this.videoPlayer_.pause();
 };
 
+mirosubs.widget.Widget.prototype.openMenu = function (){
+    this.controller_.openMenu();
+}
+
 mirosubs.widget.Widget.exportJSSameDomain_ = function(){
 
     goog.exportSymbol(
@@ -344,6 +348,11 @@ mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
         mirosubs.widget.Widget.prototype,
         "playAt",
         mirosubs.widget.Widget.prototype.playAt );
+    goog.exportProperty(
+        mirosubs.widget.Widget.prototype,
+        "openMenu",
+        mirosubs.widget.Widget.prototype.openMenu );
+
     goog.exportProperty(
         mirosubs.widget.Widget.prototype,
         "selectMenuItem",

@@ -114,6 +114,9 @@ mirosubs.widget.WidgetDecorator.prototype.pause = function() {
     this.videoPlayer_.pause();
 };
 
+mirosubs.widget.WidgetDecorator.prototype.openMenu = function() {
+    this.controller_.openMenu();
+};
 
 mirosubs.widget.WidgetDecorator.exportJSSymbols = function(){
         goog.exportProperty(
@@ -129,6 +132,10 @@ mirosubs.widget.WidgetDecorator.exportJSSymbols = function(){
         "playAt",
         mirosubs.widget.WidgetDecorator.prototype.playAt );
 
+    goog.exportProperty(
+        mirosubs.widget.WidgetDecorator.prototype,
+        "openMenu",
+        mirosubs.widget.WidgetDecorator.prototype.openMenu );
 
     goog.exportSymbol(
         "mirosubs.widget.Widget.getWidgetByURL",
