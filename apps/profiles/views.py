@@ -65,9 +65,7 @@ def edit_avatar(request):
 @login_required
 def my_profile(request):
     user = request.user
-    qs = Video.objects.filter(Q(subtitlelanguage__subtitleversion__user=user) | \
-              Q(followers=request.user) | Q(subtitlelanguage__followers=request.user) | \
-              Q(action__action_type=Action.ADD_VIDEO, action__user=user)) \
+    qs = Video.objects.filter(Q(followers=request.user) | Q(subtitlelanguage__followers=request.user)) \
               .distinct().order_by('-edited').select_related('subtitlelanguage')
     q = request.REQUEST.get('q')
 
