@@ -4,12 +4,12 @@ from django.core.urlresolvers import reverse
 from os import path
 from django.conf import settings
 from teams.models import Team, Invite, TeamVideo, Application, TeamMember, TeamVideoLanguage
-from teams import views
 from messages.models import Message
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage
 from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
+from teams import tasks
 
 class TestTasks(TestCase):
     
@@ -22,16 +22,17 @@ class TestTasks(TestCase):
         
     def test_tasks(self):
         #TODO: improve this
-        from teams.tasks import update_team_video, update_team_video_for_sl, update_one_team_video
+        result = tasks.update_team_video.delay(self.tv.video_id)
+        if result.failed():
+            self.fail(result.traceback)
         
-        result = update_team_video.delay(self.tv.video_id)
-        self.assertTrue(result.successful())
-        
-        result = update_team_video_for_sl.delay(self.sl.id)
-        self.assertTrue(result.successful())
+        result = tasks.update_team_video_for_sl.delay(self.sl.id)
+        if result.failed():
+            self.fail(result.traceback)
 
-        result = update_one_team_video.delay(self.team.id)
-        self.assertTrue(result.successful())
+        result = tasks.update_one_team_video.delay(self.team.id)
+        if result.failed():
+            self.fail(result.traceback)
         
 class TeamsTest(TestCase):
     
@@ -87,8 +88,15 @@ class TeamsTest(TestCase):
         team = Team.objects.get(slug=data['slug'])
 
         self._add_team_video(team, u'en', u"http://videos.mozilla.org/firefox/3.5/switch/switch.ogv")
+        
+        tv = TeamVideo.objects.order_by('-id')[0]
+        
+        result = tasks.update_one_team_video.delay(tv.id)
+        
+        if result.failed():
+            self.fail(result.traceback)
 
-        return team, TeamVideo.objects.order_by('-id')[0]
+        return team, tv
 
     def _make_data(self, video_id, lang):
         import os
@@ -459,6 +467,7 @@ class TestJqueryRpc(TestCase):
         if not isinstance(response, Error):
             self.fail('User should be authenticated')
         #---------------------------------------
+
         response = self.rpc.create_application(None, '', self.user)
         if not isinstance(response, Error):
             self.fail('Undefined team')
