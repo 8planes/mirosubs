@@ -53,6 +53,8 @@ mirosubs.widget.WidgetDecorator = function(videoPlayer) {
         'show_widget', args, 
         goog.bind(this.controller_.initializeState, 
                   this.controller_));
+
+    mirosubs.widget.Widget.widgetsCreated_.push(this);
 };
 
 /**
@@ -98,3 +100,40 @@ mirosubs.widget.WidgetDecorator.prototype.reposition_ = function() {
         this.videoPlayer_.getElement(),
         this.videoTab_.getElement());
 };
+
+mirosubs.widget.WidgetDecorator.prototype.playAt = function(time) {
+    this.videoPlayer_.setPlayheadTime(time);
+    this.videoPlayer_.play();
+};
+
+mirosubs.widget.WidgetDecorator.prototype.play = function() {
+    this.videoPlayer_.play();
+};
+
+mirosubs.widget.WidgetDecorator.prototype.pause = function() {
+    this.videoPlayer_.pause();
+};
+
+
+mirosubs.widget.WidgetDecorator.exportJSSymbols = function(){
+        goog.exportProperty(
+        mirosubs.widget.WidgetDecorator.prototype,
+        "play",
+        mirosubs.widget.WidgetDecorator.prototype.play );
+    goog.exportProperty(
+        mirosubs.widget.WidgetDecorator.prototype,
+        "pause",
+        mirosubs.widget.WidgetDecorator.prototype.pause );
+    goog.exportProperty(
+        mirosubs.widget.WidgetDecorator.prototype,
+        "playAt",
+        mirosubs.widget.WidgetDecorator.prototype.playAt );
+
+
+    goog.exportSymbol(
+        "mirosubs.widget.Widget.getWidgetByURL",
+        mirosubs.widget.Widget.getWidgetByURL);
+   goog.exportSymbol(
+        "mirosubs.widget.Widget.getAllWidgets",
+        mirosubs.widget.Widget.getAllWidgets);
+}

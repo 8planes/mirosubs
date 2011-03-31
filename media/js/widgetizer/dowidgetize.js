@@ -24,3 +24,4 @@ if (window['DEBUG_UNISUBS']) {
 }
 
 mirosubs.Widgetizer.getInstance().widgetize();
+mirosubs.widget.WidgetDecorator.exportJSSymbols();

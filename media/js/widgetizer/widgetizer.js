@@ -109,7 +109,7 @@ mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
         styleElement.textContent = innerStyle;
     else {
         // IE
-        styleElement.setAttribute("type", "text/css")
+        styleElement.setAttribute("type", "text/css");
         styleElement.styleSheet.cssText = innerStyle;
     }
     containingElement.appendChild(styleElement);

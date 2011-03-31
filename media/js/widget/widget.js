@@ -303,6 +303,9 @@ mirosubs.widget.Widget.exportJSSameDomain_ = function(){
 };
 
 mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
+        if (!mirosubs.widget.CrossDomainEmbed){
+            mirosubs.widget.CrossDomainEmbed = {};
+        } 
         mirosubs.widget.CrossDomainEmbed.Type = {
             EMBED_SCRIPT : 1,
             WIDGETIZER : 2,
