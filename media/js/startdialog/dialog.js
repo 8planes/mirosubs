@@ -202,6 +202,9 @@ mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
 
 mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
+    if (this.okHasBeenClicked_)
+        return;
+    this.okHasBeenClicked_ = true;
     var fromLanguageID = null;
     if (this.fromLanguageDropdown_ && 
         this.fromLanguageDropdown_.value != 
@@ -216,9 +219,7 @@ mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
         toLanguage.LANGUAGE,
         toLanguage.VIDEO_LANGUAGE ? toLanguage.VIDEO_LANGUAGE.PK : null,
         fromLanguageID,
-        function() {
-            that.setVisible(false);
-        }
-    );
-    // TODO: show loading
+        function() { that.setVisible(false); });
+    goog.dom.setTextContent(this.okButton_, "Loading...");
+    goog.dom.classes.add(this.okButton_, "mirosubs-button-disabled");
 };

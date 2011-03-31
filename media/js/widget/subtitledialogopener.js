@@ -62,7 +62,8 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
     subLanguageCode, 
     opt_originalLanguageCode, 
     opt_subLanguagePK,
-    opt_baseLanguagePK)
+    opt_baseLanguagePK,
+    opt_completeCallback)
 {
     this.showLoading_(true);
     var args = {
@@ -70,10 +71,15 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
         'language_code': subLanguageCode,
         'subtitle_language_pk': opt_subLanguagePK || null,
         'base_language_pk': opt_baseLanguagePK || null,
-        'original_language_code': opt_originalLanguageCode || null }
+        'original_language_code': opt_originalLanguageCode || null };
+    var that = this;
     mirosubs.Rpc.call(
         'start_editing', args,
-        goog.bind(this.startEditingResponseHandler_, this));
+        function(result) {
+            if (opt_completeCallback)
+                opt_completeCallback();
+            that.startEditingResponseHandler_(result);
+        });
 };
 
 mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog = 
@@ -84,10 +90,10 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog =
         this.videoID_, null, 
         function(originalLanguage, subLanguage, subLanguageID, 
                  baseLanguageID, closeCallback) {
-            closeCallback();
             that.openDialogOrRedirect_(
                 subLanguage, originalLanguage, subLanguageID, 
-                baseLanguageID, opt_effectiveVideoURL);
+                baseLanguageID, opt_effectiveVideoURL, 
+                closeCallback);
         });
     dialog.setVisible(true);
 };
@@ -97,15 +103,16 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_ =
              opt_originalLanguageCode, 
              opt_subLanguagePK,
              opt_baseLanguagePK, 
-             opt_effectiveVideoURL)
+             opt_effectiveVideoURL,
+             opt_completeCallback)
 {
     if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
         this.openDialog(
             subLanguageCode, 
             opt_originalLanguageCode,
             opt_subLanguagePK,
-            opt_baseLanguagePK, 
-            opt_effectiveVideoURL);
+            opt_baseLanguagePK,
+            opt_completeCallback);
     else {
         var config = {
             'videoID': this.videoID_,
