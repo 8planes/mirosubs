@@ -112,10 +112,7 @@ def send_templated_email(to, subject, body_template, body_dict,
     email.content_subtype = ct
     email.send(fail_silently)
 
-import logging
-from sentry.client.handlers import SentryHandler
-logging.getLogger().addHandler(SentryHandler())
-logging.getLogger('sentry').addHandler(logging.StreamHandler())
+from sentry.client.models import client
 
 def catch_exception(exceptions, subject="", default=None):
     if not isinstance(exceptions, (list, tuple)):
@@ -126,11 +123,7 @@ def catch_exception(exceptions, subject="", default=None):
             try:
                 return func(*args, **kwargs)
             except exceptions, e:
-                print e
-                logging.error('Catched exception', exc_info=sys.exc_info())
-
-                    #body = '\n'.join(traceback.format_exception(*sys.exc_info()))
-                    #mail_admins(subject, body, fail_silently=True)
+                client.create_from_exception(sys.exc_info())
                 return default
         return update_wrapper(wrapper, func)
     return catch_exception_func
