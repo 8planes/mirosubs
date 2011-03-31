@@ -223,7 +223,7 @@ class TeamVideo(models.Model):
         #asynchronous call
         if created:
             update_one_team_video.delay(self.id)
-    
+            
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)
     
@@ -424,18 +424,6 @@ class TeamVideoLanguage(models.Model):
         cls.objects.filter(team_video=tv, language=language).delete()
         cls._update_for_language(
             tv, language, tv.video.subtitle_language_dict())
-
-    @classmethod
-    def team_video_save_handler(cls, sender, instance, created, **kwargs):
-        cls.update(instance)
-
-    @classmethod
-    def subtitle_language_save_handler(cls, sender, instance, created, **kwargs):
-        for tv in instance.video.teamvideo_set.all():
-            cls.update_for_language(tv, instance.language)
-
-post_save.connect(TeamVideoLanguage.subtitle_language_save_handler, SubtitleLanguage)
-post_save.connect(TeamVideoLanguage.team_video_save_handler, TeamVideo)
 
 class TeamVideoLanguagePair(models.Model):
     team_video = models.ForeignKey(TeamVideo)
