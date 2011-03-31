@@ -103,7 +103,10 @@ mirosubs.startdialog.Model.prototype.fromLanguages = function() {
     });
     possibleFromLanguages = goog.array.filter(
         possibleFromLanguages,
-        function(vl) { return !vl.DEPENDENT || vl.PERCENT_DONE > 0; });
+        function(vl) { 
+            return (vl.DEPENDENT && vl.PERCENT_DONE > 0) || 
+                (!vl.DEPENDENT && vl.SUBTITLE_COUNT > 0); 
+        });
     var myLanguages = new goog.structs.Set(this.myLanguages_);
     goog.array.sort(
         possibleFromLanguages,

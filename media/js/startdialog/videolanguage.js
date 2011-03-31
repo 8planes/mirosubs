@@ -27,23 +27,26 @@ mirosubs.startdialog.VideoLanguage = function(json) {
     this.DEPENDENT = json['dependent'];
     this.IS_COMPLETE = json['is_complete'];
     this.PERCENT_DONE = json['percent_done'];
-    this.STANDARD = json['standard'];
+    this.STANDARD_PK = json['standard_pk'];
+    this.SUBTITLE_COUNT = json['subtitle_count'];
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
     var name = mirosubs.languageNameForCode(this.LANGUAGE);
+    var numSubs = this.SUBTITLE_COUNT + ' sub' + 
+        (this.SUBTITLE_COUNT == 1 ? ')' : 's)');
     if (!this.DEPENDENT)
-        return name + (this.IS_COMPLETE ? " (complete)" : " (incomplete)");
+        return name + (this.IS_COMPLETE ? " (complete, " : " (incomplete, ") + numSubs;
     else
-        return name + " (" + this.PERCENT_DONE + "%)";
+        return name + " (" + this.PERCENT_DONE + "%, " + numSubs;    
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
     this.allLangs_ = all;
-    if (this.STANDARD)
+    if (this.STANDARD_PK)
         this.standardLang_ = goog.array.find(
             this.allLangs_, 
-            function(lang) { return lang.LANGUAGE == this.STANDARD; },
+            function(lang) { return lang.PK == this.STANDARD_PK; },
             this);
 };
 
@@ -75,7 +78,7 @@ mirosubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation =
     if (!this.DEPENDENT)
         return false;
     if (languageSummary.DEPENDENT)
-        return this.STANDARD = languageSummary.STANDARD;
+        return this.STANDARD_PK == languageSummary.STANDARD_PK;
     else
-        return this.STANDARD = languageSummary;
+        return this.STANDARD_PK == languageSummary.PK;
 };

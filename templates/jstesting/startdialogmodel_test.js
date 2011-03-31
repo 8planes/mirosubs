@@ -8,8 +8,8 @@ function makeBaseJSON() {
         'my_languages': ['en', 'fr'],
         'original_language': 'en',
         'video_languages': [
-            { 'pk': 1, 'language': 'en', 'dependent': false, 'is_complete': true },
-            { 'pk': 2, 'language': 'fr', 'dependent': false, 'is_complete': false }
+            { 'pk': 1, 'language': 'en', 'dependent': false, 'is_complete': true, 'subtitle_count': 4 },
+            { 'pk': 2, 'language': 'fr', 'dependent': false, 'is_complete': false, 'subtitle_count': 5 }
         ]
     };
 }
@@ -44,7 +44,8 @@ function testToLanguages0() {
 function testToLanguagesWithUnspoken() {
     var json = makeBaseJSON();
     json['video_languages'].push({
-        'language': 'it', 'dependent': false, 'is_complete': true
+        'language': 'it', 'dependent': false, 'is_complete': true, 
+        'subtitle_count': 8
     });
     var model = new mirosubs.startdialog.Model(json);
     var languages = model.toLanguages();
@@ -100,7 +101,7 @@ function testToLanguagesWithDependent0() {
     var json = makeBaseJSON();
     json['my_languages'] = ['it', 'fr'];
     json['video_languages'].push({
-        'pk': 3, 'language': 'it', 'dependent': true, 'percent_done': 50, 'standard': 'fr'
+        'pk': 3, 'language': 'it', 'dependent': true, 'percent_done': 50, 'standard_pk': 2, 'subtitle_count': 9
     })
     var model = new mirosubs.startdialog.Model(json);
     var languages = model.toLanguages();
@@ -125,7 +126,7 @@ function testFromLanguagesWithZeroPercent() {
     var json = makeBaseJSON();
     json['video_languages'].push(
         {'pk': 3, 'dependent': true, 'percent_done': 90, 
-         'language': 'ru', 'standard': 'en' });
+         'language': 'ru', 'standard_pk': 1, 'subtitle_count': 4 });
     var model = new mirosubs.startdialog.Model(json);
     var fromLanguages = model.fromLanguages();
     assertEquals(2, fromLanguages.length);
@@ -134,7 +135,26 @@ function testFromLanguagesWithZeroPercent() {
     json = makeBaseJSON();
     json['video_languages'].push(
         {'pk': 3, 'dependent': true, 'percent_done': 0, 
-         'language': 'ru', 'standard': 'en' });
+         'language': 'ru', 'standard_pk': 1, 'subtitle_count': 0 });
+    model = new mirosubs.startdialog.Model(json);
+    fromLanguages = model.fromLanguages();
+    assertEquals(1, fromLanguages.length);
+}
+
+function testFromLanguageWithZeroCount() {
+    var json = makeBaseJSON();
+    json['video_languages'].push(
+        {'pk': 3, 'dependent': false, 'is_complete': false, 
+         'language': 'ru', 'subtitle_count': 4 });
+    var model = new mirosubs.startdialog.Model(json);
+    var fromLanguages = model.fromLanguages();
+    assertEquals(2, fromLanguages.length);
+
+
+    json = makeBaseJSON();
+    json['video_languages'].push(
+        {'pk': 3, 'dependent': false, 'is_complete': false, 
+         'language': 'ru', 'subtitle_count': 0 });
     model = new mirosubs.startdialog.Model(json);
     fromLanguages = model.fromLanguages();
     assertEquals(1, fromLanguages.length);
@@ -149,7 +169,8 @@ function testGeneral0() {
             'pk': 3, 
             "dependent": false,
             "is_complete": true,
-            "language": ""
+            "language": "",
+            'subtitle_count': 0
         }]
     }
     var model = new mirosubs.startdialog.Model(json, null);
@@ -166,8 +187,8 @@ function testGeneral0() {
 function testLanguageSummaryNullError() {
     var json = {
         'video_languages': [
-            {'pk': 3, 'dependent': false, 'is_complete': false, 'language': 'en'},
-            {'pk': 4, 'dependent': true, 'percent_done': 66, 'language': 'ru', 'standard': 'en'}
+            {'pk': 3, 'dependent': false, 'is_complete': false, 'language': 'en', 'subtitle_count': 3},
+            {'pk': 4, 'dependent': true, 'percent_done': 66, 'language': 'ru', 'standard_pk': 3, 'subtitle_count': 2}
         ],
         'my_languages': ['ru', 'be'],
         'original_language': 'en'
@@ -180,7 +201,7 @@ function testLanguageSummaryNullError() {
 function testSetOriginalLanguage() {
     var json = {
         'video_languages': [
-            {'pk': 5, 'dependent': false, 'is_complete': false, 'language': 'ru'}
+            {'pk': 5, 'dependent': false, 'is_complete': false, 'language': 'ru', 'subtitle_count': 3}
         ],
         'my_languages': ['ru', 'en'],
         'original_language': ''
