@@ -88,12 +88,13 @@ class Rpc(BaseRpc):
         summary = {
             'pk': language.pk,
             'language': language.language,
-            'dependent': language.is_dependent() }
+            'dependent': language.is_dependent(),
+            'subtitle_count': language.subtitle_count }
         if language.is_dependent():
             summary['percent_done'] = language.percent_done
             if language.real_standard_language():
-                summary['standard'] = \
-                    language.real_standard_language().language
+                summary['standard_pk'] = \
+                    language.real_standard_language().pk
         else:
             summary['is_complete'] = language.is_complete
         return summary
