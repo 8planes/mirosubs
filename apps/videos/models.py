@@ -144,10 +144,9 @@ class Video(models.Model):
     def update_subtitles_fetched(self, lang=None):
         self.subtitles_fetched_counter.incr()
         #Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
-        sub_lang = self.subtitle_language(lang)
-        update_subtitles_fetch_counter(self, sub_lang)
-        if sub_lang:
-            sub_lang.subtitles_fetched_counter.incr()
+        update_subtitles_fetch_counter(self, lang)
+        if lang:
+            lang.subtitles_fetched_counter.incr()
             #SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         
     def get_thumbnail(self):
@@ -305,8 +304,7 @@ class Video(models.Model):
     def subtitle_languages(self, language_code):
         return self.subtitlelanguage_set.filter(language=language_code)
 
-    def version(self, version_no=None, language_code=None):
-        language = self.subtitle_language(language_code)
+    def version(self, version_no=None, language=None):
         return None if language is None else language.version(version_no)
 
     def latest_version(self, language_code=None):

@@ -58,10 +58,15 @@ def associate_extra_url(video_url, video_id):
                 'videoid': video_id })
         cache.set(cache_key, video_url.videoid, TIMEOUT)
 
-def invalidate_cache(video_id, language_code=None):
+def invalidate_cache(video_id, language=None):
     cache.delete(_video_urls_key(video_id))
-    for l in settings.ALL_LANGUAGES:
-        cache.delete(_subtitles_dict_key(video_id, l[0]))
+    try:
+        from apps.videos.models import Video
+        video = Video.objects.get(video_id=video_id)
+        for l in video.subtitlelanguage_set.all():
+            cache.delete(_subtitles_dict_key(video_id, l))
+    except Video.DoesNotExist:
+        pass
     cache.delete(_subtitles_dict_key(video_id, None))
     cache.delete(_subtitles_count_key(video_id))
     cache.delete(_video_languages_key(video_id))
@@ -96,8 +101,8 @@ def _video_id_key(video_url):
 def _video_urls_key(video_id):
     return 'widget_video_urls_{0}'.format(video_id)
 
-def _subtitles_dict_key(video_id, language_code, version_no=None):
-    return 'widget_subtitles_{0}{1}{2}'.format(video_id, language_code, version_no)
+def _subtitles_dict_key(video_id, language_pk, version_no=None):
+    return 'widget_subtitles_{0}{1}{2}'.format(video_id, language_pk, version_no)
 
 def _subtitles_count_key(video_id):
     return "subtitle_count_{0}".format(video_id)
@@ -122,16 +127,17 @@ def get_video_urls(video_id):
         return video_urls
 
 def get_subtitles_dict(
-    video_id, language_code, version_no, subtitles_dict_fn):
-    cache_key = _subtitles_dict_key(video_id, language_code, version_no)
+    video_id, language_pk, version_no, subtitles_dict_fn):
+    cache_key = _subtitles_dict_key(video_id, language_pk, version_no)
     value = cache.get(cache_key)
     if value is not None:
         cached_value = value
     else:
         from videos.models import Video
         video = Video.objects.get(video_id=video_id)
-        video.update_subtitles_fetched(language_code)
-        version = video.version(version_no, language_code)
+        language = video.subtitlelanguage_set.get(pk=language_pk)
+        video.update_subtitles_fetched(language)
+        version = video.version(version_no, language)
         if version:
             cached_value = subtitles_dict_fn(version)
         else:
