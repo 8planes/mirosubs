@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% load i18n teams_tags paginator profiles_tags widget markup %}
+
+{% block title %}
+    {{ team }} | Universal Subtitles
+{% endblock %}
+
+{% block body_attrs %}id="teams"{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    {% include "widget/_js_onsite_dependencies.html" %}
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var GLOBAL_WIDGET_SETTINGS = {{ general_settings|safe }};
+    </script>
+{% endblock %}
+
+{% block select_language_dialog %}
+	{% select_language_dialog 'force' %}
+{% endblock %}
+
+
+
+{% block main_content %}
+
+{% if team.header_html_text %}
+<div id="team_header_html" class="clearfix">
+  {{team.header_html_text|safe}}
+</div><!-- // team_header_html -->
+{% endif %}
+
+<h2 id="team_title">{{ team }} {% trans "Videos" %}</h2>
+
+{% if team.page_content %}
+  <div class="team_html clearfix">
+    {{ team.page_content|force_escape|markdown }}
+  </div>    
+{% endif %}
+
+<div style="margin-top: 6px;" class="grid_8 alpha">
+    {% if not team.page_content and team.video %}
+        {% widget widget_params %}
+    {% endif %}
+    
+    <pre>
+      Pass a ?langs=en,es parameter to change test languages
+      languages = {{languages}} 
+
+      Querysets:
+      qs1 -> {{qs1.count}}
+      qs2 -> {{qs2.count}}
+      qs3 -> {{qs3.count}}
+      qs4 -> {{qs4.count}}
+      mqs -> {{mqs_count}}
+      qs -> {{qs.count}}
+      lqs -> {{lqs.count}}
+
+      Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
+      {% for x in qs1 %}
+          {{x}}
+      {% endfor %}
+
+      Qs2: qs.filter(percent_complete=0)
+      {% for x in qs2 %}
+          {{x}}
+      {% endfor %}
+
+      Qs3: lqs.filter(is_original=True, is_complete=False, language__in=languages)
+      {% for x in qs3 %}
+          {{x}}
+      {% endfor %}
+
+      Qs4: lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
+      {% for x in qs4 %}
+          {{x}}
+      {% endfor %}
+
+    qs = TeamVideoLanguagePair.objects.filter(language_pair__in=langs_pairs, team=team) \
+        .select_related('team_video', 'team_video__video')
+    lqs = TeamVideoLanguage.objects.filter(team=team).select_related('team_video', 'team_video__video')
+    </pre>
+</div>
+
+<div class="grid_4 omega">
+    <div id="sidebar_team_detail">
+    {% include "teams/_team_detail.html" %}
+    </div>
+    {% team_activity team %}
+</div>
+
+{% endblock %}

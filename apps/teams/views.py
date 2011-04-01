@@ -27,13 +27,14 @@
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguagePair, TeamVideoLanguage
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.conf import settings
 from django.views.generic.list_detail import object_list
+from django.template import RequestContext
 from auth.models import CustomUser as User
 from django.db.models import Q, Count
 from django.contrib.auth.decorators import permission_required
@@ -111,10 +112,12 @@ def index(request, my_teams=False):
                        template_object_name='teams',
                        extra_context=extra_context)
     
-def detail(request, slug):
+def detail(request, slug, is_debugging=False):
     team = Team.get(slug, request.user)
     
     languages = get_user_languages_from_request(request)
+    if bool(is_debugging):
+        languages = request.GET.get("langs", "").split(",")
     languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
     
     langs_pairs = []
@@ -145,16 +148,33 @@ def detail(request, slug):
         mqs = TeamMultyQuerySet(TeamVideoLanguagePair.objects.filter(team=team) \
                                 .select_related('team_video', 'team_video__video'))
 
+
     general_settings = {}
     add_general_settings(request, general_settings)
     extra_context['general_settings'] = json.dumps(general_settings)
+
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
             'video_url': team.video.get_video_url(), 
             'base_state': {}
         })
-        
+
+
+    if bool(is_debugging) and request.user.is_staff:
+        extra_context.update({
+            'languages': languages,
+            'qs': qs,
+            'lqs': lqs,
+            'qs1': qs1,
+            'qs2': qs2,
+            'qs3': qs3,
+            'qs4': qs4,
+            'mqs':mqs,
+            'mqs_count': len(mqs)
+            })
+        return render_to_response("teams/detail-debug.html", extra_context, RequestContext(request))
+    
     return object_list(request, queryset=mqs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
