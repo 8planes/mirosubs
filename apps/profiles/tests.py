@@ -16,26 +16,45 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from auth.models import CustomUser as User
+from django.core.urlresolvers import reverse
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+class TestViews(TestCase):
+    
+    fixtures = ['test.json']
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
-
+    def _simple_test(self, url_name, args=None, kwargs=None, status=200, data={}):
+        response = self.client.get(reverse(url_name, args=args, kwargs=kwargs), data)
+        self.assertEqual(response.status_code, status)
+        return response
+    
+    def _login(self):
+        self.client.login(**self.auth)
+    
+    def setUp(self):
+        self.auth = dict(username='admin', password='admin')
+        self.user = User.objects.get(username=self.auth['username'])
+        
+    def test_edit_profile(self):
+        self._simple_test('profiles:edit', status=302)
+        
+        self._login()
+        self._simple_test('profiles:edit')
+        
+        data = {
+            'username': 'admin1',
+            'email': self.user.email,
+            'userlanguage_set-TOTAL_FORMS': '0',
+            'userlanguage_set-INITIAL_FORMS': '0',
+            'userlanguage_set-MAX_NUM_FORMS': ''
+        }
+        response = self.client.post(reverse('profiles:edit'), data=data)
+        self.assertEqual(response.status_code, 302)
+        user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(user.username, data['username'])
+        
+        other_user = User.objects.exclude(pk=self.user.pk)[:1].get()
+        data['username'] = other_user.username
+        response = self.client.post(reverse('profiles:edit'), data=data)
+        self.assertEqual(response.status_code, 200)

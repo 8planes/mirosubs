@@ -159,6 +159,7 @@ class EditUserForm(forms.ModelForm):
                   'changes_notification', 'biography')
         
     def clean(self):
+        self.cleaned_data = super(EditUserForm, self).clean()
         current, new, verify = map(self.cleaned_data.get,
                     ('current_password', 'new_password', 'new_password_verify'))
         if current and not self.instance.check_password(current):
