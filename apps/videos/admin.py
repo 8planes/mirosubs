@@ -78,3 +78,42 @@ class SubtitleAdmin(admin.ModelAdmin):
 admin.site.register(SubtitleVersion, SubtitleVersionAdmin)    
 admin.site.register(Video, VideoAdmin)
 admin.site.register(SubtitleLanguage, SubtitleLanguageAdmin)
+
+#Fix Celery tasks display
+from djcelery.models import TaskState
+from djcelery.admin import TaskMonitor
+from django import forms
+
+class TaskStateForm(forms.ModelForm):
+    traceback_display = forms.CharField(required=False, label=u'Traceback')
+    
+    class Meta:
+        model = TaskState
+        
+
+class FixedTaskMonitor(TaskMonitor):
+    form = TaskStateForm
+    fieldsets = (
+        (None, {
+            "fields": ("state", "task_id", "name", "args", "kwargs",
+                       "eta", "runtime", "worker", "tstamp"),
+            "classes": ("extrapretty", ),
+        }),
+        ("Details", {
+            "classes": ("collapse", "extrapretty"),
+            "fields": ("result", "traceback_display", "expires"),
+        })
+    )
+
+    readonly_fields = ("state", "task_id", "name", "args", "kwargs",
+                       "eta", "runtime", "worker", "result", "traceback_display",
+                       "expires", "tstamp")
+                
+    def traceback_display(self, obj):
+        return '<pre>%s</pre>' % obj.traceback
+    
+    traceback_display.allow_tags = True
+    traceback_display.short_description = 'Traceback'
+    
+admin.site.unregister(TaskState)
+admin.site.register(TaskState, FixedTaskMonitor)    
