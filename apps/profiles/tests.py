@@ -43,7 +43,7 @@ class TestViews(TestCase):
         self._simple_test('profiles:edit')
         
         data = {
-            'username': 'admin1',
+            'username': 'new_username_for_admin',
             'email': self.user.email,
             'userlanguage_set-TOTAL_FORMS': '0',
             'userlanguage_set-INITIAL_FORMS': '0',
