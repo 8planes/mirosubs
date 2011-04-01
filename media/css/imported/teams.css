@@ -141,8 +141,8 @@
 }
 
 .completed_translations {
-	float: none !important;
-	margin: 5px 0 5px 0 !important;
+	float: left !important;
+	margin: 4px 0 0px 0 !important;
 	display: block !important;
 	line-height: 0 !important;
 }
@@ -154,4 +154,10 @@
 
 .completed_translations a {
 	font-size: 13px !important;
+}
+
+a.add_subtitles_bt{
+    float:right;
+    display:block;
+    margin-left:400px;
 }
