@@ -183,7 +183,8 @@ class WebUseTest(TestCase):
         self.auth = dict(username='admin', password='admin')
         self.user = User.objects.get(username=self.auth['username'])
         self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
-
+        self.video.followers.add(self.user)
+        
     def _simple_test(self, url_name, args=None, kwargs=None, status=200, data={}):
         response = self.client.get(reverse(url_name, args=args, kwargs=kwargs), data)
         self.assertEqual(response.status_code, status)
@@ -545,10 +546,15 @@ class ViewsTest(WebUseTest):
         pass
     
     def test_paste_transcription(self):
-        self._login()
-
-        language_code = u"el"
+        user1 = User.objects.get(username='admin1')
+        self.client.login(username='admin1', password='admin')
         
+        self.assertFalse(self.video.followers.filter(pk=user1.pk).exists())
+        
+        mail.outbox = []
+        
+        language_code = u"el"
+
         data = {
             "video": u"1",
             "subtitles": u"""#1
@@ -561,11 +567,14 @@ class ViewsTest(WebUseTest):
         self.assertEquals(language, None)
         response = self.client.post(reverse("videos:paste_transcription"), data)
         self.failUnlessEqual(response.status_code, 200)
-
+        
         language = self.video.subtitle_language(language_code)
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 2)
-
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to[0], self.user.email)
+        self.assertTrue(self.video.followers.filter(pk=user1.pk).exists())
+        
     def test_paste_transcription_windows(self):
         self._login()
 

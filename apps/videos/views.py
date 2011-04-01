@@ -50,7 +50,6 @@ from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
 from utils.decorators import never_in_prod
 from django.utils.http import urlquote_plus
-from videos.tasks import send_change_title_email
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -77,6 +76,8 @@ def bug(request):
                               context_instance=RequestContext(request))
 
 def ajax_change_video_title(request):
+    from videos.tasks import send_change_title_email
+    
     video_id = request.POST.get('video_id')
     title = request.POST.get('title')
     user = request.user

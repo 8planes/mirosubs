@@ -722,12 +722,13 @@ class SubtitleVersion(SubtitleCollection):
             self.language.last_version = self
             self.language.save()
             
-            video = self.language.video
-            has_other_versions = SubtitleVersion.objects.filter(language__video=video) \
-                    .exclude(pk=self.pk).exists()
-
-            if self.user and not has_other_versions:
-                video.followers.add(self.user)
+            if self.user:
+                video = self.language.video
+                has_other_versions = SubtitleVersion.objects.filter(language__video=video) \
+                    .filter(user=self.user).exclude(pk=self.pk).exists()
+                
+                if not has_other_versions:
+                    video.followers.add(self.user)
     
     def update_percent_done(self):
         if self.text_change is None or self.time_change is None:
