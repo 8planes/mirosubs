@@ -10,6 +10,7 @@ from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
 from teams import tasks
+from django.core import mail
 
 class TestTasks(TestCase):
     
@@ -33,7 +34,60 @@ class TestTasks(TestCase):
         result = tasks.update_one_team_video.delay(self.team.id)
         if result.failed():
             self.fail(result.traceback)
+    
+    def test_add_video_notification(self):
+        team = self.tv.team
         
+        #at list one user should receive email
+        self.assertTrue(team.users.count() > 1)
+        
+        result = tasks.add_video_notification.delay(self.tv.id)
+        if result.failed():
+            self.fail(result.traceback)        
+
+        self.assertEqual(len(mail.outbox), 2)
+        
+        for email in mail.outbox:
+            u = team.users.get(email=email.to[0])
+            self.assertTrue(u != self.tv.added_by and u.is_active and u.changes_notification)
+        
+        #test changes_notification and is_active
+        mail.outbox = []
+        some_member = team.users.exclude(pk=self.tv.added_by_id)[:1].get()
+        some_member.changes_notification = False
+        some_member.save()
+
+        result = tasks.add_video_notification.delay(self.tv.id)
+        if result.failed():
+            self.fail(result.traceback)        
+        
+        self.assertEqual(len(mail.outbox), 1)
+        
+        mail.outbox = []
+        some_member.changes_notification = True
+        some_member.is_active = False
+        some_member.save()        
+
+        result = tasks.add_video_notification.delay(self.tv.id)
+        if result.failed():
+            self.fail(result.traceback)        
+        
+        self.assertEqual(len(mail.outbox), 1)
+
+        mail.outbox = []
+        some_member.is_active = True
+        some_member.save()    
+        
+        tm = TeamMember.objects.get(team=team, user=some_member)
+        tm.changes_notification = False
+        tm.save()
+
+        result = tasks.add_video_notification.delay(self.tv.id)
+        if result.failed():
+            self.fail(result.traceback)        
+        
+        self.assertEqual(len(mail.outbox), 1)
+                
 class TeamsTest(TestCase):
     
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
@@ -46,6 +100,7 @@ class TeamsTest(TestCase):
         self.user = User.objects.get(username=self.auth["username"])
 
     def _add_team_video(self, team, language, video_url):
+        mail.outbox = []
         data = {
             "description": u"",
             "language": language,
@@ -55,7 +110,11 @@ class TeamsTest(TestCase):
         }
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
         self.client.post(url, data)
-
+        
+        #by default all users receive notification, so when video added mail box
+        #should not be empty
+        self.assertEqual(len(mail.outbox), team.users.count()-1)
+        
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
         for ul in self.user.userlanguage_set.all():
@@ -110,7 +169,25 @@ class TeamsTest(TestCase):
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
         return response.context['team_video_md_list']
-
+    
+    def test_add_video(self):
+        self.client.login(**self.auth)
+        
+        team = Team.objects.get(pk=1)
+        TeamMember.objects.get_or_create(user=self.user, team=team)
+        
+        self.assertTrue(team.users.count() > 1)
+        
+        for tm in team.members.all():
+            tm.changes_notification = True
+            tm.save()
+            tm.user.is_active = True
+            tm.user.changes_notification = True
+            tm.user.save()
+        
+        self._add_team_video(team, u'en', u"http://videos.mozilla.org/firefox/3.5/switch/switch.ogv")
+        self.assertEqual(len(mail.outbox), team.users.count()-1)
+        
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
         self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
@@ -364,6 +441,8 @@ class TeamsTest(TestCase):
         
         #----------inviting to team-----------
         user2 = User.objects.get(username="alerion")
+        TeamMember.objects.filter(user=user2, team=team).delete()
+        
         data = {
             "username": user2.username,
             "note": u"asd",
@@ -371,7 +450,7 @@ class TeamsTest(TestCase):
         }
         response = self.client.post(reverse("teams:invite"), data)
         self.failUnlessEqual(response.status_code, 200)
-        
+
         invite = Invite.objects.get(user__username=user2.username, team=team)
         ct = ContentType.objects.get_for_model(Invite)
         message = Message.objects.get(object_pk=invite.pk, content_type=ct, user=user2)

@@ -24,7 +24,25 @@
             "is_manager": true, 
             "team": 1
         }
-    },
+    },  
+    {
+        "pk": 2, 
+        "model": "teams.teammember", 
+        "fields": {
+            "user": 9999, 
+            "is_manager": true, 
+            "team": 1
+        }
+    },      
+    {
+        "pk": 3, 
+        "model": "teams.teammember", 
+        "fields": {
+            "user": 2, 
+            "is_manager": false, 
+            "team": 1
+        }
+    },         
     {
         "pk": 1, 
         "model": "teams.teamvideo", 
