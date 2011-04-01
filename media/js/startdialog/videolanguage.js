@@ -33,12 +33,16 @@ mirosubs.startdialog.VideoLanguage = function(json) {
 
 mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
     var name = mirosubs.languageNameForCode(this.LANGUAGE);
-    var numSubs = this.SUBTITLE_COUNT + ' sub' + 
-        (this.SUBTITLE_COUNT == 1 ? ')' : 's)');
+    if (this.SUBTITLE_COUNT == 0 || (this.DEPENDENT && this.PERCENT_DONE == 0))
+        return name;
     if (!this.DEPENDENT)
-        return name + (this.IS_COMPLETE ? " (complete, " : " (incomplete, ") + numSubs;
-    else
-        return name + " (" + this.PERCENT_DONE + "%, " + numSubs;    
+        return name + (this.IS_COMPLETE ? " (%100)" : " (incomplete)");
+    else {
+        var suffix = " (" + this.PERCENT_DONE + "%)";
+        if (this.PERCENT_DONE == 100)
+            suffix = " (%100)";
+        return name + suffix;
+    }
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
