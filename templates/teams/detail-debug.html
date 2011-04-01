@@ -72,6 +72,7 @@ Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
           <th>lang  1 completesl id</th>
           <th>lang 2 sub count</th>
           <th>precent complete</th>
+          <th>Video info</th>
         </tr>
 
         {% for x in qs1 %}
@@ -83,6 +84,7 @@ Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
           <td>{{x.subtitle_language_1.is_complete}}</td>
           <td>{{x.subtitle_language_1.subtitle_count}}</td>
           <td>{{x.percent_complete}}</td>
+          <td><a href="{{x.video.video_link}}">{{x.video.title_display}}</a> </td>
         </tr>
         {% endfor %}
         </table>
@@ -96,6 +98,7 @@ Qs2: qs.filter(percent_complete=0)
           <th>lang  1 completesl id</th>
           <th>lang 2 sub count</th>
           <th>precent complete</th>
+          <th>Video info</th>
         </tr>
 
         {% for x in qs2 %}
@@ -107,6 +110,7 @@ Qs2: qs.filter(percent_complete=0)
           <td>{{x.subtitle_language_1.is_complete}}</td>
           <td>{{x.subtitle_language_1.subtitle_count}}</td>
           <td>{{x.percent_complete}}</td>
+          <td><a href="{{x.video.video_link}}">{{x.video.title_display}}</a> </td>
         </tr>
         {% endfor %}
         </table>
@@ -120,6 +124,7 @@ Qs3: lqs.filter(is_original=True, is_complete=False, language__in=languages)
         <th>sl is complete</th>
         <th>sl subtitle count</th>
         <th>sl subtitle percent done</th>
+        <th>Video info</th>
         </tr>
       {% for x in qs3 %}
       <tr>
@@ -129,32 +134,35 @@ Qs3: lqs.filter(is_original=True, is_complete=False, language__in=languages)
         <td>{{x.subtitle_language.is_complete}}</td>
         <td>{{x.subtitle_language.subtitle_count}}</td>
         <td>{{x.subtitle_language.percent_done}}</td>
+        <td><a href="{{x.video.get_absolute_url}}">{{x.video.title_display}}</a> </td>
       </tr>
       {% endfor %}
       </table>
 
 Qs4: lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
-        <table>
-        <tr>
-        <th>id</th>
-        <th>language</th>
-        <th>sl id</th>
-        <th>sl is complete</th>
-        <th>sl subtitle count</th>
-        <th>sl subtitle pecent done</th>
-        </tr>
-      {% for x in qs4 %}
-      <tr>
-        <td>{{x.id}}</td>
-        <td>{{x.language}}</td>
-        <td>{{x.subtitle_language.id}}</td>
-        <td>{{x.subtitle_language.is_complete}}</td>
-        <td>{{x.subtitle_language.subtitle_count}}</td>
-        <td>{{x.subtitle_language.percent_done}}</td>
-      </tr>
+<table>
+  <tr>
+    <th>id</th>
+    <th>language</th>
+    <th>sl id</th>
+    <th>sl is complete</th>
+    <th>sl subtitle count</th>
+    <th>sl subtitle pecent done</th>
+    <th>Video info</th>
+  </tr>
+  {% for x in qs4 %}
+  <tr>
+    <td>{{x.id}}</td>
+    <td>{{x.language}}</td>
+    <td>{{x.subtitle_language.id}}</td>
+    <td>{{x.subtitle_language.is_complete}}</td>
+    <td>{{x.subtitle_language.subtitle_count}}</td>
+    <td>{{x.subtitle_language.percent_done}}</td>
+    <td><a href="{{x.video.video_link}}">{{x.video.title_display}}</a> </td>
+  </tr>
 
-      {% endfor %}
-    </table>
+  {% endfor %}
+</table>
 
     qs = TeamVideoLanguagePair.objects.filter(language_pair__in=langs_pairs, team=team) \
         .select_related('team_video', 'team_video__video')
@@ -162,11 +170,6 @@ Qs4: lqs.filter(is_original=False, forked=True, is_complete=False, language__in=
     </pre>
 </div>
 
-<div class="grid_4 omega">
-    <div id="sidebar_team_detail">
-    {% include "teams/_team_detail.html" %}
-    </div>
-    {% team_activity team %}
-</div>
+
 
 {% endblock %}
