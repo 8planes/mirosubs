@@ -62,25 +62,99 @@
       qs -> {{qs.count}}
       lqs -> {{lqs.count}}
 
-      Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
-      {% for x in qs1 %}
-          {{x}}
-      {% endfor %}
+Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
+        <table>
+        <tr>
+          <th>id</th>
+          <th>language pair</th>
+          <th>lang  0 completesl id</th>
+          <th>lang 0 sub count</th>
+          <th>lang  1 completesl id</th>
+          <th>lang 2 sub count</th>
+          <th>precent complete</th>
+        </tr>
 
-      Qs2: qs.filter(percent_complete=0)
-      {% for x in qs2 %}
-          {{x}}
-      {% endfor %}
+        {% for x in qs1 %}
+        <tr>
+          <td>{{x.id}}</td>
+          <td>{{x.language_pair}}</td>
+          <td>{{x.subtitle_language_0.is_complete}}</td>
+          <td>{{x.subtitle_language_0.subtitle_count}}</td>
+          <td>{{x.subtitle_language_1.is_complete}}</td>
+          <td>{{x.subtitle_language_1.subtitle_count}}</td>
+          <td>{{x.percent_complete}}</td>
+        </tr>
+        {% endfor %}
+        </table>
+Qs2: qs.filter(percent_complete=0)
+        <table>
+        <tr>
+          <th>id</th>
+          <th>language pair</th>
+          <th>lang  0 completesl id</th>
+          <th>lang 0 sub count</th>
+          <th>lang  1 completesl id</th>
+          <th>lang 2 sub count</th>
+          <th>precent complete</th>
+        </tr>
 
-      Qs3: lqs.filter(is_original=True, is_complete=False, language__in=languages)
+        {% for x in qs2 %}
+        <tr>
+          <td>{{x.id}}</td>
+          <td>{{x.language_pair}}</td>
+          <td>{{x.subtitle_language_0.is_complete}}</td>
+          <td>{{x.subtitle_language_0.subtitle_count}}</td>
+          <td>{{x.subtitle_language_1.is_complete}}</td>
+          <td>{{x.subtitle_language_1.subtitle_count}}</td>
+          <td>{{x.percent_complete}}</td>
+        </tr>
+        {% endfor %}
+        </table>
+
+Qs3: lqs.filter(is_original=True, is_complete=False, language__in=languages)
+      <table>
+        <tr>
+        <th>id</th>
+        <th>language</th>
+        <th>sl id</th>
+        <th>sl is complete</th>
+        <th>sl subtitle count</th>
+        <th>sl subtitle percent done</th>
+        </tr>
       {% for x in qs3 %}
-          {{x}}
+      <tr>
+        <td>{{x.id}}</td>
+        <td>{{x.language}}</td>
+        <td>{{x.subtitle_language.id}}</td>
+        <td>{{x.subtitle_language.is_complete}}</td>
+        <td>{{x.subtitle_language.subtitle_count}}</td>
+        <td>{{x.subtitle_language.percent_done}}</td>
+      </tr>
       {% endfor %}
+      </table>
 
-      Qs4: lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
+Qs4: lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
+        <table>
+        <tr>
+        <th>id</th>
+        <th>language</th>
+        <th>sl id</th>
+        <th>sl is complete</th>
+        <th>sl subtitle count</th>
+        <th>sl subtitle pecent done</th>
+        </tr>
       {% for x in qs4 %}
-          {{x}}
+      <tr>
+        <td>{{x.id}}</td>
+        <td>{{x.language}}</td>
+        <td>{{x.subtitle_language.id}}</td>
+        <td>{{x.subtitle_language.is_complete}}</td>
+        <td>{{x.subtitle_language.subtitle_count}}</td>
+        <td>{{x.subtitle_language.percent_done}}</td>
+      </tr>
+
       {% endfor %}
+    </table>
 
     qs = TeamVideoLanguagePair.objects.filter(language_pair__in=langs_pairs, team=team) \
         .select_related('team_video', 'team_video__video')
