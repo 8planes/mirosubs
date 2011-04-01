@@ -298,7 +298,7 @@ class Video(models.Model):
                 return self._original_subtitle_language()
             else:
                 return self.subtitlelanguage_set.filter(
-                    language=language_code)[:1].get()
+                    language=language_code).order_by('-subtitle_count')[:1].get()
         except models.ObjectDoesNotExist:
             return None
 
