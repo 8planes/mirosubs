@@ -344,13 +344,13 @@ class TeamVideo(models.Model):
             team_video=self, subtitle_language_1=sl).delete()
         TeamVideoLanguagePair.objects.filter(
             team_video=self, 
-            subtitle_language_1__is_null=True, 
+            subtitle_language_1=None, 
             language_1=sl.language).delete()
 
         langs = self.video.subtitle_language_dict()
 
         for lang in lang_code_list:
-            sl1_list = langs[lang]
+            sl1_list = langs.get(lang, [])
             if len(sl1_list) == 0:
                 sl1_list = [None]
                 for sl1 in sl1_list:
