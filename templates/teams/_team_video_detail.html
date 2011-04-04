@@ -10,14 +10,16 @@
     <p></p>
     <div class="clearfix"></div>
     <div class="team-video-buttons-container">
-    {% if can_edit_video %}
 
-    {% endif %}
+
+
 
     <a class="blue_button small team_video_{{ team_video.pk }} add_subtitles_bt" href="#">
       {% trans 'Add Subtitles' %}
     </a>
+    {% if can_edit_video %}
       <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
+      {% endif %}
     {% if team_video.description %}
     <p>
       {{ team_video.description|urlize }}
