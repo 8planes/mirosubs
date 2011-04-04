@@ -62,11 +62,27 @@ def edit_avatar(request):
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
+from utils.orm import LoadRelatedQuerySet
+
+class OptimizedQuerySet(LoadRelatedQuerySet):
+    
+    def update_result_cache(self):
+        videos = dict((v.id, v) for v in self._result_cache if not hasattr(v, 'langs_cache'))
+        
+        if videos:
+            for v in videos.values():
+                v.langs_cache = []
+                
+            langs_qs = SubtitleLanguage.objects.select_related('video').filter(video__id__in=videos.keys())
+            
+            for l in langs_qs:
+                videos[l.video_id].langs_cache.append(l)
+
 @login_required
 def my_profile(request):
     user = request.user
     qs = Video.objects.filter(Q(followers=request.user) | Q(subtitlelanguage__followers=request.user)) \
-              .distinct().order_by('-edited').select_related('subtitlelanguage')
+              .distinct().order_by('-edited')
     q = request.REQUEST.get('q')
 
     if q:
@@ -75,6 +91,7 @@ def my_profile(request):
         'my_videos': True,
         'query': q
     }
+    qs = qs._clone(OptimizedQuerySet)
 
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 

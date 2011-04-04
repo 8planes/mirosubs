@@ -24,7 +24,7 @@
             {% if video.languages_count %} - {% endif %}
             
             {% for lang in video.langs_cache %}
-                {% with lang.latest_version.subtitle_set.count|default:0 as lines_count %}
+                {% with lang.subtitle_count as lines_count %}
                     {% if lines_count %}  
                     <a href="{{ lang.get_absolute_url }}">
                         {{ lang.language_display }}
