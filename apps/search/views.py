@@ -21,21 +21,6 @@ from videos.models import Video, SubtitleLanguage
 from search.forms import SearchForm
 from django.conf import settings
 from utils.translation import get_user_languages_from_request
-from utils.orm import LoadRelatedQuerySet
-
-class OptimizedQuerySet(LoadRelatedQuerySet):
-    
-    def update_result_cache(self):
-        videos = dict((v.id, v) for v in self._result_cache if not hasattr(v, 'langs_cache'))
-        
-        if videos:
-            for v in videos.values():
-                v.langs_cache = []
-                
-            langs_qs = SubtitleLanguage.objects.select_related('video').filter(video__id__in=videos.keys())
-            
-            for l in langs_qs:
-                videos[l.video_id].langs_cache.append(l)
 
 def index(request):
     accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
@@ -57,7 +42,7 @@ def index(request):
     if settings.HAYSTACK_SEARCH_ENGINE == 'dummy' and settings.DEBUG:
         q = request.REQUEST.get('q', '')
         qs = Video.objects.filter(title__icontains=q)
-    qs = qs._clone(OptimizedQuerySet)
+
     context = {
         'query': request.REQUEST.get('q', ''),
         'form': form,
