@@ -81,8 +81,7 @@ class OptimizedQuerySet(LoadRelatedQuerySet):
 @login_required
 def my_profile(request):
     user = request.user
-    qs = Video.objects.filter(Q(followers=request.user) | Q(subtitlelanguage__followers=request.user)) \
-              .distinct().order_by('-edited')
+    qs = user.videos.order_by('-edited')
     q = request.REQUEST.get('q')
 
     if q:

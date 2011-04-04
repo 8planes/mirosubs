@@ -303,9 +303,9 @@ def legacy_history(request ,video_id, lang=None):
     """
     video = get_object_or_404(Video, video_id=video_id)
     try:
-         language = video.subtitle_language(lang)
-         if language is None:
-             raise SubtitleLanguage.DoesNotExist("No such language")
+        language = video.subtitle_language(lang)
+        if language is None:
+            raise SubtitleLanguage.DoesNotExist("No such language")
     except SubtitleLanguage.DoesNotExist:
         raise Http404()
     
@@ -318,7 +318,7 @@ def legacy_history(request ,video_id, lang=None):
 def history(request, video_id, lang=None, lang_id=None):
     video = get_object_or_404(Video, video_id=video_id)
     video.update_view_counter()
-
+    
     context = widget.add_onsite_js_files({})
 
     if lang_id:

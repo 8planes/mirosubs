@@ -63,6 +63,8 @@ class CustomUser(BaseUser):
         choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
     award_points = models.IntegerField(default=0)
     last_ip = models.IPAddressField(blank=True, null=True)
+    #videos witch are related to user. this is for quicker queries 
+    videos = models.ManyToManyField('videos.Video', blank=True)
     
     objects = UserManager()
     
@@ -79,6 +81,70 @@ class CustomUser(BaseUser):
             else:
                 return self.first_name
         return self.username
+    
+    @classmethod
+    def video_followers_change_handler(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
+        from videos.models import SubtitleLanguage
+        
+        if reverse and action == 'post_add':
+            #instance is User
+            for video_pk in pk_set:
+                cls.videos.through.objects.get_or_create(video__pk=video_pk, customuser=instance, defaults={'video_id': video_pk})
+        elif reverse and action == 'post_remove':
+            #instance is User
+            for video_pk in pk_set:
+                if not SubtitleLanguage.objects.filter(followers=instance, video__pk=video_pk).exists():
+                    instance.videos.remove(video_pk)
+        elif not reverse and action == 'post_add':
+            #instance is Video
+            for user_pk in pk_set:
+                cls.videos.through.objects.get_or_create(video=instance, customuser__pk=user_pk, defaults={'customuser_id': user_pk})
+        elif not reverse and action == 'post_remove':
+            #instance is Video
+            for user_pk in pk_set:
+                if not SubtitleLanguage.objects.filter(followers__pk=user_pk, video=instance).exists():
+                    instance.customuser_set.remove(user_pk)
+        elif reverse and action == 'post_clear':
+            #instance is User
+            cls.videos.through.objects.filter(customuser=instance) \
+                .exclude(video__subtitlelanguage__followers=instance).delete()
+        elif not reverse and action == 'post_clear':
+            #instance is Video
+            cls.videos.through.objects.filter(video=instance) \
+                .exclude(customuser__followed_languages__video=instance).delete()
+            
+    @classmethod
+    def sl_followers_change_handler(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
+        from videos.models import Video, SubtitleLanguage
+        
+        if reverse and action == 'post_add':
+            #instance is User
+            for sl_pk in pk_set:
+                sl = SubtitleLanguage.objects.get(pk=sl_pk)
+                cls.videos.through.objects.get_or_create(video=sl.video, customuser=instance)
+        elif reverse and action == 'post_remove':
+            #instance is User
+            for sl_pk in pk_set:
+                if not Video.objects.filter(followers=instance, subtitlelanguage__pk=sl_pk).exists():
+                    sl = SubtitleLanguage.objects.get(pk=sl_pk)
+                    instance.videos.remove(sl.video)
+        elif not reverse and action == 'post_add':
+            #instance is SubtitleLanguage
+            for user_pk in pk_set:
+                cls.videos.through.objects.get_or_create(video=instance.video, customuser__pk=user_pk, defaults={'customuser_id': user_pk})
+        elif not reverse and action == 'post_remove':
+            #instance is SubtitleLanguage
+            for user_pk in pk_set:
+                if not Video.objects.filter(followers__pk=user_pk, subtitlelanguage=instance).exists():
+                    instance.video.customuser_set.remove(user_pk)
+        elif reverse and action == 'post_clear':
+            #instance is User
+            cls.videos.through.objects.filter(customuser=instance) \
+                .exclude(video__subtitlelanguage__followers=instance).delete()
+        elif not reverse and action == 'post_clear':
+            #instance is SubtitleLanguage
+            cls.videos.through.objects.filter(video=instance) \
+                .exclude(customuser__followed_languages__video=instance.video).delete()
     
     def get_languages(self):
         """

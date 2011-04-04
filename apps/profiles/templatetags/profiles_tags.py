@@ -67,10 +67,8 @@ def user_videos_activity(context, user=None):
     user = user or context['user']
     
     if user.is_authenticated():
-        videos_ids = Video.objects.filter(followers=user).values_list('id', flat=True)
-        
         context['users_actions'] = Action.objects.select_related('video', 'language', 'language__video', 'user') \
-            .filter(video__pk__in=videos_ids) \
+            .filter(video__customuser=user) \
             .exclude(user=user) \
             .exclude(user=User.get_youtube_anonymous())[:ACTIONS_ON_PAGE]
     else:

@@ -418,13 +418,14 @@ def create_video_id(sender, instance, **kwargs):
         return
     alphanum = string.letters+string.digits
     instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
-                                                           for i in xrange(12)])
+                                 for i in xrange(12)])
     
 def video_delete_handler(sender, instance, **kwargs):
     video_cache.invalidate_cache(instance.video_id)
 
 models.signals.pre_save.connect(create_video_id, sender=Video)
 models.signals.pre_delete.connect(video_delete_handler, sender=Video)
+models.signals.m2m_changed.connect(User.video_followers_change_handler, sender=Video.followers.through)
 
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
@@ -667,7 +668,8 @@ def subtile_language_delete_handler(sender, instance, **kwargs):
 
 def subtitle_language_save_handler(sender, instance, **kwargs):
     instance.video.update_languages_count()
-    
+
+models.signals.m2m_changed.connect(User.sl_followers_change_handler, sender=SubtitleLanguage.followers.through)
 post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
 post_save.connect(subtitle_language_save_handler, SubtitleLanguage)
 models.signals.pre_delete.connect(subtile_language_delete_handler, SubtitleLanguage)
