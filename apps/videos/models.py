@@ -305,6 +305,8 @@ class Video(models.Model):
         return self.subtitlelanguage_set.filter(language=language_code)
 
     def version(self, version_no=None, language=None):
+        if language is None:
+            language = self.subtitle_language() 
         return None if language is None else language.version(version_no)
 
     def latest_version(self, language_code=None):

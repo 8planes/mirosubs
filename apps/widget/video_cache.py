@@ -133,9 +133,15 @@ def get_subtitles_dict(
     if value is not None:
         cached_value = value
     else:
+
+            
         from videos.models import Video
         video = Video.objects.get(video_id=video_id)
-        language = video.subtitlelanguage_set.get(pk=language_pk)
+
+        if language_pk is None:
+            language = video.subtitle_language()
+        else:    
+            language = video.subtitlelanguage_set.get(pk=language_pk)
         video.update_subtitles_fetched(language)
         version = video.version(version_no, language)
         if version:

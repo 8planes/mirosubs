@@ -59,6 +59,7 @@ class Rpc(BaseRpc):
         
         return_value = {
             'video_id' : video_id,
+            'subtitles': None,
             }
         add_general_settings(request, return_value)
         if request.user.is_authenticated():
@@ -305,8 +306,6 @@ class Rpc(BaseRpc):
             video_id, language_pk, None,
             lambda version: self._subtitles_dict(version))
         lang = cache.get("language", None)
-        if lang is not None:
-            cache["language" ] = lang.pk
         return cache    
 
     def get_widget_info(self, request):
@@ -466,7 +465,8 @@ class Rpc(BaseRpc):
             video_id, language, version_no, 
             lambda version: self._subtitles_dict(version))
         if cache.get("language", None) is not None:
-            cache['language'] = cache['language'].pk
+            cache['language_code'] = cache['language'].language
+            cache['language_pk'] = cache['language'].pk
         return cache
 
     def _subtitles_dict(self, version):

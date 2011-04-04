@@ -762,7 +762,7 @@ class TestRpc(TestCase):
         response = rpc.fork(request, draft_pk)
         subtitles = response['subtitles']
         self.assertTrue(response['forked'])
-        self.assertEquals('es', response['language'])
+        self.assertEquals('es', response['language_code'])
         self.assertEquals(2, len(subtitles))
         for sub in subtitles:
             self.assertTrue(sub[u'start_time'] > 0)

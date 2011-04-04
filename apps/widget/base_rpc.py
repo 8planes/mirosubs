@@ -29,7 +29,8 @@ class BaseRpc:
     def _make_subtitles_dict(self, subtitles, language, is_original, is_complete, version, is_latest, is_forked, base_language, title):
         return {
             'subtitles': subtitles,
-            'language': language,
+            'language_code': language.language,
+            'language_pk': language.pk,
             'is_original': is_original,
             'is_complete': is_complete,
             'version': version,
