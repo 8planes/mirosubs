@@ -21,6 +21,7 @@ from videos.models import Video, SubtitleLanguage
 from search.forms import SearchForm
 from django.conf import settings
 from utils.translation import get_user_languages_from_request
+from utils.orm import LoadRelatedQuerySet
 
 class OptimizedQuerySet(LoadRelatedQuerySet):
     

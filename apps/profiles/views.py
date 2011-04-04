@@ -62,8 +62,6 @@ def edit_avatar(request):
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
-from utils.orm import LoadRelatedQuerySet
-
 class OptimizedQuerySet(LoadRelatedQuerySet):
     
     def update_result_cache(self):
