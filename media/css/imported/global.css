@@ -1,3 +1,31 @@
+#admin_controls {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	background: rgba(255,255,255, 0.4);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0, 0.2);
+	-moz-box-shadow: 0 0    8px rgba(0,0,0, 0.2);
+	padding: 5px;
+	border: 1px #FFF solid;
+}
+
+#admin_controls a {
+	display: block;
+	padding: 10px;
+	font-weight: bold;
+	text-decoration: none;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	font-size: 12px;
+}
+
+#admin_controls a:hover {
+	background: #FFF;
+	color: #555;
+}
+
 #header {
   width: 940px;
   height: 45px;
