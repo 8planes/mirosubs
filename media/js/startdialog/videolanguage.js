@@ -36,13 +36,9 @@ mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
     if (this.SUBTITLE_COUNT == 0 || (this.DEPENDENT && this.PERCENT_DONE == 0))
         return name;
     if (!this.DEPENDENT)
-        return name + (this.IS_COMPLETE ? " (%100)" : " (incomplete)");
-    else {
-        var suffix = " (" + this.PERCENT_DONE + "%)";
-        if (this.PERCENT_DONE == 100)
-            suffix = " (%100)";
-        return name + suffix;
-    }
+        return name + (this.IS_COMPLETE ? " (100%)" : " (incomplete)");
+    else
+        return name + " (" + this.PERCENT_DONE + "%)";
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
