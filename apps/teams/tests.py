@@ -43,6 +43,7 @@ class TestTasks(TestCase):
         
         #at list one user should receive email
         self.assertTrue(team.users.count() > 1)
+        mail.outbox = []
         
         result = tasks.add_video_notification.delay(self.tv.id)
         if result.failed():
