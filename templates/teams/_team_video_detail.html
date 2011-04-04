@@ -9,19 +9,22 @@
     </div>
     <p></p>
     <div class="clearfix"></div>
+    <div class="team-video-buttons-container">
+    {% if 1 or can_edit_video %}
 
-    {% if can_edit_video %}
-      <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
     {% endif %}
+
     <a class="blue_button small team_video_{{ team_video.pk }} add_subtitles_bt" href="#">
       {% trans 'Add Subtitles' %}
     </a>
+      <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
     {% if team_video.description %}
     <p>
       {{ team_video.description|urlize }}
     </p>
     {% endif %}
 
+    </div>
 </div><!-- // info -->
 <script type="text/javascript">
     $('a.team_video_{{ team_video.pk }}').click(function(){
