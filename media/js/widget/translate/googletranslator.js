@@ -159,8 +159,8 @@ function(needTranslating, fromLang, toLang, callback) {
     };
 };
 
-mirosubs.translate.GoogleTranslator.isTranslateable = function(){
-    if (!mirosubs.translate.GoogleTranslator.Languages_ ){
+mirosubs.translate.GoogleTranslator.isTranslateable = function() {
+    if (!mirosubs.translate.GoogleTranslator.Languages_ ) {
         /* 
          * @private 
          */
@@ -174,5 +174,11 @@ mirosubs.translate.GoogleTranslator.isTranslateable = function(){
 'sk','sl','es','su','sw','sv','syr','tg','ta','tt','te','th','bo','to','tr','uk',
 'ur','uz','ug','vi','cy','yi','yo','']);
     }
-    return mirosubs.translate.GoogleTranslator.Languages_.containsAll(arguments);
+    // not using Set#containsAll for now because of
+    // https://www.pivotaltracker.com/story/show/11798889
+    // upgrade in future.
+    for (var i = 0; i < arguments.length; i++)
+        if (!mirosubs.translate.GoogleTranslator.Languages_.contains(arguments[i]))
+            return false;
+    return true;
 }

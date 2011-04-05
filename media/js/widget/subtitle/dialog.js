@@ -168,6 +168,7 @@ mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
         this.currentSubtitlePanel_.suspendKeyEvents(suspended);
 };
 mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
+    this.getRightPanelInternal().showLoading(false);
     if (this.skipFinished_)
         this.setVisible(false);
     if (!mirosubs.isFromDifferentDomain()) {
@@ -192,8 +193,6 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
         videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
     }
-    this.getRightPanelInternal().showLoading(false);
-
 };
 mirosubs.subtitle.Dialog.prototype.handleGoToStep_ = function(event) {
     this.setState_(event.stepNo);
