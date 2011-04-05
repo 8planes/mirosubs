@@ -69,6 +69,7 @@ elif INSTALLATION == PRODUCTION:
     AWS_QUEUE_PREFIX = 'PRODUCTION'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     EMAIL_SUBJECT_PREFIX = '[usubs-production]'
+    EMAIL_BCC_LIST.append('socmedia@pculture.org')
     ADMINS = (
       ('Adam Duston', 'adam@8planes.com'),
       ('usubs-errors', 'usubs-errors@pculture.org')
@@ -95,7 +96,7 @@ BROKER_USER = AWS_ACCESS_KEY_ID
 BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
 BROKER_VHOST = AWS_QUEUE_PREFIX
 
-EMAIL_BCC_LIST = ['hwilson+notifications@gmail.com']
+EMAIL_BCC_LIST = EMAIL_BCC_LIST.append('hwilson+notifications@gmail.com')
 
 try:
     from commit import LAST_COMMIT_GUID

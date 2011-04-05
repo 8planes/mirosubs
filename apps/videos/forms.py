@@ -535,7 +535,7 @@ class FeedbackForm(MathCaptchaForm):
         else:
             feedback_emails = settings.FEEDBACK_EMAILS
         headers = {'Reply-To': email} if email else None
-        bcc = settings.EMAIL_BCC_LIST
+        bcc = getattr(settings, 'EMAIL_BCC_LIST', [])
         if email:
             subject = '%s (from %s)' % (settings.FEEDBACK_SUBJECT, email)
         else:
