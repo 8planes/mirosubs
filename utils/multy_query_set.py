@@ -68,7 +68,7 @@ class TeamMultyQuerySet(object):
         return qs._length
     
     def __len__(self):
-        if not hasattr(self, '_lenght'):
+        if not hasattr(self, '_length'):
             self._length = sum([self.get_qs_count(qs) for qs in self.lists])
         return self._length
     
