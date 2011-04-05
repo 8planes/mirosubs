@@ -33,22 +33,22 @@
             </form>
 
             <div class="clear"></div>
-        </div>
+          </div><!-- // feedback_bg -->
    
-        <div style="display: none;" class="feedback_bg" id="feedback_success">
-            <h4 style="font-size: 25px; font-weight: bold; margin: 0 0 10px 0;">{% trans 'Thank you for your feedback.' %}</h4>
-            <p style="font-size: 15px; line-height: 22px;">{% trans 'If you would like to perform some additional testing' %}</p>
-            <p style="font-size: 15px; line-height: 22px;">{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
-            <p style="font-size: 15px; line-height: 22px;">{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
+        <div style="display: none;" class="feedback-form-container" id="feedback_success">
+          <div class="feedback_bg">
+            <h4>{% trans 'Thank you for your feedback.' %}</h4>
+            <p>{% trans 'If you would like to perform some additional testing' %}</p>
+            <p>{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
+            <p>{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
             </p>
             
             {% if not error %}
             <a  class="red_button small" href="#close" class="">{% trans "Close" %}</a>
             {% endif %}
-            </div><!-- // blahblah -->
-          <div style="clear:both;"></div><!-- // clearfix -->
-        </div>        
-    </div>
+            </div><!-- // feedback-form-container -->
+          </div><!-- // feedback_bg -->
+        </div><!-- // feedback_container -->
     
 <script type="text/javascript">
     jQuery(document).ready(function($){
