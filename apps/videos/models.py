@@ -838,8 +838,8 @@ class SubtitleVersion(SubtitleCollection):
                     text_count_changed += 1
                     time_count_changed += 1
                     
-            self.time_change = time_count_changed / 1. / subtitles_length
-            self.text_change = text_count_changed / 1. / subtitles_length
+            self.time_change = min(time_count_changed / 1. / subtitles_length, 1)
+            self.text_change = min(text_count_changed / 1. / subtitles_length, 1)
 
     def _get_standard_collection(self):
         if self.language.standard_language:

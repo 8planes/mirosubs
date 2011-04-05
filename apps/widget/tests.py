@@ -320,8 +320,8 @@ class TestRpc(TestCase):
         language = video.subtitle_language()
         self.assertEqual(2, language.subtitleversion_set.count())
         version = language.latest_version()
-        self.assertTrue(version.text_change > 0 and version.text_change < 1)
-        self.assertTrue(version.time_change == 0)
+        self.assertTrue(version.text_change > 0 and version.text_change <= 1)
+        self.assertEqual(version.time_change , 0)
 
     def test_cant_edit_because_locked(self):
         request_0 = RequestMockup(self.user_0)
@@ -700,8 +700,8 @@ class TestRpc(TestCase):
         request = RequestMockup(self.user_0)
         video = self._create_two_sub_forked_subs(request)
         version = video.subtitle_language('es').version()
-        self.assertTrue(version.text_change > 0 and version.text_change < 1)
-        self.assertTrue(version.time_change > 0 and version.time_change < 1)
+        self.assertTrue(version.text_change > 0 and version.text_change <= 1)
+        self.assertTrue(version.time_change > 0 and version.time_change <= 1)
 
     def test_fork(self):
         request = RequestMockup(self.user_0)

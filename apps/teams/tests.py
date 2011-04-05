@@ -233,7 +233,7 @@ class TeamsTest(TestCase):
 
         # but the one with russian subs should be second.
         video_langs = self._video_lang_list(team)
-        self.assertEqual('ru', video_langs[1].language)
+        self.assertEqual('ru', video_langs[1].video.subtitle_language().language)
 
     def test_one_tvl(self):
         team, new_team_video = self._create_new_team_video()

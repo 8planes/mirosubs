@@ -54,13 +54,14 @@
       languages = {{languages}} 
 
       Querysets:
-      qs1 -> {{qs1.count}}
-      qs2 -> {{qs2.count}}
-      qs3 -> {{qs3.count}}
-      qs4 -> {{qs4.count}}
-      mqs -> {{mqs_count}}
-      qs -> {{qs.count}}
-      lqs -> {{lqs.count}}
+      qs1        -> {{qs1.count}}
+      qs2        -> {{qs2.count}}
+      qs3        -> {{qs3.count}}
+      qs4        -> {{qs4.count}}
+      mqs        -> {{mqs_count}}
+      additional -> {{additional_count}}
+      qs         -> {{qs.count}}
+      lqs        -> {{lqs.count}}
 
 Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
         <table>
@@ -164,9 +165,30 @@ Qs4: lqs.filter(is_original=False, forked=True, is_complete=False, language__in=
   {% endfor %}
 </table>
 
+additional: TeamVideoLanguagePair.objects.filter(team=team).exclude(pk__in=current_ids).select_related('team_video', 'team_video__video') - only first 50 items shown
+<table>
+  <tr>
+    <th>id</th>
+    <th>language</th>
+
+    <th>Video info</th>
+  </tr>
+  {% for x in additional|slice:":50" %}
+  <tr>
+    <td>{{x.id}}</td>
+    <td>{{x.language}}</td>
+
+    <td><a href="{{x.video.video_link}}">{{x.video.title_display}}</a> </td>
+  </tr>
+
+  {% endfor %}
+</table>
+
     qs = TeamVideoLanguagePair.objects.filter(language_pair__in=langs_pairs, team=team) \
         .select_related('team_video', 'team_video__video')
     lqs = TeamVideoLanguage.objects.filter(team=team).select_related('team_video', 'team_video__video')
+
+    
     </pre>
 </div>
 

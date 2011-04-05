@@ -208,6 +208,7 @@ class UploadSubtitlesTest(WebUseTest):
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
             }
 
+    
     def _make_altered_data(self):
         import os
         return {
@@ -295,6 +296,8 @@ class UploadSubtitlesTest(WebUseTest):
         version = language.latest_version()
         self.assertTrue(version.time_change > 0)
         self.assertTrue(version.text_change > 0)
+        self.assertEquals(version.time_change , 1)
+        self.assertEquals(version.text_change , 1)
 
     def test_upload_over_translated(self):
         # for https://www.pivotaltracker.com/story/show/11804745
