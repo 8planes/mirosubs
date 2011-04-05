@@ -1190,6 +1190,34 @@ class TestModelsSaving(TestCase):
         self.language = self.video.subtitle_language()
         self.language.is_complete = False
         self.language.save()
+    
+    def test_video_languages_count(self):
+        #test if fixtures has correct data
+        langs_count = self.video.subtitlelanguage_set.filter(had_version=True).count()
+        
+        self.assertEqual(self.video.languages_count, langs_count)
+        self.assertTrue(self.video.languages_count > 0)
+        
+        self.video.languages_count = 0
+        self.video.save()
+        self.video.update_languages_count()
+        
+        self.video = Video.objects.get(id=self.video.id)
+        self.assertEqual(self.video.languages_count, langs_count)
+        
+        self.language.had_version = False
+        self.language.save()
+        self.video = Video.objects.get(id=self.video.id)
+        self.assertEqual(self.video.languages_count, langs_count-1)
+        
+        self.language.had_version = True
+        self.language.save()        
+        self.video = Video.objects.get(id=self.video.id)
+        self.assertEqual(self.video.languages_count, langs_count)   
+        
+        self.language.delete()
+        self.video = Video.objects.get(id=self.video.id)
+        self.assertEqual(self.video.languages_count, langs_count-1)             
         
     def test_subtitle_language_save(self):
         self.assertEqual(self.video.complete_date, None)

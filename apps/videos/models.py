@@ -322,6 +322,7 @@ class Video(models.Model):
 
     def update_languages_count(self):
         self.languages_count = self.subtitlelanguage_set.filter(had_version=True).count()
+        self.save()
         
     def latest_subtitles(self, language_code=None):
         version = self.latest_version(language_code)
@@ -463,6 +464,7 @@ class SubtitleLanguage(models.Model):
         super(SubtitleLanguage, self).save(*args, **kwargs)
         self.check_initial_values()
         self.save_initial_values()
+        self.video.update_languages_count()
     
     def delete(self, *args, **kwargs):
         video_id = self.video_id
@@ -473,6 +475,9 @@ class SubtitleLanguage(models.Model):
         if not self.video.subtitlelanguage_set.exclude(is_complete=False).exists():
             self.video.complete_date = None
             self.video.save()
+            
+        video_cache.invalidate_cache(self.video.video_id)
+        self.video.update_languages_count()            
         
     def save_initial_values(self):
         self._initial_values = {
@@ -661,18 +666,9 @@ class SubtitleLanguage(models.Model):
                 exclude = [exclude]            
             qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
         return qs
-    
-def subtile_language_delete_handler(sender, instance, **kwargs):
-    video_cache.invalidate_cache(instance.video.video_id)
-    instance.video.update_languages_count()
-
-def subtitle_language_save_handler(sender, instance, **kwargs):
-    instance.video.update_languages_count()
 
 models.signals.m2m_changed.connect(User.sl_followers_change_handler, sender=SubtitleLanguage.followers.through)
 post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
-post_save.connect(subtitle_language_save_handler, SubtitleLanguage)
-models.signals.pre_delete.connect(subtile_language_delete_handler, SubtitleLanguage)
 
 class SubtitleCollection(models.Model):
     is_forked=models.BooleanField(default=False)
