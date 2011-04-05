@@ -23,9 +23,9 @@
                         var $this = $(this);
                         TeamsApi.join($this.attr('team_id'), function(response){
                             if (response.error){
-                                $.msg.clean().add(response.error, 'error');
+                                $.jGrowl.error(response.error);
                             }else{
-                                $.msg.clean().add(response.msg);
+                                $.jGrowl(response.msg);
                                 $this.remove();
                             }
                         });
@@ -38,9 +38,9 @@
                     var $this = $(this);
                     TeamsApi.leave($this.attr('team_id'), function(response){
                         if (response.error){
-                            $.msg.clean().add(response.error, 'error');
+                            $.jGrowl.error(response.error);
                         }else{
-                            $.msg.clean().add(response.msg);
+                            $.jGrowl(response.msg);
                             $this.parents('.info').find('.your-team').remove();
                             $this.remove();
                         }

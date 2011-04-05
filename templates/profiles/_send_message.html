@@ -38,7 +38,7 @@ $(function(){
         success: function(data, status, xhr, $form){
             if (data.success){
                 $form.resetForm();
-                $.msg.clean().add('{% trans "Email sent" %}');
+                $.jGrowl('{% trans "Email sent" %}');
                 $.nyroModalRemove();
             } else {
                 for (key in data.errors){
