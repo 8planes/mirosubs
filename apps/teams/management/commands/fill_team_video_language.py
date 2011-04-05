@@ -23,8 +23,7 @@ class Command(BaseCommand):
             if l in available_languages:
                 print 'Update language %s ...' % l  
                 for tv in TeamVideo.objects.all():
-                    TeamVideoLanguage.update(tv, l)
-                    
+                    TeamVideoLanguage.update_for_language(tv, l)
             else:
                 print 'Language %s does not exist in settings' % l
                 
