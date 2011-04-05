@@ -197,12 +197,14 @@ class UploadSubtitlesTest(WebUseTest):
 
     fixtures = ['test.json']
 
-    def _make_data(self, lang='ru'):
+    def _make_data(self, lang='ru', video_pk=None):
         import os
+        if video_pk is None:
+            video_pk = self.video.id
         return {
             'language': lang,
             'video_language': 'en',
-            'video': self.video.id,
+            'video': video_pk,
             'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
             }
 
@@ -293,6 +295,24 @@ class UploadSubtitlesTest(WebUseTest):
         version = language.latest_version()
         self.assertTrue(version.time_change > 0)
         self.assertTrue(version.text_change > 0)
+
+    def test_upload_over_translated(self):
+        # for https://www.pivotaltracker.com/story/show/11804745
+        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        draft = create_two_sub_dependent_draft(request)
+        video_pk = draft.language.video.pk
+        video = Video.objects.get(pk=video_pk)
+        original_en = video.subtitlelanguage_set.filter(language='en').all()[0]
+
+        self._login()
+        data = self._make_data(lang='en', video_pk=video_pk)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        
+        video = Video.objects.get(pk=video_pk)
+        self.assertEqual(3, video.subtitlelanguage_set.count())
+
 
 class Html5ParseTest(TestCase):
     def _assert(self, start_url, end_url):

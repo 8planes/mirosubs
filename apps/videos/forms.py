@@ -225,6 +225,22 @@ class SubtitlesUploadBaseForm(forms.Form):
                 original_language.video = video
                 original_language.save()
 
+    def _best_existing(self, languages):
+        for l in languages:
+            # choosing first forked SL that has no dependent languages.
+            if not l.is_dependent() and l.subtitlelanguage_set.count() == 0:
+                return l
+        return None
+
+    def _find_appropriate_language(self, video, language_code):
+        language = self._best_existing(video.subtitle_languages(language_code))
+        if not language:
+            language = SubtitleLanguage(
+                video=video, is_original=False, is_forked=True)
+        language.language = language_code
+        language.save()
+        return language
+
     def save_subtitles(self, parser):
         video = self.cleaned_data['video']
         
@@ -236,14 +252,8 @@ class SubtitlesUploadBaseForm(forms.Form):
         if not video.has_original_language():
             self._save_original_language(
                 video, self.cleaned_data['video_language'])
-  
-        language = video.subtitle_language(self.cleaned_data['language'])
         
-        if not language:
-            language = SubtitleLanguage(video=video, is_original=False, is_forked=True)
-        
-        language.language = self.cleaned_data['language']
-        language.save()
+        language = self._find_appropriate_language(video, self.cleaned_data['language'])
         
         try:
             old_version = language.subtitleversion_set.all()[:1].get()    
