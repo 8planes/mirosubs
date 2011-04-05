@@ -25,8 +25,10 @@ goog.provide('mirosubs.Rpc');
  */
 mirosubs.Rpc.TIMEOUT_ = 15000;
 
-mirosubs.Rpc.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.Rpc');
+if (goog.DEBUG) {
+    mirosubs.Rpc.logger_ =
+        goog.debug.Logger.getLogger('mirosubs.Rpc');
+}
 
 mirosubs.Rpc.baseURL = function() {
     return [mirosubs.siteURL(), 
@@ -94,16 +96,19 @@ mirosubs.Rpc.callWithJsonp_ = function(methodName, serializedArgs, opt_callback,
 };
 
 mirosubs.Rpc.logCall_ = function(methodName, args, channel) {
-    if (mirosubs.DEBUG)
+    if (goog.DEBUG) {
         mirosubs.Rpc.logger_.info(
             ['calling ', methodName, ' with ', channel,
              ': ', goog.json.serialize(args)].join(''));
+    }
 };
 
 mirosubs.Rpc.logResponse_ = function(methodName, response) {
-    if (mirosubs.DEBUG)
-        mirosubs.Rpc.logger_.info(
-            [methodName, ' response: ', response].join(''));
+    if (goog.DEBUG) {
+        if (mirosubs.DEBUG)
+            mirosubs.Rpc.logger_.info(
+                [methodName, ' response: ', response].join(''));
+    }
 };
 
 mirosubs.Rpc.call = 

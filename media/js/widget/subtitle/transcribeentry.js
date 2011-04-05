@@ -35,8 +35,6 @@ mirosubs.subtitle.TranscribeEntry = function(videoPlayer) {
     this.playStopTimer_ = new goog.Timer(8000);
 };
 goog.inherits(mirosubs.subtitle.TranscribeEntry, goog.ui.Component);
-mirosubs.subtitle.TranscribeEntry.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.subtitle.TranscribeEntry');
 
 mirosubs.subtitle.TranscribeEntry.P = 4;
 mirosubs.subtitle.TranscribeEntry.R = 3;
@@ -72,17 +70,9 @@ mirosubs.subtitle.TranscribeEntry.prototype.enterDocument = function() {
         listen(this.videoPlayer_,
                mirosubs.video.AbstractVideoPlayer.EventType.PLAY,
               this.startPlaying_);
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        "P is set to " + mirosubs.subtitle.TranscribeEntry.P);
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        "R is set to " + mirosubs.subtitle.TranscribeEntry.R);
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        "S is set to " + mirosubs.subtitle.TranscribeEntry.S);
 };
 mirosubs.subtitle.TranscribeEntry.prototype.startPlaying_ = function() {
     if (this.playMode_ == mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP) {
-        mirosubs.subtitle.TranscribeEntry.logger_.info(
-            "Starting play/stop timer in response to play");
         this.playStopTimer_.start();
     }
 };
@@ -102,8 +92,6 @@ mirosubs.subtitle.TranscribeEntry.prototype.handleKey_ = function(event) {
         this.typingPauseTimer_.stop();
         this.typingPauseTimer_.start();
         if (!this.continuouslyTyping_) {
-            mirosubs.subtitle.TranscribeEntry.logger_.info(
-                "Continuous typing started.");
             this.continuousTypingTimer_.start();
             this.continuouslyTyping_ = true;
         }
@@ -114,21 +102,12 @@ mirosubs.subtitle.TranscribeEntry.prototype.continuousTypingTimerTick_ = functio
     this.continuousTypingTimer_.stop();
     this.wasPlaying_ = this.videoPlayer_.isPlaying();
     this.videoPlayer_.pause();
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        ["Continuous typing has now progressed for P ",
-         "seconds. Pausing video at playhead time ",
-         this.videoPlayer_.getPlayheadTime() + ''].join(''));
 };
 mirosubs.subtitle.TranscribeEntry.prototype.typingPauseTimerTick_ = function() {
     // S seconds since last keystroke!
     var pSecondsElapsed = !this.continuousTypingTimer_.enabled;
     var newPlayheadTime = this.videoPlayer_.getPlayheadTime() -
         mirosubs.subtitle.TranscribeEntry.R;
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        ["Continuous typing ended.",
-         pSecondsElapsed ?
-         (" Restarting video at playhead time " + newPlayheadTime) :
-         ""].join(''));
     this.continuouslyTyping_ = false;
     this.typingPauseTimer_.stop();
     this.continuousTypingTimer_.stop();
@@ -138,8 +117,6 @@ mirosubs.subtitle.TranscribeEntry.prototype.typingPauseTimerTick_ = function() {
     }
 };
 mirosubs.subtitle.TranscribeEntry.prototype.playStopTimerTick_ = function() {
-    mirosubs.subtitle.TranscribeEntry.logger_.info(
-        "Pausing the video for play/stop mode");
     this.playStopTimer_.stop();
     this.videoPlayer_.pause();
 };
@@ -148,7 +125,6 @@ mirosubs.subtitle.TranscribeEntry.prototype.playStopTimerTick_ = function() {
  * @param {mirosubs.subtitle.TranscribePanel.PlayMode} mode
  */
 mirosubs.subtitle.TranscribeEntry.prototype.setPlayMode = function(mode) {
-    mirosubs.subtitle.TranscribeEntry.logger_.info("mode set to " + mode);
     this.playMode_ = mode;
     this.continuouslyTyping_ = false;
     this.continuousTypingTimer_.stop();

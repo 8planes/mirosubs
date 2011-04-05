@@ -24,7 +24,7 @@ def call_command(command):
 
 def compile(output_file_name, js_file_list, 
             closure_dep_file='closure-dependencies.js',
-            include_flash_deps=True):
+            include_flash_deps=True, debug=False):
     logging.info("Starting {0}".format(output_file_name))
 
     deps = [" --js %s " % os.path.join(JS_LIB, file) for file in js_file_list]
@@ -34,9 +34,14 @@ def compile(output_file_name, js_file_list,
 
     logging.info("Calculating closure dependencies")
 
-    output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/%s " +
+    js_debug_dep_file = ''
+    if debug:
+        js_debug_dep_file = '{0}/{1}'.format(JS_LIB, 'closure-debug-dependencies.js')
+
+    output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/%s %s " +
                              "-p %s/ -o script") % 
-                            (CLOSURE_LIB, JS_LIB, closure_dep_file, CLOSURE_LIB))
+                            (CLOSURE_LIB, JS_LIB, closure_dep_file, 
+                             js_debug_dep_file, CLOSURE_LIB))
 
     # This is to reduce the number of warnings in the code.
     # The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
@@ -51,12 +56,18 @@ def compile(output_file_name, js_file_list,
 
     logging.info("Compiling {0}".format(output_file_name))
 
+    debug_arg = ''
+    if not debug:
+        debug_arg = '--define goog.DEBUG=false'
+
     output,err = call_command(("java -jar %s --js %s %s "
                                "--js_output_file %s "
+                               "%s "
                                "--output_wrapper (function(){%%output%%})(); "
                                "--compilation_level ADVANCED_OPTIMIZATIONS") % 
-                              (compiler_jar, calcdeps_js, deps, compiled_js))
-    
+                              (compiler_jar, calcdeps_js, deps, compiled_js,
+                               debug_arg))
+
     with open(compiled_js, 'r') as compiled_js_file:
         compiled_js_text = compiled_js_file.read()
         
