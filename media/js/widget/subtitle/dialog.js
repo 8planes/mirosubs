@@ -271,6 +271,7 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
         this.captionSet_.makeJsonSubs(),
         function(dropDownContents) {
             that.saved_ = true;
+            that.getRightPanelInternal().showLoading(false);
             that.setDropDownContentsInternal(dropDownContents);
             if (closeAfterSave)
                 that.setVisible(false);
