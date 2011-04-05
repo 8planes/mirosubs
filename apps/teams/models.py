@@ -353,8 +353,8 @@ class TeamVideo(models.Model):
             sl1_list = langs.get(lang, [])
             if len(sl1_list) == 0:
                 sl1_list = [None]
-                for sl1 in sl1_list:
-                    self._update_team_video_language_pair(sl.language, sl, lang, sl1)
+            for sl1 in sl1_list:
+                self._update_team_video_language_pair(sl.language, sl, lang, sl1)
         for sl0 in self.video.subtitlelanguage_set.all():            
             self._update_team_video_language_pair(sl0.language, sl0, sl.language, sl)
 
