@@ -306,7 +306,7 @@ def edit(request, slug):
             form = EditTeamForm(request.POST, request.FILES, instance=team)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Team edited success'))
+            messages.success(request, _(u'Your changes have been saved'))
             return redirect(team.get_edit_url())
     else:
         if request.user.is_staff:
