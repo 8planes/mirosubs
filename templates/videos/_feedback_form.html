@@ -35,17 +35,17 @@
             <div class="clear"></div>
           </div><!-- // feedback_bg -->
    
-        <div style="display: none;" class="feedback-form-container" id="feedback_success">
+        <div style="display: none;" id="feedback_success">
           <div class="feedback_bg">
-            <h2>{% trans 'Thank you for your feedback.' %}</h2>
+            {% if not error %}
+              <a  class="red_button small" href="#close">{% trans "Close" %}</a>
+            {% endif %}
+            <div style="padding: 20px;">
+            <h3>{% trans 'Thank you for your feedback.' %}</h3>
             <p>{% trans 'If you would like to perform some additional testing' %}</p>
             <p>{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
-            <p>{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a>
-            </p>
-            
-            {% if not error %}
-            <a  class="red_button small" href="#close" class="">{% trans "Close" %}</a>
-            {% endif %}
+            <p>{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a></p>
+            </div>
             <div class="clear"></div>
           </div><!-- // feedback_bg -->
           </div><!-- // feedback_success -->
