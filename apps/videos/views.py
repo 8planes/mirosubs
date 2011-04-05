@@ -357,6 +357,7 @@ def history(request, video_id, lang=None, lang_id=None):
     context['last_version'] = language.latest_version()
     context['widget_params'] = _widget_params(request, video, None, lang or '')
     context['language'] = language
+    context['edit_url'] = language.get_widget_url()
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 

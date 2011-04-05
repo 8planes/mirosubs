@@ -62,7 +62,9 @@ mirosubs.api.openDialog = function(config) {
  * @param {Object} generalSettings See WidgetController.makeGeneralSettings
  *     for more info.
  */ 
-mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, generalSettings) {
+mirosubs.api.openUnisubsDialogWithSettings = 
+    function(askLanguage, config, generalSettings) 
+{
     mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
         mirosubs.returnURL = config['returnURL'];
