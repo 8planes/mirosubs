@@ -89,13 +89,14 @@ import codecs
 class BaseSubtitles(object):
     file_type = ''
     
-    def __init__(self, subtitles, video):
+    def __init__(self, subtitles, video, line_delimiter=u'\n'):
         """
         Use video for extra data in subtitles like Title
         Subtitles is list of {'text': 'text', 'start': 'seconds', 'end': 'seconds'}
         """
         self.subtitles = subtitles
         self.video = video
+        self.line_delimiter = line_delimiter
     
     def __unicode__(self):
         raise Exception('Should return subtitles')
@@ -109,6 +110,9 @@ GenerateSubtitlesHandler = GenerateSubtitlesHandlerClass()
     
 class SRTSubtitles(BaseSubtitles):
     file_type = 'srt'
+
+    def __init__(self, subtitles, video, line_delimiter=u'\r\n'):
+        super(SRTSubtitles, self).__init__(subtitles, video, line_delimiter)
 
     def __unicode__(self):
         output = []
@@ -124,7 +128,7 @@ class SRTSubtitles(BaseSubtitles):
                 output.append(u'')
                 i += 1
         
-        return u'\n'.join(output)
+        return self.line_delimiter.join(output)
 
     def format_time(self, time):
         hours = int(floor(time / 3600))
@@ -140,6 +144,9 @@ GenerateSubtitlesHandler.register(SRTSubtitles)
 class SBVSubtitles(BaseSubtitles):
     file_type = 'sbv'
 
+    def __init__(self, subtitles, video, line_delimiter=u'\r\n'):
+        super(SBVSubtitles, self).__init__(subtitles, video, line_delimiter)
+
     def __unicode__(self):
         output = []
         
@@ -151,7 +158,7 @@ class SBVSubtitles(BaseSubtitles):
                 output.append(item['text'].strip())
                 output.append(u'')
         
-        return u'\n'.join(output)
+        return self.line_delimiter.join(output)
 
     def format_time(self, time):
         hours = int(floor(time / 3600))
@@ -166,12 +173,16 @@ GenerateSubtitlesHandler.register(SBVSubtitles)
 
 class TXTSubtitles(BaseSubtitles):
     file_type = 'txt'
-    
+
+    def __init__(self, subtitles, video, line_delimiter=u'\r\n\r\n'):
+        super(TXTSubtitles, self).__init__(subtitles, video, line_delimiter)
+        
     def __unicode__(self):
         output = []
         for item in self.subtitles:
             item['text'] and output.append(item['text'].strip())
-        return u'\n\n'.join(output)
+
+        return self.line_delimiter.join(output)
 
 GenerateSubtitlesHandler.register(TXTSubtitles)
     
@@ -183,7 +194,8 @@ class SSASubtitles(BaseSubtitles):
         return u''.join([unicode(codecs.BOM_UTF8, "utf8"), self._start(), self._content(), self._end()])
     
     def _start(self):
-        return u'[Script Info]\r\nTitle: %s\r\n' % self.video.__unicode__()
+        ld = self.line_delimiter
+        return u'[Script Info]%sTitle: %s%s' % (ld, self.video.__unicode__(), ld)
     
     def _end(self):
         return u''
@@ -201,15 +213,16 @@ class SSASubtitles(BaseSubtitles):
         return text.replace('\n', ' ')
         
     def _content(self):
+        dl = self.line_delimiter
         output = []
-        output.append(u'[Events]\r\n')
-        output.append(u'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\r\n')
-        tpl = u'Dialogue: 0,%s,%s,Default,,0000,0000,0000,,%s\r\n'
+        output.append(u'[Events]%s' % dl)
+        output.append(u'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text%s' % dl)
+        tpl = u'Dialogue: 0,%s,%s,Default,,0000,0000,0000,,%s%s'
         for item in self.subtitles:
             start = self.format_time(item['start'])
             end = self.format_time(item['end'])
             text = self._clean_text(item['text'].strip())
-            output.append(tpl % (start, end, text))
+            output.append(tpl % (start, end, text, dl))
         return ''.join(output)
 
 GenerateSubtitlesHandler.register(SSASubtitles)
@@ -220,7 +233,7 @@ class TTMLSubtitles(BaseSubtitles):
     file_type = 'xml'
     
     def __unicode__(self):
-        return u'<?xml version="1.0" encoding="UTF-8"?>\n'\
+        return (u'<?xml version="1.0" encoding="UTF-8"?>%s' % self.line_delimiter)\
             +etree.tounicode(self.xml_node(), pretty_print=True)
     
     def xml_node(self):
