@@ -44,8 +44,10 @@ goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
 mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
-mirosubs.video.AbstractVideoPlayer.logger_ = 
-    goog.debug.Logger.getLogger('AbstractVideoPlayer');
+if (goog.DEBUG) {
+    mirosubs.video.AbstractVideoPlayer.logger_ = 
+        goog.debug.Logger.getLogger('AbstractVideoPlayer');
+}
 
 mirosubs.video.AbstractVideoPlayer.players = [];
 
@@ -246,8 +248,10 @@ mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playhead
  * @param {String} text Caption text to display in video. null for blank.
  */
 mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
-    mirosubs.video.AbstractVideoPlayer.logger_.info(
-        'showing sub: ' + text);
+    if (goog.DEBUG) {
+        mirosubs.video.AbstractVideoPlayer.logger_.info(
+            'showing sub: ' + text);
+    }
     if (text == null || text == "") {
         if (this.captionElem_ != null) {
             goog.dom.removeNode(this.captionElem_);

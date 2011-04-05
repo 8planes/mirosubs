@@ -65,13 +65,9 @@ mirosubs.LoadingDom = function() {
 goog.inherits(mirosubs.LoadingDom, goog.events.EventTarget);
 goog.addSingletonGetter(mirosubs.LoadingDom);
 
-mirosubs.LoadingDom.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.LoadingDom');
-
 mirosubs.LoadingDom.DOMLOAD = 'domloaded';
 
 mirosubs.LoadingDom.prototype.onDomLoaded_ = function() {
-    mirosubs.LoadingDom.logger_.info('onDomLoaded_ called');
     if (this.isDomLoaded_)
         return;
     this.isDomLoaded_ = true;

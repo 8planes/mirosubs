@@ -24,11 +24,13 @@ mirosubs.widget.CrossDomainEmbed.embed =
     function(widgetDiv, widgetConfig, siteConfig) 
 {
     mirosubs.siteConfig = siteConfig;
-    if (widgetConfig['debug_js']) {
-        var debugWindow = new goog.debug.FancyWindow('main');
-        debugWindow.setEnabled(true);
-        debugWindow.init();
-        mirosubs.DEBUG = true;
+    if (goog.DEBUG) {
+        if (widgetConfig['debug_js']) {
+            var debugWindow = new goog.debug.FancyWindow('main');
+            debugWindow.setEnabled(true);
+            debugWindow.init();
+            mirosubs.DEBUG = true;
+        }
     }
     mirosubs.IS_NULL = !!widgetConfig['null_widget'];
     var widget = new mirosubs.widget.Widget(widgetConfig);

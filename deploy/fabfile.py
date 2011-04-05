@@ -58,7 +58,7 @@ def dev(username):
                 'universalsubtitles.dev',
                 'www/universalsubtitles.dev', 'dev', 
                 None, 
-                False,
+                True,
                 None)
 
 def unisubs(username):

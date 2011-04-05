@@ -57,9 +57,6 @@ mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
 };
 goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
-mirosubs.video.YoutubeVideoPlayer.logger_ =
-    goog.debug.Logger.getLogger('YoutubeVideoPlayer');
-
 /**
  * This decorates an Embed element.
  * @override
@@ -72,28 +69,16 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
     this.swfEmbedded_ = true;
     this.player_ = element;
     this.playerSize_ = goog.style.getSize(element);
-    mirosubs.video.YoutubeVideoPlayer.logger_.info(
-        ["height, width of ", this.playerSize_.height, ", ", 
-         this.playerSize_.width].join(''));
     this.setDimensionsKnownInternal();
     // FIXME: petit duplication
     window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
     var timer = new goog.Timer(250);
     var that = this;
-    mirosubs.video.YoutubeVideoPlayer.logger_.info(
-        'starting to check for playVideo');
-    var count = 0;
     this.getHandler().listen(
         timer,
         goog.Timer.TICK,
         function(e) {
-            count++;
-            if ((count % 25) == 0)
-                mirosubs.video.YoutubeVideoPlayer.logger_.info(
-                    'checked for playVideo ' + count + ' times');
             if (that.player_['playVideo']) {
-                mirosubs.video.YoutubeVideoPlayer.logger_.info(
-                    'playVideo is present on count ' + count);
                 that.player_.addEventListener(
                     'onStateChange', that.eventFunction_);
                 timer.stop();
@@ -185,7 +170,6 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     if (playerAPIID == this.playerAPIID_) {
         this.setDimensionsKnownInternal();
         this.player_ = goog.dom.$(this.playerElemID_);
-        mirosubs.video.YoutubeVideoPlayer.logger_.info('setting size');
         mirosubs.style.setSize(this.player_, this.playerSize_);
         if (this.forDialog_)
             this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());
@@ -196,7 +180,6 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     }
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
-    mirosubs.video.YoutubeVideoPlayer.logger_.info('playerStateChange');
     var s = mirosubs.video.YoutubeVideoPlayer.State_;
     var et = mirosubs.video.AbstractVideoPlayer.EventType;
     if (newState == s.PLAYING) {
