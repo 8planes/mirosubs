@@ -109,6 +109,30 @@ function testToLanguagesWithDependent0() {
     assertEquals('fr', languages[1].LANGUAGE);
 }
 
+function testFromLangugesWithBlank() {
+    var json = makeBaseJSON();
+    var fr = json['video_languages'][1];
+    fr['language'] = '';
+    fr['subtitle_count'] = 0;
+    var model = new mirosubs.startdialog.Model(json);
+    var fromLanguages = model.fromLanguages();
+
+    var containsOriginal = function(tolang) {
+        return goog.string.startsWith(tolang.toString(), 'Original');
+    };
+
+    assertFalse(goog.array.some(fromLanguages, containsOriginal));
+
+    json = makeBaseJSON();
+    fr = json['video_languages'][1];
+    fr['language'] = '';
+    fr['subtitle_count'] = 8;
+    model = new mirosubs.startdialog.Model(json);
+    fromLanguages = model.fromLanguages();
+
+    assertTrue(goog.array.some(fromLanguages, containsOriginal));
+}
+
 function testFromLanguages0() {
     var model = new mirosubs.startdialog.Model(makeBaseJSON());
     var toLanguages = model.toLanguages();

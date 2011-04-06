@@ -32,7 +32,9 @@ mirosubs.startdialog.VideoLanguage = function(json) {
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
-    var name = mirosubs.languageNameForCode(this.LANGUAGE);
+    var name = this.LANGUAGE ? 
+        mirosubs.languageNameForCode(this.LANGUAGE) : "Original";
+
     if (this.SUBTITLE_COUNT == 0 || (this.DEPENDENT && this.PERCENT_DONE == 0))
         return name;
     if (!this.DEPENDENT)
