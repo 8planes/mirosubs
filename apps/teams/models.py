@@ -209,6 +209,7 @@ class TeamVideo(models.Model):
     all_languages = models.BooleanField(_('Need help with all languages'), default=False, 
         help_text=_('If you check this, other languages will not be displayed.'))
     added_by = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
     completed_languages = models.ManyToManyField(SubtitleLanguage, blank=True)
     
     class Meta:
@@ -223,7 +224,6 @@ class TeamVideo(models.Model):
         #asynchronous call
         if created:
             update_one_team_video.delay(self.id)
-            add_video_notification.delay(self.id)
             
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)

@@ -5,6 +5,10 @@ from django.conf import settings
 
 @task()
 def add_video_notification(team_video_id):
+    """
+    Celery task for sending emails to members about new video in team.
+    NOTE: It not used now(see command fill_team_video_language), but can be useful in future.
+    """
     from teams.models import TeamVideo, Team
     
     domain = Site.objects.get_current().domain
