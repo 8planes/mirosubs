@@ -53,7 +53,8 @@
             "video": 5, 
             "team": 1, 
             "thumbnail": "", 
-            "added_by": 9998
+            "added_by": 9998,
+            "created": "2010-11-11 10:52:09"
         }
     },
     {
@@ -66,7 +67,8 @@
             "video": 6, 
             "team": 1, 
             "thumbnail": "", 
-            "added_by": 9998
+            "added_by": 9998,
+            "created": "2010-11-11 10:52:09"
         }
     },
     {
@@ -79,7 +81,8 @@
             "video": 6, 
             "team": 1, 
             "thumbnail": "", 
-            "added_by": 9998
+            "added_by": 9998,
+            "created": "2010-11-11 10:52:09"
         }
     }            
 ]
