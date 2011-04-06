@@ -1162,3 +1162,12 @@ def _make_packet(updated=[], inserted=[], deleted=[], packet_no=1):
         'deleted': deleted,
         'updated': updated
         }
+
+class TestCache(TestCase):
+
+    def test_get_cache_url_no_exceptions(self):
+        try:
+            res = video_cache.get_video_urls("bad key")
+        except models.Video.DoesNotExist:
+            self.fail("bad cache key shouldn't fail")
+        self.assertTrue(len(res)==0)    
