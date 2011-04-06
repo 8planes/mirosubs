@@ -213,10 +213,6 @@ class TeamsTest(TestCase):
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
         self.client.post(url, data)
         
-        #by default all users receive notification, so when video added mail box
-        #should not be empty
-        self.assertEqual(len(mail.outbox), team.users.count()-1)
-        
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
         for ul in self.user.userlanguage_set.all():
@@ -288,7 +284,6 @@ class TeamsTest(TestCase):
             tm.user.save()
         
         self._add_team_video(team, u'en', u"http://videos.mozilla.org/firefox/3.5/switch/switch.ogv")
-        self.assertEqual(len(mail.outbox), team.users.count()-1)
         
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
