@@ -22,12 +22,13 @@ goog.provide('mirosubs.widget.WidgetController');
  * @constructor
  *
  */
-mirosubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
+mirosubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab, currentLang) {
     // TODO: when all VideoSource implementations support getVideoURL,
     // remove videoURL from the parameters for this constructor.
     this.videoURL_ = videoURL;
     this.videoPlayer_ = videoPlayer;
     this.videoTab_ = videoTab;
+    this.currentLang_ = currentLang;
 };
 
 /**
@@ -44,7 +45,7 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
         result['subtitles']);
 
     var popupMenu = new mirosubs.widget.DropDown(
-        videoID, dropDownContents, this.videoTab_);
+        videoID, dropDownContents, this.videoTab_, this.currentLang_);
 
     this.videoTab_.showContent(popupMenu.hasSubtitles(),
                                subtitleState);
@@ -53,6 +54,7 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
     mirosubs.style.showElement(popupMenu.getElement(), false);
 
     popupMenu.setCurrentSubtitleState(subtitleState);
+    popupMenu.dispatchLanguageSelection_(this.currentLang_);
 
     this.playController_ = new mirosubs.widget.PlayController(
         videoID, this.videoPlayer_.getVideoSource(), this.videoPlayer_, 

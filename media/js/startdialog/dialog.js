@@ -71,13 +71,38 @@ mirosubs.startdialog.Dialog.prototype.setVisible = function(visible) {
             goog.bind(this.responseReceived_, this));
 };
 
+/* This is a kludge until we finish the pk separation on languages.
+ * Currently the lang values are mixing pk and codes (eg. en2324),
+ * so this is needed to get the language code only back.
+ * @private
+ */
+mirosubs.startdialog.extractLangCode_ = function(fullLangInfo){
+    for (var i = 0; i < fullLangInfo.length; i++){
+        if (goog.string.isNumeric(fullLangInfo.charAt(i))){
+            return fullLangInfo.substring(0, i);
+        }
+    }
+    return fullLangInfo;
+};
+
+
 mirosubs.startdialog.Dialog.prototype.makeDropdown_ = 
     function($d, contents) 
 {
-    var options = []
-    for (var i = 0; i < contents.length; i++)
-        options.push(
-            $d('option', {'value': contents[i][0]}, contents[i][1]));
+var options = [];
+    var defaultFound = false;
+    var option;
+    for (var i = 0; i < contents.length; i++){
+        option = {'value': contents[i][0]};
+        if (this.initialLanguage_ && ! defaultFound && this.initialLanguage_){
+            if (mirosubs.startdialog.extractLangCode_(contents[i][0]) ==   this.initialLanguage_){
+               option['selected'] = 'selected';
+                defaultFound = true;
+            }
+        }
+         options.push($d('option', option, contents[i][1]));
+
+    }
     return $d('select', null, options);
 };
 
