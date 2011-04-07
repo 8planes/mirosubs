@@ -38,13 +38,29 @@ mirosubs.Rpc.baseURL = function() {
 };
 
 mirosubs.Rpc.callCrossDomain_ = function(methodName, serializedArgs, opt_callback, opt_errorCallback) {
+    var timedOut = false;
+    var timeout = goog.global.setTimeout(
+        function() {
+            timedOut = true;
+            if (opt_errorCallback)
+                opt_errorCallback();
+        }, mirosubs.Rpc.TIMEOUT_);
     goog.net.CrossDomainRpc.
         send([mirosubs.Rpc.baseURL(), 'xd/', methodName].join(''),
-             function(event) {
-                 var responseText = event["target"]["responseText"];
-                 mirosubs.Rpc.logResponse_(methodName, responseText);
-                 if (opt_callback)
-                     opt_callback(goog.json.parse(responseText));
+             function(e) {
+                 if (timedOut)
+                     return;
+                 goog.global.clearTimeout(timeout);
+                 if (e.target.status == goog.net.HttpStatus.INTERNAL_SERVER_ERROR) {
+                     if (opt_errorCallback)
+                         opt_errorCallback();
+                 }
+                 else {
+                     var responseText = e.target.responseText;
+                     mirosubs.Rpc.logResponse_(methodName, responseText);
+                     if (opt_callback)
+                         opt_callback(goog.json.parse(responseText));
+                 }
              }, "POST", serializedArgs);
 };
 
