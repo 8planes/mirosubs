@@ -32,7 +32,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
     this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'];
     this.forceFormat_ = !!widgetConfig['force_format'];
     this.videoConfig_ = widgetConfig['video_config'];
-    this.currentLang_ = widgetConfig.base_state.language;
+    this.currentLang_ = widgetConfig['base_state']['language'];
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
      * if base state is null, or equivalent of clicking on "Improve 
