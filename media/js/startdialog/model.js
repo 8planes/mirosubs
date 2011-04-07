@@ -24,7 +24,7 @@ goog.provide('mirosubs.startdialog.Model');
  * @param {Number=} opt_initialLanguage PK of SubtitleLanguage to 
  *     display initially.
  */
-mirosubs.startdialog.Model = function(json, opt_initialLanguage) {
+mirosubs.startdialog.Model = function(json, opt_initialLanguageCode) {
     /**
      * @type {Array.<string>} Array of langauge codes
      */
@@ -39,11 +39,14 @@ mirosubs.startdialog.Model = function(json, opt_initialLanguage) {
         json['video_languages']);
     this.toLanguages_ = new mirosubs.startdialog.ToLanguages(
         this.myLanguages_, this.videoLanguages_, 
-        opt_initialLanguage);
+        opt_initialLanguageCode);
     /**
      * @type {?string}
      */
     this.selectedOriginalLanguage_ = null;
+    if (opt_initialLanguageCode){
+       this.selectedLanguage_ = this.toLanguages_.forLangCode(opt_initialLanguageCode); 
+    }
 };
 
 mirosubs.startdialog.Model.prototype.getOriginalLanguage = function() {

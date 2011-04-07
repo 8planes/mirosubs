@@ -238,5 +238,19 @@ function testSetOriginalLanguage() {
     assertEquals(0, model.fromLanguages().length);
 }
 
+function testSetInitialLanguage() {
+    var json = {
+        'video_languages': [
+            {'pk': 5, 'dependent': false, 'is_complete': false, 'language': 'ru', 'subtitle_count': 3},
+            {'pk': 6, 'dependent': false, 'is_complete': false, 'language': 'pt', 'subtitle_count': 5}
+        ],
+        'my_languages': ['pt', 'en'],
+        'original_language': ''
+    };
+    var model = new mirosubs.startdialog.Model(json, "pt");
+    assertEquals(model.getSelectedLanguage().LANGUAGE, 'pt' );
+}
+
+
 
 {% endblock %}
