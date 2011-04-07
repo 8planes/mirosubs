@@ -22,13 +22,12 @@ goog.provide('mirosubs.widget.WidgetController');
  * @constructor
  *
  */
-mirosubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab, currentLang) {
+mirosubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
     // TODO: when all VideoSource implementations support getVideoURL,
     // remove videoURL from the parameters for this constructor.
     this.videoURL_ = videoURL;
     this.videoPlayer_ = videoPlayer;
     this.videoTab_ = videoTab;
-    this.currentLang_ = currentLang;
 };
 
 /**

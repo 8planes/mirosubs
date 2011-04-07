@@ -32,7 +32,6 @@ mirosubs.widget.Widget = function(widgetConfig) {
     this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'];
     this.forceFormat_ = !!widgetConfig['force_format'];
     this.videoConfig_ = widgetConfig['video_config'];
-    this.currentLang_ = widgetConfig['base_state']['language'];
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
      * if base state is null, or equivalent of clicking on "Improve 
@@ -217,7 +216,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     }
 
     this.controller_ = new mirosubs.widget.WidgetController(
-        this.videoURL_, this.videoPlayer_, this.videoTab_, this.currentLang_);
+        this.videoURL_, this.videoPlayer_, this.videoTab_);
     this.controller_.initializeState(result);
 
     var subController = this.controller_.getSubtitleController();
