@@ -71,13 +71,9 @@ mirosubs.startdialog.ToLanguages.prototype.getToLanguages = function() {
 };
 
 mirosubs.startdialog.ToLanguages.prototype.forLangCode = function(langCode){
-    var toLangs  = this.getToLanguages();
-    for (var i = 0; i < toLangs.length; i++){
-        if (toLangs[i].LANGUAGE == langCode){
-            return toLangs[i];
-        }
-    }
-    return null;
+    return goog.array.find(this.getToLanguages(), function(o){
+        return o.LANGUAGE == langCode;
+    });
 };
 
 mirosubs.startdialog.ToLanguages.prototype.forKey = function(key) {

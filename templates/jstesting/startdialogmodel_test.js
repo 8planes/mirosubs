@@ -102,7 +102,7 @@ function testToLanguagesWithDependent0() {
     json['my_languages'] = ['it', 'fr'];
     json['video_languages'].push({
         'pk': 3, 'language': 'it', 'dependent': true, 'percent_done': 50, 'standard_pk': 2, 'subtitle_count': 9
-    })
+    });
     var model = new mirosubs.startdialog.Model(json);
     var languages = model.toLanguages();
     assertEquals('it', languages[0].LANGUAGE);
@@ -249,6 +249,8 @@ function testSetInitialLanguage() {
     };
     var model = new mirosubs.startdialog.Model(json, "pt");
     assertEquals(model.getSelectedLanguage().LANGUAGE, 'pt' );
+    var model = new mirosubs.startdialog.Model(json );
+    assertEquals(model.getSelectedLanguage().LANGUAGE, 'en');
 }
 
 

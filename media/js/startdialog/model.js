@@ -21,7 +21,7 @@ goog.provide('mirosubs.startdialog.Model');
 /**
  * @constructor
  * @param {Object} json from widget rpc
- * @param {Number=} opt_initialLanguage PK of SubtitleLanguage to 
+ * @param {string=} opt_initialLanguage Lang code of SubtitleLanguage to 
  *     display initially.
  */
 mirosubs.startdialog.Model = function(json, opt_initialLanguageCode) {
