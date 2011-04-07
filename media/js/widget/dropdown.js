@@ -22,7 +22,7 @@ goog.provide('mirosubs.widget.DropDown');
  * @constructor
  * @param {mirosubs.widget.DropDownContents} dropDownContents
  */
-mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab) {
+mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab, currentLang) {
     goog.ui.Component.call(this);
 
     this.videoID_ = videoID;
@@ -30,6 +30,7 @@ mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab) {
     this.videoTab_ = videoTab;
     this.subtitleState_ = null;
     this.shown_ = false;
+    this.currentLang_ = currentLang;
     this.languageClickHandler_ = new goog.events.EventHandler(this);
 };
 
@@ -324,6 +325,7 @@ mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
 mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
     this.dispatchEvent(
         new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
+    this.currentLang_ = langCode;
 };
 
 mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {

@@ -32,6 +32,7 @@ mirosubs.widget.Widget = function(widgetConfig) {
     this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'];
     this.forceFormat_ = !!widgetConfig['force_format'];
     this.videoConfig_ = widgetConfig['video_config'];
+    this.currentLang_ = widgetConfig.base_state.language;
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
      * if base state is null, or equivalent of clicking on "Improve 
@@ -216,7 +217,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     }
 
     this.controller_ = new mirosubs.widget.WidgetController(
-        this.videoURL_, this.videoPlayer_, this.videoTab_);
+        this.videoURL_, this.videoPlayer_, this.videoTab_, this.currentLang_);
     this.controller_.initializeState(result);
 
     var subController = this.controller_.getSubtitleController();
@@ -261,6 +262,7 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
     var s = mirosubs.widget.DropDown.Selection;
     var subController = this.controller_.getSubtitleController();
     var playController = this.controller_.getPlayController();
+
     if (selection == s.ADD_LANGUAGE)
         subController.openNewLanguageDialog();
     else if (selection == s.IMPROVE_SUBTITLES)
@@ -269,8 +271,10 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
         alert('subtitle homepage');
     else if (selection == s.SUBTITLES_OFF)
         playController.turnOffSubs();
-    else if (selection == s.LANGUAGE_SELECTED)
+    else if (selection == s.LANGUAGE_SELECTED){
         playController.languageSelected(opt_languageCode);
+    }
+        
 };
 
 mirosubs.widget.Widget.prototype.playAt = function(time) {
