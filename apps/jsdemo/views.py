@@ -24,7 +24,7 @@ import sys
 
 def js_dependencies():
     js_files = list(settings.JS_ONSITE)
-    js_files.append('/site_media/js/widget/testing/stubvideoplayer.js');
+    js_files.append('widget/testing/stubvideoplayer.js');
     return js_files
 
 def jsdemo(request, file_name):
