@@ -22,7 +22,7 @@ goog.provide('mirosubs.widget.DropDown');
  * @constructor
  * @param {mirosubs.widget.DropDownContents} dropDownContents
  */
-mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab, currentLang) {
+mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab) {
     goog.ui.Component.call(this);
 
     this.videoID_ = videoID;
@@ -30,7 +30,6 @@ mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab, current
     this.videoTab_ = videoTab;
     this.subtitleState_ = null;
     this.shown_ = false;
-    this.currentLang_ = currentLang;
     this.languageClickHandler_ = new goog.events.EventHandler(this);
 };
 

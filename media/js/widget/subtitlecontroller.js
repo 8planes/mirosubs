@@ -78,19 +78,15 @@ mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
  */
 mirosubs.widget.SubtitleController.prototype.openSubtitleDialog = 
     function(e) 
- {
-     /* Or anything that has a 'currentLang_' prop.
-      * @type {mirosubs.widget.DropDown}
-      */
-     var evtTarget = e.target ;
-     this.openNewLanguageDialog(evtTarget.currentLang_);
+{
+     this.openNewLanguageDialog(this.playController_.getSubtitleState().LANGUAGE);
 };
 
 mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
-    function(opt_intitial_lang) 
+    function(opt_intitialLang) 
 {
     this.dialogOpener_.showStartDialog(
-        this.playController_.getVideoSource().getVideoURL(), opt_intitial_lang);
+        this.playController_.getVideoSource().getVideoURL(), opt_intitialLang);
 };
 
 mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {
