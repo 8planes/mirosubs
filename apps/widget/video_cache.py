@@ -115,9 +115,13 @@ def get_video_urls(video_id):
         return value
     else:
         from videos.models import Video
-        video_urls = \
-            [vu.effective_url for vu 
-             in Video.objects.get(video_id=video_id).videourl_set.all()]
+        try:
+            video_urls = \
+                [vu.effective_url for vu 
+                 in Video.objects.get(video_id=video_id).videourl_set.all()]
+        except Video.DoesNotExist:
+            invalidate_video_id(video_id)
+            return []
         cache.set(cache_key, video_urls, TIMEOUT)
         return video_urls
 
