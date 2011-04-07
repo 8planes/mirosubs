@@ -78,7 +78,10 @@ class YoutubeVideoType(VideoType):
         if self.entry.media.thumbnail:
             video_obj.thumbnail = self.entry.media.thumbnail[-1].url
         video_obj.save()
-        self._get_subtitles_from_youtube(video_obj)
+        try:
+            self._get_subtitles_from_youtube(video_obj)
+        except:
+            logger.exception("Error getting subs from youtube")
         return video_obj
     
     def _get_entry(self, video_id):
