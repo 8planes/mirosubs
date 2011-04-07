@@ -27,7 +27,6 @@ ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
-                celeryd_requires_sudo,
                 admin_dir):
     env.user = username
     env.web_hosts = hosts
@@ -37,7 +36,6 @@ def _create_env(username, hosts, s3_bucket,
     env.static_dir = '/var/{0}'.format(static_dir)
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
-    env.celeryd_requires_sudo = celeryd_requires_sudo
     env.admin_dir = admin_dir
 
 def staging(username):
@@ -48,7 +46,6 @@ def staging(username):
                 'universalsubtitles.staging',
                 'static/staging', 'staging',
                 '/etc/init.d/memcached-staging restart',
-                True,
                 '/usr/local/universalsubtitles.staging')
 
 def dev(username):
@@ -58,7 +55,6 @@ def dev(username):
                 'universalsubtitles.dev',
                 'www/universalsubtitles.dev', 'dev', 
                 None, 
-                True,
                 None)
 
 def unisubs(username):
@@ -69,7 +65,6 @@ def unisubs(username):
                 'universalsubtitles',
                 'static/production', None,
                 '/etc/init.d/memcached restart', 
-                True,
                 '/usr/local/universalsubtitles')
 
 
@@ -188,11 +183,7 @@ def bounce_memcached():
         sudo(env.memcached_bounce_cmd)
 
 def _bounce_celeryd():
-    cmd = '/etc/init.d/celeryd restart'
-    if env.celeryd_requires_sudo:
-        sudo(cmd)
-    else:
-        run(cmd)
+    sudo('/etc/init.d/celeryd restart')
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):
