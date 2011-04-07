@@ -102,7 +102,7 @@ class YoutubeVideoType(VideoType):
         
         url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
 
-        h = httplib2.Http(".cache")
+        h = httplib2.Http()
         resp, content = h.request(url, "GET")
 
         if resp.status < 200 or resp.status >= 400:
