@@ -22,7 +22,7 @@ goog.provide('mirosubs.startdialog.ToLanguages');
  * @constructor
  * @param {Array.<string>} myLanguages Should already have non-recognized and duplicates removed.
  * @param {mirosubs.startdialog.VideoLanguages} videoLanguages
- * @param {int=} opt_initialLanguage
+ * @param {int=} opt_initialLanguage 
  */
 mirosubs.startdialog.ToLanguages = function(myLanguages, videoLanguages, opt_initialLanguage) {
     this.myLanguages_ = myLanguages;
@@ -68,6 +68,12 @@ mirosubs.startdialog.ToLanguages.prototype.getToLanguages = function() {
     if (!this.toLanguages_)
         this.toLanguages_ = this.makeToLanguages_();
     return this.toLanguages_;
+};
+
+mirosubs.startdialog.ToLanguages.prototype.forLangCode = function(langCode){
+    return goog.array.find(this.getToLanguages(), function(o){
+        return o.LANGUAGE == langCode;
+    });
 };
 
 mirosubs.startdialog.ToLanguages.prototype.forKey = function(key) {
