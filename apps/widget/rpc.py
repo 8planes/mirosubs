@@ -87,9 +87,14 @@ class Rpc(BaseRpc):
         else:
             if is_remote:
                 autoplay_language = self._find_remote_autoplay_language(request)
+                language = models.Video.objects.get(video_id=video_id).subtitle_language()
+                if language is not None:
+                    language_pk = language.pk
+                else:
+                    language_pk = None
                 if autoplay_language is not None:
                     subtitles = self._autoplay_subtitles(
-                        request.user, video_id, autoplay_language, None)
+                        request.user, video_id, language_pk, None)
                     return_value['subtitles'] = subtitles
         return return_value
 
