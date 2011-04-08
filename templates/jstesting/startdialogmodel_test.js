@@ -102,11 +102,35 @@ function testToLanguagesWithDependent0() {
     json['my_languages'] = ['it', 'fr'];
     json['video_languages'].push({
         'pk': 3, 'language': 'it', 'dependent': true, 'percent_done': 50, 'standard_pk': 2, 'subtitle_count': 9
-    })
+    });
     var model = new mirosubs.startdialog.Model(json);
     var languages = model.toLanguages();
     assertEquals('it', languages[0].LANGUAGE);
     assertEquals('fr', languages[1].LANGUAGE);
+}
+
+function testFromLangugesWithBlank() {
+    var json = makeBaseJSON();
+    var fr = json['video_languages'][1];
+    fr['language'] = '';
+    fr['subtitle_count'] = 0;
+    var model = new mirosubs.startdialog.Model(json);
+    var fromLanguages = model.fromLanguages();
+
+    var containsOriginal = function(tolang) {
+        return goog.string.startsWith(tolang.toString(), 'Original');
+    };
+
+    assertFalse(goog.array.some(fromLanguages, containsOriginal));
+
+    json = makeBaseJSON();
+    fr = json['video_languages'][1];
+    fr['language'] = '';
+    fr['subtitle_count'] = 8;
+    model = new mirosubs.startdialog.Model(json);
+    fromLanguages = model.fromLanguages();
+
+    assertTrue(goog.array.some(fromLanguages, containsOriginal));
 }
 
 function testFromLanguages0() {
@@ -214,5 +238,47 @@ function testSetOriginalLanguage() {
     assertEquals(0, model.fromLanguages().length);
 }
 
+function testSetInitialLanguage() {
+    var json = {
+        'video_languages': [
+            {'pk': 5, 'dependent': false, 'is_complete': false, 'language': 'ru', 'subtitle_count': 3},
+            {'pk': 6, 'dependent': false, 'is_complete': false, 'language': 'pt', 'subtitle_count': 5}
+        ],
+        'my_languages': ['pt', 'en'],
+        'original_language': ''
+    };
+    var model = new mirosubs.startdialog.Model(json, "pt");
+    assertEquals(model.getSelectedLanguage().LANGUAGE, 'pt' );
+    var model = new mirosubs.startdialog.Model(json );
+    assertEquals(model.getSelectedLanguage().LANGUAGE, 'en');
+}
+
+function testOrderForUserLanguages() {
+    var json = makeBaseJSON();
+    json['my_languages'] = ['it', 'fr', 'es', 'ca'];
+    json['video_languages'] = goog.array.concat(json['video_languages'] ,[
+        {'pk': 3, 'language': 'it', 'dependent': true, 'percent_done': 50, 'standard_pk': 2, 'subtitle_count': 9},
+        {'pk': 5, 'language': 'es', 'dependent': true, 'percent_done': 80, 'standard_pk': 1, 'subtitle_count': 9},
+        {'pk': 5, 'language': 'pt', 'dependent': true, 'percent_done': 100, 'standard_pk': 1, 'subtitle_count': 9},
+        {'pk': 4, 'language': 'ca', 'dependent': true, 'percent_done': 80, 'standard_pk': 3, 'subtitle_count': 9}]);
+    var model = new mirosubs.startdialog.Model(json);
+    var languages = model.toLanguages();
+    // make sure that  > % comes first and on % tie we respect the 
+    // regular alphabetical sorting
+    assertEquals('ca', languages[0].LANGUAGE);
+    assertEquals('es', languages[1].LANGUAGE);
+    assertEquals('it', languages[2].LANGUAGE);
+    assertEquals('fr', languages[3].LANGUAGE);
+}
+
+function testUserLangsAllEmptyOrder(){
+    var json = makeBaseJSON();
+    json['my_languages'] = ['it',  'es', 'ca'];
+    var model = new mirosubs.startdialog.Model(json);
+    var languages = model.toLanguages();
+    assertEquals('Catalan', languages[0].LANGUAGE_NAME);
+    assertEquals('Italian', languages[1].LANGUAGE_NAME);
+    assertEquals('Spanish', languages[2].LANGUAGE_NAME);
+}
 
 {% endblock %}

@@ -303,7 +303,7 @@ class TestRpc(TestCase):
 
     def test_change_set(self):
         request = RequestMockup(self.user_0)
-        draft = self._create_two_sub_draft(request)
+        draft = create_two_sub_draft(request)
         return_value = rpc.start_editing(
             request, draft.video.video_id, 'en')
         draft_pk = return_value['draft_pk']
@@ -320,8 +320,8 @@ class TestRpc(TestCase):
         language = video.subtitle_language()
         self.assertEqual(2, language.subtitleversion_set.count())
         version = language.latest_version()
-        self.assertTrue(version.text_change > 0 and version.text_change < 1)
-        self.assertTrue(version.time_change == 0)
+        self.assertTrue(version.text_change > 0 and version.text_change <= 1)
+        self.assertEqual(version.time_change , 0)
 
     def test_cant_edit_because_locked(self):
         request_0 = RequestMockup(self.user_0)
@@ -700,12 +700,12 @@ class TestRpc(TestCase):
         request = RequestMockup(self.user_0)
         video = self._create_two_sub_forked_subs(request)
         version = video.subtitle_language('es').version()
-        self.assertTrue(version.text_change > 0 and version.text_change < 1)
-        self.assertTrue(version.time_change > 0 and version.time_change < 1)
+        self.assertTrue(version.text_change > 0 and version.text_change <= 1)
+        self.assertTrue(version.time_change > 0 and version.time_change <= 1)
 
     def test_fork(self):
         request = RequestMockup(self.user_0)
-        draft = self._create_two_sub_dependent_draft(request)
+        draft = create_two_sub_dependent_draft(request)
 
         language = models.SubtitleLanguage.objects.get(pk=draft.language.pk)
         self.assertEquals(False, language.is_forked)
@@ -748,7 +748,7 @@ class TestRpc(TestCase):
 
     def test_fork_mid_edit(self):
         request = RequestMockup(self.user_0)
-        draft = self._create_two_sub_draft(request)
+        draft = create_two_sub_draft(request)
         response = rpc.start_editing(
             request, draft.video.video_id, 
             'es', base_language_pk=draft.video.subtitle_language('en').pk)
@@ -887,7 +887,7 @@ class TestRpc(TestCase):
 
     def test_create_translation_dependent_on_dependent(self):
         request = RequestMockup(self.user_0)
-        draft = self._create_two_sub_dependent_draft(request)
+        draft = create_two_sub_dependent_draft(request)
         response = rpc.start_editing(
             request, draft.video.video_id, 'fr', 
             base_language_pk=draft.video.subtitle_language('es').pk)
@@ -911,7 +911,7 @@ class TestRpc(TestCase):
         self.assertEqual(50, video.subtitle_language('fr').percent_done)
 
     def _create_two_sub_forked_subs(self, request):
-        draft = self._create_two_sub_dependent_draft(request)
+        draft = create_two_sub_dependent_draft(request)
         # now fork subtitles
         response = rpc.start_editing(
             request, draft.video.video_id, 'es',
@@ -1049,7 +1049,7 @@ class TestRpc(TestCase):
 
     def test_edit_zero_translation(self):
         request = RequestMockup(self.user_0)
-        draft = self._create_two_sub_draft(request)
+        draft = create_two_sub_draft(request)
         
         # now create empty subs for a language. We can do this by 
         # starting editing but not finishing. Should create a 0% language.
@@ -1104,29 +1104,6 @@ class TestRpc(TestCase):
             response = rpc.finished_subtitles(request, draft_pk, [_make_packet()])
         return models.SubtitleDraft.objects.get(pk=draft_pk)
 
-    def _create_two_sub_draft(self, request):
-        return_value = rpc.show_widget(
-            request,
-            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
-            False)
-        video_id = return_value['video_id']
-        response = rpc.start_editing(request, video_id, 'en', original_language_code='en')
-        draft_pk = response['draft_pk']
-        inserted = [{'subtitle_id': u'a',
-                     'text': 'hey!',
-                     'start_time': 2.3,
-                     'end_time': 3.4,
-                     'sub_order': 1.0},
-                    {'subtitle_id': u'b',
-                     'text': 'hey!',
-                     'start_time': 3.4,
-                     'end_time': 5.8,
-                     'sub_order': 2.0}]
-        rpc.save_subtitles(request, draft_pk, 
-                           [_make_packet(inserted=inserted)])
-        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
-        return models.SubtitleDraft.objects.get(pk=draft_pk)
-
     def _create_basic_dependent_draft(self, request, finished=False):
         draft = self._create_basic_draft(request, True)
         sl = draft.video.subtitlelanguage_set.all()[0]
@@ -1141,19 +1118,42 @@ class TestRpc(TestCase):
             rpc.finished_subtitles(request, draft_pk, [_make_packet()])
         return models.SubtitleDraft.objects.get(pk=draft_pk)
 
-    def _create_two_sub_dependent_draft(self, request):
-        draft = self._create_two_sub_draft(request)
-        sl_en = draft.video.subtitle_language('en')
-        response = rpc.start_editing(
-            request, draft.video.video_id, 'es', base_language_pk=sl_en.pk)
-        draft_pk = response['draft_pk']
-        inserted = [{'subtitle_id': 'a', 'text': 'a_es'}, 
-                    {'subtitle_id': 'b', 'text': 'b_es'}]
-        rpc.save_subtitles(
-            request, draft_pk, 
-            [_make_packet(inserted=inserted)])
-        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
-        return models.SubtitleDraft.objects.get(pk=draft_pk)
+def create_two_sub_draft(request):
+    return_value = rpc.show_widget(
+        request,
+        'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+        False)
+    video_id = return_value['video_id']
+    response = rpc.start_editing(request, video_id, 'en', original_language_code='en')
+    draft_pk = response['draft_pk']
+    inserted = [{'subtitle_id': u'a',
+                 'text': 'hey!',
+                 'start_time': 2.3,
+                 'end_time': 3.4,
+                 'sub_order': 1.0},
+                {'subtitle_id': u'b',
+                 'text': 'hey!',
+                 'start_time': 3.4,
+                 'end_time': 5.8,
+                 'sub_order': 2.0}]
+    rpc.save_subtitles(request, draft_pk, 
+                       [_make_packet(inserted=inserted)])
+    rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+    return models.SubtitleDraft.objects.get(pk=draft_pk)
+
+def create_two_sub_dependent_draft(request):
+    draft = create_two_sub_draft(request)
+    sl_en = draft.video.subtitle_language('en')
+    response = rpc.start_editing(
+        request, draft.video.video_id, 'es', base_language_pk=sl_en.pk)
+    draft_pk = response['draft_pk']
+    inserted = [{'subtitle_id': 'a', 'text': 'a_es'}, 
+                {'subtitle_id': 'b', 'text': 'b_es'}]
+    rpc.save_subtitles(
+        request, draft_pk, 
+        [_make_packet(inserted=inserted)])
+    rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+    return models.SubtitleDraft.objects.get(pk=draft_pk)
 
 def _make_packet(updated=[], inserted=[], deleted=[], packet_no=1):
     return {
@@ -1162,3 +1162,12 @@ def _make_packet(updated=[], inserted=[], deleted=[], packet_no=1):
         'deleted': deleted,
         'updated': updated
         }
+
+class TestCache(TestCase):
+
+    def test_get_cache_url_no_exceptions(self):
+        try:
+            res = video_cache.get_video_urls("bad key")
+        except models.Video.DoesNotExist:
+            self.fail("bad cache key shouldn't fail")
+        self.assertTrue(len(res)==0)    

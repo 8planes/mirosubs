@@ -145,6 +145,7 @@
 	margin: 4px 0 0px 0 !important;
 	display: block !important;
 	line-height: 0 !important;
+    width: 420px;
 }
 
 .completed_translations span {
@@ -160,4 +161,13 @@ a.add_subtitles_bt{
     float:right;
     display:block;
     margin-left:400px;
+}
+
+.team-video-buttons-container{
+    margin-top:10px !important;
+    float: left;
+}
+.team-video-buttons-container a.blue_button_small{ 
+    margin-right: 4px !important;
+
 }

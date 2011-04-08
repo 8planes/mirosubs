@@ -11,15 +11,115 @@ from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
 from teams import tasks
 from django.core import mail
+from datetime import datetime, timedelta
+from django.core.management import call_command
+from django.core import mail
 
+class TestCommands(TestCase):
+    
+    fixtures = ["test.json"]
+    
+    def setUp(self):
+        self.team = Team(name='test', slug='test')
+        self.team.save()
+        
+        self.user = User.objects.all()[:1].get()
+        self.user.is_active = True
+        self.user.changes_notification = True
+        self.user.email = 'test@test.com'
+        self.user.save()
+        
+        self.tm = TeamMember(team=self.team, user=self.user)
+        self.tm.save()
+
+        v1 = Video.objects.all()[:1].get()
+        self.tv1 = TeamVideo(team=self.team, video=v1, added_by=self.user)
+        self.tv1.save()
+        
+        v2 = Video.objects.exclude(pk=v1.pk)[:1].get()
+        self.tv2 = TeamVideo(team=self.team, video=v2, added_by=self.user)
+        self.tv2.save()
+        
+    def test_new_team_video_notification(self):
+        #mockup for send_templated_email to test context of email
+        import utils
+        
+        send_templated_email = utils.send_templated_email
+        
+        def send_templated_email_mockup(to, subject, body_template, body_dict, *args, **kwargs):
+            send_templated_email_mockup.context = body_dict
+            send_templated_email(to, subject, body_template, body_dict, *args, **kwargs)
+        
+        utils.send_templated_email = send_templated_email_mockup
+        
+        #check initial data
+        self.assertEqual(self.team.teamvideo_set.count(), 2)
+        self.assertEqual(self.team.users.count(), 1)
+        
+        today = datetime.today()
+        date = today - timedelta(hours=24)
+        
+        #test notification about two new videos
+        TeamVideo.objects.filter(pk__in=[self.tv1.pk, self.tv2.pk]).update(created=datetime.today())
+        self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 2)
+        mail.outbox = []
+        call_command('new_team_video_notification')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.user.email])
+        self.assertEqual(len(send_templated_email_mockup.context['team_videos']), 2)
+        
+        #test if user turn off notification
+        self.user.is_active = False
+        self.user.save()
+        mail.outbox = []
+        call_command('new_team_video_notification')
+        self.assertEqual(len(mail.outbox), 0)
+        
+        self.user.is_active = True
+        self.user.changes_notification = False
+        self.user.save()
+        mail.outbox = []
+        call_command('new_team_video_notification')
+        self.assertEqual(len(mail.outbox), 0)        
+
+        self.user.changes_notification = True
+        self.user.save()
+        self.tm.changes_notification = False
+        self.tm.save()
+        mail.outbox = []
+        call_command('new_team_video_notification')
+        self.assertEqual(len(mail.outbox), 0)    
+
+        self.tm.changes_notification = True
+        self.tm.save()
+        
+        #test notification if one video is new
+        past_date = today - timedelta(days=2)
+        TeamVideo.objects.filter(pk=self.tv1.pk).update(created=past_date)
+        self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 1)
+        mail.outbox = []
+        call_command('new_team_video_notification')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(send_templated_email_mockup.context['team_videos']), 1)
+        self.assertEqual(send_templated_email_mockup.context['team_videos'][0], self.tv2)
+        
+        #test notification if all videos are old
+        TeamVideo.objects.filter(pk__in=[self.tv1.pk, self.tv2.pk]).update(created=past_date)
+        self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 0)
+        mail.outbox = []
+        call_command('new_team_video_notification')
+        self.assertEqual(len(mail.outbox), 0)
+        
 class TestTasks(TestCase):
     
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
     
     def setUp(self):
         self.tv = TeamVideo.objects.all()[0]
-        self.sl = SubtitleLanguage.objects.all()[0]
+        self.sl = SubtitleLanguage.objects.exclude(language='')[0]
         self.team = Team.objects.all()[0]
+        tv = TeamVideo(team=self.team, video=self.sl.video, added_by=self.team.users.all()[:1].get())
+        tv.save()
         
     def test_tasks(self):
         #TODO: improve this
@@ -27,19 +127,21 @@ class TestTasks(TestCase):
         if result.failed():
             self.fail(result.traceback)
         
-        result = tasks.update_team_video_for_sl.delay(self.sl.id)
-        if result.failed():
-            self.fail(result.traceback)
-
         result = tasks.update_one_team_video.delay(self.team.id)
         if result.failed():
             self.fail(result.traceback)
+    
+    def test_update_team_video_for_sl(self):
+        result = tasks.update_team_video_for_sl.delay(self.sl.id)
+        if result.failed():
+            self.fail(result.traceback)        
     
     def test_add_video_notification(self):
         team = self.tv.team
         
         #at list one user should receive email
         self.assertTrue(team.users.count() > 1)
+        mail.outbox = []
         
         result = tasks.add_video_notification.delay(self.tv.id)
         if result.failed():
@@ -110,10 +212,6 @@ class TeamsTest(TestCase):
         }
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
         self.client.post(url, data)
-        
-        #by default all users receive notification, so when video added mail box
-        #should not be empty
-        self.assertEqual(len(mail.outbox), team.users.count()-1)
         
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
@@ -186,7 +284,6 @@ class TeamsTest(TestCase):
             tm.user.save()
         
         self._add_team_video(team, u'en', u"http://videos.mozilla.org/firefox/3.5/switch/switch.ogv")
-        self.assertEqual(len(mail.outbox), team.users.count()-1)
         
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
@@ -229,7 +326,7 @@ class TeamsTest(TestCase):
 
         # but the one with russian subs should be second.
         video_langs = self._video_lang_list(team)
-        self.assertEqual('ru', video_langs[1].language)
+        self.assertEqual('ru', video_langs[1].video.subtitle_language().language)
 
     def test_one_tvl(self):
         team, new_team_video = self._create_new_team_video()

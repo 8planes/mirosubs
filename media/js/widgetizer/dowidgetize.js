@@ -16,11 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-if (window['DEBUG_UNISUBS']) {
-    var debugWindow = new goog.debug.FancyWindow('main');
-    debugWindow.setEnabled(true);
-    debugWindow.init();
-    mirosubs.DEBUG = true;
+if (goog.DEBUG) {
+    if (window['DEBUG_UNISUBS']) {
+        var debugWindow = new goog.debug.FancyWindow('main');
+        debugWindow.setEnabled(true);
+        debugWindow.init();
+        mirosubs.DEBUG = true;
+    }
 }
 
 mirosubs.Widgetizer.getInstance().widgetize();

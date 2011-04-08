@@ -42,7 +42,7 @@ def index(request):
     if settings.HAYSTACK_SEARCH_ENGINE == 'dummy' and settings.DEBUG:
         q = request.REQUEST.get('q', '')
         qs = Video.objects.filter(title__icontains=q)
-    
+
     context = {
         'query': request.REQUEST.get('q', ''),
         'form': form,

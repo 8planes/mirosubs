@@ -209,6 +209,7 @@ class TeamVideo(models.Model):
     all_languages = models.BooleanField(_('Need help with all languages'), default=False, 
         help_text=_('If you check this, other languages will not be displayed.'))
     added_by = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
     completed_languages = models.ManyToManyField(SubtitleLanguage, blank=True)
     
     class Meta:
@@ -223,7 +224,6 @@ class TeamVideo(models.Model):
         #asynchronous call
         if created:
             update_one_team_video.delay(self.id)
-            add_video_notification.delay(self.id)
             
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)
@@ -344,17 +344,17 @@ class TeamVideo(models.Model):
             team_video=self, subtitle_language_1=sl).delete()
         TeamVideoLanguagePair.objects.filter(
             team_video=self, 
-            subtitle_language_1__is_null=True, 
+            subtitle_language_1=None, 
             language_1=sl.language).delete()
 
         langs = self.video.subtitle_language_dict()
 
         for lang in lang_code_list:
-            sl1_list = langs[lang]
+            sl1_list = langs.get(lang, [])
             if len(sl1_list) == 0:
                 sl1_list = [None]
-                for sl1 in sl1_list:
-                    self._update_team_video_language_pair(sl.language, sl, lang, sl1)
+            for sl1 in sl1_list:
+                self._update_team_video_language_pair(sl.language, sl, lang, sl1)
         for sl0 in self.video.subtitlelanguage_set.all():            
             self._update_team_video_language_pair(sl0.language, sl0, sl.language, sl)
 

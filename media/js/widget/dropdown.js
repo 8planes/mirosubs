@@ -324,6 +324,7 @@ mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
 mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
     this.dispatchEvent(
         new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
+    this.currentLang_ = langCode;
 };
 
 mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {

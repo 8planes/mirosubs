@@ -1,7 +1,8 @@
 {% load feedback thumbnail i18n announcement_tags messages_tags profiles_tags %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   {% if not current_site.name == 'unisubs' %}
@@ -101,6 +102,16 @@
     {% if user.is_authenticated %}
         {% messages %}
     {% endif %}
+    
+    {% if user.is_staff %}
+    <div id="admin_controls">
+      <a target="_blank" href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a>
+      {% if user.is_superuser %}
+      <a target="_blank" href="{% url sentry %}"><span>{% trans 'Sentry' %}</span></a>
+      {% endif %}
+    </div><!-- // admin_controls -->
+    {% endif %}
+    
     <div id="topbar">
       <div class="wrapper">
       <div class="search">
@@ -132,18 +143,12 @@
       </ul>
     </div><!-- // mainNav -->
     <ul id="subnav" class="clearfix">
-      <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans 'volunteer' %}</a></li>
+      <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans 'Volunteer' %}</a></li>
       <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
-      <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
+      <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
       <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
       {% if user.is_authenticated %}
-          {% if user.is_staff %}
-            <li><a target="_blank" href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
-            {% if user.is_superuser %}
-                <li><a target="_blank" href="{% url sentry %}"><span>{% trans 'Sentry' %}</span></a></li>
-            {% endif %}
-          {% endif %}
-          <li id="subnav_menu">{% top_user_panel %}</li>
+        <li id="subnav_menu">{% top_user_panel %}</li>
       {% else %}
       <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
       {% endif %}

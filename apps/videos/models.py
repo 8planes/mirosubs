@@ -235,7 +235,7 @@ class Video(models.Model):
             
             Action.create_video_handler(obj, user)
             
-            SubtitleLanguage(video=obj, is_original=True).save()
+            SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
             #Save video url
             video_url_obj = VideoUrl()
             if vt.video_id:
@@ -322,6 +322,7 @@ class Video(models.Model):
 
     def update_languages_count(self):
         self.languages_count = self.subtitlelanguage_set.filter(had_version=True).count()
+        self.save()
         
     def latest_subtitles(self, language_code=None):
         version = self.latest_version(language_code)
@@ -418,13 +419,14 @@ def create_video_id(sender, instance, **kwargs):
         return
     alphanum = string.letters+string.digits
     instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
-                                                           for i in xrange(12)])
+                                 for i in xrange(12)])
     
 def video_delete_handler(sender, instance, **kwargs):
     video_cache.invalidate_cache(instance.video_id)
 
 models.signals.pre_save.connect(create_video_id, sender=Video)
 models.signals.pre_delete.connect(video_delete_handler, sender=Video)
+models.signals.m2m_changed.connect(User.video_followers_change_handler, sender=Video.followers.through)
 
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
@@ -462,6 +464,7 @@ class SubtitleLanguage(models.Model):
         super(SubtitleLanguage, self).save(*args, **kwargs)
         self.check_initial_values()
         self.save_initial_values()
+        self.video.update_languages_count()
     
     def delete(self, *args, **kwargs):
         video_id = self.video_id
@@ -472,6 +475,9 @@ class SubtitleLanguage(models.Model):
         if not self.video.subtitlelanguage_set.exclude(is_complete=False).exists():
             self.video.complete_date = None
             self.video.save()
+            
+        video_cache.invalidate_cache(self.video.video_id)
+        self.video.update_languages_count()            
         
     def save_initial_values(self):
         self._initial_values = {
@@ -534,17 +540,18 @@ class SubtitleLanguage(models.Model):
             return self.is_complete
 
     def get_widget_url(self):
-        # this duplicates mirosubs.widget.SubtitleController.prototype.startEditing_ in js
+        # duplicates mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_
         video = self.video
         video_url = video.get_video_url()
         config = {
             "videoID": video.video_id,
-            "baseVersionNo": None,
             "videoURL": video_url,
             "effectiveVideoURL": video_url,
             "languageCode": self.language,
-            "originalLanguageCode": video.language,
-            "fork": False }
+            "subLanguagePK": self.pk,
+            "originalLanguageCode": video.language }
+        if self.is_dependent():
+            config['baseLanguagePK'] = self.standard_language.pk
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
 
     @models.permalink
@@ -660,17 +667,9 @@ class SubtitleLanguage(models.Model):
                 exclude = [exclude]            
             qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
         return qs
-    
-def subtile_language_delete_handler(sender, instance, **kwargs):
-    video_cache.invalidate_cache(instance.video.video_id)
-    instance.video.update_languages_count()
 
-def subtitle_language_save_handler(sender, instance, **kwargs):
-    instance.video.update_languages_count()
-    
+models.signals.m2m_changed.connect(User.sl_followers_change_handler, sender=SubtitleLanguage.followers.through)
 post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
-post_save.connect(subtitle_language_save_handler, SubtitleLanguage)
-models.signals.pre_delete.connect(subtile_language_delete_handler, SubtitleLanguage)
 
 class SubtitleCollection(models.Model):
     is_forked=models.BooleanField(default=False)
@@ -839,8 +838,8 @@ class SubtitleVersion(SubtitleCollection):
                     text_count_changed += 1
                     time_count_changed += 1
                     
-            self.time_change = time_count_changed / 1. / subtitles_length
-            self.text_change = text_count_changed / 1. / subtitles_length
+            self.time_change = min(time_count_changed / 1. / subtitles_length, 1)
+            self.text_change = min(text_count_changed / 1. / subtitles_length, 1)
 
     def _get_standard_collection(self):
         if self.language.standard_language:

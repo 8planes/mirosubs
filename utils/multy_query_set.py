@@ -1,4 +1,5 @@
 from django.db.models import ObjectDoesNotExist
+from teams.models import TeamVideo
 
 class MultyQuerySet(object):
     """
@@ -68,7 +69,7 @@ class TeamMultyQuerySet(object):
         return qs._length
     
     def __len__(self):
-        if not hasattr(self, '_lenght'):
+        if not hasattr(self, '_length'):
             self._length = sum([self.get_qs_count(qs) for qs in self.lists])
         return self._length
     
@@ -92,7 +93,7 @@ class TeamMultyQuerySet(object):
             i = 0
             for qs in self.lists:
                 if k < (i + self.get_qs_count(qs)):
-                    val = qs._default_manager.all()[i+k]
+                    val = qs.all()[i+k]
                 i += self.get_qs_count(qs)
         else:
             selected = []
@@ -124,11 +125,16 @@ class TeamMultyQuerySet(object):
             val = []
             videos = []
             for obj in selected:
-                if obj.team_video_id not in videos:
+                if hasattr(obj, "team_video") and obj.team_video_id not in videos:
                     videos.append(obj.team_video_id)
+                    val.append(obj.team_video)
+                elif isinstance(obj, TeamVideo) and obj.id not in videos:
+                    videos.append(obj.id)
                     val.append(obj)
             
         self._cache[cache_key] = val
+        if val is None:
+            raise IndexError
         return val
         
     def _clone(self):

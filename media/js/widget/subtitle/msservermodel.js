@@ -52,16 +52,11 @@ goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
  */
 mirosubs.subtitle.MSServerModel.EMBED_JS_URL = null;
 
-mirosubs.subtitle.MSServerModel.logger_ = 
-    goog.debug.Logger.getLogger('mirosubs.subtitle.MSServerModel');
-
 // updated by values from server when widgets load.
 mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 0;
 
 mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
     goog.asserts.assert(!this.initialized_);
-    mirosubs.subtitle.MSServerModel.logger_.info(
-        'init for ' + mirosubs.currentUsername);
     this.unitOfWork_ = unitOfWork;
     this.initialized_ = true;
     this.timerRunning_ = true;

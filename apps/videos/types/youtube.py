@@ -15,11 +15,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
+import logging
+
+logger = logging.getLogger(__name__)
 
 from gdata.youtube.service import YouTubeService
 from gdata.service import RequestError
 import re
 import urllib
+import httplib2
 from utils import YoutubeSubtitleParser
 from base import VideoType, VideoTypeError
 from auth.models import CustomUser as User
@@ -78,7 +82,10 @@ class YoutubeVideoType(VideoType):
         if self.entry.media.thumbnail:
             video_obj.thumbnail = self.entry.media.thumbnail[-1].url
         video_obj.save()
-        self._get_subtitles_from_youtube(video_obj)
+        try:
+            self._get_subtitles_from_youtube(video_obj)
+        except:
+            logger.exception("Error getting subs from youtube")
         return video_obj
     
     def _get_entry(self, video_id):
@@ -97,8 +104,21 @@ class YoutubeVideoType(VideoType):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
         
         url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
-        d = urllib.urlopen(url)
-        parser = YoutubeSubtitleParser(d.read())
+
+        h = httplib2.Http()
+        resp, content = h.request(url, "GET")
+
+        if resp.status < 200 or resp.status >= 400:
+            logger.warning("Youtube subtitles error", extra={
+                    'data': {
+                        "url": url,
+                        "video_id": video_obj.youtube_videoid,
+                        "status_code": resp.status,
+                        "response": content
+                        }
+                    })
+            return
+        parser = YoutubeSubtitleParser(content)
 
         if not parser:
             return

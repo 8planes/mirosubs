@@ -261,6 +261,7 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
     var s = mirosubs.widget.DropDown.Selection;
     var subController = this.controller_.getSubtitleController();
     var playController = this.controller_.getPlayController();
+
     if (selection == s.ADD_LANGUAGE)
         subController.openNewLanguageDialog();
     else if (selection == s.IMPROVE_SUBTITLES)
@@ -269,8 +270,10 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
         alert('subtitle homepage');
     else if (selection == s.SUBTITLES_OFF)
         playController.turnOffSubs();
-    else if (selection == s.LANGUAGE_SELECTED)
+    else if (selection == s.LANGUAGE_SELECTED){
         playController.languageSelected(opt_languageCode);
+    }
+        
 };
 
 mirosubs.widget.Widget.prototype.playAt = function(time) {

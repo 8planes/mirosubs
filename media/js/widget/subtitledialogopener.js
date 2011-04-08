@@ -83,11 +83,11 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
 };
 
 mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog = 
-    function(opt_effectiveVideoURL) 
+    function(opt_effectiveVideoURL, opt_initial_lang) 
 {
     var that = this;
     var dialog = new mirosubs.startdialog.Dialog(
-        this.videoID_, null, 
+        this.videoID_, opt_initial_lang, 
         function(originalLanguage, subLanguage, subLanguageID, 
                  baseLanguageID, closeCallback) {
             that.openDialogOrRedirect_(

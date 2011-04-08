@@ -193,7 +193,6 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
         videoPlayer.pause();
     }
     this.getRightPanelInternal().showLoading(false);
-
 };
 mirosubs.subtitle.Dialog.prototype.handleGoToStep_ = function(event) {
     this.setState_(event.stepNo);

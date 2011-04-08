@@ -113,7 +113,7 @@ jQuery(function($){
             $.get(make_primary_url, {id: $this.attr('video_url_id')},
                 function(response){
                     if (response.error){
-                        $.msg.clean().add(response.error);
+                        $.jGrowl.error(response.error);
                     }else{
                         var $primary_span = $('#urls-tab .primary');
                         if ( ! $primary_span.length){
@@ -142,7 +142,7 @@ jQuery(function($){
                 $.get(remove_url, {id: $url.attr('video_url_id')},
                     function(response){
                         if (response.error){
-                            $.msg.clean().add(response.error);
+                            $.jGrowl.error(response.error);
                         }else{
                             $url.parents('tr').remove();
                         }

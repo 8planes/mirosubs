@@ -52,6 +52,8 @@ from widget.rpc import add_general_settings
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
+CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS = getattr(settings, 'CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS', 20)
+
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
 MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
 APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
@@ -135,7 +137,6 @@ def detail(request, slug, is_debugging=False):
     qs2 = qs.filter(percent_complete=0)
     qs3 = lqs.filter(is_original=True, is_complete=False, language__in=languages)
     qs4 = lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
-    
     mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
 
     extra_context = widget.add_onsite_js_files({})    
@@ -143,10 +144,19 @@ def detail(request, slug, is_debugging=False):
         'team': team,
         'can_edit_video': team.can_edit_video(request.user)
     })
+    total_count = TeamVideo.objects.filter(team=team).count()
 
-    if len(mqs) == 0:
-        mqs = TeamMultyQuerySet(TeamVideoLanguagePair.objects.filter(team=team) \
-                                .select_related('team_video', 'team_video__video'))
+    additional = TeamVideoLanguagePair.objects.none()
+    all_videos = TeamVideo.objects.filter(team=team).select_related('video')
+
+    if total_count == 0:
+        mqs = all_videos
+    else:
+        if  total_count < CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS:
+            additional = all_videos.exclude(pk__in=[x.id for x in mqs ])
+        else:
+            additional = all_videos
+        mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4 , additional)    
 
 
     general_settings = {}
@@ -160,7 +170,6 @@ def detail(request, slug, is_debugging=False):
             'base_state': {}
         })
 
-
     if bool(is_debugging) and request.user.is_staff:
         extra_context.update({
             'languages': languages,
@@ -171,7 +180,9 @@ def detail(request, slug, is_debugging=False):
             'qs3': qs3,
             'qs4': qs4,
             'mqs':mqs,
-            'mqs_count': len(mqs)
+            'mqs_count': len(mqs),
+            'additional_count': additional.count(),
+            'additional': additional[:50]
             })
         return render_to_response("teams/detail-debug.html", extra_context, RequestContext(request))
     
@@ -306,7 +317,7 @@ def edit(request, slug):
             form = EditTeamForm(request.POST, request.FILES, instance=team)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Team edited success'))
+            messages.success(request, _(u'Your changes have been saved'))
             return redirect(team.get_edit_url())
     else:
         if request.user.is_staff:

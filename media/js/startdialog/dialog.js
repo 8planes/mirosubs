@@ -21,7 +21,7 @@ goog.provide('mirosubs.startdialog.Dialog');
 /**
  * @constructor
  * @param {string} videoID
- * @param {?int} initialLanguage PK for SubtitleLanguage to select at first.
+ * @param {?string} initialLanguage Langcode for SubtitleLanguage to select at first.
  * @param {function(?string, string, ?number, ?number, function())} 
  * callback When OK button is 
  *     clicked, this will be called with: arg0: original language. This is
@@ -32,14 +32,14 @@ goog.provide('mirosubs.startdialog.Dialog');
  * SubtitleLanguage to translate from. This will be null iff the user intends to make 
  *     forked/original. arg4: function to close the dialog.
  */
-mirosubs.startdialog.Dialog = function(videoID, initialLanguage, callback) {
+mirosubs.startdialog.Dialog = function(videoID, initialLanguageCode, callback) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.videoID_ = videoID;
     this.fetchCompleted_ = false;
     this.model_ = null;
-    this.initialLanguage_ = initialLanguage;
+    this.initialLanguageCode_ = initialLanguageCode;
     this.callback_ = callback;
 };
 goog.inherits(mirosubs.startdialog.Dialog, goog.ui.Dialog);
@@ -71,19 +71,21 @@ mirosubs.startdialog.Dialog.prototype.setVisible = function(visible) {
             goog.bind(this.responseReceived_, this));
 };
 
+
+
 mirosubs.startdialog.Dialog.prototype.makeDropdown_ = 
     function($d, contents) 
 {
-    var options = []
-    for (var i = 0; i < contents.length; i++)
-        options.push(
-            $d('option', {'value': contents[i][0]}, contents[i][1]));
+var options = [];
+    for (var i = 0; i < contents.length; i++){
+         options.push($d('option', {'value': contents[i][0]}, contents[i][1]));
+    }
     return $d('select', null, options);
 };
 
 mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.fetchCompleted_ = true;
-    this.model_ = new mirosubs.startdialog.Model(jsonResult);
+    this.model_ = new mirosubs.startdialog.Model(jsonResult, this.initialLanguageCode_);
     goog.dom.removeChildren(this.contentDiv_);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
@@ -133,9 +135,10 @@ mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
     var toLanguageContents = goog.array.map(
         this.model_.toLanguages(),
         function(l) {
-            return [l.KEY, l.toString()];
+            return [l.KEY, l.toString(), l.LANGUAGE];
         });
     this.toLanguageDropdown_ = this.makeDropdown_($d, toLanguageContents);
+    this.toLanguageDropdown_.value = this.model_.getSelectedLanguage().KEY;
     this.contentDiv_.appendChild(
         $d('p', null, 
            $d('span', null, 'Subtitle into: '),

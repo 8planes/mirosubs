@@ -1,6 +1,6 @@
 {% load feedback recent_activity widget i18n announcement_tags messages_tags profiles_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -69,6 +69,14 @@
     </script>
 </head>
 <body>
+  {% if user.is_staff %}
+  <div id="admin_controls">
+    <a target="_blank" href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a>
+    {% if user.is_superuser %}
+    <a target="_blank" href="{% url sentry %}"><span>{% trans 'Sentry' %}</span></a>
+    {% endif %}
+  </div><!-- // admin_controls -->
+  {% endif %}
 <a href="#" class="feedback_tab" data-modal="feedback_container">{% trans "Feedback" %}</a>
   
 {% announcement %}
@@ -94,9 +102,9 @@
 
 
      <ul id="subnav">
-       <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans 'volunteer' %}</a></li>
+       <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans 'Volunteer' %}</a></li>
        <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
-       <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
+       <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
        <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
        {% if user.is_authenticated %}
        {% if user.is_staff %}

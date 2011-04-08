@@ -22,10 +22,12 @@ from fabric.context_managers import settings
 import os
 
 DEV_HOST = 'dev.universalsubtitles.org:2191'
+ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
-                memcached_bounce_cmd, celeryd_requires_sudo):
+                memcached_bounce_cmd, 
+                admin_dir):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -34,7 +36,7 @@ def _create_env(username, hosts, s3_bucket,
     env.static_dir = '/var/{0}'.format(static_dir)
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
-    env.celeryd_requires_sudo = celeryd_requires_sudo
+    env.admin_dir = admin_dir
 
 def staging(username):
     _create_env(username, 
@@ -44,14 +46,16 @@ def staging(username):
                 'universalsubtitles.staging',
                 'static/staging', 'staging',
                 '/etc/init.d/memcached-staging restart',
-                True)
+                '/usr/local/universalsubtitles.staging')
 
 def dev(username):
     _create_env(username,
                 ['dev.universalsubtitles.org:2191'],
                 None,
                 'universalsubtitles.dev',
-                'www/universalsubtitles.dev', 'dev', None, False)
+                'www/universalsubtitles.dev', 'dev', 
+                None, 
+                None)
 
 def unisubs(username):
     _create_env(username,
@@ -60,7 +64,8 @@ def unisubs(username):
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
                 'static/production', None,
-                '/etc/init.d/memcached restart', True)
+                '/etc/init.d/memcached restart', 
+                '/usr/local/universalsubtitles')
 
 
 def syncdb():
@@ -106,13 +111,20 @@ def _switch_branch(dir, branch_name):
         run('git branch --track {0} origin/{0}'.format(branch_name))
         run('git checkout {0}'.format(branch_name))
         env.warn_only = False
+        _git_pull()
 
-def switch_branch(branch_name):
+def _execute_on_all_hosts(cmd):
     for host in env.web_hosts:
         env.host_string = host
-        _switch_branch(env.web_dir, branch_name)
+        cmd(env.web_dir)
     env.host_string = DEV_HOST
-    _switch_branch(env.static_dir, branch_name)
+    cmd(env.static_dir)
+    if env.admin_dir is not None:
+        env.host_string = ADMIN_HOST
+        cmd(env.admin_dir)
+
+def switch_branch(branch_name):
+    _execute_on_all_hosts(lambda dir: _switch_branch(dir, branch_name))    
 
 def _update_environment(base_dir):
     with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
@@ -122,22 +134,15 @@ def _update_environment(base_dir):
         run('yes i | {0}/env/bin/pip install -E {0}/env/ -r requirements.txt'.format(base_dir), pty=True)
 
 def update_environment():
-    for host in env.web_hosts:
-        env.host_string = host
-        _update_environment(env.web_dir)
-    env.host_string = DEV_HOST
-    _update_environment(env.static_dir)
+    _execute_on_all_hosts(lambda dir: _update_environment(dir))
 
 def _clear_permissions(dir):
     sudo('chgrp pcf-web -R {0}'.format(dir))
     sudo('chmod g+w -R {0}'.format(dir))
 
 def clear_environment_permissions():
-    for host in env.web_hosts:
-        env.host_string = host
-        _clear_permissions(os.path.join(env.web_dir, 'env'))
-    env.host_string = DEV_HOST
-    _clear_permissions(os.path.join(env.static_dir, 'env'))
+    _execute_on_all_hosts(
+        lambda dir: _clear_permissions(os.path.join(dir, 'env')))
 
 def clear_permissions():
     for host in env.web_hosts:
@@ -178,11 +183,7 @@ def bounce_memcached():
         sudo(env.memcached_bounce_cmd)
 
 def _bounce_celeryd():
-    cmd = '/etc/init.d/celeryd restart'
-    if env.celeryd_requires_sudo:
-        sudo(cmd)
-    else:
-        run(cmd)
+    sudo('/etc/init.d/celeryd restart')
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):

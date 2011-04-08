@@ -21,11 +21,13 @@ goog.provide('mirosubs.widget.SameDomainEmbed');
 mirosubs.widget.SameDomainEmbed = {};
 
 mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
-    if (widgetConfig['debug_js']) {
-        var debugWindow = new goog.debug.FancyWindow('main');
-        debugWindow.setEnabled(true);
-        debugWindow.init(); 
-        mirosubs.DEBUG = true;
+    if (goog.DEBUG) {
+        if (widgetConfig['debug_js']) {
+            var debugWindow = new goog.debug.FancyWindow('main');
+            debugWindow.setEnabled(true);
+            debugWindow.init(); 
+            mirosubs.DEBUG = true;
+        }
     }
     mirosubs.IS_NULL = !!widgetConfig['null_widget'];
     if (widgetConfig['returnURL'])

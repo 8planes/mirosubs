@@ -25,21 +25,21 @@
   	{# This should be refactored in future #}
   	{% if language %}
       {% if language|is_follower:user %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %} {{ language.get_language_display }}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %} {{ language.get_language_display }}</button>
       {% else %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %} {{ language.get_language_display }}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %} {{ language.get_language_display }}</button>      
       {% endif %}
-  {% else %}
+    {% else %}
       {% if video|is_follower:user %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %}</button>
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow All" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow All" %}</button>
       {% else %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %}</button>      
+          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow All" %}</button>
+          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow All" %}</button>      
       {% endif %}	
-  {% endif %}
+    {% endif %}
   </div><!-- // video_follow -->
   <h3>{% trans 'Embed this video in your site' %} <a class="embed_options_link" target="embedoptions" href="https://github.com/8planes/mirosubs/wiki/Embed-Code-Usage-Guide">options</a></h3>
   <p class="mirosubs-embed">

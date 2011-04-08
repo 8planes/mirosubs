@@ -33,7 +33,8 @@ mirosubs.startdialog.VideoLanguages = function(jsonVideoLanguages) {
     this.videoLanguages_ = goog.array.filter(
         videoLanguages,
         function(l) {
-            return !!mirosubs.languageNameForCode(l.LANGUAGE);
+            return !!mirosubs.languageNameForCode(l.LANGUAGE) ||
+                l.SUBTITLE_COUNT > 0;
         });
     goog.array.forEach(
         this.videoLanguages_,
