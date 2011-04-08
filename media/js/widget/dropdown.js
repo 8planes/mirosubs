@@ -129,10 +129,9 @@ mirosubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
         var data = this.translationLanguages_[i];
 
         var link =
-            $d('a', {'href': '#',
+            $d('a', {'href': '#'},
                $d('span', 'mirosubs-languageTitle',
-                  mirosubs.languageNameForCode(
-                      data[0])),
+                  mirosubs.languageNameForCode(data[0])),
                $d('span', 'mirosubs-languageStatus',
                   data[1] + '%'));
         var linkLi = $d('li', null, link);
