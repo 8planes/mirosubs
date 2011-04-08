@@ -26,7 +26,8 @@ mirosubs.widget.SubtitleState = function(json, opt_subs) {
      * Language code. Null if and only if original language.
      * @type {?string}
      */
-    this.LANGUAGE = json['language'];
+    this.LANGUAGE = json['language_code'];
+    this.LANGUAGE_PK = json['language_pk'];
     this.IS_ORIGINAL = json['is_original'];
     this.IS_COMPLETE = json['is_complete'];
     /**

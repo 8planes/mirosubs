@@ -178,7 +178,8 @@ def get_video_languages(video_id):
         video = Video.objects.get(video_id=video_id)
         translated_languages = video.subtitlelanguage_set.filter(has_version=True) \
             .filter(is_original=False)
-        return_value = [(t.language, t.percent_done) for t in translated_languages]
+
+        return_value = [(t.language, t.percent_done, t.pk) for t in translated_languages]
         cache.set(cache_key, return_value, TIMEOUT)
         return return_value
 

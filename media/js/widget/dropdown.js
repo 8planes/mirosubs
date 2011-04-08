@@ -126,17 +126,20 @@ mirosubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
     this.translationLinks_ = [];
 
     for (var i = 0; i < this.translationLanguages_.length; i++) {
+        var data = this.translationLanguages_[i];
+
         var link =
-            $d('a', {'href': '#'},
+            $d('a', {'href': '#',
                $d('span', 'mirosubs-languageTitle',
                   mirosubs.languageNameForCode(
-                      this.translationLanguages_[i][0])),
+                      data[0])),
                $d('span', 'mirosubs-languageStatus',
-                  this.translationLanguages_[i][1] + '%'));
+                  data[1] + '%'));
         var linkLi = $d('li', null, link);
         this.translationLinks_.push(
             { link: link, 
               linkLi: linkLi, 
+              pk: data[2],
               lang: this.translationLanguages_[i] });
         this.languageList_.appendChild(linkLi);
     }
@@ -281,7 +284,7 @@ mirosubs.widget.DropDown.prototype.addTranslationLinkListeners_ = function() {
     goog.array.forEach(this.translationLinks_,
         function(tLink) {
             that.languageClickHandler_.listen(tLink.link, 'click',
-                goog.bind(that.languageSelected_, that, tLink.lang[0]));
+                goog.bind(that.languageSelected_, that, tLink.lang[0], tLink.pk));
         });
 };
 
@@ -316,15 +319,19 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
     this.hide();
 };
 
-mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
-    e.preventDefault();
-    this.dispatchLanguageSelection_(langCode);
+mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, langPK, e) {
+    if (e){
+        e.preventDefault();        
+    }
+
+    this.dispatchLanguageSelection_(langCode, langPK);
 };
 
-mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
+mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode, langPK) {
     this.dispatchEvent(
-        new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
+        new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode, langPK));
     this.currentLang_ = langCode;
+    this.currentLangPk_ = langPK;
 };
 
 mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {
@@ -391,7 +398,7 @@ mirosubs.widget.DropDown.prototype.disposeInternal = function() {
 * @constructor
 * @param {?string} opt_languageCode
 */
-mirosubs.widget.DropDown.LanguageSelectedEvent = function(opt_languageCode) {
+mirosubs.widget.DropDown.LanguageSelectedEvent = function(opt_languageCode, opt_languagePK) {
     this.type = mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED;
     /**
      * The language code selected, or null to signify original
@@ -399,4 +406,5 @@ mirosubs.widget.DropDown.LanguageSelectedEvent = function(opt_languageCode) {
      * @type {?string}
      */
     this.languageCode = opt_languageCode;
+    this.languagePK = opt_languagePK;
 };

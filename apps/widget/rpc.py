@@ -70,21 +70,18 @@ class Rpc(BaseRpc):
         return_value['drop_down_contents'] = \
             self._drop_down_contents(video_id)
 
-        if base_state is not None and base_state.get("languages", None) is not None:
-            lang = base_state.get('language', None)
-            if lang is not None:
-                # is this a pk?
-                try:
-                    lang = int(lang)
-                except ValueError:
+        if base_state is not None and base_state.get("language_code", None) is not None:
+            lang_pk = base_state.get('language_pk', None)
+            if lang_pk is  None:
+                lang_code = base_state.get('language_code', None)
+                language = models.SubtitleLanguage.objects.get(video_id=video_id,language=lang_code)
 
-                    language = models.Video.objects.get(video_id=video_id).subtitle_language(lang)
-                    if language:
-                        lang = language.pk
+                if language:
+                    lang_pk = language.pk
 
             subtitles = self._autoplay_subtitles(
                 request.user, video_id, 
-                lang,
+                lang_pk,
                 base_state.get('revision', None))
             return_value['subtitles'] = subtitles
         else:
@@ -305,7 +302,6 @@ class Rpc(BaseRpc):
         cache = video_cache.get_subtitles_dict(
             video_id, language_pk, None,
             lambda version: self._subtitles_dict(version))
-        lang = cache.get("language", None)
         return cache    
 
     def get_widget_info(self, request):
@@ -460,9 +456,9 @@ class Rpc(BaseRpc):
                 writelock_session_key='')
             sl.save()
 
-    def _autoplay_subtitles(self, user, video_id, language, version_no):
+    def _autoplay_subtitles(self, user, video_id, language_pk, version_no):
         cache =  video_cache.get_subtitles_dict(
-            video_id, language, version_no, 
+            video_id, language_pk, version_no, 
             lambda version: self._subtitles_dict(version))
         if cache.get("language", None) is not None:
             cache['language_code'] = cache['language'].language

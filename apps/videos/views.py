@@ -378,7 +378,8 @@ def _widget_params(request, video, version_no=None, language=None, video_url=Non
         params['base_state']['revision'] = version_no
         
     if language:
-        params['base_state']['language'] = language.pk
+        params['base_state']['language_code'] = language.language
+        params['base_state']['language_pk'] = language.pk
 
     return base_widget_params(request, params)
 
