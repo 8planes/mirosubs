@@ -678,7 +678,12 @@ class SubtitleCollection(models.Model):
         abstract = True
 
     def subtitles(self, subtitles_to_use=None):
-        subtitles = subtitles_to_use or self.subtitle_set.all()
+        if  self.pk:
+            # if this collection hasn't been saved, then subtitle_set.all will return all subtitles
+            # which will take too long / never return
+            subtitles = subtitles_to_use or self.subtitle_set.all()
+        else:
+            subtitles = subtitles_to_use or []
         if not self.is_dependent():
             return [EffectiveSubtitle.for_subtitle(s)
                     for s in subtitles]
