@@ -102,11 +102,56 @@ from socialauth.views import get_url_host
 from django.core.urlresolvers import reverse
 import urllib
 from django.conf import settings
-from socialauth.lib import oauthtwitter2 as oauthtwitter
+from socialauth.lib import oauthtwitter2 as oauthtwitter,facebook
 from django.http import HttpResponse
 from oauth import oauth
 from urllib2 import URLError
 from django.contrib import messages
+
+def facebook_login(request, next=None):
+	""" for dialog users"""
+    callback_url = None
+    if next is not None:
+        callback_url = settings.FACEBOOK_REDIRECT_URL[:-5] + 'dialog/'
+    params = {'client_id': settings.FACEBOOK_APP_ID,
+	    'redirect_uri': callback_url,
+	    'scope': 'publish_stream,email,offline_access',
+	    'display': 'popup'} 
+		# offline access for long lived token, for profile image url
+		# callback url changed from /done to /dialog
+				
+    return redirect('https://graph.facebook.com/oauth/authorize?' + urllib.urlencode(params))
+
+def facebook_login_done(request):
+    try:
+		code = request.GET['code']
+    except KeyError:
+		#Tried to access /done/ directly, redirect to login page
+		return HttpResponseRedirect(reverse('socialauth_login_page'))
+    params = {'client_id': settings.FACEBOOK_APP_ID,
+	   	'redirect_uri': settings.FACEBOOK_REDIRECT_URL,
+        'client_secret': settings.FACEBOOK_APP_SECRET,
+	   	'code': code}
+    token_url = 'https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(params)
+    response = urllib.urlopen(token_url).read() # string containing token and time for expiry
+    token = dict(urlparse.parse_qsl(response))
+	try:
+    	user = authenticate(fb_access_token = token['access_token'])
+	except KeyError:
+		pass
+
+    if user:
+        if not user.userlanguage_set.exists():
+            langs = get_user_languages_from_cookie(request)
+            for l in langs:
+                UserLanguage.objects.get_or_create(user=user, language=l)       
+            login(request, user)
+        else:
+      		# We were not able to authenticate user
+       		# Redirect to login page
+       		return HttpResponseRedirect(reverse('socialauth_login_page'))
+	# authentication was successful, use is now logged in
+	return HttpResponseRedirect(request.GET.get('next', settings.LOGIN_REDIRECT_URL))
 
 def twitter_login(request, next=None):
     callback_url = None

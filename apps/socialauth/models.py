@@ -2,6 +2,9 @@ from django.db import models
 from auth.models import CustomUser as User
 from django.db.models.signals import post_save
 from django.db import connection, transaction
+import urllib
+import simplejson
+ 
 
 class AuthMeta(models.Model):
     """Metadata for Authentication"""
@@ -36,31 +39,28 @@ class TwitterUserProfile(models.Model):
     For users who login via Twitter.
     """
     screen_name = models.CharField(max_length = 200, unique = True)
-    
     user = models.ForeignKey(User)
     access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
     profile_image_url = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     description = models.CharField(max_length=160, blank=True, null=True)
-
     def __str__(self):
-            return "%s's profile" % self.user
+        return "%s's profile" % self.user
         
 
 class FacebookUserProfile(models.Model):
     """
     For users who login via Facebook.
     """
-    facebook_uid = models.CharField(max_length = 20, unique = True)
-    
-    user = models.ForeignKey(User)
+    fb_uid = models.CharField(max_length = 20, unique = True)
+    fb_username = models.CharField(max_length = 20) 
+    user = models.ForeignKey(User, null=True)
     profile_image_url = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     about_me = models.CharField(max_length=160, blank=True, null=True)
-    
-    
-
-
-
+    access_token = models.CharField(max_length=103)
+    expires = models.IntegerField(null=True)
+    def __str__(self):
+        return "%s's profile" % self.user

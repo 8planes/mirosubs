@@ -1,10 +1,13 @@
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
-
-from socialauth.lib import oauthtwitter
+from socialauth.lib import oauthtwitter, facebook
 from socialauth.models import OpenidProfile as UserAssociation, TwitterUserProfile, FacebookUserProfile, AuthMeta
-from socialauth.lib.facebook import get_user_info, get_facebook_signature
+#from django.contrib.auth import models as auth_models
+    
+import cgi
+import urllib, urllib2
+import simplejson 
 
 from datetime import datetime
 import random
@@ -12,8 +15,7 @@ import random
 TWITTER_CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY', '')
 TWITTER_CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', '')
 FACEBOOK_API_KEY = getattr(settings, 'FACEBOOK_API_KEY', '')
-FACEBOOK_API_SECRET = getattr(settings, 'FACEBOOK_API_SECRET', '')
-FACEBOOK_REST_SERVER = getattr(settings, 'FACEBOOK_REST_SERVER', 'http://api.facebook.com/restserver.php')
+FACEBOOK_APP_SECRET = getattr(settings, 'FACEBOOK_APP_SECRET', '')
 
 class CustomUserBackend(ModelBackend):
     
@@ -140,43 +142,50 @@ class TwitterBackend:
         
 
 class FacebookBackend:
-    
-    def authenticate(self, cookies):
-        API_KEY = FACEBOOK_API_KEY
-        API_SECRET = FACEBOOK_API_SECRET   
-        REST_SERVER = FACEBOOK_REST_SERVER
-        if API_KEY in cookies:
-            signature_hash = get_facebook_signature(API_KEY, API_SECRET, cookies, True)                
-            if(signature_hash == cookies[API_KEY]) and (datetime.fromtimestamp(float(cookies[API_KEY+'_expires'])) > datetime.now()):
-                user_info_response  = get_user_info(API_KEY, API_SECRET, cookies)
-                username = user_info_response[0]['first_name']
-                try:
-                    profile = FacebookUserProfile.objects.get(facebook_uid = user_info_response[0]['uid'])
-                    return User.objects.get(pk=profile.user)
-                except (FacebookUserProfile.DoesNotExist, User.DoesNotExist):
-                    fb_data = user_info_response[0]
-                    name_count = User.objects.filter(username__istartswith = username).count()
-                    if name_count:
-                        username = '%s%s' % (username, name_count + 1)
-                    user_email = '%s@facebookuser.%s.com'%(user_info_response[0]['first_name'], settings.SITE_NAME)
-                    user = User.objects.create(username = username, email=user_email)
-                    user.first_name = fb_data['first_name']
-                    user.last_name = fb_data['last_name']
-                    user.save()
-                    location = str(fb_data['current_location'])
-                    fb_profile = FacebookUserProfile(facebook_uid = fb_data['uid'], user = user, profile_image_url = fb_data['pic_small'], location=location)
-                    fb_profile.save()
-                    auth_meta = AuthMeta(user=user, provider='Facebook').save()
-                    return user
+    def authenticate(self, fb_access_token):
+        '''authenticates token by requesting user information from facebook
+        '''
+        try:
+            graph = facebook.GraphAPI(fb_access_token)
+            userinfo = graph.get_object("me")
+        except:
+            # If we cannot get user info, user cannot be authenticated 
+            raise
+
+        fb_uid = userinfo['id']
+        try:
+            user_profile = FacebookUserProfile.objects.get(fb_uid=fb_uid)
+            user = user_profile.user
+            user_profile.access_token = fb_access_token
+            return User.objects.get(pk=user.pk)
+        except (FacebookUserProfile.DoesNotExist, User.DoesNotExist):
+            fb_uid = userinfo['id']
+            #Create new user
+            try:
+                fb_username = userinfo['username']
+            except KeyError:
+                #if username not set on facebook
+                fb_username = userinfo['first_name']
+            same_name_count = User.objects.filter(username__startswith = fb_username).count()
+            if same_name_count:
+                username = '%s%s' % (fb_username, same_name_count + 1)
             else:
-                return None
-                    
-                
-        else:
-            return None
-    
-    def get_user(self, user_id):
+                username = fb_username
+            user = User(username =  username)
+            temp_password = User.objects.make_random_password(length=12)
+            user.set_password(temp_password)
+            user.first_name, user.last_name = userinfo['first_name'], userinfo['last_name']
+            user.email = '%s@facebook.%s.com'%(username, settings.SITE_NAME)
+            user.save()
+            image_url = 'http://graph.facebook.com/me/picture?type=large'+'&access_token='+fb_access_token
+            userprofile = FacebookUserProfile(user = user, fb_uid = fb_uid, fb_username = fb_username, location = userinfo['location'])
+            userprofile.access_token = fb_access_token
+            userprofile.save()
+            auth_meta = AuthMeta(user=user, provider='Facebook').save()
+            return user
+
+    def get_user(self,user_id):
         try:
             return User.objects.get(pk=user_id)
-        except:
+        except User.DoesNotExist:
             return None

@@ -408,8 +408,10 @@ OPENID_SREG = {"required": "nickname, email", "optional":"postcode, country", "p
 OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "required": True, "alias": "email"},
              {"type_uri": "fullname", "count": 1 , "required": False, "alias": "fullname"}]
 
-FACEBOOK_API_KEY = ''
-FACEBOOK_API_SECRET = ''
+FACEBOOK_API_KEY = '28d2df280f32759d3209e8cf8427d38e'
+FACEBOOK_APP_SECRET = 'ddddc68b82c8f4775688e4464538e5d5'
+FACEBOOK_APP_ID = '141582132574249'
+FACEBOOK_REDIRECT_URL = 'http://mirosubs.example.com:8000/en/socialauth/facebook_login/done/'
 
 VIMEO_API_KEY = None
 VIMEO_API_SECRET = None
