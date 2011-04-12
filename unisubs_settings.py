@@ -28,7 +28,7 @@ DEBUG = False
 ADMINS = (
     ('Adam Duston', 'adam@8planes.com'),
     ('Holmes Wilson', 'hwilson@gmail.com'),
-    ('usubs-errors', 'usubs-errors@pculture.org')
+    ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org')
 )
 
 if INSTALLATION == DEV:
@@ -64,7 +64,7 @@ elif INSTALLATION == PRODUCTION:
     EMAIL_BCC_LIST.append('socmedia@pculture.org')
     ADMINS = (
       ('Adam Duston', 'adam@8planes.com'),
-      ('usubs-errors', 'usubs-errors@pculture.org')
+      ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org')
     )
 
 IGNORE_REDIS = True
