@@ -58,7 +58,7 @@
       {% endfor %}];
 
     var siteConfig = {
-        siteURL: 'http://{{site.domain}}',
+        siteURL: 'http://{{current_site.domain}}',
         mediaURL: '{{MEDIA_URL}}'
     };
 

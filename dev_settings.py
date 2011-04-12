@@ -18,7 +18,6 @@
 
 from settings import *
 import logging
-from django.contrib.sites.models import Site
 
 SITE_ID = 4
 SITE_NAME = 'mirosubs-dev'
@@ -26,12 +25,9 @@ SITE_NAME = 'mirosubs-dev'
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 
-MEDIA_URL = "http://{0}/site_media/".format(Site.objects.get(id=SITE_ID).domain)
+MEDIA_URL = "http://mirosubs.example.com:8000/site_media/"
 
 # MIDDLEWARE_CLASSES += ('middleware.SqlPrintingMiddleware',)
-
-# Uncomment following line when you want to work with compiled JS.
-# JS_USE_COMPILED = True
 
 VIMEO_API_KEY = 'e1a46f832f8dfa99652781ee0b39df12'
 VIMEO_API_SECRET = 'bdaeb531298eeee1'

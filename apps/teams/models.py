@@ -33,7 +33,8 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
-from teams.tasks import update_team_video, update_one_team_video
+from teams.tasks import update_team_video, update_one_team_video, add_video_notification
+from apps.videos.models import SubtitleLanguage
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -208,6 +209,7 @@ class TeamVideo(models.Model):
     all_languages = models.BooleanField(_('Need help with all languages'), default=False, 
         help_text=_('If you check this, other languages will not be displayed.'))
     added_by = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
     completed_languages = models.ManyToManyField(SubtitleLanguage, blank=True)
     
     class Meta:
@@ -222,7 +224,7 @@ class TeamVideo(models.Model):
         #asynchronous call
         if created:
             update_one_team_video.delay(self.id)
-    
+            
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)
     
@@ -281,10 +283,16 @@ class TeamVideo(models.Model):
 
     def _update_team_video_language_pair(self, lang0, sl0, lang1, sl1):
         percent_complete = self._calculate_percent_complete(sl0, sl1)
-        tvlps = TeamVideoLanguagePair.objects.filter(
-            team_video=self,
-            language_0=lang0,
-            language_1=lang1)
+        if sl1 is not None:
+            tvlps = TeamVideoLanguagePair.objects.filter(
+                team_video=self,
+                subtitle_language_0=sl0,
+                subtitle_language_1=sl1)
+        else:
+            tvlps = TeamVideoLanguagePair.objects.filter(
+                team_video=self,
+                subtitle_language_0__language=lang0,
+                language_1=lang1)
         tvlp = None if len(tvlps) == 0 else tvlps[0]
         if not tvlp and percent_complete != -1:
             tvlp = TeamVideoLanguagePair(
@@ -292,7 +300,9 @@ class TeamVideo(models.Model):
                 team=self.team,
                 video=self.video,
                 language_0=lang0,
+                subtitle_language_0=sl0,
                 language_1=lang1,
+                subtitle_language_1=sl1,
                 language_pair='{0}_{1}'.format(lang0, lang1),
                 percent_complete=percent_complete)
             tvlp.save()
@@ -302,91 +312,131 @@ class TeamVideo(models.Model):
         elif tvlp and percent_complete == -1:
             tvlp.remove()
 
+    def _update_tvlp_for_languages(self, lang0, lang1, langs):
+        sl0_list = langs.get(lang0, [])
+        sl1_list = langs.get(lang1, [])
+        if len(sl1_list) == 0:
+            sl1_list = [None]
+        for sl0 in sl0_list:
+            for sl1 in sl1_list:
+                self._update_team_video_language_pair(lang0, sl0, lang1, sl1)
+
     def update_team_video_language_pairs(self, lang_code_list=None):
+        TeamVideoLanguagePair.objects.filter(team_video=self).delete()
         if lang_code_list is None:
             lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
-        langs = dict([(l.language, l) for l in 
-                      self.video.subtitlelanguage_set.all() if l.language])
-        for lang0, sl0 in langs.items():
+        langs = self.video.subtitle_language_dict()
+        for lang0, sl0_list in langs.items():
             for lang1 in lang_code_list:
                 if lang0 == lang1:
                     continue
-                sl1 = langs.get(lang1)
-                self._update_team_video_language_pair(lang0, sl0, lang1, sl1)
+                self._update_tvlp_for_languages(lang0, lang1, langs)
                 
-    def update_team_video_language_pairs_for_sl(self, sl, lang_code_list=None):
-        if lang_code_list is None:
-            lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
-            
-        langs = dict([(l.language, l) for l in 
-                      self.video.subtitlelanguage_set.all() if l.language])  
-                          
-        for lang1 in lang_code_list:
-            if sl.language == lang1:
-                continue
-            
-            self._update_team_video_language_pair(
-                sl.language, sl, lang1, langs.get(lang1))        
-        
+    def update_team_video_language_pairs_for_sl(self, sl):
+        if not sl.language:
+            return
+
+        lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
+
+        TeamVideoLanguagePair.objects.filter(
+            team_video=self, subtitle_language_0=sl).delete()
+        TeamVideoLanguagePair.objects.filter(
+            team_video=self, subtitle_language_1=sl).delete()
+        TeamVideoLanguagePair.objects.filter(
+            team_video=self, 
+            subtitle_language_1=None, 
+            language_1=sl.language).delete()
+
+        langs = self.video.subtitle_language_dict()
+
+        for lang in lang_code_list:
+            sl1_list = langs.get(lang, [])
+            if len(sl1_list) == 0:
+                sl1_list = [None]
+            for sl1 in sl1_list:
+                self._update_team_video_language_pair(sl.language, sl, lang, sl1)
+        for sl0 in self.video.subtitlelanguage_set.all():            
+            self._update_team_video_language_pair(sl0.language, sl0, sl.language, sl)
+
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
     video = models.ForeignKey(Video)
-    language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES,  null=False, blank=False, db_index=True)
+    subtitle_language = models.ForeignKey(SubtitleLanguage, null=True)
     team = models.ForeignKey(Team)
     is_original = models.BooleanField(default=False, db_index=True)
     forked = models.BooleanField(default=True, db_index=True)
     is_complete = models.BooleanField(default=False, db_index=True)
-    percent_done = models.IntegerField(default=0)
+    percent_done = models.IntegerField(default=0, db_index=True)
     
     class Meta:
-        unique_together = (('team_video', 'language'),)
-        
+        unique_together = (('team_video', 'subtitle_language'),)
+
     def __unicode__(self):
         return self.get_language_display()
-    
+
     @classmethod
-    def update(cls, tv, l, sl=None):
-        if not sl:
-            try:
-                sl = tv.video.subtitlelanguage_set.get(language=l)
-            except models.ObjectDoesNotExist:
-                pass
-            
-        tvl, created = cls.objects.get_or_create(team_video=tv, language=l, defaults={
-            'team': tv.team,
-            'video': tv.video                                                                             
-        })
-        
-        if sl:
-            tvl.is_original = sl.is_original
-            tvl.forked = sl.is_forked
-            
-            if sl.is_original or sl.is_forked:
-                tvl.is_complete = sl.is_complete
-                
-            tvl.percent_done = sl.percent_done
-        
+    def _save_tvl_for_sl(cls, tv, sl):
+        tvl = cls(
+            team_video=tv,
+            video=tv.video,
+            language=sl.language,
+            subtitle_language=sl,
+            team=tv.team,
+            is_original=sl.is_original,
+            forked=sl.is_forked,
+            is_complete=sl.is_complete,
+            percent_done=sl.percent_done)
         tvl.save()
-    
-    @classmethod
-    def team_video_save_handler(cls, sender, instance, created, **kwargs):
-        for l, lang_name in settings.ALL_LANGUAGES:
-            cls.update(instance, l)
 
     @classmethod
-    def subtitle_language_save_handler(cls, sender, instance, created, **kwargs):
-        for tv in TeamVideo.objects.all():
-            cls.update(tv, instance.language, instance)
+    def _save_tvl_for_l(cls, tv, lang):
+        tvl = cls(
+            team_video=tv,
+            video=tv.video,
+            language=lang,
+            subtitle_language=None,
+            team=tv.team,
+            is_original=False,
+            forked=True,
+            is_complete=False,
+            percent_done=0)
+        tvl.save()
 
-post_save.connect(TeamVideoLanguage.subtitle_language_save_handler, SubtitleLanguage)        
-post_save.connect(TeamVideoLanguage.team_video_save_handler, TeamVideo)
+    @classmethod
+    def _update_for_language(cls, tv, language, sublang_dict):
+        if language in sublang_dict:
+            sublangs = sublang_dict[language]
+            for sublang in sublangs:
+                    cls._save_tvl_for_sl(tv, sublang)
+        else:
+            cls._save_tvl_for_l(tv, language)
+
+    @classmethod
+    def update(cls, tv):
+        cls.objects.filter(team_video=tv).delete()
+
+        sublang_dict = tv.video.subtitle_language_dict()
+        for lang in settings.ALL_LANGUAGES:
+            cls._update_for_language(tv, lang[0], sublang_dict)
+
+    @classmethod
+    def update_for_language(cls, tv, language):
+        cls.objects.filter(team_video=tv, language=language).delete()
+        cls._update_for_language(
+            tv, language, tv.video.subtitle_language_dict())
 
 class TeamVideoLanguagePair(models.Model):
     team_video = models.ForeignKey(TeamVideo)
     team = models.ForeignKey(Team)
     video = models.ForeignKey(Video)
+    # language_0 and subtitle_language_0 are the potential standards.
     language_0 = models.CharField(max_length=16, choices=ALL_LANGUAGES, db_index=True)
+    subtitle_language_0 = models.ForeignKey(
+        SubtitleLanguage, null=False, related_name="team_video_language_pairs_0")
     language_1 = models.CharField(max_length=16, choices=ALL_LANGUAGES, db_index=True)
+    subtitle_language_1 = models.ForeignKey(
+        SubtitleLanguage, null=True, related_name="team_video_language_pairs_1")
     language_pair = models.CharField(db_index=True, max_length=16)
     percent_complete = models.IntegerField(db_index=True, default=0)
 
@@ -400,6 +450,7 @@ class TeamMember(models.Model):
     team = models.ForeignKey(Team, related_name='members')
     user = models.ForeignKey(User)
     is_manager = models.BooleanField(default=False)
+    changes_notification = models.BooleanField(default=True)
     
     objects = TeamMemderManager()
     

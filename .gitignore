@@ -21,4 +21,4 @@ media/js/mirosubs-api.js
 media/teams/*
 media/videos/*
 disabled
-unisubs_settings.py
+server_local_settings.py

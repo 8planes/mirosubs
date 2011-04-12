@@ -71,7 +71,7 @@ class OptimizedQuerySet(LoadRelatedQuerySet):
             for v in videos.values():
                 v.langs_cache = []
                 
-            langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
+            langs_qs = SubtitleLanguage.objects.select_related('video').filter(video__id__in=videos.keys())
             
             for l in langs_qs:
                 videos[l.video_id].langs_cache.append(l)
@@ -79,20 +79,15 @@ class OptimizedQuerySet(LoadRelatedQuerySet):
 @login_required
 def my_profile(request):
     user = request.user
-    qs = Video.objects.filter(Q(subtitlelanguage__subtitleversion__user=user) | \
-              Q(followers=request.user) | \
-              Q(action__action_type=Action.ADD_VIDEO, action__user=user)) \
-              .distinct().order_by('-edited')
+    qs = user.videos.order_by('-edited')
     q = request.REQUEST.get('q')
-    total_video_count = qs.count()
+
     if q:
         qs = qs.filter(Q(title__icontains=q)|Q(description__icontains=q))
     context = {
         'my_videos': True,
-        'query': q,
-        'total_video_count': total_video_count
+        'query': q
     }
-    
     qs = qs._clone(OptimizedQuerySet)
 
     return object_list(request, queryset=qs, 

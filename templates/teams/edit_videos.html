@@ -14,7 +14,7 @@
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}
     <div>
-        <a href="{% url teams:add_video team.slug %}" class="green_button small">{% trans 'Add video' %}</a>
+        <a style="margin: 5px 0 5px 20px" href="{% url teams:add_video team.slug %}" class="green_button small">{% trans 'Add video' %}</a>
     </div>
     {% if is_paginated %}{% paginator %}{% endif %}
     <table>

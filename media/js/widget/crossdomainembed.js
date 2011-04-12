@@ -24,40 +24,24 @@ mirosubs.widget.CrossDomainEmbed.embed =
     function(widgetDiv, widgetConfig, siteConfig) 
 {
     mirosubs.siteConfig = siteConfig;
-    if (widgetConfig['debug_js']) {
-        var debugWindow = new goog.debug.FancyWindow('main');
-        debugWindow.setEnabled(true);
-        debugWindow.init();
-        mirosubs.DEBUG = true;
+    if (goog.DEBUG) {
+        if (widgetConfig['debug_js']) {
+            var debugWindow = new goog.debug.FancyWindow('main');
+            debugWindow.setEnabled(true);
+            debugWindow.init();
+            mirosubs.DEBUG = true;
+        }
     }
     mirosubs.IS_NULL = !!widgetConfig['null_widget'];
     var widget = new mirosubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
 };
 
-mirosubs.widget.CrossDomainEmbed.Type = {
-    EMBED_SCRIPT : 1,
-    WIDGETIZER : 2,
-    BOOKMARKLET : 3,
-    EXTENSION : 4
-};
+mirosubs.widget.Widget.exportJSSymbols(true);
 
-(function() {
-    goog.exportSymbol(
-        'mirosubs.widget.CrossDomainEmbed.embed',
-        mirosubs.widget.CrossDomainEmbed.embed);
-    goog.exportSymbol(
-        "mirosubs.xdSendResponse",
-        goog.net.CrossDomainRpc.sendResponse);
-    goog.exportSymbol(
-        "mirosubs.xdRequestID",
-        goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID);
-    goog.exportSymbol(
-        "mirosubs.xdDummyURI",
-        goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI);
-
-    var m = window["MiroSubsToEmbed"];
-    if (typeof(m) != 'undefined')
-        for (var i = 0; i < m.length; i++)
-            mirosubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
-})();
+var m = window["MiroSubsToEmbed"];
+if (typeof(m) != 'undefined'){
+    for (var i = 0; i < m.length; i++){
+        mirosubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
+    }
+}

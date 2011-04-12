@@ -66,7 +66,7 @@
     });
 </script>
 
-<div id="language_modal" data="{closeable: false}" style="display: none" class="language_modal clearfix">
+<div id="language_modal" data="{closeable: {% if form.initial %}true{% else %}false{% endif %}}" style="display: none" class="language_modal clearfix">
   <h3>{% trans "We really need your help!" %}</h3>
   <h2>{% trans "What languages do you speak?" %}</h2>
     <div id="language_picker" class="clearfix">

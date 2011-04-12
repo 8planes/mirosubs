@@ -100,13 +100,12 @@ def make_redirect_to(request):
 
 from socialauth.views import get_url_host
 from django.core.urlresolvers import reverse
-import urllib
 from django.conf import settings
 from socialauth.lib import oauthtwitter2 as oauthtwitter,facebook
 from django.http import HttpResponse
 from oauth import oauth
 from urllib2 import URLError
-from django.contrib import messages
+from django.utils.http import urlquote
 
 def facebook_login(request, next=None):
 	""" for dialog users"""
@@ -160,7 +159,7 @@ def twitter_login(request, next=None):
         callback_url = '%s%s?next=%s' % \
              (get_url_host(request),
              reverse("auth:twitter_login_done"), 
-             urllib.quote(next))
+             urlquote(next))
     twitter = oauthtwitter.TwitterOAuthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
     try: 
         request_token = twitter.fetch_request_token(callback_url)

@@ -88,7 +88,7 @@
             
             $('.inline_tabs').tabs();
 
-            $('#add_subtitles, #edit_subtitles').click(function() {
+            $('#add_subtitles').click(function() {
                 widget_widget_div.selectMenuItem(
                     mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
@@ -186,7 +186,7 @@
 
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
-            <a href="#" class="blue_button small"  id="edit_subtitles">{% trans 'Edit Subtitles' %}</a>
+            <a href="{{edit_url}}" class="blue_button small">{% trans 'Edit Subtitles' %}</a>
             {% paste_transcription %}            
             <div class="clear">&nbsp;</div>
           </div>

@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
@@ -30,6 +30,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 import simplejson as json
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from widget.views import base_widget_params
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
@@ -47,6 +48,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
+from utils.decorators import never_in_prod
 from django.utils.http import urlquote_plus
 
 rpc_router = RpcRouter('videos:rpc_router', {
@@ -73,21 +75,9 @@ def bug(request):
     return render_to_response('bug.html', context,
                               context_instance=RequestContext(request))
 
-@login_required
-def follow_video(request, video_id):
-    #move this on rpc
-    video = get_object_or_404(Video, video_id=video_id)
-    video.followers.add(request.user)
-    messages.success(request, _(u'You are following %(video)s now') % {'video': video})
-    return redirect(video)
-
-@login_required
-def follow_language(request, language_id):
-    #move this on rpc
-    language = get_object_or_404(SubtitleLanguage, language_id=language_id)
-    return redirect()
-
 def ajax_change_video_title(request):
+    from videos.tasks import send_change_title_email
+    
     video_id = request.POST.get('video_id')
     title = request.POST.get('title')
     user = request.user
@@ -105,22 +95,7 @@ def ajax_change_video_title(request):
             action.action_type = Action.CHANGE_TITLE
             action.save()
             
-            users = video.notification_list(user)
-            
-            for obj in users:
-                subject = u'Video\'s title changed on Universal Subtitles'
-                context = {
-                    'user': obj,
-                    'domain': Site.objects.get_current().domain,
-                    'video': video,
-                    'editor': user,
-                    'old_title': old_title,
-                    'hash': obj.hash_for_video(video.video_id)
-                }
-                send_templated_email(obj.email, subject, 
-                                     'videos/email_title_changed.html',
-                                     context, 'feedback@universalsubtitles.org',
-                                     fail_silently=not settings.DEBUG)            
+            send_change_title_email.delay(video.id, user and user.id, old_title, video.title)          
     except Video.DoesNotExist:
         pass
     
@@ -168,21 +143,20 @@ def video(request, video_id, video_url=None, title=None):
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     
-    if (video.title and not video.title_for_url() == title) or (not video.title and title):
+    if not video_url and ((video.title and not video.title_for_url() == title) or (not video.title and title)):
         return redirect(video, permanent=True)
-    
+
     video.update_view_counter()
     
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
-    context['site'] = Site.objects.get_current()
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     translations = list(video.subtitlelanguage_set.filter(had_version=True) \
-        .filter(is_original=False))
+        .filter(is_original=False).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations
-    context['widget_params'] = _widget_params(request, video, None, '')
+    context['widget_params'] = _widget_params(request, video, language_code='', video_url=video_url and video_url.effective_url)
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
@@ -190,8 +164,7 @@ def video(request, video_id, video_url=None, title=None):
                               context_instance=RequestContext(request))
 
 def video_list(request):
-    qs = Video.objects.exclude(Q(subtitlelanguage__subtitleversion__subtitle=None)) \
-        .distinct()
+    qs = Video.objects.filter(is_subtitled=True)
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
     extra_context = {}
@@ -209,10 +182,6 @@ def video_list(request):
                        extra_context=extra_context)
 
 def actions_list(request):
-    try:
-        page = int(request.GET['page'])
-    except (ValueError, TypeError, KeyError):
-        page = 1    
     qs = Action.objects.all()
     
     extra_context = {}
@@ -227,9 +196,11 @@ def actions_list(request):
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
         extra_context['ordering'] = ordering
         extra_context['order_type'] = order_type
-            
+    else:
+        qs = qs.order_by('-created')
+                
     return object_list(request, queryset=qs, allow_empty=True,
-                       paginate_by=settings.ACTIVITIES_ONPAGE, page=page,
+                       paginate_by=settings.ACTIVITIES_ONPAGE,
                        template_name='videos/actions_list.html',
                        template_object_name='action',
                        extra_context=extra_context)      
@@ -323,12 +294,37 @@ def demo(request):
     return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
-def history(request, video_id, lang=None):
+def legacy_history(request ,video_id, lang=None):
+    """
+    In the old days we allowed only one translation per video.
+    Therefore video urls looked like /vfjdh2/en/
+    Now that this constraint is removed we need to redirect old urls
+    to the new view, that needs 
+    """
+    video = get_object_or_404(Video, video_id=video_id)
+    try:
+        language = video.subtitle_language(lang)
+        if language is None:
+            raise SubtitleLanguage.DoesNotExist("No such language")
+    except SubtitleLanguage.DoesNotExist:
+        raise Http404()
+    
+    return HttpResponseRedirect(reverse("videos:translation_history", kwargs={
+            'video_id': video_id,
+            'lang_id': language.pk,
+            'lang': language.language,
+            }))
+    
+def history(request, video_id, lang=None, lang_id=None):
     video = get_object_or_404(Video, video_id=video_id)
     video.update_view_counter()
-
+    
     context = widget.add_onsite_js_files({})
-    language = video.subtitle_language(lang)
+
+    if lang_id:
+        language = video.subtitlelanguage_set.get(pk=lang_id)
+    else:    
+        language = video.subtitle_language(lang)
 
     if not language:
         if lang in dict(settings.ALL_LANGUAGES):
@@ -340,7 +336,7 @@ def history(request, video_id, lang=None):
         else:
             raise Http404
 
-    qs = language.subtitleversion_set.all()
+    qs = language.subtitleversion_set.select_related('user')
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
     order_fields = {
         'date': 'datetime_started', 
@@ -354,14 +350,14 @@ def history(request, video_id, lang=None):
         context['ordering'], context['order_type'] = ordering, order_type
 
     context['video'] = video
-    context['site'] = Site.objects.get_current()
     translations = list(video.subtitlelanguage_set.filter(is_original=False) \
-        .filter(had_version=True))
+        .filter(had_version=True).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
     context['last_version'] = language.latest_version()
     context['widget_params'] = _widget_params(request, video, None, lang or '')
     context['language'] = language
+    context['edit_url'] = language.get_widget_url()
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -370,8 +366,8 @@ def history(request, video_id, lang=None):
                        template_object_name='revision',
                        extra_context=context)
 
-def _widget_params(request, video, version_no=None, language_code=None):
-    primary_url = video.get_video_url()
+def _widget_params(request, video, version_no=None, language_code=None, video_url=None):
+    primary_url = video_url or video.get_video_url()
     alternate_urls = [vu.effective_url for vu in video.videourl_set.all() 
                       if vu.effective_url != primary_url]
     params = {'video_url': primary_url, 
@@ -566,7 +562,8 @@ def video_url_create(request):
     if form.is_valid():
         obj = form.save()
         video = form.cleaned_data['video']
-        users = video.notification_list_all(request.user)
+        users = video.notification_list(request.user)
+
         for user in users:
             subject = u'New video URL added by %(username)s to "%(video_title)s" on universalsubtitles.org'
             subject = subject % {'url': obj.url, 'username': obj.added_by, 'video_title': video}
@@ -598,3 +595,11 @@ def test_celery(request):
     from videos.tasks import add
     add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
+
+@never_in_prod
+@staff_member_required
+def video_staff_delete(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    video.delete()
+    return HttpResponse("ok")
+

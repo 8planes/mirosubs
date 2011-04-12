@@ -1,13 +1,13 @@
 {% load i18n %}
 
 <div class="actions-panel">
-    <h3>{% trans 'Edits to My Videos(by other users)' %}</h3>
+    <h3>{% trans 'Edits to my videos' %}</h3>
     
     <ul class="small_list">
         {% for item in users_actions %}
             <li>{% include 'videos/_team_member_action_item.html' %}</li>
         {% empty %}
-            <li>{% trans 'Any Activity' %}</li>            
+            <li>{% trans 'No Activity' %}</li>            
         {% endfor %}
     </ul>    
 

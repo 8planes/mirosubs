@@ -40,6 +40,7 @@ from django.core.urlresolvers import reverse
 import time
 from django.utils.safestring import mark_safe
 from teams.tasks import update_team_video, update_team_video_for_sl
+from videos.tasks import check_alarm, detect_language, send_notification
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -82,7 +83,7 @@ class Video(models.Model):
     writelock_owner = models.ForeignKey(User, null=True, editable=False,
                                         related_name="writelock_owners")
     is_subtitled = models.BooleanField(default=False)
-    was_subtitled = models.BooleanField(default=False)
+    was_subtitled = models.BooleanField(default=False, db_index=True)
     thumbnail = models.CharField(max_length=500, blank=True)
     s3_thumbnail = S3EnabledImageField(blank=True, upload_to='video/thumbnail/')
     edited = models.DateTimeField(null=True, editable=False)
@@ -91,9 +92,9 @@ class Video(models.Model):
     followers = models.ManyToManyField(User, blank=True, related_name='followed_videos')
     complete_date = models.DateTimeField(null=True, blank=True, editable=False)
         
-    subtitles_fetched_count = models.IntegerField(default=0)
-    widget_views_count = models.IntegerField(default=0)
-    view_count = models.PositiveIntegerField(default=0)
+    subtitles_fetched_count = models.IntegerField(default=0, db_index=True)
+    widget_views_count = models.IntegerField(default=0, db_index=True)
+    view_count = models.PositiveIntegerField(default=0, db_index=True)
     
     subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
     widget_views_counter = RedisSimpleField('video_id', changed_video_set)
@@ -190,10 +191,13 @@ class Video(models.Model):
         return self.title.replace('/', '-').replace('#', '').replace('?', '')
     
     @models.permalink
-    def get_absolute_url(self):
+    def get_absolute_url(self, locale=None):
+        kwargs = {}
+        if locale:
+            kwargs['locale'] = locale 
         if self.title:
-            return ('videos:video_with_title', [self.video_id, self.title_for_url()])
-        return ('videos:video', [self.video_id])
+            return ('videos:video_with_title', [self.video_id, self.title_for_url()], kwargs)
+        return ('videos:video', [self.video_id], kwargs)
 
     def get_video_url(self):
         try:
@@ -228,9 +232,11 @@ class Video(models.Model):
             obj.user = user
             obj.save()
             
+            user and obj.followers.add(user)
+            
             Action.create_video_handler(obj, user)
             
-            SubtitleLanguage(video=obj, is_original=True).save()
+            SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
             #Save video url
             video_url_obj = VideoUrl()
             if vt.video_id:
@@ -292,9 +298,12 @@ class Video(models.Model):
                 return self._original_subtitle_language()
             else:
                 return self.subtitlelanguage_set.filter(
-                    language=language_code)[:1].get()
+                    language=language_code).order_by('-subtitle_count')[:1].get()
         except models.ObjectDoesNotExist:
             return None
+
+    def subtitle_languages(self, language_code):
+        return self.subtitlelanguage_set.filter(language=language_code)
 
     def version(self, version_no=None, language_code=None):
         language = self.subtitle_language(language_code)
@@ -313,6 +322,7 @@ class Video(models.Model):
 
     def update_languages_count(self):
         self.languages_count = self.subtitlelanguage_set.filter(had_version=True).count()
+        self.save()
         
     def latest_subtitles(self, language_code=None):
         version = self.latest_version(language_code)
@@ -383,7 +393,7 @@ class Video(models.Model):
             if not user in users: 
                 users.append(user)                    
         return users
-        
+
     def update_complete_state(self):
         language = self.subtitle_language()
         if not language.has_version:
@@ -392,41 +402,54 @@ class Video(models.Model):
             self.is_subtitled = True
             self.was_subtitled = True
 
+    def subtitle_language_dict(self):
+        langs = {}
+        for sl in self.subtitlelanguage_set.all():
+            if not sl.language:
+                continue
+            if sl.language in langs:
+                langs[sl.language].append(sl)
+            else:
+                langs[sl.language] = [sl]
+        return langs
+
 def create_video_id(sender, instance, **kwargs):
     instance.edited = datetime.now()
     if not instance or instance.video_id:
         return
     alphanum = string.letters+string.digits
     instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
-                                                           for i in xrange(12)])
+                                 for i in xrange(12)])
     
 def video_delete_handler(sender, instance, **kwargs):
     video_cache.invalidate_cache(instance.video_id)
 
 models.signals.pre_save.connect(create_video_id, sender=Video)
 models.signals.pre_delete.connect(video_delete_handler, sender=Video)
+models.signals.m2m_changed.connect(User.video_followers_change_handler, sender=Video.followers.through)
 
 class SubtitleLanguage(models.Model):
     video = models.ForeignKey(Video)
     is_original = models.BooleanField()
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
-    writelock_time = models.DateTimeField(null=True)
-    writelock_session_key = models.CharField(max_length=255, blank=True)
-    writelock_owner = models.ForeignKey(User, null=True, blank=True)
+    writelock_time = models.DateTimeField(null=True, editable=False)
+    writelock_session_key = models.CharField(max_length=255, blank=True, editable=False)
+    writelock_owner = models.ForeignKey(User, null=True, blank=True, editable=False)
     is_complete = models.BooleanField(default=False)
-    has_version = models.BooleanField(default=False)
-    had_version = models.BooleanField(default=False)
-    is_forked = models.BooleanField(default=False)
+    subtitle_count = models.IntegerField(default=0)
+    has_version = models.BooleanField(default=False, editable=False)
+    had_version = models.BooleanField(default=False, editable=False)
+    is_forked = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True)
-    subtitles_fetched_count = models.IntegerField(default=0)
-    followers = models.ManyToManyField(User, blank=True, related_name='followed_languages')
+    subtitles_fetched_count = models.IntegerField(default=0, editable=False)
+    followers = models.ManyToManyField(User, blank=True, related_name='followed_languages', editable=False)
     title = models.CharField(max_length=2048, blank=True)
-    percent_done = models.IntegerField(default=0)
-    standard_language = models.ForeignKey('self', null=True, blank=True)
+    percent_done = models.IntegerField(default=0, editable=False)
+    standard_language = models.ForeignKey('self', null=True, blank=True, editable=False)
     last_version = models.ForeignKey('SubtitleVersion', null=True, blank=True, editable=False)
-        
+
     subtitles_fetched_counter = RedisSimpleField()
-    
+
     class Meta:
         unique_together = (('video', 'language', 'standard_language'),)
     
@@ -441,12 +464,20 @@ class SubtitleLanguage(models.Model):
         super(SubtitleLanguage, self).save(*args, **kwargs)
         self.check_initial_values()
         self.save_initial_values()
+        self.video.update_languages_count()
     
     def delete(self, *args, **kwargs):
         video_id = self.video_id
         super(SubtitleLanguage, self).delete(*args, **kwargs)
         #asynchronous call
         update_team_video.delay(video_id)
+
+        if not self.video.subtitlelanguage_set.exclude(is_complete=False).exists():
+            self.video.complete_date = None
+            self.video.save()
+            
+        video_cache.invalidate_cache(self.video.video_id)
+        self.video.update_languages_count()            
         
     def save_initial_values(self):
         self._initial_values = {
@@ -459,8 +490,13 @@ class SubtitleLanguage(models.Model):
     def check_initial_values(self):
         iv = self._initial_values
 
-        if not self._initial_values['is_complete'] and self.is_complete:
+        if not iv['is_complete'] and self.is_complete:
             self.video.complete_date = datetime.now()
+            self.video.save()
+        elif iv['is_complete'] and not self.is_complete:
+            if not self.video.subtitlelanguage_set.exclude(is_complete=False).exists():
+                self.video.complete_date = None
+                self.video.save()
         
         if iv['is_complete'] != self.is_complete or iv['is_original'] != self.is_original \
             or iv['percent_done'] != self.percent_done or iv['is_forked'] != self.is_forked:
@@ -474,6 +510,7 @@ class SubtitleLanguage(models.Model):
         return self.title
     
     def update_complete_state(self):
+        self._update_subtitle_count()
         version = self.latest_version()
         if version.subtitle_set.count() == 0:
             self.has_version = False
@@ -503,25 +540,27 @@ class SubtitleLanguage(models.Model):
             return self.is_complete
 
     def get_widget_url(self):
-        # this duplicates mirosubs.widget.SubtitleController.prototype.startEditing_ in js
+        # duplicates mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_
         video = self.video
         video_url = video.get_video_url()
         config = {
             "videoID": video.video_id,
-            "baseVersionNo": None,
             "videoURL": video_url,
             "effectiveVideoURL": video_url,
             "languageCode": self.language,
-            "originalLanguageCode": video.language,
-            "fork": False }
+            "subLanguagePK": self.pk,
+            "originalLanguageCode": video.language }
+        if self.is_dependent():
+            config['baseLanguagePK'] = self.standard_language.pk
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
 
     @models.permalink
     def get_absolute_url(self):
         if self.is_original:
-            return ('videos:history', [self.video.video_id])
+            return  ('videos:history', [self.video.video_id])
         else:
-            return ('videos:translation_history', [self.video.video_id, self.language])
+            return  ('videos:translation_history', [self.video.video_id, self.language, self.pk])
+
     
     def language_display(self):
         if self.is_original and not self.language:
@@ -578,7 +617,14 @@ class SubtitleLanguage(models.Model):
         if version:
             return version.subtitles()
         return []
-        
+
+    def _update_subtitle_count(self):
+        original_value = self.subtitle_count
+        new_value = len(self.latest_subtitles())
+        if original_value != new_value:
+            self.subtitle_count = new_value
+            self.save()
+
     def update_percent_done(self):
         original_value = self.percent_done
         if not self.is_original and not self.is_forked:
@@ -614,23 +660,16 @@ class SubtitleLanguage(models.Model):
             self.save()
         
     def notification_list(self, exclude=None):
-        qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
+        qs = self.followers.filter(changes_notification=True, is_active=True)
+
         if exclude:
             if not isinstance(exclude, (list, tuple)):
                 exclude = [exclude]            
             qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
         return qs
-    
-def subtile_language_delete_handler(sender, instance, **kwargs):
-    video_cache.invalidate_cache(instance.video.video_id)
-    instance.video.update_languages_count()
 
-def subtitle_language_save_handler(sender, instance, **kwargs):
-    instance.video.update_languages_count()
-    
+models.signals.m2m_changed.connect(User.sl_followers_change_handler, sender=SubtitleLanguage.followers.through)
 post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
-post_save.connect(subtitle_language_save_handler, SubtitleLanguage)
-models.signals.pre_delete.connect(subtile_language_delete_handler, SubtitleLanguage)
 
 class SubtitleCollection(models.Model):
     is_forked=models.BooleanField(default=False)
@@ -639,7 +678,12 @@ class SubtitleCollection(models.Model):
         abstract = True
 
     def subtitles(self, subtitles_to_use=None):
-        subtitles = subtitles_to_use or self.subtitle_set.all()
+        if  self.pk:
+            # if this collection hasn't been saved, then subtitle_set.all will return all subtitles
+            # which will take too long / never return
+            subtitles = subtitles_to_use or self.subtitle_set.all()
+        else:
+            subtitles = subtitles_to_use or []
         if not self.is_dependent():
             return [EffectiveSubtitle.for_subtitle(s)
                     for s in subtitles]
@@ -681,13 +725,37 @@ class SubtitleVersion(SubtitleCollection):
             #but some bug happen, I've no idea why
             self.language.last_version = self
             self.language.save()
+            
+            if self.user:
+                video = self.language.video
+                has_other_versions = SubtitleVersion.objects.filter(language__video=video) \
+                    .filter(user=self.user).exclude(pk=self.pk).exists()
+                
+                if not has_other_versions:
+                    video.followers.add(self.user)
     
     def update_percent_done(self):
+        if self.text_change is None or self.time_change is None:
+            try:
+                old_version = self.language.subtitleversion_set.exclude(pk=self.pk) \
+                    .order_by('-version_no')[:1].get()
+            except models.ObjectDoesNotExist:
+                old_version = None
+            
+            self.set_changes(old_version)
+            self.save()
+            
         if self.language.is_original or self.is_forked:
             for l in self.language.video.subtitlelanguage_set.exclude(pk=self.language.pk):
                 l.update_percent_done()
         else:
             self.language.update_percent_done()        
+        check_alarm.delay(self.pk)
+        
+        if self.language.is_original and not self.language.language:
+            detect_language.delay(self.pk)
+
+        send_notification.delay(self.pk)
         
     def delete(self, *args, **kwargs):
         super(SubtitleVersion, self).delete(*args, **kwargs)
@@ -775,8 +843,8 @@ class SubtitleVersion(SubtitleCollection):
                     text_count_changed += 1
                     time_count_changed += 1
                     
-            self.time_change = time_count_changed / 1. / subtitles_length
-            self.text_change = text_count_changed / 1. / subtitles_length
+            self.time_change = min(time_count_changed / 1. / subtitles_length, 1)
+            self.text_change = min(text_count_changed / 1. / subtitles_length, 1)
 
     def _get_standard_collection(self):
         if self.language.standard_language:
@@ -810,14 +878,17 @@ class SubtitleVersion(SubtitleCollection):
 
     def rollback(self, user):
         cls = self.__class__
-        latest_subtitles = self.language.latest_version()
+        #to be sure we have real data in instance, without cached values in attributes
+        lang = SubtitleLanguage.objects.get(id=self.language.id) 
+        latest_subtitles = lang.latest_version()
         new_version_no = latest_subtitles.version_no + 1
         note = u'rollback to version #%s' % self.version_no
-        new_version = cls(language=self.language, version_no=new_version_no, \
-            datetime_started=datetime.now(), user=user, note=note)
+        new_version = cls(language=lang, version_no=new_version_no, \
+            datetime_started=datetime.now(), user=user, note=note, is_forked=self.is_forked)
         new_version.save()
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
+
         return new_version
 
     def is_all_blank(self):
@@ -971,7 +1042,7 @@ class Action(models.Model):
         return self.action_type == self.ADD_VIDEO
     
     def type(self):
-        if self.comment:
+        if self.comment_id:
             return 'commented'
         return 'edited'
     
@@ -1024,7 +1095,7 @@ class Action(models.Model):
      
     @classmethod
     def create_video_url_handler(cls, sender, instance, created, **kwargs):
-        if created and sender.objects.filter(video=instance.video).count() > 1:
+        if created and instance.video_id and sender.objects.filter(video=instance.video).count() > 1:
             obj = cls(video=instance.video)
             obj.user = instance.added_by
             obj.action_type = cls.ADD_VIDEO_URL

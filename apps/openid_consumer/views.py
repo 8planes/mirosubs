@@ -3,8 +3,8 @@ from django.shortcuts import render_to_response as render
 from django.template import RequestContext
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-
-import re, time, urllib
+from django.utils.http import urlencode
+import re
 
 import openid   
 if openid.__version__ < '2.0.0':
@@ -71,7 +71,7 @@ def begin(request, redirect_to=None, on_failure=None, user_url=None, template_na
             join = '&'
         else:
             join = '?'
-        redirect_to += join + urllib.urlencode({
+        redirect_to += join + urlencode({
             'next': request.GET['next']
         })
     if not user_url:
@@ -80,7 +80,7 @@ def begin(request, redirect_to=None, on_failure=None, user_url=None, template_na
     if not user_url:
         request_path = request.path
         if request.GET.get('next'):
-            request_path += '?' + urllib.urlencode({
+            request_path += '?' + urlencode({
                 'next': request.GET['next']
             })
         

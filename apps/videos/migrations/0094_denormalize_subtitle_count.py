@@ -7,7 +7,7 @@ class Migration(DataMigration):
     
     def forwards(self, orm):
         for v in orm.Video.objects.all():
-            v.update_languages_count()
+            v.languages_count = v.subtitlelanguage_set.filter(had_version=True).count()
             v.save()
     
     

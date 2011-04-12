@@ -36,13 +36,13 @@ def index(request):
     display_mode = 'all'
     
     if form.is_valid():
-        qs = form.search_qs(SearchQuerySet().models(Video))
+        qs = form.search_qs(SearchQuerySet().models(Video).load_all())
         display_mode = form.cleaned_data.get('display', 'all')
         
     if settings.HAYSTACK_SEARCH_ENGINE == 'dummy' and settings.DEBUG:
         q = request.REQUEST.get('q', '')
         qs = Video.objects.filter(title__icontains=q)
-    
+
     context = {
         'query': request.REQUEST.get('q', ''),
         'form': form,
@@ -50,7 +50,7 @@ def index(request):
     }
         
     return object_list(request, queryset=qs,
-                       paginate_by=30,
+                       paginate_by=20,
                        template_name='search/index.html',
                        template_object_name='result',
                        extra_context=context)   

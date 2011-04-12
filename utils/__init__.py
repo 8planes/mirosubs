@@ -41,6 +41,14 @@ from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, Yo
 import traceback, sys
 from django.contrib.auth.decorators import user_passes_test
 
+def print_last_exception():
+    """
+    this can be useful for asynchronous tasks debuging
+    """
+    import sys
+    import traceback
+    print '\n'.join(traceback.format_exception(*sys.exc_info()))
+
 def is_staff(user):
     return user.is_authenticated() and user.is_staff and user.is_active
 
@@ -112,6 +120,8 @@ def send_templated_email(to, subject, body_template, body_dict,
     email.content_subtype = ct
     email.send(fail_silently)
 
+from sentry.client.models import client
+
 def catch_exception(exceptions, subject="", default=None):
     if not isinstance(exceptions, (list, tuple)):
         exceptions = (exceptions,)
@@ -121,11 +131,7 @@ def catch_exception(exceptions, subject="", default=None):
             try:
                 return func(*args, **kwargs)
             except exceptions, e:
-                if settings.DEBUG:
-                    print 'Redis error %s' % e
-                else:
-                    body = '\n'.join(traceback.format_exception(*sys.exc_info()))
-                    mail_admins(subject, body, fail_silently=True)
+                client.create_from_exception(sys.exc_info())
                 return default
         return update_wrapper(wrapper, func)
     return catch_exception_func

@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def _output_embed_to_dir(self, output_dir, version=''):
         file_name = 'embed{0}.js'.format(version)
         context = widget.add_offsite_js_files(
-            {'site': Site.objects.get_current(),
+            {'current_site': Site.objects.get_current(),
              'MEDIA_URL': settings.MEDIA_URL})
         rendered = render_to_string(
             'widget/{0}'.format(file_name), context)

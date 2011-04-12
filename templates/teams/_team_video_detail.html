@@ -4,23 +4,36 @@
 </a>
 <div class="info">
     <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
+    <div class="clearfix">
+      <div  class="completed_translations">{% team_video_lang_list team_video.video %}</div>
+    </div>
+    <p></p>
+    <div class="clearfix"></div>
+    <div class="team-video-buttons-container">
+
+
+
+
+    <a class="blue_button small team_video_{{ team_video.pk }} add_subtitles_bt" href="#">
+      {% trans 'Add Subtitles' %}
+    </a>
     {% if can_edit_video %}
-        <a class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
-    {% endif %}
+      <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
+      {% endif %}
     {% if team_video.description %}
     <p>
-        {{ team_video.description|urlize }}
+      {{ team_video.description|urlize }}
     </p>
     {% endif %}
-    <a class="blue_button small team_video_{{ team_video.pk }}" href="#">
-            {% trans 'Add Subtitles' %}
-    </a>
-    {% team_video_lang_list team_video.video %}
-</div>
+
+    </div>
+</div><!-- // info -->
 <script type="text/javascript">
     $('a.team_video_{{ team_video.pk }}').click(function(){
-        var config = { {{ team_video_widget_params|safe }} };
-        mirosubs.api.openUnisubsDialogWithSettings(false, config, GLOBAL_WIDGET_SETTINGS);
+        mirosubs.api.openUnisubsDialogOnsite(
+            '{{team_video.video.video_id}}', 
+            '{{team_video.video.get_video_url}}', 
+            GLOBAL_WIDGET_SETTINGS);
         return false;
     });
 </script>

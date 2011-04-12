@@ -34,7 +34,7 @@ mirosubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(mirosubs.translat
  * Maximum length of text to translate
  * @type {number}
  */
-mirosubs.translate.GoogleTranslator.queryMaxLen = 4000;
+mirosubs.translate.GoogleTranslator.queryMaxLen = 1300;
 
 /**
  * Delimiter for stings to translate
@@ -159,17 +159,20 @@ function(needTranslating, fromLang, toLang, callback) {
     };
 };
 
-mirosubs.translate.GoogleTranslator.Languages = ['af','sq','am','ar','hy','az',
+mirosubs.translate.GoogleTranslator.isTranslateable = function() {
+    if (!mirosubs.translate.GoogleTranslator.Languages_ ) {
+        /* 
+         * @private 
+         */
+        mirosubs.translate.GoogleTranslator.Languages_ = new goog.structs.Set([
+            'af','sq','am','ar','hy','az',
 'eu','be','bn','bh','br','bg','my','ca','chr','zh','zh-cn','zh-tw','co','hr','cs',
 'da','dv','nl','en','eo','et','fo','tl','fi','fr','fy','gl','ka','de','el','gu',
 'ht','iw','hi','hu','is','id','iu','ga','it','ja','jw','kn','kk','km','ko','ku',
 'ky','lo','la','lv','lt','lb','mk','ms','ml','mt','mi','mr','mn','ne','no','oc',
 'or','ps','fa','pl','pt','pt-pt','pa','qu','ro','ru','sa','gd','sr','sd','si',
 'sk','sl','es','su','sw','sv','syr','tg','ta','tt','te','th','bo','to','tr','uk',
-'ur','uz','ug','vi','cy','yi','yo',''];
-
-mirosubs.translate.GoogleTranslator.isTranslateable = function(){
-    return goog.array.every(arguments, function(l){
-        return mirosubs.translate.GoogleTranslator.Languages.indexOf(l) != -1;
-    });
+'ur','uz','ug','vi','cy','yi','yo','']);
+    }
+    return mirosubs.translate.GoogleTranslator.Languages_.containsAll(arguments);
 }

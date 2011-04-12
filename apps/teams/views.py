@@ -27,13 +27,14 @@
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguagePair, TeamVideoLanguage
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.conf import settings
 from django.views.generic.list_detail import object_list
+from django.template import RequestContext
 from auth.models import CustomUser as User
 from django.db.models import Q, Count
 from django.contrib.auth.decorators import permission_required
@@ -51,6 +52,8 @@ from widget.rpc import add_general_settings
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
+CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS = getattr(settings, 'CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS', 20)
+
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30) 
 MEMBERS_ON_PAGE = getattr(settings, 'MEMBERS_ON_PAGE', 30)
 APLICATIONS_ON_PAGE = getattr(settings, 'APLICATIONS_ON_PAGE', 30)
@@ -111,10 +114,12 @@ def index(request, my_teams=False):
                        template_object_name='teams',
                        extra_context=extra_context)
     
-def detail(request, slug):
+def detail(request, slug, is_debugging=False):
     team = Team.get(slug, request.user)
     
     languages = get_user_languages_from_request(request)
+    if bool(is_debugging):
+        languages = request.GET.get("langs", "").split(",")
     languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
     
     langs_pairs = []
@@ -130,9 +135,8 @@ def detail(request, slug):
     
     qs1 = qs.filter(percent_complete__gt=0,percent_complete__lt=100)
     qs2 = qs.filter(percent_complete=0)
-    qs3 = lqs.filter(is_original=True, is_complete=False)
-    qs4 = lqs.filter(is_original=False, forked=True, is_complete=True)
-    
+    qs3 = lqs.filter(is_original=True, is_complete=False, language__in=languages)
+    qs4 = lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
     mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
 
     extra_context = widget.add_onsite_js_files({})    
@@ -140,21 +144,48 @@ def detail(request, slug):
         'team': team,
         'can_edit_video': team.can_edit_video(request.user)
     })
+    total_count = TeamVideo.objects.filter(team=team).count()
 
-    if len(mqs) == 0:
-        mqs = TeamMultyQuerySet(TeamVideoLanguagePair.objects.filter(team=team) \
-                                .select_related('team_video', 'team_video__video'))
+    additional = TeamVideoLanguagePair.objects.none()
+    all_videos = TeamVideo.objects.filter(team=team).select_related('video')
+
+    if total_count == 0:
+        mqs = all_videos
+    else:
+        if  total_count < CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS:
+            additional = all_videos.exclude(pk__in=[x.id for x in mqs ])
+        else:
+            additional = all_videos
+        mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4 , additional)    
+
 
     general_settings = {}
     add_general_settings(request, general_settings)
     extra_context['general_settings'] = json.dumps(general_settings)
+
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
             'video_url': team.video.get_video_url(), 
             'base_state': {}
         })
-        
+
+    if bool(is_debugging) and request.user.is_staff:
+        extra_context.update({
+            'languages': languages,
+            'qs': qs,
+            'lqs': lqs,
+            'qs1': qs1,
+            'qs2': qs2,
+            'qs3': qs3,
+            'qs4': qs4,
+            'mqs':mqs,
+            'mqs_count': len(mqs),
+            'additional_count': additional.count(),
+            'additional': additional[:50]
+            })
+        return render_to_response("teams/detail-debug.html", extra_context, RequestContext(request))
+    
     return object_list(request, queryset=mqs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
@@ -246,22 +277,6 @@ def videos_actions(request, slug):
                        extra_context=extra_context, 
                        template_object_name='videos_action')
 
-def members_actions(request, slug):
-    team = Team.get(slug, request.user)   
-    
-    user_ids = team.members.values_list('user__id', flat=True)
-    
-    qs = Action.objects.filter(user__pk__in=user_ids)
-    
-    extra_context = {
-        'team': team
-    }   
-    return object_list(request, queryset=qs, 
-                       paginate_by=ACTIONS_ON_PAGE, 
-                       template_name='teams/members_actions.html', 
-                       extra_context=extra_context, 
-                       template_object_name='action')
-
 @render_to('teams/create.html')
 @login_required    
 def create(request):
@@ -302,7 +317,7 @@ def edit(request, slug):
             form = EditTeamForm(request.POST, request.FILES, instance=team)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Team edited success'))
+            messages.success(request, _(u'Your changes have been saved'))
             return redirect(team.get_edit_url())
     else:
         if request.user.is_staff:
@@ -357,7 +372,7 @@ def add_video(request, slug):
     if form.is_valid():
         obj =  form.save(False)
         obj.added_by = request.user
-        obj.save()  
+        obj.save()
         return redirect(obj)
         
     return {

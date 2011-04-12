@@ -22,8 +22,12 @@ from fabric.context_managers import settings
 import os
 
 DEV_HOST = 'dev.universalsubtitles.org:2191'
+ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 
-def _create_env(username, hosts, s3_bucket, installation_dir, static_dir, name):
+def _create_env(username, hosts, s3_bucket, 
+                installation_dir, static_dir, name,
+                memcached_bounce_cmd, 
+                admin_dir):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -31,6 +35,8 @@ def _create_env(username, hosts, s3_bucket, installation_dir, static_dir, name):
     env.web_dir = '/var/www/{0}'.format(installation_dir)
     env.static_dir = '/var/{0}'.format(static_dir)
     env.installation_name = name
+    env.memcached_bounce_cmd = memcached_bounce_cmd
+    env.admin_dir = admin_dir
 
 def staging(username):
     _create_env(username, 
@@ -38,14 +44,18 @@ def staging(username):
                  'pcf-us-staging2.pculture.org:2191'],
                 's3.staging.universalsubtitles.org',
                 'universalsubtitles.staging',
-                'static/staging', 'staging')
+                'static/staging', 'staging',
+                '/etc/init.d/memcached-staging restart',
+                '/usr/local/universalsubtitles.staging')
 
 def dev(username):
     _create_env(username,
                 ['dev.universalsubtitles.org:2191'],
                 None,
                 'universalsubtitles.dev',
-                'www/universalsubtitles.dev', 'dev')
+                'www/universalsubtitles.dev', 'dev', 
+                None, 
+                None)
 
 def unisubs(username):
     _create_env(username,
@@ -53,7 +63,9 @@ def unisubs(username):
                  'pcf-us-cluster2.pculture.org:2191'],
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
-                'static/production', None)
+                'static/production', None,
+                '/etc/init.d/memcached restart', 
+                '/usr/local/universalsubtitles')
 
 
 def syncdb():
@@ -81,7 +93,7 @@ def migrate_fake(app_name):
         run('yes no | {0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs_settings'.format(env.static_dir, app_name))
 
 def refresh_db():
-    env.host_string = DEV_HOST
+    env.host_string = env.web_hosts[0]
     sudo('/scripts/univsubs_reset_db.sh {0}'.format(env.installation_name))
     sudo('/scripts/univsubs_refresh_db.sh {0}'.format(env.installation_name))
 
@@ -99,13 +111,20 @@ def _switch_branch(dir, branch_name):
         run('git branch --track {0} origin/{0}'.format(branch_name))
         run('git checkout {0}'.format(branch_name))
         env.warn_only = False
+        _git_pull()
 
-def switch_branch(branch_name):
+def _execute_on_all_hosts(cmd):
     for host in env.web_hosts:
         env.host_string = host
-        _switch_branch(env.web_dir, branch_name)
+        cmd(env.web_dir)
     env.host_string = DEV_HOST
-    _switch_branch(env.static_dir, branch_name)
+    cmd(env.static_dir)
+    if env.admin_dir is not None:
+        env.host_string = ADMIN_HOST
+        cmd(env.admin_dir)
+
+def switch_branch(branch_name):
+    _execute_on_all_hosts(lambda dir: _switch_branch(dir, branch_name))    
 
 def _update_environment(base_dir):
     with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
@@ -115,22 +134,15 @@ def _update_environment(base_dir):
         run('yes i | {0}/env/bin/pip install -E {0}/env/ -r requirements.txt'.format(base_dir), pty=True)
 
 def update_environment():
-    for host in env.web_hosts:
-        env.host_string = host
-        _update_environment(env.web_dir)
-    env.host_string = DEV_HOST
-    _update_environment(env.static_dir)
+    _execute_on_all_hosts(lambda dir: _update_environment(dir))
 
 def _clear_permissions(dir):
     sudo('chgrp pcf-web -R {0}'.format(dir))
     sudo('chmod g+w -R {0}'.format(dir))
 
 def clear_environment_permissions():
-    for host in env.web_hosts:
-        env.host_string = host
-        _clear_permissions(os.path.join(env.web_dir, 'env'))
-    env.host_string = DEV_HOST
-    _clear_permissions(os.path.join(env.static_dir, 'env'))
+    _execute_on_all_hosts(
+        lambda dir: _clear_permissions(os.path.join(dir, 'env')))
 
 def clear_permissions():
     for host in env.web_hosts:
@@ -163,6 +175,15 @@ def update_web():
             env.warn_only = False
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
+        _bounce_celeryd()
+
+def bounce_memcached():
+    if env.memcached_bounce_cmd:
+        env.host_string = 'pcf-us-admin.pculture.org:2191'
+        sudo(env.memcached_bounce_cmd)
+
+def _bounce_celeryd():
+    sudo('/etc/init.d/celeryd restart')
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):

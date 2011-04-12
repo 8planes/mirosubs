@@ -225,6 +225,22 @@ class SubtitlesUploadBaseForm(forms.Form):
                 original_language.video = video
                 original_language.save()
 
+    def _best_existing(self, languages):
+        for l in languages:
+            # choosing first forked SL that has no dependent languages.
+            if not l.is_dependent() and l.subtitlelanguage_set.count() == 0:
+                return l
+        return None
+
+    def _find_appropriate_language(self, video, language_code):
+        language = self._best_existing(video.subtitle_languages(language_code))
+        if not language:
+            language = SubtitleLanguage(
+                video=video, is_original=False, is_forked=True)
+        language.language = language_code
+        language.save()
+        return language
+
     def save_subtitles(self, parser):
         video = self.cleaned_data['video']
         
@@ -236,14 +252,8 @@ class SubtitlesUploadBaseForm(forms.Form):
         if not video.has_original_language():
             self._save_original_language(
                 video, self.cleaned_data['video_language'])
-  
-        language = video.subtitle_language(self.cleaned_data['language'])
         
-        if not language:
-            language = SubtitleLanguage(video=video, is_original=False, is_forked=True)
-        
-        language.language = self.cleaned_data['language']
-        language.save()
+        language = self._find_appropriate_language(video, self.cleaned_data['language'])
         
         try:
             old_version = language.subtitleversion_set.all()[:1].get()    
@@ -292,6 +302,7 @@ class SubtitlesUploadBaseForm(forms.Form):
     
 class SubtitlesUploadForm(SubtitlesUploadBaseForm):
     subtitles = forms.FileField()
+    is_complete = forms.BooleanField(initial=True, required=False)
     
     def clean_subtitles(self):
         subtitles = self.cleaned_data['subtitles']
@@ -328,7 +339,16 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         subtitles = self.cleaned_data['subtitles']
         text = subtitles.read()
         parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))        
-        return self.save_subtitles(parser)
+        sl = self.save_subtitles(parser)
+        
+        is_complete = self.cleaned_data.get('is_complete')
+        sl.is_complete = is_complete
+        sl.save()
+        if sl.is_original:
+            #fix. I've no idea how, but sl.video.is_subtitles is reset to False without this
+            sl.video.update_complete_state()
+            sl.video.save()
+        return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):
     subtitles = forms.CharField()
@@ -525,7 +545,7 @@ class FeedbackForm(MathCaptchaForm):
         else:
             feedback_emails = settings.FEEDBACK_EMAILS
         headers = {'Reply-To': email} if email else None
-        bcc = settings.EMAIL_BCC_LIST
+        bcc = getattr(settings, 'EMAIL_BCC_LIST', [])
         if email:
             subject = '%s (from %s)' % (settings.FEEDBACK_SUBJECT, email)
         else:

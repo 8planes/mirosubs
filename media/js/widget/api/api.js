@@ -62,7 +62,9 @@ mirosubs.api.openDialog = function(config) {
  * @param {Object} generalSettings See WidgetController.makeGeneralSettings
  *     for more info.
  */ 
-mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, generalSettings) {
+mirosubs.api.openUnisubsDialogWithSettings = 
+    function(askLanguage, config, generalSettings) 
+{
     mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
         mirosubs.returnURL = config['returnURL'];
@@ -74,21 +76,13 @@ mirosubs.api.openUnisubsDialogWithSettings = function(askLanguage, config, gener
         config['videoID'], config['videoURL'], videoSource);
     if (!askLanguage) {
         opener.openDialog(
-            config['baseVersionNo'], 
             config['languageCode'], 
             config['originalLanguageCode'], 
-            config['fork'], config['baseLanguageCode']);
+            config['subLanguagePK'], 
+            config['baseLanguagePK']);
     }
-    else {
-        var dialog = new mirosubs.startdialog.Dialog(
-            config['videoID'], null, 
-            function(originalLang, subLang, baseLang) {
-                opener.openDialog(
-                    null, subLang, originalLang,
-                    !baseLang, baseLang);
-            });
-        dialog.setVisible(true);
-    }
+    else
+        opener.showStartDialog();
 };
 
 /**
@@ -107,14 +101,7 @@ mirosubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettin
         videoURL);
     var opener = new mirosubs.widget.SubtitleDialogOpener(
         videoID, videoURL, videoSource);
-    var dialog = new mirosubs.startdialog.Dialog(
-        videoID, null, 
-        function(originalLang, subLang, baseLang) {
-            opener.openDialogOrRedirect(
-                null, subLang, originalLang, 
-                baseLang);
-        });
-    dialog.setVisible(true);
+    opener.showStartDialog();
 };
 
 /**

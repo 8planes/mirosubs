@@ -48,7 +48,7 @@ from django.utils import translation
 def get_user_languages_from_request(request, only_supported=False, with_names=False):
     languages = []
     if request.user.is_authenticated():
-        languages = [l.language for l in request.user.userlanguage_set.all()]    
+        languages = [l.language for l in request.user.get_languages()]    
         
     if not languages:
         languages = languages_from_request(request)

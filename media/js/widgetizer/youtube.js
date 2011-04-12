@@ -59,15 +59,10 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
 
 mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
     // assuming that element is an embed.
-//    return element.getAttribute('allowscriptaccess') == 'always' &&
-//        element.src.match(/enablejsapi=1/i) &&
-//        goog.array.contains(['transparent', 'opaque'], 
-//                            element.getAttribute('wmode'));
-    // For now, we're just saying that nothing is decoratable.
-    // This is because the external interface sometimes fails 
-    // on youtube embeds after they're processed by the widgetizer 
-    // code. So, for now, all video players just get replaced.
-    return false;
+    return element.getAttribute('allowscriptaccess') == 'always' &&
+        element.src.match(/enablejsapi=1/i) &&
+        goog.array.contains(['transparent', 'opaque'], 
+                            element.getAttribute('wmode'));
 };
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 

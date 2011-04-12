@@ -112,7 +112,9 @@ mirosubs.imageAssetURL = function(imageFileName) {
 };
 
 /**
- * Set during loading.
+ * Set during loading. If true, this means we are supposed to open the fancy 
+ * debug window. Note that the window will not open if goog.DEBUG is false 
+ * (we set this to false in an option passed to the compiler for production)
  */
 mirosubs.DEBUG = false;
 

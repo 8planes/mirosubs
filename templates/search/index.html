@@ -1,16 +1,10 @@
 {% extends "base.html" %}
 
-{% load escapejs paginator widget i18n recent_activity %}
+{% load escapejs paginator widget i18n recent_activity search_tags %}
 
 {% block main_content %}
     <div class="grid_8 alpha">
         <form method="get" action=".">
-          {% comment %}
-          <ul class="video_tabs">
-            <li><a class="active" href="#">{% trans "Videos" %}</a></li>
-            <li><a href="#">{% trans "Members" %}</a></li>#}
-          </ul>
-          {% endcomment %}
           
           <div class="boxx">
             <div class="padding_small">
@@ -27,10 +21,6 @@
         <div class="grid_8 alpha">
           <div class="search_filters clearfix">
             <div id="sort_filter">
-              {% comment %}
-                {% trans "Display" %}  
-                {{ form.display }}
-  			{% endcomment %}
                 {% trans "Sort by" %}
                 {{ form.sort }}
             </div><!-- // sort_filter -->
@@ -74,6 +64,7 @@
         
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
+            {% load_related_for_result result_list %}
             {% for object in result_list %}
                 {% if object.object %}
                     {% with object.object as video %}

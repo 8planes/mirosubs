@@ -44,9 +44,6 @@ mirosubs.subtitle.TranscribePanel = function(captionSet, videoPlayer, serverMode
 };
 goog.inherits(mirosubs.subtitle.TranscribePanel, goog.ui.Component);
 
-mirosubs.subtitle.TranscribePanel.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.subtitle.TranscribePanel');
-
 mirosubs.subtitle.TranscribePanel.PlayMode = {
     PLAY_STOP : 'pl',
     AUTOPAUSE : 'au',
@@ -72,7 +69,6 @@ mirosubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
         this.videoPlayer_), true);
     this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
         this.videoPlayer_, this.captionSet_, false, true), true);
-    mirosubs.subtitle.TranscribePanel.logger_.info('setting play mode');
     this.setPlayMode(mirosubs.UserSettings.getStringValue(
         mirosubs.UserSettings.Settings.VIDEO_SPEED_MODE) ||
                      mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP);

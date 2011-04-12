@@ -324,6 +324,7 @@ mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, e) {
 mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode) {
     this.dispatchEvent(
         new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode));
+    this.currentLang_ = langCode;
 };
 
 mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {
@@ -342,9 +343,11 @@ mirosubs.widget.DropDown.prototype.setCurrentLangClassName_ = function() {
     else if (this.subtitleState_.IS_ORIGINAL)
         this.originalLanguage_.className = className;
     else {
-        goog.array.find(this.translationLinks_, function(elt) {
+        var transLink = goog.array.find(this.translationLinks_, function(elt) {
             return elt.lang[0] == that.subtitleState_.LANGUAGE;
-        }).linkLi.className = className;
+        });
+        if (transLink)
+            transLink.linkLi.className = className;
     }
 };
 

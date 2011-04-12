@@ -25,7 +25,9 @@ mirosubs.Tracker = function() {
     this.loadingMixpanel_ = false;
     this.mpmetrics_ = null;
     this.toCallOnLoad_ = [];
-    this.logger_ = goog.debug.Logger.getLogger('mirosubs.Tracker');
+    if (goog.DEBUG) {
+        this.logger_ = goog.debug.Logger.getLogger('mirosubs.Tracker');
+    }
     this.dontReport_ = false;
 };
 
@@ -41,7 +43,9 @@ mirosubs.Tracker.prototype.dontReport = function() {
 mirosubs.Tracker.prototype.track = function(event, opt_props) {
     if (this.dontReport_)
         return;
-    this.logger_.info(event);
+    if (goog.DEBUG) {
+        this.logger_.info(event);
+    }
     var props = opt_props || {};
     props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
     this.callOrLoad_('track', [event, props]);

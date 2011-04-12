@@ -26,12 +26,19 @@ from django.contrib.auth.models import UserManager, User as BaseUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.conf import settings
+import urllib
 import hashlib
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.http import urlquote_plus
 from django.core.exceptions import MultipleObjectsReturned
 from utils.amazon import S3EnabledImageField
-from datetime import datetime
+from datetime import datetime, date
+from django.core.cache import cache
+
+#I'm not sure this is the best way do do this, but this models.py is executed
+#before all other and before url.py
+from localeurl import patch_reverse
+patch_reverse()
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -56,6 +63,8 @@ class CustomUser(BaseUser):
         choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
     award_points = models.IntegerField(default=0)
     last_ip = models.IPAddressField(blank=True, null=True)
+    #videos witch are related to user. this is for quicker queries 
+    videos = models.ManyToManyField('videos.Video', blank=True)
     
     objects = UserManager()
     
@@ -73,14 +82,101 @@ class CustomUser(BaseUser):
                 return self.first_name
         return self.username
     
+    @classmethod
+    def video_followers_change_handler(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
+        from videos.models import SubtitleLanguage
+        
+        if reverse and action == 'post_add':
+            #instance is User
+            for video_pk in pk_set:
+                cls.videos.through.objects.get_or_create(video__pk=video_pk, customuser=instance, defaults={'video_id': video_pk})
+        elif reverse and action == 'post_remove':
+            #instance is User
+            for video_pk in pk_set:
+                if not SubtitleLanguage.objects.filter(followers=instance, video__pk=video_pk).exists():
+                    instance.videos.remove(video_pk)
+        elif not reverse and action == 'post_add':
+            #instance is Video
+            for user_pk in pk_set:
+                cls.videos.through.objects.get_or_create(video=instance, customuser__pk=user_pk, defaults={'customuser_id': user_pk})
+        elif not reverse and action == 'post_remove':
+            #instance is Video
+            for user_pk in pk_set:
+                if not SubtitleLanguage.objects.filter(followers__pk=user_pk, video=instance).exists():
+                    instance.customuser_set.remove(user_pk)
+        elif reverse and action == 'post_clear':
+            #instance is User
+            cls.videos.through.objects.filter(customuser=instance) \
+                .exclude(video__subtitlelanguage__followers=instance).delete()
+        elif not reverse and action == 'post_clear':
+            #instance is Video
+            cls.videos.through.objects.filter(video=instance) \
+                .exclude(customuser__followed_languages__video=instance).delete()
+            
+    @classmethod
+    def sl_followers_change_handler(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
+        from videos.models import Video, SubtitleLanguage
+        
+        if reverse and action == 'post_add':
+            #instance is User
+            for sl_pk in pk_set:
+                sl = SubtitleLanguage.objects.get(pk=sl_pk)
+                cls.videos.through.objects.get_or_create(video=sl.video, customuser=instance)
+        elif reverse and action == 'post_remove':
+            #instance is User
+            for sl_pk in pk_set:
+                if not Video.objects.filter(followers=instance, subtitlelanguage__pk=sl_pk).exists():
+                    sl = SubtitleLanguage.objects.get(pk=sl_pk)
+                    instance.videos.remove(sl.video)
+        elif not reverse and action == 'post_add':
+            #instance is SubtitleLanguage
+            for user_pk in pk_set:
+                cls.videos.through.objects.get_or_create(video=instance.video, customuser__pk=user_pk, defaults={'customuser_id': user_pk})
+        elif not reverse and action == 'post_remove':
+            #instance is SubtitleLanguage
+            for user_pk in pk_set:
+                if not Video.objects.filter(followers__pk=user_pk, subtitlelanguage=instance).exists():
+                    instance.video.customuser_set.remove(user_pk)
+        elif reverse and action == 'post_clear':
+            #instance is User
+            cls.videos.through.objects.filter(customuser=instance) \
+                .exclude(video__subtitlelanguage__followers=instance).delete()
+        elif not reverse and action == 'post_clear':
+            #instance is SubtitleLanguage
+            cls.videos.through.objects.filter(video=instance) \
+                .exclude(customuser__followed_languages__video=instance.video).delete()
+    
+    def get_languages(self):
+        """
+        Just to control this query
+        """
+        languages = cache.get('user_languages_%s' % self.pk)
+        
+        if languages is None:
+            languages = self.userlanguage_set.all()
+            cache.set('user_languages_%s' % self.pk, languages, 60*24*7)
+            
+        return languages 
+    
     def managed_teams(self):
         return self.teams.filter(members__is_manager=True)
+
+    def _get_gravatar(self, size):
+        url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest() + "?"
+        url += urllib.urlencode({'d': 'mm', 's':str(size)})
+        return url
+
+    def _get_avatar_by_size(self, size):
+        if self.picture:
+            return self.picture.thumb_url(size, size)
+        else:
+            return self._get_gravatar(size)        
     
     def avatar(self):
-        return self.picture.thumb_url(100, 100)
+        return self._get_avatar_by_size(100)
 
     def small_avatar(self):
-        return self.picture.thumb_url(50, 50)
+        return self._get_avatar_by_size(50)
     
     @models.permalink
     def get_absolute_url(self):
@@ -191,6 +287,14 @@ class UserLanguage(models.Model):
     class Meta:
         unique_together = ['user', 'language']
 
+    def save(self, *args, **kwargs):
+        super(UserLanguage, self).save(*args, **kwargs)
+        cache.delete('user_languages_%s' % self.user_id)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('user_languages_%s' % self.user_id)
+        return super(UserLanguage, self).delete(*args, **kwargs)
+
 class Announcement(models.Model):
     content = models.CharField(max_length=500)
     created = models.DateTimeField()
@@ -199,10 +303,24 @@ class Announcement(models.Model):
     class Meta:
         ordering = ['-created']
     
+    def save(self, *args, **kwargs):
+        super(Announcement, self).save(*args, **kwargs)
+        cache.delete('last_accouncement')
+
+    def delete(self, *args, **kwargs):
+        cache.delete('last_accouncement')
+        return super(Announcement, self).delete(*args, **kwargs)
+    
     @classmethod
     def last(cls):
-        try:
-            return cls.objects.filter(created__lte=datetime.now()) \
-                .filter(hidden=False)[0:1].get()
-        except cls.DoesNotExist:
-            return
+        last = cache.get('last_accouncement', '')
+
+        if last == '':
+            try:
+                last = cls.objects.filter(created__lte=datetime.today()).filter(hidden=False)[0:1].get()
+            except cls.DoesNotExist:
+                last = None
+            cache.set('last_accouncement', last, 60*24*7)
+
+        return last    
+        

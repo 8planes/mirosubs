@@ -62,7 +62,7 @@
                 if ( ! data['is-read']){
                     MessagesApi.mark_as_read(data['id'], function(response){
                         if (response.error){
-                            $.msg.clean().add(response.error, 'error');
+                            $.jGrowl.error(response.error);
                         }else{
                             $link.parents('tr').removeClass('unread');
                             data['is-read'] = true;

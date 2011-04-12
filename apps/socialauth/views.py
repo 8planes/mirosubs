@@ -1,12 +1,12 @@
 from django.shortcuts import render_to_response,redirect
 from django.template import RequestContext
-from django.contrib.auth.models import UserManager, User
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, get_host
+from django.http import HttpResponseRedirect, HttpResponse, get_host
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout
+<<<<<<< HEAD
 
 import cgi
 import simplejson
@@ -16,8 +16,11 @@ try:
     import json#Works with Python 2.6
 except ImportError:
     from django.utils import simplejson as json
+=======
+from django.utils import simplejson as json
+>>>>>>> dcb8246d55c49dc323428dcf1926435d2a4b9113
 
-from socialauth.models import OpenidProfile, AuthMeta
+from socialauth.models import AuthMeta
 from socialauth.forms import EditProfileForm
 
 """
@@ -27,16 +30,17 @@ from socialauth.models import YahooContact, TwitterContact, FacebookContact,\
 
 from openid_consumer.views import begin
 from socialauth.lib import oauthtwitter2 as oauthtwitter
+<<<<<<< HEAD
 from socialauth.lib import oauthyahoo
 from socialauth.lib import oauthgoogle
 from socialauth.lib import facebook
+=======
+from socialauth.lib.facebook import get_facebook_signature
+>>>>>>> dcb8246d55c49dc323428dcf1926435d2a4b9113
 
 from oauth import oauth
-from re import escape
-import random
 from datetime import datetime
-from cgi import parse_qs
-import urllib
+from django.utils.http import urlquote
 from utils.translation import get_user_languages_from_cookie
 from auth.models import UserLanguage
 
@@ -126,7 +130,7 @@ def twitter_login(request, next=None):
         callback_url = '%s%s?next=%s' % \
 	 	    (get_url_host(request),
 			 reverse("socialauth_twitter_login_done"), 
-		     urllib.quote(next))
+		     urlquote(next))
     twitter = oauthtwitter.TwitterOAuthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
     request_token = twitter.fetch_request_token(callback_url)
     request.session['request_token'] = request_token.to_string()

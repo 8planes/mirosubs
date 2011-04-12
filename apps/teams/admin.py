@@ -27,13 +27,9 @@ from teams.models import Team, TeamMember, TeamVideo
 from videos.models import Video
 from django.utils.translation import ugettext_lazy as _
 
-class TeamMemberInline(admin.TabularInline):
-    model = TeamMember
-    
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight')
     list_filter = ('highlight',)
-    inlines = [TeamMemberInline]
     actions = ['highlight', 'unhighlight']
     
     def highlight(self, request, queryset):
@@ -44,14 +40,13 @@ class TeamAdmin(admin.ModelAdmin):
         queryset.update(highlight=False)
     unhighlight.short_description = _('Unfeature teams')
 
-class TeamInline(admin.TabularInline):
-    model = Team
-
-class VideoInline(admin.TabularInline):
-    model = Video
+class TeamMemberAdmin(admin.ModelAdmin):
+    search_fields = ('team__name', 'user__username', 'user__first_name', 'user__last_name')
+    list_display = ('team', 'user', 'is_manager')
 
 class TeamVideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
 
+admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamVideo, TeamVideoAdmin)

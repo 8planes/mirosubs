@@ -53,6 +53,7 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
     mirosubs.style.showElement(popupMenu.getElement(), false);
 
     popupMenu.setCurrentSubtitleState(subtitleState);
+    popupMenu.dispatchLanguageSelection_(this.currentLang_);
 
     this.playController_ = new mirosubs.widget.PlayController(
         videoID, this.videoPlayer_.getVideoSource(), this.videoPlayer_, 
@@ -90,3 +91,7 @@ mirosubs.widget.WidgetController.prototype.getSubtitleController = function() {
 mirosubs.widget.WidgetController.prototype.getPlayController = function() {
     return this.playController_;
 };
+
+mirosubs.widget.WidgetController.prototype.openMenu = function(){
+    this.subtitleController_.dropDown_.show();
+}

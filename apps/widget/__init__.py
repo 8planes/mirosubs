@@ -52,7 +52,6 @@ def add_config_based_js_files(context, files, compiled_file_name):
 
     context['js_use_compiled'] = settings.JS_USE_COMPILED
     context['js_dependencies'] = js_files
-    context['site'] = Site.objects.get_current()
     return context
 
 
@@ -64,7 +63,6 @@ def add_js_files(context, use_compiled, js_files, compiled_file_name=None, full_
         context["js_dependencies"] = [full_path(compiled_file_name)]
     else:
         context["js_dependencies"] = [full_path(js_file) for js_file in js_files] + full_path_js_files
-    context["site"] = Site.objects.get_current()
     return context;    
 
 def language_to_map(code, name, percent_done=None):

@@ -42,7 +42,7 @@ class SelectLanguageForm(forms.Form):
 
     def __init__(self, *args, **kwrags):
         super(SelectLanguageForm, self).__init__(*args, **kwrags)
-        lc = get_simple_languages_list(True)
+        lc = get_languages_list(True)
         
         for i in xrange(1, 10):
             self.fields['language%s' % i].choices = lc
@@ -159,6 +159,7 @@ class EditUserForm(forms.ModelForm):
                   'changes_notification', 'biography')
         
     def clean(self):
+        self.cleaned_data = super(EditUserForm, self).clean()
         current, new, verify = map(self.cleaned_data.get,
                     ('current_password', 'new_password', 'new_password_verify'))
         if current and not self.instance.check_password(current):

@@ -49,54 +49,79 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showLoading_ =
 
 /**
  * Calls start_editing on server and then, if successful, opens the dialog.
- * @param {?int} baseVersionNo The subtitle version no on which edits should be
- *     based, or null to use most recent version.
  * @param {string} subLanguageCode The iso language code for subtitles.
- * @param {?string} originalLanguageCode The iso language code for the video's
+ * @param {string=} opt_originalLanguageCode The iso language code for the video's
  *     original language. Should be null iff the video's original language is
  *     already set.
- * @param {boolean} fork Should the subs be forked?
- * @param {string=} opt_baseLanguageCode Should only be provided if fork is 
- *     false. If fork is false and the argument is not provided, we assume 
- *     the subs are based on original language subs.
+ * @param {number=} opt_subLanguagePK PK for the SubtitleLanguage to edit, 
+ *     if any.
+ * @param {number=} opt_baseLanguagePK PK for the SubtitleLanguage to use
+ *     as base for dependent.
  */
 mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
-    baseVersionNo, subLanguageCode, originalLanguageCode, fork, opt_baseLanguageCode)
+    subLanguageCode, 
+    opt_originalLanguageCode, 
+    opt_subLanguagePK,
+    opt_baseLanguagePK,
+    opt_completeCallback)
 {
     this.showLoading_(true);
     var args = {
         'video_id': this.videoID_,
         'language_code': subLanguageCode,
-        'original_language_code': originalLanguageCode,
-        'base_version_no': baseVersionNo,
-        'fork': fork }
-    if (opt_baseLanguageCode)
-        args['base_language_code'] = opt_baseLanguageCode
+        'subtitle_language_pk': opt_subLanguagePK || null,
+        'base_language_pk': opt_baseLanguagePK || null,
+        'original_language_code': opt_originalLanguageCode || null };
+    var that = this;
     mirosubs.Rpc.call(
         'start_editing', args,
-        goog.bind(this.startEditingResponseHandler_, this));
+        function(result) {
+            if (opt_completeCallback)
+                opt_completeCallback();
+            that.startEditingResponseHandler_(result);
+        });
 };
 
-mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
-    function(baseVersionNo, subLanguageCode, 
-             originalLanguageCode, baseLanguageCode, 
-             opt_effectiveVideoURL)
+mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog = 
+    function(opt_effectiveVideoURL, opt_initial_lang) 
+{
+    var that = this;
+    var dialog = new mirosubs.startdialog.Dialog(
+        this.videoID_, opt_initial_lang, 
+        function(originalLanguage, subLanguage, subLanguageID, 
+                 baseLanguageID, closeCallback) {
+            that.openDialogOrRedirect_(
+                subLanguage, originalLanguage, subLanguageID, 
+                baseLanguageID, opt_effectiveVideoURL, 
+                closeCallback);
+        });
+    dialog.setVisible(true);
+};
+
+mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_ =
+    function(subLanguageCode, 
+             opt_originalLanguageCode, 
+             opt_subLanguagePK,
+             opt_baseLanguagePK, 
+             opt_effectiveVideoURL,
+             opt_completeCallback)
 {
     if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
         this.openDialog(
-            baseVersionNo, subLanguageCode, 
-            originalLanguageCode, !baseLanguageCode, 
-            baseLanguageCode);
+            subLanguageCode, 
+            opt_originalLanguageCode,
+            opt_subLanguagePK,
+            opt_baseLanguagePK,
+            opt_completeCallback);
     else {
         var config = {
             'videoID': this.videoID_,
-            'baseVersionNo': baseVersionNo,
             'videoURL': this.videoURL_,
             'effectiveVideoURL': opt_effectiveVideoURL || this.videoURL_,
             'languageCode': subLanguageCode,
-            'originalLanguageCode': originalLanguageCode,
-            'fork': !baseLanguageCode,
-            'baseLanguageCode': baseLanguageCode
+            'originalLanguageCode': opt_originalLanguageCode || null,
+            'subLanguagePK': opt_subLanguagePK || null,
+            'baseLanguagePK': opt_baseLanguagePK || null
         };
         if (mirosubs.IS_NULL)
             config['nullWidget'] = true;

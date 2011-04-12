@@ -5,12 +5,13 @@ from south.v2 import SchemaMigration
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ("teams", "0022_fill_team_video_language_pair.py"),
+    )
+
     def forwards(self, orm):
         # Rename 'name' field to 'full_name'
         db.rename_column('videos_subtitlelanguage', 'was_complete', 'had_version')
-
-
-
 
     def backwards(self, orm):
         # Rename 'full_name' field to 'name'

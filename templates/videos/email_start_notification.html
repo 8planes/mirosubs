@@ -8,7 +8,7 @@
     {% blocktrans with version.user as user and version.user.get_absolute_url|rmlocale as user_url and language.language_display as language and video.video_link|rmlocale as video_url %}
     Great news! <a href="http://{{ domain }}{{ user_url }}">{{ user }}</a> has just started a {{ language }} 
     translation of your video <a href="http://{{ domain }}{{ video_url }}">{{ video }}</a>
-	{% endblocktrans %}.
+	{% endblocktrans %}
     <br/>
     {% trans 'You can review the translation and thank them for their contribution on this page:' %} <br/>
     <a href="http://{{ domain }}{{ language.get_absolute_url|rmlocale }}">{% trans 'Translation homepage' %}</a> 

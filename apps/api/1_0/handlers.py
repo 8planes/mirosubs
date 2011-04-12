@@ -33,12 +33,17 @@ class VideoHandler(BaseHandler):
     anonymous = 'AnonymousVideoHandler'
     allowed_methods = ('GET',)
     fields = ('title', 'description', 'video_id', 'thumbnail', 'created', 
-              'allow_community_edits', 'allow_video_urls_edit', 'homepage')
+              'allow_community_edits', 'allow_video_urls_edit', 'homepage', 
+              'duration', 'video_url', 'is_subtitled', 'language')
     model = Video
-
+    
     @classmethod
     def resource_uri(cls, video):
         return ('api:0.1:video_handler', [video.video_id])
+    
+    @classmethod
+    def video_url(self, obj):
+        return obj.get_video_url()
     
     @classmethod
     def thumbnail(self, obj):

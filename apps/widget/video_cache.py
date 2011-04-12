@@ -67,6 +67,14 @@ def invalidate_cache(video_id, language_code=None):
     cache.delete(_video_languages_key(video_id))
     cache.delete(_video_languages_verbose_key(video_id))
 
+    from videos.models import Video
+    try:
+        video = Video.objects.get(video_id=video_id)
+        for url in video.videourl_set.all():
+            cache.delete(_video_id_key(url.url))
+    except Video.DoesNotExist:
+        pass
+
 # only used while testing.
 def invalidate_video_id(video_url):
     cache.delete(_video_id_key(video_url))
@@ -79,7 +87,8 @@ def on_subtitle_version_save(sender, instance, **kwargs):
                       instance.language.language)
 
 def on_video_url_save(sender, instance, **kwargs):
-    invalidate_cache(instance.video.video_id)
+    if instance.video_id:
+        invalidate_cache(instance.video.video_id)
 
 def _video_id_key(video_url):
     return 'video_id_{0}'.format(sha_constructor(video_url).hexdigest())
@@ -106,9 +115,13 @@ def get_video_urls(video_id):
         return value
     else:
         from videos.models import Video
-        video_urls = \
-            [vu.effective_url for vu 
-             in Video.objects.get(video_id=video_id).videourl_set.all()]
+        try:
+            video_urls = \
+                [vu.effective_url for vu 
+                 in Video.objects.get(video_id=video_id).videourl_set.all()]
+        except Video.DoesNotExist:
+            invalidate_video_id(video_id)
+            return []
         cache.set(cache_key, video_urls, TIMEOUT)
         return video_urls
 
@@ -175,11 +188,12 @@ def get_video_languages_verbose(video_id, max_items=6):
             data["total"] = total_number - max_items
         for lang in languages_with_version:
             # show only with some translation
-            if lang.percent_done > 0.0 and lang.is_dependent():
+            if lang.is_dependent():
                 data["items"].append({
                     'language_display': lang.language_display(),
                     'percent_done': lang.percent_done ,
                     'language_url': lang.get_absolute_url(),
+                    'is_dependent': True,
                 })
             else:
                 # append to the beggininig of the list as

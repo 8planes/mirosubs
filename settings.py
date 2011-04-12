@@ -97,6 +97,10 @@ ALL_LANGUAGES['ml'] = gettext_noop(u'Malayalam')
 ALL_LANGUAGES['or'] = gettext_noop(u'Oriya')
 ALL_LANGUAGES['gu'] = gettext_noop(u'Gujarati')
 ALL_LANGUAGES['as'] = gettext_noop(u'Assamese')
+ALL_LANGUAGES['tl'] = gettext_noop(u'Filipino')
+ALL_LANGUAGES['si'] = gettext_noop(u'Sinhala')
+ALL_LANGUAGES['zh'] = gettext_noop(u'Chinese, Yue')
+ALL_LANGUAGES['oc'] = gettext_noop(u'Occitan')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -166,7 +170,10 @@ JS_CORE = ['mirosubs.js',
            'video/dailymotionvideosource.js',
            'video/dailymotionvideoplayer.js',
            'startdialog/model.js',
-           'startdialog/languagesummary.js',
+           'startdialog/videolanguage.js',
+           'startdialog/videolanguages.js',
+           'startdialog/tolanguage.js',
+           'startdialog/tolanguages.js',
            'startdialog/dialog.js',
            'widget/usersettings.js',
            'widget/logindialog.js',
@@ -306,7 +313,7 @@ MIDDLEWARE_CLASSES = (
     'openid_consumer.middleware.OpenIDMiddleware',
     'middleware.P3PHeaderMiddleware',
     'middleware.UserUUIDMiddleware',
-    'middleware.SaveUserIp'
+    'middleware.SaveUserIp',
 )
 
 ROOT_URLCONF = 'mirosubs.urls'
@@ -340,6 +347,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django.contrib.admin',
     'django.contrib.markup',
     'django_extensions',
@@ -363,7 +371,7 @@ INSTALLED_APPS = (
     'sentry',
     'sentry.client',
     'djcelery',
-    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 
+    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
 # Celery settings
@@ -377,7 +385,7 @@ INSTALLED_APPS = (
 
 CELERY_IGNORE_RESULT = True
 CELERY_DISABLE_RATE_LIMITS = True
-CELERY_SEND_EVENTS = True
+CELERY_SEND_EVENTS = False
 CELERY_SEND_TASK_ERROR_EMAILS = True
 
 BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
@@ -391,7 +399,8 @@ import re
 LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/widget'),
     re.compile('^/api'),
-    re.compile('^/jstest')
+    re.compile('^/jstest'),
+    re.compile('^/profiles/router')
 )
 
 #Haystack configuration
@@ -476,8 +485,3 @@ THUMBNAILS_SIZE = (
 EMAIL_BCC_LIST = []
 
 CACHE_BACKEND = 'locmem://'
-
-try:
-    from settings_local import *
-except ImportError:
-    pass

@@ -19,7 +19,7 @@
             {% endif %}
             
             {% if item.is_add_video %}
-                {% trans 'added video' %}
+                {% trans 'added video' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>
             {% endif %}
              
             {% if item.is_change_title %}
@@ -57,7 +57,7 @@
             {% endif %}
             
             {% if item.is_add_video %}
-                {% trans 'Video added' %}
+                <a href="{{ item.video.video_link }}">{{ item.video }}</a> {% trans 'video added' %}
             {% endif %}
              
             {% if item.is_change_title %}

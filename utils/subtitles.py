@@ -166,9 +166,9 @@ class SrtSubtitleParser(SubtitleParser):
     
     def __init__(self, subtitles):
         pattern = r'\d+\n'
-        pattern += r'(?P<s_hour>\d{2}):(?P<s_min>\d{2}):(?P<s_sec>\d{2}),(?P<s_secfr>\d+)'
+        pattern += r'(?P<s_hour>\d{2}):(?P<s_min>\d{2}):(?P<s_sec>\d{2})(,(?P<s_secfr>\d*))?'
         pattern += r' --> '
-        pattern += r'(?P<e_hour>\d{2}):(?P<e_min>\d{2}):(?P<e_sec>\d{2}),(?P<e_secfr>\d+)'
+        pattern += r'(?P<e_hour>\d{2}):(?P<e_min>\d{2}):(?P<e_sec>\d{2})(,(?P<e_secfr>\d*))?'
         pattern += r'\n(\n|(?P<text>.+?)\n\n)'
         subtitles = strip_tags(subtitles)
         super(SrtSubtitleParser, self).__init__(subtitles, pattern, [re.DOTALL])
@@ -176,6 +176,8 @@ class SrtSubtitleParser(SubtitleParser):
         self.subtitles = self.subtitles.replace('\r\n', '\n')+u'\n\n'
     
     def _get_time(self, hour, min, sec, secfr):
+        if secfr is None:
+            secfr = '0'
         return int(hour)*60*60+int(min)*60+int(sec)+float('.'+secfr)
     
     def _get_data(self, match):
