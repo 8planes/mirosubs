@@ -9,32 +9,21 @@ class Migration(DataMigration):
     def forwards(self, orm):
         if db.dry_run:
             return
-
         count = orm.SubtitleLanguage.objects.count()
-        
-        i = 0
-        for sl in orm.SubtitleLanguage.objects.select_related('video'):
-            if i % 100 == 0:
-                print "{0}/{1}".format(i, count)
 
-            try:
-                #fix SubtitleLanguage.last_version
-                #I don't think it is broken, juet to be sure
-                last_version = sl.subtitleversion_set.order_by('-version_no')[:1].get()
-                sl.last_version = last_version
+        i = 0
+        for sl in orm.SubtitleLanguage.objects.all():
+            if i % 100 == 0:
+                print("{0}/{1}".format(i, count))
+            last_version = sl.last_version
+            if last_version is not None and \
+                    last_version.is_forked and \
+                    not sl.is_forked:
+                print("updating sl {0} with note {1}".format(
+                        sl.id, last_version.note))
+                sl.is_forked = True
+                sl.standard_language = None
                 sl.save()
-            except models.ObjectDoesNotExist:
-                pass
-            
-            if (not sl.last_version or not sl.last_version.subtitle_set.exists()) and sl.is_complete:
-                sl.is_complete = False
-                sl.save()
-            
-                if not sl.video.subtitlelanguage_set.exclude(is_complete=False).exists() and sl.video.complete_date:
-                    sl.video.complete_date = None
-                    sl.video.save()
-            
-            i += 1
     
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -51,7 +40,8 @@ class Migration(DataMigration):
             'picture': ('utils.amazon.fields.S3EnabledImageField', [], {'max_length': '100', 'blank': 'True'}),
             'preferred_language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
-            'valid_email': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'})
+            'valid_email': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'videos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['videos.Video']", 'symmetrical': 'False', 'blank': 'True'})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -147,6 +137,7 @@ class Migration(DataMigration):
             'last_version': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleVersion']", 'null': 'True', 'blank': 'True'}),
             'percent_done': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'standard_language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']", 'null': 'True', 'blank': 'True'}),
+            'subtitle_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'subtitles_fetched_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"}),
@@ -197,7 +188,7 @@ class Migration(DataMigration):
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'video_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'db_index': 'True'}),
-            'was_subtitled': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'was_subtitled': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True', 'blank': 'True'}),
             'widget_views_count': ('django.db.models.fields.IntegerField', [], {'default': '0', 'db_index': 'True'}),
             'writelock_owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'writelock_owners'", 'null': 'True', 'to': "orm['auth.CustomUser']"}),
             'writelock_session_key': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
