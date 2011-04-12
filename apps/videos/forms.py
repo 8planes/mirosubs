@@ -302,6 +302,7 @@ class SubtitlesUploadBaseForm(forms.Form):
     
 class SubtitlesUploadForm(SubtitlesUploadBaseForm):
     subtitles = forms.FileField()
+    is_complete = forms.BooleanField(initial=True, required=False)
     
     def clean_subtitles(self):
         subtitles = self.cleaned_data['subtitles']
@@ -338,7 +339,15 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         subtitles = self.cleaned_data['subtitles']
         text = subtitles.read()
         parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))        
-        return self.save_subtitles(parser)
+        sl = self.save_subtitles(parser)
+        
+        is_complete = self.cleaned_data.get('is_complete')
+
+        if not is_complete is None:
+            sl.is_complete = is_complete
+            sl.save()
+            
+        return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):
     subtitles = forms.CharField()

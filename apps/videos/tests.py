@@ -205,7 +205,8 @@ class UploadSubtitlesTest(WebUseTest):
             'language': lang,
             'video_language': 'en',
             'video': video_pk,
-            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
+            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt')),
+            'is_complete': True
             }
 
     
@@ -248,10 +249,18 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertTrue(version.is_forked)
         self.assertTrue(language.has_version)
         self.assertTrue(language.had_version)
+        self.assertEqual(language.is_complete, data['is_complete'])
         self.assertFalse(video.is_subtitled)
         self.assertFalse(video.was_subtitled)
         self.assertEquals(32, language.subtitle_count)
-
+        
+        data = self._make_data()
+        data['is_complete'] = not data['is_complete']
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        language = video.subtitle_language(data['language'])
+        self.assertEqual(language.is_complete, data['is_complete'])
+        
     def test_upload_original_subtitles(self):
         self._login()
         data = self._make_data(lang='en')
