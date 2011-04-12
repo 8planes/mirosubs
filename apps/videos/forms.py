@@ -342,11 +342,12 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         sl = self.save_subtitles(parser)
         
         is_complete = self.cleaned_data.get('is_complete')
-
-        if not is_complete is None:
-            sl.is_complete = is_complete
-            sl.save()
-            
+        sl.is_complete = is_complete
+        sl.save()
+        if sl.is_original:
+            #fix. I've no idea how, but sl.video.is_subtitles is reset to False without this
+            sl.video.update_complete_state()
+            sl.video.save()
         return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):
