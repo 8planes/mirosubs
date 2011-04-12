@@ -34,9 +34,13 @@ mirosubs.startdialog.ToLanguages = function(myLanguages, videoLanguages, opt_ini
 
 mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
     var toLanguages = [];
-    if (this.initialLanguage_)
-        toLanguages = [new mirosubs.startdialog.ToLanguage(
-            0, this.videoLanguages_.findForPK(this.initialLanguage_))];
+    if (this.initialLanguage_){
+        var initLang = new mirosubs.startdialog.ToLanguage(
+            0, this.videoLanguages_.findForPK(this.initialLanguage_));
+        if (initLang.LANGUAGE){
+         toLanguages.push(initLang);
+        }
+    }
     var myLanguagesToLangs = [];
 
     goog.array.forEach(
@@ -46,11 +50,16 @@ mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
                 myLanguagesToLangs, this.createMyLanguageToLangs_(l));
         },
         this);
+
     toLanguages = goog.array.concat(
         toLanguages,
         myLanguagesToLangs);
+    var userLangsCount = toLanguages.length;
     this.addMissingVideoLangs_(toLanguages);
     this.addMissingLangs_(toLanguages);
+    // we sort user langs differtly, so we split them
+    var userLangs = goog.array.splice(toLanguages, 0, userLangsCount);
+    // sort others on ranking alone
     goog.array.sort(
         toLanguages,
         function(a, b) {
@@ -61,6 +70,27 @@ mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
                     a.LANGUAGE_NAME, b.LANGUAGE_NAME);
             return compare;
         });
+    goog.array.sort(
+        userLangs,
+        function(a, b) {
+            var compare = goog.array.defaultCompare(
+                a.RANKING, b.RANKING);
+            if (compare == 0){
+                if (a.VIDEO_LANGUAGE && b.VIDEO_LANGUAGE){
+                    compare =  goog.array.defaultCompare(
+                        b.VIDEO_LANGUAGE.PERCENT_DONE, a.VIDEO_LANGUAGE.PERCENT_DONE);
+                    if (compare == 0){
+                        compare = goog.array.defaultCompare(
+                            a.LANGUAGE_NAME, b.LANGUAGE_NAME);
+                    }
+                }else{
+                    compare = goog.array.defaultCompare(
+                        a.LANGUAGE_NAME, b.LANGUAGE_NAME);
+                }
+            }
+            return compare;
+        });
+    goog.array.insertArrayAt(toLanguages, userLangs, 0);
     return toLanguages;
 };
 
