@@ -245,6 +245,8 @@ class UploadSubtitlesTest(WebUseTest):
         language = video.subtitle_language(data['language'])
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 32)
+        self.assertTrue(language.is_forked)
+        self.assertTrue(version.is_forked)
         self.assertTrue(language.has_version)
         self.assertTrue(language.had_version)
         self.assertEqual(language.is_complete, data['is_complete'])
