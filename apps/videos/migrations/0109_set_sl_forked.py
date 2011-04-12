@@ -15,6 +15,7 @@ class Migration(DataMigration):
         for sl in orm.SubtitleLanguage.objects.all():
             if i % 100 == 0:
                 print("{0}/{1}".format(i, count))
+            i += 1
             last_version = sl.last_version
             if last_version is not None and \
                     last_version.is_forked and \
