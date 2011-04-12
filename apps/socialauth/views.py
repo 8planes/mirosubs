@@ -16,10 +16,6 @@ try:
     import json#Works with Python 2.6
 except ImportError:
     from django.utils import simplejson as json
-=======
-from django.utils import simplejson as json
->>>>>>> dcb8246d55c49dc323428dcf1926435d2a4b9113
-
 from socialauth.models import AuthMeta
 from socialauth.forms import EditProfileForm
 
@@ -30,13 +26,9 @@ from socialauth.models import YahooContact, TwitterContact, FacebookContact,\
 
 from openid_consumer.views import begin
 from socialauth.lib import oauthtwitter2 as oauthtwitter
-<<<<<<< HEAD
 from socialauth.lib import oauthyahoo
 from socialauth.lib import oauthgoogle
 from socialauth.lib import facebook
-=======
-from socialauth.lib.facebook import get_facebook_signature
->>>>>>> dcb8246d55c49dc323428dcf1926435d2a4b9113
 
 from oauth import oauth
 from datetime import datetime
