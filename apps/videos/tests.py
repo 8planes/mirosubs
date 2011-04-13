@@ -929,6 +929,21 @@ class VimeoVideoTypeTest(TestCase):
         
         self.assertFalse(self.vt.matches_video_url('http://vimeo.com'))
         self.assertFalse(self.vt.matches_video_url(''))
+    
+    def test1(self):
+        #For this video Vimeo API returns response with strance error
+        #But we can get data from this response. See vidscraper.sites.vimeo.get_shortmem
+        #So if this test is failed - maybe API was just fixed and other response is returned
+        url = u'http://vimeo.com/22070806'
+        
+        video, created = Video.get_or_create_for_url(url)
+        
+        self.assertNotEqual(video.title, '')
+        self.assertNotEqual(video.description, '')
+        vu = video.videourl_set.all()[:1].get()
+
+        self.assertEqual(vu.videoid, '22070806')        
+        self.assertTrue(self.vt.video_url(vu))
         
 from videos.types.base import VideoType, VideoTypeRegistrar
 from videos.types import video_type_registrar, VideoTypeError

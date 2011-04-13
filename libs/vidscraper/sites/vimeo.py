@@ -62,11 +62,12 @@ def get_shortmem(url):
     consumer = oauth2.Consumer(settings.VIMEO_API_KEY, settings.VIMEO_API_SECRET)
     client = oauth2.Client(consumer)
     backoff = util.random_exponential_backoff(2)
-    for i in range(5):
+
+    for i in range(3):
         try:
             api_raw_data = client.request(url)[1]
             api_data = simplejson.loads(api_raw_data)
-        except Exception:
+        except Exception, e:
             continue
         else:
             if api_data.get('stat') == u'fail':
@@ -76,9 +77,20 @@ def get_shortmem(url):
                 except KeyError:
                     pass
                 raise VimeoError(error)
+
             if 'video' in api_data:
                 shortmem['api_data'] = api_data['video'][0]
                 break
+            else:
+                #this is hack to get info from Vimeo API. For some video it return strange error in response
+                try:
+                    data = api_data['backtrace'][1]['object']["_valStack"][1]["children"]
+                    if 'description' in data and 'title' in data:
+                        shortmem['api_data'] = data
+                        break                        
+                except (KeyError, IndexError):
+                    pass
+                    
         backoff.next()
     return shortmem
 
@@ -100,7 +112,11 @@ def scrape_title(url, shortmem={}):
 @parse_api
 @returns_unicode
 def scrape_description(url, shortmem={}):
-    return util.clean_description_html(shortmem['api_data']['description'])
+    try:
+        description = shortmem['api_data']['description']
+    except KeyError:
+        description = ''
+    return util.clean_description_html(description)
 
 @parse_url
 @returns_unicode
@@ -167,16 +183,19 @@ def get_embed(url, shortmem={}, width=EMBED_WIDTH, height=EMBED_HEIGHT):
 def get_thumbnail_url(url, shortmem={}):
     max_size = 0
     url = None
-    for thumbnail in shortmem['api_data']['thumbnails']['thumbnail']:
-        if 'thumbnails/defaults' in thumbnail['_content']:
-            if not url:
-                url = thumbnail['_content'] # use it only if we don't have a
-                                            # better thumbnail
-            continue
-        size = int(thumbnail['width']) * int(thumbnail['height'])
-        if size > max_size:
-            max_size = size
-            url = thumbnail['_content']
+    try:
+        for thumbnail in shortmem['api_data']['thumbnails']['thumbnail']:
+            if 'thumbnails/defaults' in thumbnail['_content']:
+                if not url:
+                    url = thumbnail['_content'] # use it only if we don't have a
+                                                # better thumbnail
+                continue
+            size = int(thumbnail['width']) * int(thumbnail['height'])
+            if size > max_size:
+                max_size = size
+                url = thumbnail['_content']
+    except KeyError:
+        pass
     return url
 
 @parse_api
