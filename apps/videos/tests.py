@@ -850,6 +850,12 @@ class BlipTvVideoTypeTest(TestCase):
         self.assertTrue(self.vt.matches_video_url('http://blip.tv/file/4297824'))
         self.assertFalse(self.vt.matches_video_url('http://blip.tv'))
         self.assertFalse(self.vt.matches_video_url(''))
+    
+    def test_video_title(self):
+        url = 'http://blip.tv/file/4914074'
+        video, created = Video.get_or_create_for_url(url)
+        #really this should be jsut not failed
+        self.assertTrue(video.get_absolute_url())
         
 from videos.types.dailymotion import DailymotionVideoType
         
