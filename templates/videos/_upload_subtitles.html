@@ -30,6 +30,10 @@
                         {% endif %}
                         <br/><br/>                        
                         <input type="file" name="subtitles" id="subtitles-file-field" />
+                        <p class="checkbox">
+                            <input type="checkbox" name="is_complete" id="updload-subtitles-form-is_complete" checked="checked"/>
+                            <label for="updload-subtitles-form-is_complete">{% trans "Check if these subtitles cover the entire video" %}</label>
+                        </p>
                     </form>
                 </div>
             {% else %}

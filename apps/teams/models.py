@@ -198,6 +198,56 @@ class Team(models.Model):
             setattr(self, '_applications_count', self.applications.count())
         return self._applications_count            
 
+    def get_videos_for_languages(self, languages, CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS):
+        from utils.multy_query_set import TeamMultyQuerySet
+        languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
+    
+        langs_pairs = []
+
+        for l1 in languages:
+            for l0 in languages:
+                if not l1 == l0:
+                    langs_pairs.append('%s_%s' % (l1, l0))
+
+        qs = TeamVideoLanguagePair.objects.filter(language_pair__in=langs_pairs, team=self) \
+            .select_related('team_video', 'team_video__video')
+        lqs = TeamVideoLanguage.objects.filter(team=self).select_related('team_video', 'team_video__video')
+
+        qs1 = qs.filter(percent_complete__gt=0,percent_complete__lt=100)
+        qs2 = qs.filter(percent_complete=0)
+        qs3 = lqs.filter(is_original=True, is_complete=False, language__in=languages)
+        qs4 = lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
+        mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
+
+        total_count = TeamVideo.objects.filter(team=self).count()
+
+        additional = TeamVideoLanguagePair.objects.none()
+        all_videos = TeamVideo.objects.filter(team=self).select_related('video')
+
+        if total_count == 0:
+            mqs = all_videos
+        else:
+            if  total_count < CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS:
+                additional = all_videos.exclude(pk__in=[x.id for x in mqs ])
+            else:
+                additional = all_videos
+            mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4 , additional)
+
+        return {
+            'qs': qs,
+            'lqs': lqs,
+            'qs1': qs1,
+            'qs2': qs2,
+            'qs3': qs3,
+            'qs4': qs4,
+            'videos':mqs,
+            'videos_count': len(mqs),
+            'additional_count': additional.count(),
+            'additional': additional[:50],
+            'lqs': lqs,
+            'qs': qs,
+            }
+
 class TeamVideo(models.Model):
     team = models.ForeignKey(Team)
     video = models.ForeignKey(Video)

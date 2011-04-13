@@ -205,7 +205,8 @@ class UploadSubtitlesTest(WebUseTest):
             'language': lang,
             'video_language': 'en',
             'video': video_pk,
-            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt'))
+            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test.srt')),
+            'is_complete': True
             }
 
     
@@ -220,9 +221,8 @@ class UploadSubtitlesTest(WebUseTest):
 
     def setUp(self):
         self._make_objects()
-
+        
     def test_upload_subtitles(self):
-        import os.path
         self._simple_test('videos:upload_subtitles', status=302)
         
         self._login()
@@ -238,18 +238,31 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEqual(response.status_code, 200)
 
         video = Video.objects.get(pk=self.video.pk)
+        self.assertFalse(video.is_writelocked)
         original_language = video.subtitle_language()
         self.assertEqual(original_language.language, data['video_language'])        
         
         language = video.subtitle_language(data['language'])
         version = language.latest_version()
         self.assertEqual(len(version.subtitles()), 32)
+        self.assertTrue(language.is_forked)
+        self.assertTrue(version.is_forked)
         self.assertTrue(language.has_version)
         self.assertTrue(language.had_version)
+        self.assertEqual(language.is_complete, data['is_complete'])
         self.assertFalse(video.is_subtitled)
         self.assertFalse(video.was_subtitled)
         self.assertEquals(32, language.subtitle_count)
-
+        
+        data = self._make_data()
+        data['is_complete'] = not data['is_complete']
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        video = Video.objects.get(pk=self.video.pk)
+        language = video.subtitle_language(data['language'])
+        self.assertEqual(language.is_complete, data['is_complete'])
+        self.assertFalse(video.is_writelocked)
+        
     def test_upload_original_subtitles(self):
         self._login()
         data = self._make_data(lang='en')
@@ -839,6 +852,12 @@ class BlipTvVideoTypeTest(TestCase):
         self.assertTrue(self.vt.matches_video_url('http://blip.tv/file/4297824'))
         self.assertFalse(self.vt.matches_video_url('http://blip.tv'))
         self.assertFalse(self.vt.matches_video_url(''))
+    
+    def test_video_title(self):
+        url = 'http://blip.tv/file/4914074'
+        video, created = Video.get_or_create_for_url(url)
+        #really this should be jsut not failed
+        self.assertTrue(video.get_absolute_url())
         
 from videos.types.dailymotion import DailymotionVideoType
         
@@ -913,6 +932,21 @@ class VimeoVideoTypeTest(TestCase):
         
         self.assertFalse(self.vt.matches_video_url('http://vimeo.com'))
         self.assertFalse(self.vt.matches_video_url(''))
+    
+    def test1(self):
+        #For this video Vimeo API returns response with strance error
+        #But we can get data from this response. See vidscraper.sites.vimeo.get_shortmem
+        #So if this test is failed - maybe API was just fixed and other response is returned
+        url = u'http://vimeo.com/22070806'
+        
+        video, created = Video.get_or_create_for_url(url)
+        
+        self.assertNotEqual(video.title, '')
+        self.assertNotEqual(video.description, '')
+        vu = video.videourl_set.all()[:1].get()
+
+        self.assertEqual(vu.videoid, '22070806')        
+        self.assertTrue(self.vt.video_url(vu))
         
 from videos.types.base import VideoType, VideoTypeRegistrar
 from videos.types import video_type_registrar, VideoTypeError

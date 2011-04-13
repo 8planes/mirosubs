@@ -19,6 +19,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
+from sitemaps import sitemaps
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -99,7 +100,8 @@ urlpatterns = patterns(
         (r'^test-ogg$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'alpha-test01-ogg.htm'}, 'test-ogg-page'),   
         (r'^test-mp4$',  'django.views.generic.simple.direct_to_template', 
-     {'template': 'alpha-test01-mp4.htm'}, 'test-mp4-page'),  
+     {'template': 'alpha-test01-mp4.htm'}, 'test-mp4-page'),
+    url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}, name='sitemap'),
 )
 
 if settings.DEBUG:

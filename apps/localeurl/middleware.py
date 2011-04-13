@@ -12,6 +12,8 @@ from localeurl import utils
 assert utils.supported_language(settings.LANGUAGE_CODE) is not None, \
         "Please ensure that settings.LANGUAGE_CODE is in settings.LANGUAGES."
 
+IGNORE = ['/sitemap.xml']
+
 class LocaleURLMiddleware(object):
     """
     Middleware that sets the language based on the request path prefix and
@@ -35,6 +37,9 @@ class LocaleURLMiddleware(object):
             raise django.core.exceptions.MiddlewareNotUsed()
 
     def process_request(self, request):
+        if request.path_info in IGNORE:
+            return
+        
         locale, path = self.split_locale_from_request(request)
         locale_path = utils.locale_path(path, locale or translation.get_language_from_request(request) \
                                         or translation.get_language())

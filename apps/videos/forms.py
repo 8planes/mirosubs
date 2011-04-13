@@ -288,10 +288,9 @@ class SubtitlesUploadBaseForm(forms.Form):
             language.save()
             if language.is_original:
                 video.update_complete_state()
-
-        video.release_writelock()
-        video.save()
-        
+                
+        language.video.release_writelock()
+        language.video.save()
         return language
 
     def get_errors(self):
@@ -302,6 +301,7 @@ class SubtitlesUploadBaseForm(forms.Form):
     
 class SubtitlesUploadForm(SubtitlesUploadBaseForm):
     subtitles = forms.FileField()
+    is_complete = forms.BooleanField(initial=True, required=False)
     
     def clean_subtitles(self):
         subtitles = self.cleaned_data['subtitles']
@@ -338,7 +338,15 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         subtitles = self.cleaned_data['subtitles']
         text = subtitles.read()
         parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))        
-        return self.save_subtitles(parser)
+        sl = self.save_subtitles(parser)
+        is_complete = self.cleaned_data.get('is_complete')
+        sl.is_complete = is_complete
+        sl.save()
+        if sl.is_original:
+            #fix. I've no idea how, but sl.video.is_subtitles is reset to False without this
+            sl.video.update_complete_state()
+            sl.video.save()
+        return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):
     subtitles = forms.CharField()

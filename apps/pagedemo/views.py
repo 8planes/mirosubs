@@ -19,8 +19,9 @@
 import widget
 from django.shortcuts import render_to_response
 from django.contrib.sites.models import Site
-from django.template import RequestContext
+from django.template import RequestContext, TemplateDoesNotExist
 from django.conf import settings
+from django.http import Http404
 
 def pagedemo(request, file_name):
     context = widget.add_config_based_js_files(
@@ -29,7 +30,10 @@ def pagedemo(request, file_name):
         "http://{0}/embed{1}.js".format(
         Site.objects.get_current().domain,
         settings.EMBED_JS_VERSION)
-    return render_to_response(
-        'pagedemo/{0}.html'.format(file_name), 
-        context, context_instance=RequestContext(request))
+    try:
+        return render_to_response(
+            'pagedemo/{0}.html'.format(file_name), 
+            context, context_instance=RequestContext(request))
+    except TemplateDoesNotExist:
+        raise Http404
 
