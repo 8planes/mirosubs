@@ -81,7 +81,7 @@ class YoutubeSubtitleParser(SubtitleParser):
     def __init__(self, data):
         try:
             data = json.loads(data)
-        except json.decoder.JSONDecodeError:
+        except json.JSONDecodeError:
             data = None
         if data:
             data = data[0]
