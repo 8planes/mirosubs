@@ -1,5 +1,5 @@
 # Create your views here.
-import os, json,  time
+import os, json,  time, datetime
 from random import shuffle
 from django.http import HttpResponse
 from django.conf import settings
@@ -27,6 +27,7 @@ def _get_fixture_file(model_name):
 
 def _add_subtitles(sub_lang, num_subs, translated_from=None):
     version = SubtitleVersion(language=sub_lang, note="Automagically-created")
+    version.datetime_started = datetime.datetime.now()
     version.save()
     for i in xrange(0, num_subs):
         subtitle = Subtitle(version=version,
@@ -44,6 +45,8 @@ def _add_subtitles(sub_lang, num_subs, translated_from=None):
 
 def _copy_subtitles(fromlang, tolang, maxout=None):
     version = SubtitleVersion(language=tolang, note="Automagically-copied")
+
+    version.datetime_started = datetime.datetime.now()
     version.save()
     i = 0
     for x in fromlang.version().subtitle_set.all():
@@ -82,7 +85,6 @@ def _add_lang_to_video(video, props,  translated_from=None):
 
 
     sub_lang.update_percent_done()
-    print 'adding lang ', sub_lang
     sub_lang.save()
     return sub_lang    
             
@@ -97,20 +99,12 @@ def _create_videos(video_data, users):
     
     for x in video_data:
         shuffle(users)
-        video = Video(title=x['title'])
+        video, created = Video.get_or_create_for_url(x['url'])
+        video.title =x['title']
         video.save()
         if len(users) > 0:
             video.user = users[0]
-        url = x['url'] + "&blah=%s" % time.time()
-        vt =  video_type_registrar.video_type_for_url(url)
-        if vt is None:
-            continue
-        video_url, created  = VideoUrl.objects.get_or_create(video=video, type=vt.abbreviation, url=url)
-        video_url.original = True
-        video_url.primary = True
-        video_url.video = video
-        video_url.save()
-         # now we loop over languages:
+
         _add_langs_to_video(video, x['langs'])
         if len(x['langs']) > 0:
             video.is_subtitled = True
@@ -129,7 +123,7 @@ def _hydrate_users(users_data):
     
 # create 30 videos
 def _create_team_videos(team, videos, users):
-    
+
     for video in videos:
         shuffle(users)
         team_video = TeamVideo(team=team, video=video)
