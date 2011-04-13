@@ -114,49 +114,24 @@ def index(request, my_teams=False):
                        template_object_name='teams',
                        extra_context=extra_context)
     
-def detail(request, slug, is_debugging=False):
+def detail(request, slug, is_debugging=False, languages=None):
     team = Team.get(slug, request.user)
-    
-    languages = get_user_languages_from_request(request)
+
+    if languages is None:
+        languages = get_user_languages_from_request(request)
     if bool(is_debugging):
         languages = request.GET.get("langs", "").split(",")
-    languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
-    
-    langs_pairs = []
-    
-    for l1 in languages:
-        for l0 in languages:
-            if not l1 == l0:
-                langs_pairs.append('%s_%s' % (l1, l0))
-    
-    qs = TeamVideoLanguagePair.objects.filter(language_pair__in=langs_pairs, team=team) \
-        .select_related('team_video', 'team_video__video')
-    lqs = TeamVideoLanguage.objects.filter(team=team).select_related('team_video', 'team_video__video')
-    
-    qs1 = qs.filter(percent_complete__gt=0,percent_complete__lt=100)
-    qs2 = qs.filter(percent_complete=0)
-    qs3 = lqs.filter(is_original=True, is_complete=False, language__in=languages)
-    qs4 = lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
-    mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
 
+    data = team.get_videos_for_languages(languages, CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS)
+    mqs = data['videos']
+    
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team,
         'can_edit_video': team.can_edit_video(request.user)
     })
-    total_count = TeamVideo.objects.filter(team=team).count()
 
-    additional = TeamVideoLanguagePair.objects.none()
-    all_videos = TeamVideo.objects.filter(team=team).select_related('video')
-
-    if total_count == 0:
-        mqs = all_videos
-    else:
-        if  total_count < CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS:
-            additional = all_videos.exclude(pk__in=[x.id for x in mqs ])
-        else:
-            additional = all_videos
-        mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4 , additional)    
+    
 
 
     general_settings = {}
@@ -171,18 +146,9 @@ def detail(request, slug, is_debugging=False):
         })
 
     if bool(is_debugging) and request.user.is_staff:
+        extra_context.update(data)
         extra_context.update({
             'languages': languages,
-            'qs': qs,
-            'lqs': lqs,
-            'qs1': qs1,
-            'qs2': qs2,
-            'qs3': qs3,
-            'qs4': qs4,
-            'mqs':mqs,
-            'mqs_count': len(mqs),
-            'additional_count': additional.count(),
-            'additional': additional[:50]
             })
         return render_to_response("teams/detail-debug.html", extra_context, RequestContext(request))
     
