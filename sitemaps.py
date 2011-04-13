@@ -1,4 +1,5 @@
 from django.contrib.sitemaps import Sitemap
+from django.db import models
 from videos.models import Video
 import datetime
 
@@ -55,11 +56,15 @@ class VideoSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Video.objects.all()
+        return Video.objects.values('video_id', 'edited')
+
+    @models.permalink
+    def location(self, obj):
+        return ('videos:video', [obj['video_id']])
 
     def lastmod(self, obj):
-        edited = obj.edited
-        return obj.edited
+        edited = obj['edited']
+        return edited
 
 sitemaps = {
             'video':VideoSitemap,
