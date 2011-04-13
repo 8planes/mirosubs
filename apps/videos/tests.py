@@ -238,6 +238,7 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEqual(response.status_code, 200)
 
         video = Video.objects.get(pk=self.video.pk)
+        self.assertFalse(video.is_writelocked)
         original_language = video.subtitle_language()
         self.assertEqual(original_language.language, data['video_language'])        
         
@@ -257,8 +258,10 @@ class UploadSubtitlesTest(WebUseTest):
         data['is_complete'] = not data['is_complete']
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
+        video = Video.objects.get(pk=self.video.pk)
         language = video.subtitle_language(data['language'])
         self.assertEqual(language.is_complete, data['is_complete'])
+        self.assertFalse(video.is_writelocked)
         
     def test_upload_original_subtitles(self):
         self._login()
