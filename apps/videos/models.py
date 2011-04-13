@@ -195,8 +195,9 @@ class Video(models.Model):
         kwargs = {}
         if locale:
             kwargs['locale'] = locale 
-        if self.title:
-            return ('videos:video_with_title', [self.video_id, self.title_for_url()], kwargs)
+        title = self.title_for_url()
+        if title:
+            return ('videos:video_with_title', [self.video_id, title], kwargs)
         return ('videos:video', [self.video_id], kwargs)
 
     def get_video_url(self):
