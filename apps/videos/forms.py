@@ -288,10 +288,9 @@ class SubtitlesUploadBaseForm(forms.Form):
             language.save()
             if language.is_original:
                 video.update_complete_state()
-
-        video.release_writelock()
-        video.save()
-        
+                
+        language.video.release_writelock()
+        language.video.save()
         return language
 
     def get_errors(self):
@@ -340,7 +339,6 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         text = subtitles.read()
         parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))        
         sl = self.save_subtitles(parser)
-        
         is_complete = self.cleaned_data.get('is_complete')
         sl.is_complete = is_complete
         sl.save()
