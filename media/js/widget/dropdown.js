@@ -252,7 +252,7 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
         listen(this.subtitlesOff_, 'click',
                goog.bind(this.menuItemClicked_, this, s.SUBTITLES_OFF)).
         listen(this.originalLanguage_, 'click',
-               goog.bind(this.languageSelected_, this, null)).
+               goog.bind(this.languageSelected_, this, null, null)).
         listen(this.usernameLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.USERNAME)).
         listen(this.logoutLink_, 'click',
