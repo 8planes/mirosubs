@@ -63,9 +63,24 @@ elif INSTALLATION == PRODUCTION:
     EMAIL_SUBJECT_PREFIX = '[usubs-production]'
     EMAIL_BCC_LIST.append('socmedia@pculture.org')
     ADMINS = (
-      ('Adam Duston', 'adam@8planes.com'),
-      ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org')
+      ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org'),
     )
+
+if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
+    SENTRY_DATABASE = {
+        'sentry': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': SENTRY_DATABASE_NAME,
+            'USER': SENTRY_DATABASE_USER,
+            'PASSWORD': SENTRY_DATABASE_PASSWORD,
+            'HOST': SENTRY_DATABASE_HOST,
+            'PORT': '3306'
+            }
+        }
+    SENTRY_DATABASE_USING = 'sentry'
+    DATABASE_ROUTERS = ['sentry.routers.SentryRouter']
+else:
+    SENTRY_DATABASE = {}
 
 IGNORE_REDIS = True
 
@@ -81,6 +96,8 @@ DATABASES = {
         'PORT': '3306'
         }
     }
+
+DATABASES.update(SENTRY_DATABASE)
 
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 
