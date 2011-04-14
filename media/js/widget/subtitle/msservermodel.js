@@ -42,6 +42,7 @@ mirosubs.subtitle.MSServerModel = function(draftPK, videoID, videoURL) {
     this.finished_ = false;
     this.unsavedPackets_ = [];
     this.packetNo_ = 1;
+    this.logger_ = new mirosubs.subtitle.Logger(draftPK);
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
 
@@ -68,22 +69,40 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
         (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
 };
 
-mirosubs.subtitle.MSServerModel.prototype.finish = 
-    function(jsonSubs, successCallback, opt_cancelCallback, opt_completed) 
-{
+mirosubs.subtitle.MSServerModel.prototype.setTitle_ = function() {
     mirosubs.Rpc.call(
         'set_title', {
             draft_pk: this.draftPK_,
             value: this.unitOfWork_.title
         }
-    );    
-    goog.asserts.assert(this.initialized_);
-    goog.asserts.assert(!this.finished_);
+    );
+};
+
+mirosubs.subtitle.MSServerModel.prototype.checkLoggedIn_ = function() {
     if (mirosubs.currentUsername == null) {
         if (!mirosubs.isLoginAttemptInProgress())
             mirosubs.login(
                 function(loggedIn) {}, 
                 "In order to finish and save your work, you need to log in.");
+        return false;
+    }
+    else
+        return true;
+};
+
+mirosubs.subtitle.MSServerModel.prototype.getSubIDPackets_ = function() {
+    goog.array.map(
+        this.unsavedPackets_, function(p) { return p.subIDPacket; });
+};
+
+mirosubs.subtitle.MSServerModel.prototype.finish = 
+    function(jsonSubs, successCallback, failureCallback, 
+             opt_cancelCallback, opt_completed) 
+{
+    this.setTitle_();
+    goog.asserts.assert(this.initialized_);
+    goog.asserts.assert(!this.finished_);
+    if (!this.checkLoggedIn_) {
         if (opt_cancelCallback)
             opt_cancelCallback();
         return;
@@ -93,17 +112,27 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
     var saveArgs = this.makeSaveArgs_();
     if (goog.isDefAndNotNull(opt_completed))
         saveArgs['completed'] = opt_completed;
+    var subIDPackets = this.getSubIDPackets_();
     mirosubs.Rpc.call(
         'finished_subtitles', 
         saveArgs,
         function(result) {
-            if (result['response'] != 'ok')
+            if (result['response'] != 'ok') {
                 // this should never happen.
                 alert('Problem saving subtitles. Response: ' +
                       result["response"]);
-            that.finished_ = true;
-            successCallback(mirosubs.widget.DropDownContents.fromJSON(
-                result['drop_down_contents']));
+                that.logger_.logSave(subIDPackets, false, response);
+                failureCallback(that.logger_, false);
+            }
+            else {
+                that.finished_ = true;
+                successCallback(mirosubs.widget.DropDownContents.fromJSON(
+                    result['drop_down_contents']));
+            }
+        }, 
+        function() {
+            that.logger_.logSave(subIDPackets, false);
+            failureCallback(that.logger_, true);
         });
 };
 
@@ -114,22 +143,31 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
 mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback, opt_errorCallback) {
     var that = this;
     var saveArgs = this.makeSaveArgs_();
-    
+    var subIDPackets = this.getSubIDPackets_();
+
     mirosubs.Rpc.call(
         'save_subtitles',
         saveArgs, 
         function(result) {
-            if (result['response'] != 'ok')
+            if (result['response'] != 'ok') {
                 // this should never happen.
                 alert('Problem saving subtitles. Response: ' + 
                       result['response']);
+                that.logger_.logSave(
+                    subIDPackets, false, response);
+            }
             else {
+                that.logger_.logSave(subIDPackets, true);
                 that.registerSavedPackets_(result['last_saved_packet']);
                 if (opt_callback)
                     opt_callback();
             }
         },
-        opt_errorCallback);
+        function() {
+            that.logger_.logSave(subIDPackets, false);
+            if (opt_errorCallback)
+                opt_errorCallback();
+        });
 };
 
 mirosubs.subtitle.MSServerModel.prototype.registerSavedPackets_ = 
@@ -137,33 +175,40 @@ mirosubs.subtitle.MSServerModel.prototype.registerSavedPackets_ =
 {
     var saved = goog.array.filter(
         this.unsavedPackets_,
-        function(p) { return p['packet_no'] <= lastSavedPacketNo; });
+        function(p) { return p.packetNo <= lastSavedPacketNo; });
     for (var i = 0; i < saved.length; i++)
         goog.array.remove(this.unsavedPackets_, saved[i]);
 };
 
+mirosubs.subtitle.MSServerModel.prototype.makePacket_ = function(work, f) {
+    return {
+        'packet_no': this.packetNo_,
+        'deleted': f(work.deleted),
+        'inserted': f(work.inserted),
+        'updated': f(work.updated)
+    };
+};
+
 mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
+    var containsWork = this.unitOfWork_.containsWork();
     var work = this.unitOfWork_.getWork();
     this.unitOfWork_.clear();
-    this.unsavedPackets_ = goog.array.filter(
-        this.unsavedPackets_,
-        function(p) {
-            return p['deleted'].length > 0 ||
-                p['inserted'].length > 0 ||
-                p['updated'].length > 0;
+    if (containsWork) {
+        var packet = this.makePacket_(
+            work, mirosubs.subtitle.EditableCaption.toJsonArray);
+        var subIDPacket = this.makePacket_(
+            work, mirosubs.subtitle.EditableCaption.toIDArray);
+        this.packetNo_++;
+        this.unsavedPackets_.push({
+            packetNo: this.packetNo_,
+            packet: packet,
+            subIDPacket: subIDPacket
         });
-    var toJson = mirosubs.subtitle.EditableCaption.toJsonArray;
-    var packet = {
-        'packet_no': this.packetNo_,
-        'deleted': toJson(work.deleted),
-        'inserted': toJson(work.neu),
-        'updated': toJson(work.updated)
-    };
-    this.packetNo_++;
-    this.unsavedPackets_.push(packet);
+    }
     return {
         'draft_pk': this.draftPK_,
-        'packets': this.unsavedPackets_
+        'packets': goog.array.map(
+            this.unsavedPackets_, function(p) { return p.packet; })
     };
 };
 

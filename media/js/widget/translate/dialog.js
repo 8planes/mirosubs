@@ -97,6 +97,9 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
             that.setDropDownContentsInternal(dropDownContents);
             that.saved_ = true;
             that.setVisible(false);
+        },
+        function(logger, retryable) {
+            
         });
 };
 mirosubs.translate.Dialog.prototype.disposeInternal = function() {

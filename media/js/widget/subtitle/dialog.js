@@ -279,6 +279,9 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
                 that.setFinishedState_();
             }
         },
+        function(logger, retryable) {
+            
+        },
         function() {
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);

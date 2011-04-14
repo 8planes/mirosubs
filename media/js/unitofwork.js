@@ -34,9 +34,9 @@ mirosubs.UnitOfWork.EventType = {
 };
 
 mirosubs.UnitOfWork.prototype.instantiateLists_ = function() {
-    this.updated = [];
-    this.deleted = [];
-    this.neu = [];
+    this.updated_ = [];
+    this.deleted_ = [];
+    this.inserted_ = [];
     this.title = '';
 };
 
@@ -45,34 +45,34 @@ mirosubs.UnitOfWork.prototype.setTitle = function(title){
 };
 
 mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
-    if (goog.array.contains(this.updated, obj) ||
-        goog.array.contains(this.deleted, obj) ||
-        goog.array.contains(this.neu, obj))
+    if (goog.array.contains(this.updated_, obj) ||
+        goog.array.contains(this.deleted_, obj) ||
+        goog.array.contains(this.inserted_, obj))
         throw new "registerNew failed";
     this.everContainedWork_ = true;
-    this.neu.push(obj);
+    this.inserted_.push(obj);
     this.issueWorkEvent_();
 };
 
 mirosubs.UnitOfWork.prototype.registerUpdated = function(obj) {
-    if (goog.array.contains(this.deleted, obj))
+    if (goog.array.contains(this.deleted_, obj))
         throw new "registerUpdated failed";
-    if (!goog.array.contains(this.neu, obj) &&
-        !goog.array.contains(this.updated, obj)) {
+    if (!goog.array.contains(this.inserted_, obj) &&
+        !goog.array.contains(this.updated_, obj)) {
         this.everContainedWork_ = true;
-        this.updated.push(obj);
+        this.updated_.push(obj);
         this.issueWorkEvent_();
     }
 };
 
 mirosubs.UnitOfWork.prototype.registerDeleted = function(obj) {
-    if (goog.array.contains(this.neu, obj))
-        goog.array.remove(this.neu, obj);
+    if (goog.array.contains(this.inserted_, obj))
+        goog.array.remove(this.inserted_, obj);
     else {
         this.everContainedWork_ = true;
-        goog.array.remove(this.updated, obj);
-        if (!goog.array.contains(this.deleted))
-            this.deleted.push(obj);
+        goog.array.remove(this.updated_, obj);
+        if (!goog.array.contains(this.deleted_, obj))
+            this.deleted_.push(obj);
         this.issueWorkEvent_();
     }
 };
@@ -82,9 +82,9 @@ mirosubs.UnitOfWork.prototype.everContainedWork = function() {
 };
 
 mirosubs.UnitOfWork.prototype.containsWork = function() {
-    return this.updated.length > 0 ||
-        this.deleted.length > 0 ||
-        this.neu.length > 0;
+    return this.updated_.length > 0 ||
+        this.deleted_.length > 0 ||
+        this.inserted_.length > 0;
 };
 
 mirosubs.UnitOfWork.prototype.clear = function() {
@@ -97,8 +97,8 @@ mirosubs.UnitOfWork.prototype.issueWorkEvent_ = function() {
 
 mirosubs.UnitOfWork.prototype.getWork = function() {
     return {
-        neu: goog.array.clone(this.neu),
-        updated: goog.array.clone(this.updated),
-        deleted: goog.array.clone(this.deleted)
+        inserted: goog.array.clone(this.inserted_),
+        updated: goog.array.clone(this.updated_),
+        deleted: goog.array.clone(this.deleted_)
     };
 };
