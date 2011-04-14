@@ -57,7 +57,7 @@
       // Create a test runner and render it.
       var testRunner = new goog.testing.MultiTestRunner()
           .setName(document.title)
-          .setBasePath('../')
+          .setBasePath('/jstest/')
           .setPoolSize(parallelInput.checked ? 8 : 1)
           .setStatsBucketSizes(5, 500)
           .setHidePasses(hidePassesInput.checked)
