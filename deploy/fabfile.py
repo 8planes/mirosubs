@@ -225,3 +225,28 @@ def update_static():
 def update():
     update_web()
     update_static()
+
+def _promote_django_admins(dir, email=None, new_password=None, userlist_path=None):
+    with cd(os.path.join(dir, 'mirosubs')):
+        python_exe = '{0}/env/bin/python'.format(dir)
+        args = ""
+        if email is not None:
+            args += "--email=%s" % (email)
+        if new_password is not None:
+            args += "--pass=%s" % (new_password)
+        if userlist_path is not None:
+            args += "--userlist_path=%s" % (userlist_path)    
+        cmd_str ='{0} manage.py promote_admins {1} --settings=unisubs_settings'.format(python_exe, args)
+        run(cmd_str)
+
+def promote_django_admins(email=None, new_password=None, userlist_path=None):
+    """
+    Make sure identified users are can access the admin site.
+    If new_password is provided will reset the user's password
+    You can pass either one user email, or a path to a json file with
+    'email', 'new_password' objects.
+
+    Examples:
+    fab staging:serveruser promote_django_admins:email=arthur@example.com
+    """
+    return _promote_django_admins(env.web_dir, email, new_password, userlist_path)
