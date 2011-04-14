@@ -38,7 +38,7 @@ mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
         var initLang = new mirosubs.startdialog.ToLanguage(
             0, this.videoLanguages_.findForPK(this.initialLanguage_));
         if (initLang.LANGUAGE){
-         toLanguages.push(initLang);
+            toLanguages.push(initLang);
         }
     }
     var myLanguagesToLangs = [];
@@ -172,8 +172,6 @@ mirosubs.startdialog.ToLanguages.prototype.createMyLanguageToLang_ = function(vi
     else if (toLang = this.createEmptyToLang_(videoLanguage, lang))
         return toLang;
     else if (toLang = this.createIncompleteIndToLang_(videoLanguage))
-        return toLang;
-    else if (toLang = this.createNonEmptyDepToLang_(videoLanguage, false, 4))
         return toLang;
     else
         return new mirosubs.startdialog.ToLanguage(10, videoLanguage, lang);
