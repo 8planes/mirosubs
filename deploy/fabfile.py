@@ -54,7 +54,7 @@ def dev(username):
                 None,
                 'universalsubtitles.dev',
                 'www/universalsubtitles.dev', 'dev', 
-                None, 
+                '/etc/init.d/memcached restart', 
                 None)
 
 def unisubs(username):
@@ -80,6 +80,7 @@ def migrate(app_name=''):
         _git_pull()
         run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs_settings'.format(
                 env.static_dir, app_name))
+    _bounce_memcached()
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
@@ -96,6 +97,7 @@ def refresh_db():
     env.host_string = env.web_hosts[0]
     sudo('/scripts/univsubs_reset_db.sh {0}'.format(env.installation_name))
     sudo('/scripts/univsubs_refresh_db.sh {0}'.format(env.installation_name))
+    _bounce_memcached()
 
 def update_closure():
     # this happens so rarely, it's not really worth putting it here.
@@ -177,10 +179,12 @@ def update_web():
             run('touch deploy/unisubs.wsgi')
         _bounce_celeryd()
 
-def bounce_memcached():
-    if env.memcached_bounce_cmd:
-        env.host_string = 'pcf-us-admin.pculture.org:2191'
-        sudo(env.memcached_bounce_cmd)
+def _bounce_memcached():
+    if env.admin_dir:
+        env.host_string = ADMIN_HOST
+    else:
+        env.host_string = DEV_HOST
+    sudo(env.memcached_bounce_cmd)
 
 def _bounce_celeryd():
     sudo('/etc/init.d/celeryd restart')
