@@ -465,7 +465,7 @@ class Rpc(BaseRpc):
         cache =  video_cache.get_subtitles_dict(
             video_id, language_pk, version_no, 
             lambda version: self._subtitles_dict(version))
-        if cache.get("language", None) is not None:
+        if cache and cache.get("language", None) is not None:
             cache['language_code'] = cache['language'].language
             cache['language_pk'] = cache['language'].pk
         return cache
