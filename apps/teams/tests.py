@@ -3,8 +3,11 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from os import path
 from django.conf import settings
-from teams.models import Team, Invite, TeamVideo, Application, TeamMember, TeamVideoLanguage
+from teams import models as tmodels
+from teams.models import Team, Invite, TeamVideo, \
+    Application, TeamMember, TeamVideoLanguage
 from messages.models import Message
+from videos import models as vmodels
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage
 from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
@@ -189,7 +192,111 @@ class TestTasks(TestCase):
             self.fail(result.traceback)        
         
         self.assertEqual(len(mail.outbox), 1)
-                
+
+class TeamDetailMetadataTest(TestCase):
+    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
+    
+    def setUp(self):
+        self.auth = {
+            "username": u"admin",
+            "password": u"admin"
+        }
+        self.user = User.objects.get(username=self.auth["username"])
+
+    def _tvlp_query_set(self, team_video):
+        return tmodels.TeamVideoLanguagePair.objects.filter(team_video=team_video)
+
+    def test_update_tvlp_no_dependent(self):
+        tv = TeamVideo.objects.get(id=2)
+        tv.update_team_video_language_pairs()
+        # this video starts with no languages.
+        self.assertEquals(0, self._tvlp_query_set(tv).count())
+        sl = SubtitleLanguage(
+            language='en',
+            is_original=True,
+            is_forked=False,
+            is_complete=False,
+            video=tv.video)
+        sl.save()
+        tv = TeamVideo.objects.get(id=2)
+        tv.update_team_video_language_pairs()
+        # the language is not complete, so it's not a good source for translations.
+        self.assertEquals(0, self._tvlp_query_set(tv).count())
+        sl = tv.video.subtitle_language('en')
+        sl.is_complete = True
+        sl.save()
+        tv = TeamVideo.objects.get(id=2)
+        tv.update_team_video_language_pairs()
+        # complete, so now every language can be translated from this one.
+        tvlps = self._tvlp_query_set(tv)
+        self.assertEquals(len(settings.ALL_LANGUAGES) - 1, len(tvlps))
+        for tvlp in tvlps:
+            self.assertEquals(0, tvlp.percent_complete)
+
+    def test_update_tvlp_with_dep(self):
+        tv = TeamVideo.objects.get(id=2)
+        sl = SubtitleLanguage(
+            language='en',
+            is_original=True,
+            is_forked=False,
+            is_complete=True,
+            video=tv.video)
+        sl.save()
+        dl = SubtitleLanguage(
+            language='es',
+            is_original=False,
+            is_forked=False,
+            percent_done=40,
+            standard_language=sl,
+            video=tv.video)
+        dl.save()
+        tv = TeamVideo.objects.get(id=2)
+        tv.update_team_video_language_pairs()
+        tvlps = self._tvlp_query_set(tv)
+        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 2, len(tvlps))
+        for tvlp in tvlps:
+            if tvlp.language_0 == 'en':
+                if tvlp.language_1 == 'es':
+                    self.assertEquals(40, tvlp.percent_complete)
+                else:
+                    self.assertEquals(0, tvlp.percent_complete)
+            elif tvlp.language_0 == 'es':
+                self.assertEquals(0, tvlp.percent_complete)
+
+    def test_update_tvlp_for_sl(self):
+        tv = TeamVideo.objects.get(id=2)
+        sl = SubtitleLanguage(
+            language='en',
+            is_original=True,
+            is_forked=False,
+            is_complete=True,
+            video=tv.video)
+        sl.save()
+        dl = SubtitleLanguage(
+            language='es',
+            is_original=False,
+            is_forked=False,
+            percent_done=40,
+            standard_language=sl,
+            video=tv.video)
+        dl.save()
+        tv = TeamVideo.objects.get(id=2)
+        tv.update_team_video_language_pairs()
+        dl = SubtitleLanguage.objects.get(id=dl.id)
+        dl.percent_done = 50
+        dl.save()
+        tv.update_team_video_language_pairs_for_sl(dl)
+        tvlps = self._tvlp_query_set(tv)
+        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 2, len(tvlps))
+        for tvlp in tvlps:
+            if tvlp.language_0 == 'en':
+                if tvlp.language_1 == 'es':
+                    self.assertEquals(50, tvlp.percent_complete)
+                else:
+                    self.assertEquals(0, tvlp.percent_complete)
+            elif tvlp.language_0 == 'es':
+                self.assertEquals(0, tvlp.percent_complete)
+
 class TeamsTest(TestCase):
     
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]

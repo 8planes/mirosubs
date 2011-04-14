@@ -339,24 +339,21 @@ class TeamVideo(models.Model):
         lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
 
         TeamVideoLanguagePair.objects.filter(
-            team_video=self, subtitle_language_0=sl).delete()
-        TeamVideoLanguagePair.objects.filter(
-            team_video=self, subtitle_language_1=sl).delete()
+            team_video=self, 
+            language_0=sl.language).delete()
         TeamVideoLanguagePair.objects.filter(
             team_video=self, 
-            subtitle_language_1=None, 
             language_1=sl.language).delete()
 
+        lang_code_list = [item[0] for item in settings.ALL_LANGUAGES]
         langs = self.video.subtitle_language_dict()
 
+        for lang0, sl0_list in langs.items():
+            if lang0 != sl.language:
+                self._update_tvlp_for_languages(lang0, sl.language, langs)
         for lang in lang_code_list:
-            sl1_list = langs.get(lang, [])
-            if len(sl1_list) == 0:
-                sl1_list = [None]
-            for sl1 in sl1_list:
-                self._update_team_video_language_pair(sl.language, sl, lang, sl1)
-        for sl0 in self.video.subtitlelanguage_set.all():            
-            self._update_team_video_language_pair(sl0.language, sl0, sl.language, sl)
+            if lang != sl.language:
+                self._update_tvlp_for_languages(sl.language, lang, langs)
 
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')
