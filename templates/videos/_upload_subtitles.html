@@ -34,6 +34,9 @@
                             <input type="checkbox" name="is_complete" id="updload-subtitles-form-is_complete" checked="checked"/>
                             <label for="updload-subtitles-form-is_complete">{% trans "Check if these subtitles cover the entire video" %}</label>
                         </p>
+                        <p>
+                            <button class="green_button small" style="float: right">{% trans "Upload" %}</button>
+                        </p>
                     </form>
                 </div>
             {% else %}
@@ -49,9 +52,9 @@
             var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
             var MSG = "{% trans "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>" %}";
             
-            $('#subtitles-file-field').change(function() {
+            /*$('#subtitles-file-field').change(function() {
                 $('#upload-subtitles-form').submit();
-            });
+            });*/
             
             $('#upload-subtitles-form').ajaxForm({
                 dataType: 'json',

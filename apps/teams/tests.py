@@ -391,6 +391,19 @@ class TeamsTest(TestCase):
             tm.user.save()
         
         self._add_team_video(team, u'en', u"http://videos.mozilla.org/firefox/3.5/switch/switch.ogv")
+    
+    def test_team_video_delete(self):
+        #this test can fail only on MySQL
+        team = Team.objects.get(pk=1)
+        tv = team.teamvideo_set.exclude(video__subtitlelanguage__language='')[:1].get()
+        TeamVideoLanguage.update(tv)
+        self.assertNotEqual(tv.languages.count(), 0)
+        tv.delete()
+        try:
+            TeamVideo.objects.get(pk=tv.pk)
+            self.fail()
+        except TeamVideo.DoesNotExist:
+            pass
         
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
@@ -632,7 +645,7 @@ class TeamsTest(TestCase):
         tv = team.teamvideo_set.get(pk=1)
         self.assertEqual(tv.title, u"change title")
         self.assertEqual(tv.description, u"and description")
-        
+
         #-----------delete video -------------
         url = reverse("teams:remove_video", kwargs={"team_video_pk": tv.pk})
         response = self.client.post(url)
