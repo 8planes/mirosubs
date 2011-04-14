@@ -30,7 +30,8 @@ goog.provide('mirosubs.widget.BaseState');
  * @param {Object} baseStateParam parameter from the embed code on the page.
  */
 mirosubs.widget.BaseState = function(baseStateParam) {
-    this.LANGUAGE = baseStateParam['language'];
+    this.LANGUAGE = baseStateParam['language_code'];
+    this.LANGUAGE_PK = baseStateParam['language_pk'];
     if (typeof(this.LANGUAGE) == 'undefined')
         this.LANGUAGE = null;
     this.REVISION = baseStateParam['revision'];

@@ -407,7 +407,7 @@ class VideoTest(TestCase):
             return
             
         video = Video.objects.get(pk=video.pk)
-        version = video.version(language_code='en')
+        version = video.version()
         self.assertFalse(version is None)
         self.assertTrue(len(version.subtitles()))
         self.assertEqual(version.subtitles()[0].text, 'I think what is probably the most misunderstood\nconcept in all of science and as we all know')

@@ -143,7 +143,7 @@ def video(request, video_id, video_url=None, title=None):
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     
-    if not video_url and ((video.title and not video.title_for_url() == title) or (not video.title and title)):
+    if not video_url and ((video.title_for_url() and not video.title_for_url() == title) or (not video.title and title)):
         return redirect(video, permanent=True)
 
     video.update_view_counter()
@@ -156,7 +156,7 @@ def video(request, video_id, video_url=None, title=None):
         .filter(is_original=False).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations
-    context['widget_params'] = _widget_params(request, video, language_code='', video_url=video_url and video_url.effective_url)
+    context['widget_params'] = _widget_params(request, video, language=None, video_url=video_url and video_url.effective_url)
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
@@ -355,7 +355,7 @@ def history(request, video_id, lang=None, lang_id=None):
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
     context['last_version'] = language.latest_version()
-    context['widget_params'] = _widget_params(request, video, None, lang or '')
+    context['widget_params'] = _widget_params(request, video, version_no=None, language=language)
     context['language'] = language
     context['edit_url'] = language.get_widget_url()
     _add_share_panel_context_for_history(context, video, lang)
@@ -366,7 +366,7 @@ def history(request, video_id, lang=None, lang_id=None):
                        template_object_name='revision',
                        extra_context=context)
 
-def _widget_params(request, video, version_no=None, language_code=None, video_url=None):
+def _widget_params(request, video, version_no=None, language=None, video_url=None):
     primary_url = video_url or video.get_video_url()
     alternate_urls = [vu.effective_url for vu in video.videourl_set.all() 
                       if vu.effective_url != primary_url]
@@ -377,8 +377,9 @@ def _widget_params(request, video, version_no=None, language_code=None, video_ur
     if version_no:
         params['base_state']['revision'] = version_no
         
-    if language_code:
-        params['base_state']['language'] = language_code
+    if language:
+        params['base_state']['language_code'] = language.language
+        params['base_state']['language_pk'] = language.pk
 
     return base_widget_params(request, params)
 
@@ -392,7 +393,7 @@ def revision(request, pk):
     language = version.language
     context['language'] = language
     context['widget_params'] = _widget_params(request, \
-            language.video, version.version_no, language.language)
+            language.video, version.version_no, language)
     context['latest_version'] = language.latest_version()
     return render_to_response('videos/revision.html', context,
                               context_instance=RequestContext(request))     
