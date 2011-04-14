@@ -297,6 +297,58 @@ class TeamDetailMetadataTest(TestCase):
             elif tvlp.language_0 == 'es':
                 self.assertEquals(0, tvlp.percent_complete)
 
+    def test_update_tvl(self):
+        tv = TeamVideo.objects.get(id=2)
+        sl = SubtitleLanguage(
+            language='en',
+            is_original=True,
+            is_forked=False,
+            is_complete=False,
+            video=tv.video)
+        sl.save()
+        tmodels.TeamVideoLanguage.update(tv)
+        tvls =  tmodels.TeamVideoLanguage.objects.filter(team_video=tv)
+        self.assertEquals(len(settings.ALL_LANGUAGES), len(tvls))
+        for tvl in tvls:
+            self.assertFalse(tvl.is_complete)
+            self.assertEquals(0, tvl.percent_done)
+        sl = SubtitleLanguage.objects.get(id=sl.id)
+        sl.is_complete = True
+        sl.save()
+        tv = TeamVideo.objects.get(id=2)
+        tmodels.TeamVideoLanguage.update(tv)
+        tvls =  tmodels.TeamVideoLanguage.objects.filter(team_video=tv)
+        self.assertEquals(len(settings.ALL_LANGUAGES), len(tvls))
+        for tvl in tvls:
+            if tvl.language != 'en':
+                self.assertFalse(tvl.is_complete)
+            else:
+                self.assertTrue(tvl.is_complete)
+            self.assertEquals(0, tvl.percent_done)
+
+    def test_update_tvl_for_language(self):
+        tv = TeamVideo.objects.get(id=2)
+        sl = SubtitleLanguage(
+            language='en',
+            is_original=True,
+            is_forked=False,
+            is_complete=False,
+            video=tv.video)
+        sl.save()
+        tmodels.TeamVideoLanguage.update(tv)
+        sl = SubtitleLanguage.objects.get(id=sl.id)
+        sl.is_complete = True
+        sl.save()
+        tmodels.TeamVideoLanguage.update_for_language(tv, sl.language)
+        tvls =  tmodels.TeamVideoLanguage.objects.filter(team_video=tv)
+        self.assertEquals(len(settings.ALL_LANGUAGES), len(tvls))
+        for tvl in tvls:
+            if tvl.language != 'en':
+                self.assertFalse(tvl.is_complete)
+            else:
+                self.assertTrue(tvl.is_complete)
+            self.assertEquals(0, tvl.percent_done)
+
 class TeamsTest(TestCase):
     
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
