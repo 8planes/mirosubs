@@ -28,7 +28,7 @@ def _create_env(username, hosts, s3_bucket,
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
                 admin_dir, separate_sentry_db=False,
-                celeryd_bounce_cmd=None):
+                celeryd_bounce_cmd=""):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -206,7 +206,8 @@ def _bounce_celeryd():
         env.host_string = ADMIN_HOST
     else:
         env.host_string = DEV_HOST
-    sudo(env.celeryd_bounce_cmd)
+    if bool(env.celeryd_bounce_cmd):
+        sudo(env.celeryd_bounce_cmd)
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):
