@@ -27,7 +27,7 @@ ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
-                admin_dir):
+                admin_dir, separate_sentry_db=False):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -37,6 +37,7 @@ def _create_env(username, hosts, s3_bucket,
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
+    env.separate_sentry_db = separate_sentry_db
 
 def staging(username):
     _create_env(username, 
@@ -46,7 +47,8 @@ def staging(username):
                 'universalsubtitles.staging',
                 'static/staging', 'staging',
                 '/etc/init.d/memcached-staging restart',
-                '/usr/local/universalsubtitles.staging')
+                '/usr/local/universalsubtitles.staging',
+                True)
 
 def dev(username):
     _create_env(username,
@@ -54,8 +56,9 @@ def dev(username):
                 None,
                 'universalsubtitles.dev',
                 'www/universalsubtitles.dev', 'dev', 
-                None, 
-                None)
+                '/etc/init.d/memcached restart', 
+                None,
+                False)
 
 def unisubs(username):
     _create_env(username,
@@ -65,14 +68,20 @@ def unisubs(username):
                 'universalsubtitles',
                 'static/production', None,
                 '/etc/init.d/memcached restart', 
-                '/usr/local/universalsubtitles')
+                '/usr/local/universalsubtitles',
+                True)
 
 
 def syncdb():
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
         _git_pull()
-        run('{0}/env/bin/python manage.py syncdb --settings=unisubs_settings'.format(env.static_dir))
+        run('{0}/env/bin/python manage.py syncdb '
+            '--settings=unisubs_settings'.format(env.static_dir))
+        if env.separate_sentry_db:
+            run('{0}/env/bin/python manage.py syncdb '
+                '--database=sentry --settings=unisubs_settings'.format(
+                    env.static_dir))
 
 def migrate(app_name=''):
     env.host_string = DEV_HOST
@@ -80,6 +89,11 @@ def migrate(app_name=''):
         _git_pull()
         run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs_settings'.format(
                 env.static_dir, app_name))
+        if env.separate_sentry_db:
+            run('{0}/env/bin/python manage.py migrate sentry '
+                '--database=sentry --settings=unisubs_settings'.format(
+                    env.static_dir)))
+    _bounce_memcached()
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
@@ -96,6 +110,7 @@ def refresh_db():
     env.host_string = env.web_hosts[0]
     sudo('/scripts/univsubs_reset_db.sh {0}'.format(env.installation_name))
     sudo('/scripts/univsubs_refresh_db.sh {0}'.format(env.installation_name))
+    _bounce_memcached()
 
 def update_closure():
     # this happens so rarely, it's not really worth putting it here.
@@ -175,14 +190,20 @@ def update_web():
             env.warn_only = False
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
-        _bounce_celeryd()
+    _bounce_celeryd()
 
-def bounce_memcached():
-    if env.memcached_bounce_cmd:
-        env.host_string = 'pcf-us-admin.pculture.org:2191'
-        sudo(env.memcached_bounce_cmd)
+def _bounce_memcached():
+    if env.admin_dir:
+        env.host_string = ADMIN_HOST
+    else:
+        env.host_string = DEV_HOST
+    sudo(env.memcached_bounce_cmd)
 
 def _bounce_celeryd():
+    if env.admin_dir:
+        env.host_string = ADMIN_HOST
+    else:
+        env.host_string = DEV_HOST
     sudo('/etc/init.d/celeryd restart')
 
 def _update_static(dir):
