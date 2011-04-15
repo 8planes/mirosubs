@@ -76,7 +76,7 @@ def syncdb():
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
         _git_pull()
-        run('{0}/env/bin/python manage.py syncdb'
+        run('{0}/env/bin/python manage.py syncdb '
             '--settings=unisubs_settings'.format(env.static_dir))
         if env.separate_sentry_db:
             run('{0}/env/bin/python manage.py syncdb '
