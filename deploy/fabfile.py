@@ -250,7 +250,7 @@ def _promote_django_admins(dir, email=None, new_password=None, userlist_path=Non
         cmd_str ='{0} manage.py promote_admins {1} --settings=unisubs_settings'.format(python_exe, args)
         run(cmd_str)
 
-def promote_django_admins(email=None, new_password=None, userlist_path="/var/static/admin-users.json"):
+def promote_django_admins(email=None, new_password=None, userlist_path=None):
     """
     Make sure identified users are can access the admin site.
     If new_password is provided will reset the user's password

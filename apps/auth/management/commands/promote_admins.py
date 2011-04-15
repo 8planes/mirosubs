@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class Command(BaseCommand):
     help = 'Makes sure that all admin users on auth/users/fixtures/_admins are admins'
@@ -42,9 +43,13 @@ class Command(BaseCommand):
         if kwargs.get('email', None) is not None:
             processed  = self.promote_user(kwargs.get("email"), kwargs.get("new_password", None))
 
-        else:    
+        else:
+            if kwargs.get("userlist_path", None) is not None:
+                users_data = json.load(open(kwargs['userlist_path']))
+            else:    
+                users_data = getattr(settings, "PROMOTE_TO_ADMINS", [])
             # no command line args, we should get the userlist-path
-            users_data = json.load(open(kwargs['userlist_path']))
+            
             for data in users_data:
                 processed.append(self.promote_user(data['email'], data.get("new_password", None)))
         print "processed %s" %  processed
