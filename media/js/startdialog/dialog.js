@@ -21,7 +21,8 @@ goog.provide('mirosubs.startdialog.Dialog');
 /**
  * @constructor
  * @param {string} videoID
- * @param {?string} initialLanguage Langcode for SubtitleLanguage to select at first.
+ * @param {?mirosubs.widget.SubtitleState} initialLanguageState The state 
+ * for the initial lang to be displayed.
  * @param {function(?string, string, ?number, ?number, function())} 
  * callback When OK button is 
  *     clicked, this will be called with: arg0: original language. This is
@@ -32,14 +33,14 @@ goog.provide('mirosubs.startdialog.Dialog');
  * SubtitleLanguage to translate from. This will be null iff the user intends to make 
  *     forked/original. arg4: function to close the dialog.
  */
-mirosubs.startdialog.Dialog = function(videoID, initialLanguageCode, callback) {
+mirosubs.startdialog.Dialog = function(videoID, initialLanguageState, callback) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.videoID_ = videoID;
     this.fetchCompleted_ = false;
     this.model_ = null;
-    this.initialLanguageCode_ = initialLanguageCode;
+    this.initialLanguageState_ = initialLanguageState;
     this.callback_ = callback;
 };
 goog.inherits(mirosubs.startdialog.Dialog, goog.ui.Dialog);
@@ -85,7 +86,7 @@ var options = [];
 
 mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.fetchCompleted_ = true;
-    this.model_ = new mirosubs.startdialog.Model(jsonResult, this.initialLanguageCode_);
+    this.model_ = new mirosubs.startdialog.Model(jsonResult, this.initialLanguageState_);
     goog.dom.removeChildren(this.contentDiv_);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
@@ -116,7 +117,7 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
             this.model_.fromLanguages(),
             function(l) {
                 return [l.PK + '', l.toString()];
-            });;
+            });
         fromLanguageContents.push(
             [mirosubs.startdialog.Dialog.FORK_VALUE,
              "Direct from video (more work)"]);

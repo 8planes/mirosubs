@@ -49,7 +49,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showLoading_ =
 
 /**
  * Calls start_editing on server and then, if successful, opens the dialog.
- * @param {string} subLanguageCode The iso language code for subtitles.
+ * @param {mirosubs.widget.SubtitleState=} opt_subLanguageState The state language for subtitle.
  * @param {string=} opt_originalLanguageCode The iso language code for the video's
  *     original language. Should be null iff the video's original language is
  *     already set.
@@ -61,7 +61,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showLoading_ =
 mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
     subLanguageCode, 
     opt_originalLanguageCode, 
-    opt_subLanguagePK,
+    opt_subLanguageState,
     opt_baseLanguagePK,
     opt_completeCallback)
 {
@@ -69,7 +69,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
     var args = {
         'video_id': this.videoID_,
         'language_code': subLanguageCode,
-        'subtitle_language_pk': opt_subLanguagePK || null,
+        'subtitle_language_pk': (opt_subLanguageState && opt_subLanguageState.LANGUAGE_PK) || null,
         'base_language_pk': opt_baseLanguagePK || null,
         'original_language_code': opt_originalLanguageCode || null };
     var that = this;
@@ -83,11 +83,11 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
 };
 
 mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog = 
-    function(opt_effectiveVideoURL, opt_initial_lang) 
+    function(opt_effectiveVideoURL, opt_lang) 
 {
     var that = this;
     var dialog = new mirosubs.startdialog.Dialog(
-        this.videoID_, opt_initial_lang, 
+        this.videoID_, opt_lang, 
         function(originalLanguage, subLanguage, subLanguageID, 
                  baseLanguageID, closeCallback) {
             that.openDialogOrRedirect_(

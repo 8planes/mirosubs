@@ -80,14 +80,14 @@ mirosubs.widget.SubtitleController.prototype.openSubtitleDialog =
     function(e) 
 {
     var state  = this.playController_.getSubtitleState();
-    this.openNewLanguageDialog(state && state.LANGUAGE);
+    this.openNewLanguageDialog(state);
 };
 
 mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
-    function(opt_intitialLang) 
+    function(opt_langState) 
 {
     this.dialogOpener_.showStartDialog(
-        this.playController_.getVideoSource().getVideoURL(), opt_intitialLang);
+        this.playController_.getVideoSource().getVideoURL(), opt_langState);
 };
 
 mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {
