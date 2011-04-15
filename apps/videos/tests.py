@@ -221,9 +221,8 @@ class UploadSubtitlesTest(WebUseTest):
 
     def setUp(self):
         self._make_objects()
-
+        
     def test_upload_subtitles(self):
-        import os.path
         self._simple_test('videos:upload_subtitles', status=302)
         
         self._login()

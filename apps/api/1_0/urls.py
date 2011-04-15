@@ -35,6 +35,6 @@ urlpatterns = patterns('',
     url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="video_handler"),
     url('^video/$', video_handler),
     url('^subtitles/languages/$', subtitles_languages_handler),
-    url('^subtitles/$', subtitle_handler),
+    url('^subtitles/$', subtitle_handler, name='subtitle_handler'),
     url('^documentation/$', documentation_view, name='documentation')
 )
