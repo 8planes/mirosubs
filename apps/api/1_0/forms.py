@@ -48,7 +48,11 @@ class AddSubtitlesForm(SubtitlesUploadBaseForm):
         
         if subtitles and format:
             try:
-                encoding = chardet.detect(subtitles)['encoding']
+                try:
+                    subtitles = subtitles.encode('utf8')
+                    encoding = chardet.detect(subtitles)['encoding']
+                except UnicodeDecodeError,e:
+                    encoding = 'utf-8'
                 if not encoding:
                     raise forms.ValidationError(_(u'Can not detect file encoding'))
                 parser = self._get_parser(format)(force_unicode(subtitles, encoding))
