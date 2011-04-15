@@ -247,7 +247,8 @@ function testSetInitialLanguage() {
         'my_languages': ['pt', 'en'],
         'original_language': ''
     };
-    var model = new mirosubs.startdialog.Model(json, "pt");
+
+    var model = new mirosubs.startdialog.Model(json, {LANGUAGE:"pt"});
     assertEquals(model.getSelectedLanguage().LANGUAGE, 'pt' );
     var model = new mirosubs.startdialog.Model(json );
     assertEquals(model.getSelectedLanguage().LANGUAGE, 'en');

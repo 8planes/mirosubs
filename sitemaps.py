@@ -1,6 +1,8 @@
 from django.contrib.sitemaps import Sitemap
 from django.db import models
 from videos.models import Video
+from django.core.urlresolvers import reverse
+from django.conf import settings
 import datetime
 
 DEFAULT_CHANGEFREQ = "monthly"
@@ -28,15 +30,16 @@ class StaticSitemap(Sitemap):
     Definition of static pages, which more or less remain the same
     and are not based on the database data.
     '''
-    pages = [
-        AS('/', "weekly", 1), #Home
-        AS('/services/'), #Services
-        AS('/faq/'), #FAQ
-        # Add more static pages
-    ]
 
     def items(self):
-        return self.pages
+        pages = [
+            AS(reverse('services_page')), #Services
+            AS(reverse('faq_page')), #FAQ
+            # Add more static pages
+        ]
+        for lang, _ in settings.LANGUAGES:
+            pages.append(AS('/%s/' % lang, "weekly", 1))
+        return pages
 
     def changefreq(self, obj):
         return obj.changefreq
@@ -57,7 +60,7 @@ class VideoSitemap(Sitemap):
 
     def items(self):
         return Video.objects.values('video_id', 'edited')
-
+    
     @models.permalink
     def location(self, obj):
         return ('videos:video', [obj['video_id']])

@@ -21,10 +21,9 @@ goog.provide('mirosubs.startdialog.Model');
 /**
  * @constructor
  * @param {Object} json from widget rpc
- * @param {string=} opt_initialLanguage Lang code of SubtitleLanguage to 
- *     display initially.
+ * @param {mirosubs.widget.SubtitleState=} opt_langState The subtitle state to display initially.
  */
-mirosubs.startdialog.Model = function(json, opt_initialLanguageCode) {
+mirosubs.startdialog.Model = function(json, opt_langState) {
     /**
      * @type {Array.<string>} Array of langauge codes
      */
@@ -39,13 +38,22 @@ mirosubs.startdialog.Model = function(json, opt_initialLanguageCode) {
         json['video_languages']);
     this.toLanguages_ = new mirosubs.startdialog.ToLanguages(
         this.myLanguages_, this.videoLanguages_, 
-        opt_initialLanguageCode);
+        opt_langState);
     /**
      * @type {?string}
      */
     this.selectedOriginalLanguage_ = null;
-    if (opt_initialLanguageCode){
-       this.selectedLanguage_ = this.toLanguages_.forLangCode(opt_initialLanguageCode); 
+    if (opt_langState){
+        // with a pk we can know for sure that we need one english in particular
+        // (if there are +1 with the same lang code) 
+        if (opt_langState.LANGUAGE_PK){
+            this.selectedLanguage_ = this.toLanguages_.forKey(
+                opt_langState.LANGUAGE+opt_langState.LANGUAGE_PK); 
+        }else{
+            this.selectedLanguage_ = this.toLanguages_.forLangCode(
+                opt_langState.LANGUAGE); 
+        }
+       
     }
 };
 
