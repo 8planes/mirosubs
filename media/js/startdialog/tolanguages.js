@@ -34,7 +34,6 @@ mirosubs.startdialog.ToLanguages = function(myLanguages, videoLanguages, opt_ini
 
 mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
     var toLanguages = [];
-    console.log(this.initialLanguageStatePk_);
     if (this.initialLanguageState_ && this.initialLanguageState_.LANGUAGE_PK){
         var initLang = new mirosubs.startdialog.ToLanguage(
             0, this.videoLanguages_.findForPK(this.initialLanguageState_.LANGUAGE_PK));
