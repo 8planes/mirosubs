@@ -165,7 +165,7 @@ def clear_permissions():
         _clear_permissions('{0}/mirosubs'.format(env.web_dir))    
 
 def _git_pull():
-    run('git pull')
+    run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
 
