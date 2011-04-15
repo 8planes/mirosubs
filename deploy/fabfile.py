@@ -206,7 +206,7 @@ def _bounce_celeryd():
         env.host_string = ADMIN_HOST
     else:
         env.host_string = DEV_HOST
-    sudo(evn.celeryd_bounce_cmd)
+    sudo(env.celeryd_bounce_cmd)
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):
