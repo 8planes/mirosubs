@@ -279,8 +279,14 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
                 that.setFinishedState_();
             }
         },
-        function(logger, retryable) {
-            
+        function(logger, opt_status) {
+            if (that.finishFailDialog_)
+                that.finishFailDialog_.failedAgain(opt_status);
+            else
+                that.finishFailDialog_ = mirosubs.FinishFailDialog.show(
+                    logger, opt_status || null,
+                    goog.bind(that.saveWorkImpl_, that, 
+                              closeAfterSave, isComplete));
         },
         function() {
             that.doneButtonEnabled_ = true;

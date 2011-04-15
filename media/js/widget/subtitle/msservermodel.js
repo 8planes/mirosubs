@@ -122,7 +122,7 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
                 alert('Problem saving subtitles. Response: ' +
                       result["response"]);
                 that.logger_.logSave(subIDPackets, false, response);
-                failureCallback(that.logger_, false);
+                failureCallback(that.logger_, 200);
             }
             else {
                 that.finished_ = true;
@@ -130,10 +130,11 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
                     result['drop_down_contents']));
             }
         }, 
-        function() {
+        function(opt_status) {
             that.logger_.logSave(subIDPackets, false);
-            failureCallback(that.logger_, true);
-        });
+            failureCallback(that.logger_, opt_status);
+        },
+        true);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {

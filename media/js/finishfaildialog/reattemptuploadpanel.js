@@ -16,14 +16,22 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.FinishFailDialog');
+/**
+ * @fileoverview Meant to be used in mirosubs.finishfaildialog.Dialog. 
+ *    Corresponds to 'reattempt upload' state of that dialog.
+ */
+
+goog.provide('mirosubs.finishfaildialog.ReattemptUploadPanel');
 
 /**
  * @constructor
+ * @param {function()} finishFn the function to call when we're finished.
+ *     This means the dialog can be closed.
+ * @param {function()} errorFn the function to call to switch to error mode.
  */
-mirosubs.FinishFailDialog = function() {
-    goog.ui.Dialog.call(this, null, true);
-    this.setButtonSet(null);
-    this.setDisposeOnHide(true);
+mirosubs.finishfaildialog.ReattemptUploadPanel = function(finishFn, errorFn) {
+    goog.ui.Component.call(this);
+    this.finishFn_ = finishFn;
+    this.errorFn_ = errorFn;
 };
-goog.inherits(mirosubs.FinishFailDialog, goog.ui.Dialog);
+goog.inherits(mirosubs.finishfaildialog.ReattemptUploadPanel, goog.ui.Component);

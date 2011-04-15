@@ -23,7 +23,7 @@ goog.provide('mirosubs.subtitle.Logger');
  */
 mirosubs.subtitle.Logger = function(draftPK) {
     this.logs_ = [
-        new Date().toUTCString(),
+        mirosubs.dateString(),
         draftPK];
     this.totalSize_ = 0;
     this.sizeExceeded_ = false;
@@ -38,17 +38,16 @@ mirosubs.subtitle.Logger.prototype.logSave =
     try {
         if (subIDPackets.length == 0)
             return;
-        var dateString = new Date().toUTCString();
         if (this.totalSize_ > mirosubs.subtitle.Logger.MAX_SIZE && 
             !this.sizeExceeded_) {
             this.sizeExceeded_ = true;
             this.logs_.push({
-                'time': dateString,
+                'time': mirosubs.dateString(),
                 'sizeExceeded': true
             });
         }
         var serialized = goog.json.serialize({
-            'time': dateString,
+            'time': mirosubs.dateString(),
             'packets': subIDPackets,
             'success': success,
             'response': (opt_response || null) })

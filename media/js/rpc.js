@@ -45,23 +45,23 @@ mirosubs.Rpc.callCrossDomain_ = function(methodName, serializedArgs, opt_callbac
             if (opt_errorCallback)
                 opt_errorCallback();
         }, mirosubs.Rpc.TIMEOUT_);
-    goog.net.CrossDomainRpc.
-        send([mirosubs.Rpc.baseURL(), 'xd/', methodName].join(''),
-             function(e) {
-                 if (timedOut)
-                     return;
-                 goog.global.clearTimeout(timeout);
-                 if (e.target.status == goog.net.HttpStatus.INTERNAL_SERVER_ERROR) {
-                     if (opt_errorCallback)
-                         opt_errorCallback();
-                 }
-                 else {
-                     var responseText = e.target.responseText;
-                     mirosubs.Rpc.logResponse_(methodName, responseText);
-                     if (opt_callback)
-                         opt_callback(goog.json.parse(responseText));
-                 }
-             }, "POST", serializedArgs);
+    goog.net.CrossDomainRpc.send(
+        [mirosubs.Rpc.baseURL(), 'xd/', methodName].join(''),
+        function(e) {
+            if (timedOut)
+                return;
+            goog.global.clearTimeout(timeout);
+            if (Math.floor(e.target.status / 100) != 2) {
+                if (opt_errorCallback)
+                    opt_errorCallback(e.target.status);
+            }
+            else {
+                var responseText = e.target.responseText;
+                mirosubs.Rpc.logResponse_(methodName, responseText);
+                if (opt_callback)
+                    opt_callback(goog.json.parse(responseText));
+            }
+        }, "POST", serializedArgs);
 };
 
 mirosubs.Rpc.callXhr_ = function(methodName, serializedArgs, opt_callback, opt_errorCallback) {
@@ -69,8 +69,11 @@ mirosubs.Rpc.callXhr_ = function(methodName, serializedArgs, opt_callback, opt_e
         [mirosubs.Rpc.baseURL(), 'xhr/', methodName].join(''),
         function(event) {
             if (!event.target.isSuccess()) {
+                var status = null;
+                if (event.target.getLastErrorCode() != goog.net.ErrorCode.TIMEOUT)
+                    status = event.target.getStatus();
                 if (opt_errorCallback)
-                    opt_errorCallback();
+                    opt_errorCallback(status);
             }
             else {
                 mirosubs.Rpc.logResponse_(
@@ -127,8 +130,18 @@ mirosubs.Rpc.logResponse_ = function(methodName, response) {
     }
 };
 
+/**
+ *
+ * @param {function(?number)=} opt_errorCallback Gets called on error. 
+ *     Will include http code if there was a server error and a 
+ *     descriptive strategy is used
+ * @param {boolean=} opt_forceDescriptive This forces a call strategy 
+ *     that returns an http code to opt_errorCallback on server error.
+ *     Right now, this means that cross-domain uses CrossDomainRpc instead
+ *     of rpc.
+ */
 mirosubs.Rpc.call = 
-    function(methodName, args, opt_callback, opt_errorCallback) 
+    function(methodName, args, opt_callback, opt_errorCallback, opt_forceDescriptive) 
 {
     var s = goog.json.serialize;
     var serializedArgs = {};
@@ -141,7 +154,7 @@ mirosubs.Rpc.call =
     }
     var callType = ''
     if (mirosubs.isEmbeddedInDifferentDomain()) {
-        if (totalSize < 2000) {
+        if (totalSize < 2000 && !opt_forceDescriptive) {
             callType = 'jsonp';
             mirosubs.Rpc.callWithJsonp_(
                 methodName, serializedArgs, 
