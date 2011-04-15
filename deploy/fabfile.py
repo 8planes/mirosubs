@@ -92,7 +92,7 @@ def migrate(app_name=''):
         if env.separate_sentry_db:
             run('{0}/env/bin/python manage.py migrate sentry '
                 '--database=sentry --settings=unisubs_settings'.format(
-                    env.static_dir)))
+                    env.static_dir))
     _bounce_memcached()
 
 def migrate_fake(app_name):
