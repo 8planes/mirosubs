@@ -27,7 +27,8 @@ ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
-                admin_dir, separate_sentry_db=False):
+                admin_dir, separate_sentry_db=False,
+                celeryd_bounce_cmd=None):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -38,6 +39,7 @@ def _create_env(username, hosts, s3_bucket,
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
     env.separate_sentry_db = separate_sentry_db
+    env.celeryd_bounce_cmd=celeryd_bounce_cmd
 
 def staging(username):
     _create_env(username, 
@@ -48,7 +50,7 @@ def staging(username):
                 'static/staging', 'staging',
                 '/etc/init.d/memcached-staging restart',
                 '/usr/local/universalsubtitles.staging',
-                True)
+                True, celeryd_bounce_cmd="/etc/init.d/celeryd.staging restart")
 
 def dev(username):
     _create_env(username,
@@ -69,7 +71,7 @@ def unisubs(username):
                 'static/production', None,
                 '/etc/init.d/memcached restart', 
                 '/usr/local/universalsubtitles',
-                True)
+                True, celeryd_bounce_cmd="/etc/init.d/celeryd.staging restart"))
 
 
 def syncdb():
@@ -204,7 +206,7 @@ def _bounce_celeryd():
         env.host_string = ADMIN_HOST
     else:
         env.host_string = DEV_HOST
-    sudo('/etc/init.d/celeryd restart')
+    sudo(evn.celeryd_bounce_cmd)
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):
