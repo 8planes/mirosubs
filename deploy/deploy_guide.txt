@@ -1,6 +1,9 @@
 * update unisubs-settings.py if necessary *
 
 fab <server> add_disabled
+
+-- turn off cron jobs and celeryd/sqs --
+
 fab <server> switch_branch:<branch_name>
 fab <server> update_environment
 fab <server> syncdb
@@ -14,6 +17,9 @@ fab <server> remove_disabled
 for staging:
 
 fab staging:<username> refresh_db
+
+-- turn off cron jobs and celeryd/sqs --
+
 fab staging:<username> switch_branch:<branch_name>
 fab staging:<username> clear_environment_permissions
 fab staging:<username> update_environment
