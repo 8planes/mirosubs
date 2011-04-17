@@ -27,7 +27,8 @@ ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
-                admin_dir, separate_sentry_db=False):
+                admin_dir, separate_sentry_db=False,
+                celeryd_bounce_cmd=""):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
@@ -38,6 +39,7 @@ def _create_env(username, hosts, s3_bucket,
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
     env.separate_sentry_db = separate_sentry_db
+    env.celeryd_bounce_cmd=celeryd_bounce_cmd
 
 def staging(username):
     _create_env(username, 
@@ -48,7 +50,7 @@ def staging(username):
                 'static/staging', 'staging',
                 '/etc/init.d/memcached-staging restart',
                 '/usr/local/universalsubtitles.staging',
-                True)
+                True, celeryd_bounce_cmd="/etc/init.d/celeryd.staging restart")
 
 def dev(username):
     _create_env(username,
@@ -69,7 +71,7 @@ def unisubs(username):
                 'static/production', None,
                 '/etc/init.d/memcached restart', 
                 '/usr/local/universalsubtitles',
-                True)
+                True, celeryd_bounce_cmd="/etc/init.d/celeryd.staging restart")
 
 
 def syncdb():
@@ -165,7 +167,7 @@ def clear_permissions():
         _clear_permissions('{0}/mirosubs'.format(env.web_dir))    
 
 def _git_pull():
-    run('git pull')
+    run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
 
@@ -204,7 +206,8 @@ def _bounce_celeryd():
         env.host_string = ADMIN_HOST
     else:
         env.host_string = DEV_HOST
-    sudo('/etc/init.d/celeryd restart')
+    if bool(env.celeryd_bounce_cmd):
+        sudo(env.celeryd_bounce_cmd)
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'mirosubs')):
@@ -247,7 +250,7 @@ def _promote_django_admins(dir, email=None, new_password=None, userlist_path=Non
         cmd_str ='{0} manage.py promote_admins {1} --settings=unisubs_settings'.format(python_exe, args)
         run(cmd_str)
 
-def promote_django_admins(email=None, new_password=None, userlist_path="/var/static/admin-users.json"):
+def promote_django_admins(email=None, new_password=None, userlist_path=None):
     """
     Make sure identified users are can access the admin site.
     If new_password is provided will reset the user's password

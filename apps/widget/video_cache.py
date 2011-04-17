@@ -64,7 +64,7 @@ def invalidate_cache(video_id, language=None):
         from apps.videos.models import Video
         video = Video.objects.get(video_id=video_id)
         for l in video.subtitlelanguage_set.all():
-            cache.delete(_subtitles_dict_key(video_id, l))
+            cache.delete(_subtitles_dict_key(video_id, l.pk))
     except Video.DoesNotExist:
         pass
     cache.delete(_subtitles_dict_key(video_id, None))
@@ -85,11 +85,11 @@ def invalidate_video_id(video_url):
     cache.delete(_video_id_key(video_url))
 
 def on_subtitle_language_save(sender, instance, **kwargs):
-    invalidate_cache(instance.video.video_id, instance.language)
+    invalidate_cache(instance.video.video_id, instance.pk)
 
 def on_subtitle_version_save(sender, instance, **kwargs):
     invalidate_cache(instance.language.video.video_id,
-                      instance.language.language)
+                      instance.language.pk)
 
 def on_video_url_save(sender, instance, **kwargs):
     if instance.video_id:

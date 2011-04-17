@@ -69,7 +69,8 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
     var args = {
         'video_id': this.videoID_,
         'language_code': subLanguageCode,
-        'subtitle_language_pk': (opt_subLanguageState && opt_subLanguageState.LANGUAGE_PK) || null,
+        'subtitle_language_pk': opt_subLanguageState ? 
+            opt_subLanguageState.LANGUAGE_PK : null,
         'base_language_pk': opt_baseLanguagePK || null,
         'original_language_code': opt_originalLanguageCode || null };
     var that = this;
