@@ -95,7 +95,7 @@ def migrate(app_name=''):
             run('{0}/env/bin/python manage.py migrate sentry '
                 '--database=sentry --settings=unisubs_settings'.format(
                     env.static_dir))
-    _bounce_memcached()
+    bounce_memcached()
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
@@ -112,7 +112,7 @@ def refresh_db():
     env.host_string = env.web_hosts[0]
     sudo('/scripts/univsubs_reset_db.sh {0}'.format(env.installation_name))
     sudo('/scripts/univsubs_refresh_db.sh {0}'.format(env.installation_name))
-    _bounce_memcached()
+    bounce_memcached()
 
 def update_closure():
     # this happens so rarely, it's not really worth putting it here.
@@ -194,7 +194,7 @@ def update_web():
             run('touch deploy/unisubs.wsgi')
     _bounce_celeryd()
 
-def _bounce_memcached():
+def bounce_memcached():
     if env.admin_dir:
         env.host_string = ADMIN_HOST
     else:
