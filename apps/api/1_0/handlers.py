@@ -129,7 +129,9 @@ class SubtitleHandler(BaseHandler):
         curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_id=7Myc2QAeBco9' -G 
         """
         video_url = request.GET.get('video_url')
-        language = request.GET.get('language')
+        language_code = request.GET.get('language')
+        language_pk = request.GET.get("language_pk")
+        
         revision = request.GET.get('revision')
         sformat = request.GET.get('sformat')
         video_id = request.GET.get('video_id')
@@ -147,9 +149,11 @@ class SubtitleHandler(BaseHandler):
             
             if not video:
                 return rc.NOT_FOUND
-        
+
         if not sformat:
-            output = [s.for_json() for s in video.subtitles(version_no=revision, language_code = language)]
+            output = [s.for_json() for s in video.subtitles(version_no=revision,
+                                                            language_code = language_code,
+                                                            language_pk= language_pk)]
             return output
         else:    
             handler = GenerateSubtitlesHandler.get(sformat)
@@ -157,7 +161,9 @@ class SubtitleHandler(BaseHandler):
             if not handler:
                 return rc.BAD_REQUEST
             
-            subtitles = [s.for_generator() for s in video.subtitles(version_no=revision, language_code = language)]
+            subtitles = [s.for_generator() for s in video.subtitles(version_no=revision,
+                                                                    language_code = language_code,
+                                                                    language_pk= language_pk)]
     
             h = handler(subtitles, video)
             return unicode(h)
