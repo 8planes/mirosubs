@@ -652,6 +652,13 @@ class ViewsTest(WebUseTest):
         response = self.client.post(reverse('videos:email_friend'), data)
         self.assertEqual(response.status_code, 302)
         self.assertEquals(len(mail.outbox), 1)
+        
+        #----------------------------------------
+        from videos.share_utils import _make_email_url
+        msg = u'Hey-- just found a version of this video ("Tú - Jennifer Lopez") with captions: http://mirosubs.example.com:8000/en/videos/OcuMvG3LrypJ/'
+        url = _make_email_url(msg)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
                 
     def test_demo(self):
         self._simple_test('videos:demo')

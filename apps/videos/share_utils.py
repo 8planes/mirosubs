@@ -15,8 +15,8 @@ def _make_twitter_url(message):
         urlencode({'status': message}))
 
 def _make_email_url(message):
-    return "/videos/email_friend/?{0}".format(
-        urlencode({'text': message}))
+    url = reverse('videos:email_friend')
+    return "%s?%s" % (url, urlencode({'text': message}))
 
 def _add_share_panel_context(context,
                              facebook_url, twitter_url,
