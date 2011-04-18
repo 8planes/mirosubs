@@ -77,7 +77,21 @@ class TestRpcView(TestCase):
         response = self.client.get(reverse('widget:rpc', args=['undefined_method']))
         #incorect arguments number: 500 status
         response = self.client.get(reverse('widget:rpc', args=['show_widget']))
-
+    
+    def test_rpc(self):
+        video_url = 'http://www.youtube.com/watch?v=z2U_jf0urVQ'
+        video, created = Video.get_or_create_for_url(video_url)
+        sl = video.subtitlelanguage_set.all()[:1].get()
+        
+        url = reverse('widget:rpc', args=['show_widget'])
+        data = {
+            'is_remote': u'false',
+            'base_state': u'{"language_pk":%s,"language_code":""}' % sl.pk,
+            'video_url': u'"%s"' % video_url
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, 200)
+    
 class TestRpc(TestCase):
     fixtures = ['test_widget.json']
     
