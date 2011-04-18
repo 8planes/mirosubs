@@ -55,6 +55,7 @@ class VideoSitemap(Sitemap):
     Definition of video pages, based on the videos available on site.
     TODO: Set video last modification time according to latest subtitle edition
     '''
+    limit = 1000
     changefreq="weekly"
     priority = 0.8
 

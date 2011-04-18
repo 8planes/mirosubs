@@ -21,7 +21,7 @@ from django.conf import settings
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
 from sitemaps import sitemaps
 from django.views.decorators.cache import cache_page
-from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps.views import sitemap, index
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -103,7 +103,9 @@ urlpatterns = patterns(
      {'template': 'alpha-test01-ogg.htm'}, 'test-ogg-page'),   
         (r'^test-mp4$',  'django.views.generic.simple.direct_to_template', 
      {'template': 'alpha-test01-mp4.htm'}, 'test-mp4-page'),
-    url(r'^sitemap\.xml$', cache_page(sitemap, 60*60*24*2), {'sitemaps': sitemaps}, name='sitemap'),
+#    url(r'^sitemap\.xml$', cache_page(sitemap, 60*60*24*2), {'sitemaps': sitemaps}, name='sitemap'),
+     url(r'^sitemap\.xml$', index, {'sitemaps': sitemaps}, name="sitemap-index"),
+     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap, {'sitemaps': sitemaps}, name="sitemap"),
 )
 
 if settings.DEBUG:
