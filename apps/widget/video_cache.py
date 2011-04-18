@@ -28,7 +28,7 @@ TIMEOUT = 60 * 60 * 24 * 5 # 5 days
 def get_video_id(video_url):
     cache_key = _video_id_key(video_url)
     value = cache.get(cache_key)
-    if value is not None:
+    if bool(value):
         return value
     else:
         from videos.models import Video

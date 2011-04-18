@@ -1171,3 +1171,10 @@ class TestCache(TestCase):
         except models.Video.DoesNotExist:
             self.fail("bad cache key shouldn't fail")
         self.assertTrue(len(res)==0)    
+
+    def test_video_id_not_empty_string(self):
+        url = "http://videos-cdn.mozilla.net/serv/mozhacks/demos/screencasts/londonproject/screencast.ogv"
+        cache_key = video_cache._video_id_key(url)
+        video_cache.cache.set(cache_key, "", video_cache.TIMEOUT)
+        video_id = video_cache.get_video_id(url)
+        self.assertTrue(bool(video_id))
