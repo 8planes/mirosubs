@@ -334,7 +334,7 @@ def history(request, video_id, lang=None, lang_id=None):
             url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
             return redirect(url)
         else:
-            raise Http404
+            language = video.subtitlelanguage_set.all()[0]
 
     qs = language.subtitleversion_set.select_related('user')
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
