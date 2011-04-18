@@ -228,9 +228,11 @@ class SSASubtitles(BaseSubtitles):
 GenerateSubtitlesHandler.register(SSASubtitles)
 
 from lxml import etree
-    
+import re 
+
 class TTMLSubtitles(BaseSubtitles):
     file_type = 'xml'
+    remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]')
     
     def __unicode__(self):
         return (u'<?xml version="1.0" encoding="UTF-8"?>%s' % self.line_delimiter)\
@@ -247,7 +249,7 @@ class TTMLSubtitles(BaseSubtitles):
                 attrib['begin'] = self.format_time(item['start'])
                 attrib['dur'] = self.format_time(item['end']-item['start'])
                 p = etree.SubElement(div, 'p', attrib=attrib)
-                p.text = item['text'].strip()
+                p.text = self.remove_re.sub('', item['text'].strip())
         return tt
     
     def format_time(self, time):

@@ -77,7 +77,21 @@ class TestRpcView(TestCase):
         response = self.client.get(reverse('widget:rpc', args=['undefined_method']))
         #incorect arguments number: 500 status
         response = self.client.get(reverse('widget:rpc', args=['show_widget']))
-
+    
+    def test_rpc(self):
+        video_url = 'http://www.youtube.com/watch?v=z2U_jf0urVQ'
+        video, created = Video.get_or_create_for_url(video_url)
+        sl = video.subtitlelanguage_set.all()[:1].get()
+        
+        url = reverse('widget:rpc', args=['show_widget'])
+        data = {
+            'is_remote': u'false',
+            'base_state': u'{"language_pk":%s,"language_code":""}' % sl.pk,
+            'video_url': u'"%s"' % video_url
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, 200)
+    
 class TestRpc(TestCase):
     fixtures = ['test_widget.json']
     
@@ -1178,3 +1192,32 @@ class TestCache(TestCase):
         video_cache.cache.set(cache_key, "", video_cache.TIMEOUT)
         video_id = video_cache.get_video_id(url)
         self.assertTrue(bool(video_id))
+
+from widget.srt_subs import TTMLSubtitles
+
+class TestSubtitlesGenerator(TestCase):
+    fixtures = ['test_widget.json']
+    
+    def setUp(self):
+        self.video = Video.objects.all()[:1].get()
+        self.subtitles = []
+        self.subtitles.append({
+            'start': 0,
+            'end': 1,
+            'text': u''
+        })
+        self.subtitles.append({
+            'start': 1,
+            'end': 2,
+            'text': u'Не аглійські субтитри. Її'                               
+        })
+        self.subtitles.append({
+            'start': 359999.0,
+            'end': 359999.0,
+            'text': u"Andres Martinez: Right. And I guess\xa0\x1e\x1e\n I'm tempted to cut to what is the answer."
+        })        
+        
+    def test_ttml(self):
+        handler = TTMLSubtitles
+        h = handler(self.subtitles, self.video)
+        self.assertTrue(unicode(h))
