@@ -1180,11 +1180,13 @@ def _make_packet(updated=[], inserted=[], deleted=[], packet_no=1):
 class TestCache(TestCase):
 
     def test_get_cache_url_no_exceptions(self):
+        e = None
         try:
-            res = video_cache.get_video_urls("bad key")
-        except models.Video.DoesNotExist:
-            self.fail("bad cache key shouldn't fail")
-        self.assertTrue(len(res)==0)    
+            video_cache.get_video_urls("bad key")
+        except models.Video.DoesNotExist,e:
+            pass
+        if e is None:
+            self.fail("Bad cache key should fail")
 
     def test_video_id_not_empty_string(self):
         url = "http://videos-cdn.mozilla.net/serv/mozhacks/demos/screencasts/londonproject/screencast.ogv"
@@ -1192,6 +1194,21 @@ class TestCache(TestCase):
         video_cache.cache.set(cache_key, "", video_cache.TIMEOUT)
         video_id = video_cache.get_video_id(url)
         self.assertTrue(bool(video_id))
+
+    def test_empty_id_show_widget(self):
+        url = "http://videos-cdn.mozilla.net/serv/mozhacks/demos/screencasts/londonproject/screencast.ogv"
+        cache_key = video_cache._video_id_key(url)
+        video, create = Video.get_or_create_for_url(url)
+        video_cache.cache.set(cache_key, "", video_cache.TIMEOUT)
+        # we have a bogus url
+        video_id = video_cache.get_video_id(url)
+        self.assertTrue(bool(video_id))
+        try:
+            Video.objects.get(video_id=video_id)
+        except Video.DoesNotExist:
+            self.fail("Should not point to a non existing video")
+
+
 
 from widget.srt_subs import TTMLSubtitles
 
