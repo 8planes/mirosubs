@@ -115,8 +115,11 @@ class SubtitleHandler(BaseHandler):
         <b>video url:</b> video_url
         <b>video id:</b> video_id
         <b>language:</b> language of video
+        <b>language_id:</b> id of language, you can get this from AnonymousSubtitleLanguages
         <b>revision:</b> revision of subtitles
         <b>sformat</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
+        
+        If language_id is not provided, you get the most completed subtitles for language.
         
         By default format of response is 'plain', so you get raw subtitles content in response.
         If 'sformat' exists in request - format will be 'plain'. 
@@ -130,7 +133,7 @@ class SubtitleHandler(BaseHandler):
         """
         video_url = request.GET.get('video_url')
         language_code = request.GET.get('language')
-        language_pk = request.GET.get("language_pk")
+        language_pk = request.GET.get("language_id")
         
         revision = request.GET.get('revision')
         sformat = request.GET.get('sformat')
@@ -204,6 +207,7 @@ class SubtitleLanguagesHandler(BaseHandler):
         curl http://127.0.0.1:8000/api/1.0/subtitles/languages/ -d 'video_id=7Myc2QAeBco9' -G
         <pre>[
             {
+                "id": 12,
                 "code": "it", 
                 "name": "Italian", 
                 "is_original": true
@@ -232,6 +236,7 @@ class SubtitleLanguagesHandler(BaseHandler):
         
         for item in video.subtitlelanguage_set.all():
             output.append({
+                'id': item.id,
                 'code': item.language,
                 'name': item.get_language_display(),
                 'is_original': item.is_original
