@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-
+import logging
+logger = logging.getLogger(__name__)
+                           
 from django.db.models import ObjectDoesNotExist
 from videos import models
 from datetime import datetime
@@ -53,6 +55,13 @@ class Rpc(BaseRpc):
         try:    
             video_urls = video_cache.get_video_urls(video_id)
         except models.Video.DoesNotExist:
+            logger.warn("Video id -> url at the cache level was invalidated", extra={
+                    'data': {
+                        "url": url,
+                        "video_id": video_id,
+                        "additional_video_urls": additional_video_urls,
+                        }
+            })
             video_cache.invalidate_video_id(video_url)
             video_id = video_cache.get_video_id(video_url)
             video_urls = video_cache.get_video_urls(video_id)
