@@ -14,9 +14,11 @@ def patch_reverse():
     if not django_reverse and localeurl.settings.URL_TYPE == 'path_prefix' and settings.USE_I18N:
         def reverse(viewname, urlconf=None, args=[], kwargs={}, prefix=None, current_app=None):
             kwargs = kwargs or {}
-            locale = utils.supported_language(kwargs.pop('locale', translation.get_language()))
+            locale = kwargs.pop('locale', translation.get_language())
             path = django_reverse(viewname, urlconf, args, kwargs, prefix, current_app)
-            return utils.locale_url(path, locale)
+            if locale == '':
+                return path
+            return utils.locale_url(path, utils.supported_language(locale))
         
         django_reverse = urlresolvers.reverse
         urlresolvers.reverse = reverse
