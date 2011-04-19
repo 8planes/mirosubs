@@ -30,6 +30,7 @@ class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'title', 'languages', 'languages_count', 'is_subtitled']
     search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
     readonly_fields = ['subtitles_fetched_count', 'widget_views_count', 'view_count']
+    raw_id_fields = ['user']
     
     def video_thumbnail(self, obj):
         return '<img width="50" height="50" src="%s"/>' % obj.get_small_thumbnail() 
@@ -50,9 +51,10 @@ class VideoAdmin(admin.ModelAdmin):
     
 class SubtitleLanguageAdmin(admin.ModelAdmin):
     actions = None
-    list_display = ['video', 'is_original', 'language', 'is_complete', 'had_version', 'versions']
+    list_display = ['video', 'is_original', 'language', 'is_complete', 'had_version', 'versions', 'subtitle_count']
     list_filter = ['is_original', 'is_complete']
     search_fields = ['video__title', 'video__video_id']
+    raw_id_fields = ['video']
     
     def versions(self, obj):
         version_qs = obj.subtitleversion_set.all()
@@ -68,6 +70,7 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
 class SubtitleVersionAdmin(admin.ModelAdmin):
     list_display = ['language', 'version_no', 'note', 'time_change', 'text_change']
     list_filter = []
+    raw_id_fields = ['language', 'user']
     
     def has_delete_permission(self, request, obj=None):
         return False

@@ -441,7 +441,7 @@ class SubtitleLanguage(models.Model):
     writelock_session_key = models.CharField(max_length=255, blank=True, editable=False)
     writelock_owner = models.ForeignKey(User, null=True, blank=True, editable=False)
     is_complete = models.BooleanField(default=False)
-    subtitle_count = models.IntegerField(default=0)
+    subtitle_count = models.IntegerField(default=0, editable=False)
     has_version = models.BooleanField(default=False, editable=False)
     had_version = models.BooleanField(default=False, editable=False)
     is_forked = models.BooleanField(default=False, editable=False)
