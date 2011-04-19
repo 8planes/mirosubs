@@ -403,7 +403,7 @@ LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/jstest'),
     re.compile('^/profiles/router'),
     re.compile('^/sitemap.*.xml'),
-    re.compile('^/crossos.xml'),
+    re.compile('^/crossdomain.xml'),
 )
 
 #Haystack configuration
