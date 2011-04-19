@@ -102,7 +102,44 @@ class ViewsTest(WebUseTest):
         response = self._simple_test("api:subtitle_existence")
         data = json.loads(response.content)
         self.assertTrue(data['is_error'])
-
+    
+    def test_subtitles_reading(self):
+        language = 'en'
+        video = Video.objects.all()[:1].get()
+        lang = video.subtitlelanguage_set.all()[:1].get()
+        lang.language = language
+        lang.save()
+        
+        version = lang.latest_version()
+        
+        url = reverse("api:0.1:subtitle_handler")
+        data = {
+            'video_id': video.video_id,
+            'language': language
+        }
+        response = self.client.get(url, data=data)
+        self.assertEqual(response.status_code, 200)
+        r = json.loads(response.content)
+        self.assertEqual(len(r), len(version.subtitles()))
+        
+        #add one more SubtitleLanguage for same language
+        new_lang = SubtitleLanguage(video=video, language=language)
+        new_lang.is_original = False
+        new_lang.save()
+        
+        #should get same subtitles because they are more completed
+        response = self.client.get(url, data=data)
+        self.assertEqual(response.status_code, 200)
+        r = json.loads(response.content)
+        self.assertEqual(len(r), len(version.subtitles()))        
+        
+        #set manually language id
+        data['language_id'] = new_lang.id
+        response = self.client.get(url, data=data)
+        self.assertEqual(response.status_code, 200)
+        r = json.loads(response.content)
+        self.assertEqual(len(r), 0)        
+        
     def test_subtitle_create(self):
         video_id= "iGzkk7nwWX8F"
         slang = "en"

@@ -28,7 +28,7 @@ class SubtitlesResource(Resource):
             elif request.GET.get('callback'):
                 em = 'json'
             else:
-                em = request.GET.get('format', 'plain')
+                em = request.GET.get('format', 'json')
 
         return em
     
