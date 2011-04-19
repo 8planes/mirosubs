@@ -91,7 +91,8 @@
                         </div>
                         
                         {% if message_list.objects %}
-                            <ul class="messages" id="message_list">
+                            <div style="clear: both"></div>
+                            <ul class="messages" id="message_list" style="margin-top: 0px">
                                 {% for group, priority in message_list.objects|with_priority %}
                                     {% include "sentry/partial/_group.html" %}
                                 {% endfor %}
