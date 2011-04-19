@@ -897,6 +897,8 @@ class SubtitleVersion(SubtitleCollection):
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
 
+        lang.subtitle_count = new_version.subtitle_set.all().count()
+        lang.save()
         return new_version
 
     def is_all_blank(self):
