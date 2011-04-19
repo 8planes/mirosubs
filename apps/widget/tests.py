@@ -1166,11 +1166,14 @@ def _make_packet(updated=[], inserted=[], deleted=[], packet_no=1):
 class TestCache(TestCase):
 
     def test_get_cache_url_no_exceptions(self):
+        e = None
         try:
             res = video_cache.get_video_urls("bad key")
-        except models.Video.DoesNotExist:
-            self.fail("bad cache key shouldn't fail")
-        self.assertTrue(len(res)==0)    
+        except models.Video.DoesNotExist, e:
+            pass
+        if e is None:
+            self.fail("bad cache key should fail")
+        
 
     def test_video_id_not_empty_string(self):
         url = "http://videos-cdn.mozilla.net/serv/mozhacks/demos/screencasts/londonproject/screencast.ogv"

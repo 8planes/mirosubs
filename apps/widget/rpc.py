@@ -50,6 +50,19 @@ class Rpc(BaseRpc):
         if video_id is None: # for example, private youtube video.
             return None
 
+        try:    
+            video_urls = video_cache.get_video_urls(video_id)
+        except models.Video.DoesNotExist:
+            video_cache.invalidate_video_id(video_url)
+            video_id = video_cache.get_video_id(video_url)
+            video_urls = video_cache.get_video_urls(video_id)
+        return_value = {
+            'video_id' : video_id,
+            'subtitles': None,
+        }
+
+        return_value['video_urls']= video_urls
+
         if additional_video_urls is not None:
             for url in additional_video_urls:
                 video_cache.associate_extra_url(url, video_id)
@@ -57,14 +70,10 @@ class Rpc(BaseRpc):
         models.Video.widget_views_counter(video_id).incr()
         widget_views_total_counter.incr()
         
-        return_value = {
-            'video_id' : video_id,
-            }
         add_general_settings(request, return_value)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
 
-        return_value['video_urls'] = video_cache.get_video_urls(video_id)
 
         return_value['drop_down_contents'] = \
             self._drop_down_contents(video_id)
