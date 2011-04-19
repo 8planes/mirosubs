@@ -45,6 +45,11 @@ def add_general_settings(request, dict):
         dict['username'] = request.user.username
 
 class Rpc(BaseRpc):
+    def log_session(self, request, draft_pk, log):
+        print(log)
+        raise Exception('whattt')
+        return { 'response': 'ok' }
+
     def show_widget(self, request, video_url, is_remote, base_state=None, additional_video_urls=None):
         video_id = video_cache.get_video_id(video_url)
         if video_id is None: # for example, private youtube video.

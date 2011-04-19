@@ -20,9 +20,12 @@ goog.provide('mirosubs.finishfaildialog.Dialog');
 
 /**
  * @constructor
+ * @param {mirosubs.subtitle.Logger} logger
+ * @param {?number} status
+ * @param {function()} saveFn
  */
 mirosubs.finishfaildialog.Dialog = function(logger, status, saveFn) {
-    goog.ui.Dialog.call(this, null, true);
+    goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.logger_ = logger;
@@ -35,30 +38,39 @@ goog.inherits(mirosubs.finishfaildialog.Dialog, goog.ui.Dialog);
  * Called to show the finish fail dialog.
  * @param {mirosubs.subtitle.Logger} logger
  * @param {?number} status
- * @param {function()} saveFn
+ * @param {function()} saveFn Gets called to reattempt save.
  */
 mirosubs.finishfaildialog.Dialog.show = function(logger, status, saveFn) {
     var dialog = new mirosubs.finishfaildialog.Dialog(logger, status, saveFn);
     dialog.setVisible(true);
+    return dialog;
 };
 
 /**
- * Called by dialog if failure occurs again after calling save function
- * again.
+ * Called by subtitle/translate dialog if failure occurs again after 
+ * calling save function again.
  * @param {?number} status Either null if no status was returned 
  *     (probably timeout), 2xx if success but bad response, and otherwise
  *     if huge potentially weird server failure.
  */
 mirosubs.finishfaildialog.Dialog.prototype.failedAgain = function(status) {
-    
+    if (goog.isDefAndNotNull(status)) {
+        // it's a real error.
+        this.removeChild(this.panel_, true);
+        this.panel_ = new mirosubs.finishfaildialog.ErrorPanel(this.logger_);
+        this.addChild(this.panel_, true);
+    }
+    else
+        this.panel_.showTryAgain();
 };
 
 mirosubs.finishfaildialog.Dialog.prototype.createDom = function() {
     mirosubs.finishfaildialog.Dialog.superClass_.createDom.call(this);
     if (goog.isDefAndNotNull(this.status_))
-        this.panel_ = new mirosubs.finishfaildialog.ErrorPanel();
+        this.panel_ = new mirosubs.finishfaildialog.ErrorPanel(this.logger_);
     else
-        this.panel_ = new mirosubs.finishfaildialog.CopyPanel();
+        this.panel_ = new mirosubs.finishfaildialog.ReattemptUploadPanel(
+            this.logger_, this.saveFn_);
     this.addChild(this.panel_, true);
 };
 

@@ -25,13 +25,71 @@ goog.provide('mirosubs.finishfaildialog.ReattemptUploadPanel');
 
 /**
  * @constructor
- * @param {function()} finishFn the function to call when we're finished.
- *     This means the dialog can be closed.
- * @param {function()} errorFn the function to call to switch to error mode.
+ * @param {mirosubs.subtitles.Logger} logger
+ * @param {function()} saveFn function to reattempt the sub save.
  */
-mirosubs.finishfaildialog.ReattemptUploadPanel = function(finishFn, errorFn) {
+mirosubs.finishfaildialog.ReattemptUploadPanel = function(logger, saveFn) {
     goog.ui.Component.call(this);
-    this.finishFn_ = finishFn;
-    this.errorFn_ = errorFn;
+    this.logger_ = logger;
+    this.saveFn_ = saveFn;
 };
 goog.inherits(mirosubs.finishfaildialog.ReattemptUploadPanel, goog.ui.Component);
+
+mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.createDom = function() {
+    mirosubs.finishfaildialog.ReattemptUploadPanel.superClass_.createDom.call(this);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.saveAgainLink_ = $d('a', {'href':'#'}, 'Try saving your subtitles again');
+    this.downloadLink_ = $d('a', {'href': '#'}, 'Download your subtitles to your computer');
+    this.logLink_ = $d('a', {'href': '#'}, 'subtitling log');
+    this.saveContainer_ = $d('p', null, this.saveAgainLink_);
+    goog.dom.append(
+        this.getElement(),
+        $d('p', null, 'We failed to save your subtitles. Don\'t worry, your work is not lost. We\'re not totally sure, but it looks like your network connection is not great.'),
+        this.saveContainer_,
+        $d('p', null, this.downloadLink_),
+        $d('p', null,
+           goog.dom.createTextNode('If you\'re pretty sure that this isn\'t because your network connection is bad, please send us your '),
+           this.logLink_,
+           goog.dom.createTextNode('.')));
+};
+
+mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.enterDocument = function() {
+    mirosubs.finishfaildialog.ReattemptUploadPanel.superClass_.enterDocument.call(this);
+    this.getHandler()
+        .listen(
+            this.saveAgainLink_, 'click',
+            this.saveAgainClicked_)
+        .listen(
+            this.downloadLink_, 'click',
+            this.downloadClicked_)
+        .listen(
+            this.logLink_, 'click',
+            this.logClicked_);
+};
+
+mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.saveAgainClicked_ = function(e) {
+    e.preventDefault();
+    this.saveContainer_.innerHTML = "Saving...";
+    this.saveFn_();
+};
+
+mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.downloadClicked_ = function(e) {
+    e.preventDefault();
+    mirosubs.finishfaildialog.CopyDialog.showForSubs(
+        this.logger_.getJsonSubs());
+};
+
+mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.logClicked_ = function(e) {
+    e.preventDefault();
+    mirosubs.finishfaildialog.CopyDialog.showForErrorLog(
+        this.logger_.getContents());
+};
+
+mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.showTryAgain = function() {
+    goog.dom.removeChildren(this.saveContainer_);
+    this.saveAgainLink_.innerHTML = "Try again.";
+    goog.dom.append(
+        this.saveContainer_,
+        goog.dom.createTextNode('Okay, that didn\'t work. '),
+        this.saveAgainLink_);
+};

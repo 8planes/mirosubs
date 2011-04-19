@@ -27,7 +27,8 @@ mirosubs.subtitle.Logger = function(draftPK) {
         draftPK];
     this.totalSize_ = 0;
     this.sizeExceeded_ = false;
-    this.logs_.push();
+    this.draftPK_ = draftPK;
+    this.jsonSubs_ = null;
 };
 
 mirosubs.subtitle.Logger.MAX_SIZE = 4 * 1024 * 1024; // 4 mb
@@ -50,7 +51,7 @@ mirosubs.subtitle.Logger.prototype.logSave =
             'time': mirosubs.dateString(),
             'packets': subIDPackets,
             'success': success,
-            'response': (opt_response || null) })
+            'response': (opt_response || null) });
         this.logs_.push(serialized);
         this.totalSize_ += serialized.length;
     }
@@ -61,4 +62,16 @@ mirosubs.subtitle.Logger.prototype.logSave =
 
 mirosubs.subtitle.Logger.prototype.getContents = function() {
     return this.logs_.join('\n');
+};
+
+mirosubs.subtitle.Logger.prototype.getDraftPK = function() {
+    return this.draftPK_;
+};
+
+mirosubs.subtitle.Logger.prototype.getJsonSubs = function() {
+    return this.jsonSubs_;
+};
+
+mirosubs.subtitle.Logger.prototype.setJsonSubs = function(subs) {
+    this.jsonSubs_ = subs;
 };

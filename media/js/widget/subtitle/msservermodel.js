@@ -112,6 +112,7 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
     var saveArgs = this.makeSaveArgs_();
     if (goog.isDefAndNotNull(opt_completed))
         saveArgs['completed'] = opt_completed;
+    this.logger_.setJsonSubs(jsonSubs);
     var subIDPackets = this.getSubIDPackets_();
     mirosubs.Rpc.call(
         'finished_subtitles', 

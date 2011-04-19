@@ -38,24 +38,71 @@ mirosubs.finishfaildialog.ErrorPanel.prototype.createDom = function() {
     this.errorReportContainer_ = $d('div', 'error-report');
     goog.dom.append(
         this.errorReportContainer_,
-        $d('Sending error report to server...'));
+        $d('p', null, 'Sending error report to server...'));
     this.downloadSubsLink_ = 
         $d('a', {'href': '#'}, 'Download your subtitles to save your work.');
+    this.downloadErrorReportLink_ =
+        $d('a', {'href': '#'}, 'Send error report.');
     goog.dom.append(
         this.getElement(),
         $d('p', null, 'We failed to save your subtitles. Don\'t worry, your work is not lost.'),
-        this.downloadSubsLink_);
+        this.errorReportContainer_,
+        $d('p', null, this.downloadSubsLink_));
     this.startUpload_();
 };
 
 mirosubs.finishfaildialog.ErrorPanel.prototype.enterDocument = function() {
     mirosubs.finishfaildialog.ErrorPanel.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.downloadSubsLink_, 'click',
-        this.downloadSubsClicked_);
+    this.getHandler()
+        .listen(
+            this.downloadSubsLink_, 'click',
+            this.downloadSubsClicked_)
+        .listen(
+            this.downloadErrorReportLink_, 'click',
+            this.sendErrorReportClicked_);
 };
 
 mirosubs.finishfaildialog.ErrorPanel.prototype.downloadSubsClicked_ = function(e) {
     e.preventDefault();
-    
+    mirosubs.finishfaildialog.CopyDialog.showForSubs(
+        this.logger_.getJsonSubs());
 };
+
+mirosubs.finishfaildialog.ErrorPanel.prototype.sendErrorReportClicked_ = function(e) {
+    e.preventDefault();
+    mirosubs.finishfaildialog.CopyDialog.showForErrorLog(
+        this.logger_.getContents());
+};
+
+mirosubs.finishfaildialog.ErrorPanel.prototype.startUpload_ = function() {
+    var that = this;
+    mirosubs.Rpc.call(
+        'log_session',
+        { 'draft_pk': this.logger_.getDraftPK(),
+          'log': this.logger_.getContents() },
+        function(response) {
+            that.uploadSucceeded_();
+        },
+        function() {
+            that.uploadFailed_();
+        });
+};
+
+mirosubs.finishfaildialog.ErrorPanel.prototype.uploadSucceeded_ = function() {
+    goog.dom.removeChildren(this.errorReportContainer_);
+    goog.dom.append(
+        this.errorReportContainer_,
+        this.getDomHelper().createDom(
+            'p', null, 'Error report successfully sent.'));
+};
+
+mirosubs.finishfaildialog.ErrorPanel.prototype.uploadFailed_ = function() {
+    goog.dom.removeChildren(this.errorReportContainer_);
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    goog.dom.append(
+        this.errorReportContainer_,
+        $d('p', null, 
+           'This is embarrassing. We weren\'t able to save the error report. It would really help out if you could email it to us.'),
+        $d('p', null, this.downloadErrorReportLink_));
+};
+
