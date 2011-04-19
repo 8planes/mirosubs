@@ -200,6 +200,14 @@ mirosubs.subtitle.EditableCaption.toJsonArray = function(editableCaptions) {
             return editableCaption.json;
         });
 };
+mirosubs.subtitle.EditableCaption.toIDArray = function(editableCaptions) {
+    return goog.array.map(
+        editableCaptions,
+        function(ec) {
+            return ec.getCaptionID();
+        });
+};
+
 
 /**
  * @constructor

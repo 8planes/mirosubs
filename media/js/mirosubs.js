@@ -91,6 +91,10 @@ mirosubs.languageNameForCode = function(code) {
     return mirosubs.languageMap_[code];
 };
 
+mirosubs.dateString = function() {
+    return new Date().toUTCString();
+};
+
 /**
  * Does not include trailing slash.
  */

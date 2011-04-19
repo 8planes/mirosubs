@@ -2420,6 +2420,10 @@ cursor:
    z-index: 2147483632 !important;
 }
 
+.mirosubs-modal-lang-content {
+   max-width: 400px;
+}
+
 .mirosubs-modal-lang, .mirosubs-forkdialog, .mirosubs-modal-completed {
    background-color: #fff !important;
 }

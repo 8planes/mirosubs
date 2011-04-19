@@ -97,6 +97,14 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
             that.setDropDownContentsInternal(dropDownContents);
             that.saved_ = true;
             that.setVisible(false);
+        },
+        function(logger, opt_status) {
+            if (that.finishFailDialog_)
+                that.finishFailDialog_.failedAgain(opt_status);
+            else
+                that.finishFailDialog_ = mirosubs.FinishFailDialog.show(
+                    logger, opt_status || null,
+                    goog.bind(that.saveWorkInternal, that, closeAfterSave));
         });
 };
 mirosubs.translate.Dialog.prototype.disposeInternal = function() {
