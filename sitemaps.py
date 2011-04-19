@@ -8,11 +8,30 @@ from django.template import loader
 from django.utils.encoding import smart_str
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.cache import cache
+from django.core import urlresolvers
+from django.contrib.sites.models import Site
 import datetime
 
 DEFAULT_CHANGEFREQ = "monthly"
 DEFAULT_PRIORITY = 0.6
 DEFAULT_LASTMOD = datetime.datetime(2011, 3, 1)
+
+def sitemap_index(request, sitemaps):
+    current_site = Site.objects.get_current()
+    sites = []
+    protocol = request.is_secure() and 'https' or 'http'
+    for section, site in sitemaps.items():
+        if callable(site):
+            pages = site().paginator.num_pages
+        else:
+            pages = site.paginator.num_pages
+        sitemap_url = urlresolvers.reverse(sitemap_view, kwargs={'section': section})
+        sites.append('%s://%s%s' % (protocol, current_site.domain, sitemap_url))
+        if pages > 1:
+            for page in range(2, pages+1):
+                sites.append('%s://%s%s?p=%s' % (protocol, current_site.domain, sitemap_url, page))
+    xml = loader.render_to_string('sitemap_index.xml', {'sitemaps': sites})
+    return HttpResponse(xml, mimetype='application/xml')
 
 def sitemap_view(request, sitemaps, section=None):
     maps, urls = [], []
