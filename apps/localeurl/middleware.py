@@ -1,7 +1,6 @@
 # Copyright (c) 2008 Joost Cassee
 # Licensed under the terms of the MIT License (see LICENSE.txt)
 
-import re
 from django.conf import settings
 import django.core.exceptions
 from django.http import HttpResponseRedirect
@@ -35,11 +34,7 @@ class LocaleURLMiddleware(object):
         if not settings.USE_I18N:
             raise django.core.exceptions.MiddlewareNotUsed()
 
-    def process_request(self, request):        
-        for regex in settings.LOCALE_INDEPENDENT_PATHS:
-            if re.match(regex, request.path_info):
-                return
-        
+    def process_request(self, request):                        
         locale, path = self.split_locale_from_request(request)
         locale_path = utils.locale_path(path, locale or translation.get_language_from_request(request) \
                                         or translation.get_language())
