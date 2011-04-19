@@ -89,12 +89,12 @@ class Video(models.Model):
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, null=True, blank=True)
-    followers = models.ManyToManyField(User, blank=True, related_name='followed_videos')
+    followers = models.ManyToManyField(User, blank=True, related_name='followed_videos', editable=False)
     complete_date = models.DateTimeField(null=True, blank=True, editable=False)
         
-    subtitles_fetched_count = models.IntegerField(default=0, db_index=True)
-    widget_views_count = models.IntegerField(default=0, db_index=True)
-    view_count = models.PositiveIntegerField(default=0, db_index=True)
+    subtitles_fetched_count = models.IntegerField(default=0, db_index=True, editable=False)
+    widget_views_count = models.IntegerField(default=0, db_index=True, editable=False)
+    view_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
     
     subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
     widget_views_counter = RedisSimpleField('video_id', changed_video_set)
@@ -102,7 +102,7 @@ class Video(models.Model):
 
     # Denormalizing the subtitles(had_version) count, in order to get faster joins
     # updated from update_languages_count()
-    languages_count = models.PositiveIntegerField(default=0, db_index=True)
+    languages_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
     
     def __unicode__(self):
         title = self.title_display()

@@ -27,8 +27,9 @@ config_register(EmailListValue(BASE_GROUP, 'alert_emails', description=_(u'Email
 
 class VideoAdmin(admin.ModelAdmin):
     actions = None
-    list_display = ['__unicode__', 'title', 'languages', 'video_thumbnail']
+    list_display = ['__unicode__', 'title', 'languages', 'languages_count', 'is_subtitled']
     search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
+    readonly_fields = ['subtitles_fetched_count', 'widget_views_count', 'view_count']
     
     def video_thumbnail(self, obj):
         return '<img width="50" height="50" src="%s"/>' % obj.get_small_thumbnail() 
