@@ -401,7 +401,9 @@ LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/widget'),
     re.compile('^/api'),
     re.compile('^/jstest'),
-    re.compile('^/profiles/router')
+    re.compile('^/profiles/router'),
+    re.compile('^/sitemap.*.xml'),
+    re.compile('^/crossos.xml'),
 )
 
 #Haystack configuration

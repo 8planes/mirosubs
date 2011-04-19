@@ -1,6 +1,7 @@
 # Copyright (c) 2008 Joost Cassee
 # Licensed under the terms of the MIT License (see LICENSE.txt)
 
+import re
 from django.conf import settings
 import django.core.exceptions
 from django.http import HttpResponseRedirect
@@ -11,8 +12,6 @@ from localeurl import utils
 # Make sure the default language is in the list of supported languages
 assert utils.supported_language(settings.LANGUAGE_CODE) is not None, \
         "Please ensure that settings.LANGUAGE_CODE is in settings.LANGUAGES."
-
-IGNORE = ['/sitemap.xml', '/crossdomain.xml']
 
 class LocaleURLMiddleware(object):
     """
@@ -36,9 +35,10 @@ class LocaleURLMiddleware(object):
         if not settings.USE_I18N:
             raise django.core.exceptions.MiddlewareNotUsed()
 
-    def process_request(self, request):
-        if request.path_info in IGNORE:
-            return
+    def process_request(self, request):        
+        for regex in settings.LOCALE_INDEPENDENT_PATHS:
+            if re.match(regex, request.path_info):
+                return
         
         locale, path = self.split_locale_from_request(request)
         locale_path = utils.locale_path(path, locale or translation.get_language_from_request(request) \
