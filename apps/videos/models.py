@@ -318,7 +318,10 @@ class Video(models.Model):
         if language_pk is None:
             language = self.subtitle_language(language_code)
         else:
-            language = self.subtitlelanguage_set.filter(pk=language_pk)
+            try:
+                language = self.subtitlelanguage_set.get(pk=language_pk)
+            except models.ObjectDoesNotExist:
+                language = None
         version = self.version(version_no, language)
         if version:
             return version.subtitles()

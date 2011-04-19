@@ -112,8 +112,8 @@ class SubtitleHandler(BaseHandler):
         Return subtitles for video.
         
         Send in request:
-        <b>video url:</b> video_url
-        <b>video id:</b> video_id
+        <b>video_url:</b> video url
+        <b>video_id:</b> video id
         <b>language:</b> language of video
         <b>language_id:</b> id of language, you can get this from AnonymousSubtitleLanguages
         <b>revision:</b> revision of subtitles
