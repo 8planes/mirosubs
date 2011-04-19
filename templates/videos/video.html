@@ -61,7 +61,7 @@
                 return false;
             });
 
-            $('#add_translation').click(function() {
+            $('.add-translation-behavior').click(function() {
                 widget_widget_div.selectMenuItem(
                     mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
                 return false;
@@ -129,7 +129,7 @@
             {% trans 'Add Subtitles' %}
         </a>
       {% else %}  
-         <a class="green_button small" id="add_translation" href="#">{% trans 'Add Translation' %}</a>     
+         <a class="green_button small" id="add_translation add-translation-behavior"  href="#">{% trans 'Add Translation' %}</a>     
       {% endif %}
 
       {% upload_subtitles video %}

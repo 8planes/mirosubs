@@ -142,7 +142,7 @@
         <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
         {% include 'videos/_left_navigation.html' %}
     </ul>
-    <a class="green_button small" id="add_translation" class="add-translation-behavior" href="#">{% trans 'Add Translation' %}</a>
+    <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
     {% upload_subtitles video %}
     {% team_add_video_select %}
   </div>
