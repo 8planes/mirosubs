@@ -72,6 +72,7 @@ mirosubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSt
     mirosubs.style.showElement(
         this.improveSubtitlesLink_,
         subtitleState != null);
+    goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = this.createDownloadSRTURL_();
 };
 
 mirosubs.widget.DropDown.prototype.createDom = function() {
@@ -158,15 +159,17 @@ mirosubs.widget.DropDown.prototype.createSubtitleHomepageURL_ = function() {
     return mirosubs.getSubtitleHomepageURL(this.videoID_);
 };
 
-mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function() {
-    var url = [mirosubs.siteURL(),
-               "/widget/download_",
-               (mirosubs.IS_NULL ? "null_" : ""),
-               "srt/?video_id=",
-               this.videoID_].join('');
-    if (this.subtitleState_ && this.subtitleState_.LANGUAGE)
-        url += ['&lang_code=', this.subtitleState_.LANGUAGE].join('');
-    return url;
+mirosubs.widget.DropDown.prototype.createDownloadSRTURL_ = function(lang_pk) {
+    var uri = new goog.Uri(mirosubs.siteURL());
+    uri.setPath("/widget/download_" + 
+               (mirosubs.IS_NULL ? "null_" : "") + "srt/");
+    uri.setParameterValue("video_id", this.videoID_);               
+
+    if (this.subtitleState_ && this.subtitleState_.LANGUAGE_PK){
+       uri.setParameterValue('lang_pk', this.subtitleState_.LANGUAGE_PK); 
+    }
+       
+    return uri.toString();
 };
 
 mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
@@ -308,8 +311,10 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         window.open(mirosubs.siteURL() + '/profiles/mine');
     else if (type == s.SUBTITLE_HOMEPAGE)
         window.location.replace(goog.dom.getFirstElementChild(this.subtitleHomepageLink_).href);
-    else if (type == s.DOWNLOAD_SUBTITLES)
+    else if (type == s.DOWNLOAD_SUBTITLES){
         window.open(goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href);
+    }
+        
     else if (type == s.ADD_LANGUAGE || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
         this.dispatchEvent(type);
     else
@@ -322,11 +327,12 @@ mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, langPK
     if (e){
         e.preventDefault();        
     }
-
     this.dispatchLanguageSelection_(langCode, langPK);
+    goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = this.createDownloadSRTURL_();
 };
 
 mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode, langPK) {
+    
     this.dispatchEvent(
         new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode, langPK));
     this.currentLang_ = langCode;

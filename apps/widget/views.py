@@ -167,7 +167,7 @@ def base_widget_params(request, extra_params={}):
 def download_subtitles(request, handler=SSASubtitles):
     #FIXME: use GenerateSubtitlesHandler
     video_id = request.GET.get('video_id')
-    lang_code = request.GET.get('lang_code')
+    lang_code = request.GET.get('lang_pk')
     
     if not video_id:
         #if video_id == None, Video.objects.get raise exception. Better show 404
@@ -178,7 +178,7 @@ def download_subtitles(request, handler=SSASubtitles):
     
     subtitles = []
     
-    language = video.subtitle_language(lang_code)
+    language = video.subtitlelanguage_set.get(pk=lang_code)
     if not language:
         raise Http404
     
