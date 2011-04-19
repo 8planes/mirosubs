@@ -60,7 +60,8 @@ def dev(username):
                 'www/universalsubtitles.dev', 'dev', 
                 '/etc/init.d/memcached restart', 
                 None,
-                False)
+                False,
+                celeryd_bounce_cmd="/etc/init.d/celeryd.dev restart")
 
 def unisubs(username):
     _create_env(username,
