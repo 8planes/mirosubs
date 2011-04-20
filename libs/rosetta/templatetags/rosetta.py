@@ -40,7 +40,7 @@ gt=register.filter(gt)
 def do_incr(parser, token):
     args = token.split_contents()
     if len(args) < 2:
-        raise TemplateSyntaxError("'incr' tag requires at least one argument")
+        raise template.TemplateSyntaxError("'incr' tag requires at least one argument")
     name = args[1]
     if not hasattr(parser, '_namedIncrNodes'):
         parser._namedIncrNodes = {}

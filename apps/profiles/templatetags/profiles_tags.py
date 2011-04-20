@@ -25,15 +25,18 @@
 from django import template
 from videos.models import Action
 from django.conf import settings
-from videos.models import Video
 from auth.models import CustomUser as User
-from django.db.models import Q
 from profiles.forms import SelectLanguageForm
-from utils.translation import languages_from_request, get_user_languages_from_request, get_user_languages_from_cookie
+from utils.translation import get_user_languages_from_request, get_user_languages_from_cookie
+from rosetta.views import can_translate as can_translate_func
 
 register = template.Library()
 
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
+
+@register.filter
+def can_translate(user):
+    return can_translate_func(user)
 
 @register.inclusion_tag('profiles/_require_email_dialog.html', takes_context=True)
 def require_email_dialog(context):

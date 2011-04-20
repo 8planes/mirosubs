@@ -103,11 +103,16 @@
         {% messages %}
     {% endif %}
     
-    {% if user.is_staff %}
+    {% if user.is_staff or user|can_translate %}
     <div id="admin_controls">
+      {% if user.is_staff %}
       <a target="_blank" href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a>
+      {% endif %}
       {% if user.is_superuser %}
       <a target="_blank" href="{% url sentry %}"><span>{% trans 'Sentry' %}</span></a>
+      {% endif %}
+      {% if user|can_translate %}
+      <a target="_blank" href="{% url rosetta-pick-file %}"><span>{% trans 'Rosetta' %}</span></a>
       {% endif %}
     </div><!-- // admin_controls -->
     {% endif %}
