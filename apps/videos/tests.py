@@ -732,7 +732,7 @@ class ViewsTest(WebUseTest):
         final_num_subs = len(last_v.subtitles())
         self.assertEqual(final_num_subs, num_subs)
         lang_subs = SubtitleLanguage.objects.get(pk=lang.pk)
-        self.assertEqual( last_v.language.subtitle_count , num_subs)
+        self.assertEqual( lang_subs.subtitle_count , num_subs)
         
     def test_diffing(self):
         version = self.video.version(0)
