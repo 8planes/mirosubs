@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+class WidgetDialogLog(models.Model):
+    date_saved = models.DateTimeField(auto_now_add=True)
+    draft_pk = models.IntegerField()
+    log = models.TextField()

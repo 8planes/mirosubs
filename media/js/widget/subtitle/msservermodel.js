@@ -156,7 +156,7 @@ mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback, opt
                 alert('Problem saving subtitles. Response: ' + 
                       result['response']);
                 that.logger_.logSave(
-                    subIDPackets, false, response);
+                    subIDPackets, false, result['response']);
             }
             else {
                 that.logger_.logSave(subIDPackets, true);
@@ -207,11 +207,14 @@ mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
             subIDPacket: subIDPacket
         });
     }
-    return {
+    var args = {
         'draft_pk': this.draftPK_,
         'packets': goog.array.map(
             this.unsavedPackets_, function(p) { return p.packet; })
     };
+    if (window['UNISUBS_THROW_EXCEPTION'])
+        args['throw_exception'] = true;
+    return args;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {

@@ -30,6 +30,7 @@ from widget import video_cache
 from statistic import widget_views_total_counter
 from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
+from uslogging.models import WidgetDialogLog
 
 ALL_LANGUAGES = settings.ALL_LANGUAGES
 LANGUAGES_MAP = dict(ALL_LANGUAGES)
@@ -46,8 +47,10 @@ def add_general_settings(request, dict):
 
 class Rpc(BaseRpc):
     def log_session(self, request, draft_pk, log):
-        print(log)
-        raise Exception('whattt')
+        dialog_log = WidgetDialogLog(
+            draft_pk=draft_pk,
+            log=log)
+        dialog_log.save()
         return { 'response': 'ok' }
 
     def show_widget(self, request, video_url, is_remote, base_state=None, additional_video_urls=None):
@@ -260,7 +263,7 @@ class Rpc(BaseRpc):
         return {"response" : "ok", 
                 "last_saved_packet": draft.last_saved_packet}
 
-    def finished_subtitles(self, request, draft_pk, packets, completed=None):
+    def finished_subtitles(self, request, draft_pk, packets, completed=None, throw_exception=False):
         draft = models.SubtitleDraft.objects.get(pk=draft_pk)
         if not request.user.is_authenticated():
             return { 'response': 'not_logged_in' }
@@ -268,6 +271,9 @@ class Rpc(BaseRpc):
             return { "response" : "unlockable" }
         if not draft.matches_request(request):
             return { "response" : "does not match request" }
+
+        if throw_exception:
+            raise Exception('purposeful exception for testing')
 
         self._save_packets(draft, packets)
 
