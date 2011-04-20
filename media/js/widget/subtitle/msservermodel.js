@@ -91,7 +91,7 @@ mirosubs.subtitle.MSServerModel.prototype.checkLoggedIn_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getSubIDPackets_ = function() {
-    goog.array.map(
+    return goog.array.map(
         this.unsavedPackets_, function(p) { return p.subIDPacket; });
 };
 

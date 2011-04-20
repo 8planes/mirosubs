@@ -54,7 +54,8 @@ mirosubs.finishfaildialog.Dialog.show = function(logger, status, saveFn) {
  *     if huge potentially weird server failure.
  */
 mirosubs.finishfaildialog.Dialog.prototype.failedAgain = function(status) {
-    if (goog.isDefAndNotNull(status)) {
+    console.log(status);
+    if (status) {
         // it's a real error.
         this.removeChild(this.panel_, true);
         this.panel_ = new mirosubs.finishfaildialog.ErrorPanel(this.logger_);
@@ -66,7 +67,7 @@ mirosubs.finishfaildialog.Dialog.prototype.failedAgain = function(status) {
 
 mirosubs.finishfaildialog.Dialog.prototype.createDom = function() {
     mirosubs.finishfaildialog.Dialog.superClass_.createDom.call(this);
-    if (goog.isDefAndNotNull(this.status_))
+    if (this.status_)
         this.panel_ = new mirosubs.finishfaildialog.ErrorPanel(this.logger_);
     else
         this.panel_ = new mirosubs.finishfaildialog.ReattemptUploadPanel(

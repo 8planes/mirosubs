@@ -93,6 +93,10 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
     this.serverModel_.finish(
         this.translationPanel_.makeJsonSubs(),
         function(dropDownContents) {
+            if (that.finishFailDialog_) {
+                that.finishFailDialog_.setVisible(false);
+                that.finishFailDialog_ = null;
+            }
             that.getRightPanelInternal().showLoading(false);
             that.setDropDownContentsInternal(dropDownContents);
             that.saved_ = true;
@@ -103,7 +107,7 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
                 that.finishFailDialog_.failedAgain(opt_status);
             else
                 that.finishFailDialog_ = mirosubs.FinishFailDialog.show(
-                    logger, opt_status || null,
+                    logger, opt_status,
                     goog.bind(that.saveWorkInternal, that, closeAfterSave));
         });
 };

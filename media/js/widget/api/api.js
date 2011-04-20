@@ -126,45 +126,8 @@ mirosubs.api.openUnisubsDialog = function(videoURL) {
         });
 };
 
-mirosubs.api.toSRT = function(jsonSubs) {
-    var stringBuffer = new goog.string.StringBuffer();
-    for (var i = 0; i < jsonSubs.length; i++)
-        mirosubs.api.subToSrt_(jsonSubs[i], i, stringBuffer);
-    return stringBuffer.toString();
-};
-
 mirosubs.api.loggedIn = function(username) {
     mirosubs.loggedIn(username);
-};
-
-mirosubs.api.subToSrt_ = function(sub, index, stringBuffer) {
-    stringBuffer.
-        append(index + 1).
-        append("\n");
-    mirosubs.api.writeSrtTimeLine_(sub, stringBuffer);
-    stringBuffer.
-        append(sub['text']).
-        append("\n\n");
-};
-
-mirosubs.api.writeSrtTimeLine_ = function(sub, stringBuffer) {
-    mirosubs.api.writeSrtTime_(sub['start_time'], stringBuffer);
-    stringBuffer.append(' --> ');
-    mirosubs.api.writeSrtTime_(sub['end_time'], stringBuffer);
-    stringBuffer.append('\n');
-};
-
-mirosubs.api.writeSrtTime_ = function(seconds, stringBuffer) {
-    var secondsInt = Math.floor(seconds);
-    var p = goog.string.padNumber;
-    stringBuffer.
-        append(p(Math.floor(secondsInt / 3600) % 60, 2)).
-        append(':').
-        append(p(Math.floor(secondsInt / 60) % 60, 2)).
-        append(':').
-        append(p(secondsInt % 60, 2)).
-        append(',').
-        append(p(Math.floor(seconds * 1000) % 1000, 3));
 };
 
 mirosubs.api.embed = function(elementID, widgetConfig) {
@@ -189,10 +152,9 @@ goog.exportSymbol(
     'mirosubs.api.openUnisubsDialogOnsite',
     mirosubs.api.openUnisubsDialogOnsite);
 
-
 goog.exportSymbol(
     'mirosubs.api.toSRT',
-    mirosubs.api.toSRT);
+    mirosubs.SRTWriter.toSRT);
 
 goog.exportSymbol(
     'mirosubs.api.loggedIn',

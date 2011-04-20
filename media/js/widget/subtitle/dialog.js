@@ -272,6 +272,10 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
         function(dropDownContents) {
             that.saved_ = true;
             that.setDropDownContentsInternal(dropDownContents);
+            if (that.finishFailDialog_) {
+                that.finishFailDialog_.setVisible(false);
+                that.finishFailDialog_ = null;
+            }
             if (closeAfterSave)
                 that.setVisible(false);
             else {
@@ -283,8 +287,8 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
             if (that.finishFailDialog_)
                 that.finishFailDialog_.failedAgain(opt_status);
             else
-                that.finishFailDialog_ = mirosubs.FinishFailDialog.show(
-                    logger, opt_status || null,
+                that.finishFailDialog_ = mirosubs.finishfaildialog.Dialog.show(
+                    logger, opt_status,
                     goog.bind(that.saveWorkImpl_, that, 
                               closeAfterSave, isComplete));
         },
