@@ -44,6 +44,26 @@ class ViewsTest(WebUseTest):
     
     fixtures = ['test.json']
     
+    def test_video_read(self):
+        self._make_objects()
+        
+        youtube_id = '066bLRRPQx8'
+        video_url = 'http://www.youtube.com/watch?v=%s' % youtube_id
+        
+        data = {
+            'video_url': video_url
+        }
+        url = reverse("api:0.1:video_handler")
+        response = self.client.get(url, data=data)
+        self.assertEqual(response.status_code, 401)
+        
+        data.update(**self.auth) 
+        response = self.client.get(url, data=data)
+        self.assertEqual(response.status_code, 200)
+        video = Video.objects.get(videourl__videoid=youtube_id, videourl__type=VIDEO_TYPE_YOUTUBE)
+        self.assertEqual(video.user, self.user)
+        self.user = User.objects.get(id=self.user.id)
+        
     def test_subtitles(self):
         youtube_id = 'uYT84jZDPE0'
         
