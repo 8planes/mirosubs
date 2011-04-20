@@ -34,7 +34,7 @@ mirosubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(mirosubs.translat
  * Maximum length of text to translate
  * @type {number}
  */
-mirosubs.translate.GoogleTranslator.queryMaxLen = 1300;
+mirosubs.translate.GoogleTranslator.queryMaxLen = 1000;
 
 /**
  * Delimiter for stings to translate
@@ -65,7 +65,7 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
         'langpair': fromLang+'|'+toLang
     }, callback, function() {
         //TODO: show pretty error
-        alert('Translating service is unavailable. Try later.');
+        //Translating service is unavailable. Try later.
     });
 };
 

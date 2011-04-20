@@ -113,11 +113,11 @@
 
 {% block title %}
     {% if language.is_original %}
-        {% blocktrans with video.title_display as title %}
+        {% blocktrans with language.get_title_display as title %}
             {{ title }} with subtitles | Universal Subtitles
         {% endblocktrans %}
     {% else %}
-        {% blocktrans with video.title_display as title and language.get_language_display as language %}
+        {% blocktrans with language.get_title_display as title and language.get_language_display as language %}
             {{ title }} with {{ language }} subtitles | Universal Subtitles
         {% endblocktrans %}
     {% endif %}
