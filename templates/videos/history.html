@@ -187,7 +187,7 @@
 
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
-            <a href="{{edit_url}}" class="blue_button small {% if not has_subtitles  %}add-translation-behavior{% endif %}">{% if not has_subtitles%}{% trans 'Add Translation' %}{% else %}{% trans 'Edit Subtitles' %}{% endif %}</a> 
+            <a href="{{edit_url}}" class="blue_button small {% if not video.is_subtitled  %}add-translation-behavior{% endif %}">{% if not video.is_subtitled %}{% trans 'Add Translation' %}{% else %}{% trans 'Edit Subtitles' %}{% endif %}</a> 
             {% paste_transcription %}            
             <div class="clear">&nbsp;</div>
           </div>

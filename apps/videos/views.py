@@ -358,7 +358,6 @@ def history(request, video_id, lang=None, lang_id=None):
     context['widget_params'] = _widget_params(request, video, version_no=None, language=language)
     context['language'] = language
     context['edit_url'] = language.get_widget_url()
-    context['has_subtitles'] = bool(video.subtitle_language()) or len(translations) > 0
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
