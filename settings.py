@@ -364,6 +364,7 @@ INSTALLED_APPS = (
     'videos',
     'teams',
     'widget',
+    'uslogging',
     'south',
     'haystack',
     'comments',

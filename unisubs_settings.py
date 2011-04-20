@@ -67,8 +67,8 @@ elif INSTALLATION == PRODUCTION:
     )
 
 if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
-    SENTRY_DATABASE = {
-        'sentry': {
+    uslogging_db = {
+        'uslogging': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': SENTRY_DATABASE_NAME,
             'USER': SENTRY_DATABASE_USER,
@@ -77,10 +77,10 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
             'PORT': '3306'
             }
         }
-    SENTRY_DATABASE_USING = 'sentry'
-    DATABASE_ROUTERS = ['sentry.routers.SentryRouter']
+    USLOGGING_DATABASE = 'uslogging'
+    DATABASE_ROUTERS = ['routers.UnisubsRouter']
 else:
-    SENTRY_DATABASE = {}
+    uslogging_db = {}
 
 IGNORE_REDIS = True
 
@@ -97,7 +97,7 @@ DATABASES = {
         }
     }
 
-DATABASES.update(SENTRY_DATABASE)
+DATABASES.update(uslogging_db)
 
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 

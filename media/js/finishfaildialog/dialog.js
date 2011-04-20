@@ -54,7 +54,6 @@ mirosubs.finishfaildialog.Dialog.show = function(logger, status, saveFn) {
  *     if huge potentially weird server failure.
  */
 mirosubs.finishfaildialog.Dialog.prototype.failedAgain = function(status) {
-    console.log(status);
     if (status) {
         // it's a real error.
         this.removeChild(this.panel_, true);

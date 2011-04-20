@@ -278,3 +278,4 @@ def jsonp(request, method_name, null=False):
     return HttpResponse(
         "{0}({1});".format(callback, json.dumps(result)),
         "text/javascript")
+
