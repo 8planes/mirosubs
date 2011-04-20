@@ -1,7 +1,7 @@
 from django.conf import settings
 
 # Number of messages to display per page.
-MESSAGES_PER_PAGE = getattr(settings,'ROSETTA_MESSAGES_PER_PAGE',10)
+MESSAGES_PER_PAGE = getattr(settings,'ROSETTA_MESSAGES_PER_PAGE',20)
 
 
 # Enable Google translation suggestions

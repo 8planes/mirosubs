@@ -47,6 +47,10 @@ def home(request):
         rosetta_i18n_lang_code = request.session['rosetta_i18n_lang_code']
         rosetta_i18n_lang_bidi = rosetta_i18n_lang_code.split('-')[0] in settings.LANGUAGES_BIDI
         rosetta_i18n_write = request.session.get('rosetta_i18n_write', True)
+        
+        #turn off writing files for now
+        rosetta_i18n_write = False
+        
         if rosetta_i18n_write:
             rosetta_i18n_pofile = pofile(rosetta_i18n_fn)
             for entry in rosetta_i18n_pofile:
@@ -198,6 +202,7 @@ def home(request):
         else:
             page = 1
         messages = paginator.page(page).object_list
+
         if rosetta_settings.MAIN_LANGUAGE and rosetta_settings.MAIN_LANGUAGE != rosetta_i18n_lang_code:
 
             main_language = None
@@ -347,12 +352,18 @@ def lang_sel(request,langid,idx):
             request.session['rosetta_i18n_write'] = True
         except OSError:
             request.session['rosetta_i18n_write'] = False
-            
+
         return HttpResponseRedirect(reverse('rosetta-home'))
 lang_sel=user_passes_test(lambda user:can_translate(user),settings.LOGIN_URL)(lang_sel)
 lang_sel=never_cache(lang_sel)
 
 def can_translate(user):
+    INSTALATION = getattr(settings, 'INSTALLATION', None)
+    DEV = getattr(settings, 'DEV', None)
+    
+    if INSTALATION != DEV:
+        return False
+    
     if not user.is_authenticated():
         return False
     elif user.is_superuser and user.is_staff:

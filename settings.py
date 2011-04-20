@@ -491,3 +491,9 @@ THUMBNAILS_SIZE = (
 EMAIL_BCC_LIST = []
 
 CACHE_BACKEND = 'locmem://'
+
+ROSETTA_EXCLUDED_APPLICATIONS = (
+    'livesettings',
+    'openid_consumer',
+    'rosetta'
+)
