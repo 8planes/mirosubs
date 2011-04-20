@@ -178,7 +178,6 @@ class Rpc(BaseRpc):
 
         draft = self._get_draft_for_editing(
             request, language, base_language)
-        self._log_call('start_editing', locals())
         subtitles = self._subtitles_dict(draft)
         return_dict = { "can_edit" : True,
                         "draft_pk" : draft.pk,
