@@ -28,7 +28,7 @@ from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguagePair, TeamVideoLanguage
 from django.shortcuts import get_object_or_404, redirect, render_to_response
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -49,6 +49,7 @@ from utils.multy_query_set import TeamMultyQuerySet
 from teams.rpc import TeamsApi
 from utils.orm import LoadRelatedQuerySet
 from widget.rpc import add_general_settings
+from django.contrib.admin.views.decorators import staff_member_required
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -61,7 +62,7 @@ ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 20)
 DEV = getattr(settings, 'DEV', False)
 DEV_OR_STAGING = DEV or getattr(settings, 'STAGING', False)
 
-@user_passes_test(lambda u: u.is_staff, login_url='/auth/login/')
+@staff_member_required
 def index(request, my_teams=False):
     q = request.REQUEST.get('q')
     
