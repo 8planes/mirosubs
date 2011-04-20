@@ -30,7 +30,6 @@ class VideoHandler(BaseHandler):
     API handler for Video.
     """
     
-    anonymous = 'AnonymousVideoHandler'
     allowed_methods = ('GET',)
     fields = ('title', 'description', 'video_id', 'thumbnail', 'created', 
               'allow_community_edits', 'allow_video_urls_edit', 'homepage', 
@@ -58,10 +57,10 @@ class VideoHandler(BaseHandler):
     def read(self, request, video_id=None):
         """
         Get video by video_id(JVoMAa3kaWzq)
-        <em>curl "http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/"</em>
+        <em>curl "http://127.0.0.1:8000/api/1.0/video/JVoMAa3kaWzq/?username=admin&password=admin"</em>
         
         Get video by url. It will be created if does not exist.
-        Authentication is not required. If video does not exist and you are 
+        Authentication IS required. If video does not exist and you are 
         authenticated - you will be saved as creator for this video.
         <em>curl "http://127.0.0.1:8000/api/1.0/video/?username=admin&password=admin" -d 'video_url=http://www.youtube.com/watch?v=oOOve811tMY' -G</em>
         
@@ -78,7 +77,7 @@ class VideoHandler(BaseHandler):
                 pass
         else:
             video = request.form.save()
-            if request.form.created and request.user.is_authenticated():
+            if request.form.created:
                 video.user = request.user
                 video.save()
 
@@ -98,9 +97,6 @@ class VideoHandler(BaseHandler):
             return rc.NOT_FOUND
         
         return video
-
-class AnonymousVideoHandler(VideoHandler, AnonymousBaseHandler):
-    pass
 
 class SubtitleHandler(BaseHandler):
     
@@ -185,6 +181,7 @@ class SubtitleHandler(BaseHandler):
         
         <em>curl "http://127.0.0.1:8000/api/1.0/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=ru' -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atest'</em>
         """
+        print request.user
         request.form.save()
         return rc.ALL_OK
   

@@ -102,6 +102,7 @@ ALL_LANGUAGES['si'] = gettext_noop(u'Sinhala')
 ALL_LANGUAGES['zh'] = gettext_noop(u'Chinese, Yue')
 ALL_LANGUAGES['oc'] = gettext_noop(u'Occitan')
 ALL_LANGUAGES['ht'] = gettext_noop(u'Creole, Haitian')
+ALL_LANGUAGES['ne'] = gettext_noop(u'Nepali')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -378,6 +379,7 @@ INSTALLED_APPS = (
     'sentry',
     'sentry.client',
     'djcelery',
+    'rosetta',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
@@ -491,3 +493,9 @@ THUMBNAILS_SIZE = (
 EMAIL_BCC_LIST = []
 
 CACHE_BACKEND = 'locmem://'
+
+ROSETTA_EXCLUDED_APPLICATIONS = (
+    'livesettings',
+    'openid_consumer',
+    'rosetta'
+)

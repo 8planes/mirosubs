@@ -69,14 +69,19 @@
     </script>
 </head>
 <body>
+{% if user.is_staff or user|can_translate %}
+<div id="admin_controls">
   {% if user.is_staff %}
-  <div id="admin_controls">
-    <a target="_blank" href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a>
-    {% if user.is_superuser %}
-    <a target="_blank" href="{% url sentry %}"><span>{% trans 'Sentry' %}</span></a>
-    {% endif %}
-  </div><!-- // admin_controls -->
+  <a target="_blank" href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a>
   {% endif %}
+  {% if user.is_superuser %}
+  <a target="_blank" href="{% url sentry %}"><span>{% trans 'Sentry' %}</span></a>
+  {% endif %}
+  {% if user|can_translate %}
+  <a target="_blank" href="{% url rosetta-pick-file %}"><span>{% trans 'Rosetta' %}</span></a>
+  {% endif %}
+</div><!-- // admin_controls -->
+{% endif %}
 <a href="#" class="feedback_tab" data-modal="feedback_container">{% trans "Feedback" %}</a>
   
 {% announcement %}

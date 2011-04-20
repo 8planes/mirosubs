@@ -26,3 +26,10 @@
     valid_email: false
   model: auth.customuser
   pk: 10000
+
+- fields:
+    name: translators
+    permissions: []
+  model: auth.group
+  pk: 1
+  

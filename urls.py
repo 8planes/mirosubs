@@ -32,7 +32,6 @@ js_info_dict = {
 
 urlpatterns = patterns(
     '',
-
     (r'^crossdomain.xml$', 'crossdomain_views.root_crossdomain'),
     url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_i18n_catalog'),
     (r'^$', 'videos.views.index'),
@@ -40,6 +39,7 @@ urlpatterns = patterns(
     (r'^sentry/', include('sentry.urls')),
     (r'^comments/', include('comments.urls', namespace='comments')),
     (r'^messages/', include('messages.urls', namespace='messages')),
+    url(r'^rosetta/', include('rosetta.urls')),
     (r'^pcf-targetter/', include('targetter.urls', namespace='targetter')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
     url(r'^admin/password_reset/$', 
