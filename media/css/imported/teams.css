@@ -164,10 +164,18 @@ a.add_subtitles_bt{
 }
 
 .team-video-buttons-container{
-    margin-top:10px !important;
     float: left;
 }
 .team-video-buttons-container a.blue_button_small{ 
     margin-right: 4px !important;
 
+}
+
+.team-detail-list-description{
+    display:block;
+    with: 400px;
+}
+
+.team-video-buttons-container .blue_button{
+    margin-right: 4px !important;
 }

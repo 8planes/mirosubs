@@ -8,7 +8,13 @@
       <div  class="completed_translations">{% team_video_lang_list team_video.video %}</div>
     </div>
     <p></p>
+        {% if team_video.description %}
+    <p class="team-detail-list-description">
+      {{ team_video.description|urlize }}
+    </p>
+    {% endif %}
     <div class="clearfix"></div>
+
     <div class="team-video-buttons-container">
 
 
@@ -20,11 +26,7 @@
     {% if can_edit_video %}
       <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
       {% endif %}
-    {% if team_video.description %}
-    <p>
-      {{ team_video.description|urlize }}
-    </p>
-    {% endif %}
+
 
     </div>
 </div><!-- // info -->
