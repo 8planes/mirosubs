@@ -89,7 +89,7 @@ import codecs
 class BaseSubtitles(object):
     file_type = ''
     
-    def __init__(self, subtitles, video, line_delimiter=u'\n'):
+    def __init__(self, subtitles, video, sl, line_delimiter=u'\n'):
         """
         Use video for extra data in subtitles like Title
         Subtitles is list of {'text': 'text', 'start': 'seconds', 'end': 'seconds'}
@@ -97,7 +97,8 @@ class BaseSubtitles(object):
         self.subtitles = subtitles
         self.video = video
         self.line_delimiter = line_delimiter
-    
+        self.sl = sl
+        
     def __unicode__(self):
         raise Exception('Should return subtitles')
 
@@ -111,7 +112,7 @@ GenerateSubtitlesHandler = GenerateSubtitlesHandlerClass()
 class SRTSubtitles(BaseSubtitles):
     file_type = 'srt'
 
-    def __init__(self, subtitles, video, line_delimiter=u'\r\n'):
+    def __init__(self, subtitles, video, sl, line_delimiter=u'\r\n'):
         super(SRTSubtitles, self).__init__(subtitles, video, line_delimiter)
 
     def __unicode__(self):
@@ -144,7 +145,7 @@ GenerateSubtitlesHandler.register(SRTSubtitles)
 class SBVSubtitles(BaseSubtitles):
     file_type = 'sbv'
 
-    def __init__(self, subtitles, video, line_delimiter=u'\r\n'):
+    def __init__(self, subtitles, video, sl, line_delimiter=u'\r\n'):
         super(SBVSubtitles, self).__init__(subtitles, video, line_delimiter)
 
     def __unicode__(self):
@@ -174,7 +175,7 @@ GenerateSubtitlesHandler.register(SBVSubtitles)
 class TXTSubtitles(BaseSubtitles):
     file_type = 'txt'
 
-    def __init__(self, subtitles, video, line_delimiter=u'\r\n\r\n'):
+    def __init__(self, subtitles, video, sl, line_delimiter=u'\r\n\r\n'):
         super(TXTSubtitles, self).__init__(subtitles, video, line_delimiter)
         
     def __unicode__(self):
@@ -195,7 +196,7 @@ class SSASubtitles(BaseSubtitles):
     
     def _start(self):
         ld = self.line_delimiter
-        return u'[Script Info]%sTitle: %s%s' % (ld, self.video.__unicode__(), ld)
+        return u'[Script Info]%sTitle: %s%s' % (ld, self.sl.get_title_display(), ld)
     
     def _end(self):
         return u''

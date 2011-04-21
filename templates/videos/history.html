@@ -124,7 +124,7 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ language.get_title }}</a></h2>
+    <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ language.get_title_display }}</a></h2>
 
     <div class="left_column">
         {% widget widget_params %}
