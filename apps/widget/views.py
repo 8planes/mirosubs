@@ -34,7 +34,6 @@ from widget.null_rpc import NullRpc
 from django.utils.encoding import iri_to_uri, DjangoUnicodeDecodeError
 from django.db.models import ObjectDoesNotExist
 from uslogging.models import WidgetDialogCall
-from celery.decorators import task
 
 rpc_views = Rpc()
 null_rpc_views = NullRpc()
@@ -236,8 +235,7 @@ def _is_loggable(method):
 def rpc(request, method_name, null=False):
     if method_name[:1] == '_':
         return HttpResponseServerError('cant call private method')
-    if _is_loggable(method_name):
-        _log_call.delay(request.browser_id, method_name, request.POST.copy())
+    _log_call(request.browser_id, method_name, request.POST.copy())
     args = { 'request': request }
     try:
         for k, v in request.POST.items():
@@ -260,8 +258,7 @@ def rpc(request, method_name, null=False):
 
 @csrf_exempt
 def xd_rpc(request, method_name, null=False):
-    if _is_loggable(method_name):
-        _log_call.delay(request.browser_id, method_name, request.POST.copy())
+    _log_call(request.browser_id, method_name, request.POST.copy())
     args = { 'request' : request }
     for k, v in request.POST.items():
         if k[0:4] == 'xdp:':
@@ -278,8 +275,7 @@ def xd_rpc(request, method_name, null=False):
                               context_instance = RequestContext(request))
 
 def jsonp(request, method_name, null=False):
-    if _is_loggable(method_name):
-        _log_call.delay(request.browser_id, method_name, request.GET.copy())
+    _log_call(request.browser_id, method_name, request.GET.copy())
     callback = request.GET['callback']
     args = { 'request' : request }
     for k, v in request.GET.items():
@@ -292,7 +288,6 @@ def jsonp(request, method_name, null=False):
         "{0}({1});".format(callback, json.dumps(result)),
         "text/javascript")
 
-@task()
 def _log_call(browser_id, method_name, request_args):
     call = WidgetDialogCall(
         browser_id=browser_id,
