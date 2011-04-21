@@ -22,9 +22,7 @@ goog.provide('mirosubs.Tracker');
  * @constructor
  */
 mirosubs.Tracker = function() {
-    this.loadingMixpanel_ = false;
-    this.mpmetrics_ = null;
-    this.toCallOnLoad_ = [];
+    this.accountSet_ = false;
     if (goog.DEBUG) {
         this.logger_ = goog.debug.Logger.getLogger('mirosubs.Tracker');
     }
@@ -33,11 +31,18 @@ mirosubs.Tracker = function() {
 
 goog.addSingletonGetter(mirosubs.Tracker);
 
+mirosubs.Tracker.prototype.ACCOUNT_ = 'UA-163840-22';
+mirosubs.Tracker.prototype.PREFIX_ = 'usubs';
+
 /**
  * Call before running unit tests or maybe selenium tests.
  */
 mirosubs.Tracker.prototype.dontReport = function() {
     this.dontReport_ = true;
+};
+
+mirosubs.Tracker.prototype.gaq_ = function() {
+    return window['_gaq'];
 };
 
 mirosubs.Tracker.prototype.track = function(event, opt_props) {
@@ -48,54 +53,20 @@ mirosubs.Tracker.prototype.track = function(event, opt_props) {
     }
     var props = opt_props || {};
     props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
-    this.callOrLoad_('track', [event, props]);
-};
-
-mirosubs.Tracker.prototype.callOrLoad_ = function(method, args) {
-    if (this.mpmetrics_)
-        this.call_(method, args);
-    else {
-        this.toCallOnLoad_.push([method, args]);
-        this.loadMixpanel_();
+    if (!this.accountSet_) {
+        window['_gaq'] = this.gaq_() || [];
+        this.loadGA_();
+        this.gaq_().push([this.PREFIX_ + '._setAccount', this.ACCOUNT_]);
+        this.accountSet_ = true;
     }
+    this.gaq_().push([this.PREFIX_ + '._trackPageview', '/widget/' + event]);
 };
 
-mirosubs.Tracker.prototype.call_ = function(method, args) {
-    this.mpmetrics_[method].apply(this.mpmetrics_, args);
-};
-
-mirosubs.Tracker.prototype.checkMixpanel_ = function() {
-    if (window['MixpanelLib']) {
-        var mpname = 'mpmetricsunisubs';
-        this.mpmetrics_ = window[mpname] = 
-            new window['MixpanelLib'](
-                '44205f56e929f08b602ccc9b4605edc3', mpname);
-        for (var i = 0; i < this.toCallOnLoad_.length; i++)
-            this.call_(this.toCallOnLoad_[i][0], this.toCallOnLoad_[i][1]);
-        this.toCallOnLoad_ = [];
-        return true;
-    }
-    else
-        return false;
-};
-
-mirosubs.Tracker.prototype.loadMixpanel_ = function() {
-    if (this.loadingMixpanel_)
-        return;
-    if (this.checkMixpanel_())
-        return;
-    this.loadingMixpanel_ = true;
-    var scriptElem = goog.dom.createDom(
-        'scr'+'ipt', {
-            'type': 'text/javascript',
-            'src': 'http://api.mixpanel.com/site_media/js/api/mixpanel.js'
-        });
-    var head = goog.dom.getElementsByTagNameAndClass('head')[0];
-    head.appendChild(scriptElem);
-    goog.Timer.callOnce(this.checkLoad_, 250, this);
-};
-
-mirosubs.Tracker.prototype.checkLoad_ = function() {
-    if (!this.checkMixpanel_())
-        goog.Timer.callOnce(this.checkLoad_, 250, this);
+mirosubs.Tracker.prototype.loadGA_ = function() {
+    var ga = document.createElement('script'); 
+    ga.type = 'text/javascript'; 
+    ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(ga, s);
 };

@@ -74,10 +74,14 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
     window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
     var timer = new goog.Timer(250);
     var that = this;
+    var count = 0;
     this.getHandler().listen(
         timer,
         goog.Timer.TICK,
         function(e) {
+            count++;
+            if (count == 20)
+                mirosubs.Tracker.getInstance().track('Youtube_failed_to_load_EI');
             if (that.player_['playVideo']) {
                 that.player_.addEventListener(
                     'onStateChange', that.eventFunction_);
