@@ -4,7 +4,7 @@ from sentry.models import GzippedDictField
 class WidgetDialogLog(models.Model):
     date_saved = models.DateTimeField(auto_now_add=True)
     draft_pk = models.IntegerField()
-    browser_id = models.IntegerField()
+    browser_id = models.CharField(max_length=127)
     log = models.TextField()
 
 class WidgetDialogCall(models.Model):
