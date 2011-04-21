@@ -49,6 +49,7 @@ class Rpc(BaseRpc):
     def log_session(self, request, draft_pk, log):
         dialog_log = WidgetDialogLog(
             draft_pk=draft_pk,
+            browser_id=request.browser_id,
             log=log)
         dialog_log.save()
         return { 'response': 'ok' }
