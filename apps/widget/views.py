@@ -189,7 +189,7 @@ def download_subtitles(request, handler=SSASubtitles):
     for item in version.subtitles():
         subtitles.append(item.for_generator())
     
-    h = handler(subtitles, video, language)
+    h = handler(subtitles, video, sl=language)
     response = HttpResponse(unicode(h), mimetype="text/plain")
     original_filename = '%s.%s' % (video.lang_filename(language), h.file_type)
     

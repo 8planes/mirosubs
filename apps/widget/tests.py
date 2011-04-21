@@ -886,7 +886,7 @@ class TestRpc(TestCase):
     def test_ensure_language_locked_on_draft_save(self):
         request = RequestMockup(self.user_0)        
         draft = self._create_basic_draft(request)
-        now = datetime.now() + timedelta(seconds=20)
+        now = datetime.now().replace(microsecond=0) + timedelta(seconds=20)
         models.datetime = FakeDatetime(now)
         inserted = [{'subtitle_id': u'sfddsfsdf',
                      'text': 'heyyo!',
