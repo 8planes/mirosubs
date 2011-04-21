@@ -22,7 +22,6 @@ from piston.resource import Resource
 from piston.doc import documentation_view
 from api.authentication import ModelAuthentication
 from api.resource import SubtitlesResource
-from api import emitters
 
 auth = ModelAuthentication()
 ad = { 'authentication': auth }
@@ -32,8 +31,8 @@ subtitles_languages_handler = Resource(SubtitleLanguagesHandler, **ad)
 subtitle_handler = SubtitlesResource(SubtitleHandler, **ad)
 
 urlpatterns = patterns('',
-    url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="video_handler"),
-    url('^video/$', video_handler),
+    url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="one_video_handler"),
+    url('^video/$', video_handler, name="video_handler"),
     url('^subtitles/languages/$', subtitles_languages_handler),
     url('^subtitles/$', subtitle_handler, name='subtitle_handler'),
     url('^documentation/$', documentation_view, name='documentation')
