@@ -190,6 +190,10 @@ def update_web():
             env.warn_only = False
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
+    if env.admin_dir is not None:
+        env.host_string = ADMIN_HOST
+        with cd(os.path.join(env.admin_dir, 'mirosubs')):
+            _git_pull()
     _bounce_celeryd()
 
 def _bounce_memcached():
