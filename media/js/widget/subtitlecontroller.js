@@ -72,15 +72,18 @@ mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
 };
 
 /**
- * Corresponds to "Add new subs" or "Improve these subs" in menu.
- * @param type {string} opt_intitial_lang= When on Improve these subs,
- *  we should now which lang to default to on the started dialog
+ * Corresponds to  "Improve these subs" in menu.
  */
 mirosubs.widget.SubtitleController.prototype.openSubtitleDialog = 
-    function(e) 
+    function() 
 {
     var state  = this.playController_.getSubtitleState();
-    this.openNewLanguageDialog(state);
+    this.dialogOpener_.openDialogOrRedirect_(
+        state.LANGUAGE,
+        null, 
+        state.LANGUAGE_PK
+    );
+    
 };
 
 mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 

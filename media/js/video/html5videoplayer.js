@@ -236,7 +236,12 @@ mirosubs.video.Html5VideoPlayer.prototype.getPlayheadTimeInternal = function() {
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
-    this.videoElem_["currentTime"] = playheadTime;
+    try{
+        this.videoElem_["currentTime"] = playheadTime;
+    }catch(e){
+        // this migth fail if we have not loaded metadata yet
+    }
+    
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.getVideoSize = function() {
