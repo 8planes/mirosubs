@@ -297,6 +297,34 @@ class TestRpc(TestCase):
         subs = rpc.fetch_subtitles(request, video_id)
         self.assertEquals('hey you!', subs['subtitles'][0]['text'])
 
+    def test_duplicate_saved_packet(self):
+        request = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        video_id = return_value['video_id']
+        return_value = rpc.start_editing(
+            request, video_id, 'en', original_language_code='en')
+        draft_pk = return_value['draft_pk']
+
+        inserted = [{'subtitle_id': u'aa',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        packet = _make_packet(inserted=inserted)
+        rpc.save_subtitles(request, draft_pk, 
+                           [packet])
+        rpc.save_subtitles(request, draft_pk,
+                           [packet])
+        rpc.finished_subtitles(request, draft_pk, [])
+        video = Video.objects.get(video_id=video_id)
+        self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
+        subs = rpc.fetch_subtitles(request, video_id)
+        self.assertEquals(1, len(subs['subtitles']))
+        self.assertEquals('hey!', subs['subtitles'][0]['text'])        
+
     def test_finish(self):
         request = RequestMockup(self.user_0)
         draft = self._create_basic_draft(request)
