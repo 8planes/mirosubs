@@ -63,7 +63,7 @@ mirosubs.finishfaildialog.CopyDialog.showForErrorLog = function(log) {
 
 mirosubs.finishfaildialog.CopyDialog.showForSubs = function(jsonSubs) {
     var copyDialog = new mirosubs.finishfaildialog.CopyDialog(
-        "Here are your subtitles. Please copy and paste them into a text file.",
+        "Here are your subtitles. Please copy and paste them into a text file. You can email them to us at widget-logs@universalsubtitles.org.",
         mirosubs.SRTWriter.toSRT(jsonSubs));
     copyDialog.setVisible(true);
 };
