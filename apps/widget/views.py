@@ -32,6 +32,7 @@ from widget.rpc import add_general_settings
 from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
 from django.utils.encoding import iri_to_uri, DjangoUnicodeDecodeError
+from django.db.models import ObjectDoesNotExist
 
 rpc_views = Rpc()
 null_rpc_views = NullRpc()
@@ -167,7 +168,7 @@ def base_widget_params(request, extra_params={}):
 def download_subtitles(request, handler=SSASubtitles):
     #FIXME: use GenerateSubtitlesHandler
     video_id = request.GET.get('video_id')
-    lang_code = request.GET.get('lang_pk')
+    lang_id = request.GET.get('lang_pk')
     
     if not video_id:
         #if video_id == None, Video.objects.get raise exception. Better show 404
@@ -178,8 +179,9 @@ def download_subtitles(request, handler=SSASubtitles):
     
     subtitles = []
     
-    language = video.subtitlelanguage_set.get(pk=lang_code)
-    if not language:
+    try:
+        language = video.subtitlelanguage_set.get(pk=lang_id)
+    except ObjectDoesNotExist:
         raise Http404
     
     version = language.version()
