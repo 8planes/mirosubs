@@ -56,7 +56,7 @@ mirosubs.finishfaildialog.CopyDialog.prototype.focusTextarea_ = function() {
 
 mirosubs.finishfaildialog.CopyDialog.showForErrorLog = function(log) {
     var copyDialog = new mirosubs.finishfaildialog.CopyDialog(
-        "This is the error report we generated. It would be a big help to us if you could copy and paste it into an email and send it to us at production-errors@universalsubtitles.org. Thank you!",
+        "This is the error report we generated. It would be a big help to us if you could copy and paste it into an email and send it to us at widget-logs@universalsubtitles.org. Thank you!",
         log);;
     copyDialog.setVisible(true);
 };
