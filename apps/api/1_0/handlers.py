@@ -24,6 +24,7 @@ from django.contrib.sites.models import Site
 from forms import GetVideoForm, AddSubtitlesForm
 from django.utils import simplejson as json
 from widget.srt_subs import GenerateSubtitlesHandler
+from django.http import HttpResponse
 
 class VideoHandler(BaseHandler):
     """
@@ -165,7 +166,7 @@ class SubtitleHandler(BaseHandler):
                                                                     language_pk= language_pk)]
     
             h = handler(subtitles, video)
-            return unicode(h)
+            return HttpResponse(unicode(h))
     
     @validate(AddSubtitlesForm)
     def create(self, request):

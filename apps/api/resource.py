@@ -24,7 +24,7 @@ class SubtitlesResource(Resource):
 
         if not em:
             if request.GET.get('sformat'):
-                em = 'plain'            
+                em = 'django'            
             elif request.GET.get('callback'):
                 em = 'json'
             else:
