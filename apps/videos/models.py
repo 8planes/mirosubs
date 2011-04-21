@@ -513,7 +513,7 @@ class SubtitleLanguage(models.Model):
     def update_complete_state(self):
         self._update_subtitle_count()
         version = self.latest_version()
-        if version.subtitle_set.count() == 0:
+        if version and version.subtitle_set.count() == 0:
             self.has_version = False
         else:
             self.has_version = True
@@ -730,7 +730,7 @@ class SubtitleVersion(SubtitleCollection):
                 if not has_other_versions:
                     video.followers.add(self.user)
     
-    def update_percent_done(self):
+    def update_percent_done(self, sends_notification=True):
         if self.text_change is None or self.time_change is None:
             try:
                 old_version = self.language.subtitleversion_set.exclude(pk=self.pk) \
@@ -740,18 +740,19 @@ class SubtitleVersion(SubtitleCollection):
             
             self.set_changes(old_version)
             self.save()
-            
+        languages = [self.language]
         if self.language.is_original or self.is_forked:
-            for l in self.language.video.subtitlelanguage_set.exclude(pk=self.language.pk):
-                l.update_percent_done()
-        else:
-            self.language.update_percent_done()        
+            languages = self.language.video.subtitlelanguage_set.all()
+        for l in languages:
+            l.update_percent_done()
+            l.update_complete_state()
         check_alarm.delay(self.pk)
         
         if self.language.is_original and not self.language.language:
             detect_language.delay(self.pk)
 
-        send_notification.delay(self.pk)
+        if sends_notification:
+            send_notification.delay(self.pk)
         
     def delete(self, *args, **kwargs):
         super(SubtitleVersion, self).delete(*args, **kwargs)
@@ -885,6 +886,8 @@ class SubtitleVersion(SubtitleCollection):
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
 
+        new_version.update_percent_done(sends_notification=False)
+        self.latest_version = new_version
         return new_version
 
     def is_all_blank(self):

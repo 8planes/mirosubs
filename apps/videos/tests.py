@@ -700,6 +700,32 @@ class ViewsTest(WebUseTest):
         self.assertTrue(last_v.is_forked)
         self.assertFalse(last_v.notification_sent)
         self.assertEqual(last_v.version_no, new_v.version_no+1)
+
+    def test_rollback_updates_sub_count(self):
+        video = Video.objects.all()[:1].get()
+        lang = video.subtitlelanguage_set.all()[:1].get()
+        v = lang.latest_version()
+        num_subs = len(v.subtitles())
+        v.is_forked  = True
+        v.save()
+        new_v = SubtitleVersion(language=lang,
+                                version_no=v.version_no+1, datetime_started=datetime.now())
+        new_v.save()
+        for i in xrange(0,20):
+            s, created = Subtitle.objects.get_or_create(
+                version=new_v,
+                subtitle_id="%s" % i,
+                subtitle_order=i,
+                subtitle_text="%s lala" % i
+            )
+        new_version_sub_count = len(new_v.subtitles())
+        self._login()
+
+        last_v  = v.rollback(self.user)
+        final_num_subs = len(last_v.subtitles())
+        self.assertEqual(final_num_subs, num_subs)
+        lang_subs = SubtitleLanguage.objects.get(pk=lang.pk)
+        self.assertEqual( lang_subs.subtitle_count , num_subs)
         
     def test_diffing(self):
         version = self.video.version(0)
