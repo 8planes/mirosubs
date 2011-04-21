@@ -322,7 +322,10 @@ def history(request, video_id, lang=None, lang_id=None):
     context = widget.add_onsite_js_files({})
 
     if lang_id:
-        language = video.subtitlelanguage_set.get(pk=lang_id)
+        try:
+            language = video.subtitlelanguage_set.get(pk=lang_id)
+        except SubtitleLanguage.DoesNotExist:
+            raise Http404
     else:    
         language = video.subtitle_language(lang)
 
