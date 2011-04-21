@@ -68,12 +68,22 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
     versions.allow_tags = True
     
 class SubtitleVersionAdmin(admin.ModelAdmin):
-    list_display = ['language', 'version_no', 'note', 'time_change', 'text_change']
+    list_display = ['video', 'language', 'version_no', 'note', 'timeline_changes', 'text_changes']
     list_filter = []
     raw_id_fields = ['language', 'user']
+    search_fields = ['language__video__title', 'language__video__video_id', 'language__language']
     
     def has_delete_permission(self, request, obj=None):
         return False
+    
+    def video(self, obj):
+        return obj.language.video
+    
+    def timeline_changes(self, obj):
+        return '%s %%' % round(obj.time_change * 100)
+
+    def text_changes(self, obj):
+        return '%s %%' % round(obj.text_change * 100)
     
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']

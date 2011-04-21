@@ -75,7 +75,7 @@ class Video(models.Model):
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
     description = models.TextField(blank=True)
-    duration = models.PositiveIntegerField(null=True, blank=True)
+    duration = models.PositiveIntegerField(null=True, blank=True, help_text=_(u'in seconds'))
     allow_community_edits = models.BooleanField()
     allow_video_urls_edit = models.BooleanField(default=True)
     writelock_time = models.DateTimeField(null=True, editable=False)
@@ -714,11 +714,11 @@ class SubtitleCollection(models.Model):
 class SubtitleVersion(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
     version_no = models.PositiveIntegerField(default=0)
-    datetime_started = models.DateTimeField()
+    datetime_started = models.DateTimeField(editable=False)
     user = models.ForeignKey(User, null=True)
     note = models.CharField(max_length=512, blank=True)
-    time_change = models.FloatField(null=True, blank=True)
-    text_change = models.FloatField(null=True, blank=True)
+    time_change = models.FloatField(null=True, blank=True, editable=False)
+    text_change = models.FloatField(null=True, blank=True, editable=False)
     notification_sent = models.BooleanField(default=False)
 
     class Meta:
