@@ -78,18 +78,6 @@ mirosubs.subtitle.MSServerModel.prototype.setTitle_ = function() {
     );
 };
 
-mirosubs.subtitle.MSServerModel.prototype.checkLoggedIn_ = function() {
-    if (mirosubs.currentUsername == null) {
-        if (!mirosubs.isLoginAttemptInProgress())
-            mirosubs.login(
-                function(loggedIn) {}, 
-                "In order to finish and save your work, you need to log in.");
-        return false;
-    }
-    else
-        return true;
-};
-
 mirosubs.subtitle.MSServerModel.prototype.getSubIDPackets_ = function() {
     return goog.array.map(
         this.unsavedPackets_, function(p) { return p.subIDPacket; });
@@ -102,11 +90,6 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
     this.setTitle_();
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
-    if (!this.checkLoggedIn_) {
-        if (opt_cancelCallback)
-            opt_cancelCallback();
-        return;
-    }
     this.stopTimer_();
     var that = this;
     var saveArgs = this.makeSaveArgs_();
