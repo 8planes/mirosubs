@@ -33,7 +33,7 @@ def jsdemo(request, file_name):
         sys.stderr.write('I am also writing gratuitous text to stderr '
                          'just to see if stderr output ends up in log')
         raise Exception('gratuitous exception')
-    elif file_name = 'log_error':
+    elif file_name == 'log_error':
         logging.error(
             'log error test with extras',
             extra={
@@ -41,7 +41,7 @@ def jsdemo(request, file_name):
                     'important_message': 'adam is so awesome',
                     'the_temperature': 10 }
                 })
-    elif file_name = 'log_warning':
+    elif file_name == 'log_warning':
         logging.warning(
             'here is a warning, y\'all!',
             extra={
