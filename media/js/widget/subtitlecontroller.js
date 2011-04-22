@@ -53,7 +53,7 @@ mirosubs.widget.SubtitleController = function(
         listen(
             dropDown,
             s.IMPROVE_SUBTITLES,
-            this.openSubtitleDialog).
+            this.improveSubtitles_).
         listen(
             videoTab.getAnchorElem(), 'click',
             this.videoAnchorClicked_
@@ -71,19 +71,23 @@ mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
     e.preventDefault();
 };
 
-/**
- * Corresponds to  "Improve these subs" in menu.
- */
-mirosubs.widget.SubtitleController.prototype.openSubtitleDialog = 
-    function() 
-{
+mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
     var state  = this.playController_.getSubtitleState();
     this.dialogOpener_.openDialogOrRedirect_(
         state.LANGUAGE,
         null, 
         state.LANGUAGE_PK
-    );
-    
+    );    
+};
+
+/**
+ * Corresponds to "add new subs" in menu.
+ */
+mirosubs.widget.SubtitleController.prototype.openSubtitleDialog = 
+    function() 
+{
+    var state  = this.playController_.getSubtitleState();
+    this.openNewLanguageDialog(state);
 };
 
 mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
