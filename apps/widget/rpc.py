@@ -66,6 +66,7 @@ class Rpc(BaseRpc):
                     'user_agent': user_agent,
                     'page_url': page_url }
                 })
+        return { 'response': 'ok' }
 
     def show_widget(self, request, video_url, is_remote, base_state=None, additional_video_urls=None):
         video_id = video_cache.get_video_id(video_url)
