@@ -165,12 +165,13 @@ def clear_environment_permissions():
 def clear_permissions():
     for host in env.web_hosts:
         env.host_string = host
-        _clear_permissions('{0}/mirosubs'.format(env.web_dir))    
+        _clear_permissions('{0}/mirosubs'.format(env.web_dir))
 
 def _git_pull():
     run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
+    _clear_permissions('.')
 
 def add_disabled():
     for host in env.web_hosts:
