@@ -70,12 +70,11 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.setTitle_ = function() {
-    mirosubs.Rpc.call(
-        'set_title', {
-            draft_pk: this.draftPK_,
-            value: this.unitOfWork_.title
-        }
-    );
+    var args  = {};
+    args['draft_pk'] = this.draftPK_;
+    args['value'] = this.unitOfWork_.title;
+    mirosubs.Rpc.call('set_title', args);
+
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getSubIDPackets_ = function() {
