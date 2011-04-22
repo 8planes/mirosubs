@@ -81,7 +81,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
         function(e) {
             count++;
             if (count == 20)
-                mirosubs.Tracker.getInstance().track('Youtube_failed_to_load_EI');
+                that.logExternalInterfaceError_();
             if (that.player_['playVideo']) {
                 that.player_.addEventListener(
                     'onStateChange', that.eventFunction_);
@@ -89,6 +89,11 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
             }
         });
     timer.start();
+};
+
+mirosubs.video.YoutubeVideoPlayer.prototype.logExternalInterfaceError_ = function() {
+    mirosubs.Rpc.call(
+        'log_youtube_ei_failure', { 'page_url': window.location.href });
 };
 
 mirosubs.video.YoutubeVideoPlayer.prototype.createDom = function() {
