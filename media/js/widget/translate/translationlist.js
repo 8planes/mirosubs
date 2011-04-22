@@ -69,6 +69,12 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
                        });
 };
 
+mirosubs.translate.TranslationList.prototype.getSubsJson = function() {
+    return goog.array.map(
+        this.translationWidgets_,
+        function(t) { return t.getSubJson(); });
+};
+
 mirosubs.translate.TranslationList.prototype.setTitleTranslation = function(value){
     this.titleTranslationWidget && this.titleTranslationWidget.setTranslation(value);
 };

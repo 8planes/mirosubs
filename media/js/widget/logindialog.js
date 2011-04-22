@@ -103,7 +103,8 @@ mirosubs.LoginDialog.prototype.siteLoginClicked_ = function(e) {
     this.showLoading_();
     this.loginWin_ = mirosubs.openLoginPopup(
         mirosubs.LoginPopupType.NATIVE,
-        goog.bind(this.processCompleted_, this));
+        goog.bind(this.processCompleted_, this),
+        goog.bind(this.loginSiteError_, this));
     e.preventDefault();
 };
 
@@ -119,8 +120,18 @@ mirosubs.LoginDialog.prototype.clicked_ = function(e) {
     else
         type = mirosubs.LoginPopupType.GOOGLE;
     this.loginWin_ = mirosubs.openLoginPopup(
-        type, goog.bind(this.processCompleted_, this));
+        type, 
+        goog.bind(this.processCompleted_, this),
+        goog.bind(this.loginSiteError_, this));
     e.preventDefault();
+};
+
+mirosubs.LoginDialog.prototype.loginSiteError_ = function(status) {
+    alert('We had a problem logging you in to the site. Most likely your ' +
+          'network connection is flaky, or there is a serious problem ' +
+          'with our server. You might want to try again.\n\nIf you are ' +
+          'subtitling a video, you can always use the download subtitles link ' +
+          'in the lower right corner of the dialog.');
 };
 
 mirosubs.LoginDialog.prototype.processCompleted_ = function(loggedIn) {

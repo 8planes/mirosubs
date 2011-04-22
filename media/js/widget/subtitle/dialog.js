@@ -79,6 +79,13 @@ mirosubs.subtitle.Dialog.prototype.createDom = function() {
     mirosubs.subtitle.Dialog.superClass_.createDom.call(this);
     this.enterState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
 };
+mirosubs.subtitle.Dialog.prototype.showDownloadLink_ = function() {
+    var that = this;
+    this.getRightPanelInternal().showDownloadLink(
+        function() { 
+            return that.captionSet_.makeJsonSubs();
+        });
+};
 mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
     mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
     var doc = this.getDomHelper().getDocument();
@@ -155,6 +162,8 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
                 1, this.timelineSubtitleSet_,
                 this.getVideoPlayerInternal()), true);
     }
+    if (state == s.REVIEW)
+        this.showDownloadLink_();
 
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {

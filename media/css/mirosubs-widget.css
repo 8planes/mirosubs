@@ -423,23 +423,26 @@ height: 713px !important;
 
 
 
-.mirosubs-restart{
+.mirosubs-restart, a.mirosubs-download-subs {
   padding-left: 33px !important;
   margin: 10px 0 30px 0px !important;
   font-size: 11px !important;
   float: right !important;
   text-decoration: none !important;
   line-height: 2em !important;
-  background: #333 url("../images/sprite.png") 8px -146px no-repeat !important;
   color: #777 !important;
+  background: #333;
   padding: 4px 20px 2px !important;
   border: 1px solid #333 !important;
   border-top: 1px solid #666 !important;
   border-bottom: 1px solid #444 !important;
   -moz-border-radius: 4px !important;
   -webkit-border-radius: 4px !important;
-  }
+}
 
+.mirosubs-restart {
+   background: #333 url("../images/sprite.png") 8px -146px no-repeat !important;
+}
   
 .mirosubs-extra{
   border: 1px solid #4f4f4f !important;

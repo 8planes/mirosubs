@@ -87,6 +87,14 @@ mirosubs.translate.Dialog.prototype.handleDoneKeyPress_ = function(event) {
 mirosubs.translate.Dialog.prototype.isWorkSaved = function() {
     return !this.unitOfWork_.everContainedWork() || this.saved_;
 };
+mirosubs.translate.Dialog.prototype.enterDocument = function() {
+    mirosubs.translate.Dialog.superClass_.enterDocument.call(this);
+    var that = this;
+    this.getRightPanelInternal().showDownloadLink(
+        function() {
+            return that.translationPanel_.makeJsonSubs();
+        });
+};
 mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
     this.getRightPanelInternal().showLoading(true);
@@ -106,7 +114,7 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
             if (that.finishFailDialog_)
                 that.finishFailDialog_.failedAgain(opt_status);
             else
-                that.finishFailDialog_ = mirosubs.FinishFailDialog.show(
+                that.finishFailDialog_ = mirosubs.finishfaildialog.Dialog.show(
                     logger, opt_status,
                     goog.bind(that.saveWorkInternal, that, closeAfterSave));
         });

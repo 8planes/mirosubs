@@ -64,6 +64,18 @@ mirosubs.finishfaildialog.CopyDialog.showForErrorLog = function(log) {
 mirosubs.finishfaildialog.CopyDialog.showForSubs = function(jsonSubs) {
     var copyDialog = new mirosubs.finishfaildialog.CopyDialog(
         "Here are your subtitles. Please copy and paste them into a text file. You can email them to us at widget-logs@universalsubtitles.org.",
-        mirosubs.SRTWriter.toSRT(jsonSubs));
+        mirosubs.finishfaildialog.CopyDialog.subsToString_(jsonSubs));
     copyDialog.setVisible(true);
+};
+
+mirosubs.finishfaildialog.CopyDialog.subsToString_ = function(jsonSubs) {
+    var noTimes = goog.array.every(
+        jsonSubs, 
+        function(j) {
+            return !j['start_time'] && !j['end_time'];
+        });
+    if (noTimes)
+        return goog.json.serialize(jsonSubs);
+    else
+        return mirosubs.SRTWriter.toSRT(jsonSubs);
 };

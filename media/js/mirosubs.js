@@ -148,7 +148,6 @@ mirosubs.login = function(opt_finishFn, opt_message) {
             opt_finishFn(true);
         return;
     }
-
     var loginDialog = new mirosubs.LoginDialog(opt_finishFn, opt_message);
     loginDialog.setVisible(true);
 };
@@ -176,8 +175,10 @@ mirosubs.LoginPopupType = {
  * @param {mirosubs.LoginPopupType} loginPopupType
  * @param {function(boolean)=} opt_finishFn Will be called with true if
  *     logged in, false otherwise.
+ * @param {function()=} opt_errorFn Will be called if post-call to
+ *     fetch user info errors out.
  */
-mirosubs.openLoginPopup = function(loginPopupType, opt_finishFn) {
+mirosubs.openLoginPopup = function(loginPopupType, opt_finishFn, opt_errorFn) {
     var loginWin = window.open(mirosubs.siteURL() + loginPopupType[0],
                                mirosubs.randomString(),
                                loginPopupType[1]);
@@ -187,13 +188,13 @@ mirosubs.openLoginPopup = function(loginPopupType, opt_finishFn) {
         function(e) {
             if (loginWin.closed) {
                 timer.dispose();
-                mirosubs.postPossiblyLoggedIn_(opt_finishFn);
+                mirosubs.postPossiblyLoggedIn_(opt_finishFn, opt_errorFn);
             }
         });
     timer.start();
     return loginWin;
 };
-mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
+mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn, opt_errorFn) {
     mirosubs.Rpc.call(
         'get_my_user_info', {},
         function(result) {
@@ -202,6 +203,10 @@ mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn) {
                 mirosubs.loggedIn(result['username']);
             if (opt_finishFn)
                 opt_finishFn(result['logged_in']);
+        },
+        function() {
+            if (opt_errorFn)
+                opt_errorFn();
         });
 };
 

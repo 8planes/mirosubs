@@ -229,6 +229,14 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
         stepsDiv.appendChild(restartAnchor);
     }
 
+    this.downloadLink_ = this.getDomHelper().createDom(
+        'a', {'href':'#', 'className':'mirosubs-download-subs'}, 
+        'Download subtitles');
+    goog.style.showElement(this.downloadLink_, false);
+    goog.dom.append(stepsDiv, this.downloadLink_);
+    this.getHandler().listen(
+        this.downloadLink_, 'click', this.downloadClicked_);
+
     stepsDiv.appendChild(this.doneAnchor_);
 
     el.appendChild(stepsDiv);
@@ -278,6 +286,16 @@ mirosubs.RightPanel.prototype.updateLoginState = function() {
                loginLink));
         this.getHandler().listen(loginLink, 'click', this.loginClicked_);
     }
+};
+
+mirosubs.RightPanel.prototype.showDownloadLink = function(jsonSubsFn) {
+    goog.style.showElement(this.downloadLink_, true);
+    this.jsonSubsFn_ = jsonSubsFn;
+};
+
+mirosubs.RightPanel.prototype.downloadClicked_ = function(e) {
+    e.preventDefault();
+    mirosubs.finishfaildialog.CopyDialog.showForSubs(this.jsonSubsFn_());
 };
 
 mirosubs.RightPanel.prototype.loginClicked_ = function(event) {
