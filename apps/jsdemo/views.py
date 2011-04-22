@@ -21,6 +21,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 import widget
 import sys
+import logging
 
 def js_dependencies():
     js_files = list(settings.JS_ONSITE)
@@ -32,6 +33,22 @@ def jsdemo(request, file_name):
         sys.stderr.write('I am also writing gratuitous text to stderr '
                          'just to see if stderr output ends up in log')
         raise Exception('gratuitous exception')
+    elif file_name == 'log_error':
+        logging.error(
+            'log error test with extras',
+            extra={
+                'data': {
+                    'important_message': 'adam is so awesome',
+                    'the_temperature': 10 }
+                })
+    elif file_name == 'log_warning':
+        logging.warning(
+            'here is a warning, y\'all!',
+            extra={
+                'data': {
+                    'what': 'what, what'
+                    }
+                })
     return render_to_response(
         'jsdemo/{0}.html'.format(file_name), 
         widget.add_js_files({}, False, js_dependencies()),
