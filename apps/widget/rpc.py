@@ -32,6 +32,7 @@ from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
 from uslogging.models import WidgetDialogLog
 import logging
+yt_logger = logging.getLogger("youtube-ei-error")
 
 ALL_LANGUAGES = settings.ALL_LANGUAGES
 LANGUAGES_MAP = dict(ALL_LANGUAGES)
@@ -57,7 +58,7 @@ class Rpc(BaseRpc):
 
     def log_youtube_ei_failure(self, request, page_url):
         user_agent = request.META.get('HTTP_USER_AGENT', '(Unknown)')
-        logging.error(
+        yt_logger.error(
             "Youtube ExternalInterface load failure",
             extra={
                 'request': request,

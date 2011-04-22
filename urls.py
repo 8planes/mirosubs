@@ -121,3 +121,5 @@ from django.template import RequestContext, loader
 def handler500(request, template_name='500.html'):
     t = loader.get_template(template_name)
     return http.HttpResponseServerError(t.render(RequestContext(request)))
+
+import sentry_logger

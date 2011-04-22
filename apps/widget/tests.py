@@ -34,6 +34,8 @@ from django.core.urlresolvers import reverse
 from widget import video_cache
 from datetime import datetime, timedelta
 
+from sentry.models import Message
+
 class FakeDatetime(object):
     def __init__(self, now):
         self.now_date = now
@@ -1149,6 +1151,19 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request_1, draft_pk, [])
         language = Video.objects.get(pk=draft.video.pk).subtitle_language('es')
         self.assertEquals(title, language.title)
+
+    def test_youtube_ei_failure(self):
+        from utils.requestfactory import RequestFactory
+        rf = RequestFactory()
+        request = rf.get("/")
+        
+        num_messages = Message.objects.all().count()
+        self.assertEquals(0, num_messages)
+
+        rpc.log_youtube_ei_failure(request, "/test-page")
+        new_num_messages = Message.objects.all().count()
+        self.assertEquals(num_messages + 1, new_num_messages)
+        
         
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(
