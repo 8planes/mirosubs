@@ -1124,6 +1124,32 @@ class TestRpc(TestCase):
         sl_es = models.SubtitleLanguage.objects.get(id=sl_es.id)
         self.assertEquals(1, sl_es.subtitleversion_set.count())
 
+
+    def test_set_title(self):
+        request = RequestMockup(self.user_0)
+        draft = self._create_basic_dependent_draft(request, True)
+        en_sl = draft.video.subtitle_language('en')
+        # user_1 opens translate dialog
+        request_1 = RequestMockup(self.user_1, "b")
+        rpc.show_widget(
+            request_1, 
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        response = rpc.start_editing(
+            request_1, draft.video.video_id, 'es', base_language_pk=en_sl.pk)
+        draft_pk = response['draft_pk']
+        title = 'new title'
+        res = rpc.set_title(request_1, draft_pk, title)
+        self.assertEquals(1, res["num_affected"])
+        # user_1 updates solitary translation to have blank text.
+        updated = [{'subtitle_id': 'aa', 'text': ''}]
+        rpc.save_subtitles(
+            request_1, draft_pk, 
+            [_make_packet(updated=updated, packet_no=2)])
+        rpc.finished_subtitles(request_1, draft_pk, [])
+        language = Video.objects.get(pk=draft.video.pk).subtitle_language('es')
+        self.assertEquals(title, language.title)
+        
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(
             request,

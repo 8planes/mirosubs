@@ -258,8 +258,8 @@ class Rpc(BaseRpc):
             return { "response" : "does not match request" }
         draft.language.writelock(request)
         draft.language.save()
-        models.SubtitleLanguage.objects.filter(pk=draft.language.pk).update(title=value)
-        return {"response" : "ok"}
+        num_affected = models.SubtitleLanguage.objects.filter(pk=draft.language.pk).update(title=value)
+        return {"response" : "ok", "num_affected": num_affected}
                     
     def save_subtitles(self, request, draft_pk, packets):
         try:
