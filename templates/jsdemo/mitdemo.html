@@ -39,10 +39,8 @@
   var printer = new goog.format.JsonPrettyPrinter();
 
   function getPlayer() {
-     if (!player) {
+     if (!player)
          player = document.getElementById('player21');
-         config = player.getConfig();
-     }
   }
 
   function printPlayheadTime() {
