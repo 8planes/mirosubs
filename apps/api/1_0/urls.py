@@ -17,7 +17,8 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
-from handlers import VideoHandler, SubtitleHandler, SubtitleLanguagesHandler
+from handlers import VideoHandler, SubtitleHandler, SubtitleLanguagesHandler,\
+    UpdateSubtitleHandler
 from piston.resource import Resource
 from piston.doc import documentation_view
 from api.authentication import ModelAuthentication
@@ -30,11 +31,15 @@ video_handler = Resource(VideoHandler, **ad)
 subtitles_languages_handler = Resource(SubtitleLanguagesHandler, **ad)
 subtitle_handler = SubtitlesResource(SubtitleHandler, **ad)
 
+update_subtitle_handler = Resource(UpdateSubtitleHandler, **ad)
+
 urlpatterns = patterns('',
     url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="one_video_handler"),
     url('^video/$', video_handler, name="video_handler"),
 
-    url('^crossdomain.xml$', "crossdomain_views.api_crossdomain"),                       
+    url('^crossdomain.xml$', "crossdomain_views.api_crossdomain"),
+
+    url('^subtitles/languages/update/$', update_subtitle_handler, name="language-update"),
     url('^subtitles/languages/$', subtitles_languages_handler),
     url('^subtitles/$', subtitle_handler, name="subtitle_handler"),
     url('^documentation/$', documentation_view, name='documentation')

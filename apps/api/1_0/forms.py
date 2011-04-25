@@ -16,6 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from videos.models import SubtitleLanguage
 from videos.forms import VideoForm, SubtitlesUploadBaseForm
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, SubtitleParserError, SbvSubtitleParser, TxtSubtitleParser
 from django.utils.translation import ugettext_lazy as _
@@ -23,7 +24,7 @@ from django.utils.encoding import force_unicode
 from django import forms
 import chardet
 
-class AddSubtitlesForm(SubtitlesUploadBaseForm):
+class BaseSubtitlesForm(SubtitlesUploadBaseForm):
     FORMAT_CHOICES = (
         ('srt', 'srt'),
         ('ass', 'ass'),
@@ -33,11 +34,7 @@ class AddSubtitlesForm(SubtitlesUploadBaseForm):
     )
     subtitles = forms.CharField(max_length=256*1024)
     format = forms.ChoiceField(choices=FORMAT_CHOICES)
-    
-    def __init__(self, *args, **kwargs):
-        super(AddSubtitlesForm, self).__init__(*args, **kwargs)
-        self.fields['video'].to_field_name = 'video_id'
-    
+
     @classmethod
     def get_form_instance(cls, request, data):
         return cls(request.user, data)
@@ -79,6 +76,30 @@ class AddSubtitlesForm(SubtitlesUploadBaseForm):
             return TtmlSubtitleParser
         if format == 'sbv':
             return SbvSubtitleParser
+        
+class AddSubtitlesForm(BaseSubtitlesForm):
+
+    
+    def __init__(self, *args, **kwargs):
+        super(AddSubtitlesForm, self).__init__(*args, **kwargs)
+        self.fields['video'].to_field_name = 'video_id'
+    
+class UpdateSubtitlesForm( BaseSubtitlesForm):
+
+    
+    def __init__(self, *args, **kwargs):
+        super(UpdateSubtitlesForm, self).__init__(*args, **kwargs)
+        for fname in self.fields:
+            if fname not in "format subtitles":
+                del self.fields[fname]
+
+    def save(self, sl):
+        if hasattr(self, 'parser'):
+            return self.save_subtitles(self.parser, language=sl, video=sl.video)
+
+    class Meta:
+        fields = ("format", "subtitles")
+        exclude = ("language")
     
 class GetVideoForm(VideoForm):
     

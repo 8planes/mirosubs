@@ -241,8 +241,8 @@ class SubtitlesUploadBaseForm(forms.Form):
         language.save()
         return language
 
-    def save_subtitles(self, parser):
-        video = self.cleaned_data['video']
+    def save_subtitles(self, parser, video=None, language=None):
+        video = video or self.cleaned_data['video']
         
         key = str(uuid4()).replace('-', '')
 
@@ -253,7 +253,7 @@ class SubtitlesUploadBaseForm(forms.Form):
             self._save_original_language(
                 video, self.cleaned_data['video_language'])
         
-        language = self._find_appropriate_language(video, self.cleaned_data['language'])
+        language = language or self._find_appropriate_language(video, self.cleaned_data['language'])
         
         try:
             old_version = language.subtitleversion_set.all()[:1].get()    

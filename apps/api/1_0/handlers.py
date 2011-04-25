@@ -16,15 +16,20 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from videos.models import Video, SubtitleVersion
+from videos.models import Video, SubtitleVersion, SubtitleLanguage
+from django.contrib.auth.models import User
+from apps.auth.models import CustomUser
+
 from piston.handler import BaseHandler, AnonymousBaseHandler
 from piston.utils import rc
+from piston.utils import decorator, FormValidationError
 from api import validate
 from django.contrib.sites.models import Site
-from forms import GetVideoForm, AddSubtitlesForm
+from forms import GetVideoForm, AddSubtitlesForm, UpdateSubtitlesForm
 from django.utils import simplejson as json
 from widget.srt_subs import GenerateSubtitlesHandler
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 class VideoHandler(BaseHandler):
     """
@@ -101,7 +106,7 @@ class VideoHandler(BaseHandler):
 
 class SubtitleHandler(BaseHandler):
     
-    allowed_methods = ('POST', 'GET')
+    allowed_methods = ('POST', 'GET',)
     anonymous = 'AnonymousSubtitleHandler'
     
     def read(self, request):
@@ -112,7 +117,7 @@ class SubtitleHandler(BaseHandler):
         <b>video_url:</b> video url
         <b>video_id:</b> video id
         <b>language:</b> language of video
-        <b>language_id:</b> id of language, you can get this from AnonymousSubtitleLanguages
+        <b>language_id:</b> id of language, you can get this from AnonymousSubtitleLanguagese
         <b>revision:</b> revision of subtitles
         <b>sformat</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
         
@@ -168,7 +173,8 @@ class SubtitleHandler(BaseHandler):
             h = handler(subtitles, video)
             return HttpResponse(unicode(h))
     
-    @validate(AddSubtitlesForm)
+
+    @validate(AddSubtitlesForm, 'POST')    
     def create(self, request):
         """
         Add subtitles for video.
@@ -182,10 +188,43 @@ class SubtitleHandler(BaseHandler):
         
         <em>curl "http://127.0.0.1:8000/api/1.0/subtitles/?username=admin&password=admin" -d 'video=0zaZ2GPv3o9m' -d 'video_language=en' -d 'language=ru' -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atest'</em>
         """
-        print request.user
         request.form.save()
         return rc.ALL_OK
-  
+
+
+class UpdateSubtitleHandler(BaseHandler):
+    
+    allowed_methods = ( 'POST', "PUT")
+    anonymous = 'AnonymousSubtitleHandler'
+
+    def update(self, request):
+        """
+        Updates subtitles for video.
+        
+        Send in request:
+        <b>language_id:</b> id of language, you can get this from AnonymousSubtitleLanguagese
+        <b>format</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
+        <b>subtitles</b>: subtitles(max size 256kB. Can be less, not tested with big content)
+        
+        <em>curl -i -X PUT "http://mirosubs.example.com:8000/api/1.0/subtitles/languages/update/?username=xxx&password=xxx" -d "language_id=24980" -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atestme -some'</em>
+
+        """
+        ds = request.REQUEST
+        sl = get_object_or_404(SubtitleLanguage, pk=ds['language_id'])
+
+        form = UpdateSubtitlesForm(user=request.user.customuser, data=ds)
+        if form.is_valid():
+            form.save(sl)
+            return rc.CREATED
+        raise FormValidationError(form) 
+
+    def create(self, request):
+        # Piston has some bugs with 'format' as a parameter and
+        # put requests. So the test client needs to issue a post, not
+        # a put request, this is just a workaroung for that
+        # normal web clientes can issue a http PUT request as expected
+        return self.update(request)
+    
 class AnonymousSubtitleHandler(AnonymousBaseHandler, SubtitleHandler):
     pass
     
