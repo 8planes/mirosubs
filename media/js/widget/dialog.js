@@ -124,6 +124,7 @@ mirosubs.Dialog.prototype.updateLoginState = function() {
  */
 mirosubs.Dialog.prototype.isWorkSaved = goog.abstractMethod;
 /**
+ * This corresponds to the finish button. It is not called during periodic saves.
  * @protected
  * @param {boolean} closeAfterSave
  */
@@ -138,7 +139,14 @@ mirosubs.Dialog.prototype.saveWork = function(closeAfterSave) {
         return;
     }
     if (mirosubs.currentUsername == null && !mirosubs.isLoginAttemptInProgress())
-        mirosubs.login()
+        mirosubs.login(function(loggedIn) {
+            if (!loggedIn) {
+                alert("We had a problem logging you in. You might want to check " +
+                      "your web connection and try again.\n\nYou can also download " +
+                      "your subtitles using the download button in the lower right corner " +
+                      "of the dialog and email them to widget-logs@universalsubtitles.org.");
+            }
+        });
     else
         this.saveWorkInternal(closeAfterSave);
 };

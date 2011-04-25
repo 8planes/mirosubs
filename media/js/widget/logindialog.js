@@ -29,7 +29,7 @@ mirosubs.LoginDialog = function(opt_finishFn, opt_message) {
     this.setBackgroundElementOpacity(0);
     this.finishFn_ = opt_finishFn;
     this.message_ = opt_message;
-    this.loggedIn_ = mirosubs.currentUsername != null;
+    this.loggedIn_ = !!mirosubs.currentUsername;
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.imageLoader_ = new goog.net.ImageLoader();
