@@ -36,7 +36,8 @@ class BaseRpc:
             'version': version,
             'is_latest': is_latest,
             'forked': is_forked,
-            'base_language': base_language,
+            'base_language': base_language and base_language.language,
+            'base_language_pk': base_language and base_language.pk,
             'title': title
             }
 
