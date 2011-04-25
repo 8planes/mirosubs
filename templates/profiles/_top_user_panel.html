@@ -1,45 +1,42 @@
 {% load i18n %}
 {% if user.is_authenticated %}
-<div class="user_panel">
-      <div class="user">
-        <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" />
-        <a href="{% url profiles:my_profile %}">Me</a>
-      </div>
-
-      <div class="dropdown">
-        <ul id="dropdown_menu">
-          <li {% if my_videos %}class="active"{% endif %}><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
-          {% if user.teams.exists %}
-          <li {% if my_teams %}class="active"{% endif %}><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
-          {% endif %}
-          {% if user.is_authenticated %}
-            <li {% if user_info == user and not edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
-          {% endif %}
-          <li {% if edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>                       
-          <li>
-              <a href="{% url messages:index %}">{% trans "My Messages" %} <span class="message_count">{{ user.received_messages.unread.count }}</span></a>
-          </li>
-          <li class="active">
-            <a href="{% url logout %}?next={{ request.path_info|urlencode }}">{% trans 'Logout' %}</a>
-          </li>
+<div id="me_menu">
+  <div id="menu_name">
+    <img src="{{ MEDIA_URL }}images/default_thumbnail_small.png" />
+    <a href="{% url profiles:my_profile %}">Me</a>
+  </div>
+  
+  <div id="menu">
+    <ul id="dropdown">
+      <li {% if my_videos %}class="active"{% endif %}><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
+      {% if user.teams.exists %}
+      <li {% if my_teams %}class="active"{% endif %}><a href="{% url teams:user_teams %}">{% trans "My Teams" %}</a></li>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <li {% if user_info == user and not edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:profile user.username %}">{% trans "View profile" %}</a></li>
+      {% endif %}
+      <li {% if edit_profile_page %}class="active"{% endif %}><a href="{% url profiles:edit %}">{% trans "Edit Profile" %}</a></li>                       
+      <li>
+        <a href="{% url messages:index %}">{% trans "My Messages" %} <span class="message_count">{{ user.received_messages.unread.count }}</span></a>
+      </li>
+      <li class="active">
+        <a href="{% url logout %}?next={{ request.path_info|urlencode }}">{% trans 'Logout' %}</a>
+      </li>
           
-        {% with user.teams.all as user_teams %}
-            <li>
-            {% if user_teams %}
-                <div class="teams_menu">
-                  <h4>{% trans "Team Management" %}</h4>
-                    {% for t in user_teams %}
-                        <li  {% if team == t %}class="active"{% endif %}><a href="{{ t.get_edit_url }}">{{ t }}</a></li>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            </li>
+      {% with user.teams.all as user_teams %}
+      <li>
+        {% if user_teams %}
+        <div id="teams_menu">
+          <h4>{% trans "Team Management" %}</h4>
+          {% for t in user_teams %}
+            <li  {% if team == t %}class="active"{% endif %}><a href="{{ t.get_edit_url }}">{{ t }}</a></li>
+            {% endfor %}
+        </div>
+          {% endif %}
+        
+      </li>
         {% endwith %}
-      </div>
-  {% comment %}
-  <a href="#">{% trans 'Team manager options' %}</a>
-  <span class="points"><strong>{% trans 'Points' %}</strong> 3,999</span>
-  <span class="awards"><strong>{% trans 'Awards' %}</strong> 3,999</span>
-  {% endcomment %}
-</div>
+    </ul><!-- // menu -->
+  </div><!-- // dropdown -->
+</div><!-- // user_menu -->
 {% endif %}

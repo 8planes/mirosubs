@@ -50,7 +50,7 @@ New Header Styles
 	-moz-box-shadow: inset -1px 0 0 #FFF;
 }
 
-#main_bar #bar_search input {
+#main_bar #bar_search form {
 	background: #FFF;
   background: -webkit-gradient(linear, left top, left bottom, from(#e8e8e8), to(#FFF)) no-repeat;
   background: -moz-linear-gradient(top,                            #e8e8e8,     #FFF) no-repeat;
@@ -59,11 +59,17 @@ New Header Styles
 	-moz-box-shadow: 0 1px 0 #FFF;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	padding: 7px 5px 7px 25px;
+	padding: 6px 5px 6px 10px;
+}
+
+#main_bar #bar_search input {
 	font-size: 12px;
 	color: #555;
 	font-family: Helvetica, Arial, sans-serif;
 	width: 125px;
+	border: 0;
+	background: transparent url(../../images/icon_nav_search.png) 0 0 no-repeat;
+	padding: 0 0 0 25px;
 }
 
 #main_bar ul#bar_menu {
@@ -117,6 +123,104 @@ New Header Styles
 
 #main_bar ul#bar_menu li#nav_submit a:hover em.icon {
 	opacity: 1.0;
+}
+
+#main_bar ul#bar_menu li#me_menu {
+	float: left;
+}
+
+#main_bar ul#bar_menu li#me_menu:hover #user_menu #menu {
+	display: block;
+}
+
+#main_bar ul#bar_menu li#me_menu:hover #user_menu {
+	background: #FFF;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu {
+	position: relative;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu_name a {
+	color: #658a00;
+	font-weight: bold;
+	background: transparent url(../../images/icon_me_menu.png) 40px 23px no-repeat;
+	padding: 18px 25px 14px 13px;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu_name a:hover {
+	background: #FFF url(../../images/icon_me_menu.png) 40px 23px no-repeat;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu {
+	display: none;
+	position: absolute;
+	background: #FFF;
+	right: 0;
+	width: 150px;
+	-webkit-box-shadow: 0 1px 3px #c8c8c8;
+	-moz-box-shadow: 0 1px 3px #c8c8c8;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius:  5px;
+	-moz-border-radius-bottomright:     5px;
+	-moz-border-radius-bottomleft:      5px;
+	padding: 10px 0 10px 0;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown {
+	padding: 0;
+	margin: 0;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li {
+	display: block !important;
+	float: none !important;
+	padding: 0;
+	margin: 0;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li a {
+	font-size: 13px;
+	display: block !important;
+	float: none !important;
+	margin: 0;
+	padding: 10px 15px 10px 15px;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li a:hover {
+	background: #EEE;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li span#message_count {
+	background: #DDD;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	padding: 5px 12px 3px 12px;
+	color: #888;
+	display: block;
+	float: right;
+	position: relative;
+	top: -5px;
+	text-shadow: 0 1px 0 #FFF;
+	-webkit-box-shadow: inset 0 1px 1px #c8c8c8;
+	-moz-box-shadow: inset 0 1px 1px #c8c8c8;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li ul#teams_menu {
+	padding: 0;
+	margin: 0;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li ul#teams_menu {
+	border-top: 1px #e4ecee solid;
+	margin: 10px 0 0 0;
+}
+
+#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li ul#teams_menu h4 {
+	padding: 10px;
+	font-size: 12px;
+	font-weight: bold;
+	color: #444;
 }
 
 #lang_bar {

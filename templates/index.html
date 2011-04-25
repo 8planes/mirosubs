@@ -6,9 +6,9 @@
 {% block main_content %}
 {% load feedback recent_activity widget i18n announcement_tags messages_tags profiles_tags %}
 
-<div id="section_primary">
-  <div class="section_primary_left">
-    <h2>{% trans "Easily caption and translate your videos, with help from your viewers." %}</h2>
+<div class="clearfix">
+  <div id="intro">
+    <h1>{% trans "Easily caption and translate your videos, with help from your viewers." %}</h1>
     <ul class="user_service_menu">
       <li class="service_00">{% trans "Increase video views by reaching global audiences and being accessible to the deaf and hard-of-hearing." %}</li>
       <li class="service_01">{% trans "It's powered by viewers and other volunteers: it's collaborative editing and translation, like a wiki." %}</li>
@@ -16,68 +16,67 @@
       <li class="service_03">{% trans "The fastest way to add subtitle functionality to a single video or a whole site. Super easy to integrate with no software to install." %}</li>
       <li class="service_04">{% trans "Free, open-source, and non-profit!" %}</li>
     </ul>
-    <p class="counter">
+    <span class="counter">
       <span class="number">{{ all_videos }}</span> {% trans "videos use" %} Universal Subtitles
-    </p>
-  </div><!-- // section_primary_left -->
-</div><!-- // section_primary -->
+    </span>
+  </div><!-- // intro -->
+  <div id="intro_video">
+    {% block widget_container %}
+    <div id="widget_div" class="mirosubs-widget"></div> 
+            <script type="text/javascript"> 
+             var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
+                 document.getElementById('widget_div'), 
+                 { base_state: {},
+                   video_config: {
+                       poster: "http://s3.www.universalsubtitles.org/images/about-poster.png",
+                       style: "width:470px;height:353px;",
+                       play_to_click: true
+                   },
+                   video_url: "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv",
+                   alternate_video_urls: 
+                       [{ url: "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4", 
+                          config: {poster: "http://s3.www.universalsubtitles.org/images/about-poster.png"}}, 
+                        "http://www.youtube.com/watch?v=Y2IJb1YnAmQ"]});
+            </script>
+    {% endblock %}
+  </div><!-- // intro_video -->
+</div><!-- // clearfix -->
 
-  <div id="section_secondary">
-  <h3>{% trans "Add this subtitle tab to a video in seconds." %}</h3>
-    <div class="section_secondary_top">
-        <div class="section_secondary_top_left">
-          <h4>{% trans "For an individual video" %}</h4>
-          <form  action="{% url videos:create %}" method="POST">
-            <input type="text"  name="video_url" class="submit_video" />
-            <div class="row">
-              <span class="caption">{% trans "enter a video URL to enable" %}<br />{% trans "and then embed anywhere" %}</span>
-              <input type="submit" class="btn_submit_video" value=""/>
-            </div>
-          </form>
-        </div><!-- // section_secondary_top_left -->
-        
-        <div class="section_secondary_top_right">
-          <h4>{% trans "For every video on a page or site" %}</h4>
-          <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/mirosubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
-          <span class="indication">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
-        </div><!-- // section_secondary_top_right -->
-      </div><!-- // section_secondary_top -->
-    
-      <div class="section_secondary_bottom">
-        <div class="section_secondary_bottom_left">
-          <h5>{% trans "Universal Subtitles works with these video sites and formats:" %}</h5>
-          <div class="video_site_box">
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_00.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_01.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_02.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_03.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_04.jpg" width="91" height="40" alt="utube" />
-          </div><!-- // video_site_box -->
-        </div><!-- // section_secondary_bottom_left -->
-        
-        <div class="section_secondary_bottom_right">
-          <img src="{{ MEDIA_URL }}index/images/video2.jpg" width="168" height="157" alt="video2" />
-        </div><!-- // section_secondary_bottom_right -->
-      </div><!-- // section_secondary_bottom -->
-    </div><!-- // section_secondary -->
-  <div class="candy_wrapper">
-  <h2 class="arrows">{% trans 'With Universal Subtitles, you can:' %}</h2>
-
+  <div id="add_subtitles">
+  <h2>{% trans "Add this subtitle tab to a video in seconds." %}</h2>
+    <form action="{% url videos:create %}" method="POST" class="clearfix">
+      <fieldset id="submit_video">
+        <label>{% trans "For an individual video" %}</label>
+        <input type="text"  name="video_url" class="submit_video" />
+        <button type="submit" class="green_button small">Submit Video</button>
+        <span class="caption">{% trans "enter a video URL to enable and then embed anywhere" %}</span>
+      </fieldset>
+      <fieldset id="any_video">
+      <label>{% trans "For every video on a page or site" %}</label>
+      <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/mirosubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
+      <span class="caption">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
+      </fieldset>
+    </form>
+          
+    <h4>{% trans "Universal Subtitles works with these video sites and formats" %}</h5>
+    <div id="video_sites">
+      <img id="example_video" src="{{ MEDIA_URL }}index/images/video2.jpg" alt="Example Video" />
+      <img src="{{ MEDIA_URL }}index/images/video_site/video_00.jpg" alt="YouTube" />
+      <img src="{{ MEDIA_URL }}index/images/video_site/video_01.jpg" alt="Vimeo" />
+      <img src="{{ MEDIA_URL }}index/images/video_site/video_02.jpg" alt="Blip.tv" />
+      <img src="{{ MEDIA_URL }}index/images/video_site/video_03.jpg" alt="h.264" />
+      <img src="{{ MEDIA_URL }}index/images/video_site/video_04.jpg" alt="HTML5" />
+    </div><!-- // video_site_box -->
+    </div><!-- // add_subtitles -->
+  
+  <div id="unisubs_features">
+  <h2>{% trans 'With Universal Subtitles, you can:' %}</h2>
   <div class="one">
-    <div>
       <h4>{% trans 'Add subtitles' %}</h4>
-      <p>
-          {% blocktrans %}
-          We've built the easiest way to subtitle videos. Add our subtitling widget to
-          your video (or your site) and click the "subtitle me" button. The rest is
-          simple! Totally free, and no software to download.
-          {% endblocktrans %}
-          </p>
-    </div>
+      <p>{% blocktrans %}We've built the easiest way to subtitle videos. Add our subtitling widget toyour video (or your site) and click the "subtitle me" button. The rest is simple! Totally free, and no software to download.{% endblocktrans %}</p>
   </div>
 
   <div class="two">
-    <div>
       <h4>{% trans 'Add translations' %}</h4>
       <p>
           {% blocktrans %}
@@ -87,11 +86,9 @@
           community.
           {% endblocktrans %}
       </p>
-    </div>
   </div>
 
   <div class="three">
-    <div>
       <h4>{% trans 'Get volunteer help' %}</h4>
       <p>
         {% blocktrans %}
@@ -101,10 +98,9 @@
           your videos more accessible.
         {% endblocktrans %}
       </p>
-    </div>
   </div>
 
-  <div class="clear"></div>
+  <div class="clearfix"></div>
 
   <div class="its-free">
     <h3>{% trans 'It’s free with no software to download' %}</h3>
@@ -115,8 +111,7 @@
     (as a small, simple button)
     {% endblocktrans %}
     </p>
-
-
+    
     <p>
       <strong>{% trans 'Subtitling tools open in your page.' %}</strong> 
       {% blocktrans %}
@@ -132,42 +127,29 @@
     <p>
     {% blocktrans %}
       You add our widget to your videos.  Then you and your viewers can add
-      subtitles, which anyone can watch.  We save the subtitles on our site (but you
-      can download them).  And each video has its own collaboration space on our site
-      (like a wikipedia article) where people can make improvements, track changes,
-      and give feedback.
+      subtitles.  We save the subtitles on our site.  And each video has its own collaboration space on our site
+      where people can track changes, and give feedback.
     {% endblocktrans %}
     <br /><a href="{% url demo %}">{% trans 'Try the demo' %}</a>.
     </p>
   </div><!-- // how -->
 
-  <div class="clear"></div>
+  <div class="clearfix"></div>
 
   <div class="different">
     <h3>{% trans 'Why Universal Subtitles is different' %}</h3>
-
     <ul>
-      <li>
-          {% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers" %}
-          (<a href="{% url about_page %}">{% trans 'find out how to volunteer' %}</a>).
+      <li>{% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers" %}(<a href="{% url about_page %}">{% trans 'find out how to volunteer' %}</a>).
       </li>
-
-      <li>
-          {% trans 'The code is free and open source' %}
-           (<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)
-      </li>
-
+      <li>{% trans 'The code is free and open source' %}(<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)</li>
       <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>
-
       <li>{% trans "It's 100% web-based, there’s no software to download." %}</li>
-
       <li>{% trans "You don't have to host your video with us, and you're not dependent on any one video host, platform, or format." %}</li>
-
       <li>{% trans 'People are free to add subtitles to any video' %}</li>
     </ul>
   </div><!-- // different -->
 
-  <div class="box">
+  <div id="drumbeat_box">
     <div class="drumbeat"></div>
     <h3>{% trans 'Mozilla will double your donation!' %}</h3>
     <p>{% trans "We're a featured Mozilla Drumbeat project!" %}
@@ -175,5 +157,6 @@
     </p>
   </div><!-- // box -->
   
-  <div class="clear"></div>
+  <div class="clearfix"></div>
+  </div><!-- // unisubs_features -->
 {% endblock %}
