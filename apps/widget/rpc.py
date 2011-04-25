@@ -515,7 +515,7 @@ class Rpc(BaseRpc):
             is_latest = True
         base_language = None
         if language.is_dependent() and not version.is_forked:
-            base_language = language.real_standard_language().language
+            base_language = language.real_standard_language()
         return self._make_subtitles_dict(
             [s.__dict__ for s in version.subtitles()],
             language,

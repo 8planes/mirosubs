@@ -37,6 +37,7 @@ mirosubs.widget.SubtitleState = function(json, opt_subs) {
     this.SUBTITLES = json['subtitles'] || opt_subs;
     this.FORKED = json['forked'];
     this.BASE_LANGUAGE = json['base_language'];
+    this.BASE_LANGUAGE_PK = json['base_language_pk'];
     this.IS_LATEST = json['is_latest']
     this.TITLE = json['title']
 };

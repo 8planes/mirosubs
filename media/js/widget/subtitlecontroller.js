@@ -75,8 +75,9 @@ mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
     var state  = this.playController_.getSubtitleState();
     this.dialogOpener_.openDialogOrRedirect_(
         state.LANGUAGE,
-        null, 
-        state.LANGUAGE_PK
+        null,
+        state.LANGUAGE_PK,
+        state.BASE_LANGUAGE_PK
     );    
 };
 
