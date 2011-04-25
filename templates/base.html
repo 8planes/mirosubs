@@ -78,19 +78,16 @@
   <div id="bar_right">
   <div id="bar_search">
     <form method="get" action="{% url search:index %}">
-      <input type="text" name="q" />
+      <input type="text" name="q" style="width:50px !important;" />
     </form>
   </div><!-- // bar_search -->
   <ul id="bar_menu" class="clearfix">
-    <li id="nav_submit"><a href="{% url videos:create %}"><em class="icon"></em> {% trans 'Subtitle a video' %}</a></li>
-    <li><a href="{% url videos:list %}">{% trans 'Videos' %}</a></li>
-    <li><a href="http://blog.universalsubtitles.org">{% trans 'Blog' %}</a></li>
-    <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
-    <li><a href="{% url faq_page %}">{% trans 'FAQ' %}</a></li>
+    <li id="nav_submit"><a href="{% url videos:create %}"><em class="icon"></em> {% trans 'Create' %}</a></li>
+    <li><a href="{% url videos:list %}">{% trans 'Watch' %}</a></li>
+    <li><a href="http://blog.universalsubtitles.org">{% trans 'Contribute' %}</a></li>
+    <li><a href="http://blog.universalsubtitles.org">{% trans 'Solutions' %}</a></li>
+    <li><a href="http://blog.universalsubtitles.org">{% trans 'Follow' %}</a></li>
     {% if user.is_authenticated %}
-      {% if user.is_staff %}
-        <li id="nav_admin"><a target="_blank" href="{% url admin:index %}">{% trans 'Admin' %}</a></li>
-      {% endif %}
         <li id="me_menu">
         <div id="user_menu">
           <div id="menu_name">
@@ -144,7 +141,9 @@
   {% endblock %}
 </div><!-- // lang_bar -->
 
-
+{% if user.is_staff %}
+  <div id="nav_admin"><a target="_blank" href="{% url admin:index %}">{% trans 'Admin' %}</a></div>
+{% endif %}
 <div class="content container_12 wrapper clearfix">
   {% if messages %}
   <div id="messages">
