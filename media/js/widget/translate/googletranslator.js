@@ -98,7 +98,13 @@ mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widge
         };
         if (response['responseStatus'] == 200) {
             var translations = response['responseData']['translatedText'].split(d);
-            callback(translations, widgets);
+            
+            var encoded = [];
+            for (var i=0, len=translations.length; i<len; i++){
+                encoded.push(goog.string.unescapeEntities(translations[i]));
+            };
+
+            callback(encoded, widgets);
         }else{
             alert(response['responseDetails']+' This language can be unsupprted by Google Translator.')
             callback([], widgets, response['responseDetails']);
