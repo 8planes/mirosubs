@@ -346,9 +346,7 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEquals(False, translated.latest_version().is_forked)
 
         trans_subs = translated.version().subtitle_set.all()
-        sub_0= trans_subs[0]
-        sub_0.start_time = 1.0
-        sub_0.save()
+        
         self._login()
         data = self._make_data(lang='en', video_pk=video.pk)
         response = self.client.post(reverse('videos:upload_subtitles'), data)
@@ -356,8 +354,25 @@ class UploadSubtitlesTest(WebUseTest):
         
         translated = video.subtitlelanguage_set.all().filter(language='es')[0]
         self.assertTrue(translated.is_forked)
+        
         original_subs = video.subtitlelanguage_set.get(language='en').version().subtitle_set.all()
-        self.assertTrue(sub_0.start_time - original_subs[0].start_time > 0.5  )
+        trans_subs = translated.version().subtitle_set.all()
+        for i,sub in enumerate(original_subs):
+            if i == 0:
+                # the fixture's first subtitle has start
+                # / end time == 0, it's hidden
+                continue
+            self.assertEqual(sub.start_time, trans_subs[i].start_time)
+            self.assertTrue(sub.start_time > 0)
+            self.assertTrue(sub.end_time > 0)
+            self.assertEqual(sub.end_time, trans_subs[i].end_time)
+            self.assertEqual(sub.subtitle_order, trans_subs[i].subtitle_order)
+        # now change the translated    
+        sub_0= original_subs[1]
+        sub_0.start_time = 1.0
+        sub_0.save()
+        original_subs = video.subtitlelanguage_set.get(language='en').version().subtitle_set.all()
+        self.assertNotEqual(sub_0.start_time , original_subs[0].start_time)
 
     def test_upload_respects_lock(self):
         from widget.tests import create_two_sub_dependent_draft, RequestMockup
