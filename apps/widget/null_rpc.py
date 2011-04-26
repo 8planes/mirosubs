@@ -98,4 +98,4 @@ class NullRpc(BaseRpc):
         return []
 
     def _subtitles_dict(self):
-        return self._make_subtitles_dict([], None, True, False, 1, True, True, None, "what")
+        return self._make_subtitles_dict([], 'en', 1, True, False, 1, True, True, None, "what")

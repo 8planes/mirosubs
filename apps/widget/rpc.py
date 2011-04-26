@@ -507,7 +507,6 @@ class Rpc(BaseRpc):
         return cache
 
     def _subtitles_dict(self, version):
-
         language = version.language
         is_latest = False
         latest_version = language.latest_version()
@@ -518,7 +517,8 @@ class Rpc(BaseRpc):
             base_language = language.real_standard_language()
         return self._make_subtitles_dict(
             [s.__dict__ for s in version.subtitles()],
-            language,
+            language.language,
+            language.pk,
             language.is_original,
             language.is_complete,
             version.version_no,

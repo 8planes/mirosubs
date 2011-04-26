@@ -58,6 +58,7 @@ class NotAuthenticatedUser:
         return True
 
 rpc = Rpc()
+null_rpc = NullRpc()
 
 class TestRpcView(TestCase):
     
@@ -1163,7 +1164,11 @@ class TestRpc(TestCase):
         rpc.log_youtube_ei_failure(request, "/test-page")
         new_num_messages = Message.objects.all().count()
         self.assertEquals(num_messages + 1, new_num_messages)
-        
+
+    def test_start_editing_null(self):
+        request = RequestMockup(self.user_0)
+        response = null_rpc.start_editing(request, 'sadfdsf', 'en')
+        self.assertEquals(True, response['can_edit'])
         
     def _create_basic_draft(self, request, finished=False):
         return_value = rpc.show_widget(
