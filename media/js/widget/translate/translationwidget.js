@@ -73,19 +73,20 @@ mirosubs.translate.TranslationWidget.prototype.inputGainedFocus_ = function(even
 };
 
 mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(track) {
+    var value = goog.string.trim(this.translateInput_.value);
     if (!this.translation_) {
         if (track)
             mirosubs.SubTracker.getInstance().trackAdd(this.getCaptionID());
         this.translation_ =
             new mirosubs.translate
-            .EditableTranslation(this.unitOfWork_, this.getCaptionID());
+                .EditableTranslation(this.unitOfWork_, this.getCaptionID());
     }
     else {
-        var edited = this.translateInput_.value != this.onFocusText_;
+        var edited = value != this.onFocusText_;
         if (track && edited)
             mirosubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
     }
-    this.translation_.setText(this.translateInput_.value);
+    this.translation_.setText(value);
 };
 
 /**
@@ -117,7 +118,7 @@ mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
  * @return {boolean}
  */
 mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
-    return ! this.translateInput_.value;
+    return ! goog.string.trim(this.translateInput_.value);
 };
 
 mirosubs.translate.TranslationWidget.prototype.showLoadingIndicator = function(){

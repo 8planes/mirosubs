@@ -62,7 +62,7 @@ mirosubs.translate.TitleTranslationWidget.prototype.getOriginalValue = function(
 };
 
 mirosubs.translate.TitleTranslationWidget.prototype.isEmpty = function(){
-    return ! this.translateInput_.value;
+    return ! goog.string.trim(this.translateInput_.value);
 };
 
 mirosubs.translate.TitleTranslationWidget.prototype.setTranslation = function(value){
@@ -74,5 +74,5 @@ mirosubs.translate.TitleTranslationWidget.prototype.setTranslationContent =
     mirosubs.translate.TitleTranslationWidget.prototype.setTranslation;
 
 mirosubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
-    this.unitOfWork_.setTitle(this.translateInput_.value);
+    this.unitOfWork_.setTitle(goog.string.trim(this.translateInput_.value));
 };
