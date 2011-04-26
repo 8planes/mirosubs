@@ -124,7 +124,7 @@ class SubtitleHandler(BaseHandler):
         If language_id is not provided, you get the most completed subtitles for language.
         
         By default format of response is 'plain', so you get raw subtitles content in response.
-        If 'sformat' exists in request - format will be 'plain'. 
+        If 'sformat' exists in request - format will be 'django'. 
         If 'callback' exists in request - format will be 'json'.
         
         curl http://127.0.0.1:8000/api/1.0/subtitles/ -d 'video_url=http://www.youtube.com/watch?v=YMBdMtbth0o' -G
