@@ -233,7 +233,7 @@ class SubtitlesUploadBaseForm(forms.Form):
         return None
 
     def _find_appropriate_language(self, video, language_code):
-        language = self._best_existing(video.subtitle_languages(language_code))
+        language = video.subtitle_language(language_code)
         if not language:
             language = SubtitleLanguage(
                 video=video, is_original=False, is_forked=True)
@@ -291,6 +291,8 @@ class SubtitlesUploadBaseForm(forms.Form):
                 
         language.video.release_writelock()
         language.video.save()
+        translations = video.subtitlelanguage_set.filter(standard_language=language)
+        [t.fork(user=self.user) for t in translations]
         return language
 
     def get_errors(self):

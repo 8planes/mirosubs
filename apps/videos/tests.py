@@ -16,6 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see
 # http://www.gnu.org/licenses/agpl-3.0.html.
+
+import json
+
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, VideoUrl
 from apps.auth.models import CustomUser as User
@@ -284,6 +287,7 @@ class UploadSubtitlesTest(WebUseTest):
         language = self.video.subtitle_language(data['language'])
         version_no = language.latest_version().version_no
         self.assertEquals(1, language.subtitleversion_set.count())
+        num_languages_1 = self.video.subtitlelanguage_set.all().count()
         # now post the same file.
         data = self._make_data()
         self.client.post(reverse('videos:upload_subtitles'), data)
@@ -291,6 +295,8 @@ class UploadSubtitlesTest(WebUseTest):
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(1, language.subtitleversion_set.count())
         self.assertEquals(version_no, language.latest_version().version_no)
+        num_languages_2 = self.video.subtitlelanguage_set.all().count()
+        self.assertEquals(num_languages_1, num_languages_2)
 
     def test_upload_altered(self):
         self._login()
@@ -327,7 +333,47 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEqual(response.status_code, 200)
         
         video = Video.objects.get(pk=video_pk)
-        self.assertEqual(3, video.subtitlelanguage_set.count())
+        self.assertEqual(2, video.subtitlelanguage_set.count())
+
+
+    def test_upload_forks(self):
+        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        draft = create_two_sub_dependent_draft(request)
+        video = draft.video
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        self.assertFalse(translated.is_forked)
+        self.assertEquals(False, translated.latest_version().is_forked)
+
+        trans_subs = translated.version().subtitle_set.all()
+        sub_0= trans_subs[0]
+        sub_0.start_time = 1.0
+        sub_0.save()
+        self._login()
+        data = self._make_data(lang='en', video_pk=video.pk)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        self.assertTrue(translated.is_forked)
+        original_subs = video.subtitlelanguage_set.get(language='en').version().subtitle_set.all()
+        self.assertTrue(sub_0.start_time - original_subs[0].start_time > 0.5  )
+
+    def test_upload_respects_lock(self):
+        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        draft = create_two_sub_dependent_draft(request)
+        video = draft.video
+
+        self._login()
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        translated.writelock(request)
+        translated.save()
+        data = self._make_data(lang='en', video_pk=video.pk)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads( response.content)
+        self.assertFalse(data['success'])
 
 
 class Html5ParseTest(TestCase):
