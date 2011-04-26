@@ -81,7 +81,7 @@ def ajax_change_video_title(request):
     video_id = request.POST.get('video_id')
     title = request.POST.get('title')
     user = request.user
-    
+
     try:
         video = Video.objects.get(video_id=video_id)
         if title and not video.title or video.is_html5() or user.is_superuser:
@@ -94,8 +94,7 @@ def ajax_change_video_title(request):
             action.created = datetime.now()
             action.action_type = Action.CHANGE_TITLE
             action.save()
-            
-            send_change_title_email.delay(video.id, user and user.id, old_title, video.title)          
+            send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))          
     except Video.DoesNotExist:
         pass
     
