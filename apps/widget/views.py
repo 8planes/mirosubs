@@ -276,7 +276,7 @@ def xd_rpc(request, method_name, null=False):
 
 def jsonp(request, method_name, null=False):
     _log_call(request.browser_id, method_name, request.GET.copy())
-    callback = request.GET['callback']
+    callback = request.GET.get('callback', 'callback')
     args = { 'request' : request }
     for k, v in request.GET.items():
         if k != 'callback':
