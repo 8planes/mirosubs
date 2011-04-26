@@ -404,7 +404,7 @@ class Video(models.Model):
 
     def update_complete_state(self):
         language = self.subtitle_language()
-        if not language.has_version:
+        if not language or not language.has_version:
             self.is_subtitled = False
         else:
             self.is_subtitled = True
