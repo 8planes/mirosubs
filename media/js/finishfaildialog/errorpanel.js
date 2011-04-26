@@ -45,9 +45,9 @@ mirosubs.finishfaildialog.ErrorPanel.prototype.createDom = function() {
         $d('a', {'href': '#'}, 'Send error report.');
     goog.dom.append(
         this.getElement(),
-        $d('p', null, 'We failed to save your subtitles. Don\'t worry, your work is not lost.'),
-        this.errorReportContainer_,
-        $d('p', null, this.downloadSubsLink_));
+        $d('p', null, 'We failed to save your subtitles. Don\'t worry, your work is not lost. You can save it now on your computer and upload it to the server any time later.'),
+        $d('p', null, this.downloadSubsLink_),
+        this.errorReportContainer_);
     this.startUpload_();
 };
 
@@ -93,7 +93,7 @@ mirosubs.finishfaildialog.ErrorPanel.prototype.uploadSucceeded_ = function() {
     goog.dom.append(
         this.errorReportContainer_,
         this.getDomHelper().createDom(
-            'p', null, 'Error report successfully sent.'));
+            'p', null, 'Our staff have been notified about the problem and will look into it soon.'));
 };
 
 mirosubs.finishfaildialog.ErrorPanel.prototype.uploadFailed_ = function() {
