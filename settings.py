@@ -103,6 +103,7 @@ ALL_LANGUAGES['zh'] = gettext_noop(u'Chinese, Yue')
 ALL_LANGUAGES['oc'] = gettext_noop(u'Occitan')
 ALL_LANGUAGES['ht'] = gettext_noop(u'Creole, Haitian')
 ALL_LANGUAGES['ne'] = gettext_noop(u'Nepali')
+ALL_LANGUAGES['ee'] = gettext_noop(u'Ewe')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
