@@ -1253,6 +1253,11 @@ def _make_packet(updated=[], inserted=[], deleted=[], packet_no=1):
 
 class TestCache(TestCase):
 
+    fixtures = ['test_widget.json']
+    
+    def setUp(self):
+        self.user_0 = CustomUser.objects.get(pk=3)
+        
     def test_get_cache_url_no_exceptions(self):
         e = None
         try:
@@ -1282,6 +1287,27 @@ class TestCache(TestCase):
         except Video.DoesNotExist:
             self.fail("Should not point to a non existing video")
 
+
+
+    def test_cache_delete_valid_chars(self):
+        # this tests depends on memcache being available
+        try:
+            from memcache.Client import MemcachedKeyCharacterError
+        except ImportError:
+            return
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_draft(request)
+        video = draft.video
+        # make sure we have video on cache
+        video_id =  video_cache.get_video_id(video.get_absolute_url(video.get_video_url()))
+        self.assertEquals(video_id, video.video_id)
+        self.assertTrue(bool(video_id))
+        try:
+            video_cache.invalidate_cache(video_id)
+        except MemcachedKeyCharacterError:
+            self.fail("Cache invalidation should not fail")
+            
+         
 
 
 from widget.srt_subs import TTMLSubtitles
