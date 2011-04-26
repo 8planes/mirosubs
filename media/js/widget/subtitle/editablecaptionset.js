@@ -248,3 +248,12 @@ mirosubs.subtitle.EditableCaptionSet.CaptionEvent =
      */
     this.caption = caption;
 };
+
+/*
+ * @return {boolean} True if one or more captions have no time data.
+ */
+mirosubs.subtitle.EditableCaptionSet.prototype.needsSync = function() {
+    return goog.array.some(this.captions_, function(x){ 
+        return x.needsSync();
+    });
+};
