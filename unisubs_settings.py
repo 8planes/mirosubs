@@ -47,12 +47,7 @@ elif INSTALLATION == STAGING:
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'    
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-apps
-    try:
-        from oboeware.django import install_oboe_instrumentation
-        MIDDLEWARE_CLASSES = install_oboe_instrumentation(MIDDLEWARE_CLASSES)
-    except ImportError:
-        import sys
-        print >> sys.stderr, "[oboe] Unable to instrument app and middleware"
+    import oboeware.djangoware
     EMAIL_SUBJECT_PREFIX = '[usubs-staging]'
 elif INSTALLATION == PRODUCTION:
     SITE_ID = 8
