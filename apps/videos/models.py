@@ -1005,11 +1005,15 @@ class Subtitle(models.Model):
             return []
 
     def update_from(self, caption_dict, is_dependent_translation=False):
-        self.subtitle_text = caption_dict['text']
-        if not is_dependent_translation:
-            self.start_time = caption_dict['start_time']
-            self.end_time = caption_dict['end_time']
+        if 'text' in caption_dict:
+            self.subtitle_text = caption_dict['text']
 
+        if not is_dependent_translation:
+            if 'start_time' in caption_dict:
+                self.start_time = caption_dict['start_time']
+                
+            if 'end_time' in caption_dict:
+                self.end_time = caption_dict['end_time']
     
 class Action(models.Model):
     ADD_VIDEO = 1
