@@ -21,7 +21,8 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, SubtitleLanguage, SubtitleVersion, VideoUrl
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, SubtitleLanguage, SubtitleVersion,  \
+    VideoUrl, AlreadyEditingException
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
     SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm, TranscriptionFileForm, \
     AddFromFeedForm
@@ -40,7 +41,9 @@ from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
 from django.db.models import Sum, Q, F
+from django.db import transaction
 from django.utils.translation import ugettext
+from django.utils.encoding import force_unicode
 from statistic.models import EmailShareStatistic
 import urllib, urllib2
 from django.template.defaultfilters import slugify
@@ -205,15 +208,23 @@ def actions_list(request):
                        extra_context=extra_context)      
         
 @login_required
+@transaction.commit_manually
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
     if form.is_valid():
-        language = form.save()
-        output['success'] = True
-        output['next'] = language.get_absolute_url()
+        try:
+            language = form.save()
+            output['success'] = True
+            output['next'] = language.get_absolute_url()
+            transaction.commit()
+        except AlreadyEditingException, e:
+            output['errors'] = {"_all__":[force_unicode(e.msg)]}
+            transaction.rollback()
+     
     else:
         output['errors'] = form.get_errors()
+        transaction.rollback()
     return HttpResponse(json.dumps(output), "text/javascript")
 
 @login_required

@@ -197,7 +197,7 @@ class ViewsTest(WebUseTest):
         
         self.client.post(url, data=data)
         video = Video.objects.get(video_id=video_id)
-        self.assertEqual(video.subtitlelanguage_set.filter(language=slang).count(), 2)        
+        self.assertEqual(video.subtitlelanguage_set.filter(language=slang).count(), 1)        
 
 
     def test_subtitle_update(self):
