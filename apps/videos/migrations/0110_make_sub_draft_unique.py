@@ -21,10 +21,10 @@ class Migration(DataMigration):
         subs_to_disassociate = []
         for sub in draft.subtitle_set.all():
             if sub.version:
-                subs_to_disassociate.add(sub)
+                subs_to_disassociate.append(sub)
             else:
                 if sub.subtitle_id in subids:
-                    subs_to_delete.add(sub)
+                    subs_to_delete.append(sub)
                 else:
                     subids.add(sub.subtitle_id)
         for sub in subs_to_delete:
