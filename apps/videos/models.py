@@ -70,6 +70,13 @@ WRITELOCK_EXPIRATION = 30 # 30 seconds
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
+class AlreadyEditingException(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __unicode__(self):
+        return self.msg
+    
 class Video(models.Model):
     """Central object in the system"""
     video_id = models.CharField(max_length=255, unique=True)
@@ -678,6 +685,33 @@ class SubtitleLanguage(models.Model):
                 exclude = [exclude]            
             qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
         return qs
+
+    def fork(self, user=None):
+        if self.standard_language is None:
+            return
+        if self.is_writelocked:
+            raise AlreadyEditingException(_("Sorry, you cannot upload subtitles right now because someone is editing the language you are uploading or a translation of it"))
+        try:
+            old_version = self.subtitleversion_set.all()[:1].get()    
+            version_no = old_version.version_no + 1
+        except SubtitleVersion.DoesNotExist:
+            old_version = None
+            version_no = 0
+
+        version = SubtitleVersion(
+                language=self, version_no=version_no,
+                datetime_started=datetime.now(), user=user,
+                note=u'Uploaded', is_forked=True, time_change=1, text_change=1)
+        version.save()
+
+        original_subs = self.standard_language.latest_version().subtitle_set.all()
+
+        for item in original_subs:
+            item.duplicate_for(version=version).save()
+        version.update_percent_done(sends_notification=False)
+        self.is_forked = True
+        self.update_complete_state()
+        self.save()
 
 models.signals.m2m_changed.connect(User.sl_followers_change_handler, sender=SubtitleLanguage.followers.through)
 post_save.connect(video_cache.on_subtitle_language_save, SubtitleLanguage)
