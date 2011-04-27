@@ -1282,9 +1282,25 @@ class TestCache(TestCase):
         except Video.DoesNotExist:
             self.fail("Should not point to a non existing video")
 
+    def test_cache_delete_valid_chars(self):
+        # this tests depends on memcache being available
+        try:
+            from memcache.Client import MemcachedKeyCharacterError
+        except ImportError:
+            return
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_draft(request)
+        video = draft.video
+        # make sure we have video on cache
+        video_id =  video_cache.get_video_id(video.get_absolute_url(video.get_video_url()))
+        self.assertEquals(video_id, video.video_id)
+        self.assertTrue(bool(video_id))
+        try:
+            video_cache.invalidate_cache(video_id)
+        except MemcachedKeyCharacterError:
+            self.fail("Cache invalidation should not fail")
 
-
-from widget.srt_subs import TTMLSubtitles
+from widget.srt_subs import TTMLSubtitles, SRTSubtitles, SBVSubtitles, TXTSubtitles, SSASubtitles
 
 class TestSubtitlesGenerator(TestCase):
     fixtures = ['test_widget.json']
@@ -1312,3 +1328,17 @@ class TestSubtitlesGenerator(TestCase):
         handler = TTMLSubtitles
         h = handler(self.subtitles, self.video)
         self.assertTrue(unicode(h))
+    
+    def test_one_subtitle(self):
+        subtitles = [{
+            'text': u'Witam, jestem Fr\xe9d\xe9ric Couchet, General Manager, od kwietnia', 
+            'end': 3.1000000000000001, 
+            'start': 0.0
+        }]
+        self.assertTrue(unicode(SRTSubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(TTMLSubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(SSASubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(SBVSubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(TXTSubtitles(subtitles, self.video)))
+
+    

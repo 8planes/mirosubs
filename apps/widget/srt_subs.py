@@ -102,7 +102,11 @@ class BaseSubtitles(object):
         
     def __unicode__(self):
         raise Exception('Should return subtitles')
-
+    
+    @classmethod
+    def isnumber(cls, val):
+        return isinstance(val, (int, long, float))
+    
 class GenerateSubtitlesHandlerClass(dict):
     
     def register(self, handler, type=None):
@@ -121,7 +125,7 @@ class SRTSubtitles(BaseSubtitles):
         
         i = 1
         for item in self.subtitles:
-            if item['start'] and item['end']:
+            if self.isnumber(item['start']) and self.isnumber(item['end']):
                 output.append(unicode(i))
                 start = self.format_time(item['start'])
                 end = self.format_time(item['end'])
@@ -129,7 +133,7 @@ class SRTSubtitles(BaseSubtitles):
                 output.append(item['text'].strip())
                 output.append(u'')
                 i += 1
-        
+
         return self.line_delimiter.join(output)
 
     def format_time(self, time):
@@ -153,7 +157,7 @@ class SBVSubtitles(BaseSubtitles):
         output = []
         
         for item in self.subtitles:
-            if item['start'] and item['end']:
+            if self.isnumber(item['start']) and self.isnumber(item['end']):
                 start = self.format_time(item['start'])
                 end = self.format_time(item['end'])
                 output.append(u'%s,%s' % (start, end))
@@ -221,10 +225,11 @@ class SSASubtitles(BaseSubtitles):
         output.append(u'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text%s' % dl)
         tpl = u'Dialogue: 0,%s,%s,Default,,0000,0000,0000,,%s%s'
         for item in self.subtitles:
-            start = self.format_time(item['start'])
-            end = self.format_time(item['end'])
-            text = self._clean_text(item['text'].strip())
-            output.append(tpl % (start, end, text, dl))
+            if self.isnumber(item['start']) and self.isnumber(item['end']):
+                start = self.format_time(item['start'])
+                end = self.format_time(item['end'])
+                text = self._clean_text(item['text'].strip())
+                output.append(tpl % (start, end, text, dl))
         return ''.join(output)
 
 GenerateSubtitlesHandler.register(SSASubtitles)
@@ -246,7 +251,7 @@ class TTMLSubtitles(BaseSubtitles):
         body = etree.SubElement(tt, 'body')
         div = etree.SubElement(body, 'div')
         for item in self.subtitles:
-            if item['text'] and item['start'] and item['end']:
+            if item['text'] and self.isnumber(item['start']) and self.isnumber(item['end']):
                 attrib = {}
                 attrib['begin'] = self.format_time(item['start'])
                 attrib['dur'] = self.format_time(item['end']-item['start'])
