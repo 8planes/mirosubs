@@ -16,6 +16,8 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+import datetime
+
 from django.core.cache import cache
 from videos.types.base import VideoTypeError
 from django.conf import settings
@@ -107,6 +109,9 @@ def _video_languages_key(video_id):
 
 def _video_languages_verbose_key(video_id):
     return "widget_video_languages_verbose_{0}".format(video_id)
+
+def _video_writelocked_langs_key(video_id):
+    return "writelocked_langs_{0".format(video_id)
 
 def get_video_urls(video_id):
     cache_key = _video_urls_key(video_id)
@@ -202,5 +207,40 @@ def get_video_languages_verbose(video_id, max_items=6):
         cache.set(cache_key, data, TIMEOUT)
         return data
 
+def _writelocked_store_langs(video_id, langs):
+    delimiter = ";"
+    cache_key = _video_languages_verbose_key(video_id)
+    value = delimiter.join(langs)
+    cache.set(cache_key, value, TIMEOUT)
+    return langs
+        
+def writelocked_langs(video_id):
+    from videos.models import WRITELOCK_EXPIRATION, Video
+    delimiter = ";"
+    cache_key = _video_languages_verbose_key(video_id)
+    value = cache.get(cache_key)
+    if value is not None:
+        langs = [x for x in value.split(delimiter) if len(x)  > 0]
+        return langs
+    else:
+        treshold = datetime.datetime.now() - datetime.timedelta(seconds=WRITELOCK_EXPIRATION)
+        video = Video.objects.get(video_id=video_id)
+        langs = list(video.subtitlelanguage_set.filter(writelock_time__gte=treshold))
+        value = _writelocked_store_langs(video_id, [x.language for x in langs])
+        return value
 
+def writelock_add_lang(video_id, language_code):
+    langs = writelocked_langs(video_id)
+    if not language_code in langs:
+        langs.append(language_code)
+        _writelocked_store_langs(video_id, langs)
+        
+def writelock_remove_lang(video_id, language_code):
+    langs = writelocked_langs(video_id)
+    if language_code in langs:
+        langs.remove(language_code)
+        _writelocked_store_langs(video_id, langs)
 
+def writelocked_langs_clear(video_id):
+    cache_key = _video_languages_verbose_key(video_id)
+    cache.delete(cache_key)
