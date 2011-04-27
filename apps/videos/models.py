@@ -686,9 +686,20 @@ class SubtitleLanguage(models.Model):
             qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
         return qs
 
-    def fork(self, user=None):
-        if self.standard_language is None:
-            return
+    def fork(self, from_version=None, user=None):
+        """
+        If this a dependent and non write locked language,
+        then will fork it, making all it's subs timing not
+        depend on anything else.
+        If locked, will throw an AlreadyEditingException .
+        """
+        if from_version:
+            original_subs = from_version.subtitle_set.all()
+        else:
+            if self.standard_language is None:
+                return    
+            original_subs = self.standard_language.latest_version().subtitle_set.all()        
+        
         if self.is_writelocked:
             raise AlreadyEditingException(_("Sorry, you cannot upload subtitles right now because someone is editing the language you are uploading or a translation of it"))
         try:
@@ -703,12 +714,21 @@ class SubtitleLanguage(models.Model):
                 datetime_started=datetime.now(), user=user,
                 note=u'Uploaded', is_forked=True, time_change=1, text_change=1)
         version.save()
-
-        original_subs = self.standard_language.latest_version().subtitle_set.all()
-
-        for item in original_subs:
-            item.duplicate_for(version=version).save()
+            
+        original_sub_dict = dict([(s.subtitle_id, s) for s  in original_subs])
+        my_subs = old_version.subtitle_set.all()
+        for sub in my_subs:
+            if sub.subtitle_id in original_sub_dict:
+                # if we can match, then we can simply copy
+                # time data
+                standard_sub = original_sub_dict[sub.subtitle_id]
+                sub.start_time = standard_sub.start_time
+                sub.end_time = standard_sub.end_time
+            sub.pk = None
+            sub.version = version
+            sub.save()     
         version.update_percent_done(sends_notification=False)
+        
         self.is_forked = True
         self.update_complete_state()
         self.save()

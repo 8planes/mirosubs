@@ -292,7 +292,7 @@ class SubtitlesUploadBaseForm(forms.Form):
         language.video.release_writelock()
         language.video.save()
         translations = video.subtitlelanguage_set.filter(standard_language=language)
-        [t.fork(user=self.user) for t in translations]
+        [t.fork(from_version=old_version, user=self.user) for t in translations]
         return language
 
     def get_errors(self):
