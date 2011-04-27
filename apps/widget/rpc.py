@@ -107,7 +107,8 @@ class Rpc(BaseRpc):
             'pk': language.pk,
             'language': language.language,
             'dependent': language.is_dependent(),
-            'subtitle_count': language.subtitle_count }
+            'subtitle_count': language.subtitle_count,
+            'in_progress': language.is_writelocked }
         if language.is_dependent():
             summary['percent_done'] = language.percent_done
             if language.real_standard_language():
