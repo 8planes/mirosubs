@@ -349,6 +349,9 @@ class UploadSubtitlesTest(WebUseTest):
         
         self._login()
         data = self._make_data(lang='en', video_pk=video.pk)
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        trans_subs_before = list(translated.version().subtitle_set.all())
+        
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
         
@@ -356,17 +359,16 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertTrue(translated.is_forked)
         
         original_subs = video.subtitlelanguage_set.get(language='en').version().subtitle_set.all()
-        trans_subs = translated.version().subtitle_set.all()
-        for i,sub in enumerate(original_subs):
-            if i == 0:
-                # the fixture's first subtitle has start
-                # / end time == 0, it's hidden
-                continue
-            self.assertEqual(sub.start_time, trans_subs[i].start_time)
-            self.assertTrue(sub.start_time > 0)
-            self.assertTrue(sub.end_time > 0)
-            self.assertEqual(sub.end_time, trans_subs[i].end_time)
-            self.assertEqual(sub.subtitle_order, trans_subs[i].subtitle_order)
+        
+        trans_subs_after = translated.version().subtitle_set.all()
+        # we want to make sure we did not have a time data
+        # but we do now, and text hasn't changed
+        for old_sub, new_sub in zip(trans_subs_before, trans_subs_after):
+            self.assertEqual(old_sub.subtitle_text, new_sub.subtitle_text)
+            self.assertTrue(bool(new_sub.start_time))
+            self.assertTrue(bool(new_sub.end_time))
+            self.assertTrue(old_sub.start_time is None)
+            self.assertTrue(old_sub.end_time is None)
         # now change the translated    
         sub_0= original_subs[1]
         sub_0.start_time = 1.0
