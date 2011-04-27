@@ -368,7 +368,7 @@ class UploadSubtitlesTest(WebUseTest):
             self.assertTrue(bool(new_sub.start_time))
             self.assertTrue(bool(new_sub.end_time))
             self.assertTrue(old_sub.start_time is None)
-            self.assertFalse(old_sub.end_time is None)
+            self.assertTrue(old_sub.end_time is None)
         # now change the translated    
         sub_0= original_subs[1]
         sub_0.start_time = 1.0
