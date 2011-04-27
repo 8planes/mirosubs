@@ -1258,6 +1258,34 @@ class TestCache(TestCase):
     def setUp(self):
         self.user_0 = CustomUser.objects.get(pk=3)
         
+    def test_writelock_cache(self):
+        
+        request = RequestMockup(self.user_0) 
+        draft = create_two_sub_dependent_draft(request)
+        video = draft.video
+        video_cache.writelocked_langs_clear(video.video_id)
+        cached_langs = video_cache.writelocked_langs(video.video_id)
+        self.assertEquals(0, len(cached_langs))
+
+        languages = video.subtitlelanguage_set.all()
+        lang_1 = languages[0]
+        lang_1.writelock(request)
+        cached_langs = video_cache.writelocked_langs(video.video_id)
+        print cached_langs
+        self.assertEquals(1, len(cached_langs))
+        self.assertEquals(lang_1.language, cached_langs[0])
+
+        lang_2 = languages[1]
+        lang_2.writelock(request)
+        cached_langs = video_cache.writelocked_langs(video.video_id)
+        self.assertEquals(2, len(cached_langs))
+        self.assertEquals(lang_2.language, cached_langs[1])
+        print cached_langs
+        lang_1.release_writelock()
+        lang_2.release_writelock()
+        cached_langs = video_cache.writelocked_langs(video.video_id)
+        self.assertEquals(0, len(cached_langs))
+
     def test_get_cache_url_no_exceptions(self):
         e = None
         try:
@@ -1286,8 +1314,6 @@ class TestCache(TestCase):
             Video.objects.get(video_id=video_id)
         except Video.DoesNotExist:
             self.fail("Should not point to a non existing video")
-
-
 
     def test_cache_delete_valid_chars(self):
         # this tests depends on memcache being available

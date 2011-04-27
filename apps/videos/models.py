@@ -612,11 +612,15 @@ class SubtitleLanguage(models.Model):
             self.writelock_owner = None
         self.writelock_session_key = request.browser_id
         self.writelock_time = datetime.now()
+        from apps.widget.video_cache import writelock_add_lang
+        writelock_add_lang(self.video.video_id, self.language)
 
     def release_writelock(self):
         self.writelock_owner = None
         self.writelock_session_key = ''
         self.writelock_time = None
+        from apps.widget.video_cache import writelock_remove_lang
+        writelock_remove_lang(self.video.video_id, self.language)
 
     def version(self, version_no=None):
         if version_no is None:
