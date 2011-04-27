@@ -7,13 +7,17 @@
     <div class="clearfix">
       <div  class="completed_translations">{% team_video_lang_list team_video.video %}</div>
     </div>
+
     <p></p>
         {% if team_video.description %}
-    <p class="team-detail-list-description">
-      {{ team_video.description|urlize }}
-    </p>
-    {% endif %}
-    <div class="clearfix"></div>
+        <p class="team-detail-list-description">
+          {{ team_video.description|urlize }}
+        </p>
+        {% endif %}
+        <div class="clearfix"></div>
+
+
+        {% team_video_in_progress_list team_video.video %}
 
     <div class="team-video-buttons-container">
 
@@ -21,7 +25,7 @@
 
 
     <a class="blue_button small team_video_{{ team_video.pk }} add_subtitles_bt" href="#">
-      {% trans 'Add Subtitles' %}
+      {% trans 'Add Subtitles ' %}
     </a>
     {% if can_edit_video %}
       <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
