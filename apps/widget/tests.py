@@ -1306,11 +1306,8 @@ class TestCache(TestCase):
             video_cache.invalidate_cache(video_id)
         except MemcachedKeyCharacterError:
             self.fail("Cache invalidation should not fail")
-            
-         
 
-
-from widget.srt_subs import TTMLSubtitles
+from widget.srt_subs import TTMLSubtitles, SRTSubtitles, SBVSubtitles, TXTSubtitles, SSASubtitles
 
 class TestSubtitlesGenerator(TestCase):
     fixtures = ['test_widget.json']
@@ -1338,3 +1335,17 @@ class TestSubtitlesGenerator(TestCase):
         handler = TTMLSubtitles
         h = handler(self.subtitles, self.video)
         self.assertTrue(unicode(h))
+    
+    def test_one_subtitle(self):
+        subtitles = [{
+            'text': u'Witam, jestem Fr\xe9d\xe9ric Couchet, General Manager, od kwietnia', 
+            'end': 3.1000000000000001, 
+            'start': 0.0
+        }]
+        self.assertTrue(unicode(SRTSubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(TTMLSubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(SSASubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(SBVSubtitles(subtitles, self.video)))
+        self.assertTrue(unicode(TXTSubtitles(subtitles, self.video)))
+
+    
