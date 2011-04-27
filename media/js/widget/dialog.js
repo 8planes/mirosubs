@@ -190,7 +190,7 @@ mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
     var serverModel = this.getServerModel();
     if (serverModel){
         var args = {};
-        args['draft_pk'] = this.serverModel_.getDraftPK();
+        args['draft_pk'] = serverModel.getDraftPK();
         mirosubs.Rpc.call("release_lock", args);    
     }
     
