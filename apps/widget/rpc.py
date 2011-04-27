@@ -186,6 +186,7 @@ class Rpc(BaseRpc):
         if original_language_code:
             self._save_original_language(video_id, original_language_code)
 
+        video_cache.writelock_add_lang(video_id, language.language)
         return return_dict
 
     def release_lock(self, request, draft_pk):
@@ -193,6 +194,8 @@ class Rpc(BaseRpc):
         if language.can_writelock(request):
             language.release_writelock()
             language.save()
+        if language:
+            video_cache.writelocked_langs_clear(language.video.video_id)
         return { "response": "ok" }
 
     def fork(self, request, draft_pk):
@@ -286,6 +289,7 @@ class Rpc(BaseRpc):
             from videos.models import Action
             Action.create_caption_handler(new_version)
 
+        video_cache.writelocked_langs_clear(draft.video.video_id)    
         return { "response" : "ok",
                  "last_saved_packet": draft.last_saved_packet,
                  "drop_down_contents" : 

@@ -211,7 +211,7 @@ def _writelocked_store_langs(video_id, langs):
     delimiter = ";"
     cache_key = _video_languages_verbose_key(video_id)
     value = delimiter.join(langs)
-    cache.set(cache_key, value, TIMEOUT)
+    cache.set(cache_key, value, 5 * 60)
     return langs
         
 def writelocked_langs(video_id):
@@ -230,6 +230,7 @@ def writelocked_langs(video_id):
         return value
 
 def writelock_add_lang(video_id, language_code):
+    writelocked_langs_clear(video_id)
     langs = writelocked_langs(video_id)
     if not language_code in langs:
         langs.append(language_code)

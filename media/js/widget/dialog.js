@@ -184,6 +184,10 @@ mirosubs.Dialog.prototype.showSaveWorkDialog_ = function() {
     unsavedWarning.setVisible(true);
 };
 mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
+    var args = {};
+    args['draft_pk'] = this.serverModel_.getDraftPK();
+    mirosubs.Rpc.call("release_lock", args);
+
     mirosubs.Dialog.superClass_.setVisible.call(this, false);
     if (mirosubs.returnURL != null) {
         goog.Timer.callOnce(function() {

@@ -1184,7 +1184,7 @@ class TestCache(TestCase):
         lang_1 = languages[0]
         lang_1.writelock(request)
         cached_langs = video_cache.writelocked_langs(video.video_id)
-        print cached_langs
+        
         self.assertEquals(1, len(cached_langs))
         self.assertEquals(lang_1.language, cached_langs[0])
 
@@ -1193,7 +1193,6 @@ class TestCache(TestCase):
         cached_langs = video_cache.writelocked_langs(video.video_id)
         self.assertEquals(2, len(cached_langs))
         self.assertEquals(lang_2.language, cached_langs[1])
-        print cached_langs
         lang_1.release_writelock()
         lang_2.release_writelock()
         cached_langs = video_cache.writelocked_langs(video.video_id)
