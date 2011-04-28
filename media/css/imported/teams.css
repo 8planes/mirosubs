@@ -173,12 +173,13 @@ a.add_subtitles_bt{
 
 .team-detail-list-description{
     display:block;
-    with: 400px;
+    width: 400px;
 }
 
-.team-video-buttons-container .blue_button{
-    margin-right: 4px !important;
+.team-detail-list-video-in-lang{
+    font-style:italic;
 }
+
 .inprogress-list{
     color: #A00;
     width: 400px;
