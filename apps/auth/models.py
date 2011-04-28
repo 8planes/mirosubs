@@ -151,13 +151,16 @@ class CustomUser(BaseUser):
         Just to control this query
         """
         languages = cache.get('user_languages_%s' % self.pk)
-        
+
         if languages is None:
             languages = self.userlanguage_set.all()
             cache.set('user_languages_%s' % self.pk, languages, 60*24*7)
-            
+
         return languages 
-    
+
+    def speaks_language(self, language_code):
+        return language_code in [l.language for l in self.get_languages()]
+
     def managed_teams(self):
         return self.teams.filter(members__is_manager=True)
 
