@@ -115,7 +115,7 @@ def _video_languages_verbose_key(video_id):
     return "widget_video_languages_verbose_{0}".format(video_id)
 
 def _video_writelocked_langs_key(video_id):
-    return "writelocked_langs_{0".format(video_id)
+    return "writelocked_langs_{0}".format(video_id)
 
 def get_video_urls(video_id):
     cache_key = _video_urls_key(video_id)
@@ -220,7 +220,7 @@ def get_video_languages_verbose(video_id, max_items=6):
 
 def _writelocked_store_langs(video_id, langs):
     delimiter = ";"
-    cache_key = _video_languages_verbose_key(video_id)
+    cache_key = _video_writelocked_langs_key(video_id)
     value = delimiter.join(langs)
     cache.set(cache_key, value, 5 * 60)
     return langs
@@ -228,7 +228,7 @@ def _writelocked_store_langs(video_id, langs):
 def writelocked_langs(video_id):
     from videos.models import WRITELOCK_EXPIRATION, Video
     delimiter = ";"
-    cache_key = _video_languages_verbose_key(video_id)
+    cache_key = _video_writelocked_langs_key(video_id)
     value = cache.get(cache_key)
     if value is not None:
         langs = [x for x in value.split(delimiter) if len(x)  > 0]
@@ -254,5 +254,5 @@ def writelock_remove_lang(video_id, language_code):
         _writelocked_store_langs(video_id, langs)
 
 def writelocked_langs_clear(video_id):
-    cache_key = _video_languages_verbose_key(video_id)
+    cache_key = _video_writelocked_langs_key(video_id)
     cache.delete(cache_key)
