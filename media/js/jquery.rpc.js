@@ -47,7 +47,7 @@ jQuery.JSON = {
         if (/["\\\x00-\x1f]/.test(s)) {
             return '"' +
             s.replace(/([\x00-\x1f\\"])/g, function(a, b){
-                var c = m[b];
+                var c = jQuery.JSON.m[b];
                 if (c) {
                     return c;
                 }
