@@ -17,14 +17,25 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.core.management.base import BaseCommand
-from django.core.management import call_command
-from django.db.transaction import commit_on_success
+from videos.models import SubtitleLanguage
+from time import sleep
+
+WAIT_BETWEEN_WRITES = 1
 
 class Command(BaseCommand):
-
-    @commit_on_success
+    
     def handle(self, *args, **kwargs):
-        options = kwargs.get('options', {})
-        fixtures = ['staging_users.json', 'staging_videos.json', 'staging_teams.json']
-        for fx in fixtures:
-            call_command('loaddata', fx, **options)
+        print 'Run recalculate all sub langs count & percent done'
+        all_count = SubtitleLanguage.objects.all().count() * 1.0
+        updated = 0
+        percent_done = 0
+        for sl in SubtitleLanguage.objects.all():
+            sl.update_percent_done()
+            sl.update_complete_state()
+            sleep(WAIT_BETWEEN_WRITES)
+            updated += 1
+            new_percent_done = int((updated / all_count) * 100)
+            if new_percent_done != percent_done:
+                print "%s%% done" % percent_done
+                percent_done = new_percent_done
+            
