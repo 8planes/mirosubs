@@ -225,7 +225,7 @@ def upload_subtitles(request):
     else:
         output['errors'] = form.get_errors()
         transaction.rollback()
-    return HttpResponse(json.dumps(output), "text/javascript")
+    return HttpResponse(u'<textarea>%s</textarea>'  % json.dumps(output))
 
 @login_required
 def paste_transcription(request):
