@@ -50,8 +50,10 @@ mirosubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
     return videoPlayers;
 };
 
-mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = function(elem) {
-    var matches = /file=([^&]+)/.exec(this.swfURL(elem));
+mirosubs.widgetizer.JWPlayer.prototype.makeVideoSource_ = function(elem) {
+    this.logger_.info('flashvars: ' + this.flashVars(elem));
+    var matches = /file=([^&]+)/.exec(this.flashVars(elem));
+    this.logger_.info('matched url: ' + matches[1]);
     return mirosubs.video.YoutubeVideoSource.forURL(matches[1]);
 };
 
@@ -80,7 +82,7 @@ mirosubs.widgetizer.JWPlayer.prototype.unwidgetizedElements_ = function() {
 
 mirosubs.widgetizer.JWPlayer.prototype.isJWPlayer_ = function(element) {    
     var swfSrc = this.swfURL(element);
-    var isJW = this.VIDS_ARE_JW_ && swfSrc.match(/player[^\.].swf$/i) != null;
+    var isJW = this.VIDS_ARE_JW_ && swfSrc.match(/player[^\.]*.swf$/i) != null;
     this.logger_.info(
         'encountered possible swf: ' + swfSrc + '. It is ' + 
             (isJW ? '' : 'not ') + 'a JWPlayer');

@@ -264,7 +264,8 @@ JS_WIDGETIZER_CORE.extend([
     "widgetizer/videoplayermaker.js",
     "widgetizer/widgetizer.js",
     "widgetizer/youtube.js",
-    "widgetizer/html5.js"])
+    "widgetizer/html5.js",
+    "widgetizer/jwplayer.js"])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('widgetizer/dowidgetize.js')
