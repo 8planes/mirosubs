@@ -11,11 +11,10 @@
     <p></p>
 
          {% team_video_in_progress_list team_video.video %}
-         {% if team_video.description %}
-           <p>
-             {{ team_video.description|urlize }}
+         <p class="team-detail-list-description">
+         {% if team_video.description %}{{ team_video.description|urlize }}. {% endif %}{% if team_video.video.subtitle_language %} <span class="team-detail-list-video-in-lang">{% trans "Video in:" %}&nbsp;{{team_video.video.subtitle_language.language_display}}.</span>{% endif %}
            </p>
-          {% endif %}
+          
     <div class="team-video-buttons-container">
 
 

@@ -172,6 +172,14 @@ a.add_subtitles_bt{
 
 }
 
+.team-detail-list-description{
+    display:block;
+    width: 400px;
+}
+
+.team-detail-list-video-in-lang{
+    font-style:italic;
+}
 .inprogress-list{
     color: #A00;
     width: 400px;
