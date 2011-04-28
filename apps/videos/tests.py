@@ -389,7 +389,7 @@ class UploadSubtitlesTest(WebUseTest):
         data = self._make_data(lang='en', video_pk=video.pk)
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
-        data = json.loads( response.content)
+        data = json.loads(response.content[10:-11])
         self.assertFalse(data['success'])
 
 
