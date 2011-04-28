@@ -17,25 +17,21 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.core.management.base import BaseCommand
-from videos.models import SubtitleLanguage
+from auth.models import CustomUser as User
 from time import sleep
 
-WAIT_BETWEEN_WRITES = 1
-
 class Command(BaseCommand):
-    
+    args = "<lang_code lang_code ...>"
+
     def handle(self, *args, **kwargs):
-        print 'Run recalculate all sub langs count & percent done'
-        all_count = SubtitleLanguage.objects.all().count() * 1.0
-        updated = 0
-        percent_done = 0
-        for sl in SubtitleLanguage.objects.all():
-            sl.update_percent_done()
-            sl.update_complete_state()
-            sleep(WAIT_BETWEEN_WRITES)
-            updated += 1
-            new_percent_done = int((updated / all_count) * 100)
-            if new_percent_done != percent_done:
-                print "%s%% done" % percent_done
-                percent_done = new_percent_done
-            
+        file_name = 'users_{0}.csv'.format(''.join(args))
+        with open(file_name, 'w') as f:
+            self._write_users_to_file(f, args)
+
+    def _write_users_to_file(self, file, langs):
+        user_ids = set()
+        for lang in langs:
+            for user in User.objects.all():
+                if user.speaks_language(lang) and user.id not in user_ids:
+                    user_ids.add(user.id)
+                    file.write('{0},{1},{2}\n'.format(user.id, user.username, user.email))
