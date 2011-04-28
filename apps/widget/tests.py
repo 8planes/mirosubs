@@ -1253,6 +1253,11 @@ def _make_packet(updated=[], inserted=[], deleted=[], packet_no=1):
 
 class TestCache(TestCase):
 
+    fixtures = ['test_widget.json']
+    
+    def setUp(self):
+        self.user_0 = CustomUser.objects.get(pk=3)
+        
     def test_get_cache_url_no_exceptions(self):
         e = None
         try:
@@ -1281,6 +1286,8 @@ class TestCache(TestCase):
             Video.objects.get(video_id=video_id)
         except Video.DoesNotExist:
             self.fail("Should not point to a non existing video")
+
+
 
     def test_cache_delete_valid_chars(self):
         # this tests depends on memcache being available

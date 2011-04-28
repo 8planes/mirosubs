@@ -58,7 +58,7 @@ mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
 goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
 /**
- * This decorates an Embed element.
+ * This decorates an Object or Embed element.
  * @override
  * @param {Element} element Either object or embed for yt video. Must 
  *     have enablejsapi=1.
@@ -83,9 +83,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element)
             if (count == 20)
                 that.logExternalInterfaceError_();
             if (that.player_['playVideo']) {
+                timer.stop();
                 that.player_.addEventListener(
                     'onStateChange', that.eventFunction_);
-                timer.stop();
             }
         });
     timer.start();

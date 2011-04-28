@@ -255,3 +255,5 @@ mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
 mirosubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {
     return this.currentlyEditing_;
 };
+
+

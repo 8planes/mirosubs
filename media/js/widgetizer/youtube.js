@@ -68,11 +68,7 @@ mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
 mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
     function(element, includeConfig) 
 {
-    var url;
-    if (element.nodeName == "EMBED")
-        url = element['src'];
-    else
-        url = element['data'];
+    var url = this.swfURL(element);
     var config = null;
     if (includeConfig) {
         config = {};
@@ -110,24 +106,9 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
         player.render(parent);
 };
 
-mirosubs.widgetizer.Youtube.prototype.isYoutubeEmbed_ = function(element) {
-    var url = element['src'];
-    return mirosubs.video.YoutubeVideoSource.isYoutube(url);
-};
-
-mirosubs.widgetizer.Youtube.prototype.isYoutubeObject_ = function(element) {
-    var url = element['data'];
-    return mirosubs.video.YoutubeVideoSource.isYoutube(url);
-};
-
-mirosubs.widgetizer.Youtube.prototype.objectContainsEmbed_ = 
-    function(element) 
-{
-    return !!goog.dom.findNode(
-        element,
-        function(node) {
-            return node.nodeName == "EMBED";
-        });
+mirosubs.widgetizer.Youtube.prototype.isYoutube_ = function(element) {
+    return mirosubs.video.YoutubeVideoSource.isYoutube(
+        this.swfURL(element));
 };
 
 mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
@@ -141,13 +122,13 @@ mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
         // most likely this will not catch all youtube players on the page
         var embeds = goog.dom.getElementsByTagNameAndClass('embed');
         for (var i = 0; i < embeds.length; i++) {
-            if (this.isYoutubeEmbed_(embeds[i]) && this.isUnwidgetized(embeds[i]))
+            if (this.isYoutube_(embeds[i]) && this.isUnwidgetized(embeds[i]))
                 unwidgetizedElements.push(embeds[i]);
         }
         var objects = document.getElementsByTagName('object');
         for (var i = 0; i < objects.length; i++)
-            if (!this.objectContainsEmbed_(objects[i]) &&
-                this.isYoutubeObject_(objects[i]) && 
+            if (!this.objectContainsEmbed(objects[i]) &&
+                this.isYoutube_(objects[i]) && 
                 this.isUnwidgetized(objects[i]))
                 unwidgetizedElements.push(objects[i]);
         return unwidgetizedElements;

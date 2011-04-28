@@ -182,6 +182,14 @@ mirosubs.subtitle.EditableCaption.prototype.hasStartTimeOnly = function() {
     return this.getStartTime() != -1 &&
         this.getEndTime() == -1;
 };
+
+/*
+ * @return {boolean} True if either startTime or endTime is not defined.
+ */
+mirosubs.subtitle.EditableCaption.prototype.needsSync = function() {
+    return this.getStartTime() == -1 || this.getEndTime() == -1;
+}
+
 mirosubs.subtitle.EditableCaption.prototype.changed_ =
     function(timesFirstAssigned, opt_dontTrack)
 {

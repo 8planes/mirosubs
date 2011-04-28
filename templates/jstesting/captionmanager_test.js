@@ -42,7 +42,7 @@ function setUp() {
 function setUpForInitialCaptions(captions) {
     var uw = new mirosubs.UnitOfWork();
     MS_editableCaptionSet =
-	new mirosubs.subtitle.EditableCaptionSet(captions, uw);
+	     new mirosubs.subtitle.EditableCaptionSet(captions, uw);
     MS_dispatchedCaptions = [];
     MS_videoPlayer = new mirosubs.testing.StubVideoPlayer();
     MS_captionManager = new mirosubs.CaptionManager(
@@ -308,5 +308,28 @@ function testDeleteSubNoTime() {
         MS_editableCaptionSet.caption(3));
     assertEquals(1, MS_dispatchedCaptions.length);
 }
+
+function testNeedsSync() {
+    // function captionJSON(startTime, endTime, captionID, subOrder) {
+    setUpForInitialCaptions([
+        captionJSON(0.5, 2, 1, 1),
+		captionJSON(2, 3, 2, 2)
+        ]);
+ 
+    assertFalse(MS_editableCaptionSet.needsSync() );
+
+    setUpForInitialCaptions([
+        captionJSON(0.5, 2, 1, 1),
+		captionJSON(-1, 3, 2, 2)
+        ]);
+    assertTrue(MS_editableCaptionSet.needsSync());
+
+    setUpForInitialCaptions([
+        captionJSON(0.5, 2, 1, 1),
+		captionJSON(1, -1, 2, 2)
+        ]);
+    assertTrue(MS_editableCaptionSet.needsSync());
+}
+
 
 {% endblock %}
