@@ -16,26 +16,22 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django import template
-from django.db.models.query import QuerySet
+from django.core.management.base import BaseCommand
+from auth.models import CustomUser as User
+from time import sleep
 
-register = template.Library()
+class Command(BaseCommand):
+    args = "<lang_code lang_code ...>"
 
-@register.simple_tag
-def load_related_for_result(search_qs):
-    #should be fixed in future if result will contain not only Video
-    from videos.models import SubtitleLanguage
-    
-    if not isinstance(search_qs, QuerySet):
-        videos = dict((obj.object.id, obj.object) for obj in search_qs)
-        langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
+    def handle(self, *args, **kwargs):
+        file_name = 'users_{0}.csv'.format(''.join(args))
+        with open(file_name, 'w') as f:
+            self._write_users_to_file(f, args)
 
-        if videos:
-            for v in videos.values():
-                v.langs_cache = []
-    
-            for l in langs_qs:
-                videos[l.video_id].langs_cache.append(l)
-
-    return ''
-
+    def _write_users_to_file(self, file, langs):
+        user_ids = set()
+        for lang in langs:
+            for user in User.objects.all():
+                if user.speaks_language(lang) and user.id not in user_ids:
+                    user_ids.add(user.id)
+                    file.write('{0},{1},{2}\n'.format(user.id, user.username, user.email))

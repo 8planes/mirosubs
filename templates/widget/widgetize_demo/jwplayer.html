@@ -1,0 +1,16 @@
+{% extends "widget/widgetize_demo/base_widgetize_demo.html" %}
+
+{% block scripts %}
+<script>
+window.UNISUBS_JW_ONLY = true;
+</script>
+{% endblock %}
+
+{% block contents %}
+<object height="325" width="530" type="application/x-shockwave-flash" id="player21" name="player21" data="{{MEDIA_URL}}test/player.swf">
+  <param name="allowfullscreen" value="true">
+  <param name="allowscriptaccess" value="always">
+  <param name="flashvars" value="file=http://www.youtube.com/v/0a1EYZLXQRM&amp;autostart=false&amp;plugins=sharing-2&amp;sharing.link=http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-189-multicore-programming-primer-january-iap-2007/projects/projects-introduction&amp;sharing.code=%3Cembed%20src%3D%22http%3A//ocw.mit.edu/jw-player-free/player.swf%22%20flashvars%3D%22file%3Dhttp%3A//www.youtube.com/v/0a1EYZLXQRM%22%20allowfullscreen%3Dtrue%20allowscriptaccess%3Dalways%20id%3Dplayer1%20name%3Dplayer1%20%20height%3D325%20width%3D530%3E%3C/embed%3E&amp;captions.file=null&amp;provider=youtube&amp;image=http://img.youtube.com/vi/0a1EYZLXQRM/0.jpg">
+</object>
+{% endblock %}
+

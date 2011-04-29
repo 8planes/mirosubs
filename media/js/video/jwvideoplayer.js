@@ -39,8 +39,6 @@ goog.inherits(mirosubs.video.JWVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 mirosubs.video.JWVideoPlayer.prototype.decorateInternal = function(element) {
     mirosubs.video.JWVideoPlayer.superClass_.decorateInternal.call(this, element);
     this.player_ = element;
-    this.playerSize_ = goog.style.getSize(element);
-    this.setDimensionsKnownInternal();
     window[this.stateListener_] = goog.bind(this.playerStateChanged_, this);
     window[this.timeListener_] = goog.bind(this.playerTimeChanged_, this);
     var timer = new goog.Timer(250);
@@ -57,7 +55,8 @@ mirosubs.video.JWVideoPlayer.prototype.decorateInternal = function(element) {
     timer.start();
 };
 mirosubs.video.JWVideoPlayer.prototype.decoratedPlayerIsReady_ = function() {
-    this.logger_.info('ready');
+    this.playerSize_ = goog.style.getSize(this.player_);
+    this.setDimensionsKnownInternal();
     this.player_['addModelListener']('STATE', this.stateListener_);
     this.player_['addModelListener']('TIME', this.timeListener_);
 };
@@ -80,9 +79,9 @@ mirosubs.video.JWVideoPlayer.prototype.playerStateChanged_ = function(data) {
 mirosubs.video.JWVideoPlayer.prototype.playerTimeChanged_ = function(data) {
     this.playheadTime_ = data['position'];
     if (!this.duration_)
-        this.duration_ = data['duration'];
+        this.duration_ = data['duration'];    
     this.dispatchEvent(
-        mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
+        mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };
 mirosubs.video.JWVideoPlayer.prototype.exitDocument = function() {
     mirosubs.video.JWVideoPlayer.superClass_.exitDocument.call(this);
@@ -102,17 +101,19 @@ mirosubs.video.JWVideoPlayer.prototype.isPausedInternal = function() {
     // TODO: write me
 };
 mirosubs.video.JWVideoPlayer.prototype.playInternal = function() {
-    this.sendEvent_('play', [true]);
+    this.sendEvent_('play', ['true']);
 };
 mirosubs.video.JWVideoPlayer.prototype.pauseInternal = function() {
-    this.sendEvent_('play', [false]);
+    this.sendEvent_('play', ['false']);
 };
 mirosubs.video.JWVideoPlayer.prototype.stopLoadingInternal = function() {
     // TODO: implement this for real.
     this.pause();
+    this.logger_.info('stopLoadingInternal called');
 };
 mirosubs.video.JWVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     // TODO: implement this for real at some point.
+    this.logger_.info('resumeLoadingInternal called');
 };
 mirosubs.video.JWVideoPlayer.prototype.getPlayheadTime = function() {
     return this.playheadTime_;
@@ -126,6 +127,8 @@ mirosubs.video.JWVideoPlayer.prototype.getVideoElement = function() {
 mirosubs.video.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
     // TODO: prob check to see if this.player_ exists yet; if not, queue the
     // command.
+    this.logger_.info('sendEvent_ called with ' + event + ' and args ' +
+                      args.join(', '));
     this.player_['sendEvent'].apply(this.player_, goog.array.concat(event, args));
 };
 

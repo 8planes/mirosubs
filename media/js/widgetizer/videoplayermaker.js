@@ -58,6 +58,22 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
     return element.nodeName == 'EMBED' ? element['src'] : element['data'];
 };
 
+mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
+    if (element.nodeName == "EMBED") {
+        return element['flashvars'];
+    } else {
+        var paramNode = goog.dom.findNode(
+            element, 
+            function(n) {
+                return n.nodeName == "PARAM" && n['name'] == 'flashvars';
+            });
+        if (paramNode) {
+            return paramNode['value'];
+        }
+    }
+    return null;
+};
+
 mirosubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
     return !!goog.dom.findNode(
         element,
