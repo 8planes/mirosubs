@@ -27,7 +27,7 @@ ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
-                admin_dir, separate_sentry_db=False,
+                admin_dir, separate_uslogging_db=False,
                 celeryd_bounce_cmd=""):
     env.user = username
     env.web_hosts = hosts
@@ -38,7 +38,7 @@ def _create_env(username, hosts, s3_bucket,
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
-    env.separate_sentry_db = separate_sentry_db
+    env.separate_uslogging_db = separate_uslogging_db
     env.celeryd_bounce_cmd=celeryd_bounce_cmd
 
 def staging(username):
@@ -81,9 +81,9 @@ def syncdb():
         _git_pull()
         run('{0}/env/bin/python manage.py syncdb '
             '--settings=unisubs_settings'.format(env.static_dir))
-        if env.separate_sentry_db:
+        if env.separate_uslogging_db:
             run('{0}/env/bin/python manage.py syncdb '
-                '--database=sentry --settings=unisubs_settings'.format(
+                '--database=uslogging --settings=unisubs_settings'.format(
                     env.static_dir))
 
 def migrate(app_name=''):
@@ -92,9 +92,9 @@ def migrate(app_name=''):
         _git_pull()
         run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs_settings'.format(
                 env.static_dir, app_name))
-        if env.separate_sentry_db:
+        if env.separate_uslogging_db:
             run('{0}/env/bin/python manage.py migrate sentry '
-                '--database=sentry --settings=unisubs_settings'.format(
+                '--database=uslogging --settings=unisubs_settings'.format(
                     env.static_dir))
             run('{0}/env/bin/python manage.py migrate uslogging'
                 '--database=uslogging --settings=unisubs_settings'.format(
