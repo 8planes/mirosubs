@@ -539,4 +539,3 @@ def language_summary( language):
     else:
         summary['is_complete'] = language.is_complete
     return summary
-    
