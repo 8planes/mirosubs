@@ -37,5 +37,5 @@ def load_related_for_result(search_qs):
             for l in langs_qs:
                 videos[l.video_id].langs_cache.append(l)
 
-
+    return ''
 
