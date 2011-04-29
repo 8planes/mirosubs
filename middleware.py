@@ -22,6 +22,22 @@ class SaveUserIp(object):
                     request.user.save()
             except ValidationError:
                 pass
+
+class ResponseTimeMiddleware(object):
+    """
+    Writes the time this request took to process, as a cookie in the
+    response. In order for it to work, it must be the very first
+    middleware in settings.py
+    """
+    def process_request(self, request):
+        request.init_time = time.time()
+        return None
+
+    def process_response(self, request, response):
+        if hasattr(request, "init_time"):
+            delta = time.time() - request.init_time
+            response.set_cookie('response_time', str(delta * 1000))
+        return response
         
 class P3PHeaderMiddleware(object):
     def process_response(self, request, response):
