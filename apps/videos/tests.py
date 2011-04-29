@@ -1237,6 +1237,15 @@ class TestPercentComplete(TestCase):
             
         self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 0)
+
+    def test_count_as_complete(self):
+        self.assertFalse(self.video.complete_date)
+        # set the original lang as complete, should be completed
+        self.translation.update_percent_done()
+        self.assertEqual(self.translation.percent_done, 100)
+        self.translation.save()
+        video = Video.objects.get(pk=self.video.pk)
+        self.assertTrue(video.complete_date is not None)        
     
 from videos import alarms
 from django.conf import settings
