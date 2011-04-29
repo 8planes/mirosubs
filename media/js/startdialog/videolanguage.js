@@ -40,6 +40,9 @@ mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
         name += (this.IS_COMPLETE ? " (100%)" : " (incomplete)");
     else if (this.DEPENDENT && this.PERCENT_DONE > 0)
         name += " (" + this.PERCENT_DONE + "%)";
+    else if (this.DEPENDENT){
+        name += " (" + this.SUBTITLE_COUNT + " lines )";
+    }
     return name + (this.IN_PROGRESS ? " (in progress)" : "");
 };
 

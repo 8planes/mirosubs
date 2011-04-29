@@ -256,6 +256,7 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertFalse(video.is_subtitled)
         self.assertFalse(video.was_subtitled)
         self.assertEquals(32, language.subtitle_count)
+        self.assertEquals(0, language.percent_done)
         
         data = self._make_data()
         data['is_complete'] = not data['is_complete']

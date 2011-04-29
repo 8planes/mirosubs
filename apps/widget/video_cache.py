@@ -168,6 +168,7 @@ def get_subtitle_count(video_id):
         return return_value
 
 def get_video_languages(video_id):
+    from apps.widget.rpc import language_summary
     cache_key = _video_languages_key(video_id)
     value = cache.get(cache_key)
     if value is not None:
@@ -178,7 +179,7 @@ def get_video_languages(video_id):
         translated_languages = video.subtitlelanguage_set.filter(has_version=True) \
             .filter(is_original=False)
 
-        return_value = [(t.language, t.percent_done, t.pk) for t in translated_languages]
+        return_value = [language_summary(l) for l in translated_languages]
         cache.set(cache_key, return_value, TIMEOUT)
         return return_value
 

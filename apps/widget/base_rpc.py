@@ -43,7 +43,7 @@ class BaseRpc:
 
     def _drop_down_contents(self, video_id):
         return {
-            'translations': self._initial_languages(video_id),
+            'languages': self._initial_languages(video_id),
             'subtitle_count': self._subtitle_count(video_id)
             }
 
