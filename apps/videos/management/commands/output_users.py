@@ -17,14 +17,21 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.core.management.base import BaseCommand
-from django.core.management import call_command
-from django.db.transaction import commit_on_success
+from auth.models import CustomUser as User
+from time import sleep
 
 class Command(BaseCommand):
+    args = "<lang_code lang_code ...>"
 
-    @commit_on_success
     def handle(self, *args, **kwargs):
-        options = kwargs.get('options', {})
-        fixtures = ['staging_users.json', 'staging_videos.json', 'staging_teams.json']
-        for fx in fixtures:
-            call_command('loaddata', fx, **options)
+        file_name = 'users_{0}.csv'.format(''.join(args))
+        with open(file_name, 'w') as f:
+            self._write_users_to_file(f, args)
+
+    def _write_users_to_file(self, file, langs):
+        user_ids = set()
+        for lang in langs:
+            for user in User.objects.all():
+                if user.speaks_language(lang) and user.id not in user_ids:
+                    user_ids.add(user.id)
+                    file.write('{0},{1},{2}\n'.format(user.id, user.username, user.email))

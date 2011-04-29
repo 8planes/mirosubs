@@ -1287,8 +1287,6 @@ class TestCache(TestCase):
         except Video.DoesNotExist:
             self.fail("Should not point to a non existing video")
 
-
-
     def test_cache_delete_valid_chars(self):
         # this tests depends on memcache being available
         try:

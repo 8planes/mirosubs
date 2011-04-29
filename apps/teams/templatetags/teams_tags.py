@@ -144,3 +144,11 @@ def team_video_lang_list(context, video, max_items=6):
         'video': video
         }
 
+@register.inclusion_tag('teams/_team_video_in_progress_list.html')
+def team_video_in_progress_list( video):
+    langs_raw = video_cache.writelocked_langs(video.video_id)
+    
+    langs = [_(ALL_LANGUAGES_DICT[x]) for x in langs_raw]
+    return  {
+        'languages': langs
+        }

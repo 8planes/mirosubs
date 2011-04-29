@@ -616,7 +616,7 @@ class SubtitleLanguage(models.Model):
     def release_writelock(self):
         self.writelock_owner = None
         self.writelock_session_key = ''
-        self.writelock_time = None
+        self.writelock_time = None        
 
     def version(self, version_no=None):
         if version_no is None:

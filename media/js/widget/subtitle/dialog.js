@@ -431,3 +431,7 @@ mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
             });
     }
 };
+
+mirosubs.subtitle.Dialog.prototype.getServerModel = function(){
+    return this.serverModel_;
+}
