@@ -131,27 +131,12 @@ class Rpc(BaseRpc):
                     return_value['subtitles'] = subtitles
         return return_value
 
-    def _language_summary(self, language):
-        summary = {
-            'pk': language.pk,
-            'language': language.language,
-            'dependent': language.is_dependent(),
-            'subtitle_count': language.subtitle_count,
-            'in_progress': language.is_writelocked }
-        if language.is_dependent():
-            summary['percent_done'] = language.percent_done
-            if language.real_standard_language():
-                summary['standard_pk'] = \
-                    language.real_standard_language().pk
-        else:
-            summary['is_complete'] = language.is_complete
-        return summary
 
     def fetch_start_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)
         my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
         video = models.Video.objects.get(video_id=video_id)
-        video_languages = [self._language_summary(l) for l 
+        video_languages = [language_summary(l) for l 
                            in video.subtitlelanguage_set.all()]
         original_language = None
         if video.subtitle_language():
@@ -537,3 +522,21 @@ class Rpc(BaseRpc):
 
     def _initial_languages(self, video_id):
         return video_cache.get_video_languages(video_id)
+
+
+def language_summary( language):
+    summary = {
+        'pk': language.pk,
+        'language': language.language,
+        'dependent': language.is_dependent(),
+        'subtitle_count': language.subtitle_count,
+        'in_progress': language.is_writelocked }
+    if language.is_dependent():
+        summary['percent_done'] = language.percent_done
+        if language.real_standard_language():
+            summary['standard_pk'] = \
+                language.real_standard_language().pk
+    else:
+        summary['is_complete'] = language.is_complete
+    return summary
+    

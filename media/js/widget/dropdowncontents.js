@@ -21,12 +21,14 @@ goog.provide('mirosubs.widget.DropDownContents');
 /**
  * @constructor
  */
-mirosubs.widget.DropDownContents = function(translations, subtitleCount) {
+mirosubs.widget.DropDownContents = function(languages, subtitleCount) {
     /**
-     * Array of [language code, percent done] pairs.
+     * Array of {mirosubs.startdialog.VideoLanguage}
      * @type {Array.<Array>}
      */
-    this.TRANSLATIONS = translations;
+    this.LANGUAGES = goog.array.map(languages, function(l){
+        return new mirosubs.startdialog.VideoLanguage(l);
+    });
     /**
      * Number of subtitles for this video.
      * @type {Number}
@@ -36,5 +38,5 @@ mirosubs.widget.DropDownContents = function(translations, subtitleCount) {
 
 mirosubs.widget.DropDownContents.fromJSON = function(json) {
     return new mirosubs.widget.DropDownContents(
-        json['translations'], json['subtitle_count']);
+        json['languages'], json['subtitle_count']);
 };
