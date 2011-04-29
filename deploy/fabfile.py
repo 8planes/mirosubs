@@ -96,6 +96,9 @@ def migrate(app_name=''):
             run('{0}/env/bin/python manage.py migrate sentry '
                 '--database=sentry --settings=unisubs_settings'.format(
                     env.static_dir))
+            run('{0}/env/bin/python manage.py migrate uslogging'
+                '--database=uslogging --settings=unisubs_settings'.format(
+                    env.static_dir))
     bounce_memcached()
 
 def migrate_fake(app_name):
