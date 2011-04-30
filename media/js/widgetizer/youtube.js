@@ -33,7 +33,7 @@ mirosubs.widgetizer.Youtube = function() {
 goog.inherits(mirosubs.widgetizer.Youtube,
               mirosubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.Youtube.logger_ =
+mirosubs.widgetizer.Youtube.prototype.logger_ =
     goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
 
 mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
@@ -107,6 +107,9 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
 };
 
 mirosubs.widgetizer.Youtube.prototype.isYoutube_ = function(element) {
+    this.logger_.info(this.swfURL(element));
+    this.logger_.info(mirosubs.video.YoutubeVideoSource.isYoutube(
+        this.swfURL(element)));
     return mirosubs.video.YoutubeVideoSource.isYoutube(
         this.swfURL(element));
 };
@@ -119,18 +122,20 @@ mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
     }
     else {
         var unwidgetizedElements = [];
-        // most likely this will not catch all youtube players on the page
-        var embeds = goog.dom.getElementsByTagNameAndClass('embed');
-        for (var i = 0; i < embeds.length; i++) {
-            if (this.isYoutube_(embeds[i]) && this.isUnwidgetized(embeds[i]))
-                unwidgetizedElements.push(embeds[i]);
-        }
         var objects = document.getElementsByTagName('object');
         for (var i = 0; i < objects.length; i++)
-            if (!this.objectContainsEmbed(objects[i]) &&
-                this.isYoutube_(objects[i]) && 
-                this.isUnwidgetized(objects[i]))
+            if (this.isYoutube_(objects[i]) && 
+                this.isUnwidgetized(objects[i])) {
                 unwidgetizedElements.push(objects[i]);
+            }
+        var embeds = goog.dom.getElementsByTagNameAndClass('embed');
+        for (var i = 0; i < embeds.length; i++) {
+            if (this.isYoutube_(embeds[i]) && 
+                this.isUnwidgetized(embeds[i]) &&
+                embeds[i].parentNode.nodeName != "OBJECT")
+                unwidgetizedElements.push(embeds[i]);
+        }
+        console.log(unwidgetizedElements);
         return unwidgetizedElements;
     }
 };

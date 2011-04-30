@@ -54,24 +54,41 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element
         function(p) { return p.getVideoElement() == element; });
 };
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
-    return element.nodeName == 'EMBED' ? element['src'] : element['data'];
+mirosubs.widgetizer.VideoPlayerMaker.prototype.findObjectParam_ = 
+    function(objElem, paramName) 
+{
+    return goog.dom.findNode(
+        objElem, 
+        function(n) {
+            return n.nodeName == "PARAM" && n['name'] == paramName;
+        });
 };
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
+mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam_ =
+    function(element, embedParamName, opt_objectParamName) 
+{
     if (element.nodeName == "EMBED") {
-        return element['flashvars'];
+        return element[embedParamName];
     } else {
-        var paramNode = goog.dom.findNode(
-            element, 
-            function(n) {
-                return n.nodeName == "PARAM" && n['name'] == 'flashvars';
-            });
+        var paramNode = this.findObjectParam_(
+            element, opt_objectParamName || embedParamName);
         if (paramNode) {
             return paramNode['value'];
         }
     }
     return null;
+};
+
+mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
+    if (element.nodeName == "OBJECT" && element['data']) {
+        return element['data'];
+    } else {
+        return this.findFlashParam_(element, 'src', 'movie');
+    }
+};
+
+mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
+    return this.findFlashParam_(element, 'flashvars');
 };
 
 mirosubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
