@@ -293,8 +293,10 @@ def jsonp(request, method_name, null=False):
         "text/javascript")
 
 def _log_call(browser_id, method_name, request_args):
-    call = WidgetDialogCall(
-        browser_id=browser_id,
-        method=method_name,
-        request_args=request_args)
-    call.save()
+    if method_name in ['start_editing', 'fork', 'set_title', 
+                       'save_subtitles', 'finished_subtitles']:
+        call = WidgetDialogCall(
+            browser_id=browser_id,
+            method=method_name,
+            request_args=request_args)
+        call.save()
