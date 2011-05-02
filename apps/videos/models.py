@@ -643,7 +643,7 @@ class SubtitleLanguage(models.Model):
             self.subtitle_count = new_value
             self.save()
 
-    def update_percent_done(self):
+    def update_percent_done(self, saves_always=False):
         original_value = self.percent_done
         if not self.is_original and not self.is_forked:
             try:
@@ -674,7 +674,7 @@ class SubtitleLanguage(models.Model):
                 self.percent_done = 0 
         else:
             self.percent_done = 100
-        if original_value != self.percent_done:
+        if saves_always or original_value != self.percent_done:
             if self.percent_done == 100:
                 self.is_complete = True
             elif not self.is_forked is not self.is_original:
