@@ -250,10 +250,12 @@ mirosubs.subtitle.EditableCaptionSet.CaptionEvent =
 };
 
 /*
- * @return {boolean} True if one or more captions have no time data.
+ * @return {boolean} True if one or more captions have no time data, 
+ * except for the last one, whose end time (only) can be undefined.
  */
 mirosubs.subtitle.EditableCaptionSet.prototype.needsSync = function() {
-    return goog.array.some(this.captions_, function(x){ 
+    return goog.array.some(goog.array.slice(this.captions_, 0, -1), function(x){ 
         return x.needsSync();
-    });
+    }) || this.captions_[this.captions_.length -1].getStartTime() == 
+        mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
 };
