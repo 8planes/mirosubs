@@ -38,8 +38,8 @@ mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_subOrder, opt_j
         {
             'subtitle_id' : mirosubs.randomString(),
             'text' : '',
-            'start_time' : -1,
-            'end_time' : -1,
+            'start_time' : mirosubs.subtitle.EditableCaption.TIME_UNDEFINED,
+            'end_time' : mirosubs.subtitle.EditableCaption.TIME_UNDEFINED,
             'sub_order' : opt_subOrder
         };
     this.previousCaption_ = null;
@@ -50,6 +50,12 @@ goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
 mirosubs.subtitle.EditableCaption.orderCompare = function(a, b) {
     return a.getSubOrder() - b.getSubOrder();
 };
+
+/*
+ * @const
+ * @type {int} 
+ */
+mirosubs.subtitle.EditableCaption.TIME_UNDEFINED = -1;
 
 mirosubs.subtitle.EditableCaption.CHANGE = 'captionchanged';
 
@@ -97,22 +103,24 @@ mirosubs.subtitle.EditableCaption.prototype.setStartTime =
 {
     var previousStartTime = this.getStartTime();
     this.setStartTime_(startTime);
-    this.changed_(previousStartTime == -1);
+    this.changed_(previousStartTime == 
+                  mirosubs.subtitle.EditableCaption.TIME_UNDEFINED);
 };
 mirosubs.subtitle.EditableCaption.prototype.setStartTime_ =
     function(startTime)
 {
     startTime = Math.max(startTime, this.getMinStartTime());
     this.json['start_time'] = startTime;
-    if (this.getEndTime() != -1 &&
+    if (this.getEndTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED &&
         this.getEndTime() < startTime +
         mirosubs.subtitle.EditableCaption.MIN_LENGTH)
         this.setEndTime_(
             startTime + mirosubs.subtitle.EditableCaption.MIN_LENGTH);
     if (this.previousCaption_ &&
-        (this.previousCaption_.getEndTime() == -1 ||
+        (this.previousCaption_.getEndTime() == 
+         mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
          this.previousCaption_.getEndTime() > startTime))
-        this.previousCaption_.setEndTime(startTime);
+         this.previousCaption_.setEndTime(startTime);
 };
 mirosubs.subtitle.EditableCaption.prototype.getStartTime = function() {
     return this.json['start_time'];
@@ -132,7 +140,8 @@ mirosubs.subtitle.EditableCaption.prototype.setEndTime_ =
         this.setStartTime_(
             endTime - mirosubs.subtitle.EditableCaption.MIN_LENGTH);
     if (this.nextCaption_ &&
-        this.nextCaption_.getStartTime() != -1 &&
+        this.nextCaption_.getStartTime() != 
+        mirosubs.subtitle.EditableCaption.TIME_UNDEFINED &&
         this.nextCaption_.getStartTime() < endTime)
         this.nextCaption_.setStartTime(endTime);
 };
@@ -141,9 +150,10 @@ mirosubs.subtitle.EditableCaption.prototype.setEndTime_ =
  * with UnitOfWork.
  */
 mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
-    if (this.getStartTime() != -1 || this.getEndTime() != -1) {
-        this.json['start_time'] = -1;
-        this.json['end_time'] = -1;
+    if (this.getStartTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
+        this.getEndTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED) {
+        this.json['start_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
+        this.json['end_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
         if (this.unitOfWork_)
             this.unitOfWork_.registerUpdated(this);
     }
@@ -157,7 +167,7 @@ mirosubs.subtitle.EditableCaption.prototype.getMinStartTime = function() {
          mirosubs.subtitle.EditableCaption.MIN_LENGTH) : 0;
 };
 mirosubs.subtitle.EditableCaption.prototype.getMaxStartTime = function() {
-    if (this.getEndTime() == -1)
+    if (this.getEndTime() == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED)
         return 99999;
     else
         return this.getEndTime() -
@@ -167,7 +177,8 @@ mirosubs.subtitle.EditableCaption.prototype.getMinEndTime = function() {
     return this.getStartTime() + mirosubs.subtitle.EditableCaption.MIN_LENGTH;
 };
 mirosubs.subtitle.EditableCaption.prototype.getMaxEndTime = function() {
-    return this.nextCaption_ && this.nextCaption_.getEndTime() != -1 ?
+    return this.nextCaption_ && this.nextCaption_.getEndTime() != 
+        mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ?
         (this.nextCaption_.getEndTime() -
          mirosubs.subtitle.EditableCaption.MIN_LENGTH) : 99999;
 };
@@ -176,18 +187,20 @@ mirosubs.subtitle.EditableCaption.prototype.getCaptionID = function() {
 };
 mirosubs.subtitle.EditableCaption.prototype.isShownAt = function(time) {
     return this.getStartTime() <= time &&
-        (this.getEndTime() == -1 || time < this.getEndTime());
+        (this.getEndTime() == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
+            time < this.getEndTime());
 };
 mirosubs.subtitle.EditableCaption.prototype.hasStartTimeOnly = function() {
-    return this.getStartTime() != -1 &&
-        this.getEndTime() == -1;
+    return this.getStartTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED &&
+        this.getEndTime() == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
 };
 
 /*
  * @return {boolean} True if either startTime or endTime is not defined.
  */
 mirosubs.subtitle.EditableCaption.prototype.needsSync = function() {
-    return this.getStartTime() == -1 || this.getEndTime() == -1;
+    return this.getStartTime() == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
+        this.getEndTime() == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
 }
 
 mirosubs.subtitle.EditableCaption.prototype.changed_ =
