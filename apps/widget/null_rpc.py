@@ -75,9 +75,8 @@ class NullRpc(BaseRpc):
             "subtitles": self._subtitles_dict() }
 
     def save_subtitles(self, request, draft_pk, packets):
-        max_packet_no = max([p['packet_no'] for p in packets])
         return {'response':'ok',
-                'last_saved_packet': max_packet_no}
+                'last_saved_packet': 3000}
 
     def finished_subtitles(self, request, draft_pk, packets):
         response = self.save_subtitles(
