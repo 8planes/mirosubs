@@ -94,24 +94,18 @@ class Rpc(BaseRpc):
         models.Video.widget_views_counter(video_id).incr()
         widget_views_total_counter.incr()
         
-        
         add_general_settings(request, return_value)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
 
-
         return_value['drop_down_contents'] = \
-            self._drop_down_contents(video_id)
+            video_cache.get_video_languages(video_id)
 
         if base_state is not None and base_state.get("language_code", None) is not None:
             lang_pk = base_state.get('language_pk', None)
             if lang_pk is  None:
                 lang_code = base_state.get('language_code', None)
-                language = models.SubtitleLanguage.objects.get(video_id=video_id,language=lang_code)
-
-                if language:
-                    lang_pk = language.pk
-
+                lang_pk = video_cache.pk_for_default_language(video_id, lang_code)
             subtitles = self._autoplay_subtitles(
                 request.user, video_id, 
                 lang_pk,
@@ -120,17 +114,12 @@ class Rpc(BaseRpc):
         else:
             if is_remote:
                 autoplay_language = self._find_remote_autoplay_language(request)
-                language = models.Video.objects.get(video_id=video_id).subtitle_language()
-                if language is not None:
-                    language_pk = language.pk
-                else:
-                    language_pk = None
+                language_pk = video_cache.pk_for_default_language(video_id, autoplay_language)
                 if autoplay_language is not None:
                     subtitles = self._autoplay_subtitles(
                         request.user, video_id, language_pk, None)
                     return_value['subtitles'] = subtitles
         return return_value
-
 
     def fetch_start_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)
@@ -310,7 +299,7 @@ class Rpc(BaseRpc):
         return { "response" : "ok",
                  "last_saved_packet": draft.last_saved_packet,
                  "drop_down_contents" : 
-                     self._drop_down_contents(draft.video.video_id) }
+                     video_cache.get_video_languages(draft.video.video_id) }
 
     def _create_version_from_draft(self, draft, user):
         version = models.SubtitleVersion(
@@ -324,16 +313,11 @@ class Rpc(BaseRpc):
         version.set_changes(draft.parent_version, subtitles)
         return version, subtitles
 
-    def fetch_subtitles(self, request, video_id, language_code=None, language_pk=None):
-        if language_pk is None and language_code is not None:
-            try:
-                language_pk  = models.SubtitleLanguage.objects.filter(video__video_id=video_id,language=language_code).order_by("-subtitle_count")[0].pk
-            except models.SubtitleLanguage.DoesNotExist:
-                pass
+    def fetch_subtitles(self, request, video_id, language_pk):
         cache = video_cache.get_subtitles_dict(
             video_id, language_pk, None,
             lambda version: self._subtitles_dict(version))
-        return cache    
+        return cache
 
     def get_widget_info(self, request):
         return {
@@ -516,13 +500,6 @@ class Rpc(BaseRpc):
             version.is_forked,
             base_language,
             language.get_title())
-
-    def _subtitle_count(self, video_id):
-        return video_cache.get_subtitle_count(video_id)
-
-    def _initial_languages(self, video_id):
-        return video_cache.get_video_languages(video_id)
-
 
 def language_summary( language):
     summary = {

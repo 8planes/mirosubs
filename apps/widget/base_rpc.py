@@ -41,12 +41,6 @@ class BaseRpc:
             'title': title
             }
 
-    def _drop_down_contents(self, video_id):
-        return {
-            'languages': self._initial_languages(video_id),
-            'subtitle_count': self._subtitle_count(video_id)
-            }
-
     def _find_remote_autoplay_language(self, request):
         language = None
         if request.user.is_anonymous() or request.user.preferred_language == '':

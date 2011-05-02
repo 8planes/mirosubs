@@ -253,8 +253,6 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
                goog.bind(this.menuItemClicked_, this, s.LANGUAGE_PREFERENCES)).
         listen(this.subtitlesOff_, 'click',
                goog.bind(this.menuItemClicked_, this, s.SUBTITLES_OFF)).
-        listen(this.originalLanguage_, 'click',
-               goog.bind(this.languageSelected_, this, null, null)).
         listen(this.usernameLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.USERNAME)).
         listen(this.logoutLink_, 'click',
@@ -288,8 +286,7 @@ mirosubs.widget.DropDown.prototype.addLanguageLinkListeners_ = function() {
                 goog.bind(
                     that.languageSelected_, 
                     that, 
-                    tLink.videoLanguage.LANGUAGE, 
-                    tLink.videoLanguage.LANGUAGE_PK
+                    tLink.videoLanguage
                 ));
         });
 };
@@ -321,26 +318,22 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         
     else if (type == s.ADD_LANGUAGE || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
         this.dispatchEvent(type);
-    else
-        this.dispatchLanguageSelection_(null);
 
     this.hide();
 };
 
-mirosubs.widget.DropDown.prototype.languageSelected_ = function(langCode, langPK, e) {
+mirosubs.widget.DropDown.prototype.languageSelected_ = function(videoLanguage, e) {
     if (e){
         e.preventDefault();        
     }
-    this.dispatchLanguageSelection_(langCode, langPK);
-    goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = this.createDownloadSRTURL_();
+    this.dispatchLanguageSelection_(videoLanguage);
+    goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = 
+        this.createDownloadSRTURL_();
 };
 
-mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(langCode, langPK) {
-    
+mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(videoLanguage) {    
     this.dispatchEvent(
-        new mirosubs.widget.DropDown.LanguageSelectedEvent(langCode, langPK));
-    this.currentLang_ = langCode;
-    this.currentLangPk_ = langPK;
+        new mirosubs.widget.DropDown.LanguageSelectedEvent(videoLanguage));
 };
 
 mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {
@@ -405,15 +398,9 @@ mirosubs.widget.DropDown.prototype.disposeInternal = function() {
 
 /**
 * @constructor
-* @param {?string} opt_languageCode
+* @param {mirosubs.startdialog.VideoLanguage} videoLanguage
 */
-mirosubs.widget.DropDown.LanguageSelectedEvent = function(opt_languageCode, opt_languagePK) {
+mirosubs.widget.DropDown.LanguageSelectedEvent = function(videoLanguage) {
     this.type = mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED;
-    /**
-     * The language code selected, or null to signify original
-     * language.
-     * @type {?string}
-     */
-    this.languageCode = opt_languageCode;
-    this.languagePK = opt_languagePK;
+    this.videoLanguage = videoLanguage;
 };

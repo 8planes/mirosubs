@@ -126,7 +126,7 @@ class TestRpc(TestCase):
         draft = self._create_basic_draft(request, True)
         subtitles_fetched_count = draft.video.subtitles_fetched_count
 
-        subs = rpc.fetch_subtitles(request, draft.video.video_id)
+        subs = rpc.fetch_subtitles(request, draft.video.video_id, draft.language.pk)
         self.assertEqual(1, len(subs['subtitles']))
         # can't test counters here because of redis/mysql setup (?)
 
@@ -154,7 +154,9 @@ class TestRpc(TestCase):
             request, url_1,
             False, additional_video_urls=[url_0])
         self.assertEqual(video_id, return_value['video_id'])
-        subs = rpc.fetch_subtitles(request, video_id)
+        subs = rpc.fetch_subtitles(
+            request, video_id, 
+            return_value['drop_down_contents'][0]['pk'])
         self.assertEquals(1, len(subs['subtitles']))
         return_value = rpc.show_widget(
             request, url_1, False)
@@ -297,7 +299,7 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, draft_pk, [])
         video = Video.objects.get(video_id=video_id)
         self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
-        subs = rpc.fetch_subtitles(request, video_id)
+        subs = rpc.fetch_subtitles(request, video_id, video.subtitle_language().pk)
         self.assertEquals('hey you!', subs['subtitles'][0]['text'])
 
     def test_duplicate_saved_packet(self):
@@ -324,7 +326,7 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, draft_pk, [])
         video = Video.objects.get(video_id=video_id)
         self.assertEquals(1, video.subtitle_language().subtitleversion_set.count())
-        subs = rpc.fetch_subtitles(request, video_id)
+        subs = rpc.fetch_subtitles(request, video_id, video.subtitle_language().pk)
         self.assertEquals(1, len(subs['subtitles']))
         self.assertEquals('hey!', subs['subtitles'][0]['text'])        
 
@@ -631,7 +633,7 @@ class TestRpc(TestCase):
         rpc.finished_subtitles(request, draft_pk, [])
         video = models.SubtitleDraft.objects.get(pk=draft_pk).video
         translations = rpc.fetch_subtitles(
-            request, video.video_id, language_code='es')
+            request, video.video_id, video.subtitle_language('es').pk)
         self.assertEquals(1, len(translations['subtitles']))
         self.assertEquals('heyoes', translations['subtitles'][0]['text'])
         language = video.subtitle_language('es')
@@ -653,8 +655,10 @@ class TestRpc(TestCase):
         rpc.save_subtitles(
             request, draft_pk, 
             [_make_packet(updated=updated, packet_no=2)])
-        rpc.finished_subtitles(request, draft_pk, [])
-        translations = rpc.fetch_subtitles(request, draft.video.video_id, language_code='es')
+        response = rpc.finished_subtitles(request, draft_pk, [])
+        es = [r for r in response['drop_down_contents'] if r['language'] == 'es'][0]
+        translations = rpc.fetch_subtitles(
+            request, draft.video.video_id, es['pk'])
         self.assertEquals('new text', translations['subtitles'][0]['text'])
         video = models.SubtitleDraft.objects.get(pk=draft_pk).video
         self.assertEquals(1, video.subtitle_language('es').subtitleversion_set.count())
@@ -782,7 +786,7 @@ class TestRpc(TestCase):
         self.assertEquals(False, language.version(0).is_forked)
         self.assertEquals(True, language.latest_version().is_forked)
 
-        subs = rpc.fetch_subtitles(request, draft.video.video_id, 'es')
+        subs = rpc.fetch_subtitles(request, draft.video.video_id, draft.language.pk)
         subtitles = subs['subtitles']
         self.assertEquals(2, len(subtitles))
         self.assertEquals('a_edited', subtitles[0]['text'])
@@ -944,9 +948,10 @@ class TestRpc(TestCase):
         rpc.save_subtitles(
             request, draft_pk,
             [_make_packet(inserted=inserted)])
-        rpc.finished_subtitles(request, draft_pk, [])
+        response = rpc.finished_subtitles(request, draft_pk, [])
+        lang = [r for r in response['drop_down_contents'] if r['language'] == 'fr'][0]
         subs = rpc.fetch_subtitles(request, draft.video.video_id, 
-                                   language_code='fr')
+                                   lang['pk'])
         subs = subs['subtitles']
         self.assertEqual(1, len(subs))
         self.assertEqual('frenchtext', subs[0]['text'])

@@ -47,8 +47,7 @@ class NullRpc(BaseRpc):
         else:
             video_urls = [video_url]
         return_value['video_urls'] = video_urls
-        return_value['drop_down_contents'] = \
-            self._drop_down_contents(None)
+        return_value['drop_down_contents'] = []
         return return_value
 
     def fetch_start_dialog_contents(self, request, video_id):

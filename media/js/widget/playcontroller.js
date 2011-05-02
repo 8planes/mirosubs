@@ -39,7 +39,7 @@ mirosubs.widget.PlayController = function(
         listen(this.dropDown_,
                mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED,
                function(e) {
-                   that.languageSelected(e.languageCode, e.languagePK);
+                   that.languageSelected(e.videoLanguage);
                }).
         listen(this.dropDown_,
                mirosubs.widget.DropDown.Selection.SUBTITLES_OFF,
@@ -107,15 +107,14 @@ mirosubs.widget.PlayController.prototype.setUpSubs_ =
                this.finished_);
 };
 
-mirosubs.widget.PlayController.prototype.languageSelected = function(languageCode, languagePK) {
+mirosubs.widget.PlayController.prototype.languageSelected = function(videoLanguage) {
     var that = this;
     mirosubs.Tracker.getInstance().track('Selects_language_from_widget_dropdown');
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'fetch_subtitles',
         { 'video_id': this.videoID_,
-          'language_pk': languagePK,
-          'language_code': languageCode },
+          'language_pk': videoLanguage.PK },
         function(subStateJSON) {
             that.turnOffSubs();
             var subState = mirosubs.widget.SubtitleState.fromJSON(subStateJSON);

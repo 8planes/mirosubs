@@ -135,7 +135,6 @@ mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
                 embeds[i].parentNode.nodeName != "OBJECT")
                 unwidgetizedElements.push(embeds[i]);
         }
-        console.log(unwidgetizedElements);
         return unwidgetizedElements;
     }
 };
