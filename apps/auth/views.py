@@ -106,6 +106,7 @@ from django.http import HttpResponse
 from oauth import oauth
 from urllib2 import URLError
 from django.utils.http import urlquote
+import urllib, urlparse
 
 def twitter_login(request, next=None):
     callback_url = None
@@ -169,3 +170,42 @@ def twitter_login_done(request):
 
     # authentication was successful, use is now logged in
     return HttpResponseRedirect(request.GET.get('next', settings.LOGIN_REDIRECT_URL))
+
+def facebook_login(request):
+    """for dialog users"""
+    params = {'client_id': settings.FACEBOOK_APP_ID,
+        'redirect_uri': 'http://mirosubs.example.com:8000/en/auth/facebook_login_done/',
+        'scope': 'publish_stream,email,offline_access',
+        'display': 'popup'} # offline access for long lived token, for profile image url
+
+    return redirect('https://graph.facebook.com/oauth/authorize?' + urllib.urlencode(params))
+
+def facebook_login_done(request):
+    """ for dialog users """
+    try:
+        code = request.GET['code']
+    except KeyError:
+        # code not passed as GET variable, redirect to login page
+        return HttpResponseRedirect(reverse('socialauth_login_page'))
+    params = {'client_id': settings.FACEBOOK_APP_ID,
+        'redirect_uri': 'http://mirosubs.example.com:8000/en/auth/facebook_login_done/',
+        'client_secret': settings.FACEBOOK_APP_SECRET,
+        'code': code}
+    token_url = 'https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(params)
+    response = urllib.urlopen(token_url).read() # string containing token and time for expiry
+    token = dict(urlparse.parse_qsl(response))
+    user = authenticate(fb_access_token = token['access_token'])
+
+    if user:
+        if not user.userlanguage_set.exists():
+            langs = get_user_languages_from_cookie(request)
+            for l in langs:
+                UserLanguage.objects.get_or_create(user=user, language=l)       
+            auth_login(request, user)
+        else:
+            # We were not able to authenticate user
+            # Redirect to login page
+            return HttpResponseRedirect(reverse('socialauth_login_page'))
+    # authentication was successful, use is now logged in
+    # facebook doesnot allow get variables in its authorize url, no next parameter
+    return HttpResponseRedirect('/widget/close_window/')

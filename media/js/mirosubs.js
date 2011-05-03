@@ -157,6 +157,10 @@ mirosubs.LoginPopupType = {
         '/widget/twitter_login/',
         'location=0,status=0,width=800,height=400'
     ],
+    FACEBOOK: [
+        '/widget/facebook_login/',
+        'location=0,status=0,width=800,height=400'
+    ],
     OPENID: [
         '/socialauth/openid/?next=/widget/close_window/',
         'scrollbars=yes,location=0,status=0,resizable=yes'

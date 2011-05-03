@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse, get_host
@@ -18,13 +18,14 @@ from socialauth.models import YahooContact, TwitterContact, FacebookContact,\
 
 from openid_consumer.views import begin
 from socialauth.lib import oauthtwitter2 as oauthtwitter
-from socialauth.lib.facebook import get_facebook_signature
+from socialauth.lib import facebook
 
 from oauth import oauth
 from datetime import datetime
 from django.utils.http import urlquote
 from utils.translation import get_user_languages_from_cookie
 from auth.models import UserLanguage
+import urllib, urlparse
 
 def get_url_host(request):
 # FIXME: Duplication
@@ -159,28 +160,43 @@ def openid_done(request, provider=None):
     else:
         return HttpResponseRedirect(settings.LOGIN_URL)
     
+def facebook_login(request):
+    params = {'client_id': settings.FACEBOOK_APP_ID,
+        'redirect_uri': settings.FACEBOOK_REDIRECT_URL,
+        'scope': 'publish_stream,email,offline_access',
+        'display': 'popup'} # offline access for long lived token, for profile image url
+
+    return redirect('https://graph.facebook.com/oauth/authorize?' + urllib.urlencode(params))
+
 def facebook_login_done(request):
-    API_KEY = settings.FACEBOOK_API_KEY
-    API_SECRET = settings.FACEBOOK_API_SECRET   
-    REST_SERVER = 'http://api.facebook.com/restserver.php'
-    # FB Connect will set a cookie with a key == FB App API Key if the user has been authenticated
-    if API_KEY in request.COOKIES:
-        signature_hash = get_facebook_signature(API_KEY, API_SECRET, request.COOKIES, True)                
-        # The hash of the values in the cookie to make sure they're not forged
-        # AND If session hasn't expired
-        if(signature_hash == request.COOKIES[API_KEY]) and (datetime.fromtimestamp(float(request.COOKIES[API_KEY+'_expires'])) > datetime.now()):
-            #Log the user in now.
-            user = authenticate(cookies=request.COOKIES)
-            if user:
-                # if user is authenticated then login user
-                login(request, user)
-                return HttpResponseRedirect(reverse('socialauth_signin_complete'))
-            else:
-                #Delete cookies and redirect to main Login page.
-                del request.COOKIES[API_KEY + '_session_key']
-                del request.COOKIES[API_KEY + '_user']
-                return HttpResponseRedirect(reverse('socialauth_login_page'))
-    return HttpResponseRedirect(reverse('socialauth_login_page'))
+    """ for normal users"""
+    try:
+        code = request.GET['code']
+    except KeyError:
+        #Tried to access /done/ directly, redirect to login page
+        return HttpResponseRedirect(reverse('socialauth_login_page'))
+    params = {'client_id': settings.FACEBOOK_APP_ID,
+        'redirect_uri': settings.FACEBOOK_REDIRECT_URL,
+        'client_secret': settings.FACEBOOK_APP_SECRET,
+        'code': code}
+    token_url = 'https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(params)
+    response = urllib.urlopen(token_url).read() # string containing token and time for expiry
+    token = dict(urlparse.parse_qsl(response))
+    user = authenticate(fb_access_token = token['access_token'])
+
+    if user:
+        if not user.userlanguage_set.exists():
+            langs = get_user_languages_from_cookie(request)
+            for l in langs:
+                UserLanguage.objects.get_or_create(user=user, language=l)       
+            login(request, user)
+        else:
+            # We were not able to authenticate user
+            # Redirect to login page
+            return HttpResponseRedirect(reverse('socialauth_login_page'))
+    # authentication was successful, use is now logged in
+    # facebook doesnot allow get variables in its authorize url, no next parameter
+    return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
 def openid_login_page(request):
     return render_to_response('openid/index.html', {}, RequestContext(request))

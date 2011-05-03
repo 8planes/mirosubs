@@ -26,4 +26,6 @@ urlpatterns = patterns(
     url(r'^login_post/$', 'login_post', name='login_post'),
     url(r'^twitter_login/$', 'twitter_login', name='twitter_login'),
     url(r'^twitter_login_done/$', 'twitter_login_done', name='twitter_login_done'),
+    url(r'^facebook_login/$', 'facebook_login', name='facebook_login'),
+    url(r'^facebook_login_done/$', 'facebook_login_done', name='facebook_login_done'),
 )

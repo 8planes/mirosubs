@@ -52,13 +52,14 @@ class FacebookUserProfile(models.Model):
     """
     For users who login via Facebook.
     """
-    facebook_uid = models.CharField(max_length = 20, unique = True)
-    
+    fb_uid = models.CharField(max_length = 20, unique = True)
+    fb_username = models.CharField(max_length = 20)
     user = models.ForeignKey(User)
     profile_image_url = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     about_me = models.CharField(max_length=160, blank=True, null=True)
+    access_token = models.CharField(max_length=103)
     
     
 
