@@ -68,7 +68,8 @@ def user_list(request):
         return render_to_response(
             'auth/user_list.csv',
             {'users': users},
-            context_instance=RequestContext(request))
+            context_instance=RequestContext(request),
+            mimetype="text/plain")
 
 @login_required
 def delete_user(request):
