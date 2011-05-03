@@ -26,4 +26,5 @@ urlpatterns = patterns(
     url(r'^login_post/$', 'login_post', name='login_post'),
     url(r'^twitter_login/$', 'twitter_login', name='twitter_login'),
     url(r'^twitter_login_done/$', 'twitter_login_done', name='twitter_login_done'),
+    url(r'^user_list/$', 'user_list', name='user_list'),
 )
