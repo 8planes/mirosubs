@@ -657,12 +657,11 @@ class SubtitleLanguage(models.Model):
                 self.percent_done = 0 
         else:
             self.percent_done = 100
-        if original_value != self.percent_done:
-            if self.percent_done == 100:
-                self.is_complete = True
-            elif not self.is_forked is not self.is_original:
-                self.is_complete = False
-            self.save()
+        if self.percent_done == 100:
+            self.is_complete = True
+        elif not self.is_forked is not self.is_original:
+            self.is_complete = False
+        self.save()
         
     def notification_list(self, exclude=None):
         qs = self.followers.filter(changes_notification=True, is_active=True)
