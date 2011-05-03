@@ -643,8 +643,7 @@ class SubtitleLanguage(models.Model):
             self.subtitle_count = new_value
             self.save()
 
-    def update_percent_done(self, saves_always=False):
-        original_value = self.percent_done
+    def update_percent_done(self):
         if not self.is_original and not self.is_forked:
             try:
                 translation_count = 0
@@ -666,7 +665,6 @@ class SubtitleLanguage(models.Model):
                 subtitles_count = last_version.subtitle_set.count()
             else:
                 subtitles_count = 0
-
             try:
                 val = int(translation_count / 1. / subtitles_count * 100)
                 self.percent_done = max(0, min(val, 100))
@@ -674,12 +672,11 @@ class SubtitleLanguage(models.Model):
                 self.percent_done = 0 
         else:
             self.percent_done = 100
-        if saves_always or original_value != self.percent_done:
-            if self.percent_done == 100:
-                self.is_complete = True
-            elif not self.is_forked is not self.is_original:
-                self.is_complete = False
-            self.save()
+        if self.percent_done == 100:
+            self.is_complete = True
+        elif not self.is_forked is not self.is_original:
+            self.is_complete = False
+        self.save()
         
     def notification_list(self, exclude=None):
         qs = self.followers.filter(changes_notification=True, is_active=True)
