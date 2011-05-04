@@ -38,9 +38,23 @@ function testToLanguages0() {
     assertEquals('fr', languages[0].VIDEO_LANGUAGE.LANGUAGE);
     assertEquals('en', languages[1].LANGUAGE);
     assertEquals('en', languages[1].VIDEO_LANGUAGE.LANGUAGE);
-    assertEquals('fr', model.getSelectedLanguage().LANGUAGE);
+    assertEquals('fr', model.getSelectedToLanguage().LANGUAGE);
+    assertEquals(null, model.getSelectedFromLanguage());
 }
 
+function testToLanguagesOriginal() {
+    var json = {
+        'my_languages': ['en', 'fr'],
+        'original_language': 'fr',
+        'video_languages': [
+            { 'pk': 1, 'language': 'en', 'dependent': false, 'is_complete': true, 'subtitle_count': 4 },
+            { 'pk': 2, 'language': 'fr', 'dependent': false, 'is_complete': false, 'subtitle_count': 5 },
+            { 'pk': 3, 'language': 'en', 'dependent': false, 'is_complete': true, 'subtitle_count': 4 },
+        ]
+    };
+}
+
+/*
 function testToLanguagesWithUnspoken() {
     var json = makeBaseJSON();
     json['video_languages'].push({
@@ -281,5 +295,5 @@ function testUserLangsAllEmptyOrder(){
     assertEquals('Italian', languages[1].LANGUAGE_NAME);
     assertEquals('Spanish', languages[2].LANGUAGE_NAME);
 }
-
+*/
 {% endblock %}

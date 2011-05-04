@@ -198,10 +198,20 @@ mirosubs.startdialog.Dialog.prototype.originalLangChanged_ = function(e) {
     this.setFromContents_();
 };
 
-
 mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
     this.model_.selectLanguage(this.toLanguageDropdown_.value);
     this.setFromContents_();
+};
+
+mirosubs.startdialog.Dialog.prototype.selectedFromLanguage_ = function() {
+    if (this.fromLanguageDropdown_ && 
+        this.fromLanguageDropdown_.value != 
+        mirosubs.startdialog.Dialog.FORK_VALUE) {
+        return this.model_.findFromLanguage(
+            parseInt(this.fromLanguageDropdown_.value));
+    } else {
+        return null;
+    }
 };
 
 mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {

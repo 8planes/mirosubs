@@ -37,7 +37,7 @@ mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
     if (this.initialLanguageState_ && this.initialLanguageState_.LANGUAGE_PK){
         var initLang = new mirosubs.startdialog.ToLanguage(
             0, this.videoLanguages_.findForPK(this.initialLanguageState_.LANGUAGE_PK));
-        if (initLang.LANGUAGE){
+        if (initLang.LANGUAGE) {
             toLanguages.push(initLang);
         }
     }
@@ -57,39 +57,14 @@ mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
     var userLangsCount = toLanguages.length;
     this.addMissingVideoLangs_(toLanguages);
     this.addMissingLangs_(toLanguages);
-    // we sort user langs differtly, so we split them
+    // we sort user langs differently, so we split them
     var userLangs = goog.array.splice(toLanguages, 0, userLangsCount);
-    // sort others on ranking alone
     goog.array.sort(
         toLanguages,
-        function(a, b) {
-            var compare = goog.array.defaultCompare(
-                a.RANKING, b.RANKING);
-            if (compare == 0)
-                compare = goog.array.defaultCompare(
-                    a.LANGUAGE_NAME, b.LANGUAGE_NAME);
-            return compare;
-        });
+        mirosubs.startdialog.ToLanguage.rankingCompare);
     goog.array.sort(
         userLangs,
-        function(a, b) {
-            var compare = goog.array.defaultCompare(
-                a.RANKING, b.RANKING);
-            if (compare == 0){
-                if (a.VIDEO_LANGUAGE && b.VIDEO_LANGUAGE){
-                    compare =  goog.array.defaultCompare(
-                        b.VIDEO_LANGUAGE.PERCENT_DONE, a.VIDEO_LANGUAGE.PERCENT_DONE);
-                    if (compare == 0){
-                        compare = goog.array.defaultCompare(
-                            a.LANGUAGE_NAME, b.LANGUAGE_NAME);
-                    }
-                }else{
-                    compare = goog.array.defaultCompare(
-                        a.LANGUAGE_NAME, b.LANGUAGE_NAME);
-                }
-            }
-            return compare;
-        });
+        mirosubs.startdialog.ToLanguage.userCompare);
     goog.array.insertArrayAt(toLanguages, userLangs, 0);
     return toLanguages;
 };
@@ -100,9 +75,97 @@ mirosubs.startdialog.ToLanguages.prototype.getToLanguages = function() {
     return this.toLanguages_;
 };
 
-mirosubs.startdialog.ToLanguages.prototype.forLangCode = function(langCode){
-    return goog.array.find(this.getToLanguages(), function(o){
+/**
+ * Creates a view of the underlying data suitable for displaying in the 
+ * to language dropdown. See 
+ * https://www.pivotaltracker.com/story/show/11820951
+ * @param {mirosubs.startdialog.VideoLanguage=} opt_fromLanguage
+ */
+mirosubs.startdialog.ToLanguages.prototype.getToLanguagesForDisplay =
+    function(opt_fromLanguage) 
+{
+    if (!opt_fromLanguage) {
+        return this.forFlatDisplay_();
+    }
+    else {
+        return this.forFromLanguageDisplay_(opt_fromLanguage);
+    }
+};
+
+mirosubs.startdialog.ToLanguages.prototype.forFromLanguageDisplay_ = function(fromLanguage) {
+    var toLanguages = this.getToLanguages();
+    var languageListMap = this.makeLanguageListMap_(toLanguages);
+    var languages = new goog.structs.Set();
+    var returnValue = [];
+    goog.array.forEach(
+        toLanguages,
+        function(tl) {
+            if (!languages.contains(tl.LANGUAGE)) {
+                languages.add(tl.LANGUAGE);
+                returnValue.push(this.selectBestToForFrom_(
+                    languageListMap[tl.LANGUAGE], fromLanguage));
+            }
+        },
+        this);
+    return returnValue;
+};
+
+mirosubs.startdialog.ToLanguages.prototype.makeLanguageListMap_ = function(toLanguages) {
+    var map = {};
+    goog.array.forEach(
+        toLanguages,
+        function(tl) {
+            if (map[tl.LANGUAGE])
+                map[tl.LANGUAGE].push(tl);
+            else
+                map[tl.LANGUAGE] = [tl];
+        });
+    return map;
+};
+
+/**
+ * @param {Array.<mirosubs.startdialog.ToLanguage>} toLanguages
+ * @param {mirosubs.startdialog.VideoLanguage} fromLanguage
+ */
+mirosubs.startdialog.ToLanguages.prototype.selectBestToForFrom_ = 
+    function(toLanguages, fromLanguage) 
+{
+    if (toLanguages.length == 1)
+        return toLanguages[0];
+    for (var i = 0; i < toLanguages.length; i++) {
+        if (toLanguages[i].VIDEO_LANGUAGE && 
+            toLanguages[i].VIDEO_LANGUAGE.canBenefitFromTranslation(
+                fromLanguage))
+            return toLanguages[i];
+    }
+    return toLanguages[0];
+};
+
+mirosubs.startdialog.ToLanguages.prototype.forFlatDisplay_ = function() {
+    var toLanguages = this.getToLanguages();
+    var returnValue = [];
+    var languages = new goog.structs.Set();
+    goog.array.forEach(
+        toLanguages,
+        function(tl) {
+            if (!languages.contains(tl.LANGUAGE)) {
+                languages.add(tl.LANGUAGE);
+                returnValue.push(new mirosubs.startdialog.ToLanguage(
+                    tl.RANKING, null, tl.LANGUAGE));
+            }
+        });
+    return returnValue;
+};
+
+mirosubs.startdialog.ToLanguages.prototype.forLangCode = function(langCode) {
+    return goog.array.find(this.getToLanguages(), function(o) {
         return o.LANGUAGE == langCode;
+    });
+};
+
+mirosubs.startdialog.ToLanguages.prototype.forLangPK = function(pk) {
+    return goog.array.find(this.getToLanguages(), function(o) {
+        return o.VIDEO_LANGUAGE && o.VIDEO_LANGUAGE.PK == pk;
     });
 };
 

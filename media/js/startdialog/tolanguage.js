@@ -20,6 +20,9 @@ goog.provide('mirosubs.startdialog.ToLanguage');
 
 /**
  * @constructor
+ * @param {number} ranking
+ * @param {mirosubs.startdialog.VideoLanguage} opt_videoLanguage
+ * @param {string=} opt_language Language code. Either provide this or opt_videoLanguage.
  */
 mirosubs.startdialog.ToLanguage = function(ranking, opt_videoLanguage, opt_language) {
     var languageCode = opt_videoLanguage ? opt_videoLanguage.LANGUAGE : opt_language;
@@ -35,4 +38,32 @@ mirosubs.startdialog.ToLanguage.prototype.toString = function() {
         return this.VIDEO_LANGUAGE.toString();
     else
         return this.LANGUAGE_NAME;
+};
+
+mirosubs.startdialog.ToLanguage.rankingCompare = function(a, b) {
+    var compare = goog.array.defaultCompare(
+        a.RANKING, b.RANKING);
+    if (compare == 0)
+        compare = goog.array.defaultCompare(
+            a.LANGUAGE_NAME, b.LANGUAGE_NAME);
+    return compare;
+};
+
+mirosubs.startdialog.ToLanguage.userCompare = function(a, b) {
+    var compare = goog.array.defaultCompare(
+        a.RANKING, b.RANKING);
+    if (compare == 0) {
+        if (a.VIDEO_LANGUAGE && b.VIDEO_LANGUAGE){
+            compare =  goog.array.defaultCompare(
+                b.VIDEO_LANGUAGE.PERCENT_DONE, a.VIDEO_LANGUAGE.PERCENT_DONE);
+            if (compare == 0) {
+                compare = goog.array.defaultCompare(
+                    a.LANGUAGE_NAME, b.LANGUAGE_NAME);
+            }
+        } else {
+            compare = goog.array.defaultCompare(
+                a.LANGUAGE_NAME, b.LANGUAGE_NAME);
+        }
+    }
+    return compare;
 };

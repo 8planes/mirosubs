@@ -77,6 +77,9 @@ mirosubs.startdialog.VideoLanguage.prototype.isDependable = function() {
         return this.IS_COMPLETE;
 };
 
+/**
+ * @param {mirosubs.startdialog.VideoLanguage} languageSummary
+ */
 mirosubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation = 
     function(languageSummary) 
 {
