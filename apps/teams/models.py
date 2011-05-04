@@ -305,12 +305,20 @@ class TeamVideo(models.Model):
         
         return ''
 
+    def _original_language(self):
+        if not hasattr(self, 'original_language_code'):
+            sub_lang = self.video.subtitle_language()
+            setattr(self, 'original_language_code', None if not sub_lang else sub_lang.language)
+        return getattr(self, 'original_language_code')
+
     def _calculate_percent_complete(self, sl0, sl1):
         # maybe move this to Video model in future.
         if not sl0 or not sl0.is_dependable():
             return -1
         if not sl1:
             return 0
+        if sl1.language == self._original_language():
+            return -1
         if sl1.is_dependent():
             if sl1.percent_done == 0:
                 return 0

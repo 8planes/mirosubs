@@ -259,7 +259,7 @@ class TeamDetailMetadataTest(TestCase):
         tv = TeamVideo.objects.get(id=2)
         tv.update_team_video_language_pairs()
         tvlps = self._tvlp_query_set(tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 2, len(tvlps))
+        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 3, len(tvlps))
         for tvlp in tvlps:
             if tvlp.language_0 == 'en':
                 if tvlp.language_1 == 'es':
@@ -293,7 +293,7 @@ class TeamDetailMetadataTest(TestCase):
         dl.save()
         tv.update_team_video_language_pairs_for_sl(dl)
         tvlps = self._tvlp_query_set(tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 2, len(tvlps))
+        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 3, len(tvlps))
         for tvlp in tvlps:
             if tvlp.language_0 == 'en':
                 if tvlp.language_1 == 'es':
