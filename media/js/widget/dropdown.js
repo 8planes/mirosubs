@@ -28,6 +28,9 @@ mirosubs.widget.DropDown = function(videoID, dropDownContents, videoTab) {
     this.videoID_ = videoID;
     this.setStats_(dropDownContents);
     this.videoTab_ = videoTab;
+    /**
+     * @type {?mirosubs.widget.SubtitleState}
+     */
     this.subtitleState_ = null;
     this.shown_ = false;
     this.languageClickHandler_ = new goog.events.EventHandler(this);
@@ -48,14 +51,10 @@ mirosubs.widget.DropDown.Selection = {
     LOGOUT: "logout"
 };
 
-mirosubs.widget.DropDown.prototype.getSubtitleCount = function() {
-    return this.subtitleCount_;
-};
 mirosubs.widget.DropDown.prototype.hasSubtitles = function() {
-    return this.subtitleCount_ > 0 || this.videoLanguages_.length > 0;
+    return this.videoLanguages_.length > 0;
 };
 mirosubs.widget.DropDown.prototype.setStats_ = function(dropDownContents) {
-    this.subtitleCount_ = dropDownContents.SUBTITLE_COUNT;
     this.videoLanguages_ = dropDownContents.LANGUAGES;
 };
 mirosubs.widget.DropDown.prototype.updateContents = function(dropDownContents) {
@@ -69,9 +68,9 @@ mirosubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSt
     this.clearCurrentLang_();
     this.subtitleState_ = subtitleState;
     this.setCurrentLangClassName_();
-    // there is likely a bug in mirosubs.styleSetPropertyInStrin,
+    // there is likely a bug in mirosubs.styleSetPropertyInString,
     // turning it on and off will not restore display to block
-    //mirosubs.style.showElement(this.improveSubtitlesLink_, shows);
+    // mirosubs.style.showElement(this.improveSubtitlesLink_, shows);
     var display = "none";
     if (Boolean(subtitleState)){
         display = "block";
@@ -101,11 +100,6 @@ mirosubs.widget.DropDown.prototype.createLanguageList_ = function($d) {
 
     this.subtitlesOff_ = $d('li', null, $d('a', {'href': '#'}, 'Subtitles Off'));
     this.subCountSpan_ = $d('span', 'mirosubs-languageStatus');
-    this.originalLanguage_ =
-        $d('li', null,
-           $d('a', {'href': '#'},
-              $d('span', 'mirosubs-languageTitle', 'Original Language'),
-              this.subCountSpan_));
     return container;
 };
 
@@ -126,20 +120,17 @@ mirosubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
            $d('span', 'mirosubs-asterisk', '*'),
            ' = Missing sections translated by Google Translate'));
     this.languageList_.appendChild(this.subtitlesOff_);
-    if (this.subtitleCount_ > 0)
-        this.languageList_.appendChild(this.originalLanguage_);
 
     this.videoLanguagesLinks_ = [];
 
     for (var i = 0; i < this.videoLanguages_.length; i++) {
         var data = this.videoLanguages_[i];
-
         var link =
             $d('a', {'href': '#'},
                $d('span', 'mirosubs-languageTitle',
-                  mirosubs.languageNameForCode(data.LANGUAGE_CODE)),
+                  mirosubs.languageNameForCode(data.LANGUAGE)),
                $d('span', 'mirosubs-languageStatus',
-                  data.toString()));
+                  data.completionStatus()));
         var linkLi = $d('li', null, link);
         this.videoLanguagesLinks_.push(
             { link: link, 
@@ -343,8 +334,6 @@ mirosubs.widget.DropDown.prototype.dispatchLanguageSelection_ = function(videoLa
 
 mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {
     this.subtitlesOff_.className = '';
-    if (this.originalLanguage_)
-        this.originalLanguage_.className = '';
     for (var i = 0; i < this.videoLanguagesLinks_.length; i++)
         this.videoLanguagesLinks_[i].linkLi.className = '';
 };
@@ -352,13 +341,11 @@ mirosubs.widget.DropDown.prototype.clearCurrentLang_ = function() {
 mirosubs.widget.DropDown.prototype.setCurrentLangClassName_ = function() {
     var className = 'mirosubs-activeLanguage';
     var that = this;
-    if (this.subtitleState_ == null)
+    if (!this.subtitleState_)
         this.subtitlesOff_.className = className;
-    else if (this.subtitleState_.IS_ORIGINAL)
-        this.originalLanguage_.className = className;
     else {
         var transLink = goog.array.find(this.videoLanguagesLinks_, function(elt) {
-            return elt.videoLanguage.LANGUAGE_PK == that.subtitleState_.LANGUAGE_PK;
+            return elt.videoLanguage.PK == that.subtitleState_.LANGUAGE_PK;
         });
         if (transLink)
             transLink.linkLi.className = className;

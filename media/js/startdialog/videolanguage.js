@@ -46,6 +46,12 @@ mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
     return name + (this.IN_PROGRESS ? " (in progress)" : "");
 };
 
+mirosubs.startdialog.VideoLanguage.prototype.completionStatus = function() {
+    return "(" +
+        (this.DEPENDENT ? (this.PERCENT_DONE + "%") : 
+         (this.SUBTITLE_COUNT + " lines")) + ")";
+};
+
 mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
     this.allLangs_ = all;
     if (this.STANDARD_PK)
