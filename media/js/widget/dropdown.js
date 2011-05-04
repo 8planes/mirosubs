@@ -69,9 +69,14 @@ mirosubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSt
     this.clearCurrentLang_();
     this.subtitleState_ = subtitleState;
     this.setCurrentLangClassName_();
-    mirosubs.style.showElement(
-        this.improveSubtitlesLink_,
-        subtitleState != null);
+    // there is likely a bug in mirosubs.styleSetPropertyInStrin,
+    // turning it on and off will not restore display to block
+    //mirosubs.style.showElement(this.improveSubtitlesLink_, shows);
+    var display = "none";
+    if (Boolean(subtitleState)){
+        display = "block";
+    }
+    goog.style.setStyle(this.improveSubtitlesLink_, display + " !important");
     goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = this.createDownloadSRTURL_();
 };
 
