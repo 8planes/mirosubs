@@ -17,6 +17,65 @@ def pr(s):
 DEBUG = False
 EVENT_QUEUE_NAME = 'celeryev'
 
+import logging
+
+class LoggingConnection(SQSConnection):
+    
+    def _log(self, method_name):
+        logging.debug(u'SQSConnection.%s' % method_name)
+        
+    def create_queue(self, *args, **kwargs):
+        self._log(u'create_queue')
+        return super(LoggingConnection, self).create_queue(*args, **kwargs)
+
+    def delete_queue(self, *args, **kwargs):
+        self._log(u'delete_queue')
+        return super(LoggingConnection, self).delete_queue(*args, **kwargs)
+
+    def get_queue_attributes(self, *args, **kwargs):
+        self._log(u'get_queue_attributes')
+        return super(LoggingConnection, self).get_queue_attributes(*args, **kwargs)
+
+    def set_queue_attribute(self, *args, **kwargs):
+        self._log(u'set_queue_attribute')
+        return super(LoggingConnection, self).set_queue_attribute(*args, **kwargs)
+
+    def receive_message(self, *args, **kwargs):
+        self._log(u'receive_message')
+        return super(LoggingConnection, self).receive_message(*args, **kwargs)
+
+    def delete_message(self, *args, **kwargs):
+        self._log(u'delete_message')
+        return super(LoggingConnection, self).delete_message(*args, **kwargs)
+
+    def delete_message_from_handle(self, *args, **kwargs):
+        self._log(u'delete_message_from_handle')
+        return super(LoggingConnection, self).delete_message_from_handle(*args, **kwargs)
+
+    def send_message(self, *args, **kwargs):
+        self._log(u'send_message')
+        return super(LoggingConnection, self).send_message(*args, **kwargs)
+
+    def change_message_visibility(self, *args, **kwargs):
+        self._log(u'change_message_visibility')
+        return super(LoggingConnection, self).change_message_visibility(*args, **kwargs)
+
+    def get_all_queues(self, *args, **kwargs):
+        self._log(u'get_all_queues')
+        return super(LoggingConnection, self).get_all_queues(*args, **kwargs)
+
+    def get_queue(self, *args, **kwargs):
+        self._log(u'get_queue')
+        return super(LoggingConnection, self).get_queue(*args, **kwargs)
+
+    def add_permission(self, *args, **kwargs):
+        self._log(u'add_permission')
+        return super(LoggingConnection, self).add_permission(*args, **kwargs)
+
+    def remove_permission(self, *args, **kwargs):
+        self._log(u'remove_permission')
+        return super(LoggingConnection, self).remove_permission(*args, **kwargs)
+
 class Channel(virtual.Channel):
     Client = SQSConnection
     
