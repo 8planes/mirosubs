@@ -78,12 +78,12 @@ mirosubs.startdialog.VideoLanguage.prototype.isDependable = function() {
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation = 
-    function(languageSummary) 
+    function(toTranslateFrom) 
 {
     if (!this.DEPENDENT)
         return false;
-    if (languageSummary.DEPENDENT)
-        return this.STANDARD_PK == languageSummary.STANDARD_PK;
+    if (toTranslateFrom.DEPENDENT)
+        return this.STANDARD_PK == toTranslateFrom.STANDARD_PK;
     else
-        return this.STANDARD_PK == languageSummary.PK;
+        return this.STANDARD_PK == toTranslateFrom.PK;
 };
