@@ -3,16 +3,15 @@
     <img height="100" src="{{ team_video.get_thumbnail }}">
 </a>
 <div class="info">
-    <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
-    <div class="completed_translations">
-       <strong>{% trans "Completed Languages" %}:</strong> 
-       {% for sl in team_video.complete_langs_cache %}
-            <a href="{{ sl.get_absolute_url }}"><span>{{ sl.language_display }}</span></a>
-            {% if not forloop.last %},{% endif %}
-       {% endfor %}
-    </div>
-    <div class="team-video-buttons-container">
-        <a class="blue_button small" href="{{ team_video.video.video_link }}">{% trans "Video Page" %}</a>
-
-    <div>
+  <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
+  <div class="completed_translations">
+    <strong>{% trans "Completed Languages" %}:</strong> 
+    {% for sl in team_video.complete_langs_cache %}
+        <a href="{{ sl.get_absolute_url }}"><span>{{ sl.language_display }}</span></a>
+        {% if not forloop.last %},{% endif %}
+    {% endfor %}
+  </div>
+  <div class="team-video-buttons-container">
+    <a class="blue_button small" href="{{ team_video.video.video_link }}">{% trans "Video Page" %}</a>
+  </div>
 </div>
