@@ -644,38 +644,34 @@ class SubtitleLanguage(models.Model):
             self.save()
 
     def update_percent_done(self):
-        if not self.is_original and not self.is_forked:
-            try:
-                translation_count = 0
-                for item in self.latest_subtitles():
-                    if item.text:
-                        translation_count += 1
-            except AttributeError:
-                translation_count = 0
-                
-            if translation_count == 0:
-                self.percent_done = 0
-            
-            if self.standard_language and self.is_dependent():
-                last_version = self.standard_language.latest_version()
-            else:    
-                last_version = self.video.latest_version()
-                
-            if last_version:
-                subtitles_count = last_version.subtitle_set.count()
-            else:
-                subtitles_count = 0
-            try:
-                val = int(translation_count / 1. / subtitles_count * 100)
-                self.percent_done = max(0, min(val, 100))
-            except ZeroDivisionError:
-                self.percent_done = 0 
+        if not self.is_dependent():
+            return
+        try:
+            translation_count = 0
+            for item in self.latest_subtitles():
+                if item.text:
+                    translation_count += 1
+        except AttributeError:
+            translation_count = 0
+
+        if translation_count == 0:
+            self.percent_done = 0
+
+        if self.standard_language and self.is_dependent():
+            last_version = self.standard_language.latest_version()
+        else:    
+            last_version = self.video.latest_version()
+
+        if last_version:
+            subtitles_count = last_version.subtitle_set.count()
         else:
-            self.percent_done = 100
-        if self.percent_done == 100:
-            self.is_complete = True
-        elif not self.is_forked is not self.is_original:
-            self.is_complete = False
+            subtitles_count = 0
+        try:
+            val = int(translation_count / 1. / subtitles_count * 100)
+            self.percent_done = max(0, min(val, 100))
+        except ZeroDivisionError:
+            self.percent_done = 0 
+        self.is_complete = self.percent_done == 100
         self.save()
         
     def notification_list(self, exclude=None):

@@ -417,6 +417,31 @@ class TestRpc(TestCase):
         self.assertTrue(sl.is_original)
         self.assertEqual(1, len(sl.latest_version().subtitles()))
 
+    def test_not_complete(self):
+        request_0 = RequestMockup(self.user_0)
+        return_value = rpc.show_widget(
+            request_0,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
+        video_id = return_value['video_id']
+        return_value = rpc.start_editing(
+            request_0, video_id, 'en', original_language_code='en')
+        draft_pk = return_value['draft_pk']
+        inserted = [{'subtitle_id': 'aa',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request_0, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request_0, draft_pk, [], False)
+
+        v = models.Video.objects.get(video_id=video_id)
+        sl = v.subtitle_language('en')
+        self.assertFalse(sl.is_complete)
+
+
     def test_finish_then_other_user_opens(self):
         request_0 = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
