@@ -99,7 +99,7 @@
                                         <span style="font-size: 10px; color: #666; font-family: Tahoma, Geneva, sans-serif;">
                                             <p>
                                                 {% trans 'To stop receiving these emails, go to your preferences page and uncheck "receive notifications":' %}
-                                                <a href="http://{{ domain }}{% filter rmlocale %}{% url profiles:my_profile %}{% endfilter %}">
+                                                <a href="http://{{ domain }}{% filter rmlocale %}{% url profiles:edit %}{% endfilter %}">
                                                     {% trans 'My profile / preferences' %}
                                                 </a>
                                             </p>
