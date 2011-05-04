@@ -40,8 +40,7 @@ def send_change_title_email(video_id, user_id, old_title, new_title):
         }
         send_templated_email(obj.email, subject, 
                              'videos/email_title_changed.html',
-                             context, 'feedback@universalsubtitles.org',
-                             fail_silently=not settings.DEBUG)       
+                             context, fail_silently=not settings.DEBUG)       
     
 @task()
 def send_notification(version_id):
@@ -118,8 +117,7 @@ def _send_letter_translation_start(translation_version):
             (language.language_display(), translation_version.user.__unicode__(), video.__unicode__())
         send_templated_email(user.email, subject, 
                              'videos/email_start_notification.html',
-                             context, 'feedback@universalsubtitles.org', 
-                             fail_silently=not settings.DEBUG)
+                             context, fail_silently=not settings.DEBUG)
 
 def _make_caption_data(new_version, old_version):
     second_captions = dict([(item.subtitle_id, item) for item in old_version.ordered_subtitles()])
@@ -202,7 +200,6 @@ def _send_letter_caption(caption_version):
             context['hash'] = item.user.hash_for_video(context['video'].video_id)
             send_templated_email(item.user.email, subject, 
                                  'videos/email_notification.html',
-                                 context, 'feedback@universalsubtitles.org',
-                                 fail_silently=not settings.DEBUG)
+                                 context, fail_silently=not settings.DEBUG)
 
         users.append(item.user)              

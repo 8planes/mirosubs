@@ -590,8 +590,7 @@ def video_url_create(request):
             }
             send_templated_email(user.email, subject, 
                                  'videos/email_video_url_add.html',
-                                 context, 'feedback@universalsubtitles.org',
-                                 fail_silently=not settings.DEBUG)          
+                                 context, fail_silently=not settings.DEBUG)          
     else:
         output['errors'] = form.get_errors()
     
