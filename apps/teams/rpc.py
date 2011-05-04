@@ -72,11 +72,11 @@ class TeamsApiClass(object):
             tm = TeamMember.objects.get(team=team, user=user)
             if team.members.exclude(pk=tm.pk).exists():
                 tm.delete()
-                return Msg(_(u'You are not a member of team now.'), is_open=team.is_open())
+                return Msg(_(u'You have left this team.'), is_open=team.is_open())
             else:
                 return Error(_(u'You are last member of this team.'))
         except TeamMember.DoesNotExist:
-            return Error(_(u'You are not a member of this team.'))
+            return Error(_(u'You have left this team.'))
     
     def join(self, team_id, user):
         if not user.is_authenticated():
