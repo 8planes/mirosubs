@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
+
+import os
+import json
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from os import path
+
 from django.conf import settings
 from teams import models as tmodels
+from apps.teams.forms import AddTeamVideoForm
 from teams.models import Team, Invite, TeamVideo, \
-    Application, TeamMember, TeamVideoLanguage
+    Application, TeamMember, TeamVideoLanguage, TeamVideoLanguagePair
 from messages.models import Message
 from videos import models as vmodels
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage
@@ -496,9 +502,9 @@ class TeamsTest(TestCase):
         # both videos should be in the list
         self.assertEqual(2, len(self._video_lang_list(team)))
 
-        # but the one with russian subs should be second.
+        # but the one with en subs should be second.
         video_langs = self._video_lang_list(team)
-        self.assertEqual('ru', video_langs[1].video.subtitle_language().language)
+        self.assertEqual('en', video_langs[1].video.subtitle_language().language)
 
     def test_one_tvl(self):
         team, new_team_video = self._create_new_team_video()
@@ -722,7 +728,7 @@ class TeamsTest(TestCase):
 
         invite = Invite.objects.get(user__username=user2.username, team=team)
         ct = ContentType.objects.get_for_model(Invite)
-        message = Message.objects.get(object_pk=invite.pk, content_type=ct, user=user2)
+        Message.objects.filter(object_pk=invite.pk, content_type=ct, user=user2)
         
         members_count = team.members.count()
         
@@ -878,3 +884,56 @@ class TestJqueryRpc(TestCase):
             self.fail(response)
         
         self.assertTrue(self.team.is_member(self.user))            
+
+class TeamsDetailQueryTest(TestCase):
+    
+    fixtures = ["staging_users.json"]
+    
+    def setUp(self):
+        self.auth = {
+            "username": u"admin",
+            "password": u"admin"
+        }    
+        self.user = User.objects.get(username=self.auth["username"])
+
+        self.client.login(**self.auth)
+        from apps.testhelpers.views import _create_videos, _create_team_videos
+        fixture_path = os.path.join(settings.PROJECT_ROOT, "apps", "videos", "fixtures", "teams-list.json")
+        data = json.load(open(fixture_path))
+        self.videos = _create_videos(data, [self.user])
+        self.team, created = Team.objects.get_or_create(name="test-team", slug="test-team")
+        self.tvs = _create_team_videos( self.team, self.videos,[self.user])        
+
+    def _set_my_languages(self, *args):
+        from auth.models import UserLanguage
+        for ul in self.user.userlanguage_set.all():
+            ul.delete()
+        for lang in args:
+            ul = UserLanguage(
+                user=self.user,
+                language=lang)
+            ul.save()
+        self.user = User.objects.get(id=self.user.id)
+
+    def _debug_videos(self):
+        from apps.testhelpers.views import debug_video
+        return "\n".join([debug_video(v) for v in self.team.videos.all()])
+
+    def test_hide_trans_back_to_original_lang(self):
+        return
+        # context https://www.pivotaltracker.com/story/show/12883401
+        user_langs = ["en", "ar", "ru"]
+        self._set_my_languages(*user_langs)
+        data = self.team.get_videos_for_languages(user_langs, 20)
+        titles = [x.video.title for x in data['qs2']]
+        self.assertFalse("qs1-not-transback" in titles)
+
+    def test_lingua_franca_later(self):
+        # context https://www.pivotaltracker.com/story/show/12883401
+        user_langs = ["en", "ar", "ru"]
+        self._set_my_languages(*user_langs)
+        data = self.team.get_videos_for_languages(user_langs, 20)
+        titles = [x.video.title for x in data['qs3']]
+        print titles
+        print self._debug_videos()
+        self.assertTrue(titles.index(u'a') < titles.index(u'b'))

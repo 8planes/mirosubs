@@ -110,6 +110,10 @@ ALL_LANGUAGES['yi'] = gettext_noop(u'Yiddish')
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
 
+# languages that more people speak, and therefore
+# are it's translators are not as rare
+LINGUA_FRANCAS = ["en", "en-gb"]
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
