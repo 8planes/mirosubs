@@ -59,7 +59,7 @@ mirosubs.widget.VideoTab.prototype.createDom = function() {
 
 mirosubs.widget.VideoTab.prototype.enterDocument = function() {
     mirosubs.widget.VideoTab.superClass_.enterDocument.call(this);
-    mirosubs.style.showElement(this.nudgeElem_, false);
+    this.showNudge(false);
     this.getHandler().
         listen(this.nudgeElem_, 'click', this.nudgeClicked_);
 };
@@ -119,8 +119,10 @@ mirosubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
     if (this.nudgeClickCallback_)
         this.nudgeClickCallback_();
 };
-mirosubs.widget.VideoTab.prototype.showNudge = function(showHide) {
-    mirosubs.style.showElement(this.nudgeElem_, showHide);
+
+mirosubs.widget.VideoTab.prototype.showNudge = function(shows) {
+    mirosubs.style.setVisibility(this.nudgeElem_, shows);
+    return;
 };
 mirosubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
     goog.dom.setTextContent(this.nudgeSpanElem_, text);

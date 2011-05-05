@@ -45,6 +45,11 @@ mirosubs.widget.PlayController = function(
                mirosubs.widget.DropDown.Selection.SUBTITLES_OFF,
                this.turnOffSubs);
     this.subtitleController_ = null;
+    /* @type {bool}
+     * Flag to keep track if the nudge has been show, to avoid
+     * the cost of many calls to a dom changing function
+     */
+    this.nudgeShown_ = false;
 };
 goog.inherits(mirosubs.widget.PlayController, goog.Disposable);
 
@@ -88,6 +93,7 @@ mirosubs.widget.PlayController.prototype.getVideoSource = function() {
 mirosubs.widget.PlayController.prototype.setUpSubs_ = 
     function(subtitleState) 
 {
+    this.nudgeShown_ = false;
     this.disposeComponents_();
     this.subtitleState_ = subtitleState;
     var captionSet = new mirosubs.subtitle.EditableCaptionSet(
@@ -132,6 +138,9 @@ mirosubs.widget.PlayController.prototype.captionReached_ = function(event) {
 };
 
 mirosubs.widget.PlayController.prototype.finished_ = function() {
+    if (this.nudgeShown_){
+        return;
+    }
     var message = !!this.subtitleState_.LANGUAGE ?
         "Improve this Translation" : "Improve these Subtitles";
     this.videoTab_.updateNudge(
@@ -139,6 +148,7 @@ mirosubs.widget.PlayController.prototype.finished_ = function() {
         goog.bind(this.subtitleController_.openSubtitleDialog,
                   this.subtitleController_));
     this.videoTab_.showNudge(true);
+    this.nudgeShown_ = true;
 };
 
 mirosubs.widget.PlayController.prototype.disposeComponents_ = function() {
