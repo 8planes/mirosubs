@@ -300,7 +300,7 @@ class UserLanguage(models.Model):
 
 class Announcement(models.Model):
     content = models.CharField(max_length=500)
-    created = models.DateTimeField()
+    created = models.DateTimeField(help_text=_(u'This is date when start to display announcement. And only the last will be displayed.'))
     hidden = models.BooleanField(default=False)
     
     class Meta:
@@ -323,7 +323,7 @@ class Announcement(models.Model):
                 last = cls.objects.filter(created__lte=datetime.today()).filter(hidden=False)[0:1].get()
             except cls.DoesNotExist:
                 last = None
-            cache.set('last_accouncement', last, 60*24*7)
+            cache.set('last_accouncement', last, 60*60)
 
         return last    
         
