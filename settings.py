@@ -103,9 +103,17 @@ ALL_LANGUAGES['zh'] = gettext_noop(u'Chinese, Yue')
 ALL_LANGUAGES['oc'] = gettext_noop(u'Occitan')
 ALL_LANGUAGES['ht'] = gettext_noop(u'Creole, Haitian')
 ALL_LANGUAGES['ne'] = gettext_noop(u'Nepali')
+ALL_LANGUAGES['ee'] = gettext_noop(u'Ewe')
+ALL_LANGUAGES['ms'] = gettext_noop(u'Malay')
+ALL_LANGUAGES['yi'] = gettext_noop(u'Yiddish')
+ALL_LANGUAGES['my'] = gettext_noop(u'Burmese')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
+
+# languages that more people speak, and therefore
+# are it's translators are not as rare
+LINGUA_FRANCAS = ["en", "en-gb"]
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -122,7 +130,7 @@ MANAGERS = ADMINS
 
 P3P_COMPACT = 'CP="CURa ADMa DEVa OUR IND DSP CAO COR"'
 
-DEFAULT_FROM_EMAIL = 'feedback@universalsubtitles.org'
+DEFAULT_FROM_EMAIL = '"Universal Subtitles" <feedback@universalsubtitles.org>'
 
 DATABASES = {
     'default': {
@@ -161,6 +169,7 @@ JS_CORE = ['mirosubs.js',
            'video/abstractvideoplayer.js',
            'video/html5videoplayer.js',
            'video/youtubevideoplayer.js',
+           'video/jwvideoplayer.js',
            'video/flvvideoplayer.js',
            'video/videosource.js',
            'video/html5videosource.js',
@@ -262,7 +271,8 @@ JS_WIDGETIZER_CORE.extend([
     "widgetizer/videoplayermaker.js",
     "widgetizer/widgetizer.js",
     "widgetizer/youtube.js",
-    "widgetizer/html5.js"])
+    "widgetizer/html5.js",
+    "widgetizer/jwplayer.js"])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('widgetizer/dowidgetize.js')
@@ -312,6 +322,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'middleware.ResponseTimeMiddleware',
     'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

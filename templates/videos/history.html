@@ -106,6 +106,23 @@
                     $(this).find('.data').text()));
                 return false;
             });
+            
+            var SL_ID = '{{ language.id }}';
+
+            $('.edit-title').click(function(){
+                var msg = '{% trans "Enter new title.  Note: this is for editing of translating the title." %}'
+                var title = prompt(msg, $('.title-container').html());
+                if (title){
+                    VideosApi.change_title_translation(SL_ID, title, function(response){
+                        if (response.error){
+                            $.jGrowl.error(response.error);
+                        }else{
+                            $('.title-container').html(title);
+                        }
+                    });
+                }
+                return false;
+            });             
         });
     </script>
   <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
@@ -124,7 +141,12 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2 class="main-title"><a href="{{ video.get_absolute_url }}">{{ language.get_title_display }}</a></h2>
+    <h2 class="main-title">
+        <a href="{{ video.get_absolute_url }}" class="title-container">{{ language.get_title_display }}</a>
+        {% if not language.standard_language and user.is_authenticated %}
+            <a class="edit-title" href="#" style="color: #3196AD !important; text-decoration: underline;">{% trans 'edit title' %}</a>
+        {% endif %}  
+    </h2>
 
     <div class="left_column">
         {% widget widget_params %}

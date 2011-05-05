@@ -24,63 +24,84 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from videos.models import Video, SubtitleLanguage
 from django.utils.translation import ugettext as _
+from utils.rpc import Error, Msg
 
 class VideosApiClass(object):
+    authentication_error_msg = _(u'You should be authenticated.')
+    
+    def change_title_translation(self, language_id, title, user):
+        if not user.is_authenticated():
+            return Error(self.authentication_error_msg)
+        
+        if not title:
+            return Error(_(u'Title can\'t be empty'))
+        
+        try:
+            sl = SubtitleLanguage.objects.get(id=language_id)
+        except SubtitleLanguage.DoesNotExist:
+            return Error(_(u'Subtitle language does not exist'))
+        
+        if not sl.standard_language_id:
+            sl.title = title
+            sl.save()
+            return Msg(_(u'Title was changed success'))
+        else:
+            return Error(_(u'This is not forked translation'))
     
     def follow(self, video_id, user):
         if not user.is_authenticated():
-            return dict(error=_(u'You should be authenticated.'))
+            return Error(self.authentication_error_msg)
         
         try:
             video = Video.objects.get(pk=video_id)
         except Video.DoesNotExist:
-            return dict(error=_(u'Video does not exist.'))
+            return Error(_(u'Video does not exist.'))
         
         video.followers.add(user)
         
         for l in video.subtitlelanguage_set.all():
             l.followers.add(user)   
         
-        return dict(msg=_(u'You are following this video now.'))
+        return Msg(_(u'You are following this video now.'))
     
     def unfollow(self, video_id, user):
         if not user.is_authenticated():
-            return dict(error=_(u'You should be authenticated.'))
+            return Error(self.authentication_error_msg)
         
         try:
             video = Video.objects.get(pk=video_id)
         except Video.DoesNotExist:
-            return dict(error=_(u'Video does not exist.'))
+            return Error(_(u'Video does not exist.'))
         
         video.followers.remove(user)
         
         for l in video.subtitlelanguage_set.all():
             l.followers.remove(user)        
         
-        return dict(msg=_(u'You stopped following this video now.'))
+        return Msg(_(u'You stopped following this video now.'))
     
     def follow_language(self, language_id, user):
         if not user.is_authenticated():
-            return dict(error=_(u'You should be authenticated.'))
+            return Error(self.authentication_error_msg)
         
         try:
             language = SubtitleLanguage.objects.get(pk=language_id)
         except SubtitleLanguage.DoesNotExist:
-            return dict(error=_(u'Subtitles does not exist.'))
+            return Error(_(u'Subtitles does not exist.'))
         
         language.followers.add(user)
         
-        return dict(msg=_(u'You are following this subtitles now.'))
+        return Msg(_(u'You are following this subtitles now.'))
     
     def unfollow_language(self, language_id, user):
         if not user.is_authenticated():
-            return dict(error=_(u'You should be authenticated.'))
+            return Error(self.authentication_error_msg)
         
         try:
             language = SubtitleLanguage.objects.get(pk=language_id)
         except SubtitleLanguage.DoesNotExist:
-            return dict(error=_(u'Subtitles does not exist.'))
+            return Error(_(u'Subtitles does not exist.'))
         
         language.followers.remove(user)
         
-        return dict(msg=_(u'You stopped following this subtitles now.'))
+        return Msg(_(u'You stopped following this subtitles now.'))

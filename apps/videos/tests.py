@@ -16,6 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see
 # http://www.gnu.org/licenses/agpl-3.0.html.
+
+import json
+
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, VideoUrl
 from apps.auth.models import CustomUser as User
@@ -253,6 +256,7 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertFalse(video.is_subtitled)
         self.assertFalse(video.was_subtitled)
         self.assertEquals(32, language.subtitle_count)
+        self.assertEquals(0, language.percent_done)
         
         data = self._make_data()
         data['is_complete'] = not data['is_complete']
@@ -284,6 +288,7 @@ class UploadSubtitlesTest(WebUseTest):
         language = self.video.subtitle_language(data['language'])
         version_no = language.latest_version().version_no
         self.assertEquals(1, language.subtitleversion_set.count())
+        num_languages_1 = self.video.subtitlelanguage_set.all().count()
         # now post the same file.
         data = self._make_data()
         self.client.post(reverse('videos:upload_subtitles'), data)
@@ -291,6 +296,8 @@ class UploadSubtitlesTest(WebUseTest):
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(1, language.subtitleversion_set.count())
         self.assertEquals(version_no, language.latest_version().version_no)
+        num_languages_2 = self.video.subtitlelanguage_set.all().count()
+        self.assertEquals(num_languages_1, num_languages_2)
 
     def test_upload_altered(self):
         self._login()
@@ -327,7 +334,64 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEqual(response.status_code, 200)
         
         video = Video.objects.get(pk=video_pk)
-        self.assertEqual(3, video.subtitlelanguage_set.count())
+        self.assertEqual(2, video.subtitlelanguage_set.count())
+
+
+    def test_upload_forks(self):
+        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        draft = create_two_sub_dependent_draft(request)
+        video = draft.video
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        self.assertFalse(translated.is_forked)
+        self.assertEquals(False, translated.latest_version().is_forked)
+
+        trans_subs = translated.version().subtitle_set.all()
+        
+        self._login()
+        data = self._make_data(lang='en', video_pk=video.pk)
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        trans_subs_before = list(translated.version().subtitle_set.all())
+        
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        self.assertTrue(translated.is_forked)
+        
+        original_subs = video.subtitlelanguage_set.get(language='en').version().subtitle_set.all()
+        
+        trans_subs_after = translated.version().subtitle_set.all()
+        # we want to make sure we did not have a time data
+        # but we do now, and text hasn't changed
+        for old_sub, new_sub in zip(trans_subs_before, trans_subs_after):
+            self.assertEqual(old_sub.subtitle_text, new_sub.subtitle_text)
+            self.assertTrue(bool(new_sub.start_time))
+            self.assertTrue(bool(new_sub.end_time))
+            self.assertTrue(old_sub.start_time is None)
+            self.assertTrue(old_sub.end_time is None)
+        # now change the translated    
+        sub_0= original_subs[1]
+        sub_0.start_time = 1.0
+        sub_0.save()
+        original_subs = video.subtitlelanguage_set.get(language='en').version().subtitle_set.all()
+        self.assertNotEqual(sub_0.start_time , original_subs[0].start_time)
+
+    def test_upload_respects_lock(self):
+        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        draft = create_two_sub_dependent_draft(request)
+        video = draft.video
+
+        self._login()
+        translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+        translated.writelock(request)
+        translated.save()
+        data = self._make_data(lang='en', video_pk=video.pk)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content[10:-11])
+        self.assertFalse(data['success'])
 
 
 class Html5ParseTest(TestCase):
@@ -891,6 +955,13 @@ class BlipTvVideoTypeTest(TestCase):
         video, created = Video.get_or_create_for_url(url)
         #really this should be jsut not failed
         self.assertTrue(video.get_absolute_url())
+    
+    def _test_creating(self):
+        #this test is for ticket: https://www.pivotaltracker.com/story/show/12996607
+        #should be uncommented in future
+        url = 'http://blip.tv/file/5006677/'
+        video, created = Video.get_or_create_for_url(url)
+        self.assertTrue(video)
         
 from videos.types.dailymotion import DailymotionVideoType
         
@@ -1173,6 +1244,14 @@ class TestPercentComplete(TestCase):
             
         self.translation.update_percent_done()
         self.assertEqual(self.translation.percent_done, 0)
+
+    def test_count_as_complete(self):
+        self.assertFalse(self.video.complete_date)
+        # set the original lang as complete, should be completed
+        self.translation.update_percent_done()
+        self.assertEqual(self.translation.percent_done, 100)
+        self.assertTrue(self.translation.is_complete)
+        self.translation.save()
     
 from videos import alarms
 from django.conf import settings

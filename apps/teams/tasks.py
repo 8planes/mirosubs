@@ -35,8 +35,7 @@ def add_video_notification(team_video_id):
         }
         send_templated_email(user.email, subject, 
                              'teams/email_new_video.html',
-                             context, 'feedback@universalsubtitles.org',
-                             fail_silently=not settings.DEBUG)    
+                             context, fail_silently=not settings.DEBUG)    
             
 @task()
 def update_team_video(video_id):

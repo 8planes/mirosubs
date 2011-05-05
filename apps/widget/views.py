@@ -179,11 +179,15 @@ def download_subtitles(request, handler=SSASubtitles):
     video = get_object_or_404(models.Video, video_id=video_id)
     
     subtitles = []
-    
-    try:
-        language = video.subtitlelanguage_set.get(pk=lang_id)
-    except ObjectDoesNotExist:
-        raise Http404
+    if not lang_id:
+        # if no language is passed, assume it's the original one
+        language  = video.subtitle_language()
+    else:    
+        try:
+            language = video.subtitlelanguage_set.get(pk=lang_id)
+        except ObjectDoesNotExist:
+
+            raise Http404
     
     version = language.version()
     if not version:
@@ -276,7 +280,7 @@ def xd_rpc(request, method_name, null=False):
 
 def jsonp(request, method_name, null=False):
     _log_call(request.browser_id, method_name, request.GET.copy())
-    callback = request.GET['callback']
+    callback = request.GET.get('callback', 'callback')
     args = { 'request' : request }
     for k, v in request.GET.items():
         if k != 'callback':
@@ -289,8 +293,10 @@ def jsonp(request, method_name, null=False):
         "text/javascript")
 
 def _log_call(browser_id, method_name, request_args):
-    call = WidgetDialogCall(
-        browser_id=browser_id,
-        method=method_name,
-        request_args=request_args)
-    call.save()
+    if method_name in ['start_editing', 'fork', 'set_title', 
+                       'save_subtitles', 'finished_subtitles']:
+        call = WidgetDialogCall(
+            browser_id=browser_id,
+            method=method_name,
+            request_args=request_args)
+        call.save()

@@ -1,23 +1,25 @@
-
 <html> 
     <head> 
 {% if not js_use_compiled %}
-{% include "widget/_js_base_dependencies.html" %}
+  {% include "widget/_js_base_dependencies.html" %}
+  <script>
+    goog.require('goog.debug.FancyWindow');
+  </script>
+  <script>
+    window.DEBUG_UNISUBS = true;
+  </script>
 {% endif %}
 {% for dep in js_dependencies %}
   <script type="text/javascript" src="{{dep|safe}}"></script>
 {% endfor %}
     </head> 
-    <body>             
+    <body>
       <object id="idOVideo" name="idOVideo" width="800" height="480" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"> 
-    <param name="movie" value="http://www.youtube.com/v/f15zA0PhSek&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
-    <param name="allowFullScreen" value="true"> 
-    <param name="allowScriptAccess" value="always"> 
-    <param name="wmode" value="opaque"> 
-    <embed id="idPlayer" name="idPlayer" wmode="opaque" src="http://www.youtube.com/v/f15zA0PhSek&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" type="application/x-shockwave-flash" allowScriptAccess="always" allowfullscreen="true" width="800" height="480"> 
-</object> 
- 
- 
- 
-    </body> 
-</html> 
+        <param name="movie" value="http://www.youtube.com/v/f15zA0PhSek&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
+        <param name="allowFullScreen" value="true"> 
+        <param name="allowScriptAccess" value="always"> 
+        <param name="wmode" value="opaque"> 
+        <embed id="idPlayer" name="idPlayer" wmode="opaque" src="http://www.youtube.com/v/f15zA0PhSek&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" type="application/x-shockwave-flash" allowScriptAccess="always" allowfullscreen="true" width="800" height="480"> 
+      </object>
+    </body>
+</html>

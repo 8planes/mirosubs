@@ -109,7 +109,7 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
             }
             else {
                 that.finished_ = true;
-                successCallback(mirosubs.widget.DropDownContents.fromJSON(
+                successCallback(new mirosubs.widget.DropDownContents(
                     result['drop_down_contents']));
             }
         }, 

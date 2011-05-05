@@ -47,8 +47,7 @@ class NullRpc(BaseRpc):
         else:
             video_urls = [video_url]
         return_value['video_urls'] = video_urls
-        return_value['drop_down_contents'] = \
-            self._drop_down_contents(None)
+        return_value['drop_down_contents'] = []
         return return_value
 
     def fetch_start_dialog_contents(self, request, video_id):
@@ -76,9 +75,8 @@ class NullRpc(BaseRpc):
             "subtitles": self._subtitles_dict() }
 
     def save_subtitles(self, request, draft_pk, packets):
-        max_packet_no = max([p['packet_no'] for p in packets])
         return {'response':'ok',
-                'last_saved_packet': max_packet_no}
+                'last_saved_packet': 3000}
 
     def finished_subtitles(self, request, draft_pk, packets):
         response = self.save_subtitles(
@@ -98,4 +96,4 @@ class NullRpc(BaseRpc):
         return []
 
     def _subtitles_dict(self):
-        return self._make_subtitles_dict([], None, True, False, 1, True, True, None, "what")
+        return self._make_subtitles_dict([], 'en', 1, True, False, 1, True, True, None, "what")

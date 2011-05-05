@@ -169,3 +169,7 @@ mirosubs.translate.Dialog.prototype.forkImpl_ = function(subtitleState) {
         this.serverModel_.getDraftPK(),
         subtitleState);
 };
+
+mirosubs.translate.Dialog.prototype.getServerModel = function(){
+    return this.serverModel_;
+}

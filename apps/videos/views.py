@@ -21,7 +21,8 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, SubtitleLanguage, SubtitleVersion, VideoUrl
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, SubtitleLanguage, SubtitleVersion,  \
+    VideoUrl, AlreadyEditingException
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
     SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm, TranscriptionFileForm, \
     AddFromFeedForm
@@ -40,7 +41,9 @@ from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
 from django.db.models import Sum, Q, F
+from django.db import transaction
 from django.utils.translation import ugettext
+from django.utils.encoding import force_unicode
 from statistic.models import EmailShareStatistic
 import urllib, urllib2
 from django.template.defaultfilters import slugify
@@ -81,7 +84,7 @@ def ajax_change_video_title(request):
     video_id = request.POST.get('video_id')
     title = request.POST.get('title')
     user = request.user
-    
+
     try:
         video = Video.objects.get(video_id=video_id)
         if title and not video.title or video.is_html5() or user.is_superuser:
@@ -94,8 +97,7 @@ def ajax_change_video_title(request):
             action.created = datetime.now()
             action.action_type = Action.CHANGE_TITLE
             action.save()
-            
-            send_change_title_email.delay(video.id, user and user.id, old_title, video.title)          
+            send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))          
     except Video.DoesNotExist:
         pass
     
@@ -206,16 +208,24 @@ def actions_list(request):
                        extra_context=extra_context)      
         
 @login_required
+@transaction.commit_manually
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
     if form.is_valid():
-        language = form.save()
-        output['success'] = True
-        output['next'] = language.get_absolute_url()
+        try:
+            language = form.save()
+            output['success'] = True
+            output['next'] = language.get_absolute_url()
+            transaction.commit()
+        except AlreadyEditingException, e:
+            output['errors'] = {"_all__":[force_unicode(e.msg)]}
+            transaction.rollback()
+     
     else:
         output['errors'] = form.get_errors()
-    return HttpResponse(json.dumps(output), "text/javascript")
+        transaction.rollback()
+    return HttpResponse(u'<textarea>%s</textarea>'  % json.dumps(output))
 
 @login_required
 def paste_transcription(request):
@@ -580,8 +590,7 @@ def video_url_create(request):
             }
             send_templated_email(user.email, subject, 
                                  'videos/email_video_url_add.html',
-                                 context, 'feedback@universalsubtitles.org',
-                                 fail_silently=not settings.DEBUG)          
+                                 context, fail_silently=not settings.DEBUG)          
     else:
         output['errors'] = form.get_errors()
     
@@ -607,3 +616,30 @@ def video_staff_delete(request, video_id):
     video.delete()
     return HttpResponse("ok")
 
+def video_debug(request, video_id):
+    from apps.testhelpers.views import debug_video
+    from apps.widget import video_cache as vc
+    from django.core.cache import cache
+    video = get_object_or_404(Video, video_id=video_id)
+    lang_info = debug_video(video)
+    vid = video.video_id
+    get_subtitles_dict = {}
+    for l in video.subtitlelanguage_set.all():
+        cache_key = vc._subtitles_dict_key(vid, l.pk, None)
+        get_subtitles_dict[l.language] = cache.get(cache_key)
+    cache = {
+        "get_video_urls": cache.get(vc._video_urls_key(vid)),
+        "get_subtitles_dict": get_subtitles_dict,
+        "get_video_languages": cache.get(vc._video_languages_key(vid)),
+        
+        "get_video_languages_verbose": cache.get(vc._video_languages_verbose_key(vid)),
+        "writelocked_langs": cache.get(vc._video_writelocked_langs_key(vid)),
+    }
+    return render_to_response("videos/video_debug.html", {
+            'video':video,
+            'lang_info': lang_info,
+            "cache": cache
+    }, context_instance=RequestContext(request))
+
+
+    

@@ -39,12 +39,17 @@ mirosubs.widget.PlayController = function(
         listen(this.dropDown_,
                mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED,
                function(e) {
-                   that.languageSelected(e.languageCode, e.languagePK);
+                   that.languageSelected(e.videoLanguage);
                }).
         listen(this.dropDown_,
                mirosubs.widget.DropDown.Selection.SUBTITLES_OFF,
                this.turnOffSubs);
     this.subtitleController_ = null;
+    /* @type {bool}
+     * Flag to keep track if the nudge has been show, to avoid
+     * the cost of many calls to a dom changing function
+     */
+    this.nudgeShown_ = false;
 };
 goog.inherits(mirosubs.widget.PlayController, goog.Disposable);
 
@@ -88,6 +93,7 @@ mirosubs.widget.PlayController.prototype.getVideoSource = function() {
 mirosubs.widget.PlayController.prototype.setUpSubs_ = 
     function(subtitleState) 
 {
+    this.nudgeShown_ = false;
     this.disposeComponents_();
     this.subtitleState_ = subtitleState;
     var captionSet = new mirosubs.subtitle.EditableCaptionSet(
@@ -107,15 +113,14 @@ mirosubs.widget.PlayController.prototype.setUpSubs_ =
                this.finished_);
 };
 
-mirosubs.widget.PlayController.prototype.languageSelected = function(languageCode, languagePK) {
+mirosubs.widget.PlayController.prototype.languageSelected = function(videoLanguage) {
     var that = this;
     mirosubs.Tracker.getInstance().track('Selects_language_from_widget_dropdown');
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'fetch_subtitles',
         { 'video_id': this.videoID_,
-          'language_pk': languagePK,
-          'language_code': languageCode },
+          'language_pk': videoLanguage.PK },
         function(subStateJSON) {
             that.turnOffSubs();
             var subState = mirosubs.widget.SubtitleState.fromJSON(subStateJSON);
@@ -132,6 +137,9 @@ mirosubs.widget.PlayController.prototype.captionReached_ = function(event) {
 };
 
 mirosubs.widget.PlayController.prototype.finished_ = function() {
+    if (this.nudgeShown_){
+        return;
+    }
     var message = !!this.subtitleState_.LANGUAGE ?
         "Improve this Translation" : "Improve these Subtitles";
     this.videoTab_.updateNudge(
@@ -139,6 +147,7 @@ mirosubs.widget.PlayController.prototype.finished_ = function() {
         goog.bind(this.subtitleController_.openSubtitleDialog,
                   this.subtitleController_));
     this.videoTab_.showNudge(true);
+    this.nudgeShown_ = true;
 };
 
 mirosubs.widget.PlayController.prototype.disposeComponents_ = function() {

@@ -39,11 +39,9 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.makeVideoPlayers =
 mirosubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized = 
     function(videoElements) 
 {
-    var unwidgetized = [];
-    for (var i = 0; i < videoElements.length; i++)
-        if (this.isUnwidgetized(videoElements[i]))
-            unwidgetized.push(videoElements[i]);
-    return unwidgetized;
+    return goog.array.filter(
+        videoElements,
+        function(elem) { return this.isUnwidgetized(elem); }, this);
 };
 
 /**
@@ -51,9 +49,52 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized =
  * @param {Element} element
  */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element) {
-    var players = mirosubs.video.AbstractVideoPlayer.players;
-    for (var i = 0; i < players.length; i++)
-        if (players[i].getVideoElement() == element)
-            return false;
-    return true;
+    return !goog.array.find(
+        mirosubs.video.AbstractVideoPlayer.players,
+        function(p) { return p.getVideoElement() == element; });
+};
+
+mirosubs.widgetizer.VideoPlayerMaker.prototype.findObjectParam_ = 
+    function(objElem, paramName) 
+{
+    return goog.dom.findNode(
+        objElem, 
+        function(n) {
+            return n.nodeName == "PARAM" && n['name'] == paramName;
+        });
+};
+
+mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam_ =
+    function(element, embedParamName, opt_objectParamName) 
+{
+    if (element.nodeName == "EMBED") {
+        return element[embedParamName];
+    } else {
+        var paramNode = this.findObjectParam_(
+            element, opt_objectParamName || embedParamName);
+        if (paramNode) {
+            return paramNode['value'];
+        }
+    }
+    return null;
+};
+
+mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
+    if (element.nodeName == "OBJECT" && element['data']) {
+        return element['data'];
+    } else {
+        return this.findFlashParam_(element, 'src', 'movie');
+    }
+};
+
+mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
+    return this.findFlashParam_(element, 'flashvars');
+};
+
+mirosubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
+    return !!goog.dom.findNode(
+        element,
+        function(node) {
+            return node.nodeName == "EMBED";
+        });
 };

@@ -7,24 +7,18 @@
     <div class="clearfix">
       <div  class="completed_translations">{% team_video_lang_list team_video.video %}</div>
     </div>
+
     <p></p>
-        {% if team_video.description %}
-    <p class="team-detail-list-description">
-      {{ team_video.description|urlize }}
-    </p>
-    {% endif %}
-    <div class="clearfix"></div>
-
+        {% team_video_in_progress_list team_video.video %}
+         <p class="team-detail-list-description">
+         {% if team_video.description %}{{ team_video.description|urlize }}. {% endif %}{% if team_video.video.subtitle_language %} <span class="team-detail-list-video-in-lang">{% trans "Video in:" %}&nbsp;{{team_video.video.subtitle_language.language_display}}.</span>{% endif %}
+           </p>
     <div class="team-video-buttons-container">
-
-
-
-
-    <a class="blue_button small team_video_{{ team_video.pk }} add_subtitles_bt" href="#">
-      {% trans 'Add Subtitles' %}
-    </a>
-    {% if can_edit_video %}
-      <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
+      <a class="blue_button small team_video_{{ team_video.pk }} add_subtitles_bt" href="#">
+        {% trans 'Add Subtitles ' %}
+      </a>
+      {% if can_edit_video %}
+          <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
       {% endif %}
 
 
@@ -37,5 +31,5 @@
             '{{team_video.video.get_video_url}}', 
             GLOBAL_WIDGET_SETTINGS);
         return false;
-    });
+k    });
 </script>

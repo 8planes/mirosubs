@@ -151,13 +151,16 @@ class CustomUser(BaseUser):
         Just to control this query
         """
         languages = cache.get('user_languages_%s' % self.pk)
-        
+
         if languages is None:
             languages = self.userlanguage_set.all()
             cache.set('user_languages_%s' % self.pk, languages, 60*24*7)
-            
+
         return languages 
-    
+
+    def speaks_language(self, language_code):
+        return language_code in [l.language for l in self.get_languages()]
+
     def managed_teams(self):
         return self.teams.filter(members__is_manager=True)
 
@@ -297,7 +300,7 @@ class UserLanguage(models.Model):
 
 class Announcement(models.Model):
     content = models.CharField(max_length=500)
-    created = models.DateTimeField()
+    created = models.DateTimeField(help_text=_(u'This is date when start to display announcement. And only the last will be displayed.'))
     hidden = models.BooleanField(default=False)
     
     class Meta:
@@ -320,7 +323,7 @@ class Announcement(models.Model):
                 last = cls.objects.filter(created__lte=datetime.today()).filter(hidden=False)[0:1].get()
             except cls.DoesNotExist:
                 last = None
-            cache.set('last_accouncement', last, 60*24*7)
+            cache.set('last_accouncement', last, 60*60)
 
         return last    
         

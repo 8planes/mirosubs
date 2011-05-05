@@ -51,6 +51,7 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
     this.currentCaptionIndex_ = -1;
     this.lastCaptionDispatched_ = null;
     this.eventsDisabled_ = false;
+    this.logger_ = goog.debug.Logger.getLogger('mirosubs.CaptionManager');
 };
 goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
 

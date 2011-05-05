@@ -2409,6 +2409,10 @@ cursor:
    width: 400px !important;
 }
 
+.mirosubs-modal-lang p.warning {
+   max-width: 300px;
+}
+
 .mirosubs-modal-login {
    width: 650px !important;
    height: 200px !important;

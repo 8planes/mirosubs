@@ -204,6 +204,7 @@ class Team(models.Model):
     
         langs_pairs = []
 
+        
         for l1 in languages:
             for l0 in languages:
                 if not l1 == l0:
@@ -215,7 +216,7 @@ class Team(models.Model):
 
         qs1 = qs.filter(percent_complete__gt=0,percent_complete__lt=100)
         qs2 = qs.filter(percent_complete=0)
-        qs3 = lqs.filter(is_original=True, is_complete=False, language__in=languages)
+        qs3 = lqs.filter(is_original=True, is_complete=False, language__in=languages).order_by("is_lingua_franca")
         qs4 = lqs.filter(is_original=False, forked=True, is_complete=False, language__in=languages)
         mqs = TeamMultyQuerySet(qs1, qs2, qs3, qs4)
 
@@ -304,12 +305,20 @@ class TeamVideo(models.Model):
         
         return ''
 
+    def _original_language(self):
+        if not hasattr(self, 'original_language_code'):
+            sub_lang = self.video.subtitle_language()
+            setattr(self, 'original_language_code', None if not sub_lang else sub_lang.language)
+        return getattr(self, 'original_language_code')
+
     def _calculate_percent_complete(self, sl0, sl1):
         # maybe move this to Video model in future.
         if not sl0 or not sl0.is_dependable():
             return -1
         if not sl1:
             return 0
+        if sl1.language == self._original_language():
+            return -1
         if sl1.is_dependent():
             if sl1.percent_done == 0:
                 return 0
@@ -415,12 +424,13 @@ class TeamVideoLanguage(models.Model):
     forked = models.BooleanField(default=True, db_index=True)
     is_complete = models.BooleanField(default=False, db_index=True)
     percent_done = models.IntegerField(default=0, db_index=True)
+    is_lingua_franca = models.BooleanField(default=False, db_index=True)
     
     class Meta:
         unique_together = (('team_video', 'subtitle_language'),)
 
     def __unicode__(self):
-        return self.get_language_display()
+        return "video: %s - %s" % (self.video.pk, self.get_language_display())
 
     @classmethod
     def _save_tvl_for_sl(cls, tv, sl):
@@ -472,6 +482,10 @@ class TeamVideoLanguage(models.Model):
         cls.objects.filter(team_video=tv, language=language).delete()
         cls._update_for_language(
             tv, language, tv.video.subtitle_language_dict())
+
+    def save(self, *args, **kwargs):
+        self.is_lingua_franca = self.language in settings.LINGUA_FRANCAS
+        return super(TeamVideoLanguage, self).save(*args, **kwargs)
 
 class TeamVideoLanguagePair(models.Model):
     team_video = models.ForeignKey(TeamVideo)

@@ -95,6 +95,19 @@ mirosubs.startdialog.Model.prototype.selectOriginalLanguage = function(language)
     this.selectedOriginalLanguage_ = language;
 };
 
+mirosubs.startdialog.Model.prototype.findFromForPK = function(pk) {
+    return this.videoLanguages_.findForPK(pk);
+};
+
+mirosubs.startdialog.Model.prototype.bestLanguages = function(toLangCode, fromLangCode) {
+    var videoLanguage = this.videoLanguages_.findForLanguagePair(
+        toLangCode, fromLangCode);
+    if (!videoLanguage)
+        return null;
+    return [this.toLanguages_.forVideoLanguage(videoLanguage), 
+            videoLanguage.getStandardLang()];
+};
+
 /**
  * @return {Array.<mirosubs.startdialog.LanguageSummary>}
  */

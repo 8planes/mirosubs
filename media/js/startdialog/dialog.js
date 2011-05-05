@@ -94,18 +94,22 @@ mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.addToLanguageSection_($d);
     this.addFromLanguageSection_($d);
     this.setFromContents_();
+    this.warningElem_ = $d('p', 'warning');
+    goog.dom.append(this.contentDiv_, this.warningElem_);
+    goog.style.showElement(this.warningElem_, false);
     this.okButton_ = 
         $d('a', 
            {'href':'#', 
             'className': "mirosubs-green-button mirosubs-big"}, 
            'Continue');
-    this.contentDiv_.appendChild(this.okButton_);
+    goog.dom.append(this.contentDiv_, this.okButton_);
     var clearDiv = $d('div');
     mirosubs.style.setProperty(clearDiv, 'clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.contentDiv_.appendChild(clearDiv);
     this.reposition();
     this.connectEvents_();
+    this.maybeShowWarning_();
 };
 
 mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
@@ -127,9 +131,14 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
             $d, fromLanguageContents);
         goog.dom.removeChildren(this.fromContainer_);
         this.fromContainer_.appendChild(this.fromLanguageDropdown_);
+        this.getHandler().listen(
+            this.fromLanguageDropdown_,
+            goog.events.EventType.CHANGE,
+            this.fromLanguageChanged_);
     }
-    else
+    else {
         this.fromLanguageDropdown_ = null;
+    }
 };
 
 mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
@@ -202,6 +211,58 @@ mirosubs.startdialog.Dialog.prototype.originalLangChanged_ = function(e) {
 mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
     this.model_.selectLanguage(this.toLanguageDropdown_.value);
     this.setFromContents_();
+    this.maybeShowWarning_();
+};
+
+mirosubs.startdialog.Dialog.prototype.fromLanguageChanged_ = function(e) {
+    this.maybeShowWarning_();
+};
+
+mirosubs.startdialog.Dialog.prototype.maybeShowWarning_ = function() {
+    var warning = null;
+    if (this.fromLanguageDropdown_ && 
+        this.fromLanguageDropdown_.value != 
+        mirosubs.startdialog.Dialog.FORK_VALUE)
+        warning = this.warningMessage_();
+    this.showWarning_(warning);
+};
+
+mirosubs.startdialog.Dialog.prototype.showWarning_ = function(warning) {
+    goog.dom.setTextContent(this.warningElem_, warning || '');
+    goog.style.showElement(this.warningElem_, !!warning);
+};
+
+mirosubs.startdialog.Dialog.prototype.warningMessage_ = function() {
+    /**
+     * @type {mirosubs.startdialog.ToLanguage}
+     */
+    var toLanguage = this.model_.getSelectedLanguage();
+    /**
+     * @type {mirosubs.startdialog.VideoLanguageLanguage}
+     */
+    var fromLanguage = this.model_.findFromForPK(
+        parseInt(this.fromLanguageDropdown_.value));
+    if (toLanguage.VIDEO_LANGUAGE &&
+        toLanguage.VIDEO_LANGUAGE.DEPENDENT &&
+        !toLanguage.VIDEO_LANGUAGE.canBenefitFromTranslation(fromLanguage)) {
+        var message = "The " + toLanguage.LANGUAGE_NAME + " subtitles you selected " +
+            "were translated from " + 
+            toLanguage.VIDEO_LANGUAGE.getStandardLang().languageName() + ". ";
+        var bestLanguages = this.model_.bestLanguages(
+            toLanguage.LANGUAGE, fromLanguage.LANGUAGE);
+        if (bestLanguages != null) {
+            message += "There is a better choice for translating into " +
+                toLanguage.LANGUAGE_NAME + " from " + 
+                fromLanguage.languageName() + ". ";            
+        }
+        else {
+            message += "If you're translating into " + toLanguage.LANGUAGE_NAME + 
+                " from " + fromLanguage.languageName() + ", you'll need to " +
+                "start from scratch.";
+        }
+        return message;
+    }
+    return null;
 };
 
 mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {

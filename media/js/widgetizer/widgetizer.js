@@ -37,7 +37,8 @@ mirosubs.Widgetizer = function() {
     }
     this.makers_ = [
         new mirosubs.widgetizer.Youtube(),
-        new mirosubs.widgetizer.HTML5()
+        new mirosubs.widgetizer.HTML5(),
+        new mirosubs.widgetizer.JWPlayer()
     ];
 };
 goog.addSingletonGetter(mirosubs.Widgetizer);

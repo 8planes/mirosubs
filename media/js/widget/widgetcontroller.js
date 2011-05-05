@@ -38,7 +38,7 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
 
     var videoID = result['video_id'];
 
-    var dropDownContents = mirosubs.widget.DropDownContents.fromJSON(
+    var dropDownContents = new mirosubs.widget.DropDownContents(
         result['drop_down_contents']);
     var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
         result['subtitles']);

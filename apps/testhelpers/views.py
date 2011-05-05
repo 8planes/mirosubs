@@ -18,6 +18,12 @@ logger = logging.getLogger("test-fixture-loading")
 
 from utils.decorators import never_in_prod
 
+def debug_lang(sl):
+    return " Language:%9s, is original: %5s, is_forked: %5s, is complete: %5s, percent done: %3s, translated from: %9s, num_subs: %7s" % (sl.language, sl.is_original, sl.is_forked, sl.is_complete, sl.percent_done, sl.standard_language, len(sl.latest_subtitles()))
+
+def debug_video(v):
+    return "%s :: %s\n" % (v.title_display(), v.pk) + "\n".join([debug_lang(x) for x in v.subtitlelanguage_set.all()])
+                     
 def _get_fixture_path(model_name):
     return os.path.join(settings.PROJECT_ROOT, "apps", "testhelpers", "fixtures", "%s-fixtures.json" % model_name)
 
@@ -51,13 +57,16 @@ def _copy_subtitles(fromlang, tolang, maxout=None):
     i = 0
     for x in fromlang.version().subtitle_set.all():
         s = x.duplicate_for(version=version, draft=None)
+        s.subtitle_text = "Sub %s for lang (%s)" % (i, tolang.language)
         s.save()
         i += 1
-        if maxout and maxout < i:
+        if maxout and maxout  == i:
             break
     
 def _add_lang_to_video(video, props,  translated_from=None):
 
+    if props.get('is_original', False):
+        video.subtitle_language().delete()
     sub_lang = SubtitleLanguage(
         video=video,
         is_original = props.get('is_original', False),
@@ -85,6 +94,8 @@ def _add_lang_to_video(video, props,  translated_from=None):
 
 
     sub_lang.update_percent_done()
+    sub_lang.update_complete_state()
+    sub_lang.is_complete = props.get("is_complete", False)
     sub_lang.save()
     return sub_lang    
             
@@ -123,13 +134,15 @@ def _hydrate_users(users_data):
     
 # create 30 videos
 def _create_team_videos(team, videos, users):
-
+    tvs = []
     for video in videos:
         shuffle(users)
         team_video = TeamVideo(team=team, video=video)
         member, created = CustomUser.objects.get_or_create(user_ptr=users[0])
         team_video.added_by = member
         team_video.save()
+        tvs.append(team_video)
+    return tvs    
 
 @transaction.commit_on_success        
 def _do_it(video_data_url=None):

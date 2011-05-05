@@ -29,18 +29,28 @@ mirosubs.startdialog.VideoLanguage = function(json) {
     this.PERCENT_DONE = json['percent_done'];
     this.STANDARD_PK = json['standard_pk'];
     this.SUBTITLE_COUNT = json['subtitle_count'];
+    this.IN_PROGRESS = json['in_progress'];
+};
+
+mirosubs.startdialog.VideoLanguage.prototype.languageName = function() {
+    return this.LANGUAGE ? 
+        mirosubs.languageNameForCode(this.LANGUAGE) : "Original";
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
-    var name = this.LANGUAGE ? 
-        mirosubs.languageNameForCode(this.LANGUAGE) : "Original";
+    var name = this.languageName();
 
-    if (this.SUBTITLE_COUNT == 0 || (this.DEPENDENT && this.PERCENT_DONE == 0))
-        return name;
-    if (!this.DEPENDENT)
-        return name + (this.IS_COMPLETE ? " (100%)" : " (incomplete)");
-    else
-        return name + " (" + this.PERCENT_DONE + "%)";
+    if (!this.DEPENDENT && this.SUBTITLE_COUNT > 0)
+        name += (this.IS_COMPLETE ? " (100%)" : " (incomplete)");
+    else if (this.DEPENDENT && this.PERCENT_DONE > 0)
+        name += " (" + this.PERCENT_DONE + "%)";
+    return name + (this.IN_PROGRESS ? " (in progress)" : "");
+};
+
+mirosubs.startdialog.VideoLanguage.prototype.completionStatus = function() {
+    return "(" +
+        (this.DEPENDENT ? (this.PERCENT_DONE + "%") : 
+         (this.SUBTITLE_COUNT + " lines")) + ")";
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
@@ -52,6 +62,9 @@ mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
             this);
 };
 
+/**
+ * @returns {?mirosubs.startdialog.VideoLanguage}
+ */
 mirosubs.startdialog.VideoLanguage.prototype.getStandardLang = function() {
     return this.standardLang_;
 };
@@ -75,12 +88,12 @@ mirosubs.startdialog.VideoLanguage.prototype.isDependable = function() {
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation = 
-    function(languageSummary) 
+    function(toTranslateFrom) 
 {
     if (!this.DEPENDENT)
         return false;
-    if (languageSummary.DEPENDENT)
-        return this.STANDARD_PK == languageSummary.STANDARD_PK;
+    if (toTranslateFrom.DEPENDENT)
+        return this.STANDARD_PK == toTranslateFrom.STANDARD_PK;
     else
-        return this.STANDARD_PK == languageSummary.PK;
+        return this.STANDARD_PK == toTranslateFrom.PK;
 };

@@ -241,7 +241,7 @@ function testInsertAndUnitOfWork() {
                          captionJSON(-1, -1, 4, 4)]);
     var inserted = set.insertCaption(set.caption(2).getSubOrder());
     var work = MS_unitOfWork.getWork();
-    assertEquals(1, work.neu.length);
+    assertEquals(1, work.inserted.length);
     assertEquals(1, work.updated.length);
     assertEquals(0, work.deleted.length);
     
@@ -296,7 +296,7 @@ function testClearAll() {
     assertEquals(0, set.count());
     assertTrue(MS_cleared);
     var work = MS_unitOfWork.getWork();
-    assertEquals(0, work.neu.length);
+    assertEquals(0, work.inserted.length);
     assertEquals(0, work.updated.length);
     assertEquals(3, work.deleted.length);
 }

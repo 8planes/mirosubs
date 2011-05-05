@@ -30,7 +30,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
 from utils.translation import get_user_languages_from_cookie
-from auth.models import UserLanguage
+from auth.models import UserLanguage, CustomUser as User
+from django.contrib.admin.views.decorators import staff_member_required
+import re
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
@@ -51,6 +53,23 @@ def create_user(request):
         return HttpResponseRedirect(redirect_to)
     else:
         return render_login(request, form, AuthenticationForm(label_suffix=""), redirect_to)
+
+@staff_member_required
+def user_list(request):
+    langs = request.GET.get('langs', None)
+    if not langs:
+        return render_to_response(
+            'auth/user_list.html',
+            context_instance=RequestContext(request))
+    else:
+        langs = re.split('[, ]+', langs)
+        user_ids = set()
+        users = User.objects.filter(userlanguage__language__in=langs).distinct()
+        return render_to_response(
+            'auth/user_list.csv',
+            {'users': users},
+            context_instance=RequestContext(request),
+            mimetype="text/plain")
 
 @login_required
 def delete_user(request):

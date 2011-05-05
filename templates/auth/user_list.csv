@@ -1,0 +1,2 @@
+{% for user in users %}{{ user.email }}
+{% endfor %}

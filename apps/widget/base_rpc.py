@@ -26,24 +26,19 @@ import widget
 LANGUAGES_MAP = dict(LANGUAGES)
 
 class BaseRpc:
-    def _make_subtitles_dict(self, subtitles, language, is_original, is_complete, version, is_latest, is_forked, base_language, title):
+    def _make_subtitles_dict(self, subtitles, language_code, language_pk, is_original, is_complete, version, is_latest, is_forked, base_language, title):
         return {
             'subtitles': subtitles,
-            'language_code': language.language,
-            'language_pk': language.pk,
+            'language_code': language_code,
+            'language_pk': language_pk,
             'is_original': is_original,
             'is_complete': is_complete,
             'version': version,
             'is_latest': is_latest,
             'forked': is_forked,
-            'base_language': base_language,
+            'base_language': base_language and base_language.language,
+            'base_language_pk': base_language and base_language.pk,
             'title': title
-            }
-
-    def _drop_down_contents(self, video_id):
-        return {
-            'translations': self._initial_languages(video_id),
-            'subtitle_count': self._subtitle_count(video_id)
             }
 
     def _find_remote_autoplay_language(self, request):

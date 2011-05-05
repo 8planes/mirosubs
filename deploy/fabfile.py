@@ -27,7 +27,7 @@ ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
-                admin_dir, separate_sentry_db=False,
+                admin_dir, separate_uslogging_db=False,
                 celeryd_bounce_cmd=""):
     env.user = username
     env.web_hosts = hosts
@@ -38,7 +38,7 @@ def _create_env(username, hosts, s3_bucket,
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
-    env.separate_sentry_db = separate_sentry_db
+    env.separate_uslogging_db = separate_uslogging_db
     env.celeryd_bounce_cmd=celeryd_bounce_cmd
 
 def staging(username):
@@ -65,7 +65,7 @@ def dev(username):
 
 def unisubs(username):
     _create_env(username,
-                ['pcf10.pculture.org:2191', 
+                ['pcf-us-cluster1.pculture.org:2191', 
                  'pcf-us-cluster2.pculture.org:2191'],
                 's3.www.universalsubtitles.org',
                 'universalsubtitles',
@@ -81,21 +81,24 @@ def syncdb():
         _git_pull()
         run('{0}/env/bin/python manage.py syncdb '
             '--settings=unisubs_settings'.format(env.static_dir))
-        if env.separate_sentry_db:
+        if env.separate_uslogging_db:
             run('{0}/env/bin/python manage.py syncdb '
-                '--database=sentry --settings=unisubs_settings'.format(
+                '--database=uslogging --settings=unisubs_settings'.format(
                     env.static_dir))
 
 def migrate(app_name=''):
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
         _git_pull()
+        if env.separate_uslogging_db:
+            run('{0}/env/bin/python manage.py migrate sentry '
+                '--database=uslogging --settings=unisubs_settings'.format(
+                    env.static_dir))
+            run('{0}/env/bin/python manage.py migrate uslogging '
+                '--database=uslogging --settings=unisubs_settings'.format(
+                    env.static_dir))
         run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs_settings'.format(
                 env.static_dir, app_name))
-        if env.separate_sentry_db:
-            run('{0}/env/bin/python manage.py migrate sentry '
-                '--database=sentry --settings=unisubs_settings'.format(
-                    env.static_dir))
     bounce_memcached()
 
 def migrate_fake(app_name):
@@ -168,6 +171,7 @@ def clear_permissions():
         _clear_permissions('{0}/mirosubs'.format(env.web_dir))
 
 def _git_pull():
+    run('git checkout --force')
     run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
