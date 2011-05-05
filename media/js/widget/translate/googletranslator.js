@@ -17,6 +17,71 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.translate.GoogleTranslator');
+goog.provide('mirosubs.translate.GoogleTranslator.Transaction');
+
+mirosubs.translate.GoogleTranslator.TRANSACTION_ID = 0;
+
+/**
+ * @constructor
+ */
+mirosubs.translate.GoogleTranslator.Transaction = function(){
+    this.id = ++mirosubs.translate.GoogleTranslator.TRANSACTION_ID;
+    this.actions = [];
+    this.withError = false;
+};
+
+mirosubs.translate.GoogleTranslator.Transaction.prototype.add = function(toTranslate, fromLang, toLang, widgets, callback){
+    this.actions.push([toTranslate, fromLang, toLang, this.getCallback_(widgets, callback)]);
+};
+
+mirosubs.translate.GoogleTranslator.Transaction.prototype.onError = function(response){
+    if ( ! this.withError){
+        this.withError = true;
+        alert('Cannot complete automated translation. Error: "'+response['responseDetails']+'".');
+    }
+};
+
+mirosubs.translate.GoogleTranslator.Transaction.prototype.getCallback_ = function(widgets, callback){
+    /**
+     * shortcut
+     * @type {string}
+     */
+    var d = mirosubs.translate.GoogleTranslator.delimiter;
+    var transaction = this;
+    
+    if (widgets.length && widgets[0].showLoadingIndicator) {
+        goog.array.forEach(widgets, function(w){
+            w.showLoadingIndicator();
+        });      
+    }
+    
+    return function(response) {
+        if (widgets.length && widgets[0].hideLoadingIndicator) {
+            goog.array.forEach(widgets, function(w){
+                w.hideLoadingIndicator();
+            });      
+        }
+        if (response['responseStatus'] === 200) {
+            var translations = response['responseData']['translatedText'].split(d);
+            
+            var encoded = [];
+            for (var i=0, len=translations.length; i<len; i++){
+                encoded.push(goog.string.unescapeEntities(translations[i]));
+            };
+
+            callback(encoded, widgets);
+        }else{
+            transaction.onError(response);
+            callback([], widgets, response['responseDetails']);
+        };
+    }    
+};
+
+mirosubs.translate.GoogleTranslator.Transaction.prototype.start = function(){
+    for (var i=0, len=this.actions.length; i<len; i++){
+        mirosubs.translate.GoogleTranslator.translate.apply(null, this.actions[i]);
+    }
+};
 
 /**
  * Uri for jsonp handler
@@ -70,49 +135,6 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
 };
 
 /**
- * Return decorated callback for GoogleTranslator
- * @param {Array.<mirosubs.translate.TranslationWidget>} widgets containing subtitles for translation
- * @param {Function} callback
- * @param {boolean} addLoadingInticator Show loading indicator or not
- * @return {function({Object})} 
- */
-mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback = function(widgets, callback, addLoadingInticator) {
-    /**
-     * shortcut
-     * @type {string}
-     */
-    var d = mirosubs.translate.GoogleTranslator.delimiter;
-    addLoadingInticator = addLoadingInticator || true;
-
-    if (widgets.length && widgets[0].showLoadingIndicator) {
-        goog.array.forEach(widgets, function(w){
-            w.showLoadingIndicator();
-        });      
-    }
-    
-    return function(response) {
-        if (widgets.length && widgets[0].hideLoadingIndicator) {
-            goog.array.forEach(widgets, function(w){
-                w.hideLoadingIndicator();
-            });      
-        };
-        if (response['responseStatus'] == 200) {
-            var translations = response['responseData']['translatedText'].split(d);
-            
-            var encoded = [];
-            for (var i=0, len=translations.length; i<len; i++){
-                encoded.push(goog.string.unescapeEntities(translations[i]));
-            };
-
-            callback(encoded, widgets);
-        }else{
-            alert(response['responseDetails']+' This language can be unsupprted by Google Translator.')
-            callback([], widgets, response['responseDetails']);
-        };
-    }
-};
-
-/**
  * Transalte subtitles from widgets with GoogleTranslator.translate
  * @param {Array.<mirosubs.translate.TranslationWidget>} needTranslating
  * @param {?string} fromLang Language code of text to translate, left empty for auto-detection
@@ -125,7 +147,6 @@ function(needTranslating, fromLang, toLang, callback) {
     var d = mirosubs.translate.GoogleTranslator.delimiter;
     var cleanStr = mirosubs.translate.GoogleTranslator.cleanString;
     var translate = mirosubs.translate.GoogleTranslator.translate;
-    var getCallback = mirosubs.translate.GoogleTranslator.getTranslateWidgetsCallback;
     
     //ml = 250; for debuging multiple requests
     
@@ -139,6 +160,7 @@ function(needTranslating, fromLang, toLang, callback) {
      * @type {Array.<mirosubs.translate.TranslationWidget>}
      */    
     var widgetsToTranslate = [];
+    var transaction = new mirosubs.translate.GoogleTranslator.Transaction();
     
     goog.array.forEach(needTranslating, function(w) {
         /**
@@ -151,7 +173,7 @@ function(needTranslating, fromLang, toLang, callback) {
         if (toTranslate.join(d).length >= ml) {
             toTranslate.pop(), widgetsToTranslate.pop();
             
-            translate(toTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback))
+            transaction.add(toTranslate.join(d), fromLang, toLang, widgetsToTranslate, callback);
             
             if (t.length > ml) {
                 toTranslate = widgetsToTranslate = [];
@@ -161,8 +183,9 @@ function(needTranslating, fromLang, toLang, callback) {
         };
     });
     if (toTranslate.length) {
-        translate(toTranslate.join(d), fromLang, toLang, getCallback(widgetsToTranslate, callback));
+        transaction.add(toTranslate.join(d), fromLang, toLang, widgetsToTranslate, callback);
     };
+    transaction.start();
 };
 
 mirosubs.translate.GoogleTranslator.isTranslateable = function() {
@@ -173,7 +196,7 @@ mirosubs.translate.GoogleTranslator.isTranslateable = function() {
         mirosubs.translate.GoogleTranslator.Languages_ = new goog.structs.Set([
             'af','sq','am','ar','hy','az',
 'eu','be','bn','bh','br','bg','my','ca','chr','zh','zh-cn','zh-tw','co','hr','cs',
-'da','dv','nl','en','eo','et','fo','tl','fi','fr','fy','gl','ka','de','el','gu',
+'da','dv','nl','en','et','fo','tl','fi','fr','fy','gl','ka','de','el','gu',
 'ht','iw','hi','hu','is','id','iu','ga','it','ja','jw','kn','kk','km','ko','ku',
 'ky','lo','la','lv','lt','lb','mk','ms','ml','mt','mi','mr','mn','ne','no','oc',
 'or','ps','fa','pl','pt','pt-pt','pa','qu','ro','ru','sa','gd','sr','sd','si',
