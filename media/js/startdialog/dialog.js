@@ -94,18 +94,21 @@ mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.addToLanguageSection_($d);
     this.addFromLanguageSection_($d);
     this.setFromContents_();
+    this.warningDiv_ = $d('div');
+    goog.dom.append(this.contentDiv_, this.warningDiv_);
     this.okButton_ = 
         $d('a', 
            {'href':'#', 
             'className': "mirosubs-green-button mirosubs-big"}, 
            'Continue');
-    this.contentDiv_.appendChild(this.okButton_);
+    goog.dom.append(this.contentDiv_, this.okButton_);
     var clearDiv = $d('div');
     mirosubs.style.setProperty(clearDiv, 'clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.contentDiv_.appendChild(clearDiv);
     this.reposition();
     this.connectEvents_();
+    this.maybeShowWarning_();
 };
 
 mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
@@ -127,9 +130,14 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
             $d, fromLanguageContents);
         goog.dom.removeChildren(this.fromContainer_);
         this.fromContainer_.appendChild(this.fromLanguageDropdown_);
+        this.getHandler().listen(
+            this.fromLanguageDropdown_,
+            goog.events.EventType.CHANGE,
+            this.fromLanguageChanged_);
     }
-    else
+    else {
         this.fromLanguageDropdown_ = null;
+    }
 };
 
 mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
@@ -202,6 +210,23 @@ mirosubs.startdialog.Dialog.prototype.originalLangChanged_ = function(e) {
 mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
     this.model_.selectLanguage(this.toLanguageDropdown_.value);
     this.setFromContents_();
+    this.maybeShowWarning_();
+};
+
+mirosubs.startdialog.Dialog.prototype.fromLanguageChanged_ = function(e) {
+    this.maybeShowWarning_();
+};
+
+mirosubs.startdialog.Dialog.prototype.maybeShowWarning_ = function() {
+    var warning = null;
+    if (this.fromLanguageDropdown_)
+        warning = this.model_.warningMessageForFromLanguage(
+            parseInt(this.fromLanguageDropdown_.value));
+    this.showWarning_(warning);
+};
+
+mirosubs.startdialog.Dialog.prototype.showWarning_ = function(warning) {
+    goog.dom.setTextContent(this.warningDiv_, warning || '');
 };
 
 mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {

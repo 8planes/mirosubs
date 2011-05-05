@@ -46,6 +46,12 @@ mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
     return name + (this.IN_PROGRESS ? " (in progress)" : "");
 };
 
+mirosubs.startdialog.VideoLanguage.prototype.completionStatus = function() {
+    return "(" +
+        (this.DEPENDENT ? (this.PERCENT_DONE + "%") : 
+         (this.SUBTITLE_COUNT + " lines")) + ")";
+};
+
 mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
     this.allLangs_ = all;
     if (this.STANDARD_PK)
@@ -78,12 +84,12 @@ mirosubs.startdialog.VideoLanguage.prototype.isDependable = function() {
 };
 
 mirosubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation = 
-    function(languageSummary) 
+    function(toTranslateFrom) 
 {
     if (!this.DEPENDENT)
         return false;
-    if (languageSummary.DEPENDENT)
-        return this.STANDARD_PK == languageSummary.STANDARD_PK;
+    if (toTranslateFrom.DEPENDENT)
+        return this.STANDARD_PK == toTranslateFrom.STANDARD_PK;
     else
-        return this.STANDARD_PK == languageSummary.PK;
+        return this.STANDARD_PK == toTranslateFrom.PK;
 };

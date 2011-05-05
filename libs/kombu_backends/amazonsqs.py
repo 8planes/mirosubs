@@ -1,5 +1,9 @@
 from kombu.transport import virtual
 from boto.sqs.connection import SQSConnection
+from django.conf import settings
+from utils.log_methods import LogNativeMethodsMetaclass
+
+LOG_AMAZON_BROKER = getattr(settings, 'LOG_AMAZON_BROKER', False)
 
 try:
     from termcolor import cprint
@@ -17,73 +21,24 @@ def pr(s):
 DEBUG = False
 EVENT_QUEUE_NAME = 'celeryev'
 
-import logging
 
 class LoggingConnection(SQSConnection):
-    
-    def _log(self, method_name):
-        logging.debug(u'SQSConnection.%s' % method_name)
-        
-    def create_queue(self, *args, **kwargs):
-        self._log(u'create_queue')
-        return super(LoggingConnection, self).create_queue(*args, **kwargs)
+    __metaclass__ = LogNativeMethodsMetaclass 
 
-    def delete_queue(self, *args, **kwargs):
-        self._log(u'delete_queue')
-        return super(LoggingConnection, self).delete_queue(*args, **kwargs)
-
-    def get_queue_attributes(self, *args, **kwargs):
-        self._log(u'get_queue_attributes')
-        return super(LoggingConnection, self).get_queue_attributes(*args, **kwargs)
-
-    def set_queue_attribute(self, *args, **kwargs):
-        self._log(u'set_queue_attribute')
-        return super(LoggingConnection, self).set_queue_attribute(*args, **kwargs)
-
-    def receive_message(self, *args, **kwargs):
-        self._log(u'receive_message')
-        return super(LoggingConnection, self).receive_message(*args, **kwargs)
-
-    def delete_message(self, *args, **kwargs):
-        self._log(u'delete_message')
-        return super(LoggingConnection, self).delete_message(*args, **kwargs)
-
-    def delete_message_from_handle(self, *args, **kwargs):
-        self._log(u'delete_message_from_handle')
-        return super(LoggingConnection, self).delete_message_from_handle(*args, **kwargs)
-
-    def send_message(self, *args, **kwargs):
-        self._log(u'send_message')
-        return super(LoggingConnection, self).send_message(*args, **kwargs)
-
-    def change_message_visibility(self, *args, **kwargs):
-        self._log(u'change_message_visibility')
-        return super(LoggingConnection, self).change_message_visibility(*args, **kwargs)
-
-    def get_all_queues(self, *args, **kwargs):
-        self._log(u'get_all_queues')
-        return super(LoggingConnection, self).get_all_queues(*args, **kwargs)
-
-    def get_queue(self, *args, **kwargs):
-        self._log(u'get_queue')
-        return super(LoggingConnection, self).get_queue(*args, **kwargs)
-
-    def add_permission(self, *args, **kwargs):
-        self._log(u'add_permission')
-        return super(LoggingConnection, self).add_permission(*args, **kwargs)
-
-    def remove_permission(self, *args, **kwargs):
-        self._log(u'remove_permission')
-        return super(LoggingConnection, self).remove_permission(*args, **kwargs)
+if LOG_AMAZON_BROKER:
+    DEFAULT_CONNECTION = LoggingConnection
+else:
+    DEFAULT_CONNECTION = SQSConnection
 
 class Channel(virtual.Channel):
-    Client = SQSConnection
+    Client = DEFAULT_CONNECTION
     
     DOT_REPLECEMENT = '___'
     supports_fanout = False
 
     def __init__(self, connection, **kwargs):
         self.queue_prefix = connection.client.virtual_host or ''
+        self.queue_cache = {}
         super(Channel, self).__init__(connection, **kwargs)
 
     def _lookup(self, exchange, routing_key, default="ae.undeliver"):
@@ -145,9 +100,14 @@ class Channel(virtual.Channel):
 
         """
         DEBUG and pr('>>> Channel._delete: %s' % queue)
+
         self._purge(queue)
         self._get_queue(queue).delete()
-
+        try:
+            del self.queue_cache[queue]
+        except KeyError:
+            pass
+                
     def _new_queue(self, queue, **kwargs):
         """Create new queue.
 
@@ -171,11 +131,19 @@ class Channel(virtual.Channel):
     
     def _get_queue(self, queue):
         # "." is not valid symbol in queue name for SQS. Maybe this should be more pretty.
-        if queue.split('.')[0] == EVENT_QUEUE_NAME:
-            queue = EVENT_QUEUE_NAME
-        queue = self.queue_prefix+'.'+queue
-        q = self.client.create_queue(queue.replace('.', self.DOT_REPLECEMENT))
-        return q
+
+        #cache to reduce requests number
+        if not queue in self.queue_cache:
+            if queue.split('.')[0] == EVENT_QUEUE_NAME:
+                queue_name = EVENT_QUEUE_NAME
+            else:
+                queue_name = queue
+            queue_name = self.queue_prefix+'.'+queue_name
+            
+            q = self.client.create_queue(queue_name.replace('.', self.DOT_REPLECEMENT))
+            self.queue_cache[queue] = q
+
+        return self.queue_cache[queue]
     
     def _poll(self, cycle, timeout=None):
         """Poll a list of queues for available messages."""

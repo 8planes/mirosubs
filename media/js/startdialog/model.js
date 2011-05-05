@@ -95,6 +95,19 @@ mirosubs.startdialog.Model.prototype.selectOriginalLanguage = function(language)
     this.selectedOriginalLanguage_ = language;
 };
 
+mirosubs.startdialog.Model.prototype.warningMessageForFromLanguage = 
+    function(fromLanguagePK) 
+{
+    var toLanguage = this.getSelectedLanguage();
+    var fromLanguage = this.videoLanguages_.findForPK(fromLanguagePK);
+    if (toLanguage.VIDEO_LANGUAGE &&
+        toLanguage.VIDEO_LANGUAGE.DEPENDENT &&
+        !toLanguage.VIDEO_LANGUAGE.canBenefitFromTranslation(fromLanguage)) {
+        return "The translation you selected is based on a different language.";
+    }
+    return null;
+};
+
 /**
  * @return {Array.<mirosubs.startdialog.LanguageSummary>}
  */
