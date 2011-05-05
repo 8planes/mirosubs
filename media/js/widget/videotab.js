@@ -122,6 +122,7 @@ mirosubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
 
 mirosubs.widget.VideoTab.prototype.showNudge = function(shows) {
     mirosubs.style.setVisibility(this.nudgeElem_, shows);
+    mirosubs.style.setVisibility(this.nudgeSpanElem_, shows);
     return;
 };
 mirosubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
