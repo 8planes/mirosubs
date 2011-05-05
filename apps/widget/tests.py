@@ -370,6 +370,41 @@ class TestRpc(TestCase):
         self.assertTrue(version.text_change > 0 and version.text_change <= 1)
         self.assertEqual(version.time_change , 0)
 
+    def test_finish_no_changes(self):
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_draft(request)
+        return_value = rpc.start_editing(
+            request, draft.video.video_id, 'en')
+        draft_pk = return_value['draft_pk']
+        # nothing changed.
+        updated = [{'subtitle_id': 'a',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(updated=updated)])
+        rpc.finished_subtitles(request, draft_pk, [])
+        video = Video.objects.get(pk=draft.video.pk)
+        language = video.subtitle_language()
+        self.assertEqual(1, language.subtitleversion_set.count())
+
+    def test_finish_change_complete_only(self):
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_draft(request)
+
+        was_complete = draft.video.subtitle_language().is_complete
+
+        return_value = rpc.start_editing(
+            request, draft.video.video_id, 'en')
+        draft_pk = return_value['draft_pk']
+        rpc.finished_subtitles(request, draft_pk, [], completed=not was_complete)
+        video = Video.objects.get(pk=draft.video.pk)
+        language = video.subtitle_language()
+        self.assertEqual(2, language.subtitleversion_set.count())
+        self.assertEqual(not was_complete, language.is_complete)
+
     def test_cant_edit_because_locked(self):
         request_0 = RequestMockup(self.user_0)
         return_value = rpc.show_widget(
