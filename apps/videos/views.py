@@ -616,3 +616,30 @@ def video_staff_delete(request, video_id):
     video.delete()
     return HttpResponse("ok")
 
+def video_debug(request, video_id):
+    from apps.testhelpers.views import debug_video
+    from apps.widget import video_cache as vc
+    from django.core.cache import cache
+    video = get_object_or_404(Video, video_id=video_id)
+    lang_info = debug_video(video)
+    vid = video.video_id
+    get_subtitles_dict = {}
+    for l in video.subtitlelanguage_set.all():
+        cache_key = vc._subtitles_dict_key(vid, l.pk, None)
+        get_subtitles_dict[l.language] = cache.get(cache_key)
+    cache = {
+        "get_video_urls": cache.get(vc._video_urls_key(vid)),
+        "get_subtitles_dict": get_subtitles_dict,
+        "get_video_languages": cache.get(vc._video_languages_key(vid)),
+        
+        "get_video_languages_verbose": cache.get(vc._video_languages_verbose_key(vid)),
+        "writelocked_langs": cache.get(vc._video_writelocked_langs_key(vid)),
+    }
+    return render_to_response("videos/video_debug.html", {
+            'video':video,
+            'lang_info': lang_info,
+            "cache": cache
+    }, context_instance=RequestContext(request))
+
+
+    

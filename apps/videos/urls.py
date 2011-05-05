@@ -1,3 +1,4 @@
+
 # Universal Subtitles, universalsubtitles.org
 # 
 # Copyright (C) 2010 Participatory Culture Foundation
@@ -44,7 +45,8 @@ urlpatterns = patterns(
     url(r'^test/$', 'test_form_page', name='test_form_page'),
     url(r'^video_url_make_primary/$', 'video_url_make_primary', name='video_url_make_primary'),
     url(r'^video_url_create/$', 'video_url_create', name='video_url_create'),
-    url(r'^video_url_remove/$', 'video_url_remove', name='video_url_remove'),    
+    url(r'^video_url_remove/$', 'video_url_remove', name='video_url_remove'),
+    url(r'^(?P<video_id>(\w|-)+)/debug/$', 'video_debug', name='video_debug'),
     url(r'^(?P<video_id>(\w|-)+)/$', 'history', name='history'),
     url(r'(?P<video_id>(\w|-)+)/info/$', 'video', name='video'),
     url(r'(?P<video_id>(\w|-)+)/info/(?P<title>[^/]+)/$', 'video', name='video_with_title'),
