@@ -19,7 +19,7 @@ logger = logging.getLogger("test-fixture-loading")
 from utils.decorators import never_in_prod
 
 def debug_lang(sl):
-    return " Language:%6s, is original: %5s, is_forked: %5s, is complete: %5s, percent done: %3s, translated from: %9s, num_subs: %7s" % (sl.language, sl.is_original, sl.is_forked, sl.is_complete, sl.percent_done, sl.standard_language, len(sl.latest_subtitles()))
+    return " Language:%9s, is original: %5s, is_forked: %5s, is complete: %5s, percent done: %3s, translated from: %9s, num_subs: %7s" % (sl.language, sl.is_original, sl.is_forked, sl.is_complete, sl.percent_done, sl.standard_language, len(sl.latest_subtitles()))
 
 def debug_video(v):
     return "%s :: %s\n" % (v.title_display(), v.pk) + "\n".join([debug_lang(x) for x in v.subtitlelanguage_set.all()])
