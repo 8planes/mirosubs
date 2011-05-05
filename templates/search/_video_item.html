@@ -26,9 +26,9 @@
     </div><!-- // lang_avail -->
     {% if not display_mode or display_mode == 'all' or display_mode == 'details' %}
       <div class="video_details">
-        <div class="fetched">{% trans "Plays" %} <strong>{{ video.subtitles_fetchec_counter.val|default:0 }}</strong></div>
-        <div class="page_loads">{% trans "Views" %} <strong>{{ video.widget_views_counter.val|default:0 }}</strong></div>
-        <div class="last_worked">{% trans "Edited" %} <strong>11/25/11</strong></div>
+        <div class="fetched">{% trans "Plays" %} <strong>{{ video.subtitles_fetched_count|default:0 }}</strong></div>
+        <div class="page_loads">{% trans "Views" %} <strong>{{ video.view_count|default:0 }}</strong></div>
+        <div class="last_worked">{% trans "Edited" %} <strong>{{ video.edited|date:'m/d/y' }}</strong></div>
       </div><!-- // video_details -->
    {% endif %}
   </div><!-- // info -->
