@@ -101,8 +101,14 @@ mirosubs.startdialog.ToLanguages.prototype.getToLanguages = function() {
 };
 
 mirosubs.startdialog.ToLanguages.prototype.forLangCode = function(langCode){
-    return goog.array.find(this.getToLanguages(), function(o){
+    return goog.array.find(this.getToLanguages(), function(o) {
         return o.LANGUAGE == langCode;
+    });
+};
+
+mirosubs.startdialog.ToLanguages.prototype.forVideoLanguage = function(videoLanguage) {
+    return goog.array.find(this.getToLanguages(), function(tl) {
+        return tl.VIDEO_LANGUAGE && tl.VIDEO_LANGUAGE.PK == videoLanguage.PK;
     });
 };
 

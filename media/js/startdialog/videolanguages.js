@@ -67,6 +67,21 @@ mirosubs.startdialog.VideoLanguages.prototype.findForLanguage = function(languag
     return this.languageMap_[language] ? this.languageMap_[language] : [];
 };
 
+/**
+ * @param {string} to The "to" language code
+ * @param {string} from The "from" language code
+ * @returns {?mirosubs.startdialog.VideoLanguage} Only not null if it finds one.
+ */
+mirosubs.startdialog.VideoLanguages.prototype.findForLanguagePair = function(to, from) {
+    var langs = this.findForLanguage(to);
+    return goog.array.find(
+        langs, 
+        function(lang) {
+            return lang.DEPENDENT && 
+                lang.getStandardLang().LANGUAGE == from;
+        });
+};
+
 mirosubs.startdialog.VideoLanguages.prototype.findForPK = function(pk) {
     if (!this.pkMap_) {
         this.pkMap_ = {};

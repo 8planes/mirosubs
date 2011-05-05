@@ -94,8 +94,9 @@ mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.addToLanguageSection_($d);
     this.addFromLanguageSection_($d);
     this.setFromContents_();
-    this.warningDiv_ = $d('div');
-    goog.dom.append(this.contentDiv_, this.warningDiv_);
+    this.warningElem_ = $d('p', 'warning');
+    goog.dom.append(this.contentDiv_, this.warningElem_);
+    goog.style.showElement(this.warningElem_, false);
     this.okButton_ = 
         $d('a', 
            {'href':'#', 
@@ -219,14 +220,49 @@ mirosubs.startdialog.Dialog.prototype.fromLanguageChanged_ = function(e) {
 
 mirosubs.startdialog.Dialog.prototype.maybeShowWarning_ = function() {
     var warning = null;
-    if (this.fromLanguageDropdown_)
-        warning = this.model_.warningMessageForFromLanguage(
-            parseInt(this.fromLanguageDropdown_.value));
+    if (this.fromLanguageDropdown_ && 
+        this.fromLanguageDropdown_.value != 
+        mirosubs.startdialog.Dialog.FORK_VALUE)
+        warning = this.warningMessage_();
     this.showWarning_(warning);
 };
 
 mirosubs.startdialog.Dialog.prototype.showWarning_ = function(warning) {
-    goog.dom.setTextContent(this.warningDiv_, warning || '');
+    goog.dom.setTextContent(this.warningElem_, warning || '');
+    goog.style.showElement(this.warningElem_, !!warning);
+};
+
+mirosubs.startdialog.Dialog.prototype.warningMessage_ = function() {
+    /**
+     * @type {mirosubs.startdialog.ToLanguage}
+     */
+    var toLanguage = this.model_.getSelectedLanguage();
+    /**
+     * @type {mirosubs.startdialog.VideoLanguageLanguage}
+     */
+    var fromLanguage = this.model_.findFromForPK(
+        parseInt(this.fromLanguageDropdown_.value));
+    if (toLanguage.VIDEO_LANGUAGE &&
+        toLanguage.VIDEO_LANGUAGE.DEPENDENT &&
+        !toLanguage.VIDEO_LANGUAGE.canBenefitFromTranslation(fromLanguage)) {
+        var message = "The " + toLanguage.LANGUAGE_NAME + " subtitles you selected " +
+            "were translated from " + 
+            toLanguage.VIDEO_LANGUAGE.getStandardLang().languageName() + ". ";
+        var bestLanguages = this.model_.bestLanguages(
+            toLanguage.LANGUAGE, fromLanguage.LANGUAGE);
+        if (bestLanguages != null) {
+            message += "There is a better choice for translating into " +
+                toLanguage.LANGUAGE_NAME + " from " + 
+                fromLanguage.languageName() + ". ";            
+        }
+        else {
+            message += "If you're translating into " + toLanguage.LANGUAGE_NAME + 
+                " from " + fromLanguage.languageName() + ", you'll need to " +
+                "start from scratch.";
+        }
+        return message;
+    }
+    return null;
 };
 
 mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
