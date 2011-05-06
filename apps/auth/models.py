@@ -303,27 +303,33 @@ class Announcement(models.Model):
     created = models.DateTimeField(help_text=_(u'This is date when start to display announcement. And only the last will be displayed.'))
     hidden = models.BooleanField(default=False)
     
+    cache_key = 'last_accouncement'
+    
     class Meta:
         ordering = ['-created']
     
+    @classmethod
+    def clear_cache(cls):
+        cache.delete(cls.cache_key)
+        
     def save(self, *args, **kwargs):
         super(Announcement, self).save(*args, **kwargs)
-        cache.delete('last_accouncement')
+        self.clear_cache()
 
     def delete(self, *args, **kwargs):
-        cache.delete('last_accouncement')
+        self.clear_cache()
         return super(Announcement, self).delete(*args, **kwargs)
     
     @classmethod
     def last(cls):
-        last = cache.get('last_accouncement', '')
+        last = cache.get(cls.cache_key, '')
 
         if last == '':
             try:
                 last = cls.objects.filter(created__lte=datetime.today()).filter(hidden=False)[0:1].get()
             except cls.DoesNotExist:
                 last = None
-            cache.set('last_accouncement', last, 60*60)
+            cache.set(cls.cache_key, last, 60*60)
 
         return last    
         

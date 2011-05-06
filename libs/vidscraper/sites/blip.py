@@ -184,6 +184,11 @@ def get_user_url(url, shortmem={}):
 
 import httplib
 from xml.dom import minidom
+from xml.parsers.expat import ExpatError
+from utils.clean_xml import clean_xml, LXMLAdapter
+import lxml
+from StringIO import StringIO
+
 
 def video_file_url(file_id):
     rss_path = '/file/%s?skin=rss' % file_id
@@ -191,8 +196,15 @@ def video_file_url(file_id):
     conn.request("GET", rss_path)
     response = conn.getresponse()
     body = response.read()
-    xmldoc = minidom.parseString(body)
-    media_content_elements = xmldoc.getElementsByTagName('media:content')
+    try:
+        xmldoc = minidom.parseString(body)
+        media_content_elements = xmldoc.getElementsByTagName('media:content')
+    except ExpatError:
+        body = StringIO(clean_xml(body).encode('utf-8'))
+        xmldoc = lxml.etree.parse(body)
+        namespaces = xmldoc.xpath("/rss")[0].nsmap
+        media_content_elements = [LXMLAdapter(x) for x in xmldoc.xpath("//media:content", namespaces=namespaces)]
+
     return _best_flv(media_content_elements) or \
         _best_mp4(media_content_elements) or \
         _best_any(media_content_elements)
