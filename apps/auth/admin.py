@@ -43,6 +43,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     visible.boolean = True
 
     def make_hidden(self, request, queryset):
+        Announcement.clear_cache()
         queryset.update(hidden=True)
     make_hidden.short_description = _(u'Hide')
     
