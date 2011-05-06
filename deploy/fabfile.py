@@ -238,6 +238,8 @@ def _update_static(dir):
         run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
 
+        run('{0} manage.py compress --settings=unisubs_settings'.format(python_exe))
+        
 def update_static():
     env.host_string = DEV_HOST
     if env.s3_bucket is not None:

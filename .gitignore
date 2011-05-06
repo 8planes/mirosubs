@@ -10,6 +10,7 @@ closure-library
 jsunit
 media/profile_images
 media/pictures
+media/CACHE
 settings_local.py
 commit.py
 media/js/config.js

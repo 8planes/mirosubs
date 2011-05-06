@@ -67,3 +67,6 @@ To run the development version:
    D. That should be it but, in case you're interested, there's a 
       list of haystack commands at 
       http://docs.haystacksearch.org/dev/management_commands.html
+
+10. (optional) If you want to use compressed css, you'll need yui compressor.
+  A. Download yuicompressor, build it and put the yuicompressor-2.4.6.jar in ../buildout/parts/yuicompressor/yuicompressor-2.4.6.jar.

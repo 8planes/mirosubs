@@ -2,7 +2,7 @@
 
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load escapejs paginator widget comments i18n subtitles_tags teams_tags %}
+{% load escapejs paginator widget comments i18n subtitles_tags teams_tags compress %}
 
 {% block css %}
     {% if video.thumbnail %}
@@ -12,8 +12,10 @@
     {% endif %}
     
     {{ block.super }}
+    {% compress css %}
     <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
-
+  <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
+  {% endcompress%}
     <style>
         div.mirosubs-widget {
             position: relative;
@@ -33,7 +35,7 @@
             boder: #666;
         }
     </style>
-  <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
+
     <style>
         .error_list {
             color: #fa6343;

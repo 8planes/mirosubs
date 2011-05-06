@@ -148,6 +148,16 @@ EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
 JS_USE_COMPILED = False
+COMPRESS = True
+COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+COMPRESS_CSS_FILTERS =	['compressor.filters.yui.YUICSSFilter']
+COMPRESS_YUI_BINARY = "java -jar ../buildout/parts/yuicompressor/yuicompressor-2.4.6.jar"
+
+COMPRESS_YUI_CSS_ARGUMENTS = ""
+
+COMPRESS_OFFLINE = True
+
 
 USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
@@ -316,10 +326,10 @@ SECRET_KEY = 'a9yr_yzp2vmj-2q1zq)d2+b^w(7fqu2o&jh18u9dozjbd@-$0!'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader'
 )
+
 
 MIDDLEWARE_CLASSES = (
     'middleware.ResponseTimeMiddleware',
@@ -392,6 +402,7 @@ INSTALLED_APPS = (
     'sentry.client',
     'djcelery',
     'rosetta',
+    'compressor',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
