@@ -1,8 +1,9 @@
 from haystack.indexes import *
 from auth.models import CustomUser as User
 from haystack import site
+from utils.celery_search_index import CelerySearchIndex
 
-class UserIndex(SearchIndex):
+class UserIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
     username = CharField()
     award_points = IntegerField(model_attr='award_points')

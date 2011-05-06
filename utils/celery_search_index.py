@@ -3,9 +3,7 @@ from django.db.models import signals
 from celery.decorators import task
 from haystack import site
 from haystack.exceptions import NotRegistered
-
-UPDATE = 'update'
-REMOVE = 'remove'
+from haystack.utils import get_identifier
 
 class CelerySearchIndex(indexes.SearchIndex):
     
@@ -22,30 +20,40 @@ class CelerySearchIndex(indexes.SearchIndex):
         signals.post_delete.disconnect(self.remove_handler, sender=model)
         
     def update_handler(self, instance, **kwargs):
-        update_search_index.delay(instance.__class__, instance.pk, UPDATE)
+        update_search_index.delay(instance.__class__, instance.pk)
     
     def remove_handler(self, instance, **kwargs):
-        update_search_index.delay(instance.__class__, instance.pk, REMOVE)
+        remove_search_index.delay(instance.__class__, get_identifier(instance))
 
-@task()    
-def update_search_index(model_class, pk, action=UPDATE):
-    print 'UPDATE SEARCH INDEX'
+def log(*args, **kwargs):
     import sentry_logger
     import logging
+    logger = logging.getLogger('search.index.updater')    
+    logger.warning(*args, **kwargs)
     
+@task()  
+def remove_search_index(model_class, obj_identifier):
+    try:
+        search_index = site.get_index(model_class)
+    except NotRegistered:
+        log(u'Seacrh index is not registered for %s' % model_class)
+        return None
+    
+    search_index.remove_object(obj_identifier)
+    
+@task()    
+def update_search_index(model_class, pk):
     try:
         obj = model_class.objects.get(pk=pk)
     except model_class.DoesNotExist:
-        logging.warning(u'Object does not exist', model=model_class, pk=pk, action=action)
+        log(u'Object does not exist for %s' % model_class)
         return
     
     try:
         search_index = site.get_index(model_class)
     except NotRegistered:
-        logging.warning(u'Seacrh index is not registered', model=model_class, pk=pk, action=action)
+        log(u'Seacrh index is not registered for %s' % model_class)
         return None
     
-    if action == UPDATE:
-        search_index.update_object(obj)
-    elif action == REMOVE:
-        search_index.remove_object(obj)
+    search_index.update_object(obj)
+        
