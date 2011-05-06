@@ -31,6 +31,7 @@ from statistic import widget_views_total_counter
 from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
 from uslogging.models import WidgetDialogLog
+from videos.tasks import update_percent_done
 import logging
 yt_logger = logging.getLogger("youtube-ei-error")
 
@@ -314,10 +315,7 @@ class Rpc(BaseRpc):
             if not draft.is_dependent() and completed is not None:
                 language.is_complete = completed
             language.save()
-            new_version.update_percent_done()
-            if language.is_original:
-                language.video.update_complete_state()
-                language.video.save()
+            update_percent_done.delay(language.id)
             from videos.models import Action
             Action.create_caption_handler(new_version)
 
