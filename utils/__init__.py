@@ -122,7 +122,7 @@ def send_templated_email(to, subject, body_template, body_dict,
 
 from sentry.client.models import client
 
-def catch_exception(exceptions, subject="", default=None):
+def catch_exception(exceptions, subject="", default=None, ignore=False):
     if not isinstance(exceptions, (list, tuple)):
         exceptions = (exceptions,)
 
@@ -131,7 +131,8 @@ def catch_exception(exceptions, subject="", default=None):
             try:
                 return func(*args, **kwargs)
             except exceptions, e:
-                client.create_from_exception(sys.exc_info())
+                if not ignore:
+                    client.create_from_exception(sys.exc_info())
                 return default
         return update_wrapper(wrapper, func)
     return catch_exception_func

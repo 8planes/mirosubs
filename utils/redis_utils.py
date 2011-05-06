@@ -12,7 +12,7 @@ IGNORE_REDIS = getattr(settings, 'IGNORE_REDIS', False) and settings.DEBUG
 
 default_connection = Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
-catch_exception_dec = catch_exception(RedisError, u'Redis error', '')
+catch_exception_dec = catch_exception(RedisError, u'Redis error', '', ignore=True)
 
 class RedisCounterField(Exception):
     pass
