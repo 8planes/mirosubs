@@ -10,6 +10,7 @@ DATABASES = {
     }
 }
 
+HAYSTACK_SEARCH_ENGINE = 'dummy' 
 CELERY_ALWAYS_EAGER = True
 
 INSTALLED_APPS += ('django_nose', )
