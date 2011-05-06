@@ -13,6 +13,16 @@ def add(x, y):
     return x + y
 
 @task()
+def update_percent_done(subtitlelanguage_id):
+    from videos.models import SubtitleLanguage
+    sl = SubtitleLanguage.objects.get(id=subtitlelanguage_id)
+    if (sl.latest_version()):
+        sl.latest_version().update_percent_done()
+    if sl.is_original:
+        sl.video.update_complete_state()
+        sl.video.save()
+
+@task()
 def send_change_title_email(video_id, user_id, old_title, new_title):
     from videos.models import Video
     from auth.models import CustomUser as User
