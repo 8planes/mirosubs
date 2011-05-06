@@ -80,10 +80,14 @@ class SubtitleVersionAdmin(admin.ModelAdmin):
         return obj.language.video
     
     def timeline_changes(self, obj):
-        return '%s %%' % int(obj.time_change * 100)
+        if obj.time_change:
+            return '%s %%' % int(obj.time_change * 100)
+        return "0 %"
 
     def text_changes(self, obj):
-        return '%s %%' % int(obj.text_change * 100)
+        if obj.text_changes:
+            return '%s %%' % int(obj.text_change * 100)
+        return "0 %"
     
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']

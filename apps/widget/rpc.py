@@ -275,7 +275,11 @@ class Rpc(BaseRpc):
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False
         else:
-            should_save = new_version.time_change > 0 or new_version.text_change > 0
+            should_save = new_version.time_change > 0 or \
+                new_version.text_change > 0 or \
+                (draft.language.latest_version() is not None and
+                 completed is not None and
+                 completed != draft.language.is_complete)
         if should_save:
             new_version.save()
             for subtitle in new_subs:

@@ -513,10 +513,12 @@ class SubtitleLanguage(models.Model):
                 self.video.complete_date = None
                 self.video.save()
         
-        if iv['is_complete'] != self.is_complete or iv['is_original'] != self.is_original \
-            or iv['percent_done'] != self.percent_done or iv['is_forked'] != self.is_forked:
+        if iv['is_complete'] != self.is_complete or iv['percent_done'] != self.percent_done or iv['is_forked'] != self.is_forked:
                 #asynchronous call
                 update_team_video_for_sl.delay(self.id)
+        
+        if iv['is_original'] != self.is_original:
+            update_team_video.delay(self.video.pk)
     
     def get_title_display(self):
         return self.get_title() or self.video.title

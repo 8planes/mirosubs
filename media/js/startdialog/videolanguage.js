@@ -32,17 +32,18 @@ mirosubs.startdialog.VideoLanguage = function(json) {
     this.IN_PROGRESS = json['in_progress'];
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
-    var name = this.LANGUAGE ? 
+mirosubs.startdialog.VideoLanguage.prototype.languageName = function() {
+    return this.LANGUAGE ? 
         mirosubs.languageNameForCode(this.LANGUAGE) : "Original";
+};
+
+mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
+    var name = this.languageName();
 
     if (!this.DEPENDENT && this.SUBTITLE_COUNT > 0)
         name += (this.IS_COMPLETE ? " (100%)" : " (incomplete)");
     else if (this.DEPENDENT && this.PERCENT_DONE > 0)
         name += " (" + this.PERCENT_DONE + "%)";
-    else if (this.DEPENDENT){
-        name += " (" + this.SUBTITLE_COUNT + " lines )";
-    }
     return name + (this.IN_PROGRESS ? " (in progress)" : "");
 };
 
@@ -61,6 +62,9 @@ mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
             this);
 };
 
+/**
+ * @returns {?mirosubs.startdialog.VideoLanguage}
+ */
 mirosubs.startdialog.VideoLanguage.prototype.getStandardLang = function() {
     return this.standardLang_;
 };

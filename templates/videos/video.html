@@ -137,6 +137,7 @@
       {% paste_transcription %}
       
         {% if user.is_staff and perms.videos.edit_video %}
+             <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
             <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank">
                 {% trans 'Edit in Admin Interface' %}
             </a>
