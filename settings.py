@@ -149,7 +149,6 @@ PREVIOUS_EMBED_JS_VERSIONS = []
 
 JS_USE_COMPILED = False
 COMPRESS = True
-COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 COMPRESS_CSS_FILTERS =	['compressor.filters.yui.YUICSSFilter']
 COMPRESS_YUI_BINARY = "java -jar ../buildout/parts/yuicompressor/yuicompressor-2.4.6.jar"
