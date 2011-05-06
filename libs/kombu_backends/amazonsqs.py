@@ -1,7 +1,7 @@
 from kombu.transport import virtual
 from boto.sqs.connection import SQSConnection
 from django.conf import settings
-from utils.log_methods import LogNativeMethodsMetaclass
+from utils.log_methods import LogNativeMethodsMetaclass, RedisLogBackend
 
 LOG_AMAZON_BROKER = getattr(settings, 'LOG_AMAZON_BROKER', False)
 
@@ -21,12 +21,15 @@ def pr(s):
 DEBUG = False
 EVENT_QUEUE_NAME = 'celeryev'
 
-
-class LoggingConnection(SQSConnection):
-    __metaclass__ = LogNativeMethodsMetaclass 
-
 if LOG_AMAZON_BROKER:
-    DEFAULT_CONNECTION = LoggingConnection
+    from utils.redis_utils import default_connection
+    
+    class SQSLoggingConnection(SQSConnection):
+        __metaclass__ = LogNativeMethodsMetaclass
+        
+        logger_backend = RedisLogBackend(default_connection)    
+        
+    DEFAULT_CONNECTION = SQSLoggingConnection
 else:
     DEFAULT_CONNECTION = SQSConnection
 
