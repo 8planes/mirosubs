@@ -7,14 +7,15 @@ def htmlentitydecode(s):
         entity = m.group(1)
         if entity in htmlentitydefs.name2codepoint:
             return unichr(htmlentitydefs.name2codepoint[entity])
-        return u" "  # Unknown entity: We replace with a space.
-    t = re.sub(u'&(%s);' % u'|'.join(htmlentitydefs.name2codepoint), entity2char, s)
+        return " "  # Unknown entity: We replace with a space.
+    t = re.sub('&(%s);' % u'|'.join(htmlentitydefs.name2codepoint), entity2char, s)
  
     # Then convert numerical entities
-    t = re.sub(u'&#(\d+);', lambda x: unichr(int(x.group(1))), t)
- 
+    t = re.sub('&', "&amp;", t)
+    #t = re.sub('[&#[\d];]', lambda x: unichr(int(x.group(1))), t)
     # Then convert hexa entities
-    return re.sub(u'&#x(\w+);', lambda x: unichr(int(x.group(1),16)), t)
+    #re.sub('[&#x[\w];]', lambda x: unichr(int(x.group(1),16)), t)
+    return t
 
 remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]')
 
@@ -22,8 +23,7 @@ def clean_xml(body):
     #Is not finished. Should clean XML below for parsing with lxml  
     return remove_re.sub('', htmlentitydecode(body))
 
-"""
-<?xml version="1.0" encoding="UTF-8"?>
+bo = """<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
     xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
     xmlns:media="http://search.yahoo.com/mrss/"
@@ -271,3 +271,11 @@ La gr?dini?a &#132;Stelu?a&#148; din ora?ul Ungheni &#238;n s?lile pentru copii 
 </channel>
 </rss>
 """
+
+class LXMLAdapter(object):
+    def __init__(self, miniNode):
+        self.miniNode = miniNode
+        
+    def getAttribute(self, att_name):
+        return  self.miniNode.attrib.get(att_name, None)
+    
