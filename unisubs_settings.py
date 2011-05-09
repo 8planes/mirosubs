@@ -44,7 +44,8 @@ elif INSTALLATION == STAGING:
     SITE_NAME = 'unisubsstaging'
     REDIS_DB = "2"
     AWS_QUEUE_PREFIX = 'STAGING'
-    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'    
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-appsw
     try:
@@ -62,6 +63,7 @@ elif INSTALLATION == PRODUCTION:
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     EMAIL_SUBJECT_PREFIX = '[usubs-production]'
     EMAIL_BCC_LIST.append('socmedia@pculture.org')
+    COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     ADMINS = (
       ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org'),
     )
