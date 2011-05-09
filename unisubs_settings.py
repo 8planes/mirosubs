@@ -45,7 +45,6 @@ elif INSTALLATION == STAGING:
     REDIS_DB = "2"
     AWS_QUEUE_PREFIX = 'STAGING'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-    COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-appsw
     try:
@@ -81,6 +80,8 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
         }
     USLOGGING_DATABASE = 'uslogging'
     DATABASE_ROUTERS = ['routers.UnisubsRouter']
+    COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    COMPRESS_URL = MEDIA_URL
 else:
     uslogging_db = {}
 
