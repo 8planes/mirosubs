@@ -148,15 +148,12 @@ EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
 JS_USE_COMPILED = False
+
 COMPRESS = True
-
 COMPRESS_CSS_FILTERS =	['compressor.filters.yui.YUICSSFilter']
-COMPRESS_YUI_BINARY = "java -jar ../buildout/parts/yuicompressor/yuicompressor-2.4.6.jar"
-
+COMPRESS_YUI_BINARY = "java -jar ./css-compression/yuicompressor-2.4.6.jar"
 COMPRESS_YUI_CSS_ARGUMENTS = ""
-
 COMPRESS_OFFLINE = True
-
 
 USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
