@@ -80,6 +80,7 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
         }
     USLOGGING_DATABASE = 'uslogging'
     DATABASE_ROUTERS = ['routers.UnisubsRouter']
+    AWS_STORAGE_BUCKET_NAME = DEFAULT_BUCKET
     COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     COMPRESS_URL = MEDIA_URL
 else:
