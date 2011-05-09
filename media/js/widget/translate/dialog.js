@@ -100,13 +100,12 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
     this.getRightPanelInternal().showLoading(true);
     this.serverModel_.finish(
         this.translationPanel_.makeJsonSubs(),
-        function(dropDownContents) {
+        function() {
             if (that.finishFailDialog_) {
                 that.finishFailDialog_.setVisible(false);
                 that.finishFailDialog_ = null;
             }
             that.getRightPanelInternal().showLoading(false);
-            that.setDropDownContentsInternal(dropDownContents);
             that.saved_ = true;
             that.setVisible(false);
         },

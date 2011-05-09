@@ -33,7 +33,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
-from teams.tasks import update_team_video, update_one_team_video, add_video_notification
+from teams.tasks import update_one_team_video
 from apps.videos.models import SubtitleLanguage
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]

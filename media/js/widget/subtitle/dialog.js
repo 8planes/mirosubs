@@ -283,9 +283,8 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
     var that = this;
     this.serverModel_.finish(
         this.captionSet_.makeJsonSubs(),
-        function(dropDownContents) {
+        function() {
             that.saved_ = true;
-            that.setDropDownContentsInternal(dropDownContents);
             if (that.finishFailDialog_) {
                 that.finishFailDialog_.setVisible(false);
                 that.finishFailDialog_ = null;

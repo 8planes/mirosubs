@@ -8,19 +8,13 @@ from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
 
 @task()
-def add(x, y):
-    print 'TASK IS EXECUTED WITH ARGUMENTS %s AND %s' % (x, y)
-    return x + y
-
-@task()
-def update_percent_done(subtitlelanguage_id):
-    from videos.models import SubtitleLanguage
-    sl = SubtitleLanguage.objects.get(id=subtitlelanguage_id)
-    if (sl.latest_version()):
-        sl.latest_version().update_percent_done()
-    if sl.is_original:
-        sl.video.update_complete_state()
-        sl.video.save()
+def video_changed_tasks(video_pk, new_version_id=None):
+    from videos import metadata_manager
+    metadata_manager.update_metadata(video_pk)
+    if new_version_id is not None:
+        _send_notification(new_version_id)
+        _check_alarm(new_version_id)
+        _detect_language(new_version_id)
 
 @task()
 def send_change_title_email(video_id, user_id, old_title, new_title):
@@ -52,15 +46,17 @@ def send_change_title_email(video_id, user_id, old_title, new_title):
                              'videos/email_title_changed.html',
                              context, fail_silently=not settings.DEBUG)       
     
-@task()
-def send_notification(version_id):
+def _send_notification(version_id):
     from videos.models import SubtitleVersion
     
     try:
         version = SubtitleVersion.objects.get(id=version_id)
     except SubtitleVersion.DoesNotExist:
         return
-    
+
+    if version.result_of_rollback:
+        return
+
     version.notification_sent = True
     version.save()
     if version.version_no == 0 and not version.language.is_original:
@@ -69,8 +65,7 @@ def send_notification(version_id):
         if version.text_change or version.time_change:
             _send_letter_caption(version)        
 
-@task()
-def check_alarm(version_id):
+def _check_alarm(version_id):
     from videos.models import SubtitleVersion
     from videos import alarms
     
@@ -83,15 +78,14 @@ def check_alarm(version_id):
     alarms.check_other_languages_changes(version)
     alarms.check_language_name(version)    
 
-@task()
-def detect_language(version_id):
+def _detect_language(version_id):
     from videos.models import SubtitleVersion, SubtitleLanguage
     
     try:
         version = SubtitleVersion.objects.get(id=version_id)
     except SubtitleVersion.DoesNotExist:
         return    
-    
+
     language = version.language
     if language.is_original and not language.language:
         url = 'http://ajax.googleapis.com/ajax/services/language/detect?v=1.0&q=%s'

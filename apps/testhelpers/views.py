@@ -92,11 +92,10 @@ def _add_lang_to_video(video, props,  translated_from=None):
     for translation_prop in props.get("translations", []):
         _add_lang_to_video(video, translation_prop, translated_from=sub_lang)
 
-
-    sub_lang.update_percent_done()
-    sub_lang.update_complete_state()
     sub_lang.is_complete = props.get("is_complete", False)
     sub_lang.save()
+    from videos.tasks import video_changed_tasks
+    video_changed_tasks.delay(sub_lang.video.id)
     return sub_lang    
             
 def _add_langs_to_video(video, props):

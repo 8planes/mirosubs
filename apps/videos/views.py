@@ -53,6 +53,7 @@ from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
 from utils.decorators import never_in_prod
 from django.utils.http import urlquote_plus
+from videos.tasks import video_changed_tasks
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -422,6 +423,7 @@ def rollback(request, pk):
     else:
         messages.success(request, message=u'Rollback successful')
         version = version.rollback(request.user)
+        video_changed_tasks.delay(version.video.id, version.id)
         return redirect(version.language.get_absolute_url()+'#revisions')
     return redirect(version)
 

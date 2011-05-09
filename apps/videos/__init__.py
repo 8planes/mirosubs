@@ -48,6 +48,10 @@ class EffectiveSubtitle:
             'start': self.start_time,
             'end': self.end_time
         }
+
+    def has_same_timing(self, subtitle):
+        return self.start_time == subtitle.start_time and \
+            self.end_time == subtitle.end_time
     
     @classmethod
     def for_subtitle(cls, subtitle):

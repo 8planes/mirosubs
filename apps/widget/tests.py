@@ -368,7 +368,7 @@ class TestRpc(TestCase):
         self.assertEqual(2, language.subtitleversion_set.count())
         version = language.latest_version()
         self.assertTrue(version.text_change > 0 and version.text_change <= 1)
-        self.assertEqual(version.time_change , 0)
+        self.assertEqual(version.time_change, 0)
 
     def test_finish_no_changes(self):
         request = RequestMockup(self.user_0)
@@ -715,7 +715,11 @@ class TestRpc(TestCase):
         rpc.save_subtitles(
             request, draft_pk, 
             [_make_packet(updated=updated, packet_no=2)])
-        response = rpc.finished_subtitles(request, draft_pk, [])
+        rpc.finished_subtitles(request, draft_pk, [])
+        response = rpc.show_widget(
+            request, 
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
         es = [r for r in response['drop_down_contents'] if r['language'] == 'es'][0]
         translations = rpc.fetch_subtitles(
             request, draft.video.video_id, es['pk'])
@@ -1008,7 +1012,11 @@ class TestRpc(TestCase):
         rpc.save_subtitles(
             request, draft_pk,
             [_make_packet(inserted=inserted)])
-        response = rpc.finished_subtitles(request, draft_pk, [])
+        rpc.finished_subtitles(request, draft_pk, [])
+        response = rpc.show_widget(
+            request,
+            'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
+            False)
         lang = [r for r in response['drop_down_contents'] if r['language'] == 'fr'][0]
         subs = rpc.fetch_subtitles(request, draft.video.video_id, 
                                    lang['pk'])
