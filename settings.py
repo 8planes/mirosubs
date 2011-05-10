@@ -563,7 +563,6 @@ MEDIA_BUNDLES = {
         "files":(
             "index/style.css",
             "css/mirosubs-widget.css",
-            "css/mirosubs-widget.css",
             "css/top_user_panel.css",
             "css/buttons.css",
             "css/forms.css" ,
