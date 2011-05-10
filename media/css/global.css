@@ -26,6 +26,24 @@
 	color: #555;
 }
 
+/*#index .note{ display: none;}*/
+
+.note {
+  text-align: center;
+  color: #333;
+  background: #faf9c5;
+  text-shadow: 1px 1px 1px #fff;
+  font-size: 16px;
+  border-bottom: 1px solid #bfbe78;
+	padding: 15px;
+	margin: 0 0 10px 0;
+}
+
+.note a {
+  color: #333;
+  font-weight: bold;
+}
+
 #header {
   width: 940px;
   height: 45px;
