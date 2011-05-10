@@ -101,6 +101,13 @@ def migrate(app_name=''):
                 env.static_dir, app_name))
     bounce_memcached()
 
+def run_command(command):
+    env.host_string = DEV_HOST
+    with cd(os.path.join(env.static_dir, 'mirosubs')):
+        _git_pull()
+        run('{0}/env/bin/python manage.py {1} '
+            '--settings=unisubs_settings'.format(env.static_dir, command))
+
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
     
@@ -224,6 +231,7 @@ def bounce_memcached():
     else:
         env.host_string = DEV_HOST
     sudo(env.memcached_bounce_cmd)
+
 
 def _bounce_celeryd():
     if env.admin_dir:
