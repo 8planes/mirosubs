@@ -607,18 +607,19 @@ class SubtitleLanguage(models.Model):
                 note=u'Uploaded', is_forked=True, time_change=1, text_change=1)
         version.save()
 
-        original_sub_dict = dict([(s.subtitle_id, s) for s  in original_subs])
-        my_subs = old_version.subtitle_set.all()
-        for sub in my_subs:
-            if sub.subtitle_id in original_sub_dict:
-                # if we can match, then we can simply copy
-                # time data
-                standard_sub = original_sub_dict[sub.subtitle_id]
-                sub.start_time = standard_sub.start_time
-                sub.end_time = standard_sub.end_time
-            sub.pk = None
-            sub.version = version
-            sub.save()
+        if old_version:
+            original_sub_dict = dict([(s.subtitle_id, s) for s  in original_subs])
+            my_subs = old_version.subtitle_set.all()
+            for sub in my_subs:
+                if sub.subtitle_id in original_sub_dict:
+                    # if we can match, then we can simply copy
+                    # time data
+                    standard_sub = original_sub_dict[sub.subtitle_id]
+                    sub.start_time = standard_sub.start_time
+                    sub.end_time = standard_sub.end_time
+                sub.pk = None
+                sub.version = version
+                sub.save()
 
         self.is_forked = True
         self.save()
