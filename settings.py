@@ -561,7 +561,7 @@ MEDIA_BUNDLES = {
     "home":{
         "type":"css",
         "files":(
-            "index/style.css",
+            "css/index.css",
             "css/mirosubs-widget.css",
             "css/top_user_panel.css",
             "css/buttons.css",

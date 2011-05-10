@@ -2,7 +2,7 @@
 body {
   font-family: Arial, sans-serif;
   font-size: 12px;
-  background: #d1e9ee url(../../../index/images/interface/bg_body.jpg) no-repeat center top;
+  background: #d1e9ee url(../images/index/interface/bg_body.jpg) no-repeat center top;
   padding-top: 35px;
   padding-bottom: 50px;
 }
@@ -94,11 +94,11 @@ ul.user_vervice_menu li {
   padding-bottom: 29px;
 }
 
-ul.user_vervice_menu li.service_00 { background:url(../../../index/images/interface/user_service_00.gif) no-repeat; }
-ul.user_vervice_menu li.service_01 { background:url(../../../index/images/interface/user_service_01.gif) no-repeat; }
-ul.user_vervice_menu li.service_02 { background:url(../../../index/images/interface/user_service_02.gif) no-repeat; } 
-ul.user_vervice_menu li.service_03 { background:url(../../../index/images/interface/user_service_03.gif) no-repeat; }
-ul.user_vervice_menu li.service_04 { background:url(../../../index/images/interface/user_service_04.gif) no-repeat; } 
+ul.user_vervice_menu li.service_00 { background:url(../images/index/interface/user_service_00.gif) no-repeat; }
+ul.user_vervice_menu li.service_01 { background:url(../images/index/interface/user_service_01.gif) no-repeat; }
+ul.user_vervice_menu li.service_02 { background:url(../images/index/interface/user_service_02.gif) no-repeat; } 
+ul.user_vervice_menu li.service_03 { background:url(../images/index/interface/user_service_03.gif) no-repeat; }
+ul.user_vervice_menu li.service_04 { background:url(../images/index/interface/user_service_04.gif) no-repeat; } 
 
 ul.user_vervice_menu li a {
   color:#000;
@@ -136,7 +136,7 @@ section_secondary
   height: 405px;
   margin: 0 auto;
   text-align: left;
-  background: url(../../../index/images/interface/bg_secondary_section.jpg) no-repeat;
+  background: url(../images/index/interface/bg_secondary_section.jpg) no-repeat;
 }
 
 #section_secondary h3 {
@@ -178,7 +178,7 @@ section_secondary
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	border: 1px #4a7d78 solid;
-  background: url(../../../index/images/interface/bg_video_upload.jpg) no-repeat;
+  background: url(../images/index/interface/bg_video_upload.jpg) no-repeat;
 }
 
 .row {
@@ -196,7 +196,7 @@ span.caption {
 .btn_submit_video {
   width: 135px;
   height: 28px;
-  background: url(../../../index/images/interface/btn_submit_video.gif) no-repeat;
+  background: url(../images/interface/btn_submit_video.gif) no-repeat;
   border: 0;
   float: right;
   cursor: pointer;
@@ -225,7 +225,7 @@ span.caption {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-  background: url(../../../index/images/interface/bg_video_upload.jpg) no-repeat;
+  background: url(../images/index/interface/bg_video_upload.jpg) no-repeat;
 	border: 1px #4a7d78 solid;
 }
 
