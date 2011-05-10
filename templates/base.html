@@ -88,6 +88,29 @@
         });
     });
 </script>
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    if ($.browser.webkit) {
+      var widgetDiv = $('#widget_div')
+      var video = widgetDiv.find('video')
+
+      var img = $('<img />', {
+        src: video.attr('poster')
+      , css: {
+          position: 'absolute'
+        , 'z-index': 1000
+        }
+      })
+
+      img.click(function(){
+        img.hide()
+        video[0].play()
+      })
+
+      widgetDiv.prepend(img)
+    };
+  })
+</script>
 </head>
 <body {% block body_attrs %}{% endblock %}>
   {% block feedback-button %}

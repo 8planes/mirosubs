@@ -3,7 +3,7 @@ body {
   font-family: Arial, sans-serif;
   font-size: 12px;
   background: #d1e9ee url(../images/index/interface/bg_body.jpg) no-repeat center top;
-  padding-top: 35px;
+  padding-top: 0;
   padding-bottom: 50px;
 }
 

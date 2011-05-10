@@ -1,0 +1,15 @@
+LICENSE
+MANIFEST.in
+setup.cfg
+setup.py
+indexer/__init__.py
+indexer/manager.py
+indexer/models.py
+indexer/utils.py
+indexer/migrations/0001_initial.py
+indexer/migrations/__init__.py
+pip-egg-info/django_indexer.egg-info/PKG-INFO
+pip-egg-info/django_indexer.egg-info/SOURCES.txt
+pip-egg-info/django_indexer.egg-info/dependency_links.txt
+pip-egg-info/django_indexer.egg-info/not-zip-safe
+pip-egg-info/django_indexer.egg-info/top_level.txt

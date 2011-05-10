@@ -1,0 +1,6 @@
+README
+pysolr.py
+pip-egg-info/pysolr.egg-info/PKG-INFO
+pip-egg-info/pysolr.egg-info/SOURCES.txt
+pip-egg-info/pysolr.egg-info/dependency_links.txt
+pip-egg-info/pysolr.egg-info/top_level.txt

@@ -341,21 +341,21 @@ font-size: 16px;
 
 /*#index .note{ display: none;}*/
 
-.note{
+.note {
   text-align: center;
   color: #333;
-  background: #faf9c5 url(../images/note.gif) left 0 repeat-x;
+  background: #faf9c5;
   text-shadow: 1px 1px 1px #fff;
   font-size: 16px;
   border-bottom: 1px solid #bfbe78;
-  height: 42px;
-  padding-top: 22px;
-  }
+	padding: 15px;
+	margin: 0 0 10px 0;
+}
 
-.note a{
+.note a {
   color: #333;
   font-weight: bold;
-  }
+}
 
 
 .no_subs{

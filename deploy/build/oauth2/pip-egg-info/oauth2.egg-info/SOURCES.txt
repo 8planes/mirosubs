@@ -1,0 +1,11 @@
+setup.cfg
+oauth2/__init__.py
+oauth2/clients/__init__.py
+oauth2/clients/imap.py
+oauth2/clients/smtp.py
+pip-egg-info/oauth2.egg-info/PKG-INFO
+pip-egg-info/oauth2.egg-info/SOURCES.txt
+pip-egg-info/oauth2.egg-info/dependency_links.txt
+pip-egg-info/oauth2.egg-info/requires.txt
+pip-egg-info/oauth2.egg-info/top_level.txt
+pip-egg-info/oauth2.egg-info/zip-safe

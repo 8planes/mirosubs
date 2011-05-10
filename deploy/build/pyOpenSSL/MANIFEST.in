@@ -1,0 +1,7 @@
+recursive-include       src     *.h
+include     COPYING ChangeLog INSTALL README TODO MANIFEST.in src/RATIONALE
+include     doc/pyOpenSSL.tex doc/Makefile
+recursive-include   doc/tools   *
+recursive-include   examples    *
+recursive-include   rpm         *
+global-exclude  *.pyc
