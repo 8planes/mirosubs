@@ -561,6 +561,10 @@ div.video_details div strong {
 	background: transparent url(../images/video_details_icons.png) 0 5px no-repeat;
 }
 
+.info p {
+	float: none !important;
+}
+
 /* Search
 ------------------------------------------------*/
 
