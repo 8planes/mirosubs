@@ -49,7 +49,7 @@ mirosubs.startdialog.Model = function(json, opt_langState) {
         if (opt_langState.LANGUAGE_PK){
             this.selectedLanguage_ = this.toLanguages_.forKey(
                 opt_langState.LANGUAGE+opt_langState.LANGUAGE_PK); 
-        }else{
+        } else {
             this.selectedLanguage_ = this.toLanguages_.forLangCode(
                 opt_langState.LANGUAGE); 
         }
