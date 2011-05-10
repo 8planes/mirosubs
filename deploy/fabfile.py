@@ -210,6 +210,7 @@ def update_web():
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
             run('{0} deploy/create_commit_file.py'.format(python_exe))
+            run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
@@ -245,7 +246,7 @@ def _update_static(dir):
         run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
 
-        run('{0} manage.py compress --settings=unisubs_settings'.format(python_exe))
+        run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():
     env.host_string = DEV_HOST
@@ -259,8 +260,9 @@ def update_static():
     
 
 def update():
-    update_web()
     update_static()
+    update_web()
+
 
 def _promote_django_admins(dir, email=None, new_password=None, userlist_path=None):
     with cd(os.path.join(dir, 'mirosubs')):
