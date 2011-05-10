@@ -1,3 +1,4 @@
+import sys
 from django.core.management.base import BaseCommand
 from videos.models import Video, VideoUrl, Action, SubtitleLanguage
 from django.core.exceptions import ObjectDoesNotExist
@@ -29,13 +30,16 @@ class Command(BaseCommand):
                 videosrt = None
                 if hasattr(item, 'videosrt'):
                     videosrt = item.videosrt
-                self._import_video(
-                    item.videodownload,
-                    item.videoid,
-                    item.title,
-                    item.description,
-                    item.thumbnail,
-                    videosrt)
+                try:
+                    self._import_video(
+                        item.videodownload,
+                        item.videoid,
+                        item.title,
+                        item.description,
+                        item.thumbnail,
+                        videosrt)
+                except:
+                    print sys.exc_info()
 
     def _import_video(self, video_url, videoid, title, description, thumbnail, videosrt):
         videoid_match = VIDEOID_RE.search(videoid)
