@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing Search Engines &mdash; Haystack v1.0.0-final documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.0-final',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Haystack v1.0.0-final documentation" href="index.html" />
+    <link rel="next" title="Haystack Settings" href="settings.html" />
+    <link rel="prev" title="Backend Support" href="backend_support.html" />
+    <link rel="stylesheet" href="http://haystacksearch.org/css/front.css" media="screen">
+    <link rel="stylesheet" href="_static/documentation.css" media="screen">
+
+  </head>
+  <body>
+    <div id="header">
+        <h1>Haystack</h1>
+        <p>Modular search for Django</p>
+
+        <ul class="features">
+          <li>Term Boost</li>
+          <li>More Like This</li>
+          <li>Faceting</li>
+          <li>Stored (non-indexed) fields</li>
+          <li>Highlighting</li>
+          <li>Spelling Suggestions</li>
+        </ul>
+    </div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="settings.html" title="Haystack Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="backend_support.html" title="Backend Support"
+             accesskey="P">previous</a> |</li>
+        <li><a href="toc.html">Haystack v1.0.0-final documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-search-engines">
+<span id="ref-installing-search-engines"></span><h1>Installing Search Engines<a class="headerlink" href="#installing-search-engines" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="solr">
+<h2>Solr<a class="headerlink" href="#solr" title="Permalink to this headline">¶</a></h2>
+<p>Official Download Location: <a class="reference external" href="http://www.apache.org/dyn/closer.cgi/lucene/solr/">http://www.apache.org/dyn/closer.cgi/lucene/solr/</a></p>
+<p>Solr is Java but comes in a pre=packaged form that requires very little other
+than the JRE and Jetty. It&#8217;s very performant and has an advanced featureset.
+Haystack requires Solr 1.3+. Installation is relatively simple:</p>
+<div class="highlight-python"><pre>curl -O http://apache.mirrors.tds.net/lucene/solr/1.3.0/apache-solr-1.3.0.tgz
+tar xvzf apache-solr-1.3.0.tgz
+cd apache-solr-1.3.0
+cd example
+java -jar start.jar</pre>
+</div>
+<p>You&#8217;ll need to revise your schema. You can generate this from your application
+(once Haystack is installed and setup) by running
+<tt class="docutils literal"><span class="pre">./manage.py</span> <span class="pre">build_solr_schema</span></tt>. Take the output from that command and place
+it in <tt class="docutils literal"><span class="pre">apache-solr-1.3.0/example/solr/conf/schema.xml</span></tt>. Then restart Solr.</p>
+<p>You&#8217;ll also need a Solr binding, <tt class="docutils literal"><span class="pre">pysolr</span></tt>. The official <tt class="docutils literal"><span class="pre">pysolr</span></tt> package,
+distributed via PyPI, is the best version to use (2.0.9+). Place <tt class="docutils literal"><span class="pre">pysolr.py</span></tt>
+somewhere on your <tt class="docutils literal"><span class="pre">PYTHONPATH</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">pysolr</span></tt> has it&#8217;s own dependencies that aren&#8217;t covered by Haystack. For
+best results, you should have an ElementTree variant install (preferably the
+<tt class="docutils literal"><span class="pre">lxml</span></tt> variant), <tt class="docutils literal"><span class="pre">httplib2</span></tt> for timeouts (though it will fall back to
+<tt class="docutils literal"><span class="pre">httplib</span></tt>) and either the <tt class="docutils literal"><span class="pre">json</span></tt> module that comes with Python 2.5+ or
+<tt class="docutils literal"><span class="pre">simplejson</span></tt>.</p>
+</div>
+<div class="section" id="more-like-this">
+<h3>More Like This<a class="headerlink" href="#more-like-this" title="Permalink to this headline">¶</a></h3>
+<p>To enable the &#8220;More Like This&#8221; functionality in Haystack, you&#8217;ll need
+to enable the <tt class="docutils literal"><span class="pre">MoreLikeThisHandler</span></tt>. Add the following line to your
+<tt class="docutils literal"><span class="pre">solrconfig.xml</span></tt> file within the <tt class="docutils literal"><span class="pre">config</span></tt> tag:</p>
+<div class="highlight-python"><pre>&lt;requestHandler name="/mlt" class="solr.MoreLikeThisHandler" /&gt;</pre>
+</div>
+</div>
+<div class="section" id="spelling-suggestions">
+<h3>Spelling Suggestions<a class="headerlink" href="#spelling-suggestions" title="Permalink to this headline">¶</a></h3>
+<p>To enable the spelling suggestion functionality in Haystack, you&#8217;ll need
+to setup the <tt class="docutils literal"><span class="pre">MoreLikeThisHandler</span></tt>. Add the following line to your
+<tt class="docutils literal"><span class="pre">solrconfig.xml</span></tt> file within the <tt class="docutils literal"><span class="pre">config</span></tt> tag:</p>
+<div class="highlight-python"><pre>&lt;searchComponent name="spellcheck" class="solr.SpellCheckComponent"&gt;
+
+    &lt;str name="queryAnalyzerFieldType"&gt;textSpell&lt;/str&gt;
+
+    &lt;lst name="spellchecker"&gt;
+      &lt;str name="name"&gt;default&lt;/str&gt;
+      &lt;str name="field"&gt;text&lt;/str&gt;
+      &lt;str name="spellcheckIndexDir"&gt;./spellchecker1&lt;/str&gt;
+      &lt;str name="buildOnCommit"&gt;true&lt;/str&gt;
+    &lt;/lst&gt;
+&lt;/searchComponent&gt;</pre>
+</div>
+<p>Then change your default handler from:</p>
+<div class="highlight-python"><pre>&lt;requestHandler name="standard" class="solr.StandardRequestHandler" default="true" /&gt;</pre>
+</div>
+<p>... to ...:</p>
+<div class="highlight-python"><pre>&lt;requestHandler name="standard" class="solr.StandardRequestHandler" default="true"&gt;
+    &lt;arr name="last-components"&gt;
+        &lt;str&gt;spellcheck&lt;/str&gt;
+    &lt;/arr&gt;
+&lt;/requestHandler&gt;</pre>
+</div>
+<p>Be warned that the <tt class="docutils literal"><span class="pre">&lt;str</span> <span class="pre">name=&quot;field&quot;&gt;text&lt;/str&gt;</span></tt> portion will be specific to
+your <tt class="docutils literal"><span class="pre">SearchIndex</span></tt> classes (in this case, assuming the main field is called
+<tt class="docutils literal"><span class="pre">text</span></tt>). This should be the same as the <tt class="docutils literal"><span class="pre">&lt;defaultSearchField&gt;</span></tt> in your
+<tt class="docutils literal"><span class="pre">schema.xml</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="whoosh">
+<h2>Whoosh<a class="headerlink" href="#whoosh" title="Permalink to this headline">¶</a></h2>
+<p>Official Download Location: <a class="reference external" href="http://whoosh.ca/">http://whoosh.ca/</a></p>
+<p>Whoosh is pure Python, so it&#8217;s a great option for getting started quickly and
+for development, though it does work for small scale live deployments. With the
+0.3.1+ releases, Whoosh has become much more performant, stable and better
+tested. The current recommended version is 0.3.5+. You can install via <a class="reference external" href="http://pypi.python.org/pypi/Whoosh/">PyPI</a>
+using:</p>
+<div class="highlight-python"><pre>sudo easy_install whoosh
+# ... or ...
+sudo pip install whoosh</pre>
+</div>
+<p>Note that, while capable otherwise, the Whoosh backend does not currently
+support &#8220;More Like This&#8221; or faceting.</p>
+</div>
+<div class="section" id="xapian">
+<h2>Xapian<a class="headerlink" href="#xapian" title="Permalink to this headline">¶</a></h2>
+<p>Official Download Location: <a class="reference external" href="http://xapian.org/download">http://xapian.org/download</a></p>
+<p>Xapian is written in C++ so it requires compilation (unless your OS has a
+package for it). Installation looks like:</p>
+<div class="highlight-python"><pre>curl -O http://oligarchy.co.uk/xapian/1.0.11/xapian-core-1.0.11.tar.gz
+curl -O http://oligarchy.co.uk/xapian/1.0.11/xapian-bindings-1.0.11.tar.gz
+
+tar xvzf xapian-core-1.0.11.tar.gz
+tar xvzf xapian-bindings-1.0.11.tar.gz
+
+cd xapian-core-1.0.11
+./configure
+make
+sudo make install
+
+cd ..
+cd xapian-bindings-1.0.11
+./configure
+make
+sudo make install</pre>
+</div>
+<p>Xapian is a supported backend but is not included in Haystack proper due to
+licensing. You can download the source from
+<a class="reference external" href="http://github.com/notanumber/xapian-haystack/tree/master">http://github.com/notanumber/xapian-haystack/tree/master</a>. Installation
+instructions can be found on that page as well. The backend, written
+by David Sauve (notanumber), fully implements the <cite>SearchQuerySet</cite> API and is
+an excellent alternative to Solr.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="toc.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Installing Search Engines</a><ul>
+<li><a class="reference external" href="#solr">Solr</a><ul>
+<li><a class="reference external" href="#more-like-this">More Like This</a></li>
+<li><a class="reference external" href="#spelling-suggestions">Spelling Suggestions</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#whoosh">Whoosh</a></li>
+<li><a class="reference external" href="#xapian">Xapian</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="backend_support.html"
+                                  title="previous chapter">Backend Support</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="settings.html"
+                                  title="next chapter">Haystack Settings</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/installing_search_engines.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="settings.html" title="Haystack Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="backend_support.html" title="Backend Support"
+             >previous</a> |</li>
+        <li><a href="toc.html">Haystack v1.0.0-final documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Daniel Lindsley.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

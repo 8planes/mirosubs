@@ -1,0 +1,34 @@
+Metadata-Version: 1.0
+Name: django-templatetag-sugar
+Version: 0.1
+Summary: A library to make Django's template tags sweet.
+Home-page: http://github.com/alex/django-templatetag-sugar/
+Author: Alex Gaynor
+Author-email: alex.gaynor@gmail.com
+License: BSD
+Description: django-templatetag-sugar
+        ===========================
+        
+        A library to make writing templatetags in Django sweet.
+        
+        Here's an example of using::
+        
+            @tag(register, [Constant("for"), Variable(), Optional([Constant("as"), Name()])]):
+            def example_tag(context, val, asvar=None):
+                if asvar:
+                    context[asvar] = val
+                    return ""
+                else:
+                    return val
+        
+        
+        As you can see it makes it super simple to define the syntax for a tag.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Framework :: Django

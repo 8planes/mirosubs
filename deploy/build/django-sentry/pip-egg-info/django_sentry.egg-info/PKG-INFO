@@ -1,0 +1,15 @@
+Metadata-Version: 1.0
+Name: django-sentry
+Version: 1.6.4
+Summary: Exception Logging to a Database in Django
+Home-page: http://github.com/dcramer/django-sentry
+Author: David Cramer
+Author-email: dcramer@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development

@@ -1,0 +1,15 @@
+Metadata-Version: 1.0
+Name: django-paging
+Version: 0.2.2
+Summary: An efficient paginator that works.
+Home-page: http://github.com/dcramer/django-paging
+Author: David Cramer
+Author-email: dcramer@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development

@@ -1,0 +1,6 @@
+README
+pyparsing.py
+pip-egg-info/pyparsing.egg-info/PKG-INFO
+pip-egg-info/pyparsing.egg-info/SOURCES.txt
+pip-egg-info/pyparsing.egg-info/dependency_links.txt
+pip-egg-info/pyparsing.egg-info/top_level.txt

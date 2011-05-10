@@ -1,0 +1,24 @@
+include AUTHORS
+include Changelog
+include FAQ
+include INSTALL
+include README
+include README.rst
+include MANIFEST.in
+include LICENSE
+include TODO
+include THANKS
+include pavement.py
+include setup.cfg
+recursive-include bin *
+recursive-include celery *.py
+recursive-include funtests *
+recursive-include docs *
+recursive-include contrib *
+recursive-include examples *
+prune tests/*.pyc
+prune docs/*.pyc
+prune contrib/*.pyc
+prune celery/*.pyc
+prune bin/*.pyc
+prune docs/.build

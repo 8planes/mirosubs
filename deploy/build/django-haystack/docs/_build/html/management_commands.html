@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Management Commands &mdash; Haystack v1.0.0-final documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.0-final',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Haystack v1.0.0-final documentation" href="index.html" />
+    <link rel="next" title="Architecture Overview" href="architecture_overview.html" />
+    <link rel="prev" title="Template Tags" href="templatetags.html" />
+    <link rel="stylesheet" href="http://haystacksearch.org/css/front.css" media="screen">
+    <link rel="stylesheet" href="_static/documentation.css" media="screen">
+
+  </head>
+  <body>
+    <div id="header">
+        <h1>Haystack</h1>
+        <p>Modular search for Django</p>
+
+        <ul class="features">
+          <li>Term Boost</li>
+          <li>More Like This</li>
+          <li>Faceting</li>
+          <li>Stored (non-indexed) fields</li>
+          <li>Highlighting</li>
+          <li>Spelling Suggestions</li>
+        </ul>
+    </div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="architecture_overview.html" title="Architecture Overview"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="templatetags.html" title="Template Tags"
+             accesskey="P">previous</a> |</li>
+        <li><a href="toc.html">Haystack v1.0.0-final documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="management-commands">
+<span id="ref-management-commands"></span><h1>Management Commands<a class="headerlink" href="#management-commands" title="Permalink to this headline">¶</a></h1>
+<p>Haystack comes with several management commands to make working with Haystack
+easier.</p>
+<div class="section" id="clear-index">
+<h2><tt class="docutils literal"><span class="pre">clear_index</span></tt><a class="headerlink" href="#clear-index" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">clear_index</span></tt> command wipes out your entire search index. It accepts no
+arguments. Use with caution.</p>
+<p>This is an <strong>INTERACTIVE</strong> command and assumes that you do <strong>NOT</strong> wish to
+delete the entire index.</p>
+</div>
+<div class="section" id="update-index">
+<h2><tt class="docutils literal"><span class="pre">update_index</span></tt><a class="headerlink" href="#update-index" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">update_index</span></tt> command will freshen all of the content in your index. It
+iterates through all indexed models and updates the records in the index. In
+addition to the standard management command options, it accepts the following
+arguments:</p>
+<div class="highlight-python"><pre>``--age``:
+    Number of hours back to consider objects new. Useful for nightly
+    reindexes (``--age=24``). Requires ``SearchIndexes`` to implement
+    the ``get_updated_field`` method.
+``--batch-size``:
+    Number of items to index at once. Default is 1000.
+``--site``:
+    The site object to use when reindexing (like `search_sites.mysite`).</pre>
+</div>
+<p>Using <tt class="docutils literal"><span class="pre">--verbosity=2</span></tt> with this command shows individual batches being sent,
+which is useful when debugging.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This command <em>ONLY</em> updates records in the index. It does <em>NOT</em> handle
+deletions, so you may need to write a separate script that handles deleted
+models, such as a queue consumer or something that runs through all records
+and tries to load the model for it. Alternatively, you can use the
+<tt class="docutils literal"><span class="pre">RealTimeSearchIndex</span></tt>, which will automatically handle deletions.</p>
+</div>
+</div>
+<div class="section" id="rebuild-index">
+<h2><tt class="docutils literal"><span class="pre">rebuild_index</span></tt><a class="headerlink" href="#rebuild-index" title="Permalink to this headline">¶</a></h2>
+<p>A shortcut for <tt class="docutils literal"><span class="pre">clear_index</span></tt> followed by <tt class="docutils literal"><span class="pre">update_index</span></tt>. It accepts no
+arguments. For when you really, really want a completely rebuilt index.</p>
+</div>
+<div class="section" id="build-solr-schema">
+<h2><tt class="docutils literal"><span class="pre">build_solr_schema</span></tt><a class="headerlink" href="#build-solr-schema" title="Permalink to this headline">¶</a></h2>
+<p>Once all of your <tt class="docutils literal"><span class="pre">SearchIndex</span></tt> classes are in place, this command can be used
+to generate the XML schema Solr needs to handle the search data. It accepts no
+arguments.</p>
+</div>
+<div class="section" id="haystack-info">
+<h2><tt class="docutils literal"><span class="pre">haystack_info</span></tt><a class="headerlink" href="#haystack-info" title="Permalink to this headline">¶</a></h2>
+<p>Provides some basic information about how Haystack is setup and what models it
+is handling. It accepts no arguments. Useful when debugging or when using
+Haystack-enabled third-party apps.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="toc.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Management Commands</a><ul>
+<li><a class="reference external" href="#clear-index"><tt class="docutils literal"><span class="pre">clear_index</span></tt></a></li>
+<li><a class="reference external" href="#update-index"><tt class="docutils literal"><span class="pre">update_index</span></tt></a></li>
+<li><a class="reference external" href="#rebuild-index"><tt class="docutils literal"><span class="pre">rebuild_index</span></tt></a></li>
+<li><a class="reference external" href="#build-solr-schema"><tt class="docutils literal"><span class="pre">build_solr_schema</span></tt></a></li>
+<li><a class="reference external" href="#haystack-info"><tt class="docutils literal"><span class="pre">haystack_info</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="templatetags.html"
+                                  title="previous chapter">Template Tags</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="architecture_overview.html"
+                                  title="next chapter">Architecture Overview</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/management_commands.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="architecture_overview.html" title="Architecture Overview"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="templatetags.html" title="Template Tags"
+             >previous</a> |</li>
+        <li><a href="toc.html">Haystack v1.0.0-final documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Daniel Lindsley.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

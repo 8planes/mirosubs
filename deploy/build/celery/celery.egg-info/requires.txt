@@ -1,0 +1,5 @@
+importlib
+python-dateutil
+anyjson
+kombu>=1.0.3
+pyparsing>=1.5.0

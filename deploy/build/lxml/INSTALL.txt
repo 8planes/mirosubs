@@ -1,0 +1,169 @@
+Installing lxml
+===============
+
+For special installation instructions regarding MS Windows and
+MacOS-X, see the specific sections below.
+
+.. contents::
+..
+   1  Requirements
+   2  Installation
+   3  Building lxml from sources
+   4  Using lxml with python-libxml2
+   5  MS Windows
+   6  MacOS-X
+
+
+Requirements
+------------
+
+You need Python 2.3 or later.
+
+Unless you are using a static binary distribution (e.g. a Windows
+binary egg from PyPI), you need to install libxml2 and libxslt, in
+particular:
+
+* libxml 2.6.21 or later. It can be found here:
+  http://xmlsoft.org/downloads.html
+
+  * We recommend libxml2 2.7.8 or a later version.
+
+  * If you want to use XPath, do not use libxml2 2.6.27.
+
+  * If you want to use the feed parser interface, especially when
+    parsing from unicode strings, do not use libxml2 2.7.4 through
+    2.7.6.
+
+* libxslt 1.1.15 or later. It can be found here:
+  http://xmlsoft.org/XSLT/downloads.html
+
+  * We recomment libxslt 1.1.26 or later.
+
+Newer versions generally contain less bugs and are therefore
+recommended.  XML Schema support is also still worked on in libxml2,
+so newer versions will give you better complience with the W3C spec.
+
+
+Installation
+------------
+
+Get the `easy_install`_ tool and run the following as super-user (or
+administrator)::
+
+  easy_install lxml
+
+.. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
+
+* On **MS Windows**, the above will install the binary builds that we
+  provide.  If there is no binary build of the latest release yet,
+  please search PyPI_ for the last release that has them and pass that
+  version to ``easy_install`` like this::
+
+    easy_install lxml==2.2.2
+
+* On **Linux** (and most other well-behaved operating systems),
+  ``easy_install`` will manage to build the source distribution as
+  long as libxml2 and libxslt are properly installed, including
+  development packages, i.e. header files, etc.  Use your package
+  management tool to look for packages like ``libxml2-dev`` or
+  ``libxslt-devel`` if the build fails, and make sure they are
+  installed.
+
+* On **MacOS-X**, use the following to build the source distribution,
+  and make sure you have a working Internet connection, as this will
+  download libxml2 and libxslt in order to build them::
+
+   STATIC_DEPS=true sudo easy_install lxml
+
+.. _PyPI: http://cheeseshop.python.org/pypi/lxml
+
+
+Building lxml from sources
+--------------------------
+
+If you want to build lxml from SVN you should read `how to build lxml
+from source`_ (or the file ``doc/build.txt`` in the source tree).
+Building from Subversion sources or from modified distribution sources
+requires Cython_ to translate the lxml sources into C code.  The
+source distribution ships with pre-generated C source files, so you do
+not need Cython installed to build from release sources.
+
+.. _Cython: http://www.cython.org
+.. _`how to build lxml from source`: build.html
+
+If you have read these instructions and still cannot manage to install lxml,
+you can check the archives of the `mailing list`_ to see if your problem is
+known or otherwise send a mail to the list.
+
+ .. _`mailing list`: http://codespeak.net/mailman/listinfo/lxml-dev
+
+
+Using lxml with python-libxml2
+------------------------------
+
+If you want to use lxml together with the official libxml2 Python
+bindings (maybe because one of your dependencies uses it), you must
+build lxml statically.  Otherwise, the two packages will interfere in
+places where the libxml2 library requires global configuration, which
+can have any kind of effect from disappearing functionality to crashes
+in either of the two.
+
+To get a static build, either pass the ``--static-deps`` option to the
+setup.py script, or run ``easy_install`` with the ``STATIC_DEPS`` or
+``STATICBUILD`` environment variable set to true, i.e.
+
+::
+
+   STATIC_DEPS=true easy_install lxml
+
+The ``STATICBUILD`` environment variable is handled equivalently to
+the ``STATIC_DEPS`` variable, but is used by some other extension
+packages, too.
+
+
+MS Windows
+----------
+
+For MS Windows, the `binary egg distribution of lxml`_ is statically
+built against the libraries, i.e. it already includes them.  There is
+no need to install the external libraries if you use an official lxml
+build from PyPI.
+
+Unless you know what you are doing, this means: *do not install
+libxml2 or libxslt if you use a binary build of lxml*.  Just use
+``easy_install`` by following the installation instructions above.
+
+*Only* if you want to upgrade the libraries and/or compile lxml from
+sources, you should install a `binary distribution`_ of libxml2 and
+libxslt.  You need both libxml2 and libxslt, as well as iconv and
+zlib.
+
+.. _`binary distribution`: http://www.zlatkovic.com/libxml.en.html
+.. _`binary egg distribution of lxml`: http://cheeseshop.python.org/pypi/lxml
+
+
+MacOS-X
+-------
+
+A macport of lxml is available.  Try ``port install py25-lxml``.
+
+If you want to use a more recent lxml release, you may have to build
+it yourself.  Apple doesn't help here, as the system libraries of
+libxml2 and libxslt installed under MacOS-X are horribly outdated, and
+updating them is everything but easy.  In any case, you cannot run
+lxml 2.x with the system provided libraries, so you have to use newer
+libraries.
+
+Luckily, lxml's ``setup.py`` script has built-in support for building
+and integrating these libraries statically during the build.  Please
+read the `MacOS-X build instructions`_.
+
+.. _`MacOS-X build instructions`: build.html#building-lxml-on-macos-x
+.. _fink: http://finkproject.org/
+
+A number of users also reported success with updated libraries
+(e.g. using fink_ or macports), but needed to set the runtime
+environment variable ``DYLD_LIBRARY_PATH`` to the directory where fink
+keeps the libraries.  In any case, this method is easy to get wrong
+and everything but safe.  Unless you know what you are doing, follow
+the static build instructions above.
