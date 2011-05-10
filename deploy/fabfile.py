@@ -147,6 +147,13 @@ def _execute_on_all_hosts(cmd):
 def switch_branch(branch_name):
     _execute_on_all_hosts(lambda dir: _switch_branch(dir, branch_name))    
 
+def _remove_pip_package(base_dir, package_name):
+    with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
+        run('yes y | {0}/env/bin/pip uninstall {1}'.format(base_dir, package_name), pty=True)
+
+def remove_pip_package(package_egg_name):
+    _execute_on_all_hosts(lambda dir: _remove_pip_package(dir, package_egg_name))
+
 def _update_environment(base_dir):
     with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
         _git_pull()
