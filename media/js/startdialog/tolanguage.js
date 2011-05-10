@@ -43,7 +43,7 @@ mirosubs.startdialog.ToLanguage.prototype.toString = function() {
 mirosubs.startdialog.ToLanguage.prototype.translationStartsFromScratch = 
     function(fromLanguage) 
 {
-    if (!this.VIDEO_LANGUAGE)
+    if (!this.VIDEO_LANGUAGE || this.VIDEO_LANGUAGE.isEmpty())
         return false;
     if (!this.VIDEO_LANGUAGE.DEPENDENT)
         return true;
