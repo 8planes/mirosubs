@@ -143,12 +143,14 @@
     
     <div id="topbar">
       <div class="wrapper">
-          
+        {% comment %}
+        <!-- commenting for now, until we are ready for prime time -->
       <div class="search">
         <form method="get" action="{% url search:index %}">
           <input type="text" class="field" name="q" />
         </form>
       </div><!-- // search -->
+      {% endcomment %}
       
        {% block select_language_dialog %}
     	  	{% select_language_dialog %}
