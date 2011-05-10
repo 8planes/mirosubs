@@ -89,12 +89,6 @@ def invalidate_cache(video_id):
 def invalidate_video_id(video_url):
     cache.delete(_video_id_key(video_url))
 
-def on_subtitle_language_save(sender, instance, **kwargs):
-    invalidate_cache(instance.video.video_id)
-
-def on_subtitle_version_save(sender, instance, **kwargs):
-    invalidate_cache(instance.language.video.video_id)
-
 def on_video_url_save(sender, instance, **kwargs):
     if instance.video_id:
         invalidate_cache(instance.video.video_id)

@@ -130,21 +130,6 @@ class TestTasks(TestCase):
         tv = TeamVideo(team=self.team, video=self.sl.video, added_by=self.team.users.all()[:1].get())
         tv.save()
         
-    def test_tasks(self):
-        #TODO: improve this
-        result = tasks.update_team_video.delay(self.tv.video_id)
-        if result.failed():
-            self.fail(result.traceback)
-        
-        result = tasks.update_one_team_video.delay(self.team.id)
-        if result.failed():
-            self.fail(result.traceback)
-    
-    def test_update_team_video_for_sl(self):
-        result = tasks.update_team_video_for_sl.delay(self.sl.id)
-        if result.failed():
-            self.fail(result.traceback)        
-    
     def test_add_video_notification(self):
         team = self.tv.team
         

@@ -147,6 +147,13 @@ def _execute_on_all_hosts(cmd):
 def switch_branch(branch_name):
     _execute_on_all_hosts(lambda dir: _switch_branch(dir, branch_name))    
 
+def _remove_pip_package(base_dir, package_name):
+    with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
+        run('yes y | {0}/env/bin/pip uninstall {1}'.format(base_dir, package_name), pty=True)
+
+def remove_pip_package(package_egg_name):
+    _execute_on_all_hosts(lambda dir: _remove_pip_package(dir, package_egg_name))
+
 def _update_environment(base_dir):
     with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
         _git_pull()
@@ -181,11 +188,17 @@ def add_disabled():
     for host in env.web_hosts:
         env.host_string = host
         run('touch {0}/mirosubs/disabled'.format(env.web_dir))
+    if env.admin_dir is not None:
+        env.host_string = ADMIN_HOST
+        sudo('/etc/init.d/cron stop')
 
 def remove_disabled():
     for host in env.web_hosts:
         env.host_string = host
         run('rm {0}/mirosubs/disabled'.format(env.web_dir))
+    if env.admin_dir is not None:
+        env.host_string = ADMIN_HOST
+        sudo('/etc/init.d/cron start')
 
 def update_web():
     for host in env.web_hosts:
@@ -197,6 +210,7 @@ def update_web():
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
             run('{0} deploy/create_commit_file.py'.format(python_exe))
+            run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
@@ -232,6 +246,8 @@ def _update_static(dir):
         run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
 
+        run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
+        
 def update_static():
     env.host_string = DEV_HOST
     if env.s3_bucket is not None:
@@ -244,8 +260,9 @@ def update_static():
     
 
 def update():
-    update_web()
     update_static()
+    update_web()
+
 
 def _promote_django_admins(dir, email=None, new_password=None, userlist_path=None):
     with cd(os.path.join(dir, 'mirosubs')):

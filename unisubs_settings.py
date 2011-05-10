@@ -44,7 +44,7 @@ elif INSTALLATION == STAGING:
     SITE_NAME = 'unisubsstaging'
     REDIS_DB = "2"
     AWS_QUEUE_PREFIX = 'STAGING'
-    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'    
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-appsw
     try:
@@ -62,6 +62,7 @@ elif INSTALLATION == PRODUCTION:
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
     EMAIL_SUBJECT_PREFIX = '[usubs-production]'
     EMAIL_BCC_LIST.append('socmedia@pculture.org')
+    COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     ADMINS = (
       ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org'),
     )
@@ -79,6 +80,9 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
         }
     USLOGGING_DATABASE = 'uslogging'
     DATABASE_ROUTERS = ['routers.UnisubsRouter']
+    AWS_STORAGE_BUCKET_NAME = DEFAULT_BUCKET
+    COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    COMPRESS_URL = MEDIA_URL
 else:
     uslogging_db = {}
 
@@ -111,7 +115,9 @@ try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
     LAST_COMMIT_GUID = ''
-    
+
+
+
 try:
     from settings_local import *
 except ImportError:

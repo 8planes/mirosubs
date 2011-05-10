@@ -3,8 +3,9 @@ from haystack import site
 from models import Video, SubtitleLanguage
 from comments.models import Comment
 from auth.models import CustomUser as User
+from utils.celery_search_index import CelerySearchIndex
 
-class VideoIndex(SearchIndex):
+class VideoIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
     title = CharField(model_attr='title_display') 
     languages = MultiValueField()
@@ -29,7 +30,7 @@ class VideoIndex(SearchIndex):
         self.prepared_data['activity_count'] = obj.action_set.count()
         return self.prepared_data
         
-class SubtitleLanguageIndex(SearchIndex):
+class SubtitleLanguageIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
     title = CharField()
     language = CharField()

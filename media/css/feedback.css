@@ -1,0 +1,56 @@
+.feedback_tab { 
+  background: #327895 url(../images/feedback.png) 7px 12px no-repeat;
+  -webkit-border-top-left-radius: 2px;
+  -moz-border-top-left-radius: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  -moz-border-bottom-left-radius: 2px;
+  position: fixed;
+  top: 150px;
+  right: 0;
+  height: 88px;
+  width: 27px;
+  text-indent: -9999px;
+}
+
+#feedback_email {
+  width: 300px;
+  margin: 2px;
+}
+    
+#feedback_message {
+  width: 368px;
+  height: 150px;
+}
+    
+#feedback_form div {
+  margin: 2px;
+}
+    
+#feedback_form p.error_list {
+  color: #ff0000;
+  margin: -1px;
+}
+    
+#feedback_success #feedback_bg {
+	padding: 10px;
+}
+
+#feedback_success h3 {
+	margin: 0 0 15px 0 !important;
+	padding: 0 !important;
+	font-size: 25px;
+}
+
+#feedback_success p {
+	margin: 0 !important;
+	padding: 5px !important;
+}
+
+#feedback_success a.red_button {
+	float: right;
+	position: relative;
+	top: 10px;
+	right: 10px;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+}

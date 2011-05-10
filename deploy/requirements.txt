@@ -33,3 +33,5 @@ feedparser
 lxml
 django-celery==2.2.4
 django-sentry==1.6.4
+-e hg+https://bitbucket.org/david/django-storages@2118944fb49996642a704de05dd557665801a642#egg=django_storages-tip
+-e git+https://github.com/arthur-debert/django_compressor.git@e323f05dacd52ceb11affb5d12705695a0bd8248#egg=django_compressor

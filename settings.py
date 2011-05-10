@@ -149,6 +149,11 @@ PREVIOUS_EMBED_JS_VERSIONS = []
 
 JS_USE_COMPILED = False
 
+
+COMPRESS_YUI_BINARY = "java -jar ./css-compression/yuicompressor-2.4.6.jar"
+COMPRESS_OUTPUT_DIRNAME = "static-cache"
+
+
 USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
 # paths provided relative to media/js
@@ -316,10 +321,10 @@ SECRET_KEY = 'a9yr_yzp2vmj-2q1zq)d2+b^w(7fqu2o&jh18u9dozjbd@-$0!'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader'
 )
+
 
 MIDDLEWARE_CLASSES = (
     'middleware.ResponseTimeMiddleware',
@@ -392,6 +397,7 @@ INSTALLED_APPS = (
     'sentry.client',
     'djcelery',
     'rosetta',
+    'unisubs_compressor',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
@@ -511,3 +517,65 @@ ROSETTA_EXCLUDED_APPLICATIONS = (
     'openid_consumer',
     'rosetta'
 )
+
+# paths from MEDIA URL
+MEDIA_BUNDLES = {
+
+    "base": {
+        "type":"css",
+        "files" : (
+            "css/960.css",
+            "css/html.css", 
+            "css/about_faq.css", 
+            "css/breadcrumb.css", 
+            "css/buttons.css", 
+            "css/classes.css", 
+            "css/comments.css", 
+            "css/forms.css", 
+            "css/home.css", 
+            "css/layout.css", 
+            "css/nav.css", 
+            "css/profile_pages.css", 
+            "css/revision_history.css", 
+            "css/tables.css", 
+            "css/teams.css", 
+            "css/transcripts.css", 
+            "css/background.css", 
+            "css/activity_stream.css", 
+            "css/settings.css", 
+            "css/feedback.css", 
+            "css/messages.css", 
+            "css/global.css", 
+            "css/top_user_panel.css", 
+            "css/services.css", 
+          ),
+        },
+    "video_history":{
+        "type":"css",
+        "files":(
+               "css/mirosubs-widget.css" ,
+               "css/nyroModal.css"
+         ),
+        },
+
+    "home":{
+        "type":"css",
+        "files":(
+            "css/index.css",
+            "css/mirosubs-widget.css",
+            "css/top_user_panel.css",
+            "css/buttons.css",
+            "css/forms.css" ,
+            "css/feedback.css", 
+            "css/global.css" ,
+
+         ),
+        }
+
+}
+
+
+try:
+    from mediabundles_list import MEDIA_BUNDLE_URLS
+except ImportError:
+    MEDIA_BUNDLE_URLS = {} 

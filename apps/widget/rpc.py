@@ -31,6 +31,7 @@ from statistic import widget_views_total_counter
 from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
 from uslogging.models import WidgetDialogLog
+from videos.tasks import video_changed_tasks
 import logging
 yt_logger = logging.getLogger("youtube-ei-error")
 
@@ -275,35 +276,31 @@ class Rpc(BaseRpc):
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False
         else:
-            should_save = new_version.time_change > 0 or \
-                new_version.text_change > 0 or \
-                (draft.language.latest_version() is not None and
-                 completed is not None and
-                 completed != draft.language.is_complete)
+            should_save = False
+            last_version = draft.language.latest_version()
+            if not last_version or last_version.changed_from(
+                new_version.subtitles(new_subs)):
+                should_save = True
+            elif last_version is not None and \
+                    completed is not None and \
+                    completed != draft.language.is_complete:
+                should_save = True
         if should_save:
             new_version.save()
             for subtitle in new_subs:
                 subtitle.version = new_version
                 subtitle.save()
             language = new_version.language
-            language.update_complete_state()
-            language.is_forked = new_version.is_forked
             language.release_writelock()
             if not draft.is_dependent() and completed is not None:
                 language.is_complete = completed
             language.save()
-            new_version.update_percent_done()
-            if language.is_original:
-                language.video.update_complete_state()
-                language.video.save()
             from videos.models import Action
             Action.create_caption_handler(new_version)
+            video_changed_tasks.delay(language.video.id, new_version.id)
 
-        video_cache.writelocked_langs_clear(draft.video.video_id)    
         return { "response" : "ok",
-                 "last_saved_packet": draft.last_saved_packet,
-                 "drop_down_contents" : 
-                     video_cache.get_video_languages(draft.video.video_id) }
+                 "last_saved_packet": draft.last_saved_packet }
 
     def _create_version_from_draft(self, draft, user):
         version = models.SubtitleVersion(
@@ -314,7 +311,6 @@ class Rpc(BaseRpc):
             user=user)
         subtitles = models.Subtitle.trim_list(
             [s.duplicate_for() for s in draft.subtitle_set.all()])
-        version.set_changes(draft.parent_version, subtitles)
         return version, subtitles
 
     def fetch_subtitles(self, request, video_id, language_pk):

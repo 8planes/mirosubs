@@ -95,11 +95,7 @@ class Command(ErrorHandlingCommand):
         except:
             if settings.DEBUG:
                 raise
-            self.handle_error(video, grab_result, sys.exc_info())         
-    
-    def handle_error(self, video, command_msg, exc_info):
-        subject = u'Error during thumbnail grabing for video: %s' % video.video_id
-        self._handle_error(subject, command_msg, exc_info)      
+            self.handle_error(sys.exc_info())         
         
     def get_file_path(self, video, video_url):
         type = video_url.url.split('.')[-1]

@@ -39,6 +39,7 @@ from gdata.youtube.service import YouTubeService
 from gdata.service import Error as GdataError
 from socket import gaierror
 from django.utils.encoding import smart_unicode
+from videos.tasks import video_changed_tasks
 import feedparser
 from utils.translation import get_languages_list
 
@@ -261,6 +262,7 @@ class SubtitlesUploadBaseForm(forms.Form):
         except ObjectDoesNotExist:
             old_version = None
             version_no = 0
+        version = None
         if not self.is_version_same(old_version, parser):
             version = SubtitleVersion(
                 language=language, version_no=version_no,
@@ -280,19 +282,14 @@ class SubtitlesUploadBaseForm(forms.Form):
                 caption.subtitle_id = str(id)
                 caption.subtitle_order = i+1
                 caption.save()
-
-            version.save()
-            version.update_percent_done()
-
-            language.update_complete_state()
-            language.save()
-            if language.is_original:
-                video.update_complete_state()
                 
         language.video.release_writelock()
         language.video.save()
         translations = video.subtitlelanguage_set.filter(standard_language=language)
         [t.fork(from_version=old_version, user=self.user) for t in translations]
+        video_changed_tasks.delay(
+            video.id, 
+            None if version is None else version.id)
         return language
 
     def get_errors(self):
@@ -344,10 +341,7 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         is_complete = self.cleaned_data.get('is_complete')
         sl.is_complete = is_complete
         sl.save()
-        if sl.is_original:
-            #fix. I've no idea how, but sl.video.is_subtitles is reset to False without this
-            sl.video.update_complete_state()
-            sl.video.save()
+        video_changed_tasks.delay(sl.video.id, sl.latest_version().id)
         return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):

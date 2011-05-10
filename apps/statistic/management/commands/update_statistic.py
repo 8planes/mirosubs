@@ -11,15 +11,19 @@ from django.db.models import F
 class Command(ErrorHandlingCommand):
 
     def handle(self, *args, **kwargs):
+        print 'Start updating...'
         try:
             sub_fetch_keys_set.r.ping()
         except:
             if settings.DEBUG:
                 raise
-            self.handle_error('Statistic update error', '', sys.exc_info())     
+            print 'ERROR: Failed connect to Redis'
+            self.handle_error(sys.exc_info())     
             return
         
         count = sub_fetch_keys_set.scard()
+        
+        print 'Subtitles fetch keys: ', count
         
         while count:
             count -= 1
@@ -50,6 +54,8 @@ class Command(ErrorHandlingCommand):
             counter_obj.save()
             
         count = changed_video_set.scard()
+        
+        print 'Changed videos count: ', count
         
         while count:
             count -= 1

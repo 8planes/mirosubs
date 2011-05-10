@@ -10,6 +10,7 @@ closure-library
 jsunit
 media/profile_images
 media/pictures
+media/CACHE
 settings_local.py
 commit.py
 media/js/config.js
@@ -18,7 +19,9 @@ media/js/mirosubs-widgetizer.js
 media/js/mirosubs-extension.js
 media/js/mirosubs-statwidget.js
 media/js/mirosubs-api.js
+media/static-cache/
 media/teams/*
 media/videos/*
 disabled
 server_local_settings.py
+/mediabundles_list.py
