@@ -149,11 +149,10 @@ PREVIOUS_EMBED_JS_VERSIONS = []
 
 JS_USE_COMPILED = False
 
-COMPRESS = True
-COMPRESS_CSS_FILTERS =	['compressor.filters.yui.YUICSSFilter']
+
 COMPRESS_YUI_BINARY = "java -jar ./css-compression/yuicompressor-2.4.6.jar"
-COMPRESS_YUI_CSS_ARGUMENTS = ""
-COMPRESS_OFFLINE = True
+COMPRESS_OUTPUT_DIRNAME = "static-cache"
+
 
 USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
@@ -398,7 +397,7 @@ INSTALLED_APPS = (
     'sentry.client',
     'djcelery',
     'rosetta',
-    'compressor',
+    'unisubs_compressor',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
@@ -518,3 +517,53 @@ ROSETTA_EXCLUDED_APPLICATIONS = (
     'openid_consumer',
     'rosetta'
 )
+
+# paths from MEDIA URL
+MEDIA_BUNDLES = {
+
+    "base": {
+        "type":"css",
+        "files" : (
+            "css/imported/html.css", 
+            "css/imported/about_faq.css", 
+            "css/imported/breadcrumb.css", 
+            "css/imported/buttons.css", 
+            "css/imported/classes.css", 
+            "css/imported/comments.css", 
+            "css/imported/forms.css", 
+            "css/imported/home.css", 
+            "css/imported/layout.css", 
+            "css/imported/nav.css", 
+            "css/imported/profile_pages.css", 
+            "css/imported/revision_history.css", 
+            "css/imported/tables.css", 
+            "css/imported/teams.css", 
+            "css/imported/transcripts.css", 
+            "css/imported/background.css", 
+            "css/imported/activity_stream.css", 
+            "css/imported/settings.css", 
+            "css/imported/feedback.css", 
+            "css/imported/messages.css", 
+            "css/imported/global.css", 
+            "css/imported/top_user_panel.css", 
+            "css/imported/services.css", 
+            "js/jgrowl/jquery.jgrowl.css", 
+            "js/jalerts/jquery.alerts.css",                          
+          ),
+        },
+    "video_history":{
+        "type":"css",
+        "files":(
+               "css/mirosubs-widget.css" ,
+
+               "css/nyroModal.css"
+         ),
+        }
+
+}
+
+
+try:
+    from mediabundles_list import MEDIA_BUNDLE_URLS
+except ImportError:
+    MEDIA_BUNDLE_URLS = {} 

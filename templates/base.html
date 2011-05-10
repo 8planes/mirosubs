@@ -1,4 +1,4 @@
-{% load feedback thumbnail i18n announcement_tags messages_tags profiles_tags %}
+{% load feedback thumbnail i18n announcement_tags messages_tags profiles_tags media_compressor %}
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -13,35 +13,8 @@
   </script>
 {% block css %}
 
-{% load compress %}
-{% compress css %}
-    <link href="{{ MEDIA_URL }}css/imported/html.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/about_faq.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/breadcrumb.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/buttons.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/classes.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/comments.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/forms.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/home.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/layout.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/nav.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/profile_pages.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/revision_history.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/tables.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/teams.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/transcripts.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/background.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/activity_stream.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/settings.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/feedback.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/messages.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/global.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/top_user_panel.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}css/imported/services.css" media="all" type="text/css" rel="stylesheet" /> 
-    <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
-    <link href="{{ MEDIA_URL }}js/jgrowl/jquery.jgrowl.css" media="all" type="text/css" rel="stylesheet" />
-    <link href="{{ MEDIA_URL }}js/jalerts/jquery.alerts.css" media="all" type="text/css" rel="stylesheet" />
-{% endcompress%}
+
+{% include_css_bundle "base" %}
 
 <!--[if gte IE 8]>
 <link href="{{ MEDIA_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
@@ -61,6 +34,7 @@
 <script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.input_replacement.min.js" type="text/javascript"></script>
 <script src="{% url profiles:rpc_api %}" type="text/javascript"></script>  
+<script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
 {% block scripts %}{% endblock %}
 <title>
     {% block title %}Universal Subtitles - {% trans 'Make subtitles, translations, and captions for almost any video.' %}{% endblock %}

@@ -19,7 +19,9 @@ media/js/mirosubs-widgetizer.js
 media/js/mirosubs-extension.js
 media/js/mirosubs-statwidget.js
 media/js/mirosubs-api.js
+media/static-cache/
 media/teams/*
 media/videos/*
 disabled
 server_local_settings.py
+/mediabundles_list.py

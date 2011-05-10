@@ -115,7 +115,9 @@ try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
     LAST_COMMIT_GUID = ''
-    
+
+
+
 try:
     from settings_local import *
 except ImportError:
