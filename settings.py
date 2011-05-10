@@ -565,6 +565,7 @@ MEDIA_BUNDLES = {
             "css/mirosubs-widget.css",
             "css/top_user_panel.css",
             "css/buttons.css",
+            "css/classes.css", 
             "css/forms.css" ,
             "css/feedback.css", 
             "css/global.css" ,
