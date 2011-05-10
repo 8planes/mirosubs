@@ -49,15 +49,15 @@ body#solutions {
 	text-indent: 0;
 	padding: 0 0 5px 20px;
 	list-style-type: none;
-	background: transparent url(../../images/icon_ngo_bullet.png) 0 2px no-repeat;
+	background: transparent url(../images/icon_ngo_bullet.png) 0 2px no-repeat;
 }
 
 #ngo_content .pod {
-	background: #f7f7f7;
+	background: #FFF;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	-webkit-box-shadow: 0 0 10px #CCC, inset 0 0 5px #FFF;
-	-moz-box-shadow:    0 0 10px #CCC, inset 0 0 5px #FFF;
+	-webkit-box-shadow: 0 0 10px #CCC;
+	-moz-box-shadow:    0 0 10px #CCC;
 	padding: 20px;
 	margin: 20px 0;
 	border: 1px #d3d3d3 solid;
@@ -73,7 +73,7 @@ body#solutions {
 
 a.learn_more {
 	font-size: 16px;
-	background: transparent url(../../images/ngo_icon_arrow.png) center right no-repeat;
+	background: transparent url(../images/ngo_icon_arrow.png) center right no-repeat;
 	padding: 0 15px 0 0;
 	font-weight: bold;
 	color: #3c82b5;
@@ -139,7 +139,7 @@ a:hover.learn_more {
 	width: 239px;
 	height: 56px;
 	display: block;
-	background: transparent url(../../images/ngo_mc_logo.png) 20px 20px no-repeat;
+	background: transparent url(../images/ngo_mc_logo.png) 20px 20px no-repeat;
 	border-right: 1px #DDD solid;
 	padding: 20px;
 	float: left;
@@ -210,7 +210,7 @@ a:hover.learn_more {
 #khan {
 	width: 960px;
 	height: 1050px;
-	background: transparent url(../../images/ngo_khan_shot.png) 0 0 no-repeat;
+	background: transparent url(../images/ngo_khan_shot.png) 0 0 no-repeat;
 	position: relative;
 	left: -10px;
 }

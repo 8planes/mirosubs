@@ -548,6 +548,7 @@ MEDIA_BUNDLES = {
             "css/global.css", 
             "css/top_user_panel.css", 
             "css/services.css", 
+            "css/solutions.css", 
           ),
         },
     "video_history":{
