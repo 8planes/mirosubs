@@ -607,7 +607,13 @@ def subscribe_to_updates(request):
     return HttpResponse('ok', 'text/plain')
 
 def test_celery(request):
-    from videos.tasks import add
+    from celery.decorators import task
+    
+    @task
+    def add(a, b):
+        print "TEST TASK FOR CELERY"
+        r = a+b
+
     add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
 
