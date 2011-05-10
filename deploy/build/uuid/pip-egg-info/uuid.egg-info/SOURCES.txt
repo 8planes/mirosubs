@@ -1,5 +1,0 @@
-uuid.py
-pip-egg-info/uuid.egg-info/PKG-INFO
-pip-egg-info/uuid.egg-info/SOURCES.txt
-pip-egg-info/uuid.egg-info/dependency_links.txt
-pip-egg-info/uuid.egg-info/top_level.txt

@@ -25,3 +25,4 @@ media/videos/*
 disabled
 server_local_settings.py
 /mediabundles_list.py
+deploy/build/*

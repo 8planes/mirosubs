@@ -1,1 +1,0 @@
-django-templatetag-sugar>=0.1
