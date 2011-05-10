@@ -79,7 +79,7 @@ table.messages .delete {
 }
 
 .msg_modal_wrap .close {
-  background: url(../../images/sprite.png) no-repeat 0px -256px !important;
+  background: url(../images/sprite.png) no-repeat 0px -256px !important;
   display: block;
   text-indent: -9999px;
   height: 27px;

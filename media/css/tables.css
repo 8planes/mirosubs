@@ -8,7 +8,7 @@ table{
 }
 
 thead{
-  background: #fff url(../../images/gradient_light.png) 0 2px repeat-x;
+  background: #fff url(../images/gradient_light.png) 0 2px repeat-x;
   border-bottom: 1px solid #aaa;
   }
 
@@ -25,15 +25,15 @@ th a, th.header{
   margin-right: 15px;
   padding-right: 25px;
   text-decoration: none !important;
-  background: url(../../images/sort_arrows.gif) right 11px no-repeat;
+  background: url(../images/sort_arrows.gif) right 11px no-repeat;
   }
 
 th.headerSortDown, th a.desc{
-    background: url(../../images/sort_arrows.gif) right -62px no-repeat;
+    background: url(../images/sort_arrows.gif) right -62px no-repeat;
 }
 
 th.headerSortUp, th a.asc{
-    background: url(../../images/sort_arrows.gif) right -25px no-repeat;
+    background: url(../images/sort_arrows.gif) right -25px no-repeat;
 }
 
 tr{ display: table-row;}

@@ -51,7 +51,7 @@
   height: 20px;
   width: 18px;  
   float: left;
-  background: url(../../images/connector.png) left center no-repeat;
+  background: url(../images/connector.png) left center no-repeat;
   }
   
 
@@ -76,7 +76,7 @@
   float: left;  
   width: 10px;
   height: 20px;
-  background: url(../../images/stamps.png) left -44px no-repeat !important;
+  background: url(../images/stamps.png) left -44px no-repeat !important;
   }
 
 
@@ -95,7 +95,7 @@ float: right;
   float: left;  
   width: 10px;
   height: 20px;
-  background: url(../../images/stamps.png) left -66px no-repeat !important;
+  background: url(../images/stamps.png) left -66px no-repeat !important;
   }
 
 
@@ -115,7 +115,7 @@ float: right;
   float: left;  
   width: 10px;
   height: 20px;
-  background: url(../../images/stamps.png) top left no-repeat !important;
+  background: url(../images/stamps.png) top left no-repeat !important;
   }
 
 
@@ -136,7 +136,7 @@ float: right;
   float: left;  
   width: 10px;
   height: 20px;
-  background: url(../../images/stamps.png) left -22px no-repeat !important;
+  background: url(../images/stamps.png) left -22px no-repeat !important;
   }
 
 

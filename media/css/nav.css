@@ -30,19 +30,19 @@ width: 390px;
 
 .nav li.last a {
   border: none;
-/*  background: url(../../images/nav2.png) right top no-repeat;*/ 
+/*  background: url(../images/nav2.png) right top no-repeat;*/ 
  }
 
 
 .nav li.last a:hover {
   border: none;
-/* background: url(../../images/nav2.png) right -45px no-repeat;*/
+/* background: url(../images/nav2.png) right -45px no-repeat;*/
   }
 
 .nav li.last a:active {
   border: none;
 
-/*background: url(../../images/nav2.png) right -89px no-repeat;*/
+/*background: url(../images/nav2.png) right -89px no-repeat;*/
   }
 
 
@@ -50,7 +50,7 @@ width: 390px;
 #about .header .nav li.last a {
   border: none;
   cursor: default;
-  /*background: url(../../images/nav2.png) right -89px no-repeat;*/
+  /*background: url(../images/nav2.png) right -89px no-repeat;*/
   }
 
 
@@ -69,13 +69,13 @@ width: 390px;
 
 /*
 
-  background: url(../../images/nav2.png) center top no-repeat;
+  background: url(../images/nav2.png) center top no-repeat;
 */
   }
 
 
 
-.nav li a:hover{ /*background: url(../../images/nav2.png) center -45px no-repeat;*/}
+.nav li a:hover{ /*background: url(../images/nav2.png) center -45px no-repeat;*/}
 
 
 .nav li a span{
@@ -96,7 +96,7 @@ margin-right: 20px;
 #login .header .nav li.login_link a,
 #faq .header .nav li.faq_link a,
 #video .header .nav li.videos_link a{
-  /*background: url(../../images/nav2.png) center -89px no-repeat;*/
+  /*background: url(../images/nav2.png) center -89px no-repeat;*/
   }
 
 /*
@@ -104,10 +104,10 @@ margin-right: 20px;
 
 
 
-.nav li.first a:hover{ background: url(../../images/nav2.png) left -45px no-repeat;}
+.nav li.first a:hover{ background: url(../images/nav2.png) left -45px no-repeat;}
 
 
-.nav li.first a:active{ background: url(../../images/nav2.png) left -89px no-repeat;}
+.nav li.first a:active{ background: url(../images/nav2.png) left -89px no-repeat;}
 
 
 .nav li a:active{ background-position-y: -90px !important;}
@@ -118,13 +118,13 @@ margin-right: 20px;
 
 .about_link a.about{
 padding-right: 15px !important;
-background: url(../../images/sub_nav_arrows.png) 46px 7px no-repeat;
+background: url(../images/sub_nav_arrows.png) 46px 7px no-repeat;
 }
 
 
 .about_link a.about:hover{
 padding-right: 15px !important;
-background: url(../../images/sub_nav_arrows.png) 46px -28px no-repeat;
+background: url(../images/sub_nav_arrows.png) 46px -28px no-repeat;
 }
 */
 

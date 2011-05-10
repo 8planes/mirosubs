@@ -44,7 +44,7 @@ a.roll_back{
   display: block;
   margin: 0px auto;
   padding: 15px 10px;
-  background: #c74141 url(../../images/gradient_light.png) 0 0px repeat-x;
+  background: #c74141 url(../images/gradient_light.png) 0 0px repeat-x;
   text-align: center;
   text-decoration: none;
   font-weight: bold;
@@ -63,7 +63,7 @@ a.new_edit{
   display: block;
   margin: 0px auto 0;
   padding: 15px 10px;
-  background: #69b165 url(../../images/gradient_light.png) 0 0 repeat-x;
+  background: #69b165 url(../images/gradient_light.png) 0 0 repeat-x;
   text-align: center;
   text-decoration: none;
   font-weight: bold;
@@ -149,12 +149,12 @@ a.next_edit ,a.previous_edit{
   height: 100px;
   width: 100px;
   float: left;
-  background: url(../../images/default_thumb.png) 0 0px repeat-x;
+  background: url(../images/default_thumb.png) 0 0px repeat-x;
   
   }
 
 .progress{
-  background: url(../../images/gradient.png) 0 -50px repeat-x;
+  background: url(../images/gradient.png) 0 -50px repeat-x;
   border: 1px solid #666;
   width: 500px;
   height: 13px;
@@ -174,7 +174,7 @@ a.next_edit ,a.previous_edit{
   height: 13px;
   display: block;
   -moz-border-radius: 15px; 
-  background: #d0e9ed url(../../images/gradient.png) 0 0px repeat-x;
+  background: #d0e9ed url(../images/gradient.png) 0 0px repeat-x;
   -webkit-border-radius: 15px;
   box-shadow: 1px 0px 0px #000;
   -moz-box-shadow: 1px 0px 0px #000;
@@ -209,15 +209,15 @@ width: 300px !important;
 
 
 .progress .completion.red{
-background: #cc3335 url(../../images/gradient.png) 0 0px repeat-x;
+background: #cc3335 url(../images/gradient.png) 0 0px repeat-x;
 }
 
 .progress .completion.yellow{
-background: #ffff66 url(../../images/gradient.png) 0 0px repeat-x;
+background: #ffff66 url(../images/gradient.png) 0 0px repeat-x;
 }
 
 .progress .completion.green{
-background: #33cc00 url(../../images/gradient.png) 0 0px repeat-x;
+background: #33cc00 url(../images/gradient.png) 0 0px repeat-x;
 }
 
 
@@ -262,24 +262,24 @@ background: #33cc00 url(../../images/gradient.png) 0 0px repeat-x;
 
 
 .user_approval li.thumb_down{
-  background: #ff0000 url(../../images/gradient.png) 0 0px repeat-x;
+  background: #ff0000 url(../images/gradient.png) 0 0px repeat-x;
   font-weight: bold;
   color: #fff;
   }
 
 .user_approval li.thumb_up .thumb{
-  background:  url(../../images/thumb.png) 3px 0px no-repeat !important;
+  background:  url(../images/thumb.png) 3px 0px no-repeat !important;
   }
 
 
 .user_approval li.thumb_up{
-  background: #1fd211 url(../../images/gradient.png) 0 0 repeat-x;
+  background: #1fd211 url(../images/gradient.png) 0 0 repeat-x;
   font-weight: bold;  
   color: #fff;
   }
 
 .user_approval li.thumb_down .thumb{
-  background:  url(../../images/thumb.png) 3px bottom no-repeat !important;
+  background:  url(../images/thumb.png) 3px bottom no-repeat !important;
   }
   
   

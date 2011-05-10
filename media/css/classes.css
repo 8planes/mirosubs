@@ -12,7 +12,7 @@ border: 1px solid;
   -webkit-border-radius: 10px;
 
   border-radius:10px;
-  background:  #000 url(../../images/modal_spinner.gif) center no-repeat !important;
+  background:  #000 url(../images/modal_spinner.gif) center no-repeat !important;
 }
 
 
@@ -32,7 +32,7 @@ border: 1px solid;
   float: left;
   padding: 4px;
   margin-right: 30px;
-  background:  url(../../images/default_thumb.png) 0px top no-repeat !important;
+  background:  url(../images/default_thumb.png) 0px top no-repeat !important;
   }
 
 .thumbnail_small{
@@ -41,7 +41,7 @@ border: 1px solid;
   float: left;
   padding: 4px;
   margin-right: 30px;
-  background:  url(../../images/default_thumb.png) 0px bottom no-repeat !important;
+  background:  url(../images/default_thumb.png) 0px bottom no-repeat !important;
   }
 
 
@@ -127,7 +127,7 @@ font-size: 16px;
 
 
 .points{
-  background: url("../../images/points.png") 0 1px no-repeat !important;
+  background: url("../images/points.png") 0 1px no-repeat !important;
   padding-left: 15px;1
   float: left;
   margin-top: 2px;
@@ -136,7 +136,7 @@ font-size: 16px;
 
 
 .awards{
-  background: url("../../images/award.png") 0 1px no-repeat !important;
+  background: url("../images/award.png") 0 1px no-repeat !important;
   padding-left: 15px;
   float: left;
   margin-left: 20px;
@@ -162,49 +162,49 @@ font-size: 16px;
 
 .upload{
   padding-left: 15px;
-  background: url(../../images/updown.gif) left -1px no-repeat;
+  background: url(../images/updown.gif) left -1px no-repeat;
   padding-right: 5px;
   }
 
 .download{
   padding-left: 20px;
-  background: url(../../images/updown.gif) -165px -1px no-repeat;
+  background: url(../images/updown.gif) -165px -1px no-repeat;
   }
 
 
 
 .rolled_back{
-  background: url(../../images/history_icons.png) 20px 12px no-repeat;
+  background: url(../images/history_icons.png) 20px 12px no-repeat;
   }
 
 .thumb_up{
-  background: url(../../images/history_icons.png) 20px -23px no-repeat;
+  background: url(../images/history_icons.png) 20px -23px no-repeat;
   }
 
 .thumb_down{
-  background: url(../../images/history_icons.png) 20px -59px no-repeat;
+  background: url(../images/history_icons.png) 20px -59px no-repeat;
   }
 
 .commented .table_activity{
-  background: url(../../images/history_icons.png) 15px -92px no-repeat;
+  background: url(../images/history_icons.png) 15px -92px no-repeat;
   padding-left: 40px;
   }
 
 .edited .table_activity{
-  background: url(../../images/history_icons.png) 15px -242px no-repeat;
+  background: url(../images/history_icons.png) 15px -242px no-repeat;
   padding-left: 40px;
   }
 
 .language_rating{
-  background: url(../../images/history_icons.png) 20px -132px no-repeat;
+  background: url(../images/history_icons.png) 20px -132px no-repeat;
   }
 
 .language_begins{
-  background: url(../../images/history_icons.png) 20px -168px no-repeat;
+  background: url(../images/history_icons.png) 20px -168px no-repeat;
   }
 
 .video_begins{
-  background: url(../../images/history_icons.png) 20px -204px no-repeat;
+  background: url(../images/history_icons.png) 20px -204px no-repeat;
   }
 
 
@@ -280,7 +280,7 @@ font-size: 16px;
   }
 
 .styled .head{
-  background: #fff url(../../images/table_head.gif) 0px 0px repeat-x;
+  background: #fff url(../images/table_head.gif) 0px 0px repeat-x;
   }
 
 
@@ -344,7 +344,7 @@ font-size: 16px;
 .note{
   text-align: center;
   color: #333;
-  background: #faf9c5 url(../../images/note.gif) left 0 repeat-x;
+  background: #faf9c5 url(../images/note.gif) left 0 repeat-x;
   text-shadow: 1px 1px 1px #fff;
   font-size: 16px;
   border-bottom: 1px solid #bfbe78;
@@ -391,7 +391,7 @@ font-size: 20px;
 text-shadow: 1px 1px 1px #fff;
 font-weight: bold;
 color: #4395aa !important;
-background: url(../../images/bookmarklet.png) left 0px no-repeat;
+background: url(../images/bookmarklet.png) left 0px no-repeat;
 }
 
 

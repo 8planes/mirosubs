@@ -53,7 +53,7 @@ ul.breadcrumb li span.subhover {background-position: center bottombottom; cursor
 .breadcrumb li{
   float: left;
   list-style: none;
-  background: url(../../images/crumb.png) right -1px no-repeat;
+  background: url(../images/crumb.png) right -1px no-repeat;
   -moz-border-radius-topleft: 4px;
   clear: none;
   position: relative;

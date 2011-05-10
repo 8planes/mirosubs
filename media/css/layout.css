@@ -60,7 +60,7 @@
 }
 
 .header h1 a, .header h1 span.logo {
-  background: url(../../images/logo.png) 0 10px no-repeat;
+  background: url(../images/logo.png) 0 10px no-repeat;
   margin: 0;
   overflow: hidden;
   padding: 50px 0 0;
@@ -70,7 +70,7 @@
 }
 
 .header h1 a:hover{
-  background: url(../../images/logo.png) 0 -59px no-repeat;
+  background: url(../images/logo.png) 0 -59px no-repeat;
 }
 
 .content h1 {
@@ -207,7 +207,7 @@ float: none;
 /*
 
 .need_help span{
-  background: url(../../images/ribbons.png) left 0 no-repeat;
+  background: url(../images/ribbons.png) left 0 no-repeat;
 float: left;
 padding: 0px 15px 0px 20px !important; 
 color: #fff !important;
@@ -219,7 +219,7 @@ width: 123px;
 
 
 .completed_in span{
-  background: url(../../images/ribbons.png) left -34px no-repeat;
+  background: url(../images/ribbons.png) left -34px no-repeat;
 float: left;
 padding: 0px 15px 0px 20px !important; 
 color: #fff !important;
@@ -301,7 +301,7 @@ margin: 0px !important;
   margin: 60px auto;
   font-weight: bold;
   font-size: 13px;
-  background: url(../../images/1x1.png);
+  background: url(../images/1x1.png);
   -moz-border-radius: 5px;  
   -webkit-border-radius: 5px;
   height: 1.6em;
@@ -546,19 +546,19 @@ div.video_details div strong {
 }
 
 .started {
-	background: transparent url(../../images/video_details_icons.png) 0 -31px no-repeat;
+	background: transparent url(../images/video_details_icons.png) 0 -31px no-repeat;
 }
 
 .last_worked {
-	background: transparent url(../../images/video_details_icons.png) 0 -31px no-repeat;
+	background: transparent url(../images/video_details_icons.png) 0 -31px no-repeat;
 }
 
 .page_loads {
-	background: transparent url(../../images/video_details_icons.png) 0 -14px no-repeat;
+	background: transparent url(../images/video_details_icons.png) 0 -14px no-repeat;
 }
 
 .fetched {
-	background: transparent url(../../images/video_details_icons.png) 0 5px no-repeat;
+	background: transparent url(../images/video_details_icons.png) 0 5px no-repeat;
 }
 
 /* Search
