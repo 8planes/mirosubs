@@ -31,7 +31,9 @@ mirosubs.translate.GoogleTranslator.Transaction = function(){
 };
 
 mirosubs.translate.GoogleTranslator.Transaction.prototype.add = function(toTranslate, fromLang, toLang, widgets, callback){
-    this.actions.push([toTranslate, fromLang, toLang, this.getCallback_(widgets, callback)]);
+    if (toTranslate.length > 0){
+        this.actions.push([toTranslate, fromLang, toLang, this.getCallback_(widgets, callback)]);
+    }
 };
 
 mirosubs.translate.GoogleTranslator.Transaction.prototype.onError = function(response){

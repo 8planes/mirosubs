@@ -12,8 +12,20 @@ class AjaxForm(object):
         for key, value in self.errors.items():
             output[key] = '/n'.join([force_unicode(i) for i in value])
         return output
+
+class StripRegexField(forms.RegexField):
+
+    def to_python(self, value):
+        value = super(StripRegexField, self).to_python(value)
+        return value.strip()
+
+class StripURLField(forms.URLField):
     
-class UniSubURLField(forms.URLField):
+    def to_python(self, value):
+        value = super(StripURLField, self).to_python(value)
+        return value.strip()
+    
+class UniSubURLField(StripURLField):
     
     def __init__(self, max_length=None, min_length=None, verify_exists=False,
             validator_user_agent=validators.URL_VALIDATOR_USER_AGENT, *args, **kwargs):

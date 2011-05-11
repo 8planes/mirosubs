@@ -42,6 +42,8 @@ from django.utils.encoding import smart_unicode
 from videos.tasks import video_changed_tasks
 import feedparser
 from utils.translation import get_languages_list
+from utils.forms import StripURLField, StripRegexField
+from videos.feed_parser import parse_feed_entry
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
 KB_SIZELIMIT = 512
@@ -406,12 +408,16 @@ class VideoForm(forms.Form):
         self.created = created
         return obj
 
-youtube_user_url_re = re.compile(r'^(http://)?(www.)?youtube.com/user/(?P<username>[a-zA-Z0-9]+)/?$')
+youtube_user_url_re = re.compile(r'^(http://)?(www.)?youtube.com/user/(?P<username>[a-zA-Z0-9]+)/?.*$')
 
 class AddFromFeedForm(forms.Form, AjaxForm):
+    VIDEOS_LIMIT = 10
+    
+    youtube_feed_url_pattern =  'https://gdata.youtube.com/feeds/api/users/%s/uploads'
     usernames = UsernameListField(required=False, label=_(u'Youtube usernames'), help_text=_(u'<span class="hint">Enter usernames separated by comma.</span>'))
-    youtube_user_url = forms.RegexField(youtube_user_url_re, required=False, label=_(u'Youtube page link.'))
-    feed_url = forms.URLField(required=False, help_text=_(u'<span class="hint">Supported: Youtube, Vimeo, Blip or Dailymotion. Only supported sites added.</span>'))
+    youtube_user_url = StripRegexField(youtube_user_url_re, required=False, label=_(u'Youtube page link.'), 
+                                       help_text=_(u'<span class="hint">For example: http://www.youtube.com/user/username</span>'))
+    feed_url = StripURLField(required=False, help_text=_(u'<span class="hint">Supported: Youtube, Vimeo, Blip or Dailymotion. Only supported sites added.</span>'))
     save_feed = forms.BooleanField(required=False, label=_(u'Save feed'), help_text=_(u'<span class="hint checkbox_hint">Choose this if you wish to add videos from this feed in the future. Only valid RSS feeds will be saved.</span>'))
     
     def __init__(self, user, *args, **kwargs):
@@ -421,100 +427,72 @@ class AddFromFeedForm(forms.Form, AjaxForm):
         super(AddFromFeedForm, self).__init__(*args, **kwargs)
         
         self.yt_service = YouTubeService()
-        self.video_types = []
-        self.feed_urls = []
-    
+        self.video_types = [] #tuples: (video_type, video_info)
+        self.feed_urls = [] #tuples: (feed_url, last_saved_entry_url)
+        self.video_limit_routreach = False 
+        
     def clean_feed_url(self):
-        url = self.cleaned_data.get('feed_url')
+        url = self.cleaned_data.get('feed_url', '')
+        
         if url:
-            feed = feedparser.parse(url)
-            for item in feed['entries']:
-                vt = self.try_get_video_type(item['link'])
-                if not vt:
-                    for obj in item.get('enclosures', []):
-                        type = obj.get('type', '')
-                        href = obj.get('href', '')
-                        if href and type.startswith('video'):
-                            self.try_get_video_type(href)
-                            
-            if feed.version:
-                self.feed_urls.append(url)
+            self.parse_feed_url(url)
                 
         return url
     
     def clean_youtube_user_url(self):
-        url = self.cleaned_data.get('youtube_user_url')
+        url = self.cleaned_data.get('youtube_user_url', '').strip()
+        
         if url:
             username = youtube_user_url_re.match(url).groupdict()['username']
-            self.add_for_youtube_user(username)
+            url = self.youtube_feed_url_pattern % str(username)
+            self.parse_feed_url(url)
         return url
         
     def clean_usernames(self):
         usernames = self.cleaned_data.get('usernames', [])
         for username in usernames:
-            self.add_for_youtube_user(username)
+            url = self.youtube_feed_url_pattern % str(username)
+            self.parse_feed_url(url)
         return usernames
     
-    def clean(self):
-        data = self.cleaned_data
-        return data
- 
-    def try_get_video_type(self, link):
-        try:
-            video_type = video_type_registrar.video_type_for_url(link)
-        except VideoTypeError, e:
-            raise forms.ValidationError(e)
-        if video_type:
-            self.video_types.append(video_type)
-        return video_type
-    
-    def add_for_youtube_user(self, username):
-        try:
-            user_feed = self.yt_service.GetYouTubeUserFeed(username=str(username))
-        except (GdataError, gaierror), e:
-            if isinstance(e, gaierror):
-                raise forms.ValidationError(_(u'Youtube is unavailable now.'))
+    def parse_feed_url(self, url):
+        feed = feedparser.parse(url)
+        
+        for entry in feed['entries'][::-1]:
+            if len(self.video_types) >= self.VIDEOS_LIMIT:
+                self.video_limit_routreach = True
+                break            
+            
             try:
-                error = smart_unicode(e[0]['body'])
-            except (IndexError, KeyError):
-                error = e
-            error = _(u'Yotube error for %(username)s: %(error)s') % {
-                'error': error,
-                'username': username
-            }                
-            raise forms.ValidationError(error)
-        
-        self.feed_urls.append(user_feed.GetFeedLink().href)
-        
-        for entry in user_feed.entry:
-            self.add_from_youtube_entry(entry)
-                    
-    def add_from_youtube_entry(self, entry):
-        if not entry.media.private and entry.media.player:
-            self.video_types.append(YoutubeVideoType(entry.media.player.url))
+                vt, info = parse_feed_entry(entry)
+            except VideoTypeError, e:
+                raise forms.ValidationError(e) 
+            except gaierror:
+                raise forms.ValidationError(_(u'Feed is unavailable now.'))
+            
+            if vt:
+                self.video_types.append((vt, info))
+                
+        if feed.version:
+            self.feed_urls.append((url, entry['link']))
     
-    def save_feed_url(self, feed_url):
+    def save_feed_url(self, feed_url, last_entry_url):
         try:
             VideoFeed.objects.get(url=feed_url)
         except VideoFeed.DoesNotExist:
             vf = VideoFeed(url=feed_url)
             vf.user = self.user
-            
-            feed = feedparser.parse(feed_url)
-            try:
-                vf.last_link = feed['entries'][0]['link']
-            except (IndexError, KeyError):
-                pass
-            
+            vf.last_link = last_entry_url
             vf.save()
                                                 
     def save(self):
         if self.cleaned_data.get('save_feed'):
-            for feed_url in self.feed_urls:
-                self.save_feed_url(feed_url)
+            for feed_url, last_entry_url in self.feed_urls:
+                self.save_feed_url(feed_url, last_entry_url)
             
-        for vt in self.video_types:
-            Video.get_or_create_for_url(vt=vt, user=self.user)
+        for vt, info in self.video_types:
+            video, created = Video.get_or_create_for_url(vt=vt, user=self.user)
+            
         return len(self.video_types)
     
 class FeedbackForm(MathCaptchaForm):

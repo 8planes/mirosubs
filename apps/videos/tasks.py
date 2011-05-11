@@ -7,6 +7,12 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
 
+@task
+def add(a, b):
+    print "TEST TASK FOR CELERY. EXECUTED WITH ARGUMENTS: %s %s" % (a, b)
+    r = a+b
+    return r
+
 @task()
 def video_changed_tasks(video_pk, new_version_id=None):
     from videos import metadata_manager
