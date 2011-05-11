@@ -26,6 +26,7 @@ Decompressed Stylesheets
 @import "imported/global.css";
 @import "imported/top_user_panel.css";
 @import "imported/services.css";
+@import "imported/solutions.css";
 
 @media only screen and (max-device-width: 480px) {
 .wrapper {

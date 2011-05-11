@@ -90,11 +90,13 @@ class TeamMultyQuerySet(object):
         val = None
         
         if isinstance(k, (int, long)):
-            i = 0
+            list_sum = 0
             for qs in self.lists:
-                if k < (i + self.get_qs_count(qs)):
-                    val = qs.all()[i+k]
-                i += self.get_qs_count(qs)
+                if k < list_sum + self.get_qs_count(qs):
+                    cur_index =  list_sum - k
+                    val = qs.all()[ k - list_sum ]
+                    break
+                list_sum += self.get_qs_count(qs)
         else:
             selected = []
             
@@ -134,7 +136,7 @@ class TeamMultyQuerySet(object):
             
         self._cache[cache_key] = val
         if val is None:
-            raise IndexError
+            raise StopIteration
         return val
         
     def _clone(self):

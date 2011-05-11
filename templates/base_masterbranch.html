@@ -1,21 +1,15 @@
-{% load feedback thumbnail i18n announcement_tags messages_tags profiles_tags media_compressor %}
-{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% load feedback thumbnail i18n announcement_tags messages_tags profiles_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   {% if not current_site.name == 'unisubs' %}
   <meta NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW"/>
   {% endif %}
-  <script type="text/javascript">
-    window.usStartTime = (new Date()).getTime();
-  </script>
 {% block css %}
 
-
-{% include_css_bundle "base" %}
-
+<link href="{{ MEDIA_URL }}css/mirosubs-mainsite.css" media="all" type="text/css" rel="stylesheet" />
 <!--[if gte IE 8]>
 <link href="{{ MEDIA_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
 <![endif]-->
@@ -23,10 +17,11 @@
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
 {% endblock %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
-
+<script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
+<link href="{{ MEDIA_URL }}js/jgrowl/jquery.jgrowl.css" media="all" type="text/css" rel="stylesheet" />
 <script src="{{ MEDIA_URL }}js/jgrowl/jquery.jgrowl.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jalerts/jquery.alerts.js" type="text/javascript"></script>
-
+<link href="{{ MEDIA_URL }}js/jalerts/jquery.alerts.css" media="all" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
 <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.metadata.js" type="text/javascript"></script>
@@ -34,7 +29,6 @@
 <script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.input_replacement.min.js" type="text/javascript"></script>
 <script src="{% url profiles:rpc_api %}" type="text/javascript"></script>  
-<script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
 {% block scripts %}{% endblock %}
 <title>
     {% block title %}Universal Subtitles - {% trans 'Make subtitles, translations, and captions for almost any video.' %}{% endblock %}
@@ -44,6 +38,9 @@
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', '{{ GOOGLE_ANALYTICS_NUMBER }}']);
     _gaq.push(['_trackPageview']);
+
+    var mpq = [];
+    mpq.push(['init', '{{ MIXPANEL_TOKEN }}']);
 
     {% block analytics %}{% endblock %}
     
@@ -56,6 +53,7 @@
         mp.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + "//api.mixpanel.com/site_media/js/api/mixpanel.js";
         s.parentNode.insertBefore(mp, s);
     })();
+
 </script>
 {% endif %}
 <script type="text/javascript">
@@ -88,29 +86,6 @@
         });
     });
 </script>
-<script type="text/javascript" charset="utf-8">
-  $(function(){
-    if ($.browser.webkit) {
-      var widgetDiv = $('#widget_div')
-      var video = widgetDiv.find('video')
-
-      var img = $('<img />', {
-        src: video.attr('poster')
-      , css: {
-          position: 'absolute'
-        , 'z-index': 1000
-        }
-      })
-
-      img.click(function(){
-        img.hide()
-        video[0].play()
-      })
-
-      widgetDiv.prepend(img)
-    };
-  })
-</script>
 </head>
 <body {% block body_attrs %}{% endblock %}>
   {% block feedback-button %}
@@ -126,32 +101,15 @@
     {% if user.is_authenticated %}
         {% messages %}
     {% endif %}
-    
-    {% if user.is_staff or user|can_translate %}
-    <div id="admin_controls">
-      {% if user.is_staff %}
-      <a target="_blank" href="{% url admin:index %}"><span>{% trans 'Admin' %}</span></a>
-      {% endif %}
-      {% if user.is_superuser %}
-      <a target="_blank" href="{% url sentry %}"><span>{% trans 'Sentry' %}</span></a>
-      {% endif %}
-      {% if user|can_translate %}
-      <a target="_blank" href="{% url rosetta-pick-file %}"><span>{% trans 'Rosetta' %}</span></a>
-      {% endif %}
-    </div><!-- // admin_controls -->
-    {% endif %}
-    
     <div id="topbar">
       <div class="wrapper">
-        {% comment %}
-        <!-- commenting for now, until we are ready for prime time -->
       <div class="search">
+        {% comment %}
         <form method="get" action="{% url search:index %}">
           <input type="text" class="field" name="q" />
         </form>
+        {% endcomment %}
       </div><!-- // search -->
-      {% endcomment %}
-      
        {% block select_language_dialog %}
     	  	{% select_language_dialog %}
     	  {% endblock %}
@@ -174,12 +132,14 @@
       </ul>
     </div><!-- // mainNav -->
     <ul id="subnav" class="clearfix">
-      <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans 'Volunteer' %}</a></li>
       <li><a href="http://blog.universalsubtitles.org">{% trans 'blog' %}</a></li>
-      <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
+      <li><a href="{% url services_page %}">{% trans "Professional Services" %}</a></li>
       <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
       {% if user.is_authenticated %}
-        <li id="subnav_menu">{% top_user_panel %}</li>
+      {% if user.is_staff %}
+      <li><a target="_blank" href="{% url admin:index %}"><span>{% trans 'admin' %}</span></a></li>
+      {% endif %}
+      <li id="subnav_menu">{% top_user_panel %}</li>
       {% else %}
       <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}"><span>{% trans 'login' %}</span></a></li>
       {% endif %}
@@ -219,8 +179,5 @@
   
 </div><!-- // wrapper -->
   <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
-  {% if not DEBUG %}
-  <script src="{{ MEDIA_URL }}js/usSiteTimer.js" type="text/javascript"></script>
-  {% endif %}
 </body>
 </html>

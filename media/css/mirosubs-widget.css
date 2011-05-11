@@ -3105,7 +3105,7 @@ border: 1px solid !important;
   -webkit-border-radius: 10px !important;
 
   border-radius:10px !important;
-  background:  #000 url(../../images/modal_spinner.gif) center no-repeat !important;
+  background:  #000 url(../images/modal_spinner.gif) center no-repeat !important;
 }
 
 .mirosubs-loading-indicator {

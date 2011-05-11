@@ -36,3 +36,18 @@ mirosubs.startdialog.ToLanguage.prototype.toString = function() {
     else
         return this.LANGUAGE_NAME;
 };
+
+/**
+ * @param {mirosubs.startdialog.VideoLanguage} fromLanguage
+ */
+mirosubs.startdialog.ToLanguage.prototype.translationStartsFromScratch = 
+    function(fromLanguage) 
+{
+    if (!this.VIDEO_LANGUAGE || this.VIDEO_LANGUAGE.isEmpty())
+        return false;
+    if (!this.VIDEO_LANGUAGE.DEPENDENT)
+        return true;
+    if (!this.VIDEO_LANGUAGE.canBenefitFromTranslation(fromLanguage))
+        return true;
+    return false;
+};

@@ -224,7 +224,7 @@ class UploadSubtitlesTest(WebUseTest):
 
     def setUp(self):
         self._make_objects()
-        
+    
     def test_upload_subtitles(self):
         self._simple_test('videos:upload_subtitles', status=302)
         
@@ -336,6 +336,29 @@ class UploadSubtitlesTest(WebUseTest):
         
         video = Video.objects.get(pk=video_pk)
         self.assertEqual(2, video.subtitlelanguage_set.count())
+
+    def test_upload_over_empty_translated(self):
+        from widget.tests import create_two_sub_draft, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        draft = create_two_sub_draft(request)
+        video_pk = draft.language.video.pk
+        video = Video.objects.get(pk=video_pk)
+        original_en = video.subtitlelanguage_set.filter(language='en').all()[0]
+
+        # save empty espanish
+        es = SubtitleLanguage(
+            video=video,
+            language='ht',
+            is_original=False,
+            is_forked=False,
+            standard_language=original_en)
+        es.save()
+
+        # now upload over the original english.
+        self._login()
+        data = self._make_data(lang='en', video_pk=video_pk)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
 
 
     def test_upload_forks(self):

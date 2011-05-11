@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% block body_attrs %}id="solutions"{% endblock %}
+{% load i18n %}
+{% block main_content %}
+<div id="ngo_content">
+
+<div class="clearfix">
+<div class="left">
+  <div id="challenges" style="width: 600px;">
+    <h1>Big Challenges</h1>
+    <h2>Facing Many Non-Profits and NGOs Today</h2>
+    <p>Keeping constituents up to date with efforts and successes in the field is critical, but often resource intensive and not as simple as it could be.</p>
+  </div><!-- // challenges -->
+</div><!-- // left -->
+
+<div class="right">
+  <div id="organization">
+    <h2>Does your Organization —</h2>
+    <ul>
+      <li>Work across cultures, languages, or continents</li>
+      <li>Connect donors to the true impact of their gifts</li>
+      <li>Foster multi-cultural online space</li>
+    </ul>
+  </div><!-- // organization -->
+</div><!-- // right -->
+</div><!-- // clearfix -->
+
+<div id="unisubs" class="pod">
+  <div class="clearfix">
+  <div class="left" style="width: 425px;">
+  <h1>Universal Subtitles</h1>
+  <h2>Make your video truly global &amp; multi-cultural</h2>
+  <p>Universal Subtitles is a platform for video translation and subtitling—it’s powered by volunteer collaborators, much like Wikipedia.</p>
+  <p>The software is open source and developed by a non-profit organization.</p>
+  </div>
+  <div class="right" style="width: 450px;">
+  <div id="widget_div" class="mirosubs-widget"></div> 
+  </div>
+  </div><!-- // clearfix -->
+</div><!-- // unisubs -->
+
+<div class="left" style="width: 460px;">
+  <div class="pod" id="benefits_unisubs" style="height: 410px">
+    <h3>Benefits of Universal Subtitles</h3>
+    <ul>
+      <li>Language barriers become obsolete</li>
+      <li>Very different cultures communicate directly</li>
+      <li>Global connection through video</li>
+    </ul>
+    <br /><br />
+    <h3>More reasons to use Universal Subtitles</h3>
+    <ul>
+      <li>Higher search engine rankings (SEO)</li>
+      <li>Accessibility for the deaf and hard of hearing</li>
+      <li>We help you build volunteer translation capacity</li>
+    </ul>
+    <a class="learn_more" href="">Learn More</a>
+  </div><!-- // benefits_unisubs -->
+</div><!-- // left -->
+
+<div class="right" style="width: 460px;">
+  <div class="pod" id="how_work">
+    <h3>How Does it Work?</h3>
+    <p>Universal Subtitles is a complete solution for translating video into different languages. It’s a turnkey process for attracting volunteers, working on collaborative subtitling, and making video available globally. <a class="learn_more" href="">Learn More</a></p>
+    
+  </div><!-- // how_work -->
+  
+  <div class="pod" id="who_uses">
+    <h3>Who Uses It?</h3>
+    <p>NYTimes, MIT OpenCourseware, Wikipedia, Mozilla, Drupal, PBS NewsHour, and many more use the software or embed subtitled video with the service. <a class="learn_more" href="">Learn More</a></p>
+    
+  </div><!-- // who_uses -->
+</div><!-- // right -->
+
+<div class="clearfix"></div><!-- // clearfix -->
+
+<div class="pod" id="miro_ad">
+  <div class="clearfix">
+  <a href="">
+    <span id="container">
+    <span id="mc_logo"></span>
+    <span id="building">
+      <p><strong>Building a video website?</strong></p>
+      <p><em>Miro Community is the easiest way to make a video website.</em></p>
+      <p>Makes Universal Subtitles even easier to manage!</p>
+    </span>
+    <span id="try">Try it now!</span>
+    </span>
+  </a>
+  </div><!-- // clearfix -->
+</div><!-- // miro_ad -->
+
+<div class="pod" id="unisubs_action">
+  <h1>Universal Subtitles in Action</h1>
+  <p>Khan Academy is a not-for-profit with the goal of changing education for the better by providing a free world-class education to anyone anywhere. They decided their 1,600+ educational videos need to be available in all of the world’s languages.</p>
+  <p>Using Universal Subtitles, all of their videos are easily translatable. They have a growing volunteer community translating new videos every day.</p>
+</div><!-- // unisubs_action -->
+
+<div id="khan">
+  <div id="video_container"></div>
+</div><!-- // khan -->
+
+<div class="pod">
+  <img src="{{MEDIA_URL}}images/ngo_globe.jpg" style="margin: 0 15px 0 0; width: 125px; float: left;"/>
+  <h3>Foster Global Communication</h3>
+  <p>Donors and supporters can connect and engage through the sharing of powerful stories. Ultimately, your constituents can more clearly see and understand the impact of their giving.</p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod" style="">
+  <img src="{{MEDIA_URL}}images/ngo_wikipedialogo.png" style="margin: 0 0 0 25px; width: 100px; float: right;"/>
+  <h3>Why do People Volunteer?</h3>
+  <p>Like Wikipedia, one of the top ten most popular websites in the world, Universal Subtitles uses the power of volunteers. We’ve seen time and again that people will step up when given a tangible way to contribute to a cause they believe in.</p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod">
+  <h3>Volunteer Teams</h3>
+  <p>An active and productive volunteer group is a sustainable resource that, once developed, can continue to provide valuable long-term assistance with translation and dubbing projects. PCF has experience building volunteer teams and can help your organization develop a highly-engaged translation community.</p>
+</div>
+
+<img src=""/>
+
+<div class="pod" style="">
+  <img src="{{MEDIA_URL}}images/ngo_hearingaid.jpg" style="margin: 0 0 0 0; width: 150px; float: right;"/>
+  <h3>Accessibility</h3>
+  <p>An important part of what we offer is the ability to make your content truly accessible to the broadest audience possible. Captions are absolutely critical for deaf and hard of hearing viewers.  And, to all viewers who don’t speak the language of the original video.</p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod">
+  <img src="{{MEDIA_URL}}images/ngo_google.png" style="margin: 15px 25px 0 0; width: 250px; float: left;"/>
+  <h3>Rank Higher in Google Searches</h3>
+  <p>Having full-text transcripts for your videos will make your pages come up sooner on Google and other search engines.</p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod">
+  <img src="{{MEDIA_URL}}images/ngo_unisubsvidplayer.jpg" style="margin: 0; width: 400px; float: right;"/>
+  <h3>Video on the Web</h3>
+  <p>No other medium can transport people to a place with the immediacy of video, which is why many of today’s organizations are using video to show donors the impact of their giving.</p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod" style="">
+  <img src="{{MEDIA_URL}}images/.png" style="margin: 0 0 0 25px; width: 100px; float: right;"/>
+  <h3>A Complete Video Solution</h3>
+  <p>Universal Subtitles works seamlessly with our video website building software, Miro Community. It’s an incredibly efficient way to put together a site that can bridge cultural and linguistic barriers using the most dominant form of content on the Internet, video. </p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod" style="">
+  <img src="{{MEDIA_URL}}images/.png" style="margin: 0 0 0 25px; width: 100px; float: right;"/>
+  <h3>Captions and Translation for Hire</h3>
+  <p>If your organization needs to post video with captions or specific languages on a sharp deadline, PCF offers captioning and subtitling services for hire. </p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod" style="">
+  <img src="{{MEDIA_URL}}images/.png" style="margin: 0 0 0 25px; width: 100px; float: right;"/>
+  <h3>Easy to Integrate</h3>
+  <p>Universal Subtitles is easy to work with and can integrate seamlessly with your website. You never need to send viewers or volunteers away from your website or brand.</p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+<div class="pod" style="">
+  <img src="{{MEDIA_URL}}images/.png" style="margin: 0 0 0 25px; width: 100px; float: right;"/>
+  <h3>Start Using Universal Subtitles</h3>
+  <p>PCF can help your organization reach more people, gain greater connection and engagement with your constituents, and tell your stories in a powerful way.  Get started today.  Contact Dean Jansen at <a href="mailto:dean@pculture.org">dean@pculture.org</a>.</p>
+  <div class="clearfix"></div>
+</div><!-- // pod -->
+
+</div><!-- // ngo_content -->
+{% endblock %}

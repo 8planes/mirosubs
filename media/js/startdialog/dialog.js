@@ -242,12 +242,14 @@ mirosubs.startdialog.Dialog.prototype.warningMessage_ = function() {
      */
     var fromLanguage = this.model_.findFromForPK(
         parseInt(this.fromLanguageDropdown_.value));
-    if (toLanguage.VIDEO_LANGUAGE &&
-        toLanguage.VIDEO_LANGUAGE.DEPENDENT &&
-        !toLanguage.VIDEO_LANGUAGE.canBenefitFromTranslation(fromLanguage)) {
-        var message = "The " + toLanguage.LANGUAGE_NAME + " subtitles you selected " +
-            "were translated from " + 
-            toLanguage.VIDEO_LANGUAGE.getStandardLang().languageName() + ". ";
+    if (toLanguage.translationStartsFromScratch(fromLanguage)) {
+        var message = "";
+        if (toLanguage.VIDEO_LANGUAGE.DEPENDENT) {
+            message = "The " + toLanguage.LANGUAGE_NAME + 
+                " subtitles you selected were translated from " + 
+                toLanguage.VIDEO_LANGUAGE.getStandardLang().languageName() + 
+                ". ";
+        }
         var bestLanguages = this.model_.bestLanguages(
             toLanguage.LANGUAGE, fromLanguage.LANGUAGE);
         if (bestLanguages != null) {
