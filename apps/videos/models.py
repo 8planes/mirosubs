@@ -623,6 +623,7 @@ class SubtitleLanguage(models.Model):
                 sub.save()
 
         self.is_forked = True
+        self.standard_language = None
         self.save()
 
 models.signals.m2m_changed.connect(User.sl_followers_change_handler, sender=SubtitleLanguage.followers.through)
