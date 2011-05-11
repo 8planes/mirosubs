@@ -130,13 +130,54 @@ class TestRpc(TestCase):
         # now spanish is forked:
         original_spanish = video.subtitlelanguage_set.get(language='es')
         base_language = video.subtitle_language()
+        num_langs = video.subtitlelanguage_set.all().count()
+        self.assertEqual(2, num_langs)
         self.assertNotEqual(2, len(base_language.latest_subtitles()))
+
+        sub_pk = original_spanish.pk
+        return_value = rpc.start_editing(
+            request,
+            video.video_id, 
+            "es", 
+            subtitle_language_pk = sub_pk,
+            base_language_pk = base_language.pk
+        )
+        draft_pk = return_value['draft_pk']
+        inserted = [{'subtitle_id': 'aa',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, []);
+
+        video = Video.objects.get(pk=video_pk)        
+        self.assertEqual(video.subtitlelanguage_set.all().count(), 3)
         
-        new_spanish, can_edit = rpc._get_language_for_editing(
-            request, video.video_id, language_code="es",
-            subtitle_language_pk=None,
-             base_language=base_language )
-        self.assertNotEqual(new_spanish, original_spanish)
+        
+        return_value = rpc.start_editing(
+            request,
+            video.video_id, 
+            "es", 
+            subtitle_language_pk = sub_pk,
+            base_language_pk = base_language.pk
+        )
+
+        draft_pk = return_value['draft_pk']
+        inserted = [{'subtitle_id': 'aa',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, []);
+
+        video = Video.objects.get(pk=video_pk)        
+        self.assertEqual(video.subtitlelanguage_set.all().count(), 3)
 
     
     def test_actions_for_subtitle_edit(self):
