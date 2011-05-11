@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib import admin
-from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle
+from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle, VideoFeed
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from utils.livesettings_values import EmailListValue
@@ -92,10 +92,15 @@ class SubtitleVersionAdmin(admin.ModelAdmin):
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']
 
+class VideoFeedAdmin(admin.ModelAdmin):
+    list_display = ['url', 'last_link', 'created', 'user']
+    raw_id_fields = ['user']
+    
 #admin.site.register(Subtitle, SubtitleAdmin)
 admin.site.register(SubtitleVersion, SubtitleVersionAdmin)    
 admin.site.register(Video, VideoAdmin)
 admin.site.register(SubtitleLanguage, SubtitleLanguageAdmin)
+admin.site.register(VideoFeed, VideoFeedAdmin)
 
 #Fix Celery tasks display
 from djcelery.models import TaskState

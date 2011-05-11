@@ -39,7 +39,7 @@
     });
 </script>
 
-<div id="submit_multiple_videos" style="display: none;">
+<div id="submit_multiple_videos" {% if not from_feed %}style="display: none;"{% endif %}>
   <form action="{% url videos:create_from_feed %}" method="POST" id="bulk_create" class="clearfix">
       
       <h3>{% trans "Automatically submit videos" %}</h3>
