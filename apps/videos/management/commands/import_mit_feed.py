@@ -54,7 +54,7 @@ class Command(BaseCommand):
             'http://www.youtube.com/watch?v={0}'.format(videoid))
         try:
             video_url_obj = VideoUrl.objects.get(
-                type=video_type.abbreviation, **video_type.create_kwars())
+                url=video_type.convert_to_video_url())
             video = video_url_obj.video
         except ObjectDoesNotExist:
             video_url_obj = None
