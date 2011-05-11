@@ -40,6 +40,7 @@ mirosubs.Widgetizer = function() {
         new mirosubs.widgetizer.HTML5(),
         new mirosubs.widgetizer.JWPlayer()
     ];
+    this.logger_ = goog.debug.Logger.getLogger('mirosubs.Widgetizer');
 };
 goog.addSingletonGetter(mirosubs.Widgetizer);
 
@@ -48,6 +49,7 @@ goog.addSingletonGetter(mirosubs.Widgetizer);
  *
  */
 mirosubs.Widgetizer.prototype.widgetize = function() {
+    
     if (mirosubs.LoadingDom.getInstance().isDomLoaded()) {
         this.onLoaded_();
     }
@@ -72,6 +74,9 @@ mirosubs.Widgetizer.prototype.onLoaded_ = function() {
 };
 
 mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
+    if (goog.DEBUG) {
+        this.logger_.info('finding and widgetizing elements');
+    }
     var videoPlayers = [];
     for (var i = 0; i < this.makers_.length; i++)
         goog.array.extend(videoPlayers, 
