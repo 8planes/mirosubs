@@ -60,11 +60,12 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.findObjectParam_ =
     return goog.dom.findNode(
         objElem, 
         function(n) {
-            return n.nodeName == "PARAM" && n['name'] == paramName;
+            return n.nodeName == "PARAM" && 
+                goog.string.caseInsensitiveCompare(n['name'], paramName) == 0;
         });
 };
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam_ =
+mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam =
     function(element, embedParamName, opt_objectParamName) 
 {
     if (element.nodeName == "EMBED") {
@@ -83,12 +84,12 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
     if (element.nodeName == "OBJECT" && element['data']) {
         return element['data'];
     } else {
-        return this.findFlashParam_(element, 'src', 'movie');
+        return this.findFlashParam(element, 'src', 'movie');
     }
 };
 
 mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
-    return this.findFlashParam_(element, 'flashvars');
+    return this.findFlashParam(element, 'flashvars');
 };
 
 mirosubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
