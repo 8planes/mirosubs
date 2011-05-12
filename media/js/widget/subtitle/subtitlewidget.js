@@ -49,8 +49,8 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.deleteButton_ = this.createDeleteButton_($d);
     this.insertButton_ = this.createInsertButton_($d);
-    mirosubs.style.showElement(this.deleteButton_, false);
-    mirosubs.style.showElement(this.insertButton_, false);
+    goog.style.showElement(this.deleteButton_, false);
+    goog.style.showElement(this.insertButton_, false);
     this.contentElement_ = $d('span', 'mirosubs-timestamp');
     this.setElementInternal(
         $d('li', null,
@@ -77,7 +77,7 @@ mirosubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     this.keyHandler_ = null;
     this.docClickListener_ = null;
     this.updateValues_();
-    this.showingTextarea_ = false
+    this.showingTextarea_ = false;
     this.editing_ = false;
 };
 mirosubs.subtitle.SubtitleWidget.prototype.createDeleteButton_ = function($d) {
@@ -154,8 +154,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.showInsertDeleteButtons_ =
     if (show == this.insertDeleteButtonsShowing_)
         return;
     this.insertDeleteButtonsShowing_ = show;
-    mirosubs.style.showElement(this.deleteButton_, show);
-    mirosubs.style.showElement(this.insertButton_, show);
+
+    goog.style.showElement(this.deleteButton_, show);
+    goog.style.showElement(this.insertButton_, show);
 };
 mirosubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
     if (this.showingTextarea_)
