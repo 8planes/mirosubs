@@ -97,13 +97,29 @@
 </div><!-- // unisubs_action -->
 
 <div id="khan">
-  <div id="video_container"></div>
+  <div id="video_container">
+    <div style="width: 600px; margin: 0 auto;">
+  <script type="text/javascript" src="http://dev.universalsubtitles.org/site_media/embed.js">
+  (
+    {
+      video_url: "http://www.youtube.com/watch?v=hiBmM05uBQg",
+      video_config: {
+                 color1: '0xFF0000',
+                 width: 600,
+                 height: 340
+             }
+    }
+  )
+  </script>
+  </div>
+  </div>
 </div><!-- // khan -->
 
-<div class="pod">
-  <img src="{{MEDIA_URL}}images/ngo_globe.jpg" style="margin: 0 15px 0 0; width: 125px; float: left;"/>
+<div class="pod" style="position: relative; height: 264px;">
+  <img src="{{MEDIA_URL}}images/ngo_languages.png" style="width: 240px; border: 1px #999 solid; float: left; margin: 0 15px 0 0;" />
   <h3>Foster Global Communication</h3>
-  <p>Donors and supporters can connect and engage through the sharing of powerful stories. Ultimately, your constituents can more clearly see and understand the impact of their giving.</p>
+  <p style="width: 400px; float: left;">Donors and supporters can connect and engage through the sharing of powerful stories. Ultimately, your constituents can more clearly see and understand the impact of their giving.</p>
+  <div style="position: absolute; right: 0; top: 0; background: transparent url({{MEDIA_URL}}images/ngo_stateofunion.png) 0 0 no-repeat; height: 284px; -webkit-border-top-right-radius: 5px; -webkit-border-bottom-right-radius: 5px; margin: 0; width: 235px; float: right; border: 0 !important;"></div>
   <div class="clearfix"></div>
 </div><!-- // pod -->
 
@@ -114,14 +130,23 @@
   <div class="clearfix"></div>
 </div><!-- // pod -->
 
+{% comment %}
 <div class="pod">
   <h3>Volunteer Teams</h3>
   <p>An active and productive volunteer group is a sustainable resource that, once developed, can continue to provide valuable long-term assistance with translation and dubbing projects. PCF has experience building volunteer teams and can help your organization develop a highly-engaged translation community.</p>
 </div>
+{% endcomment %}
 
-<img src=""/>
+<div style="position: relative; top: -25px; right: 30px; z-index: -1;">
+  <img src="{{MEDIA_URL}}images/ngo_ajshot.png" style="width: 500px; border: 1px #999 solid; float: right;" />
+  <div style="position: relative; top: 35px; left: 55px;">
+  <h3>Volunteer Teams</h3>
+  <p style="width: 355px;">An active and productive volunteer group is a sustainable resource that, once developed, can continue to provide valuable long-term assistance with translation and dubbing projects. PCF has experience building volunteer teams and can help your organization develop a highly-engaged translation community.</p>
+  </div>
+  <div class="clearfix"></div>
+</div>
 
-<div class="pod" style="">
+<div class="pod" style="position: relative; top: -60px;">
   <img src="{{MEDIA_URL}}images/ngo_hearingaid.jpg" style="margin: 0 0 0 0; width: 150px; float: right;"/>
   <h3>Accessibility</h3>
   <p>An important part of what we offer is the ability to make your content truly accessible to the broadest audience possible. Captions are absolutely critical for deaf and hard of hearing viewers.  And, to all viewers who don’t speak the language of the original video.</p>
@@ -136,7 +161,7 @@
 </div><!-- // pod -->
 
 <div class="pod">
-  <img src="{{MEDIA_URL}}images/ngo_unisubsvidplayer.jpg" style="margin: 0; width: 400px; float: right;"/>
+  <img src="{{MEDIA_URL}}images/ngo_unisubsvidplayer.jpg" style="float: right; margin: 0 0 20px 0;" />
   <h3>Video on the Web</h3>
   <p>No other medium can transport people to a place with the immediacy of video, which is why many of today’s organizations are using video to show donors the impact of their giving.</p>
   <div class="clearfix"></div>
@@ -169,6 +194,18 @@
   <p>PCF can help your organization reach more people, gain greater connection and engagement with your constituents, and tell your stories in a powerful way.  Get started today.  Contact Dean Jansen at <a href="mailto:dean@pculture.org">dean@pculture.org</a>.</p>
   <div class="clearfix"></div>
 </div><!-- // pod -->
+
+<div class="pod" style="padding-bottom: 20px;">
+<div style="width: 520px; margin: 0 auto;">
+  <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
+  (
+    {
+    video_url: "http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles847.ogv",
+    }
+  )
+  </script>
+</div>
+</div>
 
 </div><!-- // ngo_content -->
 {% endblock %}

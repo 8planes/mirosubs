@@ -222,8 +222,7 @@ a:hover.learn_more {
 #khan #video_container {
 	position: relative;
 	top: 260px;
-	background: #000;
-	width: 729px;
-	height: 338px;
+	width: 727px;
+	height: 340px;
 	left: 120px;
 }
