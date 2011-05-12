@@ -58,7 +58,7 @@ body#solutions {
 	-moz-border-radius: 5px;
 	-webkit-box-shadow: 0 0 10px #CCC;
 	-moz-box-shadow:    0 0 10px #CCC;
-	padding: 20px;
+	padding: 20px 20px 0 20px;
 	margin: 20px 0;
 	border: 1px #d3d3d3 solid;
 }
@@ -84,6 +84,10 @@ a:hover.learn_more {
 	text-decoration: underline;
 }
 
+#unisubs {
+	padding: 20px 20px 10px 20px !important;
+}
+
 #unisubs #widget_div {
 	width: 450px;
 	height: 250px;
@@ -106,7 +110,7 @@ a:hover.learn_more {
 
 #organization {
 	width: 325px;
-	margin: 45px 0 0 0;
+	margin: 50px 0 0 0;
 }
 
 #benefits_unisubs ul li {
@@ -218,8 +222,7 @@ a:hover.learn_more {
 #khan #video_container {
 	position: relative;
 	top: 260px;
-	background: #000;
-	width: 729px;
-	height: 338px;
+	width: 727px;
+	height: 340px;
 	left: 120px;
 }
