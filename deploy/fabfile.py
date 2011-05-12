@@ -123,6 +123,7 @@ def refresh_db():
     env.host_string = env.web_hosts[0]
     sudo('/scripts/univsubs_reset_db.sh {0}'.format(env.installation_name))
     sudo('/scripts/univsubs_refresh_db.sh {0}'.format(env.installation_name))
+    promote_django_admins()
     bounce_memcached()
 
 def update_closure():
