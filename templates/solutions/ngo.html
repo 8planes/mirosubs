@@ -65,20 +65,19 @@
       <li>Accessibility for the deaf and hard of hearing</li>
       <li>We help you build volunteer translation capacity</li>
     </ul>
-    <a class="learn_more" href="">Learn More</a>
   </div><!-- // benefits_unisubs -->
 </div><!-- // left -->
 
 <div class="right" style="width: 460px;">
   <div class="pod" id="how_work">
     <h3>How Does it Work?</h3>
-    <p>Universal Subtitles is a complete solution for translating video into different languages. It’s a turnkey process for attracting volunteers, working on collaborative subtitling, and making video available globally. <a class="learn_more" href="">Learn More</a></p>
+    <p>Universal Subtitles is a complete solution for translating video into different languages. It’s a turnkey process for attracting volunteers, working on collaborative subtitling, and making video available globally. </p>
     
   </div><!-- // how_work -->
   
   <div class="pod" id="who_uses">
     <h3>Who Uses It?</h3>
-    <p>NYTimes, MIT OpenCourseware, Wikipedia, Mozilla, Drupal, PBS NewsHour, and many more use the software or embed subtitled video with the service. <a class="learn_more" href="">Learn More</a></p>
+    <p>NYTimes, MIT OpenCourseware, Wikipedia, Mozilla, Drupal, PBS NewsHour, and many more use the software or embed subtitled video with the service.</p>
     
   </div><!-- // who_uses -->
 </div><!-- // right -->
@@ -107,22 +106,24 @@
   <p>Using Universal Subtitles, all of their videos are easily translatable. They have a growing volunteer community translating new videos every day.</p>
 </div><!-- // unisubs_action -->
 
-<div id="khan">
+<div id="khan" style="position: relative;">
+  <div style="position: absolute; top: 675px; right: -130px; width: 741px; height: 91px; background: transparent url({{MEDIA_URL}}images/ngo_subtab_bubble.png) 0 0 no-repeat; z-index: 9;"></div>
+  <div style="position: absolute; top: 375px; right: -180px; width: 314px; height: 91px; background: transparent url({{MEDIA_URL}}images/ngo_vidsupport.png) 0 0 no-repeat; z-index: 9;"></div>
   <div id="video_container">
-    <div style="width: 600px; margin: 0 auto;">
-  <script type="text/javascript" src="http://dev.universalsubtitles.org/site_media/embed.js">
+    <div style="width: 700px; margin: 0 auto;">
+  <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
   (
-    {
-      video_url: "http://www.youtube.com/watch?v=hiBmM05uBQg",
+    {"video_url": "http://www.youtube.com/watch?v=nTFEUsudhfs",
       video_config: {
                  color1: '0xFF0000',
-                 width: 600,
-                 height: 340
+                 width: 700
+                 height: 440
              }
     }
   )
   </script>
-  </div>
+  
+    </div>
   </div>
 </div><!-- // khan -->
 
@@ -157,7 +158,7 @@
   <div class="clearfix"></div>
 </div>
 
-<div class="pod" style="position: relative; top: -60px;">
+<div class="pod" style="margin: -60px 0 0 0;">
   <img src="{{MEDIA_URL}}images/ngo_hearingaid.jpg" style="margin: 0 0 0 0; width: 150px; float: right;"/>
   <h3>Accessibility</h3>
   <p>An important part of what we offer is the ability to make your content truly accessible to the broadest audience possible. Captions are absolutely critical for deaf and hard of hearing viewers.  And, to all viewers who don’t speak the language of the original video.</p>
@@ -206,8 +207,22 @@
   <div class="clearfix"></div>
 </div><!-- // pod -->
 
-<div class="pod" style="padding-bottom: 20px;">
-</div>
+
+<div class="pod" id="miro_ad">
+  <div class="clearfix">
+  <a href="">
+    <span id="container">
+    <span id="mc_logo"></span>
+    <span id="building">
+      <p><strong>Building a video website?</strong></p>
+      <p><em>Miro Community is the easiest way to make a video website.</em></p>
+      <p>Makes Universal Subtitles even easier to manage!</p>
+    </span>
+    <span id="try">Try it now!</span>
+    </span>
+  </a>
+  </div><!-- // clearfix -->
+</div><!-- // miro_ad -->
 
 </div><!-- // ngo_content -->
 {% endblock %}
