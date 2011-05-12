@@ -130,11 +130,15 @@ def create_from_feed(request):
     form = AddFromFeedForm(request.user, request.POST or None)
     if form.is_valid():
         count = form.save()
-        messages.success(request, _(u"%(count)s videos added") % {'count': count})
+        if not form.video_limit_routreach:
+            messages.success(request, _(u"%(count)s videos added") % {'count': count})
+        else:
+            messages.success(request, _(u"%(count)s videos added, but feed has move videos. They can be added lated if you set \"Save feed\"") % {'count': count})
         return redirect('videos:create')
     context = {
         'video_form': VideoForm(),
-        'youtube_form': form               
+        'youtube_form': form,
+        'from_feed': True 
     }
     return render_to_response('videos/create.html', context,
                               context_instance=RequestContext(request))
@@ -607,13 +611,7 @@ def subscribe_to_updates(request):
     return HttpResponse('ok', 'text/plain')
 
 def test_celery(request):
-    from celery.decorators import task
-    
-    @task
-    def add(a, b):
-        print "TEST TASK FOR CELERY"
-        r = a+b
-
+    from videos.tasks import add
     add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
 

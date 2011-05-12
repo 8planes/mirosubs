@@ -40,6 +40,10 @@ mirosubs.widgetizer.JWPlayer.prototype.videosExist = function() {
 
 mirosubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
     var elements = this.unwidgetizedElements_();
+    if (goog.DEBUG) {
+        this.logger_.info("Found this number of unwidgetized elements: " + 
+                          elements.length);
+    }
     var videoPlayers = [];
     for (var i = 0; i < elements.length; i++) {
         var videoSource = this.makeVideoSource_(elements[i]);
@@ -68,6 +72,10 @@ mirosubs.widgetizer.JWPlayer.prototype.unwidgetizedElements_ = function() {
                 return this.isJWPlayer_(emb) && this.isUnwidgetized(emb);
             }, this));
     var objects = goog.dom.getElementsByTagNameAndClass('object');
+    if (goog.DEBUG) {
+        this.logger_.info("Number of objects found on page: " + 
+                          objects.length);
+    }
     unwidgetizedElements = goog.array.concat(
         unwidgetizedElements,
         goog.array.filter(

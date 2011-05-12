@@ -16,14 +16,20 @@ import re
 
 VIDEOID_RE = re.compile(r'([A-Za-z_\-0-9]+)\w*$')
 
-class Command(BaseCommand):    
+class Command(BaseCommand):
     def handle(self, *args, **kwargs):
+        startIndex = 0
+        if len(args) > 0:
+            startIndex = int(args[0])
         feed = feedparser.parse(
             "http://ocw.mit.edu/rss/new/ocw_youtube_videos.xml")
         i = 1
         count = len(feed.entries)
         for item in feed.entries:
             if hasattr(item, 'videodownload'):
+                if i < startIndex:
+                    i += 1
+                    continue
                 print('importing {0}, {1}/{2}'.format(
                         item.videoid, i, count))
                 i += 1
@@ -48,7 +54,7 @@ class Command(BaseCommand):
             'http://www.youtube.com/watch?v={0}'.format(videoid))
         try:
             video_url_obj = VideoUrl.objects.get(
-                type=video_type.abbreviation, **video_type.create_kwars())
+                url=video_type.convert_to_video_url())
             video = video_url_obj.video
         except ObjectDoesNotExist:
             video_url_obj = None

@@ -904,6 +904,20 @@ class TeamsDetailQueryTest(TestCase):
         from apps.testhelpers.views import debug_video
         return "\n".join([debug_video(v) for v in self.team.videos.all()])
 
+    def _create_rdm_video(self, i):
+        video, created = Video.get_or_create_for_url("http://www.example.com/%s.mp4" % i)
+        return video
+    
+    def test_multi_query(self):
+        team, created = Team.objects.get_or_create(slug='arthur')
+        team.videos.all().delete()
+        from utils import multy_query_set as mq
+        created_tvs = [TeamVideo.objects.get_or_create(team=team, added_by=User.objects.all()[0], video=self._create_rdm_video(x) )[0] for x in xrange(0,20)]
+        created_pks = [x.pk for x in created_tvs]
+        multi = mq.TeamMultyQuerySet(*[TeamVideo.objects.filter(pk=x) for x in created_pks])
+        self.assertTrue([x.pk for x in multi] == created_pks)
+
+
     def test_hide_trans_back_to_original_lang(self):
         return
         # context https://www.pivotaltracker.com/story/show/12883401

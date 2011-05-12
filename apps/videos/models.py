@@ -39,6 +39,7 @@ from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 import time
 from django.utils.safestring import mark_safe
+from videos.feed_parser import parse_feed_entry
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -622,6 +623,7 @@ class SubtitleLanguage(models.Model):
                 sub.save()
 
         self.is_forked = True
+        self.standard_language = None
         self.save()
 
 models.signals.m2m_changed.connect(User.sl_followers_change_handler, sender=SubtitleLanguage.followers.through)
@@ -1060,7 +1062,10 @@ class VideoFeed(models.Model):
     last_link = models.URLField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, blank=True, null=True)
-
+    
+    def __unicode__(self):
+        return self.url
+    
     def update(self):
         import feedparser
         
@@ -1075,30 +1080,17 @@ class VideoFeed(models.Model):
         except (IndexError, KeyError):
             pass        
         
-        for item in feed.entries:
+        for entry in feed.entries:
             
-            if item.link == last_link:
+            if last_link and entry.link == last_link:
                 break
             
-            if not self.try_save_link(item['link']):
-                for obj in item.get('enclosures', []):
-                    type = obj.get('type', '')
-                    href = obj.get('href', '')
-                    if href and type.startswith('video'):
-                        self.try_save_link(href)
+            try:
+                vt, info = parse_feed_entry(entry)
+            except VideoTypeError:
+                pass                
+            Video.get_or_create_for_url(vt=vt, user=self.user)
             
             checked_entries += 1
         
         return checked_entries
-                        
-    def try_save_link(self, link):
-        try:
-            video_type = video_type_registrar.video_type_for_url(link)
-            if video_type:
-                Video.get_or_create_for_url(vt=video_type, user=self.user)
-                return True
-        except VideoTypeError, e:
-            pass
-        
-        return False
-        

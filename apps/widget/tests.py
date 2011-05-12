@@ -24,6 +24,8 @@ unittest). These will both pass when you run "manage.py test".
 Replace these with more appropriate tests for your application.
 """
 
+import os
+
 from django.test import TestCase
 from auth.models import CustomUser
 from videos.models import Video, Action
@@ -33,7 +35,7 @@ from widget.null_rpc import NullRpc
 from django.core.urlresolvers import reverse
 from widget import video_cache
 from datetime import datetime, timedelta
-
+from django.conf import settings
 from sentry.models import Message
 
 class FakeDatetime(object):
@@ -96,7 +98,7 @@ class TestRpcView(TestCase):
         self.assertEqual(response.status_code, 200)
     
 class TestRpc(TestCase):
-    fixtures = ['test_widget.json']
+    fixtures = ['test_widget.json', 'test.json']
     
     def setUp(self):
         self.user_0 = CustomUser.objects.get(pk=3)
@@ -105,6 +107,79 @@ class TestRpc(TestCase):
         video_cache.invalidate_video_id(
             'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv')
 
+        
+
+    def test_new_trans_on_fork_creates_new(self):
+        # for https://www.pivotaltracker.com/story/show/13248955
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_dependent_draft(request)
+        video_pk = draft.language.video.pk
+        video = Video.objects.get(pk=video_pk)
+
+        
+        self.client.login(**{"username":"admin", "password":"admin"})
+        data = {
+            'language': 'en',
+            'video_language': 'en',
+            'video': video_pk,
+            'subtitles': open(os.path.join(settings.PROJECT_ROOT, "apps", "videos", 'fixtures/test.srt')),
+            'is_complete': True
+            }
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        # now spanish is forked:
+        original_spanish = video.subtitlelanguage_set.get(language='es')
+        base_language = video.subtitle_language()
+        num_langs = video.subtitlelanguage_set.all().count()
+        self.assertEqual(2, num_langs)
+        self.assertNotEqual(2, len(base_language.latest_subtitles()))
+
+        sub_pk = original_spanish.pk
+        return_value = rpc.start_editing(
+            request,
+            video.video_id, 
+            "es", 
+            subtitle_language_pk = sub_pk,
+            base_language_pk = base_language.pk
+        )
+        draft_pk = return_value['draft_pk']
+        inserted = [{'subtitle_id': 'aa',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, []);
+
+        video = Video.objects.get(pk=video_pk)        
+        self.assertEqual(video.subtitlelanguage_set.all().count(), 3)
+        
+        
+        return_value = rpc.start_editing(
+            request,
+            video.video_id, 
+            "es", 
+            subtitle_language_pk = sub_pk,
+            base_language_pk = base_language.pk
+        )
+
+        draft_pk = return_value['draft_pk']
+        inserted = [{'subtitle_id': 'aa',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 1.0}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, []);
+
+        video = Video.objects.get(pk=video_pk)        
+        self.assertEqual(video.subtitlelanguage_set.all().count(), 3)
+
+    
     def test_actions_for_subtitle_edit(self):
         request = RequestMockup(self.user_0)
         action_ids = [a.id for a in Action.objects.all()]

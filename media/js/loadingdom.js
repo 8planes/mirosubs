@@ -36,27 +36,11 @@ mirosubs.LoadingDom = function() {
             }, false);
     }
     else if (document.attachEvent) {
-        var EVENT = "onreadystatechange";
-        document.attachEvent(EVENT, function() {
-            if (document.readyState == "complete") {
-                document.detachEvent(EVENT, arguments.callee);
-                that.onDomLoaded_();
-            }
-        });
-        if (document.documentElement.doScroll && window == window.top)
-            (function() {
-                if (that.isDomLoaded_)
-                    return;
-                try {
-                    // Thanks to Diego Perini: http://javascript.nwbox.com/IEContentLoaded/
-                    document.documentElement.doScroll('left');
-                }
-                catch (error) {
-                    setTimeout(arguments.callee, 0);
-                    return;
-                }
-                that.onDomLoaded_();
-            })();        
+// Commenting this out because swfobject seems to load swfs on IE
+// after we catch the dom loaded event. When this happens, the 
+// widgetizer finds no elements to widgetize. See widget/widgetize_demo/jwplayer
+// for an example.
+//        this.listenOnIE_();
     }
     // in case nothing else works: load event
     goog.events.listenOnce(window, goog.events.EventType.LOAD,
@@ -66,6 +50,31 @@ goog.inherits(mirosubs.LoadingDom, goog.events.EventTarget);
 goog.addSingletonGetter(mirosubs.LoadingDom);
 
 mirosubs.LoadingDom.DOMLOAD = 'domloaded';
+
+mirosubs.LoadingDom.prototype.listenOnIE_ = function() {
+    var that = this;
+    var EVENT = "onreadystatechange";
+    document.attachEvent(EVENT, function() {
+        if (document.readyState == "complete") {
+            document.detachEvent(EVENT, arguments.callee);
+            that.onDomLoaded_();
+        }
+    });
+    if (document.documentElement.doScroll && window == window.top)
+        (function() {
+            if (that.isDomLoaded_)
+                return;
+            try {
+                // Thanks to Diego Perini: http://javascript.nwbox.com/IEContentLoaded/
+                document.documentElement.doScroll('left');
+            }
+            catch (error) {
+                setTimeout(arguments.callee, 0);
+                return;
+            }
+            that.onDomLoaded_();
+        })();
+};
 
 mirosubs.LoadingDom.prototype.onDomLoaded_ = function() {
     if (this.isDomLoaded_)

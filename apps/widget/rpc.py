@@ -395,8 +395,10 @@ class Rpc(BaseRpc):
         if language.standard_language and not base_language:
             # forking existing
             return False
+        elif language.is_forked and base_language:
+            return True
         else:
-            return language.standard_language != base_language
+            return language.standard_language != base_language 
 
     def _get_language_for_editing(
         self, request, video_id, language_code, 
