@@ -12,7 +12,6 @@ body#solutions {
 	font-size: 36px;
 	font-weight: bold;
 	color: #333;
-	letter-spacing: -1px;
 	margin: 5px 0 10px 0;
 	line-height: 36px;
 }
@@ -20,7 +19,6 @@ body#solutions {
 #ngo_content h2 {
 	font-size: 25px;
 	font-weight: normal;
-	letter-spacing: -1px;
 	color: #555;
 	line-height: 25px;
 }
@@ -217,6 +215,9 @@ a:hover.learn_more {
 	border-right: 1px #DDD solid;
 	padding: 20px;
 	float: left;
+}
+
+.usubs_ad span#building p em {
 }
 
 #unisubs_action h3 {
