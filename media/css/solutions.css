@@ -9,7 +9,7 @@ body#solutions {
 }
 
 #ngo_content h1 {
-	font-size: 36px;
+	font-size: 34px;
 	font-weight: bold;
 	color: #333;
 	margin: 5px 0 10px 0;
@@ -55,7 +55,7 @@ body#solutions {
 	-webkit-box-shadow: 0 0 10px #CCC;
 	-moz-box-shadow:    0 0 10px #CCC;
 	padding: 20px 20px 0 20px;
-	margin: 20px 0;
+	margin: 30px 0;
 	border: 1px #d3d3d3 solid;
 }
 
@@ -106,7 +106,7 @@ a:hover.learn_more {
 
 #organization {
 	width: 325px;
-	margin: 25px 0 0 0;
+	margin: 20px 0 0 0;
 }
 
 #benefits_unisubs ul li {
@@ -244,4 +244,46 @@ a:hover.learn_more {
 	width: 727px;
 	height: 340px;
 	left: 120px;
+}
+
+#start h1 {
+	font-size: 36px;
+	background: #31789d;
+	color: #FFF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius:    5px;
+	padding: 20px;
+	text-shadow: 0 -1px 0 #000;
+}
+
+#start h3 {
+	font-size: 20px;
+	color: #333;
+	margin: 0 0 0 15px;
+}
+
+#start ul {
+	margin: 0 0 45px 20px;
+}
+
+#start ul li {
+	font-size: 20px;
+	color: #555;
+	margin: 24px 0 24px -15px;
+	text-indent: 0;
+	padding: 0 0 5px 20px;
+	list-style-type: none;
+	background: transparent url(../images/icon_ngo_bullet.png) 0 2px no-repeat;
+}
+
+#start a {
+	background: #31789d;
+	padding: 20px 25px 20px 25px;
+	font-size: 18px;
+	font-weight: bold;
+	-webkit-border-radius: 5px;
+	-moz-border-radius:    5px;
+	color: #FFF;
+	text-decoration: none;
+	margin: 15px 0 0 0;
 }
