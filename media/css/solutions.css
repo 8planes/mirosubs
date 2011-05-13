@@ -106,7 +106,7 @@ a:hover.learn_more {
 
 #organization {
 	width: 325px;
-	margin: 50px 0 0 0;
+	margin: 25px 0 0 0;
 }
 
 #benefits_unisubs ul li {
@@ -217,7 +217,8 @@ a:hover.learn_more {
 	float: left;
 }
 
-.usubs_ad span#building p em {
+.usubs_ad span#building p {
+	line-height: 22px;
 }
 
 #unisubs_action h3 {
