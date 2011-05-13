@@ -115,7 +115,11 @@ class Video(models.Model):
         if len(title) > 70:
             title = title[:70]+'...'
         return title
-
+    
+    @property
+    def views(self):
+        pass
+    
     def title_display(self):
         if self.title:
             return self.title

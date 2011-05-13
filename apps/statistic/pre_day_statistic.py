@@ -79,6 +79,18 @@ class BasePerDayStatistic(object):
         """
         raise Exception('Not implemented')        
     
+    def get_query_set(self, **kwargs):
+        """
+        Should return QuerySet for self.model for get_views method
+        """
+        raise Exception('Not implemented')
+        
+    def get_views(self, **kwargs):
+        """
+        Return views statistic for week and month
+        """
+        qs = self.get_query_set(**kwargs)
+    
     def migrate(self, verbosity=1):
         """
         Migrate information from Redis to DB
