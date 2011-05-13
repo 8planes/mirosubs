@@ -217,8 +217,13 @@ a:hover.learn_more {
 	float: left;
 }
 
+.usubs_ad span#building {
+	margin: 0px 0 0 0;
+}
+
 .usubs_ad span#building p {
 	line-height: 22px;
+	margin: 3px 0 0 0 !important;
 }
 
 #unisubs_action h3 {
