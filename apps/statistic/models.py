@@ -19,6 +19,7 @@ from django.db import models
 from auth.models import CustomUser as User
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from statistic.pre_day_statistic import BasePerDayStatisticModel
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -37,18 +38,22 @@ class TweeterShareStatistic(BaseShareStatistic):
 
 class FBShareStatistic(BaseShareStatistic):
     pass
-
-class SubtitleFetchStatistic(models.Model):
-    video = models.ForeignKey('videos.Video')
-    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
     
-class SubtitleFetchCounters(models.Model):
+class SubtitleFetchCounters(BasePerDayStatisticModel):
     video = models.ForeignKey('videos.Video')
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
-    date = models.DateField()
-    count = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        verbose_name = _(u'Subtitle fetch statistic')
+        verbose_name_plural = _(u'Subtitle fetch statistic')
 
+class VideoViewCounter(BasePerDayStatisticModel):
+    video = models.ForeignKey('videos.Video')
+    
+    class Meta:
+        verbose_name = _(u'Video view statistic')
+        verbose_name_plural = _(u'Video view statistic')
+    
 def get_model_statistics(model, today, month_ago, week_ago, day_ago):
     '''
     Gives the cronological statistics of models

@@ -15,29 +15,29 @@ class Migration(DataMigration):
             return        
         
         try:
-            from statistic import video_view_counter, sub_fetch_total_counter, \
+            from statistic import st_video_view_handler, st_sub_fetch_handler, \
                 widget_views_total_counter
         except ImportError:
             if settings.DEBUG:
                 return
             raise Exception('Some redis utilits is unavailable, maybe this migration was not updated after refactoring. You can ignore this migration with: python manage.py migrate statistic 0074 --fake, but all statistic data will be lost.')
-
+        
         try:
-            video_view_counter.r.ping()
+            widget_views_total_counter.r.ping()
         except ConnectionError:
             if settings.DEBUG:
                 return
             raise Exception('Redis server is unavailable. You can ignore this migration with: python manage.py migrate statistic 00074 --fake, but all statistic data will be lost.')
         
-        video_view_counter.delete()
-        sub_fetch_total_counter.delete()
+        st_video_view_handler.total_key.delete()
+        st_sub_fetch_handler.total_key.delete()
         widget_views_total_counter.delete()
         for obj in orm.Video.objects.all():
             video_counter = Video.view_counter(obj.video_id)
             video_counter.delete()
             video_counter.set(obj.view_count)
-            video_view_counter.incr(obj.view_count)
-            sub_fetch_total_counter.incr(obj.subtitles_fetched_count)
+            st_video_view_handler.total_key.incr(obj.view_count)
+            st_sub_fetch_handler.total_key.incr(obj.subtitles_fetched_count)
             widget_views_total_counter.incr(Video.widget_views_counter(obj.video_id).get())
         
     def backwards(self, orm):

@@ -1,19 +1,19 @@
-from statistic.models import SubtitleFetchCounters
-from statistic import sub_fetch_keys_set, changed_video_set
+from statistic import changed_video_set, st_sub_fetch_handler, st_video_view_handler 
 from utils.commands import ErrorHandlingCommand
 from django.conf import settings
 import sys
 from utils.redis_utils import default_connection
-from datetime import date
 from videos.models import Video
 from django.db.models import F
 
 class Command(ErrorHandlingCommand):
 
     def handle(self, *args, **kwargs):
+        verbosity = kwargs.get('verbosity', 1)
         print 'Start updating...'
+        
         try:
-            sub_fetch_keys_set.r.ping()
+            default_connection.ping()
         except:
             if settings.DEBUG:
                 raise
@@ -21,37 +21,13 @@ class Command(ErrorHandlingCommand):
             self.handle_error(sys.exc_info())     
             return
         
-        count = sub_fetch_keys_set.scard()
-        
+        print 'Migrate subtitles fetch statistic'
+        count = st_sub_fetch_handler.migrate(verbosity=verbosity)
         print 'Subtitles fetch keys: ', count
-        
-        while count:
-            count -= 1
-            key = sub_fetch_keys_set.spop()
-            
-            if not key:
-                break
-            
-            print 'Handle key: %s' % key
-            
-            parts = key.split(':')
-            d = date(int(parts[-1]), int(parts[-2]), int(parts[-3]))
-            
-            if len(parts) == 6:
-                lang = parts[2]
-            else:
-                lang = ''
-            
-            try:
-                video = Video.objects.get(video_id=parts[1])
-            except Video.DoesNotExist:
-                print 'Video does not exist'
-                default_connection.delete(key)
-                continue
-            
-            counter_obj, created = SubtitleFetchCounters.objects.get_or_create(date=d, video=video, language=lang)
-            counter_obj.count += int(default_connection.getset(key, 0))
-            counter_obj.save()
+
+        print 'Migrate videos view statistic'
+        count = st_video_view_handler.migrate(verbosity=verbosity)
+        print 'Videos view keys: ', count
             
         count = changed_video_set.scard()
         
