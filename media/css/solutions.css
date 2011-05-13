@@ -225,7 +225,7 @@ a:hover.learn_more {
 
 #khan {
 	width: 950px;
-	height: 886px;
+	height: 846px;
 	background: transparent url(../images/ngo_khan_shot.png) 0 0 no-repeat;
 	position: relative;
 	left: -5px;
@@ -233,7 +233,7 @@ a:hover.learn_more {
 
 #khan #video_container {
 	position: relative;
-	top: 260px;
+	top: 220px;
 	width: 727px;
 	height: 340px;
 	left: 120px;
