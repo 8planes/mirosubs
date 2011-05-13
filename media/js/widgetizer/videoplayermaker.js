@@ -69,7 +69,7 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam =
     function(element, embedParamName, opt_objectParamName) 
 {
     if (element.nodeName == "EMBED") {
-        return element[embedParamName];
+        return element.getAttribute(embedParamName);
     } else {
         var paramNode = this.findObjectParam_(
             element, opt_objectParamName || embedParamName);
