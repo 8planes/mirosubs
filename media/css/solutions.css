@@ -209,12 +209,26 @@ a:hover.learn_more {
 	text-shadow: 0 0 0;
 }
 
+#miro_ad a span#unisubs_logo {
+	width: 121px;
+	height: 61px;
+	display: block;
+	background: transparent url(../images/ngo_unisubs_logo.png) 20px 20px no-repeat;
+	border-right: 1px #DDD solid;
+	padding: 20px;
+	float: left;
+}
+
+#unisubs_action h3 {
+	font-size: 24px;
+}
+
 #khan {
-	width: 960px;
-	height: 1050px;
+	width: 950px;
+	height: 886px;
 	background: transparent url(../images/ngo_khan_shot.png) 0 0 no-repeat;
 	position: relative;
-	left: -10px;
+	left: -5px;
 }
 
 #khan #video_container {
