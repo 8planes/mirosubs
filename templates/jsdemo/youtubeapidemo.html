@@ -1,7 +1,26 @@
 <html>
   <head>
-    {% include "widget/_js_onsite_dependencies.html" %}
-    <script type="text/javascript" src="{{MEDIA_URL}}js/jsdemo/youtubeapidemo.js"></script>
+    <script type="text/javascript">
+function start(e) {
+    var object = document.getElementsByTagName('object')[0];
+    var embed = document.getElementsByTagName('embed')[0];
+    var count = 0;
+    var intervalid = window.setInterval(
+        function() {
+            if (object['playVideo'] || embed['playVideo']) {
+                count++;
+                window.clearInterval(intervalid);
+                console.log('can play video!');
+                console.log(element);
+            }
+            else {
+                console.log('cannot play video');
+            }
+        }, 250);
+}
+
+window.onload = start;
+    </script>
   </head>
   <body>
     <object id="idOVideo" name="idOVideo" width="800" height="480" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
