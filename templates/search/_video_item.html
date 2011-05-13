@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n subtitles_tags %}
 
 <li>
   {% if not display_mode or display_mode == 'all' or display_mode == 'thumbnails' %}
@@ -18,7 +18,7 @@
               {% if lines_count %}  
               <a href="{{ lang.get_absolute_url }}">
                   <!-- <span>{{ lines_count }} {% trans "lines" %}</span> -->
-                  <span class="complete">100%</span>
+                  <span class="{% complete_color lang %}">{% complete_indicator lang %}</span>
                   {{ lang.language_display }}
               </a>
               {% endif %}
