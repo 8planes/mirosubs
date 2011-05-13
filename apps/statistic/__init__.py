@@ -15,36 +15,84 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from datetime import datetime
+import datetime
 from utils.redis_utils import default_connection, RedisKey
+from statistic.pre_day_statistic import BasePerDayStatistic
+from statistic.models import SubtitleFetchCounters, VideoViewCounter
 
-SUBTITLES_FETCH_PREFIX = 'StSubFetch'
-
-video_view_counter = RedisKey('StVideoView')
-sub_fetch_total_counter = RedisKey('StSubFetchTotal')
 widget_views_total_counter = RedisKey('StWidgetViewsTotal')
-sub_fetch_keys_set = RedisKey('StSubFetchKeys')
-
 changed_video_set = RedisKey('StChangedVideos')
 
-def get_fetch_subtitles_key(video, lang=None, date=None):
-    if not date:
-        date = datetime.today()
+class VideoViewStatistic(BasePerDayStatistic):
+    connection = default_connection
+    model = VideoViewCounter
+    prefix = 'st_video_view'
     
-    key = '%s:%s' % (SUBTITLES_FETCH_PREFIX, video.video_id)
+    def get_key(self, video, date):
+        if not video.video_id or video.video_id in ['set', 'total']:
+            #"set" and "total" are reserver. 
+            #Don't want use more long key as prefix:keys:video_id, 
+            #because video_id have more length and is generated 
+            #we should never get this situation
+            return 
+
+        return '%s:%s:%s' % (self.prefix, video.video_id, self.date_format(date))
     
-    if lang:
-        key += ':%s' % lang
+    def get_object(self, key):
+        from videos.models import Video
+        
+        prefix, video_id, date_str = key.split(':')
+        
+        try:
+            video = Video.objects.get(video_id=video_id)
+        except Video.DoesNotExist:
+            return        
+        
+        date = self.get_date(date_str)
+        obj, created = self.model.objects.get_or_create(video=video, date=date)
+        return obj
+        
+class SubtitleFetchStatistic(BasePerDayStatistic):
+    connection = default_connection
+    prefix = 'st_subtitles_fetch'
+    model = SubtitleFetchCounters
     
-    key += ':%s:%s:%s' % (date.day, date.month, date.year)
-    return key
-    
-def update_subtitles_fetch_counter(video, sub_lang=None, date=None):
-    if sub_lang:
-        lang = sub_lang.language
-    else:
-        lang = None
-    key = get_fetch_subtitles_key(video, lang, date)
-    sub_fetch_keys_set.sadd(key)
-    RedisKey(key).incr()
-    sub_fetch_total_counter.incr()
+    def get_key(self, date, video, sl=None):
+        if not video.video_id or video.video_id in ['set', 'total']:
+            #see VideoViewStatistic.get_key
+            return 
+        
+        key = '%s:%s:' % (self.prefix, video.video_id)
+        
+        if sl and sl.language:
+            key += ':%s' % sl.language       
+        
+        key += ':%s' % self.date_format(date)
+        
+        return key
+        
+    def get_object(self, key):
+        from videos.models import Video
+
+        parts = key.split(':')
+        
+        if len(parts) == 6:
+            lang = parts[2]
+        else:
+            lang = ''
+        
+        try:
+            video = Video.objects.get(video_id=parts[1])
+        except Video.DoesNotExist:
+            return
+        
+        fields = {
+            'date': self.get_date(parts[-1]),
+            'video': video,
+            'language': lang
+        }
+        obj, created = self.model.objects.get_or_create(**fields)
+        return obj
+
+st_sub_fetch_handler = SubtitleFetchStatistic()
+st_video_view_handler = VideoViewStatistic()

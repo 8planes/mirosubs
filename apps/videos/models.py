@@ -29,7 +29,7 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar, VideoTypeError
-from statistic import update_subtitles_fetch_counter, video_view_counter, changed_video_set 
+from statistic import changed_video_set, st_sub_fetch_handler, st_video_view_handler
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
@@ -145,15 +145,13 @@ class Video(models.Model):
     
     def update_view_counter(self):
         self.view_counter.incr()
-        video_view_counter.incr()
+        st_video_view_handler.update(video=self)
     
     def update_subtitles_fetched(self, lang=None):
         self.subtitles_fetched_counter.incr()
-        #Video.objects.filter(pk=self.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
-        update_subtitles_fetch_counter(self, lang)
+        st_sub_fetch_handler.update(video=self, sl=lang)
         if lang:
             lang.subtitles_fetched_counter.incr()
-            #SubtitleLanguage.objects.filter(pk=sub_lang.pk).update(subtitles_fetched_count=models.F('subtitles_fetched_count')+1)
         
     def get_thumbnail(self):
         if self.s3_thumbnail:

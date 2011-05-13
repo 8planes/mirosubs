@@ -19,7 +19,7 @@ from utils import render_to, render_to_json
 from datetime import datetime, timedelta
 from videos.models import Video, SubtitleLanguage, ALL_LANGUAGES
 from statistic.models import EmailShareStatistic, TweeterShareStatistic, \
-    FBShareStatistic, SubtitleFetchStatistic, SubtitleFetchCounters, \
+    FBShareStatistic, SubtitleFetchCounters, \
     get_model_statistics
 from auth.models import CustomUser as User
 from django.views.generic.list_detail import object_list
@@ -27,7 +27,7 @@ from comments.models import Comment
 from django.db.models import Sum, Count
 from django.http import Http404
 from django.views.decorators.cache import cache_page
-from statistic import widget_views_total_counter, sub_fetch_total_counter
+from statistic import widget_views_total_counter, st_sub_fetch_handler
 
 @cache_page(60 * 60 * 24)
 @render_to('statistic/index.html')
@@ -46,7 +46,7 @@ def index(request):
     email_st = get_model_statistics(EmailShareStatistic, today, month_ago, week_ago, day_ago)
     
     context = {
-        'subtitles_fetched_count': sub_fetch_total_counter.get(),
+        'subtitles_fetched_count': st_sub_fetch_handler.total_key.get(),
         'view_count': widget_views_total_counter.get(),
         'videos_with_captions': Video.objects.exclude(subtitlelanguage=None).count(),
         'all_videos': Video.objects.count(),

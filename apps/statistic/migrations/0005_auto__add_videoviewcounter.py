@@ -1,49 +1,28 @@
 # encoding: utf-8
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
-from django.conf import settings
-from redis.exceptions import ConnectionError
-from statistic import st_sub_fetch_handler
 
-class Migration(DataMigration):
+class Migration(SchemaMigration):
     
     def forwards(self, orm):
-        if db.dry_run:
-            return        
         
-        try:
-            from utils.redis_utils import default_connection
-            from statistic import get_fetch_subtitles_key
-        except ImportError:
-            if settings.DEBUG:
-                return
-            raise Exception('Some redis utilits is unavailable, maybe this migration was not updated after refactoring. You can ignore this migration with: python manage.py migrate statistic 0002 --fake, but all statistic data will be lost.')
-
-        try:
-            default_connection.ping()
-        except ConnectionError:
-            if settings.DEBUG:
-                return
-            raise Exception('Redis server is unavailable. You can ignore this migration with: python manage.py migrate statistic 0002 --fake, but all statistic data will be lost.')
-        
-        print 'Total count of rows: ', orm.SubtitleFetchStatistic.objects.count()
-        
-        keys = []
-        for item in orm.SubtitleFetchStatistic.objects.order_by('id'):
-            
-            if not item.pk % 1000:
-                print item.pk
-                
-            key = get_fetch_subtitles_key(item.video, item.language, item.created)
-            if not key in keys:
-                default_connection.delete(key)
-                keys.append(key)
-            default_connection.incr(key)
+        # Adding model 'VideoViewCounter'
+        db.create_table('statistic_videoviewcounter', (
+            ('date', self.gf('django.db.models.fields.DateField')()),
+            ('count', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+            ('video', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.Video'])),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('statistic', ['VideoViewCounter'])
+    
     
     def backwards(self, orm):
-        "Write your backwards methods here."
+        
+        # Deleting model 'VideoViewCounter'
+        db.delete_table('statistic_videoviewcounter')
+    
     
     models = {
         'auth.customuser': {
@@ -53,10 +32,12 @@ class Migration(DataMigration):
             'biography': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'changes_notification': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'homepage': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
+            'last_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
             'picture': ('utils.amazon.fields.S3EnabledImageField', [], {'max_length': '100', 'blank': 'True'}),
             'preferred_language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
-            'valid_email': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'})
+            'valid_email': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'videos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['videos.Video']", 'symmetrical': 'False', 'blank': 'True'})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -106,9 +87,10 @@ class Migration(DataMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'})
         },
-        'statistic.subtitlefetchstatistic': {
-            'Meta': {'object_name': 'SubtitleFetchStatistic'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+        'statistic.subtitlefetchcounters': {
+            'Meta': {'object_name': 'SubtitleFetchCounters'},
+            'count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
@@ -119,10 +101,18 @@ class Migration(DataMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'})
         },
+        'statistic.videoviewcounter': {
+            'Meta': {'object_name': 'VideoViewCounter'},
+            'count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'date': ('django.db.models.fields.DateField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
+        },
         'videos.video': {
             'Meta': {'object_name': 'Video'},
             'allow_community_edits': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'allow_video_urls_edit': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
+            'complete_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'duration': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
@@ -130,15 +120,16 @@ class Migration(DataMigration):
             'followers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'followed_videos'", 'blank': 'True', 'to': "orm['auth.CustomUser']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_subtitled': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'languages_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'db_index': 'True'}),
             's3_thumbnail': ('utils.amazon.fields.S3EnabledImageField', [], {'max_length': '100', 'blank': 'True'}),
-            'subtitles_fetched_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'subtitles_fetched_count': ('django.db.models.fields.IntegerField', [], {'default': '0', 'db_index': 'True'}),
             'thumbnail': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'video_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
-            'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'was_subtitled': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'widget_views_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'db_index': 'True'}),
+            'was_subtitled': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True', 'blank': 'True'}),
+            'widget_views_count': ('django.db.models.fields.IntegerField', [], {'default': '0', 'db_index': 'True'}),
             'writelock_owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'writelock_owners'", 'null': 'True', 'to': "orm['auth.CustomUser']"}),
             'writelock_session_key': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'writelock_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
