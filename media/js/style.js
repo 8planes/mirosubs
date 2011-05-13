@@ -24,7 +24,7 @@
 goog.provide('mirosubs.style');
 
 mirosubs.style.makeCssPropertyRegex_ = function(property) {
-    return new RegExp('\\s*' + property + '\\s*:\\s*[^;]*;', 'i');
+    return new RegExp('\\s*' + property + '\\s*:\\s*[^;]*;?', 'i');
 };
 
 mirosubs.style.findCssProperty_ = function(css, property) {

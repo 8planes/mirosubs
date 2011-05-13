@@ -1,4 +1,31 @@
 from django.contrib import admin
+from statistic.models import SubtitleFetchCounters, VideoViewCounter
+
+class SubtitleFetchCountersAdmin(admin.ModelAdmin):
+    actions = None
+    list_display = ['video', 'language', 'date', 'count']
+    date_hierarchy = 'date'
+    raw_id_fields = ['video']
+    search_fields = ['video__title', 'videourl__url']
+    readonly_fields = ['video', 'language', 'date']
+    list_filter = ['language']
+    
+    def has_add_permission(self, request):
+        return False
+
+class VideoViewCounterAdmin(admin.ModelAdmin):
+    actions = None
+    list_display = ['video', 'date', 'count']
+    date_hierarchy = 'date'
+    raw_id_fields = ['video']
+    search_fields = ['video__title', 'videourl__url']
+    readonly_fields = ['video', 'date']
+    
+    def has_add_permission(self, request):
+        return False
+
+admin.site.register(SubtitleFetchCounters, SubtitleFetchCountersAdmin)    
+admin.site.register(VideoViewCounter, VideoViewCounterAdmin)
 
 #add logging statistic display for SQS API usage
 from statistic.log_methods import LogAdmin, LogFakeModel 

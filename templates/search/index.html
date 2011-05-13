@@ -62,7 +62,6 @@
         
         <div class="grid_8 clearfix"><br /></div>
         
-        {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="big_list">
             {% load_related_for_result result_list %}
             {% for object in result_list %}
@@ -83,10 +82,4 @@
         </ul>
         {% if is_paginated %}{% paginator %}{% endif %}
     </div>
-
-      <div class="grid_4 omega">
-        <h3>{% trans "Recent activity" %}</h3>
-          
-        {% recent_activity %}
-      </div>        
 {% endblock %}
