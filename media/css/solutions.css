@@ -35,11 +35,12 @@ body#solutions {
 }
 
 #ngo_content ul {
-	margin: 20px 0 0 0;
+	margin: 0px 0 0 0;
 }
 
 #ngo_content ul li {
 	font-size: 14px;
+	line-height: 20px;
 	color: #555;
 	margin: 8px 0 8px -15px;
 	text-indent: 0;
@@ -174,19 +175,15 @@ a:hover.learn_more {
 }
 
 #miro_ad a span#try {
-	background: -webkit-gradient(linear, left top, left bottom, from(#e4e4e4), to(#d4d4d4)) no-repeat;
-  background: -moz-linear-gradient(top,  #e4e4e4,  #d4d4d4) no-repeat;
+	background: #31789d;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	-webkit-box-shadow: 0 1px 2px #BBB, inset 0 -1px 0 #888;
-	-moz-box-shadow: 0 1px 2px #BBB, inset 0 -1px 0 #888;
 	padding: 15px 20px 15px 20px;
 	font-weight: bold;
+	color: #FFF;
 	font-size: 16px;
 	float: right;
 	display: block;
-	color: #333;
-	text-shadow: 0 1px 0 #FFF;
 	position: relative;
 	top: 7px;
 	right: 5px;
