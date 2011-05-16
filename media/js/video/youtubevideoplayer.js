@@ -283,11 +283,12 @@ mirosubs.video.YoutubeVideoPlayer.prototype.resumeLoadingInternal = function(pla
 mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime = function() {
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
-mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime)
+
+mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent)
 {
     if (this.player_) {
         this.player_['seekTo'](playheadTime, true);
-        this.sendTimeUpdateInternal();
+        if (!skipsUpdateEvent)this.sendTimeUpdateInternal();
     }
     else
         this.commands_.push(goog.bind(this.setPlayheadTime,
