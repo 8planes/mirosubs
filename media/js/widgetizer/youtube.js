@@ -41,7 +41,9 @@ mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
 };
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
+    this.logger_.info('making video players');
     var elements = this.unwidgetizedElements_();
+    this.logger_.info(elements);
     var videoPlayers = [];
     for (var i = 0; i < elements.length; i++) {
         var decoratable = this.isDecoratable_(elements[i]);
@@ -75,9 +77,10 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ =
         var params = uri.getQueryData().getKeys();
         for (var i = 0; i < params.length; i++)
             config[params[i]] = uri.getParameterValue(params[i]);
-        if (element['width'] && element['height']) {
-            config['width'] = element['width'];
-            config['height'] = element['height'];
+        if (this.findFlashParam(element, 'width') && 
+            this.findFlashParam(element, 'height')) {
+            config['width'] = this.findFlashParam(element, 'width');
+            config['height'] = this.findFlashParam(element, 'height');
         }
         else if (element.style.width && element.style.height) {
             config['width'] = parseInt(element.style['width']) + '';
@@ -105,10 +108,7 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
         player.render(parent);
 };
 
-mirosubs.widgetizer.Youtube.prototype.isYoutube_ = function(element) {
-    this.logger_.info(this.swfURL(element));
-    this.logger_.info(mirosubs.video.YoutubeVideoSource.isYoutube(
-        this.swfURL(element)));
+mirosubs.widgetizer.Youtube.prototype.isFlashElementAPlayer = function(element) {
     return mirosubs.video.YoutubeVideoSource.isYoutube(
         this.swfURL(element));
 };
@@ -119,21 +119,6 @@ mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
         var elements = moviePlayer ? [moviePlayer] : [];
         return this.filterUnwidgetized(elements);
     }
-    else {
-        var unwidgetizedElements = [];
-        var objects = document.getElementsByTagName('object');
-        for (var i = 0; i < objects.length; i++)
-            if (this.isYoutube_(objects[i]) && 
-                this.isUnwidgetized(objects[i])) {
-                unwidgetizedElements.push(objects[i]);
-            }
-        var embeds = goog.dom.getElementsByTagNameAndClass('embed');
-        for (var i = 0; i < embeds.length; i++) {
-            if (this.isYoutube_(embeds[i]) && 
-                this.isUnwidgetized(embeds[i]) &&
-                embeds[i].parentNode.nodeName != "OBJECT")
-                unwidgetizedElements.push(embeds[i]);
-        }
-        return unwidgetizedElements;
-    }
+    return mirosubs.widgetizer.Youtube.superClass_.
+        unwidgetizedFlashElements.call(this);
 };
