@@ -62,33 +62,11 @@ mirosubs.widgetizer.JWPlayer.prototype.makeVideoSource_ = function(elem) {
 };
 
 mirosubs.widgetizer.JWPlayer.prototype.unwidgetizedElements_ = function() {
-    var unwidgetizedElements = [];
-    var embeds = goog.dom.getElementsByTagNameAndClass('embed');
-    unwidgetizedElements = goog.array.concat(
-        unwidgetizedElements,
-        goog.array.filter(
-            embeds,
-            function(emb) {
-                return this.isJWPlayer_(emb) && this.isUnwidgetized(emb);
-            }, this));
-    var objects = goog.dom.getElementsByTagNameAndClass('object');
-    if (goog.DEBUG) {
-        this.logger_.info("Number of objects found on page: " + 
-                          objects.length);
-    }
-    unwidgetizedElements = goog.array.concat(
-        unwidgetizedElements,
-        goog.array.filter(
-            objects,
-            function(obj) {
-                return !this.objectContainsEmbed(obj) &&
-                    this.isJWPlayer_(obj) && 
-                    this.isUnwidgetized(obj);
-            }, this));
-    return unwidgetizedElements;
+    return mirosubs.widgetizer.JWPlayer.superClass_.
+        unwidgetizedFlashElements.call(this);
 };
 
-mirosubs.widgetizer.JWPlayer.prototype.isJWPlayer_ = function(element) {    
+mirosubs.widgetizer.JWPlayer.prototype.isFlashElementAPlayer = function(element) {    
     var swfSrc = this.swfURL(element);
     var isJW = this.VIDS_ARE_JW_ && swfSrc.match(/player[^\.]*.swf$/i) != null;
     this.logger_.info(
