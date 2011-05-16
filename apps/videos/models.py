@@ -40,6 +40,7 @@ from django.core.urlresolvers import reverse
 import time
 from django.utils.safestring import mark_safe
 from videos.feed_parser import parse_feed_entry
+from django.core.cache import cache
 
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -115,7 +116,22 @@ class Video(models.Model):
         if len(title) > 70:
             title = title[:70]+'...'
         return title
-
+    
+    @property
+    def views(self):
+        if not hasattr(self, '_video_views_statistic'):
+            cache_key = 'video_views_statistic_%s' % self.pk
+            views_st = cache.get(cache_key)
+            
+            if not views_st:
+                views_st = st_video_view_handler.get_views(video=self)
+                views_st['total'] = self.view_count
+                cache.set(cache_key, views_st, 60*60*2)
+                
+            self._video_views_statistic = views_st 
+            
+        return self._video_views_statistic
+    
     def title_display(self):
         if self.title:
             return self.title

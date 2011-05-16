@@ -263,10 +263,10 @@ mirosubs.video.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.swfLoaded_ ? this.player_['getTime']() : 0;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.setPlayheadTime = function(time) {
+mirosubs.video.FlvVideoPlayer.prototype.setPlayheadTime = function(time, skipsUpdateEvent) {
     if (this.swfLoaded_) {
         this.player_['seek'](time);
-        this.sendTimeUpdateInternal();
+        if (!skipsUpdateEvent)this.sendTimeUpdateInternal();
     }
     else
         this.commands_.push(goog.bind(this.setPlayheadTime, this, time));

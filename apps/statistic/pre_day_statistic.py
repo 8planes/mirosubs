@@ -79,6 +79,29 @@ class BasePerDayStatistic(object):
         """
         raise Exception('Not implemented')        
     
+    def get_query_set(self, **kwargs):
+        """
+        Should return QuerySet for self.model for get_views method
+        """
+        raise Exception('Not implemented')
+        
+    def get_views(self, **kwargs):
+        """
+        Return views statistic for week and month like: {'month': value, 'week': value}
+        """
+        qs = self.get_query_set(**kwargs)
+        today = datetime.date.today()
+        week_ago = today - datetime.timedelta(days=7)
+        month_ago = today - datetime.timedelta(days=30)
+        
+        result = dict(week=0, month=0)
+        result['week'] = qs.filter(date__range=(week_ago, today)) \
+            .aggregate(s=models.Sum('count'))['s']
+        result['month'] = qs.filter(date__range=(month_ago, today)) \
+            .aggregate(s=models.Sum('count'))['s']
+        
+        return result
+    
     def migrate(self, verbosity=1):
         """
         Migrate information from Redis to DB

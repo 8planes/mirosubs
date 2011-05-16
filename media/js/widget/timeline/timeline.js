@@ -125,12 +125,13 @@ mirosubs.timeline.Timeline.prototype.startDrag = function(e) {
 };
 mirosubs.timeline.Timeline.prototype.onDrag = function(e) {
     this.ensureWidth_();
+    console.log('dragged', e.left);
     this.timelineInner_.setLeft(e.left + this.oldLeft_, this.width_ / 2,
                                 this.videoPlayer_.getDuration());
 };
 mirosubs.timeline.Timeline.prototype.endDrag = function(e) {
     this.oldLeft_ = null;
-    this.videoPlayer_.setPlayheadTime(this.timelineInner_.getTime());
+    this.videoPlayer_.setPlayheadTime(this.timelineInner_.getTime(), true);
     if (this.wasPlaying_) {
         this.videoPlayer_.play();
     }

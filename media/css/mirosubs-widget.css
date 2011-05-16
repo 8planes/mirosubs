@@ -2274,6 +2274,7 @@ border-bottom: 1px solid #000 !important;
 		color: #fff !important;
     padding: 3px 0px 3px 0px !important;
     background: url("../images/ticks.gif") 15px 8px no-repeat !important;
+    cursor: pointer;
 }
 
 .mirosubs-timeline ul.mirosubs-timeline-time li span{
