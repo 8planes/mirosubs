@@ -235,7 +235,7 @@ mirosubs.video.Html5VideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.videoElem_["currentTime"];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
+mirosubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
     try{
         this.videoElem_["currentTime"] = playheadTime;
     }catch(e){

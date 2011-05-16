@@ -145,12 +145,12 @@ mirosubs.video.DailymotionVideoPlayer.prototype.setVolume = function(volume) {
         this.commands_.push(goog.bind(this.setVolume, this, volume));
 };
 
-mirosubs.video.DailymotionVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
+mirosubs.video.DailymotionVideoPlayer.prototype.setPlayheadTime = function(playheadTime , skipsUpdateEvent) {
     if (this.player_) {
         // FIXME: temp workaround for http://bugzilla.pculture.org/show_bug.cgi?id=14834
         playheadTime = Math.max(playheadTime, 1);
         this.player_['seekTo'](playheadTime);
-        this.sendTimeUpdateInternal();
+        if (!skipsUpdateEvent)this.sendTimeUpdateInternal();
     }
     else
         this.commands_.push(goog.bind(this.setPlayheadTime, this, playheadTime));

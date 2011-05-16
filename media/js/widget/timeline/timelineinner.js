@@ -68,19 +68,20 @@ mirosubs.timeline.TimelineInner.prototype.setLeft = function(left, offset, maxTi
     mirosubs.style.setPosition(this.getElement(), left + offset, null);
     this.ensureVisible(newTime);
 };
+
 mirosubs.timeline.TimelineInner.prototype.getTime = function() {
+    
     return this.time_;
 };
 mirosubs.timeline.TimelineInner.prototype.setTime = function(time, offset, maxTime) {
     if (maxTime != 0) {
         time = Math.min(time, maxTime);
     }
-
     var newLeft = -time * this.pixelsPerSecond_;
     this.left_ = newLeft;
-    this.time_ = time;
     mirosubs.style.setPosition(this.getElement(), newLeft + offset, null);
-    this.ensureVisible(time);
+    window.timeline_time = this.time_;
+    this.ensureVisible(this.time_);
 };
 mirosubs.timeline.TimelineInner.prototype.beforeDrag = function(e) {
     return this.timeline_.beforeDrag(e);

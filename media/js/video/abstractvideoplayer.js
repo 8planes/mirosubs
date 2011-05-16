@@ -240,7 +240,15 @@ mirosubs.video.AbstractVideoPlayer.prototype.setVolume = function(volume) {
 mirosubs.video.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };
-mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
+/*
+ * @param {Number} playheadTime The time (in seconds) to move the playhead to.
+ * @param {bool=} skipsUpdateEvent If true will not dispatch the event 
+ * broadcasting that * the player has changed position. This is useful because 
+ * this event might fire before the player reaches the target (playheadTime)
+ * time and still fire on the current (former) time. In this case, for example, 
+ * the timeline might be taken to former time.
+ */
+mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
     goog.abstractMethod();
 };
 /**
