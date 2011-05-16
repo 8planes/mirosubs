@@ -24,7 +24,7 @@ goog.provide('mirosubs.video.YoutubeVideoPlayer');
  * @param {boolean=} opt_forDialog
  */
 mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
-    mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+    mirosubs.video.FlashVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
     this.playerAPIID_ = [videoSource.getUUID(),
                          '' + new Date().getTime()].join('');
@@ -55,45 +55,30 @@ mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
     this.timeUpdateTimer_ = new goog.Timer(
         mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
 };
-goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.AbstractVideoPlayer);
+goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.FlashVideoPlayer);
 
 /**
- * This decorates an Object or Embed element.
  * @override
- * @param {Element} element Either object or embed for yt video. Must 
- *     have enablejsapi=1.
  */
-mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(element) {
-    mirosubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(
-        this, element);
-    this.swfEmbedded_ = true;
-    this.player_ = element;
-    this.playerSize_ = goog.style.getSize(element);
-    this.setDimensionsKnownInternal();
-    // FIXME: petit duplication
-    window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
-    var timer = new goog.Timer(250);
-    var that = this;
-    var count = 0;
-    this.getHandler().listen(
-        timer,
-        goog.Timer.TICK,
-        function(e) {
-            count++;
-            if (count == 20)
-                that.logExternalInterfaceError_();
-            if (that.player_['playVideo']) {
-                timer.stop();
-                that.player_.addEventListener(
-                    'onStateChange', that.eventFunction_);
-            }
-        });
-    timer.start();
+mirosubs.video.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem) {
+    return elem['playVideo'];
 };
 
-mirosubs.video.YoutubeVideoPlayer.prototype.logExternalInterfaceError_ = function() {
-    mirosubs.Rpc.call(
-        'log_youtube_ei_failure', { 'page_url': window.location.href });
+mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
+    mirosubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(this, elem);
+    this.swfEmbedded_ = true;
+    this.playerSize_ = goog.style.getSize(this.elementForSizing());
+    this.setDimensionsKnownInternal();
+}
+
+/**
+ * @override
+ */
+mirosubs.video.YoutubeVideoPlayer.prototype.setFlashPlayerElement = function(elem) {
+    this.player_ = elem;
+    window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
+    this.player_.addEventListener(
+        'onStateChange', this.eventFunction_);
 };
 
 mirosubs.video.YoutubeVideoPlayer.prototype.createDom = function() {
