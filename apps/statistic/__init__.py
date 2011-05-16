@@ -51,6 +51,11 @@ class VideoViewStatistic(BasePerDayStatistic):
         date = self.get_date(date_str)
         obj, created = self.model.objects.get_or_create(video=video, date=date)
         return obj
+
+    def get_query_set(self, video):
+        return self.model.objects.filter(video=video)
+
+st_video_view_handler = VideoViewStatistic()
         
 class SubtitleFetchStatistic(BasePerDayStatistic):
     connection = default_connection
@@ -95,4 +100,3 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
         return obj
 
 st_sub_fetch_handler = SubtitleFetchStatistic()
-st_video_view_handler = VideoViewStatistic()
