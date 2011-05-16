@@ -26,13 +26,14 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required
 
-@check_is_staff
+@login_required
 def index(request):
     context = {}
     return direct_to_template(request, 'emails_example/index.html', context)
 
-@check_is_staff
+@login_required
 def send_email(request):
     email = request.POST.get('email', '')
     subject = request.POST.get('subject', '')
@@ -64,7 +65,7 @@ def send_email(request):
         
     return redirect('emails_example:index')       
     
-@check_is_staff
+@login_required
 def email_title_changed(request):
     try:
         video = Video.objects.exclude(title__isnull=True).exclude(title='')[:1].get()
@@ -79,7 +80,7 @@ def email_title_changed(request):
     }
     return direct_to_template(request, 'videos/email_title_changed.html', context)
 
-@check_is_staff
+@login_required
 def email_video_url_add(request):
     try:
         video = Video.objects.exclude(Q(videourl__isnull=True)|Q(videourl__added_by__isnull=True))[:1].get()
@@ -95,7 +96,7 @@ def email_video_url_add(request):
     }
     return direct_to_template(request, 'videos/email_video_url_add.html', context)
 
-@check_is_staff
+@login_required
 def email_start_notification(request):
     try:
         language = SubtitleLanguage.objects.all()[:1].get()
