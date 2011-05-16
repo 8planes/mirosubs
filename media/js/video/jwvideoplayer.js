@@ -23,40 +23,31 @@ goog.provide('mirosubs.video.JWVideoPlayer');
  * @param {mirosubs.video.YoutubeVideoSource} videoSource
  */
 mirosubs.video.JWVideoPlayer = function(videoSource) {
-    mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+    mirosubs.video.FlashVideoPlayer.call(this, videoSource);
     this.logger_ = goog.debug.Logger.getLogger('mirosubs.video.JWPlayer');
-    this.stateListener_ = 'event' + mirosubs.randomString();
-    this.timeListener_ = 'time' + mirosubs.randomString();
+    this.stateListener_ = 'jwevent' + mirosubs.randomString();
+    this.timeListener_ = 'jwtime' + mirosubs.randomString();
     this.playheadTime_ = 0;
 };
-goog.inherits(mirosubs.video.JWVideoPlayer, mirosubs.video.AbstractVideoPlayer);
+goog.inherits(mirosubs.video.JWVideoPlayer, 
+              mirosubs.video.FlashVideoPlayer);
 
-/**
- * This decorates an Object or Embed element.
- * @override
- * @param {Element} Object or Embed element to decorate
- */
-mirosubs.video.JWVideoPlayer.prototype.decorateInternal = function(element) {
-    mirosubs.video.JWVideoPlayer.superClass_.decorateInternal.call(this, element);
-    this.player_ = element;
-    window[this.stateListener_] = goog.bind(this.playerStateChanged_, this);
-    window[this.timeListener_] = goog.bind(this.playerTimeChanged_, this);
-    var timer = new goog.Timer(250);
-    var that = this;
-    this.getHandler().listen(
-        timer,
-        goog.Timer.TICK,
-        function(e) {
-            if (that.player_['addModelListener']) {
-                timer.stop();
-                that.decoratedPlayerIsReady_();
-            }
-        });
-    timer.start();
+mirosubs.video.JWVideoPlayer.prototype.decorateInternal = function(elem) {
+    mirosubs.video.JWVideoPlayer.superClass_.decorateInternal.call(this, elem);
+    this.playerSize_ = goog.style.getSize(this.elementForSizing());
+    this.setDimensionsKnownInternal();
 };
-mirosubs.video.JWVideoPlayer.prototype.decoratedPlayerIsReady_ = function() {
+
+mirosubs.video.JWVideoPlayer.prototype.isFlashElementReady = function(elem) {
+    return elem['addModelListener'];
+};
+
+mirosubs.video.JWVideoPlayer.prototype.setFlashPlayerElement = function(element) {
+    this.player_ = element;
     this.playerSize_ = goog.style.getSize(this.player_);
     this.setDimensionsKnownInternal();
+    window[this.stateListener_] = goog.bind(this.playerStateChanged_, this);
+    window[this.timeListener_] = goog.bind(this.playerTimeChanged_, this);
     this.player_['addModelListener']('STATE', this.stateListener_);
     this.player_['addModelListener']('TIME', this.timeListener_);
 };
