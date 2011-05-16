@@ -26,14 +26,23 @@ from apps.videos.models import Video
 
 class ExtraContextHelpers(object):
 
-    def for_many_videos_widgetizer():
+
+    def for_many_videos_widgetizer(widgetized=True):
         videos = Video.objects.filter(languages_count__gt=1).filter(videourl__type='Y')[:40]
-        urls = [x.get_video_url().replace('watch?v=', 'v/') for x in videos]
+        urls = [];
+        for v in videos:
+            if widgetized:
+                urls.append(v.get_video_url().replace('watch?v=', 'v/') )
+            else:
+                urls.append(v.get_video_url())
 
         return {
             "urls": urls
                 
         }
+
+    def for_many_videos():
+        return ExtraContextHelpers.__dict__["for_many_videos_widgetizer"] (True)
     
 
 def pagedemo(request, file_name):
