@@ -6,12 +6,37 @@ from utils import send_templated_email
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
+from celery.signals import task_failure
+
+def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, einfo, **kwds):
+    """
+    As tasks are loaded with DjangoLoader at the begining,
+    handler will be connected before any task execution
+    """
+    from sentry.client.models import client
+    
+    data = {
+        'task': sender,
+        'exception': exception,
+        'args': args,
+        'kwargs': kwargs
+    }
+
+    client.create_from_exception(exc_info=(type(exception), exception, traceback), data=data)
+    
+task_failure.connect(task_failure_handler)
+
 
 @task
 def add(a, b):
     print "TEST TASK FOR CELERY. EXECUTED WITH ARGUMENTS: %s %s" % (a, b)
     r = a+b
     return r
+
+@task
+def raise_exception(msg, **kwargs):
+    print "TEST TASK FOR CELERY. RAISE EXCEPTION WITH MESSAGE: %s" % msg
+    raise TypeError(msg)
 
 @task()
 def video_changed_tasks(video_pk, new_version_id=None):
