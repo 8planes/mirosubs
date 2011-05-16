@@ -615,6 +615,12 @@ def test_celery(request):
     add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
 
+@staff_member_required
+def test_celery_exception(request):
+    from videos.tasks import raise_exception
+    raise_exception.delay('Exception in Celery', should_be_logged='Hello, man!')
+    return HttpResponse('Hello, from Amazon SQS backend for Celery! Look for exception.')
+
 @never_in_prod
 @staff_member_required
 def video_staff_delete(request, video_id):
@@ -646,6 +652,3 @@ def video_debug(request, video_id):
             'lang_info': lang_info,
             "cache": cache
     }, context_instance=RequestContext(request))
-
-
-    

@@ -24,6 +24,7 @@ urlpatterns = patterns(
     'videos.views',
     url(r'^$', 'video_list', name='list'),
     url(r'^test_celery/$', 'test_celery'),
+    url(r'^test_celery_exception/$', 'test_celery_exception'),
     url(r'^router/$', rpc_router, name='rpc_router'),
     url(r'^router/api/$', rpc_router.api, name='rpc_api'),    
     url(r'^subscribe_to_updates/$', 'subscribe_to_updates', name='subscribe_to_updates'),
