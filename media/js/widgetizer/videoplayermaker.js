@@ -88,6 +88,33 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
     }
 };
 
+/**
+ * To be overridden by classes that widgetize flash-based video elements.
+ * @returns {Boolean}
+ */
+mirosubs.widgetizer.VideoPlayerMaker.prototype.isFlashElementAPlayer = goog.abstractMethod;
+
+/**
+ * @protected
+ */
+mirosubs.widgetizer.VideoPlayerMaker.prototype.unwidgetizedFlashElements = function() {
+    var unwidgetizedElements = [];
+    var objects = goog.dom.getElementsByTagNameAndClass('object');
+    for (var i = 0; i < objects.length; i++)
+        if (this.isFlashElementAPlayer(objects[i]) &&
+            this.isUnwidgetized(objects[i])) {
+            unwidgetizedElements.push(objects[i]);
+        }
+    var embeds = goog.dom.getElementsByTagNameAndClass('embed');
+    for (var i = 0; i < embeds.length; i++) {
+        if (this.isFlashElementAPlayer(embeds[i]) &&
+            this.isUnwidgetized(embeds[i]) &&
+            embeds[i].parentNode.nodeName != 'OBJECT')
+            unwidgetizedElements.push(embeds[i]);
+    }
+    return unwidgetizedElements;
+};
+
 mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
     return this.findFlashParam(element, 'flashvars');
 };

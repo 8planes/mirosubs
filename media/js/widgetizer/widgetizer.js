@@ -79,8 +79,9 @@ mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
     }
     var videoPlayers = [];
     for (var i = 0; i < this.makers_.length; i++)
-        goog.array.extend(videoPlayers, 
-                          this.makers_[i].makeVideoPlayers());
+        goog.array.extend(
+            videoPlayers, 
+            this.makers_[i].makeVideoPlayers());
     for (var i = 0; i < videoPlayers.length; i++)
         mirosubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
 };
