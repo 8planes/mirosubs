@@ -80,3 +80,41 @@ mirosubs.Flash.getHTML = function(id, swfURL, width, height, flashVars) {
         goog.string.htmlEscape(flashVarsArr.join('&')),
         "#000000");
 };
+
+mirosubs.Flash.findFlashParam =
+    function(element, embedParamName, opt_objectParamName) 
+{
+    if (element.nodeName == "EMBED") {
+        return element.getAttribute(embedParamName);
+    } else {
+        var paramNode = mirosubs.Flash.findObjectParam_(
+            element, opt_objectParamName || embedParamName);
+        if (paramNode) {
+            return paramNode['value'];
+        }
+    }
+    return null;
+};
+
+mirosubs.Flash.swfURL = function(element) {
+    if (element.nodeName == "OBJECT" && element['data']) {
+        return element['data'];
+    } else {
+        return mirosubs.Flash.findFlashParam(element, 'src', 'movie');
+    }
+};
+
+mirosubs.Flash.flashVars = function(element) {
+    return mirosubs.Flash.findFlashParam(element, 'flashvars');
+};
+
+mirosubs.Flash.findObjectParam_ = 
+    function(objElem, paramName) 
+{
+    return goog.dom.findNode(
+        objElem, 
+        function(n) {
+            return n.nodeName == "PARAM" && 
+                goog.string.caseInsensitiveCompare(n['name'], paramName) == 0;
+        });
+};
