@@ -163,7 +163,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
 {
     if (playerAPIID == this.playerAPIID_) {
         this.setDimensionsKnownInternal();
-        this.player_ = goog.dom.$(this.playerElemID_);
+        this.player_ = goog.dom.getElement(this.playerElemID_);
         mirosubs.style.setSize(this.player_, this.playerSize_);
         if (this.forDialog_)
             this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());
@@ -294,7 +294,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.disposeInternal = function() {
     this.timeUpdateTimer_.dispose();
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getVideoElement = function() {
-    return this.player_;
+    return goog.dom.getElement(this.playerElemID_);
 };
 /**
  * http://code.google.com/apis/youtube/js_api_reference.html#getPlayerState
