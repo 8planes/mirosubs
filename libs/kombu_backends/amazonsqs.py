@@ -1,6 +1,8 @@
 from kombu.transport import virtual
 from boto.sqs.connection import SQSConnection
 from django.conf import settings
+from boto import exception as boto_exceptions
+from utils import LogExceptionsMetaclass
 
 LOG_AMAZON_BROKER = getattr(settings, 'LOG_AMAZON_BROKER', False)
 
@@ -35,6 +37,22 @@ else:
     DEFAULT_CONNECTION = SQSConnection
 
 class Channel(virtual.Channel):
+    #set logging these exceptions in any method of class by LogExceptionsMetaclass
+    __log_exceptions_logger_name = 'celery'
+    __log_exceptions_with_logger = (
+        boto_exceptions.BotoClientError, 
+        boto_exceptions.SDBPersistenceError,
+        boto_exceptions.BotoServerError,
+        AttributeError,
+        LookupError,
+        EnvironmentError,
+        RuntimeError,
+        SystemError,
+        ValueError
+    )
+    __metaclass__ = LogExceptionsMetaclass
+    
+    
     Client = DEFAULT_CONNECTION
     
     DOT_REPLECEMENT = '___'
@@ -74,6 +92,7 @@ class Channel(virtual.Channel):
         DEBUG and pr('>>> Channel._get: %s' % queue)
         q = self._get_queue(queue)
         m = q.read()
+
         if m:
             q.delete_message(m)
             return deserialize(m.get_body())
@@ -170,6 +189,16 @@ class Channel(virtual.Channel):
         
 class Transport(virtual.Transport):
     Channel = Channel
-    
+
+    def __init__(self, *args, **kwargs):
+        super(Transport, self).__init__(*args, **kwargs)
+        self.connection_errors = (
+            boto_exceptions.BotoServerError,
+        ) 
+        self.channel_errors = (
+            boto_exceptions.BotoClientError,
+            boto_exceptions.BotoServerError,
+        )
+            
     def establish_connection(self):
         return self

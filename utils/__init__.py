@@ -123,6 +123,11 @@ def send_templated_email(to, subject, body_template, body_dict,
 from sentry.client.models import client
 
 def catch_exception(exceptions, subject="", default=None, ignore=False):
+    """
+    Create decorator witch catch passed exceptions, log them with Sentry
+    and prevent failing. Useful for integration some services. For example we
+    don't wish that site was down if Redis does not response
+    """
     if not isinstance(exceptions, (list, tuple)):
         exceptions = (exceptions,)
 
@@ -136,3 +141,68 @@ def catch_exception(exceptions, subject="", default=None, ignore=False):
                 return default
         return update_wrapper(wrapper, func)
     return catch_exception_func
+
+def log_exception(exceptions, logger='root'):
+    """
+    Create decorator to log exceptions in Sentry.
+    """
+    if not isinstance(exceptions, (list, tuple)):
+        exceptions = (exceptions,)
+    #TODO: in Sentry message is displayed with title utils.wrapped. should fix this
+    def log_exception_func(func):
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except exceptions, e:
+                #pretty hack to prevent multiple logging if few warpped functions 
+                #call each other
+                if not hasattr(e, '_caught_by_selery'):
+                    e._caught_by_selery = True
+                    client.create_from_exception(sys.exc_info(), logger='celery')
+                raise e
+            
+        return update_wrapper(wrapper, func)
+    return log_exception_func
+
+import inspect
+
+class LogExceptionsMetaclass(type):
+    """
+    This is metaclass for wrapping all method of class with log_exception. 
+    __log_exceptions_with_logger attribute of class should ontain tuple of exceptions
+    __log_exceptions_logger_name can contain name of logger of Sentry
+    
+    Used, for example, in amazonsqs_backend. We are not sure how it is a little
+    unpredictable, so we wish log any error. Celery, witch use amazonsqs_backend,
+    does not allow catch anything.
+    """
+    
+    def __new__(cls, name, bases, attrs):
+        exc_setting_name = '_%s__log_exceptions_with_logger' % name
+        logger_setting_name = '_%s__log_exceptions_logger_name' % name
+        
+        kwargs = {
+            'exceptions': Exception
+        }
+        
+        if exc_setting_name in attrs:
+            kwargs['exceptions'] = attrs[exc_setting_name]
+            del attrs[exc_setting_name]
+        
+        if logger_setting_name in attrs:
+            kwargs['logger'] = attrs[logger_setting_name]
+            del attrs[logger_setting_name]
+            
+        log_exception_wrapper = log_exception(**kwargs)
+        
+        for n, v in attrs.items():
+            if inspect.isfunction(v):
+                attrs[n] = log_exception_wrapper(v)
+        
+        for base in bases:
+            for n, v in base.__dict__.items():
+                if not n in attrs and inspect.isfunction(v):
+                    attrs[n] = log_exception_wrapper(v)
+                    
+        new_class = super(LogExceptionsMetaclass, cls).__new__(cls, name, bases, attrs)
+        return new_class    
