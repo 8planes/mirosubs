@@ -55,46 +55,6 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element
         function(p) { return p.videoElementsContain(element); });
 };
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.findObjectParam_ = 
-    function(objElem, paramName) 
-{
-    return goog.dom.findNode(
-        objElem, 
-        function(n) {
-            return n.nodeName == "PARAM" && 
-                goog.string.caseInsensitiveCompare(n['name'], paramName) == 0;
-        });
-};
-
-/**
- * @protected
- */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam =
-    function(element, embedParamName, opt_objectParamName) 
-{
-    if (element.nodeName == "EMBED") {
-        return element.getAttribute(embedParamName);
-    } else {
-        var paramNode = this.findObjectParam_(
-            element, opt_objectParamName || embedParamName);
-        if (paramNode) {
-            return paramNode['value'];
-        }
-    }
-    return null;
-};
-
-/**
- * @protected
- */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
-    if (element.nodeName == "OBJECT" && element['data']) {
-        return element['data'];
-    } else {
-        return this.findFlashParam(element, 'src', 'movie');
-    }
-};
-
 /**
  * To be overridden by classes that widgetize flash-based video elements.
  * @protected
@@ -122,13 +82,6 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.unwidgetizedFlashElements = funct
             unwidgetizedElements.push(embeds[i]);
     }
     return unwidgetizedElements;
-};
-
-/**
- * @protected
- */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
-    return this.findFlashParam(element, 'flashvars');
 };
 
 /**
