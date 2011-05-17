@@ -28,10 +28,6 @@ mirosubs.widgetizer.HTML5 = function() {
 goog.inherits(mirosubs.widgetizer.HTML5, 
               mirosubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.HTML5.prototype.videosExist = function() {
-    return this.unwidgetizedVideos_().length > 0;
-};
-
 mirosubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
     var videoElements = this.unwidgetizedVideos_();
     var videoPlayers = [];

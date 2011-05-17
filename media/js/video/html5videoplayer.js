@@ -248,8 +248,8 @@ mirosubs.video.Html5VideoPlayer.prototype.getVideoSize = function() {
     return goog.style.getSize(this.videoElem_);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.getVideoElement = function() {
-    return this.videoElem_;
+mirosubs.video.Html5VideoPlayer.prototype.getVideoElements = function() {
+    return [this.videoElem_];
 };
 
 mirosubs.video.Html5VideoPlayer.prototype.getReadyState_ = function() {

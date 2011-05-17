@@ -36,6 +36,10 @@ mirosubs.Extension.prototype.show_ = function(enabled) {
     if (this.shown_)
         return;
     this.shown_ = true;
+    // I just removed the videosExist method from Widgetizer, since it no longer makes sense.
+    // When this is worked on again, this should first check for widgetizedVideos, then
+    // subscribe to an event from Widgetizer that gets fired whenever a new widgetized 
+    // video is found on the page.
     if (mirosubs.Widgetizer.getInstance().videosExist())
         this.addElementToPage_(enabled);
     if (enabled)
