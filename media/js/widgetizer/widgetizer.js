@@ -31,10 +31,6 @@ mirosubs.Widgetizer = function() {
         debugWindow.setEnabled(true);
         debugWindow.init();
         mirosubs.DEBUG = true;
-        if (myURI.getParameterValue('debug_mirosubs_js') == 'true' &&
-            window.name != DEBUG_WIN_NAME) {
-            mirosubs.DEBUG = true;
-        }
     }
     this.makers_ = [
         new mirosubs.widgetizer.Youtube(),
