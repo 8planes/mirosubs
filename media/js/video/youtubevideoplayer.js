@@ -319,6 +319,13 @@ mirosubs.video.YoutubeVideoPlayer.logger_ =
     var ytReady = "onYouTubePlayerReady";
     var oldReady = window[ytReady] || goog.nullFunction;
     window[ytReady] = function(apiID) {
+        if (goog.DEBUG) {
+            mirosubs.video.YoutubeVideoPlayer.logger_.info(
+                'onYouTubePlayerReady for ' + apiID);
+            mirosubs.video.YoutubeVideoPlayer.logger_.info(
+                'players_ length is ' + 
+                    mirosubs.video.YoutubeVideoPlayer.players_.length);
+        }
         try {
             oldReady(apiID);
         }

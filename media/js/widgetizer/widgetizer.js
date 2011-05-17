@@ -27,11 +27,12 @@ mirosubs.Widgetizer = function() {
     var myURI = new goog.Uri(window.location);
     var DEBUG_WIN_NAME = 'mirosubsdebuggingmain';
     if (goog.DEBUG) {
+        var debugWindow = new goog.debug.FancyWindow(DEBUG_WIN_NAME);
+        debugWindow.setEnabled(true);
+        debugWindow.init();
+        mirosubs.DEBUG = true;
         if (myURI.getParameterValue('debug_mirosubs_js') == 'true' &&
             window.name != DEBUG_WIN_NAME) {
-            var debugWindow = new goog.debug.FancyWindow(DEBUG_WIN_NAME);
-            debugWindow.setEnabled(true);
-            debugWindow.init();
             mirosubs.DEBUG = true;
         }
     }
