@@ -31,6 +31,8 @@ mirosubs.widget.VideoTab = function(opt_forAnchoring) {
     this.nudgeElem_ = null;
     this.nudgeSpanElem_ = null;
     this.nudgeClickCallback_ = null;
+    this.shareSpanElem_ = null;
+    this.shareElem_ = null;
     this.forAnchoring_ = !!opt_forAnchoring;
     this.spinnerGifURL_ = mirosubs.imageAssetURL('spinner.gif');
     this.logoURL_ = mirosubs.imageAssetURL('small_logo.png');
@@ -109,6 +111,7 @@ mirosubs.widget.VideoTab.prototype.showContent = function(
     this.text_ = text;
     goog.dom.setTextContent(this.spanElem_, text);
 };
+
 mirosubs.widget.VideoTab.prototype.getAnchorElem = function() {
     return this.anchorElem_;
 };
@@ -123,8 +126,37 @@ mirosubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
 mirosubs.widget.VideoTab.prototype.showNudge = function(shows) {
     mirosubs.style.setVisibility(this.nudgeElem_, shows);
     mirosubs.style.setVisibility(this.nudgeSpanElem_, shows);
+     if (shows){
+         mirosubs.style.setProperty(this.nudgeElem_, 'width', null);
+        
+     }else{
+         mirosubs.style.setWidth(this.nudgeElem_, 0);
+     }
     return;
 };
+
+/*
+ * Creates the share button next to the 'subtitle me', only if 
+ * this is an off site widget. When clicked will be taken to the
+ * url provided.
+ * @param shareURL {goog.URI} The url for the 'share' link.
+ * @param newWindow {bool=} If true will open on new window.
+ */
+mirosubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWindow){
+    if (!mirosubs.isEmbeddedInDifferentDomain()){
+        // no point in taking to the unisubs site if we're here already
+        return;
+    }
+    if(!this.shareElem_){
+        var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+        this.shareSpanElem_ = $d('span', {'href':'', 'class':'mirosubs-tabTextShare'}, 'Share');
+        this.shareElem_ = $d('a', {'href':'', 'class':''}, this.shareSpanElem_);
+        this.getElement().appendChild(this.shareElem_);    
+    }
+    var target= newWindow ? "_blank" : "_self";
+    goog.dom.setProperties(this.shareElem_, {"href": shareURL.toString(), "target":target});
+};
+
 mirosubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
     goog.dom.setTextContent(this.nudgeSpanElem_, text);
     this.nudgeClickCallback_ = fn;

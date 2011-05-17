@@ -6,7 +6,7 @@ from utils import send_templated_email
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
-from celery.signals import task_failure
+from celery.signals import task_failure, setup_logging
 
 def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, einfo, **kwds):
     """
@@ -14,7 +14,7 @@ def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, ei
     handler will be connected before any task execution
     """
     from sentry.client.models import client
-    
+
     data = {
         'task': sender,
         'exception': exception,
@@ -26,6 +26,13 @@ def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, ei
     
 task_failure.connect(task_failure_handler)
 
+def setup_logging_handler(*args, **kwargs):
+    """
+    Init sentry logger handler
+    """
+    import sentry_logger
+    
+setup_logging.connect(setup_logging_handler)
 
 @task
 def add(a, b):
