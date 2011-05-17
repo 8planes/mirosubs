@@ -13,7 +13,13 @@
             var USERNAME = 'Arthur Debert';
         </script> 
 {% if not js_use_compiled %}
+  <script type="text/javascript">
+    window.DEBUG_UNISUBS = true;
+  </script>
   {% include "widget/_js_base_dependencies.html" %}
+  <script>
+    goog.require('goog.debug.FancyWindow');
+  </script>
 {% endif %}
 {% for dep in js_dependencies %}
   <script type="text/javascript" src="{{dep|safe}}"></script>
@@ -37,10 +43,6 @@
               content="The Khan Academy is a not-for-profit 501(c)(3) with the mission of providing a world-class education to anyone, anywhere.  Despite being the work of one man, Salman Khan, this 2100+ video library is the most-used educational video resource as measured by YouTube video views per day and unique users per month."/> 
         <link rel="shortcut icon" href="/favicon.ico"> 
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png"/> 
- 
-        
-            <link rel='stylesheet' type='text/css' href='http://khanexercises.appspot.com/stylesheets/shared-package/hashed-39ac2cb6e411d38c0f99cdfa49624418.css'/> 
-            
     <link rel='stylesheet' type='text/css' href='http://khanexercises.appspot.com/stylesheets/video-package/hashed-f48d273bbdcfd519f1f59c6109739724.css'/> 
  
             <script type='text/javascript' src='http://khanexercises.appspot.com/javascript/shared-package/hashed-14a042f0fb2c9bb0b6017430b3692116.js'></script> 
