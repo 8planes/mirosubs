@@ -172,6 +172,7 @@ JS_CORE = ['mirosubs.js',
            'style.js',
            'video/video.js',
            'video/abstractvideoplayer.js',
+           'video/flashvideoplayer.js',
            'video/html5videoplayer.js',
            'video/youtubevideoplayer.js',
            'video/jwvideoplayer.js',
@@ -524,6 +525,8 @@ MEDIA_BUNDLES = {
     "base": {
         "type":"css",
         "files" : (
+            "css/jquery.jgrowl.css",
+            "css/jquery.alerts.css",
             "css/960.css",
             "css/html.css", 
             "css/about_faq.css", 
