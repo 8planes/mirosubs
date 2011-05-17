@@ -28,9 +28,21 @@ mirosubs.video.JWVideoPlayer = function(videoSource) {
     this.stateListener_ = 'jwevent' + mirosubs.randomString();
     this.timeListener_ = 'jwtime' + mirosubs.randomString();
     this.playheadTime_ = 0;
+
+    var readyFunc = goog.bind(this.onJWPlayerReady_, this);
+    var jwReady = "playerReady";
+    var oldReady = window[jwReady] || goog.nullFunction;
+    window[jwReady] = function(obj) {
+        oldReady(obj);
+        readyFunc(obj);
+    };
 };
 goog.inherits(mirosubs.video.JWVideoPlayer, 
               mirosubs.video.FlashVideoPlayer);
+
+mirosubs.video.JWVideoPlayer.prototype.onJWPlayerReady_ = function(elem) {
+    this.tryDecoratingAll();
+};
 
 mirosubs.video.JWVideoPlayer.prototype.decorateInternal = function(elem) {
     mirosubs.video.JWVideoPlayer.superClass_.decorateInternal.call(this, elem);
