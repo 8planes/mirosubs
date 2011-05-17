@@ -6,36 +6,6 @@ function onYouTubePlayerReady(playerId) {
     ytplayer = document.getElementById("myytplayer");
     console.log(ytplayer.playVideo);
 }
-
-function start(e) {
-    var object = document.getElementsByTagName('object')[0];
-    var embed = document.getElementsByTagName('embed')[0];
-    console.log(object);
-    console.log(embed);
-    var count = 0;
-    var intervalid = window.setInterval(
-        function() {
-            count++;
-            if ((object && object['playVideo']) || 
-                (embed && embed['playVideo'])) {
-                window.clearInterval(intervalid);
-                console.log('can play video!');
-                if (object && object['playVideo'])
-                    console.log(object);
-                if (embed && embed['playVideo'])
-                    console.log(embed);
-            }
-            else {
-                if (count < 40) {
-                    console.log('cannot play video');
-                    console.log(object.parentNode);
-                }
-            }
-        }, 250);
-}
-window.onload = start;
-
-
     </script>
   </head>
   <body>
