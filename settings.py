@@ -525,6 +525,8 @@ MEDIA_BUNDLES = {
     "base": {
         "type":"css",
         "files" : (
+            "css/jquery.jgrowl.css",
+            "css/jquery.alerts.css",
             "css/960.css",
             "css/html.css", 
             "css/about_faq.css", 

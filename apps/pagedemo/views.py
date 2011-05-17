@@ -22,14 +22,40 @@ from django.contrib.sites.models import Site
 from django.template import RequestContext, TemplateDoesNotExist
 from django.conf import settings
 from django.http import Http404
+from apps.videos.models import Video
+
+class ExtraContextHelpers(object):
+
+
+    def for_many_videos_widgetizer(widgetized=True):
+        videos = Video.objects.filter(languages_count__gt=1).filter(videourl__type='Y')[:40]
+        urls = [];
+        for v in videos:
+            if widgetized:
+                urls.append(v.get_video_url().replace('watch?v=', 'v/') )
+            else:
+                urls.append(v.get_video_url())
+
+        return {
+            "urls": urls
+                
+        }
+
+    def for_many_videos():
+        return ExtraContextHelpers.__dict__["for_many_videos_widgetizer"] (True)
+    
 
 def pagedemo(request, file_name):
+    if bool(file_name) is False:
+        return pagedemo(request, "index")
     context = widget.add_config_based_js_files(
         {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
     context['embed_js_url'] = \
         "http://{0}/embed{1}.js".format(
         Site.objects.get_current().domain,
         settings.EMBED_JS_VERSION)
+    if hasattr(ExtraContextHelpers, "for_%s" % file_name):
+        context.update( ExtraContextHelpers.__dict__[ "for_%s" % file_name]())
     try:
         return render_to_response(
             'pagedemo/{0}.html'.format(file_name), 
