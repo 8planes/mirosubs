@@ -95,6 +95,8 @@ compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
 widgetizer_js_files = ['config.js']
 widgetizer_js_files.extend(settings.JS_WIDGETIZER)
 compile('mirosubs-widgetizer.js', widgetizer_js_files)
+compile('mirosubs-widgetizer-debug.js', widgetizer_js_files, 
+        debug=True)
 
 # assumes that some other process has generated config.js
 extension_js_files = ['config.js']
