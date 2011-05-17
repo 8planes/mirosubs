@@ -27,6 +27,7 @@ mirosubs.video.FlashVideoPlayer = function(videoSource) {
     this.object_ = null;
     this.decorateTimer_ = null;
     this.decorateAttemptCount_ = 0;
+    this.decorated_ = false;
 };
 goog.inherits(mirosubs.video.FlashVideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
@@ -38,7 +39,12 @@ goog.inherits(mirosubs.video.FlashVideoPlayer,
  *
  */
 mirosubs.video.FlashVideoPlayer.prototype.decorateInternal = function(element) {
-    this.findElements_(element);
+    this.decorated_ = true;
+    var objectAndEmbed = this.findElements_(element);
+    if (objectAndEmbed[0])
+        this.object_ = objectAndEmbed[0];
+    if (objectAndEmbed[1])
+        this.embed_ = objectAndEmbed[1];
     var elementToUse = this.object_ || this.embed_;
     mirosubs.video.FlashVideoPlayer.superClass_.decorateInternal.call(
         this, elementToUse);
@@ -86,15 +92,41 @@ mirosubs.video.FlashVideoPlayer.prototype.logExternalInterfaceError_ = function(
 };
 
 mirosubs.video.FlashVideoPlayer.prototype.findElements_ = function(element) {
+    var object = null, embed = null;
     if (element.nodeName == "EMBED") {
-        this.embed_ = element;
-        if (this.embed_.parentNode.nodeName == "OBJECT")
-            this.object_ = this.embed_.parentNode;
+        embed = element;
+        if (embed.parentNode.nodeName == "OBJECT")
+            object = embed.parentNode;
     }
     else {
-        this.object_ = element;
-        this.embed_ = goog.dom.findNode(
-            this.object_, 
+        object = element;
+        embed = goog.dom.findNode(
+            object, 
             function(e) { return e.nodeName == "EMBED"; });
     }
+    return [object, embed];
+};
+
+mirosubs.video.FlashVideoPlayer.prototype.getVideoElement = goog.abstractMethod;
+
+mirosubs.video.FlashVideoPlayer.prototype.getVideoElements = function() {
+    var objectAndEmbed = null;
+    if (this.decorated_) {
+        objectAndEmbed = [this.object_, this.embed_];
+    }
+    else {
+        var videoElem = this.getVideoElement();
+        if (videoElem)
+            objectAndEmbed = this.findElements_(videoElem);
+    }
+    if (objectAndEmbed) {
+        var elems = [];
+        if (objectAndEmbed[0])
+            elems.push(objectAndEmbed[0]);
+        if (objectAndEmbed[1])
+            elems.push(objectAndEmbed[1]);
+        return elems;
+    }
+    else
+        return [];
 };

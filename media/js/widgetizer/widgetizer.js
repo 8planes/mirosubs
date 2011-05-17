@@ -49,7 +49,6 @@ goog.addSingletonGetter(mirosubs.Widgetizer);
  *
  */
 mirosubs.Widgetizer.prototype.widgetize = function() {
-    
     if (mirosubs.LoadingDom.getInstance().isDomLoaded()) {
         this.onLoaded_();
     }
@@ -61,19 +60,23 @@ mirosubs.Widgetizer.prototype.widgetize = function() {
     }
 };
 
-mirosubs.Widgetizer.prototype.videosExist = function() {
-    for (var i = 0; i < this.makers_.length; i++)
-        if (this.makers_[i].videosExist())
-            return true;
-    return false;
-}
-
 mirosubs.Widgetizer.prototype.onLoaded_ = function() {
     this.addHeadCss();
-    this.findAndWidgetizeElements_();
+    this.widgetizeAttemptTimer_ = new goog.Timer(1000);
+    this.widgetizeAttemptCount_ = 0;
+    goog.events.listen(
+        this.widgetizeAttemptTimer_,
+        goog.Timer.TICK,
+        goog.bind(this.findAndWidgetizeElements_, this));
+    this.widgetizeAttemptTimer_.start();
 };
 
 mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
+    this.widgetizeAttemptCount_++;
+    if (this.widgetizeAttemptCount_ > 5) {
+        this.widgetizeAttemptTimer_.stop();
+        return;
+    }
     if (goog.DEBUG) {
         this.logger_.info('finding and widgetizing elements');
     }
@@ -82,6 +85,10 @@ mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
         goog.array.extend(
             videoPlayers, 
             this.makers_[i].makeVideoPlayers());
+    if (goog.DEBUG) {
+        this.logger_.info('found ' + videoPlayers.length + 
+                          ' new video players on the page');
+    }
     for (var i = 0; i < videoPlayers.length; i++)
         mirosubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
 };

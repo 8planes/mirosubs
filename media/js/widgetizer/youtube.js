@@ -36,10 +36,6 @@ goog.inherits(mirosubs.widgetizer.Youtube,
 mirosubs.widgetizer.Youtube.prototype.logger_ =
     goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
 
-mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
-    return this.unwidgetizedElements_().length > 0;
-};
-
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
     this.logger_.info('making video players');
     var elements = this.unwidgetizedElements_();

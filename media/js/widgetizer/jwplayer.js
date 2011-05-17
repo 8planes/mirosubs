@@ -34,10 +34,6 @@ goog.inherits(
     mirosubs.widgetizer.JWPlayer,
     mirosubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.JWPlayer.prototype.videosExist = function() {
-    return this.unwidgetizedElements_().length > 0;
-};
-
 mirosubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
     var elements = this.unwidgetizedElements_();
     if (goog.DEBUG) {

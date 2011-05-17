@@ -225,10 +225,15 @@ mirosubs.video.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
  */
 mirosubs.video.AbstractVideoPlayer.prototype.getVolume = goog.abstractMethod;
 /**
- * @return {Element} The video element. Used to check to see if a video on the 
- *     page has been wrapped in a player yet or not.
+ * @return {Array.<Element>} Video elements on the page represented by this player.
+ *     Sometimes for a flash-based player, this is two elements: the object and the
+ *     embed.
  */
-mirosubs.video.AbstractVideoPlayer.prototype.getVideoElement = goog.abstractMethod;
+mirosubs.video.AbstractVideoPlayer.prototype.getVideoElements = goog.abstractMethod;
+
+mirosubs.video.AbstractVideoPlayer.prototype.videoElementsContain = function(elem) {
+    return goog.array.contains(this.getVideoElements(), elem);
+};
 
 /**
  * 

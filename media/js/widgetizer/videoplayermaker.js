@@ -30,9 +30,6 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.logger_ =
     goog.debug.Logger.getLogger(
         'mirosubs.widgetizer.VideoPlayerMaker');
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.videosExist = 
-    goog.abstractMethod;
-
 mirosubs.widgetizer.VideoPlayerMaker.prototype.makeVideoPlayers =
     goog.abstractMethod;
 
@@ -55,7 +52,7 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized =
 mirosubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element) {
     return !goog.array.find(
         mirosubs.video.AbstractVideoPlayer.players,
-        function(p) { return p.getVideoElement() == element; });
+        function(p) { return p.videoElementsContain(element); });
 };
 
 mirosubs.widgetizer.VideoPlayerMaker.prototype.findObjectParam_ = 
@@ -69,6 +66,9 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.findObjectParam_ =
         });
 };
 
+/**
+ * @protected
+ */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam =
     function(element, embedParamName, opt_objectParamName) 
 {
@@ -84,6 +84,9 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam =
     return null;
 };
 
+/**
+ * @protected
+ */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
     if (element.nodeName == "OBJECT" && element['data']) {
         return element['data'];
@@ -94,6 +97,7 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
 
 /**
  * To be overridden by classes that widgetize flash-based video elements.
+ * @protected
  * @returns {Boolean}
  */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.isFlashElementAPlayer = goog.abstractMethod;
@@ -120,10 +124,16 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.unwidgetizedFlashElements = funct
     return unwidgetizedElements;
 };
 
+/**
+ * @protected
+ */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
     return this.findFlashParam(element, 'flashvars');
 };
 
+/**
+ * @protected
+ */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
     return !!goog.dom.findNode(
         element,
