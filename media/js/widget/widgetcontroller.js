@@ -38,6 +38,11 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
 
     var videoID = result['video_id'];
 
+    if (videoID){
+        this.videoTab_.createShareButton(
+            new goog.Uri(mirosubs.getSubtitleHomepageURL(videoID)), false);
+    }
+
     var dropDownContents = new mirosubs.widget.DropDownContents(
         result['drop_down_contents']);
     var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
