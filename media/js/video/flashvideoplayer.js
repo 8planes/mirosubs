@@ -44,12 +44,19 @@ mirosubs.video.FlashVideoPlayer.prototype.logger_ =
  */
 mirosubs.video.FlashVideoPlayer.prototype.decorateInternal = function(element) {
     this.decorated_ = true;
+    var embedSize = new goog.math.Size(0, 0), 
+        objectSize = new goog.math.Size(0, 0);
     var objectAndEmbed = this.findElements_(element);
-    if (objectAndEmbed[0])
+    if (objectAndEmbed[0]) {
         this.object_ = objectAndEmbed[0];
-    if (objectAndEmbed[1])
+        objectSize = goog.style.getSize(this.object_);
+    }
+    if (objectAndEmbed[1]) {
         this.embed_ = objectAndEmbed[1];
-    var elementToUse = this.object_ || this.embed_;
+        embedSize = goog.style.getSize(this.embed_);
+    }
+    var elementToUse = objectSize.height > embedSize.height ? 
+        this.object_ : this.embed_;
     mirosubs.video.FlashVideoPlayer.superClass_.decorateInternal.call(
         this, elementToUse);
 };
@@ -85,10 +92,6 @@ mirosubs.video.FlashVideoPlayer.prototype.tryDecorating_ = function(element) {
     else {
         return false;
     }
-};
-
-mirosubs.video.FlashVideoPlayer.prototype.elementForSizing = function() {
-    return this.object_ || this.embed_;
 };
 
 mirosubs.video.FlashVideoPlayer.prototype.logExternalInterfaceError_ = function() {
