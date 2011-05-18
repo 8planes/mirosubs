@@ -27,9 +27,14 @@ mirosubs.video.FlashVideoPlayer = function(videoSource) {
     this.object_ = null;
     this.decorateTimer_ = null;
     this.decorateAttemptCount_ = 0;
+    this.decorated_ = false;
+    this.successfullyDecorated_ = false;
 };
 goog.inherits(mirosubs.video.FlashVideoPlayer,
               mirosubs.video.AbstractVideoPlayer);
+
+mirosubs.video.FlashVideoPlayer.prototype.logger_ = 
+    goog.debug.Logger.getLogger('mirosubs.video.FlashVideoPlayer');
 
 /**
  * @override
@@ -38,24 +43,31 @@ goog.inherits(mirosubs.video.FlashVideoPlayer,
  *
  */
 mirosubs.video.FlashVideoPlayer.prototype.decorateInternal = function(element) {
-    this.findElements_(element);
+    this.decorated_ = true;
+    var objectAndEmbed = this.findElements_(element);
+    if (objectAndEmbed[0])
+        this.object_ = objectAndEmbed[0];
+    if (objectAndEmbed[1])
+        this.embed_ = objectAndEmbed[1];
     var elementToUse = this.object_ || this.embed_;
     mirosubs.video.FlashVideoPlayer.superClass_.decorateInternal.call(
         this, elementToUse);
-    this.decorateTimer_ = new goog.Timer(250);
-    this.getHandler().listen(
-        this.decorateTimer_,
-        goog.Timer.TICK,
-        this.decorateTimerTick_);
-    this.decorateTimer_.start();
 };
 
-mirosubs.video.FlashVideoPlayer.prototype.decorateTimerTick_ = function(e) {
-    this.decorateAttemptCount_++;
-    if (this.decorateAttemptCount_ == 20)
-        this.logExternalInterfaceError_();
-    if (!this.tryDecorating_(this.embed_))
-        this.tryDecorating_(this.object_);
+/**
+ * @protected
+ */
+mirosubs.video.FlashVideoPlayer.prototype.tryDecoratingAll = function(e) {
+    if (!this.decorated_ || this.successfullyDecorated_)
+        return;
+    if (!this.tryDecorating_(this.object_))
+        this.successfullyDecorated_ = this.tryDecorating_(this.embed_);
+    else
+        this.successfullyDecorated_ = true;
+    if (goog.DEBUG) {
+        this.logger_.info("successfully decorated: " + 
+                          this.successfullyDecorated_);
+    }
 };
 
 mirosubs.video.FlashVideoPlayer.prototype.isFlashElementReady = goog.abstractMethod;
@@ -67,7 +79,6 @@ mirosubs.video.FlashVideoPlayer.prototype.tryDecorating_ = function(element) {
         return false;
     }
     else if (this.isFlashElementReady(element)) {
-        this.decorateTimer_.stop();
         this.setFlashPlayerElement(element);
         return true;
     }
@@ -86,15 +97,45 @@ mirosubs.video.FlashVideoPlayer.prototype.logExternalInterfaceError_ = function(
 };
 
 mirosubs.video.FlashVideoPlayer.prototype.findElements_ = function(element) {
+    var object = null, embed = null;
     if (element.nodeName == "EMBED") {
-        this.embed_ = element;
-        if (this.embed_.parentNode.nodeName == "OBJECT")
-            this.object_ = this.embed_.parentNode;
+        embed = element;
+        if (embed.parentNode.nodeName == "OBJECT")
+            object = embed.parentNode;
     }
     else {
-        this.object_ = element;
-        this.embed_ = goog.dom.findNode(
-            this.object_, 
+        object = element;
+        embed = goog.dom.findNode(
+            object, 
             function(e) { return e.nodeName == "EMBED"; });
     }
+    return [object, embed];
+};
+
+mirosubs.video.FlashVideoPlayer.prototype.getVideoElement = goog.abstractMethod;
+
+mirosubs.video.FlashVideoPlayer.prototype.isDecorated = function() {
+    return this.decorated_;
+};
+
+mirosubs.video.FlashVideoPlayer.prototype.getVideoElements = function() {
+    var objectAndEmbed = null;
+    if (this.decorated_) {
+        objectAndEmbed = [this.object_, this.embed_];
+    }
+    else {
+        var videoElem = this.getVideoElement();
+        if (videoElem)
+            objectAndEmbed = this.findElements_(videoElem);
+    }
+    if (objectAndEmbed) {
+        var elems = [];
+        if (objectAndEmbed[0])
+            elems.push(objectAndEmbed[0]);
+        if (objectAndEmbed[1])
+            elems.push(objectAndEmbed[1]);
+        return elems;
+    }
+    else
+        return [];
 };

@@ -12,7 +12,7 @@
             {% if receiver.picture %}
                 <img class="author-avatar" src="{{ receiver.small_avatar }}" alt="{% trans 'avatar' %}"/>
             {% else %}
-                <img class="author-avatar" src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="{% trans 'avatar' %}"/>
+                <img class="author-avatar" src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'avatar' %}"/>
             {% endif %} 
             <span class="author-username">{{ receiver }}</span>
         </span>
@@ -50,7 +50,7 @@
                         }
                     };//for
                 } else {
-                    $.jGrowl('{% trans "Message sent success." %}');
+                    $.jGrowl('{% trans "The message has been successfully sent." %}');
                     $form.clearForm();
                     $form.parents('.msg_modal_wrap').modClose();
                 };

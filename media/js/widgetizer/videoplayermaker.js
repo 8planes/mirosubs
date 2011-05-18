@@ -30,9 +30,6 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.logger_ =
     goog.debug.Logger.getLogger(
         'mirosubs.widgetizer.VideoPlayerMaker');
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.videosExist = 
-    goog.abstractMethod;
-
 mirosubs.widgetizer.VideoPlayerMaker.prototype.makeVideoPlayers =
     goog.abstractMethod;
 
@@ -55,45 +52,12 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized =
 mirosubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element) {
     return !goog.array.find(
         mirosubs.video.AbstractVideoPlayer.players,
-        function(p) { return p.getVideoElement() == element; });
-};
-
-mirosubs.widgetizer.VideoPlayerMaker.prototype.findObjectParam_ = 
-    function(objElem, paramName) 
-{
-    return goog.dom.findNode(
-        objElem, 
-        function(n) {
-            return n.nodeName == "PARAM" && 
-                goog.string.caseInsensitiveCompare(n['name'], paramName) == 0;
-        });
-};
-
-mirosubs.widgetizer.VideoPlayerMaker.prototype.findFlashParam =
-    function(element, embedParamName, opt_objectParamName) 
-{
-    if (element.nodeName == "EMBED") {
-        return element.getAttribute(embedParamName);
-    } else {
-        var paramNode = this.findObjectParam_(
-            element, opt_objectParamName || embedParamName);
-        if (paramNode) {
-            return paramNode['value'];
-        }
-    }
-    return null;
-};
-
-mirosubs.widgetizer.VideoPlayerMaker.prototype.swfURL = function(element) {
-    if (element.nodeName == "OBJECT" && element['data']) {
-        return element['data'];
-    } else {
-        return this.findFlashParam(element, 'src', 'movie');
-    }
+        function(p) { return p.videoElementsContain(element); });
 };
 
 /**
  * To be overridden by classes that widgetize flash-based video elements.
+ * @protected
  * @returns {Boolean}
  */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.isFlashElementAPlayer = goog.abstractMethod;
@@ -120,10 +84,9 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.unwidgetizedFlashElements = funct
     return unwidgetizedElements;
 };
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.flashVars = function(element) {
-    return this.findFlashParam(element, 'flashvars');
-};
-
+/**
+ * @protected
+ */
 mirosubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
     return !!goog.dom.findNode(
         element,

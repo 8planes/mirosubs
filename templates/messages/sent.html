@@ -12,7 +12,7 @@
     <script src="{{ MEDIA_URL }}js/jquery.metadata.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(function($){
-            var DEFAULT_AVATAR_URL = '{{ MEDIA_URL }}/images/default_thumb_small.png';
+            var DEFAULT_AVATAR_URL = '{{ MEDIA_URL }}images/default_thumb_small.png';
             $.metadata.setType("attr", "data");
             
             $('.messages .delete').click(function(){
@@ -45,7 +45,7 @@
                             }
                         };//for
                     } else {
-                        $.jGrowl('{% trans "Message sent success." %}');
+                        $.jGrowl('{% trans "The message has been successfully sent." %}');
                         $form.clearForm();
                     };
                 },
@@ -103,7 +103,7 @@
                 {% if user_avatar_url %}
                     <img src="{{ user_avatar_url }}" width="30" height="30" alt="{% trans 'Avatar' %}"/>
                 {% else %}
-                    <img src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="{% trans 'Avatar' %}"/>
+                    <img src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'Avatar' %}"/>
                 {% endif %}
             {% endwith %}
           </td>
@@ -134,7 +134,7 @@
   <div class="msg_modal">
     <h3>{% trans "Message from" %}
         <span> 
-            <img class="author-avatar" src="{{ MEDIA_URL }}/images/default_thumb_small.png" alt="{% trans 'avatar' %}"/> 
+            <img class="author-avatar" src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'avatar' %}"/> 
             <span class="author-username"></span>
         </span>
     </h3>

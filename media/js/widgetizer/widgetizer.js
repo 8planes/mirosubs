@@ -27,13 +27,10 @@ mirosubs.Widgetizer = function() {
     var myURI = new goog.Uri(window.location);
     var DEBUG_WIN_NAME = 'mirosubsdebuggingmain';
     if (goog.DEBUG) {
-        if (myURI.getParameterValue('debug_mirosubs_js') == 'true' &&
-            window.name != DEBUG_WIN_NAME) {
-            var debugWindow = new goog.debug.FancyWindow(DEBUG_WIN_NAME);
-            debugWindow.setEnabled(true);
-            debugWindow.init();
-            mirosubs.DEBUG = true;
-        }
+        var debugWindow = new goog.debug.FancyWindow(DEBUG_WIN_NAME);
+        debugWindow.setEnabled(true);
+        debugWindow.init();
+        mirosubs.DEBUG = true;
     }
     this.makers_ = [
         new mirosubs.widgetizer.Youtube(),
@@ -49,7 +46,6 @@ goog.addSingletonGetter(mirosubs.Widgetizer);
  *
  */
 mirosubs.Widgetizer.prototype.widgetize = function() {
-    
     if (mirosubs.LoadingDom.getInstance().isDomLoaded()) {
         this.onLoaded_();
     }
@@ -61,19 +57,23 @@ mirosubs.Widgetizer.prototype.widgetize = function() {
     }
 };
 
-mirosubs.Widgetizer.prototype.videosExist = function() {
-    for (var i = 0; i < this.makers_.length; i++)
-        if (this.makers_[i].videosExist())
-            return true;
-    return false;
-}
-
 mirosubs.Widgetizer.prototype.onLoaded_ = function() {
     this.addHeadCss();
-    this.findAndWidgetizeElements_();
+    this.widgetizeAttemptTimer_ = new goog.Timer(1000);
+    this.widgetizeAttemptCount_ = 0;
+    goog.events.listen(
+        this.widgetizeAttemptTimer_,
+        goog.Timer.TICK,
+        goog.bind(this.findAndWidgetizeElements_, this));
+    this.widgetizeAttemptTimer_.start();
 };
 
 mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
+    this.widgetizeAttemptCount_++;
+    if (this.widgetizeAttemptCount_ > 5) {
+        this.widgetizeAttemptTimer_.stop();
+        return;
+    }
     if (goog.DEBUG) {
         this.logger_.info('finding and widgetizing elements');
     }
@@ -82,6 +82,10 @@ mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
         goog.array.extend(
             videoPlayers, 
             this.makers_[i].makeVideoPlayers());
+    if (goog.DEBUG) {
+        this.logger_.info('found ' + videoPlayers.length + 
+                          ' new video players on the page');
+    }
     for (var i = 0; i < videoPlayers.length; i++)
         mirosubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
 };
@@ -98,28 +102,4 @@ mirosubs.Widgetizer.prototype.addHeadCss = function() {
         css.media = 'screen';
         head.appendChild(css);
     }
-};
-
-mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
-    var containingElement = document.createElement('div');
-    var styleElement = document.createElement('style');
-    var innerStyle = mirosubs.Config.innerStyle;
-    if ('textContent' in styleElement)
-        styleElement.textContent = innerStyle;
-    else {
-        // IE
-        styleElement.setAttribute("type", "text/css");
-        styleElement.styleSheet.cssText = innerStyle;
-    }
-    containingElement.appendChild(styleElement);
-    var widgetDiv = document.createElement('div');
-    widgetDiv.className = 'mirosubs-widget';
-    containingElement.appendChild(widgetDiv);
-
-    var parentElem = elem.parentNode;
-    parentElem.insertBefore(containingElement, elem);
-    parentElem.removeChild(elem);
-    var widgetConfig = { 'video_url': videoURL };
-    mirosubs.widget.CrossDomainEmbed.embed(
-        widgetDiv, widgetConfig, mirosubs.Config.siteConfig);
 };

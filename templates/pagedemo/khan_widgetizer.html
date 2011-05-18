@@ -12,12 +12,6 @@
             var URL_CONTINUE = '/postlogin?continue\u003Dhttp%3A//www.khanacademy.org/v/simple\u002Dequations%3Fp%3DAlgebra';
             var USERNAME = 'Arthur Debert';
         </script> 
-{% if not js_use_compiled %}
-  {% include "widget/_js_base_dependencies.html" %}
-{% endif %}
-{% for dep in js_dependencies %}
-  <script type="text/javascript" src="{{dep|safe}}"></script>
-{% endfor %} 
         <title>Simple Equations | Khan Academy</title> 
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
         <meta name="description" content="Introduction to basic algebraic equations of the form Ax=B" /> 
@@ -37,17 +31,19 @@
               content="The Khan Academy is a not-for-profit 501(c)(3) with the mission of providing a world-class education to anyone, anywhere.  Despite being the work of one man, Salman Khan, this 2100+ video library is the most-used educational video resource as measured by YouTube video views per day and unique users per month."/> 
         <link rel="shortcut icon" href="/favicon.ico"> 
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png"/> 
- 
-        
-            <link rel='stylesheet' type='text/css' href='http://khanexercises.appspot.com/stylesheets/shared-package/hashed-39ac2cb6e411d38c0f99cdfa49624418.css'/> 
-            
-    <link rel='stylesheet' type='text/css' href='http://khanexercises.appspot.com/stylesheets/video-package/hashed-f48d273bbdcfd519f1f59c6109739724.css'/> 
- 
-            <script type='text/javascript' src='http://khanexercises.appspot.com/javascript/shared-package/hashed-14a042f0fb2c9bb0b6017430b3692116.js'></script> 
-        
- 
-        
- 
+        <link rel='stylesheet' type='text/css' href='http://khanexercises.appspot.com/stylesheets/video-package/hashed-f48d273bbdcfd519f1f59c6109739724.css'/> 
+        <script type='text/javascript' src='http://khanexercises.appspot.com/javascript/shared-package/hashed-14a042f0fb2c9bb0b6017430b3692116.js'></script> 
+{% if not js_use_compiled %}
+  {% include "widget/_js_base_dependencies.html" %}
+  <script>
+    goog.require('goog.debug.FancyWindow');
+  </script>
+  {% for dep in js_dependencies %}
+      <script type="text/javascript" src="{{dep|safe}}"></script>
+  {% endfor %}
+{% else %}
+  <script type="text/javascript" src="{{MEDIA_URL}}js/mirosubs-widgetizer-debug.js"></script>
+{% endif %}
 <style> 
     .breadcrumbs_nav {
         font-weight: bold;
@@ -545,11 +541,11 @@ $(function(){
             </div> 
             <div class="youtube-video"> 
             <object id="idOVideo" name="idOVideo" width="800" height="480" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"> 
-    <param name="movie" value="http://www.youtube.com/v/9Ek61w1LxSc&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
+    <param name="movie" value="http://www.youtube.com/v/9Ek61w1LxSc?hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
     <param name="allowFullScreen" value="true"> 
     <param name="allowScriptAccess" value="always"> 
     <param name="wmode" value="transparent"> 
-    <embed id="idPlayer" name="idPlayer" wmode="transparent" src="http://www.youtube.com/v/9Ek61w1LxSc&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" type="application/x-shockwave-flash" allowScriptAccess="always" allowfullscreen="true" width="800" height="480"> 
+    <embed id="idPlayer" name="idPlayer" wmode="transparent" src="http://www.youtube.com/v/9Ek61w1LxSc?hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" type="application/x-shockwave-flash" allowScriptAccess="always" allowfullscreen="true" width="800" height="480"> 
 </object> 
  
             </div> 

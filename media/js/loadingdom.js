@@ -35,16 +35,13 @@ mirosubs.LoadingDom = function() {
                 that.onDomLoaded_();
             }, false);
     }
-//    else if (document.attachEvent) {
-// Commenting this out because swfobject seems to load swfs on IE
-// after we catch the dom loaded event. When this happens, the 
-// widgetizer finds no elements to widgetize. See widget/widgetize_demo/jwplayer
-// for an example.
-//        this.listenOnIE_();
-//    }
+    else if (document.attachEvent) {
+        this.listenOnIE_();
+    }
     // in case nothing else works: load event
-    goog.events.listenOnce(window, goog.events.EventType.LOAD,
-                           this.onDomLoaded_, false, this);
+    goog.events.listenOnce(
+        window, goog.events.EventType.LOAD,
+        this.onDomLoaded_, false, this);
 };
 goog.inherits(mirosubs.LoadingDom, goog.events.EventTarget);
 goog.addSingletonGetter(mirosubs.LoadingDom);

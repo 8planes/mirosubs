@@ -36,14 +36,8 @@ goog.inherits(mirosubs.widgetizer.Youtube,
 mirosubs.widgetizer.Youtube.prototype.logger_ =
     goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
 
-mirosubs.widgetizer.Youtube.prototype.videosExist = function() {
-    return this.unwidgetizedElements_().length > 0;
-};
-
 mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
-    this.logger_.info('making video players');
     var elements = this.unwidgetizedElements_();
-    this.logger_.info(elements);
     var videoPlayers = [];
     for (var i = 0; i < elements.length; i++) {
         var decoratable = this.isDecoratable_(elements[i]);
@@ -60,16 +54,16 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
 };
 
 mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
-    return this.findFlashParam(element, 'allowscriptaccess') == 'always' &&
-        this.swfURL(element).match(/enablejsapi=1/i) &&
+    return mirosubs.Flash.findFlashParam(element, 'allowscriptaccess') == 'always' &&
+        mirosubs.Flash.swfURL(element).match(/enablejsapi=1/i) &&
         goog.array.contains(['transparent', 'opaque'], 
-                            this.findFlashParam(element, 'wmode'));
+                            mirosubs.Flash.findFlashParam(element, 'wmode'));
 };
 
 mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
     function(element, includeConfig) 
 {
-    var url = this.swfURL(element);
+    var url = mirosubs.Flash.swfURL(element);
     var config = null;
     if (includeConfig) {
         config = {};
@@ -77,10 +71,10 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ =
         var params = uri.getQueryData().getKeys();
         for (var i = 0; i < params.length; i++)
             config[params[i]] = uri.getParameterValue(params[i]);
-        if (this.findFlashParam(element, 'width') && 
-            this.findFlashParam(element, 'height')) {
-            config['width'] = this.findFlashParam(element, 'width');
-            config['height'] = this.findFlashParam(element, 'height');
+        if (mirosubs.Flash.findFlashParam(element, 'width') && 
+            mirosubs.Flash.findFlashParam(element, 'height')) {
+            config['width'] = mirosubs.Flash.findFlashParam(element, 'width');
+            config['height'] = mirosubs.Flash.findFlashParam(element, 'height');
         }
         else if (element.style.width && element.style.height) {
             config['width'] = parseInt(element.style['width']) + '';
@@ -110,7 +104,7 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
 
 mirosubs.widgetizer.Youtube.prototype.isFlashElementAPlayer = function(element) {
     return mirosubs.video.YoutubeVideoSource.isYoutube(
-        this.swfURL(element));
+        mirosubs.Flash.swfURL(element));
 };
 
 mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {

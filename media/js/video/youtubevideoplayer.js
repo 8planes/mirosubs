@@ -32,17 +32,8 @@ mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
     this.eventFunction_ = 'event' + videoSource.getUUID();
     this.forDialog_ = !!opt_forDialog;
 
-    var readyFunc = goog.bind(this.onYouTubePlayerReady_, this);
-    var ytReady = "onYouTubePlayerReady";
-    if (window[ytReady]) {
-        var oldReady = window[ytReady];
-        window[ytReady] = function(playerAPIID) {
-            oldReady(playerAPIID);
-            readyFunc(playerAPIID);
-        };
-    }
-    else
-        window[ytReady] = readyFunc;
+    mirosubs.video.YoutubeVideoPlayer.players_.push(this);
+
     this.playerSize_ = null;
     this.player_ = null;
     /**
@@ -57,6 +48,12 @@ mirosubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
 };
 goog.inherits(mirosubs.video.YoutubeVideoPlayer, mirosubs.video.FlashVideoPlayer);
 
+mirosubs.video.YoutubeVideoPlayer.players_ = [];
+mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_ = new goog.structs.Set();
+
+mirosubs.video.YoutubeVideoPlayer.prototype.logger_ = 
+    goog.debug.Logger.getLogger('mirosubs.video.YoutubeVideoPlayer');
+
 /**
  * @override
  */
@@ -67,9 +64,17 @@ mirosubs.video.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem)
 mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
     mirosubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.swfEmbedded_ = true;
-    this.playerSize_ = goog.style.getSize(this.elementForSizing());
-    this.setDimensionsKnownInternal();
-}
+    var apiidMatch = /playerapiid=([^&]+)/.exec(mirosubs.Flash.swfURL(elem));
+    var apiid = apiidMatch ? apiidMatch[1] : '';
+    if (mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_.contains(apiid))
+        this.onYouTubePlayerReady_(apiid);
+    if (goog.DEBUG) {
+        this.logger_.info("In decorateInternal, a containing element size of " + 
+                          goog.style.getSize(this.getElement()));
+        this.logger_.info("In decorateInternal, a sizing element size of " + 
+                          goog.style.getSize(this.elementForSizing()));
+    }
+};
 
 /**
  * @override
@@ -161,9 +166,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.timeUpdateTick_ = function(e) {
 mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     function(playerAPIID)
 {
-    if (playerAPIID == this.playerAPIID_) {
+    if (!this.isDecorated() && playerAPIID == this.playerAPIID_) {
         this.setDimensionsKnownInternal();
-        this.player_ = goog.dom.$(this.playerElemID_);
+        this.player_ = goog.dom.getElement(this.playerElemID_);
         mirosubs.style.setSize(this.player_, this.playerSize_);
         if (this.forDialog_)
             this.player_['cueVideoById'](this.videoSource_.getYoutubeVideoID());
@@ -171,6 +176,17 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
         this.commands_ = [];
         window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
         this.player_.addEventListener('onStateChange', this.eventFunction_);
+    }
+    else if (this.isDecorated()) {
+        if (goog.DEBUG) {
+            this.logger_.info("In playerReady, a containing element size of " + 
+                              goog.style.getSize(this.getElement()));
+            this.logger_.info("In playerReady, a sizing element size of " + 
+                              goog.style.getSize(this.elementForSizing()));
+        }
+        this.playerSize_ = goog.style.getSize(this.elementForSizing());
+        this.setDimensionsKnownInternal();
+        this.tryDecoratingAll();
     }
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
@@ -286,6 +302,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getVideoSize = function() {
+    if (goog.DEBUG) {
+        this.logger_.info('getVideoSize returning ' + this.playerSize_);
+    }
     return this.playerSize_;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.disposeInternal = function() {
@@ -294,7 +313,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.disposeInternal = function() {
     this.timeUpdateTimer_.dispose();
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getVideoElement = function() {
-    return this.player_;
+    return goog.dom.getElement(this.playerElemID_);
 };
 /**
  * http://code.google.com/apis/youtube/js_api_reference.html#getPlayerState
@@ -308,3 +327,39 @@ mirosubs.video.YoutubeVideoPlayer.State_ = {
     BUFFERING: 3,
     VIDEO_CUED: 5
 };
+
+mirosubs.video.YoutubeVideoPlayer.logger_ = 
+    goog.debug.Logger.getLogger('mirosubs.video.YoutubeVideoPlayerStatic');
+
+(function() {
+    var ytReady = "onYouTubePlayerReady";
+    var oldReady = window[ytReady] || goog.nullFunction;
+    window[ytReady] = function(apiID) {
+        if (goog.DEBUG) {
+            mirosubs.video.YoutubeVideoPlayer.logger_.info(
+                'onYouTubePlayerReady for ' + apiID);
+            mirosubs.video.YoutubeVideoPlayer.logger_.info(
+                'players_ length is ' + 
+                    mirosubs.video.YoutubeVideoPlayer.players_.length);
+        }
+        try {
+            oldReady(apiID);
+        }
+        catch (e) {
+            // don't care
+        }
+        if (apiID == 'undefined' || !goog.isDefAndNotNull(apiID))
+            apiID = '';
+        mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_.add(apiID);
+        goog.array.forEach(
+            mirosubs.video.YoutubeVideoPlayer.players_,
+            function(p) { p.onYouTubePlayerReady_(apiID); });
+    };
+    goog.exportSymbol(
+        'mirosubs.onYouTubePlayerReady',
+        function() {
+            goog.array.forEach(
+                mirosubs.video.YoutubeVideoPlayer.players_,
+                function(p) { p.onYouTubePlayerReady_(''); });
+        });
+})();

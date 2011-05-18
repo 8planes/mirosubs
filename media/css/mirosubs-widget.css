@@ -2823,6 +2823,13 @@ span.mirosubs-tabTextfinish {
 	font-family: Helvetica Arial, sans-serif !important;
 }
 
+span.mirosubs-tabTextShare {
+	display: block !important;
+	padding: 8px 12px 8px 9px !important;
+	font-family: Helvetica Arial, sans-serif !important;
+    border-left: 1px solid #666 !important;
+}
+
 span.mirosubs-tabTextfinish {
 padding-right: 25px !important;
 padding-left: 14px !important;

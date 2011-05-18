@@ -36,7 +36,7 @@ def compile(output_file_name, js_file_list,
 
     js_debug_dep_file = ''
     if debug:
-        js_debug_dep_file = '{0}/{1}'.format(JS_LIB, 'closure-debug-dependencies.js')
+        js_debug_dep_file = '-i {0}/{1}'.format(JS_LIB, 'closure-debug-dependencies.js')
 
     output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/%s %s " +
                              "-p %s/ -o script") % 
@@ -95,6 +95,8 @@ compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
 widgetizer_js_files = ['config.js']
 widgetizer_js_files.extend(settings.JS_WIDGETIZER)
 compile('mirosubs-widgetizer.js', widgetizer_js_files)
+compile('mirosubs-widgetizer-debug.js', widgetizer_js_files, 
+        debug=True)
 
 # assumes that some other process has generated config.js
 extension_js_files = ['config.js']
