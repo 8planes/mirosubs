@@ -64,13 +64,11 @@ mirosubs.video.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem)
 mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
     mirosubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.swfEmbedded_ = true;
-    this.playerSize_ = goog.style.getSize(this.elementForSizing());
-    this.setDimensionsKnownInternal();
     var apiidMatch = /playerapiid=([^&]+)/.exec(mirosubs.Flash.swfURL(elem));
     var apiid = apiidMatch ? apiidMatch[1] : '';
     if (mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_.contains(apiid))
         this.onYouTubePlayerReady_(apiid);
-}
+};
 
 /**
  * @override
@@ -173,8 +171,11 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
         window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
         this.player_.addEventListener('onStateChange', this.eventFunction_);
     }
-    else if (this.isDecorated())
+    else if (this.isDecorated()) {
+        this.playerSize_ = goog.style.getSize(this.elementForSizing());
+        this.setDimensionsKnownInternal();
         this.tryDecoratingAll();
+    }
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
     var s = mirosubs.video.YoutubeVideoPlayer.State_;
