@@ -1,8 +1,8 @@
 {% load i18n %}
 
-<div class="language_bar">
-  <span>{% trans "Loading..." %}</span>
-  <a href="#" data-modal="language_modal" class="green_button small">{% trans "Select your Languages" %}</a>
+<div class="language_bar clearfix">
+  <span>{% trans "Loading..." %}</span> 
+  <a href="#" id="lang_select_btn" data-modal="language_modal">{% trans "Select your Languages" %}</a>
 </div><!-- // language_bar -->
 
 <script type="text/javascript">
@@ -30,7 +30,7 @@
         if (are_cookies_enabled()){        
             var $w = $('#language_modal');
             
-            $w.find('.submit_button').click(function(){
+            $w.find('button').click(function(){
                 if (typeof mpq != 'undefined') {
                     mpq.push(['track', 'Submits_languages_she_speaks']);
                 }
@@ -59,23 +59,14 @@
                 return false;
             });
             
-            $w.find('.close_button').click(function(){
-                $w.modClose();
-                return false;
-            });
-            
             if (force_ask){
-                $w.mod({
-                    closeable: false
-                });
-            }else{
-                $w.find('.close_button').show();
+                $w.mod();
             };
         };
     });
 </script>
 
-<div id="language_modal" style="display: none" class="language_modal clearfix">
+<div id="language_modal" data="{closeable: false}" style="display: none" class="language_modal clearfix">
   <h3>{% trans "We really need your help!" %}</h3>
   <h2>{% trans "What languages do you speak?" %}</h2>
     <div id="language_picker" class="clearfix">
@@ -90,6 +81,5 @@
       <li>{{ form.language6 }}</li>
     </ul>
     </div><!-- // clearfix -->
-    <button class="green_button small submit_button">{% trans "Submit" %}</button>
-    <button class="green_button small close_button" style="display: none; margin-left: 10px;">{% trans "Cancel" %}</button>
+    <button type="submit" class="green_button small">{% trans "Submit" %}</button>
 </div><!-- // language_modal -->

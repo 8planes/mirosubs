@@ -528,6 +528,7 @@ MEDIA_BUNDLES = {
             "css/jquery.jgrowl.css",
             "css/jquery.alerts.css",
             "css/960.css",
+            "css/reset.css",
             "css/html.css", 
             "css/about_faq.css", 
             "css/breadcrumb.css", 
@@ -536,6 +537,7 @@ MEDIA_BUNDLES = {
             "css/comments.css", 
             "css/forms.css", 
             "css/home.css", 
+            "css/index.css",
             "css/layout.css", 
             "css/nav.css", 
             "css/profile_pages.css", 
@@ -565,14 +567,13 @@ MEDIA_BUNDLES = {
     "home":{
         "type":"css",
         "files":(
-            "css/index.css",
+            
             "css/mirosubs-widget.css",
             "css/top_user_panel.css",
             "css/buttons.css",
             "css/forms.css" ,
             "css/feedback.css", 
             "css/global.css" ,
-
          ),
         }
 
