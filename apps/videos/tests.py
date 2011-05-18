@@ -1454,12 +1454,14 @@ class TestModelsSaving(TestCase):
         self.assertEqual(self.video.complete_date, None)
 
 from videos.feed_parser import FeedParser
-from videos.types import YoutubeVideoType
+from videos.types import YoutubeVideoType, HtmlFiveVideoType
 
 class TestFeedParser(TestCase):
     
     youtube_feed_url_pattern =  'https://gdata.youtube.com/feeds/api/users/%s/uploads'
     youtube_username = 'universalsubtitles'
+    
+    mit_feed_url = 'http://ocw.mit.edu/rss/new/ocw_youtube_videos.xml'
     
     def setUp(self):
         pass
@@ -1475,5 +1477,14 @@ class TestFeedParser(TestCase):
         
         self.assertTrue(video)
                 
-    def test_parsing_from_link(self):
-        pass
+    def test_mit_feed_parsing(self):
+        """
+        If this test fails - try check few feed entries. Not all entries from
+        MIT feed contain videos, so if sometime they delete some etries - test 
+        can fail.
+        """
+        feed_parser = FeedParser(self.mit_feed_url)
+        vt, info, entry = feed_parser.items().next()
+        self.assertTrue(isinstance(vt, HtmlFiveVideoType))
+        
+        video, crated = Video.get_or_create_for_url(vt=vt)

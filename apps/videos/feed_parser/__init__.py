@@ -33,6 +33,10 @@ class VideoTypeParseError(FeedParserError, VideoTypeError):
     pass
 
 class FeedParser(object):
+    """
+    This class allow get videos fron feed entries. 
+    See videos.tests.TestFeedParser for details.
+    """
     
     def __init__(self, feed_url):
         self.feed_url = feed_url
@@ -110,6 +114,13 @@ class BaseFeedEntryParser(object):
         return vt, info
     
 class LinkFeedEntryParser(BaseFeedEntryParser):
+    """
+    This feed entry parser just check "link" atribute of entry. 
+    So this works for sites witch are supported by UniSub. 
+    For example: Youtube, Vimeo, Blip.Tv.
+    For development can use these links:
+    https://gdata.youtube.com/feeds/api/users/universalsubtitles/uploads
+    """
     
     def get_video_type(self, entry):
         vt = None
@@ -123,3 +134,24 @@ class LinkFeedEntryParser(BaseFeedEntryParser):
         return {}
 
 feed_parsers.append(LinkFeedEntryParser())
+
+class VideodownloadFeedEntryParser(BaseFeedEntryParser):
+    """
+    This parser check "videodownload" attribute. 
+    It was developed to parse MIT feed.
+    For development can use these links:
+    http://ocw.mit.edu/rss/new/ocw_youtube_videos.xml
+    """
+    
+    def get_video_type(self, entry):
+        vt = None
+        try:
+            vt = video_type_registrar.video_type_for_url(entry['videodownload'])
+        except KeyError:
+            pass
+        return vt
+    
+    def get_video_info(self, entry):
+        return {}
+    
+feed_parsers.append(VideodownloadFeedEntryParser())
