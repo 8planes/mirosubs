@@ -54,3 +54,69 @@
 	-webkit-border-radius: 12px;
 	-moz-border-radius: 12px;
 }
+
+/*/////////////////////////////////////////////
+
+~ Feedback Form
+
+/////////////////////////////////////////////*/
+
+#feedback_container, .modal-window-container {
+  padding: 5px; 
+  border-radius: 7px;
+  border: 5px solid rgba(0,0,0,0.3);
+  width: 900px;
+  -webkit-background-clip: padding-box;
+   }
+   
+#feedback_container { 
+  padding: 0;
+  border-radius: 9px; }
+
+.feedback_bg, .modal-window-bg {
+  background: #D3E9ED url(../../images/cloud.png) center top no-repeat;
+  border-radius: 7px;
+  -webkit-background-clip: padding-box;
+}
+
+#feedback_form{
+  background: url(../../images/watercolor3.png) center 0px repeat-x;
+  border-radius: 7px;
+  padding: 60px 0;
+  clear: both;
+  float: left;
+  text-align: center;
+  }
+
+
+#feedback_form h2{
+  margin-bottom: 15px;
+  }
+
+
+#feedback_form p{
+float: none;
+  margin: 0 auto !important;
+  font-size: 15px;
+  width: 900px;
+  }
+
+
+#feedback_form textarea{
+  width: 600px;
+  margin: 0 auto;
+  }
+
+#feedback_form p input{
+width: 250px;
+margin: 0px auto 20px;
+  }
+
+
+#feedback_form button{
+width: 200px;
+margin: 20px auto !important;
+float: none;  
+
+}
+

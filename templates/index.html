@@ -1,10 +1,23 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n media_compressor feedback recent_activity widget i18n announcement_tags messages_tags profiles_tags %}
 {% block body_attrs %}id="index"{% endblock %}
-{% block scripts %}
+
+{% block css %}
+
+{% include_css_bundle "base" %}
+    {% include_css_bundle "home" %}
+
 {% endblock %}
+
+{% block scripts %}
+ <script type="text/javascript" src="http://s3.www.universalsubtitles.org/js/mirosubs-onsite-compiled.js"></script>
+{% endblock %}
+
 {% block main_content %}
-{% load feedback recent_activity widget i18n announcement_tags messages_tags profiles_tags %}
+
+
+    
+   
 
 <div class="clearfix">
   <div id="intro">
@@ -156,7 +169,12 @@
       <a href="https://donate.mozilla.org/page/contribute/universalsubtitles">{% trans 'Donate Now' %}</a>
     </p>
   </div><!-- // box -->
+
+ <div style="float: right; font-size: 0.6em; padding: 3px;">commit: milestone092v3/d10e9790</div> 
+
   
   <div class="clearfix"></div>
   </div><!-- // unisubs_features -->
+
+
 {% endblock %}
