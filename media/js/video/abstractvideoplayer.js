@@ -290,6 +290,10 @@ mirosubs.video.AbstractVideoPlayer.prototype.setCaption_ =
     if (!videoOffsetParent)
         videoOffsetParent = goog.dom.getOwnerDocument(this.getElement()).body;
     var offsetPosition = $s.getPosition(this.getElement());
+    if (goog.DEBUG) {
+        this.logger_.info(
+            "Element offset position of " + offsetPosition);
+    }
     var size = this.getVideoSize();
     var captionWidth = Math.min(400, size.width - 20);
     if (!this.captionElem_) {
