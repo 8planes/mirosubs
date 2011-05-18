@@ -7,8 +7,6 @@
   </a>
   {% endif %}
   <div class="info">
-    {% comment %}<h4><a href="{{ video.get_absolute_url }}">{{ video }}</a></h4>{% endcomment %}
-    <h4><a href="{{ video.get_absolute_url }}">{{ video }}</a></h4>
     <p>{{ video.description|striptags|truncatewords:50|linebreaksbr|urlize }}</p>  
     <div class="lang_avail">
       <h2>
@@ -18,7 +16,6 @@
               {{ number }} Languages
           {% endblocktrans %}
       </h2>
-        {% if video.languages_count %}{% endif %}
           {% for lang in video.langs_cache %}
             {% with lang.subtitle_count as lines_count %}
               {% if lines_count %}  
