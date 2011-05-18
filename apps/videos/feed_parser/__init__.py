@@ -15,20 +15,84 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from videos.types import video_type_registrar
+from videos.types import video_type_registrar, VideoTypeError
+import feedparser
+from socket import gaierror
+from django.utils.translation import ugettext_lazy as _
 
 feed_parsers = []
 
-def parse_feed_entry(entry):
-    vt, info = None, {}
-    
-    for parser in feed_parsers:
-        vt, info = parser(entry)
-        if vt:
-            break
-    
-    return vt, info
+class FeedParserError(Exception):
+    pass
 
+class VideoTypeParseError(FeedParserError, VideoTypeError):
+    """
+    This is wrapper for VideoTypeError, just to catch these errors with 
+    "except FeedParserError" and allow catch with "except VideoTypeError"
+    """
+    pass
+
+class FeedParser(object):
+    
+    def __init__(self, feed_url):
+        self.feed_url = feed_url
+        self.feed = feedparser.parse(feed_url)
+        self.parser = None
+        
+    def items(self, reverse=False, until=False, ignore_error=False):
+        """
+        Iterator witch parse every entry and return VideoType instance if possible and
+        additional info. Iterate entries from the most old to the newest 
+        """
+        if reverse:
+            entries = self.feed['entries']
+        else:
+            entries = self.feed['entries'][::-1]
+            
+        for entry in entries:
+            if until and entry.link == until:
+                break
+            
+            vt, info, entry = None, {}, entry
+            
+            if self.parser:
+                #little optimization. we save last success parser, so should not
+                #check all again. As feed can contain a lot of entries, this
+                #can be useful
+                try:
+                    vt, info = self._parse(entry, self.parser)
+                except FeedParserError, e:
+                    if not ignore_error:
+                        raise e
+            
+            if vt is None:
+                for parser in feed_parsers:
+                    if parser == self.parser:
+                        #we have parsed with this parser
+                        continue
+                    
+                    try:
+                        vt, info = self._parse(entry, parser)
+                    except FeedParserError, e:
+                        if not ignore_error:
+                            raise e
+                        
+                    if vt:
+                        self.parser = parser
+            
+            yield vt, info, entry
+    
+    def _parse(self, entry, parser):
+        """
+        This is just to incapsulate all exception handling in one place 
+        """
+        try:
+            return parser(entry)
+        except VideoTypeError, e:
+            raise VideoTypeParseError(e)
+        except gaierror:
+            raise FeedParserError(_(u'Feed is unavailable now.'))
+        
 class BaseFeedEntryParser(object):
     
     def get_video_type(self, entry):

@@ -1452,3 +1452,28 @@ class TestModelsSaving(TestCase):
         video_changed_tasks.delay(self.video.pk)
         self.video = Video.objects.get(pk=self.video.pk)
         self.assertEqual(self.video.complete_date, None)
+
+from videos.feed_parser import FeedParser
+from videos.types import YoutubeVideoType
+
+class TestFeedParser(TestCase):
+    
+    youtube_feed_url_pattern =  'https://gdata.youtube.com/feeds/api/users/%s/uploads'
+    youtube_username = 'universalsubtitles'
+    
+    def setUp(self):
+        pass
+    
+    def test_youtube_feed_parsing(self):
+        feed_url = self.youtube_feed_url_pattern % self.youtube_username
+        
+        feed_parser = FeedParser(feed_url)
+        vt, info, entry = feed_parser.items().next()
+        self.assertTrue(isinstance(vt, YoutubeVideoType))
+        
+        video, crated = Video.get_or_create_for_url(vt=vt)
+        
+        self.assertTrue(video)
+                
+    def test_parsing_from_link(self):
+        pass

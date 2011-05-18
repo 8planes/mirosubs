@@ -28,7 +28,7 @@ from comments.models import Comment
 from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from videos.types import video_type_registrar, VideoTypeError
+from videos.types import video_type_registrar
 from statistic import changed_video_set, st_sub_fetch_handler, st_video_view_handler
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
@@ -39,9 +39,9 @@ from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 import time
 from django.utils.safestring import mark_safe
-from videos.feed_parser import parse_feed_entry
 from django.core.cache import cache
-
+from videos.feed_parser import FeedParser
+        
 yt_service = YouTubeService()
 yt_service.ssl = False
 
@@ -1084,30 +1084,21 @@ class VideoFeed(models.Model):
         return self.url
     
     def update(self):
-        import feedparser
-        
-        feed = feedparser.parse(self.url)
+        feed_parser = FeedParser(self.url)
         
         checked_entries = 0
         last_link = self.last_link
         
         try:
-            self.last_link = feed.entries[0]['link']
+            self.last_link = feed_parser.feed.entries[0]['link']
             self.save()
         except (IndexError, KeyError):
-            pass        
+            pass       
         
-        for entry in feed.entries:
-            
-            if last_link and entry.link == last_link:
-                break
-            
-            try:
-                vt, info = parse_feed_entry(entry)
-            except VideoTypeError:
-                pass                
+        _iter = feed_parser.items(reverse=True, until=last_link, ignore_error=True)
+        
+        for vt, info, entry in _iter:
             Video.get_or_create_for_url(vt=vt, user=self.user)
-            
             checked_entries += 1
         
         return checked_entries
