@@ -83,7 +83,8 @@ class FeedParser(object):
                         
                     if vt:
                         self.parser = parser
-            
+                        break
+                    
             yield vt, info, entry
     
     def _parse(self, entry, parser):

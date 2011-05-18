@@ -1454,7 +1454,6 @@ class TestModelsSaving(TestCase):
         self.assertEqual(self.video.complete_date, None)
 
 from videos.feed_parser import FeedParser
-from videos.types import YoutubeVideoType, HtmlFiveVideoType
 
 class TestFeedParser(TestCase):
     
@@ -1463,8 +1462,18 @@ class TestFeedParser(TestCase):
     
     mit_feed_url = 'http://ocw.mit.edu/rss/new/ocw_youtube_videos.xml'
     
+    vimeo_feed_url = 'http://vimeo.com/blakewhitman/videos/rss'
+    
     def setUp(self):
         pass
+
+    def test_vimeo_feed_parsing(self):
+        feed_parser = FeedParser(self.vimeo_feed_url)
+        vt, info, entry = feed_parser.items().next()
+        self.assertTrue(isinstance(vt, VimeoVideoType))
+        
+        video, created = Video.get_or_create_for_url(vt=vt)
+        self.assertTrue(video)
     
     def test_youtube_feed_parsing(self):
         feed_url = self.youtube_feed_url_pattern % self.youtube_username
@@ -1473,8 +1482,7 @@ class TestFeedParser(TestCase):
         vt, info, entry = feed_parser.items().next()
         self.assertTrue(isinstance(vt, YoutubeVideoType))
         
-        video, crated = Video.get_or_create_for_url(vt=vt)
-        
+        video, created = Video.get_or_create_for_url(vt=vt)
         self.assertTrue(video)
                 
     def test_mit_feed_parsing(self):
@@ -1487,4 +1495,5 @@ class TestFeedParser(TestCase):
         vt, info, entry = feed_parser.items().next()
         self.assertTrue(isinstance(vt, HtmlFiveVideoType))
         
-        video, crated = Video.get_or_create_for_url(vt=vt)
+        video, created = Video.get_or_create_for_url(vt=vt)
+        self.assertTrue(video)
