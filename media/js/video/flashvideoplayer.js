@@ -63,6 +63,8 @@ mirosubs.video.FlashVideoPlayer.prototype.decorateInternal = function(element) {
 
 /**
  * @protected
+ * Clients can call this several times for the same player without it decorating
+ * twice.
  */
 mirosubs.video.FlashVideoPlayer.prototype.tryDecoratingAll = function(e) {
     if (!this.decorated_ || this.successfullyDecorated_)

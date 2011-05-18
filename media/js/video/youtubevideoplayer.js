@@ -61,13 +61,21 @@ mirosubs.video.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem)
     return elem['playVideo'];
 };
 
+mirosubs.video.YoutubeVideoPlayer.prototype.windowReadyAPIIDsContains = function(apiID) {
+    // this is activated if a widgetizer user has inserted the widgetizerprimer
+    // into the HEAD of their document.
+    var arr = window['unisubs.readyAPIIDs'];
+    return arr && goog.array.contains(arr, apiID);
+};
+
 mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
     mirosubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.swfEmbedded_ = true;
     var apiidMatch = /playerapiid=([^&]+)/.exec(mirosubs.Flash.swfURL(elem));
-    var apiid = apiidMatch ? apiidMatch[1] : '';
-    if (mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_.contains(apiid))
-        this.onYouTubePlayerReady_(apiid);
+    this.playerAPIID_ = apiidMatch ? apiidMatch[1] : '';
+    if (mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_.contains(this.playerAPIID_) ||
+        this.windowReadyAPIIDsContains(this.playerAPIID_))
+        this.onYouTubePlayerReady_(this.playerAPIID_);
     this.playerSize_ = goog.style.getSize(this.getElement());
     this.setDimensionsKnownInternal();
     if (goog.DEBUG) {
@@ -166,7 +174,14 @@ mirosubs.video.YoutubeVideoPlayer.prototype.timeUpdateTick_ = function(e) {
 mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     function(playerAPIID)
 {
-    if (!this.isDecorated() && playerAPIID == this.playerAPIID_) {
+    if (goog.DEBUG) {
+        this.logger_.info(
+            "onYouTubePlayerReady_ called with an id of " + playerAPIID +
+                ". My id is " + this.playerAPIID_ + ".");
+    }
+    if (playerAPIID != this.playerAPIID_)
+        return;
+    if (!this.isDecorated()) {
         this.setDimensionsKnownInternal();
         this.player_ = goog.dom.getElement(this.playerElemID_);
         mirosubs.style.setSize(this.player_, this.playerSize_);
@@ -177,7 +192,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
         window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
         this.player_.addEventListener('onStateChange', this.eventFunction_);
     }
-    else if (this.isDecorated()) {
+    else {
         if (goog.DEBUG) {
             this.logger_.info("In playerReady, a containing element size of " + 
                               goog.style.getSize(this.getElement()));
@@ -352,11 +367,4 @@ mirosubs.video.YoutubeVideoPlayer.logger_ =
             mirosubs.video.YoutubeVideoPlayer.players_,
             function(p) { p.onYouTubePlayerReady_(apiID); });
     };
-    goog.exportSymbol(
-        'mirosubs.onYouTubePlayerReady',
-        function() {
-            goog.array.forEach(
-                mirosubs.video.YoutubeVideoPlayer.players_,
-                function(p) { p.onYouTubePlayerReady_(''); });
-        });
 })();
