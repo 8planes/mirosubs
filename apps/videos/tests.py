@@ -1497,3 +1497,13 @@ class TestFeedParser(TestCase):
         
         video, created = Video.get_or_create_for_url(vt=vt)
         self.assertTrue(video)
+        
+    def _test_media_feed_parsing(self):
+        feed_url = 'http://www.dailymotion.com/rss/ru/featured/channel/tech/1'
+        
+        feed_parser = FeedParser(feed_url)
+        vt, info, entry = feed_parser.items().next()
+        self.assertTrue(isinstance(vt, DailymotionVideoType))
+        
+        video, created = Video.get_or_create_for_url(vt=vt)
+        self.assertTrue(video)        
