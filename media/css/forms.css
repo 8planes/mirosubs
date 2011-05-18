@@ -13,7 +13,8 @@ Forms with <div>, not <p>
 ***********************************************/
 
 input:focus, textarea:focus {
-	border: 1px #63ad0c solid !important;
+	-webkit-box-shadow: 1px 1px 0 #63ad0c, -1px -1px 0 #63ad0c;
+	-moz-box-shadow: 1px 1px 0 #63ad0c, -1px -1px 0 #63ad0c;
 	outline: none !important;
 }
 

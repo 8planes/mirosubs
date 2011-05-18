@@ -150,14 +150,7 @@ height: 142px;
 border: 1px solid !important;
 }
 
-
-
-#index .content{
-background: url(../images/watercolor2.png) center 690px no-repeat;
-}
-
-
-.example p{
+.example p {
 text-align: center;
 padding: 0 30px;
 font-style: italic;
