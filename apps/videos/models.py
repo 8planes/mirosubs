@@ -767,7 +767,10 @@ class SubtitleVersion(SubtitleCollection):
         return self.language.video;
 
     def _get_standard_collection(self):
-        return self.language.real_standard_language().latest_version()
+        standart_language = self.language.real_standard_language()
+        
+        if standart_language:
+            return standart_language.latest_version()
 
     def ordered_subtitles(self):
         subtitles = self.subtitles()
