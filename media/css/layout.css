@@ -452,20 +452,20 @@ float: left;
 }
 
 
-.search_title{
+.search_title {
   -moz-border-radius: 35px !important;  
   -webkit-border-radius: 35px;
-padding: 8px 13px 5px 16px;
+	padding: 8px 13px 5px 16px;
 }
 
-.search_full{
+.search_full {
   -moz-border-radius: 35px !important;  
   -webkit-border-radius: 35px;
 	padding: 8px 16px 5px 13px;
 }
 
 div.lang_avail {
-	width: 350px;
+	width: 250px;
 	float: left;
 	border-right: 1px #c2cacb solid;
 	padding: 0 10px 0 0;
@@ -486,7 +486,7 @@ div.lang_avail a {
 	padding: 0 !important;
 	font-weight: bold;
 	color: #495253;
-	font-size: 11px !important;
+	font-size: 10px !important;
 }
 
 div.lang_avail a span {
@@ -497,10 +497,11 @@ div.lang_avail a span {
 div.lang_avail a span {
 	padding: 7px 10px 7px 10px;
 	-webkit-border-radius: 95px;
+	-moz-border-radius: 95px;
 	text-decoration: none !important;
 }
 
-div.lang_avail a span.fifty {
+div.lang_avail a span.fourty, div.lang_avail a span.twenty, div.lang_avail a span.thirty {
 	background: #e5e3b7;
 }
 
@@ -508,7 +509,7 @@ div.lang_avail a span.zero {
 	background: #ebd7c9;
 }
 
-div.lang_avail a span.complete {
+div.lang_avail a span.full {
 	background: #c9ebce;
 }
 
@@ -522,7 +523,8 @@ div.lang_avail a:hover span {
 }
 
 div.video_details {
-	float: right;
+	float: left;
+	width: 150px;
 	border-left: 1px #c2cacb solid;
 	padding: 0 0 0 10px;
 	position: relative;
