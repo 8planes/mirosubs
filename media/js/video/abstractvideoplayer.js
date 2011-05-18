@@ -284,6 +284,13 @@ mirosubs.video.AbstractVideoPlayer.prototype.setCaption_ =
     var offsetPosition = $s.getPosition(this.getElement());
     if (goog.DEBUG) {
         this.logger_.info(
+            'element is ' + this.getElement().nodeName);
+        this.logger_.info(
+            'offsetParent node is ' +
+                this.getElement().offsetParent.nodeName);
+        this.logger_.info(
+            'offsetTop is ' + this.getElement().offsetTop);
+        this.logger_.info(
             "Element offset position of " + offsetPosition);
     }
     var size = this.getVideoSize();

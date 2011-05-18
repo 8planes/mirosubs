@@ -68,11 +68,11 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
     var apiid = apiidMatch ? apiidMatch[1] : '';
     if (mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_.contains(apiid))
         this.onYouTubePlayerReady_(apiid);
+    this.playerSize_ = goog.style.getSize(this.getElement());
+    this.setDimensionsKnownInternal();
     if (goog.DEBUG) {
         this.logger_.info("In decorateInternal, a containing element size of " + 
-                          goog.style.getSize(this.getElement()));
-        this.logger_.info("In decorateInternal, a sizing element size of " + 
-                          goog.style.getSize(this.elementForSizing()));
+                          this.playerSize_);
     }
 };
 
@@ -182,10 +182,8 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
             this.logger_.info("In playerReady, a containing element size of " + 
                               goog.style.getSize(this.getElement()));
             this.logger_.info("In playerReady, a sizing element size of " + 
-                              goog.style.getSize(this.elementForSizing()));
+                              goog.style.getSize(this.getElement()));
         }
-        this.playerSize_ = goog.style.getSize(this.elementForSizing());
-        this.setDimensionsKnownInternal();
         this.tryDecoratingAll();
     }
 };
