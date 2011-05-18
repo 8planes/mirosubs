@@ -29,21 +29,17 @@ import random
 from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 import chardet
 from uuid import uuid4
-from math_captcha.forms import MathCaptchaForm, math_clean
+from math_captcha.forms import MathCaptchaForm
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
-from videos.types import video_type_registrar, VideoTypeError, YoutubeVideoType
+from videos.types import video_type_registrar, VideoTypeError
 from videos.models import VideoUrl
 from utils.forms import AjaxForm, EmailListField, UsernameListField
 from gdata.youtube.service import YouTubeService
-from gdata.service import Error as GdataError
-from socket import gaierror
-from django.utils.encoding import smart_unicode
 from videos.tasks import video_changed_tasks
-import feedparser
 from utils.translation import get_languages_list
 from utils.forms import StripURLField, StripRegexField
-from videos.feed_parser import parse_feed_entry
+from videos.feed_parser import FeedParser, FeedParserError
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
 KB_SIZELIMIT = 512
@@ -456,25 +452,22 @@ class AddFromFeedForm(forms.Form, AjaxForm):
         return usernames
     
     def parse_feed_url(self, url):
-        feed = feedparser.parse(url)
-        
-        for entry in feed['entries'][::-1]:
-            if len(self.video_types) >= self.VIDEOS_LIMIT:
-                self.video_limit_routreach = True
-                break            
-            
-            try:
-                vt, info = parse_feed_entry(entry)
-            except VideoTypeError, e:
-                raise forms.ValidationError(e) 
-            except gaierror:
-                raise forms.ValidationError(_(u'Feed is unavailable now.'))
-            
-            if vt:
-                self.video_types.append((vt, info))
+        feed_parser = FeedParser(url)
+
+        try:
+            for vt, info, entry in feed_parser.items():
+                if vt:
+                    self.video_types.append((vt, info))
+
+                if len(self.video_types) >= self.VIDEOS_LIMIT:
+                    self.video_limit_routreach = True
+                    break  
+                    
+            if feed_parser.feed.version:
+                self.feed_urls.append((url, entry['link']))
                 
-        if feed.version:
-            self.feed_urls.append((url, entry['link']))
+        except FeedParserError, e:
+            raise forms.ValidationError(e) 
     
     def save_feed_url(self, feed_url, last_entry_url):
         try:

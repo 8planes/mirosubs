@@ -15,9 +15,13 @@ class VideoIndex(CelerySearchIndex):
     subtitles_fetched_count = IntegerField(model_attr='subtitles_fetched_count')
     widget_views_count = IntegerField(model_attr='widget_views_count')
     comments_count = IntegerField()
-    languages_count = IntegerField()
+    languages_count = IntegerField(model_attr='languages_count')
     contributors_count = IntegerField()
     activity_count = IntegerField()
+    
+    week_views = IntegerField()
+    month_views = IntegerField()
+    total_views = IntegerField(model_attr='view_count')
     
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
@@ -25,9 +29,10 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data['video_language'] = obj.language and '%s ++++++++++' % obj.language or ''
         self.prepared_data['languages'] = ['%s ++++++++++' % lang.language for lang in langs if lang.latest_subtitles()]
         self.prepared_data['comments_count'] = Comment.get_for_object(obj).count()
-        self.prepared_data['languages_count'] = obj.subtitlelanguage_set.count()
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()
         self.prepared_data['activity_count'] = obj.action_set.count()
+        self.prepared_data['week_views'] = obj.views['week']
+        self.prepared_data['month_views'] = obj.views['month']
         return self.prepared_data
         
 class SubtitleLanguageIndex(CelerySearchIndex):

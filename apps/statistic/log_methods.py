@@ -126,10 +126,14 @@ class LogNativeMethodsMetaclass(type):
         logger_backend = attrs.get('logger_backend', ConsoleLogBackend())
         
         attrs['logger_backend'] = logger_backend
+
+        for n, v in attrs.items():
+            if inspect.isfunction(v):
+                attrs[n] = cls.wrap(v, name, logger_backend)
         
         for base in bases:
             for n, v in base.__dict__.items():
-                if inspect.isfunction(v):
+                if not n in attrs and inspect.isfunction(v):
                     attrs[n] = cls.wrap(v, name, logger_backend)
         new_class = super(LogNativeMethodsMetaclass, cls).__new__(cls, name, bases, attrs)
         return new_class

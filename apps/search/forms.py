@@ -6,29 +6,17 @@ from utils.translation import get_languages_list
 ALL_LANGUAGES = tuple((val, _(name))for val, name in settings.ALL_LANGUAGES)
 
 class SearchForm(forms.Form):
-    SORT_TYPE_CHOICES = (
-        ('asc', _(u'Ascending')),
-        ('desc', _(u'Descending'))
-    )
     SORT_CHOICES = (
-        ('', _('Most relevant')),
-        ('date', _(u'Newest')),
-        ('sub_fetch', _(u'Most subtitle plays')),
-        ('page_loads', _(u'Most page loads')),
-        ('comments', _(u'Most commented')),
-        ('languages', _(u'Most languages')),
-        ('edited', _(u'Last edited')),
-        ('contributors', _(u'Most commented')),
-        ('activity', _(u'Most activity'))
+        ('week_views', _(u'Most plays (this week)')),
+        ('month_views', _(u'Most plays (this month)')),
+        ('total_views', _(u'Most plays (all time)')),
+        ('languages_count', _(u'Most languages'))
     )
     DISPLAY_CHOICES = (
         ('all', _(u'all')),
         ('thumbnails', _(u'thumbnails')),
-        #('details', _(u'details')),
     )
     q = forms.CharField(required=False, label=_(u'query'))
-    #st = forms.ChoiceField(choices=SORT_TYPE_CHOICES, required=False, initial='desc', 
-    #                       label=_(u'sort order'))
     sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='', 
                              label=_(u'sort type'))
     langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'languages'),
@@ -58,17 +46,6 @@ class SearchForm(forms.Form):
         langs = self.cleaned_data.get('langs')
         video_language = self.cleaned_data.get('video_lang')
         
-        order_fields = {
-            'date': 'created',
-            'sub_fetch': 'subtitles_fetched_count',
-            'page_loads': 'widget_views_count',
-            'comments': 'comments_count',
-            'languages': 'languages_count',
-            'contributors': 'contributors_count',
-            'activity': 'activity_count',
-            'edited': 'edited'
-        }
-        
         qs = qs.auto_query(q)
         
         if video_language:
@@ -94,6 +71,8 @@ class SearchForm(forms.Form):
                 qs = qs.filter(languages=langs)
         
         if ordering:
-            qs = qs.order_by('-'+order_fields[ordering])
-
+            qs = qs.order_by('-'+ordering)
+        else:
+            qs = qs.order_by('-week_views')
+            
         return qs

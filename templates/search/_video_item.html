@@ -3,22 +3,19 @@
 <li>
   {% if not display_mode or display_mode == 'all' or display_mode == 'thumbnails' %}
   <a href="{{ video.get_absolute_url }}" class="thumbnail_medium">
-      {% if video.thumbnail %}<img width="100" height="100" src="{{ video.get_thumbnail }}"></img>{% endif %}
+      {% if video.thumbnail %}<img width="125" height="75" src="{{ video.get_thumbnail }}"></img>{% endif %}
   </a>
   {% endif %}
-  <div class="info">
-    {% comment %}<h4><a href="{{ video.get_absolute_url }}">{{ video }}</a></h4>{% endcomment %}
-    <h4><a href="{{ video.get_absolute_url }}">{{ video }}</a></h4>
-    <p>{{ video.description|striptags|truncatewords:50|linebreaksbr|urlize }}</p>  
+  <div class="info clearfix">
+    <p style="margin: 0 0 15px 0;">{{ video.description|striptags|truncatewords:50|linebreaksbr|urlize }}</p>  
     <div class="lang_avail">
       <h2>
           {% blocktrans count video.languages_count as number %}
-              {{ number }} Language
+              {{ number }} language
           {% plural %}
-              {{ number }} Languages
+              {{ number }} languages
           {% endblocktrans %}
       </h2>
-        {% if video.languages_count %}{% endif %}
           {% for lang in video.langs_cache %}
             {% with lang.subtitle_count as lines_count %}
               {% if lines_count %}  
