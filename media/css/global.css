@@ -101,6 +101,12 @@ New Header Styles
 	padding: 0 0 0 25px;
 }
 
+#main_bar #bar_search input:focus {
+	border: 0 !important;
+	-webkit-box-shadow: 0 0 0;
+	-moz-box-shadow: 0 0 0;
+}
+
 #main_bar ul#bar_menu {
 	float: right;
 }
@@ -441,7 +447,7 @@ ul#subnav li#subnav_menu {
 
 .wrapper {
   width: 940px;
-  margin: 0 auto;
+  margin: 25px auto;
 }
 
 
@@ -451,7 +457,7 @@ ul#subnav li#subnav_menu {
 .language_modal { 
   display: none;
   background-color: #fff;
-  width: 375px;
+  width: 475px;
   color: #818b8f;
   padding: 20px;
   -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
@@ -478,7 +484,7 @@ ul#subnav li#subnav_menu {
   
 .language_modal ul { 
   list-style-type: none;
-  width: 150px;
+  width: 200px;
   float: left;
   margin: 0 10px 0 10px;
   padding: 0 10px 0 10px;

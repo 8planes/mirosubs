@@ -21,8 +21,8 @@
   <h2 class="main_heading">{% trans 'Subtitle a Video' %}</h2>
   {# TODO: this should be an instance of VideoForm, which should go in context processor #}
   {{ video_form.video_url.errors }}
-  {{ video_form.video_url }}
-  <input type="text" id="submit_video_field" />
+  {% comment %}{{ video_form.video_url }}{% endcomment %}
+  <input type="text" id="submit_video_field" class="prefocus main_video_form_field" name="video_url" />
   <button class="green_button big" type="submit" value="Begin">{% trans 'Begin' %}</button>
   </div>
   <p>

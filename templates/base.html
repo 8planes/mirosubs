@@ -123,9 +123,14 @@
   <ul id="bar_menu" class="clearfix">
     <li id="nav_submit"><a href="{% url videos:create %}"><em class="icon"></em> {% trans 'Create' %}</a></li>
     <li><a href="{% url videos:list %}">{% trans 'Watch' %}</a></li>
+    {% comment %}
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Contribute' %}</a></li>
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Solutions' %}</a></li>
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Follow' %}</a></li>
+    {% endcomment %}
+    <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans "Volunteer" %}</a></li>
+    <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
+    <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
     {% if user.is_authenticated %}
         <li id="me_menu">
         <div id="user_menu">
@@ -147,7 +152,7 @@
                 <a href="{% url messages:index %}"><span id="message_count">{{ user.received_messages.unread.count }}</span>{% trans "My Messages" %}</a>
               </li>
               <li class="active">
-                <a href="{% url logout %}?next={{ request.path_info|urlencode }}">{% trans 'Logout' %}</a>
+                <a href="{% url logout %}?next={{ request.path_info|urlencode }}">{% trans 'Sign Out' %}</a>
               </li>
 
               {% with user.teams.all as user_teams %}
@@ -167,7 +172,7 @@
         </div><!-- // user_menu -->
         </li>
       {% else %}
-        <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}">% trans 'Sign In' %}</a></li>
+        <li><a href="{% url auth:login %}?next={{ request.path_info|urlencode }}">{% trans 'Sign In' %}</a></li>
     {% endif %}
   </ul><!-- // bar_menu -->
   </div><!-- // bar_right -->
