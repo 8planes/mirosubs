@@ -68,6 +68,12 @@ mirosubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
     var apiid = apiidMatch ? apiidMatch[1] : '';
     if (mirosubs.video.YoutubeVideoPlayer.readyAPIIDs_.contains(apiid))
         this.onYouTubePlayerReady_(apiid);
+    if (goog.DEBUG) {
+        this.logger_.info("In decorateInternal, a containing element size of " + 
+                          goog.style.getSize(this.getElement()));
+        this.logger_.info("In decorateInternal, a sizing element size of " + 
+                          goog.style.getSize(this.elementForSizing()));
+    }
 };
 
 /**
@@ -172,6 +178,12 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
         this.player_.addEventListener('onStateChange', this.eventFunction_);
     }
     else if (this.isDecorated()) {
+        if (goog.DEBUG) {
+            this.logger_.info("In playerReady, a containing element size of " + 
+                              goog.style.getSize(this.getElement()));
+            this.logger_.info("In playerReady, a sizing element size of " + 
+                              goog.style.getSize(this.elementForSizing()));
+        }
         this.playerSize_ = goog.style.getSize(this.elementForSizing());
         this.setDimensionsKnownInternal();
         this.tryDecoratingAll();
@@ -289,6 +301,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.getVideoSize = function() {
+    if (goog.DEBUG) {
+        this.logger_.info('getVideoSize returning ' + this.playerSize_);
+    }
     return this.playerSize_;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.disposeInternal = function() {

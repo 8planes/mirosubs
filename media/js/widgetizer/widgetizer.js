@@ -103,27 +103,3 @@ mirosubs.Widgetizer.prototype.addHeadCss = function() {
         head.appendChild(css);
     }
 };
-
-mirosubs.Widgetizer.prototype.widgetizeElem_ = function(elem, videoURL) {
-    var containingElement = document.createElement('div');
-    var styleElement = document.createElement('style');
-    var innerStyle = mirosubs.Config.innerStyle;
-    if ('textContent' in styleElement)
-        styleElement.textContent = innerStyle;
-    else {
-        // IE
-        styleElement.setAttribute("type", "text/css");
-        styleElement.styleSheet.cssText = innerStyle;
-    }
-    containingElement.appendChild(styleElement);
-    var widgetDiv = document.createElement('div');
-    widgetDiv.className = 'mirosubs-widget';
-    containingElement.appendChild(widgetDiv);
-
-    var parentElem = elem.parentNode;
-    parentElem.insertBefore(containingElement, elem);
-    parentElem.removeChild(elem);
-    var widgetConfig = { 'video_url': videoURL };
-    mirosubs.widget.CrossDomainEmbed.embed(
-        widgetDiv, widgetConfig, mirosubs.Config.siteConfig);
-};
