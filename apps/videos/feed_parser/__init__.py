@@ -20,6 +20,8 @@ import feedparser
 from socket import gaierror
 from django.utils.translation import ugettext_lazy as _
 
+#list of feed entry parser. oreder is important, because after succeess finding
+#of VideoType parsing is stoped
 feed_parsers = []
 
 class FeedParserError(Exception):
@@ -83,7 +85,8 @@ class FeedParser(object):
                         
                     if vt:
                         self.parser = parser
-            
+                        break
+                    
             yield vt, info, entry
     
     def _parse(self, entry, parser):
@@ -103,7 +106,7 @@ class BaseFeedEntryParser(object):
         raise Exception('Not implemented')
     
     def get_video_info(self, entry):
-        raise Exception('Not implemented')
+        return {}
     
     def __call__(self, entry):
         vt = self.get_video_type(entry)
@@ -123,15 +126,10 @@ class LinkFeedEntryParser(BaseFeedEntryParser):
     """
     
     def get_video_type(self, entry):
-        vt = None
         try:
-            vt = video_type_registrar.video_type_for_url(entry['link'])
+            return video_type_registrar.video_type_for_url(entry['link'])
         except KeyError:
             pass
-        return vt
-    
-    def get_video_info(self, entry):
-        return {}
 
 feed_parsers.append(LinkFeedEntryParser())
 
@@ -144,14 +142,25 @@ class VideodownloadFeedEntryParser(BaseFeedEntryParser):
     """
     
     def get_video_type(self, entry):
-        vt = None
         try:
-            vt = video_type_registrar.video_type_for_url(entry['videodownload'])
+            return video_type_registrar.video_type_for_url(entry['videodownload'])
         except KeyError:
             pass
-        return vt
-    
-    def get_video_info(self, entry):
-        return {}
     
 feed_parsers.append(VideodownloadFeedEntryParser())
+
+class MediaFeedEntryParser(BaseFeedEntryParser):
+    """
+    This parser try get video from media_content in entry
+    """
+
+    def get_video_type(self, entry):
+        try:
+            for mk in entry['media_content']:
+                vt = video_type_registrar.video_type_for_url(mk['url'])
+                if vt:
+                    return vt
+        except (KeyError, IndexError):
+            pass
+        
+feed_parsers.append(MediaFeedEntryParser())

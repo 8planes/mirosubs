@@ -553,7 +553,7 @@ MEDIA_BUNDLES = {
             "css/global.css", 
             "css/top_user_panel.css", 
             "css/services.css", 
-            "css/solutions.css", 
+            "css/solutions.css",
           ),
         },
     "video_history":{
@@ -567,13 +567,9 @@ MEDIA_BUNDLES = {
     "home":{
         "type":"css",
         "files":(
-            
+            "css/nyroModal.css",
             "css/mirosubs-widget.css",
-            "css/top_user_panel.css",
-            "css/buttons.css",
-            "css/forms.css" ,
-            "css/feedback.css", 
-            "css/global.css" ,
+
          ),
         }
 
