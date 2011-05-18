@@ -2,7 +2,7 @@
 Decompressed Stylesheets
 */
 
-@import "imported/960.css";
+@import "imported/reset.css";
 @import "imported/html.css";
 @import "imported/about_faq.css";
 @import "imported/breadcrumb.css";
