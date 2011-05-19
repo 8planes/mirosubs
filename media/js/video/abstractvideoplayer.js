@@ -38,6 +38,10 @@ mirosubs.video.AbstractVideoPlayer = function(videoSource) {
      * @type{number}
      */
     this.storedPlayheadTime_ = 0;
+    /*
+     * @type {mirosubs.video.CaptionView}
+     */
+    this.captionView_ = null;
     mirosubs.video.AbstractVideoPlayer.players.push(this);
 };
 goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
@@ -152,7 +156,22 @@ mirosubs.video.AbstractVideoPlayer.prototype.setDimensionsKnownInternal = functi
     this.dimensionsKnown_ = true;
     this.dispatchEvent(
         mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN);
+    
+    
 };
+
+mirosubs.video.AbstractVideoPlayer.prototype.createCaptionView = function(){
+    if(!this.captionView_){
+        this.captionView_ = new mirosubs.video.CaptionView(this.needsIFrame());
+        var offset =  goog.style.getPosition(this.getElement());
+        var size = this.getVideoSize();
+        var box = new goog.math.Rect(offset.x, offset.y,  
+                                 size.width, size.height );
+        this.captionView_.setUpPositioning(box);
+        this.getParent().addChild(this.captionView_, true);
+    }
+};
+
 mirosubs.video.AbstractVideoPlayer.prototype.areDimensionsKnown = function() {
     return this.dimensionsKnown_;
 };
@@ -256,6 +275,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.getVideoSource = function() {
 mirosubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
     goog.abstractMethod();
 };
+
 /**
  *
  * @param {String} text Caption text to display in video. null for blank.
@@ -265,71 +285,8 @@ mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
         mirosubs.video.AbstractVideoPlayer.logger_.info(
             'showing sub: ' + text);
     }
-    if (text == null || text == "") {
-        if (this.captionElem_ != null) {
-            goog.dom.removeNode(this.captionElem_);
-            this.captionElem_ = null;
-            if (this.captionBgElem_ != null) {
-                goog.dom.removeNode(this.captionBgElem_);
-                this.captionBgElem_ = null;
-            }
-        }
-    }
-    else
-        this.setCaption_(
-            goog.string.newLineToBr(goog.string.htmlEscape(text)),
-            this.needsIFrame());
-};
-
-mirosubs.video.AbstractVideoPlayer.prototype.setCaption_ = 
-    function(htmlText, needsIFrame) 
-{
-    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var $s = goog.style;
-    var videoOffsetParent = this.getElement().offsetParent;
-    if (!videoOffsetParent)
-        videoOffsetParent = goog.dom.getOwnerDocument(this.getElement()).body;
-    var offsetPosition = $s.getPosition(this.getElement());
-    if (goog.DEBUG) {
-        this.logger_.info(
-            'element is ' + this.getElement().nodeName);
-        this.logger_.info(
-            'offsetParent node is ' +
-                this.getElement().offsetParent.nodeName);
-        this.logger_.info(
-            'offsetTop is ' + this.getElement().offsetTop);
-        this.logger_.info(
-            "Element offset position of " + offsetPosition);
-    }
-    var size = this.getVideoSize();
-    var captionWidth = Math.min(400, size.width - 20);
-    if (!this.captionElem_) {
-        this.captionElem_ = $d('span', 'mirosubs-captionSpan');
-        if (needsIFrame)
-            mirosubs.style.setVisibility(this.captionElem_, false);
-        goog.dom.appendChild(videoOffsetParent, this.captionElem_);
-        mirosubs.style.setWidth(this.captionElem_, captionWidth);
-        this.captionLeft_ = (offsetPosition.x + (size.width - captionWidth) / 2);
-        mirosubs.style.setPosition(this.captionElem_, this.captionLeft_, null);
-    }
-    this.captionElem_.innerHTML = htmlText;
-    var captionSize = goog.style.getSize(this.captionElem_);
-    var captionTop = offsetPosition.y + size.height - captionSize.height - 40;
-    mirosubs.style.setPosition(this.captionElem_, null, captionTop);
-
-    if (needsIFrame) {
-        if (!this.captionBgElem_) {
-            this.captionBgElem_ = $d('iframe', 'mirosubs-captionSpanBg');
-            mirosubs.style.setVisibility(this.captionBgElem_, false);
-            this.getDomHelper().insertSiblingBefore(
-                this.captionBgElem_, this.captionElem_);
-        }
-        $s.setPosition(this.captionBgElem_, this.captionLeft_, captionTop);
-        $s.setSize(this.captionBgElem_, captionSize);
-        mirosubs.style.setVisibility(this.captionBgElem_, true);
-        mirosubs.style.setVisibility(this.captionElem_, true);
-    }
-
+    this.captionView_ || this.createCaptionView();
+    this.captionView_.setCaptionText(text);
 };
 
 /**
