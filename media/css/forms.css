@@ -218,7 +218,7 @@ p#changes_email label {
   background: -webkit-gradient(linear, 0% 100%, 0% 70%, from(#edf6f8), to(#fff)); /* for webkit browsers */
   background: -moz-linear-gradient(0% 75% 270deg, #fff, #edf6f8); /* for firefox 3.6+ */
 	position: relative;
-	z-index: 9;
+	z-index: 1;
 }
 
 
@@ -643,7 +643,7 @@ input.open-id{
 	position: relative;
 	top: -15px;
 	right: 5px;
-	z-index: 8;
+	z-index: 0;
 }
 
 #submit_multiple_toggle a {

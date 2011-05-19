@@ -501,7 +501,8 @@ div.lang_avail a span {
 	text-decoration: none !important;
 }
 
-div.lang_avail a span.fourty, div.lang_avail a span.twenty, div.lang_avail a span.thirty {
+div.lang_avail a span.fourty, div.lang_avail a span.twenty,
+div.lang_avail a span.thirty, div.lang_avail a span.eighty {
 	background: #e5e3b7;
 }
 
