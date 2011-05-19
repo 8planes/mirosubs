@@ -67,7 +67,7 @@ ul.user_service_menu li a {
 section_secondary
 =========================================*/
 #add_subtitles {
-  width: 940px;
+  width: 980px;
   height: 405px;
   margin: 25px auto;
   text-align: left;
@@ -91,7 +91,7 @@ section_secondary
 
 #add_subtitles form fieldset {
 	float: left;
-	width: 400px;
+	width: 350px;
 	margin: 10px;
 }
 
@@ -112,7 +112,7 @@ section_secondary
 }
 
 #add_subtitles form fieldset input {
-	width: 400px;
+	width: 350px;
 	background: #FFF;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -139,7 +139,7 @@ section_secondary
 	-webkit-box-shadow: 0 0 0, inset 0 1px 0 #B7E4AC;
 	border: 1px #365a36 solid;
 	position: relative;
-	right: -20px;
+	right: 0px;
 }
 
 #add_subtitles h4 {
@@ -156,7 +156,7 @@ section_secondary
 #add_subtitles div#video_sites img#example_video {
 	float: right;
 	position: absolute;
-	right: 10px;
+	right: 50px;
 	top: -85px;
 }
 
