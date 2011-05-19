@@ -16,12 +16,14 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-mirosubs.video.WidgetizerPrimer.prime = function() {
+
+
+(function() {
     var w = window;
     var ytReady = "onYouTubePlayerReady";
     var oldReady = w[ytReady] || function() {};
     var apiIDArrayName = "unisubs_readyAPIIDs";
-    var apiIDArray = w[apiIDArrayName] = w[apiidArrayName] || [];
+    var apiIDArray = w[apiIDArrayName] = w[apiIDArrayName] || [];
     window[ytReady] = function(apiID) {
         try {
             oldReady(apiID);
@@ -33,6 +35,4 @@ mirosubs.video.WidgetizerPrimer.prime = function() {
             apiID = "";
         apiIDArray.push(apiID);
     };
-};
-
-mirosubs.video.WidgetizerPrimer.prime();
+})();

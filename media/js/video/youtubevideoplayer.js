@@ -64,7 +64,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem)
 mirosubs.video.YoutubeVideoPlayer.prototype.windowReadyAPIIDsContains = function(apiID) {
     // this is activated if a widgetizer user has inserted the widgetizerprimer
     // into the HEAD of their document.
-    var arr = window['unisubs.readyAPIIDs'];
+    var arr = window['unisubs_readyAPIIDs'];
     return arr && goog.array.contains(arr, apiID);
 };
 
