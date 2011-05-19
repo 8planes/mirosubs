@@ -103,8 +103,8 @@ New Header Styles
 
 #main_bar #bar_search input:focus {
 	border: 0 !important;
-	-webkit-box-shadow: 0 0 0;
-	-moz-box-shadow: 0 0 0;
+	-webkit-box-shadow: 0 0 0 !important;
+	-moz-box-shadow: 0 0 0 !important;
 }
 
 #main_bar ul#bar_menu {
