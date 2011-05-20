@@ -115,6 +115,13 @@
                       {% trans "Email me when something I've edited gets changed" %}
                   </label>
               </p>
+              <p id="new_message_notification">
+                  {{ form.new_message_notification.errors }}
+                  {{ form.new_message_notification }}
+                  <label for="id_new_message_notification">
+                      {% trans "Email me when another user sends me a message" %}
+                  </label>
+              </p>
               <p>
                   {{ form.biography.errors }}
                   {{ form.biography.label_tag }}

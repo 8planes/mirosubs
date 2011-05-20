@@ -1,0 +1,11 @@
+{% extends "videos/email_base.html"}
+
+{% block "content" %}
+{{author}} has just sent you a message on Universal Subtitles:<br>
+
+{{body|linebreaks}}<br>
+
+<a href="http://{{ domain }}{% url messages:index}">Reply to this message</a><br>
+<a href="http://{{ domain }}{% url profiles:edit %}">Stop receiving email notifications for personal messages</a><br>
+
+{% endblock %}
