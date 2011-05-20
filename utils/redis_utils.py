@@ -1,6 +1,6 @@
 from redis import Redis
 from django.conf import settings
-from utils import catch_exception
+from utils import catch_exception, LogExceptionsMetaclass
 from redis.exceptions import RedisError
 from inspect import ismethod
 from django.utils.functional import update_wrapper
@@ -10,9 +10,14 @@ REDIS_PORT = getattr(settings, 'REDIS_PORT', 6379)
 REDIS_DB = getattr(settings, 'REDIS_DB', 0)
 IGNORE_REDIS = getattr(settings, 'IGNORE_REDIS', False) and settings.DEBUG
 
-default_connection = Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
-
-catch_exception_dec = catch_exception(RedisError, u'Redis error', '', ignore=True)
+class LogConnection(Redis):
+    __metaclass__ = LogExceptionsMetaclass
+    
+    __log_exceptions = RedisError
+    __log_exceptions_logger_name = 'redis'
+    __log_exceptions_ignore = True
+    
+default_connection = LogConnection(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 class RedisCounterField(Exception):
     pass
@@ -46,17 +51,15 @@ class RedisKey(object):
         if hasattr(self.r, name):
             method = getattr(self.r, name)
             if ismethod(method):
-                return catch_exception_dec(redis_key_wrapper(method, self.redis_key))
+                return redis_key_wrapper(method, self.redis_key)
         raise AttributeError
     
-    @catch_exception_dec
     def set_val(self, val):
         if IGNORE_REDIS:
             return
         #get rid from this: user get, set
         return self.r.set(self.redis_key, val)
 
-    @catch_exception_dec
     def get_val(self):
         if IGNORE_REDIS:
             return        

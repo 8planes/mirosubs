@@ -39,7 +39,7 @@ else:
 class Channel(virtual.Channel):
     #set logging these exceptions in any method of class by LogExceptionsMetaclass
     __log_exceptions_logger_name = 'celery'
-    __log_exceptions_with_logger = (
+    __log_exceptions = (
         boto_exceptions.BotoClientError, 
         boto_exceptions.SDBPersistenceError,
         boto_exceptions.BotoServerError,

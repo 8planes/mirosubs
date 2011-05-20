@@ -142,7 +142,7 @@ def catch_exception(exceptions, subject="", default=None, ignore=False):
         return update_wrapper(wrapper, func)
     return catch_exception_func
 
-def log_exception(exceptions, logger='root'):
+def log_exception(exceptions, logger='root', ignore=False):
     """
     Create decorator to log exceptions in Sentry.
     """
@@ -159,7 +159,8 @@ def log_exception(exceptions, logger='root'):
                 if not hasattr(e, '_caught_by_selery'):
                     e._caught_by_selery = True
                     client.create_from_exception(sys.exc_info(), logger='celery')
-                raise e
+                if not ignore:
+                    raise e
             
         return update_wrapper(wrapper, func)
     return log_exception_func
@@ -169,8 +170,9 @@ import inspect
 class LogExceptionsMetaclass(type):
     """
     This is metaclass for wrapping all method of class with log_exception. 
-    __log_exceptions_with_logger attribute of class should ontain tuple of exceptions
+    __log_exceptionsr attribute of class should ontain tuple of exceptions
     __log_exceptions_logger_name can contain name of logger of Sentry
+    __log_exceptions_ignore - set it if exceptions should be logged without 500
     
     Used, for example, in amazonsqs_backend. We are not sure how it is a little
     unpredictable, so we wish log any error. Celery, witch use amazonsqs_backend,
@@ -178,12 +180,17 @@ class LogExceptionsMetaclass(type):
     """
     
     def __new__(cls, name, bases, attrs):
-        exc_setting_name = '_%s__log_exceptions_with_logger' % name
+        exc_setting_name = '_%s__log_exceptions' % name
         logger_setting_name = '_%s__log_exceptions_logger_name' % name
+        ignore_settings_name = '_%s__log_exceptions_ignore' % name
         
         kwargs = {
             'exceptions': Exception
         }
+        
+        if ignore_settings_name in attrs:
+            kwargs['ignore'] = attrs[ignore_settings_name]
+            del attrs[ignore_settings_name]
         
         if exc_setting_name in attrs:
             kwargs['exceptions'] = attrs[exc_setting_name]
