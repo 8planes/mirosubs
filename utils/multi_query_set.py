@@ -1,6 +1,41 @@
 from django.db.models import ObjectDoesNotExist
 from teams.models import TeamVideo
 
+class MultiQuerySet(object):
+    def __init__(self, *args, **kwargs):
+        self.querysets = args
+        self._count = None
+    
+    def count(self):
+        """ this is an expensive calculation. try not to call it. """
+        if not self._count:
+            self._count = sum(qs.count() for qs in self.querysets)
+        return self._count
+    
+    def __len__(self):
+        """ expensive. try not to call. """
+        return self.count()
+        
+    def __getitem__(self, item):
+        if isinstance(item, (int, long)):
+            offset, stop = item, item + 1
+        else: # slice
+            offset, stop = item.start, item.stop
+        items = []
+        total_len = stop - offset
+        for qs in self.querysets:
+            if len(qs) < offset:
+                offset -= len(qs)
+            else:
+                items += list(qs[offset:stop])
+                if len(items) >= total_len:
+                    return items
+                else:
+                    offset = 0
+                    stop = total_len - len(items)
+                    continue
+        return items
+
 class MultyQuerySet(object):
     """
     Proxy-object for few QuerySet to be used in Paginator.

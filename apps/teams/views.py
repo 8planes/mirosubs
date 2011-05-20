@@ -45,7 +45,7 @@ from videos.models import Action, SubtitleLanguage
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from utils.multy_query_set import TeamMultyQuerySet
+from utils.multi_query_set import TeamMultyQuerySet
 from teams.rpc import TeamsApi
 from utils.orm import LoadRelatedQuerySet
 from widget.rpc import add_general_settings
@@ -115,7 +115,39 @@ def index(request, my_teams=False):
                        template_name='teams/index.html',
                        template_object_name='teams',
                        extra_context=extra_context)
+
+def _lang_pairs(lang_pairs, suffix):
+    return ["{0}_{1}_{2}".format(lp[0], lp[1], suffix) for lp in lang_pairs]
+
+def detail_haystack(request, slug):
+    from multi_query_set import MultiQuerySet
+
+    team = Team.get(slug, request.user)
+    languages = get_user_languages_from_request(request)
+    languages.extend([l[:l.find('-')] for l in 
+                           languages if l.find('-') > -1])
+    languages = list(set(languages))
     
+    lang_pairs = []
+    for l1 in languages:
+        for l0 in languages:
+            if l1 != l0:
+                lang_pairs.append((l1, l0))
+
+    qs0 = SearchQuerySet().models(TeamVideo).filter(
+        content__in=_lang_pairs(lang_pairs, "M"))
+    qs1 = SearchQuerySet().models(TeamVideo).filter(
+        content__in=_lang_pairs(lang_pairs, "0")).exclude(
+        content__in=_lang_pairs(lang_pairs, "M"))
+    
+    mqs = MultiQuerySet(qs0, qs1)
+    
+    return render_to_response(
+        "teams/detail_haystack_debug.html", 
+        { 'mqs': mqs },
+        context_instance=RequestContext(request))
+
+
 def detail(request, slug, is_debugging=False, languages=None):
     team = Team.get(slug, request.user)
 
@@ -133,13 +165,9 @@ def detail(request, slug, is_debugging=False, languages=None):
         'can_edit_video': team.can_edit_video(request.user)
     })
 
-    
-
-
     general_settings = {}
     add_general_settings(request, general_settings)
     extra_context['general_settings'] = json.dumps(general_settings)
-
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
