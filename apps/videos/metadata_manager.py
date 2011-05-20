@@ -151,9 +151,6 @@ def _update_complete_date(video):
     elif not is_complete and video.complete_date is not None:
         video.complete_date = None
         video.save()
-    elif not video.subtitle_language() and video.complete_date is not None:
-        video.complete_date = None
-        video.save()
 
 def _invalidate_cache(video):
     from widget import video_cache
