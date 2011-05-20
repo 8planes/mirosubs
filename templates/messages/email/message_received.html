@@ -5,7 +5,7 @@
 
 {{body|linebreaks}}<br>
 
-<a href="http://{{ domain }}{% url messages:index}">Reply to this message</a><br>
+<a href="http://{{ domain }}{% url messages:detail message_pk=message_pk %}">Reply to this message</a><br>
 <a href="http://{{ domain }}{% url profiles:edit %}">Stop receiving email notifications for personal messages</a><br>
 
 {% endblock %}

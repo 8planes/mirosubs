@@ -19,5 +19,6 @@ def send_new_message_notification(message_id):
         "author": message.author,
         "body": message.content,
         "domain":  Site.objects.get_current().domain,
+        "message_pk": message.pk
         }
     send_templated_email(to, subject, "messages/email/message_received.html", context)

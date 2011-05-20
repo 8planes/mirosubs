@@ -30,18 +30,28 @@ rpc_router = RpcRouter('messages:rpc_router', {
 
 MESSAGES_ON_PAGE = getattr(settings, 'MESSAGES_ON_PAGE', 30)
 
+
 @login_required
-def index(request):
+def index(request, message_pk=None):
+    message = None
+    if message_pk is not None:
+        try:
+            message = Message.objects.for_user(request.user).get(pk=message_pk)
+        except Message.DoesNotExist:
+            pass
     qs = Message.objects.for_user(request.user).filter(user=request.user)
     extra_context = {
         'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s'),
-        'messages_display': True
+        'messages_display': True,
+        "show_message" : message
     }
     return object_list(request, queryset=qs,
                        paginate_by=MESSAGES_ON_PAGE,
                        template_name='messages/index.html',
                        template_object_name='message',
                        extra_context=extra_context)
+def message_detail(request, message_pk):
+    return index(request, message_pk)
 
 @login_required    
 def sent(request):

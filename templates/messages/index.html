@@ -133,7 +133,7 @@
               {% endif %}
           </td>
           <td class="msg_body">
-              <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}">{{ msg }}</a>
+              <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}" id="message-{{msg.pk}}">{{ msg }}</a>
           </td>
           <td class="msg_date">{{ msg.created|timesince }} {% trans 'ago' %}</td>
           <td class="msg_delete"><span class="delete" message_id="{{ msg.pk }}">&#x2326;</span></td>
@@ -186,4 +186,12 @@
     </dl>
   </div>
 </div>
+
+{% if show_message %}
+<script>
+  $(window).load(function(){
+      $("#message-{{show_message.pk}}" ).click();
+  });
+</script>
+  {% endif %}
 {% endblock %}
