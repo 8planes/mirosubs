@@ -8,7 +8,6 @@ from apps.messages.models import Message
 
 @task
 def send_new_message_notification(message_id):
-    print "inside new task"
     try:
         message = Message.objects.get(pk=message_id)
     except Message.DoesNotExist:

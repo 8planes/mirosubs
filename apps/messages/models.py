@@ -115,12 +115,10 @@ class Message(models.Model):
 
     @classmethod    
     def on_message_saved(self, sender, instance, created, *args, **kwargs):
-        print "on_message_saved", sender, instance, created
         from apps.messages.tasks import send_new_message_notification
         if not created:
             return
         if instance.user.new_message_notification:
-            print "should create message!"
             send_new_message_notification(instance.pk)
         
 post_save.connect(Message.on_message_saved, Message)
