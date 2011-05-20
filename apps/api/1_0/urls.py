@@ -33,6 +33,8 @@ subtitle_handler = SubtitlesResource(SubtitleHandler, **ad)
 urlpatterns = patterns('',
     url('^video/(?P<video_id>[\w-]+)/$', video_handler, name="one_video_handler"),
     url('^video/$', video_handler, name="video_handler"),
+    url('^crossdomain.xml$', "crossdomain_views.api_crossdomain"),                       
+
     url('^subtitles/languages/$', subtitles_languages_handler),
     url('^subtitles/$', subtitle_handler, name='subtitle_handler'),
     url('^documentation/$', documentation_view, name='documentation')
