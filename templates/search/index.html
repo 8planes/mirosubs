@@ -65,14 +65,16 @@
         <ul class="big_list">
             {% load_related_for_result result_list %}
             {% for object in result_list %}
-                {% if object.object %}
-                    {% with object.object as video %}
-                        {% include 'search/_video_item.html' %}
-                    {% endwith %}
-                {% else %}
-                    {% with object as video %}
-                        {% include 'search/_video_item.html' %}
-                    {% endwith %}                
+            	{% if object %}
+	                {% if object.object %}
+	                    {% with object.object as video %}
+	                        {% include 'search/_video_item.html' %}
+	                    {% endwith %}
+	                {% else %}
+	                    {% with object as video %}
+	                        {% include 'search/_video_item.html' %}
+	                    {% endwith %}                
+	                {% endif %}
                 {% endif %}
             {% empty %}
                 {% if query %}

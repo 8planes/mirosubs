@@ -27,7 +27,7 @@ def load_related_for_result(search_qs):
     from videos.models import SubtitleLanguage
     
     if not isinstance(search_qs, QuerySet):
-        videos = dict((obj.object.id, obj.object) for obj in search_qs)
+        videos = dict((obj.object.id, obj.object) for obj in search_qs if obj)
         langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
 
         if videos:
