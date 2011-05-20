@@ -12,6 +12,8 @@ from localeurl import utils
 assert utils.supported_language(settings.LANGUAGE_CODE) is not None, \
         "Please ensure that settings.LANGUAGE_CODE is in settings.LANGUAGES."
 
+IGNORE = ['/sitemap.xml', '/crossdomain.xml']
+
 class LocaleURLMiddleware(object):
     """
     Middleware that sets the language based on the request path prefix and

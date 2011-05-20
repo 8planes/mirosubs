@@ -31,6 +31,8 @@ js_info_dict = {
 
 urlpatterns = patterns(
     '',
+
+    (r'^crossdomain.xml$', 'crossdomain_views.root_crossdomain'),
     url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_i18n_catalog'),
     (r'^$', 'videos.views.index'),
     (r'^ff-bug/$', 'videos.views.bug'),
