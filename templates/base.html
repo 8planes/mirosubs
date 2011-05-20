@@ -23,18 +23,17 @@
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
 {% endblock %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
-<script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jgrowl/jquery.jgrowl.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jalerts/jquery.alerts.js" type="text/javascript"></script>
-<script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.metadata.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.mod.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.rpc.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jquery.input_replacement.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
 <script src="{% url profiles:rpc_api %}" type="text/javascript"></script>  
 <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>
+
 {% block scripts %}{% endblock %}
 <title>
     {% block title %}Universal Subtitles - {% trans 'Make subtitles, translations, and captions for almost any video.' %}{% endblock %}

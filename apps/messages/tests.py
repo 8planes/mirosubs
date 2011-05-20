@@ -32,7 +32,6 @@ class MessageTest(TestCase):
          self.author = User.objects.get(username="author")
          self.subject = "Let's talk"
          self.body = "Will you please help me out with Portuguese trans?"
-         print [(x, x.new_message_notification) for x in User.objects.all()]
          
      def _create_message(self, to_user):
          self.message = Message(user=to_user,
