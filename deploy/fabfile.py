@@ -72,7 +72,7 @@ def unisubs(username):
                 'static/production', None,
                 '/etc/init.d/memcached restart', 
                 '/usr/local/universalsubtitles',
-                True, celeryd_bounce_cmd="/etc/init.d/celeryd.staging restart")
+                True, celeryd_bounce_cmd="/etc/init.d/celeryd restart")
 
 
 def syncdb():
