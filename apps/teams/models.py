@@ -369,7 +369,7 @@ class TeamVideo(models.Model):
             tvlp.percent_complete = percent_complete
             tvlp.save()
         elif tvlp and percent_complete == -1:
-            tvlp.remove()
+            tvlp.delete()
 
     def _update_tvlp_for_languages(self, lang0, lang1, langs):
         sl0_list = langs.get(lang0, [])

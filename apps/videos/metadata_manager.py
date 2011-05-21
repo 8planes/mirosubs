@@ -143,16 +143,12 @@ def _update_languages_count(video):
     video.languages_count = video.subtitlelanguage_set.filter(had_version=True).count()
     video.save()
 
-def _update_complete_date(video):
-    sl = video.subtitle_language()
-    if sl:
-        if sl.is_complete and video.complete_date is None:
-            video.complete_date = datetime.now()
-            video.save()
-        elif not sl.is_complete and video.complete_date is not None:
-            video.complete_date = None
-            video.save()
-    elif video.complete_date is not None:
+def _update_complete_date(video): 
+    is_complete = video.is_complete
+    if is_complete and video.complete_date is None:
+        video.complete_date = datetime.now()
+        video.save()
+    elif not is_complete and video.complete_date is not None:
         video.complete_date = None
         video.save()
 

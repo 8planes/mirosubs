@@ -22,6 +22,7 @@ import random
 from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
+from django.db.models import Q
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
@@ -428,6 +429,16 @@ class Video(models.Model):
             else:
                 langs[sl.language] = [sl]
         return langs    
+                                                    
+    @property
+    def is_complete(self):
+        """
+        We consider complete a video which has one or more
+        subtitle languages either marked as complete, or 
+        having 100%  as the percent_done.
+        """
+        return self.subtitlelanguage_set.filter(Q(is_complete=True) |
+            Q(percent_done=100)).exists()
 
 def create_video_id(sender, instance, **kwargs):
     instance.edited = datetime.now()
