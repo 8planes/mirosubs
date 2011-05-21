@@ -1,0 +1,2 @@
+from utils.celery_search_index import remove_search_index, update_search_index
+from celery import registry
