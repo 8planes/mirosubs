@@ -11,6 +11,7 @@ class Command(BaseCommand):
         num = targets.count()
         count = 0
         print "%s videos to go " % num
+        must_return = False
         for x in targets.iterator():
             try:
                 update_metadata(x.pk)
@@ -19,7 +20,10 @@ class Command(BaseCommand):
                 if percent > percent_printed:
                     percent_printed = percent
                     print "Done %s%%" % (percent)
-            except except (KeyboardInterrupt, SystemExit):
+            except (KeyboardInterrupt, SystemExit):
+                must_return = True
                 print "stopped at %s" % count
             except:
                 print "failed for pk %s"  % x.pk
+            if must_return:
+                return    
