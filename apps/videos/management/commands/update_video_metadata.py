@@ -1,6 +1,11 @@
 from django.core.management.base import BaseCommand
 from apps.videos.models import Video
 from apps.videos.metadata_manager import update_metadata
+from time import sleep
+import sentry_logger                
+import logging 
+logger = logging.getLogger(__name__)
+import sys
 
 class Command(BaseCommand):
     
@@ -16,7 +21,7 @@ class Command(BaseCommand):
             try:
                 update_metadata(x.pk)
                 percent = "%.2f %%" % (((count * 1.0) / num) * 100)
-                count +=1 
+                count +=1          
                 if percent > percent_printed:
                     percent_printed = percent
                     print "Done %s%%" % (percent)
@@ -25,5 +30,6 @@ class Command(BaseCommand):
                 print "stopped at %s" % count
             except:
                 print "failed for pk %s"  % x.pk
+                logger.exception("metadata import")
             if must_return:
                 return    
