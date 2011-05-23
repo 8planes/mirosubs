@@ -24,15 +24,22 @@ from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 
+should_compress = None
+
 @register.inclusion_tag("uni_compressor/css_links.html")
 def include_css_bundle(bundle_name):
+    global should_compress
+    if should_compress is None:
+        should_compress = getattr(settings, "CSS_USE_COMPILED",
+                                  not getattr(settings, "DEBUG", False))
     mbu = getattr(settings, "MEDIA_BUNDLE_URLS", {})
     url = mbu.get( bundle_name, None)
-    if url is not None:
+    if url is not None and should_compress == True:
         urls = ["%s/%s" % (settings.COMPRESS_OUTPUT_DIRNAME, url)]
     else:
         urls = settings.MEDIA_BUNDLES.get(bundle_name)["files"]
-        logger.warning("could not find final url for %s" % bundle_name)
+        if should_compress:
+            logger.warning("could not find final url for %s" % bundle_name)
     return {
         "urls":urls,
         "MEDIA_URL": settings.MEDIA_URL
