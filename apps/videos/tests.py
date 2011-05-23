@@ -26,6 +26,7 @@ from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, Yout
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm
+from apps.videos import metadata_manager
 from apps.widget import video_cache
 import math_captcha
 import os
@@ -1185,17 +1186,13 @@ class TestTasks(TestCase):
 class TestPercentComplete(TestCase):
     
     fixtures = ['test.json']
-    
-    def setUp(self):
-        self.video = Video.objects.all()[:1].get()
-        self.original_language = self.video.subtitle_language()
-        latest_version = self.original_language.latest_version()
-        
+
+    def _create_trans(self, latest_version, lang_code, forked=False):
         translation = SubtitleLanguage()
         translation.video = self.video
-        translation.language = 'uk'
+        translation.language = lang_code
         translation.is_original = False
-        translation.is_forked = False
+        translation.is_forked = forked
         translation.save()
 
         self.translation = translation
@@ -1210,6 +1207,13 @@ class TestPercentComplete(TestCase):
         
         for s in latest_version.subtitle_set.all():
             s.duplicate_for(v).save()
+        return translation
+        
+    def setUp(self):
+        self.video = Video.objects.all()[:1].get()
+        self.original_language = self.video.subtitle_language()
+        latest_version = self.original_language.latest_version()
+        self.translation = self._create_trans(latest_version, 'uk')
         
     def test_percent_done(self):
         from videos.tasks import video_changed_tasks
@@ -1282,7 +1286,25 @@ class TestPercentComplete(TestCase):
         self.assertEqual(translation.percent_done, 100)
         self.assertTrue(translation.is_complete)
         self.translation.save()
-    
+
+    def test_video_complete_forked_complete(self):                                      
+        self.original_language = self.video.subtitle_language()
+        latest_version = self.original_language.latest_version()
+        new_lang = self._create_trans(latest_version, 'pt', True)
+        self.assertFalse(self.video.is_complete, False)
+        new_lang.is_complete = True             
+        new_lang.save()
+        self.assertTrue(self.video.is_complete)
+                                               
+    def test_video_complete_forked_complete(self):                                      
+        self.original_language = self.video.subtitle_language()
+        latest_version = self.original_language.latest_version()
+        new_lang = self._create_trans(latest_version, 'pt', True)
+        self.assertFalse(self.video.is_complete, False)
+        new_lang.percent_done = 100
+        new_lang.save()
+        self.assertTrue(self.video.is_complete)
+            
 from videos import alarms
 from django.conf import settings
 
