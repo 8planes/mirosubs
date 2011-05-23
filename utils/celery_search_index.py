@@ -4,6 +4,9 @@ from celery.decorators import task
 from haystack import site
 from haystack.exceptions import NotRegistered
 from haystack.utils import get_identifier
+from django.conf import settings
+
+SEARCH_INDEX_UPDATE_OFF = getattr(settings, 'SEARCH_INDEX_UPDATE_OFF', True)
 
 class CelerySearchIndex(indexes.SearchIndex):
     
@@ -20,10 +23,12 @@ class CelerySearchIndex(indexes.SearchIndex):
         signals.post_delete.disconnect(self.remove_handler, sender=model)
         
     def update_handler(self, instance, **kwargs):
-        update_search_index.delay(instance.__class__, instance.pk)
+        if not SEARCH_INDEX_UPDATE_OFF:
+            update_search_index.delay(instance.__class__, instance.pk)
     
     def remove_handler(self, instance, **kwargs):
-        remove_search_index.delay(instance.__class__, get_identifier(instance))
+        if not SEARCH_INDEX_UPDATE_OFF:
+            remove_search_index.delay(instance.__class__, get_identifier(instance))
 
 def log(*args, **kwargs):
     import sentry_logger
