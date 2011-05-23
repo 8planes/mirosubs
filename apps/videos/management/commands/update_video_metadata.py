@@ -6,6 +6,7 @@ import sentry_logger
 import logging 
 logger = logging.getLogger(__name__)
 import sys
+from time import sleep
 
 class Command(BaseCommand):
     
@@ -32,4 +33,5 @@ class Command(BaseCommand):
                 print "failed for pk %s"  % x.pk
                 logger.exception("metadata import")
             if must_return:
-                return    
+                return
+            sleep(0.2)
