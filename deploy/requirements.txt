@@ -16,7 +16,7 @@ oauth==1.0.1
 oauth2==1.2.0
 pyOpenSSL==0.9
 pycrypto==2.1.0
-redis==2.2.2
+redis==2.2.4
 vendor/python-openid-2.2.5.tar.gz
 vendor/python-yadis-1.1.0.tar.gz
 simplejson==2.1.1
