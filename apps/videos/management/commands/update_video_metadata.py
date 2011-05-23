@@ -7,6 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 import sys
 from time import sleep
+import math
 
 class Command(BaseCommand):
     
@@ -21,17 +22,18 @@ class Command(BaseCommand):
         for x in targets.iterator():
             try:
                 update_metadata(x.pk)
-                percent = "%.2f %%" % (((count * 1.0) / num) * 100)
+                percent =  (((count * 1.0) / num) * 100)
                 count +=1          
-                if percent > percent_printed:
-                    percent_printed = percent
-                    print "Done %s%%" % (percent)
+                if int(percent) > percent_printed:
+                    percent_printed = int(percent)
+                    print "Done %2s %%" % (percent_printed)
             except (KeyboardInterrupt, SystemExit):
                 must_return = True
-                print "stopped at %s" % count
+                
             except:
                 print "failed for pk %s"  % x.pk
                 logger.exception("metadata import")
             if must_return:
+                print "stopped at %s" % count
                 return
             sleep(0.2)
