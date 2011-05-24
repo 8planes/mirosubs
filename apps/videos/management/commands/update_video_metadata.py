@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand
 from apps.videos.models import Video
 from apps.videos.metadata_manager import update_metadata
+from django.conf import settings
+import sys
 
 class Command(BaseCommand):
     
@@ -24,6 +26,8 @@ class Command(BaseCommand):
                 must_return = True
                 print "stopped at %s" % count
             except:
+                if settings.DEBUG:
+                    raise sys.exc_info()[1]
                 print "failed for pk %s"  % x.pk
             if must_return:
                 return    

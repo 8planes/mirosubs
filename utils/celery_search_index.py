@@ -24,11 +24,19 @@ class CelerySearchIndex(indexes.SearchIndex):
         
     def update_handler(self, instance, **kwargs):
         if not SEARCH_INDEX_UPDATE_OFF:
-            update_search_index.delay(instance.__class__, instance.pk)
+            if not hasattr(self, 'publisher'):
+                self.publisher = update_search_index.get_publisher()    
+                        
+            update_search_index.apply_async(args=[instance.__class__, instance.pk],
+                                            publisher=self.publisher)
     
     def remove_handler(self, instance, **kwargs):
         if not SEARCH_INDEX_UPDATE_OFF:
-            remove_search_index.delay(instance.__class__, get_identifier(instance))
+            if not hasattr(self, 'publisher'):
+                self.publisher = update_search_index.get_publisher()    
+                            
+            remove_search_index.apply_async(args=[instance.__class__, get_identifier(instance)],
+                                            publisher=self.publisher)
 
 def log(*args, **kwargs):
     import sentry_logger
@@ -53,7 +61,7 @@ def update_search_index(model_class, pk):
     except model_class.DoesNotExist:
         log(u'Object does not exist for %s' % model_class)
         return
-    
+
     try:
         search_index = site.get_index(model_class)
     except NotRegistered:
