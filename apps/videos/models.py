@@ -424,7 +424,7 @@ class Video(models.Model):
         having 100%  as the percent_done.
         """
         return self.subtitlelanguage_set.filter(Q(is_complete=True) |
-            Q(percent_done=100)).exists()
+            Q(percent_done=100)).filter(subtitle_count__gt=0).exists()
 
 def create_video_id(sender, instance, **kwargs):
     instance.edited = datetime.now()
