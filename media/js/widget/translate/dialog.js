@@ -172,3 +172,7 @@ mirosubs.translate.Dialog.prototype.forkImpl_ = function(subtitleState) {
 mirosubs.translate.Dialog.prototype.getServerModel = function(){
     return this.serverModel_;
 }
+
+mirosubs.translate.Dialog.prototype.makeJsonSubs =  function (){
+    return this.translationPanel_.makeJsonSubs();
+};

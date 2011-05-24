@@ -434,3 +434,7 @@ mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
 mirosubs.subtitle.Dialog.prototype.getServerModel = function(){
     return this.serverModel_;
 }
+
+mirosubs.subtitle.Dialog.prototype.makeJsonSubs =  function (){
+    return this.captionSet_.makeJsonSubs();
+}
