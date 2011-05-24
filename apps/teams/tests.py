@@ -68,10 +68,10 @@ class TestCommands(TestCase):
         #check initial data
         self.assertEqual(self.team.teamvideo_set.count(), 2)
         self.assertEqual(self.team.users.count(), 1)
-        
+
         today = datetime.today()
         date = today - timedelta(hours=24)
-        
+
         #test notification about two new videos
         TeamVideo.objects.filter(pk__in=[self.tv1.pk, self.tv2.pk]).update(created=datetime.today())
         self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 2)

@@ -116,32 +116,12 @@ def index(request, my_teams=False):
                        template_object_name='teams',
                        extra_context=extra_context)
 
-def _lang_pairs(lang_pairs, suffix):
-    return ["{0}_{1}_{2}".format(lp[0], lp[1], suffix) for lp in lang_pairs]
-
 def detail_haystack(request, slug):
-    from multi_query_set import MultiQuerySet
-
     team = Team.get(slug, request.user)
-    languages = get_user_languages_from_request(request)
-    languages.extend([l[:l.find('-')] for l in 
-                           languages if l.find('-') > -1])
-    languages = list(set(languages))
-    
-    lang_pairs = []
-    for l1 in languages:
-        for l0 in languages:
-            if l1 != l0:
-                lang_pairs.append((l1, l0))
 
-    qs0 = SearchQuerySet().models(TeamVideo).filter(
-        content__in=_lang_pairs(lang_pairs, "M"))
-    qs1 = SearchQuerySet().models(TeamVideo).filter(
-        content__in=_lang_pairs(lang_pairs, "0")).exclude(
-        content__in=_lang_pairs(lang_pairs, "M"))
-    
-    mqs = MultiQuerySet(qs0, qs1)
-    
+    languages = get_user_languages_from_request(request)
+    mqs = team.get_videos_for_languages_haystack(languages)
+
     return render_to_response(
         "teams/detail_haystack_debug.html", 
         { 'mqs': mqs },

@@ -196,14 +196,77 @@ class Team(models.Model):
     def applications_count(self):
         if not hasattr(self, '_applications_count'):
             setattr(self, '_applications_count', self.applications.count())
-        return self._applications_count            
+        return self._applications_count
+
+    def _lang_pair(self, lp, suffix):
+        return "{0}_{1}_{2}".format(lp[0], lp[1], suffix)
+
+    def _lang(self, lang, suffix):
+        return "S_{0}_{1}".format(lang, suffix)
+
+    def _sq_expression(self, sq_list):
+        if len(sq_list) == 0:
+            return None
+        else:
+            return reduce(lambda x, y: x | y, sq_list)
+
+    def _filter(self, sqs, sq_list):
+        from haystack.query import SQ
+        sq_expression = self._sq_expression(sq_list)
+        return None if (sq_expression is None) else sqs.filter(sq_expression)
+
+    def _exclude(self, sqs, sq_list):
+        if sqs is None:
+            return None
+        sq_expression = self._sq_expression(sq_list)
+        return sqs if sq_expression is None else sqs.exclude(sq_expression)
+
+    def _base_sqs(self):
+        from haystack.query import SearchQuerySet
+        return SearchQuerySet().models(TeamVideo)
+
+    def _append(self, qs, qs_list):
+        if qs is not None:
+            qs_list.append(qs)
+
+    def get_videos_for_languages_haystack(self, languages):
+        from utils.multi_query_set import MultiQuerySet
+        from haystack.query import SQ
+
+        languages.extend([l[:l.find('-')] for l in 
+                           languages if l.find('-') > -1])
+        languages = list(set(languages))
+
+        pairs_m = []
+        pairs_0 = []
+        langs_m = []
+        langs_0 = []
+        for l1 in languages:
+            langs_m.append(SQ(content=self._lang(l1, "M")))
+            langs_0.append(SQ(content=self._lang(l1, "0")))
+            for l0 in languages:
+                if l1 != l0:
+                    pairs_m.append(SQ(content=self._lang_pair((l1, l0), "M")))
+                    pairs_0.append(SQ(content=self._lang_pair((l1, l0), "0")))
+
+        qs_list = []
+        self._append(self._filter(self._base_sqs(), pairs_m), qs_list)
+        self._append(self._exclude(self._filter(self._base_sqs(), pairs_0), 
+                                   pairs_m), qs_list)
+        self._append(self._exclude(self._filter(self._base_sqs(), langs_m), 
+                                   pairs_m + pairs_0), qs_list)
+        self._append(self._exclude(self._filter(self._base_sqs(), langs_0),
+                                   langs_m + pairs_m + pairs_0), qs_list)
+        self._append(self._exclude(self._base_sqs(), 
+                                   langs_0 + langs_m + pairs_m + pairs_0), 
+                     qs_list)
+        return MultiQuerySet(*qs_list)
 
     def get_videos_for_languages(self, languages, CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS):
         from utils.multi_query_set import TeamMultyQuerySet
         languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
     
         langs_pairs = []
-
         
         for l1 in languages:
             for l0 in languages:
