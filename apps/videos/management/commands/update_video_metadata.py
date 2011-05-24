@@ -1,8 +1,13 @@
 from django.core.management.base import BaseCommand
 from apps.videos.models import Video
 from apps.videos.metadata_manager import update_metadata
-from django.conf import settings
+from time import sleep
+import sentry_logger                
+import logging 
+logger = logging.getLogger(__name__)
 import sys
+from time import sleep
+import math
 
 class Command(BaseCommand):
     
@@ -17,17 +22,17 @@ class Command(BaseCommand):
         for x in targets.iterator():
             try:
                 update_metadata(x.pk)
-                percent = "%.2f %%" % (((count * 1.0) / num) * 100)
-                count +=1 
-                if percent > percent_printed:
-                    percent_printed = percent
-                    print "Done %s%%" % (percent)
+                percent =  (((count * 1.0) / num) * 100)
+                count +=1          
+                if int(percent) > percent_printed:
+                    percent_printed = int(percent)
+                    print "Done %2s %%" % (percent_printed)
             except (KeyboardInterrupt, SystemExit):
                 must_return = True
-                print "stopped at %s" % count
             except:
-                if settings.DEBUG:
-                    raise sys.exc_info()[1]
                 print "failed for pk %s"  % x.pk
+                logger.exception("metadata import")
             if must_return:
-                return    
+                print "stopped at %s" % count
+                return
+            sleep(0.2)
