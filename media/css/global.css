@@ -503,3 +503,15 @@ ul#subnav li#subnav_menu {
 .language_modal ul li {
   margin: 5px 0 5px 0;
 }
+.
+.mirosubs-modal-lock-warning {
+    background-color: #fff;
+    width: 475px;
+    color: #818b8f;
+    padding: 20px;
+    -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    -moz-border-radius:    3px;
+    -webkit-border-radius: 3px;
+    z-index: 4000 !important;
+
+}
