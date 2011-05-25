@@ -34,8 +34,8 @@
             
             {% if item.is_comment %}
                 {% if item.language %}
-                    {% blocktrans with item.language.language_display as language %}
-                    commented on {{ language }}.
+                    {% blocktrans with item.language.language_display as language and item.language.get_absolute_url as url %}
+                    commented on <a href="{{ url }}#comments">{{ language }} subtitles</a>..
                     {% endblocktrans %}            
                 {% else %}
                     {% trans 'commented on this video.' %}
