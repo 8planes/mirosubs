@@ -31,7 +31,7 @@ simplejson==2.1.1
 django-haystack==1.0.1-final
 pysolr==2.0.12
 chardet==1.0.1
-boto==2.0b3
+boto==2.0b4
 python-memcached
 feedparser
 lxml==2.3
