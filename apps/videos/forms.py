@@ -38,7 +38,7 @@ from utils.forms import AjaxForm, EmailListField, UsernameListField
 from gdata.youtube.service import YouTubeService
 from videos.tasks import video_changed_tasks
 from utils.translation import get_languages_list
-from utils.forms import StripURLField, StripRegexField
+from utils.forms import StripURLField, StripRegexField, FeedURLField
 from videos.feed_parser import FeedParser, FeedParserError
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
@@ -413,7 +413,7 @@ class AddFromFeedForm(forms.Form, AjaxForm):
     usernames = UsernameListField(required=False, label=_(u'Youtube usernames'), help_text=_(u'<span class="hint">Enter usernames separated by comma.</span>'))
     youtube_user_url = StripRegexField(youtube_user_url_re, required=False, label=_(u'Youtube page link.'), 
                                        help_text=_(u'<span class="hint">For example: http://www.youtube.com/user/username</span>'))
-    feed_url = StripURLField(required=False, help_text=_(u'<span class="hint">Supported: Youtube, Vimeo, Blip or Dailymotion. Only supported sites added.</span>'))
+    feed_url = FeedURLField(required=False, help_text=_(u'<span class="hint">Supported: Youtube, Vimeo, Blip or Dailymotion. Only supported sites added.</span>'))
     save_feed = forms.BooleanField(required=False, label=_(u'Save feed'), help_text=_(u'<span class="hint checkbox_hint">Choose this if you wish to add videos from this feed in the future. Only valid RSS feeds will be saved.</span>'))
     
     def __init__(self, user, *args, **kwargs):
