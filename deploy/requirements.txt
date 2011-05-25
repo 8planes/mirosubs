@@ -18,10 +18,6 @@ vendor/BeautifulSoup-3.2.0.tar.gz
 vendor/kombu-1.1.3.tar.gz
 vendor/celery-2.2.6.tar.gz
 vendor/django-celery-2.2.4.tar.gz
-Werkzeug==0.6.1
-django-debug-toolbar==0.8.3
-django-extensions==0.4.1
-ipython==0.10
 oauth==1.0.1
 oauth2==1.2.0
 pyOpenSSL==0.9
