@@ -157,8 +157,8 @@ def save_emailed_translations(request):
             'widget/save_emailed_translations.html',
             context_instance=RequestContext(request))
     else:
-        draft = models.SubtitleDraft.get(pk=request.POST['draft_pk'])
-        user = CustomUser.get(pk=request.POST['user_pk'])
+        draft = models.SubtitleDraft.objects.get(pk=request.POST['draft_pk'])
+        user = CustomUser.objects.get(pk=request.POST['user_pk'])
         subs = json.loads(request.POST['sub_text'])
         draft.subtitle_set.all().delete()
         for sub in subs:
@@ -167,9 +167,9 @@ def save_emailed_translations(request):
                 subtitle_id=sub['subtitle_id'],
                 subtitle_text=sub['text'])
             subtitle.save()
-        draft = models.SubtitleDraft.get(pk=draft.pk)
-        rpc.save_finished(draft, user)
-        redirect(draft.video.video_link())        
+        draft = models.SubtitleDraft.objects.get(pk=draft.pk)
+        rpc_views.save_finished(draft, user)
+        return redirect(draft.video.video_link())        
 
 def base_widget_params(request, extra_params={}):
     params = {}

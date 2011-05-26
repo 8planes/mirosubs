@@ -3,17 +3,18 @@
   </head>
   <body>
     <form method="post" target=".">
+      {% csrf_token %}
       <p>
         <label for="draft_pk">Draft ID:</label>
         <input type="text" id="draft_pk" name="draft_pk"></input>
       </p>
       <p>
         <label for="user_pk">User ID:</label>
-        <input type="text" id="user_pk" name="yser_pk"></input>
+        <input type="text" id="user_pk" name="user_pk"></input>
       </p>
       <p>
         <label for="sub_text">Subtitle JSON:</label>
-        <textarea id="sub_text" name="subtext"></textarea>
+        <textarea id="sub_text" name="sub_text"></textarea>
       </p>
       <button type="submit">Submit</button>
     </form>

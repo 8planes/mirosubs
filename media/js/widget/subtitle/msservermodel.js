@@ -43,8 +43,11 @@ mirosubs.subtitle.MSServerModel = function(draftPK, videoID, videoURL) {
     this.unsavedPackets_ = [];
     this.packetNo_ = 1;
     this.logger_ = new mirosubs.subtitle.Logger(draftPK);
+    mirosubs.subtitle.MSServerModel.currentInstance = this;
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
+
+mirosubs.subtitle.MSServerModel.currentInstance = null;
 
 /*
  * URL for the widget's embed javascript.
@@ -232,6 +235,10 @@ mirosubs.subtitle.MSServerModel.prototype.logIn = function() {
 
 mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
     return [mirosubs.siteURL(), "/videos/", this.videoID_, "/info/"].join('');
+};
+
+mirosubs.subtitle.MSServerModel.prototype.getVideoID = function() {
+    return this.videoID_;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getDraftPK = function() {
