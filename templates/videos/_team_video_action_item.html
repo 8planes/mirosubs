@@ -30,8 +30,9 @@
             
             {% if item.is_comment %}
                 {% if item.language %}
-                    {% blocktrans with item.language.language_display as language and item.language.get_absolute_url as url %}
+                    {% blocktrans with item.language.language_display as language and item.language.get_absolute_url as url and item.language.video.get_absolute_url as video_url and item.language.video as video %}
                     commented on <a href="{{ url }}#comments">{{ language }} subtitles</a>
+                    for <a href="{{ video_url }}">{{ video }}</a>
                     {% endblocktrans %}            
                 {% else %}
                     {% trans 'commented on ' %}<a href="{{ item.video.video_link }}">{{ item.video }}</a>
@@ -68,8 +69,9 @@
             
             {% if item.is_comment %}
                 {% if item.language %}
-                    {% blocktrans with item.language.language_display as language and item.language.get_absolute_url as url %}
-                    Comment added for <a href="{{ url }}#comments">{{ language }} subtitles</a>
+                    {% blocktrans with item.language.language_display as language and item.language.get_absolute_url as url and item.language.video.get_absolute_url as video_url and item.language.video as video %}
+                    Comment added to <a href="{{ url }}#comments">{{ language }} subtitles</a>
+                    for <a href="{{ video_url }}">{{ video }}</a>
                     {% endblocktrans %}            
                 {% else %}
                     {% trans 'Comment added for' %} <a href="{{ item.video.video_link }}">{{ item.video }}</a>
