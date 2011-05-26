@@ -1483,7 +1483,9 @@ class TestModelsSaving(TestCase):
 from videos.feed_parser import FeedParser
 
 class TestFeedParser(TestCase):
-    
+    #TODO: add test for MediaFeedEntryParser. I just can't find RSS link for it
+    #RSS should look like this http://www.dailymotion.com/rss/ru/featured/channel/tech/1
+    #but not from supported site
     youtube_feed_url_pattern =  'https://gdata.youtube.com/feeds/api/users/%s/uploads'
     youtube_username = 'universalsubtitles'
     
@@ -1524,8 +1526,18 @@ class TestFeedParser(TestCase):
         
         video, created = Video.get_or_create_for_url(vt=vt)
         self.assertTrue(video)
+
+    def test_enclosure_parsing(self):
+        feed_url = 'http://webcast.berkeley.edu/media/common/rss/Computer_Science_10__001_Spring_2011_Video__webcast.rss'
         
-    def _test_media_feed_parsing(self):
+        feed_parser = FeedParser(feed_url)
+        vt, info, entry = feed_parser.items().next()
+        self.assertTrue(isinstance(vt, HtmlFiveVideoType))
+        
+        video, created = Video.get_or_create_for_url(vt=vt)
+        self.assertTrue(video)            
+        
+    def test_dailymotion_feed_parsing(self):
         feed_url = 'http://www.dailymotion.com/rss/ru/featured/channel/tech/1'
         
         feed_parser = FeedParser(feed_url)
@@ -1534,3 +1546,4 @@ class TestFeedParser(TestCase):
         
         video, created = Video.get_or_create_for_url(vt=vt)
         self.assertTrue(video)        
+
