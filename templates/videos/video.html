@@ -119,15 +119,29 @@
     <hr />
 
   <div class="grid_3 left_nav_wrapper alpha">
-
+    
       <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+
       {% upload_subtitles video %}
+
+      <!-- this block is not in history.html -->
+      {% paste_transcription %}
+
+      {% if user.is_staff and perms.videos.edit_video %}
+      <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
+      <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank">
+          {% trans 'Edit in Admin Interface' %}
+      </a>
+      {% endif %}
+      <!-- end of block -->
+
       {% team_add_video_select %}
+
       <ul class="left_nav">
-          <li><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
+          <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
           {% include 'videos/_left_navigation.html' %}
       </ul>
-    
+
   </div>
 
   <div class="wrap grid_9 omega">
