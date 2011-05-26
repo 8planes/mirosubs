@@ -69,7 +69,21 @@ mirosubs.Dialog.prototype.enterDocument = function() {
         listen(mirosubs.userEventTarget,
                mirosubs.EventType.LOGIN,
                this.updateLoginState);
+    this.createLockDialog(mirosubs.Dialog.SECONDS_TILL_WARNING ,
+                          mirosubs.Dialog.SECONDS_TILL_FREEZE);
 };
+
+/* @const {int}
+ * Number of seconds until the idle dialog is show
+ */
+mirosubs.Dialog.SECONDS_TILL_WARNING = 300;
+
+/* @const {int}
+ * Number of seconds after the idle dialog is show that
+ * the current user session will be suspended. 
+ */
+mirosubs.Dialog.SECONDS_TILL_FREEZE = 120;
+
 /**
  * Used to display a temporary overlay, for example the instructional
  * video panel in between subtitling steps.
@@ -94,6 +108,52 @@ mirosubs.Dialog.prototype.hideTemporaryPanel = function() {
         this.temporaryPanel_ = null;
     }
 };
+
+mirosubs.Dialog.prototype.createLockDialog = function (secondsUntilWarning, secondsUntilFreeze){
+    if (this.dropLockDialog_){
+        this.dropLockDialog_.disposeInternal();
+    }
+    this.dropLockDialog_ = new mirosubs.widget.droplockdialog.Dialog( secondsUntilWarning, secondsUntilFreeze,
+                                                                      goog.dom.getDocumentScrollElement());
+
+    
+    goog.events.listen(this.dropLockDialog_, 
+                       mirosubs.widget.droplockdialog.Dialog.SESSION_IDDLE, 
+                       goog.bind(this.onSessionIdle_, this));
+    goog.events.listen(this.dropLockDialog_, 
+                       mirosubs.widget.droplockdialog.Dialog.SESSION_RESUMED, 
+                       goog.bind(this.onSessionResumed_, this));                       
+    goog.events.listen(this.dropLockDialog_, 
+                       mirosubs.widget.droplockdialog.Dialog.DOWNLOAD_REQUESTED, 
+                       goog.bind(this.downloadRequested_, this));                                     
+    goog.events.listen(this.dropLockDialog_, 
+                       "close",
+                       goog.bind(this.hideDialogImpl_, this));                                     
+};
+
+mirosubs.Dialog.prototype.onSessionIdle_ = function(e){
+    var serverModel = this.getServerModel();
+    if (serverModel){
+        var args = {};
+        args['draft_pk'] = serverModel.getDraftPK();
+        mirosubs.Rpc.call("release_lock", args);    
+        serverModel.stopTimer();
+    }    
+};
+
+mirosubs.Dialog.prototype.downloadRequested_ = function(e){
+    mirosubs.finishfaildialog.CopyDialog.showForSubs(
+        this.makeJsonSubs());
+};
+
+mirosubs.Dialog.prototype.onSessionResumed_ = function(e){
+    // FIXME: implement on session Resumed
+    // this should check if the lock is available, and if so,
+    // aqcuire lock for user
+    // setup auto saving time
+    
+};
+
 mirosubs.Dialog.prototype.getVideoPlayerInternal = function() {
     return this.videoPlayer_;
 };
@@ -214,6 +274,9 @@ mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
         });        
     }
 };
+
+mirosubs.Dialog.prototype.makeJsonSubs = goog.abstractMethod;
+
 mirosubs.Dialog.prototype.disposeInternal = function() {
     mirosubs.Dialog.superClass_.disposeInternal.call(this);
     this.videoPlayer_.dispose();

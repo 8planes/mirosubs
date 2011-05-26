@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.http import HttpResponse, Http404, HttpResponseServerError
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.contrib.sites.models import Site
 from django.template import RequestContext
 from videos import models
@@ -34,6 +34,8 @@ from widget.null_rpc import NullRpc
 from django.utils.encoding import iri_to_uri, DjangoUnicodeDecodeError
 from django.db.models import ObjectDoesNotExist
 from uslogging.models import WidgetDialogCall
+from auth.models import CustomUser
+from django.contrib.admin.views.decorators import staff_member_required
 
 rpc_views = Rpc()
 null_rpc_views = NullRpc()
@@ -147,6 +149,27 @@ def api_demo(request):
     return render_to_response('widget/api_demo.html',
                               context,
                               context_instance=RequestContext(request))
+
+@staff_member_required
+def save_emailed_translations(request):
+    if request.method == "GET":
+        return render_to_response(
+            'widget/save_emailed_translations.html',
+            context_instance=RequestContext(request))
+    else:
+        draft = models.SubtitleDraft.objects.get(pk=request.POST['draft_pk'])
+        user = CustomUser.objects.get(pk=request.POST['user_pk'])
+        subs = json.loads(request.POST['sub_text'])
+        draft.subtitle_set.all().delete()
+        for sub in subs:
+            subtitle = models.Subtitle(
+                draft=draft,
+                subtitle_id=sub['subtitle_id'],
+                subtitle_text=sub['text'])
+            subtitle.save()
+        draft = models.SubtitleDraft.objects.get(pk=draft.pk)
+        rpc_views.save_finished(draft, user)
+        return redirect(draft.video.video_link())        
 
 def base_widget_params(request, extra_params={}):
     params = {}

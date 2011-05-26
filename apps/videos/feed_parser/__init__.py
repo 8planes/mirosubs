@@ -164,3 +164,20 @@ class MediaFeedEntryParser(BaseFeedEntryParser):
             pass
         
 feed_parsers.append(MediaFeedEntryParser())
+
+class EntryLinksFeedEntryParser(BaseFeedEntryParser):
+    
+    def get_video_type(self, entry):
+        if 'links' not in entry:
+            return
+        
+        for link in entry['links']:
+            try:
+                if link['type'].startswith('video'):
+                    vt = video_type_registrar.video_type_for_url(link['href'])
+                    if vt:
+                        return vt                    
+            except (KeyError, IndexError, AttributeError):
+                pass
+            
+feed_parsers.append(EntryLinksFeedEntryParser())             

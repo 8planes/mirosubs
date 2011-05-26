@@ -6,6 +6,7 @@ b) Add / remove  the path to the css files (always from the root of MEDIA_ROOT) 
 c) if locally run:
 $ python manage.py compile_media --settings=dev_settings && python manage.py update_compiled_urls --settings=dev_settings     
 (to update the css)
+d) You can disable css compression with the setting CSS_USE_COMPILED ( which defaults to the oposite of debug)
 
 Then at compilation time, we go trough each bundle, read from disk the css file, concatenate them. Run the contatenated file though the yahoo yui compressor (at css-compression/yuicompressor....jar) . We take the md5 checksum of that result and save that file on static-cache with the checksum as the filename.
 After all bundles are done, we save the mapping between available bundles and their md5 names static-cache/compresses.py.

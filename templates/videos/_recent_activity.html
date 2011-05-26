@@ -1,3 +1,11 @@
-{% include 'videos/_activities.html' %}
 {% load i18n %}
+
+<ul class="small_list">
+    {% for item in events %}
+    <li>
+        {{ item.render }}
+    </li>
+    {% endfor %}
+</ul>
+
 <a class="view_all" href="{% url videos:actions_list %}">{% trans 'View all' %}</a>

@@ -97,12 +97,14 @@
                                 <tr>
                                     <td style="background-color: #c5d9dd; padding-top: 10px; border-bottom:1px solid #b7bdbc; border-left: 1px solid #b7bdbc; border-right: 1px solid #b7bdbc;" valign="top">
                                         <span style="font-size: 10px; color: #666; font-family: Tahoma, Geneva, sans-serif;">
+                                        	{% block stop_notification %}
                                             <p>
                                                 {% trans 'To stop receiving these emails, go to your preferences page and uncheck "receive notifications":' %}
                                                 <a href="http://{{ domain }}{% filter rmlocale %}{% url profiles:edit %}{% endfilter %}">
                                                     {% trans 'My profile / preferences' %}
                                                 </a>
                                             </p>
+                                            {% endblock %}
                                             <p style="margin-bottom: 0;">
                                                 Participatory Culture Foundation P.O. Box 55071 #20335, Boston, MA 02205-5071
                                             </p>

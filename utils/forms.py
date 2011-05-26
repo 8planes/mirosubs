@@ -24,6 +24,27 @@ class StripURLField(forms.URLField):
     def to_python(self, value):
         value = super(StripURLField, self).to_python(value)
         return value.strip()
+
+class FeedURLValidator(validators.URLValidator):
+    regex = re.compile(
+        r'^(?:(?:https?)|(?:feed))://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)    
+
+class FeedURLField(forms.URLField):
+
+    def __init__(self, max_length=None, min_length=None, verify_exists=False,
+            validator_user_agent=validators.URL_VALIDATOR_USER_AGENT, *args, **kwargs):
+        forms.CharField.__init__(self,max_length, min_length, *args,
+                                       **kwargs)
+        self.validators.append(FeedURLValidator(verify_exists=verify_exists, validator_user_agent=validator_user_agent))
+
+    def to_python(self, value):
+        value = super(FeedURLField, self).to_python(value)
+        return value.strip()
     
 class UniSubURLField(StripURLField):
     

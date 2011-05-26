@@ -158,7 +158,7 @@ def log_exception(exceptions, logger='root', ignore=False):
                 #call each other
                 if not hasattr(e, '_caught_by_selery'):
                     e._caught_by_selery = True
-                    client.create_from_exception(sys.exc_info(), logger='celery')
+                    client.create_from_exception(sys.exc_info(), logger=logger)
                 if not ignore:
                     raise e
             

@@ -5,7 +5,7 @@
     
     <ul class="small_list">
         {% for item in users_actions %}
-            <li>{% include 'videos/_team_member_action_item.html' %}</li>
+            <li>{{ item.render }}</li>
         {% empty %}
             <li>{% trans 'No Activity' %}</li>            
         {% endfor %}

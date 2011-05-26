@@ -132,6 +132,7 @@ MANAGERS = ADMINS
 P3P_COMPACT = 'CP="CURa ADMa DEVa OUR IND DSP CAO COR"'
 
 DEFAULT_FROM_EMAIL = '"Universal Subtitles" <feedback@universalsubtitles.org>'
+WIDGET_LOG_EMAIL = 'widget-logs@universalsubtitles.org'
 
 DATABASES = {
     'default': {
@@ -148,6 +149,7 @@ DATABASES = {
 EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
+CSS_USE_COMPILED = not DEBUG
 JS_USE_COMPILED = False
 
 
@@ -195,6 +197,7 @@ JS_CORE = ['mirosubs.js',
            'startdialog/tolanguage.js',
            'startdialog/tolanguages.js',
            'startdialog/dialog.js',
+           'widget/droplockdialog.js',
            'finishfaildialog/dialog.js',
            'finishfaildialog/errorpanel.js',
            'finishfaildialog/reattemptuploadpanel.js',

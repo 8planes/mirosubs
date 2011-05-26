@@ -194,16 +194,14 @@ form p textarea{
 
 }
 
-input#id_changes_notification {
+p.checkbox input {
 	float: left;
 	width: 24px;
 	position: relative;
-	top: 5px;
 }
 
-p#changes_email label {
+p.checkbox label {
 	position: relative;
-	top: -5px;
 	width: 600px;
 	display: block;
 }

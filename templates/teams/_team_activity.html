@@ -20,7 +20,7 @@
      
     <ul class="small_list" id="team-video-activity">
         {% for item in videos_actions %}
-            <li>{% include 'videos/_team_video_action_item.html' %}</li>
+            <li>{{ item.render }}</li>
         {% empty %}
             <li>{% trans 'No Video Activity' %}</li>
         {% endfor %}

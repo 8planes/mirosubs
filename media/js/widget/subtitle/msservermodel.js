@@ -43,8 +43,11 @@ mirosubs.subtitle.MSServerModel = function(draftPK, videoID, videoURL) {
     this.unsavedPackets_ = [];
     this.packetNo_ = 1;
     this.logger_ = new mirosubs.subtitle.Logger(draftPK);
+    mirosubs.subtitle.MSServerModel.currentInstance = this;
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
+
+mirosubs.subtitle.MSServerModel.currentInstance = null;
 
 /*
  * URL for the widget's embed javascript.
@@ -89,7 +92,7 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
     this.setTitle_();
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
-    this.stopTimer_();
+    this.stopTimer();
     var that = this;
     var saveArgs = this.makeSaveArgs_();
     if (goog.isDefAndNotNull(opt_completed))
@@ -211,7 +214,7 @@ mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {
         '</script>'].join('');
 };
 
-mirosubs.subtitle.MSServerModel.prototype.stopTimer_ = function() {
+mirosubs.subtitle.MSServerModel.prototype.stopTimer = function() {
     if (this.timerRunning_) {
         window.clearInterval(this.timerInterval_);
         this.timerRunning_ = false;
@@ -219,7 +222,7 @@ mirosubs.subtitle.MSServerModel.prototype.stopTimer_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.disposeInternal = function() {
-    this.stopTimer_();
+    this.stopTimer();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.currentUsername = function() {
@@ -234,6 +237,14 @@ mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
     return [mirosubs.siteURL(), "/videos/", this.videoID_, "/info/"].join('');
 };
 
+mirosubs.subtitle.MSServerModel.prototype.getVideoID = function() {
+    return this.videoID_;
+};
+
 mirosubs.subtitle.MSServerModel.prototype.getDraftPK = function() {
     return this.draftPK_;
 };
+
+mirosubs.subtitle.MSServerModel.prototype.getLogger = function() {
+    return this.logger_;
+}

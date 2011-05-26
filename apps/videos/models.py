@@ -438,7 +438,7 @@ class Video(models.Model):
         having 100%  as the percent_done.
         """
         return self.subtitlelanguage_set.filter(Q(is_complete=True) |
-            Q(percent_done=100)).exists()
+            Q(percent_done=100)).filter(subtitle_count__gt=0).exists()
 
 def create_video_id(sender, instance, **kwargs):
     instance.edited = datetime.now()
@@ -932,7 +932,100 @@ class Subtitle(models.Model):
                 
             if 'end_time' in caption_dict:
                 self.end_time = caption_dict['end_time']
+
+from django.template.loader import render_to_string
+
+class ActionRenderer(object):
     
+    def __init__(self, template_name):
+        self.template_name = template_name
+
+    def render(self, item):
+        if item.action_type == Action.ADD_VIDEO:
+            info = self.redner_ADD_VIDEO(item)
+        elif item.action_type == Action.CHANGE_TITLE:
+            info = self.redner_CHANGE_TITLE(item)
+        elif item.action_type == Action.COMMENT:
+            info = self.redner_COMMENT(item)
+        elif item.action_type == Action.ADD_VERSION:
+            info = self.render_ADD_VERSION(item)
+        elif item.action_type == Action.ADD_VIDEO_URL:
+            info = self.redner_ADD_VIDEO_URL(item)
+        else:
+            info = ''
+        
+        context = {
+            'info': info,
+            'item': item
+        }
+        
+        return render_to_string(self.template_name, context)
+    
+    def _base_kwargs(self, item):
+        return {
+            'video_url': item.video.get_absolute_url(),
+            'video_name': unicode(item.video)                  
+        }
+            
+    def redner_ADD_VIDEO(self, item):
+        if item.user:
+            msg = _(u'added video <a href="%(video_url)s">%(video_name)s</a>') 
+        else:
+            msg = _(u'<a href="%(video_url)s">%(video_name)s</a> video added') 
+        
+        return msg % self._base_kwargs(item)
+        
+    def redner_CHANGE_TITLE(self, item):
+        if item.user:
+            msg = _(u'changed title for <a href="%(video_url)s">%(video_name)s</a>') 
+        else:
+            msg = _(u'Title was changed for <a href="%(video_url)s">%(video_name)s</a>') 
+        
+        return msg % self._base_kwargs(item)
+    
+    def redner_COMMENT(self, item):
+        kwargs = self._base_kwargs(item)
+        
+        if item.language:
+            kwargs['comments_url'] = '%s#comments' % item.language.get_absolute_url()
+            kwargs['language'] = item.language.language_display()
+        else:
+            kwargs['comments_url'] = '%s#comments' % kwargs['video_url']
+        
+        if item.language:
+            if item.user:
+                msg = _(u'commented on <a href="%(comments_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')
+            else:
+                msg = _(u'Comment added for <a href="%(comments_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')
+        else:
+            if item.user:
+                msg = _(u'commented on <a href="%(video_url)s">%(video_name)s</a>')
+            else:
+                msg = _(u'Comment added for <a href="%(video_url)s">%(video_name)s</a>')
+            
+        return msg % kwargs
+    
+    def render_ADD_VERSION(self, item):
+        kwargs = self._base_kwargs(item)
+        
+        kwargs['language'] = item.language.language_display()
+        kwargs['language_url'] = item.language.get_absolute_url()
+        
+        if item.user:
+            msg = _(u'edited <a href="%(language_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')
+        else:
+            msg = _(u'<a href="%(language_url)s">%(language)s subtitles</a>  edited for <a href="%(video_url)s">%(video_name)s</a>')
+        
+        return msg % kwargs
+    
+    def redner_ADD_VIDEO_URL(self, item):
+        if item.user:
+            msg = _(u'added new URL for <a href="%(video_url)s">%(video_name)s</a>') 
+        else:
+            msg = _(u'New URL added for <a href="%(video_url)s">%(video_name)s</a>') 
+        
+        return msg % self._base_kwargs(item)
+        
 class Action(models.Model):
     ADD_VIDEO = 1
     CHANGE_TITLE = 2
@@ -946,6 +1039,10 @@ class Action(models.Model):
         (ADD_VERSION, u'add version'),
         (ADD_VIDEO_URL, u'add video url')
     )
+    
+    renderer = ActionRenderer('videos/_action_tpl.html')
+    renderer_for_video = ActionRenderer('videos/_action_tpl_video.html')
+    
     user = models.ForeignKey(User, null=True, blank=True)
     video = models.ForeignKey(Video)
     language = models.ForeignKey(SubtitleLanguage, blank=True, null=True)
@@ -961,6 +1058,15 @@ class Action(models.Model):
     def __unicode__(self):
         u = self.user and self.user.__unicode__() or 'Anonymous'
         return u'%s: %s(%s)' % (u, self.get_action_type_display(), self.created)
+    
+    def render(self, renderer=None):
+        if not renderer:
+            renderer = self.renderer
+            
+        return renderer.render(self)
+    
+    def render_for_video(self):
+        return self.render(self.renderer_for_video)
     
     def is_add_video_url(self):
         return self.action_type == self.ADD_VIDEO_URL

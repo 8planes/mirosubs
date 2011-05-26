@@ -30,7 +30,7 @@
         <ul class="big_list">
             {% with 1 as medium_thumb %}
             {% for item in videos_action_list %}
-                <li>{% include 'videos/_team_video_action_item.html' %}</li>
+                <li>{{ item.render }}</li>
             {% endfor %}
             {% endwith %}
         </ul>

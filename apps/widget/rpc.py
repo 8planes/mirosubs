@@ -32,6 +32,7 @@ from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
+from utils import send_templated_email
 import logging
 yt_logger = logging.getLogger("youtube-ei-error")
 
@@ -55,6 +56,12 @@ class Rpc(BaseRpc):
             browser_id=request.browser_id,
             log=log)
         dialog_log.save()
+        send_templated_email(
+            settings.WIDGET_LOG_EMAIL,
+            'Subtitle save failure',
+            'widget/session_log_email.txt',
+            { 'log_pk': dialog_log.pk },
+            fail_silently=False)
         return { 'response': 'ok' }
 
     def log_youtube_ei_failure(self, request, page_url):
@@ -271,7 +278,10 @@ class Rpc(BaseRpc):
 
         self._save_packets(draft, packets)
 
-        new_version, new_subs = self._create_version_from_draft(draft, request.user)
+        return self.save_finished(draft, request.user, completed)
+
+    def save_finished(self, draft, user, completed=None):
+        new_version, new_subs = self._create_version_from_draft(draft, user)
 
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False

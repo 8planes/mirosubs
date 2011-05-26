@@ -57,7 +57,7 @@ mirosubs.finishfaildialog.CopyDialog.prototype.focusTextarea_ = function() {
 mirosubs.finishfaildialog.CopyDialog.showForErrorLog = function(log) {
     var copyDialog = new mirosubs.finishfaildialog.CopyDialog(
         "This is the error report we generated. It would be a big help to us if you could copy and paste it into an email and send it to us at widget-logs@universalsubtitles.org. Thank you!",
-        log);;
+        log);
     copyDialog.setVisible(true);
 };
 
@@ -74,8 +74,17 @@ mirosubs.finishfaildialog.CopyDialog.subsToString_ = function(jsonSubs) {
         function(j) {
             return !j['start_time'] && !j['end_time'];
         });
+    var baseString;
     if (noTimes)
-        return goog.json.serialize(jsonSubs);
+        baseString = goog.json.serialize(jsonSubs);
     else
-        return mirosubs.SRTWriter.toSRT(jsonSubs);
+        baseString = mirosubs.SRTWriter.toSRT(jsonSubs);
+    var serverModel = mirosubs.subtitle.MSServerModel.currentInstance;
+    baseString = ['browser_id: ' + goog.net.cookies.get('unisub-user-uuid', 'n/a'), 
+                  'video_id: ' + (serverModel ? 
+                                  serverModel.getVideoID() : 'n/a'),
+                  'draft_pk: ' + (serverModel ?
+                                  serverModel.getDraftPK() : 'n/a'),
+                  baseString].join('\n');
+    return baseString
 };
