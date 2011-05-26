@@ -17,7 +17,13 @@
         {% if is_paginated %}{% paginator %}{% endif %}
         
         {% with action_list as events %}
-            {% include 'videos/_activities.html' %}
+			<ul class="small_list">
+			    {% for item in events %}
+			    <li>
+			        {{ item.render }}
+			    </li>
+			    {% endfor %}
+			</ul>
         {% endwith %}
             
         {% if is_paginated %}{% paginator %}{% endif %}
