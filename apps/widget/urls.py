@@ -41,6 +41,8 @@ urlpatterns = patterns(
     url(r'^download_sbv/$', 'download_subtitles', 
         {'handler': SBVSubtitles}, name='download_sbv'),                  
     url(r'^download_null_srt/$', 'null_srt'),
+    url(r'^save_emailed_translations/$', 
+        'save_emailed_translations'),
 )
 
 urlpatterns += patterns(

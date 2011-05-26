@@ -278,7 +278,10 @@ class Rpc(BaseRpc):
 
         self._save_packets(draft, packets)
 
-        new_version, new_subs = self._create_version_from_draft(draft, request.user)
+        self.save_finished(draft, request.user, completed)
+
+    def save_finished(self, draft, user, completed=None):
+        new_version, new_subs = self._create_version_from_draft(draft, user)
 
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False
