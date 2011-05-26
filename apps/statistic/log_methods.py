@@ -5,6 +5,7 @@ from django.contrib.sites.models import Site
 from django.contrib.admin.options import ModelAdmin
 from django.db import models
 from django.views.generic.simple import direct_to_template
+from django import db
 
 """
 Admin interface
@@ -79,6 +80,13 @@ class RedisLogBackend(BaseLogBackend):
         self.conn = connection
         self.prefix = prefix
         self.site_name = Site.objects.get_current().name.replace(':', '')
+        
+        #Site.objects.get_current() created new DB connection
+        #RedisLogBackend.__init__ is executed when you add it to class
+        #so, for example, celery worker process will have opened DB connection
+        #that cause bugs
+        db.connection.close()
+        
         #keys cache
         self.keys = {}
         self.key_set = self._get_key('logger_keys')
