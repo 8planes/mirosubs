@@ -7,15 +7,23 @@ class MultiQuerySet(object):
         self._count = None
     
     def count(self):
-        """ this is an expensive calculation. try not to call it. """
         if not self._count:
+            """ this is an expensive calculation. try not to call it. """
             self._count = sum(qs.count() for qs in self.querysets)
         return self._count
+
+    def set_count(self, count):
+        self._count = count
     
     def __len__(self):
         """ expensive. try not to call. """
         return self.count()
-        
+
+    def __iter__(self):
+        for qs in self.querysets:
+            for item in qs.all():
+                yield item
+
     def __getitem__(self, item):
         if isinstance(item, (int, long)):
             offset, stop = item, item + 1
@@ -34,7 +42,6 @@ class MultiQuerySet(object):
                     offset = 0
                     stop = total_len - len(items)
                     continue
-        return items
 
 class MultyQuerySet(object):
     """

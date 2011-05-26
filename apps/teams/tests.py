@@ -28,6 +28,14 @@ import re
 LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z\-]+)_(.*)")
 LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)_(.*)")
 
+def reset_solr():
+    # cause the default site to load
+    from haystack import site
+    from haystack import backend
+    sb = backend.SearchBackend()
+    sb.clear()
+    call_command('update_index')
+
 class TestCommands(TestCase):
     
     fixtures = ["test.json"]
@@ -334,6 +342,7 @@ class TeamsTest(TestCase):
             "password": u"admin"
         }
         self.user = User.objects.get(username=self.auth["username"])
+        reset_solr()
 
     def _add_team_video(self, team, language, video_url):
         mail.outbox = []
@@ -871,7 +880,8 @@ class TeamsDetailQueryTest(TestCase):
         data = json.load(open(fixture_path))
         self.videos = _create_videos(data, [self.user])
         self.team, created = Team.objects.get_or_create(name="test-team", slug="test-team")
-        self.tvs = _create_team_videos( self.team, self.videos,[self.user])        
+        self.tvs = _create_team_videos( self.team, self.videos, [self.user])
+        reset_solr()
 
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
@@ -898,25 +908,24 @@ class TeamsDetailQueryTest(TestCase):
         from utils import multi_query_set as mq
         created_tvs = [TeamVideo.objects.get_or_create(team=team, added_by=User.objects.all()[0], video=self._create_rdm_video(x) )[0] for x in xrange(0,20)]
         created_pks = [x.pk for x in created_tvs]
-        multi = mq.TeamMultyQuerySet(*[TeamVideo.objects.filter(pk=x) for x in created_pks])
+        multi = mq.MultiQuerySet(*[TeamVideo.objects.filter(pk=x) for x in created_pks])
         self.assertTrue([x.pk for x in multi] == created_pks)
 
-
     def test_hide_trans_back_to_original_lang(self):
-        return
         # context https://www.pivotaltracker.com/story/show/12883401
         user_langs = ["en", "ar", "ru"]
         self._set_my_languages(*user_langs)
-        data = self.team.get_videos_for_languages(user_langs, 20)
-        titles = [x.video.title for x in data['qs2']]
+        qs_list, mqs = self.team.get_videos_for_languages_haystack(user_langs)
+        titles = [x.video_title for x in qs_list[0]] if qs_list[0] else []
+        titles.extend([x.video_title for x in qs_list[1]] if qs_list[1] else [])
         self.assertFalse("qs1-not-transback" in titles)
 
     def test_lingua_franca_later(self):
         # context https://www.pivotaltracker.com/story/show/12883401
         user_langs = ["en", "ar", "ru"]
         self._set_my_languages(*user_langs)
-        data = self.team.get_videos_for_languages(user_langs, 20)
-        titles = [x.video.title for x in data['qs3']]
+        qs_list, mqs = self.team.get_videos_for_languages_haystack(user_langs)
+        titles = [x.video_title for x in qs_list[2]]
         print titles
         print self._debug_videos()
         self.assertTrue(titles.index(u'a') < titles.index(u'b'))

@@ -35,6 +35,8 @@ VIMEO_API_SECRET = 'bdaeb531298eeee1'
 # Celery
 CELERY_ALWAYS_EAGER = True
 
+HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/core0'
+
 # Or you can use redis as backend
 #BROKER_BACKEND = 'redis'
 #BROKER_HOST = "localhost"
