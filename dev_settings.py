@@ -32,10 +32,10 @@ MEDIA_URL = "http://mirosubs.example.com:8000/site_media/"
 VIMEO_API_KEY = 'e1a46f832f8dfa99652781ee0b39df12'
 VIMEO_API_SECRET = 'bdaeb531298eeee1'
 
-HAYSTACK_SEARCH_ENGINE = 'dummy'
-
 # Celery
 CELERY_ALWAYS_EAGER = True
+
+HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/core0'
 
 # Or you can use redis as backend
 #BROKER_BACKEND = 'redis'

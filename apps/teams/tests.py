@@ -23,6 +23,18 @@ from django.core import mail
 from datetime import datetime, timedelta
 from django.core.management import call_command
 from django.core import mail
+import re
+
+LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z\-]+)_(.*)")
+LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)")
+
+def reset_solr():
+    # cause the default site to load
+    from haystack import site
+    from haystack import backend
+    sb = backend.SearchBackend()
+    sb.clear()
+    call_command('update_index')
 
 class TestCommands(TestCase):
     
@@ -64,10 +76,10 @@ class TestCommands(TestCase):
         #check initial data
         self.assertEqual(self.team.teamvideo_set.count(), 2)
         self.assertEqual(self.team.users.count(), 1)
-        
+
         today = datetime.today()
         date = today - timedelta(hours=24)
-        
+
         #test notification about two new videos
         TeamVideo.objects.filter(pk__in=[self.tv1.pk, self.tv2.pk]).update(created=datetime.today())
         self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 2)
@@ -194,14 +206,10 @@ class TeamDetailMetadataTest(TestCase):
         }
         self.user = User.objects.get(username=self.auth["username"])
 
-    def _tvlp_query_set(self, team_video):
-        return tmodels.TeamVideoLanguagePair.objects.filter(team_video=team_video)
-
-    def test_update_tvlp_no_dependent(self):
+    def test_update_lp_no_dependent(self):
         tv = TeamVideo.objects.get(id=2)
-        tv.update_team_video_language_pairs()
         # this video starts with no languages.
-        self.assertEquals(0, self._tvlp_query_set(tv).count())
+        self.assertEquals(0, len(tv.searchable_language_pairs()))
         sl = SubtitleLanguage(
             language='en',
             is_original=True,
@@ -210,21 +218,18 @@ class TeamDetailMetadataTest(TestCase):
             video=tv.video)
         sl.save()
         tv = TeamVideo.objects.get(id=2)
-        tv.update_team_video_language_pairs()
-        # the language is not complete, so it's not a good source for translations.
-        self.assertEquals(0, self._tvlp_query_set(tv).count())
+        self.assertEquals(0, len(tv.searchable_language_pairs()))
         sl = tv.video.subtitle_language('en')
         sl.is_complete = True
         sl.save()
         tv = TeamVideo.objects.get(id=2)
-        tv.update_team_video_language_pairs()
-        # complete, so now every language can be translated from this one.
-        tvlps = self._tvlp_query_set(tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES) - 1, len(tvlps))
-        for tvlp in tvlps:
-            self.assertEquals(0, tvlp.percent_complete)
+        lps = tv.searchable_language_pairs()
+        self.assertEquals(len(settings.ALL_LANGUAGES) - 1, len(lps))
+        # we expect each string to end in "_0" to indicate zero completion.
+        for lp in lps:
+            self.assertEquals("0", LANGUAGEPAIR_RE.match(lp).group(3))
 
-    def test_update_tvlp_with_dep(self):
+    def test_update_lp_with_dep(self):
         tv = TeamVideo.objects.get(id=2)
         sl = SubtitleLanguage(
             language='en',
@@ -242,19 +247,19 @@ class TeamDetailMetadataTest(TestCase):
             video=tv.video)
         dl.save()
         tv = TeamVideo.objects.get(id=2)
-        tv.update_team_video_language_pairs()
-        tvlps = self._tvlp_query_set(tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 3, len(tvlps))
-        for tvlp in tvlps:
-            if tvlp.language_0 == 'en':
-                if tvlp.language_1 == 'es':
-                    self.assertEquals(40, tvlp.percent_complete)
+        lps = tv.searchable_language_pairs()
+        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 3, len(lps))
+        for lp in lps:
+            match = LANGUAGEPAIR_RE.match(lp)
+            if match.group(1) == 'en':
+                if match.group(2) == 'es':
+                    self.assertEquals('M', match.group(3))
                 else:
-                    self.assertEquals(0, tvlp.percent_complete)
-            elif tvlp.language_0 == 'es':
-                self.assertEquals(0, tvlp.percent_complete)
+                    self.assertEquals('0', match.group(3))
+            elif match.group(1) == 'es':
+                self.assertEquals('0', match.group(3))
 
-    def test_update_tvlp_for_sl(self):
+    def test_update_lp_for_sl(self):
         tv = TeamVideo.objects.get(id=2)
         sl = SubtitleLanguage(
             language='en',
@@ -272,73 +277,51 @@ class TeamDetailMetadataTest(TestCase):
             video=tv.video)
         dl.save()
         tv = TeamVideo.objects.get(id=2)
-        tv.update_team_video_language_pairs()
         dl = SubtitleLanguage.objects.get(id=dl.id)
         dl.percent_done = 50
         dl.save()
-        tv.update_team_video_language_pairs_for_sl(dl)
-        tvlps = self._tvlp_query_set(tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 3, len(tvlps))
-        for tvlp in tvlps:
-            if tvlp.language_0 == 'en':
-                if tvlp.language_1 == 'es':
-                    self.assertEquals(50, tvlp.percent_complete)
+        lps = tv.searchable_language_pairs()
+        self.assertEquals(len(settings.ALL_LANGUAGES) * 2 - 3, len(lps))
+        for lp in lps:
+            match = LANGUAGEPAIR_RE.match(lp)
+            if match.group(1) == 'en':
+                if match.group(2) == 'es':
+                    self.assertEquals("M", match.group(3))
                 else:
-                    self.assertEquals(0, tvlp.percent_complete)
-            elif tvlp.language_0 == 'es':
-                self.assertEquals(0, tvlp.percent_complete)
+                    self.assertEquals("0", match.group(3))
+            elif match.group(1) == 'es':
+                self.assertEquals("0", match.group(3))
 
-    def test_update_tvl(self):
+    def test_update_sl(self):
         tv = TeamVideo.objects.get(id=2)
-        sl = SubtitleLanguage(
+        sublang = SubtitleLanguage(
             language='en',
             is_original=True,
             is_forked=False,
             is_complete=False,
             video=tv.video)
-        sl.save()
-        tmodels.TeamVideoLanguage.update(tv)
-        tvls =  tmodels.TeamVideoLanguage.objects.filter(team_video=tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES), len(tvls))
-        for tvl in tvls:
-            self.assertFalse(tvl.is_complete)
-            self.assertEquals(0, tvl.percent_done)
-        sl = SubtitleLanguage.objects.get(id=sl.id)
-        sl.is_complete = True
-        sl.save()
+        sublang.save()
+        sls = tv.searchable_languages()
+        self.assertEquals(len(settings.ALL_LANGUAGES), len(sls))
+        sublang = SubtitleLanguage.objects.get(id=sublang.id)
+        sublang.is_complete = True
+        sublang.save()
         tv = TeamVideo.objects.get(id=2)
-        tmodels.TeamVideoLanguage.update(tv)
-        tvls =  tmodels.TeamVideoLanguage.objects.filter(team_video=tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES), len(tvls))
-        for tvl in tvls:
-            if tvl.language != 'en':
-                self.assertFalse(tvl.is_complete)
-            else:
-                self.assertTrue(tvl.is_complete)
-            self.assertEquals(0, tvl.percent_done)
+        sls =  tv.searchable_languages()
+        self.assertEquals(len(settings.ALL_LANGUAGES) - 1, len(sls))
 
-    def test_update_tvl_for_language(self):
-        tv = TeamVideo.objects.get(id=2)
-        sl = SubtitleLanguage(
-            language='en',
-            is_original=True,
-            is_forked=False,
-            is_complete=False,
-            video=tv.video)
-        sl.save()
-        tmodels.TeamVideoLanguage.update(tv)
-        sl = SubtitleLanguage.objects.get(id=sl.id)
-        sl.is_complete = True
-        sl.save()
-        tmodels.TeamVideoLanguage.update_for_language(tv, sl.language)
-        tvls =  tmodels.TeamVideoLanguage.objects.filter(team_video=tv)
-        self.assertEquals(len(settings.ALL_LANGUAGES), len(tvls))
-        for tvl in tvls:
-            if tvl.language != 'en':
-                self.assertFalse(tvl.is_complete)
-            else:
-                self.assertTrue(tvl.is_complete)
-            self.assertEquals(0, tvl.percent_done)
+class TeamDetailTest(TestCase):
+    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
+
+    def setUp(self):
+        self.auth = {
+            "username": u"admin",
+            "password": u"admin"
+        }
+        self.user = User.objects.get(username=self.auth["username"])    
+
+    def test_basic_response(self):
+        pass
 
 class TeamsTest(TestCase):
     
@@ -350,6 +333,7 @@ class TeamsTest(TestCase):
             "password": u"admin"
         }
         self.user = User.objects.get(username=self.auth["username"])
+        reset_solr()
 
     def _add_team_video(self, team, language, video_url):
         mail.outbox = []
@@ -413,7 +397,7 @@ class TeamsTest(TestCase):
             'subtitles': open(os.path.join(os.path.dirname(__file__), '../videos/fixtures/test.srt'))
             }
 
-    def _video_lang_list(self, team):
+    def _tv_search_record_list(self, team):
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
         return response.context['team_video_md_list']
@@ -453,7 +437,7 @@ class TeamsTest(TestCase):
         self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
 
         # The video should be in the list. 
-        self.assertEqual(1, len(self._video_lang_list(team)))
+        self.assertEqual(1, len(self._tv_search_record_list(team)))
 
     def test_detail_contents_original_subs(self):
         team, new_team_video = self._create_new_team_video()
@@ -474,22 +458,27 @@ class TeamsTest(TestCase):
 
     def test_detail_contents_unrelated_video(self):
         team, new_team_video = self._create_new_team_video()
+        en = new_team_video.video.subtitle_language()
+        en.is_complete = True
+        en.save()
         self._set_my_languages('en', 'ru')
         # now add a Russian video with no subtitles.
         self._add_team_video(
             team, u'ru',
             u'http://upload.wikimedia.org/wikipedia/commons/6/61/CollateralMurder.ogv')
 
+        reset_solr()
+
         team = Team.objects.get(id=team.id)
 
         self.assertEqual(2, team.teamvideo_set.count())
 
         # both videos should be in the list
-        self.assertEqual(2, len(self._video_lang_list(team)))
+        search_record_list = self._tv_search_record_list(team)
+        self.assertEqual(2, len(search_record_list))
 
-        # but the one with en subs should be second.
-        video_langs = self._video_lang_list(team)
-        self.assertEqual('en', video_langs[1].video.subtitle_language().language)
+        # but the one with en subs should be first, since we can translate it into russian.
+        self.assertEqual('en', search_record_list[0].original_language)
 
     def test_one_tvl(self):
         team, new_team_video = self._create_new_team_video()
@@ -887,7 +876,8 @@ class TeamsDetailQueryTest(TestCase):
         data = json.load(open(fixture_path))
         self.videos = _create_videos(data, [self.user])
         self.team, created = Team.objects.get_or_create(name="test-team", slug="test-team")
-        self.tvs = _create_team_videos( self.team, self.videos,[self.user])        
+        self.tvs = _create_team_videos( self.team, self.videos, [self.user])
+        reset_solr()
 
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
@@ -907,32 +897,34 @@ class TeamsDetailQueryTest(TestCase):
     def _create_rdm_video(self, i):
         video, created = Video.get_or_create_for_url("http://www.example.com/%s.mp4" % i)
         return video
-    
+
     def test_multi_query(self):
         team, created = Team.objects.get_or_create(slug='arthur')
         team.videos.all().delete()
-        from utils import multy_query_set as mq
+        from utils import multi_query_set as mq
         created_tvs = [TeamVideo.objects.get_or_create(team=team, added_by=User.objects.all()[0], video=self._create_rdm_video(x) )[0] for x in xrange(0,20)]
         created_pks = [x.pk for x in created_tvs]
-        multi = mq.TeamMultyQuerySet(*[TeamVideo.objects.filter(pk=x) for x in created_pks])
+        multi = mq.MultiQuerySet(*[TeamVideo.objects.filter(pk=x) for x in created_pks])
         self.assertTrue([x.pk for x in multi] == created_pks)
 
-
     def test_hide_trans_back_to_original_lang(self):
-        return
-        # context https://www.pivotaltracker.com/story/show/12883401
-        user_langs = ["en", "ar", "ru"]
+        """
+        context https://www.pivotaltracker.com/story/show/12883401
+        my languages are english and arabic. video is in arabic, 
+        and it has complete translations in english and no arabic subs. 
+        qs1 and qs2 must not contain opportunity to translate into arabic.
+        """
+        user_langs = ["en", "ar"]
         self._set_my_languages(*user_langs)
-        data = self.team.get_videos_for_languages(user_langs, 20)
-        titles = [x.video.title for x in data['qs2']]
-        self.assertFalse("qs1-not-transback" in titles)
+        qs_list, mqs = self.team.get_videos_for_languages_haystack(user_langs)
+        titles = [x.video_title for x in qs_list[0]] if qs_list[0] else []
+        titles.extend([x.video_title for x in qs_list[1]] if qs_list[1] else [])
+        self.assertFalse("dont-translate-back-to-arabic" in titles)
 
     def test_lingua_franca_later(self):
         # context https://www.pivotaltracker.com/story/show/12883401
-        user_langs = ["en", "ar", "ru"]
+        user_langs = ["en", "ar"]
         self._set_my_languages(*user_langs)
-        data = self.team.get_videos_for_languages(user_langs, 20)
-        titles = [x.video.title for x in data['qs3']]
-        print titles
-        print self._debug_videos()
-        self.assertTrue(titles.index(u'a') < titles.index(u'b'))
+        qs_list, mqs = self.team.get_videos_for_languages_haystack(user_langs)
+        titles = [x.video_title for x in qs_list[2]]
+        self.assertTrue(titles.index(u'a') < titles.index(u'c'))

@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block select_language_dialog %}
-	{% select_language_dialog 'force' %}
+    {% select_language_dialog 'force' %}
 {% endblock %}
 
 
@@ -54,14 +54,9 @@
       languages = {{languages}} 
 
       Querysets:
-      qs1        -> {{qs1.count}}
-      qs2        -> {{qs2.count}}
-      qs3        -> {{qs3.count}}
-      qs4        -> {{qs4.count}}
-      videos        -> {{videos_count}}
-      additional -> {{additional_count}}
-      qs         -> {{qs.count}}
-      lqs        -> {{lqs.count}}
+      {% for qs in qs_list %}
+      qs{{forloop.counter}} -> {% if qs %}{{qs.count}}{% else %}None{% endif %}
+      {% endfor %}
 
 Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
         <table>

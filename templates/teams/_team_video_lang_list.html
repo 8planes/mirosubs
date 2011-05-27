@@ -14,7 +14,7 @@
 
 {% if sub_statuses.total %}
 {% trans "and" %}
-<a href="{{ video.get_absolute_url }}">
+<a href="{{ search_record.video_absolute_url }}">
     {% blocktrans count sub_statuses.total as total %}
     {{ total }} other.
     {% plural %}

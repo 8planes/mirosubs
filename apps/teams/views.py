@@ -45,7 +45,7 @@ from videos.models import Action, SubtitleLanguage
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from utils.multy_query_set import TeamMultyQuerySet
+from utils.multi_query_set import TeamMultyQuerySet
 from teams.rpc import TeamsApi
 from utils.orm import LoadRelatedQuerySet
 from widget.rpc import add_general_settings
@@ -115,8 +115,49 @@ def index(request, my_teams=False):
                        template_name='teams/index.html',
                        template_object_name='teams',
                        extra_context=extra_context)
-    
+
 def detail(request, slug, is_debugging=False, languages=None):
+    team = Team.get(slug, request.user)
+
+    if languages is None:
+        languages = get_user_languages_from_request(request)
+    if bool(is_debugging):
+        languages = request.GET.get('langs', '').split(',')
+
+    qs_list, mqs = team.get_videos_for_languages_haystack(languages)
+
+    extra_context = widget.add_onsite_js_files({})
+    extra_context.update({
+        'team': team,
+        'can_edit_video': team.can_edit_video(request.user)
+    })
+
+    general_settings = {}
+    add_general_settings(request, general_settings)
+    extra_context['general_settings'] = json.dumps(general_settings)
+
+    if team.video:
+        extra_context['widget_params'] = base_widget_params(request, {
+            'video_url': team.video.get_video_url(), 
+            'base_state': {}
+        })
+
+    if bool(is_debugging) and request.user.is_staff:
+        extra_context.update({
+                'mqs': mqs,
+                'qs_list': qs_list,
+                'languages': languages
+            })
+        return render_to_response("teams/detail-debug.html", extra_context, RequestContext(request))
+    
+    return object_list(request, queryset=mqs, 
+                       paginate_by=VIDEOS_ON_PAGE, 
+                       template_name='teams/detail.html', 
+                       extra_context=extra_context, 
+                       template_object_name='team_video_md')
+
+
+def detail_old(request, slug, is_debugging=False, languages=None):
     team = Team.get(slug, request.user)
 
     if languages is None:
@@ -133,13 +174,9 @@ def detail(request, slug, is_debugging=False, languages=None):
         'can_edit_video': team.can_edit_video(request.user)
     })
 
-    
-
-
     general_settings = {}
     add_general_settings(request, general_settings)
     extra_context['general_settings'] = json.dumps(general_settings)
-
 
     if team.video:
         extra_context['widget_params'] = base_widget_params(request, {
