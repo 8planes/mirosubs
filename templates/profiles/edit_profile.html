@@ -122,6 +122,13 @@
                       {% trans "Receive notifications about sends me a message" %}
                   </label>
               </p>
+              <p class="checkbox">
+                  {{ form.follow_new_video.errors }}
+                  {{ form.follow_new_video }}
+                  <label for="id_follow_new_video">
+                      {% trans "Follow videos when I edit or submit them" %}
+                  </label>
+              </p>              
               <p>
                   {{ form.biography.errors }}
                   {{ form.biography.label_tag }}

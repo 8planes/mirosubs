@@ -59,6 +59,7 @@ class CustomUser(BaseUser):
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     new_message_notification = models.BooleanField(default=True)
+    follow_new_video = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
     autoplay_preferences = models.IntegerField(
         choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)

@@ -24,4 +24,8 @@ def is_follower(obj, user):
     #obj is Video or SubtitleLanguage
     if not user.is_authenticated():
         return False
+    
+    if not obj:
+        return False
+    
     return obj.followers.filter(pk=user.pk).exists()

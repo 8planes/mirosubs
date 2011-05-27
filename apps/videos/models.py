@@ -235,7 +235,7 @@ class Video(models.Model):
         try:
             video_url_obj = VideoUrl.objects.get(
                 url=vt.convert_to_video_url())
-            return video_url_obj.video, False
+            video, created = video_url_obj.video, False
         except models.ObjectDoesNotExist:
             pass
         
@@ -252,9 +252,7 @@ class Video(models.Model):
                 obj.slug = slugify(obj.title)
             obj.user = user
             obj.save()
-            
-            user and obj.followers.add(user)
-            
+
             Action.create_video_handler(obj, user)
             
             SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
@@ -270,8 +268,12 @@ class Video(models.Model):
             video_url_obj.video = obj
             video_url_obj.save()
             
-            return obj, True
-    
+            video, created = obj, True
+        
+        user and user.follow_new_video and video.followers.add(user)
+        
+        return video, created
+        
     @property
     def language(self):
         ol = self._original_subtitle_language()
