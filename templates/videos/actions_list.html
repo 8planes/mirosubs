@@ -5,25 +5,12 @@
 {% block main_content %}
     {% if action_list %}
         
-        <h2>{% trans 'All activities' %}</h2>
-        
-        <p>
-            Order by:
-            {% ordered_column "username" _("User") %}
-            {% ordered_column "created" _("Date") %}
-            {% ordered_column "video" _("Video") %}
-        </p>
+        <h2><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
         
         {% if is_paginated %}{% paginator %}{% endif %}
         
         {% with action_list as events %}
-			<ul class="small_list">
-			    {% for item in events %}
-			    <li>
-			        {{ item.render }}
-			    </li>
-			    {% endfor %}
-			</ul>
+			{% include "videos/_video_activity.html" %}
         {% endwith %}
             
         {% if is_paginated %}{% paginator %}{% endif %}

@@ -1,3 +1,8 @@
+<style>
+	#id_comment_form_content {
+		max-width: 508px;
+	}
+</style>
 <form method="post" action="{% url comments:post %}" id="comment-form">
     {% csrf_token %}
     {% for field in form %}

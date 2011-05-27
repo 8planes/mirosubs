@@ -188,23 +188,12 @@ def video_list(request):
                        template_object_name='video',
                        extra_context=extra_context)
 
-def actions_list(request):
-    qs = Action.objects.all()
-    
-    extra_context = {}
-    ordering = request.GET.get('o')
-    order_type = request.GET.get('ot')    
-    order_fields = {
-        'username': 'user__username', 
-        'created': 'created', 
-        'video': 'video__video_id'
+def actions_list(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    qs = Action.objects.filter(video=video)
+    extra_context = {
+        'video': video
     }
-    if ordering in order_fields and order_type in ['asc', 'desc']:
-        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
-        extra_context['ordering'] = ordering
-        extra_context['order_type'] = order_type
-    else:
-        qs = qs.order_by('-created')
                 
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.ACTIVITIES_ONPAGE,

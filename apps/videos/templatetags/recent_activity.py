@@ -42,5 +42,6 @@ def video_activity(video):
     qs = Action.objects.filter(video=video).select_related('user', 'language__video', 'language', 'video')
     
     return {
-        'events': qs[:LIMIT]
+        'events': qs[:LIMIT],
+        'video': video
     }    
