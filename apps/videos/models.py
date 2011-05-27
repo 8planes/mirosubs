@@ -231,44 +231,45 @@ class Video(models.Model):
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
             return None, False
-
+        
         try:
             video_url_obj = VideoUrl.objects.get(
                 url=vt.convert_to_video_url())
             video, created = video_url_obj.video, False
         except models.ObjectDoesNotExist:
-            pass
+            video, created = None, False
         
-        try:
-            video_url_obj = VideoUrl.objects.get(
-                type=vt.abbreviation, **vt.create_kwars())
-            if user:
-                Action.create_video_handler(video_url_obj.video, user)
-            return video_url_obj.video, False
-        except models.ObjectDoesNotExist:
-            obj = Video()
-            obj = vt.set_values(obj)
-            if obj.title:
-                obj.slug = slugify(obj.title)
-            obj.user = user
-            obj.save()
-
-            Action.create_video_handler(obj, user)
-            
-            SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
-            #Save video url
-            video_url_obj = VideoUrl()
-            if vt.video_id:
-                video_url_obj.videoid = vt.video_id
-            video_url_obj.url = vt.convert_to_video_url()
-            video_url_obj.type = vt.abbreviation
-            video_url_obj.original = True
-            video_url_obj.primary = True
-            video_url_obj.added_by = user
-            video_url_obj.video = obj
-            video_url_obj.save()
-            
-            video, created = obj, True
+        if not video:
+            try:
+                video_url_obj = VideoUrl.objects.get(
+                    type=vt.abbreviation, **vt.create_kwars())
+                if user:
+                    Action.create_video_handler(video_url_obj.video, user)
+                return video_url_obj.video, False
+            except models.ObjectDoesNotExist:
+                obj = Video()
+                obj = vt.set_values(obj)
+                if obj.title:
+                    obj.slug = slugify(obj.title)
+                obj.user = user
+                obj.save()
+    
+                Action.create_video_handler(obj, user)
+                
+                SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
+                #Save video url
+                video_url_obj = VideoUrl()
+                if vt.video_id:
+                    video_url_obj.videoid = vt.video_id
+                video_url_obj.url = vt.convert_to_video_url()
+                video_url_obj.type = vt.abbreviation
+                video_url_obj.original = True
+                video_url_obj.primary = True
+                video_url_obj.added_by = user
+                video_url_obj.video = obj
+                video_url_obj.save()
+                
+                video, created = obj, True
         
         user and user.follow_new_video and video.followers.add(user)
         
