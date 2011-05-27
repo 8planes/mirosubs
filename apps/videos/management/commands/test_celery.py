@@ -24,12 +24,12 @@ import time
 class Command(BaseCommand):
 
     option_list = BaseCommand.option_list + (
-        make_option('--count', '-c', dest='count', type="int", help='Number of tasks'),
+        make_option('--count', '-c', dest='count', type="int", help='Number of tasks', default=1000),
         make_option('--publisher', '-p', dest='use_publisher', action="store_true", 
                     default=False, help='Use one publisher for all tasks'),  
     )
 
-    def handle(self, use_publisher, count=1000, *args, **kwargs):
+    def handle(self, use_publisher, count, *args, **kwargs):
         if use_publisher:
             publisher = add.get_publisher() 
         
