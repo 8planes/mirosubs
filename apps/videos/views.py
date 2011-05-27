@@ -329,7 +329,7 @@ def legacy_history(request ,video_id, lang=None):
             'lang_id': language.pk,
             'lang': language.language,
             }))
-    
+
 def history(request, video_id, lang=None, lang_id=None):
     video = get_object_or_404(Video, video_id=video_id)
     video.update_view_counter()

@@ -5,36 +5,35 @@
 {% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor %}
 
 {% block css %}
-{% if video.thumbnail %}
-<meta property="og:image" content="{{ video.get_thumbnail }}" />
-{% else %}
-<meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
-{% endif %}
+    {% if video.thumbnail %}
+        <meta property="og:image" content="{{ video.get_thumbnail }}" />
+    {% else %}
+        <meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
+    {% endif %}
 
-{{ block.super }}
-{% include_css_bundle "video_history" %}
+    {{ block.super }}
+    
+    {% include_css_bundle "video_history" %}
 
-<style>
-    div.mirosubs-widget {
-        position: relative;
-    }
+    <style>
+        div.mirosubs-widget {
+            position: relative;
+        }
 
-    .mirosubs-videoDiv {
-        text-align: center;
-    }
+        .mirosubs-videoDiv {
+            text-align: center;
+        }
 
-    .mirosubs-widget video {
-        width: 460px;
-    }
+        .mirosubs-widget video {
+            width: 460px;
+        }
 
-    #embed {
-        white-space: pre;
-        background: #eee;
-        boder: #666;
-    }
-</style>
-
-<style>
+        #embed {
+            white-space: pre;
+            background: #eee;
+            boder: #666;
+        }
+        
     .error_list {
         color: #fa6343;
     }
@@ -47,11 +46,11 @@
 {% endblock %}
 
 {% block scripts %}
-{{ block.super }}
-{% include "widget/_js_onsite_dependencies.html" %}
-<script src="{% url videos:rpc_api %}" type="text/javascript"></script>       
-<script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
-<script type="text/javascript">
+    {{ block.super }}
+    {% include "widget/_js_onsite_dependencies.html" %}
+    <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
+    <script type="text/javascript">
     //create url template
     var DIFFING_URL = function(){
         var url = '{% block diffing_link %}{% url videos:diffing 11111 22222 %}{% endblock %}';
@@ -124,27 +123,28 @@
             return false;
         });
     });
-</script>
-<script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
+    </script>
+    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
 {% endblock %}
 
+
 {% block title %}
-{% if language.is_original %}
-{% blocktrans with language.get_title_display as title %}
-{{ title }} with subtitles | Universal Subtitles
-{% endblocktrans %}
-{% else %}
-{% blocktrans with language.get_title_display as title and language.get_language_display as language %}
-{{ title }} with {{ language }} subtitles | Universal Subtitles
-{% endblocktrans %}
-{% endif %}
+    {% if language.is_original %}
+        {% blocktrans with language.get_title_display as title %}
+            {{ title }} with subtitles | Universal Subtitles
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans with language.get_title_display as title and language.get_language_display as language %}
+            {{ title }} with {{ language }} subtitles | Universal Subtitles
+        {% endblocktrans %}
+    {% endif %}
 {% endblock %}
 
 {% block main_content %}
 <h2 class="main-title">
-    <a href="{{ video.get_absolute_url }}" class="title-container">{{ language.get_title_display }}</a>
+    <span class="title-container" style="float: none;">{{ video }}</span>
     {% if not language.standard_language and user.is_authenticated %}
-    <a class="edit-title" href="#" style="color: #3196AD !important; text-decoration: underline;">{% trans 'edit title' %}</a>
+        <a class="edit-title" href="#" style="color: #3196AD !important; text-decoration: underline;">{% trans 'edit title' %}</a>
     {% endif %}
 </h2>
 
