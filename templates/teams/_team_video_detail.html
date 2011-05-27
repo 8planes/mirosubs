@@ -1,34 +1,34 @@
 {% load i18n teams_tags %}
-<a href="{{ team_video.video.get_absolute_url }}" class="thumbnail_medium">
-    <img height="100" src="{{ team_video.get_thumbnail }}">
+<a href="{{ search_record.video_absolute_url }}" class="thumbnail_medium">
+    <img height="100" src="{{ search_record.thumbnail }}">
 </a>
 <div class="info">
-    <h4><a href="{{ team_video.video.get_absolute_url }}">{{ team_video }}</a></h4>
+    <h4><a href="{{ search_record.video_absolute_url }}">{{ search_record.title }}</a></h4>
     <div class="clearfix">
-      <div  class="completed_translations">{% team_video_lang_list team_video.video %}</div>
+      <div  class="completed_translations">{% team_video_lang_list search_record %}</div>
     </div>
 
     <p></p>
-        {% team_video_in_progress_list team_video.video %}
+        {% team_video_in_progress_list search_record %}
          <p class="team-detail-list-description">
-         {% if team_video.description %}{{ team_video.description|urlize }}. {% endif %}{% if team_video.video.subtitle_language %} <span class="team-detail-list-video-in-lang">{% trans "Video in:" %}&nbsp;{{team_video.video.subtitle_language.language_display}}.</span>{% endif %}
+         {% if search_record.description %}{{ search_record.description|urlize }}. {% endif %}{% if search_record.original_language %} <span class="team-detail-list-video-in-lang">{% trans "Video in:" %}&nbsp;{{search_record.original_language_display}}.</span>{% endif %}
            </p>
     <div class="team-video-buttons-container">
-      <a class="blue_button small team_video_{{ team_video.pk }} add_subtitles_bt" href="#">
+      <a class="blue_button small team_video_{{ search_record.team_video_pk }} add_subtitles_bt" href="#">
         {% trans 'Add Subtitles ' %}
       </a>
       {% if can_edit_video %}
-          <a style="margin-left: 0px !important;" class="blue_button small" href="{{ team_video.get_absolute_url }}">{% trans 'Edit Video' %}</a>
+          <a style="margin-left: 0px !important;" class="blue_button small" href="{{ search_record.absolute_url }}">{% trans 'Edit Video' %}</a>
       {% endif %}
 
 
     </div>
 </div><!-- // info -->
 <script type="text/javascript">
-    $('a.team_video_{{ team_video.pk }}').click(function(){
+    $('a.team_video_{{ search_record.team_video_pk }}').click(function(){
         mirosubs.api.openUnisubsDialogOnsite(
-            '{{team_video.video.video_id}}', 
-            '{{team_video.video.get_video_url}}', 
+            '{{search_record.video_id}}', 
+            '{{search_record.video_url}}', 
             GLOBAL_WIDGET_SETTINGS);
         return false;
 k    });

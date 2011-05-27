@@ -8,13 +8,19 @@ class MultiQuerySet(object):
     
     def count(self):
         if not self._count:
-            """ this is an expensive calculation. try not to call it. """
+            """ this can be an expensive calculation. try to set_count first
+            if there's a cheaper way to determine the count. """
             self._count = sum(qs.count() for qs in self.querysets)
         return self._count
 
     def set_count(self, count):
         self._count = count
-    
+
+    def _clone(self):
+        mqs = MultiQuerySet(*self.querysets)
+        mqs.set_count(self.count())
+        return mqs
+
     def __len__(self):
         """ expensive. try not to call. """
         return self.count()

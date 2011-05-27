@@ -116,13 +116,13 @@ def index(request, my_teams=False):
                        template_object_name='teams',
                        extra_context=extra_context)
 
-def detail_haystack(request, slug, is_debugging=False, languages=None):
+def detail(request, slug, is_debugging=False, languages=None):
     team = Team.get(slug, request.user)
 
     if languages is None:
         languages = get_user_languages_from_request(request)
     if bool(is_debugging):
-        languages = request.GET('langs', '').split(',')
+        languages = request.GET.get('langs', '').split(',')
 
     qs_list, mqs = team.get_videos_for_languages_haystack(languages)
 
@@ -157,7 +157,7 @@ def detail_haystack(request, slug, is_debugging=False, languages=None):
                        template_object_name='team_video_md')
 
 
-def detail(request, slug, is_debugging=False, languages=None):
+def detail_old(request, slug, is_debugging=False, languages=None):
     team = Team.get(slug, request.user)
 
     if languages is None:

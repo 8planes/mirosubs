@@ -55,16 +55,8 @@
 
       Querysets:
       {% for qs in qs_list %}
-      qs{{forloop.counter}} -> {% if qs %}None{% else %}qs.count{% endif %}
+      qs{{forloop.counter}} -> {% if qs %}{{qs.count}}{% else %}None{% endif %}
       {% endfor %}
-      qs1        -> {{qs1.count}}
-      qs2        -> {{qs2.count}}
-      qs3        -> {{qs3.count}}
-      qs4        -> {{qs4.count}}
-      videos        -> {{videos_count}}
-      additional -> {{additional_count}}
-      qs         -> {{qs.count}}
-      lqs        -> {{lqs.count}}
 
 Qs1 qs.filter(percent_complete__gt=0,percent_complete__lt=100)
         <table>

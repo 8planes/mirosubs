@@ -255,6 +255,7 @@ class Team(models.Model):
                 original_language__in=languages))
         mqs = MultiQuerySet(*[qs for qs in qs_list if qs is not None])
         mqs.set_count(TeamVideo.objects.filter(team=self).count())
+
         return qs_list, mqs
 
     def get_videos_for_languages(self, languages, CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS):

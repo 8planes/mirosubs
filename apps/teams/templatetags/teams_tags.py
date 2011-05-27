@@ -104,9 +104,9 @@ def team_add_video_select(context):
     return context 
 
 @register.inclusion_tag('teams/_team_video_detail.html', takes_context=True)  
-def team_video_detail(context, team_video):
-    context['team_video'] = team_video
-    video_url = team_video.video.get_video_url()
+def team_video_detail(context, team_video_search_record):
+    context['search_record'] = team_video_search_record
+    video_url = team_video_search_record.video_url
     context['team_video_widget_params'] = base_widget_params(context['request'], {
         'video_url': video_url, 
         'base_state': {},
@@ -115,8 +115,8 @@ def team_video_detail(context, team_video):
     return context
 
 @register.inclusion_tag('teams/_complete_team_video_detail.html', takes_context=True)  
-def complete_team_video_detail(context, team_video):
-    context['team_video'] = team_video
+def complete_team_video_detail(context, team_video_search_record):
+    context['search_record'] = team_video_search_record
     return context
 
 @register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  
@@ -135,18 +135,18 @@ def invite_friends_to_team(context, team):
     return context
 
 @register.inclusion_tag('teams/_team_video_lang_list.html', takes_context=True)  
-def team_video_lang_list(context, video, max_items=6):
+def team_video_lang_list(context, team_video_search_record, max_items=6):
     """
     max_items: if there are more items than max_items, they will be truncated to X more.
     """
     return  {
-        'sub_statuses': video_cache.get_video_languages_verbose(video.video_id, max_items),
-        'video': video
+        'sub_statuses': video_cache.get_video_languages_verbose(team_video_search_record.video_id, max_items),
+        'search_record': team_video_search_record
         }
 
 @register.inclusion_tag('teams/_team_video_in_progress_list.html')
-def team_video_in_progress_list( video):
-    langs_raw = video_cache.writelocked_langs(video.video_id)
+def team_video_in_progress_list(team_video_search_record):
+    langs_raw = video_cache.writelocked_langs(team_video_search_record.video_id)
     
     langs = [_(ALL_LANGUAGES_DICT[x]) for x in langs_raw]
     return  {

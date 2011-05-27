@@ -397,7 +397,7 @@ class TeamsTest(TestCase):
             'subtitles': open(os.path.join(os.path.dirname(__file__), '../videos/fixtures/test.srt'))
             }
 
-    def _video_lang_list(self, team):
+    def _tv_search_record_list(self, team):
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
         return response.context['team_video_md_list']
@@ -437,7 +437,7 @@ class TeamsTest(TestCase):
         self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
 
         # The video should be in the list. 
-        self.assertEqual(1, len(self._video_lang_list(team)))
+        self.assertEqual(1, len(self._tv_search_record_list(team)))
 
     def test_detail_contents_original_subs(self):
         team, new_team_video = self._create_new_team_video()
@@ -458,22 +458,27 @@ class TeamsTest(TestCase):
 
     def test_detail_contents_unrelated_video(self):
         team, new_team_video = self._create_new_team_video()
+        en = new_team_video.video.subtitle_language()
+        en.is_complete = True
+        en.save()
         self._set_my_languages('en', 'ru')
         # now add a Russian video with no subtitles.
         self._add_team_video(
             team, u'ru',
             u'http://upload.wikimedia.org/wikipedia/commons/6/61/CollateralMurder.ogv')
 
+        reset_solr()
+
         team = Team.objects.get(id=team.id)
 
         self.assertEqual(2, team.teamvideo_set.count())
 
         # both videos should be in the list
-        self.assertEqual(2, len(self._video_lang_list(team)))
+        search_record_list = self._tv_search_record_list(team)
+        self.assertEqual(2, len(search_record_list))
 
-        # but the one with en subs should be second.
-        video_langs = self._video_lang_list(team)
-        self.assertEqual('en', video_langs[1].video.subtitle_language().language)
+        # but the one with en subs should be first, since we can translate it into russian.
+        self.assertEqual('en', search_record_list[0].original_language)
 
     def test_one_tvl(self):
         team, new_team_video = self._create_new_team_video()
