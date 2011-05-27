@@ -17,7 +17,7 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.provide('mirosubs.widget.droplockdialog.Dialog');
-goog.require('goog.events.InputHandler');
+
 /**
  * @constructor
  * @param {string} videoID
