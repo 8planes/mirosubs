@@ -5,4 +5,3 @@ python manage.py build_solr_schema > /usr/lib/apache-solr/example/multicore/core
 launchctl stop org.apache.Solr
 launchctl start org.apache.Solr
 python manage.py rebuild_index --settings=dev_settings
-python manage.py rebuild_index --settings=teams.solr_test_settings

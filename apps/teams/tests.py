@@ -26,7 +26,7 @@ from django.core import mail
 import re
 
 LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z\-]+)_(.*)")
-LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)_(.*)")
+LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)")
 
 def reset_solr():
     # cause the default site to load
@@ -303,21 +303,12 @@ class TeamDetailMetadataTest(TestCase):
         sublang.save()
         sls = tv.searchable_languages()
         self.assertEquals(len(settings.ALL_LANGUAGES), len(sls))
-        for sl in sls:
-            match = LANGUAGE_RE.match(sl)
-            self.assertEquals("0", match.group(2))
         sublang = SubtitleLanguage.objects.get(id=sublang.id)
         sublang.is_complete = True
         sublang.save()
         tv = TeamVideo.objects.get(id=2)
         sls =  tv.searchable_languages()
-        self.assertEquals(len(settings.ALL_LANGUAGES), len(sls))
-        for sl in sls:
-            match = LANGUAGE_RE.match(sl)
-            if match.group(1) != 'en':
-                self.assertEquals("0", match.group(2))
-            else:
-                self.assertTrue("C", match.group(2))
+        self.assertEquals(len(settings.ALL_LANGUAGES) - 1, len(sls))
 
 class TeamDetailTest(TestCase):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
@@ -901,7 +892,7 @@ class TeamsDetailQueryTest(TestCase):
     def _create_rdm_video(self, i):
         video, created = Video.get_or_create_for_url("http://www.example.com/%s.mp4" % i)
         return video
-    
+
     def test_multi_query(self):
         team, created = Team.objects.get_or_create(slug='arthur')
         team.videos.all().delete()
@@ -912,20 +903,23 @@ class TeamsDetailQueryTest(TestCase):
         self.assertTrue([x.pk for x in multi] == created_pks)
 
     def test_hide_trans_back_to_original_lang(self):
-        # context https://www.pivotaltracker.com/story/show/12883401
-        user_langs = ["en", "ar", "ru"]
+        """
+        context https://www.pivotaltracker.com/story/show/12883401
+        my languages are english and arabic. video is in arabic, 
+        and it has complete translations in english and no arabic subs. 
+        qs1 and qs2 must not contain opportunity to translate into arabic.
+        """
+        user_langs = ["en", "ar"]
         self._set_my_languages(*user_langs)
         qs_list, mqs = self.team.get_videos_for_languages_haystack(user_langs)
         titles = [x.video_title for x in qs_list[0]] if qs_list[0] else []
         titles.extend([x.video_title for x in qs_list[1]] if qs_list[1] else [])
-        self.assertFalse("qs1-not-transback" in titles)
+        self.assertFalse("dont-translate-back-to-arabic" in titles)
 
     def test_lingua_franca_later(self):
         # context https://www.pivotaltracker.com/story/show/12883401
-        user_langs = ["en", "ar", "ru"]
+        user_langs = ["en", "ar"]
         self._set_my_languages(*user_langs)
         qs_list, mqs = self.team.get_videos_for_languages_haystack(user_langs)
         titles = [x.video_title for x in qs_list[2]]
-        print titles
-        print self._debug_videos()
-        self.assertTrue(titles.index(u'a') < titles.index(u'b'))
+        self.assertTrue(titles.index(u'a') < titles.index(u'c'))

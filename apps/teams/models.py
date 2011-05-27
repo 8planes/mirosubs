@@ -202,9 +202,6 @@ class Team(models.Model):
     def _lang_pair(self, lp, suffix):
         return SQ(content="{0}_{1}_{2}".format(lp[0], lp[1], suffix))
 
-    def _lang(self, lang, suffix):
-        return SQ(content="S_{0}_{1}".format(lang, suffix))
-
     def _sq_expression(self, sq_list):
         if len(sq_list) == 0:
             return None
@@ -233,10 +230,9 @@ class Team(models.Model):
                            languages if l.find('-') > -1])
         languages = list(set(languages))
 
-        pairs_m, pairs_0, langs_m, langs_0 = [], [], [], []
+        pairs_m, pairs_0, langs = [], [], []
         for l1 in languages:
-            langs_m.append(SQ(content=self._lang(l1, "M")))
-            langs_0.append(SQ(content=self._lang(l1, "0")))
+            langs.append(SQ(content='S_{0}'.format(l1)))
             for l0 in languages:
                 if l1 != l0:
                     pairs_m.append(self._lang_pair((l1, l0), "M"))
@@ -246,12 +242,17 @@ class Team(models.Model):
         qs_list.append(self._filter(self._base_sqs(), pairs_m))
         qs_list.append(self._exclude(self._filter(self._base_sqs(), pairs_0), 
                                      pairs_m))
-        qs_list.append(self._exclude(self._filter(self._base_sqs(), langs_m), 
-                                     pairs_m + pairs_0))
-        qs_list.append(self._exclude(self._filter(self._base_sqs(), langs_0),
-                                     langs_m + pairs_m + pairs_0))
-        qs_list.append(self._exclude(self._base_sqs(), 
-                                     langs_0 + langs_m + pairs_m + pairs_0))
+        qs_list.append(self._exclude(
+                self._base_sqs().filter(
+                    original_language__in=languages), 
+                pairs_m + pairs_0).order_by('has_lingua_franca'))
+        qs_list.append(self._exclude(
+                self._filter(self._base_sqs(), langs),
+                pairs_m + pairs_0).exclude(original_language__in=languages))
+        qs_list.append(self._exclude(
+                self._base_sqs(), 
+                langs + pairs_m + pairs_0).exclude(
+                original_language__in=languages))
         mqs = MultiQuerySet(*[qs for qs in qs_list if qs is not None])
         mqs.set_count(TeamVideo.objects.filter(team=self).count())
         return qs_list, mqs
@@ -479,18 +480,12 @@ class TeamVideo(models.Model):
         return lps
 
     def _add_searchable_language(self, language, sublang_dict, sls):
+        complete_sublangs = []
         if language in sublang_dict:
-            sublangs = [sl for sl in sublang_dict[language] if not sl.is_dependent()]
-            for sublang in sublangs:
-                if sublang.subtitle_count == 0:
-                    suffix = "0"
-                elif not sublang.is_complete:
-                    suffix = "M"
-                else:
-                    suffix = "C"
-                sls.append("S_{0}_{1}".format(language, suffix))
-        else:
-            sls.append("S_{0}_0".format(language))
+            complete_sublangs = [sl for sl in sublang_dict[language] if 
+                                 not sl.is_dependent() and sl.is_complete]
+        if len(complete_sublangs) == 0:
+            sls.append("S_{0}".format(language))
 
     def searchable_languages(self):
         sls = []
