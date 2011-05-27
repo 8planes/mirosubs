@@ -436,6 +436,8 @@ class TeamsTest(TestCase):
         team, new_team_video = self._create_new_team_video()
         self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
 
+        reset_solr()
+
         # The video should be in the list. 
         self.assertEqual(1, len(self._tv_search_record_list(team)))
 
@@ -445,6 +447,8 @@ class TeamsTest(TestCase):
         # upload some subs to the new video. make sure it still appears.
         data = self._make_data(new_team_video.video.id, 'en')
         response = self.client.post(reverse('videos:upload_subtitles'), data)
+
+        reset_solr()
 
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
@@ -482,6 +486,7 @@ class TeamsTest(TestCase):
 
     def test_one_tvl(self):
         team, new_team_video = self._create_new_team_video()
+        reset_solr()
         self._set_my_languages('ko')
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
