@@ -35,7 +35,7 @@ from widget import video_cache
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
 from utils.amazon import S3EnabledImageField
-from django.utils.http import urlquote_plus
+from django.utils.http import urlquote_plus, urlquote
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 import time
@@ -208,7 +208,7 @@ class Video(models.Model):
         return self.get_absolute_url()
     
     def title_for_url(self):
-        return self.title.replace('/', '-').replace('#', '').replace('?', '')
+        return self.title.replace('/', '-')
     
     @models.permalink
     def get_absolute_url(self, locale=None):
@@ -217,7 +217,7 @@ class Video(models.Model):
             kwargs['locale'] = locale 
         title = self.title_for_url()
         if title:
-            return ('videos:video_with_title', [self.video_id, title], kwargs)
+            return ('videos:video_with_title', [self.video_id, urlquote(title)], kwargs)
         return ('videos:video', [self.video_id], kwargs)
 
     def get_video_url(self):
