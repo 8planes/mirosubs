@@ -10,7 +10,8 @@ DATABASES = {
     }
 }
 
-HAYSTACK_SEARCH_ENGINE = 'dummy' 
+HAYSTACK_SOLR_URL = 'http://localhost:38983/solr/testing'
+
 CELERY_ALWAYS_EAGER = True
 
 INSTALLED_APPS += ('django_nose', )

@@ -40,7 +40,7 @@ if INSTALLATION == DEV:
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
     SENTRY_TESTING = True
     SOLR_ROOT = '/usr/share/'
-    HAYSTACK_SOLR_URL = 'http://localhost:38983/solr'
+    HAYSTACK_SOLR_URL = 'http://localhost:38983/solr/main'
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'
