@@ -56,10 +56,10 @@ jQuery.fn.mod = function(options){
   // Let there be light
   jQuery(document.body).append(overlay)
   try {
-      if (!jQuery.contains(document.body, modal)) {
-          jQuery(document.body).append(modal);
-      }
-  }catch(e){};
+      modal.detach();
+      jQuery(document.body).append(modal);
+  }
+  catch(e){};
   
   options.autoShow && modal.show();
   return modal;
