@@ -30,6 +30,7 @@ from django.contrib.contenttypes import generic
 from django.conf import settings
 from django.utils import simplejson as json
 from django.db.models.signals import post_save
+from django.core.urlresolvers import reverse
 
 MESSAGE_MAX_LENGTH = getattr(settings,'MESSAGE_MAX_LENGTH', 1000)
 
@@ -67,6 +68,9 @@ class Message(models.Model):
         if self.subject and not u' ' in self.subject:
             return self.subject[:40]+u'...'
         return self.subject or ugettext('[no subject]')
+    
+    def get_reply_url(self):
+        return '%s?reply=%s' % (reverse('messages:index'), self.pk)
     
     def delete_for_user(self, user):
         if self.user == user:

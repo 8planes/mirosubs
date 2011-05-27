@@ -62,6 +62,7 @@ jQuery.fn.mod = function(options){
   }catch(e){};
   
   options.autoShow && modal.show();
+  return modal;
 };
 
 jQuery.fn.modClose = function(){

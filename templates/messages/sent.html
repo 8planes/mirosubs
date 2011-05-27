@@ -16,7 +16,7 @@
             $.metadata.setType("attr", "data");
             
             $('.messages .delete').click(function(){
-                if (confirm("Do you really wish delete this message?")){
+                if (confirm("{% trans 'Do you really wish delete this message?' %}")){
                     var $this = $(this);
                     MessagesApi.remove($this.attr('message_id'), function(response){
                         if (response.error){
@@ -58,15 +58,15 @@
                 $link = $(link);
                 var data = $link.metadata();
                 var $modal = $(this);
-                
+
                 if (data['user-avatar']){
-                    $('.user-avatar', $modal).attr('src', data['user-avatar']);
+                    $('.author-avatar', $modal).attr('src', data['user-avatar']);
                 }else{
-                    $('.user-avatar', $modal).attr('src', DEFAULT_AVATAR_URL);
+                    $('.author-avatar', $modal).attr('src', DEFAULT_AVATAR_URL);
                 }
                 
                 $('#message_form_id_user').val(data['user-id']);
-                $('.author-user', $modal).html(data['user-username']);
+                $('.author-username', $modal).html(data['user-username']);
                 $('.message-content', $modal).html(data['message-content']);
                 $('.message-subject').html(data['message-subject-display']);
                 $('#message_form_id_subject').val('Re: '+data['message-subject']);
@@ -132,7 +132,7 @@
 <div class="msg_modal_wrap" id="msg_modal">
   <a href="#close" class="close">{% trans "Close" %}</a>
   <div class="msg_modal">
-    <h3>{% trans "Message from" %}
+    <h3>{% trans "Message to" %}
         <span> 
             <img class="author-avatar" src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'avatar' %}"/> 
             <span class="author-username"></span>
@@ -159,6 +159,11 @@
       <dd>
         <form action="" method="post" accept-charset="utf-8" id="send-message-form">
           <div class="global-errors"></div>
+		    <style>
+		    	#message_form_id_content {
+		    		max-width: 355px;
+		    	}
+		    </style>          
           {{ send_message_form.as_p }}
           <p><button type="submit" class="green_button small">{% trans "Send Message" %}</button></p>
         </form>

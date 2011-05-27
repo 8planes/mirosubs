@@ -13,10 +13,15 @@
     <script type="text/javascript">
         jQuery(function($){
             var DEFAULT_AVATAR_URL = '{{ MEDIA_URL }}images/default_thumb_small.png';
+            {% if not reply_msg %}
+            var reply_msg_data = null;
+            {% else %}
+            var reply_msg_data = {{ reply_msg.json_data|safe }};
+            {% endif %}
             $.metadata.setType("attr", "data");
             
             $('.messages .delete').click(function(){
-                if (confirm("Do you really wish delete this message?")){
+                if (confirm("{% trans 'Do you really wish delete this message?' %}")){
                     var $this = $(this);
                     MessagesApi.remove($this.attr('message_id'), function(response){
                         if (response.error){
@@ -54,29 +59,12 @@
                 }                
             });    
             
-            $('#msg_modal').bind('before-show-modal', function(event, link){
-                $link = $(link);
-                var data = $link.metadata();
-                var $modal = $(this);
-                
-                if ( ! data['is-read']){
-                    MessagesApi.mark_as_read(data['id'], function(response){
-                        if (response.error){
-                            $.jGrowl.error(response.error);
-                        }else{
-                            $link.parents('tr').removeClass('unread');
-                            data['is-read'] = true;
-                            $link.set_metadata(data);
-                        }
-                    });
-                };
-                
+            function set_message_data(data, $modal){
                 if (data['author-avatar']){
                     $('.author-avatar', $modal).attr('src', data['author-avatar']);
                 }else{
                     $('.author-avatar', $modal).attr('src', DEFAULT_AVATAR_URL);
                 }
-                
                 
                 $('#message_form_id_user').val(data['author-id']);
                 $('.author-username', $modal).html(data['author-username']);
@@ -89,7 +77,32 @@
                     $('.reply-container textarea', $modal).val('');
                 }else{
                     $('.reply-container', $modal).hide();
-                }
+                }            	
+            }
+            
+            if (reply_msg_data){
+            	set_message_data(reply_msg_data, $('#msg_modal'));
+            	$('#msg_modal').mod();
+            };
+            
+            $('#msg_modal').bind('before-show-modal', function(event, link){
+                var $link = $(link);
+                var $modal = $(this);
+                var data = $link.metadata();
+                
+                if ( ! data['is-read']){
+                    MessagesApi.mark_as_read(data['id'], function(response){
+                        if (response.error){
+                            $.jGrowl.error(response.error);
+                        } else {
+                            $link.parents('tr').removeClass('unread');
+                            data['is-read'] = true;
+                            $link.set_metadata(data);
+                        }
+                    });
+                };
+                
+				set_message_data(data, $modal);
             });
         });
     </script>
@@ -132,8 +145,8 @@
                 <a href="{{ msg.author.get_absolute_url }}">{{ msg.author }}</a>
               {% endif %}
           </td>
-          <td class="msg_body">
-              <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}" id="message-{{msg.pk}}">{{ msg }}</a>
+          <td>
+              <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}">{{ msg }}</a>
           </td>
           <td class="msg_date">{{ msg.created|timesince }} {% trans 'ago' %}</td>
           <td class="msg_delete"><span class="delete" message_id="{{ msg.pk }}">&#x2326;</span></td>
@@ -179,6 +192,11 @@
       <dd>
         <form action="" method="post" accept-charset="utf-8" id="send-message-form">
           <div class="global-errors"></div>
+		    <style>
+		    	#message_form_id_content {
+		    		max-width: 355px;
+		    	}
+		    </style>              
           {{ send_message_form.as_p }}
           <p><button type="submit" class="green_button small">{% trans "Send Message" %}</button></p>
         </form>
@@ -186,12 +204,4 @@
     </dl>
   </div>
 </div>
-
-{% if show_message %}
-<script>
-  $(window).load(function(){
-      $("#message-{{show_message.pk}}" ).click();
-  });
-</script>
-  {% endif %}
 {% endblock %}
