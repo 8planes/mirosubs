@@ -56,31 +56,33 @@
     <pre>
       Pass a ?langs=en,es parameter to change test languages
       languages = {{languages}} 
-
-      <h1>Querysets:</h1>
-      {% for qs in qs_list %}
-        <h2>qs{{forloop.counter}} -> {% if qs %}{{qs.count}} results{% else %}None{% endif %}</h2>
-        {% if qs %}
-          <pre>{{qs.query.build_query}}</pre>
-          <table>
-            <tr>
-              <th>Title</th>
-              <th>Original Language</th>
-              <th>Has Lingua Franca</th>
-              <th>Indexed Text</th>
-            </tr>
-            {% for x in qs %}
-              <tr>
-                <td><a href="{{x.video_absolute_url}}">{{x.title}}</a></td>
-                <td>{{x.original_language}}</td>
-                <td>{{x.has_lingua_franca}}</td>
-                <td><a href="javascript:void(0);" onclick="showIndexedText('{{x.text|escapejs}}');">link</a></td>
-              </tr>
-            {% endfor %}
-          </table>
-        {% endif %}
-      {% endfor %}
     </pre>
+
+    <h1>Querysets:</h1>
+    {% for qs in qs_list %}
+    <h2>qs{{forloop.counter}} -> {% if qs != None %}{{qs.count}} results{% else %}None{% endif %}</h2>
+    {% if qs != None %}
+    <pre>{{qs.query.build_query}}</pre>
+    {% endif %}
+    {% if qs %}
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Original Language</th>
+        <th>Has Lingua Franca</th>
+        <th>Indexed Text</th>
+      </tr>
+      {% for x in qs %}
+      <tr>
+        <td><a href="{{x.video_absolute_url}}">{{x.title}}</a></td>
+        <td>{{x.original_language}}</td>
+        <td>{{x.has_lingua_franca}}</td>
+        <td><a href="javascript:void(0);" onclick="showIndexedText('{{x.text|escapejs}}');">link</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+    {% endfor %}
 </div>
 
 {% endblock %}

@@ -221,7 +221,7 @@ class Team(models.Model):
 
     def _base_sqs(self):
         from haystack.query import SearchQuerySet
-        return SearchQuerySet().models(TeamVideo)
+        return SearchQuerySet().models(TeamVideo).filter(team_id=self.id)
 
     def get_videos_for_languages_haystack(self, languages):
         from utils.multi_query_set import MultiQuerySet
