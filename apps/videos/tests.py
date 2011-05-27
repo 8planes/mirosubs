@@ -643,10 +643,6 @@ class ViewsTest(WebUseTest):
     def test_video_list(self):
         self._simple_test('videos:list')
         self._simple_test('videos:list', data={'o': 'languages_count', 'ot': 'desc'})
-        
-    def test_actions_list(self):
-        self._simple_test('videos:actions_list')
-        self._simple_test('videos:actions_list', data={'o': 'created', 'ot': 'desc'})
 
     def test_bliptv_twice(self):
         VIDEO_FILE = 'http://blip.tv/file/get/Kipkay-AirDusterOfficeWeaponry223.m4v'
@@ -1307,7 +1303,6 @@ class TestPercentComplete(TestCase):
         metadata_manager.update_metadata(self.video.pk)
         new_lang.save()
         self.video.subtitlelanguage_set.all().filter(percent_done=100).delete()
-        print [(x.is_complete, x.subtitle_count, x.percent_done) for x in self.video.subtitlelanguage_set.all()]
         self.assertFalse(self.video.is_complete)
             
 from videos import alarms
