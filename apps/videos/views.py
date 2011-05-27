@@ -131,9 +131,9 @@ def create_from_feed(request):
     if form.is_valid():
         count = form.save()
         if not form.video_limit_routreach:
-            messages.success(request, _(u"%(count)s videos added") % {'count': count})
+            messages.success(request, _(u"%(count)s videos have been added") % {'count': count})
         else:
-            messages.success(request, _(u"%(count)s videos added, but feed has move videos. They can be added lated if you set \"Save feed\"") % {'count': count})
+            messages.success(request, _(u"%(count)s videos have been added. To add the remaining videos from this feed, submit this feed again and make sure to check \"Save feed\" box.") % {'count': count})
         return redirect('videos:create')
     context = {
         'video_form': VideoForm(),
