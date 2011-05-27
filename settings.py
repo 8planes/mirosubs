@@ -403,6 +403,7 @@ INSTALLED_APPS = (
     'sentry.client',
     'djcelery',
     'rosetta',
+    'testhelpers',
     'unisubs_compressor',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )

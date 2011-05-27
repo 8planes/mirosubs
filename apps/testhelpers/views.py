@@ -34,6 +34,7 @@ def _get_fixture_file(model_name):
 def _add_subtitles(sub_lang, num_subs, translated_from=None):
     version = SubtitleVersion(language=sub_lang, note="Automagically-created")
     version.datetime_started = datetime.datetime.now()
+    version.is_forked = True
     version.save()
     for i in xrange(0, num_subs):
         subtitle = Subtitle(version=version,
@@ -87,7 +88,7 @@ def _add_lang_to_video(video, props,  translated_from=None):
         sub_lang.is_forked = False
         sub_lang.standard_language = translated_from
         sub_lang.save()
-        _copy_subtitles(translated_from ,sub_lang,  num_subs)
+        _copy_subtitles(translated_from, sub_lang, num_subs)
 
     for translation_prop in props.get("translations", []):
         _add_lang_to_video(video, translation_prop, translated_from=sub_lang)
@@ -105,8 +106,7 @@ def _add_langs_to_video(video, props):
     
 def _create_videos(video_data, users):
     videos = []
-    
-    
+
     for x in video_data:
         shuffle(users)
         video, created = Video.get_or_create_for_url(x['url'])
@@ -120,8 +120,7 @@ def _create_videos(video_data, users):
             video.is_subtitled = True
         video.save()    
         videos.append(video)
-       
-   
+
     return videos
 
 def _hydrate_users(users_data):
