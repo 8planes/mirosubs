@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block body_attrs %}id="video"{% endblock %}
+
+{% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor %}
+
+{% block css %}
+    {% if video.thumbnail %}
+        <meta property="og:image" content="{{ video.get_thumbnail }}" />
+    {% else %}
+        <meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
+    {% endif %}
+
+    {{ block.super }}
+
+    {% include_css_bundle "video_history" %}
+
+    <style>
+        div.mirosubs-widget {
+            position: relative;
+        }
+
+        .mirosubs-videoDiv {
+            text-align: center;
+        }
+
+        .mirosubs-widget video {
+            width: 460px;
+        }
+
+        #embed {
+            white-space: pre;
+            background: #eee;
+            boder: #666;
+        }
+
+    .error_list {
+        color: #fa6343;
+    }
+
+    .success-message {
+        color: #5ae26b;
+        margin: 5px 0 0;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    {% include "widget/_js_onsite_dependencies.html" %}
+    <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    //create url template
+    var DIFFING_URL = function(){
+        var url = '{% block diffing_link %}{% url videos:diffing 11111 22222 %}{% endblock %}';
+        return url.replace(/11111/, '<<first_pk>>').replace(/22222/, '<<second_pk>>');
+    }();
+
+    function get_compare_link(first_pk, second_pk){
+        //set values from arguents
+        return DIFFING_URL.replace(/<<first_pk>>/, first_pk).replace(/<<second_pk>>/, second_pk);
+    }
+    var update_page = function(url) {
+        var title = $("#title").val()
+        var slug = $("#slug").val()
+        if (title != "" && slug != "") {
+            var data = { title:title, slug:slug };
+            var args = { type:"POST", url:url, data:data, complete:done };
+            $.ajax(args);
+        }
+        else {
+            // display an explanation of failure
+        }
+        return false;
+    };
+
+
+    jQuery(document).ready(function($){
+
+        $("a.ajax_link").click(function(event){
+            update_page($(this).attr("href").value());
+        });
+
+
+        $('.version_checkbox:first').attr('checked', 'checked');
+
+        $('.version_checkbox').change(function(){
+            var $this = $(this);
+            var checked_length = $('.version_checkbox:checked').length;
+
+            if ($this.attr('checked') && (checked_length > 2)) {
+                $this.attr('checked', '');
+            }
+        });
+
+        $('.compare_versions_button').click(function(){
+            var $checked = $('.version_checkbox:checked');
+            if ($checked.length !== 2) {
+                alert('{% trans "Select two revisions for compare, please" %}');
+            }
+            else {
+                var url = get_compare_link($checked[0].value, $checked[1].value);
+                window.location.replace(url);
+            }
+        });
+
+        $('.inline_tabs').tabs();
+
+        $('#add_subtitles').click(function() {
+            widget_widget_div.selectMenuItem(
+            mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+            return false;
+        });
+
+        $('.add-translation-behavior').click(function(e) {
+            e.preventDefault();
+            widget_widget_div.selectMenuItem(
+            mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
+            return false;
+        });
+
+        $('.time_link').click(function() {
+            widget_widget_div.playAt(parseFloat(
+            $(this).find('.data').text()));
+            return false;
+        });
+
+        var SL_ID = '{{ language.id }}';
+
+        $('.edit-title').click(function(){
+            var msg = '{% trans "Enter new title.  Note: this is for editing of translating the title." %}'
+            var title = prompt(msg, $('.title-container').html());
+            if (title){
+                VideosApi.change_title_translation(SL_ID, title, function(response){
+                    if (response.error){
+                        $.jGrowl.error(response.error);
+                    }else{
+                        $('.title-container').html(title);
+                    }
+                });
+            }
+            return false;
+        });
+    });
+    </script>
+    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block title %}
+    {% if language.is_original %}
+        {% blocktrans with language.get_title_display as title %}
+            {{ title }} with subtitles | Universal Subtitles
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans with language.get_title_display as title and language.get_language_display as language %}
+            {{ title }} with {{ language }} subtitles | Universal Subtitles
+        {% endblocktrans %}
+    {% endif %}
+{% endblock %}
+
+{% block main_content %}
+    <h2 class="main-title">
+        <span class="title-container" style="float: none;">{{ video }}</span>
+        {% if not language.standard_language and user.is_authenticated %}
+            <a class="edit-title" href="#" style="color: #3196AD !important; text-decoration: underline;">{% trans 'edit title' %}</a>
+        {% endif %}
+    </h2>
+
+    <hr />
+
+    {% if saved %}
+    <div id="messages">
+        <h2>{% blocktrans %}Subtitles saved!  You can share the video with friends,
+            or get an embed code for your site.  To add a
+            translation, click the button below.{% endblocktrans %}</h2>
+        <a href="#" id="closeBut">Close</a>
+    </div>
+    {% endif %}
+
+    <div class="grid_6 alpha left_column">
+        {% widget widget_params %}
+    </div>
+
+    <div class="grid_6 omega right_column">
+        {% include '_sharing_widget.html' %}
+    </div>
+
+    <hr />
+
+
+<div class="grid_3 left_nav_wrapper alpha">
+
+    <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+    {% upload_subtitles video %}
+
+    {% paste_transcription %}
+
+      {% if user.is_staff and perms.videos.edit_video %}
+        <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
+        <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank">
+          {% trans 'Edit in Admin Interface' %}
+        </a>
+    {% endif %}
+
+    {% team_add_video_select %}
+
+    <ul class="left_nav">
+        <li><a class="ajax_link" href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
+        {% include 'videos/_left_navigation.html' %}
+    </ul>
+
+</div>
+
+<div class="wrap grid_9 omega" id="ajax_response">
+    
+</div>
+{% endblock %}
+

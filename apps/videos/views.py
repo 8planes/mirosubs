@@ -145,6 +145,7 @@ def create_from_feed(request):
 
 create_from_feed.csrf_exempt = True
 
+
 def video(request, video_id, video_url=None, title=None):
     video = get_object_or_404(Video, video_id=video_id)
     if video_url:
@@ -167,7 +168,7 @@ def video(request, video_id, video_url=None, title=None):
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
-    return render_to_response('videos/video.html', context,
+    return render_to_response('videos/video_core.html', context,
                               context_instance=RequestContext(request))
 
 def video_list(request):
@@ -329,6 +330,100 @@ def legacy_history(request ,video_id, lang=None):
             'lang_id': language.pk,
             'lang': language.language,
             }))
+
+def video_core(request, video_id, video_url=None, title=None, lang=None, lang_id=None):
+
+    video = get_object_or_404(Video, video_id=video_id)
+
+    #if not video_url and not title
+    if video_url:
+        video_url = get_object_or_404(VideoUrl, pk=video_url)
+
+    elif title and ((video.title_for_url() and not video.title_for_url() == title) or (not video.title and title)):
+        return redirect(video, permanent=True)
+
+    
+    language = None
+    if lang_id:
+        try:
+            language = video.subtitlelanguage_set.get(pk=lang_id)
+        except SubtitleLanguage.DoesNotExist:
+            raise Http404
+        
+    elif not title and not video_url:
+        language = video.subtitle_language(lang)
+
+        if not language:
+            if lang in dict(settings.ALL_LANGUAGES):
+                config = {}
+                config["videoID"] = video.video_id
+                config["languageCode"] = lang
+                url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
+                return redirect(url)
+            else:
+                language = video.subtitlelanguage_set.all()[0]
+
+    
+
+    video.update_view_counter()
+
+    # TODO: make this more pythonic, prob using kwargs
+    context = widget.add_onsite_js_files({})
+
+    #if not ajax
+    context['video'] = video
+    context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
+    context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
+    context['original'] = video.subtitle_language()
+    context['language'] = language
+    translations = list(video.subtitlelanguage_set.filter(is_original=False) \
+        .filter(had_version=True).select_related('video'))
+    translations.sort(key=lambda f: f.get_language_display())
+    context['translations'] = translations
+
+
+    context['widget_params'] = _widget_params(request, video, None, language, video_url and video_url.effective_url)
+
+    return render_to_response('videos/video_core.html', context,
+                              context_instance=RequestContext(request))
+
+    #if(not video_url and not title):
+     #   _ajax_history(request, context, video_id, lang, lang_id)
+    
+
+    #else:
+     #   _ajax_video(request, context, video_id, video_url, title)
+
+
+def _ajax_video(request, context, video_id, video_url=None, title=None):
+    _add_share_panel_context_for_video(context, video)
+    return render_to_response('videos/_ajax_video.html', context,
+                              context_instance=RequestContext(request))
+
+def _ajax_history(request, context, video_id, lang=None, lang_id=None):
+
+    qs = language.subtitleversion_set.select_related('user')
+    ordering, order_type = request.GET.get('o'), request.GET.get('ot')
+    order_fields = {
+        'date': 'datetime_started',
+        'user': 'user__username',
+        'note': 'note',
+        'time': 'time_change',
+        'text': 'text_change'
+    }
+    if ordering in order_fields and order_type in ['asc', 'desc']:
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
+        context['ordering'], context['order_type'] = ordering, order_type
+
+    _add_share_panel_context_for_history(context, video, lang)
+    context['last_version'] = language.latest_version()
+    context['edit_url'] = language.get_widget_url()
+    return object_list(request, queryset=qs, allow_empty=True,
+                       paginate_by=settings.REVISIONS_ONPAGE,
+                       page=request.GET.get('page', 1),
+                       template_name='videos/_ajax_history.html',
+                       template_object_name='revision',
+                       extra_context=context)
 
 def history(request, video_id, lang=None, lang_id=None):
     video = get_object_or_404(Video, video_id=video_id)

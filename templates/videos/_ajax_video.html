@@ -1,0 +1,32 @@
+<h4 class="inline">{% trans 'Video Info' %}</h4>
+
+
+<ul class="inline_tabs">
+    <li><a href="#comments-tab"><span class="inline_text">{% trans 'Comments' %}</span> <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+    <li class="bull">&bull;</li>
+    {% comment %}
+    <li><a href="#comments-tab"><span class="inline_text">{% trans 'Video URLS' %}</span> <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
+    <li class="bull">&bull;</li>
+    {% endcomment %}
+    <li class="active"><a href="#activity-tab"><span class="inline_text">{% trans 'Activity Stream' %}</span></a></li>
+    <li class="bull">&bull;</li>
+    <li><a href="#urls-tab"><span class="inline_text">{% trans 'Video URLs' %}</span> <span class="badgy_out"><span class="badgy">{% video_url_count video %}</span></span></a></li>
+</ul>
+
+<div id="comments-tab" style="display: none">
+    <div class="grid_9 alpha omega">
+        {% render_comment_form video %}
+        {% render_comment_list video %}
+        <div style="clear: both"></div>
+    </div>
+</div>
+
+<div id="activity-tab">
+    <div class="grid_9 alpha omega">
+        {% video_activity video %}
+    </div>
+</div>
+
+<div id="urls-tab" style="display: none">
+    {% video_url_panel %}
+</div>
