@@ -718,6 +718,8 @@ class SubtitleVersion(SubtitleCollection):
             #but some bug happen, I've no idea why
             self.language.last_version = self
             self.language.save()
+                        
+            Action.create_caption_handler(self)
             
             if self.user:
                 video = self.language.video

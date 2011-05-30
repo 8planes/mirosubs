@@ -305,8 +305,6 @@ class Rpc(BaseRpc):
             if not draft.is_dependent() and completed is not None:
                 language.is_complete = completed
             language.save()
-            from videos.models import Action
-            Action.create_caption_handler(new_version)
             video_changed_tasks.delay(language.video.id, new_version.id)
 
         return { "response" : "ok",
