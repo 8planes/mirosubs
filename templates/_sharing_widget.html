@@ -21,26 +21,8 @@
     <li class="mirosubs-friends"><a href="{{share_panel_email_url}}" target="email_friends">{% trans 'Email to friends' %}</a></li>
   </ul>
 
-  <div id="video_follow" class="clearfix">
-  	{# This should be refactored in future #}
-  	{% if language %}
-      {% if language|is_follower:user %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow" %} {{ language.get_language_display }}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow" %} {{ language.get_language_display }}</button>
-      {% else %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow" %} {{ language.get_language_display }}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow" %} {{ language.get_language_display }}</button>      
-      {% endif %}
-    {% else %}
-      {% if video|is_follower:user %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Follow All" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Unfollow All" %}</button>
-      {% else %}
-          <button class="green_button big follow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}">{% trans "Follow All" %}</button>
-          <button class="blue_button big unfollow-video" language_id="{{ language.pk }}" language_name="{{ language.get_language_display }}" video_id="{{ video.pk }}" style="display: none">{% trans "Unfollow All" %}</button>      
-      {% endif %}	
-    {% endif %}
-  </div><!-- // video_follow -->
+  {% include 'videos/_follow_video_button.html' %}
+  
   <h3>{% trans 'Embed this video in your site' %} <a class="embed_options_link" target="embedoptions" href="https://github.com/8planes/mirosubs/wiki/Embed-Code-Usage-Guide">options</a></h3>
   <p class="mirosubs-embed">
     <textarea>{{share_panel_embed_code}}</textarea>
@@ -75,128 +57,6 @@
   <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
 </div>
 <script type="text/javascript">
-    jQuery(function($){
-        var authenticated = {% if user.is_authenticated %} true; {% else %} false; {% endif %};
-		var is_video_follower = {% if video|is_follower:user %}true;{% else %}false{% endif %};
-		
-		var unfoloow_all = function(video_id){
-            VideosApi.unfollow(video_id, function(response){
-                if (response.error){
-                    $.jGrowl.error(response.error);
-                }else{
-					is_video_follower = false;
-                    $.jGrowl(response.msg);
-                    $('.unfollow-video').hide();
-                    $('.follow-video').show();
-                }
-			});			
-		};
-
-		var foloow_all = function(video_id){
-            VideosApi.follow(video_id, function(response){
-                if (response.error){
-                    $.jGrowl.error(response.error);
-                }else{
-                    $.jGrowl(response.msg);
-					is_video_follower = true;
-                    $('.follow-video').hide();
-                    $('.unfollow-video').show();
-                }
-			});			
-		};
-
-		
-        $('.unfollow-video').click(function(e) {
-            e.preventDefault();
-			var $this = $(this);
-			
-			if ($this.attr('language_id')){
-				var options = {
-					extraButtons: []
-				};
-				
-				if (is_video_follower){
-					options.extraButtons.push({
-						name: '{% trans "Unfollow all languages" %}',
-						id: 'unfollow-all-languages-button',
-						type: 'ALL'
-					});
-				};
-				
-				$.jConfirm('{% trans "You will not receive any notification when " %}'+$this.attr('language_name')+' {% trans " subtitles for this video are edited. You can choose to follow again at any time." %}', 
-					"{% trans 'Stopped following ' %}"+$this.attr('language_name')+"{% trans ' subtitles' %}", 
-					function(button){
-						if (button == 'ALL'){
-							unfoloow_all($this.attr('video_id'));
-						}else if (button == 'OK'){
-							VideosApi.unfollow_language($this.attr('language_id'), function(response){
-				                if (response.error){
-				                    $.jGrowl.error(response.error);
-				                }else{
-				                    $.jGrowl(response.msg);
-				                    $('.unfollow-video').hide();
-				                    $('.follow-video').show();
-				                };
-							});
-						};
-					},options);		
-			}else{
-				$.jConfirm('{% trans "You will not receive any notification when subtitles in any language for this video are edited.  You can choose to follow again at any time." %}', 
-					"{% trans 'Stopped following all subtitles' %}", function(button){
-						(button === 'OK') && unfoloow_all($this.attr('video_id'));
-				});//$.jConfirm				
-			};//else
-        });
-        
-		
-        $('.follow-video').click(function(e) {
-            e.preventDefault();
-			var $this = $(this);
-            if (!authenticated) {
-                $.jAlert('{% trans "You must log in to follow a video." %}', '{% trans "Authentication required" %}');
-                return;
-            };
-			
-			if ($this.attr('language_id')){
-				var options = {
-					extraButtons: []
-				};
-				
-				if ( ! is_video_follower){
-					options.extraButtons.push({
-						name: '{% trans "Follow all languages" %}',
-						id: 'follow-all-languages-button',
-						type: 'ALL'
-					});
-				};
-				
-				$.jConfirm('{% trans "You will now receive an email when anyone edits " %}'+$this.attr('language_name')+' {% trans " subtitles for this video. You can stop these emails at any time." %}', 
-					"{% trans 'Now following ' %}"+$this.attr('language_name')+"{% trans ' subtitles' %}", 
-					function(button){
-						if (button == 'ALL'){
-							foloow_all($this.attr('video_id'));
-						}else if (button == 'OK'){
-							VideosApi.follow_language($this.attr('language_id'), function(response){
-				                if (response.error){
-				                    $.jGrowl.error(response.error);
-				                }else{
-				                    $.jGrowl(response.msg);
-				                    $('.follow-video').hide();
-				                    $('.unfollow-video').show();
-				                };
-							});
-						};
-					},options);					
-			}else{			
-				$.jConfirm('{% trans "You will now receive an email when anyone edits any subtitles for this video. You can stop these emails at any time." %}',
-					"{% trans 'Now following all subtitles' %}", 
-					function(button){
-						(button === 'OK') && foloow_all($this.attr('video_id'));	
-				});
-			};//else       
-        });
-    });
-    
     jQuery('.mirosubs-share .mirosubs-twitter-share').click(function(){
         jQuery.get('{% url statistic:tw_update_share_statistic %}');
     });
