@@ -1,6 +1,6 @@
 from haystack import indexes
 from django.db.models import signals
-from celery.decorators import task
+from utils.celery_utils import task
 from haystack import site
 from haystack.exceptions import NotRegistered
 from haystack.utils import get_identifier
@@ -24,19 +24,11 @@ class CelerySearchIndex(indexes.SearchIndex):
         
     def update_handler(self, instance, **kwargs):
         if not SEARCH_INDEX_UPDATE_OFF:
-            if not hasattr(self, 'publisher'):
-                self.publisher = update_search_index.get_publisher()    
-                        
-            update_search_index.apply_async(args=[instance.__class__, instance.pk],
-                                            publisher=self.publisher)
+            update_search_index.deplay(instance.__class__, instance.pk)
     
     def remove_handler(self, instance, **kwargs):
         if not SEARCH_INDEX_UPDATE_OFF:
-            if not hasattr(self, 'publisher'):
-                self.publisher = update_search_index.get_publisher()    
-                            
-            remove_search_index.apply_async(args=[instance.__class__, get_identifier(instance)],
-                                            publisher=self.publisher)
+            remove_search_index.delay(instance.__class__, get_identifier(instance))
 
 def log(*args, **kwargs):
     import sentry_logger

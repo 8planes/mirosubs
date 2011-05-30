@@ -1,4 +1,4 @@
-from celery.decorators import task
+from utils.celery_utils import task
 from django.utils import simplejson as json
 from django.utils.http import urlquote_plus
 import urllib

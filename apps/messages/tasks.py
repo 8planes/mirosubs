@@ -1,4 +1,4 @@
-from celery.decorators import task
+from utils.celery_utils import task
 from utils import send_templated_email
 from messages.models import Message
 from django.contrib.sites.models import Site
