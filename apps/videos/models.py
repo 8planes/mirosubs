@@ -956,6 +956,8 @@ class ActionRenderer(object):
             info = self.render_ADD_VERSION(item)
         elif item.action_type == Action.ADD_VIDEO_URL:
             info = self.redner_ADD_VIDEO_URL(item)
+        elif item.action_type == Action.ADD_TRANSLATION:
+            info = self.render_ADD_TRANSLATION(item)
         else:
             info = ''
         
@@ -1010,6 +1012,19 @@ class ActionRenderer(object):
             
         return msg % kwargs
     
+    def render_ADD_TRANSLATION(self, item):
+        kwargs = self._base_kwargs(item)
+        
+        kwargs['language'] = item.language.language_display()
+        kwargs['language_url'] = item.language.get_absolute_url()
+        
+        if item.user:
+            msg = _(u'started <a href="%(language_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')
+        else:
+            msg = _(u'<a href="%(language_url)s">%(language)s subtitles</a> started for <a href="%(video_url)s">%(video_name)s</a>')
+        
+        return msg % kwargs
+        
     def render_ADD_VERSION(self, item):
         kwargs = self._base_kwargs(item)
         
@@ -1019,7 +1034,7 @@ class ActionRenderer(object):
         if item.user:
             msg = _(u'edited <a href="%(language_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')
         else:
-            msg = _(u'<a href="%(language_url)s">%(language)s subtitles</a>  edited for <a href="%(video_url)s">%(video_name)s</a>')
+            msg = _(u'<a href="%(language_url)s">%(language)s subtitles</a> edited for <a href="%(video_url)s">%(video_name)s</a>')
         
         return msg % kwargs
     
@@ -1037,12 +1052,14 @@ class Action(models.Model):
     COMMENT = 3
     ADD_VERSION = 4
     ADD_VIDEO_URL = 5
+    ADD_TRANSLATION = 6
     TYPES = (
-        (ADD_VIDEO, u'add video'),
-        (CHANGE_TITLE, u'change title'),
-        (COMMENT, u'comment'),
-        (ADD_VERSION, u'add version'),
-        (ADD_VIDEO_URL, u'add video url')
+        (ADD_VIDEO, _(u'add video')),
+        (CHANGE_TITLE, _(u'change title')),
+        (COMMENT, _(u'comment')),
+        (ADD_VERSION, _(u'add version')),
+        (ADD_TRANSLATION, _(u'add translation')),
+        (ADD_VIDEO_URL, _(u'add video url'))
     )
     
     renderer = ActionRenderer('videos/_action_tpl.html')
@@ -1136,7 +1153,12 @@ class Action(models.Model):
         language = instance.language
         
         obj = cls(user=user, video=video, language=language)
-        obj.action_type = cls.ADD_VERSION
+        
+        if instance.version_no == 0:
+            obj.action_type = cls.ADD_TRANSLATION
+        else:
+            obj.action_type = cls.ADD_VERSION
+            
         obj.created = instance.datetime_started
         obj.save()            
     
