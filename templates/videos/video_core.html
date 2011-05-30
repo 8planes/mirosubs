@@ -2,7 +2,7 @@
 
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor %}
+{% load escapejs paginator widget comments i18n subtitles_tags teams_tags recent_activity media_compressor %}
 
 {% block css %}
     {% if video.thumbnail %}
@@ -25,30 +25,31 @@
         }
 
         .mirosubs-widget video {
-            width: 460px;
+            width: 480px;
         }
 
         #embed {
             white-space: pre;
             background: #eee;
-            boder: #666;
+            border: #666;
         }
 
-    .error_list {
-        color: #fa6343;
-    }
+        .error_list {
+            color: #fa6343;
+        }
 
-    .success-message {
-        color: #5ae26b;
-        margin: 5px 0 0;
-    }
+        .success-message {
+            color: #5ae26b;
+            margin: 5px 0 0;
+        }
 </style>
 {% endblock %}
 
 {% block scripts %}
-    {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
+    {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
     <script type="text/javascript">
     //create url template
@@ -78,9 +79,9 @@
 
     jQuery(document).ready(function($){
 
-        $("a.ajax_link").click(function(event){
-            update_page($(this).attr("href").value());
-        });
+        //$("a.ajax_link").click(function(event){
+            //update_page($(this).attr("href").value());
+        //});
 
 
         $('.version_checkbox:first').attr('checked', 'checked');
@@ -109,14 +110,14 @@
 
         $('#add_subtitles').click(function() {
             widget_widget_div.selectMenuItem(
-            mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+                mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
             return false;
         });
 
         $('.add-translation-behavior').click(function(e) {
             e.preventDefault();
             widget_widget_div.selectMenuItem(
-            mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
+                mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
             return false;
         });
 
@@ -190,28 +191,31 @@
     <hr />
 
 
-<div class="grid_3 left_nav_wrapper alpha">
+    <div class="grid_3 left_nav_wrapper alpha">
 
-    <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
-    {% upload_subtitles video %}
+        <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
+        {% upload_subtitles video %}
 
-    {% paste_transcription %}
+        {% paste_transcription %}
 
-      {% if user.is_staff and perms.videos.edit_video %}
+        {% if user.is_staff and perms.videos.edit_video %}
         <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
         <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank">
-          {% trans 'Edit in Admin Interface' %}
+            {% trans 'Edit in Admin Interface' %}
         </a>
-    {% endif %}
+        {% endif %}
 
-    {% team_add_video_select %}
+        {% team_add_video_select %}
 
-    <ul class="left_nav">
-        <li><a class="ajax_link" href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
-        {% include 'videos/_left_navigation.html' %}
-    </ul>
+        <ul class="left_nav">
+            <li li class="{% complete_color video.subtitle_language %}{% if not language %} active{% endif %}"class="active">
+                <a class="ajax_link" href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}
+                </a>
+            </li>
+            {% include 'videos/_left_navigation.html' %}
+        </ul>
 
-</div>
+    </div>
 
 <div class="wrap grid_9 omega" id="ajax_response">
     
