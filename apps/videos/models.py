@@ -1107,6 +1107,14 @@ class Action(models.Model):
             pass        
     
     @classmethod
+    def change_title_handler(cls, video, user):
+        action = cls(new_video_title=video.title, video=video)
+        action.user = user.is_authenticated() and user or None
+        action.created = datetime.now()
+        action.action_type = cls.CHANGE_TITLE
+        action.save()
+    
+    @classmethod
     def create_comment_handler(cls, sender, instance, created, **kwargs):
         if created:
             model_class = instance.content_type.model_class()

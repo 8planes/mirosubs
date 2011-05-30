@@ -19,6 +19,7 @@
 from django.test import TestCase
 from auth.models import CustomUser as User
 from django.core.urlresolvers import reverse
+from videos.models import Video, Action
 
 class TestViews(TestCase):
     
@@ -58,3 +59,12 @@ class TestViews(TestCase):
         data['username'] = other_user.username
         response = self.client.post(reverse('profiles:edit'), data=data)
         self.assertEqual(response.status_code, 200)
+        
+    def test_profile_page(self):
+        video = Video.objects.all()[0]
+        video.title = 'new title'
+        video.save()
+        Action.change_title_handler(video, self.user)
+        self.assertTrue(self.user.action_set.exists())
+        
+        self._simple_test('profiles:profile', [self.user.id])

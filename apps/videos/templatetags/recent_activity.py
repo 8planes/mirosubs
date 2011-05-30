@@ -27,14 +27,12 @@ register = template.Library()
 LIMIT = settings.RECENT_ACTIVITIES_ONPAGE
 
 @register.inclusion_tag('videos/_recent_activity.html')
-def recent_activity(user=None):
-    qs = Action.objects.all()
-    
-    if user:
-        qs = qs.filter(user=user)
+def recent_activity(user):
+    qs = Action.objects.filter(user=user)
     
     return {
-        'events': qs[:LIMIT]
+        'events': qs[:LIMIT],
+        'user_info': user
     }
 
 @register.inclusion_tag('videos/_video_activity.html')    

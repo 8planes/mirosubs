@@ -33,6 +33,7 @@ from django.db.models import Q
 from profiles.rpc import ProfileApiClass
 from utils.rpc import RpcRouter
 from utils.orm import LoadRelatedQuerySet
+from django.shortcuts import get_object_or_404
 
 rpc_router = RpcRouter('profiles:rpc_router', {
     'ProfileApi': ProfileApiClass()
@@ -150,4 +151,24 @@ def send_message(request):
         output['success'] = True
     else:
         output['errors'] = form.get_errors()
-    return HttpResponse(json.dumps(output), "text/javascript")    
+    return HttpResponse(json.dumps(output), "text/javascript")
+
+def actions_list(request, user_id):
+    try:
+        user = User.objects.get(username=user_id)
+    except User.DoesNotExist:
+        try:
+            user = User.objects.get(id=user_id)
+        except (User.DoesNotExist, ValueError):
+            raise Http404
+        
+    qs = Action.objects.filter(user=user)
+    extra_context = {
+        'user_info': user
+    }
+                
+    return object_list(request, queryset=qs, allow_empty=True,
+                       paginate_by=settings.ACTIVITIES_ONPAGE,
+                       template_name='profiles/actions_list.html',
+                       template_object_name='action',
+                       extra_context=extra_context)       

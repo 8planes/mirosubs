@@ -93,11 +93,7 @@ def ajax_change_video_title(request):
             video.title = title
             video.slug = slugify(video.title)
             video.save()
-            action = Action(new_video_title=video.title, video=video)
-            action.user = user.is_authenticated() and user or None
-            action.created = datetime.now()
-            action.action_type = Action.CHANGE_TITLE
-            action.save()
+            Action.change_title_handler(video, user)
             send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))          
     except Video.DoesNotExist:
         pass

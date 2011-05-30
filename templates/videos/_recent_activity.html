@@ -8,4 +8,4 @@
     {% endfor %}
 </ul>
 
-<a class="view_all" href="{% url videos:actions_list %}">{% trans 'View all' %}</a>
+<a class="view_all" href="{% url profiles:actions_list user_info.id %}">{% trans 'View all' %}</a>

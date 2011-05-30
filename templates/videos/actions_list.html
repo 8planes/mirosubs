@@ -3,9 +3,11 @@
 {% load paginator i18n %}
 
 {% block main_content %}
+	{% block h2 %}
+		<h2><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
+	{% endblock %}
+	
     {% if action_list %}
-        
-        <h2><a href="{{ video.get_absolute_url }}">{{ video }}</a></h2>
         
         {% if is_paginated %}{% paginator %}{% endif %}
         
