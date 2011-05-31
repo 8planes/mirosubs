@@ -52,7 +52,9 @@ mirosubs.widget.WidgetDecorator = function(videoPlayer) {
     mirosubs.Rpc.call(
         'show_widget', args, 
         goog.bind(this.controller_.initializeState, 
-                  this.controller_));
+                  this.controller_),
+        goog.bind(this.videoTab_.showError, 
+                  this.videoTab_));
 
     mirosubs.widget.Widget.widgetsCreated_.push(this);
 };

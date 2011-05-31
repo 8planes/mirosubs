@@ -34,6 +34,15 @@ mirosubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
  * Widget calls this when show_widget rpc call returns.
  */
 mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
+    try {
+        this.initializeStateImpl_(result);
+    }
+    catch (e) {
+        this.videoTab_.showError();
+    }
+};
+
+mirosubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result) {
     mirosubs.widget.WidgetController.makeGeneralSettings(result);
 
     var videoID = result['video_id'];
