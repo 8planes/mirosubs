@@ -41,6 +41,9 @@ class EffectiveSubtitle:
             'end_time': self.end_time,
             'sub_order': self.sub_order 
         }
+
+    def has_complete_timing(self):
+        return self.start_time != -1 and self.end_time != -1
     
     def for_generator(self):
         return {
