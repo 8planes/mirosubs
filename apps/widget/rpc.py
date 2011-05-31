@@ -93,7 +93,6 @@ class Rpc(BaseRpc):
             'subtitles': None,
         }
         return_value['video_urls']= video_urls
-
         
         if additional_video_urls is not None:
             for url in additional_video_urls:
