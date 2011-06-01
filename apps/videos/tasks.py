@@ -8,6 +8,17 @@ from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
 from celery.signals import task_failure, setup_logging
 from haystack import site
+from videos.models import VideoFeed
+from sentry.client.models import client
+
+@task
+def update_video_feed(video_feed_id):
+    try:
+        video_feed = VideoFeed.objects.get(pk=video_feed_id)
+        video_feed.update()
+    except VideoFeed:
+        msg = '**update_video_feed**. VideoFeed does not exist. ID: %s' % video_feed_id
+        client.create_from_text(msg, logger='celery')
 
 def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, einfo, **kwds):
     """

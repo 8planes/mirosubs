@@ -23,11 +23,14 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from profiles.forms import SelectLanguageForm, EditUserEmailForm
-from utils.rpc import RpcHttpResponse, add_request_to_kwargs, Error, Msg
+from utils.rpc import RpcHttpResponse, add_request_to_kwargs, Error, Msg, RpcExceptionEvent
 from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
 
 class ProfileApiClass(object):
+
+    def fire_exception(self, user):
+        raise Exception(1111)
     
     def select_languages(self, rdata, user):
         form = SelectLanguageForm(rdata)

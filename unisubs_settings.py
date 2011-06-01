@@ -47,6 +47,7 @@ elif INSTALLATION == STAGING:
     REDIS_DB = "2"
     AWS_QUEUE_PREFIX = 'STAGING'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    HAYSTACK_SOLR_URL = 'http://10.124.229.117:38983/solr/staging'
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-appsw
     try:
@@ -62,6 +63,7 @@ elif INSTALLATION == PRODUCTION:
     REDIS_DB = "1"
     AWS_QUEUE_PREFIX = 'PRODUCTION'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    HAYSTACK_SOLR_URL = 'http://10.124.229.117:38983/solr/production'
     EMAIL_SUBJECT_PREFIX = '[usubs-production]'
     EMAIL_BCC_LIST.append('socmedia@pculture.org')
     COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
@@ -85,6 +87,7 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     AWS_STORAGE_BUCKET_NAME = DEFAULT_BUCKET
     COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     COMPRESS_URL = MEDIA_URL
+    SOLR_ROOT = '/usr/share/'
 else:
     uslogging_db = {}
 

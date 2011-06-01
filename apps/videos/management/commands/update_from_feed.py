@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from videos.models import VideoFeed
+from videos.tasks import update_video_feed
 
 class Command(BaseCommand):
     
@@ -9,4 +10,4 @@ class Command(BaseCommand):
         for feed in VideoFeed.objects.all():
             print '-------------------------'
             print feed.url
-            print 'Checked new entries: ', feed.update()
+            update_video_feed.delay(feed.pk)
