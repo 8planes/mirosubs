@@ -12,6 +12,9 @@
         
         var update_language_display = function(){
             ProfileApi.get_user_languages(function(r){
+                if ( ! r){
+                    return
+                }
                 $('.language_bar span').remove();
                 var h = '';
                 for (l in r){

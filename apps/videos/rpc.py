@@ -24,7 +24,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from videos.models import Video, SubtitleLanguage
 from django.utils.translation import ugettext as _
-from utils.rpc import Error, Msg
+from utils.rpc import Error, Msg, RpcExceptionEvent
 
 class VideosApiClass(object):
     authentication_error_msg = _(u'You should be authenticated.')

@@ -58,10 +58,11 @@ class RpcRouter(object):
     """
     Router for jQuery.Rpc calls.
     """    
-    def __init__(self, url, actions={}, enable_buffer=True):
+    def __init__(self, url, actions={}, enable_buffer=True, max_retries=0):
         self.url = url
         self.actions = actions
         self.enable_buffer = enable_buffer
+        self.max_retries = max_retries
         
     def __call__(self, request, *args, **kwargs):
         """
@@ -69,7 +70,7 @@ class RpcRouter(object):
         """        
         user = request.user
         POST = request.POST
-
+        
         if POST.get('extAction'):
             #Forms with upload not supported yet
             requests = {
@@ -231,7 +232,8 @@ class RpcRouterJSONEncoder(simplejson.JSONEncoder):
             output = {
                 'url': reverse(o.url, args=self.url_args, kwargs=self.url_kwargs),
                 'enableBuffer': o.enable_buffer,
-                'actions': {}
+                'actions': {},
+                'maxRetries': o.max_retries
             }
             for name, action in o.actions.items():
                 output['actions'][name] = self._encode_action(action)

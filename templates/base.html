@@ -67,6 +67,7 @@
             $('#messages').remove();
             return false;
         });
+        
         $('li.search input').keypress(function(e) {
             if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
                 $('li.search form').submit();
@@ -74,6 +75,10 @@
             }
             else
                 return true;
+        });
+        
+        jQuery.Rpc.on('exception', function(e){
+            jQuery.jGrowl.error(e.message);
         });
     });
 </script>
