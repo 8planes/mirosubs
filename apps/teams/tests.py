@@ -310,19 +310,6 @@ class TeamDetailMetadataTest(TestCase):
         sls =  tv.searchable_languages()
         self.assertEquals(len(settings.ALL_LANGUAGES) - 1, len(sls))
 
-class TeamDetailTest(TestCase):
-    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
-
-    def setUp(self):
-        self.auth = {
-            "username": u"admin",
-            "password": u"admin"
-        }
-        self.user = User.objects.get(username=self.auth["username"])    
-
-    def test_basic_response(self):
-        pass
-
 class TeamsTest(TestCase):
     
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
@@ -401,6 +388,11 @@ class TeamsTest(TestCase):
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
         return response.context['team_video_md_list']
+
+    def _complete_search_record_list(self, team):
+        url = reverse("teams:completed_videos", kwargs={"slug": team.slug})
+        response = self.client.get(url)
+        return response.context['team_video_list']
     
     def test_add_video(self):
         self.client.login(**self.auth)
@@ -431,7 +423,27 @@ class TeamsTest(TestCase):
             self.fail()
         except TeamVideo.DoesNotExist:
             pass
-        
+
+    def test_complete_contents(self):
+        from widget.tests import create_two_sub_draft, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        create_two_sub_draft(request, completed=True)
+
+        team, new_team_video = self._create_new_team_video()
+        en = new_team_video.video.subtitle_language()
+        en.is_complete = True
+        en.save()
+        video = Video.objects.get(id=en.video.id)
+        self.assertEqual(True, video.is_complete)
+
+        reset_solr()
+
+        search_record_list = self._complete_search_record_list(team)
+        self.assertEqual(1, len(search_record_list))
+        search_record = search_record_list[0]
+        self.assertEqual(1, len(search_record.video_completed_langs))
+        self.assertEqual('en', search_record.video_completed_langs[0])
+
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
         self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
@@ -439,7 +451,9 @@ class TeamsTest(TestCase):
         reset_solr()
 
         # The video should be in the list. 
-        self.assertEqual(1, len(self._tv_search_record_list(team)))
+        record_list = self._tv_search_record_list(team)
+        self.assertEqual(1, len(record_list))
+        self.assertEqual(new_team_video.video.video_id, record_list[0].video_id)
 
     def test_detail_contents_original_subs(self):
         team, new_team_video = self._create_new_team_video()

@@ -553,16 +553,14 @@ class TestRpc(TestCase):
 
     def test_complete_but_not_synced(self):
         request = RequestMockup(self.user_0)
-        draft = create_two_sub_draft(request)
-        return_value = rpc.start_editing(
-            request, draft.video.video_id, 'en',
-            subtitle_language_pk=draft.language.pk)
-        draft_pk = return_value['draft_pk']
-        rpc.finished_subtitles(request, draft_pk, [], completed=True)
+        draft = create_two_sub_draft(request, completed=True)
         language = models.SubtitleLanguage.objects.get(pk=draft.language.pk)
         self.assertTrue(language.is_complete_and_synced())
         # right now video is complete.
         self.assertTrue(draft.video.is_complete)
+        completed_langs = draft.video.completed_subtitle_languages()
+        self.assertEquals(1, len(completed_langs))
+        self.assertEquals('en', completed_langs[0].language)
 
         return_value = rpc.start_editing(
             request, draft.video.video_id, 'en',
@@ -582,6 +580,34 @@ class TestRpc(TestCase):
         self.assertFalse(language.is_complete_and_synced())
         # since we have one unsynced subtitle, the video is no longer complete.
         self.assertFalse(video.is_complete)
+        self.assertEquals(0, len(draft.video.completed_subtitle_languages()))
+
+    def test_complete_with_incomplete_translation(self):
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_draft(request, completed=True)
+        sl_en = draft.video.subtitle_language('en')
+        response = rpc.start_editing(
+            request, draft.video.video_id, 'es', base_language_pk=sl_en.pk)
+        draft_pk = response['draft_pk']
+        # only covering one.
+        inserted = [{'subtitle_id': 'a', 'text': 'a_es'}]
+        rpc.save_subtitles(
+            request, draft_pk, 
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+        video = Video.objects.get(pk=draft.video.pk)
+        self.assertTrue(video.is_complete)
+        self.assertEquals(1, len(video.completed_subtitle_languages()))
+        self.assertEquals(
+            'en', video.completed_subtitle_languages()[0].language)
+
+    def test_incomplete_with_complete_translation(self):
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_dependent_draft(request)
+        # we now have a 100% translation of an incomplete language.
+        video = Video.objects.get(pk=draft.video.pk)
+        self.assertFalse(video.is_complete)
+        self.assertEquals(0, len(video.completed_subtitle_languages()))
 
     def test_finish_then_other_user_opens(self):
         request_0 = RequestMockup(self.user_0)
@@ -1385,7 +1411,7 @@ class TestRpc(TestCase):
             rpc.finished_subtitles(request, draft_pk, [_make_packet()])
         return models.SubtitleDraft.objects.get(pk=draft_pk)
 
-def create_two_sub_draft(request):
+def create_two_sub_draft(request, completed=None):
     return_value = rpc.show_widget(
         request,
         'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
@@ -1405,7 +1431,7 @@ def create_two_sub_draft(request):
                  'sub_order': 2.0}]
     rpc.save_subtitles(request, draft_pk, 
                        [_make_packet(inserted=inserted)])
-    rpc.finished_subtitles(request, draft_pk, [_make_packet()])
+    rpc.finished_subtitles(request, draft_pk, [_make_packet()], completed)
     return models.SubtitleDraft.objects.get(pk=draft_pk)
 
 def create_two_sub_dependent_draft(request):
