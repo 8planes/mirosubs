@@ -62,28 +62,8 @@
         //set values from arguents
         return DIFFING_URL.replace(/<<first_pk>>/, first_pk).replace(/<<second_pk>>/, second_pk);
     }
-    var update_page = function(url) {
-        var title = $("#title").val()
-        var slug = $("#slug").val()
-        if (title != "" && slug != "") {
-            var data = { title:title, slug:slug };
-            var args = { type:"POST", url:url, data:data, complete:done };
-            $.ajax(args);
-        }
-        else {
-            // display an explanation of failure
-        }
-        return false;
-    };
-
-
+    
     jQuery(document).ready(function($){
-
-        //$("a.ajax_link").click(function(event){
-            //update_page($(this).attr("href").value());
-        //});
-
-
         $('.version_checkbox:first').attr('checked', 'checked');
 
         $('.version_checkbox').change(function(){
@@ -209,7 +189,7 @@
 
         <ul class="left_nav">
             <li li class="{% complete_color video.subtitle_language %}{% if not language %} active{% endif %}"class="active">
-                <a class="ajax_link" href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}
+                <a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}
                 </a>
             </li>
             {% include 'videos/_left_navigation.html' %}
@@ -217,7 +197,12 @@
 
     </div>
 
-<div class="wrap grid_9 omega" id="ajax_response">
+<div class="wrap grid_9 omega">
+    {% if not language %}
+        {% include "videos/_info.html" %}
+    {% else %}
+        {% include "videos/_history.html" %}
+    {% endif %}
     
 </div>
 {% endblock %}

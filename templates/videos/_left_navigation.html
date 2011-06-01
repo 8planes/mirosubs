@@ -1,7 +1,7 @@
 {% load i18n subtitles_tags %}
     {% if video.subtitle_language %}
         <li class="{% complete_color video.subtitle_language %}{% if language.is_original %} active{% endif %}">
-            <a class="ajax_link" href="{{ video.subtitle_language.get_absolute_url }}">
+            <a href="{{ video.subtitle_language.get_absolute_url }}">
                 <span class="done_indicator"></span>
                 {{ video.subtitle_language.language_display }}
                 <span class="done_percentage">({% complete_indicator video.subtitle_language %})</span>
@@ -11,7 +11,7 @@
     {% if translations %} 
       {% for item in translations %}  
          <li class="{% complete_color item %}{% if language == item %} active{% endif %}">
-             <a class="ajax_link" href="{{ item.get_absolute_url }}">
+             <a href="{{ item.get_absolute_url }}">
                  <span class="done_indicator"></span>
                  {{ item.get_language_display }}
                  <span class="done_percentage">({% complete_indicator item %})</span>

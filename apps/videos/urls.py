@@ -56,10 +56,10 @@ urlpatterns = patterns(
     url(r'^(?P<video_id>(\w|-)+)/(?P<lang>[\w\-]+)/$', 'legacy_history', name='translation_history_legacy'),
     url(r'(?P<video_id>(\w|-)+)/staff/delete/$', 'video_staff_delete', name='video_staff_delete'),
 
-    #new ajax addresses
-    url(r'^(?P<video_id>(\w|-)+)/$', 'video_core', name='history'),
-    url(r'(?P<video_id>(\w|-)+)/info/$', 'video_core', name='video'),
-    url(r'(?P<video_id>(\w|-)+)/info/(?P<title>[^/]+)/$', 'video_core', name='video_with_title'),
-    url(r'(?P<video_id>(\w|-)+)/url/(?P<video_url>\d+)/$', '_ajax_video', name='video_url'),
-    url(r'^(?P<video_id>(\w|-)+)/(?P<lang>[\w\-]+)/(?P<lang_id>[\d]+)/$', 'video_core', name='translation_history'),
+    #new video_core addresses
+    url(r'^(?P<video_id>(\w|-)+)/$', 'video_history', name='history'),
+    url(r'(?P<video_id>(\w|-)+)/info/$', 'video_info', name='video'),
+    url(r'(?P<video_id>(\w|-)+)/info/(?P<title>[^/]+)/$', 'video_info', name='video_with_title'),
+    url(r'(?P<video_id>(\w|-)+)/url/(?P<video_url>\d+)/$', 'video_info', name='video_url'),
+    url(r'^(?P<video_id>(\w|-)+)/(?P<lang>[\w\-]+)/(?P<lang_id>[\d]+)/$', 'video_history', name='translation_history'),
 )
