@@ -85,6 +85,7 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     AWS_STORAGE_BUCKET_NAME = DEFAULT_BUCKET
     COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     COMPRESS_URL = MEDIA_URL
+    SOLR_ROOT = '/usr/share/'
 else:
     uslogging_db = {}
 
