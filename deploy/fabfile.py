@@ -233,6 +233,20 @@ def bounce_memcached():
         env.host_string = DEV_HOST
     sudo(env.memcached_bounce_cmd)
 
+def update_solr_schema():
+    if env.admin_dir:
+        env.host_string = ADMIN_HOST
+        dir = env.admin_dir
+    else:
+        env.host_string = DEV_HOST
+        dir = env.web_dir
+        python_exe = '{0}/env/bin/python'.format(env.web_dir)
+        with cd(os.path.join(dir, 'mirosubs')):
+            _git_pull()
+            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
+            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
+            sudo('service tomcat6 restart')
+            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
 
 def _bounce_celeryd():
     if env.admin_dir:
