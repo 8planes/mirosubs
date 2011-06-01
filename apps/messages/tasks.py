@@ -11,7 +11,7 @@ def send_new_message_notification(message_id):
         message = Message.objects.get(pk=message_id)
     except Message.DoesNotExist:
         msg = '**send_new_message_notification**. Message does not exist. ID: %s' % message_id
-        client.create_from_text(msg, data=dict(), logger='celery')
+        client.create_from_text(msg, logger='celery')
         return
     
     user = message.user
