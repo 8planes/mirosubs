@@ -85,7 +85,7 @@ class SubtitleVersionAdmin(admin.ModelAdmin):
         return "0 %"
 
     def text_changes(self, obj):
-        if obj.text_changes:
+        if obj.text_change:
             return '%s %%' % int(obj.text_change * 100)
         return "0 %"
     
