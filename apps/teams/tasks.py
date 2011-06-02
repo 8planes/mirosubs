@@ -6,6 +6,7 @@ from celery.decorators import periodic_task
 from celery.schedules import crontab
 from datetime import datetime
 from django.db.models import F
+from django.utils.translation import ugettext_lazy as _
 
 @periodic_task(run_every=crontab(minute=0, hour=6))
 def add_videos_notification(*args, **kwargs):
@@ -13,7 +14,7 @@ def add_videos_notification(*args, **kwargs):
     
     domain = Site.objects.get_current().domain
     
-    qs = Team.objects.filter(teamvideo__created__gte=F('last_notification_time'))
+    qs = Team.objects.filter(teamvideo__created__gte=F('last_notification_time')).distinct()
 
     for team in qs:
         team_videos = TeamVideo.objects.filter(team=team, created__gte=team.last_notification_time)
@@ -24,7 +25,7 @@ def add_videos_notification(*args, **kwargs):
         team.last_notification_time = datetime.now()
         team.save()
         
-        subject = u'New %s videos ready for subtitling!' % team
+        subject = _(u'New %(team)s videos ready for subtitling!') % dict(team=team)
 
         for user in members:
             if not user.email:
@@ -36,6 +37,7 @@ def add_videos_notification(*args, **kwargs):
                 'team': team,
                 'team_videos': team_videos
             }
+
             send_templated_email(user.email, subject, 
                                  'teams/email_new_videos.html',
                                  context, fail_silently=not settings.DEBUG)

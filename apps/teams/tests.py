@@ -8,18 +8,14 @@ from django.core.urlresolvers import reverse
 from os import path
 
 from django.conf import settings
-from teams import models as tmodels
-from apps.teams.forms import AddTeamVideoForm
 from teams.models import Team, Invite, TeamVideo, \
-    Application, TeamMember, TeamVideoLanguage, TeamVideoLanguagePair
+    Application, TeamMember, TeamVideoLanguage
 from messages.models import Message
-from videos import models as vmodels
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage
 from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
 from teams import tasks
-from django.core import mail
 from datetime import datetime, timedelta
 from django.core.management import call_command
 from django.core import mail
@@ -36,7 +32,7 @@ def reset_solr():
     sb.clear()
     call_command('update_index')
 
-class TestCommands(TestCase):
+class TestNotification(TestCase):
     
     fixtures = ["test.json"]
     
@@ -62,6 +58,12 @@ class TestCommands(TestCase):
         self.tv2.save()
         
     def test_new_team_video_notification(self):
+        #check initial data
+        self.assertEqual(self.team.teamvideo_set.count(), 2)
+        self.assertEqual(self.team.users.count(), 1)
+
+        today = datetime.today()
+        
         #mockup for send_templated_email to test context of email
         import utils
         
@@ -71,20 +73,14 @@ class TestCommands(TestCase):
             send_templated_email_mockup.context = body_dict
             send_templated_email(to, subject, body_template, body_dict, *args, **kwargs)
         
-        utils.send_templated_email = send_templated_email_mockup
+        utils.send_templated_email = send_templated_email_mockup        
+        reload(tasks)
         
-        #check initial data
-        self.assertEqual(self.team.teamvideo_set.count(), 2)
-        self.assertEqual(self.team.users.count(), 1)
-
-        today = datetime.today()
-        date = today - timedelta(hours=24)
-
         #test notification about two new videos
         TeamVideo.objects.filter(pk__in=[self.tv1.pk, self.tv2.pk]).update(created=datetime.today())
-        self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 2)
+        self.assertEqual(TeamVideo.objects.filter(created__gte=self.team.last_notification_time).count(), 2)
         mail.outbox = []
-        call_command('new_team_video_notification')
+        tasks.add_videos_notification.delay()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, [self.user.email])
         self.assertEqual(len(send_templated_email_mockup.context['team_videos']), 2)
@@ -93,14 +89,14 @@ class TestCommands(TestCase):
         self.user.is_active = False
         self.user.save()
         mail.outbox = []
-        call_command('new_team_video_notification')
+        tasks.add_videos_notification.delay()
         self.assertEqual(len(mail.outbox), 0)
         
         self.user.is_active = True
         self.user.changes_notification = False
         self.user.save()
         mail.outbox = []
-        call_command('new_team_video_notification')
+        tasks.add_videos_notification.delay()
         self.assertEqual(len(mail.outbox), 0)        
 
         self.user.changes_notification = True
@@ -108,27 +104,27 @@ class TestCommands(TestCase):
         self.tm.changes_notification = False
         self.tm.save()
         mail.outbox = []
-        call_command('new_team_video_notification')
+        tasks.add_videos_notification.delay()
         self.assertEqual(len(mail.outbox), 0)    
 
         self.tm.changes_notification = True
         self.tm.save()
         
         #test notification if one video is new
-        past_date = today - timedelta(days=2)
+        past_date = self.team.last_notification_time - timedelta(days=1)
         TeamVideo.objects.filter(pk=self.tv1.pk).update(created=past_date)
-        self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 1)
+        self.assertEqual(TeamVideo.objects.filter(created__gte=self.team.last_notification_time).count(), 1)
         mail.outbox = []
-        call_command('new_team_video_notification')
+        tasks.add_videos_notification.delay()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(len(send_templated_email_mockup.context['team_videos']), 1)
         self.assertEqual(send_templated_email_mockup.context['team_videos'][0], self.tv2)
         
         #test notification if all videos are old
         TeamVideo.objects.filter(pk__in=[self.tv1.pk, self.tv2.pk]).update(created=past_date)
-        self.assertEqual(TeamVideo.objects.filter(created__gte=date).count(), 0)
+        self.assertEqual(TeamVideo.objects.filter(created__gte=self.team.last_notification_time).count(), 0)
         mail.outbox = []
-        call_command('new_team_video_notification')
+        tasks.add_videos_notification.delay()
         self.assertEqual(len(mail.outbox), 0)
         
 class TestTasks(TestCase):
@@ -141,60 +137,6 @@ class TestTasks(TestCase):
         self.team = Team.objects.all()[0]
         tv = TeamVideo(team=self.team, video=self.sl.video, added_by=self.team.users.all()[:1].get())
         tv.save()
-        
-    def test_add_video_notification(self):
-        team = self.tv.team
-        
-        #at list one user should receive email
-        self.assertTrue(team.users.count() > 1)
-        mail.outbox = []
-        
-        result = tasks.add_video_notification.delay(self.tv.id)
-        if result.failed():
-            self.fail(result.traceback)        
-
-        self.assertEqual(len(mail.outbox), 2)
-        
-        for email in mail.outbox:
-            u = team.users.get(email=email.to[0])
-            self.assertTrue(u != self.tv.added_by and u.is_active and u.changes_notification)
-        
-        #test changes_notification and is_active
-        mail.outbox = []
-        some_member = team.users.exclude(pk=self.tv.added_by_id)[:1].get()
-        some_member.changes_notification = False
-        some_member.save()
-
-        result = tasks.add_video_notification.delay(self.tv.id)
-        if result.failed():
-            self.fail(result.traceback)        
-        
-        self.assertEqual(len(mail.outbox), 1)
-        
-        mail.outbox = []
-        some_member.changes_notification = True
-        some_member.is_active = False
-        some_member.save()        
-
-        result = tasks.add_video_notification.delay(self.tv.id)
-        if result.failed():
-            self.fail(result.traceback)        
-        
-        self.assertEqual(len(mail.outbox), 1)
-
-        mail.outbox = []
-        some_member.is_active = True
-        some_member.save()    
-        
-        tm = TeamMember.objects.get(team=team, user=some_member)
-        tm.changes_notification = False
-        tm.save()
-
-        result = tasks.add_video_notification.delay(self.tv.id)
-        if result.failed():
-            self.fail(result.traceback)        
-        
-        self.assertEqual(len(mail.outbox), 1)
 
 class TeamDetailMetadataTest(TestCase):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
