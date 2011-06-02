@@ -31,6 +31,7 @@ from django.conf import settings
 from django.utils import simplejson as json
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
+from django.utils.html import escape, urlize
 
 MESSAGE_MAX_LENGTH = getattr(settings,'MESSAGE_MAX_LENGTH', 1000)
 
@@ -98,7 +99,8 @@ class Message(models.Model):
     
     def get_content(self):
         content = []
-        self.content and content.append(self.content) and content.append('\n')
+
+        self.content and content.append(urlize(escape(self.content))) and content.append('\n')
         
         if self.object:
             added_content = self.object.render_message()
