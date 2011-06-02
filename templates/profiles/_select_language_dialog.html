@@ -56,8 +56,10 @@
                 }else{
                     $w.html('{% trans "Saving your language settings..." %}');
                     ProfileApi.select_languages(values, function(){
-                        window.location.reload(true);
-                    });
+                            window.location.reload(true);
+                        }, function(){
+                            $w.modClose();
+                        });
                 }
 
                 return false;
