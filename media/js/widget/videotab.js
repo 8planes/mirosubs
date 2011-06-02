@@ -33,6 +33,7 @@ mirosubs.widget.VideoTab = function(opt_forAnchoring) {
     this.nudgeClickCallback_ = null;
     this.shareSpanElem_ = null;
     this.shareElem_ = null;
+    this.showingError_ = false;
     this.forAnchoring_ = !!opt_forAnchoring;
     this.spinnerGifURL_ = mirosubs.imageAssetURL('spinner.gif');
     this.logoURL_ = mirosubs.imageAssetURL('small_logo.png');
@@ -78,6 +79,11 @@ mirosubs.widget.VideoTab.prototype.showLoading = function() {
 mirosubs.widget.VideoTab.prototype.showError = function() {
     this.imageElem_.src = this.logoURL_;
     goog.dom.setTextContent(this.spanElem_, "Subs Unavailable");
+    this.showingError_ = true;
+};
+
+mirosubs.widget.VideoTab.prototype.isShowingError = function() {
+    return this.showingError_;
 };
 
 /**
