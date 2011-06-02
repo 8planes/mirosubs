@@ -36,6 +36,7 @@ from django.contrib.sites.models import Site
 from teams.tasks import update_one_team_video
 from apps.videos.models import SubtitleLanguage
 from haystack.query import SQ
+import datetime 
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
@@ -88,6 +89,7 @@ class Team(models.Model):
     page_content = models.TextField(_(u'Page content'), blank=True, help_text=_(u'You can use murkdown. This will replace Description.'))
     is_moderated = models.BooleanField(default=False)
     header_html_text = models.TextField(blank=True, default='', help_text=_(u"HTML that appears at the top of the teams page."))
+    last_notification_time = models.DateTimeField(editable=False, default=datetime.datetime.now)
     
     objects = TeamManager()
     

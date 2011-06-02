@@ -2,40 +2,43 @@ from utils.celery_utils import task
 from utils import send_templated_email
 from django.contrib.sites.models import Site
 from django.conf import settings
+from celery.decorators import periodic_task
+from celery.schedules import crontab
+from datetime import datetime
+from django.db.models import F
 
-@task()
-def add_video_notification(team_video_id):
-    """
-    Celery task for sending emails to members about new video in team.
-    NOTE: It not used now(see command fill_team_video_language), but can be useful in future.
-    """
+@periodic_task(run_every=crontab(minute=0, hour=6))
+def add_videos_notification(*args, **kwargs):
     from teams.models import TeamVideo, Team
     
     domain = Site.objects.get_current().domain
     
-    try:
-        tv = TeamVideo.objects.get(pk=team_video_id)
-    except TeamVideo.DoesNotExist:
-        return
+    qs = Team.objects.filter(teamvideo__created__gte=F('last_notification_time'))
 
-    qs = tv.team.users.exclude(pk=tv.added_by).filter(changes_notification=True, is_active=True) \
-        .filter(teammember__changes_notification=True)
-    
-    subject = u'New %s videos ready for subtitling!' % tv.team
-    
-    for user in qs:
-        if not user.email:
-            continue
+    for team in qs:
+        team_videos = TeamVideo.objects.filter(team=team, created__gte=team.last_notification_time)
+
+        members = team.users.filter(changes_notification=True, is_active=True) \
+            .filter(teammember__changes_notification=True)
+
+        team.last_notification_time = datetime.now()
+        team.save()
         
-        context = {
-            'domain': domain,
-            'user': user,
-            'team': tv.team,
-            'team_video': tv
-        }
-        send_templated_email(user.email, subject, 
-                             'teams/email_new_video.html',
-                             context, fail_silently=not settings.DEBUG)    
+        subject = u'New %s videos ready for subtitling!' % team
+
+        for user in members:
+            if not user.email:
+                continue
+            
+            context = {
+                'domain': domain,
+                'user': user,
+                'team': team,
+                'team_videos': team_videos
+            }
+            send_templated_email(user.email, subject, 
+                                 'teams/email_new_videos.html',
+                                 context, fail_silently=not settings.DEBUG)
 
 @task()
 def update_one_team_video(team_video_id):

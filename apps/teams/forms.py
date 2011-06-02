@@ -125,7 +125,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     
     class Meta:
         model = TeamVideo
-        fields = ('video_url', 'title', 'description', 'thumbnail')
+        fields = ('video_url', 'language', 'title', 'description', 'thumbnail')
         
     def __init__(self, team, *args, **kwargs):
         self.team = team

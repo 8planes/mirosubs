@@ -27,3 +27,4 @@ disabled
 server_local_settings.py
 /mediabundles_list.py
 deploy/build/*
+celerybeat-schedule
