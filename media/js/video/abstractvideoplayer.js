@@ -168,7 +168,10 @@ mirosubs.video.AbstractVideoPlayer.prototype.createCaptionView = function(){
         var box = new goog.math.Rect(offset.x, offset.y,  
                                  size.width, size.height );
         this.captionView_.setUpPositioning(box);
-        this.getParent().addChild(this.captionView_, true);
+        this.captionView_.createDom();
+        var videoOffsetParent = this.getElement().offsetParent || goog.dom.getOwnerDocument(this.getElement()).body;
+        goog.dom.appendChild(videoOffsetParent, this.captionView_.getElement());
+        
     }
 };
 

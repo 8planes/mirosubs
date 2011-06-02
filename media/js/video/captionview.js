@@ -162,7 +162,7 @@ mirosubs.video.CaptionView.prototype.redrawInternal = function(){
        captionSize.height == this.oldSize_.height){
         return;
     }
-    var newTop = (this.boundingBox_.height - captionSize.height ) - 
+    var newTop = (this.boundingBox_.top + this.boundingBox_.height - captionSize.height ) - 
         mirosubs.video.CaptionView.VERTICAL_MARGIN;
     mirosubs.style.setPosition(this.getElement(), this.captionLeft_, newTop);
     if (this.needsIFrame_ && this.captionBgElem_) {
