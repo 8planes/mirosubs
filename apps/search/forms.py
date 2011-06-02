@@ -73,6 +73,6 @@ class SearchForm(forms.Form):
         if ordering:
             qs = qs.order_by('-'+ordering)
         else:
-            qs = qs.order_by('-week_views')
+            qs = qs.order_by('-languages_count')
             
         return qs
