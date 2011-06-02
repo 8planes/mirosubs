@@ -14,17 +14,17 @@ def add_videos_notification(*args, **kwargs):
     
     domain = Site.objects.get_current().domain
     
-    qs = Team.objects.filter(teamvideo__created__gte=F('last_notification_time')).distinct()
-
+    qs = Team.objects.filter(teamvideo__created__gt=F('last_notification_time')).distinct()
+    
     for team in qs:
-        team_videos = TeamVideo.objects.filter(team=team, created__gte=team.last_notification_time)
+        team_videos = TeamVideo.objects.filter(team=team, created__gt=team.last_notification_time)
+
+        team.last_notification_time = datetime.now()
+        team.save()
 
         members = team.users.filter(changes_notification=True, is_active=True) \
             .filter(teammember__changes_notification=True)
 
-        team.last_notification_time = datetime.now()
-        team.save()
-        
         subject = _(u'New %(team)s videos ready for subtitling!') % dict(team=team)
 
         for user in members:
