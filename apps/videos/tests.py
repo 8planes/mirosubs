@@ -1187,7 +1187,7 @@ class TestPercentComplete(TestCase):
     
     fixtures = ['test.json']
 
-    def _create_trans(self, latest_version, lang_code, forked=False):
+    def _create_trans(self, latest_version=None, lang_code=None, forked=False):
         translation = SubtitleLanguage()
         translation.video = self.video
         translation.language = lang_code
@@ -1199,14 +1199,17 @@ class TestPercentComplete(TestCase):
         
         v = SubtitleVersion()
         v.language = translation
-        v.version_no = latest_version.version_no+1
+        if latest_version:
+            v.version_no = latest_version.version_no+1
+        else:
+            v.version_no = 1
         v.datetime_started = datetime.now()
         v.save()
         
         self.translation_version = v
-        
-        for s in latest_version.subtitle_set.all():
-            s.duplicate_for(v).save()
+        if latest_version is not None:
+            for s in latest_version.subtitle_set.all():
+                s.duplicate_for(v).save()
         return translation
         
     def setUp(self):
@@ -1294,16 +1297,18 @@ class TestPercentComplete(TestCase):
         self.assertFalse(self.video.is_complete, False)
         new_lang.is_complete = True             
         new_lang.save()
+        metadata_manager.update_metadata(self.video.pk)
         self.assertTrue(self.video.is_complete)
                                                
-    def test_video_complete_forked_complete(self):                                      
+    def test_video_0_subs_are_never_complete(self):                                      
         self.original_language = self.video.subtitle_language()
-        latest_version = self.original_language.latest_version()
-        new_lang = self._create_trans(latest_version, 'pt', True)
+        new_lang = self._create_trans(None, 'it', True)
         self.assertFalse(self.video.is_complete, False)
-        new_lang.percent_done = 100
+        metadata_manager.update_metadata(self.video.pk)
         new_lang.save()
-        self.assertTrue(self.video.is_complete)
+        self.video.subtitlelanguage_set.all().filter(percent_done=100).delete()
+        print [(x.is_complete, x.subtitle_count, x.percent_done) for x in self.video.subtitlelanguage_set.all()]
+        self.assertFalse(self.video.is_complete)
             
 from videos import alarms
 from django.conf import settings

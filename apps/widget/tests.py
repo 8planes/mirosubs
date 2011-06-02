@@ -551,6 +551,37 @@ class TestRpc(TestCase):
         sl = v.subtitle_language('en')
         self.assertFalse(sl.is_complete)
 
+    def test_complete_but_not_synced(self):
+        request = RequestMockup(self.user_0)
+        draft = create_two_sub_draft(request)
+        return_value = rpc.start_editing(
+            request, draft.video.video_id, 'en',
+            subtitle_language_pk=draft.language.pk)
+        draft_pk = return_value['draft_pk']
+        rpc.finished_subtitles(request, draft_pk, [], completed=True)
+        language = models.SubtitleLanguage.objects.get(pk=draft.language.pk)
+        self.assertTrue(language.is_complete_and_synced())
+        # right now video is complete.
+        self.assertTrue(draft.video.is_complete)
+
+        return_value = rpc.start_editing(
+            request, draft.video.video_id, 'en',
+            subtitle_language_pk=draft.language.pk)
+        inserted = [{'subtitle_id': 'c',
+                     'text': 'unsynced sub',
+                     'start_time': -1,
+                     'end_time': -1,
+                     'sub_order': 3.0}]
+        rpc.save_subtitles(
+            request, return_value['draft_pk'],
+            [_make_packet(inserted=inserted)])
+        rpc.finished_subtitles(request, return_value['draft_pk'], 
+                               [], completed=True)
+        video = Video.objects.get(pk=draft.video.pk)
+        language = video.subtitle_language()
+        self.assertFalse(language.is_complete_and_synced())
+        # since we have one unsynced subtitle, the video is no longer complete.
+        self.assertFalse(video.is_complete)
 
     def test_finish_then_other_user_opens(self):
         request_0 = RequestMockup(self.user_0)
