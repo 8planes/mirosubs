@@ -63,12 +63,12 @@ mirosubs.widget.SubtitleController = function(
 mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ = 
     function(e) 
 {
+    e.preventDefault();
     mirosubs.Tracker.getInstance().track('videoTabClicked');
     if (!this.dropDown_.hasSubtitles())
         this.openSubtitleDialog();
     else
         this.dropDown_.toggleShow();
-    e.preventDefault();
 };
 
 mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
