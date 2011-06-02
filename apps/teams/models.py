@@ -254,6 +254,8 @@ class Team(models.Model):
                 langs + pairs_m + pairs_0).exclude(
                 original_language__in=languages))
         mqs = MultiQuerySet(*[qs for qs in qs_list if qs is not None])
+        # this is way more efficient than making a count from all the 
+        # constituent querysets.
         mqs.set_count(TeamVideo.objects.filter(team=self).count())
 
         return qs_list, mqs

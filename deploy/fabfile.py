@@ -209,6 +209,7 @@ def remove_disabled():
         sudo('/etc/init.d/cron start')
 
 def update_web():
+    #update_translations()
     for host in env.web_hosts:
         env.host_string = host
         with cd('{0}/mirosubs'.format(env.web_dir)):
@@ -225,6 +226,7 @@ def update_web():
         with cd(os.path.join(env.admin_dir, 'mirosubs')):
             _git_pull()
     _bounce_celeryd()
+    
 
 def bounce_memcached():
     if env.admin_dir:
@@ -233,6 +235,20 @@ def bounce_memcached():
         env.host_string = DEV_HOST
     sudo(env.memcached_bounce_cmd)
 
+def update_solr_schema():
+    if env.admin_dir:
+        env.host_string = ADMIN_HOST
+        dir = env.admin_dir
+    else:
+        env.host_string = DEV_HOST
+        dir = env.web_dir
+        python_exe = '{0}/env/bin/python'.format(env.web_dir)
+        with cd(os.path.join(dir, 'mirosubs')):
+            _git_pull()
+            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
+            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
+            sudo('service tomcat6 restart')
+            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
 
 def _bounce_celeryd():
     if env.admin_dir:
@@ -298,3 +314,21 @@ def promote_django_admins(email=None, new_password=None, userlist_path=None):
     """
     env.host_string = env.web_hosts[0]
     return _promote_django_admins(env.web_dir, email, new_password, userlist_path)
+
+def update_translations():
+    """
+    What it does:
+    - Pushes new strings in english and new languages to transifex.
+    - Pulls all changes from transifex, for all languages
+    - Adds only the *.mo and *.po files to the index area
+    - Commits to the rep with a predefined message
+    - Pushes to origon.
+
+    Caveats:
+    - If any of these steps fail, it will stop execution
+    - At some point, this is pretty much about syncing two reps, so conflicts can appear
+    - This assumes that we do not edit translation .po files on the file system.
+    - This assumes that we want to push with a "git push".
+    - You must have the  .transifexrc file into your home (this has auth credentials is stored outside of source control)
+    """
+    run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))

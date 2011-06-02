@@ -445,6 +445,11 @@ class Video(models.Model):
                 return True
         return False
 
+    def completed_subtitle_languages(self):
+        return [sl for sl 
+                in self.subtitlelanguage_set.all()
+                if sl.is_complete_and_synced()]
+
 def create_video_id(sender, instance, **kwargs):
     instance.edited = datetime.now()
     if not instance or instance.video_id:
@@ -506,8 +511,12 @@ class SubtitleLanguage(models.Model):
     def is_complete_and_synced(self):
         if not self.is_dependent() and not self.is_complete:
             return False
-        if self.is_dependent() and self.percent_done != 100:
-            return False
+        if self.is_dependent():
+            if self.percent_done != 100:
+                return False
+            standard_lang = self.real_standard_language()
+            if not standard_lang or not standard_lang.is_complete:
+                return False
         subtitles = self.latest_subtitles()
         if len(subtitles) == 0:
             return False

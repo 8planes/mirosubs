@@ -50,6 +50,7 @@ from teams.rpc import TeamsApi
 from utils.orm import LoadRelatedQuerySet
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
+from haystack.query import SearchQuerySet
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -149,7 +150,7 @@ def detail(request, slug, is_debugging=False, languages=None):
                 'languages': languages
             })
         return render_to_response("teams/detail-debug.html", extra_context, RequestContext(request))
-    
+
     return object_list(request, queryset=mqs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/detail.html', 
@@ -198,29 +199,12 @@ def detail_old(request, slug, is_debugging=False, languages=None):
                        template_object_name='team_video_md')
 
 
-class CompletedVideosQS(LoadRelatedQuerySet):
-
-    def update_result_cache(self):
-        #get all videos from QuerySet cache that has no complete_langs_cache yet
-        videos = dict((v.video_id, v) for v in self._result_cache if not hasattr(v, 'complete_langs_cache'))
-        
-        if videos:
-            for v in videos.values():
-                v.complete_langs_cache = []
-            
-            #select completed SubtitleLanguages for videos    
-            langs_qs = SubtitleLanguage.objects.select_related('video').filter(is_complete=True, video__id__in=videos.keys())
-
-            #fill cache
-            for l in langs_qs:
-                videos[l.video_id].complete_langs_cache.append(l)      
-
 def completed_videos(request, slug):
     team = Team.get(slug, request.user)
     
-    qs = team.teamvideo_set.exclude(video__complete_date__isnull=True) \
-        .select_related('video').order_by('-video__complete_date')
-        
+    qs = SearchQuerySet().models(TeamVideo).filter(team_id=team.id) \
+        .filter(is_complete=True).order_by('-video_complete_date')
+
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({
         'team': team
@@ -232,14 +216,12 @@ def completed_videos(request, slug):
             'base_state': {}
         })
 
-    qs = qs._clone(CompletedVideosQS)
-
     return object_list(request, queryset=qs, 
                        paginate_by=VIDEOS_ON_PAGE, 
                        template_name='teams/completed_videos.html', 
                        extra_context=extra_context, 
                        template_object_name='team_video')    
-    
+
 def detail_members(request, slug):
     #just other tab of detail view
     q = request.REQUEST.get('q')

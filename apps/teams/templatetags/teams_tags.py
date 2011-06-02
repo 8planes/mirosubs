@@ -34,7 +34,7 @@ from django.utils import simplejson as json
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
 
-ALL_LANGUAGES_DICT = dict([(val, _(name)) for val, name in settings.ALL_LANGUAGES])
+ALL_LANGUAGES_DICT = dict(settings.ALL_LANGUAGES)
 
 register = template.Library()
 
@@ -117,6 +117,10 @@ def team_video_detail(context, team_video_search_record):
 @register.inclusion_tag('teams/_complete_team_video_detail.html', takes_context=True)  
 def complete_team_video_detail(context, team_video_search_record):
     context['search_record'] = team_video_search_record
+    context['display_languages'] = \
+        zip([_(ALL_LANGUAGES_DICT[l]) for l in 
+             team_video_search_record.video_completed_langs],
+            team_video_search_record.video_completed_lang_urls)    
     return context
 
 @register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  
