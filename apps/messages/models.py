@@ -102,8 +102,8 @@ class Message(models.Model):
 
         self.content and content.append(urlize(escape(self.content))) and content.append('\n')
         
-        if self.object:
-            added_content = self.object.render_message()
+        if self.object and hasattr(self.object, 'render_message'):
+            added_content = self.object.render_message(self)
             content.append(added_content)
             
         return ''.join(content)

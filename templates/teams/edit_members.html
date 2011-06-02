@@ -1,6 +1,6 @@
 {% extends "settings.html" %}
 
-{% load i18n teams_tags paginator profiles_tags %}
+{% load i18n teams_tags paginator profiles_tags messages_tags %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% url messages:rpc_api %}" type="text/javascript"></script> 
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(function($){
@@ -76,11 +77,15 @@
       {% include 'teams/_edit_top_navigation.html' %}
   {% endwith %}
   
-    {% if team|can_invite_to_team:user %}
-    <div class="action_buttons">     
-        <a href="#invite-user" class="blue_button small invite-user">{% trans 'Invite User' %}</a>
+    <div class="action_buttons">
+        {% if team|can_invite_to_team:user %}
+            <a href="#invite-user" class="blue_button small invite-user">{% trans 'Invite User' %}</a>
+        {% endif %}
+        {% if team|is_team_manager:user %}
+            {% send_to_team_message_form team %}
+        {% endif %}
     </div>
-    {% endif %}    
+    
     {% if is_paginated %}{% paginator %}{% endif %}
     <table>
         <thead>
@@ -103,7 +108,7 @@
                     <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
                     <div class="small grey">
                         {% if team|is_team_manager:user and not member.user == user %}
-                            | <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
+                            <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
                             {% if member.is_manager %}
                                 | <a href="{% url teams:demote_member team.slug member.user.pk %}" class="demote-user">
                                     {% trans 'Demote to Member' %}

@@ -1,20 +1,20 @@
 {% load i18n %}
 
-<button class="green_button big" data-modal="{{ form_id }}">
-    <span>{% trans 'Send a Message' %}</span>
+<button class="blue_button small" data-modal="{{ form_id }}">
+    <span>{% trans 'Send Message to Team' %}</span>
 </button>
 
 <div class="msg_modal_wrap" id="{{ form_id }}">
   <a href="#close" class="close">{% trans "Close" %}</a>
   <div class="msg_modal">
-    <h3>{% trans "Send message to" %}
+    <h3>{% trans "Send message to team" %}
         <span>
-            {% if receiver.picture %}
-                <img class="author-avatar" src="{{ receiver.small_avatar }}" alt="{% trans 'avatar' %}"/>
+            {% if team.logo %}
+                <img class="author-avatar" src="{{ team.small_logo_thumbnail }}" alt="{% trans 'avatar' %}"/>
             {% else %}
-                <img class="author-avatar" src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'avatar' %}"/>
+                <img class="author-avatar" src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'logo' %}"/>
             {% endif %} 
-            <span class="author-username">{{ receiver }}</span>
+            <span class="author-username">{{ team }}</span>
         </span>
     </h3>
 
@@ -31,11 +31,11 @@
         $('#{{ form_id }}').bind('close-modal', function(){
             $(this).find('form').clearForm().find('p.error_list').remove();
         });
-        
+
         $('#{{ form_id }} form').ajaxForm({
             type: 'RPC',
             api: {
-                submit: MessagesApi.send
+                submit: MessagesApi.send_to_team
             },
             success: function(data, status, $form){
                 $('button[type=submit]', $form).show();
@@ -51,7 +51,7 @@
                     };//for
                 } else {
                     if (status.status){
-                        $.jGrowl('{% trans "The message has been successfully sent." %}');
+                        $.jGrowl('{% trans "The messages have been successfully sent." %}');
                     }                    
                     $form.clearForm();
                     $form.parents('.msg_modal_wrap').modClose();

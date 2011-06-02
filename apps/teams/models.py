@@ -100,6 +100,16 @@ class Team(models.Model):
     
     def __unicode__(self):
         return self.name
+ 
+    def render_message(self, msg):
+        context = {
+            'team': self, 
+            'msg': msg,
+            'author': msg.author,
+            'author_page': msg.author.get_absolute_url(),
+            'team_page': self.get_absolute_url()
+        }
+        return render_to_string('teams/_team_message.html', context)
     
     def is_open(self):
         return self.membership_policy == self.OPEN
@@ -633,7 +643,7 @@ class Invite(models.Model):
     def deny(self):
         self.delete()
     
-    def render_message(self):
+    def render_message(self, msg):
         return render_to_string('teams/_invite_message.html', {'invite': self})
 
 models.signals.pre_delete.connect(Message.on_delete, Invite)

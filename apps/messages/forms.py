@@ -28,6 +28,7 @@ from messages.models import Message
 from auth.models import CustomUser as User
 from utils.forms import AjaxForm
 from django.utils.translation import ugettext_lazy as _
+from teams.models import Team
 
 class SendMessageForm(forms.ModelForm, AjaxForm):
     
@@ -51,3 +52,44 @@ class SendMessageForm(forms.ModelForm, AjaxForm):
         obj.author = self.author
         commit and obj.save()
         return obj
+    
+class SendTeamMessageForm(forms.ModelForm, AjaxForm):
+    team = forms.ModelChoiceField(queryset=Team.objects.all(), widget = forms.HiddenInput())
+    
+    class Meta:
+        model = Message
+        fields = ('subject', 'content')
+
+    def __init__(self, author, *args, **kwargs):
+        self.author = author
+        super(SendTeamMessageForm, self).__init__(*args, **kwargs)
+    
+    def clean_team(self):
+        team = self.cleaned_data['team']
+        
+        if not team.is_manager(self.author):
+            raise forms.ValidationError(_(u'You are not manager of this team.'))
+        
+        return team
+    
+    def clean(self):
+        if not self.author.is_authenticated():
+            raise forms.ValidationError(_(u'You should be authenticated to write messages'))
+        return self.cleaned_data
+    
+    def save(self):
+        messages = []
+        
+        team = self.cleaned_data['team']
+        members = team.users.exclude(pk=self.author.pk)
+        
+        for user in members:
+            message = Message(user=user)
+            message.author = self.author
+            message.content = self.cleaned_data['content']
+            message.subject = self.cleaned_data['subject']
+            message.object = team
+            message.save()
+            messages.append(message)
+            
+        return messages

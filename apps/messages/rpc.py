@@ -24,9 +24,8 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
 from messages.models import Message
-from auth.models import CustomUser as User
 from django.utils.translation import ugettext as _
-from messages.forms import SendMessageForm
+from messages.forms import SendMessageForm, SendTeamMessageForm
 
 class MessagesApiClass(object):
     
@@ -50,6 +49,16 @@ class MessagesApiClass(object):
         
         return {}
     
+    def send_to_team(self, rdata, user):
+        if not user.is_authenticated():
+            return {'error': _('You should be authenticated.')}
+        
+        form = SendTeamMessageForm(user, rdata)
+        if form.is_valid():
+            return dict(count=len(form.save()))
+        else:
+            return dict(errors=form.get_errors())
+            
     def send(self, rdata, user):
         if not user.is_authenticated():
             return {'error': _('You should be authenticated.')}
@@ -57,11 +66,7 @@ class MessagesApiClass(object):
         form = SendMessageForm(user, rdata)
         if form.is_valid():
             form.save()
-            return {}
         else:
-            return {
-                'errors': form.get_errors()
-            }
-        
+            return dict(errors=form.get_errors())
+            
         return {}
-        

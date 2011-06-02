@@ -24,7 +24,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
 from messages.models import Message
-from messages.forms import SendMessageForm
+from messages.forms import SendMessageForm, SendTeamMessageForm
 
 register = template.Library()
 
@@ -43,4 +43,12 @@ def messages(context):
 def send_message_form(context, receiver):
     context['send_message_form'] = SendMessageForm(context['user'], initial={'user': receiver.pk})
     context['receiver'] = receiver
+    context['form_id'] = 'send-message-form-%s' % receiver.pk
     return context
+
+@register.inclusion_tag('messages/_send_to_team_message_form.html', takes_context=True)    
+def send_to_team_message_form(context, team):
+    context['send_message_form'] = SendTeamMessageForm(context['user'], initial={'team': team.pk})
+    context['form_id'] = 'send-message-to-team-form-%s' % team.pk
+    context['team'] = team
+    return context    
