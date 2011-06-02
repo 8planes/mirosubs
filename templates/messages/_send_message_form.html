@@ -50,7 +50,9 @@
                         }
                     };//for
                 } else {
-                    $.jGrowl('{% trans "The message has been successfully sent." %}');
+                    if (status.status){
+                        $.jGrowl('{% trans "The message has been successfully sent." %}');
+                    }                    
                     $form.clearForm();
                     $form.parents('.msg_modal_wrap').modClose();
                 };
