@@ -113,7 +113,9 @@ mirosubs.video.CaptionView.prototype.createDom  = function (){
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var el = $d('span', 'mirosubs-captionSpan');
     this.setElementInternal(el);
-    var videoOffsetParent = el.offsetParent;
+    // ie < 9 will throw an error if acessing offsetParent on an element with a null parent
+    // see http://www.google.com/search?q=ie8+offsetParent+unspecified+error
+    var videoOffsetParent = el.parent && el.offsetParent;
     if (!videoOffsetParent)
         videoOffsetParent = goog.dom.getOwnerDocument(el).body;
     if (this.needsIFrame_){
