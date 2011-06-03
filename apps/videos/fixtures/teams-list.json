@@ -67,6 +67,19 @@
     "title": "qs1-not-transback"
 },
 {
+    "url": "http://www.example.com/5.mp4",
+    "langs": [
+    {
+        "code": "pt_BR",
+        "num_subs": 0,
+        "is_complete": false,
+        "is_original": true,
+        "translations": []
+    }],
+
+    "title": "dont-translate-back-to-arabic"
+},
+{
     "url": "http://www.example.com/4.mp4",
     "langs": [
     {
@@ -84,5 +97,17 @@
         "translations": []
     }], 
     "title": "dont-translate-back-to-arabic"
+},
+{
+    "url": "http://www.example.com/6.mp4",
+    "langs": [
+    {
+        "code": "swa",
+        "num_subs": 2,
+        "is_complete": false,
+        "is_original": true,
+        "translations": []
+    }], 
+    "title": "6"
 }
 ]
