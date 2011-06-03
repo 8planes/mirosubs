@@ -3,7 +3,19 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from inspect import getargspec
 from Cookie import SimpleCookie
-from django.utils.functional import update_wrapper
+from django.utils.datastructures import MultiValueDict
+
+class RpcMultiValueDict(MultiValueDict):
+    """
+    Just allow pass not list values and get only dict as argument
+    """
+    
+    def __init__(self, key_to_list_mapping={}):
+        for key, value in key_to_list_mapping.items():
+            if not isinstance(value, (list, tuple)):
+                key_to_list_mapping[key] = [value]
+            
+        super(MultiValueDict, self).__init__(key_to_list_mapping)    
 
 class RpcExceptionEvent(Exception):
     """
@@ -168,8 +180,13 @@ class RpcRouter(object):
             }
         
         action = self.actions[rd['action']]
-        args = rd.get('data') or []
         func = getattr(action, method)
+        
+        args = []
+        for val in (rd.get('data') or []):
+            if isinstance(val, dict):
+                val = RpcMultiValueDict(val)
+            args.append(val)
 
         extra_kwargs = self.extra_kwargs(request, *args, **kwargs)
         extra_kwargs.update(self.action_extra_kwargs(action, request, *args, **kwargs))

@@ -25,10 +25,12 @@
 
 from django import forms
 from messages.models import Message
-from auth.models import CustomUser as User
+from auth.models import CustomUser as User, UserLanguage
 from utils.forms import AjaxForm
 from django.utils.translation import ugettext_lazy as _
 from teams.models import Team
+from django.db.models import Count
+from utils.translation import get_simple_languages_list
 
 class SendMessageForm(forms.ModelForm, AjaxForm):
     
@@ -41,7 +43,7 @@ class SendMessageForm(forms.ModelForm, AjaxForm):
         super(SendMessageForm, self).__init__(*args, **kwargs)
         self.fields['user'].widget = forms.HiddenInput()
         self.fields['user'].queryset = User.objects.exclude(pk=author.pk)
-    
+        
     def clean(self):
         if not self.author.is_authenticated():
             raise forms.ValidationError(_(u'You should be authenticated to write messages'))
@@ -55,6 +57,9 @@ class SendMessageForm(forms.ModelForm, AjaxForm):
     
 class SendTeamMessageForm(forms.ModelForm, AjaxForm):
     team = forms.ModelChoiceField(queryset=Team.objects.all(), widget = forms.HiddenInput())
+    languages = forms.MultipleChoiceField(label=_('Only send to speakers of...'), 
+                  widget=forms.CheckboxSelectMultiple(attrs={'class': 'langs'}),
+                  required=False)    
     
     class Meta:
         model = Message
@@ -62,8 +67,34 @@ class SendTeamMessageForm(forms.ModelForm, AjaxForm):
 
     def __init__(self, author, *args, **kwargs):
         self.author = author
+        if 'team' in kwargs.get('initial', {}):
+            self.team = kwargs['initial']['team']
+            kwargs['initial']['team'] = self.team.pk
+        else:
+            self.team = None
+
         super(SendTeamMessageForm, self).__init__(*args, **kwargs)
+
+        if self.team:
+            self.fields['languages'].choices = self._get_language_choise(self.team)
+        else:
+            self.fields['languages'].choices = get_simple_languages_list()
     
+    def _get_language_choise(self, team):
+        choices = []
+        
+        languages = dict(get_simple_languages_list())
+        
+        langs = UserLanguage.objects.exclude(user=self.author) \
+            .filter(user__teams=team).values_list('language') \
+            .annotate(Count('language'))
+        
+        for lang, count in langs:
+            name = '%s(%s)' % (languages[lang], count)
+            choices.append((lang, name))
+        
+        return choices
+        
     def clean_team(self):
         team = self.cleaned_data['team']
         
@@ -81,8 +112,11 @@ class SendTeamMessageForm(forms.ModelForm, AjaxForm):
         messages = []
         
         team = self.cleaned_data['team']
-        members = team.users.exclude(pk=self.author.pk)
-        
+        languages = self.cleaned_data['languages']
+
+        members = team.users.exclude(pk=self.author.pk)\
+            .filter(userlanguage__language__in=languages).distinct()
+
         for user in members:
             message = Message(user=user)
             message.author = self.author

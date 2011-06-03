@@ -190,6 +190,16 @@ form p input.checkbox {
     margin-left: 10px;
 }
 
+form.message_form ul li label {
+    margin: 0px;
+}
+
+form.message_form ul li input {
+    margin: 0px;
+    width: auto;
+    padding: 0px;
+}
+
 form p textarea{
 
 }

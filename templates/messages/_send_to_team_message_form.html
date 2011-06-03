@@ -1,5 +1,15 @@
 {% load i18n %}
 
+<style>
+    .langs_list_toggle label {
+        cursor: pointer;
+    }
+    
+    .langs_list_toggle.over label {
+        color: #1F4E5E;
+    }    
+</style>
+
 <button class="blue_button small" data-modal="{{ form_id }}">
     <span>{% trans 'Send Message to Team' %}</span>
 </button>
@@ -18,7 +28,7 @@
         </span>
     </h3>
 
-    <form action="" method="post" accept-charset="utf-8">
+    <form action="" method="post" accept-charset="utf-8" class="message_form">
       <div class="global-errors"></div>
       {{ send_message_form.as_p }}
       <p><button type="submit" class="green_button small"/>{% trans "Send Message" %}</button></p>
@@ -28,6 +38,19 @@
 
 <script type="text/javascript">
     (function($){
+        var $langs_list = $('input.langs').parents('ul');
+        $langs_list.hide();
+        $langs_list.prev().find('label').attr('for', '');
+        
+        $langs_list.prev().addClass('langs_list_toggle').click(function(){
+            $langs_list.toggle();
+            $langs_list.find('input').attr('checked', '');
+        }).mouseover(function(){
+            $(this).addClass('over');
+        }).mouseout(function(){
+            $(this).removeClass('over');
+        });
+        
         $('#{{ form_id }}').bind('close-modal', function(){
             $(this).find('form').clearForm().find('p.error_list').remove();
         });

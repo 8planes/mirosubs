@@ -170,8 +170,13 @@ $.fn.ajaxSubmit = function(options) {
        if (options.type === 'RPC'){
            var rpc_data = {}
            for (var i=0,len=a.length; i<len; i++){
-               rpc_data[a[i].name] = a[i].value
+               if (rpc_data[a[i].name]){
+                   rpc_data[a[i].name].push(a[i].value);
+           }else{
+                   rpc_data[a[i].name] = [a[i].value];
+               }
            } 
+
            options.api.submit(rpc_data, options.success, options.scope || options)
        }else{
            $.ajax(options);

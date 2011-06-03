@@ -48,7 +48,7 @@ def send_message_form(context, receiver):
 
 @register.inclusion_tag('messages/_send_to_team_message_form.html', takes_context=True)    
 def send_to_team_message_form(context, team):
-    context['send_message_form'] = SendTeamMessageForm(context['user'], initial={'team': team.pk})
+    context['send_message_form'] = SendTeamMessageForm(context['user'], initial={'team': team})
     context['form_id'] = 'send-message-to-team-form-%s' % team.pk
     context['team'] = team
     return context    
