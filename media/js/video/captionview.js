@@ -66,6 +66,11 @@ mirosubs.video.CaptionView.VERTICAL_MARGIN = 40;
 mirosubs.video.CaptionView.HORIZONTAL_MARGIN = 10;
 
 /*
+ * @const {int}
+ */
+mirosubs.video.CaptionView.MAXIMUM_WIDTH = 400;
+
+/*
  * @param boundingBox {goog.math.Rect} The rectangle to which
  * to attach the caption. This is how the caption nows how to position 
  * itself in relation to the playe.
