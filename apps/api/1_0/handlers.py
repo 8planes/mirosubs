@@ -31,6 +31,8 @@ from widget.srt_subs import GenerateSubtitlesHandler
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
+from apps.videos.templatetags.subtitles_tags import complete_indicator
+
 class VideoHandler(BaseHandler):
     """
     API handler for Video.
@@ -276,7 +278,8 @@ class SubtitleLanguagesHandler(BaseHandler):
                 'id': item.id,
                 'code': item.language,
                 'name': item.get_language_display(),
-                'is_original': item.is_original
+                'is_original': item.is_original,
+                "completion": complete_indicator(item)
             })
             
         return output
