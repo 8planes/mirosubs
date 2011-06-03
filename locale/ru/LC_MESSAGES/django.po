@@ -1,62 +1,61 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# DarLink <darlink@gmail.com>, 2011
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-23 03:32-0500\n"
-"PO-Revision-Date: 2011-05-23 03:43\n"
-"Last-Translator:   <alerion.um@gmial.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: Universal Subtitles\n"
+"Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
+"POT-Creation-Date: 2011-06-03 10:33-0500\n"
+"PO-Revision-Date: 2011-06-03 15:47+0000\n"
+"Last-Translator: universalsubtitles <hw@pculture.org>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/universalsubtitles/team/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Translated-Using: django-rosetta 0.6.0\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
 #: settings.py:31
 msgid "Spanish, Argentinian"
-msgstr "Испанский, аргентинский"
+msgstr ""
 
 #: settings.py:32 utils/translation_names.py:50
 msgid "English, British"
-msgstr "Английский, британский"
+msgstr ""
 
 #: settings.py:33
 msgid "Portuguese, Brazilian"
-msgstr "Португальский, бразильский"
+msgstr ""
 
 #: settings.py:34
 msgid "Latin, Serbian"
-msgstr "Латинский, сербский"
+msgstr ""
 
 #: settings.py:35 utils/translation_names.py:38
 msgid "Chinese, Simplified"
-msgstr "Китайский, упрощенный"
+msgstr ""
 
 #: settings.py:36 utils/translation_names.py:39
 msgid "Chinese, Traditional"
-msgstr "Китайский, традиционный"
+msgstr ""
 
 #: settings.py:37 utils/translation_names.py:51
 msgid "Esperanto"
-msgstr "Эсперанто"
+msgstr ""
 
 #: settings.py:49 utils/translation_names.py:74
 msgid "Inuktitut"
-msgstr "Инуктитут"
+msgstr ""
 
 #: settings.py:50
 msgid "Mohawk"
-msgstr "Мохок"
+msgstr ""
 
 #: settings.py:51
 msgid "Anishinaabe"
-msgstr "Anishinaabe"
+msgstr ""
 
 #: settings.py:52 utils/translation_names.py:42
 msgid "Cree"
@@ -294,36 +293,40 @@ msgstr ""
 msgid "Tibetan"
 msgstr ""
 
+#: settings.py:111 utils/translation_names.py:18
+msgid "Asturian"
+msgstr ""
+
 #: apps/api/1_0/forms.py:54 apps/videos/forms.py:63 apps/videos/forms.py:84
 #: apps/videos/forms.py:315
 msgid "Can not detect file encoding"
-msgstr "Невозможно определить кодировку файла"
+msgstr ""
 
 #: apps/api/1_0/forms.py:57 apps/videos/forms.py:86 apps/videos/forms.py:317
 msgid "Incorrect subtitles format"
-msgstr "неправельный формат субтитлов"
+msgstr "Неправильный формат субтитров"
 
 #: apps/api/1_0/forms.py:62
-#, fuzzy
 msgid "Incorrect subtitles encoding format"
-msgstr "неправельный формат субтитлов"
+msgstr ""
 
 #: apps/auth/admin.py:12 templates/statistic/users_statistic.html:12
-#: templates/teams/edit_members.html:89 templates/teams/edit_members.html:143
+#: templates/teams/edit_members.html:84 templates/teams/edit_members.html:138
 msgid "Username"
-msgstr "Имя пользователя"
+msgstr "Пользователь"
 
 #: apps/auth/admin.py:13
 msgid ""
-"Required. 30 characters or fewer. Alphanumeric characters only "
-"(letters, digits and underscores)."
+"Required. 30 characters or fewer. Alphanumeric characters only (letters, "
+"digits and underscores)."
 msgstr ""
-"Обязательный параметр. 30 символов или меньше. Буквенно-цифровых "
-"символов только (буквы, цифры и знак подчеркивания)."
+"Обязательный параметр. 30 или меньше символов . Буквенно-цифровые символы "
+"только (буквы, цифры и знак подчеркивания)."
 
 #: apps/auth/admin.py:14
 msgid "This value must contain only letters, numbers and underscores."
-msgstr "Это строка должна содержать только буквы, цифры и подчеркивания."
+msgstr ""
+"Это значение должно состоять только из букв, цифр и знаков подчеркивания."
 
 #: apps/auth/admin.py:15
 msgid "Password"
@@ -341,49 +344,46 @@ msgstr "Электронная почта"
 msgid "Hide"
 msgstr ""
 
-#: apps/auth/models.py:77 templates/videos/_team_member_action_item.html:18
-#: templates/videos/_video_activity.html:18
-#: templates/videos/email_video_url_add.html:13
+#: apps/auth/models.py:78 templates/videos/email_video_url_add.html:13
 msgid "Anonymous"
 msgstr ""
 
-#: apps/auth/models.py:222
+#: apps/auth/models.py:228
 msgid "Add comment"
 msgstr "Добавить комментарий"
 
-#: apps/auth/models.py:223
+#: apps/auth/models.py:229
 msgid "Start subtitles"
-msgstr "Субтитры отсутствуют"
+msgstr "Начать субтитры"
 
-#: apps/auth/models.py:224
-#, fuzzy
+#: apps/auth/models.py:230
 msgid "Start translation"
-msgstr "Добавить перевод"
+msgstr "Начать перевод"
 
-#: apps/auth/models.py:225
+#: apps/auth/models.py:231
 msgid "Edit subtitles"
-msgstr "редактировать субтитлы"
+msgstr "Изменить субтитры"
 
-#: apps/auth/models.py:226
+#: apps/auth/models.py:232
 msgid "Edit translation"
-msgstr "редактировать перевод"
+msgstr "Редактировать перевод"
 
-#: apps/auth/models.py:283
+#: apps/auth/models.py:289
 msgid "understand enough"
 msgstr ""
 
-#: apps/auth/models.py:284
+#: apps/auth/models.py:290
 msgid "understand 99%"
 msgstr ""
 
-#: apps/auth/models.py:285
+#: apps/auth/models.py:291
 msgid "write like a native"
 msgstr ""
 
-#: apps/auth/models.py:304
+#: apps/auth/models.py:310
 msgid ""
-"This is date when start to display announcement. And only the last will"
-" be displayed."
+"This is date when start to display announcement. And only the last will be "
+"displayed."
 msgstr ""
 
 #: apps/auth/views.py:87
@@ -392,32 +392,42 @@ msgstr ""
 
 #: apps/comments/forms.py:53
 msgid "You car reply only comments for same object"
-msgstr "Вы можете ответить только комментариями на ту же тему"
+msgstr "English is bad"
 
-#: apps/messages/forms.py:46
-#, fuzzy
+#: apps/messages/forms.py:49 apps/messages/forms.py:108
 msgid "You should be authenticated to write messages"
-msgstr "Вы не авторизованны"
+msgstr ""
 
-#: apps/messages/models.py:69
+#: apps/messages/forms.py:60
+msgid "Only send to speakers of..."
+msgstr ""
+
+#: apps/messages/forms.py:102
+msgid "You are not manager of this team."
+msgstr ""
+
+#: apps/messages/models.py:74
 msgid "[no subject]"
 msgstr ""
 
-#: apps/messages/models.py:109
+#: apps/messages/models.py:121
 msgid "You should enter subject or message."
 msgstr ""
 
-#: apps/messages/rpc.py:35 apps/messages/rpc.py:47 apps/messages/rpc.py:55
-#: apps/profiles/rpc.py:48 apps/teams/rpc.py:34 apps/teams/rpc.py:62
-#: apps/teams/rpc.py:83 apps/videos/rpc.py:30
-#, fuzzy
+#: apps/messages/rpc.py:34 apps/messages/rpc.py:46 apps/messages/rpc.py:54
+#: apps/messages/rpc.py:64 apps/profiles/rpc.py:51 apps/teams/rpc.py:34
+#: apps/teams/rpc.py:62 apps/teams/rpc.py:83 apps/videos/rpc.py:30
 msgid "You should be authenticated."
-msgstr "Вы не авторизованны"
+msgstr ""
 
-#: apps/messages/rpc.py:41
-#, fuzzy
+#: apps/messages/rpc.py:40
 msgid "Message does not exist."
-msgstr "Объект не существует"
+msgstr ""
+
+#: apps/messages/tasks.py:24
+#, python-format
+msgid "%(author)s sent you a message on Universal Subtitles: %(subject)s"
+msgstr ""
 
 #: apps/openid_consumer/views.py:94
 msgid "i-names are not supported"
@@ -456,16 +466,16 @@ msgstr ""
 
 #: apps/profiles/forms.py:99
 msgid "This user has not email"
-msgstr "Этот пользователь не указал адрес электронной почты"
+msgstr "English is bad"
 
 #: apps/profiles/forms.py:104
 msgid "You are not authenticated."
-msgstr "Вы не авторизованны"
+msgstr "Вы не идентифицированы."
 
 #: apps/profiles/forms.py:111
 #, python-format
 msgid "Personal message from %(sender)s on universalsubtitles.org"
-msgstr "Личное сообщение от %(sender)s из universalsubtitles.org"
+msgstr "Личное сообщение от  %(sender)s с universalsubtitles.org"
 
 #: apps/profiles/forms.py:149
 msgid "Confirm new password:"
@@ -477,19 +487,19 @@ msgstr "Неверный пароль."
 
 #: apps/profiles/forms.py:168
 msgid "The two passwords did not match."
-msgstr "Пароли не совпадают."
+msgstr "Два пароля не совпадают."
 
-#: apps/profiles/rpc.py:53
+#: apps/profiles/rpc.py:56
 msgid "Your email was updated."
 msgstr ""
 
-#: apps/profiles/views.py:59 apps/teams/views.py:314
+#: apps/profiles/views.py:60 apps/teams/views.py:331
 msgid ""
-"File server unavailable. Try later. You can edit some other information"
-" without any problem."
+"File server unavailable. Try later. You can edit some other information "
+"without any problem."
 msgstr ""
 
-#: apps/profiles/views.py:114
+#: apps/profiles/views.py:115
 msgid "Your profile has been updated."
 msgstr ""
 
@@ -506,9 +516,8 @@ msgid "Most plays (all time)"
 msgstr ""
 
 #: apps/search/forms.py:13
-#, fuzzy
 msgid "Most languages"
-msgstr "Языки"
+msgstr ""
 
 #: apps/search/forms.py:16
 #: templates/statistic/log_methods/changelist_view.html:41
@@ -528,33 +537,28 @@ msgid "sort type"
 msgstr ""
 
 #: apps/search/forms.py:22
-#, fuzzy
 msgid "languages"
-msgstr "Языки"
+msgstr ""
 
 #: apps/search/forms.py:23 apps/search/forms.py:25
 msgid "Left blank for any language"
 msgstr ""
 
 #: apps/search/forms.py:24
-#, fuzzy
 msgid "video language"
-msgstr "Язык"
+msgstr ""
 
 #: apps/search/forms.py:34
-#, fuzzy
 msgid "My languages"
-msgstr "Языки"
+msgstr ""
 
 #: apps/search/forms.py:35
-#, fuzzy
 msgid "Any Language"
-msgstr "Язык"
+msgstr ""
 
 #: apps/statistic/models.py:47 apps/statistic/models.py:48
-#, fuzzy
 msgid "Subtitle fetch statistic"
-msgstr "Субтитры просмотрено."
+msgstr ""
 
 #: apps/statistic/models.py:54 apps/statistic/models.py:55
 msgid "Video view statistic"
@@ -578,8 +582,8 @@ msgstr ""
 
 #: apps/teams/forms.py:73
 msgid ""
-"Enter the URL of any compatible video or any video on our site. You can"
-" also browse the site and use the 'Add Video to Team' menu."
+"Enter the URL of any compatible video or any video on our site. You can also"
+" browse the site and use the 'Add Video to Team' menu."
 msgstr ""
 
 #: apps/teams/forms.py:98
@@ -587,9 +591,8 @@ msgid "This URL does not contain video id."
 msgstr ""
 
 #: apps/teams/forms.py:103
-#, fuzzy
 msgid "Videos does not exist."
-msgstr "Объект не существует"
+msgstr ""
 
 #: apps/teams/forms.py:106
 msgid "Incorrect URL."
@@ -603,24 +606,18 @@ msgid ""
 "think there's been some mistake, <a\n"
 "href=\"mailto:%s\">contact us</a>!"
 msgstr ""
-"Universal Subtitles не поддерживает веб-сайт или формат видео.\n"
-"Если вы хотите присоединиться к нам, чтобы добавить поддержку нового сайта или формат, или если вы\n"
-"думаете, что есть какая-то ошибка, <a\n"
-"href=\"mailto:%s\"> свяжитесь с нами</a>!"
 
 #: apps/teams/forms.py:123
-#, fuzzy
 msgid "Video language"
-msgstr "Язык"
+msgstr ""
 
 #: apps/teams/forms.py:124
 msgid "It will be saved only if video does not exist in our database."
 msgstr ""
 
 #: apps/teams/forms.py:171 apps/teams/forms.py:206
-#, fuzzy
 msgid "Team intro video URL"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: apps/teams/forms.py:173 apps/teams/forms.py:208
 msgid ""
@@ -633,269 +630,256 @@ msgstr ""
 msgid "Team URL: http://universalsubtitles.org/teams/"
 msgstr ""
 
-#: apps/teams/models.py:56 libs/rosetta/templates/rosetta/languages.html:28
+#: apps/teams/models.py:58 libs/rosetta/templates/rosetta/languages.html:28
 #: templates/teams/_application_form.html:30
 msgid "Application"
 msgstr ""
 
-#: apps/teams/models.py:57
+#: apps/teams/models.py:59
 msgid "Invitation by manager"
 msgstr ""
 
-#: apps/teams/models.py:58
+#: apps/teams/models.py:60
 msgid "Invitation by any member"
 msgstr ""
 
-#: apps/teams/models.py:59
+#: apps/teams/models.py:61
 msgid "Open"
 msgstr ""
 
-#: apps/teams/models.py:65
-#, fuzzy
-msgid "Members can add and remove video"
-msgstr "Вы не можете редактировать видео."
-
-#: apps/teams/models.py:66
-#, fuzzy
-msgid "Managers can add and remove video"
-msgstr "Вы не можете редактировать видео."
-
 #: apps/teams/models.py:67
+msgid "Members can add and remove video"
+msgstr ""
+
+#: apps/teams/models.py:68
+msgid "Managers can add and remove video"
+msgstr ""
+
+#: apps/teams/models.py:69
 msgid "Members can only add videos"
 msgstr ""
 
-#: apps/teams/models.py:70
-#, fuzzy
+#: apps/teams/models.py:72
 msgid "name"
-msgstr "Имя пользователя"
+msgstr ""
 
-#: apps/teams/models.py:71
+#: apps/teams/models.py:73
 msgid "slug"
 msgstr ""
 
-#: apps/teams/models.py:72
+#: apps/teams/models.py:74
 msgid "description"
 msgstr ""
 
-#: apps/teams/models.py:72
+#: apps/teams/models.py:74
 msgid "All urls will be converted to links."
 msgstr ""
 
-#: apps/teams/models.py:74
+#: apps/teams/models.py:76
+#: templates/messages/_send_to_team_message_form.html:25
 msgid "logo"
 msgstr ""
 
-#: apps/teams/models.py:75
+#: apps/teams/models.py:77
 msgid "membership policy"
 msgstr ""
 
-#: apps/teams/models.py:76
+#: apps/teams/models.py:78
 msgid "video policy"
 msgstr ""
 
-#: apps/teams/models.py:77
+#: apps/teams/models.py:79
 msgid "publicly Visible?"
 msgstr ""
 
-#: apps/teams/models.py:78
+#: apps/teams/models.py:80
 msgid "videos"
 msgstr ""
 
-#: apps/teams/models.py:79
+#: apps/teams/models.py:81
 msgid "users"
 msgstr ""
 
-#: apps/teams/models.py:81
+#: apps/teams/models.py:83
 msgid "applicants"
 msgstr ""
 
-#: apps/teams/models.py:82
-msgid "invited"
-msgstr ""
-
-#: apps/teams/models.py:85
+#: apps/teams/models.py:86
 msgid "Intro Video"
 msgstr ""
 
-#: apps/teams/models.py:87 templates/teams/edit.html:98
+#: apps/teams/models.py:88 templates/teams/edit.html:98
 msgid "Page content"
 msgstr ""
 
-#: apps/teams/models.py:87
+#: apps/teams/models.py:88
 msgid "You can use murkdown. This will replace Description."
 msgstr ""
 
-#: apps/teams/models.py:89
+#: apps/teams/models.py:90
 msgid "HTML that appears at the top of the teams page."
 msgstr ""
 
-#: apps/teams/models.py:95
+#: apps/teams/models.py:97
 msgid "Team"
 msgstr ""
 
-#: apps/teams/models.py:96 templates/teams/index.html:8
+#: apps/teams/models.py:98 templates/teams/index.html:8
 msgid "Teams"
 msgstr ""
 
-#: apps/teams/models.py:257
+#: apps/teams/models.py:329
 msgid ""
-"Use this space to explain why you or your team need to caption or "
-"subtitle this video. Adding a note makes volunteers more likely to help"
-" out!"
+"Use this space to explain why you or your team need to caption or subtitle "
+"this video. Adding a note makes volunteers more likely to help out!"
 msgstr ""
 
-#: apps/teams/models.py:259
+#: apps/teams/models.py:331
 msgid "We automatically grab thumbnails for certain sites, e.g. Youtube"
 msgstr ""
 
-#: apps/teams/models.py:260
+#: apps/teams/models.py:332
 msgid "Need help with all languages"
 msgstr ""
 
-#: apps/teams/models.py:261
+#: apps/teams/models.py:333
 msgid "If you check this, other languages will not be displayed."
 msgstr ""
 
+#: apps/teams/models.py:658
+msgid "Invitation to join a team"
+msgstr ""
+
 #: apps/teams/rpc.py:41 apps/teams/rpc.py:69 apps/teams/rpc.py:90
-#, fuzzy
 msgid "Team does not exist"
-msgstr "Объект не существует"
+msgstr ""
 
 #: apps/teams/rpc.py:45 apps/teams/rpc.py:94
-#, fuzzy
 msgid "You are already a member of this team."
-msgstr "Вы не авторизованны"
+msgstr ""
 
 #: apps/teams/rpc.py:51
-#, fuzzy
 msgid "You are now a member of this team because it is open."
-msgstr "Вы не авторизованны"
+msgstr ""
 
 #: apps/teams/rpc.py:56
 msgid "Application sent success. Wait for answer from team."
 msgstr ""
 
 #: apps/teams/rpc.py:58
-#, fuzzy
 msgid "You can't join this team by application."
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
 #: apps/teams/rpc.py:75 apps/teams/rpc.py:79
-#, fuzzy
 msgid "You have left this team."
-msgstr "Вы не авторизованны"
+msgstr ""
 
 #: apps/teams/rpc.py:77
-#, fuzzy
 msgid "You are last member of this team."
-msgstr "Вы не авторизованны"
+msgstr ""
 
 #: apps/teams/rpc.py:99
-#, fuzzy
 msgid "This team is not open."
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: apps/teams/rpc.py:102
-#, fuzzy
 msgid "You are now a member of this team."
-msgstr "Вы не авторизованны"
+msgstr ""
 
-#: apps/teams/views.py:85 templates/teams/index.html:93
+#: apps/teams/tasks.py:28
+#, python-format
+msgid "New %(team)s videos ready for subtitling!"
+msgstr ""
+
+#: apps/teams/views.py:84 templates/teams/index.html:93
 msgid "Name"
 msgstr ""
 
-#: apps/teams/views.py:86 templates/teams/index.html:90
+#: apps/teams/views.py:85 templates/teams/index.html:90
 msgid "Newest"
 msgstr ""
 
-#: apps/teams/views.py:87 templates/teams/index.html:87
-#, fuzzy
+#: apps/teams/views.py:86 templates/teams/index.html:87
 msgid "Most Members"
-msgstr "Самые новые"
+msgstr ""
 
-#: apps/teams/views.py:260
+#: apps/teams/views.py:277
 msgid "Your team has been created. Review or edit its information below."
 msgstr ""
 
-#: apps/teams/views.py:288
+#: apps/teams/views.py:305
 msgid "Your changes have been saved"
 msgstr ""
 
-#: apps/teams/views.py:328
-#, fuzzy
+#: apps/teams/views.py:345
 msgid "You can't add video."
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
-#: apps/teams/views.py:381
+#: apps/teams/views.py:398
 msgid "Video has been updated."
 msgstr ""
 
-#: apps/teams/views.py:410
-#, fuzzy
+#: apps/teams/views.py:427
 msgid "You can't remove video"
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
-#: apps/teams/views.py:431
+#: apps/teams/views.py:448
 msgid "You can't remove youself"
 msgstr ""
 
-#: apps/teams/views.py:436
+#: apps/teams/views.py:453
 msgid "You can't remove user"
 msgstr ""
 
-#: apps/teams/views.py:451
+#: apps/teams/views.py:468
 msgid "You can't demote to member yorself"
 msgstr ""
 
-#: apps/teams/views.py:453
-#, fuzzy
+#: apps/teams/views.py:470
 msgid "You can't demote to member"
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
-#: apps/teams/views.py:468
+#: apps/teams/views.py:485
 msgid "You can't promote to manager"
 msgstr ""
 
-#: apps/teams/views.py:528
+#: apps/teams/views.py:545
 msgid "Application approved."
 msgstr ""
 
-#: apps/teams/views.py:530 apps/teams/views.py:547
+#: apps/teams/views.py:547 apps/teams/views.py:564
 msgid "Application does not exist."
 msgstr ""
 
-#: apps/teams/views.py:532
+#: apps/teams/views.py:549
 msgid "You can't approve application."
 msgstr ""
 
-#: apps/teams/views.py:545
+#: apps/teams/views.py:562
 msgid "Application denied."
 msgstr ""
 
-#: apps/teams/views.py:549
-#, fuzzy
+#: apps/teams/views.py:566
 msgid "You can't deny application."
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
-#: apps/teams/views.py:568
+#: apps/teams/views.py:585
 msgid "User does not exist."
 msgstr ""
 
-#: apps/teams/views.py:573
-#, fuzzy
+#: apps/teams/views.py:590
 msgid "You can't invite to team."
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
-#: apps/teams/views.py:578
-#, fuzzy
+#: apps/teams/views.py:595
 msgid "This user is member of team already."
-msgstr "Этот адрес уже используется."
+msgstr ""
 
-#: apps/teams/views.py:583
+#: apps/teams/views.py:600
 msgid "Note is too long."
 msgstr ""
 
-#: apps/teams/templatetags/teams_tags.py:132
+#: apps/teams/templatetags/teams_tags.py:136
 #, python-format
 msgid "Can somebody help me subtitle these videos? %(url)s"
 msgstr ""
@@ -909,20 +893,16 @@ msgid "File should have txt format"
 msgstr ""
 
 #: apps/videos/forms.py:58 apps/videos/forms.py:76 apps/videos/forms.py:307
-#, fuzzy
 msgid "File size should be less {0} kb"
-msgstr "рязмер фаила должен быть меньше 1мб"
+msgstr ""
 
 #: apps/videos/forms.py:67
 msgid "Can't encode file. It should have utf8 encoding."
 msgstr ""
 
 #: apps/videos/forms.py:79 apps/videos/forms.py:310
-#, fuzzy
 msgid "Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)"
 msgstr ""
-"Неправильный формат. Загрузите файл с расширением .srt, .ssa, или .xml"
-" (формата TTML)"
 
 #: apps/videos/forms.py:123
 msgid "You have not permission add video URL for this video"
@@ -930,7 +910,8 @@ msgstr ""
 
 #: apps/videos/forms.py:155
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr "Кто-то сейчас уже снабжает субтитрами это видео. Попробуйте позднее."
+msgstr ""
+"Другой пользователь сейчас пишет субтитры для этого видео. Попробуйте позже."
 
 #: apps/videos/forms.py:389
 #, python-format
@@ -948,14 +929,12 @@ msgid ""
 msgstr ""
 
 #: apps/videos/forms.py:413
-#, fuzzy
 msgid "Youtube usernames"
-msgstr "Имя пользователя"
+msgstr ""
 
 #: apps/videos/forms.py:413
-#, fuzzy
 msgid "<span class=\"hint\">Enter usernames separated by comma.</span>"
-msgstr "Введите действующие адреса электронной почты через запятую."
+msgstr ""
 
 #: apps/videos/forms.py:414
 msgid "Youtube page link."
@@ -969,8 +948,8 @@ msgstr ""
 
 #: apps/videos/forms.py:416
 msgid ""
-"<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only"
-" supported sites added.</span>"
+"<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
+"supported sites added.</span>"
 msgstr ""
 
 #: apps/videos/forms.py:417
@@ -980,21 +959,126 @@ msgstr ""
 #: apps/videos/forms.py:417
 msgid ""
 "<span class=\"hint checkbox_hint\">Choose this if you wish to add videos "
-"from this feed in the future. Only valid RSS feeds will be "
-"saved.</span>"
+"from this feed in the future. Only valid RSS feeds will be saved.</span>"
 msgstr ""
 
 #: apps/videos/models.py:86
 msgid "in seconds"
 msgstr ""
 
-#: apps/videos/models.py:622
+#: apps/videos/models.py:650
 msgid ""
-"Sorry, you cannot upload subtitles right now because someone is editing"
-" the language you are uploading or a translation of it"
+"Sorry, you cannot upload subtitles right now because someone is editing the "
+"language you are uploading or a translation of it"
 msgstr ""
 
-#: apps/videos/models.py:1074
+#: apps/videos/models.py:1004
+#, python-format
+msgid "added video <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1006
+#, python-format
+msgid "<a href=\"%(video_url)s\">%(video_name)s</a> video added"
+msgstr ""
+
+#: apps/videos/models.py:1012
+#, python-format
+msgid "changed title for <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1014
+#, python-format
+msgid "Title was changed for <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1029
+#, python-format
+msgid ""
+"commented on <a href=\"%(comments_url)s\">%(language)s subtitles</a> for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1031
+#, python-format
+msgid ""
+"Comment added for <a href=\"%(comments_url)s\">%(language)s subtitles</a> "
+"for <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1034
+#, python-format
+msgid "commented on <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1036
+#, python-format
+msgid "Comment added for <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1047
+#, python-format
+msgid ""
+"started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1049
+#, python-format
+msgid ""
+"<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1060
+#, python-format
+msgid ""
+"edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1062
+#, python-format
+msgid ""
+"<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1068
+#, python-format
+msgid "added new URL for <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1070
+#, python-format
+msgid "New URL added for <a href=\"%(video_url)s\">%(video_name)s</a>"
+msgstr ""
+
+#: apps/videos/models.py:1082
+msgid "add video"
+msgstr ""
+
+#: apps/videos/models.py:1083
+msgid "change title"
+msgstr ""
+
+#: apps/videos/models.py:1084
+msgid "comment"
+msgstr ""
+
+#: apps/videos/models.py:1085
+msgid "add version"
+msgstr ""
+
+#: apps/videos/models.py:1086
+msgid "add translation"
+msgstr ""
+
+#: apps/videos/models.py:1087
+msgid "add video url"
+msgstr ""
+
+#: apps/videos/models.py:1240
 #, python-format
 msgid ""
 "This URL already <a href=\"%(url)s\">exists</a> as its own video in our "
@@ -1006,23 +1090,20 @@ msgid "Title can't be empty"
 msgstr ""
 
 #: apps/videos/rpc.py:42
-#, fuzzy
 msgid "Subtitle language does not exist"
-msgstr "Объект не существует"
+msgstr ""
 
 #: apps/videos/rpc.py:47
 msgid "Title was changed success"
 msgstr ""
 
 #: apps/videos/rpc.py:49
-#, fuzzy
 msgid "This is not forked translation"
-msgstr "у етого видео есть периводы"
+msgstr ""
 
 #: apps/videos/rpc.py:58 apps/videos/rpc.py:74
-#, fuzzy
 msgid "Video does not exist."
-msgstr "Объект не существует"
+msgstr ""
 
 #: apps/videos/rpc.py:65
 msgid "You are following this video now."
@@ -1033,9 +1114,8 @@ msgid "You stopped following this video now."
 msgstr ""
 
 #: apps/videos/rpc.py:90 apps/videos/rpc.py:103
-#, fuzzy
 msgid "Subtitles does not exist."
-msgstr "Объект не существует"
+msgstr ""
 
 #: apps/videos/rpc.py:94
 msgid "You are following this subtitles now."
@@ -1045,42 +1125,66 @@ msgstr ""
 msgid "You stopped following this subtitles now."
 msgstr ""
 
-#: apps/videos/views.py:120
+#: apps/videos/share_utils.py:51 apps/videos/share_utils.py:74
+msgid "Just found a version of this video with captions"
+msgstr ""
+
+#: apps/videos/share_utils.py:53
+msgid "Check out this video and help make subtitles"
+msgstr ""
+
+#: apps/videos/share_utils.py:55
+#, python-format
+msgid ""
+"Hey-- check out this video %(video_title)s and help make subtitles: %(url)s"
+msgstr ""
+
+#: apps/videos/share_utils.py:76
+#, python-format
+msgid ""
+"Hey-- just found a version of this video %(video_title)s with captions: "
+"%(url)s"
+msgstr ""
+
+#: apps/videos/share_utils.py:101
+#, python-format
+msgid "Just found a version of this video with %(language_name)s subtitles"
+msgstr ""
+
+#: apps/videos/views.py:116
 msgid ""
 "Here is the subtitle workspace for your video.  You can\n"
 "share the video with friends, or get an embed code for your site.  To add or\n"
 "improve subtitles, click the button below the video"
 msgstr ""
 
-#: apps/videos/views.py:134
+#: apps/videos/views.py:130
 #, python-format
-msgid "%(count)s videos added"
+msgid "%(count)s videos have been added"
 msgstr ""
 
-#: apps/videos/views.py:136
+#: apps/videos/views.py:132
 #, python-format
 msgid ""
-"%(count)s videos added, but feed has move videos. They can be added "
-"lated if you set \"Save feed\""
+"%(count)s videos have been added. To add the remaining videos from this "
+"feed, submit this feed again and make sure to check \"Save feed\" box."
 msgstr ""
 
-#: apps/videos/views.py:548
-#, fuzzy
+#: apps/videos/views.py:533
 msgid "You have not permission change this URL"
-msgstr "Вы не авторизованны"
+msgstr ""
 
-#: apps/videos/views.py:554 apps/videos/views.py:574
+#: apps/videos/views.py:539 apps/videos/views.py:559
 msgid "Object does not exist"
-msgstr "Объект не существует"
+msgstr ""
 
-#: apps/videos/views.py:567
+#: apps/videos/views.py:552
 msgid "You have not permission delete this URL"
 msgstr ""
 
-#: apps/videos/views.py:570
-#, fuzzy
+#: apps/videos/views.py:555
 msgid "You cann't remove original URL"
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
 #: apps/videos/feed_parser/__init__.py:101
 msgid "Feed is unavailable now."
@@ -1096,17 +1200,16 @@ msgstr[2] ""
 
 #: apps/videos/types/youtube.py:36
 msgid "Private video"
-msgstr "Приватное видео"
+msgstr ""
 
 #: apps/videos/types/youtube.py:37
 msgid "Undefined error"
-msgstr "Незвестная ошибка"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/languages.html:4
 #: libs/rosetta/templates/rosetta/languages.html:6
-#, fuzzy
 msgid "Language selection"
-msgstr "Язык"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/languages.html:6
 #: libs/rosetta/templates/rosetta/pofile.html:18
@@ -1146,9 +1249,8 @@ msgid "Messages"
 msgstr ""
 
 #: libs/rosetta/templates/rosetta/languages.html:31
-#, fuzzy
 msgid "Translated"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/languages.html:32
 #: libs/rosetta/templates/rosetta/pofile.html:57
@@ -1169,16 +1271,16 @@ msgstr ""
 
 #: libs/rosetta/templates/rosetta/languages.html:56
 msgid ""
-"You haven't specified any languages in your settings file, or haven't "
-"yet generated a batch of translation catalogs."
+"You haven't specified any languages in your settings file, or haven't yet "
+"generated a batch of translation catalogs."
 msgstr ""
 
 #: libs/rosetta/templates/rosetta/languages.html:57
 #, python-format
 msgid ""
 "Please refer to <a href=\"%(i18n_doc_link)s\">Django's I18N "
-"documentation</a> for a guide on how to set up internationalization for"
-" your project."
+"documentation</a> for a guide on how to set up internationalization for your"
+" project."
 msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:8
@@ -1186,9 +1288,8 @@ msgid "Pick another file"
 msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:9
-#, fuzzy
 msgid "Download this catalog"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:21
 msgid "Progress: %(percent_translated)s%"
@@ -1200,9 +1301,8 @@ msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:24
 msgid ""
-"Some items in your last translation block couldn't be saved: this "
-"usually happens when the catalog file changes on disk after you last "
-"loaded it."
+"Some items in your last translation block couldn't be saved: this usually "
+"happens when the catalog file changes on disk after you last loaded it."
 msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:28
@@ -1215,14 +1315,12 @@ msgid "Display:"
 msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:32
-#, fuzzy
 msgid "Untranslated only"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:33
-#, fuzzy
 msgid "Translated only"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:34
 msgid "Fuzzy only"
@@ -1232,16 +1330,15 @@ msgstr ""
 #: templates/profiles/my_profile.html:36 templates/search/index.html:14
 #: templates/teams/index.html:106
 msgid "Search"
-msgstr "Поиск"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:44 templates/index_old.html:75
 msgid "Go"
 msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:54
-#, fuzzy
 msgid "Original"
-msgstr "Оригинальные субтитры"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:58
 msgid "Occurrences(s)"
@@ -1294,162 +1391,78 @@ msgid "Previous"
 msgstr ""
 
 #: templates/_paginator.html:28 templates/_paginator.html.py:30
-#, fuzzy
 msgid "Next"
-msgstr "Текст"
+msgstr ""
 
 #: templates/_share_widget.html:4 templates/_sharing_widget.html:13
 msgid "Share your subtitles"
-msgstr "поделитесь своими субтитрами"
+msgstr "Поделитесь своими субтитрами"
 
 #: templates/_share_widget.html:6 templates/_sharing_widget.html:15
 msgid "Now everyone can watch the video with subtitles-- try it!"
-msgstr ""
+msgstr "Теперь каждый может смотреть видео с субтитрами - попробуйте!"
 
 #: templates/_share_widget.html:7 templates/_sharing_widget.html:16
 msgid "Then tell the world and invite your friends to help translate:"
-msgstr ""
+msgstr "Тогда расскажи всем и пригласи своих друзей помочь в переводе:"
 
 #: templates/_share_widget.html:10 templates/_sharing_widget.html:19
 msgid "Post to Facebook"
-msgstr ""
+msgstr "Oтправить на Фейсбук"
 
 #: templates/_share_widget.html:11 templates/_sharing_widget.html:20
 msgid "Post to Twitter"
-msgstr ""
+msgstr "Oтправить на Твиттер"
 
 #: templates/_share_widget.html:12 templates/_sharing_widget.html:21
 msgid "Email to friends"
-msgstr ""
+msgstr "Отправить email друзьям"
 
 #: templates/_share_widget.html:15
 msgid "Embed Code"
-msgstr ""
+msgstr "Код для вставки"
 
-#: templates/_share_widget.html:25 templates/_sharing_widget.html:74
+#: templates/_share_widget.html:25 templates/_sharing_widget.html:56
 msgid "Permalink"
-msgstr ""
+msgstr "Постоянная ссылка"
 
-#: templates/_sharing_widget.html:28 templates/_sharing_widget.html.py:31
-#: templates/base.html:127
-msgid "Follow"
-msgstr ""
-
-#: templates/_sharing_widget.html:29 templates/_sharing_widget.html.py:32
-msgid "Unfollow"
-msgstr ""
-
-#: templates/_sharing_widget.html:36 templates/_sharing_widget.html.py:39
-#, fuzzy
-msgid "Follow All"
-msgstr "Языки"
-
-#: templates/_sharing_widget.html:37 templates/_sharing_widget.html.py:40
-#, fuzzy
-msgid "Unfollow All"
-msgstr "Языки"
-
-#: templates/_sharing_widget.html:44
+#: templates/_sharing_widget.html:26
 msgid "Embed this video in your site"
-msgstr ""
-
-#: templates/_sharing_widget.html:120
-#, fuzzy
-msgid "Unfollow all languages"
-msgstr "Языки"
-
-#: templates/_sharing_widget.html:126
-msgid "You will not receive any notification when "
-msgstr ""
-
-#: templates/_sharing_widget.html:126
-msgid ""
-" subtitles for this video are edited. You can choose to follow again at"
-" any time."
-msgstr ""
-
-#: templates/_sharing_widget.html:127
-msgid "Stopped following "
-msgstr ""
-
-#: templates/_sharing_widget.html:127 templates/_sharing_widget.html.py:174
-#, fuzzy
-msgid " subtitles"
-msgstr "редактировать субтитлы"
-
-#: templates/_sharing_widget.html:144
-msgid ""
-"You will not receive any notification when subtitles in any language "
-"for this video are edited.  You can choose to follow again at any time."
-msgstr ""
-
-#: templates/_sharing_widget.html:145
-msgid "Stopped following all subtitles"
-msgstr ""
-
-#: templates/_sharing_widget.html:156
-msgid "You must log in to follow a video."
-msgstr ""
-
-#: templates/_sharing_widget.html:156
-msgid "Authentication required"
-msgstr ""
-
-#: templates/_sharing_widget.html:167
-#, fuzzy
-msgid "Follow all languages"
-msgstr "Языки"
-
-#: templates/_sharing_widget.html:173
-msgid "You will now receive an email when anyone edits "
-msgstr ""
-
-#: templates/_sharing_widget.html:173
-msgid " subtitles for this video. You can stop these emails at any time."
-msgstr ""
-
-#: templates/_sharing_widget.html:174
-msgid "Now following "
-msgstr ""
-
-#: templates/_sharing_widget.html:191
-msgid ""
-"You will now receive an email when anyone edits any subtitles for this "
-"video. You can stop these emails at any time."
-msgstr ""
-
-#: templates/_sharing_widget.html:192
-#, fuzzy
-msgid "Now following all subtitles"
-msgstr "Скачать субтитры"
+msgstr "Вставить это видео на своем сайте"
 
 #: templates/_testing_widget.html:3
 msgid "We&#8217;d like help testing our subtitling widget"
-msgstr ""
+msgstr "Помоги&#8217; нам в тестировании нашего Виджета для субтитров"
 
 #: templates/_testing_widget.html:5
 msgid "Just launch our feedback form and try captioning a video"
 msgstr ""
+"Просто запустите форму обратной связи и попробуйте написать субтитры для "
+"видео"
 
 #: templates/_testing_widget.html:7
 msgid "Test the Widget"
-msgstr ""
+msgstr "Тестировать Виджет"
 
 #: templates/_testing_widget.html:12
 msgid ""
-"Warning: These videos should not be embeded--there is a good "
-"possibility they will break at some point!"
+"Warning: These videos should not be embeded--there is a good possibility "
+"they will break at some point!"
 msgstr ""
+"Предупреждение: Эти видео встраивать не рекомендуется - есть высокий риск, "
+"что они будут прерваны в какой-то момент!"
 
 #: templates/_testing_widget.html:16
 msgid ""
-"Warning #2: These subtitles are non-permanent and should not be relied "
-"on -- someone could change them."
+"Warning #2: These subtitles are non-permanent and should not be relied on --"
+" someone could change them."
 msgstr ""
+"Предупреждение № 2: эти субтитры не являются постоянными и на них не следует"
+" полагаться - кто-то может изменить их."
 
 #: templates/_testing_widget.html:17
 msgid "This alpha site is for purely testing purposes."
-msgstr ""
+msgstr "Этот альфа-сайт предназначен сугубо для тестирования."
 
 #: templates/about.html:25
 msgid ""
@@ -1560,140 +1573,106 @@ msgid ""
 "    "
 msgstr ""
 
-#: templates/base.html:39 templates/base_masterbranch.html:34
+#: templates/base.html:40 templates/base_masterbranch.html:34
 #: templates/bug.html:5 templates/index_masterbranch.html:7
 msgid "Make subtitles, translations, and captions for almost any video."
 msgstr ""
 
-#: templates/base.html:83 templates/base_masterbranch.html:92
+#: templates/base.html:89 templates/base_masterbranch.html:92
 #: templates/bug.html:77 templates/index_masterbranch.html:72
 msgid "Feedback"
 msgstr ""
 
-#: templates/base.html:88 templates/base_masterbranch.html:97
+#: templates/base.html:94 templates/base_masterbranch.html:97
 msgid ""
-"Universal Subtitles does not support your browser. Upgrade your browser"
-" or <a href=\"http://getfirefox.com\">Try Firefox</a>."
+"Universal Subtitles does not support your browser. Upgrade your browser or "
+"<a href=\"http://getfirefox.com\">Try Firefox</a>."
 msgstr ""
+"Universal Subtitles Не поддерживает твой браузер.Поставь новую версию или <a"
+" href=\"http://getfirefox.com\">Try Firefox</a>."
 
-#: templates/base.html:99
+#: templates/base.html:105
 msgid "Admin"
-msgstr ""
+msgstr "Администратор"
 
-#: templates/base.html:102
+#: templates/base.html:108
 msgid "Sentry"
 msgstr ""
 
-#: templates/base.html:105
+#: templates/base.html:111
 msgid "Rosetta"
 msgstr ""
 
-#: templates/base.html:122 templates/teams/_team_video_lang_detail.html:34
+#: templates/base.html:128 templates/teams/_team_video_lang_detail.html:34
 msgid "Create"
 msgstr ""
 
-#: templates/base.html:123 templates/base_masterbranch.html:129
+#: templates/base.html:129 templates/base_masterbranch.html:129
 #: templates/bug.html:94 templates/index_masterbranch.html:89
 msgid "Watch"
 msgstr ""
 
-#: templates/base.html:125
+#: templates/base.html:131
 msgid "Contribute"
 msgstr ""
 
-#: templates/base.html:126
+#: templates/base.html:132
 msgid "Solutions"
 msgstr ""
 
-#: templates/base.html:129
-msgid "Volunteer"
+#: templates/base.html:133 templates/videos/_follow_video_button.html:46
+msgid "Follow"
 msgstr ""
 
-#: templates/base.html:130
+#: templates/base.html:135
+msgid "Volunteer"
+msgstr "Доброволец"
+
+#: templates/base.html:136
 msgid "Services"
 msgstr ""
 
-#: templates/base.html:131 templates/base_masterbranch.html:137
+#: templates/base.html:137 templates/base_masterbranch.html:137
 #: templates/bug.html:106 templates/index_masterbranch.html:99
 msgid "FAQ"
-msgstr ""
+msgstr "Вопросы и ответы"
 
-#: templates/base.html:141 templates/settings.html:8
-#: templates/profiles/_top_user_panel.html:11
-#: templates/profiles/my_profile.html:24
-msgid "My Videos"
-msgstr ""
-
-#: templates/base.html:143 templates/settings.html:10
-#: templates/profiles/_top_user_panel.html:13 templates/teams/index.html:8
-msgid "My Teams"
-msgstr ""
-
-#: templates/base.html:146 templates/settings.html:13
-#: templates/profiles/_top_user_panel.html:16
-msgid "View profile"
-msgstr ""
-
-#: templates/base.html:148 templates/settings.html:15
-#: templates/profiles/_top_user_panel.html:18
-#, fuzzy
-msgid "Edit Profile"
-msgstr "редактировать название"
-
-#: templates/base.html:150 templates/messages/index.html:6
-#: templates/messages/index.html.py:101 templates/messages/sent.html:81
-#: templates/profiles/_top_user_panel.html:20
-#, fuzzy
-msgid "My Messages"
-msgstr "Языки"
-
-#: templates/base.html:153
-msgid "Sign Out"
-msgstr ""
-
-#: templates/base.html:160 templates/settings.html:27
-#: templates/profiles/_top_user_panel.html:30
-#, fuzzy
-msgid "Team Management"
-msgstr "Язык"
-
-#: templates/base.html:173
+#: templates/base.html:141
 msgid "Sign In"
 msgstr ""
 
-#: templates/base.html:202 templates/base_masterbranch.html:168
+#: templates/base.html:170 templates/base_masterbranch.html:168
 #: templates/bug.html:317 templates/index_masterbranch.html:306
 msgid ""
 "Universal Subtitles is a project of <a "
 "href=\"http://participatoryculture.org/\">PCF</a>."
 msgstr ""
 
-#: templates/base.html:205 templates/base_masterbranch.html:171
+#: templates/base.html:173 templates/base_masterbranch.html:171
 #: templates/index_masterbranch.html:310
 #: templates/profiles/view_profile.html:46
 msgid "About"
-msgstr ""
+msgstr "О"
 
-#: templates/base.html:208 templates/base_masterbranch.html:174
+#: templates/base.html:176 templates/base_masterbranch.html:174
 #: templates/bug.html:323 templates/index_masterbranch.html:313
 msgid "Contact Us"
-msgstr ""
+msgstr "Как с нами связаться"
 
-#: templates/base.html:209 templates/base_masterbranch.html:175
+#: templates/base.html:177 templates/base_masterbranch.html:175
 #: templates/bug.html:324 templates/index_masterbranch.html:314
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Правила конфиденциальности"
 
-#: templates/base.html:210 templates/base_masterbranch.html:176
+#: templates/base.html:178 templates/base_masterbranch.html:176
 #: templates/bug.html:325 templates/index_masterbranch.html:315
 msgid "Terms of Service"
 msgstr ""
 
 #: templates/base_masterbranch.html:125 templates/bug.html:89
 #: templates/index_masterbranch.html:85
-#, fuzzy
 msgid "Subtitle"
-msgstr "Есть субтитры?"
+msgstr ""
 
 #: templates/base_masterbranch.html:126 templates/bug.html:90
 #: templates/index_masterbranch.html:86
@@ -1740,15 +1719,15 @@ msgstr ""
 #: templates/bug.html:125 templates/index.html:27
 #: templates/index_masterbranch.html:115
 msgid ""
-"Increase video views by reaching global audiences and being accessible "
-"to the deaf and hard-of-hearing."
+"Increase video views by reaching global audiences and being accessible to "
+"the deaf and hard-of-hearing."
 msgstr ""
 
 #: templates/bug.html:127 templates/index.html:28
 #: templates/index_masterbranch.html:116
 msgid ""
-"It's powered by viewers and other volunteers: it's collaborative "
-"editing and translation, like a wiki."
+"It's powered by viewers and other volunteers: it's collaborative editing and"
+" translation, like a wiki."
 msgstr ""
 
 #: templates/bug.html:129 templates/index.html:29
@@ -1759,8 +1738,8 @@ msgstr ""
 #: templates/bug.html:131 templates/index.html:30
 #: templates/index_masterbranch.html:118
 msgid ""
-"The fastest way to add subtitle functionality to a single video or a "
-"whole site. Super easy to integrate with no software to install."
+"The fastest way to add subtitle functionality to a single video or a whole "
+"site. Super easy to integrate with no software to install."
 msgstr ""
 
 #: templates/bug.html:133 templates/index.html:31
@@ -1770,9 +1749,8 @@ msgstr ""
 
 #: templates/bug.html:137 templates/index.html:34
 #: templates/index_masterbranch.html:122
-#, fuzzy
 msgid "videos use"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/bug.html:156 templates/index.html:61
 #: templates/index_masterbranch.html:148
@@ -1781,9 +1759,8 @@ msgstr ""
 
 #: templates/bug.html:159 templates/index.html:64
 #: templates/index_masterbranch.html:151
-#, fuzzy
 msgid "For an individual video"
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
 #: templates/bug.html:163 templates/index_masterbranch.html:155
 msgid "enter a video URL to enable"
@@ -1801,8 +1778,8 @@ msgstr ""
 #: templates/bug.html:174 templates/index.html:72
 #: templates/index_masterbranch.html:164
 msgid ""
-"paste this single line of code into your page header and every video "
-"will be subtitle enabled"
+"paste this single line of code into your page header and every video will be"
+" subtitle enabled"
 msgstr ""
 
 #: templates/bug.html:181 templates/index_masterbranch.html:170
@@ -1811,15 +1788,13 @@ msgstr ""
 
 #: templates/bug.html:198 templates/index.html:88
 #: templates/index_masterbranch.html:186 templates/index_old.html:191
-#, fuzzy
 msgid "With Universal Subtitles, you can:"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/bug.html:202 templates/index.html:90
 #: templates/index_masterbranch.html:190 templates/index_old.html:195
-#, fuzzy
 msgid "Add subtitles"
-msgstr "редактировать субтитлы"
+msgstr ""
 
 #: templates/bug.html:204 templates/index_masterbranch.html:192
 #: templates/index_old.html:197
@@ -1833,9 +1808,8 @@ msgstr ""
 
 #: templates/bug.html:215 templates/index.html:95
 #: templates/index_masterbranch.html:203 templates/index_old.html:208
-#, fuzzy
 msgid "Add translations"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/bug.html:217 templates/index.html:97
 #: templates/index_masterbranch.html:205 templates/index_old.html:210
@@ -1923,15 +1897,13 @@ msgstr ""
 
 #: templates/bug.html:282 templates/index.html:155
 #: templates/index_masterbranch.html:269 templates/index_old.html:275
-#, fuzzy
 msgid "Why Universal Subtitles is different"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/bug.html:286 templates/index.html:157
 #: templates/index_masterbranch.html:273 templates/index_old.html:279
 msgid ""
-"It's built by a 501(c)3 nonprofit working with a community of "
-"volunteers"
+"It's built by a 501(c)3 nonprofit working with a community of volunteers"
 msgstr ""
 
 #: templates/bug.html:287 templates/index.html:157
@@ -1952,8 +1924,8 @@ msgstr ""
 #: templates/bug.html:295 templates/index.html:160
 #: templates/index_masterbranch.html:282 templates/index_old.html:288
 msgid ""
-"It's built using Javascript and HTML5 instead of proprietary software "
-"like Flash"
+"It's built using Javascript and HTML5 instead of proprietary software like "
+"Flash"
 msgstr ""
 
 #: templates/bug.html:297 templates/index.html:161
@@ -1964,37 +1936,36 @@ msgstr ""
 #: templates/bug.html:299 templates/index.html:162
 #: templates/index_masterbranch.html:286 templates/index_old.html:292
 msgid ""
-"You don't have to host your video with us, and you're not dependent on "
-"any one video host, platform, or format."
+"You don't have to host your video with us, and you're not dependent on any "
+"one video host, platform, or format."
 msgstr ""
 
 #: templates/bug.html:301 templates/index.html:163
 #: templates/index_masterbranch.html:288 templates/index_old.html:294
-#, fuzzy
 msgid "People are free to add subtitles to any video"
-msgstr "как добавить субтитлы к моиму видео"
+msgstr ""
 
 #: templates/bug.html:307 templates/index.html:169
 #: templates/index_masterbranch.html:294 templates/index_old.html:301
 #: templates/jsdemo/home.html:112
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "Mozilla удвоит ваше пожертвование!"
 
 #: templates/bug.html:308 templates/index.html:170
 #: templates/index_masterbranch.html:295 templates/index_old.html:302
 #: templates/jsdemo/home.html:113
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "Мы известный Mozilla Drumbeat проект!"
 
 #: templates/bug.html:309 templates/index.html:171
 #: templates/index_masterbranch.html:296 templates/index_old.html:303
 #: templates/jsdemo/home.html:113
 msgid "Donate Now"
-msgstr ""
+msgstr "Пожертвования"
 
 #: templates/demo.html:19
 msgid "Welcome to our alpha demo!"
-msgstr ""
+msgstr "Добро пожаловать на наш альфа-демо!"
 
 #: templates/demo.html:21
 msgid ""
@@ -2010,6 +1981,12 @@ msgid ""
 "  </p>\n"
 "  "
 msgstr ""
+"\n"
+"  <p><strong>What's this?</strong> Видео внизу для демонстрационных целей &mdash; нажми на кнопку 'Сделай субтитры' !</p> \n"
+"  <p>Мы только в самом начале проекта, так что в будущем ожидается поддержка и других браузеров (Фаерфокс 3.5+ самый подходящий на данный момент) а мы сделаем поддержку для многих разных форматов видео и хостов.Не стесняйтесь оставить нам свои предложения внизу этой старницы.\n"
+"    <em>Внимание: Ваши субтитры не будут сохранены (даже если вы сделали логин).</em>\n"
+"  </p>\n"
+"  "
 
 #: templates/demo.html:41
 msgid ""
@@ -2021,6 +1998,10 @@ msgid ""
 "    collaboration on subtitles and translations. Stay tuned!</p>\n"
 "  "
 msgstr ""
+"\n"
+"  <p style=\"clear: both\"><strong>Есть предложения?</strong> Воспользуйтесь бланком внизу старницы чтобы послать нам ваши впечатления,мнение или сообшение об ошибках.</p>\n"
+"  <p><strong>Что дальше?</strong> Мы продолжаем работать над версией альфа нашего коллективного сайта которая будет поддерживать базовые функции совместной работы над субтитрами и переводами.Будьте на связи!</p>\n"
+"  "
 
 #: templates/dmca.html:6
 msgid "Copyright Infringement Notification"
@@ -2184,8 +2165,8 @@ msgstr ""
 
 #: templates/embed_page.html:13
 msgid ""
-"Just add this line of code to your webpage, or to your blog/CMS theme "
-"(right before the &lt;/head&gt; tag)"
+"Just add this line of code to your webpage, or to your blog/CMS theme (right"
+" before the &lt;/head&gt; tag)"
 msgstr ""
 
 #: templates/embed_page.html:20
@@ -2242,8 +2223,7 @@ msgstr ""
 
 #: templates/embed_page.html:64
 msgid ""
-"Note: this code is an experimental part of the Universal Subtitles "
-"service."
+"Note: this code is an experimental part of the Universal Subtitles service."
 msgstr ""
 
 #: templates/embed_page.html:65
@@ -2268,94 +2248,97 @@ msgstr ""
 
 #: templates/embed_page.html:78
 msgid ""
-"Any other problems, especially styling problems on the page, contact us"
-" and include the site URL!"
+"Any other problems, especially styling problems on the page, contact us and "
+"include the site URL!"
 msgstr ""
 
 #: templates/faq.html:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Часто задаваемые вопросы"
 
 #: templates/faq.html:19 templates/faq.html.py:43
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Что такое Universal Subtitles?"
 
 #: templates/faq.html:20 templates/faq.html.py:54
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Как я могу использовать Universal Subtitles?"
 
 #: templates/faq.html:21 templates/faq.html.py:65
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "Каковы преимущества субтитров?"
 
 #: templates/faq.html:22 templates/faq.html.py:74
 msgid ""
 "Who is the Participatory Culture Foundation and why are they making "
 "Universal Subtitles?"
 msgstr ""
+"Кто это Фонд Культуры Участия и почему они создают Universal Subtitles?"
 
 #: templates/faq.html:23 templates/faq.html.py:78
 msgid ""
-"Will Universal Subtitles support closed captions for the deaf and hard "
-"of hearing?"
+"Will Universal Subtitles support closed captions for the deaf and hard of "
+"hearing?"
 msgstr ""
+"Будет ли Universal Subtitles поддерживать условные субтитры для глухих и "
+"слабослышащих?"
 
 #: templates/faq.html:24 templates/faq.html.py:82
 msgid "Will your subtitles support my language or characterset?"
-msgstr ""
+msgstr "Будут ли ваши субтитры поддерживать мой язык и кодоровку?"
 
 #: templates/faq.html:25 templates/faq.html.py:86
 msgid "When will the tools, including this site, be available in my language?"
-msgstr ""
+msgstr "Когда программы, в том числе этот сайт, будут доступны на моем языке?"
 
 #: templates/faq.html:26 templates/faq.html.py:97
 msgid "How can I add subtitles to my video?"
-msgstr "как добавить субтитлы к моиму видео"
+msgstr "Как я могу добавить субтитры для видео?"
 
 #: templates/faq.html:27 templates/faq.html.py:107
 msgid "What open source license do you use?"
-msgstr ""
+msgstr "Какой открытой лицензией вы пользуетесь?"
 
 #: templates/faq.html:28 templates/faq.html.py:111
 msgid "I'm a developer, can I help out?"
-msgstr ""
+msgstr "Я разработчик, я могу помочь?"
 
 #: templates/faq.html:29 templates/faq.html.py:115
 msgid "Can non-technical people get involved with the project?"
-msgstr ""
+msgstr "Могут ли  нетехнические люди участвовать в проекте?"
 
 #: templates/faq.html:30 templates/faq.html.py:126
 msgid "Do you accept donations? Are they tax deductible?"
-msgstr ""
+msgstr "Вы принимаете пожертвования? Являются ли они налогом?"
 
 #: templates/faq.html:31 templates/faq.html.py:134
 msgid "What is your relationship with Mozilla Drumbeat?"
-msgstr ""
+msgstr "Как Вы относитесь к  Mozilla Drumbeat?"
 
 #: templates/faq.html:32 templates/faq.html.py:138
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr ""
+msgstr "Где можно скачать субтитры в. SRT или их форматах?"
 
 #: templates/faq.html:33 templates/faq.html.py:148
 msgid ""
-"It says \"Someone else is currently editing these subtitles\" and I can't"
-" do anything.  How long will this last for?  Why does it happen?"
+"It says \"Someone else is currently editing these subtitles\" and I can't do"
+" anything.  How long will this last for?  Why does it happen?"
 msgstr ""
 
 #: templates/faq.html:34 templates/faq.html.py:158
 msgid "Why can't I change the timing on a translation?"
-msgstr ""
+msgstr "Почему я не могу изменить синхронность перевода?"
 
 #: templates/faq.html:35 templates/faq.html.py:169
 msgid ""
-"How do old revisions work? What if somebody makes a change to my work "
-"that I don't approve of?"
+"How do old revisions work? What if somebody makes a change to my work that I"
+" don't approve of?"
 msgstr ""
 
 #: templates/faq.html:36 templates/faq.html.py:185
 msgid ""
-"How do I add the Universal Subtitles &quot;embed all videos&quot; code "
-"to my site?"
+"How do I add the Universal Subtitles &quot;embed all videos&quot; code to my"
+" site?"
 msgstr ""
 
 #: templates/faq.html:37 templates/faq.html.py:198
@@ -2388,44 +2371,44 @@ msgstr ""
 
 #: templates/faq.html:68
 msgid ""
-"Captions make videos accessible for viewers who are deaf or hard of "
-"hearing "
+"Captions make videos accessible for viewers who are deaf or hard of hearing "
 msgstr ""
 
 #: templates/faq.html:69
 msgid ""
-"Translations make it possible for all of us to watch video in languages"
-" that we don't speak"
+"Translations make it possible for all of us to watch video in languages that"
+" we don't speak"
 msgstr ""
 
 #: templates/faq.html:70
 msgid ""
 "Video creators get: better SEO, more views, access to a far bigger "
-"(potentially multilingual and global) audience, accessibility for deaf "
-"and hard of hearing viewers, and more"
+"(potentially multilingual and global) audience, accessibility for deaf and "
+"hard of hearing viewers, and more"
 msgstr ""
 
 #: templates/faq.html:75
 msgid ""
-"he Participatory Culture Foundation is a 501c3 non-profit organization "
-"whose mission is to build a fairer, more open, and more democratic "
-"media space. PCF saw a gap in the marketplace for more open and "
-"collaborative subtitling &mdash; Universal Subtitles is helping to fill"
-" that need."
+"he Participatory Culture Foundation is a 501c3 non-profit organization whose"
+" mission is to build a fairer, more open, and more democratic media space. "
+"PCF saw a gap in the marketplace for more open and collaborative subtitling "
+"&mdash; Universal Subtitles is helping to fill that need."
 msgstr ""
 
 #: templates/faq.html:79
 msgid ""
-"Yes, we are working on a solution for making closed captions [including"
-" information about sounds and music], as well as "
-"subtitles/translations."
+"Yes, we are working on a solution for making closed captions [including "
+"information about sounds and music], as well as subtitles/translations."
 msgstr ""
+"Да, мы работаем над решением для создания субтитров \"по желанию\"  [в том "
+"числе информацию о звуках и музыке], а также субтитры / переводы."
 
 #: templates/faq.html:83
 msgid ""
-"We will be working to support as many languages/charactersets as "
-"possible."
+"We will be working to support as many languages/charactersets as possible."
 msgstr ""
+"Мы будем работать над поддержкой  как как можно большего количества языков и"
+" чарсетов"
 
 #: templates/faq.html:88
 msgid ""
@@ -2451,13 +2434,18 @@ msgid ""
 "For our subtitling widget and community website, we're using the <a "
 "href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
 msgstr ""
+"Для нашего Виджета и сайта мы используем  <a "
+"href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
 
 #: templates/faq.html:112
 msgid ""
-"Please do! If you're interested in coding and development, please visit"
-" our <a href=\"http://wiki.github.com/8planes/mirosubs/dev-"
-"center\">developer center</a>."
+"Please do! If you're interested in coding and development, please visit our "
+"<a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer "
+"center</a>."
 msgstr ""
+"Да,пожалуйста!Если вы интересуетесь кодом и разработкой, посетите наш <a "
+"href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer "
+"center</a>."
 
 #: templates/faq.html:117
 msgid ""
@@ -2479,12 +2467,17 @@ msgstr ""
 
 #: templates/faq.html:135
 msgid ""
-"The Mozilla Foundation has provided Universal Subtitles with seed "
-"funding, community support, and fundraising support through <a "
-"href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a "
-"movement to keep the web open for the next 100 years, and Universal "
-"Subtitles is a featured project!"
+"The Mozilla Foundation has provided Universal Subtitles with seed funding, "
+"community support, and fundraising support through <a "
+"href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement "
+"to keep the web open for the next 100 years, and Universal Subtitles is a "
+"featured project!"
 msgstr ""
+"Mozilla Foundation предоставила Universal Subtitles начальное "
+"финансирование,поддержку общины и сбор вкладов с помощью <a "
+"href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat это движение "
+"поддерживающее свободу Интернета на ближайшие 100 лет и Universal Subtitles "
+"iодин из его главных проектов!"
 
 #: templates/faq.html:140
 msgid ""
@@ -2550,42 +2543,45 @@ msgstr ""
 
 #: templates/feedback_response.html:3
 msgid ""
-"Thanks for getting in touch! We love hearing your ideas, bugs, "
-"feedback, opinions and such."
+"Thanks for getting in touch! We love hearing your ideas, bugs, feedback, "
+"opinions and such."
 msgstr ""
+"Спасибо за ваши предложения!Мы рады слышать ваши идеи,сообщения об ошибках, "
+"мненияи предложения."
 
 #: templates/feedback_response.html:6
 msgid "Stay tuned as the project evolves!"
-msgstr ""
+msgstr "Оставайтесь с нами,по мере того как проект развивается!"
 
 #: templates/feedback_response.html:9
 msgid "Announcement Signup"
-msgstr ""
+msgstr "Регистрация для получения новостей"
 
 #: templates/feedback_response.html:12
 msgid "Best"
-msgstr ""
+msgstr "Лучшие"
 
 #: templates/feedback_response.html:16
 msgid ""
-"PS. We do our best to respond to all questions, but please be patient "
-"-- we get a lot of email"
+"PS. We do our best to respond to all questions, but please be patient -- we "
+"get a lot of email"
 msgstr ""
+"PS. Мы прилагаем все усилия, чтобы ответить на все вопросы, но, пожалуйста, "
+"будьте терпеливы - мы получаем много электронной почты"
 
 #: templates/index.html:67
 msgid "enter a video URL to enable and then embed anywhere"
 msgstr ""
 
 #: templates/index.html:76
-#, fuzzy
 msgid "Universal Subtitles works with these video sites and formats"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/index.html:91
 msgid ""
-"We've built the easiest way to subtitle videos. Add our subtitling "
-"widget toyour video (or your site) and click the \"subtitle me\" button. "
-"The rest is simple! Totally free, and no software to download."
+"We've built the easiest way to subtitle videos. Add our subtitling widget "
+"toyour video (or your site) and click the \"subtitle me\" button. The rest "
+"is simple! Totally free, and no software to download."
 msgstr ""
 
 #: templates/index.html:143
@@ -2609,9 +2605,8 @@ msgid ""
 msgstr ""
 
 #: templates/index_old.html:57
-#, fuzzy
 msgid "videos use Universal Subtitles"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/index_old.html:71
 msgid "Try it! Subtitle a Video Now"
@@ -2639,81 +2634,106 @@ msgstr ""
 
 #: templates/opensubtitles2010.html:8 templates/opensubtitles2010.html:26
 msgid "Open Subtitles Design Summit"
-msgstr ""
+msgstr " Конференция Open Subtitles Design"
 
 #: templates/opensubtitles2010.html:28
 msgid ""
-"The Open Subtitles Design Summit will bring together global "
-"stakeholders in the subtitling space for a tightly focused / goal "
-"oriented meeting in NYC. The event is being organized by The "
-"Participatory Culture Foundation, developers of the Universal Subtitles"
-" project. We expect roughly 40 participants."
+"The Open Subtitles Design Summit will bring together global stakeholders in "
+"the subtitling space for a tightly focused / goal oriented meeting in NYC. "
+"The event is being organized by The Participatory Culture Foundation, "
+"developers of the Universal Subtitles project. We expect roughly 40 "
+"participants."
 msgstr ""
+" Конференция Open Subtitles Design соберет вместе важных заинтересованных "
+"сторон субтитрового пространства для сосредоточеного / целенаправленного "
+"заседания в Нью-Йорке. Мероприятие организовано с помощью Participatory "
+"Culture Foundation, разработчиками проекта Universal Subtitles. Мы ожидаем "
+"примерно 40 участников."
 
 #: templates/opensubtitles2010.html:34
 msgid "Meeting Goals"
-msgstr ""
+msgstr "Цели встречи"
 
 #: templates/opensubtitles2010.html:37
 msgid ""
-"<strong>Connect</strong> major stakeholders from projects, "
-"organizations, and movements that have open subtitling needs or focus."
+"<strong>Connect</strong> major stakeholders from projects, organizations, "
+"and movements that have open subtitling needs or focus."
 msgstr ""
+"<strong>Встретить вместе</strong> главных заинтересованных сторон из "
+"проектов,организаций и движений которые заинтересованы или нуждаются в "
+"открытых субтитрах."
 
 #: templates/opensubtitles2010.html:41
 msgid ""
-"<strong>Identify ways</strong> to solve stakeholder subtitling needs "
-"and be aware of existing technology that can be leveraged. Find logical"
-" places for collaboration/cooperation."
+"<strong>Identify ways</strong> to solve stakeholder subtitling needs and be "
+"aware of existing technology that can be leveraged. Find logical places for "
+"collaboration/cooperation."
 msgstr ""
+"<strong>Найти пути</strong> варианты решения проблем создания субтитров для "
+"заинтересованных сторон и получить информацию о существующих технологиях, "
+"которыми можно воспользоваться.Найти точки кооперирования и совместной "
+"работы."
 
 #: templates/opensubtitles2010.html:44
 msgid ""
-"<strong>Move towards</strong> standardizing solutions and pushing "
-"forward the state of the art in open subtiting."
+"<strong>Move towards</strong> standardizing solutions and pushing forward "
+"the state of the art in open subtiting."
 msgstr ""
+"<strong>Двигаться в направлении</strong> стандартизации решений и далнейшего"
+" продвижения в развитии открытого субтитрирования."
 
 #: templates/opensubtitles2010.html:53
 msgid "Participants"
-msgstr ""
+msgstr "Участники"
 
 #: templates/opensubtitles2010.html:55
 msgid ""
 "Participants will include: video creators and producers, end-users, "
-"representatives from major video hosting services, standards engineers,"
-" accessibility advocates, open source developers, educational leaders, "
-"and other individuals and organizations with a stake in the subtitling "
-"world. We'll make a roster available when the event draws closer."
+"representatives from major video hosting services, standards engineers, "
+"accessibility advocates, open source developers, educational leaders, and "
+"other individuals and organizations with a stake in the subtitling world. "
+"We'll make a roster available when the event draws closer."
 msgstr ""
+"Среди участников будут: видео создатели и производители, конечныe "
+"пользователи, представители основных услуг видео хостинг, инженеры "
+"стандартов , адвокаты доступности, разработчики открытого программного "
+"обеспечения, руководители образования, и другиe лица и организации, "
+"заинтересованныe в мирe субтитров . Мы сделаем список доступным при "
+"приближении события ."
 
 #: templates/opensubtitles2010.html:57
 msgid ""
-"Attendees are selected by invitation; however, if you or your "
-"organization would like to participate, please contact:"
+"Attendees are selected by invitation; however, if you or your organization "
+"would like to participate, please contact:"
 msgstr ""
+"Участники отбираются по приглашению, однако, если вы или ваша организация "
+"хотели бы принять участие, пожалуйста, обращайтесь:"
 
 #: templates/opensubtitles2010.html:62
 msgid "When"
-msgstr ""
+msgstr "Когда"
 
 #: templates/opensubtitles2010.html:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "29 и 30-е сентября , начало в 9 утра в оба дня."
 
 #: templates/opensubtitles2010.html:67
 msgid "Where"
-msgstr ""
+msgstr "Где"
 
 #: templates/opensubtitles2010.html:68
 msgid ""
-"The summit will be held at the beautiful Open Plans penthouse in Soho, "
-"which is located at 148 Lafayette St, Floor 12, New York City. (<a "
+"The summit will be held at the beautiful Open Plans penthouse in Soho, which"
+" is located at 148 Lafayette St, Floor 12, New York City. (<a "
 "href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
 msgstr ""
+"Конференция пройдет в очень красивом пентхаузе в Сохо,ул.Лафаэт 148,12 этаж,"
+" Нью Йорк.. (<a "
+"href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
 
 #: templates/opensubtitles2010.html:73
 msgid "Why"
-msgstr ""
+msgstr "Почему"
 
 #: templates/opensubtitles2010.html:75
 msgid ""
@@ -2727,51 +2747,67 @@ msgid ""
 "            and make sense of the ever growing sea of online video.\n"
 "           "
 msgstr ""
+"\n"
+"            Фокус конференции на более доступных субтитрах и облегчение в их исползовании - обе цели крайне восстребованы.Время как раз очень критическое,потому что использование видео в Интернете резко возрасло&mdash;люди, полагающиеся на субтитры под угрозой быть оставлеными позади.Новые пользователи,представители всех народов, массово присоединяются к использованию Интернета; \n"
+"            Создание технологических стандартов может прогрессивно увеличить потенциальные аудиотории и даст посланиям возможность легче пересекать культурные барьеры. \n"
+"           Субтитры также упростят индексацию и обработку вечно растущего океана видео онлайн.\n"
+"           "
 
 #: templates/opensubtitles2010.html:91
 msgid "Organizers, Facilitators, Sponsors"
-msgstr ""
+msgstr "Организаторы, посредники, спонсоры"
 
 #: templates/opensubtitles2010.html:94
 msgid "Organizers"
-msgstr ""
+msgstr "Организаторы"
 
 #: templates/opensubtitles2010.html:95
 msgid ""
-"The <a href=\"http://www.participatoryculture.org/\">Participatory "
-"Culture Foundation</a> is organizing the summit. Their most recent "
-"project, <a href=\"http://universalsubtitles.org/\">Universal "
-"Subtitles</a>, makes open source and collaborative subtitling and "
-"translation easy."
+"The <a href=\"http://www.participatoryculture.org/\">Participatory Culture "
+"Foundation</a> is organizing the summit. Their most recent project, <a "
+"href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open "
+"source and collaborative subtitling and translation easy."
 msgstr ""
+"<a href=\"http://www.participatoryculture.org/\">Participatory Culture "
+"Foundation</a> организует конференцию. Их самый свежий проект, <a "
+"href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, упрощает "
+"совместное создание субтитров и переводов."
 
 #: templates/opensubtitles2010.html:99
 msgid "Facilitators"
-msgstr ""
+msgstr "Посредники"
 
 #: templates/opensubtitles2010.html:100
 msgid ""
 "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing "
-"facilitation and agenda design. Aspiration believes that face-to-face "
-"events are the most powerful way to facilitate interaction, build "
-"networks, and collaborate."
+"facilitation and agenda design. Aspiration believes that face-to-face events"
+" are the most powerful way to facilitate interaction, build networks, and "
+"collaborate."
 msgstr ""
+"<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is предоставляет "
+"посредничество и темовой дизайн. Aspiration верит что личные встречи лицом к"
+" лицу это самый влиятельный способ общения,наращивания связей и "
+"сотрудничества."
 
 #: templates/opensubtitles2010.html:103
 msgid "Sponsors"
-msgstr ""
+msgstr "Спонсоры"
 
 #: templates/opensubtitles2010.html:104
 msgid ""
 "The summit has been generously funded by the <a "
 "href=\"http://www.soros.org/\">Open Society Institute</a>."
 msgstr ""
+"Конференция щедро субсидируется <a href=\"http://www.soros.org/\">Open "
+"Society Institute</a>."
 
 #: templates/opensubtitles2010.html:113
 msgid ""
 "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for "
 "providing meeting space!"
 msgstr ""
+"Особое спасибо <a href=\"http://openplans.org/\">Open Plans</a> за "
+"предоставление места встречи !"
 
 #: templates/services.html:8
 msgid "Want more video views and a more engaged audience?"
@@ -2808,9 +2844,8 @@ msgid ""
 msgstr ""
 
 #: templates/services.html:32
-#, fuzzy
 msgid "Universal Subtitles makes it easy to:"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/services.html:35
 msgid ""
@@ -2868,19 +2903,39 @@ msgstr ""
 msgid "Some of Our Partners"
 msgstr ""
 
+#: templates/settings.html:8 templates/profiles/_top_user_panel.html:10
+#: templates/profiles/my_profile.html:24
+msgid "My Videos"
+msgstr ""
+
+#: templates/settings.html:10 templates/profiles/_top_user_panel.html:14
+#: templates/teams/index.html:8
+msgid "My Teams"
+msgstr ""
+
+#: templates/settings.html:13 templates/profiles/_top_user_panel.html:19
+msgid "View profile"
+msgstr ""
+
+#: templates/settings.html:15 templates/profiles/_top_user_panel.html:23
+msgid "Edit Profile"
+msgstr ""
+
+#: templates/settings.html:27 templates/profiles/_top_user_panel.html:42
+msgid "Team Management"
+msgstr ""
+
 #: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
-#, fuzzy
 msgid "Universal Subtitles"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/admin/base_site.html:12
 msgid "View site"
 msgstr ""
 
 #: templates/admin/base_site.html:13
-#, fuzzy
 msgid "Edit settings"
-msgstr "редактировать субтитлы"
+msgstr ""
 
 #: templates/auth/delete_user.html:9
 msgid "Are you sure that you want to permanently delete your profile?"
@@ -2891,7 +2946,7 @@ msgid "Delete"
 msgstr ""
 
 #: templates/auth/delete_user.html:14
-#: templates/profiles/_select_language_dialog.html:94
+#: templates/profiles/_select_language_dialog.html:100
 #: templates/videos/_feedback_form.html:31
 msgid "Cancel"
 msgstr ""
@@ -2902,7 +2957,7 @@ msgstr ""
 
 #: templates/auth/login.html:13
 msgid "Login"
-msgstr ""
+msgstr "Войти"
 
 #: templates/auth/login.html:14
 msgid "Forgot password?"
@@ -2920,14 +2975,14 @@ msgstr ""
 msgid "Create Account"
 msgstr ""
 
-#: templates/comments/_item.html:8 templates/messages/index.html:138
-#: templates/messages/sent.html:118 templates/videos/_video_activity.html:58
+#: templates/comments/_item.html:8 templates/messages/index.html:154
+#: templates/messages/sent.html:121 templates/videos/_action_tpl_video.html:12
 #: templates/videos/_video_url_panel.html:54
 msgid "ago"
 msgstr ""
 
-#: templates/comments/_item.html:13 templates/messages/index.html:177
-#: templates/messages/sent.html:157
+#: templates/comments/_item.html:13 templates/messages/index.html:193
+#: templates/messages/sent.html:160
 msgid "Reply"
 msgstr ""
 
@@ -2937,116 +2992,125 @@ msgstr ""
 
 #: templates/jsdemo/home.html:16
 msgid "Subtitles and Captions for Every Video on the Web"
-msgstr ""
+msgstr "Субтитры и титры для каждого видео в Интернете"
 
 #: templates/jsdemo/home.html:19
 msgid "The Problem"
-msgstr ""
+msgstr "Проблема"
 
 #: templates/jsdemo/home.html:19
 msgid ""
-"Web video is beginning to rival television, but there isn't a good open"
-" resource for subtitling."
+"Web video is beginning to rival television, but there isn't a good open "
+"resource for subtitling."
 msgstr ""
+"Веб-видео начинает соперничать с телевидением, но нет хорошего открытого "
+"ресурса для создания субтитров."
 
 #: templates/jsdemo/home.html:21
 msgid "Our Mission"
-msgstr ""
+msgstr "Наша миссия"
 
 #: templates/jsdemo/home.html:21
 msgid ""
-"We're trying to make captioning, subtitling, and translating video "
-"publicly accessible in a way that's free and open, just like the Web."
+"We're trying to make captioning, subtitling, and translating video publicly "
+"accessible in a way that's free and open, just like the Web."
 msgstr ""
+"Мы пытаемся сделать титры, субтитры, и перевод видео публично "
+"доступными,свободными и открытыми, как и  Интернет."
 
 #: templates/jsdemo/home.html:21
 msgid "Learn More"
-msgstr ""
+msgstr "Подробнее"
 
 #: templates/jsdemo/home.html:24
 msgid "Right now"
-msgstr ""
+msgstr "Прямо сейчас"
 
 #: templates/jsdemo/home.html:24
 msgid "we're in an alpha stage, building and testing. You can help!"
 msgstr ""
+"мы находимся в стадии альфа создания и тестирования. Вы можете помочь!"
 
 #: templates/jsdemo/home.html:25
 msgid "Try our demo"
-msgstr ""
+msgstr "Попробуйте демо"
 
 #: templates/jsdemo/home.html:25
 msgid "Become a tester"
-msgstr ""
+msgstr "Стать тестером"
 
 #: templates/jsdemo/home.html:31
-#, fuzzy
 msgid "Subtitle Widget"
-msgstr "Субтитры отсутствуют."
+msgstr "Виджет субтитров"
 
 #: templates/jsdemo/home.html:32
 msgid ""
 "A simple way to create and add captions to almost any video on the web "
 "(without having to transcode or re-upload videos)."
 msgstr ""
+"Простой способ создавать и добавлять подписи к почти любому видео в "
+"Интернете (без необходимости перекодировать или повторно загружать видео)."
 
 #: templates/jsdemo/home.html:35
 msgid "Community Site"
-msgstr ""
+msgstr "Сайт сообщества"
 
 #: templates/jsdemo/home.html:36
 msgid ""
 "An online community for collaboratively subtitling and translating the "
 "world's videos (like a Wikipedia for subtitles)."
 msgstr ""
+"Интернет-сообщество для совместного создания субтитров и перевода видео (как"
+" Wikipedia для субтитров)."
 
 #: templates/jsdemo/home.html:39
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "Протокол поиска субтитров"
 
 #: templates/jsdemo/home.html:40
 msgid ""
-"An open standard to let Firefox extensions, desktop video players, "
-"websites, browsers--any client--find and retrieve subtitles for any "
-"video."
+"An open standard to let Firefox extensions, desktop video players, websites,"
+" browsers--any client--find and retrieve subtitles for any video."
 msgstr ""
+"Открытый стандарт, чтобы Firefox расширения, настольные видеоплееры, веб-"
+"сайты, браузеры - любой клиент - могли находить и загружать субтитры для "
+"любого видео."
 
 #: templates/jsdemo/home.html:50
 msgid "Get updates and find out first when we launch"
-msgstr ""
+msgstr "Получайте обновления, и и будьте первыми кто узнает о запуске проекта"
 
 #: templates/jsdemo/home.html:55
 msgid "Get Updates!"
-msgstr ""
+msgstr "Получить обновления!"
 
 #: templates/jsdemo/home.html:60
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "Пожалуйста, введите рабочий адрес электронной почты"
 
 #: templates/jsdemo/home.html:93
 msgid "Please enter your email address."
-msgstr ""
+msgstr "Пожалуйста, введите Ваш адрес электронной почты."
 
 #: templates/jsdemo/home.html:121
 msgid "Check out the widget"
-msgstr ""
+msgstr "Проверь виджет"
 
 #: templates/jsdemo/home.html:122
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "Испытай наш виджет субтитров"
 
 #: templates/jsdemo/home.html:122
 msgid "Try the Demo"
-msgstr ""
+msgstr "Попробуй Демо"
 
 #: templates/livesettings/site_settings.html:48
 msgid "Documentation"
 msgstr ""
 
 #: templates/livesettings/site_settings.html:48
-#, fuzzy
 msgid "Change password"
-msgstr "Подтвердите новый пароль:"
+msgstr ""
 
 #: templates/livesettings/site_settings.html:48
 msgid "Log out"
@@ -3097,7 +3161,7 @@ msgid ""
 msgstr ""
 
 #: templates/messages/_messages.html:7
-#: templates/videos/_recent_activity.html:3
+#: templates/videos/_recent_activity.html:11
 msgid "View all"
 msgstr ""
 
@@ -3108,74 +3172,99 @@ msgid "Send a Message"
 msgstr ""
 
 #: templates/messages/_send_message_form.html:8
-#: templates/messages/index.html:153 templates/messages/sent.html:133
+#: templates/messages/_send_to_team_message_form.html:18
+#: templates/messages/index.html:169 templates/messages/sent.html:136
+#: templates/teams/edit_members.html:134
 #: templates/videos/_feedback_form.html:41
 msgid "Close"
 msgstr ""
 
 #: templates/messages/_send_message_form.html:10
-#, fuzzy
 msgid "Send message to"
-msgstr "Вы не авторизованны"
+msgstr ""
 
 #: templates/messages/_send_message_form.html:13
 #: templates/messages/_send_message_form.html:15
-#: templates/messages/index.html:157 templates/messages/sent.html:137
+#: templates/messages/_send_to_team_message_form.html:23
+#: templates/messages/index.html:173 templates/messages/sent.html:140
 msgid "avatar"
 msgstr ""
 
 #: templates/messages/_send_message_form.html:24
-#: templates/messages/index.html:183 templates/messages/sent.html:163
+#: templates/messages/_send_to_team_message_form.html:34
+#: templates/messages/index.html:204 templates/messages/sent.html:171
 msgid "Send Message"
 msgstr ""
 
-#: templates/messages/_send_message_form.html:53
-#: templates/messages/index.html:48 templates/messages/sent.html:48
+#: templates/messages/_send_message_form.html:54
+#: templates/messages/index.html:54 templates/messages/sent.html:49
 msgid "The message has been successfully sent."
 msgstr ""
 
-#: templates/messages/index.html:101 templates/messages/sent.html:6
-#: templates/messages/sent.html.py:81
-#, fuzzy
-msgid "Sent Messages"
-msgstr "Вы не авторизованны"
+#: templates/messages/_send_to_team_message_form.html:14
+msgid "Send Message to Team"
+msgstr ""
 
-#: templates/messages/index.html:111 templates/profiles/_send_message.html:10
+#: templates/messages/_send_to_team_message_form.html:20
+msgid "Send message to team"
+msgstr ""
+
+#: templates/messages/_send_to_team_message_form.html:77
+msgid "The messages have been successfully sent."
+msgstr ""
+
+#: templates/messages/index.html:6 templates/messages/index.html.py:117
+#: templates/messages/sent.html:84 templates/profiles/_top_user_panel.html:27
+msgid "My Messages"
+msgstr ""
+
+#: templates/messages/index.html:24 templates/messages/sent.html:19
+msgid "Do you really wish delete this message?"
+msgstr ""
+
+#: templates/messages/index.html:117 templates/messages/sent.html:6
+#: templates/messages/sent.html.py:84
+msgid "Sent Messages"
+msgstr ""
+
+#: templates/messages/index.html:127 templates/profiles/_send_message.html:10
 msgid "From"
 msgstr ""
 
-#: templates/messages/index.html:112 templates/messages/index.html.py:170
-#: templates/messages/sent.html:92 templates/messages/sent.html.py:150
+#: templates/messages/index.html:128 templates/messages/index.html.py:186
+#: templates/messages/sent.html:95 templates/messages/sent.html.py:153
 #: templates/profiles/_send_message.html:14
-#: templates/teams/edit_members.html:146
+#: templates/teams/edit_members.html:141
 msgid "Message"
 msgstr ""
 
-#: templates/messages/index.html:113 templates/messages/sent.html:93
-#: templates/videos/actions_list.html:13
+#: templates/messages/index.html:129 templates/messages/sent.html:96
 msgid "Date"
 msgstr ""
 
-#: templates/messages/index.html:124 templates/messages/index.html.py:126
-#: templates/messages/sent.html:104 templates/messages/sent.html.py:106
+#: templates/messages/index.html:140 templates/messages/index.html.py:142
+#: templates/messages/sent.html:107 templates/messages/sent.html.py:109
 msgid "Avatar"
 msgstr ""
 
-#: templates/messages/index.html:148 templates/messages/sent.html:128
-#, fuzzy
+#: templates/messages/index.html:164 templates/messages/sent.html:131
 msgid "You have no messages."
-msgstr "Вы не авторизованны"
+msgstr ""
 
-#: templates/messages/index.html:155 templates/messages/sent.html:135
+#: templates/messages/index.html:171
 msgid "Message from"
 msgstr ""
 
-#: templates/messages/index.html:163 templates/messages/sent.html:143
+#: templates/messages/index.html:179 templates/messages/sent.html:146
 msgid "Subject"
 msgstr ""
 
-#: templates/messages/sent.html:91
+#: templates/messages/sent.html:94
 msgid "To"
+msgstr ""
+
+#: templates/messages/sent.html:138
+msgid "Message to"
 msgstr ""
 
 #: templates/messages/email/message_received.html:7
@@ -3184,21 +3273,15 @@ msgid ""
 "\n"
 "%(author)s has just sent you a message on Universal Subtitles:\n"
 msgstr ""
-"\n"
-"%(author)s прислал вам сообщение на Universal Subtitles:\n"
 
 #: templates/messages/email/message_received.html:14
 msgid "Reply to this message"
-msgstr "Ответить на сообщение"
-
-#: templates/messages/email/message_received.html:17
-msgid "Stop receiving email notifications for personal messages"
-msgstr "Не получать письма про новые сообщения"
+msgstr ""
 
 #: templates/profiles/_require_email_dialog.html:7
 msgid ""
-"It looks like you logged in without submitting an email. We need an "
-"email address to notify you (for example, when others edit your work)."
+"It looks like you logged in without submitting an email. We need an email "
+"address to notify you (for example, when others edit your work)."
 msgstr ""
 
 #: templates/profiles/_require_email_dialog.html:8
@@ -3206,39 +3289,36 @@ msgid "Please enter a valid e-mail address"
 msgstr ""
 
 #: templates/profiles/_require_email_dialog.html:10
-#, fuzzy
 msgid "Enter valid email please."
-msgstr "Введите действующие адреса электронной почты через запятую."
+msgstr ""
 
 #: templates/profiles/_select_language_dialog.html:4
 msgid "Loading..."
 msgstr ""
 
 #: templates/profiles/_select_language_dialog.html:5
-#, fuzzy
 msgid "Select your Languages"
-msgstr "Языки"
+msgstr ""
 
-#: templates/profiles/_select_language_dialog.html:50
+#: templates/profiles/_select_language_dialog.html:55
 msgid "Select at least one language."
 msgstr ""
 
-#: templates/profiles/_select_language_dialog.html:52
+#: templates/profiles/_select_language_dialog.html:57
 msgid "Saving your language settings..."
 msgstr ""
 
-#: templates/profiles/_select_language_dialog.html:79
+#: templates/profiles/_select_language_dialog.html:85
 msgid "We really need your help!"
 msgstr ""
 
-#: templates/profiles/_select_language_dialog.html:80
+#: templates/profiles/_select_language_dialog.html:86
 msgid "What languages do you speak?"
 msgstr ""
 
-#: templates/profiles/_select_language_dialog.html:93
-#, fuzzy
+#: templates/profiles/_select_language_dialog.html:99
 msgid "Submit"
-msgstr "Отправить"
+msgstr ""
 
 #: templates/profiles/_send_message.html:16
 msgid "No HTML"
@@ -3246,8 +3326,8 @@ msgstr ""
 
 #: templates/profiles/_send_message.html:17
 msgid ""
-"Note: when you send a message the recipient can see your email and "
-"reply directly"
+"Note: when you send a message the recipient can see your email and reply "
+"directly"
 msgstr ""
 
 #: templates/profiles/_send_message.html:41
@@ -3262,29 +3342,26 @@ msgstr ""
 msgid "Enter email please."
 msgstr ""
 
-#: templates/profiles/_top_user_panel.html:23
+#: templates/profiles/_top_user_panel.html:36
 msgid "Logout"
-msgstr ""
+msgstr "Выйти"
 
 #: templates/profiles/_user_avatar.html:6
 #: templates/profiles/my_profile.html:79
-#, fuzzy
 msgid "Edit profile"
-msgstr "редактировать название"
+msgstr ""
 
 #: templates/profiles/_user_videos_activity.html:4
-#, fuzzy
 msgid "Edits to my videos"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/profiles/_user_videos_activity.html:10
 msgid "No Activity"
 msgstr ""
 
 #: templates/profiles/edit_profile.html:5
-#, fuzzy
 msgid "Edit My Profile"
-msgstr "редактировать название"
+msgstr ""
 
 #: templates/profiles/edit_profile.html:12
 msgid "Do you really want delete picture?"
@@ -3320,64 +3397,61 @@ msgid "Upload picture"
 msgstr ""
 
 #: templates/profiles/edit_profile.html:115
-msgid "Email me when something I've edited gets changed"
+msgid "Receive notifications about edits and personal messages"
 msgstr ""
 
 #: templates/profiles/edit_profile.html:122
-msgid "Email me when another user sends me a message"
+msgid "Receive notifications about sends me a message"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:133
-#, fuzzy
+#: templates/profiles/edit_profile.html:129
+msgid "Follow videos when I edit or submit them"
+msgstr ""
+
+#: templates/profiles/edit_profile.html:140
 msgid "Language Info"
-msgstr "Язык"
+msgstr ""
 
-#: templates/profiles/edit_profile.html:146
-#, fuzzy
+#: templates/profiles/edit_profile.html:153
 msgid "Languages I Know"
-msgstr "Языки"
+msgstr ""
 
-#: templates/profiles/edit_profile.html:149
-#: templates/profiles/edit_profile.html:164
-#, fuzzy
+#: templates/profiles/edit_profile.html:156
+#: templates/profiles/edit_profile.html:171
 msgid "Remove Language"
-msgstr "Язык"
+msgstr ""
 
-#: templates/profiles/edit_profile.html:177
-#, fuzzy
+#: templates/profiles/edit_profile.html:184
 msgid "Add Language"
-msgstr "Язык"
+msgstr ""
 
-#: templates/profiles/edit_profile.html:186
+#: templates/profiles/edit_profile.html:193
 msgid "Save Edits to Profile"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:190
+#: templates/profiles/edit_profile.html:197
 msgid "Permanently Delete Your Profile"
 msgstr ""
 
 #: templates/profiles/my_profile.html:6 templates/profiles/my_profile.html:19
-#, fuzzy
 msgid "My videos"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/profiles/my_profile.html:66
 msgid "Bio"
 msgstr ""
 
 #: templates/profiles/my_profile.html:72
-#, fuzzy
 msgid "Languages I understand"
-msgstr "Языки"
+msgstr ""
 
 #: templates/profiles/view_profile.html:35
 msgid "Member since"
 msgstr ""
 
 #: templates/profiles/view_profile.html:36
-#, fuzzy
 msgid "Preferred Language"
-msgstr "Язык"
+msgstr ""
 
 #: templates/profiles/view_profile.html:37
 msgid "Homepage"
@@ -3445,8 +3519,8 @@ msgstr ""
 
 #: templates/registration/password_reset_confirm.html:33
 msgid ""
-"The password reset link was invalid, possibly because it has already "
-"been used.  Please request a new password reset."
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
 msgstr ""
 
 #: templates/registration/password_reset_done.html:6
@@ -3456,8 +3530,8 @@ msgstr ""
 
 #: templates/registration/password_reset_done.html:12
 msgid ""
-"We've e-mailed you instructions for setting your password to the e-mail"
-" address you submitted. You should be receiving it shortly."
+"We've e-mailed you instructions for setting your password to the e-mail "
+"address you submitted. You should be receiving it shortly."
 msgstr ""
 
 #: templates/registration/password_reset_email.html:2
@@ -3488,8 +3562,8 @@ msgstr ""
 
 #: templates/registration/password_reset_form.html:12
 msgid ""
-"Forgotten your password? Enter your e-mail address below, and we'll "
-"e-mail instructions for setting a new one."
+"Forgotten your password? Enter your e-mail address below, and we'll e-mail "
+"instructions for setting a new one."
 msgstr ""
 
 #: templates/registration/password_reset_form.html:17
@@ -3539,9 +3613,8 @@ msgid "Search for videos in:"
 msgstr ""
 
 #: templates/search/index.html:29
-#, fuzzy
 msgid "subtitled into"
-msgstr "редактировать субтитлы"
+msgstr ""
 
 #: templates/search/index.html:81
 #, python-format
@@ -3558,9 +3631,8 @@ msgid "Videos statistic"
 msgstr ""
 
 #: templates/statistic/index.html:28
-#, fuzzy
 msgid "Languages statistic"
-msgstr "Языки"
+msgstr ""
 
 #: templates/statistic/index.html:73
 #: templates/statistic/language_statistic.html:31
@@ -3598,9 +3670,8 @@ msgid "Total number of videos captioned"
 msgstr ""
 
 #: templates/statistic/index.html:90
-#, fuzzy
 msgid "Tweets"
-msgstr "Текст"
+msgstr ""
 
 #: templates/statistic/index.html:97
 msgid "Facebook shares"
@@ -3611,9 +3682,8 @@ msgid "Email shares"
 msgstr ""
 
 #: templates/statistic/language_statistic.html:25
-#, fuzzy
 msgid "Language statistic for "
-msgstr "Язык"
+msgstr ""
 
 #: templates/statistic/language_statistic.html:26
 #: templates/statistic/languages_statistic.html:31
@@ -3627,23 +3697,20 @@ msgid "Videos count"
 msgstr ""
 
 #: templates/statistic/language_statistic.html:48
-#, fuzzy
 msgid "Subtitles views count"
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: templates/statistic/language_statistic.html:55
 msgid "Videos views count"
 msgstr ""
 
 #: templates/statistic/languages_statistic.html:25
-#, fuzzy
 msgid "Language statistic"
-msgstr "Языки"
+msgstr ""
 
 #: templates/statistic/languages_statistic.html:36
-#, fuzzy
 msgid "Lanuage"
-msgstr "Язык"
+msgstr ""
 
 #: templates/statistic/users_statistic.html:6
 msgid "Activity statistic"
@@ -3665,7 +3732,6 @@ msgid "Month"
 msgstr ""
 
 #: templates/statistic/videos_statistic.html:12
-#: templates/videos/actions_list.html:14
 msgid "Video"
 msgstr ""
 
@@ -3686,18 +3752,16 @@ msgid "Value"
 msgstr ""
 
 #: templates/teams/_application_form.html:4
-#, fuzzy
 msgid "Send application"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/_application_form.html:8
 msgid "Apply to"
 msgstr ""
 
 #: templates/teams/_application_form.html:13
-#, fuzzy
 msgid "Language skill"
-msgstr "Язык"
+msgstr ""
 
 #: templates/teams/_application_form.html:14
 #, python-format
@@ -3718,19 +3782,16 @@ msgid "specified"
 msgstr ""
 
 #: templates/teams/_application_form.html:32
-#, fuzzy
 msgid "Submit Application"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/_complete_team_video_detail.html:8
-#, fuzzy
 msgid "Completed Languages"
-msgstr "Языки"
+msgstr ""
 
 #: templates/teams/_complete_team_video_detail.html:15
-#, fuzzy
 msgid "Video Page"
-msgstr "Язык"
+msgstr ""
 
 #: templates/teams/_edit_top_navigation.html:4 templates/teams/edit.html:8
 msgid "Team Settings"
@@ -3759,9 +3820,8 @@ msgid "According to your"
 msgstr ""
 
 #: templates/teams/_invite_friends_to_team.html:4
-#, fuzzy
 msgid "language choices"
-msgstr "Языки"
+msgstr ""
 
 #: templates/teams/_invite_friends_to_team.html:4
 msgid "there don't appear to be videos you can translate."
@@ -3788,9 +3848,8 @@ msgid "Deny"
 msgstr ""
 
 #: templates/teams/_team_activity.html:19
-#, fuzzy
 msgid "Team Activity Stream"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/teams/_team_activity.html:25
 msgid "No Video Activity"
@@ -3805,28 +3864,24 @@ msgid "Add video to team"
 msgstr ""
 
 #: templates/teams/_team_detail.html:10 templates/teams/index.html:22
-#, fuzzy
 msgid "Do you really wish join this team?"
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
 #: templates/teams/_team_detail.html:25 templates/teams/index.html:37
 msgid "Do you really wish leave this team?"
 msgstr ""
 
 #: templates/teams/_team_detail.html:52 templates/teams/_team_detail.html:113
-#, fuzzy
 msgid "Team Description"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/_team_detail.html:56
-#, fuzzy
 msgid "Show Members"
-msgstr "Самые новые"
+msgstr ""
 
 #: templates/teams/_team_detail.html:59 templates/teams/_team_detail.html:121
-#, fuzzy
 msgid "Team Managers"
-msgstr "Язык"
+msgstr ""
 
 #: templates/teams/_team_detail.html:65 templates/teams/_team_detail.html:140
 msgid "Video Policy"
@@ -3837,9 +3892,8 @@ msgid "Membership Policy"
 msgstr ""
 
 #: templates/teams/_team_detail.html:74
-#, fuzzy
 msgid "Team Page"
-msgstr "Язык"
+msgstr ""
 
 #: templates/teams/_team_detail.html:78
 msgid "Completed Videos"
@@ -3854,17 +3908,33 @@ msgid "Leave"
 msgstr ""
 
 #: templates/teams/_team_detail.html:91 templates/teams/_team_detail.html:103
-#, fuzzy
 msgid "Join this team now!"
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
 #: templates/teams/_team_detail.html:127
-#, fuzzy
 msgid "Completed Subtitles"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/teams/_team_detail.html:132
 msgid "Leave this team"
+msgstr ""
+
+#: templates/teams/_team_message.html:3
+#, python-format
+msgid ""
+"\n"
+"    A message from <a href=\"%(author_page)s\">%(author)s</a> to all members \n"
+"    of the <a href=\"%(team_page)s\">%(team)s</a> team.\n"
+"    "
+msgstr ""
+
+#: templates/teams/_team_message.html:8
+#, python-format
+msgid ""
+"\n"
+"    You received this notification because you are a member of the \n"
+"    <a href=\"%(team_page)s\">%(team)s</a> team. \n"
+"    "
 msgstr ""
 
 #: templates/teams/_team_select.html:6
@@ -3876,24 +3946,20 @@ msgid "Add new team"
 msgstr ""
 
 #: templates/teams/_team_video_detail.html:14
-#, fuzzy
 msgid "Video in:"
-msgstr "Язык"
+msgstr ""
 
 #: templates/teams/_team_video_detail.html:18
-#, fuzzy
 msgid "Add Subtitles "
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: templates/teams/_team_video_detail.html:21
-#, fuzzy
 msgid "Edit Video"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/teams/_team_video_in_progress_list.html:5
-#, fuzzy
 msgid "Subtitles currently in progress"
-msgstr "Субтитры просмотрено."
+msgstr ""
 
 #: templates/teams/_team_video_lang_detail.html:10
 #: templates/teams/edit_videos.html:45 templates/teams/index.html:129
@@ -3907,19 +3973,16 @@ msgstr ""
 
 #: templates/teams/_team_video_lang_detail.html:27
 #: templates/teams/_team_video_lang_detail.html:34
-#, fuzzy
 msgid "Captions"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/_team_video_lang_detail.html:42
-#, fuzzy
 msgid "Translate into"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/_team_video_lang_detail.html:49
-#, fuzzy
 msgid "Translation"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/_team_video_lang_list.html:10
 msgid "complete"
@@ -3948,14 +4011,12 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: templates/teams/add_video.html:8
-#, fuzzy
 msgid "Team video"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/teams/add_video.html:23 templates/teams/edit_videos.html:17
-#, fuzzy
 msgid "Add video"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/teams/add_video.html:29 templates/teams/edit.html:138
 #: templates/teams/team_video.html:34
@@ -3963,9 +4024,8 @@ msgid "Save"
 msgstr ""
 
 #: templates/teams/applications.html:8
-#, fuzzy
 msgid "Team Aplications"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/applications.html:32
 msgid "Approve"
@@ -3976,9 +4036,9 @@ msgid "There are no applicants at this time."
 msgstr ""
 
 #: templates/teams/completed_videos.html:30
-#: templates/teams/detail-debug.html:39 templates/teams/detail.html:41
+#: templates/teams/detail-debug.html:43 templates/teams/detail.html:41
 msgid "Videos"
-msgstr ""
+msgstr "Видео"
 
 #: templates/teams/create.html:6 templates/teams/create.html.py:21
 msgid "Create team"
@@ -3989,9 +4049,8 @@ msgid "Create Team"
 msgstr ""
 
 #: templates/teams/detail_members.html:26
-#, fuzzy
 msgid "Members"
-msgstr "Самые новые"
+msgstr ""
 
 #: templates/teams/edit.html:47
 msgid "Details About Your Team"
@@ -4006,19 +4065,16 @@ msgid "Upload logo"
 msgstr ""
 
 #: templates/teams/edit.html:83
-#, fuzzy
 msgid "Team Intro Video"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/teams/edit.html:86
-#, fuzzy
 msgid "Current video"
-msgstr "Приватное видео"
+msgstr ""
 
 #: templates/teams/edit.html:92
-#, fuzzy
 msgid "Application message"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/edit.html:102
 msgid "You can use"
@@ -4029,18 +4085,16 @@ msgid "markdown"
 msgstr ""
 
 #: templates/teams/edit.html:103
-#, fuzzy
 msgid "This will replace Description. "
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/teams/edit.html:107
 msgid "Team Member Settings"
 msgstr ""
 
 #: templates/teams/edit.html:110
-#, fuzzy
 msgid "Who can join this team?"
-msgstr "Вы не можете редактировать видео."
+msgstr ""
 
 #: templates/teams/edit.html:117
 msgid "Is moderated?"
@@ -4055,61 +4109,58 @@ msgid "Team Privacy Settings"
 msgstr ""
 
 #: templates/teams/edit.html:143
-#, fuzzy
 msgid "You are not a manager of this team."
-msgstr "Вы не авторизованны"
+msgstr ""
 
-#: templates/teams/edit_members.html:45
-#, fuzzy
+#: templates/teams/edit_members.html:36
 msgid "Enter username."
-msgstr "Имя пользователя"
+msgstr ""
 
-#: templates/teams/edit_members.html:50
+#: templates/teams/edit_members.html:41
 msgid "Remove this user?"
 msgstr ""
 
-#: templates/teams/edit_members.html:65
+#: templates/teams/edit_members.html:56
 msgid "Do you want demote user to member?"
 msgstr ""
 
-#: templates/teams/edit_members.html:66
+#: templates/teams/edit_members.html:57
 msgid "Do you want promote user to manager?"
 msgstr ""
 
-#: templates/teams/edit_members.html:81 templates/teams/edit_members.html:149
+#: templates/teams/edit_members.html:72 templates/teams/edit_members.html:144
 msgid "Invite User"
 msgstr ""
 
-#: templates/teams/edit_members.html:92
+#: templates/teams/edit_members.html:87
 msgid "Role"
 msgstr ""
 
-#: templates/teams/edit_members.html:106
+#: templates/teams/edit_members.html:101
 msgid "Remove from Team"
 msgstr ""
 
-#: templates/teams/edit_members.html:109
+#: templates/teams/edit_members.html:104
 msgid "Demote to Member"
 msgstr ""
 
-#: templates/teams/edit_members.html:113
+#: templates/teams/edit_members.html:108
 msgid "Promote to Manager"
 msgstr ""
 
-#: templates/teams/edit_members.html:119
+#: templates/teams/edit_members.html:114
 msgid "Contact User"
 msgstr ""
 
-#: templates/teams/edit_members.html:125
-#, fuzzy
+#: templates/teams/edit_members.html:120
 msgid "Manager"
-msgstr "Язык"
+msgstr ""
 
-#: templates/teams/edit_members.html:127
+#: templates/teams/edit_members.html:122
 msgid "Member"
 msgstr ""
 
-#: templates/teams/edit_members.html:141
+#: templates/teams/edit_members.html:136
 msgid "Invite user"
 msgstr ""
 
@@ -4126,9 +4177,8 @@ msgid "Remove"
 msgstr ""
 
 #: templates/teams/edit_videos.html:52
-#, fuzzy
 msgid "This team has not added any videos."
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/teams/edit_videos.html:60
 msgid "Remove this video?"
@@ -4202,16 +4252,16 @@ msgid "Highlighted Teams"
 msgstr ""
 
 #: templates/teams/team_video.html:8
-#, fuzzy
 msgid "Edit team video"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/teams/videos_actions.html:16
 msgid "Edit Team"
 msgstr ""
 
 #: templates/videos/_error_feedback_form.html:7
-msgid "Please let us know what you were doing when you encountered this error."
+msgid ""
+"Please let us know what you were doing when you encountered this error."
 msgstr ""
 
 #: templates/videos/_error_feedback_form.html:9
@@ -4223,13 +4273,14 @@ msgid "How are you using Universal Subtitles?  What would make it better?"
 msgstr ""
 
 #: templates/videos/_feedback_form.html:13
-msgid "Please let us know if you have any comments, questions, or suggestions!"
+msgid ""
+"Please let us know if you have any comments, questions, or suggestions!"
 msgstr ""
 
 #: templates/videos/_feedback_form.html:14
 msgid ""
-"Note: we read/speak English best, but try to read/respond to anything "
-"we can."
+"Note: we read/speak English best, but try to read/respond to anything we "
+"can."
 msgstr ""
 
 #: templates/videos/_feedback_form.html:19
@@ -4276,14 +4327,93 @@ msgstr ""
 msgid "Enter feedback please."
 msgstr ""
 
+#: templates/videos/_follow_video_button.html:37
+msgid "Unfollow all"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:40
+msgid "Follow all"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:43
+msgid "Unfollow"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:91
+msgid ""
+"You will not receive any notification when subtitles in any language for "
+"this video are edited.  You can choose to follow again at any time."
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:92
+msgid "Stopped following all subtitles"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:95
+msgid "You will not receive any notification when "
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:97
+msgid ""
+" subtitles for this video are edited. You can choose to follow again at any "
+"time."
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:98
+msgid "Stopped following "
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:100
+#: templates/videos/_follow_video_button.html:153
+msgid " subtitles"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:110
+msgid "Unfollow all languages"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:148
+msgid "You will now receive an email when anyone edits "
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:150
+msgid " subtitles for this video. You can stop these emails at any time."
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:151
+msgid "Now following "
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:155
+msgid ""
+"You will now receive an email when anyone edits any subtitles for this "
+"video. You can stop these emails at any time."
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:156
+msgid "Now following all subtitles"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:164
+msgid "Follow all languages"
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:181
+msgid "You must log in to follow a video."
+msgstr ""
+
+#: templates/videos/_follow_video_button.html:182
+msgid "Authentication required"
+msgstr ""
+
 #: templates/videos/_get_counter.html:3
 msgid "Get counter code:"
 msgstr ""
 
 #: templates/videos/_paste_transcription.html:146
 msgid ""
-"Would you like to sync your transcript now?  Users will not be able to "
-"watch it as subtitles until you do this."
+"Would you like to sync your transcript now?  Users will not be able to watch"
+" it as subtitles until you do this."
 msgstr ""
 
 #: templates/videos/_paste_transcription.html:149
@@ -4322,13 +4452,12 @@ msgstr ""
 #: templates/videos/_paste_transcription.html:185
 #: templates/videos/_upload_subtitles.html:26
 msgid "Language"
-msgstr "Язык"
+msgstr ""
 
 #: templates/videos/_paste_transcription.html:189
 #: templates/videos/_upload_subtitles.html:29
-#, fuzzy
 msgid "Video Language"
-msgstr "Язык"
+msgstr ""
 
 #: templates/videos/_paste_transcription.html:196
 msgid "Submit Transcript"
@@ -4338,136 +4467,6 @@ msgstr ""
 #: templates/videos/_upload_subtitles.html:44
 msgid "Login to upload subtitles"
 msgstr ""
-
-#: templates/videos/_team_member_action_item.html:23
-#, fuzzy
-msgid "submitted"
-msgstr "Отправить"
-
-#: templates/videos/_team_member_action_item.html:27
-#: templates/videos/_team_video_action_item.html:18
-msgid "added new URL for "
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:31
-#, python-format
-msgid ""
-"\n"
-"                changed title to \"%(title)s\" for \n"
-"                "
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:39
-#: templates/videos/_team_video_action_item.html:33
-#: templates/videos/_video_activity.html:37
-#, python-format
-msgid ""
-"\n"
-"                    commented on %(language)s.\n"
-"                    "
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:43
-#: templates/videos/_team_video_action_item.html:37
-msgid "commented on "
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:48
-#: templates/videos/_team_video_action_item.html:42
-#: templates/videos/_video_activity.html:46
-msgid "edited"
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:51
-#: templates/videos/_team_member_action_item.html:90
-#: templates/videos/_team_video_action_item.html:45
-#: templates/videos/_video_activity.html:49
-msgid "original subtitles"
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:53
-#: templates/videos/_team_member_action_item.html:92
-#: templates/videos/_team_video_action_item.html:47
-#: templates/videos/_team_video_action_item.html:84
-#: templates/videos/_video_activity.html:51
-#, fuzzy
-msgid "subtitles"
-msgstr "редактировать субтитлы"
-
-#: templates/videos/_team_member_action_item.html:55
-#: templates/videos/_team_video_action_item.html:49
-#: templates/videos/_video_activity.html:53
-msgid "for"
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:63
-#, fuzzy
-msgid " added"
-msgstr "Язык"
-
-#: templates/videos/_team_member_action_item.html:67
-#: templates/videos/_team_video_action_item.html:56
-msgid "New URL added for "
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:71
-#, python-format
-msgid ""
-"\n"
-"                Title changed to \"%(title)s\" for \n"
-"                "
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:79
-#: templates/videos/_team_video_action_item.html:71
-#, python-format
-msgid ""
-"\n"
-"                    Comment added for %(language)s.\n"
-"                    "
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:83
-#: templates/videos/_team_video_action_item.html:75
-msgid "Comment added for"
-msgstr ""
-
-#: templates/videos/_team_member_action_item.html:94
-#: templates/videos/_team_video_action_item.html:86
-msgid "edited for"
-msgstr ""
-
-#: templates/videos/_team_video_action_item.html:22
-#, fuzzy
-msgid "added video"
-msgstr "Приватное видео"
-
-#: templates/videos/_team_video_action_item.html:26
-#: templates/videos/_video_activity.html:30
-#, python-format
-msgid ""
-"\n"
-"                changed title to \"%(title)s\"\n"
-"                "
-msgstr ""
-
-#: templates/videos/_team_video_action_item.html:60
-#, fuzzy
-msgid "video added"
-msgstr "Язык"
-
-#: templates/videos/_team_video_action_item.html:64
-#, python-format
-msgid ""
-"\n"
-"                Title changed to \"%(title)s\"\n"
-"                "
-msgstr ""
-
-#: templates/videos/_team_video_action_item.html:82
-#, fuzzy
-msgid "Original subtitles"
-msgstr "Оригинальные субтитры"
 
 #: templates/videos/_upload_subtitles.html:3
 #: templates/videos/_upload_subtitles.html:8
@@ -4500,25 +4499,12 @@ msgid ""
 "href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
 msgstr ""
 
-#: templates/videos/_video_activity.html:6
+#: templates/videos/_video_activity.html:8
 msgid "Activity"
 msgstr ""
 
-#: templates/videos/_video_activity.html:7
+#: templates/videos/_video_activity.html:9
 msgid "Happened"
-msgstr ""
-
-#: templates/videos/_video_activity.html:22
-#, fuzzy
-msgid "submitted video."
-msgstr "Отправить"
-
-#: templates/videos/_video_activity.html:26
-msgid "added new URL"
-msgstr ""
-
-#: templates/videos/_video_activity.html:41
-msgid "commented on this video."
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:3
@@ -4585,23 +4571,23 @@ msgstr ""
 
 #: templates/videos/_video_url_panel.html:74
 msgid ""
-"Two versions of the same video exist on Youtube.  You don't want "
-"subtitle volunteers to duplicate their work, so you add both versions "
-"to the multiple URLs pane."
+"Two versions of the same video exist on Youtube.  You don't want subtitle "
+"volunteers to duplicate their work, so you add both versions to the multiple"
+" URLs pane."
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:75
 msgid ""
-"You put your video on Youtube, Vimeo, Blip, and Dailymotion and you "
-"want the subtitles you make to work on all of those versions."
+"You put your video on Youtube, Vimeo, Blip, and Dailymotion and you want the"
+" subtitles you make to work on all of those versions."
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:76
 msgid ""
-"You want to provide different versions of a video to different browsers"
-" (HTML5/Ogg for free software users, or HTML5/h264 to iPad users).  If "
-"you add these URLs, our embed code will automatically fall back to "
-"whatever format is necessary for the browser."
+"You want to provide different versions of a video to different browsers "
+"(HTML5/Ogg for free software users, or HTML5/h264 to iPad users).  If you "
+"add these URLs, our embed code will automatically fall back to whatever "
+"format is necessary for the browser."
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:78
@@ -4618,8 +4604,8 @@ msgstr ""
 
 #: templates/videos/_video_url_panel.html:85
 msgid ""
-"This is useful in cases where many versions of the same video exist, or"
-" when there are versions in different formats (like HTML5)"
+"This is useful in cases where many versions of the same video exist, or when"
+" there are versions in different formats (like HTML5)"
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:92
@@ -4632,26 +4618,16 @@ msgstr ""
 
 #: templates/videos/_video_url_panel.html:132
 #: templates/videos/_video_url_panel.html:152
-#, fuzzy
 msgid "You are not authenticated"
-msgstr "Вы не авторизованны"
+msgstr ""
 
 #: templates/videos/_video_url_panel.html:141
 msgid ""
-"Delete this URL?  Warning: this cannot be undone. Only delete URLs for "
-"non-matching videos or videos where subtitles fail to display "
-"correctly."
+"Delete this URL?  Warning: this cannot be undone. Only delete URLs for non-"
+"matching videos or videos where subtitles fail to display correctly."
 msgstr ""
 
-#: templates/videos/actions_list.html:8
-msgid "All activities"
-msgstr ""
-
-#: templates/videos/actions_list.html:12 templates/videos/history.html:276
-msgid "User"
-msgstr ""
-
-#: templates/videos/actions_list.html:26
+#: templates/videos/actions_list.html:21
 msgid "There are no activities."
 msgstr ""
 
@@ -4668,7 +4644,7 @@ msgstr ""
 
 #: templates/videos/create.html:21
 msgid "Subtitle a Video"
-msgstr ""
+msgstr "Создать субтитры для видео"
 
 #: templates/videos/create.html:26
 msgid "Begin"
@@ -4758,23 +4734,23 @@ msgstr ""
 msgid "Don't send any more emails about this particular video."
 msgstr ""
 
-#: templates/videos/email_base.html:101
+#: templates/videos/email_base.html:102
 msgid ""
-"To stop receiving these emails, go to your preferences page and uncheck"
-" \"receive notifications\":"
+"To stop receiving these emails, go to your preferences page and uncheck "
+"\"receive notifications\":"
 msgstr ""
 
-#: templates/videos/email_base.html:103
+#: templates/videos/email_base.html:104
 msgid "My profile / preferences"
 msgstr ""
 
 #: templates/videos/email_friend.html:6
 msgid "Email this to a friend"
-msgstr ""
+msgstr "Отправь это другу"
 
 #: templates/videos/email_friend.html:10
 msgid "Send to Friend!"
-msgstr ""
+msgstr "Отправь другу!"
 
 #: templates/videos/email_notification.html:8
 #, python-format
@@ -4808,22 +4784,20 @@ msgid "Stop watching for changes on this video"
 msgstr ""
 
 #: templates/videos/email_notification.html:30
-#, fuzzy
 msgid "Old Text"
-msgstr "Текст"
+msgstr ""
 
 #: templates/videos/email_notification.html:33
 msgid "Changes to Subtitle Text"
 msgstr ""
 
 #: templates/videos/email_notification.html:36
-#, fuzzy
 msgid "New Text"
-msgstr "Текст"
+msgstr ""
 
 #: templates/videos/email_start_notification.html:7
 msgid "Dear"
-msgstr ""
+msgstr "Уважаемый"
 
 #: templates/videos/email_start_notification.html:8
 #, python-format
@@ -4836,8 +4810,8 @@ msgstr ""
 
 #: templates/videos/email_start_notification.html:13
 msgid ""
-"You can review the translation and thank them for their contribution on"
-" this page:"
+"You can review the translation and thank them for their contribution on this"
+" page:"
 msgstr ""
 
 #: templates/videos/email_start_notification.html:14
@@ -4850,16 +4824,15 @@ msgstr ""
 
 #: templates/videos/email_start_notification.html:19
 msgid "Sincerely"
-msgstr ""
+msgstr "Искренне"
 
 #: templates/videos/email_start_notification.html:20
 msgid "The Universal Subtitles Community"
-msgstr ""
+msgstr "Сообщество Universal Subtitles "
 
 #: templates/videos/email_title_changed.html:7
-#, fuzzy
 msgid "The title of the video"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/videos/email_title_changed.html:10
 msgid "has been changed by"
@@ -4870,9 +4843,8 @@ msgid "has been changed"
 msgstr ""
 
 #: templates/videos/email_title_changed.html:16
-#, fuzzy
 msgid "The new title is"
-msgstr "Введите новое название"
+msgstr ""
 
 #: templates/videos/email_title_changed.html:18
 msgid "If this is incorrect, mouseover the title on"
@@ -4883,30 +4855,26 @@ msgid "this page"
 msgstr ""
 
 #: templates/videos/email_title_changed.html:19
-#, fuzzy
 msgid "and click \"edit title\""
-msgstr "редактировать название"
+msgstr ""
 
 #: templates/videos/email_video_url_add.html:7
-#, fuzzy
 msgid "A new video URL for"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/videos/email_video_url_add.html:9
-#, fuzzy
 msgid "was submitted by"
-msgstr "Отправить"
+msgstr ""
 
 #: templates/videos/email_video_url_add.html:15
 msgid ""
-"Please check to make sure the new URL features the exact same video, "
-"and that subtitle timing is correct:"
+"Please check to make sure the new URL features the exact same video, and "
+"that subtitle timing is correct:"
 msgstr ""
 
 #: templates/videos/email_video_url_add.html:21
-#, fuzzy
 msgid "View the new video URL"
-msgstr "Видео отсутствуют"
+msgstr ""
 
 #: templates/videos/email_video_url_add.html:22
 msgid "View the original video URL"
@@ -4938,7 +4906,7 @@ msgstr ""
 
 #: templates/videos/history.html:147 templates/videos/video.html:98
 msgid "edit title"
-msgstr "редактировать название"
+msgstr ""
 
 #: templates/videos/history.html:164 templates/videos/video.html:123
 #: templates/videos/video.html.py:150
@@ -4948,23 +4916,23 @@ msgstr ""
 #: templates/videos/history.html:167 templates/videos/history.html.py:212
 #: templates/videos/video.html:132
 msgid "Add Translation"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/videos/history.html:179
 msgid "Download Subtitles"
-msgstr "Скачать субтитры"
+msgstr ""
 
 #: templates/videos/history.html:197
 msgid "Original Language Subtitles"
-msgstr "Оригинальные субтитры"
+msgstr ""
 
 #: templates/videos/history.html:205 templates/videos/video.html:153
 msgid "Comments"
-msgstr "Комментарии"
+msgstr ""
 
 #: templates/videos/history.html:207
 msgid "History"
-msgstr "История изменений"
+msgstr ""
 
 #: templates/videos/history.html:212
 msgid "Edit Subtitles"
@@ -4984,31 +4952,35 @@ msgstr ""
 
 #: templates/videos/history.html:250
 msgid "No subtitles yet."
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: templates/videos/history.html:250
 msgid "Make some!"
-msgstr "Создай!"
+msgstr ""
 
 #: templates/videos/history.html:264
 msgid "Compare Revisions"
-msgstr "Сравнить версии"
+msgstr ""
 
 #: templates/videos/history.html:273
 msgid "Most Recent"
-msgstr "Самые новые"
+msgstr ""
+
+#: templates/videos/history.html:276
+msgid "User"
+msgstr ""
 
 #: templates/videos/history.html:279
 msgid "Note"
-msgstr "Описание"
+msgstr ""
 
 #: templates/videos/history.html:282
 msgid "Time"
-msgstr "Время"
+msgstr ""
 
 #: templates/videos/history.html:285
 msgid "Text"
-msgstr "Текст"
+msgstr ""
 
 #: templates/videos/history.html:320
 msgid "No subtitles for this language."
@@ -5019,9 +4991,8 @@ msgid "Either no subtitles have been entered, or they were deleted."
 msgstr ""
 
 #: templates/videos/revision.html:68 templates/videos/revision.html.py:78
-#, fuzzy
 msgid "Revision"
-msgstr "Сравнить версии"
+msgstr ""
 
 #: templates/videos/revision.html:83
 #, python-format
@@ -5112,7 +5083,7 @@ msgstr ""
 
 #: templates/videos/test_form_page.html:45
 msgid "Submit!"
-msgstr "Отправить"
+msgstr ""
 
 #: templates/videos/test_form_page.html:67
 msgid "Simple Instructions"
@@ -5128,8 +5099,8 @@ msgstr ""
 
 #: templates/videos/video.html:74
 msgid ""
-"Enter new title.  Note: this is for editing the original video title, "
-"not translating the title."
+"Enter new title.  Note: this is for editing the original video title, not "
+"translating the title."
 msgstr ""
 
 #: templates/videos/video.html:104
@@ -5140,9 +5111,8 @@ msgid ""
 msgstr ""
 
 #: templates/videos/video.html:129
-#, fuzzy
 msgid "Add Subtitles"
-msgstr "Субтитры отсутствуют."
+msgstr ""
 
 #: templates/videos/video.html:142
 msgid "Edit in Admin Interface"
@@ -5160,40 +5130,43 @@ msgstr ""
 msgid "Video URLs"
 msgstr ""
 
+#: templates/videos/video.html:177
+msgid "all activity"
+msgstr ""
+
 #: templates/videos/video_list.html:8
 msgid "All Submitted Videos"
 msgstr ""
 
 #: templates/videos/video_list.html:13
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: templates/videos/video_list.html:15
 msgid "Pageloads"
-msgstr "Загружено"
+msgstr ""
 
 #: templates/videos/video_list.html:19
-#, fuzzy
 msgid "Subtitles Fetched"
-msgstr "Субтитры просмотрено."
+msgstr ""
 
 #: templates/videos/video_list.html:23
-#, fuzzy
 msgid "Subtitles and Translations"
-msgstr "Добавить перевод"
+msgstr ""
 
 #: templates/videos/video_list.html:44
 msgid "There are no videos."
-msgstr "Видео отсутствуют"
+msgstr ""
 
-#: utils/forms.py:53
+#: utils/forms.py:74
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr "Введите действующие адреса электронной почты через запятую."
+msgstr ""
+"Введите действительные адреса электронной почты, разделенные запятыми."
 
-#: utils/forms.py:61
+#: utils/forms.py:82
 msgid ""
-"Enter valid usernames separated by commas. Username can contain only "
-"a-z, A-Z and 0-9."
+"Enter valid usernames separated by commas. Username can contain only a-z, "
+"A-Z and 0-9."
 msgstr ""
 
 #: utils/translation_names.py:5
@@ -5230,10 +5203,6 @@ msgstr ""
 
 #: utils/translation_names.py:16
 msgid "Aromanian"
-msgstr ""
-
-#: utils/translation_names.py:18
-msgid "Asturian"
 msgstr ""
 
 #: utils/translation_names.py:19
@@ -5759,74 +5728,4 @@ msgid ""
 "%(current_size)s"
 msgstr ""
 
-#~ msgid "Most relevant"
-#~ msgstr "Самые новые"
 
-#~ msgid "Most subtitle plays"
-#~ msgstr "редактировать субтитлы"
-
-#~ msgid "Most page loads"
-#~ msgstr "Загружено"
-
-#~ msgid "Most commented"
-#~ msgstr "Самые новые"
-
-#~ msgid "Languages Available"
-#~ msgstr "Языки"
-
-#~ msgid "Edited"
-#~ msgstr "Видео отсутствуют"
-
-#~ msgid "You are not a member of team now."
-#~ msgstr "Вы не авторизованны"
-
-#~ msgid "You are not a member of this team."
-#~ msgstr "Вы не авторизованны"
-
-#~ msgid "Yotube error for %(username)s: %(error)s"
-#~ msgstr "Ошибка Youtube:"
-
-#~ msgid "Useful description"
-#~ msgstr "Добавить перевод"
-
-#~ msgid "task name"
-#~ msgstr "Имя пользователя"
-
-#~ msgid "hostname"
-#~ msgstr "Имя пользователя"
-
-#~ msgid "This URL already exists."
-#~ msgstr "Этот адрес уже существует"
-
-#~ msgid "Languages needed"
-#~ msgstr "Языки"
-
-#~ msgid "Your profile"
-#~ msgstr "редактировать название"
-
-#~ msgid "No subtitles yet --"
-#~ msgstr "Субтитры отсутствуют."
-
-#~ msgid "Argentinian Spanish"
-#~ msgstr "Аргентинский испанский"
-
-#~ msgid "Undefined video type"
-#~ msgstr "Неизвестный формат видео"
-
-#~ msgid "prev"
-#~ msgstr "пред."
-
-#~ msgid "next"
-#~ msgstr "след."
-
-#~ msgid "Subtitled?"
-#~ msgstr "Есть субтитры?"
-
-#~ msgid "% Done"
-#~ msgstr "% завершено"
-
-#~ msgid "history"
-#~ msgstr "История изменений"
-
-#~ msgid "No subtitles yet.  Make some!"
-#~ msgstr "Субтитры отсутствуют. Создай!"
