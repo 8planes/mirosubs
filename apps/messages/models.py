@@ -32,6 +32,7 @@ from django.utils import simplejson as json
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 from django.utils.html import escape, urlize
+Q = models.Q
 
 MESSAGE_MAX_LENGTH = getattr(settings,'MESSAGE_MAX_LENGTH', 1000)
 
@@ -39,14 +40,16 @@ class MessageManager(models.Manager):
     use_for_related_fields = True
     
     def for_user(self, user):
-        return self.get_query_set().filter(models.Q(user=user) | models.Q(author=user)) \
-            .exclude(models.Q(deleted_for_user=True) | models.Q(deleted_for_author=True))
+        return self.get_query_set().filter(user=user).exclude(deleted_for_user=True)
+    
+    def for_author(self, user):
+        return self.get_query_set().filter(author=user).exclude(deleted_for_author=True)
     
     def unread(self):
         return self.get_query_set().filter(read=False)
 
 class Message(models.Model):
-    user = models.ForeignKey(User, related_name='received_messages')
+    user = models.ForeignKey(User)
     subject = models.CharField(max_length=100, blank=True)
     content = models.TextField(blank=True, max_length=MESSAGE_MAX_LENGTH)
     author = models.ForeignKey(User, blank=True, null=True, related_name='sent_messages')

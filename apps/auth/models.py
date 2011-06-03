@@ -84,6 +84,11 @@ class CustomUser(BaseUser):
                 return self.first_name
         return self.username
     
+    def unread_messages(self):
+        from messages.models import Message
+        
+        return Message.objects.for_user(self).filter(read=False)
+    
     @classmethod
     def video_followers_change_handler(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
         from videos.models import SubtitleLanguage

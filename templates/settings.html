@@ -16,7 +16,7 @@
 
     <li {% if messages_display %}class="active"{% endif %}>
         <a href="{% url messages:index %}">{% trans "Messages" %}
-        {% with user.received_messages.unread.count as messages_count %}
+        {% with user.unread_messages.count as messages_count %}
             {% if messages_count %}<span class="message_count">{{ messages_count }}</span>{% endif %}
         {% endwith %}
         </a>

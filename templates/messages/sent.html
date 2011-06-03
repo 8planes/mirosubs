@@ -45,7 +45,10 @@
                             }
                         };//for
                     } else {
-                        $.jGrowl('{% trans "The message has been successfully sent." %}');
+                        if (status.status){
+                            $.jGrowl('{% trans "The message has been successfully sent." %}');
+                        };
+                        $('#msg_modal').modClose();
                         $form.clearForm();
                     };
                 },
@@ -97,7 +100,7 @@
       
       <tbody>
         {% for msg in message_list %}
-        <tr {% if not msg.read %} class="unread"{% endif %}>
+        <tr class="{% if not msg.read %}unread{% endif %}">
           <td class="msg_avatar">
             {% with msg.user.small_avatar as user_avatar_url %}
                 {% if user_avatar_url %}

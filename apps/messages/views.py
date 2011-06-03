@@ -34,7 +34,8 @@ MESSAGES_ON_PAGE = getattr(settings, 'MESSAGES_ON_PAGE', 30)
 @login_required
 def index(request, message_pk=None):
     user = request.user
-    qs = Message.objects.for_user(user).filter(user=request.user)
+    qs = Message.objects.for_user(user)
+
     extra_context = {
         'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s'),
         'messages_display': True
@@ -59,7 +60,7 @@ def index(request, message_pk=None):
     
 @login_required    
 def sent(request):
-    qs = Message.objects.for_user(request.user).filter(author=request.user)
+    qs = Message.objects.for_author(request.user)
     extra_context = {
         'send_message_form': SendMessageForm(request.user, auto_id='message_form_id_%s'),
         'messages_display': True        
