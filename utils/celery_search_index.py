@@ -6,8 +6,6 @@ from haystack.exceptions import NotRegistered
 from haystack.utils import get_identifier
 from django.conf import settings
 
-SEARCH_INDEX_UPDATE_OFF = getattr(settings, 'SEARCH_INDEX_UPDATE_OFF', True)
-
 class CelerySearchIndex(indexes.SearchIndex):
     
     def _setup_save(self, model):
@@ -23,12 +21,10 @@ class CelerySearchIndex(indexes.SearchIndex):
         signals.post_delete.disconnect(self.remove_handler, sender=model)
         
     def update_handler(self, instance, **kwargs):
-        if not SEARCH_INDEX_UPDATE_OFF:
-            update_search_index.deplay(instance.__class__, instance.pk)
+        update_search_index.deplay(instance.__class__, instance.pk)
     
     def remove_handler(self, instance, **kwargs):
-        if not SEARCH_INDEX_UPDATE_OFF:
-            remove_search_index.delay(instance.__class__, get_identifier(instance))
+        remove_search_index.delay(instance.__class__, get_identifier(instance))
 
 def log(*args, **kwargs):
     import sentry_logger
@@ -59,6 +55,5 @@ def update_search_index(model_class, pk):
     except NotRegistered:
         log(u'Seacrh index is not registered for %s' % model_class)
         return None
-    
+
     search_index.update_object(obj)
-        

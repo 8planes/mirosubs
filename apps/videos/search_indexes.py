@@ -34,6 +34,12 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data['week_views'] = obj.views['week']
         self.prepared_data['month_views'] = obj.views['month']
         return self.prepared_data
+
+    def _setup_save(self, model):
+        pass
+    
+    def _teardown_save(self, model):
+        pass
         
 class SubtitleLanguageIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
