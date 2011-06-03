@@ -26,7 +26,7 @@
 
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
-from teams.models import Team, TeamMember, Invite, Application, TeamVideo, TeamVideoLanguagePair, TeamVideoLanguage
+from teams.models import Team, TeamMember, Invite, Application, TeamVideo
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
@@ -41,13 +41,11 @@ from django.contrib.auth.decorators import permission_required
 import random
 from widget.views import base_widget_params
 import widget
-from videos.models import Action, SubtitleLanguage
+from videos.models import Action
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from utils.multi_query_set import TeamMultyQuerySet
 from teams.rpc import TeamsApi
-from utils.orm import LoadRelatedQuerySet
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
 from haystack.query import SearchQuerySet
@@ -602,7 +600,10 @@ def invite(request):
             'error': ugettext(u'Note is too long.')
         }        
         
-    Invite.objects.get_or_create(team=team, user=user, defaults={'note': note})
+    Invite.objects.get_or_create(team=team, user=user, defaults={
+        'note': note, 
+        'author': request.user
+    })
     return {}
 
 @login_required

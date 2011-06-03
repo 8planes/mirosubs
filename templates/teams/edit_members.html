@@ -1,6 +1,6 @@
 {% extends "settings.html" %}
 
-{% load i18n teams_tags paginator profiles_tags messages_tags %}
+{% load i18n teams_tags paginator messages_tags %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
@@ -8,24 +8,13 @@
     {{ team }} {% trans 'Team Members' %} | Universal Subtitles
 {% endblock %}
 
-{% block css %}
-    {{ block.super }}
-    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
-{% endblock %}
-
 {% block scripts %}
     <script src="{% url messages:rpc_api %}" type="text/javascript"></script> 
-    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(function($){
             var TEAM_ID = '{{ team.pk }}';
             var INVITE_URL = '{% url teams:invite %}';
             
-            $('.invite-user').nyroModal({
-                minHeight: 260,
-                minWidth: 400,
-            });
-
             $('a.invite-button').click(function(){
                 var username = $('.username-invite-field').val();
                 if (username){
@@ -37,8 +26,9 @@
                         if (response.error){
                             $('.invite-user-error').html(response.error).show();
                         }else{
+                            $.jGrowl('User was invited. Wait for onfirmation.')
                             $('.invite-user-error').html('').hide();
-                            $.nyroModalRemove();
+                            $('#invite-user').modClose();
                             $('.username-invite-field, .user-invite-note').val('');
                         }
                     }, 'json');
@@ -79,7 +69,7 @@
   
     <div class="action_buttons">
         {% if team|can_invite_to_team:user %}
-            <a href="#invite-user" class="blue_button small invite-user">{% trans 'Invite User' %}</a>
+            <a href="#" data-modal="invite-user" class="blue_button small">{% trans 'Invite User' %}</a>
         {% endif %}
         {% if team|is_team_manager:user %}
             {% send_to_team_message_form team %}
@@ -139,19 +129,20 @@
     </div>
     <div class="clearfix"></div>
 
-{% send_message %}
-
 {% if team|can_invite_to_team:user %}
-<div id="invite-user" style="display: none">
-    <h3>{% trans 'Invite user' %}</h3>
-    <p class="invite-user-error" style="display: none; color: #ff8080;"></p>
-    <label>{% trans 'Username' %}</label>
-    <input type="text" style="margin: 10px;" class="username-invite-field"/>
-    <br/>
-    <label>{% trans 'Message' %}</label>
-    <textarea class="user-invite-note"></textarea>
-    <div class="action_buttons" style="border-top: none;">     
-        <a class="blue_button small invite-button">{% trans 'Invite User' %}</a>
+<div id="invite-user" class="msg_modal_wrap" style="display: none">
+    <a href="#close" class="close">{% trans "Close" %}</a>
+    <div class="msg_modal">
+        <h3><span>{% trans 'Invite user' %}</span></h3>
+        <p class="invite-user-error" style="display: none; color: #ff8080;"></p>
+        <label>{% trans 'Username' %}</label>
+        <input type="text" style="margin: 10px;" class="username-invite-field"/>
+        <br/>
+        <label>{% trans 'Message' %}</label>
+        <textarea class="user-invite-note"></textarea>
+        <div class="action_buttons" style="border-top: none;">     
+            <a class="blue_button small invite-button">{% trans 'Invite User' %}</a>
+        </div>
     </div>
 </div>
 {% endif %}

@@ -23,7 +23,7 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from videos.models import Video, SubtitleLanguage
 from auth.models import CustomUser as User
 from utils.amazon import S3EnabledImageField
@@ -81,7 +81,6 @@ class Team(models.Model):
     users = models.ManyToManyField(User, through='TeamMember', related_name='teams', verbose_name=_('users'))
     points = models.IntegerField(default=0, editable=False)
     applicants = models.ManyToManyField(User, through='Application', related_name='applicated_teams', verbose_name=_('applicants'))
-    invited = models.ManyToManyField(User, through='Invite', verbose_name=_('invited'))
     created = models.DateTimeField(auto_now_add=True)
     highlight = models.BooleanField(default=False)
     video = models.ForeignKey(Video, null=True, blank=True, related_name='intro_for_teams', verbose_name=_(u'Intro Video'))
@@ -632,7 +631,8 @@ class Invite(models.Model):
     team = models.ForeignKey(Team, related_name='invitations')
     user = models.ForeignKey(User, related_name='team_invitations')
     note = models.TextField(blank=True, max_length=200)
-
+    author = models.ForeignKey(User)
+    
     class Meta:
         unique_together = (('team', 'user'),)
     
@@ -645,14 +645,20 @@ class Invite(models.Model):
     
     def render_message(self, msg):
         return render_to_string('teams/_invite_message.html', {'invite': self})
-
+    
+    def message_json_data(self, data, msg):
+        data['can-reaply'] = False
+        return data
+    
 models.signals.pre_delete.connect(Message.on_delete, Invite)
     
 def invite_send_message(sender, instance, created, **kwargs):
     if created:
         msg = Message()
+        msg.subject = ugettext(u'Invitation to join a team')
         msg.user = instance.user
         msg.object = instance
+        msg.author = instance.author
         msg.save()
     
 post_save.connect(invite_send_message, Invite)

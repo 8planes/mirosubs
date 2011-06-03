@@ -96,8 +96,11 @@ class Message(models.Model):
             'message-content': self.get_content(),
             'message-subject': self.subject,
             'message-subject-display': unicode(self),
-            'is-read': self.read
+            'is-read': self.read,
+            'can-reaply': bool(self.author_id)
         }
+        if self.object and hasattr(self.object, 'message_json_data'):
+            data = self.object.message_json_data(data, self)
         return json.dumps(data)
     
     def get_content(self):
