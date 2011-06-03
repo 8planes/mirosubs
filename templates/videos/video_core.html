@@ -128,16 +128,19 @@
     <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
 {% endblock %}
 
-
 {% block title %}
-    {% if language.is_original %}
-        {% blocktrans with language.get_title_display as title %}
-            {{ title }} with subtitles | Universal Subtitles
-        {% endblocktrans %}
+    {% if not language %}
+        {{ video.title_display }} | Universal Subtitles
     {% else %}
-        {% blocktrans with language.get_title_display as title and language.get_language_display as language %}
-            {{ title }} with {{ language }} subtitles | Universal Subtitles
-        {% endblocktrans %}
+        {% if language.is_original %}
+            {% blocktrans with language.get_title_display as title %}
+                {{ title }} with subtitles | Universal Subtitles
+            {% endblocktrans %}
+        {% else %}
+            {% blocktrans with language.get_title_display as title and language.get_language_display as language %}
+                {{ title }} with {{ language }} subtitles | Universal Subtitles
+            {% endblocktrans %}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
