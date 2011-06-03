@@ -84,7 +84,7 @@ mirosubs.video.CaptionView.prototype.setUpPositioning =
         return null;
     }
     this.boundingBox_ = boundingBox;
-    this.captionWidth_ = Math.min(400, 
+    this.captionWidth_ = Math.min(mirosubs.video.CaptionView.MAXIMUM_WIDTH, 
         this.boundingBox_.width - 
           (mirosubs.video.CaptionView.HORIZONTAL_MARGIN * 2));
     this.captionLeft_ =  this.boundingBox_.left + 
