@@ -20,7 +20,8 @@
 import json
 
 from django.test import TestCase
-from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, VideoUrl
+from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, \
+    SubtitleLanguage, VideoUrl
 from apps.auth.models import CustomUser as User
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser, TxtSubtitleParser
 from django.core.urlresolvers import reverse
@@ -1545,3 +1546,34 @@ class TestFeedParser(TestCase):
         video, created = Video.get_or_create_for_url(vt=vt)
         self.assertTrue(video)        
 
+class TestTemplateTags(TestCase):
+    def setUp(self):
+        from django.conf import settings
+        self.auth = {
+            "username": u"admin",
+            "password": u"admin"
+        }    
+        from apps.testhelpers.views import _create_videos#, _create_team_videos
+        fixture_path = os.path.join(settings.PROJECT_ROOT, "apps", "videos", "fixtures", "teams-list.json")
+        data = json.load(open(fixture_path))
+        self.videos = _create_videos(data, [])
+        #self.team, created = Team.objects.get_or_create(name="test-team", slug="test-team")
+        #self.tvs = _create_team_videos( self.team, self.videos, [self.user])
+        
+    def test_complete_indicator(self):
+        from apps.videos.templatetags.subtitles_tags import complete_indicator
+        # one original  complete
+        l = SubtitleLanguage.objects.filter(is_original=True, is_complete=True)[0]
+        self.assertEqual("100 %", complete_indicator(l))
+        # one original non complete with 0 subs
+
+        l = SubtitleLanguage.objects.filter(is_forked=True, is_complete=False)[0]
+        self.assertEqual("0 Lines", complete_indicator(l))
+        # one original noncomplete 2 subs
+        l = SubtitleLanguage.objects.filter(video__title="6", is_original=True)[0]
+        self.assertEqual("2 Lines", complete_indicator(l))
+        # one trans non complete
+        l = SubtitleLanguage.objects.filter(video__title="b", language='pt')[0]
+        self.assertEqual("60 %", complete_indicator(l))
+        
+        
