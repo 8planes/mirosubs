@@ -27,13 +27,13 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from videos.models import Video, SubtitleLanguage
 from auth.models import CustomUser as User
 from utils.amazon import S3EnabledImageField
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from messages.models import Message
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
-from teams.tasks import update_one_team_video
+from teams.tasks import update_one_team_video, remove_one_team_video
 from apps.videos.models import SubtitleLanguage
 from haystack.query import SQ
 import datetime 
@@ -341,13 +341,6 @@ class TeamVideo(models.Model):
     def __unicode__(self):
         return self.title or self.video.__unicode__()
 
-    def save(self, *args, **kwargs):
-        created = bool(not self.pk)
-        super(TeamVideo, self).save(*args, **kwargs)
-        #asynchronous call
-        if created:
-            update_one_team_video.delay(self.id)
-            
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)
     
@@ -507,6 +500,15 @@ class TeamVideo(models.Model):
         for lang in settings.ALL_LANGUAGES:
             self._add_searchable_language(lang[0], langs, sls)
         return sls
+
+def team_video_save(sender, instance, created, **kwargs):
+    update_one_team_video.delay(instance.id)
+
+def team_video_delete(sender, instance, **kwargs):
+    remove_one_team_video.delay(instance.id)
+
+post_save.connect(team_video_save, TeamVideo)
+post_delete.connect(team_video_delete, TeamVideo)
 
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')

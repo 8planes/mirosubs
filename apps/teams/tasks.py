@@ -7,6 +7,7 @@ from celery.schedules import crontab
 from datetime import datetime
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
+from haystack import site
 
 @periodic_task(run_every=crontab(minute=0, hour=6))
 def add_videos_notification(*args, **kwargs):
@@ -43,6 +44,17 @@ def add_videos_notification(*args, **kwargs):
                                  context, fail_silently=not settings.DEBUG)
 
 @task()
+def remove_one_team_video(team_video_id):
+    from teams.models import TeamVideo, TeamVideoLanguage
+    try:
+        team_video = TeamVideo.objects.get(id=team_video_id)
+    except TeamVideo.DoesNotExist:
+        return
+
+    tv_search_index = site.get_index(TeamVideo)
+    tv_search_index.backend.remove(team_video)
+
+@task()
 def update_one_team_video(team_video_id):
     from teams.models import TeamVideo, TeamVideoLanguage
     try:
@@ -50,5 +62,6 @@ def update_one_team_video(team_video_id):
     except TeamVideo.DoesNotExist:
         return
 
-    team_video.update_team_video_language_pairs()
-    TeamVideoLanguage.update(team_video)
+    tv_search_index = site.get_index(TeamVideo)
+    tv_search_index.backend.update(
+        tv_search_index, [team_video])

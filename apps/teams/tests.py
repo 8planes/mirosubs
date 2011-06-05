@@ -394,6 +394,50 @@ class TeamsTest(TestCase):
         self.assertEqual(1, len(search_record.video_completed_langs))
         self.assertEqual('en', search_record.video_completed_langs[0])
 
+    def test_detail_contents_after_edit(self):
+        # make sure edits show up in search result from solr
+        self.client.login(**self.auth)
+        team = Team.objects.get(pk=1)
+        tv = team.teamvideo_set.get(pk=1)
+        tv.title = ''
+        tv.description = ''
+        tv.save()
+        data = {
+            "languages-MAX_NUM_FORMS": u"",
+            "languages-INITIAL_FORMS": u"0",
+            "title": u"change title",
+            "languages-0-language": u"el",
+            "languages-0-id": u"",
+            "languages-TOTAL_FORMS": u"1",
+            "languages-0-completed": u"on",
+            "thumbnail": u"",
+            "description": u"and descriptionnn"
+        }
+        url = reverse("teams:team_video", kwargs={"team_video_pk": tv.pk})
+        response = self.client.post(url, data)
+        self.assertRedirects(response, reverse("teams:team_video", kwargs={"team_video_pk": tv.pk}))
+        tv = team.teamvideo_set.get(pk=1)
+        team_video_search_records = self._tv_search_record_list(team)
+        
+        change_title_video = None
+        for tv in team_video_search_records:
+            if tv.title == 'change title':
+                change_title_video = tv
+                break
+        self.assertEquals('and descriptionnn', tv.description)
+
+    def test_detail_contents_after_remove(self):
+        # make sure removals show up in search result from solr
+        self.client.login(**self.auth)
+        team = Team.objects.get(pk=1)
+        num_team_videos = len(self._tv_search_record_list(team))
+
+        tv = team.teamvideo_set.get(pk=1)
+        url = reverse("teams:remove_video", kwargs={"team_video_pk": tv.pk})
+        self.client.post(url)
+
+        self.assertEquals(num_team_videos - 1, len(self._tv_search_record_list(team)))
+
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
         self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
@@ -731,16 +775,6 @@ class TeamsTest(TestCase):
         response = self.client.post(url)
         self.failUnlessEqual(response.status_code, 302)
         self.assertTrue(team.is_member(self.user))
-
-    def test_tvl_language_syncs(self):
-        team, new_team_video = self._create_new_team_video()
-        self._set_my_languages('en', 'ru')
-        # now add a Russian video with no subtitles.
-        self._add_team_video(
-            team, u'ru',
-            u'http://upload.wikimedia.org/wikipedia/commons/6/61/CollateralMurder.ogv')
-        tvl = TeamVideoLanguage.objects.get(team_video=new_team_video, language='ru')
-        self.assertEqual(tvl.language, 'ru')
         
     def test_fixes(self):
         url = reverse("teams:detail", kwargs={"slug": 'slug-does-not-exist'})
