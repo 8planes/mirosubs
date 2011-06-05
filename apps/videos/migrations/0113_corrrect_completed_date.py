@@ -1,5 +1,5 @@
 # encoding: utf-8
-from datetime import datetime
+import datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
@@ -77,7 +77,7 @@ class Migration(DataMigration):
                 v.complete_date = None
                 v.save()
             elif is_complete and not v.complete_date:
-                v.complete_date = datetime.now()
+                v.complete_date = datetime.datetime.now()
                 v.save()
 
     def backwards(self, orm):
