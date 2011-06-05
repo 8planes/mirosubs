@@ -1,5 +1,5 @@
 # encoding: utf-8
-import datetime
+from datetime import datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
@@ -72,8 +72,12 @@ class Migration(DataMigration):
             i += 1
             if i % 1000 == 0:
                 print('{0}/{1}'.format(i, count))
-            if not self._is_complete(v) and v.complete_date:
+            is_complete = self._is_complete(v)
+            if not is_complete and v.complete_date:
                 v.complete_date = None
+                v.save()
+            elif is_complete and not v.complete_date:
+                v.complete_date = datetime.now()
                 v.save()
 
     def backwards(self, orm):
