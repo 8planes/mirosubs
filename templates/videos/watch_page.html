@@ -13,13 +13,11 @@
 <div>
     <h2>{% trans "Featured videos" %}</h2>
     <div>
-    <div>
         {% for video in featured_videos %}
             <a href="{{ video.get_absolute_url }}">{{ video }}</a><br/>
         {% endfor %}
         <a href="#">more...</a>
     </div>        
-    </div>
 </div>
 
 <div>

@@ -21,7 +21,11 @@ class VideoIndex(CelerySearchIndex):
     
     week_views = IntegerField()
     month_views = IntegerField()
+    year_views = IntegerField()
     total_views = IntegerField(model_attr='view_count')
+    
+    def __unicode__(self):
+        return self.title
     
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
@@ -33,6 +37,7 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data['activity_count'] = obj.action_set.count()
         self.prepared_data['week_views'] = obj.views['week']
         self.prepared_data['month_views'] = obj.views['month']
+        self.prepared_data['year_views'] = obj.views['year']
         return self.prepared_data
 
     def _setup_save(self, model):

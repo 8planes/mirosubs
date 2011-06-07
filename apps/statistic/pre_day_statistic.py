@@ -140,20 +140,23 @@ class BasePerDayStatistic(object):
         
     def get_views(self, **kwargs):
         """
-        Return views statistic for week and month like: {'month': value, 'week': value}
+        Return views statistic for week and month like: {'month': value, 'week': value, 'year': value}
         Pas
         """
         qs = self.get_query_set(**kwargs)
         today = datetime.date.today()
         week_ago = today - datetime.timedelta(days=7)
         month_ago = today - datetime.timedelta(days=30)
+        year_ago = today - datetime.timedelta(days=365)
         
         result = dict(week=0, month=0)
         result['week'] = qs.filter(date__range=(week_ago, today)) \
             .aggregate(s=models.Sum('count'))['s']
         result['month'] = qs.filter(date__range=(month_ago, today)) \
             .aggregate(s=models.Sum('count'))['s']
-        
+        result['year'] = qs.filter(date__range=(year_ago, today)) \
+            .aggregate(s=models.Sum('count'))['s']
+                    
         return result
     
     def migrate(self, verbosity=1):
