@@ -504,4 +504,11 @@ clear: both !important;;
 }
 
 
-
+.msg_modal_wrap h3{
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 0px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f7fbfb'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f7fbfb)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #fff, #eee); /* for firefox 3.6+ */
+}

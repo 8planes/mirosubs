@@ -11,8 +11,7 @@
 {% endif %}
 
 <div class="msg_modal_wrap" id="{{ form_id }}">
-  <a href="#close" class="close">{% trans "Close" %}</a>
-  <div class="msg_modal">
+    <a href="#close" class="close">{% trans "Close" %}</a>
     <h3>{% trans "Send message to" %}
         <span>
             {% if receiver.picture %}
@@ -23,13 +22,14 @@
             <span class="author-username">{{ receiver }}</span>
         </span>
     </h3>
-
-    <form action="" method="post" accept-charset="utf-8">
-      <div class="global-errors"></div>
-      {{ send_message_form.as_p }}
-      <p><button type="submit" class="green_button small"/>{% trans "Send Message" %}</button></p>
-    </form>
-  </div>
+  
+    <div class="msg_modal">
+        <form action="" method="post" accept-charset="utf-8">
+          <div class="global-errors"></div>
+          {{ send_message_form.as_p }}
+          <p><button type="submit" class="green_button small"/>{% trans "Send Message" %}</button></p>
+        </form>
+    </div>
 </div>
 
 <script type="text/javascript">
