@@ -27,7 +27,7 @@ from django import forms
 from messages.models import Message
 from auth.models import CustomUser as User, UserLanguage
 from utils.forms import AjaxForm
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from teams.models import Team
 from django.db.models import Count
 from utils.translation import get_simple_languages_list
@@ -127,3 +127,23 @@ class SendTeamMessageForm(forms.ModelForm, AjaxForm):
             messages.append(message)
             
         return messages
+    
+class TeamAdminPageMessageForm(forms.ModelForm):
+    
+    class Meta:
+        model = Message
+        fields = ('subject', 'content')
+    
+    def send_to_teams(self, team_ids, author):
+        subject = self.cleaned_data['subject']
+        content = self.cleaned_data['content']
+        content = u''.join([content, '\n\n', ugettext('This message is from site administrator.')])
+        users = User.objects.filter(teams__in=team_ids).exclude(pk=author.pk)
+
+        for user in users:
+            print user
+            m = Message(author=author, user=user)
+            m.subject = subject
+            m.content = content
+            m.save()
+        return users.count()

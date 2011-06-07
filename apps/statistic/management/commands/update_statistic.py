@@ -47,6 +47,6 @@ class Command(ErrorHandlingCommand):
             widget_views_counter = Video.widget_views_counter(video_id, skip_mark_as_changed=True)
             view_counter = Video.view_counter(video_id, skip_mark_as_changed=True)
 
-            Video.objects.filter(video_id=video_id).update(view_count=F('view_count')+view_counter.getset(0))
-            Video.objects.filter(video_id=video_id).update(widget_views_count=F('widget_views_count')+widget_views_counter.getset(0))
-            Video.objects.filter(video_id=video_id).update(subtitles_fetched_count=F('subtitles_fetched_count')+subtitles_fetched_counter.getset(0))
+            Video.objects.filter(video_id=video_id).update(view_count=F('view_count')+(view_counter.getset(0) or 0))
+            Video.objects.filter(video_id=video_id).update(widget_views_count=F('widget_views_count')+(widget_views_counter.getset(0) or 0))
+            Video.objects.filter(video_id=video_id).update(subtitles_fetched_count=F('subtitles_fetched_count')+(subtitles_fetched_counter.getset(0) or 0))

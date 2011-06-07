@@ -111,7 +111,7 @@
                               </a>
                         {% endif %}
                         {% if not member.user == user and member.user.email %}
-                        | <a href="#" class="send_message" user_id="{{ member.user.pk }}">{% trans 'Contact User' %}</a>
+                        | {% send_message_form member.user 'True' %}
                         {% endif %}
                     </div>
                 </td>

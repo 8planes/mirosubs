@@ -26,11 +26,26 @@ from django.contrib import admin
 from teams.models import Team, TeamMember, TeamVideo
 from videos.models import Video
 from django.utils.translation import ugettext_lazy as _
+from messages.forms import TeamAdminPageMessageForm
 
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight')
     list_filter = ('highlight',)
-    actions = ['highlight', 'unhighlight']
+    actions = ['highlight', 'unhighlight', 'send_message']
+    
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['message_form'] = TeamAdminPageMessageForm()
+        return super(TeamAdmin, self).changelist_view(request, extra_context)
+        
+    def send_message(self, request, queryset):
+        form = TeamAdminPageMessageForm(request.POST)
+        if form.is_valid():
+            count = form.send_to_teams(request.POST.getlist(u'_selected_action'), request.user)
+            self.message_user(request, _("%(count)s messages sent") % dict(count=count))
+        else:
+            self.message_user(request, _("Fill all fields please."))
+    send_message.short_description = _('Send message')
     
     def highlight(self, request, queryset):
         queryset.update(highlight=True)

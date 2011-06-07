@@ -105,8 +105,10 @@ class Message(models.Model):
     
     def get_content(self):
         content = []
-
-        self.content and content.append(urlize(escape(self.content))) and content.append('\n')
+        
+        if self.content:
+            content.append(urlize(escape(self.content)).replace('\n', '<br />'))
+            content.append('\n')
         
         if self.object and hasattr(self.object, 'render_message'):
             added_content = self.object.render_message(self)

@@ -671,6 +671,7 @@ class SubtitleLanguage(models.Model):
                     standard_sub = original_sub_dict[sub.subtitle_id]
                     sub.start_time = standard_sub.start_time
                     sub.end_time = standard_sub.end_time
+                    sub.subtitle_order = standard_sub.subtitle_order
                 sub.pk = None
                 sub.version = version
                 sub.save()
