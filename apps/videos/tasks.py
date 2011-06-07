@@ -44,7 +44,7 @@ def setup_logging_handler(*args, **kwargs):
     """
     import sentry_logger
     
-worker_ready.connect(setup_logging_handler)
+#worker_ready.connect(setup_logging_handler)
 
 @task
 def add(a, b):
