@@ -7,7 +7,7 @@
     {% if video.thumbnail %}
         <meta property="og:image" content="{{ video.get_thumbnail }}" />
     {% else %}
-        <meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
+        <meta property="og:image" content="{{ MEDIA_URL }}images/small_logo.png" />
     {% endif %}
     
     {{ block.super }}
@@ -119,17 +119,15 @@
     <hr />
 
   <div class="grid_3 left_nav_wrapper alpha">
-    <ul class="left_nav">
-        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
-        {% include 'videos/_left_navigation.html' %}
-    </ul>      
-
+          
       {% if not video.subtitle_language %}
         <a href="#" id="add_subtitles" class="green_button small">
             {% trans 'Add Subtitles' %}
         </a>
       {% else %}  
-         <a class="green_button small add-translation-behavior" id="add_translation "   href="#">{% trans 'Add Translation' %}</a>     
+         <a class="green_button small add-translation-behavior" id="add_translation"   href="#">
+             {% trans 'Add Translation' %}
+         </a>
       {% endif %}
 
       {% upload_subtitles video %}
@@ -144,6 +142,11 @@
         {% endif %}
         
         {% team_add_video_select %}
+
+        <ul class="left_nav">
+            <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
+            {% include 'videos/_left_navigation.html' %}
+        </ul>
   </div>
 
   <div class="wrap grid_9 omega">
