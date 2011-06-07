@@ -68,6 +68,10 @@ def paginator(context, anchor='', adjacent_pages=3):
 
 register.inclusion_tag('_paginator.html', takes_context=True)(paginator)
 
+ajax_paginator = paginator
+ajax_paginator.__name__ = 'ajax_paginator'
+register.inclusion_tag('_ajax_paginator.html', takes_context=True)(ajax_paginator)
+
 @register.tag
 def ordered_column(parser, token):
     try:
