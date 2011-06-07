@@ -42,6 +42,11 @@ mirosubs.video.AbstractVideoPlayer = function(videoSource) {
      * @type {mirosubs.video.CaptionView}
      */
     this.captionView_ = null;
+
+    /*
+     * type {int} The duration, in seconds for this video
+     */
+    this.duration_ = 0;
     mirosubs.video.AbstractVideoPlayer.players.push(this);
 };
 goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);

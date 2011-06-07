@@ -50,6 +50,7 @@
     {{ block.super }}
     {% include "widget/_js_onsite_dependencies.html" %}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>       
+    {% write_video_type_js video %}
     <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
     <script type="text/javascript">
         //create url template

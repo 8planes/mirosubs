@@ -128,6 +128,8 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     }
     else if (/\.flv$|\.mov$/i.test(videoURL)) {
         return new mirosubs.video.FlvVideoSource(videoURL, opt_videoConfig);
+    }else if (mirosubs.video.BrightcoveVideoSource.isBrightcove(videoURL)){
+        return  mirosubs.video.BrightcoveVideoSource.forURL(videoURL);
     }
     else {
         var videoSource = 

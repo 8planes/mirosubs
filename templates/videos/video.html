@@ -49,6 +49,7 @@
     {% include "widget/_js_onsite_dependencies.html" %}
     {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>    
+    {% write_video_type_js video %}
     <script src="{{ MEDIA_URL }}js/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
     <script type="text/javascript">

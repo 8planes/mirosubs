@@ -80,4 +80,15 @@ function testBlipMP4WithQueryString() {
         mirosubs.video.Html5VideoType.H264);
 }
 
+function testBrightcoveVideoSource(){
+        var test_cases = [
+        [ 'http://link.brightcove.com/services/player/bcpid955357260001?bckey=AQ~~,AAAA3ijeRPk~,jc2SmUL6QMyqTwfTFhUbWr3dg6Oi980j&bctid=956115197001',
+          '955357260001', 'AQ~~,AAAA3ijeRPk~,jc2SmUL6QMyqTwfTFhUbWr3dg6Oi980j&domain']];
+    for (i in test_cases) {
+        var test_case = test_cases[i];
+        var vs = mirosubs.video.VideoSource.videoSourceForURL(test_case[0]);
+        assertEquals(test_case[1], vs.getPlayerID());
+
+    }
+}
 {% endblock %}

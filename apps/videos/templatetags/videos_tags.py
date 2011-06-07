@@ -19,6 +19,8 @@ from django import template
 
 register = template.Library()
 
+from videos.types import video_type_registrar, VideoTypeError
+
 @register.inclusion_tag('videos/_feature_video.html', takes_context=True)
 def feature_video(context, video):
     context['video'] = video
@@ -34,3 +36,15 @@ def is_follower(obj, user):
         return False
     
     return obj.followers.filter(pk=user.pk).exists()
+
+@register.simple_tag
+def write_video_type_js(video):
+    if not video or not bool(video.get_video_url()):
+        return ""
+    try:
+        vt = video_type_registrar.video_type_for_url(video.get_video_url())
+        if hasattr(vt, "js_url"):
+            return '<script type="text/javascript" src="%s"><script/>' % vt.js_url
+    except VideoTypeError:    
+        return "" 
+    
