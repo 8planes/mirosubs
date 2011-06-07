@@ -1,38 +1,26 @@
 {% load i18n %}
 <div class="pagination ajax-pagination">
-   {% if has_previous %}
-        <a class="previous_page ajax_link" href="?page={{ previous }}{{ getvars }}{{ anchor }}" rel="address:?page={{ previous }}{{ getvars }}{{ anchor }}">&#8592; {% trans 'Previous' %}</a>
-   {% else %}
-        <span class="previous_page disabled">&#8592; {% trans 'Previous' %}</span>
-   {% endif %}    
-
-   {% if show_first %}
-      <a href="?page={{ getvars }}{{ anchor }}" rel="address:?page={{ getvars }}{{ anchor }}" class="ajax_link">1</a>
-      <em>...</em>
-   {% endif %}
-
-   {% for linkpage in page_numbers %}
-      {% ifequal linkpage page %}
-         <em>{{ page }}</em>
-      {% else %}
-         <a href="?page={{ linkpage }}{{ getvars }}{{ anchor }}" rel="address:?page={{ linkpage }}{{ getvars }}{{ anchor }}" class="ajax_link">{{ linkpage }}</a>
-      {% endifequal %}
-   {% endfor %}
-
-   {% if show_last %}
-      <em>...</em>
-      <a href="?page=last{{ getvars }}{{ anchor }}" rel="address:?page=last{{ getvars }}{{ anchor }}" class="ajax_link">{{ pages }}</a>
-   {% endif %}
+    {% if has_previous %}
+        <a class="previous_page ajax_link" href="?page={{ previous }}{{ getvars }}" rel="address:?page={{ previous }}{{ getvars }}">
+            &#8592; {% trans 'Previous' %}
+        </a>
+    {% else %}
+        <em>&#8592; {% trans 'Previous' %}</em>
+    {% endif %}
     
-   {% if has_next %}
-        <a class="next_page" href="?page={{ next }}{{ getvars }}{{ anchor }}" rel="address:?page={{ next }}{{ getvars }}{{ anchor }}" class="ajax_link">{% trans 'Next' %} &#8594;</a>
-   {% else %}
-        <span class="next_page disabled">{% trans 'Next' %} &#8594;</span>
-   {% endif %}     
+    <em>{{ from_value}} - {{ to_value }} {% trans "of" %} {{ hits }} {{ items_name }}</em>
+    
+    {% if has_next %}
+        <a class="next_page" href="?page={{ next }}{{ getvars }}" rel="address:?page={{ next }}{{ getvars }}" class="ajax_link">
+            {% trans 'Next' %} &#8594;
+        </a>
+    {% else %}
+        <em>{% trans 'Next' %} &#8594;</em>
+    {% endif %}
 </div>
 <script type="text/javascript">
     jQuery(function($){
-        $('a.ajax_link').address();
+        $('.ajax-pagination a.ajax_link').address();
         
         $.address.change(function(e){
             var page = e.parameters.page;

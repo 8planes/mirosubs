@@ -24,7 +24,7 @@
     <h2>{% trans "Popular videos" %}</h2>
     <div>
         {% for video in popular_videos %}
-            <a href="{{ video.get_absolute_url }}">{{ video }}</a><br/>
+            <a href="{{ video.object.get_absolute_url }}">{{ video.title }}</a><br/>
         {% endfor %}
         <a href="#">more...</a>
     </div>
@@ -37,7 +37,7 @@
         {% for video in video_list %}
             <a href="{{ video.get_absolute_url }}">{{ video }}</a><br/>
         {% endfor %}
-        {% if is_paginated %}{% ajax_paginator %}{% endif %} 
+        {% if is_paginated %}{% ajax_paginator _("videos") %}{% endif %} 
     </div>
 </div>
 {% endblock%}

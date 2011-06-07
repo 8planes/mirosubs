@@ -24,9 +24,6 @@ class VideoIndex(CelerySearchIndex):
     year_views = IntegerField()
     total_views = IntegerField(model_attr='view_count')
     
-    def __unicode__(self):
-        return self.title
-    
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         langs = obj.subtitlelanguage_set.exclude(language=u'')

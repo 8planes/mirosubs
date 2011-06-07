@@ -81,8 +81,11 @@ def watch_page(request):
     #Popular videos
     popular_videos = SearchQuerySet().models(Video)[:4]
     
+    #featured videos
+    featured_videos = Video.objects.all()[:4]
+    
     extra_context = {
-        'featured_videos': Video.objects.all()[:4],
+        'featured_videos': featured_videos,
         'popular_videos': popular_videos
     }
     return object_list(request, queryset=qs,
