@@ -1,8 +1,14 @@
 {% load i18n %}
 
-<button class="green_button big" data-modal="{{ form_id }}">
-    <span>{% trans 'Send a Message' %}</span>
-</button>
+{# this should be maybe refactored for situation when we have a lot of such forms on page #}
+
+{% if link %}
+    <a href="#" data-modal="{{ form_id }}">{% trans 'Send a Message' %}</a>
+{% else %}
+    <button class="green_button big" data-modal="{{ form_id }}">
+        <span>{% trans 'Send a Message' %}</span>
+    </button>
+{% endif %}
 
 <div class="msg_modal_wrap" id="{{ form_id }}">
   <a href="#close" class="close">{% trans "Close" %}</a>
