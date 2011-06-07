@@ -65,6 +65,18 @@ def index(request):
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
 
+def watch_page(request):
+    qs = Video.objects.all()
+    extra_context = {
+        'featured_videos': Video.objects.all()[:4],
+        'popular_videos': Video.objects.order_by('-widget_views_count')[:4]
+    }
+    return object_list(request, queryset=qs,
+                       paginate_by=15,
+                       template_name='videos/watch_page.html',
+                       template_object_name='video',
+                       extra_context=extra_context)
+
 def bug(request):
     from widget.rpc import add_general_settings
     context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
