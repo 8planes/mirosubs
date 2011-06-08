@@ -24,11 +24,56 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from videos.models import Video, SubtitleLanguage
 from django.utils.translation import ugettext as _
-from utils.rpc import Error, Msg, RpcExceptionEvent
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
+from django.template.loader import render_to_string
+from django.template import RequestContext
+from django.conf import settings
+
+VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
 
 class VideosApiClass(object):
     authentication_error_msg = _(u'You should be authenticated.')
     
+    @add_request_to_kwargs
+    def load_watch_page(self,page, request, user):
+        import time
+        time.sleep(0.3)
+        qs = Video.objects.order_by('-edited')
+        
+        paginator = Paginator(qs, VIDEOS_ON_WATCH_PAGE)
+
+        try:
+            page = int(page)
+        except ValueError:
+            page = 1
+
+        try:
+            page_obj = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            page_obj = paginator.page(paginator.num_pages)
+        
+        context = {
+            'video_list': page_obj.object_list,
+            'page': page_obj
+        }
+        content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
+        
+        total = qs.count()
+        from_value = (page - 1) * VIDEOS_ON_WATCH_PAGE + 1
+        to_value = from_value + VIDEOS_ON_WATCH_PAGE - 1
+        
+        if to_value > total:
+            to_value = total
+            
+        return {
+            'content': content,
+            'total': total,
+            'pages': paginator.num_pages,
+            'from': from_value,
+            'to': to_value
+        }
+        
     def change_title_translation(self, language_id, title, user):
         if not user.is_authenticated():
             return Error(self.authentication_error_msg)

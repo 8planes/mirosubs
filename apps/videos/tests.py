@@ -27,6 +27,7 @@ from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, Yout
 from django.core.urlresolvers import reverse
 from django.core import mail
 from videos.forms import SubtitlesUploadForm
+from videos.tasks import video_changed_tasks
 from apps.videos import metadata_manager
 from apps.widget import video_cache
 import math_captcha
@@ -215,13 +216,14 @@ class UploadSubtitlesTest(WebUseTest):
             }
 
     
-    def _make_altered_data(self):
+    def _make_altered_data(self, video=None, language_code='ru', subs_filename='test_altered.srt'):
         import os
+        video = video or self.video
         return {
-            'language': 'ru',
-            'video': self.video.id,
+            'language': language_code,
+            'video': video.pk,
             'video_language': 'en',
-            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/test_altered.srt'))
+            'subtitles': open(os.path.join(os.path.dirname(__file__), 'fixtures/%s' % subs_filename))
             }
 
     def setUp(self):
@@ -452,7 +454,50 @@ class UploadSubtitlesTest(WebUseTest):
               self.assertTrue(sub.start_time is not None)
               self.assertTrue(sub.end_time is not None)
               self.assertTrue(sub.subtitle_order is not None)
-              self.assertTrue(sub.subtitle_id is not None)    
+              self.assertTrue(sub.subtitle_id is not None)
+
+    def test_upload_then_rollback_preservs_dependends(self):
+        self._login()
+        # for https://www.pivotaltracker.com/story/show/14311835
+        # 1. Submit a new video.
+        video, created = Video.get_or_create_for_url("http://example.com/blah.mp4")
+        # 2. Upload some original subs to this video.
+        data = self._make_data(lang='en', video_pk=video.pk)
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        original = video.subtitle_language()
+        original_version = version = original.version()
+        # 3. Upload another, different file to overwrite the original subs.
+        data = self._make_altered_data(language_code='en', video=video, subs_filename="welcome-subs.srt")
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        video = Video.objects.get(pk=video.pk)
+        version = video.version()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue (len(version.subtitles()) != len(original_version.subtitles()))
+        
+        # 4. Make a few translations.
+        pt = _create_trans(video, latest_version=version, lang_code="pt", forked=False )
+        pt_count = len(pt.latest_subtitles())
+        # 5. Roll the original subs back to #0. The translations will be wiped clean (to 0 lines).
+        original_version.rollback(self.user)
+        original_version.save()
+        video_changed_tasks.run(original_version.video.id, original_version.id)
+        # we should end up with 2 pts
+        pts = video.subtitlelanguage_set.filter(language='pt')
+        self.assertEqual(pts.count(), 2)
+        # one which is dependent, which is wiped
+        self.assertTrue(pts.filter(subtitle_count=0).exists())
+        self.assertTrue(pts.filter(subtitle_count=0, is_forked=False).exists())
+        # one which is forkded and must retain the original count
+        pt_forked = video.subtitlelanguage_set.get(language='pt', is_forked=True)
+        
+        self.assertEqual(len(pt_forked.latest_subtitles()), pt_count)
+        # now we roll back  to the second version, we should not be duplicating again
+        # because this rollback is already a rollback 
+        version.rollback(self.user)
+        pts = video.subtitlelanguage_set.filter(language='pt')
+        self.assertEqual(pts.count(), 2)
+              
 
 class Html5ParseTest(TestCase):
     def _assert(self, start_url, end_url):
@@ -1611,3 +1656,23 @@ class TestTemplateTags(TestCase):
         self.assertEqual("60 %", complete_indicator(l))
         
         
+def _create_trans( video, latest_version=None, lang_code=None, forked=False):
+        translation = SubtitleLanguage()
+        translation.video = video
+        translation.language = lang_code
+        translation.is_original = False
+        translation.is_forked = forked
+        translation.save()
+        v = SubtitleVersion()
+        v.language = translation
+        if latest_version:
+            v.version_no = latest_version.version_no+1
+        else:
+            v.version_no = 1
+        v.datetime_started = datetime.now()
+        v.save()
+        
+        if latest_version is not None:
+            for s in latest_version.subtitle_set.all():
+                s.duplicate_for(v).save()
+        return translation

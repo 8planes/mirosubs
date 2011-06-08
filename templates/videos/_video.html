@@ -1,0 +1,35 @@
+{% load i18n %}
+
+{# <ul class="video_list clearfix"> #}
+    <li>
+        <a href="{{ video.get_absolute_url }}">
+            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
+            <h4 style="overflow: hidden">Video {{ video.pk }}</h4>
+        </a>
+        <span class="views">
+            <strong>35,345,854</strong> {% trans "Views" %}
+        </span>
+        <span class="languages">
+            <a class="lang_arrow" href="">
+            <div class="lang_menu">
+                <div class="hd">
+                    <span class="menu_close">close</span>
+                    <span>53 Languages</span>
+                </div><!-- hd -->
+                <div class="bd clearfix">
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                    <span>100% English (US)</span>
+                </div>
+            </div><!-- // lang_menu -->
+            </a>
+            <span>53 Languages</span>
+        </span><!-- // languages -->
+    </li>
+{# </ul> #}

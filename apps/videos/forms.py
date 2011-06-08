@@ -338,6 +338,12 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         sl = self.save_subtitles(parser)
         is_complete = self.cleaned_data.get('is_complete')
         sl.is_complete = is_complete
+        if len(sl.latest_version().subtitles()) > 0:
+            # this will eventually get updated on the async test
+            # but if it takes too long on html file uplods
+            # then users will not see the language added which is very
+            # confusing from a UI point of view
+            sl.had_version = sl.has_version = True
         sl.save()
         video_changed_tasks.delay(sl.video.id, sl.latest_version().id)
         return sl

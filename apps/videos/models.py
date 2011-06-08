@@ -632,13 +632,19 @@ class SubtitleLanguage(models.Model):
             qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
         return qs
 
-    def fork(self, from_version=None, user=None):
+    def translations(self):
+        return SubtitleLanguage.objects.filter(video=self.video, is_original=False, is_forked=False)
+
+    def fork(self, from_version=None, user=None, result_of_rollback=False, attach_to_language=None):
         """
         If this a dependent and non write locked language,
         then will fork it, making all it's subs timing not
         depend on anything else.
         If locked, will throw an AlreadyEditingException .
+        If attach_to_language is passed, we will copy those
+        subs to a new language, else self will be used
         """
+        to_language = attach_to_language or self
         if from_version:
             original_subs = from_version.subtitle_set.all()
         else:
@@ -656,9 +662,9 @@ class SubtitleLanguage(models.Model):
             version_no = 0
 
         version = SubtitleVersion(
-                language=self, version_no=version_no,
+                language=to_language, version_no=version_no,
                 datetime_started=datetime.now(), user=user,
-                note=u'Uploaded', is_forked=True, time_change=1, text_change=1)
+                note=u'Uploaded', is_forked=True, time_change=1, text_change=1, result_of_rollback=result_of_rollback)
         version.save()
 
         if old_version:
@@ -845,11 +851,27 @@ class SubtitleVersion(SubtitleCollection):
         latest_subtitles = lang.latest_version()
         new_version_no = latest_subtitles.version_no + 1
         note = u'rollback to version #%s' % self.version_no
+
+        if latest_subtitles.result_of_rollback is False:
+            # if we have tanslations, we need to keep a forked version of them
+            # else all translations will be wiped by an earlier original rollback
+            for translation in self.language.translations():            
+                if len(translation.latest_subtitles()) > 0:
+                    translation_pk = translation.pk
+                    # create a new language, that will be forked
+                    forked_trans = translation
+                    forked_trans.pk = None
+                    forked_trans.standard_language = None
+                    forked_trans.forked = True
+                    forked_trans.save()
+                    translation = SubtitleLanguage.objects.get(pk=translation_pk)
+                    translation.fork(result_of_rollback=True, attach_to_language=forked_trans)
         new_version = cls(language=lang, version_no=new_version_no, \
                               datetime_started=datetime.now(), user=user, note=note, 
                           is_forked=self.is_forked,
                           result_of_rollback=True)
         new_version.save()
+        
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
         self.latest_version = new_version
@@ -873,11 +895,6 @@ def update_followers(sender, instance, created, **kwargs):
         
 post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
 post_save.connect(update_followers, SubtitleVersion)
-
-def update_video_edited_field(sender, instance, **kwargs):
-    video = instance.language.video
-    video.edited = datetime.now()
-    video.save()
 
 class SubtitleDraft(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
@@ -964,6 +981,11 @@ class Subtitle(models.Model):
             if 'end_time' in caption_dict:
                 self.end_time = caption_dict['end_time']
 
+    def __unicode__(self):
+        if self.pk:
+            return u"(%4s) %s %s -> %s %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
+                                          self.start_time, self.end_time, self.subtitle_text, self.version_id)
+    
 from django.template.loader import render_to_string
 
 class ActionRenderer(object):

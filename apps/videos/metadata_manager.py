@@ -22,6 +22,8 @@ from datetime import datetime
 def update_metadata(video_pk):
     from videos.models import Video
     video = Video.objects.get(pk=video_pk)
+    video.edited = datetime.now()
+    video.save()
     _update_forked(video)
     _update_changes(video)
     _update_subtitle_counts(video)
