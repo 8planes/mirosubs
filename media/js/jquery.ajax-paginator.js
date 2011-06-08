@@ -31,11 +31,11 @@
      loadingIndicator: null,
      
      page: 1, //current page
-     pages: 1,  //total number of pages
+     pages: null,  //total number of pages. Can be empty on page load, when we don't know have many pages have
      timeoutId: null, //callback timer ID
      
      options: {
-         pages: 1,
+         pages: null,
          prevLink: '.pag_prev',
          nextLink: '.pag_next',
          pageInfoNode: '.page-info',
@@ -101,7 +101,7 @@
          }
      },
      _onNextClick: function(){
-         if (this.page < this.pages){
+         if (this.pages && this.page < this.pages){
              this.setPage(this.page + 1);
          }
      },
@@ -128,7 +128,7 @@
              this.prevLink.show();
          };
          
-         if (this.nextLink == this.pages){
+         if ( ! this.pages || this.page == this.pages){
              this.nextLink.hide();
          }else{
              this.nextLink.show();
@@ -152,7 +152,7 @@
           */
          this.pages = pages;
          
-         if (this.page > this.pages){
+         if (this.pages && this.page > this.pages){
              this.page = this.pages;
          };
          this._checkNavigationLinks();
@@ -160,10 +160,10 @@
      setPage: function(page){
          //check if page number is valid
          if (page <= 0){
-             return;
+             page = 1;
          };
-         
-         if (page > this.pages){
+
+         if (this.pages && page > this.pages){
              page = this.pages;
          }
          
