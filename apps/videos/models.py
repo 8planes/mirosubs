@@ -874,11 +874,6 @@ def update_followers(sender, instance, created, **kwargs):
 post_save.connect(Awards.on_subtitle_version_save, SubtitleVersion)
 post_save.connect(update_followers, SubtitleVersion)
 
-def update_video_edited_field(sender, instance, **kwargs):
-    video = instance.language.video
-    video.edited = datetime.now()
-    video.save()
-
 class SubtitleDraft(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
     # null iff there is no SubtitleVersion yet.

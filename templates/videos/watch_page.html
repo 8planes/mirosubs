@@ -2,7 +2,7 @@
 
 {% load paginator i18n %}
 
-{% block body_attrs %}id="video"{% endblock %}
+{% block body_attrs %}id="watch"{% endblock %}
 
 {% block scripts %}
     {{ block.super }}
@@ -10,34 +10,81 @@
 {% endblock %}
 
 {% block main_content %}
-<div>
-    <h2>{% trans "Featured videos" %}</h2>
-    <div>
-        {% for video in featured_videos %}
-            <a href="{{ video.get_absolute_url }}">{{ video }}</a><br/>
-        {% endfor %}
-        <a href="#">more...</a>
-    </div>        
-</div>
+<div id="watch_search">
+    <span class="icon"></span>
+    <input type="text" value="Search videos" />
+    <a id="advanced_search" href="">
+    <div id="advanced_menu">
+        <div class="menu_item videos_in">
+            <h3>Videos In</h3>
+            <select>
+                <option>English (US)</option>
+            </select>
+        </div><!-- // menu_item -->
+        <div class="menu_item">
+            <h3>Subtitles into</h3>
+            <select>
+                <option>English (US)</option>
+            </select>
+            <button>
+                Search
+            </button>
+        </div><!-- // menu_item -->
+    </div><!-- // advanced_menu -->
+    </a>
+</div><!-- // watch_search -->
 
-<div>
-    <h2>{% trans "Popular videos" %}</h2>
-    <div>
-        {% for video in popular_videos %}
-            <a href="{{ video.object.get_absolute_url }}">{{ video.title }}</a><br/>
-        {% endfor %}
-        <a href="#">more...</a>
-    </div>
-</div>
+<h1>{% trans "Watch Subtitled Videos" %}</h1>
 
-<div>
-    <h2>{% trans "Latest" %}</h2>
-    <div>
-        {% if is_paginated %}{% paginator %}{% endif %} 
-        {% for video in video_list %}
-            <a href="{{ video.get_absolute_url }}">{{ video }}</a><br/>
-        {% endfor %}
-        {% if is_paginated %}{% ajax_paginator _("videos") %}{% endif %} 
-    </div>
-</div>
-{% endblock%}
+<div class="pod">
+    <div class="hd">
+        <h2>{% trans "Featured Videos" %}</h2>
+    </div><!-- // hd -->
+    <div class="bd">
+        <ul class="video_list clearfix">
+            {% for v in featured_videos %}
+                {% with v.object as video %}
+                    {% include 'videos/_video.html' %}
+                {% endwith %}
+            {% endfor %}
+        </ul><!--// video_list -->
+    </div><!-- // bd -->
+</div><!-- // pod -->
+<br/>
+<div class="pod">
+    <div class="hd">
+        <h2>{% trans "Popular Videos" %}</h2>
+    </div><!-- // hd -->
+    <div class="bd">
+        <ul class="video_list clearfix">
+            {% for v in popular_videos %}
+                {% with v.object as video %}
+                    {% include 'videos/_video.html' %}
+                {% endwith %}
+            {% endfor %}
+        </ul><!--// video_list -->
+    </div><!-- // bd -->
+</div><!-- // pod -->
+<br/>
+<div class="pod">
+    <div class="hd">
+        <h2>{% trans "The Latest" %}</h2>
+    </div><!-- // hd -->
+    <div class="bd">
+        <ul class="video_list clearfix">        
+            {% for video in video_list %}
+                {% include 'videos/_video.html' %}
+            {% endfor %}          
+        </ul><!--// video_list -->
+        <div class="pages">
+            <a class="pag_prev" href="">
+            <span class="icon"></span>
+            </a>
+            <span>15 of 4,000 videos</span>
+            <a class="pag_next" href="">
+            <span class="icon"></span>
+            </a>
+        </div><!-- // pagination -->
+    </div><!-- // bd -->
+</div><!-- // pod -->
+{% endblock %}

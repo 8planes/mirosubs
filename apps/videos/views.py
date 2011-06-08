@@ -76,13 +76,13 @@ def watch_page(request):
     }
     
     #Latest videos
-    qs = Video.objects.all()
+    qs = Video.objects.order_by('-edited')
     
     #Popular videos
-    popular_videos = SearchQuerySet().models(Video)[:4]
+    popular_videos = SearchQuerySet().models(Video).load_all()[:5]
     
     #featured videos
-    featured_videos = Video.objects.all()[:4]
+    featured_videos = SearchQuerySet().models(Video).load_all()[:5]
     
     extra_context = {
         'featured_videos': featured_videos,
