@@ -959,6 +959,11 @@ class Subtitle(models.Model):
             if 'end_time' in caption_dict:
                 self.end_time = caption_dict['end_time']
 
+    def __unicode__(self):
+        if self.pk:
+            return u"(%4s) %s %s -> %s %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
+                                          self.start_time, self.end_time, self.subtitle_text, self.version_id)
+    
 from django.template.loader import render_to_string
 
 class ActionRenderer(object):
