@@ -237,9 +237,19 @@ def bounce_memcached():
 
 def update_solr_schema():
     if env.admin_dir:
+        # staging and production
         env.host_string = ADMIN_HOST
         dir = env.admin_dir
+        python_exe = '{0}/env/bin/python'.format(env.web_dir)
+        with cd(os.path.join(dir, 'mirosubs')):
+            _git_pull()
+            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/{1}/conf/schema.xml'.format(
+                    python_exe, 
+                    'production' if env.installation_name is None else 'staging'))
+            sudo('service tomcat6 restart')
+            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
     else:
+        # dev
         env.host_string = DEV_HOST
         dir = env.web_dir
         python_exe = '{0}/env/bin/python'.format(env.web_dir)

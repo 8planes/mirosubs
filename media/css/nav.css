@@ -242,11 +242,13 @@ left: -4px;
 /*//////////   ~  Inline Tabs  ~   //////////*/
 
 
-.inline_tabs{
+
+
+.inline_tabs {
   display: inline !important;
   clear: none !important;
   margin: 0;
-  padding: 0; 
+  padding: 10px !important; 
   }
 
 
@@ -286,6 +288,10 @@ left: -4px;
 }
 
 
+#languages-tab .inline_tabs {
+	padding: 10px !important;
+	display: block !important;
+}
 
 
 a.active {
