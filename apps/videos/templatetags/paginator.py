@@ -68,46 +68,6 @@ def paginator(context, anchor='', adjacent_pages=3):
 
 register.inclusion_tag('_paginator.html', takes_context=True)(paginator)
 
-def ajax_paginator(context, items_name):
-    """
-    To be used in conjunction with the object_list generic view.
-
-    Adds pagination context variables for use in displaying first, adjacent and
-    last page links in addition to those created by the object_list generic
-    view.
-
-    """
-    
-    getvars = ''
-    if 'request' in context:
-        GET_vars = context['request'].GET.copy()
-        if 'page' in GET_vars:
-            del GET_vars['page']
-        if len(GET_vars.keys()) > 0:
-            getvars = "&%s" % GET_vars.urlencode()
-    
-    from_value = (context['page'] - 1) * context['results_per_page'] + 1
-    to_value = from_value + context['results_per_page'] - 1
-    
-    return {
-        'from_value': from_value,
-        'to_value': to_value,
-        'page_obj': context['page_obj'],
-        'paginator': context['paginator'],
-        'hits': context['hits'],
-        'results_per_page': context['results_per_page'],
-        'page': context['page'],
-        'pages': context['pages'],
-        'next': context['next'],
-        'previous': context['previous'],
-        'has_next': context['has_next'],
-        'has_previous': context['has_previous'],
-        'items_name': items_name,
-        'getvars': getvars
-    }
-    
-register.inclusion_tag('_ajax_paginator.html', takes_context=True)(ajax_paginator)
-
 @register.tag
 def ordered_column(parser, token):
     try:
