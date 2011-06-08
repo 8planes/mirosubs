@@ -1,13 +1,14 @@
 {% load i18n %}
-        <a href="#upload_subs-div" id="upload-subtitles-link" class="upload-button blue_button small">
-            {% trans 'Upload Subtitles' %}
-        </a>
+    <a href="#" id="upload-subtitles-link" class="upload-button green_button small" data-modal="upload_subs-div">
+        {% trans 'Upload Subtitles' %}
+    </a>
 
-    <div id="upload_subs-div" style="display: none">
-    
+    <div id="upload_subs-div" style="display: none" class="msg_modal_wrap" >
+        <a href="#close" class="close">{% trans "Close" %}</a>
         <h3>{% trans 'Upload Subtitles' %}</h3>
+        <div class="msg_modal">
+            
     
-        <div class="padding">
             {% if user.is_authenticated %}
                 <p>
                     {% blocktrans %}
@@ -75,24 +76,3 @@
             });
          })(jQuery);
     </script>
-    <script type="text/javascript">
-        jQuery(function(){
-            $.nyroModalSettings({
-                minWidth: 460,
-                minHeight: 250,
-                bgColor: '#fff',
-                cssOpt: {
-                    wrapper: {
-                       backgroundColor: '#fff'
-                    }                    
-                },
-                endRemove: function(){
-                    $('#clippy').show();
-                },
-                processHandler: function(){
-                    $('#clippy').hide();
-                }
-            }); 
-            $('.upload-button').nyroModal();
-          });
-    </script>    

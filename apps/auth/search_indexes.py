@@ -14,5 +14,5 @@ class UserIndex(SearchIndex):
     def get_queryset(self):
         return super(UserIndex, self).get_queryset().filter(is_active=True)
     
-site.register(User, UserIndex)
+#site.register(User, UserIndex)
     

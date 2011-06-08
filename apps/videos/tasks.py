@@ -6,7 +6,7 @@ from utils import send_templated_email
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
-from celery.signals import task_failure, setup_logging
+from celery.signals import task_failure, worker_ready
 from haystack import site
 from videos.models import VideoFeed
 from sentry.client.models import client
@@ -44,7 +44,7 @@ def setup_logging_handler(*args, **kwargs):
     """
     import sentry_logger
     
-setup_logging.connect(setup_logging_handler)
+#worker_ready.connect(setup_logging_handler)
 
 @task
 def add(a, b):

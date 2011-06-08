@@ -99,4 +99,12 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
         obj, created = self.model.objects.get_or_create(**fields)
         return obj
 
+    def get_query_set(self, date, video, sl=None):
+        qs = self.model.objects.filter(video=video)
+        
+        if sl:
+            qs = qs.filter(language=sl)
+        
+        return sl
+        
 st_sub_fetch_handler = SubtitleFetchStatistic()

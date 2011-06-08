@@ -16,7 +16,6 @@
 
 <div class="msg_modal_wrap" id="{{ form_id }}">
   <a href="#close" class="close">{% trans "Close" %}</a>
-  <div class="msg_modal">
     <h3>{% trans "Send message to team" %}
         <span>
             {% if team.logo %}
@@ -27,7 +26,8 @@
             <span class="author-username">{{ team }}</span>
         </span>
     </h3>
-
+      
+  <div class="msg_modal">
     <form action="" method="post" accept-charset="utf-8" class="message_form">
       <div class="global-errors"></div>
       {{ send_message_form.as_p }}

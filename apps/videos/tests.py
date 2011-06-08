@@ -420,6 +420,40 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertFalse(data['success'])
 
 
+    def test_translations_get_order_after_fork(self):
+          # we create en -> es
+          # new es has no time data, but does have order
+          from widget.tests import create_two_sub_dependent_draft, RequestMockup
+          request = RequestMockup(User.objects.all()[0])
+          draft = create_two_sub_dependent_draft(request)
+          video = draft.video
+          translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+          for sub in translated.version().subtitle_set.all():
+              self.assertTrue(sub.start_time is None)
+              self.assertTrue(sub.end_time is None)
+              self.assertTrue(sub.subtitle_order is None)
+          for sub in video.subtitle_language().version().subtitle_set.all():
+              self.assertTrue(sub.start_time is not  None)
+              self.assertTrue(sub.end_time is not None)
+              self.assertTrue(sub.subtitle_order is not None)
+          # we upload a new english
+          data = self._make_data(lang='en', video_pk=video.pk)
+          self._login()
+
+          response = self.client.post(reverse('videos:upload_subtitles'), data)
+          self.assertTrue (len(video.version().subtitles()) > len(translated.version().subtitles()))
+          self.assertEqual(response.status_code, 200)    
+          # now es is forked, which means that it must have timing data AND keep the same ordering from
+          translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+          self.assertTrue(translated.is_forked)
+          translated = video.subtitlelanguage_set.all().filter(language='es')[0]
+          subs_trans  = translated.version().subtitle_set.all()
+          for sub in subs_trans:
+              self.assertTrue(sub.start_time is not None)
+              self.assertTrue(sub.end_time is not None)
+              self.assertTrue(sub.subtitle_order is not None)
+              self.assertTrue(sub.subtitle_id is not None)    
+
 class Html5ParseTest(TestCase):
     def _assert(self, start_url, end_url):
         from videos.models import VIDEO_TYPE_HTML5

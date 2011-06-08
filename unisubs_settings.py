@@ -40,6 +40,10 @@ if INSTALLATION == DEV:
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
     SENTRY_TESTING = True
     SOLR_ROOT = '/usr/share/'
+    CELERYD_LOG_LEVEL = 'INFO'
+    CELERY_REDIRECT_STDOUTS = True
+    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'    
+
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'

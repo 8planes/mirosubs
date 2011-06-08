@@ -7,17 +7,17 @@ ALL_LANGUAGES = tuple((val, _(name))for val, name in settings.ALL_LANGUAGES)
 
 class SearchForm(forms.Form):
     SORT_CHOICES = (
+        ('languages_count', _(u'Most languages')),
         ('week_views', _(u'Most plays (this week)')),
         ('month_views', _(u'Most plays (this month)')),
         ('total_views', _(u'Most plays (all time)')),
-        ('languages_count', _(u'Most languages'))
     )
     DISPLAY_CHOICES = (
         ('all', _(u'all')),
         ('thumbnails', _(u'thumbnails')),
     )
     q = forms.CharField(required=False, label=_(u'query'))
-    sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='', 
+    sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count', 
                              label=_(u'sort type'))
     langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'languages'),
                               help_text=_(u'Left blank for any language'))
