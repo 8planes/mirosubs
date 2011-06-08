@@ -25,7 +25,7 @@ pycrypto==2.1.0
 redis==2.2.4
 simplejson==2.1.1
 django-haystack==1.2.4
-pysolr==2.0.12
+pysolr==2.0.14
 chardet==1.0.1
 boto==2.0b4
 python-memcached
