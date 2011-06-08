@@ -930,5 +930,4 @@ class TeamsDetailQueryTest(TestCase):
         self._set_my_languages(*user_langs)
         qs_list, mqs = self.team.get_videos_for_languages_haystack(user_langs)
         titles = [x.video_title for x in qs_list[3]]
-        print titles
         self.assertTrue(titles.index(u'a') < titles.index(u'c'))
