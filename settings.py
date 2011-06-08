@@ -561,6 +561,7 @@ MEDIA_BUNDLES = {
             "css/top_user_panel.css", 
             "css/services.css", 
             "css/solutions.css",
+            "css/watch.css",
           ),
         },
     "video_history":{
