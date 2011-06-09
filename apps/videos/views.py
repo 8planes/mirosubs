@@ -67,19 +67,11 @@ def index(request):
                               context_instance=RequestContext(request))
 
 def watch_page(request):
-    POPULAR_VIDEO_FILTER = {
-        #'today': _(u'Today'),
-        'week': ('week_views', _(u'This week')),
-        'month': ('month_views', _(u'This month')),
-        'year': ('year_views', _(u'This year')),
-        'all': ('total_views', _(u'Any time'))
-    }
-    
     #Latest videos
     qs = Video.objects.order_by('-edited')
     
     #Popular videos
-    popular_videos = SearchQuerySet().models(Video).load_all()[:5]
+    popular_videos = SearchQuerySet().models(Video).load_all().order_by('-week_views')[:5]
     
     #featured videos
     featured_videos = SearchQuerySet().models(Video).load_all()[:5]
@@ -347,7 +339,7 @@ def legacy_history(request ,video_id, lang=None):
 def history(request, video_id, lang=None, lang_id=None):
     video = get_object_or_404(Video, video_id=video_id)
     video.update_view_counter()
-    
+
     context = widget.add_onsite_js_files({})
 
     if lang_id:

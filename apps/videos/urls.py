@@ -23,7 +23,7 @@ from videos.views import rpc_router
 urlpatterns = patterns(
     'videos.views',
     url(r'^$', 'video_list', name='list'),
-    url(r'^watch_page/$', 'watch_page', name='watch_page'),
+    url(r'^watch/$', 'watch_page', name='watch_page'),
     url(r'^test_celery/$', 'test_celery'),
     url(r'^test_celery_exception/$', 'test_celery_exception'),
     url(r'^router/$', rpc_router, name='rpc_router'),

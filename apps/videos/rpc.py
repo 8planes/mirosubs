@@ -29,6 +29,7 @@ from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.conf import settings
+from haystack.query import SearchQuerySet
 
 VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
 
@@ -36,7 +37,30 @@ class VideosApiClass(object):
     authentication_error_msg = _(u'You should be authenticated.')
     
     @add_request_to_kwargs
-    def load_watch_page(self,page, request, user):
+    def load_popular_page(self, sort, request, user):
+        sort_types = {
+            'week': 'week_views', 
+            'month': 'month_views', 
+            'year': 'year_views', 
+            'total': 'total_views'
+        }
+        
+        sort_field = sort_types.get(sort, 'week_views')
+        
+        popular_videos = SearchQuerySet().models(Video).load_all().order_by('-%s' % sort_field)[:5]
+        
+        context = {
+            'video_list': [item.object for item in popular_videos]
+        }
+        
+        content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
+        
+        return {
+            'content': content
+        }
+        
+    @add_request_to_kwargs
+    def load_watch_page(self, page, request, user):
         qs = Video.objects.order_by('-edited')
         
         paginator = Paginator(qs, VIDEOS_ON_WATCH_PAGE)

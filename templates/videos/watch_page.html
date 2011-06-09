@@ -57,25 +57,47 @@
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
         <h2>{% trans "Popular Videos" %}</h2>
-        <a id="popular_sort" href="">
-            <span>Today</span>
+        <a id="popular_sort" href="#">
+            <span class="current-sort">{% trans "This Week" %}</span>
             <div id="sort_menu">
                 <ul>
-                    <li>This Week</li>
-                    <li>This Month</li>
-                    <li>This Year</li>
+                    <li val="week" style="display: none">{% trans "This Week" %}</li>
+                    <li val="month">{% trans "This Month" %}</li>
+                    <li val="year">{% trans "This Year" %}</li>
+                    <li val="total">{% trans "All Time" %}</li>
                 </ul>
             </div><!-- // sort_menu -->
-        </a>                
+        </a>
+        <script type="text/javascript">
+            jQuery(function($){
+                var $current_sort = $('#popular_sort .current-sort');
+                var $sort_menu = $('#sort_menu');
+                var $container = $('.popular-videos-content');
+                
+                $('li', $sort_menu).click(function(){
+                    var $this = $(this);
+                    
+                    $('li', $sort_menu).show();
+                    $this.hide();
+                    $current_sort.html($this.html());
+                    VideosApi.load_popular_page($this.attr('val'), function(data){
+                        $container.html(data.content);
+                    });
+                    return false;
+                });
+            });
+        </script>                        
     </div><!-- // hd -->
     <div class="bd">
-        <ul class="video_list clearfix">
-            {% for v in popular_videos %}
-                {% with v.object as video %}
-                    {% include 'videos/_video.html' %}
-                {% endwith %}
-            {% endfor %}
-        </ul><!--// video_list -->
+        <div class="popular-videos-content">
+            <ul class="video_list clearfix">
+                {% for v in popular_videos %}
+                    {% with v.object as video %}
+                        {% include 'videos/_video.html' %}
+                    {% endwith %}
+                {% endfor %}
+            </ul><!--// video_list -->
+        </div>
     </div><!-- // bd -->
 </div><!-- // pod -->
 <br/>
@@ -134,4 +156,5 @@
         });
     });
 </script>
+
 {% endblock %}

@@ -2,9 +2,15 @@
 
 {# <ul class="video_list clearfix"> #}
     <li>
-        <a href="">
-            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-            <h4>Video {{ video.pk }}</h4>
+        <a href="{{ video.get_absolute_url }}">
+            {% with video.get_thumbnail as thumbnail_url %}
+                {% if thumbnail_url %}
+                    <img src="{{ thumbnail_url }}" width="155" height="90"/>
+                {% else %}
+                    <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
+                {% endif %}
+            {% endwith %}
+            <h4>{{ video.video_id }}</h4>
         </a>
         <span class="views">
             <strong>35,345,854</strong> Views
