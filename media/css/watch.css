@@ -374,3 +374,74 @@ div.pages a.pag_next span.icon {
 #popular_videos .hd a:hover#popular_sort #sort_menu ul li:hover {
 	background: #ecf3f5;
 }
+
+body#watch_results #watch_search {
+	top: 12px;
+	right: 15px;
+}
+
+body#watch_results #sidebar {
+	width: 175px;
+	float: left;
+	border-right: 1px #cad1d4 solid;
+}
+
+body#watch_results #sidebar h2 {
+	font-size: 16px;
+	border-bottom: 1px #cad1d4 solid;
+	margin: 0 0 10px 0;
+	padding: 13px 20px 10px 20px;
+	text-align: right;
+	color: #52686e;
+}
+
+body#watch_results #sidebar ul {
+	border-bottom: 1px #cad1d4 solid;
+	margin: 0;
+	padding: 0 0 10px 0;
+	display: block;
+}
+
+body#watch_results #sidebar ul.last {
+	border: 0;
+	padding: 0;
+}
+
+body#watch_results #sidebar ul li {
+	margin: 0;
+	padding: 0;
+}
+
+body#watch_results #sidebar ul li a {
+	display: block;
+	text-align: right;
+	padding: 7px 10px 7px 10px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #788b90;
+}
+
+body#watch_results #sidebar ul li a:hover {
+	background: #dce5e7;
+}
+
+body#watch_results #sidebar ul li.active a {
+	color: #31879f;
+	background: transparent url(../images/icon_results_active.png) 93% 9px no-repeat;
+	padding: 7px 30px 7px 10px;
+}
+
+body#watch_results #sidebar ul li.active a:hover {
+	background: #dce5e7 url(../images/icon_results_active.png) 93% 9px no-repeat;
+}
+
+body#watch_results #main_col {
+	width: 764px;
+	float: left;
+}
+
+body#watch_results .pages {
+	width: 764px;
+	margin: 0 0 0 175px;
+	border-left: 1px #cad1d4 solid;
+}
