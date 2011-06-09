@@ -7,7 +7,7 @@ from utils.celery_search_index import CelerySearchIndex
 
 class VideoIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
-    title = CharField(model_attr='title_display') 
+    title = CharField(model_attr='title_display', boost=2) 
     languages = MultiValueField()
     video_language = CharField() 
     created = DateTimeField(model_attr='created')

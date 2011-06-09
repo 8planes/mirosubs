@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block body_attrs %}id="watch_results"{% endblock %}
+
+{% load i18n search_tags %}
+
+{% block main_content %}
+<div class="pod" id="featured_videos">
+    <div class="hd">
+        {% search_form form %}
+        <h2>
+            {% if result_list %}
+            {% blocktrans %}
+                Search Results for "{{ query }}"
+            {% endblocktrans %}
+            {% else %}
+                {% trans "Search Videos" %}
+            {% endif %}
+        </h2>
+        
+    </div><!-- // hd -->
+    {% if result_list %}
+    <div class="bd clearfix">
+        {% include 'search/_search_filter.html' %}
+        <div id="main_col">
+            <ul class="video_list clearfix">
+                {% load_related_for_result result_list %}
+                {% with result_list as video_list %}
+                    {% include 'videos/_watch_page.html' %}
+                {% endwith %}
+            </ul><!--// video_list -->
+        </div><!-- // main_col -->
+        
+        <div class="clearfix"></div>
+        
+        <div class="pages clearfix">
+            <a class="pag_prev" href="#">
+            <span class="icon"></span>
+            </a>
+            <span class="page_count">15 of 4,000 videos</span>
+            <a class="pag_next" href="#">
+            <span class="icon"></span>
+            </a>
+        </div><!-- // pagination -->
+    </div><!-- // bd -->
+    {% endif %}
+</div><!-- // pod -->
+{% endblock %}

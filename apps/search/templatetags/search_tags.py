@@ -19,8 +19,15 @@
 from django import template
 from django.db.models.query import QuerySet
 from django.db.models import Model
+from search.forms import SearchForm
 
 register = template.Library()
+
+@register.inclusion_tag('search/_search_form.html', takes_context=True)
+def search_form(context, form=None):
+    return {
+        'form': form or SearchForm(context['request'])
+    }
 
 @register.simple_tag
 def load_related_for_result(search_qs):

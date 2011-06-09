@@ -20,16 +20,15 @@ from django.views.generic.list_detail import object_list
 from videos.models import Video, SubtitleLanguage
 from search.forms import SearchForm
 from django.conf import settings
-from utils.translation import get_user_languages_from_request
 
-def index(request):
+
+def index(request, template_name='search/index.html'):
     accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
-    user_langs = get_user_languages_from_request(request)
     
     if 'q' in request.REQUEST:
-        form = SearchForm(request.user, user_langs, request.REQUEST)
+        form = SearchForm(request, request.REQUEST)
     else:
-        form = SearchForm(request.user, user_langs)
+        form = SearchForm(request)
     
     qs = SearchQuerySet().none()
     
@@ -51,6 +50,9 @@ def index(request):
         
     return object_list(request, queryset=qs,
                        paginate_by=20,
-                       template_name='search/index.html',
+                       template_name=template_name,
                        template_object_name='result',
-                       extra_context=context)   
+                       extra_context=context)
+    
+def search(request):
+    return index(request, 'search/search.html')

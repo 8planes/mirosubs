@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n search_tags %}
 
 {% block body_attrs %}id="watch"{% endblock %}
 
@@ -12,29 +12,8 @@
 {% endblock %}
 
 {% block main_content %}
-<div id="watch_search">
-    <span class="icon"></span>
-    <input type="text" value="Search videos" />
-    <a id="advanced_search" href="">
-    <div id="advanced_menu">
-        <div class="menu_item videos_in">
-            <h3>Videos In</h3>
-            <select>
-                <option>English (US)</option>
-            </select>
-        </div><!-- // menu_item -->
-        <div class="menu_item">
-            <h3>Subtitles into</h3>
-            <select>
-                <option>English (US)</option>
-            </select>
-            <button>
-                Search
-            </button>
-        </div><!-- // menu_item -->
-    </div><!-- // advanced_menu -->
-    </a>
-</div><!-- // watch_search -->
+
+{% search_form %}
 
 <h1>{% trans "Watch Subtitled Videos" %}</h1>
 

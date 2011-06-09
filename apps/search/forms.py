@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from utils.translation import get_languages_list
+from utils.translation import get_user_languages_from_request
 
 ALL_LANGUAGES = tuple((val, _(name))for val, name in settings.ALL_LANGUAGES)
 
@@ -25,11 +26,10 @@ class SearchForm(forms.Form):
                               help_text=_(u'Left blank for any language'))
     display = forms.ChoiceField(choices=DISPLAY_CHOICES, required=False, initial='all')
     
-    
-    def __init__(self, user, user_langs, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         choices = list(get_languages_list())
-        self.user_langs = user_langs
+        self.user_langs = get_user_languages_from_request(request)
         choices[:0] = (
             ('my_langs', _(u'My languages')),
             ('', _(u'Any Language')),
@@ -37,8 +37,6 @@ class SearchForm(forms.Form):
         )
         self.fields['langs'].choices = choices
         self.fields['video_lang'].choices = choices
-        self.user = user
-
         
     def search_qs(self, qs):
         q = self.cleaned_data.get('q')
