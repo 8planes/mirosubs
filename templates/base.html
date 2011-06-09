@@ -134,7 +134,7 @@
     {% endcomment %}
     <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans "Volunteer" %}</a></li>
     <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
-    <li><a href="{% url faq_page %}"><span>{% trans 'FAQ' %}</span></a></li>
+    <li><a href="{% url faq_page %}"><span>{% trans 'Help' %}</span></a></li>
     {% if user.is_authenticated %}
         <li id="me_menu">{% top_user_panel %}</li>
     {% else %}
