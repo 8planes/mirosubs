@@ -38,7 +38,7 @@
 
 <h1>{% trans "Watch Subtitled Videos" %}</h1>
 
-<div class="pod">
+<div class="pod" id="featured_videos">
     <div class="hd">
         <h2>{% trans "Featured Videos" %}</h2>
     </div><!-- // hd -->
@@ -53,9 +53,20 @@
     </div><!-- // bd -->
 </div><!-- // pod -->
 <br/>
-<div class="pod">
-    <div class="hd">
+
+<div class="pod" id="popular_videos">
+    <div class="hd clearfix">
         <h2>{% trans "Popular Videos" %}</h2>
+        <a id="popular_sort" href="">
+            <span>Today</span>
+            <div id="sort_menu">
+                <ul>
+                    <li>This Week</li>
+                    <li>This Month</li>
+                    <li>This Year</li>
+                </ul>
+            </div><!-- // sort_menu -->
+        </a>                
     </div><!-- // hd -->
     <div class="bd">
         <ul class="video_list clearfix">
@@ -68,18 +79,17 @@
     </div><!-- // bd -->
 </div><!-- // pod -->
 <br/>
-<div class="pod">
+
+<div class="pod" id="latest_videos">
     <div class="hd">
         <h2>{% trans "The Latest" %}</h2>
     </div><!-- // hd -->
     <div class="bd">
         <div class="watch-page-content"></div>
         <!-- // pagination start -->
-        <div class="pages ajax-pagination">
-            <a href="#" class="pag_prev" style="float: left;">
-                Prev
-            </a>
-            <span class="page-info">
+        <div class="pages ajax-pagination clearfix">
+            <a class="pag_prev" href=""><span class="icon"></span></a>
+            <span class="page_count page-info">
                 <span class="from-value">{{ from_value }}</span> - 
                 <span class="to-value">{{ to_value }}</span> 
                 {% trans "of" %} 
@@ -88,15 +98,13 @@
                     video
                 {% plural %}
                     videos
-                {% endblocktrans %}
+                {% endblocktrans %}                
             </span>
-            <span class="loading-indicator" style="display: none;">
+            <span class="page_count loading-indicator" style="display: none;">
                 {% trans "Loading..." %}
-            </span>
-            <a href="#" class="pag_next" href="" style="float: right;">
-                Next
-            </a>
-        </div>
+            </span>            
+            <a class="pag_next" href=""><span class="icon"></span></a>
+        </div>      
         <!-- // pagination end-->
     </div><!-- // bd -->
 </div><!-- // pod -->
@@ -106,7 +114,20 @@
             container: $('.watch-page-content'),
             onPageChange: function(page, callback){
                 VideosApi.load_watch_page(page, function(data){
-                    this.options.container.html(data.content || '');
+                    var $c = this.options.container;
+                    
+                    //fix Chrome page jumping
+                    $.browser.webkit && $c.css('height', $c.height()+'px');
+                    
+                    $c.html(data.content || '');
+                    
+                    //fix Chrome page jumping
+                    if ($.browser.webkit) {
+                        setTimeout(function(){
+                            $c.css('height', $c.children().height()+'px');
+                        }, 1);
+                    };
+                    
                     callback.call(this, data);
                 }, this);
             },

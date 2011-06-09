@@ -37,8 +37,6 @@ class VideosApiClass(object):
     
     @add_request_to_kwargs
     def load_watch_page(self,page, request, user):
-        import time
-        time.sleep(0.3)
         qs = Video.objects.order_by('-edited')
         
         paginator = Paginator(qs, VIDEOS_ON_WATCH_PAGE)
