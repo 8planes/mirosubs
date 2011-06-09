@@ -82,7 +82,7 @@ def watch_page(request):
     }
     return object_list(request, queryset=qs,
                        paginate_by=15,
-                       template_name='videos/watch_page.html',
+                       template_name='videos/watch.html',
                        template_object_name='video',
                        extra_context=extra_context)
 

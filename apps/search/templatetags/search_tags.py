@@ -18,6 +18,7 @@
 
 from django import template
 from django.db.models.query import QuerySet
+from django.db.models import Model
 
 register = template.Library()
 
@@ -26,16 +27,27 @@ def load_related_for_result(search_qs):
     #should be fixed in future if result will contain not only Video
     from videos.models import SubtitleLanguage
     
-    if not isinstance(search_qs, QuerySet):
-        videos = dict((obj.object.id, obj.object) for obj in search_qs if obj)
-        langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
-
-        if videos:
-            for v in videos.values():
-                v.langs_cache = []
+    videos = []
     
-            for l in langs_qs:
-                videos[l.video_id].langs_cache.append(l)
+    for obj in search_qs:
+        if not obj:
+            continue
+        
+        if isinstance(obj, Model):
+            videos.append((obj.id, obj))
+        else:
+            videos.append((obj.object.id, obj.object))
+    
+    videos = dict(videos)
+        
+    langs_qs = SubtitleLanguage.objects.select_related('video', 'last_version').filter(video__id__in=videos.keys())
+
+    if videos:
+        for v in videos.values():
+            v.langs_cache = []
+
+        for l in langs_qs:
+            videos[l.video_id].langs_cache.append(l)
 
     return ''
 

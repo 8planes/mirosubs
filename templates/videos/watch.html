@@ -43,13 +43,9 @@
         <h2>{% trans "Featured Videos" %}</h2>
     </div><!-- // hd -->
     <div class="bd">
-        <ul class="video_list clearfix">
-            {% for v in featured_videos %}
-                {% with v.object as video %}
-                    {% include 'videos/_video.html' %}
-                {% endwith %}
-            {% endfor %}
-        </ul><!--// video_list -->
+        {% with featured_videos as video_list %}
+            {% include 'videos/_watch_page.html' %}
+        {% endwith %}
     </div><!-- // bd -->
 </div><!-- // pod -->
 <br/>
@@ -90,13 +86,9 @@
     </div><!-- // hd -->
     <div class="bd">
         <div class="popular-videos-content">
-            <ul class="video_list clearfix">
-                {% for v in popular_videos %}
-                    {% with v.object as video %}
-                        {% include 'videos/_video.html' %}
-                    {% endwith %}
-                {% endfor %}
-            </ul><!--// video_list -->
+            {% with popular_videos as video_list %}
+                {% include 'videos/_watch_page.html' %}
+            {% endwith %}
         </div>
     </div><!-- // bd -->
 </div><!-- // pod -->
