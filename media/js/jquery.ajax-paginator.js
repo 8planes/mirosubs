@@ -29,6 +29,7 @@
      totalValueNode: null,
      pageInfoNode: null,
      loadingIndicator: null,
+     container: null,
      
      page: 1, //current page
      pages: null,  //total number of pages. Can be empty on page load, when we don't know have many pages have
@@ -43,6 +44,14 @@
          fromValueNode: '.from-value',
          toValueNode: '.to-value',
          totalValueNode: '.total-value',
+         container: null,
+         
+         //null - for scrolling to container, false - not scroll,
+         //'top' - to page top, or some other jQuery node
+         scrollTo: null, 
+         scrollSpeed: 500,
+         scrollOffset: -10,
+         
          onPageChange: function(page, callback){
              /*
               * This method get page number and should load/change page content.
@@ -72,6 +81,7 @@
          //I just hate this.options, so like add them to this
          this.pages = this.options.pages;
          this.onPageChange = this.options.onPageChange;
+         this.container = this.options.container;
      },
      _init: function(){
          var page = $.address.parameter('page')-0;
@@ -110,6 +120,47 @@
             this.setPage(this.page - 1);
          }
      },
+     updateContent: function(data){
+        var $c = this.container;
+        
+        //fix Chrome page jumping
+        $.browser.webkit && $c.css('height', $c.height()+'px');
+        
+        $c.html(data.content || '');
+        
+        //fix Chrome page jumping
+        if ($.browser.webkit) {
+            setTimeout(function(){
+                $c.css('height', $c.children().height()+'px');
+            }, 1);
+        };
+     },
+     scrollAfterUpdate: function(data){
+         var speed = $.address.parameter('speed')-0 || this.options.scrollSpeed;
+
+         if ($.address.parameter('top') || this.options.scrollTo === 'top'){
+             if (speed==1){
+                 $('html, body').scrollTop(0);
+                 $.jGrowl('Instance scroll to the TOP');
+             }else{
+                 $('html, body').animate({scrollTop: 0}, speed);
+                 $.jGrowl('Scrool to TOP with for '+speed+'ms');
+             }
+         }else if(this.options.scrollTo !== false){
+             if (this.options.scrollTo){
+                 var offset = this.options.scrollTo.offset().top + this.options.scrollOffset;
+             }else{
+                 var offset = this.container.offset().top + this.options.scrollOffset;
+             }
+             if (speed==1){
+                 $('html, body').scrollTop(offset);
+                 $.jGrowl('Instance scroll to the CONTAINER TOP');
+             }else{
+                 $('html, body').animate({scrollTop: offset}, speed);
+                 $.jGrowl('Scrool to CONTAINER TOP with for '+speed+'ms');
+             }             
+         }         
+     },
      _pageLoadCallback: function(data){
          /*
           * This function is executed after page loading and update
@@ -119,7 +170,10 @@
          data.from && this.fromValueNode.html(data.from);
          data.to && this.toValueNode.html(data.to);
          data.pages && this.setPages(data.pages);
+         
+         this.updateContent(data);
          this.hideLoading();
+         this.scrollAfterUpdate(data);
      },
      _checkNavigationLinks: function(){
          if (this.page == 1){
@@ -137,10 +191,12 @@
      showLoading: function(){
          this.pageInfoNode.hide();
          this.loadingIndicator.show();
+         this.container.css('opacity', '0.4');
      },
      hideLoading: function(){
          this.loadingIndicator.hide();
          this.pageInfoNode.show();
+         this.container.css('opacity', '');
      },             
      setPages: function(pages){
          /*
@@ -174,7 +230,7 @@
          
          //change URL
          if (page != 1 || $.address.parameter('page')){
-             $.address.value('?page='+page);
+             $.address.parameter('page', page);
          }
          
          //init timedout callback for page loading

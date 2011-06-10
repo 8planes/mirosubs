@@ -104,25 +104,10 @@
 <script type="text/javascript">
     jQuery(function($){
         $('.ajax-pagination').ajaxPaginator({
+            scrollTo: $('#latest_videos'),
             container: $('.watch-page-content'),
             onPageChange: function(page, callback){
-                VideosApi.load_watch_page(page, '{{ request.GET.show_title }}', function(data){
-                    var $c = this.options.container;
-                    
-                    //fix Chrome page jumping
-                    $.browser.webkit && $c.css('height', $c.height()+'px');
-                    
-                    $c.html(data.content || '');
-                    
-                    //fix Chrome page jumping
-                    if ($.browser.webkit) {
-                        setTimeout(function(){
-                            $c.css('height', $c.children().height()+'px');
-                        }, 1);
-                    };
-                    
-                    callback.call(this, data);
-                }, this);
+                VideosApi.load_watch_page(page, '{{ request.GET.show_title }}', callback, this);
             },
         });
     });
