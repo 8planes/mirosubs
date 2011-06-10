@@ -10,7 +10,11 @@
                     <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
                 {% endif %}
             {% endwith %}
-            <h4>{{ video.video_id }}</h4>
+            {% if show_title or request.GET.show_title %}
+                <h4>{{ video }}</h4>
+            {% else %}
+                <h4>{{ video.video_id }}</h4>
+            {% endif %}
         </a>
         <span class="views">
             <strong>{{ video.views.total }}</strong> {% trans "Views" %}

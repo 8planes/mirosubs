@@ -106,7 +106,7 @@
         $('.ajax-pagination').ajaxPaginator({
             container: $('.watch-page-content'),
             onPageChange: function(page, callback){
-                VideosApi.load_watch_page(page, function(data){
+                VideosApi.load_watch_page(page, '{{ request.GET.show_title }}', function(data){
                     var $c = this.options.container;
                     
                     //fix Chrome page jumping

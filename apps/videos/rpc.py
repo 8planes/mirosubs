@@ -60,7 +60,7 @@ class VideosApiClass(object):
         }
         
     @add_request_to_kwargs
-    def load_watch_page(self, page, request, user):
+    def load_watch_page(self, page, show_title, request, user):
         qs = Video.objects.order_by('-edited')
         
         paginator = Paginator(qs, VIDEOS_ON_WATCH_PAGE)
@@ -77,7 +77,8 @@ class VideosApiClass(object):
         
         context = {
             'video_list': page_obj.object_list,
-            'page': page_obj
+            'page': page_obj,
+            'show_title': show_title #TODO: remove this later
         }
         content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
         
