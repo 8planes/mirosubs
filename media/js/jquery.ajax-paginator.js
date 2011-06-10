@@ -173,7 +173,7 @@
          this._checkNavigationLinks();
          
          //change URL
-         if (page !== 1){
+         if (page != 1 || $.address.parameter('page')){
              $.address.value('?page='+page);
          }
          
