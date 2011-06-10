@@ -86,7 +86,7 @@
      _init: function(){
          var page = $.address.parameter('page')-0;
          page = page || this.page;
-         this.setPage(page);
+         this.setPage(page, true);
          
          var that = this;
          
@@ -107,7 +107,7 @@
      _onAdressChange: function(event){
          var page = event.parameters.page-0;
          if (page && page !== this.page){
-             this.setPage(page);
+             this.setPage(page, true);
          }
      },
      _onNextClick: function(){
@@ -118,6 +118,13 @@
      _onPrevClick: function(){
          if (this.page > 1){
             this.setPage(this.page - 1);
+         }
+     },
+     _createDelegate: function(func, args, scope){
+         return function(){
+             callArgs = Array.prototype.slice.call(arguments, 0);
+             callArgs = callArgs.concat(args);
+             return func.apply(scope || window, callArgs);
          }
      },
      updateContent: function(data){
@@ -135,11 +142,11 @@
             }, 1);
         };
      },
-     scrollAfterUpdate: function(data){
+     scrollAfterUpdate: function(data, likeReload){
          var speed = $.address.parameter('speed')-0 || this.options.scrollSpeed;
 
-         if ($.address.parameter('top') || this.options.scrollTo === 'top'){
-             if (speed==1){
+         if ($.address.parameter('top') || this.options.scrollTo === 'top' || likeReload){
+             if (speed == 1 || likeReload){
                  $('html, body').scrollTop(0);
                  $.jGrowl('Instance scroll to the TOP');
              }else{
@@ -161,7 +168,7 @@
              }             
          }         
      },
-     _pageLoadCallback: function(data){
+     _pageLoadCallback: function(data, likeReload){
          /*
           * This function is executed after page loading and update
           * metadata 
@@ -171,9 +178,9 @@
          data.to && this.toValueNode.html(data.to);
          data.pages && this.setPages(data.pages);
          
-         this.updateContent(data);
-         this.hideLoading();
-         this.scrollAfterUpdate(data);
+         this.updateContent(data, likeReload);
+         this.hideLoading(data, likeReload);
+         this.scrollAfterUpdate(data, likeReload);
      },
      _checkNavigationLinks: function(){
          if (this.page == 1){
@@ -213,7 +220,10 @@
          };
          this._checkNavigationLinks();
      },
-     setPage: function(page){
+     setPage: function(page, likeReload){
+         //this for changing page on document ready and with changing URL
+         //so this looks like user reload page
+         likeReload = likeReload || false;
          //check if page number is valid
          if (page <= 0){
              page = 1;
@@ -243,7 +253,7 @@
          var that = this;
          this.timeoutId = setTimeout(function(){
              that.showLoading();
-             that.onPageChange(that.page, that._pageLoadCallback);
+             that.onPageChange(that.page, that._createDelegate(that._pageLoadCallback, [likeReload], that));
          }, 300);
      }
  });
