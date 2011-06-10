@@ -15,9 +15,10 @@ def form_field_as_list(request, bounded_field):
         getvars = "?%s" % GET_vars.urlencode()
     
     output = [u'<ul>']
-    
+    data = bounded_field.data or bounded_field.field.initial and bounded_field.field.initial
+
     for choice in bounded_field.field.choices:
-        if choice[0] == bounded_field.data:
+        if choice[0] == data:
             li_attrs = u'class="active"'
         else:
             li_attrs = u''

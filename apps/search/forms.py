@@ -72,5 +72,9 @@ class SearchForm(forms.Form):
             qs = qs.order_by('-' + ordering)
         else:
             qs = qs.order_by('-languages_count')
-            
+        
+        #video_langs = qs.facet('video_language').facet_counts()['fields']['video_language']
+        #print video_langs
+        #self.fields['video_lang'].choices = tuple(() for l in video_langs[:10])
+        
         return qs
