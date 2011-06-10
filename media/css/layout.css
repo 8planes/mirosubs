@@ -108,12 +108,12 @@
 
 
 .big_list .info{
-  margin-left: 140px;
+  margin-left: 120px;
   }
 
 
 .small_list .info{
-  margin-left: 85px;
+  margin-left: 65px;
   }
   
 
@@ -502,7 +502,8 @@ div.lang_avail a span {
 }
 
 div.lang_avail a span.fourty, div.lang_avail a span.twenty,
-div.lang_avail a span.thirty, div.lang_avail a span.eighty {
+div.lang_avail a span.thirty, div.lang_avail a span.eighty,
+div.lang_avail a span.sixty {
 	background: #e5e3b7;
 }
 
