@@ -48,8 +48,8 @@
          
          //null - for scrolling to container, false - not scroll,
          //'top' - to page top, or some other jQuery node
-         scrollTo: null, 
-         scrollSpeed: 500,
+         scrollTo: 'top', 
+         scrollSpeed: 200,
          scrollOffset: -10,
          
          onPageChange: function(page, callback){
@@ -143,15 +143,11 @@
         };
      },
      scrollAfterUpdate: function(data, likeReload){
-         var speed = $.address.parameter('speed')-0 || this.options.scrollSpeed;
-
-         if ($.address.parameter('top') || this.options.scrollTo === 'top' || likeReload){
-             if (speed == 1 || likeReload){
+         if (this.options.scrollTo === 'top' || likeReload){
+             if (this.options.scrollSpeed == 1 || likeReload){
                  $('html, body').scrollTop(0);
-                 $.jGrowl('Instance scroll to the TOP');
              }else{
-                 $('html, body').animate({scrollTop: 0}, speed);
-                 $.jGrowl('Scrool to TOP with for '+speed+'ms');
+                 $('html, body').animate({scrollTop: 0}, this.options.scrollSpeed);
              }
          }else if(this.options.scrollTo !== false){
              if (this.options.scrollTo){
@@ -159,12 +155,10 @@
              }else{
                  var offset = this.container.offset().top + this.options.scrollOffset;
              }
-             if (speed==1){
+             if (this.options.scrollSpeed==1){
                  $('html, body').scrollTop(offset);
-                 $.jGrowl('Instance scroll to the CONTAINER TOP');
              }else{
-                 $('html, body').animate({scrollTop: offset}, speed);
-                 $.jGrowl('Scrool to CONTAINER TOP with for '+speed+'ms');
+                 $('html, body').animate({scrollTop: offset}, this.options.scrollSpeed);
              }             
          }         
      },
