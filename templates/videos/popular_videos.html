@@ -9,20 +9,33 @@
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>  
     <script src="{{ MEDIA_URL }}js/jquery.address-1.4.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/jquery.ajax-paginator.js" type="text/javascript"></script>
-    {% block pagination_script %}
     <script type="text/javascript">
         jQuery(function($){
+            var $current_sort = $('#popular_sort .current-sort');
+            var $sort_menu = $('#sort_menu');
+            var $container = $('.popular-videos-content');
+            
+            $('li', $sort_menu).click(function(){
+                var $this = $(this);
+                
+                $('li', $sort_menu).show();
+                $this.hide();
+                $current_sort.html($this.html());
+                $current_sort.attr('val', $this.attr('val'));
+                $('.ajax-pagination').ajaxPaginator('refresh');
+                return false;
+            });
+            
             $('.ajax-pagination').ajaxPaginator({
                 container: $('.watch-page-content'),
                 onPageChange: function(page, callback){
-                    VideosApi.load_featured_page(page, function(data){
+                    VideosApi.load_popular_page(page, $current_sort.attr('val'), function(data){
                         callback.call(this, data);
                     }, this);
                 },
-            });
+            });                
         });
     </script>
-    {% endblock %}
 {% endblock %}
 
 {% block main_content %}
@@ -31,9 +44,20 @@
 
 <h1><a href="{% url videos:watch_page %}">{% trans "Watch Subtitled Videos" %}</a></h1>
 
-<div class="pod" id="featured_videos">
-    <div class="hd">
-        <h2>{% block content_title %}{% trans "Featured Videos" %}{% endblock %}</h2>
+<div class="pod" id="popular_videos">
+    <div class="hd clearfix">
+        <h2>{% trans "Popular Videos" %}</h2>
+        <a id="popular_sort" href="#">
+            <span class="current-sort" val="week">{% trans "This Week" %}</span>
+            <div id="sort_menu">
+                <ul>
+                    <li val="week" style="display: none">{% trans "This Week" %}</li>
+                    <li val="month">{% trans "This Month" %}</li>
+                    <li val="year">{% trans "This Year" %}</li>
+                    <li val="total">{% trans "All Time" %}</li>
+                </ul>
+            </div><!-- // sort_menu -->
+        </a>
     </div><!-- // hd -->
     <div class="bd">
         <div class="watch-page-content">

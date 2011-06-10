@@ -214,6 +214,9 @@
          };
          this._checkNavigationLinks();
      },
+     refresh: function(likeReload){
+         this.setPage(this.page, likeReload);
+     },
      setPage: function(page, likeReload){
          //this for changing page on document ready and with changing URL
          //so this looks like user reload page

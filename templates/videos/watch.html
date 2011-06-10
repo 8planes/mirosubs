@@ -45,6 +45,9 @@
                     <li val="total">{% trans "All Time" %}</li>
                 </ul>
             </div><!-- // sort_menu -->
+            <a style="float: right; margin: 20px 40px 0;" href="{% url videos:popular_videos %}">
+                {% trans "more popular videos" %}
+            </a>             
         </a>
         <script type="text/javascript">
             jQuery(function($){
@@ -59,7 +62,7 @@
                     $this.hide();
                     $current_sort.html($this.html());
                     $container.css('opacity', '0.4');
-                    VideosApi.load_popular_page($this.attr('val'), function(data){
+                    VideosApi.load_popular_videos($this.attr('val'), function(data){
                         $container.html(data.content);
                         $container.css('opacity', '');
                     });
@@ -81,6 +84,9 @@
 <div class="pod" id="latest_videos">
     <div class="hd">
         <h2>{% trans "The Latest" %}</h2>
+        <a style="float: right; margin: -35px 40px 0;" href="{% url videos:latest_videos %}">
+            {% trans "more latest videos" %}
+        </a>        
     </div><!-- // hd -->
     <div class="bd">
         <div class="watch-page-content">
@@ -109,7 +115,6 @@
 <script type="text/javascript">
     jQuery(function($){
         $('.ajax-pagination').ajaxPaginator({
-            scrollTo: $('#latest_videos'),
             container: $('.watch-page-content'),
             onPageChange: function(page, callback){
                 VideosApi.load_watch_page(page, '{{ request.GET.show_title }}', function(data){

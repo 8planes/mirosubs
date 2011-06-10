@@ -81,8 +81,15 @@ def watch_page(request):
                               context_instance=RequestContext(request)) 
 
 def featured_videos(request):
-
     return render_to_response('videos/featured_videos.html', {},
+                              context_instance=RequestContext(request)) 
+
+def latest_videos(request):
+    return render_to_response('videos/latest_videos.html', {},
+                              context_instance=RequestContext(request)) 
+
+def popular_videos(request):
+    return render_to_response('videos/popular_videos.html', {},
                               context_instance=RequestContext(request)) 
 
 def bug(request):

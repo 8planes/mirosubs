@@ -37,6 +37,13 @@ VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
 class VideosApiClass(object):
     authentication_error_msg = _(u'You should be authenticated.')
     
+    popular_videos_sorts = {
+        'week': 'week_views', 
+        'month': 'month_views', 
+        'year': 'year_views', 
+        'total': 'total_views'
+    }
+    
     def _render_page(self, page, qs, on_page=VIDEOS_ON_PAGE, request=None,
                      template='videos/_watch_page.html', extra_context={}):
         paginator = Paginator(qs, on_page)
@@ -79,12 +86,32 @@ class VideosApiClass(object):
             
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
-        qs = Video.objects.order_by('-edited')
+        qs = Video.objects.order_by('-featured')
         
         return self._render_page(page, qs, request=request)    
+
+    @add_request_to_kwargs
+    def load_latest_page(self, page, request, user):
+        qs = Video.objects.order_by('-edited')
+        return self._render_page(page, qs, request=request)
+
+    @add_request_to_kwargs
+    def load_popular_page(self, page, sort, request, user):
+        sort_types = {
+            'week': 'week_views', 
+            'month': 'month_views', 
+            'year': 'year_views', 
+            'total': 'total_views'
+        }
+        
+        sort_field = sort_types.get(sort, 'week_views')
+        
+        sqs = SearchQuerySet().models(Video).load_all().order_by('-%s' % sort_field)
+        
+        return self._render_page(page, sqs, request=request)
     
     @add_request_to_kwargs
-    def load_popular_page(self, sort, request, user):
+    def load_popular_videos(self, sort, request, user):
         sort_types = {
             'week': 'week_views', 
             'month': 'month_views', 
@@ -114,7 +141,7 @@ class VideosApiClass(object):
         }
         return self._render_page(page, qs, VIDEOS_ON_WATCH_PAGE, request, 
                                  extra_context=extra_context)
-        
+
     def change_title_translation(self, language_id, title, user):
         if not user.is_authenticated():
             return Error(self.authentication_error_msg)
