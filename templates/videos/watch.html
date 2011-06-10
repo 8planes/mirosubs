@@ -107,7 +107,9 @@
             scrollTo: $('#latest_videos'),
             container: $('.watch-page-content'),
             onPageChange: function(page, callback){
-                VideosApi.load_watch_page(page, '{{ request.GET.show_title }}', callback, this);
+                VideosApi.load_watch_page(page, '{{ request.GET.show_title }}', function(data){
+                    callback.call(this, data);
+                }, this);
             },
         });
     });
