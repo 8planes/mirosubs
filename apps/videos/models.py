@@ -23,6 +23,7 @@ from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
 from django.db.models.signals import post_save
 from django.db.models import Q
+from django.db import IntegrityError
 from django.utils.dateformat import format as date_format
 from gdata.youtube.service import YouTubeService
 from comments.models import Comment
@@ -857,15 +858,15 @@ class SubtitleVersion(SubtitleCollection):
             # else all translations will be wiped by an earlier original rollback
             for translation in self.language.translations():            
                 if len(translation.latest_subtitles()) > 0:
-                    translation_pk = translation.pk
-                    # create a new language, that will be forked
-                    forked_trans = translation
-                    forked_trans.pk = None
-                    forked_trans.standard_language = None
-                    forked_trans.forked = True
-                    forked_trans.save()
-                    translation = SubtitleLanguage.objects.get(pk=translation_pk)
-                    translation.fork(result_of_rollback=True, attach_to_language=forked_trans)
+                    try:
+                        # this can fail, because if we already have a forked subs with this lang
+                        # we will hit the db unique constraint
+                        translation.fork(result_of_rollback=True)
+                    except IntegrityError:
+                        raise
+                        logger.warning(
+                            "Got error on forking insinde rollback, original %s, forked %s" %
+                            (lang.pk, translation.pk))
         new_version = cls(language=lang, version_no=new_version_no, \
                               datetime_started=datetime.now(), user=user, note=note, 
                           is_forked=self.is_forked,

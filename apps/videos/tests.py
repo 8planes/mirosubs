@@ -482,21 +482,18 @@ class UploadSubtitlesTest(WebUseTest):
         original_version.rollback(self.user)
         original_version.save()
         video_changed_tasks.run(original_version.video.id, original_version.id)
-        # we should end up with 2 pts
+        # we should end up with 1 forked pts
         pts = video.subtitlelanguage_set.filter(language='pt')
-        self.assertEqual(pts.count(), 2)
-        # one which is dependent, which is wiped
-        self.assertTrue(pts.filter(subtitle_count=0).exists())
-        self.assertTrue(pts.filter(subtitle_count=0, is_forked=False).exists())
+        self.assertEqual(pts.count(), 1)
         # one which is forkded and must retain the original count
         pt_forked = video.subtitlelanguage_set.get(language='pt', is_forked=True)
-        
         self.assertEqual(len(pt_forked.latest_subtitles()), pt_count)
         # now we roll back  to the second version, we should not be duplicating again
         # because this rollback is already a rollback 
         version.rollback(self.user)
         pts = video.subtitlelanguage_set.filter(language='pt')
-        self.assertEqual(pts.count(), 2)
+        self.assertEqual(pts.count(), 1)
+        self.assertEqual(len(pt_forked.latest_subtitles()), pt_count)
               
 
 class Html5ParseTest(TestCase):
