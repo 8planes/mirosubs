@@ -50,6 +50,9 @@ elif INSTALLATION == STAGING:
     REDIS_DB = "2"
     AWS_QUEUE_PREFIX = 'STAGING'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    CELERYD_LOG_LEVEL = 'INFO'
+    CELERY_REDIRECT_STDOUTS = True
+    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'        
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-appsw
     try:
@@ -71,7 +74,10 @@ elif INSTALLATION == PRODUCTION:
     ADMINS = (
       ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org'),
     )
-
+    CELERYD_LOG_LEVEL = 'INFO'
+    CELERY_REDIRECT_STDOUTS = True
+    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'    
+    
 if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     uslogging_db = {
         'uslogging': {
