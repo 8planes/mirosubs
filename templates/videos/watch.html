@@ -55,8 +55,10 @@
                     $('li', $sort_menu).show();
                     $this.hide();
                     $current_sort.html($this.html());
+                    $container.css('opacity', '0.4');
                     VideosApi.load_popular_page($this.attr('val'), function(data){
                         $container.html(data.content);
+                        $container.css('opacity', '');
                     });
                     return false;
                 });
