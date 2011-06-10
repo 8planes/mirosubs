@@ -18,8 +18,8 @@ class SearchForm(forms.Form):
         ('thumbnails', _(u'thumbnails')),
     )
     q = forms.CharField(required=False, label=_(u'query'))
-    sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count', 
-                             label=_(u'sort type'))
+    sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count',
+                             label=_(u'Sort By'))
     langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'languages'),
                               help_text=_(u'Left blank for any language'))
     video_lang = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'video language'),
@@ -69,7 +69,7 @@ class SearchForm(forms.Form):
                 qs = qs.filter(languages=langs)
         
         if ordering:
-            qs = qs.order_by('-'+ordering)
+            qs = qs.order_by('-' + ordering)
         else:
             qs = qs.order_by('-languages_count')
             
