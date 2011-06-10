@@ -100,6 +100,7 @@ class Video(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
     followers = models.ManyToManyField(User, blank=True, related_name='followed_videos', editable=False)
     complete_date = models.DateTimeField(null=True, blank=True, editable=False)
+    featured = models.DateTimeField(null=True, blank=True)
 
     subtitles_fetched_count = models.IntegerField(default=0, db_index=True, editable=False)
     widget_views_count = models.IntegerField(default=0, db_index=True, editable=False)

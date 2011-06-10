@@ -67,24 +67,23 @@ def index(request):
                               context_instance=RequestContext(request))
 
 def watch_page(request):
-    #Latest videos
-    qs = Video.objects.order_by('-edited')
-    
     #Popular videos
     popular_videos = SearchQuerySet().models(Video).load_all().order_by('-week_views')[:5]
     
     #featured videos
-    featured_videos = SearchQuerySet().models(Video).load_all()[:5]
+    featured_videos = Video.objects.order_by('-featured')[:5]
     
-    extra_context = {
+    context = {
         'featured_videos': featured_videos,
         'popular_videos': popular_videos
     }
-    return object_list(request, queryset=qs,
-                       paginate_by=15,
-                       template_name='videos/watch.html',
-                       template_object_name='video',
-                       extra_context=extra_context)
+    return render_to_response('videos/watch.html', context,
+                              context_instance=RequestContext(request)) 
+
+def featured_videos(request):
+
+    return render_to_response('videos/featured_videos.html', {},
+                              context_instance=RequestContext(request)) 
 
 def bug(request):
     from widget.rpc import add_general_settings

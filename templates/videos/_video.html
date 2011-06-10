@@ -20,35 +20,35 @@
             <strong>{{ video.views.total }}</strong> {% trans "Views" %}
         </span>
         <span class="languages">
-            {% if video.languages_count %}
-                <a class="lang_arrow" href="#">
-                    <div class="lang_menu">
-                        <div class="hd">
-                            {#<span class="menu_close">{% trans "close" %}</span>#}
-                            <span>
-                              {% blocktrans count video.languages_count as number %}
-                                  {{ number }} Language
-                              {% plural %}
-                                  {{ number }} Languages
-                              {% endblocktrans %}
-                            </span>
-                        </div><!-- hd -->
-                        
-                        <div class="bd clearfix">
-                            {% for lang in video.langs_cache|slice:":10" %}
-                                {% with lang.subtitle_count as lines_count %}
-                                    {% if lines_count %}  
-                                        <span class="{% complete_color lang %}">
-                                            {% complete_indicator lang %}
-                                            {{ lang.language_display }}
-                                        </span>
-                                    {% endif %}
-                                {% endwith %}
-                            {% endfor %}                    
-                        </div>
-                    </div><!-- // lang_menu -->
-                </a>
-            {% endif %}
+            <a class="lang_arrow" href="#">
+                {% if video.languages_count %}
+                <div class="lang_menu">
+                    <div class="hd">
+                        {#<span class="menu_close">{% trans "close" %}</span>#}
+                        <span>
+                          {% blocktrans count video.languages_count as number %}
+                              {{ number }} Language
+                          {% plural %}
+                              {{ number }} Languages
+                          {% endblocktrans %}
+                        </span>
+                    </div><!-- hd -->
+                    
+                    <div class="bd clearfix">
+                        {% for lang in video.langs_cache|slice:":10" %}
+                            {% with lang.subtitle_count as lines_count %}
+                                {% if lines_count %}  
+                                    <span class="{% complete_color lang %}">
+                                        {% complete_indicator lang %}
+                                        {{ lang.language_display }}
+                                    </span>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}                    
+                    </div>
+                </div><!-- // lang_menu -->
+                {% endif %}
+            </a>
             <span>
                   {% blocktrans count video.languages_count as number %}
                       {{ number }} Language

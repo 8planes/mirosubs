@@ -32,9 +32,56 @@ from django.conf import settings
 from haystack.query import SearchQuerySet
 
 VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
+VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
 
 class VideosApiClass(object):
     authentication_error_msg = _(u'You should be authenticated.')
+    
+    def _render_page(self, page, qs, on_page=VIDEOS_ON_PAGE, request=None,
+                     template='videos/_watch_page.html', extra_context={}):
+        paginator = Paginator(qs, on_page)
+
+        try:
+            page = int(page)
+        except ValueError:
+            page = 1
+
+        try:
+            page_obj = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            page_obj = paginator.page(paginator.num_pages)
+        
+        context = {
+            'video_list': page_obj.object_list,
+            'page': page_obj
+        }
+        context.update(extra_context)
+        
+        if request:
+            content = render_to_string(template, context, RequestContext(request))
+        else:
+            content = render_to_string(template, context)
+            
+        total = qs.count()
+        from_value = (page - 1) * on_page + 1
+        to_value = from_value + on_page - 1
+        
+        if to_value > total:
+            to_value = total
+            
+        return {
+            'content': content,
+            'total': total,
+            'pages': paginator.num_pages,
+            'from': from_value,
+            'to': to_value
+        }        
+            
+    @add_request_to_kwargs
+    def load_featured_page(self, page, request, user):
+        qs = Video.objects.order_by('-edited')
+        
+        return self._render_page(page, qs, request=request)    
     
     @add_request_to_kwargs
     def load_popular_page(self, sort, request, user):
@@ -62,40 +109,11 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_watch_page(self, page, show_title, request, user):
         qs = Video.objects.order_by('-edited')
-        
-        paginator = Paginator(qs, VIDEOS_ON_WATCH_PAGE)
-
-        try:
-            page = int(page)
-        except ValueError:
-            page = 1
-
-        try:
-            page_obj = paginator.page(page)
-        except (EmptyPage, InvalidPage):
-            page_obj = paginator.page(paginator.num_pages)
-        
-        context = {
-            'video_list': page_obj.object_list,
-            'page': page_obj,
+        extra_context = {
             'show_title': show_title #TODO: remove this later
         }
-        content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
-        
-        total = qs.count()
-        from_value = (page - 1) * VIDEOS_ON_WATCH_PAGE + 1
-        to_value = from_value + VIDEOS_ON_WATCH_PAGE - 1
-        
-        if to_value > total:
-            to_value = total
-            
-        return {
-            'content': content,
-            'total': total,
-            'pages': paginator.num_pages,
-            'from': from_value,
-            'to': to_value
-        }
+        return self._render_page(page, qs, VIDEOS_ON_WATCH_PAGE, request, 
+                                 extra_context=extra_context)
         
     def change_title_translation(self, language_id, title, user):
         if not user.is_authenticated():

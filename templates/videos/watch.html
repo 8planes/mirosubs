@@ -20,6 +20,9 @@
 <div class="pod" id="featured_videos">
     <div class="hd">
         <h2>{% trans "Featured Videos" %}</h2>
+        <a style="float: right; margin: -35px 40px 0;" href="{% url videos:featured_videos %}">
+            {% trans "more featured videos" %}
+        </a>
     </div><!-- // hd -->
     <div class="bd">
         {% with featured_videos as video_list %}
@@ -80,20 +83,20 @@
         <h2>{% trans "The Latest" %}</h2>
     </div><!-- // hd -->
     <div class="bd">
-        <div class="watch-page-content"></div>
+        <div class="watch-page-content">
+            <div style="text-align: center; padding: 50px">
+                <img align="absmiddle" width="256" height1="30" src="{{ MEDIA_URL }}/images/ajax-loader.gif"/>
+            </div>            
+        </div>
         <!-- // pagination start -->
         <div class="pages ajax-pagination clearfix">
             <a class="pag_prev" href=""><span class="icon"></span></a>
             <span class="page_count page-info">
-                <span class="from-value">{{ from_value }}</span> - 
-                <span class="to-value">{{ to_value }}</span> 
+                <span class="from-value"></span> - 
+                <span class="to-value"></span> 
                 {% trans "of" %} 
-                <span class="total-value">{{ hits }}</span>
-                {% blocktrans count hits as hits %}
-                    video
-                {% plural %}
-                    videos
-                {% endblocktrans %}                
+                <span class="total-value"></span>
+                {% trans "videos" %}           
             </span>
             <span class="page_count loading-indicator" style="display: none;">
                 {% trans "Loading..." %}
