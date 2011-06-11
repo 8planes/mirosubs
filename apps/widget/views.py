@@ -281,7 +281,12 @@ def rpc(request, method_name, null=False):
         result = func(**args)
     except TypeError:
         result = {'error': 'Incorrect number of arguments'}
-    return HttpResponse(json.dumps(result), "application/json")
+    
+    user_message = result.pop("_user_message", None)
+    response = HttpResponse(json.dumps(result), "application/json")
+    if user_message is not None:
+        response.set_cookie( "_user_message", user_message["body"], max_age=6, path="/")
+    return response
 
 @csrf_exempt
 def xd_rpc(request, method_name, null=False):

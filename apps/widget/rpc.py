@@ -281,7 +281,7 @@ class Rpc(BaseRpc):
 
     def save_finished(self, draft, user, completed=None):
         new_version, new_subs = self._create_version_from_draft(draft, user)
-
+        user_message = None
         if len(new_subs) == 0 and draft.language.latest_version() is None:
             should_save = False
         else:
@@ -304,9 +304,17 @@ class Rpc(BaseRpc):
             if not draft.is_dependent() and completed is not None:
                 language.is_complete = completed
             language.save()
+            
             video_changed_tasks.delay(language.video.id, new_version.id)
 
-        return { "response" : "ok",
+
+            user_message = {
+                "body": "Thank you for uploading. It will take a minute or so for your subtitles to appear."
+                }
+        return {
+
+            "user_message": user_message,
+            "response" : "ok",
                  "last_saved_packet": draft.last_saved_packet }
 
     def _create_version_from_draft(self, draft, user):

@@ -185,5 +185,21 @@
       {% endblock %}
 
 <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
+<script>
+$(window).ready(function(){
+    function displayPendingMessages(){
+        var MESSAGE_COOKIE_NAME = '_user_message';
+        if (goog && goog.net ){
+            var cookie = new goog.net.Cookies(document)
+            var message = cookie.get(MESSAGE_COOKIE_NAME);
+            if (message && message.length > 0){
+                 jQuery.jGrowl(message);
+            }
+            cookie.remove(MESSAGE_COOKIE_NAME);
+        }
+    }
+    displayPendingMessages();
+});
+</script>
 </body>
 </html>

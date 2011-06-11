@@ -17,6 +17,7 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.require("goog.ui.Dialog");
+goog.require("goog.net.Cookies");
 goog.require("goog.json.Serializer");
 goog.require("goog.net.CrossDomainRpc");
 goog.require("goog.dom.DomHelper");
