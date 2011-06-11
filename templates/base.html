@@ -171,7 +171,7 @@
   </div><!-- // floatleft -->
   <div class="floatright">
   <a href="/about">{% trans 'About' %}</a>
-  <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
+  <a href="http://www.facebook.com/<p></p>ages/Universal-Subtitles/112574762094219">Facebook</a> 
   <a href="http://twitter.com/universalsubs">Twitter</a>
   <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
   <a href="http://www.pculture.org/pcf/websites-privacy/">{% trans 'Privacy Policy' %}</a>
@@ -186,20 +186,9 @@
 
 <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
 <script>
-$(window).ready(function(){
-    function displayPendingMessages(){
-        var MESSAGE_COOKIE_NAME = '_user_message';
-        if (goog && goog.net ){
-            var cookie = new goog.net.Cookies(document)
-            var message = cookie.get(MESSAGE_COOKIE_NAME);
-            if (message && message.length > 0){
-                 jQuery.jGrowl(message);
-            }
-            cookie.remove(MESSAGE_COOKIE_NAME);
-        }
-    }
-    displayPendingMessages();
-});
+  $(window).load(function(){
+    mirosubs.messaging.simplemessage.displayPendingMessages();
+  });
 </script>
 </body>
 </html>
