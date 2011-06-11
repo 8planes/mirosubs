@@ -73,6 +73,7 @@ class UserLanguageForm(forms.ModelForm):
     def __init__(self, *args, **kwrags):
         super(UserLanguageForm, self).__init__(*args, **kwrags)
         self.fields['language'].choices = get_languages_list(True)
+        print self.fields
 
 class UserLanguagelineFormSet(BaseInlineFormSet):
 
