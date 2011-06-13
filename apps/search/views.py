@@ -20,12 +20,10 @@ from django.views.generic.list_detail import object_list
 from videos.models import Video, SubtitleLanguage
 from search.forms import SearchForm
 from django.conf import settings
+from videos.search_indexes import VideoSearchResult
 
-
-def index(request, template_name='search/index.html'):
-    accept = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
-    
-    if 'q' in request.REQUEST:
+def index(request, template_name='search/search.html'):
+    if request.REQUEST.get('q'):
         form = SearchForm(request, request.REQUEST)
     else:
         form = SearchForm(request)
@@ -35,7 +33,8 @@ def index(request, template_name='search/index.html'):
     display_mode = 'all'
     
     if form.is_valid():
-        qs = form.search_qs(SearchQuerySet().models(Video).load_all())
+        qs = form.search_qs(SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).load_all())
         display_mode = form.cleaned_data.get('display', 'all')
         
     if settings.HAYSTACK_SEARCH_ENGINE == 'dummy' and settings.DEBUG:
@@ -53,6 +52,3 @@ def index(request, template_name='search/index.html'):
                        template_name=template_name,
                        template_object_name='result',
                        extra_context=context)
-    
-def search(request):
-    return index(request, 'search/search.html')

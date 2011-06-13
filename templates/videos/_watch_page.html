@@ -1,14 +1,7 @@
 {% load search_tags %}
 
 <ul class="video_list clearfix">
-    {% load_related_for_result video_list %}
     {% for video in video_list %}
-        {% if video.object %}
-            {% with video.object as video %}
-                {% include 'videos/_video.html' %}
-            {% endwith %}
-        {% else %}
-            {% include 'videos/_video.html' %}
-        {% endif %}
+        {% include 'videos/_video.html' %}
     {% endfor %}          
 </ul><!--// video_list -->

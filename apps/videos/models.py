@@ -210,18 +210,30 @@ class Video(models.Model):
         return self.get_absolute_url()
     
     def title_for_url(self):
+        """
+        NOTE: this method is used in videos.search_indexes.VideoSearchResult
+        to prevent duplication of code in search result and in DB-query result
+        """
         return self.title.replace('/', '-')
     
-    @models.permalink
-    def get_absolute_url(self, locale=None):
+    def _get_absolute_url(self, locale=None):
+        """
+        NOTE: this method is used in videos.search_indexes.VideoSearchResult
+        to prevent duplication of code in search result and in DB-query result
+        
+        This is a little hack, because Django uses get_absolute_url in own way,
+        so it was impossible just copy to VideoSearchResult
+        """        
         kwargs = {}
         if locale:
             kwargs['locale'] = locale 
         title = self.title_for_url()
         if title:
-            return ('videos:video_with_title', [self.video_id, urlquote(title)], kwargs)
-        return ('videos:video', [self.video_id], kwargs)
-
+            return reverse('videos:video_with_title', args=[self.video_id, urlquote(title)], kwargs=kwargs)
+        return reverse('videos:video', args=[self.video_id], kwargs=kwargs)
+    
+    get_absolute_url = _get_absolute_url
+    
     def get_video_url(self):
         try:
             return self.videourl_set.filter(primary=True).all()[:1].get().effective_url

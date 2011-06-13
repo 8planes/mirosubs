@@ -55,6 +55,7 @@ from utils.decorators import never_in_prod
 from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
+from videos.search_indexes import VideoSearchResult
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -68,14 +69,20 @@ def index(request):
 
 def watch_page(request):
     #Popular videos
-    popular_videos = SearchQuerySet().models(Video).load_all().order_by('-week_views')[:5]
-    
+    popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).load_all().order_by('-week_views')[:5]
+        
     #featured videos
-    featured_videos = Video.objects.order_by('-featured')[:5]
+    featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).load_all().order_by('-featured')[:5]
+    
+    latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).load_all().order_by('-edited')[:15]
     
     context = {
         'featured_videos': featured_videos,
-        'popular_videos': popular_videos
+        'popular_videos': popular_videos,
+        'latest_videos': latest_videos
     }
     return render_to_response('videos/watch.html', context,
                               context_instance=RequestContext(request)) 

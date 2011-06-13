@@ -90,39 +90,11 @@
     </div><!-- // hd -->
     <div class="bd">
         <div class="watch-page-content">
-            <div style="text-align: center; padding: 50px">
-                <img align="absmiddle" width="256" height1="30" src="{{ MEDIA_URL }}/images/ajax-loader.gif"/>
-            </div>            
+            {% with latest_videos as video_list %}
+                {% include 'videos/_watch_page.html' %}
+            {% endwith %}    
         </div>
-        <!-- // pagination start -->
-        <div class="pages ajax-pagination clearfix">
-            <a class="pag_prev" href=""><span class="icon"></span></a>
-            <span class="page_count page-info">
-                <span class="from-value"></span> - 
-                <span class="to-value"></span> 
-                {% trans "of" %} 
-                <span class="total-value"></span>
-                {% trans "videos" %}           
-            </span>
-            <span class="page_count loading-indicator" style="display: none;">
-                {% trans "Loading..." %}
-            </span>            
-            <a class="pag_next" href=""><span class="icon"></span></a>
-        </div>      
-        <!-- // pagination end-->
     </div><!-- // bd -->
 </div><!-- // pod -->
-<script type="text/javascript">
-    jQuery(function($){
-        $('.ajax-pagination').ajaxPaginator({
-            container: $('.watch-page-content'),
-            onPageChange: function(page, callback){
-                VideosApi.load_watch_page(page, '{{ request.GET.show_title }}', function(data){
-                    callback.call(this, data);
-                }, this);
-            },
-        });
-    });
-</script>
 
 {% endblock %}
