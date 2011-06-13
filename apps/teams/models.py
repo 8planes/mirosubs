@@ -33,9 +33,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
-from teams.tasks import update_one_team_video, remove_one_team_video
+from teams.tasks import update_one_team_video
 from apps.videos.models import SubtitleLanguage
 from haystack.query import SQ
+from haystack import site
 import datetime 
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
@@ -505,7 +506,11 @@ def team_video_save(sender, instance, created, **kwargs):
     update_one_team_video.delay(instance.id)
 
 def team_video_delete(sender, instance, **kwargs):
-    remove_one_team_video.delay(instance.id)
+    # not using an async task for this since the async task 
+    # could easily execute way after the instance is gone,
+    # and backend.remove requires the instance.
+    tv_search_index = site.get_index(TeamVideo)
+    tv_search_index.backend.remove(instance)
 
 post_save.connect(team_video_save, TeamVideo)
 post_delete.connect(team_video_delete, TeamVideo)

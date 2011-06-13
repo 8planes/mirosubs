@@ -43,16 +43,6 @@ def add_videos_notification(*args, **kwargs):
                                  'teams/email_new_videos.html',
                                  context, fail_silently=not settings.DEBUG)
 
-@task()
-def remove_one_team_video(team_video_id):
-    from teams.models import TeamVideo, TeamVideoLanguage
-    try:
-        team_video = TeamVideo.objects.get(id=team_video_id)
-    except TeamVideo.DoesNotExist:
-        return
-
-    tv_search_index = site.get_index(TeamVideo)
-    tv_search_index.backend.remove(team_video)
 
 @task()
 def update_one_team_video(team_video_id):
