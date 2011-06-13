@@ -7,15 +7,13 @@
         <a href="#close" class="close">{% trans "Close" %}</a>
         <h3>{% trans 'Upload Subtitles' %}</h3>
         <div class="msg_modal">
-            
-    
             {% if user.is_authenticated %}
                 <p>
                     {% blocktrans %}
                     Our site accepts SRT, SSA, SBV and TTML format. Only files ending in .srt, .ssa, .sbv
                     or .xml (for TTML) are accepted. Or you can
                     {% endblocktrans %}
-                      <a href="#upload-transcript" class="upload-transcript-button">
+                      <a href="#" data-modal="upload-transcript" class="upload-transcript-button">
                           {% trans 'paste in a transcript' %}
                       </a>
                 </p>
@@ -77,6 +75,10 @@
                     $('p.error_list', $Form ).fadeOut('fast');
                     $('p.#feedback-message', $Form ).fadeOut('fast');
                 }
+            });
+            
+            $('#upload_subs-div .upload-transcript-button').click(function(){
+                $('#upload_subs-div').modClose();
             });
          })(jQuery);
     </script>

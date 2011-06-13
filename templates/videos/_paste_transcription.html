@@ -11,20 +11,6 @@
                 if (data.success){
                     window.location.assign(
                         LANGUAGE_PAGE_URL + $("#id_language", $form).val() + '/');
-                    /*
-                    var content = $($('#success-upload-transcript-dialog').html());
-                    $.nyroModalManual({
-                        content: content
-                    });
-                    $('.yes-button', content).click(function(){
-                        alert('TODO')
-                        return false;
-                    })                    
-                    $('.no-button', content).click(function(){
-                        document.location = data.next || LANGUAGE_PAGE_URL;
-                        return false;
-                    })
-                    */
                 } else {
                     for (key in data.errors) {
                         var error = '<p class="error_list">' + data.errors[key] + '</p>';
@@ -105,24 +91,6 @@
             return valid;
         });
         
-        $('.upload-transcript-button').nyroModal({
-            minWidth: 400,
-            minHeight: 600,
-            bgColor: '#fff',
-            windowResize: false,
-            cssOpt: {
-                wrapper: {
-                   backgroundColor: '#fff'
-                }                    
-            },
-            endRemove: function(){
-                $('#clippy').show();
-            },
-            processHandler: function(){
-                $('#clippy').hide();
-            }
-        });
-        
         $('#id_txtfile').change(function(){
             $('#id_txtfile_form').ajaxSubmit({
                 dataType: 'json',
@@ -141,18 +109,10 @@
         });      
     });
 </script>
-<div id="success-upload-transcript-dialog" style="display: none">
-    <p>
-        {% trans 'Would you like to sync your transcript now?  Users will not be able to watch it as subtitles until you do this.' %}
-    </p>
-    <p class="success-upload-transcript-buttons">
-        <a href='#' class="yes-button">{% trans 'Yes, Sync Now' %}</a> / 
-        <a href="#" class="no-button">{% trans "No. Don't sync" %}</a>
-    </p>
-</div>
-<div id="upload-transcript" style="position: fixed; top: -10000px;">
+<div id="upload-transcript" style="position: fixed; top: -10000px; width: 620px;" class="msg_modal_wrap">
+    <a href="#close" class="close">{% trans "Close" %}</a>
     <h3>{% trans 'Submit a Transcript' %}</h3>
-    <div class="padding">
+    <div class="msg_modal">
         {% if user.is_authenticated %}
         <p style="margin-top: -15px;">
             {% blocktrans %}
