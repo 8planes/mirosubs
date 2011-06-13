@@ -5,11 +5,11 @@ from comments.models import Comment
 from auth.models import CustomUser as User
 from utils.celery_search_index import CelerySearchIndex
 
-suffix = u' ++++++++++'
+SUFFIX = u' ++++++++++'
 
 class LanguageField(SearchField):
     """
-    This field is cerated for appending suffix for short language code, beucase
+    This field is cerated for appending SUFFIX for short language code, beucase
     Solr does not want work with short strings properlly
     
     TODO: fix convering value before saving. Because SerachIndex.prepare return 
@@ -18,16 +18,17 @@ class LanguageField(SearchField):
     
     def prepare(self, obj):
         value = super(LanguageField, self).prepare(obj)
-        return unicode(value)+suffix
+        return unicode(value)+SUFFIX
     
-    def convert(self, value):
+    @classmethod
+    def convert(cls, value):
         if value is None:
             return None
         
         value = unicode(value)
         
-        if value and value.endswith(suffix):
-            value = value[:-len(suffix)]
+        if value and value.endswith(SUFFIX):
+            value = value[:-len(SUFFIX)]
 
         return value
     
@@ -47,7 +48,7 @@ class LanguagesField(MultiValueField):
         output = []
         for val in value:
             if isinstance(val, (str, unicode)) and val:
-                val = unicode(val) + suffix          
+                val = unicode(val) + SUFFIX          
             output.append(val)
 
         return output
@@ -58,7 +59,7 @@ class LanguagesField(MultiValueField):
         
         value = list(value)
 
-        return [v[:-len(suffix)] for v in value if v.endswith(suffix)]
+        return [v[:-len(SUFFIX)] for v in value if v.endswith(SUFFIX)]
 
 class VideoIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
@@ -84,8 +85,8 @@ class VideoIndex(CelerySearchIndex):
         langs = obj.subtitlelanguage_set.exclude(language=u'')
         self.prepared_data['video_language'] = obj.language
         #TODO: converting should in Field
-        self.prepared_data['video_language'] = obj.language and u'%s%s' % (obj.language, suffix) or u''
-        self.prepared_data['languages'] = [u'%s%s' % (lang.language, suffix) for lang in langs if lang.latest_subtitles()]
+        self.prepared_data['video_language'] = obj.language and u'%s%s' % (obj.language, SUFFIX) or u''
+        self.prepared_data['languages'] = [u'%s%s' % (lang.language, SUFFIX) for lang in langs if lang.latest_subtitles()]
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()
         self.prepared_data['activity_count'] = obj.action_set.count()
         self.prepared_data['week_views'] = obj.views['week']

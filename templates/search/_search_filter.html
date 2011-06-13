@@ -2,37 +2,11 @@
 
 <div id="sidebar">
     <h2>{{ form.sort.label }}</h2>
-    
     {% form_field_as_list request form.sort %}
     
-    <h2>Videos In</h2>
-    <ul>
-        <li>
-            <a href="">English</a>
-        </li>
-        <li class="active">
-            <a href="">English</a>
-        </li>
-        <li>
-            <a href="">English</a>
-        </li>
-        <li>
-            <a href="">English</a>
-        </li>
-    </ul>
-    <h2>Subtitled In</h2>
-    <ul class="last">
-        <li>
-            <a href="">English</a>
-        </li>
-        <li class="active">
-            <a href="">English</a>
-        </li>
-        <li>
-            <a href="">English</a>
-        </li>
-        <li>
-            <a href="">English</a>
-        </li>
-    </ul>
+    <h2>{{ form.video_lang.label }}</h2>
+    {% form_field_as_list request form.video_lang %}
+
+    <h2>{{ form.langs.label }}</h2>
+    {% form_field_as_list request form.langs %}
 </div><!-- // sidebar -->
