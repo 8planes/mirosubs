@@ -59,7 +59,7 @@ mirosubs.SubTracker.prototype.trackAdd = function(subtitleID) {
     if (this.addIfNotPresent_(subtitleID, this.added_)) {
         this.numAdded_++;
         if (this.numAdded_ == 1 || (this.numAdded_ % 5) == 0)
-            mirosubs.Tracker.getInstance().track(
+            mirosubs.Tracker.getInstance().trackPageview(
                 this.translating_ ? "Translates_a_line" : 
                     "Creates_a_subtitle");
     }
@@ -69,7 +69,7 @@ mirosubs.SubTracker.prototype.trackEdit = function(subtitleID) {
     if (this.addIfNotPresent_(subtitleID, this.edited_)) {
         this.numEdited_++;
         if (this.numEdited_ == 1 || (this.numEdited_ % 5) == 0)
-            mirosubs.Tracker.getInstance().track(
+            mirosubs.Tracker.getInstance().trackPageview(
                 this.translating_ ? "Edits_a_line_of_translation" : 
                     "Edits_a_subtitle");
     }

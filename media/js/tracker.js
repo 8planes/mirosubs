@@ -45,21 +45,38 @@ mirosubs.Tracker.prototype.gaq_ = function() {
     return window['_gaq'];
 };
 
-mirosubs.Tracker.prototype.track = function(event, opt_props) {
+mirosubs.Tracker.prototype.trackEvent = function(category, action, opt_label, opt_value) {
     if (this.dontReport_)
         return;
     if (goog.DEBUG) {
-        this.logger_.info(event);
+        this.logger_.info('tracking event: ' + category + 
+                          ' for action ' + action + 
+                          (opt_label ? (' with label ' + opt_label) : ""));
+    }
+    this.setAccount_();
+    this.gaq_().push(
+        [this.PREFIX_ + "._trackEvent", category, action, opt_label, opt_value]);
+};
+
+mirosubs.Tracker.prototype.trackPageview = function(pageview, opt_props) {
+    if (this.dontReport_)
+        return;
+    if (goog.DEBUG) {
+        this.logger_.info(pageview);
     }
     var props = opt_props || {};
     props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
+    this.setAccount_();
+    this.gaq_().push([this.PREFIX_ + '._trackPageview', '/widget/' + pageview]);
+};
+
+mirosubs.Tracker.prototype.setAccount_ = function() {
     if (!this.accountSet_) {
         window['_gaq'] = this.gaq_() || [];
         this.loadGA_();
         this.gaq_().push([this.PREFIX_ + '._setAccount', this.ACCOUNT_]);
         this.accountSet_ = true;
     }
-    this.gaq_().push([this.PREFIX_ + '._trackPageview', '/widget/' + event]);
 };
 
 mirosubs.Tracker.prototype.loadGA_ = function() {

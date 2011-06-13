@@ -414,7 +414,7 @@ mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
 };
 mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
     // Adam hypothesizes that this will get called 0 times except in testing
-    mirosubs.Tracker.getInstance().track('Adding_translations_on_close');
+    mirosubs.Tracker.getInstance().trackPageview('Adding_translations_on_close');
     var oldReturnURL = mirosubs.returnURL;
     mirosubs.returnURL = null;
     this.setVisible(false);
