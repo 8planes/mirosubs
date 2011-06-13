@@ -11,15 +11,6 @@ from haystack import site
 from videos.models import VideoFeed
 from sentry.client.models import client
 
-@task
-def update_video_feed(video_feed_id):
-    try:
-        video_feed = VideoFeed.objects.get(pk=video_feed_id)
-        video_feed.update()
-    except VideoFeed:
-        msg = '**update_video_feed**. VideoFeed does not exist. ID: %s' % video_feed_id
-        client.create_from_text(msg, logger='celery')
-
 def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, einfo, **kwds):
     """
     As tasks are loaded with DjangoLoader at the begining,
@@ -36,15 +27,33 @@ def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, ei
 
     client.create_from_exception(exc_info=(type(exception), exception, traceback), data=data)
     
-task_failure.connect(task_failure_handler)
+#task_failure.connect(task_failure_handler)
 
 def setup_logging_handler(*args, **kwargs):
     """
     Init sentry logger handler
     """
-    import sentry_logger
+    import logging
+    from sentry.client.handlers import SentryHandler
     
-#worker_ready.connect(setup_logging_handler)
+    logger = logging.getLogger('celery')
+    if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
+        logger.addHandler(SentryHandler(logging.ERROR))
+        
+        logger = logging.getLogger('sentry.errors')
+        logger.propagate = False
+        logger.addHandler(logging.StreamHandler())        
+
+worker_ready.connect(setup_logging_handler)
+
+@task
+def update_video_feed(video_feed_id):
+    try:
+        video_feed = VideoFeed.objects.get(pk=video_feed_id)
+        video_feed.update()
+    except VideoFeed:
+        msg = '**update_video_feed**. VideoFeed does not exist. ID: %s' % video_feed_id
+        client.create_from_text(msg, logger='celery')
 
 @task
 def add(a, b):
