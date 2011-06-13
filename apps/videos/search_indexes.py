@@ -105,9 +105,10 @@ class VideoIndex(CelerySearchIndex):
     def _teardown_save(self, model):
         pass
 
+
 class VideoSearchResult(SearchResult):
-    title_for_url = Video.title_for_url
-    get_absolute_url = Video.get_absolute_url
+    title_for_url = Video.__dict__['title_for_url']
+    get_absolute_url = Video.__dict__['_get_absolute_url']
     
     def __unicode__(self):
         title = self.title
@@ -116,7 +117,7 @@ class VideoSearchResult(SearchResult):
             title = title[:70]+'...'
         
         return title
-        
+
 class SubtitleLanguageIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
     title = CharField()
