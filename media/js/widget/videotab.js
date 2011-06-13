@@ -124,7 +124,7 @@ mirosubs.widget.VideoTab.prototype.getAnchorElem = function() {
 
 mirosubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
     e.preventDefault();
-    mirosubs.Tracker.getInstance().track('Clicks_Improve_Subtitles_or_translation');
+    mirosubs.Tracker.getInstance().trackPageview('Clicks_Improve_Subtitles_or_translation');
     if (this.nudgeClickCallback_)
         this.nudgeClickCallback_();
 };

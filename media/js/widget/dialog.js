@@ -189,7 +189,7 @@ mirosubs.Dialog.prototype.isWorkSaved = goog.abstractMethod;
  * @param {boolean} closeAfterSave
  */
 mirosubs.Dialog.prototype.saveWork = function(closeAfterSave) {
-    mirosubs.Tracker.getInstance().track('Submits_final_work_in_widget');
+    mirosubs.Tracker.getInstance().trackPageview('Submits_final_work_in_widget');
     if (mirosubs.IS_NULL) {
         this.saved_ = true;
         var message = "Congratulations, you have completed a demo. There is a web full of videos waiting for your translations, enjoy!";

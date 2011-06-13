@@ -50,6 +50,7 @@ mirosubs.widget.PlayController = function(
      * the cost of many calls to a dom changing function
      */
     this.nudgeShown_ = false;
+    this.trackedURLs_ = new goog.structs.Set();
 };
 goog.inherits(mirosubs.widget.PlayController, goog.Disposable);
 
@@ -110,12 +111,29 @@ mirosubs.widget.PlayController.prototype.setUpSubs_ =
                this.finished_).
         listen(this.videoPlayer_,
                mirosubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
-               this.finished_);
+               this.finished_).
+        listen(this.videoPlayer_,
+               mirosubs.video.AbstractVideoPlayer.EventType.PLAY,
+               this.trackPlay_);
+    if (this.videoPlayer_.isPlaying())
+        this.trackPlay_();
+};
+
+mirosubs.widget.PlayController.prototype.trackPlay_ = function() {
+    var videoURL = this.videoSource_.getVideoURL();
+    if (!this.trackedURLs_.contains(videoURL)) {
+        this.trackedURLs_.add(videoURL);
+        mirosubs.Tracker.getInstance().trackEvent(
+            "Subs Played", 
+            window.location.href,
+            videoURL);
+    }
 };
 
 mirosubs.widget.PlayController.prototype.languageSelected = function(videoLanguage) {
     var that = this;
-    mirosubs.Tracker.getInstance().track('Selects_language_from_widget_dropdown');
+    mirosubs.Tracker.getInstance().trackPageview(
+        'Selects_language_from_widget_dropdown');
     this.videoTab_.showLoading();
     mirosubs.Rpc.call(
         'fetch_subtitles',
