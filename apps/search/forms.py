@@ -21,10 +21,10 @@ class SearchForm(forms.Form):
     q = forms.CharField(required=False, label=_(u'query'))
     sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count',
                              label=_(u'Sort By'))
-    langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Languages'),
-                              help_text=_(u'Left blank for any language'))
-    video_lang = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Video Language'),
-                              help_text=_(u'Left blank for any language'))
+    langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Subtitled Into'),
+                              help_text=_(u'Left blank for any language'), initial='')
+    video_lang = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Video In'),
+                              help_text=_(u'Left blank for any language'), initial='')
     display = forms.ChoiceField(choices=DISPLAY_CHOICES, required=False, initial='all')
     
     def __init__(self, request, *args, **kwargs):
@@ -40,7 +40,7 @@ class SearchForm(forms.Form):
         self.fields['video_lang'].choices = choices
     
     def _make_choices_from_faceting(self, data):
-        choices = []
+        choices = [('', _('All Languages'))]
 
         for l in data:
             lang = LanguageField.convert(l[0])

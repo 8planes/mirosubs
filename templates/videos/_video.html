@@ -3,24 +3,19 @@
 {# <ul class="video_list clearfix"> #}
     <li>
         <a href="{{ video.get_absolute_url }}">
-            {% with video.get_thumbnail as thumbnail_url %}
-                {% if thumbnail_url %}
-                    <img src="{{ thumbnail_url }}" width="155" height="90"/>
-                {% else %}
-                    <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-                {% endif %}
-            {% endwith %}
-            {% if show_title or request.GET.show_title %}
-                <h4>{{ video }}</h4>
+            {% if video.thumbnail_url %}
+                <img src="{{ thumbnail_url }}" width="155" height="90"/>
             {% else %}
-                <h4>{{ video.video_id }}</h4>
+                <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
             {% endif %}
+            <h4>{{ video }}</h4>
         </a>
         <span class="views">
-            <strong>{{ video.views.total }}</strong> {% trans "Views" %}
+            <strong>{{ video.total_views }}</strong> {% trans "Views" %}
         </span>
         <span class="languages">
             <a class="lang_arrow" href="#">
+                {% comment %}
                 {% if video.languages_count %}
                 <div class="lang_menu">
                     <div class="hd">
@@ -48,6 +43,7 @@
                     </div>
                 </div><!-- // lang_menu -->
                 {% endif %}
+                {% endcomment %}
             </a>
             <span>
                   {% blocktrans count video.languages_count as number %}

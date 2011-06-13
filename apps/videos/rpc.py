@@ -30,6 +30,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.conf import settings
 from haystack.query import SearchQuerySet
+from videos.search_indexes import VideoSearchResult
 
 VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
@@ -63,7 +64,7 @@ class VideosApiClass(object):
             'page': page_obj
         }
         context.update(extra_context)
-        
+
         if request:
             content = render_to_string(template, context, RequestContext(request))
         else:
@@ -86,27 +87,31 @@ class VideosApiClass(object):
             
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
-        qs = Video.objects.order_by('-featured')
+        sqs = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).load_all().order_by('-featured')
         
-        return self._render_page(page, qs, request=request)    
+        return self._render_page(page, sqs, request=request)    
 
     @add_request_to_kwargs
     def load_latest_page(self, page, request, user):
-        qs = Video.objects.order_by('-edited')
-        return self._render_page(page, qs, request=request)
+        sqs = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).load_all().order_by('-edited')
+            
+        return self._render_page(page, sqs, request=request)
 
     @add_request_to_kwargs
     def load_popular_page(self, page, sort, request, user):
         sort_types = {
-            'week': 'week_views', 
+            'week' : 'week_views', 
             'month': 'month_views', 
-            'year': 'year_views', 
+            'year' : 'year_views', 
             'total': 'total_views'
         }
         
         sort_field = sort_types.get(sort, 'week_views')
         
-        sqs = SearchQuerySet().models(Video).load_all().order_by('-%s' % sort_field)
+        sqs = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).load_all().order_by('-%s' % sort_field)
         
         return self._render_page(page, sqs, request=request)
     
@@ -121,10 +126,11 @@ class VideosApiClass(object):
         
         sort_field = sort_types.get(sort, 'week_views')
         
-        popular_videos = SearchQuerySet().models(Video).load_all().order_by('-%s' % sort_field)[:5]
-        
+        popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).load_all().order_by('-%s' % sort_field)[:5]
+
         context = {
-            'video_list': [item.object for item in popular_videos]
+            'video_list': popular_videos
         }
         
         content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
@@ -132,15 +138,6 @@ class VideosApiClass(object):
         return {
             'content': content
         }
-        
-    @add_request_to_kwargs
-    def load_watch_page(self, page, show_title, request, user):
-        qs = Video.objects.order_by('-edited')
-        extra_context = {
-            'show_title': show_title #TODO: remove this later
-        }
-        return self._render_page(page, qs, VIDEOS_ON_WATCH_PAGE, request, 
-                                 extra_context=extra_context)
 
     def change_title_translation(self, language_id, title, user):
         if not user.is_authenticated():

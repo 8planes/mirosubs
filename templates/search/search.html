@@ -24,7 +24,6 @@
         {% include 'search/_search_filter.html' %}
         <div id="main_col">
             <ul class="video_list clearfix">
-                {% load_related_for_result result_list %}
                 {% with result_list as video_list %}
                     {% include 'videos/_watch_page.html' %}
                 {% endwith %}

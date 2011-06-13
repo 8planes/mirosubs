@@ -1,4 +1,5 @@
 from haystack.indexes import *
+from haystack.models import SearchResult
 from haystack import site
 from models import Video, SubtitleLanguage
 from comments.models import Comment
@@ -63,17 +64,21 @@ class LanguagesField(MultiValueField):
 
 class VideoIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
-    title = CharField(model_attr='title_display', boost=2) 
+    title = CharField(model_attr='title_display', boost=2)
     languages = LanguagesField(faceted=True)
-    video_language = LanguageField(faceted=True) 
+    video_language = LanguageField(faceted=True)
+    languages_count = IntegerField(model_attr='languages_count')
+    video_id = CharField(model_attr='video_id', indexed=False)
+    thumbnail_url = CharField(model_attr='get_thumbnail', indexed=False)
     created = DateTimeField(model_attr='created')
     edited = DateTimeField(model_attr='edited')
     subtitles_fetched_count = IntegerField(model_attr='subtitles_fetched_count')
     widget_views_count = IntegerField(model_attr='widget_views_count')
     comments_count = IntegerField()
-    languages_count = IntegerField(model_attr='languages_count')
+    
     contributors_count = IntegerField()
     activity_count = IntegerField()
+    featured = DateTimeField(model_attr='featured', null=True)
     
     week_views = IntegerField()
     month_views = IntegerField()
@@ -84,7 +89,7 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         langs = obj.subtitlelanguage_set.exclude(language=u'')
         self.prepared_data['video_language'] = obj.language
-        #TODO: converting should in Field
+        #TODO: converting should be in Field
         self.prepared_data['video_language'] = obj.language and u'%s%s' % (obj.language, SUFFIX) or u''
         self.prepared_data['languages'] = [u'%s%s' % (lang.language, SUFFIX) for lang in langs if lang.latest_subtitles()]
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()
@@ -99,6 +104,18 @@ class VideoIndex(CelerySearchIndex):
     
     def _teardown_save(self, model):
         pass
+
+class VideoSearchResult(SearchResult):
+    title_for_url = Video.title_for_url
+    get_absolute_url = Video.get_absolute_url
+    
+    def __unicode__(self):
+        title = self.title
+        
+        if len(title) > 70:
+            title = title[:70]+'...'
+        
+        return title
         
 class SubtitleLanguageIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
