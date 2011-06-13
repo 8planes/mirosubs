@@ -318,11 +318,11 @@ p.checkbox label {
   border: 1px solid #fff;
 }
 
-#upload-subtitles-form .feedback-message{
+#upload-subtitles-form .feedback-message {
     background-color: orange;
     padding: 10px;
-    color: white;
-    width: 92%;
+    color: #FFF;
+    width: 98%;
     font-size: 12px;
 }
 
