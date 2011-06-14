@@ -43,6 +43,10 @@ import time
 from django.utils.safestring import mark_safe
 from django.core.cache import cache
 from videos.feed_parser import FeedParser
+import logging
+
+logger = logging.getLogger("videos-models")
+
         
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -546,9 +550,14 @@ class SubtitleLanguage(models.Model):
         elif self.is_dependent():
             # This should only be needed temporarily until data is more cleaned up.
             # in other words, self.standard_language should never be None for a dependent SL
-            self.standard_language = self.video.subtitle_language()
-            self.save()
-            return self.standard_language
+            try:
+                self.standard_language = self.video.subtitle_language()
+                self.save()
+                return self.standard_language
+            except IntegrityError:
+                logger.error(
+                    "Subtitle Language {0} is dependent but has no acceptable "
+                    "standard_language".format(self.id))
         return None
 
     def is_dependable(self):
@@ -829,10 +838,9 @@ class SubtitleVersion(SubtitleCollection):
         return self.language.video;
 
     def _get_standard_collection(self):
-        standart_language = self.language.real_standard_language()
-        
-        if standart_language:
-            return standart_language.latest_version()
+        standard_language = self.language.real_standard_language()
+        if standard_language:
+            return standard_language.latest_version()
 
     def ordered_subtitles(self):
         subtitles = self.subtitles()
