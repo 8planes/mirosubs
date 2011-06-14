@@ -43,6 +43,10 @@ import time
 from django.utils.safestring import mark_safe
 from django.core.cache import cache
 from videos.feed_parser import FeedParser
+import logging
+
+logger = logging.getLogger("videos-models")
+
         
 yt_service = YouTubeService()
 yt_service.ssl = False
@@ -834,10 +838,9 @@ class SubtitleVersion(SubtitleCollection):
         return self.language.video;
 
     def _get_standard_collection(self):
-        standart_language = self.language.real_standard_language()
-        
-        if standart_language:
-            return standart_language.latest_version()
+        standard_language = self.language.real_standard_language()
+        if standard_language:
+            return standard_language.latest_version()
 
     def ordered_subtitles(self):
         subtitles = self.subtitles()
