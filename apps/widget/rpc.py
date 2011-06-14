@@ -128,6 +128,16 @@ class Rpc(BaseRpc):
                     return_value['subtitles'] = subtitles
         return return_value
 
+    def fetch_request_dialog_contents(self, request, video_id):
+        my_languages = get_user_languages_from_request(request)
+        my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
+        all_languages = LANGUAGES_MAP
+        return {
+            'my_languages': my_languages,
+            'all_languages': all_languages
+        }
+
+
     def fetch_start_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)
         my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
