@@ -131,14 +131,12 @@
             {% csrf_token %}
             <p id="txtfile-errors">
             </p>
-                <div>
-                <button class="green_button small notIE" type="submit" value="Save">
+            <p>
+                <button class="green_button small" type="submit" value="Save">
                     <span>{% trans 'Upload TXT file' %}</span>
-                </button>
-                </div>
-                <div style="margin: 0 0 50px 0; float: left; width: 200px !important;">
+                </button>     
                 <input class="ajax-file-upload-field" type="file" name="txtfile" id="id_txtfile"/>
-                </div>
+            </p>
         </form>
         <form method="post" action="{% url videos:paste_transcription %}" id="upload-transcript-form">
             {% csrf_token %}
