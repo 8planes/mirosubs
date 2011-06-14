@@ -921,7 +921,6 @@ class ViewsTest(WebUseTest):
             
     def test_search(self):
         self._simple_test('search:index')
-        self._simple_test('search:index', data={'o': 'title', 'ot': 'desc'})
     
     def test_counter(self):
         self._simple_test('counter')
