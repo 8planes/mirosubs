@@ -14,3 +14,7 @@
 .mirosubs-howtopanel .goog-checkbox {
   margin-top: 25px !important;
 }
+
+.notIE {
+	display: none !important;
+}

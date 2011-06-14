@@ -25,7 +25,7 @@ mirosubs.messaging.simplemessage.showAndRemove = function(messageKey){
     var cookie = new goog.net.Cookies(document);
     var message = cookie.get(messageKey);
     if (message && message.length > 0){
-        jQuery['jGrowl'](message);
+        jQuery['jGrowl'](message, {'sticky': true});
     }
     return cookie.remove(messageKey);
 }

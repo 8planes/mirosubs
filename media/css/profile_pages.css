@@ -56,6 +56,11 @@
     z-index: 2;
   }
 
+.ajax-file-upload-field {
+	position: relative !important;
+	width: 200px !important;
+}
+
 .upload-picture {
     position: absolute;
   }
