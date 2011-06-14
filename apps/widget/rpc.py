@@ -306,7 +306,9 @@ class Rpc(BaseRpc):
             language.save()
             
             video_changed_tasks.delay(language.video.id, new_version.id)
-            user_message = {
+            # we should only show that if this is  a new language
+            if language.subtitleversion_set.all().count() == 1:
+                user_message = {
                 "body": "Thank you for uploading. It will take a minute or so for your subtitles to appear."
                 }
         return {
