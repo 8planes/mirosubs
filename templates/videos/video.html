@@ -128,16 +128,17 @@
         <a href="#" id="add_subtitles" class="green_button small">
             {% trans 'Add Subtitles' %}
         </a>
+        <br /><br />
       {% else %}  
-         <a class="green_button small add-translation-behavior" id="add_translation "   href="#">{% trans 'Add Translation' %}</a>     
+         <a class="green_button small add-translation-behavior" id="add_translation "   href="#">{% trans 'Add Translation' %}</a>
       {% endif %}
-
+      <br /><br />
       {% upload_subtitles video %}
-        
+      <br /><br />
       {% paste_transcription %}
       
         {% if user.is_staff and perms.videos.edit_video %}
-             <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
+             <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a><br /><br />
             <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank">
                 {% trans 'Edit in Admin Interface' %}
             </a>

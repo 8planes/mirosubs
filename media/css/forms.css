@@ -313,9 +313,8 @@ p.checkbox label {
 }
 
 #upload-subtitles-form #subtitles-file-field {
-  background: #444;
-  padding: 3px !important;
-  border: 1px solid #fff;
+	width: 200px !important;
+	margin: 10px 0 10px 0 !important
 }
 
 #upload-subtitles-form .feedback-message {
