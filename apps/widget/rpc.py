@@ -306,14 +306,12 @@ class Rpc(BaseRpc):
             language.save()
             
             video_changed_tasks.delay(language.video.id, new_version.id)
-
-
             user_message = {
                 "body": "Thank you for uploading. It will take a minute or so for your subtitles to appear."
                 }
         return {
 
-            "user_message": user_message,
+            "_user_message": user_message,
             "response" : "ok",
                  "last_saved_packet": draft.last_saved_packet }
 
