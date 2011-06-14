@@ -5,7 +5,6 @@ from utils.translation import get_languages_list, get_simple_languages_list, get
 from videos.search_indexes import LanguageField
 
 ALL_LANGUAGES = get_simple_languages_list()
-ALL_LANGUAGES_NAMES = dict(ALL_LANGUAGES)
 
 class SearchForm(forms.Form):
     SORT_CHOICES = (
@@ -40,17 +39,17 @@ class SearchForm(forms.Form):
             langs_data = facet_data['fields']['languages']
             self.fields['langs'].choices = self._make_choices_from_faceting(langs_data)
         else:
-            choices = list(get_languages_list())
+            choices = list(get_simple_languages_list())
             self.fields['langs'].choices = choices
             self.fields['video_lang'].choices = choices
-
-
     
     def _make_choices_from_faceting(self, data):
         choices = [('', _('All Languages'))]
 
         for l in data:
             lang = LanguageField.convert(l[0])
+            ALL_LANGUAGES_NAMES = dict(get_simple_languages_list())
+                        
             try:
                 choices.append((lang, ALL_LANGUAGES_NAMES[lang]))
             except KeyError:
