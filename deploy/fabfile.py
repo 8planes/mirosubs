@@ -240,7 +240,7 @@ def update_solr_schema():
         # staging and production
         env.host_string = ADMIN_HOST
         dir = env.admin_dir
-        python_exe = '{0}/env/bin/python'.format(env.web_dir)
+        python_exe = '{0}/env/bin/python'.format(env.admin_dir)
         with cd(os.path.join(dir, 'mirosubs')):
             _git_pull()
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/{1}/conf/schema.xml'.format(
