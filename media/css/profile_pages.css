@@ -82,5 +82,10 @@
 
 .user_language label{
   margin: 2px 0 0 30px;
-  width:160px;
+  width:180px;
+  font-size:small;
+}
+
+.user_language input[type="checkbox"]{
+  width:auto;
 }
