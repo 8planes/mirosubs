@@ -19,6 +19,11 @@
 <!--[if gte IE 8]>
 <link href="{{ MEDIA_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
 <![endif]-->
+<!--[if IE 8]>
+<style>
+.notIE { display: none !important ; }
+</style>
+<![endif]-->
 <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
 {% endblock %}
