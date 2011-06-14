@@ -134,8 +134,9 @@
             <p>
                 <button class="green_button small" type="submit" value="Save">
                     <span>{% trans 'Upload TXT file' %}</span>
-                </button>     
-                <input class="ajax-file-upload-field" type="file" name="txtfile" id="id_txtfile"/>
+                </button>
+                <label id="ie-only_file_label">Upload TXT file</label>
+                <input class="ajax-file-upload-field" type="file"  name="txtfile" id="id_txtfile"/>
             </p>
         </form>
         <form method="post" action="{% url videos:paste_transcription %}" id="upload-transcript-form">

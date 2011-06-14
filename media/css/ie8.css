@@ -14,3 +14,16 @@
 .mirosubs-howtopanel .goog-checkbox {
   margin-top: 25px !important;
 }
+
+.ajax-file-upload-field {
+	position: relative !important;
+	width: 200px !important;
+}
+
+#id_txtfile_form button {
+	display: none !important;
+}
+
+#id_txtfile_form label#ie-only_file_label {
+	display: block;
+}

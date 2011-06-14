@@ -38,7 +38,9 @@
   }
 
 
-
+#id_txtfile_form label#ie-only_file_label {
+	display: none;
+}
 
 .edit_profile_shell h2 button{
   position: absolute;
