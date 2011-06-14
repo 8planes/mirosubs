@@ -546,9 +546,14 @@ class SubtitleLanguage(models.Model):
         elif self.is_dependent():
             # This should only be needed temporarily until data is more cleaned up.
             # in other words, self.standard_language should never be None for a dependent SL
-            self.standard_language = self.video.subtitle_language()
-            self.save()
-            return self.standard_language
+            try:
+                self.standard_language = self.video.subtitle_language()
+                self.save()
+                return self.standard_language
+            except IntegrityError:
+                logger.error(
+                    "Subtitle Language {0} is dependent but has no acceptable "
+                    "standard_language".format(self.id))
         return None
 
     def is_dependable(self):
