@@ -1,7 +1,26 @@
-{% load search_tags %}
+{% load i18n search_tags %}
 
 <ul class="video_list clearfix">
     {% for video in video_list %}
         {% include 'videos/_video.html' %}
-    {% endfor %}          
+    {% empty %}
+        <h3 style="padding: 20px">{% trans "No video found" %}</h3>
+    {% endfor %}
 </ul><!--// video_list -->
+
+<script type="text/javascript">
+    (function($){
+        var lang_arrow_click_handler = function(){
+            var $this = $(this);
+            if ( ! $(this).find('.lang_menu').length){
+                VideosApi.load_video_languages($this.attr('video_id'), function(r){
+                    $this.html(r.content);
+                });
+            }
+            return false;
+        };
+        
+        $('.video_list .lang_arrow').unbind('click')
+            .bind('click', lang_arrow_click_handler);
+    })(jQuery);
+</script>

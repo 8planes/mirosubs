@@ -17,7 +17,10 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.conf.urls.defaults import *
+from search.views import rpc_router
 
 urlpatterns = patterns('search.views',
     url(r'^$', 'index', name='index'),
+    url(r'^router/$', rpc_router, name='rpc_router'),
+    url(r'^router/api/$', rpc_router.api, name='rpc_api'),      
 )

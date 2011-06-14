@@ -5,8 +5,25 @@
     {% form_field_as_list request form.sort %}
     
     <h2>{{ form.video_lang.label }}</h2>
-    {% form_field_as_list request form.video_lang %}
+    {% form_field_as_list request form.video_lang 10 %}
 
     <h2>{{ form.langs.label }}</h2>
-    {% form_field_as_list request form.langs %}
+    {% form_field_as_list request form.langs 10 %}
+
 </div><!-- // sidebar -->
+<script type="text/javascript">
+    (function($){
+        $('#sidebar .more-link').click(function(){
+            var $ul = $(this).parents('ul');
+            
+            if ($ul.find('li:hidden').length){
+                $ul.find('li:hidden').show();
+            }else{
+                var i = $ul.find('li').index($(this));
+                $ul.find('li:gt('+i+')').hide();
+            }
+
+            return false;
+        });
+    })(jQuery);
+</script>

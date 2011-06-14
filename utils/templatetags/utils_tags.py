@@ -1,10 +1,11 @@
 from django import template
 from django.db import connection
+from django.utils.translation import ugettext
 
 register = template.Library()
 
 @register.simple_tag
-def form_field_as_list(request, bounded_field):
+def form_field_as_list(request, bounded_field, count=0):
     getvars = '?'
     
     GET_vars = request.GET.copy()
@@ -12,21 +13,47 @@ def form_field_as_list(request, bounded_field):
         del GET_vars[bounded_field.name]
     
     if len(GET_vars.keys()) > 0:
-        getvars = "?%s" % GET_vars.urlencode()
+        getvars = "?%s&" % GET_vars.urlencode()
     
-    output = [u'<ul>']
+    output = []
     data = bounded_field.data or bounded_field.field.initial and bounded_field.field.initial
 
-    for choice in bounded_field.field.choices:
+    for i, choice in enumerate(bounded_field.field.choices):
         if choice[0] == data:
             li_attrs = u'class="active"'
         else:
             li_attrs = u''
         
-        href = u'%s&%s=%s' % (getvars, bounded_field.name, choice[0])
-        li = u'<li %s><a href="%s">%s</a></li>' % (li_attrs, href, choice[1])
-        output.append(li)
+        href = u'%s%s=%s' % (getvars, bounded_field.name, choice[0])
+        li = {
+            'attrs': li_attrs,
+            'href': href,
+            'value': choice[0],
+            'fname': bounded_field.name,
+            'name': choice[1]
+        }
         
-    output.append(u'</ul>')
+        if count and choice[0] == data and i >= count:
+            output.insert(count - 1, li)
+        else:
+            output.append(li)
+
+    if count:
+        li = {
+            'attrs': u'class="more-link"',
+            'href': '#',
+            'name': ugettext(u'more...'),
+            'fname': '',
+            'value': ''
+        }        
+        output.insert(count, li)
+        
+        for i in xrange(len(output[count+1:])):
+            output[count+i+1]['attrs'] += u' style="display: none"'
+
+    content = [u'<ul>']
+    for item in output:
+        content.append(u'<li %(attrs)s><a href="%(href)s" name="%(fname)s" value="%(value)s">%(name)s</a></li>' % item) 
+    content.append(u'</ul>')
     
-    return u''.join(output)
+    return u''.join(content)

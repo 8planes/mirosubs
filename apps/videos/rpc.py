@@ -45,59 +45,33 @@ class VideosApiClass(object):
         'total': 'total_views'
     }
     
-    def _render_page(self, page, qs, on_page=VIDEOS_ON_PAGE, request=None,
-                     template='videos/_watch_page.html', extra_context={}):
-        paginator = Paginator(qs, on_page)
-
+    def load_video_languages(self, video_id, user):
         try:
-            page = int(page)
-        except ValueError:
-            page = 1
-
-        try:
-            page_obj = paginator.page(page)
-        except (EmptyPage, InvalidPage):
-            page_obj = paginator.page(paginator.num_pages)
+            video = Video.objects.get(pk=video_id)
+        except Video.DoesNotExist:
+            video = None
         
         context = {
-            'video_list': page_obj.object_list,
-            'page': page_obj
+            'video': video
         }
-        context.update(extra_context)
-
-        if request:
-            content = render_to_string(template, context, RequestContext(request))
-        else:
-            content = render_to_string(template, context)
-            
-        total = qs.count()
-        from_value = (page - 1) * on_page + 1
-        to_value = from_value + on_page - 1
         
-        if to_value > total:
-            to_value = total
-            
         return {
-            'content': content,
-            'total': total,
-            'pages': paginator.num_pages,
-            'from': from_value,
-            'to': to_value
-        }        
-            
+            'content': render_to_string('videos/_video_languages.html', context)
+        }
+    
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).load_all().order_by('-featured')
         
-        return self._render_page(page, sqs, request=request)    
+        return render_page(page, sqs, request=request)    
 
     @add_request_to_kwargs
     def load_latest_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).load_all().order_by('-edited')
             
-        return self._render_page(page, sqs, request=request)
+        return render_page(page, sqs, request=request)
 
     @add_request_to_kwargs
     def load_popular_page(self, page, sort, request, user):
@@ -113,7 +87,7 @@ class VideosApiClass(object):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).load_all().order_by('-%s' % sort_field)
         
-        return self._render_page(page, sqs, request=request)
+        return render_page(page, sqs, request=request)
     
     @add_request_to_kwargs
     def load_popular_videos(self, sort, request, user):
@@ -215,3 +189,44 @@ class VideosApiClass(object):
         language.followers.remove(user)
         
         return Msg(_(u'You stopped following this subtitles now.'))
+    
+def render_page(page, qs, on_page=VIDEOS_ON_PAGE, request=None,
+                 template='videos/_watch_page.html', extra_context={}):
+    paginator = Paginator(qs, on_page)
+
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+
+    try:
+        page_obj = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        page_obj = paginator.page(paginator.num_pages)
+    
+    context = {
+        'video_list': page_obj.object_list,
+        'page': page_obj
+    }
+    context.update(extra_context)
+
+    if request:
+        content = render_to_string(template, context, RequestContext(request))
+    else:
+        content = render_to_string(template, context)
+        
+    total = qs.count()
+    from_value = (page - 1) * on_page + 1
+    to_value = from_value + on_page - 1
+    
+    if to_value > total:
+        to_value = total
+        
+    return {
+        'content': content,
+        'total': total,
+        'pages': paginator.num_pages,
+        'from': from_value,
+        'to': to_value
+    }
+        

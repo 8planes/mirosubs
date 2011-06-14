@@ -14,30 +14,37 @@ class SearchForm(forms.Form):
         ('month_views', _(u'Most plays (this month)')),
         ('total_views', _(u'Most plays (all time)')),
     )
-    DISPLAY_CHOICES = (
-        ('all', _(u'all')),
-        ('thumbnails', _(u'thumbnails')),
-    )
-    q = forms.CharField(required=False, label=_(u'query'))
+    q = forms.CharField(label=_(u'query'))
     sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count',
                              label=_(u'Sort By'))
     langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Subtitled Into'),
                               help_text=_(u'Left blank for any language'), initial='')
     video_lang = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Video In'),
                               help_text=_(u'Left blank for any language'), initial='')
-    display = forms.ChoiceField(choices=DISPLAY_CHOICES, required=False, initial='all')
     
     def __init__(self, request, *args, **kwargs):
+        if 'sqs' in kwargs:
+            sqs = kwargs['sqs']
+            del kwargs['sqs']
+        else:
+            sqs = None
+            
         super(SearchForm, self).__init__(*args, **kwargs)
         self.user_langs = get_user_languages_from_request(request)
-        choices = list(get_languages_list())
-        choices[:0] = (
-            ('my_langs', _(u'My languages')),
-            ('', _(u'Any Language')),
-            ('not_selected', 'Not ---'),
-        )
-        self.fields['langs'].choices = choices
-        self.fields['video_lang'].choices = choices
+        
+        if sqs:
+            facet_data = sqs.facet('video_language').facet('languages').facet_counts()
+            video_langs_data = facet_data['fields']['video_language']
+            self.fields['video_lang'].choices = self._make_choices_from_faceting(video_langs_data)
+    
+            langs_data = facet_data['fields']['languages']
+            self.fields['langs'].choices = self._make_choices_from_faceting(langs_data)
+        else:
+            choices = list(get_languages_list())
+            self.fields['langs'].choices = choices
+            self.fields['video_lang'].choices = choices
+
+
     
     def _make_choices_from_faceting(self, data):
         choices = [('', _('All Languages'))]
@@ -59,13 +66,7 @@ class SearchForm(forms.Form):
         
         #update filters choices
         qs = qs.auto_query(q)
-        facet_data = qs.facet('video_language').facet('languages').facet_counts()
-        video_langs_data = facet_data['fields']['video_language']
-        self.fields['video_lang'].choices = self._make_choices_from_faceting(video_langs_data)[:10]
-        
-        langs_data = facet_data['fields']['languages']
-        self.fields['langs'].choices = self._make_choices_from_faceting(langs_data)[:10]
-        
+
         #aplly filtering
         
         if video_language:
@@ -94,5 +95,5 @@ class SearchForm(forms.Form):
             qs = qs.order_by('-' + ordering)
         else:
             qs = qs.order_by('-languages_count')
-        
+            
         return qs

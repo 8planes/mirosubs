@@ -52,7 +52,7 @@
          scrollSpeed: 200,
          scrollOffset: -10,
          
-         onPageChange: function(page, callback){
+         onPageChange: function(page, callback, parameters){
              /*
               * This method get page number and should load/change page content.
               * Callback should be executed with changed metadata in format:
@@ -167,14 +167,20 @@
           * This function is executed after page loading and update
           * metadata 
           */
+         this.updateContent(data, likeReload);
+         this.hideLoading(data, likeReload);
+         this.scrollAfterUpdate(data, likeReload);
+
          data.total && this.totalValueNode.html(data.total);
          data.from && this.fromValueNode.html(data.from);
          data.to && this.toValueNode.html(data.to);
          data.pages && this.setPages(data.pages);
          
-         this.updateContent(data, likeReload);
-         this.hideLoading(data, likeReload);
-         this.scrollAfterUpdate(data, likeReload);
+         if ( ! data.total){
+             this.pageInfoNode.hide();
+         }else{
+             this.pageInfoNode.show();
+         }
      },
      _checkNavigationLinks: function(){
          if (this.page == 1){
@@ -217,6 +223,14 @@
      refresh: function(likeReload){
          this.setPage(this.page, likeReload);
      },
+     getAddressParams: function(){
+        var parameters = {},
+            parameterNames = $.address.parameterNames();
+        for (var i = 0, l = parameterNames.length; i < l; i++) {
+            parameters[parameterNames[i]] = $.address.parameter(parameterNames[i]);
+        };
+        return parameters;
+     },
      setPage: function(page, likeReload){
          //this for changing page on document ready and with changing URL
          //so this looks like user reload page
@@ -250,7 +264,8 @@
          var that = this;
          this.timeoutId = setTimeout(function(){
              that.showLoading();
-             that.onPageChange(that.page, that._createDelegate(that._pageLoadCallback, [likeReload], that));
+             var cb = that._createDelegate(that._pageLoadCallback, [likeReload], that);
+             that.onPageChange(that.page, cb, that.getAddressParams());
          }, 300);
      }
  });

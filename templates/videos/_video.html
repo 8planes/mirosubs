@@ -1,10 +1,10 @@
-{% load i18n subtitles_tags %}
+{% load i18n %}
 
 {# <ul class="video_list clearfix"> #}
     <li>
         <a href="{{ video.get_absolute_url }}">
             {% if video.thumbnail_url %}
-                <img src="{{ thumbnail_url }}" width="155" height="90"/>
+                <img src="{{ video.thumbnail_url }}" width="155" height="90"/>
             {% else %}
                 <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
             {% endif %}
@@ -14,37 +14,9 @@
             <strong>{{ video.total_views }}</strong> {% trans "Views" %}
         </span>
         <span class="languages">
-            <a class="lang_arrow" href="#">
-                {% comment %}
-                {% if video.languages_count %}
-                <div class="lang_menu">
-                    <div class="hd">
-                        {#<span class="menu_close">{% trans "close" %}</span>#}
-                        <span>
-                          {% blocktrans count video.languages_count as number %}
-                              {{ number }} Language
-                          {% plural %}
-                              {{ number }} Languages
-                          {% endblocktrans %}
-                        </span>
-                    </div><!-- hd -->
-                    
-                    <div class="bd clearfix">
-                        {% for lang in video.langs_cache|slice:":10" %}
-                            {% with lang.subtitle_count as lines_count %}
-                                {% if lines_count %}  
-                                    <span class="{% complete_color lang %}">
-                                        {% complete_indicator lang %}
-                                        {{ lang.language_display }}
-                                    </span>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}                    
-                    </div>
-                </div><!-- // lang_menu -->
-                {% endif %}
-                {% endcomment %}
-            </a>
+            {% if video.languages_count %}
+            <a class="lang_arrow" href="#" video_id="{{ video.pk }}"></a>
+            {% endif %}
             <span>
                   {% blocktrans count video.languages_count as number %}
                       {{ number }} Language

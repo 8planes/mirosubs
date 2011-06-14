@@ -15,28 +15,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from haystack.query import SearchQuerySet
-from django.views.generic.list_detail import object_list
-from videos.models import Video, SubtitleLanguage
-from search.forms import SearchForm
+
+from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
 from django.conf import settings
+from search.forms import SearchForm
 from videos.search_indexes import VideoSearchResult
-from search.rpc import SearchApiClass
-from utils.rpc import RpcRouter
-from utils import render_to
-from django.http import HttpResponseRedirect
-import urllib
+from haystack.query import SearchQuerySet
+from videos.models import Video
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from videos.rpc import render_page
 
-rpc_router = RpcRouter('search:rpc_router', {
-    'SearchApi': SearchApiClass()
-})
+class SearchApiClass(object):
+    
+    @add_request_to_kwargs
+    def search(self, rdata, request, user):
+        form = SearchForm(request, rdata)
 
-@render_to('search/search.html')
-def index(request):
-    if request.GET:
-        print request.path_info
-        return HttpResponseRedirect('%s#/?%s' % (request.path_info, urllib.urlencode(request.GET)))
-            
-    return {
-        'form': SearchForm(request, sqs=SearchQuerySet().models(Video))
-    }
+        if form.is_valid():
+            qs = form.search_qs(SearchQuerySet().result_class(VideoSearchResult) \
+                .models(Video).load_all())
+        else:
+            qs = SearchQuerySet().none()    
+        
+        return render_page(rdata.get('page', 1), qs, 20, request)
+    
+    

@@ -113,8 +113,8 @@ class VideoSearchResult(SearchResult):
     def __unicode__(self):
         title = self.title
         
-        if len(title) > 70:
-            title = title[:70]+'...'
+        if len(title) > 60:
+            title = title[:60]+'...'
         
         return title
 

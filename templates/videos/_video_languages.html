@@ -1,0 +1,29 @@
+{% load i18n subtitles_tags %}
+
+<div class="lang_menu">
+    {% if video %}
+    <div class="hd">
+ 
+        <span>
+          {% blocktrans count video.languages_count as number %}
+              {{ number }} Language
+          {% plural %}
+              {{ number }} Languages
+          {% endblocktrans %}
+        </span>
+    </div><!-- hd -->
+    
+    <div class="bd clearfix">
+        {% for lang in video.subtitlelanguage_set.all|slice:":10" %}
+            {% with lang.subtitle_count as lines_count %}
+                {% if lines_count %}  
+                    <span class="{% complete_color lang %}">
+                        {% complete_indicator lang %}
+                        {{ lang.language_display }}
+                    </span>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}                    
+    </div>
+    {% endif %}
+</div>

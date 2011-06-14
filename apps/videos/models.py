@@ -116,8 +116,8 @@ class Video(models.Model):
     
     def __unicode__(self):
         title = self.title_display()
-        if len(title) > 70:
-            title = title[:70]+'...'
+        if len(title) > 60:
+            title = title[:60]+'...'
         return title
     
     @property
