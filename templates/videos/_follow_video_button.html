@@ -34,10 +34,10 @@
             },            
             _render: function(){
                 if (this.options.isVideoFollower){
-                    this.element.html('{% trans "Unfollow all" %}');
+                    this.element.html('{% trans "Unfollow Video" %}');
                     this._setUnfollowCls();
                 }else if( ! this.options.languageId){
-                    this.element.html('{% trans "Follow all" %}');
+                    this.element.html('{% trans "Follow Video" %}');
                     this._setFollowCls();
                 }else if(this.options.isLanguageFollower){
                     this.element.html('{% trans "Unfollow" %}'+' '+this.options.languageName);
