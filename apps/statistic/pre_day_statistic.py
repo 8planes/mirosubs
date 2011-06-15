@@ -183,7 +183,7 @@ class BasePerDayStatistic(object):
         i = count 
         
         while i:
-            if verbosity >= 1:
+            if verbosity >= 2:
                 print '  >>> migrate key: ', i
                  
             i -= 1
