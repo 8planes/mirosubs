@@ -78,7 +78,6 @@ def video_changed_tasks(video_pk, new_version_id=None):
     from videos import metadata_manager
     from videos.models import Video
     from teams.models import TeamVideo
-    from utils.celery_search_index import update_search_index
     
     metadata_manager.update_metadata(video_pk)
     if new_version_id is not None:
@@ -86,15 +85,15 @@ def video_changed_tasks(video_pk, new_version_id=None):
         _check_alarm(new_version_id)
         _detect_language(new_version_id)
 
-    update_search_index.delay(Video, video_pk)
-
     video = Video.objects.get(pk=video_pk)
     if video.teamvideo_set.count() > 0:
         tv_search_index = site.get_index(TeamVideo)
         tv_search_index.backend.update(
             tv_search_index,
             list(video.teamvideo_set.all()))
-
+    
+    video.update_search_index()
+    
 @task()
 def send_change_title_email(video_id, user_id, old_title, new_title):
     from videos.models import Video

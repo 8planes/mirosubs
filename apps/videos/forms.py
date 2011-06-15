@@ -346,7 +346,6 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
             # confusing from a UI point of view
             sl.had_version = sl.has_version = True
         sl.save()
-        video_changed_tasks.delay(sl.video.id, sl.latest_version().id)
         return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):

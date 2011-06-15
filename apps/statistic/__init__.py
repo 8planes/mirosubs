@@ -60,6 +60,7 @@ class VideoViewStatistic(BasePerDayStatistic):
     def update_total(self, key, obj, value):
         video = obj.video
         video.__class__.objects.filter(pk=video.pk).update(view_count=F('view_count')+value)
+        video.update_search_index()
         
 st_video_view_handler = VideoViewStatistic()
 
@@ -88,6 +89,7 @@ class WidgetViewStatistic(VideoViewStatistic):
     def update_total(self, key, obj, value):
         video = obj.video
         video.__class__.objects.filter(pk=video.pk).update(widget_views_count=F('widget_views_count')+value)
+        video.update_search_index()
         
 st_widget_view_statistic = WidgetViewStatistic()
 
@@ -144,5 +146,6 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
     def update_total(self, key, obj, value):
         video = obj.video
         video.__class__.objects.filter(pk=video.pk).update(view_count=F('subtitles_fetched_count')+value)
+        video.update_search_index()
         
 st_sub_fetch_handler = SubtitleFetchStatistic()

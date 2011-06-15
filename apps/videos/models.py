@@ -111,8 +111,6 @@ class Video(models.Model):
     widget_views_count = models.IntegerField(_(u'Widget views'), default=0, db_index=True, editable=False)
     view_count = models.PositiveIntegerField(_(u'Views'), default=0, db_index=True, editable=False)
     
-    #widget_views_counter = RedisSimpleField('video_id', changed_video_set)
-
     # Denormalizing the subtitles(had_version) count, in order to get faster joins
     # updated from update_languages_count()
     languages_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
@@ -122,7 +120,11 @@ class Video(models.Model):
         if len(title) > 60:
             title = title[:60]+'...'
         return title
-    
+
+    def update_search_index(self):
+        from utils.celery_search_index import update_search_index
+        update_search_index.delay(self.__class__, self.pk)        
+        
     @property
     def views(self):
         if not hasattr(self, '_video_views_statistic'):
@@ -283,6 +285,8 @@ class Video(models.Model):
                 video_url_obj.added_by = user
                 video_url_obj.video = obj
                 video_url_obj.save()
+                
+                obj.update_search_index()
                 
                 video, created = obj, True
         
