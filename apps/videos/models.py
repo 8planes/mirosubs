@@ -98,6 +98,7 @@ class Video(models.Model):
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False, db_index=True)
     thumbnail = models.CharField(max_length=500, blank=True)
+    small_thumbnail = models.CharField(max_length=500, blank=True)
     s3_thumbnail = S3EnabledImageField(blank=True, upload_to='video/thumbnail/')
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -182,8 +183,8 @@ class Video(models.Model):
         return ''
     
     def get_small_thumbnail(self):
-        if self.s3_thumbnail:
-            return self.s3_thumbnail.thumb_url(50, 50)
+        if self.small_thumbnail:
+            return self.small_thumbnail
         
         return ''        
     
