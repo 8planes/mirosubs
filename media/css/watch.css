@@ -170,7 +170,8 @@ body#watch h1 {
 ul.video_list li {
 	width: 155px;
 	float: left;
-	margin: 13px;
+	margin: 13px 13px 0 13px;
+	height: 180px;
 }
 
 ul.video_list li a {
