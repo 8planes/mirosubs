@@ -40,6 +40,7 @@ from videos.tasks import video_changed_tasks
 from utils.translation import get_languages_list
 from utils.forms import StripURLField, StripRegexField, FeedURLField
 from videos.feed_parser import FeedParser, FeedParserError
+from utils.forms import ReCaptchaField
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
 KB_SIZELIMIT = 512
@@ -494,10 +495,11 @@ class AddFromFeedForm(forms.Form, AjaxForm):
             
         return len(self.video_types)
     
-class FeedbackForm(MathCaptchaForm):
+class FeedbackForm(forms.Form):
     email = forms.EmailField(required=False)
     message = forms.CharField(widget=forms.Textarea())
     error = forms.CharField(required=False)
+    captcha = ReCaptchaField(label=_(u'captcha'))
     
     def send(self, request):
         email = self.cleaned_data['email']

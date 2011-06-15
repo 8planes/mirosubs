@@ -3,6 +3,7 @@ from django import forms
 from django.core import validators
 from utils.validators import UniSubURLValidator
 from django.utils.translation import ugettext_lazy as _
+from utils.forms.recapcha import ReCaptchaField
 import re
 
 class AjaxForm(object):

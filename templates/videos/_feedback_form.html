@@ -18,10 +18,9 @@
                 <p>
                     <label for="feedback_email">{% trans 'Your email:' %} </label>{{ form.email }}
                 </p>
-                <p>
-                    {{ form.math_captcha_field|safe }}
-                    {{ form.math_captcha_question|safe }}
-                </p>
+                <div class="recaptcha-field">
+                    {{ form.captcha }}
+                </div>
                 <p>
                     <label>{% trans 'Your Feedback' %}</label>
                     {{ form.message }}
@@ -72,6 +71,8 @@
                         var error = '<p class="error_list">'+data.errors[key]+'</p>';
                         if ($field.length){
                             $field.before(error);
+                        }else if(key === 'captcha'){
+                            $('.recaptcha-field', $form).before(error);
                         }else{
                             $('.global-errors', $form).prepend(error);
                         }
