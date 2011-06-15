@@ -102,7 +102,7 @@ class YoutubeVideoType(VideoType):
     def _get_subtitles_from_youtube(self, video_obj):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
         
-        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
+        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.videoid
 
         h = httplib2.Http()
         resp, content = h.request(url, "GET")
@@ -111,7 +111,7 @@ class YoutubeVideoType(VideoType):
             logger.info("Youtube subtitles error", extra={
                     'data': {
                         "url": url,
-                        "video_id": video_obj.youtube_videoid,
+                        "video_id": self.videoid,
                         "status_code": resp.status,
                         "response": content
                         }
