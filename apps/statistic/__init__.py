@@ -18,12 +18,14 @@
 import datetime
 from utils.redis_utils import default_connection, RedisKey
 from statistic.pre_day_statistic import BasePerDayStatistic
-from statistic.models import SubtitleFetchCounters, VideoViewCounter
-
-widget_views_total_counter = RedisKey('StWidgetViewsTotal')
-changed_video_set = RedisKey('StChangedVideos')
+from statistic.models import SubtitleFetchCounters, VideoViewCounter, WidgetViewCounter
+from django.db.models import F
 
 class VideoViewStatistic(BasePerDayStatistic):
+    """
+    statistic.WidgetViewStatistic is inherited from this. Pay attention changing 
+    methods
+    """
     connection = default_connection
     model = VideoViewCounter
     prefix = 'st_video_view'
@@ -55,8 +57,42 @@ class VideoViewStatistic(BasePerDayStatistic):
     def get_query_set(self, video):
         return self.model.objects.filter(video=video)
 
-st_video_view_handler = VideoViewStatistic()
+    def update_total(self, key, obj, value):
+        video = obj.video
+        video.__class__.objects.filter(pk=video.pk).update(view_count=F('view_count')+value)
+        video.update_search_index()
         
+st_video_view_handler = VideoViewStatistic()
+
+class WidgetViewStatistic(VideoViewStatistic):
+    model = WidgetViewCounter
+    prefix = 'st_widget_view'
+
+    def get_key(self, date, video=None, video_id=None):
+        """
+        Get get video object or video_id, to reduce DB query number in widget.rpc
+        """
+        if not video and not video_id:
+            return
+        
+        video_id = video_id or video.video_id
+        
+        if not video_id or video_id in ['set', 'total']:
+            #"set" and "total" are reserver. 
+            #Don't want use more long key as prefix:keys:video_id, 
+            #because video_id have more length and is generated 
+            #we should never get this situation
+            return 
+
+        return '%s:%s:%s' % (self.prefix, video_id, self.date_format(date))
+
+    def update_total(self, key, obj, value):
+        video = obj.video
+        video.__class__.objects.filter(pk=video.pk).update(widget_views_count=F('widget_views_count')+value)
+        video.update_search_index()
+        
+st_widget_view_statistic = WidgetViewStatistic()
+
 class SubtitleFetchStatistic(BasePerDayStatistic):
     connection = default_connection
     prefix = 'st_subtitles_fetch'
@@ -106,5 +142,10 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
             qs = qs.filter(language=sl)
         
         return sl
+
+    def update_total(self, key, obj, value):
+        video = obj.video
+        video.__class__.objects.filter(pk=video.pk).update(view_count=F('subtitles_fetched_count')+value)
+        video.update_search_index()
         
 st_sub_fetch_handler = SubtitleFetchStatistic()

@@ -3,8 +3,8 @@
 {# <ul class="video_list clearfix"> #}
     <li>
         <a href="{{ video.get_absolute_url }}">
-            {% if video.thumbnail_url %}
-                <img src="{{ video.thumbnail_url }}" width="155" height="90"/>
+            {% if video.small_thumbnail %}
+                <img src="{{ video.small_thumbnail }}" width="155" height="90"/>
             {% else %}
                 <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
             {% endif %}

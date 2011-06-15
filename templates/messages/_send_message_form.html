@@ -15,7 +15,7 @@
     <h3>{% trans "Send message to" %}
         <span>
             {% if receiver.picture %}
-                <img class="author-avatar" src="{{ receiver.small_avatar }}" alt="{% trans 'avatar' %}"/>
+                <img class="author-avatar" src="{{ receiver.small_avatar }}" alt="{% trans 'avatar' %}" width="30" height="30"/>
             {% else %}
                 <img class="author-avatar" src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'avatar' %}"/>
             {% endif %} 

@@ -27,7 +27,7 @@ from comments.models import Comment
 from django.db.models import Sum, Count
 from django.http import Http404
 from django.views.decorators.cache import cache_page
-from statistic import widget_views_total_counter, st_sub_fetch_handler
+from statistic import st_sub_fetch_handler
 
 @cache_page(60 * 60 * 24)
 @render_to('statistic/index.html')
@@ -47,7 +47,6 @@ def index(request):
     
     context = {
         'subtitles_fetched_count': st_sub_fetch_handler.total_key.get(),
-        'view_count': widget_views_total_counter.get(),
         'videos_with_captions': Video.objects.exclude(subtitlelanguage=None).count(),
         'all_videos': Video.objects.count(),
         'all_users': User.objects.count(),
@@ -133,7 +132,7 @@ def language_statistic(request, lang):
     
     videos_views_count = 0
     for video in Video.objects.filter(subtitlelanguage__language=lang):
-        videos_views_count += video.widget_views_counter.get()
+        videos_views_count += video.widget_views_count
             
     return {
         'video_count': videos_count,

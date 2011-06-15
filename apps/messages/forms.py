@@ -114,8 +114,10 @@ class SendTeamMessageForm(forms.ModelForm, AjaxForm):
         team = self.cleaned_data['team']
         languages = self.cleaned_data['languages']
 
-        members = team.users.exclude(pk=self.author.pk)\
-            .filter(userlanguage__language__in=languages).distinct()
+        members = team.users.exclude(pk=self.author.pk)
+        
+        if languages:
+            members = members.filter(userlanguage__language__in=languages).distinct()
 
         for user in members:
             message = Message(user=user)

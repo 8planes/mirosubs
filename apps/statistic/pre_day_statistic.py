@@ -137,6 +137,21 @@ class BasePerDayStatistic(object):
         Should return QuerySet for self.model for get_views method
         """
         raise Exception('Not implemented')
+    
+    def update_total(self, key, obj, value):
+        """
+        Should update total counter for one instance. 
+        key - Redis key, the same that is passed to *get_object*
+        obj - object returned by *get_object*. This is NOT object that was viewed
+        value - number of views
+        
+        Example:
+        
+        def update_total(self, key, obj, value):
+            video = obj.video
+            video.__class__.objects.filter(pk=video.pk).update(view_count=F('view_count')+value)        
+        """
+        raise Exception('Not implemented')
         
     def get_views(self, **kwargs):
         """
@@ -168,7 +183,7 @@ class BasePerDayStatistic(object):
         i = count 
         
         while i:
-            if verbosity >= 1:
+            if verbosity >= 2:
                 print '  >>> migrate key: ', i
                  
             i -= 1
@@ -178,8 +193,13 @@ class BasePerDayStatistic(object):
             
             obj = self.get_object(key)
             if obj:
-                obj.count += int(self.connection.getset(key, 0))
-                obj.save()
+                try:
+                    value = int(self.connection.getset(key, 0))
+                    obj.count += value
+                    obj.save()
+                    self.update_total(key, obj, value)
+                except (TypeError, ValueError):
+                    pass
                 self.connection.delete(key)
         
         return count
@@ -190,7 +210,7 @@ class BasePerDayStatistic(object):
         """
         date = kwargs.get('date', datetime.date.today())
         key = self.get_key(date=date, **kwargs)
-        
+
         if not key:
             return
         

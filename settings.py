@@ -522,6 +522,10 @@ EMAIL_BCC_LIST = []
 
 CACHE_BACKEND = 'locmem://'
 
+#for mirosubs.example.com
+RECAPTCHA_PUBLIC = '6LdoScUSAAAAANmmrD7ALuV6Gqncu0iJk7ks7jZ0'
+RECAPTCHA_PRIVATE = ' 6LdoScUSAAAAALvQj3aI1dRL9mHgh85Ks2xZH1qc'
+
 ROSETTA_EXCLUDED_APPLICATIONS = (
     'livesettings',
     'openid_consumer',

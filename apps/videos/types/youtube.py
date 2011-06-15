@@ -72,7 +72,6 @@ class YoutubeVideoType(VideoType):
         return {'videoid': self.video_id}
 
     def set_values(self, video_obj):
-        video_obj.youtube_videoid = self.video_id
         video_obj.title = self.entry.media.title.text or ''
         if self.entry.media.description:
             video_obj.description = self.entry.media.description.text or ''
@@ -80,6 +79,7 @@ class YoutubeVideoType(VideoType):
             video_obj.duration = int(self.entry.media.duration.seconds)
         if self.entry.media.thumbnail:
             video_obj.thumbnail = self.entry.media.thumbnail[-1].url
+        video_obj.small_thumbnail = 'http://i.ytimg.com/vi/%s/default.jpg' % self.video_id   
         video_obj.save()
         try:
             self._get_subtitles_from_youtube(video_obj)
@@ -102,7 +102,7 @@ class YoutubeVideoType(VideoType):
     def _get_subtitles_from_youtube(self, video_obj):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
         
-        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % video_obj.youtube_videoid
+        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.videoid
 
         h = httplib2.Http()
         resp, content = h.request(url, "GET")
@@ -111,7 +111,7 @@ class YoutubeVideoType(VideoType):
             logger.info("Youtube subtitles error", extra={
                     'data': {
                         "url": url,
-                        "video_id": video_obj.youtube_videoid,
+                        "video_id": self.videoid,
                         "status_code": resp.status,
                         "response": content
                         }

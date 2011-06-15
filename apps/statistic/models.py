@@ -53,6 +53,13 @@ class VideoViewCounter(BasePerDayStatisticModel):
     class Meta:
         verbose_name = _(u'Video view statistic')
         verbose_name_plural = _(u'Video view statistic')
+
+class WidgetViewCounter(BasePerDayStatisticModel):
+    video = models.ForeignKey('videos.Video')
+    
+    class Meta:
+        verbose_name = _(u'Widget view statistic')
+        verbose_name_plural = _(u'Widget view statistic')
     
 def get_model_statistics(model, today, month_ago, week_ago, day_ago):
     '''

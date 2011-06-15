@@ -108,10 +108,10 @@
                                     {% trans 'Promote to Manager' %}
                                   </a>
                             {% endif %}
-                              </a>
+                            |
                         {% endif %}
                         {% if not member.user == user and member.user.email %}
-                        | {% send_message_form member.user 'True' %}
+                            {% send_message_form member.user 'True' %}
                         {% endif %}
                     </div>
                 </td>

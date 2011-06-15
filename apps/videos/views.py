@@ -276,7 +276,7 @@ def upload_transcription_file(request):
 
 def feedback(request):
     output = dict(success=False)
-    form = FeedbackForm(request.POST)
+    form = FeedbackForm(request.POST, initial={'captcha': request.META['REMOTE_ADDR']})
     if form.is_valid():
         form.send(request)
         output['success'] = True

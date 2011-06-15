@@ -31,7 +31,7 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
-from statistic import changed_video_set, st_sub_fetch_handler, st_video_view_handler
+from statistic import st_sub_fetch_handler, st_video_view_handler, st_widget_view_statistic
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
@@ -98,6 +98,7 @@ class Video(models.Model):
     is_subtitled = models.BooleanField(default=False)
     was_subtitled = models.BooleanField(default=False, db_index=True)
     thumbnail = models.CharField(max_length=500, blank=True)
+    small_thumbnail = models.CharField(max_length=500, blank=True)
     s3_thumbnail = S3EnabledImageField(blank=True, upload_to='video/thumbnail/')
     edited = models.DateTimeField(null=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -106,14 +107,10 @@ class Video(models.Model):
     complete_date = models.DateTimeField(null=True, blank=True, editable=False)
     featured = models.DateTimeField(null=True, blank=True)
 
-    subtitles_fetched_count = models.IntegerField(default=0, db_index=True, editable=False)
-    widget_views_count = models.IntegerField(default=0, db_index=True, editable=False)
-    view_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
+    subtitles_fetched_count = models.IntegerField(_(u'Sub.fetched'), default=0, db_index=True, editable=False)
+    widget_views_count = models.IntegerField(_(u'Widget views'), default=0, db_index=True, editable=False)
+    view_count = models.PositiveIntegerField(_(u'Views'), default=0, db_index=True, editable=False)
     
-    subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
-    widget_views_counter = RedisSimpleField('video_id', changed_video_set)
-    view_counter = RedisSimpleField('video_id', changed_video_set)
-
     # Denormalizing the subtitles(had_version) count, in order to get faster joins
     # updated from update_languages_count()
     languages_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
@@ -123,7 +120,11 @@ class Video(models.Model):
         if len(title) > 60:
             title = title[:60]+'...'
         return title
-    
+
+    def update_search_index(self):
+        from utils.celery_search_index import update_search_index
+        update_search_index.delay(self.__class__, self.pk)        
+        
     @property
     def views(self):
         if not hasattr(self, '_video_views_statistic'):
@@ -167,11 +168,9 @@ class Video(models.Model):
         return title
     
     def update_view_counter(self):
-        self.view_counter.incr()
         st_video_view_handler.update(video=self)
     
     def update_subtitles_fetched(self, lang=None):
-        self.subtitles_fetched_counter.incr()
         st_sub_fetch_handler.update(video=self, sl=lang)
         if lang:
             lang.subtitles_fetched_counter.incr()
@@ -186,8 +185,8 @@ class Video(models.Model):
         return ''
     
     def get_small_thumbnail(self):
-        if self.s3_thumbnail:
-            return self.s3_thumbnail.thumb_url(50, 50)
+        if self.small_thumbnail:
+            return self.small_thumbnail
         
         return ''        
     
@@ -286,6 +285,8 @@ class Video(models.Model):
                 video_url_obj.added_by = user
                 video_url_obj.video = obj
                 video_url_obj.save()
+                
+                obj.update_search_index()
                 
                 video, created = obj, True
         

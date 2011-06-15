@@ -80,9 +80,7 @@
     {% endif %}
     {% if team|is_team_member:user %}
         <p>
-            {% if team|is_team_manager:user %}
             <a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a><br/>
-            {% endif %}
             <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a>   
         </p>
     {% else %}
