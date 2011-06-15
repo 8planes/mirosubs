@@ -10,6 +10,13 @@ from celery.signals import task_failure, worker_ready
 from haystack import site
 from videos.models import VideoFeed
 from sentry.client.models import client
+from celery.decorators import periodic_task
+from celery.schedules import crontab
+
+@periodic_task(run_every=crontab(minute=0, hour=1))
+def update_from_feed(*args, **kwargs):
+    for feed in VideoFeed.objects.all():
+        update_video_feed.delay(feed.pk)    
 
 def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, einfo, **kwds):
     """

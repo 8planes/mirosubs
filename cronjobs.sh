@@ -8,4 +8,3 @@ fi
 apphome="$1"
 
 . $apphome/env/bin/activate
-python $apphome/mirosubs/manage.py update_from_feed --settings=unisubs_settings
