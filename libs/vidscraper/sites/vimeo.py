@@ -200,6 +200,16 @@ def get_thumbnail_url(url, shortmem={}):
 
 @parse_api
 @returns_unicode
+def get_small_thumbnail_url(url, shortmem={}):
+    url = None
+    try:
+        url = shortmem['api_data']['thumbnails']['thumbnail'][1]['_content']
+    except (KeyError, IndexError):
+        pass
+    return url
+
+@parse_api
+@returns_unicode
 def get_user(url, shortmem={}):
     return shortmem['api_data']['owner']['display_name']
 
