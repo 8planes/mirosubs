@@ -74,18 +74,19 @@
   border-radius: 9px; }
 
 .feedback_bg, .modal-window-bg {
-  background: #D3E9ED url(../../images/cloud.png) center top no-repeat;
+  background: #D3E9ED url(../images/cloud.png) center top no-repeat;
   border-radius: 7px;
   -webkit-background-clip: padding-box;
 }
 
 #feedback_form{
-  background: url(../../images/watercolor3.png) center 0px repeat-x;
+  background: url(../images/watercolor3.png) center 0px repeat-x;
   border-radius: 7px;
   padding: 60px 0;
   clear: both;
   float: left;
   text-align: center;
+  display:block !important;
   }
 
 
