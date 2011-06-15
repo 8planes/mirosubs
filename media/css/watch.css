@@ -78,8 +78,9 @@ body#watch h1 {
 	background: transparent;
 	float: left;
 	width: 114px;
+	position: relative;
+	top: 8px;
 	margin: 0 0 0 8px;
-	padding: 18px 0 0 0;
 	font-size: 11px;
 	color: #78868a;
 }
@@ -351,7 +352,7 @@ div.pages a.pag_next span.icon {
 	display: block;
 	background: #FFF;
 	position: absolute;
-	top: 45px;
+	top: 35px;
 	left: -1px;
 	-webkit-box-shadow: 0 1px 3px #DDD;
 	-webkit-border-bottom-right-radius: 5px;
@@ -371,7 +372,7 @@ div.pages a.pag_next span.icon {
 	font-size: 12px;
 	display: block;
 	padding: 5px 0 3px 0;
-	width: 98px;
+	width: 129px;
 	text-align: center;
 	margin: 4px 0 4px 0;
 }
