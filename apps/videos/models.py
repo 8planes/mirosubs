@@ -31,7 +31,7 @@ from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from videos.types import video_type_registrar
-from statistic import changed_video_set, st_sub_fetch_handler, st_video_view_handler
+from statistic import st_sub_fetch_handler, st_video_view_handler, st_widget_view_statistic
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
@@ -110,9 +110,7 @@ class Video(models.Model):
     widget_views_count = models.IntegerField(default=0, db_index=True, editable=False)
     view_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
     
-    subtitles_fetched_counter = RedisSimpleField('video_id', changed_video_set)
-    widget_views_counter = RedisSimpleField('video_id', changed_video_set)
-    view_counter = RedisSimpleField('video_id', changed_video_set)
+    #widget_views_counter = RedisSimpleField('video_id', changed_video_set)
 
     # Denormalizing the subtitles(had_version) count, in order to get faster joins
     # updated from update_languages_count()
@@ -167,11 +165,9 @@ class Video(models.Model):
         return title
     
     def update_view_counter(self):
-        self.view_counter.incr()
         st_video_view_handler.update(video=self)
     
     def update_subtitles_fetched(self, lang=None):
-        self.subtitles_fetched_counter.incr()
         st_sub_fetch_handler.update(video=self, sl=lang)
         if lang:
             lang.subtitles_fetched_counter.incr()

@@ -27,12 +27,12 @@ from urlparse import urlparse, parse_qs
 from django.conf import settings
 from django.db.models import Sum
 from widget import video_cache
-from statistic import widget_views_total_counter
 from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
 from utils import send_templated_email
+from statistic import st_widget_view_statistic
 import logging
 yt_logger = logging.getLogger("youtube-ei-error")
 
@@ -78,6 +78,7 @@ class Rpc(BaseRpc):
 
     def show_widget(self, request, video_url, is_remote, base_state=None, additional_video_urls=None):
         video_id = video_cache.get_video_id(video_url)
+
         if video_id is None: # for example, private youtube video.
             return None
 
@@ -98,8 +99,7 @@ class Rpc(BaseRpc):
             for url in additional_video_urls:
                 video_cache.associate_extra_url(url, video_id)
 
-        models.Video.widget_views_counter(video_id).incr()
-        widget_views_total_counter.incr()
+        st_widget_view_statistic.update(video_id=video_id)
         
         add_general_settings(request, return_value)
         if request.user.is_authenticated():
