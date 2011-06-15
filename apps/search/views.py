@@ -34,7 +34,6 @@ rpc_router = RpcRouter('search:rpc_router', {
 @render_to('search/search.html')
 def index(request):
     if request.GET:
-        print request.path_info
         return HttpResponseRedirect('%s#/?%s' % (request.path_info, urllib.urlencode(request.GET)))
             
     return {

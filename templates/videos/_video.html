@@ -14,9 +14,11 @@
             <strong>{{ video.total_views }}</strong> {% trans "Views" %}
         </span>
         <span class="languages">
+            {% comment %}
             {% if video.languages_count %}
             <a class="lang_arrow" href="#" video_id="{{ video.pk }}"></a>
             {% endif %}
+            {% endcomment %}
             <span>
                   {% blocktrans count video.languages_count as number %}
                       {{ number }} Language
