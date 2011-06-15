@@ -73,6 +73,7 @@ section_secondary
   text-align: left;
 	color: #333;
 	font-weight: bold;
+	background: url(../images/interface/bg_secondary_section.png) no-repeat;
 }
 
 #add_subtitles h2 {

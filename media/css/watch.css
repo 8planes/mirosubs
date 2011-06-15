@@ -167,11 +167,15 @@ body#watch h1 {
 	text-shadow: 0 -1px 0 #34454b;
 }
 
+ul.video_list {
+	margin: 20px 0 0 0;
+}
+
 ul.video_list li {
 	width: 155px;
 	float: left;
-	margin: 13px 13px 0 13px;
-	height: 180px;
+	margin: 0 13px 0 13px;
+	height: 200px;
 }
 
 ul.video_list li a {
