@@ -106,9 +106,9 @@ class Video(models.Model):
     complete_date = models.DateTimeField(null=True, blank=True, editable=False)
     featured = models.DateTimeField(null=True, blank=True)
 
-    subtitles_fetched_count = models.IntegerField(default=0, db_index=True, editable=False)
-    widget_views_count = models.IntegerField(default=0, db_index=True, editable=False)
-    view_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
+    subtitles_fetched_count = models.IntegerField(_(u'Sub.fetched'), default=0, db_index=True, editable=False)
+    widget_views_count = models.IntegerField(_(u'Widget views'), default=0, db_index=True, editable=False)
+    view_count = models.PositiveIntegerField(_(u'Views'), default=0, db_index=True, editable=False)
     
     #widget_views_counter = RedisSimpleField('video_id', changed_video_set)
 
