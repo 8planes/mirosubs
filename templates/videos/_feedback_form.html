@@ -62,6 +62,7 @@
         $('#feedback_form').ajaxForm({
             dataType: 'json',
             success: function(data, status, xhr, $form){
+                Recaptcha.reload();
                 if (data.success){
                     $form.resetForm();
                     $form.parent().hide().next().show();
@@ -77,7 +78,7 @@
                             $('.global-errors', $form).prepend(error);
                         }
                     };
-                }
+                };
             },
             beforeSubmit: function(formData, $Form, options){
                 $('p.error_list', $Form).remove();
