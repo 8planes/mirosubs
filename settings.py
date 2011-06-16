@@ -235,7 +235,7 @@ JS_CORE = ['mirosubs.js',
            'widget/subtitle/transcribeentry.js',
            'widget/subtitle/transcribepanel.js',
            'widget/subtitle/transcriberightpanel.js',
-
+           'widget/subtitle/syncpanel.js',
            'widget/subtitle/reviewpanel.js',
            'widget/subtitle/reviewrightpanel.js',
            'widget/subtitle/sharepanel.js',

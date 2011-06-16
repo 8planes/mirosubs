@@ -31,15 +31,22 @@ goog.provide('mirosubs.video.ControlledVideoPlayer');
 mirosubs.video.ControlledVideoPlayer = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
+    this.controls_ = null;
 };
 goog.inherits(mirosubs.video.ControlledVideoPlayer, goog.ui.Component);
 
 mirosubs.video.ControlledVideoPlayer.prototype.createDom = function() {
     mirosubs.video.ControlledVideoPlayer.superClass_.createDom.call(this);
     this.addChild(this.videoPlayer_, true);
-    this.controls_ = new mirosubs.controls.VideoControls(this.videoPlayer_);
-    this.addChild(this.controls_, true);
+    if ( this.videoPlayer_.isChromeless()){
+        this.controls_ = new mirosubs.controls.VideoControls(this.videoPlayer_);
+        this.addChild(this.controls_, true);    
+    }else{
+        // dummy object  
+        this.controls_ = function (){};
+    }
 };
+
 mirosubs.video.ControlledVideoPlayer.prototype.getPlayer = function() {
     return this.videoPlayer_;
 };

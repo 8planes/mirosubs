@@ -123,8 +123,6 @@ mirosubs.video.BrightcoveVideoPlayer.prototype.enterDocument = function() {
         videoConf["height"]  = videoConf["height"] || 412;
         videoConf['uuid'] = this.playerElemID_;
         var embedString = ' <object id="{{uuid}}" class="BrightcoveExperience"> <param name="bgcolor" value="#FFFFFF" /> <param name="width" value="{{width}}" /> <param name="height" value="{{height}}" /><param name="playerID" value="{{playerID}}" /><param name="playerKey" value="{{playerKey}}" /><param name="wmode" value="transparent" /><param name="isVid" value="true" /><param name="dynamicStreaming" value="true" /><param name="@videoPlayer" value="{{videoID}}" /></object>';
-        //;'' + '<script type="text/javascript">brightcove.createExperiences();</script>';
-// + '<script type="text/javascript">brightcove.createExperiences(goog.dom.getElement("{{elID}}"));</script>'.replace("{{elID}}", this.playerElemID_);
 
         for (var prop in videoConf){
             embedString = embedString.replace("{{"+prop+"}}", videoConf[prop]);
@@ -132,6 +130,7 @@ mirosubs.video.BrightcoveVideoPlayer.prototype.enterDocument = function() {
         videoContainer.innerHTML = embedString;
         videoContainer.id = mirosubs.randomString();
         this.getElement().appendChild(videoContainer);
+        brightcove.createExperiences();
 
     }
     this.getHandler().
@@ -177,8 +176,6 @@ mirosubs.video.BrightcoveVideoPlayer.prototype.onBrightcoveTemplateLoaded_ =
         experienceModule.addEventListener(BCExperienceEvent.TEMPLATE_READY, 
                                           goog.bind(this.onBrightcoveTemplateReady_, this));
         mirosubs.style.setSize(this.player_, this.playerSize_);
-        //if (this.forDialog_)
-            //this.player_['cueVideoById'](this.videoSource_.getBrightcoveVideoID());
         goog.array.forEach(this.commands_, function(cmd) { cmd(); });
         this.commands_ = [];
     }
@@ -276,7 +273,7 @@ mirosubs.video.BrightcoveVideoPlayer.prototype.videoEndedInternal = function() {
     return this.isFinished_();
 };
 mirosubs.video.BrightcoveVideoPlayer.prototype.isPlayingInternal = function() {
-    return this.bcPlayerController_  && !this.bcPlayerController_["isPlaying"]();
+    return this.bcPlayerController_  && this.bcPlayerController_["isPlaying"]();
 };
 mirosubs.video.BrightcoveVideoPlayer.prototype.playInternal = function () {
     if (this.bcPlayerController_)
@@ -319,7 +316,7 @@ mirosubs.video.BrightcoveVideoPlayer.prototype.getPlayheadTime = function() {
 mirosubs.video.BrightcoveVideoPlayer.prototype.setPlayheadTime = function(playheadTime)
 {
     if (this.bcPlayerController_ ) {
-        this.bcPlayerController_['seek'](playheadTime, true);
+        this.bcPlayerController_['seek'](playheadTime);
         this.sendTimeUpdateInternal();
     }
     else
@@ -333,6 +330,10 @@ mirosubs.video.BrightcoveVideoPlayer.prototype.getPlayerState_ = function() {
 
 mirosubs.video.BrightcoveVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
+};
+
+mirosubs.video.BrightcoveVideoPlayer.prototype.isChromeless = function() {
+    return false;
 };
 
 mirosubs.video.BrightcoveVideoPlayer.prototype.getVideoSize = function() {

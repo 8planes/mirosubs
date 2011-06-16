@@ -305,6 +305,17 @@ mirosubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
 mirosubs.video.AbstractVideoPlayer.prototype.needsIFrame = function() {
     return false;
 };
+
+/**
+ * Override for video players cannot be shown chromeless or can't be easily
+ * detected (eg. brighcove player)
+ * @protected
+ * @returns {bool} If the video playe is chromeless
+ */
+mirosubs.video.AbstractVideoPlayer.prototype.isChromeless = function() {
+    return true;
+};
+
 /**
  *
  * @protected
