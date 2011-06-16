@@ -159,7 +159,7 @@ class BasePerDayStatistic(object):
         Pas
         """
         qs = self.get_query_set(**kwargs)
-        today = datetime.date.today()
+        today = datetime.datetime.today()
         yesterday  = today - datetime.timedelta(days=1)
         week_ago = today - datetime.timedelta(days=7)
         month_ago = today - datetime.timedelta(days=30)
