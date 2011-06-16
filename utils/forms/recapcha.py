@@ -39,7 +39,7 @@ class ReCaptchaField(forms.FileField):
         ip = initial
         resp = captcha.submit(data.get("recaptcha_challenge_field", None),
                               data.get("recaptcha_response_field", None),
-                              settings.RECAPTCHA_PRIVATE, ip)
+                              settings.RECAPTCHA_SECRET, ip)
         if not resp.is_valid:
             raise forms.ValidationError(self.default_error_messages.get(
                     resp.error_code, "Unknown error: %s" % (resp.error_code)))    
