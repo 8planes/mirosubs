@@ -201,6 +201,9 @@ def video(request, video_id, video_url=None, title=None):
                               context_instance=RequestContext(request))
 
 def video_list(request):
+    """
+    Depreacted should be removed
+    """
     qs = Video.objects.filter(is_subtitled=True)
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
