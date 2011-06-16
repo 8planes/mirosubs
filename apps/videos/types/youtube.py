@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
+from urlparse import urlparse
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,8 +39,12 @@ _('Undefined error')
 
 class YoutubeVideoType(VideoType):
     
-    _url_pattern = re.compile(
-        r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)')
+    _url_patterns = [re.compile(x) for x in [
+        r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)',
+        r'youtu.be/(?P<video_id>[\w-]+)',
+    ]]
+
+    HOSTNAMES = ( "youtube.com", "youtu.be", "www.youtube.com",)
 
     abbreviation = 'Y'
     name = 'Youtube' 
@@ -66,7 +71,8 @@ class YoutubeVideoType(VideoType):
     
     @classmethod
     def matches_video_url(cls, url):
-        return 'youtube.com' in url and cls._get_video_id(url)
+        hostname = urlparse(url).netloc
+        return  hostname in YoutubeVideoType.HOSTNAMES and  cls._get_video_id(url)
 
     def create_kwars(self):
         return {'videoid': self.video_id}
@@ -96,8 +102,12 @@ class YoutubeVideoType(VideoType):
     
     @classmethod    
     def _get_video_id(cls, video_url):
-        match = cls._url_pattern.search(video_url)
-        return match and match.group('video_id')
+        for pattern in cls._url_patterns:
+            match = pattern.search(video_url)
+            video_id = match and match.group('video_id')
+            if bool(video_id):
+                return video_id
+        return False    
 
     def _get_subtitles_from_youtube(self, video_obj):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
