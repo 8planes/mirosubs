@@ -62,14 +62,14 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).load_all().order_by('-featured')
+            .models(Video).order_by('-featured')
         
         return render_page(page, sqs, request=request)    
 
     @add_request_to_kwargs
     def load_latest_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).load_all().order_by('-edited')
+            .models(Video).order_by('-edited')
             
         return render_page(page, sqs, request=request)
 
@@ -85,7 +85,7 @@ class VideosApiClass(object):
         sort_field = sort_types.get(sort, 'week_views')
         
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).load_all().order_by('-%s' % sort_field)
+            .models(Video).order_by('-%s' % sort_field)
         
         return render_page(page, sqs, request=request)
     
@@ -101,7 +101,7 @@ class VideosApiClass(object):
         sort_field = sort_types.get(sort, 'week_views')
         
         popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).load_all().order_by('-%s' % sort_field)[:5]
+            .models(Video).order_by('-%s' % sort_field)[:5]
 
         context = {
             'video_list': popular_videos

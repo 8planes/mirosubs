@@ -33,7 +33,7 @@ class SearchApiClass(object):
 
         if form.is_valid():
             qs = form.search_qs(SearchQuerySet().result_class(VideoSearchResult) \
-                .models(Video).load_all())
+                .models(Video))
         else:
             qs = SearchQuerySet().none()    
         
