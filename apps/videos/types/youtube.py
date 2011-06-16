@@ -38,8 +38,10 @@ _('Undefined error')
 
 class YoutubeVideoType(VideoType):
     
-    _url_pattern = re.compile(
-        r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)')
+    _url_patterns = [re.compile(x) for x in [
+        r'youtube.com/.*?v[/=](?P<video_id>[\w-]+)',
+        r'youtu.be/(?P<video_id>[\w-]+)',
+    ]]
 
     abbreviation = 'Y'
     name = 'Youtube' 
@@ -96,8 +98,12 @@ class YoutubeVideoType(VideoType):
     
     @classmethod    
     def _get_video_id(cls, video_url):
-        match = cls._url_pattern.search(video_url)
-        return match and match.group('video_id')
+        for pattern in cls._url_patterns:
+            match = pattern.search(video_url)
+            video_id = match and match.group('video_id')
+            if bool(video_id):
+                return video_id
+        return False    
 
     def _get_subtitles_from_youtube(self, video_obj):
         from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle

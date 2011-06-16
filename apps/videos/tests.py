@@ -966,6 +966,7 @@ class YoutubeVideoTypeTest(TestCase):
             'url': 'http://www.youtube.com/watch?v=woobL2yAxD4&amp;playnext=1&amp;videos=9ikUhlPnCT0&amp;feature=featured',
             'video_id': 'woobL2yAxD4'
         }]
+        self.shorter_url = "http://youtu.be/HaAVZ2yXDBo"
     
     def test_create_kwars(self):
         vt = self.vt('http://www.youtube.com/watch?v=woobL2yAxD4')
@@ -995,6 +996,11 @@ class YoutubeVideoTypeTest(TestCase):
     def test_get_video_id(self):
         for item in self.data:
             self.failUnlessEqual(item['video_id'], self.vt._get_video_id(item['url']))
+
+    def test_shorter_format(self):
+        vt = self.vt(self.shorter_url)
+        self.assertTrue(vt)
+        self.assertEqual(vt.video_id , self.shorter_url.split("/")[-1])
     
 from videos.types.htmlfive import HtmlFiveVideoType
 
