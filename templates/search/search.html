@@ -54,8 +54,8 @@
                 $.each($form.serializeArray(), function(i, item){
                     $.address.parameter(item.name, item.value);
                 });
-                
-                $('.ajax-pagination').ajaxPaginator('refresh');
+
+                $('.ajax-pagination').ajaxPaginator('setPage', 1);
             };
             
             $form.submit(function(e){
