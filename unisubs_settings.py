@@ -40,19 +40,12 @@ if INSTALLATION == DEV:
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
     SENTRY_TESTING = True
     SOLR_ROOT = '/usr/share/'
-    CELERYD_LOG_LEVEL = 'INFO'
-    CELERY_REDIRECT_STDOUTS = True
-    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'    
-
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'
     REDIS_DB = "2"
     AWS_QUEUE_PREFIX = 'STAGING'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-    CELERYD_LOG_LEVEL = 'INFO'
-    CELERY_REDIRECT_STDOUTS = True
-    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'        
     # Tracelyzer instrumentation
     # http://support.tracelytics.com/kb/instrumenting-your-app/instrumenting-django-appsw
     try:
@@ -60,7 +53,6 @@ elif INSTALLATION == STAGING:
     except ImportError:
         import sys
         print >> sys.stderr, "[oboe] Unable to instrument app and middleware"
-
     EMAIL_SUBJECT_PREFIX = '[usubs-staging]'
 elif INSTALLATION == PRODUCTION:
     SITE_ID = 8
@@ -74,9 +66,6 @@ elif INSTALLATION == PRODUCTION:
     ADMINS = (
       ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org'),
     )
-    CELERYD_LOG_LEVEL = 'INFO'
-    CELERY_REDIRECT_STDOUTS = True
-    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'    
     
 if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     uslogging_db = {
@@ -97,6 +86,12 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     SOLR_ROOT = '/usr/share/'
 else:
     uslogging_db = {}
+
+CELERYD_LOG_LEVEL = 'INFO'
+CELERY_REDIRECT_STDOUTS = True
+CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'
+
+RECAPTCHA_PUBLIC = '6LftU8USAAAAADia-hmK1RTJyqXjFf_T5QzqLE9o'
 
 IGNORE_REDIS = True
 
