@@ -63,13 +63,19 @@ mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
     goog.asserts.assert(!this.initialized_);
     this.unitOfWork_ = unitOfWork;
     this.initialized_ = true;
-    this.timerRunning_ = true;
+    this.startTimer();
+};
+
+mirosubs.subtitle.MSServerModel.prototype.startTimer = function() {
     var that = this;
-    this.timerInterval_ = 
-    window.setInterval(function() {
-            that.timerTick_();
-        }, 
-        (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
+    if (!this.timerRunning_) {
+        this.timerRunning_ = true;
+        this.timerInterval_ = window.setInterval(
+            function() {
+                that.timerTick_();
+            }, 
+            (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
+    }
 };
 
 mirosubs.subtitle.MSServerModel.prototype.setTitle_ = function() {

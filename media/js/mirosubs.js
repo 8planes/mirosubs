@@ -361,3 +361,10 @@ mirosubs.LoginEvent = function(username) {
 mirosubs.getSubtitleHomepageURL = function(videoID) {
     return [mirosubs.siteURL(), "/videos/", videoID].join('');
 };
+
+mirosubs.createLinkButton = function($d, text, opt_className) {
+    var atts = { 'href': 'javascript:void(0);' };
+    if (opt_className)
+        atts['className'] = opt_className;
+    return $d('a', atts, text);
+};

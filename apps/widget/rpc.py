@@ -208,6 +208,14 @@ class Rpc(BaseRpc):
             video_cache.writelocked_langs_clear(language.video.video_id)
         return { "response": "ok" }
 
+    def regain_lock(self, request, draft_pk):
+        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+        if not draft.language.can_writelock(request):
+            return { 'response': 'unlockable' }
+        else:
+            draft.language.writelock(request)
+            return { 'response': 'ok' }
+
     def fork(self, request, draft_pk):
         draft = models.SubtitleDraft.objects.get(pk=draft_pk)
         if not draft.language.can_writelock(request):
