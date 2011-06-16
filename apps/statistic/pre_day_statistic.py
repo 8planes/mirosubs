@@ -168,15 +168,15 @@ class BasePerDayStatistic(object):
         #TODO: refactor this. too many queries. 
         result = dict(week=0, month=0)
         result['week'] = qs.filter(date__range=(week_ago, today)) \
-            .aggregate(s=models.Sum('count'))['s']
+            .aggregate(s=models.Sum('count'))['s'] or 0
         result['month'] = qs.filter(date__range=(month_ago, today)) \
-            .aggregate(s=models.Sum('count'))['s']
+            .aggregate(s=models.Sum('count'))['s'] or 0
         result['year'] = qs.filter(date__range=(year_ago, today)) \
-            .aggregate(s=models.Sum('count'))['s']
+            .aggregate(s=models.Sum('count'))['s'] or 0
 
-        today_views = qs.filter(date=today).aggregate(s=models.Sum('count'))['s']
-        yesterday_views = qs.filter(date=yesterday).aggregate(s=models.Sum('count'))['s']
-        result['today'] =  today_views + yesterday_views * (1 - today.hour / 24.)
+        today_views = qs.filter(date=today).aggregate(s=models.Sum('count'))['s'] or 0
+        yesterday_views = qs.filter(date=yesterday).aggregate(s=models.Sum('count'))['s'] or 0
+        result['today'] =  int(today_views + yesterday_views * (1 - today.hour / 24.))
                     
         return result
     
