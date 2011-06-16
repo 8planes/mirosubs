@@ -8,7 +8,7 @@
     {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
     <script src="{% url search:rpc_api %}" type="text/javascript"></script> 
-    <script src="{{ MEDIA_URL }}js/jquery.address-1.4.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.address-1.4.fixed.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/jquery.ajax-paginator.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(function($){
@@ -74,11 +74,12 @@
                 container: $('#main_col'),
                 onPageChange: function(page, callback, parameters){
                     parameters['page'] = page;
-                    
+
                     if (parameters['q']){
-                        $('.search-header').html('{% trans "Search Results for" %} "'+parameters['q']+'"');
-                        if ($q_input.val() != parameters['q']){
-                            $q_input.val(parameters['q']);
+                        var q = decodeURI(parameters['q']);
+                        $('.search-header').html('{% trans "Search Results for" %} "'+q+'"');
+                        if ($q_input.val() != q){
+                            $q_input.val(q);
                         }
                     };
                     

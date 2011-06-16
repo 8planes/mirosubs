@@ -25,7 +25,7 @@ from search.rpc import SearchApiClass
 from utils.rpc import RpcRouter
 from utils import render_to
 from django.http import HttpResponseRedirect
-import urllib
+from django.utils.http import urlencode
 
 rpc_router = RpcRouter('search:rpc_router', {
     'SearchApi': SearchApiClass()
@@ -34,7 +34,7 @@ rpc_router = RpcRouter('search:rpc_router', {
 @render_to('search/search.html')
 def index(request):
     if request.GET:
-        return HttpResponseRedirect('%s#/?%s' % (request.path_info, urllib.urlencode(request.GET)))
+        return HttpResponseRedirect('%s#/?%s' % (request.path_info, urlencode(request.GET)))
             
     return {
         'form': SearchForm(request, sqs=SearchQuerySet().models(Video))

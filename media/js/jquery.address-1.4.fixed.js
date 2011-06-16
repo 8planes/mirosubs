@@ -8,6 +8,7 @@
  *
  * Date: 2011-05-04 14:22:12 +0300 (Wed, 04 May 2011)
  */
+
 (function ($) {
 
     $.address = (function () {
@@ -280,6 +281,9 @@
                         });
                     }
                 }
+            },
+            _decode = function(value){
+                return unescape(value.replace('+', ' '))
             },
             UNDEFINED,
             ID = 'jQueryAddress',
@@ -590,7 +594,7 @@
                     for (i = 0; i < params.length; i++) {
                         var p = params[i].split('=');
                         if (p[0] == name) {
-                            r.push(p.slice(1).join('='));
+                            r.push(_decode(p.slice(1).join('=')));
                         }
                     }
                     if (r.length !== 0) {
