@@ -14,6 +14,10 @@
             var $current_sort = $('#popular_sort .current-sort');
             var $sort_menu = $('#sort_menu');
             
+            $('#popular_sort').click(function(){
+                return false;
+            })
+            
             $('li', $sort_menu).click(function(){
                 var $this = $(this);
                 
@@ -21,7 +25,7 @@
                 $this.hide();
                 $current_sort.html($this.html());
                 $current_sort.attr('val', $this.attr('val'));
-                $('.ajax-pagination').ajaxPaginator('refresh');
+                $('.ajax-pagination').ajaxPaginator('setPage', 1);
                 return false;
             });
             
