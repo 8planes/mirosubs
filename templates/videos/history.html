@@ -2,7 +2,7 @@
 
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor %}
+{% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor videos_tags %}
 
 {% block css %}
     {% if video.thumbnail %}
@@ -166,6 +166,9 @@
     </ul>
     <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
     {% upload_subtitles video %}
+    {% if user.is_staff and perms.videos.edit_video %}
+        {% feature_video video %}
+    {% endif %}
     {% team_add_video_select %}
   </div>
 

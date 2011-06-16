@@ -31,6 +31,7 @@ from django.template import RequestContext
 from django.conf import settings
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
+import datetime
 
 VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
 VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
@@ -44,6 +45,34 @@ class VideosApiClass(object):
         'year': 'year_views', 
         'total': 'total_views'
     }
+    
+    def unfeature_video(self, video_id, user):
+        if not user.has_perm('videos.edit_video'):
+            raise RpcExceptionEvent(_(u'You have not permission'))
+        
+        try:
+            c = Video.objects.filter(pk=video_id).update(featured=None)
+        except (ValueError, TypeError):
+            raise RpcExceptionEvent(_(u'Incorrect video ID'))
+        
+        if not c:
+            raise RpcExceptionEvent(_(u'Video does not exist'))
+        
+        return {}    
+    
+    def feature_video(self, video_id, user):
+        if not user.has_perm('videos.edit_video'):
+            raise RpcExceptionEvent(_(u'You have not permission'))
+        
+        try:
+            c = Video.objects.filter(pk=video_id).update(featured=datetime.datetime.today())
+        except (ValueError, TypeError):
+            raise RpcExceptionEvent(_(u'Incorrect video ID'))
+                
+        if not c:
+            raise RpcExceptionEvent(_(u'Video does not exist'))
+        
+        return {}
     
     def load_video_languages(self, video_id, user):
         try:
