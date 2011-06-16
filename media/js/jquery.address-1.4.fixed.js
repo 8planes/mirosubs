@@ -361,7 +361,7 @@
                 }
             },
             _decode = function(value){
-                return Url.decode(value.replace('+', ' '))
+                return Url.decode(value.replace(/\+/g, ' '))
             },
             UNDEFINED,
             ID = 'jQueryAddress',
