@@ -159,11 +159,13 @@ class BasePerDayStatistic(object):
         Pas
         """
         qs = self.get_query_set(**kwargs)
-        today = datetime.date.today()
+        today = datetime.datetime.today()
+        yesterday  = today - datetime.timedelta(days=1)
         week_ago = today - datetime.timedelta(days=7)
         month_ago = today - datetime.timedelta(days=30)
         year_ago = today - datetime.timedelta(days=365)
         
+        #TODO: refactor this. too many queries. 
         result = dict(week=0, month=0)
         result['week'] = qs.filter(date__range=(week_ago, today)) \
             .aggregate(s=models.Sum('count'))['s']
@@ -171,6 +173,10 @@ class BasePerDayStatistic(object):
             .aggregate(s=models.Sum('count'))['s']
         result['year'] = qs.filter(date__range=(year_ago, today)) \
             .aggregate(s=models.Sum('count'))['s']
+
+        today_views = qs.filter(date=today).aggregate(s=models.Sum('count'))['s']
+        yesterday_views = qs.filter(date=yesterday).aggregate(s=models.Sum('count'))['s']
+        result['today'] =  today_views + yesterday_views * (1 - today.hour / 24.)
                     
         return result
     
