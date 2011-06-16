@@ -25,6 +25,15 @@
 #feedback_form div {
   margin: 2px;
 }
+
+#recaptcha_table {
+   background: transparent;
+}
+
+div.recaptcha-field #recaptcha_widget_div {
+   width: 318px;
+   margin: 0 auto;
+}
     
 #feedback_form p.error_list {
   color: #ff0000;
