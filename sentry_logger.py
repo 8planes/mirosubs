@@ -22,7 +22,7 @@ from sentry.client.handlers import SentryHandler
 logger = logging.getLogger()
 # ensure we havent already registered the handler
 if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
-    logger.addHandler(SentryHandler('WARNING'))
+    logger.addHandler(SentryHandler(logging.WARNING))
     
     # Add StreamHandler to sentry's default so you can catch missed exceptions
     logger = logging.getLogger('sentry.errors')

@@ -1359,6 +1359,7 @@ class TestRpc(TestCase):
         self.assertEquals(title, language.title)
 
     def test_youtube_ei_failure(self):
+        import sentry_logger
         from utils.requestfactory import RequestFactory
         rf = RequestFactory()
         request = rf.get("/")
