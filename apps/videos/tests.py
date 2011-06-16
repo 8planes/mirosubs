@@ -992,6 +992,7 @@ class YoutubeVideoTypeTest(TestCase):
             self.assertFalse(self.vt.matches_video_url(''))
             self.assertFalse(self.vt.matches_video_url('http://youtube.com/'))
             self.assertFalse(self.vt.matches_video_url('http://youtube.com/some-video/'))
+            self.assertTrue(self.vt.matches_video_url(self.shorter_url))
     
     def test_get_video_id(self):
         for item in self.data:
