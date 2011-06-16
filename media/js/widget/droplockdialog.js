@@ -146,7 +146,7 @@ mirosubs.widget.droplockdialog.Dialog.prototype.createLockDroppedDom_ = function
     var p = $d("p", null, "Since you were idle for " +
                this.toMinutes( this.secondsUntilWarning_) 
                + " minutes, we've closed your subtitling session so that other users can work on this video.\n\n" +
-               "If there was work you don't want to loose, ");
+               "If there was work you don't want to lose, ");
     
     this.downloadWorkButton_ = $d("a", "inline-download-subs", "download subtitles here.");
     goog.dom.setProperties(this.downloadWorkButton_, {"href":"#"});
