@@ -282,7 +282,7 @@ def rpc(request, method_name, null=False):
     except TypeError:
         result = {'error': 'Incorrect number of arguments'}
     
-    user_message = result.pop("_user_message", None)
+    user_message = result and result.pop("_user_message", None)
     response = HttpResponse(json.dumps(result), "application/json")
     if user_message is not None:
         response.set_cookie( "_user_message", user_message["body"], max_age=6, path="/")
