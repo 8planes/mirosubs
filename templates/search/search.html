@@ -88,6 +88,7 @@
                     };
                     
                     SearchApi.search(parameters, function(data){
+                        $('.loading-indicator').remove();
                         $('.search-page').show();
                         callback.call(this, data);
                     }, this);
@@ -111,7 +112,11 @@
             {% endif %}
         </h2>
     </div><!-- // hd -->
-    
+    <div class="bd clearfix loading-indicator">
+        <div style="text-align: center; padding: 75px">
+            <img align="absmiddle" width="256" height1="30" src="{{ MEDIA_URL }}/images/ajax-loader.gif"/>
+        </div>        
+    </div>
     <div class="bd clearfix search-page" {% if not result_list %}style="display: none"{% endif %}>
         {% include 'search/_search_filter.html' %}
         <div id="main_col">
