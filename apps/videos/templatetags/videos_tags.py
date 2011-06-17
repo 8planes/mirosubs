@@ -40,11 +40,11 @@ def is_follower(obj, user):
 @register.simple_tag
 def write_video_type_js(video):
     if not video or not bool(video.get_video_url()):
-        return ""
+        return 
     try:
         vt = video_type_registrar.video_type_for_url(video.get_video_url())
         if hasattr(vt, "js_url"):
             return '<script type="text/javascript" src="%s"><script/>' % vt.js_url
     except VideoTypeError:    
-        return "" 
+        return  
     
