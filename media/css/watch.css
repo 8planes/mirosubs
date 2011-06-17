@@ -389,7 +389,6 @@ body#watch_results #watch_search {
 body#watch_results #sidebar {
 	width: 175px;
 	float: left;
-	border-right: 1px #cad1d4 solid;
 }
 
 body#watch_results #sidebar h2 {
@@ -444,6 +443,7 @@ body#watch_results #sidebar ul li.active a:hover {
 body#watch_results #main_col {
 	width: 764px;
 	float: left;
+	border-left: 1px #cad1d4 solid;
 }
 
 body#watch_results .pages {
