@@ -16,38 +16,40 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.db import models
+import logging
+logger = logging.getLogger("videos-models")
+
 import string
 import random
-from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
+import time
+
+from django.utils.safestring import mark_safe
+from django.core.cache import cache
+from django.db import models
 from django.db.models.signals import post_save
 from django.db.models import Q
 from django.db import IntegrityError
 from django.utils.dateformat import format as date_format
-from gdata.youtube.service import YouTubeService
-from comments.models import Comment
-from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from videos.types import video_type_registrar
-from statistic import st_sub_fetch_handler, st_video_view_handler, st_widget_view_statistic
-from widget import video_cache
-from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
-from utils.amazon import S3EnabledImageField
 from django.utils.http import urlquote_plus, urlquote
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
-import time
-from django.utils.safestring import mark_safe
-from django.core.cache import cache
+
+from gdata.youtube.service import YouTubeService
+
+from auth.models import CustomUser as User, Awards
+from videos import EffectiveSubtitle, MAX_SUB_TIME, UNSYNCED_MARKER, is_synced, is_synced_value
+from videos.types import video_type_registrar
 from videos.feed_parser import FeedParser
-import logging
+from comments.models import Comment
+from statistic import st_sub_fetch_handler, st_video_view_handler, st_widget_view_statistic
+from widget import video_cache
+from utils.redis_utils import RedisSimpleField
+from utils.amazon import S3EnabledImageField
 
-logger = logging.getLogger("videos-models")
-
-        
 yt_service = YouTubeService()
 yt_service.ssl = False
 
