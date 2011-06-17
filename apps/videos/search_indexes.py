@@ -88,11 +88,12 @@ class VideoIndex(CelerySearchIndex):
     
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
+        
         langs = obj.subtitlelanguage_set.exclude(language=u'')
         self.prepared_data['video_language'] = obj.language
         #TODO: converting should be in Field
         self.prepared_data['video_language'] = obj.language and u'%s%s' % (obj.language, SUFFIX) or u''
-        self.prepared_data['languages'] = [u'%s%s' % (lang.language, SUFFIX) for lang in langs if lang.latest_subtitles()]
+        self.prepared_data['languages'] = [u'%s%s' % (lang.language, SUFFIX) for lang in langs if lang.subtitle_count]
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()
         self.prepared_data['activity_count'] = obj.action_set.count()
         self.prepared_data['week_views'] = obj.views['week']
