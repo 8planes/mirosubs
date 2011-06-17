@@ -331,3 +331,10 @@
   </div>
 {% endblock %}
 
+{% block bottom_scripts %}
+<script>
+  $(window).load(function(){
+    mirosubs.messaging.simplemessage.displayPendingMessages();
+  });
+</script>
+{% endblock %}

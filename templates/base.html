@@ -190,10 +190,6 @@
       {% endblock %}
 
 <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
-<script>
-  $(window).load(function(){
-    mirosubs.messaging.simplemessage.displayPendingMessages();
-  });
-</script>
+{% block bottom_scripts %}{% endblock %}
 </body>
 </html>
