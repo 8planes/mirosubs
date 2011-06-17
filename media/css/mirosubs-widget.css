@@ -3130,3 +3130,30 @@ border: 1px solid !important;
   margin: 7px 0 0 0;
 }
 
+.mirosubs-request-div{
+  width: 420px;
+}
+
+.mirosubs-request-langs{
+  margin: 0 0 10px;
+}
+
+.mirosubs-request-div select{
+  margin: 5px 10px;
+}
+
+#mirosubs-request-track{
+  float:left;
+  margin-left: 10px;
+}
+
+label[for="mirosubs-request-track"]{
+  float:left;
+  margin: 3px 0 0;
+}
+
+#mirosubs-request-description{
+  float:right;
+  width: 200px;
+  margin: 0 10px 10px;
+}

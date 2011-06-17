@@ -21,11 +21,13 @@ goog.provide('mirosubs.requestdialog.Model');
 /**
  * @constructor
  * @param {Object} json from widget rpc
+ * @param {string} videoID
  */
-mirosubs.requestdialog.Model = function(json) {
+mirosubs.requestdialog.Model = function(json, videoId) {
     /**
      * @type {Array.<string>} Array of langauge codes
      */
+    this.videoID_ = videoId;
     this.myLanguages_ = json['my_languages'];
     this.allLanguages_ = json['all_languages'];
     this.requestLanguages_ = [];
@@ -37,14 +39,18 @@ mirosubs.requestdialog.Model = function(json) {
         this.myLanguages_, function(l) {
             return !!mirosubs.languageNameForCode(l);
         });
-    this.allLanguages_ = goog.array.filter(
-         this.allLanguages_, function(l) {
-            return !!mirosubs.languageNameForCode(l);
-        });
 };
 
 mirosubs.requestdialog.Model.prototype.addRequestLanguage = function(language){
     this.requestLanguages_.push(language);
+};
+
+mirosubs.requestdialog.Model.prototype.getMyLanguages = function(){
+    return this.myLanguages_;
+};
+
+mirosubs.requestdialog.Model.prototype.getAllLanguages = function(){
+    return this.allLanguages_;
 };
 
 mirosubs.requestdialog.Model.prototype.getRequestLanguages = function(){
@@ -55,14 +61,15 @@ mirosubs.requestdialog.Model.prototype.setDescription = function(description){
     this.description_ = description;
 };
 
-mirosubs.requestdialog.Model.prototype.unsetTracking = function(){
-    this.track_ = false;
+mirosubs.requestdialog.Model.prototype.setTrackRequests = function(track){
+    this.track_ = track;
 };
 
 mirosubs.requestdialog.Model.prototype.submitRequest = function(){
     mirosubs.Rpc.call(
             'submit_subtitle_request',
             {
+                'video_id':this.videoID_,
                 'request_languages':this.requestLanguages_,
                 'track_request':this.track_,
                 'description':this.description_
