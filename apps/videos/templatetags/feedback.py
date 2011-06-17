@@ -11,7 +11,10 @@ def feedback_form():
     
 @register.inclusion_tag('videos/_error_feedback_form.html')
 def error_feedback_form(error):
+    form = FeedbackForm(auto_id="feedback_%s", label_suffix="", initial={
+        'error': error
+    }, hide_captcha=True)
     return {
-        'form': FeedbackForm(auto_id="feedback_%s", label_suffix=""),
+        'form': form,
         'error': error
     }

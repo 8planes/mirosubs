@@ -498,8 +498,14 @@ class AddFromFeedForm(forms.Form, AjaxForm):
 class FeedbackForm(forms.Form):
     email = forms.EmailField(required=False)
     message = forms.CharField(widget=forms.Textarea())
-    error = forms.CharField(required=False)
+    error = forms.CharField(required=False, widget=forms.HiddenInput)
     captcha = ReCaptchaField(label=_(u'captcha'))
+    
+    def __init__(self, *args, **kwargs):
+        hide_captcha = kwargs.pop('hide_captcha', False)
+        super(FeedbackForm, self).__init__(*args, **kwargs)
+        if hide_captcha:
+            del self.fields['captcha']
     
     def send(self, request):
         email = self.cleaned_data['email']

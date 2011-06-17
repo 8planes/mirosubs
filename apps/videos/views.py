@@ -274,9 +274,10 @@ def upload_transcription_file(request):
         output['errors'] = form.get_errors()
     return HttpResponse(u'<textarea>%s</textarea>'  % json.dumps(output))
 
-def feedback(request):
+def feedback(request, hide_captcha=False):
     output = dict(success=False)
-    form = FeedbackForm(request.POST, initial={'captcha': request.META['REMOTE_ADDR']})
+    form = FeedbackForm(request.POST, initial={'captcha': request.META['REMOTE_ADDR']}, 
+                        hide_captcha=hide_captcha)
     if form.is_valid():
         form.send(request)
         output['success'] = True

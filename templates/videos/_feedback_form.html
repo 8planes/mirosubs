@@ -2,7 +2,7 @@
    
     <div style="{% if not error %}display: none{% endif %}" class="feedback-form-container" id="feedback_container">
         <div class="feedback_bg">
-            <form method="post" action="{% url videos:feedback %}" id="feedback_form">
+            <form method="post" action="{% block action %}{% url videos:feedback %}{% endblock %}" id="feedback_form">
             {% csrf_token %}
                 <h2>
                     {% block form_title %}
@@ -62,7 +62,9 @@
         $('#feedback_form').ajaxForm({
             dataType: 'json',
             success: function(data, status, xhr, $form){
-                Recaptcha.reload();
+                if (typeof Recaptcha !== 'undefined'){
+                    Recaptcha.reload();
+                }
                 if (data.success){
                     $form.resetForm();
                     $form.parent().hide().next().show();

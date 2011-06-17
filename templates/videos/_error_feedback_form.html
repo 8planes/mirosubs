@@ -10,6 +10,8 @@
     {% endif %}
 {% endblock %}
 
+{% block action %}{% url videos:feedback_error %}{% endblock %}
+
 {% block hidden_fields %}
-    <input type="hidden" name="error" value="{{ error }}"/>
+    {{ form.error }}
 {% endblock %}
