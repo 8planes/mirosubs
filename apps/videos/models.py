@@ -41,7 +41,7 @@ from django.core.urlresolvers import reverse
 from gdata.youtube.service import YouTubeService
 
 from auth.models import CustomUser as User, Awards
-from videos import EffectiveSubtitle, MAX_SUB_TIME, UNSYNCED_MARKER, is_synced, is_synced_value
+from videos import EffectiveSubtitle
 from videos.types import video_type_registrar
 from videos.feed_parser import FeedParser
 from comments.models import Comment
