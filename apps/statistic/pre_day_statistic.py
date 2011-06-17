@@ -19,6 +19,7 @@
 from django.db import models
 from utils.redis_utils import RedisKey
 import datetime
+import time
 
 class BasePerDayStatisticModel(models.Model):
     """
@@ -180,34 +181,59 @@ class BasePerDayStatistic(object):
                     
         return result
     
+    def post_migrate(self, updated_objects, updated_keys):
+        """
+        This method is executed after migration to DB
+        """
+        pass
+
+    def pre_migrate(self):
+        """
+        This method is executed after migration to DB
+        """
+        pass
+    
     def migrate(self, verbosity=1):
         """
         Migrate information from Redis to DB
         """
+        self.pre_migrate()
+        
         count = self.set_key.scard()
         
         i = count 
         
+        updated_keys = []
+        updated_objects = []
+        
         while i:
-            if verbosity >= 2:
-                print '  >>> migrate key: ', i
+            if verbosity >= 2 and (count - i) % 100 == 0:
+                print '  >>> migrate key: %s of %s' % ((count - i), count)
                  
             i -= 1
             key = self.set_key.spop()
             if not key:
                 break
             
+            updated_keys.append(key)
+            
             obj = self.get_object(key)
             if obj:
                 try:
                     value = int(self.connection.getset(key, 0))
-                    obj.count += value
-                    obj.save()
+                    
+                    obj.__class__._default_manager.filter(pk=obj.pk) \
+                        .update(count=models.F('count')+value)
+
                     self.update_total(key, obj, value)
+
+                    updated_objects.append(obj)
                 except (TypeError, ValueError):
                     pass
                 self.connection.delete(key)
-        
+
+        self.post_migrate(updated_objects, updated_keys)
+
         return count
         
     def update(self, **kwargs):

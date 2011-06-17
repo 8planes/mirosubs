@@ -20,6 +20,7 @@ from utils.redis_utils import default_connection, RedisKey
 from statistic.pre_day_statistic import BasePerDayStatistic
 from statistic.models import SubtitleFetchCounters, VideoViewCounter, WidgetViewCounter
 from django.db.models import F
+import time
 
 class VideoViewStatistic(BasePerDayStatistic):
     """
@@ -60,7 +61,6 @@ class VideoViewStatistic(BasePerDayStatistic):
     def update_total(self, key, obj, value):
         video = obj.video
         video.__class__.objects.filter(pk=video.pk).update(view_count=F('view_count')+value)
-        video.update_search_index()
         
 st_video_view_handler = VideoViewStatistic()
 
@@ -87,10 +87,22 @@ class WidgetViewStatistic(VideoViewStatistic):
         return '%s:%s:%s' % (self.prefix, video_id, self.date_format(date))
 
     def update_total(self, key, obj, value):
-        video = obj.video
-        video.__class__.objects.filter(pk=video.pk).update(widget_views_count=F('widget_views_count')+value)
-        video.update_search_index()
+        from videos.models import Video
         
+        qs = Video.objects.filter(pk=obj.video_id) \
+            .update(widget_views_count=F('widget_views_count')+value)
+        
+        #from django.db import connection, transaction
+        #cursor = connection.cursor()
+        #cursor.execute("UPDATE `videos_video` SET `widget_views_count` = `videos_video`.`widget_views_count` + %s WHERE `videos_video`.`id` = %s", [value, obj.video_id])
+
+        
+    def post_migrate(self, updated_objects, updated_keys):
+        from utils.celery_search_index import update_search_index_for_qs
+        from videos.models import Video
+        
+        update_search_index_for_qs.delay(Video, [item.video_id for item in updated_objects])
+            
 st_widget_view_statistic = WidgetViewStatistic()
 
 class SubtitleFetchStatistic(BasePerDayStatistic):
@@ -146,6 +158,5 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
     def update_total(self, key, obj, value):
         video = obj.video
         video.__class__.objects.filter(pk=video.pk).update(view_count=F('subtitles_fetched_count')+value)
-        video.update_search_index()
         
 st_sub_fetch_handler = SubtitleFetchStatistic()

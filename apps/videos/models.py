@@ -134,7 +134,7 @@ class Video(models.Model):
             views_st = cache.get(cache_key)
             
             if not views_st:
-                views_st = st_video_view_handler.get_views(video=self)
+                views_st = st_widget_view_statistic.get_views(video=self)
                 views_st['total'] = self.view_count
                 cache.set(cache_key, views_st, 60*60*2)
                 

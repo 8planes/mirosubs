@@ -57,3 +57,15 @@ def update_search_index(model_class, pk):
         return None
 
     search_index.update_object(obj)
+
+@task()    
+def update_search_index_for_qs(model_class, pks):
+    qs = model_class._default_manager.filter(pk__in=pks)
+
+    try:
+        search_index = site.get_index(model_class)
+    except NotRegistered:
+        log(u'Seacrh index is not registered for %s' % model_class)
+        return None
+    
+    search_index.backend.update(search_index, qs)
