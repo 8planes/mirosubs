@@ -66,7 +66,7 @@ ul.user_service_menu li a {
 /*
 section_secondary
 =========================================*/
-#add_subtitles {
+#index_add_subtitles {
   width: 980px;
   height: 405px;
   margin: 25px auto;
@@ -75,7 +75,7 @@ section_secondary
 	background: url(../images/interface/bg_secondary_section.png) no-repeat;
 }
 
-#add_subtitles h2 {
+#index_add_subtitles h2 {
   color: #fff;
   text-align: center;
   font-size: 16px;
@@ -84,34 +84,34 @@ section_secondary
 	text-shadow: 0 0 0;
 }
 
-#add_subtitles form {
+#index_add_subtitles form {
 	width: 900px;
 	margin: 35px auto;
 }
 
-#add_subtitles form fieldset {
+#index_add_subtitles form fieldset {
 	float: left;
 	width: 350px;
 	margin: 10px;
 }
 
-#add_subtitles form fieldset#submit_video {
+#index_add_subtitles form fieldset#submit_video {
 	margin: 10px 60px 10px 10px;
 }
 
-#add_subtitles form fieldset#submit_video span.caption {
+#index_add_subtitles form fieldset#submit_video span.caption {
 	width: 300px;
 	display: block;
 }
 
-#add_subtitles form fieldset label {
+#index_add_subtitles form fieldset label {
 	display: block;
 	font-size: 14px;
 	font-weight: bold;
 	margin: 0 0 10px 0;
 }
 
-#add_subtitles form fieldset input {
+#index_add_subtitles form fieldset input {
 	width: 350px;
 	background: #FFF;
 	-webkit-border-radius: 5px;
@@ -123,15 +123,15 @@ section_secondary
 	padding: 10px;
 }
 
-#add_subtitles form fieldset#any_video input {
+#index_add_subtitles form fieldset#any_video input {
 	cursor: text;
 }
 
-#add_subtitles form fieldset span.caption {
+#index_add_subtitles form fieldset span.caption {
 	color: #afcbc8;
 }
 
-#add_subtitles form fieldset button.green_button {
+#index_add_subtitles form fieldset button.green_button {
 	float: right !important;
 	display: block;
 	-webkit-border-radius: 5px;
@@ -142,18 +142,18 @@ section_secondary
 	right: 0px;
 }
 
-#add_subtitles h4 {
+#index_add_subtitles h4 {
 	font-weight: bold;
 	font-size: 16px;
 	margin: 85px 0 0 20px !important;
 }
 
-#add_subtitles div#video_sites {
+#index_add_subtitles div#video_sites {
 	margin: 30px 0 0 20px;
 	position: relative;
 }
 
-#add_subtitles div#video_sites img#example_video {
+#index_add_subtitles div#video_sites img#example_video {
 	float: right;
 	position: absolute;
 	right: 50px;
