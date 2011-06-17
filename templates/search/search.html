@@ -16,7 +16,7 @@
             $('#sidebar a').click(function(){
                 var $this = $(this);
 
-                if ($this.attr('name') && $this.attr('value')){
+                if ($this.attr('name') && $this.attr('value') !== undefined){
                     $this.parents('ul').find('li.active').removeClass('active');
                     $this.parents('li').addClass('active');
                     
