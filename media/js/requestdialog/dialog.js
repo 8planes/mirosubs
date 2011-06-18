@@ -34,6 +34,7 @@ mirosubs.requestdialog.Dialog = function(videoID) {
     this.trackRequestLabel_ = 'Keep me posted';
     this.descriptionInitial_ = 'I am requesting these subtitles because...';
     this.emptyWarning_ = 'Please select at least one language.';
+    this.submitError_ = 'An error occured in submitting the request.';
 };
 goog.inherits(mirosubs.requestdialog.Dialog, goog.ui.Dialog);
 
@@ -158,10 +159,21 @@ mirosubs.requestdialog.Dialog.prototype.okClicked_ = function(e) {
         if (description != this.descriptionInitial_){
             this.model_.setDescription(description);
         }
-        this.model_.submitRequest();
+        this.model_.submitRequest(goog.bind(this.requestCallback_,
+                                  this));
     }
     else{
         goog.dom.setTextContent(this.warningElem_, this.emptyWarning_);
+        goog.style.showElement(this.warningElem_, true);
+    }
+};
+
+mirosubs.requestdialog.Dialog.prototype.requestCallback_ = function(jsonResult) {
+    if (jsonResult["status"]){
+        this.setVisible(false);
+    }
+    else{
+        goog.dom.setTextContent(this.warningElem_, this.submitError_);
         goog.style.showElement(this.warningElem_, true);
     }
 };

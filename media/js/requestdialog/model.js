@@ -65,7 +65,7 @@ mirosubs.requestdialog.Model.prototype.setTrackRequests = function(track){
     this.track_ = track;
 };
 
-mirosubs.requestdialog.Model.prototype.submitRequest = function(){
+mirosubs.requestdialog.Model.prototype.submitRequest = function(callback){
     mirosubs.Rpc.call(
             'submit_subtitle_request',
             {
@@ -74,12 +74,5 @@ mirosubs.requestdialog.Model.prototype.submitRequest = function(){
                 'track_request':this.track_,
                 'description':this.description_
             },
-            goog.bind(this.responseReceived_, this));
-};
-
-mirosubs.requestdialog.Model.prototype.responseReceived_ = function(jsonResult) {
-    if (jsonResult['status']){
-        return true;
-    }
-    return false;
+            goog.bind(callback, this));
 };
