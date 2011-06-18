@@ -6,6 +6,14 @@
                   'post_to_fb', 'status=0,width=560,height=320');
       return false;
   }
+
+  // Select all text when embed code is clicked
+  $(document).ready(function() {
+     // .focus is not properly working with chrome so using .click
+     $(".mirosubs-embed textarea").click(function(){
+        this.select();
+     });
+  });
 </script>
 <div class="mirosubs-share">
   
@@ -25,7 +33,7 @@
   
   <h3>{% trans 'Embed this video in your site' %} <a class="embed_options_link" target="embedoptions" href="https://github.com/8planes/mirosubs/wiki/Embed-Code-Usage-Guide">options</a></h3>
   <p class="mirosubs-embed">
-    <textarea>{{share_panel_embed_code}}</textarea>
+    <textarea readonly="readonly">{{share_panel_embed_code}}</textarea>
     <span>
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
             width="110"
