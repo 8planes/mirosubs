@@ -23,26 +23,53 @@ from django.template import RequestContext, TemplateDoesNotExist
 from django.conf import settings
 from django.http import Http404
 from apps.videos.models import Video
+from apps.videos.views import _widget_params
 
 class ExtraContextHelpers(object):
 
+    def for_boingboing_regular(type=None, request=None):
+        videos = Video.objects.filter(languages_count__gt=1).filter(videourl__type='Y')[:30]
+        for v in videos:
+            if  type != "embed":
+                v.url = v.get_video_url().replace('watch?v=', 'v/')
+            elif type and type == 'embed':
+                v.widget_params = _widget_params(request, v, version_no=None, language= v.subtitlelanguage_set.all()[0])
+                v.url = v.get_video_url()
 
-    def for_many_videos_widgetizer(widgetized=True):
+        return {
+            "videos": videos,
+            "type": type,
+                
+        }
+    
+    def for_boingboing_widgetizer(request):
+        return ExtraContextHelpers.__dict__["for_boingboing_regular"] (type="widgetizer",request=request)
+
+    def for_boingboing_embed(request):
+        return ExtraContextHelpers.__dict__["for_boingboing_regular"] (type="embed", request=request)
+
+    for_boingboing_widgetizer.template_name = for_boingboing_embed.template_name = "boingboing_regular"
+
+    
+        
+    def for_many_videos_widgetizer(request=None, type=None):
         videos = Video.objects.filter(languages_count__gt=1).filter(videourl__type='Y')[:40]
         urls = [];
         for v in videos:
-            if widgetized:
+            if type and type =='widgetizer':
                 urls.append(v.get_video_url().replace('watch?v=', 'v/') )
+                
             else:
                 urls.append(v.get_video_url())
 
         return {
-            "urls": urls
+            "urls": urls,
+            "type": type,
                 
         }
 
     def for_many_videos():
-        return ExtraContextHelpers.__dict__["for_many_videos_widgetizer"] (True)
+        return ExtraContextHelpers.__dict__["for_many_videos_widgetizer"] (type="widetizer")
     
 
 def pagedemo(request, file_name):
@@ -55,7 +82,9 @@ def pagedemo(request, file_name):
         Site.objects.get_current().domain,
         settings.EMBED_JS_VERSION)
     if hasattr(ExtraContextHelpers, "for_%s" % file_name):
-        context.update( ExtraContextHelpers.__dict__[ "for_%s" % file_name]())
+        extra_ = ExtraContextHelpers.__dict__[ "for_%s" % file_name]
+        context.update( extra_(request=request))
+        file_name = getattr(extra_, "template_name", file_name)
     try:
         return render_to_response(
             'pagedemo/{0}.html'.format(file_name), 

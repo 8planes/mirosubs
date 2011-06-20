@@ -387,6 +387,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.admin',
     'django.contrib.markup',
+    'django.contrib.webdesign',
     'django_extensions',
     'profiles',
     'sorl.thumbnail',
