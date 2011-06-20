@@ -1,20 +1,4 @@
 {% load i18n videos_tags %}
-<script type="text/javascript">
-  function share_on_facebook(event) {
-      jQuery.get('{% url statistic:fb_update_share_statistic %}');
-      window.open('{{share_panel_facebook_url}}',
-                  'post_to_fb', 'status=0,width=560,height=320');
-      return false;
-  }
-
-  // Select all text when embed code is clicked
-  $(document).ready(function() {
-     // .focus is not properly working with chrome so using .click
-     $(".mirosubs-embed textarea").click(function(){
-        this.select();
-     });
-  });
-</script>
 <div class="mirosubs-share">
   
   <img src="{{MEDIA_URL}}images/blue_triangle.png" class="mirosubs-blueTriangle" />
@@ -65,7 +49,23 @@
   <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
 </div>
 <script type="text/javascript">
+
+</script>
+
+<script type="text/javascript">
     jQuery('.mirosubs-share .mirosubs-twitter-share').click(function(){
         jQuery.get('{% url statistic:tw_update_share_statistic %}');
+    });
+    function share_on_facebook(event) {
+        jQuery.get('{% url statistic:fb_update_share_statistic %}');
+        window.open('{{share_panel_facebook_url}}',
+                'post_to_fb', 'status=0,width=560,height=320');
+        return false;
+    }
+
+    // Select all text when embed code is clicked
+    // .focus is not properly working with chrome so using .click
+    $(".mirosubs-embed textarea").click(function(){
+        this.select();
     });
 </script>
