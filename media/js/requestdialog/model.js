@@ -24,11 +24,9 @@ goog.provide('mirosubs.requestdialog.Model');
  * @param {string} videoID
  */
 mirosubs.requestdialog.Model = function(json, videoId) {
-    /**
-     * @type {Array.<string>} Array of langauge codes
-     */
     this.videoID_ = videoId;
     this.myLanguages_ = json['my_languages'];
+    // A list of tuple of languages and their codes
     this.allLanguages_ = json['all_languages'];
     this.requestLanguages_ = [];
     this.track_ = true;
@@ -65,6 +63,10 @@ mirosubs.requestdialog.Model.prototype.setTrackRequests = function(track){
     this.track_ = track;
 };
 
+/**
+ * Post the request through rpc according to the current state of
+ * "Request" object
+ */
 mirosubs.requestdialog.Model.prototype.submitRequest = function(callback){
     mirosubs.Rpc.call(
             'submit_subtitle_request',

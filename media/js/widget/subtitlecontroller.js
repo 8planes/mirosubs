@@ -86,6 +86,9 @@ mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
     );    
 };
 
+/**
+ * Corresponds to "request subtitles" in menu.
+ */
 mirosubs.widget.SubtitleController.prototype.requestSubtitles_ = function() {
     this.openRequestSubtitlesDialog();
 };
@@ -120,9 +123,12 @@ mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e)
     }
 };
 
-mirosubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog =
-    function()
+/**
+ * Opens the request subtitles dialog.
+ */
+mirosubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog = function()
 {
+    // Create a new request Dialog
     var dialog = new mirosubs.requestdialog.Dialog(this.videoID_);
     dialog.setVisible(true);
 }

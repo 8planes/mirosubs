@@ -131,9 +131,12 @@ class Rpc(BaseRpc):
     def fetch_request_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)
         my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
+
+        # List of language-code tuples
         all_languages = sorted(LANGUAGES_MAP.items())
 
         ##TODO: Filter all_languages according to already submitted requests
+        # after creation of SubtitleRequest Model
 
         return {
             'my_languages': my_languages,
