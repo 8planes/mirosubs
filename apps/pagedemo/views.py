@@ -49,7 +49,7 @@ class ExtraContextHelpers(object):
     def for_boingboing_embed(request):
         return ExtraContextHelpers.__dict__["for_boingboing_regular"] (type="embed", request=request)
 
-    for_boingboing_widgetizer.template_name = for_boingboing_embed.template_name = "boingboing_regular"
+    for_boingboing_widgetizer.template_name =  "boingboing_regular"
 
     
         

@@ -5,7 +5,8 @@
 	<title>Boing Boing TV - Boing Boing</title>
   <script type="text/javascript">
     window.usStartTime = (new Date()).getTime();
-  </script>	
+
+    </script>	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="http://tv.boingboing.net/stylesheet112010.css?r=4" type="text/css">
 	<link rel="alternate" type="application/atom+xml" title="Atom" href="http://feeds.boingboing.net/boingboing/iBag">
@@ -21,25 +22,17 @@
 
 
 {% ifequal type "widgetizer" %}
-{% if not js_use_compiled %}
-  {% include "widget/_js_base_dependencies.html" %}
-  <script>
-    goog.require('goog.debug.FancyWindow');
-  </script>
-  {% for dep in js_dependencies %}
-      <script type="text/javascript" src="{{dep|safe}}"></script>
-  {% endfor %}
-{% else %}
-  <script type="text/javascript" src="{{MEDIA_URL}}js/mirosubs-widgetizer.js"></script>
-{% endif %}
+        <script>
+          goog.require('goog.debug.FancyWindow');
+        </script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/widgetizer/widgetizerprimer.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/mirosubs-widgetizer.js"></script>
 {% endifequal %}
 
 {% ifequal type "embed" %}
      {% if not js_use_compiled %}
          {% include "widget/_js_base_dependencies.html" %}
       {% endif %}
-      {% include "widget/_js_onsite_dependencies.html" %}
-
 {% endifequal %}
 </head>
 
@@ -205,11 +198,6 @@ United States and other countries.</small></p>
 <div style="position:absolute;top:0px;left:0px;margin:0px;">
 <a href="http://www.youtube.com/subscription_center?add_user=boingboingvideo"><img src="http://tv.boingboing.net/style/followus.png"></a>
 </div>
-
-
-
-
-
 
 <script>
     jQuery(window).load(function() {
