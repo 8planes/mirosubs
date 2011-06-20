@@ -28,7 +28,8 @@ from apps.videos.views import _widget_params
 class ExtraContextHelpers(object):
 
     def for_boingboing_regular(type=None, request=None):
-        videos = Video.objects.filter(languages_count__gt=1).filter(videourl__type='Y')[:30]
+        num = request.GET.get('num_items', 30)
+        videos = Video.objects.filter(languages_count__gt=1).filter(videourl__type='Y')[:num]
         for v in videos:
             if  type != "embed":
                 v.url = v.get_video_url().replace('watch?v=', 'v/')
