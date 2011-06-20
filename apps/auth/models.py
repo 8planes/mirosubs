@@ -75,7 +75,7 @@ class CustomUser(BaseUser):
         
     def __unicode__(self):
         if not self.is_active:
-            return ugettext('Anonymous')
+            return ugettext('Retired user')
             
         if self.first_name:
             if self.last_name:
