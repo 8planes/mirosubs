@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 import datetime
 from utils.redis_utils import default_connection, RedisKey
-from statistic.pre_day_statistic import BasePerDayStatistic
+from statistic.pre_day_statistic import BasePerDayStatistic, UpdatingLogger
 from statistic.models import SubtitleFetchCounters, VideoViewCounter, WidgetViewCounter
 from django.db.models import F
 import time
@@ -67,7 +67,9 @@ st_video_view_handler = VideoViewStatistic()
 class WidgetViewStatistic(VideoViewStatistic):
     model = WidgetViewCounter
     prefix = 'st_widget_view'
-
+    log_to_redis = UpdatingLogger(default_connection, 'st_widget_view_migrations',
+                                  u'Widget views statistic')
+    
     def get_key(self, date, video=None, video_id=None):
         """
         Get get video object or video_id, to reduce DB query number in widget.rpc

@@ -18,19 +18,103 @@
 
 from django.db import models
 from utils.redis_utils import RedisKey
+from django.contrib.admin import ModelAdmin
+from django.views.generic.simple import direct_to_template
+from django.core.paginator import EmptyPage, InvalidPage, Paginator
 import datetime
 import time
+from django.views.generic.list_detail import object_list
+
+class LoggerModelAdmin(ModelAdmin):
+    logger = None
+    verbose_name = u'Redis->MySql migration statistic'
+    verbose_name_plural = u'Redis->MySql migration statistic'
+    
+    @classmethod
+    def model(cls):
+        class LoggerFakeModel(models.Model):
+            
+            class Meta:
+                managed = False
+                verbose_name = cls.verbose_name
+                verbose_name_plural = cls.verbose_name_plural
+        
+        return LoggerFakeModel
+    
+    def changelist_view(self, request, extra_context=None):
+        opts = self.model._meta
+        app_label = opts.app_label
+        title = opts.verbose_name_plural
+
+        context = {
+            'app_label': app_label,
+            'title': title
+        }
+        return object_list(request, queryset=self.logger,
+                           paginate_by=self.list_per_page,
+                           template_name='statistic/logger_model_admin.html',
+                           template_object_name='object',
+                           extra_context=context)        
+    
+    def has_change_permission(self, request, obj=None):
+        return not bool(obj)
+            
+    def has_add_permission(self, request):
+        return False
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 class UpdatingLogger(object):
+    date_format = '%Y.%m.%d..%H.%M.%S' 
     
-    def __init__(self, connection, prefix):
+    def __init__(self, connection, prefix, name):
         self.conn = connection
         self.prefix = prefix
-        self.id_key = RedisKey('%s:id' % self.prefix, self.connection)
+        self.name = name
+        self.id_key = RedisKey('%s:id' % self.prefix, self.conn)
+        self.set_key = RedisKey('%s:set' % self.prefix, self.conn)
+        
+    def save(self, date, value):
+        id = self.id_key.incr()
+        key = '%s:obj:%s' % (self.prefix, id)
+        
+        date_str = date.strftime(self.date_format)
+        self.conn.hmset(key, {'value': value, 'date': date_str})
+        self.set_key.sadd(id)
 
-    def save(self, name, value, date):
-        pass
-
+    def __getitem__(self, k):
+        """
+        Retrieves an item or slice from the set of results.
+        """
+        if not isinstance(k, slice):
+            raise TypeError
+        
+        num = k.stop - k.start
+        key = self.set_key.redis_key
+        get = ['%s:obj:*->value' % self.prefix, '%s:obj:*->date' % self.prefix]
+        return self._to_python(self.conn.sort(key, get=get, start=k.start, num=num, desc=True))
+    
+    def count(self):
+        return self.set_key.scard()
+    
+    def _get_date(self, value):
+        return datetime.datetime.strptime(value, self.date_format)
+    
+    def _clone(self):
+        return self
+    
+    def _to_python(self, result):
+        output = []
+        
+        for i in range(len(result))[::2]:
+            obj = {}
+            obj['value'] = result[i]
+            obj['date'] = self._get_date(result[i+1])
+            output.append(obj)
+            
+        return output
+        
 class BasePerDayStatisticModel(models.Model):
     """
     Base Model for saving statistic information in DB
@@ -216,6 +300,9 @@ class BasePerDayStatistic(object):
         
         updated_keys = []
         updated_objects = []
+        
+        if self.log_to_redis and count:
+            self.log_to_redis.save(datetime.datetime.now(), count)
         
         while i:
             if verbosity >= 2 and (count - i) % 100 == 0:

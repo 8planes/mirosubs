@@ -34,3 +34,12 @@ from kombu_backends.amazonsqs import SQSLoggingConnection
 LogAdmin.register('SQS usage', SQSLoggingConnection.logger_backend)
 
 admin.site.register(LogFakeModel, LogAdmin)
+
+#add logging statistic for migration data from Redis to MySQL
+from statistic.pre_day_statistic import LoggerModelAdmin
+from statistic import st_widget_view_statistic
+
+class WidgetViewsMigrateStatistic(LoggerModelAdmin):
+    logger = st_widget_view_statistic.log_to_redis
+        
+admin.site.register(WidgetViewsMigrateStatistic.model(), WidgetViewsMigrateStatistic)
