@@ -21,6 +21,16 @@ from utils.redis_utils import RedisKey
 import datetime
 import time
 
+class UpdatingLogger(object):
+    
+    def __init__(self, connection, prefix):
+        self.conn = connection
+        self.prefix = prefix
+        self.id_key = RedisKey('%s:id' % self.prefix, self.connection)
+
+    def save(self, name, value, date):
+        pass
+
 class BasePerDayStatisticModel(models.Model):
     """
     Base Model for saving statistic information in DB
@@ -84,6 +94,7 @@ class BasePerDayStatistic(object):
     connection = None   #Redis connection
     prefix = None       #keys' prefix
     model = None        #Model to save info in DB, BasePerDayStatisticModel subclass
+    log_to_redis = None
     
     def __init__(self):
         if not self.connection:
