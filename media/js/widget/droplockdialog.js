@@ -86,7 +86,7 @@ mirosubs.widget.DropLockDialog.prototype.showLockDroppedDom_ = function(e){
         $d("p", null,
            "We've closed your subtitling session so that other users can work on this video."),
         $d("p", null,
-           "If there ws work you didn't want to lose, you can ",
+           "If there was work you didn't want to lose, you can ",
            this.downloadWorkLink_, 
            "."),
         this.tryToResumeButton_,

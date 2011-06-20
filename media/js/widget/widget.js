@@ -364,7 +364,10 @@ mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
     goog.exportSymbol(
         "mirosubs.widget.Widget.getWidgetByURL",
         mirosubs.widget.Widget.getWidgetByURL);
-   goog.exportSymbol(
+    goog.exportSymbol(
+        'mirosubs.widget.fireKeySequence',
+        goog.testing.events.fireNonAsciiKeySequence);
+    goog.exportSymbol(
         "mirosubs.widget.Widget.getAllWidgets",
         mirosubs.widget.Widget.getAllWidgets);
 
