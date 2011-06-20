@@ -28,16 +28,37 @@ mirosubs.requestdialog.Dialog = function(videoID) {
     this.setDisposeOnHide(true);
     this.videoID_ = videoID;
     this.model_ = null;
-    this.leastLangMenuCount_ = 2;
     this.langMenuCount_ = 0;
-    // The string which will denote no language selected
-    this.emptyLang_ = '-------------'
-    this.trackRequestLabel_ = 'Keep me posted';
-    // The default content of request description text area
-    this.descriptionInitial_ = 'I am requesting these subtitles because...';
-    // Errors and warning which can occur in requesting subs
-    this.emptyWarning_ = 'Please select at least one language.';
-    this.submitError_ = 'An error occured in submitting the request.';
+    /**
+     * The string which will denote no language selected
+     * @const
+     * @type {string}
+     */
+    this.EMPTY_LANG_ = '-------------'
+    /**
+     * Label for tracking request checkbox
+     * @const
+     * @type {string}
+     */
+    this.TRACK_REQUEST_LABEL_ = 'Keep me posted';
+    /**
+     * The default content of request description text area
+     * @const
+     * @type {string}
+     */
+    this.DESCRIPTION_INITIAL_ = 'I am requesting these subtitles because...';
+    /**
+     * Warning to be shown when no language is selected
+     * @const
+     * @type {string}
+     */
+    this.EMPTY_WARNING_ = 'Please select at least one language.';
+    /**
+     * Error to be shown when the response from server is negetive
+     * @const
+     * @type {string}
+     */
+    this.SUBMIT_ERROR_ = 'An error occured in submitting the request.';
 };
 goog.inherits(mirosubs.requestdialog.Dialog, goog.ui.Dialog);
 
@@ -45,11 +66,10 @@ mirosubs.requestdialog.Dialog.prototype.createDom = function() {
     mirosubs.requestdialog.Dialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
-    var el = this.getElement();
-    el.appendChild(
-        $d('h3', null, 'Request subtitles'));
+    var el = this.getContentElement();
+    this.headingDiv_ = $d('h3', null, 'Request subtitles');
     this.contentDiv_ = $d('div', {'className':'mirosubs-request-div'}, "Loading...");
-    el.appendChild(this.contentDiv_);
+    goog.dom.append(el, this.headingDiv_, this.contentDiv_);
 };
 
 mirosubs.requestdialog.Dialog.prototype.enterDocument = function() {
@@ -72,7 +92,7 @@ mirosubs.requestdialog.Dialog.prototype.setVisible = function(visible) {
 mirosubs.requestdialog.Dialog.prototype.makeDropdown_ = function($d){
     var options = [];
     contents = this.model_.getAllLanguages()
-    options.push($d('option', {'value': ''}, this.emptyLang_));
+    options.push($d('option', {'value': ''}, this.EMPTY_LANG_));
     for (var i = 0; i < contents.length; i++){
          options.push($d('option', {'value': contents[i][0]}, contents[i][1]));
     }
@@ -80,14 +100,11 @@ mirosubs.requestdialog.Dialog.prototype.makeDropdown_ = function($d){
 };
 
 /**
- * Adds the dropdown to the dialog contents.
+ * Adds two dropdown to the dialog contents.
  * Each call creats two dropdowns.
  */
 mirosubs.requestdialog.Dialog.prototype.addDropdowns_ = function($d){
-    dropdowns = []
-    dropdowns.push(this.makeDropdown_($d));
-    dropdowns.push(this.makeDropdown_($d));
-    goog.dom.append(this.langDiv_, dropdowns);
+    goog.dom.append(this.langDiv_, this.makeDropdown_($d), this.makeDropdown_($d));
 };
 
 /**
@@ -97,11 +114,10 @@ mirosubs.requestdialog.Dialog.prototype.addDropdowns_ = function($d){
 mirosubs.requestdialog.Dialog.prototype.addMetaForm_ = function($d){
     this.metaDiv_ = $d('div');
     this.checkBox_ = $d('input', {'type':'checkbox', 'checked':true, 'id':'mirosubs-request-track'});
-    this.checkBoxLabel_ = $d('label', {'for':'mirosubs-request-track'}, this.trackRequestLabel_);
-    this.description_ = $d('textarea', { 'id':'mirosubs-request-description' }, this.descriptionInitial_);
-    this.metaDiv_.appendChild(this.checkBox_);
-    this.metaDiv_.appendChild(this.checkBoxLabel_);
-    this.metaDiv_.appendChild(this.description_);
+    this.checkBoxLabel_ = $d('label', {'for':'mirosubs-request-track'}, this.TRACK_REQUEST_LABEL_);
+    this.description_ = $d('textarea', { 'id':'mirosubs-request-description' }, this.DESCRIPTION_INITIAL_);
+    goog.dom.append(this.metaDiv_, this.checkBox_, this.checkBoxLabel_,
+                    this.description_);
     goog.dom.append(this.contentDiv_, this.metaDiv_);
 }
 
@@ -185,7 +201,7 @@ mirosubs.requestdialog.Dialog.prototype.okClicked_ = function(e) {
                                   this));
     }
     else{
-        goog.dom.setTextContent(this.warningElem_, this.emptyWarning_);
+        goog.dom.setTextContent(this.warningElem_, this.EMPTY_WARNING_);
         goog.style.showElement(this.warningElem_, true);
     }
 };
@@ -208,7 +224,7 @@ mirosubs.requestdialog.Dialog.prototype.requestCallback_ = function(jsonResult) 
         this.setVisible(false);
     }
     else{
-        goog.dom.setTextContent(this.warningElem_, this.submitError_);
+        goog.dom.setTextContent(this.warningElem_, this.SUBMIT_ERROR_);
         goog.style.showElement(this.warningElem_, true);
     }
 };
