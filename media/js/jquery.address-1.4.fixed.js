@@ -282,7 +282,7 @@
                 }
             },
             _decode = function(value){
-                return value
+                return value.replace(/\+/g, ' ')
             },
             UNDEFINED,
             ID = 'jQueryAddress',
