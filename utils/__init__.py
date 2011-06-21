@@ -154,11 +154,14 @@ def log_exception(exceptions, logger='root', ignore=False):
             try:
                 return func(*args, **kwargs)
             except exceptions, e:
-                #pretty hack to prevent multiple logging if few warpped functions 
+                #pretty hack to prevent multiple logging if few wrapped functions 
                 #call each other
                 if not hasattr(e, '_caught_by_selery'):
                     e._caught_by_selery = True
-                    client.create_from_exception(sys.exc_info(), logger=logger)
+                    data = {
+                        'stack': traceback.extract_stack()
+                    }
+                    client.create_from_exception(sys.exc_info() , logger=logger, data=data)
                 if not ignore:
                     raise e
             
