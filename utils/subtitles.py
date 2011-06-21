@@ -26,6 +26,10 @@ from django.utils import simplejson as json
 import re
 import htmllib
 
+# see video.models.Subtitle..start_time
+MAX_SUB_TIME = (60 * 60 * 99) -1 
+
+
 class SubtitleParserError(Exception):
     pass
     
@@ -140,7 +144,10 @@ class TtmlSubtitleParser(SubtitleParser):
         
         try:
             hour, min, sec = begin.split(':')
+            
             start = int(hour)*60*60 + int(min)*60 + float(sec)
+            if start > MAX_SUB_TIME:
+                return -1
             
             d_hour, d_min, d_sec = dur.split(':')
             end = start + int(d_hour)*60*60 + int(d_min)*60 + float(d_sec)

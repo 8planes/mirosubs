@@ -46,7 +46,7 @@ mirosubs.SRTWriter.writeSrtTime_ = function(seconds, stringBuffer) {
     var secondsInt = Math.floor(seconds);
     var p = goog.string.padNumber;
     stringBuffer.
-        append(p(Math.floor(secondsInt / 3600) % 60, 2)).
+        append(p(Math.floor(secondsInt / 3600) , 2)).
         append(':').
         append(p(Math.floor(secondsInt / 60) % 60, 2)).
         append(':').

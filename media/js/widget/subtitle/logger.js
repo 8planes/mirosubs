@@ -69,7 +69,8 @@ mirosubs.subtitle.Logger.prototype.getDraftPK = function() {
 };
 
 mirosubs.subtitle.Logger.prototype.getJsonSubs = function() {
-    return this.jsonSubs_;
+     return goog.array.map(this.jsonSubs_,
+                    mirosubs.subtitle.EditableCaption.adjustUndefinedTiming );
 };
 
 mirosubs.subtitle.Logger.prototype.setJsonSubs = function(subs) {
