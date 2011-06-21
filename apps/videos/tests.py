@@ -494,7 +494,45 @@ class UploadSubtitlesTest(WebUseTest):
         pts = video.subtitlelanguage_set.filter(language='pt')
         self.assertEqual(pts.count(), 1)
         self.assertEqual(len(pt_forked.latest_subtitles()), pt_count)
-              
+
+    def test_upload_file_with_unsynced(self):
+        self._login()
+        data = self._make_data()
+        data = self._make_altered_data(subs_filename="subs-with-unsynced.srt")
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        language = self.video.subtitlelanguage_set.get(language='ru')
+        subs = Subtitle.objects.filter(version=language.version())
+        num_subs = len(subs)
+        
+        num_unsynced = len(Subtitle.objects.unsynced().filter(version=language.version()))
+
+                                       
+        self.assertEquals(82, num_subs)
+        self.assertEquals(26 ,num_unsynced)
+
+    def test_upload_from_failed_session(self):
+        self._login()
+
+        data = self._make_data( video_pk=self.video.pk, lang='ru')
+
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+        
+        data = self._make_altered_data(video=self.video, language_code='ru', subs_filename='subs-from-fail-session.srt')
+
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+
+        language = self.video.subtitlelanguage_set.get(language='ru')
+        subs = Subtitle.objects.filter(version=language.version())
+
+        num_subs = len(subs)
+        num_unsynced = len(Subtitle.objects.unsynced().filter(version=language.version()))
+        self.assertEquals(10, num_subs)
+        self.assertEquals(2 , num_unsynced)
+        
+
 
 class Html5ParseTest(TestCase):
     def _assert(self, start_url, end_url):
@@ -730,10 +768,6 @@ class ViewsTest(WebUseTest):
         blip.video_file_url = old_video_file_url
         # this test passes if the following line executes without throwing an error.
         Video.get_or_create_for_url(VIDEO_FILE)
-    
-    def test_upload_transcription_file(self):
-        #TODO: write tests
-        pass
     
     def test_legacy_history(self):
         #TODO: write tests
@@ -1524,6 +1558,7 @@ class TestModelsSaving(TestCase):
         from videos.tasks import video_changed_tasks
         video_changed_tasks.delay(self.video.pk)
         self.video = Video.objects.get(pk=self.video.pk)
+        print [x for x in self.language.version().subtitle_set.all()]
         self.assertNotEqual(self.video.complete_date, None)
         
         self.language.is_complete = False
@@ -1701,4 +1736,5 @@ def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         if latest_version is not None:
             for s in latest_version.subtitle_set.all():
                 s.duplicate_for(v).save()
-        return translation
+        return translation         
+                              
