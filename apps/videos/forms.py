@@ -286,9 +286,6 @@ class SubtitlesUploadBaseForm(forms.Form):
         language.video.save()
         translations = video.subtitlelanguage_set.filter(standard_language=language)
         [t.fork(from_version=old_version, user=self.user) for t in translations]
-        video_changed_tasks.delay(
-            video.id, 
-            None if version is None else version.id)
         return language
 
     def get_errors(self):
@@ -346,7 +343,7 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
             # confusing from a UI point of view
             sl.had_version = sl.has_version = True
         sl.save()
-        video_changed_tasks.delay(sl.video.id, sl.latest_version().id)
+        video_changed_tasks.delay(sl.video_id, sl.latest_version().id)
         return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):
@@ -358,6 +355,7 @@ class PasteTranscriptionForm(SubtitlesUploadBaseForm):
         language = self.save_subtitles(parser)
         if language.is_original:
             language.video.subtitlelanguage_set.exclude(pk=language.pk).update(is_forked=True)
+        video_changed_tasks.delay(language.video_id, language.latest_version().id)
         return language
     
 class UserTestResultForm(forms.ModelForm):

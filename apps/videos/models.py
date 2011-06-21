@@ -427,7 +427,7 @@ class Video(models.Model):
         self.writelock_time = None
 
     def notification_list(self, exclude=None):
-        qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
+        qs = self.followers.filter(changes_notification=True, is_active=True)
         if exclude:
             if not isinstance(exclude, (list, tuple)):
                 exclude = [exclude]
