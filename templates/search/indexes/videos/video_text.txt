@@ -7,6 +7,7 @@
     {{ item.url }}
 {% endfor %}
 {% for lang in object.subtitlelanguage_set.all %}
+    {% if lang.title %}{{ lang.title }}{% endif %}
     {{ lang.language_display }}
     {% for item in lang.latest_subtitles %}
         {{ item.text }}
