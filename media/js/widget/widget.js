@@ -334,6 +334,12 @@ mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
             goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI);
 };
 
+mirosubs.widget.Widget.exportFireKeySequence = function() {
+    goog.exportSymbol(
+        'mirosubs.widget.fireKeySequence',
+        goog.testing.events.fireNonAsciiKeySequence);
+};
+
 /*
  * @param {bool} isCrossDomain Is is a cross domain embed?
  */
@@ -361,12 +367,11 @@ mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
         "selectMenuItem",
         mirosubs.widget.Widget.prototype.selectMenuItem);
 
+    mirosubs.widget.Widget.exportFireKeySequence();
+
     goog.exportSymbol(
         "mirosubs.widget.Widget.getWidgetByURL",
         mirosubs.widget.Widget.getWidgetByURL);
-    goog.exportSymbol(
-        'mirosubs.widget.fireKeySequence',
-        goog.testing.events.fireNonAsciiKeySequence);
     goog.exportSymbol(
         "mirosubs.widget.Widget.getAllWidgets",
         mirosubs.widget.Widget.getAllWidgets);
