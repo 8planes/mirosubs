@@ -42,8 +42,8 @@
                 <tbody>
                     {% for obj in object_list %}
                     <tr class="{% cycle 'row1' 'row2' %}">
-                        <td>{{ obj.date }}</td>
-                        <td>{{ obj.value }}</td>
+                        <td>{{ obj.date|date:"DATETIME_FORMAT" }}</td>
+                        <td>{{ obj.num }}</td>
                         <td>{{ obj.time }}</td>
                     </tr>
                     {% endfor %}
