@@ -36,14 +36,15 @@ def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, ei
     
 #task_failure.connect(task_failure_handler)
 
-def setup_logging_handler(*args, **kwargs):
+def setup_logging_handler(sender, *args, **kwargs):
     """
     Init sentry logger handler
     """
     import logging
     from sentry.client.handlers import SentryHandler
+
+    logger = sender.logger
     
-    logger = logging.getLogger('celery')
     if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
         logger.addHandler(SentryHandler(logging.ERROR))
         
@@ -71,6 +72,9 @@ def add(a, b):
 @task
 def raise_exception(msg, **kwargs):
     print "TEST TASK FOR CELERY. RAISE EXCEPTION WITH MESSAGE: %s" % msg
+    logger = raise_exception.get_logger()
+    logger.error('Test error logging to Sentry from Celery')
+
     raise TypeError(msg)
 
 @task()

@@ -26,25 +26,32 @@ from django.core import mail
 from apps.messages.models import Message
 
 class MessageTest(TestCase):
-     fixtures = ["messages.json"]
 
-     def setUp(self):
-         self.author = User.objects.get(username="author")
-         self.subject = "Let's talk"
-         self.body = "Will you please help me out with Portuguese trans?"
+    def setUp(self):
+        self.author = User.objects.all()[:1].get()
+        self.subject = "Let's talk"
+        self.body = "Will you please help me out with Portuguese trans?"
+        self.user = User.objects.exclude(pk=self.author.pk)[:1].get()
          
-     def _create_message(self, to_user):
-         self.message = Message(user=to_user,
+    def _create_message(self, to_user):
+        self.message = Message(user=to_user,
                            author=self.author,
                            subject=self.subject,
                            content=self.body)
-         self.message.save()
+        self.message.save()
 
-     def test_send_email_to_allowed_user(self):
-         self._create_message(User.objects.get(username='optin_user'))
-         email = mail.outbox[0]
-         self.assertTrue(email)
+    def test_send_email_to_allowed_user(self):
+        self.user.changes_notification = True
+        self.user.save()
+        assert self.user.is_active and self.user.email
+        
+        self._create_message(self.user)
+        self.assertEqual(len(mail.outbox), 1)
 
-     def test_send_email_to_optout_user(self):
-         self._create_message(User.objects.get(username='optout_user'))
-         self.assertEquals(len(mail.outbox), 0)
+    def test_send_email_to_optout_user(self):
+        self.user.changes_notification = False
+        self.user.save()
+        assert self.user.is_active and self.user.email
+                
+        self._create_message(self.user)
+        self.assertEquals(len(mail.outbox), 0)

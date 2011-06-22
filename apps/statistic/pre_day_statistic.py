@@ -75,12 +75,11 @@ class UpdatingLogger(object):
         self.id_key = RedisKey('%s:id' % self.prefix, self.conn)
         self.set_key = RedisKey('%s:set' % self.prefix, self.conn)
         
-    def save(self, date, value):
+    def save(self, date, value, t):
         id = self.id_key.incr()
         key = '%s:obj:%s' % (self.prefix, id)
-        
         date_str = date.strftime(self.date_format)
-        self.conn.hmset(key, {'value': value, 'date': date_str})
+        self.conn.hmset(key, {'value': value, 'date': date_str, 'time': t})
         self.set_key.sadd(id)
 
     def __getitem__(self, k):
@@ -92,7 +91,8 @@ class UpdatingLogger(object):
         
         num = k.stop - k.start
         key = self.set_key.redis_key
-        get = ['%s:obj:*->value' % self.prefix, '%s:obj:*->date' % self.prefix]
+        p = self.prefix
+        get = ['%s:obj:*->value' % p, '%s:obj:*->date' % p, '%s:obj:*->time' % p]
         return self._to_python(self.conn.sort(key, get=get, start=k.start, num=num, desc=True))
     
     def count(self):
@@ -107,10 +107,11 @@ class UpdatingLogger(object):
     def _to_python(self, result):
         output = []
         
-        for i in range(len(result))[::2]:
+        for i in range(len(result))[::3]:
             obj = {}
             obj['value'] = result[i]
             obj['date'] = self._get_date(result[i+1])
+            obj['time'] = result[i+2]
             output.append(obj)
             
         return output
@@ -292,6 +293,8 @@ class BasePerDayStatistic(object):
         """
         Migrate information from Redis to DB
         """
+        start = time.time()
+        
         self.pre_migrate()
         
         count = self.set_key.scard()
@@ -300,9 +303,6 @@ class BasePerDayStatistic(object):
         
         updated_keys = []
         updated_objects = []
-        
-        if self.log_to_redis and count:
-            self.log_to_redis.save(datetime.datetime.now(), count)
         
         while i:
             if verbosity >= 2 and (count - i) % 100 == 0:
@@ -331,6 +331,9 @@ class BasePerDayStatistic(object):
                 self.connection.delete(key)
 
         self.post_migrate(updated_objects, updated_keys)
+
+        if self.log_to_redis and count:
+            self.log_to_redis.save(datetime.datetime.now(), count, time.time()-start)
 
         return count
         

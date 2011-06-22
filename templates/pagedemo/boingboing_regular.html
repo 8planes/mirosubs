@@ -85,7 +85,7 @@
     {"base_state": {}, "video_url": "{{video.url}}"}
 )</script>
 {% else %}
-    <object width="960px" height="571px"><param name="movie" value="{{video.url}}?fs=1&amp;hl=en_US&enablejsapi=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="{{video.url}}?enablejsapi=1&fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="100%" height="100%"></embed></object> 
+    <object width="960px" height="571px"><param name="movie" value="{{video.url}}?fs=1&amp;hl=en_US&enablejsapi=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="{{video.url}}?enablejsapi=1&fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="100%" height="100%" wmode="transparent"></embed></object> 
 
 {% endifequal %}
 </div>

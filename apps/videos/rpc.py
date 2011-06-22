@@ -31,6 +31,7 @@ from django.template import RequestContext
 from django.conf import settings
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
+from utils.celery_search_index import update_search_index
 import datetime
 
 VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
@@ -157,6 +158,7 @@ class VideosApiClass(object):
         if not sl.standard_language_id:
             sl.title = title
             sl.save()
+            update_search_index.delay(Video, sl.video_id)
             return Msg(_(u'Title was changed success'))
         else:
             return Error(_(u'This is not forked translation'))
