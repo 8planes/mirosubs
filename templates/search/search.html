@@ -80,7 +80,7 @@
                     parameters['page'] = page;
 
                     if (parameters['q']){
-                        var q = decodeURI(parameters['q']);
+                        var q = parameters['q'];
                         $('.search-header').html('{% trans "Search Results for" %} "'+q+'"');
                         if ($q_input.val() != q){
                             $q_input.val(q);
