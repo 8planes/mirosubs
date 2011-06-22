@@ -247,7 +247,7 @@ def update_solr_schema():
                     python_exe, 
                     'production' if env.installation_name is None else 'staging'))
             sudo('service tomcat6 restart')
-            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
+            run('yes y | {0} manage.py rebuild_index --verbosity=2 --settings=unisubs_settings'.format(python_exe))
     else:
         # dev
         env.host_string = DEV_HOST
@@ -258,7 +258,7 @@ def update_solr_schema():
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
             sudo('service tomcat6 restart')
-            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
+            run('yes y | {0} manage.py rebuild_index --verbosity=2 --settings=unisubs_settings'.format(python_exe))
 
 def _bounce_celeryd():
     if env.admin_dir:
