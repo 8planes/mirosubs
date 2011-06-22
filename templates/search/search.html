@@ -34,6 +34,9 @@
             var parameterNames = $.address.parameterNames();
             for (var i = 0, l = parameterNames.length; i < l; i++) {
                 var name = parameterNames[i];
+                if (name === 'q'){
+                    continue
+                }
                 var value = $.address.parameter(name);
                 
                 var $link = $('#sidebar a[name='+name+'][value='+value+']');
@@ -81,7 +84,7 @@
 
                     if (parameters['q']){
                         var q = parameters['q'];
-                        $('.search-header').html('{% trans "Search Results for" %} "'+q+'"');
+                        $('.search-header').html('{% trans "Search Results for" %} '+q);
                         if ($q_input.val() != q){
                             $q_input.val(q);
                         }
@@ -105,7 +108,7 @@
         <h2 class="search-header">
             {% if result_list %}
             {% blocktrans %}
-                Search Results for "{{ query }}"
+                Search Results for {{ query }}
             {% endblocktrans %}
             {% else %}
                 {% trans "Search Videos" %}
