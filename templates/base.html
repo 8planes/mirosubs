@@ -135,7 +135,7 @@
   </div><!-- // bar_search -->
   <ul id="bar_menu" class="clearfix">
     <li id="nav_submit"><a href="{% url videos:create %}"><em class="icon"></em> {% trans 'Create' %}</a></li>
-    <li><a href="{% url videos:list %}">{% trans 'Watch' %}</a></li>
+    <li><a href="{% url search:index %}?q=%20">{% trans 'Watch' %}</a></li>
     {% comment %}
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Contribute' %}</a></li>
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Solutions' %}</a></li>

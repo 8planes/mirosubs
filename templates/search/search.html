@@ -84,7 +84,11 @@
 
                     if (parameters['q']){
                         var q = parameters['q'];
-                        $('.search-header').html('{% trans "Search Results for" %} '+q);
+                        if (q === ' '){
+                            $('.search-header').html('{% trans "Search Videos" %}');
+                        }else{
+                            $('.search-header').html('{% trans "Search Results for" %} '+q);
+                        }
                         if ($q_input.val() != q){
                             $q_input.val(q);
                         }
