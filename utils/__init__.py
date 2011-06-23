@@ -166,18 +166,19 @@ def log_exception(exceptions, logger='root', ignore=False):
                 #wrapped function, but you always can use ignore=False
                 while frame:
                     if frame.f_code.co_name == func_name and frame.f_code.co_filename == file_name:
+                        if not hasattr(e, '_traceback'):
+                            e._traceback = exec_info[2]
                         raise e
                         
                     frame = frame.f_back
                     
-                #pretty hack to prevent multiple logging if few wrapped functions 
-                #call each other
-                if not hasattr(e, '_caught_by_selery'):
-                    e._caught_by_selery = True
-                    data = {
-                        'stack': traceback.extract_stack()
-                    }
-                    client.create_from_exception(exec_info, logger=logger, data=data)
+                data = {
+                    'stack': traceback.extract_stack()
+                }
+                if hasattr(e, '_traceback'):
+                    exec_info = exec_info[0], exec_info[1], e._traceback
+
+                client.create_from_exception(exec_info, logger=logger, data=data)
                 if not ignore:
                     raise e
             
