@@ -13,7 +13,7 @@ class ModelSet(Set):
     def __init__(self, model_class):
         self.model_class = model_class
         self.key = model_class._key['all']
-        self._db = redisco.get_client()
+        self._db = model_class.get_conn() or redisco.get_client()
         self._filters = {}
         self._exclusions = {}
         self._zfilters = []
