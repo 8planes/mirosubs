@@ -296,8 +296,12 @@ class Model(object):
     @property
     def db(cls):
         """Returns the Redis client used by the model."""
-        return redisco.get_client()
-
+        return cls.get_conn() or redisco.get_client()
+    
+    @classmethod
+    def get_conn(cls):
+        return cls._meta['db']
+    
     @property
     def errors(self):
         """Returns the list of errors after validation."""
