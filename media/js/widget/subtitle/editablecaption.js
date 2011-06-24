@@ -58,6 +58,11 @@ mirosubs.subtitle.EditableCaption.orderCompare = function(a, b) {
 mirosubs.subtitle.EditableCaption.TIME_UNDEFINED = -1;
 mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER = (100 * 60 * 60) -1;
 
+mirosubs.subtitle.EditableCaption.isTimeUndefined = function(v){
+    return !goog.isDefAndNotNull(v) || 
+        v == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
+        v == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER || false;
+}
 mirosubs.subtitle.EditableCaption.CHANGE = 'captionchanged';
 
 /**
