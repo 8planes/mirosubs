@@ -16,8 +16,11 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+import time
+
 from django.http import HttpResponse, Http404, HttpResponseServerError
 from django.shortcuts import render_to_response, redirect
+from django.utils.http import cookie_date
 from django.contrib.sites.models import Site
 from django.template import RequestContext
 from videos import models
@@ -285,7 +288,7 @@ def rpc(request, method_name, null=False):
     user_message = result and result.pop("_user_message", None)
     response = HttpResponse(json.dumps(result), "application/json")
     if user_message is not None:
-        response.set_cookie( "_user_message", user_message["body"], max_age=6, path="/")
+        response.set_cookie( "_user_message", user_message["body"], expires= cookie_date(time.time() +6), path="/")
     return response
 
 @csrf_exempt
