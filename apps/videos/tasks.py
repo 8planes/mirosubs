@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
 from celery.signals import task_failure, worker_ready
 from haystack import site
-from videos.models import VideoFeed
+from videos.models import VideoFeed, SubtitleLanguage
 from sentry.client.models import client
 from celery.decorators import periodic_task
 from celery.schedules import crontab
@@ -36,14 +36,15 @@ def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, ei
     
 #task_failure.connect(task_failure_handler)
 
-def setup_logging_handler(*args, **kwargs):
+def setup_logging_handler(sender, *args, **kwargs):
     """
     Init sentry logger handler
     """
     import logging
     from sentry.client.handlers import SentryHandler
+
+    logger = sender.logger
     
-    logger = logging.getLogger('celery')
     if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
         logger.addHandler(SentryHandler(logging.ERROR))
         
@@ -52,6 +53,14 @@ def setup_logging_handler(*args, **kwargs):
         logger.addHandler(logging.StreamHandler())        
 
 worker_ready.connect(setup_logging_handler)
+
+@task
+def update_subtitles_fetched_counter_for_sl(sl_pk):
+    try:
+        sl = SubtitleLanguage.objects.get(pk=sl_pk)
+        sl.subtitles_fetched_counter.incr()
+    except (SubtitleLanguage.DoesNotExist, ValueError):
+        return
 
 @task
 def update_video_feed(video_feed_id):
@@ -71,6 +80,9 @@ def add(a, b):
 @task
 def raise_exception(msg, **kwargs):
     print "TEST TASK FOR CELERY. RAISE EXCEPTION WITH MESSAGE: %s" % msg
+    logger = raise_exception.get_logger()
+    logger.error('Test error logging to Sentry from Celery')
+
     raise TypeError(msg)
 
 @task()

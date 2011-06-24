@@ -80,8 +80,7 @@ mirosubs.timeline.TimelineInner.prototype.setTime = function(time, offset, maxTi
     var newLeft = -time * this.pixelsPerSecond_;
     this.left_ = newLeft;
     mirosubs.style.setPosition(this.getElement(), newLeft + offset, null);
-    window.timeline_time = this.time_;
-    this.ensureVisible(this.time_);
+    this.ensureVisible(time);
 };
 mirosubs.timeline.TimelineInner.prototype.beforeDrag = function(e) {
     return this.timeline_.beforeDrag(e);

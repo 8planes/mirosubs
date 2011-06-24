@@ -17,7 +17,7 @@ class LogConnection(Redis):
     __log_exceptions_logger_name = 'redis'
     __log_exceptions_ignore = True
     
-default_connection = LogConnection(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
+default_connection = LogConnection(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, socket_timeout=5)
 
 class RedisCounterField(Exception):
     pass

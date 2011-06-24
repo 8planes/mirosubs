@@ -32,7 +32,7 @@ from django.utils.translation import ugettext as _
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
 from utils import send_templated_email
-from statistic import st_widget_view_statistic
+from statistic.tasks import st_widget_view_statistic_update
 import logging
 yt_logger = logging.getLogger("youtube-ei-error")
 
@@ -99,7 +99,7 @@ class Rpc(BaseRpc):
             for url in additional_video_urls:
                 video_cache.associate_extra_url(url, video_id)
 
-        st_widget_view_statistic.update(video_id=video_id)
+        st_widget_view_statistic_update.delay(video_id=video_id)
         
         add_general_settings(request, return_value)
         if request.user.is_authenticated():

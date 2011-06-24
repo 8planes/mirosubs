@@ -16,7 +16,7 @@ def send_new_message_notification(message_id):
     
     user = message.user
     
-    if not user.email or not user.is_active or not user.new_message_notification:
+    if not user.email or not user.is_active or not user.changes_notification:
         return
 
     to = "%s <%s>" % (user, user.email)

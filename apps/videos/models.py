@@ -41,11 +41,12 @@ from django.core.urlresolvers import reverse
 from gdata.youtube.service import YouTubeService
 
 from auth.models import CustomUser as User, Awards
-from videos import EffectiveSubtitle
+from videos import EffectiveSubtitle, is_synced, is_synced_value
 from videos.types import video_type_registrar
 from videos.feed_parser import FeedParser
 from comments.models import Comment
-from statistic import st_sub_fetch_handler, st_video_view_handler, st_widget_view_statistic
+from statistic import st_widget_view_statistic
+from statistic.tasks import st_sub_fetch_handler_update, st_video_view_handler_update
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
 from utils.amazon import S3EnabledImageField
@@ -172,12 +173,14 @@ class Video(models.Model):
         return title
     
     def update_view_counter(self):
-        st_video_view_handler.update(video=self)
+        st_video_view_handler_update.delay(video_id=self.video_id)
     
     def update_subtitles_fetched(self, lang=None):
-        st_sub_fetch_handler.update(video=self, sl=lang)
+        st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
+        
         if lang:
-            lang.subtitles_fetched_counter.incr()
+            from videos.tasks import update_subtitles_fetched_counter_for_sl
+            update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
         
     def get_thumbnail(self):
         if self.s3_thumbnail:
@@ -489,6 +492,7 @@ models.signals.pre_delete.connect(video_delete_handler, sender=Video)
 models.signals.m2m_changed.connect(User.video_followers_change_handler, sender=Video.followers.through)
 
 class SubtitleLanguage(models.Model):
+    
     video = models.ForeignKey(Video)
     is_original = models.BooleanField()
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
@@ -545,7 +549,7 @@ class SubtitleLanguage(models.Model):
             return False
         if len([s for s in subtitles[:-1] if not s.has_complete_timing()]) > 0:
             return False
-        if subtitles[-1].start_time == -1:
+        if not is_synced_value(subtitles[-1].start_time):
             return False
         return True
 
@@ -958,6 +962,11 @@ class SubtitleDraft(SubtitleCollection):
         else:
             return request.browser_id == self.browser_id
 
+class SubtitleManager(models.Manager):
+
+    def unsynced(self):
+        return self.get_query_set().filter(start_time__isnull=True, end_time__isnull=True)
+        
 class Subtitle(models.Model):
     version = models.ForeignKey(SubtitleVersion, null=True)
     draft = models.ForeignKey(SubtitleDraft, null=True)
@@ -967,11 +976,17 @@ class Subtitle(models.Model):
     # in seconds
     start_time = models.FloatField(null=True)
     end_time = models.FloatField(null=True)
+
+    objects = SubtitleManager()
     
     class Meta:
         ordering = ['subtitle_order']
         unique_together = (('version', 'subtitle_id'), ('draft', 'subtitle_id'),)
 
+    @property
+    def is_synced(self):
+        return is_synced(self)
+    
     def duplicate_for(self, version=None, draft=None):
         return Subtitle(version=version,
                         draft=draft,
@@ -980,7 +995,7 @@ class Subtitle(models.Model):
                         subtitle_text=self.subtitle_text,
                         start_time=self.start_time,
                         end_time=self.end_time)
-
+    
     @classmethod
     def trim_list(cls, subtitles):
         first_nonblank_index = -1
@@ -1008,10 +1023,15 @@ class Subtitle(models.Model):
             if 'end_time' in caption_dict:
                 self.end_time = caption_dict['end_time']
 
+    def save(self, *args, **kwargs):
+        if not self.is_synced:
+            self.start_time = self.end_time = None
+        return super(Subtitle, self).save(*args, **kwargs)
+        
     def __unicode__(self):
         if self.pk:
-            return u"(%4s) %s %s -> %s %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
-                                          self.start_time, self.end_time, self.subtitle_text, self.version_id)
+            return u"(%4s) %s %s -> %s - syc = %s = %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
+                                          self.start_time, self.end_time, self.is_synced, self.subtitle_text, self.version_id)
     
 from django.template.loader import render_to_string
 

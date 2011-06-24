@@ -56,7 +56,13 @@ mirosubs.subtitle.EditableCaption.orderCompare = function(a, b) {
  * @type {int} 
  */
 mirosubs.subtitle.EditableCaption.TIME_UNDEFINED = -1;
+mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER = (100 * 60 * 60) -1;
 
+mirosubs.subtitle.EditableCaption.isTimeUndefined = function(v){
+    return !goog.isDefAndNotNull(v) || 
+        v == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
+        v == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER || false;
+}
 mirosubs.subtitle.EditableCaption.CHANGE = 'captionchanged';
 
 /**
@@ -123,7 +129,7 @@ mirosubs.subtitle.EditableCaption.prototype.setStartTime_ =
          this.previousCaption_.setEndTime(startTime);
 };
 mirosubs.subtitle.EditableCaption.prototype.getStartTime = function() {
-    return this.json['start_time'];
+    return this.json['start_time'] || mirosubs.subtitle.EditableCaption.TIME_UNDEFINED; 
 };
 mirosubs.subtitle.EditableCaption.prototype.setEndTime =
     function(endTime)
@@ -159,7 +165,7 @@ mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
     }
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
-    return this.json['end_time'];
+    return this.json['end_time'] || mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
 };
 mirosubs.subtitle.EditableCaption.prototype.getMinStartTime = function() {
     return this.previousCaption_ ?
@@ -214,11 +220,22 @@ mirosubs.subtitle.EditableCaption.prototype.changed_ =
         new mirosubs.subtitle.EditableCaption.ChangeEvent(
             timesFirstAssigned));
 };
+
+mirosubs.subtitle.EditableCaption.adjustUndefinedTiming = function(json) {
+    if (!json['start_time'] || json['start_time'] == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED){
+        json['start_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER;
+    }
+    if (!json['end_time'] || json['end_time'] == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED){
+        json['end_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER;
+    }
+    return json;
+};
+
 mirosubs.subtitle.EditableCaption.toJsonArray = function(editableCaptions) {
     return goog.array.map(
         editableCaptions, 
         function(editableCaption) {
-            return editableCaption.json;
+            return mirosubs.subtitle.EditableCaption.adjustUndefinedTiming(editableCaption.json);
         });
 };
 mirosubs.subtitle.EditableCaption.toIDArray = function(editableCaptions) {

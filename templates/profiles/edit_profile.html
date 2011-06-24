@@ -112,14 +112,7 @@
                   {{ form.changes_notification.errors }}
                   {{ form.changes_notification }}
                   <label for="id_changes_notification">
-                      {% trans "Notify me by email when a video I follow is edited" %}
-                  </label>
-              </p>
-              <p class="checkbox">
-                  {{ form.new_message_notification.errors }}
-                  {{ form.new_message_notification }}
-                  <label for="id_new_message_notification">
-                      {% trans "Notify me by email about new incoming personal messages" %}
+                      {% trans "Notify me by email about new personal messages and edits to the videos I follow" %}
                   </label>
               </p>
               <p class="checkbox">
@@ -157,10 +150,13 @@
                       {{ formset.empty_form.id }}
                       {{ formset.empty_form.language }}
                       {{ formset.empty_form.proficiency }}
-                      <label for="{{ formset.empty_form.follow_requests.auto_id }}">
-                          {{ formset.empty_form.follow_requests.label }}
-                      </label>
-                      {{ formset.empty_form.follow_requests }}
+                      <!--TODO: #request subtitles: Uncomment these while integrating request subtitles into the master branch-->
+                      <!--
+                         -<label for="{{ formset.empty_form.follow_requests.auto_id }}">
+                         -    {{ formset.empty_form.follow_requests.label }}
+                         -</label>
+                         -{{ formset.empty_form.follow_requests }}
+                         -->
                       <div style="display: none" class="delete-checkbox">
                           {{ form.DELETE }}
                       </div>                
@@ -178,10 +174,13 @@
                           {{ form.language }}
                           {{ form.proficiency.errors }}
                           {{ form.proficiency }}
-                          <label for="{{ form.follow_requests.auto_id }}">
-                              {{ form.follow_requests.label }}
-                          </label>
-                          {{ form.follow_requests }}
+                          <!--TODO: #request subtitles: Uncomment these while integrating request subtitles branch into the master branch-->
+                          <!--
+                             -<label for="{{ form.follow_requests.auto_id }}">
+                             -    {{ form.follow_requests.label }}
+                             -</label>
+                             -{{ form.follow_requests }}
+                             -->
                           <div style="display: none" class="delete-checkbox">
                               {{ form.DELETE }}
                           </div>
