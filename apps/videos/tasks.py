@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
 from celery.signals import task_failure, worker_ready
 from haystack import site
-from videos.models import VideoFeed
+from videos.models import VideoFeed, SubtitleLanguage
 from sentry.client.models import client
 from celery.decorators import periodic_task
 from celery.schedules import crontab
@@ -53,6 +53,14 @@ def setup_logging_handler(sender, *args, **kwargs):
         logger.addHandler(logging.StreamHandler())        
 
 worker_ready.connect(setup_logging_handler)
+
+@task
+def update_subtitles_fetched_counter_for_sl(sl_pk):
+    try:
+        sl = SubtitleLanguage.objects.get(pk=sl_pk)
+        sl.subtitles_fetched_counter.incr()
+    except (SubtitleLanguage.DoesNotExist, ValueError):
+        return
 
 @task
 def update_video_feed(video_feed_id):
