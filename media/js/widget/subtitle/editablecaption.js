@@ -129,7 +129,8 @@ mirosubs.subtitle.EditableCaption.prototype.setStartTime_ =
          this.previousCaption_.setEndTime(startTime);
 };
 mirosubs.subtitle.EditableCaption.prototype.getStartTime = function() {
-    return this.json['start_time'] || mirosubs.subtitle.EditableCaption.TIME_UNDEFINED; 
+     return mirosubs.subtitle.EditableCaption.isTimeUndefined (this.json['start_time']) ?
+           mirosubs.subtitle.EditableCaption.TIME_UNDEFINED : this.json['start_time'];
 };
 mirosubs.subtitle.EditableCaption.prototype.setEndTime =
     function(endTime)
@@ -165,7 +166,8 @@ mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
     }
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
-    return this.json['end_time'] || mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
+     return mirosubs.subtitle.EditableCaption.isTimeUndefined (this.json['end_time']) ?
+           mirosubs.subtitle.EditableCaption.TIME_UNDEFINED : this.json['end_time'];
 };
 mirosubs.subtitle.EditableCaption.prototype.getMinStartTime = function() {
     return this.previousCaption_ ?
@@ -205,8 +207,8 @@ mirosubs.subtitle.EditableCaption.prototype.hasStartTimeOnly = function() {
  * @return {boolean} True if either startTime or endTime is not defined.
  */
 mirosubs.subtitle.EditableCaption.prototype.needsSync = function() {
-    return this.getStartTime() == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
-        this.getEndTime() == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
+    return !(mirosubs.subtitle.EditableCaption.isTimeUndefined(this.getStartTime()) || 
+        mirosubs.subtitle.EditableCaption.isTimeUndefined(this.getEndTime()));
 }
 
 mirosubs.subtitle.EditableCaption.prototype.changed_ =
@@ -222,12 +224,13 @@ mirosubs.subtitle.EditableCaption.prototype.changed_ =
 };
 
 mirosubs.subtitle.EditableCaption.adjustUndefinedTiming = function(json) {
-    if (!json['start_time'] || json['start_time'] == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED){
+    
+    if (mirosubs.subtitle.EditableCaption.isTimeUndefined(json['start_time'])){
         json['start_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER;
-    }
-    if (!json['end_time'] || json['end_time'] == mirosubs.subtitle.EditableCaption.TIME_UNDEFINED){
+    } 
+    if (mirosubs.subtitle.EditableCaption.isTimeUndefined(json['end_time'])){
         json['end_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED_SERVER;
-    }
+    } 
     return json;
 };
 
