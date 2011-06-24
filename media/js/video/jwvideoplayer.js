@@ -139,6 +139,10 @@ mirosubs.video.JWVideoPlayer.prototype.needsIFrame = function() {
 mirosubs.video.JWVideoPlayer.prototype.getVideoElement = function() {
     return this.player_;
 };
+mirosubs.video.JWVideoPlayer.prototype.isPlayingInternal = function() {
+    return this.player_['getConfig']()['state'] == 
+        mirosubs.video.JWVideoPlayer.State_.PLAYING;
+};
 mirosubs.video.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
     // TODO: prob check to see if this.player_ exists yet; if not, queue the
     // command.
