@@ -96,7 +96,7 @@ mirosubs.Spinner.prototype.addAnchorEventHandlers_ = function(elem) {
 mirosubs.Spinner.prototype.updateText_ = function() {
     var displayValue = 
     mirosubs.subtitle.EditableCaption.isTimeUndefined(this.value_) ?
-         "0.0" : this.value_;
+         "" : this.value_;
     goog.dom.setTextContent(this.valueSpan_,
                             this.valueExpression_(displayValue));
 };
