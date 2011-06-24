@@ -150,10 +150,13 @@
                       {{ formset.empty_form.id }}
                       {{ formset.empty_form.language }}
                       {{ formset.empty_form.proficiency }}
-                      <label for="{{ formset.empty_form.follow_requests.auto_id }}">
-                          {{ formset.empty_form.follow_requests.label }}
-                      </label>
-                      {{ formset.empty_form.follow_requests }}
+                      <!--TODO: #request subtitles: Uncomment these while integrating request subtitles into the master branch-->
+                      <!--
+                         -<label for="{{ formset.empty_form.follow_requests.auto_id }}">
+                         -    {{ formset.empty_form.follow_requests.label }}
+                         -</label>
+                         -{{ formset.empty_form.follow_requests }}
+                         -->
                       <div style="display: none" class="delete-checkbox">
                           {{ form.DELETE }}
                       </div>                
@@ -171,10 +174,13 @@
                           {{ form.language }}
                           {{ form.proficiency.errors }}
                           {{ form.proficiency }}
-                          <label for="{{ form.follow_requests.auto_id }}">
-                              {{ form.follow_requests.label }}
-                          </label>
-                          {{ form.follow_requests }}
+                          <!--TODO: #request subtitles: Uncomment these while integrating request subtitles branch into the master branch-->
+                          <!--
+                             -<label for="{{ form.follow_requests.auto_id }}">
+                             -    {{ form.follow_requests.label }}
+                             -</label>
+                             -{{ form.follow_requests }}
+                             -->
                           <div style="display: none" class="delete-checkbox">
                               {{ form.DELETE }}
                           </div>
