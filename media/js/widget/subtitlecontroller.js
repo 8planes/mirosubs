@@ -129,6 +129,6 @@ mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e)
 mirosubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog = function()
 {
     // Create a new request Dialog
-    var dialog = new mirosubs.requestdialog.Dialog(this.videoID_);
+    var dialog = new mirosubs.RequestDialog(this.videoID_);
     dialog.setVisible(true);
 }

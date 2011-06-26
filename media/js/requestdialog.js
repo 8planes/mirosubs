@@ -16,19 +16,23 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.requestdialog.Dialog');
+goog.provide('mirosubs.RequestDialog');
 
 /**
  * @constructor
  * @param {string} videoID
  */
-mirosubs.requestdialog.Dialog = function(videoID) {
+mirosubs.RequestDialog = function(videoID) {
     goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.videoID_ = videoID;
-    this.model_ = null;
     this.langMenuCount_ = 0;
+    this.myLanguages_ = [];
+    this.allLanguages_ = [];
+    this.requestLanguages_ = [];
+    this.track_ = true;
+    this.description_ = null;
     /**
      * The string which will denote no language selected
      * @const
@@ -60,24 +64,25 @@ mirosubs.requestdialog.Dialog = function(videoID) {
      */
     this.SUBMIT_ERROR_ = 'An error occured in submitting the request.';
 };
-goog.inherits(mirosubs.requestdialog.Dialog, goog.ui.Dialog);
+goog.inherits(mirosubs.RequestDialog, goog.ui.Dialog);
 
-mirosubs.requestdialog.Dialog.prototype.createDom = function() {
-    mirosubs.requestdialog.Dialog.superClass_.createDom.call(this);
+mirosubs.RequestDialog.prototype.createDom = function() {
+    mirosubs.RequestDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
     var el = this.getContentElement();
     this.headingDiv_ = $d('h3', null, 'Request subtitles');
-    this.contentDiv_ = $d('div', {'className':'mirosubs-request-div'}, "Loading...");
+    this.loadingDiv_ = $d('p', null, 'Loading...')
+    this.contentDiv_ = $d('div', {'className':'mirosubs-request-div'}, this.loadingDiv_);
     goog.dom.append(el, this.headingDiv_, this.contentDiv_);
 };
 
-mirosubs.requestdialog.Dialog.prototype.enterDocument = function() {
-    mirosubs.requestdialog.Dialog.superClass_.enterDocument.call(this);
+mirosubs.RequestDialog.prototype.enterDocument = function() {
+    mirosubs.RequestDialog.superClass_.enterDocument.call(this);
     this.connectEvents_();
 };
 
-mirosubs.requestdialog.Dialog.prototype.setVisible = function(visible) {
+mirosubs.RequestDialog.prototype.setVisible = function(visible) {
     mirosubs.startdialog.Dialog.superClass_.setVisible.call(this, visible);
     if (visible)
         mirosubs.Rpc.call(
@@ -89,9 +94,9 @@ mirosubs.requestdialog.Dialog.prototype.setVisible = function(visible) {
 /**
  * Create a language select dropdown
  */
-mirosubs.requestdialog.Dialog.prototype.makeDropdown_ = function($d){
+mirosubs.RequestDialog.prototype.makeDropdown_ = function($d){
     var options = [];
-    contents = this.model_.getAllLanguages()
+    contents = this.allLanguages_
     options.push($d('option', {'value': ''}, this.EMPTY_LANG_));
     for (var i = 0; i < contents.length; i++){
          options.push($d('option', {'value': contents[i][0]}, contents[i][1]));
@@ -103,7 +108,7 @@ mirosubs.requestdialog.Dialog.prototype.makeDropdown_ = function($d){
  * Adds two dropdown to the dialog contents.
  * Each call creats two dropdowns.
  */
-mirosubs.requestdialog.Dialog.prototype.addDropdowns_ = function($d){
+mirosubs.RequestDialog.prototype.addDropdowns_ = function($d){
     goog.dom.append(this.langDiv_, this.makeDropdown_($d), this.makeDropdown_($d));
 };
 
@@ -111,7 +116,7 @@ mirosubs.requestdialog.Dialog.prototype.addDropdowns_ = function($d){
  * Add the rest of the fields (tracking request, description) to the
  * form.
  */
-mirosubs.requestdialog.Dialog.prototype.addMetaForm_ = function($d){
+mirosubs.RequestDialog.prototype.addMetaForm_ = function($d){
     this.metaDiv_ = $d('div');
     this.checkBox_ = $d('input', {'type':'checkbox', 'checked':true, 'id':'mirosubs-request-track'});
     this.checkBoxLabel_ = $d('label', {'for':'mirosubs-request-track'}, this.TRACK_REQUEST_LABEL_);
@@ -121,10 +126,20 @@ mirosubs.requestdialog.Dialog.prototype.addMetaForm_ = function($d){
     goog.dom.append(this.contentDiv_, this.metaDiv_);
 }
 
-mirosubs.requestdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
+mirosubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
     this.fetchCompleted_ = true;
+
+    //The data required to create the form
+    this.myLanguages_ = jsonResult['my_languages'];
+    this.allLanguages_ = jsonResult['all_languages'];
+    //Filter out duplicates from myLanguages list
+    goog.array.removeDuplicates(this.myLanguages_);
+    this.myLanguages_ = goog.array.filter(
+        this.myLanguages_, function(l) {
+            return !!mirosubs.languageNameForCode(l);
+        });
+
     // Create a Request object which will store the request relevent info.
-    this.model_ = new mirosubs.requestdialog.Model(jsonResult, this.videoID_);
     goog.dom.removeChildren(this.contentDiv_);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
@@ -158,7 +173,7 @@ mirosubs.requestdialog.Dialog.prototype.responseReceived_ = function(jsonResult)
     this.connectEvents_();
 };
 
-mirosubs.requestdialog.Dialog.prototype.connectEvents_ = function() {
+mirosubs.RequestDialog.prototype.connectEvents_ = function() {
     if (!this.isInDocument() || !this.fetchCompleted_)
         return;
     this.getHandler().
@@ -172,7 +187,7 @@ mirosubs.requestdialog.Dialog.prototype.connectEvents_ = function() {
             this.addLangClicked_);
 };
 
-mirosubs.requestdialog.Dialog.prototype.okClicked_ = function(e) {
+mirosubs.RequestDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     if (this.okHasBeenClicked_)
         goog.style.showElement(this.warningElem_, false);
@@ -184,20 +199,20 @@ mirosubs.requestdialog.Dialog.prototype.okClicked_ = function(e) {
         var e = document.getElementById('mirosubs-requestlang-' + i);
         var lang = e.options[e.selectedIndex].value
         if (lang){
-            this.model_.addRequestLanguage(lang);
+            this.requestLanguages_.push(lang);
         }
     }
 
     // Submit the request if at least one language is there
-    if (this.model_.getRequestLanguages().length > 0){
+    if (this.requestLanguages_.length > 0){
         var track = document.getElementById('mirosubs-request-track').checked;
         var description = document.getElementById('mirosubs-request-description').value;
-        this.model_.setTrackRequests(track);
+        this.track_ = track;
         if (description != this.descriptionInitial_){
-            this.model_.setDescription(description);
+            this.description_ = description;
         }
 
-        this.model_.submitRequest(goog.bind(this.requestCallback_,
+        this.submitRequest(goog.bind(this.requestCallback_,
                                   this));
     }
     else{
@@ -210,7 +225,7 @@ mirosubs.requestdialog.Dialog.prototype.okClicked_ = function(e) {
 /**
  * Add more languages to the form
  */
-mirosubs.requestdialog.Dialog.prototype.addLangClicked_ = function(e) {
+mirosubs.RequestDialog.prototype.addLangClicked_ = function(e) {
     e.preventDefault();
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
@@ -218,7 +233,7 @@ mirosubs.requestdialog.Dialog.prototype.addLangClicked_ = function(e) {
     this.reposition();
 };
 
-mirosubs.requestdialog.Dialog.prototype.requestCallback_ = function(jsonResult) {
+mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
     // If response has a key status, set to true, hide the dialog
     if (jsonResult["status"]){
         this.setVisible(false);
@@ -227,4 +242,16 @@ mirosubs.requestdialog.Dialog.prototype.requestCallback_ = function(jsonResult) 
         goog.dom.setTextContent(this.warningElem_, this.SUBMIT_ERROR_);
         goog.style.showElement(this.warningElem_, true);
     }
+};
+
+mirosubs.RequestDialog.prototype.submitRequest = function(){
+    mirosubs.Rpc.call(
+            'submit_subtitle_request',
+            {
+                'video_id':this.videoID_,
+                'request_languages':this.requestLanguages_,
+                'track_request':this.track_,
+                'description':this.description_
+            },
+            goog.bind(this.requestCallback_, this));
 };
