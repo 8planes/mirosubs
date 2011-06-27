@@ -81,7 +81,7 @@ section_secondary
   font-size: 16px;
   padding: 25px 0 0 0;
   font-weight: normal;
-	text-shadow: 0 0 0;
+	text-shadow: 0 0 0 !important;
 }
 
 #index_add_subtitles form {
