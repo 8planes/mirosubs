@@ -63,11 +63,9 @@ class SearchForm(forms.Form):
         langs = self.cleaned_data.get('langs')
         video_language = self.cleaned_data.get('video_lang')
         
-        #update filters choices
-        qs = qs.auto_query(q)
-
-        #aplly filtering
+        qs = qs.auto_query(q).filter_or(title=q)
         
+        #aplly filtering
         if video_language:
             if video_language == 'my_langs':
                 qs = qs.filter(video_language__in=self.user_langs)
