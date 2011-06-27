@@ -106,6 +106,7 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_popular_page(self, page, sort, request, user):
         sort_types = {
+            'today': 'today_views',
             'week' : 'week_views', 
             'month': 'month_views', 
             'year' : 'year_views', 
@@ -122,6 +123,7 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_popular_videos(self, sort, request, user):
         sort_types = {
+            'today': 'today_views',
             'week': 'week_views', 
             'month': 'month_views', 
             'year': 'year_views', 

@@ -81,6 +81,7 @@ class VideoIndex(CelerySearchIndex):
     activity_count = IntegerField()
     featured = DateTimeField(model_attr='featured', null=True)
     
+    today_views = IntegerField()
     week_views = IntegerField()
     month_views = IntegerField()
     year_views = IntegerField()
@@ -99,6 +100,7 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data['week_views'] = obj.views['week']
         self.prepared_data['month_views'] = obj.views['month']
         self.prepared_data['year_views'] = obj.views['year']
+        self.prepared_data['today_views'] = obj.views['today']
         return self.prepared_data
 
     def _setup_save(self, model):
