@@ -180,6 +180,16 @@ class RpcRouter(object):
             }
         
         action = self.actions[rd['action']]
+        
+        if not hasattr(action, method):
+            return {
+                'tid': rd['tid'],
+                'type': 'exception',
+                'action': rd['action'],
+                'method': method,
+                'message': 'Undefined method'
+            }
+                    
         func = getattr(action, method)
         
         args = []
