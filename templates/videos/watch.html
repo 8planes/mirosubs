@@ -19,10 +19,10 @@
 
 <div class="pod" id="featured_videos">
     <div class="hd">
-        <h2>{% trans "Featured Videos" %}</h2>
-        <a style="float: right; margin: -35px 40px 0;" href="{% url videos:featured_videos %}">
-            {% trans "more featured videos" %}
+        <a class="btn_more_videos" href="{% url videos:featured_videos %}">
+            {% trans "More Featured Videos" %}
         </a>
+        <h2>{% trans "Featured Videos" %}</h2>
     </div><!-- // hd -->
     <div class="bd">
         {% with featured_videos as video_list %}
@@ -34,6 +34,10 @@
 
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
+        <a class="btn_more_videos" href="{% url videos:popular_videos %}">
+            {% trans "More Popular Videos" %}
+        </a>
+        
         <h2>{% trans "Popular Videos" %}</h2>
         <a id="popular_sort" href="#">
             <span class="current-sort">{% trans "This Week" %}</span>
@@ -46,9 +50,7 @@
                     <li val="total">{% trans "All Time" %}</li>
                 </ul>
             </div><!-- // sort_menu -->
-            <a style="float: right; margin: 20px 40px 0;" href="{% url videos:popular_videos %}">
-                {% trans "more popular videos" %}
-            </a>             
+            
         </a>
         <script type="text/javascript">
             jQuery(function($){
@@ -88,10 +90,10 @@
 
 <div class="pod" id="latest_videos">
     <div class="hd">
+        <a class="btn_more_videos" href="{% url videos:latest_videos %}">
+            {% trans "More Recent Videos" %}
+        </a>
         <h2>{% trans "Latest Videos" %}</h2>
-        <a style="float: right; margin: -35px 40px 0;" href="{% url videos:latest_videos %}">
-            {% trans "more recent videos" %}
-        </a>        
     </div><!-- // hd -->
     <div class="bd">
         <div class="watch-page-content">
