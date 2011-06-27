@@ -158,7 +158,7 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'homepage', 'preferred_language', 
-                  'changes_notification', 'biography', 'new_message_notification', 'follow_new_video')
+                  'changes_notification', 'biography', 'follow_new_video')
         
     def clean(self):
         self.cleaned_data = super(EditUserForm, self).clean()
