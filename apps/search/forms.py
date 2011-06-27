@@ -9,6 +9,7 @@ ALL_LANGUAGES = get_simple_languages_list()
 class SearchForm(forms.Form):
     SORT_CHOICES = (
         ('languages_count', _(u'Most languages')),
+        ('today_views', _(u'Views Today')),
         ('week_views', _(u'Views This Week')),
         ('month_views', _(u'Views This Month')),
         ('total_views', _(u'Total Views')),
