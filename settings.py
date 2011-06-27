@@ -226,6 +226,7 @@ JS_CORE = ['mirosubs.js',
            'widget/unsavedwarning.js',
 
            'widget/dropdown.js',
+           'widget/requestdialog.js',
            'widget/subtitle/dialog.js',
            'widget/subtitle/msservermodel.js',
            'widget/subtitle/editablecaption.js',
