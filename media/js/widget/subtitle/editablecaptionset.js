@@ -112,6 +112,21 @@ mirosubs.subtitle.EditableCaptionSet.prototype.caption = function(index) {
 mirosubs.subtitle.EditableCaptionSet.prototype.makeJsonSubs = function() {
     return goog.array.map(this.captions_, function(c) { return c.json; });
 };
+mirosubs.subtitle.EditableCaptionSet.prototype.nonblankSubtitles = function() {
+    return goog.array.filter(
+        this.captions_, function(c) { return c.getTrimmedText() != ''; });
+};
+mirosubs.subtitle.EditableCaptionSet.prototype.identicalTo = function(otherCaptionSet) {
+    var myNonblanks = this.nonblankSubtitles();
+    var otherNonblanks = otherCaptionSet.nonblankSubtitles();
+    if (myNonblanks.length != otherNonblanks.length)
+        return false;
+    for (var i = 0; i < myNonblanks.length; i++)
+        if (!myNonblanks[i].isIdenticalTo(otherNonblanks[i]))
+            return false;
+    return true;
+};
+
 /**
  *
  * @param {Number} nextSubOrder The next subtitle's subOrder

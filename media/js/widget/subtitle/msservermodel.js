@@ -29,20 +29,32 @@ goog.provide('mirosubs.subtitle.MSServerModel');
  * @constructor
  * @implements {mirosubs.subtitle.ServerModel}
  * @extends {goog.Disposable}
- * @param {string} draftPK Universal Subtitles draft primary key
+ * @param {string} sessionPK Universal Subtitles subtitling session primary key
  * @param {string} videoID Universal Subtitles video id
  * @param {string} videoURL url for the video
+ * @param {boolean} subsComplete Are we starting with a complete set of subs?
+ * @param {mirosubs.subtitle.EditableCaptionSet} editableCaptionSet
  */
-mirosubs.subtitle.MSServerModel = function(draftPK, videoID, videoURL) {
+mirosubs.subtitle.MSServerModel = function(
+    sessionPK, videoID, videoURL, 
+    subsComplete, editableCaptionSet)
+{
     goog.Disposable.call(this);
-    this.draftPK_ = draftPK;
+    this.sessionPK_ = sessionPK;
     this.videoID_ = videoID;
     this.videoURL_ = videoURL;
+    this.subsComplete_ = subsComplete;
+    this.captionSet_ = editableCaptionSet;
     this.initialized_ = false;
     this.finished_ = false;
-    this.unsavedPackets_ = [];
-    this.packetNo_ = 1;
-    this.logger_ = new mirosubs.subtitle.Logger(draftPK);
+    this.title_ = null;
+    this.timerTickCount_ = 0;
+    this.timer_ = new goog.Timer(
+        (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
+    goog.events.listen(
+        this.timer_,
+        goog.Timer.TICK,
+        goog.bind(this.timerTick_, this));
     mirosubs.subtitle.MSServerModel.currentInstance = this;
 };
 goog.inherits(mirosubs.subtitle.MSServerModel, goog.Disposable);
@@ -59,62 +71,109 @@ mirosubs.subtitle.MSServerModel.EMBED_JS_URL = null;
 // updated by values from server when widgets load.
 mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 0;
 
-mirosubs.subtitle.MSServerModel.prototype.init = function(unitOfWork) {
+mirosubs.subtitle.MSServerModel.prototype.saveInitialSubs_ = function() {
+    var savedSubs = new mirosubs.widget.SavedSubtitles(
+        this.sessionPK_, null, this.subsComplete_, this.captionSet_);
+    mirosubs.widget.SavedSubtitles.save(0, savedSubs);
+};
+
+/**
+ * @return {?mirosubs.widget.SavedSubtitles}
+ */
+mirosubs.subtitle.MSServerModel.prototype.fetchInitialSubs_ = function() {
+    return mirosubs.widget.SavedSubtitles.fetchSaved(0);
+};
+
+mirosubs.subtitle.MSServerModel.prototype.init = function() {
     goog.asserts.assert(!this.initialized_);
-    this.unitOfWork_ = unitOfWork;
     this.initialized_ = true;
+    this.saveInitialSubs_();
     this.startTimer();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.startTimer = function() {
-    var that = this;
-    if (!this.timerRunning_) {
-        this.timerRunning_ = true;
-        this.timerInterval_ = window.setInterval(
-            function() {
-                that.timerTick_();
-            }, 
-            (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
+    this.timer_.start();
+};
+
+mirosubs.subtitle.MSServerModel.prototype.setTitle = function(title) {
+    this.title_ = title;
+};
+
+mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function(e) {
+    mirosubs.Rpc.call(
+        'regain_lock',
+        { 'session_pk': this.sessionPK_  }, 
+        function(result) {
+            if (result['response'] != 'ok') {
+                // this should never happen.
+                alert("You lost the lock on these subtitles. This " +
+                      "probably happened because your network connection disappeared for too long.");
+            }
+        },
+        function() {
+            // TODO: this means there was an error -- probably bad network connection.
+            // we should communicate this to the user, since the user is in danger
+            // of losing subtitling work.
+        });
+    this.timerTickCount_++;
+    if ((this.timerTickCount_ % 4) == 0) {
+        // for 2k subs, this takes about 20-40ms on FF and Chrome on my Macbook.
+        var savedSubs = new mirosubs.widget.SavedSubtitles(
+            this.sessionPK_, this.title_, null, this.captionSet_);
+        mirosubs.widget.SavedSubtitles.save(1, savedSubs);
     }
 };
 
-mirosubs.subtitle.MSServerModel.prototype.setTitle_ = function() {
-    var args  = {};
-    args['draft_pk'] = this.draftPK_;
-    args['value'] = this.unitOfWork_.title;
-    mirosubs.Rpc.call('set_title', args);
+mirosubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function(completed) {
+    /**
+     * @type {mirosubs.widget.SavedSubtitles}
+     */
+    var initialSubs = this.fetchInitialSubs_();
 
-};
+    var subtitles = null;
+    if (!initialSubs.CAPTION_SET.identicalto(this.captionSet_))
+        subtitles = this.captionSet_.nonblankSubtitles_();
 
-mirosubs.subtitle.MSServerModel.prototype.getSubIDPackets_ = function() {
-    return goog.array.map(
-        this.unsavedPackets_, function(p) { return p.subIDPacket; });
+    var args = { 'session_pk': this.sessionPK_ };
+    var atLeastOneThingChanged = false;
+    if (!goog.isNull(subtitles)) {
+        args['subtitles'] = subtitles;
+        atLeastOneThingChanged = true;
+    }
+    if (!goog.isNull(this.title_)) {
+        args['new_title'] = this.title_;
+        atLeastOneThingChanged = true;;
+    }
+    if (goog.isDefAndNotNull(completed) && completed != initialSubs.IS_COMPLETE) {
+        args['completed'] = completed;
+        atLeastOneThingChanged = true;
+    }
+    return atLeastOneThingChanged ? args : null;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.finish = 
-    function(jsonSubs, successCallback, failureCallback, 
+    function(successCallback, failureCallback, 
              opt_cancelCallback, opt_completed) 
 {
-    this.setTitle_();
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
     this.stopTimer();
+
     var that = this;
-    var saveArgs = this.makeSaveArgs_();
-    if (goog.isDefAndNotNull(opt_completed))
-        saveArgs['completed'] = opt_completed;
-    this.logger_.setJsonSubs(jsonSubs);
-    var subIDPackets = this.getSubIDPackets_();
+    var args = this.makeFinishArgs_(opt_completed);
+    if (goog.isNull(args)) { // no changes.
+        successCallback(); // TODO: is this the right ux?
+        return;
+    }
     mirosubs.Rpc.call(
         'finished_subtitles', 
-        saveArgs,
+        args,
         function(result) {
             if (result['response'] != 'ok') {
                 // this should never happen.
                 alert('Problem saving subtitles. Response: ' +
                       result["response"]);
-                that.logger_.logSave(subIDPackets, false, response);
-                failureCallback(that.logger_, 200);
+                failureCallback(200);
             }
             else {
                 that.finished_ = true;
@@ -122,89 +181,9 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
             }
         }, 
         function(opt_status) {
-            that.logger_.logSave(subIDPackets, false);
-            failureCallback(that.logger_, opt_status);
+            failureCallback(opt_status);
         },
         true);
-};
-
-mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function() {
-    this.forceSave();
-};
-
-mirosubs.subtitle.MSServerModel.prototype.forceSave = function(opt_callback, opt_errorCallback) {
-    var that = this;
-    var saveArgs = this.makeSaveArgs_();
-    var subIDPackets = this.getSubIDPackets_();
-
-    mirosubs.Rpc.call(
-        'save_subtitles',
-        saveArgs, 
-        function(result) {
-            if (result['response'] != 'ok') {
-                // this should never happen.
-                alert('Problem saving subtitles. Response: ' + 
-                      result['response']);
-                that.logger_.logSave(
-                    subIDPackets, false, result['response']);
-            }
-            else {
-                that.logger_.logSave(subIDPackets, true);
-                that.registerSavedPackets_(result['last_saved_packet']);
-                if (opt_callback)
-                    opt_callback();
-            }
-        },
-        function() {
-            that.logger_.logSave(subIDPackets, false);
-            if (opt_errorCallback)
-                opt_errorCallback();
-        });
-};
-
-mirosubs.subtitle.MSServerModel.prototype.registerSavedPackets_ = 
-    function(lastSavedPacketNo) 
-{
-    var saved = goog.array.filter(
-        this.unsavedPackets_,
-        function(p) { return p.packetNo <= lastSavedPacketNo; });
-    for (var i = 0; i < saved.length; i++)
-        goog.array.remove(this.unsavedPackets_, saved[i]);
-};
-
-mirosubs.subtitle.MSServerModel.prototype.makePacket_ = function(work, f) {
-    return {
-        'packet_no': this.packetNo_,
-        'deleted': f(work.deleted),
-        'inserted': f(work.inserted),
-        'updated': f(work.updated)
-    };
-};
-
-mirosubs.subtitle.MSServerModel.prototype.makeSaveArgs_ = function() {
-    var containsWork = this.unitOfWork_.containsWork();
-    var work = this.unitOfWork_.getWork();
-    this.unitOfWork_.clear();
-    if (containsWork) {
-        var packet = this.makePacket_(
-            work, mirosubs.subtitle.EditableCaption.toJsonArray);
-        var subIDPacket = this.makePacket_(
-            work, mirosubs.subtitle.EditableCaption.toIDArray);
-        this.packetNo_++;
-        this.unsavedPackets_.push({
-            packetNo: this.packetNo_,
-            packet: packet,
-            subIDPacket: subIDPacket
-        });
-    }
-    var args = {
-        'draft_pk': this.draftPK_,
-        'packets': goog.array.map(
-            this.unsavedPackets_, function(p) { return p.packet; })
-    };
-    if (window['UNISUBS_THROW_EXCEPTION'])
-        args['throw_exception'] = true;
-    return args;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {
@@ -221,14 +200,13 @@ mirosubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.stopTimer = function() {
-    if (this.timerRunning_) {
-        window.clearInterval(this.timerInterval_);
-        this.timerRunning_ = false;
-    }
+    this.timer_.stop();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.disposeInternal = function() {
+    mirosubs.subtitle.MSServerModel.superClass_.disposeInternal.call(this);
     this.stopTimer();
+    this.timer_.dispose();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.currentUsername = function() {
@@ -247,10 +225,6 @@ mirosubs.subtitle.MSServerModel.prototype.getVideoID = function() {
     return this.videoID_;
 };
 
-mirosubs.subtitle.MSServerModel.prototype.getDraftPK = function() {
-    return this.draftPK_;
+mirosubs.subtitle.MSServerModel.prototype.getSessionPK = function() {
+    return this.sessionPK_;
 };
-
-mirosubs.subtitle.MSServerModel.prototype.getLogger = function() {
-    return this.logger_;
-}

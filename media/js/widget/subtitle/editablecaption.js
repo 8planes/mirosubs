@@ -89,6 +89,13 @@ mirosubs.subtitle.EditableCaption.prototype.setNextCaption =
 mirosubs.subtitle.EditableCaption.prototype.getNextCaption = function() {
     return this.nextCaption_;
 };
+mirosubs.subtitle.EditableCaption.prototype.identicalTo = function(other) {
+    return this.getSubOrder() == other.getSubOrder() &&
+        this.getTrimmedText() == other.getTrimmedText() &&
+        this.getStartTime() == other.getStartTime() &&
+        this.getEndTime() == other.getEndTime() &&
+        this.getCaptionID() == other.getCaptionID();
+};
 mirosubs.subtitle.EditableCaption.prototype.getSubOrder = function() {
     return this.json['sub_order'];
 };
@@ -98,6 +105,9 @@ mirosubs.subtitle.EditableCaption.prototype.setText = function(text, opt_dontTra
 };
 mirosubs.subtitle.EditableCaption.prototype.getText = function() {
     return this.json['text'];
+};
+mirosubs.subtitle.EditableCaption.prototype.getTrimmedText = function() {
+    return goog.string.trim(this.json['text']);
 };
 mirosubs.subtitle.EditableCaption.prototype.setStartTime =
     function(startTime)

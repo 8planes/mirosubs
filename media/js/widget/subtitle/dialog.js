@@ -266,9 +266,9 @@ mirosubs.subtitle.Dialog.prototype.isWorkSaved = function() {
 };
 
 mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
-    if (this.captionSet_.needsSync()){
+    if (this.captionSet_.needsSync()) {
         this.saveWorkImpl_(closeAfterSave, false);
-    }else{
+    } else {
         mirosubs.subtitle.CompletedDialog.show(
             !!this.subtitles_.IS_COMPLETE,
             goog.bind(this.saveWorkImpl_, this, 

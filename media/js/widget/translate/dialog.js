@@ -141,34 +141,6 @@ mirosubs.translate.Dialog.prototype.getSubtitleLanguage = function(){
     return this.subtitleState_.LANGUAGE;
 };
 
-/**
- * @param {function()} saveCompleted
- */
-mirosubs.translate.Dialog.prototype.forkAndClose = function(saveCompleted) {
-    this.serverModel_.forceSave(
-        goog.bind(this.offerForking_, this, saveCompleted),
-        saveCompleted);
-};
-mirosubs.translate.Dialog.prototype.offerForking_ = function(saveCompleted) {
-    saveCompleted();
-    var dialog = new mirosubs.translate.ForkDialog(
-        this.serverModel_.getDraftPK(),
-        this.subtitleState_.LANGUAGE,
-        goog.bind(this.forkImpl_, this));
-    dialog.setVisible(true);
-};
-mirosubs.translate.Dialog.prototype.forkImpl_ = function(subtitleState) {
-    var oldReturnURL = mirosubs.returnURL;
-    mirosubs.returnURL = null;
-    this.saved_ = true;
-    this.setVisible(false);
-    mirosubs.returnURL = oldReturnURL;
-    var that = this;
-    this.opener_.openForkedTranslationDialog(
-        this.serverModel_.getDraftPK(),
-        subtitleState);
-};
-
 mirosubs.translate.Dialog.prototype.getServerModel = function(){
     return this.serverModel_;
 }
