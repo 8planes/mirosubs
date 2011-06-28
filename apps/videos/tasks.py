@@ -283,12 +283,11 @@ def _send_letter_caption(caption_version):
 
     users = []
 
-    video_followers = video.notification_list(caption_version.user)
-    language_followers = language.notification_list(caption_version.user)
-
+    followers = set(video.notification_list(caption_version.user))
+    followers.update(language.notification_list(caption_version.user))
+    
     for item in qs:
-        if item.user and not item.user in users and (item.user in video_followers or \
-            item.user in language_followers):
+        if item.user and item.user in followers:
             context['your_version'] = item
             context['user'] = item.user
             context['hash'] = item.user.hash_for_video(context['video'].video_id)
@@ -296,4 +295,11 @@ def _send_letter_caption(caption_version):
                                  'videos/email_notification.html',
                                  context, fail_silently=not settings.DEBUG)
 
-        users.append(item.user)              
+            followers.discard(item.user)
+    
+    for user in followers:
+        context['user'] = user
+        context['hash'] = user.hash_for_video(context['video'].video_id)
+        send_templated_email(user.email, subject, 
+                             'videos/email_notification_non_editors.html',
+                             context, fail_silently=not settings.DEBUG)        
