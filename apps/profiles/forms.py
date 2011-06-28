@@ -78,7 +78,7 @@ class UserLanguagelineFormSet(BaseInlineFormSet):
 
     def _construct_form(self, i, **kwargs):
         try:
-            return super(UserLanguagelineFormSet, self). _construct_form(i, **kwargs)
+            return super(UserLanguagelineFormSet, self)._construct_form(i, **kwargs)
         except (IndexError, ValueError):
             return BaseFormSet._construct_form(self, i, **kwargs)
 
