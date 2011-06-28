@@ -76,6 +76,27 @@
                 }
             });
             
+            var add_faceting_data = function(fname, data){
+                var $sb = $('#sidebar');
+                
+                $sb.find('a[name'+fname+']').each(function(){
+                    console.log($(this))
+                });
+                
+                
+                for (var i=0, len=data.length; i<len; i++){
+                    var $a = $sb.find('a[name='+fname+'][value='+data[i].lang+']');
+                    var $span = $a.find('span');
+                    
+                    if ( ! $span.length){
+                        $span = $('<span></span>');
+                        $a.append($span);
+                    }
+                    
+                    $span.html('('+data[i].val+')');
+                }
+            }
+            
             //Init AJAX-paginator
             $('.ajax-pagination').ajaxPaginator({
                 container: $('#main_col'),
@@ -93,6 +114,11 @@
                             $q_input.val(q);
                         }
                     };
+                    
+                    SearchApi.load_languages_faceting(parameters['q'], function(data){
+                        add_faceting_data('langs', data.languages);
+                        add_faceting_data('video_lang', data.video_languages);
+                    });
                     
                     SearchApi.search(parameters, function(data){
                         $('.loading-indicator').remove();

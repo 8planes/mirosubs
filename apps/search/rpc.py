@@ -19,7 +19,7 @@
 from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
 from django.conf import settings
 from search.forms import SearchForm
-from videos.search_indexes import VideoSearchResult
+from videos.search_indexes import VideoSearchResult, LanguageField
 from haystack.query import SearchQuerySet
 from videos.models import Video
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -27,10 +27,40 @@ from videos.rpc import render_page
 
 class SearchApiClass(object):
     
+    def load_languages_faceting(self, q, user):
+        sqs = SearchQuerySet().models(Video)
+        
+        facet_data = sqs.facet('video_language').facet('languages').facet_counts()
+        
+        sqs = SearchForm.apply_query(q, sqs)
+        
+        for lang, val in facet_data['fields']['video_language']:
+            sqs = sqs.query_facet('video_language', LanguageField.convert(lang))
+        
+        for lang, val in facet_data['fields']['languages']:
+            sqs = sqs.query_facet('languages', LanguageField.convert(lang))
+            
+        facet_data = sqs.facet_counts()
+        
+        video_languages = []
+        languages = []
+        
+        for item, val in facet_data['queries'].items():
+            t, lang = item.split(':')
+            if t == 'video_language_exact':
+                video_languages.append(dict(lang=lang, val=val))
+            elif t == 'languages_exact':
+                languages.append(dict(lang=lang, val=val))
+            
+        return {
+            'video_languages': video_languages,
+            'languages': languages
+        }
+    
     @add_request_to_kwargs
     def search(self, rdata, request, user):
         form = SearchForm(request, rdata)
-
+        
         if form.is_valid():
             qs = form.search_qs(SearchQuerySet().result_class(VideoSearchResult) \
                 .models(Video))
