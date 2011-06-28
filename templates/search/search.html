@@ -102,6 +102,8 @@
                 });
             }
             
+            var prev_query = null;
+            
             //Init AJAX-paginator
             $('.ajax-pagination').ajaxPaginator({
                 container: $('#main_col'),
@@ -120,10 +122,14 @@
                         }
                     };
                     
-                    SearchApi.load_languages_faceting(parameters['q'], function(data){
-                        add_faceting_data('langs', data.languages);
-                        add_faceting_data('video_lang', data.video_languages);
-                    });
+                    if (parameters['q'] !== prev_query){
+                        SearchApi.load_languages_faceting(parameters['q'], function(data){
+                            add_faceting_data('langs', data.languages);
+                            add_faceting_data('video_lang', data.video_languages);
+                        });                        
+                    }
+                    
+                    prev_query = parameters['q'];
                     
                     SearchApi.search(parameters, function(data){
                         $('.loading-indicator').remove();
