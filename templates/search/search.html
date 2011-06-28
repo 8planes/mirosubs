@@ -77,24 +77,29 @@
             });
             
             var add_faceting_data = function(fname, data){
-                var $sb = $('#sidebar');
-                
-                $sb.find('a[name'+fname+']').each(function(){
-                    console.log($(this))
-                });
-                
-                
-                for (var i=0, len=data.length; i<len; i++){
-                    var $a = $sb.find('a[name='+fname+'][value='+data[i].lang+']');
-                    var $span = $a.find('span');
+                $('#sidebar a[name='+fname+']').each(function(){
+                    var $this = $(this);
+
+                    var value = $this.attr('value');
+                    var is_active = $this.parents('li').hasClass('active');
                     
-                    if ( ! $span.length){
-                        $span = $('<span></span>');
-                        $a.append($span);
+                    if (typeof data[value] != 'undefined'){
+                        var $span = $this.find('span');
+                        
+                        if ( ! $span.length){
+                            $span = $('<span></span>');
+                            $this.append($span);
+                        }
+                        
+                        $span.html('('+data[value]+')');
                     }
-                    
-                    $span.html('('+data[i].val+')');
-                }
+                    /*
+                    if (value === '' || data[value] || is_active){
+                        $this.show();
+                    }else{
+                        $this.hide();
+                    }*/
+                });
             }
             
             //Init AJAX-paginator

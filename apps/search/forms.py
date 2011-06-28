@@ -45,17 +45,20 @@ class SearchForm(forms.Form):
             self.fields['video_lang'].choices = choices
     
     def _make_choices_from_faceting(self, data):
-        choices = [('', _('All Languages'))]
+        choices = []
         
         ALL_LANGUAGES_NAMES = dict(get_simple_languages_list())
         
         for lang, val in data:
             lang = LanguageField.convert(lang)
             try:
-                choices.append((lang, ALL_LANGUAGES_NAMES[lang]))
+                choices.append((lang, ALL_LANGUAGES_NAMES[lang], val))
             except KeyError:
                 pass
-            
+
+        choices.sort(key=lambda item: item[-1], reverse=True)
+        
+        choices.insert(0, ('', _('All Languages')))
         return choices
     
     @classmethod

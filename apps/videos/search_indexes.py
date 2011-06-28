@@ -6,7 +6,7 @@ from comments.models import Comment
 from auth.models import CustomUser as User
 from utils.celery_search_index import CelerySearchIndex
 
-SUFFIX = u'====='
+SUFFIX = u'+++++'
 
 class LanguageField(SearchField):
     """

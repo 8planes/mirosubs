@@ -29,28 +29,28 @@ class SearchApiClass(object):
     
     def load_languages_faceting(self, q, user):
         sqs = SearchQuerySet().models(Video)
-        
+
         facet_data = sqs.facet('video_language').facet('languages').facet_counts()
         
         sqs = SearchForm.apply_query(q, sqs)
         
         for lang, val in facet_data['fields']['video_language']:
-            sqs = sqs.query_facet('video_language', LanguageField.convert(lang))
+            sqs = sqs.query_facet('video_language', lang)
         
         for lang, val in facet_data['fields']['languages']:
-            sqs = sqs.query_facet('languages', LanguageField.convert(lang))
+            sqs = sqs.query_facet('languages', lang)
             
         facet_data = sqs.facet_counts()
-        
-        video_languages = []
-        languages = []
+
+        video_languages = {}
+        languages = {}
         
         for item, val in facet_data['queries'].items():
             t, lang = item.split(':')
             if t == 'video_language_exact':
-                video_languages.append(dict(lang=lang, val=val))
+                video_languages[LanguageField.convert(lang)] = val
             elif t == 'languages_exact':
-                languages.append(dict(lang=lang, val=val))
+                languages[LanguageField.convert(lang)] = val
             
         return {
             'video_languages': video_languages,
