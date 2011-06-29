@@ -41,6 +41,7 @@ goog.inherits(mirosubs.widget.DropDown, goog.ui.Component);
 mirosubs.widget.DropDown.Selection = {
     ADD_LANGUAGE: "add_language",
     IMPROVE_SUBTITLES: "improve_subtitles",
+    REQUEST_SUBTITLES: "request_subtitles",
     SUBTITLE_HOMEPAGE: "subtitle_homepage",
     DOWNLOAD_SUBTITLES: "download_subtitles",
     CREATE_ACCOUNT: "create_account",
@@ -173,7 +174,10 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.improveSubtitlesLink_ =
         $d('li', 'mirosubs-improveSubtitles',
            $d('a', {'href': '#'}, 'Improve These Subtitles'));
-    this.subtitleHomepageLink_ =
+    this.requestSubtitlesLink_ =
+        $d('li', 'mirosubs-requestSubtitles',
+           $d('a', {'href': '#'}, 'Request Subtitles'));
+   this.subtitleHomepageLink_ =
         $d('li', 'mirosubs-subtitleHomepage',
            $d('a', {'href': this.createSubtitleHomepageURL_()},
               'Subtitle Homepage'));
@@ -206,6 +210,7 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
 
     this.videoActions_.appendChild(this.addLanguageLink_);
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
+    this.videoActions_.appendChild(this.requestSubtitlesLink_);
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
     this.videoActions_.appendChild(this.getEmbedCodeLink_);    
     this.videoActions_.appendChild(this.downloadSubtitlesLink_);
@@ -232,6 +237,8 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
                goog.bind(this.menuItemClicked_, this, s.ADD_LANGUAGE)).
         listen(this.improveSubtitlesLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.IMPROVE_SUBTITLES)).
+        listen(this.requestSubtitlesLink_, 'click',
+               goog.bind(this.menuItemClicked_, this, s.REQUEST_SUBTITLES)).
         listen(this.subtitleHomepageLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.SUBTITLE_HOMEPAGE)).
         listen(this.downloadSubtitlesLink_, 'click',
@@ -305,7 +312,8 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         window.open(goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href);
     }
         
-    else if (type == s.ADD_LANGUAGE || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
+    else if (type == s.ADD_LANGUAGE || type == s.IMPROVE_SUBTITLES ||
+             type == s.REQUEST_SUBTITLES || type == s.SUBTITLES_OFF)
         this.dispatchEvent(type);
 
     this.hide();
