@@ -51,6 +51,8 @@ mirosubs.subtitle.MSServerModel = function(
     this.timerTickCount_ = 0;
     this.timer_ = new goog.Timer(
         (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
+    this.logger_ = goog.debug.Logger.getLogger(
+        'mirosubs.subtitle.MSServerModel');
     goog.events.listen(
         this.timer_,
         goog.Timer.TICK,
@@ -74,14 +76,15 @@ mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 0;
 mirosubs.subtitle.MSServerModel.prototype.saveInitialSubs_ = function() {
     var savedSubs = new mirosubs.widget.SavedSubtitles(
         this.sessionPK_, null, this.subsComplete_, this.captionSet_);
-    mirosubs.widget.SavedSubtitles.save(0, savedSubs);
+    this.initialSubs_ = mirosubs.widget.SavedSubtitles.deserialize(
+        savedSubs.serialize());
 };
 
 /**
  * @return {?mirosubs.widget.SavedSubtitles}
  */
 mirosubs.subtitle.MSServerModel.prototype.fetchInitialSubs_ = function() {
-    return mirosubs.widget.SavedSubtitles.fetchSaved(0);
+    return this.initialSubs_;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.init = function() {
@@ -117,11 +120,20 @@ mirosubs.subtitle.MSServerModel.prototype.timerTick_ = function(e) {
         });
     this.timerTickCount_++;
     if ((this.timerTickCount_ % 4) == 0) {
-        // for 2k subs, this takes about 20-40ms on FF and Chrome on my Macbook.
-        var savedSubs = new mirosubs.widget.SavedSubtitles(
-            this.sessionPK_, this.title_, null, this.captionSet_);
-        mirosubs.widget.SavedSubtitles.save(1, savedSubs);
+        this.saveSubsLocally_();
     }
+};
+
+mirosubs.subtitle.MSServerModel.prototype.saveSubsLocally_ = function() {
+    // for 2k subs, this takes about 20-40ms on FF and Chrome on my Macbook.
+    var savedSubs = new mirosubs.widget.SavedSubtitles(
+        this.sessionPK_, this.title_, null, this.captionSet_);
+    mirosubs.widget.SavedSubtitles.save(1, savedSubs);
+};
+
+mirosubs.subtitle.MSServerModel.prototype.anySubtitlingWorkDone = function() {
+    var initialSubs = this.fetchInitialSubs_();
+    return !initialSubs.CAPTION_SET.identicalTo(this.captionSet_);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function(completed) {
@@ -131,13 +143,14 @@ mirosubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function(completed) 
     var initialSubs = this.fetchInitialSubs_();
 
     var subtitles = null;
-    if (!initialSubs.CAPTION_SET.identicalto(this.captionSet_))
-        subtitles = this.captionSet_.nonblankSubtitles_();
+    if (this.anySubtitlingWorkDone())
+        subtitles = this.captionSet_.nonblankSubtitles();
 
     var args = { 'session_pk': this.sessionPK_ };
     var atLeastOneThingChanged = false;
     if (!goog.isNull(subtitles)) {
-        args['subtitles'] = subtitles;
+        args['subtitles'] = goog.array.map(
+            subtitles, function(s) { return s.json; });
         atLeastOneThingChanged = true;
     }
     if (!goog.isNull(this.title_)) {
@@ -157,6 +170,9 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
 {
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
+
+    this.saveSubsLocally_();
+
     this.stopTimer();
 
     var that = this;
@@ -223,6 +239,10 @@ mirosubs.subtitle.MSServerModel.prototype.getPermalink = function() {
 
 mirosubs.subtitle.MSServerModel.prototype.getVideoID = function() {
     return this.videoID_;
+};
+
+mirosubs.subtitle.MSServerModel.prototype.getCaptionSet = function() {
+    return this.captionSet_;
 };
 
 mirosubs.subtitle.MSServerModel.prototype.getSessionPK = function() {

@@ -123,7 +123,7 @@ mirosubs.widget.DropLockDialog.prototype.timerTick_ = function(e) {
         this.serverModel_.stopTimer();
         mirosubs.Rpc.call(
             "release_lock",
-            { 'draft_pk': this.serverModel_.getDraftPK() });
+            { 'session_pk': this.serverModel_.getSessionPK() });
         this.showLockDroppedDom_();
     }
     else {
@@ -149,7 +149,7 @@ mirosubs.widget.DropLockDialog.prototype.tryToResume_ = function(e) {
     var that = this;
     mirosubs.Rpc.call(
         'regain_lock',
-        { 'draft_pk': this.serverModel_.getDraftPK() },
+        { 'session_pk': this.serverModel_.getSessionPK() },
         function(result) {
             if (result['response'] == 'ok') {
                 alert("You have successfully resumed editing.");

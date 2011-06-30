@@ -35,7 +35,7 @@ mirosubs.widget.SavedSubtitles = function(sessionPK, title, isComplete, captionS
      * @const
      * @type {?string}
      */
-    this.TITLE_ = title;
+    this.TITLE = title;
     /**
      * @const
      * @type {?boolean}
@@ -48,27 +48,35 @@ mirosubs.widget.SavedSubtitles = function(sessionPK, title, isComplete, captionS
     this.CAPTION_SET = captionSet;
 };
 
+mirosubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
+mirosubs.widget.SavedSubtitles.logger_ = 
+    goog.debug.Logger.getLogger('mirosubs.widget.SavedSubtitles');
+
 mirosubs.widget.SavedSubtitles.prototype.serialize = function() {
     return goog.json.serialize(
-        { sessionPK: this.sessionPK_,
-          title: this.title,
-          isComplete: this.isComplete_,
-          captionSet: this.captionSet_.makeJsonSubs() });
+        { sessionPK: this.SESSION_PK,
+          title: this.TITTLE,
+          isComplete: this.IS_COMPLETE,
+          captionSet: this.CAPTION_SET.makeJsonSubs() });
 };
 
-mirosubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
-
 mirosubs.widget.SavedSubtitles.deserialize = function(json) {
-    var obj = goog.json.deserialize(json);
+    var obj = goog.json.parse(json);
     return new mirosubs.widget.SavedSubtitles(
         obj.sessionPK, obj.title, obj.isComplete, 
         new mirosubs.subtitle.EditableCaptionSet(obj.captionSet));
 };
 
 mirosubs.widget.SavedSubtitles.save = function(index, savedSubs) {
-    window['localStorage']['setItem'](
-        mirosubs.widget.SavedSubtitles.STORAGEKEY_ + index,
-        savedSubs.serialize());
+    var key = mirosubs.widget.SavedSubtitles.STORAGEKEY_ + index;
+    var value = savedSubs.serialize();
+    if (goog.DEBUG) {
+        mirosubs.widget.SavedSubtitles.logger_.info(
+            "Saving subs to " + key);
+        mirosubs.widget.SavedSubtitles.logger_.info(
+            "Saved subs:" + value);
+    }
+    window['localStorage']['setItem'](key, value);
 };
 
 mirosubs.widget.SavedSubtitles.fetchSaved = function(index) {

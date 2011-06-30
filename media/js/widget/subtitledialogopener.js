@@ -153,13 +153,16 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
 {
     this.showLoading_(false);
     if (result['can_edit']) {
-        var draftPK = result['draft_pk'];
+        var sessionPK = result['session_pk'];
         subtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['subtitles']);
+        captionSet = new mirosubs.subtitle.EditableCaptionSet(
+            subtitles.SUBTITLES);
         originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['original_subtitles']);
         var serverModel = new mirosubs.subtitle.MSServerModel(
-            draftPK, this.videoID_, this.videoURL_);
+            sessionPK, this.videoID_, this.videoURL_,
+            subtitles.IS_COMPLETE, captionSet);
         if (subtitles.IS_ORIGINAL || subtitles.FORKED)
             this.openSubtitlingDialog_(serverModel, subtitles);
         else

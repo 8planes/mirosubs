@@ -23,7 +23,6 @@ goog.provide('mirosubs.subtitle.EditableCaption');
  * mirosubs.subtitle.EditableCaptionSet.
  *
  * @constructor
- * @param {mirosubs.UnitOfWork=} opt_unitOfWork
  * @param {Number=} opt_subOrder Order in which this sub appears. Provide
  *    this parameter iff the caption doesn't exist in the MiroSubs
  *    system.
@@ -31,9 +30,8 @@ goog.provide('mirosubs.subtitle.EditableCaption');
  *     we're operating. Provide this parameter iff the caption exists
  *     already in the MiroSubs system.
  */
-mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_subOrder, opt_jsonCaption) {
+mirosubs.subtitle.EditableCaption = function(opt_subOrder, opt_jsonCaption) {
     goog.events.EventTarget.call(this);
-    this.unitOfWork_ = opt_unitOfWork;
     this.json = opt_jsonCaption ||
         {
             'subtitle_id' : mirosubs.randomString(),
@@ -157,16 +155,13 @@ mirosubs.subtitle.EditableCaption.prototype.setEndTime_ =
         this.nextCaption_.setStartTime(endTime);
 };
 /**
- * Clears times. Does not issue a CHANGE event. Registers update
- * with UnitOfWork.
+ * Clears times. Does not issue a CHANGE event.
  */
 mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
     if (this.getStartTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
         this.getEndTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED) {
         this.json['start_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
         this.json['end_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
-        if (this.unitOfWork_)
-            this.unitOfWork_.registerUpdated(this);
     }
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
@@ -219,8 +214,6 @@ mirosubs.subtitle.EditableCaption.prototype.changed_ =
 {
     if (!opt_dontTrack)
         mirosubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
-    if (this.unitOfWork_)
-        this.unitOfWork_.registerUpdated(this);
     this.dispatchEvent(
         new mirosubs.subtitle.EditableCaption.ChangeEvent(
             timesFirstAssigned));
