@@ -51,8 +51,6 @@ mirosubs.widget.SubtitleDialogOpener.prototype.getResumeEditingRecord_ =
     function(openDialogArgs)
 {
     var resumeEditingRecord = mirosubs.widget.ResumeEditingRecord.fetch();
-    console.log(openDialogArgs);
-    console.log(resumeEditingRecord);
     if (resumeEditingRecord && resumeEditingRecord.matches(
         this.videoID_, openDialogArgs))
         return resumeEditingRecord;
@@ -81,8 +79,6 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
     var that = this;
     this.showLoading_(true);
     var resumeEditingRecord = this.getResumeEditingRecord_(openDialogArgs);
-    console.log(resumeEditingRecord);
-    console.log(resumeEditingRecord && resumeEditingRecord.getSavedSubtitles());
     if (resumeEditingRecord && resumeEditingRecord.getSavedSubtitles()) {
         this.resumeEditing_(
             resumeEditingRecord.getSavedSubtitles(),

@@ -48,8 +48,6 @@ mirosubs.widget.ResumeEditingRecord.prototype.save = function() {
 mirosubs.widget.ResumeEditingRecord.prototype.getSavedSubtitles = function() {
     if (!this.savedSubtitles_) {
         var savedSubtitles = mirosubs.widget.SavedSubtitles.fetchLatest();
-        console.log(savedSubtitles);
-        console.log(this.sessionPK_);
         if (savedSubtitles && savedSubtitles.SESSION_PK == this.sessionPK_)
             this.savedSubtitles_ = savedSubtitles;
         else
