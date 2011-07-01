@@ -2,6 +2,8 @@
 <html>
   <head>
     {% include "widget/_js_onsite_dependencies.html" %}
+    <script type="text/javascript" src="{{MEDIA_URL}}js/testing/testing.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/testing/timerstub.js"></script>
     <script>
       goog.require('goog.testing.jsunit');
       goog.require('goog.testing.events');
