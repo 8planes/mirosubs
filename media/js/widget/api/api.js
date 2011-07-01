@@ -76,10 +76,11 @@ mirosubs.api.openUnisubsDialogWithSettings =
         config['videoID'], config['videoURL'], videoSource);
     if (!askLanguage) {
         opener.openDialog(
-            config['languageCode'], 
-            config['originalLanguageCode'], 
-            config['subLanguagePK'], 
-            config['baseLanguagePK']);
+            new mirosubs.widget.OpenDialogArgs(
+                config['languageCode'], 
+                config['originalLanguageCode'], 
+                config['subLanguagePK'], 
+                config['baseLanguagePK']));
     }
     else
         opener.showStartDialog();

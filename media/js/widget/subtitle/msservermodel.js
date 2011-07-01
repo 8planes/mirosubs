@@ -73,24 +73,16 @@ mirosubs.subtitle.MSServerModel.EMBED_JS_URL = null;
 // updated by values from server when widgets load.
 mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 0;
 
-mirosubs.subtitle.MSServerModel.prototype.saveInitialSubs_ = function() {
-    var savedSubs = new mirosubs.widget.SavedSubtitles(
-        this.sessionPK_, null, this.subsComplete_, this.captionSet_);
-    this.initialSubs_ = mirosubs.widget.SavedSubtitles.deserialize(
-        savedSubs.serialize());
-};
-
 /**
  * @return {?mirosubs.widget.SavedSubtitles}
  */
 mirosubs.subtitle.MSServerModel.prototype.fetchInitialSubs_ = function() {
-    return this.initialSubs_;
+    return mirosubs.widget.SavedSubtitles.fetchInitial();
 };
 
 mirosubs.subtitle.MSServerModel.prototype.init = function() {
     goog.asserts.assert(!this.initialized_);
     this.initialized_ = true;
-    this.saveInitialSubs_();
     this.startTimer();
 };
 
@@ -128,7 +120,7 @@ mirosubs.subtitle.MSServerModel.prototype.saveSubsLocally_ = function() {
     // for 2k subs, this takes about 20-40ms on FF and Chrome on my Macbook.
     var savedSubs = new mirosubs.widget.SavedSubtitles(
         this.sessionPK_, this.title_, null, this.captionSet_);
-    mirosubs.widget.SavedSubtitles.save(1, savedSubs);
+    mirosubs.widget.SavedSubtitles.saveLatest(savedSubs);
 };
 
 mirosubs.subtitle.MSServerModel.prototype.anySubtitlingWorkDone = function() {

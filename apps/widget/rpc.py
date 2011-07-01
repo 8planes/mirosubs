@@ -202,7 +202,22 @@ class Rpc(BaseRpc):
         if session.language.can_writelock(request) and \
                 session.parent_version == session.language.version():
             session.language.writelock(request)
-            return { 'response': 'ok' }
+            # FIXME: Duplication between this and start_editing.
+            version_for_subs = session.language.version()
+            if not version_for_subs:
+                version_for_subs = self._create_version_from_session(session)
+                version_no = 0
+            else:
+                version_no = version_for_subs.version_no + 1
+            subtitles = self._subtitles_dict(version_for_subs, version_no)
+            return_dict = { "response": "ok",
+                            "can_edit" : True,
+                            "session_pk" : session.pk,
+                            "subtitles" : subtitles }
+            if session.base_language:
+                return_dict['original_subtitles'] = \
+                    self._subtitles_dict(session.base_language.latest_version())
+            return return_dict
         else:
             return { 'response': 'cannot_resume' }
 

@@ -49,8 +49,6 @@ mirosubs.widget.SavedSubtitles = function(sessionPK, title, isComplete, captionS
 };
 
 mirosubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
-mirosubs.widget.SavedSubtitles.logger_ = 
-    goog.debug.Logger.getLogger('mirosubs.widget.SavedSubtitles');
 
 mirosubs.widget.SavedSubtitles.prototype.serialize = function() {
     return goog.json.serialize(
@@ -67,20 +65,30 @@ mirosubs.widget.SavedSubtitles.deserialize = function(json) {
         new mirosubs.subtitle.EditableCaptionSet(obj.captionSet));
 };
 
-mirosubs.widget.SavedSubtitles.save = function(index, savedSubs) {
-    var key = mirosubs.widget.SavedSubtitles.STORAGEKEY_ + index;
-    var value = savedSubs.serialize();
-    if (goog.DEBUG) {
-        mirosubs.widget.SavedSubtitles.logger_.info(
-            "Saving subs to " + key);
-        mirosubs.widget.SavedSubtitles.logger_.info(
-            "Saved subs:" + value);
-    }
-    window['localStorage']['setItem'](key, value);
+mirosubs.widget.SavedSubtitles.saveInitial = function(savedSubs) {
+    mirosubs.widget.SavedSubtitles.save_(0, savedSubs);
 };
 
-mirosubs.widget.SavedSubtitles.fetchSaved = function(index) {
-    var savedSubsText = window['localStorage']['getItem'](
+mirosubs.widget.SavedSubtitles.saveLatest = function(savedSubs) {
+    mirosubs.widget.SavedSubtitles.save_(1, savedSubs);
+};
+
+mirosubs.widget.SavedSubtitles.fetchInitial = function() {
+    return mirosubs.widget.SavedSubtitles.fetchSaved_(0);
+};
+
+mirosubs.widget.SavedSubtitles.fetchLatest = function() {
+    return mirosubs.widget.SavedSubtitles.fetchSaved_(1);
+};
+
+mirosubs.widget.SavedSubtitles.save_ = function(index, savedSubs) {
+    var key = mirosubs.widget.SavedSubtitles.STORAGEKEY_ + index;
+    var value = savedSubs.serialize();
+    mirosubs.saveInLocalStorage(key, value);
+};
+
+mirosubs.widget.SavedSubtitles.fetchSaved_ = function(index) {
+    var savedSubsText = mirosubs.fetchFromLocalStorage(
         mirosubs.widget.SavedSubtitles.STORAGEKEY_ + index);
     if (savedSubsText)
         return mirosubs.widget.SavedSubtitles.deserialize(savedSubsText);

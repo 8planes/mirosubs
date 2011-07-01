@@ -78,12 +78,12 @@ mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
 
 mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
     var state  = this.playController_.getSubtitleState();
-    this.dialogOpener_.openDialogOrRedirect_(
-        state.LANGUAGE,
-        null,
-        state.LANGUAGE_PK,
-        state.BASE_LANGUAGE_PK
-    );    
+    this.dialogOpener_.openDialogOrRedirect(
+        new mirosubs.widget.OpenDialogArgs(
+            state.LANGUAGE,
+            null,
+            state.LANGUAGE_PK,
+            state.BASE_LANGUAGE_PK));
 };
 
 mirosubs.widget.SubtitleController.prototype.requestSubtitles_ = function() {
