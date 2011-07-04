@@ -145,6 +145,33 @@ class VideosApiClass(object):
             'content': content
         }
 
+    @add_request_to_kwargs
+    def load_popular_videos_volunteer(self, sort, request, user):
+        sort_types = {
+            'today': 'today_views',
+            'week': 'week_views', 
+            'month': 'month_views', 
+            'year': 'year_views', 
+            'total': 'total_views'
+        }
+        
+        sort_field = sort_types.get(sort, 'week_views')
+
+        user_langs = user.userlanguage_set.values_list('language', flat=True)
+        
+        popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(video_language__in=user_langs).order_by('-%s' % sort_field)[:5]
+
+        context = {
+            'video_list': popular_videos
+        }
+        
+        content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
+        
+        return {
+            'content': content
+        }
+
     def change_title_translation(self, language_id, title, user):
         if not user.is_authenticated():
             return Error(self.authentication_error_msg)

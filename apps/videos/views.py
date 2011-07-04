@@ -100,6 +100,30 @@ def popular_videos(request):
     return render_to_response('videos/popular_videos.html', {},
                               context_instance=RequestContext(request)) 
 
+def volunteer_page(request):
+    user = request.user
+    # Get the user comfort languages list 
+    user_langs = user.userlanguage_set.values_list('language', flat=True)
+
+    featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).filter(video_language__in=user_langs).order_by('-featured')[:5]
+
+    popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).filter(video_language__in=user_langs).order_by('-week_views')[:5]
+
+    latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).filter(video_language__in=user_langs).order_by('-edited')[:15]
+ 
+    context = {
+        'featured_videos': featured_videos,
+        'popular_videos': popular_videos,
+        'latest_videos': latest_videos,
+        'user_langs':user_langs,
+    }
+
+    return render_to_response('videos/volunteer.html', context,
+                              context_instance=RequestContext(request))
+
 def bug(request):
     from widget.rpc import add_general_settings
     context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
