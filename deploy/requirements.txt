@@ -33,3 +33,6 @@ feedparser
 lxml==2.3
 django-sentry==1.8.3.1
 vendor/indifex-transifex-client-0.5.tar.gz 
+django-extensions==0.4.1                   
+# do we really need this in prod?
+django-debug-toolbar==0.8.3
