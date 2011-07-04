@@ -119,6 +119,43 @@ class VideosApiClass(object):
             .models(Video).order_by('-%s' % sort_field)
         
         return render_page(page, sqs, request=request)
+
+    @add_request_to_kwargs
+    def load_featured_page_volunteer(self, page, request, user):
+        user_langs = user.userlanguage_set.values_list('language', flat=True)
+        sqs = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(video_language__in=user_langs) \
+            .order_by('-featured')
+        
+        return render_page(page, sqs, request=request)    
+
+    @add_request_to_kwargs
+    def load_latest_page_volunteer(self, page, request, user):
+        user_langs = user.userlanguage_set.values_list('language', flat=True)
+        sqs = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(video_language__in=user_langs) \
+            .order_by('-edited')
+            
+        return render_page(page, sqs, request=request)
+
+    @add_request_to_kwargs
+    def load_popular_page_volunteer(self, page, sort, request, user):
+        user_langs = user.userlanguage_set.values_list('language', flat=True)
+        sort_types = {
+            'today': 'today_views',
+            'week' : 'week_views', 
+            'month': 'month_views', 
+            'year' : 'year_views', 
+            'total': 'total_views'
+        }
+        
+        sort_field = sort_types.get(sort, 'week_views')
+        
+        sqs = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(video_language__in=user_langs) \
+            .order_by('-%s' % sort_field)
+        
+        return render_page(page, sqs, request=request)
     
     @add_request_to_kwargs
     def load_popular_videos(self, sort, request, user):
@@ -160,7 +197,8 @@ class VideosApiClass(object):
         user_langs = user.userlanguage_set.values_list('language', flat=True)
         
         popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(video_language__in=user_langs).order_by('-%s' % sort_field)[:5]
+            .models(Video).filter(video_language__in=user_langs) \
+            .order_by('-%s' % sort_field)[:5]
 
         context = {
             'video_list': popular_videos

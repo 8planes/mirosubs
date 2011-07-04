@@ -19,7 +19,7 @@
 
 <div class="pod" id="featured_videos">
     <div class="hd">
-        <a class="btn_more_videos" href="{% url videos:featured_videos %}">
+        <a class="btn_more_videos" href="{% url videos:volunteer_category "featured" %}">
             {% trans "More Featured Videos" %}
         </a>
         <h2>{% trans "Featured Videos" %}</h2>
@@ -34,7 +34,7 @@
 
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
-        <a class="btn_more_videos" href="{% url videos:popular_videos %}">
+        <a class="btn_more_videos" href="{% url videos:volunteer_category "popular" %}">
             {% trans "More Popular Videos" %}
         </a>
         
@@ -90,7 +90,7 @@
 
 <div class="pod" id="latest_videos">
     <div class="hd">
-        <a class="btn_more_videos" href="{% url videos:latest_videos %}">
+        <a class="btn_more_videos" href="{% url videos:volunteer_category "latest" %}">
             {% trans "More Recent Videos" %}
         </a>
         <h2>{% trans "Latest Videos" %}</h2>

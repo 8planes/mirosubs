@@ -124,6 +124,10 @@ def volunteer_page(request):
     return render_to_response('videos/volunteer.html', context,
                               context_instance=RequestContext(request))
 
+def volunteer_category(request, category):
+    return render_to_response('videos/volunteer_%s.html' %(category),
+                              context_instance=RequestContext(request))
+
 def bug(request):
     from widget.rpc import add_general_settings
     context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
