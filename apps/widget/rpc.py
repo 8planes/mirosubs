@@ -226,8 +226,13 @@ class Rpc(BaseRpc):
         draft.is_forked = True
         draft.save()
         latest_version = draft.video.latest_version()
-        sub_dict = dict([(s.subtitle_id, s) for s 
-                         in latest_version.subtitle_set.all()])
+        
+        if latest_version:
+            sub_dict = dict([(s.subtitle_id, s) for s 
+                             in latest_version.subtitle_set.all()])
+        else:
+            sub_dict = {}
+            
         to_delete = []
         for sub in draft.subtitle_set.all():
             if sub.subtitle_id in sub_dict:
