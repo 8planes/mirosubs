@@ -5,6 +5,7 @@
     <span class="icon"></span>
     <input type="text" value="Search videos" />
     <a id="advanced_search" href="">
+      {% comment %}
     <div id="advanced_menu">
         <div class="menu_item videos_in">
             <h3>Videos In</h3>
@@ -22,6 +23,7 @@
             </button>
         </div><!-- // menu_item -->
     </div><!-- // advanced_menu -->
+    {% endcomment %}
     </a>
 </div><!-- // watch_search -->
 <h1>Watch Subtitled Videos</h1>
@@ -179,8 +181,10 @@
 <!-- row -->
     </ul><!--// video_list -->
     <div class="pages clearfix">
+      <a class="pag_first" href=""><span class="icon"></span></a>
       <a class="pag_prev" href=""><span class="icon"></span></a>
       <span class="page_count">15 of 4,000 videos</span>
+      <a class="pag_last" href=""><span class="icon"></span></a>
       <a class="pag_next" href=""><span class="icon"></span></a>
     </div><!-- // pagination -->
   </div><!-- // bd -->
@@ -350,8 +354,10 @@
 <!-- row -->
     </ul><!--// video_list -->
     <div class="pages clearfix">
+      <a class="pag_first" href=""><span class="icon"></span></a>
       <a class="pag_prev" href=""><span class="icon"></span></a>
       <span class="page_count">15 of 4,000 videos</span>
+      <a class="pag_last" href=""><span class="icon"></span></a>
       <a class="pag_next" href=""><span class="icon"></span></a>
     </div><!-- // pagination -->
   </div><!-- // bd -->
@@ -807,9 +813,12 @@
 
     </ul><!--// video_list -->
     <div class="pages clearfix">
+      <a class="pag_first" href=""><span class="icon"></span></a>
       <a class="pag_prev" href=""><span class="icon"></span></a>
       <span class="page_count">15 of 4,000 videos</span>
+      <a class="pag_last" href=""><span class="icon"></span></a>
       <a class="pag_next" href=""><span class="icon"></span></a>
+      
     </div><!-- // pagination -->
   </div><!-- // bd -->
 </div><!-- // pod -->
