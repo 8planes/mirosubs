@@ -459,7 +459,8 @@ class AddFromFeedForm(forms.Form, AjaxForm):
     
     def parse_feed_url(self, url):
         feed_parser = FeedParser(url)
-
+        entry = ''
+        
         try:
             for vt, info, entry in feed_parser.items():
                 if vt:
@@ -468,9 +469,9 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                 if len(self.video_types) >= self.VIDEOS_LIMIT:
                     self.video_limit_routreach = True
                     break  
-                    
+
             if feed_parser.feed.version:
-                self.feed_urls.append((url, entry['link']))
+                self.feed_urls.append((url, entry and entry['link']))
                 
         except FeedParserError, e:
             raise forms.ValidationError(e) 
