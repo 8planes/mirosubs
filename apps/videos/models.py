@@ -588,7 +588,7 @@ class SubtitleLanguage(models.Model):
             "subLanguagePK": self.pk,
             "originalLanguageCode": video.language }
         if self.is_dependent():
-            config['baseLanguagePK'] = self.standard_language.pk
+            config['baseLanguagePK'] = self.standard_language and self.standard_language.pk
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
 
     @models.permalink
