@@ -36,6 +36,7 @@
                     <tr>
                         <th>{% trans "Date" %}</th>
                         <th>{% trans "Count" %}</th>
+                        <th>{% trans "Time(sec)" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +44,7 @@
                     <tr class="{% cycle 'row1' 'row2' %}">
                         <td>{{ obj.date }}</td>
                         <td>{{ obj.value }}</td>
+                        <td>{{ obj.time }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

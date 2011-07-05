@@ -88,45 +88,53 @@ div.recaptcha-field #recaptcha_widget_div {
   -webkit-background-clip: padding-box;
 }
 
-#feedback_form{
+#feedback_form {
   background: url(../images/watercolor3.png) center 0px repeat-x;
   border-radius: 7px;
-  padding: 60px 0;
+  padding: 20px 0 20px 0;
   clear: both;
   float: left;
   text-align: center;
   display:block !important;
-  }
+}
 
 
-#feedback_form h2{
+#feedback_form h2 {
   margin-bottom: 15px;
-  }
+}
 
 
-#feedback_form p{
-float: none;
+#feedback_form p {
+	float: none;
   margin: 0 auto !important;
   font-size: 15px;
   width: 900px;
-  }
-
-
-#feedback_form textarea{
-  width: 600px;
-  margin: 0 auto;
-  }
-
-#feedback_form p input{
-width: 250px;
-margin: 0px auto 20px;
-  }
-
-
-#feedback_form button{
-width: 200px;
-margin: 20px auto !important;
-float: none;  
-
 }
 
+
+#feedback_form textarea {
+  width: 600px;
+  margin: 0 auto;
+}
+
+#feedback_form p input {
+	width: 250px;
+	margin: 0px auto 20px;
+}
+
+
+#feedback_form button {
+	width: 200px;
+	margin: 20px auto !important;
+	float: none;  
+}
+
+#feedback_form div#feedback_email_field p  {
+	width: 280px;
+	float: left;
+}
+
+#feedback_form #recaptcha-field {
+	width: 315px;
+	float: left;
+}

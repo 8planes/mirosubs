@@ -41,7 +41,10 @@ goog.inherits(mirosubs.widget.DropDown, goog.ui.Component);
 mirosubs.widget.DropDown.Selection = {
     ADD_LANGUAGE: "add_language",
     IMPROVE_SUBTITLES: "improve_subtitles",
-    REQUEST_SUBTITLES: "request_subtitles",
+    //TODO #request_subs: Uncomment this while integrating request subtitles with master branch
+    /*
+     *REQUEST_SUBTITLES: "request_subtitles",
+     */
     SUBTITLE_HOMEPAGE: "subtitle_homepage",
     DOWNLOAD_SUBTITLES: "download_subtitles",
     CREATE_ACCOUNT: "create_account",
@@ -69,7 +72,14 @@ mirosubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSt
     this.clearCurrentLang_();
     this.subtitleState_ = subtitleState;
     this.setCurrentLangClassName_();
-    mirosubs.style.showElement(this.improveSubtitlesLink_, !!subtitleState);
+    // there is likely a bug in mirosubs.styleSetPropertyInString,
+    // turning it on and off will not restore display to block
+    // mirosubs.style.showElement(this.improveSubtitlesLink_, shows);
+    var display = "none";
+    if (Boolean(subtitleState)){
+        display = "block";
+    }
+    goog.style.setStyle(this.improveSubtitlesLink_, display + " !important");
     goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = this.createDownloadSRTURL_();
 };
 
@@ -210,7 +220,10 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
 
     this.videoActions_.appendChild(this.addLanguageLink_);
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
-    this.videoActions_.appendChild(this.requestSubtitlesLink_);
+    //TODO #request_subtitles: Uncomment this while integrating request subtiles UI with master branch
+    /*
+     *this.videoActions_.appendChild(this.requestSubtitlesLink_);
+     */
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
     this.videoActions_.appendChild(this.getEmbedCodeLink_);    
     this.videoActions_.appendChild(this.downloadSubtitlesLink_);
@@ -237,8 +250,6 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
                goog.bind(this.menuItemClicked_, this, s.ADD_LANGUAGE)).
         listen(this.improveSubtitlesLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.IMPROVE_SUBTITLES)).
-        listen(this.requestSubtitlesLink_, 'click',
-               goog.bind(this.menuItemClicked_, this, s.REQUEST_SUBTITLES)).
         listen(this.subtitleHomepageLink_, 'click',
                goog.bind(this.menuItemClicked_, this, s.SUBTITLE_HOMEPAGE)).
         listen(this.downloadSubtitlesLink_, 'click',
@@ -259,6 +270,12 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
         listen(this.getDomHelper().getDocument(),
                goog.events.EventType.MOUSEDOWN,
                this.onDocClick_, true);
+
+        //TODO #request_subs: Add this while integrating request subtitles with master branch
+        /*
+         *listen(this.requestSubtitlesLink_, 'click',
+         *       goog.bind(this.menuItemClicked_, this, s.REQUEST_SUBTITLES)).
+         */
 
     // Webkit doesn't fire a mousedown event when opening the context menu,
     // but we need one to update menu visibility properly. So in Safari handle

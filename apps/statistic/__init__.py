@@ -20,6 +20,7 @@ from utils.redis_utils import default_connection, RedisKey
 from statistic.pre_day_statistic import BasePerDayStatistic, UpdatingLogger
 from statistic.models import SubtitleFetchCounters, VideoViewCounter, WidgetViewCounter
 from django.db.models import F
+from django.db import models
 import time
 
 class VideoViewStatistic(BasePerDayStatistic):
@@ -31,15 +32,20 @@ class VideoViewStatistic(BasePerDayStatistic):
     model = VideoViewCounter
     prefix = 'st_video_view'
     
-    def get_key(self, video, date):
-        if not video.video_id or video.video_id in ['set', 'total']:
+    def get_key(self, date, video=None, video_id=None):
+        if not video and not video_id:
+            return
+        
+        video_id = video_id or video.video_id
+        
+        if not video_id or video_id in ['set', 'total']:
             #"set" and "total" are reserver. 
             #Don't want use more long key as prefix:keys:video_id, 
             #because video_id have more length and is generated 
             #we should never get this situation
             return 
 
-        return '%s:%s:%s' % (self.prefix, video.video_id, self.date_format(date))
+        return '%s:%s:%s' % (self.prefix, video_id, self.date_format(date))
     
     def get_object(self, key):
         from videos.models import Video
@@ -112,12 +118,24 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
     prefix = 'st_subtitles_fetch'
     model = SubtitleFetchCounters
     
-    def get_key(self, date, video, sl=None):
-        if not video.video_id or video.video_id in ['set', 'total']:
-            #see VideoViewStatistic.get_key
+    def get_key(self, date, video=None, sl=None, sl_pk=None, video_id=None):
+        from videos.models import SubtitleLanguage
+        
+        if not video and not video_id:
+            return
+        
+        video_id = video_id or video.video_id   
+             
+        if not video_id or video_id in ['set', 'total']:
             return 
         
-        key = '%s:%s:' % (self.prefix, video.video_id)
+        key = '%s:%s:' % (self.prefix, video_id)
+        
+        if sl_pk:
+            try:
+                sl = SubtitleLanguage.objects.get(pk=sl_pk)
+            except (SubtitleLanguage.DoesNotExist, ValueError):
+                pass
         
         if sl and sl.language:
             key += ':%s' % sl.language       

@@ -151,7 +151,7 @@ DATABASES = {
 EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
-CSS_USE_COMPILED = not DEBUG
+CSS_USE_COMPILED = True
 JS_USE_COMPILED = False
 
 
@@ -226,7 +226,8 @@ JS_CORE = ['mirosubs.js',
            'widget/resumeeditingrecord.js',
            'widget/opendialogargs.js',
            'widget/dropdown.js',
-           'widget/requestdialog.js',
+           ## TODO #request subtitles: Uncomment these while integrating request subtitles ui into master branch
+           #'widget/requestdialog.js',
            'widget/subtitle/dialog.js',
            'widget/subtitle/msservermodel.js',
            'widget/subtitle/editablecaption.js',

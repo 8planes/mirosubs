@@ -27,7 +27,11 @@
 <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
 {% endblock %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
+{% if DEBUG %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.js" type="text/javascript"></script>
+{% else %}
+<script src="{{ MEDIA_URL }}js/jquery-1.4.3.js" type="text/javascript"></script>
+{% endif %}
 <script src="{{ MEDIA_URL }}js/jquery-ui-1.8.13.custom.min.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jgrowl/jquery.jgrowl.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/jalerts/jquery.alerts.js" type="text/javascript"></script>
@@ -131,7 +135,7 @@
   </div><!-- // bar_search -->
   <ul id="bar_menu" class="clearfix">
     <li id="nav_submit"><a href="{% url videos:create %}"><em class="icon"></em> {% trans 'Create' %}</a></li>
-    <li><a href="{% url videos:list %}">{% trans 'Watch' %}</a></li>
+    <li><a href="{% url search:index %}?q=%20">{% trans 'Watch' %}</a></li>
     {% comment %}
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Contribute' %}</a></li>
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Solutions' %}</a></li>

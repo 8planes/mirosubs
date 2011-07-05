@@ -45,7 +45,8 @@ from videos import EffectiveSubtitle, is_synced, is_synced_value
 from videos.types import video_type_registrar
 from videos.feed_parser import FeedParser
 from comments.models import Comment
-from statistic import st_sub_fetch_handler, st_video_view_handler, st_widget_view_statistic
+from statistic import st_widget_view_statistic
+from statistic.tasks import st_sub_fetch_handler_update, st_video_view_handler_update
 from widget import video_cache
 from utils.redis_utils import RedisSimpleField
 from utils.amazon import S3EnabledImageField
@@ -172,12 +173,14 @@ class Video(models.Model):
         return title
     
     def update_view_counter(self):
-        st_video_view_handler.update(video=self)
+        st_video_view_handler_update.delay(video_id=self.video_id)
     
     def update_subtitles_fetched(self, lang=None):
-        st_sub_fetch_handler.update(video=self, sl=lang)
+        st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
+        
         if lang:
-            lang.subtitles_fetched_counter.incr()
+            from videos.tasks import update_subtitles_fetched_counter_for_sl
+            update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
         
     def get_thumbnail(self):
         if self.s3_thumbnail:

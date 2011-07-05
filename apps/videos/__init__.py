@@ -41,8 +41,13 @@ class EffectiveSubtitle:
     def __init__(self, subtitle_id, text, start_time, end_time, sub_order):
         self.subtitle_id = subtitle_id
         self.text = text
-        self.start_time = start_time
-        self.end_time = end_time
+        if start_time is None:
+            start_time = UNSYNCED_MARKER
+        self.start_time = start_time    
+        if end_time is None:
+            end_time = UNSYNCED_MARKER
+            
+        self.end_time = end_time 
         self.sub_order = sub_order
     
     def for_json(self):

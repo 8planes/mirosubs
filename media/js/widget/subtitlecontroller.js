@@ -56,13 +56,16 @@ mirosubs.widget.SubtitleController = function(
             s.IMPROVE_SUBTITLES,
             this.improveSubtitles_).
        listen(
-            dropDown,
-            s.REQUEST_SUBTITLES,
-            this.requestSubtitles_).
-       listen(
             videoTab.getAnchorElem(), 'click',
             this.videoAnchorClicked_
         );
+       /*
+        *TODO #request subtitles: Add this after integrating request subtitles ui with master
+        *listen(
+        *     dropDown,
+        *     s.REQUEST_SUBTITLES,
+        *     this.requestSubtitles_).
+        */
 };
 
 mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ = 

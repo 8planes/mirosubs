@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title>Universal Subtitles</title>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/reset.css">
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/new_global.css">
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/new_index.css">
+    
+  </head>
+
+  <body>
+    
+    <div id="header">
+      <div class="container">
+        <h1><a href="#">Universal Subtitles</a></h1>
+        <ul id="nav">
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Help</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li id="user"><a href="#"><img src="{{ MEDIA_URL }}images/new_avatar_tiny.png"/>Me</a></li>
+        </ul>
+      </div>
+    </div>
+        
+    <div id="subheader">
+      <div class="container">
+        <ul>
+          <li><a href="#">Subtitle a Video</a></li>
+          <li><a href="#">Most Watched</a></li>
+          <li><a href="#" class="current">Volunteer</a></li>
+          <li><a href="#">Enterprise Services</a></li>
+        </ul>
+        
+        <form id="search">
+          <input type="text" name="q">
+        </form>
+      </div>
+    </div>    <!-- end #subheader-->
+    
+    
+    <div class="container">
+      
+      <div id="home-blurb">
+        <h1>The easiest way to caption and translate any video.</h1>
+        <p>Universal Subtitles is open and powered by volunteers &mdash; a "Wikipedia" for subtitling.</p>
+      </div>
+      
+      
+      <div id="home-left">
+        <div id="subtitle" class="clearfix">
+          <form>
+            <h2>Subtitle a Video Now</h2>
+            <input type="text" name="url" />
+            <button class="button" type="submit">Subtitle</button>
+            <p>Works with YouTube, Vimeo, Blip.tv, HTML5, and more.</p>
+          </form>
+          
+          <div id="features">
+            <h3>Features</h3>
+            <ul>
+              <li>Embed the video anywhere</li>
+              <li>Add subtitles yourself or ask viewers to help.</li>
+              <li><a href="">Full site integration</a></li>
+            </ul>
+          </div>
+        </div> <!-- end #subtitle -->
+        
+        <div>
+          <h2>Volunteers Needed</h2>
+          <p>Our deaf and hard of hearing users and non-profits request help for videos that need captions or translations. <a href="#">See the most requested videos.</a></p>
+        </div>
+        
+        <div>
+          <h2>Complete Subtitling Solutions</h2>
+          <p>Increase viewership with transcription, captioning, and translation services, and flexible API and integration options. Improve SEO, reach a global audience, and build a managed volunteer community. <a href="#">See our enterprise services.</a></p>
+        </div>
+      </div> <!-- end #home-left -->
+      
+      <div id="home-right">
+        <!-- widget goes here -->
+      </div>
+      
+      <div class="clearfix"></div>
+      <div id="benefits" class="clearfix">
+        <a class="button" href="#">5 key benefits</a>
+        <h2>The largest, most powerful captioning and translation platform in the world.</h2>
+      </div> <!-- end #benefits -->
+      
+      <div id="partners">
+        <a href="#" id="partner_prev">Previous</a>
+        <a href="#" id="partner_next">Next</a>
+        <ul class="clearfix">
+          <li>
+            <a href="">
+            <img src="{{ MEDIA_URL }}images/partner_sample_logo.png"/>
+            Mozilla
+            <span class="url">example at mozilla.com</span>
+              </a>
+          </li>
+          <li>
+            <a href="">
+            <img src="{{ MEDIA_URL }}images/partner_sample_logo.png"/>
+            Mozilla
+            <span class="url">example at mozilla.com</span>
+            </a>
+          </li>
+          <li>
+            <a href="">
+            <img src="{{ MEDIA_URL }}images/partner_sample_logo.png"/>
+            Mozilla
+            <span class="url">example at mozilla.com</span>
+            </a>
+          </li>
+          <li>
+            <a href="">
+            <img src="{{ MEDIA_URL }}images/partner_sample_logo.png"/>
+            Mozilla
+            <span class="url">example at mozilla.com</span>
+            </a>
+          </li>
+          <li>
+            <a href="">
+            <img src="{{ MEDIA_URL }}images/partner_sample_logo.png"/>
+            Mozilla
+            <span class="url">example at mozilla.com</span>
+            </a>
+          </li>
+        </ul>
+      </div> <!-- // partners -->
+      
+      {% comment %}
+      <p id="enterprise">
+        Interested in deep integration or a volunteer translation team? Want crowdsourcing with quality control?
+        <a class="button grey" href="#">Take a look at our enterprise services</a>
+      </p>
+      {% endcomment %}
+      
+      <div id="most-popular" class="featured">
+        <h2>Most Popular Today</h2>
+        <p class="links">
+          <a href="#">Top this month</a>
+          <a href="#">Top all-time</a>
+        </p>
+        
+        <ul>
+          <li class="clearfix">
+            <div class="rounded-img" style="background-image: url({{ MEDIA_URL }}images/featured_img.png)">
+              <img src="{{ MEDIA_URL }}images/featured_img.png" />
+            </div>
+            <a href="#" class="title">Cherynobl: A Million Causualties</a>
+            <p>Doctor in indea uses Universal Subtitles to translate videos for his patients.</p>
+            <a href="#">Watch Video</a>
+          </li>
+          <li class="clearfix">
+            <div class="rounded-img" style="background-image: url({{ MEDIA_URL }}images/featured_img.png)">
+              <img src="{{ MEDIA_URL }}images/featured_img.png" />
+            </div>
+            <a href="#" class="title">Cherynobl: A Million Causualties</a>
+            <p>Doctor in indea uses Universal Subtitles to translate videos for his patients.</p>
+            <a href="#">Watch Video</a>
+          </li>
+        </ul>
+      </div><!-- // most_popular -->
+      
+      <div id="featured-videos" class="featured">
+        <h2>Featured Videos</h2>
+        <p class="links">
+          <a href="#">Top volunteer needs</a>
+          <a href="#">Translation teams</a>
+        </p>
+        
+        <ul>
+          <li class="clearfix">
+            <div class="rounded-img" style="background-image: url({{ MEDIA_URL }}images/featured_img.png)">
+              <img src="{{ MEDIA_URL }}images/featured_img.png" />
+            </div>
+            <a href="#" class="title">Cherynobl: A Million Causualties</a>
+            <p>Doctor in indea uses Universal Subtitles to translate videos for his patients.</p>
+            <a href="#">Watch Video</a>
+          </li>
+          <li class="clearfix">
+            <div class="rounded-img" style="background-image: url({{ MEDIA_URL }}images/featured_img.png)">
+              <img src="{{ MEDIA_URL }}images/featured_img.png" />
+            </div>
+            <a href="#" class="title">Cherynobl: A Million Causualties</a>
+            <p>Doctor in indea uses Universal Subtitles to translate videos for his patients.</p>
+            <a href="#">Watch Video</a>
+          </li>
+        </ul>
+      </div><!-- // featured_videos -->
+    </div><!-- // container -->
+    
+    <div class="clearfix"></div>
+    <div id="footer" class="clearfix">
+      <div class="container">
+        <ul>
+          <li><a href="#">Subtitle a Video</a></li>
+          <li><a href="#">Most Watched</a></li>
+          <li><a href="#">Volunteer</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Help</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+        
+        <a id="pcf" href="#">A project of the<br/> Participatory Culture Foundation</a>
+        
+        <address>
+          <strong>Participatory Culture Foundation</strong><br />
+          PO Box 55071<br />
+          #20335<br />
+          Boston, MA 02205-5071
+        </address>
+        
+        <form id="language-select">
+          <label for="language">Language</label>
+          <select name="language" >
+            <option>English (American)</option>
+            <option>English (UK)</option>
+          </select>
+        </form>
+      </div><!-- // container -->
+    </div><!-- // footer -->
+  </body>
+</html>

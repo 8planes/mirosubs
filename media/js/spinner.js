@@ -94,8 +94,11 @@ mirosubs.Spinner.prototype.addAnchorEventHandlers_ = function(elem) {
         listen(elem, et.MOUSEOUT, this.mouseOut_);
 };
 mirosubs.Spinner.prototype.updateText_ = function() {
+    var displayValue = 
+    mirosubs.subtitle.EditableCaption.isTimeUndefined(this.value_) ?
+         "" : this.value_;
     goog.dom.setTextContent(this.valueSpan_,
-                            this.valueExpression_(this.value_));
+                            this.valueExpression_(displayValue));
 };
 mirosubs.Spinner.prototype.cancelTimer_ = function() {
     this.activated_ = false;

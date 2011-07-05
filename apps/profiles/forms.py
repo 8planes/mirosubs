@@ -69,6 +69,8 @@ class UserLanguageForm(forms.ModelForm):
     
     class Meta:
         model = UserLanguage
+        # TODO #request subtitles: Remove this after implementing request notifications
+        exclude = ('follow_requests',)
         
     def __init__(self, *args, **kwrags):
         super(UserLanguageForm, self).__init__(*args, **kwrags)
@@ -156,7 +158,7 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'homepage', 'preferred_language', 
-                  'changes_notification', 'biography', 'new_message_notification', 'follow_new_video')
+                  'changes_notification', 'biography', 'follow_new_video')
         
     def clean(self):
         self.cleaned_data = super(EditUserForm, self).clean()

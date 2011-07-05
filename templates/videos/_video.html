@@ -4,7 +4,11 @@
     <li>
         <a href="{{ video.get_absolute_url }}">
             {% if video.small_thumbnail %}
-                <img src="{{ video.small_thumbnail }}" width="155" height="90"/>
+            <span class="video_thumb">
+              <span class="clip">
+                <img src="{{ video.small_thumbnail }}"/>
+              </span><!-- // clip -->
+            </span><!-- // video_thumb -->
             {% else %}
                 <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
             {% endif %}
@@ -14,11 +18,9 @@
             <strong>{{ video.total_views }}</strong> {% trans "Views" %}
         </span>
         <span class="languages">
-            {% comment %}
             {% if video.languages_count %}
             <a class="lang_arrow" href="#" video_id="{{ video.pk }}"></a>
             {% endif %}
-            {% endcomment %}
             <span>
                   {% blocktrans count video.languages_count as number %}
                       {{ number }} Language

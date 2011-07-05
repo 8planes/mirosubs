@@ -164,3 +164,5 @@ goog.exportSymbol(
 goog.exportSymbol(
     'mirosubs.api.embed',
     mirosubs.api.embed);
+
+mirosubs.widget.Widget.exportFireKeySequence();
