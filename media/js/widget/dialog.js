@@ -262,7 +262,7 @@ mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
     var serverModel = this.getServerModel();
     if (serverModel){
         var args = {};
-        args['draft_pk'] = serverModel.getDraftPK();
+        args['session_pk'] = serverModel.getSessionPK();
         mirosubs.Rpc.call("release_lock", args);    
     }
     mirosubs.widget.ResumeEditingRecord.clear();

@@ -210,23 +210,24 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
     this.showLoading_(false);
     if (result['can_edit']) {
         var sessionPK = result['session_pk'];
-        subtitles = mirosubs.widget.SubtitleState.fromJSON(
+        var subtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['subtitles']);
-        captionSet = new mirosubs.subtitle.EditableCaptionSet(
+        var originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
+            result['original_subtitles']);
+        var captionSet = new mirosubs.subtitle.EditableCaptionSet(
             subtitles.SUBTITLES);
         if (!fromResuming) {
             this.saveInitialSubs_(sessionPK, subtitles);
         }
-        originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
-            result['original_subtitles']);
         var serverModel = new mirosubs.subtitle.MSServerModel(
             sessionPK, this.videoID_, this.videoURL_,
             subtitles.IS_COMPLETE, captionSet);
         if (subtitles.IS_ORIGINAL || subtitles.FORKED)
             this.openSubtitlingDialog_(serverModel, subtitles);
-        else
+        else {
             this.openDependentTranslationDialog_(
                 serverModel, subtitles, originalSubtitles);
+        }
     }
     else {
         var username = 

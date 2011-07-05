@@ -121,6 +121,17 @@ mirosubs.subtitle.EditableCaptionSet.prototype.identicalTo = function(otherCapti
     return true;
 };
 
+mirosubs.subtitle.EditableCaptionSet.prototype.addNewDependentTranslation = 
+    function(subOrder, subtitleID)
+{
+    var c = new mirosubs.subtitle.EditableCaption(
+        null, 
+        { 'subtitle_id': subtitleID,
+          'text': '',
+          'sub_order': subOrder });
+    this.captions_.push(c);
+    return c;
+};
 
 
 /**
@@ -202,6 +213,7 @@ mirosubs.subtitle.EditableCaptionSet.prototype.addNewCaption = function(opt_disp
         lastSubOrder = this.captions_[this.captions_.length - 1].getSubOrder();
     var c = new mirosubs.subtitle.EditableCaption(lastSubOrder + 1.0);
     mirosubs.SubTracker.getInstance().trackAdd(c.getCaptionID());    
+
     c.setParentEventTarget(this);
     this.captions_.push(c);
     if (this.captions_.length > 1) {
@@ -264,4 +276,13 @@ mirosubs.subtitle.EditableCaptionSet.prototype.needsSync = function() {
         return x.needsSync();
     }) || this.captions_[this.captions_.length -1].getStartTime() == 
         mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
+};
+
+mirosubs.subtitle.EditableCaptionSet.prototype.makeMap = function() {
+    var map = {};
+    goog.array.forEach(this.captions_, 
+                       function(c) {
+                           map[c.getCaptionID()] = c;
+                       });
+    return map;
 };
