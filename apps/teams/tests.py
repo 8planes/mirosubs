@@ -377,7 +377,7 @@ class TeamsTest(TestCase):
     def test_complete_contents(self):
         from widget.tests import create_two_sub_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        create_two_sub_session(request)
+        create_two_sub_session(request, completed=True)
 
         team, new_team_video = self._create_new_team_video()
         en = new_team_video.video.subtitle_language()
