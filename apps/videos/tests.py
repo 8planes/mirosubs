@@ -364,7 +364,6 @@ class UploadSubtitlesTest(WebUseTest):
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
 
-
     def test_upload_forks(self):
         from widget.tests import create_two_sub_dependent_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
