@@ -219,6 +219,14 @@
   line-height: 18px;
 }
 
+.featured a.more {
+	float: right;
+	display: block;
+	position: relative;
+	top: 6px;
+	right: 10px;
+}
+
 .featured h2 {
   font-size: 24px;
   border-bottom: 1px solid #cfcfcf;

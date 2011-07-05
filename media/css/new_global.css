@@ -89,6 +89,88 @@ input {
   margin: 0 auto;
 }
 
+.ultra-nav {
+	height: 45px;
+  border-bottom: 1px solid #DDD;
+}
+
+.ultra-nav ul {
+	width: 990px;
+	padding: 0 10px;
+	margin: 0 auto;  
+}
+
+.ultra-nav li {
+  float: left;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ultra-nav li a {
+	float: left;
+	color: #555;
+	padding: 16px 26px 13px 53px;
+	text-decoration: none;
+	margin: 0;
+	height: 16px;
+	overflow: hidden;
+	font-size: 14px;
+}
+
+.ultra-nav li a:hover {
+	text-decoration: none;
+	color: #000;
+}
+
+.ultra-nav li:active {
+	background-color:#F7FAFE;
+}
+
+.miro-top {
+	background: url(../images/ultra_nav_small_icons.png) 22px 11px no-repeat !important;
+	border-right: 1px solid #e4e4e4;
+	border-left: 1px solid #e4e4e4;
+}
+
+.ipad_link {
+	background: url(../images/ultra_nav_small_icons.png) 22px -29px no-repeat;
+	border-right: 1px solid #e4e4e4;
+}
+
+.mvc_link {
+	background: url(../images/ultra_nav_small_icons.png) 22px -71px no-repeat;
+	border-right: 1px solid #e4e4e4;
+}
+
+.mc_link {
+	background: url(../images/ultra_nav_small_icons.png) 22px -113px no-repeat;
+	border-right: 1px solid #e4e4e4;
+}
+
+.us_link {
+	background: url(../images/ultra_nav_small_icons.png) 22px -157px no-repeat, -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,.1)), to(rgba(255,255,255,.1))) !important;
+}
+
+.us_link a {
+	border-right: 1px solid #E4E4E4;
+}
+
+.pcf_link {
+}
+
+.pcf_link a {
+	padding: 30px 0 0 !important;
+	height: 0px;
+	width: 100px;
+	overflow: hidden;
+	line-height: 4em;
+	background: url(../images/ultra_nav_pcf_logo.png) 18px 16px no-repeat;
+}
+
+.pcf_link a:hover {
+	background: url(../images/ultra_nav_pcf_logo.png) 18px -21px no-repeat;
+}
 
 #header {
   background-image: -moz-linear-gradient(top, #fff, #ddd);
@@ -122,17 +204,39 @@ input {
 
 #nav li { 
   float: left;
-  margin: 0 25px;
+  margin: 0 15px;
 }
 
 #nav a { 
   color: #7d7d7d;
   font-size: 14px;
-  font-weight: bold; 
 }
 
 #nav a:hover {
   color: #444;
+}
+
+#nav li#btn_twitter, #nav li#btn_facebook {
+	padding: 12px 0 13px 0;
+}
+
+#nav li#btn_twitter a, #nav li#btn_facebook a {
+	display: block;
+	width: 20px;
+	height: 20px;
+	text-indent: -99999px;
+}
+
+#nav li#btn_twitter a {
+	background: transparent url(../images/icon_nav_twitter.png) 0 0 no-repeat;
+}
+
+#nav li#btn_facebook a {
+	background: transparent url(../images/icon_nav_facebook.png) 0 1px no-repeat;
+}
+
+#nav li#btn_twitter a:hover, #nav li#btn_facebook a:hover {
+	opacity: 0.7;
 }
 
 #user {
@@ -248,21 +352,24 @@ input {
 
 #footer #language-select {
   background-color: #fff;
-  width: 284px;
-  height: 44px;
-  line-height: 44px;
-  text-align: center;
+  width: 225px;
   margin: 0 auto;
   border-top-left-radius:   5px;
   border-top-right-radius:  5px;
   position: relative;
-  top: 36px;
+	top: 36px;
+	padding: 10px 10px 20px 10px;
 }
 
 #footer #language-select label {
   color: #126295;
   font-weight:  bold;
-  margin-right: 5px;
+	display: block;
+	font-size: 14px;
+	margin: 0 0 5px 0;
+}
+
+#footer #language-select select {
 }
 
 #footer address {

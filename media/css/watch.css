@@ -528,11 +528,12 @@ body#watch_results #sidebar ul li a:hover {
 
 body#watch_results #sidebar ul li.active a {
 	color: #31879f;
-	padding: 7px 10px 7px 10px;
+	padding: 7px 30px 7px 10px;
+	background: transparent url(../images/icon_results_active.png) 95% center no-repeat;
 }
 
 body#watch_results #sidebar ul li.active a:hover {
-	background: #dce5e7;
+	background: #dce5e7 url(../images/icon_results_active.png) 95% center no-repeat;
 }
 
 body#watch_results #main_col {
