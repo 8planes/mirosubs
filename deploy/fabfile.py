@@ -342,3 +342,8 @@ def update_translations():
     - You must have the  .transifexrc file into your home (this has auth credentials is stored outside of source control)
     """
     run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))
+
+def test_services():
+    with cd(os.path.join(env.web_dir, 'mirosubs')):
+        run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
+            env.static_dir))
