@@ -236,7 +236,7 @@ class Rpc(BaseRpc):
                 sub.end_time = standard_sub.end_time
                 sub.save()
             else:
-                to_delete.add(sub)
+                to_delete.append(sub)
         for sub in to_delete:
             sub.delete()
         draft = models.SubtitleDraft.objects.get(pk=draft_pk)
