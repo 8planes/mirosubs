@@ -326,10 +326,10 @@ class UploadSubtitlesTest(WebUseTest):
 
     def test_upload_over_translated(self):
         # for https://www.pivotaltracker.com/story/show/11804745
-        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        from widget.tests import create_two_sub_dependent_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_dependent_draft(request)
-        video_pk = draft.language.video.pk
+        session = create_two_sub_dependent_session(request)
+        video_pk = session.language.video.pk
         video = Video.objects.get(pk=video_pk)
         original_en = video.subtitlelanguage_set.filter(language='en').all()[0]
 
@@ -342,10 +342,10 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEqual(2, video.subtitlelanguage_set.count())
 
     def test_upload_over_empty_translated(self):
-        from widget.tests import create_two_sub_draft, RequestMockup
+        from widget.tests import create_two_sub_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_draft(request)
-        video_pk = draft.language.video.pk
+        session = create_two_sub_session(request)
+        video_pk = session.language.video.pk
         video = Video.objects.get(pk=video_pk)
         original_en = video.subtitlelanguage_set.filter(language='en').all()[0]
 
@@ -366,10 +366,10 @@ class UploadSubtitlesTest(WebUseTest):
 
 
     def test_upload_forks(self):
-        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        from widget.tests import create_two_sub_dependent_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_dependent_draft(request)
-        video = draft.video
+        session = create_two_sub_dependent_session(request)
+        video = session.video
         translated = video.subtitlelanguage_set.all().filter(language='es')[0]
         self.assertFalse(translated.is_forked)
         self.assertEquals(False, translated.latest_version().is_forked)
@@ -406,10 +406,10 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertNotEqual(sub_0.start_time , original_subs[0].start_time)
 
     def test_upload_respects_lock(self):
-        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        from widget.tests import create_two_sub_dependent_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_dependent_draft(request)
-        video = draft.video
+        session = create_two_sub_dependent_session(request)
+        video = session.video
 
         self._login()
         translated = video.subtitlelanguage_set.all().filter(language='es')[0]
@@ -425,10 +425,10 @@ class UploadSubtitlesTest(WebUseTest):
     def test_translations_get_order_after_fork(self):
           # we create en -> es
           # new es has no time data, but does have order
-          from widget.tests import create_two_sub_dependent_draft, RequestMockup
+          from widget.tests import create_two_sub_dependent_session, RequestMockup
           request = RequestMockup(User.objects.all()[0])
-          draft = create_two_sub_dependent_draft(request)
-          video = draft.video
+          session = create_two_sub_dependent_session(request)
+          video = session.video
           translated = video.subtitlelanguage_set.all().filter(language='es')[0]
           for sub in translated.version().subtitle_set.all():
               self.assertTrue(sub.start_time is None)
