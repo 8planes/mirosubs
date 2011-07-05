@@ -14,7 +14,7 @@
     </div><!-- hd -->
     
     <div class="bd clearfix">
-        {% for lang in video.subtitlelanguage_set.all|slice:":10" %}
+        {% for lang in languages|slice:":10" %}
             {% with lang.subtitle_count as lines_count %}
                 {% if lines_count %}  
                     <span class="{% complete_color lang %}">
