@@ -104,7 +104,13 @@ def _update_percent_done(video):
         if not sl.is_dependent():
             continue
         translation_count = sl.nonblank_subtitle_count()
-        subtitle_count = sl.real_standard_language().nonblank_subtitle_count()
+        real_standard_language = sl.real_standard_language()
+        
+        if real_standard_language:
+            subtitle_count = real_standard_language.nonblank_subtitle_count()
+        else:
+            subtitle_count = 0
+            
         if subtitle_count == 0:
             percent_done = 0
         else:

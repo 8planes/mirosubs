@@ -41,10 +41,6 @@ goog.inherits(mirosubs.widget.DropDown, goog.ui.Component);
 mirosubs.widget.DropDown.Selection = {
     ADD_LANGUAGE: "add_language",
     IMPROVE_SUBTITLES: "improve_subtitles",
-    //TODO #request_subs: Uncomment this while integrating request subtitles with master branch
-    /*
-     *REQUEST_SUBTITLES: "request_subtitles",
-     */
     SUBTITLE_HOMEPAGE: "subtitle_homepage",
     DOWNLOAD_SUBTITLES: "download_subtitles",
     CREATE_ACCOUNT: "create_account",
@@ -72,14 +68,7 @@ mirosubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSt
     this.clearCurrentLang_();
     this.subtitleState_ = subtitleState;
     this.setCurrentLangClassName_();
-    // there is likely a bug in mirosubs.styleSetPropertyInString,
-    // turning it on and off will not restore display to block
-    // mirosubs.style.showElement(this.improveSubtitlesLink_, shows);
-    var display = "none";
-    if (Boolean(subtitleState)){
-        display = "block";
-    }
-    goog.style.setStyle(this.improveSubtitlesLink_, display + " !important");
+    mirosubs.style.showElement(this.improveSubtitlesLink_, !!subtitleState);
     goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = this.createDownloadSRTURL_();
 };
 
@@ -184,10 +173,7 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.improveSubtitlesLink_ =
         $d('li', 'mirosubs-improveSubtitles',
            $d('a', {'href': '#'}, 'Improve These Subtitles'));
-    this.requestSubtitlesLink_ =
-        $d('li', 'mirosubs-requestSubtitles',
-           $d('a', {'href': '#'}, 'Request Subtitles'));
-   this.subtitleHomepageLink_ =
+    this.subtitleHomepageLink_ =
         $d('li', 'mirosubs-subtitleHomepage',
            $d('a', {'href': this.createSubtitleHomepageURL_()},
               'Subtitle Homepage'));
@@ -220,10 +206,6 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
 
     this.videoActions_.appendChild(this.addLanguageLink_);
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
-    //TODO #request_subtitles: Uncomment this while integrating request subtiles UI with master branch
-    /*
-     *this.videoActions_.appendChild(this.requestSubtitlesLink_);
-     */
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
     this.videoActions_.appendChild(this.getEmbedCodeLink_);    
     this.videoActions_.appendChild(this.downloadSubtitlesLink_);
@@ -270,12 +252,6 @@ mirosubs.widget.DropDown.prototype.enterDocument = function() {
         listen(this.getDomHelper().getDocument(),
                goog.events.EventType.MOUSEDOWN,
                this.onDocClick_, true);
-
-        //TODO #request_subs: Add this while integrating request subtitles with master branch
-        /*
-         *listen(this.requestSubtitlesLink_, 'click',
-         *       goog.bind(this.menuItemClicked_, this, s.REQUEST_SUBTITLES)).
-         */
 
     // Webkit doesn't fire a mousedown event when opening the context menu,
     // but we need one to update menu visibility properly. So in Safari handle
@@ -329,8 +305,7 @@ mirosubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
         window.open(goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href);
     }
         
-    else if (type == s.ADD_LANGUAGE || type == s.IMPROVE_SUBTITLES ||
-             type == s.REQUEST_SUBTITLES || type == s.SUBTITLES_OFF)
+    else if (type == s.ADD_LANGUAGE || type == s.IMPROVE_SUBTITLES || type == s.SUBTITLES_OFF)
         this.dispatchEvent(type);
 
     this.hide();

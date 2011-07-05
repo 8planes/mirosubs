@@ -82,7 +82,8 @@ class VideosApiClass(object):
             video = None
         
         context = {
-            'video': video
+            'video': video,
+            'languages': video.subtitlelanguage_set.filter(had_version=True)
         }
         
         return {

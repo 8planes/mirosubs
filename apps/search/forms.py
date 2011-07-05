@@ -45,18 +45,25 @@ class SearchForm(forms.Form):
             self.fields['video_lang'].choices = choices
     
     def _make_choices_from_faceting(self, data):
-        choices = [('', _('All Languages'))]
-
-        for l in data:
-            lang = LanguageField.convert(l[0])
-            ALL_LANGUAGES_NAMES = dict(get_simple_languages_list())
-                        
+        choices = []
+        
+        ALL_LANGUAGES_NAMES = dict(get_simple_languages_list())
+        
+        for lang, val in data:
+            lang = LanguageField.convert(lang)
             try:
-                choices.append((lang, ALL_LANGUAGES_NAMES[lang]))
+                choices.append((lang, ALL_LANGUAGES_NAMES[lang], val))
             except KeyError:
                 pass
-            
+
+        choices.sort(key=lambda item: item[-1], reverse=True)
+        
+        choices.insert(0, ('', _('All Languages')))
         return choices
+    
+    @classmethod
+    def apply_query(cls, q, qs):
+        return qs.auto_query(q).filter_or(title=q)
     
     def search_qs(self, qs):
         q = self.cleaned_data.get('q')
@@ -64,30 +71,14 @@ class SearchForm(forms.Form):
         langs = self.cleaned_data.get('langs')
         video_language = self.cleaned_data.get('video_lang')
         
-        qs = qs.auto_query(q).filter_or(title=q)
+        qs = self.apply_query(q, qs)
         
         #aplly filtering
         if video_language:
-            if video_language == 'my_langs':
-                qs = qs.filter(video_language__in=self.user_langs)
-            elif video_language == 'not_selected' and langs not in ['', 'not_selected']:
-                if langs == 'my_langs':
-                    qs = qs.exclude(video_language__in=self.user_langs)
-                else:
-                    qs = qs.exclude(video_language=langs)
-            else:
-                qs = qs.filter(video_language=video_language)
+            qs = qs.filter(video_language__exact=video_language)
         
         if langs:
-            if langs == 'my_langs':
-                qs = qs.filter(languages__in=self.user_langs)
-            elif langs == 'not_selected' and video_language not in ['', 'not_selected']:
-                if video_language == 'my_langs':
-                    qs = qs.exclude(languages__in=self.user_langs)
-                else:
-                    qs = qs.exclude(languages=langs)
-            else:
-                qs = qs.filter(languages=langs)
+            qs = qs.filter(languages=langs)
         
         if ordering:
             qs = qs.order_by('-' + ordering)

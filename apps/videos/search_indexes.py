@@ -6,7 +6,7 @@ from comments.models import Comment
 from auth.models import CustomUser as User
 from utils.celery_search_index import CelerySearchIndex
 
-SUFFIX = u' ++++++++++'
+SUFFIX = u'+++++'
 
 class LanguageField(SearchField):
     """
@@ -19,12 +19,16 @@ class LanguageField(SearchField):
     
     def prepare(self, obj):
         value = super(LanguageField, self).prepare(obj)
-        return unicode(value)+SUFFIX
+        return self.prepare_lang(value)
+    
+    @classmethod
+    def prepare_lang(cls, lang):
+        return u'%s%s' % (lang, SUFFIX)
     
     @classmethod
     def convert(cls, value):
         if value is None:
-            return None
+            return
         
         value = unicode(value)
         
@@ -49,18 +53,17 @@ class LanguagesField(MultiValueField):
         output = []
         for val in value:
             if isinstance(val, (str, unicode)) and val:
-                val = unicode(val) + SUFFIX          
+                val = LanguageField.prepare_lang(val)          
+                
             output.append(val)
 
         return output
         
     def convert(self, value):
         if value is None:
-            return None
+            return
         
-        value = list(value)
-
-        return [v[:-len(SUFFIX)] for v in value if v.endswith(SUFFIX)]
+        return [LanguageField.convert(v) for v in list(value)]
 
 class VideoIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
@@ -93,8 +96,8 @@ class VideoIndex(CelerySearchIndex):
         langs = obj.subtitlelanguage_set.exclude(language=u'')
         self.prepared_data['video_language'] = obj.language
         #TODO: converting should be in Field
-        self.prepared_data['video_language'] = obj.language and u'%s%s' % (obj.language, SUFFIX) or u''
-        self.prepared_data['languages'] = [u'%s%s' % (lang.language, SUFFIX) for lang in langs if lang.subtitle_count]
+        self.prepared_data['video_language'] = obj.language and LanguageField.prepare_lang(obj.language) or u''
+        self.prepared_data['languages'] = [LanguageField.prepare_lang(lang.language) for lang in langs if lang.subtitle_count]
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()
         self.prepared_data['activity_count'] = obj.action_set.count()
         self.prepared_data['week_views'] = obj.views['week']

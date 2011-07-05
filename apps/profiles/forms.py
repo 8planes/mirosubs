@@ -69,8 +69,6 @@ class UserLanguageForm(forms.ModelForm):
     
     class Meta:
         model = UserLanguage
-        # TODO #request subtitles: Remove this after implementing request notifications
-        exclude = ('follow_requests',)
         
     def __init__(self, *args, **kwrags):
         super(UserLanguageForm, self).__init__(*args, **kwrags)
@@ -80,7 +78,7 @@ class UserLanguagelineFormSet(BaseInlineFormSet):
 
     def _construct_form(self, i, **kwargs):
         try:
-            return super(UserLanguagelineFormSet, self). _construct_form(i, **kwargs)
+            return super(UserLanguagelineFormSet, self)._construct_form(i, **kwargs)
         except (IndexError, ValueError):
             return BaseFormSet._construct_form(self, i, **kwargs)
 

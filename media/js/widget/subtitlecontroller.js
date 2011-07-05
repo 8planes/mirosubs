@@ -40,7 +40,6 @@ mirosubs.widget.SubtitleController = function(
                 videoTab.stopLoading();
         },
         goog.bind(playController.stopForDialog, playController));
-
     this.handler_.listenOnce(
         this.dialogOpener_,
         goog.ui.Dialog.EventType.AFTER_HIDE,
@@ -55,17 +54,10 @@ mirosubs.widget.SubtitleController = function(
             dropDown,
             s.IMPROVE_SUBTITLES,
             this.improveSubtitles_).
-       listen(
+        listen(
             videoTab.getAnchorElem(), 'click',
             this.videoAnchorClicked_
         );
-       /*
-        *TODO #request subtitles: Add this after integrating request subtitles ui with master
-        *listen(
-        *     dropDown,
-        *     s.REQUEST_SUBTITLES,
-        *     this.requestSubtitles_).
-        */
 };
 
 mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ = 
@@ -87,10 +79,6 @@ mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
             null,
             state.LANGUAGE_PK,
             state.BASE_LANGUAGE_PK));
-};
-
-mirosubs.widget.SubtitleController.prototype.requestSubtitles_ = function() {
-    this.openRequestSubtitlesDialog();
 };
 
 /**
@@ -122,10 +110,3 @@ mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e)
         this.dropDown_.updateContents(dropDownContents);
     }
 };
-
-mirosubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog =
-    function()
-{
-    var dialog = new mirosubs.widget.RequestDialog(this.videoID_);
-    dialog.setVisible(true);
-}

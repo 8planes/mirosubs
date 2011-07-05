@@ -240,6 +240,7 @@ class Rpc(BaseRpc):
                 language.video.video_id, language.language)
             return { 'response': 'ok' }
 
+
     def finished_subtitles(self, request, session_pk, subtitles=None, 
                            new_title=None, completed=None, 
                            throw_exception=False):

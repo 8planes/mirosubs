@@ -226,8 +226,6 @@ JS_CORE = ['mirosubs.js',
            'widget/resumeeditingrecord.js',
            'widget/opendialogargs.js',
            'widget/dropdown.js',
-           ## TODO #request subtitles: Uncomment these while integrating request subtitles ui into master branch
-           #'widget/requestdialog.js',
            'widget/subtitle/dialog.js',
            'widget/subtitle/msservermodel.js',
            'widget/subtitle/editablecaption.js',
