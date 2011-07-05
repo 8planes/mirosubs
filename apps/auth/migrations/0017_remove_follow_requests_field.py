@@ -7,16 +7,16 @@ from django.db import models
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
+        """
+        This is fixin migration for other deleted migration
+        """
+        try:
+            db.delete_column('auth_userlanguage', 'follow_requests')
+        except:
+            pass
         
-        # Adding field 'UserLanguage.follow_requests'
-        db.add_column('auth_userlanguage', 'follow_requests', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
-    
-    
     def backwards(self, orm):
-        
-        # Deleting field 'UserLanguage.follow_requests'
-        db.delete_column('auth_userlanguage', 'follow_requests')
-    
+        pass
     
     models = {
         'auth.announcement': {
@@ -43,7 +43,6 @@ class Migration(SchemaMigration):
             'follow_new_video': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'homepage': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             'last_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
-            'new_message_notification': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'picture': ('utils.amazon.fields.S3EnabledImageField', [], {'max_length': '100', 'blank': 'True'}),
             'preferred_language': ('django.db.models.fields.CharField', [], {'max_length': '16', 'blank': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
@@ -87,7 +86,6 @@ class Migration(SchemaMigration):
         },
         'auth.userlanguage': {
             'Meta': {'unique_together': "(['user', 'language'],)", 'object_name': 'UserLanguage'},
-            'follow_requests': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
             'proficiency': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
@@ -115,6 +113,7 @@ class Migration(SchemaMigration):
             'is_subtitled': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'languages_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'db_index': 'True'}),
             's3_thumbnail': ('utils.amazon.fields.S3EnabledImageField', [], {'max_length': '100', 'blank': 'True'}),
+            'small_thumbnail': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
             'subtitles_fetched_count': ('django.db.models.fields.IntegerField', [], {'default': '0', 'db_index': 'True'}),
             'thumbnail': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
