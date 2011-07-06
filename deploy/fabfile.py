@@ -226,7 +226,7 @@ def update_web():
         with cd(os.path.join(env.admin_dir, 'mirosubs')):
             _git_pull()
     _bounce_celeryd()
-    
+    test_services()
 
 def bounce_memcached():
     if env.admin_dir:
@@ -298,7 +298,6 @@ def update():
     update_static()
     update_web()
 
-
 def _promote_django_admins(dir, email=None, new_password=None, userlist_path=None):
     with cd(os.path.join(dir, 'mirosubs')):
         python_exe = '{0}/env/bin/python'.format(dir)
@@ -344,6 +343,8 @@ def update_translations():
     run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))
 
 def test_services():
-    with cd(os.path.join(env.web_dir, 'mirosubs')):
-        run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
-            env.static_dir))
+    for host in env.web_hosts:
+        env.host_string = host    
+        with cd(os.path.join(env.web_dir, 'mirosubs')):
+            run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
+                env.static_dir))

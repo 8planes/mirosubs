@@ -18,12 +18,36 @@
 
 from django.core.management.base import BaseCommand
 from utils.redis_utils import default_connection
+from haystack import backend
+from pysolr import SolrError
+from django.core.cache import cache
 
 class Command(BaseCommand):
     help = u'Test if Solr, Redis and Memcached are available'
     
     def handle(self, *args, **kwargs):
         self._test_redis()
-    
+        self._test_solr()
+        self._test_memcached()
+        
     def _test_redis(self):
         assert default_connection.ping(), u'Redis is unavailable'
+        
+        print 'Redis: OK'
+        
+    def _test_solr(self):
+        sb = backend.SearchBackend()
+        try:
+            sb.conn.commit()
+        except (IOError, SolrError), e:
+            raise Exception('Solr is unavailable')
+        
+        print 'Solr: OK'
+        
+    def _test_memcached(self):
+        val = 1
+        key = 'test-cache'
+        cache.set(key, val)
+        assert val == cache.get(key), u'Cache is unavailable'
+        
+        print 'Cache: OK'
