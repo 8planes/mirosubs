@@ -634,7 +634,7 @@ def subscribe_to_updates(request):
 
 def test_celery(request):
     from videos.tasks import add
-    add.delay(1, 2)
+    r = add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
 
 @staff_member_required

@@ -25,6 +25,7 @@ from pysolr import SolrError
 from django.core.cache import cache
 from utils.celery_search_index import update_search_index
 from videos.models import Video
+from videos.tasks import add
 import random
 import base64
 
@@ -35,6 +36,19 @@ class Command(BaseCommand):
         self._test_redis()
         self._test_solr()
         self._test_memcached()
+        self._test_celery()
+        
+    def _test_celery(self):
+        print '=== CELERY ==='
+        a = int(random.random()*1000)
+        b = int(random.random()*1000)
+        r = add.delay(a, b)
+        ra, rb, s = r.get()
+        print 'Execute task "add" with args: ', a, b
+        assert ra == a and rb == b and s == a+b, u'Celery is unavailable'
+        
+        print 'OK'
+        print
         
     def _test_redis(self):
         print '=== REDIS ==='
