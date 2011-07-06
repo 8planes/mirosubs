@@ -218,6 +218,8 @@ def update_web():
             env.warn_only = True
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
+            #with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
+            #    run('. ../../env/bin/activate && pip install -q -r requirements.txt')
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
