@@ -105,8 +105,7 @@ def index(request, my_teams=False):
         'ordering': ordering,
         'order_type': order_type,
         'order_name': order_fields_name.get(ordering, 'name'),
-        'highlighted_qs': highlighted_qs,
-        'can_create_team': DEV or (request.user.is_superuser and request.user.is_active)
+        'highlighted_qs': highlighted_qs
     }
     return object_list(request, queryset=qs,
                        paginate_by=TEAMS_ON_PAGE,
