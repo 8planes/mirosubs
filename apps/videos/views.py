@@ -52,6 +52,7 @@ from django.core.urlresolvers import reverse
 from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
 from utils.decorators import never_in_prod
+from utils.translation import get_user_languages_from_request
 from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
@@ -103,7 +104,7 @@ def popular_videos(request):
 def volunteer_page(request):
     user = request.user
     # Get the user comfort languages list 
-    user_langs = user.userlanguage_set.values_list('language', flat=True)
+    user_langs = get_user_languages_from_request(request)
 
     relevevent = SearchQuerySet().result_class(VideoSearchResult) \
         .models(Video).filter(video_language__in=user_langs) \

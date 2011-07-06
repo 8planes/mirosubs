@@ -26,6 +26,7 @@ from videos.models import Video, SubtitleLanguage
 from django.utils.translation import ugettext as _
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
+from utils.translation import get_user_languages_from_request
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.conf import settings
@@ -126,7 +127,7 @@ class VideosApiClass(object):
         Return the search query set for videos which would be relevent to
         volunteer for writing subtitles.
         '''
-        user_langs = user.userlanguage_set.values_list('language', flat=True)
+        user_langs = get_user_languages_from_request()
 
         relevent = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).filter(video_language__in=user_langs) \
