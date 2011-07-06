@@ -105,15 +105,16 @@ def volunteer_page(request):
     # Get the user comfort languages list 
     user_langs = user.userlanguage_set.values_list('language', flat=True)
 
-    featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(video_language__in=user_langs).order_by('-featured')[:5]
+    relevevent = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).filter(video_language__in=user_langs) \
+        .filter_or(languages__in=user_langs)
 
-    popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(video_language__in=user_langs).order_by('-week_views')[:5]
+    featured_videos =  relevevent.order_by('-featured')[:5]
 
-    latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(video_language__in=user_langs).order_by('-edited')[:15]
- 
+    popular_videos = relevevent.order_by('-week_views')[:5]
+
+    latest_videos = relevevent.order_by('-edited')[:15]
+
     context = {
         'featured_videos': featured_videos,
         'popular_videos': popular_videos,
@@ -125,6 +126,10 @@ def volunteer_page(request):
                               context_instance=RequestContext(request))
 
 def volunteer_category(request, category):
+    '''
+    Display results only for a particular category of video results from
+    popular, featured and latest videos.
+    '''
     return render_to_response('videos/volunteer_%s.html' %(category),
                               context_instance=RequestContext(request))
 
@@ -391,7 +396,7 @@ def history(request, video_id, lang=None, lang_id=None):
             language = video.subtitlelanguage_set.get(pk=lang_id)
         except SubtitleLanguage.DoesNotExist:
             raise Http404
-    else:
+    else:    
         language = video.subtitle_language(lang)
 
     if not language:
@@ -402,7 +407,7 @@ def history(request, video_id, lang=None, lang_id=None):
             url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
             return redirect(url)
         else:
-            raise Http404
+            language = video.subtitlelanguage_set.all()[0]
 
     qs = language.subtitleversion_set.select_related('user')
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
@@ -662,7 +667,7 @@ def subscribe_to_updates(request):
 
 def test_celery(request):
     from videos.tasks import add
-    r = add.delay(1, 2)
+    add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
 
 @staff_member_required
