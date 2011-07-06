@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import redis
+from django.conf import settings
+
+REDIS_HOST = getattr(settings, 'REDIS_HOST', 'localhost')
+REDIS_PORT = getattr(settings, 'REDIS_PORT', 6379)
+REDIS_DB = getattr(settings, 'REDIS_DB', 0)
 
 class Client(object):
     def __init__(self, **kwargs):
-        self.connection_settings = kwargs or {'host': 'localhost',
-                'port': 6379, 'db': 0}
+        self.connection_settings = kwargs or {'host': REDIS_HOST,
+                'port': REDIS_PORT, 'db': REDIS_DB}
 
     def redis(self):
         return redis.Redis(**self.connection_settings)
