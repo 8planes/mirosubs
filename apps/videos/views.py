@@ -396,7 +396,7 @@ def history(request, video_id, lang=None, lang_id=None):
             language = video.subtitlelanguage_set.get(pk=lang_id)
         except SubtitleLanguage.DoesNotExist:
             raise Http404
-    else:    
+    else:
         language = video.subtitle_language(lang)
 
     if not language:
@@ -407,7 +407,7 @@ def history(request, video_id, lang=None, lang_id=None):
             url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
             return redirect(url)
         else:
-            language = video.subtitlelanguage_set.all()[0]
+            raise Http404
 
     qs = language.subtitleversion_set.select_related('user')
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
@@ -667,7 +667,7 @@ def subscribe_to_updates(request):
 
 def test_celery(request):
     from videos.tasks import add
-    add.delay(1, 2)
+    r = add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
 
 @staff_member_required
