@@ -347,4 +347,4 @@ def test_services():
         env.host_string = host    
         with cd(os.path.join(env.web_dir, 'mirosubs')):
             run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
-                env.web_dir_dir))
+                env.web_dir))
