@@ -218,6 +218,8 @@ def update_web():
             env.warn_only = True
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
+            #with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
+            #    run('. ../../env/bin/activate && pip install -q -r requirements.txt')
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
@@ -226,7 +228,7 @@ def update_web():
         with cd(os.path.join(env.admin_dir, 'mirosubs')):
             _git_pull()
     _bounce_celeryd()
-    
+    test_services()
 
 def bounce_memcached():
     if env.admin_dir:
@@ -298,7 +300,6 @@ def update():
     update_static()
     update_web()
 
-
 def _promote_django_admins(dir, email=None, new_password=None, userlist_path=None):
     with cd(os.path.join(dir, 'mirosubs')):
         python_exe = '{0}/env/bin/python'.format(dir)
@@ -342,3 +343,10 @@ def update_translations():
     - You must have the  .transifexrc file into your home (this has auth credentials is stored outside of source control)
     """
     run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))
+
+def test_services():
+    for host in env.web_hosts:
+        env.host_string = host    
+        with cd(os.path.join(env.web_dir, 'mirosubs')):
+            run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
+                env.web_dir))

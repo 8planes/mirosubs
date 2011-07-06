@@ -24,9 +24,11 @@ goog.provide('mirosubs.ClosingWindow');
  */
 mirosubs.ClosingWindow = function() {
     goog.events.EventTarget.call(this);
-    var oldOnBeforeUnload = window.onbeforeunload;
+    var w = window;
+    var oldOnBeforeUnload = w.onbeforeunload,
+        oldOnUnload = w.onunload;
     var that = this;
-    window.onbeforeunload = function(evt) {
+    w.onbeforeunload = function(evt) {
         var ret, oldRet;
         try {
             ret = that.beforeunload_();
@@ -39,16 +41,33 @@ mirosubs.ClosingWindow = function() {
             return oldRet;
         // returns undefined.
     };
+    w.onunload = function(evt) {
+        try {
+            that.unload_();
+        }
+        finally {
+            oldOnUnload && oldOnUnload(evt);
+            w.onresize = null;
+            w.onscroll = null;
+            w.onbeforeunload = null;
+            w.onunload = null;
+        }
+    };
 };
 goog.inherits(mirosubs.ClosingWindow, goog.events.EventTarget);
 goog.addSingletonGetter(mirosubs.ClosingWindow);
 
 mirosubs.ClosingWindow.BEFORE_UNLOAD = 'beforeunload';
+mirosubs.ClosingWindow.UNLOAD = 'unload';
 
 mirosubs.ClosingWindow.prototype.beforeunload_ = function() {
     var event = new mirosubs.ClosingWindow.BeforeUnloadEvent();
     goog.events.dispatchEvent(this, event);
     return event.message;
+};
+
+mirosubs.ClosingWindow.prototype.unload_ = function() {
+    this.dispatchEvent(mirosubs.ClosingWindow.UNLOAD);
 };
 
 /**

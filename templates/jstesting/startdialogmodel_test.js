@@ -202,7 +202,6 @@ function testGeneral0() {
     assertEquals(0, model.fromLanguages().length);
     var toLanguages = model.toLanguages();
     assertEquals("en", toLanguages[0].LANGUAGE);
-    console.log(toLanguages);
     assertEquals(mirosubs.languages.length, toLanguages.length);
     for (var i = 0; i < toLanguages.length; i++)
         assertTrue(!toLanguages[i].VIDEO_LANGUAGE);

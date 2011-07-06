@@ -20,14 +20,17 @@ goog.provide('mirosubs.translate.TranslationWidget');
 
 /**
  * @constructor
- * @param {Object.<string, *>} subtitle Subtitle in json format
- * @param {mirosubs.UnitOfWork} unitOfWork
+ * @param {Object.<string, *>} subtitle Base language subtitle in json format
+ * @param {mirosubs.subtitle.EditableCaption} translation
  */
 mirosubs.translate.TranslationWidget = function(subtitle,
-                                                unitOfWork) {
+                                                translation) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
-    this.unitOfWork_ = unitOfWork;
+    /**
+     * @type {mirosubs.subtitle.EditableCaption}
+     */
+    this.translation_ = translation;
 };
 goog.inherits(mirosubs.translate.TranslationWidget, goog.ui.Component);
 
@@ -66,6 +69,7 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
         .listen(
             this.translateInput_, goog.events.EventType.FOCUS,
             this.inputGainedFocus_);
+    this.translateInput_.value = this.translation_ ? this.translation_.getText() : '';
 };
 
 mirosubs.translate.TranslationWidget.prototype.inputGainedFocus_ = function(event) {
@@ -74,29 +78,16 @@ mirosubs.translate.TranslationWidget.prototype.inputGainedFocus_ = function(even
 
 mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(track) {
     var value = goog.string.trim(this.translateInput_.value);
-    if (!this.translation_) {
-        if (track)
+    var edited = value != this.onFocusText_;
+    if (track && edited) {
+        if (this.onFocusText_ == "")
             mirosubs.SubTracker.getInstance().trackAdd(this.getCaptionID());
-        this.translation_ =
-            new mirosubs.translate
-                .EditableTranslation(this.unitOfWork_, this.getCaptionID());
-    }
-    else {
-        var edited = value != this.onFocusText_;
-        if (track && edited)
+        else
             mirosubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
     }
     this.translation_.setText(value);
 };
 
-/**
- *
- * @param {mirosubs.translate.EditableTranslation} translation
- */
-mirosubs.translate.TranslationWidget.prototype.setTranslation = function(translation) {
-    this.translation_ = translation;
-    this.translateInput_.value = translation ? translation.getText() : '';
-};
 
 mirosubs.translate.TranslationWidget.prototype.setTranslationContent = function(value){
     this.translateInput_.value = value;

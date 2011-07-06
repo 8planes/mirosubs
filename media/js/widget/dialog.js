@@ -80,6 +80,9 @@ mirosubs.Dialog.prototype.enterDocument = function() {
     this.getHandler().
         listen(mirosubs.ClosingWindow.getInstance(),
                mirosubs.ClosingWindow.BEFORE_UNLOAD,
+               this.onBeforeWindowUnload_).
+        listen(mirosubs.ClosingWindow.getInstance(),
+               mirosubs.ClosingWindow.UNLOAD,
                this.onWindowUnload_).
         listen(mirosubs.userEventTarget,
                mirosubs.EventType.LOGIN,
@@ -210,9 +213,12 @@ mirosubs.Dialog.prototype.saveWork = function(closeAfterSave) {
 mirosubs.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     goog.abstractMethod();
 };
-mirosubs.Dialog.prototype.onWindowUnload_ = function(event) {
+mirosubs.Dialog.prototype.onBeforeWindowUnload_ = function(event) {
     if (!this.isWorkSaved())
         event.message = "You have unsaved work.";
+};
+mirosubs.Dialog.prototype.onWindowUnload_ = function() {
+    mirosubs.widget.ResumeEditingRecord.clear();
 };
 mirosubs.Dialog.prototype.setVisible = function(visible) {
     if (visible) {
@@ -243,8 +249,9 @@ mirosubs.Dialog.prototype.showSaveWorkDialog_ = function() {
     var unsavedWarning = new mirosubs.UnsavedWarning(function(submit) {
         if (submit)
             that.saveWork(true);
-        else
+        else {
             that.hideDialogImpl_(false);
+        }
     });
     unsavedWarning.setVisible(true);
 };
@@ -255,10 +262,10 @@ mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
     var serverModel = this.getServerModel();
     if (serverModel){
         var args = {};
-        args['draft_pk'] = serverModel.getDraftPK();
+        args['session_pk'] = serverModel.getSessionPK();
         mirosubs.Rpc.call("release_lock", args);    
     }
-
+    mirosubs.widget.ResumeEditingRecord.clear();
     mirosubs.Dialog.superClass_.setVisible.call(this, false);
     if (mirosubs.returnURL != null) {
         goog.Timer.callOnce(function() {

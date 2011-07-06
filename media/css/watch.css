@@ -317,6 +317,24 @@ div.pages span.page_count {
 	padding: 13px 0 0 0;
 }
 
+div.pages a.pag_first {
+	display: block;
+	float: left;
+	padding: 12px 15px 12px 15px;
+	border-right: 1px #cad1d4 solid;
+}
+
+div.pages a:hover.pag_first {
+	opacity: 0.7;
+}
+
+div.pages a:active.pag_prev, div.pages a:active.pag_next,
+div.pages a:active.pag_first, div.pages a:active.pag_last {
+	-webkit-box-shadow: inset 0 2px 5px #c7dae1;
+	background: -webkit-gradient(linear, left bottom, left top, from(#FFF), to(#d2e0e3)) no-repeat;
+	background: -moz-linear-gradient(bottom,  #FFF,  #d2e0e3) no-repeat;
+}
+
 div.pages a.pag_prev {
 	display: block;
 	float: left;
@@ -328,10 +346,15 @@ div.pages a:hover.pag_prev {
 	opacity: 0.7;
 }
 
-div.pages a:active.pag_prev, div.pages a:active.pag_next {
-	-webkit-box-shadow: inset 0 2px 5px #c7dae1;
-	background: -webkit-gradient(linear, left bottom, left top, from(#FFF), to(#d2e0e3)) no-repeat;
-	background: -moz-linear-gradient(bottom,  #FFF,  #d2e0e3) no-repeat;
+div.pages a.pag_last {
+	float: right;
+	display: block;
+	padding: 12px 15px 12px 15px;
+	border-left: 1px #cad1d4 solid;
+}
+
+div.pages a:hover.pag_last {
+	opacity: 0.7;
 }
 
 div.pages a.pag_next {
@@ -345,6 +368,12 @@ div.pages a:hover.pag_next {
 	opacity: 0.7;
 }
 
+div.pages a:active.pag_prev, div.pages a:active.pag_next,
+div.pages a:active.pag_first, div.pages a:active.pag_last {
+	-webkit-box-shadow: inset 0 2px 5px #c7dae1;
+	background: -webkit-gradient(linear, left bottom, left top, from(#FFF), to(#d2e0e3)) no-repeat;
+	background: -moz-linear-gradient(bottom,  #FFF,  #d2e0e3) no-repeat;
+}
 
 div.pages a.pag_prev span.icon {
 	background: transparent url(../images/icon_pages_prev.png) 0 0 no-repeat;
@@ -356,6 +385,20 @@ div.pages a.pag_prev span.icon {
 div.pages a.pag_next span.icon {
 	background: transparent url(../images/icon_pages_next.png) 0 0 no-repeat;
 	width: 12px;
+	height: 18px;
+	display: block;
+}
+
+div.pages a.pag_first span.icon {
+	background: transparent url(../images/icon_pages_first.png) 0 0 no-repeat;
+	width: 18px;
+	height: 18px;
+	display: block;
+}
+
+div.pages a.pag_last span.icon {
+	background: transparent url(../images/icon_pages_last.png) 0 0 no-repeat;
+	width: 18px;
 	height: 18px;
 	display: block;
 }
@@ -485,11 +528,12 @@ body#watch_results #sidebar ul li a:hover {
 
 body#watch_results #sidebar ul li.active a {
 	color: #31879f;
-	padding: 7px 10px 7px 10px;
+	padding: 7px 30px 7px 10px;
+	background: transparent url(../images/icon_results_active.png) 95% center no-repeat;
 }
 
 body#watch_results #sidebar ul li.active a:hover {
-	background: #dce5e7;
+	background: #dce5e7 url(../images/icon_results_active.png) 95% center no-repeat;
 }
 
 body#watch_results #main_col {

@@ -223,7 +223,8 @@ JS_CORE = ['mirosubs.js',
            'widget/subtitledialogopener.js',
            'widget/chooselanguagedialog.js',
            'widget/unsavedwarning.js',
-
+           'widget/resumeeditingrecord.js',
+           'widget/opendialogargs.js',
            'widget/dropdown.js',
            'widget/subtitle/dialog.js',
            'widget/subtitle/msservermodel.js',
@@ -244,6 +245,7 @@ JS_CORE = ['mirosubs.js',
            'widget/subtitle/editrightpanel.js',
            'widget/subtitle/bottomfinishedpanel.js',
            'widget/subtitle/logger.js',
+           'widget/subtitle/savedsubtitles.js',
            'widget/timeline/timerow.js',
            'widget/timeline/timerowul.js',
            'widget/timeline/timelinesub.js',
@@ -266,7 +268,6 @@ JS_CORE = ['mirosubs.js',
            'widget/translate/translationlist.js',
            'widget/translate/translationwidget.js',
            'widget/translate/translationrightpanel.js',
-           'widget/translate/editabletranslation.js',
            'widget/translate/forkdialog.js',
            'widget/translate/titletranslationwidget.js',
            'widget/play/manager.js',
@@ -428,6 +429,7 @@ CELERY_IGNORE_RESULT = True
 CELERY_DISABLE_RATE_LIMITS = True
 CELERY_SEND_EVENTS = False
 CELERY_SEND_TASK_ERROR_EMAILS = True
+CELERY_RESULT_BACKEND = 'redis'
 
 BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
 BROKER_USER = AWS_ACCESS_KEY_ID = ""
