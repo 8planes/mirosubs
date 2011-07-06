@@ -1,9 +1,8 @@
 """
 Handles the queries.
 """
-from attributes import IntegerField, DateTimeField
 import redisco
-from redisco.containers import SortedSet, Set, List, NonPersistentList
+from redisco.containers import SortedSet, Set, List
 from exceptions import AttributeNotIndexed
 from utils import _encode_key
 from attributes import ZINDEXABLE
@@ -154,7 +153,7 @@ class ModelSet(Set):
         if self._zfilters:
             self._cached_set = self._add_zfilters()
             return self._cached_set
-        s = Set(self.key)
+        s = Set(self.key, self.db)
         self._expire_or_delete = []
         if self._filters:
             s = self._add_set_filter(s)
@@ -176,9 +175,9 @@ class ModelSet(Set):
                         (k, self.model_class.__name__))
             indices.append(index)
         new_set_key = "~%s.%s" % ("+".join([self.key] + indices), id(self))
-        s.intersection(new_set_key, *[Set(n) for n in indices])
+        s.intersection(new_set_key, *[Set(n, self.db) for n in indices])
         self._expire_or_delete.append(new_set_key)
-        return Set(new_set_key)
+        return Set(new_set_key, self.db)
 
     def _add_set_exclusions(self, s):
         indices = []
@@ -190,9 +189,9 @@ class ModelSet(Set):
                         (k, self.model_class.__name__))
             indices.append(index)
         new_set_key = "~%s.%s" % ("-".join([self.key] + indices), id(self))
-        s.difference(new_set_key, *[Set(n) for n in indices])
+        s.difference(new_set_key, *[Set(n, self.db) for n in indices])
         self._expire_or_delete.append(new_set_key)
-        return Set(new_set_key)
+        return Set(new_set_key, self.db)
 
     def _add_zfilters(self):
         k, v = self._zfilters[0].items()[0]
@@ -202,7 +201,7 @@ class ModelSet(Set):
             raise ValueError("zfilter should have an operator.")
         index = self.model_class._key[att]
         desc = self.model_class._attributes[att]
-        zset = SortedSet(index)
+        zset = SortedSet(index, self.db)
         limit, offset = self._get_limit_and_offset()
         if isinstance(v, (tuple, list,)):
             min, max = v
@@ -247,7 +246,7 @@ class ModelSet(Set):
                          desc=desc)
             self._expire_or_delete.append(old_set_key)
             self._expire_or_delete.append(new_set_key)
-            return List(new_set_key)
+            return List(new_set_key, self.db)
 
     def _set_without_ordering(self, skey):
         # sort by id
@@ -260,7 +259,7 @@ class ModelSet(Set):
                      num=num)
         self._expire_or_delete.append(old_set_key)
         self._expire_or_delete.append(new_set_key)
-        return List(new_set_key)
+        return List(new_set_key, self.db)
 
     def _get_limit_and_offset(self):
         if (self._limit is not None and self._offset is None) or \
