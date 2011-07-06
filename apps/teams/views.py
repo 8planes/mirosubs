@@ -61,7 +61,6 @@ ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 20)
 DEV = getattr(settings, 'DEV', False)
 DEV_OR_STAGING = DEV or getattr(settings, 'STAGING', False)
 
-@staff_member_required
 def index(request, my_teams=False):
     q = request.REQUEST.get('q')
     
@@ -263,7 +262,7 @@ def videos_actions(request, slug):
                        template_object_name='videos_action')
 
 @render_to('teams/create.html')
-@login_required    
+@staff_member_required
 def create(request):
     user = request.user
     
