@@ -344,6 +344,12 @@ def update_translations():
     """
     run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))
 
+def test_celeryd():
+    for host in env.web_hosts:
+        env.host_string = host
+        output = run('ps aux | grep "manage.py celeryd -B" | grep -v grep')
+        assert len(output.split('\n'))
+
 def test_services():
     for host in env.web_hosts:
         env.host_string = host    
