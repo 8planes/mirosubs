@@ -362,13 +362,17 @@ def test_memcached():
             [alphanum[random.randint(0, len(alphanum)-1)] 
              for i in xrange(12)])
         env.host_string = host
-        run('{0}/env/bin/python manage.py set_memcached {1} --settings=unisubs_settings').format(
-            env.web_dir,
-            random_string)
+        with cd(os.path.join(env.web_dir, 'mirosubs')):
+            run('{0}/env/bin/python manage.py set_memcached {1} --settings=unisubs_settings'.format(
+                env.web_dir,
+                random_string))
         other_hosts = host_set - set([host])
         for other_host in other_hosts:
-            output = run('{0}/env/bin/python manage.py get_memcached --settings=unisubs_settings').format(
-                env.web_dir)
+            env.host_string = host
+            output = ''
+            with cd(os.path.join(env.web_dir, 'mirosubs')):
+                output = run('{0}/env/bin/python manage.py get_memcached --settings=unisubs_settings'.format(
+                    env.web_dir))
             if output.find(random_string) == -1:
                 raise Exception('Machines {0} and {1} are using different memcached instances'.format(
                         host, other_host))
