@@ -347,6 +347,7 @@ def update_translations():
     run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))
 
 def test_services():
+    test_memcached()
     for host in env.web_hosts:
         env.host_string = host    
         with cd(os.path.join(env.web_dir, 'mirosubs')):
