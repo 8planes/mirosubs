@@ -127,7 +127,7 @@ class VideosApiClass(object):
         Return the search query set for videos which would be relevent to
         volunteer for writing subtitles.
         '''
-        user_langs = get_user_languages_from_request()
+        user_langs = get_user_languages_from_request(request)
 
         relevent = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).filter(video_language__in=user_langs) \
