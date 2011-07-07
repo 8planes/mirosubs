@@ -19,6 +19,8 @@
 from __future__ import with_statement
 from fabric.api import run, put, sudo, env, cd, local
 from fabric.context_managers import settings
+import string
+import random
 import os
 
 DEV_HOST = 'dev.universalsubtitles.org:2191'
@@ -351,8 +353,34 @@ def test_celeryd():
         assert len(output.split('\n'))
 
 def test_services():
+    test_memcached()
     for host in env.web_hosts:
         env.host_string = host    
         with cd(os.path.join(env.web_dir, 'mirosubs')):
             run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
                 env.web_dir))
+
+def test_memcached():
+    alphanum = string.letters+string.digits
+    host_set = set(env.web_hosts)
+    for host in host_set:
+        random_string = ''.join(
+            [alphanum[random.randint(0, len(alphanum)-1)] 
+             for i in xrange(12)])
+        env.host_string = host
+        with cd(os.path.join(env.web_dir, 'mirosubs')):
+            run('{0}/env/bin/python manage.py set_memcached {1} --settings=unisubs_settings'.format(
+                env.web_dir,
+                random_string))
+        other_hosts = host_set - set([host])
+        for other_host in other_hosts:
+            env.host_string = host
+            output = ''
+            with cd(os.path.join(env.web_dir, 'mirosubs')):
+                output = run('{0}/env/bin/python manage.py get_memcached --settings=unisubs_settings'.format(
+                    env.web_dir))
+            if output.find(random_string) == -1:
+                raise Exception('Machines {0} and {1} are using different memcached instances'.format(
+                        host, other_host))
+                
+
