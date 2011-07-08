@@ -97,13 +97,8 @@ class WidgetViewStatistic(VideoViewStatistic):
     def update_total(self, key, obj, value):
         from videos.models import Video
         
-        qs = Video.objects.filter(pk=obj.video_id) \
+        Video.objects.filter(pk=obj.video_id) \
             .update(widget_views_count=F('widget_views_count')+value)
-        
-        #from django.db import connection, transaction
-        #cursor = connection.cursor()
-        #cursor.execute("UPDATE `videos_video` SET `widget_views_count` = `videos_video`.`widget_views_count` + %s WHERE `videos_video`.`id` = %s", [value, obj.video_id])
-
         
     def post_migrate(self, updated_objects, updated_keys):
         from utils.celery_search_index import update_search_index_for_qs

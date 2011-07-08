@@ -293,6 +293,9 @@ class BasePerDayStatistic(object):
         """
         Migrate information from Redis to DB
         """
+        if verbosity >= 2:
+            print '>>> Start migration...'
+            
         start = time.time()
         
         self.pre_migrate()
