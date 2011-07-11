@@ -1396,5 +1396,8 @@ class SubtitleRequest(models.Model):
         return not self.done
     pending.boolean = True
 
+    class Meta:
+        unique_together = ('video', 'user', 'time')
+
 
 
