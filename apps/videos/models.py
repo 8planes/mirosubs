@@ -1349,3 +1349,52 @@ class VideoFeed(models.Model):
             checked_entries += 1
         
         return checked_entries
+
+
+class SubtitleRequestManager(models.Manager):
+    '''
+    Custom manager for subtitle requests. Provides methods for creation
+    of requests from provided video, user and languages
+    '''
+
+    def create_request(self, video, user, language):
+        '''
+        Create a subtitle request for single language
+        '''
+        subreq, new = self.get_or_create(user=user, video=video,
+                                         language=language)
+        if not new:
+            ## Update the 'time' to current
+            subreq.done = False
+            subreq.save()
+        return (subreq, new)
+
+    def create_requests(self, video, user, languages):
+        '''
+        Create multiple requests according to the list of languages provided
+        '''
+        created_new = []
+        for language in languages:
+            req, new = self.create_request(video, user, language)
+            if new:
+                created_new.append(req)
+        return created_new
+
+
+class SubtitleRequest(models.Model):
+    video = models.ForeignKey(Video)
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
+    user = models.ForeignKey(User, related_name='subreqs')
+    time = models.DateTimeField(auto_now=True)
+    done = models.BooleanField()
+
+    def __unicode__(self):
+        return "%s-%s request (%s)" %(self.video, self.get_language_display(),
+                                       self.user)
+
+    def pending(self):
+        return not self.done
+    pending.boolean = True
+
+
+
