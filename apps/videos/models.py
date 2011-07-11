@@ -1369,11 +1369,12 @@ class SubtitleRequestManager(models.Manager):
             subreq.save()
         return (subreq, new)
 
-    def create_requests(self, video, user, languages):
+    def create_requests(self, video_id, user, languages):
         '''
         Create multiple requests according to the list of languages provided
         '''
         created_new = []
+        video = Video.objects.get(video_id=video_id)
         for language in languages:
             req, new = self.create_request(video, user, language)
             if new:
@@ -1388,6 +1389,8 @@ class SubtitleRequest(models.Model):
     time = models.DateTimeField(auto_now=True)
     done = models.BooleanField()
 
+    objects = SubtitleRequestManager()
+
     def __unicode__(self):
         return "%s-%s request (%s)" %(self.video, self.get_language_display(),
                                        self.user)
@@ -1398,6 +1401,3 @@ class SubtitleRequest(models.Model):
 
     class Meta:
         unique_together = ('video', 'user', 'time')
-
-
-

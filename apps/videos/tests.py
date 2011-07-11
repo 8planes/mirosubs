@@ -21,7 +21,7 @@ import json
 
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, \
-    SubtitleLanguage, VideoUrl, VideoFeed
+    SubtitleLanguage, VideoUrl, VideoFeed, SubtitleRequest
 from apps.auth.models import CustomUser as User
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser, TxtSubtitleParser
 from django.core.urlresolvers import reverse
@@ -1767,7 +1767,45 @@ class TestTemplateTags(TestCase):
         l = SubtitleLanguage.objects.filter(video__title="b", language='pt')[0]
         self.assertEqual("60 %", complete_indicator(l))
         
-        
+class TestSubtitleRequest(TestCase):
+
+    fixtures = ['test.json']
+
+    def setUp(self):
+        self.video = Video.objects.all()[0]
+        self.user = User.objects.get(username=u'admin')
+        self.language = 'en'
+        self.languages = ['fr', 'hi']
+        self.Model = SubtitleRequest.objects
+
+    def test_create_request(self):
+        request, new = self.Model.create_request(self.video, self.user,
+                                                 self.language)
+        self.assertEqual(1, request.id)
+        self.assertEqual(False, request.done)
+        self.assertEqual(self.language, request.language)
+        self.assertEqual(True, new)
+
+        request.done = True
+        request.save()
+
+        # Stored request should be loaded
+        request, new = self.Model.create_request(self.video, self.user,
+                                                 self.language)
+        self.assertEqual(1, request.id)
+        self.assertEqual(False, new)
+        # Request should be marked as reopened
+        self.assertEqual(False, request.done)
+
+    def test_create_requests(self):
+        request, new = self.Model.create_request(self.video, self.user,
+                                                 self.language)
+        requests = self.Model.create_requests(self.video.video_id, self.user,
+                                              self.languages)
+        # Only two new requests should be created
+        self.assertEqual(2, len(requests))
+
+
 def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         translation = SubtitleLanguage()
         translation.video = video
@@ -1787,5 +1825,3 @@ def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         if latest_version is not None:
             for s in latest_version.subtitle_set.all():
                 s.duplicate_for(v).save()
-        return translation         
-                              

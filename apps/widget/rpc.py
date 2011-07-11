@@ -171,11 +171,18 @@ class Rpc(BaseRpc):
     def submit_subtitle_request(self, request, video_id, request_languages, track_request,
                                 description):
         status = True
+        message = ''
 
-        ##TODO: Save requests here
+        new_requests = models.SubtitleRequest.objects.create_requests(
+                video_id,
+                request.user,
+                request_languages
+        )
 
         return {
             'status':status,
+            'message': message,
+            'count' : len(new_requests),
             'video_id':video_id,
             'request_languages':request_languages,
             'track_request':track_request,
