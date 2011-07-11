@@ -201,7 +201,7 @@ mirosubs.RequestDialog.prototype.okClicked_ = function(e) {
     this.okHasBeenClicked_ = true;
 
     // Stores the languages selected from the select box in the model
-    for (i = 1; i < this.langMenuCount_; i++){
+    for (i = 1; i <= this.langMenuCount_; i++){
         var e = document.getElementById('mirosubs-requestlang-' + i);
         var lang = e.options[e.selectedIndex].value
         if (lang){
