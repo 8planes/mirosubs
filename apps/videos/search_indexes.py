@@ -88,7 +88,7 @@ class VideoIndex(CelerySearchIndex):
     week_views = IntegerField()
     month_views = IntegerField()
     year_views = IntegerField()
-    total_views = IntegerField(model_attr='view_count')
+    total_views = IntegerField(model_attr='widget_views_count')
     
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
