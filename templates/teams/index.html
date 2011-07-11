@@ -34,7 +34,7 @@
                 return false;
             });
             $('.leave-team', $('ul.big_list')).live('click', function(){
-                if (confirm('{% trans "Do you really wish leave this team?" %}')){
+                if (confirm('{% trans "Do you really wish to leave this team?" %}')){
                     var $this = $(this);
                     TeamsApi.leave($this.attr('team_id'), function(response){
                         if (response.error){
