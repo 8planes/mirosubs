@@ -31,14 +31,12 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.serverModel_ = serverModel;
     this.opener_ = opt_opener;
     this.skipFinished_ = !!opt_skipFinished;
-    var uw = this.unitOfWork_ = new mirosubs.UnitOfWork();
-    this.captionSet_ =
-        new mirosubs.subtitle.EditableCaptionSet(subtitles.SUBTITLES, uw);
+    this.captionSet_ = this.serverModel_.getCaptionSet();
     this.captionManager_ =
         new mirosubs.CaptionManager(
             this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
-    this.serverModel_.init(uw, goog.bind(this.showLoginNag_, this));
+    this.serverModel_.init();
     /**
      * @type {?boolean} True iff we pass into FINISHED state.
      */
@@ -201,7 +199,6 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
         videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
     }
-    this.getRightPanelInternal().showLoading(false);
 };
 mirosubs.subtitle.Dialog.prototype.handleGoToStep_ = function(event) {
     this.setState_(event.stepNo);
@@ -262,13 +259,13 @@ mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
 };
 
 mirosubs.subtitle.Dialog.prototype.isWorkSaved = function() {
-    return !this.unitOfWork_.everContainedWork() || this.saved_;
+    return this.saved_ || !this.serverModel_.anySubtitlingWorkDone();
 };
 
 mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
-    if (this.captionSet_.needsSync()){
+    if (this.captionSet_.needsSync()) {
         this.saveWorkImpl_(closeAfterSave, false);
-    }else{
+    } else {
         mirosubs.subtitle.CompletedDialog.show(
             !!this.subtitles_.IS_COMPLETE,
             goog.bind(this.saveWorkImpl_, this, 
@@ -282,7 +279,6 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
     this.getRightPanelInternal().showLoading(true);
     var that = this;
     this.serverModel_.finish(
-        this.captionSet_.makeJsonSubs(),
         function() {
             that.saved_ = true;
             if (that.finishFailDialog_) {

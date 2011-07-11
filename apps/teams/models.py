@@ -86,7 +86,7 @@ class Team(models.Model):
     highlight = models.BooleanField(default=False)
     video = models.ForeignKey(Video, null=True, blank=True, related_name='intro_for_teams', verbose_name=_(u'Intro Video'))
     application_text = models.TextField(blank=True)
-    page_content = models.TextField(_(u'Page content'), blank=True, help_text=_(u'You can use murkdown. This will replace Description.'))
+    page_content = models.TextField(_(u'Page content'), blank=True, help_text=_(u'You can use markdown. This will replace Description.'))
     is_moderated = models.BooleanField(default=False)
     header_html_text = models.TextField(blank=True, default='', help_text=_(u"HTML that appears at the top of the teams page."))
     last_notification_time = models.DateTimeField(editable=False, default=datetime.datetime.now)

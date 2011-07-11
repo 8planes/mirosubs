@@ -26,21 +26,15 @@ goog.provide('mirosubs.translate.TranslationPanel');
  *
  *
  * @constructor
+ * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
+ * @param {mirosubs.subtitle.SubtitleState} standardSubState
  */
-mirosubs.translate.TranslationPanel = function(subtitleState,
-                                               standardSubState,
-                                               unitOfWork) {
+mirosubs.translate.TranslationPanel = function(captionSet,
+                                               standardSubState) {
     goog.ui.Component.call(this);
-    this.subtitleState_ = subtitleState;
+    this.captionSet_ = captionSet
     this.standardSubState_ = standardSubState;
-    this.unitOfWork_ = unitOfWork;
     this.contentElem_ = null;
-    this.editableTranslations_ = goog.array.map(
-        this.subtitleState_.SUBTITLES,
-        function(transJson) {
-            return new mirosubs.translate.EditableTranslation(
-                unitOfWork, transJson['subtitle_id'], transJson);
-        });
 };
 goog.inherits(mirosubs.translate.TranslationPanel, goog.ui.Component);
 
@@ -51,20 +45,17 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     mirosubs.translate.TranslationPanel.superClass_.createDom.call(this);
     var el = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    
+
     el.appendChild(this.contentElem_ = $d('div'));
     this.translationList_ =
         new mirosubs.translate.TranslationList(
-            this.standardSubState_.SUBTITLES, this.unitOfWork_, this.standardSubState_.TITLE);
+            this.captionSet_,
+            this.standardSubState_.SUBTITLES, 
+            this.standardSubState_.TITLE);
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className =
         "mirosubs-titlesList";
-    var uw = this.unitOfWork_;
-    this.translationList_.setTranslations(this.editableTranslations_);
-    this.translationList_.setTitleTranslation(this.subtitleState_.TITLE);
-};
-mirosubs.translate.TranslationPanel.prototype.makeJsonSubs = function() {
-    return this.translationList_.getSubsJson();
+    this.translationList_.setTitleTranslation("FIXME: Fill this in.");
 };
 mirosubs.translate.TranslationPanel.prototype.getTranslationList = function(){
     return this.translationList_;

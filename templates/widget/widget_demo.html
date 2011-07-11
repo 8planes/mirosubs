@@ -3,7 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 {% if not js_use_compiled %}
-{% include "widget/_js_base_dependencies.html" %}
+  {% include "widget/_js_base_dependencies.html" %}
+  <script>
+    goog.require('goog.debug.FancyWindow');
+  </script>
 {% endif %}
 </head>
 <body>

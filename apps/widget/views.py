@@ -215,7 +215,7 @@ def download_subtitles(request, handler=SSASubtitles):
 
             raise Http404
     
-    version = language.version()
+    version = language and language.version()
     if not version:
         raise Http404    
     

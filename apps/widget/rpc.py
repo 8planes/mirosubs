@@ -18,6 +18,7 @@
 
 from django.db.models import ObjectDoesNotExist
 from videos import models
+from widget.models import SubtitlingSession
 from datetime import datetime
 import re
 import simplejson as json
@@ -187,7 +188,7 @@ class Rpc(BaseRpc):
                       base_language_pk=None,
                       original_language_code=None):
         """Called by subtitling widget when subtitling or translation 
-        is to commence or recommence on a video.
+        is to commence on a video.
         """
         # TODO: remove whenever blank SubtitleLanguages become illegal.
         self._fix_blank_original(video_id)
@@ -206,165 +207,137 @@ class Rpc(BaseRpc):
             return { "can_edit": False, 
                      "locked_by" : language.writelock_owner_name }
 
-        draft = self._get_draft_for_editing(
+        session = self._make_subtitling_session(
             request, language, base_language)
-        subtitles = self._subtitles_dict(draft)
+        version_for_subs = language.version()
+        if not version_for_subs:
+            version_for_subs = self._create_version_from_session(session)
+            version_no = 0
+        else:
+            version_no = version_for_subs.version_no + 1
+        subtitles = self._subtitles_dict(version_for_subs, version_no)
         return_dict = { "can_edit" : True,
-                        "draft_pk" : draft.pk,
+                        "session_pk" : session.pk,
                         "subtitles" : subtitles }
-        if draft.is_dependent():
-            video = models.Video.objects.get(video_id=video_id)
-            if language.standard_language and base_language:
-                standard_version = base_language.latest_version()
-            else:
-                standard_version = video.latest_version()
-            if standard_version:
-                return_dict['original_subtitles'] = \
-                    self._subtitles_dict(standard_version)
-            else:
-                return_dict['original_subtitles'] = {}            
+        if base_language:
+            return_dict['original_subtitles'] = \
+                self._subtitles_dict(base_language.latest_version())
         if original_language_code:
             self._save_original_language(video_id, original_language_code)
-
         video_cache.writelock_add_lang(video_id, language.language)
         return return_dict
 
-    def release_lock(self, request, draft_pk):
-        language = models.SubtitleDraft.objects.get(pk=draft_pk).language
+    def resume_editing(self, request, session_pk):
+        session = SubtitlingSession.objects.get(pk=session_pk)
+        if session.language.can_writelock(request) and \
+                session.parent_version == session.language.version():
+            session.language.writelock(request)
+            # FIXME: Duplication between this and start_editing.
+            version_for_subs = session.language.version()
+            if not version_for_subs:
+                version_for_subs = self._create_version_from_session(session)
+                version_no = 0
+            else:
+                version_no = version_for_subs.version_no + 1
+            subtitles = self._subtitles_dict(version_for_subs, version_no)
+            return_dict = { "response": "ok",
+                            "can_edit" : True,
+                            "session_pk" : session.pk,
+                            "subtitles" : subtitles }
+            if session.base_language:
+                return_dict['original_subtitles'] = \
+                    self._subtitles_dict(session.base_language.latest_version())
+            return return_dict
+        else:
+            return { 'response': 'cannot_resume' }
+
+    def release_lock(self, request, session_pk):
+        language = SubtitlingSession.objects.get(pk=session_pk).language
         if language.can_writelock(request):
             language.release_writelock()
             language.save()
-        if language:
             video_cache.writelocked_langs_clear(language.video.video_id)
         return { "response": "ok" }
 
-    def regain_lock(self, request, draft_pk):
-        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
-        if not draft.language.can_writelock(request):
+    def regain_lock(self, request, session_pk):
+        language = SubtitlingSession.objects.get(pk=session_pk).language
+        if not language.can_writelock(request):
             return { 'response': 'unlockable' }
         else:
-            draft.language.writelock(request)
+            language.writelock(request)
+            language.save()
+            video_cache.writelock_add_lang(
+                language.video.video_id, language.language)
             return { 'response': 'ok' }
 
-    def fork(self, request, draft_pk):
-        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
-        if not draft.language.can_writelock(request):
-            return { "response" : "unlockable" }
-        if not draft.matches_request(request):
-            return { "response" : "does not match request" }
-        draft.language.writelock(request)
-        draft.is_forked = True
-        draft.save()
-        latest_version = draft.video.latest_version()
-        sub_dict = dict([(s.subtitle_id, s) for s 
-                         in latest_version.subtitle_set.all()])
-        to_delete = []
-        for sub in draft.subtitle_set.all():
-            if sub.subtitle_id in sub_dict:
-                standard_sub = sub_dict[sub.subtitle_id]
-                sub.start_time = standard_sub.start_time
-                sub.end_time = standard_sub.end_time
-                sub.save()
-            else:
-                to_delete.add(sub)
-        for sub in to_delete:
-            sub.delete()
-        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
-        return self._subtitles_dict(draft)
-    
-    def set_title(self, request, draft_pk, value, **kwargs):
-        try:
-            draft = models.SubtitleDraft.objects.get(pk=draft_pk)
-        except models.SubtitleDraft.DoesNotExist:
-            return {"response": "draft does not exist"}
-        if not draft.language.can_writelock(request):
-            return { "response" : "unlockable" }
-        if not draft.matches_request(request):
-            return { "response" : "does not match request" }
-        draft.language.writelock(request)
-        draft.language.save()
-        num_affected = models.SubtitleLanguage.objects.filter(pk=draft.language.pk).update(title=value)
-        return {"response" : "ok", "num_affected": num_affected}
-                    
-    def save_subtitles(self, request, draft_pk, packets):
-        try:
-            draft = models.SubtitleDraft.objects.get(pk=draft_pk)
-        except models.SubtitleDraft.DoesNotExist:
-            return {"response": "draft does not exist"}
-        if not draft.language.can_writelock(request):
-            return { "response" : "unlockable" }
-        if not draft.matches_request(request):
-            return { "response" : "does not match request" }
-        draft.language.writelock(request)
-        draft.language.save()
-        self._save_packets(draft, packets)
-        return {"response" : "ok", 
-                "last_saved_packet": draft.last_saved_packet}
 
-    def finished_subtitles(self, request, draft_pk, packets, completed=None, throw_exception=False):
-        draft = models.SubtitleDraft.objects.get(pk=draft_pk)
+    def finished_subtitles(self, request, session_pk, subtitles=None, 
+                           new_title=None, completed=None, 
+                           throw_exception=False):
+        session = SubtitlingSession.objects.get(pk=session_pk)
         if not request.user.is_authenticated():
             return { 'response': 'not_logged_in' }
-        if not draft.language.can_writelock(request):
+        if not session.language.can_writelock(request):
             return { "response" : "unlockable" }
-        if not draft.matches_request(request):
+        if not session.matches_request(request):
             return { "response" : "does not match request" }
 
         if throw_exception:
             raise Exception('purposeful exception for testing')
 
-        self._save_packets(draft, packets)
-
-        return self.save_finished(draft, request.user, completed)
-
-    def save_finished(self, draft, user, completed=None):
-        new_version, new_subs = self._create_version_from_draft(draft, user)
-        user_message = None
-        if len(new_subs) == 0 and draft.language.latest_version() is None:
-            should_save = False
-        else:
-            should_save = False
-            last_version = draft.language.latest_version()
-            if not last_version or last_version.changed_from(
-                new_version.subtitles(new_subs)):
-                should_save = True
-            elif last_version is not None and \
-                    completed is not None and \
-                    completed != draft.language.is_complete:
-                should_save = True
-        if should_save:
+        language = session.language
+        new_version = None
+        if subtitles is not None and \
+                (len(subtitles) > 0 or language.latest_version() is not None):
+            new_version = self._create_version_from_session(session, request.user)
             new_version.save()
-            for subtitle in new_subs:
-                subtitle.version = new_version
-                subtitle.save()
-            language = new_version.language
-            language.release_writelock()
-            if not draft.is_dependent() and completed is not None:
-                language.is_complete = completed
-            language.save()
-            
+            self._save_subtitles(
+                new_version.subtitle_set, subtitles, new_version.is_forked)
+
+        language.release_writelock()
+        if completed is not None:
+            language.is_complete = completed
+        if new_title is not None:
+            language.title = new_title
+        language.save()
+
+        if new_version is not None:
             video_changed_tasks.delay(language.video.id, new_version.id)
-            # we should only show that if this is  a new language
-            if language.subtitleversion_set.all().count() == 1:
-                user_message = {
-                "body": "Thank you for uploading. It will take a minute or so for your subtitles to appear."
-                }
+        else:
+            video_changed_tasks.delay(language.video.id)
+
+        user_message = None
+        if new_version is not None and new_version.version_no == 0:
+            user_message = {
+                "body": ("Thank you for uploading. It will take a minute "
+                         "or so for your subtitles to appear.") }
         return {
+            '_user_message': user_message,
+            'response': 'ok' }
 
-            "_user_message": user_message,
-            "response" : "ok",
-                 "last_saved_packet": draft.last_saved_packet }
+    def _save_subtitles(self, subtitle_set, json_subs, forked):
+        for s in json_subs:
+            if not forked:
+                subtitle_set.create(
+                    subtitle_id=s['subtitle_id'],
+                    subtitle_text=s['text'])
+            else:
+                subtitle_set.create(
+                    subtitle_id=s['subtitle_id'],
+                    subtitle_text=s['text'],
+                    start_time=s['start_time'],
+                    end_time=s['end_time'],
+                    subtitle_order=s['sub_order'])
 
-    def _create_version_from_draft(self, draft, user):
-        version = models.SubtitleVersion(
-            language=draft.language,
-            version_no=draft.version_no,
-            is_forked=draft.is_forked,
-            datetime_started=draft.datetime_started,
+    def _create_version_from_session(self, session, user=None):
+        latest_version = session.language.version()
+        return models.SubtitleVersion(
+            language=session.language,
+            version_no=(0 if latest_version is None 
+                        else latest_version.version_no + 1),
+            is_forked=(session.base_language is None),
+            datetime_started=session.datetime_started,
             user=user)
-        subtitles = models.Subtitle.trim_list(
-            [s.duplicate_for() for s in draft.subtitle_set.all()])
-        return version, subtitles
 
     def fetch_subtitles(self, request, video_id, language_pk):
         cache = video_cache.get_subtitles_dict(
@@ -379,58 +352,18 @@ class Rpc(BaseRpc):
             'videos_with_captions': models.Video.objects.exclude(subtitlelanguage=None).count(),
             'translations_count': models.SubtitleLanguage.objects.filter(is_original=False).count()
         }
-    
-    def _get_draft_for_editing(self, request, language, base_language=None):
-        draft = self._find_existing_draft_to_edit(request, language)
-        if draft:
-            draft.last_saved_packet = 0
-            draft.save()
-            return draft
 
-        version_to_copy = language.version()
-        draft = models.SubtitleDraft(
+    def _make_subtitling_session(self, request, language, base_language):
+        session = SubtitlingSession(
             language=language,
-            parent_version=version_to_copy,
-            datetime_started=datetime.now())
-
-        if base_language is None:
-            draft.is_forked = True
+            base_language=base_language,
+            parent_version=language.version(),
+            browser_id=request.browser_id)
         if request.user.is_authenticated():
-            draft.user = request.user
-        draft.browser_id = request.browser_id
-        draft.last_saved_packet = 0
-        draft.save()
-
-        if version_to_copy is not None:
-            if not version_to_copy.is_forked and draft.is_forked:
-                subs_to_copy = version_to_copy.subtitles()
-            else:
-                subs_to_copy = version_to_copy.subtitle_set.all()
-            for subtitle in subs_to_copy:
-                draft.subtitle_set.add(subtitle.duplicate_for(draft=draft))
-        return draft
-
-    def _find_existing_draft_to_edit(self, request, language):
-        latest_version = language.latest_version()
-        draft = None
-        if request.user.is_authenticated():
-            try:
-                draft = models.SubtitleDraft.objects.get(
-                    language=language, 
-                    parent_version=latest_version,
-                    user=request.user)
-            except:
-                pass
-        if not draft:
-            try:
-                draft = models.SubtitleDraft.objects.get(
-                    langauge=language,
-                    parent_version=latest_version,
-                    browser_id=request.browser_id)
-            except:
-                pass
-        return draft
-
+            session.user = request.user
+        session.save()
+        return session
+    
     def _find_base_language(self, base_language):
         if base_language:
             video = base_language.video
@@ -535,22 +468,23 @@ class Rpc(BaseRpc):
             cache['language_pk'] = cache['language'].pk
         return cache
 
-    def _subtitles_dict(self, version):
+    def _subtitles_dict(self, version, forced_version_no=None):
         language = version.language
-        is_latest = False
-        latest_version = language.latest_version()
-        if latest_version is None or version.version_no >= latest_version.version_no:
-            is_latest = True
         base_language = None
         if language.is_dependent() and not version.is_forked:
             base_language = language.real_standard_language()
+        version_no = version.version_no if forced_version_no is None else forced_version_no
+        is_latest = False
+        latest_version = language.latest_version()
+        if latest_version is None or version_no >= latest_version.version_no:
+            is_latest = True
         return self._make_subtitles_dict(
             [s.__dict__ for s in version.subtitles()],
             language.language,
             language.pk,
             language.is_original,
             language.is_complete,
-            version.version_no,
+            version_no,
             is_latest,
             version.is_forked,
             base_language,

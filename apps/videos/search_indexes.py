@@ -88,12 +88,12 @@ class VideoIndex(CelerySearchIndex):
     week_views = IntegerField()
     month_views = IntegerField()
     year_views = IntegerField()
-    total_views = IntegerField(model_attr='view_count')
+    total_views = IntegerField(model_attr='widget_views_count')
     
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         
-        langs = obj.subtitlelanguage_set.exclude(language=u'')
+        langs = obj.subtitlelanguage_set.exclude(language=u'', subtitle_count__gt=0)
         self.prepared_data['video_language'] = obj.language
         #TODO: converting should be in Field
         self.prepared_data['video_language'] = obj.language and LanguageField.prepare_lang(obj.language) or u''

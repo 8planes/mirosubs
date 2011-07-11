@@ -47,38 +47,93 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showLoading_ =
         this.loadingFn_(loading);
 };
 
+mirosubs.widget.SubtitleDialogOpener.prototype.getResumeEditingRecord_ = 
+    function(openDialogArgs)
+{
+    var resumeEditingRecord = mirosubs.widget.ResumeEditingRecord.fetch();
+    if (resumeEditingRecord && resumeEditingRecord.matches(
+        this.videoID_, openDialogArgs))
+        return resumeEditingRecord;
+    else
+        return null;
+};
+
+mirosubs.widget.SubtitleDialogOpener.prototype.saveResumeEditingRecord_ = 
+    function(sessionPK, openDialogArgs)
+{
+    var resumeEditingRecord = new mirosubs.widget.ResumeEditingRecord(
+        this.videoID_, sessionPK, openDialogArgs);
+    resumeEditingRecord.save();
+};
+
+
 /**
  * Calls start_editing on server and then, if successful, opens the dialog.
- * @param {mirosubs.widget.SubtitleState=} opt_subLanguageState The state language for subtitle.
- * @param {string=} opt_originalLanguageCode The iso language code for the video's
- *     original language. Should be null iff the video's original language is
- *     already set.
- * @param {number=} opt_subLanguagePK PK for the SubtitleLanguage to edit, 
- *     if any.
- * @param {number=} opt_baseLanguagePK PK for the SubtitleLanguage to use
- *     as base for dependent.
+ * @param {mirosubs.widget.OpenDialogArgs} openDialogArgs
+ * @param {function()=} opt_completeCallback
  */
 mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
-    subLanguageCode, 
-    opt_originalLanguageCode, 
-    opt_subLanguagePK,
-    opt_baseLanguagePK,
+    openDialogArgs,
     opt_completeCallback)
 {
+    var that = this;
     this.showLoading_(true);
+    var resumeEditingRecord = this.getResumeEditingRecord_(openDialogArgs);
+    if (resumeEditingRecord && resumeEditingRecord.getSavedSubtitles()) {
+        this.resumeEditing_(
+            resumeEditingRecord.getSavedSubtitles(),
+            openDialogArgs,
+            opt_completeCallback);
+    }
+    else {
+        this.startEditing_(openDialogArgs, opt_completeCallback);
+    }
+};
+
+mirosubs.widget.SubtitleDialogOpener.prototype.startEditing_ = 
+    function(openDialogArgs,
+             opt_completeCallback) 
+{
     var args = {
         'video_id': this.videoID_,
-        'language_code': subLanguageCode,
-        'subtitle_language_pk': opt_subLanguagePK,
-        'base_language_pk': opt_baseLanguagePK || null,
-        'original_language_code': opt_originalLanguageCode || null };
+        'language_code': openDialogArgs.LANGUAGE,
+        'subtitle_language_pk': openDialogArgs.SUBLANGUAGE_PK || null,
+        'base_language_pk': openDialogArgs.BASELANGUAGE_PK || null,
+        'original_language_code': openDialogArgs.ORIGINAL_LANGUAGE || null };
     var that = this;
     mirosubs.Rpc.call(
         'start_editing', args,
         function(result) {
+            that.saveResumeEditingRecord_(
+                result['session_pk'], openDialogArgs);
             if (opt_completeCallback)
                 opt_completeCallback();
-            that.startEditingResponseHandler_(result);
+            that.startEditingResponseHandler_(result, false);
+        });
+};
+
+mirosubs.widget.SubtitleDialogOpener.prototype.resumeEditing_ = 
+    function(savedSubtitles,
+             openDialogArgs,
+             opt_completeCallback) 
+{
+    var that = this;
+    mirosubs.Rpc.call(
+        'resume_editing', 
+        { 'session_pk': savedSubtitles.SESSION_PK },
+        function(result) {
+            if (result['response'] == 'ok') {
+                result['subtitles']['subtitles'] = 
+                    savedSubtitles.CAPTION_SET.makeJsonSubs();
+                that.startEditingResponseHandler_(result, true);
+            }
+            else {
+                // someone else stepped in front of us.
+                // TODO: should we show a message here?
+                that.removeResumeEditingRecord_();
+                that.startEditing_(openDialogArgs,
+                                   opt_completeCallback);
+            }
         });
 };
 
@@ -90,38 +145,33 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog =
         this.videoID_, opt_lang, 
         function(originalLanguage, subLanguage, subLanguageID, 
                  baseLanguageID, closeCallback) {
-            that.openDialogOrRedirect_(
-                subLanguage, originalLanguage, subLanguageID, 
-                baseLanguageID, opt_effectiveVideoURL, 
+            that.openDialogOrRedirect(
+                new mirosubs.widget.OpenDialogArgs(
+                    subLanguage, originalLanguage, subLanguageID, 
+                    baseLanguageID), 
+                opt_effectiveVideoURL, 
                 closeCallback);
         });
     dialog.setVisible(true);
 };
 
-mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_ =
-    function(subLanguageCode, 
-             opt_originalLanguageCode, 
-             opt_subLanguagePK,
-             opt_baseLanguagePK, 
+mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
+    function(openDialogArgs, 
              opt_effectiveVideoURL,
              opt_completeCallback)
 {
     if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
-        this.openDialog(
-            subLanguageCode, 
-            opt_originalLanguageCode,
-            opt_subLanguagePK,
-            opt_baseLanguagePK,
-            opt_completeCallback);
+        this.openDialog(openDialogArgs,
+                        opt_completeCallback);
     else {
         var config = {
             'videoID': this.videoID_,
             'videoURL': this.videoURL_,
             'effectiveVideoURL': opt_effectiveVideoURL || this.videoURL_,
-            'languageCode': subLanguageCode,
-            'originalLanguageCode': opt_originalLanguageCode || null,
-            'subLanguagePK': opt_subLanguagePK || null,
-            'baseLanguagePK': opt_baseLanguagePK || null
+            'languageCode': openDialogArgs.LANGUAGE,
+            'originalLanguageCode': openDialogArgs.ORIGINAL_LANGUAGE || null,
+            'subLanguagePK': openDialogArgs.SUBLANGUAGE_PK || null,
+            'baseLanguagePK': openDialogArgs.BASELANGUAGE_PK || null
         };
         if (mirosubs.IS_NULL)
             config['nullWidget'] = true;
@@ -131,7 +181,6 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_ =
             goog.json.serialize(config));
         window.location.assign(uri.toString());
     }
-
 }
 
 /**
@@ -148,23 +197,37 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openForkedTranslationDialog =
     this.openSubtitlingDialog_(serverModel, subtitles);
 };
 
+mirosubs.widget.SubtitleDialogOpener.prototype.saveInitialSubs_ = function(sessionPK, subtitles) {
+    var savedSubs = new mirosubs.widget.SavedSubtitles(
+        sessionPK, null, subtitles.IS_COMPLETE, 
+        new mirosubs.subtitle.EditableCaptionSet(subtitles.SUBTITLES));
+    mirosubs.widget.SavedSubtitles.saveInitial(savedSubs);
+};
+
 mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ = 
-    function(result)
+    function(result, fromResuming)
 {
     this.showLoading_(false);
     if (result['can_edit']) {
-        var draftPK = result['draft_pk'];
-        subtitles = mirosubs.widget.SubtitleState.fromJSON(
+        var sessionPK = result['session_pk'];
+        var subtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['subtitles']);
-        originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
+        var originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['original_subtitles']);
+        var captionSet = new mirosubs.subtitle.EditableCaptionSet(
+            subtitles.SUBTITLES);
+        if (!fromResuming) {
+            this.saveInitialSubs_(sessionPK, subtitles);
+        }
         var serverModel = new mirosubs.subtitle.MSServerModel(
-            draftPK, this.videoID_, this.videoURL_);
+            sessionPK, this.videoID_, this.videoURL_,
+            subtitles.IS_COMPLETE, captionSet);
         if (subtitles.IS_ORIGINAL || subtitles.FORKED)
             this.openSubtitlingDialog_(serverModel, subtitles);
-        else
+        else {
             this.openDependentTranslationDialog_(
                 serverModel, subtitles, originalSubtitles);
+        }
     }
     else {
         var username = 

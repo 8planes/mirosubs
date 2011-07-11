@@ -10,8 +10,9 @@ fab <server> update
 fab <server> bounce_memcached
 fab <server> remove_disabled
 
-fab <server> update_solr_schema (maybe)
-
+- open ssh session and run 
+$manage.py/ build_solr_schema --settings=unisubs_settings > /etc/solr/conf/production/conf/schema.xml # 20 seconds
+$python manage.py update_index --settings=unisubs_settings --verbosity=2 # ~1 hours
 
 
 for staging:

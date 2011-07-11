@@ -138,6 +138,11 @@ class SqlPrintingMiddleware(object):
             print "%s\033[1;32m[TOTAL TIME: %s seconds]\033[0m" % replace_tuple
         return response
 
+class ExceptionLoggingMiddleware(object):
+    def process_exception(self, request, exception):
+        import traceback
+        print traceback.format_exc()
+
 from debug_toolbar.middleware import DebugToolbarMiddleware
 import debug_toolbar
 

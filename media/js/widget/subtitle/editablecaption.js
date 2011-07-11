@@ -23,7 +23,6 @@ goog.provide('mirosubs.subtitle.EditableCaption');
  * mirosubs.subtitle.EditableCaptionSet.
  *
  * @constructor
- * @param {mirosubs.UnitOfWork=} opt_unitOfWork
  * @param {Number=} opt_subOrder Order in which this sub appears. Provide
  *    this parameter iff the caption doesn't exist in the MiroSubs
  *    system.
@@ -31,9 +30,8 @@ goog.provide('mirosubs.subtitle.EditableCaption');
  *     we're operating. Provide this parameter iff the caption exists
  *     already in the MiroSubs system.
  */
-mirosubs.subtitle.EditableCaption = function(opt_unitOfWork, opt_subOrder, opt_jsonCaption) {
+mirosubs.subtitle.EditableCaption = function(opt_subOrder, opt_jsonCaption) {
     goog.events.EventTarget.call(this);
-    this.unitOfWork_ = opt_unitOfWork;
     this.json = opt_jsonCaption ||
         {
             'subtitle_id' : mirosubs.randomString(),
@@ -94,6 +92,13 @@ mirosubs.subtitle.EditableCaption.prototype.setNextCaption =
 mirosubs.subtitle.EditableCaption.prototype.getNextCaption = function() {
     return this.nextCaption_;
 };
+mirosubs.subtitle.EditableCaption.prototype.identicalTo = function(other) {
+    return this.getSubOrder() == other.getSubOrder() &&
+        this.getTrimmedText() == other.getTrimmedText() &&
+        this.getStartTime() == other.getStartTime() &&
+        this.getEndTime() == other.getEndTime() &&
+        this.getCaptionID() == other.getCaptionID();
+};
 mirosubs.subtitle.EditableCaption.prototype.getSubOrder = function() {
     return this.json['sub_order'];
 };
@@ -103,6 +108,9 @@ mirosubs.subtitle.EditableCaption.prototype.setText = function(text, opt_dontTra
 };
 mirosubs.subtitle.EditableCaption.prototype.getText = function() {
     return this.json['text'];
+};
+mirosubs.subtitle.EditableCaption.prototype.getTrimmedText = function() {
+    return goog.string.trim(this.json['text']);
 };
 mirosubs.subtitle.EditableCaption.prototype.setStartTime =
     function(startTime)
@@ -152,16 +160,13 @@ mirosubs.subtitle.EditableCaption.prototype.setEndTime_ =
         this.nextCaption_.setStartTime(endTime);
 };
 /**
- * Clears times. Does not issue a CHANGE event. Registers update
- * with UnitOfWork.
+ * Clears times. Does not issue a CHANGE event.
  */
 mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
     if (this.getStartTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED ||
         this.getEndTime() != mirosubs.subtitle.EditableCaption.TIME_UNDEFINED) {
         this.json['start_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
         this.json['end_time'] = mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
-        if (this.unitOfWork_)
-            this.unitOfWork_.registerUpdated(this);
     }
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
@@ -214,8 +219,6 @@ mirosubs.subtitle.EditableCaption.prototype.changed_ =
 {
     if (!opt_dontTrack)
         mirosubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
-    if (this.unitOfWork_)
-        this.unitOfWork_.registerUpdated(this);
     this.dispatchEvent(
         new mirosubs.subtitle.EditableCaption.ChangeEvent(
             timesFirstAssigned));

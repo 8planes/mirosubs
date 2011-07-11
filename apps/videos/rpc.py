@@ -26,6 +26,7 @@ from videos.models import Video, SubtitleLanguage
 from django.utils.translation import ugettext as _
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
+from utils.translation import get_user_languages_from_request
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.conf import settings
@@ -82,7 +83,8 @@ class VideosApiClass(object):
             video = None
         
         context = {
-            'video': video
+            'video': video,
+            'languages': video.subtitlelanguage_set.filter(subtitle_count__gt=0)
         }
         
         return {
@@ -119,7 +121,57 @@ class VideosApiClass(object):
             .models(Video).order_by('-%s' % sort_field)
         
         return render_page(page, sqs, request=request)
-    
+
+    def _get_volunteer_sqs(self, request, user):
+        '''
+        Return the search query set for videos which would be relevent to
+        volunteer for writing subtitles.
+        '''
+        user_langs = get_user_languages_from_request(request)
+
+        relevent = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(video_language__in=user_langs) \
+            .filter_or(languages__in=user_langs)
+
+        ## The rest of videos which are NOT relevent
+        #rest = SearchQuerySet().result_class(VideoSearchResult) \
+            #.models(Video).filter(video_language__in=user_langs) \
+            #.filter_or(languages__in=user_langs)
+
+        return relevent
+
+    @add_request_to_kwargs
+    def load_featured_page_volunteer(self, page, request, user):
+        relevent = self._get_volunteer_sqs(request, user)
+        sqs = relevent.order_by('-featured')
+
+        return render_page(page, sqs, request=request)    
+
+    @add_request_to_kwargs
+    def load_latest_page_volunteer(self, page, request, user):
+        relevent = self._get_volunteer_sqs(request, user)
+        sqs = relevent.order_by('-edited')
+
+        return render_page(page, sqs, request=request)
+
+    @add_request_to_kwargs
+    def load_popular_page_volunteer(self, page, sort, request, user):
+
+        sort_types = {
+            'today': 'today_views',
+            'week' : 'week_views', 
+            'month': 'month_views', 
+            'year' : 'year_views', 
+            'total': 'total_views'
+        }
+
+        sort_field = sort_types.get(sort, 'week_views')
+
+        relevent = self._get_volunteer_sqs(request, user)
+        sqs = relevent.order_by('-%s' % sort_field)
+
+        return render_page(page, sqs, request=request)
+
     @add_request_to_kwargs
     def load_popular_videos(self, sort, request, user):
         sort_types = {
@@ -141,6 +193,32 @@ class VideosApiClass(object):
         
         content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
         
+        return {
+            'content': content
+        }
+
+    @add_request_to_kwargs
+    def load_popular_videos_volunteer(self, sort, request, user):
+        sort_types = {
+            'today': 'today_views',
+            'week': 'week_views', 
+            'month': 'month_views', 
+            'year': 'year_views', 
+            'total': 'total_views'
+        }
+
+        sort_field = sort_types.get(sort, 'week_views')
+
+        relevent = self._get_volunteer_sqs(request, user)
+
+        popular_videos = relevent.order_by('-%s' % sort_field)[:5]
+
+        context = {
+            'video_list': popular_videos
+        }
+
+        content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
+
         return {
             'content': content
         }

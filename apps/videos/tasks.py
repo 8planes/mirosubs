@@ -71,11 +71,10 @@ def update_video_feed(video_feed_id):
         msg = '**update_video_feed**. VideoFeed does not exist. ID: %s' % video_feed_id
         client.create_from_text(msg, logger='celery')
 
-@task
+@task(ignore_result=False)
 def add(a, b):
     print "TEST TASK FOR CELERY. EXECUTED WITH ARGUMENTS: %s %s" % (a, b)
-    r = a+b
-    return r
+    return (a, b, a+b)
 
 @task
 def raise_exception(msg, **kwargs):

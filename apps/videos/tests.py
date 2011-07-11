@@ -21,7 +21,7 @@ import json
 
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, \
-    SubtitleLanguage, VideoUrl
+    SubtitleLanguage, VideoUrl, VideoFeed
 from apps.auth.models import CustomUser as User
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser, TxtSubtitleParser
 from django.core.urlresolvers import reverse
@@ -326,10 +326,10 @@ class UploadSubtitlesTest(WebUseTest):
 
     def test_upload_over_translated(self):
         # for https://www.pivotaltracker.com/story/show/11804745
-        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        from widget.tests import create_two_sub_dependent_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_dependent_draft(request)
-        video_pk = draft.language.video.pk
+        session = create_two_sub_dependent_session(request)
+        video_pk = session.language.video.pk
         video = Video.objects.get(pk=video_pk)
         original_en = video.subtitlelanguage_set.filter(language='en').all()[0]
 
@@ -342,10 +342,10 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEqual(2, video.subtitlelanguage_set.count())
 
     def test_upload_over_empty_translated(self):
-        from widget.tests import create_two_sub_draft, RequestMockup
+        from widget.tests import create_two_sub_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_draft(request)
-        video_pk = draft.language.video.pk
+        session = create_two_sub_session(request)
+        video_pk = session.language.video.pk
         video = Video.objects.get(pk=video_pk)
         original_en = video.subtitlelanguage_set.filter(language='en').all()[0]
 
@@ -364,12 +364,11 @@ class UploadSubtitlesTest(WebUseTest):
         response = self.client.post(reverse('videos:upload_subtitles'), data)
         self.assertEqual(response.status_code, 200)
 
-
     def test_upload_forks(self):
-        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        from widget.tests import create_two_sub_dependent_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_dependent_draft(request)
-        video = draft.video
+        session = create_two_sub_dependent_session(request)
+        video = session.video
         translated = video.subtitlelanguage_set.all().filter(language='es')[0]
         self.assertFalse(translated.is_forked)
         self.assertEquals(False, translated.latest_version().is_forked)
@@ -406,10 +405,10 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertNotEqual(sub_0.start_time , original_subs[0].start_time)
 
     def test_upload_respects_lock(self):
-        from widget.tests import create_two_sub_dependent_draft, RequestMockup
+        from widget.tests import create_two_sub_dependent_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
-        draft = create_two_sub_dependent_draft(request)
-        video = draft.video
+        session = create_two_sub_dependent_session(request)
+        video = session.video
 
         self._login()
         translated = video.subtitlelanguage_set.all().filter(language='es')[0]
@@ -425,10 +424,10 @@ class UploadSubtitlesTest(WebUseTest):
     def test_translations_get_order_after_fork(self):
           # we create en -> es
           # new es has no time data, but does have order
-          from widget.tests import create_two_sub_dependent_draft, RequestMockup
+          from widget.tests import create_two_sub_dependent_session, RequestMockup
           request = RequestMockup(User.objects.all()[0])
-          draft = create_two_sub_dependent_draft(request)
-          video = draft.video
+          session = create_two_sub_dependent_session(request)
+          video = session.video
           translated = video.subtitlelanguage_set.all().filter(language='es')[0]
           for sub in translated.version().subtitle_set.all():
               self.assertTrue(sub.start_time is None)
@@ -1106,7 +1105,7 @@ class DailymotionVideoTypeTest(TestCase):
     
     def setUp(self):
         self.vt = DailymotionVideoType
-        
+    
     def test_type(self):
         url = 'http://www.dailymotion.com/video/x7u2ww_juliette-drums_lifestyle#hp-b-l'
         vt = self.vt(url)
@@ -1123,6 +1122,16 @@ class DailymotionVideoTypeTest(TestCase):
         self.assertTrue(self.vt.matches_video_url(url))
         self.assertFalse(self.vt.matches_video_url(''))
         self.assertFalse(self.vt.matches_video_url('http://www.dailymotion.com'))
+    
+    def test_type1(self):
+        from videos.types import VideoTypeError
+        url = u'http://www.dailymotion.com/video/edit/xjhzgb_projet-de-maison-des-services-a-fauquembergues_news'
+        vt = self.vt(url)
+        try:
+            vt.get_metadata(vt.videoid)
+            self.fail('This link should return wrong response')
+        except VideoTypeError:
+            pass
         
 from videos.types.flv import FLVVideoType
 
@@ -1223,6 +1232,48 @@ class TestFeedsSubmit(TestCase):
         self.assertRedirects(response, reverse('videos:create'))
         self.assertNotEqual(old_count, Video.objects.count())
 
+    def test_empty_feed_submit(self):
+        import urllib2
+        import feedparser
+        from StringIO import StringIO
+        
+        base_open_resource = feedparser._open_resource
+        
+        def _open_resource_mock(*args, **kwargs):
+            return StringIO(str(u"".join([u"<?xml version='1.0' encoding='UTF-8'?>",
+            u"<feed xmlns='http://www.w3.org/2005/Atom' xmlns:openSearch='http://a9.com/-/spec/opensearchrss/1.0/'>",
+            u"<id>http://gdata.youtube.com/feeds/api/users/test/uploads</id>",
+            u"<updated>2011-07-05T09:17:40.888Z</updated>",
+            u"<category scheme='http://schemas.google.com/g/2005#kind' term='http://gdata.youtube.com/schemas/2007#video'/>",
+            u"<title type='text'>Uploads by test</title>",
+            u"<logo>http://www.youtube.com/img/pic_youtubelogo_123x63.gif</logo>",
+            u"<link rel='related' type='application/atom+xml' href='https://gdata.youtube.com/feeds/api/users/test'/>",
+            u"<link rel='alternate' type='text/html' href='https://www.youtube.com/profile_videos?user=test'/>",
+            u"<link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml' href='https://gdata.youtube.com/feeds/api/users/test/uploads'/>",
+            u"<link rel='http://schemas.google.com/g/2005#batch' type='application/atom+xml' href='https://gdata.youtube.com/feeds/api/users/test/uploads/batch'/>",
+            u"<link rel='self' type='application/atom+xml' href='https://gdata.youtube.com/feeds/api/users/test/uploads?start-index=1&amp;max-results=25'/>",
+            u"<author><name>test</name><uri>https://gdata.youtube.com/feeds/api/users/test</uri></author>",
+            u"<generator version='2.0' uri='http://gdata.youtube.com/'>YouTube data API</generator>",
+            u"<openSearch:totalResults>0</openSearch:totalResults><openSearch:startIndex>1</openSearch:startIndex>",
+            u"<openSearch:itemsPerPage>25</openSearch:itemsPerPage></feed>"])))           
+        
+        feedparser._open_resource = _open_resource_mock
+
+        old_count = Video.objects.count()
+        feed_url = u'http://gdata.youtube.com/feeds/api/users/testempty/uploads'
+        data = {
+            'feed_url': feed_url,
+            'save_feed': True
+        }
+        response = self.client.post(reverse('videos:create_from_feed'), data)
+        self.assertRedirects(response, reverse('videos:create'))
+        self.assertEqual(old_count, Video.objects.count())
+        
+        vf = VideoFeed.objects.get(url=feed_url)
+        self.assertEqual(vf.last_link, '')
+        
+        feedparser._open_resource = base_open_resource
+        
 from apps.videos.types.brigthcove  import BrightcoveVideoType        
 
 class BrightcoveVideoTypeTest(TestCase):

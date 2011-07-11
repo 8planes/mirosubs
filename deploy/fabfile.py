@@ -19,6 +19,8 @@
 from __future__ import with_statement
 from fabric.api import run, put, sudo, env, cd, local
 from fabric.context_managers import settings
+import string
+import random
 import os
 
 DEV_HOST = 'dev.universalsubtitles.org:2191'
@@ -27,7 +29,8 @@ ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 def _create_env(username, hosts, s3_bucket, 
                 installation_dir, static_dir, name,
                 memcached_bounce_cmd, 
-                admin_dir, separate_uslogging_db=False,
+                admin_dir, celeryd_host, celeryd_proj_root, 
+                separate_uslogging_db=False,
                 celeryd_bounce_cmd=""):
     env.user = username
     env.web_hosts = hosts
@@ -40,39 +43,52 @@ def _create_env(username, hosts, s3_bucket,
     env.admin_dir = admin_dir
     env.separate_uslogging_db = separate_uslogging_db
     env.celeryd_bounce_cmd=celeryd_bounce_cmd
+    env.celeryd_host = celeryd_host
+    env.celeryd_proj_root = celeryd_proj_root
 
 def staging(username):
-    _create_env(username, 
-                ['pcf-us-staging1.pculture.org:2191', 
-                 'pcf-us-staging2.pculture.org:2191'],
-                's3.staging.universalsubtitles.org',
-                'universalsubtitles.staging',
-                'static/staging', 'staging',
-                '/etc/init.d/memcached-staging restart',
-                '/usr/local/universalsubtitles.staging',
-                True, celeryd_bounce_cmd="/etc/init.d/celeryd.staging restart")
+    _create_env(username              = username, 
+                hosts                 = ['pcf-us-staging1.pculture.org:2191', 
+                                        'pcf-us-staging2.pculture.org:2191'],
+                s3_bucket             = 's3.staging.universalsubtitles.org',
+                installation_dir      = 'universalsubtitles.staging',
+                static_dir            = 'static/staging', 
+                name                  = 'staging',
+                memcached_bounce_cmd  = '/etc/init.d/memcached-staging restart',
+                admin_dir             = '/usr/local/universalsubtitles.staging',
+                celeryd_host          = ADMIN_HOST,
+                celeryd_proj_root     = 'universalsubtitles.staging',
+                separate_uslogging_db = True, 
+                celeryd_bounce_cmd    = "/etc/init.d/celeryd.staging restart")
 
 def dev(username):
-    _create_env(username,
-                ['dev.universalsubtitles.org:2191'],
-                None,
-                'universalsubtitles.dev',
-                'www/universalsubtitles.dev', 'dev', 
-                '/etc/init.d/memcached restart', 
-                None,
-                False,
-                celeryd_bounce_cmd="/etc/init.d/celeryd.dev restart")
+    _create_env(username              = username,
+                hosts                 = ['dev.universalsubtitles.org:2191'],
+                s3_bucket             = None,
+                installation_dir      = 'universalsubtitles.dev',
+                static_dir            = 'www/universalsubtitles.dev', 
+                name                  = 'dev', 
+                memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
+                admin_dir             = None,
+                celeryd_host          = DEV_HOST,
+                celeryd_proj_root     = 'universalsubtitles.dev',
+                separate_uslogging_db = False,
+                celeryd_bounce_cmd    = "/etc/init.d/celeryd.dev restart")
 
 def unisubs(username):
-    _create_env(username,
-                ['pcf-us-cluster1.pculture.org:2191', 
-                 'pcf-us-cluster2.pculture.org:2191'],
-                's3.www.universalsubtitles.org',
-                'universalsubtitles',
-                'static/production', None,
-                '/etc/init.d/memcached restart', 
-                '/usr/local/universalsubtitles',
-                True, celeryd_bounce_cmd="/etc/init.d/celeryd restart")
+    _create_env(username              = username,
+                hosts                 = ['pcf-us-cluster1.pculture.org:2191', 
+                                        'pcf-us-cluster2.pculture.org:2191'],
+                s3_bucket             = 's3.www.universalsubtitles.org',
+                installation_dir      = 'universalsubtitles',
+                static_dir            = 'static/production',
+                name                  =  None,
+                memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
+                admin_dir             = '/usr/local/universalsubtitles',
+                celeryd_host          = ADMIN_HOST,
+                celeryd_proj_root     = 'universalsubtitles',
+                separate_uslogging_db = True, 
+                celeryd_bounce_cmd    = "/etc/init.d/celeryd restart")
 
 
 def syncdb():
@@ -218,6 +234,8 @@ def update_web():
             env.warn_only = True
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
+            with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
+                run('. ../../env/bin/activate && pip install -q -r requirements.txt')
             run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
@@ -226,7 +244,7 @@ def update_web():
         with cd(os.path.join(env.admin_dir, 'mirosubs')):
             _git_pull()
     _bounce_celeryd()
-    
+    test_services()
 
 def bounce_memcached():
     if env.admin_dir:
@@ -298,7 +316,6 @@ def update():
     update_static()
     update_web()
 
-
 def _promote_django_admins(dir, email=None, new_password=None, userlist_path=None):
     with cd(os.path.join(dir, 'mirosubs')):
         python_exe = '{0}/env/bin/python'.format(dir)
@@ -342,3 +359,45 @@ def update_translations():
     - You must have the  .transifexrc file into your home (this has auth credentials is stored outside of source control)
     """
     run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))
+
+def test_celeryd():
+    print '=== TEST CELERYD SCHEDULLER ==='
+    env.host_string = env.celeryd_host
+    output = run('ps aux | grep "%s/mirosubs/manage\.py.*celeryd.*-B" | grep -v grep' % env.celeryd_proj_root)
+    assert len(output.split('\n'))
+
+def test_services():
+    test_memcached()
+    test_celeryd()
+    print '=== TEST SERVICES ==='
+    for host in env.web_hosts:
+        env.host_string = host    
+        with cd(os.path.join(env.web_dir, 'mirosubs')):
+            run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
+                env.web_dir))
+
+def test_memcached():
+    print '=== TEST MEMCACHED ==='
+    alphanum = string.letters+string.digits
+    host_set = set(env.web_hosts)
+    for host in host_set:
+        random_string = ''.join(
+            [alphanum[random.randint(0, len(alphanum)-1)] 
+             for i in xrange(12)])
+        env.host_string = host
+        with cd(os.path.join(env.web_dir, 'mirosubs')):
+            run('{0}/env/bin/python manage.py set_memcached {1} --settings=unisubs_settings'.format(
+                env.web_dir,
+                random_string))
+        other_hosts = host_set - set([host])
+        for other_host in other_hosts:
+            env.host_string = host
+            output = ''
+            with cd(os.path.join(env.web_dir, 'mirosubs')):
+                output = run('{0}/env/bin/python manage.py get_memcached --settings=unisubs_settings'.format(
+                    env.web_dir))
+            if output.find(random_string) == -1:
+                raise Exception('Machines {0} and {1} are using different memcached instances'.format(
+                        host, other_host))
+                
+
