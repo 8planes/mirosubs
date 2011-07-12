@@ -29,6 +29,9 @@
                 return false;
             });
             
+            var sort = $.address.parameter('sort');
+            $('li[val='+sort+']', $sort_menu).click();
+            
             $('.ajax-pagination').ajaxPaginator({
                 container: $('.watch-page-content'),
                 onPageChange: function(page, callback){
