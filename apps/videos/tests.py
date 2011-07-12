@@ -1375,12 +1375,13 @@ class TestPercentComplete(TestCase):
     
     fixtures = ['test.json']
 
-    def _create_trans(self, latest_version=None, lang_code=None, forked=False):
+    def _create_trans(self, standard_language, latest_version=None, lang_code=None, forked=False):
         translation = SubtitleLanguage()
         translation.video = self.video
         translation.language = lang_code
         translation.is_original = False
         translation.is_forked = forked
+        translation.standard_language = standard_language
         translation.save()
 
         self.translation = translation
@@ -1404,8 +1405,9 @@ class TestPercentComplete(TestCase):
         self.video = Video.objects.all()[:1].get()
         self.original_language = self.video.subtitle_language()
         latest_version = self.original_language.latest_version()
-        self.translation = self._create_trans(latest_version, 'uk')
-        
+        self.translation = self._create_trans(
+            self.original_language, latest_version, 'uk')
+
     def test_percent_done(self):
         from videos.tasks import video_changed_tasks
         video_changed_tasks.delay(self.translation.video.id)
@@ -1492,7 +1494,8 @@ class TestPercentComplete(TestCase):
                                                
     def test_video_0_subs_are_never_complete(self):                                      
         self.original_language = self.video.subtitle_language()
-        new_lang = self._create_trans(None, 'it', True)
+        new_lang = self._create_trans(
+            self.original_language, None, 'it', True)
         self.assertFalse(self.video.is_complete, False)
         metadata_manager.update_metadata(self.video.pk)
         new_lang.save()
@@ -1769,12 +1772,13 @@ class TestTemplateTags(TestCase):
         self.assertEqual("60 %", complete_indicator(l))
         
         
-def _create_trans( video, latest_version=None, lang_code=None, forked=False):
+def _create_trans(video, latest_version=None, lang_code=None, forked=False):
         translation = SubtitleLanguage()
         translation.video = video
         translation.language = lang_code
         translation.is_original = False
         translation.is_forked = forked
+        translation.standard_language = video.subtitle_language()
         translation.save()
         v = SubtitleVersion()
         v.language = translation
