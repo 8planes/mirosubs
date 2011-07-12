@@ -25,6 +25,7 @@
                 $this.hide();
                 $current_sort.html($this.html());
                 $current_sort.attr('val', $this.attr('val'));
+                $.address.parameter('sort', $this.attr('val'));
                 $('.ajax-pagination').ajaxPaginator('setPage', 1);
                 return false;
             });
