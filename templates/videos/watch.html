@@ -34,7 +34,7 @@
 
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
-        <a class="btn_more_videos" href="{% url videos:popular_videos %}">
+        <a class="btn_more_videos more-popular-video-link" href="{% url videos:popular_videos %}">
             {% trans "More Popular Videos" %}
         </a>
         
@@ -62,6 +62,12 @@
                     return false;
                 });
                 
+                var update_more_link = function(){
+                    var href = $('a.more-popular-video-link').attr('href');
+                    var link = href.split('#')[0]+'#/?sort='+$sort_menu.find('li:hidden').attr('val');
+                    $('a.more-popular-video-link').attr('href', link);                    
+                };
+                
                 $('li', $sort_menu).click(function(){
                     var $this = $(this);
                     
@@ -73,6 +79,7 @@
                         $container.html(data.content);
                         $container.css('opacity', '');
                     });
+                    update_more_link();
                     return false;
                 });
             });
