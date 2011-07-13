@@ -107,10 +107,13 @@ def team_add_video_select(context):
 def render_belongs_to_team_list(video):
     teams =  []
     for t in list(video.team_set.all()):
-        teams.append(t)
         if video.moderated_by == t:
             t.moderates =True
+            teams.insert(0, t)
+        else:
+            teams.append(t)
     return {"teams": teams}
+
 
 @register.inclusion_tag('teams/_team_video_detail.html', takes_context=True)  
 def team_video_detail(context, team_video_search_record):
