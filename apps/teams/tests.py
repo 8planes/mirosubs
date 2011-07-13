@@ -1429,6 +1429,10 @@ class TestRemoval(TestSubtitleVersions, BaseTestModeration):
        # the last one must be v0 -> the one approved
        self.assertEquals(tv.video.subtitle_language().latest_version().subtitles()[0].text , v0_subs_text)
        
-        
+class TestTeamTemplateTags(BaseTestModeration):
+
+    def test_render_belongs_to_list(self):
+        # FIXME implement test
+        return
 def refresh_obj(m):
     return m.__class__.objects.get(pk=m.pk)
