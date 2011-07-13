@@ -50,7 +50,7 @@ function updateHistoryPanel(el, data){
     
 
 }
-function showMessageFromResonse(response){
+function showMessageFromResponse(response){
     var message = response.data.message || "An error ocurred, we're working on getting this fixes asap.";
     jQuery['jGrowl'](message, {'life': 10000});    
 }
@@ -63,7 +63,7 @@ function showMessageFromResonse(response){
  */
 function onApproveDone(el, response){
     if (response.success){
-        showMessageFromResonse(response)
+        showMessageFromResponse(response)
 
     }
     if (el){
@@ -78,7 +78,7 @@ function onApproveDone(el, response){
 }
 
 function prepareApproveButton(i, el){
-
+    
     var url = $(el).attr('href');
     $(el).attr('#');
     $(el).click( function(e){
@@ -114,5 +114,5 @@ function ajaxifyApproveButtons(el){
     $("." + APPROVE_MARKER, el).each(prepareApproveButton);
 
 }
-ajaxifyApproveButtons(window);
+ajaxifyApproveButtons();
 window.ajaxifyApproveButtons = ajaxifyApproveButtons;
