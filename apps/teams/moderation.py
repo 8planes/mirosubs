@@ -40,6 +40,7 @@ def is_moderated(version_lang_or_video):
         video = version_lang_or_video
     return bool(video.moderated_by)
 
+
 #@require_lock
 def add_moderation( video, team, user):
    """

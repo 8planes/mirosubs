@@ -194,9 +194,13 @@ class Team(models.Model):
 
     # moderation
     
-    def get_pending_moderation( self):
+    def get_pending_moderation( self, video=None):
         from videos.models import SubtitleVersion
-        return SubtitleVersion.objects.filter(language__video__moderated_by=self, moderation_status=WAITING_MODERATION)
+        qs =  SubtitleVersion.objects.filter(language__video__moderated_by=self, moderation_status=WAITING_MODERATION)
+        if video is not None:
+            qs = qs.filter(language__video=video)
+        return qs    
+            
 
     def can_add_moderation(self, user):
         if not user.is_authenticated():
@@ -523,6 +527,9 @@ class TeamVideo(models.Model):
         for lang in settings.ALL_LANGUAGES:
             self._add_searchable_language(lang[0], langs, sls)
         return sls
+
+    def get_pending_moderation(self):
+        return self.team.get_pending_moderation(self.video)
 
 def team_video_save(sender, instance, created, **kwargs):
     update_one_team_video.delay(instance.id)
