@@ -96,13 +96,24 @@ function onBatchRejectRequested(){
     return ;
 }
 
+function setLangCheckbox(el, val){
+    $(el).attr("checked", val);
+    $(el).change();
+}
+
+function onCheckAllClicked(e){
+    var val = $(e.target).is(":checked");
+    $(".batch-apply").each(function(i, obj){
+        setLangCheckbox(obj, val) ;
+    });
+}
+
 function onBatchForVideoChanged(e){
     var el = e.target;
     var table = $(el).parents("table").eq(0);
     var id = $(el).attr("name").split("-")[2];
     $("input.video-" + id, table).each(function(i,obj){
-        $(obj).attr("checked", $(el).is(":checked"));  
-        $(obj).change();
+        setLangCheckbox(obj, $(el).is(":checked"));  
     })
 }
 
@@ -173,6 +184,7 @@ function decorateItems(){
     });
     handleForm(form);
     refreshBatchButtonState();
+    $(".select-all-languages").change(onCheckAllClicked);
 }
 
 decorateItems();

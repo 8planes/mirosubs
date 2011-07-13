@@ -33,6 +33,7 @@
     <form class="moderation-dashboard" action="{% url moderation:get-pending-videos team_id=team.pk %}" method="GET">
       <label>Batch Actions</label>
       <div class="dev-button-container">
+        <input type="checkbox" class="select-all-languages" name="select-all-languages"/>
         <a class="batch-approve-selected-button mirosubs-green-button small"> Approve  </a>
         <a class="batch-reject-selected-button mirosubs-green-button small dev-button-sequence"> Reject </a>
       </div>
