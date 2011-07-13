@@ -27,9 +27,12 @@
                         <img height="50" src="{{ team_video.video.get_thumbnail }}">
                         {% endif %}
                     </a>                    
-                    <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video }}</strong></a>
+                    <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video }} </strong></a>
                     <div class="test-me">
                       {% team_video_lang_list team_video.video 6 %}
+                      {% if team_video.get_pending_moderation  %}
+                      <br>Video has languages pending approval (<a href="{% url moderation:edit_moderation team.pk %}">Review now </a>) 
+                      {% endif %}
 
                     </div>
 
@@ -44,6 +47,7 @@
                         {% if team_video|can_edit_video:user %}
                         | <a href="{{ team_video.get_absolute_url }}">{% trans 'Edit' %}</a>
                         {% endif %}
+
                     </div>
                 </td>
             </tr>
