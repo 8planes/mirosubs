@@ -19,11 +19,6 @@
 
     WSGIScriptAlias / /var/www/INSERT_SITE_DIRECTORY/mirosubs/deploy/unisubs.wsgi
 
-    Alias /favicon.ico /var/www/INSERT_SITE_DIRECTORY/mirosubs/media/images/favicon.ico
-    <Location "/favicon.ico">
-        SetHandler None
-    </Location>
-
     Alias /site_media /var/www/INSERT_SITE_DIRECTORY/mirosubs/media/
     <Location "/site_media">
         SetHandler None
