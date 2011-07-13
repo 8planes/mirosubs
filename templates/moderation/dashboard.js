@@ -96,9 +96,20 @@ function onBatchRejectRequested(){
     return ;
 }
 
+function onBatchForVideoChanged(e){
+    var el = e.target;
+    var table = $(el).parents("table").eq(0);
+    var id = $(el).attr("name").split("-")[2];
+    $("input.video-" + id, table).each(function(i,obj){
+        $(obj).attr("checked", $(el).is(":checked"));  
+        $(obj).change();
+    })
+}
+
 function initRow(i, rowEl){
     // if this is a table row, do nothing with it
     if ($("td", rowEl ).length == 0){
+        $(".batch-select-video", rowEl).change(onBatchForVideoChanged);
         return
     }
     var data = $(".approve-button-container", rowEl).attr("name").split(";");
