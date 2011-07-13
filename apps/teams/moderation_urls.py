@@ -31,7 +31,7 @@ urlpatterns = patterns(
     url(r'team/(?P<team_id>\d+)/revisions/approves/$', 'batch_approve_version', name='revision-approve-batch'),
     url(r'team/(?P<team_id>\d+)/lang/(?P<lang_id>\d+)/revisions/approve-before/(?P<before_rev>\d+)/$', 'batch_approve_version', name='revision-approve-batch-until'),
     url(r'team/(?P<team_id>\d+)/revision/(?P<version_id>\d+)/reject/$', 'reject_version', name='revision-reject'),
-    url(r'team/(?P<team_id>\d+)/revisions/reject/$', 'batch_reject_version', name='revision-reject-batch'),
+    url(r'team/(?P<team_id>\d+)//lang/(?P<lang_id>\d+)/revisions/approve-before/(?P<before_rev>\d+)/$', 'batch_reject_version', name='revision-reject-batch-until'),
     url(r'team/(?P<team_id>\d+)/revision/(?P<version_id>\d+)/remove-moderation/$', 'remove_moderation_version', name='revision-remove-moderation'),
     url(r'team/(?P<team_id>\d+)/affect-selected/$', 'affect_selected', name='affect-selected'),
 )

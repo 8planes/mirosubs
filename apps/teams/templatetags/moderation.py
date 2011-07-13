@@ -81,6 +81,20 @@ def render_approve_button_lang(team, lang_pk, latest_version_pk):
         "url": url
         }
 
+@register.inclusion_tag("moderation/_reject_button.html")
+def render_reject_button_lang(team, lang_pk, latest_version_pk):
+    label = _("Approve  revisions")
+    url = reverse("moderation:revision-reject-batch-until", kwargs={
+            'team_id':team,
+            "before_rev": latest_version_pk,
+            "lang_id":lang_pk
+        })
+    return {
+        "style":"labelless",
+        "label": label,
+        "team": team,
+        "url": url
+        }
 
 @register.inclusion_tag("moderation/_reject_button.html")
 def render_reject_button(version_or_language):
