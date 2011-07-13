@@ -354,6 +354,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'middleware.ResponseTimeMiddleware',
+    'utils.ajaxmiddleware.AjaxErrorMiddleware',
     'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -486,7 +487,8 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.OpenIdBackend',
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',
-   'django.contrib.auth.backends.ModelBackend'
+   'django.contrib.auth.backends.ModelBackend',
+   'guardian.backends.ObjectPermissionBackend',
 )
 
 SKIP_SOUTH_TESTS = True
@@ -517,6 +519,8 @@ TEAMS_ON_PAGE = 12
 PROJECT_VERSION = '0.5'
 
 EDIT_END_THRESHOLD = 120
+
+ANONYMOUS_USER_ID = -1
 
 #Use on production
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
@@ -593,7 +597,8 @@ MEDIA_BUNDLES = {
         "type":"css",
         "files":(
                "css/mirosubs-widget.css" ,
-               "css/nyroModal.css"
+               "css/nyroModal.css",
+               "css/dev.css"
          ),
         },
 

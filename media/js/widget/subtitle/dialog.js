@@ -274,24 +274,31 @@ mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     
 };
 
+mirosubs.subtitle.Dialog.prototype.onWorkSaved = function(closeAfterSave, isComplete){
+    this.saved_ = true;
+    if (this.finishFailDialog_) {
+        this.finishFailDialog_.setVisible(false);
+        this.finishFailDialog_ = null;
+    }
+    if (closeAfterSave)
+        this.setVisible(false);
+    else {
+        this.doneButtonEnabled_ = true;
+        this.setFinishedState_();
+    }
+};
+
 mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isComplete) {
     this.doneButtonEnabled_ = false;
     this.getRightPanelInternal().showLoading(true);
     this.captionSet_.completed = isComplete;
     var that = this;
     this.serverModel_.finish(
-        function() {
-            that.saved_ = true;
-            if (that.finishFailDialog_) {
-                that.finishFailDialog_.setVisible(false);
-                that.finishFailDialog_ = null;
-            }
-            if (closeAfterSave)
-                that.setVisible(false);
-            else {
-                that.doneButtonEnabled_ = true;
-                that.setFinishedState_();
-            }
+        function(serverMsg){
+            mirosubs.subtitle.OnSavedDialog.show(serverMsg, function(){
+                that.onWorkSaved(closeAfterSave, isComplete);
+            })
+            
         },
         function(opt_status) {
             if (that.finishFailDialog_)

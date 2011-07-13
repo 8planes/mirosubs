@@ -41,6 +41,8 @@ import re
 from utils.translation import get_languages_list
 from utils.forms.unisub_video_form import UniSubBoundVideoField
 
+from apps.teams.moderation import add_moderation, remove_moderation
+
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
 
@@ -54,13 +56,18 @@ class EditLogoForm(forms.ModelForm, AjaxForm):
         return self.cleaned_data
 
 class EditTeamVideoForm(forms.ModelForm):
-    
+
+
     class Meta:
         model = TeamVideo
         fields = ('title', 'description', 'thumbnail', 'all_languages', 'completed_languages')
     
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        
+            
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
+        
         self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
         self.fields['completed_languages'].help_text = None
         self.fields['completed_languages'].widget = forms.CheckboxSelectMultiple()
@@ -68,6 +75,76 @@ class EditTeamVideoForm(forms.ModelForm):
             self.fields['completed_languages'].queryset = self.instance.video.subtitlelanguage_set.all()
         else:
             self.fields['completed_languages'].queryset = SubtitleLanguage.objects.none()
+        
+        self.should_add_moderation = self.should_remove_moderation = False
+        
+        if self.instance:
+            video  = self.instance.video
+            team = self.instance.team
+            
+            if video and team:
+                who_owns = video.moderated_by
+                is_ours = who_owns and who_owns == team
+                is_moderated = False
+                if who_owns and not is_ours:
+                    self.is_moderated_by_other_team = who_owns
+                    # should write about moderation
+                    pass
+                else:
+                    if is_ours:
+                         is_moderated = True
+                    self.fields['is_moderated'] = forms.BooleanField(
+                        label=_("Moderate subtitles"),
+                        initial=is_moderated,
+                        required=False
+                    )
+
+    def clean(self, *args, **kwargs):
+        super(EditTeamVideoForm, self).clean(*args, **kwargs)
+        should_moderate = self.cleaned_data.get("is_moderated", False)
+        if self.instance:
+
+            team = self.instance.team
+            video = self.instance.video
+            who_owns = video.moderated_by
+            is_ours = who_owns and who_owns == team
+            if should_moderate:
+                if  is_ours:
+                # do nothing, we are good!
+                    pass
+                elif  who_owns:
+                    self._errors['is_moderated'] = self.error_class([u"This video is already moderated by team %s" % who_owns])
+                    del self.cleaned_data['is_moderated']
+                else:
+                    self.should_add_moderation = True
+            else:
+                if not who_owns:
+                    # do nothiing we are good!
+                    pass
+                elif is_ours:
+                    self.should_remove_moderation = True
+        
+        return self.cleaned_data
+
+    def save(self, *args, **kwargs):
+        obj = super(EditTeamVideoForm, self).save(*args, **kwargs)
+
+        video = obj.video
+        team = obj.team
+        if self.should_add_moderation:
+            try:
+                add_moderation(video, team, self.user)
+            except Exception ,e:
+                raise
+                self._errors["should_moderate"] = [e]
+        elif self.should_remove_moderation:
+            try:
+                remove_moderation(video, team, self.user)
+            except Exception ,e:
+                raise
+                self._errors["should_moderate"] = [e]
+                 
+    
 
 class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubBoundVideoField(label=_('Video URL'), verify_exists=True, 
@@ -77,6 +154,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
                                  help_text=_(u'It will be saved only if video does not exist in our database.'))
     
+    
     class Meta:
         model = TeamVideo
         fields = ('video_url', 'language', 'title', 'description', 'thumbnail')
@@ -85,7 +163,8 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         self.team = team
         super(AddTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['language'].choices = get_languages_list(True)
-    
+
+
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
         video = self.fields['video_url'].video
@@ -95,7 +174,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         except TeamVideo.DoesNotExist:
             pass
         
-        return video_url     
+        return video_url
     
     def save(self, commit=True):
         video_language = self.cleaned_data['language']

@@ -46,7 +46,6 @@ class SubtitleFetchCounters(BasePerDayStatisticModel):
     class Meta:
         verbose_name = _(u'Subtitle fetch statistic')
         verbose_name_plural = _(u'Subtitle fetch statistic')
-        unique_together = (('video', 'language', 'date'),)
 
 class VideoViewCounter(BasePerDayStatisticModel):
     video = models.ForeignKey('videos.Video')
@@ -54,7 +53,6 @@ class VideoViewCounter(BasePerDayStatisticModel):
     class Meta:
         verbose_name = _(u'Video view statistic')
         verbose_name_plural = _(u'Video view statistic')
-        unique_together = (('video', 'date'),)
 
 class WidgetViewCounter(BasePerDayStatisticModel):
     video = models.ForeignKey('videos.Video')
@@ -62,7 +60,6 @@ class WidgetViewCounter(BasePerDayStatisticModel):
     class Meta:
         verbose_name = _(u'Widget view statistic')
         verbose_name_plural = _(u'Widget view statistic')
-        unique_together = (('video', 'date'),)
     
 def get_model_statistics(model, today, month_ago, week_ago, day_ago):
     '''

@@ -180,7 +180,7 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
     var that = this;
     var args = this.makeFinishArgs_();
     if (goog.isNull(args)) { // no changes.
-        successCallback(); // TODO: is this the right ux?
+        successCallback("Saved"); // TODO: is this the right ux?
         return;
     }
     mirosubs.Rpc.call(
@@ -195,7 +195,7 @@ mirosubs.subtitle.MSServerModel.prototype.finish =
             }
             else {
                 that.finished_ = true;
-                successCallback();
+                successCallback(result["user_message"]);
             }
         }, 
         function(opt_status) {

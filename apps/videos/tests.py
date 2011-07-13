@@ -250,7 +250,7 @@ class UploadSubtitlesTest(WebUseTest):
         self.assertEqual(original_language.language, data['video_language'])
         
         language = video.subtitle_language(data['language'])
-        version = language.latest_version()
+        version = language.latest_version(public_only=True)
         self.assertEqual(len(version.subtitles()), 32)
         self.assertTrue(language.is_forked)
         self.assertTrue(version.is_forked)
@@ -291,7 +291,7 @@ class UploadSubtitlesTest(WebUseTest):
         data = self._make_data()
         self.client.post(reverse('videos:upload_subtitles'), data)
         language = self.video.subtitle_language(data['language'])
-        version_no = language.latest_version().version_no
+        version_no = language.latest_version(public_only=True).version_no
         self.assertEquals(1, language.subtitleversion_set.count())
         num_languages_1 = self.video.subtitlelanguage_set.all().count()
         # now post the same file.
@@ -300,7 +300,7 @@ class UploadSubtitlesTest(WebUseTest):
         self._make_objects()
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(1, language.subtitleversion_set.count())
-        self.assertEquals(version_no, language.latest_version().version_no)
+        self.assertEquals(version_no, language.latest_version(public_only=True).version_no)
         num_languages_2 = self.video.subtitlelanguage_set.all().count()
         self.assertEquals(num_languages_1, num_languages_2)
 
@@ -318,7 +318,7 @@ class UploadSubtitlesTest(WebUseTest):
         self.client.post(reverse('videos:upload_subtitles'), altered_data)
         language = self.video.subtitle_language(data['language'])
         self.assertEquals(2, language.subtitleversion_set.count())
-        version = language.latest_version()
+        version = language.latest_version(public_only=True)
         self.assertTrue(version.time_change > 0)
         self.assertTrue(version.text_change > 0)
         self.assertEquals(version.time_change , 1)
@@ -371,7 +371,7 @@ class UploadSubtitlesTest(WebUseTest):
         video = session.video
         translated = video.subtitlelanguage_set.all().filter(language='es')[0]
         self.assertFalse(translated.is_forked)
-        self.assertEquals(False, translated.latest_version().is_forked)
+        self.assertEquals(False, translated.latest_version(public_only=True).is_forked)
 
         trans_subs = translated.version().subtitle_set.all()
         
@@ -779,7 +779,7 @@ class ViewsTest(WebUseTest):
         self.failUnlessEqual(response.status_code, 200)
         
         language = self.video.subtitle_language(language_code)
-        version = language.latest_version()
+        version = language.latest_version(public_only=True)
         self.assertEqual(len(version.subtitles()), 2)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to[0], self.user.email)
@@ -798,7 +798,7 @@ class ViewsTest(WebUseTest):
         }
         response = self.client.post(reverse("videos:paste_transcription"), data)
         language = self.video.subtitle_language(language_code)
-        version = language.latest_version()
+        version = language.latest_version(public_only=True)
         self.assertEqual(len(version.subtitles()), 2)        
         
     def test_email_friend(self):
@@ -851,7 +851,7 @@ class ViewsTest(WebUseTest):
         self._login()
         
         version = self.video.version(0)
-        last_version = self.video.version()
+        last_version = self.video.version(public_only=False)
         
         self._simple_test('videos:rollback', [version.id], status=302)
         
@@ -861,7 +861,7 @@ class ViewsTest(WebUseTest):
     def test_model_rollback(self):
         video = Video.objects.all()[:1].get()
         lang = video.subtitlelanguage_set.all()[:1].get()
-        v = lang.latest_version()
+        v = lang.latest_version(public_only=True)
         v.is_forked = True
         v.save()
         
@@ -873,7 +873,7 @@ class ViewsTest(WebUseTest):
         
         self.client.get(reverse('videos:rollback', args=[v.id]), {})
         lang = SubtitleLanguage.objects.get(id=lang.id)
-        last_v = lang.latest_version()
+        last_v = lang.latest_version(public_only=True)
         self.assertTrue(last_v.is_forked)
         self.assertFalse(last_v.notification_sent)
         self.assertEqual(last_v.version_no, new_v.version_no+1)
@@ -881,7 +881,7 @@ class ViewsTest(WebUseTest):
     def test_rollback_updates_sub_count(self):
         video = Video.objects.all()[:1].get()
         lang = video.subtitlelanguage_set.all()[:1].get()
-        v = lang.latest_version()
+        v = lang.latest_version(public_only=True)
         num_subs = len(v.subtitles())
         v.is_forked  = True
         v.save()
@@ -898,14 +898,14 @@ class ViewsTest(WebUseTest):
         new_version_sub_count = len(new_v.subtitles())
         self._login()
         self.client.get(reverse('videos:rollback', args=[v.id]), {})
-        last_v  = SubtitleLanguage.objects.get(id=lang.id).latest_version()
+        last_v  = SubtitleLanguage.objects.get(id=lang.id).latest_version(public_only=True)
         final_num_subs = len(last_v.subtitles())
         self.assertEqual(final_num_subs, num_subs)
         lang_subs = SubtitleLanguage.objects.get(pk=lang.pk)
         self.assertEqual( lang_subs.subtitle_count , num_subs)
         
     def test_diffing(self):
-        version = self.video.version(0)
+        version = self.video.version(version_no=0)
         last_version = self.video.version()
         response = self._simple_test('videos:diffing', [version.id, last_version.id])
         self.assertEqual(len(response.context['captions']), 5)
@@ -1306,7 +1306,7 @@ class TestTasks(TestCase):
     def setUp(self):
         self.video = Video.objects.all()[:1].get()
         self.language = self.video.subtitle_language()
-        self.latest_version = self.language.latest_version()
+        self.latest_version = self.language.latest_version(public_only=True)
         
         self.latest_version.user.changes_notification = True
         self.latest_version.user.is_active = True

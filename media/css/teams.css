@@ -185,3 +185,10 @@ a.add_subtitles_bt{
     width: 400px;
     font-weight: bold;
 }
+
+.video-info{
+   margin-left:80px;
+}
+.video-moderation-item{
+   margin-bottom:40px;
+}

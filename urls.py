@@ -63,6 +63,7 @@ urlpatterns = patterns(
     url(r'^pagedemo/(\w+)?$', 'pagedemo.views.pagedemo', name="pagedemo"),
     (r'^videos/', include('videos.urls', namespace='videos', 
                           app_name='videos')),
+    (r'^moderation/', include('teams.moderation_urls', namespace="moderation")),
     (r'^teams/', include('teams.urls', namespace='teams', 
                           app_name='teams')),                          
     (r'^profiles/', include('profiles.urls', namespace='profiles', 

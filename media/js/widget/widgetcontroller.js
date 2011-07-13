@@ -49,14 +49,14 @@ mirosubs.widget.WidgetController.prototype.initializeStateImpl_ = function(resul
     mirosubs.widget.WidgetController.makeGeneralSettings(result);
 
     var videoID = result['video_id'];
-
+     
     if (videoID){
         this.videoTab_.createShareButton(
             new goog.Uri(mirosubs.getSubtitleHomepageURL(videoID)), false);
     }
 
     var dropDownContents = new mirosubs.widget.DropDownContents(
-        result['drop_down_contents']);
+        result['drop_down_contents'], result["is_moderated"]);
     var subtitleState = mirosubs.widget.SubtitleState.fromJSON(
         result['subtitles']);
 

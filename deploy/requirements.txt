@@ -36,5 +36,6 @@ vendor/indifex-transifex-client-0.5.tar.gz
 django-extensions==0.4.1                   
 # do we really need this in prod?
 django-debug-toolbar==0.8.3
+vendor/django-guardian-1.0.2.tar.gz
 # This can be commented out if you're using sqlite
 MySQL_python>=1.2.2

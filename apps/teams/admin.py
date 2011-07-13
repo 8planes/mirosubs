@@ -27,7 +27,6 @@ from teams.models import Team, TeamMember, TeamVideo
 from videos.models import SubtitleLanguage
 from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
-from django import forms
 
 class TeamMemberInline(admin.TabularInline):
     model = TeamMember
@@ -66,8 +65,7 @@ class TeamAdmin(admin.ModelAdmin):
 class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ('team__name', 'user__username', 'user__first_name', 'user__last_name')
     list_display = ('team', 'user', 'is_manager')
-    raw_id_fields = ('team', 'user')
-    
+
 class TeamVideoForm(forms.ModelForm):
     
     class Meta:
@@ -84,11 +82,8 @@ class TeamVideoForm(forms.ModelForm):
         self.fields['completed_languages'].queryset = qs
 
 class TeamVideoAdmin(admin.ModelAdmin):
-    form = TeamVideoForm
-    list_display = ('__unicode__', 'team')
-    search_fields = ('team__name', 'title')
-    raw_id_fields = ['video', 'team', 'added_by']
-    
+    list_display = ('title', 'description')
+
 admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamVideo, TeamVideoAdmin)

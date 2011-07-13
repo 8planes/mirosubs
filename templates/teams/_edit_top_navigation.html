@@ -1,22 +1,26 @@
-{% load i18n %}
+{% load i18n moderation %}
 <ul class="inline_tabs">
     <li {% if active == "settings" %} class="active"{% endif %}>
-        <a href="{{ team.get_edit_url }}">{% trans 'Team Settings' %}</a>
+        <a href="{{ team.get_edit_url }}">{% trans 'Settings' %}</a>
     </li>
     <li class="bull">&bull;</li>
     <li {% if active == "members" %} class="active"{% endif %}>
-        <a href="{% url teams:edit_members team.slug %}">{% trans 'Team Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
+        <a href="{% url teams:edit_members team.slug %}">{% trans 'Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
     </li>
     <li class="bull">&bull;</li>
     <li {% if active == "videos" %} class="active"{% endif %}>
-        <a href="{% url teams:edit_videos team.slug %}">{% trans 'Team Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+        <a href="{% url teams:edit_videos team.slug %}">{% trans 'Videos' %}<span class="badgy_out"><span class="badgy">{{ team.videos_count }}</span></span></a>
+    </li>
+    <li class="bull">&bull;</li>
+    <li {% if active == "moderation" %} class="active"{% endif %}>
+        <a href="{% url moderation:edit_moderation team.pk %}">{% trans 'Subtitles Pending' %}<span class="badgy_out"><span class="badgy">{% versions_to_moderate_count team %}</span></span></a>
     </li>
     <li class="bull">&bull;</li>
     <li {% if active == "application" %} class="active"{% endif %}>
-        <a href="{% url teams:applications team.slug %}">{% trans 'Review Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
+        <a href="{% url teams:applications team.slug %}">{% trans 'Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
     </li>
     <li class="bull">&bull;</li>   
     <li>
-        <a href="{{ team.get_absolute_url }}">{% trans 'View Team' %}</a>
+        <a href="{{ team.get_absolute_url }}">{% trans 'Team Homepage' %}</a>
     </li>          
 </ul>

@@ -60,6 +60,8 @@ from videos.search_indexes import VideoSearchResult
 from utils.celery_search_index import update_search_index
 import datetime
 
+from apps.teams.moderation import user_can_moderate
+
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
 })
@@ -239,6 +241,7 @@ def video(request, video_id, video_url=None, title=None):
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
+    
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
@@ -434,10 +437,11 @@ def history(request, video_id, lang=None, lang_id=None):
         .filter(had_version=True).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
-    context['last_version'] = language.latest_version()
+    context['last_version'] = language.latest_version(public_only=False)
     context['widget_params'] = _widget_params(request, video, version_no=None, language=language)
     context['language'] = language
     context['edit_url'] = language.get_widget_url()
+    context["user_can_moderate"] = user_can_moderate(video, request.user)
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 

@@ -50,6 +50,7 @@ from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
 from haystack.query import SearchQuerySet
 
+
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
 CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS = getattr(settings, 'CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS', 20)
@@ -381,6 +382,7 @@ def edit_videos(request, slug):
                        template_object_name='videos',
                        extra_context=extra_context)
 
+
 @login_required
 @render_to('teams/team_video.html')
 def team_video(request, team_video_pk):
@@ -389,7 +391,9 @@ def team_video(request, team_video_pk):
     if not team_video.can_edit(request.user):
         raise Http404
     
-    form = EditTeamVideoForm(request.POST or None, request.FILES or None, instance=team_video)
+    form = EditTeamVideoForm(request.POST or None, request.FILES or None,
+                             instance=team_video,
+                             user=request.user)
 
     if form.is_valid():
         form.save()

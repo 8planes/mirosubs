@@ -77,6 +77,7 @@ def invalidate_cache(video_id):
     cache.delete(_subtitles_count_key(video_id))
     cache.delete(_video_languages_key(video_id))
     cache.delete(_video_languages_verbose_key(video_id))
+    cache.delete(_video_is_moderated_key(video_id))
 
     from videos.models import Video
     try:
@@ -117,6 +118,9 @@ def _video_writelocked_langs_key(video_id):
 def _subtitle_language_pk_key(video_id, language_code):
     return "sl_pk_{0}{1}".format(video_id, language_code)
 
+def _video_is_moderated_key(video_id):
+    return 'widget_video_is_moderated_{0}'.format(video_id)
+
 def pk_for_default_language(video_id, language_code):
     cache_key = _subtitle_language_pk_key(video_id, language_code)
     value = cache.get(cache_key)
@@ -143,7 +147,7 @@ def get_video_urls(video_id):
         return video_urls
 
 def get_subtitles_dict(
-    video_id, language_pk, version_no, subtitles_dict_fn):
+    video_id, language_pk, version_no, subtitles_dict_fn, is_remote=False):
     cache_key = _subtitles_dict_key(video_id, language_pk, version_no)
     value = cache.get(cache_key)
     if value is not None:
@@ -151,13 +155,12 @@ def get_subtitles_dict(
     else:
         from videos.models import Video
         video = Video.objects.get(video_id=video_id)
-
         if language_pk is None:
             language = video.subtitle_language()
         else:    
             language = video.subtitlelanguage_set.get(pk=language_pk)
         video.update_subtitles_fetched(language)
-        version = video.version(version_no, language)
+        version = video.version(version_no, language, public_only=not is_remote)
         if version:
             cached_value = subtitles_dict_fn(version)
         else:
@@ -216,6 +219,18 @@ def get_video_languages_verbose(video_id, max_items=6):
         cache.set(cache_key, data, TIMEOUT)
         return data
 
+def get_is_moderated(video_id):
+    cache_key = _video_is_moderated_key(video_id)
+    value = cache.get(cache_key)
+    if value is  None:
+        from videos.models import Video
+        video = Video.objects.get(video_id=video_id)
+        value = video.is_moderated
+        cache.set(cache_key, value, TIMEOUT)
+    return value
+    
+        
+    
 def _writelocked_store_langs(video_id, langs):
     delimiter = ";"
     cache_key = _video_writelocked_langs_key(video_id)

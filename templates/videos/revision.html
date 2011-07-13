@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load widget i18n media_compressor %}
+{% load widget i18n media_compressor moderation %}
 
 {% block css %}
   {{ block.super }}
@@ -141,6 +141,7 @@
           <span>{% trans 'Roll back to version' %} (#{{ version.version_no }})</span>
       </a>
       {% endif %}
+      {% render_approval_toolbar user version %}
     </div>
     <div class="clearboth">&nbsp;</div>
     <a href="{{ language.get_absolute_url }}#revisions" class="return_history floatright">
@@ -166,3 +167,12 @@
       {% endfor %}
     </ul>
 {% endblock %}
+
+{% block bottom_scripts %}
+<script>
+    $(window).load(function(){
+    {% include 'moderation/moderation-buttons.js' %}
+  });
+</script>
+{% endblock %}
+

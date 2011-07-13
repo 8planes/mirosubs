@@ -1,3 +1,4 @@
+
 # Universal Subtitles, universalsubtitles.org
 # 
 # Copyright (C) 2010 Participatory Culture Foundation
@@ -33,6 +34,7 @@ from django.utils.translation import ugettext as _
 from subrequests.models import SubtitleRequest
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
+
 from utils import send_templated_email
 from statistic.tasks import st_widget_view_statistic_update
 import logging
@@ -96,7 +98,7 @@ class Rpc(BaseRpc):
             'subtitles': None,
         }
         return_value['video_urls']= video_urls
-        
+        return_value['is_moderated'] = video_cache.get_is_moderated(video_id)
         if additional_video_urls is not None:
             for url in additional_video_urls:
                 video_cache.associate_extra_url(url, video_id)
@@ -297,10 +299,12 @@ class Rpc(BaseRpc):
         if throw_exception:
             raise Exception('purposeful exception for testing')
 
+        from apps.teams.moderation import is_moderated
+        
         language = session.language
         new_version = None
         if subtitles is not None and \
-                (len(subtitles) > 0 or language.latest_version() is not None):
+                (len(subtitles) > 0 or language.latest_version(public_only=False) is not None):
             new_version = self._create_version_from_session(session, request.user, forked)
             new_version.save()
             self._save_subtitles(
@@ -320,11 +324,16 @@ class Rpc(BaseRpc):
 
         user_message = None
         if new_version is not None and new_version.version_no == 0:
-            user_message = {
-                "body": ("Thank you for uploading. It will take a minute "
-                         "or so for your subtitles to appear.") }
+            user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
+        elif new_version and is_moderated(new_version):
+            user_message = """This video is moderated by %s. 
+
+You will not see your subtitles in our widget when you leave this page-- they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles they will show up on our site and in the widget.""" % (new_version.video.moderated_by.name)
+
+                
+                
         return {
-            '_user_message': user_message,
+            'user_message': user_message,
             'response': 'ok' }
 
     def _save_subtitles(self, subtitle_set, json_subs, forked):
@@ -342,7 +351,7 @@ class Rpc(BaseRpc):
                     subtitle_order=s['sub_order'])
 
     def _create_version_from_session(self, session, user=None, forked=False):
-        latest_version = session.language.version()
+        latest_version = session.language.version((public_only=False)
         return models.SubtitleVersion(
             language=session.language,
             version_no=(0 if latest_version is None 

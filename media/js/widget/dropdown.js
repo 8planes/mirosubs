@@ -57,7 +57,13 @@ mirosubs.widget.DropDown.prototype.hasSubtitles = function() {
 };
 mirosubs.widget.DropDown.prototype.setStats_ = function(dropDownContents) {
     this.videoLanguages_ = dropDownContents.LANGUAGES;
+    this.isModerated_ = dropDownContents.IS_MODERATED;
 };
+
+mirosubs.widget.DropDown.prototype.isModerated = function() {
+    return this.isModerated_;
+}
+
 mirosubs.widget.DropDown.prototype.updateContents = function(dropDownContents) {
     this.setStats_(dropDownContents);
     this.updateSubtitleStats_();
@@ -138,6 +144,9 @@ mirosubs.widget.DropDown.prototype.createActionList_ = function($d) {
     this.actions_ = $d('div', {'className': 'mirosubs-actions'});
     this.createActionLinks_($d);
     this.actions_.appendChild(this.unisubsLink_);
+    if (this.isModerated_){
+        this.actions_.appendChild($d('h4', null, 'SUBS ARE MODERATED'));
+    }
     this.actions_.appendChild($d('h4', null, 'THIS VIDEO'));
     this.actions_.appendChild(this.videoActions_);
     this.actions_.appendChild($d('h4', null, 'MY SETTINGS'));

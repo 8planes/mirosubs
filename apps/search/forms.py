@@ -32,7 +32,7 @@ class SearchForm(forms.Form):
         ('month_views', _(u'Views This Month')),
         ('total_views', _(u'Total Views')),
     )
-    q = forms.CharField(label=_(u'query'))
+    q = forms.CharField(label=_(u'query'), initial="title")
     sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count',
                              label=_(u'Sort By'))
     langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Subtitled Into'),
@@ -46,7 +46,6 @@ class SearchForm(forms.Form):
             del kwargs['sqs']
         else:
             sqs = None
-            
         super(SearchForm, self).__init__(*args, **kwargs)
         
         if sqs:
