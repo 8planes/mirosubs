@@ -46,11 +46,11 @@ def _set_moderation(request, team, version, status, msg, updates_meta=True):
 
         _set_version_moderation_status(version, team, request.user, status, updates_meta)
         if request.is_ajax():
-            return HttpResponse(json.dumps({
+            return {
                         "status":"ok",
                         "message": msg,
                         "status_icon_html": render_moderation_icon(version),
-                        "new_button_html":render_moderation_togggle_button(version)}))
+                        "new_button_html":render_moderation_togggle_button(version)}
         else:
             return HttpResponseRedirect(reverse("videos:revision", kwargs={'pk':version.pk}))
     except SuspiciousOperation:
