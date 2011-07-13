@@ -49,7 +49,7 @@ def update_search_index(model_class, pk):
     try:
         obj = model_class.objects.get(pk=pk)
     except model_class.DoesNotExist:
-        log(u'Object does not exist for %s' % model_class)
+        log(u'Object does not exist for %s %s' % (model_class, pk))
         return
 
     try:
