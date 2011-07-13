@@ -41,6 +41,8 @@ import datetime
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
+from apps.teams.moderation_const import WAITING_MODERATION
+
 class TeamManager(models.Manager):
     
     def for_user(self, user):
@@ -189,6 +191,25 @@ class Team(models.Model):
             return self.is_manager(user)
         
         return self.is_member(user)
+
+    # moderation
+    
+    def get_pending_moderation( self):
+        from videos.models import SubtitleVersion
+        return SubtitleVersion.objects.filter(language__video__moderated_by=self, moderation_status=WAITING_MODERATION)
+
+    def can_add_moderation(self, user):
+        if not user.is_authenticated():
+            return False
+        return self.is_manager(user)
+        
+    def can_remove_moderation(self, user):
+        if not user.is_authenticated():
+            return False
+        return self.is_manager(user)
+
+    def video_is_moderated_by_team(self, video):
+        return video.moderated_by == self
     
     def can_approve_application(self, user):
         return self.is_member(user)
@@ -335,6 +356,7 @@ class TeamVideo(models.Model):
     added_by = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
     completed_languages = models.ManyToManyField(SubtitleLanguage, blank=True)
+
     
     class Meta:
         unique_together = (('team', 'video'),)

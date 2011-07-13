@@ -61,3 +61,4 @@ urlpatterns += patterns('',
         'template': 'jsdemo/teams_profile.html'
     }),
 )
+

@@ -1,0 +1,10 @@
+{% load moderation %}
+{% if version %}
+   {% if is_approved %}
+
+       {% render_remove_approve_button version %}
+    {% else %}
+       {% render_moderation_togggle_button version %}
+    {% endif %}
+    {% render_reject_button version %}
+{% endif %}

@@ -1,0 +1,7 @@
+<ul class="video-team-list">
+{% for team in teams %}
+<li>
+<a href="{% url teams:detail slug=team.slug %}"> {{team.name}} </a>{% if team.moderates %}(moderating){%endif%}{%if not forloop.islast %},{%endif%}
+</li>
+{% endfor %}
+</ul>

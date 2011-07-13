@@ -99,6 +99,12 @@ class WidgetViewStatistic(VideoViewStatistic):
         
         Video.objects.filter(pk=obj.video_id) \
             .update(widget_views_count=F('widget_views_count')+value)
+        
+    def post_migrate(self, updated_objects, updated_keys):
+        from utils.celery_search_index import update_search_index_for_qs
+        from videos.models import Video
+        
+        update_search_index_for_qs.delay(Video, [item.video_id for item in updated_objects])
             
 st_widget_view_statistic = WidgetViewStatistic()
 

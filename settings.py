@@ -226,6 +226,7 @@ JS_CORE = ['mirosubs.js',
            'widget/resumeeditingrecord.js',
            'widget/opendialogargs.js',
            'widget/dropdown.js',
+           'widget/subtitle/onsaveddialog.js',
            'widget/subtitle/dialog.js',
            'widget/subtitle/msservermodel.js',
            'widget/subtitle/editablecaption.js',
@@ -341,6 +342,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'middleware.ResponseTimeMiddleware',
+    'utils.ajaxmiddleware.AjaxErrorMiddleware',
     'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -413,6 +415,7 @@ INSTALLED_APPS = (
     'rosetta',
     'testhelpers',
     'unisubs_compressor',
+    'guardian',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
@@ -472,7 +475,8 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.OpenIdBackend',
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',
-   'django.contrib.auth.backends.ModelBackend'
+   'django.contrib.auth.backends.ModelBackend',
+   'guardian.backends.ObjectPermissionBackend',
 )
 
 SKIP_SOUTH_TESTS = True
@@ -503,6 +507,8 @@ TEAMS_ON_PAGE = 12
 PROJECT_VERSION = '0.5'
 
 EDIT_END_THRESHOLD = 120
+
+ANONYMOUS_USER_ID = -1
 
 #Use on production
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
@@ -577,7 +583,8 @@ MEDIA_BUNDLES = {
         "type":"css",
         "files":(
                "css/mirosubs-widget.css" ,
-               "css/nyroModal.css"
+               "css/nyroModal.css",
+               "css/dev.css"
          ),
         },
 

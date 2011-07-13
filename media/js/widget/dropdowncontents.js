@@ -21,11 +21,16 @@ goog.provide('mirosubs.widget.DropDownContents');
 /**
  * @constructor
  */
-mirosubs.widget.DropDownContents = function(languages) {
+mirosubs.widget.DropDownContents = function(languages, isModerated) {
     /**
      * @type {Array.<mirosubs.startdialog.VideoLanguage>}
      */
     this.LANGUAGES = goog.array.map(languages, function(l){
         return new mirosubs.startdialog.VideoLanguage(l);
     });
+    /**
+     * @type {bool}
+     */
+    this.IS_MODERATED = isModerated;
+
 };
