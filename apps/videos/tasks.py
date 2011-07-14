@@ -185,7 +185,7 @@ def _detect_language(version_id):
                 break
         r = json.loads(urllib.urlopen(url % urlquote_plus(text)).read())
 
-        if not 'error' in r:
+        if r and not 'error' in r:
             try:
                 SubtitleLanguage.objects.get(video=language.video, language=r['responseData']['language'])
             except SubtitleLanguage.DoesNotExist:
