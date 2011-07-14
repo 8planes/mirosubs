@@ -90,7 +90,7 @@ mirosubs.translate.Dialog.prototype.enterDocument = function() {
     var that = this;
     this.getRightPanelInternal().showDownloadLink(
         function() {
-            return that.translationPanel_.makeJsonSubs();
+            return that.makeJsonSubs();
         });
 };
 mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
@@ -142,5 +142,5 @@ mirosubs.translate.Dialog.prototype.getServerModel = function(){
 }
 
 mirosubs.translate.Dialog.prototype.makeJsonSubs =  function (){
-    return this.translationPanel_.makeJsonSubs();
+    return this.serverModel_.getCaptionSet().makeJsonSubs();
 };

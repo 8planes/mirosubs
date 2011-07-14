@@ -243,6 +243,7 @@ class Rpc(BaseRpc):
 
     def finished_subtitles(self, request, session_pk, subtitles=None, 
                            new_title=None, completed=None, 
+                           forked=False,
                            throw_exception=False):
         session = SubtitlingSession.objects.get(pk=session_pk)
         if not request.user.is_authenticated():
@@ -259,7 +260,7 @@ class Rpc(BaseRpc):
         new_version = None
         if subtitles is not None and \
                 (len(subtitles) > 0 or language.latest_version() is not None):
-            new_version = self._create_version_from_session(session, request.user)
+            new_version = self._create_version_from_session(session, request.user, forked)
             new_version.save()
             self._save_subtitles(
                 new_version.subtitle_set, subtitles, new_version.is_forked)
@@ -299,13 +300,13 @@ class Rpc(BaseRpc):
                     end_time=s['end_time'],
                     subtitle_order=s['sub_order'])
 
-    def _create_version_from_session(self, session, user=None):
+    def _create_version_from_session(self, session, user=None, forked=False):
         latest_version = session.language.version()
         return models.SubtitleVersion(
             language=session.language,
             version_no=(0 if latest_version is None 
                         else latest_version.version_no + 1),
-            is_forked=(session.base_language is None),
+            is_forked=(session.base_language is None or forked == True),
             datetime_started=session.datetime_started,
             user=user)
 
