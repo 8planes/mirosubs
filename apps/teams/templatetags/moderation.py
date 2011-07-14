@@ -97,17 +97,24 @@ def render_reject_button_lang(team, lang_pk, latest_version_pk):
         }
 
 @register.inclusion_tag("moderation/_reject_button.html")
-def render_reject_button(version_or_language):
+def render_reject_button(version_or_language, label=None, confirms=False):
     if isinstance(version_or_language, SubtitleVersion):
         version = version_or_language
     elif isinstance(version_or_language, SubtitleLanguage):
         version = version_or_language.latest(public_only=False)
 
 
-    team = version.video.moderated_by        
+    team = version.video.moderated_by
+    url = reverse("moderation:revision-reject", kwargs={
+            'team_id':team.pk,
+            "version_id": version.pk,
+        })
     return {
         "team": team,
-        "version": version
+        "version": version,
+        "label": label or "Decline revision",
+        "confirms": confirms,
+        "url": url,
        } 
     
 
@@ -116,7 +123,6 @@ def render_approval_toolbar( user, version):
     team = version.video.moderated_by        
     can_moderate = _user_can_moderate(version.language.video,  user)
     if not team or not  can_moderate:
-        print "empty"
         return {
             
         }
