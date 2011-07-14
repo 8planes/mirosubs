@@ -110,6 +110,7 @@ ALL_LANGUAGES['my'] = gettext_noop(u'Burmese')
 ALL_LANGUAGES['bo'] = gettext_noop(u'Tibetan')
 ALL_LANGUAGES['ast'] = gettext_noop(u'Asturian')
 ALL_LANGUAGES['ay'] = gettext_noop(u'Aymara')
+ALL_LANGUAGES['ps'] = gettext_noop(u'Pashto')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
