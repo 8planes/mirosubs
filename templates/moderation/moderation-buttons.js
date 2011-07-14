@@ -77,37 +77,49 @@ function onApproveDone(el, response){
     }
 }
 
-function prepareApproveButton(i, el){
-    
+function sendModeration(el, extra){
+    var previousLabel = $(el).text();
+    $(el).text(LOADING_TEXT);
+    $(el).addClass("disabled");
+    $(el).css("opacity", 0.5);
     var url = $(el).attr('href');
     $(el).attr('#');
+    var btn = $(el);
+    $.ajax( {
+        url: url,
+        dataType: 'json',
+        type: "POST",
+        data:extra,        
+        success: function(response){
+            btn.text(previousLabel);
+            btn.removeClass("disabled");
+            onApproveDone(el, response);
+        },
+        error: function(response){
+            onApproveDone(null, response);
+        }
+    });
+}
+
+function prepareApproveButton(i, el){
+
     $(el).click( function(e){
         e.preventDefault();
+
         if ($(this).hasClass("disabled")){
             return false;
         }
-        var previousLabel = $(this).text();
-        $(this).text(LOADING_TEXT);
-        $(this).addClass("disabled");
-        $(this).css("opacity", 0.5);
-        var btn = $(this);
-        $.ajax( {
-            url: url,
-            dataType: 'json',
-            type: "POST",
-            success: function(response){
-                btn.text(previousLabel);
-                btn.removeClass("disabled");
-                onApproveDone(el, response);
-            },
-            error: function(response){
-                onApproveDone(null, response);
-            }
-        });
+        var requiresDialogClass = $(el).attr("data-confirmdialog");
+        if (requiresDialogClass){
+            var d = new (goog.getObjectByName(requiresDialogClass))(function(x){
+                sendModeration(el, x);
+            });
+            d.setVisible(true);
+        }else{
+            sendModeration(el);
+        }
+    
     });
-
-    
-    
 }
 
 function ajaxifyApproveButtons(el){
