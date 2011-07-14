@@ -1774,36 +1774,45 @@ class TestSubtitleRequest(TestCase):
     def setUp(self):
         self.video = Video.objects.all()[0]
         self.user = User.objects.get(username=u'admin')
-        self.language = 'en'
-        self.languages = ['fr', 'hi']
+        self.languages1 = 'en'
+        self.languages2 = ['hi', 'fr']
         self.Model = SubtitleRequest.objects
 
     def test_create_request(self):
-        request, new = self.Model.create_request(self.video, self.user,
-                                                 self.language)
+        request = self.Model.create_requests(self.video.video_id,
+                                             self.user,
+                                             self.languages1)[0]
         self.assertEqual(1, request.id)
         self.assertEqual(False, request.done)
-        self.assertEqual(self.language, request.language)
-        self.assertEqual(True, new)
+        self.assertEqual(self.languages1[0], request.language)
 
         request.done = True
         request.save()
 
         # Stored request should be loaded
-        request, new = self.Model.create_request(self.video, self.user,
-                                                 self.language)
+        request = self.Model.create_requests(self.video.video_id,
+                                             self.user,
+                                             self.languages1)[0]
+
         self.assertEqual(1, request.id)
-        self.assertEqual(False, new)
         # Request should be marked as reopened
         self.assertEqual(False, request.done)
 
     def test_create_requests(self):
-        request, new = self.Model.create_request(self.video, self.user,
-                                                 self.language)
+        self.Model.create_requests(self.video.video_id, self.user,
+                                   self.languages1)
         requests = self.Model.create_requests(self.video.video_id, self.user,
-                                              self.languages)
+                                              self.languages2)
         # Only two new requests should be created
         self.assertEqual(2, len(requests))
+
+        # An action should have been created relating this video
+        action = Action.objects.filter(subtitlerequests__in=requests).latest()
+        print action.render()
+        self.assertEqual(2, action.subtitlerequests.all().count())
+
+        for request in requests:
+            self.assertEqual(2, request.action.pk)
 
 
 def _create_trans( video, latest_version=None, lang_code=None, forked=False):
