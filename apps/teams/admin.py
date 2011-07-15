@@ -29,7 +29,12 @@ from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
 from django import forms
 
+class TeamMemberInline(admin.TabularInline):
+    model = TeamMember
+    raw_id_fields = ['user']
+
 class TeamAdmin(admin.ModelAdmin):
+    inlines = [TeamMemberInline]
     search_fields = ('name'),
     list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight', 'last_notification_time')
     list_filter = ('highlight', 'is_visible')
@@ -61,7 +66,8 @@ class TeamAdmin(admin.ModelAdmin):
 class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ('team__name', 'user__username', 'user__first_name', 'user__last_name')
     list_display = ('team', 'user', 'is_manager')
-
+    raw_id_fields = ('team', 'user')
+    
 class TeamVideoForm(forms.ModelForm):
     
     class Meta:
