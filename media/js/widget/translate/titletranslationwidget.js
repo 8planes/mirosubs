@@ -21,13 +21,10 @@ goog.provide('mirosubs.translate.TitleTranslation');
 /**
  * @constructor
  * @param {string} video title
- * @param {mirosubs.UnitOfWork} unitOfWork
  */
-mirosubs.translate.TitleTranslationWidget = function(videoTitle,
-                                                unitOfWork) {
+mirosubs.translate.TitleTranslationWidget = function(videoTitle) {
     goog.ui.Component.call(this);
     this.originalVideoTitle_ = videoTitle || '';
-    this.unitOfWork_ = unitOfWork;
 };
 goog.inherits(mirosubs.translate.TitleTranslationWidget, goog.ui.Component);
 
@@ -67,12 +64,11 @@ mirosubs.translate.TitleTranslationWidget.prototype.isEmpty = function(){
 
 mirosubs.translate.TitleTranslationWidget.prototype.setTranslation = function(value){
     this.translateInput_.value = value;
-    this.unitOfWork_.setTitle(value);    
 };
 
 mirosubs.translate.TitleTranslationWidget.prototype.setTranslationContent = 
     mirosubs.translate.TitleTranslationWidget.prototype.setTranslation;
 
 mirosubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
-    this.unitOfWork_.setTitle(goog.string.trim(this.translateInput_.value));
+
 };

@@ -109,6 +109,8 @@ ALL_LANGUAGES['yi'] = gettext_noop(u'Yiddish')
 ALL_LANGUAGES['my'] = gettext_noop(u'Burmese')
 ALL_LANGUAGES['bo'] = gettext_noop(u'Tibetan')
 ALL_LANGUAGES['ast'] = gettext_noop(u'Asturian')
+ALL_LANGUAGES['ay'] = gettext_noop(u'Aymara')
+ALL_LANGUAGES['ps'] = gettext_noop(u'Pashto')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -150,7 +152,7 @@ DATABASES = {
 EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
-CSS_USE_COMPILED = not DEBUG
+CSS_USE_COMPILED = True
 JS_USE_COMPILED = False
 
 
@@ -212,7 +214,6 @@ JS_CORE = ['mirosubs.js',
            'widget/howtovideopanel.js',
            'widget/dialog.js',
            'widget/captionmanager.js',
-           'widget/brokenwarning.js',
            'widget/rightpanel.js',
            'widget/basestate.js',
            'widget/subtitlestate.js',
@@ -222,9 +223,9 @@ JS_CORE = ['mirosubs.js',
            'widget/subtitledialogopener.js',
            'widget/chooselanguagedialog.js',
            'widget/unsavedwarning.js',
-
+           'widget/resumeeditingrecord.js',
+           'widget/opendialogargs.js',
            'widget/dropdown.js',
-           'widget/requestdialog.js',
            'widget/subtitle/dialog.js',
            'widget/subtitle/msservermodel.js',
            'widget/subtitle/editablecaption.js',
@@ -244,6 +245,7 @@ JS_CORE = ['mirosubs.js',
            'widget/subtitle/editrightpanel.js',
            'widget/subtitle/bottomfinishedpanel.js',
            'widget/subtitle/logger.js',
+           'widget/subtitle/savedsubtitles.js',
            'widget/timeline/timerow.js',
            'widget/timeline/timerowul.js',
            'widget/timeline/timelinesub.js',
@@ -266,7 +268,6 @@ JS_CORE = ['mirosubs.js',
            'widget/translate/translationlist.js',
            'widget/translate/translationwidget.js',
            'widget/translate/translationrightpanel.js',
-           'widget/translate/editabletranslation.js',
            'widget/translate/forkdialog.js',
            'widget/translate/titletranslationwidget.js',
            'widget/play/manager.js',
@@ -386,6 +387,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.admin',
     'django.contrib.markup',
+    'django.contrib.webdesign',
     'django_extensions',
     'profiles',
     'sorl.thumbnail',
@@ -427,6 +429,7 @@ CELERY_IGNORE_RESULT = True
 CELERY_DISABLE_RATE_LIMITS = True
 CELERY_SEND_EVENTS = False
 CELERY_SEND_TASK_ERROR_EMAILS = True
+CELERY_RESULT_BACKEND = 'redis'
 
 BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
 BROKER_USER = AWS_ACCESS_KEY_ID = ""

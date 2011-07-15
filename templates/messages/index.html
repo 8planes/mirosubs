@@ -21,7 +21,7 @@
             $.metadata.setType("attr", "data");
             
             $('.messages .delete').click(function(){
-                if (confirm("{% trans 'Do you really wish delete this message?' %}")){
+                if (confirm("{% trans 'Do you really wish to delete this message?' %}")){
                     var $this = $(this);
                     MessagesApi.remove($this.attr('message_id'), function(response){
                         if (response.error){

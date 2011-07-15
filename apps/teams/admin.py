@@ -24,14 +24,22 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib import admin
 from teams.models import Team, TeamMember, TeamVideo
-from videos.models import Video
+from videos.models import SubtitleLanguage
 from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
+from django import forms
+
+class TeamMemberInline(admin.TabularInline):
+    model = TeamMember
+    raw_id_fields = ['user']
 
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight')
-    list_filter = ('highlight',)
+    inlines = [TeamMemberInline]
+    search_fields = ('name'),
+    list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight', 'last_notification_time')
+    list_filter = ('highlight', 'is_visible')
     actions = ['highlight', 'unhighlight', 'send_message']
+    raw_id_fields = ['video']
     
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -58,10 +66,29 @@ class TeamAdmin(admin.ModelAdmin):
 class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ('team__name', 'user__username', 'user__first_name', 'user__last_name')
     list_display = ('team', 'user', 'is_manager')
+    raw_id_fields = ('team', 'user')
+    
+class TeamVideoForm(forms.ModelForm):
+    
+    class Meta:
+        model = TeamVideo
+        
+    def __init__(self, *args, **kwargs):
+        super(TeamVideoForm, self).__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            qs = SubtitleLanguage.objects.filter(video=self.instance.video)
+        else:
+            qs = SubtitleLanguage.objects.none()
+               
+        self.fields['completed_languages'].queryset = qs
 
 class TeamVideoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')
-
+    form = TeamVideoForm
+    list_display = ('__unicode__', 'team')
+    search_fields = ('team__name', 'title')
+    raw_id_fields = ['video', 'team', 'added_by']
+    
 admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamVideo, TeamVideoAdmin)

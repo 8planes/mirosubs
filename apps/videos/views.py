@@ -52,10 +52,12 @@ from django.core.urlresolvers import reverse
 from videos.rpc import VideosApiClass
 from utils.rpc import RpcRouter
 from utils.decorators import never_in_prod
+from utils.translation import get_user_languages_from_request
 from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
+from utils.celery_search_index import update_search_index
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -99,6 +101,39 @@ def popular_videos(request):
     return render_to_response('videos/popular_videos.html', {},
                               context_instance=RequestContext(request)) 
 
+def volunteer_page(request):
+    user = request.user
+    # Get the user comfort languages list 
+    user_langs = get_user_languages_from_request(request)
+
+    relevevent = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).filter(video_language__in=user_langs) \
+        .filter_or(languages__in=user_langs)
+
+    featured_videos =  relevevent.order_by('-featured')[:5]
+
+    popular_videos = relevevent.order_by('-week_views')[:5]
+
+    latest_videos = relevevent.order_by('-edited')[:15]
+
+    context = {
+        'featured_videos': featured_videos,
+        'popular_videos': popular_videos,
+        'latest_videos': latest_videos,
+        'user_langs':user_langs,
+    }
+
+    return render_to_response('videos/volunteer.html', context,
+                              context_instance=RequestContext(request))
+
+def volunteer_category(request, category):
+    '''
+    Display results only for a particular category of video results from
+    popular, featured and latest videos.
+    '''
+    return render_to_response('videos/volunteer_%s.html' %(category),
+                              context_instance=RequestContext(request))
+
 def bug(request):
     from widget.rpc import add_general_settings
     context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
@@ -127,6 +162,7 @@ def ajax_change_video_title(request):
             video.title = title
             video.slug = slugify(video.title)
             video.save()
+            update_search_index.delay(Video, video.pk)
             Action.change_title_handler(video, user)
             send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))          
     except Video.DoesNotExist:
@@ -361,7 +397,7 @@ def history(request, video_id, lang=None, lang_id=None):
             language = video.subtitlelanguage_set.get(pk=lang_id)
         except SubtitleLanguage.DoesNotExist:
             raise Http404
-    else:    
+    else:
         language = video.subtitle_language(lang)
 
     if not language:
@@ -372,7 +408,7 @@ def history(request, video_id, lang=None, lang_id=None):
             url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
             return redirect(url)
         else:
-            language = video.subtitlelanguage_set.all()[0]
+            raise Http404
 
     qs = language.subtitleversion_set.select_related('user')
     ordering, order_type = request.GET.get('o'), request.GET.get('ot')
@@ -632,7 +668,7 @@ def subscribe_to_updates(request):
 
 def test_celery(request):
     from videos.tasks import add
-    add.delay(1, 2)
+    r = add.delay(1, 2)
     return HttpResponse('Hello, from Amazon SQS backend for Celery!')
 
 @staff_member_required

@@ -40,6 +40,7 @@ from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, Yo
     TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser
 import traceback, sys
 from django.contrib.auth.decorators import user_passes_test
+import inspect
 
 def print_last_exception():
     """
@@ -150,19 +151,38 @@ def log_exception(exceptions, logger='root', ignore=False):
         exceptions = (exceptions,)
     #TODO: in Sentry message is displayed with title utils.wrapped. should fix this
     def log_exception_func(func):
-        def wrapper(*args, **kwargs):
+        def log_exception_wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
             except exceptions, e:
-                #pretty hack to prevent multiple logging if few warpped functions 
-                #call each other
-                if not hasattr(e, '_caught_by_selery'):
-                    e._caught_by_selery = True
-                    client.create_from_exception(sys.exc_info(), logger=logger)
+                exec_info = sys.exc_info()
+                frame = exec_info[2].tb_frame.f_back
+                file_name = inspect.getfile(log_exception_wrapper)
+                func_name = 'log_exception_wrapper'
+                
+                #check if func is called by other wrapped function
+                #we should not catch execption in this case, because other function
+                #can be waiting for it. Really exception can be caught by any not
+                #wrapped function, but you always can use ignore=False
+                while frame:
+                    if frame.f_code.co_name == func_name and frame.f_code.co_filename == file_name:
+                        if not hasattr(e, '_traceback'):
+                            e._traceback = exec_info[2]
+                        raise e
+                        
+                    frame = frame.f_back
+                    
+                data = {
+                    'stack': traceback.extract_stack()
+                }
+                if hasattr(e, '_traceback'):
+                    exec_info = exec_info[0], exec_info[1], e._traceback
+
+                client.create_from_exception(exec_info, logger=logger, data=data)
                 if not ignore:
                     raise e
             
-        return update_wrapper(wrapper, func)
+        return update_wrapper(log_exception_wrapper, func)
     return log_exception_func
 
 import inspect

@@ -368,3 +368,33 @@ mirosubs.createLinkButton = function($d, text, opt_className) {
         atts['className'] = opt_className;
     return $d('a', atts, text);
 };
+
+mirosubs.saveInLocalStorage = function(key, value) {
+    if (goog.DEBUG) {
+        mirosubs.logger_.info(
+            "Saving local storage, key: " + key + 
+                " and value " + value);
+    }
+    window['localStorage']['setItem'](key, value);
+};
+
+mirosubs.fetchFromLocalStorage = function(key) {
+    if (goog.DEBUG) {
+        mirosubs.logger_.info(
+            "Fetching local storage, key: " + key + 
+                " and value " + 
+                window['localStorage']['getItem'](key));
+    }
+    return window['localStorage']['getItem'](key);
+};
+
+mirosubs.removeFromLocalStorage = function(key) {
+    if (goog.DEBUG) {
+        mirosubs.logger_.info("Removing " + key + " from localStorage.");
+    }
+    window['localStorage']['removeItem'](key);
+};
+
+if (goog.DEBUG) {
+    mirosubs.logger_ = goog.debug.Logger.getLogger('mirosubs');
+}

@@ -5,6 +5,8 @@ from haystack import site
 from haystack.exceptions import NotRegistered
 from haystack.utils import get_identifier
 from django.conf import settings
+from utils.redis_utils import default_connection
+import time
 
 class CelerySearchIndex(indexes.SearchIndex):
     
@@ -47,7 +49,7 @@ def update_search_index(model_class, pk):
     try:
         obj = model_class.objects.get(pk=pk)
     except model_class.DoesNotExist:
-        log(u'Object does not exist for %s' % model_class)
+        log(u'Object does not exist for %s %s' % (model_class, pk))
         return
 
     try:
@@ -60,6 +62,8 @@ def update_search_index(model_class, pk):
 
 @task()    
 def update_search_index_for_qs(model_class, pks):
+    start = time.time()
+    
     qs = model_class._default_manager.filter(pk__in=pks)
 
     try:
@@ -69,3 +73,17 @@ def update_search_index_for_qs(model_class, pks):
         return None
     
     search_index.backend.update(search_index, qs)
+    
+    LogEntry(num=len(pks), time=time.time()-start).save()
+    
+from redisco import models as rmodels
+
+class LogEntry(rmodels.Model):
+    num = rmodels.IntegerField()
+    time = rmodels.FloatField()
+    date = rmodels.DateTimeField(auto_now_add=True)
+        
+    class Meta:
+        verbose_name = 'Search index update statistic'
+        verbose_name_plural = 'Search index update statistic'
+        db = default_connection

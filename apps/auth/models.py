@@ -58,7 +58,6 @@ class CustomUser(BaseUser):
     picture = S3EnabledImageField(blank=True, upload_to='pictures/')
     valid_email = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
-    new_message_notification = models.BooleanField(default=True)
     follow_new_video = models.BooleanField(default=True)
     biography = models.TextField('Tell us about yourself', blank=True)
     autoplay_preferences = models.IntegerField(
@@ -75,7 +74,7 @@ class CustomUser(BaseUser):
         
     def __unicode__(self):
         if not self.is_active:
-            return ugettext('Anonymous')
+            return ugettext('Retired user')
             
         if self.first_name:
             if self.last_name:
@@ -293,8 +292,7 @@ class UserLanguage(models.Model):
     user = models.ForeignKey(CustomUser)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, verbose_name='languages')
     proficiency = models.IntegerField(choices=PROFICIENCY_CHOICES, default=1)
-    follow_requests = models.BooleanField(verbose_name='follow subtitle requests')
-
+    
     class Meta:
         unique_together = ['user', 'language']
 

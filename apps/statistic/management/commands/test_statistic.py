@@ -47,4 +47,9 @@ class Command(BaseCommand):
         print 'Migrate to DB'
         st_widget_view_statistic.migrate(verbosity=2)
         
+        print 'Test migrated data'
+        for video in qs:
+            views_st = st_widget_view_statistic.get_views(video=video)
+            assert video.widget_views_count >= views_st['month'], video.pk
+        
         print time.time() - start

@@ -34,6 +34,9 @@
             var parameterNames = $.address.parameterNames();
             for (var i = 0, l = parameterNames.length; i < l; i++) {
                 var name = parameterNames[i];
+                if (name === 'q'){
+                    continue
+                }
                 var value = $.address.parameter(name);
                 
                 var $link = $('#sidebar a[name='+name+'][value='+value+']');
@@ -73,6 +76,34 @@
                 }
             });
             
+            var add_faceting_data = function(fname, data){
+                $('#sidebar a[name='+fname+']').each(function(){
+                    var $this = $(this);
+
+                    var value = $this.attr('value');
+                    var is_active = $this.parents('li').hasClass('active');
+                    
+                    if (typeof data[value] != 'undefined'){
+                        var $span = $this.find('span');
+                        
+                        if ( ! $span.length){
+                            $span = $('<span></span>');
+                            $this.append($span);
+                        }
+                        
+                        $span.html('('+data[value]+')');
+                    }
+                    /*
+                    if (value === '' || data[value] || is_active){
+                        $this.show();
+                    }else{
+                        $this.hide();
+                    }*/
+                });
+            }
+            
+            var prev_query = null;
+            
             //Init AJAX-paginator
             $('.ajax-pagination').ajaxPaginator({
                 container: $('#main_col'),
@@ -80,12 +111,25 @@
                     parameters['page'] = page;
 
                     if (parameters['q']){
-                        var q = decodeURI(parameters['q']);
-                        $('.search-header').html('{% trans "Search Results for" %} "'+q+'"');
+                        var q = parameters['q'];
+                        if (q === ' '){
+                            $('.search-header').html('{% trans "Search Videos" %}');
+                        }else{
+                            $('.search-header').html('{% trans "Search Results for" %} '+q);
+                        }
                         if ($q_input.val() != q){
                             $q_input.val(q);
                         }
                     };
+                    
+                    if (parameters['q'] !== prev_query){
+                        SearchApi.load_languages_faceting(parameters['q'], function(data){
+                            add_faceting_data('langs', data.languages);
+                            add_faceting_data('video_lang', data.video_languages);
+                        });                        
+                    }
+                    
+                    prev_query = parameters['q'];
                     
                     SearchApi.search(parameters, function(data){
                         $('.loading-indicator').remove();
@@ -105,7 +149,7 @@
         <h2 class="search-header">
             {% if result_list %}
             {% blocktrans %}
-                Search Results for "{{ query }}"
+                Search Results for {{ query }}
             {% endblocktrans %}
             {% else %}
                 {% trans "Search Videos" %}

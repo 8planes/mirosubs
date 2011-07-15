@@ -57,3 +57,9 @@ mirosubs.widget.SubtitleState.prototype.baseParams = function() {
     return mirosubs.widget.BaseState.createParams(
         this.LANGUAGE, this.VERSION);
 };
+
+mirosubs.widget.SubtitleState.prototype.fork = function() {
+    this.FORKED = true;
+    this.BASE_LANGUAGE = null;
+    this.BASE_LANGUAGE_PK = null;
+};

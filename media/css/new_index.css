@@ -1,0 +1,277 @@
+#home-blurb {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+#home-blurb h1 {
+  color: #393939;
+  font-size: 32px;
+  margin: 36px 0 10px;
+	font-weight: bold;
+}
+
+#home-blurb p {
+  margin: 0;
+  color: #878787;
+  font-size: 18px;
+}
+
+#home-left,
+#home-right {
+  margin-bottom: 30px;
+}
+
+
+#home-left {
+  width: 496px;
+  float: left;
+  color: #5c5c5c;
+  font-size: 13px;
+}
+
+#home-left div {
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 14px;
+}
+
+#home-left h2 {
+  font-size: 20px;
+  color: #3a3a3a;
+  margin: 0 0 10px;
+	font-weight: bold;
+}
+
+#home-left p {
+  margin: 0;
+	line-height: 18px;
+}
+
+#home-left input {
+  color:#555;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid #c6c6c6;
+  border-radius: 4px;
+  width: 180px;
+  height: 32px;
+  padding: 0 0 0 4px;
+  margin-right: 5px;
+}
+
+#home-left #subtitle p {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+#home-left form {
+  float:left;
+}
+
+#home-left #features {
+  float: right;
+  width: 172px;
+  font-size: 11px;
+  padding: 0;
+  margin: 0;
+  border-left: 1px solid #dfdfdf;
+}
+
+#home-left #features h3 {
+  font-size: 12px;
+  margin: 0 0 5px;
+	font-weight: bold;
+}
+
+#home-left #features li {
+  margin-bottom: 4px;
+  list-style-type: disc;
+  margin-left: 14px;
+}
+
+#home-left #features h3,
+#home-left #features ul {
+  padding-left: 14px;
+}
+
+
+#home-right {
+  float: right;
+	background: #EEE;
+	width: 470px;
+	height: 384px;
+}
+
+
+#benefits {
+  background-color: #126295;
+  border-top-left-radius:  5px;
+  border-top-right-radius: 5px;
+  padding: 18px;
+}
+
+#benefits h2 {
+  color: #fff;
+  font-size: 22px;
+  margin: 0;
+	padding: 18px 0 0 0;
+	line-height: 0;
+	font-weight: bold;
+}
+
+#benefits p {
+  font-size: 16px;
+  color: #c4e0eb;
+  margin: 0;
+}
+
+#benefits .button {
+  float: right;
+  position: relative;
+  top: 0;
+  left: -4px;
+}
+
+#partners {
+  background-color: #efefef;
+  font-size:        12px;
+  font-weight:      bold;
+  line-height: 20px;
+  padding: 24px 0;
+	margin: 0 0 20px 0;
+}
+
+#partner_prev,
+#partner_next {
+  display: block;
+  width: 38px;
+  height: 38px;
+  text-indent: -9000px;
+  position: relative;
+  top: 44px;
+}
+
+#partner_prev {
+  background: url(../images/partner_prev.png);
+  float: left;
+  left: -19px;
+}
+
+#partner_next {
+  background: url(../images/partner_next.png);
+  float: right;
+  left: 19px;
+}
+
+#partners ul {
+  text-align: center;
+}
+
+#partners li {
+	display: block;
+	float: left;
+}
+
+#partners li a {
+  display: inline-block;
+  width: 175px;
+  text-align: center;
+	color: #333;
+}
+
+#partners a img {
+  display: block;
+  margin: 0 auto 10px;
+}
+
+#partners a .url {
+  color: #2067b0;
+  font-weight: normal;
+  display: block;
+}
+
+#enterprise {
+  background: #868686 url(../images/new_enterprise_bg.png);
+  color: #fff;
+  font-size: 14px;
+  line-height: 47px;
+  border-bottom: 2px solid #696969;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  margin: 0 0 25px;
+  padding: 0 0 0 10px;
+  text-shadow: 0 -1px 0 #454545;
+}
+
+#enterprise .button {
+  float: right;
+  position: relative;
+  top: 6px;
+  left: -6px;
+}
+
+
+
+.featured {
+  width: 473px;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.featured a.more {
+	float: right;
+	display: block;
+	position: relative;
+	top: 6px;
+	right: 10px;
+}
+
+.featured h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cfcfcf;
+  line-height: 34px;
+  margin-bottom: 6px;
+}
+
+.featured li {
+  margin-bottom: 20px;
+	
+}
+
+.featured .title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.featured a {
+  font-weight: bold;
+}
+
+.featured p {
+  margin-bottom: 0;
+}
+
+.featured .links {
+  margin: 0 0 15px 0;
+}
+
+.featured .links a {
+  font-size: 12px;
+  color: #727272;
+  margin-right: 10px;
+}
+
+.featured .links a:hover {
+	color: #000;
+}
+
+.featured .rounded-img {
+  float: left;
+  border-radius: 6px;
+  border: 3px solid #ddd;
+  margin-right: 10px;
+}
+
+#most-popular { float: left; }
+#featured-videos { float: right; }

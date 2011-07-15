@@ -1,12 +1,4 @@
 {% load i18n videos_tags %}
-<script type="text/javascript">
-  function share_on_facebook(event) {
-      jQuery.get('{% url statistic:fb_update_share_statistic %}');
-      window.open('{{share_panel_facebook_url}}',
-                  'post_to_fb', 'status=0,width=560,height=320');
-      return false;
-  }
-</script>
 <div class="mirosubs-share">
   
   <img src="{{MEDIA_URL}}images/blue_triangle.png" class="mirosubs-blueTriangle" />
@@ -25,7 +17,7 @@
   
   <h3>{% trans 'Embed this video in your site' %} <a class="embed_options_link" target="embedoptions" href="https://github.com/8planes/mirosubs/wiki/Embed-Code-Usage-Guide">options</a></h3>
   <p class="mirosubs-embed">
-    <textarea>{{share_panel_embed_code}}</textarea>
+    <textarea readonly="readonly">{{share_panel_embed_code}}</textarea>
     <span>
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
             width="110"
@@ -56,8 +48,21 @@
   <h3>{% trans 'Permalink' %}</h3>
   <a href="{{share_panel_permalink}}" class="mirosubs-permalink">{{share_panel_permalink}}</a>
 </div>
+
 <script type="text/javascript">
     jQuery('.mirosubs-share .mirosubs-twitter-share').click(function(){
         jQuery.get('{% url statistic:tw_update_share_statistic %}');
+    });
+    function share_on_facebook(event) {
+        jQuery.get('{% url statistic:fb_update_share_statistic %}');
+        window.open('{{share_panel_facebook_url}}',
+                'post_to_fb', 'status=0,width=560,height=320');
+        return false;
+    }
+
+    // Select all text when embed code is clicked
+    // .focus is not properly working with chrome so using .click
+    $(".mirosubs-embed textarea").click(function(){
+        this.select();
     });
 </script>

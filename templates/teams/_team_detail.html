@@ -7,7 +7,7 @@
             if ( ! IS_AUTHENTICATED){
                 document.location = '{% url auth:login %}?next={{ request.path_info|urlencode }}';
             }else{            
-                if (confirm('{% trans "Do you really wish join this team?" %}')){
+                if (confirm('{% trans "Do you really wish to join this team?" %}')){
                     var $this = $(this);
                     TeamsApi.join($this.attr('team_id'), function(response){
                         if (response.error){
@@ -22,7 +22,7 @@
             return false;
         });
         $('a.leave-team').click(function(){
-            if (confirm('{% trans "Do you really wish leave this team?" %}')){
+            if (confirm('{% trans "Do you really wish to leave this team?" %}')){
                 var $this = $(this);
                 TeamsApi.leave($this.attr('team_id'), function(response){
                     if (response.error){

@@ -34,7 +34,7 @@
                 return false;
             });
             $('.leave-team', $('ul.big_list')).live('click', function(){
-                if (confirm('{% trans "Do you really wish leave this team?" %}')){
+                if (confirm('{% trans "Do you really wish to leave this team?" %}')){
                     var $this = $(this);
                     TeamsApi.leave($this.attr('team_id'), function(response){
                         if (response.error){
@@ -54,16 +54,10 @@
 
 {% block main_content %}
 
-{% if can_create_team %}
-    {% if user.is_authenticated %}
-        <a href="{% url teams:create %}" class="green_button big start_team">
-            <span>{% trans 'Start a Team' %}</span>
-        </a>
-    {% else %}
-        <a href="{% url auth:login %}?next={{ request.path_info }}" class="green_button big start_team">
-            <span>{% trans 'Login to start a team' %}</span>
-        </a>
-    {% endif %}
+{% if user.is_superuser and user.is_active %}
+    <a href="{% url teams:create %}" class="green_button big start_team">
+        <span>{% trans 'Start a Team' %}</span>
+    </a>
 {% endif %}
 
 <h2>{% trans 'Team Directory' %}</h2>

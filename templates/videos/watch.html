@@ -19,10 +19,10 @@
 
 <div class="pod" id="featured_videos">
     <div class="hd">
-        <h2>{% trans "Featured Videos" %}</h2>
-        <a style="float: right; margin: -35px 40px 0;" href="{% url videos:featured_videos %}">
-            {% trans "more featured videos" %}
+        <a class="btn_more_videos" href="{% url videos:featured_videos %}">
+            {% trans "More Featured Videos" %}
         </a>
+        <h2>{% trans "Featured Videos" %}</h2>
     </div><!-- // hd -->
     <div class="bd">
         {% with featured_videos as video_list %}
@@ -34,20 +34,23 @@
 
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
+        <a class="btn_more_videos more-popular-video-link" href="{% url videos:popular_videos %}">
+            {% trans "More Popular Videos" %}
+        </a>
+        
         <h2>{% trans "Popular Videos" %}</h2>
         <a id="popular_sort" href="#">
             <span class="current-sort">{% trans "This Week" %}</span>
             <div id="sort_menu">
                 <ul>
+                    <li val="today">{% trans "Today" %}</li>
                     <li val="week" style="display: none">{% trans "This Week" %}</li>
                     <li val="month">{% trans "This Month" %}</li>
                     <li val="year">{% trans "This Year" %}</li>
                     <li val="total">{% trans "All Time" %}</li>
                 </ul>
             </div><!-- // sort_menu -->
-            <a style="float: right; margin: 20px 40px 0;" href="{% url videos:popular_videos %}">
-                {% trans "more popular videos" %}
-            </a>             
+            
         </a>
         <script type="text/javascript">
             jQuery(function($){
@@ -58,6 +61,12 @@
                 $('#popular_sort').click(function(){
                     return false;
                 });
+                
+                var update_more_link = function(){
+                    var href = $('a.more-popular-video-link').attr('href');
+                    var link = href.split('#')[0]+'#/?sort='+$sort_menu.find('li:hidden').attr('val');
+                    $('a.more-popular-video-link').attr('href', link);                    
+                };
                 
                 $('li', $sort_menu).click(function(){
                     var $this = $(this);
@@ -70,6 +79,7 @@
                         $container.html(data.content);
                         $container.css('opacity', '');
                     });
+                    update_more_link();
                     return false;
                 });
             });
@@ -87,10 +97,10 @@
 
 <div class="pod" id="latest_videos">
     <div class="hd">
-        <h2>{% trans "The Latest" %}</h2>
-        <a style="float: right; margin: -35px 40px 0;" href="{% url videos:latest_videos %}">
-            {% trans "more latest videos" %}
-        </a>        
+        <a class="btn_more_videos" href="{% url videos:latest_videos %}">
+            {% trans "More Recent Videos" %}
+        </a>
+        <h2>{% trans "Latest Videos" %}</h2>
     </div><!-- // hd -->
     <div class="bd">
         <div class="watch-page-content">

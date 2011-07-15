@@ -33,6 +33,8 @@ To run the development version:
    # this is the mirosubs directory you cloned from git, not the parent you created the virtualenv in.
    $ pip install -r requirements.txt
        note: you'll need mercurial installed to make this last command work.
+       note2: If you do not have the MySQL bindings installed (MySQLdb) and wish to keep it that way, unisubs runs just fine on sqlite, just comment out the line "MySQL_python>=1.2.2" on deploy/requirements.txt before running this command.
+
 
 6. Check out google closure into directory of your choice: svn checkout 
    http://closure-library.googlecode.com/svn/trunk/ <directory>. Then 

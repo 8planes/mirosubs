@@ -78,7 +78,7 @@ class UserLanguagelineFormSet(BaseInlineFormSet):
 
     def _construct_form(self, i, **kwargs):
         try:
-            return super(UserLanguagelineFormSet, self). _construct_form(i, **kwargs)
+            return super(UserLanguagelineFormSet, self)._construct_form(i, **kwargs)
         except (IndexError, ValueError):
             return BaseFormSet._construct_form(self, i, **kwargs)
 
@@ -156,7 +156,7 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'homepage', 'preferred_language', 
-                  'changes_notification', 'biography', 'new_message_notification', 'follow_new_video')
+                  'changes_notification', 'biography', 'follow_new_video')
         
     def clean(self):
         self.cleaned_data = super(EditUserForm, self).clean()

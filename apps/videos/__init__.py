@@ -16,12 +16,24 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from utils.subtitles import MAX_SUB_TIME
+
+UNSYNCED_MARKER = -1
+
+def is_synced_value(v):
+    return v != -1 and v != None and v < MAX_SUB_TIME
+
+def is_synced(obj):
+    if obj.start_time is None or  obj.end_time is None:
+        return False
+    return is_synced_value( obj.start_time) and is_synced_value(obj.start_time)
+    
 def format_time(time):
-    if time < 0:
-        return ''
+    if not is_synced_value(time):
+         return ""
     t = int(round(time))
     s = t % 60
-    s = s > 9 and s or '0%s' % s 
+    s = s > 9 and s or '0%s' % s
     return '%s:%s' % (t / 60, s)   
 
 
@@ -29,8 +41,13 @@ class EffectiveSubtitle:
     def __init__(self, subtitle_id, text, start_time, end_time, sub_order):
         self.subtitle_id = subtitle_id
         self.text = text
-        self.start_time = start_time
-        self.end_time = end_time
+        if start_time is None:
+            start_time = UNSYNCED_MARKER
+        self.start_time = start_time    
+        if end_time is None:
+            end_time = UNSYNCED_MARKER
+            
+        self.end_time = end_time 
         self.sub_order = sub_order
     
     def for_json(self):
@@ -43,7 +60,7 @@ class EffectiveSubtitle:
         }
 
     def has_complete_timing(self):
-        return self.start_time != -1 and self.end_time != -1
+        return is_synced(self)
     
     def for_generator(self):
         return {

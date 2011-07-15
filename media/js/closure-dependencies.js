@@ -42,4 +42,5 @@ goog.require('goog.style.cursor');
 goog.require('goog.net.cookies');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.dom.ViewportSizeMonitor');
-goog.require('goog.events.InputHandler')
+goog.require('goog.events.InputHandler');
+goog.require('goog.testing.events');

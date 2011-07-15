@@ -5,45 +5,53 @@
 {% block body_attrs %}id="demo"{% endblock %}
 
 {% block scripts %}
-{% include "widget/_js_onsite_dependencies.html" %}
+    {% include "widget/_js_onsite_dependencies.html" %}
 {% endblock %}
+
 {% block css %}
-{{ block.super }}
-<link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
-
+    {{ block.super }}
+    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+    <style>
+        p {
+            font-size: 1.2em;
+        }
+    </style>
 {% endblock %}
+
 {% block main_content %}
+<h2 class="centered">{% trans 'Universal Subtitles Editor Demo' %}</h2>
 
-
-
-<h2 class="centered">{% trans 'Welcome to our alpha demo!' %}</h2>
 <div style="text-align: center;">
-  {% blocktrans %}
-  <p><strong>What's this?</strong> The video below is for 
-    demonstration purposes &mdash; try clicking the 'Subtitle Me' button!</p> 
-  <p>We're just getting started, so expect to see better cross-browser 
-    support (Firefox 3.5+ works best right now) and we'll make it 
-    compatible with lots of different video formats/hosts. Feel free 
-    to drop us a note at the bottom of the page. 
-    <em>Note: Your subtitles will not be permanently saved 
-      (even if you log in).</em>
-  </p>
-  {% endblocktrans %}
-    <div id="widget_div" class="mirosubs-widget"></div>
-  <script language="JavaScript" type="text/javascript">
+    <p>
+        {% blocktrans %}
+        <strong>What's this?</strong> The video below is for 
+        demonstration purposes &mdash; try clicking the 'Subtitle Me' button!
+        Don't worry, nothing you do will be saved.
+        {% endblocktrans %}
+    </p> 
+    <div style="text-align: center">
+        <div id="widget_div" class="mirosubs-widget" style="width: 427px; margin: 10px auto"></div>
+    </div>
+    <script language="JavaScript" type="text/javascript">
       var videoURL = mirosubs.video.supportsOgg() ? 
           "http://videos.mozilla.org/firefox/3.5/switch/switch.ogv" :
           "http://www.youtube.com/watch?v=6APY0_lEHJo";
       mirosubs.widget.SameDomainEmbed.embed(
           document.getElementById('widget_div'),
           { video_url: videoURL, null_widget: true });
-  </script>
-  {% blocktrans %}
-  <p style="clear: both"><strong>Got feedback?</strong> Use the form at the bottom of 
-    this page to give us your feedback, bugs, and opinions.</p>
-  <p><strong>What's next?</strong> We’re working on an alpha 
-    version of our community website that will enable basic 
-    collaboration on subtitles and translations. Stay tuned!</p>
-  {% endblocktrans %}
+    </script>
+    <p style="clear: both">
+        {% blocktrans %}
+        <strong>Got feedback?</strong> Use the form at the bottom of 
+        this page to give us your feedback, bugs, and opinions.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans %}
+        <strong>What's next?</strong> We’re working on an alpha 
+        version of our community website that will enable basic 
+        collaboration on subtitles and translations. Stay tuned!
+        {% endblocktrans %}
+    </p>
 </div>
 {% endblock %}

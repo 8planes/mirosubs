@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
 from celery.signals import task_failure, worker_ready
 from haystack import site
-from videos.models import VideoFeed
+from videos.models import VideoFeed, SubtitleLanguage
 from sentry.client.models import client
 from celery.decorators import periodic_task
 from celery.schedules import crontab
@@ -36,14 +36,15 @@ def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, ei
     
 #task_failure.connect(task_failure_handler)
 
-def setup_logging_handler(*args, **kwargs):
+def setup_logging_handler(sender, *args, **kwargs):
     """
     Init sentry logger handler
     """
     import logging
     from sentry.client.handlers import SentryHandler
+
+    logger = sender.logger
     
-    logger = logging.getLogger('celery')
     if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
         logger.addHandler(SentryHandler(logging.ERROR))
         
@@ -54,6 +55,14 @@ def setup_logging_handler(*args, **kwargs):
 worker_ready.connect(setup_logging_handler)
 
 @task
+def update_subtitles_fetched_counter_for_sl(sl_pk):
+    try:
+        sl = SubtitleLanguage.objects.get(pk=sl_pk)
+        sl.subtitles_fetched_counter.incr()
+    except (SubtitleLanguage.DoesNotExist, ValueError):
+        return
+
+@task
 def update_video_feed(video_feed_id):
     try:
         video_feed = VideoFeed.objects.get(pk=video_feed_id)
@@ -62,15 +71,17 @@ def update_video_feed(video_feed_id):
         msg = '**update_video_feed**. VideoFeed does not exist. ID: %s' % video_feed_id
         client.create_from_text(msg, logger='celery')
 
-@task
+@task(ignore_result=False)
 def add(a, b):
     print "TEST TASK FOR CELERY. EXECUTED WITH ARGUMENTS: %s %s" % (a, b)
-    r = a+b
-    return r
+    return (a, b, a+b)
 
 @task
 def raise_exception(msg, **kwargs):
     print "TEST TASK FOR CELERY. RAISE EXCEPTION WITH MESSAGE: %s" % msg
+    logger = raise_exception.get_logger()
+    logger.error('Test error logging to Sentry from Celery')
+
     raise TypeError(msg)
 
 @task()
@@ -174,7 +185,7 @@ def _detect_language(version_id):
                 break
         r = json.loads(urllib.urlopen(url % urlquote_plus(text)).read())
 
-        if not 'error' in r:
+        if r and not 'error' in r:
             try:
                 SubtitleLanguage.objects.get(video=language.video, language=r['responseData']['language'])
             except SubtitleLanguage.DoesNotExist:
@@ -271,12 +282,11 @@ def _send_letter_caption(caption_version):
 
     users = []
 
-    video_followers = video.notification_list(caption_version.user)
-    language_followers = language.notification_list(caption_version.user)
-
+    followers = set(video.notification_list(caption_version.user))
+    followers.update(language.notification_list(caption_version.user))
+    
     for item in qs:
-        if item.user and not item.user in users and (item.user in video_followers or \
-            item.user in language_followers):
+        if item.user and item.user in followers:
             context['your_version'] = item
             context['user'] = item.user
             context['hash'] = item.user.hash_for_video(context['video'].video_id)
@@ -284,4 +294,11 @@ def _send_letter_caption(caption_version):
                                  'videos/email_notification.html',
                                  context, fail_silently=not settings.DEBUG)
 
-        users.append(item.user)              
+            followers.discard(item.user)
+    
+    for user in followers:
+        context['user'] = user
+        context['hash'] = user.hash_for_video(context['video'].video_id)
+        send_templated_email(user.email, subject, 
+                             'videos/email_notification_non_editors.html',
+                             context, fail_silently=not settings.DEBUG)        

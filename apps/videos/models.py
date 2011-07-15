@@ -16,38 +16,41 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.db import models
+import logging
+logger = logging.getLogger("videos-models")
+
 import string
 import random
-from auth.models import CustomUser as User, Awards
 from datetime import datetime, date, timedelta
+import time
+
+from django.utils.safestring import mark_safe
+from django.core.cache import cache
+from django.db import models
 from django.db.models.signals import post_save
 from django.db.models import Q
 from django.db import IntegrityError
 from django.utils.dateformat import format as date_format
-from gdata.youtube.service import YouTubeService
-from comments.models import Comment
-from videos import EffectiveSubtitle
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from videos.types import video_type_registrar
-from statistic import st_sub_fetch_handler, st_video_view_handler, st_widget_view_statistic
-from widget import video_cache
-from utils.redis_utils import RedisSimpleField
 from django.template.defaultfilters import slugify
-from utils.amazon import S3EnabledImageField
 from django.utils.http import urlquote_plus, urlquote
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
-import time
-from django.utils.safestring import mark_safe
-from django.core.cache import cache
+
+from gdata.youtube.service import YouTubeService
+
+from auth.models import CustomUser as User, Awards
+from videos import EffectiveSubtitle, is_synced, is_synced_value
+from videos.types import video_type_registrar
 from videos.feed_parser import FeedParser
-import logging
+from comments.models import Comment
+from statistic import st_widget_view_statistic
+from statistic.tasks import st_sub_fetch_handler_update, st_video_view_handler_update
+from widget import video_cache
+from utils.redis_utils import RedisSimpleField
+from utils.amazon import S3EnabledImageField
 
-logger = logging.getLogger("videos-models")
-
-        
 yt_service = YouTubeService()
 yt_service.ssl = False
 
@@ -135,7 +138,7 @@ class Video(models.Model):
             
             if not views_st:
                 views_st = st_widget_view_statistic.get_views(video=self)
-                views_st['total'] = self.view_count
+                views_st['total'] = self.widget_views_count
                 cache.set(cache_key, views_st, 60*60*2)
                 
             self._video_views_statistic = views_st 
@@ -170,12 +173,14 @@ class Video(models.Model):
         return title
     
     def update_view_counter(self):
-        st_video_view_handler.update(video=self)
+        st_video_view_handler_update.delay(video_id=self.video_id)
     
     def update_subtitles_fetched(self, lang=None):
-        st_sub_fetch_handler.update(video=self, sl=lang)
+        st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
+        
         if lang:
-            lang.subtitles_fetched_counter.incr()
+            from videos.tasks import update_subtitles_fetched_counter_for_sl
+            update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
         
     def get_thumbnail(self):
         if self.s3_thumbnail:
@@ -247,6 +252,7 @@ class Video(models.Model):
 
     @classmethod
     def get_or_create_for_url(cls, video_url=None, vt=None, user=None):
+        assert video_url or vt, 'should be video URL or VideoType'
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
             return None, False
@@ -425,7 +431,7 @@ class Video(models.Model):
         self.writelock_time = None
 
     def notification_list(self, exclude=None):
-        qs = self.followers.exclude(changes_notification=False).exclude(is_active=False)
+        qs = self.followers.filter(changes_notification=True, is_active=True)
         if exclude:
             if not isinstance(exclude, (list, tuple)):
                 exclude = [exclude]
@@ -487,6 +493,7 @@ models.signals.pre_delete.connect(video_delete_handler, sender=Video)
 models.signals.m2m_changed.connect(User.video_followers_change_handler, sender=Video.followers.through)
 
 class SubtitleLanguage(models.Model):
+    
     video = models.ForeignKey(Video)
     is_original = models.BooleanField()
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True)
@@ -543,7 +550,7 @@ class SubtitleLanguage(models.Model):
             return False
         if len([s for s in subtitles[:-1] if not s.has_complete_timing()]) > 0:
             return False
-        if subtitles[-1].start_time == -1:
+        if not is_synced_value(subtitles[-1].start_time):
             return False
         return True
 
@@ -582,7 +589,7 @@ class SubtitleLanguage(models.Model):
             "subLanguagePK": self.pk,
             "originalLanguageCode": video.language }
         if self.is_dependent():
-            config['baseLanguagePK'] = self.standard_language.pk
+            config['baseLanguagePK'] = self.standard_language and self.standard_language.pk
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
 
     @models.permalink
@@ -956,6 +963,11 @@ class SubtitleDraft(SubtitleCollection):
         else:
             return request.browser_id == self.browser_id
 
+class SubtitleManager(models.Manager):
+
+    def unsynced(self):
+        return self.get_query_set().filter(start_time__isnull=True, end_time__isnull=True)
+        
 class Subtitle(models.Model):
     version = models.ForeignKey(SubtitleVersion, null=True)
     draft = models.ForeignKey(SubtitleDraft, null=True)
@@ -965,11 +977,17 @@ class Subtitle(models.Model):
     # in seconds
     start_time = models.FloatField(null=True)
     end_time = models.FloatField(null=True)
+
+    objects = SubtitleManager()
     
     class Meta:
         ordering = ['subtitle_order']
         unique_together = (('version', 'subtitle_id'), ('draft', 'subtitle_id'),)
 
+    @property
+    def is_synced(self):
+        return is_synced(self)
+    
     def duplicate_for(self, version=None, draft=None):
         return Subtitle(version=version,
                         draft=draft,
@@ -978,7 +996,7 @@ class Subtitle(models.Model):
                         subtitle_text=self.subtitle_text,
                         start_time=self.start_time,
                         end_time=self.end_time)
-
+    
     @classmethod
     def trim_list(cls, subtitles):
         first_nonblank_index = -1
@@ -1006,10 +1024,15 @@ class Subtitle(models.Model):
             if 'end_time' in caption_dict:
                 self.end_time = caption_dict['end_time']
 
+    def save(self, *args, **kwargs):
+        if not self.is_synced:
+            self.start_time = self.end_time = None
+        return super(Subtitle, self).save(*args, **kwargs)
+        
     def __unicode__(self):
         if self.pk:
-            return u"(%4s) %s %s -> %s %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
-                                          self.start_time, self.end_time, self.subtitle_text, self.version_id)
+            return u"(%4s) %s %s -> %s - syc = %s = %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
+                                          self.start_time, self.end_time, self.is_synced, self.subtitle_text, self.version_id)
     
 from django.template.loader import render_to_string
 
@@ -1323,7 +1346,7 @@ class VideoFeed(models.Model):
         _iter = feed_parser.items(reverse=True, until=last_link, ignore_error=True)
         
         for vt, info, entry in _iter:
-            Video.get_or_create_for_url(vt=vt, user=self.user)
+            vt and Video.get_or_create_for_url(vt=vt, user=self.user)
             checked_entries += 1
         
         return checked_entries

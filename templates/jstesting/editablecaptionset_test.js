@@ -4,7 +4,6 @@
 var MS_eventHandler = new goog.events.EventHandler();
 var MS_updatedCaptions = [];
 var MS_cleared = false;
-var MS_unitOfWork = null;
 
 function MS_updateListener(event) {
     MS_updatedCaptions.push(event.target);
@@ -34,9 +33,8 @@ function addNewCaption(set) {
 }
 
 function createSet(existingCaptions) {    
-    MS_unitOfWork = new mirosubs.UnitOfWork();
     var captionSet = new mirosubs.subtitle.EditableCaptionSet(
-        existingCaptions, MS_unitOfWork);
+        existingCaptions);
     for (var i = 0; i < captionSet.count(); i++)
         listenToCaption(captionSet.caption(i));
     MS_eventHandler.listen(
@@ -55,7 +53,6 @@ function tearDown() {
     MS_eventHandler.removeAll();
     MS_updatedCaptions = [];
     MS_cleared = false;
-    MS_unitOfWork = null;
 }
 
 function testBasicAdd() {
@@ -234,20 +231,6 @@ function testInsertSubFirstUntimed() {
     assertEquals(-1, inserted.getEndTime());
 }
 
-function testInsertAndUnitOfWork() {
-    var set = createSet([captionJSON(0.5, 2, 1, 1),
-			 captionJSON(2, 3, 2, 2),
-			 captionJSON(3, -1, 3, 3),
-                         captionJSON(-1, -1, 4, 4)]);
-    var inserted = set.insertCaption(set.caption(2).getSubOrder());
-    var work = MS_unitOfWork.getWork();
-    assertEquals(1, work.inserted.length);
-    assertEquals(1, work.updated.length);
-    assertEquals(0, work.deleted.length);
-    
-}
-
-
 function testSpacebarHold() {
     var T0 = 1.8, T1 = 5.6, T2 = 9.2;
     var set = createSet([
@@ -295,10 +278,6 @@ function testClearAll() {
     set.clear();
     assertEquals(0, set.count());
     assertTrue(MS_cleared);
-    var work = MS_unitOfWork.getWork();
-    assertEquals(0, work.inserted.length);
-    assertEquals(0, work.updated.length);
-    assertEquals(3, work.deleted.length);
 }
 
 {% endblock %}

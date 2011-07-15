@@ -241,7 +241,7 @@ class SubtitlesUploadBaseForm(forms.Form):
         language.save()
         return language
 
-    def save_subtitles(self, parser, video=None, language=None):
+    def save_subtitles(self, parser, video=None, language=None, update_video=True):
         video = video or self.cleaned_data['video']
         
         key = str(uuid4()).replace('-', '')
@@ -286,9 +286,8 @@ class SubtitlesUploadBaseForm(forms.Form):
         language.video.save()
         translations = video.subtitlelanguage_set.filter(standard_language=language)
         [t.fork(from_version=old_version, user=self.user) for t in translations]
-        video_changed_tasks.delay(
-            video.id, 
-            None if version is None else version.id)
+        if update_video:
+            video_changed_tasks.delay(video.id, None if version is None else version.id)        
         return language
 
     def get_errors(self):
@@ -336,7 +335,7 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
         subtitles = self.cleaned_data['subtitles']
         text = subtitles.read()
         parser = self._get_parser(subtitles.name)(force_unicode(text, chardet.detect(text)['encoding']))        
-        sl = self.save_subtitles(parser)
+        sl = self.save_subtitles(parser, update_video=False)
         is_complete = self.cleaned_data.get('is_complete')
         sl.is_complete = is_complete
         if len(sl.latest_version().subtitles()) > 0:
@@ -346,7 +345,7 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
             # confusing from a UI point of view
             sl.had_version = sl.has_version = True
         sl.save()
-        video_changed_tasks.delay(sl.video.id, sl.latest_version().id)
+        video_changed_tasks.delay(sl.video_id, sl.latest_version().id)
         return sl
  
 class PasteTranscriptionForm(SubtitlesUploadBaseForm):
@@ -460,7 +459,8 @@ class AddFromFeedForm(forms.Form, AjaxForm):
     
     def parse_feed_url(self, url):
         feed_parser = FeedParser(url)
-
+        entry = ''
+        
         try:
             for vt, info, entry in feed_parser.items():
                 if vt:
@@ -469,9 +469,9 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                 if len(self.video_types) >= self.VIDEOS_LIMIT:
                     self.video_limit_routreach = True
                     break  
-                    
+
             if feed_parser.feed.version:
-                self.feed_urls.append((url, entry['link']))
+                self.feed_urls.append((url, entry and entry['link']))
                 
         except FeedParserError, e:
             raise forms.ValidationError(e) 

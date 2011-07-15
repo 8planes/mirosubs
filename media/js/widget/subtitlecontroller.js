@@ -40,7 +40,6 @@ mirosubs.widget.SubtitleController = function(
                 videoTab.stopLoading();
         },
         goog.bind(playController.stopForDialog, playController));
-
     this.handler_.listenOnce(
         this.dialogOpener_,
         goog.ui.Dialog.EventType.AFTER_HIDE,
@@ -55,11 +54,7 @@ mirosubs.widget.SubtitleController = function(
             dropDown,
             s.IMPROVE_SUBTITLES,
             this.improveSubtitles_).
-       listen(
-            dropDown,
-            s.REQUEST_SUBTITLES,
-            this.requestSubtitles_).
-       listen(
+        listen(
             videoTab.getAnchorElem(), 'click',
             this.videoAnchorClicked_
         );
@@ -78,16 +73,12 @@ mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
 
 mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
     var state  = this.playController_.getSubtitleState();
-    this.dialogOpener_.openDialogOrRedirect_(
-        state.LANGUAGE,
-        null,
-        state.LANGUAGE_PK,
-        state.BASE_LANGUAGE_PK
-    );    
-};
-
-mirosubs.widget.SubtitleController.prototype.requestSubtitles_ = function() {
-    this.openRequestSubtitlesDialog();
+    this.dialogOpener_.openDialogOrRedirect(
+        new mirosubs.widget.OpenDialogArgs(
+            state.LANGUAGE,
+            null,
+            state.LANGUAGE_PK,
+            state.BASE_LANGUAGE_PK));
 };
 
 /**
@@ -119,10 +110,3 @@ mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e)
         this.dropDown_.updateContents(dropDownContents);
     }
 };
-
-mirosubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog =
-    function()
-{
-    var dialog = new mirosubs.widget.RequestDialog(this.videoID_);
-    dialog.setVisible(true);
-}

@@ -76,10 +76,11 @@ mirosubs.api.openUnisubsDialogWithSettings =
         config['videoID'], config['videoURL'], videoSource);
     if (!askLanguage) {
         opener.openDialog(
-            config['languageCode'], 
-            config['originalLanguageCode'], 
-            config['subLanguagePK'], 
-            config['baseLanguagePK']);
+            new mirosubs.widget.OpenDialogArgs(
+                config['languageCode'], 
+                config['originalLanguageCode'], 
+                config['subLanguagePK'], 
+                config['baseLanguagePK']));
     }
     else
         opener.showStartDialog();
@@ -163,3 +164,5 @@ goog.exportSymbol(
 goog.exportSymbol(
     'mirosubs.api.embed',
     mirosubs.api.embed);
+
+mirosubs.widget.Widget.exportFireKeySequence();

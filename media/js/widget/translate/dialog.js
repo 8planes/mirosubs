@@ -33,17 +33,15 @@ mirosubs.translate.Dialog = function(opener,
     this.subtitleState_ = subtitleState;
     this.standardSubState_ = standardSubState;
 
-    this.unitOfWork_ = new mirosubs.UnitOfWork();
     this.serverModel_ = serverModel;
-    this.serverModel_.init(this.unitOfWork_);
+    this.serverModel_.init();
     this.saved_ = false;
 };
 goog.inherits(mirosubs.translate.Dialog, mirosubs.Dialog);
 mirosubs.translate.Dialog.prototype.createDom = function() {
     mirosubs.translate.Dialog.superClass_.createDom.call(this);
     this.translationPanel_ = new mirosubs.translate.TranslationPanel(
-        this.subtitleState_, this.standardSubState_,
-        this.unitOfWork_);
+        this.serverModel_.getCaptionSet(), this.standardSubState_);
     this.getCaptioningAreaInternal().addChild(
         this.translationPanel_, true);
     var rightPanel = this.createRightPanel_();
@@ -85,21 +83,20 @@ mirosubs.translate.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     event.preventDefault();
 };
 mirosubs.translate.Dialog.prototype.isWorkSaved = function() {
-    return !this.unitOfWork_.everContainedWork() || this.saved_;
+    return this.saved_ || !this.serverModel_.anySubtitlingWorkDone();
 };
 mirosubs.translate.Dialog.prototype.enterDocument = function() {
     mirosubs.translate.Dialog.superClass_.enterDocument.call(this);
     var that = this;
     this.getRightPanelInternal().showDownloadLink(
         function() {
-            return that.translationPanel_.makeJsonSubs();
+            return that.makeJsonSubs();
         });
 };
 mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
     this.getRightPanelInternal().showLoading(true);
     this.serverModel_.finish(
-        this.translationPanel_.makeJsonSubs(),
         function() {
             if (that.finishFailDialog_) {
                 that.finishFailDialog_.setVisible(false);
@@ -120,7 +117,6 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
 };
 mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     mirosubs.translate.Dialog.superClass_.disposeInternal.call(this);
-    this.unitOfWork_.dispose();
     this.serverModel_.dispose();
 };
 /**
@@ -133,7 +129,7 @@ mirosubs.translate.Dialog.prototype.translateViaGoogle = function(){
         this.standardSubState_.LANGUAGE, this.subtitleState_.LANGUAGE);
 };
 
-mirosubs.translate.Dialog.prototype.getStandartLanguage = function(){
+mirosubs.translate.Dialog.prototype.getStandardLanguage = function(){
     return this.standardSubState_.LANGUAGE;
 };
 
@@ -141,38 +137,30 @@ mirosubs.translate.Dialog.prototype.getSubtitleLanguage = function(){
     return this.subtitleState_.LANGUAGE;
 };
 
-/**
- * @param {function()} saveCompleted
- */
-mirosubs.translate.Dialog.prototype.forkAndClose = function(saveCompleted) {
-    this.serverModel_.forceSave(
-        goog.bind(this.offerForking_, this, saveCompleted),
-        saveCompleted);
-};
-mirosubs.translate.Dialog.prototype.offerForking_ = function(saveCompleted) {
-    saveCompleted();
-    var dialog = new mirosubs.translate.ForkDialog(
-        this.serverModel_.getDraftPK(),
-        this.subtitleState_.LANGUAGE,
-        goog.bind(this.forkImpl_, this));
-    dialog.setVisible(true);
-};
-mirosubs.translate.Dialog.prototype.forkImpl_ = function(subtitleState) {
-    var oldReturnURL = mirosubs.returnURL;
-    mirosubs.returnURL = null;
-    this.saved_ = true;
-    this.setVisible(false);
-    mirosubs.returnURL = oldReturnURL;
-    var that = this;
-    this.opener_.openForkedTranslationDialog(
-        this.serverModel_.getDraftPK(),
-        subtitleState);
-};
-
 mirosubs.translate.Dialog.prototype.getServerModel = function(){
     return this.serverModel_;
 }
 
 mirosubs.translate.Dialog.prototype.makeJsonSubs =  function (){
-    return this.translationPanel_.makeJsonSubs();
+    return this.serverModel_.getCaptionSet().makeJsonSubs();
+};
+
+mirosubs.translate.Dialog.prototype.forkAndClose = function() {
+    var dialog = new mirosubs.translate.ForkDialog(
+        goog.bind(this.forkImpl_, this));
+    dialog.setVisible(true);
+};
+
+mirosubs.translate.Dialog.prototype.forkImpl_ = function() {
+    this.subtitleState_.fork();
+    this.serverModel_.fork(this.standardSubState_);
+    // ugh, hack alert
+    var oldReturnURL = mirosubs.returnURL;
+    mirosubs.returnURL = null;
+    this.saved_ = true;
+    this.hideToFork();
+    mirosubs.returnURL = oldReturnURL;
+    this.opener_.openSubtitlingDialog(
+        this.serverModel_,
+        this.subtitleState_);
 };

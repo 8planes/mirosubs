@@ -17,9 +17,10 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 import datetime
 from utils.redis_utils import default_connection, RedisKey
-from statistic.pre_day_statistic import BasePerDayStatistic
+from statistic.pre_day_statistic import BasePerDayStatistic, UpdatingLogger
 from statistic.models import SubtitleFetchCounters, VideoViewCounter, WidgetViewCounter
 from django.db.models import F
+from django.db import models
 import time
 
 class VideoViewStatistic(BasePerDayStatistic):
@@ -31,15 +32,20 @@ class VideoViewStatistic(BasePerDayStatistic):
     model = VideoViewCounter
     prefix = 'st_video_view'
     
-    def get_key(self, video, date):
-        if not video.video_id or video.video_id in ['set', 'total']:
+    def get_key(self, date, video=None, video_id=None):
+        if not video and not video_id:
+            return
+        
+        video_id = video_id or video.video_id
+        
+        if not video_id or video_id in ['set', 'total']:
             #"set" and "total" are reserver. 
             #Don't want use more long key as prefix:keys:video_id, 
             #because video_id have more length and is generated 
             #we should never get this situation
             return 
 
-        return '%s:%s:%s' % (self.prefix, video.video_id, self.date_format(date))
+        return '%s:%s:%s' % (self.prefix, video_id, self.date_format(date))
     
     def get_object(self, key):
         from videos.models import Video
@@ -67,7 +73,9 @@ st_video_view_handler = VideoViewStatistic()
 class WidgetViewStatistic(VideoViewStatistic):
     model = WidgetViewCounter
     prefix = 'st_widget_view'
-
+    log_to_redis = UpdatingLogger(default_connection, 'st_widget_view_migrations',
+                                  u'Widget views statistic')
+    
     def get_key(self, date, video=None, video_id=None):
         """
         Get get video object or video_id, to reduce DB query number in widget.rpc
@@ -89,19 +97,8 @@ class WidgetViewStatistic(VideoViewStatistic):
     def update_total(self, key, obj, value):
         from videos.models import Video
         
-        qs = Video.objects.filter(pk=obj.video_id) \
+        Video.objects.filter(pk=obj.video_id) \
             .update(widget_views_count=F('widget_views_count')+value)
-        
-        #from django.db import connection, transaction
-        #cursor = connection.cursor()
-        #cursor.execute("UPDATE `videos_video` SET `widget_views_count` = `videos_video`.`widget_views_count` + %s WHERE `videos_video`.`id` = %s", [value, obj.video_id])
-
-        
-    def post_migrate(self, updated_objects, updated_keys):
-        from utils.celery_search_index import update_search_index_for_qs
-        from videos.models import Video
-        
-        update_search_index_for_qs.delay(Video, [item.video_id for item in updated_objects])
             
 st_widget_view_statistic = WidgetViewStatistic()
 
@@ -110,12 +107,24 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
     prefix = 'st_subtitles_fetch'
     model = SubtitleFetchCounters
     
-    def get_key(self, date, video, sl=None):
-        if not video.video_id or video.video_id in ['set', 'total']:
-            #see VideoViewStatistic.get_key
+    def get_key(self, date, video=None, sl=None, sl_pk=None, video_id=None):
+        from videos.models import SubtitleLanguage
+        
+        if not video and not video_id:
+            return
+        
+        video_id = video_id or video.video_id   
+             
+        if not video_id or video_id in ['set', 'total']:
             return 
         
-        key = '%s:%s:' % (self.prefix, video.video_id)
+        key = '%s:%s:' % (self.prefix, video_id)
+        
+        if sl_pk:
+            try:
+                sl = SubtitleLanguage.objects.get(pk=sl_pk)
+            except (SubtitleLanguage.DoesNotExist, ValueError):
+                pass
         
         if sl and sl.language:
             key += ':%s' % sl.language       
