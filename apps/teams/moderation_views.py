@@ -16,6 +16,8 @@ from utils.translation import get_user_languages_from_request, get_languages_lis
 from apps.teams.moderation import CAN_MODERATE_VERSION, CAN_SET_VIDEO_AS_MODERATED,\
   CAN_UNSET_VIDEO_AS_MODERATED, MODERATION_STATUSES, UNMODERATED, APPROVED, \
   WAITING_MODERATION, REJECTED
+from apps.teams.moderation import approve_version as core_approve_version
+from apps.teams.moderation import reject_version as core_reject_version
 from apps.teams.templatetags.moderation import render_moderation_togggle_button, render_moderation_icon
 
 from apps.videos.models import SubtitleVersion
@@ -29,7 +31,6 @@ from utils.jsonresponse import to_json
 
 def _check_moderate_permission(view):
     def wrapper(request,  *args, **kwargs):
-
         team = Team.objects.get(pk=kwargs.pop("team_id", "-1"))
         if not team.is_member(request.user):
             return  HttpResponseForbidden("This user does not have the permission to moderate this team")
@@ -45,9 +46,9 @@ def _set_moderation(request, team, version, status,  updates_meta=True):
 
 
         if status == APPROVED:
-            approve_version(version, team, request.user, updates_meta)
+            core_approve_version(version, team, request.user, updates_meta)
         elif status == REJECTED:
-            reject_version(version, team, request.user, updates_meta)
+            core_reject_version(version, team, request.user, updates_meta)
         if request.is_ajax():
             return {
                         "status":"ok",
@@ -67,6 +68,7 @@ def _set_moderation(request, team, version, status,  updates_meta=True):
 def approve_version(request, team, version_id):
     res =  _set_moderation(request, team, version_id, APPROVED)
     res['msg'] = "Version approved, well done!"
+    return res
 
 @to_json
 @_check_moderate_permission

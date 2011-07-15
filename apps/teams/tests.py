@@ -1163,6 +1163,7 @@ class TestViews(TestCase):
             version_no = lang.subtitleversion_set.all()[0].version_no + 1
         v = SubtitleVersion(language=lang, is_forked=False,
                             datetime_started=datetime.now(),
+                            user = self.user,
                             version_no=version_no)
         v.save()
         for x  in xrange(0, num):
@@ -1240,9 +1241,15 @@ class TestViews(TestCase):
 
         url = reverse("moderation:revision-approve", kwargs={
                     "team_id":self.team.id,
-                    "version_id":version.pk})
-        response = self.client.post(url, {},follow=True)
+                    "version_id":version.pk} )
+        response = self.client.post(url, {},follow=True,  HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(response.status_code, 200)
+        
+        data  =  json.loads(response.content)
+        self.assertTrue(data["success"])
+
+
+        self.team = refresh_obj(self.team)
         self.assertEquals(self.team.get_pending_moderation().count(), 5)
         version = SubtitleVersion.objects.get(pk=version.pk)
         self.assertEquals(version.moderation_status,APPROVED)

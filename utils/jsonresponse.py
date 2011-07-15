@@ -32,19 +32,18 @@ def _json_response(data, response=None):
     correct content-type.
     """
     final_data = {}
+    suc = True
+    final_data['data'] = data
+    final_data['success'] = data.get("success", True)
     suc = False
     errors = None
     if isinstance(data, dict):
         suc =  data.pop('success', False)
         errors = data.pop('errors', None)
-    if errors is not None:
-        final_data['errors'] = errors
-        suc = False
-    if  errors is None: 
-        suc = True
-        final_data['data']= data
-    final_data['success'] = suc
-    
+        if errors is not None:
+            final_data['errors'] = errors
+            final_data['success'] = False
+            suc = False
     response = response or HttpResponse()
     response['Content-Type'] = "application/json; charset=UTF-8"
     json_res = json.dumps(final_data,cls=LazyEncoder, ensure_ascii=True)
@@ -52,7 +51,7 @@ def _json_response(data, response=None):
     return response
 
 def _json_errors(errors):
-        return _json_response({'success':False, 'errors':errors})
+    return _json_response({'success':False, 'errors':errors})
 
 def to_json(view):
     def wrapper(request, *args, **kwargs):
@@ -62,11 +61,19 @@ def to_json(view):
             if isinstance(res, HttpResponse):
                 res = res.content
             return _json_response(res, response)
-        except:
+        except Exception, exception:
             logging.exception("Error on view %s" % view.__name__)
-            if settings.DEBUG:
-                raise
-            return _json_errors("Something is wrong")
+            if True or  settings.DEBUG:
+                import sys, traceback
+                (exc_type, exc_info, tb) = sys.exc_info()
+                message = "%s\n" % exc_type.__name__
+                message += "%s\n\n" % exc_info
+                message += "TRACEBACK:\n"    
+                for tb in traceback.format_tb(tb):
+                    message += "%s\n" % tb
+            else:
+                message = "something is wrong"
+            return _json_errors([message])
     return wraps(view)(wrapper)
 
 def post_required(view):
