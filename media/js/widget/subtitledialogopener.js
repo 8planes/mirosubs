@@ -160,7 +160,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
              opt_effectiveVideoURL,
              opt_completeCallback)
 {
-    if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
+    if (mirosubs.returnURL)
         this.openDialog(openDialogArgs,
                         opt_completeCallback);
     else {
@@ -182,20 +182,6 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
         window.location.assign(uri.toString());
     }
 }
-
-/**
- * @param {number} draftPK The draft saved with this primary key should 
- *     already be in forked state on the server.
- * @param {mirosubs.widget.SubtitleState} subtitles The subtitles should 
- *     include current timing information.
- */
-mirosubs.widget.SubtitleDialogOpener.prototype.openForkedTranslationDialog = 
-    function(draftPK, subtitles)
-{
-    var serverModel = new mirosubs.subtitle.MSServerModel(
-        draftPK, this.videoID_, this.videoURL_);
-    this.openSubtitlingDialog_(serverModel, subtitles);
-};
 
 mirosubs.widget.SubtitleDialogOpener.prototype.saveInitialSubs_ = function(sessionPK, subtitles) {
     var savedSubs = new mirosubs.widget.SavedSubtitles(
@@ -223,7 +209,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
             sessionPK, this.videoID_, this.videoURL_,
             subtitles.IS_COMPLETE, captionSet);
         if (subtitles.IS_ORIGINAL || subtitles.FORKED)
-            this.openSubtitlingDialog_(serverModel, subtitles);
+            this.openSubtitlingDialog(serverModel, subtitles);
         else {
             this.openDependentTranslationDialog_(
                 serverModel, subtitles, originalSubtitles);
@@ -239,7 +225,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
     }
 };
 
-mirosubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog_ = 
+mirosubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog = 
     function(serverModel, subtitleState) 
 {
     if (this.subOpenFn_)

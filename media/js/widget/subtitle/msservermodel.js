@@ -49,6 +49,7 @@ mirosubs.subtitle.MSServerModel = function(
     this.finished_ = false;
     this.title_ = null;
     this.timerTickCount_ = 0;
+    this.forked_ = false;
     this.timer_ = new goog.Timer(
         (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
     this.logger_ = goog.debug.Logger.getLogger(
@@ -81,9 +82,10 @@ mirosubs.subtitle.MSServerModel.prototype.fetchInitialSubs_ = function() {
 };
 
 mirosubs.subtitle.MSServerModel.prototype.init = function() {
-    goog.asserts.assert(!this.initialized_);
-    this.initialized_ = true;
-    this.startTimer();
+    if (!this.initialized_) {
+        this.initialized_ = true;
+        this.startTimer();
+    }
 };
 
 mirosubs.subtitle.MSServerModel.prototype.startTimer = function() {
@@ -128,6 +130,15 @@ mirosubs.subtitle.MSServerModel.prototype.anySubtitlingWorkDone = function() {
     return !initialSubs.CAPTION_SET.identicalTo(this.captionSet_);
 };
 
+/**
+ * @param {mirosubs.widget.SubtitleState} standardSubState SubtitleState for original language subs
+ */
+mirosubs.subtitle.MSServerModel.prototype.fork = function(standardSubState) {
+    this.captionSet_.fork(standardSubState);
+    this.forked_ = true;
+    this.saveSubsLocally_();
+};
+
 mirosubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function(completed) {
     /**
      * @type {mirosubs.widget.SavedSubtitles}
@@ -152,6 +163,11 @@ mirosubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function(completed) 
     if (goog.isDefAndNotNull(completed) && completed != initialSubs.IS_COMPLETE) {
         args['completed'] = completed;
         atLeastOneThingChanged = true;
+    }
+    if (this.forked_) {
+        args['forked'] = true;
+        // a fork alone isn't sufficient to trigger a save, 
+        // so not setting atLeastOneThingChanged.
     }
     return atLeastOneThingChanged ? args : null;
 };

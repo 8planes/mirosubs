@@ -278,6 +278,19 @@ mirosubs.subtitle.EditableCaptionSet.prototype.needsSync = function() {
         mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
 };
 
+mirosubs.subtitle.EditableCaptionSet.prototype.fork = function(originalSubtitleState) {
+    var subMap = this.makeMap();
+    var translatedSub;
+    goog.array.forEach(
+        originalSubtitleState.SUBTITLES,
+        function(origSub) {
+            translatedSub = subMap[origSub['subtitle_id']];
+            if (translatedSub) {
+                translatedSub.fork(origSub);
+            }
+        });
+};
+
 mirosubs.subtitle.EditableCaptionSet.prototype.makeMap = function() {
     var map = {};
     goog.array.forEach(this.captions_, 
