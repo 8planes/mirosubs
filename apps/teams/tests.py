@@ -1300,6 +1300,7 @@ class TestSubtitleVersions(TestCase):
         self.user = User.objects.all()[0]
         member = TeamMember(user=self.user, team=self.team, is_manager=True)
         member.save()
+        self.user2 = User.objects.exclude(pk=self.user.pk)[0]
 
     def _make_subs(self, lang, num=10):
         version_no = 0
@@ -1421,7 +1422,7 @@ class TestRemoval(TestSubtitleVersions, BaseTestModeration):
        v1_subs_text = versions[1].subtitles()[0].text
        approve_version(versions[0], tv.team, self.user)
        num_versions = SubtitleVersion.objects.filter(language__video=tv.video).count()
-       reject_version(versions[1], tv.team, self.user)
+       reject_version(versions[1], tv.team, self.user, None, self.user2)
        # we should roll back
        self.assertEquals(SubtitleVersion.objects.filter(language__video=tv.video).count(),num_versions +1)
        self.assertEquals( tv.video.subtitle_language().latest_version(), versions[0])
