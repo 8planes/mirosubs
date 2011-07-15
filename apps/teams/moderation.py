@@ -4,12 +4,14 @@ import datetime
 
 from django.db import models
 from django.core.exceptions import SuspiciousOperation
+from django.contrib.sites.models import Site
 
 from guardian.shortcuts import assign
 
 from haystack import site
 
 from utils.db import require_lock
+from utils.tasks import send_templated_email_async
 
 from apps.videos.models import Video, SubtitleVersion, SubtitleLanguage
 from apps.teams.models import TeamVideo
@@ -101,7 +103,7 @@ def approve_version( version, team, user, updates_meta=True):
     # FIXME: implement news track
     
 
-def reject_version(version, team, user, updates_meta=True):
+def reject_version(version, team, user, rejection_message, sender, updates_meta=True, ):
     v = _set_version_moderation_status(version, team, user, REJECTED, updates_meta)
 
     latest = version.language.latest_version(public_only=False)
@@ -109,5 +111,17 @@ def reject_version(version, team, user, updates_meta=True):
         # rollback to the last moderated status
         latest_approved = version.language.latest_version(public_only=True)
         latest_approved.rollback(user)
+    comment = create_rejection_message(version,rejection_message, sender)
+    notify_comment_by_email(comment, version)
     return v
-    # FIXME: implement news track
+
+def create_comment_for_rejection(version, msg, moderator):
+    comment = Comment.get_for_object(version.video)
+    comment.user = moderator
+    comment.content = msg
+    comment.submit_date = datetime.datetime.now()
+    comment.save()
+    return comment
+    
+
+

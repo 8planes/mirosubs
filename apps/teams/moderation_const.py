@@ -13,3 +13,5 @@ MODERATION_STATUSES = (
     (APPROVED,   "approved"),
     (REJECTED,  "rejected"),
 )
+
+SUBJECT_EMAIL_VERSION_REJECTED = "Your version for %s was declined"

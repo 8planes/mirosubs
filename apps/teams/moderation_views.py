@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse, Http404
+from django.views.decorators.http import  require_POST
 from django.template import RequestContext
 from django.utils.functional import  wraps
 
@@ -14,7 +15,7 @@ from utils.translation import get_user_languages_from_request, get_languages_lis
 
 from apps.teams.moderation import CAN_MODERATE_VERSION, CAN_SET_VIDEO_AS_MODERATED,\
   CAN_UNSET_VIDEO_AS_MODERATED, MODERATION_STATUSES, UNMODERATED, APPROVED, \
-  WAITING_MODERATION, REJECTED, _set_version_moderation_status
+  WAITING_MODERATION, REJECTED
 from apps.teams.templatetags.moderation import render_moderation_togggle_button, render_moderation_icon
 
 from apps.videos.models import SubtitleVersion
@@ -26,7 +27,6 @@ from apps.teams.moderation import _update_search_index
 
 from utils.jsonresponse import to_json
 
-
 def _check_moderate_permission(view):
     def wrapper(request,  *args, **kwargs):
 
@@ -35,20 +35,22 @@ def _check_moderate_permission(view):
             return  HttpResponseForbidden("This user does not have the permission to moderate this team")
         return view(request, team, *args, **kwargs)
     return wraps(view)(wrapper)
-        
 
-def _set_moderation(request, team, version, status, msg, updates_meta=True):
+def _set_moderation(request, team, version, status,  updates_meta=True):
     try:
         if not isinstance(version, SubtitleVersion):
             version = get_object_or_404(SubtitleVersion, pk=version)
         if not isinstance(team, Team):
             team = get_object_or_404(Team, pk=team)
 
-        _set_version_moderation_status(version, team, request.user, status, updates_meta)
+
+        if status == APPROVED:
+            approve_version(version, team, request.user, updates_meta)
+        elif status == REJECTED:
+            reject_version(version, team, request.user, updates_meta)
         if request.is_ajax():
             return {
                         "status":"ok",
-                        "message": msg,
                         "status_icon_html": render_moderation_icon(version),
                         "new_button_html":render_moderation_togggle_button(version)}
         else:
@@ -61,19 +63,28 @@ def _set_moderation(request, team, version, status, msg, updates_meta=True):
         
 @to_json    
 @_check_moderate_permission
+@require_POST
 def approve_version(request, team, version_id):
-    return _set_moderation(request, team, version_id, APPROVED, msg="Version approved, well done!")
+    res =  _set_moderation(request, team, version_id, APPROVED)
+    res['msg'] = "Version approved, well done!"
 
 @to_json
 @_check_moderate_permission
+@require_POST
 def reject_version(request, team, version_id):
-    return _set_moderation(request, team, version_id, REJECTED, msg="Version rejected!")
+    rejection_message = None
+    if request.POST.get("message"):
+        # we should send the user a message
+        rejection_message = request.POST.get("message")
+    res =  _set_moderation(request, team, version_id, REJECTED, rejection_message=rejection_message)
+    res['msg'] = "Version rejected!"
+    return res
 
 @to_json
 @_check_moderate_permission
+@require_POST
 def remove_moderation_version(request, team, version_id):
     return _set_moderation(request, team, version_id, WAITING_MODERATION, msg="Moderation data deleted")
-
 
 def _batch_set_moderation(request, team, status, before_rev=None, lang_id= None):
     if before_rev is not None:
@@ -82,10 +93,8 @@ def _batch_set_moderation(request, team, status, before_rev=None, lang_id= None)
         versions = request.POST.get("version_ids" , None)
     res = []
     versions = list(versions)
-    #import pdb;pdb.set_trace()
     for v in versions:
-        _set_moderation(request, team, v, APPROVED, msg="Moderation statuses approved", updates_meta=False)
-    
+        _set_moderation(request, team, v, APPROVED,  updates_meta=False)
     if len(versions):
         _update_search_index(versions[0].video)
         language_id = versions[0].language.pk
@@ -94,25 +103,25 @@ def _batch_set_moderation(request, team, status, before_rev=None, lang_id= None)
     return  {
         "lang_id":language_id,
         "count": len(versions),
-        "pending_count" : team.get_pending_moderation().count()
+        "pending_count" : team.get_pending_moderation().count(),
+        "msg":"Moderation statuses approved",
     }
 
 @to_json
 @_check_moderate_permission
+@require_POST
 def batch_approve_version(request, team, before_rev=None, lang_id=None):
     s = _batch_set_moderation(request, team, APPROVED, before_rev, lang_id)
-    s["message"] = "Subs approved."
+    s["msg"] = "Subs approved."
     return s
-    
 
 @to_json
 @_check_moderate_permission
+@require_POST
 def batch_reject_version(request, team, before_rev=None, lang_id=None):
     s = _batch_set_moderation(request, team, REJECTED, before_rev, lang_id)
-    s["message"] = "Subs rejected."
+    s["msg"] = "Subs rejected."
     return s
-
-
 
 def _get_moderation_results(request, team):
     sqs = SearchQuerySet().models(TeamVideo).filter(needs_moderation=True)
@@ -120,11 +129,10 @@ def _get_moderation_results(request, team):
     result_list = []
     if form.is_valid():
         result_list = form.search_qs(sqs)
-        
     return form, result_list
 
-
 @_check_moderate_permission
+@require_POST
 def get_pending_videos(request, team):
     form, result_list = _get_moderation_results(request, team)
     return render_to_response('moderation/_videos_to_moderate.html', {
@@ -132,10 +140,7 @@ def get_pending_videos(request, team):
             "form":form,
             "result_list":result_list
              }, RequestContext(request))
-    
     return
-
-
 
 @_check_moderate_permission
 def edit_moderation(request, team ):
@@ -146,9 +151,9 @@ def edit_moderation(request, team ):
             "result_list":result_list
              }, RequestContext(request))
 
-
 @to_json
 @_check_moderate_permission
+@require_POST
 def affect_selected(request, team):
     if request.method == "POST":
         action = request.POST.get("action", False)
@@ -159,6 +164,6 @@ def affect_selected(request, team):
                  _batch_set_moderation(request, team, action, version_id, lang_id)
             res = {}
             res["pending_count"] = team.get_pending_moderation().count()
-            res["message"] = "Subs moderated"
+            res["msg"] = "Subs moderated"
             return res                    
                     
