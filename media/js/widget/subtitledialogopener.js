@@ -76,6 +76,9 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
     openDialogArgs,
     opt_completeCallback)
 {
+    if (this.disallow_()) {
+        return;
+    }
     var that = this;
     this.showLoading_(true);
     var resumeEditingRecord = this.getResumeEditingRecord_(openDialogArgs);
@@ -140,6 +143,9 @@ mirosubs.widget.SubtitleDialogOpener.prototype.resumeEditing_ =
 mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog = 
     function(opt_effectiveVideoURL, opt_lang) 
 {
+    if (this.disallow_()) {
+        return;
+    }
     var that = this;
     var dialog = new mirosubs.startdialog.Dialog(
         this.videoID_, opt_lang, 
@@ -155,11 +161,24 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog =
     dialog.setVisible(true);
 };
 
+mirosubs.widget.SubtitleDialogOpener.prototype.disallow_ = function() {
+    if (goog.userAgent.IE && !goog.userAgent.isVersion(8)) {
+        alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+
 mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
     function(openDialogArgs, 
              opt_effectiveVideoURL,
              opt_completeCallback)
 {
+    if (this.disallow_()) {
+        return;
+    }
     if (mirosubs.returnURL)
         this.openDialog(openDialogArgs,
                         opt_completeCallback);
