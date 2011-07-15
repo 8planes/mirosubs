@@ -86,8 +86,6 @@ def remove_moderation( video,  team, user):
     return num
 
 def _set_version_moderation_status(version, team, user, status, updates_meta=True):
-    #if False or not user.has_perm("approve_subtitles", version):
-    #    raise SuspiciousOperation("User cannot approve this version")
     if not user_can_moderate(version.language.video, user):
         raise SuspiciousOperation("User cannot approve this version")    
     version.moderation_status = status
@@ -98,7 +96,6 @@ def _set_version_moderation_status(version, team, user, status, updates_meta=Tru
     return version    
 
 def approve_version( version, team, user, updates_meta=True):
-
     return _set_version_moderation_status(version, team, user, APPROVED, updates_meta)
     # FIXME: implement news track
     
