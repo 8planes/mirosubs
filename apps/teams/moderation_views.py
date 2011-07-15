@@ -73,11 +73,21 @@ def approve_version(request, team, version_id):
 @require_POST
 def reject_version(request, team, version_id):
     rejection_message = None
-    if request.POST.get("message"):
-        # we should send the user a message
-        rejection_message = request.POST.get("message")
     res =  _set_moderation(request, team, version_id, REJECTED, rejection_message=rejection_message)
     res['msg'] = "Version rejected!"
+    if request.POST.get("message"):
+        obj = SubtitleVersion.objects.get(pk=version_id)
+        rejection_message = request.POST.get("message")
+        if bool(rejection_message):
+            data = {}
+            data["content"] = rejection_message[:511]
+            data["content_type"] = ContentType.objects.get_for_object(version)
+            form = CommentForm(None, data)
+            if form.is_valid():
+                comment = form.save(request.user)
+                output['success'] = True
+                notify_comment_by_email(comment, obj, is_rejection=True)
+
     return res
 
 @to_json
