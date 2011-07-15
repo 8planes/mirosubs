@@ -12,6 +12,8 @@ PATH_RE = re.compile(r'^/(?P<locale>%s)(?=/)(?P<path>.*)$' % LOCALES_RE)
 DOMAIN_RE = re.compile(r'^(?P<locale>%s)(?=/)\.(?P<domain>.*)$' % LOCALES_RE)
 DOMAIN_MAP = dict(localeurl.settings.DOMAINS)
 
+from django.contrib.sites.models import Site
+
 def is_locale_independent(path):
     """
     Returns whether the path is locale-independent.
@@ -102,3 +104,14 @@ def locale_url(path, locale=''):
     """
     path = locale_path(path, locale)
     return ''.join([urlresolvers.get_script_prefix(), path[1:]])
+
+
+def universal_url( *args, **kwargs):
+    """
+    Returns an absolute path (with protocol + domain) but without the locale set.
+    This is useful for email links, for exaple, where the recipient should choose the locale,
+    and therefore the url
+    """
+    protocol = kwargs.pop("protocol", "http")
+    return "%s://%s%s" % (protocol, Site.objects.get_current().domain,
+                     strip_path(urlresolvers.reverse(*args, **kwargs))[1])

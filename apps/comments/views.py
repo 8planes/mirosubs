@@ -24,15 +24,19 @@ from models import Comment
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+from apps.comments.notifications import notify_comment_by_email
+
 @login_required
 def post(request):
     output = dict(success=False)
     form = CommentForm(None, request.POST)
     if form.is_valid():
-        form.save(request.user)
+        obj = form.save(request.user)
         output['success'] = True
+        notify_comment_by_email(obj)
     else:
         output['errors'] = form.get_errors()
+        
     return HttpResponse(json.dumps(output), "text/javascript")
 
 def update_comments(request):

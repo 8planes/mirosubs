@@ -47,11 +47,10 @@ function updateHistoryPanel(el, data){
     });
     var statusHolder = $(newBT).parents("tr");
     $("div.moderation-status-icon", statusHolder).replaceWith(data.status_icon_html);
-    
 
 }
 function showMessageFromResponse(response){
-    var message = response.data.message || "An error ocurred, we're working on getting this fixes asap.";
+    var message = response.data.msg || "An error ocurred, we're working on getting this fixes asap.";
     jQuery['jGrowl'](message, {'life': 10000});    
 }
 /*
@@ -63,7 +62,7 @@ function showMessageFromResponse(response){
  */
 function onApproveDone(el, response){
     if (response.success){
-        showMessageFromResponse(response)
+        showMessageFromResponse(response);
 
     }
     if (el){
