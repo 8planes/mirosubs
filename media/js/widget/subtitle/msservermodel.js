@@ -51,7 +51,7 @@ mirosubs.subtitle.MSServerModel = function(
     this.timerTickCount_ = 0;
     this.forked_ = false;
     this.timer_ = new goog.Timer(
-        (mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION - 5) * 1000);
+        (mirosubs.LOCK_EXPIRATION - 5) * 1000);
     this.logger_ = goog.debug.Logger.getLogger(
         'mirosubs.subtitle.MSServerModel');
     goog.events.listen(
@@ -70,9 +70,6 @@ mirosubs.subtitle.MSServerModel.currentInstance = null;
  * @type {string} 
  */
 mirosubs.subtitle.MSServerModel.EMBED_JS_URL = null;
-
-// updated by values from server when widgets load.
-mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 0;
 
 /**
  * @return {?mirosubs.widget.SavedSubtitles}
