@@ -80,7 +80,7 @@ def notify_comment_by_email(comment,  version=None, is_rejection=False, moderato
     else:
         user_url  = ""
     if is_rejection:
-        subject = SUBJECT_EMAIL_VERSION_REJECTED  % video.title_display
+        subject = SUBJECT_EMAIL_VERSION_REJECTED  % video.title_display()
     else:
         subject = SUBJECT_EMAIL_VIDEO_COMMENTED  % (comment.user.username, video.title_display())
 
