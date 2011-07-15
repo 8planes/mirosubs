@@ -111,15 +111,18 @@ def reject_version(version, team, user, rejection_message, sender, updates_meta=
         # rollback to the last moderated status
         latest_approved = version.language.latest_version(public_only=True)
         latest_approved.rollback(user)
-    comment = create_rejection_message(version,rejection_message, sender)
-    notify_comment_by_email(comment, version)
+    if bool(rejection_message):
+        comment = create_comment_for_rejection(version, rejection_message, sender)
+        notify_comment_by_email(comment, version)
     return v
 
 def create_comment_for_rejection(version, msg, moderator):
-    comment = Comment.get_for_object(version.video)
-    comment.user = moderator
-    comment.content = msg
-    comment.submit_date = datetime.datetime.now()
+    from apps.comments.models import Comment
+    comment = Comment(content_object=version.language,
+                      user = moderator,
+                      content = msg,
+                      submit_date = datetime.datetime.now()
+                      )
     comment.save()
     return comment
     
