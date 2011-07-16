@@ -31,19 +31,19 @@ def _json_response(data, response=None):
     Simple wrapper that encodes response to json and sets the
     correct content-type.
     """
+
     final_data = {}
     suc = True
     final_data['data'] = data
-    final_data['success'] = data.get("success", True)
+    final_data['success'] = False
     suc = False
     errors = None
     if isinstance(data, dict):
-        suc =  data.pop('success', False)
         errors = data.pop('errors', None)
+        final_data["success"] = data.pop('success', True)
         if errors is not None:
             final_data['errors'] = errors
             final_data['success'] = False
-            suc = False
     response = response or HttpResponse()
     response['Content-Type'] = "application/json; charset=UTF-8"
     json_res = json.dumps(final_data,cls=LazyEncoder, ensure_ascii=True)
@@ -61,6 +61,8 @@ def to_json(view):
             if isinstance(res, HttpResponse):
                 res = res.content
             return _json_response(res, response)
+        except SuspiciousOperation, exception:
+            return _json_errors("Forbiden")
         except Exception, exception:
             logging.exception("Error on view %s" % view.__name__)
             if True or  settings.DEBUG:

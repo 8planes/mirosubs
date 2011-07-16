@@ -33,15 +33,13 @@ SUBJECT_EMAIL_VIDEO_COMMENTED = "%s left a comment on the video %s"
 
 
 
-def notify_comment_by_email(comment,  version=None, is_rejection=False, moderator=None):
+def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejection=False):
     """
     Comments can be attached to a video (appear in the videos:video (info)) page) OR
                                   sublanguage (appear in the videos:translation_history  page)
     Since version rejection becomes comments for videos we also need to cater for this in the email
                                   
     """
-
-
     ct = comment.content_object
     if isinstance( ct, Video):
         video = ct
@@ -76,7 +74,7 @@ def notify_comment_by_email(comment,  version=None, is_rejection=False, moderato
     else:
         version_url = None
     if moderator:
-        user_url = universal_url("profiles:detail", args=(moderator.id))
+        user_url = universal_url("profiles:profile", args=(moderator.id,))
     else:
         user_url  = ""
     if is_rejection:

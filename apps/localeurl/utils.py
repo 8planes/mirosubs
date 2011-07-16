@@ -113,5 +113,10 @@ def universal_url( *args, **kwargs):
     and therefore the url
     """
     protocol = kwargs.pop("protocol", "http")
+    try:
+        original = urlresolvers.reverse(*args, **kwargs)
+    except Exception, e:
+        print e
     return "%s://%s%s" % (protocol, Site.objects.get_current().domain,
-                     strip_path(urlresolvers.reverse(*args, **kwargs))[1])
+                     strip_path(original)[1])
+    
