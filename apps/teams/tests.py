@@ -934,6 +934,7 @@ class TeamsDetailQueryTest(TestCase):
 from django.test import TestCase
 from django.core.exceptions import SuspiciousOperation
 
+from apps.teams.moderation_const import SUBJECT_EMAIL_VERSION_REJECTED    
 from apps.teams.moderation import  UNMODERATED, APPROVED, WAITING_MODERATION, \
     add_moderation, remove_moderation, approve_version, is_moderated, reject_version
 from apps.videos.models import SubtitleVersion, Subtitle, VideoUrl
@@ -964,7 +965,7 @@ class BaseTestModeration(TestCase):
                 s.save()
         return versions
 
-class TestVideoModerationForm(TestCase):
+class TestVideoModerationForm(BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
      
     def setUp(self):
@@ -1042,9 +1043,12 @@ class TestBusinessLogic( BaseTestModeration):
         self.video = self.team.videos.all()[0]
         self.user = User.objects.all()[0]
 
-    def _login(self):
-        self.client.login(**self.auth)
-        self.failUnlessEqual(1 + 1, 2)
+        self.auth_user  = User.objects.get(username= self.auth["username"])
+
+    def _login(self, is_moderator=False):
+            if is_moderator:
+                TeamMember(user=self.auth_user, team=self.team, is_manager=True).save()
+            self.client.login(**self.auth)
 
     def _make_subs(self, lang, num=10):
         v = SubtitleVersion(language=lang, is_forked=False, datetime_started=datetime.now())
@@ -1144,7 +1148,7 @@ class TestBusinessLogic( BaseTestModeration):
 
 
 
-class TestViews(TestCase):
+class TestModerationViews(BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
      
     def setUp(self):
@@ -1153,7 +1157,11 @@ class TestViews(TestCase):
         self.auth = dict(username='admin', password='admin')
         self.team  = Team.objects.all()[0]
         self.video = self.team.videos.all()[0]
+        l = self.video.subtitle_language()
+        l.language = 'en'
+        l.save()
         self.user = User.objects.all()[0]
+        self.auth_user = User.objects.get(username=self.auth["username"])
         member = TeamMember(user=self.user, team=self.team, is_manager=True)
         member.save()
 
@@ -1179,9 +1187,12 @@ class TestViews(TestCase):
             subtitle.save()
         return v
     
-    def _login(self):
-        self.client.login(**self.auth)
 
+    def _login(self, is_moderator=False):
+            if is_moderator:
+                TeamMember.objects.get_or_create(user=self.auth_user, team=self.team, is_manager=True)
+            self.client.login(**self.auth)
+        
     def _call_rpc_method(self, method_name,  *args, **kwargs):
         from utils.requestfactory import Client
         rf = Client()
@@ -1267,7 +1278,56 @@ class TestViews(TestCase):
         
         sub = widget_res["subtitles"][0]
         self.assertTrue(sub["text"].startswith("vno:2 Sub 0 "))
+
+
+    def test_rejection_view_no_message(self):
+        from apps.comments.models import Comment
+        tv = self.team.teamvideo_set.all()[0]
+        add_moderation(tv.video, tv.team, self.user)
+        self.assertEquals(tv.team.get_pending_moderation().count() , 0)
+        self.version = self._create_versions( tv.video.subtitle_language(), num_versions=1)[0]
+        self.reject_url = reverse("moderation:revision-reject", kwargs={
+                "team_id": self.team.pk,
+                "version_id": self.version.pk,
+        })
+        # reject first without messge, no notification nor comments should be save
+
+        response = self.client.post(self.reject_url, {}, HTTP_X_REQUESTED_WITH= "XMLHttpRequest", follow=True)
+        res_data = json.loads(response.content)
+        # not logged in! cannot moderate this
+        self.assertFalse(res_data["success"])
+        self._login(is_moderator=True)
+        prev_comments_count = Comment.objects.all().count()
+
+        self.version = self._create_versions( tv.video.subtitle_language(), num_versions=1)[0]
+        self.reject_url = reverse("moderation:revision-reject", kwargs={
+                "team_id": self.team.pk,
+                "version_id": self.version.pk,
+        })
+        response = json.loads(self.client.post(self.reject_url, {}, HTTP_X_REQUESTED_WITH= "XMLHttpRequest", follow=True).content)
+        self.assertTrue(response["success"])
         
+        self.assertEquals ( Comment.objects.all().count() , prev_comments_count)
+
+
+        version2 = self._create_versions(self.video.subtitle_language() , num_versions=1)[0]
+        self.reject_url = reverse("moderation:revision-reject", kwargs={
+                "team_id": tv.pk,
+                "version_id": version2.pk,
+        })
+        response = self.client.post(self.reject_url, {"message": "bad version"}, HTTP_X_REQUESTED_WITH= "XMLHttpRequest", follow=True)
+        data = json.loads(response.content)
+        self.assertTrue(data["success"])
+        self.assertEquals ( Comment.objects.all().count() , prev_comments_count + 1)
+
+                          
+        
+        followers = set(self.video.notification_list(self.auth_user))
+        followers.update(self.version.language.notification_list(self.auth_user))
+        self.assertEquals (len(mail.outbox), len(followers))
+        email = mail.outbox[0]
+        subject = SUBJECT_EMAIL_VERSION_REJECTED  % self.video.title_display()
+        self.assertEqual(email.subject, subject)
         
 
 
@@ -1309,6 +1369,12 @@ class TestSubtitleVersions(TestCase):
         member.save()
         self.user2 = User.objects.exclude(pk=self.user.pk)[0]
 
+        
+        
+        #self.bad_user = User.objects.all().exclude(self.user)[0]
+        self.client = Client()
+
+        
     def _make_subs(self, lang, num=10):
         version_no = 0
         if lang.subtitleversion_set.all().exists():
@@ -1436,6 +1502,9 @@ class TestRemoval(TestSubtitleVersions, BaseTestModeration):
        remove_moderation(tv.video, tv.team, self.user)
        # the last one must be v0 -> the one approved
        self.assertEquals(tv.video.subtitle_language().latest_version().subtitles()[0].text , v0_subs_text)
+
+
+       
        
 class TestTeamTemplateTags(BaseTestModeration):
 

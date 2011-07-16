@@ -17,6 +17,7 @@ from apps.videos.models import Video, SubtitleVersion, SubtitleLanguage
 from apps.teams.models import TeamVideo
 
 from apps.auth.models import CustomUser as User
+from apps.comments.notifications import notify_comment_by_email
 from widget.rpc import video_cache
 
 
@@ -100,26 +101,28 @@ def approve_version( version, team, user, updates_meta=True):
     # FIXME: implement news track
     
 
-def reject_version(version, team, user, rejection_message, sender, updates_meta=True, ):
+def reject_version(version, team, user, rejection_message=None, sender=None, updates_meta=True, ):
     v = _set_version_moderation_status(version, team, user, REJECTED, updates_meta)
 
     latest = version.language.latest_version(public_only=False)
     if latest and latest.moderation_status == REJECTED:
         # rollback to the last moderated status
         latest_approved = version.language.latest_version(public_only=True)
-        latest_approved.rollback(user)
-    if bool(rejection_message):
+        if latest_approved:
+            latest_approved.rollback(user)
+    if bool(rejection_message) and bool(sender):
         comment = create_comment_for_rejection(version, rejection_message, sender)
-        notify_comment_by_email(comment, version)
+        notify_comment_by_email(comment, version.language, moderator = sender, is_rejection=True )
     return v
 
-def create_comment_for_rejection(version, msg, moderator):
+def create_comment_for_rejection(version, msg, sender):
     from apps.comments.models import Comment
     comment = Comment(content_object=version.language,
-                      user = moderator,
+                      user = sender,
                       content = msg,
                       submit_date = datetime.datetime.now()
                       )
+
     comment.save()
     return comment
     

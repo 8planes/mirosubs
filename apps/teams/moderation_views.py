@@ -33,11 +33,14 @@ def _check_moderate_permission(view):
     def wrapper(request,  *args, **kwargs):
         team = Team.objects.get(pk=kwargs.pop("team_id", "-1"))
         if not team.is_member(request.user):
-            return  HttpResponseForbidden("This user does not have the permission to moderate this team")
+            error_msg ="This user does not have the permission to moderate this team"
+            if request.is_ajax():
+                return {"success":False, "errors":[error_msg] } 
+            return  HttpResponseForbidden(error_msg)
         return view(request, team, *args, **kwargs)
     return wraps(view)(wrapper)
 
-def _set_moderation(request, team, version, status,  updates_meta=True):
+def _set_moderation(request, team, version, status,  updates_meta=True, rejection_message=None, sender=None):
     try:
         if not isinstance(version, SubtitleVersion):
             version = get_object_or_404(SubtitleVersion, pk=version)
@@ -48,7 +51,7 @@ def _set_moderation(request, team, version, status,  updates_meta=True):
         if status == APPROVED:
             core_approve_version(version, team, request.user, updates_meta)
         elif status == REJECTED:
-            core_reject_version(version, team, request.user, updates_meta)
+            core_reject_version(version, team, request.user, rejection_message=rejection_message, sender=sender, updates_meta=updates_meta )
         if request.is_ajax():
             return {
                         "status":"ok",
@@ -74,22 +77,15 @@ def approve_version(request, team, version_id):
 @_check_moderate_permission
 @require_POST
 def reject_version(request, team, version_id):
-    rejection_message = None
-    res =  _set_moderation(request, team, version_id, REJECTED, rejection_message=rejection_message)
-    res['msg'] = "Version rejected!"
-    if request.POST.get("message"):
-        obj = SubtitleVersion.objects.get(pk=version_id)
-        rejection_message = request.POST.get("message")
-        if bool(rejection_message):
-            data = {}
-            data["content"] = rejection_message[:511]
-            data["content_type"] = ContentType.objects.get_for_object(version)
-            form = CommentForm(None, data)
-            if form.is_valid():
-                comment = form.save(request.user)
-                output['success'] = True
-                notify_comment_by_email(comment, obj, is_rejection=True)
-
+    rejection_message = request.POST.get("message")
+    res =  _set_moderation(
+        request,
+        team,
+        version_id,
+        REJECTED,
+        rejection_message=rejection_message,
+        sender=request.user)
+    res['msg'] = "Version approved, well done!"
     return res
 
 @to_json
