@@ -50,13 +50,37 @@
                 }
                 return false;
             });
-            
-            $('a.demote-user, a.promote-user').click(function(){
-                var confirm_text = $(this).hasClass('demote-user') ?
-                    '{% trans "Do you want demote user to member?" %}' :
-                    '{% trans "Do you want promote user to manager?" %}';
-                return confirm(confirm_text);
-            })                        
+
+            function onRoleChangerSelected(e){
+        
+               var url = $(this).data("url");
+               var role = $(this).val();
+               $.ajax({
+                url:url,
+                dataType: 'json',
+                type: "POST",
+                data:{'role':role},        
+                success: function(response){
+                    var message = response.data.msg || "An error ocurred, we're working on getting this fixes asap.";
+                    jQuery['jGrowl'](message, {'life': 10000});    
+        
+                },
+                error: function(response){
+                    var message = response.data.msg || "An error ocurred, we're working on getting this fixes asap.";
+                    jQuery['jGrowl'](message, {'life': 10000});    
+                }
+              });
+            }
+        
+            function wrapRoleChangingSelects(els){
+               $(els).each(function(i, o){
+                   $(o).change(onRoleChangerSelected);
+               })
+
+
+            }
+           wrapRoleChangingSelects($(".role-changer"));
+        
         });
     </script>
 {% endblock %}
@@ -99,15 +123,7 @@
                     <div class="small grey">
                         {% if team|is_team_manager:user and not member.user == user %}
                             <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
-                            {% if member.is_manager %}
-                                | <a href="{% url teams:demote_member team.slug member.user.pk %}" class="demote-user">
-                                    {% trans 'Demote to Member' %}
-                                  </a>
-                            {% else %}
-                                | <a href="{% url teams:promote_member team.slug member.user.pk %}" class="promote-user">
-                                    {% trans 'Promote to Manager' %}
-                                  </a>
-                            {% endif %}
+
                             |
                         {% endif %}
                         {% if not member.user == user and member.user.email %}
@@ -116,11 +132,18 @@
                     </div>
                 </td>
                 <td>
-                    {% if member.is_manager %}
-                        {% trans 'Manager' %}
-                    {% else %}
-                        {% trans 'Member' %}
-                    {% endif %}
+                  {% if not member.user == user %}
+                  <select name="role" class="role-changer" data-url="{% url teams:promote_member user_pk=member.user.pk,slug=team.slug %}">
+                    {% for choice in role_choices %}
+                    <option {% ifequal choice.0  member.role %}selected="selected" {% endifequal %} value="{{choice.0}}">{{choice.1}}</option>
+                    {% endfor %}
+                  </select>
+                  {% else %}
+                  {% trans member.role %}
+                  {% endif %}
+
+
+
                 </td>
             </tr>
             {% endfor %}

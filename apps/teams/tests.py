@@ -735,18 +735,22 @@ class TeamsTest(TestCase):
         }
         url = reverse("teams:edit_members", kwargs={"slug": team.slug})
         response = self.client.get(url, data)
-        self.failUnlessEqual(response.status_code, 200) 
+        self.failUnlessEqual(response.status_code, 200)
+
+        tm,c = TeamMember.objects.get_or_create(user=self.user, team=team)
+        tm.promote_to_manager()
+        
         
         self.assertFalse(team.is_manager(user2))
-        
         url = reverse("teams:promote_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
         response = self.client.get(url)
         self.assertRedirects(response, reverse("teams:edit_members", kwargs={"slug": team.slug}))
-        
+
+        team = refresh_obj(team)
         self.assertTrue(team.is_manager(user2))
         
-        url = reverse("teams:demote_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
-        response = self.client.get(url)
+        url = reverse("teams:promote_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
+        response = self.client.post(url, {"role":TeamMember.ROLE_MEMBER})
         self.assertRedirects(response, reverse("teams:edit_members", kwargs={"slug": team.slug}))
         
         self.assertFalse(team.is_manager(user2))
@@ -973,7 +977,7 @@ class TestVideoModerationForm(BaseTestModeration):
         self.team  = Team.objects.all()[0]
         self.video = self.team.videos.all()[0]
         self.user = User.objects.all()[0]
-        member = TeamMember(user=self.user, team=self.team, is_manager=True)
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
         member.save()
 
     def _login(self):
@@ -1047,7 +1051,9 @@ class TestBusinessLogic( BaseTestModeration):
 
     def _login(self, is_moderator=False):
             if is_moderator:
-                TeamMember(user=self.auth_user, team=self.team, is_manager=True).save()
+                o, c = TeamMember.objects.get_or_create(user=self.auth_user, team=self.team)
+                o.role=TeamMember.ROLE_MANAGER
+                o.save()
             self.client.login(**self.auth)
 
     def _make_subs(self, lang, num=10):
@@ -1072,7 +1078,7 @@ class TestBusinessLogic( BaseTestModeration):
     
 
     def test_create_moderation_simple(self):
-        TeamMember(user=self.user, team=self.team, is_manager=True).save()
+        TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER).save()
         self.assertFalse(self.video.moderated_by)
         add_moderation(self.video, self.team, self.user)
         self.video = Video.objects.get(pk=self.video.pk)
@@ -1090,12 +1096,14 @@ class TestBusinessLogic( BaseTestModeration):
         self.assertTrue(e)
         member.is_manager  = True
         member.save()
-        add_moderation(self.video, self.team, self.user)
+        self.assertRaises(SuspiciousOperation, add_moderation, *[self.video, self.team, self.user])
+        self._login(is_moderator=True)
+        add_moderation (self.video, self.team, self.auth_user)
         self.video = Video.objects.get(pk=self.video.pk)
         self.assertTrue(self.video.moderated_by)
 
     def test_remove_moderation_simple(self):
-        TeamMember(user=self.user, team=self.team, is_manager=True).save()
+        TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER).save()
         self.assertFalse(self.video.moderated_by)
         add_moderation(self.video, self.team, self.user)
         self.video = Video.objects.get(pk=self.video.pk)
@@ -1105,18 +1113,14 @@ class TestBusinessLogic( BaseTestModeration):
         self.assertFalse(self.video.moderated_by)
 
     def test_remove__moderation_only_for_members(self):
-        member = TeamMember(user=self.user, team=self.team, is_manager=True)
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
         member.save()
         add_moderation(self.video, self.team, self.user)
-        member.is_manager  = False
+        member.role = TeamMember.ROLE_MEMBER
         member.save()
         e = None
-        try:
-            remove_moderation(self.video, self.team, self.user)
-        except SuspiciousOperation, e:
-            pass
-        self.assertTrue(e)
-        member.is_manager  = True
+        self.assertRaises(SuspiciousOperation, remove_moderation, *(self.video, self.team, self.user))
+        member.role = TeamMember.ROLE_MANAGER
         member.save()
         remove_moderation(self.video, self.team, self.user)
         self.video = Video.objects.get(pk=self.video.pk)
@@ -1129,7 +1133,7 @@ class TestBusinessLogic( BaseTestModeration):
         
         v1 = self._make_subs(lang, 5)
         self.assertEquals(v1.moderation_status , UNMODERATED)
-        member = TeamMember(user=self.user, team=self.team, is_manager=True)
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
         member.save()
         add_moderation(self.video, self.team, self.user)
         v1 = SubtitleVersion.objects.get(pk=v1.pk)
@@ -1138,7 +1142,7 @@ class TestBusinessLogic( BaseTestModeration):
     def test_new_version_will_await_moderation(self):
         #from apps.testhelpers.views import debug_video
         lang = self.video.subtitle_language()
-        member = TeamMember(user=self.user, team=self.team, is_manager=True)
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
         member.save()
         v0 = self._make_subs(lang, 5)
         self.assertEquals(v0.moderation_status , UNMODERATED)
@@ -1162,7 +1166,7 @@ class TestModerationViews(BaseTestModeration):
         l.save()
         self.user = User.objects.all()[0]
         self.auth_user = User.objects.get(username=self.auth["username"])
-        member = TeamMember(user=self.user, team=self.team, is_manager=True)
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
         member.save()
 
     def _make_subs(self, lang, num=10):
@@ -1190,7 +1194,9 @@ class TestModerationViews(BaseTestModeration):
 
     def _login(self, is_moderator=False):
             if is_moderator:
-                TeamMember.objects.get_or_create(user=self.auth_user, team=self.team, is_manager=True)
+                o, c = TeamMember.objects.get_or_create(user=self.auth_user, team=self.team)
+                o.role=TeamMember.ROLE_MANAGER
+                o.save()
             self.client.login(**self.auth)
         
     def _call_rpc_method(self, method_name,  *args, **kwargs):
@@ -1220,7 +1226,7 @@ class TestModerationViews(BaseTestModeration):
         url = reverse("teams:detail", kwargs={"slug": self.team.slug})
         response = self.client.get(url)
         add_moderation(video, self.team, self.user)
-        self._login()
+        self._login(is_moderator=True)
         self.client.get("\en\faq")        
         lang = video.subtitle_language()
         [ self._make_subs(lang, 5) for x in xrange(0, 3)]
@@ -1336,7 +1342,7 @@ class TestModerationViews(BaseTestModeration):
         url = reverse("teams:detail", kwargs={"slug": self.team.slug})
         response = self.client.get(url)
         add_moderation(self.video, self.team, self.user)
-        self._login()
+        self._login(is_moderator=True)
         self.client.get("\en\faq")        
         lang = self.video.subtitle_language()
         [ self._make_subs(lang, 5) for x in xrange(0, 3)]
@@ -1347,6 +1353,7 @@ class TestModerationViews(BaseTestModeration):
         self.assertEquals(self.team.get_pending_moderation().count(), 6)
         versions = self.team.get_pending_moderation()
         version = versions[0]
+
         url = reverse("moderation:revision-approve", kwargs={
                     "team_id":self.team.id,
                     "version_id":version.pk})
@@ -1365,7 +1372,7 @@ class TestSubtitleVersions(TestCase):
         self.team  = Team.objects.all()[0]
         self.video = self.team.videos.all()[0]
         self.user = User.objects.all()[0]
-        member = TeamMember(user=self.user, team=self.team, is_manager=True)
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
         member.save()
         self.user2 = User.objects.exclude(pk=self.user.pk)[0]
 

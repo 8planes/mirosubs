@@ -25,6 +25,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
 from utils import render_to, render_to_json
+from utils.jsonresponse import _json_response
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo
 from django.shortcuts import get_object_or_404, redirect, render_to_response
@@ -455,36 +456,29 @@ def remove_member(request, slug, user_pk):
             'error': ugettext('You can\'t remove user')
         }        
 
-@login_required
-def demote_member(request, slug, user_pk):
-    team = Team.get(slug, request.user)
 
-    if not team.is_member(request.user):
-        raise Http404
-
-    if team.is_manager(request.user):
-        user = get_object_or_404(User, pk=user_pk)
-        if not user == request.user:
-            TeamMember.objects.filter(team=team, user=user).update(is_manager=False)
-        else:
-            messages.error(request, _('You can\'t demote to member yorself'))
-    else:
-        messages.error(request, _('You can\'t demote to member'))          
-    return redirect('teams:edit_members', team.slug)
 
 @login_required
 def promote_member(request, slug, user_pk):
     team = Team.get(slug, request.user)
-
     if not team.is_member(request.user):
         raise Http404
-
+    error = None
+    msg = _("Team member role changed.")
     if team.is_manager(request.user):
         user = get_object_or_404(User, pk=user_pk)
         if not user == request.user:
-            TeamMember.objects.filter(team=team, user=user).update(is_manager=True)
+            new_role = request.POST.get("role", TeamMember.ROLE_MANAGER)
+            if new_role not in [x[0] for x in TeamMember.ROLES]:
+                error =  _('Not a valid role')
+            else:
+                TeamMember.objects.filter(team=team, user=user).update(role=new_role)
     else:
-        messages.error(request, _('You can\'t promote to manager'))
+        error =  _('You can\'t promote to manager')
+    if request.is_ajax():
+        return _json_response({"success":not error, "msg": error or msg})
+    elif error:
+        messages.error(request, error)
     return redirect('teams:edit_members', team.slug)
 
 @login_required        
@@ -498,16 +492,18 @@ def edit_members(request, slug):
     
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
-    
+
     if ordering == 'username' and order_type in ['asc', 'desc']:
         pr = '-' if order_type == 'desc' else ''
         qs = qs.order_by(pr+'user__first_name', pr+'user__last_name', pr+'user__username')
     elif ordering == 'role' and order_type in ['asc', 'desc']:
-        qs = qs.order_by(('-' if order_type == 'desc' else '')+'is_manager')
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+'role')
+    
     extra_context = {
         'team': team,
         'ordering': ordering,
-        'order_type': order_type
+        'order_type': order_type,
+        'role_choices' : TeamMember.ROLES,
     }
 
     return object_list(request, queryset=qs,
