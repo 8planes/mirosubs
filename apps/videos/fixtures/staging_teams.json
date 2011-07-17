@@ -21,7 +21,7 @@
         "model": "teams.teammember", 
         "fields": {
             "user": 9998, 
-            "is_manager": true, 
+            "role": "manager", 
             "team": 1
         }
     },  
@@ -30,7 +30,7 @@
         "model": "teams.teammember", 
         "fields": {
             "user": 9999, 
-            "is_manager": true, 
+            "role": "manager", 
             "team": 1
         }
     },      
@@ -39,7 +39,7 @@
         "model": "teams.teammember", 
         "fields": {
             "user": 2, 
-            "is_manager": false, 
+            "role": "member", 
             "team": 1
         }
     },         

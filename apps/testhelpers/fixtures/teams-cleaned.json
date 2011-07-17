@@ -7878,7 +7878,7 @@
         "model": "teams.teammember", 
         "fields": {
             "user": 11597, 
-            "is_manager": true, 
+            "role": "manager", 
             "team": 21
         }
     }, 
@@ -7887,7 +7887,7 @@
         "model": "teams.teammember", 
         "fields": {
             "user": 14003, 
-            "is_manager": false, 
+            "role": "member", 
             "team": 21
         }
     }, 
@@ -7896,7 +7896,7 @@
         "model": "teams.teammember", 
         "fields": {
             "user": 14004, 
-            "is_manager": false, 
+            "role": "member", 
             "team": 21
         }
     }
