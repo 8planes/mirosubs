@@ -168,7 +168,8 @@ class CustomUser(BaseUser):
         return language_code in [l.language for l in self.get_languages()]
 
     def managed_teams(self):
-        return self.teams.filter(members__is_manager=True)
+        from apps.teams.models import TeamMember
+        return self.teams.filter(members__role=TeamMember.MANAGER)
 
     def _get_gravatar(self, size):
         url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest() + "?"

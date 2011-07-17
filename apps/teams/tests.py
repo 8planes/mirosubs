@@ -1085,7 +1085,7 @@ class TestBusinessLogic( BaseTestModeration):
         self.assertEquals(self.video.moderated_by, self.team)
 
     def test_create_moderation_only_for_members(self):
-        member = TeamMember(user=self.user, team=self.team, is_manager=False)
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MEMBER)
         member.save()
         e = None
         try:
