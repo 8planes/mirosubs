@@ -140,7 +140,6 @@ def _get_moderation_results(request, team):
     return form, result_list
 
 @_check_moderate_permission
-@require_POST
 def get_pending_videos(request, team):
     form, result_list = _get_moderation_results(request, team)
     return render_to_response('moderation/_videos_to_moderate.html', {
