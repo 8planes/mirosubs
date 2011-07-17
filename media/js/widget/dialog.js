@@ -258,6 +258,15 @@ mirosubs.Dialog.prototype.showSaveWorkDialog_ = function() {
 
 mirosubs.Dialog.prototype.getServerModel = goog.abstractMethod;
 
+/**
+ * @protected
+ */
+mirosubs.Dialog.prototype.hideToFork = function() {
+    // we just want to hide translation dialog to switch to subtitling dialog
+    // because of a fork. so skip releasing the lock and changing the location.
+    mirosubs.Dialog.superClass_.setVisible.call(this, false);
+};
+
 mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
     var serverModel = this.getServerModel();
     if (serverModel){
@@ -266,16 +275,12 @@ mirosubs.Dialog.prototype.hideDialogImpl_ = function() {
         mirosubs.Rpc.call("release_lock", args);    
     }
     mirosubs.widget.ResumeEditingRecord.clear();
-    mirosubs.Dialog.superClass_.setVisible.call(this, false);
     if (mirosubs.returnURL != null) {
         goog.Timer.callOnce(function() {
             window.location.replace(mirosubs.returnURL);
         });
-    } else if ( ! mirosubs.isFromDifferentDomain()) {
-        goog.Timer.callOnce(function() {
-            window.location.reload();
-        });        
     }
+    mirosubs.Dialog.superClass_.setVisible.call(this, false);
 };
 
 mirosubs.Dialog.prototype.makeJsonSubs = goog.abstractMethod;

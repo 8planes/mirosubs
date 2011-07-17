@@ -686,6 +686,55 @@ class TestRpc(TestCase):
         self.assertEquals(3.4, subtitles[1]['start_time'])
         self.assertEquals(5.8, subtitles[1]['end_time'])
 
+    def test_fork_on_finish(self):
+        request = RequestMockup(self.user_0)
+        session = create_two_sub_dependent_session(request)
+
+        language = models.SubtitleLanguage.objects.get(pk=session.language.pk)
+        self.assertEquals(False, language.is_forked)
+        self.assertEquals(False, language.latest_version().is_forked)
+
+        # open translation dialog
+        response = rpc.start_editing(
+            request, session.video.video_id, 'es',
+            subtitle_language_pk=language.pk,
+            base_language_pk=session.video.subtitle_language().pk)
+        session_pk = response['session_pk']
+
+        # fork mid-edit
+        subtitles = [{'subtitle_id': u'a',
+                 'text': 'uno',
+                 'start_time': 1.3,
+                 'end_time': 2.4,
+                 'sub_order': 1.0},
+                {'subtitle_id': u'b',
+                 'text': 'dos',
+                 'start_time': 6.4,
+                 'end_time': 8.8,
+                 'sub_order': 2.0}]
+
+        # save as forked.
+        rpc.finished_subtitles(
+            request, 
+            session_pk,
+            subtitles=subtitles,
+            forked=True)
+
+        # assert models are in correct state
+        video = models.Video.objects.get(id=session.video.id)
+        self.assertEquals(2, video.subtitlelanguage_set.count())
+        es = video.subtitle_language('es')
+        self.assertEquals(True, es.is_forked)
+        self.assertEquals(2, es.subtitleversion_set.count())
+        first = es.version(0)
+        self.assertEquals(False, first.is_forked)
+        self.assertEquals(True, es.latest_version().is_forked)
+        subtitles = es.latest_version().subtitles()
+        self.assertEquals(1.3, subtitles[0].start_time)
+        self.assertEquals(2.4, subtitles[0].end_time)
+        self.assertEquals(6.4, subtitles[1].start_time)
+        self.assertEquals(8.8, subtitles[1].end_time)        
+
     def test_change_original_language_legal(self):
         request = RequestMockup(self.user_0)
         return_value = rpc.show_widget(

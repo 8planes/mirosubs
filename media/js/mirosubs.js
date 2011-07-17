@@ -59,6 +59,13 @@ mirosubs.embedVersion = null;
 mirosubs.languages = null;
 
 /**
+ * editing lock expiration, in seconds. set in initial loading.
+ * @type {number}
+ * @const
+ */
+mirosubs.LOCK_EXPIRATION = 0;
+
+/**
  * Set when widget gets initial state from server. All available languages.
  * Each member is a two-element array, with language code first then 
  * language name.

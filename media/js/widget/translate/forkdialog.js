@@ -20,17 +20,12 @@ goog.provide('mirosubs.translate.ForkDialog');
 
 /**
  * @constructor
- * @param {number} draftPK
- * @param {string} languageCode
- * @param {function(mirosubs.widget.SubtitleState)} finishedCallback Called 
- *     after forking has occurred on server.
+ * @param {function()} finishedCallback Called iff the user decides to go ahead and fork.
  */
-mirosubs.translate.ForkDialog = function(draftPK, languageCode, finishedCallback) {
+mirosubs.translate.ForkDialog = function(finishedCallback) {
     goog.ui.Dialog.call(this, 'mirosubs-forkdialog', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
-    this.draftPK_ = draftPK;
-    this.languageCode_ = languageCode;
     this.finishedCallback_ = finishedCallback;
 };
 goog.inherits(mirosubs.translate.ForkDialog, goog.ui.Dialog);
@@ -38,7 +33,6 @@ goog.inherits(mirosubs.translate.ForkDialog, goog.ui.Dialog);
 mirosubs.translate.ForkDialog.prototype.createDom = function() {
     mirosubs.translate.ForkDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var language = mirosubs.languageNameForCode(this.languageCode_);
     this.getElement().appendChild(
         $d('div', null,
            $d('p', null, 'Are you sure you want to edit timing?'),
@@ -50,10 +44,6 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
            $d('p', null,
               'If you continue, you should finish all translations first ' +
               '(the original text will not be visible on the next screen).')));
-    this.loadingNotice_ = 
-        $d('p', null, 'Please wait. Heavy forking action occurring...');
-    mirosubs.style.showElement(this.loadingNotice_, false);
-    this.getElement().appendChild(this.loadingNotice_);
     this.cancelButton_ =
         $d('a',
            {'href':'#',
@@ -77,33 +67,16 @@ mirosubs.translate.ForkDialog.prototype.enterDocument = function() {
     this.getHandler().
         listen(this.okButton_,
                'click',
-               this.okClicked_).
+               this.linkClicked_).
         listen(this.cancelButton_,
                'click',
-               this.cancelClicked_);
+               this.linkClicked_);
 };
 
-mirosubs.translate.ForkDialog.prototype.cancelClicked_ = function(e) {
+mirosubs.translate.ForkDialog.prototype.linkClicked_ = function(e) {
     e.preventDefault();
-    if (this.loading_)
-        return;
     this.setVisible(false);
-};
-
-mirosubs.translate.ForkDialog.prototype.okClicked_ = function(e) {
-    e.preventDefault();
-    if (this.loading_)
-        return;
-    this.loading_ = true;
-    mirosubs.style.showElement(this.loadingNotice_, true);
-    mirosubs.Rpc.call(
-        'fork',
-        {'draft_pk': this.draftPK_},
-        goog.bind(this.okResponse_, this));
-};
-
-mirosubs.translate.ForkDialog.prototype.okResponse_ = function(result) {
-    this.loading_ = false;
-    this.setVisible(false);
-    this.finishedCallback_(mirosubs.widget.SubtitleState.fromJSON(result));
+    if (e.target == this.okButton_) {
+        this.finishedCallback_();
+    }
 };
