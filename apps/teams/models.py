@@ -162,8 +162,20 @@ class Team(models.Model):
     
     def is_member(self, user):
         if not user.is_authenticated():
-            return False        
+            return False
         return self.members.filter(user=user).exists()
+    
+    
+
+    def is_contributor(self, user, authenticated=True):
+        """
+        Contibutors can add new subs to moderated videos and bypass moderation all together 
+        """
+        if authenticated and  not user.is_authenticated():
+            return False        
+        return self.members.filter(role__in=
+                                   [TeamMember.ROLE_CONTRIBUTOR, TeamMember.ROLE_MANAGER],
+                                    user=user).exists()
     
     def can_remove_video(self, user, team_video=None):
         if not user.is_authenticated():

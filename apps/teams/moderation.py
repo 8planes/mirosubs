@@ -32,7 +32,7 @@ class AlreadyModeratedException(Exception):
 def user_can_moderate(video, user):
     if not user.is_authenticated():
         return False
-    return video.moderated_by and video.moderated_by.is_manager(user)
+    return video.moderated_by and video.moderated_by.is_contributor(user)
 
 def is_moderated(version_lang_or_video):
     if isinstance(version_lang_or_video , SubtitleVersion):

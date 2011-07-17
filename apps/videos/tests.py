@@ -881,7 +881,7 @@ class ViewsTest(WebUseTest):
     def test_rollback_updates_sub_count(self):
         video = Video.objects.all()[:1].get()
         lang = video.subtitlelanguage_set.all()[:1].get()
-        v = lang.latest_version(public_only=True)
+        v = lang.latest_version(public_only=False)
         num_subs = len(v.subtitles())
         v.is_forked  = True
         v.save()
@@ -901,8 +901,7 @@ class ViewsTest(WebUseTest):
         last_v  = SubtitleLanguage.objects.get(id=lang.id).latest_version(public_only=True)
         final_num_subs = len(last_v.subtitles())
         self.assertEqual(final_num_subs, num_subs)
-        lang_subs = SubtitleLanguage.objects.get(pk=lang.pk)
-        self.assertEqual( lang_subs.subtitle_count , num_subs)
+
         
     def test_diffing(self):
         version = self.video.version(version_no=0)
@@ -1364,6 +1363,7 @@ class TestTasks(TestCase):
         s.save()        
 
         result = video_changed_tasks.delay(v.video.id, v.id)
+        self.assertEqual(len(mail.outbox), 1)
 
         if result.failed():
             self.fail(result.traceback)
@@ -1609,7 +1609,6 @@ class TestModelsSaving(TestCase):
         from videos.tasks import video_changed_tasks
         video_changed_tasks.delay(self.video.pk)
         self.video = Video.objects.get(pk=self.video.pk)
-        print [x for x in self.language.version().subtitle_set.all()]
         self.assertNotEqual(self.video.complete_date, None)
         
         self.language.is_complete = False

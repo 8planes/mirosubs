@@ -35,6 +35,7 @@ from subrequests.models import SubtitleRequest
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
 
+
 from utils import send_templated_email
 from statistic.tasks import st_widget_view_statistic_update
 import logging
@@ -299,7 +300,7 @@ class Rpc(BaseRpc):
         if throw_exception:
             raise Exception('purposeful exception for testing')
 
-        from apps.teams.moderation import is_moderated
+        from apps.teams.moderation import is_moderated, user_can_moderate
         
         language = session.language
         new_version = None
@@ -326,9 +327,11 @@ class Rpc(BaseRpc):
         if new_version is not None and new_version.version_no == 0:
             user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
         elif new_version and is_moderated(new_version):
-            user_message = """This video is moderated by %s. 
+            
+             if user_can_moderate(user, new_version) is False:
+                 user_message = """This video is moderated by %s. 
 
-You will not see your subtitles in our widget when you leave this page-- they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles they will show up on our site and in the widget.""" % (new_version.video.moderated_by.name)
+# You will not see your subtitles in our widget when you leave this page-- they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles they will show up on our site and in the widget.""" % (new_version.video.moderated_by.name)
 
                 
                 
