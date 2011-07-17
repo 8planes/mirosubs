@@ -1349,6 +1349,7 @@ class TestTasks(TestCase):
         v.language = self.language
         v.datetime_started = datetime.now()
         v.version_no = latest_version.version_no+1
+        v.user = User.objects.all()[0]
         v.save()
 
         for s in latest_version.subtitle_set.all():
@@ -1364,7 +1365,6 @@ class TestTasks(TestCase):
         s.save()        
 
         result = video_changed_tasks.delay(v.video.id, v.id)
-        print mail.outbox
         self.assertEqual(len(mail.outbox), 1)
 
         if result.failed():
