@@ -20,6 +20,7 @@ from datetime import datetime, timedelta
 from django.core.management import call_command
 from django.core import mail
 from django.test.client import Client
+from apps.videos import metadata_manager 
 import re
 
 LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z\-]+)_(.*)")
@@ -1148,8 +1149,7 @@ class TestBusinessLogic( BaseTestModeration):
         self.assertEquals(v0.moderation_status , UNMODERATED)
         add_moderation(self.video, self.team, self.user)
         v1 = self._create_versions(self.video.subtitle_language(), num_versions=1)[0]
-        self.assertEquals(v1.moderation_status , WAITING_MODERATION)    
-
+        self.assertEquals(v1.moderation_status , WAITING_MODERATION)
 
 
 class TestModerationViews(BaseTestModeration):
@@ -1364,7 +1364,7 @@ class TestModerationViews(BaseTestModeration):
         self.assertEquals(version.moderation_status,APPROVED)
         
 
-class TestSubtitleVersions(TestCase):
+class TestSubtitleVersions(BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
      
     def setUp(self):
@@ -1452,14 +1452,30 @@ class TestSubtitleVersions(TestCase):
         add_moderation(video, self.team, self.user)
         res =  self._get_widget_moderation_status(video_url.url)
         self.assertTrue(res["is_moderated"])
-        
+
+    def test_contribuitors_do_bypass_moderation(self):
+        lang = self.video.subtitle_language()
+        member, created = TeamMember.objects.get_or_create(user=self.user, team=self.team)
+        member.role=TeamMember.ROLE_MANAGER
+        member.save()
+        add_moderation(self.video, self.team, self.user)
+        joe_doe = User(username="joedoe", password="joedoe", email="joedow@example.com")
+        joe_doe.save()
+        joe_member, c = TeamMember.objects.get_or_create(user=joe_doe, team=self.team)
+        joe_member.save()
+        v0 = self._create_versions(lang, 1, user=joe_doe)[0]
+        self.assertEquals(v0.moderation_status,WAITING_MODERATION)
+        joe_member.promote_to_contributor()
+        joe_doe = refresh_obj(joe_doe)
+
+        self.assertTrue(self.team.is_contributor(joe_doe, authenticated=False))
+        v1 = self._create_versions(lang, 1, user=joe_doe)[0]
+        metadata_manager.update_metadata(self.video.pk)
+        v1 = refresh_obj(v1)
+        self.assertEquals(v1.moderation_status, APPROVED)
         
 
 class TestDashboard(TestSubtitleVersions, BaseTestModeration):
-
-    
-
-
     def test_pending_count(self):
         self.assertEquals(self.team.get_pending_moderation().count() , 0)
         tv = self.team.teamvideo_set.all()[0]
