@@ -158,7 +158,7 @@ class Team(models.Model):
     def is_manager(self, user):
         if not user.is_authenticated():
             return False
-        return self.members.filter(user=user, is_manager=True).exists()
+        return self.members.filter(user=user, role=TeamMember.ROLE_MANAGER).exists()
     
     def is_member(self, user):
         if not user.is_authenticated():
@@ -635,16 +635,45 @@ class TeamMemderManager(models.Manager):
     use_for_related_fields = True
     
     def managers(self):
-        return self.get_query_set().filter(is_manager=True)
+        return self.get_query_set().filter(role=TeamMember.ROLE_MANAGER)
     
 class TeamMember(models.Model):
+    # migration 0039 depends on these values
+    ROLE_MANAGER = "manager"
+    ROLE_MEMBER = "member"
+    ROLE_CONTRIBUTOR = "contribuitor"
+    
+    ROLES = (
+        (ROLE_MANAGER, _("Manager")),
+        (ROLE_MEMBER, _("Member")),
+        (ROLE_CONTRIBUTOR, _("Contributor")),
+    )
+    
     team = models.ForeignKey(Team, related_name='members')
     user = models.ForeignKey(User)
+    role = models.CharField(max_length=16, default=ROLE_MEMBER, choices=ROLES)
     is_manager = models.BooleanField(default=False)
     changes_notification = models.BooleanField(default=True)
     
     objects = TeamMemderManager()
-    
+
+    def promote_to_manager(self, saves=True):
+        self.role = TeamMember.ROLE_MANAGER
+        if saves:
+            self.save()
+
+
+
+    def promote_to_member(self, saves=True):
+        self.role = TeamMember.ROLE_MEMBER
+        if saves:
+            self.save()
+
+    def promote_to_contributor(self, saves=True):
+        self.role = TeamMember.ROLE_CONTRIBUTOR
+        if saves:
+            self.save()        
+        
     class Meta:
         unique_together = (('team', 'user'),)
     
