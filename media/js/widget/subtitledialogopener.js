@@ -162,7 +162,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog =
 };
 
 mirosubs.widget.SubtitleDialogOpener.prototype.disallow_ = function() {
-    if (goog.userAgent.IE && !goog.userAgent.isVersion(8)) {
+    if (!mirosubs.supportsLocalStorage()) {
         alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");
         return true;
     }
