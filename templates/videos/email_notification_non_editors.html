@@ -5,13 +5,15 @@
 {% block content %}
     <p style="font-size: 12px;">
         {% if user_url %}
-            {% blocktrans with video_url|rmlocale as video_url and version.user as u and user_url|rmlocale as user_url and video as v and version.time_change_display as change_percent %}
-            Subtitles to video <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b>
+            {% blocktrans with language_url|rmlocale as language_url and language.language_display as lang and video_url|rmlocale as video_url and version.user as u and user_url|rmlocale as user_url and video as v and version.time_change_display as change_percent %}
+            <b><a href="http://{{ domain }}{{ language_url }}">{{ lang }} subtitles</a></b> 
+            to video <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b>
             were changed by <b><a href="http://{{ domain }}{{ user_url }}">{{ u }}</a></b>. These changes went live immediately. {{ change_percent }} of the timing was changed.  
             {% endblocktrans %}<br/>
         {% else %}
-            {% blocktrans with video_url|rmlocale as video_url and version.user as u and video as v and version.time_change_display as change_percent %}
-            Subtitles to video <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b>
+            {% blocktrans with language_url|rmlocale as language_url and language.language_display as lang and video_url|rmlocale as video_url and version.user as u and video as v and version.time_change_display as change_percent %}
+            <b><a href="http://{{ domain }}{{ language_url }}">{{ lang }} subtitles</a></b> 
+            to video <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b>
             were changed. These changes went live immediately. {{ change_percent }} of the timing was changed.             
             {% endblocktrans %}<br/>        
         {% endif %}
