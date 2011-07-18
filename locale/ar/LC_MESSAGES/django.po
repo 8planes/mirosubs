@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-07-18 05:01-0500\n"
-"PO-Revision-Date: 2011-07-18 10:11+0000\n"
+"POT-Creation-Date: 2011-07-18 11:01-0500\n"
+"PO-Revision-Date: 2011-07-18 16:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.net/projects/p/universalsubtitles/team/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -4229,7 +4229,6 @@ msgid "Remove this video?"
 msgstr ""
 
 #: templates/teams/email_new_video.html:7
-#: templates/teams/email_new_videos.html:7
 #, python-format
 msgid ""
 "\n"
@@ -4238,12 +4237,21 @@ msgid ""
 msgstr ""
 
 #: templates/teams/email_new_video.html:13
-#: templates/teams/email_new_videos.html:19
+#: templates/teams/email_new_videos.html:20
 msgid "Or you can visit the team page to see the latest work"
 msgstr ""
 
 #: templates/teams/email_new_video.html:17
 msgid "Stop receiving new notifications when a new video is added."
+msgstr ""
+
+#: templates/teams/email_new_videos.html:7
+#, python-format
+msgid ""
+"\n"
+"            Please visit the <a href=\"http://%(domain)s%(team_url)s\">%(team_name)s</a> \n"
+"            to see the new videos that need your help:\n"
+"        "
 msgstr ""
 
 #: templates/teams/index.html:22
