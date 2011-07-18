@@ -1372,33 +1372,37 @@ class VideoFeed(models.Model):
 class SubtitleRequestManager(models.Manager):
     '''
     Custom manager for subtitle requests. Provides methods for creation
-    of requests from provided video, user and languages
+    of requests from provided video, user and languages.
     '''
 
-    def _create_request(self, video, user, language):
+    def _create_request(self, video, user, language, track=True):
         '''
-        Create a subtitle request for single language
+        Create a subtitle request for single language.
         '''
+
         subreq, new = self.get_or_create(user=user, video=video,
-                                         language=language)
-        new =  new or subreq.done
-        if new:
-            ## Update the 'time' to current
+                                         language=language, track=track)
+        if not new:
+            # Update the 'time' to current and mark as 'not done' as it is
+            # reopened.
             subreq.done = False
+
         subreq.save()
 
         return (subreq, new)
 
-    def create_requests(self, video_id, user, languages):
+    def create_requests(self, video_id, user, languages, track=True):
         '''
-        Create multiple requests according to the list of languages provided
+        Create multiple requests according to the list of languages provided.
         '''
 
         created_new = []
         video = Video.objects.get(video_id=video_id)
 
         for language in languages:
-            req, new = self._create_request(video, user, language)
+            req, new = self._create_request(video, user, language, track)
+            # If the request created is new (user, language, video triad
+            # wise), remember it.
             if new:
                 created_new.append(req)
 
@@ -1410,6 +1414,7 @@ class SubtitleRequestManager(models.Manager):
                 created=datetime.now(),
             )
 
+            # Attach the newly created action to the new requests
             for request in created_new:
                 request.action = action
                 request.save()
@@ -1418,6 +1423,9 @@ class SubtitleRequestManager(models.Manager):
 
 
 class SubtitleRequest(models.Model):
+    '''
+    A request for subtitles.
+    '''
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
     user = models.ForeignKey(User, related_name='subtitlerequests')
@@ -1432,6 +1440,9 @@ class SubtitleRequest(models.Model):
                                        self.user)
 
     def pending(self):
+        '''
+        Request pending or not.
+        '''
         return not self.done
     pending.boolean = True
 

@@ -130,6 +130,10 @@ class Rpc(BaseRpc):
         return return_value
 
     def fetch_request_dialog_contents(self, request, video_id):
+        '''
+        Fetch the contents for creating a dialog to create request subtitles
+        form.
+        '''
         my_languages = get_user_languages_from_request(request)
         my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
 
@@ -170,13 +174,17 @@ class Rpc(BaseRpc):
 
     def submit_subtitle_request(self, request, video_id, request_languages, track_request,
                                 description):
+        '''
+        Processes a request submitted through the UI
+        '''
         status = True
         message = ''
 
         new_requests = models.SubtitleRequest.objects.create_requests(
                 video_id,
                 request.user,
-                request_languages
+                request_languages,
+                track=track_request,
         )
 
         return {
