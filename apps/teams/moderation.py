@@ -99,8 +99,6 @@ def _set_version_moderation_status(version, team, user, status, updates_meta=Tru
 def approve_version( version, team, user, updates_meta=True):
     res =  _set_version_moderation_status(version, team, user, APPROVED, updates_meta)
     Action.create_approved_video_handler(version, user)
-    # FIXME: implement news track
-    
 
 def reject_version(version, team, user, rejection_message=None, sender=None, updates_meta=True, ):
     v = _set_version_moderation_status(version, team, user, REJECTED, updates_meta)
@@ -122,8 +120,7 @@ def create_comment_for_rejection(version, msg, sender):
                       user = sender,
                       content = msg,
                       submit_date = datetime.datetime.now()
-                      )
-
+    )
     comment.save()
     return comment
     
