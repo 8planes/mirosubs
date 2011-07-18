@@ -1365,10 +1365,11 @@ class TestTasks(TestCase):
         s.save()        
 
         result = video_changed_tasks.delay(v.video.id, v.id)
-        self.assertEqual(len(mail.outbox), 1)
 
         if result.failed():
             self.fail(result.traceback)
+            
+        self.assertEqual(len(mail.outbox), 1)
 
 class TestPercentComplete(TestCase):
     
