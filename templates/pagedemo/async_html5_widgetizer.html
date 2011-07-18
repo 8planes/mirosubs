@@ -1,0 +1,25 @@
+<html> 
+    <head> 
+      <title>Universal Subtitles HTML5 Demo</title>
+    </head> 
+    <body>
+      <video width="500" controls><br /> 
+        <source src="http://videos.mozilla.org/serv/blizzard/35days/html5-fallbacks/zombie.ogg" type="video/ogg"/>
+        <source src="http://videos.mozilla.org/serv/blizzard/35days/html5-fallbacks/zombie-large.mp4" type="video/mp4"/>
+      </video> 
+      {% if not js_use_compiled %}
+      <div>
+        This page only works with compiled js. If running for dev, even just use compilelite.
+      </div>
+      {% else %}
+      <script type="text/javascript">
+        var us = document.createElement('script'); 
+        us.type = 'text/javascript'; 
+        us.async = true;
+        us.src = '{{MEDIA_URL}}js/mirosubs-widgetizer.js';
+        var s = document.getElementsByTagName('script')[0]; 
+        s.parentNode.insertBefore(us, s);
+      </script>
+      {% endif %}
+    </body>
+</html>
