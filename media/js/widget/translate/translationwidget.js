@@ -50,7 +50,8 @@ mirosubs.translate.TranslationWidget.prototype.getSubJson = function() {
 };
 
 mirosubs.translate.TranslationWidget.prototype.createDom = function() {
-    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    var domhelper = this.getDomHelper();
+    var $d = goog.bind(domhelper.createDom, domhelper);
 
     this.setElementInternal(
         $d('li', null,
@@ -61,7 +62,9 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
            this.translateInput_ = $d('textarea', 'mirosubs-translateField')
         )
     );
-
+    
+    domhelper.setProperties(this.translateInput_, {'id': 'ti_'+this.subtitle_.subtitle_id});
+    
     this.getHandler()
         .listen(
             this.translateInput_, goog.events.EventType.BLUR,
