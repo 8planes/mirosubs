@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-07-17 23:01-0500\n"
-"PO-Revision-Date: 2011-07-18 04:11+0000\n"
+"POT-Creation-Date: 2011-07-18 05:01-0500\n"
+"PO-Revision-Date: 2011-07-18 10:12+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -305,11 +305,11 @@ msgid "Pashto"
 msgstr ""
 
 #: apps/api/1_0/forms.py:54 apps/videos/forms.py:64 apps/videos/forms.py:85
-#: apps/videos/forms.py:315
+#: apps/videos/forms.py:266
 msgid "Can not detect file encoding"
 msgstr ""
 
-#: apps/api/1_0/forms.py:57 apps/videos/forms.py:87 apps/videos/forms.py:317
+#: apps/api/1_0/forms.py:57 apps/videos/forms.py:87 apps/videos/forms.py:268
 msgid "Incorrect subtitles format"
 msgstr ""
 
@@ -912,7 +912,7 @@ msgstr ""
 msgid "File should have txt format"
 msgstr ""
 
-#: apps/videos/forms.py:59 apps/videos/forms.py:77 apps/videos/forms.py:307
+#: apps/videos/forms.py:59 apps/videos/forms.py:77 apps/videos/forms.py:258
 msgid "File size should be less {0} kb"
 msgstr ""
 
@@ -920,7 +920,7 @@ msgstr ""
 msgid "Can't encode file. It should have utf8 encoding."
 msgstr ""
 
-#: apps/videos/forms.py:80 apps/videos/forms.py:310
+#: apps/videos/forms.py:80 apps/videos/forms.py:261
 msgid "Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)"
 msgstr ""
 
@@ -932,14 +932,14 @@ msgstr ""
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr ""
 
-#: apps/videos/forms.py:395
+#: apps/videos/forms.py:346
 #, python-format
 msgid ""
 "Please try again with a link to a video page. \n"
 "                        <a href=\"mailto:%s\">Contact us</a> if there's a problem."
 msgstr ""
 
-#: apps/videos/forms.py:398
+#: apps/videos/forms.py:349
 #, python-format
 msgid ""
 "You must link to a video on a compatible site (like YouTube) or directly to a\n"
@@ -947,41 +947,41 @@ msgid ""
 "                    <a href=\"mailto:%s\">Contact us</a> if there's a problem."
 msgstr ""
 
-#: apps/videos/forms.py:419
+#: apps/videos/forms.py:370
 msgid "Youtube usernames"
 msgstr ""
 
-#: apps/videos/forms.py:419
+#: apps/videos/forms.py:370
 msgid "<span class=\"hint\">Enter usernames separated by comma.</span>"
 msgstr ""
 
-#: apps/videos/forms.py:420
+#: apps/videos/forms.py:371
 msgid "Youtube page link."
 msgstr ""
 
-#: apps/videos/forms.py:421
+#: apps/videos/forms.py:372
 msgid ""
 "<span class=\"hint\">For example: "
 "http://www.youtube.com/user/username</span>"
 msgstr ""
 
-#: apps/videos/forms.py:422
+#: apps/videos/forms.py:373
 msgid ""
 "<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
 "supported sites added.</span>"
 msgstr ""
 
-#: apps/videos/forms.py:423
+#: apps/videos/forms.py:374
 msgid "Save feed"
 msgstr ""
 
-#: apps/videos/forms.py:423
+#: apps/videos/forms.py:374
 msgid ""
 "<span class=\"hint checkbox_hint\">Choose this if you wish to add videos "
 "from this feed in the future. Only valid RSS feeds will be saved.</span>"
 msgstr ""
 
-#: apps/videos/forms.py:502
+#: apps/videos/forms.py:453
 msgid "captcha"
 msgstr ""
 
@@ -4740,49 +4740,51 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            Subtitles you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b> \n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b> \n"
 "            were changed by <b><a href=\"http://%(domain)s%(user_url)s\">%(u)s</a></b>. \n"
 "            These changes went live immediately.  %(text_change)s of the text and\n"
 "            %(time_change)s of the timing was changed.\n"
 "            "
 msgstr ""
 
-#: templates/videos/email_notification.html:15
+#: templates/videos/email_notification.html:16
 #, python-format
 msgid ""
 "\n"
-"            Subtitles you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b> \n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b> \n"
 "            were changed. These changes went live immediately. %(text_change)s of the text and \n"
 "            %(time_change)s of the timing was changed.\n"
 "            "
 msgstr ""
 
-#: templates/videos/email_notification.html:23
-#: templates/videos/email_notification_non_editors.html:20
+#: templates/videos/email_notification.html:25
+#: templates/videos/email_notification_non_editors.html:22
 msgid "Compare the new version to the last version"
 msgstr ""
 
-#: templates/videos/email_notification.html:24
+#: templates/videos/email_notification.html:26
 msgid "Compare your work to the new version"
 msgstr ""
 
-#: templates/videos/email_notification.html:25
-#: templates/videos/email_notification_non_editors.html:21
+#: templates/videos/email_notification.html:27
+#: templates/videos/email_notification_non_editors.html:23
 msgid "Stop watching for changes on this video"
 msgstr ""
 
-#: templates/videos/email_notification.html:32
-#: templates/videos/email_notification_non_editors.html:28
+#: templates/videos/email_notification.html:34
+#: templates/videos/email_notification_non_editors.html:30
 msgid "Old Text"
 msgstr ""
 
-#: templates/videos/email_notification.html:35
-#: templates/videos/email_notification_non_editors.html:31
+#: templates/videos/email_notification.html:37
+#: templates/videos/email_notification_non_editors.html:33
 msgid "Changes to Subtitle Text"
 msgstr ""
 
-#: templates/videos/email_notification.html:38
-#: templates/videos/email_notification_non_editors.html:34
+#: templates/videos/email_notification.html:40
+#: templates/videos/email_notification_non_editors.html:36
 msgid "New Text"
 msgstr ""
 
@@ -4790,16 +4792,18 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            Subtitles to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b>\n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b>\n"
 "            were changed by <b><a href=\"http://%(domain)s%(user_url)s\">%(u)s</a></b>. These changes went live immediately. %(change_percent)s of the timing was changed.  \n"
 "            "
 msgstr ""
 
-#: templates/videos/email_notification_non_editors.html:13
+#: templates/videos/email_notification_non_editors.html:14
 #, python-format
 msgid ""
 "\n"
-"            Subtitles to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b>\n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b>\n"
 "            were changed. These changes went live immediately. %(change_percent)s of the timing was changed.             \n"
 "            "
 msgstr ""
