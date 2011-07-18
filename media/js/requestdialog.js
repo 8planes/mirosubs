@@ -56,8 +56,8 @@ mirosubs.RequestDialog = function(videoID) {
      * @const
      * @type {string}
      */
-    this.DESCRIPTION_INITIAL_ = 'Please tell us the reason you need these'+
-                                'subtitles so that volunteers can act'    +
+    this.DESCRIPTION_INITIAL_ = 'Please tell us the reason you need these '+
+                                'subtitles so that volunteers can act '    +
                                 'appropriately.';
     /**
      * Displayed on a successfull request submission
@@ -266,8 +266,7 @@ mirosubs.RequestDialog.prototype.closeClicked_ = function(e) {
 };
 
 /**
- * Callback after a request has been posted.
- * Notifies about successful or unsuccessful request
+ * Callback after a request has been posted.  * Notifies about successful or unsuccessful request
  */
 mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
     // If response has a key status, set to true, hide the dialog
@@ -279,7 +278,7 @@ mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
         this.confirmDiv_ = $d('p', null, this.SUBMISSION_CONFIRM_);
         this.volunteerDiv_ = $d('p', null, 'If you can, help others on our ',
                                             $d('a', {"href":"/videos/volunteer/"},
-                                               "Volunteer Page"));
+                                               "Volunteer Page."));
 
         this.contentDiv_.appendChild(this.confirmDiv_);
         this.contentDiv_.appendChild(this.volunteerDiv_);

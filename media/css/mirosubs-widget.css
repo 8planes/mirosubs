@@ -3130,6 +3130,10 @@ border: 1px solid !important;
   margin: 7px 0 0 0;
 }
 
+.mirosubs-request-div{
+    width:400px;
+}
+
 .mirosubs-request-div select{
   margin: 10px 10px;
 }
