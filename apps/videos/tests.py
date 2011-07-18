@@ -1784,19 +1784,18 @@ class TestSubtitleRequest(TestCase):
                                              self.languages1)[0]
         self.assertEqual(1, request.id)
         self.assertEqual(False, request.done)
+        self.assertEqual(True, request.track)
         self.assertEqual(self.languages1[0], request.language)
 
         request.done = True
         request.save()
 
-        # Stored request should be loaded
-        request = self.Model.create_requests(self.video.video_id,
-                                             self.user,
-                                             self.languages1)[0]
+        # No request returned so empty list returned
+        requests = self.Model.create_requests(self.video.video_id,
+                                              self.user,
+                                              self.languages1)
 
-        self.assertEqual(1, request.id)
-        # Request should be marked as reopened
-        self.assertEqual(False, request.done)
+        self.assertEqual(requests, [])
 
     def test_create_requests(self):
         self.Model.create_requests(self.video.video_id, self.user,
@@ -1808,7 +1807,6 @@ class TestSubtitleRequest(TestCase):
 
         # An action should have been created relating this video
         action = Action.objects.filter(subtitlerequests__in=requests).latest()
-        print action.render()
         self.assertEqual(2, action.subtitlerequests.all().count())
 
         for request in requests:

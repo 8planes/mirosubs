@@ -1433,6 +1433,7 @@ class SubtitleRequest(models.Model):
     done = models.BooleanField()
     action = models.ForeignKey(Action, related_name='subtitlerequests',
                                blank=True, null=True)
+    track = models.BooleanField(_('follow related activities'), default=True)
     objects = SubtitleRequestManager()
 
     def __unicode__(self):
