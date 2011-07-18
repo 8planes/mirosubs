@@ -11,7 +11,7 @@ from django.conf import settings
 from apps.teams.models import Team, Invite, TeamVideo, \
     Application, TeamMember, TeamVideoLanguage
 from messages.models import Message
-from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage
+from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage, Action
 from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
@@ -1151,6 +1151,18 @@ class TestBusinessLogic( BaseTestModeration):
         v1 = self._create_versions(self.video.subtitle_language(), num_versions=1)[0]
         self.assertEquals(v1.moderation_status , WAITING_MODERATION)
 
+
+    def test_approval_activity_stream(self):
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
+        member.save()
+        add_moderation(self.video, self.team, self.user)
+        v1 = self._create_versions(self.video.subtitle_language(), num_versions=1)[0]
+        count = Action.objects.all().count()
+        approve_version(v1, self.team, self.user)
+        self.assertEquals(count + 1, Action.objects.all().count())
+        act  = Action.objects.all().order_by("-created")[0]
+        act.action_type == Action.APPROVE_VERSION
+        
 
 class TestModerationViews(BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]

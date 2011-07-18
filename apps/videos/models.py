@@ -1197,6 +1197,7 @@ class Action(models.Model):
     ADD_VIDEO_URL = 5
     ADD_TRANSLATION = 6
     SUBTITLE_REQUEST = 7
+    APPROVE_VERSION = 8
     TYPES = (
         (ADD_VIDEO, _(u'add video')),
         (CHANGE_TITLE, _(u'change title')),
@@ -1205,6 +1206,7 @@ class Action(models.Model):
         (ADD_TRANSLATION, _(u'add translation')),
         (ADD_VIDEO_URL, _(u'add video url')),
         (SUBTITLE_REQUEST, _(u'request subtitles')),
+        (APPROVE_VERSION, _(u'approve version')),
     )
     
     renderer = ActionRenderer('videos/_action_tpl.html')
@@ -1323,6 +1325,16 @@ class Action(models.Model):
             obj.action_type = cls.ADD_VIDEO_URL
             obj.created = instance.created
             obj.save()
+
+    @classmethod
+    def create_approved_video_handler(cls, version, moderator,  **kwargs):
+        obj = cls(video=version.video)
+        obj.language = version.language
+        obj.user = moderator
+        obj.action_type = cls.APPROVE_VERSION
+        obj.created = datetime.now()
+        obj.save()
+
                 
 post_save.connect(Action.create_comment_handler, Comment)        
 

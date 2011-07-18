@@ -13,7 +13,7 @@ from haystack import site
 from utils.db import require_lock
 from utils.tasks import send_templated_email_async
 
-from apps.videos.models import Video, SubtitleVersion, SubtitleLanguage
+from apps.videos.models import Video, SubtitleVersion, SubtitleLanguage, Action
 from apps.teams.models import TeamVideo
 
 from apps.auth.models import CustomUser as User
@@ -97,7 +97,8 @@ def _set_version_moderation_status(version, team, user, status, updates_meta=Tru
     return version    
 
 def approve_version( version, team, user, updates_meta=True):
-    return _set_version_moderation_status(version, team, user, APPROVED, updates_meta)
+    res =  _set_version_moderation_status(version, team, user, APPROVED, updates_meta)
+    Action.create_approved_video_handler(version, user)
     # FIXME: implement news track
     
 
