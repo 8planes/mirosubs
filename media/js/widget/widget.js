@@ -323,15 +323,6 @@ mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
         goog.exportSymbol(
             'mirosubs.widget.CrossDomainEmbed.embed',
             mirosubs.widget.CrossDomainEmbed.embed);
-        goog.exportSymbol(
-            "mirosubs.xdSendResponse",
-            goog.net.CrossDomainRpc.sendResponse);
-        goog.exportSymbol(
-            "mirosubs.xdRequestID",
-            goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID);
-        goog.exportSymbol(
-            "mirosubs.xdDummyURI",
-            goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI);
 };
 
 mirosubs.widget.Widget.exportFireKeySequence = function() {
