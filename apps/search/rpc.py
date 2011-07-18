@@ -27,7 +27,7 @@ from videos.rpc import render_page
 
 class SearchApiClass(object):
     
-    def load_languages_faceting(self, user, q=''):
+    def load_languages_faceting(self, q, user):
         video_languages = {}
         languages = {}
                 
