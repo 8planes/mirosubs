@@ -3130,26 +3130,26 @@ border: 1px solid !important;
   margin: 7px 0 0 0;
 }
 
-.mirosubs-request-langs{
-  margin: 0 0 10px;
+.mirosubs-request-div select{
+  margin: 10px 10px;
 }
 
-.mirosubs-request-div select{
-  margin: 5px 10px;
+.mirosubs-request-addlang{
+  font-size:small;
+  margin: 0 10px 20px;
 }
 
 #mirosubs-request-track{
-  float:left;
-  margin-left: 10px;
+  margin: 10px;
+  clear:both;
 }
 
 label[for="mirosubs-request-track"]{
-  float:left;
   margin: 3px 0 0;
 }
 
 #mirosubs-request-description{
-  float:right;
-  width: 200px;
-  margin: 0 10px 10px;
+  width: 370px;
+  height: 60px;
+  margin: 10px 10px;
 }
