@@ -21,26 +21,14 @@ goog.provide('mirosubs.widget.SavedSubtitles');
 /**
  * @constructor
  * @param {!number} sessionPK
- * @param {?string} title
- * @param {?boolean} isComplete
  * @param {!mirosubs.subtitle.EditableCaptionSet} captionSet
  */
-mirosubs.widget.SavedSubtitles = function(sessionPK, title, isComplete, captionSet) {
+mirosubs.widget.SavedSubtitles = function(sessionPK, captionSet) {
     /**
      * @const
      * @type {!number}
      */
     this.SESSION_PK = sessionPK;
-    /**
-     * @const
-     * @type {?string}
-     */
-    this.TITLE = title;
-    /**
-     * @const
-     * @type {?boolean}
-     */
-    this.IS_COMPLETE = isComplete;
     /**
      * @const
      * @type {!mirosubs.subtitle.EditableCaptionSet}
@@ -53,16 +41,17 @@ mirosubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
 mirosubs.widget.SavedSubtitles.prototype.serialize = function() {
     return goog.json.serialize(
         { sessionPK: this.SESSION_PK,
-          title: this.TITTLE,
-          isComplete: this.IS_COMPLETE,
+          title: this.CAPTION_SET.title,
+          isComplete: this.CAPTION_SET.completed,
           captionSet: this.CAPTION_SET.makeJsonSubs() });
 };
 
 mirosubs.widget.SavedSubtitles.deserialize = function(json) {
     var obj = goog.json.parse(json);
     return new mirosubs.widget.SavedSubtitles(
-        obj.sessionPK, obj.title, obj.isComplete, 
-        new mirosubs.subtitle.EditableCaptionSet(obj.captionSet));
+        obj.sessionPK, 
+        new mirosubs.subtitle.EditableCaptionSet(
+            obj.captionSet, obj.complete, obj.title));
 };
 
 mirosubs.widget.SavedSubtitles.saveInitial = function(savedSubs) {

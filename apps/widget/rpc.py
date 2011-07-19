@@ -454,7 +454,7 @@ class Rpc(BaseRpc):
             language.language,
             language.pk,
             language.is_original,
-            language.is_complete,
+            None if base_language is not None else language.is_complete,
             version_no,
             is_latest,
             version.is_forked,

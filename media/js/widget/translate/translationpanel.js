@@ -50,12 +50,11 @@ mirosubs.translate.TranslationPanel.prototype.createDom = function() {
     this.translationList_ =
         new mirosubs.translate.TranslationList(
             this.captionSet_,
-            this.standardSubState_.SUBTITLES, 
+            this.standardSubState_.SUBTITLES,
             this.standardSubState_.TITLE);
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className =
         "mirosubs-titlesList";
-    this.translationList_.setTitleTranslation("FIXME: Fill this in.");
 };
 mirosubs.translate.TranslationPanel.prototype.getTranslationList = function(){
     return this.translationList_;
