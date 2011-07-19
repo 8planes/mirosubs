@@ -1774,7 +1774,7 @@ class TestSubtitleRequest(TestCase):
     def setUp(self):
         self.video = Video.objects.all()[0]
         self.user = User.objects.get(username=u'admin')
-        self.languages1 = 'en'
+        self.languages1 = ['en']
         self.languages2 = ['hi', 'fr']
         self.Model = SubtitleRequest.objects
 
@@ -1790,12 +1790,16 @@ class TestSubtitleRequest(TestCase):
         request.done = True
         request.save()
 
-        # No request returned so empty list returned
-        requests = self.Model.create_requests(self.video.video_id,
-                                              self.user,
-                                              self.languages1)
+        self.Model.create_requests(self.video.video_id, self.user,
+                                   self.languages1)
 
-        self.assertEqual(requests, [])
+        # No request returned so count should be 1
+        request_count = SubtitleRequest.objects.filter(
+                user=self.user,
+                video=self.video,
+                language=self.languages1[0]
+        ).count()
+        self.assertEqual(1, request_count)
 
     def test_create_requests(self):
         self.Model.create_requests(self.video.video_id, self.user,
@@ -1808,10 +1812,6 @@ class TestSubtitleRequest(TestCase):
         # An action should have been created relating this video
         action = Action.objects.filter(subtitlerequests__in=requests).latest()
         self.assertEqual(2, action.subtitlerequests.all().count())
-
-        for request in requests:
-            self.assertEqual(2, request.action.pk)
-
 
 def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         translation = SubtitleLanguage()

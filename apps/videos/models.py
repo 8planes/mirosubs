@@ -1375,7 +1375,7 @@ class SubtitleRequestManager(models.Manager):
     of requests from provided video, user and languages.
     '''
 
-    def _create_request(self, video, user, language, track=True):
+    def _create_request(self, video, user, language, action, track=True):
         '''
         Create a subtitle request for single language.
         '''
@@ -1383,44 +1383,33 @@ class SubtitleRequestManager(models.Manager):
         subreq, new = self.get_or_create(user=user, video=video,
                                          language=language, track=track)
         if not new:
-            # Update the 'time' to current and mark as 'not done' as it is
-            # reopened.
+            # Mark as 'not done' as it is reopened.
             subreq.done = False
+            subreq.save()
 
-        subreq.save()
-
-        return (subreq, new)
+        subreq.actions.add(action)
+        return subreq
 
     def create_requests(self, video_id, user, languages, track=True):
         '''
         Create multiple requests according to the list of languages provided.
         '''
 
-        created_new = []
         video = Video.objects.get(video_id=video_id)
+        subreqs = []
+
+        # A new action relating the requested sub langs
+        action = Action.objects.create(
+            user=user,
+            video=video,
+            action_type=Action.SUBTITLE_REQUEST,
+            created=datetime.now(),
+        )
 
         for language in languages:
-            req, new = self._create_request(video, user, language, track)
-            # If the request created is new (user, language, video triad
-            # wise), remember it.
-            if new:
-                created_new.append(req)
-
-        if created_new:
-            action = Action.objects.create(
-                user=user,
-                video=video,
-                action_type=Action.SUBTITLE_REQUEST,
-                created=datetime.now(),
-            )
-
-            # Attach the newly created action to the new requests
-            for request in created_new:
-                request.action = action
-                request.save()
-
-        return created_new
-
+            subreqs.append(self._create_request(video, user, language,
+                                                action, track))
+        return subreqs
 
 class SubtitleRequest(models.Model):
     '''
@@ -1429,10 +1418,9 @@ class SubtitleRequest(models.Model):
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
     user = models.ForeignKey(User, related_name='subtitlerequests')
-    time = models.DateTimeField(auto_now=True)
-    done = models.BooleanField()
-    action = models.ForeignKey(Action, related_name='subtitlerequests',
-                               blank=True, null=True)
+    done = models.BooleanField(_('request completed'))
+    actions = models.ManyToManyField(Action, related_name='subtitlerequests',
+                                     blank=True, null=True)
     track = models.BooleanField(_('follow related activities'), default=True)
     objects = SubtitleRequestManager()
 
@@ -1440,12 +1428,5 @@ class SubtitleRequest(models.Model):
         return "%s-%s request (%s)" %(self.video, self.get_language_display(),
                                        self.user)
 
-    def pending(self):
-        '''
-        Request pending or not.
-        '''
-        return not self.done
-    pending.boolean = True
-
     class Meta:
-        unique_together = ('video', 'user', 'time')
+        unique_together = ('video', 'user', 'language')

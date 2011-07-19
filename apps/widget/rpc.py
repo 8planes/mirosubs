@@ -180,7 +180,7 @@ class Rpc(BaseRpc):
         status = True
         message = ''
 
-        new_requests = models.SubtitleRequest.objects.create_requests(
+        subreqs = models.SubtitleRequest.objects.create_requests(
                 video_id,
                 request.user,
                 request_languages,
@@ -190,7 +190,7 @@ class Rpc(BaseRpc):
         return {
             'status':status,
             'message': message,
-            'count' : len(new_requests),
+            'count' : len(subreqs),
             'video_id':video_id,
             'request_languages':request_languages,
             'track_request':track_request,

@@ -99,7 +99,7 @@ class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']
 
 class SubtitleRequestAdmin(admin.ModelAdmin):
-    list_display = ['video', 'language', 'user', 'pending']
+    list_display = ['video', 'language', 'user', 'done']
     raw_id_fields = ['video', 'user']
 
 class VideoFeedAdmin(admin.ModelAdmin):
