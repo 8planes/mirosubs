@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-19 05:00-0500\n"
+"POT-Creation-Date: 2011-07-19 11:00-0500\n"
 "PO-Revision-Date: 2011-07-18 16:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.net/projects/p/"
@@ -561,7 +561,7 @@ msgstr "Lasciato vuoto per qualsiasi lingua"
 msgid "Video In"
 msgstr "Video in"
 
-#: apps/search/forms.py:61
+#: apps/search/forms.py:76
 msgid "All Languages"
 msgstr "Tutte le lingue"
 
@@ -730,7 +730,7 @@ msgstr "principi per la scelta dei video"
 msgid "publicly Visible?"
 msgstr "pubblicamente visibile?"
 
-#: apps/teams/models.py:81 templates/search/search.html:181
+#: apps/teams/models.py:81 templates/search/search.html:177
 #: templates/videos/featured_videos.html:52
 #: templates/videos/popular_videos.html:84
 #: templates/videos/volunteer_featured.html:52
@@ -1045,7 +1045,7 @@ msgstr "Sottotitoli richiamati"
 msgid "Widget views"
 msgstr "Visualizzazioni del widget"
 
-#: apps/videos/models.py:117 templates/videos/_video.html:18
+#: apps/videos/models.py:117 templates/videos/_video.html:24
 msgid "Views"
 msgstr "Visualizzazioni"
 
@@ -1198,43 +1198,43 @@ msgstr "ID del video errato"
 msgid "Video does not exist"
 msgstr "Il video non esiste"
 
-#: apps/videos/rpc.py:231
+#: apps/videos/rpc.py:237
 msgid "Title can't be empty"
 msgstr "La voce titolo non può essere vuota"
 
-#: apps/videos/rpc.py:236
+#: apps/videos/rpc.py:242
 msgid "Subtitle language does not exist"
 msgstr "La lingua di sottotitolazione non esiste"
 
-#: apps/videos/rpc.py:242
+#: apps/videos/rpc.py:248
 msgid "Title was changed success"
 msgstr "La modifica del titolo è riuscita"
 
-#: apps/videos/rpc.py:244
+#: apps/videos/rpc.py:250
 msgid "This is not forked translation"
 msgstr "Questa non è una traduzione \"forked\" (derivata)"
 
-#: apps/videos/rpc.py:253 apps/videos/rpc.py:269
+#: apps/videos/rpc.py:259 apps/videos/rpc.py:275
 msgid "Video does not exist."
 msgstr "Il video non esiste."
 
-#: apps/videos/rpc.py:260
+#: apps/videos/rpc.py:266
 msgid "You are following this video now."
 msgstr "Adesso stai seguendo questo video."
 
-#: apps/videos/rpc.py:276
+#: apps/videos/rpc.py:282
 msgid "You stopped following this video now."
 msgstr "Adesso hai smesso di seguire questo video."
 
-#: apps/videos/rpc.py:285 apps/videos/rpc.py:298
+#: apps/videos/rpc.py:291 apps/videos/rpc.py:304
 msgid "Subtitles does not exist."
 msgstr "I sottotitoli non esistono."
 
-#: apps/videos/rpc.py:289
+#: apps/videos/rpc.py:295
 msgid "You are following this subtitles now."
 msgstr "Adesso stai seguendo questi sottotitoli."
 
-#: apps/videos/rpc.py:302
+#: apps/videos/rpc.py:308
 msgid "You stopped following this subtitles now."
 msgstr "Adesso hai smesso di seguire questi sottotitoli."
 
@@ -1271,7 +1271,7 @@ msgstr ""
 "Ho appena trovato una versione di questo video con sottotitoli in %"
 "(language_name)s "
 
-#: apps/videos/views.py:186
+#: apps/videos/views.py:187
 msgid ""
 "Here is the subtitle workspace for your video.  You can\n"
 "share the video with friends, or get an embed code for your site.  To add "
@@ -1283,12 +1283,12 @@ msgstr ""
 "tuo sito, Per aggiungere o\n"
 "migliorare i sottotitoli, clicca sul pulsante sotto il video"
 
-#: apps/videos/views.py:200
+#: apps/videos/views.py:201
 #, python-format
 msgid "%(count)s videos have been added"
 msgstr "%(count)s video sono stati aggiunti"
 
-#: apps/videos/views.py:202
+#: apps/videos/views.py:203
 #, python-format
 msgid ""
 "%(count)s videos have been added. To add the remaining videos from this "
@@ -1298,19 +1298,19 @@ msgstr ""
 "questo feed, sottoponi di nuovo questo feed, e bada a contrassegnare la "
 "casella \"Salva flusso\"."
 
-#: apps/videos/views.py:604
+#: apps/videos/views.py:605
 msgid "You have not permission change this URL"
 msgstr "Non sei autorizzare a modificare questo URL"
 
-#: apps/videos/views.py:610 apps/videos/views.py:630
+#: apps/videos/views.py:611 apps/videos/views.py:631
 msgid "Object does not exist"
 msgstr "L'oggetto non esiste"
 
-#: apps/videos/views.py:623
+#: apps/videos/views.py:624
 msgid "You have not permission delete this URL"
 msgstr "Non sei autorizzato a cancellare questo URL"
 
-#: apps/videos/views.py:626
+#: apps/videos/views.py:627
 msgid "You cann't remove original URL"
 msgstr "Non puoi togliere l'URL originale"
 
@@ -4160,7 +4160,7 @@ msgid "Enter valid email please."
 msgstr "Inserisci un indirizzo e-mail valido, per favore."
 
 #: templates/profiles/_select_language_dialog.html:4
-#: templates/search/search.html:184 templates/videos/featured_videos.html:55
+#: templates/search/search.html:180 templates/videos/featured_videos.html:55
 #: templates/videos/popular_videos.html:87
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
@@ -4497,15 +4497,15 @@ msgstr "Visualizzazioni (questo mese)"
 msgid "Plays (all time)"
 msgstr "Visualizzazioni (da sempre)"
 
-#: templates/search/search.html:116 templates/search/search.html.py:155
+#: templates/search/search.html:112 templates/search/search.html.py:151
 msgid "Search Videos"
 msgstr "Cerca tra i video"
 
-#: templates/search/search.html:118
+#: templates/search/search.html:114
 msgid "Search Results for"
 msgstr "Risultati della ricerca per"
 
-#: templates/search/search.html:151
+#: templates/search/search.html:147
 #, python-format
 msgid ""
 "\n"
@@ -4516,7 +4516,7 @@ msgstr ""
 "                Risultati della ricerca per %(query)s\n"
 "            "
 
-#: templates/search/search.html:179 templates/videos/featured_videos.html:50
+#: templates/search/search.html:175 templates/videos/featured_videos.html:50
 #: templates/videos/popular_videos.html:82
 #: templates/videos/volunteer_featured.html:50
 #: templates/videos/volunteer_popular.html:78
@@ -5503,7 +5503,7 @@ msgstr ""
 "Grazie per il caricamento. Ci vorrà circa un minuto affinché i tuoi "
 "sottotitoli appaiano."
 
-#: templates/videos/_video.html:25
+#: templates/videos/_video.html:31
 #, python-format
 msgid ""
 "\n"
@@ -5694,7 +5694,7 @@ msgstr ""
 "annullata. Cancella soltanto gli URL di video che non corrispondono, o dove "
 "i sottotitoli non appaiono correttamente."
 
-#: templates/videos/_watch_page.html:7
+#: templates/videos/_watch_page.html:9
 msgid "No video found"
 msgstr "Nessun video trovato"
 
@@ -6176,7 +6176,7 @@ msgid "Either no subtitles have been entered, or they were deleted."
 msgstr "O non sono stati inseriti sottotitoli, o sono stati eliminati."
 
 #: templates/videos/latest_videos.html:20 templates/videos/volunteer.html:96
-#: templates/videos/volunteer_latest.html:20 templates/videos/watch.html:103
+#: templates/videos/volunteer_latest.html:20 templates/videos/watch.html:105
 msgid "Latest Videos"
 msgstr "Ultimi video"
 
@@ -6410,7 +6410,7 @@ msgstr "Altri video messi in evidenza"
 msgid "More Popular Videos"
 msgstr "Altri video popolari"
 
-#: templates/videos/volunteer.html:94 templates/videos/watch.html:101
+#: templates/videos/volunteer.html:94 templates/videos/watch.html:103
 msgid "More Recent Videos"
 msgstr "Altri video recenti"
 

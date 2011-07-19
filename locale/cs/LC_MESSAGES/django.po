@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-19 05:02-0500\n"
+"POT-Creation-Date: 2011-07-19 11:02-0500\n"
 "PO-Revision-Date: 2011-07-18 16:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.net/projects/p/universalsubtitles/"
@@ -558,7 +558,7 @@ msgstr "Vynechat pro jakýkoli jazyk"
 msgid "Video In"
 msgstr "Video v"
 
-#: apps/search/forms.py:61
+#: apps/search/forms.py:76
 msgid "All Languages"
 msgstr "Všechny jazyky"
 
@@ -727,7 +727,7 @@ msgstr "nastavení videa"
 msgid "publicly Visible?"
 msgstr "veřejně viditelné?"
 
-#: apps/teams/models.py:81 templates/search/search.html:181
+#: apps/teams/models.py:81 templates/search/search.html:177
 #: templates/videos/featured_videos.html:52
 #: templates/videos/popular_videos.html:84
 #: templates/videos/volunteer_featured.html:52
@@ -1038,7 +1038,7 @@ msgstr "Titulky nahrány"
 msgid "Widget views"
 msgstr "Zobrazení widgetu"
 
-#: apps/videos/models.py:117 templates/videos/_video.html:18
+#: apps/videos/models.py:117 templates/videos/_video.html:24
 msgid "Views"
 msgstr "Zobrazení"
 
@@ -1190,43 +1190,43 @@ msgstr ""
 msgid "Video does not exist"
 msgstr ""
 
-#: apps/videos/rpc.py:231
+#: apps/videos/rpc.py:237
 msgid "Title can't be empty"
 msgstr "Název nemůže být prázdný"
 
-#: apps/videos/rpc.py:236
+#: apps/videos/rpc.py:242
 msgid "Subtitle language does not exist"
 msgstr "Jazyk titulků neexistuje"
 
-#: apps/videos/rpc.py:242
+#: apps/videos/rpc.py:248
 msgid "Title was changed success"
 msgstr "Název byl úspěšně změněn"
 
-#: apps/videos/rpc.py:244
+#: apps/videos/rpc.py:250
 msgid "This is not forked translation"
 msgstr "Toto není odvětvený překlad"
 
-#: apps/videos/rpc.py:253 apps/videos/rpc.py:269
+#: apps/videos/rpc.py:259 apps/videos/rpc.py:275
 msgid "Video does not exist."
 msgstr "Video neexistuje."
 
-#: apps/videos/rpc.py:260
+#: apps/videos/rpc.py:266
 msgid "You are following this video now."
 msgstr "Nyní sledujete toto video."
 
-#: apps/videos/rpc.py:276
+#: apps/videos/rpc.py:282
 msgid "You stopped following this video now."
 msgstr "Přestali jste sledovat toto video."
 
-#: apps/videos/rpc.py:285 apps/videos/rpc.py:298
+#: apps/videos/rpc.py:291 apps/videos/rpc.py:304
 msgid "Subtitles does not exist."
 msgstr "Titulky neexistují."
 
-#: apps/videos/rpc.py:289
+#: apps/videos/rpc.py:295
 msgid "You are following this subtitles now."
 msgstr "Nyní sledujete tyto titulky."
 
-#: apps/videos/rpc.py:302
+#: apps/videos/rpc.py:308
 msgid "You stopped following this subtitles now."
 msgstr "Přestali jste sledovat tyto titulky."
 
@@ -1259,7 +1259,7 @@ msgstr ""
 msgid "Just found a version of this video with %(language_name)s subtitles"
 msgstr "Právě jsem nalezl verzi tohoto videa s titulky %(language_name)s"
 
-#: apps/videos/views.py:186
+#: apps/videos/views.py:187
 msgid ""
 "Here is the subtitle workspace for your video.  You can\n"
 "share the video with friends, or get an embed code for your site.  To add "
@@ -1271,12 +1271,12 @@ msgstr ""
 "přidání\n"
 "nebo vylepšení titulků klikněte na tlačítko pod videem"
 
-#: apps/videos/views.py:200
+#: apps/videos/views.py:201
 #, python-format
 msgid "%(count)s videos have been added"
 msgstr "%(count)s videí bylo přidáno"
 
-#: apps/videos/views.py:202
+#: apps/videos/views.py:203
 #, python-format
 msgid ""
 "%(count)s videos have been added. To add the remaining videos from this "
@@ -1285,19 +1285,19 @@ msgstr ""
 "%(count)s videí bylo přidáno. Pro přidání zbývajících videí z tohoto zdroje "
 "vložte tento zdroj znovu a ujistěte se, že jste zaškrtli „Uložit zdroj“."
 
-#: apps/videos/views.py:604
+#: apps/videos/views.py:605
 msgid "You have not permission change this URL"
 msgstr "Nemáte oprávnění změnit tuto URL"
 
-#: apps/videos/views.py:610 apps/videos/views.py:630
+#: apps/videos/views.py:611 apps/videos/views.py:631
 msgid "Object does not exist"
 msgstr "Objekt neexistuje"
 
-#: apps/videos/views.py:623
+#: apps/videos/views.py:624
 msgid "You have not permission delete this URL"
 msgstr "Nemáte oprávnění smazat tuto URL"
 
-#: apps/videos/views.py:626
+#: apps/videos/views.py:627
 msgid "You cann't remove original URL"
 msgstr "Nemůžete odstranit původní URL"
 
@@ -3891,7 +3891,7 @@ msgid "Enter valid email please."
 msgstr "Vložte platný email prosím"
 
 #: templates/profiles/_select_language_dialog.html:4
-#: templates/search/search.html:184 templates/videos/featured_videos.html:55
+#: templates/search/search.html:180 templates/videos/featured_videos.html:55
 #: templates/videos/popular_videos.html:87
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
@@ -4228,15 +4228,15 @@ msgstr "Přehrání (tento měsíc)"
 msgid "Plays (all time)"
 msgstr "Přehrání (za celou dobu)"
 
-#: templates/search/search.html:116 templates/search/search.html.py:155
+#: templates/search/search.html:112 templates/search/search.html.py:151
 msgid "Search Videos"
 msgstr "Hledat videa"
 
-#: templates/search/search.html:118
+#: templates/search/search.html:114
 msgid "Search Results for"
 msgstr "Výsledky pro"
 
-#: templates/search/search.html:151
+#: templates/search/search.html:147
 #, python-format
 msgid ""
 "\n"
@@ -4244,7 +4244,7 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/search/search.html:179 templates/videos/featured_videos.html:50
+#: templates/search/search.html:175 templates/videos/featured_videos.html:50
 #: templates/videos/popular_videos.html:82
 #: templates/videos/volunteer_featured.html:50
 #: templates/videos/volunteer_popular.html:78
@@ -5223,7 +5223,7 @@ msgid ""
 "appear."
 msgstr "Děkujeme za upload. Za zhruba minutu se titulky objeví."
 
-#: templates/videos/_video.html:25
+#: templates/videos/_video.html:31
 #, python-format
 msgid ""
 "\n"
@@ -5420,7 +5420,7 @@ msgstr ""
 "Smazat tuto URL?  Varování: toto nelze vrátit zpět. Mažte URL pouze pro "
 "nesedící videa nebo videa, kde se titulky nezobrazují správně."
 
-#: templates/videos/_watch_page.html:7
+#: templates/videos/_watch_page.html:9
 msgid "No video found"
 msgstr "Nenalezeno žádné video"
 
@@ -5896,7 +5896,7 @@ msgid "Either no subtitles have been entered, or they were deleted."
 msgstr "Buď nebyly žádné titulky vloženy, nebo byly smazány."
 
 #: templates/videos/latest_videos.html:20 templates/videos/volunteer.html:96
-#: templates/videos/volunteer_latest.html:20 templates/videos/watch.html:103
+#: templates/videos/volunteer_latest.html:20 templates/videos/watch.html:105
 msgid "Latest Videos"
 msgstr "Nejnovější videa"
 
@@ -6136,7 +6136,7 @@ msgstr ""
 msgid "More Popular Videos"
 msgstr ""
 
-#: templates/videos/volunteer.html:94 templates/videos/watch.html:101
+#: templates/videos/volunteer.html:94 templates/videos/watch.html:103
 msgid "More Recent Videos"
 msgstr ""
 
