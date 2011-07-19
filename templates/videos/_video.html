@@ -15,7 +15,13 @@
             <h4>{{ video }}</h4>
         </a>
         <span class="views">
-            <strong>{{ video.total_views }}</strong> {% trans "Views" %}
+            <strong>
+                {% if video_views %}
+                    {{ video_views }}
+                {% else %}
+                    {{ video.total_views }}
+                {% endif %}
+            </strong> {% trans "Views" %}
         </span>
         <span class="languages">
             {% if video.languages_count %}

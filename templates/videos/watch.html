@@ -87,8 +87,10 @@
     </div><!-- // hd -->
     <div class="bd">
         <div class="popular-videos-content">
-            {% with popular_videos as video_list %}
-                {% include 'videos/_watch_page.html' %}
+            {% with 'week' as display_views %}
+                {% with popular_videos as video_list %}
+                    {% include 'videos/_watch_page.html' %}
+                {% endwith %}
             {% endwith %}
         </div>
     </div><!-- // bd -->
