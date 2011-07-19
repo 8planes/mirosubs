@@ -84,7 +84,8 @@ def watch_page(request):
     context = {
         'featured_videos': featured_videos,
         'popular_videos': popular_videos,
-        'latest_videos': latest_videos
+        'latest_videos': latest_videos,
+        'popular_display_views': 'week'
     }
     return render_to_response('videos/watch.html', context,
                               context_instance=RequestContext(request)) 

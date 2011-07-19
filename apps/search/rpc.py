@@ -70,6 +70,7 @@ class SearchApiClass(object):
         else:
             qs = SearchQuerySet().none()    
         
-        return render_page(rdata.get('page', 1), qs, 20, request)
+        display_views = form.get_display_views()
+        return render_page(rdata.get('page', 1), qs, 20, request, display_views=display_views)
     
     

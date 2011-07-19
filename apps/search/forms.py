@@ -44,6 +44,21 @@ class SearchForm(forms.Form):
             self.fields['langs'].choices = choices
             self.fields['video_lang'].choices = choices
     
+    def get_display_views(self):
+        sort = self.cleaned_data.get('sort')
+        
+        if not sort:
+            return
+        
+        if sort == 'today_views':
+            return 'today'
+        elif sort == 'week_views':
+            return 'week'
+        elif sort == 'month_views':
+            return 'month'
+        elif sort == 'total_views':
+            return 'total'
+    
     def _make_choices_from_faceting(self, data):
         choices = []
         
