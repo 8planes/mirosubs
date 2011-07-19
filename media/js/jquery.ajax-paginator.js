@@ -106,8 +106,8 @@
      },
      _onAdressChange: function(event){
          var page = event.parameters.page-0;
-         if (page && page !== this.page){
-             this.setPage(page, true);
+         if (page !== this.page){
+             this.setPage(page || 1, true);
          }
      },
      _onNextClick: function(){
