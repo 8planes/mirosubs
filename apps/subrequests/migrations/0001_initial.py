@@ -9,29 +9,38 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding model 'SubtitleRequest'
-        db.create_table('videos_subtitlerequest', (
+        db.create_table('subrequests_subtitlerequest', (
+            ('language', self.gf('django.db.models.fields.CharField')(max_length=16)),
+            ('track', self.gf('django.db.models.fields.BooleanField')(default=True, blank=True)),
+            ('done', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='subtitlerequests', to=orm['auth.CustomUser'])),
             ('video', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['videos.Video'])),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('language', self.gf('django.db.models.fields.CharField')(max_length=16)),
         ))
-        db.send_create_signal('videos', ['SubtitleRequest'])
+        db.send_create_signal('subrequests', ['SubtitleRequest'])
 
-        # Adding M2M table for field users on 'SubtitleRequest'
-        db.create_table('videos_subtitlerequest_users', (
+        # Adding unique constraint on 'SubtitleRequest', fields ['video', 'user', 'language']
+        db.create_unique('subrequests_subtitlerequest', ['video_id', 'user_id', 'language'])
+
+        # Adding M2M table for field actions on 'SubtitleRequest'
+        db.create_table('subrequests_subtitlerequest_actions', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('subtitlerequest', models.ForeignKey(orm['videos.subtitlerequest'], null=False)),
-            ('customuser', models.ForeignKey(orm['auth.customuser'], null=False))
+            ('subtitlerequest', models.ForeignKey(orm['subrequests.subtitlerequest'], null=False)),
+            ('action', models.ForeignKey(orm['videos.action'], null=False))
         ))
-        db.create_unique('videos_subtitlerequest_users', ['subtitlerequest_id', 'customuser_id'])
+        db.create_unique('subrequests_subtitlerequest_actions', ['subtitlerequest_id', 'action_id'])
     
     
     def backwards(self, orm):
         
         # Deleting model 'SubtitleRequest'
-        db.delete_table('videos_subtitlerequest')
+        db.delete_table('subrequests_subtitlerequest')
 
-        # Removing M2M table for field users on 'SubtitleRequest'
-        db.delete_table('videos_subtitlerequest_users')
+        # Removing unique constraint on 'SubtitleRequest', fields ['video', 'user', 'language']
+        db.delete_unique('subrequests_subtitlerequest', ['video_id', 'user_id', 'language'])
+
+        # Removing M2M table for field actions on 'SubtitleRequest'
+        db.delete_table('subrequests_subtitlerequest_actions')
     
     
     models = {
@@ -96,6 +105,16 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'subrequests.subtitlerequest': {
+            'Meta': {'unique_together': "(('video', 'user', 'language'),)", 'object_name': 'SubtitleRequest'},
+            'actions': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'subtitlerequests'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['videos.Action']"}),
+            'done': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
+            'track': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'subtitlerequests'", 'to': "orm['auth.CustomUser']"}),
+            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
+        },
         'videos.action': {
             'Meta': {'object_name': 'Action'},
             'action_type': ('django.db.models.fields.IntegerField', [], {}),
@@ -106,29 +125,6 @@ class Migration(SchemaMigration):
             'new_video_title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
             'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
-        },
-        'videos.subtitle': {
-            'Meta': {'unique_together': "(('version', 'subtitle_id'), ('draft', 'subtitle_id'))", 'object_name': 'Subtitle'},
-            'draft': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleDraft']", 'null': 'True'}),
-            'end_time': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'start_time': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
-            'subtitle_id': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
-            'subtitle_order': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
-            'subtitle_text': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'blank': 'True'}),
-            'version': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleVersion']", 'null': 'True'})
-        },
-        'videos.subtitledraft': {
-            'Meta': {'object_name': 'SubtitleDraft'},
-            'browser_id': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
-            'datetime_started': ('django.db.models.fields.DateTimeField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_forked': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleLanguage']"}),
-            'last_saved_packet': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'parent_version': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.SubtitleVersion']", 'null': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True'})
         },
         'videos.subtitlelanguage': {
             'Meta': {'unique_together': "(('video', 'language', 'standard_language'),)", 'object_name': 'SubtitleLanguage'},
@@ -152,13 +148,6 @@ class Migration(SchemaMigration):
             'writelock_session_key': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'writelock_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
         },
-        'videos.subtitlerequest': {
-            'Meta': {'object_name': 'SubtitleRequest'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
-            'users': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'subreqs'", 'symmetrical': 'False', 'to': "orm['auth.CustomUser']"}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"})
-        },
         'videos.subtitleversion': {
             'Meta': {'unique_together': "(('language', 'version_no'),)", 'object_name': 'SubtitleVersion'},
             'datetime_started': ('django.db.models.fields.DateTimeField', [], {}),
@@ -172,16 +161,6 @@ class Migration(SchemaMigration):
             'time_change': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True'}),
             'version_no': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
-        },
-        'videos.usertestresult': {
-            'Meta': {'object_name': 'UserTestResult'},
-            'browser': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
-            'get_updates': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'task1': ('django.db.models.fields.TextField', [], {}),
-            'task2': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'task3': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
         'videos.video': {
             'Meta': {'object_name': 'Video'},
@@ -210,27 +189,7 @@ class Migration(SchemaMigration):
             'writelock_owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'writelock_owners'", 'null': 'True', 'to': "orm['auth.CustomUser']"}),
             'writelock_session_key': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'writelock_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
-        },
-        'videos.videofeed': {
-            'Meta': {'object_name': 'VideoFeed'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'})
-        },
-        'videos.videourl': {
-            'Meta': {'object_name': 'VideoUrl'},
-            'added_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.CustomUser']", 'null': 'True', 'blank': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'original': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
-            'url': ('django.db.models.fields.URLField', [], {'unique': 'True', 'max_length': '255'}),
-            'video': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['videos.Video']"}),
-            'videoid': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'})
         }
     }
     
-    complete_apps = ['videos']
+    complete_apps = ['subrequests']

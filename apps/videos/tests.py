@@ -1767,51 +1767,6 @@ class TestTemplateTags(TestCase):
         l = SubtitleLanguage.objects.filter(video__title="b", language='pt')[0]
         self.assertEqual("60 %", complete_indicator(l))
         
-class TestSubtitleRequest(TestCase):
-
-    fixtures = ['test.json']
-
-    def setUp(self):
-        self.video = Video.objects.all()[0]
-        self.user = User.objects.get(username=u'admin')
-        self.languages1 = ['en']
-        self.languages2 = ['hi', 'fr']
-        self.Model = SubtitleRequest.objects
-
-    def test_create_request(self):
-        request = self.Model.create_requests(self.video.video_id,
-                                             self.user,
-                                             self.languages1)[0]
-        self.assertEqual(1, request.id)
-        self.assertEqual(False, request.done)
-        self.assertEqual(True, request.track)
-        self.assertEqual(self.languages1[0], request.language)
-
-        request.done = True
-        request.save()
-
-        self.Model.create_requests(self.video.video_id, self.user,
-                                   self.languages1)
-
-        # No request returned so count should be 1
-        request_count = SubtitleRequest.objects.filter(
-                user=self.user,
-                video=self.video,
-                language=self.languages1[0]
-        ).count()
-        self.assertEqual(1, request_count)
-
-    def test_create_requests(self):
-        self.Model.create_requests(self.video.video_id, self.user,
-                                   self.languages1)
-        requests = self.Model.create_requests(self.video.video_id, self.user,
-                                              self.languages2)
-        # Only two new requests should be created
-        self.assertEqual(2, len(requests))
-
-        # An action should have been created relating this video
-        action = Action.objects.filter(subtitlerequests__in=requests).latest()
-        self.assertEqual(2, action.subtitlerequests.all().count())
 
 def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         translation = SubtitleLanguage()

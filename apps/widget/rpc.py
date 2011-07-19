@@ -30,6 +30,7 @@ from django.db.models import Sum
 from widget import video_cache
 from utils.translation import get_user_languages_from_request
 from django.utils.translation import ugettext as _
+from subrequests.models import SubtitleRequest
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
 from utils import send_templated_email
@@ -129,26 +130,6 @@ class Rpc(BaseRpc):
                     return_value['subtitles'] = subtitles
         return return_value
 
-    def fetch_request_dialog_contents(self, request, video_id):
-        '''
-        Fetch the contents for creating a dialog to create request subtitles
-        form.
-        '''
-        my_languages = get_user_languages_from_request(request)
-        my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
-
-        # List of language-code tuples
-        all_languages = sorted(LANGUAGES_MAP.items())
-
-        ##TODO: Filter all_languages according to already submitted requests
-        # after creation of SubtitleRequest Model
-
-        return {
-            'my_languages': my_languages,
-            'all_languages': all_languages
-        }
-
-
     def fetch_start_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)
         my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
@@ -172,6 +153,25 @@ class Rpc(BaseRpc):
             'is_original_language_subtitled': is_original_language_subtitled,
             'general_settings': general_settings }
 
+    def fetch_request_dialog_contents(self, request, video_id):
+        '''
+        Fetch the contents for creating a dialog to create request subtitles
+        form.
+        '''
+        my_languages = get_user_languages_from_request(request)
+        my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
+
+        # List of language-code tuples
+        all_languages = sorted(LANGUAGES_MAP.items())
+
+        ##TODO: Filter all_languages according to already submitted requests
+        # after creation of SubtitleRequest Model
+
+        return {
+            'my_languages': my_languages,
+            'all_languages': all_languages
+        }
+
     def submit_subtitle_request(self, request, video_id, request_languages, track_request,
                                 description):
         '''
@@ -180,7 +180,7 @@ class Rpc(BaseRpc):
         status = True
         message = ''
 
-        subreqs = models.SubtitleRequest.objects.create_requests(
+        subreqs = SubtitleRequest.objects.create_requests(
                 video_id,
                 request.user,
                 request_languages,
@@ -191,10 +191,6 @@ class Rpc(BaseRpc):
             'status':status,
             'message': message,
             'count' : len(subreqs),
-            'video_id':video_id,
-            'request_languages':request_languages,
-            'track_request':track_request,
-            'description':description,
         }
 
     def start_editing(self, request, video_id, 

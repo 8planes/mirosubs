@@ -18,7 +18,7 @@
 
 from django.contrib import admin
 from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle, \
-    VideoFeed, SubtitleRequest
+    VideoFeed
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from utils.livesettings_values import EmailListValue
@@ -98,10 +98,6 @@ class SubtitleVersionAdmin(admin.ModelAdmin):
 class SubtitleAdmin(admin.ModelAdmin):
     list_display = ['version', 'subtitle_id', 'subtitle_order', 'subtitle_text', 'start_time', 'end_time']
 
-class SubtitleRequestAdmin(admin.ModelAdmin):
-    list_display = ['video', 'language', 'user', 'done']
-    raw_id_fields = ['video', 'user']
-
 class VideoFeedAdmin(admin.ModelAdmin):
     list_display = ['url', 'last_link', 'created', 'user']
     raw_id_fields = ['user']
@@ -111,7 +107,6 @@ admin.site.register(SubtitleVersion, SubtitleVersionAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(SubtitleLanguage, SubtitleLanguageAdmin)
 admin.site.register(VideoFeed, VideoFeedAdmin)
-admin.site.register(SubtitleRequest, SubtitleRequestAdmin)
 
 #Fix Celery tasks display
 from djcelery.models import TaskState
