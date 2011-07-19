@@ -168,7 +168,7 @@ mirosubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
            'Request');
     this.volunteerButton_ =
     $d('a',
-           {'href':'/videos/volunteer/',
+           {'href':mirosubs.getVolunteerPageURL(),
             'className': "mirosubs-green-button mirosubs-big"},
            'Visit Volunteer Page');
     this.closeButton_ =
@@ -266,7 +266,8 @@ mirosubs.RequestDialog.prototype.closeClicked_ = function(e) {
 };
 
 /**
- * Callback after a request has been posted.  * Notifies about successful or unsuccessful request
+ * Callback after a request has been posted.  
+ * Notifies about successful or unsuccessful request
  */
 mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
     // If response has a key status, set to true, hide the dialog
@@ -277,8 +278,8 @@ mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
         goog.dom.removeChildren(this.contentDiv_);
         this.confirmDiv_ = $d('p', null, this.SUBMISSION_CONFIRM_);
         this.volunteerDiv_ = $d('p', null, 'If you can, help others on our ',
-                                            $d('a', {"href":"/videos/volunteer/"},
-                                               "Volunteer Page."));
+                                            $d('a', {"href":mirosubs.getVolunteerPageURL()},
+                                               "Volunteer Page"), '.');
 
         this.contentDiv_.appendChild(this.confirmDiv_);
         this.contentDiv_.appendChild(this.volunteerDiv_);

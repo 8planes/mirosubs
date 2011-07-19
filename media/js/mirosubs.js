@@ -362,6 +362,10 @@ mirosubs.getSubtitleHomepageURL = function(videoID) {
     return [mirosubs.siteURL(), "/videos/", videoID].join('');
 };
 
+mirosubs.getVolunteerPageURL = function(){
+    return [mirosubs.siteURL(), "/videos/volunteer/"].join('');
+}
+
 mirosubs.createLinkButton = function($d, text, opt_className) {
     var atts = { 'href': 'javascript:void(0);' };
     if (opt_className)
