@@ -49,11 +49,14 @@ class ExtraContextHelpers(object):
     def for_boingboing_widgetizer(request):
         return ExtraContextHelpers.__dict__["for_boingboing_regular"] (type="widgetizer",request=request)
 
+    def for_boingboing_async_widgetizer(request):
+        return ExtraContextHelpers.__dict__["for_boingboing_regular"] (type="widgetizerasync",request=request)
+
     def for_boingboing_embed(request):
         return ExtraContextHelpers.__dict__["for_boingboing_regular"] (type="embed", request=request)
 
     for_boingboing_widgetizer.template_name =  "boingboing_regular"
-
+    for_boingboing_async_widgetizer.template_name =  "boingboing_regular"
     
         
     def for_many_videos_widgetizer(request=None, type=None):
