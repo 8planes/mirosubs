@@ -70,7 +70,7 @@ class VideoIndex(CelerySearchIndex):
     title = CharField(model_attr='title_display', boost=2)
     languages = LanguagesField(faceted=True)
     video_language = LanguageField(faceted=True)
-    languages_count = IntegerField(model_attr='languages_count')
+    languages_count = IntegerField()
     video_id = CharField(model_attr='video_id', indexed=False)
     thumbnail_url = CharField(model_attr='get_thumbnail', indexed=False)
     small_thumbnail = CharField(model_attr='small_thumbnail', indexed=False)
@@ -94,6 +94,7 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         
         langs = obj.subtitlelanguage_set.exclude(language=u'', subtitle_count__gt=0)
+        self.prepared_data['languages_count'] = obj.subtitlelanguage_set.filter(subtitle_count__gt=0).count()
         self.prepared_data['video_language'] = obj.language
         #TODO: converting should be in Field
         self.prepared_data['video_language'] = obj.language and LanguageField.prepare_lang(obj.language) or u''
