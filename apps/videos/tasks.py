@@ -274,7 +274,7 @@ def _send_letter_caption(caption_version):
         'language': language,
         'last_version': most_recent_version,
         'captions': captions,
-        'video_url': language.get_absolute_url(),
+        'video_url': video.get_absolute_url(),
         'language_url': language.get_absolute_url(),
         'user_url': caption_version.user and caption_version.user.get_absolute_url()
     }
