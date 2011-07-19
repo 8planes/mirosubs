@@ -219,10 +219,7 @@ def download_subtitles(request, handler=SSASubtitles):
     if not version:
         raise Http404    
     
-    for item in version.subtitles():
-        subtitles.append(item.for_generator())
-    
-    h = handler(subtitles, video, sl=language)
+    h = handler.create(version, video, language)
     response = HttpResponse(unicode(h), mimetype="text/plain")
     original_filename = '%s.%s' % (video.lang_filename(language), h.file_type)
     

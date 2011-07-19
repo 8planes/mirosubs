@@ -107,6 +107,18 @@ class BaseSubtitles(object):
     def isnumber(cls, val):
         return isinstance(val, (int, long, float))
     
+    @classmethod
+    def create(cls, sv, video=None, sl=None):
+        sl = sl or sv.language
+        video = video or sl.video
+        
+        subtitles = []
+        
+        for item in sv.subtitles():
+            subtitles.append(item.for_generator())
+        
+        return cls(subtitles, video, sl=sl)        
+        
 class GenerateSubtitlesHandlerClass(dict):
     
     def register(self, handler, type=None):
