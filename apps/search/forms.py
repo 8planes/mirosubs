@@ -45,6 +45,9 @@ class SearchForm(forms.Form):
             self.fields['video_lang'].choices = choices
     
     def get_display_views(self):
+        if not hasattr(self, 'cleaned_data'):
+            return 
+        
         sort = self.cleaned_data.get('sort')
         
         if not sort:
@@ -93,7 +96,7 @@ class SearchForm(forms.Form):
             qs = qs.filter(video_language__exact=video_language)
         
         if langs:
-            qs = qs.filter(languages=langs)
+            qs = qs.filter(languages__exact=langs)
         
         if ordering:
             qs = qs.order_by('-' + ordering)
