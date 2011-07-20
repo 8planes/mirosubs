@@ -66,7 +66,8 @@ class EffectiveSubtitle:
         return {
             'text': self.text,
             'start': self.start_time,
-            'end': self.end_time
+            'end': self.end_time,
+            'id': self.subtitle_id
         }
 
     def has_same_timing(self, subtitle):
