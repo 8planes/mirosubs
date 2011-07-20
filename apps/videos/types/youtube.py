@@ -16,9 +16,10 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from urlparse import urlparse
+import sentry_logger
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('youtube')
 
 from gdata.youtube.service import YouTubeService
 from gdata.service import RequestError
@@ -118,7 +119,7 @@ class YoutubeVideoType(VideoType):
         resp, content = h.request(url, "GET")
         resp.status = 500
         if resp.status < 200 or resp.status >= 400:
-            logger.info("Youtube subtitles error", extra={
+            logger.warning("Youtube subtitles error", extra={
                     'data': {
                         "url": url,
                         "video_id": self.videoid,
@@ -126,11 +127,11 @@ class YoutubeVideoType(VideoType):
                         "response": content
                         }
                     })
-            return
+            return resp
         parser = YoutubeSubtitleParser(content)
 
         if not parser:
-            return
+            return resp
         
         language, create = SubtitleLanguage.objects.get_or_create(video=video_obj, language = parser.language)
         language.is_original = False
