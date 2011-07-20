@@ -126,11 +126,11 @@ class YoutubeVideoType(VideoType):
                         "response": content
                         }
                     })
-            return resp
+            return
         parser = YoutubeSubtitleParser(content)
 
         if not parser:
-            return resp
+            return
         
         language, create = SubtitleLanguage.objects.get_or_create(video=video_obj, language = parser.language)
         language.is_original = False
