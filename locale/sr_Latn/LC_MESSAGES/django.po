@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-07-20 05:01-0500\n"
-"PO-Revision-Date: 2011-07-20 10:15+0000\n"
+"POT-Creation-Date: 2011-07-20 11:01-0500\n"
+"PO-Revision-Date: 2011-07-20 16:19+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4144,7 +4144,6 @@ msgid ""
 msgstr ""
 
 #: templates/teams/email_new_video.html:13
-#: templates/teams/email_new_videos.html:20
 msgid "Or you can visit the team page to see the latest work"
 msgstr ""
 
@@ -4156,9 +4155,13 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            Please visit the <a href=\"http://%(domain)s%(team_url)s\">%(team_name)s</a> \n"
-"            to see the new videos that need your help:\n"
+"            The <a href=\"http://%(domain)s%(team_url)s\">%(team_name)s</a> \n"
+"            team has added new videos, and they need your help:\n"
 "        "
+msgstr ""
+
+#: templates/teams/email_new_videos.html:20
+msgid "Thank you!"
 msgstr ""
 
 #: templates/teams/index.html:22
