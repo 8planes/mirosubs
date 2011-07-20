@@ -128,14 +128,20 @@ body#watch h1 a {
 	-webkit-border-top-right-radius: 5px;
 }
 
-#watch_search a#advanced_search #advanced_menu_open {
+#watch_search a#advanced_search.btn_active {
+	background: #FFF url(../images/icon_watch_search_arrow.png) 12px 13px no-repeat;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+
+#watch_search #advanced_menu_open {
 	display: block;
 	background: #FFF;
 	width: 170px;
 	position: relative;
-	right: 168px;
-	top: 17px;
-	padding: 10px;
+	right: 1px;
+	top: 31px;
+	padding: 0 10px 10px 10px;
 	border: 1px #d3dadc solid;
 	-moz-border-radius-bottomleft: 5px;
 	-moz-border-radius-bottomright: 5px;
@@ -144,21 +150,28 @@ body#watch h1 a {
 	-webkit-box-shadow: 0 1px 3px #e5ebed;
 }
 
-#watch_search a#advanced_search #advanced_menu_open .menu_item h3 {
+#watch_search #advanced_menu_open .menu_item {
+}
+
+#watch_search #advanced_menu_open .menu_item label {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
+	text-indent: 0;
+	color: #6d787c;
+	display: block;
+	font-weight: bold;
 }
 
-#watch_search a#advanced_search #advanced_menu_open .videos_in {
-	margin: 0 0 15px 0;
+#watch_search #advanced_menu_open .videos_in {
+	margin: -20px 0 15px 0;
 }
 
-#watch_search a#advanced_search #advanced_menu_open .menu_item select {
+#watch_search #advanced_menu_open .menu_item select {
 	width: 170px;
 }
 
-#watch_search a#advanced_search #advanced_menu_open button {
+#watch_search #advanced_menu_open button {
 	border: 1px #34454b solid;
 	background: -webkit-gradient(linear, left top, left bottom, from(#6e8b93), to(#566d75)) no-repeat;
 	background: -moz-linear-gradient(top,  #6e8b93,  #566d75) no-repeat;
@@ -175,7 +188,7 @@ body#watch h1 a {
 	margin: 5px 0 0 0;
 }
 
-#watch_search a#advanced_search #advanced_menu_open button:hover {
+#watch_search #advanced_menu_open button:hover {
 	background: -webkit-gradient(linear, left top, left bottom, from(#7897a0), to(#607881)) no-repeat;
 	background: -moz-linear-gradient(top,  #7897a0,  #607881) no-repeat;
 	-webkit-box-shadow: 0 1px 1px #a1a1a1, inset 0 1px 0 #9ababf;
@@ -183,7 +196,7 @@ body#watch h1 a {
 	text-shadow: 0 -1px 0 #34454b;
 }
 
-#watch_search a#advanced_search #advanced_menu_open button:active {
+#watch_search #advanced_menu_open button:active {
 	background: -webkit-gradient(linear, left bottom, left top, from(#7897a0), to(#607881)) no-repeat;
 	background: -moz-linear-gradient(bottom,  #7897a0,  #607881) no-repeat;
 	-webkit-box-shadow: 0 -1px 1px #a1a1a1, inset 0 -1px 0 #9ababf;
